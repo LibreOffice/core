@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygonprimitive2d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-07 14:27:26 $
+ *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ namespace drawinglayer
         basegfx::B2DRange PolyPolygonHairlinePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // return range
-            return basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolyPolygon()));
+            return basegfx::tools::getRange(getB2DPolyPolygon());
         }
 
         // provide unique ID
@@ -203,7 +203,7 @@ namespace drawinglayer
         basegfx::B2DRange PolyPolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // get range of it (subdivided)
-            basegfx::B2DRange aRetval(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolyPolygon())));
+            basegfx::B2DRange aRetval(basegfx::tools::getRange(getB2DPolyPolygon()));
 
             // if width, grow by line width
             if(getLineAttribute().getWidth())
@@ -347,7 +347,7 @@ namespace drawinglayer
         basegfx::B2DRange PolyPolygonColorPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // return range
-            return basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolyPolygon()));
+            return basegfx::tools::getRange(getB2DPolyPolygon());
         }
 
         // provide unique ID

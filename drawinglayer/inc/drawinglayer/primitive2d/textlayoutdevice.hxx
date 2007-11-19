@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayoutdevice.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-01 09:13:53 $
+ *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@
 class VirtualDevice;
 class Font;
 class String;
+class OutputDevice;
 
 namespace drawinglayer { namespace primitive2d {
     class FontAttributes;
@@ -87,6 +88,7 @@ namespace drawinglayer
 
             void setFont(const Font& rFont);
             void setFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform);
+            void setFontAttributes(const FontAttributes& rFontAttributes, double fFontScaleX, double fFontScaleY);
 
             double getTextHeight() const;
             double getUnderlineHeight() const;
@@ -110,6 +112,30 @@ namespace drawinglayer
                 xub_StrLen nIndex,
                 xub_StrLen nLength) const;
         };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        // helper methods for vcl font handling
+        Font getVclFontFromFontAttributes(
+            const FontAttributes& rFontAttributes,
+            double fFontScaleX,
+            double fFontScaleY,
+            double fFontRotation,
+            const OutputDevice& rOutDev);
+
+        Font getVclFontFromFontAttributes(
+            const FontAttributes& rFontAttributes,
+            const basegfx::B2DHomMatrix& rTransform,
+            const OutputDevice& rOutDev);
+
+        FontAttributes getFontAttributesFromVclFont(basegfx::B2DVector& rSize, const Font& rFont, bool bRTL, bool bBiDiStrong);
+
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 

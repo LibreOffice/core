@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayoutdevice.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-01 09:14:08 $
+ *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,10 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_TEXTPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #endif
+
+//#ifndef _SV_OUTDEV_HXX
+//#include <vcl/outdev.hxx>
+//#endif
 
 //////////////////////////////////////////////////////////////////////////////
 // VDev RevDevice provider
@@ -181,7 +185,12 @@ namespace drawinglayer
 
         void TextLayouterDevice::setFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform)
         {
-            setFont( getVclFontFromFontAttributes(rFontAttributes, rTransform) );
+            setFont(getVclFontFromFontAttributes(rFontAttributes, rTransform, mrDevice));
+        }
+
+        void TextLayouterDevice::setFontAttributes(const FontAttributes& rFontAttributes, double fFontScaleX, double fFontScaleY)
+        {
+            setFont(getVclFontFromFontAttributes(rFontAttributes, fFontScaleX, fFontScaleY, 0.0, mrDevice));
         }
 
         double TextLayouterDevice::getUnderlineOffset() const
@@ -260,6 +269,100 @@ namespace drawinglayer
             {
                 return basegfx::B2DRange();
             }
+        }
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+// helper methods for vcl font handling
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        Font getVclFontFromFontAttributes(
+            const FontAttributes& rFontAttributes,
+            const basegfx::B2DHomMatrix& rTransform,
+            const OutputDevice& rOutDev)
+        {
+            // decompose matrix to have position and size of text
+            basegfx::B2DVector aScale, aTranslate;
+            double fRotate, fShearX;
+
+            rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+
+            return getVclFontFromFontAttributes(rFontAttributes, aScale.getX(), aScale.getY(), fRotate, rOutDev);
+        }
+
+        Font getVclFontFromFontAttributes(
+            const FontAttributes& rFontAttributes,
+            double fFontScaleX,
+            double fFontScaleY,
+            double fFontRotation,
+            const OutputDevice& rOutDev)
+        {
+#ifndef WIN32
+            // not used under unix, but reference for warning-free
+            (void)rOutDev;
+#endif
+            sal_uInt32 nWidth(basegfx::fround(fabs(fFontScaleX)));
+            sal_uInt32 nHeight(basegfx::fround(fabs(fFontScaleY)));
+            Font aRetval(
+                rFontAttributes.getFamilyName(),
+                rFontAttributes.getStyleName(),
+#ifdef WIN32
+                Size(0, nHeight));
+#else
+                Size(nWidth, nHeight));
+#endif
+
+            aRetval.SetAlign(ALIGN_BASELINE);
+            aRetval.SetCharSet(rFontAttributes.getSymbol() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE);
+            aRetval.SetVertical(rFontAttributes.getVertical() ? TRUE : FALSE);
+            aRetval.SetWeight(static_cast<FontWeight>(rFontAttributes.getWeight()));
+            aRetval.SetItalic(rFontAttributes.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
+            aRetval.SetOutline(rFontAttributes.getOutline());
+
+#ifdef WIN32
+            if(nWidth != nHeight)
+            {
+                const FontMetric aFontMetric(rOutDev.GetFontMetric(aRetval));
+                const double fCurrentWidth(aFontMetric.GetWidth());
+
+                aRetval.SetWidth(basegfx::fround(fCurrentWidth * (nWidth/nHeight)));
+            }
+#endif
+
+            if(!basegfx::fTools::equalZero(fFontRotation))
+            {
+                sal_Int16 aRotate10th((sal_Int16)(fFontRotation * (-1800.0/F_PI)));
+                aRetval.SetOrientation(aRotate10th % 3600);
+            }
+
+            return aRetval;
+        }
+
+        FontAttributes getFontAttributesFromVclFont(basegfx::B2DVector& rSize, const Font& rFont, bool bRTL, bool bBiDiStrong)
+        {
+            FontAttributes aRetval(
+                rFont.GetName(),
+                rFont.GetStyleName(),
+                static_cast<sal_uInt16>(rFont.GetWeight()),
+                RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet(),
+                rFont.IsVertical(),
+                ITALIC_NONE != rFont.GetItalic(),
+                rFont.IsOutline(),
+                bRTL,
+                bBiDiStrong);
+            // TODO: eKerning
+
+            const sal_Int32 nWidth(rFont.GetSize().getWidth());
+            const sal_Int32 nHeight(rFont.GetSize().getHeight());
+
+            rSize.setX(nWidth ? nWidth : nHeight);
+            rSize.setY(nHeight);
+
+            return aRetval;
         }
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

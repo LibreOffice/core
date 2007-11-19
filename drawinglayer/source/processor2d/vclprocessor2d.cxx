@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-16 15:46:43 $
+ *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,10 @@
 #include <drawinglayer/primitive2d/controlprimitive2d.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_TEXTLAYOUTDEVICE_HXX
+#include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
@@ -171,7 +175,7 @@ namespace drawinglayer
     namespace processor2d
     {
         //////////////////////////////////////////////////////////////////////////////
-        // UNO usings
+        // UNO class usages
         using ::com::sun::star::uno::Reference;
         using ::com::sun::star::uno::UNO_QUERY;
         using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -209,7 +213,8 @@ namespace drawinglayer
                 if(basegfx::fTools::more(aScale.getX(), 0.0) && basegfx::fTools::more(aScale.getY(), 0.0))
                 {
                     // prepare everything that is not sheared and mirrored
-                    Font aFont(primitive2d::getVclFontFromFontAttributes(rTextCandidate.getFontAttributes(), aScale, fRotate));
+                    Font aFont(getVclFontFromFontAttributes(
+                        rTextCandidate.getFontAttributes(), aScale.getX(), aScale.getY(), fRotate, *mpOutputDevice));
 
                     // handle additional font attributes
                     const primitive2d::TextDecoratedPortionPrimitive2D* pTCPP =

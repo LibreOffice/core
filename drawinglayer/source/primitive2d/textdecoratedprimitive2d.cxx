@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textdecoratedprimitive2d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-07 14:27:26 $
+ *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,16 +118,13 @@ namespace drawinglayer
                 TextLayouterDevice aTextLayouter;
 
                 // unscaled is needed since scale contains already the font size
-                aUnscaledTransform.rotate(rDecTrans.getRotate());
                 aUnscaledTransform.shearX(rDecTrans.getShearX());
+                aUnscaledTransform.rotate(rDecTrans.getRotate());
                 aUnscaledTransform.translate(rDecTrans.getTranslate().getX(), rDecTrans.getTranslate().getY());
 
                 // TextLayouterDevice is needed to get metrics for text decorations like
-                // underline/strikeout/emphasis marks from it. For setup, the unrotated transform
-                // is needed
-                basegfx::B2DHomMatrix aUnrotatedTransform(rDecTrans.getB2DHomMatrix());
-                aUnrotatedTransform.rotate(-rDecTrans.getRotate());
-                aTextLayouter.setFontAttributes(getFontAttributes(), aUnrotatedTransform);
+                // underline/strikeout/emphasis marks from it. For setup, the font size is needed
+                aTextLayouter.setFontAttributes(getFontAttributes(), rDecTrans.getScale().getX(), rDecTrans.getScale().getY());
 
                 // get text width
                 double fTextWidth(0.0);

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillgradientprimitive2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:29 $
+ *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,6 @@ namespace drawinglayer
             {
                 const basegfx::B2DPoint aCircleCenter(0.5, 0.5);
                 aUnitPolygon = basegfx::tools::createPolygonFromEllipse(aCircleCenter, 0.5, 0.5);
-                aUnitPolygon = basegfx::tools::adaptiveSubdivideByAngle(aUnitPolygon);
             }
             else
             {

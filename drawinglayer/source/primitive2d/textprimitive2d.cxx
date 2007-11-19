@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-02 16:55:00 $
+ *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,10 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
+using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
 namespace drawinglayer
 {
     namespace primitive2d
@@ -84,114 +88,111 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        Font getVclFontFromFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform)
+        void TextSimplePortionPrimitive2D::getCorrectedScaleAndFontScale(basegfx::B2DVector& rScale, basegfx::B2DVector& rFontScale) const
         {
-            // decompose matrix to have position and size of text
-            basegfx::B2DVector aScale, aTranslate;
-            double fRotate, fShearX;
-            rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-            return getVclFontFromFontAttributes(rFontAttributes, aScale, fRotate);
-        }
+            // copy input value
+            rFontScale = rScale;
 
-        Font getVclFontFromFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DVector& rFontSize, double fFontRotation)
-        {
-            sal_uInt32 nWidth(basegfx::fround(fabs(rFontSize.getX())));
-            sal_uInt32 nHeight(basegfx::fround(fabs(rFontSize.getY())));
-
-            if(nWidth == nHeight)
+            if(basegfx::fTools::equalZero(rFontScale.getY()))
             {
-                nWidth = 0L;
+                // no font height; choose one and adapt scale to get back to original scaling
+                static double fDefaultFontScale(100.0);
+                rScale.setY(1.0 / fDefaultFontScale);
+                rFontScale.setY(fDefaultFontScale);
+            }
+            else if(basegfx::fTools::less(rFontScale.getY(), 0.0))
+            {
+                // negative font height; invert and adapt scale to get back to original scaling
+                rFontScale.setY(-rFontScale.getY());
+                rScale.setY(-1.0);
+            }
+            else
+            {
+                // positive font height; adapt scale; scaling will be part of the polygons
+                rScale.setY(1.0);
             }
 
-            Font aRetval(
-                rFontAttributes.getFamilyName(),
-                rFontAttributes.getStyleName(),
-                Size(nWidth, nHeight));
-
-            if(!basegfx::fTools::equalZero(fFontRotation))
+            if(basegfx::fTools::equal(rFontScale.getX(), rFontScale.getY()))
             {
-                sal_Int16 aRotate10th((sal_Int16)(fFontRotation * (-1800.0/F_PI)));
-                aRetval.SetOrientation(aRotate10th % 3600);
+                // adapt scale in X
+                rScale.setX(1.0);
             }
-
-            aRetval.SetAlign(ALIGN_BASELINE);
-            aRetval.SetCharSet(rFontAttributes.getSymbol() ? RTL_TEXTENCODING_SYMBOL : RTL_TEXTENCODING_UNICODE);
-            aRetval.SetVertical(rFontAttributes.getVertical() ? TRUE : FALSE);
-            aRetval.SetWeight(static_cast<FontWeight>(rFontAttributes.getWeight()));
-            aRetval.SetItalic(rFontAttributes.getItalic() ? ITALIC_NORMAL : ITALIC_NONE);
-            aRetval.SetOutline(rFontAttributes.getOutline());
-
-            return aRetval;
+            else
+            {
+                // If font scale is different in X and Y, force font scale to equal
+                // in X and Y to get a non-scaled VCL font.
+                // Adapt scaling in X accordingly. FontScaleY cannot be zero here.
+                rScale.setX(rFontScale.getX()/rFontScale.getY());
+                rFontScale.setX(rFontScale.getY());
+            }
         }
 
-        FontAttributes getFontAttributesFromVclFont(basegfx::B2DVector& rSize, const Font& rFont, bool bRTL, bool bBiDiStrong)
+        void TextSimplePortionPrimitive2D::getTextOutlinesAndTransformation(basegfx::B2DPolyPolygonVector& rTarget, basegfx::B2DHomMatrix& rTransformation) const
         {
-            FontAttributes aRetval(
-                rFont.GetName(),
-                rFont.GetStyleName(),
-                static_cast<sal_uInt16>(rFont.GetWeight()),
-                RTL_TEXTENCODING_SYMBOL == rFont.GetCharSet(),
-                rFont.IsVertical(),
-                ITALIC_NONE != rFont.GetItalic(),
-                rFont.IsOutline(),
-                bRTL,
-                bBiDiStrong);
-            // TODO: eKerning
+            if(getTextLength())
+            {
+                // decompose object transformation to single values
+                basegfx::B2DVector aScale, aTranslate;
+                double fRotate, fShearX;
 
-            const sal_Int32 nWidth(rFont.GetSize().getWidth());
-            const sal_Int32 nHeight(rFont.GetSize().getHeight());
+                // if decomposition returns false, create no geometry since e.g. scaling may
+                // be zero
+                if(getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX))
+                {
+                    // handle special case: If scale is negative in (x,y) (3rd quadrant), it can
+                    // be expressed as rotation by PI
+                    if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
+                    {
+                        aScale = basegfx::absolute(aScale);
+                        fRotate += F_PI;
+                    }
 
-            rSize.setX(nWidth ? nWidth : nHeight);
-            rSize.setY(nHeight);
+                    // for the TextLayouterDevice, it is necessary to have a scaling representing
+                    // the font size. Since we want to extract polygons here, it is okay to
+                    // work just with scaling and to ignore shear, rotation and translation,
+                    // all that can be applied to the polygons later
+                    basegfx::B2DVector aFontScale;
+                    getCorrectedScaleAndFontScale(aScale, aFontScale);
 
-            return aRetval;
+                    // prepare textlayoutdevice
+                    TextLayouterDevice aTextLayouter;
+                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY());
+
+                    // get integer DXArray for getTextOutlines call (ATM uses vcl, so this
+                    // is needed)
+                    const basegfx::B2DVector aPixelVector(getTextTransform() * basegfx::B2DVector(1.0, 0.0));
+                    const ::std::vector< sal_Int32 > aNewIntegerDXArray(getDXArray().size(), basegfx::fround(aPixelVector.getLength()));
+
+                    // get the text outlines
+                    aTextLayouter.getTextOutlines(rTarget, getText(), getTextPosition(), getTextLength(), aNewIntegerDXArray);
+
+                    // create primitives for the outlines
+                    const sal_uInt32 nCount(rTarget.size());
+
+                    if(nCount)
+                    {
+                        // prepare object transformation for polygons
+                        rTransformation.identity();
+                        rTransformation.scale(aScale.getX(), aScale.getY());
+                        rTransformation.shearX(fShearX);
+                        rTransformation.rotate(fRotate);
+                        rTransformation.translate(aTranslate.getX(), aTranslate.getY());
+                    }
+                }
+            }
         }
-    } // end of namespace primitive2d
-} // end of namespace drawinglayer
 
-//////////////////////////////////////////////////////////////////////////////
-
-using namespace com::sun::star;
-
-//////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace primitive2d
-    {
         Primitive2DSequence TextSimplePortionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             Primitive2DSequence aRetval;
 
             if(getTextLength())
             {
-                // get integer DXArray for getTextOutlines call (ATM uses vcl)
-                ::std::vector< sal_Int32 > aNewIntegerDXArray;
-                getIntegerDXArray(aNewIntegerDXArray);
-
-                // prepare transformation matrices
-                basegfx::B2DVector aScale, aTranslate;
-                double fRotate, fShearX;
-                getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX);
-
-                // unscaled transform is needed for transformations since the scale is the font height/width already
-                basegfx::B2DHomMatrix aUnscaledTransform;
-                aUnscaledTransform.rotate( fRotate );
-                aUnscaledTransform.shearX( fShearX );
-                aUnscaledTransform.translate( aTranslate.getX(), aTranslate.getY() );
-
-                // unrotated transform is needed for text layouter. He works always with
-                // X-Axis aligned text
-                basegfx::B2DHomMatrix aUnrotatedTransform(getTextTransform());
-                aUnrotatedTransform.rotate( -fRotate );
-
-                // prepare textlayoutdevice
-                TextLayouterDevice aTextLayouter;
-                aTextLayouter.setFontAttributes(getFontAttributes(), aUnrotatedTransform );
-
-                // get the text outlines
                 basegfx::B2DPolyPolygonVector aB2DPolyPolyVector;
-                aTextLayouter.getTextOutlines(aB2DPolyPolyVector, getText(), getTextPosition(), getTextLength(), aNewIntegerDXArray);
+                basegfx::B2DHomMatrix aPolygonTransform;
+
+                // get text outlines and their object transformation
+                getTextOutlinesAndTransformation(aB2DPolyPolyVector, aPolygonTransform);
 
                 // create primitives for the outlines
                 const sal_uInt32 nCount(aB2DPolyPolyVector.size());
@@ -206,12 +207,17 @@ namespace drawinglayer
                     {
                         // prepare polypolygon
                         basegfx::B2DPolyPolygon& rPolyPolygon = aB2DPolyPolyVector[a];
-                        rPolyPolygon.transform(aUnscaledTransform);
+                        rPolyPolygon.transform(aPolygonTransform);
                         aRetval[a] = new PolyPolygonColorPrimitive2D(rPolyPolygon, getFontColor());
                     }
 
                     if(getFontAttributes().getOutline())
                     {
+                        // decompose polygon transformation to single values
+                        basegfx::B2DVector aScale, aTranslate;
+                        double fRotate, fShearX;
+                        aPolygonTransform.decompose(aScale, aTranslate, fRotate, fShearX);
+
                         // create outline text effect with current content and replace
                         Primitive2DReference aNewTextEffect(new TextEffectPrimitive2D(
                             aRetval,
@@ -253,23 +259,6 @@ namespace drawinglayer
 #endif
         }
 
-        void TextSimplePortionPrimitive2D::getIntegerDXArray(::std::vector< sal_Int32 >& rDXArray) const
-        {
-            rDXArray.clear();
-
-            if(getDXArray().size())
-            {
-                rDXArray.reserve(getDXArray().size());
-                const basegfx::B2DVector aPixelVector(getTextTransform() * basegfx::B2DVector(1.0, 0.0));
-                const double fPixelVectorLength(aPixelVector.getLength());
-
-                for(::std::vector< double >::const_iterator aStart(getDXArray().begin()); aStart != getDXArray().end(); aStart++)
-                {
-                    rDXArray.push_back(basegfx::fround((*aStart) * fPixelVectorLength));
-                }
-            }
-        }
-
         bool impLocalesAreEqual(const ::com::sun::star::lang::Locale& rA, const ::com::sun::star::lang::Locale& rB)
         {
             return (rA.Language == rB.Language
@@ -303,21 +292,37 @@ namespace drawinglayer
             if(getTextLength())
             {
                 // get TextBoundRect as base size
-                TextLayouterDevice aTextLayouter;
-                aTextLayouter.setFontAttributes(getFontAttributes(), getTextTransform());
-                aRetval = aTextLayouter.getTextBoundRect(getText(), getTextPosition(), getTextLength());
-
-                // apply textTransform to it, but without scaling. The scale defines the font size
-                // which is already part of the fetched textRange
+                // decompose object transformation to single values
                 basegfx::B2DVector aScale, aTranslate;
                 double fRotate, fShearX;
-                basegfx::B2DHomMatrix aTextTransformWithoutScale;
 
-                getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX);
-                aTextTransformWithoutScale.shearX(fShearX);
-                aTextTransformWithoutScale.rotate(fRotate);
-                aTextTransformWithoutScale.translate(aTranslate.getX(), aTranslate.getY());
-                aRetval.transform(aTextTransformWithoutScale);
+                if(getTextTransform().decompose(aScale, aTranslate, fRotate, fShearX))
+                {
+                    // for the TextLayouterDevice, it is necessary to have a scaling representing
+                    // the font size. Since we want to extract polygons here, it is okay to
+                    // work just with scaling and to ignore shear, rotation and translation,
+                    // all that can be applied to the polygons later
+                    basegfx::B2DVector aFontScale;
+                    getCorrectedScaleAndFontScale(aScale, aFontScale);
+
+                    // prepare textlayoutdevice
+                    TextLayouterDevice aTextLayouter;
+                    aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY());
+
+                    // get basic text range
+                    aRetval = aTextLayouter.getTextBoundRect(getText(), getTextPosition(), getTextLength());
+
+                    // prepare object transformation for range
+                    basegfx::B2DHomMatrix aRangeTransformation;
+
+                    aRangeTransformation.scale(aScale.getX(), aScale.getY());
+                    aRangeTransformation.shearX(fShearX);
+                    aRangeTransformation.rotate(fRotate);
+                    aRangeTransformation.translate(aTranslate.getX(), aTranslate.getY());
+
+                    // apply range transformation to it
+                    aRetval.transform(aRangeTransformation);
+                }
             }
 
             return aRetval;

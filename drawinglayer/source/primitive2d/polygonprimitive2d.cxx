@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive2d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-07 14:27:26 $
+ *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ namespace drawinglayer
         basegfx::B2DRange PolygonHairlinePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // return range
-            return basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolygon()));
+            return basegfx::tools::getRange(getB2DPolygon());
         }
 
         // provide unique ID
@@ -166,7 +166,7 @@ namespace drawinglayer
         basegfx::B2DRange PolygonMarkerPrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // return range
-            return basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolygon()));
+            return basegfx::tools::getRange(getB2DPolygon());
         }
 
         // provide unique ID
@@ -189,6 +189,7 @@ namespace drawinglayer
 
                 if(0.0 == getStrokeAttribute().getFullDotDashLen())
                 {
+                    // no line dashing, just copy
                     aHairLinePolyPolygon.append(getB2DPolygon());
                 }
                 else
@@ -201,14 +202,7 @@ namespace drawinglayer
 
                 if(getLineAttribute().getWidth())
                 {
-                    static bool bTestNewMethod(true);
-
                     // create fat line data
-                    if(!bTestNewMethod)
-                    {
-                        aHairLinePolyPolygon = basegfx::tools::adaptiveSubdivideByAngle(aHairLinePolyPolygon);
-                    }
-
                     const double fHalfLineWidth(getLineAttribute().getWidth() / 2.0);
                     const double fMiterMinimumAngle(15.0 * F_PI180);
                     const basegfx::B2DLineJoin aLineJoin(getLineAttribute().getLineJoin());
@@ -231,7 +225,8 @@ namespace drawinglayer
                         // to be painted as a single PolyPolygon (XORed as fill rule). Alternatively, a
                         // melting process may be used here one day.
                         const basegfx::B2DPolyPolygon aNewPolyPolygon(aAreaPolyPolygon.getB2DPolygon(b));
-                        const basegfx::BColor aColor(bTestNewMethod
+                        static bool bTestByUsingRandomColor(true);
+                        const basegfx::BColor aColor(bTestByUsingRandomColor
                             ? basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)
                             : getLineAttribute().getColor());
                         const Primitive2DReference xRef(new PolyPolygonColorPrimitive2D(aNewPolyPolygon, aColor));
@@ -291,7 +286,7 @@ namespace drawinglayer
         basegfx::B2DRange PolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
             // get range of it (subdivided)
-            basegfx::B2DRange aRetval(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolygon())));
+            basegfx::B2DRange aRetval(basegfx::tools::getRange(getB2DPolygon()));
 
             // if width, grow by line width
             if(getLineAttribute().getWidth())
@@ -436,8 +431,7 @@ namespace drawinglayer
 
             if(!aLocalPolygon.isClosed())
             {
-                // apply arrows. To do that, make sure it's not a curve (necessary at the moment, maybe optimized later)
-                aLocalPolygon = basegfx::tools::adaptiveSubdivideByAngle(aLocalPolygon);
+                // apply arrows
                 const double fPolyLength(basegfx::tools::getLength(aLocalPolygon));
                 double fStart(0.0);
                 double fEnd(0.0);
@@ -446,7 +440,8 @@ namespace drawinglayer
                 {
                     // create start arrow primitive and consume
                     aArrowA = basegfx::tools::createAreaGeometryForLineStartEnd(
-                        aLocalPolygon, getStart().getB2DPolyPolygon(), true, getStart().getWidth(), getStart().isCentered() ? 0.5 : 0.0, &fStart);
+                        aLocalPolygon, getStart().getB2DPolyPolygon(), true, getStart().getWidth(),
+                        fPolyLength, getStart().isCentered() ? 0.5 : 0.0, &fStart);
 
                     // create some overlapping
                     fStart *= 0.8;
@@ -456,7 +451,8 @@ namespace drawinglayer
                 {
                     // create end arrow primitive and consume
                     aArrowB = basegfx::tools::createAreaGeometryForLineStartEnd(
-                        aLocalPolygon, getEnd().getB2DPolyPolygon(), false, getEnd().getWidth(), getEnd().isCentered() ? 0.5 : 0.0, &fEnd);
+                        aLocalPolygon, getEnd().getB2DPolyPolygon(), false, getEnd().getWidth(),
+                        fPolyLength, getEnd().isCentered() ? 0.5 : 0.0, &fEnd);
 
                     // create some overlapping
                     fEnd *= 0.8;

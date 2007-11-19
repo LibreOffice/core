@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-02 16:54:52 $
+ *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,16 @@
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+
+//////////////////////////////////////////////////////////////////////////////
+// predefines
+
+namespace basegfx {
+    class B2DPolyPolygon;
+    typedef ::std::vector< B2DPolyPolygon > B2DPolyPolygonVector;
+}
+
+class OutputDevice;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -122,12 +132,6 @@ namespace drawinglayer
             bool getRTL() const { return mbRTL; }
             bool getBiDiStrong() const { return mbBiDiStrong; }
         };
-
-        // helper methods for vcl font
-        Font getVclFontFromFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DVector& rFontSize, double fFontRotation);
-        Font getVclFontFromFontAttributes(const FontAttributes& rFontAttributes, const basegfx::B2DHomMatrix& rTransform);
-        FontAttributes getFontAttributesFromVclFont(basegfx::B2DVector& rSize, const Font& rFont, bool bRTL, bool bBiDiStrong);
-
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
@@ -164,6 +168,19 @@ namespace drawinglayer
                 const ::com::sun::star::lang::Locale& rLocale,
                 const basegfx::BColor& rFontColor);
 
+            // helpers
+            // get text outlines as polygons and their according ObjectTransformation. Handles all
+            // the necessary VCL outline extractins, scaling adaptions and other stuff.
+            void getTextOutlinesAndTransformation(basegfx::B2DPolyPolygonVector& rTarget, basegfx::B2DHomMatrix& rTransformation) const;
+
+            // adapts fontScale for usage with TextLayouter. Input is rScale which is the extracted
+            // scale from a text transformation. A copy goes to rFontScale and is modified so that
+            // it contains only positive scalings and XY-equal scalings to allow to get a non-X-scaled
+            // Vcl-Font for TextLayouter. rScale is adapted accordingly to contain the corrected scale
+            // which would need to be applied to e.g. outlines received from TextLayouter under
+            // usage of fontScale. This includes Y-Scale, X-Scale-correction and mirrorings.
+            void getCorrectedScaleAndFontScale(basegfx::B2DVector& rScale, basegfx::B2DVector& rFontScale) const;
+
             // get data
             const basegfx::B2DHomMatrix& getTextTransform() const { return maTextTransform; }
             const String& getText() const { return maText; }
@@ -173,9 +190,6 @@ namespace drawinglayer
             const FontAttributes& getFontAttributes() const { return maFontAttributes; }
             const ::com::sun::star::lang::Locale& getLocale() const { return  maLocale; }
             const basegfx::BColor& getFontColor() const { return maFontColor; }
-
-            // helper to have a central conversion to font-size-scaled integer DXArray
-            void getIntegerDXArray(::std::vector< sal_Int32 >& rDXArray) const;
 
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;

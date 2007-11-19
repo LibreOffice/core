@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-07 14:27:27 $
+ *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,10 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GRAPHICPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/graphicprimitive2d.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -369,17 +373,30 @@ namespace drawinglayer
 
                 if(!rB2DPolygon.isClosed())
                 {
+                    double fPolyLength(0.0);
+
                     if(pStart && pStart->isActive())
                     {
+                        fPolyLength = basegfx::tools::getLength(rB2DPolygon);
+
                         const basegfx::B2DPolyPolygon aStartArrow(basegfx::tools::createAreaGeometryForLineStartEnd(
-                            rB2DPolygon, pStart->getB2DPolyPolygon(), true, pStart->getWidth(), pStart->isCentered() ? 0.5 : 0.0, 0));
+                            rB2DPolygon, pStart->getB2DPolyPolygon(), true, pStart->getWidth(),
+                            fPolyLength, pStart->isCentered() ? 0.5 : 0.0, 0));
+
                         aStartPolyPolygon = PolyPolygon(aStartArrow);
                     }
 
                     if(pEnd && pEnd->isActive())
                     {
+                        if(basegfx::fTools::equalZero(fPolyLength))
+                        {
+                            fPolyLength = basegfx::tools::getLength(rB2DPolygon);
+                        }
+
                         const basegfx::B2DPolyPolygon aEndArrow(basegfx::tools::createAreaGeometryForLineStartEnd(
-                            rB2DPolygon, pEnd->getB2DPolyPolygon(), false, pEnd->getWidth(), pEnd->isCentered() ? 0.5 : 0.0, 0));
+                            rB2DPolygon, pEnd->getB2DPolyPolygon(), false, pEnd->getWidth(),
+                            fPolyLength, pEnd->isCentered() ? 0.5 : 0.0, 0));
+
                         aEndPolyPolygon = PolyPolygon(aEndArrow);
                     }
                 }
@@ -1097,7 +1114,7 @@ namespace drawinglayer
                             // calculate transformation. Get real object size, all values in FillBitmapAttribute
                             // are relative to the unified object
                             const attribute::FillBitmapAttribute& rFillBitmapAttribute = rBitmapCandidate .getFillBitmap();
-                            const basegfx::B2DRange aOutlineRange(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon)));
+                            const basegfx::B2DRange aOutlineRange(basegfx::tools::getRange(aLocalPolyPolygon));
                             const basegfx::B2DVector aOutlineSize(aOutlineRange.getRange());
 
                             // get absolute values
@@ -1375,8 +1392,9 @@ namespace drawinglayer
 
                             if(maClipPolyPolygon.count())
                             {
-                                // set VCL clip region; subdivide before conversion to tools polygon
+                                // set VCL clip region; subdivide before conversion to tools polygon. Subdivision necessary (!)
                                 mpOutputDevice->Push(PUSH_CLIPREGION);
+                                mpOutputDevice->SetClipRegion(Region(PolyPolygon(maClipPolyPolygon)));
                                 mpOutputDevice->SetClipRegion(Region(PolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(maClipPolyPolygon))));
                             }
 
@@ -1463,7 +1481,7 @@ namespace drawinglayer
                             mpOutputDevice->SetFillColor(Color(aPolygonColor));
                             mpOutputDevice->SetLineColor();
                             mpOutputDevice->DrawTransparent(
-                                PolyPolygon(basegfx::tools::adaptiveSubdivideByAngle(aLocalPolyPolygon)),
+                                PolyPolygon(aLocalPolyPolygon),
                                 nTransPercentVcl);
                             impEndSvtGraphicFill(pSvtGraphicFill);
                         }

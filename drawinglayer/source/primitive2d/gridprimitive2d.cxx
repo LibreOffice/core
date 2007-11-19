@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridprimitive2d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2007-07-27 09:03:33 $
+ *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,8 +80,8 @@ namespace drawinglayer
 
                 // create grid matrix which transforms from scaled logic to view
                 basegfx::B2DHomMatrix aRST;
-                aRST.rotate(fRotate);
                 aRST.shearX(fShearX);
+                aRST.rotate(fRotate);
                 aRST.translate(aTranslate.getX(), aTranslate.getY());
                 aRST *= rViewInformation.getViewTransformation();
 
