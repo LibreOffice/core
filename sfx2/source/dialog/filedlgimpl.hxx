@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlgimpl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:11:56 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:32:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@
 #include <svtools/svstdarr.hxx>
 
 #include <sfx2/filedlghelper.hxx>
+#include <comphelper/sequenceasvector.hxx>
 
 class SfxFilterMatcher;
 class GraphicFilter;
@@ -95,6 +96,8 @@ namespace sfx2
         GraphicFilter*              mpGraphicFilter;
         FileDialogHelper*           mpAntiImpl;
         Window*                     mpPreferredParentWindow;
+
+        ::comphelper::SequenceAsVector< ::rtl::OUString > mlLastURLs;
 
         ::rtl::OUString             maPath;
         ::rtl::OUString             maFileName;
@@ -179,6 +182,12 @@ namespace sfx2
         void                    SaveLastUsedFilter( void );
 
         void                    implInitializeFileName( );
+
+        void                    implGetAndCacheFiles( const ::com::sun::star::uno::Reference< XInterface >& xPicker  ,
+                                                            SvStringsDtor*&               rpURLList,
+                                                      const SfxFilter*                    pFilter  );
+        String                  implEnsureURLExtension(const String& sURL      ,
+                                                       const String& sExtension);
 
         DECL_LINK( TimeOutHdl_Impl, Timer* );
         DECL_LINK( HandleEvent, FileDialogHelper* );
