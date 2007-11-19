@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urlparameter.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 13:16:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 13:01:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
 #endif
+#include <rtl/ustrbuf.hxx>
 #include <libxslt/xslt.h>
 #include <libxslt/transform.h>
 #include <libxslt/xsltutils.h>
@@ -75,9 +76,6 @@
 #endif
 #ifndef _DATABASES_HXX_
 #include <provider/databases.hxx>
-#endif
-#ifndef _RTL_URI_HXX_
-#include <rtl/uri.hxx>
 #endif
 #ifndef _COM_SUN_STAR_IO_XACTIVEDATASINK_HPP_
 #include <com/sun/star/io/XActiveDataSink.hpp>
@@ -167,18 +165,18 @@ URLParameter::URLParameter( const rtl::OUString&  aURL,
     parse();
 }
 
-
 bool URLParameter::isErrorDocument()
 {
+    bool bErrorDoc = false;
+
     if( isFile() )
     {
-        Reference< XHierarchicalNameAccess > xNA = m_pDatabases->jarFile( get_jar(),
-                                                                          get_language() );
-
-        return ! ( xNA.is() && xNA->hasByHierarchicalName( get_path() ) );
+        Reference< XHierarchicalNameAccess > xNA =
+            m_pDatabases->findJarFileForPath( get_jar(), get_language(), get_path() );
+        bErrorDoc = !xNA.is();
     }
 
-    return false;
+    return bErrorDoc;
 }
 
 
@@ -348,30 +346,56 @@ rtl::OUString URLParameter::get_the_jar()
 
 void URLParameter::readBerkeley()
 {
+    static rtl::OUString aQuestionMark( rtl::OUString::createFromAscii( "?" ) );
+
     if( get_id().compareToAscii("") == 0 )
         return;
 
-    Db* db = m_pDatabases->getBerkeley( get_module(),
-                                        get_language() );
+    rtl::OUString aModule = get_module();
+    rtl::OUString aLanguage = get_language();
 
-    if( ! db )
-        return;
+    DataBaseIterator aDbIt( *m_pDatabases, aModule, aLanguage, false );
+    bool bSuccess = false;
 
-    rtl::OString keyStr( m_aId.getStr(),m_aId.getLength(),RTL_TEXTENCODING_UTF8 );
-    Dbt key( static_cast< void* >( const_cast< sal_Char* >( keyStr.getStr() ) ),
-             keyStr.getLength() );
     Dbt data;
+    rtl::OUString aExtensionPath;
+    while( true )
+    {
+        Db* db = aDbIt.nextDb( &aExtensionPath );
+        if( !db )
+            break;
 
-    int err = db->get( 0,&key,&data,0 );
-    (void)err;
+        rtl::OString keyStr( m_aId.getStr(),m_aId.getLength(),RTL_TEXTENCODING_UTF8 );
+        Dbt key( static_cast< void* >( const_cast< sal_Char* >( keyStr.getStr() ) ),
+                 keyStr.getLength() );
 
-    DbtToStringConverter converter( static_cast< sal_Char* >( data.get_data() ),
-                                    data.get_size() );
-    m_aTitle = converter.getTitle();
-    m_pDatabases->replaceName( m_aTitle );
-    m_aPath  = converter.getFile();
-    m_aJar   = converter.getDatabase();
-    m_aTag   = converter.getHash();
+        int err = db->get( 0,&key,&data,0 );
+        if( err == 0 )
+        {
+            bSuccess = true;
+            break;
+        }
+    }
+
+    if( bSuccess )
+    {
+        DbtToStringConverter converter( static_cast< sal_Char* >( data.get_data() ),
+                                        data.get_size() );
+        m_aTitle = converter.getTitle();
+        m_pDatabases->replaceName( m_aTitle );
+        m_aPath  = converter.getFile();
+        m_aJar   = converter.getDatabase();
+        if( aExtensionPath.getLength() > 0 )
+        {
+            rtl::OUStringBuffer aExtendedJarStrBuf;
+            aExtendedJarStrBuf.append( aQuestionMark );
+            aExtendedJarStrBuf.append( aExtensionPath );
+            aExtendedJarStrBuf.append( aQuestionMark );
+            aExtendedJarStrBuf.append( m_aJar );
+            m_aJar = aExtendedJarStrBuf.makeStringAndClear();
+        }
+        m_aTag   = converter.getHash();
+    }
 }
 
 
@@ -582,34 +606,35 @@ void URLParameter::parse() throw( com::sun::star::ucb::IllegalIdentifierExceptio
 }
 
 
-
 bool URLParameter::scheme()
 {
-#define PREFIX_LENGTH 20
-    if( m_aExpr.compareToAscii( "vnd.sun.star.help://",PREFIX_LENGTH ) == 0 )
+    // Correct extension help links as sometimes the
+    // module is missing resulting in a misformed URL
+    if( m_aExpr.compareToAscii( "vnd.sun.star.help:///", 21 ) == 0 )
     {
-        m_aExpr = m_aExpr.copy( PREFIX_LENGTH );
-#undef PREFIX_LENGTH
-        return true;
+        sal_Int32 nLen = m_aExpr.getLength();
+        rtl::OUString aLastStr = m_aExpr.copy( nLen - 6 );
+        if( aLastStr.compareToAscii( "DbPAR=" ) == 0 )
+        {
+            rtl::OUString aNewExpr = m_aExpr.copy( 0, 20 );
+            rtl::OUString aSharedStr = rtl::OUString::createFromAscii( "shared" );
+            aNewExpr += aSharedStr;
+            aNewExpr += m_aExpr.copy( 20 );
+            aNewExpr += aSharedStr;
+            m_aExpr = aNewExpr;
+        }
     }
-#define PREFIX_LENGTH 19
-    else if( m_aExpr.compareToAscii( "vnd.sun.star.help:/",PREFIX_LENGTH ) == 0 )
-    {
-        m_aExpr = m_aExpr.copy( PREFIX_LENGTH );
-#undef PREFIX_LENGTH
-        return true;
-    }
-#define PREFIX_LENGTH 18
-    else if( m_aExpr.compareToAscii( "vnd.sun.star.help:",PREFIX_LENGTH ) == 0 )
-    {
-        m_aExpr = m_aExpr.copy( PREFIX_LENGTH );
-#undef PREFIX_LENGTH
-        return true;
-    }
-    else
-        return false;
-}
 
+    for( sal_Int32 nPrefixLen = 20 ; nPrefixLen >= 18 ; --nPrefixLen )
+    {
+        if( m_aExpr.compareToAscii( "vnd.sun.star.help://", nPrefixLen ) == 0 )
+        {
+            m_aExpr = m_aExpr.copy( nPrefixLen );
+            return true;
+        }
+    }
+    return false;
+}
 
 
 bool URLParameter::module()
@@ -792,7 +817,8 @@ pkgOpen(const char * /*URI*/) {
         path = ugblData->m_pInitial->get_path();
     }
 
-    Reference< XHierarchicalNameAccess > xNA(ugblData->m_pDatabases->jarFile( jar,language ));
+    Reference< XHierarchicalNameAccess > xNA =
+        ugblData->m_pDatabases->findJarFileForPath( jar, language, path );
 
     Reference< XInputStream > xInputStream;
 
@@ -828,7 +854,8 @@ helpOpen(const char * URI) {
     language = urlpar.get_language();
     path = urlpar.get_path();
 
-    Reference< XHierarchicalNameAccess > xNA(ugblData->m_pDatabases->jarFile( jar,language ));
+    Reference< XHierarchicalNameAccess > xNA =
+        ugblData->m_pDatabases->findJarFileForPath( jar, language, path );
 
     Reference< XInputStream > xInputStream;
 
