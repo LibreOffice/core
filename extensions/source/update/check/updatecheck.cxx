@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:38:05 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:47:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,9 @@
 
 #ifndef _COM_SUN_STAR_TASK_XJOB_HPP_
 #include <com/sun/star/task/XJob.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
+#include <com/sun/star/task/XJobExecutor.hpp>
 #endif
 
 // #include <comphelper/processfactory.hxx>
@@ -413,6 +416,7 @@ bool
 UpdateCheckThread::runCheck()
 {
     bool ret = false;
+    UpdateState eUIState = UPDATESTATE_NO_UPDATE_AVAIL;
 
     UpdateInfo aInfo;
     rtl::Reference< UpdateCheck > aController(UpdateCheck::get());
@@ -420,10 +424,23 @@ UpdateCheckThread::runCheck()
     if( checkForUpdates(aInfo, m_xContext, aController->getInteractionHandler(), createProvider()) )
     {
         aController->setUpdateInfo(aInfo);
+        eUIState = aController->getUIState(aInfo);
         ret = true;
     }
     else
         aController->setCheckFailedState();
+
+    // We will only look for extension updates, when there is no 'check for office updates' dialog open
+    // and when there was no office update found
+    if ( ( eUIState != UPDATESTATE_UPDATE_AVAIL ) &&
+         ( eUIState != UPDATESTATE_UPDATE_NO_DOWNLOAD ) &&
+         !aController->isDialogShowing() )
+    {
+        bool bHasExtensionUpdates = checkForExtensionUpdates( m_xContext );
+        aController->setHasExtensionUpdates( bHasExtensionUpdates );
+        if ( bHasExtensionUpdates )
+            aController->setUIState( UPDATESTATE_EXT_UPD_AVAIL );
+    }
 
     // joining with this thread is safe again
     clearProvider();
@@ -558,7 +575,11 @@ uno::Any SAL_CALL
 MenuBarButtonJob::execute(const uno::Sequence<beans::NamedValue>& )
     throw (lang::IllegalArgumentException, uno::Exception)
 {
-    m_aUpdateCheck->showDialog();
+    if ( m_aUpdateCheck->shouldShowExtUpdDlg() )
+        m_aUpdateCheck->showExtensionDialog();
+    else
+        m_aUpdateCheck->showDialog();
+
     return uno::Any();
 }
 
@@ -720,6 +741,10 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
         aModel.getUpdateEntry(m_aUpdateInfo);
 
         bool obsoleteUpdateInfo = isObsoleteUpdateInfo(aUpdateEntryVersion);
+
+        m_bHasExtensionUpdate = checkForPendingUpdates( xContext );
+        m_bShowExtUpdDlg = false;
+
         rtl::OUString aLocalFileName = aModel.getLocalFileName();
 
         if( aLocalFileName.getLength() > 0 )
@@ -858,7 +883,8 @@ UpdateCheck::install()
             rtl::OUString aInstallImage(m_aImageName);
             osl::FileBase::getSystemPathFromFileURL(aInstallImage, aInstallImage);
             xShellExecute->execute(aInstallImage, rtl::OUString(), c3s::SystemShellExecuteFlags::DEFAULTS);
-            ShutdownThread *pShutdownThread = new ShutdownThread( m_xContext );
+            ShutdownThread *pShutdownThread;
+            pShutdownThread = new ShutdownThread( m_xContext );
         }
     } catch(c3s::SystemShellExecuteException&) {
         m_aUpdateHandler->setErrorMessage( m_aUpdateHandler->getDefaultInstErrMsg() );
@@ -1260,31 +1286,19 @@ UpdateCheck::setCheckFailedState()
 }
 
 //------------------------------------------------------------------------------
-
-void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
+void UpdateCheck::handleMenuBarUI( rtl::Reference< UpdateHandler > rUpdateHandler,
+                                   UpdateState& eState,
+                                   bool suppressBubble )
 {
-    osl::ClearableMutexGuard aGuard(m_aMutex);
+    uno::Reference<beans::XPropertySet> xMenuBarUI( m_xMenuBarUI );
 
-    if( ! m_xMenuBarUI.is() &&
-        (DISABLED != m_eState) &&
-        (UPDATESTATE_NO_UPDATE_AVAIL != eState) &&
-        (UPDATESTATE_CHECKING != eState) &&
-        (UPDATESTATE_ERROR_CHECKING != eState)
-    )
-    {
-        m_xMenuBarUI = createMenuBarUI(m_xContext, new MenuBarButtonJob(this));
-    }
+    if ( ( UPDATESTATE_NO_UPDATE_AVAIL == eState ) && m_bHasExtensionUpdate )
+        eState = UPDATESTATE_EXT_UPD_AVAIL;
 
-    uno::Reference< uno::XComponentContext > xContext(m_xContext);
-
-    uno::Reference<beans::XPropertySet> xMenuBarUI(m_xMenuBarUI);
-    rtl::Reference<UpdateHandler> aUpdateHandler(getUpdateHandler());
-    OSL_ASSERT( aUpdateHandler.is() );
-
-    UpdateInfo aUpdateInfo(m_aUpdateInfo);
-    rtl::OUString aImageName(m_aImageName);
-
-    aGuard.clear();
+    if ( UPDATESTATE_EXT_UPD_AVAIL == eState )
+        m_bShowExtUpdDlg = true;
+    else
+        m_bShowExtUpdDlg = false;
 
     if( xMenuBarUI.is() )
     {
@@ -1294,19 +1308,46 @@ void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
         }
         else
         {
-            xMenuBarUI->setPropertyValue( PROPERTY_TITLE, uno::makeAny(aUpdateHandler->getBubbleTitle(eState)) );
-            xMenuBarUI->setPropertyValue( PROPERTY_TEXT, uno::makeAny(aUpdateHandler->getBubbleText(eState)) );
+            xMenuBarUI->setPropertyValue( PROPERTY_TITLE, uno::makeAny(rUpdateHandler->getBubbleTitle(eState)) );
+            xMenuBarUI->setPropertyValue( PROPERTY_TEXT, uno::makeAny(rUpdateHandler->getBubbleText(eState)) );
 
-            if( ! suppressBubble && ( ! aUpdateHandler->isVisible() || aUpdateHandler->isMinimized() ) )
+            if( ! suppressBubble && ( ! rUpdateHandler->isVisible() || rUpdateHandler->isMinimized() ) )
                 xMenuBarUI->setPropertyValue( PROPERTY_SHOW_BUBBLE, uno::makeAny( sal_True ) );
 
             if( UPDATESTATE_CHECKING != eState )
                 xMenuBarUI->setPropertyValue( PROPERTY_SHOW_MENUICON, uno::makeAny(sal_True) );
         }
     }
+}
+
+//------------------------------------------------------------------------------
+void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
+{
+    osl::ClearableMutexGuard aGuard(m_aMutex);
+
+    if( ! m_xMenuBarUI.is() &&
+        (DISABLED != m_eState) &&
+        ( m_bHasExtensionUpdate || (UPDATESTATE_NO_UPDATE_AVAIL != eState)) &&
+        (UPDATESTATE_CHECKING != eState) &&
+        (UPDATESTATE_ERROR_CHECKING != eState)
+    )
+    {
+        m_xMenuBarUI = createMenuBarUI(m_xContext, new MenuBarButtonJob(this));
+    }
+
+    rtl::Reference<UpdateHandler> aUpdateHandler(getUpdateHandler());
+    OSL_ASSERT( aUpdateHandler.is() );
+
+    UpdateInfo aUpdateInfo(m_aUpdateInfo);
+    rtl::OUString aImageName(m_aImageName);
+
+    aGuard.clear();
+
+    handleMenuBarUI( aUpdateHandler, eState, suppressBubble );
 
     if( UPDATESTATE_UPDATE_AVAIL == eState )
     {
+        uno::Reference< uno::XComponentContext > xContext(m_xContext);
         aUpdateHandler->setNextVersion(aUpdateInfo.Version);
 
         rtl::OUString aDownloadDestination =
@@ -1404,6 +1445,28 @@ UpdateCheck::storeReleaseNote(sal_Int8 nNum, const rtl::OUString &rURL)
 
     aFile.close();
     return true;
+}
+
+//------------------------------------------------------------------------------
+void UpdateCheck::showExtensionDialog()
+{
+    rtl::OUString sServiceName = UNISTRING("com.sun.star.deployment.ui.PackageManagerDialog");
+    rtl::OUString sArguments = UNISTRING("SHOW_UPDATE_DIALOG");
+    uno::Reference< uno::XInterface > xService;
+
+    if( ! m_xContext.is() )
+        throw uno::RuntimeException(
+            UNISTRING( "UpdateCheck::showExtensionDialog(): empty component context" ), uno::Reference< uno::XInterface > () );
+
+    uno::Reference< lang::XMultiComponentFactory > xServiceManager( m_xContext->getServiceManager() );
+    if( !xServiceManager.is() )
+        throw uno::RuntimeException(
+            UNISTRING( "UpdateCheck::showExtensionDialog(): unable to obtain service manager from component context" ), uno::Reference< uno::XInterface > () );
+
+    xService = xServiceManager->createInstanceWithContext( sServiceName, m_xContext );
+    uno::Reference< task::XJobExecutor > xExecuteable( xService, uno::UNO_QUERY );
+    if ( xExecuteable.is() )
+        xExecuteable->trigger( sArguments );
 }
 
 //------------------------------------------------------------------------------
