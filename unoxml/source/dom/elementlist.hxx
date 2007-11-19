@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementlist.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:46:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:43:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
 
 using namespace rtl;
 using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
 using namespace com::sun::star::xml::dom;
 using namespace com::sun::star::xml::dom::events;
 
@@ -60,7 +59,7 @@ namespace DOM
 {
     typedef std::vector< xmlNodePtr > nodevector;
 
-    class CElementList : public cppu::WeakImplHelper2< XNodeList, XEventListener >
+    class CElementList : public cppu::WeakImplHelper2< XNodeList, com::sun::star::xml::dom::events::XEventListener >
     {
     private:
         const CElement* m_pElement;
