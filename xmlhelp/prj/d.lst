@@ -4,3 +4,6 @@
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.*
 ..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.*
 ..\util\ucpchelp.xml %_DEST%\xml%_EXT%\ucpchelp.xml
+..\inc\xmlhelp\compilehelp.hxx %_DEST%\inc%_EXT%\xmlhelp\compilehelp.hxx
+..\inc\xmlhelp\helplinkerdllapi.h  %_DEST%\inc%_EXT%\xmlhelp\helplinkerdllapi.h
+..\%__SRC%\lib\ihelplinker.lib %_DEST%\lib%_EXT%\ihelplinker.lib
