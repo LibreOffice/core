@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckconfig.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 15:57:22 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:48:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,12 @@ public:
     // Returns a directory accessible for all users
     static rtl::OUString getAllUsersDirectory();
 
+    // store and retrieve information about extensions
+    void storeExtensionVersion( const rtl::OUString& rExtensionName,
+                                const rtl::OUString& rVersion );
+    bool checkExtensionVersion( const rtl::OUString& rExtensionName,
+                                const rtl::OUString& rVersion );
+
     // XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  )
         throw (::com::sun::star::uno::RuntimeException);
@@ -223,6 +229,9 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
+
+    static rtl::OUString getSubVersion( const rtl::OUString& rVersion, sal_Int32 *nIndex );
+    static bool isVersionGreater( const rtl::OUString& rVersion1, const rtl::OUString& rVersion2 );
 
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xContainer;
     const ::rtl::Reference< UpdateCheckConfigListener > m_rListener;
