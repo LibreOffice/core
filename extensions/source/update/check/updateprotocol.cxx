@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updateprotocol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 15:58:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:50:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,15 @@
 #endif
 
 #include "updateprotocol.hxx"
+#include "updatecheckconfig.hxx"
 
 #ifndef _COM_SUN_STAR_DEPLOYMENT_UPDATEINFORMATINENTRY_HPP_
 #include <com/sun/star/deployment/UpdateInformationEntry.hpp>
 #endif
+#ifndef  _COM_SUN_STAR_DEPLOYMENT_XPACKAGEINFORMATIONPROVIDER_HPP_
+#include <com/sun/star/deployment/XPackageInformationProvider.hpp>
+#endif
+
 
 #include <rtl/ref.hxx>
 #include <rtl/uri.hxx>
@@ -241,4 +246,85 @@ checkForUpdates(
     }
 
     return true;
+}
+
+//------------------------------------------------------------------------------
+bool storeExtensionUpdateInfos( const uno::Reference< uno::XComponentContext > & rxContext,
+                                const uno::Sequence< uno::Sequence< rtl::OUString > > &rUpdateInfos )
+{
+    if ( rUpdateInfos.hasElements() )
+    {
+        rtl::Reference< UpdateCheckConfig > aConfig = UpdateCheckConfig::get( rxContext );
+
+        for ( sal_Int32 i = rUpdateInfos.getLength() - 1; i >= 0; i-- )
+        {
+            aConfig->storeExtensionVersion( rUpdateInfos[i][0], rUpdateInfos[i][1] );
+        }
+    }
+    return rUpdateInfos.hasElements();
+}
+
+//------------------------------------------------------------------------------
+// Returns 'true' if there are updates for any extension
+
+bool checkForExtensionUpdates( const uno::Reference< uno::XComponentContext > & rxContext )
+{
+    uno::Sequence< uno::Sequence< rtl::OUString > > aUpdateList;
+
+    uno::Reference< deployment::XPackageInformationProvider > xInfoProvider;
+    try
+    {
+        uno::Any aValue( rxContext->getValueByName(
+                UNISTRING( "/singletons/com.sun.star.deployment.PackageInformationProvider" ) ) );
+        OSL_VERIFY( aValue >>= xInfoProvider );
+    }
+    catch( const uno::Exception& )
+    {
+        OSL_ENSURE( false, "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
+    }
+
+    if ( !xInfoProvider.is() ) return false;
+
+    aUpdateList = xInfoProvider->isUpdateAvailable( ::rtl::OUString() );
+    storeExtensionUpdateInfos( rxContext, aUpdateList );
+
+    return aUpdateList.hasElements();
+}
+
+//------------------------------------------------------------------------------
+// Returns 'true' if there are any pending updates for any extension (offline check)
+
+bool checkForPendingUpdates( const uno::Reference< uno::XComponentContext > & rxContext )
+{
+    uno::Sequence< uno::Sequence< rtl::OUString > > aExtensionList;
+    uno::Reference< deployment::XPackageInformationProvider > xInfoProvider;
+    try
+    {
+        uno::Any aValue( rxContext->getValueByName(
+                UNISTRING( "/singletons/com.sun.star.deployment.PackageInformationProvider" ) ) );
+        OSL_VERIFY( aValue >>= xInfoProvider );
+    }
+    catch( const uno::Exception& )
+    {
+        OSL_ENSURE( false, "checkForExtensionUpdates: could not create the PackageInformationProvider!" );
+    }
+
+    if ( !xInfoProvider.is() ) return false;
+
+    bool bPendingUpdateFound = false;
+
+    aExtensionList = xInfoProvider->getExtensionList();
+    if ( aExtensionList.hasElements() )
+    {
+        rtl::Reference< UpdateCheckConfig > aConfig = UpdateCheckConfig::get( rxContext );
+
+        for ( sal_Int32 i = aExtensionList.getLength() - 1; i >= 0; i-- )
+        {
+            bPendingUpdateFound = aConfig->checkExtensionVersion( aExtensionList[i][0], aExtensionList[i][1] );
+            if ( bPendingUpdateFound )
+                break;
+        }
+    }
+
+    return bPendingUpdateFound;
 }
