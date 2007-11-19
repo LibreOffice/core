@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequenceashashmap.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:58:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:32:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,42 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
         void operator>>(::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& lDestination) const;
 
         //---------------------------------------
+        /** @short  return this map instance as an
+                    Any, which can be
+                    used in const environments only.
+
+            @descr  Its made const to prevent using of the
+                    return value directly as an in/out parameter!
+                    usage: myMethod(stlDequeAdapter.getAsAnyList());
+
+            @param  bAsPropertyValue
+                    switch between using of PropertyValue or NamedValue as
+                    value type.
+
+            @return A const Any, which
+                    contains all items of this map.
+         */
+        const ::com::sun::star::uno::Any getAsConstAny(::sal_Bool bAsPropertyValue) const;
+
+        //---------------------------------------
+        /** @short  return this map instance as a
+                    sequence< Any >, which can be
+                    used in const environments only.
+
+            @descr  Its made const to prevent using of the
+                    return value directly as an in/out parameter!
+                    usage: myMethod(stlDequeAdapter.getAsAnyList());
+
+            @param  bAsPropertyValue
+                    switch between using of PropertyValue or NamedValue as
+                    value type.
+
+            @return A const sequence which elements of Any, which
+                    contains all items of this map.
+         */
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > getAsConstAnyList(::sal_Bool bAsPropertyValue) const;
+
+        //---------------------------------------
         /** @short  return this map instance to as a
                     NamedValue sequence, which can be
                     used in const environments only.
@@ -324,6 +360,19 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
                     in these map; FALSE otherwise.
          */
         sal_Bool match(const SequenceAsHashMap& rCheck) const;
+
+        //---------------------------------------
+        /** @short  merge all values from the given map into
+                    this one.
+
+            @descr  Existing items will be overwritten ...
+                    missing items will be created new ...
+                    but non specified items will stay alive !
+
+            @param  rSource
+                    the map containing all items for the update.
+         */
+        void update(const SequenceAsHashMap& rSource);
 
         //---------------------------------------
         /** @short  can be used to generate a file dump of
