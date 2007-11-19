@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 15:56:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:48:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,6 +124,10 @@ public:
 
     // Returns true if the update dialog is currently showing
     bool isDialogShowing() const;
+    bool shouldShowExtUpdDlg() const { return ( m_bShowExtUpdDlg && m_bHasExtensionUpdate ); }
+    void showExtensionDialog();
+    void setHasExtensionUpdates( bool bHasUpdates ) { m_bHasExtensionUpdate = bHasUpdates; }
+    bool hasOfficeUpdate() const { return (m_aUpdateInfo.BuildId.getLength() > 0); }
 
     // DownloadInteractionHandler
     virtual bool downloadTargetExists(const rtl::OUString& rFileName);
@@ -174,6 +178,10 @@ private:
     // stores the release note url on disk to be used by setup app
     static bool storeReleaseNote(sal_Int8 nNum, const rtl::OUString &rURL);
 
+    /* This method turns on the menubar icon and triggers the bubble window
+     */
+    void handleMenuBarUI( rtl::Reference< UpdateHandler > rUpdateHandler,
+                          UpdateState& eState, bool suppressBubble );
     enum State {
         NOT_INITIALIZED,
         DISABLED,
@@ -190,6 +198,8 @@ private:
 
     UpdateInfo m_aUpdateInfo;
     rtl::OUString m_aImageName;
+    bool m_bHasExtensionUpdate;
+    bool m_bShowExtUpdDlg;
 
     rtl::Reference<UpdateHandler> m_aUpdateHandler;
     com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> m_xMenuBarUI;
