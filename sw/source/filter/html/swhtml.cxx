@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:51:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 13:03:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -441,6 +441,10 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
     nSBModuleCnt( 0 ),
     nMissingImgMaps( 0 ),
     nParaCnt( 5 ),
+    // --> OD 2007-10-26 #i83625#
+    nContextStMin( 0 ),
+    nContextStAttrMin( 0 ),
+    // <--
     nOpenParaToken( 0 ),
     eJumpTo( JUMPTO_NONE ),
 #ifndef PRODUCT
