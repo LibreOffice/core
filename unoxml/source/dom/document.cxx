@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:44:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:42:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#include <com/sun/star/uno/Sequence.h>
 
 #include "document.hxx"
 #include "attr.hxx"
@@ -98,12 +100,101 @@ namespace DOM
 
     }
 
-    CDocument::CDocument(xmlDocPtr aDocPtr)
+    CDocument::CDocument(xmlDocPtr aDocPtr):
+        m_aNodeRefList(),
+        m_aDocPtr(aDocPtr),
+        m_streamListeners()
     {
-        m_aDocPtr = aDocPtr;
-        m_aNodeType = NodeType_DOCUMENT_NODE;
         // init node base
+        m_aNodeType = NodeType_DOCUMENT_NODE;
         init_node((xmlNodePtr)m_aDocPtr);
+    }
+
+    void SAL_CALL CDocument::addListener(const Reference< XStreamListener >& aListener )
+        throw (RuntimeException)
+    {
+        m_streamListeners.insert(aListener);
+    }
+
+    void SAL_CALL CDocument::removeListener(const Reference< XStreamListener >& aListener )
+        throw (RuntimeException)
+    {
+        m_streamListeners.erase(aListener);
+    }
+
+    // IO context functions for libxml2 interaction
+    typedef struct {
+        Reference< XOutputStream > stream;
+        bool allowClose;
+    } IOContext;
+
+    extern "C" {
+    // write callback
+    // int xmlOutputWriteCallback (void * context, const char * buffer, int len)
+    static int writeCallback(void *context, const char* buffer, int len){
+        // create a sequence and write it to the stream
+        IOContext *pContext = static_cast<IOContext*>(context);
+        Sequence<sal_Int8> bs(reinterpret_cast<const sal_Int8*>(buffer), len);
+        pContext->stream->writeBytes(bs);
+        return len;
+    }
+
+    // clsoe callback
+    //int xmlOutputCloseCallback (void * context)
+    static int closeCallback(void *context)
+    {
+        IOContext *pContext = static_cast<IOContext*>(context);
+        if (pContext->allowClose) {
+            pContext->stream->closeOutput();
+        }
+        return 0;
+    }
+    } // extern "C"
+
+    void SAL_CALL CDocument::start()
+        throw (RuntimeException)
+    {
+        if (! m_rOutputStream.is()) return;
+
+        // notify listners about start
+        listenerlist_t::const_iterator iter1 = m_streamListeners.begin();
+        while (iter1 != m_streamListeners.end()) {
+            Reference< XStreamListener > aListener = *iter1;
+            aListener->started();
+            iter1++;
+        }
+
+        // setup libxml IO and write data to output stream
+        IOContext ioctx = {m_rOutputStream, false};
+        xmlOutputBufferPtr pOut = xmlOutputBufferCreateIO(
+            writeCallback, closeCallback, &ioctx, NULL);
+        xmlSaveFileTo(pOut, m_aNodePtr->doc, NULL);
+
+        // call listeners
+        listenerlist_t::const_iterator iter2 = m_streamListeners.begin();
+        while (iter2 != m_streamListeners.end()) {
+            Reference< XStreamListener > aListener = *iter2;
+            aListener->closed();
+            iter2++;
+        }
+
+    }
+
+    void SAL_CALL CDocument::terminate()
+        throw (RuntimeException)
+    {
+        // not supported
+    }
+
+    void SAL_CALL CDocument::setOutputStream(   const Reference< XOutputStream >& aStream )
+        throw (RuntimeException)
+    {
+        m_rOutputStream = aStream;
+    }
+
+    Reference< XOutputStream > SAL_CALL  CDocument::getOutputStream() throw (RuntimeException)
+    {
+        return m_rOutputStream;
     }
 
     // Creates an Attr of the given name.
