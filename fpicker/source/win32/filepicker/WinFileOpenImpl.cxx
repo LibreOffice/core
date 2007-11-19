@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:57:26 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ using namespace com::sun::star;
 
 using com::sun::star::ui::dialogs::FilePickerEvent;
 using com::sun::star::lang::IllegalArgumentException;
-using com::sun::star::ui::dialogs::XFilePicker;
+using com::sun::star::ui::dialogs::XFilePicker2;
 
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
@@ -196,7 +196,7 @@ void CWinFileOpenImpl::setDisplayDirectory(const rtl::OUString& aDirectory)
              ::osl::FileBase::getSystemPathFromFileURL(aDirectory,aSysDirectory))
             throw IllegalArgumentException(
                 rtl::OUString::createFromAscii("Invalid directory"),
-                static_cast<XFilePicker*>(m_FilePicker), 1);
+                static_cast<XFilePicker2*>(m_FilePicker), 1);
 
         // we ensure that there is a trailing '/' at the end of
         // he given file url, because the windows functions only
@@ -267,7 +267,7 @@ sal_Int16 SAL_CALL CWinFileOpenImpl::execute(  ) throw(uno::RuntimeException)
     else
         throw uno::RuntimeException(
             rtl::OUString::createFromAscii("Error executing dialog"),
-            static_cast<XFilePicker*>(m_FilePicker));
+            static_cast<XFilePicker2*>(m_FilePicker));
 
     return rc;
 }
@@ -286,7 +286,7 @@ void SAL_CALL CWinFileOpenImpl::appendFilter(const rtl::OUString& aTitle, const 
     if (!bRet)
         throw IllegalArgumentException(
             rtl::OUString::createFromAscii("filter already exists"),
-            static_cast<XFilePicker*>(m_FilePicker), 1);
+            static_cast<XFilePicker2*>(m_FilePicker), 1);
 
     // #95345# see MSDN OPENFILENAME
     // If nFilterIndex is zero and lpstrCustomFilter is NULL,
@@ -311,7 +311,7 @@ void SAL_CALL CWinFileOpenImpl::setCurrentFilter(const rtl::OUString& aTitle)
     if (filterPos < 0)
         throw IllegalArgumentException(
             rtl::OUString::createFromAscii("filter doesn't exist"),
-            static_cast<XFilePicker*>(m_FilePicker), 1);
+            static_cast<XFilePicker2*>(m_FilePicker), 1);
 
     // filter index of the base class starts with 1
     CFileOpenDialog::setFilterIndex(filterPos + 1);
