@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:50:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 17:21:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 TabDialog RID_SVXDLG_CUSTOMIZE
 {
     OutputSize = TRUE ;
+    Text [ de ] = "Anpassen" ;
     Text [ en-US ] = "Customize" ;
     Moveable = TRUE ;
     SvLook = TRUE ;
@@ -50,24 +51,28 @@ TabDialog RID_SVXDLG_CUSTOMIZE
             PageItem
             {
                 Identifier = RID_SVXPAGE_MENUS ;
+                Text [ de ] = "Menüs" ;
                 Text [ en-US ] = "Menus" ;
                 PageResID = 300 ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_KEYBOARD ;
+                Text [ de ] = "Tastatur" ;
                 Text [ en-US ] = "Keyboard" ;
                 PageResID = 301 ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_TOOLBARS ;
+                Text [ de ] = "Symbolleisten" ;
                 Text [ en-US ] = "Toolbars" ;
                 PageResID = 302 ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_EVENTS ;
+                Text [ de ] = "Ereignisse" ;
                 Text [ en-US ] = "Events" ;
                 PageResID = 303 ;
             };
@@ -76,36 +81,47 @@ TabDialog RID_SVXDLG_CUSTOMIZE
 };
 
 #define TEXT_MENU \
+    Text [ de ] = "Menü" ; \
     Text [ en-US ] = "Menu" ;\
 
 #define TEXT_BEGIN_GROUP \
+    Text [ de ] = "Gruppe beginnen" ; \
     Text [ en-US ] = "Begin a Group" ;\
 
 #define TEXT_RENAME \
+    Text [ de ] = "Umbenennen..." ; \
     Text [ en-US ] = "Rename..." ;\
 
 #define TEXT_DELETE \
+    Text [ de ] = "Entfernen..." ; \
     Text [ en-US ] = "Delete..." ;\
 
 #define TEXT_DELETE_NODOTS \
+    Text [ de ] = "Entfernen" ; \
     Text [ en-US ] = "Delete" ;\
 
 #define TEXT_MOVE \
+    Text [ de ] = "Verschieben..." ; \
     Text [ en-US ] = "Move..." ;\
 
 #define TEXT_DEFAULT_STYLE \
+    Text [ de ] = "Standard Einstellungen herstellen" ; \
     Text [ en-US ] = "Restore Default Settings" ;\
 
 #define TEXT_DEFAULT_COMMAND \
+    Text [ de ] = "Standardbefehl ~wiederherstellen" ; \
     Text [ en-US ] = "Restore Default Command" ;\
 
 #define TEXT_TEXT_ONLY \
+    Text [ de ] = "Nur Text" ; \
     Text [ en-US ] = "Text only" ;\
 
 #define TEXT_TOOLBAR_NAME \
+    Text [ de ] = "Name der Symbolleiste" ; \
     Text [ en-US ] = "Toolbar Name" ;\
 
 #define TEXT_SAVE_IN \
+    Text [ de ] = "Speichern in" ; \
     Text [ en-US ] = "Save In" ;\
 
 TabPage RID_SVXPAGE_MENUS
@@ -117,6 +133,7 @@ TabPage RID_SVXPAGE_MENUS
     {
         Pos = MAP_APPFONT ( 6 , 11 ) ;
         Size = MAP_APPFONT ( 261 , 8 ) ;
+        Text [ de ] = "%PRODUCTNAME %MODULENAME Menüs" ;
         Text [ en-US ] = "%PRODUCTNAME %MODULENAME Menus" ;
     };
     FixedText FT_MENUS
@@ -137,6 +154,7 @@ TabPage RID_SVXPAGE_MENUS
         Pos = MAP_APPFONT ( 192 , 22 ) ;
         Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
+        Text [ de ] = "Neu..." ;
         Text [ en-US ] = "New..." ;
     };
     MenuButton BTN_CHANGE
@@ -150,6 +168,7 @@ TabPage RID_SVXPAGE_MENUS
     {
         Pos = MAP_APPFONT ( 6 , 56 ) ;
         Size = MAP_APPFONT ( 261 , 8 ) ;
+        Text [ de ] = "Menüinhalt" ;
         Text [ en-US ] = "Menu Content" ;
     };
     FixedText GRP_MENU_ENTRIES
@@ -157,6 +176,7 @@ TabPage RID_SVXPAGE_MENUS
         Pos = MAP_APPFONT ( 9 , 67 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
         Group = TRUE ;
+        Text [ de ] = "Einträge" ;
         Text [ en-US ] = "Entries" ;
     };
     Control BOX_ENTRIES
@@ -172,6 +192,7 @@ TabPage RID_SVXPAGE_MENUS
         Pos = MAP_APPFONT ( 192 , 67 ) ;
         Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
+        Text [ de ] = "Hinzufügen..." ;
         Text [ en-US ] = "Add..." ;
     };
     MenuButton BTN_CHANGE_ENTRY
@@ -179,6 +200,7 @@ TabPage RID_SVXPAGE_MENUS
         Pos = MAP_APPFONT ( 192 , 84 ) ;
         Size = MAP_APPFONT ( 75 , 14 ) ;
         TabStop = TRUE ;
+        Text [ de ] = "Ändern" ;
         Text [ en-US ] = "Modify" ;
     };
     ImageButton BTN_UP
@@ -215,6 +237,7 @@ TabPage RID_SVXPAGE_MENUS
     {
         Pos = MAP_APPFONT ( 6 , 205 ) ;
         Size = MAP_APPFONT ( 261 , 8 ) ;
+        Text [ de ] = "Beschreibung" ;
         Text [ en-US ] = "Description" ;
     };
     MultiLineEdit ED_DESCRIPTION
@@ -261,6 +284,7 @@ Menu MODIFY_ENTRY
         MenuItem
         {
             Identifier = ID_ADD_SUBMENU ;
+            Text [ de ] = "Untermenü einfügen..." ;
             Text [ en-US ] = "Add Submenu..." ;
         };
         MenuItem
@@ -321,6 +345,7 @@ Menu MODIFY_TOOLBAR
             Identifier = ID_ICONS_ONLY ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
+            Text [ de ] = "Nur Symbole" ;
             Text [ en-US ] = "Icons Only" ;
         };
         MenuItem
@@ -335,6 +360,7 @@ Menu MODIFY_TOOLBAR
             Identifier = ID_ICONS_AND_TEXT ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
+            Text [ de ] = "Symbole & Text" ;
             Text [ en-US ] = "Icons & Text" ;
         };
     };
@@ -376,6 +402,7 @@ Menu MODIFY_TOOLBAR_CONTENT
         MenuItem
         {
             Identifier = ID_ICON_ONLY ;
+            Text [ de ] = "Nur Symbol" ;
             Text [ en-US ] = "Icon Only" ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
@@ -383,6 +410,7 @@ Menu MODIFY_TOOLBAR_CONTENT
         MenuItem
         {
             Identifier = ID_TEXT_ONLY ;
+            Text [ de ] = "Nur Text" ;
             Text [ en-US ] = "Text Only" ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
@@ -390,6 +418,7 @@ Menu MODIFY_TOOLBAR_CONTENT
         MenuItem
         {
             Identifier = ID_ICON_AND_TEXT ;
+            Text [ de ] = "Symbol & Text" ;
             Text [ en-US ] = "Icon & Text" ;
             RadioCheck = TRUE ;
             AutoCheck = TRUE ;
@@ -402,11 +431,13 @@ Menu MODIFY_TOOLBAR_CONTENT
         MenuItem
         {
             Identifier = ID_CHANGE_SYMBOL ;
+            Text [ de ] = "Symbol austauschen..." ;
             Text [ en-US ] = "Change Icon..." ;
         };
         MenuItem
         {
             Identifier = ID_RESET_SYMBOL ;
+            Text [ de ] = "Symbol zurücksetzen" ;
             Text [ en-US ] = "Reset Icon" ;
         };
     };
@@ -415,32 +446,38 @@ Menu MODIFY_TOOLBAR_CONTENT
 /* %n will be replaced at runtime by a number starting with 1 and increasing as necessary */
 String RID_SVXSTR_NEW_MENU
 {
+    Text [ de ] = "Neues Menü %n";
     Text [ en-US ] = "New Menu %n";
 };
 
 /* %n will be replaced at runtime by a number starting with 1 and increasing as necessary */
 String RID_SVXSTR_NEW_TOOLBAR
 {
+    Text [ de ] = "Neue Symbolleiste %n";
     Text [ en-US ] = "New Toolbar %n";
 };
 
 String RID_SVXSTR_MOVE_MENU
 {
+    Text [ de ] = "Menü verschieben";
     Text [ en-US ] = "Move Menu";
 };
 
 String RID_SVXSTR_ADD_SUBMENU
 {
+    Text [ de ] = "Untermenü hinzufügen";
     Text [ en-US ] = "Add Submenu";
 };
 
 String RID_SVXSTR_SUBMENU_NAME
 {
+    Text [ de ] = "Name des Untermenüs";
     Text [ en-US ] = "Submenu name";
 };
 
 String RID_SVXSTR_MENU_ADDCOMMANDS_DESCRIPTION
 {
+    Text [ de ] = "Um Befehle einem menu hinzuzufügen, wählen Sie zuerst eine Kategorie und dann den Befehl. Alternativ ziehen Sie den Befehl in die Befehlsliste auf der Registerseite 'Menüs' im Dialog 'Anpassen'.";
     Text [ en-US ] = "To add a command to a menu, select the category and then the command. You can also drag the command to the Commands list of the Menus tab page in the Customize dialog.";
 };
 
@@ -448,6 +485,7 @@ ModalDialog MD_MENU_ORGANISER
 {
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 172 , 154 ) ;
+    Text [ de ] = "Neues Menü" ;
     Text [ en-US ] = "New Menu" ;
     SvLook = TRUE ;
     Moveable = TRUE ;
@@ -458,6 +496,7 @@ ModalDialog MD_MENU_ORGANISER
         Size = MAP_APPFONT ( 93 , 8 ) ;
         Group = TRUE ;
         Left = TRUE ;
+        Text [ de ] = "Menüname" ;
         Text [ en-US ] = "Menu name" ;
     };
     Edit EDIT_MENU_NAME
@@ -473,6 +512,7 @@ ModalDialog MD_MENU_ORGANISER
         Size = MAP_APPFONT ( 93 , 8 ) ;
         Group = TRUE ;
         Left = TRUE ;
+        Text [ de ] = "Menüposition" ;
         Text [ en-US ] = "Menu position" ;
     };
     Control BOX_MAIN_MENUS
@@ -521,6 +561,7 @@ ModalDialog MD_NEW_TOOLBAR
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 165 , 63 ) ;
+    Text [ de ] = "Name" ;
     Text [ en-US ] = "Name" ;
     Moveable = TRUE ;
     FixedText FT_NAME
@@ -581,6 +622,7 @@ ModalDialog MD_ICONSELECTOR
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 240 , 152 ) ;
+    Text [ de ] = "Symbole Austauschen" ;
     Text [ en-US ] = "Change Icon" ;
     Moveable = TRUE ;
     HelpId = HID_SVX_CONFIG_ICON_SELECTOR;
@@ -588,49 +630,64 @@ ModalDialog MD_ICONSELECTOR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 172 , 8 ) ;
+        Text [ de ] = "Symbole" ;
         Text [ en-US ] = "Icons" ;
     };
     ToolBox TB_SYMBOLS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 160 , 96 ) ;
+        Size = MAP_APPFONT ( 160 , 80 ) ;
         Scroll = TRUE ;
         LineSpacing = TRUE ;
         Customize = FALSE ;
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 184 , 7 ) ;
+        Pos = MAP_APPFONT ( 60 , 130 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 184 , 24 ) ;
+        Pos = MAP_APPFONT ( 120 , 130 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 184 , 44 ) ;
+        Pos = MAP_APPFONT ( 180 , 130 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
     PushButton BTN_IMPORT
     {
-        Pos = MAP_APPFONT ( 184 , 95 ) ;
+        Pos = MAP_APPFONT ( 184 , 7 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
+        Text [ de ] = "Importieren..." ;
             Text[ en-US ] = "Import...";
+    };
+    PushButton BTN_DELETE
+    {
+        Pos = MAP_APPFONT ( 184 , 24 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+            Text[ en-US ] = "Delete...";
     };
     FixedText FT_NOTE
     {
-        Pos = MAP_APPFONT ( 12 , 117 ) ;
+        Pos = MAP_APPFONT ( 12 , 95 ) ;
         Size = MAP_APPFONT ( 172 , 24 ) ;
+        Text [ de ] = "Hinweis:\nBitte beachten Sie das für einen erfolgreichen Import die Symbole eine Größe  von 16x16 Pixel haben müssen." ;
         Text [ en-US ] = "Note:\nThe size of the icons must be 16x16 pixels for them to be successfully imported." ;
         Left = TRUE ;
         WordBreak = TRUE;
+    };
+    FixedLine FL_SEPARATOR
+    {
+        Pos = MAP_APPFONT ( 0, 120 );
+        Size = MAP_APPFONT ( 240, 8 );
     };
     Color IMAGE_BTN_COLOR
     {
@@ -643,31 +700,57 @@ ModalDialog MD_ICONSELECTOR
 // Strings ---------------------------------------------------------------
 String RID_SVXSTR_IMPORT_ICON_ERROR
 {
+    Text [ de ] = "Die aufgelisteten Dateien konnten nicht importiert werden. Die Symbole entsprechen nicht der Größe von 16x16 Pixel." ;
     Text [ en-US ] = "The files listed here could not be imported. The icons are not the required 16x16 pixels in size." ;
+};
+
+String RID_SVXSTR_DELETE_ICON_CONFIRM  //added for issue73355
+{
+    Text [ en-US ] = "Are you sure to delete the image?" ;
+};
+
+String RID_SVXSTR_REPLACE_ICON_WARNING  //added for issue73355
+{
+    Text [ en-US ] = "The icon %ICONNAME is already contained in the image list.\nWould you like to replace the existing icon?";
+};
+
+String RID_SVXSTR_REPLACE_ICON_CONFIRM //added for issue73355
+{
+    Text [ en-US ] = "Confirm Icon Replacement";
+};
+
+String RID_SVXSTR_YESTOALL //added for issue73355
+{
+    Text [ en-US ] = "Yes to All";
 };
 
 String RID_SVXSTR_PRODUCTNAME_TOOLBARS
 {
+    Text [ de ] = "%PRODUCTNAME %MODULENAME Symbolleisten" ;
     Text [ en-US ] = "%PRODUCTNAME %MODULENAME Toolbars" ;
 };
 
 String RID_SVXSTR_TOOLBAR
 {
+    Text [ de ] = "Symbolleiste" ;
     Text [ en-US ] = "Toolbar" ;
 };
 
 String RID_SVXSTR_TOOLBAR_CONTENT
 {
+    Text [ de ] = "Symbolleisteninhalt" ;
     Text [ en-US ] = "Toolbar Content" ;
 };
 
 String RID_SVXSTR_COMMANDS
 {
+    Text [ de ] = "Befehle" ;
     Text [ en-US ] = "Commands" ;
 };
 
 String RID_SVXSTR_COMMAND
 {
+    Text [ de ] = "Befehl" ;
     Text [ en-US ] = "Command" ;
 };
 
@@ -679,6 +762,7 @@ String RID_SVXSTR_TOOLBAR_NAME
 /* %MENUNAME will be replaced at runtime by the name of the selected menu. */
 QueryBox QBX_CONFIRM_DELETE_MENU
 {
+    Message [ de ] = "Sind Sie sicher, dass Sie das Menü '%MENUNAME' löschen möchten?";
     Message [ en-US ] = "Are you sure you want to delete the '%MENUNAME' menu?";
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
@@ -686,6 +770,7 @@ QueryBox QBX_CONFIRM_DELETE_MENU
 
 QueryBox QBX_CONFIRM_DELETE_TOOLBAR
 {
+    Message [ de ] = "Die Symbolleiste beinhaltet keine Befehle mehr. Soll die Symbolleiste gelöscht werden?";
     Message [ en-US ] = "There are no more commands on the toolbar. Do you want to delete the toolbar?";
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
@@ -696,6 +781,7 @@ QueryBox QBX_CONFIRM_DELETE_TOOLBAR
 */
 QueryBox QBX_CONFIRM_RESET
 {
+    Message [ de ] = "Die Menükonfiguration für %SAVE IN SELECTION% wird auf die Standardeinstellung zurückgesetzt. Möchten Sie fortfahren?";
     Message [ en-US ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the factory settings. Do you want to continue?";
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
@@ -707,16 +793,19 @@ QueryBox QBX_CONFIRM_RESET
 */
 String RID_SVXSTR_CONFIRM_MENU_RESET
 {
+    Text [ de ] = "Die Menükonfiguration für %SAVE IN SELECTION% wird auf die Standardeinstellung zurückgesetzt. Möchten Sie fortfahren?";
     Text [ en-US ] = "The menu configuration for %SAVE IN SELECTION% will be reset to the factory settings. Do you want to continue?";
 };
 
 String RID_SVXSTR_CONFIRM_TOOLBAR_RESET
 {
+    Text [ de ] = "Die Symbolleistenkonfiguration für %SAVE IN SELECTION% wird auf die Standardeinstellung zurückgesetzt. Möchten Sie fortfahren?";
     Text [ en-US ] = "The toolbar configuration for %SAVE IN SELECTION% will be reset to the factory settings. Do you want to continue?";
 };
 
 QueryBox QBX_CONFIRM_RESTORE_DEFAULT
 {
+    Message [ de ] = "Alle Anpassungen die an dieser Symbolleiste vorgenommen wurden werden gelöscht. Möchten Sie diese Symbolleiste wirklich zurücksetzen?";
     Message [ en-US ] = "This will delete all changes previously made to this toolbar. Do you really want to reset the toolbar?";
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
@@ -724,22 +813,27 @@ QueryBox QBX_CONFIRM_RESTORE_DEFAULT
 
 InfoBox IBX_MNUCFG_ALREADY_INCLUDED
 {
+    Message [ de ] = "Die Funktion ist bereits in diesem Popup enthalten." ;
     Message [ en-US ] = "Function is already included in this popup." ;
 };
 
 String RID_SVXSTR_LABEL_NEW_NAME
 {
+    Text [ de ] = "~Neuer Name";
     Text [ en-US ] = "~New name";
 };
 
 String RID_SVXSTR_RENAME_MENU
 {
+    Text [ de ] = "Menü umbenennen";
     Text [ en-US ] = "Rename Menu";
 };
 
 String RID_SVXSTR_RENAME_TOOLBAR
 {
+    Text [ de ] = "Symbolleiste umbenennen";
     Text [ en-US ] = "Rename Toolbar";
 };
+
 
 
