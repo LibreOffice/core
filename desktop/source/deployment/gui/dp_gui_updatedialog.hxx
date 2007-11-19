@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:35:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:52:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,10 @@ public:
     virtual BOOL Close();
 
     virtual short Execute();
+
+    void notifyMenubar( bool bPrepareOnly, bool bRecheckOnly );
+    static void createNotifyJob( bool bPrepareOnly,
+        com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< rtl::OUString > > &rItemList );
 
 private:
     UpdateDialog(UpdateDialog &); // not defined
