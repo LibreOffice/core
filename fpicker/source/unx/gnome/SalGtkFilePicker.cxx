@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:00:02 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:25:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,12 +161,13 @@ void SalGtkFilePicker::InitialMapping()
 }
 
 SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFactory>& xServiceMgr ) :
-    cppu::WeakComponentImplHelper9<
+    cppu::WeakComponentImplHelper10<
         XFilterManager,
             XFilterGroupManager,
             XFilePickerControlAccess,
         XFilePickerNotifier,
             XFilePreview,
+            XFilePicker2,
         lang::XInitialization,
         util::XCancellable,
         lang::XEventListener,
@@ -891,46 +892,38 @@ rtl::OUString SAL_CALL SalGtkFilePicker::getDisplayDirectory() throw( uno::Runti
 
 uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::RuntimeException )
 {
+    uno::Sequence< rtl::OUString > aFiles = getSelectedFiles();
+    /*
+      The previous multiselection API design was completely broken
+      and unimplementable for some hetrogenous pseudo-URIs eg. search://
+      Thus crop unconditionally to a single selection.
+    */
+    aFiles.realloc (1);
+    return aFiles;
+}
+
+uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getSelectedFiles() throw( uno::RuntimeException )
+{
     OSL_ASSERT( m_pDialog != NULL );
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
     GSList* pPathList = gtk_file_chooser_get_uris( GTK_FILE_CHOOSER(m_pDialog) );
 
-    int nFromCount = g_slist_length( pPathList );
-    OSL_TRACE( "GETFILES called %d files\n", nFromCount );
+    int nCount = g_slist_length( pPathList );
+    int nIndex = 0;
+    OSL_TRACE( "GETFILES called %d files\n", nCount );
 
     // get the current action setting
     GtkFileChooserAction eAction = gtk_file_chooser_get_action(
         GTK_FILE_CHOOSER( m_pDialog ));
 
-    /*
-    This is insane, if its one file then return the URL,
-    If its its more return the URL of the dir as the first entry,
-    and then list each seperate entry (relative to the base URL) after it
-    */
-    bool bMultiple = nFromCount > 1;
-    int nToCount = bMultiple ? nFromCount + 1 : nFromCount;
-    int nURLOffset = 0;
-    uno::Sequence< rtl::OUString > aSelectedFiles(nToCount);
-
-    if (bMultiple)
-    {
-        gchar *path = gtk_file_chooser_get_current_folder_uri(
-            GTK_FILE_CHOOSER( m_pDialog ));
-        nURLOffset = strlen(path) + 1;
-        aSelectedFiles[0] = uritounicode(path);
-        g_free(path);
-    }
+    uno::Sequence< rtl::OUString > aSelectedFiles(nCount);
 
     // Convert to OOo
-    for( int nToIndex = bMultiple ? 1 : 0;
-        ((nToIndex < nToCount) && pPathList);
-        ++nToIndex, pPathList = g_slist_next(pPathList)
-       )
+    for( GSList *pElem = pPathList; pElem; pElem = pElem->next)
     {
-        const gchar *path = reinterpret_cast<gchar*>(pPathList->data)
-            + nURLOffset;
-        aSelectedFiles[ nToIndex ] = uritounicode(path);
+        gchar *pURI = reinterpret_cast<gchar*>(pElem->data);
+        aSelectedFiles[ nIndex ] = uritounicode(pURI);
 
         if( GTK_FILE_CHOOSER_ACTION_SAVE == eAction )
         {
@@ -950,12 +943,12 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::R
             }
             else
             {
-                if( aSelectedFiles[nToIndex].indexOf('.') > 0 )
+                if( aSelectedFiles[nIndex].indexOf('.') > 0 )
                 {
                     rtl::OUString sExtension;
                     nTokenIndex = 0;
                     do
-                        sExtension = aSelectedFiles[nToIndex].getToken( 0, '.', nTokenIndex );
+                        sExtension = aSelectedFiles[nIndex].getToken( 0, '.', nTokenIndex );
                     while( nTokenIndex >= 0 );
 
                     if( sExtension.getLength() >= 3 ) // 3 = typical/minimum extension length
@@ -1013,16 +1006,11 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::R
             }
             while( nTokenIndex >= 0 );
 
-            // if AutoExtension is enabled and checked and current filter is not *,
-            // then complete the file name by concatinating the filter
-            if( mbToggleVisibility[AUTOEXTENSION]
-                 && ( !bExtensionTypedIn )
-                 && ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON( m_pToggles[AUTOEXTENSION] ) ) )
-                 && ( !sToken.equalsAscii( "*" ) ) )
+            if( !bExtensionTypedIn && ( !sToken.equalsAscii( "*" ) ) )
             {
                 //if the filename does not already have the auto extension, stick it on
                 OUString sExtension = OUString::createFromAscii( "." ) + sToken;
-                OUString &rBase = aSelectedFiles[nToIndex];
+                OUString &rBase = aSelectedFiles[nIndex];
                 sal_Int32 nExtensionIdx = rBase.getLength() - sExtension.getLength();
                 OSL_TRACE( "idx are %d %d\n", rBase.lastIndexOf( sExtension ), nExtensionIdx );
 
@@ -1032,7 +1020,8 @@ uno::Sequence<rtl::OUString> SAL_CALL SalGtkFilePicker::getFiles() throw( uno::R
 
         }
 
-        g_free( ( char* )( pPathList->data ) );
+        nIndex++;
+        g_free( pURI );
     }
 
     g_slist_free( pPathList );
@@ -1651,7 +1640,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     if( 0 == aArguments.getLength() )
         throw lang::IllegalArgumentException(
             rtl::OUString::createFromAscii( "no arguments" ),
-            static_cast<XFilePicker*>( this ), 1 );
+            static_cast<XFilePicker2*>( this ), 1 );
 
     aAny = aArguments[0];
 
@@ -1659,7 +1648,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
          (aAny.getValueType() != ::getCppuType( ( sal_Int8* )0 ) ) )
          throw lang::IllegalArgumentException(
             rtl::OUString::createFromAscii( "invalid argument type" ),
-            static_cast<XFilePicker*>( this ), 1 );
+            static_cast<XFilePicker2*>( this ), 1 );
 
     sal_Int16 templateId = -1;
     aAny >>= templateId;
@@ -1685,7 +1674,6 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
         case FILESAVE_AUTOEXTENSION_PASSWORD:
             eAction = GTK_FILE_CHOOSER_ACTION_SAVE;
             first_button_text = GTK_STOCK_SAVE;
-            mbToggleVisibility[AUTOEXTENSION] = true;
             mbToggleVisibility[PASSWORD] = true;
             OSL_TRACE( "1all true\n" );
             // TODO
@@ -1693,7 +1681,6 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
         case FILESAVE_AUTOEXTENSION_PASSWORD_FILTEROPTIONS:
             eAction = GTK_FILE_CHOOSER_ACTION_SAVE;
             first_button_text = GTK_STOCK_SAVE;
-            mbToggleVisibility[AUTOEXTENSION] = true;
             mbToggleVisibility[PASSWORD] = true;
             mbToggleVisibility[FILTEROPTIONS] = true;
             OSL_TRACE( "4all true\n" );
@@ -1702,7 +1689,6 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
         case FILESAVE_AUTOEXTENSION_SELECTION:
             eAction = GTK_FILE_CHOOSER_ACTION_SAVE; // SELECT_FOLDER ?
             first_button_text = GTK_STOCK_SAVE;
-            mbToggleVisibility[AUTOEXTENSION] = true;
             mbToggleVisibility[SELECTION] = true;
             OSL_TRACE( "5all true\n" );
             // TODO
@@ -1710,7 +1696,6 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
         case FILESAVE_AUTOEXTENSION_TEMPLATE:
             eAction = GTK_FILE_CHOOSER_ACTION_SAVE;
             first_button_text = GTK_STOCK_SAVE;
-            mbToggleVisibility[AUTOEXTENSION] = true;
             mbListVisibility[TEMPLATE] = true;
             OSL_TRACE( "6all true\n" );
             // TODO
@@ -1744,14 +1729,13 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
         case FILESAVE_AUTOEXTENSION:
             eAction = GTK_FILE_CHOOSER_ACTION_SAVE;
             first_button_text = GTK_STOCK_SAVE;
-            mbToggleVisibility[AUTOEXTENSION] = true;
             OSL_TRACE( "7all true\n" );
             // TODO
                 break;
         default:
                 throw lang::IllegalArgumentException(
                 rtl::OUString::createFromAscii( "Unknown template" ),
-                static_cast< XFilePicker* >( this ),
+                static_cast< XFilePicker2* >( this ),
                 1 );
     }
 
