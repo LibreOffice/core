@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequenceashashmap.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:58:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,6 +242,54 @@ void SequenceAsHashMap::operator>>(css::uno::Sequence< css::beans::NamedValue >&
 }
 
 /*-----------------------------------------------
+    30.07.2007 14:10
+-----------------------------------------------*/
+const css::uno::Any SequenceAsHashMap::getAsConstAny(::sal_Bool bAsPropertyValueList) const
+{
+    css::uno::Any aDestination;
+    if (bAsPropertyValueList)
+        aDestination = css::uno::makeAny(getAsConstPropertyValueList());
+    else
+        aDestination = css::uno::makeAny(getAsConstNamedValueList());
+    return aDestination;
+}
+
+/*-----------------------------------------------
+    30.07.2007 14:10
+-----------------------------------------------*/
+const css::uno::Sequence< css::uno::Any > SequenceAsHashMap::getAsConstAnyList(::sal_Bool bAsPropertyValueList) const
+{
+    ::sal_Int32                         i            = 0;
+    ::sal_Int32                         c            = (::sal_Int32)size();
+    css::uno::Sequence< css::uno::Any > lDestination(c);
+    css::uno::Any*                      pDestination = lDestination.getArray();
+
+    for (const_iterator pThis  = begin();
+                        pThis != end()  ;
+                      ++pThis           )
+    {
+        if (bAsPropertyValueList)
+        {
+            css::beans::PropertyValue aProp;
+            aProp.Name      = pThis->first;
+            aProp.Value     = pThis->second;
+            pDestination[i] = css::uno::makeAny(aProp);
+        }
+        else
+        {
+            css::beans::NamedValue aProp;
+            aProp.Name      = pThis->first;
+            aProp.Value     = pThis->second;
+            pDestination[i] = css::uno::makeAny(aProp);
+        }
+
+        ++i;
+    }
+
+    return lDestination;
+}
+
+/*-----------------------------------------------
     04.11.2003 08:30
 -----------------------------------------------*/
 const css::uno::Sequence< css::beans::NamedValue > SequenceAsHashMap::getAsConstNamedValueList() const
@@ -284,6 +332,23 @@ sal_Bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
     }
 
     return sal_True;
+}
+
+/*-----------------------------------------------
+    30.07.2007 14:30
+-----------------------------------------------*/
+void SequenceAsHashMap::update(const SequenceAsHashMap& rUpdate)
+{
+    const_iterator pUpdate;
+    for (  pUpdate  = rUpdate.begin();
+           pUpdate != rUpdate.end()  ;
+         ++pUpdate                   )
+    {
+        const ::rtl::OUString& sName  = pUpdate->first;
+        const css::uno::Any&   aValue = pUpdate->second;
+
+        (*this)[sName] = aValue;
+    }
 }
 
 /*-----------------------------------------------
