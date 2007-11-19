@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updateinstalldialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:04:27 $
+ *  last change: $Author: ihi $ $Date: 2007-11-19 16:53:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,6 @@ UpdateInstallDialog::UpdateInstallDialog(
         m_sErrorLicenseDeclined(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED))),
         m_sNoInstall(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL))),
         m_sThisErrorOccurred(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED))),
-        m_sNoTemp(String(DpGuiResId(RID_DLG_UPDATE_INSTALL_NOTEMP))),
         m_ft_action(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_DOWNLOADING)),
         m_statusbar(this,DpGuiResId(RID_DLG_UPDATE_INSTALL_STATUSBAR)),
         m_ft_extension_name(this, DpGuiResId(RID_DLG_UPDATE_INSTALL_EXTENSION_NAME)),
