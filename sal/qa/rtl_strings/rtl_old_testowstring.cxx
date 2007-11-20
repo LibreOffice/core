@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_old_testowstring.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:23:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:50:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,7 +323,7 @@ void oldtests::test_OUString()
     TEST_ENSURE( nCompareResult12_Len13 < 0, "test_OWString error 64" );
 
     sal_Int32 nCompareResult21_Len12 = OWAsciiStr2.compareToAscii( ascii_str1, 12 );
-    TEST_ENSURE( nCompareResult12_Len12 == 0, "test_OWString error 65" );
+    TEST_ENSURE( nCompareResult21_Len12 == 0, "test_OWString error 65" );
     sal_Int32 nCompareResult21_Len13 = OWAsciiStr2.compareToAscii( ascii_str1, 13 );
     TEST_ENSURE( nCompareResult21_Len13 > 0, "test_OWString error 66" );
 
