@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:55:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:42:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1182,8 +1182,38 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_PASTE:
             {
-                WaitObject aWait( GetViewData()->GetDialogParent() );
-                pTabViewShell->PasteFromSystem();
+                Window* pWin = GetViewData()->GetActiveWin();
+                ScTransferObj* pOwnClip = ScTransferObj::GetOwnClipboard( pWin );
+                ScDocument* pThisDoc = GetViewData()->GetDocument();
+                ScDPObject* pDPObj = pThisDoc->GetDPAtCursor( GetViewData()->GetCurX(),
+                                     GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
+                if ( pOwnClip && pDPObj )
+                {
+                    // paste from Calc into DataPilot table: sort (similar to drag & drop)
+
+                    ScDocument* pClipDoc = pOwnClip->GetDocument();
+                    SCTAB nSourceTab = pOwnClip->GetVisibleTab();
+
+                    SCCOL nClipStartX;
+                    SCROW nClipStartY;
+                    SCCOL nClipEndX;
+                    SCROW nClipEndY;
+                    pClipDoc->GetClipStart( nClipStartX, nClipStartY );
+                    pClipDoc->GetClipArea( nClipEndX, nClipEndY, TRUE );
+                    nClipEndX = nClipEndX + nClipStartX;
+                    nClipEndY = nClipEndY + nClipStartY;   // GetClipArea returns the difference
+
+                    ScRange aSource( nClipStartX, nClipStartY, nSourceTab, nClipEndX, nClipEndY, nSourceTab );
+                    BOOL bDone = pTabViewShell->DataPilotMove( aSource, GetViewData()->GetCurPos() );
+                    if ( !bDone )
+                        pTabViewShell->ErrorMessage( STR_ERR_DATAPILOT_INPUT );
+                }
+                else
+                {
+                    // normal paste
+                    WaitObject aWait( GetViewData()->GetDialogParent() );
+                    pTabViewShell->PasteFromSystem();
+                }
                 rReq.Done();
             }
             pTabViewShell->CellContentChanged();        // => PasteFromSystem() ???
