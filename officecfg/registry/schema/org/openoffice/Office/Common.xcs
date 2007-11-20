@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:51:43 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:04:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5304,6 +5304,74 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						<value>true</value>
 					</prop>
 					<!-- END PDF Encryption -->
+                                         <!-- PDF Version selection -->
+					<prop oor:name="SelectPdfVersion" oor:type="xs:int">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies the version of PDF to emit.</desc>
+						</info>
+						<constraints>
+							<enumeration oor:value="0">
+								<info>
+									<desc>PDF 1.4 (default selection).</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="1">
+								<info>
+									<desc>PDF/A-1 (ISO 19005-1:2005)</desc>
+								</info>
+							</enumeration>
+						</constraints>
+						<value>0</value>
+					</prop>
+					<!-- END PDF Version selection -->
+                                        <!-- PDF Relative Link -->
+					<prop oor:name="ExportLinksRelativeFsys" oor:type="xs:boolean">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies that the file system related hyperlinks (file:// protocol) present in the document will be exported as relative to the source document location.</desc>
+						</info>
+						<value>false</value>
+					</prop>
+					<prop oor:name="PDFViewSelection" oor:type="xs:int">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies the way the exported PDF will be viewed (experienced) by the user.</desc>
+						</info>
+						<constraints>
+							<enumeration oor:value="0">
+								<info>
+									<desc>Specifies that the PDF will be exported with all the links external to the document treated as URI. This is the Default</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="1">
+								<info>
+									<desc>Specifies that the PDF will be exported in order to be viewed through a PDF reader application only. Valid only if not exporting to PDF/A-1 (e.g. SelectPdfVersion not set to 1).</desc>
+								</info>
+							</enumeration>
+							<enumeration oor:value="2">
+								<info>
+									<desc>Specifies that the PDF will be exported in order to be viewed through an Internet browser, using the PDF plug-in provided with it. The bookmark of the URI will be rendered compatible with the target bookmark generated with OOo PDF Export feature (see ExportBookmarksToPDFDestination, below).</desc>
+								</info>
+							</enumeration>
+						</constraints>
+						<value>0</value>
+					</prop>
+					<prop oor:name="ConvertOOoTargetToPDFTarget" oor:type="xs:boolean">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies that the target documents with .od[tpgs] extension, will have that extension changed to .pdf when the link is exported to PDF. The source document remains untouched.</desc>
+						</info>
+						<value>false</value>
+					</prop>
+					<prop oor:name="ExportBookmarksToPDFDestination" oor:type="xs:boolean">
+						<info>
+							<author>beppec56</author>
+							<desc>Specifies that the bookmarks contained in the source OpenOffice.org file should be exported to the PDF file as Named Destination (see PDF 1.4 section 8.2.1).</desc>
+						</info>
+						<value>false</value>
+					</prop>
+                                        <!-- END PDF Relative Link -->
 				</group>
 			</group>
 		</group>
