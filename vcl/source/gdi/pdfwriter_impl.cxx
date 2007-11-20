@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 11:02:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:11:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
+
+#include <tools/urlobj.hxx> //for relative url
+
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmapex.hxx>
@@ -70,6 +73,10 @@
 
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #include <cppuhelper/implbase1.hxx>
+#endif
+
+#ifndef INCLUDED_ICC_SRGB_IEC61966_2_1_H
+#include <vcl/sRGB-IEC61966-2.1.hxx>
 #endif
 
 using namespace vcl;
@@ -99,6 +106,9 @@ void PDFTestOutputStream::write( const com::sun::star::uno::Reference< com::sun:
     xStream->writeBytes( aData );
 }
 
+// this test code cannot be used to test PDF/A-1 because it forces
+// control item (widgets) to bypass the structure controlling
+// the embedding of such elements in actual run
 void doTestCode()
 {
     static const char* pHome = getenv( "HOME"  );
@@ -486,6 +496,8 @@ static void appendHex( sal_Int8 nInt, OStringBuffer& rBuffer )
 
 static void appendName( const OUString& rStr, OStringBuffer& rBuffer )
 {
+// FIXME i59651 add a check for max length of 127 chars? Per PDF spec 1.4, appendix C.1
+// I guess than when reading the #xx sequence it will count for a single character.
     OString aStr( OUStringToOString( rStr, RTL_TEXTENCODING_UTF8 ) );
     const sal_Char* pStr = aStr.getStr();
     int nLen = aStr.getLength();
@@ -515,6 +527,7 @@ static void appendName( const OUString& rStr, OStringBuffer& rBuffer )
 
 static void appendName( const sal_Char* pStr, OStringBuffer& rBuffer )
 {
+//FIXME i59651 see above
     while( pStr && *pStr )
     {
         if( (*pStr >= 'A' && *pStr <= 'Z' ) ||
@@ -569,6 +582,54 @@ static void appendLiteralString( const sal_Char* pStr, sal_Int32 nLength, OStrin
         nLength--;
     }
 }
+
+/**--->i56629
+ * Convert a string before using it.
+ *
+ * This string conversion function is needed because the destination name
+ * in a PDF file seen through an Internet browser should be
+ * specially crafted, in order to be used directly by the browser.
+ * In this way the fragment part of a hyperlink to a PDF file (e.g. something
+ * as 'test1/test2/a-file.pdf#thefragment) will be (hopefully) interpreted by the
+ * PDF reader (currently only Adobe Reader plug-in seems to be working that way) called
+ * from inside the Internet browser as: 'open the file test1/test2/a-file.pdf
+ * and go to named destination thefragment using default zoom'.
+ * The conversion is needed because in case of a fragment in the form: Slide%201
+ * (meaning Slide 1) as it is converted obeying the Inet rules, it will become Slide25201
+ * using this conversion, in both the generated named destinations, fragment and GoToR
+ * destination.
+ *
+ * The names for destinations are name objects and so they don't need to be encrypted
+ * even though they expose the content of PDF file (e.g. guessing the PDF content from the
+ * destination name).
+ *
+ * Fhurter limitation: it is advisable to use standard ASCII characters for
+ * OOo bookmarks.
+*/
+static void appendDestinationName( const rtl::OUString& rString, OStringBuffer& rBuffer )
+{
+    const sal_Unicode* pStr = rString.getStr();
+    sal_Int32 nLen = rString.getLength();
+    for( int i = 0; i < nLen; i++ )
+    {
+        sal_Unicode aChar = pStr[i];
+        if( (aChar >= '0' && aChar <= '9' ) ||
+            (aChar >= 'a' && aChar <= 'z' ) ||
+            (aChar >= 'A' && aChar <= 'Z' ) ||
+            aChar == '-' )
+        {
+            rBuffer.append((sal_Char)aChar);
+        }
+        else
+        {
+            sal_Int8 aValueHigh = sal_Int8(aChar >> 8);
+            if(aValueHigh > 0)
+                appendHex( aValueHigh, rBuffer );
+            appendHex( (sal_Int8)(aChar & 255 ), rBuffer );
+        }
+    }
+}
+//<--- i56629
 
 static void appendUnicodeTextString( const rtl::OUString& rString, OStringBuffer& rBuffer )
 {
@@ -1382,6 +1443,7 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
         m_bEmitStructure( true ),
         m_bNewMCID( false ),
         m_nCurrentControl( -1 ),
+        m_bEmbedStandardFonts( false ),
         m_nNextFID( 1 ),
         m_nInheritedPageWidth( 595 ),  // default A4
         m_nInheritedPageHeight( 842 ), // default A4
@@ -1396,8 +1458,10 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
         m_bEncryptThisStream( false ),
         m_aDocID( 32 ),
         m_aCreationDateString( 64 ),
+        m_aCreationMetaDateString( 64 ),
         m_pEncryptionBuffer( NULL ),
-        m_nEncryptionBufferSize( 0 )
+        m_nEncryptionBufferSize( 0 ),
+        m_bIsPDF_A1( false )
 {
 #ifdef DO_TEST_PDF
     static bool bOnce = true;
@@ -1451,6 +1515,7 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
     {
         case PDFWriter::PDF_1_2: aBuffer.append( "1.2" );break;
         case PDFWriter::PDF_1_3: aBuffer.append( "1.3" );break;
+        case PDFWriter::PDF_A_1:
         default:
         case PDFWriter::PDF_1_4: aBuffer.append( "1.4" );break;
         case PDFWriter::PDF_1_5: aBuffer.append( "1.5" );break;
@@ -1466,6 +1531,12 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
 
     // insert outline root
     m_aOutline.push_back( PDFOutlineEntry() );
+
+    m_bIsPDF_A1 = (m_aContext.Version == PDFWriter::PDF_A_1);
+    if( m_bIsPDF_A1 )
+        m_aContext.Version = PDFWriter::PDF_1_4; //meaning we need PDF 1.4, PDF/A flavour
+
+    m_bEmbedStandardFonts = m_aContext.EmbedStandardFonts;
 }
 
 PDFWriterImpl::~PDFWriterImpl()
@@ -1527,19 +1598,56 @@ void PDFWriterImpl::setDocInfo( const PDFDocInfo& rInfo )
     m_aCreationDateString.append( (sal_Char)('0' + ((aDT.Minutes)%10)) );
     m_aCreationDateString.append( (sal_Char)('0' + ((aDT.Seconds/10)%10)) );
     m_aCreationDateString.append( (sal_Char)('0' + ((aDT.Seconds)%10)) );
+//--> i59651, we fill the Metadata date string as well, if PDF/A is requested
+    if( m_bIsPDF_A1 )
+    {
+// according to ISO 19005-1:2005 6.7.3 the date is corrected for
+// local time zone offset UTC only, whereas Acrobat 8 seems
+// to use the localtime notation only
+// according to a raccomandation in XMP Specification (Jan 2004, page 75)
+// the Acrobat way seems the right approach
+        m_aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Year/1000)%10)) );
+        m_aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Year/100)%10)) );
+        m_aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Year/10)%10)) );
+        m_aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Year)%10)) );
+        m_aCreationMetaDateString.append( "-" );
+        m_aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Month/10)%10)) );
+        m_aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Month)%10)) );
+        m_aCreationMetaDateString.append( "-" );
+        m_aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Day/10)%10)) );
+        m_aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Day)%10)) );
+        m_aCreationMetaDateString.append( "T" );
+        m_aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Hours/10)%10)) );
+        m_aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Hours)%10)) );
+        m_aCreationMetaDateString.append( ":" );
+        m_aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Minutes/10)%10)) );
+        m_aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Minutes)%10)) );
+        m_aCreationMetaDateString.append( ":" );
+        m_aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Seconds/10)%10)) );
+        m_aCreationMetaDateString.append( (sal_Char)('0' + ((aDT.Seconds)%10)) );
+    }
     sal_uInt32 nDelta = 0;
     if( aGMT.Seconds > aTVal.Seconds )
     {
         m_aCreationDateString.append( "-" );
         nDelta = aGMT.Seconds-aTVal.Seconds;
+        if( m_bIsPDF_A1 )
+            m_aCreationMetaDateString.append( "-" );
     }
     else if( aGMT.Seconds < aTVal.Seconds )
     {
         m_aCreationDateString.append( "+" );
         nDelta = aTVal.Seconds-aGMT.Seconds;
+        if( m_bIsPDF_A1 )
+            m_aCreationMetaDateString.append( "+" );
     }
     else
+    {
         m_aCreationDateString.append( "Z" );
+        if( m_bIsPDF_A1 )
+            m_aCreationMetaDateString.append( "Z" );
+
+    }
     if( nDelta )
     {
         m_aCreationDateString.append( (sal_Char)('0' + ((nDelta/36000)%10)) );
@@ -1547,6 +1655,14 @@ void PDFWriterImpl::setDocInfo( const PDFDocInfo& rInfo )
         m_aCreationDateString.append( "'" );
         m_aCreationDateString.append( (sal_Char)('0' + ((nDelta/600)%6)) );
         m_aCreationDateString.append( (sal_Char)('0' + ((nDelta/60)%10)) );
+        if( m_bIsPDF_A1 )
+        {
+            m_aCreationMetaDateString.append( (sal_Char)('0' + ((nDelta/36000)%10)) );
+            m_aCreationMetaDateString.append( (sal_Char)('0' + ((nDelta/3600)%10)) );
+            m_aCreationMetaDateString.append( ":" );
+            m_aCreationMetaDateString.append( (sal_Char)('0' + ((nDelta/600)%6)) );
+            m_aCreationMetaDateString.append( (sal_Char)('0' + ((nDelta/60)%10)) );
+        }
     }
     m_aCreationDateString.append( "'" );
     aID.append( m_aCreationDateString.getStr(), m_aCreationDateString.getLength() );
@@ -1835,11 +1951,12 @@ ImplDevFontList* PDFWriterImpl::filterDevFontList( ImplDevFontList* pFontList )
     ImplDevFontList* pFiltered = pFontList->Clone( true, true );
 
     // append the PDF builtin fonts
-    for( unsigned int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
-    {
-        ImplFontData* pNewData = new ImplPdfBuiltinFontData( m_aBuiltinFonts[i] );
-        pFiltered->Add( pNewData );
-    }
+    if( !m_bIsPDF_A1 && !m_bEmbedStandardFonts)
+        for( unsigned int i = 0; i < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); i++ )
+        {
+            ImplFontData* pNewData = new ImplPdfBuiltinFontData( m_aBuiltinFonts[i] );
+            pFiltered->Add( pNewData );
+        }
     return pFiltered;
 }
 
@@ -3832,7 +3949,12 @@ bool PDFWriterImpl::emitLinkAnnotations()
         OStringBuffer aLine( 1024 );
         aLine.append( rLink.m_nObject );
         aLine.append( " 0 obj\n" );
-        aLine.append( "<</Type/Annot/Subtype/Link/Border[0 0 0]/Rect[" );
+//i59651  key /F set bits Print to 1 rest to 0. We don't set NoZoom NoRotate to 1, since it's a 'should'
+// see PDF 8.4.2 and ISO 19005-1:2005 6.5.3
+        aLine.append( "<</Type/Annot" );
+        if( m_bIsPDF_A1 )
+            aLine.append( "/F 4" );
+        aLine.append( "/Subtype/Link/Border[0 0 0]/Rect[" );
 
         appendFixedInt( rLink.m_aRect.Left()-7, aLine );//the +7 to have a better shape of the border rectangle
         aLine.append( ' ' );
@@ -3849,8 +3971,146 @@ bool PDFWriterImpl::emitLinkAnnotations()
         }
         else
         {
-            aLine.append( "/A<</Type/Action/S/URI/URI" );
-            appendLiteralStringEncrypt( rLink.m_aURL, rLink.m_nObject, aLine );
+/*--->i56629
+destination is external to the document, so
+we check in the following sequence:
+
+ if target type is neither .pdf, nor .od[tpgs], then
+          check if relative or absolute and act accordingly (use URI or 'launch application' as requested)
+                             end processing
+ else if target is .od[tpgs]: then
+      if conversion of type from od[tpgs]  to pdf is requested, convert it and this becomes the new target file
+      processing continue
+
+ if (new)target is .pdf : then
+     if GotToR is requested, then
+           convert the target in GoToR where the fragment of the URI is
+           considered the named destination in the target file, set relative or absolute as requested
+     else strip the fragment from URL and then set URI or 'launch application' as requested
+*/
+//
+// FIXME: check if the decode mechanisms for URL processing throughout this implementation
+// are the correct one!!
+//
+// extract target file type
+            INetURLObject aDocumentURL( m_aContext.BaseURL );
+            INetURLObject aTargetURL( rLink.m_aURL );
+            sal_Int32   nChangeFileExtensionToPDF = 0;
+            sal_Int32   nSetGoToRMode = 0;
+            sal_Bool    bTargetHasPDFExtension = sal_False;
+            INetProtocol eTargetProtocol = aTargetURL.GetProtocol();
+// check if the protocol is a known one, or if there is no protocol at all (on target only)
+// if there is no protocol, make the target relative to the current document directory
+// getting the needed URL information from the current document path
+            if( eTargetProtocol == INET_PROT_NOT_VALID )
+            {
+                INetURLObject aNewBase( aDocumentURL );//duplicate document URL
+                aNewBase.removeSegment(); //remove last segment from it, obtaining the base URL of the
+                                          //target document
+                aNewBase.insertName( rLink.m_aURL );
+                aTargetURL = aNewBase;//reassign the new target URL
+//recompute the target protocol, with the new URL
+//normal URL processing resumes
+                eTargetProtocol = aTargetURL.GetProtocol();
+            }
+
+            rtl::OUString aFileExtension = aTargetURL.GetFileExtension();
+
+// Check if the URL ends in '/': if yes it's a directory,
+// it will be forced to a URI link.
+// possibly a malformed URI, leave it as it is, force as URI
+            if( aTargetURL.hasFinalSlash() )
+                m_aContext.DefaultLinkAction = PDFWriter::URIAction;
+
+            if( aFileExtension.getLength() > 0 )
+            {
+                if( m_aContext.ConvertOOoTargetToPDFTarget )
+                {
+//examine the file type (.odt. .odp, odg, ods
+                    if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odt" ) ) ) )
+                        nChangeFileExtensionToPDF++;
+                    else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odp" ) ) ) )
+                        nChangeFileExtensionToPDF++;
+                    else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odg" ) ) ) )
+                        nChangeFileExtensionToPDF++;
+                    else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ods" ) ) ) )
+                        nChangeFileExtensionToPDF++;
+                    if( nChangeFileExtensionToPDF )
+                        aTargetURL.setExtension(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf" ) ) );
+                }
+//check if extension is pdf, see if GoToR should be forced
+                bTargetHasPDFExtension = aTargetURL.GetFileExtension().equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf" ) ) );
+                if( m_aContext.ForcePDFAction && bTargetHasPDFExtension )
+                    nSetGoToRMode++;
+            }
+//prepare the URL, if relative or not
+            INetProtocol eBaseProtocol = aDocumentURL.GetProtocol();
+//queue the string common to all types of actions
+            aLine.append( "/A<</Type/Action/S");
+            sal_Int32 nSetRelative = 0;
+//check if relative file link is requested and if the protocol is 'file://'
+            if( m_aContext.RelFsys && eBaseProtocol == eTargetProtocol && eTargetProtocol == INET_PROT_FILE )
+                nSetRelative++;
+
+            rtl::OUString aFragment = aTargetURL.GetMark( INetURLObject::NO_DECODE /*DECODE_WITH_CHARSET*/ ); //fragment as is,
+            if( nSetGoToRMode == 0 )
+                switch( m_aContext.DefaultLinkAction )
+                {
+                default:
+                case PDFWriter::URIAction :
+                case PDFWriter::URIActionDestination :
+                    aLine.append( "/URI/URI" );
+                    break;
+                case PDFWriter::LaunchAction:
+// now:
+// if a launch action is requested and the hyperlink target has a fragment
+// and the target file does not have a pdf extension, or it's not a 'file:://' protocol
+// then force the uri action on it
+// This code will permit the correct opening of application on web pages, the one that
+// normally have fragments (but I may be wrong...)
+// and will force the use of URI when the protocol is not file://
+                    if( (aFragment.getLength() > 0 && !bTargetHasPDFExtension) ||
+                                    eTargetProtocol != INET_PROT_FILE )
+                        aLine.append( "/URI/URI" );
+                    else
+                        aLine.append( "/Launch/F" );
+                    break;
+                }
+//fragment are encoded in the same way as in the named destination processing
+            rtl::OUString aURLNoMark = aTargetURL.GetURLNoMark( INetURLObject::DECODE_WITH_CHARSET );
+            if( nSetGoToRMode )
+            {//add the fragment
+                aLine.append("/GoToR");
+                aLine.append("/F");
+                appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURLNoMark ) :
+                                                               aURLNoMark, rLink.m_nObject, aLine );
+                if( aFragment.getLength() > 0 )
+                {
+                    aLine.append("/D/");
+                    appendDestinationName( aFragment , aLine );
+                }
+            }
+            else
+            {
+// change the fragment to accomodate the bookmark (only if the file extension is PDF and
+// the requested action is of the correct type)
+                if(m_aContext.DefaultLinkAction == PDFWriter::URIActionDestination &&
+                           bTargetHasPDFExtension && aFragment.getLength() > 0 )
+                {
+                    OStringBuffer aLineLoc( 1024 );
+                    appendDestinationName( aFragment , aLineLoc );
+//substitute the fragment
+                    aTargetURL.SetMark( aLineLoc.getStr() );
+                }
+                rtl::OUString aURL = aTargetURL.GetMainURL( INetURLObject::DECODE_WITH_CHARSET );
+// check if we have a URL available, if the string is empty, set it as the original one
+//                 if( aURL.getLength() == 0 )
+//                     appendLiteralStringEncrypt( rLink.m_aURL , rLink.m_nObject, aLine );
+//                 else
+                    appendLiteralStringEncrypt( nSetRelative ? INetURLObject::GetRelURL( m_aContext.BaseURL, aURL ) :
+                                                               aURL , rLink.m_nObject, aLine );
+            }
+//<--- i56629
             aLine.append( ">>\n" );
         }
         if( rLink.m_nStructParent > 0 )
@@ -3878,7 +4138,12 @@ bool PDFWriterImpl::emitNoteAnnotations()
         OStringBuffer aLine( 1024 );
         aLine.append( rNote.m_nObject );
         aLine.append( " 0 obj\n" );
-        aLine.append( "<</Type/Annot/Subtype/Text/Rect[" );
+//i59651  key /F set bits Print to 1 rest to 0. We don't set NoZoom NoRotate to 1, since it's a 'should'
+// see PDF 8.4.2 and ISO 19005-1:2005 6.5.3
+        aLine.append( "<</Type/Annot" );
+        if( m_bIsPDF_A1 )
+            aLine.append( "/F 4" );
+        aLine.append( "/Subtype/Text/Rect[" );
 
         appendFixedInt( rNote.m_aRect.Left(), aLine );
         aLine.append( ' ' );
@@ -4699,28 +4964,30 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         }
         if( rWidget.m_eType == PDFWriter::PushButton )
         {
-            OStringBuffer aDest;
-            if( appendDest( rWidget.m_nDest, aDest ) )
+            if(!m_bIsPDF_A1)
             {
-                aLine.append( "/AA<</D<</Type/Action/S/GoTo/D " );
-                aLine.append( aDest.makeStringAndClear() );
-                aLine.append( ">>>>\n" );
-            }
-            else if( rWidget.m_aListEntries.empty() )
-            {
-                // create a reset form action
-                aLine.append( "/AA<</D<</Type/Action/S/ResetForm>>>>\n" );
-            }
-            else if( rWidget.m_bSubmit )
-            {
-                // create a submit form action
-                aLine.append( "/AA<</D<</Type/Action/S/SubmitForm/F" );
-                appendLiteralStringEncrypt( rWidget.m_aListEntries.front(), rWidget.m_nObject, aLine );
-                aLine.append( "/Flags " );
-
-                sal_Int32 nFlags = 0;
-                switch( m_aContext.SubmitFormat )
+                OStringBuffer aDest;
+                if( appendDest( rWidget.m_nDest, aDest ) )
                 {
+                    aLine.append( "/AA<</D<</Type/Action/S/GoTo/D " );
+                    aLine.append( aDest.makeStringAndClear() );
+                    aLine.append( ">>>>\n" );
+                }
+                else if( rWidget.m_aListEntries.empty() )
+                {
+                    // create a reset form action
+                    aLine.append( "/AA<</D<</Type/Action/S/ResetForm>>>>\n" );
+                }
+                else if( rWidget.m_bSubmit )
+                {
+                    // create a submit form action
+                    aLine.append( "/AA<</D<</Type/Action/S/SubmitForm/F" );
+                    appendLiteralStringEncrypt( rWidget.m_aListEntries.front(), rWidget.m_nObject, aLine );
+                    aLine.append( "/Flags " );
+
+                    sal_Int32 nFlags = 0;
+                    switch( m_aContext.SubmitFormat )
+                    {
                     case PDFWriter::HTML:
                         nFlags |= 4;
                         break;
@@ -4735,18 +5002,19 @@ bool PDFWriterImpl::emitWidgetAnnotations()
                     case PDFWriter::FDF:
                     default:
                         break;
+                    }
+                    if( rWidget.m_bSubmitGet )
+                        nFlags |= 8;
+                    aLine.append( nFlags );
+                    aLine.append( ">>>>\n" );
                 }
-                if( rWidget.m_bSubmitGet )
-                    nFlags |= 8;
-                aLine.append( nFlags );
-                aLine.append( ">>>>\n" );
-            }
-            else
-            {
-                // create a URI action
-                aLine.append( "/AA<</D<</Type/Action/S/URI/URI(" );
-                aLine.append( OUStringToOString( rWidget.m_aListEntries.front(), RTL_TEXTENCODING_ASCII_US ) );
-                aLine.append( ")>>>>\n" );
+                else
+                {
+                    // create a URI action
+                    aLine.append( "/AA<</D<</Type/Action/S/URI/URI(" );
+                    aLine.append( OUStringToOString( rWidget.m_aListEntries.front(), RTL_TEXTENCODING_ASCII_US ) );
+                    aLine.append( ")>>>>\n" );
+                }
             }
         }
         if( rWidget.m_aDAString.getLength() )
@@ -4817,7 +5085,15 @@ bool PDFWriterImpl::emitCatalog()
         if( ! it->emit( nTreeNode ) )
             return false;
 
+    sal_Int32 nNamedDestinationsDictionary = emitNamedDestinations();
+
     sal_Int32 nOutlineDict = emitOutline();
+
+    //emit Output intent i59651
+    sal_Int32 nOutputIntentObject = emitOutputIntent();
+
+    //emit metadata
+    sal_Int32 nMetadataObject = emitDocumentMetadata();
 
     sal_Int32 nStructureDict = 0;
     if(m_aStructure.size() > 1)
@@ -4882,7 +5158,15 @@ bool PDFWriterImpl::emitCatalog()
                   "<</Type/Catalog/Pages " );
     aLine.append( nTreeNode );
     aLine.append( " 0 R\n" );
-
+//--->i56629
+//check if there are named destinations to emit (root must be inside the catalog)
+    if( nNamedDestinationsDictionary )
+    {
+        aLine.append("/Dests ");
+        aLine.append( nNamedDestinationsDictionary );
+        aLine.append( " 0 R\n" );
+    }
+//<----
     if( m_aContext.PageLayout != PDFWriter::DefaultLayout )
         switch(  m_aContext.PageLayout )
         {
@@ -5035,7 +5319,25 @@ bool PDFWriterImpl::emitCatalog()
         }
         aLine.append( "\n]/DR " );
         aLine.append( getResourceDictObj() );
-        aLine.append( " 0 R /NeedAppearances true>>\n" );
+        aLine.append( " 0 R" );
+        if( m_bIsPDF_A1 )
+            aLine.append( ">>\n" );
+        else
+            aLine.append( "/NeedAppearances true>>\n" );
+    }
+//--->i59651
+//check if there is a Metadata object
+    if( nOutputIntentObject )
+    {
+        aLine.append("/OutputIntents[");
+        aLine.append( nOutputIntentObject );
+        aLine.append( " 0 R]" );
+    }
+    if( nMetadataObject )
+    {
+        aLine.append("/Metadata ");
+        aLine.append( nMetadataObject );
+        aLine.append( " 0 R" );
     }
     aLine.append( ">>\n"
                   "endobj\n\n" );
@@ -5091,8 +5393,8 @@ sal_Int32 PDFWriterImpl::emitInfoDict( )
             aLine.append( "\n" );
         }
 
-        aLine.append( "/CreationDate" );
-        appendLiteralStringEncrypt( m_aCreationDateString, nObject, aLine );
+         aLine.append( "/CreationDate" );
+         appendLiteralStringEncrypt( m_aCreationDateString, nObject, aLine );
         aLine.append( ">>\nendobj\n\n" );
         if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
             nObject = 0;
@@ -5102,6 +5404,340 @@ sal_Int32 PDFWriterImpl::emitInfoDict( )
 
     return nObject;
 }
+
+//--->i56629
+// Part of this function may be shared with method appendDest.
+//
+sal_Int32 PDFWriterImpl::emitNamedDestinations()
+{
+    sal_Int32  nCount = m_aNamedDests.size();
+    if( nCount <= 0 )
+        return 0;//define internal error
+
+//get the object number for all the destinations
+    sal_Int32 nObject = createObject();
+
+    if( updateObject( nObject ) )
+    {
+//emit the dictionary
+        OStringBuffer aLine( 1024 );
+        aLine.append( nObject );
+        aLine.append( " 0 obj\n"
+                      "<<" );
+
+        sal_Int32  nDestID;
+        for( nDestID = 0; nDestID < nCount; nDestID++ )
+        {
+            const PDFNamedDest& rDest   = m_aNamedDests[ nDestID ];
+// In order to correctly function both under an Internet browser and
+// directly with a reader (provided the reader has the feature) we
+// need to set the name of the destination the same way it will be encoded
+// in an Internet link
+            INetURLObject aLocalURL(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "http://ahost.ax" ) ) ); //dummy location, won't be used
+            aLocalURL.SetMark( rDest.m_aDestName );
+
+            const rtl::OUString aName   = aLocalURL.GetMark( INetURLObject::NO_DECODE ); //same coding as
+            // in link creation ( see PDFWriterImpl::emitLinkAnnotations )
+            const PDFPage& rDestPage    = m_aPages[ rDest.m_nPage ];
+
+            aLine.append( '/' );
+            appendDestinationName( aName, aLine ); // this conversion must be done when forming the link to target ( see in emitCatalog )
+            aLine.append( '[' ); // the '[' can be emitted immediately, because the appendDestinationName function
+                                 //maps the preceeding character properly
+            aLine.append( rDestPage.m_nPageObject );
+            aLine.append( " 0 R" );
+
+            switch( rDest.m_eType )
+            {
+            case PDFWriter::XYZ:
+            default:
+                aLine.append( "/XYZ " );
+                appendFixedInt( rDest.m_aRect.Left(), aLine );
+                aLine.append( ' ' );
+                appendFixedInt( rDest.m_aRect.Bottom(), aLine );
+                aLine.append( " 0" );
+                break;
+            case PDFWriter::Fit:
+                aLine.append( "/Fit" );
+                break;
+            case PDFWriter::FitRectangle:
+                aLine.append( "/FitR " );
+                appendFixedInt( rDest.m_aRect.Left(), aLine );
+                aLine.append( ' ' );
+                appendFixedInt( rDest.m_aRect.Top(), aLine );
+                aLine.append( ' ' );
+                appendFixedInt( rDest.m_aRect.Right(), aLine );
+                aLine.append( ' ' );
+                appendFixedInt( rDest.m_aRect.Bottom(), aLine );
+                break;
+            case PDFWriter::FitHorizontal:
+                aLine.append( "/FitH " );
+                appendFixedInt( rDest.m_aRect.Bottom(), aLine );
+                break;
+            case PDFWriter::FitVertical:
+                aLine.append( "/FitV " );
+                appendFixedInt( rDest.m_aRect.Left(), aLine );
+                break;
+            case PDFWriter::FitPageBoundingBox:
+                aLine.append( "/FitB" );
+                break;
+            case PDFWriter::FitPageBoundingBoxHorizontal:
+                aLine.append( "/FitBH " );
+                appendFixedInt( rDest.m_aRect.Bottom(), aLine );
+                break;
+            case PDFWriter::FitPageBoundingBoxVertical:
+                aLine.append( "/FitBV " );
+                appendFixedInt( rDest.m_aRect.Left(), aLine );
+                break;
+            }
+            aLine.append( "]\n" );
+        }
+//close
+
+        aLine.append( ">>\nendobj\n\n" );
+        if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
+            nObject = 0;
+    }
+    else
+        nObject = 0;
+
+    return nObject;
+}
+//<--- i56629
+
+//--->i59651
+// emits the output intent dictionary
+
+sal_Int32 PDFWriterImpl::emitOutputIntent()
+{
+    if( !m_bIsPDF_A1 )
+        return 0;
+
+//emit the sRGB standard profile, in ICC format, in a stream, per IEC61966-2.1
+
+    OStringBuffer aLine( 1024 );
+    sal_Int32 nICCObject = createObject();
+
+    aLine.append( nICCObject );
+// sRGB has 3 colors, hence /N 3 below (PDF 1.4 table 4.16)
+    aLine.append( " 0 obj\n<</N 3/Length " );
+    aLine.append( (sal_Int32) sizeof( nsRGB_ICC_profile ) );
+    aLine.append( "/Filter/FlateDecode>>\nstream\n" );
+    CHECK_RETURN( updateObject( nICCObject ) );
+    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    beginCompression();
+    checkAndEnableStreamEncryption( nICCObject );
+    sal_Int32 nStreamSize = writeBuffer( nsRGB_ICC_profile, (sal_Int32) sizeof( nsRGB_ICC_profile ) );
+    disableStreamEncryption();
+    endCompression();
+    if( nStreamSize == 0 )
+        return 0;
+    if( ! writeBuffer( "\nendstream\nendobj\n\n", 19 ) )
+        return 0 ;
+    aLine.setLength( 0 );
+//emit the OutputIntent dictionary
+    sal_Int32 nOIObject = createObject();
+    CHECK_RETURN( updateObject( nOIObject ) );
+    aLine.append( nOIObject );
+    aLine.append( " 0 obj\n"
+                  "<</Type/OutputIntent/S/GTS_PDFA1/OutputConditionIdentifier");
+
+    rtl::OUString aComment( RTL_CONSTASCII_USTRINGPARAM( "sRGB IEC61966-2.1" ) );
+    appendLiteralStringEncrypt( aComment ,nOIObject, aLine );
+    aLine.append("/DestOutputProfile ");
+    aLine.append( nICCObject );
+    aLine.append( " 0 R>>\nendobj\n\n" );;
+    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+    return nOIObject;
+}
+
+// formats the string for the XML stream
+static void escapeStringXML( const rtl::OUString& rStr, rtl::OUString &rValue)
+{
+    const sal_Unicode* pUni = rStr.getStr();
+    int nLen = rStr.getLength();
+    for( ; nLen; nLen--, pUni++ )
+    {
+        switch( *pUni )
+        {
+        case sal_Unicode('&'):
+            rValue += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "&amp;" ) );
+        break;
+        case sal_Unicode('<'):
+            rValue += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "&lt;" ) );
+        break;
+        case sal_Unicode('>'):
+            rValue += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "&gt;" ) );
+        break;
+        case sal_Unicode('\''):
+            rValue += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "&apos;" ) );
+        break;
+        case sal_Unicode('"'):
+            rValue += rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "&quot;" ) );
+        break;
+        default:
+            rValue += rtl::OUString( *pUni );
+            break;
+        }
+    }
+}
+
+// emits the document metadata
+//
+sal_Int32 PDFWriterImpl::emitDocumentMetadata()
+{
+    if( !m_bIsPDF_A1 )
+        return 0;
+
+    //get the object number for all the destinations
+    sal_Int32 nObject = createObject();
+
+    if( updateObject( nObject ) )
+    {
+// the following string are written in UTF-8 unicode
+        OStringBuffer aMetadataStream( 8192 );
+
+        aMetadataStream.append( "<?xpacket begin=\"" );
+// this lines writes Unicode “zero width non-breaking space character” (U+FEFF) (aka byte-order mark ) used
+// as a byte-order marker.
+        aMetadataStream.append( OUStringToOString( OUString( sal_Unicode( 0xFEFF ) ), RTL_TEXTENCODING_UTF8 ) );
+        aMetadataStream.append( "\" id=\"W5M0MpCehiHzreSzNTczkc9d\"?>\n" );
+        aMetadataStream.append( "<x:xmpmeta xmlns:x=\"adobe:ns:meta/\">\n" );
+        aMetadataStream.append( " <rdf:RDF xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\">\n" );
+//PDF/A part ( ISO 19005-1:2005 - 6.7.11 )
+        aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
+        aMetadataStream.append( "      xmlns:pdfaid=\"http://www.aiim.org/pdfa/ns/id/\">\n" );
+        aMetadataStream.append( "   <pdfaid:part>1</pdfaid:part>\n" );
+        aMetadataStream.append( "   <pdfaid:conformance>A</pdfaid:conformance>\n" );
+        aMetadataStream.append( "  </rdf:Description>\n" );
+//... Dublin Core properties go here
+        if( m_aDocInfo.Title.Len() ||
+            m_aDocInfo.Author.Len() ||
+            m_aDocInfo.Subject.Len() )
+        {
+            aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
+            aMetadataStream.append( "      xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\n" );
+            if( m_aDocInfo.Title.Len() )
+            {
+// this is according to PDF/A-1, technical corrigendum 1 (2007-04-01)
+                aMetadataStream.append( "   <dc:title>\n" );
+                aMetadataStream.append( "    <rdf:Alt>\n" );
+                aMetadataStream.append( "     <rdf:li xml:lang=\"x-default\">" );
+                rtl::OUString aTitle;
+                escapeStringXML( m_aDocInfo.Title, aTitle );
+                aMetadataStream.append( OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 )  );
+                aMetadataStream.append( "</rdf:li>\n" );
+                aMetadataStream.append( "    </rdf:Alt>\n" );
+                aMetadataStream.append( "   </dc:title>\n" );
+            }
+            if( m_aDocInfo.Author.Len() )
+            {
+                aMetadataStream.append( "   <dc:creator>\n" );
+                aMetadataStream.append( "    <rdf:Seq>\n" );
+                aMetadataStream.append( "     <rdf:li>" );
+                rtl::OUString aAuthor;
+                escapeStringXML( m_aDocInfo.Author, aAuthor );
+                aMetadataStream.append( OUStringToOString( aAuthor , RTL_TEXTENCODING_UTF8 )  );
+                aMetadataStream.append( "</rdf:li>\n" );
+                aMetadataStream.append( "    </rdf:Seq>\n" );
+                aMetadataStream.append( "   </dc:creator>\n" );
+            }
+            if( m_aDocInfo.Subject.Len() )
+            {
+// this is according to PDF/A-1, technical corrigendum 1 (2007-04-01)
+                aMetadataStream.append( "   <dc:description>\n" );
+                aMetadataStream.append( "    <rdf:Alt>\n" );
+                aMetadataStream.append( "     <rdf:li xml:lang=\"x-default\">" );
+                rtl::OUString aSubject;
+                escapeStringXML( m_aDocInfo.Subject, aSubject );
+                aMetadataStream.append( OUStringToOString( aSubject , RTL_TEXTENCODING_UTF8 )  );
+                aMetadataStream.append( "</rdf:li>\n" );
+                aMetadataStream.append( "    </rdf:Alt>\n" );
+                aMetadataStream.append( "   </dc:description>\n" );
+            }
+            aMetadataStream.append( "  </rdf:Description>\n" );
+        }
+
+//... PDF properties go here
+        if( m_aDocInfo.Producer.Len() ||
+            m_aDocInfo.Keywords.Len() )
+        {
+            aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
+            aMetadataStream.append( "     xmlns:pdf=\"http://ns.adobe.com/pdf/1.3/\">\n" );
+            if( m_aDocInfo.Producer.Len() )
+            {
+                aMetadataStream.append( "   <pdf:Producer>" );
+                rtl::OUString aProducer;
+                escapeStringXML( m_aDocInfo.Producer, aProducer );
+                aMetadataStream.append( OUStringToOString( aProducer , RTL_TEXTENCODING_UTF8 )  );
+                aMetadataStream.append( "</pdf:Producer>\n" );
+            }
+            if( m_aDocInfo.Keywords.Len() )
+            {
+                aMetadataStream.append( "   <pdf:Keywords>" );
+                rtl::OUString aKeywords;
+                escapeStringXML( m_aDocInfo.Keywords, aKeywords );
+                aMetadataStream.append( OUStringToOString( aKeywords , RTL_TEXTENCODING_UTF8 )  );
+                aMetadataStream.append( "</pdf:Keywords>\n" );
+            }
+            aMetadataStream.append( "  </rdf:Description>\n" );
+        }
+
+        aMetadataStream.append( "  <rdf:Description rdf:about=\"\"\n" );
+        aMetadataStream.append( "    xmlns:xmp=\"http://ns.adobe.com/xap/1.0/\">\n" );
+        if( m_aDocInfo.Creator.Len() )
+        {
+            aMetadataStream.append( "   <xmp:CreatorTool>" );
+            rtl::OUString aCreator;
+            escapeStringXML( m_aDocInfo.Creator, aCreator );
+            aMetadataStream.append( OUStringToOString( aCreator , RTL_TEXTENCODING_UTF8 )  );
+            aMetadataStream.append( "</xmp:CreatorTool>\n" );
+        }
+//creation date
+        aMetadataStream.append( "   <xmp:CreateDate>" );
+        aMetadataStream.append( m_aCreationMetaDateString );
+        aMetadataStream.append( "</xmp:CreateDate>\n" );
+
+        aMetadataStream.append( "  </rdf:Description>\n" );
+        aMetadataStream.append( " </rdf:RDF>\n" );
+        aMetadataStream.append( "</x:xmpmeta>\n" );
+
+//add the padding
+        for( sal_Int32 nSpaces = 1; nSpaces <= 2100; nSpaces++ )
+        {
+            aMetadataStream.append( " " );
+            if( nSpaces % 100 == 0 )
+                aMetadataStream.append( "\n" );
+        }
+
+        aMetadataStream.append( "<?xpacket end=\"w\"?>\n" );
+
+        OStringBuffer aMetadataObj( 1024 );
+
+        aMetadataObj.append( nObject );
+        aMetadataObj.append( " 0 obj\n" );
+
+        aMetadataObj.append( "<</Type/Metadata/Subtype/XML/Length " );
+
+        aMetadataObj.append( (sal_Int32) aMetadataStream.getLength() );
+        aMetadataObj.append( ">>\nstream\n" );
+        CHECK_RETURN( writeBuffer( aMetadataObj.getStr(), aMetadataObj.getLength() ) );
+//emit the stream
+        CHECK_RETURN( writeBuffer( aMetadataStream.getStr(), aMetadataStream.getLength() ) );
+
+        aMetadataObj.setLength( 0 );
+        aMetadataObj.append( "\nendstream\nendobj\n\n" );
+        if( ! writeBuffer( aMetadataObj.getStr(), aMetadataObj.getLength() ) )
+            nObject = 0;
+    }
+    else
+        nObject = 0;
+
+    return nObject;
+}
+//<---i59651
 
 bool PDFWriterImpl::emitTrailer()
 {
@@ -7007,7 +7643,7 @@ void PDFWriterImpl::drawTransparent( const PolyPolygon& rPolyPoly, sal_uInt32 nT
         m_aGraphicsStack.front().m_aFillColor == Color( COL_TRANSPARENT ) )
         return;
 
-    if( m_aContext.Version < PDFWriter::PDF_1_4 )
+    if( m_bIsPDF_A1 || m_aContext.Version < PDFWriter::PDF_1_4 )
     {
         drawPolyPolygon( rPolyPoly );
         return;
@@ -7826,59 +8462,72 @@ bool PDFWriterImpl::writeTransparentObject( TransparencyEmit& rObject )
                   "<<" );
     if( ! rObject.m_pSoftMaskStream )
     {
-        aLine.append(  "/CA " );
-        appendDouble( rObject.m_fAlpha, aLine );
-        aLine.append( "\n"
-                  "   /ca " );
-        appendDouble( rObject.m_fAlpha, aLine );
+//i59651
+        if( m_bIsPDF_A1 )
+            aLine.append( "/CA 1.0/ca 1.0" );
+        else
+        {
+            aLine.append(  "/CA " );
+            appendDouble( rObject.m_fAlpha, aLine );
+            aLine.append( "\n"
+                          "   /ca " );
+            appendDouble( rObject.m_fAlpha, aLine );
+        }
         aLine.append( "\n" );
     }
     else
     {
-        rObject.m_pSoftMaskStream->Seek( STREAM_SEEK_TO_END );
-        sal_Int32 nMaskSize = (sal_Int32)rObject.m_pSoftMaskStream->Tell();
-        rObject.m_pSoftMaskStream->Seek( STREAM_SEEK_TO_BEGIN );
-        sal_Int32 nMaskObject = createObject();
-        aLine.append( "/SMask<</Type/Mask/S/Luminosity/G " );
-        aLine.append( nMaskObject );
-        aLine.append( " 0 R>>\n" );
+        if( m_bIsPDF_A1 )
+        {
+            aLine.append( "/SMask/None" );
+        }
+        else
+        {
+            rObject.m_pSoftMaskStream->Seek( STREAM_SEEK_TO_END );
+            sal_Int32 nMaskSize = (sal_Int32)rObject.m_pSoftMaskStream->Tell();
+            rObject.m_pSoftMaskStream->Seek( STREAM_SEEK_TO_BEGIN );
+            sal_Int32 nMaskObject = createObject();
+            aLine.append( "/SMask<</Type/Mask/S/Luminosity/G " );
+            aLine.append( nMaskObject );
+            aLine.append( " 0 R>>\n" );
 
-        OStringBuffer aMask;
-        aMask.append( nMaskObject );
-        aMask.append( " 0 obj\n"
-                      "<</Type/XObject\n"
-                      "/Subtype/Form\n"
-                      "/BBox[" );
-        appendFixedInt( rObject.m_aBoundRect.Left(), aMask );
-        aMask.append( ' ' );
-        appendFixedInt( rObject.m_aBoundRect.Top(), aMask );
-        aMask.append( ' ' );
-        appendFixedInt( rObject.m_aBoundRect.Right(), aMask );
-        aMask.append( ' ' );
-        appendFixedInt( rObject.m_aBoundRect.Bottom()+1, aMask );
-        aMask.append( "]\n" );
+            OStringBuffer aMask;
+            aMask.append( nMaskObject );
+            aMask.append( " 0 obj\n"
+                          "<</Type/XObject\n"
+                          "/Subtype/Form\n"
+                          "/BBox[" );
+            appendFixedInt( rObject.m_aBoundRect.Left(), aMask );
+            aMask.append( ' ' );
+            appendFixedInt( rObject.m_aBoundRect.Top(), aMask );
+            aMask.append( ' ' );
+            appendFixedInt( rObject.m_aBoundRect.Right(), aMask );
+            aMask.append( ' ' );
+            appendFixedInt( rObject.m_aBoundRect.Bottom()+1, aMask );
+            aMask.append( "]\n" );
 
-        /* #i42884# see above */
-        #if 0
-        aLine.append( "/Resources " );
-        aMask.append( getResourceDictObj() );
-        aMask.append( " 0 R\n" );
-        #endif
+            /* #i42884# see above */
+#if 0
+            aLine.append( "/Resources " );
+            aMask.append( getResourceDictObj() );
+            aMask.append( " 0 R\n" );
+#endif
 
-        aMask.append( "/Group<</S/Transparency/CS/DeviceRGB>>\n" );
-        aMask.append( "/Length " );
-        aMask.append( nMaskSize );
-        aMask.append( ">>\n"
-                      "stream\n" );
-        CHECK_RETURN( updateObject( nMaskObject ) );
-        checkAndEnableStreamEncryption(  nMaskObject );
-        CHECK_RETURN( writeBuffer( aMask.getStr(), aMask.getLength() ) );
-        CHECK_RETURN( writeBuffer( rObject.m_pSoftMaskStream->GetData(), nMaskSize ) );
-        disableStreamEncryption();
-        aMask.setLength( 0 );
-        aMask.append( "\nendstream\n"
-                      "endobj\n\n" );
-        CHECK_RETURN( writeBuffer( aMask.getStr(), aMask.getLength() ) );
+            aMask.append( "/Group<</S/Transparency/CS/DeviceRGB>>\n" );
+            aMask.append( "/Length " );
+            aMask.append( nMaskSize );
+            aMask.append( ">>\n"
+                          "stream\n" );
+            CHECK_RETURN( updateObject( nMaskObject ) );
+            checkAndEnableStreamEncryption(  nMaskObject );
+            CHECK_RETURN( writeBuffer( aMask.getStr(), aMask.getLength() ) );
+            CHECK_RETURN( writeBuffer( rObject.m_pSoftMaskStream->GetData(), nMaskSize ) );
+            disableStreamEncryption();
+            aMask.setLength( 0 );
+            aMask.append( "\nendstream\n"
+                          "endobj\n\n" );
+            CHECK_RETURN( writeBuffer( aMask.getStr(), aMask.getLength() ) );
+        }
     }
     aLine.append( ">>\n"
                   "endobj\n\n" );
@@ -8012,7 +8661,7 @@ bool PDFWriterImpl::writeJPG( JPGEmit& rObject )
     if( !!rObject.m_aMask )
     {
         if( rObject.m_aMask.GetBitCount() == 1 ||
-            ( rObject.m_aMask.GetBitCount() == 8 && m_aContext.Version >= PDFWriter::PDF_1_4 )
+            ( rObject.m_aMask.GetBitCount() == 8 && m_aContext.Version >= PDFWriter::PDF_1_4 && !m_bIsPDF_A1 )//i59651
             )
             nMaskObject = createObject();
     }
@@ -8251,7 +8900,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         }
     }
 
-    if( ! bMask && m_aContext.Version > PDFWriter::PDF_1_2 )
+    if( ! bMask && m_aContext.Version > PDFWriter::PDF_1_2 && !m_bIsPDF_A1 )//i59651
     {
         if( bWriteMask )
         {
@@ -9220,6 +9869,29 @@ sal_Int32 PDFWriterImpl::createLink( const Rectangle& rRect, sal_Int32 nPageNr )
 
     return nRet;
 }
+
+//--->i56629
+sal_Int32 PDFWriterImpl::createNamedDest( const rtl::OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+{
+    if( nPageNr < 0 )
+        nPageNr = m_nCurrentPage;
+
+    if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() )
+        return -1;
+
+    sal_Int32 nRet = m_aNamedDests.size();
+
+    m_aNamedDests.push_back( PDFNamedDest() );
+    m_aNamedDests.back().m_aDestName = sDestName;
+    m_aNamedDests.back().m_nPage = nPageNr;
+    m_aNamedDests.back().m_eType = eType;
+    m_aNamedDests.back().m_aRect = rRect;
+    // convert to default user space now, since the mapmode may change
+    m_aPages[nPageNr].convertRect( m_aNamedDests.back().m_aRect );
+
+    return nRet;
+}
+//<---i56629
 
 sal_Int32 PDFWriterImpl::createDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
@@ -10688,4 +11360,3 @@ according to the table 3.15, pdf v 1.4 */
         m_aContext.Encrypt = false; //then turn the encryption off
 }
 /* end i12626 methods */
-
