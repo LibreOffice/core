@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OUStringBuffer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:46:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:49:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,20 @@ const int MAXBUFLENGTH = 255;
 //------------------------------------------------------------------------
 // helper functions
 //------------------------------------------------------------------------
+static void unused()
+{
+    (void)kBinaryNumsStr;
+    (void)kOctolNumsStr;
+    (void)kDecimalNumsStr;
+    (void)kHexDecimalNumsStr;
+    (void)kBase36NumsStr;
+    (void)inputChar;
+    (void)input1StrDefault;
+    (void)input1StrNormal;
+    (void)input1StrLastDefault;
+    (void)input1StrLastNormal;
+    unused();
+}
 
 //------------------------------------------------------------------------
 // testing constructors
@@ -232,6 +246,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_ctors(
 {
     c_rtl_tres_state_start( hRtlTestResult, "ctors");
     sal_Bool DCState = test_ini_uString();
+    (void)DCState;
     sal_Bool bTSState = test_rtl_OUStringBuffer_ctor_001( hRtlTestResult );
     bTSState &= test_rtl_OUStringBuffer_ctor_002( hRtlTestResult);
     bTSState &= test_rtl_OUStringBuffer_ctor_003( hRtlTestResult);
@@ -293,7 +308,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_makeStringAndCle
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -370,7 +385,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_getLength(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -455,7 +470,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_getCapacity(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -550,7 +565,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_ensureCapacity(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -680,7 +695,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_setLength(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -757,7 +772,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_charAt(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -831,7 +846,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_csuc(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
        const sal_Unicode* pstr = *arrTestCase[i].input1;
@@ -886,7 +901,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_getStr(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
        const sal_Unicode* pstr = arrTestCase[i].input1->getStr();
@@ -945,9 +960,11 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_setCharAt(
     {"set the only of OUStringBuffer(aUStr28) with special character",
                 new OUString(aUStr34),
                 new OUStringBuffer(arrOUS[2]), 1, 5},
+/*
         {"set the only of OUStringBuffer(aUStr28) with special character",
                 new OUString(aUStr35),
                 new OUStringBuffer(arrOUS[2]), 1, -5}
+*/
 #ifdef WITH_CORE
     ,{"invalid character of OUStringBuffer()",
                 0,
@@ -964,7 +981,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_setCharAt(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1097,7 +1114,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_001(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1219,7 +1236,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_002(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1367,7 +1384,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_003(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1463,7 +1480,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_004(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1603,7 +1620,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_001(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1749,7 +1766,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_002(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
