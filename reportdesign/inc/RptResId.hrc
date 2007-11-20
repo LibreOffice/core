@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RptResId.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:02 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 18:55:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@
 #define RID_STR_PAGEFOOTEROPTION            (RID_STRING_START + 111)
 #define RID_STR_REPORTPRINTOPTION_CONST     (RID_STRING_START + 112)
 #define RID_STR_SECTIONPAGEBREAK_CONST      (RID_STRING_START + 113)
-// free
+#define RID_STR_SCOPE_GROUP                 (RID_STRING_START + 114)
 #define RID_APP_TITLE                       (RID_STRING_START + 115)
 #define RID_APP_NEW_DOC                     (RID_STRING_START + 116)
 #define RID_STR_UNDO_ALIGNMENT              (RID_STRING_START + 117)
@@ -218,6 +218,10 @@
 #define RID_STR_UNDO_CHANGEFONT             (RID_STRING_START + 137)
 #define RID_STR_UNDO_CHANGEPAGE             (RID_STRING_START + 138)
 #define RID_STR_CAUGHT_FOREIGN_EXCEPTION    (RID_STRING_START + 139)
+#define RID_STR_FORMULALIST                 (RID_STRING_START + 140)
+#define RID_STR_SCOPE                       (RID_STRING_START + 141)
+#define RID_STR_TYPE                        (RID_STRING_START + 142)
+#define RID_STR_TYPE_CONST                  (RID_STRING_START + 143)
 
 // #define RID_STR_                     (RID_STRING_START + 130)
 // -----------------------------------------------------------------------

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpids.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:02 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 18:55:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,9 +74,9 @@
 #define HID_PROP_CANGROW                    (HID_RPT_START + 31)
 #define HID_PROP_CANSHRINK                  (HID_RPT_START + 32)
 #define HID_PROP_REPEATSECTION              (HID_RPT_START + 33)
-// free
-// free
-// free
+#define HID_PROP_FORMULALIST                (HID_RPT_START + 34)
+#define HID_PROP_SCOPE                      (HID_RPT_START + 35)
+#define HID_PROP_TYPE                       (HID_RPT_START + 36)
 // free
 // free
 // free
