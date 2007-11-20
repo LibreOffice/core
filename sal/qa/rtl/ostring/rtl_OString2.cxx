@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OString2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:57:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ class valueOf : public CppUnit::TestFixture
             sValue = rtl::OString::valueOf( _nValue );
             t_print(T_VERBOSE, "nFloat := %.9f  sValue := %s\n", _nValue, sValue.getStr());
 
-            float nValueATOF = atof( sValue.getStr() );
+            float nValueATOF = static_cast<float>(atof( sValue.getStr() ));
 
             bool bEqualResult = is_float_equal(_nValue, nValueATOF);
             CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult == true);
