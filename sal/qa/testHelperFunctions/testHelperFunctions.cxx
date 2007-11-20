@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testHelperFunctions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:23:22 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,14 +75,14 @@ void t_print64(sal_Int64 n)
     if (n > 2147483647)
     {
         sal_Int64 n64 = n >> 32;
-        sal_Int32 n32 = n64 & 0xffffffff;
+        sal_uInt32 n32 = n64 & 0xffffffff;
         printf("0x%.8x ", n32);
         n32 = n & 0xffffffff;
         printf("%.8x (64bit)", n32);
     }
     else
     {
-        sal_Int32 n32 = n & 0xffffffff;
+        sal_uInt32 n32 = n & 0xffffffff;
         printf("0x%.8x (32bit) ", n32);
     }
     printf("\n");
