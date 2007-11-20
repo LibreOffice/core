@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_File.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:49:26 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,12 +63,13 @@
 
 #include <cppunit/simpleheader.hxx>
 
-#ifdef WNT
-#   define UNICODE
-#   define WIN32_LEAN_AND_MEAN
-#   include <windows.h>
-#   include <tchar.h>
-#endif
+// #ifdef WNT
+// #   define UNICODE
+// #    define WIN32_LEAN_AND_MEAN
+// #    include <windows.h>
+// #   include <tchar.h>
+// #endif
+
 
 using namespace osl;
 using namespace rtl;
@@ -347,6 +348,7 @@ inline sal_Bool compareFileName( const ::rtl::OUString & ustr1, const ::rtl::OUS
 */
 inline sal_Bool compareFileName( const ::rtl::OUString & ustr, const sal_Char *astr )
 {
+    (void)ustr;
     ::rtl::OUString ustr1 = rtl::OUString::createFromAscii( astr );
     sal_Bool bOk = ustr1.equalsIgnoreAsciiCase( ustr1 );
 
@@ -598,7 +600,7 @@ inline sal_Bool ifFileExist( const ::rtl::OUString & str )
          bCheckResult = sal_True;
 #else*/
     ::rtl::OString aString = ::rtl::OUStringToOString( str, RTL_TEXTENCODING_ASCII_US );
-    const char *path = aString.getStr( );
+    // const char *path = aString.getStr( );
     ::osl::File testFile( str );
     bCheckResult = ( osl::FileBase::E_None == testFile.open( OpenFlag_Read ) );
     //if (bCheckResult)
@@ -720,6 +722,8 @@ inline void changeFileMode( ::rtl::OUString & filepath, sal_Int32 mode )
 #else                                          //Windows version
 inline void changeFileMode( ::rtl::OUString & filepath, sal_Int32 mode )
 {
+    (void)filepath;
+    (void)mode;
     t_print("this method is not implemented yet");
 }
 #endif
@@ -1258,6 +1262,10 @@ namespace osl_FileBase
     {
 #if ( defined WNT )
         check_SystemPath_FileURL(_sURL, _nAssumeError, _sWNTAssumeResultString);
+#else
+        (void)_sURL;
+        (void)_nAssumeError;
+        (void)_sWNTAssumeResultString;
 #endif
     }
 
@@ -1265,6 +1273,10 @@ namespace osl_FileBase
     {
 #if ( defined UNX )
         check_SystemPath_FileURL(_sURL, _nAssumeError, _sUnixAssumeResultString);
+#else
+        (void)_sURL;
+        (void)_nAssumeError;
+        (void)_sUnixAssumeResultString;
 #endif
     }
 
@@ -1272,6 +1284,10 @@ namespace osl_FileBase
     {
 #if ( defined WNT )
         check_SystemPath_FileURL(_sSysPath, _nAssumeError, _sWNTAssumeResultString, sal_False );
+#else
+        (void)_sSysPath;
+        (void)_nAssumeError;
+        (void)_sWNTAssumeResultString;
 #endif
     }
 
@@ -1279,6 +1295,10 @@ namespace osl_FileBase
     {
 #if ( defined UNX )
         check_SystemPath_FileURL(_sSysPath, _nAssumeError, _sUnixAssumeResultString, sal_False );
+#else
+        (void)_sSysPath;
+        (void)_nAssumeError;
+        (void)_sUnixAssumeResultString;
 #endif
     }
 
@@ -4748,6 +4768,7 @@ namespace osl_File
         createTestFile( aTmpName6 );
         File tmpFile( aTmpName6 );
         FileBase::RC err = tmpFile.open( OpenFlag_Write | OpenFlag_Read );
+        (void)err;
         tmpFile.setSize( 200 );
         tmpFile.close();
         //copy to new path
@@ -6038,7 +6059,9 @@ namespace osl_Directory
 
             //check the file name
             ::rtl::OUString     strFilename;
-            sal_Bool            bOk1, bOk2, bOk3;
+            sal_Bool            bOk1 = sal_False;
+            sal_Bool bOk2 = sal_False;
+            sal_Bool bOk3 = sal_False;
               ::osl::FileStatus   rFileStatus( FileStatusMask_FileName );
             for ( int nCount = 0; nCount < 3; nCount++ )
             {
@@ -6530,7 +6553,7 @@ namespace osl_Directory
         {
         }
 
-        virtual void DirectoryCreated(const rtl::OUString& aDirectoryUrl)
+        virtual void DirectoryCreated(const rtl::OUString& /*aDirectoryUrl*/)
         {
             i++;
         };
@@ -6755,6 +6778,7 @@ inline void insertPID( ::rtl::OUString & pathname )
 */
 void RegisterAdditionalFunctions( FktRegFuncPtr _pFunc )
 {
+    (void)_pFunc;
     t_print( "Initializing..." );
 
     //~ make sure the c:\temp exist, if not, create it.
