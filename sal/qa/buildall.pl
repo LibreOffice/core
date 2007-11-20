@@ -6,9 +6,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: buildall.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:35:48 $
+#   last change: $Author: ihi $ $Date: 2007-11-20 19:25:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,12 @@ use English;
 use Cwd 'chdir';
 
 my $cwd = getcwd();
+
+# Prototypes
+sub initEnvironment();
+sub main($);
+sub checkForKillobj();
+sub checkARGVFor($);
 
 my $g_sTempDir = "";
 my $FS = "";
