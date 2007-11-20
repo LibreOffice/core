@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_process.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:36:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:32:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,12 @@
 #include <osl/module.hxx>
 #endif
 
-#ifdef WNT
+#if ( defined WNT )                     // Windows
+#include <tools/prewin.h>
 #   define WIN32_LEAN_AND_MEAN
-#   include <windows.h>
+// #    include <windows.h>
 #   include <tchar.h>
+#include <tools/postwin.h>
 #endif
 
 #include "rtl/allocator.hxx"
