@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlCell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:20:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 18:59:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ OXMLCell::OXMLCell( ORptFilter& rImport
         ::rtl::OUString sLocalName;
         const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
@@ -169,7 +169,7 @@ SvXMLImportContext* OXMLCell::CreateChildContext(
     Reference<XMultiServiceFactory> xFactor(rImport.GetModel(),uno::UNO_QUERY);
     static const ::rtl::OUString s_sStringConcat(RTL_CONSTASCII_USTRINGPARAM(" & "));
 
-    sal_uInt16 nToken = rTokenMap.Get( _nPrefix, _rLocalName );
+    const sal_uInt16 nToken = rTokenMap.Get( _nPrefix, _rLocalName );
     switch( nToken )
     {
         case XML_TOK_FIXED_CONTENT:
