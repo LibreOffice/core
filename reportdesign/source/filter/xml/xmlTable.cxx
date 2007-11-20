@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:24:40 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:04:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,9 @@
 #include <com/sun/star/report/XShape.hpp>
 #include <com/sun/star/report/XFixedLine.hpp>
 
+#define MIN_WIDTH   80
+#define MIN_HEIGHT  20
+
 namespace rptxml
 {
     using namespace ::xmloff;
@@ -130,7 +133,7 @@ OXMLTable::OXMLTable( ORptFilter& rImport
             rtl::OUString sLocalName;
             const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+            const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
@@ -146,7 +149,6 @@ OXMLTable::OXMLTable( ORptFilter& rImport
                 case XML_TOK_KEEP_TOGETHER:
                     m_xSection->setKeepTogether(sValue == s_sTRUE);
                     break;
-
                 case XML_TOK_SECTION_NAME:
                     m_xSection->setName(sValue);
                     break;
@@ -194,6 +196,9 @@ SvXMLImportContext* OXMLTable::CreateChildContext(
         case XML_TOK_COLUMN:
             rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
             pContext = new OXMLRowColumn( rImport, _nPrefix, _rLocalName,xAttrList,this);
+            break;
+        case XML_TOK_CONDITIONAL_PRINT_EXPRESSION:
+            pContext = new OXMLCondPrtExpr( rImport, _nPrefix, _rLocalName,xAttrList,m_xSection.get());
             break;
         default:
                 break;
@@ -285,11 +290,17 @@ void OXMLTable::EndElement()
                                     }
                                 }
                                 Reference<XFixedLine> xFixedLine(*aCellIter,uno::UNO_QUERY);
-                                if ( xFixedLine.is() && xFixedLine->getOrientation() == 1 ) // vertical
+                                if ( xFixedLine.is() )
                                 {
-                                    OSL_ENSURE(static_cast<sal_uInt32>(j+1) < m_aWidth.size(),"Illegal pos of col iter. There should be an empty cell for the next line part.");
-                                    nWidth += m_aWidth[j+1];
-
+                                    if ( xFixedLine->getOrientation() == 1 ) // vertical
+                                    {
+                                        OSL_ENSURE(static_cast<sal_uInt32>(j+1) < m_aWidth.size(),"Illegal pos of col iter. There should be an empty cell for the next line part.");
+                                        nWidth += m_aWidth[j+1];
+                                        if ( nWidth < MIN_WIDTH )
+                                            nWidth = MIN_WIDTH;
+                                    }
+                                    else if ( nHeight < MIN_HEIGHT )
+                                        nHeight = MIN_HEIGHT;
                                 }
                                 try
                                 {
@@ -298,7 +309,7 @@ void OXMLTable::EndElement()
                                 }
                                 catch(beans::PropertyVetoException)
                                 {
-                                    OSL_ENSURE(0,"Could set the correct positions!");
+                                    OSL_ENSURE(0,"Could not set the correct position or size!");
                                 }
                             }
                         }
