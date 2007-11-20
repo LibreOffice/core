@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportDefinition.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:53:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 18:57:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2099,10 +2099,18 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWith
     ::connectivity::checkDisposed(ReportDefinitionBase::rBHelper.bDisposed);
 
     uno::Reference< drawing::XShape > xShape;
+    sal_Int32 nOrientation = 1;
     const uno::Any* pIter = _aArgs.getConstArray();
-    const uno::Any* pEnd      = pIter + _aArgs.getLength();
-    for(;pIter != pEnd && !xShape.is();++pIter)
-        xShape.set(*pIter,uno::UNO_QUERY);
+    const uno::Any* pEnd  = pIter + _aArgs.getLength();
+    for(;pIter != pEnd ;++pIter)
+    {
+        beans::NamedValue aValue;
+        *pIter >>= aValue;
+        if ( aValue.Name == PROPERTY_SHAPE )
+            xShape.set(aValue.Value,uno::UNO_QUERY);
+        else if ( aValue.Name == PROPERTY_ORIENTATION )
+            aValue.Value >>= nOrientation;
+    }
 
     uno::Reference< uno::XInterface > xReportComponent;
     if ( xShape.is() )
@@ -2123,7 +2131,7 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstanceWith
         }
         else if ( aServiceSpecifier == SERVICE_FIXEDLINE)
         {
-            xReportComponent = static_cast<cppu::OWeakObject*>(new OFixedLine(m_aProps->m_xContext,this,xShape));
+            xReportComponent = static_cast<cppu::OWeakObject*>(new OFixedLine(m_aProps->m_xContext,this,xShape,nOrientation));
             if ( xShape.is() )
                 throw uno::Exception();
         }
@@ -2197,8 +2205,12 @@ uno::Reference< uno::XInterface > SAL_CALL OReportDefinition::createInstance( co
     uno::Reference< uno::XInterface > xReturn;
     {
         uno::Sequence< uno::Any > aArgs(1);
-        aArgs[0] <<= xShape;
-        xShape.clear();
+        {
+            beans::NamedValue aValue;
+            aValue.Name = PROPERTY_SHAPE;
+            aValue.Value <<= xShape; xShape.clear();    // keep exactly *one* reference!
+            aArgs[0] <<= aValue;
+        }
         xReturn = createInstanceWithArguments(aServiceSpecifier,aArgs);
     }
     return xReturn;
