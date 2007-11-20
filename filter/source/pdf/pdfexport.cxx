@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:20:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:03:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,9 @@
 #include <svtools/FilterConfigItem.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/solar.hrc>
+
+#include <svtools/saveopt.hxx> // only for testing of relative saving options in PDF
+
 #include <vcl/graphictools.hxx>
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -141,8 +144,11 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mxMSF                   ( xFactory ),
     mxStatusIndicator       ( rxStatusIndicator ),
     mbUseTaggedPDF          ( sal_False ),
+    mnPDFTypeSelection      ( 0 ),
     mbExportNotes           ( sal_True ),
     mbExportNotesPages      ( sal_False ),
+    mbEmbedStandardFonts    ( sal_False ),//in preparation for i54636 and i76458.
+                                          //already used for i59651 (PDF/A-1)
     mbUseTransitionEffects  ( sal_True ),
     mbExportBookmarks       ( sal_True ),
     mnOpenBookmarkLevels    ( -1 ),
@@ -180,7 +186,14 @@ PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::
     mbCanCopyOrExtract          ( sal_True ),
     mbCanExtractForAccessibility( sal_True ),
 
-    mnCachePatternId            ( -1 )
+    mnCachePatternId            ( -1 ),
+
+//--->i56629
+    mbExportRelativeFsysLinks       ( sal_False ),
+    mnDefaultLinkAction         ( 0 ),
+    mbConvertOOoTargetToPDFTarget( sal_False ),
+    mbExportBmkToDest           ( sal_False )
+//<---
 {
 }
 
@@ -461,10 +474,14 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mnMaxImageResolution;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ) )
                     rFilterData[ nData ].Value >>= mbUseTaggedPDF;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectPdfVersion" ) ) )
+                    rFilterData[ nData ].Value >>= mnPDFTypeSelection;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ) )
                     rFilterData[ nData ].Value >>= mbExportNotes;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ) )
                     rFilterData[ nData ].Value >>= mbExportNotesPages;
+//              else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EmbedStandardFonts" ) ) )
+//                  rFilterData[ nData ].Value >>= mbEmbedStandardFonts;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ) )
                     rFilterData[ nData ].Value >>= mbUseTransitionEffects;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ) )
@@ -522,13 +539,40 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mbCanCopyOrExtract;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableTextAccessForAccessibilityTools" ) ) )
                     rFilterData[ nData ].Value >>= mbCanExtractForAccessibility;
+//--->i56629 links extra (relative links and other related stuff)
+                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportLinksRelativeFsys" ) ) )
+                     rFilterData[ nData ].Value >>= mbExportRelativeFsysLinks;
+                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "PDFViewSelection" ) ) )
+                     rFilterData[ nData ].Value >>= mnDefaultLinkAction;
+                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ConvertOOoTargetToPDFTarget" ) ) )
+                     rFilterData[ nData ].Value >>= mbConvertOOoTargetToPDFTarget;
+                  else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarksToPDFDestination" ) ) )
+                      rFilterData[ nData ].Value >>= mbExportBmkToDest;
+//<---
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ) )
                     rFilterData[ nData ].Value >>= mbExportBookmarks;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ) )
                     rFilterData[ nData ].Value >>= mnOpenBookmarkLevels;
             }
             aContext.URL        = aURL.GetMainURL(INetURLObject::DECODE_TO_IURI);
-            aContext.Version    = PDFWriter::PDF_1_4;
+
+//set the correct version, depending on user request
+            switch( mnPDFTypeSelection )
+            {
+            default:
+            case 0:
+                aContext.Version    = PDFWriter::PDF_1_4;
+                break;
+            case 1:
+                aContext.Version    = PDFWriter::PDF_A_1;
+//force the tagged PDF as well
+                mbUseTaggedPDF = sal_True;
+//force embedding of standard fonts
+                mbEmbedStandardFonts = sal_True;
+//force disabling of form conversion
+                mbExportFormFields = sal_False;
+                break;
+            }
 
 //copy in context the values default in the contructor or set by the FilterData sequence of properties
             aContext.Tagged     = mbUseTaggedPDF;
@@ -543,6 +587,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             aContext.DisplayPDFDocumentTitle    = mbDisplayPDFDocumentTitle;
             aContext.InitialPage                = mnInitialPage-1;
             aContext.OpenBookmarkLevels         = mnOpenBookmarkLevels;
+            aContext.EmbedStandardFonts         = mbEmbedStandardFonts;
 
             switch( mnPDFDocumentMode )
             {
@@ -597,73 +642,75 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
 
             aContext.FirstPageLeft = mbFirstPageLeft;
 
+//check if PDF/A, which does not allow encryption
+            if( aContext.Version != PDFWriter::PDF_A_1 )
+            {
 //set values needed in encryption
-            aContext.Encrypt = mbEncrypt;
+                aContext.Encrypt =  mbEncrypt;
 //set encryption level, fixed, but here it can set by the UI if needed.
 // true is 128 bit, false 40
 //note that in 40 bit mode the UI needs reworking, since the current UI is meaningfull only for
 //128bit security mode
-            aContext.Security128bit = sal_True;
+                aContext.Security128bit = sal_True;
 
 //set the open password
-            if( mbEncrypt &&  msOpenPassword.getLength() > 0 )
-                aContext.UserPassword = msOpenPassword;
+                if( aContext.Encrypt &&  msOpenPassword.getLength() > 0 )
+                    aContext.UserPassword = msOpenPassword;
 
 //set check for permission change password
 // if not enabled and no permission password, force permissions to default as if PDF where without encryption
-            if( mbRestrictPermissions && msPermissionPassword.getLength() > 0 )
-            {
-                aContext.OwnerPassword = msPermissionPassword;
-                aContext.Encrypt = sal_True;
+                if( mbRestrictPermissions && msPermissionPassword.getLength() > 0 )
+                {
+                    aContext.OwnerPassword = msPermissionPassword;
+                    aContext.Encrypt = sal_True;
 //permission set as desired, done after
-            }
-            else
-            {
+                }
+                else
+                {
 //force permission to default
-                mnPrintAllowed                  = 2 ;
-                mnChangesAllowed                = 4 ;
-                mbCanCopyOrExtract              = sal_True;
-                mbCanExtractForAccessibility    = sal_True ;
+                    mnPrintAllowed                  = 2 ;
+                    mnChangesAllowed                = 4 ;
+                    mbCanCopyOrExtract              = sal_True;
+                    mbCanExtractForAccessibility    = sal_True ;
+                }
+
+                switch( mnPrintAllowed )
+                {
+                case 0: //initialized when aContext is build, means no printing
+                    break;
+                default:
+                case 2:
+                    aContext.AccessPermissions.CanPrintFull         = sal_True;
+                case 1:
+                    aContext.AccessPermissions.CanPrintTheDocument  = sal_True;
+                    break;
+                }
+
+                switch( mnChangesAllowed )
+                {
+                case 0: //already in struct PDFSecPermissions CTOR
+                    break;
+                case 1:
+                    aContext.AccessPermissions.CanAssemble              = sal_True;
+                    break;
+                case 2:
+                    aContext.AccessPermissions.CanFillInteractive       = sal_True;
+                    break;
+                case 3:
+                    aContext.AccessPermissions.CanAddOrModify           = sal_True;
+                    break;
+                default:
+                case 4:
+                    aContext.AccessPermissions.CanModifyTheContent      =
+                        aContext.AccessPermissions.CanCopyOrExtract     =
+                        aContext.AccessPermissions.CanAddOrModify       =
+                        aContext.AccessPermissions.CanFillInteractive   = sal_True;
+                    break;
+                }
+
+                aContext.AccessPermissions.CanCopyOrExtract             = mbCanCopyOrExtract;
+                aContext.AccessPermissions.CanExtractForAccessibility   = mbCanExtractForAccessibility;
             }
-
-            switch( mnPrintAllowed )
-            {
-            case 0: //initialized when aContext is build, means no printing
-                break;
-            default:
-            case 2:
-                aContext.AccessPermissions.CanPrintFull         = sal_True;
-            case 1:
-                aContext.AccessPermissions.CanPrintTheDocument  = sal_True;
-                break;
-            }
-
-//check permitted changes
-            switch( mnChangesAllowed )
-            {
-            case 0: //already in struct PDFSecPermissions CTOR
-                break;
-            case 1:
-                aContext.AccessPermissions.CanAssemble              = sal_True;
-                break;
-            case 2:
-                aContext.AccessPermissions.CanFillInteractive       = sal_True;
-                break;
-            case 3:
-                aContext.AccessPermissions.CanAddOrModify           = sal_True;
-                break;
-            default:
-            case 4:
-                aContext.AccessPermissions.CanModifyTheContent      =
-                    aContext.AccessPermissions.CanCopyOrExtract     =
-                    aContext.AccessPermissions.CanAddOrModify       =
-                    aContext.AccessPermissions.CanFillInteractive   = sal_True;
-                break;
-            }
-
-            aContext.AccessPermissions.CanCopyOrExtract             = mbCanCopyOrExtract;
-            aContext.AccessPermissions.CanExtractForAccessibility   = mbCanExtractForAccessibility;
-
             /*
             * FIXME: the entries are only implicitly defined by the resource file. Should there
             * ever be an additional form submit format this could get invalid.
@@ -685,6 +732,48 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     break;
             }
 
+            {
+//---> i56629 Relative link stuff
+//set the base URL of the file:
+//get model
+                Reference< frame::XModel > xModel( mxSrcDoc, UNO_QUERY );
+//then base URL
+                aContext.BaseURL = xModel->getURL();
+// get options
+//              SvtSaveOptions aSaveOpt;
+//relative link option is private to PDF Export filter and limited to local filesystem only
+                aContext.RelFsys = mbExportRelativeFsysLinks;
+//              aContext.RelInet = aSaveOpt.IsSaveRelINet();
+//determine the default acton for PDF links
+                switch( mnDefaultLinkAction )
+                {
+                default:
+//default: URI, without fragment conversion (the bookmark in PDF may not work)
+                case 0:
+                    aContext.DefaultLinkAction = PDFWriter::URIAction;
+                    break;
+//view PDF through an Internet browser
+                case 1:
+                    aContext.DefaultLinkAction = PDFWriter::URIActionDestination;
+                    break;
+//view PDF through the reader application
+                case 2:
+                    aContext.ForcePDFAction = sal_True;
+                    aContext.DefaultLinkAction = PDFWriter::LaunchAction;
+                    break;
+                }
+                aContext.ConvertOOoTargetToPDFTarget = mbConvertOOoTargetToPDFTarget;
+// check for Link Launch action, not allowed on PDF/A-1
+// this code chunk checks when the filter is called from scripting
+                if( aContext.Version == PDFWriter::PDF_A_1 &&
+                    aContext.DefaultLinkAction == PDFWriter::LaunchAction )
+                {   //force the similar allowed URI action
+                    aContext.DefaultLinkAction = PDFWriter::URIActionDestination;
+                    //and remove the remote goto action forced on PDF file
+                    aContext.ForcePDFAction = sal_False;
+                }
+//<---
+            }
 // all context data set, time to create the printing device
             PDFWriter*          pPDFWriter = new PDFWriter( aContext );
             OutputDevice*       pOut = pPDFWriter->GetReferenceDevice();
@@ -752,6 +841,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 pPDFExtOutDevData->SetIsExportBookmarks( mbExportBookmarks );
                 pPDFExtOutDevData->SetIsLosslessCompression( mbUseLosslessCompression );
                 pPDFExtOutDevData->SetIsReduceImageResolution( mbReduceImageResolution );
+                pPDFExtOutDevData->SetIsExportNamedDestinations( mbExportBmkToDest );
 
                 Sequence< PropertyValue > aRenderOptions( 6 );
                 aRenderOptions[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) );
