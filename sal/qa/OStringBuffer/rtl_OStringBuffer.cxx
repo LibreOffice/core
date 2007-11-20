@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OStringBuffer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:19:05 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:27:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3556,7 +3556,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr143 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[0] );
-            sal_Char               input = (sal_Char)255;
+            sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
 
@@ -3588,7 +3588,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr144 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[1] );
-            sal_Char               input = (sal_Char)255;
+            sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
 
@@ -3620,7 +3620,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr144 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[2] );
-            sal_Char               input = (sal_Char)255;
+            sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
 
@@ -3652,7 +3652,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr144 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[3] );
-            sal_Char               input = (sal_Char)255;
+            sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
 
@@ -3684,7 +3684,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr145 );
             ::rtl::OStringBuffer   aStrBuf( *arrOUS[4] );
-            sal_Char               input = (sal_Char)255;
+            sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
 
@@ -3717,7 +3717,7 @@ namespace rtl_OStringBuffer
         {
             OString                expVal( kTestStr144 );
             ::rtl::OStringBuffer   aStrBuf( kSInt32Max );
-            sal_Char               input = (sal_Char)255;
+            sal_Char               input = static_cast<sal_Char>(SAL_MAX_UINT8);
 
             aStrBuf.append( input );
 
