@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcolor.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 11:54:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -685,7 +685,7 @@ ColorConfigWindow_Impl::ColorConfigWindow_Impl(Window* pParent, const ResId& rRe
                 ExtendedColorConfigValue aColorEntry = aExtConfig.GetComponentColorConfigValue(sComponentName,i);
                 FixedText* pFixedText = new FixedText(this,ResId(FT_BASICERROR, *rResId.GetResMgr()));
                 pFixedText->SetPosSizePixel(LogicToPixel( Point( _FT_XPOS, nLineNum * _LINE_HEIGHT ), MAP_APPFONT ),aFixedSize);
-                pFixedText->SetText(aColorEntry.m_sDisplayName);
+                pFixedText->SetText(aColorEntry.getDisplayName());
                 aFixedTexts.push_back(pFixedText);
                 aCheckBoxes.push_back(NULL); // no checkboxes
                 ColorListBox* pColorBox = new ColorListBox(this,ResId(LB_BASICERROR, *rResId.GetResMgr()));
@@ -1093,23 +1093,24 @@ void ColorConfigCtrl_Impl::Update()
 
         for( sal_Int32 k = 0; i < nCount && k < nColorCount; ++i ,++nPos,++k)
         {
-            ExtendedColorConfigValue aColorEntry = pExtColorConfig->GetComponentColorConfigValue(sComponentName,k);
-            Color aColor(aColorEntry.nColor);
-            if(COL_AUTO == (UINT32)aColorEntry.nColor)
+            if(aScrollWindow.aColorBoxes[i])
             {
-                if(aScrollWindow.aColorBoxes[i])
+                ExtendedColorConfigValue aColorEntry = pExtColorConfig->GetComponentColorConfigValue(sComponentName,k);
+                Color aColor(aColorEntry.getColor());
+                if(aColorEntry.getDefaultColor() == aColorEntry.getColor() )
+                {
                     aScrollWindow.aColorBoxes[i]->SelectEntryPos(0);
-            } // if(COL_AUTO == rColorEntry.nColor)
-            else
-            {
-                if(aScrollWindow.aColorBoxes[i])
+                }
+                else
+                {
                     aScrollWindow.aColorBoxes[i]->SelectEntry( aColor );
-            }
-            if(aScrollWindow.aWindows[i])
-                aScrollWindow.aWindows[i]->SetBackground(Wallpaper(aColor));
+                }
+                if(aScrollWindow.aWindows[i])
+                    aScrollWindow.aWindows[i]->SetBackground(Wallpaper(aColor));
 
-            if(aScrollWindow.aWindows[i])
-                aScrollWindow.aWindows[i]->Invalidate();
+                if(aScrollWindow.aWindows[i])
+                    aScrollWindow.aWindows[i]->Invalidate();
+            }
         }
     }
 }
@@ -1333,15 +1334,17 @@ IMPL_LINK(ColorConfigCtrl_Impl, ColorHdl, ColorListBox*, pBox)
             {
                 ExtendedColorConfigValue aColorEntry = pExtColorConfig->GetComponentColorConfigValue(sComponentName,k);
                 Color aColor = pBox->GetSelectEntryColor();     // #i14869# no Color&, 'cause it's a ref to a temp object on the stack!
-                aColorEntry.nColor = aColor.GetColor();
-                if(!pBox->GetSelectEntryPos())
+                aColorEntry.setColor(aColor.GetColor());
+                if( !pBox->GetSelectEntryPos() ) // auto color
                 {
-                    aColorEntry.nColor = COL_AUTO;
+                    aColorEntry.setColor(aColorEntry.getDefaultColor());
+                    aColor.SetColor(aColorEntry.getColor());
                 }
-                if(aScrollWindow.aWindows[i])
+                if ( aScrollWindow.aWindows[i] )
+                {
                     aScrollWindow.aWindows[i]->SetBackground(Wallpaper(aColor));
-                if(aScrollWindow.aWindows[i])
                     aScrollWindow.aWindows[i]->Invalidate();
+                }
                 pExtColorConfig->SetColorValue(sComponentName,aColorEntry);
                 break;
             }
