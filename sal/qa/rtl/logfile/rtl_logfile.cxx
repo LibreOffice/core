@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_logfile.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:22:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:41:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,11 +60,13 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
-#ifdef WNT
-#define UNICODE
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#if ( defined WNT )                     // Windows
+#include <tools/prewin.h>
+// #define UNICODE
+// #define WIN32_LEAN_AND_MEAN
+// #include <windows.h>
 #include <tchar.h>
+#include <tools/postwin.h>
 #endif
 
 using namespace ::osl;
