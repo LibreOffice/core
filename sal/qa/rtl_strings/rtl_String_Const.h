@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_String_Const.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:22:53 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:49:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,16 +260,17 @@ static const sal_Int32 kTestStr1PlusStr6Len = kTestStr1Len + kTestStr6Len;
  static sal_Unicode aUStr49[kTestStr49Len+1];
  static sal_Unicode aUStr50[kTestStr50Len+1];
  static sal_Unicode aUStr51[kTestStr51Len+1];
- static sal_Unicode aUStr52[kTestStr52Len+1]={83,117,110,32,32767};
- static sal_Unicode aUStr53[kTestStr53Len+1]={83,117,110,32,SAL_MIN_INT16 /*-32768*/};
- static sal_Unicode aUStr54[kTestStr54Len+1]={32767};
- static sal_Unicode aUStr55[kTestStr55Len+1]={SAL_MIN_INT16 /*-32768*/};
+// static sal_Unicode aUStr52[kTestStr52Len+1]={83,117,110,32,32767};
+// static sal_Unicode aUStr53[kTestStr53Len+1]={83,117,110,32,SAL_MIN_INT16 /*-32768*/};
+// static sal_Unicode aUStr54[kTestStr54Len+1]={32767};
+// static sal_Unicode aUStr55[kTestStr55Len+1]={SAL_MIN_INT16 /*-32768*/};
  static sal_Unicode aUStr56[kTestStr56Len+1];
- static sal_Unicode aUStr57[kTestStr57Len+1]={40,3,5,7,9,11,13,15,115,117,110,32767};
- static sal_Unicode aUStr58[kTestStr58Len+1]={40,3,5,7,9,11,13,15,115,117,110,SAL_MIN_INT16 /*-32768*/};
+// static sal_Unicode aUStr57[kTestStr57Len+1]={40,3,5,7,9,11,13,15,115,117,110,32767};
+// static sal_Unicode aUStr58[kTestStr58Len+1]={40,3,5,7,9,11,13,15,115,117,110,SAL_MIN_INT16 /*-32768*/};
  static sal_Unicode aUStr1PlusUStr6[kTestStr1Len + kTestStr6Len + 1];
 
 // we are already in "C"
+
 static sal_Bool SAL_CALL test_ini_uString()
 {
 
@@ -654,14 +655,14 @@ static const sal_Char *kBase36MaxNumsStr[kBase36MaxNumsCount] =
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 static const sal_Int32 nDoubleCount=24;
-static const sal_Char *inputDouble[nDoubleCount] =
-    {
-            "3","3.1","3.1415","3.1415926535","3.141592653589793",
-            "3.1415926535897932","3.14159265358979323","+3.1",
-            "3.141592653589793238462643","9.1096e-31","2.997925e8","6.241e18","5.381e+18",
-            "1.7e-309","6.5822e-16","1.7e+307","2.2e30","03.1"," 3.1","-3.1",
-            "-0.0","0.0","","1.00e308"
-    };
+// static const sal_Char *inputDouble[nDoubleCount] =
+//  {
+//             "3","3.1","3.1415","3.1415926535","3.141592653589793",
+//             "3.1415926535897932","3.14159265358979323","+3.1",
+//             "3.141592653589793238462643","9.1096e-31","2.997925e8","6.241e18","5.381e+18",
+//             "1.7e-309","6.5822e-16","1.7e+307","2.2e30","03.1"," 3.1","-3.1",
+//             "-0.0","0.0","","1.00e308"
+//  };
 static const double   expValDouble[nDoubleCount]=
     {
             3.0,3.1,3.1415,3.1415926535,3.141592653589793,
@@ -672,31 +673,31 @@ static const double   expValDouble[nDoubleCount]=
     };
 //------------------------------------------------------------------------
 static const sal_Int32 nFloatCount=22;
-static const sal_Char *inputFloat[nFloatCount] =
-        {
-            "3",
-            "3.1",
-            "3.1415",
-            "3.14159",
-            "3.141592",
-            "3.1415926",
-            "3.14159265",
-            "3.141592653589793238462643",
-            "6.5822e-16",
-            "9.1096e-31",
-            "2.997925e8",
-            "6.241e18",
-            "1.00e38",
-            "6.241e-37",
-            "6.241e37",
-            "03.1",
-            " 3.1",
-            "-3.1",
-            "+3.1",
-            "-0.0",
-            "0.0",
-            ""
-        };
+// static const sal_Char *inputFloat[nFloatCount] =
+//         {
+//             "3",
+//             "3.1",
+//             "3.1415",
+//             "3.14159",
+//             "3.141592",
+//             "3.1415926",
+//             "3.14159265",
+//             "3.141592653589793238462643",
+//             "6.5822e-16",
+//             "9.1096e-31",
+//             "2.997925e8",
+//             "6.241e18",
+//             "1.00e38",
+//             "6.241e-37",
+//             "6.241e37",
+//             "03.1",
+//             " 3.1",
+//             "-3.1",
+//             "+3.1",
+//             "-0.0",
+//             "0.0",
+//             ""
+//         };
 static const float  expValFloat[nFloatCount] =
         {
             3.0f,
