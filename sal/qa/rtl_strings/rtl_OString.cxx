@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OString.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:02:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:48:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,16 @@ const int MAXBUFLENGTH = 255;
 // helper functions
 //------------------------------------------------------------------------
 
+static void unused()
+{
+    test_ini_uString();
+    (void)inputChar;
+    (void)input1StrDefault;
+    (void)input1StrNormal;
+    (void)input1StrLastDefault;
+    (void)input1StrLastNormal;
+    unused();
+}
 
 //------------------------------------------------------------------------
 // testing constructors
