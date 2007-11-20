@@ -45,9 +45,9 @@ sal_Int8 kTestByte6[] = {kTestByte60, kTestByte61, kTestByte62, kTestByte63, kTe
 
 char kTestChar = 45;
 char kTestChar0 = 0;
-char kTestChar1 = 500;
+    char kTestChar1 = (char)((500 & 0xff) - 256);
 char kTestChar2 = 78;
-char kTestChar3 = -155;
+    char kTestChar3 = (char)(-155 & 0xff);
 
 sal_Int32 kTestSeqLen0 = 0;
 sal_Int32 kTestSeqLen1 = 5;
