@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GeometryHandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:45:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:10:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,12 +37,14 @@
 #ifndef RPT_GEOMETRYHANDLER_HXX
 #include "GeometryHandler.hxx"
 #endif
+#include <com/sun/star/report/Function.hpp>
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
 #ifndef REPORTDESIGN_SHARED_UISTRINGS_HRC
 #include "uistrings.hrc"
 #endif
+#include <unotools/textsearch.hxx>
 #include "reportformula.hxx"
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
@@ -75,6 +77,9 @@
 #include <com/sun/star/report/XReportDefinition.hpp>
 #endif
 #include <com/sun/star/report/XShape.hpp>
+#include <com/sun/star/util/SearchOptions.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
+#include <vcl/waitobj.hxx>
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
@@ -209,6 +214,12 @@
 #endif
 #include <toolkit/helper/convert.hxx>
 
+#define DATA_OR_FORMULA     0
+#define FUNCTION            1
+#define COUNTER             2
+#define USER_DEF_FUNCTION   3
+#define UNDEF_DATA          4
+
 //........................................................................
 namespace rptui
 {
@@ -228,25 +239,34 @@ struct PropertyCompare : public ::std::binary_function< beans::Property, ::rtl::
         return x.equals(y.Name);// ? true : false;
     }
 };
-void lcl_collectFunctionNames(const uno::Reference< report::XFunctions>& _xFunctions,::std::vector< ::rtl::OUString >& _rFunctionNames)
+// -----------------------------------------------------------------------------
+::rtl::OUString lcl_getQuotedFunctionName(const ::rtl::OUString& _sFunction)
 {
-    const static ::rtl::OUString sLeftBracket(RTL_CONSTASCII_USTRINGPARAM("["));
-    const static ::rtl::OUString sRightBracket(RTL_CONSTASCII_USTRINGPARAM("]"));
-
+    ::rtl::OUString sQuotedFunctionName(RTL_CONSTASCII_USTRINGPARAM("["));
+    sQuotedFunctionName += _sFunction + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("]"));
+    return sQuotedFunctionName;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString lcl_getQuotedFunctionName(const uno::Reference< report::XFunction>& _xFunction)
+{
+    return lcl_getQuotedFunctionName(_xFunction->getName());
+}
+// -----------------------------------------------------------------------------
+void lcl_collectFunctionNames(const uno::Reference< report::XFunctions>& _xFunctions,TFunctions& _rFunctionNames)
+{
+    uno::Reference< report::XFunctionsSupplier> xParent(_xFunctions->getParent(),uno::UNO_QUERY_THROW);
     const sal_Int32 nCount = _xFunctions->getCount();
     for (sal_Int32 i = 0; i < nCount ; ++i)
     {
-        uno::Reference< report::XFunction > xFunction(_xFunctions->getByIndex(i),uno::UNO_QUERY);
-        ::rtl::OUString sName = sLeftBracket;
-        sName += xFunction->getName();
-        sName += sRightBracket;
-        _rFunctionNames.push_back(sName);
+        uno::Reference< report::XFunction > xFunction(_xFunctions->getByIndex(i),uno::UNO_QUERY_THROW);
+        _rFunctionNames.insert(TFunctions::value_type(lcl_getQuotedFunctionName(xFunction),TFunctionPair(xFunction,xParent)));
     }
 }
-void lcl_collectFunctionNames(const uno::Reference< report::XSection>& _xSection,::std::vector< ::rtl::OUString >& _rFunctionNames)
+// -----------------------------------------------------------------------------
+void lcl_collectFunctionNames(const uno::Reference< report::XSection>& _xSection,TFunctions& _rFunctionNames)
 {
-    uno::Reference< report::XReportDefinition> xReportDefinition = _xSection->getReportDefinition();
-    uno::Reference< report::XGroups> xGroups = xReportDefinition->getGroups();
+    const uno::Reference< report::XReportDefinition> xReportDefinition = _xSection->getReportDefinition();
+    const uno::Reference< report::XGroups> xGroups = xReportDefinition->getGroups();
     sal_Int32 nPos = -1;
     uno::Reference< report::XGroup> xGroup = _xSection->getGroup();
     if ( xGroup.is() )
@@ -256,7 +276,7 @@ void lcl_collectFunctionNames(const uno::Reference< report::XSection>& _xSection
 
     for (sal_Int32 i = 0 ; i <= nPos ; ++i)
     {
-        xGroup.set(xGroups->getByIndex(i),uno::UNO_QUERY);
+        xGroup.set(xGroups->getByIndex(i),uno::UNO_QUERY_THROW);
         lcl_collectFunctionNames(xGroup->getFunctions(),_rFunctionNames);
     }
     lcl_collectFunctionNames(xReportDefinition->getFunctions(),_rFunctionNames);
@@ -266,12 +286,25 @@ void lcl_convertFormulaTo(const uno::Any& _aPropertyValue,uno::Any& _rControlVal
 {
     ::rtl::OUString sName;
     _aPropertyValue >>= sName;
-    sal_Int32 nLen = sName.getLength();
+    const sal_Int32 nLen = sName.getLength();
     if ( nLen )
     {
         ReportFormula aFormula( sName );
         _rControlValue <<= aFormula.getUndecoratedContent();
     }
+}
+// -----------------------------------------------------------------------------
+bool GeometryHandler::impl_isDataField(const ::rtl::OUString& _sName) const
+{
+    const ::rtl::OUString* pEnd = m_aFieldNames.getConstArray() + m_aFieldNames.getLength();
+    bool bIsField = ( ::std::find( m_aFieldNames.getConstArray(), pEnd, _sName ) != pEnd );
+
+    if ( !bIsField )
+    {
+        pEnd = m_aParamNames.getConstArray() + m_aParamNames.getLength();
+        bIsField = ( ::std::find( m_aParamNames.getConstArray(), pEnd, _sName ) != pEnd );
+    }
+    return bIsField;
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString GeometryHandler::impl_convertToFormula( const uno::Any& _rControlValue )
@@ -286,27 +319,25 @@ void lcl_convertFormulaTo(const uno::Any& _aPropertyValue,uno::Any& _rControlVal
     if ( aParser.isValid() )
         return sName;
 
-    const ::rtl::OUString* pEnd = m_aFieldNames.getConstArray() + m_aFieldNames.getLength();
-    bool bIsField = ( ::std::find( m_aFieldNames.getConstArray(), pEnd, sName ) != pEnd );
-
-    pEnd = m_aParamNames.getConstArray() + m_aParamNames.getLength();
-    bool bIsParam = ( ::std::find( m_aParamNames.getConstArray(), pEnd, sName ) != pEnd );
-
-    aParser = ReportFormula( bIsField || bIsParam ? ReportFormula::Field : ReportFormula::Expression, sName );
+    aParser = ReportFormula( impl_isDataField(sName) ? ReportFormula::Field : ReportFormula::Expression, sName );
     return aParser.getCompleteFormula();
 }
 DBG_NAME(rpt_GeometryHandler)
 GeometryHandler::GeometryHandler(uno::Reference< uno::XComponentContext > const & context) :
-    GeometryHandler_Base(m_aMutex),
-    m_xContext(context),
-    m_pInfoService(new OPropertyInfoService())
+    GeometryHandler_Base(m_aMutex)
+    ,m_aPropertyListeners( m_aMutex )
+    ,m_xContext(context)
+    ,m_pInfoService(new OPropertyInfoService())
+    ,m_nDataFieldType(0)
+    ,m_bIn(false)
 {
     DBG_CTOR(rpt_GeometryHandler,NULL);
     try
     {
-        uno::Reference< lang::XMultiComponentFactory > xFac = m_xContext->getServiceManager();
+        const uno::Reference< lang::XMultiComponentFactory > xFac = m_xContext->getServiceManager();
         m_xFormComponentHandler.set(xFac->createInstanceWithContext(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.inspection.FormComponentPropertyHandler")),m_xContext),uno::UNO_QUERY_THROW);
         m_xTypeConverter.set(xFac->createInstanceWithContext( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter" )),m_xContext),uno::UNO_QUERY_THROW);
+        loadDefaultFunctions();
     }
     catch(const uno::Exception&)
     {
@@ -364,8 +395,12 @@ void SAL_CALL GeometryHandler::disposing()
     {
         ::comphelper::disposeComponent(m_xFormComponentHandler);
         ::comphelper::disposeComponent(m_xTypeConverter);
+        if ( m_xReportComponent.is() && m_xReportComponent->getPropertySetInfo()->hasPropertyByName(PROPERTY_DATAFIELD) )
+            m_xReportComponent->removePropertyChangeListener(PROPERTY_DATAFIELD,static_cast< beans::XPropertyChangeListener* >( this ));
+
         m_xReportComponent.clear();
         m_xRowSet.clear();
+        m_aPropertyListeners.clear();
     }
     catch(uno::Exception&)
     {}
@@ -386,21 +421,35 @@ void SAL_CALL GeometryHandler::removeEventListener(const uno::Reference< lang::X
 void SAL_CALL GeometryHandler::inspect( const uno::Reference< uno::XInterface > & _rxInspectee ) throw (uno::RuntimeException, lang::NullPointerException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
+    m_sScope = m_sDefaultFunction = ::rtl::OUString();
+    m_bNewFunction = false;
+    m_nDataFieldType = 0;
+    m_xFunction.clear();
+    m_aFunctionNames.clear();
     try
     {
-        uno::Reference< container::XNameContainer > xObjectAsContainer( _rxInspectee, uno::UNO_QUERY );
+        if ( m_xReportComponent.is() && m_xReportComponent->getPropertySetInfo()->hasPropertyByName(PROPERTY_DATAFIELD) )
+            m_xReportComponent->removePropertyChangeListener(PROPERTY_DATAFIELD,static_cast< beans::XPropertyChangeListener* >( this ));
+
+        const uno::Reference< container::XNameContainer > xObjectAsContainer( _rxInspectee, uno::UNO_QUERY );
         m_xReportComponent.set( xObjectAsContainer->getByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReportComponent" ) ) ), uno::UNO_QUERY );
 
         const ::rtl::OUString sRowSet(RTL_CONSTASCII_USTRINGPARAM("RowSet"));
         if ( xObjectAsContainer->hasByName( sRowSet ) )
         {
-            uno::Any aRowSet = xObjectAsContainer->getByName(sRowSet);
+            const uno::Any aRowSet( xObjectAsContainer->getByName(sRowSet) );
             aRowSet >>= m_xRowSet;
             // forward the rowset to our delegator handler
             uno::Reference< beans::XPropertySet > xProp( m_xFormComponentHandler,uno::UNO_QUERY );
             xProp->setPropertyValue( sRowSet, aRowSet );
+
+            m_aParamNames = getParameterNames( m_xRowSet );
+            impl_initFieldList_nothrow(m_aFieldNames);
+            if ( m_xReportComponent->getPropertySetInfo()->hasPropertyByName(PROPERTY_DATAFIELD) )
+                m_xReportComponent->addPropertyChangeListener(PROPERTY_DATAFIELD,static_cast< beans::XPropertyChangeListener* >( this ));
         }
-        uno::Reference< report::XReportComponent> xReportComponent( m_xReportComponent, uno::UNO_QUERY );
+
+        const uno::Reference< report::XReportComponent> xReportComponent( m_xReportComponent, uno::UNO_QUERY);
         uno::Reference< report::XSection> xSection( m_xReportComponent, uno::UNO_QUERY );
         if ( !xSection.is() && xReportComponent.is() )
             xSection = xReportComponent->getSection();
@@ -417,7 +466,7 @@ void SAL_CALL GeometryHandler::inspect( const uno::Reference< uno::XInterface > 
 uno::Any SAL_CALL GeometryHandler::getPropertyValue(const ::rtl::OUString & PropertyName) throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    uno::Any aPropertyValue = m_xReportComponent->getPropertyValue( PropertyName );
+    uno::Any aPropertyValue;
     const sal_Int32 nId = m_pInfoService->getPropertyId(PropertyName);
     switch(nId)
     {
@@ -425,17 +474,77 @@ uno::Any SAL_CALL GeometryHandler::getPropertyValue(const ::rtl::OUString & Prop
         case PROPERTY_ID_INITIALFORMULA:
         case PROPERTY_ID_FORMULA:
         case PROPERTY_ID_DATAFIELD:
+            aPropertyValue = m_xReportComponent->getPropertyValue( PropertyName );
             lcl_convertFormulaTo(aPropertyValue,aPropertyValue);
+            if ( PROPERTY_ID_DATAFIELD == nId )
+            {
+                ::rtl::OUString sDataField;
+                aPropertyValue >>= sDataField;
+                switch(m_nDataFieldType)
+                {
+                    case DATA_OR_FORMULA:
+                        break;
+                    case FUNCTION:
+                        if ( isDefaultFunction(sDataField,sDataField) )
+                            aPropertyValue <<= sDataField;
+                        else if ( !sDataField.getLength() )
+                            aPropertyValue = uno::Any();
+                        break;
+                    case COUNTER:
+                    case USER_DEF_FUNCTION:
+                        aPropertyValue = uno::Any();
+                        break;
+                }
+
+            }
+            break;
+        case PROPERTY_ID_TYPE:
+            {
+                const sal_uInt32 nOldDataFieldType = m_nDataFieldType;
+                m_nDataFieldType = impl_getDataFieldType_throw();
+                if ( UNDEF_DATA == m_nDataFieldType )
+                    m_nDataFieldType = nOldDataFieldType;
+                aPropertyValue <<= m_nDataFieldType;
+            }
+            break;
+        case PROPERTY_ID_FORMULALIST:
+        case PROPERTY_ID_SCOPE:
+            {
+                uno::Any aDataField = m_xReportComponent->getPropertyValue( PROPERTY_DATAFIELD );
+                lcl_convertFormulaTo(aDataField,aDataField);
+                ::rtl::OUString sDataField;
+                aDataField >>= sDataField;
+                switch(m_nDataFieldType)
+                {
+                    case DATA_OR_FORMULA:
+                        break;
+                    case FUNCTION:
+                        if ( isDefaultFunction(sDataField,sDataField,uno::Reference< report::XFunctionsSupplier>(),true) )
+                            aPropertyValue <<= (PROPERTY_ID_FORMULALIST == nId ? m_sDefaultFunction : m_sScope);
+                        break;
+                    case USER_DEF_FUNCTION:
+                        if ( sDataField.getLength() && PROPERTY_ID_FORMULALIST == nId )
+                            aPropertyValue = aDataField;
+                        break;
+                    case COUNTER:
+                        if ( PROPERTY_ID_SCOPE == nId && impl_isCounterFunction_throw(sDataField,m_sScope) )
+                            aPropertyValue <<= m_sScope;
+                        break;
+                }
+
+            }
             break;
         case PROPERTY_ID_BACKCOLOR:
         case PROPERTY_ID_CONTROLBACKGROUND:
             {
+                aPropertyValue = m_xReportComponent->getPropertyValue( PropertyName );
                 sal_Int32 nColor = COL_TRANSPARENT;
                 if ( (aPropertyValue >>= nColor) && static_cast<sal_Int32>(COL_TRANSPARENT) == nColor )
                     aPropertyValue.clear();
             }
             break;
         default:
+            aPropertyValue = m_xReportComponent->getPropertyValue( PropertyName );
             break;
     }
     return aPropertyValue;
@@ -443,7 +552,7 @@ uno::Any SAL_CALL GeometryHandler::getPropertyValue(const ::rtl::OUString & Prop
 
 void SAL_CALL GeometryHandler::setPropertyValue(const ::rtl::OUString & PropertyName, const uno::Any & Value) throw (uno::RuntimeException, beans::UnknownPropertyException)
 {
-    ::osl::MutexGuard aGuard( m_aMutex );
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
     uno::Any aNewValue = Value;
     const sal_Int32 nId = m_pInfoService->getPropertyId(PropertyName);
     bool bHandled = false;
@@ -451,15 +560,167 @@ void SAL_CALL GeometryHandler::setPropertyValue(const ::rtl::OUString & Property
     {
         case PROPERTY_ID_INITIALFORMULA:
         case PROPERTY_ID_FORMULA:
+            break;
         case PROPERTY_ID_DATAFIELD:
-            // aNewValue <<= impl_convertToFormula( aNewValue );
+            {
+                OBlocker aBlocker(m_bIn);
+                m_xReportComponent->setPropertyValue(PropertyName, aNewValue);
+                bHandled = true;
+                const ::rtl::OUString sOldFunctionName = m_sDefaultFunction;
+                const ::rtl::OUString sOldScope = m_sScope;
+
+                uno::Any aPropertyValue;
+                lcl_convertFormulaTo(Value,aPropertyValue);
+                ::rtl::OUString sDataField;
+                aPropertyValue >>= sDataField;
+
+                m_sScope = m_sDefaultFunction = ::rtl::OUString();
+                m_xFunction.clear();
+                const sal_uInt32 nOldDataFieldType = m_nDataFieldType;
+                if ( sDataField.getLength() )
+                {
+                    if ( isDefaultFunction(sDataField,sDataField,uno::Reference< report::XFunctionsSupplier>(),true) )
+                        m_nDataFieldType = FUNCTION;
+                    else if ( m_aFunctionNames.find(sDataField) != m_aFunctionNames.end() )
+                        m_nDataFieldType = USER_DEF_FUNCTION;
+                }
+
+                resetOwnProperties(aGuard,sOldFunctionName,sOldScope,nOldDataFieldType);
+            }
+            break;
+        case PROPERTY_ID_TYPE:
+            {
+                bHandled = true;
+                Value >>= m_nDataFieldType;
+
+                const ::rtl::OUString sOldFunctionName = m_sDefaultFunction;
+                const ::rtl::OUString sOldScope = m_sScope;
+                m_sDefaultFunction = m_sScope = ::rtl::OUString();
+
+                if ( m_nDataFieldType == COUNTER )
+                {
+                    impl_setCounterFunction_throw();
+                }
+                else
+                {
+                    if ( m_bNewFunction )
+                        removeFunction();
+                    m_xFunction.clear();
+                    OBlocker aBlocker(m_bIn);
+                    m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny(::rtl::OUString()));
+                }
+                resetOwnProperties(aGuard,sOldFunctionName,sOldScope,m_nDataFieldType);
+            }
+            break;
+        case PROPERTY_ID_FORMULALIST:
+            {
+                bHandled = true;
+                ::rtl::OUString sFunction;
+                if ( !(Value >>= sFunction) || !sFunction.getLength() )
+                {
+                    if ( m_nDataFieldType == FUNCTION )
+                    {
+                        m_sDefaultFunction = ::rtl::OUString();
+                        if ( m_bNewFunction )
+                            removeFunction();
+                        m_xFunction.clear();
+
+                        beans::PropertyChangeEvent aEvent;
+                        aEvent.PropertyName = PROPERTY_SCOPE;
+                        aEvent.OldValue <<= m_sScope;
+                        m_sScope = ::rtl::OUString();
+                        aEvent.NewValue <<= m_sScope;
+                        aGuard.clear();
+                        m_aPropertyListeners.notify( aEvent, &beans::XPropertyChangeListener::propertyChange );
+                    }
+                    else if ( m_nDataFieldType == USER_DEF_FUNCTION )
+                    {
+                        OBlocker aBlocker(m_bIn);
+                        m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny(::rtl::OUString()));
+                    }
+                }
+                else if ( m_nDataFieldType == USER_DEF_FUNCTION )
+                {
+                    ::rtl::OUString sDataField;
+                    OBlocker aBlocker(m_bIn);
+                    const sal_uInt32 nNewDataType = impl_getDataFieldType_throw(sFunction);
+                    if ( nNewDataType != UNDEF_DATA && nNewDataType != m_nDataFieldType )
+                    {
+                        const ::rtl::OUString sOldFunctionName = m_sDefaultFunction;
+                        const ::rtl::OUString sOldScope = m_sScope;
+                        m_sScope = m_sDefaultFunction = ::rtl::OUString();
+                        m_xFunction.clear();
+                        if ( nNewDataType == COUNTER )
+                            impl_isCounterFunction_throw(sFunction,m_sScope);
+                        else
+                        {
+                            ::rtl::OUString sNamePostFix;
+                            const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostFix);
+                            isDefaultFunction(sFunction,sDataField,xFunctionsSupplier,true);
+                        }
+                        const sal_uInt32 nOldDataFieldType = m_nDataFieldType;
+                        m_nDataFieldType = nNewDataType;
+                        m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny(impl_convertToFormula( uno::makeAny(sFunction))));
+                        resetOwnProperties(aGuard,sOldFunctionName,sOldScope,nOldDataFieldType);
+                    }
+                    else
+                        m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny(impl_convertToFormula( uno::makeAny(sFunction))));
+                }
+                else if ( m_nDataFieldType == FUNCTION )
+                {
+                    uno::Any aPropertyValue = m_xReportComponent->getPropertyValue(PROPERTY_DATAFIELD);
+                    lcl_convertFormulaTo(aPropertyValue,aPropertyValue);
+                    ::rtl::OUString sDataField;
+                    aPropertyValue >>= sDataField;
+                    if ( m_nDataFieldType == FUNCTION && (!isDefaultFunction(sDataField,sDataField) || m_sDefaultFunction != sFunction) )
+                    {
+                        if ( m_bNewFunction )
+                            removeFunction();
+                        // function currently does not exist
+                        createDefaultFunction(aGuard,sFunction,sDataField);
+                        m_sDefaultFunction = sFunction;
+                    }
+                }
+            }
+
+            break;
+        case PROPERTY_ID_SCOPE:
+            if ( !(Value >>= m_sScope) )
+                m_sScope = ::rtl::OUString();
+            else
+            {
+                if ( m_bNewFunction )
+                    removeFunction();
+                if ( m_nDataFieldType == COUNTER )
+                    impl_setCounterFunction_throw();
+                else
+                {
+                    OSL_ENSURE(m_xFunction.is(),"Where is my function gone!");
+
+                    ::rtl::OUString sNamePostFix;
+                    const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostFix);
+
+                    ::rtl::OUString sQuotedFunctionName(lcl_getQuotedFunctionName(m_xFunction));
+                    if ( isDefaultFunction(sQuotedFunctionName,sQuotedFunctionName,xFunctionsSupplier,true) )
+                        m_bNewFunction = false;
+                    else
+                    {
+                        ::rtl::OUString sDefaultFunctionName;
+                        ::rtl::OUString sDataField;
+                        OSL_VERIFY( impl_isDefaultFunction_nothrow(m_xFunction,sDataField,sDefaultFunctionName) );
+                        m_sDefaultFunction = sDefaultFunctionName;
+                        createDefaultFunction(aGuard,m_sDefaultFunction,sDataField);
+                    }
+                }
+            }
+            bHandled = true;
             break;
         case PROPERTY_ID_POSITIONX:
         case PROPERTY_ID_POSITIONY:
         case PROPERTY_ID_HEIGHT:
         case PROPERTY_ID_WIDTH:
             {
-                uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY);
+                const uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY);
                 if ( xSourceReportComponent.is() ) // check only report components
                 {
                     sal_Int32 nNewValue = 0;
@@ -481,7 +742,7 @@ void SAL_CALL GeometryHandler::setPropertyValue(const ::rtl::OUString & Property
             break;
         case PROPERTY_ID_CHARFONTNAME:
             {
-                uno::Reference< report::XReportControlFormat > xReportControlFormat( m_xReportComponent,uno::UNO_QUERY_THROW );
+                const uno::Reference< report::XReportControlFormat > xReportControlFormat( m_xReportComponent,uno::UNO_QUERY_THROW );
                 uno::Sequence< beans::NamedValue > aFontSettings;
                 OSL_VERIFY( Value >>= aFontSettings );
                 applyCharacterSettings( xReportControlFormat, aFontSettings );
@@ -511,19 +772,24 @@ void GeometryHandler::implCreateListLikeControl(
         ,sal_Bool _bTrueIfListBoxFalseIfComboBox
     )
 {
-    const String aEntries = String( ModuleRes( _nResId ) );
-    implCreateListLikeControl(_rxControlFactory,out_Descriptor,aEntries,_bReadOnlyControl,_bTrueIfListBoxFalseIfComboBox);
+    const String sEntries = String( ModuleRes( _nResId ) );
+    const xub_StrLen nCount = sEntries.GetTokenCount();
+    ::std::vector< ::rtl::OUString > aList;
+    for ( xub_StrLen i=0; i < nCount; ++i )
+        aList.push_back(sEntries.GetToken(i));
+
+    implCreateListLikeControl(_rxControlFactory,out_Descriptor,aList,_bReadOnlyControl,_bTrueIfListBoxFalseIfComboBox);
 }
 // -----------------------------------------------------------------------------
 void GeometryHandler::implCreateListLikeControl(
         const uno::Reference< inspection::XPropertyControlFactory >& _rxControlFactory
         ,inspection::LineDescriptor & out_Descriptor
-        ,const ::rtl::OUString& _sEntries
+        ,const ::std::vector< ::rtl::OUString>& _aEntries
         ,sal_Bool _bReadOnlyControl
         ,sal_Bool _bTrueIfListBoxFalseIfComboBox
     )
 {
-    uno::Reference< inspection::XStringListControl > xListControl(
+    const uno::Reference< inspection::XStringListControl > xListControl(
         _rxControlFactory->createPropertyControl(
             _bTrueIfListBoxFalseIfComboBox ? inspection::PropertyControlType::ListBox : inspection::PropertyControlType::ComboBox, _bReadOnlyControl
         ),
@@ -531,10 +797,7 @@ void GeometryHandler::implCreateListLikeControl(
     );
 
     out_Descriptor.Control = xListControl.get();
-    const String sEntries(_sEntries);
-    const xub_StrLen nCount = sEntries.GetTokenCount();
-    for ( xub_StrLen i=0; i < nCount; ++i )
-        xListControl->appendListEntry( sEntries.GetToken(i) );
+    ::std::for_each( _aEntries.begin(), _aEntries.end(),::boost::bind( &inspection::XStringListControl::appendListEntry, xListControl,_1 ));
 }
 // -----------------------------------------------------------------------------
 void lcl_collectParamNames_nothrow( const uno::Reference< container::XIndexAccess >& _rxParams, ::std::vector< ::rtl::OUString >& _out_rParamNames )
@@ -545,12 +808,12 @@ void lcl_collectParamNames_nothrow( const uno::Reference< container::XIndexAcces
 
     try
     {
-        sal_Int32 count( _rxParams->getCount() );
-        _out_rParamNames.reserve( count );
+        const sal_Int32 nCount( _rxParams->getCount() );
+        _out_rParamNames.reserve( nCount );
 
         uno::Reference< beans::XPropertySet > xParam;
         ::rtl::OUString sParamName;
-        for ( sal_Int32 i=0; i<count; ++i )
+        for ( sal_Int32 i=0; i<nCount; ++i )
         {
             xParam.set( _rxParams->getByIndex(i), uno::UNO_QUERY_THROW );
             OSL_VERIFY( xParam->getPropertyValue( PROPERTY_NAME ) >>= sParamName );
@@ -582,7 +845,23 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
         case PROPERTY_ID_PAGEFOOTEROPTION:
             implCreateListLikeControl(_xControlFactory,aOut,RID_STR_REPORTPRINTOPTION_CONST,sal_False,sal_True);
             break;
-
+        case PROPERTY_ID_FORMULALIST:
+            {
+                ::std::vector< ::rtl::OUString > aList;
+                impl_fillFormulaList_nothrow(aList);
+                implCreateListLikeControl(_xControlFactory,aOut,aList,sal_False,sal_True);
+            }
+            break;
+        case PROPERTY_ID_SCOPE:
+            {
+                ::std::vector< ::rtl::OUString > aList;
+                impl_fillScopeList_nothrow(aList);
+                implCreateListLikeControl(_xControlFactory,aOut,aList,sal_False,sal_True);
+            }
+            break;
+        case PROPERTY_ID_TYPE:
+            implCreateListLikeControl(_xControlFactory,aOut,RID_STR_TYPE_CONST,sal_False,sal_True);
+            break;
         case PROPERTY_ID_VISIBLE:
         case PROPERTY_ID_CANGROW:
         case PROPERTY_ID_CANSHRINK:
@@ -611,22 +890,27 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
             break;
         case PROPERTY_ID_DATAFIELD:
             {
-                uno::Reference< inspection::XStringListControl > xListControl;
-                aOut = m_xFormComponentHandler->describePropertyLine(PropertyName, _xControlFactory);
+                uno::Reference< inspection::XStringListControl > xListControl(
+                    _xControlFactory->createPropertyControl(
+                        m_nDataFieldType == DATA_OR_FORMULA ? inspection::PropertyControlType::ComboBox : inspection::PropertyControlType::ListBox, sal_False
+                    ),
+                    uno::UNO_QUERY_THROW
+                );
 
-                xListControl.set( aOut.Control, uno::UNO_QUERY );
-                if ( xListControl.is() )
+                aOut.Control = xListControl.get();
+                if ( m_nDataFieldType == USER_DEF_FUNCTION )
                 {
-                    // the usual field names
-                    m_aFieldNames = xListControl->getListEntries();
-
-                    // add parameter names
-                    m_aParamNames = getParameterNames( m_xRowSet );
-                    ::std::for_each( m_aParamNames.getConstArray(), m_aParamNames.getConstArray() + m_aParamNames.getLength(),
-                        ::boost::bind( &inspection::XStringListControl::appendListEntry, xListControl, _1 ) );
-
                     // add function names
                     ::std::for_each( m_aFunctionNames.begin(), m_aFunctionNames.end(),
+                        ::std::compose1(
+                            ::boost::bind( &inspection::XStringListControl::appendListEntry, xListControl,_1 ),
+                            ::std::select1st<TFunctions::value_type>()));
+                }
+                else
+                {
+                    ::std::for_each( m_aFieldNames.getConstArray(), m_aFieldNames.getConstArray() + m_aFieldNames.getLength(),
+                        ::boost::bind( &inspection::XStringListControl::appendListEntry, xListControl, _1 ) );
+                    ::std::for_each( m_aParamNames.getConstArray(), m_aParamNames.getConstArray() + m_aParamNames.getLength(),
                         ::boost::bind( &inspection::XStringListControl::appendListEntry, xListControl, _1 ) );
                 }
             }
@@ -666,8 +950,8 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
         const sal_Int16 nDisplayUnit = VCLUnoHelper::ConvertToMeasurementUnit( MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH, 1 );
         uno::Reference< inspection::XNumericControl > xNumericControl(aOut.Control,uno::UNO_QUERY);
         xNumericControl->setDecimalDigits( 2 );
-        xNumericControl->setMinValue(beans::Optional<double>(sal_True,0.0));
         xNumericControl->setValueUnit( util::MeasureUnit::MM_100TH );
+        xNumericControl->setMinValue(beans::Optional<double>(sal_True,0.0));
         if ( nDisplayUnit != -1 )
             xNumericControl->setDisplayUnit( nDisplayUnit );
         uno::Reference< report::XReportComponent> xComp(m_xReportComponent,uno::UNO_QUERY);
@@ -686,7 +970,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                     case PROPERTY_ID_POSITIONY:
                     case PROPERTY_ID_WIDTH:
                         xNumericControl->setMinValue(beans::Optional<double>(sal_True,0.0));
-                        xNumericControl->setMaxValue(beans::Optional<double>(sal_True,double(aSize.Width - nLeftMargin - nRightMargin) / 1000.0));
+                        xNumericControl->setMaxValue(beans::Optional<double>(sal_True,double(aSize.Width - nLeftMargin - nRightMargin)));
                         if ( PROPERTY_ID_WIDTH == nId )
                         {
                             uno::Reference<report::XFixedLine> xFixedLine(m_xReportComponent,uno::UNO_QUERY);
@@ -701,7 +985,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
         }
         else if ( PROPERTY_ID_HEIGHT == nId )
         {
-            uno::Reference< report::XSection> xSection(m_xReportComponent,uno::UNO_QUERY);
+            const uno::Reference< report::XSection> xSection(m_xReportComponent,uno::UNO_QUERY);
             if ( xSection.is() )
             {
                 sal_Int32 nHeight = 0;
@@ -711,7 +995,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
                     uno::Reference<drawing::XShape> xShape(xSection->getByIndex(i),uno::UNO_QUERY);
                     nHeight = ::std::max<sal_Int32>(nHeight,xShape->getPosition().Y + xShape->getSize().Height);
                 }
-                xNumericControl->setMinValue(beans::Optional<double>(sal_True,nHeight / 1000.0 ));
+                xNumericControl->setMinValue(beans::Optional<double>(sal_True,nHeight ));
             }
         }
     }
@@ -802,48 +1086,59 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const ::rtl::OUString 
         case PROPERTY_ID_BACKTRANSPARENT:
         case PROPERTY_ID_CONTROLBACKGROUNDTRANSPARENT:
         {
-            if ( !aPropertyValue.hasValue() )
-                // NULL is converted to NULL
-                break;
-
-            const beans::Property aProp = getProperty(PropertyName);
-            if ( aPropertyValue.getValueType().equals( aProp.Type ) )
-                // nothing to do, type is already as desired
-                return aPropertyValue;
-
-            if ( _rControlValue.getValueType().getTypeClass() == uno::TypeClass_STRING )
+            if ( aPropertyValue.hasValue() )
             {
-                ::rtl::OUString sControlValue;
-                _rControlValue >>= sControlValue;
+                const beans::Property aProp = getProperty(PropertyName);
+                if ( aPropertyValue.getValueType().equals( aProp.Type ) )
+                    // nothing to do, type is already as desired
+                    return aPropertyValue;
 
-                uno::Reference< inspection::XStringRepresentation > xConversionHelper = inspection::StringRepresentation::create( m_xContext,m_xTypeConverter );
-                aPropertyValue = xConversionHelper->convertToPropertyValue( sControlValue, aProp.Type );
-            }
-            else
-            {
-                try
+                if ( _rControlValue.getValueType().getTypeClass() == uno::TypeClass_STRING )
                 {
-                    aPropertyValue = m_xTypeConverter->convertTo( _rControlValue, aProp.Type );
+                    ::rtl::OUString sControlValue;
+                    _rControlValue >>= sControlValue;
+
+                    const uno::Reference< inspection::XStringRepresentation > xConversionHelper = inspection::StringRepresentation::create( m_xContext,m_xTypeConverter );
+                    aPropertyValue = xConversionHelper->convertToPropertyValue( sControlValue, aProp.Type );
                 }
-                catch( const uno::Exception& )
+                else
                 {
-                    OSL_ENSURE( sal_False, "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                    try
+                    {
+                        aPropertyValue = m_xTypeConverter->convertTo( _rControlValue, aProp.Type );
+                    }
+                    catch( const uno::Exception& )
+                    {
+                        OSL_ENSURE( sal_False, "GeometryHandler::convertToPropertyValue: caught an exception while converting via TypeConverter!" );
+                    }
                 }
             }
+
             break;
         }
         case PROPERTY_ID_CONDITIONALPRINTEXPRESSION:
         case PROPERTY_ID_INITIALFORMULA:
         case PROPERTY_ID_FORMULA:
-        case PROPERTY_ID_DATAFIELD:
             return uno::makeAny( impl_convertToFormula( _rControlValue ) );
-
+        case PROPERTY_ID_DATAFIELD:
+            {
+                ::rtl::OUString sDataField;
+                _rControlValue >>= sDataField;
+                if ( isDefaultFunction(sDataField,sDataField) )
+                {
+                    OSL_ENSURE(m_xFunction.is(),"No function set!");
+                    aPropertyValue <<= impl_convertToFormula( uno::makeAny(lcl_getQuotedFunctionName(m_xFunction)) );
+                }
+                else
+                    aPropertyValue <<= impl_convertToFormula( _rControlValue );
+            }
+            break;
         case PROPERTY_ID_POSITIONX:
             {
                 aPropertyValue = m_xFormComponentHandler->convertToPropertyValue(PropertyName, _rControlValue);
                 sal_Int32 nPosX = 0;
                 aPropertyValue >>= nPosX;
-                uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY);
+                const uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY);
                 if ( xSourceReportComponent->getSection().is() )
                     nPosX += getStyleProperty<sal_Int32>(xSourceReportComponent->getSection()->getReportDefinition(),PROPERTY_LEFTMARGIN);
                 aPropertyValue <<= nPosX;
@@ -851,6 +1146,26 @@ uno::Any SAL_CALL GeometryHandler::convertToPropertyValue(const ::rtl::OUString 
             break;
         case PROPERTY_ID_CHARFONTNAME:
             return m_xFormComponentHandler->convertToPropertyValue(PROPERTY_FONTNAME, _rControlValue);
+        case PROPERTY_ID_SCOPE:
+        case PROPERTY_ID_FORMULALIST:
+            aPropertyValue = _rControlValue;
+            break;
+        case PROPERTY_ID_TYPE:
+            {
+                ::rtl::OUString sValue;
+                _rControlValue >>= sValue;
+                const String sConstantValues = String(ModuleRes(RID_STR_TYPE_CONST));
+                const xub_StrLen nCount = sConstantValues.GetTokenCount();
+                for (xub_StrLen i = 0; i < nCount; ++i)
+                {
+                    if ( sConstantValues.GetToken(i) == String(sValue) )
+                    {
+                        aPropertyValue <<= static_cast<sal_uInt32>(i);
+                        break;
+                    }
+                }
+            }
+            break;
         default:
             return m_xFormComponentHandler->convertToPropertyValue(PropertyName, _rControlValue);
     }
@@ -904,7 +1219,7 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const ::rtl::OUString &
         {
             if ( _rControlValueType.getTypeClass() == uno::TypeClass_STRING )
             {
-                uno::Reference< inspection::XStringRepresentation > xConversionHelper = inspection::StringRepresentation::create( m_xContext,m_xTypeConverter );
+                const uno::Reference< inspection::XStringRepresentation > xConversionHelper = inspection::StringRepresentation::create( m_xContext,m_xTypeConverter );
                 aControlValue <<= xConversionHelper->convertToControlValue( aPropertyValue );
             }
             else
@@ -923,8 +1238,17 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const ::rtl::OUString &
         case PROPERTY_ID_CONDITIONALPRINTEXPRESSION:
         case PROPERTY_ID_INITIALFORMULA:
         case PROPERTY_ID_FORMULA:
-        case PROPERTY_ID_DATAFIELD:
             lcl_convertFormulaTo(aPropertyValue,aControlValue);
+            break;
+        case PROPERTY_ID_DATAFIELD:
+            {
+                ::rtl::OUString sValue;
+                aControlValue >>= sValue;
+                if ( isDefaultFunction(sValue,sValue) )
+                    aControlValue <<= sValue;
+                else
+                    lcl_convertFormulaTo(aPropertyValue,aControlValue);
+            }
             break;
         case PROPERTY_ID_CHARFONTNAME:
             aControlValue = m_xFormComponentHandler->convertToControlValue(PROPERTY_FONTNAME, aPropertyValue, _rControlValueType);
@@ -933,11 +1257,27 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const ::rtl::OUString &
             {
                 sal_Int32 nPosX = 0;
                 aPropertyValue >>= nPosX;
-                uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY);
+                const uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY);
                 if ( xSourceReportComponent->getSection().is() )
                     nPosX -= getStyleProperty<sal_Int32>(xSourceReportComponent->getSection()->getReportDefinition(),PROPERTY_LEFTMARGIN);
                 aPropertyValue <<= nPosX;
                 aControlValue = m_xFormComponentHandler->convertToControlValue(PropertyName, aPropertyValue, _rControlValueType);
+            }
+            break;
+        case PROPERTY_ID_FORMULALIST:
+            aControlValue <<= m_sDefaultFunction;
+            break;
+        case PROPERTY_ID_SCOPE:
+            aControlValue <<= m_sScope;
+            break;
+        case PROPERTY_ID_TYPE:
+            {
+                const String sConstantValues = String(ModuleRes(RID_STR_TYPE_CONST));
+                const xub_StrLen nCount = sConstantValues.GetTokenCount();
+                if ( m_nDataFieldType < nCount )
+                {
+                    aControlValue <<= ::rtl::OUString(sConstantValues.GetToken(static_cast<xub_StrLen>(m_nDataFieldType)));
+                }
             }
             break;
         case PROPERTY_ID_BACKCOLOR:
@@ -953,13 +1293,17 @@ uno::Any SAL_CALL GeometryHandler::convertToControlValue(const ::rtl::OUString &
     }
     return aControlValue;
 }
-void SAL_CALL GeometryHandler::addPropertyChangeListener(const uno::Reference< beans::XPropertyChangeListener > & Listener) throw (uno::RuntimeException, lang::NullPointerException)
+void SAL_CALL GeometryHandler::addPropertyChangeListener(const uno::Reference< beans::XPropertyChangeListener > & _rxListener) throw (uno::RuntimeException, lang::NullPointerException)
 {
-    m_xFormComponentHandler->addPropertyChangeListener(Listener);
+    ::osl::MutexGuard aGuard( m_aMutex );
+    m_aPropertyListeners.addListener( _rxListener );
+    m_xFormComponentHandler->addPropertyChangeListener(_rxListener);
 }
 
 void SAL_CALL GeometryHandler::removePropertyChangeListener(const uno::Reference< beans::XPropertyChangeListener > & _rxListener) throw (uno::RuntimeException)
 {
+    ::osl::MutexGuard aGuard( m_aMutex );
+    m_aPropertyListeners.removeListener( _rxListener );
     m_xFormComponentHandler->removePropertyChangeListener(_rxListener);
 }
 // -----------------------------------------------------------------------------
@@ -973,7 +1317,6 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
     const ::rtl::OUString pIncludeProperties[] =
     {
          PROPERTY_FORCENEWPAGE
-//        ,PROPERTY_NEWROWORCOL
         ,PROPERTY_KEEPTOGETHER
         ,PROPERTY_CANGROW
         ,PROPERTY_CANSHRINK
@@ -984,7 +1327,6 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
         ,PROPERTY_RESETPAGENUMBER
         ,PROPERTY_PRINTWHENGROUPCHANGE
         ,PROPERTY_VISIBLE
-//        ,PROPERTY_GROUPKEEPTOGETHER
         ,PROPERTY_PAGEHEADEROPTION
         ,PROPERTY_PAGEFOOTEROPTION
         ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ControlLabel"))
@@ -1005,8 +1347,8 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
         ,PROPERTY_CONTROLBACKGROUNDTRANSPARENT
         ,PROPERTY_LABEL
     };
-    uno::Reference < beans::XPropertySetInfo > xInfo = m_xReportComponent->getPropertySetInfo();
-    uno::Sequence< beans::Property> aSeq = xInfo->getProperties();
+    const uno::Reference < beans::XPropertySetInfo > xInfo = m_xReportComponent->getPropertySetInfo();
+    const uno::Sequence< beans::Property> aSeq = xInfo->getProperties();
     for (size_t i = 0; i < sizeof(pIncludeProperties)/sizeof(pIncludeProperties[0]) ;++i )
     {
         const beans::Property* pIter = aSeq.getConstArray();
@@ -1014,6 +1356,17 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
         const beans::Property* pFind = ::std::find_if(pIter,pEnd,::std::bind2nd(PropertyCompare(),boost::cref(pIncludeProperties[i])));
         if ( pFind != pEnd )
         {
+            // special case for controls which contain a data field
+            if ( PROPERTY_DATAFIELD == pIncludeProperties[i] )
+            {
+                beans::Property aValue;
+                aValue.Name = PROPERTY_FORMULALIST;
+                aNewProps.push_back(aValue);
+                aValue.Name = PROPERTY_SCOPE;
+                aNewProps.push_back(aValue);
+                aValue.Name = PROPERTY_TYPE;
+                aNewProps.push_back(aValue);
+            }
             aNewProps.push_back(*pFind);
         }
     }
@@ -1024,7 +1377,7 @@ uno::Sequence< beans::Property > SAL_CALL GeometryHandler::getSupportedPropertie
 uno::Sequence< ::rtl::OUString > SAL_CALL GeometryHandler::getSupersededProperties() throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aRet;
-    uno::Reference<report::XReportDefinition> xReport(m_xReportComponent,uno::UNO_QUERY);
+    const uno::Reference<report::XReportDefinition> xReport(m_xReportComponent,uno::UNO_QUERY);
     if ( xReport.is() && !uno::Reference< report::XSection>(xReport->getParent(),uno::UNO_QUERY).is() )
     {
         aRet.realloc(5);
@@ -1042,9 +1395,13 @@ uno::Sequence< ::rtl::OUString > SAL_CALL GeometryHandler::getActuatingPropertie
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    uno::Sequence< ::rtl::OUString > aSeq(2);
+    uno::Sequence< ::rtl::OUString > aSeq(5);
     aSeq[0] = PROPERTY_BACKTRANSPARENT;
     aSeq[1] = PROPERTY_CONTROLBACKGROUNDTRANSPARENT;
+    aSeq[2] = PROPERTY_FORMULALIST;
+    aSeq[3] = PROPERTY_TYPE;
+    aSeq[4] = PROPERTY_DATAFIELD;
+
     return ::comphelper::concatSequences(m_xFormComponentHandler->getActuatingProperties(),aSeq);
 }
 
@@ -1075,8 +1432,8 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
         inspection::InteractiveSelectionResult eResult = inspection::InteractiveSelectionResult_Cancelled;
-        uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DialogParentWindow"))) ,uno::UNO_QUERY);
-        uno::Reference< report::XReportControlFormat> xReportControlFormat(m_xReportComponent,uno::UNO_QUERY);
+        const uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DialogParentWindow"))) ,uno::UNO_QUERY);
+        const uno::Reference< report::XReportControlFormat> xReportControlFormat(m_xReportComponent,uno::UNO_QUERY);
         aGuard.clear();
 
         uno::Sequence< beans::NamedValue > aFontSettings;
@@ -1091,7 +1448,7 @@ inspection::InteractiveSelectionResult SAL_CALL GeometryHandler::onInteractivePr
     return m_xFormComponentHandler->onInteractivePropertySelection(PropertyName, Primary, _rData, _rxInspectorUI);
 }
 
-void SAL_CALL GeometryHandler::actuatingPropertyChanged(const ::rtl::OUString & ActuatingPropertyName, const uno::Any & NewValue, const uno::Any & OldValue, const uno::Reference< inspection::XObjectInspectorUI > & _rxInspectorUI, ::sal_Bool FirstTimeInit) throw (uno::RuntimeException, lang::NullPointerException)
+void SAL_CALL GeometryHandler::actuatingPropertyChanged(const ::rtl::OUString & ActuatingPropertyName, const uno::Any & NewValue, const uno::Any & OldValue, const uno::Reference< inspection::XObjectInspectorUI > & _rxInspectorUI, ::sal_Bool _bFirstTimeInit) throw (uno::RuntimeException, lang::NullPointerException)
 {
     if ( !_rxInspectorUI.is() )
         throw lang::NullPointerException();
@@ -1100,6 +1457,63 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const ::rtl::OUString & 
     const sal_Int32 nId = m_pInfoService->getPropertyId(ActuatingPropertyName);
     switch(nId)
     {
+        case PROPERTY_ID_TYPE:
+            {
+                sal_uInt32 nNewVal = 0;
+                NewValue >>= nNewVal;
+                switch(nNewVal)
+                {
+                    case DATA_OR_FORMULA:
+                        _rxInspectorUI->rebuildPropertyUI(PROPERTY_DATAFIELD);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_True);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,sal_False);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,sal_False);
+                        OSL_ENSURE(m_sDefaultFunction.getLength() == 0,"Why is the m_sDefaultFunction set?");
+                        OSL_ENSURE(m_sScope.getLength() == 0,"Why is the m_sScope set?");
+                        break;
+                    case FUNCTION:
+                        _rxInspectorUI->rebuildPropertyUI(PROPERTY_DATAFIELD);
+                        _rxInspectorUI->rebuildPropertyUI(PROPERTY_FORMULALIST);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_True);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,m_sDefaultFunction.getLength() != 0);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,m_sScope.getLength() != 0);
+                        break;
+                    case USER_DEF_FUNCTION:
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_False);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,sal_True);
+                        _rxInspectorUI->rebuildPropertyUI(PROPERTY_FORMULALIST);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,sal_False);
+                        break;
+                    case COUNTER:
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_DATAFIELD,sal_False);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,sal_False);
+                        _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,sal_True);
+                        break;
+                }
+            }
+            break;
+        case PROPERTY_ID_DATAFIELD:
+            {
+                sal_Bool bEnable = (m_nDataFieldType != DATA_OR_FORMULA && m_nDataFieldType != COUNTER );
+                if ( bEnable )
+                {
+                    ::rtl::OUString sValue;
+                    m_xReportComponent->getPropertyValue( PROPERTY_DATAFIELD ) >>= sValue;
+                    bEnable = sValue.getLength() != 0;
+                }
+                _rxInspectorUI->enablePropertyUI(PROPERTY_FORMULALIST,bEnable);
+                if ( bEnable )
+                {
+                    _rxInspectorUI->rebuildPropertyUI(PROPERTY_DATAFIELD);
+                    _rxInspectorUI->rebuildPropertyUI(PROPERTY_FORMULALIST);
+                }
+            }
+            break;
+        case PROPERTY_ID_FORMULALIST:
+            {
+                _rxInspectorUI->enablePropertyUI(PROPERTY_SCOPE,m_nDataFieldType == FUNCTION || m_nDataFieldType == COUNTER);
+            }
+            break;
         case PROPERTY_ID_BACKTRANSPARENT:
         case PROPERTY_ID_CONTROLBACKGROUNDTRANSPARENT:
             {
@@ -1108,30 +1522,10 @@ void SAL_CALL GeometryHandler::actuatingPropertyChanged(const ::rtl::OUString & 
                 bValue = !bValue;
                 _rxInspectorUI->enablePropertyUI(PROPERTY_BACKCOLOR,bValue);
                 _rxInspectorUI->enablePropertyUI(PROPERTY_CONTROLBACKGROUND,bValue);
-                if ( bValue )
-                    try
-                    {
-                        const ::rtl::OUString pProps[] ={PROPERTY_BACKCOLOR,PROPERTY_CONTROLBACKGROUND};
-                        for (size_t i = 0; i < sizeof(pProps)/sizeof(pProps[0]); ++i)
-                        {
-                            if ( m_xReportComponent->getPropertySetInfo()->hasPropertyByName(pProps[i]) )
-                            {
-                                sal_Int32 nColor = COL_TRANSPARENT;
-                                m_xReportComponent->getPropertyValue(pProps[i]) >>= nColor;
-                                if ( COL_TRANSPARENT == static_cast<sal_uInt32>(nColor) )
-                                    m_xReportComponent->setPropertyValue(pProps[i],uno::makeAny(COL_WHITE));
-                                break;
-                            }
-                        }
-                    }
-                    catch(const uno::Exception&)
-                    {
-                        // not interested in
-                    }
             }
             break;
         default:
-            m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, _rxInspectorUI, FirstTimeInit);
+            m_xFormComponentHandler->actuatingPropertyChanged(ActuatingPropertyName, NewValue, OldValue, _rxInspectorUI, _bFirstTimeInit);
             break;
     }
 }
@@ -1181,7 +1575,7 @@ bool GeometryHandler::impl_dialogFilter_nothrow( ::rtl::OUString& _out_rSelected
             return false;
         }
 
-        String aGcc3WorkaroundTemporary( ModuleRes(RID_STR_FILTER));
+        const String aGcc3WorkaroundTemporary( ModuleRes(RID_STR_FILTER));
         const ::rtl::OUString sPropertyUIName( aGcc3WorkaroundTemporary );
         // initialize the dialog
         uno::Reference< beans::XPropertySet > xDialogProps( xDialog, uno::UNO_QUERY_THROW );
@@ -1212,8 +1606,8 @@ bool GeometryHandler::impl_dialogFilter_nothrow( ::rtl::OUString& _out_rSelected
 void GeometryHandler::checkPosAndSize(  const awt::Point& _aNewPos,
                                     const awt::Size& _aSize)
 {
-    uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY);
-    uno::Reference< report::XSection> xSection(xSourceReportComponent->getParent(),uno::UNO_QUERY);
+    const uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY);
+    const uno::Reference< report::XSection> xSection(xSourceReportComponent->getParent(),uno::UNO_QUERY);
     if ( !xSection.is() || uno::Reference< report::XShape>(xSourceReportComponent,uno::UNO_QUERY).is() ) // shapes can overlap.
         return;
 
@@ -1223,17 +1617,562 @@ void GeometryHandler::checkPosAndSize(  const awt::Point& _aNewPos,
 
     ::Rectangle aSourceRect(aPos,VCLSize(_aSize));
 
-    sal_Int32 nCount = xSection->getCount();
+    const sal_Int32 nCount = xSection->getCount();
     for (sal_Int32 i = 0; i < nCount ; ++i)
     {
-        uno::Reference< report::XReportComponent> xReportComponent(xSection->getByIndex(i),uno::UNO_QUERY);
+        const uno::Reference< report::XReportComponent> xReportComponent(xSection->getByIndex(i),uno::UNO_QUERY);
         if ( xReportComponent.is() && xReportComponent != xSourceReportComponent )
         {
-            ::Rectangle aBoundRect(VCLPoint(xReportComponent->getPosition()),VCLSize(xReportComponent->getSize()));
-            ::Rectangle aRect = aSourceRect.GetIntersection(aBoundRect);
+            const ::Rectangle aBoundRect(VCLPoint(xReportComponent->getPosition()),VCLSize(xReportComponent->getSize()));
+            const ::Rectangle aRect = aSourceRect.GetIntersection(aBoundRect);
             if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
                 throw beans::PropertyVetoException(String(ModuleRes( RID_STR_OVERLAP_OTHER_CONTROL)),xSourceReportComponent);
         }
+    }
+}
+// -----------------------------------------------------------------------------
+void GeometryHandler::impl_fillFormulaList_nothrow(::std::vector< ::rtl::OUString >& _out_rList) const
+{
+    if ( m_nDataFieldType == FUNCTION )
+        ::std::transform(m_aDefaultFunctions.begin(),m_aDefaultFunctions.end(),::std::back_inserter(_out_rList),::boost::bind( &DefaultFunction::getName, _1 ));
+    else if ( m_nDataFieldType == USER_DEF_FUNCTION )
+        ::std::transform(m_aFunctionNames.begin(),m_aFunctionNames.end(),::std::back_inserter(_out_rList),::std::select1st<TFunctions::value_type>());
+}
+// -----------------------------------------------------------------------------
+void GeometryHandler::impl_fillScopeList_nothrow(::std::vector< ::rtl::OUString >& _out_rList) const
+{
+    try
+    {
+        const uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY_THROW);
+        const uno::Reference< report::XSection> xSection(xSourceReportComponent->getParent(),uno::UNO_QUERY_THROW);
+
+        const uno::Reference< report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
+        const uno::Reference< report::XGroups> xGroups = xReportDefinition->getGroups();
+        sal_Int32 nPos = -1;
+        uno::Reference< report::XGroup> xGroup = xSection->getGroup();
+        if ( xGroup.is() )
+            nPos = getPositionInIndexAccess(xGroups.get(),xGroup);
+        else if ( xSection == xReportDefinition->getDetail() )
+            nPos = xGroups->getCount()-1;
+
+        const String sGroup = String(ModuleRes(RID_STR_SCOPE_GROUP));
+        for (sal_Int32 i = 0 ; i <= nPos ; ++i)
+        {
+            xGroup.set(xGroups->getByIndex(i),uno::UNO_QUERY_THROW);
+            String sGroupName = sGroup;
+            sGroupName.SearchAndReplaceAscii("%1",xGroup->getExpression());
+            _out_rList.push_back(sGroupName);
+        }
+        _out_rList.push_back(xReportDefinition->getName());
+    }
+    catch(uno::Exception&)
+    {
+        OSL_ENSURE(0,"Exception caught!");
+    }
+}
+// -----------------------------------------------------------------------------
+uno::Reference< report::XFunctionsSupplier> GeometryHandler::fillScope_throw(::rtl::OUString& _rsNamePostFix)
+{
+    uno::Reference< report::XFunctionsSupplier> xReturn;
+
+    const uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY_THROW);
+    const uno::Reference< report::XSection> xSection(xSourceReportComponent->getParent(),uno::UNO_QUERY_THROW);
+    const uno::Reference< report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
+    if ( !m_sScope.getLength() )
+    {
+        const uno::Reference< report::XGroup> xGroup(xSection->getGroup(),uno::UNO_QUERY);
+        if ( xGroup.is() )
+        {
+            String sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
+            _rsNamePostFix = xGroup->getExpression();
+            sGroupName.SearchAndReplaceAscii("%1",_rsNamePostFix);
+            m_sScope = sGroupName;
+            xReturn = xGroup.get();
+        }
+        else if ( xSection == xReportDefinition->getDetail() )
+        {
+            const uno::Reference< report::XGroups> xGroups = xReportDefinition->getGroups();
+            const sal_Int32 nCount = xGroups->getCount();
+            if ( nCount )
+            {
+                const uno::Reference< report::XGroup> xGroup2(xGroups->getByIndex(nCount - 1),uno::UNO_QUERY_THROW);
+                String sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
+                _rsNamePostFix = xGroup2->getExpression();
+                sGroupName.SearchAndReplaceAscii("%1",_rsNamePostFix);
+                m_sScope = sGroupName;
+                xReturn = xGroup2.get();
+            }
+        }
+        if ( !m_sScope.getLength() )
+        {
+            xReturn = xReportDefinition.get();
+            _rsNamePostFix = m_sScope = xReportDefinition->getName();
+        }
+    }
+    else if ( m_sScope == xReportDefinition->getName() )
+    {
+        xReturn = xReportDefinition.get();
+        _rsNamePostFix = m_sScope;
+    }
+    else
+    {
+        uno::Reference< report::XGroups> xGroups = xReportDefinition->getGroups();
+        const sal_Int32 nCount = xGroups->getCount();
+
+        for (sal_Int32 i = 0 ; i < nCount; ++i)
+        {
+            const uno::Reference< report::XGroup> xGroup(xGroups->getByIndex(i),uno::UNO_QUERY_THROW);
+            String sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
+            sGroupName.SearchAndReplaceAscii("%1",xGroup->getExpression());
+            if ( m_sScope == ::rtl::OUString(sGroupName) )
+            {
+                _rsNamePostFix = xGroup->getExpression();
+                xReturn = xGroup.get();
+                break;
+            }
+        }
+
+    }
+    OSL_ENSURE(xReturn.is(),"Why don't we have a functionssupplier here!");
+
+    return xReturn;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString GeometryHandler::getFormula() const
+{
+    return m_sDefaultFunction;
+}
+// -----------------------------------------------------------------------------
+sal_Bool GeometryHandler::isDefaultFunction( const ::rtl::OUString& _sQuotedFunction
+                                            ,::rtl::OUString& _rDataField
+                                            ,const uno::Reference< report::XFunctionsSupplier>& _xFunctionsSupplier
+                                            ,bool _bSet) const
+{
+    sal_Bool bDefaultFunction = sal_False;
+    try
+    {
+        const uno::Reference< report::XReportComponent> xSourceReportComponent(m_xReportComponent,uno::UNO_QUERY_THROW);
+        const uno::Reference< report::XSection> xSection(xSourceReportComponent->getParent(),uno::UNO_QUERY_THROW);
+        const uno::Reference< report::XReportDefinition> xReportDefinition = xSection->getReportDefinition();
+
+        ::std::pair<TFunctions::const_iterator,TFunctions::const_iterator> aFind = m_aFunctionNames.equal_range(_sQuotedFunction);
+        while ( aFind.first != aFind.second )
+        {
+            if ( !_xFunctionsSupplier.is() || _xFunctionsSupplier == aFind.first->second.second )
+            {
+                const beans::Optional< ::rtl::OUString> aInitalFormula = aFind.first->second.first->getInitialFormula();
+                if ( aInitalFormula.IsPresent )
+                {
+                    ::rtl::OUString sDefaultFunctionName;
+                    bDefaultFunction = impl_isDefaultFunction_nothrow(aFind.first->second.first,_rDataField,sDefaultFunctionName);
+                    if ( bDefaultFunction )
+                    {
+                        m_xFunction = aFind.first->second.first;
+                        if ( _bSet )
+                        {
+                            m_sDefaultFunction = sDefaultFunctionName;
+                            uno::Reference< report::XGroup> xGroup(aFind.first->second.second,uno::UNO_QUERY);
+                            if ( xGroup.is() )
+                            {
+                                String sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
+                                sGroupName.SearchAndReplaceAscii("%1",xGroup->getExpression());
+                                m_sScope = sGroupName;
+                            }
+                            else
+                                m_sScope = xReportDefinition->getName();
+                        }
+                    }
+                    break;
+                }
+            }
+            ++(aFind.first);
+        }
+    }
+    catch(uno::Exception&)
+    {
+        OSL_ENSURE(0,"Exception caught!");
+    }
+    return bDefaultFunction;
+}
+// -----------------------------------------------------------------------------
+sal_Bool GeometryHandler::impl_isDefaultFunction_nothrow( const uno::Reference< report::XFunction>& _xFunction
+                                            ,::rtl::OUString& _rDataField
+                                            ,::rtl::OUString& _rsDefaultFunctionName) const
+{
+    sal_Bool bDefaultFunction = sal_False;
+    try
+    {
+        const String sFormula( _xFunction->getFormula() );
+        util::SearchOptions aSearchOptions;
+        aSearchOptions.algorithmType = util::SearchAlgorithms_REGEXP;
+        aSearchOptions.searchFlag = 0x00000100;
+        ::std::vector< DefaultFunction >::const_iterator aIter = m_aDefaultFunctions.begin();
+        ::std::vector< DefaultFunction >::const_iterator aDeEnd = m_aDefaultFunctions.end();
+        for (; aIter != aDeEnd; ++aIter)
+        {
+            aSearchOptions.searchString = aIter->m_sSearchString;
+            utl::TextSearch aTextSearch(aSearchOptions);
+            xub_StrLen start = 0;
+            xub_StrLen end = sFormula.Len();
+            if ( aTextSearch.SearchFrwrd(sFormula,&start,&end) && start == 0 && end == sFormula.Len()) // default function found
+            {
+                aSearchOptions.searchString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]"));
+                utl::TextSearch aDataSearch(aSearchOptions);
+                aDataSearch.SearchFrwrd(sFormula,&start,&end );
+                ++start;
+                _rDataField = sFormula.Copy(start,end-start-1);
+                _rsDefaultFunctionName = aIter->m_sName;
+                break;
+            }
+        }
+
+        bDefaultFunction = aIter != aDeEnd;
+    }
+    catch(uno::Exception&)
+    {
+        OSL_ENSURE(0,"Exception caught!");
+    }
+    return bDefaultFunction;
+}
+// -----------------------------------------------------------------------------
+void GeometryHandler::loadDefaultFunctions()
+{
+    if ( m_aDefaultFunctions.empty() )
+    {
+        m_aCounterFunction.m_bPreEvaluated = sal_False;
+        m_aCounterFunction.m_bDeepTraversing = sal_False;
+        m_aCounterFunction.m_sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Counter"));
+        m_aCounterFunction.m_sFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[%FunctionName] + 1"));
+        m_aCounterFunction.m_sSearchString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*[:digit:]*"));
+        m_aCounterFunction.m_sInitialFormula.IsPresent = sal_True;
+        m_aCounterFunction.m_sInitialFormula.Value = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:1"));
+
+        DefaultFunction aDefault;
+        aDefault.m_bDeepTraversing = sal_False;
+
+        //aDefault.m_sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Counter"));
+        //aDefault.m_sFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[%FunctionName] + 1"));
+        //aDefault.m_sSearchString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:\\[[:alpha:]+[:alnum:]*\\][:space:]*\\+[:space:]*1"));
+        //aDefault.m_sInitialFormula.IsPresent = sal_True;
+        //aDefault.m_sInitialFormula.Value = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:1"));
+        //m_aDefaultFunctions.push_back(aDefault);
+
+        aDefault.m_bPreEvaluated = sal_True;
+
+        aDefault.m_sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Accumulation"));
+        aDefault.m_sFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[%Column] + [%FunctionName]"));
+        aDefault.m_sSearchString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:\\[[:alpha:]+([:space:]*[:alnum:]*)*\\][:space:]*\\+[:space:]*\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]"));
+        aDefault.m_sInitialFormula.IsPresent = sal_True;
+        aDefault.m_sInitialFormula.Value = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[%Column]"));
+        m_aDefaultFunctions.push_back(aDefault);
+
+        aDefault.m_sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Minimum"));
+        aDefault.m_sFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:IF([%Column] < [%FunctionName];[%Column];[%FunctionName])"));
+        aDefault.m_sSearchString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*<[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)"));
+        aDefault.m_sInitialFormula.IsPresent = sal_True;
+        aDefault.m_sInitialFormula.Value = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[%Column]"));
+        m_aDefaultFunctions.push_back(aDefault);
+
+        aDefault.m_sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Maximum"));
+        aDefault.m_sFormula = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:IF([%Column] > [%FunctionName];[%Column];[%FunctionName])"));
+        aDefault.m_sSearchString = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:IF\\((\\[[:alpha:]+([:space:]*[:alnum:]*)*\\])[:space:]*>[:space:]*(\\[[:alpha:]+([:space:]*[:alnum:]*)*\\]);[:space:]*\\1[:space:]*;[:space:]*\\3[:space:]*\\)"));
+        aDefault.m_sInitialFormula.IsPresent = sal_True;
+        aDefault.m_sInitialFormula.Value = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:[%Column]"));
+        m_aDefaultFunctions.push_back(aDefault);
+    }
+}
+// -----------------------------------------------------------------------------
+void GeometryHandler::createDefaultFunction(::osl::ResettableMutexGuard& _aGuard ,const ::rtl::OUString& _sFunction,const ::rtl::OUString& _sDataField)
+{
+    try
+    {
+        ::rtl::OUString sNamePostFix;
+        const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostFix);
+
+        ::std::vector< DefaultFunction >::const_iterator aIter = m_aDefaultFunctions.begin();
+        ::std::vector< DefaultFunction >::const_iterator aDeEnd = m_aDefaultFunctions.end();
+        for (; aIter != aDeEnd; ++aIter)
+        {
+            if ( aIter->m_sName == _sFunction )
+            {
+                const ::rtl::OUString sFunctionName( _sFunction + _sDataField + sNamePostFix);
+                const ::rtl::OUString sQuotedFunctionName(lcl_getQuotedFunctionName(sFunctionName));
+
+                beans::PropertyChangeEvent aEvent;
+                aEvent.PropertyName = PROPERTY_SCOPE;
+                aEvent.OldValue <<= m_sScope;
+
+                ::std::pair<TFunctions::const_iterator,TFunctions::const_iterator> aFind = m_aFunctionNames.equal_range(sQuotedFunctionName);
+                while ( aFind.first != aFind.second )
+                {
+                    if ( xFunctionsSupplier == aFind.first->second.second )
+                    {
+                        m_xFunction = aFind.first->second.first;
+                        ::rtl::OUString sTemp;
+                        isDefaultFunction(sQuotedFunctionName,sTemp,uno::Reference< report::XFunctionsSupplier>(),true); // implicitly sets the m_sScope
+                        break;
+                    }
+                    ++(aFind.first);
+                }
+                if ( aFind.first == aFind.second )
+                    impl_createFunction(sFunctionName,_sDataField,*aIter);
+
+                OBlocker aBlocker(m_bIn);
+                m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny( impl_convertToFormula( uno::makeAny(sQuotedFunctionName) )));
+                aEvent.NewValue <<= m_sScope;
+                _aGuard.clear();
+                m_aPropertyListeners.notify( aEvent, &beans::XPropertyChangeListener::propertyChange );
+                break;
+            }
+        }
+    }
+    catch(uno::Exception&)
+    {
+        OSL_ENSURE(0,"Exception caught!");
+    }
+}
+// -----------------------------------------------------------------------------
+void GeometryHandler::removeFunction()
+{
+    if ( m_xFunction.is() )
+    {
+        const ::rtl::OUString sQuotedFunctionName(lcl_getQuotedFunctionName(m_xFunction));
+        ::std::pair<TFunctions::iterator,TFunctions::iterator> aFind = m_aFunctionNames.equal_range(sQuotedFunctionName);
+        while ( aFind.first != aFind.second )
+        {
+            if ( aFind.first->second.first == m_xFunction )
+            {
+                uno::Reference< report::XFunctions> xFunctions = aFind.first->second.second->getFunctions();
+                xFunctions->removeByIndex(xFunctions->getCount() - 1 ); /// TODO: insert new method in XFunctions: removeFunction(xfunction)
+                m_aFunctionNames.erase(aFind.first);
+                m_bNewFunction = false;
+                break;
+            }
+            ++(aFind.first);
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void GeometryHandler::resetOwnProperties(::osl::ResettableMutexGuard& _aGuard,const ::rtl::OUString& _sOldFunctionName,const ::rtl::OUString& _sOldScope,const sal_uInt32 _nOldDataFieldType)
+{
+    const ::rtl::OUString sNewFunction = m_sDefaultFunction;
+    const ::rtl::OUString sNewScope = m_sScope;
+    const sal_uInt32 nNewDataFieldType = m_nDataFieldType;
+    _aGuard.clear();
+    if ( _nOldDataFieldType != nNewDataFieldType )
+    {
+        beans::PropertyChangeEvent aScopeEvent;
+        aScopeEvent.PropertyName = PROPERTY_TYPE;
+        aScopeEvent.OldValue <<= _nOldDataFieldType;
+        aScopeEvent.NewValue <<= nNewDataFieldType;
+        m_aPropertyListeners.notify( aScopeEvent, &beans::XPropertyChangeListener::propertyChange );
+    }
+    if ( _sOldFunctionName != sNewFunction )
+    {
+        beans::PropertyChangeEvent aFormulaEvent;
+        aFormulaEvent.PropertyName = PROPERTY_FORMULALIST;
+        aFormulaEvent.OldValue <<= _sOldFunctionName;
+        aFormulaEvent.NewValue <<= sNewFunction;
+
+        m_aPropertyListeners.notify( aFormulaEvent, &beans::XPropertyChangeListener::propertyChange );
+    }
+    if ( _sOldScope != sNewScope )
+    {
+        beans::PropertyChangeEvent aScopeEvent;
+        aScopeEvent.PropertyName = PROPERTY_SCOPE;
+        aScopeEvent.OldValue <<= _sOldScope;
+        aScopeEvent.NewValue <<= sNewScope;
+        m_aPropertyListeners.notify( aScopeEvent, &beans::XPropertyChangeListener::propertyChange );
+    }
+
+    _aGuard.reset();
+}
+//------------------------------------------------------------------------
+void GeometryHandler::impl_initFieldList_nothrow( uno::Sequence< ::rtl::OUString >& _rFieldNames ) const
+{
+    _rFieldNames.realloc(0);
+    try
+    {
+        uno::Reference< awt::XWindow> xInspectorWindow(m_xContext->getValueByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DialogParentWindow"))) ,uno::UNO_QUERY);
+        Window* pInspectorWindow = VCLUnoHelper::GetWindow( xInspectorWindow );
+        WaitObject aWaitCursor( pInspectorWindow );
+
+        uno::Reference< sdbc::XPreparedStatement >  xStatement;
+
+        // get the form of the control we're inspecting
+        uno::Reference< beans::XPropertySet > xFormSet( m_xRowSet, uno::UNO_QUERY );
+        if ( !xFormSet.is() )
+            return;
+
+        ::rtl::OUString sObjectName;
+        OSL_VERIFY( xFormSet->getPropertyValue( PROPERTY_COMMAND ) >>= sObjectName );
+        // when there is no command we don't need to ask for columns
+        uno::Reference<sdbc::XConnection> xCon(m_xContext->getValueByName( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"))) ,uno::UNO_QUERY);
+        if ( sObjectName.getLength() && xCon.is() )
+        {
+            sal_Int32 nObjectType = sdb::CommandType::COMMAND;
+            OSL_VERIFY( xFormSet->getPropertyValue( PROPERTY_COMMANDTYPE ) >>= nObjectType );
+
+            _rFieldNames = ::dbtools::getFieldNamesByCommandDescriptor( xCon, nObjectType, sObjectName );
+        }
+    }
+    catch (uno::Exception&)
+    {
+        DBG_ERROR( "GeometryHandler::impl_initFieldList_nothrow: caught an exception!" )
+    }
+}
+// -----------------------------------------------------------------------------
+bool GeometryHandler::impl_isCounterFunction_throw(const ::rtl::OUString& _sQuotedFunctionName,::rtl::OUString& _Out_sScope) const
+{
+    ::std::pair<TFunctions::const_iterator,TFunctions::const_iterator> aFind = m_aFunctionNames.equal_range(_sQuotedFunctionName);
+    while ( aFind.first != aFind.second )
+    {
+        const beans::Optional< ::rtl::OUString> aInitalFormula = aFind.first->second.first->getInitialFormula();
+        if ( aInitalFormula.IsPresent )
+        {
+            const String sFormula( aFind.first->second.first->getFormula() );
+            util::SearchOptions aSearchOptions;
+            aSearchOptions.algorithmType = util::SearchAlgorithms_REGEXP;
+            aSearchOptions.searchFlag = 0x00000100;
+            aSearchOptions.searchString = m_aCounterFunction.m_sSearchString;
+            utl::TextSearch aTextSearch(aSearchOptions);
+            xub_StrLen start = 0;
+            xub_StrLen end = sFormula.Len();
+            if ( aTextSearch.SearchFrwrd(sFormula,&start,&end) && start == 0 && end == sFormula.Len()) // counter function found
+            {
+                const uno::Reference< report::XGroup > xGroup(aFind.first->second.second,uno::UNO_QUERY);
+                if ( xGroup.is() )
+                {
+                    String sGroupName = String(ModuleRes(RID_STR_SCOPE_GROUP));
+                    sGroupName.SearchAndReplaceAscii("%1",xGroup->getExpression());
+                    _Out_sScope = sGroupName;
+                }
+                else
+                    _Out_sScope = uno::Reference< report::XReportDefinition >(aFind.first->second.second,uno::UNO_QUERY_THROW)->getName();
+                break;
+            }
+        }
+        ++(aFind.first);
+    }
+    return aFind.first != aFind.second;
+}
+// -----------------------------------------------------------------------------
+void GeometryHandler::impl_createFunction(const ::rtl::OUString& _sFunctionName,const ::rtl::OUString& _sDataField,const DefaultFunction& _aFunction)
+{
+    if ( m_bNewFunction )
+        removeFunction();
+
+    const ::rtl::OUString sQuotedFunctionName(lcl_getQuotedFunctionName(_sFunctionName));
+    m_xFunction.set(report::Function::create(m_xContext));
+    m_xFunction->setName( _sFunctionName );
+
+    const String sPlaceHolder1(RTL_CONSTASCII_USTRINGPARAM("%Column"));
+    const String sPlaceHolder2(RTL_CONSTASCII_USTRINGPARAM("%FunctionName"));
+    String sFormula(_aFunction.m_sFormula);
+    sFormula.SearchAndReplaceAll(sPlaceHolder1,_sDataField);
+    sFormula.SearchAndReplaceAll(sPlaceHolder2,_sFunctionName);
+
+    m_xFunction->setFormula(sFormula);
+    m_xFunction->setPreEvaluated(_aFunction.m_bPreEvaluated);
+    m_xFunction->setDeepTraversing(_aFunction.m_bDeepTraversing);
+    if ( _aFunction.m_sInitialFormula.IsPresent )
+    {
+        beans::Optional< ::rtl::OUString> aInitialFormula = _aFunction.m_sInitialFormula;
+        String sInitialFormula = aInitialFormula.Value;
+        sInitialFormula.SearchAndReplaceAll(sPlaceHolder1,_sDataField);
+        sInitialFormula.SearchAndReplaceAll(sPlaceHolder2,_sFunctionName);
+        aInitialFormula.Value = sInitialFormula;
+        m_xFunction->setInitialFormula( aInitialFormula );
+    }
+    ::rtl::OUString sNamePostFix;
+    const uno::Reference< report::XFunctionsSupplier> xFunctionsSupplier = fillScope_throw(sNamePostFix);
+    const uno::Reference< container::XIndexContainer> xFunctions(xFunctionsSupplier->getFunctions(),uno::UNO_QUERY_THROW);
+    xFunctions->insertByIndex(xFunctions->getCount(),uno::makeAny(m_xFunction));
+    m_aFunctionNames.insert(TFunctions::value_type(sQuotedFunctionName,TFunctionPair(m_xFunction,xFunctionsSupplier)));
+    m_bNewFunction = true;
+}
+// -----------------------------------------------------------------------------
+void GeometryHandler::impl_setCounterFunction_throw()
+{
+    ::rtl::OUString sNamePostFix;
+    fillScope_throw(sNamePostFix);
+    ::rtl::OUString sFunctionName = m_aCounterFunction.m_sName;
+    sFunctionName += sNamePostFix;
+    const ::rtl::OUString sQuotedFunctionName = lcl_getQuotedFunctionName(sFunctionName);
+    ::rtl::OUString sScope;
+    if ( !(sFunctionName.getLength() && m_aFunctionNames.find(sQuotedFunctionName) != m_aFunctionNames.end() && impl_isCounterFunction_throw(sQuotedFunctionName,sScope)) )
+        impl_createFunction(sFunctionName,::rtl::OUString(),m_aCounterFunction);
+
+    OBlocker aBlocker(m_bIn);
+    m_xReportComponent->setPropertyValue(PROPERTY_DATAFIELD,uno::makeAny(impl_convertToFormula( uno::makeAny(sQuotedFunctionName))));
+}
+// -----------------------------------------------------------------------------
+sal_uInt32 GeometryHandler::impl_getDataFieldType_throw(const ::rtl::OUString& _sDataField) const
+{
+    sal_uInt32 nDataFieldType = UNDEF_DATA;
+    ::rtl::OUString sDataField;
+    if ( _sDataField.getLength() )
+        sDataField = _sDataField;
+    else
+    {
+        uno::Any aDataField( m_xReportComponent->getPropertyValue( PROPERTY_DATAFIELD ) );
+        lcl_convertFormulaTo(aDataField,aDataField);
+        aDataField >>= sDataField;
+    }
+
+    if ( sDataField.getLength() )
+    {
+        if ( impl_isDataField(sDataField) )
+            nDataFieldType = DATA_OR_FORMULA;
+        else if ( isDefaultFunction(sDataField,sDataField) )
+            nDataFieldType = FUNCTION;
+        else if ( m_aFunctionNames.find(sDataField) != m_aFunctionNames.end() )
+        {
+            nDataFieldType = USER_DEF_FUNCTION;
+            ::rtl::OUString sScope;
+            if ( impl_isCounterFunction_throw(sDataField,sScope) )
+                nDataFieldType = COUNTER;
+        }
+        else
+            nDataFieldType = DATA_OR_FORMULA;
+    }
+    return nDataFieldType;
+}
+// -----------------------------------------------------------------------------
+// XEventListener
+void SAL_CALL GeometryHandler::disposing(const lang::EventObject& ) throw( uno::RuntimeException )
+{
+}
+// XPropertyChangeListener
+void SAL_CALL GeometryHandler::propertyChange(const beans::PropertyChangeEvent& /*evt*/) throw(uno::RuntimeException)
+{
+    ::osl::ResettableMutexGuard aGuard( m_aMutex );
+    if ( !m_bIn )
+    {
+        const sal_uInt32 nOldDataFieldType = m_nDataFieldType;
+        const ::rtl::OUString sOldFunctionName = m_sDefaultFunction;
+        const ::rtl::OUString sOldScope = m_sScope;
+        m_sDefaultFunction = m_sScope = ::rtl::OUString();
+        m_nDataFieldType = impl_getDataFieldType_throw();
+        if ( UNDEF_DATA == m_nDataFieldType )
+            m_nDataFieldType = nOldDataFieldType;
+        uno::Any aDataField = m_xReportComponent->getPropertyValue( PROPERTY_DATAFIELD );
+        lcl_convertFormulaTo(aDataField,aDataField);
+        ::rtl::OUString sDataField;
+        aDataField >>= sDataField;
+        switch(m_nDataFieldType)
+        {
+            case FUNCTION:
+                isDefaultFunction(sDataField,sDataField,uno::Reference< report::XFunctionsSupplier>(),true);
+                break;
+            case COUNTER:
+                impl_isCounterFunction_throw(sDataField,m_sScope);
+                break;
+            default:
+                ;
+        }
+
+        resetOwnProperties(aGuard,sOldFunctionName,sOldScope,nOldDataFieldType);
     }
 }
 //........................................................................
