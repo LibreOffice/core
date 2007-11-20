@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:01:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:23:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,6 @@ String RID_STR_NEW_REPORT_AUTO
 
 String RID_STR_NEW_REPORT
 {
-    Text [ de ] ="Bericht in Entwurfsansicht erstellen..." ;
     Text [ en-US ] = "Create Report in Design View..." ;
 };
 
@@ -129,7 +128,6 @@ Menu RID_MENU_APP_NEW
             Identifier = SID_APP_NEW_REPORT;
             HelpId = SID_APP_NEW_REPORT;
             Command = ".uno:DBNewReport";
-            Text [ de ] ="Bericht..." ;
             Text [ en-US ] = "Report..." ;
         };
         MenuItem
@@ -242,6 +240,13 @@ Menu RID_MENU_APP_EDIT
             Identifier = SID_FORM_CREATE_REPWIZ_PRE_SEL;
             Text [ en-US ] = "Form Wizard...";
             Command = ".uno:DBNewFormAutoPilotWithPreSelection";
+        };
+        MenuItem
+        {
+            Identifier = SID_APP_NEW_REPORT_PRE_SEL;
+            HelpId = SID_APP_NEW_REPORT_PRE_SEL;
+            Command = ".uno:DBNewReportWithPreSelection";
+            Text [ en-US ] = "Report..." ;
         };
         MenuItem
         {
