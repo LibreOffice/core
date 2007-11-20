@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:39:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:01:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,11 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbIsRangeChecked( sal_False ),
     msPageRange( ' ' ),
 
-    mbSelectionIsChecked( sal_False )
+    mbSelectionIsChecked( sal_False ),
+    mbExportRelativeFsysLinks( sal_False ),
+    mnViewPDFMode( 0 ),
+    mbConvertOOoTargets( sal_False ),
+    mbExportBmkToPDFDestination( sal_False )
 {
     FreeResource();
     mprResMgr = &rResMgr;
@@ -199,6 +203,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mnMaxImageResolution = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ) ), 300 );
 
     mbUseTaggedPDF = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ), sal_False );
+    mnPDFTypeSelection =  maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectPdfVersion" ) ), 0 );
     if ( mbIsPresentation )
         mbExportNotesBoth = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages"  ) ), sal_False );
     else
@@ -239,8 +244,17 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mbCanCopyOrExtract = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableCopyingOfContent" ) ), sal_True );
     mbCanExtractForAccessibility = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "EnableTextAccessForAccessibilityTools" ) ), sal_True );
 
+//prepare values for relative links
+    mbExportRelativeFsysLinks = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportLinksRelativeFsys" ) ), sal_False );
+
+    mnViewPDFMode = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "PDFViewSelection" ) ), 0 );
+
+    mbConvertOOoTargets = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ConvertOOoTargetToPDFTarget" ) ), sal_False );
+    mbExportBmkToPDFDestination = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarksToPDFDestination" ) ), sal_False );
+
 //queue the tab pages for later creation (created when first shown)
     AddTabPage( RID_PDF_TAB_SECURITY, ImpPDFTabSecurityPage::Create, 0 );
+    AddTabPage( RID_PDF_TAB_LINKS, ImpPDFTabLinksPage::Create, 0 );
     AddTabPage( RID_PDF_TAB_VPREFER, ImpPDFTabViewerPage::Create, 0 );
     AddTabPage( RID_PDF_TAB_OPNFTR, ImpPDFTabOpnFtrPage::Create, 0 );
 
@@ -268,6 +282,7 @@ ImpPDFTabDialog::~ImpPDFTabDialog()
     RemoveTabPage( RID_PDF_TAB_GENER );
     RemoveTabPage( RID_PDF_TAB_VPREFER );
     RemoveTabPage( RID_PDF_TAB_OPNFTR );
+    RemoveTabPage( RID_PDF_TAB_LINKS );
     RemoveTabPage( RID_PDF_TAB_SECURITY );
 }
 
@@ -285,6 +300,9 @@ void ImpPDFTabDialog::PageCreated( USHORT _nId,
         break;
     case RID_PDF_TAB_OPNFTR:
         ( ( ImpPDFTabOpnFtrPage* )&_rPage )->SetFilterConfigItem( this );
+        break;
+    case RID_PDF_TAB_LINKS:
+        ( ( ImpPDFTabLinksPage* )&_rPage )->SetFilterConfigItem( this );
         break;
     case RID_PDF_TAB_SECURITY:
         ( ( ImpPDFTabSecurityPage* )&_rPage )->SetFilterConfigItem( this );
@@ -314,10 +332,13 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "MaxImageResolution" ) ), mnMaxImageResolution );
 
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTaggedPDF" ) ), mbUseTaggedPDF );
+    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "SelectPdfVersion" ) ), mnPDFTypeSelection );
+
     if ( mbIsPresentation )
         maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotesPages" ) ), mbExportNotesBoth );
     else
         maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportNotes" ) ), mbExportNotesBoth );
+
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ), mbExportBookmarks );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), mbUseTransitionEffects );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ), mbIsSkipEmptyPages );
@@ -350,6 +371,14 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayout" ) ), mnPageLayout );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ), mbFirstPageLeft );
     maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ), mnOpenBookmarkLevels );
+
+    if( GetTabPage( RID_PDF_TAB_LINKS ) )
+        ( ( ImpPDFTabLinksPage* )GetTabPage( RID_PDF_TAB_LINKS ) )->GetFilterConfigItem( this );
+
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportLinksRelativeFsys" ) ), mbExportRelativeFsysLinks );
+    maConfigItem.WriteInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "PDFViewSelection" ) ), mnViewPDFMode );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ConvertOOoTargetToPDFTarget" ) ), mbConvertOOoTargets );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarksToPDFDestination" ) ), mbExportBmkToPDFDestination );
 
     if( GetTabPage( RID_PDF_TAB_SECURITY ) )
         ( ( ImpPDFTabSecurityPage* )GetTabPage( RID_PDF_TAB_SECURITY ) )->GetFilterConfigItem( this );
@@ -421,17 +450,23 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
     maCoReduceImageResolution( this, ResId( CO_REDUCEIMAGERESOLUTION, *paResMgr ) ),
 
     maFlGeneral( this, ResId( FL_GENERAL, *paResMgr ) ),
+    maCbPDFA1b( this, ResId( CB_PDFA_1B_SELECT, *paResMgr ) ),
+
     maCbTaggedPDF( this, ResId( CB_TAGGEDPDF, *paResMgr ) ),
-    maCbExportNotes( this, ResId( CB_EXPORTNOTES, *paResMgr ) ),
-    maCbExportBookmarks( this, ResId( CB_EXPORTBOOKMARKS, *paResMgr ) ),
+    mbTaggedPDFUserSelection( sal_False ),
 
     maCbExportFormFields( this, ResId( CB_EXPORTFORMFIELDS, *paResMgr ) ),
+    mbExportFormFieldsUserSelection( sal_False ),
     maFtFormsFormat( this, ResId( FT_FORMSFORMAT, *paResMgr ) ),
     maLbFormsFormat( this, ResId( LB_FORMSFORMAT, *paResMgr ) ),
+
+    maCbExportBookmarks( this, ResId( CB_EXPORTBOOKMARKS, *paResMgr ) ),
+    maCbExportNotes( this, ResId( CB_EXPORTNOTES, *paResMgr ) ),
     maCbExportEmptyPages( this, ResId( CB_EXPORTEMPTYPAGES, *paResMgr ) ),
     maCbAddStream( this, ResId( CB_ADDSTREAM, *paResMgr ) ),
     mbIsPresentation( sal_False ),
-    mbIsWriter( sal_False)
+    mbIsWriter( sal_False),
+    mpaParent( 0 )
 {
     mpaResMgr = paResMgr;
     FreeResource();
@@ -446,6 +481,8 @@ ImpPDFTabGeneralPage::~ImpPDFTabGeneralPage()
 // -----------------------------------------------------------------------------
 void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent )
 {
+    mpaParent = paParent;
+
 //init this class data
     maRbRange.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, TogglePagesHdl ) );
 
@@ -483,12 +520,37 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     maCoReduceImageResolution.SetText( aStrRes );
     maCoReduceImageResolution.Enable( bReduceImageResolution );
 
-    maCbTaggedPDF.Check( paParent->mbUseTaggedPDF );
+    maCbPDFA1b.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleExportPDFAHdl) );
+    switch( paParent->mnPDFTypeSelection )
+    {
+    default:
+    case 0: maCbPDFA1b.Check( FALSE ); // PDF 1.4
+        break;
+    case 1: maCbPDFA1b.Check(); // PDF/A-1a
+        break;
+    }
+    ToggleExportPDFAHdl( NULL );
+
+    maCbExportFormFields.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
+
+// get the form values, for use with PDF/A-1 selection interface
+    mbTaggedPDFUserSelection = paParent->mbUseTaggedPDF;
+    mbExportFormFieldsUserSelection = paParent->mbExportFormFields;
+
+    if( !maCbPDFA1b.IsChecked() )
+    {// the value for PDF/A set by the ToggleExportPDFAHdl method called before
+        maCbTaggedPDF.Check( mbTaggedPDFUserSelection  );
+        maCbExportFormFields.Check( mbExportFormFieldsUserSelection );
+    }
+
+    maLbFormsFormat.SelectEntryPos( (sal_uInt16)paParent->mnFormsType );
+    maLbFormsFormat.Enable( paParent->mbExportFormFields );
 
     if ( mbIsPresentation )
         maCbExportNotes.Check( paParent->mbExportNotesBoth );
     else
         maCbExportNotes.Check( paParent->mbExportNotesBoth );
+
     maCbExportBookmarks.Check( paParent->mbExportBookmarks );
 
     maCbExportEmptyPages.Check( !paParent->mbIsSkipEmptyPages );
@@ -512,11 +574,6 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
     maCbAddStream.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleAddStreamHdl ) );
     // init addstream dependencies
     ToggleAddStreamHdl( NULL );
-
-    maCbExportFormFields.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
-    maCbExportFormFields.Check( paParent->mbExportFormFields );
-    maLbFormsFormat.SelectEntryPos( (sal_uInt16)paParent->mnFormsType );
-    maLbFormsFormat.Enable( paParent->mbExportFormFields );
 }
 
 // -----------------------------------------------------------------------------
@@ -527,7 +584,6 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     paParent->mnQuality = static_cast<sal_Int32>(maNfQuality.GetValue());
     paParent->mbReduceImageResolution = maCbReduceImageResolution.IsChecked();
     paParent->mnMaxImageResolution = maCoReduceImageResolution.GetText().ToInt32();
-    paParent->mbUseTaggedPDF =  maCbTaggedPDF.IsChecked();
     paParent->mbExportNotesBoth = maCbExportNotes.IsChecked();
     paParent->mbExportBookmarks = maCbExportBookmarks.IsChecked();
 
@@ -544,12 +600,25 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     {
         paParent->mbSelectionIsChecked = maRbSelection.IsChecked();
     }
+
+    paParent->mnPDFTypeSelection = 0;
+    if( maCbPDFA1b.IsChecked() )
+    {
+        paParent->mnPDFTypeSelection = 1;
+        paParent->mbUseTaggedPDF =  mbTaggedPDFUserSelection;
+        paParent->mbExportFormFields = mbExportFormFieldsUserSelection;
+    }
+    else
+    {
+        paParent->mbUseTaggedPDF =  maCbTaggedPDF.IsChecked();
+        paParent->mbExportFormFields = maCbExportFormFields.IsChecked();
+    }
+
     /*
     * FIXME: the entries are only implicitly defined by the resource file. Should there
     * ever be an additional form submit format this could get invalid.
     */
     paParent->mnFormsType = (sal_Int32) maLbFormsFormat.GetSelectEntryPos();
-    paParent->mbExportFormFields = maCbExportFormFields.IsChecked();
 }
 
 // -----------------------------------------------------------------------------
@@ -612,6 +681,43 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleAddStreamHdl, void*, EMPTYARG )
             maRbSelection.Enable( TRUE );
         }
     }
+    return 0;
+}
+
+// -----------------------------------------------------------------------------
+IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportPDFAHdl, void*, EMPTYARG )
+{
+//get the security page
+    if( mpaParent && mpaParent->GetTabPage( RID_PDF_TAB_SECURITY ) )
+        ( ( ImpPDFTabSecurityPage* )mpaParent->GetTabPage( RID_PDF_TAB_SECURITY ) )->Enable( !maCbPDFA1b.IsChecked() );
+
+//PDF/A-1 needs tagged PDF, so  force disable the control, will be forced in pdfexport.
+    sal_Bool bPDFA1Sel = maCbPDFA1b.IsChecked();
+    maFtFormsFormat.Enable( !bPDFA1Sel );
+    maLbFormsFormat.Enable( !bPDFA1Sel );
+    if(bPDFA1Sel)
+    {
+//store the values of subordinate controls
+        mbTaggedPDFUserSelection = maCbTaggedPDF.IsChecked();
+        maCbTaggedPDF.Check();
+        maCbTaggedPDF.Enable( sal_False );
+        mbExportFormFieldsUserSelection = maCbExportFormFields.IsChecked();
+        maCbExportFormFields.Check( sal_False );
+        maCbExportFormFields.Enable( sal_False );
+    }
+    else
+    {
+//retrieve the values of subordinate controls
+        maCbTaggedPDF.Enable();
+        maCbTaggedPDF.Check( mbTaggedPDFUserSelection );
+        maCbExportFormFields.Check( mbExportFormFieldsUserSelection );
+        maCbExportFormFields.Enable();
+    }
+// PDF/A-1 doesn't allow launch action, so enable/disable the selection on
+// Link page
+    if( mpaParent && mpaParent->GetTabPage( RID_PDF_TAB_LINKS ) )
+        ( ( ImpPDFTabLinksPage* )mpaParent->GetTabPage( RID_PDF_TAB_LINKS ) )->ImplPDFALinkControl( !maCbPDFA1b.IsChecked() );
+
     return 0;
 }
 
@@ -986,6 +1092,7 @@ void ImpPDFTabSecurityPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
     paParent->mbCanExtractForAccessibility = maCbEnableAccessibility.IsChecked();
 }
 
+
 // -----------------------------------------------------------------------------
 void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
 {
@@ -1039,6 +1146,10 @@ void ImpPDFTabSecurityPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParen
     maCbPermissions.SetToggleHdl( LINK( this, ImpPDFTabSecurityPage, TogglemaCbPermissionsHdl ) );
     maCbPermissions.Check( sal_False );
     TogglemaCbPermissionsHdl( NULL );
+// set the status of this windows, according to the PDFA selection
+
+    if( paParent && paParent->GetTabPage( RID_PDF_TAB_GENER ) )
+        ( ( ImpPDFTabGeneralPage* )paParent->GetTabPage( RID_PDF_TAB_GENER ) )->ToggleExportPDFAHdl( NULL );
 }
 
 IMPL_LINK( ImpPDFTabSecurityPage, TogglemaCbEncryptHdl, void*, p )
@@ -1107,5 +1218,157 @@ IMPL_LINK( ImpPDFTabSecurityPage, ClickmaPbOwnerPwdHdl, void*, p )
     if( msOwnerPassword.Len() == 0 )
         maCbPermissions.Check( false );
 
+    return 0;
+}
+
+////////////////////////////////////////////////////////
+// The link preferences tab page (relative and other stuff)
+// -----------------------------------------------------------------------------
+ImpPDFTabLinksPage::ImpPDFTabLinksPage( Window* pParent,
+                                              const SfxItemSet& rCoreSet,
+                                              ResMgr& rResMgr ) :
+    SfxTabPage( pParent, ResId( RID_PDF_TAB_LINKS, rResMgr ), rCoreSet ),
+
+    maCbExprtBmkrToNmDst( this, ResId( CB_EXP_BMRK_TO_DEST , rResMgr ) ),
+    maCbOOoToPDFTargets( this,  ResId( CB_CNV_OOO_DOCTOPDF , rResMgr ) ),
+     maCbExportRelativeFsysLinks( this, ResId( CB_ENAB_RELLINKFSYS , rResMgr ) ),
+
+    maFlDefaultTitle( this,  ResId( FL_DEFAULT_LINK_ACTION , rResMgr ) ),
+    maRbOpnLnksDefault( this, ResId( CB_VIEW_PDF_DEFAULT , rResMgr ) ),
+    mbOpnLnksDefaultUserState( sal_False ),
+    maRbOpnLnksLaunch( this, ResId( CB_VIEW_PDF_APPLICATION , rResMgr ) ),
+    mbOpnLnksLaunchUserState( sal_False ),
+    maRbOpnLnksBrowser( this,  ResId( CB_VIEW_PDF_BROWSER , rResMgr ) ),
+    mbOpnLnksBrowserUserState( sal_False )
+{
+    mpaResMgr = &rResMgr;
+    FreeResource();
+}
+
+// -----------------------------------------------------------------------------
+ImpPDFTabLinksPage::~ImpPDFTabLinksPage()
+{
+    delete mpaResMgr;
+}
+
+// -----------------------------------------------------------------------------
+SfxTabPage*  ImpPDFTabLinksPage::Create( Window* pParent,
+                                          const SfxItemSet& rAttrSet)
+{
+    ByteString aResMgrName( "pdffilter" );
+    aResMgrName.Append( ByteString::CreateFromInt32( SOLARUPD ) );
+    ResMgr * paResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
+    return ( new  ImpPDFTabLinksPage( pParent, rAttrSet, *paResMgr ) );
+}
+
+// -----------------------------------------------------------------------------
+void ImpPDFTabLinksPage::GetFilterConfigItem( ImpPDFTabDialog* paParent  )
+{
+    paParent->mbExportRelativeFsysLinks = maCbExportRelativeFsysLinks.IsChecked();
+
+    sal_Bool bIsPDFASel =  sal_False;
+    if( paParent && paParent->GetTabPage( RID_PDF_TAB_GENER ) )
+        bIsPDFASel = ( ( ImpPDFTabGeneralPage* )paParent->
+               GetTabPage( RID_PDF_TAB_GENER ) )->maCbPDFA1b.IsChecked();
+// if PDF/A-1 was not selected while exiting dialog...
+    if( !bIsPDFASel )
+    {
+// ...get the control states
+        mbOpnLnksDefaultUserState = maRbOpnLnksDefault.IsChecked();
+        mbOpnLnksLaunchUserState =  maRbOpnLnksLaunch.IsChecked();
+        mbOpnLnksBrowserUserState = maRbOpnLnksBrowser.IsChecked();
+    }
+// the control states, or the saved is used
+// to form the stored selection
+    paParent->mnViewPDFMode = 0;
+    if( mbOpnLnksBrowserUserState )
+        paParent->mnViewPDFMode = 2;
+    else if( mbOpnLnksLaunchUserState )
+        paParent->mnViewPDFMode = 1;
+
+    paParent->mbConvertOOoTargets = maCbOOoToPDFTargets.IsChecked();
+    paParent->mbExportBmkToPDFDestination = maCbExprtBmkrToNmDst.IsChecked();
+}
+
+// -----------------------------------------------------------------------------
+void ImpPDFTabLinksPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent )
+{
+    maCbOOoToPDFTargets.Check( paParent->mbConvertOOoTargets );
+    maCbExprtBmkrToNmDst.Check( paParent->mbExportBmkToPDFDestination );
+
+    maRbOpnLnksDefault.SetClickHdl( LINK( this, ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl ) );
+    maRbOpnLnksBrowser.SetClickHdl( LINK( this, ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl ) );
+
+    maCbExportRelativeFsysLinks.Check( paParent->mbExportRelativeFsysLinks );
+    switch( paParent->mnViewPDFMode )
+    {
+    default:
+    case 0:
+        maRbOpnLnksDefault.Check();
+        mbOpnLnksDefaultUserState = sal_True;
+        break;
+    case 1:
+        maRbOpnLnksLaunch.Check();
+        mbOpnLnksLaunchUserState = sal_True;
+        break;
+    case 2:
+        maRbOpnLnksBrowser.Check();
+        mbOpnLnksBrowserUserState = sal_True;
+        break;
+    }
+// now check the status of PDF/A selection
+// and set the link action accordingly
+// PDF/A-1 doesn't allow launch action on links
+//
+    if( paParent && paParent->GetTabPage( RID_PDF_TAB_GENER ) )
+        ImplPDFALinkControl(
+            !( ( ImpPDFTabGeneralPage* )paParent->
+               GetTabPage( RID_PDF_TAB_GENER ) )->maCbPDFA1b.IsChecked() );
+}
+
+// -----------------------------------------------------------------------------
+// called from general tab, with PDFA/1 selection status
+// retrieves/store the status of Launch action selection
+void ImpPDFTabLinksPage::ImplPDFALinkControl( sal_Bool bEnableLaunch )
+{
+// set the value and position of link type selection
+    if( bEnableLaunch )
+    {
+        maRbOpnLnksLaunch.Enable();
+//restore user state with no PDF/A-1 selected
+        maRbOpnLnksDefault.Check( mbOpnLnksDefaultUserState );
+        maRbOpnLnksLaunch.Check( mbOpnLnksLaunchUserState );
+        maRbOpnLnksBrowser.Check( mbOpnLnksBrowserUserState );
+    }
+    else
+    {
+//save user state with no PDF/A-1 selected
+        mbOpnLnksDefaultUserState = maRbOpnLnksDefault.IsChecked();
+        mbOpnLnksLaunchUserState = maRbOpnLnksLaunch.IsChecked();
+        mbOpnLnksBrowserUserState = maRbOpnLnksBrowser.IsChecked();
+        maRbOpnLnksLaunch.Enable( sal_False );
+        maRbOpnLnksBrowser.Check();
+    }
+}
+
+// -----------------------------------------------------------------------------
+// reset the memory of Launch action present
+// when PDF/A-1 was requested
+IMPL_LINK( ImpPDFTabLinksPage, ClickRbOpnLnksDefaultHdl, void*, EMPTYARG )
+{
+    mbOpnLnksDefaultUserState = maRbOpnLnksDefault.IsChecked();
+    mbOpnLnksLaunchUserState = maRbOpnLnksLaunch.IsChecked();
+    mbOpnLnksBrowserUserState = maRbOpnLnksBrowser.IsChecked();
+    return 0;
+}
+
+// -----------------------------------------------------------------------------
+// reset the memory of a launch action present
+// when PDF/A-1 was requested
+IMPL_LINK( ImpPDFTabLinksPage, ClickRbOpnLnksBrowserHdl, void*, EMPTYARG )
+{
+    mbOpnLnksDefaultUserState = maRbOpnLnksDefault.IsChecked();
+    mbOpnLnksLaunchUserState = maRbOpnLnksLaunch.IsChecked();
+    mbOpnLnksBrowserUserState = maRbOpnLnksBrowser.IsChecked();
     return 0;
 }
