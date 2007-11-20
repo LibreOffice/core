@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-09 11:56:31 $
+#   last change: $Author: ihi $ $Date: 2007-11-20 19:11:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ ENABLE_EXCEPTIONS=TRUE
 SLOFILES=\
     $(SLO)$/DefaultInspection.obj		\
     $(SLO)$/ReportComponentHandler.obj	\
-    $(SLO)$/GeometryHandler.obj	\
+    $(SLO)$/GeometryHandler.obj			\
     $(SLO)$/metadata.obj
 
 
