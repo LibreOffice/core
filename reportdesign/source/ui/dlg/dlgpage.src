@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgpage.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 12:13:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:08:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,6 @@ TabDialog RID_PAGEDIALOG_PAGE
         /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
         Text [ en-US ] = "Return" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Text [ x-comment ] = " ";
 
