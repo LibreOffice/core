@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_Socket2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:53:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:35:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ namespace osl_Socket
         void ctors_none()
         {
             /// Socket constructor.
-            ::osl::Socket sSocket();
+            // ::osl::Socket sSocket();
 
             CPPUNIT_ASSERT_MESSAGE( "test for ctors_none constructor function: check if the socket was created successfully, if no exception occured",
                                     1 == 1 );
@@ -530,7 +530,8 @@ namespace osl_Socket
             ::rtl::OUString suError = outputError(::rtl::OUString::valueOf(sSocket.getLocalPort( )),
                 ::rtl::OUString::valueOf((sal_Int32)OSL_INVALID_PORT),
                 "test for getLocalPort function: first create a new socket, then an invalid socket address, bind them, and check the port assigned.");
-            bOK = ( OSL_INVALID_PORT == sSocket.getLocalPort( ) );
+            sal_Bool bOK = ( OSL_INVALID_PORT == sSocket.getLocalPort( ) );
+            (void)bOK;
 #else
             //on Unix, if Addr is not an address of type osl_Socket_FamilyInet, it returns OSL_INVALID_PORT
             ::rtl::OUString suError = ::rtl::OUString::createFromAscii( "on Unix, if Addr is not an address of type osl_Socket_FamilyInet, it returns OSL_INVALID_PORT, but can not create Addr of that case");
