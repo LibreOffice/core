@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpsave.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:04:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:41:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
+#include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 #include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/XHierarchiesSupplier.hpp>
 #include <com/sun/star/sheet/XLevelsSupplier.hpp>
@@ -88,6 +89,7 @@ using namespace com::sun::star;
 #define DP_PROP_SUBTOTALS           "SubTotals"
 #define DP_PROP_USEDHIERARCHY       "UsedHierarchy"
 #define DP_PROP_FILTER              "Filter"
+#define DP_PROP_POSITION            "Position"
 
 // -----------------------------------------------------------------------
 
@@ -189,10 +191,10 @@ void ScDPSaveMember::SetName( const String& rNew )
     aName = rNew;
 }
 
-void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMember )
+void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMember, sal_Int32 nPosition )
 {
     //  nothing to do?
-    if ( nVisibleMode == SC_DPSAVEMODE_DONTKNOW && nShowDetailsMode == SC_DPSAVEMODE_DONTKNOW )
+    if ( nVisibleMode == SC_DPSAVEMODE_DONTKNOW && nShowDetailsMode == SC_DPSAVEMODE_DONTKNOW && nPosition < 0 )
         return;
 
     uno::Reference<beans::XPropertySet> xMembProp( xMember, uno::UNO_QUERY );
@@ -208,6 +210,18 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
         if ( nShowDetailsMode != SC_DPSAVEMODE_DONTKNOW )
             lcl_SetBoolProperty( xMembProp,
                     rtl::OUString::createFromAscii(DP_PROP_SHOWDETAILS), (BOOL)nShowDetailsMode );
+
+        if ( nPosition >= 0 )
+        {
+            try
+            {
+                xMembProp->setPropertyValue( rtl::OUString::createFromAscii(DP_PROP_POSITION), uno::Any(nPosition) );
+            }
+            catch ( uno::Exception& )
+            {
+                // position is optional - exception must be ignored
+            }
+        }
     }
 }
 
@@ -584,6 +598,18 @@ ScDPSaveMember* ScDPSaveDimension::GetMemberByName(const String& rName)
     return pNew;
 }
 
+void ScDPSaveDimension::SetMemberPosition( const String& rName, sal_Int32 nNewPos )
+{
+    ScDPSaveMember* pMember = GetMemberByName( rName );     // make sure it exists and is in the hash
+
+    maMemberList.remove( pMember );
+
+    MemberList::iterator aIter = maMemberList.begin();
+    for (sal_Int32 i=0; i<nNewPos && aIter != maMemberList.end(); i++)
+        ++aIter;
+    maMemberList.insert( aIter, pMember );
+}
+
 void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xDim )
 {
     uno::Reference<beans::XPropertySet> xDimProp( xDim, uno::UNO_QUERY );
@@ -735,6 +761,10 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                     uno::Reference<container::XNameAccess> xMembers = xMembSupp->getMembers();
                     if ( xMembers.is() )
                     {
+                        sal_Int32 nPosition = -1;           // set position only in manual mode
+                        if ( !pSortInfo || pSortInfo->Mode == sheet::DataPilotFieldSortMode::MANUAL )
+                            nPosition = 0;
+
                         for (MemberList::const_iterator i=maMemberList.begin(); i != maMemberList.end() ; i++)
                         {
                             rtl::OUString aMemberName = (*i)->GetName();
@@ -742,7 +772,10 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
                             {
                                 uno::Reference<uno::XInterface> xMemberInt = ScUnoHelpFunctions::AnyToInterface(
                                     xMembers->getByName( aMemberName ) );
-                                (*i)->WriteToSource( xMemberInt );
+                                (*i)->WriteToSource( xMemberInt, nPosition );
+
+                                if ( nPosition >= 0 )
+                                    ++nPosition;            // increase if initialized
                             }
                             // missing member is no error
                         }
