@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:25:02 $
+#   last change: $Author: ihi $ $Date: 2007-11-20 19:35:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ SHL1IMPLIB= i$(SHL1TARGET)
 # SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 # DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP = export.map
+SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
@@ -85,7 +85,7 @@ SHL2STDLIBS=\
 
 SHL2IMPLIB= i$(SHL2TARGET)
 DEF2NAME=    $(SHL2TARGET)
-SHL2VERSIONMAP = export.map
+SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
 
 # END --------------------------------------------------------------
 
@@ -110,7 +110,7 @@ SHL3STDLIBS += -ldl -lnsl
 
 SHL3IMPLIB= i$(SHL3TARGET)
 DEF3NAME=    $(SHL3TARGET)
-SHL3VERSIONMAP = export.map
+SHL3VERSIONMAP = $(PRJ)$/qa$/export.map
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
@@ -135,7 +135,7 @@ SHL4STDLIBS += -ldl -lnsl
 
 SHL4IMPLIB= i$(SHL4TARGET)
 DEF4NAME=    $(SHL4TARGET)
-SHL4VERSIONMAP = export.map
+SHL4VERSIONMAP = $(PRJ)$/qa$/export.map
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
@@ -160,7 +160,7 @@ SHL5STDLIBS += -ldl -lnsl
 
 SHL5IMPLIB= i$(SHL5TARGET)
 DEF5NAME=    $(SHL5TARGET)
-SHL5VERSIONMAP = export.map
+SHL5VERSIONMAP = $(PRJ)$/qa$/export.map
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
@@ -185,7 +185,7 @@ SHL6STDLIBS += -ldl -lnsl
 
 SHL6IMPLIB= i$(SHL6TARGET)
 DEF6NAME=    $(SHL6TARGET)
-SHL6VERSIONMAP = export.map
+SHL6VERSIONMAP = $(PRJ)$/qa$/export.map
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
@@ -210,7 +210,7 @@ SHL7STDLIBS += -ldl -lnsl
 
 SHL7IMPLIB= i$(SHL7TARGET)
 DEF7NAME=    $(SHL7TARGET)
-SHL7VERSIONMAP = export.map
+SHL7VERSIONMAP = $(PRJ)$/qa$/export.map
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
@@ -235,7 +235,7 @@ SHL8STDLIBS += -ldl -lnsl
 
 SHL8IMPLIB= i$(SHL8TARGET)
 DEF8NAME=    $(SHL8TARGET)
-SHL8VERSIONMAP = export.map
+SHL8VERSIONMAP = $(PRJ)$/qa$/export.map
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
