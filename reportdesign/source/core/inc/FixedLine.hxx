@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FixedLine.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 18:58:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,8 @@ namespace reportdesign
         explicit OFixedLine(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & _xContext);
         explicit OFixedLine(::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & _xContext
                             ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & _xFactory
-                            ,::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _xShape);
+                            ,::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _xShape
+                            ,sal_Int32 _nOrientation);
 
         DECLARE_XINTERFACE( )
         // ::com::sun::star::lang::XServiceInfo

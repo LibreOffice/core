@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportDrawPage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 18:58:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include "corestrings.hrc"
 
 #include <com/sun/star/report/XFixedLine.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 #include <tools/diagnose_ex.h>
 #include <svx/unoshape.hxx>
@@ -113,15 +114,20 @@ uno::Reference< drawing::XShape >  OReportDrawPage::_CreateShape( SdrObject *pOb
 
         try
         {
-            uno::Sequence< uno::Any > aArgs(1);
-            aArgs[0] <<= xShape; xShape.clear();    // keep exactly *one* reference!
-            xRet.set( xFactory->createInstanceWithArguments( sServiceName, aArgs ), uno::UNO_QUERY_THROW );
-
-            if ( bChangeOrientation )
+            uno::Sequence< uno::Any > aArgs(bChangeOrientation ? 2 : 1);
             {
-                uno::Reference< report::XFixedLine > xFixedLine( xRet, uno::UNO_QUERY_THROW );
-                xFixedLine->setOrientation(0);
+                beans::NamedValue aValue;
+                aValue.Name = PROPERTY_SHAPE;
+                aValue.Value <<= xShape; xShape.clear();    // keep exactly *one* reference!
+                aArgs[0] <<= aValue;
+                if ( bChangeOrientation )
+                {
+                    aValue.Name = PROPERTY_ORIENTATION;
+                    aValue.Value <<= sal_Int32(0);
+                    aArgs[1] <<= aValue;
+                }
             }
+            xRet.set( xFactory->createInstanceWithArguments( sServiceName, aArgs ), uno::UNO_QUERY_THROW );
         }
         catch( const uno::Exception& )
         {
