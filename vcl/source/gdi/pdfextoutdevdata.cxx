@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfextoutdevdata.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:20:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:11:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,8 @@ namespace vcl
 {
 struct PDFExtOutDevDataSync
 {
-    enum Action{    CreateDest,
+    enum Action{    CreateNamedDest,
+                    CreateDest,
                     CreateLink,
                     SetLinkDest,
                     SetLinkURL,
@@ -159,6 +160,19 @@ void GlobalSyncData::PlayGlobalActions( PDFWriter& rWriter )
     {
         switch( *aIter )
         {
+        case PDFExtOutDevDataSync::CreateNamedDest : //i56629
+            {
+                 rWriter.Push( PUSH_MAPMODE );
+                rWriter.SetMapMode( mParaMapModes.front() );
+                mParaMapModes.pop_front();
+                mParaIds.push_back( rWriter.CreateNamedDest( mParaOUStrings.front(), mParaRects.front(), mParaInts.front(), mParaDestAreaTypes.front() ) );
+                mParaOUStrings.pop_front();
+                mParaRects.pop_front();
+                mParaInts.pop_front();
+                mParaDestAreaTypes.pop_front();
+                rWriter.Pop();
+            }
+            break;
             case PDFExtOutDevDataSync::CreateDest :
             {
                 rWriter.Push( PUSH_MAPMODE );
@@ -454,6 +468,7 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
                 }
             }
             break;
+            case PDFExtOutDevDataSync::CreateNamedDest:
             case PDFExtOutDevDataSync::CreateDest:
             case PDFExtOutDevDataSync::CreateLink:
             case PDFExtOutDevDataSync::SetLinkDest:
@@ -484,6 +499,7 @@ PDFExtOutDevData::PDFExtOutDevData( const OutputDevice& rOutDev ) :
     mbTransitionEffects     ( sal_True ),
     mbUseLosslessCompression( sal_True ),
     mbReduceImageResolution ( sal_False ),
+    mbExportNDests          ( sal_False ),
     mnFormsFormat           ( 0 ),
     mnPage                  ( -1 ),
     mpPageSyncData          ( NULL ),
@@ -574,6 +590,14 @@ std::vector< PDFExtOutDevBookmarkEntry >& PDFExtOutDevData::GetBookmarks()
 {
     return maBookmarks;
 }
+sal_Bool PDFExtOutDevData::GetIsExportNamedDestinations() const
+{
+    return mbExportNDests;
+}
+void PDFExtOutDevData::SetIsExportNamedDestinations( const sal_Bool bExportNDests )
+{
+    mbExportNDests = bExportNDests;
+}
 void PDFExtOutDevData::ResetSyncData()
 {
     *mpPageSyncData = PageSyncData( mpGlobalSyncData );
@@ -590,6 +614,18 @@ void PDFExtOutDevData::PlayGlobalActions( PDFWriter& rWriter )
 /* global actions, syncronisation to the recorded metafile isn't needed,
    all actions will be played after the last page was recorded
 */
+//--->i56629
+sal_Int32 PDFExtOutDevData::CreateNamedDest(const String& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+{
+    mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateNamedDest );
+    mpGlobalSyncData->mParaOUStrings.push_back( sDestName );
+    mpGlobalSyncData->mParaRects.push_back( rRect );
+    mpGlobalSyncData->mParaMapModes.push_back( mrOutDev.GetMapMode() );
+    mpGlobalSyncData->mParaInts.push_back( nPageNr == -1 ? mnPage : nPageNr );
+    mpGlobalSyncData->mParaDestAreaTypes.push_back( eType );
+    return mpGlobalSyncData->mCurId++;
+}
+//<---i56629
 sal_Int32 PDFExtOutDevData::CreateDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     mpGlobalSyncData->mActions.push_back( PDFExtOutDevDataSync::CreateDest );
