@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 15:19:54 $
+#   last change: $Author: ihi $ $Date: 2007-11-20 19:28:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ SHL1STDLIBS=\
 SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
-SHL1VERSIONMAP = export.map
+SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 
 #-------------------------------------------------------------------
 
@@ -79,7 +79,7 @@ SHL2STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
 .ENDIF
 SHL2IMPLIB=i$(SHL2TARGET)
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
-SHL2VERSIONMAP = export.map
+SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
 DEF2NAME    =$(SHL2TARGET)
 
 
@@ -96,7 +96,7 @@ SHL3STDLIBS=\
 SHL3IMPLIB= i$(SHL3TARGET)
 
 DEF3NAME    =$(SHL3TARGET)
-SHL3VERSIONMAP = export.map
+SHL3VERSIONMAP = $(PRJ)$/qa$/export.map
 # END --------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
