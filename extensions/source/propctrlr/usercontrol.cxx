@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usercontrol.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:50:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:53:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@
 #ifndef _ZFORMAT_HXX
 #include <svtools/zformat.hxx>
 #endif
+#include <connectivity/dbconversion.hxx>
+#include <com/sun/star/util/Time.hpp>
 
 //............................................................................
 namespace pcr
@@ -133,13 +135,44 @@ namespace pcr
         if ( _rValue >>= nFormatKey )
         {
             // else set the new format key, the text will be reformatted
-            getTypedControlWindow()->SetValue( 1234.56789 );
             getTypedControlWindow()->SetFormatKey( nFormatKey );
+
+            SvNumberFormatter* pNF = getTypedControlWindow()->GetFormatter();
+            getTypedControlWindow()->SetValue( getPreviewValue(pNF,getTypedControlWindow()->GetFormatKey()) );
         }
         else
             getTypedControlWindow()->SetText( String() );
     }
-
+    //------------------------------------------------------------------
+    double OFormatSampleControl::getPreviewValue(SvNumberFormatter* _pNF,sal_Int32 _nFormatKey)
+    {
+        const SvNumberformat* pEntry = _pNF->GetEntry(_nFormatKey);
+        DBG_ASSERT( pEntry, "OFormattedNumericControl::SetFormatDescription: invalid format key!" );
+        double nValue = 1234.56789;
+        if ( pEntry )
+        {
+            switch (pEntry->GetType() & ~NUMBERFORMAT_DEFINED)
+            {
+                case NUMBERFORMAT_DATE:
+                    {
+                        Date aCurrentDate;
+                        static ::com::sun::star::util::Date STANDARD_DB_DATE(30,12,1899);
+                        nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toDate(static_cast<sal_Int32>(aCurrentDate.GetDate())),STANDARD_DB_DATE);
+                    }
+                    break;
+                case NUMBERFORMAT_TIME:
+                case NUMBERFORMAT_DATETIME:
+                    {
+                        Time aCurrentTime;
+                        nValue = ::dbtools::DBTypeConversion::toDouble(::dbtools::DBTypeConversion::toTime(aCurrentTime.GetTime()));
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return nValue;
+    }
     //------------------------------------------------------------------
     Any SAL_CALL OFormatSampleControl::getValue() throw (RuntimeException)
     {
