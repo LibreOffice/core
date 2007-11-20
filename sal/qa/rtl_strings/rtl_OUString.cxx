@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OUString.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:02:22 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:49:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,13 @@ const int MAXBUFLENGTH = 255;
 //------------------------------------------------------------------------
 // helper functions
 //------------------------------------------------------------------------
+static void unused()
+{
+    // NEVER CALL SUCH FUNCTION!!!
+    (void)input1StrLastDefault;
+    (void)input1StrLastNormal;
+    unused();
+}
 
 //------------------------------------------------------------------------
 // testing constructors
@@ -211,6 +218,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_ctors(
 {
     c_rtl_tres_state_start( hRtlTestResult, "ctors");
     sal_Bool DCState = test_ini_uString();
+    (void)DCState;
     sal_Bool bTSState = test_rtl_OUString_ctor_001( hRtlTestResult );
     bTSState &= test_rtl_OUString_ctor_002( hRtlTestResult);
     bTSState &= test_rtl_OUString_ctor_003( hRtlTestResult);
@@ -269,7 +277,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_getLength(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -354,7 +362,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equals(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -422,7 +430,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsIgnoreAsciiCase(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -507,7 +515,7 @@ static sal_Bool SAL_CALL test_rtl_OUString_compareTo_001(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -574,7 +582,7 @@ static sal_Bool SAL_CALL test_rtl_OUString_compareTo_002(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -643,7 +651,7 @@ static sal_Bool SAL_CALL test_rtl_OUString_match_001(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -713,7 +721,7 @@ static sal_Bool SAL_CALL test_rtl_OUString_match_002(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -782,7 +790,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_op_eq(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -855,7 +863,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_op_peq(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -890,7 +898,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_csuc(
     rtl_uString* tmpUstring = NULL;
     const sal_Char *tmpStr=kTestStr1;
     sal_Int32 tmpLen=(sal_Int32) kTestStr1Len;
-    sal_Int32 cmpLen = 0;
+    // sal_Int32 cmpLen = 0;
 
     rtl_string2UString( &tmpUstring, tmpStr,  tmpLen,
                         osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
@@ -914,7 +922,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_csuc(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         const sal_Unicode* pstr = *arrTestCase[i].input1;
@@ -947,7 +955,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_getStr(
     rtl_uString* tmpUstring = NULL;
     const sal_Char *tmpStr=kTestStr1;
     sal_Int32 tmpLen=(sal_Int32) kTestStr1Len;
-    sal_Int32 cmpLen = 0;
+    // sal_Int32 cmpLen = 0;
 
     rtl_string2UString( &tmpUstring, tmpStr,  tmpLen,
                         osl_getThreadTextEncoding(), OSTRING_TO_OUSTRING_CVTFLAGS );
@@ -971,7 +979,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_getStr(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         const sal_Unicode* pstr = arrTestCase[i].input1->getStr();
@@ -1045,7 +1053,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_reverseCompareTo(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1117,7 +1125,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsAscii(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1196,7 +1204,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_equalsAsciiL(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1274,7 +1282,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_compareToAscii(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1330,7 +1338,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_valueOf_sal_Bool(
     };
 
     sal_Bool    res;
-    sal_Int32   i;
+    sal_uInt32   i;
 
     for(i=0;i<(sizeof(arrTestCase))/(sizeof(TestCase));i++)
     {
@@ -1394,7 +1402,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_valueOf_sal_Unicode(
     };
 
     sal_Bool    res=sal_True;
-    sal_Int32   i;
+    sal_uInt32   i;
 
     for(i=0;i<(sizeof(arrTestCase))/(sizeof(TestCase));i++)
     {
@@ -1770,7 +1778,7 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int32_defaultParam(
     };
 
     sal_Bool    res=sal_True;
-    sal_Int32   i;
+    sal_uInt32   i;
 
     for(i=0;i<(sizeof(arrTestCase))/(sizeof(TestCase));i++)
     {
@@ -2067,7 +2075,7 @@ static sal_Bool SAL_CALL test_rtl_OUString_valueOf_Int64_defaultParam(
     };
 
     sal_Bool    res=sal_True;
-    sal_Int32   i;
+    sal_uInt32   i;
 
     for(i=0;i<(sizeof(arrTestCase))/(sizeof(TestCase));i++)
     {
@@ -2410,7 +2418,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_createFromAscii(
     };
 
     sal_Bool    res;
-    sal_Int32   i;
+    sal_uInt32   i;
 
     for(i=0;i<(sizeof(arrTestCase))/(sizeof(TestCase));i++)
     {
@@ -2442,7 +2450,7 @@ sal_Bool test_index( const T* input1, int num,const sal_Int32* input2,
 {
     sal_Bool    res=sal_True;
     sal_Char    methName[MAXBUFLENGTH];
-    sal_Char    *meth;
+    sal_Char    *meth = '\0';
     sal_Char*   pMeth=methName;
     sal_Int32   i;
     sal_Bool    lastRes=sal_False;
@@ -2500,7 +2508,7 @@ sal_Bool test_indexStr( const T** input1, int num,const sal_Int32* input2,
 {
     sal_Bool    res=sal_True;
     sal_Char    methName[MAXBUFLENGTH];
-    sal_Char    *meth;
+    sal_Char    *meth = '\0';
     sal_Char*   pMeth=methName;
     sal_Int32   i;
     sal_Bool    lastRes=sal_False;
@@ -2790,7 +2798,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_concat(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         OUString str = arrTestCase[i].input1->concat(*arrTestCase[i].input2);
@@ -2858,7 +2866,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_replaceAt(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -2921,7 +2929,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_replace(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -2977,7 +2985,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_toAsciiLowerCase(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
     sal_Bool lastRes=sal_False;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
@@ -3047,7 +3055,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_toAsciiUpperCase(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
     sal_Bool lastRes=sal_False;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
@@ -3142,7 +3150,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_trim(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -3173,9 +3181,10 @@ sal_Bool test_toData( const char** input, int num, sal_Int16 radix,
                       const T* _fPrecision,
                       rtlTestResult hRtlTestResult)
 {
+    (void)_fPrecision;
     sal_Bool    res=sal_True;
     sal_Char    methName[MAXBUFLENGTH];
-    sal_Char    *meth;
+    sal_Char    *meth = '\0';
     sal_Char*   pMeth=methName;
     sal_Int32   i;
 //  static      sal_Unicode aUchar[60]={0x00};
@@ -3196,25 +3205,25 @@ sal_Bool test_toData( const char** input, int num, sal_Int16 radix,
 
         if(base==0)
         {
-            intRes=str.toInt32();
+            intRes=static_cast<T>(str.toInt32());
             lastRes=(intRes==expVal[i]);
             meth="toInt32default";
         }
         if(base==1)
         {
-            intRes=str.toInt32(radix);
+            intRes=static_cast<T>(str.toInt32(radix));
             lastRes=(intRes==expVal[i]);
             meth="toInt32normal";
         }
         if(base==2)
         {
-            intRes=str.toInt64();
+            intRes=static_cast<T>(str.toInt64());
             lastRes=(intRes==expVal[i]);
             meth="toInt64default";
         }
         if(base==3)
         {
-            intRes=str.toInt64(radix);
+            intRes=static_cast<T>(str.toInt64(radix));
             lastRes=(intRes==expVal[i]);
             meth="toInt64normal";
         }
@@ -3364,7 +3373,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUString_toBoolean(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
