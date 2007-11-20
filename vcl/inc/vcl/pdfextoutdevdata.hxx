@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfextoutdevdata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:02:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:10:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,7 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
     sal_Bool                    mbReduceImageResolution;
     sal_Bool                    mbExportFormFields;
     sal_Bool                    mbExportBookmarks;
+    sal_Bool                    mbExportNDests; //i56629
     sal_Int32                   mnFormsFormat;
     sal_Int32                   mnPage;
 
@@ -124,6 +125,9 @@ public :
 
     sal_Bool    GetIsExportBookmarks() const;
     void        SetIsExportBookmarks( const sal_Bool bExportBookmarks );
+
+    sal_Bool    GetIsExportNamedDestinations() const; //i56629
+    void        SetIsExportNamedDestinations( const sal_Bool bExportNDests ); //i56629
 
     // PageNumber, Compression is being set by the PDFExport
     sal_Int32   GetCurrentPageNumber() const;
@@ -177,6 +181,29 @@ public :
                           BYTE              nTransparency,
                           const Rectangle&  rOutputRect,
                           const Rectangle&  rVisibleOutputRect );
+//--->i56629
+    /** Create a new named destination to be used in a link to this document from another PDF document
+ (see PDF spec 1.4, 8.2.1)
+
+    @parm sDestName
+    the name this destination will be addressed with from others PDF document
+
+    @param rRect
+    target rectangle on page to be displayed if dest is jumped to
+
+    @param nPageNr
+    number of page the dest is on (as returned by NewPage)
+    or -1 in which case the current page is used
+
+    @param eType
+    what dest type to use
+
+    @returns
+    the destination id (to be used in SetLinkDest) or
+    -1 if page id does not exist
+    */
+    sal_Int32 CreateNamedDest( const String& sDestName,  const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
+//<---i56629
 
     /** Create a new destination to be used in a link
 
