@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UndoActions.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:44:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 18:59:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ OUndoContainerAction::~OUndoContainerAction()
 #if OSL_DEBUG_LEVEL > 0
             SvxShape* pShape = SvxShape::getImplementation( xChild );
             SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
-            OSL_ENSURE( pShape && ( pObject ? pShape->HasSdrObjectOwnership() && !pObject->IsInserted() : true ),
+            OSL_ENSURE( pObject ? pShape->HasSdrObjectOwnership() && !pObject->IsInserted() : true ,
                 "OUndoContainerAction::~OUndoContainerAction: inconsistency in the shape/object ownership!" );
 #endif
             // -> dispose it
