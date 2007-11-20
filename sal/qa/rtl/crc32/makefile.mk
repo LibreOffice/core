@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 15:21:58 $
+#   last change: $Author: ihi $ $Date: 2007-11-20 19:39:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 # DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP= export.map
+SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
 # auto generated Target:jobfile
 # END ------------------------------------------------------------------
 
