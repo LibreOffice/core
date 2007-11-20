@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sockethelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:41:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:36:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,12 +105,17 @@ extern "C"
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/wait.h>
+#endif
 
-#else                                   // Windows
+#ifndef _OSL_SOCKET_CONST_H_
 
-#include <windows.h>
+#if ( defined WNT )                     // Windows
+#include <tools/prewin.h>
+// #include <windows.h>
 #include <winsock.h>
 #include <string.h>
+#include <tools/postwin.h>
+#endif
 
 #endif
 
