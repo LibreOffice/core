@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AddField.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:06:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,6 +213,7 @@ DBG_NAME( rpt_OAddFieldWindow );
 OAddFieldWindow::OAddFieldWindow(::rptui::OReportController& _rController,Window* pParent)
             :FloatingWindow(pParent, WinBits(WB_STDMODELESS|WB_SIZEABLE))
             ,::comphelper::OPropertyChangeListener(m_aMutex)
+            ,::comphelper::OContainerListener(m_aMutex)
             ,m_pListBox(new OAddFieldWindowListBox( this ))
             ,m_rController( _rController )
             ,m_nCommandType(0)
@@ -249,6 +250,8 @@ OAddFieldWindow::~OAddFieldWindow()
 {
     if (m_pChangeListener.is())
         m_pChangeListener->dispose();
+    if ( m_pContainerListener.is() )
+        m_pContainerListener->dispose();
     DBG_DTOR( rpt_OAddFieldWindow,NULL);
 }
 
@@ -310,6 +313,9 @@ namespace
 //-----------------------------------------------------------------------
 void OAddFieldWindow::Update()
 {
+    if ( m_pContainerListener.is() )
+        m_pContainerListener->dispose();
+    m_pContainerListener = NULL;
     m_xColumns.clear();
 
     try
@@ -344,12 +350,16 @@ void OAddFieldWindow::Update()
         m_sFilter = sFilter;
 
         // add the columns to the list
-        m_xColumns.clear();
         uno::Reference< sdbc::XConnection> xCon = getConnection();
         if ( xCon.is() && m_aCommandName.getLength() )
             m_xColumns = dbtools::getFieldsByCommandDescriptor( xCon, GetCommandType(), GetCommand(), m_xHoldAlive );
         if ( m_xColumns.is() )
+        {
             lcl_addToList( *m_pListBox, m_xColumns->getElementNames() );
+            uno::Reference< container::XContainer> xContainer(m_xColumns,uno::UNO_QUERY);
+            if ( xContainer.is() )
+                m_pContainerListener = new ::comphelper::OContainerListenerAdapter(this,xContainer);
+        }
 
         // add the parameter columns to the list
         Sequence< ::rtl::OUString > aParamNames( getParameterNames( m_rController.getRowSet() ) );
@@ -412,6 +422,30 @@ void OAddFieldWindow::fillDescriptor(SvLBoxEntry* _pSelected,::svx::ODataAccessD
         if ( m_xColumns->hasByName( sColumnName ) )
             _rDescriptor[ ::svx::daColumnObject ] <<= m_xColumns->getByName(sColumnName);
     }
+}
+// -----------------------------------------------------------------------------
+void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent )  throw(::com::sun::star::uno::RuntimeException)
+{
+    if ( m_pListBox.get() )
+    {
+        ::rtl::OUString sName;
+        if ( _rEvent.Accessor >>= sName )
+            m_pListBox->InsertEntry(sName);
+    }
+}
+// -----------------------------------------------------------------------------
+void OAddFieldWindow::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
+{
+    if ( m_pListBox.get() )
+    {
+        m_pListBox->Clear();
+        if ( m_xColumns.is() )
+            lcl_addToList( *m_pListBox, m_xColumns->getElementNames() );
+    }
+}
+// -----------------------------------------------------------------------------
+void OAddFieldWindow::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(::com::sun::star::uno::RuntimeException)
+{
 }
 // =============================================================================
 } // namespace rptui
