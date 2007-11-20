@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FixedLine.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:29:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 18:57:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
 #include <boost/bind.hpp>
 #include "ReportHelperImpl.hxx"
+
+#define MIN_WIDTH   80
+#define MIN_HEIGHT  20
 // =============================================================================
 namespace reportdesign
 {
@@ -137,16 +140,17 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
 {
     DBG_CTOR(rpt_OFixedLine,NULL);
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDLINE,m_aProps.aComponent.m_xContext->getServiceManager());
-    m_aProps.aComponent.m_nWidth = 8;
+    m_aProps.aComponent.m_nWidth = MIN_WIDTH;
 }
 // -----------------------------------------------------------------------------
 OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContext
                        ,const uno::Reference< lang::XMultiServiceFactory>& _xFactory
-                       ,uno::Reference< drawing::XShape >& _xShape)
+                       ,uno::Reference< drawing::XShape >& _xShape
+                       ,sal_Int32 _nOrientation)
 :FixedLineBase(m_aMutex)
 ,FixedLinePropertySet(_xContext,static_cast< Implements >(IMPLEMENTS_PROPERTY_SET),lcl_getLineOptionals())
 ,m_aProps(m_aMutex,static_cast< container::XContainer*>( this ),_xContext)
-,m_nOrientation(1)
+,m_nOrientation(_nOrientation)
 ,m_LineColor(0)
 ,m_LineTransparence(0)
 ,m_LineWidth(0)
@@ -155,8 +159,27 @@ OFixedLine::OFixedLine(uno::Reference< uno::XComponentContext > const & _xContex
     m_aProps.aComponent.m_sName  = RPT_RESSTRING(RID_STR_FIXEDLINE,m_aProps.aComponent.m_xContext->getServiceManager());
     m_aProps.aComponent.m_xFactory = _xFactory;
     osl_incrementInterlockedCount( &m_refCount );
+    try
     {
+        awt::Size aSize = _xShape->getSize();
+        if ( m_nOrientation == 1 )
+        {
+            if ( aSize.Width < MIN_WIDTH )
+            {
+                aSize.Width = MIN_WIDTH;
+                _xShape->setSize(aSize);
+            }
+        }
+        else if ( MIN_HEIGHT > aSize.Height )
+        {
+            aSize.Height = MIN_HEIGHT;
+            _xShape->setSize(aSize);
+        }
         m_aProps.aComponent.setShape(_xShape,this,m_refCount);
+    }
+    catch(uno::Exception&)
+    {
+        OSL_ENSURE(0,"OFixedLine::OFixedLine: Exception caught!");
     }
     osl_decrementInterlockedCount( &m_refCount );
 }
@@ -503,7 +526,7 @@ awt::Size SAL_CALL OFixedLine::getSize(  ) throw (uno::RuntimeException)
 // -----------------------------------------------------------------------------
 void SAL_CALL OFixedLine::setSize( const awt::Size& aSize ) throw (beans::PropertyVetoException, uno::RuntimeException)
 {
-    if ( aSize.Width < 8 && m_nOrientation == 1 )
+    if ( (aSize.Width < MIN_WIDTH && m_nOrientation == 1) || (aSize.Height < MIN_HEIGHT && m_nOrientation == 0) )
         throw beans::PropertyVetoException();
     OShapeHelper::setSize(aSize,this);
 }
