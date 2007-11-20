@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dapiuno.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:42:43 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:42:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,7 @@ const SfxItemPropertyMap* lcl_GetDataPilotItemMap()
     static SfxItemPropertyMap aDataPilotItemMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ISHIDDEN),     0,  &getBooleanCppuType(),                              0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_POS),          0,  &getCppuType((sal_Int32*)0),                        0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SHOWDETAIL),   0,  &getBooleanCppuType(),                              0, 0 },
         {0,0,0,0,0,0}
     };
@@ -3369,11 +3370,34 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const ::rtl::OUString& aProp
                 ScDPSaveMember* pMember = pDim->GetMemberByName(sName);
                 if (pMember)
                 {
+                    bool bGetNewIndex = false;
                     if ( aNameString.EqualsAscii( SC_UNONAME_SHOWDETAIL ) )
                         pMember->SetShowDetails(cppu::any2bool(aValue));
                     else if ( aNameString.EqualsAscii( SC_UNONAME_ISHIDDEN ) )
                         pMember->SetIsVisible(!cppu::any2bool(aValue));
+                    else if ( aNameString.EqualsAscii( SC_UNONAME_POS ) )
+                    {
+                        sal_Int32 nNewPos = 0;
+                        if ( ( aValue >>= nNewPos ) && nNewPos >= 0 && nNewPos < nCount )
+                        {
+                            pDim->SetMemberPosition( sName, nNewPos );
+                            // get new effective index (depends on sorting mode, which isn't modified)
+                            bGetNewIndex = true;
+                        }
+                        else
+                            throw lang::IllegalArgumentException();
+                    }
                     pParent->SetDPObject(pDPObj);
+
+                    if ( bGetNewIndex )     // after SetDPObject, get the new index
+                    {
+                        rtl::OUString aOUName( sName );
+                        uno::Sequence<rtl::OUString> aItemNames = xMembers->getElementNames();
+                        sal_Int32 nItemCount = aItemNames.getLength();
+                        for (sal_Int32 nItem=0; nItem<nItemCount; ++nItem)
+                            if (aItemNames[nItem] == aOUName)
+                                nIndex = nItem;
+                    }
                 }
             }
         }
@@ -3437,6 +3461,10 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const ::rtl::OUString& aProp
                         else
                             aRet = cppu::bool2any(sal_False);
                     }
+                }
+                else if ( aNameString.EqualsAscii( SC_UNONAME_POS ) )
+                {
+                    aRet <<= static_cast<sal_Int32>( nIndex );
                 }
             }
         }
