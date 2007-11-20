@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkeddocuments.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:33:02 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:23:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,14 +104,16 @@ namespace dbaui
             OPEN_FORMAIL
         };
 
-        sal_Bool isConnected() const { return m_xConnection.is(); }
+        inline sal_Bool isConnected() const { return m_xConnection.is(); }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       open(const ::rtl::OUString& _rLinkName
                                                                                     ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
                                                                                     , EOpenMode _eOpenMode = OPEN_NORMAL);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newForm(sal_Int32 _nNewFormId
-                                ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition);
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newDocument(sal_Int32 _nNewFormId
+                                ,::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>& _xDefinition
+                                ,const sal_Int32 _nCommandType
+                                ,const ::rtl::OUString& _sObjectName);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newWithPilot(
                             const char* _pWizardService
