@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:20:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:11:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,7 +419,12 @@ sal_Int32 PDFWriter::CreateLink( const Rectangle& rRect, sal_Int32 nPageNr )
 {
     return ((PDFWriterImpl*)pImplementation)->createLink( rRect, nPageNr );
 }
-
+//--->i56629
+sal_Int32 PDFWriter::CreateNamedDest( const rtl::OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
+{
+    return ((PDFWriterImpl*)pImplementation)->createNamedDest( sDestName, rRect, nPageNr, eType );
+}
+//<---
 sal_Int32 PDFWriter::CreateDest( const Rectangle& rRect, sal_Int32 nPageNr, PDFWriter::DestAreaType eType )
 {
     return ((PDFWriterImpl*)pImplementation)->createDest( rRect, nPageNr, eType );
