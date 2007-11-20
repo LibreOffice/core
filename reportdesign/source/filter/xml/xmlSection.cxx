@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlSection.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:23:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:04:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ OXMLSection::OXMLSection( ORptFilter& rImport,
             rtl::OUString sLocalName;
             const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+            const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
@@ -170,9 +170,6 @@ SvXMLImportContext* OXMLSection::CreateChildContext(
 
     switch( rTokenMap.Get( _nPrefix, _rLocalName ) )
     {
-        case XML_TOK_CONDITIONAL_PRINT_EXPRESSION:
-            pContext = new OXMLCondPrtExpr( rImport, _nPrefix, _rLocalName,xAttrList,m_xSection.get());
-            break;
         case XML_TOK_TABLE:
             pContext = new OXMLTable( rImport, _nPrefix, _rLocalName,xAttrList,m_xSection);
             break;
