@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AddField.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:09:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #ifndef _CPPUHELPER_BASEMUTEX_HXX_
 #include "cppuhelper/basemutex.hxx"
 #endif
+#include <comphelper/containermultiplexer.hxx>
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
@@ -70,6 +71,7 @@ class OAddFieldWindowListBox;
 class  OAddFieldWindow  :public FloatingWindow
                     ,   public ::cppu::BaseMutex
                     ,   public ::comphelper::OPropertyChangeListener
+                    ,   public ::comphelper::OContainerListener
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       m_xHoldAlive;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xColumns;
@@ -80,6 +82,7 @@ class  OAddFieldWindow  :public FloatingWindow
     sal_Int32                                                                   m_nCommandType;
     sal_Bool                                                                    m_bEscapeProcessing;
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer>                   m_pChangeListener;
+    ::rtl::Reference< comphelper::OContainerListenerAdapter>                    m_pContainerListener;
 
     OAddFieldWindow(const OAddFieldWindow&);
     void operator =(const OAddFieldWindow&);
@@ -109,9 +112,13 @@ public:
     */
     void fillDescriptor(SvLBoxEntry* _pSelected,::svx::ODataAccessDescriptor& _rDescriptor);
 
-protected:
+private:
     // FmXChangeListener
     virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw( ::com::sun::star::uno::RuntimeException );
+    // OContainerListener
+    virtual void _elementInserted( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void _elementRemoved( const  ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void _elementReplaced( const ::com::sun::star::container::ContainerEvent& _rEvent ) throw(::com::sun::star::uno::RuntimeException);
 };
 //==============================================================================
 } // rptui
