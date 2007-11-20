@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uistrings.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:35:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:05:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@ namespace rptui
 {
 #include "stringconstants.cxx"
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_REPORTNAME            , "ReportName");
-    IMPLEMENT_CONSTASCII_USTRING(CFG_REPORTDESIGNER             , "ReportDesigner");
+    IMPLEMENT_CONSTASCII_USTRING(CFG_REPORTDESIGNER             , "SunReportBuilder");
     IMPLEMENT_CONSTASCII_USTRING(DBREPORTHEADER                 , "ReportHeader");
     IMPLEMENT_CONSTASCII_USTRING(DBREPORTFOOTER                 , "ReportFooter");
     IMPLEMENT_CONSTASCII_USTRING(DBPAGEHEADER                   , "PageHeader");
@@ -59,5 +59,7 @@ namespace rptui
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_FORMATKEYDATE         , "FormatKeyDate");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_FORMATKEYTIME         , "FormatKeyTime");
     IMPLEMENT_CONSTASCII_USTRING(DBOVERLAPPEDCONTROL            , "OverlappedControl");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_FORMULALIST           , "FormulaList");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_SCOPE                 , "Scope");
 }
 
