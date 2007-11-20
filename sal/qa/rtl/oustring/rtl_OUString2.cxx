@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OUString2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 09:23:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:44:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ class valueOf : public CppUnit::TestFixture
             sValue <<= suValue;
             t_print(T_VERBOSE, "nFloat := %.9f  sValue := %s\n", _nValue, sValue.getStr());
 
-            float nValueATOF = atof( sValue.getStr() );
+            float nValueATOF = static_cast<float>(atof( sValue.getStr() ));
 
             bool bEqualResult = is_float_equal(_nValue, nValueATOF);
             CPPUNIT_ASSERT_MESSAGE("Values are not equal.", bEqualResult == true);
@@ -276,7 +276,7 @@ sal_Int16 SAL_CALL checkPrecisionSize()
     for (i=0;i<50;i++)
     {
         nCalcValue *= 10;
-        volatile T nValue = nCalcValue + 0.1;
+        volatile T nValue = nCalcValue + static_cast<T>(0.1);
         volatile T dSub = nValue - nCalcValue;
         // ----- 0.11 ---- 0.1 ---- 0.09 -----
         if (0.11 > dSub && dSub < 0.09)
@@ -300,8 +300,8 @@ sal_Int16 SAL_CALL checkPrecisionSize()
     for (j=0;j<50;j++)
     {
         nCalcValue /= 10;
-        volatile T nValue = nCalcValue + 1.0;
-        volatile T dSub = nValue - 1.0;
+        volatile T nValue = nCalcValue + static_cast<T>(1.0);
+        volatile T dSub = nValue - static_cast<T>(1.0);
         // ---- 0.02 ----- 0.01 ---- 0 --- -0.99 ---- -0.98 ----
         // volatile T dSubAbsolut = fabs(dSub);
         // ---- 0.02 ----- 0.01 ---- 0 (cut)
@@ -495,7 +495,7 @@ sal_Int16 SAL_CALL checkPrecisionSize()
         void toFloat_test_impl(rtl::OString const& _sValue)
             {
                 //t_print("the original str is %s\n", _sValue.getStr());
-                float nValueATOF = atof( _sValue.getStr() );
+                float nValueATOF = static_cast<float>(atof( _sValue.getStr() ));
         //t_print("the original str is %.10f\n", nValueATOF);
                 rtl::OUString suValue = rtl::OUString::createFromAscii( _sValue.getStr() );
                 float nValueToFloat = suValue.toFloat();
@@ -519,14 +519,14 @@ sal_Int16 SAL_CALL checkPrecisionSize()
         void toFloat_selftest()
             {
                 t_print("Start selftest:\n");
-                CPPUNIT_ASSERT (is_float_equal(1.0, 1.01) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0, 1.001) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0, 1.0001) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0, 1.00001) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0, 1.000002) == false);
-                CPPUNIT_ASSERT (is_float_equal(1.0, 1.0000001) == true);
-                CPPUNIT_ASSERT (is_float_equal(1.0, 1.00000001) == true);
-                CPPUNIT_ASSERT (is_float_equal(1.0, 1.000000001) == true);
+                CPPUNIT_ASSERT (is_double_equal(1.0, 1.01) == false);
+                CPPUNIT_ASSERT (is_double_equal(1.0, 1.001) == false);
+                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0001) == false);
+                CPPUNIT_ASSERT (is_double_equal(1.0, 1.00001) == false);
+                CPPUNIT_ASSERT (is_double_equal(1.0, 1.000002) == false);
+                CPPUNIT_ASSERT (is_double_equal(1.0, 1.0000001) == true);
+                CPPUNIT_ASSERT (is_double_equal(1.0, 1.00000001) == true);
+                CPPUNIT_ASSERT (is_double_equal(1.0, 1.000000001) == true);
 
                 t_print("Selftest done.\n");
             }
@@ -1019,12 +1019,12 @@ public:
         pValues = new sal_uIntPtr[nSequence];
         for (i = 0; i < nSequence; i++)
         {
-            pStrs[i] = rtl::OUString::valueOf( sqrt( i ) ).intern();
+            pStrs[i] = rtl::OUString::valueOf( sqrt( static_cast<double>(i) ) ).intern();
             pValues[i] = reinterpret_cast<sal_uIntPtr>( pStrs[i].pData );
         }
         for (i = 0; i < nSequence; i++)
         {
-            rtl::OUString aNew = rtl::OUString::valueOf( sqrt( i ) ).intern();
+            rtl::OUString aNew = rtl::OUString::valueOf( sqrt( static_cast<double>(i) ) ).intern();
             CPPUNIT_ASSERT_MESSAGE("double intern failed",
                                    aNew.pData == pStrs[i].pData);
         }
@@ -1034,14 +1034,14 @@ public:
         {
             // Overwrite - hopefully this re-uses the memory
             pStrs[i] = rtl::OUString();
-            pStrs[i] = rtl::OUString::valueOf( sqrt( i ) );
+            pStrs[i] = rtl::OUString::valueOf( sqrt( static_cast<double>(i) ) );
         }
 
         for (i = 0; i < nSequence; i++)
         {
             rtl::OUString aIntern;
             sal_uIntPtr nValue;
-            aIntern = rtl::OUString::valueOf( sqrt( i ) ).intern();
+            aIntern = rtl::OUString::valueOf( sqrt( static_cast<double>(i) ) ).intern();
 
             nValue = reinterpret_cast<sal_uIntPtr>( aIntern.pData );
             // This may not be 100% reliable: memory may
