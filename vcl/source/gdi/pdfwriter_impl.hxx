@@ -4,12 +4,13 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:13:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:11:48 $
  *
  *  The Contents of this file are made available subject to
- *  the terms of GNU Lesser General Public License Version 2.1.
+ *  the terms of GNU
+ *  Lesser General Public License Version 2.1.
  *
  *
  *    GNU Lesser General Public License Version 2.1
@@ -364,6 +365,16 @@ public:
         Rectangle                   m_aRect;
     };
 
+//--->i56629
+    struct PDFNamedDest
+    {
+        rtl::OUString               m_aDestName;
+        sal_Int32                   m_nPage;
+        PDFWriter::DestAreaType     m_eType;
+        Rectangle                   m_aRect;
+    };
+//<---
+
     struct PDFOutlineEntry
     {
         sal_Int32                   m_nParentID;
@@ -580,6 +591,11 @@ private:
     std::list< BitmapEmit >             m_aBitmaps;
     /* contains JPG streams until written to file     */
     std::list<JPGEmit>                  m_aJPGs;
+    /*--->i56629 contains all named destinations ever set during the PDF creation,
+       destination id is always the destination's position in this vector
+     */
+    std::vector<PDFNamedDest>           m_aNamedDests;
+    //<---
     /* contains all dests ever set during the PDF creation,
        dest id is always the dest's position in this vector
      */
@@ -633,6 +649,7 @@ private:
     std::list< TransparencyEmit >       m_aTransparentObjects;
     /*  contains all font subsets in use */
     FontSubsetData                      m_aSubsets;
+    bool                                m_bEmbedStandardFonts;
     FontEmbedData                       m_aEmbeddedFonts;
     sal_Int32                           m_nNextFID;
     PDFFontCache                        m_aFontCache;
@@ -783,6 +800,8 @@ i12626
     rtl::OStringBuffer                      m_aDocID;
 /* string to hold the PDF creation date */
     rtl::OStringBuffer                      m_aCreationDateString;
+/* string to hold the PDF creation date, for PDF/A metadata */
+    rtl::OStringBuffer                      m_aCreationMetaDateString;
 /* the buffer where the data are encrypted, dynamically allocated */
     sal_uInt8                               *m_pEncryptionBuffer;
 /* size of the buffer */
@@ -958,6 +977,8 @@ i12626
     bool emitAnnotations();
     // writes the dest dict for the catalog
     sal_Int32 emitDestDict();
+    //write the named destination stuff
+    sal_Int32 emitNamedDestinations();//i56629
     // writes outline dict and tree
     sal_Int32 emitOutline();
     // puts the attribute objects of a structure element into the returned string,
@@ -1033,6 +1054,9 @@ i12626
 
     /* draws an emphasis mark */
     void drawEmphasisMark(  long nX, long nY, const PolyPolygon& rPolyPoly, BOOL bPolyLine, const Rectangle& rRect1, const Rectangle& rRect2 );
+
+    /* true if PDF/A-1a or PDF/A-1b is output */
+    sal_Bool        m_bIsPDF_A1;
 
 /*
 i12626
@@ -1212,6 +1236,16 @@ public:
     void drawPolyPolygon( const PolyPolygon& rPolyPoly, sal_Int32 nPattern, bool bEOFill );
 
     void emitComment( const char* pComment );
+
+    //--->i56629 named destinations
+    sal_Int32 createNamedDest( const rtl::OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr = -1, PDFWriter::DestAreaType eType = PDFWriter::XYZ );
+
+    //--->i59651
+    //emits output intent
+    sal_Int32   emitOutputIntent();
+
+    //emits the document metadata
+    sal_Int32   emitDocumentMetadata();
 
     // links
     sal_Int32 createLink( const Rectangle& rRect, sal_Int32 nPageNr = -1 );
