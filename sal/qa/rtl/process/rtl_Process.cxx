@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_Process.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:22:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:45:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sal.hxx"
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -71,9 +72,9 @@ using namespace rtl;
 
 /** print a UNI_CODE String. And also print some comments of the string.
 */
-inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = "" )
+inline void printUString( const ::rtl::OUString & str, const sal_Char * msg = NULL )
 {
-    if ( msg != "" )
+    if ( msg != NULL )
     {
         t_print("#%s #printUString_u# ", msg );
     }
@@ -307,10 +308,11 @@ public:
 
 }; // class getGlobalProcessId
 
+} // namespace rtl_Process
+
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Process::getAppCommandArg, "rtl_Process");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_Process::getGlobalProcessId, "rtl_Process");
 
-} // namespace rtl_Process
 
 // -----------------------------------------------------------------------------
 
