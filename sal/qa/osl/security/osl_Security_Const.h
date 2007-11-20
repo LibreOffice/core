@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_Security_Const.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:21:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:34:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,14 @@
 #ifndef _OSL_SECURITY_CONST_H_
 #define _OSL_SECURITY_CONST_H_
 
+#if ( defined WNT )                     // Windows
+//#define UNICODE
+#include <tools/prewin.h>
+// #include <windows.h>
+#include <io.h>
+#include <tools/postwin.h>
+#endif
+
 //------------------------------------------------------------------------
 //------------------------------------------------------------------------
 
@@ -64,9 +72,6 @@
 #if ( defined UNX ) || ( defined OS2 )
 #include <unistd.h>
 #include <pwd.h>
-#else
-#include <windows.h>
-#include <io.h>
 #endif
 
 #include <cppunit/simpleheader.hxx>
