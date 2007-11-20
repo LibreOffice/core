@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 06:47:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:14:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1834,8 +1834,12 @@ void askForParameters(const Reference< XSingleSelectQueryComposer >& _xComposer,
         _rxHandler->handle(xRequest);
 
         if (!pParams->wasSelected())
+        {
             // canceled by the user (i.e. (s)he canceled the dialog)
-            throw RowSetVetoException();
+            RowSetVetoException e;
+            e.ErrorCode = ParameterInteractionCancelled;
+            throw e;
+        }
 
         // now transfer the values from the continuation object to the parameter columns
         Sequence< PropertyValue > aFinalValues = pParams->getValues();
