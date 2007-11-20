@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_Socket_Const.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:40:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:35:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,10 +111,13 @@ extern "C"
 #   include <netdb.h>
 #   include <netinet/in.h>
 #       include <arpa/inet.h>
-#else                                   // Windows
-#   include <windows.h>
+#endif
+#if ( defined WNT )                     // Windows
+#include <tools/prewin.h>
+// #    include <windows.h>
 #   include <winsock.h>
 #   include <string.h>
+#include <tools/postwin.h>
 #endif
 
 
