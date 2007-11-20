@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CondFormat.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:06:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,22 @@
 #ifndef RPTUI_CONDFORMAT_HRC
 #define RPTUI_CONDFORMAT_HRC
 
+#define CHECKBOX_HEIGHT      8
+#define FIXEDTEXT_HEIGHT     8
+#define EDIT_WIDTH          75
+#define RELATED_CONTROLS     4
+#define UNRELATED_CONTROLS   7
+#define EDIT_HEIGHT         12
+#define BUTTON_HEIGHT       14
+#define BUTTON_WIDTH        50
+#define COND_TYPE_WIDTH     50
+#define COND_OP_WIDTH       75
+#define OPERATOR_SEP_WIDTH  15
+#define SCROLLBAR_WIDTH     8
+#define IMAGE_BUTTON_WIDTH  12
+#define IMAGE_BUTTON_HEIGHT 14
+
+
 #define FL_FORMAT                   1
 #define FL_CONDITION_HEADER         2
 #define CRTL_FORMAT_PREVIEW         3
@@ -60,21 +76,6 @@
 #define BTN_REMOVE_CONDITION        23
 #define IMG_MOVE_UP_HC              24
 #define IMG_MOVE_DOWN_HC            25
-
-#define CHECKBOX_HEIGHT      8
-#define FIXEDTEXT_HEIGHT     8
-#define EDIT_WIDTH          75
-#define RELATED_CONTROLS     4
-#define UNRELATED_CONTROLS   7
-#define EDIT_HEIGHT         12
-#define BUTTON_HEIGHT       14
-#define BUTTON_WIDTH        50
-#define COND_TYPE_WIDTH     50
-#define COND_OP_WIDTH       75
-#define OPERATOR_SEP_WIDTH  15
-#define SCROLLBAR_WIDTH     8
-#define IMAGE_BUTTON_WIDTH  12
-#define IMAGE_BUTTON_HEIGHT 14
 
 #define ROW_0_POS       ( RELATED_CONTROLS )
 #define ROW_0_HEIGTH    ( FIXEDTEXT_HEIGHT )
