@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:11:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -818,6 +818,17 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
             sal_Int32 nParent = -1;     // top-level
             pPDFData->CreateOutlineItem( nParent, aTabName, nDestID );
         }
+        //--->i56629
+        // add the named destination stuff
+        if( pPDFData->GetIsExportNamedDestinations() )
+        {
+            Rectangle aArea( pDev->PixelToLogic( Rectangle( 0,0,0,0 ) ) );
+            String aTabName;
+            pDoc->GetName( nTab, aTabName );
+//need the PDF page number here
+            pPDFData->CreateNamedDest( aTabName, aArea );
+        }
+        //<---i56629
     }
 
     (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, TRUE, NULL, NULL );
