@@ -6,9 +6,9 @@
  *
  *  $RCSfile: DateTime.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:09:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,12 @@
 #ifndef _COM_SUN_STAR_REPORT_XREPORTDEFINITION_HPP_
 #include <com/sun/star/report/XReportDefinition.hpp>
 #endif
+#include <com/sun/star/util/XNumberFormats.hpp>
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
+
+#include <svtools/dialogcontrolling.hxx>
 
 namespace rptui
 {
@@ -67,44 +70,48 @@ class OReportController;
 \************************************************************************/
 class ODateTimeDialog : public ModalDialog
 {
-    FixedLine                               m_aFLDate;
+    // FixedLine                            m_aFLDate;
     CheckBox                                m_aDate;
-    RadioButton                             m_aDateF1;
-    RadioButton                             m_aDateF2;
-    RadioButton                             m_aDateF3;
-    FixedLine                               m_aFLTime;
+    FixedText                               m_aFTDateFormat;
+    ListBox                                 m_aDateListBox;
+    FixedLine                               m_aFL0;
     CheckBox                                m_aTime;
-    RadioButton                             m_aTimeF1;
-    RadioButton                             m_aTimeF2;
-    RadioButton                             m_aTimeF3;
+    FixedText                               m_aFTTimeFormat;
+    ListBox                                 m_aTimeListBox;
     FixedLine                               m_aFL1;
     OKButton                                m_aPB_OK;
     CancelButton                            m_aPB_CANCEL;
     HelpButton                              m_aPB_Help;
 
 
+    svt::ControlDependencyManager           m_aDateControlling;
+    svt::ControlDependencyManager           m_aTimeControlling;
+
     ::rptui::OReportController*             m_pController;
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>
                                             m_xHoldAlive;
     ::com::sun::star::lang::Locale          m_nLocale;
 
-    /** returns the format string.
+    /** returns the frmat string
+    *
+    * \param _nNumberFormatKey the number format key
+    * \param _xFormats
+    * \param _bTime
+    * \return
     */
-    ::rtl::OUString getFormatString(::sal_Int16 _nNumberFormatIndex);
-
-    /** returns the format
-        @param  _bDate  <TRUE/> when the date format should be returned otherwise the time format will be returned.
-    */
-    sal_Int16 getFormatIndex(sal_Bool _bDate);
+    ::rtl::OUString getFormatStringByKey(::sal_Int32 _nNumberFormatKey,const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats>& _xFormats,bool _bTime);
 
     /** returns the number format key
         @param  _nNumberFormatIndex the number format index @see com::sun::star::i18n::NumberFormatIndex
     */
-    sal_Int32 getFormatKey(::sal_Int16 _nNumberFormatIndex);
+    sal_Int32 getFormatKey(sal_Bool _bDate) const;
 
     DECL_LINK( CBClickHdl, CheckBox* );
     ODateTimeDialog(const ODateTimeDialog&);
     void operator =(const ODateTimeDialog&);
+
+    // fill methods
+    void InsertEntry(sal_Int16 _nNumberFormatId);
 public:
     ODateTimeDialog( Window* pParent
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xHoldAlive
