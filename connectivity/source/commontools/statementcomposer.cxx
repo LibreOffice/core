@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statementcomposer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 13:38:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:15:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ namespace dbtools
                         );
 
                         // the "basic" statement
-                        xComposer->setQuery( sStatement );
+                        xComposer->setElementaryQuery( sStatement );
 
                         // the sort order
                         const ::rtl::OUString sPropOrder( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Order" ) ) );
