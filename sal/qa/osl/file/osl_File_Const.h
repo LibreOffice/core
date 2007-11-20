@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_File_Const.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:28:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,11 +121,15 @@ const sal_Char pBuffer_Blank[]  = "";
 #   define TEST_PLATFORM_TEMP   "tmp"
 #   define PATH_LIST_DELIMITER  ":"
 #   define PATH_SEPERATOR       "/"
-#else                                   // Windows
-#   include <windows.h>
+#endif
+#if (defined WNT )                      // Windows
+#include <tools/prewin.h>
+// #    include <windows.h>
+#   include <tchar.h>
 #   include <io.h>
 #   include <stdio.h>
 #   include <stdlib.h>
+#include <tools/postwin.h>
 #   define PATH_MAX             MAX_PATH
 #   define TEST_PLATFORM        "c:/"
 #   define TEST_PLATFORM_ROOT   "c:/"
