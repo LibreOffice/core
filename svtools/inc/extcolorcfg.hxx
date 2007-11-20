@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extcolorcfg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 07:13:40 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:16:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,14 +61,33 @@ namespace svtools{
 
  ---------------------------------------------------------------------------*/
 class ExtendedColorConfig_Impl;
-struct ExtendedColorConfigValue
+class ExtendedColorConfigValue
 {
     ::rtl::OUString m_sName;
     ::rtl::OUString m_sDisplayName;
-    sal_Int32       nColor;
-    ExtendedColorConfigValue() : nColor(0) {}
+    sal_Int32       m_nColor;
+    sal_Int32       m_nDefaultColor;
+public:
+    ExtendedColorConfigValue() : m_nColor(0),m_nDefaultColor(0){}
+    ExtendedColorConfigValue(const ::rtl::OUString& _sName
+                            ,const ::rtl::OUString& _sDisplayName
+                            ,sal_Int32      _nColor
+                            ,sal_Int32      _nDefaultColor)
+    : m_sName(_sName)
+    ,m_sDisplayName(_sDisplayName)
+    ,m_nColor(_nColor)
+    ,m_nDefaultColor(_nDefaultColor)
+    {}
+
+    inline ::rtl::OUString getName()         const { return m_sName; }
+    inline ::rtl::OUString getDisplayName()  const { return m_sDisplayName; }
+    inline sal_Int32       getColor()        const { return m_nColor; }
+    inline sal_Int32       getDefaultColor() const { return m_nDefaultColor; }
+
+    inline void setColor(sal_Int32 _nColor) { m_nColor = _nColor; }
+
     sal_Bool operator !=(const ExtendedColorConfigValue& rCmp) const
-        { return nColor != rCmp.nColor;}
+        { return m_nColor != rCmp.m_nColor;}
 };
 /* -----------------------------22.03.2002 15:36------------------------------
 

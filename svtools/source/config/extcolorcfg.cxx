@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extcolorcfg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 07:14:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:16:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -396,7 +396,7 @@ void ExtendedColorConfig_Impl::Load(const rtl::OUString& rScheme)
 // -----------------------------------------------------------------------------
 void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < ::rtl::OUString >& _rComponents,const TDisplayNames& _rDisplayNames)
 {
-    ::rtl::OUString sColorEntries(RTL_CONSTASCII_USTRINGPARAM("/Entries"));
+    const ::rtl::OUString sColorEntries(RTL_CONSTASCII_USTRINGPARAM("/Entries"));
     ::rtl::OUString* pIter = _rComponents.getArray();
     ::rtl::OUString* pEnd  = pIter + _rComponents.getLength();
     for(;pIter != pEnd;++pIter)
@@ -408,11 +408,19 @@ void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < ::rtl::OUStri
             sEntry += sColorEntries;
 
             uno::Sequence < ::rtl::OUString > aColorNames = GetPropertyNames(sEntry);
+            uno::Sequence < ::rtl::OUString > aDefaultColorNames = aColorNames;
 
-            ::rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM("/Color"));
-            lcl_addString(aColorNames,sName);
+            const ::rtl::OUString sColor(RTL_CONSTASCII_USTRINGPARAM("/Color"));
+            const ::rtl::OUString sDefaultColor(RTL_CONSTASCII_USTRINGPARAM("/DefaultColor"));
+            lcl_addString(aColorNames,sColor);
+            lcl_addString(aDefaultColorNames,sDefaultColor);
             uno::Sequence< uno::Any > aColors = GetProperties( aColorNames );
             const uno::Any* pColors = aColors.getConstArray();
+
+            uno::Sequence< uno::Any > aDefaultColors = GetProperties( aDefaultColorNames );
+            bool bDefaultColorFound = aDefaultColors.getLength() != 0;
+            const uno::Any* pDefaultColors = aDefaultColors.getConstArray();
+
             ::rtl::OUString* pColorIter = aColorNames.getArray();
             ::rtl::OUString* pColorEnd  = pColorIter + aColorNames.getLength();
 
@@ -423,22 +431,28 @@ void ExtendedColorConfig_Impl::FillComponentColors(uno::Sequence < ::rtl::OUStri
             {
                 if ( aConfigValues.find(*pColorIter) == aConfigValues.end() )
                 {
-                    ExtendedColorConfigValue aValue;
                     sal_Int32 nIndex = 0;
                     pColorIter->getToken(2,'/',nIndex);
-                    aValue.m_sName = pColorIter->copy(nIndex);
-                    ::rtl::OUString sTemp = aValue.m_sName.copy(0,aValue.m_sName.lastIndexOf(sName));
+                    ::rtl::OUString sName(pColorIter->copy(nIndex)),sDisplayName;
+                    ::rtl::OUString sTemp = sName.copy(0,sName.lastIndexOf(sColor));
 
                     TDisplayNames::const_iterator aFind = _rDisplayNames.find(sTemp);
                     nIndex = 0;
-                    aValue.m_sName = aValue.m_sName.getToken(2,'/',nIndex);
+                    sName = sName.getToken(2,'/',nIndex);
                     OSL_ENSURE(aFind != _rDisplayNames.end(),"DisplayName is not in EntryNames config list!");
                     if ( aFind != _rDisplayNames.end() )
-                        aValue.m_sDisplayName = aFind->second;
+                        sDisplayName = aFind->second;
 
                     OSL_ENSURE(pColors[i].hasValue(),"Color config entry has NIL as color value set!");
-                    pColors[i] >>= aValue.nColor;
-                    aConfigValuesPos.push_back(aConfigValues.insert(TConfigValues::value_type(aValue.m_sName,aValue)).first);
+                    OSL_ENSURE(pDefaultColors[i].hasValue(),"Color config entry has NIL as color value set!");
+                    sal_Int32 nColor = 0,nDefaultColor = 0;
+                    pColors[i] >>= nColor;
+                    if ( bDefaultColorFound )
+                        pDefaultColors[i] >>= nDefaultColor;
+                    else
+                        nDefaultColor = nColor;
+                    ExtendedColorConfigValue aValue(sName,sDisplayName,nColor,nDefaultColor);
+                    aConfigValuesPos.push_back(aConfigValues.insert(TConfigValues::value_type(sName,aValue)).first);
                 }
             } // for(int i = 0; pColorIter != pColorEnd; ++pColorIter ,++i)
         }
@@ -468,21 +482,17 @@ void ExtendedColorConfig_Impl::Commit()
 {
     if ( !m_sLoadedScheme.getLength() )
         return;
-    ::rtl::OUString sColorEntries(RTL_CONSTASCII_USTRINGPARAM("Entries"));
-    ::rtl::OUString sColor(RTL_CONSTASCII_USTRINGPARAM("/Color"));
+    const ::rtl::OUString sColorEntries(RTL_CONSTASCII_USTRINGPARAM("Entries"));
+    const ::rtl::OUString sColor(RTL_CONSTASCII_USTRINGPARAM("/Color"));
+    const ::rtl::OUString sDefaultColor(RTL_CONSTASCII_USTRINGPARAM("/DefaultColor"));
     ::rtl::OUString sBase(RTL_CONSTASCII_USTRINGPARAM("ExtendedColorScheme/ColorSchemes/"));
-    ::rtl::OUString s_sSep(RTL_CONSTASCII_USTRINGPARAM("/"));
+    const ::rtl::OUString s_sSep(RTL_CONSTASCII_USTRINGPARAM("/"));
     sBase += m_sLoadedScheme;
 
     TComponents::iterator aIter = m_aConfigValues.begin();
     TComponents::iterator aEnd = m_aConfigValues.end();
     for( ;aIter != aEnd;++aIter )
-    //uno::Sequence < ::rtl::OUString > aComponents = GetPropertyNames(sBase);
-    //::rtl::OUString* pCompIter = aComponents.getArray();
-    //::rtl::OUString* pCompEnd  = pCompIter + aComponents.getLength();
-    //for(;pCompIter != pCompEnd;++pCompIter)
     {
-        //::rtl::OUString sEntry = *pCompIter;
         ::rtl::OUString sEntry = aIter->first;
         sEntry += sColorEntries;
 
@@ -500,18 +510,12 @@ void ExtendedColorConfig_Impl::Commit()
             TConfigValues::iterator aConIter = aIter->second.first.begin();
             TConfigValues::iterator aConEnd  = aIter->second.first.end();
             for (; aConIter != aConEnd; ++aConIter,++pPropValues)
-
-            /*uno::Sequence < ::rtl::OUString > aColorNames = GetPropertyNames(sEntry);
-            const ::rtl::OUString* pColorNames = aColorNames.getConstArray();
-            const ::rtl::OUString* pEnd = pColorNames + aColorNames.getLength();
-            for(int i = 0; pColorNames != pEnd ; ++i,++pColorNames)*/
             {
-                //pPropValues->Name = *pColorNames;
                 pPropValues->Name = sNode + s_sSep + aConIter->first;
                 ConfigItem::AddNode(sNode, aConIter->first);
-
                 pPropValues->Name += sColor;
-                pPropValues->Value <<= aConIter->second.nColor;
+                pPropValues->Value <<= aConIter->second.getColor();
+                // the default color will never be changed
             }
             ::rtl::OUString s(RTL_CONSTASCII_USTRINGPARAM("ExtendedColorScheme/ColorSchemes"));
             SetSetProperties(s, aPropValues);
@@ -554,7 +558,7 @@ void ExtendedColorConfig_Impl::SetColorConfigValue(const ::rtl::OUString& _sName
     TComponents::iterator aFind = m_aConfigValues.find(_sName);
     if ( aFind != m_aConfigValues.end() )
     {
-        TConfigValues::iterator aFind2 = aFind->second.first.find(rValue.m_sName);
+        TConfigValues::iterator aFind2 = aFind->second.first.find(rValue.getName());
         if ( aFind2 != aFind->second.first.end() )
             aFind2->second = rValue;
         SetModified();
