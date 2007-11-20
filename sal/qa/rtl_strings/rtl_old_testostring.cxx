@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_old_testostring.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:03:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:50:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,10 @@ namespace rtl_OString
         CPPUNIT_TEST_SUITE_END( );
     };
 
+
+#ifdef WNT
+#pragma warning( disable : 4723 )
+#endif
 
 void oldtests::test_OString()
 {
