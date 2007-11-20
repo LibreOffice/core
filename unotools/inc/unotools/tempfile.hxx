@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tempfile.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:02:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:18:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,15 @@ public:
                     The extension string may be f.e. ".txt" or "", if no extension string is given, ".tmp" is used
                     */
                     TempFile( const String& rLeadingChars, const String* pExtension=NULL, const String* pParent=NULL,
-                                sal_Bool bDirectory=sal_False );
+                                sal_Bool bDirectory=sal_False);
+
+                    /**
+                    Same as above; additionally the name starts with some given characters followed by a counter ( example:
+                    rLeadingChars="abc" means "abc0","abc1" and so on, depending on existing files in the folder ).
+                    The extension string may be f.e. ".txt" or "", if no extension string is given, ".tmp" is used
+                        @param  _bStartWithZero If set to false names will be generated like "abc","abc0","abc1"
+                    */
+                    TempFile( const String& rLeadingChars,sal_Bool _bStartWithZero, const String* pExtension=NULL, const String* pParent=NULL,sal_Bool bDirectory=sal_False);
 
                     /**
                     TempFile will be removed from disk in dtor if EnableKillingTempFile was called before.
