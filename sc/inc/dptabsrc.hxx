@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabsrc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:03:43 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:40:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -768,6 +768,7 @@ private:
     ScDPItemData    maData;
 //  String          aCaption;           // visible name (changeable by user)
 
+    sal_Int32       nPosition;          // manual sorting
     BOOL            bVisible;
     BOOL            bShowDet;
 
@@ -840,6 +841,9 @@ public:
     virtual void            setIsVisible(BOOL bSet);
     virtual BOOL            getShowDetails() const;
     virtual void            setShowDetails(BOOL bSet);
+
+    sal_Int32               getPosition() const;
+    void                    setPosition(sal_Int32 nNew);
 };
 
 
