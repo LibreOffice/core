@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:52:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:41:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1885,6 +1885,7 @@ ScDPLevel::ScDPLevel( ScDPSource* pSrc, long nD, long nH, long nL ) :
     nLev( nL ),
     pMembers( NULL ),
     bShowEmpty( FALSE ),
+    aSortInfo( EMPTY_STRING, sal_True, sheet::DataPilotFieldSortMode::NAME ),   // default: sort by name
     nSortMeasure( 0 ),
     nAutoMeasure( 0 ),
     bEnableLayout( FALSE )
@@ -1923,7 +1924,7 @@ void ScDPLevel::EvaluateSortOrder()
                 //! error if not found?
             }
             break;
-//        case sheet::DataPilotFieldSortMode::MANUAL:
+        case sheet::DataPilotFieldSortMode::MANUAL:
         case sheet::DataPilotFieldSortMode::NAME:
             {
                 ScDPMembers* pLocalMembers = GetMembersObject();
@@ -1934,10 +1935,9 @@ void ScDPLevel::EvaluateSortOrder()
                 for (long nPos=0; nPos<nCount; nPos++)
                     aGlobalOrder[nPos] = nPos;
 
-                //! allow manual or name
-                //  (manual is then always ascending!)
-
-                ScDPGlobalMembersOrder aComp( *this, aSortInfo.IsAscending );
+                // allow manual or name (manual is always ascending)
+                BOOL bAscending = ( aSortInfo.Mode == sheet::DataPilotFieldSortMode::MANUAL || aSortInfo.IsAscending );
+                ScDPGlobalMembersOrder aComp( *this, bAscending );
                 ::std::sort( aGlobalOrder.begin(), aGlobalOrder.end(), aComp );
             }
             break;
@@ -2287,11 +2287,21 @@ uno::Any SAL_CALL ScDPMembers::getByName( const rtl::OUString& aName )
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDPMembers::getElementNames() throw(uno::RuntimeException)
 {
+    // Return list of names in sorted order,
+    // so it's displayed in that order in the field options dialog.
+    // Sorting is done at the level object (parent of this).
+
+    ScDPLevel* pLevel = pSource->GetDimensionsObject()->getByIndex(nDim)->
+        GetHierarchiesObject()->getByIndex(nHier)->GetLevelsObject()->getByIndex(nLev);
+    pLevel->EvaluateSortOrder();
+    const std::vector<sal_Int32>& rGlobalOrder = pLevel->GetGlobalOrder();
+    bool bSort = !rGlobalOrder.empty();
+
     long nCount = getCount();
     uno::Sequence<rtl::OUString> aSeq(nCount);
     rtl::OUString* pArr = aSeq.getArray();
     for (long i=0; i<nCount; i++)
-        pArr[i] = getByIndex(i)->getName();
+        pArr[i] = getByIndex(bSort ? rGlobalOrder[i] : i)->getName();
     return aSeq;
 }
 
@@ -2426,6 +2436,7 @@ ScDPMember::ScDPMember( ScDPSource* pSrc, long nD, long nH, long nL,
     nHier( nH ),
     nLev( nL ),
     maData( rN, fV, bHV ),
+    nPosition( -1 ),
     bVisible( TRUE ),
     bShowDet( TRUE )
 {
@@ -2455,6 +2466,26 @@ BOOL ScDPMember::IsNamedItem( const ScDPItemData& r ) const
 
 sal_Int32 ScDPMember::Compare( const ScDPMember& rOther ) const
 {
+    if ( nPosition >= 0 )
+    {
+        if ( rOther.nPosition >= 0 )
+        {
+            DBG_ASSERT( nPosition != rOther.nPosition, "same position for two members" );
+            return ( nPosition < rOther.nPosition ) ? -1 : 1;
+        }
+        else
+        {
+            // only this has a position - members with specified positions come before those without
+            return -1;
+        }
+    }
+    else if ( rOther.nPosition >= 0 )
+    {
+        // only rOther has a position
+        return 1;
+    }
+
+    // no positions set - compare names
     return ScDPItemData::Compare( maData, rOther.maData );
 }
 
@@ -2502,6 +2533,16 @@ void ScDPMember::setShowDetails(BOOL bSet)
     //! set "manual change" flag
 }
 
+sal_Int32 ScDPMember::getPosition() const
+{
+    return nPosition;
+}
+
+void ScDPMember::setPosition(sal_Int32 nNew)
+{
+    nPosition = nNew;
+}
+
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo()
@@ -2512,6 +2553,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
     static SfxItemPropertyMap aDPMemberMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNO_ISVISIBL), 0,  &getBooleanCppuType(),              0, 0 },
+        {MAP_CHAR_LEN(SC_UNO_POSITION), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNO_SHOWDETA), 0,  &getBooleanCppuType(),              0, 0 },
         {0,0,0,0,0,0}
     };
@@ -2530,6 +2572,12 @@ void SAL_CALL ScDPMember::setPropertyValue( const rtl::OUString& aPropertyName, 
         setIsVisible( lcl_GetBoolFromAny( aValue ) );
     else if ( aNameStr.EqualsAscii( SC_UNO_SHOWDETA ) )
         setShowDetails( lcl_GetBoolFromAny( aValue ) );
+    else if ( aNameStr.EqualsAscii( SC_UNO_POSITION ) )
+    {
+        sal_Int32 nInt = 0;
+        if (aValue >>= nInt)
+            setPosition( nInt );
+    }
     else
     {
         DBG_ERROR("unknown property");
@@ -2547,6 +2595,8 @@ uno::Any SAL_CALL ScDPMember::getPropertyValue( const rtl::OUString& aPropertyNa
         lcl_SetBoolInAny( aRet, getIsVisible() );
     else if ( aNameStr.EqualsAscii( SC_UNO_SHOWDETA ) )
         lcl_SetBoolInAny( aRet, getShowDetails() );
+    else if ( aNameStr.EqualsAscii( SC_UNO_POSITION ) )
+        aRet <<= (sal_Int32) getPosition();
     else
     {
         DBG_ERROR("unknown property");
