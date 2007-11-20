@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:13:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:02:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #define RID_PDF_TAB_VPREFER         (RID_PDF_DIALOG_START +   2)
 #define RID_PDF_TAB_OPNFTR          (RID_PDF_DIALOG_START +   3)
 #define RID_PDF_TAB_SECURITY        (RID_PDF_DIALOG_START +   4)
+#define RID_PDF_TAB_LINKS           (RID_PDF_DIALOG_START +   12)
 //strings
 #define STR_PDF_EXPORT              (RID_PDF_DIALOG_START +   5)
 
@@ -79,6 +80,8 @@
 #define LB_FORMSFORMAT              22
 #define CB_EXPORTEMPTYPAGES         23
 #define CB_ADDSTREAM                24
+
+#define CB_PDFA_1B_SELECT           25
 
 #define FL_OLD_PAGES        51
 #define RB_OLD_ALL          52
@@ -159,3 +162,15 @@
 #define RB_CHANGES_ANY_NOCOPY   137
 #define CB_ENDAB_COPY           138
 #define CB_ENAB_ACCESS          139
+
+//---> i56629 controls for link management
+#define CB_ENAB_RELLINKFSYS     150
+
+#define FL_DEFAULT_LINK_ACTION  151
+#define CB_VIEW_PDF_DEFAULT     152
+#define CB_VIEW_PDF_BROWSER     153
+#define CB_VIEW_PDF_APPLICATION 154
+
+#define CB_CNV_OOO_DOCTOPDF     155
+#define CB_EXP_BMRK_TO_DEST     156
+//<---
