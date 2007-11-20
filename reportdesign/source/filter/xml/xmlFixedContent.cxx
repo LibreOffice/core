@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlFixedContent.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:21:43 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:01:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,7 +186,7 @@ SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
     Reference<XMultiServiceFactory> xFactor = m_rImport.getServiceFactory();
 
     m_rImport.GetProgressBarHelper()->Increment( PROGRESS_BAR_STEP );
-    sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
+    const sal_uInt16 nToken = rTokenMap.Get( nPrefix, rLocalName );
     switch( nToken )
     {
         case XML_TOK_P:
@@ -217,7 +217,7 @@ void OXMLFixedContent::EndElement()
 {
     if ( m_bInP )
     {
-        Reference<XMultiServiceFactory> xFactor(m_rImport.GetModel(),uno::UNO_QUERY);
+        const Reference<XMultiServiceFactory> xFactor(m_rImport.GetModel(),uno::UNO_QUERY);
         Reference< XFixedText > xControl(xFactor->createInstance(SERVICE_FIXEDTEXT),uno::UNO_QUERY);
         OSL_ENSURE(xControl.is(),"Could not create FixedContent!");
         m_xComponent = xControl.get();
