@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:30:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:02:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 #include "impdialog.hrc"
 
-#define TAB_PDF_SIZE Size = MAP_APPFONT ( 176, 225 )
+#define TAB_PDF_SIZE Size = MAP_APPFONT ( 176, 239 )
 //string for TabDialog standard buttons
 String STR_PDF_EXPORT
 {
@@ -172,44 +172,37 @@ TabPage  RID_PDF_TAB_GENER
         Size = MAP_APPFONT ( 162 , 8 ) ;
         Text[ en-US ] = "General";
     };
+    CheckBox CB_PDFA_1B_SELECT
+    {
+        Pos = MAP_APPFONT ( 12, 129 ) ;
+        Size = MAP_APPFONT ( 100 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "PDF/A-1";
+    };
     CheckBox CB_TAGGEDPDF
     {
-        Pos = MAP_APPFONT ( 12 , 129 ) ;
-        Size = MAP_APPFONT ( 153 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 143 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Tagged PDF";
     };
-    CheckBox CB_EXPORTNOTES
-    {
-        Pos = MAP_APPFONT ( 12 , 143 ) ;
-        Size = MAP_APPFONT ( 153 , 10 ) ;
-        TabStop = TRUE ;
-        Text[ en-US ] = "Export ~notes";
-    };
-    CheckBox CB_EXPORTBOOKMARKS
-    {
-        Pos = MAP_APPFONT ( 12 , 157 ) ;
-        Size = MAP_APPFONT ( 153 , 10 ) ;
-        TabStop = TRUE ;
-        Text[ en-US ] = "Export ~bookmarks";
-    };
     CheckBox CB_EXPORTFORMFIELDS
     {
-        Pos = MAP_APPFONT ( 12 , 171 ) ;
+        Pos = MAP_APPFONT ( 12 , 157 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "~Create PDF form";
     };
     FixedText FT_FORMSFORMAT
     {
-        Pos = MAP_APPFONT ( 30 , 185 ) ;
-        Size = MAP_APPFONT ( 98, 10 ) ;
+        Pos = MAP_APPFONT ( 30 , 171 ) ;
+        Size = MAP_APPFONT ( 88, 10 ) ;
         Text[ en-US ] = "Submit ~format";
     };
     ListBox LB_FORMSFORMAT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 124, 182 ) ;
+        Pos = MAP_APPFONT ( 124, 168 ) ;
         Size = MAP_APPFONT ( 38, 48 ) ;
         DeltaLang = < Default ; Default ; Default ; Default ; > ;
         TabStop = TRUE ;
@@ -222,16 +215,30 @@ TabPage  RID_PDF_TAB_GENER
             < "XML" ; > ;
         };
     };
-    CheckBox CB_EXPORTEMPTYPAGES
+    CheckBox CB_EXPORTBOOKMARKS
+    {
+        Pos = MAP_APPFONT ( 12 , 185 ) ;
+        Size = MAP_APPFONT ( 153 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "Export ~bookmarks";
+    };
+    CheckBox CB_EXPORTNOTES
     {
         Pos = MAP_APPFONT ( 12 , 199 ) ;
+        Size = MAP_APPFONT ( 90 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "Export ~notes";
+    };
+    CheckBox CB_EXPORTEMPTYPAGES
+    {
+        Pos = MAP_APPFONT ( 12 , 213 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Export automatically inserted ~blank pages";
     };
     CheckBox CB_ADDSTREAM
     {
-        Pos = MAP_APPFONT ( 12 , 213 ) ;
+        Pos = MAP_APPFONT ( 12 , 227 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
         TabStop = TRUE ;
         Text[ en-US ] = "Create ~hybrid file";
@@ -637,6 +644,71 @@ TabPage  RID_PDF_TAB_SECURITY
 };
 
 //----------------------------------------------------------
+//tab page for PDF Export, links management
+TabPage  RID_PDF_TAB_LINKS
+{
+    HelpId = 0 ;
+    Text [ en-US ] = "---";
+    TAB_PDF_SIZE;
+    Hide = TRUE;
+
+    CheckBox CB_EXP_BMRK_TO_DEST
+    {
+        Pos = MAP_APPFONT ( 6 , 3 ) ;
+        Size = MAP_APPFONT ( 166 , 12 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "Export bookmarks as named destinations" ;
+    };
+
+    CheckBox CB_CNV_OOO_DOCTOPDF
+    {
+        Pos = MAP_APPFONT ( 6 , 14 ) ;
+        Size = MAP_APPFONT ( 166 , 12 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "Convert document references to PDF targets" ;
+    };
+
+    CheckBox CB_ENAB_RELLINKFSYS
+    {
+        Pos = MAP_APPFONT ( 6 , 25 ) ;
+        Size = MAP_APPFONT ( 166 , 12 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "Export URLs relative to file system" ;
+    };
+
+    FixedLine FL_DEFAULT_LINK_ACTION
+    {
+        Pos = MAP_APPFONT ( 6 , 39 ) ;
+        Size = MAP_APPFONT (156  , 8 ) ;
+        Text[ en-US ] = "Cross-document links" ;
+    };
+
+    RadioButton CB_VIEW_PDF_DEFAULT
+    {
+        Pos = MAP_APPFONT ( 12 , 50 ) ;
+        Size = MAP_APPFONT ( 166 , 12 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "Default mode" ;
+    };
+
+    RadioButton CB_VIEW_PDF_APPLICATION
+    {
+        Pos = MAP_APPFONT ( 12 , 61 ) ;
+        Size = MAP_APPFONT ( 150  , 12 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "Open with PDF reader application" ;
+    };
+
+    RadioButton CB_VIEW_PDF_BROWSER
+    {
+        Pos = MAP_APPFONT ( 12 , 72 ) ;
+        Size = MAP_APPFONT ( 150  , 12 ) ;
+        TabStop = TRUE ;
+        Text[ en-US ] = "Open with Internet browser" ;
+    };
+};
+
+//----------------------------------------------------------
 TabDialog  RID_PDF_EXPORT_DLG
 {
     HelpId = HID_FILTER_PDF_OPTIONS ;
@@ -668,9 +740,15 @@ TabDialog  RID_PDF_EXPORT_DLG
             };
             PageItem
             {
+                Identifier = RID_PDF_TAB_LINKS;
+                Text [ en-US ] = "Links";
+            };
+            PageItem
+            {
                 Identifier = RID_PDF_TAB_SECURITY;
                 Text [ en-US ] = "Security";
             };
+
         };
     };
 };
