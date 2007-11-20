@@ -1,6 +1,6 @@
 # This file contain a list of todos for testshl2 automated tests.
 # 
-# $Id: libs2test.txt,v 1.12 2004-10-28 06:59:32 pjunck Exp $
+# $Id: libs2test.txt,v 1.13 2007-11-20 19:25:30 ihi Exp $
 #
 # Legend:
 # there exist 2 formats
@@ -83,3 +83,4 @@ osl/process   ; osl_Thread
 
 # new 20041025
 rtl/doublelock ; rtl_doublelocking
+
