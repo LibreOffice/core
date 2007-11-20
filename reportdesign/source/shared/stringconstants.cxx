@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:35:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:05:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,4 +237,7 @@ IMPLEMENT_CONSTASCII_USTRING(PROPERTY_HYPERLINKTARGET     , "HyperLinkTarget");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_HYPERLINKNAME       , "HyperLinkName");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_VISITEDCHARSTYLENAME, "VisitedCharStyleName");
 IMPLEMENT_CONSTASCII_USTRING(PROPERTY_UNVISITEDCHARSTYLENAME, "UnvisitedCharStyleName");
+
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ORDER, "Order");
+IMPLEMENT_CONSTASCII_USTRING(PROPERTY_APPLYFILTER, "ApplyFilter");
 
