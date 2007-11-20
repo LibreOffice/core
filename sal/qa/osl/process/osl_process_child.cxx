@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_process_child.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:51:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,14 @@
 //########################################
 // includes
 
-#ifdef WNT
+#if ( defined WNT )                     // Windows
+#include <tools/prewin.h>
 #   define UNICODE
 #   define _UNICODE
 #   define WIN32_LEAN_AND_MEAN
-#   include <windows.h>
+// #    include <windows.h>
 #   include <tchar.h>
+#include <tools/postwin.h>
 #else
 #   include <unistd.h>
 #endif
@@ -66,7 +68,7 @@
 #endif
 
 //########################################
-void wait(char* time)
+void wait_for_seconds(char* time)
 {
     SLEEP(atoi(time));
 }
@@ -75,8 +77,9 @@ void wait(char* time)
 
 #ifdef WNT
 //########################################
-void w_to_a(LPCTSTR strW, LPSTR strA, DWORD size)
+void w_to_a(LPCTSTR _strW, LPSTR strA, DWORD size)
 {
+    LPCWSTR strW = reinterpret_cast<LPCWSTR>(_strW);
     WideCharToMultiByte(CP_ACP, 0, strW, -1, strA, size, NULL, NULL);
 }
 //########################################
@@ -89,7 +92,7 @@ void w_to_a(LPCTSTR strW, LPSTR strA, DWORD size)
         std::ofstream file(file_path);
 
         char buffer[32767];
-        while (size_t l = _tcslen(p))
+        while (size_t l = _tcslen(reinterpret_cast<wchar_t*>(p)))
         {
             w_to_a(p, buffer, sizeof(buffer));
             file << buffer << std::endl;
@@ -123,7 +126,7 @@ int main(int argc, char* argv[])
     {
         if (0 == strcmp("-join", argv[1]))
         {
-            wait(argv[2]);
+            wait_for_seconds(argv[2]);
         }
         else if (0 == strcmp("-env", argv[1]))
         {
