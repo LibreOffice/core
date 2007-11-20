@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_String_Utils.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:48:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:27:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,10 @@ sal_uInt32 AStringLen( const sal_Char *pAStr )
 
     return nStrLen;
 } // AStringLen
+/* disable assignment within condition expression */
+#ifdef WNT
+#pragma warning( disable : 4706 )
+#endif
 sal_Char* cpystr( sal_Char* dst, const sal_Char* src )
 {
     const sal_Char* psrc = src;
