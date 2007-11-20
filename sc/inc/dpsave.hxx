@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpsave.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 12:06:44 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:40:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,8 @@ public:
     void                    SetName( const String& rNew );  // used if the source member was renamed (groups)
 
     void                    WriteToSource( const com::sun::star::uno::Reference<
-                                            com::sun::star::uno::XInterface>& xMember );
+                                            com::sun::star::uno::XInterface>& xMember,
+                                            sal_Int32 nPosition );
 
     void                    Store( SvStream& rStream ) const;
 };
@@ -181,6 +182,8 @@ public:
 
     ScDPSaveMember*         GetExistingMemberByName(const String& rName);
     ScDPSaveMember*         GetMemberByName(const String& rName);
+
+    void                    SetMemberPosition( const String& rName, sal_Int32 nNewPos );
 
     void                    WriteToSource( const com::sun::star::uno::Reference<
                                             com::sun::star::uno::XInterface>& xDim );
