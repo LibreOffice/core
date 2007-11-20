@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfunc.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:07:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,8 @@ public:
     void            NumGroupDataPilot( const ScDPNumGroupInfo& rInfo );
     void            UngroupDataPilot();
     void            DataPilotInput( const ScAddress& rPos, const String& rString );
+
+    BOOL            DataPilotMove( const ScRange& rSource, const ScAddress& rDest );
 
     BOOL            HasSelectionForDrillDown( USHORT& rOrientation );
     void            SetDataPilotDetails( BOOL bShow, const String* pNewDimensionName = NULL );
