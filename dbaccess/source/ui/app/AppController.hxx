@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:46:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:23:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,6 +443,12 @@ namespace dbaui
                 Defines the mode of opening. @see OLinkedDocumentsAccess::EOpenMode
         */
         void doAction(sal_uInt16 _nId ,OLinkedDocumentsAccess::EOpenMode _eOpenMode);
+
+        /** returns the currently selected table or query name.
+        *
+        * \return the name of the currently table or query. If the tables or query container is selected otherwise an empty string will be returned.
+        */
+        ::rtl::OUString getCurrentlySelectedName(sal_Int32& _rnCommandType) const;
 
         /** select the give entry
         */
