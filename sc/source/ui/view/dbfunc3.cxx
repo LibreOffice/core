@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfunc3.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:49:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:43:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #include <svtools/zforlist.hxx>
 #include <sfx2/app.hxx>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
@@ -56,6 +57,8 @@
 #ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDGROUPBY_HPP_
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #endif
+
+#include <hash_set>
 
 #include "dbfunc.hxx"
 #include "global.hxx"
@@ -1477,6 +1480,115 @@ void ScDBFunc::DataPilotInput( const ScAddress& rPos, const String& rString )
             ErrorMessage( nErrorId );
         }
     }
+}
+
+void lcl_MoveToEnd( ScDPSaveDimension& rDim, const String& rItemName )
+{
+    ScDPSaveMember* pNewMember = NULL;
+    const ScDPSaveMember* pOldMember = rDim.GetExistingMemberByName( rItemName );
+    if ( pOldMember )
+        pNewMember = new ScDPSaveMember( *pOldMember );
+    else
+        pNewMember = new ScDPSaveMember( rItemName );
+    rDim.AddMember( pNewMember );
+    // AddMember takes ownership of the new pointer,
+    // puts it to the end of the list even if it was in the list before.
+}
+
+BOOL ScDBFunc::DataPilotMove( const ScRange& rSource, const ScAddress& rDest )
+{
+    BOOL bRet = FALSE;
+    ScDocument* pDoc = GetViewData()->GetDocument();
+    ScDPObject* pDPObj = pDoc->GetDPAtCursor( rSource.aStart.Col(), rSource.aStart.Row(), rSource.aStart.Tab() );
+    if ( pDPObj && pDPObj == pDoc->GetDPAtCursor( rDest.Col(), rDest.Row(), rDest.Tab() ) )
+    {
+        ScDPPositionData aDestData;
+        pDPObj->GetPositionData( aDestData, rDest );
+        bool bValid = ( aDestData.nDimension >= 0 );        // dropping onto a field
+
+        // look through the source range
+        std::hash_set< String, ScStringHashCode, std::equal_to<String> > aMembersSet;   // for lookup
+        std::vector<String> aMembersVector;         // members in original order, for inserting
+        aMembersVector.reserve( std::max( static_cast<SCSIZE>( rSource.aEnd.Col() - rSource.aStart.Col() + 1 ),
+                                          static_cast<SCSIZE>( rSource.aEnd.Row() - rSource.aStart.Row() + 1 ) ) );
+        for (SCROW nRow = rSource.aStart.Row(); bValid && nRow <= rSource.aEnd.Row(); ++nRow )
+            for (SCCOL nCol = rSource.aStart.Col(); bValid && nCol <= rSource.aEnd.Col(); ++nCol )
+            {
+                ScDPPositionData aSourceData;
+                pDPObj->GetPositionData( aSourceData, ScAddress( nCol, nRow, rSource.aStart.Tab() ) );
+                if ( aSourceData.nDimension == aDestData.nDimension && aSourceData.aMemberName.Len() )
+                {
+                    if ( aMembersSet.find( aSourceData.aMemberName ) == aMembersSet.end() )
+                    {
+                        aMembersSet.insert( aSourceData.aMemberName );
+                        aMembersVector.push_back( aSourceData.aMemberName );
+                    }
+                    // duplicates are ignored
+                }
+                else
+                    bValid = false;     // empty (subtotal) or different field
+            }
+
+        if ( bValid )
+        {
+            BOOL bIsDataLayout;
+            String aDimName = pDPObj->GetDimName( aDestData.nDimension, bIsDataLayout );
+            if ( !bIsDataLayout )
+            {
+                ScDPSaveData aData( *pDPObj->GetSaveData() );
+                ScDPSaveDimension* pDim = aData.GetDimensionByName( aDimName );
+
+                // get all member names in source order
+                uno::Sequence<rtl::OUString> aMemberNames;
+                pDPObj->GetMembers( aDestData.nDimension, aMemberNames );
+
+                bool bInserted = false;
+
+                sal_Int32 nMemberCount = aMemberNames.getLength();
+                for (sal_Int32 nMemberPos=0; nMemberPos<nMemberCount; ++nMemberPos)
+                {
+                    String aMemberStr( aMemberNames[nMemberPos] );
+
+                    if ( !bInserted && aMemberStr == aDestData.aMemberName )
+                    {
+                        // insert dragged items before this item
+                        for ( std::vector<String>::const_iterator aIter = aMembersVector.begin();
+                              aIter != aMembersVector.end(); ++aIter )
+                            lcl_MoveToEnd( *pDim, *aIter );
+                        bInserted = true;
+                    }
+
+                    if ( aMembersSet.find( aMemberStr ) == aMembersSet.end() )  // skip dragged items
+                        lcl_MoveToEnd( *pDim, aMemberStr );
+                }
+                // insert dragged item at end if dest wasn't found (for example, empty)
+                if ( !bInserted )
+                    for ( std::vector<String>::const_iterator aIter = aMembersVector.begin();
+                          aIter != aMembersVector.end(); ++aIter )
+                        lcl_MoveToEnd( *pDim, *aIter );
+
+                // Items that were in SaveData, but not in the source, end up at the start of the list.
+
+                // set flag for manual sorting
+                sheet::DataPilotFieldSortInfo aSortInfo;
+                aSortInfo.Mode = sheet::DataPilotFieldSortMode::MANUAL;
+                pDim->SetSortInfo( &aSortInfo );
+
+                // apply changes
+                ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
+                ScDPObject* pNewObj = new ScDPObject( *pDPObj );
+                pNewObj->SetSaveData( aData );
+                aFunc.DataPilotUpdate( pDPObj, pNewObj, TRUE, FALSE );      //! bApi for drag&drop?
+                delete pNewObj;
+
+                Unmark();       // entry was moved - no use in leaving the old cell selected
+
+                bRet = TRUE;
+            }
+        }
+    }
+
+    return bRet;
 }
 
 BOOL ScDBFunc::HasSelectionForDrillDown( USHORT& rOrientation )
