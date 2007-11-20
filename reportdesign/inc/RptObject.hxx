@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RptObject.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:27:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 18:55:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ public:
     void _elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
     void _elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw(::com::sun::star::uno::RuntimeException);
 
-    sal_Bool        supportsService( const sal_Char* _pServiceName ) const;
+    sal_Bool        supportsService( const ::rtl::OUString& _sServiceName ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent> getReportComponent() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> getAwtComponent();
