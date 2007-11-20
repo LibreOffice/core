@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usercontrol.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:50:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:53:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,14 @@ namespace pcr
         {
             getTypedControlWindow()->SetFormatSupplier( _pSupplier );
         }
+
+        /** returns the default preview value for the given format key
+        *
+        * \param _pNF the number formatter
+        * \param _nFormatKey the format key
+        * \return current date or time or the value 1234.56789
+        */
+        static double getPreviewValue(SvNumberFormatter* _pNF,sal_Int32 _nFormatKey);
     };
 
     //========================================================================
