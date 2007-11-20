@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlRow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:23:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ OXMLRow::OXMLRow( ORptFilter& rImport
      ::rtl::OUString sLocalName;
         const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
         const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-        rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+        const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
 
         switch( rTokenMap.Get( nPrefix, sLocalName ) )
         {
