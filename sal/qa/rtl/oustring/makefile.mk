@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 16:00:56 $
+#   last change: $Author: ihi $ $Date: 2007-11-20 19:43:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 # DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP= export.map
+SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
 # auto generated Target:joblist
 # END ------------------------------------------------------------------
 
@@ -78,7 +78,7 @@ SHL2STDLIBS=\
 
 SHL2IMPLIB= i$(SHL2TARGET)
 DEF2NAME    =$(SHL2TARGET)
-SHL2VERSIONMAP= export.map
+SHL2VERSIONMAP= $(PRJ)$/qa$/export.map
 # END ------------------------------------------------------------------
 
 #------------------------------- All object files -------------------------------
