@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_Security.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:52:02 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:33:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,7 +405,8 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
     if( !getuid( ) )
         isAdmin = sal_True;
 
-#else
+#endif
+#if defined ( WNT )
     /// some initialization work for Windows OS
 
 
@@ -416,7 +417,7 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
 
     lpszSystemInfo = tchBuffer;
     cchBuff = BUFSIZE;
-    if( GetUserName(lpszSystemInfo, &cchBuff) )
+    if( GetUserNameA(lpszSystemInfo, &cchBuff) )
         strUserName = ::rtl::OUString::createFromAscii( lpszSystemInfo );
 
     if( GetComputerName(lpszSystemInfo, &cchBuff) )
@@ -464,7 +465,7 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
     LPCWSTR wszAccName = ( LPWSTR ) strUserName.getStr( );
 
     // Create buffers for the SID and the domain name.
-    PSID pSid = (PSID) new BYTE[dwSidBufferSize];
+    PSID pSid = (PSID) new WIN_BYTE[dwSidBufferSize];
     CPPUNIT_ASSERT_MESSAGE("# creating SID buffer failed.\n", pSid!= NULL );
     memset( pSid, 0, dwSidBufferSize);
 
@@ -502,7 +503,7 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
                 // Reallocate memory for the SID buffer.
                 wprintf(L"# The SID buffer was too small. It will be reallocated.\n");
                 FreeSid( pSid);
-                pSid = (PSID) new BYTE[cbSid];
+                pSid = (PSID) new WIN_BYTE[cbSid];
                 CPPUNIT_ASSERT_MESSAGE("# re-creating SID buffer failed.\n",  pSid!= NULL );
                 memset( pSid, 0, cbSid);
                 dwSidBufferSize = cbSid;
@@ -583,7 +584,7 @@ void RegisterAdditionalFunctions(FktRegFuncPtr)
 
     /// check if logged in user is administrator:
 
-    BOOL b;
+    WIN_BOOL b;
     SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
     PSID AdministratorsGroup;
     b = AllocateAndInitializeSid(
