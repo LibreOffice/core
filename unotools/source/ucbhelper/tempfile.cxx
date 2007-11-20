@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:32:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:18:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,6 +273,74 @@ umask(old_mode);
     }
 }
 
+void lcl_createName(TempFile_Impl& _rImpl,const String& rLeadingChars,sal_Bool _bStartWithZero, const String* pExtension, const String* pParent, sal_Bool bDirectory)
+{
+    _rImpl.bIsDirectory = bDirectory;
+
+    // get correct directory
+    String aName = ConstructTempDir_Impl( pParent );
+
+    sal_Bool bUseNumber = _bStartWithZero;
+    // now use special naming scheme ( name takes leading chars and an index counting up from zero
+    aName += rLeadingChars;
+    for ( sal_Int32 i=0;; i++ )
+    {
+        String aTmp( aName );
+        if ( bUseNumber )
+            aTmp += String::CreateFromInt32( i );
+        bUseNumber = sal_True;
+        if ( pExtension )
+            aTmp += *pExtension;
+        else
+            aTmp += String::CreateFromAscii( ".tmp" );
+        if ( bDirectory )
+        {
+            FileBase::RC err = Directory::create( aTmp );
+            if ( err == FileBase::E_None )
+            {
+                _rImpl.aName = aTmp;
+                break;
+            }
+            else if ( err != FileBase::E_EXIST )
+                // if f.e. name contains invalid chars stop trying to create dirs
+                break;
+        }
+        else
+        {
+            File aFile( aTmp );
+#ifdef UNX
+/* RW permission for the user only! */
+ mode_t old_mode = umask(077);
+#endif
+            FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
+#ifdef UNX
+umask(old_mode);
+#endif
+            if ( err == FileBase::E_None )
+            {
+                _rImpl.aName = aTmp;
+                aFile.close();
+                break;
+            }
+            else if ( err != FileBase::E_EXIST )
+            {
+                // if f.e. name contains invalid chars stop trying to create dirs
+                // but if there is a folder with such name proceed further
+
+                DirectoryItem aTmpItem;
+                FileStatus aTmpStatus( FileStatusMask_Type );
+                if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
+                  || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
+                  || aTmpStatus.getFileType() != FileStatus::Directory )
+                    break;
+            }
+        }
+        if ( !_bStartWithZero )
+            aTmp += String::CreateFromInt32( i );
+    }
+}
+
+
 String TempFile::CreateTempName( const String* pParent )
 {
     // get correct directory
@@ -301,68 +369,17 @@ TempFile::TempFile( const String* pParent, sal_Bool bDirectory )
     CreateTempName_Impl( pImp->aName, sal_True, bDirectory );
 }
 
-TempFile::TempFile( const String& rLeadingChars, const String* pExtension, const String* pParent, sal_Bool bDirectory )
+TempFile::TempFile( const String& rLeadingChars, const String* pExtension, const String* pParent, sal_Bool bDirectory)
     : pImp( new TempFile_Impl )
     , bKillingFileEnabled( sal_False )
 {
-    pImp->bIsDirectory = bDirectory;
-
-    // get correct directory
-    String aName = ConstructTempDir_Impl( pParent );
-
-    // now use special naming scheme ( name takes leading chars and an index counting up from zero
-    aName += rLeadingChars;
-    for ( sal_Int32 i=0;; i++ )
-    {
-        String aTmp( aName );
-        aTmp += String::CreateFromInt32( i );
-        if ( pExtension )
-            aTmp += *pExtension;
-        else
-            aTmp += String::CreateFromAscii( ".tmp" );
-        if ( bDirectory )
-        {
-            FileBase::RC err = Directory::create( aTmp );
-            if ( err == FileBase::E_None )
-            {
-                pImp->aName = aTmp;
-                break;
-            }
-            else if ( err != FileBase::E_EXIST )
-                // if f.e. name contains invalid chars stop trying to create dirs
-                break;
-        }
-        else
-        {
-            File aFile( aTmp );
-#ifdef UNX
-/* RW permission for the user only! */
- mode_t old_mode = umask(077);
-#endif
-            FileBase::RC err = aFile.open(osl_File_OpenFlag_Create);
-#ifdef UNX
-umask(old_mode);
-#endif
-            if ( err == FileBase::E_None )
-            {
-                pImp->aName = aTmp;
-                aFile.close();
-                break;
-            }
-            else if ( err != FileBase::E_EXIST )
-            {
-                // if f.e. name contains invalid chars stop trying to create dirs
-                // but if there is a folder with such name proceed further
-
-                DirectoryItem aTmpItem;
-                FileStatus aTmpStatus( FileStatusMask_Type );
-                if ( DirectoryItem::get( aTmp, aTmpItem ) != FileBase::E_None
-                  || aTmpItem.getFileStatus( aTmpStatus ) != FileBase::E_None
-                  || aTmpStatus.getFileType() != FileStatus::Directory )
-                    break;
-            }
-        }
-    }
+    lcl_createName(*pImp,rLeadingChars,sal_True, pExtension, pParent, bDirectory);
+}
+TempFile::TempFile( const String& rLeadingChars,sal_Bool _bStartWithZero, const String* pExtension, const String* pParent, sal_Bool bDirectory)
+    : pImp( new TempFile_Impl )
+    , bKillingFileEnabled( sal_False )
+{
+    lcl_createName(*pImp,rLeadingChars,_bStartWithZero, pExtension, pParent, bDirectory);
 }
 
 TempFile::~TempFile()
