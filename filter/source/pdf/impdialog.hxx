@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:30:23 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:02:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@ class ResMgr;
 class ImpPDFTabGeneralPage;
 class ImpPDFTabViewerPage;
 class ImpPDFTabOpnFtrPage;
+class ImpPDFTabLinksPage;
 
 ////////////////////////////////////////////////////////////////////////
 //class tabbed dialog
@@ -87,6 +88,7 @@ protected:
     sal_Bool                    mbReduceImageResolution;
     sal_Int32                   mnMaxImageResolution;
     sal_Bool                    mbUseTaggedPDF;
+    sal_Int32                   mnPDFTypeSelection;
     sal_Bool                    mbExportNotesBoth;
     sal_Bool                    mbUseTransitionEffects;
     sal_Bool                    mbIsSkipEmptyPages;
@@ -125,12 +127,18 @@ protected:
     String                      msPageRange;
     sal_Bool                    mbSelectionIsChecked;
 
+    sal_Bool                    mbExportRelativeFsysLinks;
+    sal_Int32                   mnViewPDFMode;
+    sal_Bool                    mbConvertOOoTargets;
+    sal_Bool                    mbExportBmkToPDFDestination;
+
 public:
 
     friend class                ImpPDFTabGeneralPage;
     friend class                ImpPDFTabViewerPage;
     friend class                ImpPDFTabOpnFtrPage;
     friend class                ImpPDFTabSecurityPage;
+    friend class                ImpPDFTabLinksPage;
 
     ImpPDFTabDialog( Window* pParent, ResMgr& rResMgr,
                      Sequence< PropertyValue >& rFilterData,
@@ -151,6 +159,8 @@ protected:
 //class tab page general
 class ImpPDFTabGeneralPage : public SfxTabPage
 {
+    friend class                ImpPDFTabLinksPage;
+
     FixedLine                   maFlPages;
     RadioButton                 maRbAll;
     RadioButton                 maRbRange;
@@ -166,13 +176,18 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     ComboBox                    maCoReduceImageResolution;
 
     FixedLine                   maFlGeneral;
+    CheckBox                    maCbPDFA1b;
     CheckBox                    maCbTaggedPDF;
-    CheckBox                    maCbExportNotes;
-    CheckBox                    maCbExportBookmarks;
+    sal_Bool                    mbTaggedPDFUserSelection;
 
     CheckBox                    maCbExportFormFields;
+    sal_Bool                    mbExportFormFieldsUserSelection;
     FixedText                   maFtFormsFormat;
     ListBox                     maLbFormsFormat;
+
+    CheckBox                    maCbExportBookmarks;
+    CheckBox                    maCbExportNotes;
+
     CheckBox                    maCbExportEmptyPages;
     CheckBox                    maCbAddStream;
 
@@ -181,6 +196,8 @@ class ImpPDFTabGeneralPage : public SfxTabPage
 
     ResMgr*                     mpaResMgr;
 
+const ImpPDFTabDialog*          mpaParent;
+
     DECL_LINK( TogglePagesHdl, void* );
     DECL_LINK( ToggleCompressionHdl, void* );
     DECL_LINK( ToggleReduceImageResolutionHdl, void* );
@@ -188,6 +205,8 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     DECL_LINK( ToggleExportFormFieldsHdl, void* );
 
 public:
+    DECL_LINK( ToggleExportPDFAHdl, void* );
+
     ImpPDFTabGeneralPage( Window* pParent,
                           const SfxItemSet& rSet,
                           ResMgr* paResMgr );
@@ -342,6 +361,43 @@ public:
 
     void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
     void    SetFilterConfigItem( const ImpPDFTabDialog* paParent );
+};
+
+//class to implement the relative link stuff
+class ImpPDFTabLinksPage : public SfxTabPage
+{
+    CheckBox                    maCbExprtBmkrToNmDst;
+    CheckBox                    maCbOOoToPDFTargets;
+    CheckBox                    maCbExportRelativeFsysLinks;
+
+    FixedLine                   maFlDefaultTitle;
+    RadioButton                 maRbOpnLnksDefault;
+    sal_Bool                    mbOpnLnksDefaultUserState;
+    RadioButton                 maRbOpnLnksLaunch;
+    sal_Bool                    mbOpnLnksLaunchUserState;
+    RadioButton                 maRbOpnLnksBrowser;
+    sal_Bool                    mbOpnLnksBrowserUserState;
+
+    ResMgr*                     mpaResMgr;
+
+    long nWidth;
+
+    DECL_LINK( ClickRbOpnLnksDefaultHdl, void* );
+    DECL_LINK( ClickRbOpnLnksBrowserHdl, void* );
+
+public:
+    ImpPDFTabLinksPage( Window* pParent,
+                           const SfxItemSet& rSet,
+                           ResMgr& rResMgr );
+
+    ~ImpPDFTabLinksPage();
+    static SfxTabPage*      Create( Window* pParent,
+                                    const SfxItemSet& rAttrSet );
+
+    void    GetFilterConfigItem( ImpPDFTabDialog* paParent);
+    void    SetFilterConfigItem( const ImpPDFTabDialog* paParent );
+
+    void    ImplPDFALinkControl( sal_Bool bEnableLaunch );
 };
 
 #endif // IMPDIALOG_HXX
