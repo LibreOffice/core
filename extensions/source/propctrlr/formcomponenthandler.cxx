@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:48:27 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2742,7 +2742,7 @@ namespace pcr
             aCoreSet.Put( SfxUInt32Item( SID_ATTR_NUMBERFORMAT_VALUE, nFormatKey ) );
 
             SvNumberFormatter* pFormatter = pSupplier->GetNumberFormatter();
-            double dPreviewVal = 1234.56789;
+            double dPreviewVal = OFormatSampleControl::getPreviewValue(pFormatter,nFormatKey);
             SvxNumberInfoItem aFormatter( pFormatter, dPreviewVal, SID_ATTR_NUMBERFORMAT_INFO );
             aCoreSet.Put( aFormatter );
 
