@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GroupsSorting.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:00:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:07:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,6 +297,13 @@ sal_Int8 OFieldExpressionControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt
 {
     DBG_CHKTHIS( rpt_OFieldExpressionControl,NULL);
     sal_Int8 nAction = DND_ACTION_NONE;
+    if ( IsEditing() )
+    {
+        USHORT nPos = m_pComboCell->GetSelectEntryPos();
+        if ( COMBOBOX_ENTRY_NOTFOUND != nPos || m_pComboCell->GetText().Len() )
+            SaveModified();
+        DeactivateCell();
+    }
     if ( IsDropFormatSupported( OGroupExchange::getReportGroupId() ) && m_pParent->getGroups()->getCount() > 1 && rEvt.GetWindow() == &GetDataWindow() )
     {
         nAction = DND_ACTION_MOVE;
@@ -1173,6 +1180,8 @@ sal_Int32 OGroupsSortingDialog::getColumnDataType(const ::rtl::OUString& _sColum
     sal_Int32 nDataType = sdbc::DataType::VARCHAR;
     try
     {
+        if ( !m_xColumns.is() )
+            fillColumns();
         if ( m_xColumns.is() && m_xColumns->hasByName(_sColumnName) )
         {
             uno::Reference< beans::XPropertySet> xColumn(m_xColumns->getByName(_sColumnName),uno::UNO_QUERY);
