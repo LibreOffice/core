@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RptObject.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:44:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 18:59:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -491,7 +491,7 @@ void OObjectBase::_elementRemoved(const container::ContainerEvent& /*Event*/) th
 }
 
 //----------------------------------------------------------------------------
-sal_Bool OObjectBase::supportsService( const sal_Char* _pServiceName ) const
+sal_Bool OObjectBase::supportsService( const ::rtl::OUString& _sServiceName ) const
 {
     DBG_CHKTHIS( rpt_OObjectBase,NULL);
     sal_Bool bSupports = sal_False;
@@ -499,7 +499,7 @@ sal_Bool OObjectBase::supportsService( const sal_Char* _pServiceName ) const
     Reference< lang::XServiceInfo > xServiceInfo( m_xReportComponent , UNO_QUERY );
         // TODO: cache xServiceInfo as member?
     if ( xServiceInfo.is() )
-        bSupports = xServiceInfo->supportsService( ::rtl::OUString::createFromAscii( _pServiceName ) );
+        bSupports = xServiceInfo->supportsService( _sServiceName );
 
     return bSupports;
 }
@@ -811,8 +811,18 @@ FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
             if ( !m_xReportComponent.is() )
                 m_xReportComponent.set(getUnoShape(),uno::UNO_QUERY);
             // set labels
-            if ( m_xReportComponent.is() && supportsService( "com.sun.star.report.FixedText" ) )
-                m_xReportComponent->setPropertyValue( PROPERTY_LABEL, uno::makeAny(GetDefaultName(this)) );
+            if ( m_xReportComponent.is() )
+            {
+                try
+                {
+                    if ( supportsService( SERVICE_FIXEDTEXT ) )
+                        m_xReportComponent->setPropertyValue( PROPERTY_LABEL, uno::makeAny(GetDefaultName(this)) );
+                }
+                catch(const uno::Exception&)
+                {
+                    OSL_ENSURE(0,"OUnoObject::EndCreate: Exception caught!");
+                }
+            }
         }
         // set geometry properties
         SetPropsFromRect(GetLogicRect());
@@ -825,19 +835,19 @@ FASTBOOL OUnoObject::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
 {
     sal_uInt16 nResId = 0;
     ::rtl::OUString aDefaultName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HERE WE HAVE TO INSERT OUR NAME!"));
-    if ( _pObj->supportsService( "com.sun.star.report.FixedText" ) )
+    if ( _pObj->supportsService( SERVICE_FIXEDTEXT ) )
     {
         nResId = RID_STR_CLASS_FIXEDTEXT;
     }
-    else if ( _pObj->supportsService( "com.sun.star.report.FixedLine" ) )
+    else if ( _pObj->supportsService( SERVICE_FIXEDLINE ) )
     {
         nResId = RID_STR_CLASS_FIXEDLINE;
     }
-    else if ( _pObj->supportsService( "com.sun.star.report.ImageControl" ) )
+    else if ( _pObj->supportsService( SERVICE_IMAGECONTROL ) )
     {
         nResId = RID_STR_CLASS_IMAGECONTROL;
     }
-    else if ( _pObj->supportsService( "com.sun.star.report.FormattedField" ) )
+    else if ( _pObj->supportsService( SERVICE_FORMATTEDFIELD ) )
     {
         nResId = RID_STR_CLASS_FORMATTEDFIELD;
     }
