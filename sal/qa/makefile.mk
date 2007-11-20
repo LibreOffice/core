@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-05 10:45:22 $
+#   last change: $Author: ihi $ $Date: 2007-11-20 19:25:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,4 +67,4 @@ test_all:
         @echo ----------------------------------------------------------
         @echo - start sal unit tests
         @echo ----------------------------------------------------------
-        perl buildall.pl $(TESTOPT)
+        $(PERL) buildall.pl $(TESTOPT)
