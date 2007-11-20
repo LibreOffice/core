@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:54:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:41:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <vcl/msgbox.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 
 #include "uiitems.hxx"
 #include "rangeutl.hxx"
@@ -1432,6 +1433,8 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
                     pDim->SetLayoutInfo( &aIt->maLayoutInfo );
                     pDim->SetAutoShowInfo( &aIt->maShowInfo );
 
+                    bool bManualSort = ( aIt->maSortInfo.Mode == sheet::DataPilotFieldSortMode::MANUAL );
+
                     // visibility of members
                     if( const rtl::OUString* pItem = aIt->maMembers.getConstArray() )
                     {
@@ -1441,9 +1444,10 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
                         for( const rtl::OUString* pEnd = pItem + aIt->maMembers.getLength(); pItem != pEnd; ++pItem, ++nIdx )
                         {
                             // #i40054# create/access members only if flags are not default
+                            // (or in manual sorting mode - to keep the order)
                             bool bIsVisible = (nIdx >= nVisSize) || aIt->maVisible[ nIdx ];
                             bool bShowDetails = (nIdx >= nShowSize) || aIt->maShowDet[ nIdx ];
-                            if( !bIsVisible || !bShowDetails )
+                            if( bManualSort || !bIsVisible || !bShowDetails )
                             {
                                 ScDPSaveMember* pMember = pDim->GetMemberByName( *pItem );
                                 pMember->SetIsVisible( bIsVisible );
