@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclpixelprocessor2d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-16 15:46:43 $
+ *  last change: $Author: aw $ $Date: 2007-11-20 10:20:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,10 +105,6 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 #endif
 
-#ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
-#include <svtools/optionsdrawinglayer.hxx>
-#endif
-
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
@@ -116,7 +112,8 @@ namespace drawinglayer
     namespace processor2d
     {
         VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
-        :   VclProcessor2D(rViewInformation, rOutDev)
+        :   VclProcessor2D(rViewInformation, rOutDev),
+            maDrawinglayerOpt()
         {
             // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
             maCurrentTransformation = rViewInformation.getViewTransformation();
@@ -125,10 +122,8 @@ namespace drawinglayer
                mpOutputDevice->Push(PUSH_MAPMODE);
             mpOutputDevice->SetMapMode();
 
-            // set AntiAliasing
-            const SvtOptionsDrawinglayer aDrawinglayerOpt;
-
-            if(aDrawinglayerOpt.IsAntiAliasing())
+            // react on AntiAliasing settings
+            if(maDrawinglayerOpt.IsAntiAliasing())
             {
                 mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() & ~ANTIALIASING_DISABLE_POLYGONS);
             }
@@ -303,6 +298,29 @@ namespace drawinglayer
                     {
                         // process recursively and use the decomposition as Bitmap
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+
+                    break;
+                }
+                case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
+                {
+                    // polygon stroke primitive
+                    static bool bSuppressFatToHairlineCorrection(false);
+
+                    if(maDrawinglayerOpt.IsAntiAliasing() || bSuppressFatToHairlineCorrection)
+                    {
+                        // with AA there is no need to handle thin lines special
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+                    else
+                    {
+                        // Lines with 1 and 2 pixel width without AA need special treatment since their vsiualisation
+                        // as filled polygons is geometrically corret but looks wrong since polygon filling avoids
+                        // the right and bottom pixels. The used method evaluates that and takes the correct action,
+                        // including calling recursively with decomposition if line is wide enough
+                        const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokePrimitive = static_cast< const primitive2d::PolygonStrokePrimitive2D& >(rCandidate);
+
+                        RenderPolygonStrokePrimitive2D(rPolygonStrokePrimitive);
                     }
 
                     break;

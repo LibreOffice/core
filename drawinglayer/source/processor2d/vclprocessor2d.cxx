@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
+ *  last change: $Author: aw $ $Date: 2007-11-20 10:20:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -910,6 +910,87 @@ namespace drawinglayer
                 mpOutputDevice->SetLineColor(Color(aProcessedColor));
                 mpOutputDevice->SetFillColor();
                 mpOutputDevice->DrawWaveLine(aVclStart, aVclStop, nWaveStyle);
+            }
+        }
+
+        void VclProcessor2D::RenderPolygonStrokePrimitive2D(const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokeCandidate)
+        {
+            const attribute::LineAttribute& rLineAttribute = rPolygonStrokeCandidate.getLineAttribute();
+            const double fLineWidth(rLineAttribute.getWidth());
+            bool bDone(false);
+
+            if(basegfx::fTools::more(fLineWidth, 0.0))
+            {
+                const basegfx::B2DVector aDiscreteUnit(maCurrentTransformation * basegfx::B2DVector(1.0, 1.0));
+                const double fDiscreteLineWidth((fLineWidth * aDiscreteUnit.getX() + fLineWidth * aDiscreteUnit.getY()) * 0.5);
+
+                if(basegfx::fTools::lessOrEqual(fDiscreteLineWidth, 2.5))
+                {
+                    // force to hairline
+                    const attribute::StrokeAttribute& rStrokeAttribute = rPolygonStrokeCandidate.getStrokeAttribute();
+                    const basegfx::BColor aHairlineColor(maBColorModifierStack.getModifiedColor(rLineAttribute.getColor()));
+                    basegfx::B2DPolyPolygon aHairlinePolyPolygon;
+
+                    mpOutputDevice->SetLineColor(Color(aHairlineColor));
+                    mpOutputDevice->SetFillColor();
+
+                    if(0.0 == rStrokeAttribute.getFullDotDashLen())
+                    {
+                        // no line dashing, just copy
+                        aHairlinePolyPolygon.append(rPolygonStrokeCandidate.getB2DPolygon());
+                    }
+                    else
+                    {
+                        // else apply LineStyle
+                        basegfx::tools::applyLineDashing(rPolygonStrokeCandidate.getB2DPolygon(),
+                            rStrokeAttribute.getDotDashArray(),
+                            &aHairlinePolyPolygon, 0, rStrokeAttribute.getFullDotDashLen());
+                    }
+
+                    const sal_uInt32 nCount(aHairlinePolyPolygon.count());
+
+                    if(nCount)
+                    {
+                        const bool bNeedQuadro(basegfx::fTools::more(fDiscreteLineWidth, 1.5));
+                        aHairlinePolyPolygon.transform(maCurrentTransformation);
+
+                        for(sal_uInt32 a(0); a < nCount; a++)
+                        {
+                            // draw the basic hairline polygon
+                            basegfx::B2DPolygon aCandidate(aHairlinePolyPolygon.getB2DPolygon(a));
+                            mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+
+                            if(bNeedQuadro)
+                            {
+                                // line width is in range ]1.5 .. 2.5], use four hairlines
+                                // drawn in a square. Create the three other ones
+                                basegfx::B2DHomMatrix aMat;
+
+                                aMat.set(0, 2, 1);
+                                aCandidate.transform(aMat);
+                                mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+
+                                aMat.set(0, 2, 0);
+                                aMat.set(1, 2, 1);
+                                aCandidate.transform(aMat);
+                                mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+
+                                aMat.set(0, 2, -1);
+                                aMat.set(1, 2, 0);
+                                aCandidate.transform(aMat);
+                                mpOutputDevice->DrawPolyLine(aCandidate, 0.0);
+                            }
+                        }
+                    }
+
+                    bDone = true;
+                }
+            }
+
+            if(!bDone)
+            {
+                // line width is big enough for standard filled polygon visualisation or zero
+                process(rPolygonStrokeCandidate.get2DDecomposition(getViewInformation2D()));
             }
         }
 

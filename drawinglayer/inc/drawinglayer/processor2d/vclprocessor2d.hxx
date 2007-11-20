@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-15 16:10:57 $
+ *  last change: $Author: aw $ $Date: 2007-11-20 10:20:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ namespace drawinglayer { namespace primitive2d {
     class PointArrayPrimitive2D;
     class ModifiedColorPrimitive2D;
     class WrongSpellPrimitive2D;
+    class PolygonStrokePrimitive2D;
     class ControlPrimitive2D;
 }}
 
@@ -109,6 +110,7 @@ namespace drawinglayer
             void RenderMarkerArrayPrimitive2D(const primitive2d::MarkerArrayPrimitive2D& rMarkerArrayCandidate);
             void RenderPointArrayPrimitive2D(const primitive2d::PointArrayPrimitive2D& rPointArrayCandidate);
             void RenderWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellCandidate);
+            void RenderPolygonStrokePrimitive2D(const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokeCandidate);
 
             /////////////////////////////////////////////////////////////////////////////
             // FormControl support
