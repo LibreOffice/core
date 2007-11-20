@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:11:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,12 @@
 #include <stack>
 
 #include <tools/globname.hxx>
+
+//--->i56629
+#ifndef _BOOKMRK_HXX
+#include <bookmrk.hxx>
+#endif
+//<---
 
 
 using namespace ::com::sun::star;
@@ -1643,6 +1649,39 @@ void SwEnhancedPDFExportHelper::EnhancedPDFExport()
                 }
             }
         }
+
+        if( pPDFExtOutDevData->GetIsExportNamedDestinations() )
+        {
+        //---> i56629 the iteration to convert the OOo bookmark (#bookmark)
+        // into PDF named destination, see section 8.2.1 in PDF 1.4 spec
+        // We need:
+        // 1. a name for the destination, formed from the standard OOo bookmark name
+        // 2. the destination, obtained from where the bookmark destination lies
+            const SwBookmarks& rBkmks = mrSh.GetDoc()->getBookmarks();
+            //iterate trhrough bookmarks
+            sal_uInt16 nBkmks = rBkmks.Count(), nCnt;
+            for(nCnt = 0; nCnt < nBkmks; nCnt++)
+            {
+//get the name
+                SwBookmark* pBkmk = rBkmks[ nCnt ];
+                mrSh.SwCrsrShell::ClearMark();
+                rtl::OUString sBkName = pBkmk->GetName();
+//jump to it
+                JumpToSwMark( &mrSh, sBkName );
+
+                // Destination Rectangle
+                const SwRect& rDestRect = mrSh.GetCharRect();
+
+                // Destination PageNum
+                const sal_Int32 nDestPageNum = CalcOutputPageNum( rDestRect );
+
+                // Destination Export
+                if ( -1 != nDestPageNum )
+                    pPDFExtOutDevData->CreateNamedDest( sBkName, rDestRect.SVRect(), nDestPageNum );
+            }
+            mrSh.SwCrsrShell::ClearMark();
+        }
+//<--- i56629
     }
     else
     {
