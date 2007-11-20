@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 16:01:59 $
+#   last change: $Author: ihi $ $Date: 2007-11-20 19:46:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ DEF1NAME    =$(SHL1TARGET)
 .IF "$(OS)$(CPU)$(COMNAME)" == "LINUXIgcc3"
 SHL1VERSIONMAP = linuxigcc3_export.map
 .ELSE
-SHL1VERSIONMAP = export.map
+SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
 .ENDIF
 
 # END --------------------------------------------------------------
@@ -78,7 +78,7 @@ DEF2NAME    =$(SHL2TARGET)
 .IF "$(OS)$(CPU)$(COMNAME)" == "LINUXIgcc3"
 SHL2VERSIONMAP = linuxigcc3_export.map
 .ELSE
-SHL2VERSIONMAP = export.map
+SHL2VERSIONMAP = $(PRJ)$/qa$/export.map
 .ENDIF
 
 # END --------------------------------------------------------------
