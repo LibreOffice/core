@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:03:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:22:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -731,6 +731,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 break;
             case SID_FORM_CREATE_REPWIZ_PRE_SEL:
             case SID_REPORT_CREATE_REPWIZ_PRE_SEL:
+            case SID_APP_NEW_REPORT_PRE_SEL:
                 aReturn.bEnabled = !isDataSourceReadOnly()
                                     && SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SWRITER)
                                     && getContainer()->isALeafSelected();
@@ -738,6 +739,17 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 {
                     ElementType eType = getContainer()->getElementType();
                     aReturn.bEnabled = eType == E_QUERY || eType == E_TABLE;
+                    if ( aReturn.bEnabled && SID_APP_NEW_REPORT_PRE_SEL == _nId )
+                    {
+                        Reference< XContentEnumerationAccess > xEnumAccess(m_xServiceFactory, UNO_QUERY);
+                        aReturn.bEnabled = xEnumAccess.is();
+                        if ( aReturn.bEnabled )
+                        {
+                            static ::rtl::OUString s_sReportDesign(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOReportJobFactory"));
+                            Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(s_sReportDesign);
+                            aReturn.bEnabled = xEnumDrivers.is() && xEnumDrivers->hasMoreElements();
+                        }
+                    }
                 }
                 break;
             case SID_DB_APP_DELETE:
@@ -1144,6 +1156,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case ID_APP_NEW_QUERY_AUTO_PILOT:
             case SID_DB_FORM_NEW_PILOT:
             case SID_REPORT_CREATE_REPWIZ_PRE_SEL:
+            case SID_APP_NEW_REPORT_PRE_SEL:
             case SID_FORM_CREATE_REPWIZ_PRE_SEL:
             case ID_DOCUMENT_CREATE_REPWIZ:
             case SID_APP_NEW_FORM:
@@ -1170,6 +1183,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                             bAutoPilot = sal_True;
                             // run through
                         case SID_APP_NEW_REPORT:
+                        case SID_APP_NEW_REPORT_PRE_SEL:
                             eType = E_REPORT;
                             break;
                         case ID_APP_NEW_QUERY_AUTO_PILOT:
@@ -1360,6 +1374,8 @@ void OApplicationController::describeSupportedFeatures()
                                                                                         CommandGroup::APPLICATION );
 
     implDescribeSupportedFeature( ".uno:DBNewReport",        SID_APP_NEW_REPORT,        CommandGroup::INSERT );
+    implDescribeSupportedFeature( ".uno:DBNewReportWithPreSelection",
+                                                             SID_APP_NEW_REPORT_PRE_SEL,CommandGroup::APPLICATION );
     implDescribeSupportedFeature( ".uno:DBNewReportAutoPilot",
                                                              ID_DOCUMENT_CREATE_REPWIZ, CommandGroup::INSERT );
     implDescribeSupportedFeature( ".uno:DBNewReportAutoPilotWithPreSelection",
@@ -1779,24 +1795,8 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
             ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
             if ( aHelper->isConnected() )
             {
-                sal_Int32 nCommandType = ( (getContainer()->getElementType() == E_QUERY)
-                                            ? CommandType::QUERY : ( (getContainer()->getElementType() == E_TABLE) ? CommandType::TABLE : -1 ));
-                Reference<XConnection> xConnection;
-
-                ::rtl::OUString sName;
-                if ( nCommandType != -1 )
-                {
-                    try
-                    {
-                        sName = getContainer()->getQualifiedName( NULL );
-                        OSL_ENSURE( sName.getLength(), "OApplicationController::newElementWithPilot: no name given!" );
-                    }
-                    catch(Exception)
-                    {
-                        OSL_ENSURE( 0, "OApplicationController::newElementWithPilot: Exception catched!" );
-                    }
-                }
-
+                sal_Int32 nCommandType = -1;
+                const ::rtl::OUString sName(getCurrentlySelectedName(nCommandType));
                 Reference< XComponent > xComponent,xDefinition;
                 if ( E_REPORT == _eType )
                     xComponent = aHelper->newReportWithPilot(xDefinition,nCommandType,sName);
@@ -1833,18 +1833,13 @@ void OApplicationController::newElement( ElementType _eType, sal_Bool _bSQLView 
     switch ( _eType )
     {
         case E_FORM:
-            {
-                ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
-                Reference< XComponent > xComponent,xDefinition;
-                xComponent = aHelper->newForm(ID_FORM_NEW_TEXT,xDefinition);
-                addDocumentListener(xComponent,xDefinition);
-            }
-            break;
         case E_REPORT:
             {
                 ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
                 Reference< XComponent > xComponent,xDefinition;
-                xComponent = aHelper->newForm(ID_REPORT_NEW_TEXT,xDefinition);
+                sal_Int32 nCommandType = -1;
+                const ::rtl::OUString sName(getCurrentlySelectedName(nCommandType));
+                xComponent = aHelper->newDocument(_eType == E_FORM ? ID_FORM_NEW_TEXT : ID_REPORT_NEW_TEXT,xDefinition,nCommandType,sName);
                 addDocumentListener(xComponent,xDefinition);
             }
             break;
@@ -2475,6 +2470,28 @@ void OApplicationController::containerFound( const Reference< XContainer >& _xCo
     {
         OSL_ENSURE(0,"Could not listener on the container!");
     }
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OApplicationController::getCurrentlySelectedName(sal_Int32& _rnCommandType) const
+{
+    _rnCommandType = ( (getContainer()->getElementType() == E_QUERY)
+                                ? CommandType::QUERY : ( (getContainer()->getElementType() == E_TABLE) ? CommandType::TABLE : -1 ));
+
+
+    ::rtl::OUString sName;
+    if ( _rnCommandType != -1 )
+    {
+        try
+        {
+            sName = getContainer()->getQualifiedName( NULL );
+            OSL_ENSURE( sName.getLength(), "OApplicationController::newElementWithPilot: no name given!" );
+        }
+        catch(Exception)
+        {
+            OSL_ENSURE( 0, "OApplicationController::newElementWithPilot: Exception catched!" );
+        }
+    }
+    return sName;
 }
 // -----------------------------------------------------------------------------
 ::sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw (IllegalArgumentException, RuntimeException)
