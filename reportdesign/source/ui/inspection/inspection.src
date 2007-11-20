@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inspection.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 12:13:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:10:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,4 +203,24 @@ String RID_STR_OVERLAP_OTHER_CONTROL
 String RID_STR_ILLEGAL_POSITION
 {
     Text [ en-US ] = "This position can not be set. It is invalid.";
+};
+String RID_STR_SCOPE_GROUP
+{
+    Text [ en-US ] = "Group: %1";
+};
+String RID_STR_FORMULALIST
+{
+    Text [ en-US ] = "Function";
+};
+String RID_STR_SCOPE
+{
+    Text [ en-US ] = "Scope";
+};
+String RID_STR_TYPE
+{
+    Text [ en-US ] = "Data Field Type";
+};
+String RID_STR_TYPE_CONST
+{
+    Text [ en-US ] = "Field or Formula;Function;Counter;User defined Function";
 };
