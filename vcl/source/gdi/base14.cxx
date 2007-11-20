@@ -4,9 +4,9 @@
  *
  *  $RCSfile: base14.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 14:20:23 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:10:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,7 +287,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
 },
 
 { "Helvetica", // family name
-  "Normal", // style
+  "Italic", // style
   "Helvetica-Oblique", // PSName
   718, -207, // ascend, descend
   FAMILY_SWISS, // family style
@@ -332,7 +332,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
 },
 
 { "Helvetica", // family name
-  "Italic", // style
+  "Bold", // style
   "Helvetica-Bold", // PSName
   718, -207, // ascend, descend
   FAMILY_SWISS, // family style
@@ -377,7 +377,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
 },
 
 { "Helvetica", // family name
-  "Bold", // style
+  "Bold Italic", // style
   "Helvetica-BoldOblique", // PSName
   718, -207, // ascend, descend
   FAMILY_SWISS, // family style
@@ -422,7 +422,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
 },
 
 { "Times", // family name
-  "Bold Italic", // style
+  "Normal", // style
   "Times-Roman", // PSName
   683, -217, // ascend, descend
   FAMILY_ROMAN, // family style
@@ -467,7 +467,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
 },
 
 { "Times", // family name
-  "Normal", // style
+  "Italic", // style
   "Times-Italic", // PSName
   683, -217, // ascend, descend
   FAMILY_ROMAN, // family style
@@ -512,7 +512,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
 },
 
 { "Times", // family name
-  "Normal", // style
+  "Bold", // style
   "Times-Bold", // PSName
   683, -217, // ascend, descend
   FAMILY_ROMAN, // family style
@@ -557,7 +557,7 @@ const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
 },
 
 { "Times", // family name
-  "Italic", // style
+  "Bold Italic", // style
   "Times-BoldItalic", // PSName
   683, -217, // ascend, descend
   FAMILY_ROMAN, // family style
