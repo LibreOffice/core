@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Navigator.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:00:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:08:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,10 +140,12 @@ USHORT lcl_getImageId(const uno::Reference< report::XReportComponent>& _xElement
     return nId;
 }
 // -----------------------------------------------------------------------------
-::rtl::OUString lcl_getName(const uno::Reference< report::XReportComponent>& _xElement)
+::rtl::OUString lcl_getName(const uno::Reference< beans::XPropertySet>& _xElement)
 {
     OSL_ENSURE(_xElement.is(),"Found report element which is NULL!");
-    ::rtl::OUStringBuffer sName = _xElement->getName();
+    ::rtl::OUString sTempName;
+    _xElement->getPropertyValue(PROPERTY_NAME) >>= sTempName;
+    ::rtl::OUStringBuffer sName = sTempName;
     uno::Reference< report::XFixedText> xFixedText(_xElement,uno::UNO_QUERY);
     uno::Reference< report::XReportControlModel> xReportModel(_xElement,uno::UNO_QUERY);
     if ( xFixedText.is() )
@@ -151,7 +153,7 @@ USHORT lcl_getImageId(const uno::Reference< report::XReportComponent>& _xElement
         sName.append(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" : ")));
         sName.append(xFixedText->getLabel());
     }
-    else if ( xReportModel->getPropertySetInfo()->hasPropertyByName(PROPERTY_DATAFIELD) )
+    else if ( xReportModel.is() && _xElement->getPropertySetInfo()->hasPropertyByName(PROPERTY_DATAFIELD) )
     {
         ReportFormula aFormula( xReportModel->getDataField() );
         if ( aFormula.isValid() )
@@ -226,7 +228,6 @@ protected:
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& _rEvt );
 
     // OSelectionChangeListener
-    virtual void _selectionChanged( const lang::EventObject& aEvent ) throw (uno::RuntimeException);
     virtual void _disposing(const lang::EventObject& _rSource) throw( uno::RuntimeException);
 
     // OPropertyChangeListener
@@ -243,6 +244,8 @@ public:
 
     DECL_LINK(OnEntrySelDesel, NavigatorTree*);
     DECL_LINK( OnDropActionTimer, void* );
+
+    virtual void _selectionChanged( const lang::EventObject& aEvent ) throw (uno::RuntimeException);
 
     // ITraverseReport
     virtual void traverseReport(const uno::Reference< report::XReportDefinition>& _xReport);
@@ -594,7 +597,7 @@ void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xS
     {
         uno::Reference< report::XReportComponent> xElement(_xSection->getByIndex(i),uno::UNO_QUERY);
         OSL_ENSURE(xElement.is(),"Found report element which is NULL!");
-        insertEntry(lcl_getName(xElement),pSection,lcl_getImageId(xElement),LIST_APPEND,new UserData(this,xElement));
+        insertEntry(lcl_getName(xElement.get()),pSection,lcl_getImageId(xElement),LIST_APPEND,new UserData(this,xElement));
         uno::Reference< report::XReportDefinition> xSubReport(xElement,uno::UNO_QUERY);
         if ( xSubReport.is() )
         {
@@ -767,9 +770,9 @@ void NavigatorTree::_elementInserted( const container::ContainerEvent& _rEvent )
     else
     {
         uno::Reference< report::XReportComponent> xElement(xProp,uno::UNO_QUERY);
-        if ( xElement.is() )
-            sName = lcl_getName(xElement);
-        insertEntry(sName,pEntry,lcl_getImageId(xElement),LIST_APPEND,new UserData(this,xProp));
+        if ( xProp.is() )
+            sName = lcl_getName(xProp);
+        insertEntry(sName,pEntry,(!xElement.is() ? USHORT(SID_RPT_NEW_FUNCTION) : lcl_getImageId(xElement)),LIST_APPEND,new UserData(this,xProp));
     }
     if ( !IsExpanded(pEntry) )
         Expand(pEntry);
@@ -844,6 +847,10 @@ NavigatorTree::UserData::UserData(NavigatorTree* _pTree,const uno::Reference<uno
                 m_pListener->addProperty(PROPERTY_NAME);
             else if ( xInfo->hasPropertyByName(PROPERTY_EXPRESSION) )
                 m_pListener->addProperty(PROPERTY_EXPRESSION);
+            if ( xInfo->hasPropertyByName(PROPERTY_DATAFIELD) )
+                m_pListener->addProperty(PROPERTY_DATAFIELD);
+            if ( xInfo->hasPropertyByName(PROPERTY_LABEL) )
+                m_pListener->addProperty(PROPERTY_LABEL);
             if ( xInfo->hasPropertyByName(PROPERTY_HEADERON) )
                 m_pListener->addProperty(PROPERTY_HEADERON);
             if ( xInfo->hasPropertyByName(PROPERTY_FOOTERON) )
@@ -872,35 +879,45 @@ void NavigatorTree::UserData::_propertyChanged(const beans::PropertyChangeEvent&
     SvLBoxEntry* pEntry = m_pTree->find(_rEvent.Source);
     OSL_ENSURE(pEntry,"No entry could be found! Why not!");
     const bool bFooterOn = (PROPERTY_FOOTERON == _rEvent.PropertyName);
-    if ( bFooterOn || PROPERTY_HEADERON == _rEvent.PropertyName )
+    try
     {
-        sal_Int32 nPos = 1;
-        uno::Reference< report::XGroup> xGroup(_rEvent.Source,uno::UNO_QUERY);
-        ::std::mem_fun_t< sal_Bool,OGroupHelper> pIsOn = ::std::mem_fun(&OGroupHelper::getHeaderOn);
-        ::std::mem_fun_t< uno::Reference<report::XSection> ,OGroupHelper> pMemFunSection = ::std::mem_fun(&OGroupHelper::getHeader);
-        if ( bFooterOn )
+        if ( bFooterOn || PROPERTY_HEADERON == _rEvent.PropertyName )
         {
-            pIsOn = ::std::mem_fun(&OGroupHelper::getFooterOn);
-            pMemFunSection = ::std::mem_fun(&OGroupHelper::getFooter);
-            nPos = m_pTree->GetChildCount(pEntry) - 1;
-        }
-
-        OGroupHelper aGroupHelper(xGroup);
-        if ( pIsOn(&aGroupHelper) )
-        {
+            sal_Int32 nPos = 1;
+            uno::Reference< report::XGroup> xGroup(_rEvent.Source,uno::UNO_QUERY);
+            ::std::mem_fun_t< sal_Bool,OGroupHelper> pIsOn = ::std::mem_fun(&OGroupHelper::getHeaderOn);
+            ::std::mem_fun_t< uno::Reference<report::XSection> ,OGroupHelper> pMemFunSection = ::std::mem_fun(&OGroupHelper::getHeader);
             if ( bFooterOn )
-                ++nPos;
-            m_pTree->traverseSection(pMemFunSection(&aGroupHelper),pEntry,bFooterOn ? SID_GROUPFOOTER : SID_GROUPHEADER,nPos);
+            {
+                pIsOn = ::std::mem_fun(&OGroupHelper::getFooterOn);
+                pMemFunSection = ::std::mem_fun(&OGroupHelper::getFooter);
+                nPos = m_pTree->GetChildCount(pEntry) - 1;
+            }
+
+            OGroupHelper aGroupHelper(xGroup);
+            if ( pIsOn(&aGroupHelper) )
+            {
+                if ( bFooterOn )
+                    ++nPos;
+                m_pTree->traverseSection(pMemFunSection(&aGroupHelper),pEntry,bFooterOn ? SID_GROUPFOOTER : SID_GROUPHEADER,nPos);
+            }
+            //else
+            //    m_pTree->removeEntry(m_pTree->GetEntry(pEntry,nPos));
         }
-        //else
-        //    m_pTree->removeEntry(m_pTree->GetEntry(pEntry,nPos));
+        else if ( PROPERTY_EXPRESSION == _rEvent.PropertyName)
+        {
+            ::rtl::OUString sNewName;
+            _rEvent.NewValue >>= sNewName;
+            m_pTree->SetEntryText(pEntry,sNewName);
+        }
+        else if ( PROPERTY_DATAFIELD == _rEvent.PropertyName || PROPERTY_LABEL == _rEvent.PropertyName || PROPERTY_NAME == _rEvent.PropertyName )
+        {
+            uno::Reference<beans::XPropertySet> xProp(_rEvent.Source,uno::UNO_QUERY);
+            m_pTree->SetEntryText(pEntry,lcl_getName(xProp));
+        }
     }
-    else if ( PROPERTY_NAME == _rEvent.PropertyName || PROPERTY_EXPRESSION == _rEvent.PropertyName)
-    {
-        ::rtl::OUString sNewName;
-        _rEvent.NewValue >>= sNewName;
-        m_pTree->SetEntryText(pEntry,sNewName);
-    }
+    catch(uno::Exception)
+    {}
 }
 // -----------------------------------------------------------------------------
 void NavigatorTree::UserData::_elementInserted( const container::ContainerEvent& _rEvent ) throw(uno::RuntimeException)
@@ -946,6 +963,8 @@ ONavigatorImpl::ONavigatorImpl(OReportController* _pController,ONavigator* _pPar
     reportdesign::OReportVisitor aVisitor(m_pNavigatorTree.get());
     aVisitor.start(m_xReport);
     m_pNavigatorTree->Expand(m_pNavigatorTree->find(m_xReport));
+    lang::EventObject aEvent(*m_pController);
+    m_pNavigatorTree->_selectionChanged(aEvent);
 }
 //------------------------------------------------------------------------
 ONavigatorImpl::~ONavigatorImpl()
