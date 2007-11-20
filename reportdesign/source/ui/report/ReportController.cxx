@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportController.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:45:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:12:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,7 +343,7 @@ uno::Reference< report::XReportControlFormat> lcl_getReportControlFormat(const S
 }
 // -----------------------------------------------------------------------------
 // check overlapping
-void lcl_correctOverlapping(SdrObject* pControl,::boost::shared_ptr<OReportSection> _pReportSection)
+void lcl_correctOverlapping(SdrObject* pControl,::boost::shared_ptr<OReportSection> _pReportSection,bool _bAppend = true)
 {
     OSectionView* pSectionView = _pReportSection->getView();
     uno::Reference< report::XReportComponent> xComponent(pControl->getUnoShape(),uno::UNO_QUERY);
@@ -353,15 +353,16 @@ void lcl_correctOverlapping(SdrObject* pControl,::boost::shared_ptr<OReportSecti
     bool bOverlapping = true;
     while ( bOverlapping )
     {
-        SdrObject* pOverlappedObj = isOver(aRet,*_pReportSection->getPage(),*pSectionView,true,pControl);
+        const SdrObject* pOverlappedObj = isOver(aRet,*_pReportSection->getPage(),*pSectionView,true,pControl);
         bOverlapping = pOverlappedObj != NULL;
         if ( bOverlapping )
         {
-            aRet.Move(0,pOverlappedObj->GetLogicRect().getHeight());
+            const Rectangle& aLogicRect = pOverlappedObj->GetLogicRect();
+            aRet.Move(0,aLogicRect.Top() + aLogicRect.getHeight() - aRet.Top());
             xComponent->setPositionY(aRet.Top());
         }
     }
-    if ( !bOverlapping ) // now insert objects
+    if ( !bOverlapping && _bAppend ) // now insert objects
         pSectionView->InsertObjectAtView(pControl,*pSectionView->GetSdrPageView(),SDRINSERT_ADDMARK);
 }
 //------------------------------------------------------------------------------
@@ -1689,7 +1690,7 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             }
             break;
         case SID_SAVEASDOC:
-            getView()->PostUserEvent(LINK(this, OReportController,OnSaveAs));
+            //getView()->PostUserEvent(LINK(this, OReportController,OnSaveAs));
             break;
         case SID_SAVEDOC:
             getView()->PostUserEvent(LINK(this, OReportController,OnSave));
@@ -2706,9 +2707,8 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
             {
                 SvxPageItem aPageItem(RPTUI_ID_PAGE);
                 aPageItem.SetDescName(xPageStyle->getName());
-
-                //style::PageStyleLayout ePageStyleLayout = getStyleProperty<style::PageStyleLayout>(m_xReportDefinition,PROPERTY_PAGESTYLELAYOUT);
-                aPageItem.SetPageUsage(SVX_PAGE_ALL);
+                uno::Reference<beans::XPropertySet> xProp(xPageStyle,uno::UNO_QUERY_THROW);
+                aPageItem.PutValue(xProp->getPropertyValue(PROPERTY_PAGESTYLELAYOUT),MID_PAGE_LAYOUT);
                 aPageItem.SetLandscape(getStyleProperty<sal_Bool>(m_xReportDefinition,PROPERTY_ISLANDSCAPE));
                 aPageItem.SetNumType((SvxNumType)getStyleProperty<sal_Int16>(m_xReportDefinition,PROPERTY_NUMBERINGTYPE));
                 pDescriptor->Put(aPageItem);
@@ -2732,6 +2732,7 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                 }
                 else
                 {
+                    uno::Reference< beans::XPropertySet> xProp(getUsedStyle(m_xReportDefinition),uno::UNO_QUERY_THROW);
                     const String sUndoAction(ModuleRes(RID_STR_UNDO_CHANGEPAGE));
                     UndoManagerListAction aListAction(m_aUndoManager,sUndoAction);
                     const SfxPoolItem* pItem = NULL;
@@ -2740,30 +2741,35 @@ void OReportController::openPageDialog(const uno::Reference<report::XSection>& _
                         const Size aPaperSize = static_cast<const SvxSizeItem*>(pItem)->GetSize();
                         //view::PaperFormat eUnoPaperFormat = lcl_convertPaperFormat(SvxPaperInfo::GetSvxPaper(aPaperSize,MAP_100TH_MM,TRUE));
                         //m_xReportDefinition->setPaperFormat(eUnoPaperFormat);
-                        setStyleProperty(m_xReportDefinition,PROPERTY_PAPERSIZE,AWTSize(aPaperSize));
+                        uno::Any aValue;
+                        static_cast<const SvxSizeItem*>(pItem)->QueryValue(aValue,MID_SIZE_SIZE);
+                        xProp->setPropertyValue(PROPERTY_PAPERSIZE,aValue);
                     }
 
                     if ( SFX_ITEM_SET == pSet->GetItemState( RPTUI_ID_LRSPACE,sal_True,&pItem))
                     {
-                        setStyleProperty(m_xReportDefinition,PROPERTY_LEFTMARGIN,static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft());
-                        setStyleProperty(m_xReportDefinition,PROPERTY_RIGHTMARGIN,static_cast<const SvxLRSpaceItem*>(pItem)->GetRight());
+                        xProp->setPropertyValue(PROPERTY_LEFTMARGIN,uno::makeAny(static_cast<const SvxLRSpaceItem*>(pItem)->GetLeft()));
+                        xProp->setPropertyValue(PROPERTY_RIGHTMARGIN,uno::makeAny(static_cast<const SvxLRSpaceItem*>(pItem)->GetRight()));
                     }
                     if ( SFX_ITEM_SET == pSet->GetItemState( RPTUI_ID_ULSPACE,sal_True,&pItem))
                     {
-                        setStyleProperty(m_xReportDefinition,PROPERTY_TOPMARGIN,static_cast<const SvxULSpaceItem*>(pItem)->GetUpper());
-                        setStyleProperty(m_xReportDefinition,PROPERTY_BOTTOMMARGIN,static_cast<const SvxULSpaceItem*>(pItem)->GetLower());
+                        xProp->setPropertyValue(PROPERTY_TOPMARGIN,uno::makeAny(static_cast<const SvxULSpaceItem*>(pItem)->GetUpper()));
+                        xProp->setPropertyValue(PROPERTY_BOTTOMMARGIN,uno::makeAny(static_cast<const SvxULSpaceItem*>(pItem)->GetLower()));
                     }
                     if ( SFX_ITEM_SET == pSet->GetItemState( RPTUI_ID_PAGE,sal_True,&pItem))
                     {
                         const SvxPageItem* pPageItem = static_cast<const SvxPageItem*>(pItem);
-                        setStyleProperty(m_xReportDefinition,PROPERTY_ISLANDSCAPE,static_cast<sal_Bool>(pPageItem->IsLandscape()));
-                        setStyleProperty(m_xReportDefinition,PROPERTY_NUMBERINGTYPE,static_cast<sal_Int16>(pPageItem->GetNumType()));
+                        xProp->setPropertyValue(PROPERTY_ISLANDSCAPE,uno::makeAny(static_cast<sal_Bool>(pPageItem->IsLandscape())));
+                        xProp->setPropertyValue(PROPERTY_NUMBERINGTYPE,uno::makeAny(static_cast<sal_Int16>(pPageItem->GetNumType())));
+                        uno::Any aValue;
+                        pPageItem->QueryValue(aValue,MID_PAGE_LAYOUT);
+                        xProp->setPropertyValue(PROPERTY_PAGESTYLELAYOUT,aValue);
                     }
                     if ( SFX_ITEM_SET == pSet->GetItemState( RPTUI_ID_BRUSH,sal_True,&pItem))
                     {
                         ::Color aBackColor = static_cast<const SvxBrushItem*>(pItem)->GetColor();
-                        setStyleProperty(m_xReportDefinition,PROPERTY_BACKTRANSPARENT,aBackColor == COL_TRANSPARENT);
-                        setStyleProperty(m_xReportDefinition,PROPERTY_BACKCOLOR,aBackColor.GetColor());
+                        xProp->setPropertyValue(PROPERTY_BACKTRANSPARENT,uno::makeAny(aBackColor == COL_TRANSPARENT));
+                        xProp->setPropertyValue(PROPERTY_BACKCOLOR,uno::makeAny(aBackColor.GetColor()));
                     }
                 }
             }
@@ -3090,7 +3096,7 @@ uno::Reference< sdbc::XRowSet > OReportController::getRowSet()
         uno::Reference< beans::XPropertySet> xRowSetProp( xRowSet, uno::UNO_QUERY_THROW );
 
         xRowSetProp->setPropertyValue( PROPERTY_ACTIVECONNECTION, uno::makeAny( getConnection() ) );
-        xRowSetProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ApplyFilter" ) ), uno::makeAny( sal_True ) );
+        xRowSetProp->setPropertyValue( PROPERTY_APPLYFILTER, uno::makeAny( sal_True ) );
 
         TPropertyNamePair aPropertyMediation;
         aPropertyMediation.insert( TPropertyNamePair::value_type( PROPERTY_COMMAND, PROPERTY_COMMAND ) );
@@ -3121,14 +3127,18 @@ void OReportController::insertGraphic()
 
         uno::Reference< ui::dialogs::XFilePickerControlAccess > xController(aDialog.GetFilePicker(), UNO_QUERY_THROW);
         xController->setValue(ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_PREVIEW, 0, ::cppu::bool2any(sal_True));
-        xController->enableControl(ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False);
-        xController->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, ::cppu::bool2any( sal_True ) );
+        xController->enableControl(ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, sal_False/*sal_True*/);
+        sal_Bool bLink = sal_True;
+        xController->setValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0, ::cppu::bool2any( bLink ) );
 
         if ( ERRCODE_NONE == aDialog.Execute() )
         {
-            uno::Sequence<beans::PropertyValue> aArgs(1);
+            xController->getValue( ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_LINK, 0) >>= bLink;
+            uno::Sequence<beans::PropertyValue> aArgs(2);
             aArgs[0].Name = PROPERTY_IMAGEURL;
             aArgs[0].Value <<= ::rtl::OUString(aDialog.GetPath());
+            aArgs[1].Name = PROPERTY_PRESERVEIRI;
+            aArgs[1].Value <<= bLink;
             createControl(aArgs,xSection,::rtl::OUString(),OBJ_DLG_IMAGECONTROL);
         }
     }
@@ -3326,7 +3336,10 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         }
     }
 
-    const sal_Int32 nShapeWidth = xShapeProp->getWidth();
+    const sal_Int32 nShapeWidth = aMap.getUnpackedValueOrDefault(PROPERTY_WIDTH,xShapeProp->getWidth());
+    if ( nShapeWidth != xShapeProp->getWidth() )
+        xShapeProp->setWidth( nShapeWidth );
+
     const bool bChangedPos = (aPos.X + nShapeWidth) > nPaperWidth;
     if ( bChangedPos )
         aPos.X = nPaperWidth - nShapeWidth;
@@ -3574,8 +3587,8 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     for(i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i)
                     {
                         pObjs[i] = dynamic_cast<OUnoObject*>(pControl[i]);
-                        uno::Reference<beans::XPropertySet> xUnoProp(pObjs[i]->GetUnoControlModel(),uno::UNO_QUERY);
-                        uno::Reference< report::XReportComponent> xShapeProp(pObjs[i]->getUnoShape(),uno::UNO_QUERY);
+                        uno::Reference<beans::XPropertySet> xUnoProp(pObjs[i]->GetUnoControlModel(),uno::UNO_QUERY_THROW);
+                        uno::Reference< report::XReportComponent> xShapeProp(pObjs[i]->getUnoShape(),uno::UNO_QUERY_THROW);
                         xUnoProp->setPropertyValue(PROPERTY_NAME,xShapeProp->getPropertyValue(PROPERTY_NAME));
 
                         uno::Reference<beans::XPropertySetInfo> xInfo = xUnoProp->getPropertySetInfo();
@@ -3615,8 +3628,8 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     {
                         // we have two different Views, so set the position x new.
                         // pSectionViews[1].position.x = pSectionViews[0].position.x
-                        uno::Reference< report::XReportComponent> xShapePropLabel(pObjs[0]->getUnoShape(),uno::UNO_QUERY);
-                        uno::Reference< report::XReportComponent> xShapePropTextField(pObjs[1]->getUnoShape(),uno::UNO_QUERY);
+                        uno::Reference< report::XReportComponent> xShapePropLabel(pObjs[0]->getUnoShape(),uno::UNO_QUERY_THROW);
+                        uno::Reference< report::XReportComponent> xShapePropTextField(pObjs[1]->getUnoShape(),uno::UNO_QUERY_THROW);
                         awt::Point aPosLabel = xShapePropLabel->getPosition();
                         awt::Point aPosTextField = xShapePropTextField->getPosition();
                         aPosTextField.X = aPosLabel.X;
@@ -3624,11 +3637,8 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         if (bLabelAboveTextField)
                         {
                             // move the label down near the splitter
-                            uno::Reference<report::XSection> xLabelSection = pReportSection[1]->getSection();
-                            sal_Int32 nSectionHeight = xLabelSection->getHeight();
-                            sal_Int32 nLabelHeight = xShapePropLabel->getHeight();
-                            sal_Int32 nNewYPosition = nSectionHeight - nLabelHeight /* - 1 */;
-                            aPosLabel.Y = nNewYPosition;
+                            const uno::Reference<report::XSection> xLabelSection = pReportSection[1]->getSection();
+                            aPosLabel.Y = xLabelSection->getHeight() - xShapePropLabel->getHeight();
                         }
                         else
                         {
@@ -3638,11 +3648,32 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                         xShapePropLabel->setPosition(aPosLabel);
                     }
                     OUnoObject* pObj = dynamic_cast<OUnoObject*>(pControl[0]);
-                    uno::Reference< report::XReportComponent> xShapeProp(pObj->getUnoShape(),uno::UNO_QUERY);
+                    uno::Reference< report::XReportComponent> xShapeProp(pObj->getUnoShape(),uno::UNO_QUERY_THROW);
                     xShapeProp->setName(xShapeProp->getName() + sDefaultName );
 
                     for(i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i)
                         lcl_correctOverlapping(pControl[i],pReportSection[1-i]);
+                    if (!bLabelAboveTextField )
+                    {
+                        uno::Reference< report::XReportComponent> xComponent(pControl[1]->getUnoShape(),uno::UNO_QUERY_THROW);
+                        sal_Int32 nY1 = xShapeProp->getPositionY();
+                        sal_Int32 nY2 = xComponent->getPositionY();
+                        while( nY1 != nY2 )
+                        {
+                            size_t nWhich = 0;
+                            if ( nY1 > nY2 )
+                            {
+                                ++nWhich;
+                                xComponent->setPositionY(nY1);
+                            }
+                            else
+                                xShapeProp->setPositionY(nY2);
+                            lcl_correctOverlapping(pControl[nWhich],pReportSection[1 - nWhich],false);
+
+                            nY1 = xShapeProp->getPositionY();
+                            nY2 = xComponent->getPositionY();
+                        }
+                    }
                 }
             }
             else
@@ -3713,7 +3744,7 @@ void OReportController::listen(const bool _bAdd)
     const beans::Property* pIter = aSeq.getConstArray();
     const beans::Property* pEnd   = pIter + aSeq.getLength();
     const ::rtl::OUString* pPropsBegin = &aProps[0];
-    const ::rtl::OUString* pPropsEnd   = pPropsBegin + (sizeof(aProps)/sizeof(aProps[0])) - 2;
+    const ::rtl::OUString* pPropsEnd   = pPropsBegin + (sizeof(aProps)/sizeof(aProps[0])) - 3;
     for(;pIter != pEnd;++pIter)
     {
         if ( ::std::find(pPropsBegin,pPropsEnd,pIter->Name) == pPropsEnd )
@@ -3748,19 +3779,22 @@ void OReportController::listen(const bool _bAdd)
     } // for (sal_Int32 i=0;i<nCount ; ++i)
 
     if ( _bAdd )
+    {
         m_pMyOwnView->addSection(m_xReportDefinition->getDetail(),DBDETAIL);
 
-    for (sal_Int32 i=0;i<nCount ; ++i)
-    {
-        uno::Reference< report::XGroup > xGroup(xGroups->getByIndex(i),uno::UNO_QUERY);
-        if ( xGroup->getFooterOn() && _bAdd )
-            m_pMyOwnView->addSection(xGroup->getFooter(),DBGROUPFOOTER);
-    } // for (sal_Int32 i=0;i<nCount ; ++i)
+        for (sal_Int32 i=nCount;i > 0 ; --i)
+        {
+            uno::Reference< report::XGroup > xGroup(xGroups->getByIndex(i-1),uno::UNO_QUERY);
+            if ( xGroup->getFooterOn() )
+                m_pMyOwnView->addSection(xGroup->getFooter(),DBGROUPFOOTER);
+        }
+        if ( m_xReportDefinition->getReportFooterOn() )
+            m_pMyOwnView->addSection(m_xReportDefinition->getReportFooter(),DBREPORTFOOTER);
+        if ( m_xReportDefinition->getPageFooterOn())
+            m_pMyOwnView->addSection(m_xReportDefinition->getPageFooter(),DBPAGEFOOTER);
+    }
 
-    if ( m_xReportDefinition->getReportFooterOn() && _bAdd )
-        m_pMyOwnView->addSection(m_xReportDefinition->getReportFooter(),DBREPORTFOOTER);
-    if ( m_xReportDefinition->getPageFooterOn() && _bAdd )
-        m_pMyOwnView->addSection(m_xReportDefinition->getPageFooter(),DBPAGEFOOTER);
+
 
     _bAdd ? xGroups->addContainerListener(static_cast<XContainerListener*>(this))
         : xGroups->removeContainerListener(static_cast<XContainerListener*>(this));
