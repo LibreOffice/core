@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap_process.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:54:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:37:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,17 +59,18 @@ using namespace ::rtl;
 // ----------------------------------- Main -----------------------------------
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
-        Bootstrap aBootstrap;
-        //custom .ini/rc file
-        Bootstrap aBs_custom( OUString::createFromAscii(argv[3]) );
+    (void)argc;
+    Bootstrap aBootstrap;
+    //custom .ini/rc file
+    Bootstrap aBs_custom( OUString::createFromAscii(argv[3]) );
     OUString suValue;
     OUString suDefault( OUString::createFromAscii("mydefault") );
-        int flag = atoi( argv[1] );
+    int flag = atoi( argv[1] );
 
-        switch( flag ) {
-       case 1:
+    switch( flag ) {
+    case 1:
         // parameters may be passed by command line arguments
-            aBootstrap.getFrom(
+        aBootstrap.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("UNO_SERVICES")),
             suValue );
         if (suValue.equalsAscii("service.rdb") )
@@ -78,9 +79,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else
             return 11;
-              case 2:
-                  // parameters may be passed by ini file
-            aBootstrap.getFrom(
+    case 2:
+        // parameters may be passed by ini file
+        aBootstrap.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("EXECUTABLE_RC")),
             suValue );
         if (suValue.equalsAscii("true") )
@@ -89,9 +90,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else
             return 21;
-              case 3:
-              // parameters may be passed by command line arguments
-            aBootstrap.getFrom(
+    case 3:
+        // parameters may be passed by command line arguments
+        aBootstrap.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("QADEV_BOOTSTRAP")),
             suValue );
         if (suValue.equalsAscii("sun&ms") )
@@ -100,9 +101,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else
             return 31;
-       case 4:
-              // parameters may be passed by custom .ini/rc file
-            aBs_custom.getFrom(
+    case 4:
+        // parameters may be passed by custom .ini/rc file
+        aBs_custom.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("RTLVALUE")),
             suValue );
         if (suValue.equalsAscii("qadev17") )
@@ -111,9 +112,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else
             return 41;
-       case 5:
-              // parameters may be passed by inheritance
-            aBs_custom.getFrom(
+    case 5:
+        // parameters may be passed by inheritance
+        aBs_custom.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("EXECUTABLE_RC")),
             suValue );
         if (suValue.equalsAscii("true") )
@@ -122,9 +123,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else
             return 51;
-       default:
-             // parameters may be passed by inheritance
-            aBs_custom.getFrom(
+    default:
+        // parameters may be passed by inheritance
+        aBs_custom.getFrom(
             OUString(RTL_CONSTASCII_USTRINGPARAM("ABCDE")),
             suValue, suDefault );
         if (suValue.equalsAscii("mydefault") )
@@ -133,5 +134,5 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         }
         else
             return 61;
-       }
+    }
 }
