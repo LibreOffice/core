@@ -6,9 +6,9 @@
  *
  *  $RCSfile: metadata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:38:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:10:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,8 +144,8 @@ namespace rptui
     #define PROPERTY_ID_CONDITIONALPRINTEXPRESSION      18
     #define PROPERTY_ID_INITIALFORMULA                  19
     #define PROPERTY_ID_STARTNEWCOLUMN                  20
-    #define PROPERTY_ID_DATAFIELD                       21
-    #define PROPERTY_ID_RESETPAGENUMBER                 22
+    #define PROPERTY_ID_TYPE                            21
+    #define PROPERTY_ID_DATAFIELD                       22
     #define PROPERTY_ID_CHARFONTNAME                    23
     #define PROPERTY_ID_PRINTWHENGROUPCHANGE            24
     #define PROPERTY_ID_DEEPTRAVERSING                  25
@@ -154,6 +154,9 @@ namespace rptui
     #define PROPERTY_ID_BACKTRANSPARENT                 28
     #define PROPERTY_ID_CONTROLBACKGROUND               29
     #define PROPERTY_ID_CONTROLBACKGROUNDTRANSPARENT    30
+    #define PROPERTY_ID_FORMULALIST                     31
+    #define PROPERTY_ID_SCOPE                           32
+    #define PROPERTY_ID_RESETPAGENUMBER                 33
 
 //............................................................................
 } // namespace rptui
