@@ -4,9 +4,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:54:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:52:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -589,7 +589,7 @@ namespace pcr
         if ( !_minvalue.IsPresent )
             getTypedControlWindow()->SetMin( ::std::numeric_limits< sal_Int64 >::min() );
         else
-            getTypedControlWindow()->SetMin( impl_apiValueToFieldValue_nothrow( _minvalue.Value ) );
+            getTypedControlWindow()->SetMin( impl_apiValueToFieldValue_nothrow( _minvalue.Value ) , m_eValueUnit);
     }
 
     //--------------------------------------------------------------------
@@ -612,7 +612,7 @@ namespace pcr
         if ( !_maxvalue.IsPresent )
             getTypedControlWindow()->SetMax( ::std::numeric_limits< sal_Int64 >::max() );
         else
-            getTypedControlWindow()->SetMax( impl_apiValueToFieldValue_nothrow( _maxvalue.Value ) );
+            getTypedControlWindow()->SetMax( impl_apiValueToFieldValue_nothrow( _maxvalue.Value ), m_eValueUnit );
     }
 
     //--------------------------------------------------------------------
