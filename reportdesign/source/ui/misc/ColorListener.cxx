@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColorListener.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:11:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ OColorListener::OColorListener(Window* _pParent ,const ::rtl::OUString& _sColorE
 {
     DBG_CTOR( rpt_OColorListener,NULL);
     StartListening(m_aExtendedColorConfig);
-    m_nColor = m_aExtendedColorConfig.GetColorValue(CFG_REPORTDESIGNER,m_sColorEntry).nColor;
+    m_nColor = m_aExtendedColorConfig.GetColorValue(CFG_REPORTDESIGNER,m_sColorEntry).getColor();
     m_nTextBoundaries = m_aColorConfig.GetColorValue(::svtools::DOCBOUNDARIES).nColor;
 }
 // -----------------------------------------------------------------------------
@@ -75,7 +75,7 @@ void OColorListener::Notify(SfxBroadcaster & /*rBc*/, SfxHint const & rHint)
         && (static_cast< SfxSimpleHint const & >(rHint).GetId()
             == SFX_HINT_COLORS_CHANGED))
     {
-        m_nColor = m_aExtendedColorConfig.GetColorValue(CFG_REPORTDESIGNER,m_sColorEntry).nColor;
+        m_nColor = m_aExtendedColorConfig.GetColorValue(CFG_REPORTDESIGNER,m_sColorEntry).getColor();
         m_nTextBoundaries = m_aColorConfig.GetColorValue(::svtools::DOCBOUNDARIES).nColor;
         Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE);
     }
