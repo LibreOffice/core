@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:49:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:14:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,14 @@ enum StandardSQLState
     SQL_CYCLIC_SUB_QUERIES,         // OB001
 
     SQL_ERROR_UNSPECIFIED = SAL_MAX_ENUM    // special value indicating that an SQLState is not to be specified
+};
+
+//==============================================================================
+//= Special exception if cancel is pressed in DBA UI
+//==============================================================================
+enum OOoBaseErrorCode
+{
+    ParameterInteractionCancelled = 1
 };
 
 //==============================================================================
