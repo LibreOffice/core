@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlReport.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:23:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ OXMLReport::OXMLReport( ORptFilter& rImport,
          ::rtl::OUString sLocalName;
             const rtl::OUString sAttrName = _xAttrList->getNameByIndex( i );
             const sal_uInt16 nPrefix = rMap.GetKeyByAttrName( sAttrName,&sLocalName );
-            rtl::OUString sValue = _xAttrList->getValueByIndex( i );
+            const rtl::OUString sValue = _xAttrList->getValueByIndex( i );
 
             switch( rTokenMap.Get( nPrefix, sLocalName ) )
             {
@@ -143,6 +143,9 @@ OXMLReport::OXMLReport( ORptFilter& rImport,
                     break;
                 case XML_TOK_REPORT_MIMETYPE:
                     m_xComponent->setMimeType(sValue);
+                    break;
+                case XML_TOK_REPORT_NAME:
+                    m_xComponent->setName(sValue);
                     break;
                 default:
                     break;
