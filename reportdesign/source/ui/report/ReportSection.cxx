@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportSection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 15:35:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:12:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,8 +126,7 @@ using namespace ::com::sun::star;
 sal_Int32 lcl_getOverlappedControlColor(/*const uno::Reference <lang::XMultiServiceFactory> _rxFactory*/)
 {
     svtools::ExtendedColorConfig aConfig;
-    // sal_Int32 nColor = aConfig.GetColorValue(rtl::OUString::createFromAscii("ReportDesigner"), rtl::OUString::createFromAscii("OverlappedControl")).nColor;
-    sal_Int32 nColor = aConfig.GetColorValue(rtl::OUString::createFromAscii("ReportDesigner"), DBOVERLAPPEDCONTROL).nColor;
+    sal_Int32 nColor = aConfig.GetColorValue(CFG_REPORTDESIGNER, DBOVERLAPPEDCONTROL).getColor();
     return nColor;
 }
 //------------------------------------------------------------------------------
