@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:02:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:05:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2100,7 +2100,7 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                             Point aPoint( 0, 0 );
                             Rectangle   aPageRect( aPoint, aPageSize );
 
-                            // resolving links
+                            // resolving links found in this page by the method ImpEditEngine::Paint
                             std::vector< vcl::PDFExtOutDevBookmarkEntry >& rBookmarks = pPDFExtOutDevData->GetBookmarks();
                             std::vector< vcl::PDFExtOutDevBookmarkEntry >::iterator aIBeg = rBookmarks.begin();
                             std::vector< vcl::PDFExtOutDevBookmarkEntry >::iterator aIEnd = rBookmarks.end();
@@ -2114,7 +2114,29 @@ void SAL_CALL SdXImpressDocument::render( sal_Int32 nRenderer, const uno::Any& r
                                 aIBeg++;
                             }
                             rBookmarks.clear();
+                            //---> i56629, i40318
+                            //get the page name, will be used as outline element in PDF bookmark pane
+                            String aPageName = mpDoc->GetSdPage( (USHORT)nPageNumber - 1 , PK_STANDARD )->GetName();
+                            if( aPageName.Len() > 0 )
+                            {
+                                // insert the bookmark to this page into the NamedDestinations
+                                if( pPDFExtOutDevData->GetIsExportNamedDestinations() )
+                                    pPDFExtOutDevData->CreateNamedDest( aPageName, aPageRect,  nPageNumber - 1 );
+                                //
+                                // add the name to the outline, (almost) same code as in sc/source/ui/unoobj/docuno.cxx
+                                // issue i40318.
+                                //
+                                if( pPDFExtOutDevData->GetIsExportBookmarks() )
+                                {
+                                    // Destination Export
+                                    const sal_Int32 nDestId =
+                                        pPDFExtOutDevData->CreateDest( aPageRect , nPageNumber - 1 );
 
+                                    // Create a new outline item:
+                                    pPDFExtOutDevData->CreateOutlineItem( -1 , aPageName, nDestId );
+                                }
+                            }
+                            //<--- i56629, i40318
                         }
                         catch( uno::Exception& )
                         {
