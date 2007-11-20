@@ -4,9 +4,9 @@
  *
  *  $RCSfile: osl_Module.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:50:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:29:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ inline sal_Bool ifFileExist( const ::rtl::OUString & str )
         return sal_False;
 
     ::osl::File strFile( aUStr );
-    sal_Bool nError = strFile.open( OpenFlag_Read );
+    ::osl::FileBase::RC nError = strFile.open( OpenFlag_Read );
     if ( ::File::E_NOENT == nError )
         return sal_False;
     else{
@@ -216,7 +216,9 @@ namespace osl_Module
         void ctors_name_mode( )
         {
             OUString aFileURL;
-            if ( !( bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL )  ) )
+            bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL );
+
+            if ( !( bRes ) )
             {
                 CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.",  sal_False  );
             }
@@ -247,7 +249,8 @@ namespace osl_Module
         void getUrlFromAddress_001( )
         {
             OUString aFileURL;
-            if ( !( bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL )  ) )
+            bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL ) ;
+            if ( !( bRes ) )
             {
                 CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.",  sal_False  );
             }
@@ -262,7 +265,8 @@ namespace osl_Module
             FuncPtr pFunc = ( FuncPtr ) aMod.getSymbol( rtl::OUString::createFromAscii( "firstfunc" ) );
 
             OUString aFileURL;
-            if ( !( bRes = osl::Module::getUrlFromAddress( ( void* )pFunc, aFileURL )  ) )
+            bRes = osl::Module::getUrlFromAddress( ( void* )pFunc, aFileURL );
+            if ( !( bRes  ) )
             {
                 CPPUNIT_ASSERT_MESSAGE("Cannot locate current module.",  sal_False  );
             }
@@ -390,7 +394,8 @@ namespace osl_Module
         void is_001( )
         {
             OUString aFileURL;
-            if ( !( bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL )  ) )
+            bRes = osl::Module::getUrlFromAddress( ( void* ) &::osl_Module::testClass::myFunc, aFileURL );
+            if ( !( bRes  ) )
             {
                 CPPUNIT_ASSERT_MESSAGE("Cannot locate current module - using executable instead",  sal_False  );
             }
