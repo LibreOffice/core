@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:14:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:03:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,10 @@ private:
     Reference< task::XStatusIndicator > mxStatusIndicator;
 
     sal_Bool                mbUseTaggedPDF;
+    sal_Int32               mnPDFTypeSelection;
     sal_Bool                mbExportNotes;
     sal_Bool                mbExportNotesPages;
+    sal_Bool                mbEmbedStandardFonts;
     sal_Bool                mbUseTransitionEffects;
     sal_Bool                mbExportBookmarks;
     sal_Int32               mnOpenBookmarkLevels;
@@ -115,6 +117,12 @@ private:
     SvtGraphicFill          maCacheFill;
     sal_Int32               mnCachePatternId;
 
+//--->i56629
+    sal_Bool                mbExportRelativeFsysLinks;
+    sal_Int32               mnDefaultLinkAction;
+    sal_Bool                mbConvertOOoTargetToPDFTarget;
+    sal_Bool                mbExportBmkToDest;
+//<---
     sal_Bool                ImplExportPage( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData& rPDFExtOutDevData,
                                                 const GDIMetaFile& rMtf );
     sal_Bool                ImplWriteActions( ::vcl::PDFWriter& rWriter, ::vcl::PDFExtOutDevData* pPDFExtOutDevData,
