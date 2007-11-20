@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:56:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:43:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3201,7 +3201,68 @@ sal_Int8 ScGridWindow::AcceptPrivateDrop( const AcceptDropEvent& rEvt )
 
         InsCellCmd eDragInsertMode = INS_NONE;
         Window::PointerState aState = GetPointerState();
-        if ( aState.mnState & KEY_MOD2 )
+
+        // check for datapilot item sorting
+        ScDPObject* pDPObj = NULL;
+        if ( pThisDoc == pSourceDoc && ( pDPObj = pThisDoc->GetDPAtCursor( nNewDragX, nNewDragY, nTab ) ) != NULL )
+        {
+            // drop on DataPilot table: sort or nothing
+
+            bool bDPSort = false;
+            if ( pThisDoc->GetDPAtCursor( nSourceStartX, nSourceStartY, aSourceRange.aStart.Tab() ) == pDPObj )
+            {
+                ScDPPositionData aDestData;
+                pDPObj->GetPositionData( aDestData, ScAddress(nNewDragX, nNewDragY, nTab) );
+                bool bValid = ( aDestData.nDimension >= 0 );        // dropping onto a field
+
+                // look through the source range
+                for (SCROW nRow = aSourceRange.aStart.Row(); bValid && nRow <= aSourceRange.aEnd.Row(); ++nRow )
+                    for (SCCOL nCol = aSourceRange.aStart.Col(); bValid && nCol <= aSourceRange.aEnd.Col(); ++nCol )
+                    {
+                        ScDPPositionData aSourceData;
+                        pDPObj->GetPositionData( aSourceData, ScAddress( nCol, nRow, aSourceRange.aStart.Tab() ) );
+                        if ( aSourceData.nDimension != aDestData.nDimension || !aSourceData.aMemberName.Len() )
+                            bValid = false;     // empty (subtotal) or different field
+                    }
+
+                if ( bValid )
+                {
+                    BOOL bIsDataLayout;
+                    String aDimName = pDPObj->GetDimName( aDestData.nDimension, bIsDataLayout );
+                    const ScDPSaveDimension* pDim = pDPObj->GetSaveData()->GetExistingDimensionByName( aDimName );
+                    if ( pDim )
+                    {
+                        ScRange aOutRange = pDPObj->GetOutRange();
+
+                        USHORT nOrient = pDim->GetOrientation();
+                        if ( nOrient == sheet::DataPilotFieldOrientation_COLUMN )
+                        {
+                            eDragInsertMode = INS_CELLSRIGHT;
+                            nSizeY = aOutRange.aEnd.Row() - nNewDragY + 1;
+                            bDPSort = true;
+                        }
+                        else if ( nOrient == sheet::DataPilotFieldOrientation_ROW )
+                        {
+                            eDragInsertMode = INS_CELLSDOWN;
+                            nSizeX = aOutRange.aEnd.Col() - nNewDragX + 1;
+                            bDPSort = true;
+                        }
+                    }
+                }
+            }
+
+            if ( !bDPSort )
+            {
+                // no valid sorting in a DataPilot table -> disallow
+                if ( bDragRect )
+                {
+                    bDragRect = FALSE;
+                    UpdateDragRectOverlay();
+                }
+                return DND_ACTION_NONE;
+            }
+        }
+        else if ( aState.mnState & KEY_MOD2 )
         {
             if ( pThisDoc == pSourceDoc && nTab == aSourceRange.aStart.Tab() )
             {
@@ -3633,6 +3694,16 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
                 pViewData->GetDispatcher().Execute( nId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
                                             &aRangeItem, &aNameItem, (void*) NULL );
                 bDone = TRUE;
+            }
+            else if ( pThisDoc->GetDPAtCursor( nDestPosX, nDestPosY, nThisTab ) )
+            {
+                // drop on DataPilot table: try to sort, fail if that isn't possible
+
+                ScAddress aDestPos( nDestPosX, nDestPosY, nThisTab );
+                if ( aDestPos != aSource.aStart )
+                    bDone = pViewData->GetView()->DataPilotMove( aSource, aDestPos );
+                else
+                    bDone = TRUE;   // same position: nothing
             }
             else if ( nDestPosX != aSource.aStart.Col() || nDestPosY != aSource.aStart.Row() ||
                         nSourceTab != nThisTab )
