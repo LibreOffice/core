@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 15:20:34 $
+#   last change: $Author: ihi $ $Date: 2007-11-20 19:31:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,9 +54,9 @@ SHL1OBJS=  \
 
 SHL1TARGET= osl_Mutex
 SHL1STDLIBS=\
-   $(SALLIB) 
+   $(SALLIB) \
+    $(CPPUNITLIB)
 .IF "$(GUI)" == "WNT"
-SHL1STDLIBS +=	$(SOLARLIBDIR)$/cppunit.lib
 SHL1STDLIBS += $(WS2_32LIB)
 .ENDIF
 
@@ -65,15 +65,14 @@ SHL1STDLIBS +=	$(SOLARLIBDIR)$/cppunit.lib
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=$(SOLARLIBDIR)$/libcppunit$(DLLPOSTFIX).a
 SHL1STDLIBS += -ldl -lnsl
 .ENDIF
 
 SHL1IMPLIB= i$(SHL1TARGET)
-SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME    =$(SHL1TARGET)
-DEF1EXPORTFILE= export.exp
+SHL1VERSIONMAP = $(PRJ)$/qa$/export.map
+
 # auto generated Target:Socket
 # END ------------------------------------------------------------------
 
