@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:24:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 17:10:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,9 @@ public:
     };
 
     enum Orientation { Portrait, Landscape, Seascape, Inherit };
-    enum PDFVersion { PDF_1_2, PDF_1_3, PDF_1_4, PDF_1_5 };
+
+    // in case the below enum is added PDF_1_6 PDF_1_7, please add them just after PDF_1_5
+    enum PDFVersion { PDF_1_2, PDF_1_3, PDF_1_4, PDF_1_5, PDF_A_1 };//i59651, PDF/A-1b & -1a, only -1b implemented for now
     // for the meaning of DestAreaType please look at PDF Reference Manual
     // version 1.4 section 8.2.1, page 475
     enum DestAreaType { XYZ, Fit, FitHorizontal, FitVertical,
@@ -477,6 +479,15 @@ public:
         ContinuousFacing
     };
 
+    // These emuns are treated as integer while reading/writing to configuration
+    //what default action to generate in a PDF hyperlink to external document/site
+    enum PDFLinkDefaultAction
+    {
+        URIAction,
+        URIActionDestination,
+        LaunchAction
+    };
+
 /*
 The following structure describes the permissions used in PDF security
  */
@@ -509,12 +520,26 @@ The following structure describes the permissions used in PDF security
     {
         /* must be a valid file: URL usable by osl */
         rtl::OUString                   URL;
+        /* the URL of the document being exported, used for relative links*/
+        rtl::OUString                   BaseURL;
+        /*if relative to file system should be formed*/
+        bool                            RelFsys;//i56629, i49415?, i64585?
+        /*the action to set the PDF hyperlink to*/
+        PDFWriter::PDFLinkDefaultAction DefaultLinkAction;
+        //convert the .od? target file type in a link to a .pdf type
+        //this is examined before doing anything else
+        bool                            ConvertOOoTargetToPDFTarget;
+        //when the file type is .pdf, force the GoToR action
+        bool                            ForcePDFAction;
+
         /* decides the PDF language level to be produced */
         PDFVersion                      Version;
         /* valid for PDF >= 1.4
            causes the MarkInfo entry in the document catalog to be set
         */
         bool                            Tagged;
+        /* forces the embedding of PDF standard fonts */
+        bool                            EmbedStandardFonts;
         /*  determines in which format a form
             will be submitted.
          */
@@ -553,8 +578,13 @@ The following structure describes the permissions used in PDF security
         rtl::OUString                   UserPassword; // user password for PDF, in clear text
 
         PDFWriterContext() :
+                RelFsys( false ), //i56629, i49415?, i64585?
+                DefaultLinkAction( PDFWriter::URIAction ),
+                ConvertOOoTargetToPDFTarget( false ),
+                ForcePDFAction( false ),
                 Version( PDFWriter::PDF_1_4 ),
                 Tagged( false ),
+                EmbedStandardFonts( false ),
                 SubmitFormat( PDFWriter::FDF ),
                 PDFDocumentMode( PDFWriter::ModeDefault ),
                 PDFDocumentAction( PDFWriter::ActionDefault ),
@@ -797,6 +827,26 @@ The following structure describes the permissions used in PDF security
     */
     void                DrawJPGBitmap( SvStream& rJPGData, bool bIsTrueColor, const Size& rSrcSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask );
 
+    /** Create a new named destination to be used in a link from another PDF document
+
+    @parm sDestName
+    the name (label) of the bookmark, to be used to jump to
+
+    @param rRect
+    target rectangle on page to be displayed if dest is jumped to
+
+    @param nPageNr
+    number of page the dest is on (as returned by NewPage)
+    or -1 in which case the current page is used
+
+    @param eType
+    what dest type to use
+
+    @returns
+    the destination id (to be used in SetLinkDest) or
+    -1 if page id does not exist
+    */
+    sal_Int32           CreateNamedDest( const rtl::OUString& sDestName, const Rectangle& rRect, sal_Int32 nPageNr = -1, DestAreaType eType = XYZ );
     /** Create a new destination to be used in a link
 
     @param rRect
