@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportWindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:40:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:12:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,8 @@
 #include "dlgedfac.hxx"
 #endif
 #include <boost/bind.hpp>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <svtools/syslocale.hxx>
 
 #define SECTION_OFFSET  3
 namespace rptui
@@ -137,6 +139,8 @@ OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
     m_aHRuler.SetIndents();
     m_aHRuler.SetMargin1();
     m_aHRuler.SetMargin2();
+    const MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
+    m_aHRuler.SetUnit(MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH);
 
     m_pObjFac = new DlgEdFactory();
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StartMarker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:04:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:12:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,8 @@
 #endif
 #include <vcl/gradient.hxx>
 #include <vcl/lineinfo.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <svtools/syslocale.hxx>
 #ifndef _SFXSMPLHINT_HXX
 #include <svtools/smplhint.hxx>
 #endif
@@ -112,6 +114,8 @@ OStartMarker::OStartMarker(OSectionsWindow* _pParent,const ::rtl::OUString& _sCo
     m_aVRuler.SetIndents();
     m_aVRuler.SetMargin1();
     m_aVRuler.SetMargin2();
+    const MeasurementSystem eSystem = SvtSysLocale().GetLocaleData().getMeasurementSystemEnum();
+    m_aVRuler.SetUnit(MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH);
 
 }
 // -----------------------------------------------------------------------------
