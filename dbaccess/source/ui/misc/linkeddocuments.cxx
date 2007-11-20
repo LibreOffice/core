@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-31 09:15:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,10 +142,12 @@
 #include <comphelper/mimeconfighelper.hxx>
 #endif
 
+#include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/dbtools.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <com/sun/star/io/WrongFormatException.hpp>
 #include "ExtensionNotPresent.hxx"
+#include "com/sun/star/sdb/RowSetVetoException.hpp"
 
 //......................................................................
 namespace dbaui
@@ -339,7 +341,7 @@ namespace dbaui
         newWithPilot("com.sun.star.wizards.query.CallQueryWizard",xDefinition,_nCommandType,_rObjectName);
     }
     //------------------------------------------------------------------
-    Reference< XComponent > OLinkedDocumentsAccess::newForm(sal_Int32 _nNewFormId,Reference< XComponent >& _xDefinition)
+    Reference< XComponent > OLinkedDocumentsAccess::newDocument(sal_Int32 _nNewFormId,Reference< XComponent >& _xDefinition,const sal_Int32 _nCommandType,const ::rtl::OUString& _sObjectName)
     {
         OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid document container!");
         // determine the URL to use for the new document
@@ -399,6 +401,12 @@ namespace dbaui
                     aCommand.Argument <<= aOpenCommand;
                     WaitObject aWaitCursor( m_pDialogParent );
                     xNewDocument.set(xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()),UNO_QUERY);
+                    Reference<XPropertySet> xProp(xNewDocument,UNO_QUERY);
+                    if ( xProp.is() && _sObjectName.getLength() )
+                    {
+                        xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(_nCommandType));
+                        xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(_sObjectName));
+                    }
                 }
             }
         }
@@ -453,21 +461,27 @@ namespace dbaui
         }
         catch(Exception& e)
         {
-            com::sun::star::sdbc::SQLException aSQLException;
-            aSQLException.Message = e.Message;
-            aSQLException.Context = e.Context;
-            aInfo = dbtools::SQLExceptionInfo(aSQLException);
+            Any aAny = ::cppu::getCaughtException();
+            com::sun::star::sdbc::SQLException a;
+            if ((aAny >>= a) &&
+                (a.ErrorCode != dbtools::ParameterInteractionCancelled))
+            {
+                com::sun::star::sdbc::SQLException aSQLException;
+                aSQLException.Message = e.Message;
+                aSQLException.Context = e.Context;
+                aInfo = dbtools::SQLExceptionInfo(aSQLException);
 
-            // more like a hack, insert an empty message
-            aInfo.prepend(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" \n")));
+                // more like a hack, insert an empty message
+                aInfo.prepend(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" \n")));
 
-            String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
-            sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
-            aInfo.prepend(sMessage);
+                String sMessage = String(ModuleRes(STR_COULDNOTOPEN_LINKEDDOC));
+                sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
+                aInfo.prepend(sMessage);
 
-            // sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
-            // ErrorBox aError(m_pDialogParent, WB_OK, sMessage);
-            // aError.Execute();
+                // sMessage.SearchAndReplaceAscii("$file$",_rLinkName);
+                // ErrorBox aError(m_pDialogParent, WB_OK, sMessage);
+                // aError.Execute();
+            }
         }
         if (aInfo.isValid())
         {
