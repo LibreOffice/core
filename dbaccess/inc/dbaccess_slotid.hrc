@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaccess_slotid.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:49:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:22:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
 #define SID_DB_APP_CLOSECONNECTION      ( SID_DBACCESS_START +  16 )
 #define SID_DB_APP_DSPROPS              ( SID_DBACCESS_START +  17 )
 #define SID_DB_APP_DBADMIN              ( SID_DBACCESS_START +  18 )
-// free
+#define SID_APP_NEW_REPORT_PRE_SEL      ( SID_DBACCESS_START +  19 )
 #define SID_DB_APP_CONVERTTOVIEW        ( SID_DBACCESS_START +  20 )
 #define SID_DB_APP_REFRESH_TABLES       ( SID_DBACCESS_START +  21 )
 #define SID_DB_APP_VIEW_REPORTS         ( SID_DBACCESS_START +  22 )
