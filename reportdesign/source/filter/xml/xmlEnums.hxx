@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlEnums.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-20 19:00:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,8 @@ namespace rptxml
         XML_TOK_ESCAPE_PROCESSING       ,
         XML_TOK_REPORT_FUNCTION         ,
         XML_TOK_REPORT_ELEMENT          ,
-        XML_TOK_REPORT_MIMETYPE
+        XML_TOK_REPORT_MIMETYPE         ,
+        XML_TOK_REPORT_NAME
     };
     enum XMLGroup
     {
@@ -85,7 +86,6 @@ namespace rptxml
     {
         XML_TOK_SECTION_NAME,
         XML_TOK_TABLE,
-        XML_TOK_CONDITIONAL_PRINT_EXPRESSION,
         XML_TOK_VISIBLE             ,
         XML_TOK_FORCE_NEW_PAGE      ,
         XML_TOK_FORCE_NEW_COLUMN    ,
@@ -124,6 +124,7 @@ namespace rptxml
         ,XML_TOK_NUMBER_ROWS_SPANNED
         ,XML_TOK_TEXT_STYLE_NAME
         ,XML_TOK_TRANSFORM
+        ,XML_TOK_CONDITIONAL_PRINT_EXPRESSION
     };
     enum XMLReportElement
     {
