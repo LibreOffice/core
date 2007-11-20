@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 15:20:09 $
+#   last change: $Author: ihi $ $Date: 2007-11-20 19:29:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ SHL2IMPLIB= i$(SHL2TARGET)
 SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
 
 DEF2NAME    =$(SHL2TARGET)
-SHL2VERSIONMAP= export.map
+SHL2VERSIONMAP= $(PRJ)$/qa$/export.map
 # END ------------------------------------------------------------------
 
 # --- Targets ------------------------------------------------------
