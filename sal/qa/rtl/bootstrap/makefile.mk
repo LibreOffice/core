@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:25:25 $
+#   last change: $Author: ihi $ $Date: 2007-11-20 19:37:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ SHL1IMPLIB= i$(SHL1TARGET)
 
 DEF1NAME    =$(SHL1TARGET)
 # DEF1EXPORTFILE= export.exp
-SHL1VERSIONMAP= export.map
+SHL1VERSIONMAP= $(PRJ)$/qa$/export.map
 # END ------------------------------------------------------------------
 
 OBJ2FILES=$(OBJ)$/bootstrap_process.obj 
