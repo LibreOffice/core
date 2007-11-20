@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 16:01:47 $
+#   last change: $Author: ihi $ $Date: 2007-11-20 19:46:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ SHL1OBJS := \
     $(SLO)$/test_oustring_noadditional.obj
 SHL1IMPLIB := i$(SHL1TARGET)
 SHL1STDLIBS := $(CPPUNITLIB) $(SALLIB)
-SHL1VERSIONMAP := export.map
+SHL1VERSIONMAP := $(PRJ)$/qa$/export.map
 DEF1NAME := $(SHL1TARGET)
 
 .INCLUDE: target.mk
