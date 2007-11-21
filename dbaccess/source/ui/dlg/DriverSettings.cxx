@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DriverSettings.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:06:40 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:59:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ void ODriversSettings::getSupportedIndirectSettings( DATASOURCE_TYPE _eType, ::s
          DSID_AUTORETRIEVEENABLED,
          DSID_AUTOINCREMENTVALUE,
          DSID_AUTORETRIEVEVALUE,
+         DSID_BOOLEANCOMPARISON,
          0
     };
     for ( const USHORT* pGenericKnowSetting = nGenericKnownSettings; *pGenericKnowSetting; ++pGenericKnowSetting )
@@ -125,23 +126,11 @@ void ODriversSettings::getSupportedIndirectSettings( DATASOURCE_TYPE _eType, ::s
 
         case DST_MOZILLA:
         case DST_THUNDERBIRD:
-            _out_rDetailsIds.push_back(DSID_DOSLINEENDS);
-            break;
         case DST_EVOLUTION:
-            _out_rDetailsIds.push_back(DSID_DOSLINEENDS);
-            break;
         case DST_KAB:
-            _out_rDetailsIds.push_back(DSID_DOSLINEENDS);
-            break;
         case DST_MACAB:
-            _out_rDetailsIds.push_back(DSID_DOSLINEENDS);
-            break;
         case DST_OUTLOOK:
-            _out_rDetailsIds.push_back(DSID_DOSLINEENDS);
-            break;
-
         case DST_OUTLOOKEXP:
-            _out_rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
 
         case DST_JDBC:
