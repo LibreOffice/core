@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:23:05 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:07:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1732,7 +1732,7 @@ Reference<XPropertySet> createView( const ::rtl::OUString& _sName
         _xSourceObject->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
 
         sal_Bool bEscapeProcessing( sal_False );
-        OSL_VERIFY( _xSourceObject->getPropertyValue( PROPERTY_USE_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
+        OSL_VERIFY( _xSourceObject->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
         if ( bEscapeProcessing )
             sCommand = lcl_createSDBCLevelStatement( sCommand, _xConnection );
     }
