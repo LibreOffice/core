@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:21:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:37:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@
 #include <svtools/xtextedt.hxx>
 #include <tools/diagnose_ex.h>
 #include <sfx2/sfxdefs.hxx>
+#include <sfx2/signaturestate.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
