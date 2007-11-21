@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:36:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -646,8 +646,6 @@ SdrObject* FmFormView::CreateXFormsControl( const OXFormsDescriptor &_rDesc )
 //------------------------------------------------------------------------
 SdrObject* FmFormView::CreateFieldControl(const UniString& rFieldDesc) const
 {
-    // SBA_FIELDEXCHANGE_FORMAT
-    // "Datenbankname";"Tabellen/QueryName";1/0(fuer Tabelle/Abfrage);"Feldname"
     ::rtl::OUString sDataSource     = rFieldDesc.GetToken(0,sal_Unicode(11));
     ::rtl::OUString sObjectName     = rFieldDesc.GetToken(1,sal_Unicode(11));
     sal_uInt16 nObjectType          = (sal_uInt16)rFieldDesc.GetToken(2,sal_Unicode(11)).ToInt32();
