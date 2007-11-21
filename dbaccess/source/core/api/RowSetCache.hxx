@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:11:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:33:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,9 @@
 #ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
 #include <comphelper/propertycontainer.hxx>
 #endif
+#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
+#include <comphelper/componentcontext.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE5_HXX_
 #include <cppuhelper/implbase5.hxx>
 #endif
@@ -127,7 +130,7 @@ namespace dbaccess
         //the set can be static, bookmarkable or keyset
         ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XResultSet>       m_xSet;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData; // must be before m_aInsertRow
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xServiceFactory;
+        ::comphelper::ComponentContext                                                  m_aContext;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>                 m_xCacheSet;
 
@@ -191,7 +194,7 @@ namespace dbaccess
     public:
         ORowSetCache(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >&,
                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryAnalyzer >& _xAnalyzer,
-                     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,
+                     const ::comphelper::ComponentContext& _rContext,
                      const ::rtl::OUString& _rUpdateTableName,
                      sal_Bool&  _bModified,
                      sal_Bool&  _bNew);
