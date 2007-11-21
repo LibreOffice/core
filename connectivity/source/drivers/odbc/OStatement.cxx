@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:07:43 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:05:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -876,6 +876,15 @@ void OStatement_Base::setResultSetType(sal_Int32 _par0)
     N3SQLSetStmtAttr(m_aStatementHandle, SQL_ATTR_CURSOR_SENSITIVITY,(SQLPOINTER)nSet,SQL_IS_UINTEGER);
 }
 //------------------------------------------------------------------------------
+void OStatement_Base::setEscapeProcessing( const sal_Bool _bEscapeProc )
+{
+    OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
+    SQLUINTEGER nEscapeProc( _bEscapeProc ? SQL_NOSCAN_OFF : SQL_NOSCAN_ON );
+    SQLRETURN nRetCode = N3SQLSetStmtAttr( m_aStatementHandle, SQL_ATTR_NOSCAN, (SQLPOINTER)nEscapeProc, SQL_IS_UINTEGER );
+    (void)nRetCode;
+}
+
+//------------------------------------------------------------------------------
 void OStatement_Base::setFetchDirection(sal_Int32 _par0)
 {
     OSL_ENSURE(m_aStatementHandle,"StatementHandle is null!");
@@ -925,6 +934,15 @@ sal_Bool OStatement_Base::isUsingBookmarks() const
     SQLRETURN nRetCode = N3SQLGetStmtAttr(m_aStatementHandle,SQL_ATTR_USE_BOOKMARKS,&nValue,SQL_IS_UINTEGER,NULL);
     OSL_UNUSED( nRetCode );
     return nValue != SQL_UB_OFF;
+}
+// -------------------------------------------------------------------------
+sal_Bool OStatement_Base::getEscapeProcessing() const
+{
+    OSL_ENSURE( m_aStatementHandle, "StatementHandle is null!" );
+    sal_uInt32 nValue = SQL_NOSCAN_OFF;
+    SQLRETURN nRetCode = N3SQLGetStmtAttr( m_aStatementHandle, SQL_ATTR_NOSCAN, &nValue, SQL_IS_UINTEGER, NULL );
+    (void)nRetCode;
+    return nValue == SQL_NOSCAN_OFF;
 }
 // -------------------------------------------------------------------------
 void OStatement_Base::setUsingBookmarks(sal_Bool _bUseBookmark)
@@ -1008,8 +1026,10 @@ sal_Bool OStatement_Base::convertFastPropertyValue(
                 bConverted = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, isUsingBookmarks());
                 break;
 
-            default:
-                ;
+            case PROPERTY_ID_ESCAPEPROCESSING:
+                bConverted = ::comphelper::tryPropertyValue( rConvertedValue, rOldValue, rValue, getEscapeProcessing() );
+                break;
+
         }
     }
     catch(const SQLException&)
@@ -1052,8 +1072,12 @@ void OStatement_Base::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const A
             case PROPERTY_ID_USEBOOKMARKS:
                 setUsingBookmarks(comphelper::getBOOL(rValue));
                 break;
+            case PROPERTY_ID_ESCAPEPROCESSING:
+                setEscapeProcessing( ::comphelper::getBOOL( rValue ) );
+                break;
             default:
-                ;
+                OSL_ENSURE( false, "OStatement_Base::setFastPropertyValue_NoBroadcast: what property?" );
+                break;
         }
     }
     catch(const SQLException& )
@@ -1091,10 +1115,14 @@ void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
             rValue <<= getFetchSize();
             break;
         case PROPERTY_ID_USEBOOKMARKS:
-            rValue <<= cppu::bool2any(isUsingBookmarks());
+            rValue = cppu::bool2any(isUsingBookmarks());
+            break;
+        case PROPERTY_ID_ESCAPEPROCESSING:
+            rValue <<= getEscapeProcessing();
             break;
         default:
-            ;
+            OSL_ENSURE( false, "OStatement_Base::getFastPropertyValue: what property?" );
+            break;
     }
 }
 // -------------------------------------------------------------------------
