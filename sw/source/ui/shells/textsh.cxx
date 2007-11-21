@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-06 16:26:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 13:55:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -939,6 +939,8 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
     SwWrtShell &rSh = GetShell();
     USHORT nWhich = aIter.FirstWhich();
     SvtModuleOptions aMOpt;
+    SfxObjectCreateMode eCreateMode =
+                        GetView().GetDocShell()->GetCreateMode();
     while ( nWhich )
     {
         switch ( nWhich )
@@ -947,21 +949,21 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case SID_INSERT_VIDEO:
                 if ( GetShell().IsSelFrmMode() ||
                      !SvxPluginFileDlg::IsAvailable( nWhich ) ||
-                     SFX_CREATE_MODE_EMBEDDED == GetView().GetDocShell()->GetCreateMode() )
+                     SFX_CREATE_MODE_EMBEDDED == eCreateMode )
                 {
                     rSet.DisableItem( nWhich );
                 }
                 break;
 
             case SID_INSERT_DIAGRAM:
-                if( !aMOpt.IsChart() )
+                if( !aMOpt.IsChart() || eCreateMode == SFX_CREATE_MODE_EMBEDDED)
                 {
                     rSet.DisableItem( nWhich );
                 }
                 break;
 
             case FN_INSERT_SMA:
-                if( FN_INSERT_SMA == nWhich && !aMOpt.IsMath() )
+                if( !aMOpt.IsMath() || eCreateMode == SFX_CREATE_MODE_EMBEDDED)
                 {
                     rSet.DisableItem( nWhich );
                 }
@@ -972,14 +974,11 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
             case SID_INSERT_PLUGIN:
             case SID_INSERT_APPLET:
             {
-                SfxObjectCreateMode eMode =
-                                    GetView().GetDocShell()->GetCreateMode();
-
                 if(
 #ifndef SOLAR_JAVA
                     nWhich == SID_INSERT_APPLET ||
 #endif
-                    eMode == SFX_CREATE_MODE_EMBEDDED)
+                    eCreateMode == SFX_CREATE_MODE_EMBEDDED)
                 {
                     rSet.DisableItem( nWhich );
                 }
