@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:02:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:51:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3830,24 +3830,9 @@ void SfxViewFrame::UpdateDocument_Impl()
 {
     SfxObjectShell* pDoc = GetObjectShell();
     if ( pDoc->IsLoadingFinished() )
-    {
-        // if the loading still not finished the macros will be handled immediatelly after loading
-        if ( SvtSecurityOptions().IsMacroDisabled() )
-        {
-            // no macro should be executed at all
-            pDoc->Get_Impl()->bMacroDisabled = sal_True;
-            pDoc->Get_Impl()->nMacroMode = ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE;
-        }
-        else if ( pDoc->HasMacrosLib_Impl() || pDoc->HasMacrosStor_Impl() )
-            pDoc->AdjustMacroMode( String() );
-        else
-        {
-            // if macros will be added by the user later, the security check is obsolete
-            pDoc->Get_Impl()->nMacroMode = ::com::sun::star::document::MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-        }
-    }
+        pDoc->CheckSecurityOnLoading_Impl();
 
-    // check if document depends from a template
+    // check if document depends on a template
     pDoc->UpdateFromTemplate_Impl();
 }
 
