@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablename.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:20:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:47:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,12 +73,19 @@ namespace sdbtools
 
     public:
         /** constructs the instance
+
+            @param _rContext
+                the component's context
             @param  _rxConnection
                 the connection to work with. Will be held weak. Must not be <NULL/>.
+
             @throws ::com::sun::star::lang::NullPointerException
                 if _rxConnection is <NULL/>
         */
-        TableName( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
+        TableName(
+            const ::comphelper::ComponentContext& _rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+        );
 
         // XTableName
         virtual ::rtl::OUString SAL_CALL getCatalogName() throw (::com::sun::star::uno::RuntimeException);

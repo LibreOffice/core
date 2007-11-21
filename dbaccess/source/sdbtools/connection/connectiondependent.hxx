@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connectiondependent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:18:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:44:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,21 +37,13 @@
 #define DBACCESS_CONNECTION_DEPENDENT_HXX
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
-#endif
-
-#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/weakref.hxx>
-#endif
+#include <osl/mutex.hxx>
 
 //........................................................................
 namespace sdbtools
@@ -67,6 +59,8 @@ namespace sdbtools
         mutable ::osl::Mutex    m_aMutex;
         ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XConnection >
                                 m_aConnection;
+        ::comphelper::ComponentContext
+                                m_aContext;
 
         /** a hard reference to the connection we're working for
 
@@ -80,11 +74,17 @@ namespace sdbtools
     protected:
         ::osl::Mutex&   getMutex() const { return m_aMutex; }
 
+        const ::comphelper::ComponentContext&
+                        getContext() const { return m_aContext; }
+
     protected:
         class EntryGuard;
 
     protected:
-        ConnectionDependentComponent() { }
+        ConnectionDependentComponent( const ::comphelper::ComponentContext& _rContext )
+            :m_aContext( _rContext )
+        {
+        }
 
         /** sets the connection we depend on.
 

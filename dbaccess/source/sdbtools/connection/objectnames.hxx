@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectnames.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:20:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:47:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,14 @@
 #ifndef DBACCESS_SOURCE_SDBTOOLS_INC_OBJECTNAMES_HXX
 #define DBACCESS_SOURCE_SDBTOOLS_INC_OBJECTNAMES_HXX
 
-#ifndef DBACCESS_CONNECTION_DEPENDENT_HXX
 #include "connectiondependent.hxx"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_SDB_TOOLS_XOBJECTNAMES_HPP_
 #include <com/sun/star/sdb/tools/XObjectNames.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <comphelper/componentcontext.hxx>
 #include <cppuhelper/implbase1.hxx>
-#endif
 
 #include <memory>
 
@@ -73,12 +68,19 @@ namespace sdbtools
 
     public:
         /** constructs the instance
+
+            @param _rContext
+                the component's context
             @param  _rxConnection
                 the connection to work with. Will be held weak. Must not be <NULL/>.
+
             @throws ::com::sun::star::lang::NullPointerException
                 if _rxConnection is <NULL/>
         */
-        ObjectNames( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
+        ObjectNames(
+            const ::comphelper::ComponentContext& _rContext,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection
+        );
 
         // XObjectNames
         virtual ::rtl::OUString SAL_CALL suggestName( ::sal_Int32 CommandType, const ::rtl::OUString& BaseName ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);

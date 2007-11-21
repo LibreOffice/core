@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connectiontools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:19:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:45:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,17 +85,15 @@ namespace sdbtools
                             ,public ConnectionDependentComponent
     {
     private:
-        ::comphelper::ComponentContext  m_aContext;
         SdbtClient                      m_aModuleClient;
 
     public:
         /** constructs a ConnectionTools instance
 
-            @param _rxConnection
-                the connection on which the instance should operate. Must not be <NULL/>.
-                The connection will be held weak.
+            @param _rxContext
+                the context of the component
         */
-        ConnectionTools( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext );
+        ConnectionTools( const ::comphelper::ComponentContext& _rContext );
 
         // XConnectionTools
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdb::tools::XTableName > SAL_CALL createTableName() throw (::com::sun::star::uno::RuntimeException);
