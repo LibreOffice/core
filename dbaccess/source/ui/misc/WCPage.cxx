@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:51:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:07:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,12 +178,11 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView )
         m_aRB_Def.SetClickHdl(          LINK( this, OCopyTable, RadioChangeHdl      ) );
         m_aRB_View.SetClickHdl(         LINK( this, OCopyTable, RadioChangeHdl      ) );
 
-        m_aCB_PrimaryColumn.SetClickHdl( LINK( this, OCopyTable, KeyClickHdl ) );
+        m_aCB_PrimaryColumn.SetClickHdl(LINK( this, OCopyTable, KeyClickHdl         ) );
 
         m_aFT_KeyName.Enable(sal_False);
         m_edKeyName.Enable(sal_False);
-
-        ::rtl::OUString sKeyName(::rtl::OUString::createFromAscii("ID"));
+        ::rtl::OUString sKeyName(RTL_CONSTASCII_USTRINGPARAM("ID"));
         sKeyName = m_pParent->createUniqueName(sKeyName);
         m_edKeyName.SetText(sKeyName);
 
