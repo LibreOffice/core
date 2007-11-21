@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:32:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:41:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,11 +208,6 @@ String RID_STR_COMMAND_LEADING_TO_ERROR
 String RID_STR_STATEMENT_WITHOUT_RESULT_SET
 {
     Text [ en-US ] = "The SQL command does not describe a result set.";
-};
-
-String RID_STR_NO_SLASH_IN_OBJECT_NAME
-{
-    Text [ en-US ] = "The name must not contain any slashes ('/').";
 };
 
 String RID_STR_NAME_MUST_NOT_BE_EMPTY
