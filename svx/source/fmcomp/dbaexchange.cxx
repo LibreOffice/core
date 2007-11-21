@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:07:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:21:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -495,7 +495,7 @@ namespace svx
         {
             ::rtl::OUString sFilter, sSort;
             if (::cppu::any2bool(_rxLivingForm->getPropertyValue(FM_PROP_APPLYFILTER)))
-                _rxLivingForm->getPropertyValue(FM_PROP_FILTER_CRITERIA) >>= sFilter;
+                _rxLivingForm->getPropertyValue(FM_PROP_FILTER) >>= sFilter;
             _rxLivingForm->getPropertyValue(FM_PROP_SORT) >>= sSort;
             bHasFilterOrSort = (sFilter.getLength()>0) || (sSort.getLength()>0);
 
