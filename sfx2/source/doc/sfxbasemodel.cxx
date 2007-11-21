@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:32:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:49:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,7 @@
 //  includes of my own project
 //________________________________________________________________________________________________________
 
+#include <sfx2/signaturestate.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <objshimp.hxx>
 #include <sfx2/viewfrm.hxx>
