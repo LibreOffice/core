@@ -4,9 +4,9 @@
  *
  *  $RCSfile: YCatalog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:03:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:04:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,22 +110,27 @@ void OMySQLCatalog::refreshViews()
     Sequence< ::rtl::OUString > aTypes(1);
     aTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW"));
 
+/*
     sal_Bool bSupportsViews = sal_False;
     try
     {
         Reference<XResultSet> xRes = m_xMetaData->getTableTypes();
         Reference<XRow> xRow(xRes,UNO_QUERY);
-        while ( xRow.is() && xRes->next() )
+        while ( !bSupportsViews && xRow.is() && xRes->next() )
         {
-            if ( (bSupportsViews = xRow->getString(1).equalsIgnoreAsciiCase(aTypes[0])) )
-            {
-                break;
-            }
+            ::rtl::OUString sTableType( xRow->getString( 1 ) );
+            bSupportsViews = sTableType.equalsIgnoreAsciiCase( aTypes[0] );
         }
     }
     catch(const SQLException&)
     {
     }
+*/
+    // let's simply assume the server is new enough to support views. Current drivers
+    // as of this writing might not return the proper information in getTableTypes, so
+    // don't rely on it.
+    // during #73245# / 2007-10-26 / frank.schoenheit@sun.com
+    bool bSupportsViews = sal_True;
 
     TStringVector aVector;
     if ( bSupportsViews )
