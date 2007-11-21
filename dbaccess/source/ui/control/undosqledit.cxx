@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undosqledit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:03:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:52:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ namespace dbaui
 void OSqlEditUndoAct::ToggleText()
 {
     String strNext = m_pOwner->GetText();
-    m_pOwner->OverloadedSetText(m_strNextText);
+    m_pOwner->SetText(m_strNextText);
     m_strNextText  =strNext;
 }
 // -----------------------------------------------------------------------------
