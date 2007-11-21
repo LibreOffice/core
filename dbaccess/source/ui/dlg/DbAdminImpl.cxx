@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DbAdminImpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:06:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:53:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -528,6 +528,7 @@ String ODbDataSourceAdministrationHelper::getConnectionURL() const
             }
             break;
         case DST_MSACCESS:
+        case DST_MSACCESS_2007:
             {
                 ::rtl::OUString sFileName = pCollection->cutPrefix(pUrlItem->GetValue());
                 ::rtl::OUString sNewFileName;
