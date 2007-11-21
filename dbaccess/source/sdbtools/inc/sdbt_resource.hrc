@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdbt_resource.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:15:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:47:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,12 +45,12 @@
 
 //------------------------------------------------------------------------------
 //- String-IDs
-#define STR_NAME_ALREADY_USED_IN_DB         RID_SDBT_STRINGS_START +  1
-#define STR_QUERY_AND_TABLE_DISTINCT_NAMES  RID_SDBT_STRINGS_START +  2
-#define STR_BASENAME_TABLE                  RID_SDBT_STRINGS_START +  3
-#define STR_BASENAME_QUERY                  RID_SDBT_STRINGS_START +  4
-#define STR_NO_QUOTES_IN_QUERY_NAMES        RID_SDBT_STRINGS_START +  5
-#define STR_NO_VALID_SQL_NAME               RID_SDBT_STRINGS_START +  6
-#define STR_NO_SLASHES_IN_QUERY_NAMES       RID_SDBT_STRINGS_START +  7
+#define STR_QUERY_AND_TABLE_DISTINCT_NAMES  RID_SDBT_STRINGS_START +  0
+#define STR_BASENAME_TABLE                  RID_SDBT_STRINGS_START +  1
+#define STR_BASENAME_QUERY                  RID_SDBT_STRINGS_START +  2
+#define STR_CONN_WITHOUT_QUERIES_OR_TABLES  RID_SDBT_STRINGS_START +  3
+#define STR_NO_TABLE_OBJECT                 RID_SDBT_STRINGS_START +  4
+#define STR_INVALID_COMPOSITION_TYPE        RID_SDBT_STRINGS_START +  5
+#define STR_INVALID_COMMAND_TYPE            RID_SDBT_STRINGS_START +  6
 
 #endif // DBACCESS_SDBT_RESOURCE_HRC
