@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:49:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ namespace dbaui
         TPositions                      m_vColumns;     // Welche Spalten "ubernommen werden sollen
         ::std::vector<sal_Int32>        m_vColumnTypes; // FeldTypen f"ur schnelleren Zugriff
         ::std::vector<sal_Int32>        m_vColumnSize;
-        ::std::vector<sal_Int32>        m_vFormatKey;
+        ::std::vector<sal_Int16>        m_vNumberFormat;
         ::com::sun::star::lang::Locale  m_aLocale;
 
         TColumns                        m_aDestColumns; // container for new created columns
@@ -143,6 +143,7 @@ namespace dbaui
         sal_Bool            m_bIsAutoIncrement; // if PKey is set by user
         sal_Bool            m_bFoundTable;      // set to true when a table was found
         sal_Bool            m_bCheckOnly;
+        bool                m_bAppendFirstLine;
 
 
         virtual sal_Bool        CreateTable(int nToken)         = 0;
@@ -151,7 +152,7 @@ namespace dbaui
         */
         virtual OWizTypeSelect* createPage(Window* _pParent)    = 0;
         void                    CreateDefaultColumn(const ::rtl::OUString& _rColumnName);
-        sal_Int32               CheckString(const String& aToken, sal_Int32 _nOldFormat);
+        sal_Int16               CheckString(const String& aToken, sal_Int16 _nOldNumberFormat);
         void                    adjustFormat();
         void                    eraseTokens();
         void                    insertValueIntoColumn();
