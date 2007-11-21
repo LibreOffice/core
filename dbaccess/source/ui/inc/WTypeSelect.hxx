@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WTypeSelect.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:30:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:02:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,6 @@ namespace dbaui
 
         DECL_LINK( ColumnSelectHdl, MultiListBox* );
         DECL_LINK( ButtonClickHdl, Button * );
-
     protected:
         OWizTypeSelectList      m_lbColumnNames;
         FixedLine               m_flColumns;
