@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldvar.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:49:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 13:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -796,7 +796,7 @@ USHORT SwFldVarPage::FillFormatLB(USHORT nTypeId)
     {
         if (IsFldEdit())
         {
-            bSpecialFmt = GetCurField()->GetFormat() == ULONG_MAX;
+            bSpecialFmt = GetCurField()->GetFormat() == SAL_MAX_UINT32;
 
             if (!bSpecialFmt)
             {
