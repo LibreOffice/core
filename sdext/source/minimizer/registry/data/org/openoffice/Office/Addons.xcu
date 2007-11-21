@@ -42,8 +42,8 @@
             </node>
         </node>
         <node oor:name="OfficeMenuBarMerging">
-            <node oor:name="org.openoffice.Office.SunPresentationMinimizer" oor:op="replace">
-                <node oor:name="org.openoffice.Office.SunPresentationMinimizerCommand1" oor:op="replace">
+            <node oor:name="SunPresentationMinimizer" oor:op="replace">
+                <node oor:name="Command1" oor:op="replace">
                     <prop oor:name="MergePoint">
                         <value>.uno:ToolsMenu\.uno:AVMediaPlayer</value>
                     </prop>
@@ -57,12 +57,12 @@
                         <value>com.sun.star.presentation.PresentationDocument</value>
                     </prop>
                     <node oor:name="MenuItems">
-                        <node oor:name="org.openoffice.Office.SunPresentationMinimizerExecute1" oor:op="replace">
+                        <node oor:name="SunPresentationMinimizerExecute1" oor:op="replace">
                             <prop oor:name="URL" oor:type="xs:string">
                                 <value>private:separator</value>
                             </prop>
                         </node>
-                        <node oor:name="org.openoffice.Office.SunPresentationMinimizerExecute2" oor:op="replace">
+                        <node oor:name="SunPresentationMinimizerExecute2" oor:op="replace">
                             <prop oor:name="URL" oor:type="xs:string">
                                 <value>vnd.com.sun.star.comp.SunPresentationMinimizer:execute</value>
                             </prop>
@@ -79,7 +79,7 @@
                         </node>
                     </node>
                 </node>
-                <node oor:name="org.openoffice.Office.SunPresentationMinimizerCommand2" oor:op="replace">
+                <node oor:name="Command2" oor:op="replace">
                     <prop oor:name="MergePoint">
                         <value>.uno:HelpMenu\.uno:About</value>
                     </prop>
@@ -93,7 +93,7 @@
                         <value>com.sun.star.presentation.PresentationDocument</value>
                     </prop>
                     <node oor:name="MenuItems">
-                        <node oor:name="org.openoffice.Office.SunPresentationMinimizerAbout1" oor:op="replace">
+                        <node oor:name="SunPresentationMinimizerAbout1" oor:op="replace">
                             <prop oor:name="URL" oor:type="xs:string">
                                 <value>vnd.com.sun.star.comp.SunPresentationMinimizer:about</value>
                             </prop>
