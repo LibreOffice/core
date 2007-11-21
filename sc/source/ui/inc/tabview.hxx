@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-23 14:46:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:09:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,6 @@
 
 #ifndef _SV_SCRBAR_HXX //autogen
 #include <vcl/scrbar.hxx>
-#endif
-
-#ifndef _SVX_ZOOMITEM_HXX //autogen
-#include <svx/zoomitem.hxx>
 #endif
 
 //REMOVE    #ifndef SO2_DECL_SVINPLACECLIENT_DEFINED
@@ -185,7 +181,6 @@ private:
 
     double              mfPendingTabBarWidth;       // Tab bar width relative to frame window width.
 
-    SvxZoomType         eZoomType;
     BOOL                bMinimized;
     BOOL                bInUpdateHeader;
     BOOL                bInActivatePart;
@@ -304,7 +299,8 @@ public:
     BOOL            IsMinimized() const     { return bMinimized; }
 
     void            TabChanged();
-    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY );
+    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, BOOL bAll );
+    void            RefreshZoom();
     void            SetPagebreakMode( BOOL bSet );
 
     void            UpdateLayerLocks();
@@ -366,8 +362,8 @@ public:
     void            AlignToCursor( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                                     const ScSplitPos* pWhich = NULL );
 
-    SvxZoomType     GetZoomType() const             { return eZoomType; }
-    void            SetZoomType( SvxZoomType eNew ) { eZoomType = eNew; }
+    SvxZoomType     GetZoomType() const;
+    void            SetZoomType( SvxZoomType eNew, BOOL bAll );
     USHORT          CalcZoom( SvxZoomType eType, USHORT nOldZoom );
 
 //  void            CalcZoom( SvxZoomType eType, USHORT& rZoom, SCCOL& rCol, SCROW& rRow );
