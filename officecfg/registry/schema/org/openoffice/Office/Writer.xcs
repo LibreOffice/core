@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Writer.xcs,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-10-15 17:30:53 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:15:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2096,6 +2096,24 @@
 					</info>
 					<value>false</value>
 				</prop>
+                                <prop oor:name="PrintHiddenText" oor:type="xs:boolean">
+                                        <!-- UIHints: Tools - Option - Text-Document - Print - [Section] Contents -->
+                                        <info>
+                                                <author>OS</author>
+                                                <desc>Specifies if hidden text, fields, paragraphs are printed.</desc>
+                                                <label>Print hidden text</label>
+                                        </info>
+                                        <value>false</value>
+                                </prop>
+                                <prop oor:name="PrintPlaceholders" oor:type="xs:boolean">
+                                        <!-- UIHints: Tools - Option - Text-Document - Print - [Section] Contents -->
+                                        <info>
+                                                <author>OS</author>
+                                                <desc>Specifies if the text of placeholder fields is printed.</desc>
+                                                <label>Print placeholders</label>
+                                        </info>
+                                        <value>false</value>
+                                </prop>
 				<prop oor:name="Note" oor:type="xs:int">
 					<!-- OldPath: Writer/Print -->
 					<!-- OldLocation: Soffice.cfg -->
@@ -2750,6 +2768,12 @@
 					<author>OS</author>
 					<desc>Specifies the settings for inserting captions for various object types.</desc>
 				</info>
+                                <prop oor:name="CaptionOrderNumberingFirst" oor:type="xs:boolean">
+                                        <info>
+                                                <desc>Specifies the order of the captions. If true the Numeber appears in front of the category.</desc>
+                                                <label>Caption order: Numbering first</label>
+                                        </info>
+                                </prop>
 				<prop oor:name="Automatic" oor:type="xs:boolean">
 					<info>
 						<desc>Specifies how tables, graphics, frames and Office documents, which have been inserted as OLE objects, are labeled</desc>
@@ -2827,6 +2851,13 @@
 								</constraints>
 								<value>4</value>
 							</prop>
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                                <info>
+                                                                        <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
+                                                                        <label>Numbering separator</label>
+                                                                </info>
+                                                                <value>. </value>
+                                                        </prop>
                             <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
 								<info>
 									<desc>Specifies the text of the caption field.</desc>
@@ -2953,6 +2984,13 @@
 								</constraints>
 								<value>4</value>
 							</prop>
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                                <info>
+                                                                        <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
+                                                                        <label>Numbering separator</label>
+                                                                </info>
+                                                                <value>. </value>
+                                                        </prop>
                             <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
 								<info>
 									<desc>Specifies the text of the caption field.</desc>
@@ -3078,6 +3116,13 @@
 								</constraints>
 								<value>4</value>
 							</prop>
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                                <info>
+                                                                        <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
+                                                                        <label>Numbering separator</label>
+                                                                </info>
+                                                                <value>. </value>
+                                                        </prop>
                             <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
                                 <info>
 									<desc>Specifies the text of the caption field.</desc>
@@ -3214,6 +3259,13 @@
 								</constraints>
 								<value>4</value>
 							</prop>
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                                <info>
+                                                                        <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
+                                                                        <label>Numbering separator</label>
+                                                                </info>
+                                                                <value>. </value>
+                                                        </prop>
                             <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
                                 <info>
 									<desc>Specifies the text of the caption field.</desc>
@@ -3345,6 +3397,13 @@
 								</constraints>
 								<value>4</value>
 							</prop>
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                                <info>
+                                                                        <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
+                                                                        <label>Numbering separator</label>
+                                                                </info>
+                                                                <value>. </value>
+                                                        </prop>
                             <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
                                 <info>
 									<desc>Specifies the text of the caption field.</desc>
@@ -3476,6 +3535,13 @@
 								</constraints>
 								<value>4</value>
 							</prop>
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                                <info>
+                                                                        <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
+                                                                        <label>Numbering separator</label>
+                                                                </info>
+                                                                <value>. </value>
+                                                        </prop>
                             <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
                                 <info>
 									<desc>Specifies the text of the caption field.</desc>
@@ -3607,6 +3673,13 @@
 								</constraints>
 								<value>4</value>
 							</prop>
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                                <info>
+                                                                        <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
+                                                                        <label>Numbering separator</label>
+                                                                </info>
+                                                                <value>. </value>
+                                                        </prop>
                             <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
                                 <info>
 									<desc>Specifies the text of the caption field.</desc>
@@ -3738,6 +3811,13 @@
 								</constraints>
 								<value>4</value>
 							</prop>
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                                <info>
+                                                                        <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
+                                                                        <label>Numbering separator</label>
+                                                                </info>
+                                                                <value>. </value>
+                                                        </prop>
                             <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
                                 <info>
 									<desc>Specifies the text of the caption field.</desc>
@@ -3869,6 +3949,13 @@
 								</constraints>
 								<value>4</value>
 							</prop>
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                                <info>
+                                                                        <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
+                                                                        <label>Numbering separator</label>
+                                                                </info>
+                                                                <value>. </value>
+                                                        </prop>
                             <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
                                 <info>
 									<desc>Specifies the text of the caption field.</desc>
@@ -4000,6 +4087,13 @@
 								</constraints>
 								<value>4</value>
 							</prop>
+                                                        <prop oor:name="NumberingSeparator" oor:type="xs:string" oor:localized="true">
+                                                                <info>
+                                                                        <desc>In case the order of the caption is set to 'Numbering first' then this property contains the separator between the number and the category.</desc>
+                                                                        <label>Numbering separator</label>
+                                                                </info>
+                                                                <value>. </value>
+                                                        </prop>
                             <prop oor:name="CaptionText" oor:type="xs:string" oor:localized="true">
                                 <info>
 									<desc>Specifies the text of the caption field.</desc>
