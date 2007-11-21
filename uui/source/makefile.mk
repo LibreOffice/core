@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-07 10:10:34 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 17:15:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,9 @@ SLOFILES = \
     $(SLO)$/interactionhandler.obj\
     $(SLO)$/requeststringresolver.obj\
     $(SLO)$/unknownauthdlg.obj\
-    $(SLO)$/sslwarndlg.obj
+    $(SLO)$/sslwarndlg.obj\
+    $(SLO)$/secmacrowarnings.obj
+
 SRS1NAME=$(TARGET)
 SRC1FILES = \
     cookiedg.src \
@@ -66,6 +68,7 @@ SRC1FILES = \
     passworderrs.src \
     fltdlg.src \
     unknownauthdlg.src\
-    sslwarndlg.src
+    sslwarndlg.src\
+    secmacrowarnings.src
 
 .INCLUDE: target.mk
