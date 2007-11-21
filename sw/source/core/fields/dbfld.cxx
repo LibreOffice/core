@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:23:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 13:54:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,7 +420,7 @@ void SwDBField::Evaluate()
             SetValue(aVal.GetDouble());
 
             SvNumberFormatter* pFormatter = GetDoc()->GetNumberFormatter();
-            if (nFmt && nFmt != ULONG_MAX && !pFormatter->IsTextFormat(nFmt))
+            if (nFmt && nFmt != SAL_MAX_UINT32 && !pFormatter->IsTextFormat(nFmt))
                 bValidValue = TRUE; // Wegen Bug #60339 nicht mehr bei allen Strings
         }
         else
