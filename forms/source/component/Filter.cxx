@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Filter.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:54:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:33:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,117 +37,47 @@
 #include "precompiled_forms.hxx"
 
 
-#ifndef FORMS_COMPONENT_FILTER_HXX
 #include "Filter.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
-#include <com/sun/star/form/FormComponentType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCHECKBOX_HPP_
-#include <com/sun/star/awt/XCheckBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XRADIOBUTTON_HPP_
-#include <com/sun/star/awt/XRadioButton.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XLISTBOX_HPP_
-#include <com/sun/star/awt/XListBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XCOMBOBOX_HPP_
-#include <com/sun/star/awt/XComboBox.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_VCLWINDOWPEERATTRIBUTE_HPP_
-#include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XVCLWINDOWPEER_HPP_
-#include <com/sun/star/awt/XVclWindowPeer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
-#include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
-#include <com/sun/star/sdbc/XRowSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDDB_XCOLUMNSSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
-#include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
-#include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOLUMN_HPP_
-#include <com/sun/star/sdb/XColumn.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
-#include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
-#include <com/sun/star/beans/NamedValue.hpp>
-#endif
-
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-#ifndef _DBHELPER_DBCONVERSION_HXX_
-#include <connectivity/dbconversion.hxx>
-#endif
-#ifndef CONNECTIVITY_PREDICATEINPUT_HXX
-#include <connectivity/predicateinput.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_HXX_
-#include <comphelper/property.hxx>
-#endif
-#ifndef _COMPHELPER_NUMBERS_HXX_
-#include <comphelper/numbers.hxx>
-#endif
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
-#include <unotools/localedatawrapper.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
-#include <tools/diagnose_ex.h>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef _SV_WINTYPES_HXX
-#include <vcl/wintypes.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _VCL_STDTEXT_HXX
-#include <vcl/stdtext.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
-#endif
-
-#ifndef _FRM_PROPERTY_HXX_
-#include "property.hxx"
-#endif
-#ifndef _FRM_PROPERTY_HRC_
-#include "property.hrc"
-#endif
-#ifndef _FRM_RESOURCE_HXX_
-#include "frm_resource.hxx"
-#endif
-#ifndef _FRM_RESOURCE_HRC_
-#include "frm_resource.hrc"
-#endif
-#ifndef FRM_MODULE_HXX
 #include "frm_module.hxx"
-#endif
+#include "frm_resource.hrc"
+#include "frm_resource.hxx"
+#include "property.hrc"
+#include "property.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/awt/VclWindowPeerAttribute.hpp>
+#include <com/sun/star/awt/XCheckBox.hpp>
+#include <com/sun/star/awt/XComboBox.hpp>
+#include <com/sun/star/awt/XListBox.hpp>
+#include <com/sun/star/awt/XRadioButton.hpp>
+#include <com/sun/star/awt/XVclWindowPeer.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/form/FormComponentType.hpp>
+#include <com/sun/star/sdb/BooleanComparisonMode.hpp>
+#include <com/sun/star/sdb/XColumn.hpp>
+#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/numbers.hxx>
+#include <comphelper/property.hxx>
+#include <connectivity/dbconversion.hxx>
+#include <connectivity/dbtools.hxx>
+#include <connectivity/predicateinput.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
+#include <unotools/localedatawrapper.hxx>
+#include <vcl/stdtext.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/wintypes.hxx>
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_OFilterControl()
@@ -399,39 +329,69 @@ namespace frm
     //---------------------------------------------------------------------
     void SAL_CALL OFilterControl::itemStateChanged( const ItemEvent& rEvent ) throw(RuntimeException)
     {
-        ::rtl::OUString aText;
+        ::rtl::OUStringBuffer aText;
         switch (m_nControlClass)
         {
             case FormComponentType::CHECKBOX:
             {
-                switch (rEvent.Selected)
+                if ( ( rEvent.Selected == STATE_CHECK ) || ( rEvent.Selected == STATE_NOCHECK ) )
                 {
-                    case STATE_CHECK:
-                        aText = ::rtl::OUString::createFromAscii("1");
-                        break;
-                    case STATE_NOCHECK:
-                        aText = ::rtl::OUString::createFromAscii("0");
-                        break;
+                    sal_Int32 nBooleanComparisonMode = ::dbtools::DatabaseMetaData( m_xConnection ).getBooleanComparisonMode();
+
+                    bool bSelected = ( rEvent.Selected == STATE_CHECK );
+
+                    ::rtl::OUString sExpressionMarker( RTL_CONSTASCII_USTRINGPARAM( "$expression$" ) );
+                    ::dbtools::getBoleanComparisonPredicate(
+                        sExpressionMarker,
+                        bSelected,
+                        nBooleanComparisonMode,
+                        aText
+                    );
+
+                    ::rtl::OUString sText( aText.makeStringAndClear() );
+                    sal_Int32 nMarkerPos( sText.indexOf( sExpressionMarker ) );
+                    OSL_ENSURE( nMarkerPos == 0, "OFilterControl::itemStateChanged: unsupported boolean comparison mode!" );
+                    // If this assertion fails, then getBoleanComparisonPredicate created a predicate which
+                    // does not start with the expression we gave it. The only known case is when
+                    // the comparison mode is ACCESS_COMPAT, and the value is TRUE. In this case,
+                    // the expression is rather complex.
+                    // Well, so this is a known issue - the filter controls (and thus the form based filter)
+                    // do not work with boolean MS Access fields.
+                    // To fix this, we would probably have to revert here to always return "1" or "0" as normalized
+                    // filter, and change our client code to properly translate this (which could be some effort).
+                    if ( nMarkerPos == 0 )
+                        aText.append( sText.copy( sExpressionMarker.getLength() ) );
+                    else
+                    {
+                        // fallback
+                        aText.appendAscii( bSelected ? "1" : "0" );
+                    }
                 }
-            }   break;
+            }
+            break;
+
             case FormComponentType::LISTBOX:
             {
                 Sequence< ::rtl::OUString> aValueSelection;
                 Reference< XPropertySet > aPropertyPointer(getModel(), UNO_QUERY);
                 aPropertyPointer->getPropertyValue(PROPERTY_VALUE_SEQ) >>= aValueSelection;
                 if (rEvent.Selected <= aValueSelection.getLength())
-                    aText = aValueSelection.getConstArray()[rEvent.Selected];
-            } break;
+                    aText.append( aValueSelection[ rEvent.Selected ] );
+            }
+            break;
+
             case FormComponentType::RADIOBUTTON:
             {
-                if (rEvent.Selected == STATE_CHECK)
-                    aText = ::comphelper::getString(Reference< XPropertySet > (getModel(), UNO_QUERY)->getPropertyValue(PROPERTY_REFVALUE));
-            } break;
+                if ( rEvent.Selected == STATE_CHECK )
+                    aText.append( ::comphelper::getString( Reference< XPropertySet >( getModel(), UNO_QUERY )->getPropertyValue( PROPERTY_REFVALUE ) ) );
+            }
+            break;
         }
 
-        if (m_aText.compareTo(aText))
+        ::rtl::OUString sText( aText.makeStringAndClear() );
+        if ( m_aText.compareTo( sText ) )
         {
-            m_aText = aText;
+            m_aText = sText;
             TextEvent aEvt;
             aEvt.Source = *this;
             ::cppu::OInterfaceIteratorHelper aIt( m_aTextListeners );
@@ -705,15 +665,24 @@ namespace frm
                 if (xVclWindow.is())
                 {
                     Any aValue;
-                    if (aText.equals(::rtl::OUString::createFromAscii("1")))
+                    if  (   aText.equalsAscii( "1" )
+                        ||  aText.equalsIgnoreAsciiCaseAscii( "TRUE" )
+                        ||  aText.equalsIgnoreAsciiCaseAscii( "IS TRUE" )
+                        )
+                    {
                         aValue <<= (sal_Int32)STATE_CHECK;
-                    else if (aText.compareTo(::rtl::OUString::createFromAscii("0")) == 0)
+                    }
+                    else if (   aText.equalsAscii( "0" )
+                            ||  aText.equalsIgnoreAsciiCaseAscii( "FALSE" )
+                            )
+                    {
                         aValue <<= (sal_Int32)STATE_NOCHECK;
+                    }
                     else
                         aValue <<= (sal_Int32)STATE_DONTKNOW;
 
                     m_aText = aText;
-                    xVclWindow->setProperty(PROPERTY_STATE, aValue);
+                    xVclWindow->setProperty( PROPERTY_STATE, aValue );
                 }
             }   break;
             case FormComponentType::RADIOBUTTON:
