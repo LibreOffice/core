@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:14:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 14:56:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,8 +92,6 @@ enum StandardSQLState
     SQL_FEATURE_NOT_IMPLEMENTED,    // HYC00
     SQL_FUNCTION_NOT_SUPPORTED,     // IM001
     SQL_CONNECTION_DOES_NOT_EXIST,  // 08003
-
-    SQL_CYCLIC_SUB_QUERIES,         // OB001
 
     SQL_ERROR_UNSPECIFIED = SAL_MAX_ENUM    // special value indicating that an SQLState is not to be specified
 };
