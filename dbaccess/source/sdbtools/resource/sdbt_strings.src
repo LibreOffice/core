@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdbt_strings.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:32:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:48:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,6 @@
 #include "sdbt_resource.hrc"
 #endif
 
-String STR_NAME_ALREADY_USED_IN_DB
-{
-    Text [ en-US ] = "The name '$name$' is already in use in the database.";
-};
-
 String STR_QUERY_AND_TABLE_DISTINCT_NAMES
 {
     Text [ en-US ] = "You cannot give a table and a query the same name. Please use a name which is not yet used by a query or table.";
@@ -57,17 +52,22 @@ String STR_BASENAME_QUERY
     Text [ en-US ] = "Query";
 };
 
-String STR_NO_QUOTES_IN_QUERY_NAMES
+String STR_CONN_WITHOUT_QUERIES_OR_TABLES
 {
-    Text [ en-US ] = "Query names must not contain quote characters.";
+    Text [ en-US ] = "The given connection is no valid query and/or tables supplier.";
 };
 
-String STR_NO_VALID_SQL_NAME
+String STR_NO_TABLE_OBJECT
 {
-    Text [ en-US ] = "$name$ is no SQL conform identifier.";
+    Text [ en-US ] = "The given object is no table object.";
 };
 
-String STR_NO_SLASHES_IN_QUERY_NAMES
+String STR_INVALID_COMPOSITION_TYPE
 {
-    Text [ en-US ] = "The name must not contain any slashes ('/').";
+    Text [ en-US ] = "Invalid composition type - need a value from com.sun.star.sdb.tools.CompositionType.";
+};
+
+String STR_INVALID_COMMAND_TYPE
+{
+    Text [ en-US ] = "Invalid command type - only TABLE and AND QUERY from com.sun.star.sdb.CommandType are allowed.";
 };
