@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2007-05-30 14:03:28 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 18:52:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,11 @@ TARGET = climaker
 TARGETTYPE = CUI
 LIBTARGET = NO
 ENABLE_EXCEPTIONS = TRUE
+
+# disable caching to avoid stale objects
+# on version changes
+CCACHE_DISABLE=TRUE
+.EXPORT : CCACHE_DISABLE
 
 .INCLUDE :  settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
