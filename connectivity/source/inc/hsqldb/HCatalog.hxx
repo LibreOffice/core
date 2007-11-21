@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HCatalog.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:13:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:05:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ namespace connectivity
                 @param  _sKindOfObject
                     The type of tables to be fetched.
                 @param  _rNames
-                    The container for the names to be filled. <OUT/>
+                    The container for the names to be filled.
             */
             void refreshObjects(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _sKindOfObject,TStringVector& _rNames);
 
