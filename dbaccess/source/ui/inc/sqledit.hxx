@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqledit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:03:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:05:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,10 +66,11 @@ namespace dbaui
         OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle = WB_LEFT | WB_VSCROLL |WB_BORDER);
         virtual ~OSqlEdit();
 
-        void OverloadedSetText(const String& rNewText);
-            // mieser name, ich weiss .... leider muss ich das SetText, dass die UndoActions an mir ausfuehren koennen, abfangen
-            // die Alternative waere gewesen, allen oder nur den UndoActions Zugriff auf m_strOrigText zu geben ...
+        // Edit overridables
+        virtual void SetText(const String& rNewText);
+        using MultiLineEdit::SetText;
 
+        // own functionality
         BOOL IsInAccelAct();
 
         void SetTextModifyHdl(const Link& lnk) { m_lnkTextModifyHdl = lnk; }
