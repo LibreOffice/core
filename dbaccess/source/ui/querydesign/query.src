@@ -4,9 +4,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:06:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:15:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,25 +317,23 @@ String STR_QRY_ILLEGAL_JOIN
 
 String STR_QUERY_SAVEMODIFIED
 {
-    Text [ en-US ] = "$object$ has been changed.\nDo you want to save the changes?" ;
+    Text [ en-US ] = "The $object$ has been changed.\nDo you want to save the changes?" ;
+    Text [ x-comment ] = "For $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource will be inserted.";
 };
 
 Resource RSC_QUERY_OBJECT_TYPE
 {
     String 1
     {
-
-        Text [ en-US ] = "The query";
+        Text [ en-US ] = "table view";
     };
     String 2
     {
-
-        Text [ en-US ] = "The table view";
+        Text [ en-US ] = "query";
     };
     String 3
     {
-
-        Text [ en-US ] = "The SQL statement";
+        Text [ en-US ] = "SQL statement";
     };
 };
 
@@ -347,6 +345,11 @@ String STR_SVT_SQL_SYNTAX_ERROR
 String STR_QUERYDESIGN_NO_VIEW_SUPPORT
 {
     Text [ en-US ] = "This database does not support table views.";
+};
+
+String STR_NO_ALTER_VIEW_SUPPORT
+{
+    Text [ en-US ] = "This database does not support altering of existing table views.";
 };
 
 String STR_QUERYDESIGN_NO_VIEW_ASK
@@ -405,15 +408,24 @@ String STR_VIEWDESIGN
 
 String STR_ERROR_PARSING_STATEMENT
 {
-    Text [ en-US ] = "The SQL command which constitutes the query could not be parsed.";
+    Text [ en-US ] = "The SQL command which constitutes the $object$ could not be parsed.";
+    Text [ x-comment ] = "For $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource "
+        "(except \"SQL command\", which doesn't make sense here) will be inserted.";
 };
 
 String STR_INFO_OPENING_IN_SQL_VIEW
 {
-    Text [ en-US ] = "The query will be opened in SQL view.";
+    Text [ en-US ] = "The $object$ will be opened in SQL view.";
+    Text [ x-comment ] = "For $object$, one of the values of the RSC_QUERY_OBJECT_TYPE resource "
+        "(except \"SQL command\", which doesn't make sense here) will be inserted.";
 };
 
 String STR_STATEMENT_WITHOUT_RESULT_SET
 {
     Text [ en-US ] = "The query does not create a result set, and thus cannot be part of another query.";
+};
+
+String STR_NO_DATASOURCE_OR_CONNECTION
+{
+    Text [ en-US ] = "Both the ActiveConnection and the DataSourceName parameter are missing or wrong - cannot initialize the query designer.";
 };
