@@ -1,0 +1,126 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: secmacrowarnings.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:24:53 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#define __RSC
+
+#include "secmacrowarnings.hrc"
+#include "ids.hrc"
+
+ModalDialog RID_XMLSECDLG_MACROWARN
+{
+    HelpId = HID_XMLSECDLG_MACROWARN;
+    Size = MAP_APPFONT( MW_WIDTH, MW_HEIGHT );
+    OutputSize = TRUE;
+    Closeable = FALSE;
+    Moveable = TRUE;
+    SVLook = TRUE;
+
+    Text [ en-US ] = "%PRODUCTNAME - Security Warning";
+
+    FixedImage IMG_SYMBOL
+    {
+        Pos = MAP_APPFONT( MW_COL_0, MW_ROW_0 );
+        Size = MAP_APPFONT( MW_SYMBOL_WIDTH, MW_SYMBOL_HEIGHT );
+    };
+    FixedText FI_DOCNAME
+    {
+        Pos = MAP_APPFONT( MW_COL_1, MW_ROW_0+RSC_CD_FIXEDTEXT_HEIGHT );
+        Size = MAP_APPFONT( MW_COL_4-MW_COL_1, 2*RSC_CD_FIXEDTEXT_HEIGHT );
+        Wordbreak = TRUE;
+    };
+    FixedText FI_DESCR1A
+    {
+        Pos = MAP_APPFONT( MW_COL_1, MW_ROW_1 );
+        Size = MAP_APPFONT( MW_COL_4-MW_COL_1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Wordbreak = TRUE;
+        Text [ en-US ] = "The document contains document macros signed by:";
+    };
+    FixedText FI_DESCR1B
+    {
+        Pos = MAP_APPFONT( MW_COL_1, MW_ROW_1 );
+        Size = MAP_APPFONT( MW_COL_4-MW_COL_1, RSC_CD_FIXEDTEXT_HEIGHT );
+        Wordbreak = TRUE;
+        Text [ en-US ] = "The document contains document macros.";
+    };
+    FixedText FI_SIGNS
+    {
+        Pos = MAP_APPFONT( MW_COL_1, MW_ROW_2 );
+        Size = MAP_APPFONT( MW_COL_2-MW_COL_1, MW_ROW_3-MW_ROW_2-RSC_SP_CTRL_DESC_Y );
+        Wordbreak = TRUE;
+    };
+    PushButton PB_VIEWSIGNS
+    {
+        Pos = MAP_APPFONT( MW_COL_3, MW_ROW_2 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "View Signatures...";
+    };
+    FixedText FI_DESCR2
+    {
+        Pos = MAP_APPFONT( MW_COL_1, MW_ROW_3 );
+        Size = MAP_APPFONT( MW_COL_4-MW_COL_1, 4*RSC_CD_FIXEDTEXT_HEIGHT );
+        Wordbreak = TRUE;
+        Text [ en-US ] = "Macros may contain viruses. Disabling macros for a document is always safe. If you disable macros you may lose functionality provided by the document macros.";
+    };
+    CheckBox CB_ALWAYSTRUST
+    {
+        Pos = MAP_APPFONT( MW_COL_1, MW_ROW_4 );
+        Size = MAP_APPFONT( MW_COL_4-MW_COL_1, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ en-US ] = "Always trust macros from this source";
+    };
+    FixedLine FL_BOTTOM_SEP
+    {
+        Pos = MAP_APPFONT( 0, MW_ROW_5 );
+        Size = MAP_APPFONT( MW_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
+    };
+    OKButton PB_ENABLE
+    {
+        Pos = MAP_APPFONT( DLGS_BOTTOM_OK_X( MW_WIDTH ), MW_ROW_6 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "~Enable Macros";
+    };
+    CancelButton PB_DISABLE
+    {
+        Pos = MAP_APPFONT( DLGS_BOTTOM_CANCEL_X( MW_WIDTH ), MW_ROW_6 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        DefButton = TRUE;
+        Text [ en-US ] = "~Disable Macros";
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT( DLGS_BOTTOM_HELP_X( MW_WIDTH ), MW_ROW_6 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+    };
+};
+
