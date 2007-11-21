@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:15:22 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,32 +265,35 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     Reference<XSingleSelectQueryComposer> xAnalyzer(xFactory->createInstance(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER),UNO_QUERY);
     xAnalyzer->setQuery(m_xComposer->getQuery());
     Reference<XTablesSupplier> xTabSup(xAnalyzer,uno::UNO_QUERY);
-    Reference<XIndexAccess> xSelectTables(xTabSup->getTables(),uno::UNO_QUERY);
-    sal_Int32 nCount = xSelectTables->getCount();
-    if ( nCount > 1 ) // special handling for join
+    Reference<XNameAccess> xSelectTables(xTabSup->getTables(),uno::UNO_QUERY);
+    const Sequence< ::rtl::OUString> aSeq = xSelectTables->getElementNames();
+    if ( aSeq.getLength() > 1 ) // special handling for join
     {
-        for (sal_Int32 i = 0; i < nCount; ++i)
+        const ::rtl::OUString* pIter = aSeq.getConstArray();
+        const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
+        for(;pIter != pEnd;++pIter)
         {
-            connectivity::OSQLTable xSelColSup(xSelectTables->getByIndex(i),uno::UNO_QUERY);
-            if ( xSelColSup != m_xTable )
+            if ( *pIter != m_sUpdateTableName )
             {
-                Reference<XNameAccess > xSelectColumns = xSup->getColumns();
-                Reference<XPropertySet> xProp(xSup,uno::UNO_QUERY);
+                connectivity::OSQLTable xSelColSup(xSelectTables->getByName(*pIter),uno::UNO_QUERY);
+                Reference<XPropertySet> xProp(xSelColSup,uno::UNO_QUERY);
                 ::rtl::OUString sSelectTableName = ::dbtools::composeTableName( xMetaData, xProp, ::dbtools::eInDataManipulation, false, false, false );
+                Reference<XNameAccess > xSelectColumns = xSup->getColumns();
+
                 ::dbaccess::getColumnPositions(xSelectColumns,xSelColSup->getColumns(),sSelectTableName,(*m_pForeignColumnNames));
 
-                uno::Sequence< ::rtl::OUString> aSeq = xSelectColumns->getElementNames();
-                const ::rtl::OUString* pIter = aSeq.getConstArray();
-                const ::rtl::OUString* pEnd   = pIter + aSeq.getLength();
-                for( ; pIter != pEnd ; ++pIter)
+                uno::Sequence< ::rtl::OUString> aSelectColumnNames = xSelectColumns->getElementNames();
+                const ::rtl::OUString* pSelectColumnName = aSelectColumnNames.getConstArray();
+                const ::rtl::OUString* pSelectColumnEnd   = pSelectColumnName + aSelectColumnNames.getLength();
+                for( ; pSelectColumnName != pSelectColumnEnd ; ++pSelectColumnName)
                 {
                     // look for columns not in the source columns to use them as filter as well
-                    if ( !xSourceColumns->hasByName(*pIter) )
+                    if ( !xSourceColumns->hasByName(*pSelectColumnName) )
                     {
                         aFilter += s_sDot;
-                        aFilter += ::dbtools::quoteName( aQuote,*pIter);
+                        aFilter += ::dbtools::quoteName( aQuote,*pSelectColumnName);
                         aFilter += s_sParam;
-                        if ( (pIter+1) != pEnd )
+                        if ( (pSelectColumnName+1) != pSelectColumnEnd )
                             aFilter += aAnd;
                     }
                 }
@@ -1306,9 +1309,9 @@ namespace dbaccess
         const ::rtl::OUString* pSelBegin    = aSelNames.getConstArray();
         const ::rtl::OUString* pSelEnd      = pSelBegin + aSelNames.getLength();
 
-        Sequence< ::rtl::OUString> aTableNames(_rxColumns->getElementNames());
-        const ::rtl::OUString* pTableBegin  = aTableNames.getConstArray();
-        const ::rtl::OUString* pTableEnd    = pTableBegin + aTableNames.getLength();
+        Sequence< ::rtl::OUString> aColumnNames(_rxColumns->getElementNames());
+        const ::rtl::OUString* pColumnIter  = aColumnNames.getConstArray();
+        const ::rtl::OUString* pColumnEnd   = pColumnIter + aColumnNames.getLength();
 
         ::comphelper::UStringMixLess aTmp(_rColumnNames.key_comp());
         ::comphelper::UStringMixEqual bCase(static_cast< ::comphelper::UStringMixLess*>(&aTmp)->isCaseSensitive());
@@ -1322,9 +1325,9 @@ namespace dbaccess
             xColumnProp->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
             xColumnProp->getPropertyValue(PROPERTY_TABLENAME)   >>= sTableName;
 
-            for(;pTableBegin != pTableEnd;++pTableBegin)
+            for(;pColumnIter != pColumnEnd;++pColumnIter)
             {
-                if(bCase(sRealName,*pTableBegin) && bCase(_rsUpdateTableName,sTableName) && _rColumnNames.find(*pTableBegin) == _rColumnNames.end())
+                if(bCase(sRealName,*pColumnIter) && bCase(_rsUpdateTableName,sTableName) && _rColumnNames.find(*pColumnIter) == _rColumnNames.end())
                 {
                     sal_Int32 nType = 0;
                     xColumnProp->getPropertyValue(PROPERTY_TYPE)    >>= nType;
@@ -1336,7 +1339,7 @@ namespace dbaccess
                     break;
                 }
             }
-            pTableBegin = aTableNames.getConstArray();
+            pColumnIter = aColumnNames.getConstArray();
         }
     }
 }
