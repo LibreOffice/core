@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdlg2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:37:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:24:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,7 +218,8 @@ void SwView::InsertCaption(const InsCaptionOpt *pOpt)
 
     GetWrtShell().InsertLabel( eT,
                                 pOpt->GetCaption(),
-                                pOpt->GetSeparator(),
+                                !pOpt->IgnoreSeqOpts() ? aEmptyStr : pOpt->GetSeparator(),
+                                pOpt->GetNumSeparator(),
                                 !pOpt->GetPos(),
                                 nID,
                                 pOpt->GetCharacterStyle(),
