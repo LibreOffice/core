@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:39:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:35:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -547,9 +547,7 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
             insertElement(sName,xName);
             // and notify our listeners
             ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(sName), makeAny(xName), Any());
-            OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
-            while (aListenerLoop.hasMoreElements())
-                static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
+            m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
         }
     }
 }
