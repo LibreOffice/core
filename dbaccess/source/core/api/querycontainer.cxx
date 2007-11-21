@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:35:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:34:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
         throw DisposedException( ::rtl::OUString(), *this );
 
     // first clone this object's CommandDefinition part
-    Reference< XPropertySet > xCommandDefinitionPart( m_xORB->createInstance( SERVICE_SDB_QUERYDEFINITION ), UNO_QUERY_THROW );
+    Reference< XPropertySet > xCommandDefinitionPart( m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_QUERYDEFINITION ), UNO_QUERY_THROW );
     ::comphelper::copyProperties( _rxDesc, xCommandDefinitionPart );
     // TODO : the columns part of the descriptor has to be copied
 
@@ -406,11 +406,11 @@ Reference< XContent > OQueryContainer::implCreateWrapper(const Reference< XConte
     Reference< XContent > xReturn;
     if ( xContainer .is() )
     {
-        xReturn = new OQueryContainer(xContainer,m_xConnection,m_xORB,m_pWarnings);
+        xReturn = new OQueryContainer( xContainer, m_xConnection, m_aContext.getLegacyServiceFactory(), m_pWarnings );
     }
     else
     {
-        OQuery* pNewObject = new OQuery(Reference<XPropertySet>(_rxCommandDesc,UNO_QUERY), m_xConnection,m_xORB);
+        OQuery* pNewObject = new OQuery( Reference< XPropertySet >( _rxCommandDesc, UNO_QUERY ), m_xConnection, m_aContext.getLegacyServiceFactory() );
         xReturn = pNewObject;
 
         pNewObject->setWarningsContainer( m_pWarnings );
