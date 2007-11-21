@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 07:59:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:17:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1672,11 +1672,12 @@ public:
     //Einfuegen einer Beschriftung - falls ein FlyFormat erzeugt wird, so
     // returne dieses.
     SwFlyFrmFmt* InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
+                    const String& rNumberingSeparator,
                     const sal_Bool bBefore, const sal_uInt16 nId, const ULONG nIdx,
                     const String& rCharacterStyle,
                     const sal_Bool bCpyBrd = sal_True );
     SwFlyFrmFmt* InsertDrawLabel(
-        const String &rTxt, const String& rSeparator,
+        const String &rTxt, const String& rSeparator, const String& rNumberSeparator,
         const sal_uInt16 nId, const String& rCharacterStyle, SdrObject& rObj );
 
     // erfrage den Attribut Pool
