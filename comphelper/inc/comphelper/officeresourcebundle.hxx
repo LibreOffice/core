@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeresourcebundle.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 12:44:41 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:52:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,15 @@ namespace comphelper
                 then.
         */
         ::rtl::OUString loadString( sal_Int32 _resourceId ) const;
+
+        /** determines whether the resource bundle has a string with the given id
+            @param  _resourceId
+                the id of the string whose existence is to be checked
+            @return
+                <TRUE/> if and only if a string with the given ID exists in the resource
+                bundle.
+        */
+        bool            hasString( sal_Int32 _resourceId ) const;
     };
 
 //........................................................................
