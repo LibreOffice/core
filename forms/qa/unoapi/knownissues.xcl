@@ -1,5 +1,7 @@
+
+
 ## 114044 ###
-forms.ODatabaseForm::com::sun::star::sdbc::XWarningsSupplier
+# forms.ODatabaseForm::com::sun::star::sdbc::XWarningsSupplier
 
 ## i21167 ###
 # forms.ODatabaseForm::com::sun::star::form::XLoadable
@@ -31,7 +33,9 @@ forms.ODatabaseForm::com::sun::star::sdbc::XWarningsSupplier
 # forms.OSpinButtonModel::com::sun::star::io::XPersistObject
 # forms.OTimeModel::com::sun::star::io::XPersistObject
 
-
+### i79108 ###
+forms.OImageButtonControl::com::sun::star::form::submission::XSubmission
+forms.OButtonControl::com::sun::star::form::submission::XSubmission
 
 ### 100040 ###
 # forms.ODatabaseForm::com::sun::star::awt::XTabControllerModel
@@ -79,17 +83,17 @@ forms.OCurrencyModel::com::sun::star::form::XUpdateBroadcaster
 # forms.OGroupBoxModel::com::sun::star::beans::XPropertyContainer
 
 ### i79098 ###
-# forms.OScrollBarModel::com::sun::star::awt::UnoControlScrollBarModel
+forms.OScrollBarModel::com::sun::star::awt::UnoControlScrollBarModel
 
 ### i79100 ###
-# forms.ORadioButtonModel::com::sun::star::awt::UnoControlRadioButtonModel
+forms.ORadioButtonModel::com::sun::star::awt::UnoControlRadioButtonModel
 
 ### i79108 ###
 # forms.OImageButtonControl::com::sun::star::form::submission::XSubmission
-forms.OButtonControl::com::sun::star::form::submission::XSubmission
+# forms.OButtonControl::com::sun::star::form::submission::XSubmission
 
 ### i79109 ###
-# forms.OFixedTextModel::com::sun::star::awt::UnoControlFixedTextModel
+forms.OFixedTextModel::com::sun::star::awt::UnoControlFixedTextModel
 
 ### i79110 ###
 forms.OCheckBoxModel::com::sun::star::awt::UnoControlCheckBoxModel
@@ -97,8 +101,15 @@ forms.OCheckBoxModel::com::sun::star::awt::UnoControlCheckBoxModel
 ### i79111 ###
 forms.OButtonModel::com::sun::star::awt::UnoControlButtonModel
 
-
-forms.OComboBoxModel::com::sun::star::form::XUpdateBroadcaster
+### failures wirhout issue ###
+# forms.OComboBoxModel::com::sun::star::form::XUpdateBroadcaster
 forms.ODatabaseForm::com::sun::star::form::XDatabaseParameterBroadcaster
 forms.ODatabaseForm::com::sun::star::sdbc::XParameters
-
+forms.OEditModel::com::sun::star::style::ParagraphProperties
+forms.OImageControlModel::com::sun::star::awt::UnoControlImageControlModel
+forms.ONumericModel::com::sun::star::form::XUpdateBroadcaster
+forms.OEditModel::com::sun::star::form::XUpdateBroadcaster
+forms.OPatternModel::com::sun::star::form::XUpdateBroadcaster
+forms.OImageButtonModel::com::sun::star::awt::UnoControlImageControlModel
+forms.ORadioButtonControl::com::sun::star::awt::XView
+forms.OEditControl::com::sun::star::awt::XView
