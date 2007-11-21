@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresslistdialog.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:29:53 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 13:54:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -610,6 +610,7 @@ IMPL_STATIC_LINK(SwAddressListDialog, StaticListBoxSelectHdl_Impl, SvLBoxEntry*,
             pThis->m_aDBData.sDataSource = pThis->m_aListLB.GetEntryText(pSelect, ITEMID_NAME - 1);
             pThis->m_aDBData.sCommand = pThis->m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
             pThis->m_aDBData.nCommandType = pUserData->nCommandType;
+            pThis->m_aOK.Enable(sal_True);
         }
         sTable = pThis->m_aListLB.GetEntryText(pSelect, ITEMID_TABLE - 1);
         if(sTable == pThis->m_sConnecting)
