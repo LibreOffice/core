@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentcontext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:53:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,37 @@ namespace comphelper
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createComponent( const sal_Char* _pAsciiServiceName ) const
         {
             return createComponent( ::rtl::OUString::createFromAscii( _pAsciiServiceName ) );
+        }
+
+        /** creates a component using our component factory/context, passing creation arguments
+
+            @throws ::com::sun::star::lang::ServiceNotRegisteredException
+                if the given service is not registered
+            @throws Exception
+                if an exception occured during creating the component
+            @return
+                the newly created component. Is never <NULL/>.
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createComponentWithArguments(
+            const ::rtl::OUString& _rServiceName,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments
+        ) const;
+
+        /** creates a component using our component factory/context, passing creation arguments
+
+            @throws ::com::sun::star::lang::ServiceNotRegisteredException
+                if the given service is not registered
+            @throws Exception
+                if an exception occured during creating the component
+            @return
+                the newly created component. Is never <NULL/>.
+        */
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createComponentWithArguments(
+                const sal_Char* _pAsciiServiceName,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments
+            ) const
+        {
+            return createComponentWithArguments( ::rtl::OUString::createFromAscii( _pAsciiServiceName ), _rArguments );
         }
 
         /** retrieves a singleton instance from the context
