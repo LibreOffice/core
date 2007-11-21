@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:04:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:11:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1683,14 +1683,6 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
         aViewData.ResetOldCursor();
         SetCursor( aViewData.GetCurX(), aViewData.GetCurY(), TRUE );
 
-        if ( bRefMode )     // evtl. EditView verstecken (nach aViewData.SetTabNo !)
-        {
-            for ( USHORT i=0; i<4; i++ )
-                if ( pGridWin[i] )
-                    if ( pGridWin[i]->IsVisible() )
-                        pGridWin[i]->UpdateEditViewPos();
-        }
-
         SfxBindings& rBindings = aViewData.GetBindings();
         ScMarkData& rMark = aViewData.GetMarkData();
 
@@ -1725,6 +1717,18 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
         }
 
         bool bUnoRefDialog = pScMod->IsRefDialogOpen() && pScMod->GetCurRefDlgId() == WID_SIMPLE_REF;
+
+        // recalc zoom-dependent values (before TabChanged, before UpdateEditViewPos)
+        RefreshZoom();
+        UpdateVarZoom();
+
+        if ( bRefMode )     // hide EditView if necessary (after aViewData.SetTabNo !)
+        {
+            for ( USHORT i=0; i<4; i++ )
+                if ( pGridWin[i] )
+                    if ( pGridWin[i]->IsVisible() )
+                        pGridWin[i]->UpdateEditViewPos();
+        }
 
         TabChanged();                                       // DrawView
         aViewData.GetViewShell()->WindowChanged();          // falls das aktive Fenster anders ist
@@ -2521,9 +2525,7 @@ void ScTabView::RecalcPPT()
     double nOldX = aViewData.GetPPTX();
     double nOldY = aViewData.GetPPTY();
 
-    Fraction aZoomX = aViewData.GetZoomX();
-    Fraction aZoomY = aViewData.GetZoomY();
-    aViewData.SetZoom( aZoomX, aZoomY );            // pre-calculate new PPT values
+    aViewData.RefreshZoom();                            // pre-calculate new PPT values
 
     BOOL bChangedX = ( aViewData.GetPPTX() != nOldX );
     BOOL bChangedY = ( aViewData.GetPPTY() != nOldY );
@@ -2532,7 +2534,9 @@ void ScTabView::RecalcPPT()
         //  call view SetZoom (including draw scale, split update etc)
         //  and paint only if values changed
 
-        SetZoom( aZoomX, aZoomY );
+        Fraction aZoomX = aViewData.GetZoomX();
+        Fraction aZoomY = aViewData.GetZoomY();
+        SetZoom( aZoomX, aZoomY, FALSE );
 
         PaintGrid();
         if (bChangedX)
