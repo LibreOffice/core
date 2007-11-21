@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormDocument.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:52:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:43:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,10 +88,8 @@ public class FormDocument extends TextDocument {
     final static String SOMAINFORM = "MainForm";
     final static String SOSUBFORM = "SubForm";
 
-    private final static PropertyValue MODULE_IDENTIFIER = new PropertyValue( "ModuleIdentifier", -1, "com.sun.star.sdb.FormDesign", com.sun.star.beans.PropertyState.DIRECT_VALUE );
-
     public FormDocument(XMultiServiceFactory xMSF, Resource oResource) {
-    super(xMSF, new PropertyValue[]{ MODULE_IDENTIFIER }, true, null);
+    super(xMSF, new TextDocument.ModuleIdentifier( "com.sun.star.sdb.FormDesign" ), true);
     try {
         oFormHandler = new FormHandler(xMSF, xTextDocument);
         oFormHandler.setDrawObjectsCaptureMode(false);
