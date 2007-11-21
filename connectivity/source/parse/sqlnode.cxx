@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:52:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:09:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 
 #ifndef _CONNECTIVITY_SQLNODE_HXX
 #include <connectivity/sqlnode.hxx>
+#endif
+#ifndef CONNECTIVITY_SQLERROR_HXX
+#include <connectivity/sqlerror.hxx>
 #endif
 #ifndef _CONNECTIVITY_SQLINTERNALNODE_HXX
 #include <internalnode.hxx>
@@ -75,6 +78,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_ERRORCONDITION_HPP_
+#include <com/sun/star/sdb/ErrorCondition.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
 #include <com/sun/star/util/XNumberFormatter.hpp>
@@ -122,6 +128,9 @@
 #ifndef _COMPHELPER_NUMBERS_HXX_
 #include <comphelper/numbers.hxx>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
@@ -130,6 +139,9 @@
 #endif
 #ifndef CONNECTIVITY_INC_CONNECTIVITY_DBMETADATA_HXX
 #include "connectivity/dbmetadata.hxx"
+#endif
+#ifndef CONNECTIVITY_SQLERROR_HXX
+#include "connectivity/sqlerror.hxx"
 #endif
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
@@ -143,6 +155,7 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star;
 using namespace ::osl;
 using namespace ::dbtools;
 using namespace ::comphelper;
@@ -210,6 +223,18 @@ namespace
 
 namespace connectivity
 {
+
+//=============================================================================
+struct OSQLParser_Data
+{
+    ::com::sun::star::lang::Locale  aLocale;
+    ::connectivity::SQLError        aErrors;
+
+    OSQLParser_Data( const Reference< XMultiServiceFactory >& _xServiceFactory )
+        :aErrors( _xServiceFactory )
+    {
+    }
+};
 
 //=============================================================================
 //= SQLParseNodeParameter
@@ -668,9 +693,17 @@ bool OSQLParseNode::impl_parseTableNameNodeToString_throw( ::rtl::OUString& rStr
         if ( rParam.pSubQueryHistory->find( sTableOrQueryName ) != rParam.pSubQueryHistory->end() )
         {
             ::rtl::OUString sMessage( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cyclic sub queries" ) ) );
+            OSL_ENSURE( rParam.pParser, "OSQLParseNode::impl_parseTableNameNodeToString_throw: no parser?" );
             if ( rParam.pParser )
-                sMessage = rParam.pParser->getContext().getErrorMessage( IParseContext::ERROR_CYCLIC_SUB_QUERIES );
-            ::dbtools::throwSQLException( sMessage, SQL_CYCLIC_SUB_QUERIES, NULL );
+            {
+                const SQLError& rErrors( rParam.pParser->getErrorHelper() );
+                rErrors.raiseException( sdb::ErrorCondition::PARSER_CYCLIC_SUB_QUERIES );
+            }
+            else
+            {
+                SQLError aErrors( ::comphelper::getProcessServiceFactory() );
+                aErrors.raiseException( sdb::ErrorCondition::PARSER_CYCLIC_SUB_QUERIES );
+            }
         }
         rParam.pSubQueryHistory->insert( sTableOrQueryName );
 
@@ -859,7 +892,7 @@ void OSQLParser::killThousandSeparator(OSQLParseNode* pLiteral)
 {
     if ( pLiteral )
     {
-        if ( s_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator.toChar() == ',' )
+        if ( s_xLocaleData->getLocaleItem( m_pData->aLocale ).decimalSeparator.toChar() == ',' )
         {
             pLiteral->m_aNodeValue = pLiteral->m_aNodeValue.replace('.', sal_Unicode());
             // and replace decimal
@@ -1174,14 +1207,14 @@ OSQLParseNode* OSQLParser::buildNode_STR_NUM(OSQLParseNode*& _pLiteral)
     {
         try
         {
-            ParseResult aResult = m_xCharClass->parsePredefinedToken(KParseType::ANY_NUMBER,_rValue,0,*m_pLocale,0,::rtl::OUString(),KParseType::ANY_NUMBER,::rtl::OUString());
+            ParseResult aResult = m_xCharClass->parsePredefinedToken(KParseType::ANY_NUMBER,_rValue,0,m_pData->aLocale,0,::rtl::OUString(),KParseType::ANY_NUMBER,::rtl::OUString());
             if((aResult.TokenType & KParseType::IDENTNAME) && aResult.EndPos == _rValue.getLength())
             {
                 aValue = ::rtl::OUString::valueOf(aResult.Value);
                 sal_Int32 nPos = aValue.lastIndexOf(::rtl::OUString::createFromAscii("."));
                 if((nPos+_nScale) < aValue.getLength())
                     aValue = aValue.replaceAt(nPos+_nScale,aValue.getLength()-nPos-_nScale,::rtl::OUString());
-                aValue = aValue.replaceAt(aValue.lastIndexOf(::rtl::OUString::createFromAscii(".")),1,s_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator);
+                aValue = aValue.replaceAt(aValue.lastIndexOf(::rtl::OUString::createFromAscii(".")),1,s_xLocaleData->getLocaleItem(m_pData->aLocale).decimalSeparator);
                 return aValue;
             }
         }
@@ -1216,13 +1249,6 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
 
 
     // reset the parser
-    if (!m_pLocale)
-    {
-        Locale aPreferredLocale( m_pContext->getPreferredLocale( ) );
-            // this temporary is due to an MSVC compiler bug
-        m_pLocale = new Locale( aPreferredLocale );
-    }
-
     m_xField        = xField;
     m_xFormatter    = xFormatter;
 
@@ -1265,10 +1291,10 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
             OSL_ENSURE(aValue.getValueType() == ::getCppuType((const ::com::sun::star::lang::Locale*)0), "OSQLParser::PredicateTree : invalid language property !");
 
             if (aValue.getValueType() == ::getCppuType((const ::com::sun::star::lang::Locale*)0))
-                aValue >>= *m_pLocale;
+                aValue >>= m_pData->aLocale;
         }
         else
-            *m_pLocale = m_pContext->getPreferredLocale();
+            m_pData->aLocale = m_pContext->getPreferredLocale();
 
         if ( m_xFormatter.is() )
         {
@@ -1309,7 +1335,7 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
                 s_pScanner->SetRule(s_pScanner->GetSTRINGRule());
                 break;
             default:
-                if (m_pLocale && s_xLocaleData->getLocaleItem(*m_pLocale).decimalSeparator.toChar() == ',')
+                if ( s_xLocaleData->getLocaleItem( m_pData->aLocale ).decimalSeparator.toChar() == ',' )
                     s_pScanner->SetRule(s_pScanner->GetGERRule());
                 else
                     s_pScanner->SetRule(s_pScanner->GetENGRule());
@@ -1370,15 +1396,16 @@ OSQLParseNode* OSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const :
         return m_pParseTree;
     }
 }
+
 //=============================================================================
 //-----------------------------------------------------------------------------
 OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory,const IParseContext* _pContext)
-           :m_pContext(_pContext)
-           ,m_pParseTree(NULL)
-           ,m_pLocale(NULL)
-           ,m_nFormatKey(0)
-           ,m_nDateFormatKey(0)
-           ,m_xServiceFactory(_xServiceFactory)
+    :m_pContext(_pContext)
+    ,m_pParseTree(NULL)
+    ,m_pData( new OSQLParser_Data( _xServiceFactory ) )
+    ,m_nFormatKey(0)
+    ,m_nDateFormatKey(0)
+    ,m_xServiceFactory(_xServiceFactory)
 {
 
 
@@ -1517,8 +1544,33 @@ OSQLParser::OSQLParser(const ::com::sun::star::uno::Reference< ::com::sun::star:
     if (m_pContext == NULL)
         // take the default context
         m_pContext = &s_aDefaultContext;
+
+    m_pData->aLocale = m_pContext->getPreferredLocale();
 }
 
+//-----------------------------------------------------------------------------
+OSQLParser::~OSQLParser()
+{
+    {
+        ::osl::MutexGuard aGuard(getMutex());
+        OSL_ENSURE(s_nRefCount > 0, "OSQLParser::~OSQLParser() : suspicious call : have a refcount of 0 !");
+        if (!--s_nRefCount)
+        {
+            s_pScanner->setScanner(sal_True);
+            delete s_pScanner;
+            s_pScanner = NULL;
+
+            delete s_pGarbageCollector;
+            s_pGarbageCollector = NULL;
+            // is only set the first time so we should delete it only when there no more instances
+            s_xLocaleData = NULL;
+
+            RuleIDMap aEmpty;
+            s_aReverseRuleIDLookup.swap( aEmpty );
+        }
+        m_pParseTree = NULL;
+    }
+}
 // -----------------------------------------------------------------------------
 void OSQLParseNode::substituteParameterNames(OSQLParseNode* _pNode)
 {
@@ -1551,7 +1603,7 @@ bool OSQLParser::extractDate(OSQLParseNode* pLiteral,double& _rfValue)
     try
     {
         if ( !m_nFormatKey && xFormatTypes.is() )
-            m_nFormatKey = ::dbtools::getDefaultNumberFormat( m_xField, xFormatTypes, *m_pLocale );
+            m_nFormatKey = ::dbtools::getDefaultNumberFormat( m_xField, xFormatTypes, m_pData->aLocale );
     }
     catch( Exception& ) { }
     ::rtl::OUString sValue = pLiteral->getTokenValue();
@@ -1563,7 +1615,7 @@ bool OSQLParser::extractDate(OSQLParseNode* pLiteral,double& _rfValue)
     {
         try
         {
-            nTryFormat = xFormatTypes->getStandardFormat( NumberFormat::DATE, *m_pLocale );
+            nTryFormat = xFormatTypes->getStandardFormat( NumberFormat::DATE, m_pData->aLocale );
         }
         catch( Exception& ) { }
         bSuccess = lcl_saveConvertToNumber( m_xFormatter, nTryFormat, sValue, _rfValue );
@@ -1574,7 +1626,7 @@ bool OSQLParser::extractDate(OSQLParseNode* pLiteral,double& _rfValue)
     {
         try
         {
-            nTryFormat = xFormatTypes->getFormatIndex( NumberFormatIndex::DATE_DIN_YYYYMMDD, *m_pLocale );
+            nTryFormat = xFormatTypes->getFormatIndex( NumberFormatIndex::DATE_DIN_YYYYMMDD, m_pData->aLocale );
         }
         catch( Exception& ) { }
         bSuccess = lcl_saveConvertToNumber( m_xFormatter, nTryFormat, sValue, _rfValue );
@@ -2585,6 +2637,13 @@ sal_Int32 OSQLParser::getFunctionReturnType(const ::rtl::OUString& _sFunctionNam
 
     return nType;
 }
+
+// -----------------------------------------------------------------------------
+const SQLError& OSQLParser::getErrorHelper() const
+{
+    return m_pData->aErrors;
+}
+
 // -----------------------------------------------------------------------------
 OSQLParseNode::Rule OSQLParseNode::getKnownRuleID() const
 {
