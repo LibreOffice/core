@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.54 $
+#   $Revision: 1.55 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-07 10:27:53 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 18:50:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ NULLDEV:=/dev/null
 
 # iz29609 helpmacro to check if file exists
 .IF "$(USE_SHELL)"=="bash"
-IFEXIST:=if test -f 
+IFEXIST:=if test -e
 THEN:= ; then
 FI:= ; fi
 PIPEERROR=2>&1 |
