@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:01:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:12:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1412,13 +1412,14 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const ::com::sun:
         aNewValue <<= aNewFontDescriptor;
         sal_Int32 nDescriptorId( BASEPROPERTY_FONTDESCRIPTOR );
         nDescriptorId = BASEPROPERTY_FONTDESCRIPTOR;
-        setFastPropertyValues( 1, &nDescriptorId, &aNewValue, 1 );
 
-        // also fire a propertyChange event for the single property, since with the above
-        // line, only an event for the FontDescriptor property will be fired
+        // also, we need  fire a propertyChange event for the single property, since with
+        // the above line, only an event for the FontDescriptor property will be fired
         Any aNewSingleValue;
         getFastPropertyValue( aNewSingleValue, BASEPROPERTY_FONTDESCRIPTORPART_START );
+
         aGuard.clear();
+        setFastPropertyValues( 1, &nDescriptorId, &aNewValue, 1 );
         fire( &nPropId, &aNewSingleValue, &aOldSingleValue, 1, sal_False );
        }
     else
