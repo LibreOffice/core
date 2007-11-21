@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:23:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:09:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,13 +71,17 @@ Resource RSC_DATASOURCE_TYPES
     {
         Text  ="sdbc:dbase:";
     };
-    String STR_ADO
-    {
-        Text  ="sdbc:ado:";
-    };
     String STR_MSACCESS
     {
         Text  ="sdbc:ado:access:PROVIDER=Microsoft.Jet.OLEDB.4.0;DATA SOURCE=";
+    };
+    String STR_MSACCESS2007
+    {
+        Text  ="sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0;DATA SOURCE=";
+    };
+    String STR_ADO
+    {
+        Text  ="sdbc:ado:";
     };
     String STR_FLAT
     {
@@ -163,13 +167,17 @@ Resource RSC_DATASOURCE_TYPE_UINAMES
     {
         Text[ en-US ] = "dBASE";
     };
-    String STR_ADO
-    {
-        Text[ en-US ] = "ADO";
-    };
     String STR_MSACCESS
     {
         Text[ en-US ] = "Microsoft Access";
+    };
+    String STR_MSACCESS2007
+    {
+        Text[ en-US ] = "Microsoft Access 2007";
+    };
+    String STR_ADO
+    {
+        Text[ en-US ] = "ADO";
     };
     String STR_FLAT
     {
