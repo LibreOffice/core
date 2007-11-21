@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:16:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:24:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
 #include <com/sun/star/sdb/XResultSetAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_ERRORCONDITION_HPP_
+#include <com/sun/star/sdb/ErrorCondition.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -272,8 +275,35 @@ using namespace ::svxform;
 using namespace ::connectivity::simple;
 
 //  ------------------------------------------------------------------------------
+namespace
+{
+    static bool lcl_shouldDisplayError( const Any& _rError )
+    {
+        SQLException aError;
+        if ( !( _rError >>= aError ) )
+            return true;
+
+        if ( aError.Message.indexOfAsciiL( RTL_CONSTASCII_STRINGPARAM( "[OOoBase]" ) ) != 0 )
+            // it is an exception *not* thrown by an OOo Base core component
+            return true;
+
+        // the only exception we do not display ATM is a RowSetVetoException, which
+        // has been raised because an XRowSetApprovalListener vetoed a change
+        if ( aError.ErrorCode + ErrorCondition::ROW_SET_OPERATION_VETOED == 0 )
+            return false;
+
+        // everything else is to be displayed
+        return true;
+    }
+}
+
+//  ------------------------------------------------------------------------------
 void displayException(const Any& _rExcept, Window* _pParent)
 {
+    // check whether we need to display it
+    if ( !lcl_shouldDisplayError( _rExcept ) )
+        return;
+
     try
     {
         // the parent window
