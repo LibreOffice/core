@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedvaluecollection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:55:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:53:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,18 +41,17 @@
 #endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
+#include <com/sun/star/beans/PropertyState.hpp>
 /** === end UNO includes === **/
 
 #include <rtl/ustrbuf.hxx>
 #include <osl/diagnose.h>
 
 #include <hash_map>
+#include <functional>
+#include <algorithm>
 
 //........................................................................
 namespace comphelper
@@ -70,6 +69,7 @@ namespace comphelper
     using ::com::sun::star::uno::cpp_queryInterface;
     using ::com::sun::star::lang::IllegalArgumentException;
     using ::com::sun::star::beans::NamedValue;
+    using ::com::sun::star::beans::PropertyState_DIRECT_VALUE;
     /** === end UNO using === **/
 
     //====================================================================
@@ -231,6 +231,14 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
+    bool NamedValueCollection::impl_put( const ::rtl::OUString& _rValueName, const Any& _rValue )
+    {
+        bool bHas = impl_has( _rValueName );
+        m_pImpl->aValues[ _rValueName ] = _rValue;
+        return bHas;
+    }
+
+    //--------------------------------------------------------------------
     bool NamedValueCollection::impl_remove( const ::rtl::OUString& _rValueName )
     {
         NamedValueRepository::iterator pos = m_pImpl->aValues.find( _rValueName );
@@ -238,6 +246,43 @@ namespace comphelper
             return false;
         m_pImpl->aValues.erase( pos );
         return true;
+    }
+
+    //--------------------------------------------------------------------
+    namespace
+    {
+        struct Value2PropertyValue : public ::std::unary_function< NamedValueRepository::value_type, PropertyValue >
+        {
+            PropertyValue operator()( const NamedValueRepository::value_type& _rValue )
+            {
+                return PropertyValue(
+                    _rValue.first, 0, _rValue.second, PropertyState_DIRECT_VALUE );
+            }
+        };
+
+        struct Value2NamedValue : public ::std::unary_function< NamedValueRepository::value_type, NamedValue >
+        {
+            NamedValue operator()( const NamedValueRepository::value_type& _rValue )
+            {
+                return NamedValue( _rValue.first, _rValue.second );
+            }
+        };
+    }
+
+    //--------------------------------------------------------------------
+    sal_Int32 NamedValueCollection::operator >>= ( Sequence< PropertyValue >& _out_rValues )
+    {
+        _out_rValues.realloc( m_pImpl->aValues.size() );
+        ::std::transform( m_pImpl->aValues.begin(), m_pImpl->aValues.end(), _out_rValues.getArray(), Value2PropertyValue() );
+        return _out_rValues.getLength();
+    }
+
+    //--------------------------------------------------------------------
+    sal_Int32 NamedValueCollection::operator >>= ( Sequence< NamedValue >& _out_rValues )
+    {
+        _out_rValues.realloc( m_pImpl->aValues.size() );
+        ::std::transform( m_pImpl->aValues.begin(), m_pImpl->aValues.end(), _out_rValues.getArray(), Value2NamedValue() );
+        return _out_rValues.getLength();
     }
 
 //........................................................................
