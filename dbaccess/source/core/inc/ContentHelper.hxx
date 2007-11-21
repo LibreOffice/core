@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContentHelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:54:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:40:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,9 @@
 #ifndef _COMPHELPER_BROADCASTHELPER_HXX_
 #include <comphelper/broadcasthelper.hxx>
 #endif
+#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
+#include <comphelper/componentcontext.hxx>
+#endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
@@ -91,6 +94,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XRENAME_HPP_
 #include <com/sun/star/sdbcx/XRename.hpp>
+#endif
+#ifndef CONNECTIVITY_SQLERROR_HXX
+#include <connectivity/sqlerror.hxx>
 #endif
 #ifndef BOOST_SHARED_PTR_HPP_INCLUDED
 #include <boost/shared_ptr.hpp>
@@ -156,12 +162,14 @@ namespace dbaccess
                             com::sun::star::ucb::XCommandEnvironment > & xEnv );
 
     protected:
-        ::cppu::OInterfaceContainerHelper   m_aContentListeners;
-        PropertyChangeListenerContainer     m_aPropertyChangeListeners;
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >               m_xParentContainer;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
-        TContentPtr                     m_pImpl;
-        sal_uInt32                      m_nCommandId;
+        ::cppu::OInterfaceContainerHelper       m_aContentListeners;
+        PropertyChangeListenerContainer         m_aPropertyChangeListeners;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+                                                m_xParentContainer;
+        const ::comphelper::ComponentContext    m_aContext;
+        const ::connectivity::SQLError          m_aErrorHelper;
+        TContentPtr                             m_pImpl;
+        sal_uInt32                              m_nCommandId;
 
 
         // helper
