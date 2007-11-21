@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:51:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:22:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,8 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
+#include <modcfg.hxx>
+#include <swmodule.hxx>
 #ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
 #endif
@@ -134,13 +136,21 @@ class SwSequenceOptionDialog : public SvxStandardDialog
     ListBox         aLbLevel;
     FixedText       aFtDelim;
     Edit            aEdDelim;
+
     FixedLine       aFlCatAndFrame;
     FixedText       aFtCharStyle;
     ListBox         aLbCharStyle;
     CheckBox        aApplyBorderAndShadowCB;
+
+    //#i61007# order of captions
+    FixedLine       aFlCaptionOrder;
+    FixedText       aFtCaptionOrder;
+    ListBox         aLbCaptionOrder;
+
     OKButton        aOKButton;
     CancelButton    aCancelButton;
     HelpButton      aHelpButton;
+
     SwView&         rView;
     String          aFldTypeName;
 
@@ -152,6 +162,10 @@ public:
 
     bool IsApplyBorderAndShadow( void ) { return aApplyBorderAndShadowCB.IsChecked(); }
     void SetApplyBorderAndShadow( bool bSet )  { aApplyBorderAndShadowCB.Check(bSet); }
+
+    //#i61007# order of captions
+    bool IsOrderNumberingFirst() const {return aLbCaptionOrder.GetSelectEntryPos() == 1;}
+    void SetOrderNumberingFirst(bool bSet) { aLbCaptionOrder.SelectEntryPos( bSet ? 1 : 0 ); }
 
     void    SetCharacterStyle(const String& rStyle);
     String  GetCharacterStyle() const;
@@ -168,6 +182,8 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     aCategoryBox  (this, SW_RES(BOX_CATEGORY)),
     aFormatText   (this, SW_RES(TXT_FORMAT  )),
     aFormatBox    (this, SW_RES(BOX_FORMAT  )),
+    aNumberingSeparatorFT(this, SW_RES(FT_NUM_SEP  )),
+    aNumberingSeparatorED(this, SW_RES(ED_NUM_SEP  )),
     aSepText      (this, SW_RES(TXT_SEP     )),
     aSepEdit      (this, SW_RES(EDT_SEP     )),
     aPosText      (this, SW_RES(TXT_POS     )),
@@ -181,9 +197,12 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     aPrevWin      (this, SW_RES(WIN_SAMPLE  )),
     rView( rV ),
     pMgr( new SwFldMgr(rView.GetWrtShellPtr()) ),
-    bCopyAttributes( FALSE )
-
+    bCopyAttributes( FALSE ),
+    bOrderNumberingFirst( SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst() )
 {
+    //#i61007# order of captions
+    if( bOrderNumberingFirst )
+        ApplyCaptionOrder();
     SwWrtShell &rSh = rView.GetWrtShell();
      uno::Reference< frame::XModel >  xModel = rView.GetDocShell()->GetBaseModel();
 
@@ -198,7 +217,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     Link aLk = LINK( this, SwCaptionDialog, ModifyHdl );
     aCategoryBox.SetModifyHdl( aLk );
     aTextEdit   .SetModifyHdl( aLk );
-
+    aNumberingSeparatorED.SetModifyHdl ( aLk );
     aSepEdit    .SetModifyHdl( aLk );
 
     aLk = LINK(this, SwCaptionDialog, SelectHdl);
@@ -341,6 +360,7 @@ void SwCaptionDialog::Apply()
     }
     aOpt.SetNumType( (sal_uInt16)(sal_uIntPtr)aFormatBox.GetEntryData( aFormatBox.GetSelectEntryPos() ) );
     aOpt.SetSeparator( aSepEdit.IsEnabled() ? aSepEdit.GetText() : String() );
+    aOpt.SetNumSeparator( aNumberingSeparatorED.GetText() );
     aOpt.SetCaption( aTextEdit.GetText() );
     aOpt.SetPos( aPosBox.GetSelectEntryPos() );
     aOpt.IgnoreSeqOpts() = sal_True;
@@ -357,9 +377,17 @@ IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
     SwSequenceOptionDialog  aDlg( pButton, rView, sFldTypeName );
     aDlg.SetApplyBorderAndShadow(bCopyAttributes);
     aDlg.SetCharacterStyle( sCharacterStyle );
+    aDlg.SetOrderNumberingFirst( bOrderNumberingFirst );
     aDlg.Execute();
     bCopyAttributes = aDlg.IsApplyBorderAndShadow();
     sCharacterStyle = aDlg.GetCharacterStyle();
+    //#i61007# order of captions
+    if( bOrderNumberingFirst != aDlg.IsOrderNumberingFirst() )
+    {
+        bOrderNumberingFirst = aDlg.IsOrderNumberingFirst();
+        SW_MOD()->GetModuleConfig()->SetCaptionOrderNumberingFirst(bOrderNumberingFirst);
+        ApplyCaptionOrder();
+    }
     DrawSample();
     return 0;
 }
@@ -419,9 +447,13 @@ void SwCaptionDialog::DrawSample()
         if( SVX_NUM_NUMBER_NONE != nNumFmt )
         {
             // Kategorie
-            aStr += sFldTypeName;
-            if ( aStr.Len() > 0 )
-                aStr += ' ';
+            //#i61007# order of captions
+            if( !bOrderNumberingFirst )
+            {
+                aStr += sFldTypeName;
+                if ( aStr.Len() > 0 )
+                    aStr += ' ';
+            }
 
             SwWrtShell &rSh = rView.GetWrtShell();
             SwSetExpFieldType* pFldType = (SwSetExpFieldType*)rSh.GetFldType(
@@ -450,12 +482,17 @@ void SwCaptionDialog::DrawSample()
             //case ARABIC:
             default:                    aStr += '1'; break;
             }
-        }
+            //#i61007# order of captions
+            if( bOrderNumberingFirst )
+            {
+                aStr += aNumberingSeparatorED.GetText();
+                aStr += sFldTypeName;
+            }
 
+        }
         aStr += aSepEdit.GetText();
     }
     aStr += aTextEdit.GetText();
-
     // do preview!
     aPrevWin.SetPreviewText( aStr );
 }
@@ -511,6 +548,9 @@ SwSequenceOptionDialog::SwSequenceOptionDialog( Window *pParent, SwView &rV,
     aFtCharStyle    (this, SW_RES(FT_CHARSTYLE )),
     aLbCharStyle    (this, SW_RES(LB_CHARSTYLE )),
     aApplyBorderAndShadowCB(this, SW_RES(CB_APPLYBAS)),
+    aFlCaptionOrder(this, SW_RES( FL_ORDER )), //#i61007# order of captions
+    aFtCaptionOrder(this, SW_RES( FT_ORDER )),
+    aLbCaptionOrder(this, SW_RES( LB_ORDER )),
     aOKButton       (this, SW_RES(BTN_OK       )),
     aCancelButton   (this, SW_RES(BTN_CANCEL   )),
     aHelpButton     (this, SW_RES(BTN_HELP     )),
@@ -623,4 +663,40 @@ long SwCaptionDialog::CategoryBox::PreNotify( NotifyEvent& rNEvt )
         nHandled = ComboBox::PreNotify( rNEvt );
     return nHandled;
 }
+/*-- 01.11.2007 10:45:51---------------------------------------------------
+    //#i61007# order of captions
+  -----------------------------------------------------------------------*/
+void lcl_MoveH( Window& rWin, sal_Int32 nMove )
+{
+    Point aPos( rWin.GetPosPixel() );
+    aPos.Y() += nMove;
+    rWin.SetPosPixel(aPos);
+}
+void SwCaptionDialog::ApplyCaptionOrder()
+{
+    //have the settings changed?
+    bool bVisible = aNumberingSeparatorED.IsVisible() != 0;
+    if( bOrderNumberingFirst != bVisible )
+    {
+        sal_Int32 nDiff = aPosBox.GetPosPixel().Y() - aSepEdit.GetPosPixel().Y();
 
+        aNumberingSeparatorFT.Show( bOrderNumberingFirst );
+        aNumberingSeparatorED.Show( bOrderNumberingFirst );
+        if( !bOrderNumberingFirst )
+        {
+            nDiff = -nDiff;
+        }
+        lcl_MoveH( aCategoryText, 2 * nDiff);
+        lcl_MoveH( aFormatText, -nDiff );
+        lcl_MoveH( aFormatBox, -nDiff );
+        lcl_MoveH( aCategoryBox, 2 * nDiff);
+        lcl_MoveH( aSepText, nDiff );
+        lcl_MoveH( aSepEdit, nDiff );
+        lcl_MoveH( aPosText, nDiff );
+        lcl_MoveH( aPosBox, nDiff );
+        lcl_MoveH( aPrevWin, nDiff );
+        Size aDlgSize( GetSizePixel() );
+        aDlgSize.Height() += nDiff;
+        SetSizePixel( aDlgSize );
+    }
+}
