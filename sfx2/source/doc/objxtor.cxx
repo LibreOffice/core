@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:32:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:48:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@
 #endif
 
 #include <sfx2/objsh.hxx>
+#include <sfx2/signaturestate.hxx>
 
 #ifndef _BASIC_SBUNO_HXX
 #include <basic/sbuno.hxx>
@@ -221,12 +222,14 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
 TYPEINIT1(SfxObjectShell, SfxShell);
 
 //--------------------------------------------------------------------
-SfxObjectShell_Impl::SfxObjectShell_Impl()
+SfxObjectShell_Impl::SfxObjectShell_Impl( SfxObjectShell& _rDocShell )
 :mpObjectContainer(0)
     ,pAccMgr(0)
     ,pDocInfo ( 0)
     ,pCfgMgr( 0)
     ,pBasicManager( new SfxBasicManagerHolder )
+    ,rDocShell( _rDocShell )
+    ,aMacroMode( *this )
     ,pProgress( 0)
     ,nTime()
     ,nVisualDocumentNumber( USHRT_MAX)
@@ -290,10 +293,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl()
     ,bHiddenLockedByAPI( sal_False )
     ,bInCloseEvent( sal_False )
     ,nStyleFilter( 0 )
-    ,nMacroMode( -1 )
     ,bDisposing( sal_False )
-    ,bMacroDisabled( sal_False )
-    ,bMacroDisabledMessageIsShown( sal_False )
     ,m_bEnableSetModified( sal_True )
     ,m_bIsModified( sal_False )
     ,m_nMapUnit( MAP_100TH_MM )
@@ -342,7 +342,7 @@ SfxObjectShell::SfxObjectShell
     Konstruktor der Klasse SfxObjectShell.
 */
 
-:   pImp( new SfxObjectShell_Impl ),
+:   pImp( new SfxObjectShell_Impl( *this ) ),
     pMedium(0),
     pStyleSheetPool(0),
     eCreateMode(eMode)
