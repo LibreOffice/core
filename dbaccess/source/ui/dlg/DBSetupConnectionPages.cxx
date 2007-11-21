@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBSetupConnectionPages.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:05:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:53:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -585,9 +585,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         }
 
         USHORT nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
-        String aMessage = String(ModuleRes(nMessage));
-        String sTitle(ModuleRes(STR_JDBCDRIVER_TEST));
-        OSQLMessageBox aMsg(this,sTitle,aMessage);
+        OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String() );
         aMsg.Execute();
         return 0L;
     }
@@ -696,10 +694,7 @@ DBG_NAME(OMySQLIntroPageSetup)
         }
 
         USHORT nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
-
-        String aMessage = String(ModuleRes(nMessage));
-        String sTitle(ModuleRes(STR_JDBCDRIVER_TEST));
-        OSQLMessageBox aMsg(this,sTitle,aMessage);
+        OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String() );
         aMsg.Execute();
         return 0L;
     }
