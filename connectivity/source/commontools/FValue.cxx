@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:58:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 14:58:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1035,9 +1035,26 @@ sal_Bool ORowSetValue::getBool()    const
         {
             case DataType::CHAR:
             case DataType::VARCHAR:
+            case DataType::LONGVARCHAR:
+                {
+                    const ::rtl::OUString sValue(m_aValue.m_pString);
+                    const static ::rtl::OUString s_sTrue(RTL_CONSTASCII_USTRINGPARAM("true"));
+                    const static ::rtl::OUString s_sFalse(RTL_CONSTASCII_USTRINGPARAM("false"));
+                    if ( sValue.equalsIgnoreAsciiCase(s_sTrue) )
+                    {
+                        bRet = sal_True;
+                        break;
+                    }
+                    else if ( sValue.equalsIgnoreAsciiCase(s_sFalse) )
+                    {
+                        bRet = sal_False;
+                        break;
+                    }
+                }
+                // run through
             case DataType::DECIMAL:
             case DataType::NUMERIC:
-            case DataType::LONGVARCHAR:
+
                 bRet = ::rtl::OUString(m_aValue.m_pString).toInt32() != 0;
                 break;
             case DataType::BIGINT:
