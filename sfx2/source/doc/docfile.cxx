@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.195 $
+ *  $Revision: 1.196 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 11:48:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:46:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sfx2.hxx"
 #include <sfx2/docfile.hxx>
+#include "sfx2/signaturestate.hxx"
 
 #include <uno/mapping.hxx>
 #include <com/sun/star/task/XInteractionHandler.hpp>
