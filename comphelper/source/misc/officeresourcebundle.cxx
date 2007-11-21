@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeresourcebundle.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:13:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:53:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,15 @@ namespace comphelper
         */
         ::rtl::OUString loadString( sal_Int32 _resourceId ) const;
 
+        /** determines whether the resource bundle has a string with the given id
+            @param  _resourceId
+                the id of the string whose existence is to be checked
+            @return
+                <TRUE/> if and only if a string with the given ID exists in the resource
+                bundle.
+        */
+        bool            hasString( sal_Int32 _resourceId ) const;
+
     private:
         /** loads the bundle represented by the instance
 
@@ -120,7 +129,21 @@ namespace comphelper
                 Our mutex is locked.
         */
         bool    impl_loadBundle_nothrow();
+
+        /** returns the resource bundle key for a string with a given resource id
+        */
+        static ::rtl::OUString
+                impl_getStringResourceKey( sal_Int32 _resourceId );
     };
+
+    //--------------------------------------------------------------------
+    ::rtl::OUString ResourceBundle_Impl::impl_getStringResourceKey( sal_Int32 _resourceId )
+    {
+        ::rtl::OUStringBuffer key;
+        key.appendAscii( "string:" );
+        key.append( _resourceId );
+        return key.makeStringAndClear();
+    }
 
     //--------------------------------------------------------------------
     ::rtl::OUString ResourceBundle_Impl::loadString( sal_Int32 _resourceId ) const
@@ -131,12 +154,9 @@ namespace comphelper
 
         if ( const_cast< ResourceBundle_Impl* >( this )->impl_loadBundle_nothrow() )
         {
-            ::rtl::OUStringBuffer key;
-            key.appendAscii( "string:" );
-            key.append( _resourceId );
             try
             {
-                OSL_VERIFY( m_xBundle->getByName( key.makeStringAndClear() ) >>= sString );
+                OSL_VERIFY( m_xBundle->getByName( impl_getStringResourceKey( _resourceId ) ) >>= sString );
             }
             catch( const Exception& )
             {
@@ -144,6 +164,27 @@ namespace comphelper
             }
         }
         return sString;
+    }
+
+    //--------------------------------------------------------------------
+    bool ResourceBundle_Impl::hasString( sal_Int32 _resourceId ) const
+    {
+        ::osl::MutexGuard aGuard( m_aMutex );
+
+        bool has = false;
+
+        if ( const_cast< ResourceBundle_Impl* >( this )->impl_loadBundle_nothrow() )
+        {
+            try
+            {
+                has = m_xBundle->hasByName( impl_getStringResourceKey( _resourceId ) );
+            }
+            catch( const Exception& )
+            {
+                OSL_ENSURE( false, "ResourceBundle_Impl::hasString: caught an exception!" );
+            }
+        }
+        return has;
     }
 
     //--------------------------------------------------------------------
@@ -210,6 +251,12 @@ namespace comphelper
     ::rtl::OUString OfficeResourceBundle::loadString( sal_Int32 _resourceId ) const
     {
         return m_pImpl->loadString( _resourceId );
+    }
+
+    //--------------------------------------------------------------------
+    bool OfficeResourceBundle::hasString( sal_Int32 _resourceId ) const
+    {
+        return m_pImpl->hasString( _resourceId );
     }
 
 //........................................................................
