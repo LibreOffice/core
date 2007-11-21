@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cption.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:56:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:23:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,9 @@ class SwCaptionDialog : public SvxStandardDialog
     CategoryBox  aCategoryBox;
     FixedText    aFormatText;
     ListBox      aFormatBox;
+    //#i61007# order of captions
+    FixedText    aNumberingSeparatorFT;
+    Edit         aNumberingSeparatorED;
     FixedText    aSepText;
     Edit         aSepEdit;
     FixedText    aPosText;
@@ -136,6 +139,7 @@ class SwCaptionDialog : public SvxStandardDialog
     String       sCharacterStyle;
     String       sObjectName;
     bool         bCopyAttributes;
+    bool        bOrderNumberingFirst; //#i61007# order of captions
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xNameAccess;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >         xNamed;
@@ -149,6 +153,7 @@ class SwCaptionDialog : public SvxStandardDialog
 
     void    DrawSample();
     void    CheckButtonWidth();
+    void    ApplyCaptionOrder(); //#i61007# order of captions
 
 public:
      SwCaptionDialog( Window *pParent, SwView &rV );
