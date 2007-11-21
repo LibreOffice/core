@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:13:02 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 15:15:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ UNOIDLDEFS += -w
 
 # ------------------------------------------------------------------------
 IDLFILES=\
+    BooleanComparisonMode.idl \
     CallableStatement.idl \
     Column.idl \
     ColumnSettings.idl \
@@ -72,6 +73,7 @@ IDLFILES=\
     Document.idl \
     DocumentDefinition.idl \
     DocumentSaveRequest.idl \
+    ErrorCondition.idl \
     ErrorMessageDialog.idl \
     InteractionHandler.idl \
     ParametersRequest.idl \
