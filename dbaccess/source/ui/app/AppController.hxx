@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:23:05 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:49:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,7 +251,7 @@ namespace dbaui
         /** fills the list with the selected entries.
             @param  _rNames
         */
-        void getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames );
+        void getSelectionElementNames( ::std::vector< ::rtl::OUString>& _rNames ) const;
 
         /// deletes the entries selected.
         void deleteEntries();
@@ -587,6 +587,9 @@ namespace dbaui
 
         // OComponentHelper
         virtual void SAL_CALL disposing();
+
+    private:
+        bool    impl_isAlterableView_nothrow( const ::rtl::OUString& _rTableOrViewName ) const;
     };
 
 //........................................................................
