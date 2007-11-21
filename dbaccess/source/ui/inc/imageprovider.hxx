@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imageprovider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:06:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:05:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ namespace dbaui
     //====================================================================
     //= ImageProvider
     //====================================================================
-    struct ImageProvider_Impl;
+    struct ImageProvider_Data;
     /** provides images for database objects such as tables, queries, forms, reports ...
 
         At the moment, this class cares for small icons only, that is, icons which can be used
@@ -72,7 +72,7 @@ namespace dbaui
     class ImageProvider
     {
     private:
-        ::boost::shared_ptr< ImageProvider_Impl >   m_pImpl;
+        ::boost::shared_ptr< ImageProvider_Data >   m_pData;
 
     public:
         /** creates a semi-functional ImageProvider instance
@@ -98,24 +98,23 @@ namespace dbaui
                 constants.
             @param  _rName
                 the name of the object
-            @param  _bHighContrast
-                indicates whether High-Contrast icons should be used.
-                Note that normally, this would be some application-wide setting. However,
-                in current OOo, HC support is decided on a per-control basis, means every
-                control decides itself whether its images must be HC versions or not.
-                Thus callers need to specify this flag.
+            @param  _out_rImage
+                the normal image to use for the object
+            @param  _out_rImageHC
+                the high-contrast version of the image to use for the object
             @return
                 the image to be used for the object.
         */
-        Image getImage(
+        void getImages(
             const String& _rName,
-            sal_Int32 _nDatabaseObjectType,
-            bool _bHighContrast
+            const sal_Int32 _nDatabaseObjectType,
+            Image& _out_rImage,
+            Image& _out_rImageHC
         );
 
         /** returns the default image to be used for a database object
 
-            In opposite to getImage, this method does not check the concrete object
+            In opposite to getImages, this method does not check the concrete object
             for its image, but returns a default image to be used for all objects of the given
             type.
 
@@ -138,7 +137,7 @@ namespace dbaui
 
         /** returns the resource ID for the default image to be used for a database object
 
-            In opposite to getImage, this method does not check the concrete object
+            In opposite to getImages, this method does not check the concrete object
             for its image, but returns a default image to be used for all objects of the given
             type.
 
