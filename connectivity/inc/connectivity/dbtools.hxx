@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:11:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 14:57:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,11 @@ namespace task {
 
 } } }
 
+namespace rtl
+{
+    class OUStringBuffer;
+}
+
 //.........................................................................
 namespace dbtools
 {
@@ -111,10 +116,6 @@ namespace dbtools
     };
 //=========================================================================
     // date conversion
-
-//  extern ::com::sun::star::util::Date STANDARD_DB_DATE;
-//  double ToStandardDbDate(const ::com::sun::star::util::Date& rNullDate, double rVal);
-//  double ToNullDate(const ::com::sun::star::util::Date& rNullDate, double rVal);
 
     // calculates the default numberformat for a given datatype and a give language
     sal_Int32 getDefaultNumberFormat(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xColumn,
@@ -232,7 +233,10 @@ namespace dbtools
 
     /** returns the columns of the named table of the given connection
     */
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getTableFields(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn, const ::rtl::OUString& _rName);
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getTableFields(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _rxConn,
+        const ::rtl::OUString& _rName
+    );
 
     /** get fields for a result set given by a "command descriptor"
 
@@ -342,7 +346,10 @@ namespace dbtools
         @param _pAsciiSettingName
             the ASCII name of the setting
     */
-    bool getBooleanDataSourceSetting( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection, const sal_Char* _pAsciiSettingName );
+    bool getBooleanDataSourceSetting(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const sal_Char* _pAsciiSettingName
+        );
 
     /** check if a specific property is enabled in the info sequence
         @deprecated
@@ -687,6 +694,9 @@ namespace dbtools
                                  const ::rtl::OUString& _sSchema,
                                  const ::rtl::OUString& _sTable);
 
+    typedef ::std::pair<sal_Bool,sal_Bool> TBoolPair;
+    typedef ::std::pair< TBoolPair,sal_Int32 > ColumnInformation;
+    typedef ::std::multimap< ::rtl::OUString, ColumnInformation, ::comphelper::UStringMixLess> ColumnInformationMap;
     /** collects the information about auto increment, currency and data type for the given column name.
         The column must be quoted, * is also valid.
         @param  _xConnection
@@ -698,13 +708,31 @@ namespace dbtools
         @param  _rInfo
             The information about the column(s).
     */
-    typedef ::std::pair<sal_Bool,sal_Bool> TBoolPair;
-    typedef ::std::pair< TBoolPair,sal_Int32 > ColumnInformation;
-    typedef ::std::multimap< ::rtl::OUString, ColumnInformation, ::comphelper::UStringMixLess> ColumnInformationMap;
     void collectColumnInformation(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
                                     const ::rtl::OUString& _sComposedTableName,
                                     const ::rtl::OUString& _rName,
                                     ColumnInformationMap& _rInfo);
+
+
+    /** adds a boolean comparison clause to the given SQL predicate
+
+        @param _rExpression
+            the expression which is to be compared with a boolean value
+        @param _bValue
+            the boolean value which the expression is to be compared with
+        @param _nBooleanComparisonMode
+            the boolean comparison mode to be used. Usually obtained from
+            a css.sdb.DataSource's Settings member.
+        @param _out_rSQLPredicate
+            the buffer to which the comparison predicate will be appended
+    */
+    void getBoleanComparisonPredicate(
+            const ::rtl::OUString& _rExpression,
+            const sal_Bool  _bValue,
+            const sal_Int32 _nBooleanComparisonMode,
+            ::rtl::OUStringBuffer& _out_rSQLPredicate
+        );
+
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
