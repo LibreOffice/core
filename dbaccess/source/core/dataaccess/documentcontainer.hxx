@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:53:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:39:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,6 @@ class ODocumentContainer    : public ODefinitionContainer
                             , public ::comphelper::OPropertyStateContainer
                             , public ::comphelper::OPropertyArrayUsageHelper< ODocumentContainer >
 {
-    DECLARE_STL_USTRINGACCESS_MAP(bool, PersistentNames);
-    PersistentNames m_aObjectList;
     sal_Bool        m_bFormsContainer;
 public:
     /** constructs the container.<BR>
