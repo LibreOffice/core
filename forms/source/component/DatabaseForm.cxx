@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:51:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:32:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3117,6 +3117,43 @@ void SAL_CALL ODatabaseForm::rowSetChanged(const EventObject& /*event*/) throw( 
 }
 
 //------------------------------------------------------------------------------
+bool ODatabaseForm::impl_approveRowChange_throw( const EventObject& _rEvent, const bool _bAllowSQLException,
+    ::osl::ClearableMutexGuard& _rGuard )
+{
+    ::cppu::OInterfaceIteratorHelper aIter( m_aRowSetApproveListeners );
+    _rGuard.clear();
+    while ( aIter.hasMoreElements() )
+    {
+        Reference< XRowSetApproveListener > xListener( static_cast< XRowSetApproveListener* >( aIter.next() ) );
+        if ( !xListener.is() )
+            continue;
+
+        try
+        {
+            if ( !xListener->approveRowSetChange( _rEvent ) )
+                return false;
+        }
+        catch ( const DisposedException& e )
+        {
+            if ( e.Context == xListener )
+                aIter.remove();
+        }
+        catch ( const RuntimeException& ) { throw; }
+        catch ( const SQLException& )
+        {
+            if ( _bAllowSQLException )
+                throw;
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        catch ( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+    return true;
+}
+
+//------------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseForm::approveCursorMove(const EventObject& event) throw( RuntimeException )
 {
     // is our aggregate calling?
@@ -3125,20 +3162,39 @@ sal_Bool SAL_CALL ODatabaseForm::approveCursorMove(const EventObject& event) thr
         // Our aggregate doesn't have any ApproveRowSetListeners (expect ourself), as we re-routed the queryInterface
         // for XRowSetApproveBroadcaster-interface.
         // So we have to multiplex this approve request.
-        ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
-        while (aIter.hasMoreElements())
-            if (!((XRowSetApproveListener*)aIter.next())->approveCursorMove(event))
-                return sal_False;
+        ::cppu::OInterfaceIteratorHelper aIter( m_aRowSetApproveListeners );
+        while ( aIter.hasMoreElements() )
+        {
+            Reference< XRowSetApproveListener > xListener( static_cast< XRowSetApproveListener* >( aIter.next() ) );
+            if ( !xListener.is() )
+                continue;
+
+            try
+            {
+                if ( !xListener->approveCursorMove( event ) )
+                    return sal_False;
+            }
+            catch ( const DisposedException& e )
+            {
+                if ( e.Context == xListener )
+                    aIter.remove();
+            }
+            catch ( const RuntimeException& ) { throw; }
+            catch ( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+        return true;
     }
     else
     {
         // this is a call from our parent ...
         // a parent's cursor move will result in a re-execute of our own row-set, so we have to
         // ask our own RowSetChangesListeners, too
-        ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
-        while (aIter.hasMoreElements())
-            if (!((XRowSetApproveListener*)aIter.next())->approveRowSetChange(event))
-                return sal_False;
+        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+        if ( !impl_approveRowChange_throw( event, false, aGuard ) )
+            return sal_False;
     }
     return sal_True;
 }
@@ -3152,10 +3208,30 @@ sal_Bool SAL_CALL ODatabaseForm::approveRowChange(const RowChangeEvent& event) t
         // Our aggregate doesn't have any ApproveRowSetListeners (expect ourself), as we re-routed the queryInterface
         // for XRowSetApproveBroadcaster-interface.
         // So we have to multiplex this approve request.
-        ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
-        while (aIter.hasMoreElements())
-            if (!((XRowSetApproveListener*)aIter.next())->approveRowChange(event))
-                return sal_False;
+        ::cppu::OInterfaceIteratorHelper aIter( m_aRowSetApproveListeners );
+        while ( aIter.hasMoreElements() )
+        {
+            Reference< XRowSetApproveListener > xListener( static_cast< XRowSetApproveListener* >( aIter.next() ) );
+            if ( !xListener.is() )
+                continue;
+
+            try
+            {
+                if ( !xListener->approveRowChange( event ) )
+                    return false;
+            }
+            catch ( const DisposedException& e )
+            {
+                if ( e.Context == xListener )
+                    aIter.remove();
+            }
+            catch ( const RuntimeException& ) { throw; }
+            catch ( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+        return true;
     }
     return sal_True;
 }
@@ -3165,16 +3241,14 @@ sal_Bool SAL_CALL ODatabaseForm::approveRowSetChange(const EventObject& event) t
 {
     if (event.Source == InterfaceRef(static_cast<XWeak*>(this)))    // ignore our aggregate as we handle this approve ourself
     {
-        ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
-        while (aIter.hasMoreElements())
-        if (!((XRowSetApproveListener*)aIter.next())->approveRowSetChange(event))
+        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+        bool bWasLoaded = isLoaded();
+        if ( !impl_approveRowChange_throw( event, false, aGuard ) )
             return sal_False;
 
-        if (isLoaded())
+        if ( bWasLoaded )
         {
-            ::cppu::OInterfaceIteratorHelper aLoadIter(m_aLoadListeners);
-            while (aLoadIter.hasMoreElements())
-                ((XLoadListener*)aLoadIter.next())->reloading(event);
+            m_aLoadListeners.notifyEach( &XLoadListener::reloading, event );
         }
     }
     else
@@ -3182,10 +3256,9 @@ sal_Bool SAL_CALL ODatabaseForm::approveRowSetChange(const EventObject& event) t
         // this is a call from our parent ...
         // a parent's cursor move will result in a re-execute of our own row-set, so we have to
         // ask our own RowSetChangesListeners, too
-        ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
-        while (aIter.hasMoreElements())
-            if (!((XRowSetApproveListener*)aIter.next())->approveRowSetChange(event))
-                return sal_False;
+        ::osl::ClearableMutexGuard aGuard( m_aMutex );
+        if ( !impl_approveRowChange_throw( event, false, aGuard ) )
+            return sal_False;
     }
     return sal_True;
 }
@@ -3257,7 +3330,7 @@ void SAL_CALL ODatabaseForm::removeParameterListener(const Reference<XDatabasePa
 //------------------------------------------------------------------------------
 void SAL_CALL ODatabaseForm::executeWithCompletion( const Reference< XInteractionHandler >& _rxHandler ) throw(SQLException, RuntimeException)
 {
-    ::osl::ResettableMutexGuard aGuard(m_aMutex);
+    ::osl::ClearableMutexGuard aGuard(m_aMutex);
     // the difference between execute and load is, that we position on the first row in case of load
     // after execute we remain before the first row
     if (!isLoaded())
@@ -3268,12 +3341,8 @@ void SAL_CALL ODatabaseForm::executeWithCompletion( const Reference< XInteractio
     else
     {
         EventObject event(static_cast< XWeak* >(this));
-        ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
-        aGuard.clear();
-
-        while (aIter.hasMoreElements())
-            if (!((XRowSetApproveListener*)aIter.next())->approveRowSetChange(event))
-                return;
+        if ( !impl_approveRowChange_throw( event, true, aGuard ) )
+            return;
 
         // we're loaded and somebody want's to execute ourself -> this means a reload
         reload_impl(sal_False, _rxHandler);
@@ -3298,12 +3367,8 @@ void SAL_CALL ODatabaseForm::execute() throw( SQLException, RuntimeException )
     else
     {
         EventObject event(static_cast< XWeak* >(this));
-        ::cppu::OInterfaceIteratorHelper aIter(m_aRowSetApproveListeners);
-        aGuard.clear();
-
-        while (aIter.hasMoreElements())
-            if (!((XRowSetApproveListener*)aIter.next())->approveRowSetChange(event))
-                return;
+        if ( !impl_approveRowChange_throw( event, true, aGuard ) )
+            return;
 
         // we're loaded and somebody want's to execute ourself -> this means a reload
         reload_impl(sal_False);
