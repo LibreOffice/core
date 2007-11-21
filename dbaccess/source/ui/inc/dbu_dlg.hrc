@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_dlg.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:20:43 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:03:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@
 #define STR_LOGICAL_INDEX_NAME              RID_STR_DLG_START + 33
 #define STR_CONNECTION_TEST                 RID_STR_DLG_START + 34
 #define STR_CONNECTION_SUCCESS              RID_STR_DLG_START + 35
-#define STR_JDBCDRIVER_TEST                 RID_STR_DLG_START + 36
+    // FREE
 #define STR_JDBCDRIVER_SUCCESS              RID_STR_DLG_START + 37
 #define STR_JDBCDRIVER_NO_SUCCESS           RID_STR_DLG_START + 38
 #define STR_MSACCESS_FILTERNAME             RID_STR_DLG_START + 39
@@ -126,12 +126,13 @@
 #define STR_EXCEPTION_WARNING               RID_STR_DLG_START + 63
 #define STR_EXCEPTION_INFO                  RID_STR_DLG_START + 64
 #define STR_EXCEPTION_DETAILS               RID_STR_DLG_START + 65
-
+#define STR_MSACCESS_2007_FILTERNAME        RID_STR_DLG_START + 66
+#define STR_MSACCESS_ACCDB_FILE             RID_STR_DLG_START + 67
 
 
 // please adjust checking before insert new strings
 
-#define LAST_STR_HERE                       RID_STR_DLG_START + 65
+#define LAST_STR_HERE                       RID_STR_DLG_START + 67
 
 #if LAST_STR_HERE > RID_STR_DLG_END
 #error Resource-Id Overflow in #file, #line
