@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:40:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,42 +105,6 @@ class ODocumentDefinition
     sal_Bool                                                                            m_bInExecute;
     OEmbeddedClientHelper*                                                              m_pClientHelper;
 
-private:
-    // Command "insert"
-    void insert( const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw( ::com::sun::star::uno::Exception );
-
-    /** fills the load arguments
-    *
-    * \param _rArgs
-    * \param _rEmbeddedObjectDescriptor
-    * \param _xConnection
-    * \param _bReadOnly
-    * \param _nMarcoExcecMode
-    */
-    void fillLoadArgs(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rArgs
-                    , ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& _rEmbeddedObjectDescriptor
-                    ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
-                    ,sal_Bool _bReadOnly
-                    ,sal_Int16 _nMarcoExcecMode);
-    /** loads the EmbeddedObject if not already loaded
-        @param  _aClassID
-            If set, it will be used to create the embedded object.
-    */
-    void loadEmbeddedObject(sal_Int16 _nMarcoExcecMode
-                            ,const ::com::sun::star::uno::Sequence< sal_Int8 >& _aClassID = ::com::sun::star::uno::Sequence< sal_Int8 >()
-                            ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>()
-                            ,sal_Bool _bReadOnly = sal_False
-                            );
-
-
-    void generateNewImage(::com::sun::star::uno::Any& _rImage);
-    void fillDocumentInfo(::com::sun::star::uno::Any& _rInfo);
-    /** searches for read-only flag in the args of the model and sets it to the given value,
-        if the value was not found, it will be appended.
-        @param  _bReadOnly
-            If <TRUE/> the document will be switched to readonly mode
-    */
-    void updateDocumentTitle();
 protected:
     virtual ~ODocumentDefinition();
 
@@ -184,7 +148,7 @@ public:
     sal_Bool save(sal_Bool _bApprove);
     void closeObject();
     sal_Bool isModified();
-    void fillReportData(sal_Bool _bFill = sal_True);
+    void fillReportData();
 
     /** prepares closing the document component
 
@@ -202,7 +166,7 @@ public:
         @param _bOpenedInDesignMode
             determines whether the embedded object has been opened for designing it or for data display
     */
-    void impl_onActivateEmbeddedObject( bool _bOpenedInDesignMode );
+    void impl_onActivateEmbeddedObject();
 
     /** initializes a newly created view/controller which is displaying our embedded object
 
@@ -234,8 +198,74 @@ protected:
     virtual void SAL_CALL disposing();
 
 private:
+    /** fills the load arguments
+    */
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+        fillLoadArgs(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+            const bool _bSuppressMacros,
+            const bool _bReadOnly,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rAdditionalArgs,
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _out_rEmbeddedObjectDescriptor
+        );
+
+    /** loads the EmbeddedObject if not already loaded
+        @param  _aClassID
+            If set, it will be used to create the embedded object.
+    */
+    void loadEmbeddedObject(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
+                const ::com::sun::star::uno::Sequence< sal_Int8 >& _aClassID,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rAdditionalArgs,
+                const bool _bSuppressMacros,
+                const bool _bReadOnly
+            );
+
+    /** loads the embedded object, if not already loaded. No new object can be created with this method.
+    */
+    void    loadEmbeddedObject()
+    {
+        loadEmbeddedObject(
+            NULL,
+            ::com::sun::star::uno::Sequence< sal_Int8 >(),
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >(),
+            false,
+            false
+        );
+    }
+
+    /** loads the embedded object for preview. Macros will be suppressed, and the document will
+        be read-only.
+    */
+    void    loadEmbeddedObjectForPreview()
+    {
+        loadEmbeddedObject(
+            NULL,
+            ::com::sun::star::uno::Sequence< sal_Int8 >(),
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >(),
+            true,
+            true
+        );
+    }
+
+    /** searches for read-only flag in the args of the model and sets it to the given value,
+        if the value was not found, it will be appended.
+        @param  _bReadOnly
+            If <TRUE/> the document will be switched to readonly mode
+    */
+    void updateDocumentTitle();
+
     void registerProperties();
 
+    //-------------------------------------------------------------------------
+    //- commands
+    //-------------------------------------------------------------------------
+
+    void onCommandGetDocumentInfo( ::com::sun::star::uno::Any& _rInfo );
+    void onCommandInsert( const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& Environment ) throw( ::com::sun::star::uno::Exception );
+    void onCommandPreview( ::com::sun::star::uno::Any& _rImage );
+    void onCommandOpenSomething( const ::com::sun::star::uno::Any& _rArgument, const bool _bActivate,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment >& _rxEnvironment, ::com::sun::star::uno::Any& _out_rComponent );
 };
 
 //........................................................................
