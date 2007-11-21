@@ -16,7 +16,6 @@
     <accel:item accel:code="KEY_R" accel:mod1="true" xlink:href=".uno:RightPara"/>
     <accel:item accel:code="KEY_E" accel:mod1="true" xlink:href=".uno:CenterPara"/>
     <accel:item accel:code="KEY_J" accel:mod1="true" xlink:href=".uno:JustifyPara"/>
-    <accel:item accel:code="KEY_5" accel:mod1="true" xlink:href=".uno:SpacePara15"/>
     <accel:item accel:code="KEY_INSERT" xlink:href=".uno:InsertMode"/>
     <accel:item accel:code="KEY_F5" xlink:href=".uno:Navigator"/>
     <accel:item accel:code="KEY_A" accel:shift="true" accel:mod1="true" xlink:href=".uno:ParaLeftToRight"/>
@@ -99,10 +98,13 @@
     <accel:item accel:code="KEY_PAGEDOWN" accel:mod1="true" xlink:href=".uno:JumpToFooter"/>
     <accel:item accel:code="KEY_PAGEDOWN" accel:shift="true" accel:mod1="true" xlink:href=".uno:JumpToFootnoteArea"/>
     <accel:item accel:code="KEY_I" accel:shift="true" accel:mod1="true" xlink:href=".uno:SelectTextMode"/>
-    <accel:item accel:code="KEY_0" accel:mod1="true" xlink:href=".uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles"/>
+    <accel:item accel:code="KEY_0" accel:mod1="true" xlink:href=".uno:StyleApply?Style:string=Text body&amp;FamilyName:string=ParagraphStyles"/>
+    <accel:item accel:code="KEY_0" accel:mod1="true" accel:shift="true" xlink:href=".uno:StyleApply?Style:string=Standard&amp;FamilyName:string=ParagraphStyles"/>
     <accel:item accel:code="KEY_1" accel:mod1="true" xlink:href=".uno:StyleApply?Style:string=Heading 1&amp;FamilyName:string=ParagraphStyles"/>
     <accel:item accel:code="KEY_2" accel:mod1="true" xlink:href=".uno:StyleApply?Style:string=Heading 2&amp;FamilyName:string=ParagraphStyles"/>
     <accel:item accel:code="KEY_3" accel:mod1="true" xlink:href=".uno:StyleApply?Style:string=Heading 3&amp;FamilyName:string=ParagraphStyles"/>
+    <accel:item accel:code="KEY_4" accel:mod1="true" xlink:href=".uno:StyleApply?Style:string=Heading 4&amp;FamilyName:string=ParagraphStyles"/>
+    <accel:item accel:code="KEY_5" accel:mod1="true" xlink:href=".uno:StyleApply?Style:string=Heading 5&amp;FamilyName:string=ParagraphStyles"/>
     <accel:item accel:code="KEY_SPACE" accel:mod1="true" accel:shift="true" xlink:href=".uno:ResetAttributes"/>
     <accel:item accel:code="KEY_J" accel:shift="true" accel:mod1="true" xlink:href=".uno:FullScreen"/>
     <accel:item accel:code="KEY_X" accel:shift="true" accel:mod1="true" xlink:href=".uno:RemoveDirectCharFormats"/>
