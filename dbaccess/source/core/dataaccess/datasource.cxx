@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:05:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:37:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1377,11 +1377,8 @@ Reference< XNameAccess > SAL_CALL ODatabaseSource::getQueryDefinitions( ) throw(
     Reference< XNameAccess > xContainer = m_pImpl->m_xCommandDefinitions;
     if ( !xContainer.is() )
     {
-        if ( !m_pImpl->m_aContainer[ODatabaseModelImpl::E_QUERY].get() )
-        {
-            m_pImpl->m_aContainer[ODatabaseModelImpl::E_QUERY] = TContentPtr(new ODefinitionContainer_Impl);
-        }
-        xContainer = new OCommandContainer(m_pImpl->m_xServiceFactory,*this,m_pImpl->m_aContainer[ODatabaseModelImpl::E_QUERY],sal_False);
+        TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::E_QUERY ) );
+        xContainer = new OCommandContainer( m_pImpl->m_xServiceFactory, *this, rContainerData, sal_False );
         m_pImpl->m_xCommandDefinitions = xContainer;
     }
     return xContainer;
@@ -1396,11 +1393,8 @@ Reference< XNameAccess >  ODatabaseSource::getTables() throw( RuntimeException )
     Reference< XNameAccess > xContainer = m_pImpl->m_xTableDefinitions;
     if ( !xContainer.is() )
     {
-        if ( !m_pImpl->m_aContainer[ODatabaseModelImpl::E_TABLE].get() )
-        {
-            m_pImpl->m_aContainer[ODatabaseModelImpl::E_TABLE] = TContentPtr(new ODefinitionContainer_Impl);
-        }
-        xContainer = new OCommandContainer( m_pImpl->m_xServiceFactory, *this, m_pImpl->m_aContainer[ODatabaseModelImpl::E_TABLE], sal_True);
+        TContentPtr& rContainerData( m_pImpl->getObjectContainer( ODatabaseModelImpl::E_TABLE ) );
+        xContainer = new OCommandContainer( m_pImpl->m_xServiceFactory, *this, rContainerData, sal_True );
         m_pImpl->m_xTableDefinitions = xContainer;
     }
     return xContainer;
