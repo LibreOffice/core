@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:32:14 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,7 @@ using namespace ::com::sun::star::script;
 #include <vcl/svapp.hxx>
 #include <framework/interaction.hxx>
 
+#include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
 #include "appdata.hxx"
 #include <sfx2/request.hxx>
@@ -180,7 +181,6 @@ using namespace ::com::sun::star::script;
 #include "workwin.hxx"
 #include "helpid.hrc"
 #include "../appl/app.hrc"
-#include "secmacrowarnings.hxx"
 #include <sfx2/sfxdlg.hxx>
 #include "appbaslib.hxx"
 
@@ -1018,66 +1018,30 @@ void SfxObjectShell::BreakMacroSign_Impl( sal_Bool bBreakMacroSign )
 }
 
 //-------------------------------------------------------------------------
-void SfxObjectShell::CheckMacrosOnLoading_Impl()
+void SfxObjectShell::CheckSecurityOnLoading_Impl()
 {
-    const SfxFilter* pFilter = pMedium->GetFilter();
-    sal_Bool bHasStorage = IsPackageStorageFormat_Impl( *pMedium );
+    uno::Reference< task::XInteractionHandler > xInteraction;
+    if ( GetMedium() )
+        xInteraction = GetMedium()->GetInteractionHandler();
 
-    if ( GetError() != ERRCODE_NONE )
+    // check macro security
+    pImp->aMacroMode.checkMacrosOnLoading( xInteraction );
+    // check if there is a broken signature...
+    CheckForBrokenDocSignatures_Impl( xInteraction );
+}
+
+//-------------------------------------------------------------------------
+void SfxObjectShell::CheckForBrokenDocSignatures_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
+{
+    sal_Int16 nSignatureState = GetDocumentSignatureState();
+    bool bSignatureBroken = ( nSignatureState == SIGNATURESTATE_SIGNATURES_BROKEN );
+    if ( !bSignatureBroken )
         return;
 
-    if ( SvtSecurityOptions().IsMacroDisabled() )
-    {
-        // no macro should be executed at all
-        pImp->bMacroDisabled = sal_True;
-        pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-    }
-    else
-    {
-        sal_Bool bHasMacros = sal_False;
+    pImp->showBrokenSignatureWarning( xHandler );
 
-        if ( bHasStorage && ( !pFilter || !( pFilter->GetFilterFlags() & SFX_FILTER_STARONEFILTER ) ) )
-        {
-            uno::Reference< embed::XStorage > xStorage = pMedium->GetStorage();
-            if ( xStorage.is() )
-                bHasMacros = StorageHasMacros( xStorage );
-            else
-                SetError( ERRCODE_IO_GENERAL );
-        }
-
-        if ( !bHasMacros )
-            bHasMacros = HasMacrosLib_Impl();
-
-        if ( bHasMacros )
-        {
-            bool bAllowMacros = AdjustMacroMode( String() ); // if macros are disabled the message will be shown here
-            if ( SvtSecurityOptions().GetMacroSecurityLevel() > 2
-                && !bAllowMacros && pMedium )
-            {
-                  UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_DOCUMENT_MACRO_DISABLED );
-            }
-        }
-        else if ( !pImp->bMacroDisabled )
-        {
-            // if macros will be added by the user later, the security check is obsolete
-            pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-        }
-    }
-
-    // MAV: the code below is moved here since this is the only central place where the object shell is visible
-    //      in case of pick list for example OpenDocExec_Impl() is not used.
-
-    // xmlsec05, check with SFX team
-    // Check if there is a broken signature...
-    if ( !pImp->bSignatureErrorIsShown
-    && GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
-    {
-        if ( pMedium
-          && UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_BROKENSIGNATURE ) )
-            pImp->bSignatureErrorIsShown = sal_True;
-
-        pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-    }
+    // broken signatures imply no macro execution at all
+    pImp->aMacroMode.disallowMacroExecution();
 }
 
 //-------------------------------------------------------------------------
@@ -1100,7 +1064,7 @@ sal_Bool SfxObjectShell::IsLoadingFinished() const
     return ( pImp->nLoadedFlags == SFX_LOADED_ALL );
 }
 
-void impl_addToModelCollection(const css::uno::Reference< css::frame::XModel >& xModel);
+void impl_addToModelCollection(const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& xModel);
 void SfxObjectShell::InitOwnModel_Impl()
 {
     if ( !pImp->bModelInitialized )
@@ -1160,7 +1124,7 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         if( !bSetModifiedTRUE && IsEnableSetModified() )
             SetModified( sal_False );
 
-        CheckMacrosOnLoading_Impl();
+        CheckSecurityOnLoading_Impl();
 
         bHasName = sal_True; // the document is loaded, so the name should already available
         GetTitle( SFX_TITLE_DETECT );
@@ -1365,9 +1329,8 @@ ErrCode SfxObjectShell::CallXScript( const String& rScriptURL,
     if( rScriptURL.Search( UniString::CreateFromAscii( "location=document" ) )
             > 0 )
     {
-        if ( !AdjustMacroMode( String() ) ) {
+        if ( !AdjustMacroMode( String() ) )
             return ERRCODE_IO_ACCESSDENIED;
-        }
     }
 
     try
@@ -1813,253 +1776,15 @@ void SfxObjectShell::Invalidate( USHORT nId )
         Invalidate_Impl( pFrame->GetBindings(), nId );
 }
 
-// nMacroMode == -1 : uninitialized
-// other values as in /com/sun/star/document/MacroExecMode.hxx
-
 bool SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/, bool _bSuppressUI )
 {
-    if( pImp->nMacroMode < 0 )
-    {
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pMacroModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
-        pImp->nMacroMode = pMacroModeItem ? pMacroModeItem->GetValue() : MacroExecMode::NEVER_EXECUTE;
-    }
+    uno::Reference< task::XInteractionHandler > xInteraction;
+    if ( pMedium && !_bSuppressUI )
+        xInteraction = pMedium->GetInteractionHandler();
 
-    // --> PB 2004-11-09 #i35190#
-    // xmlsec05, check with SFX team
-    if ( !pImp->bSignatureErrorIsShown && GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
-    {
-        // if the signature is broken, show here the warning before
-        // the macro warning
-        if  (   !_bSuppressUI
-            &&  pMedium != NULL
-            &&  UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_BROKENSIGNATURE )
-            )
-            pImp->bSignatureErrorIsShown = sal_True;
+    CheckForBrokenDocSignatures_Impl( xInteraction );
 
-        pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-    }
-    // <--
-
-    if ( SvtSecurityOptions().IsMacroDisabled() )
-    {
-        // no macro should be executed at all
-        pImp->bMacroDisabled = sal_True;
-        pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-
-        if  (   !_bSuppressUI
-            &&  !pImp->bMacroDisabledMessageIsShown
-            &&  pMedium != NULL
-            && UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_MACROS_SUPPORT_DISABLED )
-            )
-        {
-            pImp->bMacroDisabledMessageIsShown = sal_True;
-        }
-
-        return false;
-    }
-
-    // get setting from configuration if required
-    sal_Int16 nAutoConformation = 0;
-    if ( pImp->nMacroMode == MacroExecMode::USE_CONFIG
-      || pImp->nMacroMode == MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION
-      || pImp->nMacroMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION )
-    {
-           SvtSecurityOptions aOpt;
-        switch( aOpt.GetMacroSecurityLevel() )
-        {
-            case 3:
-                pImp->nMacroMode = MacroExecMode::FROM_LIST_NO_WARN;
-                break;
-            case 2:
-                pImp->nMacroMode = MacroExecMode::FROM_LIST_AND_SIGNED_WARN;
-                break;
-            case 1:
-                pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE;
-                break;
-            case 0:
-                pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-                break;
-            default:
-                OSL_ENSURE( sal_False, "Unexpected macro security level!\n" );
-                pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-        }
-
-        if ( pImp->nMacroMode == MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION )
-            nAutoConformation = -1;
-        else if ( pImp->nMacroMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION )
-            nAutoConformation = 1;
-    }
-
-    if ( pImp->nMacroMode == MacroExecMode::NEVER_EXECUTE )
-        return false;
-    if ( pImp->nMacroMode == MacroExecMode::ALWAYS_EXECUTE_NO_WARN )
-        return true;
-
-    try
-    {
-        uno::Reference< security::XDocumentDigitalSignatures > xSignatures(
-            comphelper::getProcessServiceFactory()->createInstance(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.security.DocumentDigitalSignatures" ) ) ),
-            uno::UNO_QUERY );
-        String aReferer;
-
-        // get document location from medium name and check whether it is a trusted one
-        if ( xSignatures.is() )
-        {
-            ::rtl::OUString aLocation;
-            aReferer = GetMedium()->GetName();
-            if ( !aReferer.Len() )
-            {
-                // for documents made from a template: get the name of the template
-                aReferer = GetDocInfo().GetTemplateFileName();
-            }
-            INetURLObject aURLReferer( aReferer );
-            if ( aURLReferer.removeSegment() )
-                aLocation = aURLReferer.GetMainURL( INetURLObject::NO_DECODE );
-
-            if ( aLocation.getLength() && xSignatures->isLocationTrusted( aLocation ) )
-            {
-                pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-                return true;
-            }
-        }
-
-        // at this point it is clear that the document is not in the secure location
-        if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_NO_WARN )
-        {
-            pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-            return false;
-        }
-
-        // check whether the document is signed with trusted certificate
-        if ( xSignatures.is() && pImp->nMacroMode != MacroExecMode::FROM_LIST )
-        {
-            ::com::sun::star::uno::Sequence< security::DocumentSignatureInformation > aScriptingSignatureInformations;
-            uno::Reference < embed::XStorage > xStore = GetMedium()->GetLastCommitReadStorage_Impl();
-            sal_uInt16 nSignatureState = GetScriptingSignatureState();
-
-            if ( nSignatureState != SIGNATURESTATE_NOSIGNATURES && pImp->m_bMacroSignBroken )
-            {
-                // if there is a macro signature it must be handled as broken
-                nSignatureState = SIGNATURESTATE_SIGNATURES_BROKEN;
-            }
-
-            if ( nSignatureState == SIGNATURESTATE_SIGNATURES_BROKEN )
-            {
-                if ( pImp->nMacroMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
-                {
-                    if  (   !_bSuppressUI
-                        &&  pMedium != NULL
-                        &&  UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_BROKENSIGNATURE )
-                        )
-                        pImp->bSignatureErrorIsShown = sal_True;
-
-                    pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-                    return false;
-                }
-            }
-            else if ( (    nSignatureState == SIGNATURESTATE_SIGNATURES_OK
-                        || nSignatureState == SIGNATURESTATE_SIGNATURES_NOTVALIDATED )
-                      && xStore.is() )
-                aScriptingSignatureInformations =
-                    xSignatures->verifyScriptingContentSignatures( xStore, uno::Reference< io::XInputStream >() );
-
-            sal_Int32 nNumOfInfos = aScriptingSignatureInformations.getLength();
-
-            // from now on aReferer is the system file path
-            // aReferer = INetURLObject::decode( aReferer, '%', INetURLObject::DECODE_WITH_CHARSET );
-            ::rtl::OUString aSystemFileURL;
-            if ( osl::FileBase::getSystemPathFromFileURL( aReferer, aSystemFileURL ) == osl::FileBase::E_None )
-                aReferer = aSystemFileURL;
-
-            if ( nNumOfInfos )
-            {
-                for ( sal_Int32 nInd = 0; nInd < nNumOfInfos; nInd++ )
-                    if ( xSignatures->isAuthorTrusted( aScriptingSignatureInformations[nInd].Signer ) )
-                    {
-                        pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-                        return true;
-                    }
-
-                if ( pImp->nMacroMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
-                {
-                    bool bAllowMacros = false;
-                    if ( !_bSuppressUI )
-                    {
-                        MacroWarning aDlg( GetDialogParent(), true );
-                        aDlg.SetDocumentURL( aReferer );
-                        if( nNumOfInfos > 1 )
-                            aDlg.SetStorage( xStore, aScriptingSignatureInformations );
-                        else
-                            aDlg.SetCertificate( aScriptingSignatureInformations[ 0 ].Signer );
-                        USHORT nRet = aDlg.Execute();
-                        bAllowMacros = ( nRet == RET_OK );
-                    }
-
-                    pImp->nMacroMode = bAllowMacros ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN : MacroExecMode::NEVER_EXECUTE;
-                    return bAllowMacros;
-                }
-            }
-/*          this is an impossible case - above, USE_CONFIG has already been translated to something else
-            else if( pImp->nMacroMode == MacroExecMode::USE_CONFIG )
-            {
-                MacroWarning aWarning( GetDialogParent(), false );
-                aWarning.SetDocumentURL( aReferer );
-                if( aWarning.Execute() != RET_OK )
-                    return pImp->nMacroMode;
-            }
-*/
-        }
-
-        // at this point it is clear that the document is neither in secure location nor signed with trusted certificate
-        if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
-          || pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
-        {
-            if  (   !_bSuppressUI
-                &&  pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN
-                &&  pMedium != NULL
-                )
-            {
-                  UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_DOCUMENT_MACRO_DISABLED );
-            }
-               pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-            return false;
-        }
-    }
-    catch ( uno::Exception& )
-    {
-        if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_NO_WARN
-          || pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN
-          || pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
-        {
-            pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-            return false;
-        }
-    }
-
-    // conformation is required
-    sal_Bool bSecure = sal_False;
-    if ( !nAutoConformation )
-    {
-        String aReferer = GetMedium()->GetName();
-        if ( !aReferer.Len() )
-            aReferer = GetDocInfo().GetTemplateFileName();
-        ::rtl::OUString aSystemFileURL;
-        if ( osl::FileBase::getSystemPathFromFileURL( aReferer, aSystemFileURL ) == osl::FileBase::E_None )
-            aReferer = aSystemFileURL;
-
-        if ( !_bSuppressUI )
-        {
-            MacroWarning aWarning( GetDialogParent(), false );
-            aWarning.SetDocumentURL( aReferer );
-            bSecure = ( aWarning.Execute() == RET_OK );
-        }
-    }
-    else
-        bSecure = ( nAutoConformation > 0 );
-
-    pImp->nMacroMode = bSecure ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN : MacroExecMode::NEVER_EXECUTE;
-    return bSecure;
+    return pImp->aMacroMode.adjustMacroMode( xInteraction );
 }
 
 Window* SfxObjectShell::GetDialogParent( SfxMedium* pLoadingMedium )
@@ -2176,87 +1901,6 @@ void SfxObjectShell::InPlaceActivate( BOOL )
 {
 }
 
-BOOL SfxObjectShell::HasMacrosLib_Impl() const
-{
-    Reference< XLibraryContainer > xContainer( const_cast< SfxObjectShell* >( this )->GetBasicContainer() );
-    BOOL bHasMacros = xContainer.is();
-    try
-    {
-        if ( bHasMacros )
-        {
-            // a library container exists; check if it's empty
-
-            // if there are libraries except "Standard" library
-            // we assume that they are not empty (because they have been created by the user)
-            if ( !xContainer->hasElements() )
-                bHasMacros = sal_False;
-            else
-            {
-                ::rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-                uno::Sequence< ::rtl::OUString > aElements = xContainer->getElementNames();
-                if ( aElements.getLength() )
-                {
-                    if ( aElements.getLength() > 1 || !aElements[0].equals( aStdLibName ) )
-                        bHasMacros = sal_True;
-                    else
-                    {
-                        // usually a "Standard" library is always present (design)
-                        // for this reason we must check if it's empty
-                        //
-                        // Note: Since #i73229#, this is not true anymore. There's no default
-                        // "Standard" lib anymore. Wouldn't it be time to get completely
-                        // rid of the "Standard" thingie - this shouldn't be necessary
-                        // anymore, should it?
-                        // 2007-01-25 / frank.schoenheit@sun.com
-                        uno::Reference < container::XNameAccess > xLib;
-                        uno::Any aAny = xContainer->getByName( aStdLibName );
-                        aAny >>= xLib;
-                        if ( xLib.is() )
-                            bHasMacros = xLib->hasElements();
-                    }
-                }
-            }
-        }
-    }
-    catch( uno::Exception& )
-    {
-    }
-
-    return bHasMacros;
-}
-
-BOOL SfxObjectShell::HasMacrosStor_Impl() const
-{
-    sal_Bool bHasMacros = sal_False;
-    if ( pImp->m_xDocStorage.is() )
-        bHasMacros = StorageHasMacros( pImp->m_xDocStorage );
-
-    return bHasMacros;
-}
-
-BOOL SfxObjectShell::StorageHasMacros( const uno::Reference< embed::XStorage >& xStorage )
-{
-    sal_Bool bHasMacros = sal_False;
-
-    if ( xStorage.is() )
-    {
-        try
-        {
-            bHasMacros =
-                ( xStorage->hasByName( ::rtl::OUString::createFromAscii("Basic") )
-                    && xStorage->isStorageElement( ::rtl::OUString::createFromAscii("Basic") ) )
-                ||  ( xStorage->hasByName( ::rtl::OUString::createFromAscii("Scripts") )
-                    && xStorage->isStorageElement( ::rtl::OUString::createFromAscii("Scripts") ) );
-        }
-        catch ( uno::Exception& )
-        {
-            OSL_ASSERT( "Something is wrong with the checked storage!\n" );
-        }
-    }
-
-    return bHasMacros;
-}
-
 sal_Bool SfxObjectShell::UseInteractionToHandleError(
                     const uno::Reference< task::XInteractionHandler >& xHandler,
                     sal_uInt32 nError )
@@ -2295,6 +1939,80 @@ sal_Bool SfxObjectShell::UseInteractionToHandleError(
     return bResult;
 }
 
+sal_Int16 SfxObjectShell_Impl::getImposedMacroExecMode() const
+{
+    sal_Int16 nImposedExecMode( MacroExecMode::NEVER_EXECUTE );
 
+    const SfxMedium* pMedium( rDocShell.GetMedium() );
+    OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getImposedMacroExecMode: no medium!" );
+    if ( pMedium )
+    {
+        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pMacroModeItem, SfxUInt16Item, SID_MACROEXECMODE, sal_False);
+        if ( pMacroModeItem )
+            nImposedExecMode = pMacroModeItem->GetValue();
+    }
+    return nImposedExecMode;
+}
 
+::rtl::OUString SfxObjectShell_Impl::getDocumentLocation() const
+{
+    ::rtl::OUString sLocation;
 
+    const SfxMedium* pMedium( rDocShell.GetMedium() );
+    OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getDocumentLocation: no medium!" );
+    if ( pMedium )
+    {
+        sLocation = pMedium->GetName();
+        if ( !sLocation.getLength() )
+        {
+            // for documents made from a template: get the name of the template
+            sLocation = rDocShell.GetDocInfo().GetTemplateFileName();
+        }
+    }
+    return sLocation;
+}
+
+uno::Reference< embed::XStorage > SfxObjectShell_Impl::getLastCommitDocumentStorage()
+{
+    Reference < embed::XStorage > xStore;
+
+    SfxMedium* pMedium( rDocShell.GetMedium() );
+    OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getLastCommitDocumentStorage: no medium!" );
+    if ( pMedium )
+    {
+        xStore = pMedium->GetLastCommitReadStorage_Impl();
+    }
+    return xStore;
+}
+
+bool SfxObjectShell_Impl::documentStorageHasMacros() const
+{
+    return ::sfx2::DocumentMacroMode::storageHasMacros( m_xDocStorage );
+}
+
+Reference< XEmbeddedScripts > SfxObjectShell_Impl::getEmbeddedDocumentScripts() const
+{
+    return Reference< XEmbeddedScripts >( rDocShell.GetModel(), UNO_QUERY );
+}
+
+sal_Int16 SfxObjectShell_Impl::getScriptingSignatureState() const
+{
+    sal_Int16 nSignatureState( rDocShell.GetScriptingSignatureState() );
+
+    if ( nSignatureState != SIGNATURESTATE_NOSIGNATURES && m_bMacroSignBroken )
+    {
+        // if there is a macro signature it must be handled as broken
+        nSignatureState = SIGNATURESTATE_SIGNATURES_BROKEN;
+    }
+
+    return nSignatureState;
+}
+
+void SfxObjectShell_Impl::showBrokenSignatureWarning( const uno::Reference< task::XInteractionHandler >& _rxInteraction ) const
+{
+    if  ( !bSignatureErrorIsShown )
+    {
+        SfxObjectShell::UseInteractionToHandleError( _rxInteraction, ERRCODE_SFX_BROKENSIGNATURE );
+        const_cast< SfxObjectShell_Impl* >( this )->bSignatureErrorIsShown = sal_True;
+    }
+}
