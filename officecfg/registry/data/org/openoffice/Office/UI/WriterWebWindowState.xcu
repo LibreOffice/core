@@ -5,9 +5,9 @@
  *
  *  $RCSfile: WriterWebWindowState.xcu,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 11:26:08 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 13:51:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -392,6 +392,9 @@
             <node oor:name="private:resource/toolbar/insertbar" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Insert</value>
+                </prop>
+                <prop oor:name="Docked" oor:type="xs:boolean">
+                    <value>false</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
