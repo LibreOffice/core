@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventThread.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:21:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:33:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,8 @@ public:
 private:
     void    implStarted( );
     void    implTerminated( );
+
+    void    impl_clearEventQueue();
 };
 
 //.........................................................................
