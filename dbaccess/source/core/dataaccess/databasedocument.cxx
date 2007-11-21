@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 08:11:44 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:37:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include "dbastrings.hrc"
 #endif
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/enumhelper.hxx>
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
@@ -208,7 +209,6 @@ ODatabaseDocument::~ODatabaseDocument()
 void lcl_stripLoadArguments( ::comphelper::MediaDescriptor& _rDescriptor, Sequence< PropertyValue >& _rArgs )
 {
     _rDescriptor.erase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StatusIndicator" ) ) );
-    _rDescriptor.erase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "InteractionHandler" ) ) );
     _rDescriptor.erase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) ) );
     _rDescriptor >> _rArgs;
 }
@@ -259,6 +259,7 @@ sal_Bool SAL_CALL ODatabaseDocument::attachResource( const ::rtl::OUString& _rUR
     }
     catch(const Exception&)
     {
+        DBG_UNHANDLED_EXCEPTION();
         m_pImpl->m_xStorage = NULL;
     }
 
@@ -340,7 +341,25 @@ Sequence< PropertyValue > SAL_CALL ODatabaseDocument::getArgs(  ) throw (Runtime
 void SAL_CALL ODatabaseDocument::connectController( const Reference< XController >& _xController ) throw (RuntimeException)
 {
     ModelMethodGuard aGuard( *this );
+
     m_aControllers.push_back( _xController );
+
+    if ( m_aControllers.size() == 1 )
+    {
+        // check/adjust our macro mode. Note: This is only temporary. When we fully support the
+        // XEmbeddedScripts interface, then the controller is able to do this itself, since
+        // we'll then have a UNO method for this.
+        //
+        // Also, the same has to happen in the loader then, since the checks must be made
+        // *before* OnLoad events are triggered - finally, the user can bind events to OnLoad ...
+        // (This, at the latest, implies we need a UNO equivalent for checkMacrosOnLoading, else
+        //  the loader can't call it.)
+        //
+        // For now, as long as we do not have own macros, but only those in the embedded
+        // forms/reports, it's sufficient to do the check here.
+        //
+        m_pImpl->checkMacrosOnLoading();
+    }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XController >& _xController ) throw (RuntimeException)
@@ -358,6 +377,11 @@ void SAL_CALL ODatabaseDocument::disconnectController( const Reference< XControl
 
     if ( m_aControllers.empty() )
     {
+        // reset the macro mode: in case the our impl struct stays alive (e.g. because our DataSource
+        // object still exists), and somebody subsequently re-opens the document, we want to have
+        // the security warning, again.
+        m_pImpl->resetMacroExecutionMode();
+
         // if this was the last view, close the document as a whole
         // #i51157# / 2006-03-16 / frank.schoenheit@sun.com
         try
@@ -525,7 +549,7 @@ void SAL_CALL ODatabaseDocument::storeAsURL( const ::rtl::OUString& _rURL, const
 
         if ( !xStorage.is() )
         {
-            // TODO: localize this
+            // TODO: resource
             ::rtl::OUString sMessage = ::rtl::OUString::createFromAscii( "Could not store the database document to '" );
             sMessage += _rURL;
             sMessage += ::rtl::OUString::createFromAscii( "'." );
@@ -747,13 +771,8 @@ Reference< XNameAccess > ODatabaseDocument::impl_getDocumentContainer_throw( ODa
     Reference< XNameAccess > xContainer = rContainerRef;
     if ( !xContainer.is() )
     {
-        if ( !m_pImpl->m_aContainer[ _eType ].get() )
-        {
-            m_pImpl->m_aContainer[ _eType ] = TContentPtr( new ODefinitionContainer_Impl );
-            m_pImpl->m_aContainer[ _eType ]->m_pDataSource = m_pImpl.get();
-            m_pImpl->m_aContainer[ _eType ]->m_aProps.aTitle = ::rtl::OUString::createFromAscii( bFormsContainer ? "forms" : "reports" );
-        }
-        rContainerRef = xContainer = new ODocumentContainer( m_pImpl->m_xServiceFactory, *this, m_pImpl->m_aContainer[ _eType ], bFormsContainer );
+        TContentPtr& rContainerData( m_pImpl->getObjectContainer( _eType ) );
+        rContainerRef = xContainer = new ODocumentContainer( m_pImpl->m_xServiceFactory, *this, rContainerData, bFormsContainer );
         impl_reparent_nothrow( xContainer );
     }
     return xContainer;
