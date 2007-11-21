@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imivctl1.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 16:29:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:39:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,7 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl( SvtIconChoiceCtrl* pCurView,
     pHead = NULL;
     pCursor = NULL;
     bUpdateMode = TRUE;
+    bEntryEditingEnabled = FALSE;
     bInDragDrop = FALSE;
     bHighlightFramePressed = FALSE;
     eSelectionMode = MULTIPLE_SELECTION;
