@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:36:14 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:03:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,9 +176,26 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The JDBC driver class name."))
                 ,sal_True
-                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.mysql.jdbc.Driver"))
+                ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
                 );
+
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClassPath"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The class path where to look for the JDBC driver."))
+                ,sal_True
+                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" ) )
+                ,Sequence< ::rtl::OUString >())
+                );
+
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SystemProperties"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Additional properties to set at java.lang.System before loading the driver."))
+                ,sal_True
+                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" ) )
+                ,Sequence< ::rtl::OUString >())
+                );
+
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParameterNameSubstitution"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Change named parameters with '?'."))
@@ -186,6 +203,7 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
                 ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
                 ,aBooleanValues)
                 );
+
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreDriverPrivileges"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ignore the privileges from the database driver."))
@@ -193,6 +211,7 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
                 ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
                 ,aBooleanValues)
                 );
+
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Retrieve generated values."))
@@ -200,6 +219,7 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
                 ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
                 ,aBooleanValues)
                 );
+
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Auto-increment statement."))
@@ -207,6 +227,7 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
                 ,::rtl::OUString()
                 ,Sequence< ::rtl::OUString >())
                 );
+
         aDriverInfo.push_back(DriverPropertyInfo(
                 ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("GenerateASBeforeCorrelationName"))
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Generate AS before table correlation names."))
