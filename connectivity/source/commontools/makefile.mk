@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 14:49:32 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 16:56:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/FValue.obj                              \
         $(SLO)$/paramwrapper.obj                        \
         $(SLO)$/statementcomposer.obj                   \
+        $(SLO)$/sqlerror.obj                            \
         $(SLO)$/formattedcolumnvalue.obj
 
 SLOFILES=\
