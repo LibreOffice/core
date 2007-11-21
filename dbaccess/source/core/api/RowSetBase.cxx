@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:03:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:32:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,21 +134,23 @@ connectivity::sdbcx::ObjectType OEmptyCollection::createObject(const ::rtl::OUSt
 // =========================================================================
 DBG_NAME(ORowSetBase)
 // -------------------------------------------------------------------------
-ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper,::osl::Mutex* _pMutex)
-            : OPropertyStateContainer(_rBHelper)
-            , m_pMutex(_pMutex)
-            , m_pCache(NULL)
-            , m_pColumns(NULL)
-            , m_rBHelper(_rBHelper)
-            , m_pEmptyCollection( NULL )
-            , m_nLastColumnIndex(-1)
-            , m_nDeletedPosition(-1)
-            , m_nResultSetType( ResultSetType::FORWARD_ONLY )
-            , m_nResultSetConcurrency( ResultSetConcurrency::READ_ONLY )
-            , m_bClone(sal_False)
-            , m_bIgnoreResult(sal_False)
-            , m_bBeforeFirst(sal_True) // changed from sal_False
-            , m_bAfterLast(sal_False)
+ORowSetBase::ORowSetBase( const ::comphelper::ComponentContext& _rContext, ::cppu::OBroadcastHelper& _rBHelper, ::osl::Mutex* _pMutex )
+    :OPropertyStateContainer(_rBHelper)
+    ,m_pMutex(_pMutex)
+    ,m_pCache(NULL)
+    ,m_pColumns(NULL)
+    ,m_rBHelper(_rBHelper)
+    ,m_pEmptyCollection( NULL )
+    ,m_aContext( _rContext )
+    ,m_aErrors( _rContext )
+    ,m_nLastColumnIndex(-1)
+    ,m_nDeletedPosition(-1)
+    ,m_nResultSetType( ResultSetType::FORWARD_ONLY )
+    ,m_nResultSetConcurrency( ResultSetConcurrency::READ_ONLY )
+    ,m_bClone(sal_False)
+    ,m_bIgnoreResult(sal_False)
+    ,m_bBeforeFirst(sal_True) // changed from sal_False
+    ,m_bAfterLast(sal_False)
 {
     DBG_CTOR(ORowSetBase,NULL);
 
