@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JDBCConnectionProperties.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 10:45:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:16:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 
 #ifndef __com_sun_star_sdbc_ConnectionProperties_idl__
 #include <com/sun/star/sdbc/ConnectionProperties.idl>
+#endif
+#ifndef __com_sun_star_beans_NamedValue_idl__
+#include <com/sun/star/beans/NamedValue.idl>
 #endif
 
 module com {  module sun {  module star {  module sdbc {
@@ -81,6 +84,11 @@ service JDBCConnectionProperties
         @since OOo 2.3
     */
     [optional, property] string JavaDriverClassPath;
+
+    /** specifies a set of properties to pass to <code>java.lang.System.setProperty</code> before
+        loading the system's JDBC driver.
+    */
+    [optional, property] sequence< ::com::sun::star::beans::NamedValue > SystemProperties;
 
     /** specifies if retrieving of auto generated values should be enabled or not.
         If <TRUE/> than the statement will support the XGeneratedResultSet (future concept) interface, otherwise not.
