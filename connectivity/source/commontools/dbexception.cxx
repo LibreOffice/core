@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 11:49:40 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 14:58:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
 #endif
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -296,13 +299,9 @@ void SQLExceptionInfo::append( TYPE _eType, const ::rtl::OUString& _rErrorMessag
 //------------------------------------------------------------------------------
 void SQLExceptionInfo::doThrow()
 {
-    switch ( m_eType )
-    {
-    case SQL_EXCEPTION: throw *(const SQLException*)(*this);
-    case SQL_WARNING:   throw *(const SQLWarning*)(*this);
-    case SQL_CONTEXT:   throw *(const SQLContext*)(*this);
-    default:            throw RuntimeException();
-    }
+    if ( m_aContent.getValueTypeClass() == TypeClass_EXCEPTION )
+        ::cppu::throwException( m_aContent );
+    throw RuntimeException();
 }
 
 //==============================================================================
@@ -455,7 +454,8 @@ void throwFunctionNotSupportedException(const ::rtl::OUString& _rMsg,
 void throwFunctionNotSupportedException( const sal_Char* _pAsciiFunctionName, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxContext,
         const ::com::sun::star::uno::Any* _pNextException ) throw ( ::com::sun::star::sdbc::SQLException )
 {
-    ::rtl::OUString sMessage = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ": Driver does not support this function: " ) );
+    ::rtl::OUString sMessage = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The driver does not support this function: " ) );
+    // TODO: resource
     sMessage += ::rtl::OUString::createFromAscii( _pAsciiFunctionName );
     throw SQLException(
         sMessage,
@@ -555,8 +555,6 @@ const sal_Char* getStandardSQLStateAscii( StandardSQLState _eState )
         case SQL_FUNCTION_NOT_SUPPORTED:    pAsciiState = "IM001"; break;
         case SQL_CONNECTION_DOES_NOT_EXIST: pAsciiState = "08003"; break;
 
-         // OOoBase-specific SQLStates
-         case SQL_CYCLIC_SUB_QUERIES:        pAsciiState = "OB001"; break;
         default:
             break;
     }
