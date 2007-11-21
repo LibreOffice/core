@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cption.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:12:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:22:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ ModalDialog DLG_CAPTION
     HelpID = HID_DLG_CAPTION ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 250 , 141 ) ;
+    Size = MAP_APPFONT ( 250 , 143 ) ;
     Text [ en-US ] = "Caption" ;
     Moveable = TRUE ;
     OKButton BTN_OK
@@ -133,6 +133,24 @@ ModalDialog DLG_CAPTION
         DropDown = TRUE ;
         TabStop = TRUE ;
     };
+    FixedText FT_NUM_SEP
+    {
+        Pos = MAP_APPFONT ( 12 , 66 ) ;
+        Size = MAP_APPFONT ( 67 , 8 ) ;
+        Text [ en-US ] = "Numbering separator" ;
+        Left = TRUE ;
+        Hide = TRUE;
+    };
+    Edit ED_NUM_SEP
+    {
+        Pos = MAP_APPFONT ( 82 , 63 ) ;
+        Size = MAP_APPFONT ( 106 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Text  = ". " ;
+        Hide = TRUE;
+    };
     FixedText TXT_SEP
     {
         Pos = MAP_APPFONT ( 12 , 82 ) ;
@@ -151,14 +169,14 @@ ModalDialog DLG_CAPTION
     };
     FixedText TXT_POS
     {
-        Pos = MAP_APPFONT ( 12 , 98 ) ;
+        Pos = MAP_APPFONT ( 12 , 100 ) ;
         Size = MAP_APPFONT ( 67 , 8 ) ;
         Left = TRUE ;
         Text [ en-US ] = "Position" ;
     };
     ListBox BOX_POS
     {
-        Pos = MAP_APPFONT ( 82 , 95 ) ;
+        Pos = MAP_APPFONT ( 82 , 97 ) ;
         Size = MAP_APPFONT ( 106 , 61 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
@@ -166,7 +184,7 @@ ModalDialog DLG_CAPTION
     };
     Window WIN_SAMPLE
     {
-        Pos = MAP_APPFONT ( 6 , 115 ) ;
+        Pos = MAP_APPFONT ( 6 , 117 ) ;
         Size = MAP_APPFONT ( 182 , 20 ) ;
         Border = TRUE ;
     };
@@ -198,7 +216,7 @@ ModalDialog DLG_SEQUENCE_OPTION
     HelpID = HID_DLG_SEQUENCE_OPTION ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 200 , 108 ) ;
+    Size = MAP_APPFONT ( 200 , 132 ) ;
     Moveable = TRUE ;
     Text [ en-US ] = "Options" ;
     OKButton BTN_OK
@@ -289,50 +307,31 @@ ModalDialog DLG_SEQUENCE_OPTION
         TabStop = TRUE ;
         Text [ en-US ] = "~Apply border and shadow";
    };
+    FixedLine FL_ORDER
+    {
+        Pos = MAP_APPFONT ( 6 , 97 ) ;
+        Size = MAP_APPFONT ( 132 , 8 ) ;
+        Text [ en-US ] = "Caption" ;
+    };
+    FixedText FT_ORDER
+    {
+        Pos = MAP_APPFONT ( 12 , 115 ) ;
+        Size = MAP_APPFONT ( 50 , 8 ) ;
+        Text [ en-US ] = "Caption order" ;
+    };
+    ListBox LB_ORDER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 65 , 114 ) ;
+        Size = MAP_APPFONT ( 72 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Category first" ; > ;
+            < "Numbering first" ; > ;
+        };
+    };
 };
  // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
