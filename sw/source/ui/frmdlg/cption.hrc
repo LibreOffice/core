@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cption.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:50:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,12 @@
 #define FT_CHARSTYLE    28
 #define LB_CHARSTYLE    29
 #define CB_APPLYBAS     30
+#define FL_ORDER        31
+#define FT_ORDER        32
+#define LB_ORDER        33
+
+#define FT_NUM_SEP      34
+#define ED_NUM_SEP       35
 
 #define STR_BEGINNING       1
 #define STR_END             2
