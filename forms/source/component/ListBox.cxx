@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:55:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 17:15:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -643,8 +643,11 @@ namespace frm
         if (m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT)
             m_aBoundColumn >>= nBoundColumn;
 
+        ::utl::SharedUNOComponent< XResultSet > xListCursor;
         try
         {
+            m_aListRowSet.setConnection( xConnection );
+
             sal_Bool bExecute = sal_False;
             switch (m_eListSourceType)
             {
@@ -735,12 +738,18 @@ namespace frm
                     qualifiedNameComponents( xMeta, sListSource, sCatalog, sSchema, sTable, eInDataManipulation );
                     aStatement += composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable );
 
+<<<<<<< ListBox.cxx
                     m_aListRowSet.setCommand( aStatement );
+=======
+                    m_aListRowSet.setEscapeProcessing( sal_False );
+                    m_aListRowSet.setCommand( aStatement );
+>>>>>>> 1.52.12.2
                     bExecute = sal_True;
                 }
                 break;
 
             case ListSourceType_QUERY:
+<<<<<<< ListBox.cxx
                 {
                     Reference< XQueriesSupplier > xSupplyQueries( xConnection, UNO_QUERY_THROW );
                     Reference< XNameAccess >      xQueries      ( xSupplyQueries->getQueries(), UNO_QUERY_THROW );
@@ -752,19 +761,30 @@ namespace frm
                         bExecute = sal_True;
                     }
                 }
+=======
+                m_aListRowSet.setCommandFromQuery( sListSource );
+                bExecute = sal_True;
+>>>>>>> 1.52.12.2
                 break;
 
             default:
+<<<<<<< ListBox.cxx
                 {
                     if (ListSourceType_SQLPASSTHROUGH == m_eListSourceType)
                         m_aListRowSet.setEscapeProcessing( sal_False );
                     m_aListRowSet.setCommand( sListSource );
                     bExecute = sal_True;
                 }
+=======
+                m_aListRowSet.setEscapeProcessing( ListSourceType_SQLPASSTHROUGH != m_eListSourceType );
+                m_aListRowSet.setCommand( sListSource );
+                bExecute = sal_True;
+>>>>>>> 1.52.12.2
             }
 
             if (bExecute)
             {
+<<<<<<< ListBox.cxx
                 Reference< XPropertySet > xFormProps(xForm, UNO_QUERY);
 
                 m_aListRowSet.setCommandType( CommandType::COMMAND );
@@ -781,6 +801,17 @@ namespace frm
                     return;
                 }
                 m_aListRowSet.execute();
+=======
+                if ( !m_aListRowSet.isDirty() )
+                {
+                    // if none of the settings of the row set changed, compared to the last
+                    // invocation of loadData, then don't re-fill the list. Instead, assume
+                    // the list entries are the same.
+                    return;
+                }
+                xListCursor.reset( m_aListRowSet.execute() );
+
+>>>>>>> 1.52.12.2
             }
         }
         catch(SQLException& eSQL)
@@ -802,11 +833,19 @@ namespace frm
 
         try
         {
+<<<<<<< ListBox.cxx
             ::utl::SharedUNOComponent< XResultSet > xListCursor( Reference< XResultSet >( m_aListRowSet.getRowSet(), UNO_QUERY ) );
             if ( ListSourceType_TABLEFIELDS != m_eListSourceType && !xListCursor.is() )
                 // something went wrong ...
                 return;
 
+=======
+            OSL_ENSURE( xListCursor.is() || ( ListSourceType_TABLEFIELDS == m_eListSourceType ),
+                "OListBoxModel::loadData: logic error!" );
+            if ( !xListCursor.is() && ( ListSourceType_TABLEFIELDS != m_eListSourceType ) )
+                return;
+
+>>>>>>> 1.52.12.2
             switch (m_eListSourceType)
             {
             case ListSourceType_SQL:

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:54:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 17:15:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,18 +58,15 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 /** === end UNO includes === **/
 
-#include <connectivity/dbtools.hxx>
-#include <connectivity/dbconversion.hxx>
-
-#include <unotools/sharedunocomponent.hxx>
-
-#include <tools/debug.hxx>
-#include <tools/diagnose_ex.h>
-
 #include <comphelper/numbers.hxx>
 #include <comphelper/basicio.hxx>
-
+#include <connectivity/dbtools.hxx>
+#include <connectivity/dbconversion.hxx>
 #include <cppuhelper/queryinterface.hxx>
+#include <rtl/ustrbuf.hxx>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+#include <unotools/sharedunocomponent.hxx>
 
 using namespace dbtools;
 
@@ -506,6 +503,7 @@ void OComboBoxModel::loadData()
     if (!m_aListSource.getLength() || m_eListSourceType == ListSourceType_VALUELIST)
         return;
 
+    ::utl::SharedUNOComponent< XResultSet > xListCursor;
     try
     {
         m_aListRowSet.setConnection( xConnection );
@@ -575,46 +573,38 @@ void OComboBoxModel::loadData()
                 if ( xMeta.is() )
                 {
                     ::rtl::OUString aQuote = xMeta->getIdentifierQuoteString();
-                    ::rtl::OUString aStatement = ::rtl::OUString::createFromAscii("SELECT DISTINCT ");
-
-                    aStatement += quoteName(aQuote, aFieldName);
-                    aStatement += ::rtl::OUString::createFromAscii(" FROM ");
 
                     ::rtl::OUString sCatalog, sSchema, sTable;
                     qualifiedNameComponents( xMeta, m_aListSource, sCatalog, sSchema, sTable, eInDataManipulation );
-                    aStatement += composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable );
 
-                    m_aListRowSet.setEscapeProcessing( false );
-                    m_aListRowSet.setCommandType( CommandType::COMMAND );
-                    m_aListRowSet.setCommand( aStatement );
+                    ::rtl::OUStringBuffer aStatement;
+                    aStatement.appendAscii( "SELECT DISTINCT " );
+                    aStatement.append     ( quoteName( aQuote, aFieldName ) );
+                    aStatement.appendAscii( " FROM " );
+                    aStatement.append     ( composeTableNameForSelect( xConnection, sCatalog, sSchema, sTable ) );
+
+                    m_aListRowSet.setEscapeProcessing( sal_False );
+                    m_aListRowSet.setCommand( aStatement.makeStringAndClear() );
                     bExecuteRowSet = true;
                 }
             }   break;
             case ListSourceType_QUERY:
             {
-                m_aListRowSet.setCommand( m_aListSource );
-                m_aListRowSet.setCommandType( CommandType::QUERY );
+                m_aListRowSet.setCommandFromQuery( m_aListSource );
                 bExecuteRowSet = true;
             }
             break;
 
             default:
             {
-                if (ListSourceType_SQLPASSTHROUGH == m_eListSourceType)
-                    m_aListRowSet.setEscapeProcessing( false );
+                m_aListRowSet.setEscapeProcessing( ListSourceType_SQLPASSTHROUGH != m_eListSourceType );
                 m_aListRowSet.setCommand( m_aListSource );
-                m_aListRowSet.setCommandType( CommandType::COMMAND );
                 bExecuteRowSet = true;
             }
         }
 
         if ( bExecuteRowSet )
         {
-            Reference< XPropertySet > xFormProps(xForm, UNO_QUERY);
-
-            m_aListRowSet.setDataSource( xFormProps->getPropertyValue( PROPERTY_DATASOURCE ) );
-            m_aListRowSet.setConnection( xFormProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) );
-
             if ( !m_aListRowSet.isDirty() )
             {
                 // if none of the settings of the row set changed, compared to the last
@@ -622,7 +612,7 @@ void OComboBoxModel::loadData()
                 // the list entries are the same.
                 return;
             }
-            m_aListRowSet.execute();
+            xListCursor.reset( m_aListRowSet.execute() );
         }
     }
     catch(SQLException& eSQL)
@@ -640,9 +630,9 @@ void OComboBoxModel::loadData()
     aStringList.reserve(16);
     try
     {
-        ::utl::SharedUNOComponent< XResultSet > xListCursor( Reference< XResultSet >( m_aListRowSet.getRowSet(), UNO_QUERY ) );
-        if (ListSourceType_TABLEFIELDS != m_eListSourceType && !xListCursor.is())
-            // something went wrong ...
+        OSL_ENSURE( xListCursor.is() || ( ListSourceType_TABLEFIELDS == m_eListSourceType ),
+            "OComboBoxModel::loadData: logic error!" );
+        if ( !xListCursor.is() && ( ListSourceType_TABLEFIELDS != m_eListSourceType ) )
             return;
 
         switch (m_eListSourceType)
