@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-13 15:14:31 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 15:18:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ PACKAGE=com$/sun$/star$/task
 
 IDLFILES=\
     ClassifiedInteractionRequest.idl\
+    DocumentMacroConfirmationRequest.idl\
     DocumentPasswordRequest.idl\
     ErrorCodeRequest.idl\
     ErrorCodeIOException.idl\
