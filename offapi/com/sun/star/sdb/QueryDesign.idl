@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesign.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:21:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:15:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,122 @@ module com {  module sun {  module star {  module sdb {
     where columns can be selected for the SQL statement. The second part contains the columns which should appear
     in the selection of the SQL statement or criterias which narrow the query.</p>
 
+    <h3>Operation Modes</h3>
+
+    <p>A <code>QueryDesign</code> component has 3 operation modes, which control what kind of object is edited:
+    <ul><li><a name="query_mode"></a><b>Query Mode</b>
+        <p>In <code>Query Mode</code>, the designer is used to modify an existing or create a new client-side
+        query.</p></li>
+
+        <li><a name="view_mode"</a><b>View Mode</b>
+        <p>In <code>View Mode</code>, the designer is used to modify an existing or create a new server-side
+        view.</p>
+        <p>The view which is being designed must support the <type scope="com::sun::star::sdbcx">XAlterView</type>
+        interface, except when a new view is being designed. In the latter case, the designer closes itself
+        automatically when <code>XAlterView</code> is not supported, and the view has been saved.</p></li>
+
+        <li><a name="command_mode"</a><b>Command Mode</b>
+        <p>In <code>Command Mode</code>, the designer is used to design an standalone SQL command.</p>
+        <p>The client of the designer is then responsible to listen at changes in the
+        <member>ActiveCommand</member> and <member>EscapeProcessing</member> members, which are updated
+        every time the user saves the command.</p></li>
+    </ul></p>
+
+    <h3><a name="initialization"></a>Initialization</h3>
+
+    <p>Initialization is done using the <type scope="com::sun::star::lang">XInitialization</type> interface,
+    which expects a sequence of objects being either <type scope="com::sun::star::beans">NamedValue</type>s or
+    <type scope="com::sun::star::beans">PropertyValue</type>s. The following parameters are supported at
+    initialization time:
+    <ul>
+        <li><b>Frame</b><br/>
+        has to be an <type scope="com::sun::star::frame">XFrame</type> interface specifying the frame to plug the
+        QueryDesign component into.<br/>
+        This parameter is mandatory.
+        </li>
+
+        <li><a name="data_source"></a><b>DataSourceName</b><br/>
+        specifies the name of the globally registered <type>DataSource</type> for which a query, view, or SQL
+        command is to be designed.<br/>
+        The DataSourceName may be omitted if and only if a valid <a href="#active_connection">ActiveConnection</a>
+        parameter is present.<br/>
+        If both <code>DataSourceName</code> and <code>ActiveConnection</code> are present, the former
+        is ignored.
+        </li>
+
+        <li><a name="active_connection"></a><b>ActiveConnection</b><br/>
+        specifies the connection to work with.<br/>
+        May be ommitted if and only if a valid <a href="#data_source">DataSourceName</a> parameter is supplied.
+        </li>
+
+        <li><a name="command"></a><b>Command</b><br/>
+        specifies the name of the query or view to design, or, in case of the <a href="#command_type">CommandType</a>
+        being <member>CommandType::COMMAND</member>, the initial SQL command.<br/>
+        If this parameter is not present, a new query/view will be designed, respectively the initial
+        command will be empty.
+        </li>
+
+        <li><a name="command_type"></a><b>CommandType</b><br/>
+        specifies the type of object which should be designed. The following options are
+        supported:
+        <ul><li><member>CommandType::QUERY</member> specifies the designer should operate in
+            <a href="#query_mode">query mode</a>, that is, an existing client-side query should be
+            designed, or a new query should be created, depending on the presence of the
+            <a href="#command">Command</a> parameter.<br/>
+            If the <a href="#data_source">DataSourceName</a> parameter is present, the query is
+            looked up in the specified data source. Otherwise, the designer tries to determine
+            the data source which the <a href="#active_connection">ActiveConnection</a> belongs
+            to, and looks up the query there.</li>
+
+            <li><member>CommandType::COMMAND</member> specifies the designer should operate in
+            <a href="#command_mode">command mode</a>, that is, a standalone SQL command
+            should be designed. When the user attempts to save the designed SQL statement,
+            the <member>ActiveCommand</member> and <member>EscapeProcessing</member> properties
+            of the designer are updated.</li>
+
+            <li><member>CommandType::TABLE</member> specifies the designer should operate in
+            <a href="#view_mode">view mode</a>, that is, an existing or a new
+            server-side view should be designed, depending on the presence of the
+            <a href="#command">Command</a> parameter.<br/>
+            If the <a href="#data_source">DataSourceName</a> parameter is present, the view is
+            looked up in a newly created connection for the specified data source. Otherwise,
+            it is looked up in the connection given as <a href="#active_connection">ActiveConnection</a>.</li>
+        </ul>
+        If not present, this parameter defaults to <member>CommandType::QUERY</member>.
+        </li>
+
+        <li><b>EscapeProcessing</b><br/>
+        Specifies whether or not escape processing should be initially enabled in the query designer. If set
+        to <FALSE/>, then the designer can operate in text view only (as opposed to the graphical view). The
+        <a href="#graphical_design">GraphicalDesign</a> parameter will be ignored then, and assumed to be <FALSE/>.<br/>
+        If not present, <TRUE/> is assumed for this parameter.</li>
+
+        <li><a name="graphical_design"></a><b>GraphicalDesign</b><br/>
+        This value indicates whether the designer should be opened in the graphical design view
+        (<TRUE/>) or in the text view (<FALSE/>).<br/>
+        If not present, <FALSE/> is assumed for this parameter.
+        </li>
+    </ul>
+    </p>
+
+    <p>There's a number of legacy settings which are recognized for compatibility reasons, though
+    you're discouraged from using them:
+    <ul>
+        <li><b>CurrentQuery</b><br/>
+        is the same as Command, and implies a <a href="#command_type">CommandType</a> of
+        <member>CommandType::QUERY</member></li>
+
+        <li><b>QueryDesignView</b><br/>
+        is the same as <a href="#graphical_design">GraphicalDesign</a>.</li>
+
+        <li><b>IndependentSQLCommand</b><br/>
+        is the same as Command, and implies a <a href="#command_type">CommandType</a> of
+        <member>CommandType::COMMAND</member></li>
+
+        <li><b>CreateView</b><br/>
+        implies a <a href="#command_type">CommandType</a> of <member>CommandType::TABLE</member></li>
+    </ul>
+
     @see com::sun::star::sdb::ContentLoader
 */
 
@@ -71,73 +187,20 @@ published service QueryDesign
 
     /** is used to initialize the QueryDesign.
 
-        <p>Parameters (passed to the method
-        <member scope="com::sun::star::lang">XInitialization::initialize</member>)
-        have to be instances of <type scope="com::sun::star::beans">PropertyValue</type>, where the
-        <member scope="com::sun::star::beans">PropertyValue::Name</member> member specifies what the parameter controls,
-        with the <member scope="com::sun::star::beans">PropertyValue::Value</member> member containing the value
-        to be used.<br>
-        Recognized parameters are:
-        <ul>
-            <li margin-top="8px"><b>Frame</b><br>
-            has to be an <type scope="com::sun::star::frame">XFrame</type> interface specifying the frame to plug the
-            QueryDesign component into.<br/>
-            This parameter is mandatory.
-            </li>
-
-            <li margin-top="8px"><a name="data_source"/><b>DataSourceName</b><br>
-            The name of the globally registered <type>DataSource</type> for which a query or view
-            is to be designed.<br/>
-            The DataSourceName may be omitted if and only if a valid <a href="#active_connection">ActiveConnection</a>
-            parameter is present.
-            </li>
-
-            <li margin-top="8px"><a name="active_connection"/><b>ActiveConnection</b><br>
-            The connection to work with.<br/>
-            May be ommitted if and only if a valid <a href="#data_source">DataSourceName</a> parameter is supplied.
-            </li>
-
-            <li margin-top="8px"><b>CurrentQuery</b><br>
-            If the component should be used to design an existing query, it's name has to be specified as CurrentQuery
-            parameter.<br/>
-            If the <a href="#data_source">DataSourceName</a> parameter is present, the query is looked up
-            in the specified data source. If <a href="#data_source">DataSourceName</a> is not present, the component
-            tries to determine the data source which the <a href="#active_connection">ActiveConnection</a> belongs
-            to, and looks up the query there.<br/>
-            If this parameter is not present, a new query will be designed.<br/>
-            This parameter is ignored if <a href="#independent">IndependentSQLCommand</a> is set to <TRUE/>.
-            </li>
-
-            <li margin-top="8px"><b>QueryDesignView</b><br>
-            This value indicates if the QueryDesign should be opened in the design view or in the text view.
-            If set to </TRUE> than the design view will be displayed otherwise the text view will appear.<br/>
-            If not present, <FALSE/> is assumed for this parameter.
-            </li>
-
-            <li margin-top="8px"><b>CreateView</b><br/>
-            Indicates whether the component should be used to create a server-side view in the database (set to <TRUE/>),
-            or a client-side query in the data source. There are some differences in both modi, e.g. the component closes
-            itself when a view is being saved, since a view cannot be modified after creation.<br/>
-            If not present, <FALSE/> is assumed for this parameter.<br/>
-            This parameter is ignored if <a href="#independent">IndependentSQLCommand</a> is set to <TRUE/>.
-            </li>
-
-            <li margin-top="8px"><a name=independent"/><b>IndependentSQLCommand</b><br/>
-            Allows to use the component to design an SQL command which is neither to be stored as server-side view,
-            nor as a client-side query. Instead, when the user attempts to save the designed SQL statement,
-            the <member>ActiveCommand</member> property of the component is updated. Whoever invoked the
-            query design with IndependentSQLCommand being <TRUE/> is then responsible for listening at this property,
-            and reacting appropriately on its changes.<br/>
-            If not present, <FALSE/> is assumed for this parameter.
-            </li>
-        </ul>
-        </p>
+        <p>See chapter <a href="#initialization">Initialization</a> for details.</p>
     */
     interface com::sun::star::lang::XInitialization;
 
     /** reflects the designed SQL command at the moment it was last saved by the user.
     */
     [readonly, property] string ActiveCommand;
+
+    /** specifies whether the user enabled escape processing for the statement being designed.
+
+        @see DataAccessDescriptor::EscapeProcessing
+        @since OOo 2.4
+    */
+    [readonly, property, optional] boolean EscapeProcessing;
 };
 
 //=============================================================================
