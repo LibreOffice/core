@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sharedunocomponent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:57:02 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:42:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,6 +212,9 @@ namespace utl
         inline void set( const ::com::sun::star::uno::XInterface* _pInterface, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow );
         inline void set( const ::com::sun::star::uno::BaseReference & _rRef, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow );
         inline void set( const ::com::sun::star::uno::Any& _rAny, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow );
+
+        inline void set( const INTERFACE* _pInterface, ::com::sun::star::uno::UnoReference_SetThrow _setThrow );
+        inline void set( const ::com::sun::star::uno::Reference< INTERFACE >& _rRef, ::com::sun::star::uno::UnoReference_SetThrow _setThrow );
 #endif
 
         INTERFACE* SAL_CALL operator->() const;
@@ -303,6 +306,20 @@ namespace utl
     void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::Any& _rAny, ::com::sun::star::uno::UnoReference_QueryThrow _queryThrow )
     {
         reset( ::com::sun::star::uno::Reference< INTERFACE >( _rAny, _queryThrow ), TakeOwnership );
+    }
+
+    //-------------------------------------------------------------------------
+    template < class INTERFACE, class COMPONENT >
+    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const INTERFACE* _pInterface, ::com::sun::star::uno::UnoReference_SetThrow _setThrow )
+    {
+        reset( ::com::sun::star::uno::Reference< INTERFACE >( _pInterface, _setThrow ), TakeOwnership );
+    }
+
+    //-------------------------------------------------------------------------
+    template < class INTERFACE, class COMPONENT >
+    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::Reference< INTERFACE >& _rRef, ::com::sun::star::uno::UnoReference_SetThrow _setThrow )
+    {
+        reset( ::com::sun::star::uno::Reference< INTERFACE >( _rRef, _setThrow ), TakeOwnership );
     }
 #endif
 
