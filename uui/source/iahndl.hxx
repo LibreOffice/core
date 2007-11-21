@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 10:09:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:23:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_PASSWORDREQUESTMODE_HPP_
 #include "com/sun/star/task/PasswordRequestMode.hpp"
+#endif
+#ifndef _COM_SUN_STAR_TASK_DOCUMENTMACROCONFIRMATIONREQUEST_HPP_
+#include "com/sun/star/task/DocumentMacroConfirmationRequest.hpp"
 #endif
 #ifndef _SOLAR_H
 #include "tools/solar.h"
@@ -345,6 +348,16 @@ private:
     bool bObtainErrorStringOnly,
     bool & bHasErrorString,
     rtl::OUString & rErrorString)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
+    handleMacroConfirmRequest(
+        const ::com::sun::star::task::DocumentMacroConfirmationRequest& _rRequest,
+        com::sun::star::uno::Sequence<
+            com::sun::star::uno::Reference<
+                com::sun::star::task::XInteractionContinuation > > const &
+                    rContinuations
+    )
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void
