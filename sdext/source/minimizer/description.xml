@@ -7,8 +7,8 @@
         <OpenOffice.org-minimal-version value="2.3" dep:name="OpenOffice.org 2.3"/>
     </dependencies>
     <registration>
-        <simple-license accept-by="admin" default-license-id="en-NZ">
-            <license-text xlink:href="licensefile" lang="isocode" />
+        <simple-license accept-by="admin" default-license-id="lic-en-US">
+            <license-text xlink:href="licensefile" lang="isocode" license-id="lic-isocode"/>
         </simple-license>
     </registration>
 </description>
