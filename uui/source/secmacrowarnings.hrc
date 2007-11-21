@@ -1,0 +1,96 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: secmacrowarnings.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:24:21 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _SECMACROWARNINGS_HRC
+#define _SECMACROWARNINGS_HRC
+
+#include <svtools/controldims.hrc>
+
+// --------- general metrics ---------
+
+#define SEP_FL_SPACE_Y                  6
+#define SEP_FL_ADJ_Y(val)               (val-3)
+#define DLGS_BOTTOM_BTN_L(dlgh)         (dlgh-RSC_SP_DLG_INNERBORDER_BOTTOM)
+#define DLGS_BOTTOM_BTN_Y(dlgh)         (DLGS_BOTTOM_BTN_L(dlgh)-RSC_CD_PUSHBUTTON_HEIGHT)
+#define DLGS_BOTTOM_FL_Y(dlgh)          (DLGS_BOTTOM_BTN_Y(dlgh)-SEP_FL_SPACE_Y-5)
+#define DLGS_BOTTOM_LAST_CTRL_L(dlgh)   (DLGS_BOTTOM_BTN_Y(dlgh)-2*SEP_FL_SPACE_Y-3)
+#define DLGS_BOTTOM_HELP_X(dlgw)        (dlgw-RSC_SP_DLG_INNERBORDER_RIGHT-RSC_CD_PUSHBUTTON_WIDTH)
+#define DLGS_BOTTOM_CANCEL_X(dlgw)      (DLGS_BOTTOM_HELP_X(dlgw)-RSC_SP_CTRL_X-RSC_CD_PUSHBUTTON_WIDTH)
+#define DLGS_BOTTOM_OK_X(dlgw)          (DLGS_BOTTOM_CANCEL_X(dlgw)-RSC_SP_CTRL_GROUP_X-RSC_CD_PUSHBUTTON_WIDTH)
+
+// --------- signed macro warning ---------
+
+#define FI_DOCNAME                      1
+#define FI_DESCR1A                      2
+#define FI_SIGNS                        3
+#define PB_VIEWSIGNS                    4
+#define FI_DESCR2                       5
+#define CB_ALWAYSTRUST                  6
+#define PB_ENABLE                       7
+#define PB_DISABLE                      8
+#define FI_DESCR1B                      9
+#define FL_BOTTOM_SEP                   10
+#define BTN_HELP                        11
+#define IMG_SYMBOL                      12
+
+#define MW_WIDTH                        220
+#define MW_HEIGHT                       190
+
+#define MW_SYMBOL_WIDTH                 (20)
+#define MW_SYMBOL_HEIGHT                (20)
+
+#define MW_COL_0                        (RSC_SP_DLG_INNERBORDER_LEFT)
+#define MW_COL_1                        (MW_COL_0+MW_SYMBOL_WIDTH+RSC_SP_CTRL_DESC_X)
+
+#define MW_COL_4                        (MW_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
+#define MW_COL_3                        (MW_COL_4-RSC_CD_PUSHBUTTON_WIDTH)
+#define MW_COL_2                        (MW_COL_3-RSC_SP_CTRL_DESC_X)
+
+#define MW_COL_A                        (DLGS_BOTTOM_OK_X(MW_WIDTH))
+#define MW_COL_C                        (DLGS_BOTTOM_CANCEL_X(MW_WIDTH))
+#define MW_COL_E                        (DLGS_BOTTOM_HELP_X(MW_WIDTH))
+
+#define MW_ROW_0                        (RSC_SP_DLG_INNERBORDER_TOP)
+#define MW_ROW_1                        (MW_ROW_0+3*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
+#define MW_ROW_2                        (MW_ROW_1+RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_CTRL_DESC_Y)
+
+#define MW_ROW_7                        (MW_HEIGHT-RSC_SP_DLG_INNERBORDER_BOTTOM)
+#define MW_ROW_6                        (MW_ROW_7-RSC_CD_PUSHBUTTON_HEIGHT)
+#define MW_ROW_5                        (MW_ROW_6-RSC_SP_CTRL_DESC_Y-RSC_CD_FIXEDTEXT_HEIGHT)
+#define MW_ROW_4                        (MW_ROW_5-RSC_SP_CTRL_DESC_Y-RSC_CD_CHECKBOX_HEIGHT)
+#define MW_ROW_3                        (MW_ROW_4-RSC_SP_CTRL_DESC_Y-4*RSC_CD_FIXEDTEXT_HEIGHT)
+
+#endif
+
