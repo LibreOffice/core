@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:53:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:24:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1504,7 +1504,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
                     break;
                 case DataType::TIMESTAMP:
                     bDateNTimeField = sal_True;
-                    sLabelPostfix = UniString(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX)).GetToken(0, ';');
+                    sLabelPostfix = String( SVX_RES( RID_STR_POSTFIX_DATE ) );
                     // DON'T break !
                 case DataType::DATE:
                     nOBJID = OBJ_FM_DATEFIELD;
@@ -1560,7 +1560,7 @@ SdrObject* FmXFormView::implCreateFieldControl( const ::svx::ODataAccessDescript
             // die Zeit-Komponente
             pLabel = pControl = NULL;
             createControlLabelPair(m_pView,_pOutDev, 0,1000, xField, xNumberFormats, OBJ_FM_TIMEFIELD,
-                UniString(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX)).GetToken(1, ';'),FmFormInventor,OBJ_FM_FIXEDTEXT,
+                String( SVX_RES( RID_STR_POSTFIX_TIME ) ), FmFormInventor,OBJ_FM_FIXEDTEXT,
                 NULL,NULL,NULL,
                 pLabel, pControl);
 
