@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Connection.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:38:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:07:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,8 @@
 #endif
 
 #include "java/sql/ConnectionLog.hxx"
+#include "java/LocalRef.hxx"
+#include "java/GlobalRef.hxx"
 
 namespace connectivity
 {
@@ -75,6 +77,8 @@ namespace connectivity
                                             //  for this Connection
         const java_sql_Driver*  m_pDriver;
         jobject                 m_pDriverobject;
+        jdbc::GlobalRef< jobject >
+                                m_pDriverClassLoader;
 
         jclass                  m_Driver_theClass;
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
@@ -91,7 +95,11 @@ namespace connectivity
                 The new statement witgh unnamed parameters.
         */
         ::rtl::OUString transFormPreparedStatement(const ::rtl::OUString& _sSQL);
-        void loadDriverFromProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info,::rtl::OUString& _rsGeneratedValueStatement,sal_Bool& _rbAutoRetrievingEnabled,sal_Bool& _bParameterSubstitution,sal_Bool& _bIgnore);
+
+        void loadDriverFromProperties(
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info
+             );
+
     protected:
     // statische Daten fuer die Klasse
         static jclass theClass;
@@ -99,6 +107,7 @@ namespace connectivity
         static void saveClassRef( jclass pClass );
 
         virtual ~java_sql_Connection();
+
     public:
         static jclass getMyClass();
 
@@ -113,7 +122,15 @@ namespace connectivity
 
         inline  sal_Bool isIgnoreDriverPrivilegesEnabled() const { return   m_bIgnoreDriverPrivileges;}
 
+        /** returns the instance used for logging events related to this connection
+        */
         const java::sql::ConnectionLog& getLogger() const { return m_aLogger; }
+
+        /** returns the class loader which was used to load the driver class
+
+            Usually used in conjunction with a ContextClassLoaderScope instance.
+        */
+        const jdbc::GlobalRef< jobject >& getDriverClassLoader() const { return m_pDriverClassLoader; }
 
         // OComponentHelper
         virtual void SAL_CALL disposing(void);
