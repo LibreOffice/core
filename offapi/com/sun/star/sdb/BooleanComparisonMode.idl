@@ -1,0 +1,82 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: BooleanComparisonMode.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:14:54 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_BooleanComparisonMode_idl__
+#define __com_sun_star_sdb_BooleanComparisonMode_idl__
+
+//=============================================================================
+
+module com { module sun { module star { module sdb {
+
+//=============================================================================
+
+/** specifies different modi how boolean comparison predicates are to be generated
+    by a <type>SingleSelectQueryComposer</type>.
+ */
+constants BooleanComparisonMode
+{
+    /** denotes the default comparison
+
+        <p>Most databases support comparing boolean expressions or column values directly with
+        integer values: <code><em>column</em> = 0</code> respectively <code><em>column</em> = 1</code>.</p>
+    */
+    const long EQUAL_INTEGER    = 0;
+
+    /** requires to use <code>IS <em>boolean_literal</em></code> for boolean comparison.
+
+        <p>That is, the generated comparison predicates will be <code><em>column</em> IS TRUE</code> resp.
+        <code><em>column</em> IS FALSE</code>.</p>
+    */
+    const long IS_LITERAL       = 1;
+
+    /** requires to use <code>= <em>boolean_literal</em></code> for boolean comparison.
+
+        <p>That is, the generated comparison predicates will be <code><em>column</em> = TRUE</code> resp.
+        <code><em>column</em> = FALSE</code>.</p>
+    */
+    const long EQUAL_LITERAL    = 2;
+
+    /** requires to use an Microsoft Access compatible syntax for boolean comparison.
+    */
+    const long ACCESS_COMPAT    = 3;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
