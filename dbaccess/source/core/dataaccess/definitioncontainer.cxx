@@ -4,9 +4,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:12:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:38:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
 #endif
@@ -73,6 +76,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_ERRORCONDITION_HPP_
+#include <com/sun/star/sdb/ErrorCondition.hpp>
+#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -87,6 +93,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::sdb;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
@@ -645,7 +652,7 @@ void ODefinitionContainer::approveNewObject(const ::rtl::OUString& _sName,const 
 
     if ( _sName.indexOf( '/' ) != -1 )
         throw IllegalArgumentException(
-            DBA_RES( RID_STR_NO_SLASH_IN_OBJECT_NAME ),
+            m_aErrorHelper.getErrorMessage( ErrorCondition::DB_OBJECT_NAME_WITH_SLASHES ),
             *this,
             0 );
 
@@ -694,7 +701,7 @@ void SAL_CALL ODefinitionContainer::propertyChange( const PropertyChangeEvent& e
         }
         catch(const Exception&)
         {
-            OSL_ENSURE(0,"Exception catched!");
+            DBG_UNHANDLED_EXCEPTION();
             throw RuntimeException();
         }
         m_bInPropertyChange = sal_False;
