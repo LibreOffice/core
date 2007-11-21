@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:55:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:10:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -396,19 +396,19 @@ TabPage RID_SCPAGE_CONTENT
     };
     FixedLine GB_OBJECT
     {
-        Pos = MAP_APPFONT ( 6 , 108 ) ;
+        Pos = MAP_APPFONT ( 6 , 100 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
         Text [ en-US ] = "Objects" ;
     };
     FixedText FT_OBJGRF
     {
-        Pos = MAP_APPFONT ( 12 , 121 ) ;
+        Pos = MAP_APPFONT ( 12 , 113 ) ;
         Size = MAP_APPFONT ( 68 , 8 ) ;
         Text [ en-US ] = "Ob~jects/Graphics" ;
     };
     ListBox LB_OBJGRF
     {
-        Pos = MAP_APPFONT ( 84 , 119 ) ;
+        Pos = MAP_APPFONT ( 84 , 111 ) ;
         Size = MAP_APPFONT ( 40 , 46 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -421,13 +421,13 @@ TabPage RID_SCPAGE_CONTENT
     };
     FixedText FT_DIAGRAM
     {
-        Pos = MAP_APPFONT ( 12 , 137 ) ;
+        Pos = MAP_APPFONT ( 12 , 129 ) ;
         Size = MAP_APPFONT ( 68 , 8 ) ;
         Text [ en-US ] = "Cha~rts" ;
     };
     ListBox LB_DIAGRAM
     {
-        Pos = MAP_APPFONT ( 84 , 135 ) ;
+        Pos = MAP_APPFONT ( 84 , 127 ) ;
         Size = MAP_APPFONT ( 40 , 46 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -441,13 +441,13 @@ TabPage RID_SCPAGE_CONTENT
     };
     FixedText FT_DRAW
     {
-        Pos = MAP_APPFONT ( 12 , 153 ) ;
+        Pos = MAP_APPFONT ( 12 , 145 ) ;
         Size = MAP_APPFONT ( 68 , 8 ) ;
         Text [ en-US ] = "~Drawing objects" ;
     };
     ListBox LB_DRAW
     {
-        Pos = MAP_APPFONT ( 84 , 151 ) ;
+        Pos = MAP_APPFONT ( 84 , 143 ) ;
         Size = MAP_APPFONT ( 40 , 46 ) ;
         Border = TRUE ;
         DropDown = TRUE ;
@@ -458,6 +458,18 @@ TabPage RID_SCPAGE_CONTENT
             < "Placeholders" ; Default ; > ;
         };
 
+    };
+    FixedLine GB_ZOOM
+    {
+        Pos = MAP_APPFONT ( 6 , 160 ) ;
+        Size = MAP_APPFONT ( 121 , 8 ) ;
+        Text [ en-US ] = "Zoom";
+    };
+    CheckBox CB_SYNCZOOM
+    {
+        Pos = MAP_APPFONT ( 12 , 171 ) ;
+        Size = MAP_APPFONT ( 112 , 10 ) ;
+        Text [ en-US ] = "S~ynchronize sheets" ;
     };
     FixedLine FL_SEPARATOR2
     {
