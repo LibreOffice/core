@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontainer.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:15:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:41:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,6 @@
 #include "FilteredContainer.hxx"
 #endif
 
-class WildCard;
 namespace dbaccess
 {
     //==========================================================================
@@ -135,6 +134,9 @@ namespace dbaccess
 
     protected:
         using OFilteredContainer::disposing;
+
+    private:
+        ::rtl::OUString m_sAppendingCurrenly;
     };
 }
 #endif // _DBA_CORE_VIEWCONTAINER_HXX_
