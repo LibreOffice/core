@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextengine.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 09:56:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:35:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,9 @@
 #ifndef _UNDO_HXX
 #include <svtools/undo.hxx>
 #endif
-
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 #include <algorithm>
 #include <functional>
@@ -131,12 +133,18 @@ namespace frm
     //--------------------------------------------------------------------
     RichTextEngine* RichTextEngine::Clone()
     {
-        EditTextObject* pMyText = CreateTextObject();
-        OSL_ENSURE( pMyText, "RichTextEngine::Clone: CreateTextObject returned nonsense!" );
+        RichTextEngine* pClone( NULL );
+        {
+            ::vos::OGuard aGuard( Application::GetSolarMutex() );
+            EditTextObject* pMyText = CreateTextObject();
+            OSL_ENSURE( pMyText, "RichTextEngine::Clone: CreateTextObject returned nonsense!" );
 
-        RichTextEngine* pClone = Create();
-        pClone->SetText( *pMyText );
-        delete pMyText;
+            pClone = Create();
+
+            if ( pMyText )
+                pClone->SetText( *pMyText );
+            delete pMyText;
+        }
 
         return pClone;
     }
