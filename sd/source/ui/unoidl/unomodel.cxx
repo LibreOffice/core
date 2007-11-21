@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:05:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:27:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,22 +313,20 @@ const SfxItemPropertyMap* ImplGetDrawModelPropertyMap()
 SdXImpressDocument::SdXImpressDocument (::sd::DrawDocShell* pShell ) throw()
 :   SfxBaseModel( pShell ),
     mpDocShell( pShell ),
-    mpDoc( 0 ),
+    mpDoc( pShell ? pShell->GetDoc() : NULL ),
     mbDisposed(false),
+    mbImpressDoc( pShell && pShell->GetDoc() && pShell->GetDoc()->GetDocumentType() == DOCUMENT_TYPE_IMPRESS ),
     mbClipBoard( sal_False ),
     maPropSet( ImplGetDrawModelPropertyMap() )
 {
-    if( mpDocShell )
+    if( mpDoc )
     {
-        mpDoc = mpDocShell->GetDoc();
         StartListening( *mpDoc );
     }
     else
     {
         DBG_ERROR("DocShell is invalid");
     }
-
-    mbImpressDoc = mpDoc && mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
 }
 
 SdXImpressDocument::SdXImpressDocument( SdDrawDocument* pDoc, sal_Bool bClipBoard ) throw()
@@ -336,6 +334,7 @@ SdXImpressDocument::SdXImpressDocument( SdDrawDocument* pDoc, sal_Bool bClipBoar
     mpDocShell( NULL ),
     mpDoc( pDoc ),
     mbDisposed(false),
+    mbImpressDoc( pDoc && pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS ),
     mbClipBoard( bClipBoard ),
     maPropSet( ImplGetDrawModelPropertyMap() )
 {
@@ -347,8 +346,6 @@ SdXImpressDocument::SdXImpressDocument( SdDrawDocument* pDoc, sal_Bool bClipBoar
     {
         DBG_ERROR("SdDrawDocument is invalid");
     }
-
-    mbImpressDoc = mpDoc && mpDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS;
 }
 
 /***********************************************************************
@@ -398,8 +395,6 @@ UNO3_GETIMPLEMENTATION2_IMPL( SdXImpressDocument, SfxBaseModel );
 // XInterface
 uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException)
 {
-    OGuard aGuard( Application::GetSolarMutex() );
-
     uno::Any aAny;
 
     QUERYINT(lang::XServiceInfo);
