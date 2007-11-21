@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPage.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:58:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,11 +173,6 @@ String STR_CONNECTION_NO_SUCCESS
     Text [ en-US ] = "The connection could not be established successfully.";
 };
 
-String STR_JDBCDRIVER_TEST
-{
-    Text [ en-US ] = "JDBC Driver Test";
-};
-
 String STR_JDBCDRIVER_SUCCESS
 {
     Text [ en-US ] = "The JDBC driver was loaded successfully.";
@@ -193,4 +188,8 @@ String STR_MSACCESS_FILTERNAME
     Text [ en-US ] = "MS Access file";
 };
 
+String STR_MSACCESS_2007_FILTERNAME
+{
+    Text [ en-US ] = "MS Access 2007 file";
+};
 
