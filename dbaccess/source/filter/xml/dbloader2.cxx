@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 08:12:23 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:42:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,146 +36,59 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-//#ifndef _SFXFRAME_HXX
-//#include <sfx2/frame.hxx>
-//#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
-#include <toolkit/helper/vclunohelper.hxx>
-#endif
-#ifndef _URLOBJ_HXX //autogen
-#include <tools/urlobj.hxx>
-#endif
-#ifndef _TOOLKIT_AWT_VCLXWINDOW_HXX_
-#include <toolkit/awt/vclxwindow.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
-#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATOR_HPP_
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
-#include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
-#include <com/sun/star/frame/XFrame.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
-#include <com/sun/star/frame/XFramesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XFRAMELOADER_HPP_
-#include <com/sun/star/frame/XFrameLoader.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
-#include <com/sun/star/document/XEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XDOCUMENTDATASOURCE_HPP_
-#include <com/sun/star/sdb/XDocumentDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XLOADEVENTLISTENER_HPP_
-#include <com/sun/star/frame/XLoadEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
-#include <com/sun/star/embed/XStorage.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
-#include <com/sun/star/embed/ElementModes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
-#include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
-#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
-#endif
-#ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
-#include <com/sun/star/io/XInputStream.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XSET_HPP_
-#include <com/sun/star/container/XSet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XFILTER_HPP_
-#include <com/sun/star/document/XFilter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
-#include <com/sun/star/util/XURLTransformer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_REGISTRY_XREGISTRYKEY_HPP_
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEXTENDEDFILTERDETECTION_HPP_
-#include <com/sun/star/document/XExtendedFilterDetection.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _FLT_REGHELPER_HXX_
 #include "flt_reghelper.hxx"
-#endif
-#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
-#include <com/sun/star/lang/XInitialization.hpp>
-#endif
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENT_HXX
-#include <ucbhelper/content.hxx>
-#endif
-#ifndef _UCBHELPER_COMMANDENVIRONMENT_HXX
-#include <ucbhelper/commandenvironment.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-#include <comphelper/documentconstants.hxx>
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
-#include <comphelper/sequenceashashmap.hxx>
-#endif
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
-#ifndef _UCBHELPER_CONTENTBROKER_HXX
-#include <ucbhelper/contentbroker.hxx>
-#endif
-#ifndef _SFXDOCFILE_HXX //autogen wg. SfxMedium
-#include <sfx2/docfile.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
-#include <svtools/moduleoptions.hxx>
-#endif
-#ifndef DBACCESS_SHARED_XMLSTRINGS_HRC
 #include "xmlstrings.hrc"
-#endif
-#ifndef _COMPHELPER_STLTYPES_HXX_
-#include <comphelper/stl_types.hxx>
-#endif
-#ifndef _COMPHELPER_STORAGEHELPER_HXX
-#include <comphelper/storagehelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TASK_XJOBEXECUTOR_HPP_
+
+/** === begin UNO includes === **/
+#include <com/sun/star/beans/NamedValue.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XSet.hpp>
+#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/document/XExtendedFilterDetection.hpp>
+#include <com/sun/star/document/XFilter.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/XController.hpp>
+#include <com/sun/star/frame/XFrame.hpp>
+#include <com/sun/star/frame/XFrameLoader.hpp>
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#include <com/sun/star/frame/XLoadEventListener.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/io/XInputStream.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/task/XJobExecutor.hpp>
-#endif
-#ifndef _SV_MSGBOX_HXX
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/util/XURLTransformer.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/componentcontext.hxx>
+#include <comphelper/documentconstants.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/stl_types.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <comphelper/types.hxx>
+#include <cppuhelper/implbase2.hxx>
+#include <osl/file.hxx>
+#include <sfx2/docfile.hxx>
+#include <svtools/moduleoptions.hxx>
+#include <toolkit/awt/vclxwindow.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <tools/diagnose_ex.h>
+#include <tools/urlobj.hxx>
+#include <ucbhelper/commandenvironment.hxx>
+#include <ucbhelper/content.hxx>
+#include <ucbhelper/contentbroker.hxx>
 #include <vcl/msgbox.hxx>
-#endif
+#include <vcl/svapp.hxx>
 
 using namespace ::ucbhelper;
 using namespace ::com::sun::star::task;
@@ -202,7 +115,8 @@ namespace dbaxml
 
 class DBTypeDetection : public ::cppu::WeakImplHelper2< XExtendedFilterDetection, XServiceInfo>
 {
-    Reference< XMultiServiceFactory > m_xServiceFactory;
+    ::comphelper::ComponentContext  m_aContext;
+
 public:
     DBTypeDetection(const Reference< XMultiServiceFactory >&);
 
@@ -224,7 +138,7 @@ public:
 };
 // -------------------------------------------------------------------------
 DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFactory)
-: m_xServiceFactory(_rxFactory)
+    :m_aContext( _rxFactory )
 {
 }
 // -------------------------------------------------------------------------
@@ -238,7 +152,8 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
         Reference<XPropertySet> xProp;
         if ( xInStream.is() )
         {
-            xProp.set(::comphelper::OStorageHelper::GetStorageFromInputStream(xInStream,m_xServiceFactory),UNO_QUERY);
+            xProp.set( ::comphelper::OStorageHelper::GetStorageFromInputStream(
+                xInStream, m_aContext.getLegacyServiceFactory() ), UNO_QUERY );
         }
         else
         {
@@ -247,7 +162,8 @@ DBTypeDetection::DBTypeDetection(const Reference< XMultiServiceFactory >& _rxFac
             if ( sTemp.getLength() )
             {
                 INetURLObject aURL(sTemp);
-                xProp.set(::comphelper::OStorageHelper::GetStorageFromURL(sTemp,ElementModes::READ,m_xServiceFactory),UNO_QUERY);
+                xProp.set( ::comphelper::OStorageHelper::GetStorageFromURL(
+                    sTemp, ElementModes::READ, m_aContext.getLegacyServiceFactory() ), UNO_QUERY );
             }
         }
 
@@ -310,7 +226,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBTypeDetection()
 class DBContentLoader : public ::cppu::WeakImplHelper2< XFrameLoader, XServiceInfo>
 {
 private:
-    Reference< XMultiServiceFactory >   m_xServiceFactory;
+    ::comphelper::ComponentContext      m_aContext;
     Reference< XFrameLoader >           m_xMySelf;
     ::rtl::OUString                     m_sCurrentURL;
     sal_Int32                           m_nStartWizard;
@@ -346,7 +262,7 @@ private:
 DBG_NAME(DBContentLoader)
 
 DBContentLoader::DBContentLoader(const Reference< XMultiServiceFactory >& _rxFactory)
-    :m_xServiceFactory(_rxFactory)
+    :m_aContext( _rxFactory )
     ,m_nStartWizard(0)
 {
     DBG_CTOR(DBContentLoader,NULL);
@@ -403,18 +319,14 @@ Sequence< ::rtl::OUString > DBContentLoader::getSupportedServiceNames_Static(voi
 // -----------------------------------------------------------------------
 namespace
 {
-    sal_Bool lcl_urlAllowsInteraction( Reference< XMultiServiceFactory >& _rxORB, const ::rtl::OUString& _rURL )
+    // ...................................................................
+    sal_Bool lcl_urlAllowsInteraction( const ::comphelper::ComponentContext& _rContext, const ::rtl::OUString& _rURL )
     {
         bool bDoesAllow = sal_False;
         try
         {
-            Reference< XURLTransformer > xTransformer(
-                _rxORB->createInstance(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ) ),
-                UNO_QUERY
-            );
-            OSL_ENSURE( xTransformer.is(), "lcl_urlAllowsInteraction: could not create an URLTransformer!" );
-            if ( xTransformer.is() )
+            Reference< XURLTransformer > xTransformer;
+            if ( _rContext.createComponent( "com.sun.star.util.URLTransformer", xTransformer ) )
             {
                 URL aURL;
                 aURL.Complete = _rURL;
@@ -429,22 +341,25 @@ namespace
         return bDoesAllow;
     }
 
-    Reference< XWindow > lcl_getTopMostWindow( Reference< XMultiServiceFactory >& _rxORB )
+    // ...................................................................
+    Reference< XWindow > lcl_getTopMostWindow( const ::comphelper::ComponentContext& _rContext )
     {
         Reference< XWindow > xWindow;
         // get the top most window
-        Reference < XFramesSupplier > xDesktop( _rxORB->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.Desktop" ) ) ), UNO_QUERY );
-        Reference < XFrame > xActiveFrame = xDesktop->getActiveFrame();
-        if ( xActiveFrame.is() )
+        Reference < XFramesSupplier > xDesktop;
+        if ( _rContext.createComponent( "com.sun.star.frame.Desktop", xDesktop ) )
         {
-            xWindow = xActiveFrame->getContainerWindow();
-            Reference<XFrame> xFrame = xActiveFrame;
-            while ( xFrame.is() && !xFrame->isTop() )
-                xFrame.set(xFrame->getCreator(),UNO_QUERY);
+            Reference < XFrame > xActiveFrame = xDesktop->getActiveFrame();
+            if ( xActiveFrame.is() )
+            {
+                xWindow = xActiveFrame->getContainerWindow();
+                Reference<XFrame> xFrame = xActiveFrame;
+                while ( xFrame.is() && !xFrame->isTop() )
+                    xFrame.set(xFrame->getCreator(),UNO_QUERY);
 
-            if ( xFrame.is() )
-                xWindow = xFrame->getContainerWindow();
+                if ( xFrame.is() )
+                    xWindow = xFrame->getContainerWindow();
+            }
         }
         return xWindow;
     }
@@ -457,7 +372,7 @@ sal_Bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _r
     aWizardArgs[0] <<= PropertyValue(
                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")),
                     0,
-                    makeAny( lcl_getTopMostWindow( m_xServiceFactory ) ),
+                    makeAny( lcl_getTopMostWindow( m_aContext ) ),
                     PropertyState_DIRECT_VALUE);
 
     aWizardArgs[1] <<= PropertyValue(
@@ -467,11 +382,10 @@ sal_Bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _r
                     PropertyState_DIRECT_VALUE);
 
     // create the dialog
-    Reference< XExecutableDialog > xAdminDialog(
-        m_xServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.DatabaseWizardDialog")),aWizardArgs), UNO_QUERY);
+    Reference< XExecutableDialog > xAdminDialog;
+    OSL_VERIFY( m_aContext.createComponentWithArguments( "com.sun.star.sdb.DatabaseWizardDialog", aWizardArgs, xAdminDialog ) );
 
     // execute it
-    ::rtl::OUString sExistingDocumentToOpen;
     if ( !xAdminDialog.is() || ( RET_OK != xAdminDialog->execute() ) )
         return sal_False;
 
@@ -489,19 +403,17 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
 {
 
     // first check if preview is true, if so return with out creating a controller. Preview is not supported
-    ::comphelper::SequenceAsHashMap lDescriptor(rArgs);
-    sal_Bool bPreview = lDescriptor.getUnpackedValueOrDefault(INFO_PREVIEW, sal_False );
+    ::comphelper::NamedValueCollection aMediaDesc( rArgs );
+    sal_Bool bPreview = aMediaDesc.getOrDefault( "Preview", sal_False );
     if ( bPreview )
     {
         if (rListener.is())
             rListener->loadCancelled(this);
         return;
     }
-    Reference< XModel > xModel   = lDescriptor.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Model")), Reference< XModel >());
 
-    ::rtl::OUString sSalvagedURL = lDescriptor.getUnpackedValueOrDefault(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SalvagedFile" ) ), _rURL );
-    Sequence< PropertyValue > aLoadArgs( rArgs );
+    Reference< XModel > xModel       = aMediaDesc.getOrDefault( "Model", Reference< XModel >() );
+    ::rtl::OUString     sSalvagedURL = aMediaDesc.getOrDefault( "SalvagedFile", _rURL );
 
     sal_Bool bCreateNew = sal_False;        // does the URL denote the private:factory URL?
     sal_Bool bDidLoadExisting = sal_False;  // when it does, did we (the wizard) load an existing document instead
@@ -509,14 +421,27 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
 
     sal_Bool bSuccess = sal_True;
 
+    // If there's no interaction handler in the media descriptor, put one.
+    // By definition, loading via loadComponentFromURL (and thus via the content loader here)
+    // is allowed to raise UI. To not burden every place inside the document with creating
+    // a default handler, we simply ensure there is one.
+    // If a handler is present in the media descriptor, even if it is NULL, we will
+    // not touch it.
+    if ( !aMediaDesc.has( "InteractionHandler" ) )
+    {
+        Reference< XInteractionHandler > xHandler;
+        if ( m_aContext.createComponent( "com.sun.star.sdb.InteractionHandler", xHandler ) )
+            aMediaDesc.put( "InteractionHandler", xHandler );
+    }
+
     /* special mode: use already loaded model ...
         In such case no filter name will be selected and no URL will be given!
         Such informations are not neccessary. We have to create a new view only
         and call setComponent() at the corresponding frame. */
     if ( !xModel.is() )
     {
-        Reference< XSingleServiceFactory > xDatabaseContext(m_xServiceFactory->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-        if ( xDatabaseContext.is() )
+        Reference< XSingleServiceFactory > xDatabaseContext;
+        if ( m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT, xDatabaseContext ) )
         {
             sal_Bool bInteractive = sal_False;
 
@@ -529,16 +454,20 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
                 aCreationArgs[0] <<= NamedValue( INFO_POOLURL, makeAny( sSalvagedURL ) );
             }
             else
-                bInteractive = lcl_urlAllowsInteraction( m_xServiceFactory, _rURL );
+                bInteractive = lcl_urlAllowsInteraction( m_aContext, _rURL );
 
             Reference< XDocumentDataSource > xDocumentDataSource;
             xDocumentDataSource.set(xDatabaseContext->createInstanceWithArguments(aCreationArgs),UNO_QUERY_THROW);
             xModel.set(xDocumentDataSource->getDatabaseDocument(),UNO_QUERY);
             if ( xModel.is() )
             {
-                ::rtl::OUString sURL = xModel->getURL();
+                const ::rtl::OUString sURL = xModel->getURL();
                 if ( bCreateNew )
-                    xModel->attachResource( sURL, aLoadArgs );
+                {
+                    Sequence< PropertyValue > aDocResource;
+                    aMediaDesc >>= aDocResource;
+                    xModel->attachResource( sURL, aDocResource );
+                }
 
                 if ( bInteractive )
                 {
@@ -561,14 +490,14 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     {
         try
         {
-            aLoadArgs.realloc(aLoadArgs.getLength()+1);
-            aLoadArgs[aLoadArgs.getLength()-1].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FileName"));
-            aLoadArgs[aLoadArgs.getLength()-1].Value <<= _rURL;
-
-            xModel->attachResource( _rURL, aLoadArgs );
+            aMediaDesc.put( "FileName", _rURL );
+            Sequence< PropertyValue > aDocResource;
+            aMediaDesc >>= aDocResource;
+            xModel->attachResource( _rURL, aDocResource );
         }
-        catch(Exception&)
+        catch(const Exception&)
         {
+            DBG_UNHANDLED_EXCEPTION();
             bSuccess = sal_False;
         }
     }
@@ -576,9 +505,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     Reference< XController > xController;
     if ( bSuccess )
     {
-        xController.set(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.comp.dbu.OApplicationController"))),UNO_QUERY);
-
-        bSuccess = xController.is();
+        bSuccess = m_aContext.createComponent( "org.openoffice.comp.dbu.OApplicationController", xController );
         if ( bSuccess )
         {
             xController->attachModel(xModel);
@@ -589,6 +516,9 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             // and initialize
             try
             {
+                Sequence< PropertyValue > aLoadArgs;
+                aMediaDesc >>= aLoadArgs;
+
                 Reference<XInitialization > xIni(xController,UNO_QUERY);
                 Sequence< Any > aInitArgs( aLoadArgs.getLength() + 1 );
 
@@ -621,14 +551,15 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
             xController->attachFrame(rFrame);
         try
         {
-            Reference< css::container::XSet > xModelCollection(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.GlobalEventBroadcaster"))),UNO_QUERY_THROW);
-            xModelCollection->insert(css::uno::makeAny(xModel));
+            Reference< css::container::XSet > xModelCollection;
+            if ( m_aContext.createComponent( "com.sun.star.frame.GlobalEventBroadcaster", xModelCollection ) )
+                xModelCollection->insert(css::uno::makeAny(xModel));
 
             Reference< css::document::XEventListener > xDocEventBroadcaster(xModel,UNO_QUERY_THROW);
             css::document::EventObject aEvent;
             aEvent.Source = xModel;
             ::std::vector< ::rtl::OUString > aEvents;
-            if ( bCreateNew && !bDidLoadExisting )
+            if ( bCreateNew )
             {
                 aEvents.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnCreate")));
                 aEvents.push_back(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OnNew"))); // UI event
@@ -695,9 +626,8 @@ IMPL_LINK( DBContentLoader, OnStartTableWizard, void*, /*NOTINTERESTEDIN*/ )
         aWizArgs[0] <<= aValue;
 
         ::vos::OGuard aGuard(Application::GetSolarMutex());
-        Reference< XJobExecutor > xTableWizard(m_xServiceFactory->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.table.CallTableWizard")),aWizArgs),UNO_QUERY);
-
-        if ( xTableWizard.is() )
+        Reference< XJobExecutor > xTableWizard;
+        if ( m_aContext.createComponentWithArguments( "com.sun.star.wizards.table.CallTableWizard", aWizArgs, xTableWizard ) )
             xTableWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("start")));
     }
     catch(const Exception&)
