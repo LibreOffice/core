@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.191 $
+ *  $Revision: 1.192 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 14:01:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:50:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1752,7 +1752,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                     if (xDataSource.is())
                     {
                         sal_Int32 nType = ::comphelper::getINT32(xDataSource->getPropertyValue(PROPERTY_COMMANDTYPE));
-                        aReturn.bEnabled = aReturn.bEnabled && ((::comphelper::getBOOL(xDataSource->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING)) || (nType == ::com::sun::star::sdb::CommandType::QUERY)));
+                        aReturn.bEnabled = aReturn.bEnabled && ((::comphelper::getBOOL(xDataSource->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)) || (nType == ::com::sun::star::sdb::CommandType::QUERY)));
                     }
                 }
                 catch(DisposedException&)
@@ -2100,8 +2100,8 @@ void SbaTableQueryBrowser::implAppendEntry( SvLBoxEntry* _pParent, const String&
 {
     ::std::auto_ptr< ImageProvider > pImageProvider( getImageProviderFor( _pParent ) );
 
-    Image aImage( pImageProvider->getImage( _rName, getDatabaseObjectType( _eEntryType ), false ) );
-    Image aImageHC( pImageProvider->getImage( _rName, getDatabaseObjectType( _eEntryType ), true ) );
+    Image aImage, aImageHC;
+    pImageProvider->getImages( _rName, getDatabaseObjectType( _eEntryType ), aImage, aImageHC );
 
     SvLBoxEntry* pNewEntry = m_pTreeView->getListBox()->InsertEntry( _rName, _pParent, sal_False, LIST_APPEND, _pUserData );
 
@@ -2305,7 +2305,7 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
                 // set this _before_ setting the connection, else the rowset would rebuild it ...
             xProp->setPropertyValue(PROPERTY_COMMANDTYPE, makeAny(_nCommandType));
             xProp->setPropertyValue(PROPERTY_COMMAND, makeAny(_rCommand));
-            xProp->setPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING, ::cppu::bool2any(_bEscapeProcessing));
+            xProp->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, ::cppu::bool2any(_bEscapeProcessing));
             if ( m_bPreview )
             {
                 // this be undone by the grid control in DbGridControl::RecalcRows
@@ -3032,7 +3032,7 @@ void SbaTableQueryBrowser::impl_initialize()
     rArguments.get_ensureType( (::rtl::OUString)PROPERTY_UPDATE_CATALOGNAME, aCatalogName );
     rArguments.get_ensureType( (::rtl::OUString)PROPERTY_UPDATE_SCHEMANAME, aSchemaName );
     rArguments.get_ensureType( (::rtl::OUString)PROPERTY_UPDATE_TABLENAME, aTableName );
-    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_USE_ESCAPE_PROCESSING, bEsacpeProcessing );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_ESCAPE_PROCESSING, bEsacpeProcessing );
     rArguments.get_ensureType( "Frame", xFrame );
     rArguments.get_ensureType( (::rtl::OUString)PROPERTY_SHOWMENU, m_bShowMenu );
 
@@ -3618,7 +3618,7 @@ sal_Bool SbaTableQueryBrowser::implGetQuerySignature( ::rtl::OUString& _rCommand
         if ( xQuery.is() )
         {
             xQuery->getPropertyValue( PROPERTY_COMMAND ) >>= _rCommand;
-            _bEscapeProcessing = ::cppu::any2bool( xQuery->getPropertyValue( PROPERTY_USE_ESCAPE_PROCESSING ) );
+            _bEscapeProcessing = ::cppu::any2bool( xQuery->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) );
             return sal_True;
         }
     }
