@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_qry.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:20:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 17:01:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,8 +89,10 @@
 #define STR_ERROR_PARSING_STATEMENT         RID_STR_QRY_START + 46
 #define STR_INFO_OPENING_IN_SQL_VIEW        RID_STR_QRY_START + 47
 #define STR_STATEMENT_WITHOUT_RESULT_SET    RID_STR_QRY_START + 48
-#define STR_QUERY_CROSS_JOIN                RID_STR_QRY_START + 49
-#define STR_QUERY_NATURAL_JOIN              RID_STR_QRY_START + 50
+#define STR_NO_DATASOURCE_OR_CONNECTION     RID_STR_QRY_START + 49
+#define STR_NO_ALTER_VIEW_SUPPORT           RID_STR_QRY_START + 50
+#define STR_QUERY_CROSS_JOIN                RID_STR_QRY_START + 51
+#define STR_QUERY_NATURAL_JOIN              RID_STR_QRY_START + 52
     // please adjust checking when inserting new strings
 
 
