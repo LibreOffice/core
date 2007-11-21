@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:41:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 13:56:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,12 +51,10 @@ Resource RID_SHELLRES_AUTOFMTSTRS
     };
     String STR_AUTOFMTREDL_CPTL_STT_WORD+1
     {
-        /* ### ACHTUNG: Neuer Text in Resource? ZWei Großbuchstaben am WOrtanfang korrigieren : ZWei Gro˜buchstaben am WOrtanfang korrigieren */
         Text [ en-US ] = "Correct TWo INitial CApitals" ;
     };
     String STR_AUTOFMTREDL_CPTL_STT_SENT+1
     {
-        /* ### ACHTUNG: Neuer Text in Resource? Jeden Satz mit einem Großbuchstaben beginnen : Jeden Satz mit einem Gro˜buchstaben beginnen */
         Text [ en-US ] = "Capitalize first letter of sentences" ;
     };
     String STR_AUTOFMTREDL_TYPO+1
@@ -141,27 +139,22 @@ String STR_EVENT_OBJECT_SELECT
 };
 String STR_EVENT_START_INS_GLOSSARY
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Vor AutoText einfügen : Vor AutoText einf³gen */
     Text [ en-US ] = "Before inserting AutoText";
 };
 String STR_EVENT_END_INS_GLOSSARY
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Nach AutoText einfügen : Nach AutoText einf³gen */
     Text [ en-US ] = "After inserting AutoText";
 };
 String STR_EVENT_MOUSEOVER_OBJECT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Maus über Objekt : Maus ³ber Objekt */
     Text [ en-US ] = "Mouse over object" ;
 };
 String STR_EVENT_MOUSECLICK_OBJECT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Hyperlink auslösen : Hyperlink ausl÷sen */
     Text [ en-US ] = "Trigger hyperlink" ;
 };
 String STR_EVENT_MOUSEOUT_OBJECT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Maus verläßt Objekt : Maus verlõ˜t Objekt */
     Text [ en-US ] = "Mouse leaves object" ;
 };
 String STR_EVENT_IMAGE_LOAD
@@ -186,7 +179,6 @@ String STR_EVENT_FRM_KEYINPUT_NOA
 };
 String STR_EVENT_FRM_RESIZE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Rahmengröße verändern : Rahmengr÷˜e verõndern */
     Text [ en-US ] = "Resize frame" ;
 };
 String STR_EVENT_FRM_MOVE
@@ -195,7 +187,6 @@ String STR_EVENT_FRM_MOVE
 };
 String STR_CONTENT_TYPE_OUTLINE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschriften : šberschriften */
     Text [ en-US ] = "Headings" ;
 };
 String STR_CONTENT_TYPE_TABLE
@@ -204,7 +195,7 @@ String STR_CONTENT_TYPE_TABLE
 };
 String STR_CONTENT_TYPE_FRAME
 {
-    Text [ en-US ] = "Text frame" ;
+    Text [ en-US ] = "Text frames" ;
 };
 String STR_CONTENT_TYPE_GRAPHIC
 {
@@ -244,7 +235,6 @@ String STR_CONTENT_TYPE_POSTIT
 };
 String STR_CONTENT_TYPE_SINGLE_OUTLINE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überschrift : šberschrift */
     Text [ en-US ] = "Heading" ;
 };
 String STR_CONTENT_TYPE_SINGLE_TABLE
