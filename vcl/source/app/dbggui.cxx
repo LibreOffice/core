@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 07:44:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:36:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1954,6 +1954,36 @@ void DbgPrintMsgBox( const char* pLine )
 
 // -----------------------------------------------------------------------
 
+class SolarWindowPrinter : public ::vcl::SolarThreadExecutor
+{
+private:
+    String  m_sDebugMessage;
+
+public:
+    SolarWindowPrinter( const String& _rDebugMessage )
+        :m_sDebugMessage( _rDebugMessage )
+    {
+    }
+
+protected:
+    virtual long doIt();
+};
+
+long SolarWindowPrinter::doIt()
+{
+    DbgWindow* pDbgWindow = ImplGetSVData()->maWinData.mpDbgWin;
+    if ( !pDbgWindow )
+    {
+        pDbgWindow = new DbgWindow;
+        ImplGetSVData()->maWinData.mpDbgWin = pDbgWindow;
+    }
+    pDbgWindow->InsertLine( m_sDebugMessage );
+
+    return 0L;
+}
+
+// -----------------------------------------------------------------------
+
 void DbgPrintWindow( const char* pLine )
 {
     static BOOL bIn = FALSE;
@@ -1963,14 +1993,12 @@ void DbgPrintWindow( const char* pLine )
         return;
     bIn = TRUE;
 
-    DbgWindow* pDbgWindow = ImplGetSVData()->maWinData.mpDbgWin;
-    if ( !pDbgWindow )
-    {
-        pDbgWindow = new DbgWindow;
-        ImplGetSVData()->maWinData.mpDbgWin = pDbgWindow;
-    }
+    SolarWindowPrinter aPrinter( String( pLine, RTL_TEXTENCODING_UTF8 ) );
+    TimeValue aTimeout; aTimeout.Seconds = 2; aTimeout.Nanosec = 0;
+    aPrinter.execute( aTimeout );
 
-    pDbgWindow->InsertLine( XubString( pLine, RTL_TEXTENCODING_UTF8 ) );
+    if ( aPrinter.didTimeout() )
+        DbgPrintShell( pLine );
 
     bIn = FALSE;
 }
