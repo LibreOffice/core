@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.59 2007-11-01 14:52:06 hr Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.60 2007-11-21 15:08:54 ihi Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: hr $ $Date: 2007-11-01 14:52:06 $ $Revision: 1.59 $
+//	$Author: ihi $ $Date: 2007-11-21 15:08:54 $ $Revision: 1.60 $
 //
 // Description:
 //
@@ -3139,7 +3139,6 @@ IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE_OR_QUERY,   "The database do
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_COLUMN,	"The column \"#1\" is unknown in the table \"#2\".");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_TABLE_EXIST,	"The database already contains a table or view with name \"#\".");
 IMPLEMENT_CONSTASCII_STRING(ERROR_STR_INVALID_QUERY_EXIST,	"The database already contains a query with name \"#\".");
-IMPLEMENT_CONSTASCII_STRING(ERROR_STR_CYCLIC_SUB_QUERIES,   "The statement contains a cyclic reference to one or more sub queries.");
 
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_LIKE, "LIKE");
 IMPLEMENT_CONSTASCII_STRING(KEY_STR_NOT, "NOT");
@@ -3191,7 +3190,6 @@ OParseContext::~OParseContext()
 		case ERROR_INVALID_COLUMN:			aMsg = ERROR_STR_INVALID_COLUMN; break;
 		case ERROR_INVALID_TABLE_EXIST:		aMsg = ERROR_STR_INVALID_TABLE_EXIST; break;
 		case ERROR_INVALID_QUERY_EXIST:		aMsg = ERROR_STR_INVALID_QUERY_EXIST; break;
-		case ERROR_CYCLIC_SUB_QUERIES:      aMsg = ERROR_STR_CYCLIC_SUB_QUERIES; break;
         default:
             OSL_ENSURE( false, "OParseContext::getErrorMessage: unknown error code!" );
             break;
@@ -3342,29 +3340,6 @@ OSQLParseNodes*		OSQLParser::s_pGarbageCollector = 0;
 void setParser(OSQLParser* _pParser)
 {
 	xxx_pGLOBAL_SQLPARSER = _pParser;
-}
-//-----------------------------------------------------------------------------
-OSQLParser::~OSQLParser()
-{
-	{
-		::osl::MutexGuard aGuard(getMutex());
-		OSL_ENSURE(s_nRefCount > 0, "OSQLParser::~OSQLParser() : suspicious call : have a refcount of 0 !");
-		if (!--s_nRefCount)
-		{
-			s_pScanner->setScanner(sal_True);
-			delete s_pScanner;
-			s_pScanner = NULL;
-
-			delete s_pGarbageCollector;
-			s_pGarbageCollector = NULL;
-			// is only set the first time so we should delete it only when there no more instances
-			s_xLocaleData = NULL;
-
-            RuleIDMap aEmpty;
-            s_aReverseRuleIDLookup.swap( aEmpty );
-		}
-		m_pParseTree = NULL;
-	}
 }
 // -------------------------------------------------------------------------
 void OSQLParser::setParseTree(OSQLParseNode * pNewParseTree)
