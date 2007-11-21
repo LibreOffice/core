@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:06:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:50:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -592,7 +592,7 @@ void OApplicationController::impl_initialize()
     m_bCurrentlyModified = (xModi.is() && xModi->isModified());
 }
 // -----------------------------------------------------------------------------
-void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames)
+void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUString>& _rNames) const
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -835,7 +835,7 @@ sal_Bool OApplicationController::paste( ElementType _eType,const ::svx::ODataAcc
                     else
                     {
                         xNewQuery->setPropertyValue(PROPERTY_COMMAND,makeAny(sCommand));
-                        xNewQuery->setPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING,makeAny(bEscapeProcessing));
+                        xNewQuery->setPropertyValue(PROPERTY_ESCAPE_PROCESSING,makeAny(bEscapeProcessing));
                     }
                     // insert
                     xDestQueries->insertByName( sTargetName, makeAny(xNewQuery) );
