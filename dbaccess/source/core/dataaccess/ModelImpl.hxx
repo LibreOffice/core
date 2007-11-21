@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:04:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:36:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,129 +36,52 @@
 #ifndef _DBA_COREDATAACCESS_MODELIMPL_HXX_
 #define _DBA_COREDATAACCESS_MODELIMPL_HXX_
 
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
-#include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
-#include <com/sun/star/container/XContainerListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XBOOKMARKSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XBookmarksSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XQUERYDEFINITIONSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XISOLATEDCONNECTION_HPP_
-#include <com/sun/star/sdbc/XIsolatedConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
-#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XEVENTLISTENER_HPP_
-#include <com/sun/star/document/XEventListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
-#include <com/sun/star/util/XFlushable.hpp>
-#endif
-#ifndef _CPPUHELPER_PROPSHLP_HXX
-#include <cppuhelper/propshlp.hxx>
-#endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
-#include <comphelper/proparrhlp.hxx>
-#endif
-#ifndef _CPPUHELPER_WEAKREF_HXX_
-#include <cppuhelper/weakref.hxx>
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _DBA_REGHELPER_HXX_
-#include "dba_reghelper.hxx"
-#endif
-#ifndef _DBA_CORE_BOOKMARKCONTAINER_HXX_
 #include "bookmarkcontainer.hxx"
-#endif
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
-#endif
-#ifndef _STRING_HXX
-#include <tools/string.hxx>
-#endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-#include <connectivity/CommonTools.hxx>
-#endif
-#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
-#include <comphelper/broadcasthelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
-#include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
-#include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
-#include <com/sun/star/sdb/XCompletedConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XREPORTDOCUMENTSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_XFORMDOCUMENTSSUPPLIER_HPP_
-#include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
-#include <com/sun/star/frame/XStorable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
-#include <com/sun/star/util/XModifiable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
-#include <com/sun/star/util/XCloseable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
-#include <com/sun/star/embed/XStorage.hpp>
-#endif
-#ifndef DBA_CONTENTHELPER_HXX
 #include "ContentHelper.hxx"
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTSUBSTORAGESUPPLIER_HPP_
-#include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XSTORAGEBASEDDOCUMENT_HPP_
-#include <com/sun/star/document/XStorageBasedDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
-#include <com/sun/star/embed/ElementModes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XTRANSACTIONLISTENER_HPP_
-#include <com/sun/star/embed/XTransactionListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
-#include <com/sun/star/util/XRefreshable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
+#include "dba_reghelper.hxx"
+
+/** === begin UNO includes === **/
+#include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertyAccess.hpp>
-#endif
+#include <com/sun/star/container/XContainerListener.hpp>
+#include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
+#include <com/sun/star/document/XEventListener.hpp>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/embed/XTransactionListener.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#include <com/sun/star/sdb/XBookmarksSupplier.hpp>
+#include <com/sun/star/sdb/XCompletedConnection.hpp>
+#include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>
+#include <com/sun/star/sdb/XQueryDefinitionsSupplier.hpp>
+#include <com/sun/star/sdb/XReportDocumentsSupplier.hpp>
+#include <com/sun/star/sdbc/XDataSource.hpp>
+#include <com/sun/star/sdbc/XIsolatedConnection.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/util/XCloseable.hpp>
+#include <com/sun/star/util/XFlushable.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/util/XNumberFormatsSupplier.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/broadcasthelper.hxx>
+#include <comphelper/proparrhlp.hxx>
+#include <connectivity/CommonTools.hxx>
+#include <cppuhelper/propshlp.hxx>
+#include <cppuhelper/weakref.hxx>
+#include <sfx2/docmacromode.hxx>
+#include <tools/string.hxx>
+#include <vos/ref.hxx>
+
 #include <memory>
 
 //........................................................................
@@ -216,17 +139,10 @@ DECLARE_STL_USTRINGACCESS_MAP(::com::sun::star::uno::Reference< ::com::sun::star
 class ODatabaseContext;
 class DocumentStorageAccess;
 class OSharedConnectionManager;
-class ODatabaseModelImpl : public ::rtl::IReference
+class ODatabaseModelImpl    :public ::rtl::IReference
+                            ,public ::sfx2::IMacroDocumentAccess
 {
-private:
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >     m_xModel;
-    ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDataSource > m_xDataSource;
-
-    DocumentStorageAccess*                                                      m_pStorageAccess;
-    ::rtl::Reference< SharedMutex >                                             m_xMutex;
-
 public:
-
     enum ObjectType
     {
         E_FORM   = 0,
@@ -234,13 +150,22 @@ public:
         E_QUERY  = 2,
         E_TABLE  = 3
     };
-    OWeakConnectionArray        m_aConnections;
 
+private:
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XModel >     m_xModel;
+    ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDataSource > m_xDataSource;
+
+    DocumentStorageAccess*                                                      m_pStorageAccess;
+    ::rtl::Reference< SharedMutex >                                             m_xMutex;
+    ::std::vector< TContentPtr >                                                m_aContainer;   // one for each ObjectType
+    TStorages                                                                   m_aStorages;
+    ::sfx2::DocumentMacroMode                                                   m_aMacroMode;
+
+public:
+    OWeakConnectionArray                                                                m_aConnections;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
 
-    ::std::vector<TContentPtr>      m_aContainer;
-    TStorages                       m_aStorages;
-
+public:
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xCommandDefinitions;
     ::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNameAccess >    m_xTableDefinitions;
 
@@ -256,7 +181,6 @@ public:
     */
     ::rtl::OUString                                     m_sRealFileURL;
 
-// <properties>
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >
                                                         m_xNumberFormatsSupplier;
     ::rtl::OUString                                     m_sConnectURL;
@@ -278,10 +202,7 @@ public:
     ::com::sun::star::uno::Sequence< ::rtl::OUString >  m_aTableTypeFilter;
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
                                                         m_aArgs;
-// </properties>
 
-
-    // ::cppu::OInterfaceContainerHelper                    m_aStorageListeners;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>               m_xSharedConnectionManager;
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >                   m_xStorage;
@@ -291,7 +212,6 @@ public:
     oslInterlockedCount                                 m_refCount;
     sal_uInt16                                          m_nControllerLockCount;
     sal_Bool                                            m_bOwnStorage;
-
 
     void reset();
 
@@ -419,6 +339,50 @@ public:
 
     /// returns a all known data source settings, including their default values
     static const AsciiPropertyValue* getDefaultDataSourceSettings();
+
+    /** retrieves the requested container of objects (forms/reports/tables/queries)
+    */
+    TContentPtr&    getObjectContainer( const ObjectType _eType );
+
+    /** determines whether the given storage is the storage of our embedded database (named "database"), if any
+    */
+    bool            isDatabaseStorage( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage ) const;
+
+    /** returns the name of the storage which is used to stored objects of the given type, if applicable
+    */
+    static ::rtl::OUString
+                    getObjectContainerStorageName( const ObjectType _eType );
+
+    /** checks our document's macro execution mode, using the interaction handler as supplied with our
+        load arguments
+    */
+    void            checkMacrosOnLoading();
+
+    /** adjusts our document's macro execution mode, without using any UI, assuming the user
+        would reject execution of macros, if she would have been asked.
+
+        If checkMacrosOnLoading has been called before (and thus the macro execution mode
+        is already adjusted), then the current execution mode is simply returned.
+
+        @return
+            whether or not macro execution is allowed
+    */
+    bool            adjustMacroMode_AutoReject();
+
+    /** resets our macro execute mode, so next time  the checkMacrosOnLoading is called, it will
+        behave as if it has never been called before
+    */
+    void            resetMacroExecutionMode();
+
+private:
+    // IMacroDocumentAccess overridables
+    virtual sal_Int16 getImposedMacroExecMode() const;
+    virtual ::rtl::OUString getDocumentLocation() const;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getLastCommitDocumentStorage();
+    virtual bool documentStorageHasMacros() const;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const;
+    virtual sal_Int16 getScriptingSignatureState() const;
+    virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const;
 
 private:
     void    impl_construct_nothrow();
