@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HViews.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:36:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:06:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,12 @@ namespace connectivity
 {
     namespace hsqldb
     {
-        class OViews : public sdbcx::OCollection
+        class HViews : public sdbcx::OCollection
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
+            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
             sal_Bool m_bInDrop;
+
         protected:
             virtual sdbcx::ObjectType createObject(const ::rtl::OUString& _rName);
             virtual void impl_refresh() throw(::com::sun::star::uno::RuntimeException);
@@ -58,11 +60,9 @@ namespace connectivity
 
             void createView( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
         public:
-            OViews(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rMetaData,::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
-                const TStringVector &_rVector) : sdbcx::OCollection(_rParent,sal_True,_rMutex,_rVector)
-                ,m_xMetaData(_rMetaData)
-                ,m_bInDrop(sal_False)
-            {}
+            HViews(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+                ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex, const TStringVector &_rVector );
 
             // only the name is identical to ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
