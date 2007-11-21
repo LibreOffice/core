@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:25:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:10:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,6 +286,7 @@ void ODsnTypeCollection::extractHostNamePort(const String& _rDsn,String& _sDatab
             }
             break;
         case DST_MSACCESS:
+        case DST_MSACCESS_2007:
             {
                 ::rtl::OUString sNewFileName;
                 if ( ::osl::FileBase::getFileURLFromSystemPath( sUrl, sNewFileName ) == ::osl::FileBase::E_None )
@@ -308,6 +309,7 @@ sal_Bool ODsnTypeCollection::isFileSystemBased(DATASOURCE_TYPE _eType) const
         case DST_FLAT:
         case DST_CALC:
         case DST_MSACCESS:
+        case DST_MSACCESS_2007:
             return sal_True;
 
         case DST_USERDEFINE1:
@@ -351,6 +353,7 @@ sal_Bool ODsnTypeCollection::supportsTableCreation(DATASOURCE_TYPE _eType)
             case DST_ADABAS:
             case DST_ADO:
             case DST_MSACCESS:
+            case DST_MSACCESS_2007:
             case DST_MYSQL_ODBC:
             case DST_ODBC:
             case DST_MYSQL_JDBC:
@@ -375,6 +378,7 @@ sal_Bool ODsnTypeCollection::supportsBrowsing(DATASOURCE_TYPE _eType)
         case DST_ADABAS:
         case DST_ADO:
         case DST_MSACCESS:
+        case DST_MSACCESS_2007:
         case DST_MYSQL_ODBC:
         case DST_ODBC:
         case DST_MOZILLA:
@@ -443,7 +447,13 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn) const
     {
         nSeparator = _rDsn.Search((sal_Unicode)':', nSeparator + 1);
         if (STRING_NOTFOUND != nSeparator && _rDsn.EqualsIgnoreCaseAscii("sdbc:ado:access",0, nSeparator) )
+        {
+            nSeparator = _rDsn.Search((sal_Unicode)';', nSeparator + 1);
+            if (STRING_NOTFOUND != nSeparator && _rDsn.EqualsIgnoreCaseAscii("sdbc:ado:access:Provider=Microsoft.ACE.OLEDB.12.0",0, nSeparator) )
+                return DST_MSACCESS_2007;
+
             return DST_MSACCESS;
+        }
         return DST_ADO;
     }
     if (_rDsn.EqualsIgnoreCaseAscii("sdbc:flat:", 0, nSeparator))
@@ -475,6 +485,8 @@ DATASOURCE_TYPE ODsnTypeCollection::implDetermineType(const String& _rDsn) const
             return DST_EVOLUTION;
         if (_rDsn.EqualsIgnoreCaseAscii("kab", nSeparator,_rDsn.Len() - nSeparator))
             return DST_KAB;
+        if (_rDsn.EqualsIgnoreCaseAscii("macab", nSeparator,_rDsn.Len() - nSeparator))
+            return DST_MACAB;
     }
 
     // find third :
