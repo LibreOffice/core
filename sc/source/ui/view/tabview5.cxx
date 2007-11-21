@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview5.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:03:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:11:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -415,12 +415,30 @@ String ScTabView::GetSelectedChartName() const
         return EMPTY_STRING;
 }
 
-void ScTabView::SetZoom( const Fraction& rNewX, const Fraction& rNewY )
+SvxZoomType ScTabView::GetZoomType() const
 {
-    aViewData.SetZoom(rNewX,rNewY);
+    return aViewData.GetZoomType();
+}
+
+void ScTabView::SetZoomType( SvxZoomType eNew, BOOL bAll )
+{
+    aViewData.SetZoomType( eNew, bAll );
+}
+
+void ScTabView::SetZoom( const Fraction& rNewX, const Fraction& rNewY, BOOL bAll )
+{
+    aViewData.SetZoom( rNewX, rNewY, bAll );
     if (pDrawView)
         pDrawView->RecalcScale();
     ZoomChanged();              // einzeln wegen CLOOKs
+}
+
+void ScTabView::RefreshZoom()
+{
+    aViewData.RefreshZoom();
+    if (pDrawView)
+        pDrawView->RecalcScale();
+    ZoomChanged();
 }
 
 void ScTabView::SetPagebreakMode( BOOL bSet )
