@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabletree.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:14:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:51:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,8 +181,7 @@ void OTableTreeListBox::notifyHiContrastChanged()
                 else
                 {
                     String sCompleteName( getQualifiedTableName( pEntryLoop ) );
-                    aImage = m_pImageProvider->getImage( sCompleteName, DatabaseObject::TABLE, false );
-                    aImageHC = m_pImageProvider->getImage( sCompleteName, DatabaseObject::TABLE, true );
+                    m_pImageProvider->getImages( sCompleteName, DatabaseObject::TABLE, aImage, aImageHC );
                 }
 
                 pContextBitmapItem->SetBitmap1( aImage, BMP_COLOR_NORMAL );
@@ -480,8 +479,9 @@ SvLBoxEntry* OTableTreeListBox::implAddEntry(
     {
         pRet = InsertEntry( sName, pParentEntry, FALSE, LIST_APPEND );
 
-        Image aImage( m_pImageProvider->getImage( _rTableName, DatabaseObject::TABLE, false ) );
-        Image aImageHC( m_pImageProvider->getImage( _rTableName, DatabaseObject::TABLE, true ) );
+        Image aImage, aImageHC;
+        m_pImageProvider->getImages( _rTableName, DatabaseObject::TABLE, aImage, aImageHC );
+
         SetExpandedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
         SetCollapsedEntryBmp( pRet, aImage, BMP_COLOR_NORMAL );
         SetExpandedEntryBmp( pRet, aImageHC, BMP_COLOR_HIGHCONTRAST );
