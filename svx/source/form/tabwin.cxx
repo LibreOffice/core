@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:18:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:26:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,21 +35,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#ifndef _SVX_TABWIN_HXX
+
 #include "tabwin.hxx"
-#endif
-#ifndef _SVX_FMTOOLS_HXX
 #include "fmtools.hxx"
-#endif
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
-#ifndef _SVX_FMSERVS_HXX
 #include "fmservs.hxx"
-#endif
-#ifndef _SVX_DBAEXCHANGE_HXX_
+#include "stringlistresource.hxx"
+
+#include <svx/svxids.hrc>
 #include <svx/dbaexchange.hxx>
-#endif
 
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -423,18 +416,18 @@ void FmFieldWin::UpdateContent(const ::com::sun::star::uno::Reference< ::com::su
 
         // Prefix setzen
         UniString  aPrefix;
-        UniString  aPrefixes( SVX_RES(RID_STR_TABWIN_PREFIX) );
+        StringListResource aPrefixes( SVX_RES( RID_RSC_TABWIN_PREFIX ) );
 
         switch (m_nObjectType)
         {
             case CommandType::TABLE:
-                aPrefix = aPrefixes.GetToken(0);
+                aPrefix = aPrefixes[0];
                 break;
             case CommandType::QUERY:
-                aPrefix = aPrefixes.GetToken(1);
+                aPrefix = aPrefixes[1];
                 break;
             default:
-                aPrefix = aPrefixes.GetToken(2);
+                aPrefix = aPrefixes[2];
                 break;
         }
 
