@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:05:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:17:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -715,6 +715,7 @@ public:
 
     //SS fuer Beschriftungen
     void InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
+                      const String& rNumberSeparator,
                       const BOOL bBefore, const USHORT nId,
                       const String& rCharacterStyle,
                       const BOOL bCpyBrd = TRUE );
