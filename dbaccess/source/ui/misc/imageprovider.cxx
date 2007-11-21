@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imageprovider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:49:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:10:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,44 +36,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACCESS_IMAGEPROVIDER_HXX
 #include "imageprovider.hxx"
-#endif
-#ifndef _DBU_RESOURCE_HRC_
 #include "dbu_resource.hrc"
-#endif
-#ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
-#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
 #include <com/sun/star/graphic/XGraphic.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GRAPHIC_GRAPHICCOLORMODE_HPP_
 #include <com/sun/star/graphic/GraphicColorMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_APPLICATION_XTABLEUIPROVIDER_HPP_
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
-#endif
+#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 /** === end UNO includes === **/
 
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
-
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
 
 //........................................................................
 namespace dbaui
@@ -85,69 +61,73 @@ namespace dbaui
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
-    using ::com::sun::star::sdbcx::XTablesSupplier;
     using ::com::sun::star::container::XNameAccess;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::graphic::XGraphic;
     using ::com::sun::star::sdb::application::XTableUIProvider;
     using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::sdbcx::XViewsSupplier;
+    using ::com::sun::star::uno::UNO_SET_THROW;
     /** === end UNO using === **/
     namespace GraphicColorMode = ::com::sun::star::graphic::GraphicColorMode;
 
     //====================================================================
-    //= ImageProvider_Impl
+    //= ImageProvider_Data
     //====================================================================
-    struct ImageProvider_Impl
+    struct ImageProvider_Data
     {
-        Reference< XConnection >    xConnection;
+        /// the connection we work with
+        Reference< XConnection >        xConnection;
+        /// the views of the connection, if the DB supports views
+        Reference< XNameAccess >        xViews;
+        /// interface for providing table's UI
+        Reference< XTableUIProvider >   xTableUI;
     };
 
     //--------------------------------------------------------------------
     namespace
     {
         //................................................................
-        static Reference< XGraphic > lcl_getConnectionProvidedTableIcon_nothrow(
-            const Reference< XConnection >& _rxConnection, const ::rtl::OUString& _rName, bool _bHighContrast )
+        static void lcl_getConnectionProvidedTableIcon_nothrow(  const ImageProvider_Data& _rData,
+            const ::rtl::OUString& _rName, Reference< XGraphic >& _out_rxGraphic, Reference< XGraphic >& _out_rxGraphicHC )
         {
             try
             {
-                Reference< XTableUIProvider > xProvider( _rxConnection, UNO_QUERY );
-                if ( xProvider.is() )
-                    return xProvider->getTableIcon( _rName, _bHighContrast ? GraphicColorMode::HIGH_CONTRAST : GraphicColorMode::NORMAL );
+                if ( _rData.xTableUI.is() )
+                {
+                    _out_rxGraphic = _rData.xTableUI->getTableIcon( _rName, GraphicColorMode::NORMAL );
+                    _out_rxGraphicHC = _rData.xTableUI->getTableIcon( _rName, GraphicColorMode::HIGH_CONTRAST );
+                }
             }
             catch( const Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
-            return NULL;
         }
 
         //................................................................
-        static USHORT lcl_getTableImageResourceID_nothrow( const Reference< XConnection >& _rxConnection, const ::rtl::OUString& _rName, bool _bHighContrast )
+        static void lcl_getTableImageResourceID_nothrow( const ImageProvider_Data& _rData, const ::rtl::OUString& _rName,
+            USHORT& _out_rResourceID, USHORT& _out_rResourceID_HC )
         {
-            USHORT nResourceID( 0 );
+            _out_rResourceID = _out_rResourceID_HC = 0;
             try
             {
-                Reference< XTablesSupplier > xTableSupp( _rxConnection, UNO_QUERY_THROW );
-                Reference< XNameAccess > xTables( xTableSupp->getTables(), UNO_QUERY_THROW );
-
-                OSL_ENSURE( xTables->hasByName( _rName ), "lcl_getTableImageResourceID_nothrow: table with the given name does not exist!" );
-
-                Reference< XPropertySet > xTableProps( xTables->getByName( _rName ), UNO_QUERY_THROW );
-                ::rtl::OUString sTableType;
-                OSL_VERIFY( xTableProps->getPropertyValue( PROPERTY_TYPE ) >>= sTableType );
-                bool bIsView = sTableType.equalsAscii( "VIEW" );
-
+                bool bIsView = _rData.xViews.is() && _rData.xViews->hasByName( _rName );
                 if ( bIsView )
-                    nResourceID = _bHighContrast ? VIEW_TREE_ICON_SCH : VIEW_TREE_ICON;
+                {
+                    _out_rResourceID = VIEW_TREE_ICON;
+                    _out_rResourceID_HC = VIEW_TREE_ICON_SCH;
+                }
                 else
-                    nResourceID = _bHighContrast ? TABLE_TREE_ICON_SCH : TABLE_TREE_ICON;
+                {
+                    _out_rResourceID = TABLE_TREE_ICON;
+                    _out_rResourceID_HC = TABLE_TREE_ICON_SCH;
+                }
             }
             catch( const Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
-            return nResourceID;
         }
     }
     //====================================================================
@@ -155,42 +135,62 @@ namespace dbaui
     //====================================================================
     //--------------------------------------------------------------------
     ImageProvider::ImageProvider()
-        :m_pImpl( new ImageProvider_Impl )
+        :m_pData( new ImageProvider_Data )
     {
     }
 
     //--------------------------------------------------------------------
     ImageProvider::ImageProvider( const Reference< XConnection >& _rxConnection )
-        :m_pImpl( new ImageProvider_Impl )
+        :m_pData( new ImageProvider_Data )
     {
-        m_pImpl->xConnection = _rxConnection;
+        m_pData->xConnection = _rxConnection;
+        try
+        {
+            Reference< XViewsSupplier > xSuppViews( m_pData->xConnection, UNO_QUERY );
+            if ( xSuppViews.is() )
+                m_pData->xViews.set( xSuppViews->getViews(), UNO_SET_THROW );
+
+            m_pData->xTableUI.set( _rxConnection, UNO_QUERY );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 
     //--------------------------------------------------------------------
-    Image ImageProvider::getImage( const String& _rName, sal_Int32 _nDatabaseObjectType, bool _bHighContrast )
+    void ImageProvider::getImages( const String& _rName, const sal_Int32 _nDatabaseObjectType, Image& _out_rImage, Image& _out_rImageHC )
     {
-        Image aObjectImage;
-
         if ( _nDatabaseObjectType != DatabaseObject::TABLE )
+        {
             // for types other than tables, the icon does not depend on the concrete object
-            aObjectImage = getDefaultImage( _nDatabaseObjectType, _bHighContrast );
+            _out_rImage = getDefaultImage( _nDatabaseObjectType, false );
+            _out_rImageHC = getDefaultImage( _nDatabaseObjectType, true );
+        }
         else
         {
             // check whether the connection can give us an icon
-            Reference< XGraphic > xGraphic = lcl_getConnectionProvidedTableIcon_nothrow( m_pImpl->xConnection, _rName, _bHighContrast );
+            Reference< XGraphic > xGraphic;
+            Reference< XGraphic > xGraphicHC;
+            lcl_getConnectionProvidedTableIcon_nothrow( *m_pData, _rName, xGraphic, xGraphicHC );
             if ( xGraphic.is() )
-                aObjectImage = Image( xGraphic );
+                _out_rImage = Image( xGraphic );
+            if ( xGraphicHC.is() )
+                _out_rImageHC = Image( xGraphicHC );
 
-            if ( !aObjectImage )
+            if ( !_out_rImage || !_out_rImageHC )
             {
                 // no -> determine by type
-                USHORT nImageResourceID = lcl_getTableImageResourceID_nothrow( m_pImpl->xConnection, _rName, _bHighContrast );
-                if ( nImageResourceID )
-                    aObjectImage = Image( ModuleRes( nImageResourceID ) );
+                USHORT nImageResourceID = 0;
+                USHORT nImageResourceID_HC = 0;
+                lcl_getTableImageResourceID_nothrow( *m_pData, _rName, nImageResourceID, nImageResourceID_HC );
+
+                if ( nImageResourceID && !_out_rImage )
+                    _out_rImage = Image( ModuleRes( nImageResourceID ) );
+                if ( nImageResourceID_HC && !_out_rImageHC )
+                    _out_rImageHC = Image( ModuleRes( nImageResourceID_HC ) );
             }
         }
-
-        return aObjectImage;
     }
 
     //--------------------------------------------------------------------
