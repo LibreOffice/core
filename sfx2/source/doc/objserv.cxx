@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:08:44 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:47:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,7 @@
 #endif
 
 #include <sfx2/app.hxx>
+#include <sfx2/signaturestate.hxx>
 #include "sfxresid.hxx"
 #include <sfx2/event.hxx>
 #include <sfx2/request.hxx>
