@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:05:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:09:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1119,6 +1119,12 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         bSaveAppOptions = TRUE;
     }
 
+    if ( IS_AVAILABLE(SID_SC_OPT_SYNCZOOM,pItem) )
+    {
+        pAppCfg->SetSynchronizeZoom( static_cast<const SfxBoolItem*>(pItem)->GetValue() );
+        bSaveAppOptions = TRUE;
+    }
+
     //============================================
     // ViewOptions
     //============================================
@@ -1470,7 +1476,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
             //  update view scale
             ScViewData* pViewData = pOneViewSh->GetViewData();
-            pOneViewSh->SetZoom( pViewData->GetZoomX(), pViewData->GetZoomY() );
+            pOneViewSh->SetZoom( pViewData->GetZoomX(), pViewData->GetZoomY(), FALSE );
 
             //  repaint
             pOneViewSh->PaintGrid();
@@ -2090,6 +2096,7 @@ SfxItemSet*  ScModule::CreateItemSet( USHORT nId )
                             SID_SCDOCOPTIONS,       SID_SCDOCOPTIONS,
                             // TP_VIEW:
                             SID_SCVIEWOPTIONS,      SID_SCVIEWOPTIONS,
+                            SID_SC_OPT_SYNCZOOM,    SID_SC_OPT_SYNCZOOM,
                             // TP_INPUT:
                             SID_SC_INPUT_SELECTION,SID_SC_INPUT_MARK_HEADER,
                             SID_SC_INPUT_TEXTWYSIWYG,SID_SC_INPUT_TEXTWYSIWYG,
@@ -2132,6 +2139,7 @@ SfxItemSet*  ScModule::CreateItemSet( USHORT nId )
 
         // TP_VIEW
         pRet->Put( ScTpViewItem( SID_SCVIEWOPTIONS, aViewOpt ) );
+        pRet->Put( SfxBoolItem( SID_SC_OPT_SYNCZOOM, GetAppOptions().GetSynchronizeZoom() ) );
 
         // TP_INPUT
         const ScInputOptions& rInpOpt = GetInputOptions();
