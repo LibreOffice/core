@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 08:46:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:39:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -477,7 +477,7 @@ Resource RID_ERRHDL
     };
     String ERRCODE_SFX_DOCUMENT_MACRO_DISABLED
     {
-        Text [ en-US ] = "This document contains macros.\nExecution of this macros is disabled due to the current macro security setting. Therefore, some functionality may not be available." ;
+        Text [ en-US ] = "This document contains macros.\n\nMacros may contain viruses. Execution of macros is disabled due to the current macro security setting in Tools - Options - %PRODUCTNAME - Security.\n\nTherefore, some functionality may not be available." ;
     };
     String ERRCODE_SFX_BROKENSIGNATURE
     {
