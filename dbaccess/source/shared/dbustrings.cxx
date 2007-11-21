@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbustrings.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:57:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:48:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,9 @@ namespace dbaui
     //= other
     //============================================================
     IMPLEMENT_CONSTASCII_USTRING(FRAME_NAME_QUERY_PREVIEW,          "QueryPreview");
-    IMPLEMENT_CONSTASCII_USTRING( PARAM_INDEPENDENT_SQL_COMMAND,    "IndependentSQLCommand");
     IMPLEMENT_CONSTASCII_USTRING(SERVICE_CONTROLDEFAULT,            "com.sun.star.comp.dbu.OColumnControl");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_QUERYDESIGNVIEW,          "QueryDesignView");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_GRAPHICAL_DESIGN,         "GraphicalDesign");
 
     //============================================================
     //= properties
