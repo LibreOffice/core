@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statement.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-17 14:52:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:41:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xAggregateAsSet;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCancellable > m_xAggregateAsCancellable;
     sal_Bool                m_bUseBookmarks;
+    sal_Bool                m_bEscapeProcessing;
 
     virtual ~OStatementBase();
 
