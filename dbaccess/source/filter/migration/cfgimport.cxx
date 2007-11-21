@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgimport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:33:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:42:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1014,8 +1014,8 @@ void SAL_CALL  OCfgImport::overrideProperty(
                     ::rtl::OUString sProp;
                     if ( aName == CONFIGKEY_QRYDESCR_COMMAND )
                         sProp = PROPERTY_COMMAND;
-                    else if ( aName == CONFIGKEY_QRYDESCR_USE_ESCAPE_PROCESSING )
-                        sProp = PROPERTY_USE_ESCAPE_PROCESSING;
+                    else if ( aName == CONFIGKEY_QRYDESCR_ESCAPE_PROCESSING )
+                        sProp = PROPERTY_ESCAPE_PROCESSING;
                     else if ( aName == CONFIGKEY_QRYDESCR_UPDATE_TABLENAME )
                         sProp = PROPERTY_UPDATE_TABLENAME;
                     else if ( aName == CONFIGKEY_QRYDESCR_UPDATE_SCHEMANAME )
