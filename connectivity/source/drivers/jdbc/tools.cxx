@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 10:41:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:04:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,7 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
         // this is a special property to find the jdbc driver
         if( pBegin->Name.compareToAscii("JavaDriverClass") &&
             pBegin->Name.compareToAscii("JavaDriverClassPath") &&
+            pBegin->Name.compareToAscii("SystemProperties") &&
             pBegin->Name.compareToAscii("CharSet") &&
             pBegin->Name.compareToAscii("AppendTableAlias") &&
             pBegin->Name.compareToAscii("GenerateASBeforeCorrelationName") &&
