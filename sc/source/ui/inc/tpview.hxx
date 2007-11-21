@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpview.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:28:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:09:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,9 @@ class ScTpContentOptions : public SfxTabPage
     ListBox         aDiagramLB;
     FixedText       aDrawFT;
     ListBox         aDrawLB;
+
+    FixedLine       aZoomGB;
+    CheckBox        aSyncZoomCB;
 
     FixedLine       aSeparator2FL;
 
