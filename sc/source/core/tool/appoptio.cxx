@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appoptio.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:41:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:08:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,7 @@ void ScAppOptions::SetDefaults()
 
     nZoom           = 100;
     eZoomType       = SVX_ZOOM_PERCENT;
+    bSynchronizeZoom = TRUE;
     nStatusFunc     = SUBTOTAL_FUNC_SUM;
     bAutoComplete   = TRUE;
     bDetectiveAuto  = TRUE;
@@ -126,6 +127,7 @@ const ScAppOptions& ScAppOptions::operator=( const ScAppOptions& rCpy )
 {
     eMetric         = rCpy.eMetric;
     eZoomType       = rCpy.eZoomType;
+    bSynchronizeZoom = rCpy.bSynchronizeZoom;
     nZoom           = rCpy.nZoom;
     SetLRUFuncList( rCpy.pLRUList, rCpy.nLRUFuncCount );
     nStatusFunc     = rCpy.nStatusFunc;
@@ -365,7 +367,8 @@ void lcl_GetSortList( Any& rDest )
 #define SCLAYOUTOPT_STATUSBAR       1
 #define SCLAYOUTOPT_ZOOMVAL         2
 #define SCLAYOUTOPT_ZOOMTYPE        3
-#define SCLAYOUTOPT_COUNT           4
+#define SCLAYOUTOPT_SYNCZOOM        4
+#define SCLAYOUTOPT_COUNT           5
 
 #define CFGPATH_INPUT       "Office.Calc/Input"
 
@@ -406,7 +409,8 @@ Sequence<OUString> ScAppCfg::GetLayoutPropertyNames()
         "Other/MeasureUnit/NonMetric",  // SCLAYOUTOPT_MEASURE
         "Other/StatusbarFunction",      // SCLAYOUTOPT_STATUSBAR
         "Zoom/Value",                   // SCLAYOUTOPT_ZOOMVAL
-        "Zoom/Type"                     // SCLAYOUTOPT_ZOOMTYPE
+        "Zoom/Type",                    // SCLAYOUTOPT_ZOOMTYPE
+        "Zoom/Synchronize"              // SCLAYOUTOPT_SYNCZOOM
     };
     Sequence<OUString> aNames(SCLAYOUTOPT_COUNT);
     OUString* pNames = aNames.getArray();
@@ -536,6 +540,9 @@ ScAppCfg::ScAppCfg() :
                         break;
                     case SCLAYOUTOPT_ZOOMTYPE:
                         if (pValues[nProp] >>= nIntVal) SetZoomType( (SvxZoomType) nIntVal );
+                        break;
+                    case SCLAYOUTOPT_SYNCZOOM:
+                        SetSynchronizeZoom( ScUnoHelpFunctions::GetBoolFromAny( pValues[nProp] ) );
                         break;
                 }
             }
@@ -698,6 +705,9 @@ IMPL_LINK( ScAppCfg, LayoutCommitHdl, void *, EMPTYARG )
                 break;
             case SCLAYOUTOPT_ZOOMTYPE:
                 pValues[nProp] <<= (sal_Int32) GetZoomType();
+                break;
+            case SCLAYOUTOPT_SYNCZOOM:
+                ScUnoHelpFunctions::SetBoolInAny( pValues[nProp], GetSynchronizeZoom() );
                 break;
         }
     }
