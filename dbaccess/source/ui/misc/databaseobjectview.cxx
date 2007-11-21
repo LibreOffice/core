@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databaseobjectview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:36:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:08:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,9 +235,9 @@ namespace dbaui
     //----------------------------------------------------------------------
     QueryDesigner::QueryDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication,
         const Reference< XFrame >& _rxParentFrame,
-        sal_Bool _bCreateView, sal_Bool _bPreferSQLView )
+        bool _bCreateView, sal_Bool _bPreferSQLView )
         :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< ::rtl::OUString >( URL_COMPONENT_QUERYDESIGN ) )
-        ,m_bCreateView( _bCreateView )
+        ,m_nCommandType( _bCreateView ? CommandType::TABLE : CommandType::QUERY )
         ,m_bPreferSQLView( _bPreferSQLView )
     {
     }
@@ -251,18 +251,17 @@ namespace dbaui
         sal_Bool bIncludeQueryName = 0 != _rObjectName.getLength();
 
         sal_Int32 nPos = _rDispatchArguments.getLength();
-        _rDispatchArguments.realloc(_rDispatchArguments.getLength() + 2 + (bIncludeQueryName ? 1 : 0) );
+        _rDispatchArguments.realloc(_rDispatchArguments.getLength() + 2 + ( bIncludeQueryName ? 1 : 0 ) );
 
+        _rDispatchArguments[nPos  ].Name = PROPERTY_GRAPHICAL_DESIGN;
+        _rDispatchArguments[nPos++].Value <<= ::cppu::bool2any( !m_bPreferSQLView );
 
-        _rDispatchArguments[nPos  ].Name = PROPERTY_QUERYDESIGNVIEW;
-        _rDispatchArguments[nPos++].Value <<= ::cppu::bool2any(!m_bPreferSQLView);
+        _rDispatchArguments[nPos  ].Name = PROPERTY_COMMANDTYPE;
+        _rDispatchArguments[nPos++].Value <<= m_nCommandType;
 
-        _rDispatchArguments[nPos  ].Name = PROPERTY_CREATEVIEW;
-        _rDispatchArguments[nPos++].Value <<= ::cppu::bool2any(m_bCreateView);
-
-        if (bIncludeQueryName)
+        if ( bIncludeQueryName )
         {
-            _rDispatchArguments[nPos  ].Name = PROPERTY_CURRENTQUERY;
+            _rDispatchArguments[nPos  ].Name = PROPERTY_COMMAND;
             _rDispatchArguments[nPos++].Value <<= _rObjectName;
         }
     }
@@ -395,10 +394,10 @@ namespace dbaui
     {
     }
     //======================================================================
-    //= OReportDesigner
+    //= ReportDesigner
     //======================================================================
     //----------------------------------------------------------------------
-    OReportDesigner::OReportDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication , const Reference< XFrame >& _rxParentFrame)
+    ReportDesigner::ReportDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication , const Reference< XFrame >& _rxParentFrame)
         :DatabaseObjectView( _rxORB, _rxApplication,  _rxParentFrame,static_cast< ::rtl::OUString >( URL_COMPONENT_REPORTDESIGN ) )
     {
     }
