@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:20:04 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 18:51:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,8 +92,7 @@ DEF1NAME=		$(SHL1TARGET)
 # --- Targets ------------------------------------------------------
 .INCLUDE :	target.mk
 
-$(SRS)$/chinese_dictionarydialog.srs: $(INCCOM)$/chinese_direction.hrc
-$(SRS)$/chinese_translationdialog.srs: $(INCCOM)$/chinese_direction.hrc
+$(SRS)$/$(TARGET).srs: $(INCCOM)$/chinese_direction.hrc
 $(SLO)$/chinese_dictionarydialog.obj: $(INCCOM)$/chinese_direction.hrc
 $(SLO)$/chinese_translationdialog.obj: $(INCCOM)$/chinese_direction.hrc
 
