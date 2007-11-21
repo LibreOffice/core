@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HConnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:39:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:00:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,65 +36,29 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef CONNECTIVITY_HSQLDB_CONNECTION_HXX
 #include "hsqldb/HConnection.hxx"
-#endif
-#ifndef CONNECTIVITY_HSQLUI_HRC
+#include "hsqldb/HTools.hxx"
 #include "hsqlui.hrc"
-#endif
+
+#include <connectivity/dbtools.hxx>
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XDATADEFINITIONSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_SERVICENOTREGISTEREDEXCEPTION_HPP_
 #include <com/sun/star/lang/ServiceNotRegisteredException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_GRAPHIC_GRAPHICCOLORMODE_HPP_
 #include <com/sun/star/graphic/GraphicColorMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
-#include <connectivity/dbtools.hxx>
-#endif
-
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef COMPHELPER_INC_COMPHELPER_LISTENERNOTIFICATION_HXX
-#include <comphelper/listenernotification.hxx>
-#endif
-#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
 #include <comphelper/componentcontext.hxx>
-#endif
-
-#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <comphelper/listenernotification.hxx>
+#include <comphelper/sequence.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#endif
-
-#ifndef TOOLS_DIAGNOSE_EX_H
-#include <tools/diagnose_ex.h>
-#endif
-
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
+#include <tools/diagnose_ex.h>
 
 /** === begin UNO using === **/
 using ::com::sun::star::util::XFlushListener;
@@ -211,16 +175,6 @@ namespace connectivity { namespace hsqldb
         {
             if ( m_xConnection.is() )
             {
-//                Reference< XStatement> xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
-//                xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 0" ) ) );
-//
-//                sal_Bool bPreviousAutoCommit = m_xConnection->getAutoCommit();
-//                m_xConnection->setAutoCommit( sal_False );
-//                m_xConnection->commit();
-//                m_xConnection->setAutoCommit( bPreviousAutoCommit );
-//
-//                if ( xStmt.is() )
-//                    xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SET WRITE_DELAY 60" ) ) );
                 Reference< XStatement > xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
                 xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CHECKPOINT" ) ) );
             }
@@ -228,9 +182,9 @@ namespace connectivity { namespace hsqldb
             EventObject aFlushedEvent( *this );
             m_aFlushListeners.notifyEach( &XFlushListener::flushed, aFlushedEvent );
         }
-        catch(::com::sun::star::uno::Exception&)
+        catch(const Exception& )
         {
-            OSL_ENSURE( false, "OHsqlConnection::flush: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
    }
 
@@ -381,23 +335,8 @@ namespace connectivity { namespace hsqldb
             // get the table information
             ::rtl::OUStringBuffer sSQL;
             sSQL.appendAscii( "SELECT HSQLDB_TYPE FROM INFORMATION_SCHEMA.SYSTEM_TABLES" );
-            sSQL.appendAscii( " WHERE " );
-            if ( sCatalog.getLength() )
-            {
-                sSQL.appendAscii( "TABLE_CAT = '" );
-                sSQL.append     ( sCatalog );
-                sSQL.appendAscii( "' AND " );
-            }
-            if ( sSchema.getLength() )
-            {
-                sSQL.appendAscii( "' TABLE_SCHEM = '" );
-                sSQL.append     ( sSchema );
-                sSQL.appendAscii( "' AND " );
-            }
-            sSQL.appendAscii( "TABLE_NAME = '" );
-            sSQL.append     ( sName );
-            sSQL.appendAscii( "' AND TABLE_TYPE = '" );
-            sSQL.appendAscii( "TABLE'" );
+            HTools::appendTableFilterCrit( sSQL, sCatalog, sSchema, sName, true );
+            sSQL.appendAscii( " AND TABLE_TYPE = 'TABLE'" );
 
             Reference< XStatement > xStatement( xMe->createStatement(), UNO_QUERY_THROW );
             Reference< XResultSet > xTableHsqlType( xStatement->executeQuery( sSQL.makeStringAndClear() ), UNO_QUERY_THROW );
