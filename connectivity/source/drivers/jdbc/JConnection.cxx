@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JConnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:50:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:03:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
-#ifndef _CONNECTIVITY_JAVA_SQL_CONNECTION_HXX_
+
 #include "java/sql/Connection.hxx"
-#endif
 #include "java/lang/Class.hxx"
-#ifndef _CONNECTIVITY_JAVA_TOOLS_HXX_
 #include "java/tools.hxx"
-#endif
+#include "java/ContextClassLoader.hxx"
+
 #ifndef _CONNECTIVITY_JAVA_SQL_DATABASEMETADATA_HXX_
 #include "java/sql/DatabaseMetaData.hxx"
 #endif
@@ -66,6 +65,12 @@
 #ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
 #include <com/sun/star/sdbc/SQLWarning.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
+#include <com/sun/star/sdbc/SQLWarning.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include "connectivity/sqlparse.hxx"
 #endif
@@ -73,6 +78,7 @@
 #include "connectivity/dbexception.hxx"
 #endif
 #include "java/util/Property.hxx"
+#include "java/LocalRef.hxx"
 #include "resource/jdbc_log.hrc"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "jvmaccess/classpath.hxx"
@@ -83,6 +89,7 @@
 #include <memory>
 
 using namespace connectivity;
+using namespace connectivity::jdbc;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
@@ -91,29 +98,15 @@ using namespace ::com::sun::star::lang;
 
 namespace {
 
-struct JObject {
-    JObject(JNIEnv * environment): object(NULL), m_environment(environment) {}
-    ~JObject() { if (object != NULL) m_environment->DeleteLocalRef(object); }
-
-    jobject release() {
-        jobject t = object;
-        object = NULL;
-        return t;
-    }
-
-    jobject object;
-
-private:
-    JNIEnv *& m_environment;
-};
-
 struct ClassMapEntry {
     ClassMapEntry(
         rtl::OUString const & theClassPath, rtl::OUString const & theClassName):
-        classPath(theClassPath), className(theClassName), classObject(NULL) {}
+        classPath(theClassPath), className(theClassName), classLoader(NULL),
+        classObject(NULL) {}
 
     rtl::OUString classPath;
     rtl::OUString className;
+    jweak classLoader;
     jweak classObject;
 };
 
@@ -132,14 +125,51 @@ struct ClassMapDataInit {
     }
 };
 
-// Load a class (see jvmaccess::ClassPath::loadClass in jvmaccess/classpath.hxx
-// for details).  A map from (classPath, name) pairs to weak Java class
-// references is maintained, so that a class is only loaded once.  If null is
-// returned, a (still pending) JNI exception occurred.
-jclass loadClass(
-    Reference< XComponentContext > const & context, JNIEnv * environment,
-    rtl::OUString const & classPath, rtl::OUString const & name)
+template < typename T >
+bool getLocalFromWeakRef( jweak& _weak, LocalRef< T >& _inout_local )
 {
+    _inout_local.set( static_cast< T >( _inout_local.env().NewLocalRef( _weak ) ) );
+
+    if ( !_inout_local.is() )
+    {
+        if ( _inout_local.env().ExceptionCheck())
+        {
+            return false;
+        }
+        else if ( _weak != NULL )
+        {
+            _inout_local.env().DeleteWeakGlobalRef( _weak );
+            _weak = NULL;
+        }
+    }
+    return true;
+}
+
+// Load a class.  A map from pairs of (classPath, name) to pairs of weak Java
+// references to (ClassLoader, Class) is maintained, so that a class is only
+// loaded once.
+//
+// It may happen that the weak reference to the ClassLoader becomes null while
+// the reference to the Class remains non-null (in case the Class was actually
+// loaded by some parent of the ClassLoader), in which case the ClassLoader is
+// resurrected (which cannot cause any classes to be loaded multiple times, as
+// the ClassLoader is no longer reachable, so no classes it has ever loaded are
+// still reachable).
+//
+// Similarly, it may happen that the weak reference to the Class becomes null
+// while the reference to the ClassLoader remains non-null, in which case the
+// Class is simply re-loaded.
+//
+// This code is close to the implementation of jvmaccess::ClassPath::loadClass
+// in jvmaccess/classpath.hxx, but not close enough to avoid the duplication.
+//
+// If false is returned, a (still pending) JNI exception occurred.
+bool loadClass(
+    Reference< XComponentContext > const & context, JNIEnv& environment,
+    rtl::OUString const & classPath, rtl::OUString const & name,
+    LocalRef< jobject > * classLoaderPtr, LocalRef< jclass > * classPtr)
+{
+    OSL_ASSERT(classLoaderPtr != NULL);
     // For any jweak entries still present in the map upon destruction,
     // DeleteWeakGlobalRef is not called (which is a leak):
     ClassMapData * d =
@@ -147,47 +177,114 @@ jclass loadClass(
         osl::GetGlobalMutex >::create(
             ClassMapDataInit(), osl::GetGlobalMutex());
     osl::MutexGuard g(d->mutex);
-    JObject cl(environment);
+    ClassMap::iterator i(d->map.begin());
+    LocalRef< jobject > cloader(environment);
+    LocalRef< jclass > cl(environment);
     // Prune dangling weak references from the list while searching for a match,
     // so that the list cannot grow unbounded:
-    for (ClassMap::iterator i(d->map.begin()); i != d->map.end();) {
-        JObject o(environment);
-        o.object = environment->NewLocalRef(i->classObject);
-        if (o.object == NULL) {
-            if (environment->ExceptionCheck()) {
-                return NULL;
-            }
-            if (i->classObject != NULL) {
-                environment->DeleteWeakGlobalRef(i->classObject);
-            }
+    for (; i != d->map.end();)
+    {
+        LocalRef< jobject > classLoader( environment );
+        if ( !getLocalFromWeakRef( i->classLoader, classLoader ) )
+            return false;
+
+        LocalRef< jclass > classObject( environment );
+        if ( !getLocalFromWeakRef( i->classObject, classObject ) )
+            return false;
+
+        if ( !classLoader.is() && !classObject.is() )
+        {
             i = d->map.erase(i);
-        } else {
-            if (i->classPath == classPath && i->className == name) {
-                cl.object = o.release();
-            }
+        }
+        else if ( i->classPath == classPath && i->className == name )
+        {
+            cloader.set( classLoader.release() );
+            cl.set( classObject.release() );
+            break;
+        }
+        else
+        {
             ++i;
         }
     }
-    if (cl.object == NULL) {
-        // Push a new ClassMapEntry (which can potentially fail) before loading
-        // the class, so that it never happens that a class is loaded but not
-        // added to the map (which could have effects on the JVM that are not
-        // easily undone).  If the pushed ClassMapEntry is not used after all
-        // (jvmaccess::ClassPath::loadClass throws, return NULL, etc.) it will
-        // be pruned on next call because its classObject is null:
-        d->map.push_front(ClassMapEntry(classPath, name));
-        cl.object = jvmaccess::ClassPath::loadClass(
-            context, environment, classPath, name);
-        if (cl.object == NULL) {
-            return NULL;
+    if ( !cloader.is() || !cl.is() )
+    {
+        if ( i == d->map.end() )
+        {
+            // Push a new ClassMapEntry (which can potentially fail) before
+            // loading the class, so that it never happens that a class is
+            // loaded but not added to the map (which could have effects on the
+            // JVM that are not easily undone).  If the pushed ClassMapEntry is
+            // not used after all (return false, etc.) it will be pruned on next
+            // call because its classLoader/classObject are null:
+            d->map.push_front( ClassMapEntry( classPath, name ) );
+            i = d->map.begin();
         }
-        jweak w = environment->NewWeakGlobalRef(cl.object);
-        if (w == NULL) {
-            return NULL;
+
+        LocalRef< jclass > clClass( environment );
+        clClass.set( environment.FindClass( "java/net/URLClassLoader" ) );
+        if ( !clClass.is() )
+            return false;
+
+        jweak wcloader = NULL;
+        if (!cloader.is())
+        {
+            jmethodID ctorLoader( environment.GetMethodID( clClass.get(), "<init>", "([Ljava/net/URL;)V" ) );
+            if (ctorLoader == NULL)
+                return false;
+
+            LocalRef< jobjectArray > arr( environment );
+            arr.set( jvmaccess::ClassPath::translateToUrls( context, &environment, classPath ) );
+            if ( !arr.is() )
+                return false;
+
+            jvalue arg;
+            arg.l = arr.get();
+            cloader.set( environment.NewObjectA( clClass.get(), ctorLoader, &arg ) );
+            if ( !cloader.is() )
+                return false;
+
+            wcloader = environment.NewWeakGlobalRef( cloader.get() );
+            if ( wcloader == NULL )
+                return false;
         }
-        d->map.front().classObject = w;
+
+        jweak wcl = NULL;
+        if ( !cl.is() )
+        {
+            jmethodID methLoadClass( environment.GetMethodID( clClass.get(), "loadClass", "(Ljava/lang/String;)Ljava/lang/Class;" ) );
+            if ( methLoadClass == NULL )
+                return false;
+
+            LocalRef< jstring > str( environment );
+            str.set( convertwchar_tToJavaString( &environment, name ) );
+            if ( !str.is() )
+                return false;
+
+            jvalue arg;
+            arg.l = str.get();
+            cl.set( static_cast< jclass >( environment.CallObjectMethodA( cloader.get(), methLoadClass, &arg ) ) );
+            if ( !cl.is() )
+                return false;
+
+            wcl = environment.NewWeakGlobalRef( cl.get() );
+            if ( wcl == NULL )
+                return false;
+        }
+
+        if ( wcloader != NULL)
+        {
+            i->classLoader = wcloader;
+        }
+        if ( wcl != NULL )
+        {
+            i->classObject = wcl;
+        }
     }
-    return static_cast< jclass >(cl.release());
+
+    classLoaderPtr->set( cloader.release() );
+    classPtr->set( cl.release() );
+    return true;
 }
 
 }
@@ -206,6 +303,7 @@ java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
     ,m_xMetaData(NULL)
     ,m_pDriver( &_rDriver )
     ,m_pDriverobject(NULL)
+    ,m_pDriverClassLoader()
     ,m_Driver_theClass(NULL)
     ,m_aLogger( _rDriver.getLogger() )
     ,m_bParameterSubstitution(sal_False)
@@ -816,14 +914,64 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
     return Any();
 }
 // -----------------------------------------------------------------------------
-void java_sql_Connection::loadDriverFromProperties(
-        const Sequence< PropertyValue >& info, ::rtl::OUString& _rsGeneratedValueStatement,
-        sal_Bool& _rbAutoRetrievingEnabled, sal_Bool& _bParameterSubstitution, sal_Bool& _bIgnoreDriverPrivileges )
+namespace
 {
+    bool lcl_setSystemProperties_nothrow( const java::sql::ConnectionLog& _rLogger,
+        JNIEnv& _rEnv, const Sequence< NamedValue >& _rSystemProperties )
+    {
+        if ( _rSystemProperties.getLength() == 0 )
+            // nothing to do
+            return true;
+
+        LocalRef< jclass > systemClass( _rEnv );
+        jmethodID nSetPropertyMethodID = 0;
+        // retrieve the java.lang.System class
+        systemClass.set( _rEnv.FindClass( "java/lang/System" ) );
+        if ( systemClass.is() )
+        {
+            nSetPropertyMethodID = _rEnv.GetStaticMethodID(
+                systemClass.get(), "setProperty", "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;" );
+        }
+
+        if ( nSetPropertyMethodID == 0 )
+            return false;
+
+        for (   const NamedValue* pSystemProp = _rSystemProperties.getConstArray();
+                pSystemProp != _rSystemProperties.getConstArray() + _rSystemProperties.getLength();
+                ++pSystemProp
+            )
+        {
+            ::rtl::OUString sValue;
+            OSL_VERIFY( pSystemProp->Value >>= sValue );
+
+            _rLogger.log( LogLevel::FINER, STR_LOG_SETTING_SYSTEM_PROPERTY, pSystemProp->Name, sValue );
+
+            LocalRef< jstring > jName( _rEnv, convertwchar_tToJavaString( &_rEnv, pSystemProp->Name ) );
+            LocalRef< jstring > jValue( _rEnv, convertwchar_tToJavaString( &_rEnv, sValue ) );
+
+            _rEnv.CallStaticObjectMethod( systemClass.get(), nSetPropertyMethodID, jName.get(), jValue.get() );
+            LocalRef< jthrowable > throwable( _rEnv, _rEnv.ExceptionOccurred() );
+            if ( throwable.is() )
+                return false;
+        }
+
+        return true;
+    }
+}
+
+// -----------------------------------------------------------------------------
+void java_sql_Connection::loadDriverFromProperties( const Sequence< PropertyValue >& info )
+{
+    // contains the statement which should be used when query for automatically generated values
+    ::rtl::OUString     sGeneratedValueStatement;
+    // set to <TRUE/> when we should allow to query for generated values
+    sal_Bool            bAutoRetrievingEnabled = sal_False;
+
     // first try if the jdbc driver is alraedy registered at the driver manager
-    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    SDBThreadAttach t;
     try
     {
+        Sequence< NamedValue > aSystemProperties;
         const PropertyValue* pJavaDriverClass = 0;
         const PropertyValue* pJavaDriverClassPath = 0;
         const PropertyValue* pBegin = info.getConstArray();
@@ -840,23 +988,32 @@ void java_sql_Connection::loadDriverFromProperties(
             }
             else if(!pBegin->Name.compareToAscii("IsAutoRetrievingEnabled"))
             {
-                OSL_VERIFY( pBegin->Value >>= _rbAutoRetrievingEnabled );
+                OSL_VERIFY( pBegin->Value >>= bAutoRetrievingEnabled );
             }
             else if(!pBegin->Name.compareToAscii("AutoRetrievingStatement"))
             {
-                OSL_VERIFY( pBegin->Value >>= _rsGeneratedValueStatement );
+                OSL_VERIFY( pBegin->Value >>= sGeneratedValueStatement );
             }
             else if(!pBegin->Name.compareToAscii("ParameterNameSubstitution"))
             {
-                OSL_VERIFY( pBegin->Value >>= _bParameterSubstitution );
+                OSL_VERIFY( pBegin->Value >>= m_bParameterSubstitution );
             }
             else if(!pBegin->Name.compareToAscii("IgnoreDriverPrivileges"))
             {
-                OSL_VERIFY( pBegin->Value >>= _bIgnoreDriverPrivileges );
+                OSL_VERIFY( pBegin->Value >>= m_bIgnoreDriverPrivileges );
+            }
+            else if(!pBegin->Name.compareToAscii("SystemProperties"))
+            {
+                OSL_VERIFY( pBegin->Value >>= aSystemProperties );
             }
         }
         if ( !object && pJavaDriverClass != 0 )
         {
+            if ( !lcl_setSystemProperties_nothrow( getLogger(), *t.pEnv, aSystemProperties ) )
+                ThrowLoggedSQLException( getLogger(), t.pEnv, *this );
+
+            m_pDriverClassLoader.reset();
+
             // here I try to find the class for jdbc driver
             java_sql_SQLException_BASE::getMyClass();
             java_lang_Throwable::getMyClass();
@@ -884,20 +1041,25 @@ void java_sql_Connection::loadDriverFromProperties(
                     ::rtl::OUString classpath;
                     OSL_VERIFY( pJavaDriverClassPath->Value >>= classpath );
 
-                    pDrvClass.reset(
-                        new java_lang_Class(
-                            t.pEnv,
-                            loadClass(
-                                m_pDriver->getContext().getUNOContext(),
-                                t.pEnv, classpath, aStr
-                            )
-                        )
-                    );
+                    LocalRef< jclass > driverClass(t.env());
+                    LocalRef< jobject > driverClassLoader(t.env());
+
+                    loadClass(
+                        m_pDriver->getContext().getUNOContext(),
+                        t.env(), classpath, aStr, &driverClassLoader, &driverClass );
+
+                    m_pDriverClassLoader.set( driverClassLoader );
+                    pDrvClass.reset( new java_lang_Class( t.pEnv, driverClass.release() ) );
+
                     ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
                 }
                 if ( pDrvClass.get() )
                 {
-                    m_pDriverobject = pDrvClass->newInstanceObject();
+                    LocalRef< jobject > driverObject( t.env() );
+                    driverObject.set( pDrvClass->newInstanceObject() );
+                    ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+                    m_pDriverobject = driverObject.release();
+
                     if( t.pEnv && m_pDriverobject )
                         m_pDriverobject = t.pEnv->NewGlobalRef( m_pDriverobject );
                     if( t.pEnv )
@@ -916,13 +1078,24 @@ void java_sql_Connection::loadDriverFromProperties(
     }
     catch(SQLException& e)
     {
-        throw SQLException(::rtl::OUString::createFromAscii("The specified driver could not be loaded!"),*this,::rtl::OUString(),1000,makeAny(e));
+        throw SQLException(
+            ::rtl::OUString::createFromAscii( "The specified driver could not be loaded." ),
+                // TODO: resource
+            *this,
+            ::rtl::OUString(),
+            1000,
+            makeAny(e)
+        );
     }
     catch(Exception&)
     {
         ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The specified driver could not be loaded!")) ,*this);
     }
+
+    enableAutoRetrievingEnabled( bAutoRetrievingEnabled );
+    setAutoRetrievingStatement( sGeneratedValueStatement );
 }
+
 // -----------------------------------------------------------------------------
 sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
                                     const Sequence< PropertyValue >& info)
@@ -937,12 +1110,7 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
     if ( !t.pEnv )
             throw SQLException(::rtl::OUString::createFromAscii("No Java installation could be found. Please check your installation!"),*this,::rtl::OUString::createFromAscii("S1000"),1000 ,Any());
 
-    ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
-    sal_Bool            bAutoRetrievingEnabled = sal_False; // set to <TRUE/> when we should allow to query for generated values
-    loadDriverFromProperties(info,sGeneratedValueStatement,bAutoRetrievingEnabled,m_bParameterSubstitution,m_bIgnoreDriverPrivileges);
-
-    enableAutoRetrievingEnabled(bAutoRetrievingEnabled);
-    setAutoRetrievingStatement(sGeneratedValueStatement);
+    loadDriverFromProperties( info );
 
     if ( t.pEnv && m_Driver_theClass && m_pDriverobject )
     {
@@ -962,30 +1130,37 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
             java_util_Properties* pProps = createStringPropertyArray(info);
             args[1].l = pProps->getJavaObject();
 
-            jobject out = t.pEnv->CallObjectMethod( m_pDriverobject, mID, args[0].l,args[1].l );
-            if ( !out )
-                m_aLogger.log( LogLevel::SEVERE, STR_LOG_NO_SYSTEM_CONNECTION );
+            LocalRef< jobject > ensureDelete( t.env(), args[0].l );
 
-            try
+            jobject out = NULL;
+            // In some cases (e.g.,
+            // connectivity/source/drivers/hsqldb/HDriver.cxx:1.24
+            // l. 249) the JavaDriverClassPath contains multiple jars,
+            // as creating the JavaDriverClass instance requires
+            // (reflective) access to those other jars.  Now, if the
+            // JavaDriverClass is actually loaded by some parent class
+            // loader (e.g., because its jar is also on the global
+            // class path), it would still not have access to the
+            // additional jars on the JavaDriverClassPath.  Hence, the
+            // JavaDriverClassPath class loader is pushed as context
+            // class loader around the JavaDriverClass instance
+            // creation:
+            // #i82222# / 2007-10-15
             {
+                ContextClassLoaderScope ccl( t.env(), getDriverClassLoader(), getLogger(), *this );
+                out = t.pEnv->CallObjectMethod( m_pDriverobject, mID, args[0].l,args[1].l );
+                delete pProps, pProps = NULL;
                 ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
             }
-            catch(const SQLException& )
-            {
-                t.pEnv->DeleteLocalRef((jstring)args[0].l);
-                delete pProps;
-                throw;
-            }
-            // und aufraeumen
-            t.pEnv->DeleteLocalRef((jstring)args[0].l);
-            delete pProps;
-            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+
+            if ( !out )
+                m_aLogger.log( LogLevel::SEVERE, STR_LOG_NO_SYSTEM_CONNECTION );
 
             if ( out )
                 object = t.pEnv->NewGlobalRef( out );
 
             if ( object )
-                m_aLogger.log( LogLevel::FINE, STR_LOG_GOT_JDBC_CONNECTION, url );
+                m_aLogger.log( LogLevel::INFO, STR_LOG_GOT_JDBC_CONNECTION, url );
 
             m_aConnectionInfo = info;
         } //mID
