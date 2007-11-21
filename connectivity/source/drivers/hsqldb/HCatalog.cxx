@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HCatalog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:39:41 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:00:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ void OHCatalog::refreshViews()
     if ( m_pViews )
         m_pViews->reFill(aVector);
     else
-        m_pViews = new OViews(m_xMetaData,*this,m_aMutex,aVector);
+        m_pViews = new HViews( m_xConnection, *this, m_aMutex, aVector );
 }
 // -------------------------------------------------------------------------
 void OHCatalog::refreshGroups()
@@ -164,7 +164,6 @@ Any SAL_CALL OHCatalog::queryInterface( const Type & rType ) throw(RuntimeExcept
 {
     if ( rType == ::getCppuType((const Reference<XGroupsSupplier>*)0) )
         return Any();
-
 
     return OCatalog::queryInterface(rType);
 }
