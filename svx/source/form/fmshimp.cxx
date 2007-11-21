@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 13:57:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:23:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2922,14 +2922,12 @@ void saveFilter(const Reference< XFormController>& _rxController)
     try
     {
 
-        xFormAsSet->setPropertyValue(FM_PROP_FILTER_CRITERIA, xControllerAsSet->getPropertyValue(FM_PROP_FILTER_CRITERIA));
-
-        sal_Bool bB(sal_True);
-        xFormAsSet->setPropertyValue(FM_PROP_APPLYFILTER, Any(&bB,getBooleanCppuType()));
+        xFormAsSet->setPropertyValue(FM_PROP_FILTER, xControllerAsSet->getPropertyValue(FM_PROP_FILTER));
+        xFormAsSet->setPropertyValue(FM_PROP_APPLYFILTER, makeAny( (sal_Bool)sal_True ) );
     }
-    catch(Exception&)
+    catch (const Exception& )
     {
-        DBG_ERROR("saveFilter: Exception occured!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
 }
@@ -2969,7 +2967,7 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                     try
                     {
                         Reference< XPropertySet > xFormAsSet((*j)->getModel(), UNO_QUERY);
-                        aOriginalFilters.push_back(::comphelper::getString(xFormAsSet->getPropertyValue(FM_PROP_FILTER_CRITERIA)));
+                        aOriginalFilters.push_back(::comphelper::getString(xFormAsSet->getPropertyValue(FM_PROP_FILTER)));
                         aOriginalApplyFlags.push_back(::comphelper::getBOOL(xFormAsSet->getPropertyValue(FM_PROP_APPLYFILTER)));
                     }
                     catch(Exception&)
@@ -3020,13 +3018,13 @@ void FmXFormShell::stopFiltering(sal_Bool bSave)
                     sal_Bool bOriginalApplyFlag = aOriginalApplyFlags[ j - rControllers.begin() ];
                     try
                     {
-                        xFormSet->setPropertyValue(FM_PROP_FILTER_CRITERIA, makeAny(sOriginalFilter));
+                        xFormSet->setPropertyValue(FM_PROP_FILTER, makeAny(sOriginalFilter));
                         xFormSet->setPropertyValue(FM_PROP_APPLYFILTER, makeAny(bOriginalApplyFlag));
                         xReload->reload();
                     }
-                    catch(Exception&)
+                    catch(const Exception&)
                     {
-                        DBG_ERROR("FmXFormShell::stopFiltering: Exception occured!");
+                        DBG_UNHANDLED_EXCEPTION();
                     }
                 }
             }
@@ -4052,18 +4050,25 @@ void FmXFormShell::loadForms( FmFormPage* _pPage, const sal_uInt16 _nBehaviour /
                 xForms->getByIndex( j ) >>= xForm;
                 bFormWasLoaded = sal_False;
                 // a database form must be loaded for
-                if ( 0 == ( _nBehaviour & FORMS_UNLOAD ) )
+                try
                 {
-                    if ( ::isLoadable( xForm ) && !xForm->isLoaded() )
-                        xForm->load();
-                }
-                else
-                {
-                    if ( xForm->isLoaded() )
+                    if ( 0 == ( _nBehaviour & FORMS_UNLOAD ) )
                     {
-                        bFormWasLoaded = sal_True;
-                        xForm->unload();
+                        if ( ::isLoadable( xForm ) && !xForm->isLoaded() )
+                            xForm->load();
                     }
+                    else
+                    {
+                        if ( xForm->isLoaded() )
+                        {
+                            bFormWasLoaded = sal_True;
+                            xForm->unload();
+                        }
+                    }
+                }
+                catch( const Exception& )
+                {
+                    DBG_UNHANDLED_EXCEPTION();
                 }
 
                 // reset the form if it was loaded
