@@ -4,9 +4,9 @@
  *
  *  $RCSfile: caption.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:39:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:20:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ InsCaptionOpt::InsCaptionOpt(const SwCapObjType eType, const SvGlobalName* pOleI
     bUseCaption(FALSE),
     eObjType(eType),
     nNumType(SVX_NUM_ARABIC),
+    sNumberSeparator( ::rtl::OUString::createFromAscii(". ") ),
     nPos(1),
     nLevel(0),
     sSeparator( String::CreateFromAscii( ": " ) ),
@@ -94,6 +95,7 @@ InsCaptionOpt& InsCaptionOpt::operator=( const InsCaptionOpt& rOpt )
     aOleId = rOpt.aOleId;
     sCategory = rOpt.sCategory;
     nNumType = rOpt.nNumType;
+    sNumberSeparator = rOpt.sNumberSeparator;
     sCaption = rOpt.sCaption;
     nPos = rOpt.nPos;
     nLevel = rOpt.nLevel;
