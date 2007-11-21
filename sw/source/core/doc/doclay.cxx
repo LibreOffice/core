@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:36:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:18:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,8 @@
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
+#include <swmodule.hxx>
+#include <modcfg.hxx>
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
@@ -1335,6 +1337,7 @@ void lcl_CpyAttr( SfxItemSet &rNewSet, const SfxItemSet &rOldSet, sal_uInt16 nWh
 
 
 SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, const String& rSeparator,
+            const String& rNumberingSeparator,
             const sal_Bool bBefore, const sal_uInt16 nId, const ULONG nNdIdx,
             const String& rCharacterStyle,
             const sal_Bool bCpyBrd )
@@ -1344,7 +1347,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
     if( bWasUndo )
     {
         ClearRedo();
-        pUndo = new SwUndoInsertLabel( eType, rTxt, rSeparator,
+        pUndo = new SwUndoInsertLabel( eType, rTxt, rSeparator, rNumberingSeparator,
                                        bBefore, nId, rCharacterStyle, bCpyBrd );
         DoUndo( sal_False );
     }
@@ -1565,15 +1568,21 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
             ASSERT( !this, "Neuer LabelType?." );
     }
     ASSERT( pNew, "No Label inserted" );
-
     if( pNew )
     {
+        //#i61007# order of captions
+        sal_Bool bOrderNumberingFirst = SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst();
         //String aufbereiten
         String aTxt;
-        if(pType)
+        if( bOrderNumberingFirst )
+        {
+            aTxt = rNumberingSeparator;
+        }
+        if( pType)
         {
             aTxt += pType->GetName();
-            aTxt += ' ';
+            if( !bOrderNumberingFirst )
+                aTxt += ' ';
         }
         xub_StrLen nIdx = aTxt.Len();
         aTxt += rSeparator;
@@ -1589,6 +1598,8 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
         if(pType)
         {
             SwSetExpField aFld( (SwSetExpFieldType*)pType, aEmptyStr, SVX_NUM_ARABIC);
+            if( bOrderNumberingFirst )
+                nIdx = 0;
             pNew->InsertItem( SwFmtFld( aFld ), nIdx, nIdx );
             if(rCharacterStyle.Len())
             {
@@ -1644,6 +1655,7 @@ SwFlyFrmFmt* SwDoc::InsertLabel( const SwLabelType eType, const String &rTxt, co
 
 SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
                                      const String& rSeparator,
+                                     const String& rNumberSeparator,
                                      const sal_uInt16 nId,
                                      const String& rCharacterStyle,
                                      SdrObject& rSdrObj )
@@ -1666,7 +1678,7 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
     {
         ClearRedo();
         pUndo = new SwUndoInsertLabel(
-            LTYPE_DRAW, rTxt, rSeparator, sal_False, nId, rCharacterStyle, sal_False );
+            LTYPE_DRAW, rTxt, rSeparator, rNumberSeparator, sal_False, nId, rCharacterStyle, sal_False );
         DoUndo( sal_False );
         SetNoDrawUndoObj( sal_True );
     }
@@ -1842,12 +1854,20 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
 
     if( pNew )
     {
+        //#i61007# order of captions
+        sal_Bool bOrderNumberingFirst = SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst();
+
         // prepare string
         String aTxt;
+        if( bOrderNumberingFirst )
+        {
+            aTxt = rNumberSeparator;
+        }
         if ( pType )
         {
             aTxt += pType->GetName();
-            aTxt += ' ';
+            if( !bOrderNumberingFirst )
+                aTxt += ' ';
         }
         xub_StrLen nIdx = aTxt.Len();
         aTxt += rSeparator;
@@ -1862,6 +1882,8 @@ SwFlyFrmFmt* SwDoc::InsertDrawLabel( const String &rTxt,
         if ( pType )
         {
             SwSetExpField aFld( (SwSetExpFieldType*)pType, aEmptyStr, SVX_NUM_ARABIC );
+            if( bOrderNumberingFirst )
+                nIdx = 0;
             pNew->InsertItem( SwFmtFld( aFld ), nIdx, nIdx );
             if ( rCharacterStyle.Len() )
             {
