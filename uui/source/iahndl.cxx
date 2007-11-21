@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-13 14:19:44 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:23:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/script/ModuleSizeExceededRequest.hpp"
 #include "com/sun/star/sync2/BadPartnershipException.hpp"
+#include "com/sun/star/task/DocumentMacroConfirmationRequest.hpp"
 #include "com/sun/star/task/DocumentPasswordRequest.hpp"
 #include "com/sun/star/task/ErrorCodeIOException.hpp"
 #include "com/sun/star/task/ErrorCodeRequest.hpp"
@@ -114,6 +115,7 @@
 
 #include "ids.hrc"
 #include "cookiedg.hxx"
+#include "secmacrowarnings.hxx"
 #include "masterpasscrtdlg.hxx"
 #include "masterpassworddlg.hxx"
 #include "logindlg.hxx"
@@ -1170,6 +1172,16 @@ void UUIInteractionHelper::handleErrorHandlerRequests(
                    bObtainErrorStringOnly,
                    bHasErrorString,
                    rErrorString);
+        return;
+    }
+
+    star::task::DocumentMacroConfirmationRequest aMacroConfirmRequest;
+    if (aAnyRequest >>= aMacroConfirmRequest)
+    {
+        handleMacroConfirmRequest(
+            aMacroConfirmRequest,
+            rRequest->getContinuations()
+        );
         return;
     }
 
@@ -2775,6 +2787,54 @@ UUIInteractionHelper::handleGenericErrorRequest(
     else if (xAbort.is())
         xAbort->select();
     }
+}
+
+void
+UUIInteractionHelper::handleMacroConfirmRequest(
+    const star::task::DocumentMacroConfirmationRequest& _rRequest,
+    star::uno::Sequence< star::uno::Reference<
+        star::task::XInteractionContinuation > > const & rContinuations
+)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    star::uno::Reference< star::task::XInteractionApprove > xApprove;
+
+    sal_Int32 nCount = rContinuations.getLength();
+    for( sal_Int32 nStep=0; nStep<nCount; ++nStep )
+    {
+        if( !xAbort.is() )
+            xAbort = star::uno::Reference< star::task::XInteractionAbort >( rContinuations[nStep], star::uno::UNO_QUERY );
+
+        if( !xApprove.is() )
+            xApprove = star::uno::Reference< star::task::XInteractionApprove >( rContinuations[nStep], star::uno::UNO_QUERY );
+    }
+
+    bool bApprove = false;
+
+    std::auto_ptr< ResMgr > pResMgr( ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
+    if ( pResMgr.get() )
+    {
+        bool bShowSignatures = _rRequest.DocumentSignatureInformation.getLength() > 0;
+        MacroWarning aWarning( getParentProperty(), bShowSignatures, *pResMgr.get() );
+
+        aWarning.SetDocumentURL( _rRequest.DocumentURL );
+        if ( _rRequest.DocumentSignatureInformation.getLength() > 1 )
+        {
+            aWarning.SetStorage( _rRequest.DocumentStorage, _rRequest.DocumentSignatureInformation );
+        }
+        else if ( _rRequest.DocumentSignatureInformation.getLength() == 1 )
+        {
+            aWarning.SetCertificate( _rRequest.DocumentSignatureInformation[ 0 ].Signer );
+        }
+
+        bApprove = aWarning.Execute() == RET_OK;
+    }
+
+    if ( bApprove && xApprove.is() )
+        xApprove->select();
+    else if ( xAbort.is() )
+            xAbort->select();
 }
 
 void
