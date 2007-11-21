@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:51:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:32:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -579,6 +579,24 @@ private:
 
     /// checks if we currently share our connection with our parent
     sal_Bool    isSharingConnection( ) const { return m_bSharingConnection; }
+
+    /** calls our row set approval listeners
+
+        @param _rEvent
+            the event to notify
+        @param _bAllowSQLException
+            <TRUE/> if SQLExceptions are allowed to leave the method
+        @param _rGuard
+            the guard to be cleared before actually calling into the listeners, but after making
+            a copy of the listeners array to operate on.
+        @return
+            <TRUE/> if and only if the execution has been approved
+    */
+    bool    impl_approveRowChange_throw(
+        const ::com::sun::star::lang::EventObject& _rEvent,
+        const bool _bAllowSQLException,
+        ::osl::ClearableMutexGuard& _rGuard
+    );
 
     /// invalidate all our parameter-related stuff
     void        invlidateParameters();
