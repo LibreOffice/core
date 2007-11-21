@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindow.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-05 09:04:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 17:11:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,8 +345,8 @@ void OTableWindow::impl_updateImage()
 {
     ImageProvider aImageProvider( getDesignView()->getController()->getConnection() );
 
-    Image aImage( aImageProvider.getImage( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, false ) );
-    Image aImageHC( aImageProvider.getImage( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, true ) );
+    Image aImage, aImageHC;
+    aImageProvider.getImages( GetComposedName(), m_pData->isQuery() ? DatabaseObject::QUERY : DatabaseObject::TABLE, aImage, aImageHC );
 
     if ( !aImage || !aImageHC )
     {
