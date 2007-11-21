@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InteractionHandler.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 09:58:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:18:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@ module com { module sun { module star { module task {
         <LI><type scope="com::sun::star::ucb">InteractiveWrongMediumException</type>*</LI>
         <LI><type scope="com::sun::star::task">PasswordRequest</type></LI>
         <LI><type scope="com::sun::star::java">WrongJavaVersionException</type>*</LI>
+        <LI><type scope="com::sun::star::task">DocumentMacroConfirmationRequest</type></LI>
     </UL>
     The requests marked with an asterisk are only handled if (a) their
     continuations match certain restrictions (see below), and (b) the
