@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmstring.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:21:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:23:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,52 +37,63 @@
 /* Strings fuer Uebersetzung */
 String RID_ERR_CONTEXT_ADDFORM
 {
-    Text [ en-US ] = "Error while creating form" ;
+    Text [ en-US ] = "Error while creating form";
 };
 String RID_ERR_FIELDREQUIRED
 {
-    Text [ en-US ] = "Input required in field '#'. Please enter a value." ;
+    Text [ en-US ] = "Input required in field '#'. Please enter a value.";
 };
 String RID_ERR_DUPLICATE_NAME
 {
-    Text [ en-US ] = "Entry already exists.\nPlease choose another name." ;
+    Text [ en-US ] = "Entry already exists.\nPlease choose another name.";
 };
 String RID_STR_FORMS
 {
-    Text [ en-US ] = "Forms" ;
+    Text [ en-US ] = "Forms";
 };
 String RID_STR_NO_PROPERTIES
 {
-    Text [ en-US ] = "No control selected" ;
+    Text [ en-US ] = "No control selected";
 };
 String RID_STR_PROPERTIES_CONTROL
 {
     /* ### ACHTUNG: Neuer Text in Resource? Eigenschaften:  : Kontrollelement Eigenschaften */
-    Text [ en-US ] = "Properties: " ;
+    Text [ en-US ] = "Properties: ";
 };
 String RID_STR_PROPERTIES_FORM
 {
-    Text [ en-US ] = "Form Properties" ;
+    Text [ en-US ] = "Form Properties";
 };
 String RID_STR_FMEXPLORER
 {
-    Text [ en-US ] = "Form Navigator" ;
+    Text [ en-US ] = "Form Navigator";
 };
 String RID_STR_FORM
 {
-    Text [ en-US ] = "Form" ;
+    Text [ en-US ] = "Form";
 };
-String RID_STR_TABWIN_PREFIX
+Resource RID_RSC_TABWIN_PREFIX
 {
-    Text [ en-US ] = "Table;Query;Sql;Sql [Native]" ;
+    String 1
+    {
+        Text [ en-US ] = "Table";
+    };
+    String 2
+    {
+        Text [ en-US ] = "Query";
+    };
+    String 3
+    {
+        Text [ en-US ] = "SQL";
+    };
 };
 String RID_STR_FORMSHELL
 {
-    Text [ en-US ] = "Form" ;
+    Text [ en-US ] = "Form";
 };
 String RID_STR_STDFORMNAME
 {
-    Text = "Standard" ;
+    Text = "Standard";
 };
 String RID_STR_FORMATTED_CLASSNAME
 {
@@ -90,79 +101,79 @@ String RID_STR_FORMATTED_CLASSNAME
 };
 String RID_STR_CONTROL_CLASSNAME
 {
-    Text = "Control" ;
+    Text = "Control";
 };
 String RID_STR_CHECKBOX_CLASSNAME
 {
-    Text = "CheckBox" ;
+    Text = "CheckBox";
 };
 String RID_STR_RADIOBUTTON_CLASSNAME
 {
-    Text = "OptionButton" ;
+    Text = "OptionButton";
 };
 String RID_STR_BUTTON_CLASSNAME
 {
-    Text = "PushButton" ;
+    Text = "PushButton";
 };
 String RID_STR_FIXEDTEXT_CLASSNAME
 {
-    Text = "LabelField" ;
+    Text = "LabelField";
 };
 String RID_STR_IMAGE_CLASSNAME
 {
-    Text = "ImageButton" ;
+    Text = "ImageButton";
 };
 String RID_STR_GRID_CLASSNAME
 {
-    Text = "TableControl" ;
+    Text = "TableControl";
 };
 String RID_STR_GROUPBOX_CLASSNAME
 {
-    Text = "GroupBox" ;
+    Text = "GroupBox";
 };
 String RID_STR_LISTBOX_CLASSNAME
 {
-    Text = "ListBox" ;
+    Text = "ListBox";
 };
 String RID_STR_COMBOBOX_CLASSNAME
 {
-    Text = "ComboBox" ;
+    Text = "ComboBox";
 };
 String RID_STR_EDIT_CLASSNAME
 {
-    Text = "TextBox" ;
+    Text = "TextBox";
 };
 String RID_STR_FILECONTROL_CLASSNAME
 {
-    Text = "FileSelection" ;
+    Text = "FileSelection";
 };
 String RID_STR_DATEFIELD_CLASSNAME
 {
-    Text = "DateField" ;
+    Text = "DateField";
 };
 String RID_STR_TIMEFIELD_CLASSNAME
 {
-    Text = "TimeField" ;
+    Text = "TimeField";
 };
 String RID_STR_NUMERICFIELD_CLASSNAME
 {
-    Text = "NumericalField" ;
+    Text = "NumericalField";
 };
 String RID_STR_CURRENCYFIELD_CLASSNAME
 {
-    Text = "CurrencyField" ;
+    Text = "CurrencyField";
 };
 String RID_STR_PATTERNFIELD_CLASSNAME
 {
-    Text = "PatternField" ;
+    Text = "PatternField";
 };
 String RID_STR_IMAGECONTROL_CLASSNAME
 {
-    Text = "ImageControl" ;
+    Text = "ImageControl";
 };
 String RID_STR_HIDDEN_CLASSNAME
 {
-    Text = "HiddenControl" ;
+    Text = "HiddenControl";
 };
 String RID_STR_NAVBAR_CLASSNAME
 {
@@ -171,25 +182,25 @@ String RID_STR_NAVBAR_CLASSNAME
 
 String RID_STR_CLASSNAME_SCROLLBAR
 {
-    Text [ en-US ] = "Scrollbar" ;
+    Text [ en-US ] = "Scrollbar";
 };
 
 String RID_STR_CLASSNAME_SPINBUTTON
 {
-    Text [ en-US ] = "SpinButton" ;
+    Text [ en-US ] = "SpinButton";
 };
 
 String RID_STR_CONTROL
 {
-    Text [ en-US ] = "Control" ;
+    Text [ en-US ] = "Control";
 };
 String RID_STR_REC_TEXT
 {
-    Text [ en-US ] = "Record" ;
+    Text [ en-US ] = "Record";
 };
 String RID_STR_REC_FROM_TEXT
 {
-    Text [ en-US ] = "of" ;
+    Text [ en-US ] = "of";
 };
 String RID_STR_FIELDSELECTION
 {
@@ -197,70 +208,70 @@ String RID_STR_FIELDSELECTION
 };
 String RID_STR_WRITEERROR
 {
-    Text [ en-US ] = "Error writing data to database" ;
+    Text [ en-US ] = "Error writing data to database";
 };
 
 String RID_STR_SYNTAXERROR
 {
-    Text [ en-US ] = "Syntax error in query expression" ;
+    Text [ en-US ] = "Syntax error in query expression";
 };
 
 String RID_STR_DELETECONFIRM_RECORD
 {
-    Text [ en-US ] = "You intend to delete 1 record." ;
+    Text [ en-US ] = "You intend to delete 1 record.";
 };
 String RID_STR_DELETECONFIRM_RECORDS
 {
-    Text [ en-US ] = "# records will be deleted." ;
+    Text [ en-US ] = "# records will be deleted.";
 };
 String RID_STR_DELETECONFIRM
 {
-    Text [ en-US ] = "If you click Yes, you won't be able to undo this operation!\nDo you want to continue anyway?" ;
+    Text [ en-US ] = "If you click Yes, you won't be able to undo this operation!\nDo you want to continue anyway?";
 };
 
 String RID_ERR_NO_ELEMENT
 {
-    Text [ en-US ] = "Choose an entry from the list or enter a text corresponding to one of the list items." ;
+    Text [ en-US ] = "Choose an entry from the list or enter a text corresponding to one of the list items.";
 };
 String RID_STR_GROUPBOX
 {
-    Text [ en-US ] = "Frame element" ;
+    Text [ en-US ] = "Frame element";
 };
 String RID_STR_NAVIGATION
 {
-    Text [ en-US ] = "Navigation" ;
+    Text [ en-US ] = "Navigation";
 };
 String RID_STR_NAVIGATIONBAR
 {
-    Text [ en-US ] = "Navigation bar" ;
+    Text [ en-US ] = "Navigation bar";
 };
 String RID_STR_COLUMN
 {
-    Text [ en-US ] = "Col" ;
+    Text [ en-US ] = "Col";
 };
 String RID_STR_UNDO_PROPERTY
 {
-    Text [ en-US ] = "Set property '#'" ;
+    Text [ en-US ] = "Set property '#'";
 };
 String RID_STR_UNDO_CONTAINER_INSERT
 {
-    Text [ en-US ] = "Insert in container" ;
+    Text [ en-US ] = "Insert in container";
 };
 String RID_STR_UNDO_CONTAINER_REMOVE
 {
-    Text [ en-US ] = "Delete #" ;
+    Text [ en-US ] = "Delete #";
 };
 String RID_STR_UNDO_CONTAINER_REMOVE_MULTIPLE
 {
-    Text [ en-US ] = "Delete # objects" ;
+    Text [ en-US ] = "Delete # objects";
 };
 String RID_STR_UNDO_CONTAINER_REPLACE
 {
-    Text [ en-US ] = "Replace a container element" ;
+    Text [ en-US ] = "Replace a container element";
 };
 String RID_STR_UNDO_DELETE_LOGICAL
 {
-    Text [ en-US ] = "Delete structure" ;
+    Text [ en-US ] = "Delete structure";
 };
 String RID_STR_UNDO_MODEL_REPLACE
 {
@@ -268,35 +279,35 @@ String RID_STR_UNDO_MODEL_REPLACE
 };
 String RID_STR_DATE
 {
-    Text [ en-US ] = "Date" ;
+    Text [ en-US ] = "Date";
 };
 String RID_STR_TIME
 {
-    Text [ en-US ] = "Time" ;
+    Text [ en-US ] = "Time";
 };
 String RID_STR_PROPTITLE_PUSHBUTTON
 {
-    Text [ en-US ] = "Button" ;
+    Text [ en-US ] = "Button";
 };
 String RID_STR_PROPTITLE_RADIOBUTTON
 {
-    Text [ en-US ] = "Option Button" ;
+    Text [ en-US ] = "Option Button";
 };
 String RID_STR_PROPTITLE_CHECKBOX
 {
-    Text [ en-US ] = "Check Box" ;
+    Text [ en-US ] = "Check Box";
 };
 String RID_STR_PROPTITLE_FIXEDTEXT
 {
-    Text [ en-US ] = "Label field" ;
+    Text [ en-US ] = "Label field";
 };
 String RID_STR_PROPTITLE_GROUPBOX
 {
-    Text [ en-US ] = "Group Box" ;
+    Text [ en-US ] = "Group Box";
 };
 String RID_STR_PROPTITLE_EDIT
 {
-    Text [ en-US ] = "Text Box" ;
+    Text [ en-US ] = "Text Box";
 };
 String RID_STR_PROPTITLE_FORMATTED
 {
@@ -308,55 +319,55 @@ String RID_STR_MOVING_CURSOR
 };
 String RID_STR_PROPTITLE_LISTBOX
 {
-    Text [ en-US ] = "List Box" ;
+    Text [ en-US ] = "List Box";
 };
 String RID_STR_PROPTITLE_COMBOBOX
 {
-    Text [ en-US ] = "Combo Box" ;
+    Text [ en-US ] = "Combo Box";
 };
 String RID_STR_PROPTITLE_IMAGEBUTTON
 {
-    Text [ en-US ] = "Image Button" ;
+    Text [ en-US ] = "Image Button";
 };
 String RID_STR_PROPTITLE_IMAGECONTROL
 {
-    Text [ en-US ] = "Image Control" ;
+    Text [ en-US ] = "Image Control";
 };
 String RID_STR_PROPTITLE_FILECONTROL
 {
-    Text [ en-US ] = "File Selection" ;
+    Text [ en-US ] = "File Selection";
 };
 String RID_STR_PROPTITLE_DATEFIELD
 {
-    Text [ en-US ] = "Date Field" ;
+    Text [ en-US ] = "Date Field";
 };
 String RID_STR_PROPTITLE_TIMEFIELD
 {
-    Text [ en-US ] = "Time Field" ;
+    Text [ en-US ] = "Time Field";
 };
 String RID_STR_PROPTITLE_NUMERICFIELD
 {
-    Text [ en-US ] = "Numeric Field" ;
+    Text [ en-US ] = "Numeric Field";
 };
 String RID_STR_PROPTITLE_CURRENCYFIELD
 {
-    Text [ en-US ] = "Currency Field" ;
+    Text [ en-US ] = "Currency Field";
 };
 String RID_STR_PROPTITLE_PATTERNFIELD
 {
-    Text [ en-US ] = "Pattern Field" ;
+    Text [ en-US ] = "Pattern Field";
 };
 String RID_STR_PROPTITLE_DBGRID
 {
-    Text [ en-US ] = "Table Control " ;
+    Text [ en-US ] = "Table Control ";
 };
 String RID_STR_PROPTITLE_SCROLLBAR
 {
-    Text [ en-US ] = "Scrollbar" ;
+    Text [ en-US ] = "Scrollbar";
 };
 String RID_STR_PROPTITLE_SPINBUTTON
 {
-    Text [ en-US ] = "Spin Button" ;
+    Text [ en-US ] = "Spin Button";
 };
 String RID_STR_PROPTITLE_NAVBAR
 {
@@ -364,15 +375,19 @@ String RID_STR_PROPTITLE_NAVBAR
 };
 String RID_STR_PROPTITLE_MULTISELECT
 {
-    Text [ en-US ] = "Multiselection" ;
+    Text [ en-US ] = "Multiselection";
 };
 String RID_STR_NODATACONTROLS
 {
-    Text [ en-US ] = "No data-related controls in the current form!" ;
+    Text [ en-US ] = "No data-related controls in the current form!";
 };
-String RID_STR_DATETIME_LABELPOSTFIX
+String RID_STR_POSTFIX_DATE
 {
-    Text [ en-US ] = "(Date); (Time)";
+    Text [ en-US ] = " (Date)";
+};
+String RID_STR_POSTFIX_TIME
+{
+    Text [ en-US ] = " (Time)";
 };
 String RID_STR_FILTER_NAVIGATOR
 {
@@ -402,17 +417,72 @@ QueryBox RID_QRY_SAVEMODIFIED
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
-    Message [ en-US ] = "The content of the current form has been modified.\nDo you want to save your changes?" ;
+    Message [ en-US ] = "The content of the current form has been modified.\nDo you want to save your changes?";
 };
-String RID_STR_SVT_SQL_INTERNATIONAL
+Resource RID_RSC_SQL_INTERNATIONAL
 {
-    Text [ en-US ] = "LIKE;NOT;EMPTY;TRUE;FALSE;IS;BETWEEN;OR;AND;Average;Count;Maximum;Minimum;Sum" ;
+    String 1
+    {
+        Text [ en-US ] = "LIKE";
+    };
+    String 2
+    {
+        Text [ en-US ] = "NOT";
+    };
+    String 3
+    {
+        Text [ en-US ] = "EMPTY";
+    };
+    String 4
+    {
+        Text [ en-US ] = "TRUE";
+    };
+    String 5
+    {
+        Text [ en-US ] = "FALSE";
+    };
+    String 6
+    {
+        Text [ en-US ] = "IS";
+    };
+    String 7
+    {
+        Text [ en-US ] = "BETWEEN";
+    };
+    String 8
+    {
+        Text [ en-US ] = "OR";
+    };
+    String 9
+    {
+        Text [ en-US ] = "AND";
+    };
+    String 10
+    {
+        Text [ en-US ] = "Average";
+    };
+    String 11
+    {
+        Text [ en-US ] = "Count";
+    };
+    String 12
+    {
+        Text [ en-US ] = "Maximum";
+    };
+    String 13
+    {
+        Text [ en-US ] = "Minimum";
+    };
+    String 14
+    {
+        Text [ en-US ] = "Sum";
+    };
 };
 
 String RID_STR_SVT_SQL_SYNTAX_ERROR
 {
     /* ### ACHTUNG: Neuer Text in Resource? Syntaxfehler im SQL-Ausdruck : Fehlerhafte Syntax */
-    Text [ en-US ] = "Syntax error in SQL statement" ;
+    Text [ en-US ] = "Syntax error in SQL statement";
 };
 
 String RID_STR_SVT_SQL_SYNTAX_VALUE_NO_LIKE
@@ -450,10 +520,6 @@ String RID_STR_SVT_SQL_SYNTAX_QUERY_EXISTS
 {
     Text [ en-US ] = "The database already contains a query with name \"#\".";
 };
-String RID_STR_SVT_SQL_CYCLIC_SUB_QUERIES
-{
-    Text [ en-US ] = "The statement contains a cyclic reference to one or more sub queries.";
-};
 String RID_STR_SVT_SQL_SYNTAX_COLUMN
 {
     Text [ en-US ] = "The column \"#1\" is unknown in the table \"#2\".";
@@ -470,10 +536,10 @@ String RID_STR_SVT_SQL_SYNTAX_CRIT_NO_COMPARE
 
 String RID_STR_DATANAVIGATOR
 {
-    Text [ en-US ] = "Data Navigator" ;
+    Text [ en-US ] = "Data Navigator";
 };
 
 String RID_STR_READONLY_VIEW
 {
-    Text [ en-US ] = " (read-only)" ;
+    Text [ en-US ] = " (read-only)";
 };
