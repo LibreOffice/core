@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:02:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:50:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #endif
 
 #include <sfx2/topfrm.hxx>
+#include <sfx2/signaturestate.hxx>
 
 #ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
