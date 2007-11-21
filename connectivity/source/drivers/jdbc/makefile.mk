@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 14:37:42 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 15:04:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,8 @@ SLOFILES=\
         $(SLO)$/Throwable.obj						\
         $(SLO)$/Timestamp.obj						\
         $(SLO)$/jservices.obj						\
-        $(SLO)$/tools.obj
+        $(SLO)$/tools.obj                           \
+        $(SLO)$/ContextClassLoader.obj
 
 SHL1VERSIONMAP=$(JDBC_TARGET).map
 
