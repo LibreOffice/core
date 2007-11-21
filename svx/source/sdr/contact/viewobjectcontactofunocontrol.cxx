@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofunocontrol.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:37:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:29:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -497,6 +497,14 @@ namespace sdr { namespace contact {
         */
         void dispose();
 
+        /** determines whether the instance is disposed
+        */
+        bool isDisposed() const { return impl_isDisposed_nofail(); }
+
+        /** determines whether the instance is alive
+        */
+        bool isAlive() const { return !isDisposed(); }
+
         /** returns the SdrUnoObject associated with the ViewContact
 
             @precond
@@ -959,6 +967,10 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     bool ViewObjectContactOfUnoControl_Impl::ensureControl( const DisplayInfo& _rDisplayInfo )
     {
+        OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::ensureControl: already disposed()" );
+        if ( impl_isDisposed_nofail() )
+            return false;
+
         const OutputDevice* pDeviceForControl( NULL );
 
         // if we're working for a page view, use the respective OutputDevice at the proper
@@ -986,6 +998,10 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     bool ViewObjectContactOfUnoControl_Impl::ensureControl()
     {
+        OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::ensureControl: already disposed()" );
+        if ( impl_isDisposed_nofail() )
+            return false;
+
         ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &m_pAntiImpl->GetObjectContact() );
         DBG_ASSERT( pPageViewContact, "ViewObjectContactOfUnoControl_Impl::ensureControl: cannot create a control if I don't have a PageView!" );
         if ( !pPageViewContact )
@@ -1374,10 +1390,23 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::disposing( const EventObject& Source ) throw(RuntimeException)
     {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            // some code below - in particular our disposal - might trigger actions which require the
+            // SolarMutex. In particular, in our disposal, we remove ourself as listener from the control,
+            // which alone needs the SolarMutex. Of course this - a removeFooListener needed the SolarMutex -
+            // is the real bug. Toolkit really is infested with solar mutex usage ... :(
+            // #i82169# / 2007-11-14 / frank.schoenheit@sun.com
         VOCGuard aGuard( *this );
 
-        if ( Source.Source == m_xControl )
+        if ( !m_xControl.is() )
+            return;
+
+        if  (   ( Source.Source == m_xControl )
+            ||  ( Source.Source == m_xControl->getModel() )
+            )
         {
+            // the model or the control is dying ... hmm, not much sense in that we ourself continue
+            // living
             impl_dispose_nothrow( false );
             return;
         }
@@ -1416,6 +1445,10 @@ namespace sdr { namespace contact {
     {
         ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
             // (re)painting might require VCL operations, which need the SolarMutex
+
+        OSL_PRECOND( !impl_isDisposed_nofail(), "ViewObjectContactOfUnoControl_Impl::propertyChange: already disposed()" );
+        if ( impl_isDisposed_nofail() )
+            return;
 
         VOCGuard aGuard( *this );
         DBG_ASSERT( m_xControl.is(), "ViewObjectContactOfUnoControl_Impl::propertyChange: " );
@@ -1460,6 +1493,12 @@ namespace sdr { namespace contact {
     //--------------------------------------------------------------------
     void SAL_CALL ViewObjectContactOfUnoControl_Impl::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
     {
+        ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
+            // some code below - in particular our disposal - might trigger actions which require the
+            // SolarMutex. In particular, in our disposal, we remove ourself as listener from the control,
+            // which alone needs the SolarMutex. Of course this - a removeFooListener needed the SolarMutex -
+            // is the real bug. Toolkit really is infested with solar mutex usage ... :(
+            // #i82169# / 2007-11-14 / frank.schoenheit@sun.com
         VOCGuard aGuard( *this );
         DBG_ASSERT( Event.Source == m_xContainer, "ViewObjectContactOfUnoControl_Impl::elementRemoved: where did this come from?" );
 
