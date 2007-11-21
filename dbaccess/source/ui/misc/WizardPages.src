@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WizardPages.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:05:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:08:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,7 +317,6 @@ TabPage TAB_WIZ_TYPE_SELECT
         TabStop             = TRUE ;
         Text                = "~Auto" ;
     };
-
 };
 
 Menu RID_SBA_RTF_PKEYPOPUP
