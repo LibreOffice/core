@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CRMDatabase.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:50:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:30:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,7 +210,8 @@ public class CRMDatabase
 
         m_database.getDataSource().createQuery( "parseable", "SELECT * FROM \"customers\"" );
         m_database.getDataSource().createQuery( "parseable native", "SELECT * FROM INFORMATION_SCHEMA.SYSTEM_VIEWS", false );
-        m_database.getDataSource().createQuery( "unparseable", "SELECT \"Postal\" || ' - ' || \"City\" AS \"concat\" FROM \"customers\"", false );
+        m_database.getDataSource().createQuery( "unparseable",
+            "SELECT CAST( \"ID\" AS VARCHAR(3) ) AS \"ID_VARCHAR\" FROM \"products\"", false );
 
         validateUnparseable();
     }

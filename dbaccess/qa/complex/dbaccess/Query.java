@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Query.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:51:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ public class Query extends complexlib.ComplexTestCase {
             String[][] expectedColumnNames = new String[][] {
                 new String[] { "ID", "Name", "Address", "City", "Postal" },
                 new String[] { "TABLE_CATALOG", "TABLE_SCHEMA", "TABLE_NAME", "VIEW_DEFINITION", "CHECK_OPTION", "IS_UPDATABLE", "VALID" },
-                new String[] { "concat" }
+                new String[] { "ID_VARCHAR" }
             };
 
             for ( int i = 0; i < queryNames.length; ++i )
