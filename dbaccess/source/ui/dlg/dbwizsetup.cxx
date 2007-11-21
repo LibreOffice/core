@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:12:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 17:00:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,6 +261,7 @@ using namespace ::cppu;
 #define CREATENEW_PATH           22
 #define USERDEFINED_PATH         23
 #define OPEN_DOC_PATH            24
+#define MSACCESS2007_PATH        25
 
 OFinalDBPageSetup*          pFinalPage;
 
@@ -343,6 +344,7 @@ ODbTypeWizDialogSetup::ODbTypeWizDialogSetup(Window* _pParent
     declareAuthDepPath( DST_ADABAS,             ADABAS_PATH,            PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_ADABAS, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
     declareAuthDepPath( DST_LDAP,               LDAP_PATH,              PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_LDAP, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
     declareAuthDepPath( DST_MSACCESS,           MSACCESS_PATH,          PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MSACCESS, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
+    declareAuthDepPath( DST_MSACCESS_2007,      MSACCESS2007_PATH,      PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_MSACCESS, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
     declareAuthDepPath( DST_OUTLOOKEXP,         OUTLOOKEXP_PATH,        PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
     declareAuthDepPath( DST_OUTLOOK,            OUTLOOK_PATH,           PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
     declareAuthDepPath( DST_MOZILLA,            MOZILLA_PATH,           PAGE_DBSETUPWIZARD_INTRO, PAGE_DBSETUPWIZARD_AUTHENTIFICATION, PAGE_DBSETUPWIZARD_FINAL, -1 );
@@ -503,6 +505,7 @@ void ODbTypeWizDialogSetup::activateDatabasePath()
             { DST_ADABAS,       ADABAS_PATH         },
             { DST_LDAP,         LDAP_PATH           },
             { DST_MSACCESS,     MSACCESS_PATH       },
+            { DST_MSACCESS_2007,MSACCESS2007_PATH   },
             { DST_OUTLOOKEXP,   OUTLOOKEXP_PATH     },
             { DST_OUTLOOK,      OUTLOOK_PATH        },
             { DST_MOZILLA,      MOZILLA_PATH        },
