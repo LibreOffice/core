@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbumiscres.hrc,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:23:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 17:10:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,20 +47,21 @@
 #define STR_ODBC                6
 #define STR_DBASE               7
 #define STR_MSACCESS            8
-#define STR_ADO                 9
-#define STR_FLAT                10
-#define STR_CALC                11
-#define STR_MOZILLA             12
-#define STR_LDAP                13
-#define STR_OUTLOOK             14
-#define STR_OUTLOOKEXP          15
-#define STR_EVOLUTION           16
-#define STR_EVOLUTION_GROUPWISE 17
-#define STR_EVOLUTION_LDAP      18
-#define STR_KAB                 19
-#define STR_MACAB               20
-#define STR_EMBEDDED_HSQLDB     21
-#define STR_THUNDERBIRD         22
+#define STR_MSACCESS2007        9
+#define STR_ADO                 10
+#define STR_FLAT                11
+#define STR_CALC                12
+#define STR_MOZILLA             13
+#define STR_LDAP                14
+#define STR_OUTLOOK             15
+#define STR_OUTLOOKEXP          16
+#define STR_EVOLUTION           17
+#define STR_EVOLUTION_GROUPWISE 18
+#define STR_EVOLUTION_LDAP      19
+#define STR_KAB                 20
+#define STR_MACAB               21
+#define STR_EMBEDDED_HSQLDB     22
+#define STR_THUNDERBIRD         23
 
 #define STR_END                 STR_THUNDERBIRD + 1
 
