@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionHelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:09:53 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:52:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,6 +342,16 @@ DBG_NAME(OConnectionHelper)
                 ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK | WB_STDMODAL | WB_OPEN);
                 aFileDlg.AddFilter(sFilterName,sExt);
                 aFileDlg.SetCurrentFilter(sFilterName);
+                askForFileName(aFileDlg);
+            }
+            break;
+            case DST_MSACCESS_2007:
+            {
+                ::rtl::OUString sAccdb(RTL_CONSTASCII_USTRINGPARAM("*.accdb"));
+                String sFilterName2(ModuleRes (STR_MSACCESS_2007_FILTERNAME));
+                ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK | WB_STDMODAL | WB_OPEN);
+                aFileDlg.AddFilter(sFilterName2,sAccdb);
+                aFileDlg.SetCurrentFilter(sFilterName2);
                 askForFileName(aFileDlg);
             }
             break;
@@ -809,6 +819,7 @@ DBG_NAME(OConnectionHelper)
         if (    (DST_DBASE == m_eType)
             ||  (DST_FLAT == m_eType)
             ||  (DST_MSACCESS == m_eType)
+            ||  (DST_MSACCESS_2007 == m_eType)
             ||  (DST_CALC == m_eType) )
             switch (_rNEvt.GetType())
             {
@@ -929,6 +940,7 @@ DBG_NAME(OConnectionHelper)
         if (    (DST_DBASE == m_eType)
             ||  (DST_FLAT == m_eType)
             ||  (DST_MSACCESS == m_eType)
+            ||  (DST_MSACCESS_2007 == m_eType)
             ||  (DST_CALC == m_eType) )
         {
             if ((sURL != sOldPath) && (0 != sURL.Len()))
@@ -938,7 +950,7 @@ DBG_NAME(OConnectionHelper)
                 OFileNotation aTransformer(sURL);
                 sURL = aTransformer.get(OFileNotation::N_URL);
 
-                if ( (DST_CALC == m_eType) || (DST_MSACCESS == m_eType) )
+                if ( (DST_CALC == m_eType) || (DST_MSACCESS == m_eType) || (DST_MSACCESS_2007 == m_eType) )
                 { // #106016# --------------------------
                     if( pathExists(sURL, sal_True) == PATH_NOT_EXIST )
                     {
