@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:29:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1430,7 +1430,7 @@ void ScTabViewObj::SetZoom(INT16 nZoom)
             }
         }
         Fraction aFract( nZoom, 100 );
-        pViewSh->SetZoom( aFract, aFract );
+        pViewSh->SetZoom( aFract, aFract, TRUE );
         pViewSh->PaintGrid();
         pViewSh->PaintTop();
         pViewSh->PaintLeft();
@@ -1510,11 +1510,11 @@ void ScTabViewObj::SetZoomType(INT16 aZoomType)
             {
                 case SVX_ZOOM_WHOLEPAGE:
                 case SVX_ZOOM_PAGEWIDTH:
-                    pView->SetZoomType( eZoomType );
+                    pView->SetZoomType( eZoomType, TRUE );
                     break;
 
                 default:
-                    pView->SetZoomType( SVX_ZOOM_PERCENT );
+                    pView->SetZoomType( SVX_ZOOM_PERCENT, TRUE );
             }
             SetZoom( nZoom );
         }
