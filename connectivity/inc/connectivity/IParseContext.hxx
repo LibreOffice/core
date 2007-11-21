@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IParseContext.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 14:51:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 14:56:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,7 @@ namespace connectivity
             ERROR_INVALID_TABLE_OR_QUERY,   // "The database does contain neither a table nor a query named \"#\"."
             ERROR_INVALID_COLUMN,           // "The column \"#1\" is unknown in the table \"#2\"."
             ERROR_INVALID_TABLE_EXIST,      // "The database already contains a table or view with name \"#\"."
-            ERROR_INVALID_QUERY_EXIST,      // "The database already contains a query with name \"#\".";
-            ERROR_CYCLIC_SUB_QUERIES        // "The statement contains a cyclic reference to one or more sub queries."
+            ERROR_INVALID_QUERY_EXIST       // "The database already contains a query with name \"#\".";
         };
 
         enum    InternationalKeyCode
