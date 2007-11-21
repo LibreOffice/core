@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:45:43 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:50:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 
 #include <svtools/securityoptions.hxx>
 #include <sfx2/objsh.hxx>
+#include "sfx2/docmacromode.hxx"
 #include "bitset.hxx"
 
 namespace svtools { class AsynchronLink; }
@@ -66,7 +67,7 @@ class SfxFrame;
 class SfxToolBoxConfig;
 class SfxAcceleratorManager;
 class SfxBasicManagerHolder;
-struct SfxObjectShell_Impl
+struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 {
     ::comphelper::EmbeddedObjectContainer* mpObjectContainer;
     SfxAcceleratorManager*  pAccMgr;
@@ -74,10 +75,13 @@ struct SfxObjectShell_Impl
     SfxConfigManager*   pCfgMgr;
     SfxBasicManagerHolder*
                         pBasicManager;
+    SfxObjectShell&     rDocShell;
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
                         xBasicLibraries;
     ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
                         xDialogLibraries;
+    ::sfx2::DocumentMacroMode
+                        aMacroMode;
     SfxProgress*        pProgress;
     String              aTitle;
     String              aTempName;
@@ -154,11 +158,7 @@ struct SfxObjectShell_Impl
     sal_Bool                bInCloseEvent;
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel;
     sal_uInt16              nStyleFilter;
-    sal_Int16                nMacroMode;
     sal_Bool                bDisposing;
-
-    sal_Bool                bMacroDisabled;
-    sal_Bool                bMacroDisabledMessageIsShown;
 
     sal_Bool                m_bEnableSetModified;
     sal_Bool                m_bIsModified;
@@ -172,9 +172,17 @@ struct SfxObjectShell_Impl
     sal_Bool                m_bIsInit;
 
 
-    SfxObjectShell_Impl();
-    ~SfxObjectShell_Impl();
+    SfxObjectShell_Impl( SfxObjectShell& _rDocShell );
+    virtual ~SfxObjectShell_Impl();
 
+    // IMacroDocumentAccess overridables
+    virtual sal_Int16 getImposedMacroExecMode() const;
+    virtual ::rtl::OUString getDocumentLocation() const;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getLastCommitDocumentStorage();
+    virtual bool documentStorageHasMacros() const;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const;
+    virtual sal_Int16 getScriptingSignatureState() const;
+    virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const;
 };
 
 #endif
