@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-21 09:22:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:08:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -588,6 +588,9 @@
 #define SID_DRAW_HLINK_EDIT             (SC_VIEW_START + 96)
 #define SID_DRAW_HLINK_DELETE           (SC_VIEW_START + 97)
 #endif
+
+// "Zoom / Synchronize sheets" in options dialog
+#define SID_SC_OPT_SYNCZOOM             (SC_VIEW_START + 98)
 
 // NOTE: last valid ID is (SC_VIEW_START + 99)
 
