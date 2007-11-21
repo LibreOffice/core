@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:41:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:09:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,8 @@
 #define FT_DRAW                 31
 #define LB_DRAW                 32
 #define CB_CLIP             33
+#define GB_ZOOM             34
+#define CB_SYNCZOOM         35
 
 // TP_LAYOUT
 #define GB_LINK                 1
