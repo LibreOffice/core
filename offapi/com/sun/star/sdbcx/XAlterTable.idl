@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XAlterTable.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:20:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:16:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,8 @@ published interface XAlterTable: com::sun::star::uno::XInterface
 {
 
     /** is intended to alter an existing column identified by its name.
-        This operation must be atomar. Atomar means that the operation must be done inone step.
-        <b>
-        Note:
-        </b>
-        Atomar is nower days the wrong word, because we know that there exists smaller elements than atoms.
+        This operation must be atomic, in that it is done in one step.s
+
         @param colName
             the column name which to alter
         @param descriptor
@@ -82,13 +79,16 @@ published interface XAlterTable: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     /** is intended to alter an existing column identified by its position.
-        This operation must be atomar.
+        This operation must be atomic, in that it is done in one step.s
+
         @param index
             the position of the column to alter
         @param descriptor
             the new descriptor for the new column
         @throws com::sun::star::sdbc::SQLException
             if a database access error occurs.
+        @throws com::sun::star::lang::IndexOutOfBoundsException
+            if the given index does not denote an existing column.
     */
     void alterColumnByIndex([in]long index,
         [in]com::sun::star::beans::XPropertySet descriptor) raises
