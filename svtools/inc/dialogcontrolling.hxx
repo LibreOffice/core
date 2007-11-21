@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrolling.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:28:27 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,7 @@ namespace svt
         /** constructs the instance
 
             @param _rCheckable
-                a ->Window instance which supports a boolean method IsCheckable. Usually
+                a ->Window instance which supports a boolean method IsChecked. Usually
                 a ->RadioButton or ->CheckBox
         */
         EnableOnCheck( SourceType& _rCheckable )
