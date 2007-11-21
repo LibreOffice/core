@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:42:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:32:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,9 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
 #endif
+#ifndef CONNECTIVITY_SQLERROR_HXX
+#include <connectivity/sqlerror.hxx>
+#endif
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include <connectivity/CommonTools.hxx>
 #endif
@@ -95,8 +98,10 @@
 #ifndef DBACCESS_ROWSETCACHEITERATOR_HXX
 #include "RowSetCacheIterator.hxx"
 #endif
-#include <functional>
 
+#include <comphelper/componentcontext.hxx>
+
+#include <functional>
 
 
 namespace com { namespace sun { namespace star {
@@ -149,6 +154,9 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatTypes>   m_xNumberFormatTypes;
         OEmptyCollection*                                                               m_pEmptyCollection;
 
+        ::comphelper::ComponentContext          m_aContext;
+        ::connectivity::SQLError                m_aErrors;
+
         sal_Int32                               m_nLastColumnIndex; // the last column ask for, used for wasNull()
         sal_Int32                               m_nDeletedPosition; // is set only when a row was deleted
         sal_Int32                               m_nResultSetType;   // fetch property
@@ -159,7 +167,11 @@ namespace dbaccess
         sal_Bool                                m_bAfterLast    : 1;
 
     protected:
-        ORowSetBase(::cppu::OBroadcastHelper    &_rBHelper,::osl::Mutex* _pMutex);
+        ORowSetBase(
+            const ::comphelper::ComponentContext& _rContext,
+            ::cppu::OBroadcastHelper& _rBHelper,
+            ::osl::Mutex* _pMutex
+        );
 
         // fire a notification for all that are listening on column::VALUE property
         void firePropertyChange(const ORowSetRow& _rOldRow);
