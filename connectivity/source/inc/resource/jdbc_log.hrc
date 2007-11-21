@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jdbc_log.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:40:40 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:08:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,5 +93,6 @@
 #define STR_LOG_META_DATA_RESULT            ( STR_JDBC_LOG_MESSAGE_BASE + 53 )
 #define STR_LOG_META_DATA_SUCCESS           ( STR_JDBC_LOG_MESSAGE_BASE + 54 )
 #define STR_LOG_THROWING_EXCEPTION          ( STR_JDBC_LOG_MESSAGE_BASE + 55 )
+#define STR_LOG_SETTING_SYSTEM_PROPERTY     ( STR_JDBC_LOG_MESSAGE_BASE + 56 )
 
 #endif // CONNECTIVITY_RESOURCE_JDBC_LOG_HRC
