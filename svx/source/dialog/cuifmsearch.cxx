@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuifmsearch.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 10:24:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:20:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,14 +336,18 @@ void FmSearchDialog::Init(const UniString& strVisibleFields, const UniString& sI
 
     // die Listboxen fuellen
     // die Methoden des Feldvergleiches
-    UniString strListBoxEntries(SVX_RES(RID_STR_RECORDSEARCH_METHODS));
-    xub_StrLen i;
-    for (i=0; i<strListBoxEntries.GetTokenCount(); ++i)
-        m_lbPosition.InsertEntry(strListBoxEntries.GetToken(i));
+    USHORT nResIds[] = {
+        RID_STR_SEARCH_ANYWHERE,
+        RID_STR_SEARCH_BEGINNING,
+        RID_STR_SEARCH_END,
+        RID_STR_SEARCH_WHOLE
+    };
+    for ( size_t i=0; i<sizeof(nResIds)/sizeof(nResIds[0]); ++i )
+        m_lbPosition.InsertEntry( String( SVX_RES( nResIds[i] ) ) );
     m_lbPosition.SelectEntryPos(MATCHING_ANYWHERE);
 
     // die Feld-Listbox
-    for (i=0; i<strVisibleFields.GetTokenCount(';'); ++i)
+    for (USHORT i=0; i<strVisibleFields.GetTokenCount(';'); ++i)
         m_lbField.InsertEntry(strVisibleFields.GetToken(i, ';'));
 
 
@@ -547,9 +551,7 @@ IMPL_LINK(FmSearchDialog, OnCheckBoxToggled, CheckBox*, pBox)
     // Richtung -> weiterreichen und Checkbox-Text fuer StartOver neu setzen
     else if (pBox == &m_cbBackwards)
     {
-        UniString strButtonText(SVX_RES(RID_STR_RECORDSEARCH_BUTTONS));
-        m_cbStartOver.SetText(strButtonText.GetToken(bChecked ? 1 : 0));
-
+        m_cbStartOver.SetText( String( SVX_RES( bChecked ? RID_STR_FROM_BOTTOM : RID_STR_FROM_TOP ) ) );
         m_pSearchEngine->SetDirection(!bChecked);
     }
     // Aehnlichkeitssuche oder regulaerer Ausdruck
@@ -835,8 +837,8 @@ IMPL_LINK(FmSearchDialog, OnSearchProgress, FmSearchProgress*, pProgress)
         case FmSearchProgress::STATE_PROGRESS:
             if (pProgress->bOverflow)
             {
-                UniString strHint = SVX_RESSTR(RID_STR_SEARCH_OVERFLOW).GetToken(m_cbBackwards.IsChecked() ? 1 : 0);
-                m_ftHint.SetText(strHint);
+                String sHint( SVX_RES( m_cbBackwards.IsChecked() ? RID_STR_OVERFLOW_BACKWARD : RID_STR_OVERFLOW_FORWARD ) );
+                m_ftHint.SetText( sHint );
                 m_ftHint.Invalidate();
             }
 
