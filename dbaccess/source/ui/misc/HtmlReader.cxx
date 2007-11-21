@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:34:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:06:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,8 +264,15 @@ void OHTMLReader::NextToken( int nToken )
                 }
             case HTML_THEAD_ON:
             case HTML_TBODY_ON:
-                if ( !m_xTable.is() ) // erste Zeile als Header verwenden
-                    m_bError = !CreateTable(nToken);
+                {
+                    sal_uInt32 nTell = rInput.Tell(); // verändert vielleicht die Position des Streams
+                    if ( !m_xTable.is() )
+                    {// erste Zeile als Header verwenden
+                        m_bError = !CreateTable(nToken);
+                        if ( m_bAppendFirstLine )
+                            rInput.Seek(nTell);
+                    }
+                }
                 break;
             case HTML_TABLE_OFF:
                 if(!--m_nTableCount)
@@ -294,11 +301,19 @@ void OHTMLReader::NextToken( int nToken )
                 if ( m_bInTbl ) //&& !m_bSDNum ) // wichtig, da wir sonst auch die Namen der Fonts bekommen
                     m_sTextToken += aToken;
                 break;
+            case HTML_PARABREAK_OFF:
+                m_sCurrent += m_sTextToken;
+                break;
+            case HTML_PARABREAK_ON:
+                m_sTextToken.Erase();
+                break;
             case HTML_TABLEDATA_ON:
                 fetchOptions();
                 break;
             case HTML_TABLEDATA_OFF:
                 {
+                    if ( m_sCurrent.Len() )
+                        m_sTextToken = m_sCurrent;
                     try
                     {
                         insertValueIntoColumn();
@@ -308,6 +323,7 @@ void OHTMLReader::NextToken( int nToken )
                     {
                         showErrorDialog(e);
                     }
+                    m_sCurrent.Erase();
                     m_nColumnPos++;
                     eraseTokens();
                     m_bSDNum = m_bInTbl = sal_False;
@@ -360,15 +376,27 @@ void OHTMLReader::NextToken( int nToken )
                 if ( m_bInTbl ) // && !m_bSDNum ) // wichtig, da wir sonst auch die Namen der Fonts bekommen
                     m_sTextToken += aToken;
                 break;
+            case HTML_PARABREAK_OFF:
+                m_sCurrent += m_sTextToken;
+                break;
+            case HTML_PARABREAK_ON:
+                m_sTextToken.Erase();
+                break;
             case HTML_TABLEDATA_OFF:
+                if ( m_sCurrent.Len() )
+                    m_sTextToken = m_sCurrent;
                 adjustFormat();
                 m_nColumnPos++;
                 m_bSDNum = m_bInTbl = sal_False;
+                m_sCurrent.Erase();
                 break;
             case HTML_TABLEROW_OFF:
+                if ( m_sCurrent.Len() )
+                    m_sTextToken = m_sCurrent;
                 adjustFormat();
                 m_nColumnPos = 0;
                 m_nRows--;
+                m_sCurrent.Erase();
                 break;
         }
     }
@@ -423,23 +451,8 @@ void OHTMLReader::TableDataOn(SvxCellHorJustify& eVal,int nToken)
                     eVal = SVX_HOR_JUSTIFY_STANDARD;
             }
             break;
-            case HTML_O_SDVAL:
-            {
-                //pValue = new String( pOption->GetString() );
-            }
-            break;
-            case HTML_O_SDNUM:
-            {
-                //pValue = new String( pOption->GetString() );
-            }
-            break;
-            case HTML_O_BGCOLOR:
-                //m_aFont.SetFillColor(Color((sal_Int32)pOption->GetString()));
-            break;
             case HTML_O_WIDTH:
-            {
                 m_nWidth = GetWidthPixel( pOption );
-            }
             break;
         }
     }
@@ -528,7 +541,6 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
     sal_Bool bTableHeader = sal_False;
     String aColumnName;
     SvxCellHorJustify eVal;
-    String *pValue=NULL;
 
     String aTableName;
     FontDescriptor aFont = ::dbaui::CreateFontDescriptor(Application::GetSettings().GetStyleSettings().GetAppFont());
@@ -544,36 +556,35 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
                 if(bCaption)
                     aTableName += aToken;
                 break;
+            case HTML_PARABREAK_OFF:
+                m_sCurrent += aColumnName;
+                break;
+            case HTML_PARABREAK_ON:
+                m_sTextToken.Erase();
+                break;
             case HTML_TABLEDATA_ON:
+                // m_bAppendFirstLine = true;
+                // run through
             case HTML_TABLEHEADER_ON:
-                if(pValue)
-                {       // HTML_TABLEHEADER_OFF oder HTML_TABLEDATA_OFF fehlte
-                    aColumnName.EraseLeadingChars();
-                    aColumnName.EraseTrailingChars();
-                    if (!aColumnName.Len())
-                        aColumnName = String(ModuleRes(STR_COLUMN_NAME));
-
-                    CreateDefaultColumn(aColumnName);
-                    aColumnName.Erase();
-
-                    DELETEZ(pValue);
-                    eVal = SVX_HOR_JUSTIFY_STANDARD;
-                }
                 TableDataOn(eVal,nTmpToken2);
                 bTableHeader = TRUE;
                 break;
             case HTML_TABLEDATA_OFF:
+                // m_bAppendFirstLine = true;
+                // run through
             case HTML_TABLEHEADER_OFF:
                 {
                     aColumnName.EraseLeadingChars();
                     aColumnName.EraseTrailingChars();
-                    if (!aColumnName.Len())
+                    if (!aColumnName.Len() || m_bAppendFirstLine )
                         aColumnName = String(ModuleRes(STR_COLUMN_NAME));
+                    else if ( m_sCurrent.Len() )
+                        aColumnName = m_sCurrent;
 
                     CreateDefaultColumn(aColumnName);
                     aColumnName.Erase();
+                    m_sCurrent.Erase();
 
-                    DELETEZ(pValue);
                     eVal = SVX_HOR_JUSTIFY_STANDARD;
                     bTableHeader = sal_False;
                 }
@@ -612,6 +623,8 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
     }
     while((nTmpToken2 = GetNextToken()) != HTML_TABLEROW_OFF);
 
+    if ( m_sCurrent.Len() )
+        aColumnName = m_sCurrent;
     if(aColumnName.Len())
         CreateDefaultColumn(aColumnName);
 
