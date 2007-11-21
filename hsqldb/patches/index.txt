@@ -1,83 +1,15 @@
 ====================================================================================
 File name
 ---------
-  timestamp_and_vendor.patch
+  patch_file.patch
 
 Description
 -----------
-  removes the tstamp/_tmpstamp construct from the build.xml (not supported by
-  some ant versions)
+  patches HSQL so that ....
 
 Issue
 -----
-  http://www.openoffice.org/issues/show_bug.cgi?id=51409
-  Build breaks in hsqldb
+  http://www.openoffice.org/issues/show_bug.cgi?id=?????
+  <summary>
 
 
-====================================================================================
-File name
----------
-  unique_constraint_violation_error.patch
-
-Description
------------
-  provides a better error message when violating a unique index or (primary)
-  constraint
-
-Issue
------
-  http://www.openoffice.org/issues/show_bug.cgi?id=65426
-  "Database frontend: Confusing errormessage when entering duplicate primary key"
-
-
-====================================================================================
-File name
----------
-  text_table_double_quotes.patch
-
-Description
------------
-  fixes the problem that when inserting double quotes into a text table, the table
-  becomes unreadable under some circumstances.
-
-Issue
------
-  http://www.openoffice.org/issues/show_bug.cgi?id=70841
-  writing certain data into bugdoc HSQL Text Table renders the complete database inaccessible
-
-
-====================================================================================
-File name
----------
-  view_asterisk_replacement.patch
-
-Description
------------
-  modifies HSQLDB so that views behave more standard-conform. That is, per SQL standard
-  views are requested to return the columns as they existed at the time of definition
-  of the view. I.e., if the table gets new columns later on, they're not included in the
-  view.
-  This indirectly fixes the below issue.
-
-Issue
------
-  http://www.openoffice.org/issues/show_bug.cgi?id=78296
-  adding a column to a HSQLDB table which is referred in a view renders the database useless
-
-
-====================================================================================
-File name
----------
-  select_into.patch
-
-Description
------------
-  Fixes the problem that quoted table names which are created with SELECT INTO command get the correct
-  table type when asking the database meta data for it.
-Issue
------
-  http://www.openoffice.org/issues/show_bug.cgi?id=70160
-  Table created with SELECT INTO TABLE command is not visible
-
-
-====================================================================================
