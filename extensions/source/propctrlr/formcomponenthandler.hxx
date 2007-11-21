@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:48:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:22:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -422,11 +422,16 @@ namespace pcr
             database form
             @param _rxUIUpdate
                 access to the property browser UI
+            @param _nDesignForProperty
+                the ID for the property for which the designer is opened
             @return
                 <TRUE/> if the window was successfully opened, or was previously open,
                 <FALSE/> otherwise
         */
-        bool impl_doDesignSQLCommand_nothrow( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI );
+        bool impl_doDesignSQLCommand_nothrow(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XObjectInspectorUI >& _rxInspectorUI,
+            PropertyId _nDesignForProperty
+        );
 
         /** updates a property (UI) whose state depends on more than one other property
 
