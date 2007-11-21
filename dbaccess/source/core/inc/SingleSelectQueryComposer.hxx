@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:12:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:40:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,9 @@
 #ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
 #include <comphelper/propertycontainer.hxx>
 #endif
+#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
+#include <comphelper/componentcontext.hxx>
+#endif
 
 #include <memory>
 
@@ -134,7 +137,7 @@ namespace dbaccess
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xConnectionTables;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >  m_xNumberFormatsSupplier;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>         m_xColumns;
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceFactory;
+        ::comphelper::ComponentContext                                                      m_aContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::script::XTypeConverter >        m_xTypeConverter;
 
         ::std::vector<OPrivateColumns*>         m_aCurrentColumns;
@@ -225,16 +228,8 @@ namespace dbaccess
 
         OSingleSelectQueryComposer( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _xTableSupplier,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xServiceFactory);
+                        const ::comphelper::ComponentContext& _rContext);
 
-
-        enum BoolComparison
-        {
-            BOOL_COMPARISON_DEFAULT = 0, // column = 0, column = 1
-            BOOL_COMPARISON_SQL     = 1, // column Is true, column Is false
-            BOOL_COMPARISON_MISC    = 2, // column = false, column = true
-            BOOL_COMPARISON_ACCESS  = 3  // column = 0, column = -1
-        };
 
         void SAL_CALL disposing(void);
         // ::com::sun::star::lang::XTypeProvider
