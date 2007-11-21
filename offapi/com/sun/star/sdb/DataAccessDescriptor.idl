@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataAccessDescriptor.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:14:08 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:15:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ module com {  module sun {  module star {  module sdb {
     such as a query, a table, a result set, a connection to a data source, a column within a table, and so on.</br>
     All of these objects are usually not specified with a single property, but with a set of properties, and for
     various objects, various (but not always different) properties are needed.<br/>
-    The <type>DataAccessDescriptor</type> describes the super set of the properties for the most common
+    The <code>DataAccessDescriptor</code> describes the super set of the properties for the most common
     data access objects.</p>
 
     <p>Every component providing or requiring a <type>DataAccessDescriptor</type> for some functionality
@@ -70,7 +70,8 @@ published service DataAccessDescriptor
     /** specifies the name of the datasource to access.
 
         <p>This data source is usually used to create a <type>Connection</type>. If no DataSourceName is given
-        and the <member>DatabaseLocation</member> and the <member>ConnectionResource</member> are emtpy, then an <member>ActiveConnection</member> is reuqired.</p>
+        and the <member>DatabaseLocation</member> and the <member>ConnectionResource</member> are emtpy, then an <member>ActiveConnection</member>
+        is required.</p>
 
         @see com::sun::star::sdb::DatabaseContext
         @see ActiveConnection
@@ -114,7 +115,7 @@ published service DataAccessDescriptor
 
     /** specifies the command to execute to retrieve a result set.
 
-        <p>This property is only meaningfull together with the <member>CommandType</member>
+        <p>This property is only meaningful together with the <member>CommandType</member>
         property, thus either <em>both</em> or <em>none</em> of them are present.</p>
 
         @see CommandType
@@ -133,7 +134,7 @@ published service DataAccessDescriptor
      */
     [optional, property] long CommandType;
 
-    /** specifies an addtional filter to optinally use.
+    /** specifies an addtional filter to optionally use.
 
         <p>The Filter string has to form a SQL WHERE-clause, <em>without</em> the WHERE-string itself.</p>
 
@@ -196,7 +197,7 @@ published service DataAccessDescriptor
         <member>BookmarkSelection</member> becomes mandatory.</p>
 
         <p>If the elements specify bookmarks, and a <member>ResultSet</member> has been specified, then
-        this result set is urged to support the <type scope="com::sun::star::sdbcx">XRowLocate</type> interface.</p>
+        this result set is required to support the <type scope="com::sun::star::sdbcx">XRowLocate</type> interface.</p>
     */
     [optional, property] sequence< any > Selection;
 
