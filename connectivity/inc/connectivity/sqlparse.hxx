@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 12:35:02 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 14:57:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@ namespace com
 namespace connectivity
 {
     class OSQLScanner;
+    class SQLError;
 
     //==========================================================================
     //= OParseContext
@@ -131,6 +132,7 @@ namespace connectivity
     //==========================================================================
     //= OSQLParser
     //==========================================================================
+    struct OSQLParser_Data;
     /** Parser for SQL92
     */
     class OSQLParser
@@ -155,7 +157,8 @@ namespace connectivity
     // informations on the current parse action
         const IParseContext*        m_pContext;
         OSQLParseNode*              m_pParseTree;   // result from parsing
-        ::com::sun::star::lang::Locale* m_pLocale;      // current locale settings for parsing
+        ::std::auto_ptr< OSQLParser_Data >
+                                    m_pData;
         ::rtl::OUString                     m_sFieldName;   // current field name for a predicate
         ::rtl::OUString                     m_sErrorMessage;// current error msg
 
@@ -200,6 +203,9 @@ namespace connectivity
 
         // Access to the context
         const IParseContext& getContext() const {return *m_pContext;}
+
+        /// access to the SQLError instance owned by this parser
+        const SQLError& getErrorHelper() const;
 
         // TokenIDToStr: Token-Name zu einer Token-Nr.
         static ::rtl::OString TokenIDToStr(sal_uInt32 nTokenID, const IParseContext* pContext = NULL);
