@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 14:42:29 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 15:10:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,12 @@
 PRJ=..$/..
 PRJINC=..
 PRJNAME=connectivity
+# common resources in connectivity
 TARGET=cnr
+# resources used for logging in the various SDBC drivers
 TARGET2=sdbcl
+# resources used for ::com::sun::star::sdb::ErrorCondition messages
+TARGET3=sdberr
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -60,15 +64,27 @@ EXCEPTIONSFILES=\
 SLOFILES=\
         $(EXCEPTIONSFILES)
 
+# ...............................................
+
 SRS1NAME=conn_shared_res
 SRC1FILES= \
-    conn_shared_res.src
+    $(SRS1NAME).src
+
+# ...............................................
 
 SRS2NAME=conn_log_res
 SRC2FILES= \
-    conn_log_res.src
+    $(SRS2NAME).src
+
+# ...............................................
+
+SRS3NAME=conn_error_message
+SRC3FILES= \
+    $(SRS3NAME).src
 
 # === .res file ==========================================================
+
+# ...............................................
 
 RES1FILELIST=\
     $(SRS)$/$(SRS1NAME).srs \
@@ -76,11 +92,21 @@ RES1FILELIST=\
 RESLIB1NAME=$(TARGET)
 RESLIB1SRSFILES=$(RES1FILELIST)
 
+# ...............................................
+
 RES2FILELIST=\
     $(SRS)$/$(SRS2NAME).srs \
 
 RESLIB2NAME=$(TARGET2)
 RESLIB2SRSFILES=$(RES2FILELIST)
+
+# ...............................................
+
+RES3FILELIST=\
+    $(SRS)$/$(SRS3NAME).srs \
+
+RESLIB3NAME=$(TARGET3)
+RESLIB3SRSFILES=$(RES3FILELIST)
 
 # --- Targets ----------------------------------
 
