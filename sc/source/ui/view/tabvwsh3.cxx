@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:56:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -627,6 +627,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case SID_ATTR_ZOOM: // Statuszeile
         case FID_SCALE:
             {
+                BOOL bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
                 SvxZoomType eOldZoomType = GetZoomType();
                 SvxZoomType eNewZoomType = eOldZoomType;
                 const Fraction& rOldY = GetViewData()->GetZoomY();  // Y wird angezeigt
@@ -704,11 +705,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     {
                         case SVX_ZOOM_WHOLEPAGE:
                         case SVX_ZOOM_PAGEWIDTH:
-                            SetZoomType( eNewZoomType );
+                            SetZoomType( eNewZoomType, bSyncZoom );
                             break;
 
                         default:
-                            SetZoomType( SVX_ZOOM_PERCENT );
+                            SetZoomType( SVX_ZOOM_PERCENT, bSyncZoom );
                     }
                 }
 
@@ -722,7 +723,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         pScMod->SetAppOptions( aNewOpt );
                     }
                     Fraction aFract( nZoom, 100 );
-                    SetZoom( aFract, aFract );
+                    SetZoom( aFract, aFract, bSyncZoom );
                     PaintGrid();
                     PaintTop();
                     PaintLeft();
