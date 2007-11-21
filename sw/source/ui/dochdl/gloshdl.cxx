@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:39:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -686,7 +686,7 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
                     const IDocumentFieldsAccess* pIDFA = pWrtShell->getIDocumentFieldsAccess();
                     SwFieldType* pType = pIDFA->GetFldType( RES_SETEXPFLD, pColl->GetName(), false );
                     sal_uInt16 nId = pIDFA->GetFldTypes()->GetPos( pType );
-                    pWrtShell->InsertLabel( LTYPE_OBJECT, aEmptyStr, aEmptyStr, FALSE, nId, aEmptyStr );
+                    pWrtShell->InsertLabel( LTYPE_OBJECT, aEmptyStr, aEmptyStr, aEmptyStr, FALSE, nId, aEmptyStr );
                     pWrtShell->SwFEShell::SetFlyName( sTeamCredits );
                     pWrtShell->SwFEShell::SelectObj ( Point ( ULONG_MAX, ULONG_MAX ) );
                     pWrtShell->EnterStdMode();
