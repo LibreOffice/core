@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventThread.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:48:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:33:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,8 +85,8 @@ OComponentEventThread::~OComponentEventThread()
 
     DBG_ASSERT( m_aEvents.size() == 0,
         "OComponentEventThread::~OComponentEventThread: Kein dispose gerufen?" );
-    while (m_aEvents.size())
-        delete *m_aEvents.erase(m_aEvents.begin());
+
+    impl_clearEventQueue();
 }
 
 Any SAL_CALL OComponentEventThread::queryInterface(const Type& _rType) throw (RuntimeException)
@@ -103,6 +103,17 @@ Any SAL_CALL OComponentEventThread::queryInterface(const Type& _rType) throw (Ru
     return aReturn;
 }
 
+void OComponentEventThread::impl_clearEventQueue()
+{
+    while ( m_aEvents.size() )
+    {
+        delete *m_aEvents.begin();
+        m_aEvents.erase( m_aEvents.begin() );
+    }
+    m_aControls.erase( m_aControls.begin(), m_aControls.end() );
+    m_aFlags.erase( m_aFlags.begin(), m_aFlags.end() );
+}
+
 void OComponentEventThread::disposing( const EventObject& evt ) throw ( ::com::sun::star::uno::RuntimeException)
 {
     if( evt.Source == m_xComp )
@@ -114,10 +125,7 @@ void OComponentEventThread::disposing( const EventObject& evt ) throw ( ::com::s
         m_xComp->removeEventListener( xEvtLstnr );
 
         // Event-Queue loeschen
-        while (m_aEvents.size())
-            delete *m_aEvents.erase(m_aEvents.begin());
-        m_aControls.erase(m_aControls.begin(), m_aControls.end());
-        m_aFlags.erase(m_aFlags.begin(), m_aFlags.end());
+        impl_clearEventQueue();
 
         // Das Control loslassen und pCompImpl auf 0 setzen, damit der
         // Thread weiss, dass er sich beenden soll.
@@ -210,9 +218,17 @@ void OComponentEventThread::run()
             Reference<XComponent>  xComp = m_xComp;
             ::cppu::OComponentHelper *pCompImpl = m_pCompImpl;
 
-            EventObject* pEvt = *m_aEvents.erase( m_aEvents.begin() );
-            Reference<XAdapter> xControlAdapter = *m_aControls.erase( m_aControls.begin() );
-            sal_Bool bFlag = *m_aFlags.erase( m_aFlags.begin() );
+            ThreadEvents::iterator firstEvent( m_aEvents.begin() );
+            EventObject* pEvt = *firstEvent;
+            m_aEvents.erase( firstEvent );
+
+            ThreadObjects::iterator firstControl( m_aControls.begin() );
+            Reference<XAdapter> xControlAdapter = *firstControl;
+            m_aControls.erase( firstControl );
+
+            ThreadBools::iterator firstFlag( m_aFlags.begin() );
+            sal_Bool bFlag = *firstFlag;
+            m_aFlags.erase( firstFlag );
 
             {
                 MutexRelease aReleaseOnce(m_aMutex);
