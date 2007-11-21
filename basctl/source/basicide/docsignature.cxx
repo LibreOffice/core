@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsignature.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:23:14 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 /** === end UNO includes === **/
 
 #include <sfx2/objsh.hxx>
+#include <sfx2/signaturestate.hxx>
 
 //........................................................................
 namespace basctl
