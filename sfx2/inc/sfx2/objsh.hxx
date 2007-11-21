@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objsh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:30:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:45:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,16 +201,6 @@ typedef sal_uInt32 SfxObjectShellFlags;
 #define SEQUENCE                ::com::sun::star::uno::Sequence
 #define OUSTRING                ::rtl::OUString
 
-// xmlsec05, check with SFX team
-#define SIGNATURESTATE_UNKNOWN                  (-1)
-#define SIGNATURESTATE_NOSIGNATURES             0
-#define SIGNATURESTATE_SIGNATURES_OK            1
-#define SIGNATURESTATE_SIGNATURES_BROKEN        2
-#define SIGNATURESTATE_SIGNATURES_INVALID       3   // State was SIGNATURES_OK, but doc is modified now
-
-// pb: #i54495# new status
-#define SIGNATURESTATE_SIGNATURES_NOTVALIDATED  4   // signature is OK, but certificate could not be validated
-
 //--------------------------------------------------------------------
 
 #define HIDDENINFORMATION_RECORDEDCHANGES       0x0001
@@ -353,11 +343,6 @@ public:
     SAL_DLLPRIVATE void SetModalMode_Impl(sal_Bool bModal=sal_True);
     SAL_DLLPRIVATE void SetMacroMode_Impl(sal_Bool bModal=sal_True);
 //#endif
-
-    BOOL                        HasMacrosLib_Impl() const;
-    BOOL                        HasMacrosStor_Impl() const;
-
-    static sal_Bool             StorageHasMacros( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
     void                        ResetError();
     sal_uInt32                  GetError() const;
@@ -734,7 +719,8 @@ public:
 
     SAL_DLLPRIVATE void InitOwnModel_Impl();
     SAL_DLLPRIVATE void BreakMacroSign_Impl( sal_Bool bBreakMacroSing );
-    SAL_DLLPRIVATE void CheckMacrosOnLoading_Impl();
+    SAL_DLLPRIVATE void CheckSecurityOnLoading_Impl();
+    SAL_DLLPRIVATE void CheckForBrokenDocSignatures_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
 
     SAL_DLLPRIVATE static SEQUENCE< OUSTRING > GetEventNames_Impl();
     SAL_DLLPRIVATE void InitBasicManager_Impl();
