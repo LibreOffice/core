@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatortree.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:17:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:25:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -772,7 +772,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    SvLBoxEntry* NavigatorTree::Insert( FmEntryData* pEntryData, sal_uInt32 nRelPos )
+    SvLBoxEntry* NavigatorTree::Insert( FmEntryData* pEntryData, ULONG nRelPos )
     {
         //////////////////////////////////////////////////////////////////////
         // Aktuellen Eintrag einfuegen
