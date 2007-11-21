@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:01:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -593,9 +593,9 @@ void FmXFormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) c
 {
     switch (nHandle)
     {
-        case FM_ATTR_FILTER_CRITERIA:
+        case FM_ATTR_FILTER:
         {
-            ::rtl::OUString aFilter;
+            ::rtl::OUStringBuffer aFilter;
             OStaticDataAccessTools aStaticTools;
             Reference<XConnection> xConnection(aStaticTools.getRowSetConnection(Reference< XRowSet>(m_xModelAsIndex, UNO_QUERY)));
             if (xConnection.is())
@@ -612,42 +612,42 @@ void FmXFormController::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) c
                 ::rtl::OUString aQuote( xMetaData->getIdentifierQuoteString() );
 
                     // now add the filter rows
-                for (FmFilterRows::const_iterator i = m_aFilters.begin(); i != m_aFilters.end(); ++i)
+                for ( FmFilterRows::const_iterator row = m_aFilters.begin(); row != m_aFilters.end(); ++row )
                 {
-                    ::rtl::OUString aTest, aErrorMsg, aCriteria;
-                    const FmFilterRow& rRow = *i;
+                    const FmFilterRow& rRow = *row;
 
-                    if (!rRow.empty())
+                    if ( rRow.empty() )
+                        continue;
+
+                    if ( aFilter.getLength() )
+                        aFilter.appendAscii( " OR " );
+
+                    aFilter.appendAscii( "( " );
+                    for ( FmFilterRow::const_iterator condition = rRow.begin(); condition != rRow.end(); ++condition )
                     {
-                        if (aFilter.getLength())
-                            aFilter += ::rtl::OUString::createFromAscii(" OR ");
+                        // get the field of the controls map
+                        Reference< XTextComponent > xText = condition->first;
+                        Reference< XPropertySet > xField = m_aFilterControls.find( xText )->second;
+                        DBG_ASSERT( xField.is(), "FmXFormController::getFastPropertyValue: no field found!" );
+                        if ( condition != rRow.begin() )
+                            aFilter.appendAscii( " AND " );
 
-                        aFilter += ::rtl::OUString::createFromAscii("(");
-                        for (FmFilterRow::const_iterator j = rRow.begin(); j != rRow.end(); j++)
+                        ::rtl::OUString sFilterValue( condition->second );
+
+                        ::rtl::OUString sErrorMsg, sCriteria;
+                        ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree( sErrorMsg, sFilterValue, xFormatter, xField );
+                        OSL_ENSURE( xParseNode.is(), "FmXFormController::getFastPropertyValue: could not parse the field value predicate!" );
+                        if ( xParseNode.is() )
                         {
-                            // get the field of the controls map
-                            Reference< XTextComponent > xText = (*j).first;
-                            Reference< XPropertySet> xField = (*m_aFilterControls.find(xText)).second;
-                            DBG_ASSERT(xField.is(), "NoField found");
-                            if (j != rRow.begin())
-                                aFilter += ::rtl::OUString::createFromAscii(" AND ");
-
-                            aTest = (*j).second;
-                            aErrorMsg = ::rtl::OUString();
-                            ::rtl::Reference< ISQLParseNode > xParseNode = predicateTree(aErrorMsg, aTest, xFormatter, xField);
-                            if (xParseNode.is())
-                            {
-                                aCriteria = ::rtl::OUString();
-                                // don't use a parse context here, we need it unlocalized
-                                xParseNode->parseNodeToStr( aCriteria, xConnection, NULL );
-                                aFilter += aCriteria;
-                            }
+                            // don't use a parse context here, we need it unlocalized
+                            xParseNode->parseNodeToStr( sCriteria, xConnection, NULL );
+                            aFilter.append( sCriteria );
                         }
-                        aFilter += ::rtl::OUString::createFromAscii(")");
                     }
+                    aFilter.appendAscii( " )" );
                 }
             }
-            rValue <<= ::rtl::OUString(aFilter);
+            rValue <<= aFilter.makeStringAndClear();
         }
         break;
 
@@ -681,7 +681,7 @@ void FmXFormController::fillProperties(
     _rProps.realloc(2);
     sal_Int32 nPos = 0;
     Property* pDesc = _rProps.getArray();
-    DECL_PROP1(FILTER_CRITERIA, rtl::OUString, READONLY);
+    DECL_PROP1(FILTER, rtl::OUString, READONLY);
     DECL_PROP1(FORM_OPERATIONS, Reference< XFormOperations >, READONLY);
 }
 
@@ -2532,7 +2532,7 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
             {
                 Reference< XPropertySet >  xSet(xForm, UNO_QUERY);
                 ::rtl::OUString aStatement  = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_ACTIVECOMMAND));
-                ::rtl::OUString aFilter     = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_FILTER_CRITERIA));
+                ::rtl::OUString aFilter     = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_FILTER));
                 m_xComposer->setQuery(aStatement);
                 m_xComposer->setFilter(aFilter);
             }
