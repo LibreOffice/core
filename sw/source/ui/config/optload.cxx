@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:23:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:20:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,7 @@
 #ifndef _EXPFLD_HXX //autogen
 #include <expfld.hxx>
 #endif
+#include <caption.hxx>
 #ifndef _COM_SUN_STAR_DOCUMENT_PRINTERINDEPENDENTLAYOUT_HPP_
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #endif
@@ -406,11 +407,16 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     : SfxTabPage(pParent, SW_RES(TP_OPTCAPTION_PAGE), rSet),
     aCheckFT        (this, SW_RES(FT_OBJECTS    )),
     aCheckLB        (this, SW_RES(CLB_OBJECTS   )),
+    aFtCaptionOrder(this, SW_RES( FT_ORDER )),
+    aLbCaptionOrder(this, SW_RES( LB_ORDER )),
+    aPreview        (this, SW_RES(WIN_PREVIEW   )),
     aSettingsGroupFL(this, SW_RES(FL_SETTINGS_2 )),
     aCategoryText   (this, SW_RES(TXT_CATEGORY  )),
     aCategoryBox    (this, SW_RES(BOX_CATEGORY  )),
     aFormatText     (this, SW_RES(TXT_FORMAT    )),
     aFormatBox      (this, SW_RES(BOX_FORMAT    )),
+    aNumberingSeparatorFT(this, SW_RES(FT_NUM_SEP  )),
+    aNumberingSeparatorED(this, SW_RES(ED_NUM_SEP  )),
     aTextText       (this, SW_RES(TXT_TEXT      )),
     aTextEdit       (this, SW_RES(EDT_TEXT      )),
     aPosText        (this, SW_RES(TXT_POS       )),
@@ -424,7 +430,6 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
     aCharStyleFT    (this, SW_RES(FT_CHARSTYLE  )),
     aCharStyleLB    (this, SW_RES(LB_CHARSTYLE  )),
     aApplyBorderCB  (this, SW_RES(CB_APPLYBORDER)),
-    aPreview        (this, SW_RES(WIN_PREVIEW   )),
 
     sSWTable        (SW_RES(STR_TABLE           )),
     sSWFrame        (SW_RES(STR_FRAME           )),
@@ -505,11 +510,14 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
 
     Link aLk = LINK( this, SwCaptionOptPage, ModifyHdl );
     aCategoryBox.SetModifyHdl( aLk );
+    aNumberingSeparatorED.SetModifyHdl( aLk );
     aTextEdit   .SetModifyHdl( aLk );
 
     aLk = LINK(this, SwCaptionOptPage, SelectHdl);
     aCategoryBox.SetSelectHdl( aLk );
     aFormatBox  .SetSelectHdl( aLk );
+
+    aLbCaptionOrder.SetSelectHdl( LINK(this, SwCaptionOptPage, OrderHdl));
 
     aCheckLB.SetSelectHdl( LINK(this, SwCaptionOptPage, ShowEntryHdl) );
     aCheckLB.SetCheckButtonHdl( LINK(this, SwCaptionOptPage, ShowEntryHdl) );
@@ -558,6 +566,9 @@ BOOL SwCaptionOptPage::FillItemSet( SfxItemSet&  )
 
     USHORT nCheckCount = aCheckLB.GetCheckedEntryCount();
     pModOpt->SetInsWithCaption( bHTMLMode, nCheckCount > 0 );
+
+    sal_Int32 nPos = aLbCaptionOrder.GetSelectEntryPos();
+    pModOpt->SetCaptionOrderNumberingFirst(nPos == 1 ? sal_True : sal_False );
 
     return bRet;
 }
@@ -627,7 +638,8 @@ void SwCaptionOptPage::Reset( const SfxItemSet& rSet)
         aCheckLB.InsertEntry( sClass );
         SetOptions( nPos++, OLE_CAP, &rOleId );
     }
-
+    aLbCaptionOrder.SelectEntryPos(
+        SW_MOD()->GetModuleConfig()->IsCaptionOrderNumberingFirst() ? 1 : 0);
     ModifyHdl();
 }
 
@@ -683,6 +695,9 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
         aCategoryBox.Enable( bChecked );
         aFormatText.Enable( bChecked );
         aFormatBox.Enable( bChecked );
+        sal_Bool bNumSep = bChecked && aLbCaptionOrder.GetSelectEntryPos() == 1;
+        aNumberingSeparatorED.Enable( bNumSep );
+        aNumberingSeparatorFT.Enable( bNumSep );
         aTextText.Enable( bChecked );
         aTextEdit.Enable( bChecked );
         aPosText.Enable( bChecked );
@@ -775,6 +790,7 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
         USHORT nLevelPos = ( pOpt->GetLevel() < MAXLEVEL ) ? pOpt->GetLevel() + 1 : 0;
         aLbLevel.SelectEntryPos( nLevelPos );
         aEdDelim.SetText(pOpt->GetSeparator());
+        aNumberingSeparatorED.SetText( pOpt->GetNumSeparator() );
         if(pOpt->GetCharacterStyle().Len())
             aCharStyleLB.SelectEntry( pOpt->GetCharacterStyle() );
         else
@@ -830,6 +846,7 @@ void SwCaptionOptPage::SaveEntry(SvLBoxEntry* pEntry)
         USHORT nLevel = ( nPos > 0 && nPos != LISTBOX_ENTRY_NOTFOUND ) ? nPos - 1 : MAXLEVEL;
         pOpt->SetLevel(nLevel);
         pOpt->SetSeparator(aEdDelim.GetText());
+        pOpt->SetNumSeparator( aNumberingSeparatorED.GetText());
         if(!aCharStyleLB.GetSelectEntryPos())
             pOpt->SetCharacterStyle(aEmptyStr);
         else
@@ -876,7 +893,17 @@ IMPL_LINK_INLINE_START( SwCaptionOptPage, SelectHdl, ListBox *, EMPTYARG )
     return 0;
 }
 IMPL_LINK_INLINE_END( SwCaptionOptPage, SelectHdl, ListBox *, EMPTYARG )
+/*-- 02.11.2007 10:00:36---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox*, pBox )
+{
+    DrawSample();
+    sal_Int32 nPos = pBox->GetSelectEntryPos();
+    aNumberingSeparatorFT.Enable( nPos == 1 );
+    aNumberingSeparatorED.Enable( nPos == 1 );
+    return 0;
+}
 /* -----------------26.10.98 10:58-------------------
  *
  * --------------------------------------------------*/
@@ -887,14 +914,20 @@ void SwCaptionOptPage::DrawSample()
 
     if( aCategoryBox.GetText() != sNone)
     {
+        //#i61007# order of captions
+        bool bOrderNumberingFirst = aLbCaptionOrder.GetSelectEntryPos() == 1;
         // Nummer
         USHORT nNumFmt = (USHORT)(ULONG)aFormatBox.GetEntryData(
                                         aFormatBox.GetSelectEntryPos() );
         if( SVX_NUM_NUMBER_NONE != nNumFmt )
         {
-            // Kategorie
-            aStr += aCategoryBox.GetText();
-            aStr += ' ';
+            //#i61007# order of captions
+            if( !bOrderNumberingFirst )
+            {
+                // Kategorie
+                aStr += aCategoryBox.GetText();
+                aStr += ' ';
+            }
 
             SwWrtShell *pSh = ::GetActiveWrtShell();
             String sFldTypeName( aCategoryBox.GetText() );
@@ -927,6 +960,12 @@ void SwCaptionOptPage::DrawSample()
                 //case ARABIC:
                 default:                    aStr += '1'; break;
             }
+        }
+        //#i61007# order of captions
+        if( bOrderNumberingFirst )
+        {
+            aStr += aNumberingSeparatorED.GetText();
+            aStr += aCategoryBox.GetText();
         }
         aStr += aTextEdit.GetText();
     }
