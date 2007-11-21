@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:33:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:06:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,7 @@ ORTFReader::ORTFReader( SvStream& rIn,
     ,ODatabaseExport(_rxConnection,_rxNumberF,_rM,pList,_pInfoMap)
 {
     DBG_CTOR(ORTFReader,NULL);
+    m_bAppendFirstLine = false;
 }
 // ---------------------------------------------------------------------------
 ORTFReader::ORTFReader(SvStream& rIn,
@@ -156,6 +157,7 @@ ORTFReader::ORTFReader(SvStream& rIn,
    ,ODatabaseExport(nRows,_rColumnPositions,_rxNumberF,_rM,pList,_pInfoMap,_bAutoIncrementEnabled)
 {
     DBG_CTOR(ORTFReader,NULL);
+    m_bAppendFirstLine = false;
 }
 // ---------------------------------------------------------------------------
 ORTFReader::~ORTFReader()
@@ -217,18 +219,30 @@ void ORTFReader::NextToken( int nToken )
                 m_nDefToken = (rtl_TextEncoding)nTokenValue;
                 break;
             case RTF_TROWD:
-                if(!m_xTable.is()) // erste Zeile als Header verwenden
-                    m_bError = !CreateTable(nToken);
-                else
                 {
-                    try
+                    sal_uInt32 nTell = rInput.Tell(); // verändert vielleicht die Position des Streams
+                    bool bInsertRow = true;
+                    if ( !m_xTable.is() ) // erste Zeile als Header verwenden
                     {
-                        m_pUpdateHelper->moveToInsertRow(); // sonst neue Zeile anh"angen
+                        m_bError = !CreateTable(nToken);
+                        bInsertRow = m_bAppendFirstLine;
+                        if ( m_bAppendFirstLine )
+                        {
+                            rInput.Seek(nTell);
+                            bInsertRow = true;
+                        }
                     }
-                    catch(SQLException& e)
-                    // UpdateFehlerbehandlung
+                    if ( bInsertRow && !m_bError)
                     {
-                        showErrorDialog(e);
+                        try
+                        {
+                            m_pUpdateHelper->moveToInsertRow(); // sonst neue Zeile anh"angen
+                        }
+                        catch(SQLException& e)
+                        // UpdateFehlerbehandlung
+                        {
+                            showErrorDialog(e);
+                        }
                     }
                 }
                 break;
@@ -350,7 +364,7 @@ sal_Bool ORTFReader::CreateTable(int nToken)
                 {
                     aColumnName.EraseLeadingChars();
                     aColumnName.EraseTrailingChars();
-                    if (!aColumnName.Len())
+                    if (!aColumnName.Len() || m_bAppendFirstLine )
                         aColumnName = String(ModuleRes(STR_COLUMN_NAME));
 
                     CreateDefaultColumn(aColumnName);
@@ -380,8 +394,12 @@ sal_Bool ORTFReader::CreateTable(int nToken)
     sal_Bool bOk = !m_vDestVector.empty();
     if(bOk)
     {
-        if(aColumnName.Len())
+        if ( aColumnName.Len() )
+        {
+            if ( m_bAppendFirstLine )
+                aColumnName = String(ModuleRes(STR_COLUMN_NAME));
             CreateDefaultColumn(aColumnName);
+        }
 
         m_bInTbl        = sal_False;
         m_bFoundTable   = sal_True;
