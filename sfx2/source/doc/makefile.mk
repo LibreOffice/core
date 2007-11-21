@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-17 13:43:24 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 16:47:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \
-        doc.src new.src doctdlg.src docvor.src doctempl.src sfxbasemodel.src graphhelp.src secmacrowarnings.src
+        doc.src new.src doctdlg.src docvor.src doctempl.src sfxbasemodel.src graphhelp.src
 
 SLOFILES =	\
         $(SLO)$/printhelper.obj \
@@ -83,25 +83,9 @@ SLOFILES =	\
         $(SLO)$/objembed.obj\
         $(SLO)$/graphhelp.obj \
         $(SLO)$/QuerySaveDocument.obj \
-        $(SLO)$/secmacrowarnings.obj \
         $(SLO)$/opostponedtruncationstream.obj \
-        $(SLO)$/docinsert.obj
-
-# exception should already be switched on
-# EXCEPTIONSFILES=$(SLO)$/objuno.obj \
-#                $(SLO)$/objcont.obj \
-#		$(SLO)$/docfac.obj \
-#		$(SLO)$/docfile.obj \
-#		$(SLO)$/doctempl.obj \
-#		$(SLO)$/doctemplates.obj \
-#		$(SLO)$/sfxbasemodel.obj \
-#		$(SLO)$/commitlistener.obj \
-#		$(SLO)$/objxtor.obj \
-#		$(SLO)$/objstor.obj \
-#		$(SLO)$/graphhelp.obj \
-#		$(SLO)$/guisaveas.obj\
-#		$(SLO)$/xmlversion.obj\
-#		$(SLO)$/secmacrowarnings.obj
+        $(SLO)$/docinsert.obj \
+        $(SLO)$/docmacromode.obj
 
 # --- Tagets -------------------------------------------------------
 
