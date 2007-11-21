@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 14:19:37 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 18:49:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ sub create_directory
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            if ($installer::globals::isunix)
+            if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
             {
                 my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
                 system($localcall);
@@ -93,7 +93,7 @@ sub create_directory
                         $infoline = "\nAttention: Successfully created parent directory (should already be created before): $parentdir\n";
                         push(@installer::globals::logfileinfo, $infoline);
 
-                        if ($installer::globals::isunix)
+                        if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
                         {
                             my $localcall = "chmod 775 $parentdir \>\/dev\/null 2\>\&1";
                             system($localcall);
@@ -126,7 +126,7 @@ sub create_directory
                     $infoline = "\nAttention: Created directory \"$directory\" in the second try.\n";
                     push(@installer::globals::logfileinfo, $infoline);
 
-                    if ($installer::globals::isunix)
+                    if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
                     {
                         my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
                         system($localcall);
@@ -173,7 +173,7 @@ sub create_directory_with_privileges
 
     if (!(-d $directory))
     {
-        my $localprivileges = "0" . $privileges;
+        my $localprivileges = oct("0".$privileges); # changes "777" to 0777
         $returnvalue = mkdir($directory, $localprivileges);
 
         if ($returnvalue)
@@ -181,7 +181,7 @@ sub create_directory_with_privileges
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            if ($installer::globals::isunix)
+            if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
             {
                 my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
                 system($localcall);
@@ -211,7 +211,7 @@ sub create_directory_with_privileges
                         $infoline = "\nAttention: Successfully created parent directory (should already be created before): $parentdir\n";
                         push(@installer::globals::logfileinfo, $infoline);
 
-                        if ($installer::globals::isunix)
+                        if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
                         {
                             my $localcall = "chmod $privileges $parentdir \>\/dev\/null 2\>\&1";
                             system($localcall);
@@ -229,7 +229,7 @@ sub create_directory_with_privileges
                         else
                         {
                             # Now it is time to exit, even the parent could not be created.
-                            installer::exiter::exit_program("ERROR: Could not create parent directory \"$parentdir\"", "create_directory");
+                            installer::exiter::exit_program("ERROR: Could not create parent directory \"$parentdir\"", "create_directory_with_privileges");
                         }
                     }
                 }
@@ -244,7 +244,7 @@ sub create_directory_with_privileges
                     $infoline = "\nAttention: Created directory \"$directory\" in the second try.\n";
                     push(@installer::globals::logfileinfo, $infoline);
 
-                    if ($installer::globals::isunix)
+                    if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
                     {
                         my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
                         system($localcall);
@@ -260,7 +260,7 @@ sub create_directory_with_privileges
                     else
                     {
                         # It is time to exit, even the second try failed.
-                        installer::exiter::exit_program("ERROR: Failed to create the directory: $directory", "create_directory");
+                        installer::exiter::exit_program("ERROR: Failed to create the directory: $directory", "create_directory_with_privileges");
                     }
                 }
             }
@@ -276,7 +276,7 @@ sub create_directory_with_privileges
         $infoline = "\nAlready existing directory, did not create: $directory\n";
         push(@installer::globals::logfileinfo, $infoline);
 
-        if ($installer::globals::isunix)
+        if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
         {
             my $localcall = "chmod $privileges $directory \>\/dev\/null 2\>\&1";
             system($localcall);
@@ -1426,7 +1426,7 @@ sub try_to_create_directory
             $infoline = "\nCreated directory: $directory\n";
             push(@installer::globals::logfileinfo, $infoline);
 
-            if ($installer::globals::isunix)
+            if ( defined $ENV{'USE_SHELL'} && $ENV{'USE_SHELL'} ne "4nt" )
             {
                 my $localcall = "chmod 775 $directory \>\/dev\/null 2\>\&1";
                 system($localcall);
