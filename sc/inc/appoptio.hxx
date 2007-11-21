@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appoptio.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:24:08 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:08:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,8 @@ public:
     USHORT      GetZoom() const                 { return nZoom;         }
     void        SetZoomType( SvxZoomType eNew ) { eZoomType = eNew;     }
     SvxZoomType GetZoomType() const             { return eZoomType;     }
+    void        SetSynchronizeZoom( BOOL bNew ) { bSynchronizeZoom = bNew; }
+    BOOL        GetSynchronizeZoom() const      { return bSynchronizeZoom; }
     USHORT      GetLRUFuncListCount() const     { return nLRUFuncCount; }
     USHORT*     GetLRUFuncList() const          { return pLRUList;      }
     void        SetLRUFuncList( const USHORT* pList,
@@ -114,6 +116,7 @@ private:
     USHORT*     pLRUList;
     SvxZoomType eZoomType;
     USHORT      nZoom;
+    BOOL        bSynchronizeZoom;
     USHORT      nStatusFunc;
     BOOL        bAutoComplete;
     BOOL        bDetectiveAuto;
