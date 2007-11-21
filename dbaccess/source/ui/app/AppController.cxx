@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:22:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:57:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XALTERVIEW_HPP_
+#include <com/sun/star/sdbcx/XAlterView.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
@@ -785,12 +788,36 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                                     && getContainer()->isALeafSelected();
                 break;
             case SID_DB_APP_EDIT_SQL_VIEW:
-                aReturn.bEnabled =
-                    (   ( !isDataSourceReadOnly() )
-                    &&  ( getContainer()->getElementType() == E_QUERY )
-                    &&  ( getContainer()->getSelectionCount() > 0 )
-                    &&  ( getContainer()->isALeafSelected() )
-                    );
+                if ( isDataSourceReadOnly() )
+                    aReturn.bEnabled = sal_False;
+                else
+                {
+                    switch ( getContainer()->getElementType() )
+                    {
+                    case E_QUERY:
+                        aReturn.bEnabled =  ( getContainer()->getSelectionCount() > 0 )
+                                        &&  ( getContainer()->isALeafSelected() );
+                        break;
+                    case E_TABLE:
+                        aReturn.bEnabled = sal_False;
+                        // there's one exception: views which support altering their underlying
+                        // command can be edited in SQL view, too
+                        if  (   ( getContainer()->getSelectionCount() > 0 )
+                            &&  ( getContainer()->isALeafSelected() )
+                            )
+                        {
+                            ::std::vector< ::rtl::OUString > aSelected;
+                            getSelectionElementNames( aSelected );
+                            OSL_ENSURE( aSelected.size() == 1, "OApplicationController::GetState: inconsistency!" );
+                            if ( aSelected.size() == 1 )
+                                if ( impl_isAlterableView_nothrow( aSelected[0] ) )
+                                    aReturn.bEnabled = sal_True;
+                        }
+                        break;
+                    default:
+                        break;
+                    }
+                }
                 break;
             case SID_DB_APP_OPEN:
             case SID_DB_APP_TABLE_OPEN:
@@ -907,7 +934,6 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
 
                     if ( !sDatabaseName.Len() )
                         sDatabaseName = m_aTypeCollection.cutPrefix( sURL );
-
                     if ( m_aTypeCollection.isFileSystemBased(eType) )
                     {
                         sDatabaseName = SvtPathOptions().SubstituteVariable( sDatabaseName );
@@ -1223,7 +1249,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                     {
-                        QueryDesigner aDesigner( getORB(), this, m_xCurrentFrame, sal_True, SID_DB_NEW_VIEW_SQL == _nId );
+                        QueryDesigner aDesigner( getORB(), this, m_xCurrentFrame, true, SID_DB_NEW_VIEW_SQL == _nId );
 
                         Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                         Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
@@ -1697,6 +1723,32 @@ bool OApplicationController::onEntryDoubleClick(SvTreeListBox* _pTree)
     return false;   // not handled
 }
 // -----------------------------------------------------------------------------
+bool OApplicationController::impl_isAlterableView_nothrow( const ::rtl::OUString& _rTableOrViewName ) const
+{
+    OSL_PRECOND( m_xDataSourceConnection.is(), "OApplicationController::impl_isAlterableView_nothrow: no connection!" );
+
+    bool bIsAlterableView( false );
+    try
+    {
+        Reference< XViewsSupplier > xViewsSupp( m_xDataSourceConnection, UNO_QUERY );
+        Reference< XNameAccess > xViews;
+        if ( xViewsSupp.is() )
+            xViews = xViewsSupp->getViews();
+
+        Reference< XAlterView > xAsAlterableView;
+        if ( xViews.is() && xViews->hasByName( _rTableOrViewName ) )
+            xAsAlterableView.set( xViews->getByName( _rTableOrViewName ), UNO_QUERY );
+
+        bIsAlterableView = xAsAlterableView.is();
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+    return bIsAlterableView;
+}
+
+// -----------------------------------------------------------------------------
 Reference< XComponent > OApplicationController::openElement(const ::rtl::OUString& _sName, ElementType _eType,
     OLinkedDocumentsAccess::EOpenMode _eOpenMode, sal_uInt16 _nInstigatorCommand )
 {
@@ -1707,70 +1759,73 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
         // OJ: http://www.openoffice.org/issues/show_bug.cgi?id=30382
         getContainer()->showPreview(NULL);
     }
+
     switch ( _eType )
     {
-        case E_REPORT:
-        case E_FORM:
+    case E_REPORT:
+    case E_FORM:
+    {
+        ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
+        Reference< XComponent > xDefinition;
+        xRet.set(aHelper->open(_sName, xDefinition,_eOpenMode),UNO_QUERY);
+        if (_eOpenMode == OLinkedDocumentsAccess::OPEN_DESIGN ||
+        _eType == E_FORM )
+        {
+        //  // LLA: close only if in EDIT mode
+            addDocumentListener(xRet,xDefinition);
+        }
+    }
+    break;
+
+    case E_QUERY:
+    case E_TABLE:
+    {
+        SharedConnection xConnection( ensureConnection() );
+        if ( !xConnection.is() )
+            break;
+
+        ::std::auto_ptr< DatabaseObjectView > pDesigner;
+        Sequence < PropertyValue > aArgs;
+        Any aDataSource;
+        if ( _eOpenMode == OLinkedDocumentsAccess::OPEN_DESIGN )
+        {
+            sal_Bool bQuerySQLMode =( _nInstigatorCommand == SID_DB_APP_EDIT_SQL_VIEW );
+
+            if ( _eType == E_TABLE )
             {
-                ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
-                Reference< XComponent > xDefinition;
-                xRet.set(aHelper->open(_sName, xDefinition,_eOpenMode),UNO_QUERY);
-                if (_eOpenMode == OLinkedDocumentsAccess::OPEN_DESIGN ||
-                _eType == E_FORM )
-                {
-                //  // LLA: close only if in EDIT mode
-                    addDocumentListener(xRet,xDefinition);
-                }
+                if ( impl_isAlterableView_nothrow( _sName ) )
+                    pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, true, bQuerySQLMode ) );
+                else
+                    pDesigner.reset( new TableDesigner( getORB(), this, m_xCurrentFrame ) );
             }
-            break;
-
-        case E_QUERY:
-        case E_TABLE:
+            else if ( _eType == E_QUERY )
             {
-                SharedConnection xConnection( ensureConnection() );
-                if ( xConnection.is() )
-                {
-                    ::std::auto_ptr< DatabaseObjectView > pDesigner;
-                    Sequence < PropertyValue > aArgs;
-                    Any aDataSource;
-                    if ( _eOpenMode == OLinkedDocumentsAccess::OPEN_DESIGN )
-                    {
-                        if ( _eType == E_TABLE )
-                        {
-                            pDesigner.reset( new TableDesigner( getORB(), this, m_xCurrentFrame ) );
-                        }
-                        else if ( _eType == E_QUERY )
-                        {
-                            sal_Bool bQuerySQLMode =
-                                (   ( _nInstigatorCommand == SID_DB_APP_EDIT_SQL_VIEW )
-                                &&  ( _eType == E_QUERY )
-                                );
-                            pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, sal_False, bQuerySQLMode ) );
-                        }
-                        else if ( _eType == E_REPORT )
-                        {
-                            pDesigner.reset(new OReportDesigner(getORB(),this, m_xCurrentFrame ));
-                        }
-                        aDataSource <<= m_xDataSource;
-                    }
-                    else
-                    {
-                        pDesigner.reset( new ResultSetBrowser( getORB(), this, m_xCurrentFrame, _eType == E_TABLE ) );
-
-                        aArgs.realloc(1);
-                        aArgs[0].Name = PROPERTY_SHOWMENU;
-                        aArgs[0].Value <<= sal_True;
-
-                        aDataSource <<= getDatabaseName();
-                    }
-
-                    Reference< XComponent > xComponent( pDesigner->openExisting( aDataSource, _sName, aArgs ), UNO_QUERY );
-                    addDocumentListener( xComponent, NULL );
-                }
+                pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, false, bQuerySQLMode ) );
             }
-            break;
-        default:
-            break;
+            else if ( _eType == E_REPORT )
+            {
+                pDesigner.reset( new ReportDesigner( getORB(),this, m_xCurrentFrame ) );
+            }
+            aDataSource <<= m_xDataSource;
+        }
+        else
+        {
+            pDesigner.reset( new ResultSetBrowser( getORB(), this, m_xCurrentFrame, _eType == E_TABLE ) );
+
+            aArgs.realloc(1);
+            aArgs[0].Name = PROPERTY_SHOWMENU;
+            aArgs[0].Value <<= sal_True;
+
+            aDataSource <<= getDatabaseName();
+        }
+
+        Reference< XComponent > xComponent( pDesigner->openExisting( aDataSource, _sName, aArgs ), UNO_QUERY );
+        addDocumentListener( xComponent, NULL );
+    }
+    break;
+
+    default:
+        break;
     }
     return xRet;
 }
@@ -1857,10 +1912,10 @@ void OApplicationController::newElement( ElementType _eType, sal_Bool _bSQLView 
                     }
                     else if ( _eType == E_QUERY )
                     {
-                        pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, sal_False, _bSQLView ) );
+                        pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, false, _bSQLView ) );
                     }
                     else
-                        pDesigner.reset(new OReportDesigner(getORB(),this, m_xCurrentFrame ));
+                        pDesigner.reset( new ReportDesigner( getORB(), this, m_xCurrentFrame ) );
 
                     Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                     Reference< XComponent > xComponent( pDesigner->createNew( xDataSource ), UNO_QUERY );
