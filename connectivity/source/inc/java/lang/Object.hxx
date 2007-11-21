@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Object.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:13:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:07:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,14 @@ namespace connectivity
         JNIEnv* pEnv;
         static void addRef();
         static void releaseRef();
+
+    public:
+        JNIEnv& env() const
+        {
+            // according to the documentation of jvmaccess::VirtualMachine::AttachGuard, our env is never
+            // NULL, so why bothering with pointer checks?
+            return *pEnv;
+        }
     };
     //=====================================================================
     class java_lang_Class;
