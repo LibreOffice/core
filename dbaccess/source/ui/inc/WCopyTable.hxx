@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:50:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:02:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,8 +202,7 @@ namespace dbaui
         sal_Bool                        m_bAddPKFirstTime;
         Wizard_Create_Style             m_eCreateStyle;
         Wizard_Button_Style             m_ePressed;
-        sal_Bool                        m_bCreatePrimaryColumn;
-
+        bool                            m_bCreatePrimaryColumn;
 
     private:
         DECL_LINK( ImplPrevHdl  , PushButton* );
@@ -278,7 +277,7 @@ namespace dbaui
             @return
                 <TRUE/> if I need to set the autoincrement value by myself otherwise <FALSE/>
         */
-        sal_Bool        isAutoincrementEnabled() const;
+        bool isAutoincrementEnabled() const;
 
         /** returns the name of the primary key
             @return
