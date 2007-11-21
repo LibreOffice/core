@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:05:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:53:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,6 +270,7 @@ namespace dbaui
                 m_aFT_Connection.SetText(String(ModuleRes(STR_COMMONURL)));
                 break;
             case DST_MSACCESS:
+            case DST_MSACCESS_2007:
                 m_aFT_Connection.SetText(String(ModuleRes(STR_MSACCESS_MDB_FILE)));
                 m_aET_Connection.SetHelpId(HID_DSADMIN_MSACCESS_MDB_FILE);
                 break;
@@ -431,10 +432,7 @@ namespace dbaui
         }
 
         USHORT nMessage = bSuccess ? STR_JDBCDRIVER_SUCCESS : STR_JDBCDRIVER_NO_SUCCESS;
-
-        String aMessage = String(ModuleRes(nMessage));
-        String sTitle(ModuleRes(STR_JDBCDRIVER_TEST));
-        OSQLMessageBox aMsg(this,sTitle,aMessage);
+        OSQLMessageBox aMsg( this, String( ModuleRes( nMessage ) ), String() );
         aMsg.Execute();
         return 0L;
     }
