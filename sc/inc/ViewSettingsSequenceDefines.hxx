@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewSettingsSequenceDefines.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:20:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@
 // this are the defines for the position of the settings in the
 // TableViewSettingsSequence
 
-#define SC_TABLE_VIEWSETTINGS_COUNT         11
+#define SC_TABLE_VIEWSETTINGS_COUNT         14
 
 #define SC_CURSOR_X                         0
 #define SC_CURSOR_Y                         1
@@ -82,6 +82,9 @@
 #define SC_POSITION_RIGHT                   8
 #define SC_POSITION_TOP                     9
 #define SC_POSITION_BOTTOM                  10
+#define SC_TABLE_ZOOM_TYPE                  11
+#define SC_TABLE_ZOOM_VALUE                 12
+#define SC_TABLE_PAGE_VIEW_ZOOM_VALUE       13
 
 #define SC_CURSORPOSITIONX                  "CursorPositionX"
 #define SC_CURSORPOSITIONY                  "CursorPositionY"
