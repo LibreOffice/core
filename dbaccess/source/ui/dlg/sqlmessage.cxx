@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:19:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:58:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #endif
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
+#endif
+#ifndef CONNECTIVITY_SQLERROR_HXX
+#include <connectivity/sqlerror.hxx>
 #endif
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -261,6 +264,28 @@ namespace
     };
 
     typedef ::std::vector< ExceptionDisplayInfo >   ExceptionDisplayChain;
+
+    //------------------------------------------------------------------------------
+    /// strips the [OOoBase] vendor identifier from the given error message, if applicable
+    ::rtl::OUString lcl_stripOOoBaseVendor( const ::rtl::OUString& _rErrorMessage )
+    {
+        ::rtl::OUString sErrorMessage( _rErrorMessage );
+
+        const ::rtl::OUString sVendorIdentifier( ::connectivity::SQLError::getMessagePrefix() );
+        if ( sErrorMessage.indexOf( sVendorIdentifier ) == 0 )
+        {
+            // characters to strip
+            sal_Int32 nStripLen( sVendorIdentifier.getLength() );
+            // usually, there should be a whitespace between the vendor and the real message
+            while   (   ( sErrorMessage.getLength() > nStripLen )
+                    &&  ( sErrorMessage[nStripLen] == ' ' )
+                    )
+                    ++nStripLen;
+            sErrorMessage = sErrorMessage.copy( nStripLen );
+        }
+
+        return sErrorMessage;
+    }
 
     //------------------------------------------------------------------------------
     void lcl_buildExceptionChain( const SQLExceptionInfo& _rErrorInfo, const ProviderFactory& _rFactory, ExceptionDisplayChain& _out_rChain )
@@ -532,6 +557,7 @@ void OSQLMessageBox::impl_positionControls()
 
     // primary text
     lcl_positionInAppFont( *this, m_aTitle, TEXT_POS_X, OUTER_MARGIN, DIALOG_WIDTH - TEXT_POS_X - 2 * OUTER_MARGIN, 16 );
+    sPrimary = lcl_stripOOoBaseVendor( sPrimary );
     m_aTitle.SetText( sPrimary );
     m_aTitle.Show();
 
@@ -539,6 +565,7 @@ void OSQLMessageBox::impl_positionControls()
 
     // secondary text (if applicable)
     m_aMessage.SetStyle( m_aMessage.GetStyle() | WB_NOLABEL );
+    sSecondary = lcl_stripOOoBaseVendor( sSecondary );
     m_aMessage.SetText( sSecondary );
 
     lcl_positionInAppFont( *this, m_aMessage, TEXT_POS_X, OUTER_MARGIN + 16 + 3, DIALOG_WIDTH - TEXT_POS_X - 2 * OUTER_MARGIN, 8 );
@@ -565,21 +592,28 @@ void OSQLMessageBox::impl_positionControls()
         // and center it horizontally
         m_aTitle.SetStyle( ( m_aTitle.GetStyle() & ~WB_LEFT ) | WB_CENTER );
 
+        Rectangle aInfoRect( m_aInfoImage.GetPosPixel(), m_aInfoImage.GetSizePixel() );
         // also, if it's not as high as the image ...
         if ( aPrimaryRect.GetHeight() < m_aInfoImage.GetSizePixel().Height() )
         {   // ... make it fit the image height
-            aPrimaryRect.Bottom() += m_aInfoImage.GetSizePixel().Height() - aPrimaryRect.GetHeight();
+            aPrimaryRect.Bottom() += aInfoRect.GetHeight() - aPrimaryRect.GetHeight();
             // and center it vertically
             m_aTitle.SetStyle( m_aTitle.GetStyle() | WB_VCENTER );
+        }
+        else
+        {   // ... otherwise, center the image vertically, relative to the primary text
+            aInfoRect.Move( 0, ( aPrimaryRect.GetHeight() - aInfoRect.GetHeight() ) / 2 );
+            m_aInfoImage.SetPosSizePixel( aInfoRect.TopLeft(), aInfoRect.GetSize() );
         }
 
         m_aTitle.SetPosSizePixel( aPrimaryRect.TopLeft(), aPrimaryRect.GetSize() );
     }
 
     // adjust dialog size accordingly
+    const Rectangle& rBottomTextRect( bHaveSecondaryText ? aSecondaryRect : aPrimaryRect );
     Size aBorderSize = LogicToPixel( Size( OUTER_MARGIN, OUTER_MARGIN ), MAP_APPFONT );
     Size aDialogSize( LogicToPixel( Size( DIALOG_WIDTH, 30 ), MAP_APPFONT ) );
-    aDialogSize.Height() = aSecondaryRect.Bottom() + aBorderSize.Height();
+    aDialogSize.Height() = rBottomTextRect.Bottom() + aBorderSize.Height();
     aDialogSize.Width() = aPrimaryRect.Right() + aBorderSize.Width();
 
     SetSizePixel( aDialogSize );
