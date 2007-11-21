@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:27:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:12:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -869,14 +869,16 @@ void UnoControl::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
 
 awt::Rectangle UnoControl::getPosSize(  ) throw(RuntimeException)
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
-
     awt::Rectangle aRect( maComponentInfos.nX, maComponentInfos.nY, maComponentInfos.nWidth, maComponentInfos.nHeight);
+    Reference< XWindow > xWindow;
 
-    Reference< XWindow > xWindow( getPeer(), uno::UNO_QUERY );
+    {
+        ::osl::MutexGuard aGuard( GetMutex() );
+        xWindow = xWindow.query( getPeer() );
+    }
+
     if( xWindow.is() )
         aRect = xWindow->getPosSize();
-
     return aRect;
 }
 
@@ -1101,6 +1103,7 @@ awt::Size UnoControl::getSize(  ) throw(RuntimeException)
 
 void UnoControl::draw( sal_Int32 x, sal_Int32 y ) throw(RuntimeException)
 {
+    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard( GetMutex() );
 
     Reference< XWindowPeer >    xP = ImplGetCompatiblePeer( sal_True );
