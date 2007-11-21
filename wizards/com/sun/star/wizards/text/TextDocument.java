@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextDocument.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:53:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:43:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,7 +31,10 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.text;
+ ************************************************************************/
+
+package com.sun.star.wizards.text;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -40,9 +43,12 @@ import com.sun.star.container.XNameAccess;
 import com.sun.star.document.XDocumentInfo;
 import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.frame.XController;
+import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XFramesSupplier;
+import com.sun.star.frame.XLoadable;
 import com.sun.star.frame.XModel;
+import com.sun.star.frame.XModule;
 import com.sun.star.frame.XTerminateListener;
 import com.sun.star.frame.XStorable;
 import com.sun.star.i18n.NumberFormatIndex;
@@ -134,15 +140,56 @@ public class TextDocument {
         init();
     }
 
+    public static class ModuleIdentifier
+    {
+        private String  m_identifier;
+
+        protected final String getIdentifier()
+        {
+            return m_identifier;
+        }
+
+        public ModuleIdentifier( String _identifier )
+        {
+            m_identifier = _identifier;
+        }
+    };
+
     // creates an instance of TextDocument containing a blank text document
-    public TextDocument(XMultiServiceFactory xMSF, PropertyValue[] _aLoadArguments, boolean bShowStatusIndicator, XTerminateListener listener ) {
+    public TextDocument(XMultiServiceFactory xMSF, ModuleIdentifier _moduleIdentifier, boolean bShowStatusIndicator ) {
         this.xMSF = xMSF;
 
-        XDesktop xDesktop = Desktop.getDesktop(xMSF);
-        xFrame = OfficeDocument.createNewFrame(xMSF, listener);
-        Object oDoc = OfficeDocument.load(xFrame, "private:factory/swriter", "_self", _aLoadArguments);
-        xTextDocument = (XTextDocument) oDoc;
-        xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xTextDocument);
+        try
+        {
+            // create the empty document, and set its module identifier
+            xTextDocument = (XTextDocument)UnoRuntime.queryInterface( XTextDocument.class,
+                xMSF.createInstance( "com.sun.star.text.TextDocument" ) );
+
+            XLoadable xLoadable = (XLoadable)UnoRuntime.queryInterface(XLoadable.class, xTextDocument);
+            xLoadable.initNew();
+
+            XModule xModule = (XModule)UnoRuntime.queryInterface( XModule.class,
+                xTextDocument );
+            xModule.setIdentifier( _moduleIdentifier.getIdentifier() );
+
+            // load the document into a blank frame
+            XDesktop xDesktop = Desktop.getDesktop(xMSF);
+            XComponentLoader xLoader = (XComponentLoader)UnoRuntime.queryInterface( XComponentLoader.class, xDesktop );
+            PropertyValue[] loadArgs = new PropertyValue[]
+            {
+                new PropertyValue("Model", -1, xTextDocument, com.sun.star.beans.PropertyState.DIRECT_VALUE)
+            };
+            xLoader.loadComponentFromURL("private:object", "_blank", 0, loadArgs );
+
+            // remember some things for later usage
+            xFrame = xTextDocument.getCurrentController().getFrame();
+            xComponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, xTextDocument);
+        }
+        catch( Exception e )
+        {
+            // TODO: it seems the whole project does not really have an error handling. Other menthods
+            // seem to generally silence errors, so we can't do anything else here ...
+        }
 
         if (bShowStatusIndicator)
             showStatusIndicator();
