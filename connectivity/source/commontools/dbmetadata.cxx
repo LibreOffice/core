@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmetadata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:28:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 14:58:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,32 +36,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef CONNECTIVITY_INC_CONNECTIVITY_DBMETADATA_HXX
 #include <connectivity/dbmetadata.hxx>
-#endif
-#ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA2_HPP_
+#include <com/sun/star/sdb/BooleanComparisonMode.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
-#endif
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
@@ -91,6 +76,7 @@ namespace dbtools
     using ::com::sun::star::beans::XPropertySetInfo;
     using ::com::sun::star::uno::UNO_QUERY;
     /** === end UNO using === **/
+    namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
 
     //====================================================================
     //= DatabaseMetaData_Impl
@@ -127,7 +113,7 @@ namespace dbtools
         }
 
         //................................................................
-        static bool lcl_getConnectionSettings( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
+        static bool lcl_getConnectionSetting( const sal_Char* _asciiName, const DatabaseMetaData_Impl& _metaData, Any& _out_setting )
         {
             try
             {
@@ -258,7 +244,7 @@ namespace dbtools
 
         bool restrict( false );
         Any setting;
-        if ( lcl_getConnectionSettings( "EnableSQL92Check", *m_pImpl, setting ) )
+        if ( lcl_getConnectionSetting( "EnableSQL92Check", *m_pImpl, setting ) )
             OSL_VERIFY( setting >>= restrict );
         return restrict;
     }
@@ -268,9 +254,19 @@ namespace dbtools
     {
         bool doGenerate( true );
         Any setting;
-        if ( lcl_getConnectionSettings( "GenerateASBeforeCorrelationName", *m_pImpl, setting ) )
+        if ( lcl_getConnectionSetting( "GenerateASBeforeCorrelationName", *m_pImpl, setting ) )
             OSL_VERIFY( setting >>= doGenerate );
         return doGenerate;
+    }
+
+    //--------------------------------------------------------------------
+    sal_Int32 DatabaseMetaData::getBooleanComparisonMode() const
+    {
+        sal_Int32 mode( BooleanComparisonMode::EQUAL_INTEGER );
+        Any setting;
+        if ( lcl_getConnectionSetting( "BooleanComparisonMode", *m_pImpl, setting ) )
+            OSL_VERIFY( setting >>= mode );
+        return mode;
     }
 
     //--------------------------------------------------------------------
