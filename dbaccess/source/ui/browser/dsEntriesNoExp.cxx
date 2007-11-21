@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:03:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:58:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,8 +251,7 @@ void SbaTableQueryBrowser::notifyHiContrastChanged()
                 else
                 {
                     sal_Int32 nObjectType( getDatabaseObjectType( pData->eType ) );
-                    aImage = pImageProvider->getImage( GetEntryText( pEntryLoop ), nObjectType, false );
-                    aImageHC = pImageProvider->getImage( GetEntryText( pEntryLoop ), nObjectType, true );
+                    pImageProvider->getImages( GetEntryText( pEntryLoop ), nObjectType, aImage, aImageHC );
                 }
             }
 
