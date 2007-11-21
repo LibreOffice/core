@@ -4,9 +4,9 @@
  *
  *  $RCSfile: core_resource.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:13:23 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,12 +85,11 @@
 #define RID_STR_CONFLICTING_NAMES               ( RID_CORE_STRINGS_START + 37 )
 #define RID_STR_COMMAND_LEADING_TO_ERROR        ( RID_CORE_STRINGS_START + 38 )
 #define RID_STR_STATEMENT_WITHOUT_RESULT_SET    ( RID_CORE_STRINGS_START + 39 )
-#define RID_STR_NO_SLASH_IN_OBJECT_NAME         ( RID_CORE_STRINGS_START + 40 )
-#define RID_STR_NAME_MUST_NOT_BE_EMPTY          ( RID_CORE_STRINGS_START + 41 )
-#define RID_STR_NO_NULL_OBJECTS_IN_CONTAINER    ( RID_CORE_STRINGS_START + 42 )
-#define RID_STR_NAME_ALREADY_USED               ( RID_CORE_STRINGS_START + 43 )
-#define RID_STR_OBJECT_CONTAINER_MISMATCH       ( RID_CORE_STRINGS_START + 44 )
-#define RID_STR_OBJECT_ALREADY_CONTAINED        ( RID_CORE_STRINGS_START + 45 )
+#define RID_STR_NAME_MUST_NOT_BE_EMPTY          ( RID_CORE_STRINGS_START + 40 )
+#define RID_STR_NO_NULL_OBJECTS_IN_CONTAINER    ( RID_CORE_STRINGS_START + 41 )
+#define RID_STR_NAME_ALREADY_USED               ( RID_CORE_STRINGS_START + 42 )
+#define RID_STR_OBJECT_CONTAINER_MISMATCH       ( RID_CORE_STRINGS_START + 43 )
+#define RID_STR_OBJECT_ALREADY_CONTAINED        ( RID_CORE_STRINGS_START + 44 )
 
 #endif // _DBA_CORE_RESOURCE_HRC_
 
