@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:51:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:31:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_ROWCHANGEACTION_HPP_
 #include <com/sun/star/sdb/RowChangeAction.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_ERRORCONDITION_HPP_
+#include <com/sun/star/sdb/ErrorCondition.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERACCESS_HPP_
 #include <com/sun/star/sdbc/XDriverAccess.hpp>
@@ -200,6 +203,7 @@ using namespace dbaccess;
 using namespace connectivity;
 using namespace comphelper;
 using namespace dbtools;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
@@ -211,19 +215,6 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::util;
 using namespace ::cppu;
 using namespace ::osl;
-
-// -------------------------------------------------------------------------
-namespace
-{
-    static void throwRowSetVetoException( const Reference< XInterface >& _rSource, const sal_Char* _pAsciiMessage )
-    {
-        // TODO: resource (localize the message)
-        RowSetVetoException aException;
-        aException.Message = ::rtl::OUString::createFromAscii( _pAsciiMessage );
-        aException.Context = _rSource;
-        throw RowSetVetoException( aException );
-    }
-}
 
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_ORowSet()
@@ -269,16 +260,15 @@ Reference< XInterface > ORowSet_CreateInstance(const Reference< XMultiServiceFac
     return *(new ORowSet(_rxFactory));
 }
 //--------------------------------------------------------------------------
-ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _xFac)
-    : ORowSet_BASE1(m_aMutex)
-    , ORowSetBase(ORowSet_BASE1::rBHelper,&m_aMutex)
-    ,m_xServiceManager(_xFac)
+ORowSet::ORowSet( const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB )
+    :ORowSet_BASE1(m_aMutex)
+    ,ORowSetBase( _rxORB, ORowSet_BASE1::rBHelper, &m_aMutex )
     ,m_pParameters( NULL )
     ,m_aRowsetListeners(*m_pMutex)
     ,m_aApproveListeners(*m_pMutex)
     ,m_pTables(NULL)
     ,m_nFetchDirection(FetchDirection::FORWARD)
-    ,m_nFetchSize(1)
+    ,m_nFetchSize(50)
     ,m_nMaxFieldSize(0)
     ,m_nMaxRows(0)
     ,m_nQueryTimeOut(0)
@@ -335,7 +325,7 @@ ORowSet::ORowSet(const Reference< ::com::sun::star::lang::XMultiServiceFactory >
     registerProperty(PROPERTY_URL,                  PROPERTY_ID_URL,                    0,                              &m_aURL,                ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_TRANSACTIONISOLATION, PROPERTY_ID_TRANSACTIONISOLATION,   PropertyAttribute::TRANSIENT,   &m_nTransactionIsolation,::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
     registerMayBeVoidProperty(PROPERTY_TYPEMAP,     PROPERTY_ID_TYPEMAP,                PropertyAttribute::MAYBEVOID|PropertyAttribute::TRANSIENT,  &m_aTypeMap,            ::getCppuType(reinterpret_cast< Reference< XNameAccess >* >(NULL)));
-    registerProperty(PROPERTY_USE_ESCAPE_PROCESSING,PROPERTY_ID_USE_ESCAPE_PROCESSING,  PropertyAttribute::BOUND,       &m_bUseEscapeProcessing,::getBooleanCppuType()  );
+    registerProperty(PROPERTY_ESCAPE_PROCESSING,PROPERTY_ID_ESCAPE_PROCESSING,  PropertyAttribute::BOUND,       &m_bUseEscapeProcessing,::getBooleanCppuType()  );
     registerProperty(PROPERTY_QUERYTIMEOUT,         PROPERTY_ID_QUERYTIMEOUT,           PropertyAttribute::TRANSIENT,   &m_nQueryTimeOut,       ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
     registerProperty(PROPERTY_MAXFIELDSIZE,         PROPERTY_ID_MAXFIELDSIZE,           PropertyAttribute::TRANSIENT,   &m_nMaxFieldSize,       ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
     registerProperty(PROPERTY_MAXROWS,              PROPERTY_ID_MAXROWS,                0,                              &m_nMaxRows,            ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)) );
@@ -392,7 +382,7 @@ void ORowSet::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) c
         case PROPERTY_ID_FETCHSIZE:
             _rDefault <<= static_cast<sal_Int32>(1);
             break;
-        case PROPERTY_ID_USE_ESCAPE_PROCESSING:
+        case PROPERTY_ID_ESCAPE_PROCESSING:
             _rDefault <<= sal_True;
             break;
     }
@@ -640,7 +630,7 @@ void SAL_CALL ORowSet::disposing()
     m_aApproveListeners.disposeAndClear( aDisposeEvent );
 
     freeResources( true );
-    m_xServiceManager   = NULL;
+
     // remove myself as dispose listener
     Reference< XComponent >  xComponent(m_xActiveConnection, UNO_QUERY);
     if (xComponent.is())
@@ -1241,8 +1231,7 @@ void ORowSet::notifyAllListenersRowBeforeChange(::osl::ResettableMutexGuard& _rG
 {
     NOTIFY_LISTERNERS_CHECK(m_aApproveListeners,XRowSetApproveListener,approveRowChange);
     if ( !bCheck )
-        throwRowSetVetoException( *this, "The record operation has been vetoed." );
-        // TODO: resource
+        m_aErrors.raiseTypedException( sdb::ErrorCondition::ROW_SET_OPERATION_VETOED, *this, ::cppu::UnoType< RowSetVetoException >::get() );
 }
 // -------------------------------------------------------------------------
 void ORowSet::fireRowcount()
@@ -1342,7 +1331,7 @@ void SAL_CALL ORowSet::moveToCurrentRow(  ) throw(SQLException, RuntimeException
         // if the current row is deleted, then no write access to this row should be possible. So,
         // m_bModified should be true. Also, as soon as somebody calls moveToInsertRow,
         // our current row should not be deleted anymore. So, we should not have survived the above
-        // check "if ( !m_pCache->m_bInserted && !m_bModified )"
+        // check "if ( !m_pCache->m_bNew && !m_bModified )"
         throwSQLException( "The current row is deleted.", SQL_FUNCTION_SEQUENCE_ERROR, *this );
         // TODO: resource
 
@@ -1529,7 +1518,7 @@ void SAL_CALL ORowSet::executeWithCompletion( const Reference< XInteractionHandl
         calcConnection( _rxHandler );
         m_bRebuildConnOnExecute = sal_False;
 
-        Reference< XSingleSelectQueryComposer > xComposer = getCurrentSettingsComposer( this, m_xServiceManager );
+        Reference< XSingleSelectQueryComposer > xComposer = getCurrentSettingsComposer( this, m_aContext.getLegacyServiceFactory() );
         ::dbtools::askForParameters( xComposer, this, m_xActiveConnection, _rxHandler );
     }
     // ensure that only the allowed exceptions leave this block
@@ -1584,11 +1573,27 @@ void ORowSet::approveExecution() throw (RowSetVetoException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aColumnsMutex );
     EventObject aEvt(*this);
-    OInterfaceIteratorHelper aApproveIter(m_aApproveListeners);
-    while (aApproveIter.hasMoreElements())
+
+    OInterfaceIteratorHelper aApproveIter( m_aApproveListeners );
+    while ( aApproveIter.hasMoreElements() )
     {
-        if (!((XRowSetApproveListener*)aApproveIter.next())->approveRowSetChange(aEvt))
-            throw RowSetVetoException();
+        Reference< XRowSetApproveListener > xListener( static_cast< XRowSetApproveListener* >( aApproveIter.next() ) );
+        try
+        {
+            if ( xListener.is() && !xListener->approveRowSetChange( aEvt ) )
+                throw RowSetVetoException();
+        }
+        catch ( const DisposedException& e )
+        {
+            if ( e.Context == xListener )
+                aApproveIter.remove();
+        }
+        catch ( const RuntimeException& ) { throw; }
+        catch ( const RowSetVetoException& ) { throw; }
+        catch ( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 }
 // -------------------------------------------------------------------------
@@ -1841,7 +1846,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ResettableMutexGuard& _rClearForNotifi
 
         {
             RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "frank.schoenheit@sun.com", "ORowSet::execute_NoApprove_NoNewConn: creating cache" );
-            m_pCache = new ORowSetCache(xResultSet,m_xComposer.get(),m_xServiceManager,aComposedUpdateTableName,m_bModified,m_bNew);
+            m_pCache = new ORowSetCache( xResultSet, m_xComposer.get(), m_aContext, aComposedUpdateTableName, m_bModified, m_bNew );
             if ( m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY )
             {
                 m_nPrivileges = Privilege::SELECT;
@@ -2055,7 +2060,7 @@ Reference< XResultSet > SAL_CALL ORowSet::createResultSet(  ) throw(SQLException
 
     if(m_xStatement.is())
     {
-        ORowSetClone* pClone = new ORowSetClone(*this,m_pMutex);
+        ORowSetClone* pClone = new ORowSetClone( m_aContext, *this, m_pMutex );
         Reference< XResultSet > xRet(pClone);
         m_aClones.push_back(WeakReferenceHelper(xRet));
         return xRet;
@@ -2168,7 +2173,8 @@ Reference< XConnection >  ORowSet::calcConnection(const Reference< XInteractionH
         if (m_aDataSourceName.getLength())
         {
             // is it a file url?
-            Reference< ::com::sun::star::container::XNameAccess >  xNamingContext(m_xServiceManager->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
+            Reference< XNameAccess > xNamingContext;
+            if ( m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT, xNamingContext ) )
             if (xNamingContext.is() )
             {
                 try
@@ -2278,7 +2284,7 @@ sal_Bool ORowSet::impl_initComposer_throw( ::rtl::OUString& _out_rCommandToExecu
         catch (const Exception& ) { m_xComposer = NULL; }
     }
     if ( !m_xComposer.is() )
-        m_xComposer = new OSingleSelectQueryComposer( impl_getTables_throw(), m_xActiveConnection, m_xServiceManager );
+        m_xComposer = new OSingleSelectQueryComposer( impl_getTables_throw(), m_xActiveConnection, m_aContext );
 
     m_xComposer->setElementaryQuery( m_aActiveCommand );
 
@@ -2379,7 +2385,7 @@ sal_Bool ORowSet::impl_buildActiveCommand_throw()
                     if ( xQuery.is() )
                     {
                         xQuery->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
-                        xQuery->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING) >>= bDoEscapeProcessing;
+                        xQuery->getPropertyValue(PROPERTY_ESCAPE_PROCESSING) >>= bDoEscapeProcessing;
 
                         ::rtl::OUString aCatalog,aSchema,aTable;
                         xQuery->getPropertyValue(PROPERTY_UPDATE_CATALOGNAME)   >>= aCatalog;
@@ -2723,9 +2729,9 @@ void SAL_CALL ORowSet::refreshRow(  ) throw(SQLException, RuntimeException)
 // ***********************************************************
 DBG_NAME(ORowSetClone);
 //--------------------------------------------------------------------------
-ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex* _pMutex)
+ORowSetClone::ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORowSet& rParent, ::osl::Mutex* _pMutex )
              :OSubComponent(m_aMutex, rParent)
-             ,ORowSetBase(OComponentHelper::rBHelper,_pMutex)
+             ,ORowSetBase( _rContext, OComponentHelper::rBHelper, _pMutex )
              ,m_pParent(&rParent)
              ,m_nFetchDirection(rParent.m_nFetchDirection)
              ,m_nFetchSize(rParent.m_nFetchSize)
