@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:35:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:12:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -483,7 +483,7 @@ void __EXPORT ScTabViewShell::SetZoomFactor( const Fraction &rZoomX, const Fract
         aNewY = aFrac400;
 
     GetViewData()->UpdateScreenZoom( aNewX, aNewY );
-    SetZoom( aNewX, aNewY );
+    SetZoom( aNewX, aNewY, TRUE );
 
     PaintGrid();
     PaintTop();
@@ -1766,9 +1766,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
         else if ( bFirstView )
         {
             pDocSh->SetInplace( FALSE );
-            GetViewData()->SetZoom(                             // PPT neu berechnen
-                            GetViewData()->GetZoomX(),
-                            GetViewData()->GetZoomY());
+            GetViewData()->RefreshZoom();           // recalculate PPT
             if (!pDoc->IsEmbedded())
                 pDoc->SetEmbedded( aVisArea );                  // VisArea markieren
         }
@@ -1954,13 +1952,13 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
     if ( GetViewData()->GetDocShell()->IsPreview() )
     {
         //  preview for template dialog: always show whole page
-        SetZoomType( SVX_ZOOM_WHOLEPAGE );      // zoom value is recalculated at next Resize
+        SetZoomType( SVX_ZOOM_WHOLEPAGE, TRUE );    // zoom value is recalculated at next Resize
     }
     else
     {
         Fraction aFract( rAppOpt.GetZoom(), 100 );
-        SetZoom( aFract, aFract );
-        SetZoomType( rAppOpt.GetZoomType() );
+        SetZoom( aFract, aFract, TRUE );
+        SetZoomType( rAppOpt.GetZoomType(), TRUE );
     }
 
     /*uno::Reference<frame::XFrame> xFrame = pViewFrame->GetFrame()->GetFrameInterface();
