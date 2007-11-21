@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:52:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:32:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,6 @@ namespace dbaccess
     {
         friend class ORowSetClone;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xServiceManager;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xOldConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xActiveConnection;
         ::com::sun::star::uno::Any                                                      m_aActiveConnection;
@@ -507,7 +506,7 @@ namespace dbaccess
 
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const ::com::sun::star::uno::Any& rValue) throw (::com::sun::star::uno::Exception);
     public:
-        ORowSetClone(ORowSet& rParent,::osl::Mutex* _pMutex);
+        ORowSetClone( const ::comphelper::ComponentContext& _rContext, ORowSet& rParent, ::osl::Mutex* _pMutex );
         virtual ~ORowSetClone();
 
     // com::sun::star::lang::XTypeProvider
