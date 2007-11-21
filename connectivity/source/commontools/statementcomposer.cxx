@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statementcomposer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:15:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 14:59:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,7 @@ namespace dbtools
             ,nCommandType( CommandType::COMMAND )
             ,bEscapeProcessing( sal_True )
             ,bComposerDirty( true )
+            ,bDisposeComposer( true )
         {
             if ( !_rxConnection.is() )
                 throw NullPointerException();
