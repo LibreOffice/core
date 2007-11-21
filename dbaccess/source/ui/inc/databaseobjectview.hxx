@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databaseobjectview.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:27:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,7 +191,7 @@ namespace dbaui
     class QueryDesigner : public DatabaseObjectView
     {
     protected:
-        sal_Bool    m_bCreateView;
+        sal_Int32   m_nCommandType;
         sal_Bool    m_bPreferSQLView;
 
     protected:
@@ -206,7 +206,7 @@ namespace dbaui
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
             const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame,
-            sal_Bool _bCreateView,
+            bool _bCreateView,
             sal_Bool _bPreferSQLView
         );
     };
@@ -286,15 +286,16 @@ namespace dbaui
         );
     };
     //======================================================================
-    //= OReportDesigner
+    //= ReportDesigner
     //======================================================================
-    class OReportDesigner : public DatabaseObjectView
+    class ReportDesigner : public DatabaseObjectView
     {
     public:
-        OReportDesigner(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
-           ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication
-,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame
-);
+        ReportDesigner(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame
+        );
     };
 // .........................................................................
 }   // namespace dbaui
