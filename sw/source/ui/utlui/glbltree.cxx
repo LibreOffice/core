@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:45:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 13:55:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -878,7 +878,9 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const String* pF
     else if ( pFileName->Len() )
     {
         aFileNames.realloc(1);
-        aFileNames.getArray()[0] = INetURLObject( *pFileName ).GetMainURL( INetURLObject::NO_DECODE );
+        INetURLObject aFileName;
+        aFileName.SetSmartURL( *pFileName );
+        aFileNames.getArray()[0] = aFileName.GetMainURL( INetURLObject::NO_DECODE );
         InsertRegion( pCont, aFileNames );
     }
 }
@@ -1494,7 +1496,8 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* _pContent, const Sequen
             else
                 pAnchorContent = aTempContents.GetObject(aTempContents.Count() - 1);
             String sFileName(pFileNames[nFile]);
-            INetURLObject aFileUrl(sFileName);
+            INetURLObject aFileUrl;
+            aFileUrl.SetSmartURL( sFileName );
             String sSectionName(String(aFileUrl.GetLastName(
                 INetURLObject::DECODE_UNAMBIGUOUS)).GetToken(0,
                 sfx2::cTokenSeperator));
