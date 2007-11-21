@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:35:43 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,7 +289,6 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent,SvStream*   _pStream)
     m_etAuto.SetText(String::CreateFromAscii("10"));
     m_etAuto.SetDecimalDigits(0);
     m_pbAuto.SetClickHdl(LINK(this,OWizTypeSelect,ButtonClickHdl));
-
     m_lbColumnNames.EnableMultiSelection(sal_True);
 
     try
@@ -333,7 +332,6 @@ IMPL_LINK( OWizTypeSelect, ColumnSelectHdl, MultiListBox *, /*pListBox*/ )
         m_aTypeControl.DisplayData(pField);
     return 0;
 }
-
 // -----------------------------------------------------------------------
 void OWizTypeSelect::Reset()
 {
