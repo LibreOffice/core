@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:45:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 13:54:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,7 +380,7 @@ IMPL_LINK( SwFldDBPage, TypeHdl, ListBox *, pBox )
 
                 if (IsFldEdit())
                 {
-                    if (GetCurField()->GetFormat() != 0 && GetCurField()->GetFormat() != ULONG_MAX)
+                    if (GetCurField()->GetFormat() != 0 && GetCurField()->GetFormat() != SAL_MAX_UINT32)
                         aNumFormatLB.SetDefFormat(GetCurField()->GetFormat());
 
                     if (GetCurField()->GetSubType() & nsSwExtendedSubType::SUB_OWN_FMT)
