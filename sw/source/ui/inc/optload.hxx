@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:38:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:23:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,11 +158,19 @@ private:
     FixedText       aCheckFT;
     SvxCheckListBox aCheckLB;
 
+    FixedText       aFtCaptionOrder;
+    ListBox         aLbCaptionOrder;
+
+    SwCaptionPreview    aPreview;
+
     FixedLine       aSettingsGroupFL;
     FixedText       aCategoryText;
     CaptionComboBox aCategoryBox;
     FixedText       aFormatText;
     ListBox         aFormatBox;
+    //#i61007# order of captions
+    FixedText       aNumberingSeparatorFT;
+    Edit            aNumberingSeparatorED;
     FixedText       aTextText;
     Edit            aTextEdit;
     FixedText       aPosText;
@@ -178,8 +186,6 @@ private:
     FixedText       aCharStyleFT;
     ListBox         aCharStyleLB;
     CheckBox        aApplyBorderCB;
-
-    SwCaptionPreview    aPreview;
 
     String          sSWTable;
     String          sSWFrame;
@@ -204,6 +210,7 @@ private:
 
     DECL_LINK( SelectHdl, ListBox *pLB = 0 );
     DECL_LINK( ModifyHdl, Edit *pEdt = 0 );
+    DECL_LINK( OrderHdl, ListBox* );
     DECL_LINK( ShowEntryHdl, SvxCheckListBox *pLB = 0 );
     DECL_LINK( SaveEntryHdl, SvxCheckListBox *pLB = 0 );
 
