@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modcfg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:30:02 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:20:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,8 @@
 #ifndef _FLDUPDE_HXX
 #include <fldupde.hxx>
 #endif
-
+#include <svtools/syslocaleoptions.hxx>
+#include <caption.hxx>
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
 #include <com/sun/star/uno/Any.hxx>
 #endif
@@ -447,6 +448,103 @@ void SwRevisionConfig::Load()
 /* -----------------------------10.10.00 16:22--------------------------------
 
  ---------------------------------------------------------------------------*/
+enum InsertConfigProp
+{
+    INS_PROP_TABLE_HEADER = 0,
+    INS_PROP_TABLE_REPEATHEADER,                        // 1
+    INS_PROP_TABLE_BORDER,                              // 2
+    INS_PROP_TABLE_SPLIT,                               // 3 from here not in writer/web
+    INS_PROP_CAP_AUTOMATIC,                             // 4
+    INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST,            // 5
+    INS_PROP_CAP_OBJECT_TABLE_ENABLE,                   // 6
+    INS_PROP_CAP_OBJECT_TABLE_CATEGORY,                 // 7
+    INS_PROP_CAP_OBJECT_TABLE_NUMBERING,                // 8
+    INS_PROP_CAP_OBJECT_TABLE_NUMBERINGSEPARATOR,       // 9
+    INS_PROP_CAP_OBJECT_TABLE_CAPTIONTEXT,              //10
+    INS_PROP_CAP_OBJECT_TABLE_DELIMITER,                //11
+    INS_PROP_CAP_OBJECT_TABLE_LEVEL,                    //12
+    INS_PROP_CAP_OBJECT_TABLE_POSITION,                 //13
+    INS_PROP_CAP_OBJECT_TABLE_CHARACTERSTYLE,           //14
+    INS_PROP_CAP_OBJECT_FRAME_ENABLE,                   //15
+    INS_PROP_CAP_OBJECT_FRAME_CATEGORY,                 //16
+    INS_PROP_CAP_OBJECT_FRAME_NUMBERING,                //17
+    INS_PROP_CAP_OBJECT_FRAME_NUMBERINGSEPARATOR,       //18
+    INS_PROP_CAP_OBJECT_FRAME_CAPTIONTEXT,              //19
+    INS_PROP_CAP_OBJECT_FRAME_DELIMITER,                //20
+    INS_PROP_CAP_OBJECT_FRAME_LEVEL,                    //21
+    INS_PROP_CAP_OBJECT_FRAME_POSITION,                 //22
+    INS_PROP_CAP_OBJECT_FRAME_CHARACTERSTYLE,           //23
+    INS_PROP_CAP_OBJECT_GRAPHIC_ENABLE,                          //24
+    INS_PROP_CAP_OBJECT_GRAPHIC_CATEGORY,               //25
+    INS_PROP_CAP_OBJECT_GRAPHIC_NUMBERING,              //26
+    INS_PROP_CAP_OBJECT_GRAPHIC_NUMBERINGSEPARATOR,     //27
+    INS_PROP_CAP_OBJECT_GRAPHIC_CAPTIONTEXT,            //28
+    INS_PROP_CAP_OBJECT_GRAPHIC_DELIMITER,              //29
+    INS_PROP_CAP_OBJECT_GRAPHIC_LEVEL,                  //30
+    INS_PROP_CAP_OBJECT_GRAPHIC_POSITION,               //31
+    INS_PROP_CAP_OBJECT_GRAPHIC_CHARACTERSTYLE,         //32
+    INS_PROP_CAP_OBJECT_GRAPHIC_APPLYATTRIBUTES,        //33
+    INS_PROP_CAP_OBJECT_CALC_ENABLE,                             //34
+    INS_PROP_CAP_OBJECT_CALC_CATEGORY,                  //35
+    INS_PROP_CAP_OBJECT_CALC_NUMBERING,                 //36
+    INS_PROP_CAP_OBJECT_CALC_NUMBERINGSEPARATOR,        //37
+    INS_PROP_CAP_OBJECT_CALC_CAPTIONTEXT,               //38
+    INS_PROP_CAP_OBJECT_CALC_DELIMITER,                 //39
+    INS_PROP_CAP_OBJECT_CALC_LEVEL,                     //40
+    INS_PROP_CAP_OBJECT_CALC_POSITION,                  //41
+    INS_PROP_CAP_OBJECT_CALC_CHARACTERSTYLE,            //42
+    INS_PROP_CAP_OBJECT_CALC_APPLYATTRIBUTES,           //43
+    INS_PROP_CAP_OBJECT_IMPRESS_ENABLE,                          //44
+    INS_PROP_CAP_OBJECT_IMPRESS_CATEGORY,               //45
+    INS_PROP_CAP_OBJECT_IMPRESS_NUMBERING,              //46
+    INS_PROP_CAP_OBJECT_IMPRESS_NUMBERINGSEPARATOR,     //47
+    INS_PROP_CAP_OBJECT_IMPRESS_CAPTIONTEXT,            //48
+    INS_PROP_CAP_OBJECT_IMPRESS_DELIMITER,              //49
+    INS_PROP_CAP_OBJECT_IMPRESS_LEVEL,                  //50
+    INS_PROP_CAP_OBJECT_IMPRESS_POSITION,               //51
+    INS_PROP_CAP_OBJECT_IMPRESS_CHARACTERSTYLE,         //52
+    INS_PROP_CAP_OBJECT_IMPRESS_APPLYATTRIBUTES,        //53
+    INS_PROP_CAP_OBJECT_CHART_ENABLE,                            //54
+    INS_PROP_CAP_OBJECT_CHART_CATEGORY,                 //55
+    INS_PROP_CAP_OBJECT_CHART_NUMBERING,                //56
+    INS_PROP_CAP_OBJECT_CHART_NUMBERINGSEPARATOR,       //57
+    INS_PROP_CAP_OBJECT_CHART_CAPTIONTEXT,              //58
+    INS_PROP_CAP_OBJECT_CHART_DELIMITER,                //59
+    INS_PROP_CAP_OBJECT_CHART_LEVEL,                    //60
+    INS_PROP_CAP_OBJECT_CHART_POSITION,                 //61
+    INS_PROP_CAP_OBJECT_CHART_CHARACTERSTYLE,           //62
+    INS_PROP_CAP_OBJECT_CHART_APPLYATTRIBUTES,          //63
+    INS_PROP_CAP_OBJECT_FORMULA_ENABLE,                          //64
+    INS_PROP_CAP_OBJECT_FORMULA_CATEGORY,               //65
+    INS_PROP_CAP_OBJECT_FORMULA_NUMBERING,              //66
+    INS_PROP_CAP_OBJECT_FORMULA_NUMBERINGSEPARATOR,     //67
+    INS_PROP_CAP_OBJECT_FORMULA_CAPTIONTEXT,            //68
+    INS_PROP_CAP_OBJECT_FORMULA_DELIMITER,              //69
+    INS_PROP_CAP_OBJECT_FORMULA_LEVEL,                  //70
+    INS_PROP_CAP_OBJECT_FORMULA_POSITION,               //71
+    INS_PROP_CAP_OBJECT_FORMULA_CHARACTERSTYLE,         //72
+    INS_PROP_CAP_OBJECT_FORMULA_APPLYATTRIBUTES,        //73
+    INS_PROP_CAP_OBJECT_DRAW_ENABLE,                             //74
+    INS_PROP_CAP_OBJECT_DRAW_CATEGORY,                  //75
+    INS_PROP_CAP_OBJECT_DRAW_NUMBERING,                 //76
+    INS_PROP_CAP_OBJECT_DRAW_NUMBERINGSEPARATOR,        //77
+    INS_PROP_CAP_OBJECT_DRAW_CAPTIONTEXT,               //78
+    INS_PROP_CAP_OBJECT_DRAW_DELIMITER,                 //79
+    INS_PROP_CAP_OBJECT_DRAW_LEVEL,                     //80
+    INS_PROP_CAP_OBJECT_DRAW_POSITION,                  //81
+    INS_PROP_CAP_OBJECT_DRAW_CHARACTERSTYLE,            //82
+    INS_PROP_CAP_OBJECT_DRAW_APPLYATTRIBUTES,           //83
+    INS_PROP_CAP_OBJECT_OLEMISC_ENABLE,                          //84
+    INS_PROP_CAP_OBJECT_OLEMISC_CATEGORY,               //85
+    INS_PROP_CAP_OBJECT_OLEMISC_NUMBERING,              //86
+    INS_PROP_CAP_OBJECT_OLEMISC_NUMBERINGSEPARATOR,     //87
+    INS_PROP_CAP_OBJECT_OLEMISC_CAPTIONTEXT,            //88
+    INS_PROP_CAP_OBJECT_OLEMISC_DELIMITER,              //89
+    INS_PROP_CAP_OBJECT_OLEMISC_LEVEL,                  //90
+    INS_PROP_CAP_OBJECT_OLEMISC_POSITION,               //91
+    INS_PROP_CAP_OBJECT_OLEMISC_CHARACTERSTYLE,         //92
+    INS_PROP_CAP_OBJECT_OLEMISC_APPLYATTRIBUTES        //93
+};
 const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
@@ -455,93 +553,103 @@ const Sequence<OUString>& SwInsertConfig::GetPropertyNames()
     {
         static const char* aPropNames[] =
         {
-            "Table/Header",                                 // 0
-            "Table/RepeatHeader",                           // 1
-            "Table/Border",                                 // 2
-            "Table/Split",                                  // 3 from here not in writer/web
-            "Caption/Automatic",                            // 4
-            "Caption/WriterObject/Table/Enable",        // 5
-            "Caption/WriterObject/Table/Settings/Category",     // 6
-            "Caption/WriterObject/Table/Settings/Numbering",    // 7
-            "Caption/WriterObject/Table/Settings/CaptionText",  // 8
-            "Caption/WriterObject/Table/Settings/Delimiter",    // 9
-            "Caption/WriterObject/Table/Settings/Level",        //10
-            "Caption/WriterObject/Table/Settings/Position",     //11
-            "Caption/WriterObject/Table/Settings/CharacterStyle",//12
-            "Caption/WriterObject/Frame/Enable",                //13
-            "Caption/WriterObject/Frame/Settings/Category",     //14
-            "Caption/WriterObject/Frame/Settings/Numbering",    //15
-            "Caption/WriterObject/Frame/Settings/CaptionText",  //16
-            "Caption/WriterObject/Frame/Settings/Delimiter",    //17
-            "Caption/WriterObject/Frame/Settings/Level",        //18
-            "Caption/WriterObject/Frame/Settings/Position",     //19
-            "Caption/WriterObject/Frame/Settings/CharacterStyle",   //20
-            "Caption/WriterObject/Graphic/Enable",                  //21
-            "Caption/WriterObject/Graphic/Settings/Category",       //22
-            "Caption/WriterObject/Graphic/Settings/Numbering",      //23
-            "Caption/WriterObject/Graphic/Settings/CaptionText",    //24
-            "Caption/WriterObject/Graphic/Settings/Delimiter",      //25
-            "Caption/WriterObject/Graphic/Settings/Level",          //26
-            "Caption/WriterObject/Graphic/Settings/Position",       //27
-            "Caption/WriterObject/Graphic/Settings/CharacterStyle", //28
-            "Caption/WriterObject/Graphic/Settings/ApplyAttributes",//29
-            "Caption/OfficeObject/Calc/Enable",                     //30
-            "Caption/OfficeObject/Calc/Settings/Category",          //31
-            "Caption/OfficeObject/Calc/Settings/Numbering",         //32
-            "Caption/OfficeObject/Calc/Settings/CaptionText",       //33
-            "Caption/OfficeObject/Calc/Settings/Delimiter",         //34
-            "Caption/OfficeObject/Calc/Settings/Level",             //35
-            "Caption/OfficeObject/Calc/Settings/Position",          //36
-            "Caption/OfficeObject/Calc/Settings/CharacterStyle", //37
-            "Caption/OfficeObject/Calc/Settings/ApplyAttributes",//38
-            "Caption/OfficeObject/Impress/Enable",                  //39
-            "Caption/OfficeObject/Impress/Settings/Category",       //40
-            "Caption/OfficeObject/Impress/Settings/Numbering",      //41
-            "Caption/OfficeObject/Impress/Settings/CaptionText",    //42
-            "Caption/OfficeObject/Impress/Settings/Delimiter",      //43
-            "Caption/OfficeObject/Impress/Settings/Level",          //44
-            "Caption/OfficeObject/Impress/Settings/Position",       //45
-            "Caption/OfficeObject/Impress/Settings/CharacterStyle", //46
-            "Caption/OfficeObject/Impress/Settings/ApplyAttributes",//47
-            "Caption/OfficeObject/Chart/Enable",                    //48
-            "Caption/OfficeObject/Chart/Settings/Category",         //49
-            "Caption/OfficeObject/Chart/Settings/Numbering",        //50
-            "Caption/OfficeObject/Chart/Settings/CaptionText",      //51
-            "Caption/OfficeObject/Chart/Settings/Delimiter",        //52
-            "Caption/OfficeObject/Chart/Settings/Level",            //53
-            "Caption/OfficeObject/Chart/Settings/Position",         //54
-            "Caption/OfficeObject/Chart/Settings/CharacterStyle", //55
-            "Caption/OfficeObject/Chart/Settings/ApplyAttributes",//56
-            "Caption/OfficeObject/Formula/Enable",                  //57
-            "Caption/OfficeObject/Formula/Settings/Category",       //58
-            "Caption/OfficeObject/Formula/Settings/Numbering",      //59
-            "Caption/OfficeObject/Formula/Settings/CaptionText",    //60
-            "Caption/OfficeObject/Formula/Settings/Delimiter",      //61
-            "Caption/OfficeObject/Formula/Settings/Level",          //62
-            "Caption/OfficeObject/Formula/Settings/Position",       //63
-            "Caption/OfficeObject/Formula/Settings/CharacterStyle", //64
-            "Caption/OfficeObject/Formula/Settings/ApplyAttributes",//65
-            "Caption/OfficeObject/Draw/Enable",                     //66
-            "Caption/OfficeObject/Draw/Settings/Category",          //67
-            "Caption/OfficeObject/Draw/Settings/Numbering",         //68
-            "Caption/OfficeObject/Draw/Settings/CaptionText",       //69
-            "Caption/OfficeObject/Draw/Settings/Delimiter",         //70
-            "Caption/OfficeObject/Draw/Settings/Level",             //71
-            "Caption/OfficeObject/Draw/Settings/Position",          //72
-            "Caption/OfficeObject/Draw/Settings/CharacterStyle", //73
-            "Caption/OfficeObject/Draw/Settings/ApplyAttributes",//74
-            "Caption/OfficeObject/OLEMisc/Enable",                  //75
-            "Caption/OfficeObject/OLEMisc/Settings/Category",       //76
-            "Caption/OfficeObject/OLEMisc/Settings/Numbering",      //77
-            "Caption/OfficeObject/OLEMisc/Settings/CaptionText",    //78
-            "Caption/OfficeObject/OLEMisc/Settings/Delimiter",      //79
-            "Caption/OfficeObject/OLEMisc/Settings/Level",          //80
-            "Caption/OfficeObject/OLEMisc/Settings/Position",       //81
-            "Caption/OfficeObject/OLEMisc/Settings/CharacterStyle", //82
-            "Caption/OfficeObject/OLEMisc/Settings/ApplyAttributes",//83
+            "Table/Header",                                                 // 0
+            "Table/RepeatHeader",                                           // 1
+            "Table/Border",                                                 // 2
+            "Table/Split",                                                  // 3 from here not in writer/web
+            "Caption/Automatic",                                            // 4
+            "Caption/CaptionOrderNumberingFirst",                           // 5
+            "Caption/WriterObject/Table/Enable",                            // 6
+            "Caption/WriterObject/Table/Settings/Category",                 // 7
+            "Caption/WriterObject/Table/Settings/Numbering",                // 8
+            "Caption/WriterObject/Table/Settings/NumberingSeparator",       // 9
+            "Caption/WriterObject/Table/Settings/CaptionText",              //10
+            "Caption/WriterObject/Table/Settings/Delimiter",                //11
+            "Caption/WriterObject/Table/Settings/Level",                    //12
+            "Caption/WriterObject/Table/Settings/Position",                 //13
+            "Caption/WriterObject/Table/Settings/CharacterStyle",           //14
+            "Caption/WriterObject/Frame/Enable",                            //15
+            "Caption/WriterObject/Frame/Settings/Category",                 //16
+            "Caption/WriterObject/Frame/Settings/Numbering",                //17
+            "Caption/WriterObject/Frame/Settings/NumberingSeparator",       //18
+            "Caption/WriterObject/Frame/Settings/CaptionText",              //19
+            "Caption/WriterObject/Frame/Settings/Delimiter",                //20
+            "Caption/WriterObject/Frame/Settings/Level",                    //21
+            "Caption/WriterObject/Frame/Settings/Position",                 //22
+            "Caption/WriterObject/Frame/Settings/CharacterStyle",           //23
+            "Caption/WriterObject/Graphic/Enable",                          //24
+            "Caption/WriterObject/Graphic/Settings/Category",               //25
+            "Caption/WriterObject/Graphic/Settings/Numbering",              //26
+            "Caption/WriterObject/Graphic/Settings/NumberingSeparator",     //27
+            "Caption/WriterObject/Graphic/Settings/CaptionText",            //28
+            "Caption/WriterObject/Graphic/Settings/Delimiter",              //29
+            "Caption/WriterObject/Graphic/Settings/Level",                  //30
+            "Caption/WriterObject/Graphic/Settings/Position",               //31
+            "Caption/WriterObject/Graphic/Settings/CharacterStyle",         //32
+            "Caption/WriterObject/Graphic/Settings/ApplyAttributes",        //33
+            "Caption/OfficeObject/Calc/Enable",                             //34
+            "Caption/OfficeObject/Calc/Settings/Category",                  //35
+            "Caption/OfficeObject/Calc/Settings/Numbering",                 //36
+            "Caption/OfficeObject/Calc/Settings/NumberingSeparator",        //37
+            "Caption/OfficeObject/Calc/Settings/CaptionText",               //38
+            "Caption/OfficeObject/Calc/Settings/Delimiter",                 //39
+            "Caption/OfficeObject/Calc/Settings/Level",                     //40
+            "Caption/OfficeObject/Calc/Settings/Position",                  //41
+            "Caption/OfficeObject/Calc/Settings/CharacterStyle",            //42
+            "Caption/OfficeObject/Calc/Settings/ApplyAttributes",           //43
+            "Caption/OfficeObject/Impress/Enable",                          //44
+            "Caption/OfficeObject/Impress/Settings/Category",               //45
+            "Caption/OfficeObject/Impress/Settings/Numbering",              //46
+            "Caption/OfficeObject/Impress/Settings/NumberingSeparator",     //47
+            "Caption/OfficeObject/Impress/Settings/CaptionText",            //48
+            "Caption/OfficeObject/Impress/Settings/Delimiter",              //49
+            "Caption/OfficeObject/Impress/Settings/Level",                  //50
+            "Caption/OfficeObject/Impress/Settings/Position",               //51
+            "Caption/OfficeObject/Impress/Settings/CharacterStyle",         //52
+            "Caption/OfficeObject/Impress/Settings/ApplyAttributes",        //53
+            "Caption/OfficeObject/Chart/Enable",                            //54
+            "Caption/OfficeObject/Chart/Settings/Category",                 //55
+            "Caption/OfficeObject/Chart/Settings/Numbering",                //56
+            "Caption/OfficeObject/Chart/Settings/NumberingSeparator",       //57
+            "Caption/OfficeObject/Chart/Settings/CaptionText",              //58
+            "Caption/OfficeObject/Chart/Settings/Delimiter",                //59
+            "Caption/OfficeObject/Chart/Settings/Level",                    //60
+            "Caption/OfficeObject/Chart/Settings/Position",                 //61
+            "Caption/OfficeObject/Chart/Settings/CharacterStyle",           //62
+            "Caption/OfficeObject/Chart/Settings/ApplyAttributes",          //63
+            "Caption/OfficeObject/Formula/Enable",                          //64
+            "Caption/OfficeObject/Formula/Settings/Category",               //65
+            "Caption/OfficeObject/Formula/Settings/Numbering",              //66
+            "Caption/OfficeObject/Formula/Settings/NumberingSeparator",     //67
+            "Caption/OfficeObject/Formula/Settings/CaptionText",            //68
+            "Caption/OfficeObject/Formula/Settings/Delimiter",              //69
+            "Caption/OfficeObject/Formula/Settings/Level",                  //70
+            "Caption/OfficeObject/Formula/Settings/Position",               //71
+            "Caption/OfficeObject/Formula/Settings/CharacterStyle",         //72
+            "Caption/OfficeObject/Formula/Settings/ApplyAttributes",        //73
+            "Caption/OfficeObject/Draw/Enable",                             //74
+            "Caption/OfficeObject/Draw/Settings/Category",                  //75
+            "Caption/OfficeObject/Draw/Settings/Numbering",                 //76
+            "Caption/OfficeObject/Draw/Settings/NumberingSeparator",        //77
+            "Caption/OfficeObject/Draw/Settings/CaptionText",               //78
+            "Caption/OfficeObject/Draw/Settings/Delimiter",                 //79
+            "Caption/OfficeObject/Draw/Settings/Level",                     //80
+            "Caption/OfficeObject/Draw/Settings/Position",                  //81
+            "Caption/OfficeObject/Draw/Settings/CharacterStyle",            //82
+            "Caption/OfficeObject/Draw/Settings/ApplyAttributes",           //83
+            "Caption/OfficeObject/OLEMisc/Enable",                          //84
+            "Caption/OfficeObject/OLEMisc/Settings/Category",               //85
+            "Caption/OfficeObject/OLEMisc/Settings/Numbering",              //86
+            "Caption/OfficeObject/OLEMisc/Settings/NumberingSeparator",     //87
+            "Caption/OfficeObject/OLEMisc/Settings/CaptionText",            //88
+            "Caption/OfficeObject/OLEMisc/Settings/Delimiter",              //89
+            "Caption/OfficeObject/OLEMisc/Settings/Level",                  //90
+            "Caption/OfficeObject/OLEMisc/Settings/Position",               //91
+            "Caption/OfficeObject/OLEMisc/Settings/CharacterStyle",         //92
+            "Caption/OfficeObject/OLEMisc/Settings/ApplyAttributes"         //93
         };
-        const int nCount = 84;
-        const int nWebCount = 3;
+        const int nCount = INS_PROP_CAP_OBJECT_OLEMISC_APPLYATTRIBUTES + 1;
+        const int nWebCount = INS_PROP_TABLE_BORDER + 1;
         aNames.realloc(nCount);
         aWebNames.realloc(nWebCount);
         OUString* pNames = aNames.getArray();
@@ -562,6 +670,8 @@ SwInsertConfig::SwInsertConfig(sal_Bool bWeb) :
         CONFIG_MODE_DELAYED_UPDATE|CONFIG_MODE_RELEASE_TREE),
     pCapOptions(0),
     pOLEMiscOpt(0),
+    bInsWithCaption( sal_False ),
+    bCaptionOrderNumberingFirst( sal_False ),
     aInsTblOpts(0,0),
     bIsWeb(bWeb)
 {
@@ -598,12 +708,13 @@ void lcl_WriteOpt(const InsCaptionOpt& rOpt, Any* pValues, sal_Int32 nProp, sal_
         break;//Enable
         case 1: pValues[nProp] <<= OUString(rOpt.GetCategory()); break;//Category
         case 2: pValues[nProp] <<= (sal_Int32)rOpt.GetNumType(); break;//Numbering",
-        case 3: pValues[nProp] <<= OUString(rOpt.GetCaption());  break;//CaptionText",
-        case 4: pValues[nProp] <<= OUString(rOpt.GetSeparator());break;//Delimiter",
-        case 5: pValues[nProp] <<= (sal_Int32)rOpt.GetLevel();   break;//Level",
-        case 6: pValues[nProp] <<= (sal_Int32)rOpt.GetPos();     break;//Position",
-        case 7: pValues[nProp] <<= (::rtl::OUString&)rOpt.GetCharacterStyle(); break; //CharacterStyle
-        case 8: pValues[nProp] <<= rOpt.CopyAttributes(); break; //ApplyAttributes
+        case 3: pValues[nProp] <<= rOpt.GetNumSeparator(); break;//NumberingSeparator",
+        case 4: pValues[nProp] <<= OUString(rOpt.GetCaption());  break;//CaptionText",
+        case 5: pValues[nProp] <<= OUString(rOpt.GetSeparator());break;//Delimiter",
+        case 6: pValues[nProp] <<= (sal_Int32)rOpt.GetLevel();   break;//Level",
+        case 7: pValues[nProp] <<= (sal_Int32)rOpt.GetPos();     break;//Position",
+        case 8: pValues[nProp] <<= (::rtl::OUString&)rOpt.GetCharacterStyle(); break; //CharacterStyle
+        case 9: pValues[nProp] <<= rOpt.CopyAttributes(); break; //ApplyAttributes
     }
 }
 //-----------------------------------------------------------------------------
@@ -637,62 +748,145 @@ void SwInsertConfig::Commit()
         }
         switch(nProp)
         {
-            case  0:
+            case INS_PROP_TABLE_HEADER:
             {
                 sal_Bool bVal = 0 !=(aInsTblOpts.mnInsMode & tabopts::HEADLINE); pValues[nProp].setValue(&bVal, rType);
             }
             break;//"Table/Header",
-            case  1:
+            case INS_PROP_TABLE_REPEATHEADER:
             {
                 sal_Bool bVal = (aInsTblOpts.mnRowsToRepeat>0); pValues[nProp].setValue(&bVal, rType);
             }
             break;//"Table/RepeatHeader",
-            case  2:
+            case INS_PROP_TABLE_BORDER:
             {
                 sal_Bool bVal = 0 !=(aInsTblOpts.mnInsMode & tabopts::DEFAULT_BORDER ); pValues[nProp].setValue(&bVal, rType);
             }
             break;//"Table/Border",
-            case  3:
+            case INS_PROP_TABLE_SPLIT:
             {
                 sal_Bool bVal = 0 !=(aInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT); pValues[nProp].setValue(&bVal, rType);
             }
             break;//"Table/Split",
-            case  4: pValues[nProp].setValue(&bInsWithCaption, rType);break;//"Caption/Automatic",
+            case INS_PROP_CAP_AUTOMATIC: pValues[nProp].setValue(&bInsWithCaption, rType);break;//"Caption/Automatic",
+            case INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST:
+                pValues[nProp] <<= bCaptionOrderNumberingFirst;
+            break;//"Caption/CaptionOrderNumberingFirst"
 
-            case  5: case  6: case  7: case  8: case  9: case 10: case 11: case 12://"Caption/WriterObject/Table/Position",
+            case INS_PROP_CAP_OBJECT_TABLE_ENABLE:
+            case INS_PROP_CAP_OBJECT_TABLE_CATEGORY:
+            case INS_PROP_CAP_OBJECT_TABLE_NUMBERING:
+            case INS_PROP_CAP_OBJECT_TABLE_NUMBERINGSEPARATOR:
+            case INS_PROP_CAP_OBJECT_TABLE_CAPTIONTEXT:
+            case INS_PROP_CAP_OBJECT_TABLE_DELIMITER:
+            case INS_PROP_CAP_OBJECT_TABLE_LEVEL:
+            case INS_PROP_CAP_OBJECT_TABLE_POSITION:
+            case INS_PROP_CAP_OBJECT_TABLE_CHARACTERSTYLE:
                     if(pWriterTableOpt)
-                        lcl_WriteOpt(*pWriterTableOpt, pValues, nProp, nProp - 5);
+                        lcl_WriteOpt(*pWriterTableOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_TABLE_ENABLE);
             break;
-            case 13: case 14: case 15: case 16: case 17: case 18: case 19: case 20:
+            case INS_PROP_CAP_OBJECT_FRAME_ENABLE:
+            case INS_PROP_CAP_OBJECT_FRAME_CATEGORY:
+            case INS_PROP_CAP_OBJECT_FRAME_NUMBERING:
+            case INS_PROP_CAP_OBJECT_FRAME_NUMBERINGSEPARATOR:
+            case INS_PROP_CAP_OBJECT_FRAME_CAPTIONTEXT:
+            case INS_PROP_CAP_OBJECT_FRAME_DELIMITER:
+            case INS_PROP_CAP_OBJECT_FRAME_LEVEL:
+            case INS_PROP_CAP_OBJECT_FRAME_POSITION:
+            case INS_PROP_CAP_OBJECT_FRAME_CHARACTERSTYLE:
                     if(pWriterFrameOpt)
-                        lcl_WriteOpt(*pWriterFrameOpt, pValues, nProp, nProp - 13);
-            case 21: case 22: case 23: case 24: case 25: case 26: case 27: case 28: case 29:
+                        lcl_WriteOpt(*pWriterFrameOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_FRAME_ENABLE);
+            break;
+            case INS_PROP_CAP_OBJECT_GRAPHIC_ENABLE:
+            case INS_PROP_CAP_OBJECT_GRAPHIC_CATEGORY:
+            case INS_PROP_CAP_OBJECT_GRAPHIC_NUMBERING:
+            case INS_PROP_CAP_OBJECT_GRAPHIC_NUMBERINGSEPARATOR:
+            case INS_PROP_CAP_OBJECT_GRAPHIC_CAPTIONTEXT:
+            case INS_PROP_CAP_OBJECT_GRAPHIC_DELIMITER:
+            case INS_PROP_CAP_OBJECT_GRAPHIC_LEVEL:
+            case INS_PROP_CAP_OBJECT_GRAPHIC_POSITION:
+            case INS_PROP_CAP_OBJECT_GRAPHIC_CHARACTERSTYLE:
+            case INS_PROP_CAP_OBJECT_GRAPHIC_APPLYATTRIBUTES:
                     if(pWriterGraphicOpt)
-                        lcl_WriteOpt(*pWriterGraphicOpt, pValues, nProp, nProp - 21);
-                    break;
-            case 30: case 31: case 32: case 33: case 34: case 35: case 36: case 37: case 38:
+                        lcl_WriteOpt(*pWriterGraphicOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_GRAPHIC_ENABLE);
+            break;
+            case INS_PROP_CAP_OBJECT_CALC_ENABLE:
+            case INS_PROP_CAP_OBJECT_CALC_CATEGORY:
+            case INS_PROP_CAP_OBJECT_CALC_NUMBERING:
+            case INS_PROP_CAP_OBJECT_CALC_NUMBERINGSEPARATOR:
+            case INS_PROP_CAP_OBJECT_CALC_CAPTIONTEXT:
+            case INS_PROP_CAP_OBJECT_CALC_DELIMITER:
+            case INS_PROP_CAP_OBJECT_CALC_LEVEL:
+            case INS_PROP_CAP_OBJECT_CALC_POSITION:
+            case INS_PROP_CAP_OBJECT_CALC_CHARACTERSTYLE:
+            case INS_PROP_CAP_OBJECT_CALC_APPLYATTRIBUTES:
                     if(pOLECalcOpt)
-                        lcl_WriteOpt(*pOLECalcOpt, pValues, nProp, nProp - 30);
+                        lcl_WriteOpt(*pOLECalcOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_CALC_ENABLE);
             break;
-            case 39: case 40: case 41: case 42: case 43: case 44: case 45:case 46: case 47:
+            case INS_PROP_CAP_OBJECT_IMPRESS_ENABLE:
+            case INS_PROP_CAP_OBJECT_IMPRESS_CATEGORY:
+            case INS_PROP_CAP_OBJECT_IMPRESS_NUMBERING:
+            case INS_PROP_CAP_OBJECT_IMPRESS_NUMBERINGSEPARATOR:
+            case INS_PROP_CAP_OBJECT_IMPRESS_CAPTIONTEXT:
+            case INS_PROP_CAP_OBJECT_IMPRESS_DELIMITER:
+            case INS_PROP_CAP_OBJECT_IMPRESS_LEVEL:
+            case INS_PROP_CAP_OBJECT_IMPRESS_POSITION:
+            case INS_PROP_CAP_OBJECT_IMPRESS_CHARACTERSTYLE:
+            case INS_PROP_CAP_OBJECT_IMPRESS_APPLYATTRIBUTES:
                     if(pOLEImpressOpt)
-                        lcl_WriteOpt(*pOLEImpressOpt, pValues, nProp, nProp - 39);
+                        lcl_WriteOpt(*pOLEImpressOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_IMPRESS_ENABLE);
             break;
-            case 48: case 49: case 50: case 51: case 52:case 53: case 54: case 55: case 56:
+            case INS_PROP_CAP_OBJECT_CHART_ENABLE:
+            case INS_PROP_CAP_OBJECT_CHART_CATEGORY:
+            case INS_PROP_CAP_OBJECT_CHART_NUMBERING:
+            case INS_PROP_CAP_OBJECT_CHART_NUMBERINGSEPARATOR:
+            case INS_PROP_CAP_OBJECT_CHART_CAPTIONTEXT:
+            case INS_PROP_CAP_OBJECT_CHART_DELIMITER:
+            case INS_PROP_CAP_OBJECT_CHART_LEVEL:
+            case INS_PROP_CAP_OBJECT_CHART_POSITION:
+            case INS_PROP_CAP_OBJECT_CHART_CHARACTERSTYLE:
+            case INS_PROP_CAP_OBJECT_CHART_APPLYATTRIBUTES:
                     if(pOLEChartOpt)
-                        lcl_WriteOpt(*pOLEChartOpt, pValues, nProp, nProp - 48);
+                        lcl_WriteOpt(*pOLEChartOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_CHART_ENABLE);
             break;
-            case 57: case 58: case 59: case 60: case 61: case 62: case 63: case 64: case 65:
+            case INS_PROP_CAP_OBJECT_FORMULA_ENABLE:
+            case INS_PROP_CAP_OBJECT_FORMULA_CATEGORY:
+            case INS_PROP_CAP_OBJECT_FORMULA_NUMBERING:
+            case INS_PROP_CAP_OBJECT_FORMULA_NUMBERINGSEPARATOR:
+            case INS_PROP_CAP_OBJECT_FORMULA_CAPTIONTEXT:
+            case INS_PROP_CAP_OBJECT_FORMULA_DELIMITER:
+            case INS_PROP_CAP_OBJECT_FORMULA_LEVEL:
+            case INS_PROP_CAP_OBJECT_FORMULA_POSITION:
+            case INS_PROP_CAP_OBJECT_FORMULA_CHARACTERSTYLE:
+            case INS_PROP_CAP_OBJECT_FORMULA_APPLYATTRIBUTES:
                     if(pOLEFormulaOpt)
-                        lcl_WriteOpt(*pOLEFormulaOpt, pValues, nProp, nProp - 57);
+                        lcl_WriteOpt(*pOLEFormulaOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_FORMULA_ENABLE);
             break;
-            case 66: case 67: case 68: case 69: case 70: case 71: case 72: case 73: case 74:
+            case INS_PROP_CAP_OBJECT_DRAW_ENABLE:
+            case INS_PROP_CAP_OBJECT_DRAW_CATEGORY:
+            case INS_PROP_CAP_OBJECT_DRAW_NUMBERING:
+            case INS_PROP_CAP_OBJECT_DRAW_NUMBERINGSEPARATOR:
+            case INS_PROP_CAP_OBJECT_DRAW_CAPTIONTEXT:
+            case INS_PROP_CAP_OBJECT_DRAW_DELIMITER:
+            case INS_PROP_CAP_OBJECT_DRAW_LEVEL:
+            case INS_PROP_CAP_OBJECT_DRAW_POSITION:
+            case INS_PROP_CAP_OBJECT_DRAW_CHARACTERSTYLE:
+            case INS_PROP_CAP_OBJECT_DRAW_APPLYATTRIBUTES:
                     if(pOLEDrawOpt)
-                        lcl_WriteOpt(*pOLEDrawOpt, pValues, nProp, nProp - 66);
+                        lcl_WriteOpt(*pOLEDrawOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_DRAW_ENABLE);
             break;
-            case 75: case 76: case 77: case 78: case 79: case 80: case 81: case 82: case 83:
+            case INS_PROP_CAP_OBJECT_OLEMISC_ENABLE:
+            case INS_PROP_CAP_OBJECT_OLEMISC_CATEGORY:
+            case INS_PROP_CAP_OBJECT_OLEMISC_NUMBERING:
+            case INS_PROP_CAP_OBJECT_OLEMISC_NUMBERINGSEPARATOR:
+            case INS_PROP_CAP_OBJECT_OLEMISC_CAPTIONTEXT:
+            case INS_PROP_CAP_OBJECT_OLEMISC_DELIMITER:
+            case INS_PROP_CAP_OBJECT_OLEMISC_LEVEL:
+            case INS_PROP_CAP_OBJECT_OLEMISC_POSITION:
+            case INS_PROP_CAP_OBJECT_OLEMISC_CHARACTERSTYLE:
+            case INS_PROP_CAP_OBJECT_OLEMISC_APPLYATTRIBUTES:
                     if(pOLEMiscOpt)
-                        lcl_WriteOpt(*pOLEMiscOpt, pValues, nProp, nProp - 75);
+                        lcl_WriteOpt(*pOLEMiscOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_OLEMISC_ENABLE);
             break;
 
         }
@@ -725,37 +919,43 @@ void lcl_ReadOpt(InsCaptionOpt& rOpt, const Any* pValues, sal_Int32 nProp, sal_I
         case 3:
         {
             OUString sTemp; pValues[nProp] >>= sTemp;
+            rOpt.SetNumSeparator(sTemp);
+        }
+        break;//NumberingSeparator",
+        case 4:
+        {
+            OUString sTemp; pValues[nProp] >>= sTemp;
             rOpt.SetCaption(sTemp);
         }
         break;//CaptionText",
-        case 4:
+        case 5:
         {
             OUString sTemp; pValues[nProp] >>= sTemp;
             if(sTemp.getLength())
                 rOpt.SetSeparator(sTemp);
         }
         break;//Delimiter",
-        case 5:
+        case 6:
         {
             sal_Int32 nTemp = 0;
             pValues[nProp] >>= nTemp;
             rOpt.SetLevel(sal::static_int_cast< sal_uInt16, sal_Int32>(nTemp));
         }
         break;//Level",
-        case 6:
+        case 7:
         {
             sal_Int32 nTemp = 0;
             pValues[nProp] >>= nTemp;
             rOpt.SetPos(sal::static_int_cast< sal_uInt16, sal_Int32>(nTemp));
         }
         break;//Position",
-        case 7 : //CharacterStyle
+        case 8 : //CharacterStyle
         {
             ::rtl::OUString sTemp; pValues[nProp] >>= sTemp;
             rOpt.SetCharacterStyle( sTemp );
         }
         break;
-        case 8 : //ApplyAttributes
+        case 9 : //ApplyAttributes
         {
             pValues[nProp] >>= rOpt.CopyAttributes();
         }
@@ -798,110 +998,197 @@ void SwInsertConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                sal_Bool bBool = nProp < 5 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
+                sal_Bool bBool = nProp < INS_PROP_CAP_OBJECT_TABLE_ENABLE ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
                 switch(nProp)
                 {
-                    case  0:
+                    case INS_PROP_TABLE_HEADER:
                     {
                         if(bBool)
                             nInsTblFlags|= tabopts::HEADLINE;
                     }
                     break;//"Table/Header",
-                    case  1:
+                    case INS_PROP_TABLE_REPEATHEADER:
                     {
                         aInsTblOpts.mnRowsToRepeat = bBool? 1 : 0;
 
                     }
                     break;//"Table/RepeatHeader",
-                    case  2:
+                    case INS_PROP_TABLE_BORDER:
                     {
                         if(bBool)
                             nInsTblFlags|= tabopts::DEFAULT_BORDER;
                     }
                     break;//"Table/Border",
-                    case  3:
+                    case INS_PROP_TABLE_SPLIT:
                     {
                         if(bBool)
                             nInsTblFlags|= tabopts::SPLIT_LAYOUT;
                     }
                     break;//"Table/Split",
-                    case 4:
+                    case INS_PROP_CAP_AUTOMATIC:
                         bInsWithCaption = bBool;
                     break;
-                    case  5: case  6: case  7: case  8: case  9: case 10: case 11: case 12:
+                    case INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST: bCaptionOrderNumberingFirst = bBool; break;
+                    case INS_PROP_CAP_OBJECT_TABLE_ENABLE:
+                    case INS_PROP_CAP_OBJECT_TABLE_CATEGORY:
+                    case INS_PROP_CAP_OBJECT_TABLE_NUMBERING:
+                    case INS_PROP_CAP_OBJECT_TABLE_NUMBERINGSEPARATOR:
+                    case INS_PROP_CAP_OBJECT_TABLE_CAPTIONTEXT:
+                    case INS_PROP_CAP_OBJECT_TABLE_DELIMITER:
+                    case INS_PROP_CAP_OBJECT_TABLE_LEVEL:
+                    case INS_PROP_CAP_OBJECT_TABLE_POSITION:
+                    case INS_PROP_CAP_OBJECT_TABLE_CHARACTERSTYLE:
                         if(!pWriterTableOpt)
                         {
                             pWriterTableOpt = new InsCaptionOpt(TABLE_CAP);
                             pCapOptions->Insert(pWriterTableOpt);
                         }
-                        lcl_ReadOpt(*pWriterTableOpt, pValues, nProp, nProp - 5);
+                        lcl_ReadOpt(*pWriterTableOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_TABLE_ENABLE);
                     break;
-                    case 13: case 14: case 15: case 16: case 17: case 18:case 19: case 20:
+                    case INS_PROP_CAP_OBJECT_FRAME_ENABLE:
+                    case INS_PROP_CAP_OBJECT_FRAME_CATEGORY:
+                    case INS_PROP_CAP_OBJECT_FRAME_NUMBERING:
+                    case INS_PROP_CAP_OBJECT_FRAME_NUMBERINGSEPARATOR:
+                    case INS_PROP_CAP_OBJECT_FRAME_CAPTIONTEXT:
+                    case INS_PROP_CAP_OBJECT_FRAME_DELIMITER:
+                    case INS_PROP_CAP_OBJECT_FRAME_LEVEL:
+                    case INS_PROP_CAP_OBJECT_FRAME_POSITION:
+                    case INS_PROP_CAP_OBJECT_FRAME_CHARACTERSTYLE:
                         if(!pWriterFrameOpt)
                         {
                             pWriterFrameOpt = new InsCaptionOpt(FRAME_CAP);
                             pCapOptions->Insert(pWriterFrameOpt);
                         }
-                        lcl_ReadOpt(*pWriterFrameOpt, pValues, nProp, nProp - 13);
-                    case 21:case 22: case 23: case 24:case 25: case 26: case 27: case 28: case 29:
+                        lcl_ReadOpt(*pWriterFrameOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_FRAME_ENABLE);
+                    break;
+                    case INS_PROP_CAP_OBJECT_GRAPHIC_ENABLE:
+                    case INS_PROP_CAP_OBJECT_GRAPHIC_CATEGORY:
+                    case INS_PROP_CAP_OBJECT_GRAPHIC_NUMBERING:
+                    case INS_PROP_CAP_OBJECT_GRAPHIC_NUMBERINGSEPARATOR:
+                    case INS_PROP_CAP_OBJECT_GRAPHIC_CAPTIONTEXT:
+                    case INS_PROP_CAP_OBJECT_GRAPHIC_DELIMITER:
+                    case INS_PROP_CAP_OBJECT_GRAPHIC_LEVEL:
+                    case INS_PROP_CAP_OBJECT_GRAPHIC_POSITION:
+                    case INS_PROP_CAP_OBJECT_GRAPHIC_CHARACTERSTYLE:
+                    case INS_PROP_CAP_OBJECT_GRAPHIC_APPLYATTRIBUTES:
                         if(!pWriterGraphicOpt)
                         {
                             pWriterGraphicOpt = new InsCaptionOpt(GRAPHIC_CAP);
                             pCapOptions->Insert(pWriterGraphicOpt);
                         }
-                        lcl_ReadOpt(*pWriterGraphicOpt, pValues, nProp, nProp - 21);
-                        break;
-                    case 30: case 31: case 32: case 33: case 34: case 35: case 36: case 37: case 38:
+                        lcl_ReadOpt(*pWriterGraphicOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_GRAPHIC_ENABLE);
+                    break;
+                    case INS_PROP_CAP_OBJECT_CALC_ENABLE:
+                    case INS_PROP_CAP_OBJECT_CALC_CATEGORY:
+                    case INS_PROP_CAP_OBJECT_CALC_NUMBERING:
+                    case INS_PROP_CAP_OBJECT_CALC_NUMBERINGSEPARATOR:
+                    case INS_PROP_CAP_OBJECT_CALC_CAPTIONTEXT:
+                    case INS_PROP_CAP_OBJECT_CALC_DELIMITER:
+                    case INS_PROP_CAP_OBJECT_CALC_LEVEL:
+                    case INS_PROP_CAP_OBJECT_CALC_POSITION:
+                    case INS_PROP_CAP_OBJECT_CALC_CHARACTERSTYLE:
+                    case INS_PROP_CAP_OBJECT_CALC_APPLYATTRIBUTES:
                         if(!pOLECalcOpt)
                         {
                             pOLECalcOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_CALC]);
                             pCapOptions->Insert(pOLECalcOpt);
                         }
-                        lcl_ReadOpt(*pOLECalcOpt, pValues, nProp, nProp - 30);
+                        lcl_ReadOpt(*pOLECalcOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_CALC_ENABLE);
                     break;
-                    case 39: case 40: case 41: case 42: case 43: case 44: case 45:case 46: case 47:
+                    case INS_PROP_CAP_OBJECT_IMPRESS_ENABLE:
+                    case INS_PROP_CAP_OBJECT_IMPRESS_CATEGORY:
+                    case INS_PROP_CAP_OBJECT_IMPRESS_NUMBERING:
+                    case INS_PROP_CAP_OBJECT_IMPRESS_NUMBERINGSEPARATOR:
+                    case INS_PROP_CAP_OBJECT_IMPRESS_CAPTIONTEXT:
+                    case INS_PROP_CAP_OBJECT_IMPRESS_DELIMITER:
+                    case INS_PROP_CAP_OBJECT_IMPRESS_LEVEL:
+                    case INS_PROP_CAP_OBJECT_IMPRESS_POSITION:
+                    case INS_PROP_CAP_OBJECT_IMPRESS_CHARACTERSTYLE:
+                    case INS_PROP_CAP_OBJECT_IMPRESS_APPLYATTRIBUTES:
                         if(!pOLEImpressOpt)
                         {
                             pOLEImpressOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_IMPRESS]);
                             pCapOptions->Insert(pOLEImpressOpt);
                         }
-                        lcl_ReadOpt(*pOLEImpressOpt, pValues, nProp, nProp - 39);
+                        lcl_ReadOpt(*pOLEImpressOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_IMPRESS_ENABLE);
                     break;
-                    case 48: case 49: case 50: case 51: case 52:case 53: case 54:    case 55: case 56:
+                    case INS_PROP_CAP_OBJECT_CHART_ENABLE:
+                    case INS_PROP_CAP_OBJECT_CHART_CATEGORY:
+                    case INS_PROP_CAP_OBJECT_CHART_NUMBERING:
+                    case INS_PROP_CAP_OBJECT_CHART_NUMBERINGSEPARATOR:
+                    case INS_PROP_CAP_OBJECT_CHART_CAPTIONTEXT:
+                    case INS_PROP_CAP_OBJECT_CHART_DELIMITER:
+                    case INS_PROP_CAP_OBJECT_CHART_LEVEL:
+                    case INS_PROP_CAP_OBJECT_CHART_POSITION:
+                    case INS_PROP_CAP_OBJECT_CHART_CHARACTERSTYLE:
+                    case INS_PROP_CAP_OBJECT_CHART_APPLYATTRIBUTES:
                         if(!pOLEChartOpt)
                         {
                             pOLEChartOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_CHART]);
                             pCapOptions->Insert(pOLEChartOpt);
                         }
-                        lcl_ReadOpt(*pOLEChartOpt, pValues, nProp, nProp - 48);
+                        lcl_ReadOpt(*pOLEChartOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_CHART_ENABLE);
                     break;
-
-                    case 57: case 58: case 59:case 60: case 61: case 62: case 63: case 65: case 64:
+                    case INS_PROP_CAP_OBJECT_FORMULA_ENABLE:
+                    case INS_PROP_CAP_OBJECT_FORMULA_CATEGORY:
+                    case INS_PROP_CAP_OBJECT_FORMULA_NUMBERING:
+                    case INS_PROP_CAP_OBJECT_FORMULA_NUMBERINGSEPARATOR:
+                    case INS_PROP_CAP_OBJECT_FORMULA_CAPTIONTEXT:
+                    case INS_PROP_CAP_OBJECT_FORMULA_DELIMITER:
+                    case INS_PROP_CAP_OBJECT_FORMULA_LEVEL:
+                    case INS_PROP_CAP_OBJECT_FORMULA_POSITION:
+                    case INS_PROP_CAP_OBJECT_FORMULA_CHARACTERSTYLE:
+                    case INS_PROP_CAP_OBJECT_FORMULA_APPLYATTRIBUTES:
                         if(!pOLEFormulaOpt)
                         {
                             pOLEFormulaOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_MATH]);
                             pCapOptions->Insert(pOLEFormulaOpt);
                         }
-                        lcl_ReadOpt(*pOLEFormulaOpt, pValues, nProp, nProp - 57);
+                        lcl_ReadOpt(*pOLEFormulaOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_FORMULA_ENABLE);
                     break;
-                    case 66: case 67: case 68: case 69: case 70: case 71: case 72: case 73: case 74:
+                    case INS_PROP_CAP_OBJECT_DRAW_ENABLE:
+                    case INS_PROP_CAP_OBJECT_DRAW_CATEGORY:
+                    case INS_PROP_CAP_OBJECT_DRAW_NUMBERING:
+                    case INS_PROP_CAP_OBJECT_DRAW_NUMBERINGSEPARATOR:
+                    case INS_PROP_CAP_OBJECT_DRAW_CAPTIONTEXT:
+                    case INS_PROP_CAP_OBJECT_DRAW_DELIMITER:
+                    case INS_PROP_CAP_OBJECT_DRAW_LEVEL:
+                    case INS_PROP_CAP_OBJECT_DRAW_POSITION:
+                    case INS_PROP_CAP_OBJECT_DRAW_CHARACTERSTYLE:
+                    case INS_PROP_CAP_OBJECT_DRAW_APPLYATTRIBUTES:
                         if(!pOLEDrawOpt)
                         {
                             pOLEDrawOpt = new InsCaptionOpt(OLE_CAP, &aGlobalNames[GLOB_NAME_DRAW]);
                             pCapOptions->Insert(pOLEDrawOpt);
                         }
-                        lcl_ReadOpt(*pOLEDrawOpt, pValues, nProp, nProp - 66);
+                        lcl_ReadOpt(*pOLEDrawOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_DRAW_ENABLE);
                     break;
-                    case 75: case 76: case 77: case 78: case 79: case 80: case 81: case 82: case 83:
+                    case INS_PROP_CAP_OBJECT_OLEMISC_ENABLE:
+                    case INS_PROP_CAP_OBJECT_OLEMISC_CATEGORY:
+                    case INS_PROP_CAP_OBJECT_OLEMISC_NUMBERING:
+                    case INS_PROP_CAP_OBJECT_OLEMISC_NUMBERINGSEPARATOR:
+                    case INS_PROP_CAP_OBJECT_OLEMISC_CAPTIONTEXT:
+                    case INS_PROP_CAP_OBJECT_OLEMISC_DELIMITER:
+                    case INS_PROP_CAP_OBJECT_OLEMISC_LEVEL:
+                    case INS_PROP_CAP_OBJECT_OLEMISC_POSITION:
+                    case INS_PROP_CAP_OBJECT_OLEMISC_CHARACTERSTYLE:
+                    case INS_PROP_CAP_OBJECT_OLEMISC_APPLYATTRIBUTES:
                         if(!pOLEMiscOpt)
                         {
                             pOLEMiscOpt = new InsCaptionOpt(OLE_CAP);
                         }
-                        lcl_ReadOpt(*pOLEMiscOpt, pValues, nProp, nProp - 75);
+                        lcl_ReadOpt(*pOLEMiscOpt, pValues, nProp, nProp - INS_PROP_CAP_OBJECT_OLEMISC_ENABLE);
                     break;
-
                 }
             }
+            else if(nProp == INS_PROP_CAP_CAPTIONORDERNUMBERINGFIRST)
+            {
+                //#i61007#  initialize caption order, right now only HUNGARIAN seems to need a different order
+                SvtSysLocaleOptions aSysLocaleOptions;
+                OUString sLang = aSysLocaleOptions.GetLocaleConfigString();
+                bCaptionOrderNumberingFirst = ( sLang.getLength() && sLang.matchAsciiL( "hu", 2 )) ? sal_True : sal_False;
+            }
+
         }
         aInsTblOpts.mnInsMode = nInsTblFlags;
     }
