@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connectiontools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:49:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:45:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,8 +88,8 @@ namespace sdbtools
     //= ConnectionTools
     //====================================================================
     //--------------------------------------------------------------------
-    ConnectionTools::ConnectionTools( const Reference< XComponentContext >& _rxContext )
-        :m_aContext( _rxContext )
+    ConnectionTools::ConnectionTools( const ::comphelper::ComponentContext& _rContext )
+        :ConnectionDependentComponent( _rContext )
     {
     }
 
@@ -102,21 +102,21 @@ namespace sdbtools
     Reference< XTableName > SAL_CALL ConnectionTools::createTableName() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
-        return new TableName( getConnection() );
+        return new TableName( getContext(), getConnection() );
     }
 
     //--------------------------------------------------------------------
     Reference< XObjectNames > SAL_CALL ConnectionTools::getObjectNames() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
-        return new ObjectNames( getConnection() );
+        return new ObjectNames( getContext(), getConnection() );
     }
 
     //--------------------------------------------------------------------
     Reference< XDataSourceMetaData > SAL_CALL ConnectionTools::getDataSourceMetaData() throw (RuntimeException)
     {
         EntryGuard aGuard( *this );
-        return new DataSourceMetaData( getConnection() );
+        return new DataSourceMetaData( getContext(), getConnection() );
     }
 
     //--------------------------------------------------------------------
@@ -157,7 +157,7 @@ namespace sdbtools
     //--------------------------------------------------------------------
     Reference< XInterface > SAL_CALL ConnectionTools::Create(const Reference< XComponentContext >& _rxContext )
     {
-        return *( new ConnectionTools( _rxContext ) );
+        return *( new ConnectionTools( ::comphelper::ComponentContext( _rxContext ) ) );
     }
 
     //--------------------------------------------------------------------

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablename.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:50:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:47:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,35 +36,20 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACCESS_SOURCE_SDBTOOLS_CONNECTION_TABLENAME_HXX
 #include "tablename.hxx"
-#endif
-
-#ifndef DBACCESS_MODULE_SDBT_HXX
+#include "sdbt_resource.hrc"
 #include "module_sdbt.hxx"
-#endif
-#ifndef DBACCESS_SHARED_SDBTSTRINGS_HRC
 #include "sdbtstrings.hrc"
-#endif
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_LANG_NULLPOINTEREXCEPTION_HPP_
 #include <com/sun/star/lang/NullPointerException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_TOOLS_COMPOSITIONTYPE_HPP_
 #include <com/sun/star/sdb/tools/CompositionType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
-#endif
+#include <tools/string.hxx>
 
 //........................................................................
 namespace sdbtools
@@ -108,8 +93,9 @@ namespace sdbtools
     //= TableName
     //====================================================================
     //--------------------------------------------------------------------
-    TableName::TableName( const Reference< XConnection >& _rxConnection )
-        :m_pImpl( new TableName_Impl )
+    TableName::TableName( const ::comphelper::ComponentContext& _rContext, const Reference< XConnection >& _rxConnection )
+        :ConnectionDependentComponent( _rContext )
+        ,m_pImpl( new TableName_Impl )
     {
         if ( !_rxConnection.is() )
             throw NullPointerException();
@@ -211,11 +197,10 @@ namespace sdbtools
             ||  !xPSI->hasPropertyByName( PROPERTY_NAME )
             )
             throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The given object is no table object." ) ),
+                String( SdbtRes( STR_NO_TABLE_OBJECT ) ),
                 *this,
                 0
             );
-            // TODO: resource
 
         try
         {
@@ -224,14 +209,9 @@ namespace sdbtools
             OSL_VERIFY( _table->getPropertyValue( PROPERTY_NAME ) >>= m_pImpl->sName );
         }
         catch( const RuntimeException& ) { throw; }
-        catch( const Exception& )
+        catch( const Exception& e )
         {
-            throw IllegalArgumentException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "An unknown error occured while examining the given table object." ) ),
-                *this,
-                0
-            );
-            // TODO: resource
+            throw IllegalArgumentException( e.Message, e.Context, 0 );
         }
     }
 
@@ -265,11 +245,10 @@ namespace sdbtools
                     found = true;
             if ( !found )
                 throw IllegalArgumentException(
-                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid composition type (not from com.sun.star.sdb.tools.CompositionType)" ) ),
+                    String( SdbtRes( STR_INVALID_COMPOSITION_TYPE ) ),
                     NULL,
                     0
                 );
-                // TODO: resource
 
             return TypeTable[i].eComposeRule;
         }
