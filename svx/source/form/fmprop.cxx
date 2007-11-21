@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmprop.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:06:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:22:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ namespace svxform
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_ENABLED,"Enabled");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_READONLY,"ReadOnly");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_ISREADONLY,"IsReadOnly");
-    IMPLEMENT_CONSTASCII_USTRING(FM_PROP_FILTER_CRITERIA,"Filter");
+    IMPLEMENT_CONSTASCII_USTRING(FM_PROP_FILTER,"Filter");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_AUTOINCREMENT,"IsAutoIncrement");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_DATAENTRY,"DataEntry");
     IMPLEMENT_CONSTASCII_USTRING(FM_PROP_WIDTH,"Width");
