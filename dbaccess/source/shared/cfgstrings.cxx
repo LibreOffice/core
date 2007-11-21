@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgstrings.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:51:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:48:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ namespace dbacfg
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_DBLINK_DOCUMENTLOCATION, "DocumentLocation");
 
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_COMMAND, "Command");
-    IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_USE_ESCAPE_PROCESSING, "EscapeProcessing");
+    IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_ESCAPE_PROCESSING, "EscapeProcessing");
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_UPDATE_TABLENAME, "UpdateTableName");
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_UPDATE_SCHEMANAME, "UpdateSchemaName");
     IMPLEMENT_CONSTASCII_USTRING(CONFIGKEY_QRYDESCR_UPDATE_CATALOGNAME, "UpdateCatalogName");
