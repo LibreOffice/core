@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:22:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:27:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -457,7 +457,7 @@ namespace svxform
         void ClearBranch( FmFormData* pParentData );
         void UpdateContent( FmFormShell* pNewShell );
 
-        void Insert( FmEntryData* pEntryData, sal_uInt32 nRelPos = LIST_APPEND,
+        void Insert( FmEntryData* pEntryData, ULONG nRelPos = LIST_APPEND,
                                               sal_Bool bAlterModel = sal_False );
         void Remove( FmEntryData* pEntryData, sal_Bool bAlterModel = sal_False );
 
@@ -532,7 +532,7 @@ namespace svxform
         sal_Bool        IsDeleteAllowed();
         FmControlData*  NewControl( const ::rtl::OUString& rServiceName, SvLBoxEntry* pParentEntry, sal_Bool bEditName = sal_True );
         void            NewForm( SvLBoxEntry* pParentEntry );
-        SvLBoxEntry*    Insert( FmEntryData* pEntryData, sal_uInt32 nRelPos=LIST_APPEND );
+        SvLBoxEntry*    Insert( FmEntryData* pEntryData, ULONG nRelPos=LIST_APPEND );
         void            Remove( FmEntryData* pEntryData );
 
 
