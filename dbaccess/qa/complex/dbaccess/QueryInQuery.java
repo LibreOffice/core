@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryInQuery.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:29:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:31:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@ import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
+import com.sun.star.sdb.ErrorCondition;
 import com.sun.star.sdb.XSingleSelectQueryComposer;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.UnoRuntime;
@@ -208,7 +209,7 @@ public class QueryInQuery extends complexlib.ComplexTestCase
 
         boolean caughtExpected = false;
         try { rowSet.execute(); }
-        catch ( SQLException e ) { caughtExpected = e.SQLState.equals( "OB001" ); }
+        catch ( SQLException e ) { caughtExpected = ( e.ErrorCode == -com.sun.star.sdb.ErrorCondition.PARSER_CYCLIC_SUB_QUERIES ); }
 
         assure( "executing a query with cyclic nested sub queries should fail!", caughtExpected );
     }
