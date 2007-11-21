@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:37:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,6 +212,7 @@
 #include "docsh.hxx"
 #include "viewuno.hxx"
 #include "AccessibilityHints.hxx"
+#include "appoptio.hxx"
 
 #include <string>
 #include <algorithm>
@@ -366,7 +367,6 @@ BOOL lcl_HasRowOutline( const ScViewData& rViewData )
             bBlockCols( FALSE ),                                            \
             bBlockRows( FALSE ),                                            \
             mfPendingTabBarWidth( -1.0 ),                                   \
-            eZoomType( SVX_ZOOM_PERCENT ),                                  \
             bMinimized( FALSE ),                                            \
             bInUpdateHeader( FALSE ),                                       \
             bInActivatePart( FALSE ),                                       \
@@ -392,7 +392,6 @@ ScTabView::ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShe
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabView::ScTabView" );
 
-    eZoomType = rScTabView.eZoomType;
     aViewData.SetViewShell( pViewShell );
     Init();
 
@@ -880,6 +879,7 @@ void ScTabView::UpdateVarZoom()
 {
     //  update variable zoom types
 
+    SvxZoomType eZoomType = GetZoomType();
     if ( eZoomType != SVX_ZOOM_PERCENT && !bInZoomUpdate )
     {
         bInZoomUpdate = TRUE;
@@ -891,7 +891,7 @@ void ScTabView::UpdateVarZoom()
 
         if ( aNew != rOldX || aNew != rOldY )
         {
-            SetZoom( aNew, aNew );
+            SetZoom( aNew, aNew, FALSE );   // always separately per sheet
             PaintGrid();
             PaintTop();
             PaintLeft();
@@ -1171,11 +1171,12 @@ BOOL ScTabView::ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos )
 
             if ( nNew != nOld )
             {
-                //! Zoom an AppOptions merken ???
+                // scroll wheel doesn't set the AppOptions default
 
-                SetZoomType( SVX_ZOOM_PERCENT );
+                BOOL bSyncZoom = SC_MOD()->GetAppOptions().GetSynchronizeZoom();
+                SetZoomType( SVX_ZOOM_PERCENT, bSyncZoom );
                 Fraction aFract( nNew, 100 );
-                SetZoom( aFract, aFract );
+                SetZoom( aFract, aFract, bSyncZoom );
                 PaintGrid();
                 PaintTop();
                 PaintLeft();
@@ -2182,7 +2183,7 @@ void ScTabView::SnapSplitPos( Point& rScreenPosPixel )
         return;
 
     //  #74761# don't snap to cells if the scale will be modified afterwards
-    if ( eZoomType != SVX_ZOOM_PERCENT )
+    if ( GetZoomType() != SVX_ZOOM_PERCENT )
         return;
 
     ScSplitPos ePos = SC_SPLIT_BOTTOMLEFT;
