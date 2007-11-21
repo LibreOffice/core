@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-27 16:04:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:01:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,13 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
+#include <comphelper/namedvaluecollection.hxx>
+#endif
+#ifndef _UNOTOOLS_CONFIGNODE_HXX_
+#include <unotools/confignode.hxx>
+#endif
+
 //........................................................................
 namespace connectivity
 {
@@ -186,6 +193,37 @@ namespace connectivity
     }
 
     //--------------------------------------------------------------------
+    namespace
+    {
+        ::rtl::OUString lcl_getPermittedJavaMethods_nothrow( const Reference< XMultiServiceFactory >& _rxORB )
+        {
+            ::rtl::OUStringBuffer aConfigPath;
+            aConfigPath.appendAscii( "/org.openoffice.Office.DataAccess/DriverSettings/" );
+            aConfigPath.append     ( ODriverDelegator::getImplementationName_Static() );
+            aConfigPath.appendAscii( "/PermittedJavaMethods" );
+            ::utl::OConfigurationTreeRoot aConfig( ::utl::OConfigurationTreeRoot::createWithServiceFactory(
+                _rxORB, aConfigPath.makeStringAndClear() ) );
+
+            ::rtl::OUStringBuffer aPermittedMethods;
+            Sequence< ::rtl::OUString > aNodeNames( aConfig.getNodeNames() );
+            for (   const ::rtl::OUString* pNodeNames = aNodeNames.getConstArray();
+                    pNodeNames != aNodeNames.getConstArray() + aNodeNames.getLength();
+                    ++pNodeNames
+                )
+            {
+                ::rtl::OUString sPermittedMethod;
+                OSL_VERIFY( aConfig.getNodeValue( *pNodeNames ) >>= sPermittedMethod );
+
+                if ( aPermittedMethods.getLength() )
+                    aPermittedMethods.append( (sal_Unicode)';' );
+                aPermittedMethods.append( sPermittedMethod );
+            }
+
+            return aPermittedMethods.makeStringAndClear();;
+        }
+    }
+
+    //--------------------------------------------------------------------
     Reference< XConnection > SAL_CALL ODriverDelegator::connect( const ::rtl::OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException)
     {
         Reference< XConnection > xConnection;
@@ -228,39 +266,49 @@ namespace connectivity
 
                 bool bIsNewDatabase = !xStorage->hasElements();
 
-                Sequence< PropertyValue > aConvertedProperties(9);
-                sal_Int32 nPos = 0;
-                aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("storage_key"));
-                ::rtl::OUString sConnPartURL = sSystemPath.copy(0,::std::max<sal_Int32>(nIndex,sSystemPath.getLength()));
-                ::rtl::OUString sKey = StorageContainer::registerStorage(xStorage,sConnPartURL);
-                aConvertedProperties[nPos++].Value <<= sKey;
-                aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("storage_class_name"));
-                aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.comp.hsqldb.StorageAccess"));
-                aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fileaccess_class_name"));
-                aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.comp.hsqldb.StorageFileAccess"));
-                aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"));
-                aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.hsqldb.jdbcDriver"));
-                aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClassPath"));
-                aConvertedProperties[nPos++].Value <<= ::rtl::OUString(
+                ::comphelper::NamedValueCollection aProperties;
+
+                // properties for accessing the embedded storage
+                ::rtl::OUString sConnPartURL = sSystemPath.copy( 0, ::std::max< sal_Int32 >( nIndex, sSystemPath.getLength() ) );
+                ::rtl::OUString sKey = StorageContainer::registerStorage( xStorage, sConnPartURL );
+                aProperties.put( "storage_key", sKey );
+                aProperties.put( "storage_class_name",
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbcx.comp.hsqldb.StorageAccess" ) ) );
+                aProperties.put( "fileaccess_class_name",
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdbcx.comp.hsqldb.StorageFileAccess" ) ) );
+
+                // JDBC driver and driver's classpath
+                aProperties.put( "JavaDriverClass",
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "org.hsqldb.jdbcDriver" ) ) );
+                aProperties.put( "JavaDriverClassPath",
+                    ::rtl::OUString(
 #ifdef SYSTEM_HSQLDB
-                    RTL_CONSTASCII_USTRINGPARAM(HSQLDB_JAR
-                    " vnd.sun.star.expand:$ORIGIN/classes/sdbc_hsqldb.jar")
+                        RTL_CONSTASCII_USTRINGPARAM(HSQLDB_JAR
+                        " vnd.sun.star.expand:$ORIGIN/classes/sdbc_hsqldb.jar" )
 #else
-                    RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$ORIGIN/classes/hsqldb.jar"
-                    " vnd.sun.star.expand:$ORIGIN/classes/sdbc_hsqldb.jar")
+                        RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$ORIGIN/classes/hsqldb.jar"
+                        " vnd.sun.star.expand:$ORIGIN/classes/sdbc_hsqldb.jar" )
 #endif
-                );
-                aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled"));
-                aConvertedProperties[nPos++].Value <<= sal_True;
-                aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"));
-                aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CALL IDENTITY()"));
-                aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreDriverPrivileges"));
-                aConvertedProperties[nPos++].Value <<= sal_True;
+                        ) );
+
+                // auto increment handling
+                aProperties.put( "IsAutoRetrievingEnabled", true );
+                aProperties.put( "AutoRetrievingStatement",
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CALL IDENTITY()" ) ) );
+                aProperties.put( "IgnoreDriverPrivileges", true );
 
                 // don't want to expose HSQLDB's schema capabilities which exist since 1.8.0RC10
-                aConvertedProperties[nPos].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "default_schema" ) );
-                aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true"));
+                aProperties.put( "default_schema",
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
 
+                // security: permitted Java classes
+                NamedValue aPermittedClasses(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hsqldb.method_class_names" ) ),
+                    makeAny( lcl_getPermittedJavaMethods_nothrow( m_xFactory ) )
+                );
+                aProperties.put( "SystemProperties", Sequence< NamedValue >( &aPermittedClasses, 1 ) );
+
+                // readonly?
                 Reference<XPropertySet> xProp(xStorage,UNO_QUERY);
                 if ( xProp.is() )
                 {
@@ -268,11 +316,12 @@ namespace connectivity
                     xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OpenMode"))) >>= nMode;
                     if ( (nMode & ElementModes::WRITE) != ElementModes::WRITE )
                     {
-                        aConvertedProperties.realloc(nPos+1);
-                        aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("readonly"));
-                        aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("true"));
+                        aProperties.put( "readonly", ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
                     }
                 }
+
+                Sequence< PropertyValue > aConnectionArgs;
+                aProperties >>= aConnectionArgs;
 
                 ::rtl::OUString sConnectURL(RTL_CONSTASCII_USTRINGPARAM("jdbc:hsqldb:"));
 
@@ -280,7 +329,7 @@ namespace connectivity
                 Reference<XConnection> xOrig;
                 try
                 {
-                    xOrig = xDriver->connect( sConnectURL, aConvertedProperties );
+                    xOrig = xDriver->connect( sConnectURL, aConnectionArgs );
                 }
                 catch(const Exception& e)
                 {
