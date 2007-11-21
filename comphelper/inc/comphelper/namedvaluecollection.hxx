@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedvaluecollection.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:54:05 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:52:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,6 +197,38 @@ namespace comphelper
             return impl_has( _rValueName );
         }
 
+        /** puts a value into the collection
+
+            @return <TRUE/> if and only if a value was already present previously, in
+                which case it has been overwritten.
+        */
+        template < typename VALUE_TYPE >
+        inline bool put( const sal_Char* _pAsciiValueName, const VALUE_TYPE& _rValue )
+        {
+            return impl_put( ::rtl::OUString::createFromAscii( _pAsciiValueName ), ::com::sun::star::uno::makeAny( _rValue ) );
+        }
+
+        /** puts a value into the collection
+
+            @return <TRUE/> if and only if a value was already present previously, in
+                which case it has been overwritten.
+        */
+        template < typename VALUE_TYPE >
+        inline bool put( const ::rtl::OUString& _rValueName, const VALUE_TYPE& _rValue )
+        {
+            return impl_put( _rValueName, ::com::sun::star::uno::makeAny( _rValue ) );
+        }
+
+        inline bool put( const sal_Char* _pAsciiValueName, const ::com::sun::star::uno::Any& _rValue )
+        {
+            return impl_put( ::rtl::OUString::createFromAscii( _pAsciiValueName ), _rValue );
+        }
+
+        inline bool put( const ::rtl::OUString& _rValueName, const ::com::sun::star::uno::Any& _rValue )
+        {
+            return impl_put( _rValueName, _rValue );
+        }
+
         /** removes the value with the given name from the collection
 
             @return <TRUE/> if and only if a value with the given name existed in the collection.
@@ -215,6 +247,20 @@ namespace comphelper
             return impl_remove( _rValueName );
         }
 
+        /** transforms the collection to a sequence of PropertyValues
+
+            @return
+                the  number of elements in the sequence
+        */
+        sal_Int32 operator >>= ( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _out_rValues );
+
+        /** transforms the collection to a sequence of NamedValues
+
+            @return
+                the  number of elements in the sequence
+        */
+        sal_Int32 operator >>= ( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _out_rValues );
+
     private:
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _rArguments );
         void    impl_assign( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rArguments );
@@ -230,6 +276,8 @@ namespace comphelper
                 impl_get( const ::rtl::OUString& _rValueName ) const;
 
         bool    impl_has( const ::rtl::OUString& _rValueName ) const;
+
+        bool    impl_put( const ::rtl::OUString& _rValueName, const ::com::sun::star::uno::Any& _rValue );
 
         bool    impl_remove( const ::rtl::OUString& _rValueName );
     };
