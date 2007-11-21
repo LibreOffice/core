@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statement.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:30:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,9 +87,10 @@ DBG_NAME(OStatementBase)
 //--------------------------------------------------------------------------
 OStatementBase::OStatementBase(const Reference< XConnection > & _xConn,
                                const Reference< XInterface > & _xStatement)
-               :OSubComponent(m_aMutex, _xConn)
-               ,OPropertySetHelper(OComponentHelper::rBHelper)
-               ,m_bUseBookmarks(sal_False)
+    :OSubComponent(m_aMutex, _xConn)
+    ,OPropertySetHelper(OComponentHelper::rBHelper)
+    ,m_bUseBookmarks( sal_False )
+    ,m_bEscapeProcessing( sal_True )
 
 {
     DBG_CTOR(OStatementBase, NULL);
@@ -226,7 +227,7 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (Runtim
 {
     BEGIN_PROPERTY_HELPER(10)
         DECL_PROP0(CURSORNAME,              ::rtl::OUString);
-        DECL_PROP0_BOOL(USE_ESCAPE_PROCESSING);
+        DECL_PROP0_BOOL(ESCAPE_PROCESSING);
         DECL_PROP0(FETCHDIRECTION,          sal_Int32);
         DECL_PROP0(FETCHSIZE,               sal_Int32);
         DECL_PROP0(MAXFIELDSIZE,            sal_Int32);
@@ -252,25 +253,30 @@ sal_Bool OStatementBase::convertFastPropertyValue( Any & rConvertedValue, Any & 
     switch (nHandle)
     {
         case PROPERTY_ID_USEBOOKMARKS:
+            bModified = ::comphelper::tryPropertyValue( rConvertedValue, rOldValue, rValue, m_bUseBookmarks );
+            break;
+
+        case PROPERTY_ID_ESCAPE_PROCESSING:
+            bModified = ::comphelper::tryPropertyValue( rConvertedValue, rOldValue, rValue, m_bEscapeProcessing );
+            break;
+
+        default:
             if ( m_xAggregateAsSet.is() )
             {
-                bModified = ::comphelper::tryPropertyValue(rConvertedValue, rOldValue, rValue, m_bUseBookmarks);
-                if (bModified && m_xAggregateAsSet->getPropertySetInfo()->hasPropertyByName(PROPERTY_USEBOOKMARKS))
-                    m_xAggregateAsSet->setPropertyValue(PROPERTY_USEBOOKMARKS, rConvertedValue);
+                // get the property name
+                ::rtl::OUString sPropName;
+                getInfoHelper().fillPropertyMembersByHandle( &sPropName, NULL, nHandle );
+
+                // now set the value
+                Any aCurrentValue = m_xAggregateAsSet->getPropertyValue( sPropName );
+                if ( aCurrentValue != rValue )
+                {
+                    rOldValue = aCurrentValue;
+                    rConvertedValue = rValue;
+                    bModified = sal_True;
+                }
             }
             break;
-        default:
-        {
-            // get the property name
-            ::rtl::OUString aPropName;
-            sal_Int16 nAttributes;
-            getInfoHelper().fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
-            OSL_ENSURE(aPropName.getLength(), "property not found?");
-
-            // now set the value
-            if ( m_xAggregateAsSet.is() )
-                m_xAggregateAsSet->setPropertyValue(aPropName, rValue);
-        }
     }
     return bModified;
 }
@@ -278,13 +284,30 @@ sal_Bool OStatementBase::convertFastPropertyValue( Any & rConvertedValue, Any & 
 //------------------------------------------------------------------------------
 void OStatementBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception)
 {
-    switch (nHandle)
+    switch ( nHandle )
     {
-        // the other properties are set in convertFast...
         case PROPERTY_ID_USEBOOKMARKS:
         {
-            m_bUseBookmarks = ::comphelper::getBOOL(rValue);
-        }   break;
+            m_bUseBookmarks = ::comphelper::getBOOL( rValue );
+            if ( m_xAggregateAsSet.is() && m_xAggregateAsSet->getPropertySetInfo()->hasPropertyByName( PROPERTY_USEBOOKMARKS ) )
+                m_xAggregateAsSet->setPropertyValue( PROPERTY_USEBOOKMARKS, rValue );
+        }
+        break;
+
+        case PROPERTY_ID_ESCAPE_PROCESSING:
+            m_bEscapeProcessing = ::comphelper::getBOOL( rValue );
+            if ( m_xAggregateAsSet.is() )
+                m_xAggregateAsSet->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, rValue );
+            break;
+
+        default:
+            if ( m_xAggregateAsSet.is() )
+            {
+                ::rtl::OUString sPropName;
+                getInfoHelper().fillPropertyMembersByHandle( &sPropName, NULL, nHandle );
+                m_xAggregateAsSet->setPropertyValue( sPropName, rValue );
+            }
+            break;
     }
 }
 
@@ -294,20 +317,23 @@ void OStatementBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
     switch (nHandle)
     {
         case PROPERTY_ID_USEBOOKMARKS:
-            rValue.setValue(&m_bUseBookmarks, getBooleanCppuType());
+            rValue <<= m_bUseBookmarks;
             break;
+
+        case PROPERTY_ID_ESCAPE_PROCESSING:
+            // don't rely on our aggregate - if it implements this wrong, and always returns
+            // TRUE here, then we would loop in impl_doEscapeProcessing_nothrow
+            rValue <<= m_bEscapeProcessing;
+            break;
+
         default:
-        {
-            // get the property name
-            ::rtl::OUString aPropName;
-            sal_Int16 nAttributes;
-            const_cast<OStatementBase*>(this)->getInfoHelper().
-                fillPropertyMembersByHandle(&aPropName, &nAttributes, nHandle);
-            OSL_ENSURE(aPropName.getLength(), "property not found?");
-            // now read the value
             if ( m_xAggregateAsSet.is() )
-                rValue = m_xAggregateAsSet->getPropertyValue(aPropName);
-        }
+            {
+                ::rtl::OUString sPropName;
+                const_cast< OStatementBase* >( this )->getInfoHelper().fillPropertyMembersByHandle( &sPropName, NULL, nHandle );
+                rValue = m_xAggregateAsSet->getPropertyValue( sPropName );
+            }
+            break;
     }
 }
 
@@ -550,13 +576,10 @@ void SAL_CALL OStatement::disposing()
 // -----------------------------------------------------------------------------
 ::rtl::OUString OStatement::impl_doEscapeProcessing_nothrow( const ::rtl::OUString& _rSQL ) const
 {
+    if ( !m_bEscapeProcessing )
+        return _rSQL;
     try
     {
-        bool bEscapeProcessing = false;
-        OSL_VERIFY( m_xAggregateAsSet->getPropertyValue( PROPERTY_USE_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
-        if ( !bEscapeProcessing )
-            return _rSQL;
-
         if ( !impl_ensureComposer_nothrow() )
             return _rSQL;
 
@@ -569,11 +592,6 @@ void SAL_CALL OStatement::disposing()
             return _rSQL;
 
         ::rtl::OUString sLowLevelSQL = m_xComposer->getQueryWithSubstitution();
-        if ( sLowLevelSQL == m_xComposer->getQuery() )
-            // if the low level SQL is the same as the high level SQL, then simply
-            // return the original SQL statement, without tampering with it at all.
-            return _rSQL;
-
         return sLowLevelSQL;
     }
     catch( const Exception& )
