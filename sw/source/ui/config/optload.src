@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:38:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:21:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,9 +162,34 @@ TabPage TP_OPTCAPTION_PAGE
     Control CLB_OBJECTS
     {
         Pos = MAP_APPFONT ( 6 , 29 ) ;
-        Size = MAP_APPFONT ( 106 , 150 ) ;
+        Size = MAP_APPFONT ( 106 , 97 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
+    };
+    FixedText FT_ORDER
+    {
+        Pos = MAP_APPFONT ( 6 , 130 ) ;
+        Size = MAP_APPFONT ( 106 , 8 ) ;
+        Text [ en-US ] = "Caption order" ;
+    };
+    ListBox LB_ORDER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 141 ) ;
+        Size = MAP_APPFONT ( 106 , 60 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "Category first" ; > ;
+            < "Numbering first" ; > ;
+        };
+    };
+    Window WIN_PREVIEW
+    {
+        Pos = MAP_APPFONT ( 6 , 159 ) ;
+        Size = MAP_APPFONT ( 106 , 20 ) ;
+        Border = TRUE;
     };
     String STR_TABLE
     {
@@ -219,16 +244,32 @@ TabPage TP_OPTCAPTION_PAGE
         DropDown = TRUE ;
         TabStop = TRUE ;
     };
+    FixedText FT_NUM_SEP
+    {
+        Pos = MAP_APPFONT ( 125 , 46 ) ;
+        Size = MAP_APPFONT ( 61 , 8 ) ;
+        Text [ en-US ] = "Numbering separator" ;
+        Left = TRUE ;
+    };
+    Edit ED_NUM_SEP
+    {
+        Pos = MAP_APPFONT ( 189 , 44 ) ;
+        Size = MAP_APPFONT ( 59 , 12 ) ;
+        Border = TRUE ;
+        TabStop = TRUE ;
+        Left = TRUE ;
+        Text  = ". " ;
+    };
     FixedText TXT_TEXT
     {
-        Pos = MAP_APPFONT ( 125 , 45 ) ;
+        Pos = MAP_APPFONT ( 125 , 60 ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
         Text [ en-US ] = "Separator" ;
         Left = TRUE ;
     };
     Edit EDT_TEXT
     {
-        Pos = MAP_APPFONT ( 189 , 44 ) ;
+        Pos = MAP_APPFONT ( 189 , 59 ) ;
         Size = MAP_APPFONT ( 59 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -236,14 +277,14 @@ TabPage TP_OPTCAPTION_PAGE
     };
     FixedText TXT_POS
     {
-        Pos = MAP_APPFONT ( 125 , 60 ) ;
+        Pos = MAP_APPFONT ( 125 , 75 ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
         Left = TRUE ;
         Text [ en-US ] = "Position" ;
     };
     ListBox BOX_POS
     {
-        Pos = MAP_APPFONT ( 189 , 59 ) ;
+        Pos = MAP_APPFONT ( 189 , 74 ) ;
         Size = MAP_APPFONT ( 59 , 61 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
@@ -252,20 +293,20 @@ TabPage TP_OPTCAPTION_PAGE
 
     FixedLine FL_NUMCAPT
     {
-        Pos = MAP_APPFONT ( 118 , 74 ) ;
+        Pos = MAP_APPFONT ( 118 , 89 ) ;
         Size = MAP_APPFONT ( 136 , 8 ) ;
         Text [ en-US ] = "Numbering captions by chapter" ;
     };
     FixedText FT_LEVEL
     {
-        Pos = MAP_APPFONT ( 125 , 87 ) ;
+        Pos = MAP_APPFONT ( 125 , 102 ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
         Text [ en-US ] = "Level" ;
     };
     ListBox LB_LEVEL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 189 , 85 ) ;
+        Pos = MAP_APPFONT ( 189 , 100 ) ;
         Size = MAP_APPFONT ( 59 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -276,13 +317,13 @@ TabPage TP_OPTCAPTION_PAGE
     };
     FixedText FT_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 125 , 102 ) ;
+        Pos = MAP_APPFONT ( 125 , 117 ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
         Text [ en-US ] = "Separator" ;
     };
     Edit ED_SEPARATOR
     {
-        Pos = MAP_APPFONT ( 189 , 100 ) ;
+        Pos = MAP_APPFONT ( 189 , 115 ) ;
         Size = MAP_APPFONT ( 59 , 12 ) ;
         Border = TRUE ;
         MaxTextLength = 1 ;
@@ -290,20 +331,20 @@ TabPage TP_OPTCAPTION_PAGE
     };
     FixedLine FL_CATEGORY
     {
-        Pos = MAP_APPFONT ( 118 , 115 ) ;
+        Pos = MAP_APPFONT ( 118 , 130 ) ;
         Size = MAP_APPFONT ( 136 , 8 ) ;
         Text [ en-US ] = "Category and frame format" ;
     };
     FixedText FT_CHARSTYLE
     {
-        Pos = MAP_APPFONT ( 125 , 128 ) ;
+        Pos = MAP_APPFONT ( 125 , 143 ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
         Text [ en-US ] = "Character style" ;
     };
     ListBox LB_CHARSTYLE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 189 , 126 ) ;
+        Pos = MAP_APPFONT ( 189 , 141 ) ;
         Size = MAP_APPFONT ( 59 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -314,15 +355,9 @@ TabPage TP_OPTCAPTION_PAGE
     };
     CheckBox CB_APPLYBORDER
     {
-        Pos = MAP_APPFONT ( 125 , 143 ) ;
+        Pos = MAP_APPFONT ( 125 , 158 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
         Text [ en-US ] = "Apply border and shadow" ;
-    };
-    Window WIN_PREVIEW
-    {
-        Pos = MAP_APPFONT ( 125 , 159 ) ;
-        Size = MAP_APPFONT ( 123 , 20 ) ;
-        Border = TRUE;
     };
 
     String STR_BEGINNING
