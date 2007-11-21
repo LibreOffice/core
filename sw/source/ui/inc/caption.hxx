@@ -4,9 +4,9 @@
  *
  *  $RCSfile: caption.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:02:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:23:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,15 +44,11 @@
 #ifndef _GLOBNAME_HXX //autogen
 #include <tools/globname.hxx>
 #endif
+#include <SwCapObjType.hxx>
 
 #ifndef INCLUDED_SWDLLAPI_H
 #include "swdllapi.h"
 #endif
-
-enum SwCapObjType
-{
-    FRAME_CAP, GRAPHIC_CAP, TABLE_CAP, OLE_CAP
-};
 
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -61,17 +57,18 @@ enum SwCapObjType
 class SW_DLLPUBLIC InsCaptionOpt
 {
 private:
-    BOOL         bUseCaption;
-    SwCapObjType eObjType;
-    SvGlobalName aOleId;
-    String       sCategory;
-    USHORT       nNumType;
-    String       sCaption;
-    USHORT       nPos;
-    USHORT       nLevel;
-//  sal_Unicode  cSeparator;
-    String       sSeparator;
-    String       sCharacterStyle;
+    BOOL            bUseCaption;
+    SwCapObjType    eObjType;
+    SvGlobalName    aOleId;
+    String          sCategory;
+    USHORT          nNumType;
+    ::rtl::OUString sNumberSeparator;
+    String          sCaption;
+    USHORT          nPos;
+    USHORT          nLevel;
+//  sal_Unicode     cSeparator;
+    String          sSeparator;
+    String          sCharacterStyle;
 
     BOOL         bIgnoreSeqOpts;    // wird nicht gespeichert
     BOOL         bCopyAttributes;   //          -""-
@@ -95,6 +92,9 @@ public:
 
     inline USHORT           GetNumType() const              { return nNumType; }
     inline void             SetNumType(const USHORT nNT)    { nNumType = nNT; }
+
+    const ::rtl::OUString&  GetNumSeparator() const { return sNumberSeparator; }
+    void                    SetNumSeparator(const ::rtl::OUString& rSet) {sNumberSeparator = rSet;}
 
     inline const String&    GetCaption() const              { return sCaption; }
     inline void             SetCaption(const String& rCap)  { sCaption = rCap; }
