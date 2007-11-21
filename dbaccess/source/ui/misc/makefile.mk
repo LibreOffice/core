@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 15:25:51 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 16:10:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,6 @@ SLOFILES=	\
         $(SLO)$/WExtendPages.obj			\
         $(SLO)$/WNameMatch.obj				\
         $(SLO)$/documentcontroller.obj      \
-        $(SLO)$/dialogcontrolling.obj       \
         $(SLO)$/ToolBoxHelper.obj			\
         $(SLO)$/stringlistitem.obj			\
         $(SLO)$/charsets.obj				\
