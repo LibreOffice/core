@@ -4,9 +4,9 @@
  *
  *  $RCSfile: View.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:19:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:16:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,8 @@
 
  module com {  module sun {  module star {  module sdbcx {
 
- published interface XRename;
+published interface XRename;
+published interface XAlterView;
 
 
 /** is used to specify views on data. A view object is only used for creation and
@@ -67,6 +68,10 @@ published service View
     // gives access to the properties.
     interface com::sun::star::beans::XPropertySet;
 
+    /** allows changing the view's <member>Command</member>.
+    */
+    [optional] interface XAlterView;
+
 
     /** is the name of the view.
      */
@@ -83,14 +88,20 @@ published service View
     [readonly, property] string SchemaName;
 
 
-    /** is the command for creating the view. After appending a view to its
-        container, the command may be empty. This is typically a
-        SQL Select-Statement.
+    /** is the command for creating the view.
+
+        <p>This is typically a SQL Select-Statement.</p>
+
+        <p>This property might be empty when a backend does not support retrieving the current
+        SQL command of a view. However, if the <code>View</code> supports altering its command
+        via the <member>XAlterView</member> interface, then it's required to also provide the
+        current SQL command in the <code>Command</code> property.</p>
      */
     [readonly, property] string Command;
 
 
     /** indicates if a check option should be used for the view.
+
         @see com::sun::star::sdbcx::CheckOption
      */
     [readonly, property] long CheckOption;
