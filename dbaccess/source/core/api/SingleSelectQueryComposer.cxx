@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:38:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:33:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,95 +36,45 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
+#include "composertools.hxx"
+#include "core_resource.hrc"
+#include "core_resource.hxx"
+#include "dbastrings.hrc"
+#include "HelperCollections.hxx"
 #include "SingleSelectQueryComposer.hxx"
 
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
-#include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTER_HPP_
-#include <com/sun/star/util/XNumberFormatter.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNSEARCH_HPP_
-#include <com/sun/star/sdbc/ColumnSearch.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
-#include <com/sun/star/sdbc/DataType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDB_SQLFILTEROPERATOR_HPP_
-#include <com/sun/star/sdb/SQLFilterOperator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATASUPPLIER_HPP_
-#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XRESULTSETMETADATA_HPP_
-#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XAGGREGATION_HPP_
-#include <com/sun/star/uno/XAggregation.hpp>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
-#include <comphelper/processfactory.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
-#include "dbastrings.hrc"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HXX_
-#include "core_resource.hxx"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HRC_
-#include "core_resource.hrc"
-#endif
-#ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
-#include <cppuhelper/typeprovider.hxx>
-#endif
-#ifndef _UTL_CONFIGMGR_HXX_
-#include <unotools/configmgr.hxx>
-#endif
-#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
-#include <unotools/sharedunocomponent.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
-#include <comphelper/types.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef TOOLS_DIAGNOSE_EX_H
-#include <tools/diagnose_ex.h>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+/** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_I18N_XLOCALEDATA_HPP_
-#include <com/sun/star/i18n/XLocaleData.hpp>
-#endif
-#ifndef DBA_HELPERCOLLECTIONS_HXX
-#include "HelperCollections.hxx"
-#endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <svtools/syslocale.hxx>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef DBACCESS_SOURCE_CORE_INC_COMPOSERTOOLS_HXX
-#include "composertools.hxx"
-#endif
-#ifndef _RTL_LOGFILE_HXX_
+#include <com/sun/star/i18n/XLocaleData.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
+#include <com/sun/star/sdb/BooleanComparisonMode.hpp>
+#include <com/sun/star/sdb/SQLFilterOperator.hpp>
+#include <com/sun/star/sdbc/ColumnSearch.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
+#include <com/sun/star/sdbc/XResultSetMetaData.hpp>
+#include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
+#include <com/sun/star/uno/XAggregation.hpp>
+#include <com/sun/star/util/XNumberFormatter.hpp>
+/** === end UNO includes === **/
+
+#include <comphelper/processfactory.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/types.hxx>
+#include <cppuhelper/typeprovider.hxx>
 #include <rtl/logfile.hxx>
-#endif
+#include <svtools/syslocale.hxx>
+#include <tools/debug.hxx>
+#include <tools/diagnose_ex.h>
+#include <unotools/configmgr.hxx>
+#include <unotools/sharedunocomponent.hxx>
+
 #include <memory>
 
-using namespace dbaccess;
-using namespace dbtools;
-using namespace comphelper;
-using namespace connectivity;
+using namespace ::dbaccess;
+using namespace ::dbtools;
+using namespace ::comphelper;
+using namespace ::connectivity;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
@@ -138,6 +88,10 @@ using namespace ::com::sun::star::util;
 using namespace ::cppu;
 using namespace ::osl;
 using namespace ::utl;
+
+namespace dbaccess {
+namespace BooleanComparisonMode = ::com::sun::star::sdb::BooleanComparisonMode;
+}
 
 #define STR_SELECT      ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT "))
 #define STR_FROM        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FROM "))
@@ -246,23 +200,23 @@ DBG_NAME(OSingleSelectQueryComposer)
 // -------------------------------------------------------------------------
 OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAccess>& _rxTables,
                                const Reference< XConnection>& _xConnection,
-                               const Reference< XMultiServiceFactory >& _xServiceFactory)
+                               const ::comphelper::ComponentContext& _rContext )
     :OSubComponent(m_aMutex,_xConnection)
     ,OPropertyContainer(m_aBHelper)
-    ,m_aSqlParser(_xServiceFactory)
+    ,m_aSqlParser( _rContext.getLegacyServiceFactory() )
     ,m_aSqlIterator( _xConnection, _rxTables, m_aSqlParser, NULL )
     ,m_aAdditiveIterator( _xConnection, _rxTables, m_aSqlParser, NULL )
     ,m_aElementaryParts( (size_t)SQLPartCount )
     ,m_xConnection(_xConnection)
     ,m_xMetaData(_xConnection->getMetaData())
     ,m_xConnectionTables( _rxTables )
-    ,m_xServiceFactory(_xServiceFactory)
+    ,m_aContext( _rContext )
     ,m_pTables(NULL)
-    ,m_nBoolCompareMode(BOOL_COMPARISON_DEFAULT)
+    ,m_nBoolCompareMode( BooleanComparisonMode::EQUAL_INTEGER )
 {
     DBG_CTOR(OSingleSelectQueryComposer,NULL);
 
-    if ( !m_xServiceFactory.is() || !m_xConnection.is() || !m_xConnectionTables.is() )
+    if ( !m_aContext.is() || !m_xConnection.is() || !m_xConnectionTables.is() )
         throw IllegalArgumentException();
 
     registerProperty(PROPERTY_ORIGINAL,PROPERTY_ID_ORIGINAL,PropertyAttribute::BOUND|PropertyAttribute::READONLY,&m_sOrignal,::getCppuType(&m_sOrignal));
@@ -270,8 +224,9 @@ OSingleSelectQueryComposer::OSingleSelectQueryComposer(const Reference< XNameAcc
     m_aCurrentColumns.resize(4);
 
     m_aLocale = SvtSysLocale().GetLocaleData().getLocale();
-    m_xNumberFormatsSupplier = dbtools::getNumberFormats(m_xConnection,sal_True,m_xServiceFactory);
-    Reference< XLocaleData> xLocaleData = Reference<XLocaleData>(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.LocaleData"))),UNO_QUERY);
+    m_xNumberFormatsSupplier = dbtools::getNumberFormats( m_xConnection, sal_True, m_aContext.getLegacyServiceFactory() );
+    Reference< XLocaleData > xLocaleData;
+    m_aContext.createComponent( "com.sun.star.i18n.LocaleData", xLocaleData );
     LocaleDataItem aData = xLocaleData->getLocaleItem(m_aLocale);
     m_sDecimalSep = aData.decimalSeparator;
     OSL_ENSURE(m_sDecimalSep.getLength() == 1,"OSingleSelectQueryComposer::OSingleSelectQueryComposer decimal separator is not 1 length");
@@ -327,7 +282,6 @@ void SAL_CALL OSingleSelectQueryComposer::disposing(void)
 
     m_xConnectionTables = NULL;
     m_xConnection       = NULL;
-    m_xServiceFactory   = NULL;
 
     clearCurrentCollections();
 }
@@ -388,6 +342,8 @@ void OSingleSelectQueryComposer::setQuery_Impl( const ::rtl::OUString& command )
     m_aPureSelectSQL = getPureSelectStatement( m_aSqlIterator.getParseTree(), m_xConnection );
 
     // update columns and tables
+    // why? Shouldn't this be done on request only?
+    // otherwise nothing is working anymore :-)
     getColumns();
     getTables();
 }
@@ -774,7 +730,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) thr
         {
             xStatement.reset( Reference< XStatement >( m_xConnection->createStatement(), UNO_QUERY_THROW ) );
             Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
-            try { xStatementProps->setPropertyValue( PROPERTY_USE_ESCAPE_PROCESSING, makeAny( sal_False ) ); }
+            try { xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( sal_False ) ); }
             catch ( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
             Reference< XResultSetMetaDataSupplier > xResMetaDataSup( xStatement->executeQuery( sSql ), UNO_QUERY_THROW );
             xResultSetMeta.set( xResMetaDataSup->getMetaData(), UNO_QUERY_THROW );
@@ -1503,7 +1459,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
     Any aValue;
     column->getPropertyValue(PROPERTY_VALUE) >>= aValue;
 
-    ::rtl::OUString aSql;
+    ::rtl::OUStringBuffer aSQL;
     ::rtl::OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
 
     if ( m_aCurrentColumns[SelectColumns] && m_aCurrentColumns[SelectColumns]->hasByName(aName) )
@@ -1528,21 +1484,24 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
 
         if ( !::comphelper::getBOOL(xColumn->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Function")))) )
         {
-            aSql =  sTableName;
-            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
-            aSql += ::dbtools::quoteName(aQuote,sRealName);
+            aSQL =  sTableName;
+            aSQL.appendAscii( "." );
+            aSQL.append( ::dbtools::quoteName( aQuote, sRealName ) );
         }
         else
-            aSql += sRealName;
+            aSQL = sRealName;
 
     }
     else
-        aSql = getTableAlias(column) + ::dbtools::quoteName(aQuote,aName);
+    {
+        aSQL = getTableAlias( column );
+        aSQL.append( ::dbtools::quoteName( aQuote, aName ) );
+    }
 
     if ( aValue.hasValue() )
     {
-        if(!m_xTypeConverter.is())
-            m_xTypeConverter = Reference< XTypeConverter >(m_xServiceFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter"))),UNO_QUERY);
+        if(  !m_xTypeConverter.is() )
+            m_aContext.createComponent( "com.sun.star.script.Converter", m_xTypeConverter );
         OSL_ENSURE(m_xTypeConverter.is(),"NO typeconverter!");
 
         switch(nType)
@@ -1550,8 +1509,8 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             case DataType::VARCHAR:
             case DataType::CHAR:
             case DataType::LONGVARCHAR:
-                aSql += STR_LIKE;
-                aSql += DBTypeConversion::toSQLString(nType,aValue,sal_True,m_xTypeConverter);
+                aSQL.append( STR_LIKE );
+                aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );
                 break;
             case DataType::VARBINARY:
             case DataType::BINARY:
@@ -1562,20 +1521,20 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                     {
                         if(nSearchable == ColumnSearch::CHAR)
                         {
-                            aSql += STR_LIKE;
-                            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\'"));
+                            aSQL.append( STR_LIKE );
+                            aSQL.appendAscii( "\'" );
                         }
                         else
-                            aSql += STR_EQUAL;
-                        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0x"));
+                            aSQL.append( STR_EQUAL );
+                        aSQL.appendAscii( "0x" );
                         const sal_Int8* pBegin  = aSeq.getConstArray();
                         const sal_Int8* pEnd    = pBegin + aSeq.getLength();
                         for(;pBegin != pEnd;++pBegin)
                         {
-                            aSql += ::rtl::OUString::valueOf((sal_Int32)*pBegin,16).getStr();
+                            aSQL.append( (sal_Int32)*pBegin, 16 ).getStr();
                         }
-                        if(nSearchable == ColumnSearch::NONE)
-                            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\'"));
+                        if(nSearchable == ColumnSearch::CHAR)
+                            aSQL.appendAscii( "\'" );
                     }
                     else
                         throw SQLException(DBACORE_RESSTRING(RID_STR_NOT_SEQUENCE_INT8),*this,SQLSTATE_GENERAL,1000,Any() );
@@ -1584,69 +1543,26 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
             case DataType::BIT:
             case DataType::BOOLEAN:
                 {
-                    ::rtl::OUString sTmpName = aSql;
-
-
                     sal_Bool bValue = sal_False;
                     m_xTypeConverter->convertToSimpleType(aValue, TypeClass_BOOLEAN) >>= bValue;
-                    switch ( m_nBoolCompareMode )
-                    {
-                        case BOOL_COMPARISON_SQL:
-                            aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS "));
-                            if ( bValue )
-                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TRUE "));
-                            else
-                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FALSE "));
-                            break;
-                        case BOOL_COMPARISON_MISC:
-                            aSql += STR_EQUAL;
-                            if ( bValue )
-                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TRUE "));
-                            else
-                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" FALSE "));
-                            break;
-                        case BOOL_COMPARISON_ACCESS:
-                            if ( bValue )
-                            {
-                                aSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" NOT ( "));
-                                aSql += sTmpName;
-                                aSql += STR_EQUAL;
-                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
-                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" OR "));
-                                aSql += sTmpName;
-                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NULL )")) ;
-                            }
-                            else
-                            {
-                                aSql += STR_EQUAL;
-                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
-                            }
-                            break;
-                        case BOOL_COMPARISON_DEFAULT: // fall through
-                        default:
-                            aSql += STR_EQUAL;
-                            if ( bValue )
-                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1"));
-                            else
-                                aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("0"));
 
-
-                    }
-                    break;
+                    ::rtl::OUString sColumnExp = aSQL.makeStringAndClear();
+                    getBoleanComparisonPredicate( sColumnExp, bValue, m_nBoolCompareMode, aSQL );
                 }
             default:
-                aSql += STR_EQUAL;
-                aSql += DBTypeConversion::toSQLString(nType,aValue,sal_True,m_xTypeConverter);
+                aSQL.append( STR_EQUAL );
+                aSQL.append( DBTypeConversion::toSQLString( nType, aValue, sal_True, m_xTypeConverter ) );
+                break;
         }
     }
     else
-        aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" IS NULL")) ;
+        aSQL.appendAscii( " IS NULL" ) ;
 
     // filter anhaengen
     // select ohne where und order by aufbauen
     ::rtl::OUString sFilter = getFilter();
 
-    if ( (sFilter.getLength() != 0) && (aSql.getLength() != 0) )
+    if ( sFilter.getLength() && aSQL.getLength() )
     {
         ::rtl::OUString sTemp(L_BRACKET);
         sTemp += sFilter;
@@ -1654,7 +1570,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
         sTemp += andCriteria ? STR_AND : STR_OR;
         sFilter = sTemp;
     }
-    sFilter += aSql;
+    sFilter += aSQL.makeStringAndClear();
 
     // add the filter and the sort order
     _aSetFunctor(this,sFilter);
@@ -1699,9 +1615,9 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
             if ( pCondition )
             {
                 ::std::vector< ::std::vector < PropertyValue > > aFilters;
-                Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(m_xServiceFactory
-                                ->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.util.NumberFormatter"))), UNO_QUERY);
-                xFormatter->attachNumberFormatsSupplier(m_xNumberFormatsSupplier);
+                Reference< XNumberFormatter > xFormatter;
+                m_aContext.createComponent( "com.sun.star.util.NumberFormatter", xFormatter );
+                xFormatter->attachNumberFormatsSupplier( m_xNumberFormatsSupplier );
 
                 if (setORCriteria(pCondition, m_aAdditiveIterator, aFilters, xFormatter))
                 {
