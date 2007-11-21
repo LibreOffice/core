@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ParseContext.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:13:14 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:20:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@
 #include "svx/svxdllapi.h"
 #endif
 
+#include <vector>
+
 namespace svxform
 {
     //==========================================================================
@@ -59,7 +61,8 @@ namespace svxform
     class SVX_DLLPUBLIC OSystemParseContext : public ::connectivity::IParseContext
     {
     private:
-        ByteString m_aSQLInternationals;
+
+        ::std::vector< String > m_aLocalizedKeywords;
 
     public:
         OSystemParseContext();
