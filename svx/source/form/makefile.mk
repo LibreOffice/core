@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:58:33 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 15:25:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,8 @@ SLOFILES = \
     $(SLO)$/xfm_addcondition.obj \
     $(SLO)$/formpdfexport.obj \
     $(SLO)$/datalistener.obj \
-    $(SLO)$/fmscriptingenv.obj
+    $(SLO)$/fmscriptingenv.obj \
+    $(SLO)$/stringlistresource.obj
 
 .IF "$(OS)$(CPU)"=="SOLARISI"
 NOOPTFILES=$(SLO)$/fmprop.obj
