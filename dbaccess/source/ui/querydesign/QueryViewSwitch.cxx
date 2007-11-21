@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:39:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:13:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,7 @@ OQueryContainerWindow* OQueryViewSwitch::getContainer() const
 sal_Bool OQueryViewSwitch::switchView()
 {
     sal_Bool bRet = sal_True;
-    sal_Bool bGraphicalDesign = static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode();
+    sal_Bool bGraphicalDesign = static_cast<OQueryController*>(m_pDesignView->getController())->isGraphicalDesign();
 
     OAddTableDlg* pAddTabDialog( getAddTableDialog() );
 
