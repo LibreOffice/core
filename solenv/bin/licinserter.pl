@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: licinserter.pl,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2007-10-10 15:30:30 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 18:04:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -86,18 +86,31 @@ close INFILE;
 
 chomp @inlines;
 
+# Empty or unset WITH_LANG environment variable is set to default en-US.
+# When WITH_LANG is set but does not contain en-US then that is prepended.
+my $WithLang = $ENV{WITH_LANG};
+if ( ! defined $WithLang || $WithLang eq "")
+{
+    $WithLang = "en-US";
+}
+elsif ($WithLang !~ /\ben-US\b/)
+{
+    $WithLang = "en-US " . $WithLang;
+}
+
+
 if ( $langswitch eq "" ) {
     my @outlines;
     foreach my $i (@inlines) {
         if ( $i =~ /license-text/ ) {
             my $ii;
             my $name;
-            foreach my $code ( split(/\s+/,$ENV{WITH_LANG}) ) {
+            foreach my $code ( split(/\s+/,$WithLang) ) {
                 $ii = $i;
                 $name = $ARGV[1];
                 $name =~ s/xxx/$code/;
-                $ii =~ s/isocode/$code/;
-                $ii =~ s?licensefile?$name?;
+                $ii =~ s/isocode/$code/g;
+                $ii =~ s?licensefile?$name?g;
                 push @outlines, "$ii\n";
             }
         } else {
@@ -118,8 +131,8 @@ if ( $langswitch eq "" ) {
                 my $ii = $i;
                 $name = $ARGV[1];
                 $name =~ s/xxx/$code/;
-                $ii =~ s/isocode/$code/;
-                $ii =~ s?licensefile?$name?;
+                $ii =~ s/isocode/$code/g;
+                $ii =~ s?licensefile?$name?g;
                 push @outlines, "$ii\n";
             } else {
                 push @outlines, "$i\n";
