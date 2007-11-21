@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:31:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:09:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 #ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
 #endif
+#ifndef CONNECTIVITY_SQLERROR_HXX
+#include <connectivity/sqlerror.hxx>
+#endif
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
@@ -60,6 +63,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_ERRORCONDITION_HPP_
+#include <com/sun/star/sdb/ErrorCondition.hpp>
 #endif
 #ifdef SQL_TEST_PARSETREEITERATOR
 #include <iostream>
@@ -94,6 +100,7 @@ using namespace ::connectivity;
 using namespace ::connectivity::sdbcx;
 using namespace ::dbtools;
 using namespace ::connectivity::parse;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::sdbcx;
@@ -443,13 +450,7 @@ OSQLTable OSQLParseTreeIterator::impl_locateRecordSource( const ::rtl::OUString&
             {
                 if  ( !m_pImpl->isQueryAllowed( sComposedName ) )
                 {
-                    impl_appendError( SQLException(
-                        m_rParser.getContext().getErrorMessage( IParseContext::ERROR_CYCLIC_SUB_QUERIES ),
-                        NULL,
-                        getStandardSQLState( SQL_CYCLIC_SUB_QUERIES ),
-                        0,
-                        Any()
-                    ) );
+                    impl_appendError( m_rParser.getErrorHelper().getSQLException( sdb::ErrorCondition::PARSER_CYCLIC_SUB_QUERIES, NULL ) );
                     return NULL;
                 }
 
