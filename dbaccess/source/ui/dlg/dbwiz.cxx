@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwiz.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:12:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:56:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,6 +221,7 @@ WizardTypes::WizardState ODbTypeWizDialog::determineNextState(WizardState _nCurr
                 case DST_KAB:
                 case DST_MACAB:
                 case DST_MSACCESS:
+                case DST_MSACCESS_2007:
                 case DST_JDBC:
                 case DST_CALC:
                     nNextState = WZS_INVALID_STATE;
