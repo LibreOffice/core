@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:56:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:43:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -702,7 +702,7 @@ void ODBExport::exportQuery(XPropertySet* _xProp)
         && getBOOL(_xProp->getPropertyValue(PROPERTY_APPLYORDER)) )
         AddAttribute(XML_NAMESPACE_DB, XML_APPLY_ORDER,XML_TRUE);
 
-    if ( ! getBOOL(_xProp->getPropertyValue(PROPERTY_USE_ESCAPE_PROCESSING)) )
+    if ( ! getBOOL(_xProp->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)) )
         AddAttribute(XML_NAMESPACE_DB, XML_ESCAPE_PROCESSING,XML_FALSE);
 
     exportStyleName(_xProp,GetAttrList());
