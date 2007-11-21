@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlcommanddesign.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:50:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:22:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,41 +37,25 @@
 #define EXTENSIONS_SOURCE_PROPCTRLR_SQLCOMMANDDESIGN_HXX
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSPECTION_XOBJECTINSPECTORUI_HPP_
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef _CONNECTIVITY_DBTOOLS_HXX_
 #include <connectivity/dbtools.hxx>
-#endif
-#ifndef _LINK_HXX
 #include <tools/link.hxx>
-#endif
+#include <cppuhelper/implbase1.hxx>
+#include <rtl/ref.hxx>
 
 //........................................................................
 namespace pcr
 {
 //........................................................................
 
+    class ISQLCommandAdapter;
     //====================================================================
     //= SQLCommandDesigner
     //====================================================================
@@ -85,9 +69,9 @@ namespace pcr
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >        m_xContext;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiComponentFactory >  m_xORB;
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >           m_xRowSet;
         ::dbtools::SharedConnection                                                         m_xConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >            m_xDesigner;
+        ::rtl::Reference< ISQLCommandAdapter >                                              m_xObjectAdapter;
         Link                                                                                m_aCloseLink;
 
     public:
@@ -95,8 +79,8 @@ namespace pcr
 
         @param  _rxContext
             our component context. Must not be <NULL/>, and must provide a non-<NULL/> XMultiComponentFactory
-        @param  _rxRowSet
-            a ->RowSet whose Command property is to be designed. Must not be <NULL/>.
+        @param  _rxPropertyAdapter
+            an adapter to the object's SQL command related properties
         @param  _rConnection
             the current connection of ->_rxRowSet. Must not be <NULL/>.
         @param _rCloseLink
@@ -107,7 +91,7 @@ namespace pcr
         */
         SQLCommandDesigner(
             const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& _rxContext,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxRowSet,
+            const ::rtl::Reference< ISQLCommandAdapter >& _rxPropertyAdapter,
             const ::dbtools::SharedConnection& _rConnection,
             const Link& _rCloseLink
         );
@@ -116,6 +100,10 @@ namespace pcr
             if there currently exists a frame which allows the user entering the SQL command
         */
         inline bool isActive() const { return m_xDesigner.is(); }
+
+        /** returns the property adapter used by the instance
+        */
+        inline const ::rtl::Reference< ISQLCommandAdapter >& getPropertyAdapter() const { return m_xObjectAdapter; }
 
         /** raises the designer window to top
             @precond
@@ -152,8 +140,6 @@ namespace pcr
                 the designer is not currently active (see ->isActive)
             @precond
                 ->m_xConnection is not <NULL/>
-            @precond
-                ->m_xRowSet is not <NULL/>
         */
         void impl_doOpenDesignerFrame_nothrow();
 
@@ -201,10 +187,40 @@ namespace pcr
         */
         bool impl_trySuspendDesigner_nothrow() const;
 
+        /** gets the current value of the command property
+        */
+        ::rtl::OUString
+                impl_getCommandPropertyValue_nothrow();
+
+        /** sets anew value for the command property
+        */
+        void    impl_setCommandPropertyValue_nothrow( const ::rtl::OUString& _rCommand ) const;
+
     private:
         SQLCommandDesigner();                                       // never implemented
         SQLCommandDesigner( const SQLCommandDesigner& );            // never implemented
         SQLCommandDesigner& operator=( const SQLCommandDesigner& ); // never implemented
+    };
+
+    //====================================================================
+    //= ISQLCommandAdapter
+    //====================================================================
+    /** an adapter to forward changed SQL command property values to a component
+    */
+    class ISQLCommandAdapter : public ::rtl::IReference
+    {
+    public:
+        /// retrieves the current SQL command of the component
+        virtual ::rtl::OUString getSQLCommand() const = 0;
+        /// retrieves the current value of the EscapeProcessing property of the component
+        virtual sal_Bool        getEscapeProcessing() const = 0;
+
+        /// sets a new SQL command
+        virtual void    setSQLCommand( const ::rtl::OUString& _rCommand ) const = 0;
+        /// sets a new EscapeProcessing property value
+        virtual void    setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const = 0;
+
+        virtual ~ISQLCommandAdapter();
     };
 
 //........................................................................
