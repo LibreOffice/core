@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HTables.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:41:26 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:01:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@ void OTables::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
         // if no exception was thrown we must delete it from the views
         if ( bIsView )
         {
-            OViews* pViews = static_cast<OViews*>(static_cast<OHCatalog&>(m_rParent).getPrivateViews());
+            HViews* pViews = static_cast<HViews*>(static_cast<OHCatalog&>(m_rParent).getPrivateViews());
             if ( pViews && pViews->hasByName(_sElementName) )
                 pViews->dropByNameImpl(_sElementName);
         }
