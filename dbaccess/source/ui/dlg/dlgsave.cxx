@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:16:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:57:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,6 +177,9 @@ OSaveAsDlgImpl::OSaveAsDlgImpl( Window * _pParent,
         m_aSchema.setAllowedChars( sExtraNameChars );
         m_aTitle.setAllowedChars( sExtraNameChars );
     }
+
+    m_aCatalog.SetDropDownLineCount( 10 );
+    m_aSchema.SetDropDownLineCount( 10 );
 }
 // -----------------------------------------------------------------------------
 OSaveAsDlgImpl::OSaveAsDlgImpl( Window * _pParent,
@@ -200,7 +203,10 @@ OSaveAsDlgImpl::OSaveAsDlgImpl( Window * _pParent,
              ,m_nType(CommandType::COMMAND)
              ,m_nFlags(_nFlags)
 {
+    m_aCatalog.SetDropDownLineCount( 10 );
+    m_aSchema.SetDropDownLineCount( 10 );
 }
+
 // -----------------------------------------------------------------------------
 using namespace ::com::sun::star::lang;
 
