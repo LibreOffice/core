@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentcontext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:54:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:52:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@ namespace comphelper
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::RuntimeException;
+    using ::com::sun::star::uno::Sequence;
     /** === end UNO using === **/
 
     //====================================================================
@@ -130,6 +131,17 @@ namespace comphelper
     {
         Reference< XInterface > xComponent(
             m_xORB->createInstanceWithContext( _rServiceName, m_xContext )
+        );
+        if ( !xComponent.is() )
+            throw ServiceNotRegisteredException( _rServiceName, NULL );
+        return xComponent;
+    }
+
+    //------------------------------------------------------------------------
+    Reference< XInterface > ComponentContext::createComponentWithArguments( const ::rtl::OUString& _rServiceName, const Sequence< Any >& _rArguments ) const
+    {
+        Reference< XInterface > xComponent(
+            m_xORB->createInstanceWithArgumentsAndContext( _rServiceName, _rArguments, m_xContext )
         );
         if ( !xComponent.is() )
             throw ServiceNotRegisteredException( _rServiceName, NULL );
