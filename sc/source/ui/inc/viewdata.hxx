@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:28:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:10:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,10 @@
  ************************************************************************/
 #ifndef SC_VIEWDATA_HXX
 #define SC_VIEWDATA_HXX
+
+#ifndef _SVX_ZOOMITEM_HXX //autogen
+#include <svx/zoomitem.hxx>
+#endif
 
 #ifndef INCLUDED_SCDLLAPI_H
 #include "scdllapi.h"
@@ -103,6 +107,12 @@ class ScViewDataTable                           // Daten pro Tabelle
 {
 friend class ScViewData;
 private:
+    SvxZoomType     eZoomType;                  // selected zoom type (normal view)
+    Fraction        aZoomX;                     // selected zoom X
+    Fraction        aZoomY;                     // selected zoom Y (displayed)
+    Fraction        aPageZoomX;                 // zoom in page break preview mode
+    Fraction        aPageZoomY;
+
     long            nTPosX[2];                  // MapMode - Offset (Twips)
     long            nTPosY[2];
     long            nMPosX[2];                  // MapMode - Offset (1/100 mm)
@@ -133,7 +143,8 @@ private:
                     ~ScViewDataTable();
 
     void            WriteUserDataSequence(com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings);
-    void            ReadUserDataSequence(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings);
+    void            ReadUserDataSequence(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings,
+                                         bool& rHasZoom);
 };
 
 // ---------------------------------------------------------------------------
@@ -162,10 +173,11 @@ private:
     Size                aScrSize;
     MapMode             aLogicMode;                 // skalierter 1/100mm-MapMode
 
-    Fraction            aZoomX;                     // eingestellter Zoom X
-    Fraction            aZoomY;                     // eingestellter Zoom Y (angezeigt)
-    Fraction            aPageZoomX;                 // Zoom im Seitenumbruch-Vorschaumodus
-    Fraction            aPageZoomY;
+    SvxZoomType         eDefZoomType;               // default zoom and type for missing TabData
+    Fraction            aDefZoomX;
+    Fraction            aDefZoomY;
+    Fraction            aDefPageZoomX;              // zoom in page break preview mode
+    Fraction            aDefPageZoomY;
 
     ScRefType           eRefType;
 
@@ -203,6 +215,8 @@ private:
     SC_DLLPRIVATE DECL_LINK (EditEngineHdl, EditStatus*);
 
     SC_DLLPRIVATE void          CalcPPT();
+    SC_DLLPRIVATE void          CreateTabData( SCTAB nNewTab );
+    SC_DLLPRIVATE void          CreateSelectedTabData();
 
 public:
                     ScViewData( ScDocShell* pDocSh, ScTabViewShell* pViewSh );
@@ -287,12 +301,15 @@ public:
     void            SetFixPosY( SCROW nPos )                        { pThisTab->nFixPosY = nPos; }
     void            SetPagebreakMode( BOOL bSet );
 
-    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY );
+    void            SetZoomType( SvxZoomType eNew, BOOL bAll );
+    void            SetZoom( const Fraction& rNewX, const Fraction& rNewY, BOOL bAll );
+    void            RefreshZoom();
 
     void            SetSelCtrlMouseClick( BOOL bTmp ) { bSelCtrlMouseClick = bTmp; }
 
-    const Fraction& GetZoomX() const        { return bPagebreak ? aPageZoomX : aZoomX; }
-    const Fraction& GetZoomY() const        { return bPagebreak ? aPageZoomY : aZoomY; }
+    SvxZoomType     GetZoomType() const     { return pThisTab->eZoomType; }
+    const Fraction& GetZoomX() const        { return bPagebreak ? pThisTab->aPageZoomX : pThisTab->aZoomX; }
+    const Fraction& GetZoomY() const        { return bPagebreak ? pThisTab->aPageZoomY : pThisTab->aZoomY; }
 
     const MapMode&  GetLogicMode( ScSplitPos eWhich );
     const MapMode&  GetLogicMode();                     // Offset 0
