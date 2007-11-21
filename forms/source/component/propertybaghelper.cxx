@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertybaghelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:57:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:35:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,7 +320,7 @@ namespace frm
     //--------------------------------------------------------------------
     void PropertyBagHelper::setPropertyValues( const Sequence< PropertyValue >& _rProps )
     {
-        ::osl::MutexGuard aGuard( m_rContext.getMutex() );
+        ::osl::ClearableMutexGuard aGuard( m_rContext.getMutex() );
         impl_nts_checkDisposed_throw();
 
         sal_Int32 nPropertyValues = _rProps.getLength();
@@ -354,6 +354,8 @@ namespace frm
             aValues.getArray(), SelectValueOfPropertyValue() );
 
         Reference< XMultiPropertySet > xMe( m_rContext.getPropertiesInterface(), UNO_QUERY_THROW );
+
+        aGuard.clear();
         xMe->setPropertyValues( aNames, aValues );
     }
 
