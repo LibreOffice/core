@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 11:28:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -641,7 +641,7 @@ void OConnection::refresh(const Reference< XNameAccess >& _rToBeRefreshed)
     {
         if (!m_pViews->isInitialized())
         {
-            // check if out "master connection" can supply tables
+            // check if our "master connection" can supply tables
             Reference< XViewsSupplier > xMaster(getMasterTables(),UNO_QUERY);
 
             if (xMaster.is() && xMaster->getViews().is())
@@ -724,7 +724,7 @@ Reference< XInterface > SAL_CALL OConnection::createInstance( const ::rtl::OUStr
         || ( _sServiceSpecifier.equalsAscii( "com.sun.star.sdb.SingleSelectQueryAnalyzer" ) )
         )
     {
-        xRet = new OSingleSelectQueryComposer( getTables(),this, m_aContext.getLegacyServiceFactory() );
+        xRet = new OSingleSelectQueryComposer( getTables(),this, m_aContext );
         m_aComposers.push_back(WeakReferenceHelper(xRet));
     }
     return Reference< XInterface >(xRet,UNO_QUERY);
