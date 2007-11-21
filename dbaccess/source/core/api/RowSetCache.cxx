@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:11:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:33:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,13 +139,13 @@ DBG_NAME(ORowSetCache)
 // -------------------------------------------------------------------------
 ORowSetCache::ORowSetCache(const Reference< XResultSet >& _xRs,
                            const Reference< XSingleSelectQueryAnalyzer >& _xAnalyzer,
-                           const Reference< XMultiServiceFactory >& _xServiceFactory,
+                           const ::comphelper::ComponentContext& _rContext,
                            const ::rtl::OUString& _rUpdateTableName,
                            sal_Bool&    _bModified,
                            sal_Bool&    _bNew)
     :m_xSet(_xRs)
     ,m_xMetaData(Reference< XResultSetMetaDataSupplier >(_xRs,UNO_QUERY)->getMetaData())
-    ,m_xServiceFactory(_xServiceFactory)
+    ,m_aContext( _rContext )
     ,m_pCacheSet(NULL)
     ,m_pMatrix(NULL)
     ,m_pInsertMatrix(NULL)
@@ -1460,7 +1460,7 @@ sal_Bool ORowSetCache::checkJoin(const Reference< XConnection>& _xConnection,
     sal_Bool bOk = sal_False;
     ::rtl::OUString sSql = _xAnalyzer->getQuery();
     ::rtl::OUString sErrorMsg;
-    ::connectivity::OSQLParser aSqlParser(m_xServiceFactory);
+    ::connectivity::OSQLParser aSqlParser( m_aContext.getLegacyServiceFactory() );
     ::std::auto_ptr< ::connectivity::OSQLParseNode> pSqlParseNode( aSqlParser.parseTree(sErrorMsg,sSql));
     if ( pSqlParseNode.get() && SQL_ISRULE(pSqlParseNode, select_statement) )
     {
