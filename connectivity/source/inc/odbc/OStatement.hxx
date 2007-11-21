@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OStatement.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:06:41 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:08:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,7 @@ namespace connectivity
             sal_Int32 getFetchSize()            const;
             ::rtl::OUString getCursorName()     const;
             sal_Bool isUsingBookmarks()         const;
+            sal_Bool getEscapeProcessing()      const;
             sal_Int32 getStmtOption (short fOption) const;
 
             void setQueryTimeOut(sal_Int32 _par0)           ;
@@ -141,6 +142,7 @@ namespace connectivity
             void setFetchDirection(sal_Int32 _par0)         ;
             void setFetchSize(sal_Int32 _par0)              ;
             void setCursorName(const ::rtl::OUString &_par0);
+            void setEscapeProcessing( const sal_Bool _bEscapeProc );
 
             virtual void setResultSetConcurrency(sal_Int32 _par0)   ;
             virtual void setResultSetType(sal_Int32 _par0)          ;
