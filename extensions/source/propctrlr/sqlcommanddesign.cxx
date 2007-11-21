@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlcommanddesign.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:53:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:22:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,25 +136,34 @@ namespace pcr
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::frame::XDispatchProvider;
     using ::com::sun::star::frame::XDispatch;
+    using ::com::sun::star::uno::Any;
     /** === end UNO using === **/
     namespace FrameSearchFlag = ::com::sun::star::frame::FrameSearchFlag;
     namespace CommandType = ::com::sun::star::sdb::CommandType;
+
+    //====================================================================
+    //= ISQLCommandAdapter
+    //====================================================================
+    //--------------------------------------------------------------------
+    ISQLCommandAdapter::~ISQLCommandAdapter()
+    {
+    }
 
     //====================================================================
     //= SQLCommandDesigner
     //====================================================================
     //--------------------------------------------------------------------
     SQLCommandDesigner::SQLCommandDesigner( const Reference< XComponentContext >& _rxContext,
-            const Reference< XPropertySet >& _rxRowSet, const ::dbtools::SharedConnection& _rConnection,
-            const Link& _rCloseLink )
+            const ::rtl::Reference< ISQLCommandAdapter >& _rxPropertyAdapter,
+            const ::dbtools::SharedConnection& _rConnection, const Link& _rCloseLink )
         :m_xContext( _rxContext )
-        ,m_xRowSet( _rxRowSet )
         ,m_xConnection( _rConnection )
+        ,m_xObjectAdapter( _rxPropertyAdapter )
         ,m_aCloseLink( _rCloseLink )
     {
         if ( m_xContext.is() )
             m_xORB = m_xContext->getServiceManager();
-        if ( !m_xORB.is() || !m_xRowSet.is() || !m_xConnection.is() )
+        if ( !m_xORB.is() || !_rxPropertyAdapter.is() || !m_xConnection.is() )
             throw NullPointerException();
 
         impl_doOpenDesignerFrame_nothrow();
@@ -172,20 +181,26 @@ namespace pcr
 
         if ( m_xDesigner.is() && ( Event.Source == m_xDesigner ) )
         {
-            if ( PROPERTY_ACTIVECOMMAND == Event.PropertyName )
+            try
             {
-                OSL_ENSURE( Event.NewValue.getValueTypeClass() == TypeClass_STRING,
-                    "SQLCommandDesigner::propertyChange: invalid new value for the ActiveCommand!" );
-                try
+                if ( PROPERTY_ACTIVECOMMAND == Event.PropertyName )
                 {
-                    m_xRowSet->setPropertyValue( PROPERTY_COMMAND, Event.NewValue );
+                    ::rtl::OUString sCommand;
+                    OSL_VERIFY( Event.NewValue >>= sCommand );
+                    m_xObjectAdapter->setSQLCommand( sCommand );
                 }
-                catch( const RuntimeException& ) { throw; }
-                catch( const Exception& )
+                else if ( PROPERTY_ESCAPE_PROCESSING == Event.PropertyName )
                 {
-                    // not allowed to leave, so silence it
-                    DBG_UNHANDLED_EXCEPTION();
+                    sal_Bool bEscapeProcessing( sal_False );
+                    OSL_VERIFY( Event.NewValue >>= bEscapeProcessing );
+                    m_xObjectAdapter->setEscapeProcessing( bEscapeProcessing );
                 }
+            }
+            catch( const RuntimeException& ) { throw; }
+            catch( const Exception& )
+            {
+                // not allowed to leave, so silence it
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
     }
@@ -193,8 +208,6 @@ namespace pcr
     //--------------------------------------------------------------------
     void SAL_CALL SQLCommandDesigner::disposing( const EventObject& Source ) throw (RuntimeException)
     {
-        OSL_ENSURE( m_xDesigner.is() && ( Source.Source == m_xDesigner ), "SQLCommandDesigner::propertyChange: where did this come from?" );
-
         if ( m_xDesigner.is() && ( Source.Source == m_xDesigner ) )
         {
             impl_designerClosed_nothrow();
@@ -213,7 +226,6 @@ namespace pcr
 
         m_xConnection.clear();
         m_xContext.clear();
-        m_xRowSet.clear();
         m_xORB.clear();
     }
 
@@ -266,7 +278,7 @@ namespace pcr
     {
         OSL_PRECOND( !isActive(),
             "SQLCommandDesigner::impl_doOpenDesignerFrame_nothrow: already active!" );
-        OSL_PRECOND( m_xConnection.is() && m_xRowSet.is(), "SQLCommandDesigner::impl_doOpenDesignerFrame_nothrow: this will crash!" );
+        OSL_PRECOND( m_xConnection.is(), "SQLCommandDesigner::impl_doOpenDesignerFrame_nothrow: this will crash!" );
         osl_incrementInterlockedCount(&m_refCount);
 
         try
@@ -275,13 +287,19 @@ namespace pcr
             // thus, we create a blank frame at the desktop, remove it from the desktop's frame list
             // immediately, and then load the component into this blank (and now parent-less) frame
             Reference< XComponentLoader > xLoader( impl_createEmptyParentlessTask_nothrow(), UNO_QUERY_THROW );
-            Sequence< PropertyValue > aArgs( 3 );
-            aArgs[0].Name  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IndependentSQLCommand" ) );
-            aArgs[0].Value = m_xRowSet->getPropertyValue( PROPERTY_COMMAND );
-            aArgs[1].Name  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ActiveConnection" ) );
-            aArgs[1].Value <<= m_xConnection.getTyped();
-            aArgs[2].Name  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "QueryDesignView" ) );
-            aArgs[2].Value <<= (sal_Bool)sal_True;
+            Sequence< PropertyValue > aArgs( 5 );
+            aArgs[0].Name = PROPERTY_ACTIVE_CONNECTION;
+            aArgs[0].Value <<= m_xConnection.getTyped();
+
+            aArgs[1].Name  = PROPERTY_COMMAND;
+            aArgs[1].Value <<= m_xObjectAdapter->getSQLCommand();
+            aArgs[2].Name  = PROPERTY_COMMANDTYPE;
+            aArgs[2].Value <<= (sal_Int32)CommandType::COMMAND;
+            aArgs[3].Name  = PROPERTY_ESCAPE_PROCESSING;
+            aArgs[3].Value <<= m_xObjectAdapter->getEscapeProcessing();
+
+            aArgs[4].Name  = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GraphicalDesign" ) );
+            aArgs[4].Value <<= m_xObjectAdapter->getEscapeProcessing();
 
             Reference< XComponent > xQueryDesign = xLoader->loadComponentFromURL(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".component:DB/QueryDesign" ) ),
@@ -298,7 +316,10 @@ namespace pcr
                 Reference< XPropertySet > xQueryDesignProps( m_xDesigner, UNO_QUERY );
                 OSL_ENSURE( xQueryDesignProps.is(), "SQLCommandDesigner::impl_doOpenDesignerFrame_nothrow: the controller should have properties!" );
                 if ( xQueryDesignProps.is() )
+                {
                     xQueryDesignProps->addPropertyChangeListener( PROPERTY_ACTIVECOMMAND, this );
+                    xQueryDesignProps->addPropertyChangeListener( PROPERTY_ESCAPE_PROCESSING, this );
+                }
             }
 
             // get the frame which we just opened and set it's title
@@ -396,7 +417,7 @@ namespace pcr
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        m_xDesigner = NULL;
+        m_xDesigner.clear();
     }
 
     //------------------------------------------------------------------------
@@ -414,6 +435,7 @@ namespace pcr
         }
         return bAllow;
     }
+
 //........................................................................
 } // namespace pcr
 //........................................................................
