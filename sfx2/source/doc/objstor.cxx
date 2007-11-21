@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.195 $
+ *  $Revision: 1.196 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:44:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:48:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,6 +205,7 @@
 #include <rtl/logfile.hxx>
 #include <basic/modsizeexceeded.hxx>
 
+#include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/childwin.hxx>
@@ -587,7 +588,7 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
     if ( InitNew( pMed ? pMed->GetStorage() : uno::Reference < embed::XStorage >() ) )
     {
         // empty documents always get their macros from the user, so there is no reason to restrict access
-        pImp->nMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+        pImp->aMacroMode.allowMacroExecution();
         if ( SFX_CREATE_MODE_EMBEDDED == eCreateMode )
             SetTitle( String( SfxResId( STR_NONAME ) ));
 
