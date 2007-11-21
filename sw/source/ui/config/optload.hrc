@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:45:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:21:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,10 @@
 #define CB_APPLYBORDER          29
 #define WIN_PREVIEW             30
 #define STR_CATEGORY_NONE       31
+#define LB_ORDER                32
+#define FT_ORDER                33
+#define FT_NUM_SEP              34
+#define ED_NUM_SEP              35
 
 #define STR_TABLE               10
 #define STR_FRAME               11
