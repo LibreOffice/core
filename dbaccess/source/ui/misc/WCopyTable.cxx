@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:51:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:07:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
     ,m_bDeleteSourceColumns(sal_True)
     ,m_eCreateStyle(WIZARD_DEF_DATA)
     ,m_ePressed( WIZARD_NONE )
-    ,m_bCreatePrimaryColumn(sal_False)
+    ,m_bCreatePrimaryColumn(false)
 {
     DBG_CTOR(OCopyTableWizard,NULL);
     construct();
@@ -228,7 +228,7 @@ OCopyTableWizard::OCopyTableWizard(Window * pParent,
     ,m_sName(_rDefaultName)
     ,m_eCreateStyle(WIZARD_DEF_DATA)
     ,m_ePressed( WIZARD_NONE )
-    ,m_bCreatePrimaryColumn(sal_False)
+    ,m_bCreatePrimaryColumn(false)
 {
     DBG_CTOR(OCopyTableWizard,NULL);
     construct();
@@ -483,7 +483,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
                                 case RET_YES:
                                 {
                                     OCopyTable* pPage = static_cast<OCopyTable*>(GetPage(0));
-                                    m_bCreatePrimaryColumn = sal_True;
+                                    m_bCreatePrimaryColumn = true;
                                     m_aKeyName = pPage->GetKeyName();
                                     sal_Int32 nBreakPos2 = 0;
                                     CheckColumns(nBreakPos2);
@@ -514,7 +514,7 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
     return bFinish;
 }
 //------------------------------------------------------------------------
-sal_Bool OCopyTableWizard::isAutoincrementEnabled() const
+bool OCopyTableWizard::isAutoincrementEnabled() const
 {
     DBG_CHKTHIS(OCopyTableWizard,NULL);
     return m_bCreatePrimaryColumn;
