@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HViews.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:42:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:02:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
 
-#ifndef _CONNECTIVITY_HSQLDB_VIEWS_HXX_
-#include "hsqldb/HViews.hxx"
-#endif
-#ifndef CONNECTIVITY_HSQLDB_TABLES_HXX
 #include "hsqldb/HTables.hxx"
-#endif
+#include "hsqldb/HViews.hxx"
+#include "hsqldb/HView.hxx"
+
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -75,9 +73,6 @@
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
 #include <cppuhelper/interfacecontainer.h>
 #endif
-#ifndef _CONNECTIVITY_SDBCX_VIEW_HXX_
-#include "connectivity/sdbcx/VView.hxx"
-#endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
 #endif
@@ -99,7 +94,18 @@ using namespace ::com::sun::star::lang;
 using namespace dbtools;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-sdbcx::ObjectType OViews::createObject(const ::rtl::OUString& _rName)
+// -------------------------------------------------------------------------
+HViews::HViews( const Reference< XConnection >& _rxConnection, ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,
+    const TStringVector &_rVector )
+    :sdbcx::OCollection( _rParent, sal_True, _rMutex, _rVector )
+    ,m_xConnection( _rxConnection )
+    ,m_xMetaData( _rxConnection->getMetaData() )
+    ,m_bInDrop( sal_False )
+{
+}
+
+// -------------------------------------------------------------------------
+sdbcx::ObjectType HViews::createObject(const ::rtl::OUString& _rName)
 {
     ::rtl::OUString sCatalog,sSchema,sTable;
     ::dbtools::qualifiedNameComponents(m_xMetaData,
@@ -108,28 +114,22 @@ sdbcx::ObjectType OViews::createObject(const ::rtl::OUString& _rName)
                                         sSchema,
                                         sTable,
                                         ::dbtools::eInDataManipulation);
-    return new ::connectivity::sdbcx::OView(isCaseSensitive(),
-                            sTable,
-                            m_xMetaData,
-                            0,
-                            ::rtl::OUString(),
-                            sSchema,
-                            sCatalog
-                            );
+    return new HView( m_xConnection, isCaseSensitive(), sSchema, sTable );
 }
+
 // -------------------------------------------------------------------------
-void OViews::impl_refresh(  ) throw(RuntimeException)
+void HViews::impl_refresh(  ) throw(RuntimeException)
 {
     static_cast<OHCatalog&>(m_rParent).refreshTables();
 }
 // -------------------------------------------------------------------------
-void OViews::disposing(void)
+void HViews::disposing(void)
 {
     m_xMetaData = NULL;
     OCollection::disposing();
 }
 // -------------------------------------------------------------------------
-Reference< XPropertySet > OViews::createDescriptor()
+Reference< XPropertySet > HViews::createDescriptor()
 {
     Reference<XConnection> xConnection = static_cast<OHCatalog&>(m_rParent).getConnection();
     connectivity::sdbcx::OView* pNew = new connectivity::sdbcx::OView(sal_True,xConnection->getMetaData());
@@ -137,14 +137,14 @@ Reference< XPropertySet > OViews::createDescriptor()
 }
 // -------------------------------------------------------------------------
 // XAppend
-sdbcx::ObjectType OViews::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
+sdbcx::ObjectType HViews::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
     createView(descriptor);
     return createObject( _rForName );
 }
 // -------------------------------------------------------------------------
 // XDrop
-void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
+void HViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
 {
     if ( m_bInDrop )
         return;
@@ -165,14 +165,14 @@ void OViews::dropObject(sal_Int32 _nPos,const ::rtl::OUString /*_sElementName*/)
     }
 }
 // -----------------------------------------------------------------------------
-void OViews::dropByNameImpl(const ::rtl::OUString& elementName)
+void HViews::dropByNameImpl(const ::rtl::OUString& elementName)
 {
     m_bInDrop = sal_True;
     OCollection_TYPE::dropByName(elementName);
     m_bInDrop = sal_False;
 }
 // -----------------------------------------------------------------------------
-void OViews::createView( const Reference< XPropertySet >& descriptor )
+void HViews::createView( const Reference< XPropertySet >& descriptor )
 {
     Reference<XConnection> xConnection = static_cast<OHCatalog&>(m_rParent).getConnection();
 
@@ -202,14 +202,12 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
     }
 }
 // -----------------------------------------------------------------------------
-void OViews::appendNew(const ::rtl::OUString& _rsNewTable)
+void HViews::appendNew(const ::rtl::OUString& _rsNewTable)
 {
     insertElement(_rsNewTable,NULL);
     // notify our container listeners
     ContainerEvent aEvent(static_cast<XContainer*>(this), makeAny(_rsNewTable), Any(), Any());
-    OInterfaceIteratorHelper aListenerLoop(m_aContainerListeners);
-    while (aListenerLoop.hasMoreElements())
-        static_cast<XContainerListener*>(aListenerLoop.next())->elementInserted(aEvent);
+    m_aContainerListeners.notifyEach( &XContainerListener::elementInserted, aEvent );
 }
 // -----------------------------------------------------------------------------
 
