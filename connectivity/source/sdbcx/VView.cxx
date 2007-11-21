@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VView.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:13:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:10:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
-#include <stdio.h>
 
 #ifndef _CONNECTIVITY_SDBCX_VIEW_HXX_
 #include "connectivity/sdbcx/VView.hxx"
