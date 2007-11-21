@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:08:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:21:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -682,9 +682,11 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
 
         if (bDateNTimeCol)
         {
-            String sPostfix(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX));
-            xCol->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName + ::rtl::OUString(sPostfix.GetToken(1, ';'))));
-            xSecondCol->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName + ::rtl::OUString(sPostfix.GetToken(0, ';'))));
+            String sTimePostfix( SVX_RES( RID_STR_POSTFIX_TIME ) );
+            xCol->setPropertyValue(FM_PROP_LABEL, makeAny( ::rtl::OUString( sFieldName + sTimePostfix ) ) );
+
+            String sDatePostfix( SVX_RES( RID_STR_POSTFIX_DATE ) );
+            xSecondCol->setPropertyValue(FM_PROP_LABEL, makeAny( ::rtl::OUString( sFieldName + sDatePostfix ) ) );
         }
         else
             xCol->setPropertyValue(FM_PROP_LABEL, makeAny(sFieldName));
@@ -725,11 +727,15 @@ IMPL_LINK( FmGridHeader, OnAsyncExecuteDrop, void*, /*NOTINTERESTEDIN*/ )
         if (bDateNTimeCol)
         {
             String sRealName,sPurePostfix;
-            String sPostfix(SVX_RES(RID_STR_DATETIME_LABELPOSTFIX));
 
-            for (xub_StrLen i=0; i<2; ++i)
+            String aPostfix[] = {
+                String( SVX_RES( RID_STR_POSTFIX_DATE ) ),
+                String( SVX_RES( RID_STR_POSTFIX_TIME ) )
+            };
+
+            for ( size_t i=0; i<2; ++i )
             {
-                sPurePostfix = sPostfix.GetToken(i, ';');
+                sPurePostfix = aPostfix[i];
                 sPurePostfix.EraseLeadingChars(' ');
                 sPurePostfix.EraseLeadingChars('(');
                 sPurePostfix.EraseTrailingChars(')');
