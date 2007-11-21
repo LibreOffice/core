@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:27:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,15 +281,33 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     };
 };
 
-String RID_STR_RECORDSEARCH_METHODS
+String RID_STR_SEARCH_ANYWHERE
 {
-    Text [ en-US ] = "anywhere in the field;beginning of field;end of field;entire field";
+    Text [ en-US ] = "anywhere in the field";
 };
 
-String RID_STR_RECORDSEARCH_BUTTONS
+String RID_STR_SEARCH_BEGINNING
 {
-    // Bem. : das 'Suchen' in diesem String muss genau das selbe sein wie die Beschriftung des PB_SEARCH-Buttons im Dialog
-    Text [ en-US ] = "From top;From bottom;Search;Cancel";
+    Text [ en-US ] = "beginning of field";
+};
+
+String RID_STR_SEARCH_END
+{
+    Text [ en-US ] = "end of field";
+};
+
+String RID_STR_SEARCH_WHOLE
+{
+    Text [ en-US ] = "entire field";
+};
+
+String RID_STR_FROM_TOP
+{
+    Text [ en-US ] = "From top";
+};
+String RID_STR_FROM_BOTTOM
+{
+    Text [ en-US ] = "From bottom";
 };
 
 ErrorBox RID_SVXERR_SEARCH_NORECORD
@@ -304,36 +322,17 @@ ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
     Message [ en-US ] = "An unknown error occurred. The search could not be finished.";
 };
 
-String RID_STR_SEARCH_OVERFLOW
+String RID_STR_OVERFLOW_FORWARD
 {
-    Text [ en-US ] = "Overflow, search continued at the beginning;Overflow, search continued at the end";
+    Text [ en-US ] = "Overflow, search continued at the beginning";
+};
+
+String RID_STR_OVERFLOW_BACKWARD
+{
+    Text [ en-US ] = "Overflow, search continued at the end";
 };
 
 String RID_STR_SEARCH_COUNTING
 {
     Text [ en-US ] = "counting records";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
