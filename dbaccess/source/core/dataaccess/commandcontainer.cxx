@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commandcontainer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:38:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:36:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,9 +92,11 @@ Reference< XContent > OCommandContainer::createObject( const ::rtl::OUString& _r
 {
     const ODefinitionContainer_Impl& rDefinitions( getDefinitions() );
     OSL_ENSURE( rDefinitions.find(_rName) != rDefinitions.end(), "OCommandContainer::createObject: Invalid entry in map!" );
+
+    const TContentPtr& pElementContent( rDefinitions.find( _rName )->second );
     if ( m_bTables )
-        return new OComponentDefinition( *this, _rName, m_xORB, rDefinitions.find( _rName )->second, m_bTables );
-    return new OCommandDefinition( *this, _rName, m_xORB, rDefinitions.find( _rName )->second );
+        return new OComponentDefinition( *this, _rName, m_aContext.getLegacyServiceFactory(), pElementContent, m_bTables );
+    return new OCommandDefinition( *this, _rName, m_aContext.getLegacyServiceFactory(), pElementContent );
 }
 
 // -----------------------------------------------------------------------------
@@ -106,7 +108,7 @@ Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL OCommandContainer::createInstance( ) throw (Exception, RuntimeException)
 {
-    return m_xORB->createInstance(m_bTables ? SERVICE_SDB_TABLEDEFINITION : SERVICE_SDB_COMMAND_DEFINITION);
+    return m_aContext.createComponent( (::rtl::OUString)( m_bTables ? SERVICE_SDB_TABLEDEFINITION : SERVICE_SDB_COMMAND_DEFINITION ) );
 }
 
 //........................................................................
