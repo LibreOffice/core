@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:57:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:10:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,9 @@ ScTpContentOptions::ScTpContentOptions( Window*         pParent,
     aDrawFT( this,      ScResId(FT_DRAW )),
     aDrawLB( this,      ScResId(LB_DRAW )),
 
+    aZoomGB( this,      ScResId(GB_ZOOM) ),
+    aSyncZoomCB( this,  ScResId(CB_SYNCZOOM) ),
+
     aSeparator2FL    (this, ScResId(FL_SEPARATOR2)),
     aWindowGB( this,        ScResId(GB_WINDOW         )),
     aRowColHeaderCB(this,   ScResId(CB_ROWCOLHEADER )),
@@ -195,6 +198,11 @@ BOOL    ScTpContentOptions::FillItemSet( SfxItemSet& rCoreSet )
         rCoreSet.Put(SfxBoolItem(SID_SC_INPUT_RANGEFINDER, aRangeFindCB.IsChecked()));
         bRet = TRUE;
     }
+    if(aSyncZoomCB.GetSavedValue() != aSyncZoomCB.IsChecked())
+    {
+        rCoreSet.Put(SfxBoolItem(SID_SC_OPT_SYNCZOOM, aSyncZoomCB.IsChecked()));
+        bRet = TRUE;
+    }
 
 
     return bRet;
@@ -237,8 +245,11 @@ void    ScTpContentOptions::Reset( const SfxItemSet& rCoreSet )
 
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_RANGEFINDER, FALSE, &pItem))
         aRangeFindCB.Check(((const SfxBoolItem*)pItem)->GetValue());
+    if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_OPT_SYNCZOOM, FALSE, &pItem))
+        aSyncZoomCB.Check(((const SfxBoolItem*)pItem)->GetValue());
 
     aRangeFindCB.SaveValue();
+    aSyncZoomCB.SaveValue();
 
     aFormulaCB  .SaveValue();
     aNilCB      .SaveValue();
