@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ContentHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:39:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:35:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,8 @@ OContentHelper::OContentHelper(const Reference< XMultiServiceFactory >& _xORB
     ,m_aContentListeners(m_aMutex)
     ,m_aPropertyChangeListeners(m_aMutex)
     ,m_xParentContainer(_xParentContainer)
-    ,m_xORB(_xORB)
+    ,m_aContext( _xORB )
+    ,m_aErrorHelper( m_aContext )
     ,m_pImpl(_pImpl)
     ,m_nCommandId(0)
 {
@@ -159,7 +160,7 @@ Reference< XContentIdentifier > SAL_CALL OContentHelper::getIdentifier(  ) throw
     }
 
     sContentId = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:")) + sContentId;
-    return new ::ucbhelper::ContentIdentifier(m_xORB,sContentId);
+    return new ::ucbhelper::ContentIdentifier( m_aContext.getLegacyServiceFactory(), sContentId );
     //  return Reference< XContentIdentifier >();
 }
 // -----------------------------------------------------------------------------
@@ -481,7 +482,7 @@ Reference< XRow > OContentHelper::getPropertyValues( const Sequence< Property >&
 {
     // Note: Empty sequence means "get values of all supported properties".
 
-    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_xORB );
+    rtl::Reference< ::ucbhelper::PropertyValueSet > xRow = new ::ucbhelper::PropertyValueSet( m_aContext.getLegacyServiceFactory() );
 
     sal_Int32 nCount = rProperties.getLength();
     if ( nCount )
