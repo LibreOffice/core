@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:42:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 13:53:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -475,7 +475,7 @@ const SwIndex& SwContact::GetCntntAnchorIndex() const
 */
 sal_uInt32 SwContact::GetMinOrdNum() const
 {
-    sal_uInt32 nMinOrdNum( ULONG_MAX );
+    sal_uInt32 nMinOrdNum( SAL_MAX_UINT32 );
 
     std::vector< SwAnchoredObject* > aObjs;
     GetAnchoredObjs( aObjs );
@@ -492,7 +492,7 @@ sal_uInt32 SwContact::GetMinOrdNum() const
         aObjs.pop_back();
     }
 
-    ASSERT( nMinOrdNum != ULONG_MAX,
+    ASSERT( nMinOrdNum != SAL_MAX_UINT32,
             "<SwContact::GetMinOrdNum()> - no order number found." );
     return nMinOrdNum;
 }
