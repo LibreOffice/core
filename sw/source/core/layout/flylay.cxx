@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:02:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 18:19:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -704,7 +704,7 @@ void SwPageFrm::AppendFlyToPage( SwFlyFrm *pNew )
     const SwFlyFrm* pFly = pNew->GetAnchorFrm()->FindFlyFrm();
     if ( pFly && pObj->GetOrdNum() < pFly->GetVirtDrawObj()->GetOrdNum() )
     {
-        UINT32 nNewNum = pFly->GetVirtDrawObj()->GetOrdNumDirect() + 1;
+        UINT32 nNewNum = pFly->GetVirtDrawObj()->GetOrdNumDirect();
         if ( pObj->GetPage() )
             pObj->GetPage()->SetObjectOrdNum( pObj->GetOrdNumDirect(), nNewNum);
         else
@@ -961,7 +961,7 @@ void SwPageFrm::AppendDrawObjToPage( SwAnchoredObject& _rNewObj )
     if ( pFlyFrm &&
          _rNewObj.GetDrawObj()->GetOrdNum() < pFlyFrm->GetVirtDrawObj()->GetOrdNum() )
     {
-        UINT32 nNewNum = pFlyFrm->GetVirtDrawObj()->GetOrdNumDirect() + 1;
+        UINT32 nNewNum = pFlyFrm->GetVirtDrawObj()->GetOrdNumDirect();
         if ( _rNewObj.GetDrawObj()->GetPage() )
             _rNewObj.DrawObj()->GetPage()->SetObjectOrdNum(
                             _rNewObj.GetDrawObj()->GetOrdNumDirect(), nNewNum);
