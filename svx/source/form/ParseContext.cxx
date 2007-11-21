@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ParseContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:09:44 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:22:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,26 +35,17 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
-#ifndef SVX_QUERYDESIGNCONTEXT_HXX
-#include "ParseContext.hxx"
-#endif
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
-#include <svtools/syslocale.hxx>
-#endif
-#ifndef _SVX_FMRESIDS_HRC
-#include "fmresids.hrc"
-#endif
-#include <svx/dialmgr.hxx>
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _VOS_MUTEX_HXX_
-#include <vos/mutex.hxx>
-#endif
 
+#include "ParseContext.hxx"
+#include "stringlistresource.hxx"
+#include "fmresids.hrc"
+
+#include <svx/dialmgr.hxx>
+
+#include <svtools/syslocale.hxx>
+#include <vcl/svapp.hxx>
+#include <tools/debug.hxx>
+#include <vos/mutex.hxx>
 
 using namespace svxform;
 using namespace ::connectivity;
@@ -67,7 +58,9 @@ OSystemParseContext::OSystemParseContext() : IParseContext()
 {
     DBG_CTOR(OSystemParseContext,NULL);
     vos::OGuard aGuard( Application::GetSolarMutex() );
-    m_aSQLInternationals = ByteString(SVX_RES(RID_STR_SVT_SQL_INTERNATIONAL),RTL_TEXTENCODING_UTF8);
+
+    ::svx::StringListResource aKeywords( SVX_RES( RID_RSC_SQL_INTERNATIONAL ) );
+    aKeywords.get( m_aLocalizedKeywords );
 }
 
 //-----------------------------------------------------------------------------
@@ -101,7 +94,6 @@ OSystemParseContext::~OSystemParseContext()
         case ERROR_INVALID_COLUMN:          aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_COLUMN); break;
         case ERROR_INVALID_TABLE_EXIST:     aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_TABLE_EXISTS); break;
         case ERROR_INVALID_QUERY_EXIST:     aMsg = SVX_RES(RID_STR_SVT_SQL_SYNTAX_QUERY_EXISTS); break;
-        case ERROR_CYCLIC_SUB_QUERIES:      aMsg = SVX_RES(RID_STR_SVT_SQL_CYCLIC_SUB_QUERIES); break;
         case ERROR_NONE: break;
     }
     return aMsg;
@@ -110,28 +102,34 @@ OSystemParseContext::~OSystemParseContext()
 //-----------------------------------------------------------------------------
 ::rtl::OString OSystemParseContext::getIntlKeywordAscii(InternationalKeyCode _eKey) const
 {
-    ByteString aKeyword;
-    switch (_eKey)
+    size_t nIndex = 0;
+    switch ( _eKey )
     {
-        case KEY_LIKE:      aKeyword = m_aSQLInternationals.GetToken(0); break;
-        case KEY_NOT:       aKeyword = m_aSQLInternationals.GetToken(1); break;
-        case KEY_NULL:      aKeyword = m_aSQLInternationals.GetToken(2); break;
-        case KEY_TRUE:      aKeyword = m_aSQLInternationals.GetToken(3); break;
-        case KEY_FALSE:     aKeyword = m_aSQLInternationals.GetToken(4); break;
-        case KEY_IS:        aKeyword = m_aSQLInternationals.GetToken(5); break;
-        case KEY_BETWEEN:   aKeyword = m_aSQLInternationals.GetToken(6); break;
-        case KEY_OR:        aKeyword = m_aSQLInternationals.GetToken(7); break;
-        case KEY_AND:       aKeyword = m_aSQLInternationals.GetToken(8); break;
-        case KEY_AVG:       aKeyword = m_aSQLInternationals.GetToken(9); break;
-        case KEY_COUNT:     aKeyword = m_aSQLInternationals.GetToken(10); break;
-        case KEY_MAX:       aKeyword = m_aSQLInternationals.GetToken(11); break;
-        case KEY_MIN:       aKeyword = m_aSQLInternationals.GetToken(12); break;
-        case KEY_SUM:       aKeyword = m_aSQLInternationals.GetToken(13); break;
+        case KEY_LIKE:      nIndex = 0; break;
+        case KEY_NOT:       nIndex = 1; break;
+        case KEY_NULL:      nIndex = 2; break;
+        case KEY_TRUE:      nIndex = 3; break;
+        case KEY_FALSE:     nIndex = 4; break;
+        case KEY_IS:        nIndex = 5; break;
+        case KEY_BETWEEN:   nIndex = 6; break;
+        case KEY_OR:        nIndex = 7; break;
+        case KEY_AND:       nIndex = 8; break;
+        case KEY_AVG:       nIndex = 9; break;
+        case KEY_COUNT:     nIndex = 10; break;
+        case KEY_MAX:       nIndex = 11; break;
+        case KEY_MIN:       nIndex = 12; break;
+        case KEY_SUM:       nIndex = 13; break;
         case KEY_NONE:
             DBG_ERROR( "OSystemParseContext::getIntlKeywordAscii: illegal argument!" );
             break;
     }
-    return aKeyword;
+
+    OSL_ENSURE( nIndex < m_aLocalizedKeywords.size(), "OSystemParseContext::getIntlKeywordAscii: invalid index!" );
+
+    ByteString sKeyword;
+    if ( nIndex < m_aLocalizedKeywords.size() )
+        sKeyword = ByteString( m_aLocalizedKeywords[nIndex], RTL_TEXTENCODING_UTF8 );
+    return sKeyword;
 }
 
 //-----------------------------------------------------------------------------
