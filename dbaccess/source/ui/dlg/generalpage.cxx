@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:13:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,9 +89,6 @@
 #endif
 #ifndef DBAUI_DRIVERSETTINGS_HXX
 #include "DriverSettings.hxx"
-#endif
-#ifndef DBACCESS_SOURCE_UI_INC_DIALOGCONTROLLING_HXX
-#include "dialogcontrolling.hxx"
 #endif
 
 //.........................................................................
@@ -337,15 +334,20 @@ namespace dbaui
 
             m_pDatasourceType->SetPosPixel( MovePoint( m_aRB_GetExistingDatabase.GetPosPixel(), INDENT_BELOW_RADIO, 14 ) );
 
-            m_pSelectTypeController.reset( new RadioDependentEnabler( m_aRB_GetExistingDatabase, !bValid || bReadonly ) );
-            m_pSelectTypeController->addDependentWindow( m_aDatasourceTypeLabel );
-            m_pSelectTypeController->addDependentWindow( *m_pDatasourceType );
-            m_pSelectTypeController->addDependentWindow( m_aFTDataSourceAppendix );
-
-            m_pOpenDocController.reset( new RadioDependentEnabler( m_aRB_OpenDocument, !bValid || bReadonly ) );
-            m_pOpenDocController->addDependentWindow( m_aPB_OpenDocument );
-            m_pOpenDocController->addDependentWindow( m_aFT_DocListLabel );
-            m_pOpenDocController->addDependentWindow( *m_pLB_DocumentList );
+            if ( !bValid || bReadonly )
+            {
+                m_aDatasourceTypeLabel.Enable( false );
+                m_pDatasourceType->Enable( false );
+                m_aFTDataSourceAppendix.Enable( false );
+                m_aPB_OpenDocument.Enable( false );
+                m_aFT_DocListLabel.Enable( false );
+                m_pLB_DocumentList->Enable( false );
+            }
+            else
+            {
+                m_aControlDependencies.enableOnRadioCheck( m_aRB_GetExistingDatabase, m_aDatasourceTypeLabel, *m_pDatasourceType, m_aFTDataSourceAppendix );
+                m_aControlDependencies.enableOnRadioCheck( m_aRB_OpenDocument, m_aPB_OpenDocument, m_aFT_DocListLabel, *m_pLB_DocumentList );
+            }
 
             m_pLB_DocumentList->SetDropDownLineCount( 20 );
             if ( m_pLB_DocumentList->GetEntryCount() )
