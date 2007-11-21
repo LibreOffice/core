@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JStatement.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:36:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:03:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,22 +35,14 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_connectivity.hxx"
-#ifndef _CONNECTIVITY_JAVA_SQL_STATEMENT_HXX_
-#include "java/sql/JStatement.hxx"
-#endif
 
-#ifndef _CONNECTIVITY_JAVA_SQL_RESULTSET_HXX_
+#include "java/sql/JStatement.hxx"
 #include "java/sql/ResultSet.hxx"
-#endif
-#ifndef _CONNECTIVITY_JAVA_SQL_CONNECTION_HXX_
 #include "java/sql/Connection.hxx"
-#endif
-#ifndef _CONNECTIVITY_JAVA_SQL_SQLWARNING_HXX_
 #include "java/sql/SQLWarning.hxx"
-#endif
-#ifndef _CONNECTIVITY_JAVA_TOOLS_HXX_
 #include "java/tools.hxx"
-#endif
+#include "java/ContextClassLoader.hxx"
+
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
 #endif
@@ -168,7 +160,7 @@ jclass java_sql_Statement_Base::getMyClass()
 // -----------------------------------------------------------------------------
 void SAL_CALL java_sql_Statement_Base::disposing(void)
 {
-    m_aLogger.log( LogLevel::INFO, STR_LOG_CLOSING_STATEMENT );
+    m_aLogger.log( LogLevel::FINE, STR_LOG_CLOSING_STATEMENT );
     java_sql_Statement_BASE::disposing();
     clearObject();
 }
@@ -315,7 +307,7 @@ void SAL_CALL java_sql_Statement::clearBatch(  ) throw(::com::sun::star::sdbc::S
 
 sal_Bool SAL_CALL java_sql_Statement_Base::execute( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
-    m_aLogger.log( LogLevel::INFO, STR_LOG_EXECUTE_STATEMENT, sql );
+    m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTE_STATEMENT, sql );
 
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -332,11 +324,17 @@ sal_Bool SAL_CALL java_sql_Statement_Base::execute( const ::rtl::OUString& sql )
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             // Parameter konvertieren
-            jstring str = convertwchar_tToJavaString(t.pEnv,sql);
-            out = t.pEnv->CallBooleanMethod( object, mID, str );
-            // und aufraeumen
-            t.pEnv->DeleteLocalRef(str);
-            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+            jdbc::LocalRef< jstring > str( t.env(), convertwchar_tToJavaString( t.pEnv, sql ) );
+            {
+                jdbc::ContextClassLoaderScope ccl( t.env(),
+                    m_pConnection ? m_pConnection->getDriverClassLoader() : jdbc::GlobalRef< jobject >(),
+                    m_aLogger,
+                    *this
+                );
+
+                out = t.pEnv->CallBooleanMethod( object, mID, str.get() );
+                ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+            }
         } //mID
     } //t.pEnv
     return out;
@@ -345,7 +343,7 @@ sal_Bool SAL_CALL java_sql_Statement_Base::execute( const ::rtl::OUString& sql )
 
 Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
-    m_aLogger.log( LogLevel::INFO, STR_LOG_EXECUTE_QUERY, sql );
+    m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTE_QUERY, sql );
 
     jobject out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -362,11 +360,17 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const ::
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             // Parameter konvertieren
-            jstring str = convertwchar_tToJavaString(t.pEnv,sql);
-            out = t.pEnv->CallObjectMethod( object, mID, str);
-            // und aufraeumen
-            t.pEnv->DeleteLocalRef(str);
-            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+            jdbc::LocalRef< jstring > str( t.env(), convertwchar_tToJavaString( t.pEnv, sql ) );
+            {
+                jdbc::ContextClassLoaderScope ccl( t.env(),
+                    m_pConnection ? m_pConnection->getDriverClassLoader() : jdbc::GlobalRef< jobject >(),
+                    m_aLogger,
+                    *this
+                );
+
+                out = t.pEnv->CallObjectMethod( object, mID, str.get() );
+                ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+            }
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
@@ -443,7 +447,7 @@ Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  ) throw(::com:
 
 sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const ::rtl::OUString& sql ) throw(SQLException, RuntimeException)
 {
-    m_aLogger.log( LogLevel::INFO, STR_LOG_EXECUTE_UPDATE, sql );
+    m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTE_UPDATE, sql );
 
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -459,11 +463,17 @@ sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const ::rtl::OUString
             mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
         if( mID ){
             // Parameter konvertieren
-            jstring str = convertwchar_tToJavaString(t.pEnv,sql);
-            out = t.pEnv->CallIntMethod( object, mID, str );
-            // und aufraeumen
-            t.pEnv->DeleteLocalRef(str);
-            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+            jdbc::LocalRef< jstring > str( t.env(), convertwchar_tToJavaString( t.pEnv, sql ) );
+            {
+                jdbc::ContextClassLoaderScope ccl( t.env(),
+                    m_pConnection ? m_pConnection->getDriverClassLoader() : jdbc::GlobalRef< jobject >(),
+                    m_aLogger,
+                    *this
+                );
+
+                out = t.pEnv->CallIntMethod( object, mID, str.get() );
+                ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+            }
         } //mID
     } //t.pEnv
     return (sal_Int32)out;
@@ -800,7 +810,7 @@ void java_sql_Statement_Base::setQueryTimeOut(sal_Int32 _par0) throw(SQLExceptio
 //------------------------------------------------------------------------------
 void java_sql_Statement_Base::setEscapeProcessing(sal_Bool _par0) throw(SQLException, RuntimeException)
 {
-    m_aLogger.log( LogLevel::INFO, STR_LOG_SET_ESCAPE_PROCESSING, _par0 );
+    m_aLogger.log( LogLevel::FINE, STR_LOG_SET_ESCAPE_PROCESSING, _par0 );
 
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     m_bEscapeProcessing = _par0;
