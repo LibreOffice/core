@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 08:12:05 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:39:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #endif
 #ifndef _COMPHELPER_MEDIADESCRIPTOR_HXX_
 #include <comphelper/mediadescriptor.hxx>
+#endif
+#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
+#include <comphelper/namedvaluecollection.hxx>
 #endif
 #ifndef _COMPHELPER_CLASSIDS_HXX
 #include <comphelper/classids.hxx>
@@ -163,6 +166,9 @@
 #endif
 #ifndef DBA_INTERCEPT_HXX
 #include "intercept.hxx"
+#endif
+#ifndef _COM_SUN_STAR_SDB_ERRORCONDITION_HPP_
+#include <com/sun/star/sdb/ErrorCondition.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XINTERACTIONDOCUMENTSAVE_HPP_
 #include <com/sun/star/sdb/XInteractionDocumentSave.hpp>
@@ -534,7 +540,7 @@ ODocumentDefinition::ODocumentDefinition(const Reference< XInterface >& _rxConta
     DBG_CTOR(ODocumentDefinition, NULL);
     registerProperties();
     if ( _aClassID.getLength() )
-        loadEmbeddedObject(MacroExecMode::USE_CONFIG,_aClassID,_xConnection);
+        loadEmbeddedObject( _xConnection, _aClassID, Sequence< PropertyValue >(), false, false );
 }
 
 //--------------------------------------------------------------------------
@@ -634,16 +640,16 @@ public:
 // -----------------------------------------------------------------------------
 namespace
 {
-    bool lcl_extractOpenMode( const Any& _rValue, sal_Int32& /* [out] */ _rMode )
+    bool lcl_extractOpenMode( const Any& _rValue, sal_Int32& _out_rMode )
     {
         OpenCommandArgument aOpenCommand;
         if ( _rValue >>= aOpenCommand )
-            _rMode = aOpenCommand.Mode;
+            _out_rMode = aOpenCommand.Mode;
         else
         {
             OpenCommandArgument2 aOpenCommand2;
             if ( _rValue >>= aOpenCommand2 )
-                _rMode = aOpenCommand2.Mode;
+                _out_rMode = aOpenCommand2.Mode;
             else
                 return false;
         }
@@ -655,14 +661,14 @@ namespace
 void ODocumentDefinition::impl_removeFrameFromDesktop_throw( const Reference< XFrame >& _rxFrame )
 {
     if ( !m_xDesktop.is() )
-        m_xDesktop.set( m_xORB->createInstance( SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
+        m_xDesktop.set( m_aContext.createComponent( (::rtl::OUString)SERVICE_FRAME_DESKTOP ), UNO_QUERY_THROW );
 
     Reference< XFrames > xFrames( m_xDesktop->getFrames(), UNO_QUERY_THROW );
     xFrames->remove( _rxFrame );
 }
 
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::impl_onActivateEmbeddedObject( bool _bOpenedInDesignMode )
+void ODocumentDefinition::impl_onActivateEmbeddedObject()
 {
     try
     {
@@ -692,7 +698,7 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject( bool _bOpenedInDesignMo
         LifetimeCoupler::couple( *this, Reference< XComponent >( xFrame, UNO_QUERY_THROW ) );
 
         // init the edit view
-        if ( _bOpenedInDesignMode )
+        if ( m_bOpenInDesign )
             impl_initObjectEditView( xController );
     }
     catch( const RuntimeException& )
@@ -834,99 +840,153 @@ void ODocumentDefinition::impl_initObjectEditView( const Reference< XController 
 }
 
 // -----------------------------------------------------------------------------
+void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, const bool _bActivate,
+    const Reference< XCommandEnvironment >& _rxEnvironment, Any& _out_rComponent )
+{
+    OExecuteImpl aExecuteGuard(m_bInExecute);
+
+    Reference< XConnection > xConnection;
+    sal_Int32 nOpenMode = OpenMode::DOCUMENT;
+
+    // our own macro execution mode
+    // Note that we don't pass an interaction handler here. If the user has not been asked/notified
+    // by now (i.e. during loading the whole DB document), then this won't happen anymore.
+    bool bExecuteOwnMacros = m_pImpl->m_pDataSource->adjustMacroMode_AutoReject();
+    sal_Int16 nDocumentMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+
+    ::comphelper::NamedValueCollection aDocumentArgs;
+
+    // for the document, default to the interaction handler as used for loading the DB doc
+    // This might be overwritten below, when examining _rOpenArgument.
+    ::comphelper::NamedValueCollection aDBDocArgs( m_pImpl->m_pDataSource->m_aArgs );
+    aDocumentArgs.put( "InteractionHandler", aDBDocArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
+
+    if ( !lcl_extractOpenMode( _rOpenArgument, nOpenMode ) )
+    {
+        Sequence< PropertyValue > aArguments;
+        if ( _rOpenArgument >>= aArguments )
+        {
+            const PropertyValue* pIter = aArguments.getConstArray();
+            const PropertyValue* pEnd  = pIter + aArguments.getLength();
+            for ( ;pIter != pEnd; ++pIter )
+            {
+                if ( pIter->Name == PROPERTY_ACTIVECONNECTION )
+                {
+                    xConnection.set( pIter->Value, UNO_QUERY );
+                    continue;
+                }
+
+                if ( lcl_extractOpenMode( pIter->Value, nOpenMode ) )
+                    continue;
+
+                if ( pIter->Name.equalsAscii( "MacroExecutionMode" ) )
+                {
+                    OSL_VERIFY( pIter->Value >>= nDocumentMacroMode );
+                    continue;
+                }
+
+                // unknown argument -> pass to the loaded document
+                aDocumentArgs.put( pIter->Name, pIter->Value );
+            }
+        }
+    }
+
+    // allow the command arguments to downgrade the macro execution mode, but not to upgrade
+    // it
+    if ( !bExecuteOwnMacros )
+    {
+        // no macros per DB doc -> no macros in the embedded doc
+        nDocumentMacroMode = MacroExecMode::NEVER_EXECUTE;
+    }
+    else
+    {
+        // DB doc allows macros -> allow macros in the embedded doc, unless explicitly prohibited
+        if ( nDocumentMacroMode != MacroExecMode::NEVER_EXECUTE )
+            nDocumentMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+    }
+    aDocumentArgs.put( "MacroExecutionMode", nDocumentMacroMode );
+
+
+    if ( xConnection.is() )
+        m_xLastKnownConnection = xConnection;
+
+    if  (   ( nOpenMode == OpenMode::ALL )
+        ||  ( nOpenMode == OpenMode::FOLDERS )
+        ||  ( nOpenMode == OpenMode::DOCUMENTS )
+        ||  ( nOpenMode == OpenMode::DOCUMENT_SHARE_DENY_NONE )
+        ||  ( nOpenMode == OpenMode::DOCUMENT_SHARE_DENY_WRITE )
+        )
+    {
+        // not supported
+        ucbhelper::cancelCommandExecution(
+                makeAny( UnsupportedOpenModeException(
+                                rtl::OUString(),
+                                static_cast< cppu::OWeakObject * >( this ),
+                                sal_Int16( nOpenMode ) ) ),
+                _rxEnvironment );
+        // Unreachable
+        DBG_ERROR( "unreachable" );
+      }
+
+    Reference<XModel> xModel;
+    if ( m_pImpl->m_aProps.sPersistentName.getLength() )
+    {
+        Sequence< PropertyValue > aLoadArgs;
+        aDocumentArgs >>= aLoadArgs;
+        loadEmbeddedObject( xConnection, Sequence< sal_Int8 >(), aLoadArgs, false, !m_bOpenInDesign );
+        if ( m_xEmbeddedObject.is() )
+        {
+            xModel.set(getComponent(),UNO_QUERY);
+            Reference< report::XReportDefinition > xReportDefinition(xModel,UNO_QUERY);
+
+            Reference< XModule> xModule(xModel,UNO_QUERY);
+            if ( xModule.is() )
+            {
+                if ( m_bForm )
+                    xModule->setIdentifier(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.FormDesign")));
+                else if ( !xReportDefinition.is() )
+                    xModule->setIdentifier(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.TextReportDesign")));
+            }
+
+            bool bIsAliveNewStyleReport = ( !m_bOpenInDesign && xReportDefinition.is() );
+            if ( bIsAliveNewStyleReport )
+            {
+                // we are in ReadOnly mode
+                // we would like to open the Writer or Calc with the report direct, without design it.
+                Reference< report::XReportEngine > xReportEngine( m_aContext.createComponent( "com.sun.star.comp.report.OReportEngineJFree" ), UNO_QUERY_THROW );
+
+                xReportEngine->setReportDefinition(xReportDefinition);
+                xReportEngine->setActiveConnection(m_xLastKnownConnection);
+                _out_rComponent <<= xReportEngine->createDocumentAlive(NULL);
+                return;
+            }
+
+            if ( _bActivate )
+            {
+                m_xEmbeddedObject->changeState( EmbedStates::ACTIVE );
+                impl_onActivateEmbeddedObject();
+            }
+
+            fillReportData();
+            _out_rComponent <<= xModel;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
 Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException)
 {
     Any aRet;
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( !m_bInExecute )
     {
-        OExecuteImpl aExecuteGuard(m_bInExecute);
-        sal_Bool bOpenInDesign = aCommand.Name.equalsAscii("openDesign");
-        sal_Bool bOpenForMail = aCommand.Name.equalsAscii("openForMail");
-        if ( aCommand.Name.compareToAscii( "open" ) == 0 || bOpenInDesign || bOpenForMail )
+        sal_Bool bOpen = aCommand.Name.equalsAscii( "open" );
+        sal_Bool bOpenInDesign = aCommand.Name.equalsAscii( "openDesign" );
+        sal_Bool bOpenForMail = aCommand.Name.equalsAscii( "openForMail" );
+        if ( bOpen || bOpenInDesign || bOpenForMail )
         {
-            //////////////////////////////////////////////////////////////////
-            // open command for a folder content
-            //////////////////////////////////////////////////////////////////
-            Reference< XConnection> xConnection;
-            sal_Int32 nOpenMode = OpenMode::DOCUMENT;
-
-            lcl_extractOpenMode( aCommand.Argument, nOpenMode );
-
-            Sequence< PropertyValue > aArguments;
-            if ( aCommand.Argument >>= aArguments )
-            {
-                const PropertyValue* pIter = aArguments.getConstArray();
-                const PropertyValue* pEnd  = pIter + aArguments.getLength();
-                for(;pIter != pEnd;++pIter)
-                {
-                    if ( pIter->Name == PROPERTY_ACTIVECONNECTION )
-                        xConnection.set(pIter->Value,UNO_QUERY);
-                    else
-                        lcl_extractOpenMode( pIter->Value, nOpenMode );
-                }
-            }
-
-            if ( xConnection.is() )
-                m_xLastKnownConnection = xConnection;
-
-            if  (   ( nOpenMode == OpenMode::ALL )
-                ||  ( nOpenMode == OpenMode::FOLDERS )
-                ||  ( nOpenMode == OpenMode::DOCUMENTS )
-                ||  ( nOpenMode == OpenMode::DOCUMENT_SHARE_DENY_NONE )
-                ||  ( nOpenMode == OpenMode::DOCUMENT_SHARE_DENY_WRITE )
-                )
-            {
-                // opening as folder is not supported
-                ucbhelper::cancelCommandExecution(
-                        makeAny( UnsupportedOpenModeException(
-                                        rtl::OUString(),
-                                        static_cast< cppu::OWeakObject * >( this ),
-                                        sal_Int16( nOpenMode ) ) ),
-                        Environment );
-                    // Unreachable
-                DBG_ERROR( "unreachable" );
-              }
-
-            Reference<XModel> xModel;
-            if ( m_pImpl->m_aProps.sPersistentName.getLength() )
-            {
-                m_bOpenInDesign = bOpenInDesign;
-                loadEmbeddedObject(MacroExecMode::USE_CONFIG,Sequence< sal_Int8 >(),xConnection,!bOpenInDesign);
-                if ( m_xEmbeddedObject.is() )
-                {
-                    xModel.set(getComponent(),UNO_QUERY);
-                    Reference< report::XReportDefinition> xReportDefinition(xModel,UNO_QUERY);
-
-                    if ( !bOpenForMail && !(!bOpenInDesign && xReportDefinition.is()) )
-                    {
-                        Reference< XModule> xModule(xModel,UNO_QUERY);
-                        if ( xModule.is() )
-                        {
-                            if ( m_bForm )
-                                xModule->setIdentifier(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.FormDesign")));
-                            else if ( !xReportDefinition.is() )
-                                xModule->setIdentifier(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.TextReportDesign")));
-                        }
-                        m_xEmbeddedObject->changeState(EmbedStates::ACTIVE);
-                        impl_onActivateEmbeddedObject( bOpenInDesign );
-                    }
-                    else if ( !bOpenInDesign && xReportDefinition.is() )
-                    {
-                        // we are in ReadOnly mode
-                        // we would like to open the Writer or Calc with the report direct, without design it.
-                        Reference< report::XReportEngine> xReportEngine( m_xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.report.OReportEngineJFree"))) ,UNO_QUERY);
-
-                        xReportEngine->setReportDefinition(xReportDefinition);
-                        xReportEngine->setActiveConnection(m_xLastKnownConnection);
-                        aRet <<= xReportEngine->createDocumentAlive(NULL);
-                        return aRet;
-                    }
-
-                    fillReportData(!bOpenInDesign);
-                    aRet <<= xModel;
-                }
-            }
+            m_bOpenInDesign = bOpenInDesign;
+            onCommandOpenSomething( aCommand.Argument, !bOpenForMail, Environment, aRet );
         }
         else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "copyTo" ) ) )
         {
@@ -946,7 +1006,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             Reference< XStorage> xStorage(aIni[0],UNO_QUERY);
             ::rtl::OUString sPersistentName;
             aIni[1] >>= sPersistentName;
-            loadEmbeddedObject(MacroExecMode::USE_CONFIG, Sequence< sal_Int8 >(), Reference< XConnection >(), sal_False );
+            loadEmbeddedObject();
             Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
             if ( xPersist.is() )
             {
@@ -959,7 +1019,7 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
         }
         else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "preview" ) ) )
         {
-            generateNewImage(aRet);
+            onCommandPreview(aRet);
         }
         else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "insert" ) ) )
         {
@@ -978,11 +1038,11 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
             }
             ::rtl::OUString sURL;
             aIni[0] >>= sURL;
-            insert(sURL,Environment);
+            onCommandInsert( sURL, Environment );
         }
         else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "getdocumentinfo" ) ) )
         {
-            fillDocumentInfo(aRet);
+            onCommandGetDocumentInfo( aRet );
         }
         else if ( aCommand.Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "delete" ) ) )
         {
@@ -1054,7 +1114,7 @@ namespace
     }
 }
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::insert(const ::rtl::OUString& _sURL, const Reference< XCommandEnvironment >& Environment)
+void ODocumentDefinition::onCommandInsert( const ::rtl::OUString& _sURL, const Reference< XCommandEnvironment >& Environment )
     throw( Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
@@ -1062,7 +1122,7 @@ void ODocumentDefinition::insert(const ::rtl::OUString& _sURL, const Reference< 
     // Check, if all required properties were set.
     if ( !_sURL.getLength() || m_xEmbeddedObject.is() )
     {
-        OSL_ENSURE( sal_False, "Content::insert - property value missing!" );
+        OSL_ENSURE( sal_False, "Content::onCommandInsert - property value missing!" );
 
         Sequence< rtl::OUString > aProps( 1 );
         aProps[ 0 ] = PROPERTY_URL;
@@ -1081,7 +1141,7 @@ void ODocumentDefinition::insert(const ::rtl::OUString& _sURL, const Reference< 
         Reference< XStorage> xStorage = getStorage();
         if ( xStorage.is() )
         {
-            Reference< XEmbedObjectCreator> xEmbedFactory( m_xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.EmbeddedObjectCreator"))) ,UNO_QUERY);
+            Reference< XEmbedObjectCreator> xEmbedFactory( m_aContext.createComponent( "com.sun.star.embed.EmbeddedObjectCreator" ), UNO_QUERY );
             if ( xEmbedFactory.is() )
             {
                 Sequence<PropertyValue> aEmpty,aMediaDesc(1);
@@ -1171,7 +1231,7 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
             pRequest->addContinuation(pAbort);
 
             // create the handler, let it handle the request
-            Reference< XInteractionHandler > xHandler(m_xORB->createInstance(SERVICE_SDB_INTERACTION_HANDLER), UNO_QUERY);
+            Reference< XInteractionHandler > xHandler( m_aContext.createComponent( (::rtl::OUString)SERVICE_SDB_INTERACTION_HANDLER ), UNO_QUERY );
             if ( xHandler.is() )
                 xHandler->handle(xRequest);
 
@@ -1208,10 +1268,41 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
     }
     return sal_True;
 }
-// -----------------------------------------------------------------------------
-void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<PropertyValue>& _rEmbeddedObjectDescriptor,const Reference<XConnection>& _xConnection,sal_Bool _bReadOnly,sal_Int16 _nMarcoExcecMode)
+
+namespace
 {
-    sal_Int32 nLen = _rArgs.getLength();
+    // .........................................................................
+    void    lcl_putLoadArgs( ::comphelper::NamedValueCollection& _io_rArgs, const bool _bSuppressMacros, const bool _bReadOnly,
+        const ::rtl::OUString& _rDocTitle )
+    {
+        if ( _bSuppressMacros )
+        {
+            // if we're to suppress macros, do exactly this
+            _io_rArgs.put( "MacroExecutionMode", MacroExecMode::NEVER_EXECUTE );
+        }
+        else
+        {
+            // otherwise, put the setting only if not already present
+            if ( !_io_rArgs.has( "MacroExecutionMode" ) )
+            {
+                _io_rArgs.put( "MacroExecutionMode", MacroExecMode::USE_CONFIG );
+            }
+        }
+
+        _io_rArgs.put( "ReadOnly", _bReadOnly );
+
+        if ( _rDocTitle.getLength() )
+        {
+            _io_rArgs.put( "DocumentTitle", _rDocTitle );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+Sequence< PropertyValue > ODocumentDefinition::fillLoadArgs( const Reference< XConnection>& _xConnection, const bool _bSuppressMacros, const bool _bReadOnly,
+        const Sequence< PropertyValue >& _rAdditionalArgs, Sequence< PropertyValue >& _out_rEmbeddedObjectDescriptor )
+{
+    ::comphelper::NamedValueCollection aMediaDesc( _rAdditionalArgs );
     {
         Sequence<PropertyValue> aDocumentContext(2);
         aDocumentContext[0].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ActiveConnection"));
@@ -1220,24 +1311,10 @@ void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<
         aDocumentContext[1].Name = PROPERTY_APPLYFORMDESIGNMODE;
         aDocumentContext[1].Value <<= !_bReadOnly;
 
-        _rArgs.realloc(nLen+1);
-        _rArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ComponentData"));
-        _rArgs[nLen++].Value <<= aDocumentContext;
+        aMediaDesc.put( "ComponentData", aDocumentContext );
     }
 
-    _rArgs.realloc(nLen+2);
-    _rArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
-    _rArgs[nLen++].Value <<= _bReadOnly;
-
-    _rArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode"));
-    _rArgs[nLen++].Value <<= _nMarcoExcecMode;
-
-    if ( m_pImpl->m_aProps.aTitle.getLength() )
-    {
-        _rArgs.realloc(nLen+1);
-        _rArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
-        _rArgs[nLen++].Value <<= m_pImpl->m_aProps.aTitle;
-    }
+    lcl_putLoadArgs( aMediaDesc, _bSuppressMacros, _bReadOnly, m_pImpl->m_aProps.aTitle );
 
     if ( m_pInterceptor )
     {
@@ -1250,10 +1327,10 @@ void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<
     m_pInterceptor->acquire();
     Reference<XDispatchProviderInterceptor> xInterceptor = m_pInterceptor;
 
-    _rEmbeddedObjectDescriptor.realloc(2);
-    nLen = 0;
-    _rEmbeddedObjectDescriptor[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutplaceDispatchInterceptor"));
-    _rEmbeddedObjectDescriptor[nLen++].Value <<= xInterceptor;
+    _out_rEmbeddedObjectDescriptor.realloc(2);
+    sal_Int32 nLen = 0;
+    _out_rEmbeddedObjectDescriptor[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutplaceDispatchInterceptor"));
+    _out_rEmbeddedObjectDescriptor[nLen++].Value <<= xInterceptor;
 
     uno::Sequence< uno::Any > aOutFrameProps(2);
     PropertyValue aProp;
@@ -1276,18 +1353,23 @@ void ODocumentDefinition::fillLoadArgs(Sequence<PropertyValue>& _rArgs,Sequence<
         aOutFrameProps[1] <<= aProp;
     }
 
-    _rEmbeddedObjectDescriptor[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutplaceFrameProperties"));
-    _rEmbeddedObjectDescriptor[nLen++].Value <<= aOutFrameProps;
+    _out_rEmbeddedObjectDescriptor[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("OutplaceFrameProperties"));
+    _out_rEmbeddedObjectDescriptor[nLen++].Value <<= aOutFrameProps;
+
+    Sequence< PropertyValue > aLoadArgs;
+    aMediaDesc >>= aLoadArgs;
+    return aLoadArgs;
 }
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::loadEmbeddedObject(sal_Int16 _nMarcoExcecMode,const Sequence< sal_Int8 >& _aClassID,const Reference<XConnection>& _xConnection,sal_Bool _bReadOnly)
+void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _xConnection, const Sequence< sal_Int8 >& _aClassID,
+        const Sequence< PropertyValue >& _rAdditionalArgs, const bool _bSuppressMacros, const bool _bReadOnly )
 {
     if ( !m_xEmbeddedObject.is() )
     {
         Reference< XStorage> xStorage = getStorage();
         if ( xStorage.is() )
         {
-            Reference< XEmbedObjectFactory> xEmbedFactory( m_xORB->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.embed.OOoEmbeddedObjectFactory"))) ,UNO_QUERY);
+            Reference< XEmbedObjectFactory> xEmbedFactory( m_aContext.createComponent( "com.sun.star.embed.OOoEmbeddedObjectFactory" ), UNO_QUERY );
             if ( xEmbedFactory.is() )
             {
                 ::rtl::OUString sDocumentService;
@@ -1301,13 +1383,13 @@ void ODocumentDefinition::loadEmbeddedObject(sal_Int16 _nMarcoExcecMode,const Se
                 }
                 else
                 {
-                    sDocumentService = GetDocumentServiceFromMediaType(xStorage,m_pImpl->m_aProps.sPersistentName,m_xORB,aClassID);
+                    sDocumentService = GetDocumentServiceFromMediaType( xStorage, m_pImpl->m_aProps.sPersistentName, m_aContext.getLegacyServiceFactory(), aClassID );
                     // check if we are not a form and
                     // the com.sun.star.report.pentaho.SOReportJobFactory is not present.
                     if (m_bForm == 0 /* MAGIC! */ && !sDocumentService.equalsAscii("com.sun.star.text.TextDocument"))
                     {
                         // we seems to be a new report, check if report extension is present.
-                        Reference< XContentEnumerationAccess > xEnumAccess(m_xORB, UNO_QUERY);
+                        Reference< XContentEnumerationAccess > xEnumAccess( m_aContext.getLegacyServiceFactory(), UNO_QUERY );
                         static ::rtl::OUString s_sReportDesign(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOReportJobFactory"));
                         Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(s_sReportDesign);
                         if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
@@ -1330,15 +1412,16 @@ void ODocumentDefinition::loadEmbeddedObject(sal_Int16 _nMarcoExcecMode,const Se
 
                 OSL_ENSURE( aClassID.getLength(),"No Class ID" );
 
-                Sequence<PropertyValue> aArgs,aEmbeddedObjectDescriptor;
-                fillLoadArgs(aArgs,aEmbeddedObjectDescriptor,_xConnection,_bReadOnly,_nMarcoExcecMode);
+                Sequence< PropertyValue > aEmbeddedObjectDescriptor;
+                Sequence< PropertyValue > aLoadArgs( fillLoadArgs(
+                    _xConnection, _bSuppressMacros, _bReadOnly, _rAdditionalArgs, aEmbeddedObjectDescriptor ) );
 
                 m_xEmbeddedObject.set(xEmbedFactory->createInstanceUserInit(aClassID
                                                                             ,sDocumentService
                                                                             ,xStorage
                                                                             ,m_pImpl->m_aProps.sPersistentName
                                                                             ,nEntryConnectionMode
-                                                                            ,aArgs
+                                                                            ,aLoadArgs
                                                                             ,aEmbeddedObjectDescriptor
                                                                             ),UNO_QUERY);
                 if ( m_xEmbeddedObject.is() )
@@ -1373,12 +1456,14 @@ void ODocumentDefinition::loadEmbeddedObject(sal_Int16 _nMarcoExcecMode,const Se
         Reference<XEmbeddedClient> xClient = m_pClientHelper;
         m_xEmbeddedObject->setClientSite(xClient);
 
-        Sequence<PropertyValue> aArgs,aEmbeddedObjectDescriptor;
-        fillLoadArgs(aArgs,aEmbeddedObjectDescriptor,_xConnection,_bReadOnly,_nMarcoExcecMode);
+        Sequence< PropertyValue > aEmbeddedObjectDescriptor;
+        Sequence< PropertyValue > aLoadArgs( fillLoadArgs(
+            _xConnection, _bSuppressMacros, _bReadOnly, _rAdditionalArgs, aEmbeddedObjectDescriptor ) );
+
         Reference<XCommonEmbedPersist> xCommon(m_xEmbeddedObject,UNO_QUERY);
         OSL_ENSURE(xCommon.is(),"unsupported interface!");
         if ( xCommon.is() )
-            xCommon->reload(aArgs,aEmbeddedObjectDescriptor);
+            xCommon->reload( aLoadArgs, aEmbeddedObjectDescriptor );
         m_xEmbeddedObject->changeState(EmbedStates::RUNNING);
     }
 
@@ -1397,32 +1482,25 @@ void ODocumentDefinition::loadEmbeddedObject(sal_Int16 _nMarcoExcecMode,const Se
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "ODocumentDefinition::loadEmbeddedObject: caught an exception while setting the parent of the embedded object!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
     if ( xModel.is() )
     {
         Sequence<PropertyValue> aArgs = xModel->getArgs();
-        ::comphelper::MediaDescriptor aHelper(aArgs);
-        aHelper[ ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ReadOnly" ) )] <<= _bReadOnly;
 
-        if ( m_pImpl->m_aProps.aTitle.getLength() )
-            aHelper[
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DocumentTitle" ) )] <<= m_pImpl->m_aProps.aTitle;
+        ::comphelper::NamedValueCollection aMediaDesc( aArgs );
+        lcl_putLoadArgs( aMediaDesc, _bSuppressMacros, _bReadOnly, m_pImpl->m_aProps.aTitle );
 
-        aHelper[
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroExecutionMode" ))] <<= _nMarcoExcecMode;
-
-        aHelper >> aArgs;
-
-        xModel->attachResource(xModel->getURL(),aArgs);
+        aMediaDesc >>= aArgs;
+        xModel->attachResource( xModel->getURL(), aArgs );
     }
 }
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::generateNewImage(Any& _rImage)
+void ODocumentDefinition::onCommandPreview(Any& _rImage)
 {
-    loadEmbeddedObject( MacroExecMode::NEVER_EXECUTE,Sequence< sal_Int8 >(), Reference< XConnection >(), sal_True );
+    loadEmbeddedObjectForPreview();
     if ( m_xEmbeddedObject.is() )
     {
         try
@@ -1449,19 +1527,20 @@ void ODocumentDefinition::getPropertyDefaultByHandle( sal_Int32 /*_nHandle*/, An
     _rDefault.clear();
 }
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::fillDocumentInfo(Any& _rInfo)
+void ODocumentDefinition::onCommandGetDocumentInfo( Any& _rInfo )
 {
-    loadEmbeddedObject( MacroExecMode::NEVER_EXECUTE,Sequence< sal_Int8 >(), Reference< XConnection >(), sal_True );
+    loadEmbeddedObjectForPreview();
     if ( m_xEmbeddedObject.is() )
     {
         try
         {
-            Reference<XDocumentInfoSupplier> xDocSup(getComponent(),UNO_QUERY);
+            Reference<XDocumentInfoSupplier> xDocSup( getComponent(), UNO_QUERY );
             if ( xDocSup.is() )
                 _rInfo <<= xDocSup->getDocumentInfo();
         }
-        catch( Exception e )
+        catch( const Exception& )
         {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 }
@@ -1501,13 +1580,10 @@ void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& _rNewName ) th
         if ( _rNewName.equals( m_pImpl->m_aProps.aTitle ) )
             return;
 
-        // document definitions are organized in a hierarchicalway, so reject names
+        // document definitions are organized in a hierarchical way, so reject names
         // which contain a /, as this is reserved for hierarchy level separation
         if ( _rNewName.indexOf( '/' ) != -1 )
-        {
-            ::dbtools::throwGenericSQLException(
-                DBA_RES( RID_STR_NO_SLASH_IN_OBJECT_NAME ), *this );
-        }
+            m_aErrorHelper.raiseException( ErrorCondition::DB_OBJECT_NAME_WITH_SLASHES, *this );
 
         sal_Int32 nHandle = PROPERTY_ID_NAME;
         Any aOld = makeAny( m_pImpl->m_aProps.aTitle );
@@ -1530,10 +1606,8 @@ void SAL_CALL ODocumentDefinition::rename( const ::rtl::OUString& _rNewName ) th
 // -----------------------------------------------------------------------------
 Reference< XStorage> ODocumentDefinition::getStorage() const
 {
-    static const ::rtl::OUString s_sForms = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("forms"));
-    static const ::rtl::OUString s_sReports = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reports"));
     return  m_pImpl->m_pDataSource
-        ?   m_pImpl->m_pDataSource->getStorage( m_bForm ? s_sForms : s_sReports )
+        ?   m_pImpl->m_pDataSource->getStorage( ODatabaseModelImpl::getObjectContainerStorageName( m_bForm ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT ) )
         :   Reference< XStorage>();
 }
 // -----------------------------------------------------------------------------
@@ -1591,9 +1665,9 @@ bool ODocumentDefinition::prepareClose()
     return true;
 }
 // -----------------------------------------------------------------------------
-void ODocumentDefinition::fillReportData(sal_Bool _bFill)
+void ODocumentDefinition::fillReportData()
 {
-    if ( !m_bForm && _bFill && m_pImpl->m_aProps.bAsTemplate && !m_bOpenInDesign ) // open a report in alive mode, so we need to fill it
+    if ( !m_bForm && m_pImpl->m_aProps.bAsTemplate && !m_bOpenInDesign ) // open a report in alive mode, so we need to fill it
     {
         Sequence<Any> aArgs(2);
         PropertyValue aValue;
@@ -1604,7 +1678,7 @@ void ODocumentDefinition::fillReportData(sal_Bool _bFill)
            aValue.Value <<= m_xLastKnownConnection;
            aArgs[1] <<= aValue;
 
-        Reference< XJobExecutor > xExecuteable(m_xORB->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.wizards.report.CallReportWizard")),aArgs),UNO_QUERY);
+        Reference< XJobExecutor > xExecuteable( m_aContext.createComponentWithArguments( "com.sun.star.wizards.report.CallReportWizard", aArgs ), UNO_QUERY );
         if ( xExecuteable.is() )
             xExecuteable->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("fill")));
     }
