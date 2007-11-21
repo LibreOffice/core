@@ -5,9 +5,9 @@
  *
  *  $RCSfile: WriterGlobalWindowState.xcu,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 11:25:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 13:51:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -363,20 +363,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Insert</value>
-                </prop>
-            </node>
-            <node oor:name="private:resource/toolbar/insertobjectbar" oor:op="replace">
-                <prop oor:name="Docked" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="Visible" oor:type="xs:boolean">
-                    <value>false</value>
-                </prop>
-                <prop oor:name="UIName" oor:type="xs:string">
-                    <value xml:lang="en-US">Insert Object</value>
-                </prop>
-                <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
-                    <value>true</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/oleobjectbar" oor:op="replace">
