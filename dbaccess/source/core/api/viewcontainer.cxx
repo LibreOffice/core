@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:37:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:35:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,9 @@
 #ifndef _CONNECTIVITY_SDBCX_VIEW_HXX_
 #include <connectivity/sdbcx/VView.hxx>
 #endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 
 using namespace dbaccess;
 using namespace dbtools;
@@ -187,6 +190,31 @@ Reference< XPropertySet > OViewContainer::createDescriptor()
     return xRet;
 }
 // -----------------------------------------------------------------------------
+namespace
+{
+    template <typename TYPE>
+    class EnsureReset
+    {
+    public:
+        EnsureReset( TYPE& _rValueLocation, const TYPE& _rResetValue )
+            :m_rValueLocation( _rValueLocation )
+            ,m_aResetValue( _rResetValue )
+        {
+        }
+
+        ~EnsureReset()
+        {
+            m_rValueLocation = m_aResetValue;
+        }
+
+    private:
+        TYPE&   m_rValueLocation;
+        TYPE    m_aResetValue;
+    };
+
+    typedef EnsureReset< ::rtl::OUString >  EnsureStringReset;
+}
+// -----------------------------------------------------------------------------
 // XAppend
 ObjectType OViewContainer::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -197,31 +225,35 @@ ObjectType OViewContainer::appendObject( const ::rtl::OUString& _rForName, const
     Reference< XPropertySet > xProp = descriptor;
     if(xAppend.is())
     {
+        m_sAppendingCurrenly = aName;
+        EnsureStringReset aReset( m_sAppendingCurrenly, ::rtl::OUString() );
+
         xAppend->appendByDescriptor(descriptor);
         if(m_xMasterContainer->hasByName(aName))
             xProp.set(m_xMasterContainer->getByName(aName),UNO_QUERY);
     }
     else
     {
-        ::rtl::OUString aSql    = ::rtl::OUString::createFromAscii("CREATE VIEW ");
         ::rtl::OUString sComposedName = ::dbtools::composeTableName( m_xMetaData, descriptor, ::dbtools::eInTableDefinitions, false, false, true );
         if(!sComposedName.getLength())
             ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
 
-        aSql += sComposedName + ::rtl::OUString::createFromAscii(" AS ");
         ::rtl::OUString sCommand;
-        descriptor->getPropertyValue(PROPERTY_COMMAND)          >>= sCommand;
-        aSql += sCommand;
+        descriptor->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
 
+        ::rtl::OUStringBuffer aSQL;
+        aSQL.appendAscii( "CREATE VIEW " );
+        aSQL.append     ( sComposedName );
+        aSQL.appendAscii( " AS " );
+        aSQL.append     ( sCommand );
 
         Reference<XConnection> xCon = m_xConnection;
         OSL_ENSURE(xCon.is(),"Connection is null!");
         if ( xCon.is() )
         {
-            Reference< XStatement > xStmt = xCon->createStatement(  );
+            ::utl::SharedUNOComponent< XStatement > xStmt( xCon->createStatement() );
             if ( xStmt.is() )
-                xStmt->execute(aSql);
-            ::comphelper::disposeComponent(xStmt);
+                xStmt->execute( aSQL.makeStringAndClear() );
         }
     }
 
@@ -269,7 +301,10 @@ void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) thr
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     ::rtl::OUString sName;
-    if ( (Event.Accessor >>= sName) && !hasByName(sName) )
+    if  (   ( Event.Accessor >>= sName )
+        &&  ( m_sAppendingCurrenly != sName )
+        &&  ( !hasByName( sName ) )
+        )
     {
         Reference<XPropertySet> xProp(Event.Element,UNO_QUERY);
         ::rtl::OUString sType;
