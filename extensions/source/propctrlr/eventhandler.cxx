@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventhandler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 14:07:23 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,115 +36,46 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_EVENTHANDLER_HXX
 #include "eventhandler.hxx"
-#endif
-#ifndef _EXTENSIONS_FORMSCTRLR_FORMBROWSERTOOLS_HXX_
-#include "formbrowsertools.hxx"
-#endif
-#ifndef _EXTENSIONS_FORMSCTRLR_FORMSTRINGS_HXX_
-#include "formstrings.hxx"
-#endif
-#ifndef _EXTENSIONS_FORMSCTRLR_PCRSTRINGS_HXX_
-#include "pcrstrings.hxx"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_MODULEPRC_HXX_
-#include "modulepcr.hxx"
-#endif
-#ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
-#include "formresid.hrc"
-#endif
-#ifndef EXTENSIONS_INC_EXTENSIO_HRC
 #include "extensio.hrc"
-#endif
-#ifndef EXTENSIONS_SOURCE_PROPCTRLR_HANDLERHELPER_HXX
+#include "formbrowsertools.hxx"
+#include "formresid.hrc"
+#include "formstrings.hxx"
 #include "handlerhelper.hxx"
-#endif
-#ifndef _EXTENSIONS_PROPCTRLR_PCRCOMMON_HXX_
+#include "modulepcr.hxx"
 #include "pcrcommon.hxx"
-#endif
+#include "pcrstrings.hxx"
 
 /** === begin UNO includes === **/
-#ifndef _COM_SUN_STAR_LANG_NULLPOINTEREXCEPTION_HPP_
-#include <com/sun/star/lang/NullPointerException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
-#include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XINDEXACCESS_HPP_
-#include <com/sun/star/container/XIndexAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XEVENTATTACHERMANAGER_HPP_
-#include <com/sun/star/script/XEventAttacherManager.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XINTROSPECTION_HPP_
-#include <com/sun/star/beans/XIntrospection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XINTROSPECTIONACCESS_HPP_
-#include <com/sun/star/beans/XIntrospectionAccess.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_XSCRIPTEVENTSSUPPLIER_HPP_
-#include <com/sun/star/script/XScriptEventsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
-#include <com/sun/star/container/XNameContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_XTABCONTROLLERMODEL_HPP_
 #include <com/sun/star/awt/XTabControllerModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORM_HPP_
-#include <com/sun/star/form/XForm.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMCONTROLLER_HPP_
-#include <com/sun/star/form/XFormController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_UNKNOWNPROPERTYEXCEPTION_HPP_
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
+#include <com/sun/star/beans/XIntrospection.hpp>
+#include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/container/NoSuchElementException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNameReplace.hpp>
-#endif
-#ifndef _COM_SUN_STAR_INSPECTION_PROPERTYCONTROLTYPE_HPP_
+#include <com/sun/star/form/XForm.hpp>
+#include <com/sun/star/form/XFormController.hpp>
 #include <com/sun/star/inspection/PropertyControlType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
+#include <com/sun/star/lang/NullPointerException.hpp>
+#include <com/sun/star/script/XEventAttacherManager.hpp>
+#include <com/sun/star/script/XScriptEventsSupplier.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
-#endif
 /** === end UNO includes === **/
 
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-#ifndef COMPHELPER_NAMEDVALUECOLLECTION_HXX
 #include <comphelper/namedvaluecollection.hxx>
-#endif
-#ifndef _SVX_DIALOG_HXX
-#include <svx/svxdlg.hxx>
-#endif
-#ifndef _SFXAPP_HXX
-#include <sfx2/app.hxx>
-#endif
-#ifndef _SFXITEMSET_HXX
-#include <svtools/itemset.hxx>
-#endif
-#ifndef _EITEM_HXX
-#include <svtools/eitem.hxx>
-#endif
-#ifndef _SVX_SVXIDS_HRC
-#include <svx/svxids.hrc>
-#endif
-#ifndef _RTL_REF_HXX_
+#include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
-#endif
+#include <rtl/ustrbuf.hxx>
+#include <sfx2/app.hxx>
+#include <svtools/eitem.hxx>
+#include <svtools/itemset.hxx>
+#include <svx/svxdlg.hxx>
+#include <svx/svxids.hrc>
+#include <tools/diagnose_ex.h>
 
 #include <map>
 
@@ -359,23 +290,31 @@ namespace pcr
                     continue;
                 }
 
-                ::rtl::OUString sScriptCode = pAssignedEvent->ScriptCode;
-                if ( 0 == pAssignedEvent->ScriptType.compareToAscii( "StarBasic" ) )
-                {   // it's a StarBasic macro
-                    sal_Int32 nPrefixLen = sScriptCode.indexOf( ':' );
-                    if ( nPrefixLen >= 0 )
-                    {
-                        // strip the prefix from the macro name
-
-                        // (This is from the times where Basic macro names were stored
-                        // as "document:<macro_name>" or "application:<macro_name>". Since
-                        // the new scripting framework, they have another format ...)
-
-                        sScriptCode = sScriptCode.copy( nPrefixLen + 1 );
-                    }
-                }
-
                 aScriptEvent = *pAssignedEvent;
+
+                if ( !aScriptEvent.ScriptType.equalsAscii( "StarBasic" ) )
+                    continue;
+
+                // this is an old-style macro specification:
+                // [document|application]:Library.Module.Function
+                // we need to translate this to the new-style macro specification
+                // vnd.sun.star.script:Library.Module.Function?language=Basic&location=[document|application]
+
+                sal_Int32 nPrefixLen = aScriptEvent.ScriptCode.indexOf( ':' );
+                OSL_ENSURE( nPrefixLen > 0, "lcl_getAssignedScriptEvent: illegal location!" );
+                ::rtl::OUString sLocation = aScriptEvent.ScriptCode.copy( 0, nPrefixLen );
+                ::rtl::OUString sMacroPath = aScriptEvent.ScriptCode.copy( nPrefixLen + 1 );
+
+                ::rtl::OUStringBuffer aNewStyleSpec;
+                aNewStyleSpec.appendAscii( "vnd.sun.star.script:" );
+                aNewStyleSpec.append     ( sMacroPath );
+                aNewStyleSpec.appendAscii( "?language=Basic&location=" );
+                aNewStyleSpec.append     ( sLocation );
+
+                aScriptEvent.ScriptCode = aNewStyleSpec.makeStringAndClear();
+
+                // also, this new-style spec requires the script code to be "Script" instead of "StarBasic"
+                aScriptEvent.ScriptType = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Script" ) );
             }
             return aScriptEvent;
         }
@@ -905,52 +844,6 @@ namespace pcr
     }
 
     //--------------------------------------------------------------------
-    namespace
-    {
-        //................................................................
-        ::rtl::OUString lcl_getAssignedMacroURL( const EventDescription& _rEvent, const Sequence< ScriptEventDescriptor >& _rAllAssignedMacros )
-        {
-            ::rtl::OUString sScriptCode;
-
-            const ScriptEventDescriptor* pAssignedEvent = _rAllAssignedMacros.getConstArray();
-            sal_Int32 assignedEventCount( _rAllAssignedMacros.getLength() );
-            for ( sal_Int32 assignedEvent = 0; assignedEvent < assignedEventCount; ++assignedEvent, ++pAssignedEvent )
-            {
-                if  (   ( pAssignedEvent->ListenerType != _rEvent.sListenerClassName )
-                    ||  ( pAssignedEvent->EventMethod != _rEvent.sListenerMethodName )
-                    )
-                    continue;
-
-                if  (   ( pAssignedEvent->ScriptCode.getLength() == 0 )
-                    ||  ( pAssignedEvent->ScriptType.getLength() == 0 )
-                    )
-                {
-                    DBG_ERROR( "lcl_getAssignedMacroURL: me thinks this should not happen!" );
-                    continue;
-                }
-
-                sScriptCode = pAssignedEvent->ScriptCode;
-
-                if ( 0 == pAssignedEvent->ScriptType.compareToAscii( "StarBasic" ) )
-                {   // it's a StarBasic macro
-                    sal_Int32 nPrefixLen = sScriptCode.indexOf( ':' );
-                    if ( nPrefixLen >= 0 )
-                    {
-                        // strip the prefix from the macro name
-
-                        // (This is from the times where Basic macro names were stored
-                        // as "document:<macro_name>" or "application:<macro_name>". Since
-                        // the new scripting framework, they have another format ...)
-
-                        sScriptCode = sScriptCode.copy( nPrefixLen + 1 );
-                    }
-                }
-            }
-            return sScriptCode;
-        }
-    }
-
-    //--------------------------------------------------------------------
     InteractiveSelectionResult SAL_CALL EventHandler::onInteractivePropertySelection( const ::rtl::OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException)
     {
         if ( !_rxInspectorUI.is() )
@@ -1012,16 +905,9 @@ namespace pcr
                 );
             }
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-        #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "EventHandler::onInteractivePropertySelection: caught an exception!\n" );
-            sMessage += "message:\n";
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-            OSL_ENSURE( false, sMessage );
-        #else
-            e; // make compiler happy
-        #endif
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         return InteractiveSelectionResult_Success;
@@ -1204,6 +1090,7 @@ namespace pcr
         try
         {
             ::rtl::OUString sScriptCode( _rScriptEvent.ScriptCode );
+            ::rtl::OUString sScriptType( _rScriptEvent.ScriptType );
             bool bResetScript = ( sScriptCode.getLength() == 0 );
 
             sal_Int32 nObjectIndex = impl_getComponentIndexInParent_throw();
@@ -1223,8 +1110,11 @@ namespace pcr
                 {
                     // yes
                     if ( !bResetScript )
+                    {
                         // set to something non-empty -> overwrite
                         pEvent->ScriptCode = sScriptCode;
+                        pEvent->ScriptType = sScriptType;
+                    }
                     else
                     {
                         // set to empty -> remove from sequence
@@ -1287,16 +1177,9 @@ namespace pcr
                     xEvents->insertByName( sCompleteName, aNewValue );
             }
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-        #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "EventHandler::impl_setDialogElementScriptEvent_nothrow: caught an exception!\n" );
-            sMessage += "message:\n";
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-            OSL_ENSURE( false, sMessage );
-        #else
-            e; // make compiler happy
-        #endif
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
