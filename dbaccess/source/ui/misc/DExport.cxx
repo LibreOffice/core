@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:50:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:06:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,6 +201,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     ,m_bIsAutoIncrement(_bAutoIncrementEnabled)
     ,m_bFoundTable(sal_False)
     ,m_bCheckOnly(sal_False)
+    ,m_bAppendFirstLine(false)
 {
     DBG_CTOR(ODatabaseExport,NULL);
 
@@ -211,11 +212,11 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
             ++nCount;
 
     m_vColumnSize.resize(nCount);
-    m_vFormatKey.resize(nCount);
+    m_vNumberFormat.resize(nCount);
     for(sal_Int32 i=0;i<nCount;++i)
     {
         m_vColumnSize[i] = 0;
-        m_vFormatKey[i] = 0;
+        m_vNumberFormat[i] = 0;
     }
 
     try
@@ -254,6 +255,7 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
     ,m_bIsAutoIncrement(sal_False)
     ,m_bFoundTable(sal_False)
     ,m_bCheckOnly(sal_False)
+    ,m_bAppendFirstLine(false)
 {
     DBG_CTOR(ODatabaseExport,NULL);
     try
@@ -483,11 +485,11 @@ void ODatabaseExport::insertValueIntoColumn()
     }
 }
 // -----------------------------------------------------------------------------
-sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOldFormat)
+sal_Int16 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int16 _nOldNumberFormat)
 {
     DBG_CHKTHIS(ODatabaseExport,NULL);
     double fOutNumber = 0.0;
-    sal_Int32 nFormat = 0;
+    sal_Int16 nNumberFormat = 0;
 
     try
     {
@@ -501,69 +503,69 @@ sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOl
             sal_uInt32 nNumberFormat2;
             fOutNumber = SfxHTMLParser::GetTableDataOptionsValNum(nNumberFormat2,eNumLang,m_sTextToken,m_sNumToken,*m_pFormatter);
             //double fOutNumber2 = SfxHTMLParser::GetTableDataOptionsValNum(nNumberFormat2,eNumLang,m_sValToken,m_sNumToken,*m_pFormatter);
-            nFormat = static_cast<sal_Int32>(nNumberFormat2);
+            nNumberFormat = static_cast<sal_Int16>(nNumberFormat2);
         }
         else
         {
             Reference<XNumberFormatTypes> xNumType(xFormats,UNO_QUERY);
-            nFormat = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::ALL,m_aLocale),aCheckToken);
-            fOutNumber = m_xFormatter->convertStringToNumber(nFormat,aCheckToken);
+            sal_Int32 nFormatKey = m_xFormatter->detectNumberFormat(xNumType->getStandardFormat(NumberFormat::ALL,m_aLocale),aCheckToken);
+            fOutNumber = m_xFormatter->convertStringToNumber(nFormatKey,aCheckToken);
 
-            Reference<XPropertySet> xProp = xFormats->getByKey(nFormat);
+            Reference<XPropertySet> xProp = xFormats->getByKey(nFormatKey);
             sal_Int16 nType = 0;
             xProp->getPropertyValue(PROPERTY_TYPE) >>= nType;
 
             switch(nType)
             {
                 case NumberFormat::ALL:
-                    nFormat = NumberFormat::ALL;
+                    nNumberFormat = NumberFormat::ALL;
                     break;
                 case NumberFormat::DEFINED:
-                    nFormat = NumberFormat::TEXT;
+                    nNumberFormat = NumberFormat::TEXT;
                     break;
                 case NumberFormat::DATE:
-                    switch(_nOldFormat)
+                    switch(_nOldNumberFormat)
                     {
                         case NumberFormat::DATETIME:
                         case NumberFormat::TEXT:
                         case NumberFormat::DATE:
                             break;
                         case NumberFormat::ALL:
-                            nFormat = NumberFormat::DATE;
+                            nNumberFormat = NumberFormat::DATE;
                             break;
                         default:
-                            nFormat = NumberFormat::TEXT;
+                            nNumberFormat = NumberFormat::TEXT;
 
                     }
                     break;
                 case NumberFormat::TIME:
-                    switch(_nOldFormat)
+                    switch(_nOldNumberFormat)
                     {
                         case NumberFormat::DATETIME:
                         case NumberFormat::TEXT:
                         case NumberFormat::TIME:
                             break;
                         case NumberFormat::ALL:
-                            nFormat = NumberFormat::TIME;
+                            nNumberFormat = NumberFormat::TIME;
                             break;
                         default:
-                            nFormat = NumberFormat::TEXT;
+                            nNumberFormat = NumberFormat::TEXT;
                             break;
                     }
                     break;
                 case NumberFormat::CURRENCY:
-                    switch(_nOldFormat)
+                    switch(_nOldNumberFormat)
                     {
                         case NumberFormat::NUMBER:
-                            nFormat = NumberFormat::CURRENCY;
+                            nNumberFormat = NumberFormat::CURRENCY;
                             break;
                         case NumberFormat::CURRENCY:
                             break;
                         case NumberFormat::ALL:
-                            nFormat = NumberFormat::CURRENCY;
+                            nNumberFormat = NumberFormat::CURRENCY;
                             break;
                         default:
-                            nFormat = NumberFormat::TEXT;
+                            nNumberFormat = NumberFormat::TEXT;
                             break;
                     }
                     break;
@@ -571,38 +573,38 @@ sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOl
                 case NumberFormat::SCIENTIFIC:
                 case NumberFormat::FRACTION:
                 case NumberFormat::PERCENT:
-                    switch(_nOldFormat)
+                    switch(_nOldNumberFormat)
                     {
                         case NumberFormat::NUMBER:
                             break;
                         case NumberFormat::CURRENCY:
-                            nFormat = NumberFormat::CURRENCY;
+                            nNumberFormat = NumberFormat::CURRENCY;
                             break;
                         case NumberFormat::ALL:
-                            nFormat = nType;
+                            nNumberFormat = nType;
                             break;
                         default:
-                            nFormat = NumberFormat::TEXT;
+                            nNumberFormat = NumberFormat::TEXT;
                             break;
                     }
                     break;
                 case NumberFormat::TEXT:
                 case NumberFormat::UNDEFINED:
                 case NumberFormat::LOGICAL:
-                    nFormat = NumberFormat::TEXT; // Text "uberschreibt alles
+                    nNumberFormat = NumberFormat::TEXT; // Text "uberschreibt alles
                     break;
                 case NumberFormat::DATETIME:
-                    switch(_nOldFormat)
+                    switch(_nOldNumberFormat)
                     {
                         case NumberFormat::DATETIME:
                         case NumberFormat::TEXT:
                         case NumberFormat::TIME:
                             break;
                         case NumberFormat::ALL:
-                            nFormat = NumberFormat::DATETIME;
+                            nNumberFormat = NumberFormat::DATETIME;
                             break;
                         default:
-                            nFormat = NumberFormat::TEXT;
+                            nNumberFormat = NumberFormat::TEXT;
                             break;
                     }
                     break;
@@ -613,10 +615,10 @@ sal_Int32 ODatabaseExport::CheckString(const String& aCheckToken, sal_Int32 _nOl
     }
     catch(Exception&)
     {
-        nFormat = NumberFormat::TEXT; // Text "uberschreibt alles
+        nNumberFormat = NumberFormat::TEXT; // Text "uberschreibt alles
     }
 
-    return nFormat;
+    return nNumberFormat;
 }
 // -----------------------------------------------------------------------------
 void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfoMap* _pInfoMap)
@@ -632,11 +634,10 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
         {
             sal_Int32 nDataType;
             sal_Int32 nLength(0),nScale(0);
-            OSL_ENSURE((i) < static_cast<sal_Int32>(m_vFormatKey.size()),"m_vFormatKey: Illegal index for vector");
+            OSL_ENSURE((i) < static_cast<sal_Int32>(m_vNumberFormat.size()),"m_vFormatKey: Illegal index for vector");
             OSL_ENSURE((i) < static_cast<sal_Int32>(m_vColumnSize.size()),"m_vColumnSize: Illegal index for vector");
-            Reference<XPropertySet> xProp = xFormats->getByKey(m_vFormatKey[i]);
-            sal_Int16 nType = 0;
-            xProp->getPropertyValue(PROPERTY_TYPE) >>= nType;
+            sal_Int16 nType = m_vNumberFormat[i];
+
             switch ( nType )
             {
                 case NumberFormat::ALL:
@@ -680,8 +681,15 @@ void ODatabaseExport::SetColumnTypes(const TColumnVector* _pList,const OTypeInfo
                 (*aIter)->second->SetType(aFind->second);
                 (*aIter)->second->SetPrecision(::std::min<sal_Int32>(aFind->second->nPrecision,nLength));
                 (*aIter)->second->SetScale(::std::min<sal_Int32>(aFind->second->nMaximumScale,nScale));
+
+                sal_Int32 nFormatKey = ::dbtools::getDefaultNumberFormat( nDataType,
+                                    (*aIter)->second->GetScale(),
+                                    (*aIter)->second->IsCurrency(),
+                                    Reference< XNumberFormatTypes>(xFormats,UNO_QUERY),
+                                    m_aLocale);
+
+                (*aIter)->second->SetFormatKey(nFormatKey);
             }
-            (*aIter)->second->SetFormatKey(m_vFormatKey[i]);
         }
     }
 }
@@ -891,9 +899,9 @@ void ODatabaseExport::adjustFormat()
             if( nColPos != sal::static_int_cast< long >(CONTAINER_ENTRY_NOTFOUND))
             {
                 --nColPos;
-                OSL_ENSURE((nColPos) < static_cast<sal_Int32>(m_vFormatKey.size()),"m_vFormatKey: Illegal index for vector");
+                OSL_ENSURE((nColPos) < static_cast<sal_Int32>(m_vNumberFormat.size()),"m_vFormatKey: Illegal index for vector");
                 OSL_ENSURE((nColPos) < static_cast<sal_Int32>(m_vColumnSize.size()),"m_vColumnSize: Illegal index for vector");
-                m_vFormatKey[nColPos] = CheckString(m_sTextToken,m_vFormatKey[nColPos]);
+                m_vNumberFormat[nColPos] = CheckString(m_sTextToken,m_vNumberFormat[nColPos]);
                 m_vColumnSize[nColPos] = ::std::max<sal_Int32>((sal_Int32)m_vColumnSize[nColPos],(sal_Int32)m_sTextToken.Len());
             }
         }
