@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:31:27 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:59:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,11 +59,13 @@ namespace dbaui
     //===============================================================================================
     class OHTMLReader : public HTMLParser, public ODatabaseExport
     {
+        String              m_sCurrent;
         sal_Int32           m_nTableCount;
         sal_Int16           m_nWidth;
         sal_Int16           m_nColumnWidth;     // max. Spaltenbreite
         sal_Bool            m_bMetaOptions;     // true when we scaned the meta information
         sal_Bool            m_bSDNum;
+
     protected:
         virtual void        NextToken( int nToken ); // Basisklasse
         virtual sal_Bool    CreateTable(int nToken);
