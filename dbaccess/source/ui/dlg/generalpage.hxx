@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:13:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:58:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #ifndef _SV_EDIT_HXX
 #include <vcl/edit.hxx>
 #endif
+#include <svtools/dialogcontrolling.hxx>
 #include <memory>
 
 //.........................................................................
@@ -58,7 +59,6 @@ namespace dbaui
 {
 //.........................................................................
     class IDatabaseSettingsDialog;
-    class RadioDependentEnabler;
     //=========================================================================
     //= OGeneralPage
     //=========================================================================
@@ -105,10 +105,8 @@ namespace dbaui
         CreationMode        m_eOriginalCreationMode;
         DocumentDescriptor  m_aBrowsedDocument;
 
-        ::std::auto_ptr< RadioDependentEnabler >
-                            m_pSelectTypeController;
-        ::std::auto_ptr< RadioDependentEnabler >
-                            m_pOpenDocController;
+        ::svt::ControlDependencyManager
+                            m_aControlDependencies;
 
 
         ODsnTypeCollection* m_pCollection;  /// the DSN type collection instance
