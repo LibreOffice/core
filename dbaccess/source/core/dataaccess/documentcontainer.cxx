@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontainer.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-23 14:37:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,11 +72,17 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_ERRORCONDITION_HPP_
+#include <com/sun/star/sdb/ErrorCondition.hpp>
+#endif
 #ifndef _DBA_COREDATAACCESS_DATASOURCE_HXX_
 #include "datasource.hxx"
 #endif
 #ifndef _COMPHELPER_MIMECONFIGHELPER_HXX_
 #include <comphelper/mimeconfighelper.hxx>
+#endif
+#ifndef CONNECTIVITY_SQLERROR_HXX
+#include <connectivity/sqlerror.hxx>
 #endif
 
 using namespace ::com::sun::star::uno;
@@ -86,6 +92,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::io;
 using namespace ::osl;
 using namespace ::comphelper;
@@ -101,8 +108,17 @@ namespace dbaccess
 //==========================================================================
 class LocalNameApproval : public IContainerApprove
 {
+    ::connectivity::SQLError    m_aErrors;
+
 public:
-    LocalNameApproval() { }
+    LocalNameApproval( const Reference< XMultiServiceFactory >& _rxFactory )
+        :m_aErrors( ::comphelper::ComponentContext( _rxFactory ) )
+    {
+    }
+    virtual ~LocalNameApproval()
+    {
+    }
+
     void SAL_CALL   approveElement( const ::rtl::OUString& _rName, const Reference< XInterface >& _rxElement );
 };
 
@@ -111,10 +127,10 @@ void SAL_CALL LocalNameApproval::approveElement( const ::rtl::OUString& _rName, 
 {
     if ( _rName.indexOf( '/' ) != -1 )
         throw IllegalArgumentException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "The name must not contain any / characters." ) ),
+            m_aErrors.getErrorMessage( ErrorCondition::DB_OBJECT_NAME_WITH_SLASHES ),
             NULL,
-            0 );
-        // TODO: resource
+            0
+        );
 }
 
 //==========================================================================
@@ -135,7 +151,7 @@ ODocumentContainer::ODocumentContainer(const Reference< XMultiServiceFactory >& 
     registerProperty(PROPERTY_NAME, PROPERTY_ID_NAME, PropertyAttribute::BOUND | PropertyAttribute::READONLY | PropertyAttribute::CONSTRAINED,
                     &m_pImpl->m_aProps.aTitle, ::getCppuType(&m_pImpl->m_aProps.aTitle));
 
-    setElementApproval( PContainerApprove( new LocalNameApproval ) );
+    setElementApproval( PContainerApprove( new LocalNameApproval ( _xORB ) ) );
 }
 
 //--------------------------------------------------------------------------
@@ -170,8 +186,8 @@ Reference< XContent > ODocumentContainer::createObject( const ::rtl::OUString& _
     ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( _rName );
     OSL_ENSURE( aFind != rDefinitions.end(), "ODocumentContainer::createObject:Invalid entry in map!" );
     if ( aFind->second->m_aProps.bIsFolder )
-        return new ODocumentContainer( m_xORB, *this, aFind->second, m_bFormsContainer );
-    return new ODocumentDefinition( *this, m_xORB, aFind->second, m_bFormsContainer );
+        return new ODocumentContainer( m_aContext.getLegacyServiceFactory(), *this, aFind->second, m_bFormsContainer );
+    return new ODocumentDefinition( *this, m_aContext.getLegacyServiceFactory(), aFind->second, m_bFormsContainer );
 }
 // -----------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODocumentContainer::createInstance( const ::rtl::OUString& aServiceSpecifier ) throw (Exception, RuntimeException)
@@ -205,7 +221,6 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             else if ( aValue.Name.equalsAscii(PROPERTY_PERSISTENT_NAME) )
             {
                 aValue.Value >>= sPersistentName;
-                m_aObjectList.insert(PersistentNames::value_type(sPersistentName,true));
             }
             else if ( aValue.Name.equalsAscii(PROPERTY_EMBEDDEDOBJECT) )
             {
@@ -258,7 +273,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
             }
 
             if ( ( aClassID.getLength() == 0 ) && ( 0 == sURL.getLength() ) )
-                ODocumentDefinition::GetDocumentServiceFromMediaType(getStorage(),sPersistentName,m_xORB,aClassID);
+                ODocumentDefinition::GetDocumentServiceFromMediaType( getStorage(), sPersistentName, m_aContext.getLegacyServiceFactory(), aClassID );
         }
 
         ODefinitionContainer_Impl::const_iterator aFind = rDefinitions.find( sName );
@@ -276,7 +291,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         else
             pElementImpl = aFind->second;
 
-        xContent = new ODocumentDefinition(*this, m_xORB,pElementImpl,m_bFormsContainer,aClassID,xConnection);
+        xContent = new ODocumentDefinition( *this, m_aContext.getLegacyServiceFactory(), pElementImpl, m_bFormsContainer, aClassID, xConnection );
 
         if ( sURL.getLength() )
         {
@@ -326,7 +341,7 @@ Reference< XInterface > SAL_CALL ODocumentContainer::createInstanceWithArguments
         else
             pElementImpl = aFind->second;
         OSL_ENSURE( pElementImpl ," Invalid entry in map!");
-        xContent = new ODocumentContainer(m_xORB,*this,pElementImpl,ServiceSpecifier == SERVICE_NAME_FORM_COLLECTION);
+        xContent = new ODocumentContainer( m_aContext.getLegacyServiceFactory(), *this, pElementImpl, ServiceSpecifier == SERVICE_NAME_FORM_COLLECTION );
 
         // copy children
         if ( xCopyFrom.is() )
@@ -417,7 +432,7 @@ Any SAL_CALL ODocumentContainer::execute( const Command& aCommand, sal_Int32 Com
             // open as folder - return result set
 
             Reference< XDynamicResultSet > xSet
-                            = new DynamicResultSet( m_xORB,
+                            = new DynamicResultSet( m_aContext.getLegacyServiceFactory(),
                                                     this,
                                                     aOpenCommand,
                                                     Environment );
@@ -684,10 +699,8 @@ void SAL_CALL ODocumentContainer::revert(  ) throw (::com::sun::star::io::IOExce
 // -----------------------------------------------------------------------------
 Reference< XStorage> ODocumentContainer::getStorage() const
 {
-    static const ::rtl::OUString s_sForms = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("forms"));
-    static const ::rtl::OUString s_sReports = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("reports"));
     return  m_pImpl->m_pDataSource
-        ?   m_pImpl->m_pDataSource->getStorage( m_bFormsContainer ? s_sForms : s_sReports )
+        ?   m_pImpl->m_pDataSource->getStorage( ODatabaseModelImpl::getObjectContainerStorageName( m_bFormsContainer ? ODatabaseModelImpl::E_FORM : ODatabaseModelImpl::E_REPORT ) )
         :   Reference< XStorage>();
 }
 
