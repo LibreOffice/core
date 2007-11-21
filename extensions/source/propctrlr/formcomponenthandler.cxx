@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:52:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 16:21:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1534,7 +1534,8 @@ namespace pcr
             break;
 
         case PROPERTY_ID_COMMAND:
-            if ( impl_doDesignSQLCommand_nothrow( _rxInspectorUI ) )
+        case PROPERTY_ID_LISTSOURCE:
+            if ( impl_doDesignSQLCommand_nothrow( _rxInspectorUI, nPropId ) )
                 eResult = InteractiveSelectionResult_Pending;
             break;
         default:
@@ -1573,7 +1574,6 @@ namespace pcr
         case PROPERTY_ID_ESCAPE_PROCESSING:
             aDependentProperties.push_back( PROPERTY_ID_FILTER );
             aDependentProperties.push_back( PROPERTY_ID_SORT );
-            aDependentProperties.push_back( PROPERTY_ID_COMMAND );
             break;  // case PROPERTY_ID_ESCAPE_PROCESSING
 
         // ----- CommandType -----
@@ -1959,19 +1959,16 @@ namespace pcr
             // ----- Command -----
             case PROPERTY_ID_COMMAND:
             {
-                sal_Int32       nCommandType( CommandType::COMMAND );
-                sal_Bool        bEscapeProcessing( sal_False );
+                sal_Int32   nCommandType( CommandType::COMMAND );
                 OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_COMMANDTYPE ) >>= nCommandType );
-                OSL_VERIFY( impl_getPropertyValue_throw( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
 
                 impl_ensureRowsetConnection_nothrow();
-                Reference< XConnection > xConnection = m_xRowSetConnection;
+                Reference< XConnection > xConnection = m_xRowSetConnection.getTyped();
                 bool bAllowEmptyDS = false;
                 if ( !xConnection.is() )
                     bAllowEmptyDS = ::dbtools::isEmbeddedInDatabase( m_xComponent, xConnection );
 
                 bool doEnable = ( nCommandType == CommandType::COMMAND )
-                            &&  ( bEscapeProcessing )
                             &&  (  m_xRowSetConnection.is()
                                 || xConnection.is()
                                 || impl_hasValidDataSourceSignature_nothrow( m_xComponent, bAllowEmptyDS)
@@ -2629,6 +2626,11 @@ namespace pcr
             _out_rDescriptor.Control = PropertyHandlerHelper::createComboBoxControl( _rxControlFactory, aListEntries, sal_False, sal_False );
         }
         break;
+        case ListSourceType_SQL:
+        case ListSourceType_SQLPASSTHROUGH:
+            impl_ensureRowsetConnection_nothrow();
+            _out_rDescriptor.HasPrimaryButton = m_xRowSetConnection.is();
+            break;
         }
     }
 
@@ -2962,7 +2964,219 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    bool FormComponentPropertyHandler::impl_doDesignSQLCommand_nothrow( const Reference< XObjectInspectorUI >& _rxInspectorUI )
+    namespace
+    {
+        //--------------------------------------------------------------------
+        //- ISQLCommandPropertyUI
+        //--------------------------------------------------------------------
+        class ISQLCommandPropertyUI : public ISQLCommandAdapter
+        {
+        public:
+            /** returns the empty-string-terminated list of names of properties
+                whose UI is to be disabled while the SQL command property is
+                being edited.
+            */
+            virtual ::rtl::OUString*    getPropertiesToDisable() = 0;
+        };
+
+        //--------------------------------------------------------------------
+        //- SQLCommandPropertyUI
+        //--------------------------------------------------------------------
+        class SQLCommandPropertyUI : public ISQLCommandPropertyUI
+        {
+        protected:
+            SQLCommandPropertyUI( const Reference< XPropertySet >& _rxObject )
+                :m_xObject( _rxObject )
+            {
+                if ( !m_xObject.is() )
+                    throw NullPointerException();
+            }
+
+            virtual oslInterlockedCount SAL_CALL acquire()
+            {
+                return osl_incrementInterlockedCount( &m_refCount );
+            }
+
+            virtual oslInterlockedCount SAL_CALL release()
+            {
+                if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
+                {
+                    delete this;
+                    return 0;
+                }
+                return m_refCount;
+            }
+
+        protected:
+            Reference< XPropertySet >   m_xObject;
+
+        private:
+            oslInterlockedCount         m_refCount;
+        };
+
+        //--------------------------------------------------------------------
+        //- FormSQLCommandUI - declaration
+        //--------------------------------------------------------------------
+        class FormSQLCommandUI : public SQLCommandPropertyUI
+        {
+        public:
+            FormSQLCommandUI( const Reference< XPropertySet >& _rxForm );
+
+            // ISQLCommandAdapter
+            virtual ::rtl::OUString getSQLCommand() const;
+            virtual sal_Bool        getEscapeProcessing() const;
+            virtual void            setSQLCommand( const ::rtl::OUString& _rCommand ) const;
+            virtual void            setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const;
+
+            // ISQLCommandPropertyUI
+            virtual ::rtl::OUString*    getPropertiesToDisable();
+        };
+
+        //--------------------------------------------------------------------
+        //- FormSQLCommandUI - implementation
+        //--------------------------------------------------------------------
+        //....................................................................
+        FormSQLCommandUI::FormSQLCommandUI( const Reference< XPropertySet >& _rxForm )
+            :SQLCommandPropertyUI( _rxForm )
+        {
+        }
+
+        //....................................................................
+        ::rtl::OUString FormSQLCommandUI::getSQLCommand() const
+        {
+            ::rtl::OUString sCommand;
+            OSL_VERIFY( m_xObject->getPropertyValue( PROPERTY_COMMAND ) >>= sCommand );
+            return sCommand;
+        }
+
+        //....................................................................
+        sal_Bool FormSQLCommandUI::getEscapeProcessing() const
+        {
+            sal_Bool bEscapeProcessing( sal_False );
+            OSL_VERIFY( m_xObject->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
+            return bEscapeProcessing;
+        }
+
+        //....................................................................
+        void FormSQLCommandUI::setSQLCommand( const ::rtl::OUString& _rCommand ) const
+        {
+            m_xObject->setPropertyValue( PROPERTY_COMMAND, makeAny( _rCommand ) );
+        }
+
+        //....................................................................
+        void FormSQLCommandUI::setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const
+        {
+            m_xObject->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( _bEscapeProcessing ) );
+        }
+
+        //....................................................................
+        ::rtl::OUString* FormSQLCommandUI::getPropertiesToDisable()
+        {
+            static ::rtl::OUString s_aCommandProps[] = {
+                PROPERTY_DATASOURCE,
+                PROPERTY_COMMAND,
+                PROPERTY_COMMANDTYPE,
+                PROPERTY_ESCAPE_PROCESSING,
+                ::rtl::OUString()
+            };
+            return s_aCommandProps;
+        }
+        //--------------------------------------------------------------------
+        //- ValueListCommandUI - declaration
+        //--------------------------------------------------------------------
+        class ValueListCommandUI : public SQLCommandPropertyUI
+        {
+        public:
+            ValueListCommandUI( const Reference< XPropertySet >& _rxListOrCombo );
+
+            // ISQLCommandAdapter
+            virtual ::rtl::OUString getSQLCommand() const;
+            virtual sal_Bool        getEscapeProcessing() const;
+            virtual void            setSQLCommand( const ::rtl::OUString& _rCommand ) const;
+            virtual void            setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const;
+
+            // ISQLCommandPropertyUI
+            virtual ::rtl::OUString*    getPropertiesToDisable();
+        private:
+            mutable bool    m_bPropertyValueIsList;
+        };
+
+        //--------------------------------------------------------------------
+        //- ValueListCommandUI - implementation
+        //--------------------------------------------------------------------
+        //....................................................................
+        ValueListCommandUI::ValueListCommandUI( const Reference< XPropertySet >& _rxListOrCombo )
+            :SQLCommandPropertyUI( _rxListOrCombo )
+            ,m_bPropertyValueIsList( false )
+        {
+        }
+
+        //....................................................................
+        ::rtl::OUString ValueListCommandUI::getSQLCommand() const
+        {
+            ::rtl::OUString sValue;
+            m_bPropertyValueIsList = false;
+
+            // for combo boxes, the property is a mere string
+            Any aValue( m_xObject->getPropertyValue( PROPERTY_LISTSOURCE ) );
+            if ( aValue >>= sValue )
+                return sValue;
+
+            Sequence< ::rtl::OUString > aValueList;
+            if ( aValue >>= aValueList )
+            {
+                m_bPropertyValueIsList = true;
+                if ( aValueList.getLength() )
+                    sValue = aValueList[0];
+                return sValue;
+            }
+
+            OSL_ENSURE( false, "ValueListCommandUI::getSQLCommand: unexpected property type!" );
+            return sValue;
+        }
+
+        //....................................................................
+        sal_Bool ValueListCommandUI::getEscapeProcessing() const
+        {
+            enum ListSourceType eType( ListSourceType_SQL );
+            OSL_VERIFY( m_xObject->getPropertyValue( PROPERTY_LISTSOURCETYPE ) >>= eType );
+            OSL_ENSURE( ( eType == ListSourceType_SQL ) || ( eType == ListSourceType_SQLPASSTHROUGH ),
+                "ValueListCommandUI::getEscapeProcessing: unexpected list source type!" );
+            return ( eType == ListSourceType_SQL );
+        }
+
+        //....................................................................
+        void ValueListCommandUI::setSQLCommand( const ::rtl::OUString& _rCommand ) const
+        {
+            Any aValue;
+            if ( m_bPropertyValueIsList )
+                aValue <<= Sequence< ::rtl::OUString >( &_rCommand, 1 );
+            else
+                aValue <<= _rCommand;
+            m_xObject->setPropertyValue( PROPERTY_LISTSOURCE, aValue );
+        }
+
+        //....................................................................
+        void ValueListCommandUI::setEscapeProcessing( const sal_Bool _bEscapeProcessing ) const
+        {
+            m_xObject->setPropertyValue( PROPERTY_LISTSOURCETYPE, makeAny(
+                _bEscapeProcessing ? ListSourceType_SQL : ListSourceType_SQLPASSTHROUGH ) );
+        }
+
+        //....................................................................
+        ::rtl::OUString* ValueListCommandUI::getPropertiesToDisable()
+        {
+            static ::rtl::OUString s_aListSourceProps[] = {
+                PROPERTY_LISTSOURCETYPE,
+                PROPERTY_LISTSOURCE,
+                ::rtl::OUString()
+            };
+            return s_aListSourceProps;
+        }
+    }
+
+    //------------------------------------------------------------------------
+    bool FormComponentPropertyHandler::impl_doDesignSQLCommand_nothrow( const Reference< XObjectInspectorUI >& _rxInspectorUI, PropertyId _nDesignForProperty )
     {
         try
         {
@@ -2980,25 +3194,43 @@ namespace pcr
             if ( !impl_ensureRowsetConnection_nothrow() )
                 return false;
 
-            Reference< XPropertySet > xRowSetProperties( impl_getRowSet_throw(), UNO_QUERY_THROW );
-            m_xCommandDesigner.set( new SQLCommandDesigner( m_aContext.getUNOContext(), xRowSetProperties, m_xRowSetConnection, LINK( this, FormComponentPropertyHandler, OnDesignerClosed ) ) );
+            Reference< XPropertySet > xComponentProperties( m_xComponent, UNO_QUERY_THROW );
+
+            ::rtl::Reference< ISQLCommandPropertyUI > xCommandUI;
+            switch ( _nDesignForProperty )
+            {
+            case PROPERTY_ID_COMMAND:
+                xCommandUI = new FormSQLCommandUI( xComponentProperties );
+                break;
+            case PROPERTY_ID_LISTSOURCE:
+                xCommandUI = new ValueListCommandUI( xComponentProperties );
+                break;
+            default:
+                OSL_ENSURE( false, "FormComponentPropertyHandler::OnDesignerClosed: invalid property id!" );
+                return false;
+            }
+
+            m_xCommandDesigner.set( new SQLCommandDesigner( m_aContext.getUNOContext(), xCommandUI.get(), m_xRowSetConnection, LINK( this, FormComponentPropertyHandler, OnDesignerClosed ) ) );
 
             DBG_ASSERT( _rxInspectorUI.is(), "FormComponentPropertyHandler::OnDesignerClosed: no access to the property browser ui!" );
             if ( m_xCommandDesigner->isActive() && _rxInspectorUI.is() )
             {
                 m_xBrowserUI = _rxInspectorUI;
-                // disable everything which has to do with the form's data source
-                m_xBrowserUI->enablePropertyUIElements( PROPERTY_DATASOURCE, PropertyLineElement::All, sal_False );
-                m_xBrowserUI->enablePropertyUIElements( PROPERTY_COMMANDTYPE, PropertyLineElement::All, sal_False );
-                m_xBrowserUI->enablePropertyUIElements( PROPERTY_COMMAND, PropertyLineElement::All, sal_False );
-                m_xBrowserUI->enablePropertyUIElements( PROPERTY_ESCAPE_PROCESSING, PropertyLineElement::All, sal_False );
-                // but enable the browse button for Command - so it can be used to raise the query designer
-                m_xBrowserUI->enablePropertyUIElements( PROPERTY_COMMAND, PropertyLineElement::PrimaryButton, sal_True );
+                // disable everything which would affect this property
+                const ::rtl::OUString* pToDisable = xCommandUI->getPropertiesToDisable();
+                while ( pToDisable->getLength() )
+                {
+                    m_xBrowserUI->enablePropertyUIElements( *pToDisable++, PropertyLineElement::All, sal_False );
+                }
+
+                // but enable the browse button for the property itself - so it can be used to raise the query designer
+                ::rtl::OUString sPropertyName( impl_getPropertyNameFromId_nothrow( _nDesignForProperty ) );
+                m_xBrowserUI->enablePropertyUIElements( sPropertyName, PropertyLineElement::PrimaryButton, sal_True );
             }
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "FormComponentPropertyHandler::impl_doDesignSQLCommand_nothrow: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
         return m_xCommandDesigner.is();
     }
@@ -3006,18 +3238,26 @@ namespace pcr
     //------------------------------------------------------------------------
     IMPL_LINK( FormComponentPropertyHandler, OnDesignerClosed, void*, /*NOTINTERESTEDIN*/ )
     {
-        OSL_ENSURE( m_xBrowserUI.is(), "FormComponentPropertyHandler::OnDesignerClosed: no access to the property browser ui!" );
-        if ( m_xBrowserUI.is() )
+        OSL_ENSURE( m_xBrowserUI.is() && m_xCommandDesigner.is(), "FormComponentPropertyHandler::OnDesignerClosed: too many NULLs!" );
+        if ( m_xBrowserUI.is() && m_xCommandDesigner.is() )
         {
-            m_xBrowserUI->enablePropertyUI( PROPERTY_DATASOURCE, sal_True );
-            m_xBrowserUI->enablePropertyUI( PROPERTY_COMMANDTYPE, sal_True );
-            m_xBrowserUI->enablePropertyUI( PROPERTY_COMMAND, sal_True );
-            m_xBrowserUI->enablePropertyUI( PROPERTY_ESCAPE_PROCESSING, sal_True );
+            try
+            {
+                ::rtl::Reference< ISQLCommandPropertyUI > xCommandUI(
+                    dynamic_cast< ISQLCommandPropertyUI* >( m_xCommandDesigner->getPropertyAdapter().get() ) );
+                if ( !xCommandUI.is() )
+                    throw NullPointerException();
 
-            m_xBrowserUI->enablePropertyUIElements( PROPERTY_DATASOURCE, PropertyLineElement::All, sal_True );
-            m_xBrowserUI->enablePropertyUIElements( PROPERTY_COMMANDTYPE, PropertyLineElement::All, sal_True );
-            m_xBrowserUI->enablePropertyUIElements( PROPERTY_COMMAND, PropertyLineElement::All, sal_True );
-            m_xBrowserUI->enablePropertyUIElements( PROPERTY_ESCAPE_PROCESSING, PropertyLineElement::All, sal_True );
+                const ::rtl::OUString* pToEnable = xCommandUI->getPropertiesToDisable();
+                while ( pToEnable->getLength() )
+                {
+                    m_xBrowserUI->enablePropertyUIElements( *pToEnable++, PropertyLineElement::All, sal_True );
+                }
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
         }
 
         return 0L;
