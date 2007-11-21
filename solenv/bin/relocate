@@ -15,9 +15,9 @@
 #
 #   $RCSfile: relocate,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-18 08:00:45 $
+#   last change: $Author: ihi $ $Date: 2007-11-21 18:49:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ sub rewrite_product_deps($$$)
     while ($name = readdir ($misc_dir)) {
 # Should try re-writing these - but perhaps this would
 # screw with timestamps ?
-	if ($name =~ m/\.dpcc$/ || $name =~ m/\.dpslo$/) {
+    if ($name =~ m/\.dpcc$/ || $name =~ m/\.dpslo$/ || $name =~ m/\.dpobj$/) {
 		unlink ("$path/$name");
 	}
     }
