@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsecctrl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:55:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 15:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@
 //#ifndef _SFXITEMPOOL_HXX
 //#include <svtools/itempool.hxx>
 //#endif
+#include <sfx2/signaturestate.hxx>
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
 #endif
