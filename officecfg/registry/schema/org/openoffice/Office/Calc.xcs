@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Calc.xcs,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:27:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-21 19:06:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -618,6 +618,15 @@
 					</info>
 					<value>100</value>
 				</prop>
+                <prop oor:name="Synchronize" oor:type="xs:boolean">
+                    <!-- UIHints: Tools - Options - Spreadsheets - View - [Section] Zoom -->
+                    <info>
+                        <author>NN</author>
+                        <desc>Specifies if zoom is applied to all sheets of a document.</desc>
+                        <label>Synchronize sheets</label>
+                    </info>
+                    <value>true</value>
+                </prop>
 			</group>
 		</group>
 		<group oor:name="Input">
