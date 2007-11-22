@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:36:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:41:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1504,6 +1504,8 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                     rSet.Put(SfxUInt16Item(FN_STAT_SELMODE, 0));
                 else if(rShell.IsAddMode())
                     rSet.Put(SfxUInt16Item(FN_STAT_SELMODE, 2));
+                else if(rShell.IsBlockMode())
+                    rSet.Put(SfxUInt16Item(FN_STAT_SELMODE, 3));
                 else
                     rSet.Put(SfxUInt16Item(FN_STAT_SELMODE, 1));
                 break;
@@ -1657,13 +1659,14 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                         case 0: rSh.EnterStdMode(); break;
                         case 1: rSh.EnterExtMode(); break;
                         case 2: rSh.EnterAddMode(); break;
+                        case 3: rSh.EnterBlockMode(); break;
                     }
                 }
             }
             else
             {
 
-                if( !rSh.IsAddMode() && !rSh.IsExtMode() )
+                if( !rSh.IsAddMode() && !rSh.IsExtMode() && !rSh.IsBlockMode() )
                     rSh.ToggleExtMode();
                 else if ( rSh.IsExtMode() )
                 {
@@ -1671,13 +1674,23 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     rSh.ToggleAddMode();
                 }
                 else if ( rSh.IsAddMode() )
+                {
                     rSh.ToggleAddMode();
+                    rSh.ToggleBlockMode();
+                }
+                else
+                    rSh.ToggleBlockMode();
             }
             bUp = TRUE;
             break;
         }
         case FN_SET_ADD_MODE:
             rSh.ToggleAddMode();
+            nWhich = FN_STAT_SELMODE;
+            bUp = TRUE;
+        break;
+        case FN_SET_BLOCK_MODE:
+            rSh.ToggleBlockMode();
             nWhich = FN_STAT_SELMODE;
             bUp = TRUE;
         break;
