@@ -31,7 +31,7 @@ directly references by the URL in the <update-information> of the description.xm
 See also the Wiki entry at:
 http://wiki.services.openoffice.org/wiki/Creating_update_information_for_extensions
 This generated update information file can then be used by the webserver, when it 
-sends back the requested update information. The update information while will be 
+sends back the requested update information. The update information file will be 
 generated in the misc diretory of the output directory.
 
 The update information file needs to be copied into common.pro/pus.mxyz directory. 
