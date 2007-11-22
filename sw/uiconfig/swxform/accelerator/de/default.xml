@@ -88,6 +88,8 @@
     <accel:item accel:code="KEY_PAGEDOWN" xlink:href=".uno:PageDown"/>
     <accel:item accel:code="KEY_F8" accel:shift="true" xlink:href=".uno:SetMultiSelection"/>
     <accel:item accel:code="KEY_F8" xlink:href=".uno:SetExtSelection"/>
+        <accel:item accel:code="KEY_F8" accel:shift="true" accel:mod1="true" xlink:href=".uno:SelectionModeBlock"/>
+        <accel:item accel:code="KEY_F8" accel:shift="true" accel:mod2="true" xlink:href=".uno:SelectionModeBlock"/>
     <accel:item accel:code="KEY_ESCAPE" xlink:href=".uno:Escape"/>
     <accel:item accel:code="KEY_BACKSPACE" accel:shift="true" xlink:href=".uno:ShiftBackspace"/>
         <accel:item accel:code="KEY_UP" accel:shift="true" accel:mod1="true" xlink:href=".uno:StartOfParaSel"/>
