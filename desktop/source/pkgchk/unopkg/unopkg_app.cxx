@@ -5,9 +5,9 @@
  *
  *  $RCSfile: unopkg_app.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:00:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:05:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,6 +236,7 @@ SAL_IMPLEMENT_MAIN()
         s_option_infos, OUSTR("version") );
 
     Reference<XComponentContext> xComponentContext;
+    Reference<XComponentContext> xLocalComponentContext;
 
     try {
         sal_uInt32 nPos = 0;
@@ -301,7 +302,7 @@ SAL_IMPLEMENT_MAIN()
             }
         }
 
-        xComponentContext = getUNO( disposeGuard, option_verbose, subcmd_gui );
+        xComponentContext = getUNO( disposeGuard, option_verbose, subcmd_gui, xLocalComponentContext );
 
         if (deploymentContext.getLength() == 0) {
             deploymentContext = option_shared ? OUSTR("shared") : OUSTR("user");
@@ -404,18 +405,10 @@ SAL_IMPLEMENT_MAIN()
         }
         else if (subCommand.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("gui") ))
         {
-
-            ::std::size_t cUrls = cmdPackages.size();
-            ::boost::scoped_array<OUString> sarUrls(new OUString[cUrls]);
-            OUString * arString = sarUrls.get();
-
-            for ( ::std::size_t pos = 0; pos < cUrls; ++pos )
-            {
-                arString[pos] = cmdPackages[pos];
-            }
             Reference<ui::dialogs::XAsynchronousExecutableDialog> xDialog(
                 deployment::ui::PackageManagerDialog::createAndInstall(
-                    xComponentContext, Sequence<OUString>(arString, cUrls), deploymentContext) );
+                    xComponentContext,
+                    cmdPackages.size() > 0 ? cmdPackages[0] : OUString() ));
 
             osl::Condition dialogEnded;
             dialogEnded.reset();
@@ -439,7 +432,7 @@ SAL_IMPLEMENT_MAIN()
         if (option_verbose)
             printf( "\n%s done.\n", APP_NAME );
         //Force to release all bridges which connect us to the child processes
-        disposeBridges(xComponentContext);
+        disposeBridges(xLocalComponentContext);
         return 0;
     }
     catch (ucb::CommandFailedException &) {
@@ -469,7 +462,7 @@ SAL_IMPLEMENT_MAIN()
             ::comphelper::anyToString(exc) : e.Message, textenc).getStr() );
     }
     fprintf( stderr, "\n%s failed.\n", APP_NAME );
-    disposeBridges(xComponentContext);
+    disposeBridges(xLocalComponentContext);
     return 1;
 }
 
