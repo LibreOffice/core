@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_misc.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:01:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:05:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,12 +436,14 @@ Reference<XComponentContext> connectToOffice(
 
 //==============================================================================
 Reference<XComponentContext> getUNO(
-    DisposeGuard & disposeGuard, bool verbose, bool bGui )
+    DisposeGuard & disposeGuard, bool verbose, bool bGui,
+    Reference<XComponentContext> & out_localContext)
 {
     // hold lock during process runtime:
     static ::desktop::Lockfile s_lockfile( false /* no IPC server */ );
     Reference<XComponentContext> xComponentContext(
         bootstrapStandAlone( disposeGuard, verbose ) );
+    out_localContext = xComponentContext;
     if (::dp_misc::office_is_running()) {
         xComponentContext.set(
             connectToOffice( xComponentContext, verbose ) );
