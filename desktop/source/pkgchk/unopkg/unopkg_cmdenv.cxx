@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_cmdenv.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:13:26 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:05:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,8 +354,7 @@ void CommandEnvironmentImpl::handle(
                 pConts[ pos ], UNO_QUERY );
             if (xInteractionApprove.is()) {
                 xInteractionApprove->select();
-                // don't query again for ongoing continuations:
-                approve = false;
+                break;
             }
         }
         else if (abort) {
@@ -363,8 +362,7 @@ void CommandEnvironmentImpl::handle(
                 pConts[ pos ], UNO_QUERY );
             if (xInteractionAbort.is()) {
                 xInteractionAbort->select();
-                // don't query again for ongoing continuations:
-                abort = false;
+                break;
             }
         }
     }
