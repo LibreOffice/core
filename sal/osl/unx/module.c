@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:48:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 16:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,11 +127,15 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 
 oslModule SAL_CALL osl_psz_loadModule(const sal_Char *pszModuleName, sal_Int32 nRtldMode)
 {
-    sal_Int32 rtld_mode = (nRtldMode == 0) ? RTLD_LAZY : nRtldMode;
-
+    OSL_ASSERT(
+        (nRtldMode & SAL_LOADMODULE_LAZY) == 0 ||
+        (nRtldMode & SAL_LOADMODULE_NOW) == 0); /* only either LAZY or NOW */
     if (pszModuleName)
     {
 #ifndef NO_DL_FUNCTIONS
+        int rtld_mode =
+            ((nRtldMode & SAL_LOADMODULE_NOW) ? RTLD_NOW : RTLD_LAZY) |
+            ((nRtldMode & SAL_LOADMODULE_GLOBAL) ? RTLD_GLOBAL : RTLD_LOCAL);
         void* pLib = dlopen(pszModuleName, rtld_mode);
 
 #if OSL_DEBUG_LEVEL > 1
