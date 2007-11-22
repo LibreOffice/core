@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-14 15:11:34 $
+#   last change: $Author: ihi $ $Date: 2007-11-22 12:01:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ ALLTAR : $(LOCALPYFILES)
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
 ALLTAR : openoffice
 .ELSE
-ALLTAR : openoffice sdkoo_en-US ure_en-US ooowoure
+ALLTAR : openoffice sdkoo_en-US ure_en-US
 .ENDIF
 .ELSE			# "$(UPDATER)"=="" || "$(USE_PACKAGER)"==""
 ALLTAR : updatepack
