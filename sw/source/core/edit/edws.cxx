@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edws.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:47:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:34:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,7 +358,7 @@ void SwEditShell::AutoCorrect( SvxAutoCorrect& rACorr, sal_Bool bInsert,
 
     StartAllAction();
 
-    SwPaM* pCrsr = GetCrsr();
+    SwPaM* pCrsr = getShellCrsr( true );
     SwTxtNode* pTNd = pCrsr->GetNode()->GetTxtNode();
 
     SwAutoCorrDoc aSwAutoCorrDoc( *this, *pCrsr, cChar );
@@ -382,7 +382,7 @@ sal_Bool SwEditShell::GetPrevAutoCorrWord( SvxAutoCorrect& rACorr, String& rWord
     SET_CURR_SHELL( this );
 
     sal_Bool bRet;
-    SwPaM* pCrsr = GetCrsr();
+    SwPaM* pCrsr = getShellCrsr( true );
     xub_StrLen nPos = pCrsr->GetPoint()->nContent.GetIndex();
     SwTxtNode* pTNd = pCrsr->GetNode()->GetTxtNode();
     if( pTNd && nPos )
