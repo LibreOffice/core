@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclhelpergradient.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hdu $ $Date: 2007-04-17 10:02:28 $
+ *  last change: $Author: aw $ $Date: 2007-11-22 15:01:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,7 +239,6 @@ namespace drawinglayer
         {
             const basegfx::B2DPoint aCircleCenter(0.5, 0.5);
             aUnitPolygon = basegfx::tools::createPolygonFromEllipse(aCircleCenter, 0.5, 0.5);
-            // aUnitPolygon = basegfx::tools::adaptiveSubdivideByAngle(aUnitPolygon);
         }
         else
         {

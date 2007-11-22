@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrlatheprimitive3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:58 $
+ *  last change: $Author: aw $ $Date: 2007-11-22 15:01:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ namespace drawinglayer
         void SdrLathePrimitive3D::impCreateSlices()
         {
             // prepare the polygon
-            basegfx::B2DPolyPolygon aCandidate(basegfx::tools::adaptiveSubdivideByDistance(getPolyPolygon()));
+            basegfx::B2DPolyPolygon aCandidate(basegfx::tools::adaptiveSubdivideByAngle(getPolyPolygon()));
             aCandidate.removeDoublePoints();
             aCandidate = basegfx::tools::correctOrientations(aCandidate);
             aCandidate = basegfx::tools::correctOutmostPolygon(aCandidate);

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive2d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
+ *  last change: $Author: aw $ $Date: 2007-11-22 15:01:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,15 +204,17 @@ namespace drawinglayer
                 {
                     // create fat line data
                     const double fHalfLineWidth(getLineAttribute().getWidth() / 2.0);
-                    const double fMiterMinimumAngle(15.0 * F_PI180);
                     const basegfx::B2DLineJoin aLineJoin(getLineAttribute().getLineJoin());
                     basegfx::B2DPolyPolygon aAreaPolyPolygon;
 
                     for(sal_uInt32 a(0L); a < nCount; a++)
                     {
-                        const basegfx::B2DPolyPolygon aNewPolyPolygon(basegfx::tools::createAreaGeometryForPolygon(
-                            aHairLinePolyPolygon.getB2DPolygon(a), fHalfLineWidth, aLineJoin, fMiterMinimumAngle));
-                        aAreaPolyPolygon.append(aNewPolyPolygon);
+                        // AW: New version of createAreaGeometry; now creates bezier polygons
+                        aAreaPolyPolygon.append(basegfx::tools::createAreaGeometry(
+                            aHairLinePolyPolygon.getB2DPolygon(a), fHalfLineWidth, aLineJoin));
+                        //const basegfx::B2DPolyPolygon aNewPolyPolygon(basegfx::tools::createAreaGeometryForPolygon(
+                        //  aHairLinePolyPolygon.getB2DPolygon(a), fHalfLineWidth, aLineJoin, fMiterMinimumAngle));
+                        //aAreaPolyPolygon.append(aNewPolyPolygon);
                     }
 
                     // prepare return value
