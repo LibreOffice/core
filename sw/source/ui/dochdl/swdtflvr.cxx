@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-06 16:26:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 16:36:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1030,6 +1030,7 @@ int SwTransferable::PrepareForCopy( BOOL bIsCut )
             pWrtShell->CreateCrsr();
 
         SwDoc* pTmpDoc = pClpDocFac->GetDoc();
+        pTmpDoc->SetClipBoard( true );
 
         pTmpDoc->SetRefForDocShell( (SfxObjectShellRef*)&(long&)aDocShellRef );
         pTmpDoc->LockExpFlds();     // nie die Felder updaten - Text so belassen
@@ -3372,10 +3373,14 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
 
     SwTrnsfrActionAndUndo aAction( &rShell, UNDO_PASTE_CLIPBOARD);
 
+    bool bKillPaMs = false;
+
     //Selektierten Inhalt loeschen, nicht bei Tabellen-Selektion und
     //Tabelle im Clipboard
     if( rShell.HasSelection() && !( nSelection & nsSelectionType::SEL_TBL_CELLS))
     {
+        bKillPaMs = true;
+        rShell.SetRetainSelection( true );
         rShell.DelRight();
         // war ein Fly selektiert, so muss jetzt fuer eine gueltige
         // Cursor-Position gesorgt werden! (geparkter Cursor!)
@@ -3387,6 +3392,7 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
             Point aPt( rShell.GetCharRect().Pos() );
             rShell.SwCrsrShell::SetCrsr( aPt, TRUE );
         }
+        rShell.SetRetainSelection( false );
     }
 
     BOOL bInWrd = FALSE, bEndWrd = FALSE, bSttWrd = FALSE,
@@ -3414,6 +3420,9 @@ int SwTransferable::PrivatePaste( SwWrtShell& rShell )
     }
 
     int nRet = rShell.Paste( pClpDocFac->GetDoc() );
+
+    if( bKillPaMs )
+        rShell.KillPams();
 
     // Wenn Smart Paste dann Leerzeichen einfuegen
     if( nRet && bSmart && ((bInWrd && !bEndWrd )|| bSttWrd) )
@@ -3527,9 +3536,10 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
     }
     else if( !bTblSel && !bFrmSel )
     {
+        rSh.GoPrevCrsr();
         if( !rSh.IsAddMode() )
             rSh.SwCrsrShell::CreateCrsr();
-        rSh.SwCrsrShell::SetCrsr( rDragPt, TRUE );
+        rSh.SwCrsrShell::SetCrsr( rDragPt, TRUE, false );
         rSh.GoPrevCrsr();
         cWord = rSh.IntelligentCut( rSh.GetSelectionType(), FALSE );
         rSh.GoNextCrsr();
@@ -3608,7 +3618,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
 
         /* #109590# after dragging a table selection inside one shell
             set cursor to the drop position. */
-        if (bTblSel && &rSh == &rSrcSh)
+        if( &rSh == &rSrcSh && ( bTblSel || rSh.IsBlockMode() ) )
         {
             rSrcSh.SwCrsrShell::SetCrsr(rDragPt);
             rSrcSh.GetSwCrsr()->SetMark();
