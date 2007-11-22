@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:47:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 16:51:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,15 +68,10 @@ extern "C" {
 
 #endif
 
-#if defined (MACOSX)
-  #define SAL_LOADMODULE_GLOBAL 0x8
-#else
-  #define SAL_LOADMODULE_GLOBAL 0x100
-#endif
-
 #define SAL_LOADMODULE_DEFAULT    0x00000
 #define SAL_LOADMODULE_LAZY       0x00001
 #define SAL_LOADMODULE_NOW        0x00002
+#define SAL_LOADMODULE_GLOBAL     0x00100
 
 typedef void* oslModule;
 
