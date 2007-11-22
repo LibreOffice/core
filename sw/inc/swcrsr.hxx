@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:07:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:28:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@ class SwCursor : public SwPaM
     _SwCursor_SavePos* pSavePos;
     long mnRowSpanOffset;        // required for travelling in tabs with rowspans
     BYTE nCursorBidiLevel;       // bidi level of the cursor
+    bool mbColumnSelection;      // true: cursor is aprt of a column selection
 
     ULONG FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, BOOL& bCancel );
 
@@ -104,7 +105,7 @@ protected:
 
 public:
     // single argument ctors shall be explicit.
-    SwCursor( const SwPosition &rPos, SwPaM* pRing = 0 );
+    SwCursor( const SwPosition &rPos, SwPaM* pRing, bool bColumnSel );
     virtual ~SwCursor();
 
     // @@@ semantic: no copy ctor.
@@ -240,6 +241,9 @@ public:
 
     BYTE GetCrsrBidiLevel() const { return nCursorBidiLevel; }
     void SetCrsrBidiLevel( BYTE nNewLevel ) { nCursorBidiLevel = nNewLevel; }
+
+    bool IsColumnSelection() const { return mbColumnSelection; }
+    void SetColumnSelection( bool bNew ) { mbColumnSelection = bNew; }
 
     long GetCrsrRowSpanOffset() const { return mnRowSpanOffset; }
     void SetCrsrRowSpanOffset( long nNew ) { mnRowSpanOffset = nNew; }
