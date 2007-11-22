@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ring.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:07:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:28:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 #ifndef _RING_HXX
 #define _RING_HXX
 
+#include <swtypes.hxx>
+
 class Ring
 {
     Ring *pNext;
@@ -50,6 +52,8 @@ public:
 
     Ring* GetNext() const       { return pNext; }
     Ring* GetPrev() const       { return pPrev; }
+
+    sal_uInt32 numberOf() const;
 };
 
 
