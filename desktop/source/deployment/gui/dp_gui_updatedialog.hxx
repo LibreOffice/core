@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:52:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:02:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ private:
     rtl::OUString m_noDependency;
     rtl::OUString m_noPermission;
     rtl::OUString m_noPermissionVista;
-    rtl::OUString m_noUpdate;
+    rtl::OUString m_browserbased;
     std::vector< dp_gui::UpdateData > m_enabledUpdates;
     std::vector< UpdateDialog::DisabledUpdate > m_disabledUpdates;
     std::vector< rtl::OUString > m_generalErrors;
