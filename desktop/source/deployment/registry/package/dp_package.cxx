@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:07:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:04:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -433,7 +433,7 @@ OUString BackendImpl::PackageImpl::findLocalizedLicense(
     const css::uno::Reference<css::xml::xpath::XXPathAPI>& xXPath)
 {
     try {
-        lang::Locale const & officeLocale = getOfficeLocale();
+        lang::Locale const officeLocale = getOfficeLocale();
         css::uno::Reference<css::xml::dom::XNodeList> listLicText =
             xXPath->selectNodeList(xRoot,
             OUSTR("/desc:description/desc:registration/desc:simple-license/desc:license-text"));
@@ -1325,7 +1325,7 @@ void BackendImpl::PackageImpl::scanBundle(
 }
 
 
-    lang::Locale const & officeLocale = getOfficeLocale();
+    lang::Locale const officeLocale = getOfficeLocale();
     OUString descrFile;
     lang::Locale descrFileLocale;
 
