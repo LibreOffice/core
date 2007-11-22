@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 09:04:29 $
+#   last change: $Author: ihi $ $Date: 2007-11-22 15:37:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,7 @@ SLOFILES =  \
     $(SLO)$/sortedobjs.obj \
     $(SLO)$/sortedobjsimpl.obj \
     $(SLO)$/ssfrm.obj \
+    $(SLO)$/swselectionlist.obj \
     $(SLO)$/tabfrm.obj \
     $(SLO)$/trvlfrm.obj \
     $(SLO)$/unusedf.obj \
