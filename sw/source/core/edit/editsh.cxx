@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:45:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:33:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,16 +184,19 @@ void SwEditShell::Insert( sal_Unicode c, BOOL bOnlyCurrCrsr )
 void SwEditShell::Insert(const String &rStr)
 {
     StartAllAction();
-    FOREACHPAM_START(this)
-        //OPT: GetSystemCharSet
-        if( !GetDoc()->Insert( *PCURCRSR, rStr, true ) )
-        {
-            ASSERT( FALSE, "Doc->Insert(Str) failed." )
-        }
+    {
+        SwPaM *_pStartCrsr = getShellCrsr( true ), *__pStartCrsr = _pStartCrsr;
+        do {
+            //OPT: GetSystemCharSet
+            if( !GetDoc()->Insert( *_pStartCrsr, rStr, true ) )
+            {
+                ASSERT( FALSE, "Doc->Insert(Str) failed." )
+            }
 
-        SaveTblBoxCntnt( PCURCRSR->GetPoint() );
+            SaveTblBoxCntnt( _pStartCrsr->GetPoint() );
 
-    FOREACHPAM_END()
+        } while( (_pStartCrsr=(SwPaM *)_pStartCrsr->GetNext()) != __pStartCrsr );
+    }
 
     // calculate cursor bidi level
     SwCursor* pTmpCrsr = _GetCrsr();
