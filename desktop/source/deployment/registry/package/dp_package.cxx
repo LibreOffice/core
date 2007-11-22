@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:04:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 16:25:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,9 +141,6 @@ class BackendImpl : public ImplBaseT
                     css::ucb::CommandFailedException,
                     css::ucb::CommandAbortedException,
                     css::uno::RuntimeException);
-        OUString findLocalizedLicense(
-            const css::uno::Reference<css::xml::dom::XNode>& xRoot,
-            const css::uno::Reference<css::xml::xpath::XXPathAPI>& xXPath);
         OUString getLicenseText(
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
             const OUString& licenseUrl);
@@ -211,6 +208,8 @@ class BackendImpl : public ImplBaseT
 
         virtual Sequence<OUString> SAL_CALL getUpdateInformationURLs()
             throw (RuntimeException);
+
+        virtual OUString SAL_CALL getDisplayName() throw (RuntimeException);
     };
     friend class PackageImpl;
 
@@ -424,139 +423,6 @@ BackendImpl::PackageImpl::isRegistered_(
         present, beans::Ambiguous<sal_Bool>(reg, ambig) );
 }
 
-/* Obtains the value of the /description/registration/simple-license/license-text@href.
-    May throw a com::sun::star::uno::DeploymentException.
-    If the value of the attribut is empty then an exception is thrown.
-*/
-OUString BackendImpl::PackageImpl::findLocalizedLicense(
-    const css::uno::Reference<css::xml::dom::XNode>& xRoot,
-    const css::uno::Reference<css::xml::xpath::XXPathAPI>& xXPath)
-{
-    try {
-        lang::Locale const officeLocale = getOfficeLocale();
-        css::uno::Reference<css::xml::dom::XNodeList> listLicText =
-            xXPath->selectNodeList(xRoot,
-            OUSTR("/desc:description/desc:registration/desc:simple-license/desc:license-text"));
-        css::uno::Reference<css::xml::dom::XNode> nodeMatch;
-
-
-        //check if we match lang + country + variant
-        OSL_ASSERT(officeLocale.Language.getLength());
-        OUString sLangCountry;
-        ::rtl::OUStringBuffer buff(64);
-        buff.append(officeLocale.Language);
-        if ( officeLocale.Country.getLength() || officeLocale.Variant.getLength())
-        {
-            buff.appendAscii("-");
-            if (officeLocale.Country.getLength())
-            {
-                buff.append(officeLocale.Country);
-                sLangCountry = buff.getStr();
-                if (officeLocale.Variant.getLength())
-                    buff.appendAscii("-");
-            }
-            if (officeLocale.Variant.getLength())
-            {
-                buff.append(officeLocale.Variant);
-            }
-        }
-
-        OUString exp1(
-            OUSTR("/desc:description/desc:registration/desc:simple-license"
-            "/desc:license-text[normalize-space(@lang)=\"") + buff.makeStringAndClear() +
-            OUSTR("\"]"));
-        nodeMatch = xXPath->selectSingleNode(xRoot, exp1);
-        //check if we match lang + country
-         if (!nodeMatch.is() )
-         {
-            if (officeLocale.Country.getLength())
-            {
-                //first try exact match for lang-country
-                OUString exp2(
-                    OUSTR("/desc:description/desc:registration/desc:simple-license"
-                          "/desc:license-text[normalize-space(@lang)=\"") + sLangCountry + OUSTR("\"]"));
-                nodeMatch = xXPath->selectSingleNode(xRoot, exp2);
-
-                //try to match in strings that also have a variant, for example en-US matches in
-                //en-US-montana
-                if (!nodeMatch.is())
-                {
-                    OUString exp3(
-                        OUSTR("/desc:description/desc:registration/desc:simple-license"
-                              "/desc:license-text[starts-with(normalize-space(@lang),\"") + sLangCountry + OUSTR("-\")]"));
-                    nodeMatch = xXPath->selectSingleNode(xRoot, exp3);
-                }
-            }
-         }
-
-        //check if we match lang
-         if (!nodeMatch.is() )
-         {
-            //first try exact match for lang
-            OUString exp2(
-                OUSTR("/desc:description/desc:registration/desc:simple-license"
-                      "/desc:license-text[normalize-space(@lang)=\"") + officeLocale.Language + OUSTR("\"]"));
-            nodeMatch = xXPath->selectSingleNode(xRoot, exp2);
-
-            //try to match in strings that also have a country and/orvariant, for example en  matches in
-            //en-US-montana, en-US, en-montana
-            if (!nodeMatch.is())
-            {
-                OUString exp3(
-                    OUSTR("/desc:description/desc:registration/desc:simple-license"
-                          "/desc:license-text[starts-with(normalize-space(@lang),\"") + officeLocale.Language + OUSTR("-\")]"));
-                nodeMatch = xXPath->selectSingleNode(xRoot, exp3);
-            }
-         }
-
-         //get default
-         if (!nodeMatch.is())
-         {
-            css::uno::Reference<css::xml::dom::XNode> nodeSimpleLic =
-                xXPath->selectSingleNode(xRoot,
-                                         OUSTR("/desc:description/desc:registration/desc:simple-license"));
-            css::uno::Reference<css::xml::xpath::XXPathObject> nodeDefault =
-                xXPath->eval(nodeSimpleLic, OUSTR("@default-license-id"));
-
-            if (!nodeDefault.is())
-                throw cssu::Exception(
-                OUSTR("The simple-license element has no valid default-license-id attribute."), 0);
-
-            OUString sDefaultId = nodeDefault->getString().trim();
-            if (sDefaultId.getLength() == 0)
-                throw cssu::Exception(
-                OUSTR("The simple-license element has no valid default-license-id attribute."), 0);
-
-            OUString exp2(
-                OUSTR("/desc:description/desc:registration/desc:simple-license"
-                      "/desc:license-text[normalize-space(@license-id) = \"") + sDefaultId + OUSTR("\"]"));
-            nodeMatch = xXPath->selectSingleNode(xRoot, exp2);
-         }
-
-        if (!nodeMatch.is())
-            throw css::uno::Exception(
-            OUSTR("Cannot find a localized license text or a default license text."), 0);
-
-
-        css::uno::Reference<css::xml::dom::XElement> elemLicText(
-            nodeMatch, css::uno::UNO_QUERY_THROW);
-
-        OUString value = elemLicText->getAttributeNS(OUSTR("http://www.w3.org/1999/xlink"), OUSTR("href"));
-        if (value.getLength() == 0)
-            throw css::uno::Exception(
-            OUSTR("The value of the attribut license-text@href is empty."), 0);
-
-        // /desc:description/desc:registration/desc:simple-license/desc:license-text
-        return value;
-    }
-    catch (css::uno::Exception& )
-    {
-        Any exc( ::cppu::getCaughtException() );
-        throw css::deployment::DeploymentException(
-            OUSTR("Could not obtain the url to the license text file."), 0, exc);
-    }
-}
-
 OUString BackendImpl::PackageImpl::getLicenseText(
     const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv,
     const OUString& licenseUrl)
@@ -661,8 +527,7 @@ bool BackendImpl::PackageImpl::checkDependencies(
     {
         css::uno::Reference<css::xml::dom::XNode> xRoot = desc.getRootElement();
         css::uno::Reference<css::xml::xpath::XXPathAPI> xPath =
-            DescriptionInfoset(getMyBackend()->getComponentContext(), xRoot).
-            getXpath();
+            getDescriptionInfoset().getXpath();
 
         css::uno::Reference<css::xml::dom::XNode> nodeSimpleLic =
             xPath->selectSingleNode(xRoot,
@@ -671,7 +536,8 @@ bool BackendImpl::PackageImpl::checkDependencies(
         if (!nodeSimpleLic.is())
             return true;
         //throws an exception if nothing adequate was found
-        OUString sHref = desc.getExtensionRootUrl() + OUSTR("/") + findLocalizedLicense(xRoot, xPath);
+        OUString sHref = desc.getExtensionRootUrl() + OUSTR("/")
+            + getDescriptionInfoset().getLocalizedLicenseURL();
            OUString sLicense = getLicenseText(xCmdEnv, sHref);
         //determine who has to agree to the license
         css::uno::Reference<css::xml::xpath::XXPathObject> nodeAttribWho3 =
@@ -1325,7 +1191,7 @@ void BackendImpl::PackageImpl::scanBundle(
 }
 
 
-    lang::Locale const officeLocale = getOfficeLocale();
+    const lang::Locale officeLocale = getOfficeLocale();
     OUString descrFile;
     lang::Locale descrFileLocale;
 
@@ -1501,6 +1367,15 @@ void BackendImpl::PackageImpl::scanLegacyBundle(
             }
         }
     }
+}
+
+OUString BackendImpl::PackageImpl::getDisplayName() throw (RuntimeException)
+{
+    OUString sName = getDescriptionInfoset().getLocalizedDisplayName();
+    if (sName.getLength() == 0)
+        return m_displayName;
+    else
+        return sName;
 }
 
 } // anon namespace
