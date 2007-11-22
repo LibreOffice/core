@@ -4,9 +4,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:53:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:42:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,7 +292,7 @@ ULONG SwWrtShell::SearchAttr( const SfxItemSet& rFindSet, BOOL bNoColls,
 
 void SwWrtShell::PushMode()
 {
-    pModeStack = new ModeStack( pModeStack, bIns, bExtMode, bAddMode );
+    pModeStack = new ModeStack( pModeStack, bIns, bExtMode, bAddMode, bBlockMode );
 }
 
 
@@ -306,6 +306,8 @@ void SwWrtShell::PopMode()
         LeaveExtMode();
     if ( bAddMode && !pModeStack->bAdd )
         LeaveAddMode();
+    if ( bBlockMode && !pModeStack->bBlock )
+        LeaveBlockMode();
     bIns = pModeStack->bIns;
 
     ModeStack *pTmp = pModeStack->pNext;
@@ -412,6 +414,12 @@ void SwWrtShell::SttSelect()
         return;
     if(!HasMark())
         SetMark();
+    if( bBlockMode )
+    {
+        SwShellCrsr* pTmp = getShellCrsr( true );
+        if( !pTmp->HasMark() )
+            pTmp->SetMark();
+    }
     fnKillSel = &SwWrtShell::Ignore;
     fnSetCrsr = &SwWrtShell::SetCrsr;
     bInSelect = TRUE;
@@ -557,6 +565,9 @@ void SwWrtShell::EnterStdMode()
 {
     if(bAddMode)
         LeaveAddMode();
+    if(bBlockMode)
+        LeaveBlockMode();
+    bBlockMode = FALSE;
     bExtMode = FALSE;
     bInSelect = FALSE;
     if(IsSelFrmMode())
@@ -573,7 +584,8 @@ void SwWrtShell::EnterStdMode()
         {
             ACT_KONTEXT(this);
             bSelWrd = bSelLn = FALSE;
-            KillPams();
+            if( !IsRetainSelection() )
+                KillPams();
             ClearMark();
             fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
             fnKillSel = &SwWrtShell::ResetSelect;
@@ -590,8 +602,15 @@ void SwWrtShell::EnterStdMode()
 
 void SwWrtShell::EnterExtMode()
 {
+    if(bBlockMode)
+    {
+        LeaveBlockMode();
+        KillPams();
+        ClearMark();
+    }
     bExtMode = TRUE;
     bAddMode = FALSE;
+    bBlockMode = FALSE;
     SttSelect();
 }
 
@@ -640,10 +659,13 @@ long SwWrtShell::AddLeaveSelect(const Point *, BOOL )
 void SwWrtShell::EnterAddMode()
 {
     if(IsTableMode()) return;
+    if(bBlockMode)
+        LeaveBlockMode();
     fnLeaveSelect = &SwWrtShell::AddLeaveSelect;
     fnKillSel = &SwWrtShell::Ignore;
     fnSetCrsr = &SwWrtShell::SetCrsr;
     bAddMode = TRUE;
+    bBlockMode = FALSE;
     bExtMode = FALSE;
     if(SwCrsrShell::HasSelection())
         CreateCrsr();
@@ -657,6 +679,27 @@ void SwWrtShell::LeaveAddMode()
     fnKillSel = &SwWrtShell::ResetSelect;
     fnSetCrsr = &SwWrtShell::SetCrsrKillSel;
     bAddMode = FALSE;
+}
+
+/*
+ * Block Mode
+ */
+
+void SwWrtShell::EnterBlockMode()
+{
+    bBlockMode = FALSE;
+    EnterStdMode();
+    bBlockMode = TRUE;
+    CrsrToBlockCrsr();
+}
+
+
+
+void SwWrtShell::LeaveBlockMode()
+{
+    bBlockMode = FALSE;
+    BlockCrsrToCrsr();
+    EndSelect();
 }
 
 // Einfuegemodus
@@ -766,6 +809,12 @@ long SwWrtShell::ToggleAddMode()
     return !bAddMode;
 }
 
+
+long SwWrtShell::ToggleBlockMode()
+{
+    bBlockMode ? LeaveBlockMode(): EnterBlockMode();
+    return !bBlockMode;
+}
 
 
 long SwWrtShell::ToggleExtMode()
