@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _textsh.sdi,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:15:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:28:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1498,6 +1498,16 @@ interface BaseText
                 ExecMethod = Execute ;
                 StateMethod = GetState ;
         ]
+    FN_SELECTION_MODE_DEFAULT
+    [
+            ExecMethod = Execute ;
+            StateMethod = GetState ;
+    ]
+    FN_SELECTION_MODE_BLOCK
+    [
+            ExecMethod = Execute ;
+            StateMethod = GetState ;
+    ]
     SID_OPEN_HYPERLINK
     [
         ExecMethod = Execute ;
