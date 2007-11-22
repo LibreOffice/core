@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:48:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:35:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,6 +375,8 @@ public:
     void GetBorderAndShadowBoundRect( const SwRect& _rPageRect,
                                       ViewShell*    _pViewShell,
                                       SwRect& _orBorderAndShadowBoundRect ) const;
+
+    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
     // OD 12.02.2003 #i9719#, #105645#
     inline sal_Int8 BorderPxWidth() const
