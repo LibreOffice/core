@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fixedhyper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 13:57:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:24:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ namespace svt
         long                m_nTextLen;
         Pointer             m_aOldPointer;
         Link                m_aClickHdl;
+        String              m_sURL;
 
         /** initializes the font (link color and underline).
 
@@ -126,6 +127,19 @@ namespace svt
                 <member>m_aClickHdl</member>
         */
         inline const Link&  GetClickHdl() const { return m_aClickHdl; }
+
+        /** sets the URL of the hyperlink and uses it as tooltip. */
+        void         SetURL( const String& rNewURL );
+
+        /** returns the URL of the hyperlink.
+
+            @return
+                <member>m_sURL</member>
+        */
+        inline String       GetURL() const { return m_sURL; }
+
+        /** sets new text and recalculates the text length. */
+        void                SetDescription( const String& rNewDescription );
     };
 
 //.........................................................................
