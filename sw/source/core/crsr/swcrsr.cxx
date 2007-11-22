@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:30:41 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:31:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,14 +190,16 @@ struct _PercentHdl
         }
 };
 
-SwCursor::SwCursor( const SwPosition &rPos, SwPaM* pRing )
-    : SwPaM( rPos, pRing ), pSavePos( 0 ), mnRowSpanOffset( 0 ), nCursorBidiLevel( 0 )
+SwCursor::SwCursor( const SwPosition &rPos, SwPaM* pRing, bool bColumnSel )
+    : SwPaM( rPos, pRing ), pSavePos( 0 ), mnRowSpanOffset( 0 ), nCursorBidiLevel( 0 ),
+    mbColumnSelection( bColumnSel )
 {
 }
 
 // @@@ semantic: no copy ctor.
 SwCursor::SwCursor( SwCursor& rCpy )
-    : SwPaM( rCpy ), pSavePos( 0 ), mnRowSpanOffset( rCpy.mnRowSpanOffset ), nCursorBidiLevel( rCpy.nCursorBidiLevel )
+    : SwPaM( rCpy ), pSavePos( 0 ), mnRowSpanOffset( rCpy.mnRowSpanOffset ),
+    nCursorBidiLevel( rCpy.nCursorBidiLevel ), mbColumnSelection( rCpy.mbColumnSelection )
 {
 }
 
@@ -213,7 +215,7 @@ SwCursor::~SwCursor()
 
 SwCursor* SwCursor::Create( SwPaM* pRing ) const
 {
-    return new SwCursor( *GetPoint(), pRing );
+    return new SwCursor( *GetPoint(), pRing, false );
 }
 
 SwCursor::operator SwTableCursor* ()        { return 0; }
@@ -1268,7 +1270,7 @@ BOOL SwCursor::IsStartEndSentence( bool bEnd ) const
 
     if( !bRet )
     {
-        SwCursor aCrsr(*GetPoint());
+        SwCursor aCrsr(*GetPoint(), 0, false);
         SwPosition aOrigPos = *aCrsr.GetPoint();
         aCrsr.GoSentence( bEnd ? SwCursor::END_SENT : SwCursor::START_SENT );
         bRet = aOrigPos == *aCrsr.GetPoint();
@@ -2042,7 +2044,7 @@ void SwCursor::RestoreSavePos()     // Point auf die SavePos setzen
 /*  */
 
 SwTableCursor::SwTableCursor( const SwPosition &rPos, SwPaM* pRing )
-    : SwCursor( rPos, pRing )
+    : SwCursor( rPos, pRing, false )
 {
     bParked = FALSE;
     bChg = FALSE;
