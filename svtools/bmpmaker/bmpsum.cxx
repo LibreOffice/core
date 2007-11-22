@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpsum.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:24:14 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 12:00:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,11 +276,7 @@ void BmpSum::ProcessFile( const String& rBmpFileName )
 
         if( !aBmp.IsEmpty() )
         {
-#ifdef WNT
-            fprintf( stdout, "%I64u\r\n", GetCRC( aBmp ) );
-#else
-            fprintf( stdout, "%llu\r\n", GetCRC( aBmp ) );
-#endif
+            fprintf( stdout, "%" SAL_PRIuUINT64 "\r\n", GetCRC( aBmp ) );
         }
         else
         {
@@ -293,11 +289,7 @@ void BmpSum::ProcessFile( const String& rBmpFileName )
 
               if( !aBmp.IsEmpty() )
             {
-#ifdef WNT
-                fprintf( stdout, "%I64u\r\n", GetCRC( aBmp ) );
-#else
-                fprintf( stdout, "%llu\r\n", GetCRC( aBmp ) );
-#endif
+                fprintf( stdout, "%" SAL_PRIuUINT64 "\r\n", GetCRC( aBmp ) );
             }
             else
                 Message( String( RTL_CONSTASCII_USTRINGPARAM( "file not valid" ) ), EXIT_INVALIDFILE );
