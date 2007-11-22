@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 15:49:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:01:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using ::rtl::OUString;
+
 
 namespace dp_gui
 {
@@ -887,26 +888,31 @@ void DialogImpl::TreeListBoxImpl::select(css::uno::Reference<css::deployment::XP
 //##############################################################################
 
 //______________________________________________________________________________
-
-IMPL_STATIC_LINK_NOINSTANCE( DialogImpl, destroyDialog, void *, EMPTYARG )
+IMPL_LINK( DialogImpl, destroyDialog, DialogImpl *, EMPTYARG )
 {
-    //The installThread is started in a IMPL_LINK, that is, by the main thread.
-    //Because this function is also a LINK which is dispatched by the main thread,
-    //there is no danger that the installThread is started after the if statement.
-    //Either the installThread is already running or is not.
-    if (osl_isThreadRunning(s_dialog->m_installThread) == sal_False)
+    //When the install queue has not terminated then we repost the event
+    //until the installation thread has finished. We must not block the
+    //main thread because installing the extensions requires GUI. Therefore
+    //blocking here could cause a deadlock.
+    if (m_addExtensionQueue->hasTerminated())
     {
-        if (s_dialog.is())
+        //make sure the updatability thread (controls the update button) terminates
+        //this call blocks until the thread is dead.
+        m_updatability->stop();
+
+        if (s_closingDialog.is())
         {
-            ::rtl::Reference<DialogImpl> dialog( s_dialog );
-            s_dialog.clear();
+            //keep the dialog alive in this scope. disposing will already delete
+            //the static reference
+            ::rtl::Reference<DialogImpl> dialog( s_closingDialog );
+            s_closingDialog.clear();
             try {
                 dialog->disposing( lang::EventObject( dialog->m_xDesktop ) );
             }
             catch (RuntimeException &) {
                 OSL_ASSERT( 0 );
             }
-            dialog.get()->ModelessDialog::Close();
+            dialog->ModelessDialog::Close();
         }
         if (! office_is_running())
             Application::Quit();
@@ -914,7 +920,7 @@ IMPL_STATIC_LINK_NOINSTANCE( DialogImpl, destroyDialog, void *, EMPTYARG )
     else
     {   //Repost event instead of blocking the main thread.
         Application::PostUserEvent(
-            STATIC_LINK( 0, DialogImpl, destroyDialog ), 0 );
+            LINK( this, DialogImpl, destroyDialog ), 0 );
         return 0;
     }
     return 0;
@@ -924,66 +930,107 @@ IMPL_STATIC_LINK_NOINSTANCE( DialogImpl, destroyDialog, void *, EMPTYARG )
 //Called when clicking the close button
 //The actual closing of the dialog is done in
 //IMPL_STATIC_LINK( DialogImpl, destroyDialog, void *, EMPTYARG )
-//because we need to guarantee that the main dialog stays open as long as there
-//are other dialogs open.
 BOOL DialogImpl::Close()
 {
-    //make sure the updatability thread (controls the update button) terminates
-    //this call blocks until the thread is dead.
-    if (m_updatability.get() != NULL)
-        m_updatability->stop();
-    //todo check if the installation has finished
+    {
+        //Let the user click Close again in the following rare case.
+        if (sal_False == s_closingMutex.tryToAcquire()
+            || s_closingDialog.get() != NULL)
+            return FALSE;
+
+        //For all new installation request, for example by double-clicking an oxt file,
+        // a new DialogImpl is used. So temporarily there could be two dialogs visible.
+        //The old one will process all remaining installation request in the AddExtensionQueue
+        //and then die.
+        //This is necessary for the case when the user clicks close and in the same moment
+        //a new installation request arrives.
+        //The last reference to this DialogImpl will be removed in destroyDialog where
+        //s_closingDialog.clear is called.
+        {
+            ::osl::MutexGuard g(s_dialogMutex);
+            s_closingDialog = s_dialog;
+            s_dialog.clear();
+        }
+        s_closingMutex.release();
+    }
+
+    //This call does not block but signals that the installation thread shall terminate.
+    m_addExtensionQueue->stop();
+
+
+    //Do not call m_addExtensionQueue->stop() here. See event handler destroyDialog.
     Application::PostUserEvent(
-        STATIC_LINK( 0, DialogImpl, destroyDialog ), 0 );
-    return FALSE; //ModelessDialog::Close();
+        LINK( this, DialogImpl, destroyDialog ), 0 );
+    return FALSE;
 }
 
 // XEventListener
 //______________________________________________________________________________
 void DialogImpl::disposing( lang::EventObject const & evt )
-    throw (RuntimeException)
+throw (RuntimeException)
 {
     const lang::EventObject evt_( static_cast<OWeakObject *>(this) );
+
+    // see destroyDialog
+    bool shutDown = (evt.Source == m_xDesktop);
     {
-        bool shutDown = (evt.Source == m_xDesktop);
+        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        // remove contexts:
+        SvLBoxEntry * entry = m_treelb->First();
+        while (entry != 0)
         {
-            const ::vos::OGuard guard( Application::GetSolarMutex() );
-            // remove contexts:
-            SvLBoxEntry * entry = m_treelb->First();
-            while (entry != 0)
-            {
-                ::rtl::Reference<NodeImpl> node( NodeImpl::get(entry) );
-                entry = m_treelb->NextSibling(entry);
-                if (shutDown ||
-                    node->m_xPackageManager
-                    ->getContext().matchIgnoreAsciiCaseAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:") ))
-                    node->disposing( evt_ );
-            }
+            ::rtl::Reference<NodeImpl> node( NodeImpl::get(entry) );
+            entry = m_treelb->NextSibling(entry);
+            if (shutDown ||
+                node->m_xPackageManager
+                ->getContext().matchIgnoreAsciiCaseAsciiL(
+                RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:") ))
+                node->disposing( evt_ );
+        }
 
-            if (shutDown)
-            {
-                m_selectionBox->m_bShutDown = true;
+        if (shutDown)
+        {
+            m_selectionBox->m_bShutDown = true;
+        }
+    } // release Solar mutex which will be used by the extension queue.
+
+    if (shutDown)
+    {
+        //Make sure we destroy all threads before destroying the dialog.
+        //s_dialog may not contain this anymore but a new dialog
+        m_updatability->stop();
+        m_addExtensionQueue->stopAndWait();
+        {
+            ::osl::MutexGuard g(s_dialogMutex);
+            if (static_cast<DialogImpl*>(s_dialog.get()) == static_cast<DialogImpl*>(this))
                 s_dialog.clear();
-            }
         }
-
-        if (m_xTdocRoot.is()) {
-            m_xTdocRoot->removeContentEventListener( this );
-            m_xTdocRoot.clear();
-        }
-        if (shutDown && m_xDesktop.is()) {
-            m_xDesktop->removeTerminateListener( this );
-            m_xDesktop.clear();
+        {
+            ::osl::MutexGuard g(s_closingMutex);
+            if (static_cast<DialogImpl*>(s_closingDialog.get()) == static_cast<DialogImpl*>(this))
+                s_closingDialog.clear();
         }
     }
+
+    if (m_xTdocRoot.is()) {
+        m_xTdocRoot->removeContentEventListener( this );
+        m_xTdocRoot.clear();
+    }
+    if (shutDown && m_xDesktop.is()) {
+        m_xDesktop->removeTerminateListener( this );
+        m_xDesktop.clear();
+    }
 }
+
 
 // XTerminateListener
 //______________________________________________________________________________
 void DialogImpl::queryTermination( lang::EventObject const & )
     throw (frame::TerminationVetoException, RuntimeException)
 {
+    // If we did not threw an exception anyway, we would have to do it
+    //as long as there are queued installation requests for extensions.
+    //See m_addExtensionsQueue.
     throw frame::TerminationVetoException(
         OUSTR("The office cannot be closed while the Extension Manager is running"),
         Reference<XInterface>(static_cast<frame::XTerminateListener*>(this), UNO_QUERY));
@@ -995,6 +1042,8 @@ void DialogImpl::notifyTermination( lang::EventObject const & evt )
 {
    if (m_updatability.get() != NULL)
         m_updatability->stop();
+   if (m_addExtensionQueue.get() != NULL)
+       m_addExtensionQueue->stopAndWait();
 
     disposing( evt );
 }
