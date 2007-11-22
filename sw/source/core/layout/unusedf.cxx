@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unusedf.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:24:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:38:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,12 @@ sal_Bool SwCntntFrm::WouldFit( SwTwips &, sal_Bool&, sal_Bool )
 {
     ASSERT( FALSE, "WouldFit des CntntFrm gerufen." );
     return FALSE;
+}
+
+bool SwFrm::FillSelection( SwSelectionList& , const SwRect& ) const
+{
+    ASSERT( false, "Don't call this function at the base class!" );
+    return false;
 }
 
 BOOL SwFrm::GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState*  ) const
