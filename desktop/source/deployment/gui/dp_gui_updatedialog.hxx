@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:02:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:25:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,6 @@
 #ifndef _SVLBOXITM_HXX
 #include "svtools/svlbitm.hxx"
 #endif
-#ifndef _SVEDIT_HXX
-#include "svtools/svmedit.hxx"
-#endif
 #ifndef _SVX_CHECKLBX_HXX
 #include "svx/checklbx.hxx"
 #endif
@@ -79,6 +76,11 @@
 #ifndef _SV_FIXED_HXX
 #include "vcl/fixed.hxx"
 #endif
+#ifndef SVTOOLS_FIXEDHYPER_HXX
+#include <svtools/fixedhyper.hxx>
+#endif
+
+#include "descedit.hxx"
 
 /// @HTML
 
@@ -205,13 +207,16 @@ private:
 
     void enableOk();
 
+    void initDescription();
+    void clearDescription();
+    bool showDescription( const dp_gui::UpdateData& rData );
+    bool showDescription( const String& rDescription, bool bWithPublisher );
+
     DECL_LINK(selectionHandler, void *);
-
     DECL_LINK(allHandler, void *);
-
     DECL_LINK(okHandler, void *);
-
     DECL_LINK(cancelHandler, void *);
+    DECL_LINK(hyperlink_clicked, svt::FixedHyperlink *);
 
     com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
         m_context;
@@ -220,8 +225,12 @@ private:
     FixedText m_update;
     UpdateDialog::CheckListBox m_updates;
     CheckBox m_all;
-    FixedText m_description;
-    MultiLineEdit m_descriptions;
+    FixedLine m_description;
+    FixedText m_PublisherLabel;
+    svt::FixedHyperlink m_PublisherLink;
+    FixedText m_ReleaseNotesLabel;
+    svt::FixedHyperlink m_ReleaseNotesLink;
+    dp_gui::DescriptionEdit m_descriptions;
     FixedLine m_line;
     HelpButton m_help;
     PushButton m_ok;
@@ -243,6 +252,11 @@ private:
     std::vector< UpdateDialog::SpecificError > m_specificErrors;
     std::vector< dp_gui::UpdateData > & m_updateData;
     rtl::Reference< UpdateDialog::Thread > m_thread;
+
+    Point m_aFirstLinePos;
+    Size m_aFirstLineSize;
+    long m_nFirstLineDelta;
+    long m_nOneLineMissing;
 };
 
 }
