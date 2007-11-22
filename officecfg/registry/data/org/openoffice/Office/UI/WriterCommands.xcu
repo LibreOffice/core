@@ -2147,6 +2147,16 @@
                     <value xml:lang="en-US">E-mail as ~OpenDocument Text...</value>
                 </prop>
             </node>
+            <node oor:name=".uno:SelectionModeDefault" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Standard</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SelectionModeBlock" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">~Block Area</value>
+                </prop>
+            </node>
         </node>
         <node oor:name="Popups">
             <node oor:name=".uno:TableMenu" oor:op="replace">
@@ -2207,6 +2217,11 @@
             <node oor:name=".uno:AutoFormatMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Auto~Format</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SelectionModeMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Selection Mode</value>
                 </prop>
             </node>
         </node>
