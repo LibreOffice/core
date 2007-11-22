@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_resource.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:24:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:04:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,8 @@ namespace dp_misc {
 namespace {
 
 struct OfficeLocale :
-        public rtl::StaticWithInit<const lang::Locale, OfficeLocale> {
-    const lang::Locale operator () () {
+        public rtl::StaticWithInit<const OUString, OfficeLocale> {
+    const OUString operator () () {
         OUString slang;
         if (! (::utl::ConfigManager::GetDirectConfigProperty(
                    ::utl::ConfigManager::LOCALE ) >>= slang))
@@ -63,16 +63,15 @@ struct OfficeLocale :
         //office for the first time.
         if (slang.getLength() == 0)
             slang =  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("en-US"));
-        return toLocale(slang);
+        return slang;
     }
 };
 
-void dummy() {}
 struct DeploymentResMgr : public rtl::StaticWithInit<
     ResMgr *, DeploymentResMgr> {
     ResMgr * operator () () {
         return ResMgr::CreateResMgr( "deployment" LIBRARY_SOLARUPD(),
-                                     OfficeLocale::get() );
+                                     getOfficeLocale() );
     }
 };
 
@@ -229,7 +228,12 @@ void checkThirdSubtag(::rtl::OUString const & tag)
 }
 
 //==============================================================================
-lang::Locale const & getOfficeLocale()
+lang::Locale getOfficeLocale()
+{
+    return toLocale(OfficeLocale::get());
+}
+
+::rtl::OUString getOfficeLocaleString()
 {
     return OfficeLocale::get();
 }
