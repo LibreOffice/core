@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:14:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:38:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #include "frmfmt.hxx"
 #include "paratr.hxx"
 #include "flyfrm.hxx"
+#include "pam.hxx"
+#include "swselectionlist.hxx"
+#include <sortedobjs.hxx>
 
 #ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
@@ -1697,5 +1700,148 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         --nOffset;
 
     return nOffset;
+}
+
+/** Looks for text portions which are inside the given rectangle
+
+    For a rectangular text selection every text portions which is inside the given
+    rectangle has to be put into the SwSelectionList as SwPaM
+    From these SwPaM the SwCursors will be created.
+
+    @param rSelList
+    The container for the overlapped text portions
+
+    @param rRect
+    A rectangle in document coordinates, text inside this rectangle has to be
+    selected.
+
+    @return [ true, false ]
+    true if any overlapping text portion has been found and put into list
+    false if no portion overlaps, the list has been unchanged
+*/
+bool SwTxtFrm::FillSelection( SwSelectionList& rSelList, const SwRect& rRect ) const
+{
+    bool bRet = false;
+    // PaintArea() instead Frm() for negative indents
+    SwRect aTmpFrm( PaintArea() );
+    if( !rRect.IsOver( aTmpFrm ) )
+        return false;
+    if( rSelList.checkContext( this ) )
+    {
+        SwRect aRect( aTmpFrm );
+        aRect.Intersection( rRect );
+        // rNode without const to create SwPaMs
+        SwCntntNode &rNode = const_cast<SwCntntNode&>( *GetNode() );
+        SwNodeIndex aIdx( rNode );
+        SwPosition aPosL( aIdx, SwIndex( &rNode, 0 ) );
+        if( IsEmpty() )
+        {
+            SwPaM *pPam = new SwPaM( aPosL, aPosL );
+            rSelList.insertPaM( pPam );
+        }
+        else if( aRect.HasArea() )
+        {
+            xub_StrLen nOld = STRING_LEN;
+            SwPosition aPosR( aPosL );
+            Point aPoint;
+            SwTxtInfo aInf( const_cast<SwTxtFrm*>(this) );
+            SwTxtIter aLine( const_cast<SwTxtFrm*>(this), &aInf );
+            // We have to care for top-to-bottom layout, where right becomes top etc.
+            SWRECTFN( this )
+            SwTwips nTop = (aRect.*fnRect->fnGetTop)();
+            SwTwips nBottom = (aRect.*fnRect->fnGetBottom)();
+            SwTwips nLeft = (aRect.*fnRect->fnGetLeft)();
+            SwTwips nRight = (aRect.*fnRect->fnGetRight)();
+            SwTwips nY = aLine.Y(); // Top position of the first line
+            SwTwips nLastY = nY;
+            while( nY < nTop && aLine.Next() ) // line above rectangle
+            {
+                nLastY = nY;
+                nY = aLine.Y();
+            }
+            bool bLastLine = false;
+            if( nY < nTop && !aLine.GetNext() )
+            {
+                bLastLine = true;
+                nY += aLine.GetLineHeight();
+            }
+            do // check the lines for overlapping
+            {
+                if( nLastY < nTop ) // if the last line was above rectangle
+                    nLastY = nTop;
+                if( nY > nBottom ) // if the current line leaves the rectangle
+                    nY = nBottom;
+                if( nY >= nLastY ) // gotcha: overlapping
+                {
+                    nLastY += nY;
+                    nLastY /= 2;
+                    if( bVert )
+                    {
+                        aPoint.X() = nLastY;
+                        aPoint.Y() = nLeft;
+                    }
+                    else
+                    {
+                        aPoint.X() = nLeft;
+                        aPoint.Y() = nLastY;
+                    }
+                    // Looking for the position of the left border of the rectangle
+                    // in this text line
+                    SwCrsrMoveState aState( MV_UPDOWN );
+                    if( GetCrsrOfst( &aPosL, aPoint, &aState ) )
+                    {
+                        if( bVert )
+                        {
+                            aPoint.X() = nLastY;
+                            aPoint.Y() = nRight;
+                        }
+                        else
+                        {
+                            aPoint.X() = nRight;
+                            aPoint.Y() = nLastY;
+                        }
+                        // If we get a right position and if the left position
+                        // is not the same like the left position of the line before
+                        // which cound happen e.g. for field portions or fly frames
+                        // a SwPaM will be inserted with these positions
+                        if( GetCrsrOfst( &aPosR, aPoint, &aState ) &&
+                            nOld != aPosL.nContent.GetIndex() )
+                        {
+                            SwPaM *pPam = new SwPaM( aPosL, aPosR );
+                            rSelList.insertPaM( pPam );
+                            nOld = aPosL.nContent.GetIndex();
+                        }
+                    }
+                }
+                if( aLine.Next() )
+                {
+                    nLastY = nY;
+                    nY = aLine.Y();
+                }
+                else if( !bLastLine )
+                {
+                    bLastLine = true;
+                    nLastY = nY;
+                    nY += aLine.GetLineHeight();
+                }
+                else
+                    break;
+            }while( nLastY < nBottom );
+        }
+    }
+    if( GetDrawObjs() )
+    {
+        const SwSortedObjs &rObjs = *GetDrawObjs();
+        for ( USHORT i = 0; i < rObjs.Count(); ++i )
+        {
+            const SwAnchoredObject* pAnchoredObj = rObjs[i];
+            if( !pAnchoredObj->ISA(SwFlyFrm) )
+                continue;
+            const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
+            if( pFly->IsFlyInCntFrm() && pFly->FillSelection( rSelList, rRect ) )
+                bRet = true;
+        }
+    }
+    return bRet;
 }
 
