@@ -4,9 +4,9 @@
  *
  *  $RCSfile: license_dialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:53:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:22:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,33 +104,6 @@ protected:
 struct LicenseDialogImpl : public ModalDialog
 {
     cssu::Reference<cssu::XComponentContext> m_xComponentContext;
-    //virtual BOOL Close();
-    //virtual void Resize();
-    //DECL_LINK( headbar_dragEnd, HeaderBar * );
-    //
-    //void clickClose( USHORT id );
-    //void clickAdd( USHORT id );
-    //void clickRemove( USHORT id );
-
-    //void updateButtonStates(
-    //    css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv =
-    //    com::sun::star::uno::Reference<
-    //    com::sun::star::ucb::XCommandEnvironment>() );
-    //
-    //css::uno::Reference<css::uno::XComponentContext> m_xComponentContext;
-
-    // controls:
-    //::std::auto_ptr<SelectionBoxControl> m_selectionBox;
-    //::std::auto_ptr<HeaderBar> m_headerBar;
-    //::std::auto_ptr<TreeListBoxImpl> m_treelb;
-
-    //::std::auto_ptr<ThreadedPushButton> m_addButton;
-    //::std::auto_ptr<ThreadedPushButton> m_removeButton;
-    //::std::auto_ptr<ThreadedPushButton> m_enableButton;
-    //::std::auto_ptr<ThreadedPushButton> m_disableButton;
-    //::std::auto_ptr<ThreadedPushButton> m_exportButton;
-    //::std::auto_ptr<FixedLine> m_bottomLine;
-
     FixedText m_ftHead;
     FixedText m_ftBody1;
     FixedText m_ftBody1Txt;
@@ -150,8 +123,6 @@ struct LicenseDialogImpl : public ModalDialog
     DECL_LINK(EndReachedHdl, LicenseView*);
 
     bool m_bLicenseRead;
-//    DECL_STATIC_LINK( DialogImpl, destroyDialog, void * );
-//    static ::rtl::Reference<LicenseDialogImpl> s_dialog;
 
     virtual ~LicenseDialogImpl();
 
