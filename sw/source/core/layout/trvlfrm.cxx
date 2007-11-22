@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:07:02 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:37:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,7 @@
 
 // FLT_MAX
 #include <cfloat>
+#include <swselectionlist.hxx>
 
 //Fuer SwFlyFrm::GetCrsrOfst
 class SwCrsrOszControl
@@ -325,6 +326,62 @@ BOOL SwPageFrm::GetCrsrOfst( SwPosition *pPos, Point &rPoint,
     if ( bRet )
         rPoint = aPoint;
     return bRet;
+}
+
+bool SwLayoutFrm::FillSelection( SwSelectionList& rList, const SwRect& rRect ) const
+{
+    bool bRet = false;
+    if( rRect.IsOver(PaintArea()) )
+    {
+        const SwFrm* pFrm = Lower();
+        while( pFrm )
+        {
+            pFrm->FillSelection( rList, rRect );
+            pFrm = pFrm->GetNext();
+        }
+    }
+    return bRet;
+}
+
+bool SwPageFrm::FillSelection( SwSelectionList& rList, const SwRect& rRect ) const
+{
+    bool bRet = false;
+    if( rRect.IsOver(PaintArea()) )
+    {
+        bRet = SwLayoutFrm::FillSelection( rList, rRect );
+        if( GetSortedObjs() )
+        {
+            const SwSortedObjs &rObjs = *GetSortedObjs();
+            for ( USHORT i = 0; i < rObjs.Count(); ++i )
+            {
+                const SwAnchoredObject* pAnchoredObj = rObjs[i];
+                if( !pAnchoredObj->ISA(SwFlyFrm) )
+                    continue;
+                const SwFlyFrm* pFly = static_cast<const SwFlyFrm*>(pAnchoredObj);
+                if( pFly->FillSelection( rList, rRect ) )
+                    bRet = true;
+            }
+        }
+    }
+    return bRet;
+}
+
+bool SwRootFrm::FillSelection( SwSelectionList& aSelList, const SwRect& rRect) const
+{
+    const SwFrm *pPage = Lower();
+    const long nBottom = rRect.Bottom();
+    while( pPage )
+    {
+        if( pPage->Frm().Top() < nBottom )
+        {
+            if( pPage->Frm().Bottom() > rRect.Top() )
+                pPage->FillSelection( aSelList, rRect );
+            pPage = pPage->GetNext();
+        }
+        else
+            pPage = 0;
+    }
+    return !aSelList.isEmpty();
 }
 
 /*************************************************************************
