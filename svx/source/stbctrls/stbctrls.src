@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:55:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:56:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,12 @@ String RID_SVXSTR_SELMODE_ERG
 {
      // 'Erg"anzend' bzw. 'Added' abgek"urzt auf h"ochstens 3 Zeichen
     Text [ en-US ] = "ADD" ;
+};
+String RID_SVXSTR_SELMODE_BLK
+{
+     // 'Block' shortened to max. 3 chararcters
+    Text [ en-US ] = "BLK" ;
+    Text [ x-comment ] = " ";
 };
 
 String RID_SVXSTR_XMLSEC_SIG_OK
