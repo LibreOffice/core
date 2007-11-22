@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:52:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:02:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,6 @@ struct UpdateDialog::DisabledUpdate {
     rtl::OUString name;
     css::uno::Sequence< rtl::OUString > unsatisfiedDependencies;
     bool permission;
-    boost::optional< rtl::OUString > updateWebsiteUrl;
 };
 
 struct UpdateDialog::SpecificError {
@@ -565,26 +564,33 @@ bool UpdateDialog::Thread::update(
 {
     dp_misc::DescriptionInfoset infoset(m_context, updateInfo);
     OSL_ASSERT(infoset.getVersion().getLength() != 0);
-    rtl::OUStringBuffer b(package->getDisplayName());
-    b.append(static_cast< sal_Unicode >(' '));
-    b.append(infoset.getVersion());
-    UpdateDialog::DisabledUpdate du;
-    du.name = b.makeStringAndClear();
     css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > > ds(
         dp_misc::Dependencies::check(infoset));
+    UpdateDialog::DisabledUpdate du;
     du.unsatisfiedDependencies.realloc(ds.getLength());
     for (sal_Int32 i = 0; i < ds.getLength(); ++i) {
         du.unsatisfiedDependencies[i] = dp_misc::Dependencies::name(ds[i]);
     }
     du.permission = ! packageManager->isReadOnly();
-    du.updateWebsiteUrl = infoset.getUpdateWebsiteUrl();
-    if (du.unsatisfiedDependencies.getLength() == 0 && du.permission &&
-        !du.updateWebsiteUrl)
+    const ::boost::optional< ::rtl::OUString> updateWebsiteURL(infoset.getLocalizedUpdateWebsiteURL());
+    rtl::OUStringBuffer b(package->getDisplayName());
+    b.append(static_cast< sal_Unicode >(' '));
+    b.append(infoset.getVersion());
+    if (updateWebsiteURL)
+    {
+        b.append(static_cast< sal_Unicode >(' '));
+        b.append(m_dialog.m_browserbased);
+    }
+    du.name = b.makeStringAndClear();
+
+    if (du.unsatisfiedDependencies.getLength() == 0 && du.permission)
     {
         dp_gui::UpdateData data;
         data.aInstalledPackage = package;
         data.aPackageManager = packageManager;
         data.aUpdateInfo = updateInfo;
+        if (updateWebsiteURL)
+            data.sWebsiteURL = *updateWebsiteURL;
         vos::OGuard g(Application::GetSolarMutex());
         if (!m_stop) {
             m_dialog.addEnabledUpdate(du.name, data);
@@ -631,7 +637,7 @@ UpdateDialog::UpdateDialog(
     m_noDependency(String(DpGuiResId(RID_DLG_UPDATE_NODEPENDENCY))),
     m_noPermission(String(DpGuiResId(RID_DLG_UPDATE_NOPERMISSION))),
     m_noPermissionVista(String(DpGuiResId(RID_DLG_UPDATE_NOPERMISSION_VISTA))),
-    m_noUpdate(String(DpGuiResId(RID_DLG_UPDATE_NOUPDATE))),
+    m_browserbased(String(DpGuiResId(RID_DLG_UPDATE_BROWSERBASED))),
     m_updateData(*updateData),
     m_thread(
         new UpdateDialog::Thread(
@@ -976,21 +982,6 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG) {
                         b.append(m_noPermissionVista);
                     else
                         b.append(m_noPermission);
-                }
-                if (data.updateWebsiteUrl) {
-                    if (b.getLength() == 0) {
-                        b.append(m_noInstall);
-                    }
-                    b.append(LF);
-                    static char const url[] = "%URL";
-                    sal_Int32 i = m_noUpdate.indexOf(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(url)));
-                    b.append(
-                        i < 0
-                        ? m_noUpdate
-                        : m_noUpdate.replaceAt(
-                            i, RTL_CONSTASCII_LENGTH(url),
-                            confineToParagraph(*data.updateWebsiteUrl)));
                 }
                 break;
             }
