@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.hrc,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:21:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 16:05:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,9 +133,14 @@
 #define RID_DLG_UPDATE_NOPERMISSION 22
 #define RID_DLG_UPDATE_NOPERMISSION_VISTA 23
 #define RID_DLG_UPDATE_BROWSERBASED 24
+#define RID_DLG_UPDATE_PUBLISHER_LABEL 25
+#define RID_DLG_UPDATE_PUBLISHER_LINK  26
+#define RID_DLG_UPDATE_RELEASENOTES_LABEL 27
+#define RID_DLG_UPDATE_RELEASENOTES_LINK 28
+#define RID_DLG_UPDATE_NOUPDATE 29
 
 #define RID_DLG_UPDATEINSTALL                  (RID_DEPLOYMENT_GUI_START + 20)
-#define RID_INFOBOX_UPDATE_SHARED_EXTENSION        (RID_DEPLOYMENT_GUI_START + 21)
+#define RID_INFOBOX_UPDATE_SHARED_EXTENSION    (RID_DEPLOYMENT_GUI_START + 21)
 
 #define RID_IMG_DEF_INSTALLATION               (RID_DEPLOYMENT_GUI_START+50)
 #define RID_IMG_DEF_INSTALLATION_HC            (RID_DEPLOYMENT_GUI_START+51)
