@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:30:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 12:01:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,9 +80,17 @@ typedef unsigned char       sal_uInt8;
 #if SAL_TYPES_SIZEOFLONG == 4
     typedef signed long       sal_Int32;
     typedef unsigned long     sal_uInt32;
+    #define SAL_PRIdINT32 "ld"
+    #define SAL_PRIuUINT32 "lu"
+    #define SAL_PRIxUINT32 "lx"
+    #define SAL_PRIXUINT32 "lX"
 #elif SAL_TYPES_SIZEOFINT == 4
     typedef signed int        sal_Int32;
     typedef unsigned int      sal_uInt32;
+    #define SAL_PRIdINT32 "d"
+    #define SAL_PRIuUINT32 "u"
+    #define SAL_PRIxUINT32 "x"
+    #define SAL_PRIXUINT32 "X"
 #else
      #error "Could not find 32-bit type, add support for your architecture"
 #endif
@@ -94,6 +102,11 @@ typedef unsigned char       sal_uInt8;
     /*  The following are macros that will add the 64 bit constant suffix. */
     #define SAL_CONST_INT64(x)       x##i64
     #define SAL_CONST_UINT64(x)      x##ui64
+
+    #define SAL_PRIdINT64 "I64d"
+    #define SAL_PRIuUINT64 "I64u"
+    #define SAL_PRIxUINT64 "I64x"
+    #define SAL_PRIXUINT64 "I64X"
 #elif defined(__SUNPRO_CC) || defined(__SUNPRO_C) || defined (__GNUC__) || defined(__hpux) || defined (sgi)
     #if SAL_TYPES_SIZEOFLONG == 8
         typedef signed long int         sal_Int64;
@@ -103,6 +116,11 @@ typedef unsigned char       sal_uInt8;
         /*  The following are macros that will add the 64 bit constant suffix. */
         #define SAL_CONST_INT64(x)       x##l
         #define SAL_CONST_UINT64(x)      x##ul
+
+        #define SAL_PRIdINT64 "ld"
+        #define SAL_PRIuUINT64 "lu"
+        #define SAL_PRIxUINT64 "lx"
+        #define SAL_PRIXUINT64 "lX"
     #elif SAL_TYPES_SIZEOFLONGLONG == 8
         typedef signed long long    sal_Int64;
         typedef unsigned long long  sal_uInt64;
@@ -111,6 +129,10 @@ typedef unsigned char       sal_uInt8;
         #define SAL_CONST_INT64(x)       x##ll
         #define SAL_CONST_UINT64(x)      x##ull
 
+        #define SAL_PRIdINT64 "lld"
+        #define SAL_PRIuUINT64 "llu"
+        #define SAL_PRIxUINT64 "llx"
+        #define SAL_PRIXUINT64 "llX"
     #else
         #error "Could not find 64-bit type, add support for your architecture"
     #endif
@@ -151,15 +173,33 @@ typedef void *                   sal_Handle;
     #error "Please make sure SAL_TYPES_SIZEOFPOINTER is defined for your architecture/compiler"
 #endif
 
+/* printf-style conversion specification length modifiers for size_t and
+   ptrdiff_t (most platforms support C99, MSC has its own extension) */
+#if defined _MSC_VER
+    #define SAL_PRI_SIZET "I"
+    #define SAL_PRI_PTRDIFFT "I"
+#else
+    #define SAL_PRI_SIZET "z"
+    #define SAL_PRI_PTRDIFFT "t"
+#endif
+
 /* sal_IntPtr, sal_uIntPtr are integer types designed to hold pointers so that any valid
  * pointer to void can be converted to this type and back to a pointer to void and the
  * result will compare to the original pointer */
 #if SAL_TYPES_SIZEOFPOINTER == 4
     typedef sal_Int32           sal_IntPtr;
     typedef sal_uInt32          sal_uIntPtr;
+    #define SAL_PRIdINTPTR SAL_PRIdINT32
+    #define SAL_PRIuUINTPTR SAL_PRIuUINT32
+    #define SAL_PRIxUINTPTR SAL_PRIxUINT32
+    #define SAL_PRIXUINTPTR SAL_PRIXUINT32
 #elif SAL_TYPES_SIZEOFPOINTER == 8
     typedef sal_Int64           sal_IntPtr;
     typedef sal_uInt64          sal_uIntPtr;
+    #define SAL_PRIdINTPTR SAL_PRIdINT64
+    #define SAL_PRIuUINTPTR SAL_PRIuUINT64
+    #define SAL_PRIxUINTPTR SAL_PRIxUINT64
+    #define SAL_PRIXUINTPTR SAL_PRIXUINT64
 #else
     #error "Please make sure SAL_TYPES_SIZEOFPOINTER is defined for your architecture/compiler"
 #endif
