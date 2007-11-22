@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fixedhyper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-29 12:11:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:24:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,18 @@ void FixedHyperlink::KeyInput( const KeyEvent& rKEvt )
         default:
             FixedText::KeyInput( rKEvt );
     }
+}
+
+void FixedHyperlink::SetURL( const String& rNewURL )
+{
+    m_sURL = rNewURL;
+    SetQuickHelpText( m_sURL );
+}
+
+void FixedHyperlink::SetDescription( const String& rNewDescription )
+{
+    SetText( rNewDescription );
+    m_nTextLen = GetCtrlTextWidth( GetText() );
 }
 
 //.........................................................................
