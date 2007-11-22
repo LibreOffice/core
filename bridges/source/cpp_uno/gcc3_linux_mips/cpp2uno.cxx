@@ -4,11 +4,11 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
  *  Wrote by Fuxin Zhang. fxzhang@ict.ac.cn.
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 15:21:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 16:47:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include <com/sun/star/uno/genfunc.hxx>
 #include <typelib/typedescription.hxx>
 #include <uno/data.h>
+#include <osl/endian.h>
 #include "bridges/cpp_uno/shared/bridge.hxx"
 #include "bridges/cpp_uno/shared/cppinterfaceproxy.hxx"
 #include "bridges/cpp_uno/shared/types.hxx"
@@ -59,8 +60,11 @@ using namespace ::rtl;
 #endif
 #include <sys/sysmips.h>
 
-
-
+#ifdef OSL_BIGENDIAN
+#define IS_BIG_ENDIAN 1
+#else
+#define IS_BIG_ENDIAN 0
+#endif
 
 using namespace ::com::sun::star::uno;
 
@@ -199,13 +203,13 @@ namespace
     fprintf(stderr,"cpp2uno_call:byte=%p,%p\n",gpreg[0],ovrflw[0]);
 #endif
             if (nw < 4) {
-              pCppArgs[nPos] = ((char *)gpreg);
-              pUnoArgs[nPos] = ((char *)gpreg);
+              pCppArgs[nPos] = ((char *)gpreg + 3*IS_BIG_ENDIAN);
+              pUnoArgs[nPos] = ((char *)gpreg + 3*IS_BIG_ENDIAN);
               nw++;
               gpreg++;
             } else {
-              pCppArgs[nPos] = ((char *)ovrflw);
-              pUnoArgs[nPos] = ((char *)ovrflw);
+              pCppArgs[nPos] = ((char *)ovrflw + 3*IS_BIG_ENDIAN);
+              pUnoArgs[nPos] = ((char *)ovrflw + 3*IS_BIG_ENDIAN);
               ovrflw++;
             }
             break;
@@ -218,13 +222,13 @@ namespace
     fprintf(stderr,"cpp2uno_call:char=%p,%p\n",gpreg[0],ovrflw[0]);
 #endif
             if (nw < 4) {
-              pCppArgs[nPos] = ((char *)gpreg);
-              pUnoArgs[nPos] = ((char *)gpreg);
+              pCppArgs[nPos] = ((char *)gpreg + 2*IS_BIG_ENDIAN);
+              pUnoArgs[nPos] = ((char *)gpreg + 2*IS_BIG_ENDIAN);
               nw++;
               gpreg++;
             } else {
-              pCppArgs[nPos] = ((char *)ovrflw);
-              pUnoArgs[nPos] = ((char *)ovrflw);
+              pCppArgs[nPos] = ((char *)ovrflw + 2*IS_BIG_ENDIAN);
+              pUnoArgs[nPos] = ((char *)ovrflw + 2*IS_BIG_ENDIAN);
               ovrflw++;
             }
             break;
@@ -623,10 +627,8 @@ namespace
         break;
 
       case typelib_TypeClass_DOUBLE:
-        __asm__( "lwc1 $f0,%0\n\t"
-                 "lwc1 $f1,%1\n\t" : :
-            "m" (*((float*)nRegReturn)),
-            "m" (*(((float*)nRegReturn)+1)) );
+          { register double dret asm("$f0");
+        dret = (*((double*)nRegReturn)); }
         break;
 
       case typelib_TypeClass_HYPER:

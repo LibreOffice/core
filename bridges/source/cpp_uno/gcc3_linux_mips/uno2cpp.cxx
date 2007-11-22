@@ -4,11 +4,11 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
  *  Wrote by Fuxin Zhang. fxzhang@ict.ac.cn.
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 15:22:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 16:47:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,8 +81,7 @@ namespace
     int nw;                       // number of words mapped
     long *p;                      // pointer to parameter overflow area
     int c;                        // character of parameter type being decoded
-    float fret,fret2;             // temporary function return values
-    int iret, iret2;
+    int iret, iret2;              // temporary function return values
 
     // never called
     if (! pAdjustedThisPtr ) CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything("xxx"); // address something
@@ -216,16 +215,15 @@ namespace
     __asm__ __volatile__ (
         "sw $2,%0 \n\t"
         "sw $3,%1 \n\t"
-        "swc1 $f0,%2\n\t"
-        "swc1 $f1,%3\n\t"
-        : "=m" (iret), "=m" (iret2),"=m"(fret),"=m"(fret2) : );
+        : "=m" (iret), "=m" (iret2) : );
+    register float fret asm("$f0");
+    register double dret asm("$f0");
 
     switch( eReturnType )
     {
       case typelib_TypeClass_HYPER:
       case typelib_TypeClass_UNSIGNED_HYPER:
-        ((long*)pRegisterReturn)[0] = iret;
-        ((long*)pRegisterReturn)[1] = iret2;
+          ((long*)pRegisterReturn)[1] = iret2;  // fall through
       case typelib_TypeClass_LONG:
       case typelib_TypeClass_UNSIGNED_LONG:
       case typelib_TypeClass_ENUM:
@@ -244,11 +242,10 @@ namespace
         *(float*)pRegisterReturn = fret;
         break;
       case typelib_TypeClass_DOUBLE:
-        ((float*)pRegisterReturn)[0] = fret;
-        ((float*)pRegisterReturn)[1] = fret2;
+        *(double*)pRegisterReturn = dret;
         break;
-        default:
-            break;
+      default:
+        break;
     }
   }
 
