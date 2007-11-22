@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-16 11:42:56 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:35:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@ class Color;
 class SwBorderAttrs;
 class SwCache;
 class SvxBrushItem;
+class SwSelectionList;
 struct SwPosition;
 struct SwCrsrMoveState;
 
@@ -827,6 +828,8 @@ public:
     void InvalidateNextPrtArea();
 
     void InvalidatePage( const SwPageFrm *pPage = 0 ) const;
+
+    virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
     virtual BOOL    GetCrsrOfst( SwPosition *, Point&,
                                  SwCrsrMoveState* = 0 ) const;
