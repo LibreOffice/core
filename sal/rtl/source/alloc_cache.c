@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alloc_cache.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:24:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 12:20:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1544,7 +1544,7 @@ static DWORD WINAPI
 #endif /* SAL_UNX || SAL_W32 */
 rtl_cache_wsupdate_all (void * arg)
 {
-    unsigned int seconds = (unsigned int)(arg);
+    unsigned int seconds = (unsigned int)SAL_INT_CAST(sal_uIntPtr, arg);
 
     RTL_MEMORY_LOCK_ACQUIRE(&(g_cache_list.m_lock));
     while (!g_cache_list.m_update_done)
