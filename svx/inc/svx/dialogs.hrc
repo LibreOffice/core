@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 17:19:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 16:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,7 +349,7 @@
 
 #define RID_SVXCTRL_RECTBTNS                (RID_SVX_START + 226)
 
-// ResId's f�r Hyperlink-Dialog-Tabpages
+// ResId's f???r Hyperlink-Dialog-Tabpages
 #define RID_SVXDLG_NEWHYPERLINK             (RID_SVX_START + 227)
 #define RID_SVXPAGE_HYPERLINK_INTERNET      (RID_SVX_START + 228)
 #define RID_SVXPAGE_HYPERLINK_MAIL          (RID_SVX_START + 229)
@@ -1372,9 +1372,10 @@
 #define RID_SVXSTR_REPLACE_ICON_WARNING                     (RID_SVX_START + 1164) //added for issue73355
 #define RID_SVXSTR_REPLACE_ICON_CONFIRM                     (RID_SVX_START + 1165) //added for issue73355
 #define RID_SVXSTR_YESTOALL                                 (RID_SVX_START + 1166) //added for issue73355
+#define RID_SVXSTR_SELMODE_BLK                              (RID_SVX_START + 1167)
 
 // pb: next free string resource id
-#define RID_SVXSTR_NEXTFREE                 (RID_SVX_START + 1167)
+#define RID_SVXSTR_NEXTFREE                 (RID_SVX_START + 1168)
 
 
 // ----------------------------------------------------------------------------
