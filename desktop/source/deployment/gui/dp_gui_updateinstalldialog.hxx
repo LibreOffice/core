@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updateinstalldialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:25:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:03:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,11 +88,6 @@ public:
 
        @param parent
        the parent window, may be null
-
-       @param selected
-       if true, only check for updates of extensions selected in
-       <code>dp_gui::DialogImpl</code>; if false, check for updates of all
-       deployed extensions
     */
     UpdateInstallDialog(Window * parent, std::vector<UpdateData> & aVecUpdateData,
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xCtx);
@@ -111,8 +106,6 @@ private:
     friend class UpdateCommandEnv;
 
     DECL_LINK(cancelHandler, void *);
-
- //   DECL_LINK( startThread,  ::osl::Condition *  );
 
     //signals in the dialog that we have finished.
     void updateDone();
@@ -141,7 +134,6 @@ private:
     ::rtl::OUString m_sErrorLicenseDeclined;
     ::rtl::OUString m_sNoInstall;
     ::rtl::OUString m_sThisErrorOccurred;
-    ::rtl::OUString m_sNoTemp;
 
     FixedText m_ft_action;
     ProgressBar m_statusbar;
