@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updateinstalldialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:53:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:03:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,6 +388,10 @@ void UpdateInstallDialog::Thread::downloadExtensions()
             UpdateData & curData = *i;
 
             OSL_ASSERT(curData.aUpdateInfo.is());
+            //We assume that m_aVecUpdateData contains only information about extensions which
+            //can be downloaded directly.
+            OSL_ASSERT(curData.sWebsiteURL.getLength() == 0);
+
             if (!curData.aUpdateInfo.is())
                 continue;
             //update the name of the extension which is to be downloaded
@@ -405,10 +409,12 @@ void UpdateInstallDialog::Thread::downloadExtensions()
             //remember occurring exceptions in case we need to print out error information
             ::std::vector< ::std::pair<OUString, cssu::Exception> > vecExceptions;
             cssu::Sequence<OUString> seqDownloadURLs = info.getUpdateDownloadUrls();
+            OSL_ENSURE(seqDownloadURLs.getLength() > 0, "No download URL provided!");
             for (sal_Int32 j = 0; j < seqDownloadURLs.getLength(); j++)
             {
                 try
                 {
+                    OSL_ENSURE(seqDownloadURLs[j].getLength() > 0, "Download URL is empty!");
                     download(seqDownloadURLs[j], curData);
                     if (curData.sLocalURL.getLength() > 0)
                         break;
