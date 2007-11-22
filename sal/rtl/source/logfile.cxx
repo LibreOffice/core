@@ -4,9 +4,9 @@
  *
  *  $RCSfile: logfile.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:05:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 12:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ LoggerGuard::~LoggerGuard()
     if( g_buffer )
     {
         sal_Int64 nWritten, nConverted =
-            sprintf( g_buffer, "closing log file at %06lu", osl_getGlobalTimer() );
+            sprintf( g_buffer, "closing log file at %06" SAL_PRIuUINT32, osl_getGlobalTimer() );
         if( nConverted > 0 )
             osl_writeFile( g_aFile, g_buffer, nConverted, (sal_uInt64 *)&nWritten );
         osl_closeFile( g_aFile );
@@ -188,7 +188,7 @@ void init() {
                         nConverted = (sal_Int64 ) sprintf (
                                 g_buffer,
                                 "opening log file %f seconds past January 1st 1970\n"
-                                "corresponding to %lu ms after timer start\n",
+                                "corresponding to %" SAL_PRIuUINT32 " ms after timer start\n",
                                 aCurrentTime.Seconds + 1e-9 * aCurrentTime.Nanosec,
                                 osl_getGlobalTimer());
 
@@ -199,7 +199,7 @@ void init() {
                         }
                     }
 
-                    nConverted = sprintf (g_buffer, "Process id is %lu\n", aProcessId);
+                    nConverted = sprintf (g_buffer, "Process id is %" SAL_PRIuUINT32 "\n", aProcessId);
                     if( nConverted )
                     {
                         sal_Int64 nWritten;
@@ -247,7 +247,7 @@ extern "C" void SAL_CALL rtl_logfile_longTrace(char const * format, ...) {
         {
             MutexGuard g(getLogMutex());
             int n1 = snprintf(
-                g_buffer, g_BUFFERSIZE, "%06lu %lu ", time, threadId);
+                g_buffer, g_BUFFERSIZE, "%06" SAL_PRIuUINT32 " %" SAL_PRIuUINT32 " ", time, threadId);
             if (n1 >= 0) {
                 sal_uInt64 n2;
                 osl_writeFile(
