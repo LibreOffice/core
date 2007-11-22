@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: ihi $ $Date: 2007-10-15 17:33:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:40:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3076,7 +3076,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         }
                         //im Extended Mode hat Doppel- und
                         //Dreifachklick keine Auswirkungen.
-                        if ( rSh.IsExtMode() )
+                        if ( rSh.IsExtMode() || rSh.IsBlockMode() )
                             return;
 
                         //Wort selektieren, gfs. Additional Mode
@@ -3195,7 +3195,7 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                         }
                         else
                         {
-                            if ( !rSh.IsAddMode() && !rSh.IsExtMode())
+                            if ( !rSh.IsAddMode() && !rSh.IsExtMode() && !rSh.IsBlockMode() )
                             {
                                 rSh.PushMode();
                                 bModePushed = TRUE;
@@ -3208,6 +3208,21 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                             }
                             bCallBase = FALSE;
                         }
+                    }
+                    break;
+                    case KEY_MOD2:
+                    {
+                        if ( !rSh.IsAddMode() && !rSh.IsExtMode() && !rSh.IsBlockMode() )
+                        {
+                            rSh.PushMode();
+                            bModePushed = TRUE;
+                            BOOL bUnLockView = !rSh.IsViewLocked();
+                            rSh.LockView( TRUE );
+                            rSh.EnterBlockMode();
+                            if( bUnLockView )
+                                rSh.LockView( FALSE );
+                        }
+                        bCallBase = FALSE;
                     }
                     break;
                     case KEY_SHIFT:
@@ -3851,6 +3866,14 @@ void SwEditWin::MouseMove(const MouseEvent& _rMEvt)
                 }
             }
             break;
+        case MOUSE_LEFT + KEY_MOD2:
+            if( rSh.IsBlockMode() && !rMEvt.IsSynthetic() )
+            {
+                (rSh.*rSh.fnDrag)( &aDocPt,FALSE );
+                bValidCrsrPos = !(CRSR_POSCHG & (rSh.*rSh.fnSetCrsr)(&aDocPt,FALSE));
+                EnterArea();
+            }
+        break;
     }
 
     if( bDelShadCrsr && pShadCrsr )
