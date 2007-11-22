@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:27:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:38:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1608,7 +1608,7 @@ sal_Bool SwXTextCursor::isStartOfSentence(void) throw( uno::RuntimeException )
         if(!bRet && (!pUnoCrsr->HasMark() ||
                         *pUnoCrsr->GetPoint() == *pUnoCrsr->GetMark()))
         {
-            SwCursor aCrsr(*pUnoCrsr->GetPoint());
+            SwCursor aCrsr(*pUnoCrsr->GetPoint(),0,false);
             SwPosition aOrigPos = *aCrsr.GetPoint();
             aCrsr.GoSentence(SwCursor::START_SENT );
             bRet = aOrigPos == *aCrsr.GetPoint();
@@ -1637,7 +1637,7 @@ sal_Bool SwXTextCursor::isEndOfSentence(void) throw( uno::RuntimeException )
         if(!bRet && (!pUnoCrsr->HasMark() ||
                         *pUnoCrsr->GetPoint() == *pUnoCrsr->GetMark()))
         {
-            SwCursor aCrsr(*pUnoCrsr->GetPoint());
+            SwCursor aCrsr(*pUnoCrsr->GetPoint(),0,false);
             SwPosition aOrigPos = *aCrsr.GetPoint();
             aCrsr.GoSentence(SwCursor::END_SENT );
             bRet = aOrigPos == *aCrsr.GetPoint();
