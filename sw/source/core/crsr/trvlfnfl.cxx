@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfnfl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:31:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:31:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@
 BOOL SwCrsrShell::CallCrsrFN( FNCrsr fnCrsr )
 {
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
-    SwCursor* pCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
+    SwCursor* pCrsr = getShellCrsr( true );
     BOOL bRet = (pCrsr->*fnCrsr)();
     if( bRet )
         UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
