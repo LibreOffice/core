@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eddel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:44:41 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:33:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@
 #endif
 
 #include <comcore.hrc>
+#include <list>
 
 /************************************************************
  * Loeschen
@@ -183,17 +184,21 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
 
     SET_CURR_SHELL( pDestShell );
 
-    // ueberpruefe ob Selectionen in sich selbst kopiert werden
-    if( pDestShell->GetDoc() == GetDoc() )
+    // List of insert positions for smart insert of block selections
+    std::list< boost::shared_ptr<SwPosition> > aInsertList;
+
+    // Fill list of insert positions
     {
         SwPosition * pPos = 0;
+        boost::shared_ptr<SwPosition> pInsertPos;
+        USHORT nMove = 0;
         FOREACHPAM_START(this)
 
             if( !pPos )
             {
                 if( pDestShell == this )
                 {
-                    // der 1.Cursor ist die Position, wohin verschoben wird !!
+                    // First cursor represents the target position!!
                     PCURCRSR->DeleteMark();
                     pPos = (SwPosition*)PCURCRSR->GetPoint();
                     continue;
@@ -201,18 +206,38 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
                 else
                     pPos = pDestShell->GetCrsr()->GetPoint();
             }
-            if( *PCURCRSR->Start() <= *pPos && *pPos < *PCURCRSR->End() )
-                return FALSE;       // Position im Bereich einer Selection
-                                    // --> Kopieren in sich selbst
+            if( IsBlockMode() )
+            {   // In block mode different insert positions will be calculated
+                // by simulated cursor movements from the given first insert position
+                if( nMove )
+                {
+                    SwCursor aCrsr( *pPos, 0, false);
+                    if( aCrsr.UpDown( FALSE, nMove, 0, 0 ) )
+                    {
+                        pInsertPos.reset( new SwPosition( *aCrsr.GetPoint() ) );
+                        aInsertList.push_back( pInsertPos );
+                    }
+                }
+                else
+                    pInsertPos.reset( new SwPosition( *pPos ) );
+                ++nMove;
+            }
+            SwPosition *pTmp = IsBlockMode() ? pInsertPos.get() : pPos;
+            // Check if a selection would be copied into itself
+            if( pDestShell->GetDoc() == GetDoc() &&
+                *PCURCRSR->Start() <= *pTmp && *pTmp < *PCURCRSR->End() )
+                return FALSE;
         FOREACHPAM_END()
     }
 
     pDestShell->StartAllAction();
-    SwPosition * pPos = 0;
+    SwPosition *pPos = 0;
     BOOL bRet = FALSE;
     BOOL bFirstMove = TRUE;
     SwNodeIndex aSttNdIdx( pDestShell->GetDoc()->GetNodes() );
     xub_StrLen nSttCntIdx = 0;
+    // For block selection this list is filled with the insert positions
+    std::list< boost::shared_ptr<SwPosition> >::iterator pNextInsert = aInsertList.begin();
 
     pDestShell->GetDoc()->StartUndo( UNDO_START, NULL );
     FOREACHPAM_START(this)
@@ -221,7 +246,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
         {
             if( pDestShell == this )
             {
-                // der 1.Cursor ist die Position, wohin verschoben wird !!
+                // First cursor represents the target position!!
                 PCURCRSR->DeleteMark();
                 pPos = (SwPosition*)PCURCRSR->GetPoint();
                 continue;
@@ -229,10 +254,20 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
             else
                 pPos = pDestShell->GetCrsr()->GetPoint();
         }
+        if( !bFirstMove )
+        {
+            if( pNextInsert != aInsertList.end() )
+            {
+                pPos = pNextInsert->get();
+                ++pNextInsert;
+            }
+            else if( IsBlockMode() )
+                GetDoc()->SplitNode( *pPos, false );
+        }
 
         // nur bei Selektion (nicht Textnodes haben Selection,
         // aber Point/GetMark sind gleich
-        if( !PCURCRSR->HasMark() || *PCURCRSR->GetPoint() == *PCURCRSR->GetMark())
+        if( !PCURCRSR->HasMark() || *PCURCRSR->GetPoint() == *PCURCRSR->GetMark() )
             continue;
 
         if( bFirstMove )
@@ -253,7 +288,7 @@ long SwEditShell::Copy( SwEditShell* pDestShell )
     FOREACHPAM_END()
 
 
-    // wurde ueberhaupt etwas verschoben ?
+    // Maybe nothing has been moved?
     if( !bFirstMove )
     {
         SwPaM* pCrsr = pDestShell->GetCrsr();
