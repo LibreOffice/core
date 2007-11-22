@@ -65,6 +65,12 @@
             <menu:menuitem menu:id=".uno:Paste"/>
             <menu:menuitem menu:id=".uno:PasteSpecial"/>
             <menu:menuitem menu:id=".uno:SelectTextMode"/>
+                        <menu:menu menu:id=".uno:SelectionModeMenu">
+                                <menu:menupopup>
+                                        <menu:menuitem menu:id=".uno:SelectionModeDefault"/>
+                                        <menu:menuitem menu:id=".uno:SelectionModeBlock"/>
+                                </menu:menupopup>
+                        </menu:menu>
             <menu:menuitem menu:id=".uno:SelectAll"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:ChangesMenu">
