@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 10:57:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:41:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1156,6 +1156,21 @@ void SwTextShell::Execute(SfxRequest &rReq)
             rWrtSh.ShowCrsr();
         }
     break;
+    case FN_SELECTION_MODE_DEFAULT:
+    case FN_SELECTION_MODE_BLOCK :
+    {
+        bool bSetBlockMode = !rWrtSh.IsBlockMode();
+        if( pArgs && SFX_ITEM_SET == pArgs->GetItemState(nSlot, FALSE, &pItem))
+            bSetBlockMode = ((const SfxBoolItem*)pItem)->GetValue();
+        if( ( nSlot == FN_SELECTION_MODE_DEFAULT ) ^ bSetBlockMode )
+            rWrtSh.EnterBlockMode();
+        else
+            rWrtSh.EnterStdMode();
+        SfxBindings &rBnd = GetView().GetViewFrame()->GetBindings();
+        rBnd.Invalidate(FN_STAT_SELMODE);
+        rBnd.Update(FN_STAT_SELMODE);
+    }
+    break;
     case SID_OPEN_HYPERLINK:
     {
         SfxItemSet aSet(GetPool(),
@@ -1441,6 +1456,10 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 {
                     rSet.Put(SfxBoolItem(nWhich, rSh.GetViewOptions()->IsSelectionInReadonly()));
                 }
+            break;
+            case FN_SELECTION_MODE_DEFAULT:
+            case FN_SELECTION_MODE_BLOCK :
+                    rSet.Put(SfxBoolItem(nWhich, (nWhich == FN_SELECTION_MODE_DEFAULT) != rSh.IsBlockMode()));
             break;
             case  SID_OPEN_HYPERLINK:
             {
