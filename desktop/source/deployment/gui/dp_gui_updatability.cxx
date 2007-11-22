@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatability.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:53:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:01:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,9 @@ void Updatability::Thread::execute() {
                 input = m_input;
                 m_input = NONE;
                 if (input == NONE) {
+                    //In case input would be STOP then we would later break out of the loop
+                    //before further calls to the XPackageManger are done. That is, the abort
+                    //channel would not be used anyway.
                     m_abort = abort;
                 }
                 if (input != NONE) {
