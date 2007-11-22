@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:22:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 12:19:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,12 +507,12 @@ static int ReportCrash( int Signal )
                     {
                         Dl_info dl_info;
 
-                        fprintf( stackout, "0x%x:",
-                            (unsigned int)stackframes[iFrame] );
+                        fprintf( stackout, "0x%" SAL_PRIxUINTPTR ":",
+                            SAL_INT_CAST(sal_uIntPtr, stackframes[iFrame]) );
 
-                        fprintf( xmlout, "<errormail:StackInfo pos=\"%d\" ip=\"0x%x\"",
+                        fprintf( xmlout, "<errormail:StackInfo pos=\"%d\" ip=\"0x%" SAL_PRIxUINTPTR "\"",
                             iFrame,
-                            (unsigned int)stackframes[iFrame]
+                            SAL_INT_CAST(sal_uIntPtr, stackframes[iFrame])
                             );
 
                         memset( &dl_info, 0, sizeof(dl_info) );
@@ -565,12 +565,12 @@ static int ReportCrash( int Signal )
 
                             if ( dl_info.dli_fbase && dl_info.dli_fname )
                             {
-                                fprintf( stackout, " %s + 0x%x",
+                                fprintf( stackout, " %s + 0x%" SAL_PRI_PTRDIFFT "x",
                                     dl_info.dli_fname,
                                     (char*)stackframes[iFrame] - (char*)dl_info.dli_fbase
                                     );
 
-                                fprintf( xmlout, " rel=\"0x%x\"", (char *)stackframes[iFrame] - (char *)dl_info.dli_fbase );
+                                fprintf( xmlout, " rel=\"0x%" SAL_PRI_PTRDIFFT "x\"", (char *)stackframes[iFrame] - (char *)dl_info.dli_fbase );
                                 if ( dli_fname )
                                     fprintf( xmlout, " name=\"%s\"", dli_fname );
 
@@ -584,12 +584,12 @@ static int ReportCrash( int Signal )
                             {
                                 fputs( " (", stackout );
                                 fputs_xml( dl_info.dli_sname, stackout );
-                                fprintf( stackout, " + 0x%x)",
+                                fprintf( stackout, " + 0x%" SAL_PRI_PTRDIFFT "x)",
                                     (char*)stackframes[iFrame] - (char*)dl_info.dli_saddr );
 
                                 fputs( " ordinal=\"", xmlout );
                                 fputs_xml( dl_info.dli_sname, xmlout );
-                                fprintf( xmlout, "+0x%x\"",
+                                fprintf( xmlout, "+0x%" SAL_PRI_PTRDIFFT "x\"",
                                     (char *)stackframes[iFrame] - (char *)dl_info.dli_saddr );
                             }
 
