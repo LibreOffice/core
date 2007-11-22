@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:02:26 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 16:07:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,8 @@
 #include "com/sun/star/frame/XDispatchProvider.hpp"
 #include "com/sun/star/lang/IllegalArgumentException.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
+#include "com/sun/star/system/SystemShellExecuteFlags.hpp"
+#include "com/sun/star/system/XSystemShellExecute.hpp"
 #include "com/sun/star/task/XAbortChannel.hpp"
 #include "com/sun/star/task/XJob.hpp"
 #include "com/sun/star/ucb/CommandAbortedException.hpp"
@@ -94,7 +96,7 @@
 #include "sal/types.h"
 #include "svtools/svlbitm.hxx"
 #include "svtools/svlbox.hxx"
-#include "svtools/svmedit.hxx"
+#include <svtools/controldims.hrc>
 #include "svx/checklbx.hxx"
 #include "tools/gen.hxx"
 #include "tools/link.hxx"
@@ -605,6 +607,7 @@ bool UpdateDialog::Thread::update(
     }
 }
 
+// UpdateDialog ----------------------------------------------------------
 UpdateDialog::UpdateDialog(
     css::uno::Reference< css::uno::XComponentContext > const & context,
     Window * parent,
@@ -622,6 +625,10 @@ UpdateDialog::UpdateDialog(
         Image(DpGuiResId(RID_DLG_UPDATE_HIGHCONTRASTALERT))),
     m_all(this, DpGuiResId(RID_DLG_UPDATE_ALL)),
     m_description(this, DpGuiResId(RID_DLG_UPDATE_DESCRIPTION)),
+    m_PublisherLabel(this, DpGuiResId(RID_DLG_UPDATE_PUBLISHER_LABEL)),
+    m_PublisherLink(this, DpGuiResId(RID_DLG_UPDATE_PUBLISHER_LINK)),
+    m_ReleaseNotesLabel(this, DpGuiResId(RID_DLG_UPDATE_RELEASENOTES_LABEL)),
+    m_ReleaseNotesLink(this, DpGuiResId(RID_DLG_UPDATE_RELEASENOTES_LINK)),
     m_descriptions(this, DpGuiResId(RID_DLG_UPDATE_DESCRIPTIONS)),
     m_line(this, DpGuiResId(RID_DLG_UPDATE_LINE)),
     m_help(this, DpGuiResId(RID_DLG_UPDATE_HELP)),
@@ -642,7 +649,10 @@ UpdateDialog::UpdateDialog(
     m_thread(
         new UpdateDialog::Thread(
             context, *this, selectedPackages,
-            packageManagers))
+            packageManagers)),
+    m_nFirstLineDelta(0),
+    m_nOneLineMissing(0)
+
 {
     OSL_ASSERT(updateData != NULL);
     css::uno::Reference< css::awt::XToolkit > toolkit;
@@ -689,6 +699,8 @@ UpdateDialog::UpdateDialog(
     String sTemp(m_noPermissionVista);
     sTemp.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
     m_noPermissionVista = sTemp;
+
+    initDescription();
 }
 
 UpdateDialog::~UpdateDialog() {
@@ -773,6 +785,15 @@ void UpdateDialog::addAdditional(
 void UpdateDialog::addEnabledUpdate(
     rtl::OUString const & name, dp_gui::UpdateData const & data)
 {
+// this shows how we get the publisher and release notes information
+    dp_misc::DescriptionInfoset infoset(m_context, data.aUpdateInfo);
+    std::pair< rtl::OUString, rtl::OUString > pairPub = infoset.getLocalizedPublisherNameAndURL();
+    rtl::OUString sPub = pairPub.first;
+    rtl::OUString sURL = pairPub.second;
+
+    rtl::OUString sRel = infoset.getLocalizedReleaseNotesURL();
+//--------------------------------------------------------------------
+
     std::vector< dp_gui::UpdateData >::size_type n = m_enabledUpdates.size();
     m_enabledUpdates.push_back(data);
     insertItem(
@@ -826,13 +847,14 @@ void UpdateDialog::checkingDone() {
     m_throbber->stop();
     css::uno::Reference< css::awt::XWindow >(
         m_throbber, css::uno::UNO_QUERY_THROW)->setVisible(false);
-    if (m_updates.getItemCount() == 0) {
+    if (m_updates.getItemCount() == 0)
+    {
+        clearDescription();
         m_description.Enable();
         m_descriptions.Enable();
-        m_descriptions.SetText(
-            (m_disabledUpdates.empty() && m_generalErrors.empty() &&
-             m_specificErrors.empty())
-            ? m_none : m_noInstallable);
+        showDescription(
+            ( m_disabledUpdates.empty() && m_generalErrors.empty() && m_specificErrors.empty() )
+                ? m_none : m_noInstallable, false );
     }
     enableOk();
 }
@@ -944,16 +966,153 @@ void UpdateDialog::notifyMenubar( bool bPrepareOnly, bool bRecheckOnly )
 
 // *********************************************************************************
 
-IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG) {
+void UpdateDialog::initDescription()
+{
+    m_PublisherLabel.Hide();
+    m_PublisherLink.Hide();
+    m_ReleaseNotesLabel.Hide();
+    m_ReleaseNotesLink.Hide();
+    m_descriptions.Hide();
+
+    Link aLink = LINK( this, UpdateDialog, hyperlink_clicked );
+    m_PublisherLink.SetClickHdl( aLink );
+    m_ReleaseNotesLink.SetClickHdl( aLink );
+
+    long nTextWidth = m_PublisherLabel.GetCtrlTextWidth( m_PublisherLabel.GetText() );
+    long nTemp = m_ReleaseNotesLabel.GetTextWidth( m_ReleaseNotesLabel.GetText() );
+    if ( nTemp > nTextWidth )
+        nTextWidth = nTemp;
+    nTextWidth = nTextWidth * 110 / 100;
+
+    Size aNewSize = m_PublisherLabel.GetSizePixel();
+    if ( nTextWidth > aNewSize.Width() )
+    {
+        long nDelta = nTextWidth - aNewSize.Width();
+        aNewSize.Width() = nTextWidth;
+        m_PublisherLabel.SetSizePixel( aNewSize );
+        m_ReleaseNotesLabel.SetSizePixel( aNewSize );
+
+        aNewSize = m_PublisherLink.GetSizePixel();
+        aNewSize.Width() = aNewSize.Width() - nDelta;
+        Point aNewPos = m_PublisherLink.GetPosPixel();
+        aNewPos.X() = aNewPos.X() + nDelta;
+        m_PublisherLink.SetPosSizePixel( aNewPos, aNewSize );
+        aNewPos.Y() = m_ReleaseNotesLink.GetPosPixel().Y();
+        m_ReleaseNotesLink.SetPosSizePixel( aNewPos, aNewSize );
+    }
+
+    m_aFirstLinePos = m_descriptions.GetPosPixel();
+    m_aFirstLineSize = m_descriptions.GetSizePixel();
+    Size aMarginSize = LogicToPixel( Size( RSC_SP_CTRL_GROUP_X, RSC_SP_CTRL_GROUP_Y ), MAP_APPFONT );
+    Point aThirdLinePos = m_ReleaseNotesLabel.GetPosPixel();
+    aThirdLinePos.Y() = aThirdLinePos.Y() + m_ReleaseNotesLabel.GetSizePixel().Height() + aMarginSize.Height();
+    m_nFirstLineDelta = aThirdLinePos.Y() - m_aFirstLinePos.Y();
+    m_nOneLineMissing = m_ReleaseNotesLabel.GetPosPixel().Y() - m_PublisherLabel.GetPosPixel().Y();
+}
+
+void UpdateDialog::clearDescription()
+{
+    String sEmpty;
+    m_PublisherLabel.Hide();
+    m_PublisherLink.Hide();
+    m_PublisherLink.SetDescription( sEmpty );
+    m_PublisherLink.SetURL( sEmpty );
+    m_ReleaseNotesLabel.Hide();
+    m_ReleaseNotesLink.Hide();
+    m_ReleaseNotesLink.SetURL( sEmpty );
+    if ( m_PublisherLabel.GetPosPixel().Y() == m_ReleaseNotesLabel.GetPosPixel().Y() )
+    {
+        Point aNewPos = m_ReleaseNotesLabel.GetPosPixel();
+        aNewPos.Y() += m_nOneLineMissing;
+        m_ReleaseNotesLabel.SetPosPixel( aNewPos );
+        aNewPos = m_ReleaseNotesLink.GetPosPixel();
+        aNewPos.Y() += m_nOneLineMissing;
+        m_ReleaseNotesLink.SetPosPixel( aNewPos );
+    }
+    m_descriptions.Hide();
+    m_descriptions.Clear();
+    m_descriptions.SetPosSizePixel( m_aFirstLinePos, m_aFirstLineSize );
+}
+
+bool UpdateDialog::showDescription( const dp_gui::UpdateData& rData )
+{
+    dp_misc::DescriptionInfoset infoset(m_context, rData.aUpdateInfo);
+    std::pair< rtl::OUString, rtl::OUString > pairPub = infoset.getLocalizedPublisherNameAndURL();
+    rtl::OUString sPub = pairPub.first;
+    rtl::OUString sURL = pairPub.second;
+    rtl::OUString sRel = infoset.getLocalizedReleaseNotesURL();
+
+    if ( sPub.getLength() == 0 && sURL.getLength() == 0 && sRel.getLength() == 0 )
+        // nothing to show
+        return false;
+
+    bool bPublisher = false;
+    if ( sPub.getLength() > 0 )
+    {
+        m_PublisherLabel.Show();
+        m_PublisherLink.Show();
+        m_PublisherLink.SetDescription( sPub );
+        m_PublisherLink.SetURL( sURL );
+        bPublisher = true;
+    }
+
+    if ( sRel.getLength() > 0 )
+    {
+        if ( !bPublisher )
+        {
+            m_ReleaseNotesLabel.SetPosPixel( m_PublisherLabel.GetPosPixel() );
+            m_ReleaseNotesLink.SetPosPixel( m_PublisherLink.GetPosPixel() );
+        }
+        m_ReleaseNotesLabel.Show();
+        m_ReleaseNotesLink.Show();
+        m_ReleaseNotesLink.SetURL( sRel );
+    }
+    return true;
+}
+
+bool UpdateDialog::showDescription( const String& rDescription, bool bWithPublisher )
+{
+    if ( rDescription.Len() == 0 )
+        // nothing to show
+        return false;
+
+    if ( bWithPublisher )
+    {
+        bool bOneLineMissing = !m_ReleaseNotesLabel.IsVisible() || !m_PublisherLabel.IsVisible();
+        Point aNewPos = m_aFirstLinePos;
+        aNewPos.Y() += m_nFirstLineDelta;
+        if ( bOneLineMissing )
+            aNewPos.Y() -= m_nOneLineMissing;
+        Size aNewSize = m_aFirstLineSize;
+        aNewSize.Height() -= m_nFirstLineDelta;
+        if ( bOneLineMissing )
+            aNewSize.Height() += m_nOneLineMissing;
+        m_descriptions.SetPosSizePixel( aNewPos, aNewSize );
+    }
+    m_descriptions.Show();
+    m_descriptions.SetDescription( rDescription );
+    return true;
+}
+
+IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
+{
     rtl::OUStringBuffer b;
+    bool bInserted = false;
     UpdateDialog::Index const * p = static_cast< UpdateDialog::Index const * >(
         m_updates.GetEntryData(m_updates.GetSelectEntryPos()));
-    if (p != NULL) {
-        switch (p->kind) {
-        case ENABLED_UPDATE:
-            b.append(m_noDescription);
-            break;
-        case DISABLED_UPDATE:
+    clearDescription();
+
+    if (p != NULL)
+    {
+        bInserted = showDescription( m_enabledUpdates[ m_updates.GetSelectEntryPos() ] );
+        switch (p->kind)
+        {
+            case ENABLED_UPDATE:
+            {
+                b.append(m_noDescription);
+                break;
+            }
+            case DISABLED_UPDATE:
             {
                 UpdateDialog::DisabledUpdate & data = m_disabledUpdates[
                     p->index.disabledUpdate];
@@ -985,7 +1144,7 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG) {
                 }
                 break;
             }
-        case GENERAL_ERROR:
+            case GENERAL_ERROR:
             {
                 rtl::OUString & msg = m_generalErrors[p->index.generalError];
                 b.append(m_failure);
@@ -993,7 +1152,7 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG) {
                 b.append(msg.getLength() == 0 ? m_unknownError : msg);
                 break;
             }
-        case SPECIFIC_ERROR:
+            case SPECIFIC_ERROR:
             {
                 UpdateDialog::SpecificError & data = m_specificErrors[
                     p->index.specificError];
@@ -1004,12 +1163,13 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG) {
                     ? m_unknownError : data.message);
                 break;
             }
-        default:
-            OSL_ASSERT(false);
-            break;
+            default:
+                OSL_ASSERT(false);
+                break;
         }
     }
-    m_descriptions.SetText(b.makeStringAndClear());
+
+    showDescription( b.makeStringAndClear(), bInserted );
     return 0;
 }
 
@@ -1063,16 +1223,16 @@ IMPL_LINK(UpdateDialog, allHandler, void *, EMPTYARG) {
                 ++i;
             }
         }
-        if (m_updates.getItemCount() == 0) {
+
+        if (m_updates.getItemCount() == 0)
+        {
+            clearDescription();
             m_update.Disable();
             m_updates.Disable();
-            if (m_checking.IsVisible()) {
+            if (m_checking.IsVisible())
                 m_description.Disable();
-                m_descriptions.Disable();
-                m_descriptions.SetText(String());
-            } else {
-                m_descriptions.SetText(m_noInstallable);
-            }
+            else
+                showDescription(m_noInstallable,false);
         }
     }
     return 0;
@@ -1096,3 +1256,29 @@ IMPL_LINK(UpdateDialog, cancelHandler, void *, EMPTYARG) {
     EndDialog(RET_CANCEL);
     return 0;
 }
+
+IMPL_LINK( UpdateDialog, hyperlink_clicked, svt::FixedHyperlink*, pHyperlink )
+{
+    ::rtl::OUString sURL;
+    if ( pHyperlink )
+        sURL = ::rtl::OUString( pHyperlink->GetURL() );
+    if ( sURL.getLength() == 0 )
+        return 0;
+
+    try
+    {
+        css::uno::Reference< css::system::XSystemShellExecute > xSystemShellExecute(
+            m_context->getServiceManager()->createInstanceWithContext(
+                ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" ),
+                m_context), css::uno::UNO_QUERY_THROW);
+        //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
+        xSystemShellExecute->execute(
+            sURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS);
+    }
+    catch (css::uno::Exception& )
+    {
+    }
+
+    return 1;
+}
+
