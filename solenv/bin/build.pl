@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.160 $
+#   $Revision: 1.161 $
 #
-#   last change: $Author: vg $ $Date: 2007-11-06 12:30:16 $
+#   last change: $Author: vg $ $Date: 2007-11-22 14:44:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.160 $ ';
+    $id_str = ' $Revision: 1.161 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1982,11 +1982,9 @@ sub is_output_tree {
 sub get_tmp_dir {
     my $tmp_dir;
     if( defined($ENV{TMP}) ) {
-        print_error("the \$TMP directory $ENV{TMP} does not exist! Please, create it first.") if (!-d $ENV{TMP});
        $tmp_dir = $ENV{TMP} . '/';
     } else {
-        print_error("the \$TMP environment variable is not defined! Please, define it...");
-#       $tmp_dir = '/tmp/';
+       $tmp_dir = '/tmp/';
     }
     $tmp_dir .= $$ while (-d $tmp_dir);
     $tmp_dir = CorrectPath($tmp_dir);
