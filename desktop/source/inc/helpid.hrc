@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:30:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,11 @@
 #define HID_FIRSTSTART_UPDATE_CHECK                 (HID_DESKTOP_START +  17)
 #define HID_DEPLOYMENT_GUI_UPDATE                   (HID_DESKTOP_START +  18)
 #define HID_DEPLOYMENT_GUI_UPDATEINSTALL            (HID_DESKTOP_START +  19)
+#define HID_DEPLOYMENT_GUI_UPDATE_PUBLISHER         (HID_DESKTOP_START +  20)
+#define HID_DEPLOYMENT_GUI_UPDATE_RELEASENOTES      (HID_DESKTOP_START +  21)
+#define HID_DEPLOYMENT_GUI_UPDATE_AVAILABLE_UPDATES (HID_DESKTOP_START +  22)
 
-
-#define ACT_DESKTOP_HID_END HID_DEPLOYMENT_GUI_UPDATEINSTALL
+#define ACT_DESKTOP_HID_END HID_DEPLOYMENT_GUI_UPDATE_AVAILABLE_UPDATES
 
 // check bounds:
 #if ACT_DESKTOP_HID_END > HID_DESKTOP_END
