@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:50:56 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:34:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -853,6 +853,12 @@ BOOL SwFEShell::Copy( SwFEShell* pDestShell, const Point& rSttPt,
 |
 |*************************************************************************/
 
+namespace {
+    typedef boost::shared_ptr<SwPaM> PaMPtr;
+    typedef boost::shared_ptr<SwPosition> PositionPtr;
+    typedef std::pair< PaMPtr, PositionPtr > Insertion;
+}
+
 BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
 {
     SET_CURR_SHELL( this );
@@ -886,7 +892,118 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
     GetDoc()->StartUndo( UNDO_INSGLOSSARY, NULL );
     GetDoc()->LockExpFlds();
 
-    FOREACHPAM_START(this)
+    // When the clipboard content has been created by a rectangular selection
+    // the pasting is more sophisticated:
+    // every paragraph will be inserted into another position.
+    // The first positions are given by the actual cursor ring,
+    // if there are more text portions to insert than cursor in this ring,
+    // the additional insert positions will be created by moving the last
+    // cursor position into the next line (like pressing the cursor down key)
+    if( pClpDoc->IsColumnSelection() && !IsTableMode() )
+    {
+        // Creation of the list of insert positions
+        std::list< Insertion > aCopyList;
+        // The number of text portions of the rectangular selection
+        const sal_uInt32 nSelCount = aCpyPam.GetPoint()->nNode.GetIndex()
+                       - aCpyPam.GetMark()->nNode.GetIndex();
+        sal_uInt32 nCount = nSelCount;
+        SwNodeIndex aClpIdx( aIdx );
+        SwPaM* pStartCursor = GetCrsr();
+        SwPaM* pCurrCrsr = pStartCursor;
+        sal_uInt32 nCursorCount = pStartCursor->numberOf();
+        // If the target selection is a multi-selection, often the last and first
+        // cursor of the ring points to identical document positions. Then
+        // we should avoid double insertion of text portions...
+        while( nCursorCount > 1 && *pCurrCrsr->GetPoint() ==
+            *(dynamic_cast<SwPaM*>(pCurrCrsr->GetPrev())->GetPoint()) )
+        {
+            --nCursorCount;
+            pCurrCrsr = dynamic_cast<SwPaM*>(pCurrCrsr->GetNext());
+            pStartCursor = pCurrCrsr;
+        }
+        SwPosition aStartPos( *pStartCursor->GetPoint() );
+        SwPosition aInsertPos( aStartPos ); // first insertion position
+        bool bCompletePara = false;
+        USHORT nMove = 0;
+        while( nCount )
+        {
+            --nCount;
+            ASSERT( aIdx.GetNode().GetCntntNode(), "Who filled the clipboard?!" )
+            if( aIdx.GetNode().GetCntntNode() ) // robust
+            {
+                Insertion aInsertion( PaMPtr( new SwPaM( aIdx ) ),
+                    PositionPtr( new SwPosition( aInsertPos ) ) );
+                ++aIdx;
+                aInsertion.first->SetMark();
+                if( pStartCursor == pCurrCrsr->GetNext() )
+                {   // Now we have to look for insertion positions...
+                    if( !nMove ) // Annotate the last given insert position
+                        aStartPos = aInsertPos;
+                    SwCursor aCrsr( aStartPos, 0, false);
+                    // Check if we find another insert position by moving
+                    // down the last given position
+                    if( aCrsr.UpDown( FALSE, ++nMove, 0, 0 ) )
+                        aInsertPos = *aCrsr.GetPoint();
+                    else // if there is no paragraph we have to create it
+                        bCompletePara = nCount > 0;
+                    nCursorCount = 0;
+                }
+                else // as long as we find more insert positions in the cursor ring
+                {    // we'll take them
+                    pCurrCrsr = dynamic_cast<SwPaM*>(pCurrCrsr->GetNext());
+                    aInsertPos = *pCurrCrsr->GetPoint();
+                    --nCursorCount;
+                }
+                // If there are no more paragraphs e.g. at the end of a document,
+                // we insert complete paragraphs instead of text portions
+                if( bCompletePara )
+                    aInsertion.first->GetPoint()->nNode = aIdx;
+                else
+                    aInsertion.first->GetPoint()->nContent =
+                        aInsertion.first->GetCntntNode()->Len();
+                aCopyList.push_back( aInsertion );
+            }
+            // If there are no text portions left but there are some more
+            // cursor positions to fill we have to restart with the first
+            // text portion
+            if( !nCount && nCursorCount )
+            {
+                nCount = std::min( nSelCount, nCursorCount );
+                aIdx = aClpIdx; // Start of clipboard content
+            }
+        }
+        std::list< Insertion >::const_iterator pCurr = aCopyList.begin();
+        std::list< Insertion >::const_iterator pEnd = aCopyList.end();
+        while( pCurr != pEnd )
+        {
+            SwPosition& rInsPos = *pCurr->second;
+            SwPaM& rCopy = *pCurr->first;
+            const SwStartNode* pBoxNd = rInsPos.nNode.GetNode().FindTableBoxStartNode();
+            if( pBoxNd && 2 == pBoxNd->EndOfSectionIndex() - pBoxNd->GetIndex() &&
+                rCopy.GetPoint()->nNode != rCopy.GetMark()->nNode )
+            {
+                // if more than one node will be copied into a cell
+                // the box attributes have to be removed
+                GetDoc()->ClearBoxNumAttrs( rInsPos.nNode );
+            }
+            {
+                SwNodeIndex aIndexBefore(rInsPos.nNode);
+                aIndexBefore--;
+                pClpDoc->Copy( rCopy, rInsPos );
+                {
+                    aIndexBefore++;
+                    SwPaM aPaM(SwPosition(aIndexBefore, 0),
+                               SwPosition(rInsPos.nNode, 0));
+                    aPaM.GetDoc()->MakeUniqueNumRules(aPaM);
+                }
+            }
+            SaveTblBoxCntnt( &rInsPos );
+            ++pCurr;
+        }
+    }
+    else
+    {
+        FOREACHPAM_START(this)
 
         if( pSrcNd &&
             0 != ( pDestNd = GetDoc()->IsIdxInTbl( PCURCRSR->GetPoint()->nNode )))
@@ -1158,7 +1275,9 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
             }
         }
 
-    FOREACHPAM_END()
+        FOREACHPAM_END()
+    }
+
     GetDoc()->EndUndo( UNDO_INSGLOSSARY, NULL );
 
     // wurden neue Tabellenformeln eingefuegt ?
