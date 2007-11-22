@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ring.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:42:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:29:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,18 @@ void Ring::MoveRingTo(Ring *pDestRing)
     pDestPrev->pNext = this;
     pDestRing->pPrev = pMyPrev;
     pPrev = pDestPrev;
+}
+
+sal_uInt32 Ring::numberOf() const
+{
+    sal_uInt32 nRet = 1;
+    const Ring* pNxt = pNext;
+    while( pNxt != this )
+    {
+        ++nRet;
+        pNxt = pNxt->GetNext();
+    }
+    return nRet;
 }
 
 
