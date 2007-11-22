@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:28:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,9 +186,17 @@ BOOL SwCrsrShell::GotoNextNum()
             SwCntntFrm * pFrm = pCurCrsr->GetCntntNode()->GetFrm( &aPt,
                                                         pCurCrsr->GetPoint() );
             pFrm->GetCharRect( aCharRect, *pCurCrsr->GetPoint() );
-            aPt.Y() = aCharRect.Center().Y();
             pFrm->Calc();
-            aPt.X() = pFrm->Frm().Left() + nUpDownX;
+            if( pFrm->IsVertical() )
+            {
+                aPt.X() = aCharRect.Center().X();
+                aPt.Y() = pFrm->Frm().Top() + nUpDownX;
+            }
+            else
+            {
+                aPt.Y() = aCharRect.Center().Y();
+                aPt.X() = pFrm->Frm().Left() + nUpDownX;
+            }
             pFrm->GetCrsrOfst( pCurCrsr->GetPoint(), aPt );
             bRet = !pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                         nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
@@ -218,9 +226,17 @@ BOOL SwCrsrShell::GotoPrevNum()
             SwCntntFrm * pFrm = pCurCrsr->GetCntntNode()->GetFrm( &aPt,
                                                         pCurCrsr->GetPoint() );
             pFrm->GetCharRect( aCharRect, *pCurCrsr->GetPoint() );
-            aPt.Y() = aCharRect.Center().Y();
             pFrm->Calc();
-            aPt.X() = pFrm->Frm().Left() + nUpDownX;
+            if( pFrm->IsVertical() )
+            {
+                aPt.X() = aCharRect.Center().X();
+                aPt.Y() = pFrm->Frm().Top() + nUpDownX;
+            }
+            else
+            {
+                aPt.Y() = aCharRect.Center().Y();
+                aPt.X() = pFrm->Frm().Left() + nUpDownX;
+            }
             pFrm->GetCrsrOfst( pCurCrsr->GetPoint(), aPt );
             bRet = !pCurCrsr->IsSelOvr( nsSwCursorSelOverFlags::SELOVER_TOGGLE |
                                         nsSwCursorSelOverFlags::SELOVER_CHANGEPOS );
@@ -248,11 +264,12 @@ BOOL SwCrsrShell::GotoHeaderTxt()
         SET_CURR_SHELL( this );
         // hole den Header-Frame
         SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
-        SwCrsrSaveState aSaveState( *pCurCrsr );
+        SwCursor *pTmpCrsr = getShellCrsr( true );
+        SwCrsrSaveState aSaveState( *pTmpCrsr );
         pFrm->Calc();
         Point aPt( pFrm->Frm().Pos() + pFrm->Prt().Pos() );
-        pFrm->GetCrsrOfst( pCurCrsr->GetPoint(), aPt );
-        if( !pCurCrsr->IsSelOvr() )
+        pFrm->GetCrsrOfst( pTmpCrsr->GetPoint(), aPt );
+        if( !pTmpCrsr->IsSelOvr() )
             UpdateCrsr();
         else
             pFrm = 0;
@@ -278,14 +295,15 @@ BOOL SwCrsrShell::GotoFooterTxt()
 
         if( pLower )
         {
+            SwCursor *pTmpCrsr = getShellCrsr( true );
             SET_CURR_SHELL( this );
             // hole eine Position im Footer
             SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
-            SwCrsrSaveState aSaveState( *pCurCrsr );
+            SwCrsrSaveState aSaveState( *pTmpCrsr );
             pLower->Calc();
             Point aPt( pLower->Frm().Pos() + pLower->Prt().Pos() );
-            pLower->GetCrsrOfst( pCurCrsr->GetPoint(), aPt );
-            if( !pCurCrsr->IsSelOvr() )
+            pLower->GetCrsrOfst( pTmpCrsr->GetPoint(), aPt );
+            if( !pTmpCrsr->IsSelOvr() )
                 UpdateCrsr();
             else
                 pFrm = 0;
@@ -770,7 +788,7 @@ BOOL SwCrsrShell::MoveFldType( const SwFieldType* pFldType, BOOL bNext,
         return FALSE;
 
     USHORT nPos;
-    SwCursor* pCrsr = IsTableMode() ? pTblCrsr : pCurCrsr;
+    SwCursor* pCrsr = getShellCrsr( true );
     {
         // JP 19.08.98: es muss immer ueber das Feld gesucht werden, damit
         //              auch immer das richtige gefunden wird, wenn welche in
@@ -845,7 +863,7 @@ BOOL SwCrsrShell::GotoFld( const SwFmtFld& rFld )
         SET_CURR_SHELL( this );
         SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
 
-        SwCursor* pCrsr = IsTableMode() ? pTblCrsr : pCurCrsr;
+        SwCursor* pCrsr = getShellCrsr( true );
         SwCrsrSaveState aSaveState( *pCrsr );
 
         SwTxtNode* pTNd = (SwTxtNode*)rFld.GetTxtFld()->GetpTxtNode();
@@ -862,7 +880,7 @@ BOOL SwCrsrShell::GotoFld( const SwFmtFld& rFld )
 
 void SwCrsrShell::GotoOutline( USHORT nIdx )
 {
-    SwCursor* pCrsr = IsTableMode() ? pTblCrsr : pCurCrsr;
+    SwCursor* pCrsr = getShellCrsr( true );
 
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
@@ -880,7 +898,7 @@ void SwCrsrShell::GotoOutline( USHORT nIdx )
 
 BOOL SwCrsrShell::GotoOutline( const String& rName )
 {
-    SwCursor* pCrsr = IsTableMode() ? pTblCrsr : pCurCrsr;
+    SwCursor* pCrsr = getShellCrsr( true );
 
     SET_CURR_SHELL( this );
     SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
@@ -899,7 +917,7 @@ BOOL SwCrsrShell::GotoOutline( const String& rName )
 
 BOOL SwCrsrShell::GotoNextOutline()         // naechster Node mit Outline-Num.
 {
-    SwCursor* pCrsr = IsTableMode() ? pTblCrsr : pCurCrsr;
+    SwCursor* pCrsr = getShellCrsr( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
     SwNode* pNd = pCrsr->GetNode();
@@ -927,7 +945,7 @@ BOOL SwCrsrShell::GotoNextOutline()         // naechster Node mit Outline-Num.
 
 BOOL SwCrsrShell::GotoPrevOutline()         // vorheriger Node mit Outline-Num.
 {
-    SwCursor* pCrsr = IsTableMode() ? pTblCrsr : pCurCrsr;
+    SwCursor* pCrsr = getShellCrsr( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
     SwNode* pNd = pCrsr->GetNode();
@@ -961,7 +979,7 @@ BOOL SwCrsrShell::GotoPrevOutline()         // vorheriger Node mit Outline-Num.
     // Level.
 USHORT SwCrsrShell::GetOutlinePos( BYTE nLevel )
 {
-    SwPaM* pCrsr = IsTableMode() ? pTblCrsr : pCurCrsr;
+    SwPaM* pCrsr = getShellCrsr( true );
     const SwNodes& rNds = GetDoc()->GetNodes();
 
     SwNode* pNd = pCrsr->GetNode();
@@ -1692,7 +1710,7 @@ BOOL SwCrsrShell::GotoINetAttr( const SwTxtINetFmt& rAttr )
     BOOL bRet = FALSE;
     if( rAttr.GetpTxtNode() )
     {
-        SwCursor* pCrsr = IsTableMode() ? pTblCrsr : pCurCrsr;
+        SwCursor* pCrsr = getShellCrsr( true );
 
         SET_CURR_SHELL( this );
         SwCallLink aLk( *this );        // Crsr-Moves ueberwachen, evt. Link callen
