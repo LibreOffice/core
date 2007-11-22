@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:20:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:36:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ class SwTableCursor;
 class SwLayVout;
 class SwDestroyList;
 class SwCurrShells;
+class SwSelectionList;
 struct SwPosition;
 struct SwCrsrMoveState;
 
@@ -195,6 +196,8 @@ public:
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 #endif
+
+    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
     Point  GetNextPrevCntntPos( const Point &rPoint, BOOL bNext ) const;
 
