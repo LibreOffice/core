@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:30:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:39:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1667,7 +1667,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 {
                                     SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
                                     SwPosition aTestPos( aIdx );
-                                    SwCursor aTestCrsr(aTestPos);
+                                    SwCursor aTestCrsr(aTestPos,0,false);
                                     if(!aTestCrsr.MovePara(fnParaNext, fnParaStart))
                                     {
                                         //append a paragraph
@@ -3427,7 +3427,7 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                 {
                     SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
                   SwPosition aTestPos( aIdx );
-                  SwCursor aTestCrsr(aTestPos);
+                  SwCursor aTestCrsr(aTestPos,0,false);
                     if(!aTestCrsr.MovePara(fnParaNext, fnParaStart))
                     {
                         //append a paragraph
