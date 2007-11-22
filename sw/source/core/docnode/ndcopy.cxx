@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:40:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -706,11 +706,13 @@ void lcl_DeleteRedlines( const SwNodeRange& rRg, SwNodeRange& rCpyRg )
 bool SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
 {
     const SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
-    // kein Copy abfangen.
-    if( !rPam.HasMark() || *pStt >= *pEnd )
-        return FALSE;
 
     SwDoc* pDoc = rPos.nNode.GetNode().GetDoc();
+    bool bColumnSel = pDoc->IsClipBoard() && pDoc->IsColumnSelection();
+
+    // kein Copy abfangen.
+    if( !rPam.HasMark() || ( *pStt >= *pEnd && !bColumnSel ) )
+        return FALSE;
 
     // verhinder das Kopieren in Fly's, die im Bereich verankert sind.
     if( pDoc == this )
@@ -739,7 +741,7 @@ bool SwDoc::Copy( SwPaM& rPam, SwPosition& rPos ) const
 
     BOOL bRet = FALSE;
 
-    if( pDoc && pDoc != this )
+    if( pDoc != this )
         bRet = _Copy( rPam, rPos, TRUE, pRedlineRange );    // nur normales Kopieren
     // Copy in sich selbst (ueber mehrere Nodes wird hier gesondert
     // behandelt; in einem TextNode wird normal behandelt)
@@ -848,10 +850,11 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                     BOOL bMakeNewFrms, SwPaM* pCpyRange ) const
 {
     SwDoc* pDoc = rPos.nNode.GetNode().GetDoc();
+    bool bColumnSel = pDoc->IsClipBoard() && pDoc->IsColumnSelection();
 
     SwPosition *pStt = rPam.Start(), *pEnd = rPam.End();
     // kein Copy abfangen.
-    if( !rPam.HasMark() || *pStt >= *pEnd ||
+    if( !rPam.HasMark() || ( *pStt >= *pEnd && !bColumnSel ) ||
         //JP 29.6.2001: 88963 - dont copy if inspos is in region of start to end
         //JP 15.11.2001: don't test inclusive the end, ever exclusive
         ( pDoc == this && *pStt <= rPos && rPos < *pEnd ))
@@ -903,7 +906,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
         if( pSttNd )
         {
             // den Anfang nicht komplett kopieren ?
-            if( !bCopyCollFmt || pStt->nContent.GetIndex() )
+            if( !bCopyCollFmt || bColumnSel || pStt->nContent.GetIndex() )
             {
                 SwIndex aDestIdx( rPos.nContent );
                 BOOL bCopyOk = FALSE;
@@ -920,7 +923,7 @@ BOOL SwDoc::_Copy( SwPaM& rPam, SwPosition& rPos,
                     aDestIdx.Assign( pDestNd, 0 );
                     bCopyCollFmt = TRUE;
                 }
-                else if( !bOneNode )
+                else if( !bOneNode || bColumnSel )
                 {
                     BYTE nNumLevel = static_cast<BYTE>(pDestNd->GetLevel());
 
