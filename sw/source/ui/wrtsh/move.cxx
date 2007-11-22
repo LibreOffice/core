@@ -4,9 +4,9 @@
  *
  *  $RCSfile: move.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:52:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:42:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,10 +243,13 @@ BOOL SwWrtShell::GoStart( BOOL bKeepArea, BOOL *pMoveTable,
     if ( IsCrsrInTbl() )
     {
         const BOOL bBoxSelection = HasBoxSelection();
-        if ( !bSelect )
-            EnterStdMode();
-        else
-            SttSelect();
+        if( !bBlockMode )
+        {
+            if ( !bSelect )
+                EnterStdMode();
+            else
+                SttSelect();
+        }
             // Tabellenzelle?
         if ( !bBoxSelection && (MoveSection( fnSectionCurr, fnSectionStart)
                 || bDontMoveRegion))
@@ -273,10 +276,13 @@ BOOL SwWrtShell::GoStart( BOOL bKeepArea, BOOL *pMoveTable,
         }
     }
 
-    if ( !bSelect )
-        EnterStdMode();
-    else
-        SttSelect();
+    if( !bBlockMode )
+    {
+        if ( !bSelect )
+            EnterStdMode();
+        else
+            SttSelect();
+    }
     const USHORT nFrmType = GetFrmType(0,FALSE);
     if ( FRMTYPE_FLY_ANY & nFrmType )
     {
