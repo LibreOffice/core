@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:52:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:22:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include "dp_identifier.hxx"
 #include "rtl/uri.hxx"
 #include "osl/thread.hxx"
+#include "osl/mutex.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "ucbhelper/content.hxx"
@@ -106,26 +107,15 @@ const long ITEM_ID_PACKAGE = 1;
 const long ITEM_ID_VERSION = 2;
 const long ITEM_ID_STATUS = 3;
 
-namespace {
-extern "C" {
-void SAL_CALL InstallThread( void * p )
-{
-    DialogImpl * that =  static_cast<DialogImpl*>(p);
-    that->installExtensions();
-}
-} // extern "C"
-} //anon namespace
-
 
 //______________________________________________________________________________
 DialogImpl::DialogImpl(
-    Window * pParent, Sequence<OUString> const & arExtensions,
+    Window * pParent, OUString const & extensionURL,
     Reference<XComponentContext> const & xContext )
     : ModelessDialog( pParent, getResId(RID_DLG_PACKAGE_MANAGER) ),
-      m_arExtensions(arExtensions),
-      m_installThread(0),
-      m_bAutoInstallFinished(false),
       m_pUpdateDialog(NULL),
+      m_extensionURL(extensionURL),
+//    m_bAddingExtensions(false),
       m_xComponentContext( xContext ),
       m_xPkgMgrFac( deployment::thePackageManagerFactory::get(xContext) ),
       m_strAddPackages( getResourceString(RID_STR_ADD_PACKAGES) ),
@@ -137,10 +127,15 @@ DialogImpl::DialogImpl(
       m_strExportPackages( getResourceString(RID_STR_EXPORT_PACKAGES) ),
       m_strExportingPackages( getResourceString(RID_STR_EXPORTING_PACKAGES) )
 {
-    //If unopkg gui extension1 extension2 ... was used then we install them right away
-    if (m_arExtensions.getLength() > 0)
-        Application::PostUserEvent(
-            LINK( this, DialogImpl, startInstallExtensions ), 0);
+
+    m_addExtensionQueue.reset(new AddExtensionQueue(this, m_xComponentContext,
+        m_xPkgMgrFac->getPackageManager(OUSTR("user"))));
+    // If the extensionURL contains  a URL then we were
+    //started as a result of an install request triggered by user, for example by
+    //double clicking an extension in a file browser. This extension will be installed
+    //immediatly and for that time we disable the buttons
+//     if (extensionURL.getLength())
+//         m_bAddingExtensions = true;
 
     Reference<css::lang::XMultiServiceFactory> xConfig(
         xContext->getServiceManager()->createInstanceWithContext(
@@ -171,27 +166,37 @@ DialogImpl::~DialogImpl()
 
 //------------------------------------------------------------------------------
 ::rtl::Reference<DialogImpl> DialogImpl::s_dialog;
+::osl::Mutex DialogImpl::s_dialogMutex;
+::rtl::Reference<DialogImpl> DialogImpl::s_closingDialog;
+::osl::Mutex DialogImpl::s_closingMutex;
 
 //______________________________________________________________________________
 ::rtl::Reference<DialogImpl> DialogImpl::get(
     Reference<XComponentContext> const & xContext,
     Reference<awt::XWindow> const & xParent,
-    Sequence<OUString> const & arExtensions,
+    OUString const & extensionURL,
     OUString const & defaultView )
 {
-    if (s_dialog.is()) {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        return s_dialog;
+    {
+        ::osl::MutexGuard g(s_dialogMutex);
+        if (s_dialog.is())
+        {
+            //Add extensions. In this case the Extension Manager is already open
+            //and someone installs an extension by using the system integration. That is, by
+            //double clicking and extension.
+            //In case the application message loop does not work yet, which is the case when
+            //this service is created in the unpkg process, then the queue thread may be blocked
+            //during installation until messages are dispatched.
+            s_dialog->m_addExtensionQueue->addExtension(extensionURL);
+            return s_dialog;
+        }
     }
 
     Window * pParent = DIALOG_NO_PARENT;
     if (xParent.is())
         pParent = VCLUnoHelper::GetWindow(xParent);
     ::rtl::Reference<DialogImpl> that( new DialogImpl( pParent,
-        arExtensions,xContext ) );
-
-    // xxx todo: set icon:
-//     that->SetIcon( ICON_PACKAGE_MANAGER );
+        extensionURL,xContext ) );
 
     // !!! tab-order relates to creation order:
     that->m_ftPackages.reset(
@@ -207,7 +212,6 @@ DialogImpl::~DialogImpl()
     that->m_headerBar->SetEndDragHdl(
         LINK( that.get(), DialogImpl, headbar_dragEnd ) );
 
-    //
     that->m_addButton.reset(
         new ThreadedPushButton( that.get(),
                                 &DialogImpl::clickAdd, RID_BTN_ADD ) );
@@ -232,7 +236,7 @@ DialogImpl::~DialogImpl()
     that->m_optionsButton.reset(
         new ThreadedPushButton( that.get(), &DialogImpl::clickOptions,
                                 RID_BTN_OPTIONS ) );
-    //ToDo later
+
     that->m_optionsButton->Enable(true);
 
     that->m_getExtensionsButton.reset(
@@ -405,11 +409,21 @@ DialogImpl::~DialogImpl()
     if (defEntry != 0)
         that->m_treelb->Select( defEntry );
 
-    const ::vos::OGuard guard( Application::GetSolarMutex() );
-    if (! s_dialog.is()) {
-        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
-        s_dialog = that;
+    //Assuming two threads enter this function shortly after each other and
+    //both run to this point, then only one dialog will be kept alive by setting
+    //it to s_dialog. The other dialog will be destructed after leaving this function.
+    //That also means that an installation request (double-click on oxt file), must not
+    //be past into the constructor of DialogImpl, because the dialog may be destructed
+    //rigth away and will never show.
+    //See also DialogImpl::Close, DialogImpl::destroyDialog, DialogImpl::disposing
+    {
+        ::osl::MutexGuard g(s_dialogMutex);
+        if (! s_dialog.is()) {
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            s_dialog = that;
+        }
     }
+    s_dialog->m_addExtensionQueue->addExtension(extensionURL);
     return s_dialog;
 }
 
@@ -541,7 +555,33 @@ IMPL_LINK( DialogImpl, hyperlink_clicked, svt::FixedHyperlink*, EMPTYARG )
     {   //throws css::container::NoSuchElementException, css::lang::WrappedTargetException
         Any value = m_xNameAccessRepositories->getByName(OUSTR("WebsiteLink"));
         sURL = value.get<OUString> ();
+        openWebBrowser(sURL);
+     }
+    catch (css::uno::Exception& )
+    {
+        Any exc( ::cppu::getCaughtException() );
+        OUString msg(::comphelper::anyToString(exc));
+        errbox( msg );
+    }
+    return 1;
+}
 
+
+//This event is posted after DialogImpl::Show was called.
+//It is used to install the extension when running unopkg gui extension
+//We use this event to make sure that the extension manager dialog is showing.
+IMPL_LINK( DialogImpl, startInstallExtensions, DialogImpl * , EMPTYARG )
+{
+    //See also updateButtonState which uses m_arExtensions
+    m_addExtensionQueue->addExtension(m_extensionURL);
+    m_extensionURL = OUString();
+    return 0;
+}
+
+void DialogImpl::openWebBrowser(OUString const & sURL) const
+{
+    try
+    {
         Reference< css::system::XSystemShellExecute > xSystemShellExecute(
             m_xComponentContext->getServiceManager()->createInstanceWithContext(
                 OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" ),
@@ -556,90 +596,20 @@ IMPL_LINK( DialogImpl, hyperlink_clicked, svt::FixedHyperlink*, EMPTYARG )
         OUString msg(::comphelper::anyToString(exc));
         errbox( msg );
     }
-    return 1;
 }
 
-//This event should only be called onse during the lifetime of DialogImpl. It is posted
-//in the constructor of DialogImpl.
-//It is used to install the extension when running unopkg gui extensions1 extension2 ...
-//We use this event to make sure that the extension manager dialog is showing.
-//
-IMPL_LINK( DialogImpl, startInstallExtensions, DialogImpl * , EMPTYARG )
+::std::vector<dp_gui::UpdateData> DialogImpl::excludeWebsiteDownloads(
+        ::std::vector<dp_gui::UpdateData> const & data)
 {
-    if (m_installThread != 0)
+    ::std::vector<dp_gui::UpdateData> ret;
+    typedef std::vector< dp_gui::UpdateData >::const_iterator cit;
+    for (cit i = data.begin(); i < data.end(); i++)
     {
-        OSL_ASSERT(0);
+        if (i->sWebsiteURL.getLength() == 0)
+            ret.push_back(*i);
     }
-    else
-    {
-        m_installThread = osl_createSuspendedThread( InstallThread, this );
-        OSL_ASSERT(m_installThread != 0 );
-        osl_resumeThread(m_installThread );
-    }
-    return 0;
+    return ret;
 }
-
-void DialogImpl::installExtensions()
-{
-    OSL_ASSERT(m_arExtensions.getLength() > 0);
-    //Currently unopkg gui ext1 ext2 ... is only supported for user context.
-    OUString context(OUSTR("user"));
-    Reference<deployment::XPackageManager> xPackageManager(
-        m_xPkgMgrFac->getPackageManager( context) );
-    OSL_ASSERT( xPackageManager.is() );
-
-    ::rtl::Reference<ProgressCommandEnv> currentCmdEnv(
-        new ProgressCommandEnv(m_xComponentContext, this, m_strAddingPackages, true) );
-    currentCmdEnv->showProgress( m_arExtensions.getLength() );
-    Reference<task::XAbortChannel> xAbortChannel(
-        xPackageManager->createAbortChannel() );
-
-    for ( sal_Int32 pos = 0;
-          !currentCmdEnv->isAborted() && pos < m_arExtensions.getLength(); ++pos )
-    {
-        try
-        {
-            OUString file;
-            file = m_arExtensions[ pos ];
-            currentCmdEnv->progressSection(
-                ::ucbhelper::Content(
-                    file, currentCmdEnv.get() ).getPropertyValue(
-                        OUSTR("Title") ).get<OUString>(), xAbortChannel );
-            Reference<deployment::XPackage> xPackage(
-                xPackageManager->addPackage(
-                    file, OUString() /* detect media-type */,
-                    xAbortChannel, currentCmdEnv.get() ) );
-            OSL_ASSERT( xPackage.is() );
-            m_treelb->select(xPackage);
-        }
-        catch (Exception &) {
-            //all exception should be handled by the interaction between xPackageManager and
-            //the interaction handler of currentCmdEnv
-            continue;
-        }
-
-        //catch (
-        // todo replace, remove later, currently used to signa name clashes etc.
-        //catch (Exception &) {
-        //  Any exc( ::cppu::getCaughtException() );
-        //  OUString msg;
-        //  deployment::DeploymentException dpExc;
-        //  if ((exc >>= dpExc) &&
-        //      dpExc.Cause.getValueTypeClass() == TypeClass_EXCEPTION) {
-        //      // notify error cause only:
-        //      msg = reinterpret_cast<Exception const *>(
-        //          dpExc.Cause.getValue() )->Message;
-        //  }
-        //  if (msg.getLength() == 0) // fallback for debugging purposes
-        //      msg = ::comphelper::anyToString(exc);
-        //  errbox( msg );
-        //}
-    }
-
-    m_bAutoInstallFinished = true;
-    updateButtonStates();
-}
-
 //______________________________________________________________________________
 void DialogImpl::updateButtonStates(
     Reference<XCommandEnvironment> const & xCmdEnv )
@@ -697,14 +667,13 @@ void DialogImpl::updateButtonStates(
             bExport = bEnable = bDisable = bRemove = bOptions = false;
         }
     }
-    //When unopkg gui ext1 ext2 ... was used then the installation starts automatically.
-    //Untill this installation has finished the user must not interfere.
-    bool bDisableAll = m_arExtensions.getLength() > 0
-        && !m_bAutoInstallFinished;
+//     bEnable &= (allowModification && nSelectedPackages > 0) && !m_bAddingExtensions;
+//     bDisable &= (allowModification && nSelectedPackages > 0) && !m_bAddingExtensions;
+//     bRemove &= (allowModification && nSelectedPackages > 0) && !m_bAddingExtensions;
+    bEnable &= allowModification && nSelectedPackages > 0;
+    bDisable &= allowModification && nSelectedPackages > 0;
+    bRemove &= allowModification && nSelectedPackages > 0;
 
-    bEnable &= (allowModification && nSelectedPackages > 0) && !bDisableAll;
-    bDisable &= (allowModification && nSelectedPackages > 0) && !bDisableAll;
-    bRemove &= (allowModification && nSelectedPackages > 0) && !bDisableAll;
     bExport &= (nSelectedPackages > 0);
 
     if (bOptions)
@@ -749,19 +718,22 @@ void DialogImpl::updateButtonStates(
         }
     }
 
-    m_disableButton->Enable( bDisable );
-    m_enableButton->Enable( bEnable );
-    m_exportButton->Enable( bExport );
-    m_optionsButton->Enable( bOptions);
-    SvLBoxEntry * currEntry = m_treelb->getCurrentSingleSelectedEntry();
+    {
+        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        m_disableButton->Enable( bDisable );
+        m_enableButton->Enable( bEnable );
+        m_exportButton->Enable( bExport );
+        m_optionsButton->Enable( bOptions);
+        SvLBoxEntry * currEntry = m_treelb->getCurrentSingleSelectedEntry();
 
-    m_addButton->Enable(
-        !bDisableAll &&
-        allowModification &&
-        (currEntry != 0 &&
-         m_treelb->GetParent( currEntry ) == 0 /* top-level */) &&
-        (nSelectedPackages == 0) );
-    m_removeButton->Enable( bRemove );
+        m_addButton->Enable(
+//            !m_bAddingExtensions &&
+            allowModification &&
+            (currEntry != 0 &&
+            m_treelb->GetParent( currEntry ) == 0 /* top-level */) &&
+            (nSelectedPackages == 0) );
+        m_removeButton->Enable( bRemove );
+    }
 }
 
 // The function investigates if the extension supports options.
@@ -913,6 +885,10 @@ Sequence<OUString> DialogImpl::solarthread_raiseAddPicker(
 //______________________________________________________________________________
 void DialogImpl::clickAdd( USHORT )
 {
+    //Prevent adding of new extension (m_addExtensionQueue) which are caused by
+    //calls to "unopkg gui ext", for example, double-clicking and extension.
+    ::osl::MutexGuard actionGuard(ActionMutex::get());
+
     //The top level nodes of the tree contain the respective XPackageManager
     OSL_ASSERT( m_treelb->getSelectedPackages(false).size() == 0 );
     const Reference<deployment::XPackageManager> xPackageManager(
@@ -961,6 +937,7 @@ void DialogImpl::clickAdd( USHORT )
             //extensions.
         }
         catch (CommandAbortedException &) {
+            //User clicked the cancel button
             break;
         }
     }
@@ -969,6 +946,10 @@ void DialogImpl::clickAdd( USHORT )
 //______________________________________________________________________________
 void DialogImpl::clickRemove( USHORT )
 {
+    //Prevent adding of new extension (m_addExtensionQueue) which are caused by
+    //calls to "unopkg gui ext", for example, double-clicking and extension.
+    ::osl::MutexGuard actionGuard(ActionMutex::get());
+
     const ::std::vector< ::std::pair< Reference<deployment::XPackage>,
         Reference<deployment::XPackageManager> > > selection(
             m_treelb->getSelectedPackages(true) );
@@ -1017,6 +998,10 @@ void DialogImpl::clickRemove( USHORT )
 //______________________________________________________________________________
 void DialogImpl::clickEnableDisable( USHORT id )
 {
+    //Prevent adding of new extension (m_addExtensionQueue) which are caused by
+    //calls to "unopkg gui ext", for example, double-clicking and extension.
+    ::osl::MutexGuard actionGuard(ActionMutex::get());
+
     const ::std::vector< ::std::pair< Reference<deployment::XPackage>,
         Reference<deployment::XPackageManager> > > selection(
             m_treelb->getSelectedPackages(true) );
@@ -1197,6 +1182,10 @@ bool DialogImpl::solarthread_raiseExportPickers(
 //______________________________________________________________________________
 void DialogImpl::clickExport( USHORT )
 {
+    //Prevent adding of new extension (m_addExtensionQueue) which are caused by
+    //calls to "unopkg gui ext", for example, double-clicking and extension.
+    ::osl::MutexGuard actionGuard(ActionMutex::get());
+
     const ::std::vector< ::std::pair< Reference<deployment::XPackage>,
         Reference<deployment::XPackageManager> > > selection(
             m_treelb->getSelectedPackages(false) );
@@ -1243,12 +1232,17 @@ void DialogImpl::clickExport( USHORT )
 //______________________________________________________________________________
 void DialogImpl::clickCheckUpdates( USHORT )
 {
+    // see checkUpdates.
     checkUpdates(false);
 }
 
 //______________________________________________________________________________
 void DialogImpl::clickOptions( USHORT )
 {
+    //Prevent adding of new extension (m_addExtensionQueue) which are caused by
+    //calls to "unopkg gui ext", for example, double-clicking and extension.
+    ::osl::MutexGuard actionGuard(ActionMutex::get());
+
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     if ( pFact )
     {
@@ -1266,10 +1260,10 @@ void DialogImpl::clickOptions( USHORT )
 }
 
 //______________________________________________________________________________
-void DialogImpl::errbox( OUString const & msg )
+void DialogImpl::errbox( OUString const & msg ) const
 {
     const ::vos::OGuard guard( Application::GetSolarMutex() );
-    ::std::auto_ptr<ErrorBox> box( new ErrorBox( this, WB_OK, msg ) );
+    const ::std::auto_ptr<ErrorBox> box( new ErrorBox( const_cast<DialogImpl*>(this), WB_OK, msg ) );
     box->SetText( GetText() );
     box->Execute();
 }
@@ -1277,6 +1271,9 @@ void DialogImpl::errbox( OUString const & msg )
 //______________________________________________________________________________
 void DialogImpl::checkUpdates( bool selected, bool showUpdateOnly, bool parentVisible )
 {
+    //Prevent adding of new extension (m_addExtensionQueue) which are caused by
+    //calls to "unopkg gui ext", for example, double-clicking and extension.
+    ::osl::MutexGuard actionGuard(ActionMutex::get());
     ::vos::OClearableGuard aGuard( Application::GetSolarMutex() );
     if ( m_pUpdateDialog != NULL )
     {
@@ -1299,12 +1296,37 @@ void DialogImpl::checkUpdates( bool selected, bool showUpdateOnly, bool parentVi
         if ( ( m_pUpdateDialog->Execute() == RET_OK ) && !data.empty() )
         {
             m_pUpdateDialog->notifyMenubar( true, false ); // prepare the checking, if there updates to be notified via menu bar icon
-            UpdateInstallDialog( pParent, data, m_xComponentContext ).Execute();
-            m_pUpdateDialog->notifyMenubar( false, true ); // Check, if there are still pending updates to be notified via menu bar icon
-        }
-        else
-            m_pUpdateDialog->notifyMenubar( false, false ); // Check, if there are pending updates to be notified via menu bar icon
+           //If there is at least one directly downloadable dialog then we
+            //open the install dialog.
+            int countWebsiteDownload = 0;
+            typedef std::vector< dp_gui::UpdateData >::const_iterator cit;
+            for (cit i = data.begin(); i < data.end(); i++)
+            {
+                if (i->sWebsiteURL.getLength() > 0)
+                    countWebsiteDownload ++;
+            }
 
+            short nDialogResult = RET_OK;
+            if (data.size() - countWebsiteDownload > 0)
+            {
+                ::std::vector<dp_gui::UpdateData> dataDownload(excludeWebsiteDownloads(data));
+                nDialogResult = UpdateInstallDialog( pParent, dataDownload, m_xComponentContext ).Execute();
+                m_pUpdateDialog->notifyMenubar( false, true ); // Check, if there are still pending updates to be notified via menu bar icon
+            }
+            else
+                m_pUpdateDialog->notifyMenubar( false, false ); // Check, if there are pending updates to be notified via menu bar icon
+            //Now start the webbrowser and navigate to the websites where we get the updates
+            if (RET_OK == nDialogResult)
+             {
+                for (cit i = data.begin(); i < data.end(); i++)
+                {
+                    if (i->sWebsiteURL.getLength() > 0)
+                    {
+                        openWebBrowser(i->sWebsiteURL);
+                    }
+                }
+            }
+        }
         delete m_pUpdateDialog;
         m_pUpdateDialog = NULL;
     }
@@ -1357,6 +1379,7 @@ void DialogImpl::SyncPushButton::Click()
         m_dialog->errbox( msg );
     }
 }
+
 
 //------------------------------------------------------------------------------
 namespace {
