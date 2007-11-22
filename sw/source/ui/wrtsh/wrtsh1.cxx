@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-06 16:28:08 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:43:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,6 +249,7 @@ using namespace com::sun::star;
         bClearMark = \
         bIns = TRUE;\
         bAddMode = \
+        bBlockMode = \
         bExtMode = \
         bInSelect = \
         bCopy = \
@@ -256,7 +257,8 @@ using namespace com::sun::star;
         bNoEdit = \
         bSelWrd = \
         bSelLn = \
-        bIsInClickToEdit = FALSE;
+        bIsInClickToEdit = \
+        mbRetainSelection = FALSE;
 
 
 SvxAutoCorrect* lcl_IsAutoCorr()
