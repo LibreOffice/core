@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:54:22 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:27:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -979,6 +979,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 
 #define FN_TO_FOOTNOTE_AREA         (FN_SELECTION + 63) /* jump into the appropriate footnote area */
 
+#define FN_SET_BLOCK_MODE           (FN_SELECTION + 64) /* selection mode: block */
 
 
 
@@ -1000,6 +1001,9 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_PREV_TBLFML_ERR          (FN_SELECTION + 88)   /* zur vorherigen fehl. Tabellenformel */
 
 #define FN_READONLY_SELECTION_MODE  (FN_SELECTION + 89)   /* switches text selection mode in readonly documents*/
+#define FN_SELECTION_MODE_DEFAULT   (FN_SELECTION + 90)   /* use default selection mode - not block mode */
+#define FN_SELECTION_MODE_BLOCK     (FN_SELECTION + 91)   /* switch on block selection */
+
 /*--------------------------------------------------------------------
     QUERY-Block
  --------------------------------------------------------------------*/
