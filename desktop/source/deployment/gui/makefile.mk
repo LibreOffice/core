@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 15:36:34 $
+#   last change: $Author: ihi $ $Date: 2007-11-22 15:03:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,8 @@ SLOFILES = \
         $(SLO)$/dp_gui_updatedialog.obj \
         $(SLO)$/dp_gui_updateinstalldialog.obj \
         $(SLO)$/dp_gui_autoscrolledit.obj \
-        $(SLO)$/dp_gui_system.obj
+        $(SLO)$/dp_gui_system.obj \
+        $(SLO)$/dp_gui_addextensionqueue.obj
 
 SHL1TARGET = $(TARGET)$(UPD)$(DLLPOSTFIX).uno
 SHL1VERSIONMAP = ..$/deployment.map
