@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_descriptioninfoset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:26:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:03:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@
 /// @HTML
 
 namespace com { namespace sun { namespace star {
+    namespace lang { struct Locale; }
     namespace uno { class XComponentContext; }
     namespace xml {
         namespace dom {
@@ -114,6 +115,53 @@ public:
     ::rtl::OUString getVersion() const;
 
     /**
+        Returns the localized publisher name and the corresponding URL.
+
+        In case there is no publisher element then a pair of two empty strings is returned.
+    */
+    ::std::pair< ::rtl::OUString, ::rtl::OUString > getLocalizedPublisherNameAndURL() const;
+
+    /**
+        Returns the URL for the release notes corresponding to the office's locale.
+
+        In case there is no release-notes element then an empty string is returned.
+    */
+    ::rtl::OUString getLocalizedReleaseNotesURL() const;
+
+    /** returns the relative path to the license file.
+
+        In case there is no simple-license element then an empty string is returned.
+    */
+    ::rtl::OUString getLocalizedLicenseURL() const;
+
+    /** returns the localized display name of the extensions.
+
+        In case there is no localized display-name then an empty string is returned.
+    */
+    ::rtl::OUString getLocalizedDisplayName() const;
+
+    /**
+        returns the download website URL from the update information.
+
+        There can be multiple URLs where each is assigned to a particular locale.
+        The function returs the URL which locale matches best the one used in the office.
+
+        The return value is an optional because it may be necessary to find out if there
+        was a value provided or not. This is necessary to flag the extension in the update dialog
+        properly as "browser based update". The return value will only then not be initialized
+        if there is no <code>&lt;update-website&gt;</code>. If the element exists, then it must
+        have at least one child element containing an URL.
+
+        The <code>&lt;update-website&gt;</code> and <code>&lt;update-download&gt;</code>
+        elements are mutually exclusiv.
+
+        @return
+        the download website URL, or an empty <code>optional</code> if none is
+        specified
+    */
+    ::boost::optional< ::rtl::OUString > getLocalizedUpdateWebsiteURL() const;
+
+    /**
        Return the dependencies.
 
        @return
@@ -134,20 +182,16 @@ public:
      /**
         Return the download URLs from the update information.
 
+        Because the <code>&lt;update-download&gt;</code> and the <code>&lt;update-website&gt;</code>
+        elements are mutually exclusive one may need to determine exacty if the element
+        was provided.
+
         @return
         download URLs
      */
     ::com::sun::star::uno::Sequence< ::rtl::OUString >
     getUpdateDownloadUrls() const;
 
-    /**
-       Return the download website URL from the update information.
-
-       @return
-       the download website URL, or an empty <code>optional</code> if none is
-       specified
-     */
-    ::boost::optional< ::rtl::OUString > getUpdateWebsiteUrl() const;
 
     /**
        Allow direct access to the XPath functionality.
@@ -165,6 +209,50 @@ private:
 
     SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::rtl::OUString > getUrls(
         ::rtl::OUString const & expression) const;
+
+    /** Retrieves a child element which as lang attribute which matches the office locale.
+
+        Only top-level children are taken into account. It is also assumed that they are all
+        of the same element type and have a lang attribute. The matching algoritm is according
+        to RFC 3066, with the exception that only one variant is allowed.
+        @param parent
+        the expression used to obtain the parent of the localized children. It can be null.
+        Then a null reference is returned.
+    */
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode >
+        getLocalizedChild( ::rtl::OUString const & sParent) const;
+    SAL_DLLPRIVATE  ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode>
+        matchFullLocale(::com::sun::star::uno::Reference<
+        ::com::sun::star::xml::dom::XNode > const & xParent, ::rtl::OUString const & sLocale) const;
+    SAL_DLLPRIVATE  ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode>
+        matchCountryAndLanguage(::com::sun::star::uno::Reference<
+        ::com::sun::star::xml::dom::XNode > const & xParent,
+        ::com::sun::star::lang::Locale const & officeLocale) const;
+    SAL_DLLPRIVATE  ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode>
+        matchLanguage(
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > const & xParent,
+        ::com::sun::star::lang::Locale const & officeLocale) const;
+
+    /** If there is no child element with a locale matching the office locale, then we use
+        the first child. In the case of the simple-license we also use the former default locale, which
+        was determined by the default-license-id (/description/registration/simple-license/@default-license-id)
+        and the license-id attributes (/description/registration/simple-license/license-text/@license-id).
+        However, since OOo 2.4 we use also the first child as default for the license
+        unless the two attributes are present.
+    */
+    SAL_DLLPRIVATE  ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode>
+        getChildWithDefaultLocale(
+        ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > const & xParent) const;
+    /**
+        @param out_bParentExists
+            indicates if the element node specified in sXPathParent exists.
+    */
+    SAL_DLLPRIVATE ::rtl::OUString getLocalizedHREFAttrFromChild(
+        ::rtl::OUString const & sXPathParent, bool * out_bParentExists) const;
+
+    static SAL_DLLPRIVATE ::rtl::OUString
+        localeToString(::com::sun::star::lang::Locale const & locale);
+
 
     ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XNode > m_element;
