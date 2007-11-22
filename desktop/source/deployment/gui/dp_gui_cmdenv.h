@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 14:02:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:01:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,13 +117,17 @@ class ProgressCommandEnv
 
     void solarthread_dtor();
 
-    Dialog * activeDialog(); // either m_progressDialog or m_dialog
-
 public:
     virtual ~ProgressCommandEnv();
 
-    // When param bAskWhenInstalling = true, then the user is asked if he
-    //agrees to install this extension.
+    /** When param bAskWhenInstalling = true, then the user is asked if he
+    agrees to install this extension. In case this extension is already installed
+    then the user is also notified and asked if he wants to replace that existing
+    extension. In first case an interaction request with an InstallException
+    will be handled and in the second case a VersionException will be handled.
+
+
+    */
     inline ProgressCommandEnv(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > ctx,
         Dialog * dialog,
@@ -135,6 +139,9 @@ public:
         m_bAskWhenInstalling(bAskWhenInstalling),
         m_aborted( false )
         {}
+
+    Dialog * activeDialog(); // either m_progressDialog or m_dialog
+
 
     void showProgress( sal_Int32 progressSections );
     void progressSection(
