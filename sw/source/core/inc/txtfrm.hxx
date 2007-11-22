@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:00:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:36:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,6 +279,9 @@ public:
     */
     bool GetTopOfLine( SwTwips& _onTopOfLine,
                        const SwPosition& _rPos ) const;
+
+    virtual bool FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
+
 
     //Liefert in nOffset den Offset des Characters innerhalb des
     //gesetzten Textbuffers zurueck, welcher der durch aPoint
