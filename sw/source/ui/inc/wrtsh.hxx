@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:25:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:40:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ public:
     BOOL Pop( BOOL bOldCrsr = TRUE );
 
     void    EnterStdMode();
-    BOOL    IsStdMode() const { return !bExtMode && !bAddMode; }
+    BOOL    IsStdMode() const { return !bExtMode && !bAddMode && !bBlockMode; }
 
     void    EnterExtMode();
     void    LeaveExtMode();
@@ -164,6 +164,11 @@ public:
     void    LeaveAddMode();
     long    ToggleAddMode();
     BOOL    IsAddMode() const { return bAddMode; }
+
+    void    EnterBlockMode();
+    void    LeaveBlockMode();
+    long    ToggleBlockMode();
+    BOOL    IsBlockMode() const { return bBlockMode; }
 
     void    SetInsMode( BOOL bOn = TRUE );
     void    ToggleInsMode() { SetInsMode( !bIns ); }
@@ -275,6 +280,9 @@ typedef BOOL (SwWrtShell:: *FNSimpleMove)();
     void    NoEdit(BOOL bHideCrsr = TRUE);
     void    Edit();
     BOOL    IsNoEdit() const { return bNoEdit; }
+
+    BOOL IsRetainSelection() const { return mbRetainSelection; }
+    void SetRetainSelection( BOOL bRet ) { mbRetainSelection = bRet; }
 
     // change current data base and notify
     void ChgDBData(const SwDBData& SwDBData);
@@ -485,11 +493,13 @@ private:
     {
         ModeStack   *pNext;
         BOOL        bAdd,
+                    bBlock,
                     bExt,
                     bIns;
-        ModeStack(ModeStack *pNextMode, BOOL _bIns, BOOL _bExt, BOOL _bAdd):
+        ModeStack(ModeStack *pNextMode, BOOL _bIns, BOOL _bExt, BOOL _bAdd, BOOL _bBlock):
             pNext(pNextMode),
             bAdd(_bAdd),
+            bBlock(_bBlock),
             bExt(_bExt),
             bIns(_bIns)
              {}
@@ -548,6 +558,7 @@ private:
     BOOL    bInSelect       :1;
     BOOL    bExtMode        :1;
     BOOL    bAddMode        :1;
+    BOOL    bBlockMode      :1;
     BOOL    bLayoutMode     :1;
     BOOL    bNoEdit         :1;
     BOOL    bCopy           :1;
@@ -555,6 +566,7 @@ private:
     BOOL    bSelLn          :1;
     BOOL    bIsInClickToEdit:1;
     BOOL    bClearMark      :1;     // Selektion fuer ChartAutoPilot nicht loeschen
+    BOOL    mbRetainSelection :1; // Do not remove selections
 
     Point   aStart;
     Link    aSelTblLink;
