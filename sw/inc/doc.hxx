@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 18:17:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:27:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -518,6 +518,10 @@ class SwDoc :
     bool mbWinEncryption         : 1;    // imported document password encrypted?
     bool mbLinksUpdated          : 1;    // OD 2005-02-11 #i38810#
                                          // flag indicating, that the links have been updated.
+    bool mbClipBoard             : 1;    // true: this document represents the clipboard
+    bool mbColumnSelection       : 1;    // true: this content has bee created by a column selection
+                                         //       (clipboard docs only)
+
 #ifndef PRODUCT
     bool mbXMLExport : 1;                // TRUE: during XML export
 #endif
@@ -1379,8 +1383,14 @@ public:
     void            SetTOIAutoMarkURL(const String& rSet)  {sTOIAutoMarkURL = rSet;}
     void            ApplyAutoMark();
 
-    bool IsInReading() const                   { return mbInReading; }
+    bool IsInReading() const                    { return mbInReading; }
     void SetInReading( bool bNew )              { mbInReading = bNew; }
+
+    bool IsClipBoard() const                    { return mbClipBoard; }
+    void SetClipBoard( bool bNew )              { mbClipBoard = bNew; }
+
+    bool IsColumnSelection() const              { return mbColumnSelection; }
+    void SetColumnSelection( bool bNew )        { mbColumnSelection = bNew; }
 
     bool IsInXMLImport() const { return mbInXMLImport; }
     void SetInXMLImport( bool bNew ) { mbInXMLImport = bNew; }
