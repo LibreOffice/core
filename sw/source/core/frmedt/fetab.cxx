@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:51:40 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:34:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,7 +240,7 @@ void SwFEShell::ParkCursorInTab()
     /* Set cursor to end of selection to ensure IsLastCellInRow works
        properly. */
     {
-        SwCursor aTmpCrsr(aEndPos);
+        SwCursor aTmpCrsr( aEndPos, 0, false );
         *pSwCrsr = aTmpCrsr;
     }
 
@@ -254,13 +254,13 @@ void SwFEShell::ParkCursorInTab()
            it to the next cell. */
 
         {
-            SwCursor aTmpCrsr(aStartPos);
+            SwCursor aTmpCrsr( aStartPos, 0, false );
             *pSwCrsr = aTmpCrsr;
         }
 
         if (! pSwCrsr->GoPrevCell())
         {
-            SwCursor aTmpCrsr(aEndPos);
+            SwCursor aTmpCrsr( aEndPos, 0, false );
             *pSwCrsr = aTmpCrsr;
             pSwCrsr->GoNextCell();
         }
@@ -272,13 +272,13 @@ void SwFEShell::ParkCursorInTab()
            to the previous cell. */
 
         {
-            SwCursor aTmpCrsr(aEndPos);
+            SwCursor aTmpCrsr( aEndPos, 0, false );
             *pSwCrsr = aTmpCrsr;
         }
 
         if (! pSwCrsr->GoNextCell())
         {
-            SwCursor aTmpCrsr(aStartPos);
+            SwCursor aTmpCrsr( aStartPos, 0, false );
             *pSwCrsr = aTmpCrsr;
             pSwCrsr->GoPrevCell();
         }
