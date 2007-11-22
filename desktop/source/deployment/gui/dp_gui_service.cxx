@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:52:27 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ class ServiceImpl
     Reference<XComponentContext> const m_xComponentContext;
     boost::optional< Reference<awt::XWindow> > /* const */ m_parent;
     boost::optional<OUString> /* const */ m_view;
-    boost::optional<Sequence<OUString> > m_extensions;
+    boost::optional<OUString> m_extensionURL;
     OUString m_initialTitle;
     bool m_bShowUpdateOnly;
 
@@ -185,7 +185,7 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
     } catch (css::lang::IllegalArgumentException & ) {
     }
     try {
-        comphelper::unwrapArgs( args, m_extensions, m_view );
+        comphelper::unwrapArgs( args, m_extensionURL);
     } catch (css::lang::IllegalArgumentException & ) {
     }
 
@@ -204,7 +204,7 @@ void ServiceImpl::setDialogTitle( OUString const & title )
         ::dp_gui::DialogImpl::get(
             m_xComponentContext,
             m_parent ? *m_parent : Reference<awt::XWindow>(),
-            m_extensions ? *m_extensions : Sequence<OUString>(),
+            m_extensionURL ? *m_extensionURL : OUString(),
             m_view ? *m_view : OUString() )->SetText( title );
     }
     else
@@ -218,6 +218,7 @@ void ServiceImpl::startExecuteModal(
 {
     bool bCloseDialog = true;  // only used if m_bShowUpdateOnly is true
     ::std::auto_ptr<Application> app;
+    //ToDo: synchronize access to s_dialog !!!
     if (! dp_gui::DialogImpl::s_dialog.is())
     {
         const bool bAppUp = (GetpApp() != 0);
@@ -261,14 +262,6 @@ void ServiceImpl::startExecuteModal(
         // dialog after displaying the update dialog when it has been visible before
         if ( m_bShowUpdateOnly )
             bCloseDialog = false;
-        else
-        {
-            //Currently we do not support the case that if the Extension Manager is
-            //open in an office an unopkg can be executed. This should be fixed in the future.
-            ResId warnId(WARNINGBOX_CONCURRENTINSTANCE,*DeploymentGuiResMgr::get() );
-            WarningBox warn(NULL, warnId);
-            warn.Execute();
-        }
     }
 
     {
@@ -277,7 +270,7 @@ void ServiceImpl::startExecuteModal(
             ::dp_gui::DialogImpl::get(
                 m_xComponentContext,
                 m_parent ? *m_parent : Reference<awt::XWindow>(),
-                m_extensions ? *m_extensions : Sequence<OUString>(),
+                m_extensionURL ? *m_extensionURL : OUString(),
                 m_view ? *m_view : OUString() ) );
         if (m_initialTitle.getLength() > 0) {
             dialog->SetText( m_initialTitle );
