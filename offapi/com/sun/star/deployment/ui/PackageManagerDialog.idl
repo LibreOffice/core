@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PackageManagerDialog.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:34:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 14:59:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,20 +65,15 @@ service PackageManagerDialog : com::sun::star::ui::dialogs::XAsynchronousExecuta
     create( [in] com::sun::star::awt::XWindow xParent,
             [in] string focussedContext );
 
-    /** Create a GUI and pass the extensions which shall be installed right away.
-        This constructor is instended for the case when unopkg is run as result of
-        clicking an extension in a file browser, etc.
+    /** Create a GUI and pass the URL of the extension which shall be installed right away.
+        This constructor is intended for the case when unopkg is run as result of
+        clicking an extension in a file browser, etc. The extensions will always be installed
+        for the current user.
 
-        @param extensions
-            sequence of system file URLs of extensions
-
-        @param focussedContext
-               context to be focussed and under which the extensions are to be installed,
-               for example "user" or "shared".
+        @param extensionURL
+            URL of extension
     */
-     createAndInstall( [in] sequence< string > extensions,
-             [in] string focussedContext);
-
+     createAndInstall( [in] string extensionURL);
 
 };
 
