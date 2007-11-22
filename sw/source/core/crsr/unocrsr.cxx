@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:31:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:31:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ SV_IMPL_PTRARR( SwUnoCrsrTbl, SwUnoCrsrPtr )
 IMPL_FIXEDMEMPOOL_NEWDEL( SwUnoCrsr, 10, 10 )
 
 SwUnoCrsr::SwUnoCrsr( const SwPosition &rPos, SwPaM* pRing )
-    : SwCursor( rPos, pRing ), SwModify( 0 ),
+    : SwCursor( rPos, pRing, false ), SwModify( 0 ),
     bRemainInSection( TRUE ),
     bSkipOverHiddenSections( FALSE ),
     bSkipOverProtectSections( FALSE )
@@ -209,7 +209,7 @@ BOOL SwUnoCrsr::IsSelOvr( int eFlags )
 /*  */
 
 SwUnoTableCrsr::SwUnoTableCrsr(const SwPosition& rPos)
-    : SwCursor(rPos), SwUnoCrsr(rPos), SwTableCursor(rPos), aTblSel(rPos)
+    : SwCursor(rPos,0,false), SwUnoCrsr(rPos), SwTableCursor(rPos), aTblSel(rPos,0,false)
 {
     SetRemainInSection(FALSE);
 }
