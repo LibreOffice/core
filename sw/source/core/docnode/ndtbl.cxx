@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 12:17:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:32:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1490,7 +1490,7 @@ SwTableNode* SwNodes::TextToTable( const std::vector< std::vector<SwNodeRange> >
 //                aCntPos.nContent = nChPos;
 //                SwCntntNode* pNewNd = pTxtNd->SplitNode( aCntPos );
 
-//        auch fürs undo?
+//        auch f?rs undo?
 //                if( aBkmkArr.Count() )
 //                    _RestoreCntntIdx( aBkmkArr, *pNewNd, nChPos,
 //                                        nChPos + 1 );
@@ -2739,7 +2739,7 @@ void SwDoc::GetTabRows( SwTabCols &rFill, const SwCursor* ,
     if ( pCntnt && pCntnt->IsTxtFrm() )
     {
         const SwPosition aPos( *((SwTxtFrm*)pCntnt)->GetTxtNode() );
-        const SwCursor aTmpCrsr( aPos );
+        const SwCursor aTmpCrsr( aPos, 0, false );
         ::GetTblSel( aTmpCrsr, aBoxes, nsSwTblSearchType::TBLSEARCH_COL );
     }
     // <--
@@ -3042,7 +3042,7 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
                                             aNew.SetHeightSizeType( ATT_MIN_SIZE );
                                         // This position must not be in an overlapped box
                                         const SwPosition aPos( *((SwTxtFrm*)pCntnt)->GetTxtNode() );
-                                        const SwCursor aTmpCrsr( aPos );
+                                        const SwCursor aTmpCrsr( aPos, 0, false );
                                         SetRowHeight( aTmpCrsr, aNew );
                                         // For the new table model we're done, for the old one
                                         // there might be another (sub)row to adjust...
