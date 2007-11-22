@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 07:57:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,7 @@ class SwTableBox;
 class SwCellFrms;
 class SwTOXMark;
 class SwRedline;
+class IBlockCursor;
 class SwCntntNode; //  #i23726#
 struct SwPosition;
 
@@ -220,6 +221,8 @@ private:
     SwShellCrsr* pCurCrsr;      // der aktuelle Cursor
     SwShellCrsr* pCrsrStk;      // Stack fuer den Cursor
     SwVisCrsr *pVisCrsr;        // der Sichtbare-Cursor
+
+    IBlockCursor *pBlockCrsr;   // interface of cursor for block (=rectangular) selection
 
     SwShellTableCrsr* pTblCrsr; // Tabellen-Crsr; nur in Tabellen, wenn
                                 // die Selection ueber 2 Spalten liegt
@@ -354,6 +357,8 @@ protected:
     bool SetInFrontOfLabel( BOOL bNew );
     // <--
 
+    void RefreshBlockCursor();
+
     /**
        Updates the marked numbering level stored in this shell
        according to the cursor.
@@ -375,6 +380,10 @@ public:
     BOOL DestroyCrsr();
     // TableCursor in normale Cursor verwandeln, Tablemode aufheben
     void TblCrsrToCursor();
+    // enter block mode, change normal cursor into block cursor
+    void CrsrToBlockCrsr();
+    // leave block mode, change block cursor into normal cursor
+    void BlockCrsrToCrsr();
 
     SwPaM* GetCrsr( BOOL bMakeTblCrsr = TRUE ) const;
     inline SwCursor* GetSwCrsr( BOOL bMakeTblCrsr = TRUE ) const;
@@ -440,7 +449,8 @@ public:
     // returnt
     //  CRSR_POSCHG: wenn der ob der SPoint vom Layout korrigiert wurde.
     //  CRSR_POSOLD: wenn der Crsr nicht veraendert wurde
-    int SetCrsr( const Point &rPt, BOOL bOnlyText = FALSE );
+    int SetCrsr( const Point &rPt, BOOL bOnlyText = FALSE, bool bBlock = true );
+
 
     /*
      * Benachrichtung, dass der sichtbare Bereich sich geaendert
@@ -674,6 +684,28 @@ public:
 
     BOOL GotoNextOutline();         // naechster Node mit Outline-Num.
     BOOL GotoPrevOutline();         // vorheriger Node mit Outline-Num.
+
+    /** Delivers the current shell cursor
+
+        Some operations have to run on the current cursor ring,
+        some on the pTblCrsr (if exist) or the current cursor ring and
+        some on the pTblCrsr or pBlockCrsr or the current cursor ring.
+        This small function checks the existence and delivers the wished cursor.
+
+        @param bBlock [bool]
+        if the block cursor is of interest or not
+
+        @return pTblCrsr if exist,
+        pBlockCrsr if exist and of interest (param bBlock)
+        otherwise pCurCrsr
+    */
+    SwShellCrsr* getShellCrsr( bool bBlock );
+    const SwShellCrsr* getShellCrsr( bool bBlock ) const
+        { return (const_cast<SwCrsrShell*>(this))->getShellCrsr( bBlock ); }
+
+    FASTBOOL IsBlockMode() const { return 0 != pBlockCrsr; }
+    const IBlockCursor* GetBlockCrsr() const { return pBlockCrsr; }
+    IBlockCursor* GetBlockCrsr() { return pBlockCrsr; }
 
         // ist der Crsr in einer Tabelle und ist die Selection ueber
         // zwei Spalten
