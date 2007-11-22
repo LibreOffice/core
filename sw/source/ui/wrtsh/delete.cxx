@@ -4,9 +4,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:52:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:42:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,16 +193,28 @@ long SwWrtShell::DelLeft()
     // wenn eine Selektion existiert, diese loeschen.
     if ( IsSelection() )
     {
-         //OS: wieder einmal Basic: ACT_KONTEXT muss vor
-        //EnterStdMode verlassen werden!
+        if( !IsBlockMode() || HasSelection() )
         {
-            ACT_KONTEXT(this);
-            ResetCursorStack();
-            Delete();
-            UpdateAttr();
+             //OS: wieder einmal Basic: ACT_KONTEXT muss vor
+            //EnterStdMode verlassen werden!
+            {
+                ACT_KONTEXT(this);
+                ResetCursorStack();
+                Delete();
+                UpdateAttr();
+            }
+            if( IsBlockMode() )
+            {
+                NormalizePam();
+                ClearMark();
+                EnterBlockMode();
+            }
+            else
+                EnterStdMode();
+            return 1L;
         }
-        EnterStdMode();
-        return 1L;
+        else
+            EnterStdMode();
     }
 
     // JP 29.06.95: nie eine davor stehende Tabelle loeschen.
@@ -277,17 +289,29 @@ long SwWrtShell::DelRight()
             //  wenn eine Selektion existiert, diese loeschen.
         if( IsSelection() )
         {
-            //OS: wieder einmal Basic: ACT_KONTEXT muss vor
-            //EnterStdMode verlassen werden!
+            if( !IsBlockMode() || HasSelection() )
             {
-                ACT_KONTEXT(this);
-                ResetCursorStack();
-                Delete();
-                UpdateAttr();
+                //OS: wieder einmal Basic: ACT_KONTEXT muss vor
+                //EnterStdMode verlassen werden!
+                {
+                    ACT_KONTEXT(this);
+                    ResetCursorStack();
+                    Delete();
+                    UpdateAttr();
+                }
+                if( IsBlockMode() )
+                {
+                    NormalizePam();
+                    ClearMark();
+                    EnterBlockMode();
+                }
+                else
+                    EnterStdMode();
+                nRet = 1L;
+                break;
             }
-            EnterStdMode();
-            nRet = 1L;
-            break;
+            else
+                EnterStdMode();
         }
 
         pWasInTblNd = IsCrsrInTbl();
