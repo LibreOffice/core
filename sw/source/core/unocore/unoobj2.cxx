@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:27:40 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:39:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1521,7 +1521,7 @@ void    SwXTextRange::DeleteAndInsert(const String& rText) throw( uno::RuntimeEx
     {
         const SwPosition& rPoint = *pBkm->Start();
         const SwPosition* pMark = pBkm->End();
-        SwCursor aNewCrsr( rPoint);
+        SwCursor aNewCrsr( rPoint, 0, false );
         if(pMark)
         {
             aNewCrsr.SetMark();
