@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui.h,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:51:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:21:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,13 @@
 #define INCLUDED_DP_GUI_H
 
 #include "dp_gui_cmdenv.h"
+#include "dp_gui_updatedata.hxx"
 #include "dp_misc.h"
 #include "dp_gui_updatability.hxx"
+#include "dp_gui_addextensionqueue.hxx"
 #include "dp_gui.hrc"
 #include "rtl/ref.hxx"
+#include "rtl/instance.hxx"
 #include "osl/thread.hxx"
 #include "cppuhelper/implbase2.hxx"
 #include "vcl/svapp.hxx"
@@ -51,8 +54,10 @@
 #include "svtools/svtabbx.hxx"
 #include "svtools/headbar.hxx"
 #include "com/sun/star/ucb/XContentEventListener.hpp"
+#include "osl/mutex.hxx"
 #include <list>
 #include <memory>
+#include <queue>
 
 namespace com { namespace sun { namespace star {
     namespace container {
@@ -85,6 +90,12 @@ PackageState getPackageState(
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackage> const & xPackage,
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment> const & xCmdEnv =
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment>() );
+
+
+// Use this mutex whenever a button is clicked, such as Add, Update, Options, in order to prevent that
+// an extension is installed which was startet asynchronously. For example, an office is running with the
+// Extension Manager open and the user installs an extension by double-clicking one in a file browser.
+struct ActionMutex : public rtl::Static< ::osl::Mutex, ActionMutex>{};
 
 //==============================================================================
 struct DialogImpl :
@@ -248,18 +259,23 @@ struct DialogImpl :
     void clickExport( USHORT id );
     void clickCheckUpdates( USHORT id );
     void clickOptions( USHORT id );
-    void installExtensions();
+//  void installExtensions();
 
     void updateButtonStates(
         ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XCommandEnvironment> const & xCmdEnv =
         com::sun::star::uno::Reference<
         com::sun::star::ucb::XCommandEnvironment>() );
 
-    void errbox( ::rtl::OUString const & msg );
 
     void checkUpdates( bool selected, bool showUpdateOnly = false, bool parentVisible = true );
-
+    void errbox( ::rtl::OUString const & msg ) const;
     bool supportsOptions( ::rtl::OUString const & sExtensionId);
+    void openWebBrowser(::rtl::OUString const & sURL) const;
+
+    /** return a vector which only contains information for directly downloadable updates.
+    */
+    static ::std::vector<dp_gui::UpdateData> excludeWebsiteDownloads(
+        ::std::vector<dp_gui::UpdateData> const & data);
 
     /** checks if an some action is done with a shared extension.
 
@@ -271,10 +287,20 @@ struct DialogImpl :
         ::com::sun::star::uno::Reference<
             ::com::sun::star::deployment::XPackageManager> const & xPMgr) const;
 
-    const ::com::sun::star::uno::Sequence< ::rtl::OUString > m_arExtensions;
-    oslThread m_installThread;
-    bool m_bAutoInstallFinished;
     UpdateDialog* m_pUpdateDialog;
+    /** The extensions which are passed when the Extension Manager dialog is created.
+        This is the case when the Extension Manager is started as a result of a
+        "system integration operation", such as double clicking on a oxt file.
+        This extension is always installed as user extension.
+    */
+    ::rtl::OUString m_extensionURL;
+
+    /** This flag is used to show that there are extensions being installed and the buttons should
+        therefore be disabled. For example, when the Extension Manager was started as a result of
+        double-click on an extension in a file browser, then that extension is being immediately
+        installed. During that time the buttons and context menus should be disabled.
+    */
+    bool m_bAddingExtensions;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> m_xComponentContext;
     ::com::sun::star::uno::Reference< ::com::sun::star::deployment::XPackageManagerFactory> m_xPkgMgrFac;
@@ -284,7 +310,8 @@ struct DialogImpl :
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContent> m_xTdocRoot;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xNameAccessNodes;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> m_xNameAccessRepositories;
-    const String m_strAddPackages;
+
+     const String m_strAddPackages;
     const String m_strAddingPackages;
     const String m_strRemovingPackages;
     const String m_strEnablingPackages;
@@ -323,19 +350,34 @@ struct DialogImpl :
     ::std::auto_ptr<HelpButton> m_helpButton;
 
     ::std::auto_ptr<Updatability> m_updatability;
+    ::std::auto_ptr<AddExtensionQueue> m_addExtensionQueue;
 
-    DECL_STATIC_LINK( DialogImpl, destroyDialog, void * );
+    DECL_LINK( destroyDialog, DialogImpl *);
     DECL_LINK( startInstallExtensions, DialogImpl *);
     static ::rtl::Reference<DialogImpl> s_dialog;
+    /** This mutex is used to protect s_dialog.
+    */
+    static ::osl::Mutex s_dialogMutex;
+
+    /** When the user closes the Extension Manager dialog, then the current instance of
+        the dialog will be transferred from s_dialog to s_closingDialog. The dialog will
+        remain open until all remaining installation request (see m_addExtensionsQueue)
+        are processed. See DialogImpl::Close and DialogImpl::destroyDialog in dp_gui_treelb.cxx.
+    */
+    static ::rtl::Reference<DialogImpl> s_closingDialog;
+    /* This mutex is used to protect s_closingDialog
+    */
+    static ::osl::Mutex s_closingMutex;
+
     virtual ~DialogImpl();
     DialogImpl(
         Window * pParent,
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > const & arExtensions,
+        ::rtl::OUString const & extensionURL,
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & xContext );
     static ::rtl::Reference<DialogImpl> get(
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext> const & xContext,
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow> const & xParent = 0,
-        ::com::sun::star::uno::Sequence< ::rtl::OUString > const & arExtensions = 0,
+        ::rtl::OUString const & extensionURL = ::rtl::OUString(),
         ::rtl::OUString const & view = ::rtl::OUString() );
     // XEventListener
     virtual void SAL_CALL disposing( ::com::sun::star::lang::EventObject const & evt )
