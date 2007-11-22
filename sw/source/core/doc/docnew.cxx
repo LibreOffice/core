@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:36:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:32:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,6 +337,8 @@ SwDoc::SwDoc() :
     mbWinEncryption(sal_False),
     // --> OD 2005-02-11 #i38810#
     mbLinksUpdated( sal_False ),
+    mbClipBoard( false ),
+    mbColumnSelection( false ),
     // i#78591#
     n32DummyCompatabilityOptions1(0),
     n32DummyCompatabilityOptions2(0),
