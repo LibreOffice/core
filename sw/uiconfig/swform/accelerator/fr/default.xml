@@ -55,6 +55,8 @@
   <accel:item accel:code="KEY_F8" accel:mod1="true" xlink:href=".uno:Marks"/>
   <accel:item accel:code="KEY_F8" accel:shift="true" xlink:href=".uno:SetMultiSelection"/>
   <accel:item accel:code="KEY_F8" xlink:href=".uno:SetExtSelection"/>
+        <accel:item accel:code="KEY_F8" accel:shift="true" accel:mod1="true" xlink:href=".uno:SelectionModeBlock"/>
+        <accel:item accel:code="KEY_F8" accel:shift="true" accel:mod2="true" xlink:href=".uno:SelectionModeBlock"/>
   <accel:item accel:code="KEY_F9" accel:mod1="true" xlink:href=".uno:Fieldnames"/>
   <accel:item accel:code="KEY_F9" accel:shift="true" accel:mod1="true" xlink:href=".uno:UpdateInputFields"/>
   <accel:item accel:code="KEY_F9" accel:shift="true" xlink:href=".uno:Calc"/>
