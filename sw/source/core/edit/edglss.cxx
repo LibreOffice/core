@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edglss.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:45:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:33:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,11 +277,16 @@ BOOL SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
     }
     else
     {
+        bool bColSel = _GetCrsr()->IsColumnSelection();
+        if( bColSel && pInsDoc->IsClipBoard() )
+            pInsDoc->SetColumnSelection( true );
+        {
         FOREACHPAM_START(this)
 
             if( !PCURCRSR->HasMark() )
             {
-                if( 0 != (pNd = PCURCRSR->GetCntntNode()) && !pNd->GetTxtNode() )
+                if( 0 != (pNd = PCURCRSR->GetCntntNode()) &&
+                    ( bColSel || !pNd->GetTxtNode() ) )
                 {
                     PCURCRSR->SetMark();
                     PCURCRSR->Move( fnMoveForward, fnGoCntnt );
@@ -294,6 +299,7 @@ BOOL SwEditShell::_CopySelToDoc( SwDoc* pInsDoc, SwNodeIndex* pSttNd )
                 bRet = GetDoc()->Copy( *PCURCRSR, aPos ) || bRet;
 
         FOREACHPAM_END()
+        }
     }
 
     pInsDoc->UnlockExpFlds();
