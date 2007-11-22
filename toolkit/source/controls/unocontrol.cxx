@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:12:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 11:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1103,19 +1103,25 @@ awt::Size UnoControl::getSize(  ) throw(RuntimeException)
 
 void UnoControl::draw( sal_Int32 x, sal_Int32 y ) throw(RuntimeException)
 {
-    ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-    ::osl::MutexGuard aGuard( GetMutex() );
+    Reference< XWindowPeer > xDrawPeer;
+    Reference< XView > xDrawPeerView;
 
-    Reference< XWindowPeer >    xP = ImplGetCompatiblePeer( sal_True );
-    DBG_ASSERT( xP.is(), "Layout: No Peer!" );
-    if ( xP.is() )
+    bool bDisposeDrawPeer( false );
     {
-        Reference< XView >  xV( xP, UNO_QUERY );
-        xV->draw( x, y );
+        ::osl::MutexGuard aGuard( GetMutex() );
 
-        if ( !getPeer().is() || ( getPeer() != xP ) )
-            xP->dispose();
+        xDrawPeer = ImplGetCompatiblePeer( sal_True );
+        bDisposeDrawPeer = xDrawPeer.is() && ( xDrawPeer != getPeer() );
+
+        xDrawPeerView.set( xDrawPeer, UNO_QUERY );
+        DBG_ASSERT( xDrawPeerView.is(), "UnoControl::draw: no peer!" );
     }
+
+    if ( xDrawPeerView.is() )
+        xDrawPeerView->draw( x, y );
+
+    if ( bDisposeDrawPeer )
+        xDrawPeer->dispose();
 }
 
 void UnoControl::setZoom( float fZoomX, float fZoomY ) throw(RuntimeException)
