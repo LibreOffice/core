@@ -4,9 +4,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:17:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 12:19:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ static void osl_diagnose_frame_Impl (
         offset = (ptrdiff_t)(pc);
 
     snprintf (szMessage, sizeof(szMessage),
-              "Backtrace: [%d] %s: %s+0x%x\n",
+              "Backtrace: [%d] %s: %s+0x%" SAL_PRI_PTRDIFFT "x\n",
               depth,
               fname ? fname : "<unknown>",
               sname ? sname : "???",
@@ -238,13 +238,13 @@ sal_Bool SAL_CALL osl_assertFailedLine (
     if (pszMessage != 0)
     {
         snprintf(szMessage, sizeof(szMessage),
-                 "Error: File %s, Line %lu: %s\n",
+                 "Error: File %s, Line %" SAL_PRIdINT32 ": %s\n",
                  pszFileName, nLine, pszMessage);
     }
     else
     {
         snprintf(szMessage, sizeof(szMessage),
-                 "Error: File %s, Line %lu\n",
+                 "Error: File %s, Line %" SAL_PRIdINT32 "\n",
                  pszFileName, nLine);
     }
 
