@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_resource.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:27:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:04:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,11 @@ DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
 
 //==============================================================================
 DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
-::com::sun::star::lang::Locale const & getOfficeLocale();
+::com::sun::star::lang::Locale getOfficeLocale();
+
+//==============================================================================
+DESKTOP_DEPLOYMENTMISC_DLLPUBLIC
+::rtl::OUString getOfficeLocaleString();
 
 }
 
