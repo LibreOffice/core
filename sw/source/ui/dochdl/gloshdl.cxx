@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 18:21:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:40:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -555,7 +555,7 @@ BOOL SwGlossaryHdl::ExpandGlossary(BOOL bUseStandard, BOOL bApi)
     String aShortName;
 
         // bei Textselektion diese verwenden
-    if(pWrtShell->SwCrsrShell::HasSelection())
+    if(pWrtShell->SwCrsrShell::HasSelection() && !pWrtShell->IsBlockMode())
     {
         aShortName = pWrtShell->GetSelTxt();
     }
@@ -563,6 +563,8 @@ BOOL SwGlossaryHdl::ExpandGlossary(BOOL bUseStandard, BOOL bApi)
     {
         if(pWrtShell->IsAddMode())
             pWrtShell->LeaveAddMode();
+        else if(pWrtShell->IsBlockMode())
+            pWrtShell->LeaveBlockMode();
         else if(pWrtShell->IsExtMode())
             pWrtShell->LeaveExtMode();
             // Wort selektieren
