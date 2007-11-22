@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_shared.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 11:52:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:05:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,8 @@ void printf_packages(
 
 //==============================================================================
 css::uno::Reference<css::uno::XComponentContext> getUNO(
-    DisposeGuard & disposeGuard, bool verbose, bool bGui);
+    DisposeGuard & disposeGuard, bool verbose, bool bGui,
+    css::uno::Reference<css::uno::XComponentContext> & out_LocalComponentContext);
 
 }
 
