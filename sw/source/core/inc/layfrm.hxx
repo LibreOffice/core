@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layfrm.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:45:27 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:35:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,8 @@ public:
         //Painted die Column-Trennlinien fuer die innenliegenden Columns.
     void PaintColLines( const SwRect &, const SwFmtCol &,
                         const SwPageFrm * ) const;
+
+    virtual bool    FillSelection( SwSelectionList& rList, const SwRect& rRect ) const;
 
     virtual BOOL  GetCrsrOfst( SwPosition *, Point&,
                                SwCrsrMoveState* = 0 ) const;
