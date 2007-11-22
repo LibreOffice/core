@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:55:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:56:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ void SvxSelectionModeControl::Click()
     if ( !GetStatusBar().GetItemText( GetId() ).Len() )
         return;
     nState++;
-    if ( nState > 2 )
+    if ( nState > 3 )
         nState = 0;
 
     ::com::sun::star::uno::Any a;
@@ -136,6 +136,9 @@ void SvxSelectionModeControl::DrawItemText_Impl()
         case 2:
             _nId = RID_SVXSTR_SELMODE_ERG;
             break;
+        case 3:
+            _nId = RID_SVXSTR_SELMODE_BLK;
+            break;
         default: DBG_ERROR( "invalid selection mode!" );
     }
 
@@ -149,12 +152,16 @@ ULONG SvxSelectionModeControl::GetDefItemWidth(const StatusBar& rStb)
     long nWidth1 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_SELMODE_STD));
     long nWidth2 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_SELMODE_ER));
     long nWidth3 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_SELMODE_ERG));
+    long nWidth4 =  rStb.GetTextWidth(SVX_RESSTR(RID_SVXSTR_SELMODE_BLK));
 
     if(nWidth1<nWidth2)
         nWidth1=nWidth2;
 
     if(nWidth1<nWidth3)
         nWidth1=nWidth3;
+
+    if(nWidth1<nWidth4)
+        nWidth1=nWidth4;
 
     return nWidth1+PAINT_OFFSET;
 }
