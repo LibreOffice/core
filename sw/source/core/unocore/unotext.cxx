@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:41:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:39:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -447,7 +447,7 @@ void SwXText::insertControlCharacter(const uno::Reference< text::XTextRange > & 
                             sal::static_int_cast< sal_IntPtr >( xRangeTunnel->getSomething( OTextCursorHelper::getUnoTunnelId()) ));
                 }
 
-                SwCursor aCrsr(*aTmp.GetPoint());
+                SwCursor aCrsr(*aTmp.GetPoint(),0,false);
                 SwXTextCursor::SelectPam(aCrsr, sal_True);
                 aCrsr.Left(1, CRSR_SKIP_CHARS, FALSE, FALSE);
                 //hier muss der uebergebene PaM umgesetzt werden:
@@ -1621,7 +1621,7 @@ uno::Reference< text::XTextRange > SwXText::appendTextContent(
         SwPaM aPam(*pStartNode->EndOfSectionNode());
         aPam.Move( fnMoveBackward, fnGoNode );
         //set cursor to the end of the last text node
-        SwCursor* pCursor = new SwCursor( *aPam.Start() );
+        SwCursor* pCursor = new SwCursor( *aPam.Start(),0,false );
         xRet = new SwXTextRange(*pCursor, this);
         pCursor->MovePara( fnParaCurr, fnParaEnd );
         pDoc->DontExpandFmt( *pCursor->Start() );
