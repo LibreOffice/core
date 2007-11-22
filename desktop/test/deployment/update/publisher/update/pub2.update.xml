@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/update/2006"
+             xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="2.0" />
+
+    <identifier value="org.openoffice/framework/desktop/test/deployment/update/publisher/pub2"/>
+
+    <publisher>
+      <name xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/publisher_de.html" lang="de">My OpenOffice de</name>
+      <name xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/publisher_en.html" lang="en">My OpenOffice en</name>
+      <name xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/publisher_de-DE.html" lang="de-DE">My OpenOffice de-DE</name>
+      <name xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/publisher_de-DE-altmark.html" lang="de-DE-altmark">My OpenOffice de-DE-altmark</name>
+      <name xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/publisher_en-GB.html" lang="en-GB">My OpenOffice en-GB</name>
+      <name xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/publisher_en-US-region1.html" lang="en-US-region1">My OpenOffice en-US-region1</name>
+      <name xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/publisher_en-US-region2.html" lang="en-US-region2">My OpenOffice en-US-region2</name>
+      <name xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/publisher_en-region3.html" lang="en-region3">My OpenOffice en-region3</name>
+    </publisher>
+
+    <release-notes>
+      <src xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/release-notes_de.html" lang="de" />
+      <src xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/release-notes_en.html" lang="en" />
+      <src xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/release-notes_de-DE.html" lang="de-DE" />
+      <src xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/release-notes_de-DE-altmark.html" lang="de-DE-altmark" />
+      <src xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/release-notes_en-GB.html" lang="en-GB" />
+      <src xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/release-notes_en-US-region1.html" lang="en-US-region1" />
+      <src xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/release-notes_en-US-region2.html" lang="en-US-region2" />
+      <src xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/release-notes_en-region3.html" lang="en-region3" />
+    </release-notes>
+
+    <update-download>
+        <src xlink:href="http://extensions.openoffice.org/testarea/desktop/publisher/update/pub2.oxt" />
+    </update-download>
+</description>
+
