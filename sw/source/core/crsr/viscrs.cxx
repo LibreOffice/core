@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:31:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:31:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1091,13 +1091,13 @@ void SwSelPaintRects::Get1PixelInLogic( const ViewShell& rSh,
 /*  */
 
 SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos )
-    : SwCursor(rPos), SwSelPaintRects(rCShell), pPt(SwPaM::GetPoint())
+    : SwCursor(rPos,0,false), SwSelPaintRects(rCShell), pPt(SwPaM::GetPoint())
 {}
 
 
 SwShellCrsr::SwShellCrsr( const SwCrsrShell& rCShell, const SwPosition &rPos,
                             const Point& rPtPos, SwPaM* pRing )
-    : SwCursor(rPos, pRing), SwSelPaintRects(rCShell), aMkPt(rPtPos),
+    : SwCursor(rPos, pRing, false), SwSelPaintRects(rCShell), aMkPt(rPtPos),
     aPtPt(rPtPos), pPt(SwPaM::GetPoint())
 {}
 
@@ -1270,14 +1270,14 @@ BOOL SwShellCrsr::IsAtValidPos( BOOL bPoint ) const
 
 SwShellTableCrsr::SwShellTableCrsr( const SwCrsrShell& rCrsrSh,
                                     const SwPosition& rPos )
-    : SwCursor(rPos), SwShellCrsr(rCrsrSh, rPos), SwTableCursor(rPos)
+    : SwCursor(rPos,0,false), SwShellCrsr(rCrsrSh, rPos), SwTableCursor(rPos)
 {
 }
 
 SwShellTableCrsr::SwShellTableCrsr( const SwCrsrShell& rCrsrSh,
                     const SwPosition& rMkPos, const Point& rMkPt,
                     const SwPosition& rPtPos, const Point& rPtPt )
-    : SwCursor(rPtPos), SwShellCrsr(rCrsrSh, rPtPos), SwTableCursor(rPtPos)
+    : SwCursor(rPtPos,0,false), SwShellCrsr(rCrsrSh, rPtPos), SwTableCursor(rPtPos)
 {
     SetMark();
     *GetMark() = rMkPos;
