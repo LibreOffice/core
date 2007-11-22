@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
+    <version value="2.0" />
+    <identifier value="org.openoffice/framework/desktop/test/deployment/update/website_update/web6"/>
+    <display-name>
+      <name lang="en">web-based update test 1</name>
+    </display-name>
+
+</description>
+
