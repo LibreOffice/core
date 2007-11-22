@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:24:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:02:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,8 @@ struct UpdateData
     //The URL of the locally downloaded extension. It will only be set if there were no errors
     //during the download
     ::rtl::OUString sLocalURL;
+    //The URL of the website wher the download can be obtained.
+    ::rtl::OUString sWebsiteURL;
 };
 }
 
