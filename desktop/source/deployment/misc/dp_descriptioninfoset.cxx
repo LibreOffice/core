@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_descriptioninfoset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:28:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-22 15:04:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#include "dp_descriptioninfoset.hxx"
+
+#include "dp_resource.h"
 #include "sal/config.h"
 
 #include "boost/optional.hpp"
 #include "com/sun/star/beans/Optional.hpp"
 #include "com/sun/star/lang/XMultiComponentFactory.hpp"
+#include "com/sun/star/lang/Locale.hpp"
 #include "com/sun/star/uno/Reference.hxx"
 #include "com/sun/star/uno/RuntimeException.hpp"
 #include "com/sun/star/uno/Sequence.hxx"
@@ -56,7 +60,6 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 
-#include "dp_descriptioninfoset.hxx"
 
 namespace {
 
@@ -186,13 +189,18 @@ DescriptionInfoset::getUpdateDownloadUrls() const
                 "desc:update-download/desc:src/@xlink:href")));
 }
 
-::boost::optional< ::rtl::OUString > DescriptionInfoset::getUpdateWebsiteUrl()
+::boost::optional< ::rtl::OUString > DescriptionInfoset::getLocalizedUpdateWebsiteURL()
     const
 {
-    return getOptionalValue(
-        ::rtl::OUString(
-            RTL_CONSTASCII_USTRINGPARAM(
-                "desc:update-website/desc:src/@xlink:href")));
+    bool bParentExists = false;
+    const ::rtl::OUString sURL (getLocalizedHREFAttrFromChild(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "/desc:description/desc:update-website")), &bParentExists ));
+
+    if (sURL.getLength() > 0)
+        return ::boost::optional< ::rtl::OUString >(sURL);
+    else
+        return bParentExists ? ::boost::optional< ::rtl::OUString >(::rtl::OUString()) :
+            ::boost::optional< ::rtl::OUString >();
 }
 
 css::uno::Reference< css::xml::xpath::XXPathAPI > DescriptionInfoset::getXpath()
@@ -225,6 +233,213 @@ css::uno::Sequence< ::rtl::OUString > DescriptionInfoset::getUrls(
         urls[i] = getNodeValue(ns->item(i));
     }
     return urls;
+}
+
+::std::pair< ::rtl::OUString, ::rtl::OUString > DescriptionInfoset::getLocalizedPublisherNameAndURL() const
+{
+    css::uno::Reference< css::xml::dom::XNode > node =
+        getLocalizedChild(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc:publisher")));
+
+    ::rtl::OUString sPublisherName;
+    ::rtl::OUString sURL;
+    if (node.is())
+    {
+        const ::rtl::OUString exp1(RTL_CONSTASCII_USTRINGPARAM("text()"));
+        css::uno::Reference< css::xml::dom::XNode > xPathName = m_xpath->selectSingleNode(node, exp1);
+        OSL_ASSERT(xPathName.is());
+        if (xPathName.is())
+            sPublisherName = xPathName->getNodeValue();
+
+        const ::rtl::OUString exp2(RTL_CONSTASCII_USTRINGPARAM("@xlink:href"));
+        css::uno::Reference< css::xml::dom::XNode > xURL = m_xpath->selectSingleNode(node, exp2);
+        OSL_ASSERT(xURL.is());
+        if (xURL.is())
+           sURL = xURL->getNodeValue();
+    }
+    return ::std::make_pair(sPublisherName, sURL);
+}
+
+::rtl::OUString DescriptionInfoset::getLocalizedReleaseNotesURL() const
+{
+    return getLocalizedHREFAttrFromChild(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "/desc:description/desc:release-notes")), NULL);
+}
+
+::rtl::OUString DescriptionInfoset::getLocalizedDisplayName() const
+{
+    css::uno::Reference< css::xml::dom::XNode > node =
+        getLocalizedChild(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc:display-name")));
+    if (node.is())
+    {
+        const ::rtl::OUString exp(RTL_CONSTASCII_USTRINGPARAM("text()"));
+        css::uno::Reference< css::xml::dom::XNode > xtext = m_xpath->selectSingleNode(node, exp);
+        if (xtext.is())
+            return xtext->getNodeValue();
+    }
+    return ::rtl::OUString();
+}
+
+::rtl::OUString DescriptionInfoset::getLocalizedLicenseURL() const
+{
+    return getLocalizedHREFAttrFromChild(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "/desc:description/desc:registration/desc:simple-license")), NULL);
+
+}
+
+css::uno::Reference< css::xml::dom::XNode >
+DescriptionInfoset::getLocalizedChild( const ::rtl::OUString & sParent) const
+{
+    if ( ! m_element.is() || !sParent.getLength())
+        return css::uno::Reference< css::xml::dom::XNode > ();
+
+    css::uno::Reference< css::xml::dom::XNode > xParent =
+        m_xpath->selectSingleNode(m_element, sParent);
+    css::uno::Reference<css::xml::dom::XNode> nodeMatch;
+    if (xParent.is())
+    {
+        const ::rtl::OUString sLocale = getOfficeLocaleString();
+        nodeMatch = matchFullLocale(xParent, sLocale);
+
+        //office: en-DE, en, en-DE-altmark
+        if (! nodeMatch.is())
+        {
+            const css::lang::Locale officeLocale = getOfficeLocale();
+            nodeMatch = matchCountryAndLanguage(xParent, officeLocale);
+            if ( ! nodeMatch.is())
+            {
+                nodeMatch = matchLanguage(xParent, officeLocale);
+                if (! nodeMatch.is())
+                    nodeMatch = getChildWithDefaultLocale(xParent);
+            }
+        }
+    }
+
+    return nodeMatch;
+}
+
+css::uno::Reference<css::xml::dom::XNode>
+DescriptionInfoset::matchFullLocale(css::uno::Reference< css::xml::dom::XNode >
+                                    const & xParent, ::rtl::OUString const & sLocale) const
+{
+    OSL_ASSERT(xParent.is());
+    const ::rtl::OUString exp1(
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*[@lang=\""))
+        + sLocale +
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"]")));
+    return m_xpath->selectSingleNode(xParent, exp1);
+}
+
+css::uno::Reference<css::xml::dom::XNode>
+DescriptionInfoset::matchCountryAndLanguage(
+    css::uno::Reference< css::xml::dom::XNode > const & xParent, css::lang::Locale const & officeLocale) const
+{
+    OSL_ASSERT(xParent.is());
+    css::uno::Reference<css::xml::dom::XNode> nodeMatch;
+
+    if (officeLocale.Country.getLength())
+    {
+        const ::rtl::OUString sLangCountry(officeLocale.Language +
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-")) +
+            officeLocale.Country);
+        //first try exact match for lang-country
+        const ::rtl::OUString exp1(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*[@lang=\""))
+            + sLangCountry +
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"]")));
+        nodeMatch = m_xpath->selectSingleNode(xParent, exp1);
+
+        //try to match in strings that also have a variant, for example en-US matches in
+        //en-US-montana
+        if (!nodeMatch.is())
+        {
+            const ::rtl::OUString exp2(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*[starts-with(@lang,\""))
+                + sLangCountry +
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-\")]")));
+            nodeMatch = m_xpath->selectSingleNode(xParent, exp2);
+        }
+    }
+
+    return nodeMatch;
+}
+
+
+css::uno::Reference<css::xml::dom::XNode>
+DescriptionInfoset::matchLanguage(
+    css::uno::Reference< css::xml::dom::XNode > const & xParent, css::lang::Locale const & officeLocale) const
+{
+    OSL_ASSERT(xParent.is());
+    css::uno::Reference<css::xml::dom::XNode> nodeMatch;
+
+    //first try exact match for lang
+    const ::rtl::OUString exp1(
+        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*[@lang=\""))
+        + officeLocale.Language
+        + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"]")));
+    nodeMatch = m_xpath->selectSingleNode(xParent, exp1);
+
+    //try to match in strings that also have a country and/orvariant, for example en  matches in
+    //en-US-montana, en-US, en-montana
+    if (!nodeMatch.is())
+    {
+        const ::rtl::OUString exp2(
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*[starts-with(@lang,\""))
+            + officeLocale.Language
+            + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-\")]")));
+        nodeMatch = m_xpath->selectSingleNode(xParent, exp2);
+    }
+    return nodeMatch;
+}
+
+css::uno::Reference<css::xml::dom::XNode>
+DescriptionInfoset::getChildWithDefaultLocale(css::uno::Reference< css::xml::dom::XNode >
+                                    const & xParent) const
+{
+    OSL_ASSERT(xParent.is());
+    if (xParent->getNodeName().equals(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("simple-license"))))
+    {
+        css::uno::Reference<css::xml::dom::XNode> nodeDefault =
+            m_xpath->selectSingleNode(xParent, ::rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("@default-license-id")));
+        if (nodeDefault.is())
+        {
+            //The old way
+            const ::rtl::OUString exp1(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("desc:license-text[@license-id = \""))
+                + nodeDefault->getNodeValue()
+                + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"]")));
+            return m_xpath->selectSingleNode(xParent, exp1);
+        }
+    }
+
+    const ::rtl::OUString exp2(RTL_CONSTASCII_USTRINGPARAM("*[1]"));
+    return m_xpath->selectSingleNode(xParent, exp2);
+}
+
+::rtl::OUString DescriptionInfoset::getLocalizedHREFAttrFromChild(
+    ::rtl::OUString const & sXPathParent, bool * out_bParentExists)
+    const
+{
+    css::uno::Reference< css::xml::dom::XNode > node =
+        getLocalizedChild(sXPathParent);
+
+    ::rtl::OUString sURL;
+    if (node.is())
+    {
+        if (out_bParentExists)
+            *out_bParentExists = true;
+        const ::rtl::OUString exp(RTL_CONSTASCII_USTRINGPARAM("@xlink:href"));
+        css::uno::Reference< css::xml::dom::XNode > xURL = m_xpath->selectSingleNode(node, exp);
+        OSL_ASSERT(xURL.is());
+        if (xURL.is())
+            sURL = xURL->getNodeValue();
+    }
+    else
+    {
+        if (out_bParentExists)
+            *out_bParentExists = false;
+    }
+    return sURL;
 }
 
 }
