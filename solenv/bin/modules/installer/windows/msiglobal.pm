@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 09:55:56 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 13:34:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -858,7 +858,7 @@ sub create_transforms
             $infoline = "WARNING: Returnvalue of $msitran is not 0. Checking version of $msitran!\n";
             push( @installer::globals::logfileinfo, $infoline);
 
-            open(FILE, "<$msitran") or die "ERROR: Can't open $msitran for creating file hash";
+            open(FILE, "<$installer::globals::msitranpath") or die "ERROR: Can't open $installer::globals::msitranpath for creating file hash";
             binmode(FILE);
             my $digest = Digest::MD5->new->addfile(*FILE)->hexdigest;
             close(FILE);
@@ -1160,7 +1160,7 @@ sub copy_scpactions_into_installset
 {
     my ($defaultlanguage, $installdir, $allscpactions) = @_;
 
-    installer::logger::include_header_into_logfile("Copying files into installation set");
+    installer::logger::include_header_into_logfile("Copying ScpAction files into installation set");
 
     for ( my $i = 0; $i <= $#{$allscpactions}; $i++ )
     {
@@ -1191,6 +1191,8 @@ sub copy_windows_installer_files_into_installset
 {
     my ($installdir, $includepatharrayref) = @_;
 
+    installer::logger::include_header_into_logfile("Copying Windows installer files into installation set");
+
     @copyfile = ();
     push(@copyfile, "instmsia.exe");
     push(@copyfile, "instmsiw.exe");
@@ -1210,6 +1212,28 @@ sub copy_windows_installer_files_into_installset
         $destfile = $installdir . $installer::globals::separator . $destfile;
 
         installer::systemactions::copy_one_file($$sourcefileref, $destfile);
+    }
+}
+
+#################################################################
+# Copying MergeModules for the Windows installer into the
+# installation set. The list of MergeModules is located
+# in %installer::globals::copy_msm_files
+#################################################################
+
+sub copy_merge_modules_into_installset
+{
+    my ($installdir) = @_;
+
+    installer::logger::include_header_into_logfile("Copying Merge files into installation set");
+
+    my $cabfile;
+    foreach $cabfile ( keys  %installer::globals::copy_msm_files )
+    {
+        my $sourcefile  = $installer::globals::copy_msm_files{$cabfile};
+        my $destfile = $installdir . $installer::globals::separator . $cabfile;
+
+        installer::systemactions::copy_one_file($sourcefile, $destfile);
     }
 }
 
