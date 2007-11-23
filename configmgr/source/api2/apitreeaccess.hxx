@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apitreeaccess.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:09:23 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:04:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,6 @@
 #ifndef CONFIGMGR_API_TREEACCESS_HXX_
 #define CONFIGMGR_API_TREEACCESS_HXX_
 
-#ifndef CONFIGMGR_ACCESSOR_HXX
-#include "accessor.hxx"
-#endif
 #ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include "options.hxx"
 #endif
@@ -53,19 +50,12 @@ namespace configmgr
 //-----------------------------------------------------------------------------
     struct ServiceImplementationInfo;
 //-----------------------------------------------------------------------------
-    namespace memory
-    {
-        class Accessor;
-        class Segment;
-    }
-//-----------------------------------------------------------------------------
     namespace configuration
     {
         class Name;
         class Tree;
         class TreeRef;
         class ElementRef;
-//      class RootTree;
 
         class TemplateInfo;
     }
@@ -129,15 +119,12 @@ namespace configmgr
         public:
         // model access
             configuration::TreeRef      getTreeRef() const;
-            configuration::Tree         getTree(memory::Accessor const& _aAccessor) const;
+            configuration::Tree         getTree() const;
 
         // api object handling
             Factory&                    getFactory();
             Notifier                    getNotifier();
 
-        // locking support
-            osl::Mutex&                 getDataLock() const;
-            osl::Mutex&                 getApiLock();
         protected:
             virtual ApiTreeImpl& getApiTree() const = 0;
         };
@@ -162,8 +149,6 @@ namespace configmgr
         {
         public:
             bool disposeTree();
-
-            memory::Segment const* getSourceData();
         protected:
             virtual ApiRootTreeImpl& getRootTree() = 0;
         };
@@ -177,9 +162,9 @@ namespace configmgr
         };
 //-----------------------------------------------------------------------------
         /// guards a TreeElement; provides an object (read) lock, ensures object was not disposed
+        // FIXME: bin this ...
         class TreeReadGuardImpl : Noncopyable
         {
-            osl::MutexGuard     m_aViewLock;
             TreeElement&        m_rTree;
         public:
             TreeReadGuardImpl(TreeElement& rTree);
@@ -192,6 +177,7 @@ namespace configmgr
         /// wraps a TreeElement; provides an object (read) lock, ensures object was not disposed
         class GuardedTreeElement
         {
+            UnoApiLock          m_aLock;
             TreeReadGuardImpl   m_aImpl;
         public:
             GuardedTreeElement(TreeElement& rTree) : m_aImpl(rTree) {}
@@ -201,7 +187,7 @@ namespace configmgr
 
         class GuardedRootElement
         {
-            memory::Accessor      m_aDataAccess;
+            UnoApiLock          m_aLock;
             TreeReadGuardImpl   m_aImpl;
         public:
             GuardedRootElement(RootElement& rTree);
@@ -209,8 +195,6 @@ namespace configmgr
             RootElement& get() const { return static_cast<RootElement&>(m_aImpl.get()); }
 
             configuration::Tree getTree() const;
-
-            memory::Accessor const & getDataAccessor() const { return m_aDataAccess; };
         };
 //-----------------------------------------------------------------------------
     }
