@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:11:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 10:44:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU
@@ -1303,3 +1303,5 @@ public:
 }
 
 #endif //_VCL_PDFEXPORT_HXX
+
+
