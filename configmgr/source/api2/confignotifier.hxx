@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confignotifier.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:11:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:05:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,11 +125,6 @@ namespace configmgr
             Broadcaster makeBroadcaster(NodeChanges const& aChange, bool bLocal) const;
 
         // ---------------------------------------------------------------------------------------------------
-            osl::Mutex&         getMutex() const;
-            //configuration::Tree getTree() const { return m_aTree; }
-            //NotifierImpl&     getImpl() const { return m_aImpl.getBody(); }
-
-        // ---------------------------------------------------------------------------------------------------
             bool checkAlive(uno::XInterface* pObject) const throw(css::lang::DisposedException);
 
         // ---------------------------------------------------------------------------------------------------
@@ -199,7 +194,6 @@ namespace configmgr
         ///  guards a NodeAccess; provides a simple lock for non-data access, does not check for disposed state
         class DisposeGuardImpl : Noncopyable
         {
-            osl::MutexGuard m_aLock;
         public:
             DisposeGuardImpl(NotifierImpl& rNotifierImpl) throw();
             DisposeGuardImpl(Notifier const& rNotifier) throw();
@@ -209,6 +203,7 @@ namespace configmgr
         /// wraps a Notifier (from a node or tree); provides a simple lock for notifier access, does not check for disposed state
         class GuardedNotifier
         {
+            UnoApiLock          m_aLock;
             Notifier            m_aNotifier;
             DisposeGuardImpl    m_aImpl;
         public:
@@ -226,6 +221,7 @@ namespace configmgr
         class DisposeGuard
         {
             DisposeGuardImpl    m_aImpl;
+            UnoApiLock          m_aLock;
         public:
             DisposeGuard(NodeAccess& rNode) throw(css::lang::DisposedException);
             DisposeGuard(TreeElement& rTree) throw(css::lang::DisposedException);
