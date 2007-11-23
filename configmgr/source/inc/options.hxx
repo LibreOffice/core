@@ -4,9 +4,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:24:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,8 @@
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/simplereferenceobject.hxx>
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 #ifndef _VOS_REF_HXX_
 #include <vos/ref.hxx>
@@ -66,7 +66,7 @@ namespace configmgr
        the new options or important options etc.
     */
 
-    class OOptions : public salhelper::SimpleReferenceObject
+    class OOptions : public configmgr::SimpleReferenceObject
     {
         RequestOptions  m_aRequestOptions;  // current options to use
 
@@ -86,7 +86,7 @@ namespace configmgr
         }
 
         OOptions(const OOptions& _aOtherOptions)
-        : salhelper::SimpleReferenceObject()
+        : configmgr::SimpleReferenceObject()
         , m_aRequestOptions(_aOtherOptions.m_aRequestOptions)
         {
         }
