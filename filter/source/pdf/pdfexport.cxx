@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:03:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 10:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1883,3 +1883,5 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
         }
     }
 }
+
+
