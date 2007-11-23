@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langbox.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:01:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:38:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,8 @@
 #include <unotools/localedatawrapper.hxx>
 #endif
 
+#include <svtools/langtab.hxx>
+
 #ifndef _SHL_HXX
 #include <tools/shl.hxx>
 #endif
@@ -70,14 +72,9 @@
 #ifndef _UNO_LINGU_HXX
 #include <unolingu.hxx>
 #endif
-#ifndef _SVX_LANGTAB_HXX
-#include <langtab.hxx>
-#endif
 #include <svx/langbox.hxx>
-#include "langtab.hxx"
 #include <svx/dialmgr.hxx>
 #include <svx/dialogs.hrc>
-#include "unolingu.hxx"
 
 using namespace ::rtl;
 using namespace ::com::sun::star::util;
@@ -160,7 +157,7 @@ SvxLanguageBox::SvxLanguageBox( Window* pParent, const ResId& rResId, BOOL bChec
 //------------------------------------------------------------------------
 void SvxLanguageBox::Init()
 {
-    m_pLangTable = new SvxLanguageTable;
+    m_pLangTable = new SvtLanguageTable;
     m_aNotCheckedImage = Image( SVX_RES( RID_SVXIMG_NOTCHECKED ) );
     m_aCheckedImage = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
     m_aCheckedImageHC = Image( SVX_RES( RID_SVXIMG_CHECKED_H ) );
@@ -174,7 +171,7 @@ void SvxLanguageBox::Init()
 
     if ( m_bWithCheckmark )
     {
-        SvxLanguageTable aLangTable;
+        SvtLanguageTable aLangTable;
         sal_uInt32 nCount = aLangTable.GetEntryCount();
         for ( sal_uInt32 i = 0; i < nCount; i++ )
         {
@@ -280,7 +277,7 @@ void SvxLanguageBox::SetLanguageList( INT16 nLangList,
             }
         }
 
-        SvxLanguageTable aLangTable;
+        SvtLanguageTable aLangTable;
         ::com::sun::star::uno::Sequence< sal_uInt16 > xKnown;
         const sal_uInt16* pKnown;
         sal_uInt32 nCount;
