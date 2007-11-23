@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BridgeFactory.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:48:56 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 package com.sun.star.comp.bridgefactory;
 
-
+import java.math.BigInteger;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -68,7 +68,7 @@ import com.sun.star.uno.UnoRuntime;
  * <p>
  * This component is only usable for remote bridges.
  * <p>
- * @version     $Revision: 1.9 $ $ $Date: 2005-09-07 18:48:56 $
+ * @version     $Revision: 1.10 $ $ $Date: 2007-11-23 13:11:51 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @since       UDK1.0
@@ -131,24 +131,31 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
         com.sun.star.lang.IllegalArgumentException,
         com.sun.star.uno.RuntimeException
     {
-        if(sName == null || sName.length() == 0)
-            sName = sProtocol + ":" + aConnection.getDescription();
+        boolean hasName = sName.length() != 0;
+        Object context = hasName ? (Object) sName : (Object) new UniqueToken();
+            // UnoRuntime.getBridgeByName internally uses context.toString() to
+            // distinguish bridges, so the result of
+            // new UniqueToken().toString() might clash with an explicit
+            // sName.toString(), but the UnoRuntime bridge management is
+            // obsolete anyway and should be removed
 
         // do not create a new bridge, if one already exists
-        IBridge iBridges[] = UnoRuntime.getBridges();
-        for(int i = 0; i < iBridges.length; ++ i) {
-            XBridge xBridge = (XBridge)UnoRuntime.queryInterface(XBridge.class, iBridges[i]);
+        if (hasName) {
+            IBridge iBridges[] = UnoRuntime.getBridges();
+            for(int i = 0; i < iBridges.length; ++ i) {
+                XBridge xBridge = (XBridge)UnoRuntime.queryInterface(XBridge.class, iBridges[i]);
 
-            if(xBridge != null) {
-                if(xBridge.getName().equals(sName))
-                    throw new BridgeExistsException(sName + " already exists");
+                if(xBridge != null) {
+                    if(xBridge.getName().equals(sName))
+                        throw new BridgeExistsException(sName + " already exists");
+                }
             }
         }
 
         XBridge xBridge = null;
 
         try {
-            IBridge iBridge = UnoRuntime.getBridgeByName("java", sName, "remote", sName, new Object[]{sProtocol, aConnection, anInstanceProvider, sName});
+            IBridge iBridge = UnoRuntime.getBridgeByName("java", context, "remote", context, hasName ? new Object[]{sProtocol, aConnection, anInstanceProvider, sName} : new Object[]{sProtocol, aConnection, anInstanceProvider});
 
             xBridge = (XBridge)UnoRuntime.queryInterface(XBridge.class, iBridge);
         }
@@ -212,6 +219,22 @@ public class BridgeFactory implements XBridgeFactory/*, XEventListener*/ {
             xBridges[i] = (XBridge)vector.elementAt(i);
 
         return xBridges;
+    }
+
+    private static final class UniqueToken {
+        public UniqueToken() {
+            synchronized (UniqueToken.class) {
+                token = counter.toString();
+                counter = counter.add(BigInteger.ONE);
+            }
+        }
+
+        public String toString() {
+            return token;
+        }
+
+        private final String token;
+        private static BigInteger counter = BigInteger.ZERO;
     }
 }
 
