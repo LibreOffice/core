@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VLineProperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:27:05 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:13:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ VLineProperties::VLineProperties()
     this->Color = uno::makeAny( sal_Int32(0x000000) ); //type sal_Int32 UNO_NAME_LINECOLOR
     this->LineStyle = uno::makeAny( drawing::LineStyle_SOLID ); //type drawing::LineStyle for property UNO_NAME_LINESTYLE
     this->Transparence = uno::makeAny( sal_Int16(0) );//type sal_Int16 for property UNO_NAME_LINETRANSPARENCE
-    this->Width = uno::makeAny( sal_Int32(1) );//type sal_Int32 for property UNO_NAME_LINEWIDTH
+    this->Width = uno::makeAny( sal_Int32(0) );//type sal_Int32 for property UNO_NAME_LINEWIDTH
 }
 
 void VLineProperties::initFromPropertySet( const uno::Reference< beans::XPropertySet >& xProp, bool bUseSeriesPropertyNames )
