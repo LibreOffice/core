@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _textsh.sdi,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:28:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:23:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,13 +73,7 @@ interface BaseText
         ExecMethod = Execute ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
-/*
-    SID_ATTR_TABSTOP // status()
-    [
-        ExecMethod = Execute ;
-        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
-    ]
-*/
+
     FN_FORMAT_DROPCAPS
     [
         ExecMethod = ExecParaAttrArgs ;
@@ -1411,6 +1405,11 @@ interface BaseText
         ExecMethod = Execute ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_CHAR_DLG_FOR_PARAGRAPH
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     SID_ATTR_CHAR_WORDLINEMODE // status(final|play)
     [
         ExecMethod = ExecTxtCtrl;
@@ -1527,6 +1526,14 @@ interface BaseText
     [
         ExecMethod = Execute;
     ]
+
+    SID_LANGUAGE_STATUS
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";  // e.g. disable for read-only documents
+    ]
+
 
 }  //ende interface text
 
