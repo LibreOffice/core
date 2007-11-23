@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatedispatch.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:20:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:11:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ namespace configmgr
             sal_Int16 getUpdateAttributes(node::Attributes const & _aAttributes, bool bAdded);
             sal_Int16 getUpdateAttributeMask(node::Attributes const & _aAttributes);
 
-            bool testReplacedAndGetName(data::NodeAccessRef const & _aNode, OUString & _aName);
+            bool testReplacedAndGetName(data::NodeAccess const & _aNode, OUString & _aName);
         private:
             configuration::AbsolutePath const * m_pContextPath;
             UpdateHandler   m_xUpdateHandler;
