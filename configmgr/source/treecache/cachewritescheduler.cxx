@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachewritescheduler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:26:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,34 +59,26 @@ OCacheWriteScheduler::~OCacheWriteScheduler()
 
 void OCacheWriteScheduler::stopAndWriteCache()
 {
-    // PRE: if m_xTime.isValid() => The timer's shot mutex is acquired
-    osl::ClearableMutexGuard aOwnGuard( m_aMutex );
-
+    OSL_ASSERT(UnoApiLock::isHeld());
     CFG_TRACE_INFO("Cancelling all cache writings, Stopping timer");
 
     if (m_xTimer.isValid())
         m_xTimer->dispose(); // just to be sure
 
-    aOwnGuard.clear();
-
     runWriter();
 
-    osl::MutexGuard aClearGuard( m_aMutex );
     m_aWriteList.clear();
 }
 
 // -------------------------------------------------------------------------
 void OCacheWriteScheduler::Timer::onShot()
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    UnoApiLock aLock;
+
     if (pParent)
         pParent->onTimerShot();
-
     else
-    {
         CFG_TRACE_WARNING("Timer shot for disposed cache writer");
-    }
-
 }
 
 // -----------------------------------------------------------------------------
@@ -109,20 +101,17 @@ void OCacheWriteScheduler::onTimerShot()
 
     TimeStamp aNewTime = implGetScheduleTime(TimeStamp::getCurrentTime(), m_aWriteInterval);
 
-    osl::MutexGuard aGuard(m_aMutex);
     implStartBefore(aNewTime);
 }
 // -------------------------------------------------------------------------
 void OCacheWriteScheduler::runWriter()
 {
     // Write Cache
+    OSL_ASSERT(UnoApiLock::isHeld());
     CFG_TRACE_INFO("Running write operations");
-//  osl::ClearableMutexGuard aGuard( m_rTreeManager.m_aUpdateMutex );
 
-    osl::ClearableMutexGuard aListGuard( m_aMutex );
     CacheWriteList aPendingWrites;
     m_aWriteList.swap(aPendingWrites);
-    aListGuard.clear();
 
     CFG_TRACE_INFO_NI("Found %d sections to write", int(aPendingWrites.size()));
     for (CacheWriteList::iterator it = aPendingWrites.begin();
@@ -148,17 +137,17 @@ void OCacheWriteScheduler::runWriter()
 void OCacheWriteScheduler::writeOneTreeFoundByOption(RequestOptions const& _aOptions) CFG_UNO_THROW_ALL(  )
 {
     CFG_TRACE_INFO("Writeing one cache tree for user '%s' with locale '%s'",
-                    OUSTRING2ASCII(_aOptions.getEntity()),
-                    OUSTRING2ASCII(_aOptions.getLocale()));
+           OUSTRING2ASCII(_aOptions.getEntity()),
+                   OUSTRING2ASCII(_aOptions.getLocale()));
 
-    // PRE: m_aUpdateMutex of TreeMgr must be acuired
-    CacheManager::CacheRef aCache = m_rTreeManager.m_aCacheList.get(_aOptions);
+    backend::CacheController::CacheRef aCache;
+    aCache = m_rTreeManager.m_aCacheMap.get(_aOptions);
+
     if (aCache.is())
     {
         CFG_TRACE_INFO_NI("- Found matching data container  - starting write task");
         if (!m_rTreeManager.saveAllPendingChanges(aCache,_aOptions))
         {
-            osl::MutexGuard aListGuard( m_aMutex );
             m_aWriteList.insert(_aOptions);
 
             CFG_TRACE_INFO_NI("- Write task incomplete -reregistering");
@@ -178,8 +167,6 @@ void OCacheWriteScheduler::writeOneTreeFoundByOption(RequestOptions const& _aOpt
 // -----------------------------------------------------------------------------
 bool OCacheWriteScheduler::clearTasks(RequestOptions const& _aOptions)
 {
-//  osl::MutexGuard aGuard( m_rTreeManager.m_aUpdateMutex );
-
     // sadly list::remove doesn't return an indication of what it did
     bool bFound = m_aWriteList.erase(_aOptions) !=0;
     if (bFound)
@@ -222,10 +209,7 @@ void OCacheWriteScheduler::implStartBefore(TimeStamp const& _aTime)
 // -----------------------------------------------------------------------------
 void OCacheWriteScheduler::scheduleWrite(backend::ComponentRequest _aComponent)  CFG_UNO_THROW_ALL(  )
 {
-    // PRE: m_aUpdateMutex of TreeMgr must be acuired
     OSL_ENSURE(_aComponent.getOptions().hasLocale(), "ERROR: OTreeDisposeScheduler: cannot handle complete user scheduling");
-
-    osl::MutexGuard aGuard( m_aMutex );
 
     CFG_TRACE_INFO("Scheduling cache write for user '%s' with locale '%s'",
                     OUSTRING2ASCII(_aComponent.getOptions().getEntity()),
