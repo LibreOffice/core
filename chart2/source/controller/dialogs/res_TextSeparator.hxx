@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_TextSeparator.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:47:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:49:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,11 @@ public:
 
     void PositionBelowControl( const Window& rWindow );
     void AlignListBoxWidthAndXPos( long nWantedLeftBorder /*use -1 to indicate that this can be automatic*/
-                                 , long nWantedRightBorder /*use -1 to indicate that this can be automatic*/ );
+                                 , long nWantedRightBorder /*use -1 to indicate that this can be automatic*/
+                                 , long nMinimumListBoxWidth /*use -1 to indicate that this can be automatic*/ );
+    Point GetCurrentListBoxPosition() const;
+    Size GetCurrentListBoxSize() const;
+    long GetBottom() const;
 
     ::rtl::OUString GetValue() const;
     void SetValue( const ::rtl::OUString& rSeparator );
