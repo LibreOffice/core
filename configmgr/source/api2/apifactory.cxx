@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apifactory.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:53:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,12 +94,6 @@ Factory::~Factory()
 }
 //-----------------------------------------------------------------------------
 inline
-osl::Mutex& Factory::doGetMutex()
-{
-    return m_pRegistry->mutex();
-}
-//-----------------------------------------------------------------------------
-inline
 NodeElement* Factory::implFind(configuration::NodeID const& aNode)
 {
     return m_pRegistry->findElement(aNode);
@@ -176,8 +170,6 @@ NodeElement* Factory::makeElement(Tree const& aTree, NodeRef const& aNode)
     OSL_PRECOND( aTree.isValidNode(aNode), "ERROR: Configuration: NodeRef does not match Tree");
     OSL_PRECOND( configuration::isStructuralNode(aTree,aNode), "ERROR: Configuration: Cannot make object for value node");
 
-    osl::MutexGuard aLock(this->doGetMutex());
-
     NodeID aNodeID(aTree,aNode);
     NodeElement* pRet = findElement(aNodeID);
     if (pRet == 0)
@@ -214,32 +206,14 @@ UnoInterfaceRef Factory::findUnoElement(NodeID const& aNodeID)
 //-----------------------------------------------------------------------------
 NodeElement* Factory::findElement(NodeID const& aNodeID)
 {
-    osl::MutexGuard aLock(this->doGetMutex());
     NodeElement* pReturn = implFind(aNodeID);
     if (pReturn) pReturn->getUnoInstance()->acquire();
     return pReturn;
 }
 //-----------------------------------------------------------------------------
-/*
-void Factory::registerElement(NodeID const& aNodeID, NodeElement& rElement)
-{
-    osl::MutexGuard aLock(this->doGetMutex());
-    if (NodeElement* pExist = implFind(aNodeID))
-    {
-        OSL_ENSURE(pExist == &rElement,"ERROR: A different Configuration Element was already registered for the same node");
-        OSL_ENSURE(false ,"WARNING: Configuration Element was already registered");
-    }
-    else
-    {
-        doRegisterElement(aNodeID, &rElement);
-    }
-}
-*/
-//-----------------------------------------------------------------------------
 
 void Factory::revokeElement(NodeID const& aNodeID)
 {
-    osl::MutexGuard aLock(this->doGetMutex());
     if (NodeElement* pElement = implFind(aNodeID))
         doRevokeElement(aNodeID, pElement);
 }
@@ -247,7 +221,6 @@ void Factory::revokeElement(NodeID const& aNodeID)
 
 void Factory::revokeElement(NodeID const& aNodeID, NodeElement& rElement)
 {
-    osl::MutexGuard aLock(this->doGetMutex());
     if (implFind(aNodeID) == &rElement)
         doRevokeElement(aNodeID, &rElement);
 }
@@ -265,8 +238,6 @@ TreeElement* Factory::makeAccessRoot(Tree const& aTree, RequestOptions const& _a
     OSL_ENSURE(aRoot.isValid(),"INTERNAL ERROR: Tree has no root node");
 
     OSL_PRECOND( configuration::isStructuralNode(aTree,aRoot), "ERROR: Configuration: Cannot make object for value node");
-
-    osl::MutexGuard aLock(this->doGetMutex());
 
     NodeID aNodeID(aTree,aRoot);
     // must be a tree element if it is a tree root
@@ -298,8 +269,6 @@ NodeElement* Factory::makeGroupMember(Tree const& aTree, NodeRef const& aNode)
 
     OSL_PRECOND( configuration::isStructuralNode(aTree,aNode), "ERROR: Configuration: Cannot make object for value node");
     OSL_ENSURE(!aTree.isRootNode(aNode),"INTERNAL ERROR: Root of Tree should not be used for a group member object");
-
-    osl::MutexGuard aLock(this->doGetMutex());
 
     NodeID aNodeID(aTree,aNode);
     NodeElement* pRet = findElement(aNodeID);
@@ -342,8 +311,6 @@ SetElement* Factory::makeSetElement(ElementTree const& aElementTree)
 
     OSL_ENSURE( configuration::isStructuralNode(aTree,aRoot), "ERROR: Configuration: Cannot make object for value node");
 
-    osl::MutexGuard aLock(this->doGetMutex());
-
     NodeID aNodeID(aTree,aRoot);
     // must be a set element if it wraps a ElementTree
     SetElement* pRet = static_cast<SetElement*>( findElement(aNodeID) );
@@ -369,8 +336,6 @@ SetElement* Factory::findSetElement(configuration::ElementRef const& aElement)
 
     NodeRef aRoot = aTree.getRootNode();
     OSL_ENSURE(aRoot.isValid(),"INTERNAL ERROR: Tree has no root node");
-
-    osl::MutexGuard aLock(this->doGetMutex());
 
     NodeID aNodeID(aTree,aRoot);
     // must be a set element if it wraps a ElementTree
