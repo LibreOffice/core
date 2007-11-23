@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-25 09:03:00 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 12:09:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,9 @@ SLOFILES=	\
     $(SLO)$/RessourceManager.obj \
     $(SLO)$/RangeHighlighter.obj \
     $(SLO)$/ReferenceSizeProvider.obj \
-    $(SLO)$/ExplicitCategoriesProvider.obj
+    $(SLO)$/ExplicitCategoriesProvider.obj \
+    $(SLO)$/RegressionCurveCalculator.obj \
+    $(SLO)$/RegressionEquation.obj
 
 DISABLED_SLOFILES=	\
     $(SLO)$/NamedFillProperties.obj \
