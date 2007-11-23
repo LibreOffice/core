@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodechangeimpl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:32:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:43:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,8 @@
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/simplereferenceobject.hxx>
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 
 #ifndef INCLUDED_VECTOR
@@ -115,7 +115,7 @@ namespace configmgr
 
         /// represents a node position in some tree
         class NodeChangeImpl
-        : public salhelper::SimpleReferenceObject
+        : public configmgr::SimpleReferenceObject
         {
         public:
             explicit
@@ -129,10 +129,9 @@ namespace configmgr
             /// the node that is affected by the change
             NodeOffset getTargetNode() const;
 
-            data::Accessor const& getDataAccessor() const { return m_aDataAccessor; }
         protected:
             /// setup the 'target' node that is to be affected or changed
-            void setTarget(data::Accessor const& _aAccessor, TreeHolder const& _aAffectedTree, NodeOffset _nAffectedNode);
+            void setTarget(TreeHolder const& _aAffectedTree, NodeOffset _nAffectedNode);
             void setTarget(view::Node _aAffectedNode);
 
             view::ViewTreeAccess getTargetView();
@@ -186,7 +185,6 @@ namespace configmgr
 
         private:
             typedef sal_uInt16 State;
-            data::Accessor m_aDataAccessor;
             TreeHolder m_aAffectedTree;
             NodeOffset m_nAffectedNode;
             State      m_nState;
@@ -212,7 +210,7 @@ namespace configmgr
         public:
             /// setup the 'target' node that is to be affected or changed
             void setTarget(view::GroupNode const& _aParentNode, Name const& sNodeName);
-            void setTarget(data::Accessor const& _aAccessor, TreeHolder const& aAffectedTree, NodeOffset nParentNode, Name const& sNodeName);
+            void setTarget(TreeHolder const& aAffectedTree, NodeOffset nParentNode, Name const& sNodeName);
 
         public:
             /// get the name of the value
