@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:20:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:24:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #ifndef _MENU_HXX //autogen
 #include <vcl/menu.hxx>
 #endif
+#include <map>
 
 class SwWrtShell;
 
@@ -58,6 +59,14 @@ class SwSpellPopup : public PopupMenu
     LanguageType                nGuessLangWord;
     LanguageType                nGuessLangPara;
 
+    USHORT nNumLanguageTextEntries;
+    USHORT nNumLanguageParaEntries;
+    USHORT nNumLanguageDocEntries;
+    std::map< sal_Int16, ::rtl::OUString > aLangTable_Text;
+    std::map< sal_Int16, ::rtl::OUString > aLangTable_Paragraph;
+    std::map< sal_Int16, ::rtl::OUString > aLangTable_Document;
+    USHORT fillLangPopupMenu( PopupMenu *pPopupMenu , USHORT Lang_Start, ::com::sun::star::uno::Sequence< ::rtl::OUString > aSeq,SwWrtShell* pWrtSh, USHORT nLangTable);
+
     using PopupMenu::Execute;
 
 public:
@@ -68,8 +77,8 @@ public:
 
     sal_uInt16  Execute( const Rectangle& rPopupPos, Window* pWin );
     void Execute( USHORT nId );
-};
 
+};
 
 #endif
 
