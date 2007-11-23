@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.223 $
+ *  $Revision: 1.224 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 14:07:44 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 17:06:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2583,6 +2583,7 @@ File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
                   "modules/sglobal/accelerator/fr/default.xml",
                   "modules/sglobal/menubar/menubar.xml",
                   "modules/sglobal/toolbar/insertbar.xml",
+                  "modules/sglobal/statusbar/statusbar.xml",
                   "modules/sweb/accelerator/de/default.xml",
                   "modules/sweb/accelerator/en-GB/default.xml",
                   "modules/sweb/accelerator/en-US/default.xml",
@@ -2590,6 +2591,7 @@ File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
                   "modules/sweb/accelerator/fr/default.xml",
                   "modules/sweb/menubar/menubar.xml",
                   "modules/sweb/toolbar/insertbar.xml",
+                  "modules/sweb/statusbar/statusbar.xml",
                   "modules/swriter/accelerator/de/default.xml",
                   "modules/swriter/accelerator/en-GB/default.xml",
                   "modules/swriter/accelerator/en-US/default.xml",
@@ -2597,6 +2599,7 @@ File gid_File_Share_Config_Sofficecfg_uiconfig_Zip
                   "modules/swriter/accelerator/fr/default.xml",
                   "modules/swriter/menubar/menubar.xml",
                   "modules/swriter/toolbar/insertbar.xml",
+                  "modules/swriter/statusbar/statusbar.xml",
                   "modules/simpress/accelerator/de/default.xml",
                   "modules/simpress/accelerator/en-GB/default.xml",
                   "modules/simpress/accelerator/en-US/default.xml",
