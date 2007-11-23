@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrapcontext.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:23:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:15:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,12 +147,9 @@ namespace configmgr
         bool lookupInContext  ( uno::Any & _rValue, const OUString& _aName ) const;
         bool lookupInBootstrap( uno::Any & _rValue, const OUString& _aName ) const;
 
-        osl::Mutex & mutex() const { return m_aMutex; }
-        Context const & basecontext() const { osl::MutexGuard lock(mutex()); return m_xContext; }
+        Context const & basecontext() const { return m_xContext; }
 
     private:
-        /// The mutex protecting this component
-        mutable osl::Mutex  m_aMutex;
         /// The context that most requests are delegated to
         Context             m_xContext;
         /// The bootstrap data consulted as fallback
