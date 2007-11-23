@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectNameProvider.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:43:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:45:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,6 +318,9 @@ rtl::OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural 
                 break;
         case OBJECTTYPE_DATA_STOCK_GAIN:
                 aRet=String(SchResId(STR_OBJECT_STOCK_GAIN));
+                break;
+        case OBJECTTYPE_DATA_CURVE_EQUATION:
+                aRet=String(SchResId(STR_OBJECT_CURVE_EQUATION));
                 break;
         default: //OBJECTTYPE_UNKNOWN
             ;
