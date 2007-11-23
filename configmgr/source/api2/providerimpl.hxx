@@ -4,9 +4,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:19:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,12 +203,11 @@ namespace configmgr
         virtual ~OProviderImpl();
 
         /// ITreeManager
-        virtual memory::Segment* getDataSegment(AbsolutePath const& _rAccessor, const RequestOptions& _aOptions);
         virtual data::NodeAccess requestSubtree(AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions) CFG_UNO_THROW_ALL(  );
-        virtual void updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  );
+        virtual void updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  );
 
         virtual void releaseSubtree( AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions ) CFG_NOTHROW();
-        virtual void saveAndNotifyUpdate(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  );
+        virtual void saveAndNotifyUpdate(TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  );
         virtual void disposeData(const RequestOptions& _aOptions) CFG_NOTHROW();
         virtual void fetchSubtree(AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions) CFG_NOTHROW();
 
@@ -217,8 +216,7 @@ namespace configmgr
         virtual void enableAsync(const sal_Bool& bEnableAsync) CFG_NOTHROW();
 
         /// IDefaultableTreeManager
-        virtual sal_Bool fetchDefaultData(  memory::UpdateAccessor& _aAccessToken,
-                                            AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions
+        virtual sal_Bool fetchDefaultData(AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions
                                           ) CFG_UNO_THROW_ALL(  );
 
         // IInterface
