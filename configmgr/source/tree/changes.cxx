@@ -4,9 +4,9 @@
  *
  *  $RCSfile: changes.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:20:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:31:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,7 +259,7 @@ AddNode::AddNode(TreeSegment const & _aAddedTree, OUString const& _rName, bool _
     :Change(_rName,_bToDefault)
     ,m_aOwnNewNode(_aAddedTree)
     ,m_aOwnOldNode()
-    ,m_aInsertedTree()
+    ,m_aInsertedTree(NULL)
     ,m_bReplacing(false)
 {
 }
@@ -288,7 +288,7 @@ std::auto_ptr<Change> AddNode::clone() const
 //--------------------------------------------------------------------------
 void AddNode::setInsertedAddress(data::TreeAddress const & _aInsertedTree)
 {
-    OSL_ENSURE( !m_aInsertedTree.is(), "AddNode already was applied - inserted a second time ?");
+    OSL_ENSURE( m_aInsertedTree == NULL, "AddNode already was applied - inserted a second time ?");
     m_aInsertedTree = _aInsertedTree;
 }
 //--------------------------------------------------------------------------
