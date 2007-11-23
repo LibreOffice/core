@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treemanager.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-08-21 15:28:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:38:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,6 @@
 #endif
 #ifndef CONFIGMGR_TREEACCESSOR_HXX
 #include "treeaccessor.hxx"
-#endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
@@ -110,10 +107,7 @@ void TreeManager::disposeAll()
     CFG_TRACE_INFO("TreeManager: Disposing all data" );
     CacheList::Map aReleaseList;
 
-    {
-        osl::MutexGuard aGuard(m_aCacheList.mutex());
-        m_aCacheList.swap(aReleaseList);             // move data out of m_aCacheList
-    }
+    m_aCacheList.swap(aReleaseList);             // move data out of m_aCacheList
 
     // free all the trees - not exception safe !! (i.e. disposeBroadcastHelper() must not throw)
     for (CacheList::Map::iterator i = aReleaseList.begin(); i != aReleaseList.end(); ++i)
@@ -161,8 +155,6 @@ void TreeManager::disposeOne(RequestOptions const& _aOptions)
 // -------------------------------------------------------------------------
 void TreeManager::disposeUser(RequestOptions const& _aUserOptions)
 {
-    osl::ClearableMutexGuard aGuard(m_aCacheList.mutex());
-
     CFG_TRACE_INFO("TreeManager: Disposing data and TreeInfo(s) for user '%s'",
                     OUSTRING2ASCII(_aUserOptions.getEntity()) );
 
@@ -206,9 +198,6 @@ void TreeManager::disposeUser(RequestOptions const& _aUserOptions)
         m_aCacheList.swap(aCacheData);
     }
 
-    // got all out of external reach - now dispose/notify without lock
-    aGuard.clear();
-
     for (DisposeList::iterator i = aDisposeList.begin(); i != aDisposeList.end(); ++i)
     {
         if (i->second.is())
@@ -241,10 +230,10 @@ ConfigChangeBroadcastHelper* TreeManager::getBroadcastHelper(RequestOptions cons
 
 
 // -------------------------------------------------------------------------
-TreeManager::TreeManager(BackendCacheRef const & _xBackend, memory::HeapManager & _rCacheHeapManager)
+TreeManager::TreeManager(BackendCacheRef const & _xBackend)
 : m_xCacheController(_xBackend)
 , m_aCacheList()
-, m_aTemplates(new CacheData(_rCacheHeapManager))
+, m_aTemplates(new CacheData())
 , m_bEnableAsync(true)
 {
     OSL_PRECOND(_xBackend.is(),"Trying to create a TreeManager without a backend");
@@ -293,87 +282,57 @@ void TreeManager::disposeBackendCache() CFG_NOTHROW( )
 
 // -------------------------------------------------------------------------
 
-memory::HeapManager & TreeManager::getCacheHeapManager() const
-{
-    return m_aTemplates.get()->getHeapManager();
-}
-// -------------------------------------------------------------------------
-
 TreeManager::CacheRef TreeManager::getCacheAlways(RequestOptions const & _aOptions)
 {
-    osl::MutexGuard aGuard( m_aCacheList.mutex() );
-
     CacheRef aResult = m_aCacheList.get(_aOptions);
     if (!aResult.is())
     {
-        CacheRef aNewCache( new Cache(getCacheHeapManager(), ConfigChangeBroadcaster::newBroadcastHelper()) );
+        CacheRef aNewCache( new Cache(ConfigChangeBroadcaster::newBroadcastHelper()) );
         aResult = m_aCacheList.insert(_aOptions,aNewCache);
     }
     return aResult;
 }
 
 // -------------------------------------------------------------------------
-memory::Segment* TreeManager::getDataSegment(AbsolutePath const& _rAccessor,
-                                             const RequestOptions& _aOptions)
-{
-    CacheRef aCache = m_aCacheList.get(_aOptions);
-
-    OSL_ENSURE(aCache.is(), "No cache data to get segment for");
-
-    if (aCache.is())
-        return aCache->getDataSegment(_rAccessor);
-
-    else
-        return NULL;
-}
-// -------------------------------------------------------------------------
 
 data::NodeAccess TreeManager::requestSubtree(AbsolutePath const& aSubtreePath,
-                                                const RequestOptions& _aOptions)
-                                             CFG_UNO_THROW_ALL(  )
+                         const RequestOptions& _aOptions)
+                        CFG_UNO_THROW_ALL()
 {
     CFG_TRACE_INFO("TreeManager: request for subtree '%s'", OUSTRING2ASCII(aSubtreePath.toString()));
 
     CacheRef aCache = getCacheAlways(_aOptions);
     OSL_ENSURE(aCache.is(),"TreeManager: Cannot create cache access for loading node");
 
-    data::Accessor aAccessor(NULL);
-
     if (!aCache->hasModule(aSubtreePath))
     {
-        CFG_TRACE_INFO_NI("TreeManager: cache miss. going to load the node");
+    CFG_TRACE_INFO_NI("TreeManager: cache miss. going to load the node");
         backend::ComponentRequest aQuery( aSubtreePath.getModuleName(), _aOptions );
 
         backend::CacheLocation aLoadedLocation = getCacheLoader()->loadComponent(aQuery);
-        if (aLoadedLocation.isNull())
+        if (aLoadedLocation == NULL)
         {
             CFG_TRACE_WARNING_NI("TreeManager: requested component not found");
             throw com::sun::star::container::
                     NoSuchElementException( MAKEUSTRING("Requested component not found"), NULL);
         }
 
-        CFG_TRACE_INFO_NI("TreeManager: attaching loaded cache segment ");
-
-        aAccessor = data::Accessor(aCache->attachDataSegment(aLoadedLocation.segment,aSubtreePath));
-        OSL_ENSURE(aAccessor.is(),"Cannot attach to loaded component");
+    CFG_TRACE_INFO_NI("TreeManager: attaching loaded cache segment ");
+        aCache->attachModule(aLoadedLocation,aSubtreePath.getModuleName());
     }
     else
     {
-        CFG_TRACE_INFO_NI("TreeManager: found node in cache");
+    CFG_TRACE_INFO_NI("TreeManager: found node in cache");
         if (_aOptions.isRefreshEnabled())
         {
              backend::ComponentRequest aRequest( aSubtreePath.getModuleName(), _aOptions );
              getCacheLoader()->refreshComponent(aRequest);
         }
-
-        aAccessor = data::Accessor(aCache->getDataSegment(aSubtreePath));
-        OSL_ENSURE(aAccessor.is(),"Cannot get accessor for existing component");
-
     }
 
-    data::NodeAddress aResultAddress = aCache->acquireNode(aAccessor,aSubtreePath);
+    data::NodeAddress aResultAddress = aCache->acquireNode(aSubtreePath);
 
-    return data::NodeAccess(aAccessor,aResultAddress);
+    return data::NodeAccess(aResultAddress);
 }
 
 // -------------------------------------------------------------------------
@@ -384,10 +343,9 @@ void TreeManager::fetchSubtree(AbsolutePath const& aSubtreePath, const RequestOp
 }
 
 // -------------------------------------------------------------------------
-sal_Bool TreeManager::fetchDefaultData( memory::UpdateAccessor& _aAccessToken,
-                                        AbsolutePath const& aSubtreePath,
+sal_Bool TreeManager::fetchDefaultData( AbsolutePath const& aSubtreePath,
                                         const RequestOptions& _aOptions
-                                      ) CFG_UNO_THROW_ALL(  )
+    ) CFG_UNO_THROW_ALL()
 {
     CFG_TRACE_INFO("tree manager: checking the cache for defaults");
 
@@ -395,11 +353,11 @@ sal_Bool TreeManager::fetchDefaultData( memory::UpdateAccessor& _aAccessToken,
 
     if (!aCache.is())
     {
-        OSL_ENSURE(aCache.is(),"TreeManager: Cache access to fetch defaults for does not exist ! Where does the node access come from ?");
+    OSL_ENSURE(aCache.is(),"TreeManager: Cache access to fetch defaults for does not exist ! Where does the node access come from ?");
         return false;
     }
 
-    if (aCache->hasModuleDefaults(_aAccessToken.accessor(),aSubtreePath))
+    if (aCache->hasModuleDefaults(aSubtreePath))
     {
         CFG_TRACE_INFO_NI("TreeManager: found default data in cache");
         return true;
@@ -414,7 +372,7 @@ sal_Bool TreeManager::fetchDefaultData( memory::UpdateAccessor& _aAccessToken,
     if (!aDefaults.is())
     {
         CFG_TRACE_INFO_NI("TreeManager: merging loaded defaults into cache");
-        return aCache->insertDefaults(_aAccessToken,aDefaults.instance());
+        return aCache->insertDefaults(aDefaults.instance());
     }
     else
     {
@@ -457,9 +415,8 @@ AbsolutePath TreeManager::encodeTemplateLocation(const Name& _rLogicalTemplateNa
 }
 
 // -------------------------------------------------------------------------
-data::TreeAccessor TreeManager::requestTemplate(data::Accessor const& /*_aSourceAccessor*/,
-                                                Name const& _rName, Name const& _rModule
-                                                ) CFG_UNO_THROW_ALL(  )
+data::TreeAccessor TreeManager::requestTemplate(Name const& _rName,
+                                                Name const& _rModule) CFG_UNO_THROW_ALL(  )
 {
     OSL_ENSURE(!_rName.isEmpty(), "TreeManager::requestTemplate : invalid template name !");
 
@@ -468,19 +425,13 @@ data::TreeAccessor TreeManager::requestTemplate(data::Accessor const& /*_aSource
     AbsolutePath aTemplateLocation = encodeTemplateLocation(_rName, _rModule);
     Name aCacheModule = aTemplateLocation.getModuleName();
 
-    osl::MutexGuard aGuard(m_aTemplates.mutex());
-
-    data::Accessor aTemplatesAccessor( getTemplates().getDataSegment(aCacheModule) );
-
-    if (!getTemplates().hasNode(aTemplatesAccessor,aTemplateLocation))
+    if (!getTemplates().hasNode(aTemplateLocation))
     {
-        aTemplatesAccessor.clear();
-
         CFG_TRACE_INFO_NI("TreeManager: cache miss. going to load the template");
         backend::TemplateRequest aQuery( _rName, _rModule );
 
         backend::CacheLocation aLoadedLocation = getCacheLoader()->loadTemplate(aQuery);
-        if (aLoadedLocation.isNull())
+        if (aLoadedLocation == NULL)
         {
             CFG_TRACE_ERROR_NI("TreeManager: requested template module not found");
             throw com::sun::star::container::
@@ -489,30 +440,28 @@ data::TreeAccessor TreeManager::requestTemplate(data::Accessor const& /*_aSource
 
         CFG_TRACE_INFO_NI("TreeManager: attaching to loaded template module");
 
-        aTemplatesAccessor = data::Accessor(getTemplates().attachDataSegment(aLoadedLocation.segment,aCacheModule));
-        OSL_ENSURE(aTemplatesAccessor.is(),"Cannot attach to loaded component");
+        getTemplates().attachModule(aLoadedLocation,aCacheModule);
 
         // create a client ref count on the template module
-        getTemplates().acquireNode(aTemplatesAccessor,aTemplateLocation);
+        getTemplates().acquireNode(aTemplateLocation);
     }
     else
     {
         CFG_TRACE_INFO_NI("TreeManager: template module found in cache");
-        OSL_ENSURE(aTemplatesAccessor.is(),"No accessor for existing data ?");
     }
 
-    data::TreeAddress aTemplateAddr = getTemplates().getTemplateTree(aTemplatesAccessor,aTemplateLocation);
-    if (aTemplateAddr.isNull())
+    data::TreeAddress aTemplateAddr = getTemplates().getTemplateTree(aTemplateLocation);
+    if (aTemplateAddr == NULL)
     {
         CFG_TRACE_ERROR_NI("TreeManager: template not found in module");
         throw com::sun::star::container::
                     NoSuchElementException( MAKEUSTRING("Unknown template. Type description could not be found in the given module."), NULL);
     }
-    return data::TreeAccessor(aTemplatesAccessor,aTemplateAddr);
+    return data::TreeAccessor(aTemplateAddr);
 }
 
 // -------------------------------------------------------------------------
-void TreeManager::saveAndNotifyUpdate(data::Accessor const& /*_aChangedDataAccessor*/, TreeChangeList const& aChangeTree) CFG_UNO_THROW_ALL(  )
+void TreeManager::saveAndNotifyUpdate(TreeChangeList const& aChangeTree) CFG_UNO_THROW_ALL(  )
 {
     {
         CFG_TRACE_INFO("TreeManager: committing an Update to the cache controller");
@@ -529,20 +478,17 @@ void TreeManager::saveAndNotifyUpdate(data::Accessor const& /*_aChangedDataAcces
         getCacheLoader()->saveAndNotify(anUpdate);
         CFG_TRACE_INFO_NI("TreeManager: committing done");
     }
-
-    // notification should be done via the cache loader
-    // this->ConfigChangeBroadcaster::fireChanges(_aChangedDataAccessor, aChangeTree, false);
 }
 
 // -------------------------------------------------------------------------
-void TreeManager::fireChanges(data::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChangeTree, sal_Bool _bError)
+void TreeManager::fireChanges(TreeChangeList const& aChangeTree, sal_Bool _bError)
 {
     CFG_TRACE_INFO("TreeManager: broadcasting changes");
-    ConfigChangeBroadcaster::fireChanges(_aChangedDataAccessor, aChangeTree, _bError);
+    ConfigChangeBroadcaster::fireChanges(aChangeTree, _bError);
 }
 
 // -----------------------------------------------------------------------------
-void TreeManager::updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeList& _aChanges) CFG_UNO_THROW_ALL(  )
+void TreeManager::updateTree(TreeChangeList& _aChanges) CFG_UNO_THROW_ALL(  )
 {
     CFG_TRACE_INFO("TreeManager: updating the cache from a changes list");
 
@@ -558,7 +504,7 @@ void TreeManager::updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeLi
     }
 
     // merge the changes into the tree
-    aCache->applyUpdate(_aAccessToken, anUpdate);
+    aCache->applyUpdate(anUpdate);
 
     CFG_TRACE_INFO_NI("TreeManager: cache update done");
 }
@@ -638,26 +584,23 @@ void TreeManager::nodeUpdated(TreeChangeList& _rChanges)
     CFG_TRACE_INFO("TreeManager: nodeUpdated");
     try
     {
-        CacheRef aCache = m_aCacheList.get(_rChanges.getOptions());
+    CacheRef aCache = m_aCacheList.get(_rChanges.getOptions());
 
-        if (aCache.is())
-        {
-            // first approve the changes and merge them with the current tree
-            AbsolutePath aSubtreeName = _rChanges.getRootNodePath();
+    if (aCache.is())
+    {
+        // first approve the changes and merge them with the current tree
+        AbsolutePath aSubtreeName = _rChanges.getRootNodePath();
 
-            memory::Accessor aAccessor( aCache->getDataSegment(aSubtreeName) );
-            //OSL_ENSURE(aAccessor.is(), "TreeManager::nodeUpdated : cannot access cache !");
+        data::NodeAddress aCacheTree = aCache->findInnerNode(aSubtreeName);
+        //OSL_ENSURE(aCacheTree != NULL, "TreeManager::nodeUpdated : node not found in cache!");
 
-            data::NodeAddress aCacheTree = aCache->findInnerNode(aAccessor,aSubtreeName);
-            //OSL_ENSURE(aCacheTree.is(), "TreeManager::nodeUpdated : node not found in cache!");
-
-            if (aCacheTree.is())
-                this->fireChanges(aAccessor,_rChanges,false);
-        }
+        if (aCacheTree != NULL)
+            this->fireChanges(_rChanges,false);
+    }
     }
     catch (uno::RuntimeException&)
     {
-        CFG_TRACE_ERROR_NI("TreeManager::nodeUpdated : could not notify !");
+    CFG_TRACE_ERROR_NI("TreeManager::nodeUpdated : could not notify !");
     }
     CFG_TRACE_INFO_NI("TreeManager: nodeUpdated done");
 }
