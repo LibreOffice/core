@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeHelper.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:52:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 #ifndef _COM_SUN_STAR_CHART2_AXISTYPE_HPP_
 #include <com/sun/star/chart2/AxisType.hpp>
 #endif
+#include <com/sun/star/chart2/XDataSeries.hpp>
+#include <com/sun/star/chart2/XDiagram.hpp>
 
 #ifndef _COM_SUN_STAR_DRAWING_DIRECTION3D_HPP_
 #include <com/sun/star/drawing/Direction3D.hpp>
@@ -70,6 +72,11 @@ public:
     static sal_Bool isSupportingBarConnectors(       const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
     static sal_Bool isSupportingRightAngledAxes(     const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
     static bool     isSupportingAxisSideBySide(      const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount );
+
+    //returns sequence of ::com::sun::star::chart::DataLabelPlacement
+    static ::com::sun::star::uno::Sequence < sal_Int32 > getSupportedLabelPlacements(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Bool bSwapXAndY
+        , const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >& xSeries );
 
     static ::com::sun::star::drawing::Direction3D getDefaultSimpleLightDirection( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
     static ::com::sun::star::drawing::Direction3D getDefaultRealisticLightDirection( const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType );
