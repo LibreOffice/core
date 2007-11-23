@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodechangeinfo.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 12:49:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:21:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,8 +128,8 @@ namespace configmgr
 
         //-------------------------------------------------
         // wrapper object creation
-            Tree    getNewElementTree(data::Accessor const& aAccessor) const;
-            Tree    getOldElementTree(data::Accessor const& aAccessor) const;
+            Tree    getNewElementTree() const;
+            Tree    getOldElementTree() const;
 
             NodeRef getNewElementNodeRef() const;
             NodeRef getOldElementNodeRef() const;
@@ -166,19 +166,19 @@ namespace configmgr
             bool isValidData() const;
 
             /// check whether the location is for a valid object
-            bool isValidLocation(data::Accessor const& aAccessor) const;
+            bool isValidLocation() const;
 
         //-------------------------------------------------
             /// retrieve the path from the base node to the changed node (which might be a child of the affected node)
             RelativePath getAccessor() const { return m_path; }
 
             /// retrieve the tree where the change is actually initiated/reported
-            Tree getBaseTree(data::Accessor const& aAccessor) const;
+            Tree getBaseTree() const;
             /// retrieve the node where the change is actually initiated/reported
             NodeRef getBaseNode() const;
 
             /// retrieve the tree where the change is actually taking place (may be Empty, if the tree has never been accessed)
-            Tree getAffectedTree(data::Accessor const& aAccessor) const;
+            Tree getAffectedTree() const;
             /// retrieve the tree where the change is actually taking place (may be Empty, if the tree has never been accessed)
             TreeRef getAffectedTreeRef() const;
             /// retrieve the node where the change is actually taking place (if the affected Tree is not empty)
@@ -220,19 +220,17 @@ namespace configmgr
         public:
         //-------------------------------------------------
             explicit
-            NodeChangeInformation(data::Accessor const& _accessor)
-            : accessor(_accessor)
-            , change()
+            NodeChangeInformation()
+            : change()
             , location()
             {
             }
         //-------------------------------------------------
-            data::Accessor      accessor;
             NodeChangeData      change;
             NodeChangeLocation  location;
 
         //-------------------------------------------------
-            bool hasValidLocation() const { return location.isValidLocation(accessor); }
+            bool hasValidLocation() const { return location.isValidLocation(); }
             bool isDataChange()     const { return change.isDataChange(); }
 
             bool isEmptyChange()    const { return change.isEmptyChange(); }
