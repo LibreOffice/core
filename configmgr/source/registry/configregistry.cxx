@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configregistry.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:19:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:29:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@
 #endif
 #ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "confapifactory.hxx"
+#endif
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 
 #ifndef _COMPHELPER_SEQUENCE_HXX_
@@ -197,7 +200,7 @@ Sequence< sal_Int8 > SAL_CALL OConfigurationRegistry::getImplementationId(  ) th
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OConfigurationRegistry::getURL() throw(RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
+    UnoApiLock aLock;
     return m_sLocation;
 }
 
@@ -213,7 +216,7 @@ void OConfigurationRegistry::implCheckOpen() throw(InvalidRegistryException, Run
 //--------------------------------------------------------------------------
 void SAL_CALL OConfigurationRegistry::open( const ::rtl::OUString& _rURL, sal_Bool _bReadOnly, sal_Bool /*_bCreate*/ ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
+    UnoApiLock aLock;
 
     if (implIsOpen())
         close();
@@ -272,7 +275,7 @@ void SAL_CALL OConfigurationRegistry::open( const ::rtl::OUString& _rURL, sal_Bo
 //--------------------------------------------------------------------------
 sal_Bool SAL_CALL OConfigurationRegistry::isValid(  ) throw(RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
+    UnoApiLock aLock;
     return implIsOpen();
 }
 
@@ -285,7 +288,7 @@ sal_Bool OConfigurationRegistry::implIsOpen(  ) throw(RuntimeException)
 //--------------------------------------------------------------------------
 void SAL_CALL  OConfigurationRegistry::close(  ) throw(InvalidRegistryException, RuntimeException)
 {
-    ClearableMutexGuard aGuard(m_aMutex);
+    UnoApiLock aLock;
 
     Reference< XRegistryKey > xRootKey(m_xRootKey);
     m_xRootKey = NULL;
@@ -295,8 +298,6 @@ void SAL_CALL  OConfigurationRegistry::close(  ) throw(InvalidRegistryException,
     m_xUpdateRoot = NULL;
 
     m_sLocation = ::rtl::OUString();
-
-    aGuard.clear();
 
     if (xRootKey.is())
         xRootKey->closeKey();
@@ -311,7 +312,7 @@ void SAL_CALL OConfigurationRegistry::disposing()
     close();
 
     {
-        MutexGuard aGuard(m_aMutex);
+        UnoApiLock aLock;
 
         m_xConfigurationProvider.clear();
         m_xORB.clear();
@@ -323,7 +324,7 @@ void SAL_CALL OConfigurationRegistry::disposing()
 //--------------------------------------------------------------------------
 void SAL_CALL OConfigurationRegistry::destroy(  ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
+    UnoApiLock aLock;
     implCheckOpen();
 
     throw InvalidRegistryException(UNISTRING("This registry is a wrapper for a configuration access. It can not be destroyed."), THISREF());
@@ -332,7 +333,7 @@ void SAL_CALL OConfigurationRegistry::destroy(  ) throw(InvalidRegistryException
 //--------------------------------------------------------------------------
 Reference< XRegistryKey > SAL_CALL OConfigurationRegistry::getRootKey(  ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
+    UnoApiLock aLock;
     implCheckOpen();
 
     return m_xRootKey;
@@ -341,7 +342,7 @@ Reference< XRegistryKey > SAL_CALL OConfigurationRegistry::getRootKey(  ) throw(
 //--------------------------------------------------------------------------
 sal_Bool SAL_CALL OConfigurationRegistry::isReadOnly(  ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
+    UnoApiLock aLock;
     implCheckOpen();
 
     return !m_xUpdateRoot.is();
@@ -351,7 +352,7 @@ sal_Bool SAL_CALL OConfigurationRegistry::isReadOnly(  ) throw(InvalidRegistryEx
 //--------------------------------------------------------------------------
 void SAL_CALL OConfigurationRegistry::mergeKey( const ::rtl::OUString& /*aKeyName*/, const ::rtl::OUString& /*aUrl*/ ) throw(InvalidRegistryException, MergeConflictException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
+    UnoApiLock aLock;
     implCheckOpen();
 
     // not supported. but we can't throw an NoSupportException here ...
@@ -362,7 +363,7 @@ void SAL_CALL OConfigurationRegistry::mergeKey( const ::rtl::OUString& /*aKeyNam
 void SAL_CALL OConfigurationRegistry::flush(  ) throw(RuntimeException)
 {
     {
-        MutexGuard aGuard(m_aMutex);
+        UnoApiLock aLock;
         if (m_xUpdateRoot.is())
         {
             try
