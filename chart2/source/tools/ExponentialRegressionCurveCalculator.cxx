@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ExponentialRegressionCurveCalculator.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:24:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:05:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,8 @@
 #include "macros.hxx"
 #include "RegressionCalculationHelper.hxx"
 
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -56,12 +52,10 @@ namespace chart
 
 ExponentialRegressionCurveCalculator::ExponentialRegressionCurveCalculator() :
         m_fSlope( 0.0 ),
-        m_fIntercept( 0.0 ),
-        m_fCorrelationCoeffitient( 0.0 )
+        m_fIntercept( 0.0 )
 {
     ::rtl::math::setNan( & m_fSlope );
     ::rtl::math::setNan( & m_fIntercept );
-    ::rtl::math::setNan( & m_fCorrelationCoeffitient );
 }
 
 ExponentialRegressionCurveCalculator::~ExponentialRegressionCurveCalculator()
@@ -134,14 +128,35 @@ double SAL_CALL ExponentialRegressionCurveCalculator::getCurveValue( double x )
     return fResult;
 }
 
-double SAL_CALL ExponentialRegressionCurveCalculator::getCorrelationCoefficient()
-    throw (uno::RuntimeException)
+uno::Sequence< geometry::RealPoint2D > SAL_CALL ExponentialRegressionCurveCalculator::getCurveValues(
+    double min, double max, ::sal_Int32 nPointCount,
+    const uno::Reference< chart2::XScaling >& xScalingX,
+    const uno::Reference< chart2::XScaling >& xScalingY,
+    ::sal_Bool bMaySkipPointsInCalculation )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException)
 {
-    return m_fCorrelationCoeffitient;
+    if( bMaySkipPointsInCalculation &&
+        isLinearScaling( xScalingX ) &&
+        isLogarithmicScaling( xScalingY ))
+    {
+        // optimize result
+        uno::Sequence< geometry::RealPoint2D > aResult( 2 );
+        aResult[0].X = min;
+        aResult[0].Y = this->getCurveValue( min );
+        aResult[1].X = max;
+        aResult[1].Y = this->getCurveValue( max );
+
+        return aResult;
+    }
+
+    return RegressionCurveCalculator::getCurveValues( min, max, nPointCount, xScalingX, xScalingY, bMaySkipPointsInCalculation );
 }
 
-OUString SAL_CALL ExponentialRegressionCurveCalculator::getRepresentation()
-    throw (uno::RuntimeException)
+
+OUString ExponentialRegressionCurveCalculator::ImplGetRepresentation(
+    const uno::Reference< util::XNumberFormatter >& xNumFormatter,
+    ::sal_Int32 nNumberFormatKey ) const
 {
     OUStringBuffer aBuf( C2U( "f(x) = " ));
 
@@ -152,19 +167,21 @@ OUString SAL_CALL ExponentialRegressionCurveCalculator::getRepresentation()
     }
     else if( rtl::math::approxEqual( m_fSlope, 1.0 ) )
     {
-        aBuf.append( NUMBER_TO_STR( m_fIntercept ));
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
     }
     else
     {
         if( ! rtl::math::approxEqual( m_fIntercept, 1.0 ) )
         {
-            aBuf.append( NUMBER_TO_STR( m_fIntercept ));
-            aBuf.append( sal_Unicode( ' ' ));
+            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
             aBuf.append( sal_Unicode( 0x00b7 ));
-            aBuf.append( sal_Unicode( ' ' ));
         }
 
-        aBuf.append( NUMBER_TO_STR( m_fSlope ));
+        if( m_fSlope < 0.0 )
+            aBuf.append( sal_Unicode( '(' ));
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
+        if( m_fSlope < 0.0 )
+            aBuf.append( sal_Unicode( ')' ));
         aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "^x" ));
     }
 

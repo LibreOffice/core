@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PotentialRegressionCurveCalculator.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 13:28:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:06:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,8 @@
 #include "macros.hxx"
 #include "RegressionCalculationHelper.hxx"
 
-#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -53,12 +52,10 @@ namespace chart
 
 PotentialRegressionCurveCalculator::PotentialRegressionCurveCalculator() :
         m_fSlope( 0.0 ),
-        m_fIntercept( 0.0 ),
-        m_fCorrelationCoeffitient( 0.0 )
+        m_fIntercept( 0.0 )
 {
     ::rtl::math::setNan( & m_fSlope );
     ::rtl::math::setNan( & m_fIntercept );
-    ::rtl::math::setNan( & m_fCorrelationCoeffitient );
 }
 
 PotentialRegressionCurveCalculator::~PotentialRegressionCurveCalculator()
@@ -130,14 +127,33 @@ double SAL_CALL PotentialRegressionCurveCalculator::getCurveValue( double x )
     return fResult;
 }
 
-double SAL_CALL PotentialRegressionCurveCalculator::getCorrelationCoefficient()
-    throw (uno::RuntimeException)
+uno::Sequence< geometry::RealPoint2D > SAL_CALL PotentialRegressionCurveCalculator::getCurveValues(
+    double min, double max, ::sal_Int32 nPointCount,
+    const uno::Reference< chart2::XScaling >& xScalingX,
+    const uno::Reference< chart2::XScaling >& xScalingY,
+    ::sal_Bool bMaySkipPointsInCalculation )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException)
 {
-    return m_fCorrelationCoeffitient;
+    if( bMaySkipPointsInCalculation &&
+        isLogarithmicScaling( xScalingX ) &&
+        isLogarithmicScaling( xScalingY ))
+    {
+        // optimize result
+        uno::Sequence< geometry::RealPoint2D > aResult( 2 );
+        aResult[0].X = min;
+        aResult[0].Y = this->getCurveValue( min );
+        aResult[1].X = max;
+        aResult[1].Y = this->getCurveValue( max );
+
+        return aResult;
+    }
+    return RegressionCurveCalculator::getCurveValues( min, max, nPointCount, xScalingX, xScalingY, bMaySkipPointsInCalculation );
 }
 
-OUString SAL_CALL PotentialRegressionCurveCalculator::getRepresentation()
-    throw (uno::RuntimeException)
+OUString PotentialRegressionCurveCalculator::ImplGetRepresentation(
+    const uno::Reference< util::XNumberFormatter >& xNumFormatter,
+    ::sal_Int32 nNumberFormatKey ) const
 {
     OUStringBuffer aBuf( C2U( "f(x) = " ));
 
@@ -147,21 +163,19 @@ OUString SAL_CALL PotentialRegressionCurveCalculator::getRepresentation()
     }
     else if( m_fSlope == 0.0 )
     {
-        aBuf.append( NUMBER_TO_STR( m_fIntercept ));
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
     }
     else
     {
         if( ! rtl::math::approxEqual( m_fIntercept, 1.0 ) )
         {
-            aBuf.append( NUMBER_TO_STR( m_fIntercept ));
-            aBuf.append( sal_Unicode( ' ' ));
-            aBuf.append( sal_Unicode( 0x00b7 ));
+            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
             aBuf.append( sal_Unicode( ' ' ));
         }
         if( m_fSlope != 0.0 )
         {
             aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( "x^" ));
-            aBuf.append( NUMBER_TO_STR( m_fSlope ));
+            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
         }
     }
 
