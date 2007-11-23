@@ -1,0 +1,19 @@
+*** misc/lp_solve_5.5/lpsolve55/lpsolve.rc	Sun Jun  4 00:15:24 2006
+--- misc/build/lp_solve_5.5/lpsolve55/lpsolve.rc	Fri Nov 23 16:34:22 2007
+***************
+*** 7,13 ****
+  //
+  // Generated from the TEXTINCLUDE 2 resource.
+  //
+! #include "afxres.h"
+  
+  /////////////////////////////////////////////////////////////////////////////
+  #undef APSTUDIO_READONLY_SYMBOLS
+--- 7,13 ----
+  //
+  // Generated from the TEXTINCLUDE 2 resource.
+  //
+! #include "winresrc.h"
+  
+  /////////////////////////////////////////////////////////////////////////////
+  #undef APSTUDIO_READONLY_SYMBOLS

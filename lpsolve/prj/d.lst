@@ -1,0 +1,7 @@
+mkdir: %_DEST%\inc%_EXT%\lpsolve
+
+..\%__SRC%\inc\lp_*.h %_DEST%\inc%_EXT%\lpsolve\*
+..\%__SRC%\lib\liblpsolve55.so %_DEST%\lib%_EXT%\liblpsolve55.so
+..\%__SRC%\lib\lpsolve55.lib %_DEST%\lib%_EXT%\lpsolve55.lib
+..\%__SRC%\bin\lpsolve55.dll %_DEST%\bin%_EXT%\lpsolve55.dll
+
