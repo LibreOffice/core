@@ -4,9 +4,9 @@
  *
  *  $RCSfile: builddata.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:44:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:30:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,17 +38,8 @@
 
 #include "builddata.hxx"
 
-#ifndef CONFIGMGR_TREEADDRESS_HXX
-#include "treeaddress.hxx"
-#endif
 #ifndef CONFIGMGR_TREEACCESSOR_HXX
 #include "treeaccessor.hxx"
-#endif
-#ifndef CONFIGMGR_ACCESSOR_HXX
-#include "accessor.hxx"
-#endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
 #endif
 
 #ifndef CONFIGMGR_NODEACCESS_HXX
@@ -100,30 +91,23 @@ namespace configmgr
     {
     //-------------------------------------------------------------------------
         using namespace sharable;
-        using memory::Pointer;
-        using memory::Accessor;
-        using memory::Allocator;
-        using memory::UpdateAccessor;
 //-----------------------------------------------------------------------------
 
     static
     inline
     NodeAddress offsetNodeBy(NodeAddress _aNode, Offset _nOffset)
     {
-        Address aRawAddr = _aNode.addressValue() + _nOffset * sizeof(Node);
-
-        return NodeAddress(Pointer(aRawAddr));
+        sharable::Node *pNode = _aNode;
+        pNode += _nOffset;
+        return NodeAddress(pNode);
     }
 
     static
     inline
     NodeAddress addressOfNodeAt(TreeAddress _aTree, Offset _nOffset)
     {
-        Address aRawAddr = _aTree.addressValue() +
-                            offsetof(TreeFragment,nodes) +
-                            _nOffset * sizeof(Node);
-
-        return NodeAddress(Pointer(aRawAddr));
+        sharable::TreeFragment *pRaw = _aTree;
+        return &pRaw->nodes[_nOffset];
     }
 
 //-----------------------------------------------------------------------------
@@ -147,12 +131,12 @@ namespace configmgr
         void resetTreeFragment();
         void resetTreeFragment(sharable::String _treeName, State::Field _state);
 
-        TreeAddress createTreeFragment(UpdateAccessor & _anUpdater);
+        TreeAddress createTreeFragment();
 
         Offset  startGroup( Name _aName, Flags::Field _aFlags );
         void    endGroup( Offset _nPos );
 
-        void    addSet( Name _aName, Flags::Field _aFlags, Address _aElementType );
+        void    addSet( Name _aName, Flags::Field _aFlags, SetElementAddress _aElementType );
 
         void    addValue( Name _aName, Flags::Field _aFlags,
                             AnyData::TypeCode _aValueType,
@@ -163,8 +147,8 @@ namespace configmgr
         class LinkSetNodes;
 
     private:
-        TreeAddress allocTreeFragment(UpdateAccessor & _anUpdater);
-        void linkTreeFragment(UpdateAccessor & _anUpdater, TreeAddress _aTreeAddr);
+    TreeAddress allocTreeFragment();
+        void linkTreeFragment(TreeAddress _aTreeAddr);
 
         Offset addNode(Name _aName, Flags::Field _aFlags, Type::Field _aType);
         void checkOffset(Offset _pos);
@@ -173,34 +157,23 @@ namespace configmgr
 
     class TreeNodeBuilder::CollectSetElements
     {
-        UpdateAccessor &    m_updater;
         TreeAddress         m_head;
     public:
         explicit
-        CollectSetElements(UpdateAccessor & _anUpdater)
-        : m_updater(_anUpdater)
-        {
-        }
+        CollectSetElements() : m_head(NULL) {}
 
         void resetElementList();
         void addElement(TreeAddress _aNewElement);
         List getElementListAndClear();
-
-        UpdateAccessor &    updater()   const { return m_updater; }
     };
 //-----------------------------------------------------------------------------
 
     class TreeNodeBuilder::LinkSetNodes : private SetVisitor
     {
-        UpdateAccessor &    m_updater;
         NodeAddress         m_aParentAddr;
     public:
         explicit
-        LinkSetNodes(UpdateAccessor & _anUpdater)
-        : m_updater(_anUpdater)
-        , m_aParentAddr()
-        {
-        }
+        LinkSetNodes() : m_aParentAddr(NULL) {}
 
         Result  linkTree(TreeAddress const & _aFragment);
         Result  linkSet(SetNodeAccess const & _aSet);
@@ -218,19 +191,13 @@ namespace configmgr
     {
     public:
         explicit
-        BasicDataTreeBuilder(UpdateAccessor & _anUpdater)
-        : m_updater(_anUpdater)
-        {}
+        BasicDataTreeBuilder() {}
 
-        TreeAddress createTree() { return m_builder.createTreeFragment(m_updater); }
+        TreeAddress createTree() { return m_builder.createTreeFragment(); }
 
     protected:
         TreeNodeBuilder&    builder()         { return m_builder; }
-        UpdateAccessor &    updater()   const { return m_updater; }
-        Accessor            accessor()  const { return m_updater.accessor(); }
-        Allocator           allocator() const { return m_updater.allocator(); }
     private:
-        UpdateAccessor &    m_updater;
         TreeNodeBuilder     m_builder;
     };
 //-----------------------------------------------------------------------------
@@ -241,9 +208,7 @@ namespace configmgr
         bool m_bWithDefaults;
     public:
         explicit
-        ConvertingDataTreeBuilder(UpdateAccessor & _anUpdater)
-        : BasicDataTreeBuilder(_anUpdater)
-        {}
+        ConvertingDataTreeBuilder() : BasicDataTreeBuilder() {}
 
         TreeAddress buildTree(OUString const & _aTreeName, INode const& _aNode, bool _bWithDefault);
         TreeAddress buildElement(INode const& _aNode, OUString const & _aTypeName, bool _bWithDefault);
@@ -253,7 +218,7 @@ namespace configmgr
         virtual void handle(ISubtree  const & _aNode);
         virtual void handle(OValueNode const & _aNode);
 
-        Address makeTemplateData(rtl::OUString const & _aTemplateName, rtl::OUString const & _aTemplateModule);
+        SetElementAddress makeTemplateData(rtl::OUString const & _aTemplateName, rtl::OUString const & _aTemplateModule);
 
         Name allocName(INode const & _aNode);
         State::Field makeState(node::Attributes const & _aAttributes);
@@ -269,13 +234,13 @@ namespace configmgr
         bool            m_bWithDefaults;
     public:
         explicit
-        ElementListBuilder(UpdateAccessor & _anUpdater)
-        : m_aCollector(_anUpdater)
+        ElementListBuilder()
+        : m_aCollector()
         , m_sTypeName()
         , m_bWithDefaults()
         {}
 
-        List buildElementList(ISubtree const & _aSet, bool _bWithDefaults);
+        TreeFragment *buildElementList(ISubtree const & _aSet, bool _bWithDefaults);
     private:
         void handleNode(INode const & _aSourceNode);
 
@@ -288,9 +253,7 @@ namespace configmgr
     {
     public:
         explicit
-        CopyingDataTreeBuilder(UpdateAccessor & _anUpdater)
-        : BasicDataTreeBuilder(_anUpdater)
-        {}
+        CopyingDataTreeBuilder() : BasicDataTreeBuilder() {}
 
         TreeAddress buildTree(TreeAccessor const & _aSourceTree);
 
@@ -304,7 +267,7 @@ namespace configmgr
         Result handle(GroupNodeAccess const & _aNode);
         Result handle(SetNodeAccess const & _aNode);
 
-        Address makeTemplateData(Accessor const & _aSourceAccessor, Address _aSourceTemplate);
+        SetElementAddress makeTemplateData(SetElementAddress _aSourceTemplate);
     };
 //-----------------------------------------------------------------------------
 
@@ -313,9 +276,7 @@ namespace configmgr
         TreeNodeBuilder::CollectSetElements m_aCollector;
     public:
         explicit
-        ElementListBuilder(UpdateAccessor & _anUpdater)
-        : m_aCollector(_anUpdater)
-        {}
+        ElementListBuilder() : m_aCollector() {}
 
         List buildElementList(SetNodeAccess const & _aSet);
     protected:
@@ -339,15 +300,15 @@ namespace configmgr
         }
 
         std::auto_ptr<INode>        buildNode(TreeAccessor  const& _aTree, bool _bUseTreeName);
-        std::auto_ptr<INode>        buildNode(NodeAccessRef  const& _aTree);
+        std::auto_ptr<INode>        buildNode(NodeAccess  const& _aTree);
 
         std::auto_ptr<ISubtree>     buildNodeTree(GroupNodeAccess const& _aGroupNode) const;
         std::auto_ptr<ISubtree>     buildNodeTree(SetNodeAccess const& _aSetNode) const;
         std::auto_ptr<OValueNode>   buildNodeTree(ValueNodeAccess const& _aValueNode) const
         { return this->convertNode(_aValueNode); }
 
-        static node::Attributes convertAttributes(NodeAccessRef const& _aNode)
-        { return _aNode.getAttributes(); }
+        static node::Attributes convertAttributes(NodeAccess const& _aNode)
+        { return _aNode->getAttributes(); }
     protected:
         using NodeVisitor::handle;
 
@@ -380,7 +341,7 @@ namespace configmgr
 
     private:
         Result handle(TreeAccessor const & _aElement);
-        Result handle(NodeAccessRef const & _aMember);
+        Result handle(NodeAccess const & _aMember);
     };
 //-----------------------------------------------------------------------------
 
@@ -388,20 +349,12 @@ namespace configmgr
     {
     public:
         explicit
-        DataTreeDefaultMerger(UpdateAccessor & _anUpdater)
-        : m_updater(_anUpdater)
-        {}
+        DataTreeDefaultMerger() {}
 
         void mergeDefaults(TreeAddress _aBaseAddress, INode const& _aDefaultNode);
     private:
         void handle(OValueNode const & _aNode);
         void handle(ISubtree  const & _aNode);
-    protected:
-        UpdateAccessor &    updater()   const { return m_updater; }
-        Accessor            accessor()  const { return m_updater.accessor(); }
-        Allocator           allocator() const { return m_updater.allocator(); }
-    private:
-        UpdateAccessor &    m_updater;
     };
 
 //-----------------------------------------------------------------------------
@@ -410,9 +363,7 @@ namespace configmgr
     {
     public:
         explicit
-        DataTreeCleanup(UpdateAccessor & _anUpdater)
-        : m_updater(_anUpdater)
-        {}
+        DataTreeCleanup() {}
 
         TreeAddress destroyTree(TreeAddress _aBaseAddress);
     private:
@@ -424,20 +375,14 @@ namespace configmgr
         void destroyData(sharable::GroupNode * _pNode);
         void destroyData(sharable::ValueNode * _pNode);
         void destroyData(sharable::SetNode   * _pNode);
-    private:
-        UpdateAccessor &    updater()   const { return m_updater; }
-        Accessor            accessor()  const { return m_updater.accessor(); }
-        Allocator           allocator() const { return m_updater.allocator(); }
-    private:
-        UpdateAccessor &    m_updater;
     };
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-TreeAddress buildTree(memory::UpdateAccessor& _aTargetMemory, TreeAccessor const& _aTree)
+TreeAddress buildTree(TreeAccessor const& _aTree)
 {
-    CopyingDataTreeBuilder aBuilder(_aTargetMemory);
+    CopyingDataTreeBuilder aBuilder;
 
     TreeAddress aResult = aBuilder.buildTree(_aTree);
 
@@ -445,9 +390,9 @@ TreeAddress buildTree(memory::UpdateAccessor& _aTargetMemory, TreeAccessor const
 }
 //-----------------------------------------------------------------------------
 
-TreeAddress buildTree(memory::UpdateAccessor& _aTargetMemory, rtl::OUString const & _aTreeName, INode const& _aNode, bool _bWithDefaults)
+TreeAddress buildTree(rtl::OUString const & _aTreeName, INode const& _aNode, bool _bWithDefaults)
 {
-    ConvertingDataTreeBuilder aBuilder(_aTargetMemory);
+    ConvertingDataTreeBuilder aBuilder;
 
     TreeAddress aResult = aBuilder.buildTree(_aTreeName, _aNode,_bWithDefaults);
 
@@ -455,9 +400,9 @@ TreeAddress buildTree(memory::UpdateAccessor& _aTargetMemory, rtl::OUString cons
 }
 //-----------------------------------------------------------------------------
 
-TreeAddress buildElementTree(memory::UpdateAccessor& _aTargetMemory, INode const& _aNode, rtl::OUString const & _aTypeName, bool _bWithDefaults)
+TreeAddress buildElementTree(INode const& _aNode, rtl::OUString const & _aTypeName, bool _bWithDefaults)
 {
-    ConvertingDataTreeBuilder aBuilder(_aTargetMemory);
+    ConvertingDataTreeBuilder aBuilder;
 
     TreeAddress aResult = aBuilder.buildElement(_aNode, _aTypeName, _bWithDefaults);
 
@@ -465,17 +410,17 @@ TreeAddress buildElementTree(memory::UpdateAccessor& _aTargetMemory, INode const
 }
 //-----------------------------------------------------------------------------
 
-void mergeDefaults(memory::UpdateAccessor& _aTargetMemory, TreeAddress _aBaseAddress, INode const& _aDefaultNode)
+void mergeDefaults(TreeAddress _aBaseAddress, INode const& _aDefaultNode)
 {
-    DataTreeDefaultMerger aMergeHelper(_aTargetMemory);
+    DataTreeDefaultMerger aMergeHelper;
 
     aMergeHelper.mergeDefaults(_aBaseAddress, _aDefaultNode);
 }
 //-----------------------------------------------------------------------------
 
-void destroyTree(memory::UpdateAccessor& _aTreeMemory, TreeAddress _aBaseAddress)
+void destroyTree(TreeAddress _aBaseAddress)
 {
-    DataTreeCleanup aCleaner(_aTreeMemory);
+    DataTreeCleanup aCleaner;
 
     aCleaner.destroyTree(_aBaseAddress);
 }
@@ -493,25 +438,25 @@ std::auto_ptr<INode> convertTree(TreeAccessor const & _aTree, bool _bUseTreeName
 inline
 void TreeNodeBuilder::CollectSetElements::resetElementList()
 {
-    OSL_ENSURE(m_head.isNull(), "Joining to a element list that was forgotten");
+    OSL_ENSURE(m_head == NULL, "Joining to a element list that was forgotten");
 }
 //-----------------------------------------------------------------------------
 
 inline
 List TreeNodeBuilder::CollectSetElements::getElementListAndClear()
 {
-    List aResult = m_head.addressValue();
-    m_head = TreeAddress();
+    List aResult = m_head;
+    m_head = NULL;
     return aResult;
 }
 //-----------------------------------------------------------------------------
 
 void TreeNodeBuilder::CollectSetElements::addElement(TreeAddress _aNewElement)
 {
-    if (TreeFragment * pNewFragment = TreeAccessor::access(_aNewElement,m_updater))
+    if (TreeFragment * pNewFragment = _aNewElement)
     {
         pNewFragment->header.parent = 0; // data not available here
-        pNewFragment->header.next   = m_head.addressValue();
+        pNewFragment->header.next   = m_head;
 
         m_head = _aNewElement;
     }
@@ -523,19 +468,19 @@ void TreeNodeBuilder::CollectSetElements::addElement(TreeAddress _aNewElement)
 
 NodeVisitor::Result TreeNodeBuilder::LinkSetNodes::linkTree(TreeAddress const & _aTree)
 {
-    TreeAccessor aTreeAccess(m_updater.accessor(), _aTree);
+    TreeAccessor aTreeAccess(_aTree);
 
-    TreeFragment const & rTreeData = aTreeAccess.data();
+    TreeFragment const & rTreeData = *aTreeAccess;
 
     NodeAddress aOldParent = m_aParentAddr;
-    m_aParentAddr = NodeAddress();
+    m_aParentAddr = NULL;
 
     Result eResult = CONTINUE;
 
     Offset nCount = rTreeData.header.count;
     for(Offset i=0; i < nCount; ++i)
     {
-        NodeAccessRef aNode(&aTreeAccess.accessor(),&rTreeData.nodes[i]);
+        NodeAccess aNode(&rTreeData.nodes[i]);
         eResult =this->visitNode( aNode );
 
         if (eResult == DONE) break;
@@ -549,12 +494,12 @@ NodeVisitor::Result TreeNodeBuilder::LinkSetNodes::linkTree(TreeAddress const & 
 
 NodeVisitor::Result TreeNodeBuilder::LinkSetNodes::linkSet(SetNodeAccess const & _aSet)
 {
-    OSL_ENSURE(m_aParentAddr.isNull(),"Linking set data already in progress");
-    m_aParentAddr = _aSet.address();
+    OSL_ENSURE(m_aParentAddr == NULL,"Linking set data already in progress");
+    m_aParentAddr = _aSet;
 
     Result aResult = this->visitElements(_aSet);
 
-    m_aParentAddr = NodeAddress();
+    m_aParentAddr = NULL;
 
     return aResult;
 }
@@ -562,11 +507,9 @@ NodeVisitor::Result TreeNodeBuilder::LinkSetNodes::linkSet(SetNodeAccess const &
 
 NodeVisitor::Result TreeNodeBuilder::LinkSetNodes::handle(TreeAccessor const & _aSourceTree)
 {
-    OSL_ENSURE(m_aParentAddr.is(),"Cannot link set element without parent address");
+    OSL_ENSURE(m_aParentAddr != NULL,"Cannot link set element without parent address");
 
-    TreeFragment * pFragment = _aSourceTree.access(_aSourceTree.address(), m_updater);
-
-    pFragment->header.parent = m_aParentAddr.addressValue();
+    _aSourceTree->header.parent = m_aParentAddr;
 
     return CONTINUE;
 }
@@ -638,41 +581,31 @@ void TreeNodeBuilder::resetTreeFragment(sharable::String _name, State::Field _st
 }
 //-----------------------------------------------------------------------------
 
-TreeAddress TreeNodeBuilder::allocTreeFragment(UpdateAccessor & _anUpdater)
+TreeAddress TreeNodeBuilder::allocTreeFragment()
 {
     OSL_ENSURE(m_nodes.size() == m_header.count, "TreeNodeBuilder: node count mismatch");
 
-    sal_uInt32 const nFragmentSize = sizeof(TreeFragment) + (m_header.count-1)*sizeof(Node);
+    TreeFragment *pFragment = TreeFragment::allocate(m_header.count);
+    pFragment->header = m_header;
+    std::copy(m_nodes.begin(),m_nodes.end(),pFragment->nodes);
 
-    OSL_ASSERT(nFragmentSize >= sizeof m_header + m_header.count*sizeof(Node));
-
-    Address aBaseAddress = _anUpdater.allocator().allocate(nFragmentSize);
-
-    TreeAddress aResult = TreeAddress( memory::Pointer(aBaseAddress) );
-
-    if (TreeFragment * pFragment = TreeAccessor::access(aResult,_anUpdater))
-    {
-        pFragment->header = m_header;
-        std::copy(m_nodes.begin(),m_nodes.end(),pFragment->nodes);
-    }
-
-    return aResult;
+    return TreeAddress( pFragment );
 }
 //-----------------------------------------------------------------------------
 
-void TreeNodeBuilder::linkTreeFragment(UpdateAccessor & _anUpdater, TreeAddress _aTreeFragment)
+void TreeNodeBuilder::linkTreeFragment(TreeAddress _aTreeFragment)
 {
-    LinkSetNodes(_anUpdater).linkTree(_aTreeFragment);
+    LinkSetNodes().linkTree(_aTreeFragment);
 }
 //-----------------------------------------------------------------------------
 
-TreeAddress TreeNodeBuilder::createTreeFragment(UpdateAccessor & _anUpdater)
+TreeAddress TreeNodeBuilder::createTreeFragment()
 {
-    TreeAddress aResult = allocTreeFragment(_anUpdater);
+    TreeAddress aResult = allocTreeFragment();
 
-    if (aResult.is())
+    if (aResult != NULL)
     {
-        linkTreeFragment(_anUpdater,aResult);
+        linkTreeFragment(aResult);
 
         m_nodes.clear(); // ownership of indirect data has gone ...
     }
@@ -708,7 +641,7 @@ void TreeNodeBuilder::endGroup( Offset _nPos )
 }
 //-----------------------------------------------------------------------------
 
-void TreeNodeBuilder::addSet( Name _aName, Flags::Field _aFlags, Address _aElementType )
+void TreeNodeBuilder::addSet( Name _aName, Flags::Field _aFlags, SetElementAddress _aElementType )
 {
     addNode(_aName,_aFlags,Type::nodetype_set);
 
@@ -738,10 +671,10 @@ void TreeNodeBuilder::addValue( Name _aName, Flags::Field _aFlags,
 
 TreeAddress CopyingDataTreeBuilder::buildTree(TreeAccessor const & _aSourceTree)
 {
-    OSL_ENSURE(_aSourceTree.isValid(), "Trying to build a tree from  NULL data");
-    if (!_aSourceTree.isValid()) return TreeAddress();
+    OSL_ENSURE(_aSourceTree != NULL, "Trying to build a tree from  NULL data");
+    if (_aSourceTree == NULL) return NULL;
 
-    TreeFragment const & aSrc = _aSourceTree.data();
+    TreeFragment const & aSrc = *_aSourceTree;
 
     sharable::String aTreeName = allocString( aSrc.getName());
     this->builder().resetTreeFragment(aTreeName, aSrc.header.state);
@@ -763,12 +696,12 @@ NodeVisitor::Result CopyingDataTreeBuilder::handle(ValueNodeAccess const & _aNod
 
     AnyData aNewValue, aNewDefault;
     if (aFlags & Flags::valueAvailable)
-        aNewValue = allocData(allocator(), aType, aSrc.getUserValue(_aNode.accessor()));
+        aNewValue = allocData(aType, aSrc.getUserValue());
     else
         aNewValue.data = 0;
 
     if (aFlags & Flags::defaultAvailable)
-        aNewDefault = allocData(allocator(), aType, aSrc.getDefaultValue(_aNode.accessor()));
+        aNewDefault = allocData(aType, aSrc.getDefaultValue());
     else
         aNewDefault.data = 0;
 
@@ -799,25 +732,22 @@ NodeVisitor::Result CopyingDataTreeBuilder::handle(SetNodeAccess const & _aNode)
 
     sharable::Name aNodeName = allocName( aSrc.info.getName());
     Flags::Field aFlags = aSrc.info.flags;
-    Address aTemplate = this->makeTemplateData(_aNode.accessor(), aSrc.elementType);
+    SetElementAddress aTemplate = this->makeTemplateData(aSrc.elementType);
 
     this->builder().addSet(aNodeName,aFlags,aTemplate);
 
     OSL_ASSERT( this->builder().lastNode().isSet() );
     SetNode& _aNewSet = this->builder().lastNode().set;
 
-    _aNewSet.elements = ElementListBuilder( this->updater() ).buildElementList(_aNode);
+    _aNewSet.elements = ElementListBuilder().buildElementList(_aNode);
 
     return CONTINUE;
 }
 //-----------------------------------------------------------------------------
 
-Address CopyingDataTreeBuilder::makeTemplateData(Accessor const & _aSourceAccessor, Address _aSourceTemplate)
+SetElementAddress CopyingDataTreeBuilder::makeTemplateData(SetElementAddress _aSourceTemplate)
 {
-    rtl::OUString aTemplateName      = SetNode::getTemplateDataName(_aSourceAccessor,_aSourceTemplate);
-    rtl::OUString aTemplateModule    = SetNode::getTemplateDataModule(_aSourceAccessor,_aSourceTemplate);
-
-    return SetNode::allocTemplateData(allocator(), aTemplateName, aTemplateModule );
+    return SetNode::copyTemplateData(_aSourceTemplate);
 }
 //-----------------------------------------------------------------------------
 
@@ -835,7 +765,7 @@ List CopyingDataTreeBuilder::ElementListBuilder::buildElementList(SetNodeAccess 
 
 NodeVisitor::Result CopyingDataTreeBuilder::ElementListBuilder::handle(TreeAccessor const & _aSourceTree)
 {
-    TreeAddress aNewElement = CopyingDataTreeBuilder(m_aCollector.updater()).buildTree(_aSourceTree);
+    TreeAddress aNewElement = CopyingDataTreeBuilder().buildTree(_aSourceTree);
 
     m_aCollector.addElement(aNewElement);
 
@@ -895,14 +825,15 @@ void ConvertingDataTreeBuilder::handle(ISubtree const & _aNode)
 
     if (_aNode.isSetNode())
     {
-        Address aTemplate = this->makeTemplateData(_aNode.getElementTemplateName(),_aNode.getElementTemplateModule());
+        SetElementAddress aTemplate = this->makeTemplateData(_aNode.getElementTemplateName(),
+                                 _aNode.getElementTemplateModule());
 
         this->builder().addSet(aNodeName,aFlags,aTemplate);
 
         OSL_ASSERT( this->builder().lastNode().isSet() );
         SetNode& _aNewSet = this->builder().lastNode().set;
 
-        _aNewSet.elements = ElementListBuilder(this->updater()).buildElementList(_aNode, m_bWithDefaults);
+        _aNewSet.elements = ElementListBuilder().buildElementList(_aNode, m_bWithDefaults);
     }
     else
     {
@@ -930,7 +861,7 @@ void ConvertingDataTreeBuilder::handle(OValueNode const & _aNode)
         uno::Any aValue = _aNode.getValue();
         if (aValue.hasValue())
         {
-            aNewValue = allocData(allocator(), aType, aValue);
+            aNewValue = allocData(aType, aValue);
             aFlags |= Flags::valueAvailable;
         }
     }
@@ -940,7 +871,7 @@ void ConvertingDataTreeBuilder::handle(OValueNode const & _aNode)
         uno::Any aDefault = _aNode.getDefault();
         if (aDefault.hasValue())
         {
-            aNewDefault = allocData(allocator(), aType, aDefault);
+            aNewDefault = allocData(aType, aDefault);
             aFlags |= Flags::defaultAvailable;
         }
     }
@@ -1005,9 +936,9 @@ Flags::Field ConvertingDataTreeBuilder::makeFlags(node::Attributes const & _aAtt
 }
 //-----------------------------------------------------------------------------
 
-Address ConvertingDataTreeBuilder::makeTemplateData(rtl::OUString const & _aTemplateName, rtl::OUString const & _aTemplateModule)
+SetElementAddress ConvertingDataTreeBuilder::makeTemplateData(rtl::OUString const & _aTemplateName, rtl::OUString const & _aTemplateModule)
 {
-    return SetNode::allocTemplateData(allocator(), _aTemplateName, _aTemplateModule );
+    return SetNode::allocTemplateData(_aTemplateName, _aTemplateModule );
 }
 //-----------------------------------------------------------------------------
 
@@ -1028,7 +959,7 @@ List ConvertingDataTreeBuilder::ElementListBuilder::buildElementList(ISubtree co
 
 void ConvertingDataTreeBuilder::ElementListBuilder::handleNode(INode const & _aSourceNode)
 {
-    TreeAddress aNewElement = ConvertingDataTreeBuilder(m_aCollector.updater())
+    TreeAddress aNewElement = ConvertingDataTreeBuilder()
                                  .buildElement(_aSourceNode,m_sTypeName,m_bWithDefaults);
 
     m_aCollector.addElement(aNewElement);
@@ -1062,7 +993,7 @@ std::auto_ptr<INode> ConvertingNodeBuilder::buildNode(TreeAccessor const & _aSou
 }
 //-----------------------------------------------------------------------------
 
-std::auto_ptr<INode> ConvertingNodeBuilder::buildNode(NodeAccessRef const & _aSourceNode)
+std::auto_ptr<INode> ConvertingNodeBuilder::buildNode(NodeAccess const & _aSourceNode)
 {
     OSL_ENSURE( !m_pNode.get(), "Old node tree will be dropped");
     this->visitNode(_aSourceNode);
@@ -1164,7 +1095,7 @@ NodeVisitor::Result ConvertingSubnodeBuilder::handle(TreeAccessor const & _aElem
 }
 //-----------------------------------------------------------------------------
 
-NodeVisitor::Result ConvertingSubnodeBuilder::handle(NodeAccessRef const & _aMember)
+NodeVisitor::Result ConvertingSubnodeBuilder::handle(NodeAccess const & _aMember)
 {
     OSL_ASSERT(!m_rParentNode.isSetNode());
     m_rParentNode.addChild( m_aSubnodeBuilder.buildNode(_aMember) );
@@ -1191,9 +1122,9 @@ void DataTreeDefaultMerger::handle(OValueNode const & /*_aNode*/)
 
 TreeAddress DataTreeCleanup::destroyTree(TreeAddress _aBaseAddress)
 {
-    TreeFragment * pData = TreeAccessor::access(_aBaseAddress,updater());
+    TreeFragment *pData = _aBaseAddress;
 
-    List aNext = pData->header.next;
+    TreeFragment *pNext = pData->header.next;
 
     Offset const nCount = pData->header.count;
 
@@ -1204,15 +1135,15 @@ TreeAddress DataTreeCleanup::destroyTree(TreeAddress _aBaseAddress)
         destroyNode( addressOfNodeAt(_aBaseAddress,i) );
     }
 
-    allocator().deallocate( _aBaseAddress.addressValue() );
+    TreeFragment::free_shallow( pData );
 
-    return TreeAddress( Pointer(aNext) );
+    return TreeAddress( pNext );
 }
 //-----------------------------------------------------------------------------
 
 void DataTreeCleanup::destroyNode(NodeAddress _aNodeAddress)
 {
-    Node * pNode = NodeAccess::access(_aNodeAddress,updater());
+    Node * pNode = _aNodeAddress;
 
     Type::Field aTypeTag = pNode->node.info.type;
     switch ( aTypeTag & Type::mask_nodetype )
@@ -1253,16 +1184,16 @@ void DataTreeCleanup::destroyData(NodeInfo * _pNodeInfo)
 
 void DataTreeCleanup::destroyData(sharable::SetNode * _pNode)
 {
-    TreeAddress aElement( Pointer( _pNode->elements ) );
+    TreeAddress aElement( _pNode->elements );
 
-    Address aTemplate = _pNode->elementType;;
+    SetElementAddress aTemplate = _pNode->elementType;;
 
     destroyData(&_pNode->info);
 
-    while (aElement.is())
+    while (aElement != NULL)
         aElement = destroyTree(aElement);
 
-    SetNode::releaseTemplateData( allocator(), aTemplate );
+    SetNode::releaseTemplateData( aTemplate );
 }
 //-----------------------------------------------------------------------------
 
@@ -1281,10 +1212,10 @@ void DataTreeCleanup::destroyData(sharable::ValueNode * _pNode)
     destroyData(&_pNode->info);
 
     if (aFlags & Flags::valueAvailable)
-        freeData( allocator(), aValueType, _pNode->value );
+        freeData( aValueType, _pNode->value );
 
     if (aFlags & Flags::defaultAvailable)
-        freeData( allocator(), aValueType, _pNode->defaultValue );
+        freeData( aValueType, _pNode->defaultValue );
 
 }
 //-----------------------------------------------------------------------------
