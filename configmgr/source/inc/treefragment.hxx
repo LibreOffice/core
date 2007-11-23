@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treefragment.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:49:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:25:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,16 +79,16 @@ namespace configmgr
     */
         struct TreeFragmentHeader
         {
-            List            next;       // next sibling set element or template
-            String          name;       // element-name/template name
+            struct TreeFragment *next;       // next sibling set element or template
+            String               name;       // element-name/template name
             union // context
             {
-                Address     parent;     // parent node
-                String      component;  // component name
+                union Node *parent;          // parent node
+                String      component;       // component name
             };
-            Offset          count;      // number of contained nodes
-            State::Field    state;
-            Byte            reserved;
+            Offset               count;      // number of contained nodes
+            State::Field         state;
+            sal_uInt8            reserved;
        };
     //-----------------------------------------------------------------------------
     /* a tree fragment is stored as a variable-sized struct
@@ -138,9 +138,16 @@ namespace configmgr
 
             rtl::OUString               getName() const;
             configmgr::node::Attributes getAttributes()const;
+
+            static TreeFragment *allocate(sal_uInt32 nFragments);
+            static void free_shallow( TreeFragment *pFragment );
         };
     //-----------------------------------------------------------------------------
+
     }
+  namespace data {
+    typedef sharable::TreeFragment * TreeAddress;
+  }
 //-----------------------------------------------------------------------------
 }
 
