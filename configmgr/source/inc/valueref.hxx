@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valueref.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:02:40 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:28:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ namespace configmgr
             // checking
             bool isEmpty() const;
             // checking
-            bool isValidNode(data::Accessor const& _accessor) const;
+            bool isValidNode() const;
             // hashing
             size_t hashCode() const;
             // containing node this
@@ -141,7 +141,7 @@ namespace configmgr
     //-------------------------------------------------------------------------
 
         typedef std::vector<SubNodeID>      SubNodeIDList;
-        void getAllChildrenHelper(data::Accessor const& _aAccessor, NodeID const& aNode, SubNodeIDList& aList);
+        void getAllChildrenHelper(NodeID const& aNode, SubNodeIDList& aList);
 
     //-------------------------------------------------------------------------
         inline bool operator!=(SubNodeID const& lhs, SubNodeID const& rhs)
