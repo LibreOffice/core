@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_DataLabel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:46:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:47:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,9 @@
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
 #endif
+//SfxIntegerListItem
+#include <svtools/ilstitem.hxx>
+
 // header for define RET_OK
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
@@ -71,6 +74,10 @@
 #ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
 #endif
+#ifndef _SVT_CONTROLDIMS_HRC_
+#include <svtools/controldims.hrc>
+#endif
+
 
 //.............................................................................
 namespace chart
@@ -132,6 +139,8 @@ DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAt
     m_aCBCategory(pWindow, SchResId(CB_CATEGORY)),
     m_aCBSymbol(pWindow, SchResId(CB_SYMBOL)),
     m_aSeparatorResources(pWindow),
+    m_aFT_LabelPlacement(pWindow, SchResId(FT_LABEL_PLACEMENT)),
+    m_aLB_LabelPlacement(pWindow, SchResId(LB_LABEL_PLACEMENT)),
     m_pNumberFormatter(0),
     m_bNumberFormatMixedState(true),
     m_bPercentFormatMixedState(true),
@@ -144,6 +153,28 @@ DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAt
     m_pWindow(pWindow),
     m_pPool(rInAttrs.GetPool())
 {
+    std::map< sal_Int32, XubString > aPlacementToStringMap;
+    for( sal_Int32 nEnum=0; nEnum<m_aLB_LabelPlacement.GetEntryCount(); ++nEnum )
+        aPlacementToStringMap[nEnum]=m_aLB_LabelPlacement.GetEntry(static_cast<USHORT>(nEnum));
+
+    ::com::sun::star::uno::Sequence < sal_Int32 > aAvailabelPlacementList;
+    const SfxPoolItem *pPoolItem = NULL;
+    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS, TRUE, &pPoolItem) == SFX_ITEM_SET )
+        aAvailabelPlacementList =((const SfxIntegerListItem*)pPoolItem)->GetConstSequence();
+
+    m_aLB_LabelPlacement.Clear();
+
+    for( sal_Int32 nN=0; nN<aAvailabelPlacementList.getLength(); ++nN )
+    {
+        USHORT nListBoxPos = static_cast<USHORT>( nN );
+        sal_Int32 nPlacement = aAvailabelPlacementList[nN];
+        m_aPlacementToListBoxMap[nPlacement]=nListBoxPos;
+        m_aListBoxToPlacementMap[nListBoxPos]=nPlacement;
+        m_aLB_LabelPlacement.InsertEntry( aPlacementToStringMap[nPlacement] );
+    }
+
+    m_aLB_LabelPlacement.SetDropDownLineCount(m_aLB_LabelPlacement.GetEntryCount());
+
     Size aPBSize( m_aPB_NumberFormatForPercent.GetSizePixel() );
     long nMinWidth = ::std::max( m_aPB_NumberFormatForPercent.CalcMinimumSize().getWidth(), m_aPB_NumberFormatForValue.CalcMinimumSize().getWidth() );
     aPBSize.setWidth( nMinWidth+20 );//the min with is to small to fit, hm... so add alittle
@@ -153,9 +184,30 @@ DataLabelResources::DataLabelResources( Window* pWindow, const SfxItemSet& rInAt
 
     long nWantedMinRightBorder = m_aPB_NumberFormatForPercent.GetPosPixel().X() +  m_aPB_NumberFormatForPercent.GetSizePixel().Width() - 1;
 
+    Size aSize( m_aFT_LabelPlacement.GetSizePixel() );
+    aSize.setWidth( m_aFT_LabelPlacement.CalcMinimumSize().getWidth() );
+    m_aFT_LabelPlacement.SetSizePixel(aSize);
+
+    Size aControlDistance( pWindow->LogicToPixel( Size(RSC_SP_CTRL_DESC_X,RSC_SP_CTRL_GROUP_Y), MapMode(MAP_APPFONT) ) );
+    long nWantedMinLeftBorder = m_aFT_LabelPlacement.GetPosPixel().X() + aSize.getWidth () + aControlDistance.Width();;
+
     m_aSeparatorResources.PositionBelowControl(m_aCBSymbol);
-    m_aSeparatorResources.AlignListBoxWidthAndXPos( -1, nWantedMinRightBorder );
+    m_aSeparatorResources.AlignListBoxWidthAndXPos( nWantedMinLeftBorder, nWantedMinRightBorder, m_aLB_LabelPlacement.CalcMinimumSize().getWidth() );
     m_aSeparatorResources.Show(true);
+
+    aSize = m_aLB_LabelPlacement.GetSizePixel();
+    aSize.setWidth( m_aSeparatorResources.GetCurrentListBoxSize().getWidth() );
+    m_aLB_LabelPlacement.SetSizePixel(aSize);
+
+    long nYDiff = m_aFT_LabelPlacement.GetPosPixel().Y() - m_aLB_LabelPlacement.GetPosPixel().Y();
+    Point aPos( m_aSeparatorResources.GetCurrentListBoxPosition() );
+    aPos.Y() = m_aSeparatorResources.GetBottom();
+    aPos.Y() += aControlDistance.Height();
+    m_aLB_LabelPlacement.SetPosPixel(aPos);
+
+    aPos.X() = m_aFT_LabelPlacement.GetPosPixel().X();
+    aPos.Y() += nYDiff;
+    m_aFT_LabelPlacement.SetPosPixel(aPos);
 
     m_aPB_NumberFormatForValue.SetClickHdl( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
     m_aPB_NumberFormatForPercent.SetClickHdl( LINK( this, DataLabelResources, NumberFormatDialogHdl ) );
@@ -248,6 +300,9 @@ void DataLabelResources::EnableControls()
         if( m_aCBCategory.IsChecked() )
             ++nNumberOfCheckedLabelParts;
         m_aSeparatorResources.Enable( nNumberOfCheckedLabelParts > 1 );
+        bool bEnablePlacement = nNumberOfCheckedLabelParts > 0 && m_aLB_LabelPlacement.GetEntryCount()>1;
+        m_aFT_LabelPlacement.Enable( bEnablePlacement );
+        m_aLB_LabelPlacement.Enable( bEnablePlacement );
     }
 
     m_aPB_NumberFormatForValue.Enable( m_pNumberFormatter && m_aCBNumber.IsChecked() );
@@ -281,6 +336,12 @@ BOOL DataLabelResources::FillItemSet( SfxItemSet& rOutAttrs ) const
         rOutAttrs.Put( SfxBoolItem( SCHATTR_DATADESCR_SHOW_SYMBOL, m_aCBSymbol.IsChecked()) );
 
     rOutAttrs.Put( SfxStringItem( SCHATTR_DATADESCR_SEPARATOR, m_aSeparatorResources.GetValue() ) );
+    ::std::map< USHORT, sal_Int32 >::const_iterator aIt( m_aListBoxToPlacementMap.find(m_aLB_LabelPlacement.GetSelectEntryPos()) );
+    if(aIt!=m_aListBoxToPlacementMap.end())
+    {
+        sal_Int32 nValue = aIt->second;
+        rOutAttrs.Put( SfxInt32Item( SCHATTR_DATADESCR_PLACEMENT, nValue ) );
+    }
 
     return TRUE;
 }
@@ -303,6 +364,22 @@ void DataLabelResources::Reset(const SfxItemSet& rInAttrs)
         m_aSeparatorResources.SetValue( ((const SfxStringItem*)pPoolItem)->GetValue() );
     else
         m_aSeparatorResources.SetDefault();
+
+    if( rInAttrs.GetItemState(SCHATTR_DATADESCR_PLACEMENT, TRUE, &pPoolItem) == SFX_ITEM_SET )
+    {
+        sal_Int32 nPlacement = ((const SfxInt32Item*)pPoolItem)->GetValue();
+        ::std::map< sal_Int32, USHORT >::const_iterator aIt( m_aPlacementToListBoxMap.find(nPlacement) );
+        if(aIt!=m_aPlacementToListBoxMap.end())
+        {
+            USHORT nPos = aIt->second;
+            m_aLB_LabelPlacement.SelectEntryPos( nPos );
+        }
+        else
+            m_aLB_LabelPlacement.SetNoSelection();
+    }
+    else
+        m_aLB_LabelPlacement.SetNoSelection();
+
 
     EnableControls();
 }
