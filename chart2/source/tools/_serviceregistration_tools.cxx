@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _serviceregistration_tools.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:02:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:08:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include "Scaling.hxx"
 #include "ErrorBar.hxx"
 #include "RegressionCurveModel.hxx"
+#include "RegressionEquation.hxx"
 
 static struct ::cppu::ImplementationEntry g_entries_chart2_tools[] =
 {
@@ -149,6 +150,14 @@ static struct ::cppu::ImplementationEntry g_entries_chart2_tools[] =
           ::chart::PotentialRegressionCurve::create
         , ::chart::PotentialRegressionCurve::getImplementationName_Static
         , ::chart::PotentialRegressionCurve::getSupportedServiceNames_Static
+        , ::cppu::createSingleComponentFactory
+        , 0
+        , 0
+    }
+   ,{
+          ::chart::RegressionEquation::create
+        , ::chart::RegressionEquation::getImplementationName_Static
+        , ::chart::RegressionEquation::getSupportedServiceNames_Static
         , ::cppu::createSingleComponentFactory
         , 0
         , 0
