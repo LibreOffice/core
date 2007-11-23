@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:57:00 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 13:10:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@ TARGET := test_com_sun_star_lib_uno_bridges_javaremote
 
 PACKAGE := com$/sun$/star$/lib$/uno$/bridges$/javaremote
 JAVATESTFILES := \
+    Bug51323_Test.java \
     Bug92174_Test.java \
     Bug97697_Test.java \
     Bug98508_Test.java \
