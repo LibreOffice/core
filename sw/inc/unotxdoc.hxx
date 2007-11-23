@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:09:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:22:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTLANGUAGES_HPP
+#include <com/sun/star/document/XDocumentLanguages.hpp>
+#endif
 #ifndef _SFX_ITEMPROP_HXX
 #include <svtools/itemprop.hxx>
 #endif
@@ -171,18 +174,18 @@
 #include <RefreshListenerContainer.hxx>
 #endif
 
-#define __IFC29 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
-Ifc17, Ifc18, Ifc19, Ifc20, Ifc21, Ifc22, Ifc23, Ifc24, Ifc25, Ifc26, Ifc27, Ifc28, Ifc29
+#define __IFC30 Ifc1, Ifc2, Ifc3, Ifc4, Ifc5, Ifc6, Ifc7, Ifc8, Ifc9, Ifc10, Ifc11, Ifc12, Ifc13, Ifc14, Ifc15, Ifc16, \
+Ifc17, Ifc18, Ifc19, Ifc20, Ifc21, Ifc22, Ifc23, Ifc24, Ifc25, Ifc26, Ifc27, Ifc28, Ifc29, Ifc30
 
-#define __CLASS_IFC29 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, \
+#define __CLASS_IFC30 class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, \
 class Ifc8, class Ifc9, class Ifc10, class Ifc11, class Ifc12, class Ifc13, class Ifc14, class Ifc15, class Ifc16, \
 class Ifc17, class Ifc18, class Ifc19, class Ifc20, class Ifc21, class Ifc22, class Ifc23, class Ifc24,\
-class Ifc25, class Ifc26, class Ifc27, class Ifc28, class Ifc29
+class Ifc25, class Ifc26, class Ifc27, class Ifc28, class Ifc29, class Ifc30
 
-#define __PUBLIC_IFC29 public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9, public Ifc10, public Ifc11, public Ifc12, \
+#define __PUBLIC_IFC30 public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8, public Ifc9, public Ifc10, public Ifc11, public Ifc12, \
 public Ifc13, public Ifc14, public Ifc15, public Ifc16, public Ifc17, public Ifc18, \
 public Ifc19, public Ifc20, public Ifc21, public Ifc22, public Ifc23 , public Ifc24, \
-public Ifc25, public Ifc26, public Ifc27, public Ifc28, public Ifc29
+public Ifc25, public Ifc26, public Ifc27, public Ifc28, public Ifc29, public Ifc30
 
 #ifndef _CPPUHELPER_IMPLBASE_EX_HXX_
 #include <cppuhelper/implbase_ex.hxx>
@@ -191,7 +194,7 @@ public Ifc25, public Ifc26, public Ifc27, public Ifc28, public Ifc29
 #ifndef _CPPUHELPER_IMPLBASE_EX_PRE_HXX_
 #include <cppuhelper/implbase_ex_pre.hxx>
 #endif
-#define __IFC_EX_TYPE_INIT29( class_cast ) \
+#define __IFC_EX_TYPE_INIT30( class_cast ) \
     __IFC_EX_TYPE_INIT( class_cast, 1 ), __IFC_EX_TYPE_INIT( class_cast, 2 ), \
     __IFC_EX_TYPE_INIT( class_cast, 3 ), __IFC_EX_TYPE_INIT( class_cast, 4 ), \
     __IFC_EX_TYPE_INIT( class_cast, 5 ), __IFC_EX_TYPE_INIT( class_cast, 6 ), \
@@ -206,12 +209,13 @@ public Ifc25, public Ifc26, public Ifc27, public Ifc28, public Ifc29
     __IFC_EX_TYPE_INIT( class_cast, 23 ), __IFC_EX_TYPE_INIT( class_cast, 24 ), \
     __IFC_EX_TYPE_INIT( class_cast, 25 ), __IFC_EX_TYPE_INIT( class_cast, 26 ), \
     __IFC_EX_TYPE_INIT( class_cast, 27 ), __IFC_EX_TYPE_INIT( class_cast, 28 ), \
-    __IFC_EX_TYPE_INIT( class_cast, 29 )
+    __IFC_EX_TYPE_INIT( class_cast, 29 ),__IFC_EX_TYPE_INIT( class_cast, 30 )
 
 #ifndef _CPPUHELPER_IMPLBASE_EX_POST_HXX_
 #include <cppuhelper/implbase_ex_post.hxx>
 #endif
-__DEF_IMPLHELPER_EX( 29 )
+
+__DEF_IMPLHELPER_EX( 30 )
 
 class SwDoc;
 class SwDocShell;
@@ -230,7 +234,7 @@ SV_DECL_PTRARR(ActionContextArr, UnoActionContextPtr, 4, 4)
  ******************************************************************************/
 
 
-typedef cppu::WeakImplHelper29
+typedef cppu::WeakImplHelper30
 <
     ::com::sun::star::text::XTextDocument,
     ::com::sun::star::text::XLineNumberingProperties,
@@ -260,7 +264,8 @@ typedef cppu::WeakImplHelper29
     ::com::sun::star::util::XRefreshable,
     ::com::sun::star::util::XLinkUpdate,
     ::com::sun::star::view::XRenderable,
-    ::com::sun::star::xforms::XFormsSupplier
+    ::com::sun::star::xforms::XFormsSupplier,
+    ::com::sun::star::document::XDocumentLanguages
 >
 SwXTextDocumentBaseClass;
 
@@ -491,6 +496,9 @@ public:
 
     // ::com::sun::star::xforms::XFormsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL getXForms(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::document::XDocumentLanguages
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > SAL_CALL getDocumentLanguages( ::sal_Int16 nScriptTypes, ::sal_Int16 nCount ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XDocumentInfo > SAL_CALL getDocumentInfo() throw (::com::sun::star::uno::RuntimeException);
 
