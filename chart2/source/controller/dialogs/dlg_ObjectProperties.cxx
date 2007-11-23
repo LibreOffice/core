@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:45:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:46:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #include "tp_SeriesStatistic.hxx"
 #include "tp_SeriesToAxis.hxx"
 #include "tp_TitleRotation.hxx"
+#include "tp_RegressionOptions.hxx"
 #include "ResId.hxx"
 #include "ViewElementListProvider.hxx"
 #include "macros.hxx"
@@ -369,10 +370,14 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
         case OBJECTTYPE_DATA_ERRORS_X:
         case OBJECTTYPE_DATA_ERRORS_Y:
         case OBJECTTYPE_DATA_ERRORS_Z:
-        case OBJECTTYPE_DATA_CURVE:
         case OBJECTTYPE_DATA_AVERAGE_LINE:
         case OBJECTTYPE_DATA_STOCK_RANGE:
             AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
+            break;
+
+        case OBJECTTYPE_DATA_CURVE:
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
+            AddTabPage(TP_REGRESSION_OPTIONS, String(SchResId(STR_PAGE_REGRESSION_OPTIONS)), RegressionOptionsTabPage::Create,  NULL);
             break;
 
         case OBJECTTYPE_DATA_STOCK_LOSS:
@@ -390,6 +395,14 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
         case OBJECTTYPE_AXIS_UNITLABEL:
         case OBJECTTYPE_UNKNOWN:
             // nothing
+            break;
+        case OBJECTTYPE_DATA_CURVE_EQUATION:
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_BORDER)));
+            AddTabPage(RID_SVXPAGE_AREA, String(SchResId(STR_PAGE_AREA)));
+            AddTabPage(RID_SVXPAGE_TRANSPARENCE, String(SchResId(STR_PAGE_TRANSPARENCY)));
+            AddTabPage(RID_SVXPAGE_CHAR_NAME, String(SchResId(STR_PAGE_CHARACTERS)));
+            AddTabPage(RID_SVXPAGE_CHAR_EFFECTS, String(SchResId(STR_PAGE_FONT_EFFECTS)));
+            AddTabPage(RID_SVXPAGE_NUMBERFORMAT, String(SchResId(STR_PAGE_NUMBERS)));
             break;
     }
 }
@@ -502,6 +515,9 @@ void SchAttribTabDlg::PageCreated(USHORT nId, SfxTabPage &rPage)
                 m_pParameter->HasRegressionProperties() );
             static_cast< SchStatisticTabPage & >( rPage ).SetAxisMinorStepWidthForErrorBarDecimals(
                 m_fAxisMinorStepWidthForErrorBarDecimals );
+            break;
+
+        case TP_REGRESSION_OPTIONS:
             break;
     }
 }
