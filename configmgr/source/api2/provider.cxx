@@ -4,9 +4,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:59:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:08:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
 #endif
-
 #define THISREF() static_cast< ::cppu::OWeakObject* >(this)
 
 namespace configmgr
@@ -122,6 +121,7 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     void OProvider::attachToContext()
     {
+        UnoApiLock aLock;
         ::osl::MutexGuard aGuard(ServiceComponentImpl::rBHelper.rMutex);
         OSL_ASSERT(!m_xDisposeListener.is());
         if (m_xContext.is())
@@ -142,6 +142,7 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     uno::Reference< lang::XComponent > OProvider::releaseContext()
     {
+        UnoApiLock aLock;
         ::osl::MutexGuard aGuard(ServiceComponentImpl::rBHelper.rMutex);
 
         uno::Reference< lang::XComponent > xContextComp(m_xContext, uno::UNO_QUERY);
@@ -170,6 +171,7 @@ namespace configmgr
 
     void OProvider::discardContext(uno::Reference< lang::XComponent > const & xContext)
     {
+        UnoApiLock aLock;
         if (xContext.is())
         {
             uno::Reference< uno::XComponentContext > xCC(xContext,uno::UNO_QUERY);
@@ -201,6 +203,7 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     uno::Any SAL_CALL OProvider::queryInterface(uno::Type const& rType) throw(uno::RuntimeException)
     {
+        UnoApiLock aLock;
         uno::Any aRet( ServiceComponentImpl::queryInterface(rType) );
         if ( !aRet.hasValue() )
             aRet = OProvider_Base::queryInterface(rType);
@@ -210,6 +213,7 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     void OProvider::implConnect(OProviderImpl& _rFreshProviderImpl, const ContextReader& _rSettings) throw(uno::Exception)
     {
+        UnoApiLock aLock;
         if (!_rFreshProviderImpl.initSession(_rSettings))
             throw uno::Exception(::rtl::OUString::createFromAscii("Could not connect to the configuration. Please check your settings."), THISREF() );
     }
@@ -217,6 +221,7 @@ namespace configmgr
     //-----------------------------------------------------------------------------
        void SAL_CALL OProvider::disposing(com::sun::star::lang::EventObject const& /*rEvt*/) throw()
     {
+        UnoApiLock aLock;
         releaseContext();
         this->dispose();
     }
@@ -224,6 +229,7 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     void SAL_CALL OProvider::disposing()
     {
+        UnoApiLock aLock;
         uno::Reference< lang::XComponent > xComp = releaseContext();
 
         ServiceComponentImpl::disposing();
