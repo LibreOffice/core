@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PolarLabelPositionHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:19:56 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:11:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ public:
                         , sal_Int32 nScreenValueOffsetInRadiusDirection=0 ) const;
 
     ::com::sun::star::awt::Point getLabelScreenPositionAndAlignmentForUnitCircleValues(
-                        LabelAlignment& rAlignment, bool bOutsidePosition
+                        LabelAlignment& rAlignment, sal_Int32 nLabelPlacement /*see ::com::sun::star::chart::DataLabelPlacement*/
                         , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
                         , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
                         , double fLogicZ
