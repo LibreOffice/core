@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatehelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:24:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:34:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,6 @@
 #endif
 
 // -----------------------------------------------------------------------------
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
-#endif
 #ifndef INCLUDED_SHARABLE_NODE_HXX
 #include "node.hxx"
 #endif
@@ -115,28 +112,28 @@ namespace configmgr
 class AdjustUpdate : ChangeTreeModification
 {
     SubtreeChange&      m_rChangeList;  // list which containes changes merged with the existing nodes
-    data::NodeAccessRef m_aRefNode;     // reference node needed for merging
+    data::NodeAccess    m_aRefNode;     // reference node needed for merging
     OTreeNodeConverter  m_aNodeConverter;
 public:
     static bool adjust(SubtreeChange& _rResultTree, SubtreeChange& _aUpdateTree,
-                        data::NodeAccessRef const& _aTargetNode)
+                        data::NodeAccess const& _aTargetNode)
     {
         return AdjustUpdate(_rResultTree,_aTargetNode).impl_adjust(_aUpdateTree);
     }
     static bool adjust(SubtreeChange& _rResultTree, SubtreeChange& _aUpdateTree,
-                        data::NodeAccessRef const& _aTargetNode,
+                        data::NodeAccess const& _aTargetNode,
                         OTreeNodeFactory& _rNodeFactory)
     {
         return AdjustUpdate(_rResultTree,_aTargetNode,_rNodeFactory).impl_adjust(_aUpdateTree);
     }
 private:
-    AdjustUpdate(SubtreeChange& rList, data::NodeAccessRef const & _aNode)
+    AdjustUpdate(SubtreeChange& rList, data::NodeAccess const & _aNode)
         :m_rChangeList(rList)
         ,m_aRefNode(_aNode)
         ,m_aNodeConverter()
     {}
 
-    AdjustUpdate(SubtreeChange& rList, data::NodeAccessRef const & _aNode, OTreeNodeFactory& _rNodeFactory)
+    AdjustUpdate(SubtreeChange& rList, data::NodeAccess const & _aNode, OTreeNodeFactory& _rNodeFactory)
         :m_rChangeList(rList)
         ,m_aRefNode(_aNode)
         ,m_aNodeConverter(_rNodeFactory)
@@ -157,12 +154,10 @@ private:
 
 class ApplyUpdate : public ChangeTreeModification
 {
-    memory::UpdateAccessor &    m_rUpdateAccess;
     data::NodeAddress           m_aCurrentNode;
 public:
-    ApplyUpdate(memory::UpdateAccessor & _rUpdateAccess, data::NodeAddress _aNode)
-    : m_rUpdateAccess(_rUpdateAccess)
-    , m_aCurrentNode(_aNode)
+    ApplyUpdate(data::NodeAddress _aNode)
+    : m_aCurrentNode(_aNode)
     {}
 
     void handle(ValueChange& aValueNode);
@@ -171,7 +166,7 @@ public:
     void handle(SubtreeChange& aSubtree);
 
     static
-    void applyChange(ValueChange& _rValueChange, memory::UpdateAccessor & _rUpdateAccess, data::ValueNodeAddress & _aValueNodeAddr);
+    void applyChange(ValueChange& _rValueChange, data::ValueNodeAddress & _aValueNodeAddr);
 };
 //--------------------------------------------------------------------------
 class ApplyValueChange
@@ -181,26 +176,26 @@ class ApplyValueChange
 
 public:
     static
-    data::ValueNodeAccess node(memory::UpdateAccessor & _rUpdateAccess, data::ValueNodeAddress & _aValueNodeAddr)
-    { return data::ValueNodeAccess(_rUpdateAccess.accessor(),_aValueNodeAddr); }
+    data::ValueNodeAccess node(data::ValueNodeAddress & _aValueNodeAddr)
+    { return data::ValueNodeAccess(_aValueNodeAddr); }
 
     static
-    uno::Any getValue(memory::UpdateAccessor & _rUpdateAccess, data::ValueNodeAddress & _aValueNodeAddr)
-    { return node(_rUpdateAccess,_aValueNodeAddr).getValue(); }
+    uno::Any getValue(data::ValueNodeAddress & _aValueNodeAddr)
+    { return node(_aValueNodeAddr).getValue(); }
 
     static
-    uno::Any getDefault(memory::UpdateAccessor & _rUpdateAccess, data::ValueNodeAddress & _aValueNodeAddr)
-    { return node(_rUpdateAccess,_aValueNodeAddr).getDefaultValue(); }
+    uno::Any getDefault(data::ValueNodeAddress & _aValueNodeAddr)
+    { return node(_aValueNodeAddr).getDefaultValue(); }
 
     static
-    void apply(ValueChange& _rValueChange, memory::UpdateAccessor & _rUpdateAccess, data::ValueNodeAddress & _aValueNodeAddr);
+    void apply(ValueChange& _rValueChange, data::ValueNodeAddress & _aValueNodeAddr);
 };
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
 
 
 // adjust a set of changes to the target tree, return true, if there are changes left
-    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAccessRef const & _aRootNode)
+    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAccess const & _aRootNode)
     {
         SubtreeChange aResultTree(_rUpdateTree, SubtreeChange::NoChildCopy());
 
@@ -213,38 +208,37 @@ public:
 //--------------------------------------------------------------------------
 
 // adjust a set of changes to the target tree, return true, if there are changes left
-    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, memory::UpdateAccessor& _anUpdateAccess, data::NodeAddress _aRootNode)
+    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAddress _aRootNode)
     {
-        data::NodeAccess aTargetNode(_anUpdateAccess.accessor(),_aRootNode);
+        data::NodeAccess aTargetNode(_aRootNode);
         return adjustUpdateToTree(_rUpdateTree, aTargetNode);
     }
 //--------------------------------------------------------------------------
 
 // apply a already matching set of changes to the target tree
-    void applyUpdateToTree(SubtreeChange& _anUpdateTree, memory::UpdateAccessor& _anUpdateAccess, data::NodeAddress _aRootNode)
+    void applyUpdateToTree(SubtreeChange& _anUpdateTree, data::NodeAddress _aRootNode)
     {
-        ApplyUpdate aUpdater(_anUpdateAccess,_aRootNode);
+        ApplyUpdate aUpdater(_aRootNode);
         _anUpdateTree.forEachChange(aUpdater);
-
     }
 //--------------------------------------------------------------------------
     static inline
     bool adjust_helper(SubtreeChange& _rResultTree, SubtreeChange& _aUpdateTree,
-                        memory::UpdateAccessor& _anUpdateAccess, data::NodeAddress _aTargetAddress )
+               data::NodeAddress _aTargetAddress )
     {
-        data::NodeAccess aTargetNode(_anUpdateAccess.accessor(),_aTargetAddress);
+        data::NodeAccess aTargetNode(_aTargetAddress);
         return AdjustUpdate::adjust(_rResultTree, _aUpdateTree, aTargetNode);
     }
 //--------------------------------------------------------------------------
 // apply a set of changes to the target tree
-    void applyUpdateWithAdjustmentToTree(SubtreeChange& _anUpdateTree, memory::UpdateAccessor& _anUpdateAccess, data::NodeAddress _aRootNode)
+    void applyUpdateWithAdjustmentToTree(SubtreeChange& _anUpdateTree, data::NodeAddress _aRootNode)
     {
-        // POST: pSubtree = pSubtree + aChangeList
-        SubtreeChange aActualChanges(_anUpdateTree, SubtreeChange::NoChildCopy());
+    // POST: pSubtree = pSubtree + aChangeList
+    SubtreeChange aActualChanges(_anUpdateTree, SubtreeChange::NoChildCopy());
 
-        if ( adjust_helper(aActualChanges,_anUpdateTree, _anUpdateAccess, _aRootNode) )
+        if ( adjust_helper(aActualChanges,_anUpdateTree, _aRootNode) )
         {
-            applyUpdateToTree(aActualChanges, _anUpdateAccess, _aRootNode);
+        applyUpdateToTree(aActualChanges, _aRootNode);
         }
         _anUpdateTree.swap(aActualChanges);
 
@@ -295,7 +289,7 @@ void AdjustUpdate::handle(ValueChange& _rChange)
     {
         // We need to find the element in the tree
         data::NodeAccess aChildNodeAcc = data::getSubnode(m_aRefNode, getChangeNodeName(_rChange));
-        data::NodeAccessRef aChildNode(aChildNodeAcc);
+        data::NodeAccess aChildNode(aChildNodeAcc);
 
         // We have a node so we can keep the Change and the values do not differ
         if (aChildNode.isValid())
@@ -331,7 +325,7 @@ void AdjustUpdate::handle(SubtreeChange& _rChange)
     {
         // We need to find the element in the tree
         data::NodeAccess aChildNodeAcc = data::getSubnode(m_aRefNode, getChangeNodeName(_rChange));
-        data::NodeAccessRef aChildNode(aChildNodeAcc);
+        data::NodeAccess aChildNode(aChildNodeAcc);
 
         // if there is a node we continue
         if (aChildNode.isValid())
@@ -421,29 +415,29 @@ void ApplyValueChange::adjust(uno::Any& aActual, uno::Any const& aTarget)
 
 //--------------------------------------------------------------------------
 // _rValueChange.applyTo(_aValueNode)
-void ApplyValueChange::apply(ValueChange& _rValueChange, memory::UpdateAccessor & _rUpdateAccess, data::ValueNodeAddress & _aValueNodeAddr)
+void ApplyValueChange::apply(ValueChange& _rValueChange, data::ValueNodeAddress & _aValueNodeAddr)
 {
     using data::ValueNodeAccess;
 
     switch (_rValueChange.getMode())
     {
     case ValueChange::wasDefault:
-        OSL_ASSERT(node(_rUpdateAccess,_aValueNodeAddr).isDefault());
+        OSL_ASSERT(node(_aValueNodeAddr).isDefault());
 
     case ValueChange::changeValue:
-        adjust( _rValueChange.m_aOldValue, getValue(_rUpdateAccess,_aValueNodeAddr));
-        ValueNodeAccess::setValue(_rUpdateAccess,_aValueNodeAddr,_rValueChange.getNewValue());
+        adjust( _rValueChange.m_aOldValue, getValue(_aValueNodeAddr));
+        ValueNodeAccess::setValue(_aValueNodeAddr,_rValueChange.getNewValue());
         break;
 
     case ValueChange::setToDefault:
-        adjust( _rValueChange.m_aOldValue,  getValue(_rUpdateAccess,_aValueNodeAddr));
-        adjust( _rValueChange.m_aValue,     getDefault(_rUpdateAccess,_aValueNodeAddr));
-        ValueNodeAccess::setToDefault(_rUpdateAccess,_aValueNodeAddr);
+        adjust( _rValueChange.m_aOldValue,  getValue(_aValueNodeAddr));
+        adjust( _rValueChange.m_aValue,     getDefault(_aValueNodeAddr));
+        ValueNodeAccess::setToDefault(_aValueNodeAddr);
         break;
 
     case ValueChange::changeDefault:
-        adjust( _rValueChange.m_aOldValue,  getDefault(_rUpdateAccess,_aValueNodeAddr));
-        ValueNodeAccess::changeDefault(_rUpdateAccess,_aValueNodeAddr,_rValueChange.getNewValue());
+        adjust( _rValueChange.m_aOldValue,  getDefault(_aValueNodeAddr));
+        ValueNodeAccess::changeDefault(_aValueNodeAddr,_rValueChange.getNewValue());
         break;
 
     default:
@@ -456,34 +450,34 @@ void ApplyValueChange::apply(ValueChange& _rValueChange, memory::UpdateAccessor 
 void ApplyUpdate::handle(ValueChange& _rChange)
 {
     // Change a Value
-    OSL_ENSURE(m_aCurrentNode.is(),"Cannot apply ValueChange without node");
+    OSL_ENSURE(m_aCurrentNode != NULL,"Cannot apply ValueChange without node");
 
-    data::NodeAddress aChildNodeAddr = data::getSubnodeAddress(m_rUpdateAccess, m_aCurrentNode, getChangeNodeName(_rChange));
-    OSL_ENSURE(aChildNodeAddr.is(),"Cannot apply Change: No node to change");
+    data::NodeAddress aChildNodeAddr = data::getSubnodeAddress(m_aCurrentNode, getChangeNodeName(_rChange));
+    OSL_ENSURE(aChildNodeAddr != NULL,"Cannot apply Change: No node to change");
 
-    data::ValueNodeAddress aValueAddr = data::toValueNodeAddress(m_rUpdateAccess, aChildNodeAddr);
-    OSL_ENSURE(aValueAddr.is(),"Cannot apply ValueChange: Node is not a value");
+    data::ValueNodeAddress aValueAddr = aChildNodeAddr->valueData();
+    OSL_ENSURE(aValueAddr != NULL,"Cannot apply ValueChange: Node is not a value");
 
-    if (aValueAddr.is())
-        ApplyValueChange::apply(_rChange,m_rUpdateAccess,aValueAddr);
+    if (aValueAddr != NULL)
+    ApplyValueChange::apply(_rChange,aValueAddr);
 }
 //--------------------------------------------------------------------------
 
 void ApplyUpdate::handle(SubtreeChange& _rChange)
 {
     // handle traversion
-    OSL_ENSURE(m_aCurrentNode.is(),"Cannot apply SubtreeChange without node");
+    OSL_ENSURE(m_aCurrentNode != NULL,"Cannot apply SubtreeChange without node");
 
-    data::NodeAddress aChildNodeAddr = data::getSubnodeAddress(m_rUpdateAccess, m_aCurrentNode, getChangeNodeName(_rChange));
-    OSL_ENSURE(aChildNodeAddr.is(),"Cannot apply Change: No node to change");
+    data::NodeAddress aChildNodeAddr = data::getSubnodeAddress(m_aCurrentNode, getChangeNodeName(_rChange));
+    OSL_ENSURE(aChildNodeAddr != NULL,"Cannot apply Change: No node to change");
 
-    OSL_ENSURE( data::toGroupNodeAddress(m_rUpdateAccess, aChildNodeAddr).is() ||
-                data::toSetNodeAddress(m_rUpdateAccess, aChildNodeAddr).is() ,
+    OSL_ENSURE( data::toGroupNodeAddress(aChildNodeAddr) != NULL ||
+                data::toSetNodeAddress(aChildNodeAddr) != NULL ,
                 "Cannot Apply SubtreeChange: Node is not an inner node");
 
-    if (aChildNodeAddr.is())
+    if (aChildNodeAddr != NULL)
     {
-        data::NodeAccess::access(aChildNodeAddr, m_rUpdateAccess)->node.info.markAsDefault( _rChange.isToDefault() );
+        aChildNodeAddr->node.info.markAsDefault( _rChange.isToDefault() );
 
         data::NodeAddress aOldNode = m_aCurrentNode;
         m_aCurrentNode = aChildNodeAddr;
@@ -497,29 +491,29 @@ void ApplyUpdate::handle(SubtreeChange& _rChange)
 
 void ApplyUpdate::handle(AddNode& _rChange)
 {
-    OSL_ENSURE(m_aCurrentNode.is(),"Cannot apply AddNode without node");
+    OSL_ENSURE(m_aCurrentNode != NULL,"Cannot apply AddNode without node");
 
-    data::SetNodeAddress aSetNodeAddr = data::toSetNodeAddress(m_rUpdateAccess, m_aCurrentNode);
-    OSL_ENSURE(aSetNodeAddr.is(),"Cannot apply AddNode: Node is not a set node");
+    data::SetNodeAddress aSetNodeAddr = data::toSetNodeAddress(m_aCurrentNode);
+    OSL_ENSURE(aSetNodeAddr != NULL,"Cannot apply AddNode: Node is not a set node");
 
     // Add a new element
-    if (aSetNodeAddr.is())
+    if (aSetNodeAddr != NULL)
     {
-        if (_rChange.isReplacing())
-        {
+    if (_rChange.isReplacing())
+    {
             data::TreeAddress aOldNodeAddr =
-                data::SetNodeAccess::removeElement(m_rUpdateAccess,aSetNodeAddr,getChangeNodeName(_rChange));
+                data::SetNodeAccess::removeElement(aSetNodeAddr,getChangeNodeName(_rChange));
 
-            OSL_ENSURE(aOldNodeAddr.is(), "ApplyUpdate: AddNode: can't recover node being replaced");
+            OSL_ENSURE(aOldNodeAddr != NULL, "ApplyUpdate: AddNode: can't recover node being replaced");
 
-            data::TreeAccessor aOldNodeAccess(m_rUpdateAccess.accessor(),aOldNodeAddr);
+            data::TreeAccessor aOldNodeAccess(aOldNodeAddr);
             _rChange.takeReplacedTree( data::TreeSegment::createNew(aOldNodeAccess) );
         }
 
-        data::TreeAddress aNewAddress = data::buildTree(m_rUpdateAccess, _rChange.getNewTree().getTreeAccess());
-        OSL_ENSURE(aNewAddress.is(), "ApplyUpdate: AddNode: could not create new element");
+        data::TreeAddress aNewAddress = data::buildTree(_rChange.getNewTree().getTreeAccess());
+        OSL_ENSURE(aNewAddress != NULL, "ApplyUpdate: AddNode: could not create new element");
 
-        data::SetNodeAccess::addElement(m_rUpdateAccess,aSetNodeAddr,aNewAddress);
+        data::SetNodeAccess::addElement(aSetNodeAddr,aNewAddress);
 
         _rChange.setInsertedAddress( aNewAddress );
     }
@@ -528,20 +522,20 @@ void ApplyUpdate::handle(AddNode& _rChange)
 
 void ApplyUpdate::handle(RemoveNode& _rChange)
 {
-    OSL_ENSURE(m_aCurrentNode.is(),"Cannot apply RemoveNode without node");
+    OSL_ENSURE(m_aCurrentNode != NULL,"Cannot apply RemoveNode without node");
 
-    data::SetNodeAddress aSetNodeAddr = data::toSetNodeAddress(m_rUpdateAccess, m_aCurrentNode);
-    OSL_ENSURE(aSetNodeAddr.is(),"Cannot apply RemoveNode: Node is not a set node");
+    data::SetNodeAddress aSetNodeAddr = data::toSetNodeAddress(m_aCurrentNode);
+    OSL_ENSURE(aSetNodeAddr != NULL,"Cannot apply RemoveNode: Node is not a set node");
 
     // Remove an element
-    if (aSetNodeAddr.is())
+    if (aSetNodeAddr != NULL)
     {
         data::TreeAddress aOldNodeAddr =
-            data::SetNodeAccess::removeElement(m_rUpdateAccess,aSetNodeAddr,getChangeNodeName(_rChange));
+            data::SetNodeAccess::removeElement(aSetNodeAddr,getChangeNodeName(_rChange));
 
-        OSL_ENSURE(aOldNodeAddr.is(), "ApplyUpdate: Remove: can't recover node being removed");
+        OSL_ENSURE(aOldNodeAddr != NULL, "ApplyUpdate: Remove: can't recover node being removed");
 
-        data::TreeAccessor aOldNodeAccess(m_rUpdateAccess.accessor(),aOldNodeAddr);
+        data::TreeAccessor aOldNodeAccess(aOldNodeAddr);
         _rChange.takeRemovedTree( data::TreeSegment::createNew(aOldNodeAccess) );
     }
 }
@@ -552,10 +546,10 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
     {
     protected:
         SubtreeChange&      m_rChangeList;
-        data::NodeAccessRef m_aCacheNode;
+        data::NodeAccess    m_aCacheNode;
 
     public:
-        ForwardTreeDifferenceBuilder(SubtreeChange& rList, data::NodeAccessRef const & _aCacheNode)
+        ForwardTreeDifferenceBuilder(SubtreeChange& rList, data::NodeAccess const & _aCacheNode)
         : m_rChangeList(rList)
         , m_aCacheNode(_aCacheNode)
         {
@@ -655,7 +649,7 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
         {
         }
 
-        Result applyToChildren(data::NodeAccessRef const & _aCacheNode)
+        Result applyToChildren(data::NodeAccess const & _aCacheNode)
         {
             if (data::GroupNodeAccess::isInstance(_aCacheNode))
             {
@@ -691,7 +685,7 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
             return CONTINUE;
         }
 
-        virtual Result handle(data::NodeAccessRef const & _aCacheNode)
+        virtual Result handle(data::NodeAccess const & _aCacheNode)
         {
             // value nodes are handled separately
             OSL_ASSERT(!data::ValueNodeAccess::isInstance(_aCacheNode));
@@ -762,7 +756,8 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
             else
             {
                 // Remove Node
-                std::auto_ptr<Change> pRemove(new RemoveNode(aElementName,_aCacheElement.data().isNew()));
+                std::auto_ptr<Change> pRemove(new RemoveNode(aElementName,
+                                 _aCacheElement->isNew()));
 
                 m_rChangeList.addChange(pRemove);
 
@@ -774,7 +769,7 @@ void ApplyUpdate::handle(RemoveNode& _rChange)
 //--------------------------------------------------------------------------
 
 // apply a set of changes to the target tree, return true, if there are changes found
-    bool createUpdateFromDifference(SubtreeChange& _rResultingUpdateTree, data::NodeAccessRef const & _aExistingData, ISubtree const & _aNewData)
+    bool createUpdateFromDifference(SubtreeChange& _rResultingUpdateTree, data::NodeAccess const & _aExistingData, ISubtree const & _aNewData)
     {
         OSL_ENSURE( _aExistingData.isValid(), "Trying to create diffrence for empty data" );
     // create the differences
