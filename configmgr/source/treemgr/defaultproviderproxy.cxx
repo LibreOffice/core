@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultproviderproxy.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:28:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:40:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,6 @@
 #ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include "options.hxx"
 #endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
-#endif
 
 namespace configmgr
 {
@@ -82,7 +79,6 @@ DefaultProviderProxy::~DefaultProviderProxy()
 
 /// tries to load a default instance of the specified node (which must be within the request range owned)
 std::auto_ptr<ISubtree> DefaultProviderProxy::getDefaultTree(
-                            memory::UpdateAccessor& /*_aDestinationSpace*/,
                             AbsolutePath const& _aLocation
                        ) const CFG_UNO_THROW_ALL()
 {
@@ -104,9 +100,7 @@ bool DefaultProviderProxy::fetchDefaultData()  CFG_UNO_THROW_ALL()
     OSL_PRECOND(m_pDefaultTreeManager, "No tree to fetch defaults into");
     if (!m_pDefaultTreeManager) return false;
 
-    memory::UpdateAccessor anAccessToken(m_pDefaultTreeManager->getDataSegment(m_aBaseLocation,m_aOptions));
-
-    return !! m_pDefaultTreeManager->fetchDefaultData(anAccessToken,m_aBaseLocation,m_aOptions);
+    return !! m_pDefaultTreeManager->fetchDefaultData(m_aBaseLocation,m_aOptions);
 }
 //-----------------------------------------------------------------------------
     }
