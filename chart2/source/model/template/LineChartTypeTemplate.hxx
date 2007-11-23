@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:49:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:02:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,8 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ ChartTypeTemplate ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >
+                getChartTypeForIndex( sal_Int32 nChartTypeIndex );
     virtual sal_Int32 getDimension() const;
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
 
