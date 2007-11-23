@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treemanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:59:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:25:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,17 +104,12 @@ namespace configmgr
         /** ctor
         */
         explicit
-        TreeManager(BackendCacheRef const & _xBackend, memory::HeapManager & _rCacheHeapManager);
+        TreeManager(BackendCacheRef const & _xBackend);
 
         // disposing the cache before destroying
         void dispose();
 
-        memory::HeapManager & getCacheHeapManager() const;
-
         // ITreeManager
-        virtual memory::Segment* getDataSegment(AbsolutePath const& _rAccessor,
-                                                RequestOptions const& _aOptions);
-
         /** requests a node given by it's path. Basicly, this means
             that the node is fetch from the cache when it contains it else it ask the server
             system into it's cache.
@@ -126,10 +121,9 @@ namespace configmgr
                                                 RequestOptions const& _aOptions
                                                ) CFG_UNO_THROW_ALL(  );
 
-        virtual void updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  );
+        virtual void updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  );
 
-        virtual void saveAndNotifyUpdate(memory::Accessor const& _aChangedDataAccessor,
-                                            TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  );
+        virtual void saveAndNotifyUpdate(TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  );
 
         virtual void releaseSubtree(AbsolutePath const& aSubtreePath,
                                     RequestOptions const& _aOptions ) CFG_NOTHROW();
@@ -145,8 +139,7 @@ namespace configmgr
         virtual void enableAsync(const sal_Bool& bEnableAsync) CFG_NOTHROW() ;
 
         // IDefaultableTreeManager
-        virtual sal_Bool fetchDefaultData(  memory::UpdateAccessor& _aAccessToken,
-                                            AbsolutePath const& aSubtreePath,
+        virtual sal_Bool fetchDefaultData(  AbsolutePath const& aSubtreePath,
                                             RequestOptions const& _aOptions
                                          ) CFG_UNO_THROW_ALL(  );
 
@@ -155,8 +148,7 @@ namespace configmgr
                                                             const RequestOptions& _aOptions
                                                           ) CFG_UNO_THROW_ALL(  );
         // ITemplateManager
-        virtual data::TreeAccessor requestTemplate( memory::Accessor const& _aAccessor,
-                                                    Name const& aName, Name const& aModule
+        virtual data::TreeAccessor requestTemplate( Name const& aName, Name const& aModule
                                                   ) CFG_UNO_THROW_ALL(  );
 
         IConfigBroadcaster* getBroadcaster() { return this; }
@@ -173,7 +165,7 @@ namespace configmgr
 
         AbsolutePath encodeTemplateLocation(const Name& _rLogicalTemplateName, const Name &_rModule);
 
-        void fireChanges(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChangeTree, sal_Bool _bError);
+        void fireChanges(TreeChangeList const& aChangeTree, sal_Bool _bError);
 
     private:
         CacheRef getCacheAlways(RequestOptions const & _aOptions);
