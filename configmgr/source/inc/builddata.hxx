@@ -4,9 +4,9 @@
  *
  *  $RCSfile: builddata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:43:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:15:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #ifndef CONFIGMGR_BUILDDATA_HXX
 #define CONFIGMGR_BUILDDATA_HXX
 
+#ifndef INCLUDED_SHARABLE_TREEFRAGMENT_HXX
+#include "treefragment.hxx"
+#endif
 #ifndef INCLUDED_MEMORY
 #define INCLUDED_MEMORY
 #include <memory>
@@ -50,23 +53,21 @@ namespace configmgr
     class ISubtree;
     class ValueNode;
 //-----------------------------------------------------------------------------
-    namespace memory { class Accessor; class UpdateAccessor; }
-//-----------------------------------------------------------------------------
+    namespace sharable { struct TreeFragment; }
     namespace data
     {
 //-----------------------------------------------------------------------------
-        class TreeAddress;
         class TreeAccessor;
 //-----------------------------------------------------------------------------
-        TreeAddress buildTree(memory::UpdateAccessor& _aTargetMemory, TreeAccessor const& _aTree);
+        TreeAddress buildTree(TreeAccessor const& _aTree);
 //-----------------------------------------------------------------------------
-        TreeAddress buildTree(memory::UpdateAccessor& _aTargetMemory, rtl::OUString const & _aTreeName, INode const& _aNode, bool _bWithDefaults);
+        TreeAddress buildTree(rtl::OUString const & _aTreeName, INode const& _aNode, bool _bWithDefaults);
 //-----------------------------------------------------------------------------
-        TreeAddress buildElementTree(memory::UpdateAccessor& _aTargetMemory, INode const& _aNode, rtl::OUString const & _aTypeName, bool _bWithDefaults);
+        TreeAddress buildElementTree(INode const& _aNode, rtl::OUString const & _aTypeName, bool _bWithDefaults);
 //-----------------------------------------------------------------------------
-        void mergeDefaults(memory::UpdateAccessor& _aTargetMemory, TreeAddress _aBaseAddress, INode const& _aDefaultNode);
+        void mergeDefaults(TreeAddress _aBaseAddress, INode const& _aDefaultNode);
 //-----------------------------------------------------------------------------
-        void destroyTree(memory::UpdateAccessor& _aTreeMemory, TreeAddress _aBaseAddress);
+        void destroyTree(TreeAddress _aBaseAddress);
 //-----------------------------------------------------------------------------
         std::auto_ptr<INode> convertTree(TreeAccessor const & _aTree, bool _bUseTreeName);
 //-----------------------------------------------------------------------------
