@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequence.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:55:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:24:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,19 +56,17 @@ namespace configmgr
         typedef Vector Sequence; // alternative name
     //-----------------------------------------------------------------------------
 
-        Sequence allocSequence(memory::Allocator const& _anAllocator, AnyData::TypeCode _aElementType, ::sal_Sequence const * _pSeqData);
-    //    Sequence copySequence(memory::Allocator const& _anAllocator, AnyData::TypeCode _aElementType, Sequence _aSeq);
-        void     freeSequence(memory::Allocator const& _anAllocator, AnyData::TypeCode _aElementType, Sequence _aSeq);
+        Sequence allocSequence(AnyData::TypeCode _aElementType, ::sal_Sequence const * _pSeqData);
+        void     freeSequence(AnyData::TypeCode _aElementType, Sequence _aSeq);
 
-        ::sal_Sequence * readSequence(memory::Accessor const& _anAccessor, AnyData::TypeCode _aElementType, Sequence _aSeq);
-        ::com::sun::star::uno::Any readAnySequence(memory::Accessor const& _anAccessor, AnyData::TypeCode _aElementType, Sequence _aSeq);
+        ::sal_Sequence * readSequence(AnyData::TypeCode _aElementType, Sequence _aSeq);
+        ::com::sun::star::uno::Any readAnySequence(AnyData::TypeCode _aElementType, Sequence _aSeq);
     //-----------------------------------------------------------------------------
 
-        Sequence allocBinary(memory::Allocator const& _anAllocator, ::com::sun::star::uno::Sequence<sal_Int8> const & _aBinaryValue);
-    //    Sequence copyBinary(memory::Allocator const& _anAllocator, Sequence _aSeq);
-        void freeBinary(memory::Allocator const& _anAllocator, Sequence _aSeq);
+        Sequence allocBinary(::com::sun::star::uno::Sequence<sal_Int8> const & _aBinaryValue);
+        void freeBinary(Sequence _aSeq);
 
-        ::com::sun::star::uno::Sequence<sal_Int8> readBinary(memory::Accessor const& _anAccessor, Sequence _aSeq);
+        ::com::sun::star::uno::Sequence<sal_Int8> readBinary(Sequence _aSeq);
     //-----------------------------------------------------------------------------
 
         template <class ET>
@@ -80,19 +78,19 @@ namespace configmgr
         }
 
         template <class ET>
-        Sequence allocSequence(memory::Allocator const& _anAllocator, ::com::sun::star::uno::Sequence<ET> const & _aSeq)
+        Sequence allocSequence(::com::sun::star::uno::Sequence<ET> const & _aSeq)
         {
             AnyData::TypeCode aTC = getElementTypeCode(_aSeq);
             ::sal_Sequence const * pSeqData = _aSeq.get();
-            return allocSequence(_anAllocator, aTC, pSeqData);
+            return allocSequence(aTC, pSeqData);
         }
 
         template <class ET>
-        void readSequence(::com::sun::star::uno::Sequence<ET> & _rSeq, memory::Accessor const& _anAccessor, Sequence _aSeq)
+        void readSequence(::com::sun::star::uno::Sequence<ET> & _rSeq, Sequence _aSeq)
         {
             AnyData::TypeCode aElementType = getElementTypeCode(_rSeq);
 
-            ::sal_Sequence * pNewSequence = readSequence(_anAccessor, aElementType, _aSeq);
+            ::sal_Sequence * pNewSequence = readSequence(aElementType, _aSeq);
 
             if (!pNewSequence) return;
 
@@ -102,11 +100,11 @@ namespace configmgr
         }
 
         template <class ET>
-        bool readSequence(::com::sun::star::uno::Sequence<ET> & _rSeq, memory::Accessor const& _anAccessor, AnyData::TypeCode _aElementType, Sequence _aSeq)
+        bool readSequence(::com::sun::star::uno::Sequence<ET> & _rSeq, AnyData::TypeCode _aElementType, Sequence _aSeq)
         {
             if (getElementTypeCode(_rSeq) != _aElementType) return false;
 
-            ::sal_Sequence * pNewSequence = readSequence(_anAccessor, _aElementType, _aSeq);
+            ::sal_Sequence * pNewSequence = readSequence(_aElementType, _aSeq);
 
             if (!pNewSequence) return false;
 
