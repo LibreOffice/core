@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.115 $
+#   $Revision: 1.116 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-17 13:26:27 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 16:48:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -328,9 +328,11 @@ SHL4OBJS=       \
                 $(SLO)$/dropdownboxtoolbarcontroller.obj  \
                 $(SLO)$/uriabbreviation.obj               \
                 $(SLO)$/popupmenudispatcher.obj           \
-                $(SLO)$/windowcommanddispatch.obj			\
-                $(SLO)$/menubarmerger.obj				  \
-                $(SLO)$/toolbarmerger.obj
+                $(SLO)$/windowcommanddispatch.obj         \
+                $(SLO)$/menubarmerger.obj                 \
+                $(SLO)$/toolbarmerger.obj                 \
+                $(SLO)$/langselectionstatusbarcontroller.obj \
+                $(SLO)$/langselectionmenucontroller.obj
 
 SHL4STDLIBS=	\
                 $(FWILIB)                           \
@@ -347,7 +349,8 @@ SHL4STDLIBS=	\
                 $(CPPULIB)							\
                 $(VOSLIB)							\
                 $(SALLIB)					        \
-                $(UCBHELPERLIB)
+                $(UCBHELPERLIB)                     \
+                $(I18NISOLANGLIB)
 
 SHL4DEF=		$(MISC)$/$(SHL4TARGET).def
 SHL4DEPN=		$(SHL1IMPLIBN) $(SHL1TARGETN) $(SHL2IMPLIBN) $(SHL2TARGETN)
