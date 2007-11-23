@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:04:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:35:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1057,7 +1057,7 @@ SvXMLImportContext* SchXMLChartContext::CreateChildContext(
                                                   meDataRowSource,
                                                   maSeriesDefaultsAndStyles,
                                                   maChartTypeServiceName,
-                                                  maLSequencesPerIndex );
+                                                  maLSequencesPerIndex, maChartSize );
             break;
 
         case XML_TOK_CHART_TITLE:
@@ -1130,6 +1130,7 @@ void SchXMLChartContext::InitChart(
     const OUString & rChartTypeServiceName, // currently the old service name
     sal_Bool /* bSetSwitchData */ )
 {
+    maChartSize = aChartSize;
     uno::Reference< chart::XChartDocument > xDoc = mrImportHelper.GetChartDocument();
     DBG_ASSERT( xDoc.is(), "No valid document!" );
     uno::Reference< frame::XModel > xModel (xDoc, uno::UNO_QUERY );
