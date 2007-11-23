@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confevents.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:44:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:16:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef CONFIGMGR_API_EVENTS_HXX_
 #define CONFIGMGR_API_EVENTS_HXX_
 
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/simplereferenceobject.hxx>
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
@@ -51,19 +51,18 @@ namespace configmgr
     struct TreeChangeList;
     class RequestOptions;
 
-    namespace memory { class Accessor; }
     namespace configuration { class AbsolutePath; }
     using configuration::AbsolutePath;
 
     struct IConfigBroadcaster;
-    struct IConfigListener : public virtual salhelper::SimpleReferenceObject
+    struct IConfigListener : public virtual configmgr::SimpleReferenceObject
     {
         virtual void disposing(IConfigBroadcaster* pSource) = 0;
     };
     struct INodeListener : IConfigListener
     {
-        virtual void nodeChanged(memory::Accessor const& _aChangedDataAccessor, Change const& aChange, AbsolutePath const& aPath, IConfigBroadcaster* pSource) = 0;
-        virtual void nodeDeleted(memory::Accessor const& _aChangedDataAccessor, AbsolutePath const& aPath, IConfigBroadcaster* pSource) = 0;
+        virtual void nodeChanged(Change const& aChange, AbsolutePath const& aPath, IConfigBroadcaster* pSource) = 0;
+        virtual void nodeDeleted(AbsolutePath const& aPath, IConfigBroadcaster* pSource) = 0;
     };
     typedef rtl::Reference<INodeListener> INodeListenerRef;
 
@@ -89,7 +88,7 @@ namespace configmgr
         virtual void removeListener(const RequestOptions& _aOptions, INodeListenerRef const& pListener);
 
     protected:
-        virtual void fireChanges(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& _aChanges, sal_Bool _bError);
+        virtual void fireChanges(TreeChangeList const& _aChanges, sal_Bool _bError);
     protected:
         virtual ConfigChangeBroadcastHelper* getBroadcastHelper(const RequestOptions& _aOptions, bool bCreate) = 0;
         ConfigChangeBroadcastHelper* newBroadcastHelper(); // needed to implement the preceding
