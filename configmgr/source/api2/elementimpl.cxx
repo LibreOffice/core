@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementimpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:57:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,6 +200,8 @@ Reference< uno::XInterface > implGetParent(NodeAccess& rNode, SetElement& /*rEle
 void implSetParent(NodeAccess& rNode, InnerElement& /*rElement*/, const Reference< uno::XInterface >& /*xParent*/ )
     throw(NoSupportException, RuntimeException)
 {
+    UnoApiLock aLock;
+
     rNode.checkAlive(); // Does locking internally, checks for disposed nodes
 
     // TODO(?): allow for xParent == getParent()
@@ -213,6 +215,8 @@ void implSetParent(NodeAccess& rNode, InnerElement& /*rElement*/, const Referenc
 void implSetParent(NodeAccess& rNode, SetElement& rElement, const Reference< uno::XInterface >& xParent )
     throw(NoSupportException, RuntimeException)
 {
+    UnoApiLock aLock;
+
     //implSetParent(rNode,xParent);
     // TODO: lock the whole transaction ???? - would need Uno Tunneling ?
     using css::container::XNameContainer;
@@ -335,6 +339,8 @@ OUString implGetName(NodeAccess& rNode, NodeElement& ) throw(RuntimeException)
 // UNSUPPORTED method
 void implSetName(NodeAccess & rNode, NodeElement& /*rElement*/, const OUString& /*aName*/ ) throw(RuntimeException)
 {
+    UnoApiLock aLock;
+
     typedef RuntimeException CantRenameException;
 
     rNode.checkAlive(); // Does locking internally, checks for disposed nodes
@@ -349,6 +355,8 @@ void implSetName(NodeAccess & rNode, NodeElement& /*rElement*/, const OUString& 
 // TODO: Implementations for elements to be added to a container node
 void implSetName(NodeAccess& rNode, SetElement& rElement, const OUString& aName ) throw(RuntimeException)
 {
+    UnoApiLock aLock;
+
     // TODO: Implement
     NodeElement& rDelegate = rElement;
     implSetName(rNode,rDelegate,aName); // delegate to unsupported version
@@ -362,6 +370,8 @@ void implSetName(NodeAccess& rNode, SetElement& rElement, const OUString& aName 
 
 void implDispose( SetElement& rElement) throw(uno::RuntimeException)
 {
+    UnoApiLock aLock;
+
     if (!rElement.disposeTree(false))
     {
         throw uno::RuntimeException(
@@ -373,6 +383,8 @@ void implDispose( SetElement& rElement) throw(uno::RuntimeException)
 
 void implDispose( RootElement& rElement) throw(uno::RuntimeException)
 {
+    UnoApiLock aLock;
+
     if (!rElement.disposeTree())
     {
         throw lang::DisposedException(
@@ -384,18 +396,27 @@ void implDispose( RootElement& rElement) throw(uno::RuntimeException)
 
 void implDisposeObject( NodeAccess& ,SetElement& rElement) throw(uno::RuntimeException)
 {
+    UnoApiLock aLock;
+// FIXME: should we hold a ref on the element over this ?
+// call apitreeaccess.hxx (doGetUnoInterface) & hold a ref / unref ?
+// [or!] - call getApiTree & ref/unref on that ?
+// [or!] - hold the ref inside the dispose method itself ...
     rElement.disposeTree(true);
 }
 //-----------------------------------------------------------------------------
 
 void implDisposeObject( NodeAccess& , RootElement& rElement) throw(uno::RuntimeException)
 {
+    UnoApiLock aLock;
+
     rElement.disposeTree();
 }
 //-----------------------------------------------------------------------------
 
 void implDisposeObject( NodeAccess& rNode, InnerElement& ) throw(uno::RuntimeException)
 {
+    UnoApiLock aLock;
+
     rNode.disposeNode();
 }
 //-----------------------------------------------------------------------------
@@ -468,6 +489,7 @@ lang::Locale implGetLocale( RootElement& rElement ) throw(uno::RuntimeException)
 
 void implSetLocale( RootElement& rElement, const css::lang::Locale& /*eLocale*/ ) throw(uno::RuntimeException)
 {
+    UnoApiLock aLock;
     // TODO: Implement if possible
     rElement.checkAlive();
 
@@ -484,6 +506,8 @@ void implSetLocale( RootElement& rElement, const css::lang::Locale& /*eLocale*/ 
 
 void implCommitChanges( UpdateRootElement& rElement ) throw(css::lang::WrappedTargetException, uno::RuntimeException)
 {
+    UnoApiLock aLock;
+
     // quick check to avoid big locks for nothing (has its own locking)
     if (!implHasPendingChanges(rElement)) return;
 
