@@ -1,12 +1,13 @@
+
 /*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: olmenu.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 10:55:27 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:25:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -14,7 +15,6 @@
  *
  *    GNU Lesser General Public License Version 2.1
  *    =============================================
- *    Copyright 2005 by Sun Microsystems, Inc.
  *    901 San Antonio Road, Palo Alto, CA 94303, USA
  *
  *    This library is free software; you can redistribute it and/or
@@ -138,9 +138,55 @@
 
 #include <unomid.h>
 #include <svtools/languageoptions.hxx>
+#include <map>
+#include <svtools/langtab.hxx>
+#include <com/sun/star/document/XDocumentLanguages.hpp>
+#include <edtwin.hxx>
+#include <sfx2/sfxdlg.hxx>
+#include "swabstdlg.hxx"
+#include "chrdlg.hrc"
+
+#ifndef _SVX_BRSHITEM_HXX //autogen
+#include <svx/brshitem.hxx>
+#endif
+
+#ifndef _SFXSTRITEM_HXX
+#include <svtools/stritem.hxx>
+#endif
+
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
+
+#ifndef _UITOOL_HXX
+#include <uitool.hxx>
+#endif
+
+#ifndef _WVIEW_HXX
+#include <wview.hxx>
+#endif
+
+#ifndef _SFXREQUEST_HXX //autogen
+#include <sfx2/request.hxx>
+#endif
+
+#ifndef _MSGBOX_HXX //autogen
+#include <vcl/msgbox.hxx>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::rtl;
 
+// from textsh1.cxx:
+extern void lcl_CharDialog( SwWrtShell &rWrtSh, BOOL bUseDialog, USHORT nSlot,
+        const SfxItemSet *pArgs, SfxRequest *pReq );
+extern void lcl_SetLanguage_None( SwWrtShell& rWrtSh,
+        bool bIsForSelection, SfxItemSet &rCoreSet );
+extern void lcl_SetLanguage( SwWrtShell& rWrtSh, const String &rLangText,
+        bool bIsForSelection, SfxItemSet &rCoreSet);
+extern void lcl_SelectCurrentPara( SwWrtShell &rWrtSh );
+extern LanguageType lcl_GetCurrentLanguage( SwWrtShell &rSh );
+extern LanguageType lcl_GetLanguage( SwWrtShell &rSh, USHORT nLangWhichId );
 
 /*--------------------------------------------------------------------------
 
@@ -173,7 +219,7 @@ LanguageType lcl_CheckLanguage(
             if (aTmpLocale.Language == aLocale.Language)
                 nLang = nTmpLang;
         }
-        if (nLang == LANGUAGE_NONE) // language not found by looking up the sytem language...
+        if (nLang == LANGUAGE_NONE) // language not found by looking up the system language...
             nLang = MsLangId::convertLocaleToLanguageWithFallback( aLocale );
         if (nLang == LANGUAGE_SYSTEM)
             nLang = nTmpLang;
@@ -227,6 +273,149 @@ LanguageType lcl_CheckLanguage(
 }
 
 
+/// @returns : the language for the selected text that is set for the
+///     specified attribute (script type).
+///     If there are more than one languages used LANGUAGE_DONTKNOW will be returned.
+/// @param nLangWhichId : one of
+///     RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
+/// @returns: the language in use for the selected text.
+///     'In use' means the language(s) matching the script type(s) of the
+///     selected text. Or in other words, the language a spell checker would use.
+///     If there is more than one language LANGUAGE_DONTKNOW will be returned.
+// check if nScriptType includes the script type associated to nLang
+inline bool lcl_checkScriptType( sal_Int16 nScriptType, LanguageType nLang )
+{
+    return 0 != (nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
+}
+
+USHORT SwSpellPopup::fillLangPopupMenu(
+    PopupMenu *pPopupMenu,
+    USHORT Lang_Start,
+    uno::Sequence< ::rtl::OUString > aSeq,
+    SwWrtShell* pWrtSh,
+    USHORT nLangTable )
+{
+    if (!pPopupMenu)
+        return 0;
+
+    //Reference< awt::XMenuExtended > m_xMenuExtended( m_xPopupMenu, UNO_QUERY );
+    std::map< ::rtl::OUString, ::rtl::OUString > LangItems;
+
+    SvtLanguageTable    aLanguageTable;
+    USHORT nItemId              = Lang_Start;
+    rtl::OUString curLang       = aSeq[0];
+    USHORT nScriptType          = static_cast< sal_Int16 >(aSeq[1].toInt32());
+    rtl::OUString keyboardLang  = aSeq[2];
+    rtl::OUString guessLang     = aSeq[3];
+
+    //1--add current language
+    if(curLang!=OUString::createFromAscii(""))
+    {
+        LangItems[curLang]=curLang;
+    }
+
+    SvtLanguageTable aLangTable;
+    //2--System
+    const AllSettings& rAllSettings=Application::GetSettings();
+    LanguageType rSystemLanguage = rAllSettings.GetLanguage();
+    if(rSystemLanguage!=LANGUAGE_DONTKNOW)
+    {
+        if (lcl_checkScriptType(nScriptType,rSystemLanguage ))
+            LangItems[OUString(aLangTable.GetString(rSystemLanguage))]=OUString(aLangTable.GetString(rSystemLanguage));
+    }
+
+    //3--UI
+    LanguageType rUILanguage = rAllSettings.GetUILanguage();
+    if(rUILanguage!=LANGUAGE_DONTKNOW)
+    {
+        if (lcl_checkScriptType(nScriptType, rUILanguage ))
+            LangItems[OUString(aLangTable.GetString(rUILanguage))]=OUString(aLangTable.GetString(rUILanguage));
+    }
+
+    //4--guessed language
+    if(guessLang!=OUString::createFromAscii(""))
+    {
+        if (lcl_checkScriptType(nScriptType, aLanguageTable.GetType(guessLang)))
+            LangItems[guessLang]=guessLang;
+    }
+
+
+    //5--keyboard language
+    if(keyboardLang!=OUString::createFromAscii(""))
+    {
+        if (lcl_checkScriptType(nScriptType, aLanguageTable.GetType(keyboardLang)))
+            LangItems[keyboardLang]=keyboardLang;
+    }
+
+    //6--all languages used in current document
+    uno::Reference< com::sun::star::frame::XModel > xModel;
+    uno::Reference< com::sun::star::frame::XController > xController( pWrtSh->GetView().GetViewFrame()->GetFrame()->GetFrameInterface()->getController(), uno::UNO_QUERY );
+    if ( xController.is() )
+        xModel = xController->getModel();
+
+    uno::Reference< document::XDocumentLanguages > xDocumentLanguages( xModel, uno::UNO_QUERY );
+    /*the description of nScriptType
+      LATIN : 1
+      ASIAN : 2
+      COMPLEX:4
+      LATIN  + ASIAN : 3
+      LATIN  + COMPLEX : 5
+      ASIAN + COMPLEX : 6
+      LATIN + ASIAN + COMPLEX : 7
+    */
+
+    sal_Int16 nCount=7;
+    if(xDocumentLanguages.is())
+    {
+        uno::Sequence< lang::Locale > rLocales(xDocumentLanguages->getDocumentLanguages(nScriptType,nCount));
+        if(rLocales.getLength()>0)
+        {
+            for(USHORT i = 0; i<rLocales.getLength();++i)
+            {
+                if (LangItems.size()==7)
+                    break;
+                const lang::Locale& rLocale=rLocales[i];
+                if(lcl_checkScriptType(nScriptType, aLanguageTable.GetType(rLocale.Language)))
+                    LangItems[ rtl::OUString(rLocale.Language)]=OUString(rLocale.Language);
+            }
+        }
+    }
+
+    for (std::map< rtl::OUString, rtl::OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it)
+    {
+        rtl::OUString aEntryTxt( it->first );
+        if (aEntryTxt != rtl::OUString( aLangTable.GetString( LANGUAGE_NONE ) )&&
+            aEntryTxt != rtl::OUString::createFromAscii("*") &&
+            aEntryTxt.getLength() > 0)
+        {
+            ++nItemId;
+            if (nLangTable == 0)        // language for selection
+                aLangTable_Text[nItemId]      = aEntryTxt;
+            else if (nLangTable == 1)   // language for paragraph
+                aLangTable_Paragraph[nItemId] = aEntryTxt;
+            else if (nLangTable == 2)   // language for document
+                aLangTable_Document[nItemId]  = aEntryTxt;
+
+            pPopupMenu->InsertItem( nItemId, aEntryTxt, MIB_RADIOCHECK );
+            if (aEntryTxt == curLang)
+            {
+                //make a check mark for the current language
+                pPopupMenu->CheckItem( nItemId, TRUE );
+            }
+        }
+    }
+
+    //7--none
+    nItemId++;
+    pPopupMenu->InsertItem( nItemId, String(SW_RES( STR_LANGSTATUS_NONE )), MIB_RADIOCHECK );
+
+    //More...
+    nItemId++;
+    pPopupMenu->InsertItem( nItemId, String(SW_RES( STR_LANGSTATUS_MORE )), MIB_RADIOCHECK );
+
+    return nItemId - Lang_Start;    // return number of inserted entries
+}
+
 SwSpellPopup::SwSpellPopup(
         SwWrtShell* pWrtSh,
         const uno::Reference< linguistic2::XSpellAlternatives >  &xAlt,
@@ -241,7 +430,7 @@ SwSpellPopup::SwSpellPopup(
     uno::Sequence< OUString >   aStrings;
     if (xSpellAlt.is())
         aStrings = xSpellAlt->getAlternatives();
-    const OUString *pString = aStrings.getConstArray();
+    const rtl::OUString *pString = aStrings.getConstArray();
     sal_Int16 nStringCount = static_cast< sal_Int16 >( aStrings.getLength() );
 
     PopupMenu *pMenu = GetPopupMenu(MN_AUTOCORR);
@@ -278,7 +467,7 @@ SwSpellPopup::SwSpellPopup(
             nGuessLangWord = nGuessLangPara;
         if (nGuessLangPara == LANGUAGE_NONE)
             nGuessLangPara = nGuessLangWord;
-
+/*
         InsertSeparator();
         String aTmpWord( ::GetLanguageString( nGuessLangWord ) );
         String aTmpPara( ::GetLanguageString( nGuessLangPara ) );
@@ -286,6 +475,7 @@ SwSpellPopup::SwSpellPopup(
         SetHelpId( MN_LANGUAGE_WORD, HID_LINGU_WORD_LANGUAGE );
         InsertItem( MN_LANGUAGE_PARA, String( SW_RES( STR_PARAGRAPH ) ).Append(aTmpPara) );
         SetHelpId( MN_LANGUAGE_PARA, HID_LINGU_PARA_LANGUAGE );
+*/
     }
 
     pMenu = GetPopupMenu(MN_INSERT);
@@ -333,6 +523,47 @@ SwSpellPopup::SwSpellPopup(
     }
     EnableItem( MN_INSERT, bEnable );
 
+    //ADD NEW LANGUAGE MENU ITEM
+    ///////////////////////////////////////////////////////////////////////////
+    String aScriptTypesInUse( String::CreateFromInt32( pWrtSh->GetScriptType() ) );
+    SvtLanguageTable aLangTable;
+
+    // get keyboard language
+    String aKeyboardLang;
+    LanguageType nLang = LANGUAGE_DONTKNOW;
+    SwEditWin& rEditWin = pWrtSh->GetView().GetEditWin();
+    nLang = rEditWin.GetInputLanguage();
+    if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+        aKeyboardLang = aLangTable.GetString( nLang );
+
+    // get the language that is in use
+    const String aMultipleLanguages = String::CreateFromAscii("*");
+    String aCurrentLang = aMultipleLanguages;
+    nLang = lcl_GetCurrentLanguage( *pWrtSh );
+    if (nLang != LANGUAGE_DONTKNOW)
+        aCurrentLang = aLangTable.GetString( nLang );
+
+    // build sequence for status value
+    uno::Sequence< ::rtl::OUString > aSeq( 4 );
+    aSeq[0] = aCurrentLang;
+    aSeq[1] = aScriptTypesInUse;
+    aSeq[2] = aKeyboardLang;
+    aSeq[3] = aLangTable.GetString(nGuessLangWord);
+
+    pMenu = GetPopupMenu(MN_LANGUAGE_SELECTION);
+    nNumLanguageTextEntries = fillLangPopupMenu( pMenu, MN_LANGUAGE_SELECTION_START, aSeq, pWrtSh, 0 );
+    EnableItem( MN_LANGUAGE_SELECTION, true );
+
+    pMenu = GetPopupMenu(MN_LANGUAGE_PARAGRAPH);
+    nNumLanguageParaEntries = fillLangPopupMenu( pMenu, MN_LANGUAGE_PARAGRAPH_START, aSeq, pWrtSh, 1 );
+    EnableItem( MN_LANGUAGE_PARAGRAPH, true );
+/*
+    pMenu = GetPopupMenu(MN_LANGUAGE_ALL_TEXT);
+    nNumLanguageDocEntries = fillLangPopupMenu( pMenu, MN_LANGUAGE_ALL_TEXT_START, aSeq, pWrtSh, 2 );
+    EnableItem( MN_LANGUAGE_ALL_TEXT, true );
+*/
+    //////////////////////////////////////////////////////////////////////////////////
+
     RemoveDisabledEntries( TRUE, TRUE );
     SetMenuFlags(MENU_FLAG_NOAUTOMNEMONICS);
 }
@@ -353,7 +584,7 @@ sal_uInt16  SwSpellPopup::Execute( const Rectangle& rWordPos, Window* pWin )
 void SwSpellPopup::Execute( USHORT nId )
 {
     sal_Bool bAutoCorr = sal_False;
-    if( nId > MN_AUTOCORR_START && nId != USHRT_MAX )
+    if( nId > MN_AUTOCORR_START && nId < MN_LANGUAGE_SELECTION_START && nId != USHRT_MAX )
     {
         nId -= MN_AUTOCORR_START;
         bAutoCorr = sal_True;
@@ -435,86 +666,169 @@ void SwSpellPopup::Execute( USHORT nId )
             pSh->SetInsMode( bOldIns );
         }
         else
-            switch( nId )
+        {
+            if (nId < MN_LANGUAGE_SELECTION_START)
             {
-                case MN_SPELLING:
+                switch( nId )
                 {
-                    pSh->Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
+                    case MN_SPELLING:
                     {
-                        uno::Reference<linguistic2::XDictionaryList> xDictionaryList( SvxGetDictionaryList() );
-                        SvxDicListChgClamp aClamp( xDictionaryList );
-                        pSh->GetView().GetViewFrame()->GetDispatcher()->
-                            Execute( SID_SPELL_DIALOG, SFX_CALLMODE_ASYNCHRON );
-                    }
-                }
-                break;
-                case MN_IGNORE :
-                {
-                    uno::Reference< linguistic2::XDictionary > xDictionary( SvxGetIgnoreAllList(), uno::UNO_QUERY );
-                    SvxAddEntryToDic(
-                            xDictionary,
-                            xSpellAlt->getWord(), sal_False,
-                            aEmptyStr, LANGUAGE_NONE );
-                }
-                break;
-                case MN_INSERT:
-                    DBG_ERROR("geht noch nicht!")
-                break;
-                case MN_LANGUAGE_WORD:
-                case MN_LANGUAGE_PARA:
-                {
-                    pSh->StartAction();
-
-                    if( MN_LANGUAGE_PARA == nId )
-                    {
-                        if( !pSh->IsSttPara() )
-                            pSh->MovePara( fnParaCurr, fnParaStart );
-                        pSh->SwapPam();
-                        if( !pSh->IsEndPara() )
-                            pSh->MovePara( fnParaCurr,  fnParaEnd );
-                    }
-
-                    LanguageType nLangToUse = (MN_LANGUAGE_PARA == nId) ? nGuessLangPara : nGuessLangWord;
-                    sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
-                    USHORT nResId = 0;
-                    switch (nScriptType)
-                    {
-                        case SCRIPTTYPE_COMPLEX     : nResId = RES_CHRATR_CTL_LANGUAGE; break;
-                        case SCRIPTTYPE_ASIAN       : nResId = RES_CHRATR_CJK_LANGUAGE; break;
-                        default /*SCRIPTTYPE_LATIN*/: nResId = RES_CHRATR_LANGUAGE; break;
-                    }
-                    SfxItemSet aSet(pSh->GetAttrPool(), nResId, nResId );
-                    aSet.Put( SvxLanguageItem( nLangToUse, nResId ) );
-                    pSh->SetAttr( aSet );
-
-                    pSh->EndAction();
-                }
-                break;
-                default:
-                    if(nId >= MN_INSERT_START )
-                    {
-                        OUString aWord( xSpellAlt->getWord() );
-                        INT32 nDicIdx = nId - MN_INSERT_START - 1;
-                        DBG_ASSERT( nDicIdx < aDics.getLength(),
-                                    "dictionary index out of range" );
-                        uno::Reference< linguistic2::XDictionary > xDic =
-                            aDics.getConstArray()[nDicIdx];
-                        INT16 nAddRes = SvxAddEntryToDic( xDic,
-                            aWord, FALSE, aEmptyStr, LANGUAGE_NONE );
-                        // save modified user-dictionary if it is persistent
-                        uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
-                        if (xSavDic.is())
-                            xSavDic->store();
-
-                        if (DIC_ERR_NONE != nAddRes
-                            && !xDic->getEntry( aWord ).is())
+                        pSh->Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
                         {
-                            SvxDicError(
-                                &pSh->GetView().GetViewFrame()->GetWindow(),
-                                nAddRes );
+                            uno::Reference<linguistic2::XDictionaryList> xDictionaryList( SvxGetDictionaryList() );
+                            SvxDicListChgClamp aClamp( xDictionaryList );
+                            pSh->GetView().GetViewFrame()->GetDispatcher()->
+                                Execute( SID_SPELL_DIALOG, SFX_CALLMODE_ASYNCHRON );
                         }
                     }
+                    break;
+                    case MN_IGNORE :
+                    {
+                        uno::Reference< linguistic2::XDictionary > xDictionary( SvxGetIgnoreAllList(), uno::UNO_QUERY );
+                        SvxAddEntryToDic(
+                                xDictionary,
+                                xSpellAlt->getWord(), sal_False,
+                                aEmptyStr, LANGUAGE_NONE );
+                    }
+                    break;
+                    case MN_INSERT:
+                        DBG_ERROR("geht noch nicht!")
+                    break;
+                    case MN_LANGUAGE_WORD:
+                    case MN_LANGUAGE_PARA:
+                    {
+                        pSh->StartAction();
+
+                        if( MN_LANGUAGE_PARA == nId )
+                        {
+                            if( !pSh->IsSttPara() )
+                                pSh->MovePara( fnParaCurr, fnParaStart );
+                            pSh->SwapPam();
+                            if( !pSh->IsEndPara() )
+                                pSh->MovePara( fnParaCurr,  fnParaEnd );
+                        }
+
+                        LanguageType nLangToUse = (MN_LANGUAGE_PARA == nId) ? nGuessLangPara : nGuessLangWord;
+                        sal_uInt16 nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLangToUse );
+                        USHORT nResId = 0;
+                        switch (nScriptType)
+                        {
+                            case SCRIPTTYPE_COMPLEX     : nResId = RES_CHRATR_CTL_LANGUAGE; break;
+                            case SCRIPTTYPE_ASIAN       : nResId = RES_CHRATR_CJK_LANGUAGE; break;
+                            default /*SCRIPTTYPE_LATIN*/: nResId = RES_CHRATR_LANGUAGE; break;
+                        }
+                        SfxItemSet aSet(pSh->GetAttrPool(), nResId, nResId );
+                        aSet.Put( SvxLanguageItem( nLangToUse, nResId ) );
+                        pSh->SetAttr( aSet );
+
+                        pSh->EndAction();
+                    }
+                    break;
+                    default:
+                        if(nId >= MN_INSERT_START )
+                        {
+                            OUString aWord( xSpellAlt->getWord() );
+                            INT32 nDicIdx = nId - MN_INSERT_START - 1;
+                            DBG_ASSERT( nDicIdx < aDics.getLength(),
+                                        "dictionary index out of range" );
+                            uno::Reference< linguistic2::XDictionary > xDic =
+                                aDics.getConstArray()[nDicIdx];
+                            INT16 nAddRes = SvxAddEntryToDic( xDic,
+                                aWord, FALSE, aEmptyStr, LANGUAGE_NONE );
+                            // save modified user-dictionary if it is persistent
+                            uno::Reference< frame::XStorable >  xSavDic( xDic, uno::UNO_QUERY );
+                            if (xSavDic.is())
+                                xSavDic->store();
+
+                            if (DIC_ERR_NONE != nAddRes
+                                && !xDic->getEntry( aWord ).is())
+                            {
+                                SvxDicError(
+                                    &pSh->GetView().GetViewFrame()->GetWindow(),
+                                    nAddRes );
+                            }
+                        }
+                }
             }
+            else
+            {
+                SfxItemSet aCoreSet( pSh->GetView().GetPool(),
+                            RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
+                            RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,
+                            RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE,
+                            0 );
+                String aNewLangTxt;
+
+//              pSh->StartAction();
+
+                if (nId >= MN_LANGUAGE_SELECTION_START && nId < MN_LANGUAGE_SELECTION_START + nNumLanguageTextEntries - 1)
+                {
+                    //Set language for current selection
+                    aNewLangTxt=aLangTable_Text[nId];
+                    lcl_SetLanguage( *pSh, aNewLangTxt, true, aCoreSet );
+                }
+                else if (nId == MN_LANGUAGE_SELECTION_START + nNumLanguageTextEntries - 1)
+                {
+                    //Set Language_None for current selection
+                    lcl_SetLanguage_None( *pSh, true, aCoreSet );
+                }
+                else if (nId == MN_LANGUAGE_SELECTION_START + nNumLanguageTextEntries)
+                {
+                    //Open Format/Character Dialog
+                    lcl_CharDialog( *pSh, true, nId, 0, 0 );
+                }
+                else if (nId >= MN_LANGUAGE_PARAGRAPH_START && nId < MN_LANGUAGE_PARAGRAPH_START + nNumLanguageParaEntries - 1)
+                {
+                    //Set language for current paragraph
+                    aNewLangTxt=aLangTable_Paragraph[nId];
+                    pSh->Push();        // save cursor
+                    lcl_SelectCurrentPara( *pSh );
+                    lcl_SetLanguage( *pSh, aNewLangTxt, true, aCoreSet );
+                    pSh->Pop( FALSE );  // restore cursor
+                }
+                else if (nId == MN_LANGUAGE_PARAGRAPH_START + nNumLanguageParaEntries - 1)
+                {
+                    //Set Language_None for current paragraph
+                    pSh->Push();        // save cursor
+                    lcl_SelectCurrentPara( *pSh );
+                    lcl_SetLanguage_None( *pSh, true, aCoreSet );
+                    pSh->Pop( FALSE );  // restore cursor
+                }
+                else if (nId == MN_LANGUAGE_PARAGRAPH_START + nNumLanguageParaEntries)
+                {
+                    pSh->Push();        // save cursor
+                    lcl_SelectCurrentPara( *pSh );
+                    //Open Format/Character Dialog
+                    lcl_CharDialog( *pSh, true, nId, 0, 0 );
+                    pSh->Pop( FALSE );  // restore cursor
+                }
+                else if (nId >= MN_LANGUAGE_ALL_TEXT_START && nId < MN_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries - 1)
+                {
+                    //Set selected language as the default language
+                    aNewLangTxt=aLangTable_Document[nId];
+                    lcl_SetLanguage( *pSh, aNewLangTxt, false, aCoreSet );
+                }
+                else if (nId == MN_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries - 1)
+                {
+                    //Set Language_None as the default language
+                    lcl_SetLanguage_None( *pSh, false, aCoreSet );
+                }
+                else if (nId == MN_LANGUAGE_ALL_TEXT_START + nNumLanguageDocEntries)
+                {
+                    // open the dialog "Tools/Options/Language Settings - Language"
+                    SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+                    if (pFact)
+                    {
+                        VclAbstractDialog* pDlg = pFact->CreateVclDialog( pSh->GetView().GetWindow(), SID_LANGUAGE_OPTIONS );
+                        pDlg->Execute();
+                        delete pDlg;
+                    }
+                }
+
+//              pSh->EndAction();
+            }
+        }
     }
+
     pSh->EnterStdMode();
 }
