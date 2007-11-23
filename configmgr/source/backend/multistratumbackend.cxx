@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multistratumbackend.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:06:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:10:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -351,6 +351,7 @@ void MultiStratumBackend::initializeBackendStrata(const uno::Reference<uno::XCom
         aInitArgs[0] <<= sServiceData;
         uno::Reference <uno::XInterface> xBackend;
         bool bOptional = checkOptionalArg(sServiceName);
+
         try
         {
             xBackend= mFactory->createInstanceWithArguments(sServiceName,aInitArgs);
