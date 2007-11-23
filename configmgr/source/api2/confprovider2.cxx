@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confprovider2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:56:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:06:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ namespace configmgr
         static sal_Int32 getCreateServiceDataCount()
         {
             return 2;
-        };
+        }
 
         static const ServiceCreationInfo* getCreateServiceData()
         {
@@ -338,6 +338,8 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     void SAL_CALL OConfigurationProvider::disposing()
     {
+        UnoApiLock aLock;
+
         if (m_pImpl)
             m_pImpl->dispose();
 
@@ -348,6 +350,7 @@ namespace configmgr
     uno::Reference< uno::XInterface > SAL_CALL OConfigurationProvider::createInstance( const OUString& aServiceSpecifier )
         throw(uno::Exception, uno::RuntimeException)
     {
+        UnoApiLock aLock;
         // same as creating with empty sequence of arguments
         return this->createInstanceWithArguments( aServiceSpecifier, uno::Sequence< uno::Any >() );
     }
@@ -357,6 +360,8 @@ namespace configmgr
         OConfigurationProvider::createInstanceWithArguments( const OUString& aServiceSpecifier, const uno::Sequence< uno::Any >& aArguments )
             throw(uno::Exception, uno::RuntimeException)
     {
+        UnoApiLock aLock;
+
         OSL_ENSURE(m_pImpl, "OConfigurationProvider: no implementation available");
 
         if (ServiceCreationInfo const* pInfo = findCreationInfo(aServiceSpecifier))
@@ -379,6 +384,8 @@ namespace configmgr
     uno::Sequence< OUString > SAL_CALL OConfigurationProvider::getAvailableServiceNames(  )
         throw(uno::RuntimeException)
     {
+        UnoApiLock aLock;
+
         sal_Int32 nCount = 0;
         {
             for (int i= 0; i< getCreateServiceDataCount(); ++i)
@@ -414,15 +421,19 @@ namespace configmgr
     void SAL_CALL OConfigurationProvider::setLocale( const lang::Locale& eLocale )
         throw (uno::RuntimeException)
     {
+        UnoApiLock aLock;
+
         OSL_ENSURE(m_pImpl, "OConfigurationProvider: no implementation available");
 
         m_pImpl->setDefaultLocale( eLocale );
     }
 
     //-----------------------------------------------------------------------------
-    lang::Locale SAL_CALL OConfigurationProvider::getLocale(  )
+    lang::Locale SAL_CALL OConfigurationProvider::getLocale()
         throw (uno::RuntimeException)
     {
+        UnoApiLock aLock;
+
         OSL_ENSURE(m_pImpl, "OConfigurationProvider: no implementation available");
 
         return m_pImpl->getDefaultOptions().getUnoLocale();
@@ -430,9 +441,11 @@ namespace configmgr
 
     //XRefreshable
     //-----------------------------------------------------------------------------
-     void SAL_CALL OConfigurationProvider::refresh(  )
-                throw (uno::RuntimeException)
+    void SAL_CALL OConfigurationProvider::refresh()
+        throw (uno::RuntimeException)
      {
+        UnoApiLock aLock;
+
         OSL_ENSURE(m_pImpl, "OConfigurationProvider: no implementation available");
 
         try
@@ -471,20 +484,23 @@ namespace configmgr
          const uno::Reference< util::XRefreshListener >& aListener )
             throw (uno::RuntimeException)
      {
-         getBroadcastHelper().addListener(::getCppuType(&aListener), aListener);
+        UnoApiLock aLock;
+        getBroadcastHelper().addListener(::getCppuType(&aListener), aListener);
      }
      //-----------------------------------------------------------------------------
      void SAL_CALL OConfigurationProvider::removeRefreshListener(
          const uno::Reference< util::XRefreshListener >& aListener )
             throw (uno::RuntimeException)
      {
-         getBroadcastHelper().removeListener(::getCppuType(&aListener), aListener);
+        UnoApiLock aLock;
+        getBroadcastHelper().removeListener(::getCppuType(&aListener), aListener);
      }
      //XFlushable
      //-----------------------------------------------------------------------------
      void SAL_CALL OConfigurationProvider::flush(  )
                 throw (uno::RuntimeException)
      {
+         UnoApiLock aLock;
          OSL_ENSURE(m_pImpl, "OConfigurationProvider: no implementation available");
          m_pImpl->flushAll();
 
@@ -514,6 +530,7 @@ namespace configmgr
          const uno::Reference< util::XFlushListener >& aListener )
             throw (uno::RuntimeException)
      {
+          UnoApiLock aLock;
           getBroadcastHelper().addListener(::getCppuType(&aListener), aListener);
      }
      //-----------------------------------------------------------------------------
@@ -521,13 +538,14 @@ namespace configmgr
          const uno::Reference< util::XFlushListener >& aListener )
             throw (uno::RuntimeException)
      {
+         UnoApiLock aLock;
          getBroadcastHelper().removeListener(::getCppuType(&aListener), aListener);
      }
     // XInterface
     //-----------------------------------------------------------------------------
     ::com::sun::star::uno::Any SAL_CALL OConfigurationProvider::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
     {
-
+        UnoApiLock aLock;
         uno::Any aRet( OProvider::queryInterface(rType) );
         if ( !aRet.hasValue() )
             aRet = queryPropertyInterface(rType);
@@ -549,6 +567,7 @@ namespace configmgr
     // -------------------------------------------------------------------------
     ::cppu::IPropertyArrayHelper* OConfigurationProvider::createArrayHelper( ) const
     {
+        UnoApiLock aLock;
         uno::Sequence< beans::Property > aProps;
         describeProperties(aProps);
         return new ::cppu::OPropertyArrayHelper(aProps);
@@ -556,6 +575,7 @@ namespace configmgr
     // -------------------------------------------------------------------------
     ::cppu::IPropertyArrayHelper & OConfigurationProvider::getInfoHelper()
     {
+        UnoApiLock aLock;
         return *const_cast<OConfigurationProvider*>(this)->getArrayHelper();
     }
 
@@ -565,8 +585,9 @@ namespace configmgr
     void SAL_CALL OConfigurationProvider::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue)
                                                  throw (::com::sun::star::uno::Exception)
     {
-        OProvider::setFastPropertyValue_NoBroadcast( nHandle, rValue );
+        UnoApiLock aLock;
 
+        OProvider::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 
         switch(nHandle)
         {
