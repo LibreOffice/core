@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-05 17:43:16 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 16:41:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,6 @@ SRC1FILES =  \
         iconcdlg.src \
         imapdlg.src \
         impgrf.src \
-        langtab.src \
         language.src \
         lingu.src \
         numfmt.src \
@@ -201,7 +200,6 @@ SLOFILES+=\
         $(SLO)$/hdft.obj     \
         $(SLO)$/impgrf.obj   \
         $(SLO)$/labdlg.obj \
-        $(SLO)$/langtab.obj \
         $(SLO)$/langbox.obj \
         $(SLO)$/wrapfield.obj \
         $(SLO)$/numfmt.obj   \
@@ -313,7 +311,6 @@ LIB1OBJFILES= \
     $(SLO)$/fontwork.obj \
     $(SLO)$/hdft.obj     \
     $(SLO)$/impgrf.obj   \
-    $(SLO)$/langtab.obj \
     $(SLO)$/langbox.obj \
     $(SLO)$/wrapfield.obj    \
     $(SLO)$/pagectrl.obj \
