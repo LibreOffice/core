@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:52:53 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:58:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <svtools/solar.hrc>
 
 //free 87, 88, 89, 21
-//next is 267
+//next is 269
 
 //#define RID_APP_START 30000
 ////#define STR_NULL                            (RID_APP_START +  1)
@@ -254,6 +254,8 @@
 
 #define STR_OBJECT_CURVE_WITH_PARAMETERS    (RID_APP_START + 264)
 #define STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS (RID_APP_START + 265)
+
+#define STR_OBJECT_CURVE_EQUATION           (RID_APP_START + 268)
 #define STR_STATISTICS_IN_LEGEND            (RID_APP_START + 180)
 
 //-----------------------------------------------------------------------------
@@ -275,6 +277,7 @@
 #define STR_PAGE_PERSPECTIVE                 (RID_APP_START + 235)
 #define STR_PAGE_APPEARANCE                  (RID_APP_START + 236)
 #define STR_PAGE_ILLUMINATION                (RID_APP_START + 237)
+#define STR_PAGE_REGRESSION_OPTIONS          (RID_APP_START + 267)
 
 #define STR_DLG_CHART_WIZARD                 (RID_APP_START + 228)
 #define STR_PAGE_CHART_ELEMENTS              (RID_APP_START + 229)
