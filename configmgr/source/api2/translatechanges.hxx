@@ -4,9 +4,9 @@
  *
  *  $RCSfile: translatechanges.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:21:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:09:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,10 +52,6 @@ namespace configmgr
     namespace beans     = css::beans;
     namespace container = css::container;
 // ---------------------------------------------------------------------------------------------------
-    namespace memory
-    {
-        class Accessor;
-    }
 
     namespace configuration
     {
@@ -92,22 +88,18 @@ namespace configmgr
                                     configuration::NodeRef const& aBaseNode);
 
         // change path and base settings to start from the given base tree (root)
-        bool rebaseChange(  memory::Accessor const& _aAccessor,
-                            configuration::NodeChangeLocation& aChange,
+        bool rebaseChange(  configuration::NodeChangeLocation& aChange,
                             configuration::TreeRef const& _aBaseTreeRef);
         // change path and base settings to start from the given base node
-        bool rebaseChange(  memory::Accessor const& _aAccessor,
-                            configuration::NodeChangeLocation& aChange,
+        bool rebaseChange(  configuration::NodeChangeLocation& aChange,
                             configuration::TreeRef const& _aBaseTreeRef,
                             configuration::NodeRef const& aBaseNode);
         // resolve non-uno elements to Uno Objects
         bool resolveUnoObjects(UnoChange& aUnoChange,
                                configuration::NodeChangeData const& aChange,
-                               const memory::Accessor& aAccessor,
                                Factory& rFactory);
         // resolve non-uno elements to Uno Objects inplace
         bool resolveToUno(configuration::NodeChangeData& aChange,
-                          const memory::Accessor& aAccessor,
                           Factory& rFactory);
 
     // building events
