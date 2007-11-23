@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optmemory.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:29:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:42:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #ifdef SVX_DLLIMPLEMENTATION
 #undef SVX_DLLIMPLEMENTATION
 #endif
+
+#include <svtools/langtab.hxx>
 
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
@@ -143,9 +145,6 @@
 #endif
 #ifndef _SVX_TAB_AREA_HXX
 #include "cuitabarea.hxx"
-#endif
-#ifndef _SVX_LANGTAB_HXX //autogen
-#include "langtab.hxx"
 #endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
