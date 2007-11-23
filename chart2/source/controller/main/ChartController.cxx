@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:56:22 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1084,6 +1084,10 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         this->executeDispatch_InsertStatistic();
     else if( aCommand.equals("InsertSymbol"))
          this->executeDispatch_InsertSpecialCharacter();
+    else if( aCommand.equals("InsertTrendline"))
+         this->executeDispatch_InsertTrendline();
+    else if( aCommand.equals("InsertTrendlineEquation"))
+         this->executeDispatch_InsertTrendlineEquation();
     //format objects
     else if( aCommand.equals("DiagramObjects"))
         this->executeDispatch_ObjectProperties();
@@ -1393,7 +1397,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         // insert objects
         ( C2U("InsertTitle") )        ( C2U("InsertLegend") )         ( C2U("InsertDescription") )
         ( C2U("InsertAxis") )         ( C2U("InsertGrids") )          ( C2U("InsertStatistics") )
-        ( C2U("InsertSymbol") )
+        ( C2U("InsertSymbol") )       ( C2U("InsertTrendline") )      ( C2U("InsertTrendlineEquation") )
         //format objects
 //MENUCHANGE            ( C2U("SelectSourceRanges") )
         ( C2U("DiagramObjects") )     ( C2U("TransformDialog") )
