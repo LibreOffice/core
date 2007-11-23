@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:14:14 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:28:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -363,117 +363,9 @@ uno::Any SAL_CALL
             bFound = lookupInBootstrap( aResult, makeBootstrapName(aName) );
         }
     }
-#if 0
-    if (!bFound && bOurName)
-    {
-        OSL_TRACE( "configmgr: Cannot find bootstrap data item: %s",
-                    rtl::OUStringToOString(aName,RTL_TEXTENCODING_ASCII_US).getStr() );
-    }
-#endif
     return aResult;
 }
-// ---------------------------------------------------------------------------
 
-#if 0
-uno::Any BootstrapContext::makeDefaultProvider()
-{
-    {
-        osl::MutexGuard lock(mutex());
-        if (m_xDefaultProvider.is())
-            return uno::makeAny(m_xDefaultProvider);
-    }
-
-    if (isPassthrough())
-    {
-        Context xDelegate = basecontext();
-        if (!xDelegate.is())
-            throw lang::DisposedException(NAME("BootstrapContext: No base context"),*this);
-
-        uno::Any aResult = xDelegate->getValueByName( SINGLETON(A_DefaultProviderSingletonName) );
-
-        osl::MutexGuard relock(mutex());
-        if (!m_xDefaultProvider.is())
-        {
-            aResult >>= m_xDefaultProvider;
-            return aResult;
-        }
-        else
-            return uno::makeAny(m_xDefaultProvider);
-    }
-    else
-    {
-        ServiceManager xMgr = this->getServiceManager();
-        if (!xMgr.is())
-            throw lang::DisposedException(NAME("BootstrapContext: No service factory"),*this);
-
-        try
-        {
-            uno::Reference<uno::XInterface> xDefaultProvider = xMgr->createInstanceWithContext(NAME(A_DefaultProviderServiceAndImplName),this);
-
-            osl::MutexGuard relock(mutex());
-            if (!m_xDefaultProvider.is())
-                m_xDefaultProvider = xDefaultProvider;
-
-            return uno::makeAny(m_xDefaultProvider);
-        }
-        catch (uno::RuntimeException &) { throw; }
-        catch (uno::Exception & )
-        {
-            throw uno::RuntimeException(NAME("BootstrapContext:Exception occurred while instantiating DefaultProvider"),*this);
-        }
-    }
-}
-// ---------------------------------------------------------------------------
-
-uno::Any BootstrapContext::makeDefaultBackend()
-{
-    {
-        osl::MutexGuard lock(mutex());
-        if (m_xDefaultBackend.is())
-            return uno::makeAny(m_xDefaultBackend);
-    }
-
-    if (isPassthrough())
-    {
-        Context xDelegate = basecontext();
-        if (!xDelegate.is())
-            throw lang::DisposedException(NAME("BootstrapContext: No base context"),*this);
-
-        uno::Any aResult = xDelegate->getValueByName( SINGLETON(K_DefaultBackendSingletonName) );
-
-        osl::MutexGuard relock(mutex());
-        if (!m_xDefaultBackend.is())
-        {
-            aResult >>= m_xDefaultBackend;
-            return aResult;
-        }
-        else
-            return uno::makeAny(m_xDefaultBackend);
-    }
-    else
-    {
-        ServiceManager xMgr = this->getServiceManager();
-        if (!xMgr.is())
-            throw lang::DisposedException(NAME("BootstrapContext: No service factory"),*this);
-
-        try
-        {
-            uno::Reference<uno::XInterface> xDefaultBackend = xMgr->createInstanceWithContext(NAME(K_DefaultBackendServiceAndImplName),this);
-
-            osl::MutexGuard relock(mutex());
-            if (!m_xDefaultBackend.is())
-                m_xDefaultBackend = xDefaultBackend;
-            return uno::makeAny(m_xDefaultBackend);
-        }
-        catch (uno::RuntimeException &) { throw; }
-        catch (uno::Exception & )
-        {
-            throw uno::RuntimeException(NAME("BootstrapContext:Exception occurred while instantiating DefaultBackend"),*this);
-        }
-    }
-}
-// ---------------------------------------------------------------------------
-#endif
 // ---------------------------------------------------------------------------
 // class ContextReader
 // ---------------------------------------------------------------------------
