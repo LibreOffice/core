@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodeimplobj.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:30:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:44:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ DeferredGroupNodeImpl::~DeferredGroupNodeImpl()
 }
 //-----------------------------------------------------------------------------
 
-ValueMemberNode DeferredGroupNodeImpl::makeValueMember(data::Accessor const& _aAccessor, Name const& _aName, bool _bForUpdate)
+ValueMemberNode DeferredGroupNodeImpl::makeValueMember(Name const& _aName, bool _bForUpdate)
 {
     MemberChanges::iterator it = m_aChanges.find(_aName);
 
@@ -107,7 +107,7 @@ ValueMemberNode DeferredGroupNodeImpl::makeValueMember(data::Accessor const& _aA
             OSL_ENSURE(_aName.isEmpty(), "ERROR: Found empty change reference");
 
         else if (_bForUpdate || it->second->isChange()) // found one
-            return ValueMemberNode(_aAccessor, it->second);
+            return ValueMemberNode(it->second);
 
         else // leftover non-change
             m_aChanges.erase(it);
@@ -115,7 +115,7 @@ ValueMemberNode DeferredGroupNodeImpl::makeValueMember(data::Accessor const& _aA
         // if not found continue with default
     }
 
-    data::ValueNodeAccess aOriginal = getOriginalValueNode(_aAccessor,_aName);
+    data::ValueNodeAccess aOriginal = getOriginalValueNode(_aName);
 
     if (_bForUpdate) // create a new change
     {
@@ -124,7 +124,7 @@ ValueMemberNode DeferredGroupNodeImpl::makeValueMember(data::Accessor const& _aA
             MemberChange aNewChange(new ValueMemberNode::DeferredImpl(aOriginal));
             m_aChanges[_aName] = aNewChange;
 
-            return ValueMemberNode(_aAccessor, aNewChange);
+            return ValueMemberNode(aNewChange);
        }
     }
 
@@ -151,16 +151,16 @@ bool DeferredGroupNodeImpl::hasChanges() const
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::collectValueChanges(data::Accessor const& _aAccessor, NodeChanges& rChanges, TreeImpl* pParentTree, NodeOffset nNode) const
+void DeferredGroupNodeImpl::collectValueChanges(NodeChanges& rChanges, TreeImpl* pParentTree, NodeOffset nNode) const
 {
     for (MemberChanges::const_iterator it = m_aChanges.begin(); it != m_aChanges.end(); ++it)
     {
         if (it->second.is())
         {
             OSL_ASSERT(!it->first.isEmpty());
-            if (ValueChangeImpl* pValueChange = it->second->collectChange(_aAccessor))
+            if (ValueChangeImpl* pValueChange = it->second->collectChange())
             {
-                pValueChange->setTarget(_aAccessor,pParentTree,nNode,it->first);
+                pValueChange->setTarget(pParentTree,nNode,it->first);
 
                 rChanges.add( NodeChange(pValueChange) );
             }
@@ -201,34 +201,16 @@ DeferredGroupNodeImpl::MemberChange DeferredGroupNodeImpl::findValueChange(Name 
 }
 
 //-----------------------------------------------------------------------------
-/*
-void DeferredGroupNodeImpl::doCommitChanges(data::Accessor const& _aAccessor)
-{
-    for (ValueChanges::iterator pos = m_aChanges.begin(); pos != m_aChanges.end(); )
-    {
-        ValueChanges::iterator it = pos++; // this is used to allow erasing below
-        if (it->second.is())
-        {
-            it->second->commitDirect(_aAccessor);
-            m_aChanges.erase(it); // this goes here to ensure exception safety
-        }
-        else
-            OSL_ASSERT(it->first.isEmpty());
-    }
-    m_aChanges.clear();
-}
-*/
-//-----------------------------------------------------------------------------
 
-std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::preCommitValueChanges(data::Accessor const& _aAccessor)
+std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::preCommitValueChanges()
 {
     std::auto_ptr<SubtreeChange> aRet;
 
     if (!m_aChanges.empty())
     {
-        data::NodeAccessRef aOriginalData = this->getOriginalNodeAccessRef(&_aAccessor);
+        data::NodeAccess aOriginalData = this->getOriginalNodeAccess();
         aRet.reset( new SubtreeChange(  aOriginalData.getName().toString(),
-                                        aOriginalData.getAttributes() ) );
+                        aOriginalData->getAttributes() ) );
 
         for (MemberChanges::iterator pos = m_aChanges.begin(); pos != m_aChanges.end(); )
         {
@@ -240,7 +222,7 @@ std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::preCommitValueChanges(data::
             }
             else if (it->second->isChange())
             {
-                std::auto_ptr<ValueChange> aValueChange = it->second->preCommitChange(_aAccessor);
+                std::auto_ptr<ValueChange> aValueChange = it->second->preCommitChange();
                 if (aValueChange.get())
                 {
                     std::auto_ptr<Change> aBaseChange(aValueChange.release());
@@ -259,7 +241,7 @@ std::auto_ptr<SubtreeChange> DeferredGroupNodeImpl::preCommitValueChanges(data::
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::finishCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges)
+void DeferredGroupNodeImpl::finishCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(!rChanges.isSetNodeChange(),"ERROR: Change type SET does not match group");
 
@@ -283,7 +265,7 @@ void DeferredGroupNodeImpl::finishCommit(data::Accessor const& _aAccessor, Subtr
 
             if (aStoredChange.is())
             {
-                aStoredChange->finishCommit(rValueChange,_aAccessor);
+                aStoredChange->finishCommit(rValueChange);
                 OSL_ENSURE(!aStoredChange->isChange(),"ValueChange is not moot after finishCommit");
             }
 
@@ -301,7 +283,7 @@ void DeferredGroupNodeImpl::finishCommit(data::Accessor const& _aAccessor, Subtr
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::revertCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges)
+void DeferredGroupNodeImpl::revertCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(!rChanges.isSetNodeChange(),"ERROR: Change type SET does not match group");
 
@@ -325,7 +307,7 @@ void DeferredGroupNodeImpl::revertCommit(data::Accessor const& _aAccessor, Subtr
 
             if (aStoredChange.is())
             {
-                aStoredChange->revertCommit(rValueChange,_aAccessor);
+                aStoredChange->revertCommit(rValueChange);
                 OSL_ENSURE(!aStoredChange->isChange(),"ValueChange is not moot after reverting - will be discarded nevertheless");
             }
             m_aChanges.erase( itStoredChange ); // remove change if it is moot
@@ -336,7 +318,7 @@ void DeferredGroupNodeImpl::revertCommit(data::Accessor const& _aAccessor, Subtr
 }
 //-----------------------------------------------------------------------------
 
-void DeferredGroupNodeImpl::failedCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges)
+void DeferredGroupNodeImpl::failedCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(!rChanges.isSetNodeChange(),"ERROR: Change type SET does not match group");
 
@@ -359,7 +341,7 @@ void DeferredGroupNodeImpl::failedCommit(data::Accessor const& _aAccessor, Subtr
             OSL_ENSURE( aStoredChange.is(), "Cannot recover from failed change: found empty change object for Member value change");
 
             if (aStoredChange.is())
-                 aStoredChange->failedCommit(rValueChange,_aAccessor);
+                 aStoredChange->failedCommit(rValueChange);
            {
                 if (!aStoredChange->isChange())
                     m_aChanges.erase( itStoredChange ); // remove change if it is moot
@@ -416,7 +398,7 @@ bool DeferredSetNodeImpl::doIsEmpty() const
 
 
     // look for elements in the base set that are not 'deleted' (the changes are all deletions here)
-    {for(NativeIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
+    {for(ElementSet::PairIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
         it != stop;
         ++it)
     {
@@ -437,18 +419,18 @@ ElementTreeImpl* DeferredSetNodeImpl::doFindElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-SetNodeVisitor::Result DeferredSetNodeImpl::doDispatchToElements(data::Accessor const& _aAccessor, SetNodeVisitor& aVisitor)
+SetNodeVisitor::Result DeferredSetNodeImpl::doDispatchToElements(SetNodeVisitor& aVisitor)
 {
     SetNodeVisitor::Result eRet = SetNodeVisitor::CONTINUE;
     // look for elements in the base set that are not hidden by changes
-    {for(NativeIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
+    {for(ElementSet::PairIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
         it != stop && eRet != SetNodeVisitor::DONE;
         ++it)
     {
         if (m_aChangedData.getElement(it->first) == 0)
         {
             OSL_ASSERT(it->second.isValid());
-            eRet = aVisitor.visit(SetEntry(_aAccessor,it->second.get()));
+            eRet = aVisitor.visit(SetEntry(it->second.get()));
         }
     }}
 
@@ -459,7 +441,7 @@ SetNodeVisitor::Result DeferredSetNodeImpl::doDispatchToElements(data::Accessor 
     {
         if (it->isValid())
         {
-            eRet = aVisitor.visit(SetEntry(_aAccessor,it->get()));
+            eRet = aVisitor.visit(SetEntry(it->get()));
         }
     }}
     return eRet;
@@ -472,10 +454,10 @@ bool DeferredSetNodeImpl::hasChanges() const
 }
 //-----------------------------------------------------------------------------
 
-void DeferredSetNodeImpl::collectElementChanges(data::Accessor const& _aAccessor, NodeChanges& rChanges) const
+void DeferredSetNodeImpl::collectElementChanges(NodeChanges& rChanges) const
 {
     // collect added and deleted nodes
-    {for(NativeIterator it = m_aChangedData.beginNative(), stop = m_aChangedData.endNative();
+    {for(ElementSet::PairIterator it = m_aChangedData.beginNative(), stop = m_aChangedData.endNative();
         it != stop;
         ++it)
     {
@@ -485,18 +467,18 @@ void DeferredSetNodeImpl::collectElementChanges(data::Accessor const& _aAccessor
         {
             if (pOriginal)
             {
-                rChanges.add(NodeChange(implCreateReplace(_aAccessor, it->first,it->second,*pOriginal)));
+                rChanges.add(NodeChange(implCreateReplace(it->first,it->second,*pOriginal)));
             }
             else
             {
-                rChanges.add(NodeChange(implCreateInsert(_aAccessor, it->first,it->second)));
+                rChanges.add(NodeChange(implCreateInsert(it->first,it->second)));
             }
         }
         else
         {
             if (pOriginal)
             {
-                rChanges.add(NodeChange(implCreateRemove(_aAccessor, it->first,*pOriginal)));
+                rChanges.add(NodeChange(implCreateRemove(it->first,*pOriginal)));
             }
 
             //else nothing to do
@@ -505,14 +487,14 @@ void DeferredSetNodeImpl::collectElementChanges(data::Accessor const& _aAccessor
 
     // collect preexisting nodes
     // if (!containsValues()) // value elements ar immutable !
-    {for(NativeIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
+    {for(ElementSet::PairIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
         it != stop;
         ++it)
     {
         if (m_aChangedData.getElement(it->first) == 0)
         {
             OSL_ASSERT(it->second.isValid());
-            view::ViewTreeAccess aElementView(_aAccessor, *it->second);
+            view::ViewTreeAccess aElementView(*it->second);
 
             if (aElementView.hasChanges())
                 aElementView.collectChanges(rChanges);
@@ -531,7 +513,7 @@ void DeferredSetNodeImpl::markChanged()
 void DeferredSetNodeImpl::doTransferElements(ElementSet& rReplacement)
 {
     // transfer preexisting nodes (unless replaced/deleted)
-    {for(NativeIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
+    {for(ElementSet::PairIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
         it != stop;
         ++it)
     {
@@ -545,8 +527,8 @@ void DeferredSetNodeImpl::doTransferElements(ElementSet& rReplacement)
 
     // commit added and deleted nodes
     {
-        NativeIterator it = m_aChangedData.beginNative();
-        NativeIterator const stop = m_aChangedData.endNative();
+        ElementSet::PairIterator it = m_aChangedData.beginNative();
+        ElementSet::PairIterator const stop = m_aChangedData.endNative();
 
         while(it != stop)
         {
@@ -562,59 +544,60 @@ void DeferredSetNodeImpl::doTransferElements(ElementSet& rReplacement)
 }
 //-----------------------------------------------------------------------------
 
-void DeferredSetNodeImpl::rebuildElement(data::Accessor const& _aAccessor, Name const& _aName, Element const& _aElement)
+void DeferredSetNodeImpl::rebuildElement(Name const& _aName, Element const& _aElement)
 {
     TreeImpl* pContext = this->getParentTree();
     OSL_ENSURE(pContext, "Context tree must be set before rebuilding");
 
     rtl::Reference<view::ViewStrategy> xContextBehavior = pContext->getViewBehavior();
 
-    data::TreeAccessor aElementAccessor = this->getDataAccess(_aAccessor).getElementTree(_aName);
-    OSL_ENSURE(aElementAccessor.isValid(), "Element Tree not found in data");
+    data::TreeAccessor aElementAccessor = this->getDataAccess().getElementTree(_aName);
+    OSL_ENSURE(aElementAccessor != NULL, "Element Tree not found in data");
 
     OSL_ENSURE(_aElement.isValid(), "Element not found in view");
-    data::Accessor aOldAccessor( _aElement->getViewBehavior()->getDataSegment() );
-    _aElement->rebuild(xContextBehavior,aElementAccessor,aOldAccessor);
+    _aElement->rebuild(xContextBehavior,aElementAccessor);
 }
 
 //-----------------------------------------------------------------------------
-std::auto_ptr<SubtreeChange> DeferredSetNodeImpl::preCommitChanges(data::Accessor const& _aAccessor, ElementList& _rRemovedElements)
+std::auto_ptr<SubtreeChange> DeferredSetNodeImpl::preCommitChanges(ElementList& _rRemovedElements)
 {
-    data::NodeAccessRef aOriginalData = this->getOriginalNodeAccessRef(&_aAccessor);
+    data::NodeAccess aOriginalData = this->getOriginalNodeAccess();
     // now first get the name of this node
     Name sSetName = aOriginalData.getName();
 
     // and make a SubtreeChange
     std::auto_ptr<SubtreeChange> pSetChange( new SubtreeChange(sSetName.toString(),
-                                                               getElementTemplate()->getName().toString(),
-                                                               getElementTemplate()->getModule().toString(),
-                                                               aOriginalData.getAttributes() ) );
+                                   getElementTemplate()->getName().toString(),
+                                   getElementTemplate()->getModule().toString(),
+                                   aOriginalData->getAttributes() ) );
 
     // commit preexisting nodes
-    {for(NativeIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
+    {
+    for(ElementSet::PairIterator it = SetNodeImpl::beginElementSet(), stop = SetNodeImpl::endElementSet();
         it != stop;
         ++it)
     {
         if (m_aChangedData.getElement(it->first) == 0)
         {
-            OSL_ASSERT(it->second.isValid());
-            OSL_ENSURE( !m_bDefault || it->second.inDefault, "m_bDefault is inconsistent");
+        OSL_ASSERT(it->second.isValid());
+        OSL_ENSURE( !m_bDefault || it->second.inDefault, "m_bDefault is inconsistent");
 
-            view::ViewTreeAccess aElementView(_aAccessor,*it->second);
-            std::auto_ptr<SubtreeChange> pNewChange = aElementView.preCommitChanges(_rRemovedElements);
-            if (pNewChange.get() != 0)
-            {
-                //OSL_ENSURE( !containsValues(), "Unexpected change generated by value set element");
-                std::auto_ptr<Change> pNewChangeBase( pNewChange.release() );
-                pSetChange->addChange(pNewChangeBase);
-            }
+        view::ViewTreeAccess aElementView(*it->second);
+        std::auto_ptr<SubtreeChange> pNewChange = aElementView.preCommitChanges(_rRemovedElements);
+        if (pNewChange.get() != 0)
+        {
+            //OSL_ENSURE( !containsValues(), "Unexpected change generated by value set element");
+          std::auto_ptr<Change> pNewChangeBase( pNewChange.release() );
+          pSetChange->addChange(pNewChangeBase);
         }
-    }}
+        }
+    }
+    }
 
     // commit added and deleted nodes
     {
-        NativeIterator it = m_aChangedData.beginNative();
-        NativeIterator const stop = m_aChangedData.endNative();
+        ElementSet::PairIterator it = m_aChangedData.beginNative();
+        ElementSet::PairIterator const stop = m_aChangedData.endNative();
 
         while(it != stop)
         {
@@ -666,7 +649,7 @@ std::auto_ptr<SubtreeChange> DeferredSetNodeImpl::preCommitChanges(data::Accesso
 }
 //-----------------------------------------------------------------------------
 
-void DeferredSetNodeImpl::finishCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges)
+void DeferredSetNodeImpl::finishCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
     OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
@@ -713,7 +696,7 @@ void DeferredSetNodeImpl::finishCommit(data::Accessor const& _aAccessor, Subtree
                 else
                     SetNodeImpl::insertElement(aElementName,*pNewElement);
 
-                this->rebuildElement(_aAccessor,aElementName,*pNewElement);
+                this->rebuildElement(aElementName,*pNewElement);
             }
             else
             {
@@ -732,7 +715,7 @@ void DeferredSetNodeImpl::finishCommit(data::Accessor const& _aAccessor, Subtree
             {
                 OSL_ENSURE(aRemovedTree.is(), "Cannot take over the removed node");
 
-                aOriginal->takeTreeAndRebuild(aRemovedTree, _aAccessor);
+                aOriginal->takeTreeAndRebuild(aRemovedTree);
             }
             m_aChangedData.removeElement(aElementName);
         }
@@ -746,7 +729,7 @@ void DeferredSetNodeImpl::finishCommit(data::Accessor const& _aAccessor, Subtree
             if (!it->ISA(SubtreeChange)) throw Exception("Unexpected set element change");
 
             if (pOriginal && pOriginal->isValid())
-                view::ViewTreeAccess(_aAccessor,**pOriginal).finishCommit(static_cast<SubtreeChange&>(*it));
+                view::ViewTreeAccess(**pOriginal).finishCommit(static_cast<SubtreeChange&>(*it));
         }
     }
     m_bChanged = false;
@@ -755,7 +738,7 @@ void DeferredSetNodeImpl::finishCommit(data::Accessor const& _aAccessor, Subtree
 }
 //-----------------------------------------------------------------------------
 
-void DeferredSetNodeImpl::revertCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges)
+void DeferredSetNodeImpl::revertCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
     OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
@@ -812,7 +795,7 @@ void DeferredSetNodeImpl::revertCommit(data::Accessor const& _aAccessor, Subtree
             if (pOriginal && pRemovedTree.is())
             {
                 OSL_ASSERT(pOriginal->isValid());
-                (*pOriginal)->takeTreeAndRebuild(pRemovedTree,_aAccessor);
+                (*pOriginal)->takeTreeAndRebuild(pRemovedTree);
                 OSL_DEBUG_ONLY(pRemovedTree.clear());
             }
             OSL_ENSURE(!pRemovedTree.is(), "Could not revert removed node: Nowhere to put ownership");
@@ -827,13 +810,13 @@ void DeferredSetNodeImpl::revertCommit(data::Accessor const& _aAccessor, Subtree
             if (!it->ISA(SubtreeChange)) throw Exception("Unexpected set element change");
 
             if (pOriginal && pOriginal->isValid())
-                view::ViewTreeAccess(_aAccessor,**pOriginal).revertCommit(static_cast<SubtreeChange&>(*it));
+                view::ViewTreeAccess(**pOriginal).revertCommit(static_cast<SubtreeChange&>(*it));
         }
     }
 }
 //-----------------------------------------------------------------------------
 
-void DeferredSetNodeImpl::failedCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges)
+void DeferredSetNodeImpl::failedCommit(SubtreeChange& rChanges)
 {
     OSL_ENSURE(rChanges.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
     OSL_ENSURE( rChanges.getElementTemplateName() ==  getElementTemplate()->getName().toString(),
@@ -876,8 +859,8 @@ void DeferredSetNodeImpl::failedCommit(data::Accessor const& _aAccessor, Subtree
 
                 if (rAddNode.wasInserted())
                 { // it has been integrated into the master tree
-                    OSL_ENSURE(getDataAccess(_aAccessor).getElementTree(aElementName).address() == rAddNode.getInsertedTree(),
-                                "Internal Error: Inserted tree address does not match actual data");
+                    OSL_ENSURE(getDataAccess().getElementTree(aElementName) == rAddNode.getInsertedTree(),
+                           "Internal Error: Inserted tree address does not match actual data");
 
                     // so add it
                     if (aOriginal.isValid())
@@ -886,7 +869,7 @@ void DeferredSetNodeImpl::failedCommit(data::Accessor const& _aAccessor, Subtree
                     else
                         SetNodeImpl::insertElement(aElementName,*pNewElement);
 
-                    this->rebuildElement(_aAccessor,aElementName,*pNewElement);
+                    this->rebuildElement(aElementName,*pNewElement);
                 }
                 else // Change not done; need to restore new node (element will be released into the wild then)
                 {
@@ -907,7 +890,7 @@ void DeferredSetNodeImpl::failedCommit(data::Accessor const& _aAccessor, Subtree
                 aRemovedTree = rRemoveNode.getRemovedTree();
 
                 OSL_ASSERT(aOriginal.isValid());
-                if (aRemovedTree.is() && !getDataAccess(_aAccessor).hasElement(aElementName))
+                if (aRemovedTree.is() && !getDataAccess().hasElement(aElementName))
                 {
                     // really removed - then remove the originel
                     if (aOriginal.isValid())
@@ -918,7 +901,7 @@ void DeferredSetNodeImpl::failedCommit(data::Accessor const& _aAccessor, Subtree
             // handle a added or deleted node
             if (aOriginal.isValid() && aRemovedTree.is())
             {
-                aOriginal->takeTreeAndRebuild(aRemovedTree,_aAccessor);
+              aOriginal->takeTreeAndRebuild(aRemovedTree);
                 //aOriginal->getAccess().makeDirect();
                 OSL_DEBUG_ONLY(aRemovedTree.clear());
             }
@@ -936,7 +919,7 @@ void DeferredSetNodeImpl::failedCommit(data::Accessor const& _aAccessor, Subtree
             if (!it->ISA(SubtreeChange)) throw Exception("Unexpected set element change");
 
             if (pOriginal && pOriginal->isValid())
-                view::ViewTreeAccess(_aAccessor,**pOriginal).recoverFailedCommit(static_cast<SubtreeChange&>(*it));
+                view::ViewTreeAccess(**pOriginal).recoverFailedCommit(static_cast<SubtreeChange&>(*it));
         }
     }
     m_bChanged = false;
@@ -1007,7 +990,7 @@ void DeferredSetNodeImpl::removeOldElement(Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
-SetElementChangeImpl* DeferredSetNodeImpl::doAdjustChangedElement(data::Accessor const & _aAccessor, NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange)
+SetElementChangeImpl* DeferredSetNodeImpl::doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange)
 {
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
     {
@@ -1021,7 +1004,7 @@ SetElementChangeImpl* DeferredSetNodeImpl::doAdjustChangedElement(data::Accessor
                 SubtreeChange const& aSubtreeChange = static_cast<SubtreeChange const&>(aChange);
 
                 // recurse to element tree - but do not notify those changes (?)
-                view::Tree aElementTree(_aAccessor, **pElement);
+                view::Tree aElementTree(**pElement);
 
                 NodeChangesInformation aIgnoredChanges;
                 view::getViewBehavior(aElementTree)->adjustToChanges(aIgnoredChanges,view::getRootNode(aElementTree),aSubtreeChange);
@@ -1045,7 +1028,7 @@ SetElementChangeImpl* DeferredSetNodeImpl::doAdjustChangedElement(data::Accessor
             Element aLocalElement = *pLocalElement;
 
             // also signal something happened
-            return implCreateReplace(_aAccessor,aName,aLocalElement,aLocalElement);
+            return implCreateReplace(aName,aLocalElement,aLocalElement);
         }
         else
         {
@@ -1055,12 +1038,12 @@ SetElementChangeImpl* DeferredSetNodeImpl::doAdjustChangedElement(data::Accessor
     }
     else
     {
-        return SetNodeImpl::doAdjustChangedElement(_aAccessor, rLocalChanges,aName,aChange);
+        return SetNodeImpl::doAdjustChangedElement( rLocalChanges,aName,aChange);
     }
 }
 //-----------------------------------------------------------------------------
 
-SetElementChangeImpl* DeferredSetNodeImpl::doAdjustToAddedElement(data::Accessor const& _aAccessor, Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement)
+SetElementChangeImpl* DeferredSetNodeImpl::doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const& aNewElement)
 {
     m_bDefault = false;
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
@@ -1084,22 +1067,22 @@ SetElementChangeImpl* DeferredSetNodeImpl::doAdjustToAddedElement(data::Accessor
             Element aLocalElement = *pLocalElement;
 
             // just signal something happened
-            return implCreateReplace(_aAccessor,aName,aLocalElement,aLocalElement);
+            return implCreateReplace(aName,aLocalElement,aLocalElement);
         }
         else // had been removed locally
         {
             // signal what happened
-            return implCreateInsert(_aAccessor,aName,aNewElement);
+            return implCreateInsert(aName,aNewElement);
         }
     }
     else
     {
-        return SetNodeImpl::implAdjustToAddedElement(_aAccessor,aName,aNewElement,aAddNodeChange.isReplacing());
+        return SetNodeImpl::implAdjustToAddedElement(aName,aNewElement,aAddNodeChange.isReplacing());
     }
 }
 //-----------------------------------------------------------------------------
 
-SetElementChangeImpl* DeferredSetNodeImpl::doAdjustToRemovedElement(data::Accessor const& _aAccessor, Name const& aName, RemoveNode const& /*aRemoveNodeChange*/)
+SetElementChangeImpl* DeferredSetNodeImpl::doAdjustToRemovedElement(Name const& aName, RemoveNode const& /*aRemoveNodeChange*/)
 {
     m_bDefault = false;
     if (Element* pLocalElement = m_aChangedData.getElement(aName))
@@ -1115,7 +1098,7 @@ SetElementChangeImpl* DeferredSetNodeImpl::doAdjustToRemovedElement(data::Access
             Element aLocalElement = *pLocalElement;
 
             // signal something happened
-            return implCreateReplace(_aAccessor,aName,aLocalElement,aLocalElement);
+            return implCreateReplace(aName,aLocalElement,aLocalElement);
         }
         else // already was removed locally
         {
@@ -1124,19 +1107,19 @@ SetElementChangeImpl* DeferredSetNodeImpl::doAdjustToRemovedElement(data::Access
     }
     else
     {
-        return SetNodeImpl::implAdjustToRemovedElement(_aAccessor,aName);
+        return SetNodeImpl::implAdjustToRemovedElement(aName);
     }
 }
 //-----------------------------------------------------------------------------
 
-void DeferredSetNodeImpl::doDifferenceToDefaultState(data::Accessor const& _aAccessor, SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree)
+void DeferredSetNodeImpl::doDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree)
 {
     if (!m_bDefault)
     {
-        implDifferenceToDefaultState(_aAccessor,_rChangeToDefault,_rDefaultTree);
+        implDifferenceToDefaultState(_rChangeToDefault,_rDefaultTree);
 
-        NativeIterator it = m_aChangedData.beginNative();
-        NativeIterator const stop = m_aChangedData.endNative();
+        ElementSet::PairIterator it = m_aChangedData.beginNative();
+        ElementSet::PairIterator const stop = m_aChangedData.endNative();
 
         while(it != stop)
         {
