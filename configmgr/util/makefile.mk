@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:45:50 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 14:50:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@ DLLPRE =
 # --- Library -----------------------------------
 
 SHL1TARGET=	$(CFGMGR_TARGET)$(CFGMGR_MAJOR).uno
-
 SHL1VERSIONMAP= $(TARGET).map
 
 SHL1OBJS=$(SLOFILES)
