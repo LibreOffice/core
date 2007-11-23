@@ -54,6 +54,7 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\inc\svtools\cstitem.hxx %_DEST%\inc%_EXT%\svtools\cstitem.hxx
 ..\inc\svtools\tfrmitem.hxx %_DEST%\inc%_EXT%\svtools\tfrmitem.hxx
 ..\inc\svtools\cntwall.hxx %_DEST%\inc%_EXT%\svtools\cntwall.hxx
+..\inc\svtools\langtab.hxx %_DEST%\inc%_EXT%\svtools\langtab.hxx
 ..\inc\itemdel.hxx %_DEST%\inc%_EXT%\svtools\itemdel.hxx
 ..\inc\wallitem.hxx %_DEST%\inc%_EXT%\svtools\wallitem.hxx
 ..\inc\svtools\sfontitm.hxx %_DEST%\inc%_EXT%\svtools\sfontitm.hxx
