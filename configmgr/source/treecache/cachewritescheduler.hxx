@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachewritescheduler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:24:23 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:37:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,11 +73,9 @@ namespace configmgr
     class OCacheWriteScheduler
     {
         typedef std::set< RequestOptions, lessRequestOptions > CacheWriteList; // fire and forget!
-        typedef backend::CacheController CacheManager;
 
         class Timer : public vos::OTimer
         {
-            osl::Mutex  m_aMutex;
         public:
             OCacheWriteScheduler* pParent;
 
@@ -85,9 +83,6 @@ namespace configmgr
 
             // vos::OTimer
             virtual void SAL_CALL onShot();
-
-            //
-            osl::Mutex&     getShotMutex() {return m_aMutex;}
 
             // stop the scheduling
             void dispose() {
@@ -98,18 +93,15 @@ namespace configmgr
         };
         friend void Timer::onShot();
     private:
-        mutable osl::Mutex  m_aMutex;
-        vos::ORef<Timer>    m_xTimer;
-        CacheManager&       m_rTreeManager;
-
-        CacheWriteList      m_aWriteList;
-
-        TimeInterval m_aWriteInterval;
+        vos::ORef<Timer>          m_xTimer;
+        backend::CacheController &m_rTreeManager;
+        CacheWriteList        m_aWriteList;
+        TimeInterval          m_aWriteInterval;
 
     public:
     //-------- Construction and destruction -----------------------------------
         explicit
-        OCacheWriteScheduler(CacheManager& _rTreeManager, TimeInterval const& _aWriteInterval)
+        OCacheWriteScheduler(backend::CacheController& _rTreeManager, TimeInterval const& _aWriteInterval)
             : m_rTreeManager(_rTreeManager)
             , m_aWriteInterval(_aWriteInterval)
         {
@@ -121,7 +113,7 @@ namespace configmgr
         /// retrieves the recurrance interval used for cleanup
         TimeInterval const& getWriteInterval() const
         {
-            osl::MutexGuard aGuard(m_aMutex);
+            UnoApiLock aLock;
             return m_aWriteInterval;
         }
 
@@ -137,10 +129,6 @@ namespace configmgr
 
         /// stop and discard pending activities
         void stopAndWriteCache();
-
-        /// mutex for synchronisation
-        osl::Mutex&     getShotMutex() {return m_xTimer->getShotMutex();}
-
     private:
         // vos::OTimer
         void onTimerShot();
