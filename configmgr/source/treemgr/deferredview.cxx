@@ -4,9 +4,9 @@
  *
  *  $RCSfile: deferredview.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:28:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:41:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,13 +136,13 @@ void DeferredViewStrategy::implCollectChangesIn(Node const& _aNode, configuratio
     {
         if (_aNode.isSetNode())
         {
-            deferredSetNode(_aNode)->collectElementChanges( _aNode.accessor(), _rChanges);
+            deferredSetNode(_aNode)->collectElementChanges( _rChanges);
         }
         else if (_aNode.isGroupNode())
         {
             GroupNode aGroup(_aNode);
 
-            deferredGroupNode(aGroup)->collectValueChanges( aGroup.accessor(), _rChanges, _aNode.tree().get_impl(), _aNode.get_offset());
+            deferredGroupNode(aGroup)->collectValueChanges( _rChanges, _aNode.tree().get_impl(), _aNode.get_offset());
 
             for( Node aChild = aGroup.getFirstChild();
                  aChild.is();
@@ -225,7 +225,7 @@ node::Attributes DeferredViewStrategy::doAdjustAttributes(node::Attributes const
 //-----------------------------------------------------------------------------
 configuration::ValueMemberNode DeferredViewStrategy::doGetValueMember(GroupNode const& _aNode, Name const& _aName, bool _bForUpdate) const
 {
-    return deferredGroupNode(_aNode)->makeValueMember(_aNode.accessor(),_aName,_bForUpdate);
+    return deferredGroupNode(_aNode)->makeValueMember(_aName,_bForUpdate);
 }
 
 //-----------------------------------------------------------------------------
@@ -236,7 +236,6 @@ void DeferredViewStrategy::doInsertElement(SetNode const& _aNode, Name const& aN
 
     //implMakeElement(aNewEntry)
     SetNodeElement aNewElement = implMakeElement(_aNode, _aNewEntry );
- //   _aNewEntry.tree()->rebuild(this, _aNode.accessor());
 
     deferredSetNode(_aNode)->insertNewElement(aName, aNewElement);
 }
@@ -258,9 +257,9 @@ NodeFactory& DeferredViewStrategy::doGetNodeFactory()
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-ViewStrategyRef createDeferredChangeStrategy(memory::Segment const * _pSegment)
+ViewStrategyRef createDeferredChangeStrategy()
 {
-    return new DeferredViewStrategy(_pSegment);
+    return new DeferredViewStrategy();
 }
 
 //-----------------------------------------------------------------------------
@@ -274,11 +273,11 @@ std::auto_ptr<SubtreeChange> DeferredViewStrategy::implPreCommitChanges(Node con
 
     if (_aNode.isSetNode())
     {
-        aRet = deferredSetNode(_aNode)->preCommitChanges(_aNode.accessor(),_rRemovedElements);
+        aRet = deferredSetNode(_aNode)->preCommitChanges(_rRemovedElements);
     }
     else if (_aNode.isGroupNode())
     {
-        std::auto_ptr<SubtreeChange> aGroupChange(deferredGroupNode(_aNode)->preCommitValueChanges(_aNode.accessor()));
+        std::auto_ptr<SubtreeChange> aGroupChange(deferredGroupNode(_aNode)->preCommitValueChanges());
 
         OSL_ASSERT(aGroupChange.get());
         if (aGroupChange.get())
@@ -301,13 +300,13 @@ void DeferredViewStrategy::implFinishCommit(Node const& _aNode, SubtreeChange& r
     {
         OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
 
-        deferredSetNode(_aNode)->finishCommit(_aNode.accessor(),rSubtreeChange);
+        deferredSetNode(_aNode)->finishCommit(rSubtreeChange);
     }
     else if (_aNode.isGroupNode())
     {
         OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
 
-        deferredGroupNode(_aNode)->finishCommit(_aNode.accessor(),rSubtreeChange);
+        deferredGroupNode(_aNode)->finishCommit(rSubtreeChange);
         implFinishSubCommitted( GroupNode(_aNode), rSubtreeChange );
     }
     else
@@ -326,13 +325,13 @@ void DeferredViewStrategy::implRevertCommit(Node const& _aNode, SubtreeChange& r
     {
         OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
 
-        deferredSetNode(_aNode)->revertCommit(_aNode.accessor(),rSubtreeChange);
+        deferredSetNode(_aNode)->revertCommit(rSubtreeChange);
     }
     else if (_aNode.isGroupNode())
     {
         OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
 
-        deferredGroupNode(_aNode)->revertCommit(_aNode.accessor(),rSubtreeChange);
+        deferredGroupNode(_aNode)->revertCommit(rSubtreeChange);
         implRevertSubCommitted( GroupNode(_aNode), rSubtreeChange );
     }
     else
@@ -351,13 +350,13 @@ void DeferredViewStrategy::implFailedCommit(Node const& _aNode, SubtreeChange& r
     {
         OSL_ENSURE(rSubtreeChange.isSetNodeChange(),"ERROR: Change type GROUP does not match set");
 
-        deferredSetNode(_aNode)->failedCommit(_aNode.accessor(),rSubtreeChange);
+        deferredSetNode(_aNode)->failedCommit(rSubtreeChange);
     }
     else if (_aNode.isGroupNode())
     {
         OSL_ENSURE(!rSubtreeChange.isSetNodeChange(),"ERROR: Change type SET does not match group");
 
-        deferredGroupNode(_aNode)->failedCommit(_aNode.accessor(),rSubtreeChange);
+        deferredGroupNode(_aNode)->failedCommit(rSubtreeChange);
         implFailedSubCommitted( GroupNode(_aNode), rSubtreeChange );
     }
     else
