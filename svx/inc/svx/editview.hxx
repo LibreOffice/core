@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:47:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:35:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,6 +196,7 @@ public:
     void                SetParaAttribs( const SfxItemSet& rSet, USHORT nPara );
     void                RemoveAttribs( BOOL bRemoveParaAttribs = FALSE, USHORT nWhich = 0 );
     void                RemoveCharAttribs( USHORT nPara, USHORT nWhich = 0 );
+    void                RemoveAttribsKeepLanguages( BOOL bRemoveParaAttribs = FALSE );
 
     ULONG           Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, BOOL bSelect = FALSE, SvKeyValueIterator* pHTTPHeaderAttrs = NULL );
     ULONG           Write( SvStream& rOutput, EETextFormat eFormat );
