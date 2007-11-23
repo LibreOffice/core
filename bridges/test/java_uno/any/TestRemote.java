@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TestRemote.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:58:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:10:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,10 @@
 
 package test.java_uno.anytest;
 
-import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.lib.TestBed;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 
 public final class TestRemote {
     public static void main(String[] args) throws Exception {
@@ -53,9 +53,9 @@ public final class TestRemote {
             new Client().execute();
         }
 
-        protected boolean run(XBridge bridge) throws Throwable {
+        protected boolean run(XComponentContext context) throws Throwable {
             XTransport transport = (XTransport) UnoRuntime.queryInterface(
-                XTransport.class, bridge.getInstance("Transport"));
+                XTransport.class, getBridge(context).getInstance("Transport"));
             return TestAny.test(transport, true);
         }
     }
