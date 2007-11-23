@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:44:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,12 +44,6 @@
 #endif
 #ifndef INCLUDED_SHARABLE_TREEFRAGMENT_HXX
 #include "treefragment.hxx"
-#endif
-#ifndef CONFIGMGR_ACCESSOR_HXX
-#include "accessor.hxx"
-#endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
 #endif
 
 #ifndef CONFIGMGR_CONFIGURATION_ATTRIBUTES_HXX_
@@ -226,82 +220,55 @@ struct SetNodeTemplateData
 };
 //-----------------------------------------------------------------------------
 static inline
-SetNodeTemplateData * readTemplateData(memory::Allocator const & _anAllocator, Address _aTemplateData)
+SetNodeTemplateData * readTemplateData(SetElementAddress _aTemplateData)
 {
-    return static_cast<SetNodeTemplateData *>( _anAllocator.access(_aTemplateData) );
-}
-//-----------------------------------------------------------------------------
-static inline
-SetNodeTemplateData const * readTemplateData(memory::Accessor const & _anAccessor, Address _aTemplateData)
-{
-    return static_cast<SetNodeTemplateData const*>( _anAccessor.access(memory::Pointer(_aTemplateData)) );
+    return reinterpret_cast<SetNodeTemplateData *>( _aTemplateData );
 }
 //-----------------------------------------------------------------------------
 
-Address SetNode::allocTemplateData(memory::Allocator const & _anAllocator,
-                                   const rtl::OUString &rName,
+SetElementAddress SetNode::allocTemplateData(const rtl::OUString &rName,
                                    const rtl::OUString &rModule)
 {
-    Address aData = _anAllocator.allocate(sizeof(SetNodeTemplateData));
+    SetNodeTemplateData * pData = new SetNodeTemplateData();
 
-    if (aData)
-    {
-        SetNodeTemplateData * pData = readTemplateData(_anAllocator,aData);
+    OSL_ENSURE(pData, "Creating template data: unexpected NULL data");
 
-        OSL_ENSURE(pData, "Creating template data: unexpected NULL data");
+    pData->name   = allocName(rName);
+    pData->module = allocName(rModule);
 
-        pData->name   = allocName(rName);
-        pData->module = allocName(rModule);
-    }
-    return aData;
+    return reinterpret_cast<SetElementAddress>( pData );
 }
 
-Address SetNode::copyTemplateData(memory::Allocator const & _anAllocator,
-                                  Address _aTemplateData)
+SetElementAddress SetNode::copyTemplateData(SetElementAddress _aTemplateData)
 {
-    SetNodeTemplateData const * pData = readTemplateData(_anAllocator,_aTemplateData);
+    SetNodeTemplateData const * pData = readTemplateData(_aTemplateData);
 
     OSL_ENSURE(pData, "Copying template data: unexpected NULL data");
 
-    return allocTemplateData(_anAllocator, readName(pData->name),
-                             readName(pData->module));
+    return allocTemplateData(readName(pData->name), readName(pData->module));
 }
 
 //-----------------------------------------------------------------------------
 
-void SetNode::releaseTemplateData(memory::Allocator const & _anAllocator, Address _aTemplateData)
+void SetNode::releaseTemplateData(SetElementAddress _aTemplateData)
 {
     if (!_aTemplateData) return;
 
-    SetNodeTemplateData const * pData = readTemplateData(_anAllocator,_aTemplateData);
+    SetNodeTemplateData const * pData = readTemplateData(_aTemplateData);
 
     OSL_ENSURE(pData, "Freeing template data: unexpected NULL data");
 
     freeName(pData->name);
     freeName(pData->module);
 
-    _anAllocator.deallocate(_aTemplateData);
-}
-
-rtl::OUString SetNode::getTemplateDataName(memory::Accessor const & _anAccessor,
-                                           Address _aTemplateData)
-{
-    SetNodeTemplateData const * pData = readTemplateData(_anAccessor,_aTemplateData);
-    return pData->name;
-}
-
-rtl::OUString SetNode::getTemplateDataModule(memory::Accessor const & _anAccessor,
-                                             Address _aTemplateData)
-{
-    SetNodeTemplateData const * pData = readTemplateData(_anAccessor,_aTemplateData);
-    return pData->module;
+    delete pData;
 }
 
 //-----------------------------------------------------------------------------
 
-rtl::OUString SetNode::getElementTemplateName(memory::Accessor const & _anAccessor)   const
+rtl::OUString SetNode::getElementTemplateName() const
 {
-    SetNodeTemplateData const * pData = readTemplateData(_anAccessor,this->elementType);
+    SetNodeTemplateData const * pData = readTemplateData(this->elementType);
 
     OSL_ENSURE(pData, "ERROR: No template data found for set");
 
@@ -309,9 +276,9 @@ rtl::OUString SetNode::getElementTemplateName(memory::Accessor const & _anAccess
 }
 //-----------------------------------------------------------------------------
 
-rtl::OUString SetNode::getElementTemplateModule(memory::Accessor const & _anAccessor) const
+rtl::OUString SetNode::getElementTemplateModule() const
 {
-    SetNodeTemplateData const * pData = readTemplateData(_anAccessor,this->elementType);
+    SetNodeTemplateData const * pData = readTemplateData(this->elementType);
 
     OSL_ENSURE(pData, "ERROR: No template data found for set");
 
@@ -320,25 +287,25 @@ rtl::OUString SetNode::getElementTemplateModule(memory::Accessor const & _anAcce
 //-----------------------------------------------------------------------------
 
 static inline
-TreeFragment const * implGetFragmentFromList(memory::Accessor const & _anAccessor, List _aListEntry)
+TreeFragment const * implGetFragmentFromList(List _aListEntry)
 {
-    return static_cast<TreeFragment const *>(_anAccessor.access(memory::Pointer(_aListEntry)));
+    return reinterpret_cast<TreeFragment const *>(_aListEntry);
 }
 //-----------------------------------------------------------------------------
 
-TreeFragment const  * SetNode::getFirstElement(memory::Accessor const & _anAccessor) const
+TreeFragment const  * SetNode::getFirstElement() const
 {
-    return implGetFragmentFromList(_anAccessor, this->elements);
+    return implGetFragmentFromList(this->elements);
 }
 //-----------------------------------------------------------------------------
 
-TreeFragment const  * SetNode::getNextElement(memory::Accessor const & _anAccessor, TreeFragment const * _pElement) const
+TreeFragment const  * SetNode::getNextElement(TreeFragment const * _pElement) const
 {
     OSL_PRECOND(_pElement, "getNextElement: previous element must not be NULL");
-    OSL_PRECOND(_pElement->header.parent == _anAccessor.address(this).value(),
+    OSL_PRECOND(_pElement->header.parent == (Node *)this,
                 "getNextElement: not an element of this node");
 
-    return implGetFragmentFromList(_anAccessor, _pElement->header.next);
+    return implGetFragmentFromList(_pElement->header.next);
 }
 //-----------------------------------------------------------------------------
 
@@ -367,7 +334,7 @@ bool ValueNode::hasUsableDefault() const
 }
 //-----------------------------------------------------------------------------
 
-uno::Type   ValueNode::getValueType()  const
+uno::Type ValueNode::getValueType() const
 {
     AnyData::TypeCode aType = AnyData::TypeCode( info.type & Type::mask_valuetype );
 
@@ -375,36 +342,36 @@ uno::Type   ValueNode::getValueType()  const
 }
 //-----------------------------------------------------------------------------
 
-uno::Any    ValueNode::getValue(memory::Accessor const & _aAccessor)      const
+uno::Any ValueNode::getValue() const
 {
     if (info.flags & Flags::defaulted)
-        return getDefaultValue(_aAccessor);
+        return getDefaultValue();
 
     else
-        return getUserValue(_aAccessor);
+        return getUserValue();
 }
 //-----------------------------------------------------------------------------
 
-uno::Any    ValueNode::getUserValue(memory::Accessor const & _aAccessor)      const
+uno::Any ValueNode::getUserValue() const
 {
     if (info.flags & Flags::valueAvailable)
     {
         AnyData::TypeCode aType = AnyData::TypeCode( info.type & Type::mask_valuetype );
 
-        return readData(_aAccessor,aType,this->value);
+        return readData(aType,this->value);
     }
     else
         return uno::Any();
 }
 //-----------------------------------------------------------------------------
 
-uno::Any    ValueNode::getDefaultValue(memory::Accessor const & _aAccessor)    const
+uno::Any ValueNode::getDefaultValue() const
 {
     if (info.flags & Flags::defaultAvailable)
     {
         AnyData::TypeCode aType = AnyData::TypeCode( info.type & Type::mask_valuetype );
 
-        return readData(_aAccessor,aType,this->defaultValue);
+        return readData(aType,this->defaultValue);
     }
     else
         return uno::Any();
@@ -413,7 +380,18 @@ uno::Any    ValueNode::getDefaultValue(memory::Accessor const & _aAccessor)    c
 
 bool Node::isNamed(rtl::OUString const & _aName) const
 {
-    return _aName == readName(node.info.name);
+    rtl_uString *pCmpData = _aName.pData;
+    rtl_uString *pNodeData = node.info.name;
+
+    // Creating an OUString does rather expensive interlocking here.
+    if (pCmpData == pNodeData)
+        return true;
+    if (pCmpData->length != pNodeData->length)
+        return false;
+    return !rtl_ustr_compare_WithLength( pCmpData->buffer,
+                                         pCmpData->length,
+                                         pNodeData->buffer,
+                                         pNodeData->length);
 }
 //-----------------------------------------------------------------------------
 
@@ -446,57 +424,7 @@ bool Node::isLocalized() const
 {
     return node.info.isLocalized();
 }
-//-----------------------------------------------------------------------------
 
-bool Node::isGroup()  const
-{
-    return (node.info.type & Type::mask_nodetype) == Type::nodetype_group;
-}
-//-----------------------------------------------------------------------------
-
-bool Node::isSet()    const
-{
-    return (node.info.type & Type::mask_nodetype) == Type::nodetype_set;
-}
-//-----------------------------------------------------------------------------
-
-bool Node::isValue()  const
-{
-    return (node.info.type & Type::mask_nodetype) == Type::nodetype_value;
-}
-//-----------------------------------------------------------------------------
-
-GroupNode       * Node::groupData()
-{
-    return isGroup() ? &this->group : NULL;
-}
-//-----------------------------------------------------------------------------
-
-GroupNode const * Node::groupData() const
-{
-    return isGroup() ? &this->group : NULL;
-}
-//-----------------------------------------------------------------------------
-
-SetNode         * Node::setData()
-{
-    return isSet() ? &this->set : NULL;
-}
-//-----------------------------------------------------------------------------
-SetNode   const * Node::setData()   const
-{
-    return isSet() ? &this->set : NULL;
-}
-//-----------------------------------------------------------------------------
-ValueNode       * Node::valueData()
-{
-    return isValue() ? &this->value : NULL;
-}
-//-----------------------------------------------------------------------------
-ValueNode const * Node::valueData() const
-{
-    return isValue() ? &this->value : NULL;
-}
 //-----------------------------------------------------------------------------
 
 bool Node::isFragmentRoot() const
