@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 08:10:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2955,11 +2955,15 @@ namespace xmloff { namespace token {
         TOKEN( "group-bars-per-axis",             XML_GROUP_BARS_PER_AXIS ),
         TOKEN( "reverse-direction",               XML_REVERSE_DIRECTION ),
         TOKEN( "label-separator",                 XML_LABEL_SEPARATOR ),
-
+        TOKEN( "label-position",                  XML_LABEL_POSITION ),
+        TOKEN( "avoid-overlap",                   XML_AVOID_OVERLAP ),
+        TOKEN( "near-origin",                     XML_NEAR_ORIGIN ),
         TOKEN( "dependency",             XML_DEPENDENCY ),
 
         TOKEN( "nav-order",             XML_NAV_ORDER ),
-
+        TOKEN( "automatic-content",     XML_AUTOMATIC_CONTENT ),
+        TOKEN( "display-r-square",      XML_DISPLAY_R_SQUARE ),
+        TOKEN( "display-equation",      XML_DISPLAY_EQUATION ),
         // db odf 12
         TOKEN( "table-representations", XML_TABLE_REPRESENTATIONS ),
         TOKEN( "table-representation",  XML_TABLE_REPRESENTATION ),
@@ -2979,7 +2983,6 @@ namespace xmloff { namespace token {
         TOKEN( "character-set",         XML_CHARACTER_SET ),
         TOKEN( "application-connection-settings",         XML_APPLICATION_CONNECTION_SETTINGS ),
         TOKEN( "table-include-filter",         XML_TABLE_INCLUDE_FILTER ),
-
 #if OSL_DEBUG_LEVEL > 0
         { 0, NULL, NULL,                       XML_TOKEN_END }
 #else
