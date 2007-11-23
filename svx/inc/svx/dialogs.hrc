@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 16:37:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:35:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -692,7 +692,6 @@
 #define RID_SVXSTR_NOTCENTERED              (RID_SVX_START + 307)
 
 // String-Arrays
-#define RID_SVXSTR_LANGUAGE_TABLE           (RID_SVX_START + 310)
 #define RID_SVXSTR_FIELDUNIT_TABLE          (RID_SVX_START + 311)
 #define RID_SVXSTR_TEXTENCODING_TABLE       (RID_SVX_START + 312)
 
@@ -1452,9 +1451,11 @@
 
 // ----------------------------------------------------------------------------
 
+// !!!! double defined ID's (see below) !!!
 #define RID_OFAPAGE_HTMLOPT             (RID_OFA_START + 100)
 #define RID_OFA_AUTOCORR_DLG            (RID_OFA_START + 101)
 #define RID_OFAPAGE_AUTOCORR_OPTIONS    (RID_OFA_START + 102)
+
 #define RID_OFAPAGE_AUTOCORR_REPLACE    (RID_OFA_START + 103)
 #define RID_OFAPAGE_AUTOCORR_EXCEPT     (RID_OFA_START + 104)
 #define RID_OFA_GENERAL_OPTIONS_DLG     (RID_OFA_START + 105)
@@ -1480,6 +1481,14 @@
 #define RID_OFAPAGE_SMARTTAG_OPTIONS    (RID_OFA_START + 125)
 
 // TabPages --------------------------------------------------------------
+
+// !!!! double defined ID's (see above) !!!
+#define RID_RIDER_SLL_SITE              (RID_OFA_START + 100)
+#define RID_RIDER_SLL_PERSONAL          (RID_OFA_START + 101)
+#define RID_SW_TP_MAILCONFIG            (RID_OFA_START + 102)
+
+#define RID_IMGLIST_TREEOPT             (RID_OFA_START + 174)
+#define RID_IMGLIST_TREEOPT_HC          (RID_OFA_START + 175)
 
 #define OFA_TP_MISC                     (RID_OFA_START + 200)
 
@@ -1539,11 +1548,8 @@
 #define RID_OFA_TP_INTERNATIONAL_SD     (RID_OFA_START + 253)       // 4 SD
 #define RID_OFA_TP_INTERNATIONAL_IMPR   (RID_OFA_START + 254)       // 4 impress
 #define RID_SW_TP_OPTCOMPATIBILITY_PAGE (RID_OFA_START + 255)
-#define RID_IMGLIST_TREEOPT             (RID_OFA_START + 174)
-#define RID_IMGLIST_TREEOPT_HC          (RID_OFA_START + 175)
-#define RID_RIDER_SLL_SITE              (RID_OFA_START + 100)
-#define RID_RIDER_SLL_PERSONAL          (RID_OFA_START + 101)
-#define RID_SW_TP_MAILCONFIG            (RID_OFA_START + 102)
+#define OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE      ( RID_OFA_START + 256 )
+
 
 //add for Dialog SchTransformTabDialog,SvxTransformTabDialog //CHINA001
 #define RID_SCH_TransformTabDLG_SVXPAGE_ANGLE           (RID_SVX_START + 998)
