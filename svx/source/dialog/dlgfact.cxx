@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-06 16:29:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:37:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1100,13 +1100,22 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateVclDialog( Window* pParent,
     switch ( nResId )
     {
         case SID_OPTIONS_TREEDIALOG :
-        case SID_OPTIONS_DATABASES:
+        case SID_OPTIONS_DATABASES :
+        case SID_LANGUAGE_OPTIONS :
         {
+            bool bActivateLastSelection = false;
+            if (nResId == SID_OPTIONS_TREEDIALOG)
+                bActivateLastSelection = true;
             css::uno::Reference< css::frame::XFrame > xFrame;
-            OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent, xFrame );
-            if(nResId == SID_OPTIONS_DATABASES)
+            OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent, xFrame, bActivateLastSelection );
+            if (nResId == SID_OPTIONS_DATABASES)
             {
                 pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
+            }
+            else if (nResId == SID_LANGUAGE_OPTIONS)
+            {
+                //open the tab page "tools/options/languages"
+                pOptDlg->ActivatePage(OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE);
             }
             pDlg = pOptDlg;
         }
