@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupnodeimpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:29:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:42:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,16 +88,15 @@ namespace configmgr
 
         class GroupNodeImpl : public NodeImpl
         {
+            mutable sharable::Node *m_pCache;
         public:
-            explicit GroupNodeImpl(data::GroupNodeAddress const& _aNodeRef);
+            explicit GroupNodeImpl(data::GroupNodeAddress _pNodeRef);
 
-            typedef data::GroupNodeAccess DataAccess;
+            data::GroupNodeAccess getDataAccess() const;
 
-            DataAccess getDataAccess(data::Accessor const& _aAccessor) const;
+            bool areValueDefaultsAvailable() const;
 
-            bool areValueDefaultsAvailable(data::Accessor const& _aAccessor) const;
-
-            data::ValueNodeAccess getOriginalValueNode(data::Accessor const& _aAccessor, Name const& aName) const;
+            data::ValueNodeAccess getOriginalValueNode(Name const& aName) const;
 
             ValueMemberNode makeValueMember(data::ValueNodeAccess const& _aValueNode);
         };
