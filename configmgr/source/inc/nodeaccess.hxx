@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodeaccess.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:48:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,9 @@
 #ifndef CONFIGMGR_NODEACCESS_HXX
 #define CONFIGMGR_NODEACCESS_HXX
 
-#ifndef CONFIGMGR_NODEADDRESS_HXX
-#include "nodeaddress.hxx"
+#ifndef INCLUDED_SHARABLE_NODE_HXX
+#include "node.hxx"
 #endif
-#ifndef CONFIGMGR_ACCESSOR_HXX
-#include "accessor.hxx"
-#endif
-
 #ifndef _CONFIGMGR_TREE_VALUENODE_HXX
 #include "valuenode.hxx"
 #endif
@@ -55,117 +51,34 @@ namespace configmgr
 // -----------------------------------------------------------------------------
     namespace data
     {
-    // -------------------------------------------------------------------------
-        using memory::Accessor;
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
+        // -------------------------------------------------------------------------
         class NodeAccess
         {
         public:
-            typedef configuration::Name     Name;
-            typedef node::Attributes        Attributes;
+             NodeAccess(const sharable::Node *_pNode)
+                 : m_pData((sharable::Node *)_pNode) {}
 
-            typedef NodeAddress                     NodeAddressType;
-            typedef NodeAddress::AddressType        AddressType;
-            typedef NodeAddress::DataType const     DataType;
-            typedef DataType * NodePointerType;
+             bool isValid() const { return m_pData != NULL; }
 
-            static NodeAccess emptyNode() { return NodeAccess(); }
+             configuration::Name getName() const { return wrapName( m_pData->getName() ); }
+             static configuration::Name wrapName(rtl::OUString const& _aNameString)
+                 { return configuration::makeName( _aNameString, configuration::Name::NoValidate() ); }
 
-            NodeAccess(Accessor const& _aAccessor, NodeAddressType const& _aNodeRef)
-            : m_aAccessor(_aAccessor)
-            , m_pData(_aNodeRef.m_pData)
-            {}
-
-            NodeAccess(Accessor const& _aAccessor, NodePointerType _pNode)
-            : m_aAccessor(_aAccessor)
-            , m_pData(_aAccessor.address(_pNode))
-            {}
-
-            bool isValid() const { return m_pData.is(); }
-            bool isLocalRoot() const { return data().isFragmentRoot(); }
-
-            Name getName() const { return wrapName( data().getName() ); }
-            Attributes getAttributes() const { return data().getAttributes(); }
-
-            bool isDefault()   const { return data().isDefault(); }
-            bool isLocalized() const { return data().isLocalized(); }
-
-            NodeAddressType address() const { return NodeAddressType(m_pData); }
-            Accessor const& accessor() const { return m_aAccessor; }
-
-            DataType& data() const { return *static_cast<NodePointerType>(m_aAccessor.validate(m_pData)); }
-            NodePointerType getDataPtr() const { return static_cast<NodePointerType>(m_aAccessor.access(m_pData)); }
-
-            AddressType rawAddress() const { return m_pData; }
-
-            static Name wrapName(rtl::OUString const& _aNameString)
-            { return configuration::makeName( _aNameString, Name::NoValidate() ); }
-
-            static NodeAddress::DataType* access(NodeAddressType const& _aNodeRef, memory::UpdateAccessor& _rUpdateAccess);
-            static NodeAddress::DataType const* access(NodeAddressType const& _aNodeRef, Accessor const& _rReaderAccess)
-            { return static_cast<NodePointerType>(_rReaderAccess.access(_aNodeRef.m_pData)); }
-        private:
-            NodeAccess() : m_aAccessor(NULL), m_pData() {}
-
-            Accessor    m_aAccessor;
-            AddressType m_pData;
-        };
-    // -------------------------------------------------------------------------
-        class NodeAccessRef
-        {
-        public:
-            typedef NodeAccess::Name                Name;
-            typedef NodeAccess::Attributes          Attributes;
-
-            typedef NodeAccess::NodeAddressType     NodeAddressType;
-            typedef NodeAccess::AddressType         AddressType;
-            typedef NodeAccess::DataType            DataType;
-            typedef NodeAccess::NodePointerType     NodePointerType;
-
-            NodeAccessRef(NodeAccess const& _aNodeAccess)
-            : m_pAccessor(&_aNodeAccess.accessor())
-            , m_pData(_aNodeAccess.rawAddress())
-            {}
-
-            NodeAccessRef(Accessor const * _pAccessor, NodeAddressType const& _aNodeRef)
-            : m_pAccessor(_pAccessor)
-            , m_pData(_aNodeRef.m_pData)
-            {}
-
-            NodeAccessRef(Accessor const * _pAccessor, NodePointerType _pNode)
-            : m_pAccessor(_pAccessor)
-            , m_pData(_pAccessor->address(_pNode))
-            {}
-
-            NodeAccess toNodeAccess () const { return NodeAccess(accessor(),address()); }
-
-            bool isValid() const { return m_pData.is(); }
-            bool isLocalRoot() const { return data().isFragmentRoot(); }
-
-            Name getName() const { return NodeAccess::wrapName( data().getName() ); }
-            Attributes getAttributes() const { return data().getAttributes(); }
-
-            bool isDefault()   const { return data().isDefault(); }
-            bool isLocalized() const { return data().isLocalized(); }
-
-            NodeAddressType address() const { return NodeAddressType(m_pData); }
-            Accessor const& accessor() const { return *m_pAccessor; }
-
-            DataType& data() const { return *static_cast<NodePointerType>(m_pAccessor->validate(m_pData)); }
-            NodePointerType getDataPtr() const { return static_cast<NodePointerType>(m_pAccessor->access(m_pData)); }
-
-            AddressType rawAddress() const { return m_pData; }
+            // make it look like a pointer ...
+            operator sharable::Node *() const { return (sharable::Node *)m_pData; }
+            operator const sharable::Node * () const { return m_pData; }
+            sharable::Node* operator->() const { return (sharable::Node *)m_pData; }
+            bool operator == (const sharable::Node *pData) const { return pData == m_pData; }
+            bool operator != (const sharable::Node *pData) const { return pData != m_pData; }
 
         private:
-            Accessor const *   m_pAccessor;
-            AddressType m_pData;
+            const sharable::Node * m_pData;
         };
+
     // -------------------------------------------------------------------------
     // helper - finds child or element
-        NodeAccess  getSubnode(NodeAccessRef const & _aNode, NodeAccess::Name const & _aName);
-        NodeAddress getSubnodeAddress(memory::Accessor const& _aAccess, NodeAddress const & _aNodeAddress, NodeAccess::Name const & _aName);
-        NodeAddress getSubnodeAddress(memory::UpdateAccessor& _aAccess, NodeAddress const & _aNodeAddress, NodeAccess::Name const & _aName);
+    NodeAccess  getSubnode(NodeAccess const & _aNode, configuration::Name const & _aName);
+    NodeAddress getSubnodeAddress(NodeAddress const & _aNodeAddress, configuration::Name const & _aName);
     // -------------------------------------------------------------------------
     }
 // -----------------------------------------------------------------------------
