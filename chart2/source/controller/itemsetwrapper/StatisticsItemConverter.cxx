@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StatisticsItemConverter.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:42:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,13 +379,9 @@ bool StatisticsItemConverter::ApplySpecialItem(
                             RegressionCurveHelper::getFirstRegressTypeNotMeanValueLine( xRegCnt ))));
                 if( eOldRegress != eRegress )
                 {
-                    uno::Reference< beans::XPropertySet > xFormerProp(
-                        RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCnt ), uno::UNO_QUERY );
-
-                    RegressionCurveHelper::removeAllExceptMeanValueLine( xRegCnt );
-
-                    RegressionCurveHelper::addRegressionCurve( lcl_convertRegressionType( eRegress )
-                        , xRegCnt, uno::Reference< uno::XComponentContext >(), xFormerProp );
+                    RegressionCurveHelper::replaceOrAddCurveAndReduceToOne(
+                        lcl_convertRegressionType( eRegress ), xRegCnt,
+                        uno::Reference< uno::XComponentContext >());
                     bChanged = true;
                 }
             }
