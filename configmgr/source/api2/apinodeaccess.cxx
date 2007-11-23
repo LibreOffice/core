@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apinodeaccess.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:54:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:02:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,9 +77,9 @@ configuration::TreeRef  NodeAccess::getTreeRef() const
 }
 //-----------------------------------------------------------------------------
 
-configuration::Tree NodeAccess::getTree(data::Accessor const & _aAccessor) const
+configuration::Tree NodeAccess::getTree() const
 {
-    return configuration::Tree(_aAccessor,getApiTree().getTree());
+    return configuration::Tree(getApiTree().getTree());
 }
 //-----------------------------------------------------------------------------
 
@@ -106,23 +106,7 @@ Notifier NodeAccess::getNotifier() const
 {
     return getApiTree().getNotifier();
 }
-//-----------------------------------------------------------------------------
 
-osl::Mutex& NodeAccess::getDataLock() const
-{
-    return getApiTree().getDataLock();
-}
-//-----------------------------------------------------------------------------
-
-memory::Segment const* NodeAccess::getSourceData() const
-{
-    return getApiTree().getSourceData();
-}
-//-----------------------------------------------------------------------------
-osl::Mutex& NodeAccess::getApiLock()
-{
-    return getApiTree().getApiLock();
-}
 //-----------------------------------------------------------------------------
 
 UnoAny  makeElement(configapi::Factory& rFactory, configuration::Tree const& aTree, configuration::AnyNodeRef const& aNode)
@@ -200,7 +184,7 @@ configuration::ElementTree extractElementTree(configapi::Factory& rFactory, UnoA
 {
     using namespace configuration;
     ElementRef aExtractedRef = extractElementRef(rFactory,aElement,aElementInfo.getTemplateInfo());
-    return aExtractedRef.getElementTree(aElementInfo.getSetDataAccessor());
+    return aExtractedRef.getElementTree();
 }
 //-----------------------------------------------------------------------------
 
@@ -216,42 +200,17 @@ SetElement* findSetElement(Factory& rFactory, configuration::ElementRef const& a
 }
 //-----------------------------------------------------------------------------
 
-configuration::SetElementInfo NodeSetInfoAccess::getElementInfo(data::Accessor const& _aAccessor) const
+configuration::SetElementInfo NodeSetInfoAccess::getElementInfo() const
 {
     using configuration::SetElementInfo;
     using configuration::TemplateHolder;
 
-    TemplateHolder aTemplate = SetElementInfo::extractElementInfo(getTree(_aAccessor),getNodeRef());
+    TemplateHolder aTemplate = SetElementInfo::extractElementInfo(getTree(),getNodeRef());
 
     OSL_ENSURE(aTemplate.is(), "ERROR: Set must have an element template");
 
-    return SetElementInfo(_aAccessor,aTemplate);
+    return SetElementInfo(aTemplate);
 }
-//-----------------------------------------------------------------------------
 
-NodeReadGuardImpl::NodeReadGuardImpl(NodeAccess& rNode)
-: m_aLock(rNode.getDataLock())
-, m_rNode(rNode)
-{
-    rNode.checkAlive();
 }
-//-----------------------------------------------------------------------------
-
-NodeReadGuardImpl::~NodeReadGuardImpl() throw ()
-{
-}
-//-----------------------------------------------------------------------------
-
-configuration::Tree NodeReadGuardImpl::getTree(data::Accessor const& _aAccessor) const
-{
-    return this->get().getTree(_aAccessor);
-}
-//-----------------------------------------------------------------------------
-
-configuration::NodeRef NodeReadGuardImpl::getNode() const
-{
-    return this->get().getNodeRef();
-}
-//-----------------------------------------------------------------------------
-    }
 }
