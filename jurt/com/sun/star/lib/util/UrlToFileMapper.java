@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UrlToFileMapper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:05:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:12:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,12 @@ import java.net.URLClassLoader;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 
-
-public class UrlToFileMapper {
+/**
+ * Maps Java URL representations to File representations, on any Java version.
+ *
+ * @since UDK 3.2.8
+ */
+public final class UrlToFileMapper {
 
     // java.net.URLEncoder.encode(String, String) and java.net.URI are only
     // available since Java 1.4:
@@ -65,7 +69,12 @@ public class UrlToFileMapper {
         }
     }
 
-
+    /**
+     * Maps Java URL representations to File representations.
+     *
+     * @param url some URL, possibly null.
+     * @return a corresponding File, or null on failure.
+     */
     public static File mapUrlToFile(URL url) {
         if (url == null) {
             return null;
@@ -156,4 +165,6 @@ public class UrlToFileMapper {
         }
         return buf.toString();
     }
+
+    private UrlToFileMapper() {}
 }
