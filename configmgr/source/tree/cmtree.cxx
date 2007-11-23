@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:49:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:31:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@
 #include <set>
 #define INCLUDED_SET
 #endif
+#include <algorithm>
 
 using namespace std;
 using namespace rtl;
@@ -89,24 +90,79 @@ namespace configmgr
 
 // ------------------------ ChildListSet implementations ------------------------
     ChildListSet::ChildListSet(ChildListSet const& aSet, treeop::DeepChildCopy)
+        : m_aChildList(0)
     {
-        for(ChildList::iterator it = aSet.GetSet().begin();
-            it != aSet.GetSet().end();
-            ++it)
+        for (size_t i = 0; i < aSet.m_aChildList.size(); i++)
         {
-            INode* pOrg = *it;
-            std::auto_ptr<INode> aCopy = pOrg->clone();
-            m_aChildList.insert(m_aChildList.end(), aCopy.release());
+            m_aChildList.insert(m_aChildList.end(),
+                                aSet.m_aChildList[i]->clone().release());
         }
     }
     ChildListSet::~ChildListSet()
     {
-        for(ChildList::iterator it = m_aChildList.begin();
-            it != m_aChildList.end();
-            ++it)
-            delete *it;
+        for (size_t i = 0; i < m_aChildList.size(); i++)
+            delete m_aChildList[i];
     }
 
+    struct ltNode
+    {
+        bool operator()(const configmgr::INode* n1, const configmgr::INode* n2) const
+        {
+            return n1->getName().compareTo(n2->getName()) < 0;
+        }
+    };
+
+    ChildList::iterator ChildListSet::find(INode *pNode) const
+    {
+        ChildList &rList = const_cast<ChildList &>(m_aChildList);
+        std::pair<ChildList::iterator, ChildList::iterator> aRange;
+        ltNode aCompare;
+        aRange = equal_range(rList.begin(), rList.end(), pNode, aCompare);
+        if (aRange.second - aRange.first == 0)
+            return rList.end();
+        else
+            return aRange.first;
+    }
+
+    // Keep the list sorted ...
+    std::pair<ChildList::iterator, bool> ChildListSet::insert(INode *pNode)
+    {
+        // Inserted records are (mostly) already in order
+        if (m_aChildList.size() > 0)
+        {
+            sal_Int32 nCmp = pNode->getName().compareTo(
+                m_aChildList.back()->getName());
+            if (nCmp == 0)
+            {
+                return std::pair<ChildList::iterator, bool>(m_aChildList.end(), false);
+            }
+            else if (nCmp < 0)
+            {
+                ChildList::iterator aIns;
+                ltNode aCompare;
+                aIns = lower_bound(m_aChildList.begin(), m_aChildList.end(), pNode, aCompare);
+                if (aIns != m_aChildList.end() && pNode->getName().compareTo((*aIns)->getName()) == 0)
+                    return std::pair<ChildList::iterator, bool>(m_aChildList.end(), false);
+                return std::pair<ChildList::iterator, bool>(m_aChildList.insert(aIns, pNode), true);
+            }
+        }
+        // simple append - the common case.
+        return std::pair<ChildList::iterator, bool>(m_aChildList.insert(m_aChildList.end(), pNode), true);
+    }
+
+    INode *ChildListSet::erase(INode *pNode)
+    {
+        ChildList::iterator aIter = find(pNode);
+
+        if (aIter != m_aChildList.end())
+        {
+            INode *pCopy = *aIter;
+            m_aChildList.erase(aIter);
+            return pCopy;
+        }
+        else
+            return NULL;
+    }
 
 // ---------------------------- Node implementation ----------------------------
 
@@ -246,30 +302,15 @@ namespace configmgr
     {
         SearchNode searchObj(aName);
 
-#if OSL_DEBUG_LEVEL > 1
-        for (ChildList::iterator it2 = m_aChildren.GetSet().begin();
-            it2 != m_aChildren.GetSet().end();
-            ++it2)
-        {
-            INode* pINode = *it2;
-            OUString aName2 = pINode->getName();
-            volatile int dummy;
-            dummy = 0;
-        }
-#endif
-
-        ChildList::iterator it = m_aChildren.GetSet().find(&searchObj);
-        if (it == m_aChildren.GetSet().end())
-            return NULL;
-        else
-            return *it;
+        ChildList::iterator aIter = m_aChildren.find(&searchObj);
+        return aIter != m_aChildren.end() ? *aIter : NULL;
     }
 
     INode* Subtree::addChild(std::auto_ptr<INode> aNode)    // takes ownership
     {
         OUString aName = aNode->getName();
         std::pair<ChildList::iterator, bool> aInserted =
-            m_aChildren.GetSet().insert(aNode.get());
+            m_aChildren.insert(aNode.get());
         if (aInserted.second)
             aNode.release();
         return *aInserted.first;
@@ -278,30 +319,22 @@ namespace configmgr
     ::std::auto_ptr<INode> Subtree::removeChild(OUString const& aName)
     {
         SearchNode searchObj(aName);
-        ChildList::const_iterator it = m_aChildren.GetSet().find(&searchObj);
-
-        ::std::auto_ptr<INode> aReturn;
-        if (m_aChildren.GetSet().end() != it)
-        {
-            aReturn = ::std::auto_ptr<INode>(*it);
-            m_aChildren.GetSet().erase(it);
-        }
-        return aReturn;
+        return ::std::auto_ptr<INode>(m_aChildren.erase(&searchObj));
     }
 //  // -------------------------- ValueNode implementation --------------------------
 
     void Subtree::forEachChild(NodeAction& anAction) const
     {
-        for(ChildList::const_iterator it = m_aChildren.GetSet().begin();
-            it != m_aChildren.GetSet().end();
+        for(ChildList::const_iterator it = m_aChildren.begin();
+            it != m_aChildren.end();
             ++it)
             (**it).dispatch(anAction);
     }
 
     void Subtree::forEachChild(NodeModification& anAction)
     {
-        ChildList::iterator it = m_aChildren.GetSet().begin();
-        while( it != m_aChildren.GetSet().end() )
+        ChildList::iterator it = m_aChildren.begin();
+        while( it != m_aChildren.end() )
         {
             // modification-safe iteration
             (**it++).dispatch(anAction);
