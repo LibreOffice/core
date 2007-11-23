@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewstrategy.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:37:43 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:50:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,18 +46,16 @@
 #ifndef CONFIGMGR_SETNODEBEHAVIOR_HXX_
 #include "setnodeimpl.hxx"
 #endif
-
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/simplereferenceobject.hxx>
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
+
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
 
 namespace configmgr
 {
-//-----------------------------------------------------------------------------
-    namespace memory { class Segment; }
 //-----------------------------------------------------------------------------
     namespace configuration
     {
@@ -77,7 +75,7 @@ namespace configmgr
         typedef com::sun::star::uno::Any    UnoAny;
         typedef com::sun::star::uno::Type   UnoType;
 //-----------------------------------------------------------------------------
-        class ViewStrategy : public salhelper::SimpleReferenceObject
+        class ViewStrategy : public configmgr::SimpleReferenceObject
         {
         // node attributes
         public:
@@ -195,22 +193,10 @@ namespace configmgr
         public:
             NodeFactory& getNodeFactory();
 
-        // direct update access to data
-        public:
-            void releaseDataSegment();
-
-            memory::Segment const * getDataSegment() const;
-            memory::Segment  * getDataSegmentForUpdate();
-
-            data::NodeAddress   ::DataType * getDataForUpdate(data::NodeAccessRef const & _aNode);
-            data::SetNodeAddress::DataType * getDataForUpdate(data::SetNodeAccess const & _aNode);
-            data::GroupNodeAddress::DataType * getDataForUpdate(data::GroupNodeAccess const & _aNode);
-            data::ValueNodeAddress::DataType * getDataForUpdate(data::ValueNodeAccess const & _aNode);
-
         // access to node innards
         protected:
             /// provide access to the data of the underlying node
-            data::NodeAccessRef getNodeAccessRef(Node const& _aNode) const;
+            data::NodeAccess getNodeAccess(Node const& _aNode) const;
 
             /// provide access to the address of the underlying node
             data::NodeAddress getNodeAddress(Node const& _aNode) const;
@@ -247,13 +233,6 @@ namespace configmgr
 
         // virtual interface - these functions all have default implementations without support for pending changes
         protected:
-            virtual void doReleaseDataSegment() = 0;
-
-            // special support for direct changes to underlying data - default is no support
-            virtual data::NodeAddress::DataType * implAccessForUpdate(data::NodeAccessRef const & _aDataAccess);
-            virtual memory::Segment const * doGetDataSegment() const = 0;
-            virtual memory::Segment       * doGetDataSegmentForUpdate();
-
             // change handling
             virtual void doCollectChanges(Node const& _aNode, NodeChanges& rChanges) const;
 
@@ -275,12 +254,7 @@ namespace configmgr
             // set element access
             virtual void doInsertElement(SetNode const& _aNode, Name const& aName, SetNodeEntry const& aNewEntry) = 0;
             virtual void doRemoveElement(SetNode const& _aNode, Name const& aName) = 0;
-
-            // strategy change support
-/*          virtual void doCommitChanges(Node const& _aNode);
-            virtual rtl::Reference<ViewStrategy> doCloneDirect() = 0;
-            virtual rtl::Reference<ViewStrategy> doCloneIndirect() = 0;
-*/      };
+        };
 
 //-----------------------------------------------------------------------------
         inline Name ViewStrategy::getName(Node const& _aNode)   const
@@ -294,15 +268,6 @@ namespace configmgr
 
         inline NodeFactory& ViewStrategy::getNodeFactory()
         { return doGetNodeFactory(); }
-
-        inline void ViewStrategy::releaseDataSegment()
-        { doReleaseDataSegment(); }
-
-        inline memory::Segment const * ViewStrategy::getDataSegment()   const
-        { return doGetDataSegment(); }
-
-        inline memory::Segment       * ViewStrategy::getDataSegmentForUpdate()
-        { return doGetDataSegmentForUpdate(); }
 
 //-----------------------------------------------------------------------------
     }
