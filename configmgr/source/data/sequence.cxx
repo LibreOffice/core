@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequence.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:47:26 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:13:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,6 @@
 #ifndef INCLUDED_DATA_FLAGS_HXX
 #include "flags.hxx"
 #endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
-#endif
 
 #ifndef INCLUDED_ALGORITHM
 #include <algorithm>
@@ -55,6 +52,12 @@
 #define INCLUDED_STRING_H
 #endif
 
+#include "utility.hxx"
+
+#ifndef SIMPLE_REFERENCE_FAST
+#  include <stdio.h>
+#endif
+
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
@@ -64,9 +67,6 @@ namespace configmgr
         namespace Type = data::Type;
         namespace uno = ::com::sun::star::uno;
         typedef AnyData::TypeCode TypeCode;
-        using memory::Allocator;
-        using memory::Accessor;
-        using memory::Pointer;
 //-----------------------------------------------------------------------------
 static
 sal_uInt32 implGetElementSize(TypeCode _aElementType)
@@ -108,32 +108,20 @@ sal_uInt32 implGetHeaderSize(sal_uInt32 _nElemSize)
 //-----------------------------------------------------------------------------
 static
 inline
-sal_Int32& implGetSize(Allocator const& _anAllocator, Sequence _aSeq)
+sal_Int32& implGetSize(Sequence _aSeq)
 {
-    OSL_ASSERT(_aSeq != 0);
-    void * pBase = _anAllocator.access(_aSeq);
-    return * static_cast<sal_Int32 *>(pBase);
+    return * (sal_Int32 *) _aSeq;
 }
 
 //-----------------------------------------------------------------------------
 static
-inline
-sal_Int32 implGetSize(Accessor const& _anAccessor, Sequence _aSeq)
-{
-    OSL_ASSERT(_aSeq != 0);
-    void const * pBase = _anAccessor.access( Pointer(_aSeq) );
-    return * static_cast<sal_Int32 const *>(pBase);
-}
-
-//-----------------------------------------------------------------------------
-static
-Sequence implSeqAlloc(Allocator const& _anAllocator, sal_Int32 _nElements, sal_uInt32 _nElemSize)
+Sequence implSeqAlloc(sal_Int32 _nElements, sal_uInt32 _nElemSize)
 {
     sal_uInt32 nTotalSize = implGetHeaderSize(_nElemSize) + _nElements * _nElemSize;
 
-    Sequence aResult = _anAllocator.allocate(nTotalSize);
+    Sequence aResult = (Sequence) (new sal_uInt8[nTotalSize]);
 
-    implGetSize(_anAllocator,aResult) = _nElements;
+    implGetSize(aResult) = _nElements;
 
     return aResult;
 }
@@ -141,7 +129,7 @@ Sequence implSeqAlloc(Allocator const& _anAllocator, sal_Int32 _nElements, sal_u
 //-----------------------------------------------------------------------------
 
 static
-void allocSeqData(Allocator const& _anAllocator, Address _aDestAddr,
+void allocSeqData(sal_uInt8 *_pDestAddr,
                  TypeCode _aElementType,
                  sal_Int32 _nElements, sal_uInt32 _nElementSize,
                  void const * _pSourceData)
@@ -155,7 +143,7 @@ void allocSeqData(Allocator const& _anAllocator, Address _aDestAddr,
     case Type::value_int:
     case Type::value_long:
     case Type::value_double:
-        ::memcpy(_anAllocator.access(_aDestAddr),_pSourceData,_nElements * _nElementSize);
+        ::memcpy(_pDestAddr,_pSourceData,_nElements * _nElementSize);
         break;
 
     case Type::value_string:
@@ -168,11 +156,11 @@ void allocSeqData(Allocator const& _anAllocator, Address _aDestAddr,
             {
                 String aElement = allocString(*pSource);
 
-                String * pDest = static_cast<String*>( _anAllocator.access(_aDestAddr) );
+                String * pDest = reinterpret_cast<String*>(_pDestAddr);
                 *pDest = aElement;
 
                 ++pSource;
-                _aDestAddr += sizeof *pDest;
+                _pDestAddr += sizeof *pDest;
             }
         }
         break;
@@ -186,13 +174,13 @@ void allocSeqData(Allocator const& _anAllocator, Address _aDestAddr,
 
             while (--_nElements >= 0)
             {
-                Vector aElement = allocBinary(_anAllocator,*pSource);
+                Vector aElement = allocBinary(*pSource);
 
-                Vector * pDest = static_cast<Vector*>( _anAllocator.access(_aDestAddr) );
+                Vector * pDest = (Vector *) _pDestAddr;
                 *pDest = aElement;
 
                 ++pSource;
-                _aDestAddr += sizeof *pDest;
+                _pDestAddr += sizeof *pDest;
             }
         }
         break;
@@ -205,7 +193,7 @@ void allocSeqData(Allocator const& _anAllocator, Address _aDestAddr,
 }
 
 //-----------------------------------------------------------------------------
-Sequence allocSequence(Allocator const& _anAllocator, TypeCode _aElementType, ::sal_Sequence const * _pSeqData)
+Sequence allocSequence(TypeCode _aElementType, ::sal_Sequence const * _pSeqData)
 {
     OSL_ENSURE(_aElementType == (_aElementType & Type::mask_valuetype), "Invalid type code");
 
@@ -218,10 +206,10 @@ Sequence allocSequence(Allocator const& _anAllocator, TypeCode _aElementType, ::
     sal_uInt32 const nElementSize = implGetElementSize(_aElementType);
     sal_Int32  const nElements = _pSeqData->nElements;
 
-    Sequence aResult = implSeqAlloc(_anAllocator,nElements,nElementSize);
+    Sequence aResult = implSeqAlloc(nElements,nElementSize);
 
     if (aResult)
-        allocSeqData( _anAllocator, aResult + implGetHeaderSize(nElementSize),
+        allocSeqData( aResult + implGetHeaderSize(nElementSize),
                         _aElementType, nElements, nElementSize,
                         _pSeqData->elements);
 
@@ -229,31 +217,25 @@ Sequence allocSequence(Allocator const& _anAllocator, TypeCode _aElementType, ::
 }
 
 //-----------------------------------------------------------------------------
-Sequence allocBinary(Allocator const& _anAllocator, uno::Sequence<sal_Int8> const & _aBinaryValue)
+Sequence allocBinary(uno::Sequence<sal_Int8> const & _aBinaryValue)
 {
     sal_uInt32 const nElementSize = 1;
     sal_Int32  const nLength = _aBinaryValue.getLength();
 
-    Sequence aResult = implSeqAlloc(_anAllocator,nLength,nElementSize);
+    Sequence aResult = implSeqAlloc(nLength,nElementSize);
 
     if (aResult)
     {
-        Address aElementBaseAddr = aResult + implGetHeaderSize(nElementSize);
-        ::memcpy(_anAllocator.access(aElementBaseAddr), _aBinaryValue.getConstArray(), nLength);
+        sal_uInt8 *pElementBaseAddr = aResult + implGetHeaderSize(nElementSize);
+        ::memcpy(pElementBaseAddr, _aBinaryValue.getConstArray(), nLength);
     }
 
     return aResult;
 }
 
 //-----------------------------------------------------------------------------
-// Sequence copySequence(Allocator const& _anAllocator, TypeCode _aElementType, Sequence _aSeq)
-
-//-----------------------------------------------------------------------------
-// Sequence copyBinary(Allocator const& _anAllocator, Sequence _aSeq)
-
-//-----------------------------------------------------------------------------
 static
-void freeSeqData(Allocator const& _anAllocator, Address _aDataAddr,
+void freeSeqData(sal_uInt8 *_pDataAddr,
                  TypeCode _aElementType, sal_Int32 _nElements)
 {
     OSL_ASSERT(_aElementType == (_aElementType & Type::mask_basetype));
@@ -270,7 +252,7 @@ void freeSeqData(Allocator const& _anAllocator, Address _aDataAddr,
 
     case Type::value_string:
         {
-            String * pElements = static_cast<String*>( _anAllocator.access(_aDataAddr) );
+            String * pElements = reinterpret_cast<String*>( _pDataAddr );
 
             for (sal_Int32 i = 0; i < _nElements; ++i)
             {
@@ -281,11 +263,11 @@ void freeSeqData(Allocator const& _anAllocator, Address _aDataAddr,
 
     case Type::value_binary:
         {
-            Vector * pElements = static_cast<Vector*>( _anAllocator.access(_aDataAddr) );
+            Vector * pElements = reinterpret_cast<Vector*>( _pDataAddr );
 
             for (sal_Int32 i = 0; i < _nElements; ++i)
             {
-                freeBinary(_anAllocator,pElements[i]);
+                freeBinary(pElements[i]);
             }
         }
         break;
@@ -298,7 +280,7 @@ void freeSeqData(Allocator const& _anAllocator, Address _aDataAddr,
 }
 
 //-----------------------------------------------------------------------------
-void freeSequence(Allocator const& _anAllocator, TypeCode _aElementType, Sequence _aSeq)
+void freeSequence(TypeCode _aElementType, Sequence _aSeq)
 {
     OSL_ENSURE(_aElementType == (_aElementType & Type::mask_valuetype), "Invalid type code");
 
@@ -310,18 +292,18 @@ void freeSequence(Allocator const& _anAllocator, TypeCode _aElementType, Sequenc
 
     sal_uInt32 nHeaderSize = implGetHeaderSize( implGetElementSize( _aElementType ) );
 
-    freeSeqData(_anAllocator,_aSeq + nHeaderSize, _aElementType, implGetSize(_anAllocator,_aSeq));
+    freeSeqData(_aSeq + nHeaderSize, _aElementType, implGetSize(_aSeq));
 
-    _anAllocator.deallocate(_aSeq);
+    delete[] (sal_uInt8 *)_aSeq;
 }
 
 //-----------------------------------------------------------------------------
-void freeBinary(memory::Allocator const& _anAllocator, Sequence _aSeq)
+void freeBinary(Sequence _aSeq)
 {
     OSL_ENSURE(_aSeq, "ERROR: Trying to free a NULL sequence");
     if (_aSeq == 0) return;
 
-    _anAllocator.deallocate(_aSeq);
+    delete[] (sal_uInt8 *)_aSeq;
 }
 
 //-----------------------------------------------------------------------------
@@ -342,11 +324,11 @@ sal_Sequence * implCreateSequence(void const * _pElements, TypeCode _aElementTyp
 
 //-----------------------------------------------------------------------------
 static
-sal_Sequence * readSeqData(Accessor const & _anAccessor, Address _aDataAddr, TypeCode _aElementType, sal_Int32 _nElements)
+sal_Sequence * readSeqData(sal_uInt8 *_pDataAddr, TypeCode _aElementType, sal_Int32 _nElements)
 {
     OSL_ASSERT(_aElementType == (_aElementType & Type::mask_basetype));
 
-    void const * pElementData = _anAccessor.validate( Pointer(_aDataAddr) );
+    void const * pElementData = (void const *)_pDataAddr;
     switch (_aElementType)
     {
     case Type::value_boolean:
@@ -384,7 +366,7 @@ sal_Sequence * readSeqData(Accessor const & _anAccessor, Address _aDataAddr, Typ
 
             for (sal_Int32 i = 0; i < _nElements; ++i)
             {
-                pResult[i] = readBinary(_anAccessor,pElements[i]);
+                pResult[i] = readBinary(pElements[i]);
             }
 
             sal_Sequence * pRet = aResult.get();
@@ -401,7 +383,7 @@ sal_Sequence * readSeqData(Accessor const & _anAccessor, Address _aDataAddr, Typ
 
 //-----------------------------------------------------------------------------
 
-::sal_Sequence * readSequence(Accessor const& _anAccessor, TypeCode _aElementType, Sequence _aSeq)
+::sal_Sequence * readSequence(TypeCode _aElementType, Sequence _aSeq)
 {
     OSL_ENSURE(_aElementType == (_aElementType & Type::mask_valuetype), "Invalid type code");
 
@@ -413,13 +395,13 @@ sal_Sequence * readSeqData(Accessor const & _anAccessor, Address _aDataAddr, Typ
 
     sal_uInt32 nHeaderSize = implGetHeaderSize( implGetElementSize( _aElementType ) );
 
-    return readSeqData(_anAccessor,_aSeq + nHeaderSize, _aElementType, implGetSize(_anAccessor,_aSeq));
+    return readSeqData(_aSeq + nHeaderSize, _aElementType, implGetSize(_aSeq));
 }
 
 //-----------------------------------------------------------------------------
-uno::Any readAnySequence(Accessor const& _anAccessor, TypeCode _aElementType, Sequence _aSeq)
+uno::Any readAnySequence(TypeCode _aElementType, Sequence _aSeq)
 {
-    sal_Sequence * pRawSequence = readSequence(_anAccessor, _aElementType, _aSeq);
+    sal_Sequence * pRawSequence = readSequence(_aElementType, _aSeq);
 
     uno::Any aResult;
 
@@ -487,20 +469,13 @@ uno::Any readAnySequence(Accessor const& _anAccessor, TypeCode _aElementType, Se
 }
 
 //-----------------------------------------------------------------------------
-uno::Sequence<sal_Int8> readBinary(Accessor const& _anAccessor, Sequence _aSeq)
+uno::Sequence<sal_Int8> readBinary(Sequence _aSeq)
 {
     OSL_ENSURE(_aSeq, "ERROR: Trying to read from a NULL sequence");
     if (_aSeq == 0) return uno::Sequence<sal_Int8>();
 
-    sal_Int32 const nElements = implGetSize(_anAccessor,_aSeq);
-
-    void const * const pElementData = _anAccessor.validate( Pointer(_aSeq + implGetHeaderSize(1)) );
-
-    sal_Int8 const * const pBinaryData = static_cast<sal_Int8 const *>(pElementData);
-
-    uno::Sequence< sal_Int8 > aSequence(pBinaryData,nElements);
-
-    return aSequence;
+    return uno::Sequence< sal_Int8 >((const sal_Int8 *)(_aSeq + implGetHeaderSize(1)),
+                     implGetSize(_aSeq));
 }
 
 //-----------------------------------------------------------------------------
@@ -508,3 +483,48 @@ uno::Sequence<sal_Int8> readBinary(Accessor const& _anAccessor, Sequence _aSeq)
 //-----------------------------------------------------------------------------
 } // namespace
 
+// Remaining 'global' mutex bits - should move to api2 ...
+namespace configmgr
+{
+    osl::Mutex UnoApiLock::aCoreLock;
+    volatile oslInterlockedCount UnoApiLock::nHeld = 0;
+
+    UnoApiLockReleaser::UnoApiLockReleaser()
+    {
+        mnCount = UnoApiLock::nHeld;
+        for (oslInterlockedCount i = 0; i < mnCount; i++)
+            UnoApiLock::release();
+    }
+
+    UnoApiLockReleaser::~UnoApiLockReleaser()
+    {
+        for (oslInterlockedCount i = 0; i < mnCount; i++)
+            UnoApiLock::acquire();
+    }
+
+#ifndef SIMPLE_REFERENCE_FAST
+    void SimpleReferenceObject::acquire() SAL_THROW(())
+    {
+        if (!UnoApiLock::isHeld())
+        {
+            fprintf (stderr, "Locking disaster\n");
+            fscanf (stdin, "");
+        }
+        m_nCount++;
+    }
+    void SimpleReferenceObject::release() SAL_THROW(())
+    {
+        if (!UnoApiLock::isHeld())
+        {
+            fprintf (stderr, "Locking disaster\n");
+            fscanf (stdin, "");
+        }
+        if (--m_nCount == 0)
+            delete this;
+    }
+#endif
+    SimpleReferenceObject::~SimpleReferenceObject() SAL_THROW(())
+    {
+        OSL_ASSERT(m_nCount == 0);
+    }
+} // namespace configmgr
