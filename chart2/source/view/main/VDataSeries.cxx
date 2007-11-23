@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDataSeries.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:57:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:13:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include "macros.hxx"
 #include "CommonConverters.hxx"
 #include "LabelPositionHelper.hxx"
+#include "ChartTypeHelper.hxx"
 
 #ifndef _COM_SUN_STAR_CHART2_SYMBOL_HPP_
 #include <com/sun/star/chart2/Symbol.hpp>
@@ -390,6 +391,12 @@ rtl::OUString VDataSeries::getDataCurveCID( sal_Int32 nCurveIndex, bool bAverage
     return aRet;
 }
 
+rtl::OUString VDataSeries::getDataCurveEquationCID( sal_Int32 nCurveIndex ) const
+{
+    rtl::OUString aRet;
+    aRet = ObjectIdentifier::createDataCurveEquationCID( m_aSeriesParticle, nCurveIndex );
+    return aRet;
+}
 void VDataSeries::setDiagramReferenceSize( const awt::Size & rDiagramRefSize )
 {
     m_aReferenceSize = rDiagramRefSize;
@@ -494,6 +501,40 @@ sal_Int32 VDataSeries::getExplicitNumberFormat( sal_Int32 nPointIndex, bool bFor
 sal_Int32 VDataSeries::detectNumberFormatKey( sal_Int32 index ) const
 {
     return m_aValues_Y.detectNumberFormatKey( index );
+}
+
+sal_Int32 VDataSeries::getLabelPlacement( sal_Int32 nPointIndex, const uno::Reference< chart2::XChartType >& xChartType, sal_Int32 nDimensionCount, sal_Bool bSwapXAndY ) const
+{
+    sal_Int32 nLabelPlacement=0;
+    try
+    {
+        uno::Reference< beans::XPropertySet > xPointProps( this->getPropertiesOfPoint( nPointIndex ) );
+        if( xPointProps.is() )
+            xPointProps->getPropertyValue( C2U( "LabelPlacement" ) ) >>= nLabelPlacement;
+
+        //ensure that the set label placement is supported by this charttype
+
+        uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
+                xChartType, nDimensionCount, bSwapXAndY, m_xDataSeries ) );
+
+        for( sal_Int32 nN = 0; nN < aAvailablePlacements.getLength(); nN++ )
+            if( aAvailablePlacements[nN] == nLabelPlacement )
+                return nLabelPlacement; //ok
+
+        //otherwise use the first supported one
+        if( aAvailablePlacements.getLength() )
+        {
+            nLabelPlacement = aAvailablePlacements[0];
+            return nLabelPlacement;
+        }
+
+        DBG_ERROR("no label placement supported");
+    }
+    catch( uno::Exception& e )
+    {
+        ASSERT_EXCEPTION( e );
+    }
+    return nLabelPlacement;
 }
 
 double VDataSeries::getMinimumofAllDifferentYValues( sal_Int32 index ) const
