@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchWhichPairs.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:51:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:52:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,8 @@ const USHORT nDataLabelWhichPairs[] =
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */ \
     SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_VALUE,   /*      40          sch/schattr.hxx*/ \
     SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, /*      41          sch/schattr.hxx*/ \
+    SCHATTR_DATADESCR_PLACEMENT, SCHATTR_DATADESCR_PLACEMENT,
+    SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS, SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS,
     0
 };
 
@@ -148,6 +150,8 @@ const USHORT nDataLabelWhichPairs[] =
     SID_ATTR_NUMBERFORMAT_SOURCE, SID_ATTR_NUMBERFORMAT_SOURCE, /* 11432          svx/svxids.hrc */ \
     SCHATTR_PERCENT_NUMBERFORMAT_VALUE, SCHATTR_PERCENT_NUMBERFORMAT_VALUE,   /*      40          sch/schattr.hxx*/ \
     SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, SCHATTR_PERCENT_NUMBERFORMAT_SOURCE, /*      41          sch/schattr.hxx*/ \
+    SCHATTR_DATADESCR_PLACEMENT, SCHATTR_DATADESCR_PLACEMENT, \
+    SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS, SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS, \
     SCHATTR_STYLE_START,SCHATTR_STYLE_END,          /*    59 -    68  sch/schattr.hxx*/ \
     SCHATTR_SYMBOL_BRUSH,SCHATTR_SYMBOL_BRUSH,      /*    94          sch/schattr.hxx*/ \
     SCHATTR_SYMBOL_SIZE,SCHATTR_SYMBOL_SIZE,        /*    97          sch/schattr.hxx*/ \
@@ -257,15 +261,13 @@ const USHORT nRegressionCurveWhichPairs[] =
 
 const USHORT nRegEquationWhichPairs[] =
 {
-//  SCHATTR_TEXT_STACKED, SCHATTR_TEXT_STACKED,     //     4          sch/schattr.hxx
-//  SCHATTR_TEXT_DEGREES,SCHATTR_TEXT_DEGREES,      //    53          sch/schattr.hxx
     XATTR_LINE_FIRST, XATTR_LINE_LAST,              //  1000 -  1016  svx/xdef.hxx
     XATTR_FILL_FIRST, XATTR_FILL_LAST,              //  1018 -  1046  svx/xdef.hxx
     SDRATTR_SHADOW_FIRST, SDRATTR_SHADOW_LAST,      //  1067 -  1078  svx/svddef.hxx
     EE_ITEMS_START, EE_ITEMS_END,                   //  3994 -  4037  svx/eeitem.hxx
+    SID_ATTR_NUMBERFORMAT_VALUE, SID_ATTR_NUMBERFORMAT_VALUE,   // 10585 - 10585  svx/svxids.hrc
     0
 };
-
 
 } //  anonymous namespace
 
