@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScatterChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:01:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:03:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,8 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ ChartTypeTemplate ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >
+                getChartTypeForIndex( sal_Int32 nChartTypeIndex );
     virtual sal_Int32 getDimension() const;
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
 
