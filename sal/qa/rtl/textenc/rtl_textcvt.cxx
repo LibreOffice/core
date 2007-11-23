@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_textcvt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 08:28:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:16:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,6 +428,8 @@ public:
 
     void testComplexCut();
 
+    void testSRCBUFFERTOSMALL();
+
     void testMime();
 
     void testWindows();
@@ -438,6 +440,7 @@ public:
     CPPUNIT_TEST(testSingleByte);
     CPPUNIT_TEST(testComplex);
     CPPUNIT_TEST(testComplexCut);
+    CPPUNIT_TEST(testSRCBUFFERTOSMALL);
     CPPUNIT_TEST(testMime);
     CPPUNIT_TEST(testWindows);
     CPPUNIT_TEST(testInfo);
@@ -2561,6 +2564,30 @@ void Test::testComplexCut() {
     for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
         doComplexCharSetCutTest(data[i]);
     }
+}
+
+void Test::testSRCBUFFERTOSMALL() {
+    rtl_TextToUnicodeConverter cv = rtl_createTextToUnicodeConverter(
+        RTL_TEXTENCODING_EUC_JP);
+    OSL_ASSERT(cv != NULL);
+    rtl_TextToUnicodeContext cx = rtl_createTextToUnicodeContext(cv);
+    OSL_ASSERT(cx != NULL);
+    char src = '\xA1';
+    sal_Unicode dst[10];
+    sal_uInt32 info;
+    sal_Size cvt;
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Size(0),
+        rtl_convertTextToUnicode(
+            cv, cx, &src, 1, dst, sizeof dst / sizeof (sal_Unicode),
+            (RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR |
+             RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR |
+             RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR),
+            &info, &cvt));
+    CPPUNIT_ASSERT_EQUAL(RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL, info);
+    CPPUNIT_ASSERT(cvt <= 1);
+    rtl_destroyTextToUnicodeContext(cv, cx);
+    rtl_destroyTextToUnicodeConverter(cv);
 }
 
 void Test::testMime() {
