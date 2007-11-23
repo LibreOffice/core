@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:37:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:42:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,6 +238,9 @@ private:
     bool            bInSelectHdl_Impl;
     bool            bIsFromExtensionManager;
 
+    // check "for the current document only" and set focus to "Western" languages box
+    bool            bIsForSetDocumentLanguage;
+
     Timer           aSelectTimer;
 
     com::sun::star::uno::Reference < com::sun::star::awt::XContainerWindowProvider >
@@ -280,7 +283,8 @@ protected:
 
 public:
     OfaTreeOptionsDialog( Window* pParent,
-        const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame );
+        const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& _xFrame,
+        bool bActivateLastSelection = true );
     OfaTreeOptionsDialog( Window* pParent, const rtl::OUString& rExtensionId );
     ~OfaTreeOptionsDialog();
 
