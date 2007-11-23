@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confsvccomponent.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:53:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,14 +49,17 @@
 #include <osl/mutex.hxx>
 #endif
 
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
+#endif
+
 #include <map>
 
 namespace configmgr {
 
 
     ServiceComponentImpl::ServiceComponentImpl(ServiceImplementationInfo const* aInfo)
-        : ServiceImplBase(m_aMutex)
-        , m_aMutex()
+        : ServiceImplBase(UnoApiLock::getLock())
         , m_info(aInfo)
     {
     }
