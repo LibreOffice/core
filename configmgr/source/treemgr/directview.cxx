@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:29:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,9 @@ void DirectViewStrategy::implMarkNondefault(SetNode const& _aSetNode)
 
     OSL_ASSERT(aSetAccess.isValid());
 
-    sharable::SetNode* pNode = this->getDataForUpdate(aSetAccess);
+    sharable::SetNode* pNode = NULL;
+    if (m_aTreeSegment.is())
+        pNode = aSetAccess;
 
     OSL_ASSERT(pNode);
 
