@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgregistrykey.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-07 13:08:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:29:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,8 +177,7 @@ OConfigurationRegistryKey::OConfigurationRegistryKey
             ,sal_Bool _bWriteable
             ,SubtreeRoot
             )
-    :m_aMutex()
-    ,m_bReadOnly(!_bWriteable)
+    :m_bReadOnly(!_bWriteable)
     ,m_xNode(_rxRootNode)
     ,m_xParentNode()
     ,m_sLocalName() // this will be treated as root - maybe use hierarchical name (ß)
@@ -191,8 +190,7 @@ OConfigurationRegistryKey::OConfigurationRegistryKey
             (const Reference< XNameAccess >& _rxNode
             ,sal_Bool _bWriteable
             )
-    :m_aMutex()
-    ,m_bReadOnly(!_bWriteable)
+    :m_bReadOnly(!_bWriteable)
     ,m_xNode(_rxNode)
     ,m_xParentNode()
     ,m_sLocalName( getNodeName(_rxNode) ) // this will not be treated as root
@@ -205,8 +203,7 @@ OConfigurationRegistryKey::OConfigurationRegistryKey(
             const Reference< XNameAccess >& _rxParentNode,
             const ::rtl::OUString& _rLocalName,
             sal_Bool _bWriteable)
-    :m_aMutex()
-    ,m_bReadOnly(!_bWriteable)
+    :m_bReadOnly(!_bWriteable)
     ,m_xNode()
     ,m_xParentNode(_rxParentNode)
     ,m_sLocalName(_rLocalName)
@@ -222,8 +219,7 @@ OConfigurationRegistryKey::OConfigurationRegistryKey(
                 const Reference< XNameAccess >& _rxParentNode,
                 const ::rtl::OUString& _rLocalName,
                 sal_Bool _bWriteable)
-    :m_aMutex()
-    ,m_bReadOnly(!_bWriteable)
+    :m_bReadOnly(!_bWriteable)
     ,m_xNode()
     ,m_xParentNode(_rxParentNode)
     ,m_sLocalName(_rLocalName)
@@ -746,17 +742,17 @@ void OConfigurationRegistryKey::implSetValue(const Any& _rValue) throw(InvalidRe
 }
 
 //--------------------------------------------------------------------------
-sal_Bool SAL_CALL OConfigurationRegistryKey::isReadOnly(  ) throw(InvalidRegistryException, RuntimeException)
+sal_Bool SAL_CALL OConfigurationRegistryKey::isReadOnly() throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
+    OSL_ASSERT(UnoApiLock::isHeld());
     checkValid(KAT_META);
     return m_bReadOnly;
 }
 
 //--------------------------------------------------------------------------
-sal_Bool SAL_CALL OConfigurationRegistryKey::isValid(  ) throw(RuntimeException)
+sal_Bool SAL_CALL OConfigurationRegistryKey::isValid() throw(RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
+    OSL_ASSERT(UnoApiLock::isHeld());
     // TODO : perhaps if the registry we're a part of is closed ....
     return implIsValid();
 }
@@ -764,7 +760,7 @@ sal_Bool SAL_CALL OConfigurationRegistryKey::isValid(  ) throw(RuntimeException)
 //--------------------------------------------------------------------------
 RegistryKeyType SAL_CALL OConfigurationRegistryKey::getKeyType( const ::rtl::OUString& /*_rKeyName*/ ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
+    OSL_ASSERT(UnoApiLock::isHeld());
 
     // no further checks are made (for performance reasons) ...
     // Maybe we should check only KAT_META for consistency ?
@@ -774,9 +770,8 @@ RegistryKeyType SAL_CALL OConfigurationRegistryKey::getKeyType( const ::rtl::OUS
 }
 
 //--------------------------------------------------------------------------
-RegistryValueType SAL_CALL OConfigurationRegistryKey::getValueType(  ) throw(InvalidRegistryException, RuntimeException)
+RegistryValueType SAL_CALL OConfigurationRegistryKey::getValueType() throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
     checkValid(KAT_META);
 
     const Type aUnoType = implGetUnoType();
@@ -879,10 +874,8 @@ Any OConfigurationRegistryKey::implGetValue() throw(InvalidRegistryException, Ru
 }
 
 //--------------------------------------------------------------------------
-sal_Int32 SAL_CALL OConfigurationRegistryKey::getLongValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException)
+sal_Int32 SAL_CALL OConfigurationRegistryKey::getLongValue() throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-
     Any aValue = implGetValue();
 
     sal_Int32 nLongValue(0);
@@ -999,16 +992,12 @@ sal_Int32 SAL_CALL OConfigurationRegistryKey::getLongValue(  ) throw(InvalidRegi
 //--------------------------------------------------------------------------
 void SAL_CALL OConfigurationRegistryKey::setLongValue( sal_Int32 _nValue ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-
     implSetValue(makeAny(_nValue));
 }
 
 //--------------------------------------------------------------------------
-Sequence< sal_Int32 > SAL_CALL OConfigurationRegistryKey::getLongListValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException)
+Sequence< sal_Int32 > SAL_CALL OConfigurationRegistryKey::getLongListValue() throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-
     Any aValue = implGetValue();
 
     Sequence< sal_Int32 > aReturn;
@@ -1028,13 +1017,11 @@ Sequence< sal_Int32 > SAL_CALL OConfigurationRegistryKey::getLongListValue(  ) t
 //--------------------------------------------------------------------------
 void SAL_CALL OConfigurationRegistryKey::setLongListValue( const Sequence< sal_Int32 >& _seqValue ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-
     implSetValue(makeAny(_seqValue));
 }
 
 //--------------------------------------------------------------------------
-OUString SAL_CALL OConfigurationRegistryKey::getAsciiValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException)
+OUString SAL_CALL OConfigurationRegistryKey::getAsciiValue() throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
     OUString sReturn = getStringValue();
 
@@ -1053,7 +1040,7 @@ void SAL_CALL OConfigurationRegistryKey::setAsciiValue( const ::rtl::OUString& _
 }
 
 //--------------------------------------------------------------------------
-Sequence< OUString > SAL_CALL OConfigurationRegistryKey::getAsciiListValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException)
+Sequence< OUString > SAL_CALL OConfigurationRegistryKey::getAsciiListValue() throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
     Sequence<OUString> aReturn = getStringListValue();
 
@@ -1072,10 +1059,8 @@ void SAL_CALL OConfigurationRegistryKey::setAsciiListValue( const Sequence< ::rt
 }
 
 //--------------------------------------------------------------------------
-::rtl::OUString SAL_CALL OConfigurationRegistryKey::getStringValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException)
+::rtl::OUString SAL_CALL OConfigurationRegistryKey::getStringValue() throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-
     Any aValue = implGetValue();
 
     OUString sReturn;
@@ -1091,16 +1076,12 @@ void SAL_CALL OConfigurationRegistryKey::setAsciiListValue( const Sequence< ::rt
 //--------------------------------------------------------------------------
 void SAL_CALL OConfigurationRegistryKey::setStringValue( const ::rtl::OUString& _rValue ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-
     implSetValue(makeAny(_rValue));
 }
 
 //--------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OConfigurationRegistryKey::getStringListValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException)
+Sequence< ::rtl::OUString > SAL_CALL OConfigurationRegistryKey::getStringListValue() throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-
     Any aValue = implGetValue();
 
     Sequence< OUString > aReturn;
@@ -1116,16 +1097,12 @@ Sequence< ::rtl::OUString > SAL_CALL OConfigurationRegistryKey::getStringListVal
 //--------------------------------------------------------------------------
 void SAL_CALL OConfigurationRegistryKey::setStringListValue( const Sequence< ::rtl::OUString >& _seqValue ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-
     implSetValue(makeAny(_seqValue));
 }
 
 //--------------------------------------------------------------------------
-Sequence< sal_Int8 > SAL_CALL OConfigurationRegistryKey::getBinaryValue(  ) throw(InvalidRegistryException, InvalidValueException, RuntimeException)
+Sequence< sal_Int8 > SAL_CALL OConfigurationRegistryKey::getBinaryValue() throw(InvalidRegistryException, InvalidValueException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-
     Any aValue = implGetValue();
 
     Sequence< sal_Int8 > aReturn;
@@ -1141,8 +1118,6 @@ Sequence< sal_Int8 > SAL_CALL OConfigurationRegistryKey::getBinaryValue(  ) thro
 //--------------------------------------------------------------------------
 void SAL_CALL OConfigurationRegistryKey::setBinaryValue( const Sequence< sal_Int8 >& _rValue ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-
     implSetValue(makeAny(_rValue));
 }
 
@@ -1213,7 +1188,6 @@ Reference< XRegistryKey > OConfigurationRegistryKey::implGetKey( const ::rtl::OU
 //--------------------------------------------------------------------------
 Reference< XRegistryKey > SAL_CALL OConfigurationRegistryKey::openKey( const ::rtl::OUString& _rKeyName ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
     checkValid(KAT_CHILD);
 
     return implGetKey(_rKeyName);
@@ -1288,7 +1262,6 @@ bool OConfigurationRegistryKey::checkRelativeKeyName(OUString& _rKeyName) throw(
 //--------------------------------------------------------------------------
 Reference< XRegistryKey > SAL_CALL OConfigurationRegistryKey::createKey( const ::rtl::OUString& _rKeyName ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
     checkValid(KAT_CHILD);
 
     if (m_bReadOnly)
@@ -1411,10 +1384,9 @@ Reference< XRegistryKey > SAL_CALL OConfigurationRegistryKey::createKey( const :
 }
 
 //--------------------------------------------------------------------------
-void SAL_CALL OConfigurationRegistryKey::closeKey(  ) throw(InvalidRegistryException, RuntimeException)
+void SAL_CALL OConfigurationRegistryKey::closeKey() throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-
+    OSL_ASSERT(UnoApiLock::isHeld());
     checkValid(KAT_META);
 
     bool bRoot = (m_sLocalName.getLength() == 0);
@@ -1430,8 +1402,6 @@ void SAL_CALL OConfigurationRegistryKey::closeKey(  ) throw(InvalidRegistryExcep
 //--------------------------------------------------------------------------
 void SAL_CALL OConfigurationRegistryKey::deleteKey( const OUString& _rKeyName ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
-
     checkValid(KAT_CHILD);
     if (m_bReadOnly)
         throw InvalidRegistryException(UNISTRING("The key is read only."), THISREF());
@@ -1483,9 +1453,8 @@ void SAL_CALL OConfigurationRegistryKey::deleteKey( const OUString& _rKeyName ) 
 }
 
 //--------------------------------------------------------------------------
-Sequence< Reference< XRegistryKey > > SAL_CALL OConfigurationRegistryKey::openKeys(  ) throw(InvalidRegistryException, RuntimeException)
+Sequence< Reference< XRegistryKey > > SAL_CALL OConfigurationRegistryKey::openKeys() throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
     checkValid(KAT_CHILD);
 
     Sequence< ::rtl::OUString > aNames(m_xNode->getElementNames());
@@ -1501,9 +1470,8 @@ Sequence< Reference< XRegistryKey > > SAL_CALL OConfigurationRegistryKey::openKe
 }
 
 //--------------------------------------------------------------------------
-Sequence< ::rtl::OUString > SAL_CALL OConfigurationRegistryKey::getKeyNames(  ) throw(InvalidRegistryException, RuntimeException)
+Sequence< ::rtl::OUString > SAL_CALL OConfigurationRegistryKey::getKeyNames() throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
     checkValid(KAT_CHILD);
     return m_xNode->getElementNames();
 }
@@ -1511,28 +1479,24 @@ Sequence< ::rtl::OUString > SAL_CALL OConfigurationRegistryKey::getKeyNames(  ) 
 //--------------------------------------------------------------------------
 sal_Bool SAL_CALL OConfigurationRegistryKey::createLink( const ::rtl::OUString& /*aLinkName*/, const ::rtl::OUString& /*aLinkTarget*/ ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
     throw InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
 }
 
 //--------------------------------------------------------------------------
 void SAL_CALL OConfigurationRegistryKey::deleteLink( const ::rtl::OUString& /*rLinkName*/ ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
     throw InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
 }
 
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OConfigurationRegistryKey::getLinkTarget( const ::rtl::OUString& /*rLinkName*/ ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
     throw InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
 }
 
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OConfigurationRegistryKey::getResolvedName( const ::rtl::OUString& /*aKeyName*/ ) throw(InvalidRegistryException, RuntimeException)
 {
-    MutexGuard aGuard(m_aMutex);
     throw InvalidRegistryException(UNISTRING("This registry, which is base on a configuration tree, does not support links."), THISREF());
 }
 //--------------------------------------------------------------------------
