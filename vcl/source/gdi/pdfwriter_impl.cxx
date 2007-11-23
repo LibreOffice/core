@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:11:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 10:44:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5339,6 +5339,7 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( nMetadataObject );
         aLine.append( " 0 R" );
     }
+//<----
     aLine.append( ">>\n"
                   "endobj\n\n" );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
@@ -10628,6 +10629,7 @@ void PDFWriterImpl::setStructureBoundingBox( const Rectangle& rRect )
     sal_Int32 nPageNr = m_nCurrentPage;
     if( nPageNr < 0 || nPageNr >= (sal_Int32)m_aPages.size() || !m_aContext.Tagged )
         return;
+
 
     if( m_nCurrentStructElement > 0 && m_bEmitStructure )
     {
