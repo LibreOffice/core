@@ -5,9 +5,9 @@
  *
  *  $RCSfile: unopkg_app.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:05:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:24:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,9 @@ SAL_IMPLEMENT_MAIN()
             }
         }
 
-        xComponentContext = getUNO( disposeGuard, option_verbose, subcmd_gui, xLocalComponentContext );
+        xComponentContext = getUNO(
+            disposeGuard, option_verbose, option_shared, subcmd_gui,
+            xLocalComponentContext );
 
         if (deploymentContext.getLength() == 0) {
             deploymentContext = option_shared ? OUSTR("shared") : OUSTR("user");
