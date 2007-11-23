@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodevisitor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:24:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:22:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,15 @@
 #ifndef CONFIGMGR_NODEVISITOR_HXX
 #define CONFIGMGR_NODEVISITOR_HXX
 
+#include "nodeaccess.hxx"
+
 namespace configmgr
 {
 // -----------------------------------------------------------------------------
     namespace data
     {
     // -------------------------------------------------------------------------
-        class NodeAccessRef;
+      //        class NodeAccess;
             class ValueNodeAccess;
             class GroupNodeAccess;
             class SetNodeAccess;
@@ -65,11 +67,11 @@ namespace configmgr
             Result visitChildren(GroupNodeAccess const& _aNode);
 
             /// dispatch to <var>aNode</var> as the proper type
-            Result visitNode(NodeAccessRef const& _aNode);
+            Result visitNode(NodeAccess const& _aNode);
 
         protected:
             /// do the operation on <var>aNode</var>. Default implementation returns CONTINUE.
-            virtual Result handle(NodeAccessRef const& _aNode);
+            virtual Result handle(NodeAccess const& _aNode);
 
             /// do the operation on <var>aNode</var>. Default implementation calls handle(NodeAccess(_aNode));
             virtual Result handle(ValueNodeAccess const& _aNode);
