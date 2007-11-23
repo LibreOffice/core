@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:05:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:22:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ class SwDoc;
 class DateTime;
 class CommandExtTextInputData;
 
+class SvUShortsSort;
 class SvNumberFormatter;
 class SfxPoolItem;
 class SfxItemSet;
@@ -288,7 +289,7 @@ public:
     // Erfrage das Default Attribut vom Dokument.
     const SfxPoolItem& GetDefault( USHORT nFmtHint ) const;
 
-    void ResetAttr();
+    void ResetAttr( const SvUShortsSort* pAttrs = 0 );
     void GCAttr();
 
     // returns the scripttpye of the selection
