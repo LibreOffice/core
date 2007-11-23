@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 13:17:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:26:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,33 @@ Menu MN_SPELL_POPUP
             };
             Text [ en-US ] = "AutoCorrect" ;
         };
+        SEPARATOR
+        MenuItem
+        {
+            Identifier = MN_LANGUAGE_SELECTION ;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "Set Language for Selection" ;
+        };
+        MenuItem
+        {
+            Identifier = MN_LANGUAGE_PARAGRAPH ;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "Set Language for Paragraph" ;
+        };
+/*
+       MenuItem
+        {
+            Identifier = MN_LANGUAGE_ALL_TEXT ;
+            SubMenu = Menu
+            {
+            };
+            Text [ en-US ] = "Set Language for all Text" ;
+        };
+*/
     };
 };
 String STR_WORD
@@ -85,11 +112,18 @@ String STR_PARAGRAPH
 };
 String STR_SPELL_OK
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibprüfung ist abgeschlossen! : Die Rechtschreibpr³fung ist abgeschlossen! */
     Text [ en-US ] = "The spellcheck is complete." ;
 };
 String STR_HYP_OK
 {
     Text [ en-US ] = "Hyphenation completed" ;
+};
+String STR_LANGSTATUS_NONE
+{
+    Text [ en-US ] = "None (Do not check spelling)" ;
+};
+String STR_LANGSTATUS_MORE
+{
+    Text [ en-US ] = "More..." ;
 };
 
