@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 08:10:27 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:17:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2956,8 +2956,14 @@ namespace xmloff { namespace token {
         XML_GROUP_BARS_PER_AXIS,
         XML_REVERSE_DIRECTION,
         XML_LABEL_SEPARATOR,
+        XML_LABEL_POSITION,
+        XML_AVOID_OVERLAP,
+        XML_NEAR_ORIGIN,
         XML_DEPENDENCY,
         XML_NAV_ORDER,
+        XML_AUTOMATIC_CONTENT,
+        XML_DISPLAY_R_SQUARE,
+        XML_DISPLAY_EQUATION,
         // db odf 12
         XML_TABLE_REPRESENTATIONS,
         XML_TABLE_REPRESENTATION,
