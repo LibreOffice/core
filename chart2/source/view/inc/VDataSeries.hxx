@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VDataSeries.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:56:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:11:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART2_DATA_XLABELEDDATASEQUENCE_HPP_
 #include <com/sun/star/chart2/data/XLabeledDataSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
+#include <com/sun/star/chart2/XChartType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
 #include <com/sun/star/chart2/XDataSeries.hpp>
@@ -133,6 +136,9 @@ public:
     sal_Int32   getExplicitNumberFormat( sal_Int32 nPointIndex, bool bForPercentage ) const;
     sal_Int32   detectNumberFormatKey( sal_Int32 nPointIndex ) const;
 
+    sal_Int32   getLabelPlacement( sal_Int32 nPointIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >& xChartType
+                        , sal_Int32 nDimensionCount, sal_Bool bSwapXAndY ) const;
+
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         getPropertiesOfPoint( sal_Int32 index ) const;
 
@@ -181,6 +187,7 @@ public:
                         getDataPointLabelIfLabel( sal_Int32 index ) const;
     bool    getTextLabelMultiPropertyLists( sal_Int32 index, tNameSequence*& pPropNames, tAnySequence*& pPropValues ) const;
 
+    rtl::OUString       getDataCurveEquationCID( sal_Int32 nCurveIndex ) const;
     bool    isAttributedDataPoint( sal_Int32 index ) const;
 
     bool    isVaryColorsByPoint() const;
