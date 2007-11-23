@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:52:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:54:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,8 @@
 #include "MultipleChartConverters.hxx"
 #include "TitleItemConverter.hxx"
 #include "LegendItemConverter.hxx"
+#include "RegressionCurveItemConverter.hxx"
+#include "RegressionEquationItemConverter.hxx"
 #include "ChartModelHelper.hxx"
 #include "AxisHelper.hxx"
 #include "TitleHelper.hxx"
@@ -264,7 +266,7 @@ namespace
                         xObjectProperties,uno::Reference< util::XNumberFormatsSupplier >(xChartModel, uno::UNO_QUERY));
 
                 pItemConverter =  new wrapper::DataPointItemConverter( xChartModel, xContext,
-                                        xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
+                                        xObjectProperties, xSeries, rDrawModel.GetItemPool(), rDrawModel,
                                         pNumberFormatterWrapper,
                                         uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
                                         eMapTo, pRefSize, bDataSeries, bUseSpecialFillColor, nSpecialFillColor, false,
@@ -274,13 +276,29 @@ namespace
             case OBJECTTYPE_GRID:
             case OBJECTTYPE_SUBGRID:
             case OBJECTTYPE_DATA_ERRORS:
-            case OBJECTTYPE_DATA_CURVE:
             case OBJECTTYPE_DATA_AVERAGE_LINE:
                 pItemConverter =  new wrapper::GraphicPropertyItemConverter(
                                         xObjectProperties, rDrawModel.GetItemPool(),
                                         rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
                                         wrapper::GraphicPropertyItemConverter::LINE_PROPERTIES );
                     break;
+            case OBJECTTYPE_DATA_CURVE:
+                pItemConverter =  new wrapper::RegressionCurveItemConverter(
+                                        xObjectProperties, rDrawModel.GetItemPool(),
+                                        rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ));
+                    break;
+            case OBJECTTYPE_DATA_CURVE_EQUATION:
+            {
+                ::std::auto_ptr< awt::Size > pRefSize;
+                if( pRefSizeProvider.get() )
+                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
+
+                pItemConverter =  new wrapper::RegressionEquationItemConverter(
+                                        xObjectProperties, rDrawModel.GetItemPool(), rDrawModel,
+                                        uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ),
+                                        pRefSize );
+                    break;
+            }
             case OBJECTTYPE_DATA_ERRORS_X:
                     break;
             case OBJECTTYPE_DATA_ERRORS_Y:
@@ -600,7 +618,7 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
             uno::Reference< beans::XPropertySet > xObjectProperties =
                 ObjectIdentifier::getObjectPropertySet( aObjectCID, m_aModel->getModel() );
             wrapper::DataPointItemConverter aSymbolItemConverter( m_aModel->getModel(), m_xCC
-                                        , xObjectProperties
+                                        , xObjectProperties, ObjectIdentifier::getDataSeriesForCID( aObjectCID, m_aModel->getModel() )
                                         , m_pDrawModelWrapper->getSdrModel().GetItemPool()
                                         , m_pDrawModelWrapper->getSdrModel()
                                         , &aNumberFormatterWrapper
