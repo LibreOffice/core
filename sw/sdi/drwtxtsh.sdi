@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtxtsh.sdi,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:16:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:23:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,6 +294,11 @@ interface TextDrawText
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_CHAR_DLG_FOR_PARAGRAPH
+    [
+        ExecMethod = Execute ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
 
     SID_PARA_DLG // api:
     [
@@ -506,6 +511,12 @@ interface TextDrawText
         StateMethod = GetState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_LANGUAGE_STATUS
+    [
+        ExecMethod = Execute;
+        StateMethod = GetState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";  // e.g. disable for read-only documents
+    ]
 }
 
 interface TextDrawFont
@@ -582,5 +593,4 @@ shell SwDrawTextShell
         import TextDrawText[Automation];
         import TextDrawFont ".DrawFont";
 }
-
 
