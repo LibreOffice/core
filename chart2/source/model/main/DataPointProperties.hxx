@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointProperties.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:53:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:59:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@ public:
         PROP_DATAPOINT_LABEL_SEPARATOR,
         PROP_DATAPOINT_NUMBER_FORMAT,
         PROP_DATAPOINT_PERCENTAGE_NUMBER_FORMAT,
+        PROP_DATAPOINT_LABEL_PLACEMENT,
         PROP_DATAPOINT_REFERENCE_DIAGRAM_SIZE,
 
         // statistics
