@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:06:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:12:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ PlottingPositionHelper::PlottingPositionHelper()
         , m_nXResolution( 1000 )
         , m_nYResolution( 1000 )
         , m_nZResolution( 1000 )
+        , m_bMaySkipPointsInRegressionCalculation( true )
 {
 }
 PlottingPositionHelper::PlottingPositionHelper( const PlottingPositionHelper& rSource )
@@ -81,6 +82,7 @@ PlottingPositionHelper::PlottingPositionHelper( const PlottingPositionHelper& rS
         , m_nXResolution( rSource.m_nXResolution )
         , m_nYResolution( rSource.m_nYResolution )
         , m_nZResolution( rSource.m_nZResolution )
+        , m_bMaySkipPointsInRegressionCalculation( rSource.m_bMaySkipPointsInRegressionCalculation )
 {
 }
 
@@ -330,20 +332,6 @@ drawing::Direction3D PlottingPositionHelper::getScaledLogicWidth() const
     return aRet;
 }
 
-LabelAlignment PlottingPositionHelper::getLabelAlignmentForDimension( sal_Int32 nDimensionIndex ) const
-{
-    LabelAlignment aRet(LABEL_ALIGN_CENTER);
-    if( nDimensionIndex==0 && !m_bSwapXAndY )
-        aRet = LABEL_ALIGN_RIGHT;
-    else if( nDimensionIndex==1 && m_bSwapXAndY )
-        aRet = LABEL_ALIGN_RIGHT;
-    else if( nDimensionIndex==1 && !m_bSwapXAndY )
-        aRet = LABEL_ALIGN_TOP;
-    else if( nDimensionIndex==0 && m_bSwapXAndY )
-        aRet = LABEL_ALIGN_TOP;
-    return aRet;
-}
-
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -354,6 +342,7 @@ PolarPlottingPositionHelper::PolarPlottingPositionHelper( NormalAxis eNormalAxis
     , m_aUnitCartesianToScene()
     , m_eNormalAxis(eNormalAxis)
 {
+    m_bMaySkipPointsInRegressionCalculation = false;
 }
 
 PolarPlottingPositionHelper::PolarPlottingPositionHelper( const PolarPlottingPositionHelper& rSource )
