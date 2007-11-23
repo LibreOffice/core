@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewstrategy.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:33:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:50:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,6 @@
 #ifndef CONFIGMGR_SETNODEACCESS_HXX
 #include "setnodeaccess.hxx"
 #endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
-#endif
 
 #ifndef CONFIGMGR_CONFIGCHANGE_HXX_
 #include "nodechange.hxx"
@@ -84,15 +81,13 @@ namespace configmgr
         using configuration::ElementList;
         using configuration::GroupMemberVisitor;
         using configuration::SetNodeVisitor;
-//-----------------------------------------------------------------------------
-// virtual void doInitElements( data::SetNodeAccess const& _aNode, TreeDepth nDepth);
 
         static
         inline
         data::ValueNodeAccess getMemberValueAccess( GroupNode const & _aGroupNode, Name const & _aName )
         {
             configuration::GroupNodeImpl* pGroupData = _aGroupNode.get_impl();
-            return pGroupData->getOriginalValueNode(_aGroupNode.accessor(),_aName);
+            return pGroupData->getOriginalValueNode(_aName);
         }
 
 //-----------------------------------------------------------------------------
@@ -142,76 +137,11 @@ namespace configmgr
                 {
                     OSL_ASSERT(pContext->isValidNode(nContext));
 
-                    view::Node aContextNode(aNode.accessor(),*pContext,nContext);
+                    view::Node aContextNode(*pContext,nContext);
                     pContext->getViewBehavior()->markChanged(aContextNode);
                 }
             }
         }
-
-//-----------------------------------------------------------------------------
-        data::NodeAddress::DataType * ViewStrategy::getDataForUpdate(data::NodeAccessRef const & _aNode)
-        {
-            typedef data::NodeAddress::DataType DataType;
-            DataType * pResult = implAccessForUpdate(_aNode);
-            OSL_ASSERT(!pResult || _aNode.getDataPtr() == pResult);
-            return pResult;
-        }
-
-        data::SetNodeAddress::DataType * ViewStrategy::getDataForUpdate(data::SetNodeAccess const & _aNode)
-        {
-            typedef data::SetNodeAddress::DataType DataType;
-
-            sharable::Node * pNode = implAccessForUpdate(_aNode);
-            DataType * pResult = pNode ? pNode->setData() : 0;
-
-            OSL_ASSERT(!pResult || &_aNode.data() == pResult);
-            return pResult;
-        }
-
-        data::GroupNodeAddress::DataType * ViewStrategy::getDataForUpdate(data::GroupNodeAccess const & _aNode)
-        {
-            typedef data::GroupNodeAddress::DataType DataType;
-
-            sharable::Node * pNode = implAccessForUpdate(_aNode);
-            DataType * pResult = pNode ? pNode->groupData() : 0;
-
-            OSL_ASSERT(!pResult || &_aNode.data() == pResult);
-            return pResult;
-        }
-
-        data::ValueNodeAddress::DataType * ViewStrategy::getDataForUpdate(data::ValueNodeAccess const & _aNode)
-        {
-            typedef data::ValueNodeAddress::DataType DataType;
-
-            sharable::Node * pNode = implAccessForUpdate(_aNode);
-            DataType * pResult = pNode ? pNode->valueData() : 0;
-
-            OSL_ASSERT(!pResult || &_aNode.data() == pResult);
-            return pResult;
-        }
-
-//-----------------------------------------------------------------------------
-        data::NodeAddress::DataType * ViewStrategy::implAccessForUpdate(data::NodeAccessRef const & _aNode)
-        {
-            if (memory::Segment * pUpdatableSegment = doGetDataSegmentForUpdate())
-            {
-                void * p = memory::UpdateAccessor(pUpdatableSegment).validate(_aNode.rawAddress());
-
-                OSL_ASSERT(const_cast<const void *>(p) == _aNode.getDataPtr());
-
-                return static_cast<data::NodeAddress::DataType*>(p);
-            }
-
-            else
-                return NULL;
-        }
-
-//-----------------------------------------------------------------------------
-        memory::Segment * ViewStrategy::doGetDataSegmentForUpdate()
-        {
-            return NULL;
-        }
-
 
 //-----------------------------------------------------------------------------
         std::auto_ptr<SubtreeChange> ViewStrategy::preCommitChanges(Tree const& _aTree, ElementList& _rRemovedElements)
@@ -329,21 +259,21 @@ namespace configmgr
             {
                 AddNode const& aAddNode = static_cast<AddNode const&>(rElementChange);
 
-                SetNodeElement aNewElement = pSetData->makeAdditionalElement(_aSetNode.accessor(),this,aAddNode,nDepth);
+                SetNodeElement aNewElement = pSetData->makeAdditionalElement(this,aAddNode,nDepth);
 
-                pThisChange = pSetData->doAdjustToAddedElement(_aSetNode.accessor(), aName, aAddNode,aNewElement);
+                pThisChange = pSetData->doAdjustToAddedElement(aName, aAddNode,aNewElement);
             }
             else if (rElementChange.ISA(RemoveNode))
             {
                 RemoveNode const& aRemoveNode = static_cast<RemoveNode const&>(rElementChange);
 
-                pThisChange = pSetData->doAdjustToRemovedElement(_aSetNode.accessor(), aName, aRemoveNode);
+                pThisChange = pSetData->doAdjustToRemovedElement(aName, aRemoveNode);
             }
             else
             {
                 if (nDepth > 0 || (NULL != pSetData->doFindElement(aName)) )// found even beyond nDepth ?
                 {
-                    pThisChange = pSetData->doAdjustChangedElement(_aSetNode.accessor(),rLocalChanges,aName, rElementChange);
+                    pThisChange = pSetData->doAdjustChangedElement(rLocalChanges,aName, rElementChange);
                 }
             }
 
@@ -374,7 +304,7 @@ namespace configmgr
                 {
                     OSL_ENSURE( !hasChanges(_aSetNode.node()),"Cannot have changes to consider when no elements are loaded");
 
-                    pSetData->convertChanges( rLocalChanges, _aSetNode.accessor(), rExternalChanges, nDepth);
+                    pSetData->convertChanges( rLocalChanges, rExternalChanges, nDepth);
                 }
             }
         }
@@ -485,13 +415,13 @@ namespace configmgr
         UnoAny  ViewStrategy::getValue(ValueNode const& _aNode) const
         {
             checkInstance(_aNode.tree());
-            return _aNode.get_impl()->getValue(_aNode.accessor());
+            return _aNode.get_impl()->getValue();
         }
 
         UnoType ViewStrategy::getValueType(ValueNode const& _aNode) const
         {
             checkInstance(_aNode.tree());
-            return _aNode.get_impl()->getValueType(_aNode.accessor());
+            return _aNode.get_impl()->getValueType();
         }
 
 //-----------------------------------------------------------------------------
@@ -525,9 +455,9 @@ namespace configmgr
             }
 
             virtual Result handle(data::ValueNodeAccess const& _aValue);
-            virtual Result handle(data::NodeAccessRef const& _aNonValue);
+            virtual Result handle(data::NodeAccess const& _aNonValue);
 
-            bool test_value(data::NodeAccessRef const & _aNode) const;
+            bool test_value(data::NodeAccess const & _aNode) const;
 
             ViewStrategy&       m_rStrategy;
             GroupNode           m_aGroup;
@@ -539,7 +469,7 @@ namespace configmgr
                 using NodeVisitor::handle;
         };
 
-        bool GroupMemberDispatch::test_value(data::NodeAccessRef const& _aNode) const
+        bool GroupMemberDispatch::test_value(data::NodeAccess const& _aNode) const
         {
             Name aName = _aNode.getName();
 
@@ -555,7 +485,7 @@ namespace configmgr
             return mapResult( m_rVisitor.visit( m_rStrategy.getValue(m_aGroup,aValueName) ) );
         }
 
-        GroupMemberDispatch::Result GroupMemberDispatch::handle(data::NodeAccessRef const& _aNonValue)
+        GroupMemberDispatch::Result GroupMemberDispatch::handle(data::NodeAccess const& _aNonValue)
             {
                 { (void)_aNonValue; }
             OSL_ENSURE( !test_value(_aNonValue), "ERROR: Group MemberDispatch:Found a ValueMember for a subtree child.");
@@ -583,7 +513,7 @@ namespace configmgr
         {
             checkInstance(_aNode.tree());
             configuration::GroupNodeImpl* pGroupNode=_aNode.get_impl();
-            data::GroupNodeAccess aGroupNodeAccess = pGroupNode->getDataAccess( _aNode.accessor() );
+            data::GroupNodeAccess aGroupNodeAccess = pGroupNode->getDataAccess();
             return aGroupNodeAccess.hasChildren();
         }
 
@@ -592,7 +522,7 @@ namespace configmgr
         {
             checkInstance(_aNode.tree());
 
-            return  _aNode.get_impl()->areValueDefaultsAvailable( _aNode.accessor() );
+            return  _aNode.get_impl()->areValueDefaultsAvailable();
         }
 
         configuration::ValueMemberNode ViewStrategy::getValue(GroupNode const& _aNode, Name const& _aName) const
@@ -622,7 +552,7 @@ namespace configmgr
         ViewStrategy::SetNodeElement ViewStrategy::implMakeElement(SetNode const& _aNode, SetNodeEntry const& anEntry) const
         {
             configuration::SetNodeImpl * pNodeData = _aNode.get_impl();
-            return pNodeData->implValidateElement(anEntry.accessor(), pNodeData->entryToElement(anEntry));
+            return pNodeData->implValidateElement(pNodeData->entryToElement(anEntry));
         }
 //-----------------------------------------------------------------------------
         SetEntry ViewStrategy::implFindElement(SetNode const& _aNode, Name const& aName) const
@@ -632,13 +562,13 @@ namespace configmgr
             OSL_ENSURE(pNodeData->implHasLoadedElements(),"Cannot find elements in set that is not loaded");
             configuration::ElementTreeImpl * pElement = pNodeData->doFindElement(aName);
 
-            return SetEntry(_aNode.accessor(), pElement);
+            return SetEntry(pElement);
         }
 
         SetEntry ViewStrategy::findElement(SetNode const& _aNode, Name const& aName) const
         {
             checkInstance(_aNode.tree());
-            _aNode.get_impl()->implEnsureElementsLoaded(_aNode.accessor());
+            _aNode.get_impl()->implEnsureElementsLoaded();
             return implFindElement(_aNode,aName);
         }
 
@@ -648,7 +578,7 @@ namespace configmgr
             if (_aNode.get_impl()->implHasLoadedElements())
                 return implFindElement(_aNode,aName);
             else
-                return SetEntry(_aNode.accessor(),0);
+                return SetEntry(0);
         }
 
         static
@@ -681,10 +611,10 @@ namespace configmgr
                 if (this->hasChanges(_aNode.node()))
                 {
                     OSL_ENSURE(pNodeData->implHasLoadedElements(),"Unexpected: Found set with changes but elements are not loaded");
-                    pNodeData->doDifferenceToDefaultState(_aNode.accessor(),*aResult,_rDefaultTree);
+                    pNodeData->doDifferenceToDefaultState(*aResult,_rDefaultTree);
                 }
                 else
-                    pNodeData->implDifferenceToDefaultState(_aNode.accessor(),*aResult,_rDefaultTree);
+                    pNodeData->implDifferenceToDefaultState(*aResult,_rDefaultTree);
             }
             return aResult;
         }
@@ -702,49 +632,7 @@ namespace configmgr
         }
 
 //-----------------------------------------------------------------------------
-/*       //  virtual rtl::Reference<ViewStrategy> doCloneIndirect(); // fails* /
-        rtl::Reference<ViewStrategy> ViewStrategy::makeIndirect(Tree const& _aTree)
-        {
-            _aTree->makeIndirect(true);
-            return this;
-        }
-
-        void ViewStrategy::doCommitChanges(Node const& _aNode)
-        {
-            // nothing to do
-        }
-
-        // TODO: move this to deferred impl
-        void ViewStrategy::implCommitDirectIn(data::TreeAccessor const& _aPlaceHolder, Node const& _aNode)
-        {
-            if (this->hasChanges(_aNode) )
-            {
-                this->doCommitChanges(_aNode);
-
-                GroupNode aGroup(_aNode);
-
-                for (Node aChild = aGroup.getFirstChild(); aChild.is(); aChild = aGroup.getNextChild(aChild) )
-                {
-                    implCommitDirectIn(_aPlaceHolder, aChild);
-                }
-            }
-        }
-
-        void ViewStrategy::commitDirectly(data::TreeAccessor const& _aPlaceHolder, Tree const& _aTree)
-        {
-            implCommitDirectIn( _aPlaceHolder, getRootNode(_aTree) );
-        }
-
-        //  virtual rtl::Reference<ViewStrategy> doCloneDirect();   // returns 'this'
-        rtl::Reference<ViewStrategy> ViewStrategy::makeDirect  (Tree const& _aTree)
-        {
-            commitDirectly(_aTree.accessor(), _aTree);
-            _aTree->makeIndirect(false);
-            return this;
-        }
-*/
-//-----------------------------------------------------------------------------
-        data::NodeAccessRef ViewStrategy::getNodeAccessRef(Node const& _aNode) const
+        data::NodeAccess ViewStrategy::getNodeAccess(Node const& _aNode) const
         {
             checkInstance(_aNode.tree());
             return _aNode.getAccessRef();
@@ -759,7 +647,7 @@ namespace configmgr
         node::Attributes ViewStrategy::getNodeAttributes(Node const& _aNode) const
         {
             checkInstance(_aNode.tree());
-            return _aNode.getAccessRef().getAttributes();
+            return _aNode.getAccessRef()->getAttributes();
         }
 
 //-----------------------------------------------------------------------------
@@ -769,8 +657,8 @@ namespace configmgr
 
             configuration::SetNodeImpl * pNodeData = _aNode.get_impl();
 
-            if (pNodeData->implLoadElements(_aNode.accessor()))
-                return pNodeData->doDispatchToElements(_aNode.accessor(), _aVisitor);
+            if (pNodeData->implLoadElements())
+                return pNodeData->doDispatchToElements(_aVisitor);
 
             else
                 return SetNodeVisitor::CONTINUE;
@@ -782,7 +670,7 @@ namespace configmgr
 
             configuration::SetNodeImpl * pNodeData = _aNode.get_impl();
 
-            return !pNodeData->implLoadElements(_aNode.accessor()) || pNodeData->doIsEmpty();
+            return !pNodeData->implLoadElements() || pNodeData->doIsEmpty();
         }
 //-----------------------------------------------------------------------------
 
@@ -790,7 +678,7 @@ namespace configmgr
         {
             // cannot insert, if we cannot check for collisions
             checkInstance(_aNode.tree());
-            _aNode.get_impl()->implEnsureElementsLoaded(_aNode.accessor());
+            _aNode.get_impl()->implEnsureElementsLoaded();
             doInsertElement(_aNode,_aName,_aNewEntry);
         }
 
@@ -798,7 +686,7 @@ namespace configmgr
         {
             // cannot remove, if we cannot check for existance
             checkInstance(_aNode.tree());
-            _aNode.get_impl()->implEnsureElementsLoaded(_aNode.accessor());
+            _aNode.get_impl()->implEnsureElementsLoaded();
             doRemoveElement(_aNode,_aName);
         }
 
