@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:33:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:28:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,10 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
+#ifndef _CHARATR_HXX
+#include <charatr.hxx>
+#endif
+
 
 #ifndef _COM_SUN_STAR_UTIL_SEARCHOPTIONS_HPP_
 #include <com/sun/star/util/SearchOptions.hpp>
@@ -242,6 +246,62 @@
 #endif
 // <--
 
+///////////////////////////Modified on Jun. 14th//////////////////////////
+///////////////////////for getDocumentLanguages///////////////////////////
+//-->
+#include <svx/langitem.hxx>
+
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+
+#ifndef _DOCARY_HXX
+#include <docary.hxx>      //SwCharFmts
+#endif
+
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
+#endif
+
+#include <format.hxx>
+
+#ifndef _CHARFMT_HXX
+#include <charfmt.hxx>    //SwCharFmt
+#endif
+
+#ifndef _FMTCOL_HXX
+#include <fmtcol.hxx>     //SwTxtFmtColl
+#endif
+
+#ifndef _UNOSTYLE_HXX
+#include <unostyle.hxx>   //SwAutoStyleFamily
+#endif
+
+#ifndef _ISTYLEACCESS_HXX
+#include <istyleaccess.hxx> // handling of automatic styles
+#endif
+
+#ifndef _STYLEPOOL_HXX
+#include <svtools/stylepool.hxx>
+#endif
+
+#ifndef _SWATRSET_HXX
+#include <swatrset.hxx>
+#endif
+
+//#include <com/sun/star/i18n/ScriptType.hpp>
+#include <svtools/langtab.hxx>
+#include <map>
+#include <set>
+
+#include <svx/eeitem.hxx>
+#include <svx/editeng.hxx>
+#include <svx/svdoutl.hxx>
+#include <svtools/languageoptions.hxx>
+#include <svx/svdview.hxx>
+
+//
+//<--
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::i18n;
@@ -2916,6 +2976,204 @@ void SAL_CALL SwXTextDocument::operator delete( void * p) throw()
 {
     SwXTextDocumentBaseClass::operator delete(p);
 }
+
+
+/*---------------------------------------------------
+retrieve languages already used in current document
+-----------------------------------------------------*/
+uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
+        ::sal_Int16 nScriptTypes,
+        ::sal_Int16 nMaxCount )
+    throw (lang::IllegalArgumentException, uno::RuntimeException)
+{
+    ::vos::OGuard aGuard(Application::GetSolarMutex());
+
+    // possible canonical values for nScriptTypes
+    // any bit wise combination is allowed
+    const sal_Int16 nLatin   = 0x001;
+    const sal_Int16 nAsian   = 0x002;
+    const sal_Int16 nComplex = 0x004;
+
+    // script types for which to get the languages
+    const bool bLatin   = 0 != (nScriptTypes & nLatin);
+    const bool bAsian   = 0 != (nScriptTypes & nAsian);
+    const bool bComplex = 0 != (nScriptTypes & nComplex);
+
+    if (nScriptTypes < nLatin || nScriptTypes > (nLatin | nAsian | nComplex))
+        throw IllegalArgumentException(::rtl::OUString::createFromAscii("nScriptTypes ranges from 1 to 7!"), Reference< XInterface >(), 1);
+    if (!pDocShell)
+        throw DisposedException();
+    SwDoc* pDoc = pDocShell->GetDoc();
+
+    // avoid duplicate values
+    std::set< LanguageType > aAllLangs;
+
+    //USER STYLES
+
+    const SwCharFmts *pFmts = pDoc->GetCharFmts();
+    for(USHORT i = 0; i < pFmts->Count(); ++i)
+    {
+        const SwAttrSet &rAttrSet = (*pFmts)[i]->GetAttrSet();
+        LanguageType nLang = LANGUAGE_DONTKNOW;
+        if (bLatin)
+        {
+            nLang = rAttrSet.GetLanguage( FALSE ).GetLanguage();
+            if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+                aAllLangs.insert( nLang );
+        }
+        if (bAsian)
+        {
+            nLang = rAttrSet.GetCJKLanguage( FALSE ).GetLanguage();
+            if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+                aAllLangs.insert( nLang );
+        }
+        if (bComplex)
+        {
+            nLang = rAttrSet.GetCTLLanguage( FALSE ).GetLanguage();
+            if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+                aAllLangs.insert( nLang );
+        }
+    }
+
+    const SwTxtFmtColls *pColls = pDoc->GetTxtFmtColls();
+    for (USHORT i = 0; i < pColls->Count(); ++i)
+    {
+        const SwAttrSet &rAttrSet = (*pColls)[i]->GetAttrSet();
+        LanguageType nLang = LANGUAGE_DONTKNOW;;
+        if (bLatin)
+        {
+            nLang = rAttrSet.GetLanguage( FALSE ).GetLanguage();
+            if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+                aAllLangs.insert( nLang );
+        }
+        if (bAsian)
+        {
+            nLang = rAttrSet.GetCJKLanguage( FALSE ).GetLanguage();
+            if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+                aAllLangs.insert( nLang );
+        }
+        if (bComplex)
+        {
+            nLang = rAttrSet.GetCTLLanguage( FALSE ).GetLanguage();
+            if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+                aAllLangs.insert( nLang );
+        }
+    }
+
+    //AUTO STYLES
+    const IStyleAccess::SwAutoStyleFamily aFam[2] =
+    {
+      IStyleAccess::AUTO_STYLE_CHAR,
+      IStyleAccess::AUTO_STYLE_PARA
+    };
+    for (sal_uInt16 i = 0; i < 2; ++i)
+    {
+        std::vector< SfxItemSet_Pointer_t > rStyles;
+        pDoc->GetIStyleAccess().getAllStyles(rStyles, aFam[i]);
+        while (!rStyles.empty())
+        {
+            SfxItemSet_Pointer_t pStyle = rStyles.back();
+            rStyles.pop_back();
+            const SfxItemSet *pSet = dynamic_cast< const SfxItemSet * >(pStyle.get());
+
+            LanguageType nLang = LANGUAGE_DONTKNOW;
+            if (bLatin)
+            {
+                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_LANGUAGE, FALSE )).GetLanguage();
+                if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+                    aAllLangs.insert( nLang );
+            }
+            if (bAsian)
+            {
+                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_CJK_LANGUAGE, FALSE )).GetLanguage();
+                if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+                    aAllLangs.insert( nLang );
+            }
+            if (bComplex)
+            {
+                nLang = dynamic_cast< const SvxLanguageItem & >(pSet->Get( RES_CHRATR_CTL_LANGUAGE, FALSE )).GetLanguage();
+                if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+                    aAllLangs.insert( nLang );
+            }
+        }
+    }
+
+    //get languages from "drawobject"
+    SwWrtShell *pWrtSh = pDocShell->GetWrtShell();
+    SdrView *pSdrView = pWrtSh->GetDrawView();
+
+    if( pSdrView )
+    {
+        SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
+        if(pOutliner)
+        {
+            EditEngine& rEditEng = (EditEngine&)pOutliner->GetEditEngine();
+            ULONG nParCount = pOutliner->GetParagraphCount();
+            for (ULONG nPar=0; nPar<nParCount; nPar++)
+            {
+                //every paragraph
+                SvUShorts aPortions;
+                rEditEng.GetPortions( (USHORT)nPar, aPortions );
+
+                for ( USHORT nPos = aPortions.Count(); nPos; )
+                {
+                    //every position
+                    --nPos;
+                    USHORT nEnd = aPortions.GetObject( nPos );
+                    USHORT nStart = nPos ? aPortions.GetObject( nPos - 1 ) : 0;
+                    ESelection aSelection( (USHORT)nPar, nStart, (USHORT)nPar, nEnd );
+                    SfxItemSet aAttr = rEditEng.GetAttribs( aSelection );
+
+                    LanguageType nLang = LANGUAGE_DONTKNOW;
+                    if (bLatin)
+                    {
+                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE, FALSE )).GetLanguage();
+                        if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+                            aAllLangs.insert( nLang );
+                    }
+                    if (bAsian)
+                    {
+                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE_CJK, FALSE )).GetLanguage();
+                        if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+                            aAllLangs.insert( nLang );
+                    }
+                    if (bComplex)
+                    {
+                        nLang = dynamic_cast< const SvxLanguageItem & >(aAttr.Get( EE_CHAR_LANGUAGE_CTL, FALSE )).GetLanguage();
+                        if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+                            aAllLangs.insert( nLang );
+                    }
+                }
+            }
+        }
+    }
+    // less than nMaxCount languages
+    if (nMaxCount > static_cast< sal_Int16 >( aAllLangs.size() ))
+        nMaxCount = static_cast< sal_Int16 >( aAllLangs.size() );
+
+    // build return value
+    sal_Int32 nCount = 0;
+    uno::Sequence< lang::Locale > aLanguages( nMaxCount );
+    lang::Locale* pLanguage = aLanguages.getArray();
+    if (nMaxCount > 0)
+    {
+        const SvtLanguageTable aLangTab;
+        for (std::set< LanguageType >::const_iterator it = aAllLangs.begin(); it != aAllLangs.end(); ++it)
+        {
+            if (nCount >= nMaxCount)
+                break;
+            if (LANGUAGE_NONE != *it)
+            {
+                MsLangId::convertLanguageToLocale( *it, pLanguage[nCount] );
+                pLanguage[nCount].Language = aLangTab.GetString( *it );
+                nCount += 1;
+            }
+        }
+    }
+
+    return aLanguages;
+}
+
 /* -----------------25.10.99 11:06-------------------
 
  --------------------------------------------------*/
@@ -3391,6 +3649,7 @@ void SwXLinkNameAccessWrapper::removeVetoableChangeListener(
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {}
 /*-- 26.10.99 09:16:32---------------------------------------------------
+
 
   -----------------------------------------------------------------------*/
 Reference< XNameAccess >  SwXLinkNameAccessWrapper::getLinks(void)
