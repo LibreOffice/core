@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configset.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:28:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:40:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,9 +66,6 @@
 #ifndef CONFIGMGR_SETNODEBEHAVIOR_HXX_
 #include "setnodeimpl.hxx"
 #endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
-#endif
 
 #ifndef _VOS_REFERNCE_HXX_
 #include <vos/refernce.hxx>
@@ -120,9 +117,9 @@ bool ElementRef::isValid() const
 
 //-----------------------------------------------------------------------------
 
-ElementTree ElementRef::getElementTree(data::Accessor const& _accessor) const
+ElementTree ElementRef::getElementTree() const
 {
-   return ElementTree(_accessor, m_aTreeHolder);
+   return ElementTree(m_aTreeHolder);
 }
 //-----------------------------------------------------------------------------
 
@@ -162,42 +159,31 @@ ElementRef ElementRef::extract(TreeRef const& aTree)
     ElementTreeImpl* pImpl = pTree ? pTree->asElementTree() : 0;
     return ElementRef(pImpl);
 }
-//-----------------------------------------------------------------------------
 
-osl::Mutex& ElementRef::getTreeLock() const
-{
-    OSL_ENSURE(isValid(),"ERROR: Trying to get NULL lock for tree");
-
-    return m_aTreeHolder->getRootLock();
-}
 //-----------------------------------------------------------------------------
 // class ElementTree
 //-----------------------------------------------------------------------------
 
 ElementTree::ElementTree()
 : m_aTreeHolder()
-, m_accessor(NULL)
 {
 }
 //-----------------------------------------------------------------------------
 
-ElementTree::ElementTree(data::Accessor const& _accessor, ElementTreeImpl* pTree)
+ElementTree::ElementTree(ElementTreeImpl* pTree)
 : m_aTreeHolder(pTree)
-, m_accessor(_accessor)
 {
 }
 //-----------------------------------------------------------------------------
 
-ElementTree::ElementTree(data::Accessor const& _accessor, ElementTreeHolder const& pTree)
+ElementTree::ElementTree(ElementTreeHolder const& pTree)
 : m_aTreeHolder(pTree)
-, m_accessor(_accessor)
 {
 }
 //-----------------------------------------------------------------------------
 
 ElementTree::ElementTree(ElementTree const& aOther)
 : m_aTreeHolder(aOther.m_aTreeHolder)
-, m_accessor(aOther.m_accessor)
 {
 }
 //-----------------------------------------------------------------------------
@@ -205,7 +191,6 @@ ElementTree::ElementTree(ElementTree const& aOther)
 ElementTree& ElementTree::operator=(ElementTree const& aOther)
 {
     m_aTreeHolder = aOther.m_aTreeHolder;
-    m_accessor = aOther.m_accessor;
     return *this;
 }
 //-----------------------------------------------------------------------------
@@ -258,13 +243,13 @@ ElementTreeImpl& ElementTree::operator*() const
 
 Tree ElementTree::getTree() const
 {
-    return Tree(m_accessor,m_aTreeHolder.get());
+    return Tree(m_aTreeHolder.get());
 }
 //-----------------------------------------------------------------------------
 
 ElementTree ElementTree::extract(Tree const& aTree)
 {
-    return ElementRef::extract(aTree.getRef()).getElementTree(aTree.getDataAccessor());
+    return ElementRef::extract(aTree.getRef()).getElementTree();
 }
 //-----------------------------------------------------------------------------
 
@@ -324,9 +309,8 @@ OUString TemplateInfo::getTemplatePathString() const
 // class SetElementInfo
 //-----------------------------------------------------------------------------
 
-SetElementInfo::SetElementInfo(data::Accessor const& _aSetAccessor, TemplateHolder const& aTemplate)
+SetElementInfo::SetElementInfo(TemplateHolder const& aTemplate)
 : m_aTemplateInfo(aTemplate)
-, m_aSetAccessor(_aSetAccessor)
 {
 }
 //-----------------------------------------------------------------------------
@@ -363,9 +347,8 @@ TemplateHolder SetElementInfo::extractElementInfo(Tree const& aTree, NodeRef con
 // class SetElementFactory
 //-----------------------------------------------------------------------------
 
-SetElementFactory::SetElementFactory(data::Accessor const& _aDataAccessor, TemplateProvider const& aProvider)
+SetElementFactory::SetElementFactory(TemplateProvider const& aProvider)
 : m_aProvider(aProvider)
-, m_aDataAccessor(_aDataAccessor)
 {
     OSL_ENSURE(aProvider.m_aImpl.is(), "WARNING: Template Instance Factory created without template provider - cannot instantiate elements");
 }
@@ -373,7 +356,6 @@ SetElementFactory::SetElementFactory(data::Accessor const& _aDataAccessor, Templ
 
 SetElementFactory::SetElementFactory(SetElementFactory const& aOther)
 : m_aProvider(aOther.m_aProvider)
-, m_aDataAccessor(aOther.m_aDataAccessor)
 {
 }
 //-----------------------------------------------------------------------------
@@ -381,7 +363,6 @@ SetElementFactory::SetElementFactory(SetElementFactory const& aOther)
 SetElementFactory& SetElementFactory::operator=(SetElementFactory const& aOther)
 {
     m_aProvider = aOther.m_aProvider;
-    m_aDataAccessor = aOther.m_aDataAccessor;
     return *this;
 }
 //-----------------------------------------------------------------------------
@@ -400,7 +381,7 @@ ElementTree SetElementFactory::instantiateTemplate(TemplateHolder const& aTempla
 
     if (!aTemplate.is()) return ElementTree::emptyElement();
 
-    data::TreeSegment aInstanceTree( m_aProvider.m_aImpl->instantiate(this->getDataAccessor(), aTemplate) );
+    data::TreeSegment aInstanceTree( m_aProvider.m_aImpl->instantiate(aTemplate) );
     OSL_ENSURE(aInstanceTree.is(), "ERROR: Cannot create Element Instance: Provider could not instantiate template");
 
 
@@ -408,7 +389,7 @@ ElementTree SetElementFactory::instantiateTemplate(TemplateHolder const& aTempla
     //set removable state
     aInstanceTree.markRemovable();
 
-    ElementTree aRet( this->getDataAccessor(), new ElementTreeImpl( aInstanceTree, aTemplate, m_aProvider ) );
+    ElementTree aRet( new ElementTreeImpl( aInstanceTree, aTemplate, m_aProvider ) );
 
     return aRet;
 }
@@ -421,7 +402,7 @@ ElementTree SetElementFactory::instantiateOnDefault(data::TreeSegment const& _aE
 
     if (!_aElementData.is()) return ElementTree::emptyElement();
 
-    ElementTree aRet( this->getDataAccessor(), new ElementTreeImpl( _aElementData, aDummyTemplate, m_aProvider ) );
+    ElementTree aRet( new ElementTreeImpl( _aElementData, aDummyTemplate, m_aProvider ) );
     // ElementTreeImpl* pNewTree = new ElementTreeImpl( NodeType::getDeferredChangeFactory(),*aTree, c_TreeDepthAll, aDummyTemplate, m_aProvider );
     // pNewTree->takeNodeFrom(aTree);
 
@@ -601,7 +582,7 @@ void SetDefaulter::implValidateSet()
 }
 //-----------------------------------------------------------------------------
 
-static void doValidateElement(ElementRef const& aElement, bool bReqRemovable,Tree const& aTree)
+static void doValidateElement(ElementRef const& aElement, bool bReqRemovable)
 {
     if (!aElement.isValid())
         throw Exception("INTERNAL ERROR: Set Update: Unexpected NULL element");
@@ -612,7 +593,7 @@ static void doValidateElement(ElementRef const& aElement, bool bReqRemovable,Tre
 
     if ( bReqRemovable)
     {
-        Tree aElementTree = aElement.getElementTree(aTree.getDataAccessor()).getTree();
+        Tree aElementTree = aElement.getElementTree().getTree();
 
         if(!aElementTree.getAttributes(aElementTree.getRootNode()).isRemovable())
             throw ConstraintViolation( "New Set Update: Existing element cannot be removed (or replaced) !" );
@@ -623,7 +604,7 @@ static void doValidateElement(ElementRef const& aElement, bool bReqRemovable,Tre
 /// validates that the given element is valid in this context and returns its name
 Path::Component TreeSetUpdater::implValidateElement(ElementRef const& aElement, bool bReqRemovable)
 {
-    doValidateElement(aElement,bReqRemovable,m_aParentTree);
+    doValidateElement(aElement,bReqRemovable);
 
 #if 0 // maybe reeanable for OSL_DEBUG_LEVEL>1 ?
     ElementTreeImpl* pElement = TreeImplHelper::elementImpl(aTree)->isTemplateInstance();
@@ -639,10 +620,10 @@ Path::Component TreeSetUpdater::implValidateElement(ElementRef const& aElement, 
 /// validates that the given element is valid and can be replaced in this context and returns its name
 Path::Component ValueSetUpdater::implValidateElement(ElementRef const& aElement, bool mReqRemovable)
 {
-    doValidateElement(aElement,mReqRemovable,m_aParentTree);
+    doValidateElement(aElement,mReqRemovable);
 
 #if OSL_DEBUG_LEVEL > 0
-    UnoType aNodeType = ElementHelper::getUnoType(aElement.getElementTree(m_aParentTree.getDataAccessor()));
+    UnoType aNodeType = ElementHelper::getUnoType(aElement.getElementTree());
 
     OSL_ENSURE(aNodeType.getTypeClass() != uno::TypeClass_VOID, "INTERNAL ERROR: Set Element without associated type found");
     OSL_ENSURE(aNodeType.getTypeClass() != uno::TypeClass_INTERFACE,"INTERNAL ERROR: Set Element with complex type found");
@@ -819,7 +800,7 @@ NodeChange ValueSetUpdater::validateReplaceElement(ElementRef const& aElement, U
 
     UnoAny aValidValue = implValidateValue(aElementNode, aNewValue);
 
-    ElementNodeRef aElementTree = aElement.getElementTree(m_aParentTree.getDataAccessor()).getTree();
+    ElementNodeRef aElementTree = aElement.getElementTree().getTree();
 
     ElementTreeHolder aNewElement;
     if(aElementTree.getAttributes(aElementTree.getRootNode()).isRemovable())
@@ -867,8 +848,7 @@ NodeChange ValueSetUpdater::validateRemoveElement (ElementRef const& aElement)
 
 NodeChange SetDefaulter::validateSetToDefaultState()
 {
-    memory::UpdateAccessor _aTargetSpace(NULL); // to do: get from right place
-    std::auto_ptr< ISubtree > aDefault = m_aDefaultProvider.getDefaultTree(_aTargetSpace,m_aParentTree,m_aSetNode);
+    std::auto_ptr< ISubtree > aDefault = m_aDefaultProvider.getDefaultTree(m_aParentTree,m_aSetNode);
 
     // now build the specific change
     std::auto_ptr<SetChangeImpl> pChange;
@@ -877,7 +857,7 @@ NodeChange SetDefaulter::validateSetToDefaultState()
     {
         TemplateProvider aProvider = SetElementFactory::findTemplateProvider(m_aParentTree,m_aSetNode);
 
-        configmgr::configuration::SetElementFactory aTmp(m_aParentTree.getDataAccessor(), aProvider);
+        configmgr::configuration::SetElementFactory aTmp(aProvider);
         pChange.reset( new SetResetImpl(aTmp, aDefault) );
         pChange->setTarget(m_aParentTree.getView().makeNode(m_aSetNode));
     }
@@ -887,7 +867,7 @@ NodeChange SetDefaulter::validateSetToDefaultState()
 
 ValueSetUpdater::ElementNodeRef ValueSetUpdater::extractElementNode (ElementRef const& aElement)
 {
-    return aElement.getElementTree(m_aParentTree.getDataAccessor()).getTree();
+    return aElement.getElementTree().getTree();
 }
 //-----------------------------------------------------------------------------
 
