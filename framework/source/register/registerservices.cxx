@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:03:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:46:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,6 +274,10 @@
 #endif
 
 #include <dispatch/popupmenudispatcher.hxx>
+
+#include <uielement/langselectionstatusbarcontroller.hxx>
+#include <uielement/langselectionmenucontroller.hxx>
+
 #include <uiconfiguration/imagemanager.hxx>
 
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
@@ -330,6 +334,8 @@ COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::URLTransformer              
                         COMPONENTINFO( ::framework::UriAbbreviation                         )
                         COMPONENTINFO( ::framework::PopupMenuDispatcher                     )
                         COMPONENTINFO( ::framework::ImageManager                            )
+                        COMPONENTINFO( ::framework::LangSelectionStatusbarController        )
+                        COMPONENTINFO( ::framework::LanguageSelectionMenuController         )
                     )
 
 COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                          )   else
@@ -385,5 +391,8 @@ COMPONENTGETFACTORY (   IFFACTORY( ::framework::URLTransformer                  
                         IFFACTORY( ::framework::UriAbbreviation                         )   else
                         IFFACTORY( ::framework::PopupMenuDispatcher                     )   else
                         IFFACTORY( ::framework::ImageManager                            )
+                        IFFACTORY( ::framework::PopupMenuDispatcher                     )   else
+                        IFFACTORY( ::framework::LangSelectionStatusbarController        )   else
+                        IFFACTORY( ::framework::LanguageSelectionMenuController         )
             )
 
