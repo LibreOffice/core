@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tcvtmb.c,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:38:02 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:17:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -442,7 +442,7 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
                 /* Source buffer to small */
                 if ( pSrcBuf + 1 == pEndSrcBuf )
                 {
-                    *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
+                    *pInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
                     break;
                 }
 
@@ -466,7 +466,7 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
                     /* Source buffer to small */
                     if (pEndSrcBuf - pSrcBuf < 3)
                     {
-                        *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
+                        *pInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
                         break;
                     }
 
@@ -483,7 +483,7 @@ sal_Size ImplEUCJPToUnicode( const ImplTextConverterData* pData,
                     /* Source buffer to small */
                     if ( pSrcBuf + 1 == pEndSrcBuf )
                     {
-                        *pInfo |= RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
+                        *pInfo |= RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOSMALL;
                         break;
                     }
 
