@@ -4,9 +4,9 @@
  *
  *  $RCSfile: translatechanges.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:00:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:09:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,13 +93,13 @@ bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChang
 }
 bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChange, Tree const& aBaseTree, NodeRef const& aBaseNode)
 {
-    OSL_ENSURE(aChange.isValidLocation(aBaseTree.getDataAccessor()), "Trying to resolve against change location that wasn't set up properly");
+    OSL_ENSURE(aChange.isValidLocation(), "Trying to resolve against change location that wasn't set up properly");
 
     namespace Path = configuration::Path;
 
     typedef Path::Iterator Iter;
 
-    Tree aChangeBaseTree = aChange.getBaseTree(aBaseTree.getDataAccessor());
+    Tree aChangeBaseTree = aChange.getBaseTree();
 
     AbsolutePath aOuterBasePath     = aBaseTree.getAbsolutePath(aBaseNode);
     AbsolutePath aChangeBasePath    = aChangeBaseTree.getAbsolutePath(aChange.getBaseNode());
@@ -154,18 +154,18 @@ bool resolveChangeLocation(RelativePath& aPath, NodeChangeLocation const& aChang
 
 // ---------------------------------------------------------------------------------------------------
 // change path and base settings to start from the given base
-bool rebaseChange(data::Accessor const& _aAccessor, NodeChangeLocation& aChange, TreeRef const& _aBaseTreeRef)
+bool rebaseChange(NodeChangeLocation& aChange, TreeRef const& _aBaseTreeRef)
 {
-    return rebaseChange(_aAccessor, aChange,_aBaseTreeRef,_aBaseTreeRef.getRootNode());
+    return rebaseChange(aChange,_aBaseTreeRef,_aBaseTreeRef.getRootNode());
 }
-bool rebaseChange(data::Accessor const& _aAccessor, NodeChangeLocation& aChange, TreeRef const& _aBaseTreeRef, NodeRef const& aBaseNode)
+bool rebaseChange(NodeChangeLocation& aChange, TreeRef const& _aBaseTreeRef, NodeRef const& aBaseNode)
 {
-    OSL_ENSURE(aChange.isValidLocation(_aAccessor), "Trying to rebase change location that wasn't set up properly");
+    OSL_ENSURE(aChange.isValidLocation(), "Trying to rebase change location that wasn't set up properly");
 
-    Tree aBaseTree(_aAccessor,_aBaseTreeRef);
+    Tree aBaseTree(_aBaseTreeRef);
 
     RelativePath aNewPath;
-    if (resolveChangeLocation(aNewPath,aChange,aBaseTree, aBaseNode))
+    if (resolveChangeLocation(aNewPath,aChange,aBaseTree,aBaseNode))
     {
         aChange.setBase( aBaseTree, aBaseNode);
         aChange.setAccessor( aNewPath );
@@ -177,7 +177,7 @@ bool rebaseChange(data::Accessor const& _aAccessor, NodeChangeLocation& aChange,
 // ---------------------------------------------------------------------------------------------------
 // resolve non-uno elements to Uno Objects
 bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeData const& aChange,
-    const memory::Accessor& aAccessor, Factory& rFactory)
+                       Factory& rFactory)
 {
     if (aChange.isSetChange())
     {
@@ -195,8 +195,8 @@ bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeData const& aChange,
 
         //Check if complex or simple type
         Tree aTree = aChange.isRemoveSetChange()?
-            aChange.getOldElementTree(aAccessor):
-            aChange.getNewElementTree(aAccessor);
+            aChange.getOldElementTree():
+            aChange.getNewElementTree();
 
         NodeRef aNodeRef = aTree.getRootNode();
 
@@ -216,7 +216,7 @@ bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeData const& aChange,
 
             if (aChange.isReplaceSetChange() )
             {
-                Tree aOldTree = aChange.getOldElementTree(aAccessor);
+                Tree aOldTree = aChange.getOldElementTree();
 
                 aNodeRef = aOldTree.getRootNode();
                 OSL_ENSURE(!configuration::isStructuralNode(aOldTree, aNodeRef), "resolveUnoObject types mismatch");
@@ -239,10 +239,10 @@ bool resolveUnoObjects(UnoChange& aUnoChange, NodeChangeData const& aChange,
 }
 // ---------------------------------------------------------------------------------------------------
 // resolve non-uno elements to Uno Objects inplace
-bool resolveToUno(NodeChangeData& aChange, const memory::Accessor& aAccessor, Factory& rFactory)
+bool resolveToUno(NodeChangeData& aChange, Factory& rFactory)
 {
     struct UnoChange aUnoChange;
-    if (resolveUnoObjects(aUnoChange,aChange, aAccessor, rFactory))
+    if (resolveUnoObjects(aUnoChange,aChange, rFactory))
     {
         aChange.unoData.newValue = aUnoChange.newValue;
         aChange.unoData.oldValue = aUnoChange.oldValue;
@@ -275,7 +275,7 @@ void fillChange(util::ElementChange& rChange, NodeChangeInformation const& aInfo
 
     UnoChange aUnoChange;
 
-    if (!resolveUnoObjects(aUnoChange, aInfo.change, aInfo.accessor, rFactory))
+    if (!resolveUnoObjects(aUnoChange, aInfo.change, rFactory))
         OSL_ENSURE(false, "WARNING: Cannot find out old/new UNO objects involved in change");
 
     rChange.Accessor        <<= aRelativePath.toString();
@@ -296,7 +296,7 @@ void fillChangeFromResolved(util::ElementChange& rChange, NodeChangeInformation 
 bool fillEventData(container::ContainerEvent& rEvent, NodeChangeInformation const& aInfo, Factory& rFactory)
 {
     UnoChange aUnoChange;
-    if (!resolveUnoObjects(aUnoChange, aInfo.change, aInfo.accessor, rFactory))
+    if (!resolveUnoObjects(aUnoChange, aInfo.change, rFactory))
     {
         OSL_ENSURE(false, "WARNING: Cannot find out old/new UNO objects involved in change");
         return false;
@@ -326,7 +326,7 @@ bool fillEventData(beans::PropertyChangeEvent& rEvent, NodeChangeInformation con
         return false;
 
      UnoChange aUnoChange;
-    if (!resolveUnoObjects(aUnoChange, aInfo.change, aInfo.accessor, rFactory))
+    if (!resolveUnoObjects(aUnoChange, aInfo.change, rFactory))
         OSL_ENSURE(false, "WARNING: Cannot find out old/new UNO objects involved in change");
 
     rEvent.PropertyName     = aInfo.location.getAccessor().getLocalName().getName().toString();
