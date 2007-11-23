@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XConnector.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:11:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:13:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,9 @@ published interface XConnector: com::sun::star::uno::XInterface
     // DocMerge from xml: method com::sun::star::connection::XConnector::connect
     /** creates a new connection interprocess connection.
         <p>
-        Tries to connect to an <type>XAcceptor</type>.
+        Tries to connect to an <type>XAcceptor</type>.  Behavior is unspecified
+        if a call to connect is made when another call to connect either has not
+        yet returned or has returned successfully without raising an exception.
 
         @param sConnectionDescription
                 contains the kind of the connection plus a
