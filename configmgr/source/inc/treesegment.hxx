@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treesegment.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:00:27 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:26:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,11 +43,14 @@
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
-
+#ifndef INCLUDED_SHARABLE_TREEFRAGMENT_HXX
+#include "treefragment.hxx"
+#endif
 #ifndef INCLUDED_MEMORY
 #include <memory>
 #define INCLUDED_MEMORY
 #endif // INCLUDED_MEMORY
+
 
 // -----------------------------------------------------------------------------
 namespace rtl { class OUString; }
@@ -59,18 +62,10 @@ namespace configmgr
     namespace sharable { struct TreeFragment; union Node; } // for TreeData (sharable)
 // -----------------------------------------------------------------------------
     namespace configuration { class Name; }
-// -----------------------------------------------------------------------------
-    namespace memory
-    {
-        class Segment;
-        class Accessor;
-        class UpdateAccessor;
-    }
     // -------------------------------------------------------------------------
     namespace data
     {
     // -------------------------------------------------------------------------
-        class TreeAddress;
         class TreeAccessor;
     // -------------------------------------------------------------------------
         class TreeSegment
@@ -109,10 +104,6 @@ namespace configmgr
             void setName(Name const & _aNewName);
             void markRemovable();
 
-
-            memory::Segment * getSegment() const;
-            memory::Accessor  getAccessor() const;
-
             TreeAddress     getBaseAddress() const;
             TreeAccessor    getTreeAccess() const;
 
@@ -123,7 +114,7 @@ namespace configmgr
             TreeDataPtr getTreeData() const;
             NodeDataPtr getSegmentRootNode() const;
         private:
-            TreeDataUpdatePtr getTreeDataForUpdate(memory::UpdateAccessor& _anUpdater) const;
+            TreeDataUpdatePtr getTreeDataForUpdate() const;
 
         private:
             bool hasData() const { return !!m_pImpl.is(); }
