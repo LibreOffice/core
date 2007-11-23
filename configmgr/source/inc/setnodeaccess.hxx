@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setnodeaccess.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:48:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:24:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,11 @@
 #ifndef CONFIGMGR_NODEACCESS_HXX
 #include "nodeaccess.hxx"
 #endif
+#ifndef INCLUDED_SHARABLE_TREEFRAGMENT_HXX
+#include "treefragment.hxx"
+#endif
+
+#include "treeaccessor.hxx"
 
 namespace configmgr
 {
@@ -46,7 +51,6 @@ namespace configmgr
     namespace data
     {
     // -------------------------------------------------------------------------
-        class TreeAddress;
         class TreeAccessor;
     // -------------------------------------------------------------------------
         /** class that mediates access to the data of a Set node
@@ -55,95 +59,78 @@ namespace configmgr
         class SetNodeAccess
         {
         public:
-            typedef NodeAccess::Name        Name;
-            typedef NodeAccess::Attributes  Attributes;
-            typedef SetNodeAddress                    NodeAddressType;
-            typedef SetNodeAddress::AddressType       AddressType;
-            typedef SetNodeAddress::DataType const    DataType;
-            typedef DataType * NodePointerType;
-            typedef TreeAddress                       ElementAddress;
-            typedef TreeAccessor                      ElementAccess;
+            typedef TreeAddress    ElementAddress;
+            typedef TreeAccessor   ElementAccess;
 
-            SetNodeAccess(Accessor const& _aAccessor, NodeAddressType const& _aNodeRef)
-            : m_aAccessor(_aAccessor)
-            , m_pData(_aNodeRef.m_pData)
+            SetNodeAccess(const sharable::SetNode *_pNodeRef)
+                : m_pData((SetNodeAddress)_pNodeRef)
             {}
 
-            SetNodeAccess(Accessor const& _aAccessor, NodePointerType _pNode)
-            : m_aAccessor(_aAccessor)
-            , m_pData(check(_aAccessor,_pNode))
+            SetNodeAccess(const sharable::Node *_pNodeRef)
+                : m_pData(check(_pNodeRef))
             {}
 
             explicit
             SetNodeAccess(NodeAccess const & _aNode)
-            : m_aAccessor(_aNode.accessor())
-            , m_pData(check(_aNode))
-            {
-            }
+                : m_pData(check(_aNode))
+            {}
 
-            explicit
-            SetNodeAccess(NodeAccessRef const & _aNode)
-            : m_aAccessor(_aNode.accessor())
-            , m_pData(check(_aNode))
-            {
-            }
-
-            static bool isInstance(NodeAccessRef const & _aNode)
-            {
-                return check(_aNode) != NULL;
-            }
+            static bool isInstance(NodeAccess const & _aNode)
+                { return check(_aNode) != NULL; }
 
             bool isValid() const { return m_pData != NULL; }
 
-            Name getName() const;
-            Attributes getAttributes() const;
+            configuration::Name getName() const;
+            node::Attributes getAttributes() const;
 
             bool isDefault()   const;
 
             bool isLocalizedValueSetNode() const;
 
-            Name getElementTemplateName()   const;
-            Name getElementTemplateModule() const;
+            configuration::Name getElementTemplateName()   const;
+            configuration::Name getElementTemplateModule() const;
 
-            bool            hasElement      (Name const& _aName) const;
-            ElementAccess   getElementTree  (Name const& _aName) const;
+            bool            hasElement      (configuration::Name const& _aName) const
+                { return SetNodeAccess::implGetElement(_aName) != NULL; }
+            ElementAccess   getElementTree  (configuration::Name const& _aName) const
+                { return TreeAccessor(implGetElement(_aName)); }
 
-            NodeAddressType address()   const { return NodeAddressType(m_pData); }
-            Accessor const& accessor()  const { return m_aAccessor; }
+            operator NodeAccess() const { return NodeAccess(NodeAddress(m_pData)); }
 
-            operator NodeAccessRef() const { return NodeAccessRef(&m_aAccessor,NodeAddress(m_pData)); }
+            sharable::SetNode & data() const { return *m_pData; }
+            operator SetNodeAddress () const { return (SetNodeAddress)m_pData; }
+            operator NodeAddress () const { return (NodeAddress)m_pData; }
 
-            DataType& data() const { return *static_cast<NodePointerType>(m_aAccessor.validate(m_pData)); }
-
-            static void addElement(memory::UpdateAccessor & _aAccessor, SetNodeAddress _aSetAddress, ElementAddress _aNewElement);
-            static ElementAddress removeElement(memory::UpdateAccessor & _aAccessor, SetNodeAddress _aSetAddress, Name const & _aName);
+            static void addElement(SetNodeAddress _aSetAddress, ElementAddress _aNewElement);
+            static ElementAddress removeElement(SetNodeAddress _aSetAddress,
+                        configuration::Name const & _aName);
         private:
-            static AddressType check(NodeAccessRef const&);
-            static AddressType check(Accessor const&, NodePointerType);
+            static SetNodeAddress check(sharable::Node *pNode)
+                { return pNode ? const_cast<SetNodeAddress>(pNode->setData()) : NULL; }
+            static SetNodeAddress check(NodeAccess const&aRef)
+                { return check(static_cast<sharable::Node *>(aRef)); }
 
-            ElementAddress implGetElement(Name const& _aName) const;
+            ElementAddress implGetElement(configuration::Name const& _aName) const;
 
-            Accessor    m_aAccessor;
-            AddressType m_pData;
+            SetNodeAddress m_pData;
         };
 
-        SetNodeAddress toSetNodeAddress(memory::Accessor const & _aAccess, NodeAddress const & _aNodeAddr);
-        SetNodeAddress toSetNodeAddress(memory::UpdateAccessor & _aAccess, NodeAddress const & _aNodeAddr);
+        SetNodeAddress toSetNodeAddress(NodeAddress const & _aNodeAddr);
     // -------------------------------------------------------------------------
         inline
-        NodeAccess::Name SetNodeAccess::getName() const
+        configuration::Name SetNodeAccess::getName() const
         { return NodeAccess::wrapName( data().info.getName() ); }
 
         inline
-        NodeAccess::Name SetNodeAccess::getElementTemplateName()   const
-        { return NodeAccess::wrapName( data().getElementTemplateName(m_aAccessor) ); }
+        configuration::Name SetNodeAccess::getElementTemplateName()   const
+        { return NodeAccess::wrapName( data().getElementTemplateName() ); }
 
         inline
-        NodeAccess::Name SetNodeAccess::getElementTemplateModule() const
-        { return NodeAccess::wrapName( data().getElementTemplateModule(m_aAccessor) ); }
+        configuration::Name SetNodeAccess::getElementTemplateModule() const
+        { return NodeAccess::wrapName( data().getElementTemplateModule() ); }
 
         inline
-        NodeAccess::Attributes SetNodeAccess::getAttributes() const
+        node::Attributes SetNodeAccess::getAttributes() const
         { return sharable::node(data()).getAttributes(); }
 
         inline
