@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachefactory.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:25:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:36:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #ifndef CONFIGMGR_BACKEND_CACHECONTROLLER_HXX
 #include "cachecontroller.hxx"
 #endif
-#ifndef CONFIGMGR_HEAPFACTORY_HXX
-#include "heapfactory.hxx"
-#endif
 #ifndef CONFIGMGR_BACKENDFACTORY_HXX_
 #include "backendfactory.hxx"
 #endif
@@ -66,12 +63,10 @@ namespace configmgr
 
         if (_xBackend.is())
         {
-            memory::HeapManager & rHeap = memory::cacheHeap();
-
             rtl::Reference< backend::ICachedDataProvider > xLoader
-                = new backend::CacheController(_xBackend.get(),rHeap, _xContext);
+                = new backend::CacheController(_xBackend.get(), _xContext);
 
-            xCache.set( new TreeManager(xLoader.get(),rHeap) );
+            xCache.set( new TreeManager(xLoader.get()) );
         }
 
         return xCache;
