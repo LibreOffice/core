@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewnode.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:37:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:49:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #include "treeimpl.hxx"
 #endif
 
+#include "valuenodeaccess.hxx"
+#include "groupnodeaccess.hxx"
+
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
@@ -58,8 +61,8 @@ namespace configmgr
         {
             typedef configuration::TreeImpl TreeData;
 
-            Tree(data::Accessor const& _accessor, TreeData& _ref)
-            : m_accessor(_ref.getDataAccessor(_accessor)), m_addr(&_ref)
+            Tree(TreeData& _ref)
+            : m_addr(&_ref)
             {}
 
         // low-level access
@@ -68,13 +71,7 @@ namespace configmgr
             TreeData* get_impl() const
             { return m_addr; }
 
-            data::Accessor const& accessor() const   // has a Accessor
-            { return m_accessor; }
-
-        //    data::TreeAccessor getAccess() const;   // has a TreeAccessor
-
         private:
-            data::Accessor m_accessor;   // has a TreeAccessor
             TreeData *  m_addr;  // has a TreeAddress or NodeAddress
         };
     //-------------------------------------------------------------------------
@@ -88,8 +85,8 @@ namespace configmgr
             : m_tree(_tree), m_addr(_addr)
             {}
 
-            Node(data::Accessor const& _accessor, Tree::TreeData& _ref, NodeOffset _offs)
-                : m_tree(_accessor,_ref), m_addr( _ref.nodeData(_offs))
+            Node(Tree::TreeData& _ref, NodeOffset _offs)
+                : m_tree(_ref), m_addr( _ref.nodeData(_offs))
             {}
 
             bool is() const { return m_addr != 0; }
@@ -97,9 +94,9 @@ namespace configmgr
             Node getParent() const;
             Node getNextSibling() const;
 
-            bool isSetNode()    const { return is() && data().isSetNode(this->accessor()); }
-            bool isGroupNode()  const { return is() && data().isGroupNode(this->accessor()); }
-            bool isValueNode()  const { return is() && data().isValueElementNode(this->accessor()); }
+            bool isSetNode()    const { return is() && data().isSetNode(); }
+            bool isGroupNode()  const { return is() && data().isGroupNode(); }
+            bool isValueNode()  const { return is() && data().isValueElementNode(); }
 
         // low-level access
 //            NodeAddress operator->() const { return &data().nodeImpl(); }
@@ -115,10 +112,7 @@ namespace configmgr
             Tree tree() const   // has a Tree
             { return m_tree; }
 
-            data::Accessor const& accessor() const   // has a Accessor
-            { return m_tree.accessor(); }
-
-            data::NodeAccessRef getAccessRef() const;   // has a NodeAccess
+            data::NodeAccess getAccessRef() const;   // has a NodeAccess
 
         private:
             Tree        m_tree;   // has a Tree + Accessor
@@ -138,19 +132,16 @@ namespace configmgr
             bool is() const { return m_node.isValueNode(); }
 
         // low-level access
- //           NodeType* operator->() const { return &m_node.data().valueElementImpl(accessor()); }
+ //           NodeType* operator->() const { return &m_node.data().valueElementImpl(); }
 
             NodeType* get_impl() const
-            { return is() ? &m_node.data().valueElementImpl(accessor()) : NULL; }
+            { return is() ? &m_node.data().valueElementImpl() : NULL; }
 
             Node node() const   // has a Node
             { return m_node; }
 
             Tree tree() const   // has a Tree
             { return m_node.tree(); }
-
-            data::Accessor const& accessor() const   // has a TreeAccessor
-            { return m_node.accessor(); }
 
             data::ValueNodeAccess getAccess() const;   // has a NodeAccess
         };
@@ -171,19 +162,16 @@ namespace configmgr
             Node getFirstChild() const;
             Node getNextChild(Node const& _aAfterNode) const;
 
-//            NodeType* operator->() const { return &m_node.data().groupImpl(accessor()); }
+//            NodeType* operator->() const { return &m_node.data().groupImpl(); }
 
             NodeType* get_impl() const
-            { return is() ? &m_node.data().groupImpl(accessor()) : NULL; }
+            { return is() ? &m_node.data().groupImpl() : NULL; }
 
             Node node() const   // has a Node
             { return m_node; }
 
             Tree tree() const   // has a Tree
             { return m_node.tree(); }
-
-            data::Accessor const& accessor() const   // has a TreeAccessor
-            { return m_node.accessor(); }
 
             data::GroupNodeAccess getAccess() const;   // has a NodeAccess
         };
@@ -202,19 +190,16 @@ namespace configmgr
 
             bool is() const { return m_node.isSetNode(); }
 
-   //         NodeType* operator->() const  { return &m_node.data().setImpl(accessor()); }
+   //         NodeType* operator->() const  { return &m_node.data().setImpl(); }
 
             NodeType* get_impl() const
-            { return is() ? &m_node.data().setImpl(accessor()) : 0; }
+            { return is() ? &m_node.data().setImpl() : 0; }
 
             Node node() const   // has a Node
             { return m_node; }
 
             Tree tree() const   // has a Tree
             { return m_node.tree(); }
-
-            data::Accessor const& accessor() const   // has a TreeAccessor
-            { return m_node.accessor(); }
 
             data::SetNodeAccess getAccess() const;   // has a NodeAccess
         };

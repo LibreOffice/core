@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valuenodeimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:35:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:48:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,10 +42,7 @@
 
 namespace configmgr
 {
-//-----------------------------------------------------------------------------
-
     class ValueChange;
-//-----------------------------------------------------------------------------
 
     namespace data
     {
@@ -56,15 +53,9 @@ namespace configmgr
 
     namespace configuration
     {
+    typedef com::sun::star::uno::Any UnoAny;
+    typedef com::sun::star::uno::Type UnoType;
 //-----------------------------------------------------------------------------
-        typedef com::sun::star::uno::Any UnoAny;
-        typedef com::sun::star::uno::Type UnoType;
-
-        class ValueChangeImpl;
-
-        class Name;
-//-----------------------------------------------------------------------------
-
 // Another types of node
 //-----------------------------------------------------------------------------
 
@@ -72,28 +63,26 @@ namespace configmgr
             <p> This is an immutable value (changes are done by adding/replacing/removing set elements)
             </p>
         */
-        class ValueElementNodeImpl : public NodeImpl
-        {
-        public:
+    class ValueElementNodeImpl : public NodeImpl
+    {
+    public:
             explicit ValueElementNodeImpl(data::ValueNodeAddress const& _aNodeRef) ;
 
-        // the following delegate directly to the original node
-        public:
-            /// Does this node assume its default value
-            /// retrieve the current value of this node
-            UnoAny  getValue(data::Accessor const& _aAccessor) const;
+    // the following delegate directly to the original node
+    public:
+        /// Does this node assume its default value
+        /// retrieve the current value of this node
+        UnoAny  getValue() const;
 
-            /// get the type of this value
-            UnoType getValueType(data::Accessor const& _aAccessor)  const;
+        /// get the type of this value
+        UnoType getValueType()  const;
 
-            typedef data::ValueNodeAccess DataAccess;
-            DataAccess getDataAccess(data::Accessor const& _aAccessor) const;
-        };
+        typedef data::ValueNodeAccess DataAccess;
+            DataAccess getDataAccess() const;
+    };
 
-//-----------------------------------------------------------------------------
-        // domain-specific 'dynamic_cast' replacement
-        ValueElementNodeImpl&   AsValueNode(NodeImpl& rNode);
-//-----------------------------------------------------------------------------
+    // domain-specific 'dynamic_cast' replacement
+    ValueElementNodeImpl&   AsValueNode(NodeImpl& rNode);
     }
 }
 
