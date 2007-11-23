@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confeventhelpers.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:03:44 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:01:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,8 +199,8 @@ namespace configmgr
 
 //          void removed(OUString const& aPath, bool bRemovedFromModel, IConfigBroadcaster* pSource);
 
-            void dispatch(memory::Accessor const& _aChangedDataAccessor, Change const& rBaseChange, AbsolutePath const& sChangeLocation, sal_Bool _bError, IConfigBroadcaster* pSource);
-            void dispatch(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& rList_, sal_Bool _bError, IConfigBroadcaster* pSource);
+            void dispatch(Change const& rBaseChange, AbsolutePath const& sChangeLocation, sal_Bool _bError, IConfigBroadcaster* pSource);
+            void dispatch(TreeChangeList const& rList_, sal_Bool _bError, IConfigBroadcaster* pSource);
             void disposing(IConfigBroadcaster* pSource);
         private:
             typedef BroadcastImplHelper<NodeListenerInfo> Listeners;
@@ -209,8 +209,8 @@ namespace configmgr
             Listeners m_aListeners;
             PathMap m_aPathMap;
         private:
-            void dispatchInner(INodeListenerRef const& pTarget, AbsolutePath const& sTargetPath, memory::Accessor const& _aChangedDataAccessor, Change const& rBaseChange, AbsolutePath const& sChangeLocation, sal_Bool _bError, IConfigBroadcaster* pSource);
-            void dispatchOuter(INodeListenerRef const& pTarget, AbsolutePath const& sTargetPath, memory::Accessor const& _aChangedDataAccessor, Change const& rBaseChange, AbsolutePath const& sChangeLocation, sal_Bool _bError, IConfigBroadcaster* pSource);
+            void dispatchInner(INodeListenerRef const& pTarget, AbsolutePath const& sTargetPath, Change const& rBaseChange, AbsolutePath const& sChangeLocation, sal_Bool _bError, IConfigBroadcaster* pSource);
+            void dispatchOuter(INodeListenerRef const& pTarget, AbsolutePath const& sTargetPath, Change const& rBaseChange, AbsolutePath const& sChangeLocation, sal_Bool _bError, IConfigBroadcaster* pSource);
         };
 
     /////////////////////////////////////////////////////////////////////////
