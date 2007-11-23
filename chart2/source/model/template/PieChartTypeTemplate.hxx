@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:51:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:03:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,9 @@ protected:
                   ::com::sun::star::uno::Reference<
                       ::com::sun::star::chart2::XChartType > > & aOldChartTypesSeq
             );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >
+                getChartTypeForIndex( sal_Int32 nChartTypeIndex );
 };
 
 } //  namespace chart
