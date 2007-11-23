@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:42:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:44:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1217,13 +1217,21 @@ void OutlinerView::ShowBullets( BOOL bShow, BOOL bAffectLevel0 )
     pOwner->UndoActionEnd( OLUNDO_ATTR );
 }
 
-void OutlinerView::RemoveAttribs( BOOL bRemoveParaAttribs, USHORT nWhich )
+void OutlinerView::RemoveAttribsKeepLanguages( BOOL bRemoveParaAttribs )
+{
+    RemoveAttribs( bRemoveParaAttribs, 0, TRUE /*keep language attribs*/ );
+}
+
+void OutlinerView::RemoveAttribs( BOOL bRemoveParaAttribs, USHORT nWhich, BOOL bKeepLanguages )
 {
     DBG_CHKTHIS(OutlinerView,0);
     BOOL bUpdate = pOwner->GetUpdateMode();
     pOwner->SetUpdateMode( FALSE );
     pOwner->UndoActionStart( OLUNDO_ATTR );
-    pEditView->RemoveAttribs( bRemoveParaAttribs, nWhich );
+    if (bKeepLanguages)
+        pEditView->RemoveAttribsKeepLanguages( bRemoveParaAttribs );
+    else
+        pEditView->RemoveAttribs( bRemoveParaAttribs, nWhich );
     if ( bRemoveParaAttribs )
     {
         // Ueber alle Absaetze, und Einrueckung und Level einstellen
