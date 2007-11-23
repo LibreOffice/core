@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_DataLabel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:46:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:47:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,12 @@ private:
     CheckBox            m_aCBSymbol;
 
     TextSeparatorResources  m_aSeparatorResources;
+
+    FixedText           m_aFT_LabelPlacement;
+    ListBox             m_aLB_LabelPlacement;
+
+    ::std::map< sal_Int32, USHORT > m_aPlacementToListBoxMap;
+    ::std::map< USHORT, sal_Int32 > m_aListBoxToPlacementMap;
 
     SvNumberFormatter*  m_pNumberFormatter;
     bool                m_bNumberFormatMixedState;
