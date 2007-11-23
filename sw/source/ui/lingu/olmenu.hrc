@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:26:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:26:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@
 #define STR_HYP_OK      (RC_LINGU_BEGIN + 3)
 #define STR_WORD        (RC_LINGU_BEGIN + 4)
 #define STR_PARAGRAPH   (RC_LINGU_BEGIN + 5)
+#define STR_LANGSTATUS_NONE     (RC_LINGU_BEGIN + 6)
+#define STR_LANGSTATUS_MORE     (RC_LINGU_BEGIN + 7)
 
 #define MN_SPELLING     100
 #define MN_IGNORE       102
@@ -51,8 +53,16 @@
 #define MN_LANGUAGE_WORD 105
 #define MN_LANGUAGE_PARA 106
 
+#define MN_LANGUAGE_SELECTION   107
+#define MN_LANGUAGE_PARAGRAPH   108
+#define MN_LANGUAGE_ALL_TEXT    109
+
 #define MN_INSERT_START 500
 #define MN_AUTOCORR_START 900
+
+#define MN_LANGUAGE_SELECTION_START     1170
+#define MN_LANGUAGE_PARAGRAPH_START     1270
+#define MN_LANGUAGE_ALL_TEXT_START      1370
 
 #endif
 
