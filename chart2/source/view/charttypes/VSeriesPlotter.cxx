@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VSeriesPlotter.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:55:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:10:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@
 #include "FormattedStringHelper.hxx"
 #include "ResId.hxx"
 #include "Strings.hrc"
+#include "RelativePositionHelper.hxx"
 
 //only for creation: @todo remove if all plotter are uno components and instanciated via servicefactory
 #include "BarChart.hxx"
@@ -67,15 +68,10 @@
 #include "CandleStickChart.hxx"
 //
 
-#ifndef _COM_SUN_STAR_CHART2_ERRORBARSTYLE_HPP_
 #include <com/sun/star/chart2/ErrorBarStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
+#include <com/sun/star/chart2/RelativePosition.hpp>
 
 #ifndef _SVX_UNOPRNMS_HXX
 #include <svx/unoprnms.hxx>
@@ -448,7 +444,7 @@ OUString VSeriesPlotter::getLabelTextForValue( VDataSeries& rDataSeries
     return aNumber;
 }
 
-void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& xTarget
+uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& xTarget
                     , VDataSeries& rDataSeries
                     , sal_Int32 nPointIndex
                     , double fValue
@@ -457,6 +453,8 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
                     , LabelAlignment eAlignment
                     , sal_Int32 nOffset )
 {
+    uno::Reference< drawing::XShape > xTextShape;
+
     try
     {
         awt::Point aScreenPosition2D(rScreenPosition2D);
@@ -477,7 +475,7 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
         DataPointLabel* pLabel = rDataSeries.getDataPointLabelIfLabel( nPointIndex );
 
         if( !pLabel )
-            return;
+            return xTextShape;
 
         //------------------------------------------------
         //prepare legend symbol
@@ -557,12 +555,12 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
         tNameSequence* pPropNames;
         tAnySequence* pPropValues;
         if( !rDataSeries.getTextLabelMultiPropertyLists( nPointIndex, pPropNames, pPropValues ) )
-            return;
+            return xTextShape;
         LabelPositionHelper::changeTextAdjustment( *pPropValues, *pPropNames, eAlignment );
 
         //------------------------------------------------
         //create text shape
-        uno::Reference< drawing::XShape > xTextShape = ShapeFactory(m_xShapeFactory).
+        xTextShape = ShapeFactory(m_xShapeFactory).
             createText( xTarget_, aText.makeStringAndClear()
                         , *pPropNames, *pPropValues, ShapeFactory::makeTransformation( aScreenPosition2D ) );
 
@@ -631,6 +629,8 @@ void VSeriesPlotter::createDataLabel( const uno::Reference< drawing::XShapes >& 
     {
         ASSERT_EXCEPTION( e );
     }
+
+    return xTextShape;
 }
 
 namespace
@@ -901,8 +901,10 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
     }
 }
 
-void VSeriesPlotter::createRegressionCurvesShapes( const VDataSeries& rVDataSeries
-                            , const uno::Reference< drawing::XShapes >& xTarget )
+void VSeriesPlotter::createRegressionCurvesShapes( VDataSeries& rVDataSeries
+                            , const uno::Reference< drawing::XShapes >& xTarget
+                            , const uno::Reference< drawing::XShapes >& xEquationTarget
+                            , bool bMaySkipPointsInRegressionCalculation )
 {
     if(m_nDimension!=2)
         return;
@@ -932,10 +934,24 @@ void VSeriesPlotter::createRegressionCurvesShapes( const VDataSeries& rVDataSeri
         aRegressionPoly.SequenceY[0].realloc(nRegressionPointCount);
         aRegressionPoly.SequenceZ[0].realloc(nRegressionPointCount);
         sal_Int32 nRealPointCount=0;
+
+        uno::Sequence< chart2::ExplicitScaleData > aScaleDataSeq( m_pPosHelper->getScales());
+        uno::Reference< chart2::XScaling > xScalingX;
+        uno::Reference< chart2::XScaling > xScalingY;
+        if( aScaleDataSeq.getLength() >= 2 )
+        {
+            xScalingX.set( aScaleDataSeq[0].Scaling );
+            xScalingY.set( aScaleDataSeq[1].Scaling );
+        }
+
+        uno::Sequence< geometry::RealPoint2D > aCalculatedPoints(
+            xRegressionCurveCalculator->getCurveValues(
+                fMinX, fMaxX, nRegressionPointCount, xScalingX, xScalingY, bMaySkipPointsInRegressionCalculation ));
+        nRegressionPointCount = aCalculatedPoints.getLength();
         for(sal_Int32 nP=0; nP<nRegressionPointCount; nP++)
         {
-            double fLogicX = fMinX + nP*(fMaxX-fMinX)/double(nRegressionPointCount-1);
-            double fLogicY = xRegressionCurveCalculator->getCurveValue( fLogicX );
+            double fLogicX = aCalculatedPoints[nP].X;
+            double fLogicY = aCalculatedPoints[nP].Y;
             double fLogicZ = 0.0;//dummy
 
             m_pPosHelper->doLogicScaling( &fLogicX, &fLogicY, &fLogicZ );
@@ -958,22 +974,146 @@ void VSeriesPlotter::createRegressionCurvesShapes( const VDataSeries& rVDataSeri
         aRegressionPoly = aClippedPoly;
         m_pPosHelper->transformScaledLogicToScene( aRegressionPoly );
 
-        if( !aRegressionPoly.SequenceX.getLength() || !aRegressionPoly.SequenceX[0].getLength() )
-            continue;
+        awt::Point aDefaultPos;
+        if( aRegressionPoly.SequenceX.getLength() && aRegressionPoly.SequenceX[0].getLength() )
+        {
+            uno::Reference< beans::XPropertySet > xCurveModelProp( aCurveList[nN], uno::UNO_QUERY );
+            VLineProperties aVLineProperties;
+            aVLineProperties.initFromPropertySet( xCurveModelProp );
 
-        uno::Reference< beans::XPropertySet > xCurveModelProp( aCurveList[nN], uno::UNO_QUERY );
-        VLineProperties aVLineProperties;
-        aVLineProperties.initFromPropertySet( xCurveModelProp );
+            //create an extra group shape for each curve for selection handling
+            bool bAverageLine = RegressionCurveHelper::isMeanValueLine( aCurveList[nN] );
+            uno::Reference< drawing::XShapes > xRegressionGroupShapes =
+                createGroupShape( xTarget, rVDataSeries.getDataCurveCID( nN, bAverageLine ) );
+            uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
+                xRegressionGroupShapes, PolyToPointSequence( aRegressionPoly ), &aVLineProperties );
+            m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
+            aDefaultPos = xShape->getPosition();
+        }
 
-        //create an extra group shape for each curve for selection handling
-        bool bAverageLine = RegressionCurveHelper::isMeanValueLine( aCurveList[nN] );
-        uno::Reference< drawing::XShapes > xRegressionGroupShapes =
-            createGroupShape( xTarget, rVDataSeries.getDataCurveCID( nN, bAverageLine ) );
-        uno::Reference< drawing::XShape > xShape = m_pShapeFactory->createLine2D(
-            xRegressionGroupShapes, PolyToPointSequence( aRegressionPoly ), &aVLineProperties );
-        m_pShapeFactory->setShapeName( xShape, C2U("MarkHandles") );
+        // curve equation and correlation coefficient
+        uno::Reference< beans::XPropertySet > xEqProp( aCurveList[nN]->getEquationProperties());
+        if( xEqProp.is())
+        {
+            createRegressionCurveEquationShapes(
+                rVDataSeries.getDataCurveEquationCID( nN ),
+                xEqProp, xEquationTarget, xRegressionCurveCalculator,
+                aDefaultPos );
+        }
     }
 }
+
+void VSeriesPlotter::createRegressionCurveEquationShapes(
+    const OUString & rEquationCID,
+    const uno::Reference< beans::XPropertySet > & xEquationProperties,
+    const uno::Reference< drawing::XShapes >& xEquationTarget,
+    const uno::Reference< chart2::XRegressionCurveCalculator > & xRegressionCurveCalculator,
+    awt::Point aDefaultPos )
+{
+    OSL_ASSERT( xEquationProperties.is());
+    if( !xEquationProperties.is())
+        return;
+
+    bool bShowEquation = false;
+    bool bShowCorrCoeff = false;
+    OUString aSep( sal_Unicode('\n'));
+    if(( xEquationProperties->getPropertyValue( C2U("ShowEquation")) >>= bShowEquation ) &&
+       ( xEquationProperties->getPropertyValue( C2U("ShowCorrelationCoefficient")) >>= bShowCorrCoeff ))
+    {
+        if( ! (bShowEquation || bShowCorrCoeff))
+            return;
+
+        ::rtl::OUStringBuffer aFormula;
+        sal_Int32 nNumberFormatKey = 0;
+        xEquationProperties->getPropertyValue( C2U("NumberFormat")) >>= nNumberFormatKey;
+
+        if( bShowEquation )
+        {
+            if( m_apNumberFormatterWrapper.get())
+            {
+                aFormula = xRegressionCurveCalculator->getFormattedRepresentation(
+                    m_apNumberFormatterWrapper->getNumberFormatsSupplier(),
+                    nNumberFormatKey );
+            }
+            else
+            {
+                aFormula = xRegressionCurveCalculator->getRepresentation();
+            }
+
+            if( bShowCorrCoeff )
+            {
+//                 xEquationProperties->getPropertyValue( C2U("Separator")) >>= aSep;
+                aFormula.append( aSep );
+            }
+        }
+        if( bShowCorrCoeff )
+        {
+            aFormula.append( sal_Unicode( 'R' ));
+            aFormula.append( sal_Unicode( 0x00b2 ));
+            aFormula.append( C2U( " = " ));
+            double fR( xRegressionCurveCalculator->getCorrelationCoefficient());
+            if( m_apNumberFormatterWrapper.get())
+            {
+                sal_Int32 nLabelCol = 0;
+                bool bColChanged;
+                aFormula.append(
+                    m_apNumberFormatterWrapper->getFormattedString(
+                        nNumberFormatKey, fR*fR, nLabelCol, bColChanged ));
+                //@todo: change color of label if bColChanged is true
+            }
+            else
+            {
+                sal_Unicode aDecimalSep( '.' );//@todo get this locale dependent
+                aFormula.append( ::rtl::math::doubleToUString(
+                                     fR*fR, rtl_math_StringFormat_G, 4, aDecimalSep, true ));
+            }
+        }
+
+        awt::Point aScreenPosition2D;
+        chart2::RelativePosition aRelativePosition;
+        if( xEquationProperties->getPropertyValue( C2U("RelativePosition")) >>= aRelativePosition )
+        {
+            //@todo decide wether x is primary or secondary
+            double fX = aRelativePosition.Primary*m_aPageReferenceSize.Width;
+            double fY = aRelativePosition.Secondary*m_aPageReferenceSize.Height;
+            aScreenPosition2D.X = static_cast< sal_Int32 >( ::rtl::math::round( fX ));
+            aScreenPosition2D.Y = static_cast< sal_Int32 >( ::rtl::math::round( fY ));
+        }
+        else
+            aScreenPosition2D = aDefaultPos;
+
+        if( aFormula.getLength())
+        {
+            // set fill and line properties on creation
+            tNameSequence aNames;
+            tAnySequence  aValues;
+            PropertyMapper::getPreparedTextShapePropertyLists( xEquationProperties, aNames, aValues );
+
+            uno::Reference< drawing::XShape > xTextShape = m_pShapeFactory->createText(
+                xEquationTarget, aFormula.makeStringAndClear(),
+                aNames, aValues, ShapeFactory::makeTransformation( aScreenPosition2D ));
+
+//             // adapt font sizes
+//             awt::Size aOldRefSize;
+//             if( xTitleProperties->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize )
+//             {
+//                 uno::Reference< beans::XPropertySet > xShapeProp( xTextShape, uno::UNO_QUERY );
+//                 if( xShapeProp.is())
+//                     RelativeSizeHelper::adaptFontSizes( xShapeProp, aOldRefSize, m_aPageReferenceSize );
+//             }
+
+            OSL_ASSERT( xTextShape.is());
+            if( xTextShape.is())
+            {
+                ShapeFactory::setShapeName( xTextShape, rEquationCID );
+                xTextShape->setPosition(
+                    RelativePositionHelper::getUpperLeftCornerOfAnchoredObject(
+                        aScreenPosition2D, xTextShape->getSize(), aRelativePosition.Anchor ));
+            }
+        }
+    }
+}
+
 
 void VSeriesPlotter::setMappedProperties(
           const uno::Reference< drawing::XShape >& xTargetShape
@@ -1491,6 +1631,10 @@ PlottingPositionHelper& VSeriesPlotter::getPlottingPositionHelper( sal_Int32 nAx
     return *pRet;
 }
 
+void VSeriesPlotter::rearrangeLabelToAvoidOverlapIfRequested( const awt::Size& /*rPageSize*/ )
+{
+}
+
 VDataSeries* VSeriesPlotter::getFirstSeries() const
 {
     ::std::vector< ::std::vector< VDataSeriesGroup > >::const_iterator aZSlotIter( m_aZSlots.begin() );
@@ -1574,6 +1718,11 @@ void VSeriesPlotter::setDiagramReferenceSize( const ::com::sun::star::awt::Size 
     ::std::vector< VDataSeriesGroup > aSeriesGroups( FlattenVector( m_aZSlots ));
     ::std::for_each( aSeriesGroups.begin(), aSeriesGroups.end(),
                      lcl_setDiaRefSizeAtSeriesGroup( m_aDiagramReferenceSize ));
+}
+
+void VSeriesPlotter::setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize )
+{
+    m_aPageReferenceSize = rPageRefSize;
 }
 
 //better performance for big data
