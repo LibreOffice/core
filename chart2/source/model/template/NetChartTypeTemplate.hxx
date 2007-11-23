@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NetChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:50:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:02:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,8 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ ChartTypeTemplate ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >
+                getChartTypeForIndex( sal_Int32 nChartTypeIndex );
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
 
 
