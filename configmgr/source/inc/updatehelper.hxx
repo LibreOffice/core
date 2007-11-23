@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatehelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:01:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:27:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,29 +40,27 @@
 #include "change.hxx"
 #endif
 
+#include "nodeaccess.hxx"
+
 //..........................................................................
 namespace configmgr
 {
 //..........................................................................
-    namespace memory    { class UpdateAccessor; }
-    namespace data      { class NodeAddress; class NodeAccessRef; }
-
-//..........................................................................
 
 // adjust a set of changes to the target tree, return true, if there are changes left
-    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAccessRef const & _aRootNode);
+    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAccess const & _aRootNode);
 
 // adjust a set of changes to the target tree, return true, if there are changes left
-    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, memory::UpdateAccessor& _anUpdateAccess, data::NodeAddress _aRootNode);
+    bool adjustUpdateToTree(SubtreeChange & _rUpdateTree, data::NodeAddress _aRootNode);
 
 // apply a already matching set of changes to the target tree
-    void applyUpdateToTree(SubtreeChange& _anUpdateTree, memory::UpdateAccessor& _anUpdateAccess, data::NodeAddress _aRootNode);
+    void applyUpdateToTree(SubtreeChange& _anUpdateTree, data::NodeAddress _aRootNode);
 
 // apply a set of changes to the target tree
-    void applyUpdateWithAdjustmentToTree(SubtreeChange& _anUpdateTree, memory::UpdateAccessor& _anUpdateAccess, data::NodeAddress _aRootNode);
+    void applyUpdateWithAdjustmentToTree(SubtreeChange& _anUpdateTree, data::NodeAddress _aRootNode);
 
 // apply a set of changes to the target tree, return true, if there are changes found
-    bool createUpdateFromDifference(SubtreeChange& _rResultingUpdateTree, data::NodeAccessRef const & _aExistingData, ISubtree const & _aNewData);
+    bool createUpdateFromDifference(SubtreeChange& _rResultingUpdateTree, data::NodeAccess const & _aExistingData, ISubtree const & _aNewData);
 
 //..........................................................................
 }   // namespace configmgr
