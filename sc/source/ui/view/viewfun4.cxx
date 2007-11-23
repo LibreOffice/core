@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun4.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:48:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:52:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
 #include <svx/flditem.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/langitem.hxx>
-#include <svx/langtab.hxx>
 #include <svx/svxerr.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/unolingu.hxx>
@@ -61,6 +60,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/fcontnr.hxx>
+#include <svtools/langtab.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/stritem.hxx>
 #include <svtools/transfer.hxx>
@@ -305,7 +305,7 @@ void ScViewFunc::DoThesaurus( BOOL bRecord )
     if (eState == EE_SPELL_ERRORFOUND)              // sollte spaeter durch Wrapper geschehen!
     {
         LanguageType eLnge = ScViewUtil::GetEffLanguage( pDoc, ScAddress( nCol, nRow, nTab ) );
-        SvxLanguageTable aLangTab;
+        SvtLanguageTable aLangTab;
         String aErr = aLangTab.GetString(eLnge);
         aErr += ScGlobal::GetRscString( STR_SPELLING_NO_LANG );
         InfoBox aBox( GetViewData()->GetDialogParent(), aErr );
@@ -499,7 +499,7 @@ void ScViewFunc::DoSheetConversion( const ScConversionParam& rConvParam, BOOL bR
 
 IMPL_LINK_INLINE_START( ScViewFunc, SpellError, void *, nLang )
 {
-    SvxLanguageTable aLangTab;
+    SvtLanguageTable aLangTab;
     String aErr = aLangTab.GetString((LanguageType) (ULONG) nLang);
     ErrorHandler::HandleError(*new StringErrorInfo(
                                 ERRCODE_SVX_LINGU_LANGUAGENOTEXISTS, aErr) );
