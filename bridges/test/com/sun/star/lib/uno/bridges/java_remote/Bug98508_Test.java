@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Bug98508_Test.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:55:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:08:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,11 +35,11 @@
 
 package com.sun.star.lib.uno.bridges.javaremote;
 
-import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.lang.DisposedException;
 import com.sun.star.lib.TestBed;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 import complexlib.ComplexTestCase;
 
 /**
@@ -79,10 +79,11 @@ public final class Bug98508_Test extends ComplexTestCase {
             new Client().execute();
         }
 
-        protected boolean run(XBridge bridge) throws Throwable {
+        protected boolean run(XComponentContext context) throws Throwable {
             Test98508Interface ifc
                 = (Test98508Interface) UnoRuntime.queryInterface(
-                    Test98508Interface.class, bridge.getInstance(""));
+                    Test98508Interface.class,
+                    getBridge(context).getInstance(""));
             try {
                 ifc.get();
             } catch (DisposedException e) {

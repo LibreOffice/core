@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Bug111153_Test.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:54:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:07:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,12 @@
 
 package com.sun.star.lib.uno.bridges.javaremote;
 
-import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.lib.TestBed;
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
 
@@ -67,9 +67,9 @@ public final class Bug111153_Test extends ComplexTestCase {
             new Client().execute();
         }
 
-        protected boolean run(XBridge bridge) throws Throwable {
+        protected boolean run(XComponentContext context) throws Throwable {
             XTransport t = (XTransport) UnoRuntime.queryInterface(
-                XTransport.class, bridge.getInstance("Transport"));
+                XTransport.class, getBridge(context).getInstance("Transport"));
             XDerived d = new XDerived() {};
             t.setDerived(d);
             return t.getBase() == d;

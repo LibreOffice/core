@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Bug114133_Test.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:54:44 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:07:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,9 @@
 
 package com.sun.star.lib.uno.bridges.javaremote;
 
-import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.lib.TestBed;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
 import util.WaitUnreachable;
@@ -67,10 +67,11 @@ public final class Bug114133_Test extends ComplexTestCase {
             new Client().execute();
         }
 
-        protected boolean run(XBridge bridge) throws Throwable {
-            new WaitUnreachable(bridge.getInstance("Test")).waitUnreachable();
-            bridge = getBridge();
-            new WaitUnreachable(bridge.getInstance("Test")).waitUnreachable();
+        protected boolean run(XComponentContext context) throws Throwable {
+            new WaitUnreachable(getBridge(context).getInstance("Test")).
+                waitUnreachable();
+            new WaitUnreachable(getBridge(context).getInstance("Test")).
+                waitUnreachable();
             return true;
         }
     }

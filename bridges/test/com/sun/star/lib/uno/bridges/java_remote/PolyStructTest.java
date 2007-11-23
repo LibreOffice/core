@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PolyStructTest.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:56:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:09:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 
 package com.sun.star.lib.uno.bridges.javaremote;
 
-import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.lib.TestBed;
 import com.sun.star.lib.uno.typeinfo.MemberTypeInfo;
@@ -46,6 +45,7 @@ import com.sun.star.uno.Any;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
 
@@ -65,9 +65,9 @@ public final class PolyStructTest extends ComplexTestCase {
             new Client().execute();
         }
 
-        protected boolean run(XBridge bridge) throws Throwable {
+        protected boolean run(XComponentContext context) throws Throwable {
             TestTransport t = (TestTransport) UnoRuntime.queryInterface(
-                TestTransport.class, bridge.getInstance(""));
+                TestTransport.class, getBridge(context).getInstance(""));
 
             assertEquals(
                 Boolean.FALSE, t.transportBoolean(new TestPolyStruct()).member);
