@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 11:02:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:43:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ using namespace com::sun::star::linguistic2;
 
 
 DBG_NAME( EditView )
+
 
 // From SW => Create common method
 LanguageType lcl_CheckLanguage(
@@ -525,6 +526,28 @@ void EditView::SetParaAttribs( const SfxItemSet& rSet, sal_uInt16 nPara )
     // Kein Undo-Kappseln noetig...
     PIMPEE->SetParaAttribs( nPara, rSet );
     // Beim Aendern von Absatzattributen muss immer formatiert werden...
+    PIMPEE->FormatAndUpdate( this );
+}
+
+void EditView::RemoveAttribsKeepLanguages( sal_Bool bRemoveParaAttribs )
+{
+    DBG_CHKTHIS( EditView, 0 );
+    DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
+
+    pImpEditView->DrawSelection();
+    PIMPEE->UndoActionStart( EDITUNDO_RESETATTRIBS );
+    EditSelection aSelection( pImpEditView->GetEditSelection() );
+
+    for (sal_uInt16 nWID = EE_ITEMS_START; nWID <= EE_ITEMS_END; ++nWID)
+    {
+        bool bIsLang =  EE_CHAR_LANGUAGE     == nWID ||
+                        EE_CHAR_LANGUAGE_CJK == nWID ||
+                        EE_CHAR_LANGUAGE_CTL == nWID;
+        if (!bIsLang)
+            PIMPEE->RemoveCharAttribs( aSelection, bRemoveParaAttribs, nWID );
+    }
+
+    PIMPEE->UndoActionEnd( EDITUNDO_RESETATTRIBS );
     PIMPEE->FormatAndUpdate( this );
 }
 
