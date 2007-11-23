@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessimpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:53:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,7 +245,7 @@ uno::Type implGetElementType(NodeSetInfoAccess& rNode) throw(RuntimeException)
     {
         GuardedNodeData<NodeSetInfoAccess> lock( rNode );
 
-        aRet = rNode.getElementInfo(lock.getDataAccessor()).getElementType();
+        aRet = rNode.getElementInfo().getElementType();
     }
     catch (configuration::Exception& ex)
     {
@@ -891,7 +891,7 @@ OUString SAL_CALL implGetElementTemplateName(NodeSetInfoAccess& rNode)
     throw(uno::RuntimeException)
 {
     GuardedNodeData<NodeSetInfoAccess> lock(rNode);
-    return rNode.getElementInfo(lock.getDataAccessor()).getTemplateInfo().getTemplatePathString();
+    return rNode.getElementInfo().getTemplateInfo().getTemplatePathString();
 }
 
 //-----------------------------------------------------------------------------------
