@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewaccess.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:36:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:49:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,17 +57,14 @@ namespace configmgr
     {
 //-----------------------------------------------------------------------------
 
-        class ViewTreeAccess
-        {
+    class ViewTreeAccess
+    {
             rtl::Reference< ViewStrategy >  m_xStrategy;
             Tree                            m_aTree;
 
-        private:
-            data::Accessor accessor() const { return m_aTree.accessor(); }
-
         public:
             explicit ViewTreeAccess(Tree const & _aTree);
-            ViewTreeAccess(data::Accessor const & _aAccessor, configuration::TreeImpl& _rTree);
+            explicit ViewTreeAccess(configuration::TreeImpl& _rTree);
 
             rtl::Reference< view::ViewStrategy > getViewBehavior() { return m_xStrategy; }
         public:
@@ -168,13 +165,13 @@ namespace configmgr
 
         // value (element) node specific operations
         public:
-            /// Does this node assume its default value
-            /// retrieve the current value of this node
-            UnoAny  getValue(ValueNode const& _aNode) const
+        /// Does this node assume its default value
+        /// retrieve the current value of this node
+        UnoAny getValue(ValueNode const& _aNode) const
             { return m_xStrategy->getValue(_aNode); }
 
-            /// get the type of this value
-            UnoType getValueType(ValueNode const& _aNode)   const
+        /// get the type of this value
+        UnoType getValueType(ValueNode const& _aNode)   const
             { return m_xStrategy->getValueType(_aNode); }
 
 
@@ -255,9 +252,9 @@ namespace configmgr
 
 //-----------------------------------------------------------------------------
         inline
-        ViewTreeAccess::ViewTreeAccess(data::Accessor const & _aAccessor, configuration::TreeImpl& _rTree)
-        : m_xStrategy(_rTree.getViewBehavior())
-        , m_aTree(_aAccessor,_rTree)
+        ViewTreeAccess::ViewTreeAccess(configuration::TreeImpl& _rTree)
+            : m_xStrategy(_rTree.getViewBehavior())
+            , m_aTree(_rTree)
         {
         }
 
