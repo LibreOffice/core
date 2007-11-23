@@ -388,6 +388,18 @@
                     <value xml:lang="en-US">~Grid</value>
                 </prop>
             </node>
+            <node oor:name=".uno:InsertTrendline" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+
+                    <value xml:lang="en-US">Insert ~Regression Curve</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:InsertTrendlineEquation" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+
+                    <value xml:lang="en-US">Insert Regresion Curve ~Equation</value>
+                </prop>
+            </node>
         </node>
     </node>
 </oor:component-data>
