@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PolarLabelPositionHelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:25:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:12:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,8 @@
 #include <basegfx/vector/b2ivector.hxx>
 #endif
 
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
+
 //.............................................................................
 namespace chart
 {
@@ -79,31 +81,32 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForLogicV
     double fUnitCircleRadius = m_pPosHelper->transformToRadius( fLogicValueOnRadiusAxis );
 
     return getLabelScreenPositionAndAlignmentForUnitCircleValues(
-           rAlignment, true
+           rAlignment, ::com::sun::star::chart::DataLabelPlacement::OUTSIDE
            , fUnitCircleAngleDegree, 0.0
            , fUnitCircleRadius, fUnitCircleRadius, fLogicZ, nScreenValueOffsetInRadiusDirection );
 }
 
 awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCircleValues(
-        LabelAlignment& rAlignment, bool bOutsidePosition
+        LabelAlignment& rAlignment, sal_Int32 nLabelPlacement
         , double fUnitCircleStartAngleDegree, double fUnitCircleWidthAngleDegree
         , double fUnitCircleInnerRadius, double fUnitCircleOuterRadius
         , double fLogicZ
         , sal_Int32 nScreenValueOffsetInRadiusDirection ) const
 {
+    bool bCenter = (nLabelPlacement != ::com::sun::star::chart::DataLabelPlacement::OUTSIDE)
+                && (nLabelPlacement != ::com::sun::star::chart::DataLabelPlacement::INSIDE);
+
     double fAngleDegree = fUnitCircleStartAngleDegree + fUnitCircleWidthAngleDegree/2.0;
     double fRadius = 0.0;
-    if( bOutsidePosition ) //e.g. for pure pie chart(one ring only) or for angle axis of polyar coordinate system
-    {
+    if( !bCenter ) //e.g. for pure pie chart(one ring only) or for angle axis of polyar coordinate system
         fRadius = fUnitCircleOuterRadius;
-    }
     else
         fRadius = fUnitCircleInnerRadius + (fUnitCircleOuterRadius-fUnitCircleInnerRadius)/2.0 ;
 
     awt::Point aRet( this->transformSceneToScreenPosition(
         m_pPosHelper->transformUnitCircleToScene( fAngleDegree, fRadius, fLogicZ+0.5 ) ) );
 
-    if(3==m_nDimensionCount && bOutsidePosition)
+    if(3==m_nDimensionCount && nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE)
     {
         //check wether the upper or the downer edge is more distant from the center
         //take the farest point to put the label to
@@ -144,33 +147,35 @@ awt::Point PolarLabelPositionHelper::getLabelScreenPositionAndAlignmentForUnitCi
     }
     //------------------------------
     //set LabelAlignment
-    if( bOutsidePosition )
+    if( !bCenter )
     {
         while(fAngleDegree>360.0)
             fAngleDegree-=360.0;
         while(fAngleDegree<0.0)
             fAngleDegree+=360.0;
 
+        bool bOutside = nLabelPlacement == ::com::sun::star::chart::DataLabelPlacement::OUTSIDE;
+
         if(fAngleDegree==0.0)
             rAlignment = LABEL_ALIGN_CENTER;
         else if(fAngleDegree<=22.5)
-            rAlignment = LABEL_ALIGN_RIGHT;
+            rAlignment = bOutside ? LABEL_ALIGN_RIGHT : LABEL_ALIGN_LEFT;
         else if(fAngleDegree<67.5)
-            rAlignment = LABEL_ALIGN_RIGHT_TOP;
+            rAlignment = bOutside ? LABEL_ALIGN_RIGHT_TOP : LABEL_ALIGN_LEFT_BOTTOM;
         else if(fAngleDegree<112.5)
-            rAlignment = LABEL_ALIGN_TOP;
+            rAlignment = bOutside ? LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
         else if(fAngleDegree<=157.5)
-            rAlignment = LABEL_ALIGN_LEFT_TOP;
+            rAlignment = bOutside ? LABEL_ALIGN_LEFT_TOP : LABEL_ALIGN_RIGHT_BOTTOM;
         else if(fAngleDegree<=202.5)
-            rAlignment = LABEL_ALIGN_LEFT;
+            rAlignment = bOutside ? LABEL_ALIGN_LEFT : LABEL_ALIGN_RIGHT;
         else if(fAngleDegree<247.5)
-            rAlignment = LABEL_ALIGN_LEFT_BOTTOM;
+            rAlignment = bOutside ? LABEL_ALIGN_LEFT_BOTTOM : LABEL_ALIGN_RIGHT_TOP;
         else if(fAngleDegree<292.5)
-            rAlignment = LABEL_ALIGN_BOTTOM;
+            rAlignment = bOutside ? LABEL_ALIGN_BOTTOM : LABEL_ALIGN_TOP;
         else if(fAngleDegree<337.5)
-            rAlignment = LABEL_ALIGN_RIGHT_BOTTOM;
+            rAlignment = bOutside ? LABEL_ALIGN_RIGHT_BOTTOM : LABEL_ALIGN_LEFT_TOP;
         else
-            rAlignment = LABEL_ALIGN_RIGHT;
+            rAlignment = bOutside ? LABEL_ALIGN_RIGHT : LABEL_ALIGN_LEFT;
     }
     else
     {
