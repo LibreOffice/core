@@ -113,7 +113,7 @@ CreateFolder	Directory_	N			Directory	1	Identifier		Primary key, could be foreig
 CustomAction	Action	N					Identifier		Primary key, name of action, normally appears in sequence table unless private use.
 CustomAction	Source	Y					CustomSource		The table reference of the source of the code.
 CustomAction	Target	Y					Formatted		Excecution parameter, depends on the type of custom action
-CustomAction	Type	N	1	4095					The numeric custom action type, consisting of source location, code type, entry, option flags.
+CustomAction	Type	N	1	16383					The numeric custom action type, consisting of source location, code type, entry, option flags.
 Dialog	Attributes	Y	0	2147483647					A 32-bit word that specifies the attribute flags to be applied to this dialog.
 Dialog	Control_Cancel	Y			Control	2	Identifier		Defines the cancel control. Hitting escape or clicking on the close icon on the dialog is equivalent to pushing this button.
 Dialog	Control_Default	Y			Control	2	Identifier		Defines the default control. Hitting return is equivalent to pushing this button.
@@ -276,7 +276,7 @@ MoveFile	DestName	Y					Filename		Name to be given to the original file after it
 MoveFile	FileKey	N					Identifier		Primary key that uniquely identifies a particular MoveFile record
 MoveFile	Options	N	0	1					Integer value specifying the MoveFile operating mode, one of imfoEnum
 MoveFile	SourceFolder	Y					Identifier		Name of a property whose value is assumed to resolve to the full path to the source directory
-MoveFile	SourceName	Y					WildCardFilename		Name of the source file(s) to be moved or copied.  Can contain the '*' or '?' wildcards.
+MoveFile	SourceName	Y					Text		Name of the source file(s) to be moved or copied.  Can contain the '*' or '?' wildcards.
 MsiAssembly	Attributes	Y							Assembly attributes
 MsiAssembly	Component_	N			Component	1	Identifier		Foreign key into Component table.
 MsiAssembly	Feature_	N			Feature	1	Identifier		Foreign key into Feature table.
@@ -290,7 +290,7 @@ MsiDigitalCertificate	DigitalCertificate	N					Identifier		A unique identifier f
 MsiDigitalSignature	DigitalCertificate_	N			MsiDigitalCertificate	1	Identifier		Foreign key to MsiDigitalCertificate table identifying the signer certificate
 MsiDigitalSignature	Hash	Y					Binary		The encoded hash blob from the digital signature
 MsiDigitalSignature	SignObject	N					Text		Foreign key to Media table
-MsiDigitalSignature	Table	N					Identifier		Reference to another table name (only Media table is supported)
+MsiDigitalSignature	Table	N						Media	Reference to another table name (only Media table is supported)
 MsiFileHash	File_	N			File	1	Identifier		Primary key, foreign key into File table referencing file with this hash
 MsiFileHash	HashPart1	N							Size of file in bytes (long integer).
 MsiFileHash	HashPart2	N							Size of file in bytes (long integer).
@@ -320,7 +320,7 @@ ODBCTranslator	File_Setup	Y			File	1	Identifier		Optional reference to key trans
 ODBCTranslator	Translator	N					Identifier		Primary key, non-localized.internal token for translator
 Patch	Attributes	N	0	32767					Integer containing bit flags representing patch attributes
 Patch	File_	N					Identifier		Primary key, non-localized token, foreign key to File table, must match identifier in cabinet.
-Patch	Header	N					Binary		Binary stream. The patch header, used for patch validation.
+Patch	Header	Y					Binary		Binary stream. The patch header, used for patch validation.
 Patch	PatchSize	N	0	2147483647					Size of patch in bytes (long integer).
 Patch	Sequence	N	0	32767					Primary key, sequence with respect to the media images; order must track cabinet order.
 PatchPackage	Media_	N	0	32767					Foreign key to DiskId column of Media table. Indicates the disk containing the patch package.
@@ -357,7 +357,7 @@ RegLocator	Key	N					RegPath		The key for the registry value.
 RegLocator	Name	Y					Formatted		The registry value name.
 RegLocator	Root	N	0	3					The predefined root key for the registry value, one of rrkEnum.
 RegLocator	Signature_	N					Identifier		The table key. The Signature_ represents a unique file signature and is also the foreign key in the Signature table. If the type is 0, the registry values refers a directory, and _Signature is not a foreign key.
-RegLocator	Type	Y	0	2					An integer value that determines if the registry value is a filename or a directory location or to be used as is w/o interpretation.
+RegLocator	Type	Y	0	18					An integer value that determines if the registry value is a filename or a directory location or to be used as is w/o interpretation.
 RemoveFile	Component_	N			Component	1	Identifier		Foreign key referencing Component that controls the file to be removed.
 RemoveFile	DirProperty	N					Identifier		Name of a property whose value is assumed to resolve to the full pathname to the folder of the file to be removed.
 RemoveFile	FileKey	N					Identifier		Primary key used to identify a particular file entry
@@ -438,7 +438,7 @@ TypeLib	Directory_	Y			Directory	1	Identifier		Optional. The foreign key into th
 TypeLib	Feature_	N			Feature	1	Identifier		Required foreign key into the Feature Table, specifying the feature to validate or install in order for the type library to be operational.
 TypeLib	Language	N	0	32767					The language of the library.
 TypeLib	LibID	N					Guid		The GUID that represents the library.
-TypeLib	Version	Y	0	16777215					The version of the library. The major version is in the upper 8 bits of the short integer. The minor version is in the lower 8 bits.
+TypeLib	Version	Y	0	16777215					The version of the library. The minor version is in the lower 8 bits of the integer. The major version is in the next 16 bits. 
 UIText	Key	N					Identifier		A unique key that identifies the particular string.
 UIText	Text	Y					Text		The localized version of the string.
 Upgrade	ActionProperty	N					UpperCase		The property to set when a product in this set is found.
