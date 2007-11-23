@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NetChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:54:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:02:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,9 +169,7 @@ sal_Bool SAL_CALL NetChartTypeTemplate::matchesTemplate(
     return bResult;
 }
 
-Reference< chart2::XChartType > SAL_CALL NetChartTypeTemplate::getChartTypeForNewSeries(
-        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
-    throw (uno::RuntimeException)
+Reference< chart2::XChartType > NetChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
 {
     Reference< chart2::XChartType > xResult;
 
@@ -181,7 +179,6 @@ Reference< chart2::XChartType > SAL_CALL NetChartTypeTemplate::getChartTypeForNe
             GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
         xResult.set( xFact->createInstance(
                          CHART2_SERVICE_NAME_CHARTTYPE_NET ), uno::UNO_QUERY_THROW );
-        ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
     }
     catch( uno::Exception & ex )
     {
@@ -189,7 +186,15 @@ Reference< chart2::XChartType > SAL_CALL NetChartTypeTemplate::getChartTypeForNe
     }
 
     return xResult;
+}
 
+Reference< chart2::XChartType > SAL_CALL NetChartTypeTemplate::getChartTypeForNewSeries(
+        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
+    throw (uno::RuntimeException)
+{
+    Reference< chart2::XChartType > xResult( getChartTypeForIndex( 0 ) );
+    ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
+    return xResult;
 }
 
 // ----------------------------------------
