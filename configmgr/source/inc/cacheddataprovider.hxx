@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cacheddataprovider.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:43:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:16:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,15 +45,11 @@
 #ifndef CONFIGMGR_BACKEND_REQUESTTYPES_HXX_
 #include "requesttypes.hxx"
 #endif
-#ifndef CONFIGMGR_SEGMENT_HXX
-#include "segment.hxx"
-#endif
 #ifndef CONFIGMGR_UTILITY_HXX_
 #include "utility.hxx"
 #endif
-
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/simplereferenceobject.hxx>
+#ifndef INCLUDED_SHARABLE_TREEFRAGMENT_HXX
+#include "treefragment.hxx"
 #endif
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
@@ -65,13 +61,7 @@ namespace configmgr
     namespace backend
     {
 // ---------------------------------------------------------------------------
-    struct CacheLocation
-    {
-        memory::SegmentAddress          segment;
-        memory::SegmentHeap::Address    address;
-
-        bool isNull() const { return segment.isNull() || address == 0; }
-    };
+    typedef data::TreeAddress CacheLocation;
 // ---------------------------------------------------------------------------
     struct IDirectDataProvider;
     struct ICachedDataNotifier;
