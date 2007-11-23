@@ -4,9 +4,9 @@
  *
  *  $RCSfile: disposetimer.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:24:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:38:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,6 @@ namespace configmgr
 
         class Timer : public vos::OTimer
         {
-            osl::Mutex  m_aMutex;
         public:
             OTreeDisposeScheduler* pParent;
 
@@ -97,20 +96,13 @@ namespace configmgr
             // vos::OTimer
             virtual void SAL_CALL onShot();
 
-            //
-            osl::Mutex&     getShotMutex() {return m_aMutex;}
-
             // stop the scheduling
             void dispose() {stop(); pParent = NULL;}
-
         };
         friend void Timer::onShot();
 
     private:
-        mutable osl::Mutex  m_aMutex;
-
         Agenda              m_aAgenda;
-
         vos::ORef<Timer>    m_xTimer;
         CacheManager&       m_rTreeManager;
 
@@ -138,18 +130,16 @@ namespace configmgr
 
         ~OTreeDisposeScheduler() { stopAndClearTasks(); }
 
-    //-------- Delay and Interval ---------------------------------------------
+        //-------- Delay and Interval ---------------------------------------------
         /// sets the initial delay to be used for cleanup in the future, does not affect an already started process
         void setCleanupDelay(TimeInterval const& _aCleanupDelay)
         {
-            osl::MutexGuard aGuard(m_aMutex);
             m_aCleanupDelay = _aCleanupDelay;
         }
 
         /// sets the initial delay and recurrance interval to be used for cleanup in the future, does not affect an already started process
         void setCleanupDelay(TimeInterval const& _aCleanupDelay, TimeInterval const& _aCleanupInterval)
         {
-            osl::MutexGuard aGuard(m_aMutex);
             m_aCleanupDelay = _aCleanupDelay;
             m_aCleanupInterval = _aCleanupInterval;
         }
@@ -157,21 +147,18 @@ namespace configmgr
         /// sets the recurrance interval to be used for cleanup in the future, does not affect an already started process
         void setCleanupInterval(TimeInterval const& _aCleanupInterval)
         {
-            osl::MutexGuard aGuard(m_aMutex);
             m_aCleanupInterval = _aCleanupInterval;
         }
 
         /// retrieves the initial delay used for cleanup
         TimeInterval const& getCleanupDelay() const
         {
-            osl::MutexGuard aGuard(m_aMutex);
             return m_aCleanupDelay;
         }
 
         /// retrieves the recurrance interval used for cleanup
         TimeInterval const& getCleanupInterval() const
         {
-            osl::MutexGuard aGuard(m_aMutex);
             return m_aCleanupInterval;
         }
 
@@ -184,9 +171,6 @@ namespace configmgr
 
         /// stop and discard pending activities
         void stopAndClearTasks();
-
-        /// mutex for synchronisation
-        osl::Mutex&     getShotMutex() {return m_xTimer->getShotMutex();}
 
     private:
         // vos::OTimer
