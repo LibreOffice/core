@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:05:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:36:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,8 @@
 #include <tools/string.hxx>
 #endif
 
+#include <comphelper/processfactory.hxx>
+
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
@@ -78,67 +80,27 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
 #include <com/sun/star/xml/sax/XAttributeList.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_XTWOAXISXSUPPLIER_HPP_
 #include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_XTWOAXISYSUPPLIER_HPP_
 #include <com/sun/star/chart/XTwoAxisYSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_XAXISZSUPPLIER_HPP_
 #include <com/sun/star/chart/XAxisZSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XSTRINGMAPPING_HPP_
 #include <com/sun/star/util/XStringMapping.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_X3DDISPLAY_HPP_
 #include <com/sun/star/chart/X3DDisplay.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_XSTATISTICDISPLAY_HPP_
 #include <com/sun/star/chart/XStatisticDisplay.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEMCONTAINER_HPP_
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XRANGEXMLCONVERSION_HPP_
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPECONTAINER_HPP_
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDATASERIESCONTAINER_HPP_
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_AXISTYPE_HPP_
 #include <com/sun/star/chart2/AxisType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_CAMERAGEOMETRY_HPP_
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_POINT_HPP_
 #include <com/sun/star/awt/Point.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
-#endif
 
 using namespace com::sun::star;
 using namespace ::xmloff::token;
@@ -233,7 +195,8 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
     chart::ChartDataRowSource & rDataRowSource,
     SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
     const ::rtl::OUString& aChartTypeServiceName,
-    tSchXMLLSequencesPerIndex & rLSequencesPerIndex ) :
+    tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
+    const awt::Size & rChartSize ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
         mrSeriesAddresses( rSeriesAddresses ),
@@ -258,7 +221,8 @@ SchXMLPlotAreaContext::SchXMLPlotAreaContext(
         maChartTypeServiceName( aChartTypeServiceName ),
         mrLSequencesPerIndex( rLSequencesPerIndex ),
         mnCurrentDataIndex( 0 ),
-        mbGlobalChartTypeUsedBySeries( false )
+        mbGlobalChartTypeUsedBySeries( false ),
+        maChartSize( rChartSize )
 {
     // get Diagram
     uno::Reference< chart::XChartDocument > xDoc( rImpHelper.GetChartDocument(), uno::UNO_QUERY );
@@ -595,7 +559,7 @@ SvXMLImportContext* SchXMLPlotAreaContext::CreateChildContext(
                         maChartTypeServiceName,
                         mrLSequencesPerIndex,
                         mnCurrentDataIndex,
-                        mbGlobalChartTypeUsedBySeries );
+                        mbGlobalChartTypeUsedBySeries, maChartSize );
                 }
                 mnSeries++;
             }
@@ -1598,13 +1562,15 @@ SchXMLStatisticsObjectContext::SchXMLStatisticsObjectContext(
     ::std::list< DataRowPointStyle >& rStyleList,
     const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries >& xSeries,
-    ContextType eContextType ) :
+    ContextType eContextType,
+    const awt::Size & rChartSize ) :
 
         SvXMLImportContext( rImport, nPrefix, rLocalName ),
         mrImportHelper( rImpHelper ),
         mrStyleList( rStyleList ),
         m_xSeries( xSeries ),
-        meContextType( eContextType )
+        meContextType( eContextType ),
+        maChartSize( rChartSize )
 {}
 
 SchXMLStatisticsObjectContext::~SchXMLStatisticsObjectContext()
@@ -1630,7 +1596,9 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
         }
     }
 
-    if( sAutoStyleName.getLength())
+    // note: regression-curves must get a style-object even if there is no
+    // auto-style set, because they can contain an equation
+    if( sAutoStyleName.getLength() || meContextType == CONTEXT_TYPE_REGRESSION_CURVE )
     {
         DataRowPointStyle::StyleType eType = DataRowPointStyle::MEAN_VALUE;
         switch( meContextType )
@@ -1648,5 +1616,131 @@ void SchXMLStatisticsObjectContext::StartElement( const uno::Reference< xml::sax
         DataRowPointStyle aStyle(
             eType, m_xSeries, -1, 1, sAutoStyleName );
         mrStyleList.push_back( aStyle );
+    }
+}
+
+SvXMLImportContext* SchXMLStatisticsObjectContext::CreateChildContext(
+    USHORT nPrefix,
+    const rtl::OUString& rLocalName,
+    const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    SvXMLImportContext* pContext = 0;
+
+    if( nPrefix == XML_NAMESPACE_CHART &&
+        IsXMLToken( rLocalName, XML_EQUATION ) )
+    {
+        pContext = new SchXMLEquationContext(
+            mrImportHelper, GetImport(), nPrefix, rLocalName, m_xSeries, maChartSize, mrStyleList.back());
+    }
+    else
+    {
+        pContext = SvXMLImportContext::CreateChildContext( nPrefix, rLocalName, xAttrList );
+    }
+
+    return pContext;
+}
+
+// ========================================
+
+SchXMLEquationContext::SchXMLEquationContext(
+    SchXMLImportHelper& rImpHelper,
+    SvXMLImport& rImport,
+    sal_uInt16 nPrefix,
+    const rtl::OUString& rLocalName,
+    const ::com::sun::star::uno::Reference<
+    ::com::sun::star::chart2::XDataSeries >& xSeries,
+    const awt::Size & rChartSize,
+    DataRowPointStyle & rRegressionStyle ) :
+        SvXMLImportContext( rImport, nPrefix, rLocalName ),
+        mrImportHelper( rImpHelper ),
+        mrRegressionStyle( rRegressionStyle ),
+        m_xSeries( xSeries ),
+        maChartSize( rChartSize )
+{}
+
+SchXMLEquationContext::~SchXMLEquationContext()
+{}
+
+void SchXMLEquationContext::StartElement( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+{
+    // parse attributes
+    sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
+    SchXMLImport& rImport = ( SchXMLImport& )GetImport();
+    const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetRegEquationAttrTokenMap();
+    OUString sAutoStyleName;
+
+    sal_Bool bShowEquation = sal_True;
+    sal_Bool bShowRSquare = sal_False;
+    awt::Point aPosition;
+    bool bHasXPos = false;
+    bool bHasYPos = false;
+
+    for( sal_Int16 i = 0; i < nAttrCount; i++ )
+    {
+        rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
+        rtl::OUString aLocalName;
+        rtl::OUString aValue = xAttrList->getValueByIndex( i );
+        USHORT nPrefix = rImport.GetNamespaceMap().GetKeyByAttrName( sAttrName, &aLocalName );
+
+        switch( rAttrTokenMap.Get( nPrefix, aLocalName ))
+        {
+            case XML_TOK_REGEQ_POS_X:
+                rImport.GetMM100UnitConverter().convertMeasure( aPosition.X, aValue );
+                bHasXPos = true;
+                break;
+            case XML_TOK_REGEQ_POS_Y:
+                rImport.GetMM100UnitConverter().convertMeasure( aPosition.Y, aValue );
+                bHasYPos = true;
+                break;
+            case XML_TOK_REGEQ_DISPLAY_EQUATION:
+                rImport.GetMM100UnitConverter().convertBool( bShowEquation, aValue );
+                break;
+            case XML_TOK_REGEQ_DISPLAY_R_SQUARE:
+                rImport.GetMM100UnitConverter().convertBool( bShowRSquare, aValue );
+                break;
+            case XML_TOK_REGEQ_STYLE_NAME:
+                sAutoStyleName = aValue;
+                break;
+        }
+    }
+
+    if( sAutoStyleName.getLength() || bShowEquation || bShowRSquare )
+    {
+        uno::Reference< beans::XPropertySet > xEqProp;
+        uno::Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory(), uno::UNO_QUERY );
+        if( xFact.is())
+            xEqProp.set( xFact->createInstance(
+                             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.RegressionEquation" ))), uno::UNO_QUERY );
+        if( xEqProp.is())
+        {
+            if( sAutoStyleName.getLength() )
+            {
+                const SvXMLStylesContext* pStylesCtxt = mrImportHelper.GetAutoStylesContext();
+                if( pStylesCtxt )
+                {
+                    const SvXMLStyleContext* pStyle = pStylesCtxt->FindStyleChildContext(
+                        mrImportHelper.GetChartFamilyID(), sAutoStyleName );
+                    // note: SvXMLStyleContext::FillPropertySet is not const
+                    XMLPropStyleContext * pPropStyleContext =
+                        const_cast< XMLPropStyleContext * >( dynamic_cast< const XMLPropStyleContext * >( pStyle ));
+
+                    if( pPropStyleContext )
+                        pPropStyleContext->FillPropertySet( xEqProp );
+                }
+            }
+            xEqProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("ShowEquation")), uno::makeAny( bShowEquation ));
+            xEqProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("ShowCorrelationCoefficient")), uno::makeAny( bShowRSquare ));
+
+            if( bHasXPos && bHasYPos )
+            {
+                chart2::RelativePosition aRelPos;
+                aRelPos.Primary = static_cast< double >( aPosition.X ) / static_cast< double >( maChartSize.Width );
+                aRelPos.Secondary = static_cast< double >( aPosition.Y ) / static_cast< double >( maChartSize.Height );
+                xEqProp->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "RelativePosition" )),
+                                           uno::makeAny( aRelPos ));
+            }
+            OSL_ASSERT( mrRegressionStyle.meType == DataRowPointStyle::REGRESSION );
+            mrRegressionStyle.m_xEquationProperties.set( xEqProp );
+        }
     }
 }
