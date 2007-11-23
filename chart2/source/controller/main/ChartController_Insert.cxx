@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Insert.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:43:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:53:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,10 @@
 #include "Strings.hrc"
 #include "ReferenceSizeProvider.hxx"
 #include "chartview/NumberFormatterWrapper.hxx"
+#include "ObjectIdentifier.hxx"
+#include "RegressionCurveHelper.hxx"
+
+#include <com/sun/star/chart2/XRegressionCurve.hpp>
 
 #ifndef _SVX_ACTIONDESCRIPTIONPROVIDER_HXX
 #include <svx/ActionDescriptionProvider.hxx>
@@ -310,6 +314,44 @@ void SAL_CALL ChartController::executeDispatch_InsertStatistic()
     catch( uno::RuntimeException& e)
     {
         ASSERT_EXCEPTION( e );
+    }
+}
+
+void SAL_CALL ChartController::executeDispatch_InsertTrendline()
+{
+    uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
+        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xRegCurveCnt.is())
+    {
+        UndoGuard aUndoGuard(
+            ActionDescriptionProvider::createDescription(
+                ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_CURVE )))),
+            m_xUndoManager, m_aModel->getModel() );
+
+        RegressionCurveHelper::addRegressionCurve(
+            RegressionCurveHelper::REGRESSION_TYPE_LINEAR, xRegCurveCnt, m_xCC );
+        aUndoGuard.commitAction();
+    }
+}
+
+void SAL_CALL ChartController::executeDispatch_InsertTrendlineEquation()
+{
+    uno::Reference< chart2::XRegressionCurve > xRegCurve(
+        ObjectIdentifier::getObjectPropertySet( m_aSelection.getSelectedCID(), m_aModel->getModel()), uno::UNO_QUERY );
+    if( xRegCurve.is())
+    {
+        uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties());
+        if( xEqProp.is())
+        {
+            // using assignment for broken gcc 3.3
+            UndoGuard aUndoGuard = UndoGuard(
+                ActionDescriptionProvider::createDescription(
+                    ActionDescriptionProvider::INSERT, ::rtl::OUString( String( SchResId( STR_OBJECT_CURVE_EQUATION )))),
+                m_xUndoManager, m_aModel->getModel() );
+            xEqProp->setPropertyValue( C2U("ShowEquation"), uno::makeAny( true ));
+            xEqProp->setPropertyValue( C2U("ShowCorrelationCoefficient"), uno::makeAny( false ));
+            aUndoGuard.commitAction();
+        }
     }
 }
 
