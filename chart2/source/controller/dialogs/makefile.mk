@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-22 16:46:05 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 11:47:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,8 @@ SLOFILES=   	\
                 $(SLO)$/RangeSelectionButton.obj \
                 $(SLO)$/RangeSelectionHelper.obj \
                 $(SLO)$/RangeSelectionListener.obj \
-                $(SLO)$/RangeEdit.obj
+                $(SLO)$/RangeEdit.obj \
+                $(SLO)$/tp_RegressionOptions.obj
 
 # --- Resources ---------------------------------------------------------------
 
@@ -146,7 +147,8 @@ SRC1FILES=		\
                 dlg_InsertStatistic.src \
                 dlg_InsertTitle.src \
                 dlg_ChartType.src \
-                dlg_CreationWizard.src
+                dlg_CreationWizard.src \
+                tp_RegressionOptions.src
 
 SRS1NAME=$(TARGET)
 
@@ -184,7 +186,8 @@ $(SRS)$/chcdialogs.srs: \
         tp_DataSource.hrc \
         tp_Location.hrc \
         tp_RangeChooser.hrc \
-        tp_Wizard_TitlesAndObjects.hrc
+        tp_Wizard_TitlesAndObjects.hrc \
+        tp_RegressionOptions.hrc
 
 #        res_DataLabel.hrc \
 #        res_LegendPosition.hrc \
