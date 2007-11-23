@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:24:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:27:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,8 +102,8 @@ namespace configmgr
 
     class INode
     {
-        OUString                        m_aName;
-        node::Attributes            m_aAttributes;
+        OUString          m_aName;
+        node::Attributes  m_aAttributes;
 
     protected:
         INode(){}
@@ -207,7 +207,6 @@ namespace configmgr
         using INode::markAsDefault;
 
         sal_Int16 getLevel()         const { return m_nLevel; }
-        sal_Int16 getDefaultsLevel() const { return m_nDefaultLevels; }
 
         void setLevels(sal_Int16 _nLevel,sal_Int16 _nDefaultsLevel);
 
