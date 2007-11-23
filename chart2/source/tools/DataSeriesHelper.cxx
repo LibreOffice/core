@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesHelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:36:26 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:05:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -673,7 +673,7 @@ void setPropertyAlsoToAllAttributedDataPoints( const Reference< chart2::XDataSer
     {
         for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
         {
-            Reference< beans::XPropertySet > xPointProp( xSeries->getDataPointByIndex(nN) );
+            Reference< beans::XPropertySet > xPointProp( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]) );
             if(!xPointProp.is())
                 continue;
             xPointProp->setPropertyValue( rPropertyName, rPropertyValue );
@@ -693,7 +693,7 @@ bool hasAttributedDataPointDifferentValue( const Reference< chart2::XDataSeries 
     {
         for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
         {
-            Reference< beans::XPropertySet > xPointProp( xSeries->getDataPointByIndex(nN) );
+            Reference< beans::XPropertySet > xPointProp( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]) );
             if(!xPointProp.is())
                 continue;
             uno::Any aPointValue( xPointProp->getPropertyValue( rPropertyName ) );
