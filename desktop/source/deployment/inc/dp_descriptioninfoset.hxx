@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_descriptioninfoset.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 16:11:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 10:15:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,7 +210,6 @@ private:
     SAL_DLLPRIVATE ::com::sun::star::uno::Sequence< ::rtl::OUString > getUrls(
         ::rtl::OUString const & expression) const;
 
-<<<<<<< dp_descriptioninfoset.hxx
     /** Retrieves a child element which as lang attribute which matches the office locale.
 
         Only top-level children are taken into account. It is also assumed that they are all
@@ -255,45 +254,6 @@ private:
         localeToString(::com::sun::star::lang::Locale const & locale);
 
 
-=======
-    /** Retrieves a child element which as lang attribute which matches the office locale.
-
-        Only top-level children are taken into account. It is also assumed that they are all
-        of the same element type and have a lang attribute. The matching algoritm is according
-        to RFC 3066, with the exception that only one variant is allowed.
-        @param parent
-        the expression used to obtain the parent of the localized children. It can be null.
-        Then a null reference is returned.
-    */
-    SAL_DLLPRIVATE ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode >
-        getLocalizedChild( ::rtl::OUString const & sParent) const;
-    SAL_DLLPRIVATE  ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode>
-        matchFullLocale(::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::dom::XNode > const & xParent, ::rtl::OUString const & sLocale) const;
-    SAL_DLLPRIVATE  ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode>
-        matchCountryAndLanguage(::com::sun::star::uno::Reference<
-        ::com::sun::star::xml::dom::XNode > const & xParent,
-        ::com::sun::star::lang::Locale const & officeLocale) const;
-    SAL_DLLPRIVATE  ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode>
-        matchLanguage(
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > const & xParent,
-        ::com::sun::star::lang::Locale const & officeLocale) const;
-
-    /** If there is no child element with a locale matching the office locale, then we use
-        the first child. In the case of the simple-license we also use the former default locale, which
-        was determined by the default-license-id (/description/registration/simple-license/@default-license-id)
-        and the license-id attributes (/description/registration/simple-license/license-text/@license-id).
-        However, since OOo 2.4 we use also the first child as default for the license
-        unless the two attributes are present.
-    */
-    SAL_DLLPRIVATE  ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode>
-        getChildWithDefaultLocale(
-        ::com::sun::star::uno::Reference< ::com::sun::star::xml::dom::XNode > const & xParent) const;
-
-    static SAL_DLLPRIVATE ::rtl::OUString
-        localeToString(::com::sun::star::lang::Locale const & locale);
-
->>>>>>> 1.2.194.4
     ::com::sun::star::uno::Reference<
         ::com::sun::star::xml::dom::XNode > m_element;
     ::com::sun::star::uno::Reference<
