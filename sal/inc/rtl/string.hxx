@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:14:41 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:16:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -480,12 +480,14 @@ public:
 
     /**
       Returns the index within this string of the last occurrence of the
-      specified character, searching backward starting at the specified index.
+      specified character, searching backward starting before the specified
+      index.
 
       @param    ch          character to be located.
+      @param    fromIndex   the index before which to start the search.
       @return   the index of the last occurrence of the character in the
                 character sequence represented by this string that
-                is less or than or equal to fromIndex, or -1
+                is less than fromIndex, or -1
                 if the character does not occur before that point.
     */
     sal_Int32 lastIndexOf( sal_Char ch, sal_Int32 fromIndex ) const SAL_THROW(())
@@ -538,7 +540,8 @@ public:
 
     /**
       Returns the index within this string of the last occurrence of
-      the specified substring, searching backward starting at the end.
+      the specified substring, searching backward starting before the specified
+      index.
 
       The returned index indicates the starting index of the substring
       in this string.
@@ -546,12 +549,11 @@ public:
       returned. This is also the case, if both strings are empty.
 
       @param    str         the substring to search for.
-      @param    fromIndex   the index to start the search from.
+      @param    fromIndex   the index before which to start the search.
       @return   If the string argument occurs one or more times as a substring
-                within this string at the starting index, then the index
+                within this string before the starting index, then the index
                 of the first character of the last such substring is
-                returned. If it does not occur as a substring starting
-                at fromIndex or earlier, -1 is returned.
+                returned. Otherwise, -1 is returned.
     */
     sal_Int32 lastIndexOf( const OString & str, sal_Int32 fromIndex ) const SAL_THROW(())
     {
