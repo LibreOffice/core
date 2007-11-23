@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opthtml.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:28:08 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:41:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,13 +42,14 @@
 
 // include ---------------------------------------------------------------
 
+#include <svtools/langtab.hxx>
+
 #include "htmlcfg.hxx"
 #include "opthtml.hxx"
 #include "opthtml.hrc"
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 #include <svx/dialmgr.hxx>
-#include "langtab.hxx"
 
 // Umwandlung der Modi zu den Positionen in der Listbox
 const USHORT aPosToExportArr[] =
@@ -109,7 +110,7 @@ OfaHtmlTabPage::OfaHtmlTabPage(Window* pParent, const SfxItemSet& rSet) :
     xub_StrLen nPos;
     if ((nPos = aText.Search( aPlaceholder)) != STRING_NOTFOUND)
     {
-        SvxLanguageTable aLangTab;
+        SvtLanguageTable aLangTab;
         const String& rStr = aLangTab.GetString( LANGUAGE_ENGLISH_US);
         if (rStr.Len())
         {
