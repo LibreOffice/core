@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:03:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:45:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,6 +213,8 @@ namespace framework{
 #define IMPLEMENTATIONNAME_SIMPLETEXTSTATUSBARCONTROLLER        DECLARE_ASCII("com.sun.star.comp.framework.SimpleTextStatusbarController" )
 #define IMPLEMENTATIONNAME_URIABBREVIATION                      DECLARE_ASCII("com.sun.star.comp.framework.UriAbbreviation"         )
 #define IMPLEMENTATIONNAME_POPUPMENUDISPATCHER                  DECLARE_ASCII("com.sun.star.comp.framework.PopupMenuControllerDispatcher" )
+#define IMPLEMENTATIONNAME_LANGSELECTIONSTATUSBARCONTROLLER     DECLARE_ASCII("com.sun.star.comp.framework.LangSelectionStatusbarController"  )
+#define IMPLEMENTATIONNAME_LANGUAGESELECTIONMENUCONTROLLER      DECLARE_ASCII("com.sum.star.comp.framework.LanguageSelectionMenuController" )
 #define IMPLEMENTATIONNAME_IMAGEMANAGER                         DECLARE_ASCII("com.sun.star.comp.framework.ImageManager"            )
 
 }       //  namespace framework
