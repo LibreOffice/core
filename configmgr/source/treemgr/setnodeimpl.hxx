@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setnodeimpl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:33:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:46:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,16 +80,14 @@ namespace configmgr
 
         struct SetEntry
         {
-            SetEntry(data::Accessor const& _aAccessor,ElementTreeImpl* _pTree);
+            SetEntry(ElementTreeImpl* _pTree);
 
             bool isValid()  const { return m_pTree != 0; }
 
-            data::Accessor const& accessor() const { return m_aAccessor; }
             ElementTreeImpl* tree() const { return m_pTree; };
 
             view::ViewTreeAccess    getTreeView() const;
         private:
-            data::Accessor   m_aAccessor;
             ElementTreeImpl* m_pTree;
         };
     //-------------------------------------------------------------------------
@@ -130,20 +128,19 @@ namespace configmgr
         class ElementSet
         {
         public:
-            typedef ElementTreeData Element;
-            typedef std::map<Name, Element> Data;
+            typedef std::map<Name, ElementTreeData> Data;
 
         // the following must be implemented by derived classes
             bool isEmpty() const { return m_aData.empty(); }
 
             bool hasElement(Name const& aName) const;
-            Element* getElement(Name const& aName);
-            Element const* getElement(Name const& aName) const;
-            Element findElement(Name const& aName);
+            ElementTreeData* getElement(Name const& aName);
+            ElementTreeData const* getElement(Name const& aName) const;
+            ElementTreeData findElement(Name const& aName);
 
-            void insertElement(Name const& aName, Element const& aNewEntry);
-            Element replaceElement(Name const& aName, Element const& aNewEntry);
-            Element removeElement(Name const& aName);
+            void insertElement(Name const& aName, ElementTreeData const& aNewEntry);
+            ElementTreeData replaceElement(Name const& aName, ElementTreeData const& aNewEntry);
+            ElementTreeData removeElement(Name const& aName);
 
             void clearElements() {  m_aData.clear(); }
 
@@ -156,8 +153,8 @@ namespace configmgr
             public:
                 ConstIterator(It const& it) : m_base(it) {}
 
-                Element const& operator* () const { return  m_base->second; }
-                Element const* operator->() const { return &m_base->second; }
+                ElementTreeData const& operator* () const { return  m_base->second; }
+                ElementTreeData const* operator->() const { return &m_base->second; }
 
                 ConstIterator& operator++()     { ++m_base; return *this; }
                 ConstIterator  operator++(int)  { return ConstIterator(m_base++); }
@@ -181,8 +178,8 @@ namespace configmgr
             public:
                 Iterator(It const& it) : m_base(it) {}
 
-                Element& operator* () const { return  m_base->second; }
-                Element* operator->() const { return &m_base->second; }
+                ElementTreeData& operator* () const { return  m_base->second; }
+                ElementTreeData* operator->() const { return &m_base->second; }
 
                 Iterator& operator++()      { ++m_base; return *this; }
                 Iterator  operator++(int)   { return Iterator(m_base++); }
@@ -213,8 +210,8 @@ namespace configmgr
     // Basic implementation of a set node
     //-------------------------------------------------------------------------
 
-        class SetNodeImpl : public NodeImpl
-        {
+    class SetNodeImpl : public NodeImpl
+    {
             friend class view::ViewStrategy;
             ElementSet          m_aDataSet;
             TemplateHolder      m_aTemplate;
@@ -226,12 +223,11 @@ namespace configmgr
             InitHelper      m_aInit;
 
         public:
-            typedef ElementSet::Element Element;
+            typedef ElementTreeData Element;
 
-            SetNodeImpl(data::SetNodeAddress const& _aNodeRef, Template* pTemplate);
+            SetNodeImpl(data::SetNodeAddress _pNodeRef, Template* pTemplate);
 
-            typedef data::SetNodeAccess DataAccess;
-            DataAccess getDataAccess(data::Accessor const& _aAccessor) const;
+            data::SetNodeAccess getDataAccess() const;
 
             /// Get the template that describes elements of this set
             TemplateHolder getElementTemplate() const { return m_aTemplate; }
@@ -239,13 +235,13 @@ namespace configmgr
             /// Get a template provider that can create new elements for this set
             TemplateProvider getTemplateProvider() const { return m_aTemplateProvider; }
 
-            void convertChanges(NodeChangesInformation& rLocalChanges, data::Accessor const& _accessor, SubtreeChange const& rExternalChange, TreeDepth nDepth);
+            void convertChanges(NodeChangesInformation& rLocalChanges, SubtreeChange const& rExternalChange, TreeDepth nDepth);
 
             void    insertElement(Name const& aName, Element const& aNewElement);
             Element replaceElement(Name const& aName, Element const& aNewElement);
             Element removeElement(Name const& aName);
 
-            void rebuildFrom(SetNodeImpl& rOldData,data::SetNodeAccess const& _aNewNode,data::SetNodeAccess const& _aOldNode);
+            void rebuildFrom(SetNodeImpl& rOldData,data::SetNodeAccess const& _aNewNode);
 
         protected:
             ~SetNodeImpl();
@@ -254,12 +250,12 @@ namespace configmgr
         // new overrideables
             virtual bool                    doIsEmpty() const;
             virtual ElementTreeImpl*        doFindElement(Name const& aName) ;
-            virtual SetNodeVisitor::Result  doDispatchToElements(data::Accessor const& _aAccessor, SetNodeVisitor& aVisitor);
-            virtual void doDifferenceToDefaultState(data::Accessor const& _aAccessor, SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree);
+            virtual SetNodeVisitor::Result  doDispatchToElements( SetNodeVisitor& aVisitor);
+            virtual void doDifferenceToDefaultState( SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree);
 
-            virtual SetElementChangeImpl* doAdjustToAddedElement(data::Accessor const& _aAccessor, Name const& aName, AddNode const& aAddNodeChange, Element const & aNewElement);
-            virtual SetElementChangeImpl* doAdjustToRemovedElement(data::Accessor const& _aAccessor, Name const& aName, RemoveNode const& aRemoveNodeChange);
-            virtual SetElementChangeImpl* doAdjustChangedElement(data::Accessor const& _aAccessor, NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
+            virtual SetElementChangeImpl* doAdjustToAddedElement( Name const& aName, AddNode const& aAddNodeChange, Element const & aNewElement);
+            virtual SetElementChangeImpl* doAdjustToRemovedElement( Name const& aName, RemoveNode const& aRemoveNodeChange);
+            virtual SetElementChangeImpl* doAdjustChangedElement( NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
 
             virtual void doTransferElements(ElementSet& rReplacement);
 
@@ -268,7 +264,7 @@ namespace configmgr
             TreeImpl*   getParentTree() const;
             NodeOffset  getContextOffset() const;
 
-            Element makeElement(data::Accessor const& _aAccessor, SetEntry const & _anEntry);
+            Element makeElement( SetEntry const & _anEntry);
             static Element entryToElement(SetEntry const& _anEntry);
             view::ViewTreeAccess getElementView();
 
@@ -279,25 +275,25 @@ namespace configmgr
         protected:
             /// does this set contain any elements (loads elements if needed)
             bool implHasLoadedElements() const;
-            bool implLoadElements(data::Accessor const& _aAccessor);
-            void implEnsureElementsLoaded(data::Accessor const& _aAccessor);
+            bool implLoadElements();
+            void implEnsureElementsLoaded();
             void implInitElements(data::SetNodeAccess const& _aNode, TreeDepth nDepth);
             void implInitElement(Element const& aNewElement);
 
-            void implRebuildElements(data::SetNodeAccess const& _aNewNode,data::SetNodeAccess const& _aOldNode);
+            void implRebuildElements(data::SetNodeAccess const& _aNewNode);
         protected:
-            SetElementChangeImpl* implCreateInsert    (data::Accessor const& _aAccessor, Name const& aName, Element const& aNewElement) const;
-            SetElementChangeImpl* implCreateReplace   (data::Accessor const& _aAccessor, Name const& aName, Element const& aNewElement, Element const& aOldElement) const;
-            SetElementChangeImpl* implCreateRemove    (data::Accessor const& _aAccessor, Name const& aName, Element const& aOldElement) const;
+            SetElementChangeImpl* implCreateInsert    ( Name const& aName, Element const& aNewElement) const;
+            SetElementChangeImpl* implCreateReplace   ( Name const& aName, Element const& aNewElement, Element const& aOldElement) const;
+            SetElementChangeImpl* implCreateRemove    ( Name const& aName, Element const& aOldElement) const;
 
-            SetElementChangeImpl* implAdjustToAddedElement(data::Accessor const& _aAccessor, Name const& aName, Element const& aNewElement, bool _bReplacing);
-            SetElementChangeImpl* implAdjustToRemovedElement(data::Accessor const& _aAccessor, Name const& aName);
+            SetElementChangeImpl* implAdjustToAddedElement( Name const& aName, Element const& aNewElement, bool _bReplacing);
+            SetElementChangeImpl* implAdjustToRemovedElement( Name const& aName);
 
-            Element makeAdditionalElement(data::Accessor const& _aAccessor, rtl::Reference<view::ViewStrategy> const& _xStrategy, AddNode const& aAddNodeChange, TreeDepth nDepth);
+            Element makeAdditionalElement( rtl::Reference<view::ViewStrategy> const& _xStrategy, AddNode const& aAddNodeChange, TreeDepth nDepth);
 
-            Element implValidateElement(data::Accessor const& _aAccessor, Element const& aNewElement);
+            Element implValidateElement(Element const& aNewElement);
 
-            void implDifferenceToDefaultState(data::Accessor const& _aAccessor, SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree) const;
+            void implDifferenceToDefaultState( SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree) const;
         protected:
             bool hasStoredElement(Name const& aName) const
             { return m_aDataSet.hasElement(aName); }
@@ -306,10 +302,9 @@ namespace configmgr
             Element const* getStoredElement(Name const& aName) const
             { return m_aDataSet.getElement(aName); }
 
-            typedef ElementSet::PairIterator NativeIterator;
-            NativeIterator beginElementSet() const
+            ElementSet::PairIterator beginElementSet() const
             { return m_aDataSet.beginNative(); }
-            NativeIterator endElementSet() const
+            ElementSet::PairIterator endElementSet() const
             { return m_aDataSet.endNative(); }
 
             void attach(Element const& aNewElement, Name const& aName);
