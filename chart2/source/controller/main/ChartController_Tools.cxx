@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_Tools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:44:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:54:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,9 @@
 #include "DrawViewWrapper.hxx"
 #include "LegendHelper.hxx"
 #include "AxisHelper.hxx"
+#include "RegressionCurveHelper.hxx"
 
+#include <com/sun/star/chart2/DataPointLabel.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/drawing/CameraGeometry.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -286,6 +288,12 @@ void ChartController::executeDispatch_NewArrangement()
                     xTitleState->setPropertyToDefault( C2U("RelativePosition"));
             }
 
+            // regression curve equations
+            ::std::vector< Reference< chart2::XRegressionCurve > > aRegressionCurves(
+                RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine( xDiagram ));
+            ::std::for_each( aRegressionCurves.begin(), aRegressionCurves.end(),
+                      RegressionCurveHelper::resetEquationPosition );
+
             aUndoGuard.commitAction();
         }
     }
@@ -487,6 +495,10 @@ bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
             return true;
         if( (OBJECTTYPE_DATA_SERIES == aObjectType) || (OBJECTTYPE_LEGEND_ENTRY == aObjectType) )
             return true;
+        if( (OBJECTTYPE_DATA_CURVE_EQUATION == aObjectType) || (OBJECTTYPE_DATA_CURVE == aObjectType) )
+            return true;
+        if( (OBJECTTYPE_DATA_LABELS == aObjectType) || (OBJECTTYPE_DATA_LABEL == aObjectType) )
+            return true;
     }
 
     return false;
@@ -501,6 +513,9 @@ bool ChartController::executeDispatch_Delete()
     rtl::OUString aCID( m_aSelection.getSelectedCID() );
     if( aCID.getLength() )
     {
+        if( !isObjectDeleteable( uno::Any( aCID ) ) )
+            return false;
+
         //remove chart object
         m_aSelection.clearSelection();
 
@@ -508,7 +523,8 @@ bool ChartController::executeDispatch_Delete()
         if( !xChartDoc.is() )
             return false;
 
-        switch( ObjectIdentifier::getObjectType( aCID ))
+        ObjectType aObjectType( ObjectIdentifier::getObjectType( aCID ));
+        switch( aObjectType )
         {
             case OBJECTTYPE_TITLE:
             {
@@ -564,6 +580,78 @@ bool ChartController::executeDispatch_Delete()
                 }
                 break;
             }
+            case OBJECTTYPE_DATA_CURVE:
+            {
+                uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
+                    ObjectIdentifier::getObjectPropertySet(
+                        ObjectIdentifier::getFullParentParticle( aCID ), m_aModel->getModel()), uno::UNO_QUERY );
+                if( xRegCurveCnt.is())
+                {
+                    // using assignment for broken gcc 3.3
+                    UndoGuard aUndoGuard = UndoGuard(
+                        ActionDescriptionProvider::createDescription(
+                            ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_CURVE )))),
+                        m_xUndoManager, m_aModel->getModel() );
+                    RegressionCurveHelper::removeAllExceptMeanValueLine( xRegCurveCnt );
+                    bReturn = true;
+                    aUndoGuard.commitAction();
+                }
+                break;
+            }
+            case OBJECTTYPE_DATA_CURVE_EQUATION:
+            {
+                uno::Reference< beans::XPropertySet > xEqProp(
+                    ObjectIdentifier::getObjectPropertySet( aCID, m_aModel->getModel()));
+                if( xEqProp.is())
+                {
+                    uno::Reference< frame::XModel > xModel( m_aModel->getModel());
+                    // using assignment for broken gcc 3.3
+                    UndoGuard aUndoGuard = UndoGuard(
+                        ActionDescriptionProvider::createDescription(
+                            ActionDescriptionProvider::DELETE, ::rtl::OUString( String( SchResId( STR_OBJECT_CURVE_EQUATION )))),
+                        m_xUndoManager, xModel );
+                    {
+                        ControllerLockGuard aCtlLockGuard( xModel );
+                        xEqProp->setPropertyValue( C2U("ShowEquation"), uno::makeAny( false ));
+                        xEqProp->setPropertyValue( C2U("ShowCorrelationCoefficient"), uno::makeAny( false ));
+                    }
+                    bReturn = true;
+                    aUndoGuard.commitAction();
+                }
+                break;
+            }
+
+            case OBJECTTYPE_DATA_LABELS:
+            case OBJECTTYPE_DATA_LABEL:
+            {
+                uno::Reference< beans::XPropertySet > xObjectProperties =
+                    ObjectIdentifier::getObjectPropertySet( aCID, m_aModel->getModel() );
+                if( xObjectProperties.is() )
+                {
+                    UndoGuard aUndoGuard = UndoGuard(
+                        ActionDescriptionProvider::createDescription(
+                        ActionDescriptionProvider::DELETE, ::rtl::OUString( String(
+                            SchResId( aObjectType == OBJECTTYPE_DATA_LABEL ? STR_OBJECT_LABEL : STR_OBJECT_DATALABELS )))),
+                                m_xUndoManager, m_aModel->getModel() );
+                    chart2::DataPointLabel aLabel;
+                    xObjectProperties->getPropertyValue( C2U( "Label" ) ) >>= aLabel;
+                    aLabel.ShowNumber = false;
+                    aLabel.ShowNumberInPercent = false;
+                    aLabel.ShowCategoryName = false;
+                    aLabel.ShowLegendSymbol = false;
+                    if( aObjectType == OBJECTTYPE_DATA_LABELS )
+                    {
+                        uno::Reference< chart2::XDataSeries > xSeries( ObjectIdentifier::getDataSeriesForCID( aCID, m_aModel->getModel() ));
+                        ::chart::DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "Label" ), uno::makeAny(aLabel) );
+                    }
+                    else
+                        xObjectProperties->setPropertyValue( C2U( "Label" ), uno::makeAny(aLabel) );
+                    bReturn = true;
+                    aUndoGuard.commitAction();
+                }
+                break;
+            }
+
             default:
             {
                 break;
