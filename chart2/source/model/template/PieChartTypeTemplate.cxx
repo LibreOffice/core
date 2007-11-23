@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:06:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -440,6 +440,32 @@ sal_Bool SAL_CALL PieChartTypeTemplate::matchesTemplate(
     }
 
     return bResult;
+}
+
+Reference< chart2::XChartType > PieChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
+{
+    Reference< chart2::XChartType > xResult;
+
+    try
+    {
+        Reference< lang::XMultiServiceFactory > xFact(
+            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
+        xResult.set( xFact->createInstance(
+                         CHART2_SERVICE_NAME_CHARTTYPE_PIE ), uno::UNO_QUERY_THROW );
+        Reference< beans::XPropertySet > xCTProp( xResult, uno::UNO_QUERY );
+        if( xCTProp.is())
+        {
+            xCTProp->setPropertyValue(
+                C2U( "UseRings" ), getFastPropertyValue( PROP_PIE_TEMPLATE_USE_RINGS ));
+        }
+
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return xResult;
 }
 
 Reference< chart2::XChartType > SAL_CALL PieChartTypeTemplate::getChartTypeForNewSeries(
