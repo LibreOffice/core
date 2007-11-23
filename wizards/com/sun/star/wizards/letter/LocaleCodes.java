@@ -6,13 +6,13 @@ import com.sun.star.beans.PropertyValue;
 
 public class LocaleCodes extends Resource {
 
-    final static String UNIT_NAME = "svxres";
-    final static String MODULE_NAME = "svx";
+    final static String UNIT_NAME = "svtres";
+    final static String MODULE_NAME = "svt";
     PropertyValue [] allLanguageStrings;
 
     public LocaleCodes (XMultiServiceFactory xmsf) {
         super(xmsf, UNIT_NAME, MODULE_NAME);
-        allLanguageStrings = getStringList(10310);
+        allLanguageStrings = getStringList(16298);  // STR_SVT_JAVAERROR_END part of SvtLanguageTable from svtools
     }
 
     public String getLanguageString(String MSID) {
