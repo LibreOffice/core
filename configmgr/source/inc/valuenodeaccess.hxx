@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valuenodeaccess.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:49:26 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:27:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,48 +47,24 @@ namespace configmgr
     {
     // -------------------------------------------------------------------------
         class ValueNodeAccess
-        {
-        public:
-            typedef NodeAccess::Name        Name;
-            typedef NodeAccess::Attributes  Attributes;
-            typedef ValueNodeAddress                    NodeAddressType;
-            typedef ValueNodeAddress::AddressType       AddressType;
-            typedef ValueNodeAddress::DataType const    DataType;
-            typedef DataType * NodePointerType;
-
-            ValueNodeAccess(Accessor const& _aAccessor, NodeAddressType const& _aNodeRef)
-            : m_aAccessor(_aAccessor)
-            , m_pData(_aNodeRef.m_pData)
-            {}
-
-            ValueNodeAccess(Accessor const& _aAccessor, NodePointerType _pNode)
-            : m_aAccessor(_aAccessor)
-            , m_pData(check(_aAccessor,_pNode))
-            {}
+    {
+    public:
+            ValueNodeAccess(const sharable::ValueNode *_pNodeRef)
+                : m_pData(((sharable::Node *)_pNodeRef)->valueData()) {}
 
             explicit
             ValueNodeAccess(NodeAccess const & _aNode)
-            : m_aAccessor(_aNode.accessor())
-            , m_pData(check(_aNode))
-            {
-            }
+                : m_pData(check(_aNode)) {}
 
-            explicit
-            ValueNodeAccess(NodeAccessRef const & _aNode)
-            : m_aAccessor(_aNode.accessor())
-            , m_pData(check(_aNode))
-            {
-            }
-
-            static bool isInstance(NodeAccessRef const & _aNode)
+            static bool isInstance(NodeAccess const & _aNode)
             {
                 return check(_aNode) != NULL;
             }
 
             bool isValid() const { return m_pData != NULL; }
 
-            Name getName() const;
-            Attributes getAttributes() const;
+            configuration::Name getName() const;
+            node::Attributes getAttributes() const;
 
             bool isEmpty()     const { return data().isEmpty(); }
 
@@ -103,34 +79,33 @@ namespace configmgr
             uno::Any    getUserValue()      const;
             uno::Any    getDefaultValue()   const;
 
-            static void setValue(memory::UpdateAccessor & _aUpdater, NodeAddressType _aValueNode, uno::Any const& _aValue);
-            static void setToDefault(memory::UpdateAccessor & _aUpdater, NodeAddressType _aValueNode);
-            static void changeDefault(memory::UpdateAccessor & _aUpdater, NodeAddressType _aValueNode, uno::Any const& _aValue);
+        static void setValue(ValueNodeAddress _aValueNode, uno::Any const& _aValue);
+        static void setToDefault(ValueNodeAddress _aValueNode);
+        static void changeDefault(ValueNodeAddress _aValueNode, uno::Any const& _aValue);
 
-            NodeAddressType address()   const { return NodeAddressType(m_pData); }
-            Accessor const& accessor()  const { return m_aAccessor; }
+            sharable::ValueNode& data() const { return *m_pData; }
+            operator ValueNodeAddress () const { return (ValueNodeAddress)m_pData; }
 
-            DataType& data() const { return *static_cast<NodePointerType>(m_aAccessor.validate(m_pData)); }
-
-            operator NodeAccessRef() const { return NodeAccessRef(&m_aAccessor,NodeAddress(m_pData)); }
+            operator NodeAccess() const { return NodeAccess(NodeAddress(m_pData)); }
+            bool operator == (const NodeAddress &rAddr) const { return NodeAddress(m_pData) == rAddr; }
+            bool operator == (const ValueNodeAddress &rAddr) const { return m_pData == rAddr; }
         private:
-            static AddressType check(Accessor const& _acc, NodePointerType _p) { return _acc.address(_p); }
-            static AddressType check(NodeAccessRef const& _aNodeData);
+            static ValueNodeAddress check(sharable::Node *pNode)
+        { return pNode ? const_cast<ValueNodeAddress>(pNode->valueData()) : NULL; }
+            static ValueNodeAddress check(NodeAccess const&aRef)
+        { return check(static_cast<sharable::Node *>(aRef)); }
 
-            Accessor    m_aAccessor;
-            AddressType m_pData;
+            ValueNodeAddress m_pData;
         };
 
-        ValueNodeAddress toValueNodeAddress(memory::Accessor const & _aAccess, NodeAddress const & _aNodeAddr);
-        ValueNodeAddress toValueNodeAddress(memory::UpdateAccessor & _aAccess, NodeAddress const & _aNodeAddr);
     // -------------------------------------------------------------------------
 
         inline
-        NodeAccess::Name ValueNodeAccess::getName() const
+        configuration::Name ValueNodeAccess::getName() const
         { return NodeAccess::wrapName( data().info.getName() ); }
 
         inline
-        NodeAccess::Attributes ValueNodeAccess::getAttributes() const
+        node::Attributes ValueNodeAccess::getAttributes() const
         { return sharable::node(data()).getAttributes(); }
 
         inline
@@ -143,15 +118,15 @@ namespace configmgr
 
         inline
         uno::Any    ValueNodeAccess::getValue()      const
-        { return data().getValue(m_aAccessor); }
+        { return data().getValue(); }
 
         inline
         uno::Any    ValueNodeAccess::getUserValue()    const
-        { return data().getUserValue(m_aAccessor); }
+        { return data().getUserValue(); }
 
         inline
         uno::Any    ValueNodeAccess::getDefaultValue()    const
-        { return data().getDefaultValue(m_aAccessor); }
+        { return data().getDefaultValue(); }
 
     // -------------------------------------------------------------------------
     }
