@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtools.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:41:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:49:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -415,6 +415,11 @@
 #define STR_WARNING_INVALIDJAVASETTINGS     (STR_SVT_JAVAERROR_START+3)
 #define STR_ERROR_RESTARTREQUIRED           (STR_SVT_JAVAERROR_START+4)
 #define STR_SVT_JAVAERROR_END               (STR_ERROR_RESTARTREQUIRED)
+
+// String array to match UI language names to LanguageType values and vice versa
+#define STR_ARR_SVT_LANGUAGE_TABLE_START    (STR_SVT_JAVAERROR_END + 1)
+#define STR_ARR_SVT_LANGUAGE_TABLE          (STR_ARR_SVT_LANGUAGE_TABLE_START + 0)
+#define STR_ARR_SVT_LANGUAGE_TABLE_END      (STR_ARR_SVT_LANGUAGE_TABLE)
 
 //.............................................................................
 // dialogs
