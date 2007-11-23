@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edatmisc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:44:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
  *************************************/
 
 
-void SwEditShell::ResetAttr()
+void SwEditShell::ResetAttr( const SvUShortsSort* pAttrs )
 {
     SET_CURR_SHELL( this );
     StartAllAction();
@@ -74,7 +74,7 @@ void SwEditShell::ResetAttr()
 
         FOREACHPAM_START(this)
             // if ( PCURCRSR->HasMark() )
-                GetDoc()->ResetAttr(*PCURCRSR);
+                GetDoc()->ResetAttr(*PCURCRSR, sal_True, pAttrs);
         FOREACHPAM_END()
 
     if( bUndoGroup )
