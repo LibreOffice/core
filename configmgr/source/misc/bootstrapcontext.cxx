@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bootstrapcontext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:14:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:28:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
+#endif
 
 namespace configmgr
 {
@@ -81,8 +84,7 @@ static void testComplete()
 // ---------------------------------------------------------------------------
 
 ComponentContext::ComponentContext(Context const & _xContext)
-: ComponentContext_Base(m_aMutex)
-, m_aMutex()
+: ComponentContext_Base(UnoApiLock::getLock())
 , m_xContext(_xContext)
 , m_hBootstrapData(NULL)
 , m_xServiceManager()
@@ -98,14 +100,12 @@ ComponentContext::~ComponentContext()
 
 void ComponentContext::initialize( const OUString& _aURL )
 {
-    osl::ClearableMutexGuard lock(mutex());
+    UnoApiLock aLock;
 
     OSL_ASSERT(!m_hBootstrapData);
     m_hBootstrapData = rtl_bootstrap_args_open(_aURL.pData);
 
     uno::Reference< lang::XComponent > xOwner(m_xContext, uno::UNO_QUERY);
-
-    lock.clear();
 
     if (xOwner.is()) DisposingForwarder::forward(xOwner,this);
 
@@ -120,7 +120,7 @@ void ComponentContext::initialize( const OUString& _aURL )
 // ComponentHelper
 void SAL_CALL ComponentContext::disposing()
 {
-    osl::MutexGuard lock(mutex());
+    UnoApiLock aLock;
 
     m_xContext.clear();
 
@@ -136,7 +136,8 @@ OUString ComponentContext::getBootstrapURL() const
 {
     OUString aResult;
 
-    osl::MutexGuard lock(mutex());
+    UnoApiLock aLock;
+
     if (m_hBootstrapData)
     {
         rtl_bootstrap_get_iniName_from_handle(m_hBootstrapData,&aResult.pData);
@@ -152,7 +153,7 @@ OUString ComponentContext::getBootstrapURL() const
 
 void ComponentContext::changeBootstrapURL( const OUString& _aURL )
 {
-    osl::MutexGuard lock(mutex());
+    UnoApiLock aLock;
 
     if (rtlBootstrapHandle hNew = rtl_bootstrap_args_open(_aURL.pData))
     {
@@ -170,7 +171,7 @@ uno::Reference< lang::XMultiComponentFactory > SAL_CALL
     ComponentContext::getServiceManager(  )
         throw (uno::RuntimeException)
 {
-    osl::MutexGuard lock(mutex());
+    UnoApiLock aLock;
 
     if (!m_xServiceManager.is())
     {
@@ -262,7 +263,7 @@ bool ComponentContext::lookupInContext( uno::Any & _rValue, const OUString& _aNa
 
 bool ComponentContext::lookupInBootstrap( uno::Any & _rValue, const OUString& _aName ) const
 {
-    osl::MutexGuard lock(mutex());
+    UnoApiLock aLock;
     OUString sResult;
     if ( rtl_bootstrap_get_from_handle( m_hBootstrapData, _aName.pData, &sResult.pData, 0) )
     {
