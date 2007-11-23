@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTools.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:33:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:38:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 namespace com { namespace sun { namespace star {
     namespace chart2 {
         class XChartDocument;
+        class XRegressionCurve;
         namespace data {
             class XDataProvider;
             class XLabeledDataSequence;
@@ -100,6 +101,13 @@ namespace SchXMLTools
     ::com::sun::star::uno::Any getPropertyFromContext( const ::rtl::OUString& rPropertyName, const XMLPropStyleContext * pPropStyleContext, const SvXMLStylesContext* pStylesCtxt );
 
     void exportText( SvXMLExport& rExport, const ::rtl::OUString& rText, bool bConvertTabsLFs );
+
+    /** returns the properties of the equation of the first regression curve
+        that is no mean-value line
+     */
+    ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XRegressionCurve > getRegressionCurve(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDataSeries > & xDataSeries );
 }
 
 #endif  // SCH_XML_TOOLS_HXX_

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:32:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:38:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,8 @@
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
+#include <com/sun/star/lang/XServiceName.hpp>
 
 #include <comphelper/processfactory.hxx>
 
@@ -469,4 +471,37 @@ void exportText( SvXMLExport& rExport, const OUString& rText, bool bConvertTabsL
     }
 }
 
+Reference< chart2::XRegressionCurve > getRegressionCurve(
+    const Reference< chart2::XDataSeries > & xDataSeries )
+{
+    Reference< chart2::XRegressionCurve > xResult;
+
+    Reference< chart2::XRegressionCurveContainer > xRegCurveCnt( xDataSeries, uno::UNO_QUERY );
+    if( xRegCurveCnt.is())
+    {
+        // find equation properties of first regression curve
+        Sequence< Reference< chart2::XRegressionCurve > > aCurveSeq(
+            xRegCurveCnt->getRegressionCurves() );
+        for( sal_Int32 nI=0; nI<aCurveSeq.getLength(); ++nI )
+        {
+            // skip mean-value line
+            Reference< lang::XServiceName > xServiceName( aCurveSeq[nI], uno::UNO_QUERY );
+            if( xServiceName.is())
+            {
+                OUString aServiceName( xServiceName->getServiceName());
+                if( aServiceName.equalsAsciiL(
+                        RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.MeanValueRegressionCurve" )))
+                    continue;
+            }
+            // take first non-empty curve
+            if( aCurveSeq[nI].is())
+            {
+                xResult.set( aCurveSeq[nI] );
+                break;
+            }
+        }
+    }
+    return xResult;
 }
+
+} // namespace SchXMLTools
