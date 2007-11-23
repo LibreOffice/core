@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autoobject.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:42:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:14:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,6 @@
 #ifndef CONFIGMGR_UTILITY_HXX_
 #include "utility.hxx"
 #endif
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
-#endif
 
 namespace configmgr
 {
@@ -49,7 +46,6 @@ namespace configmgr
     using ::rtl::OUString;
 
 //-----------------------------------------------------------------------------
-
     template < class Object >
     class AutoObject : Noncopyable
     {
@@ -64,12 +60,9 @@ namespace configmgr
         bool is()   const;
         Ptr get()   const;
         Ptr getOrCreate();
-
-        osl::Mutex & mutex() const { return m_aMutex; }
     private:
         Ptr internalCreate();
     private:
-        mutable osl::Mutex  m_aMutex;
         Ptr  m_pObject;
     };
 //-----------------------------------------------------------------------------
@@ -78,7 +71,6 @@ namespace configmgr
     inline
     Object * AutoObject<Object>::get() const
     {
-        // osl::MutexGuard aGuard(m_aMutex);
         return m_pObject;
     }
 //-----------------------------------------------------------------------------
@@ -102,7 +94,6 @@ namespace configmgr
     template < class Object >
     Object * AutoObject<Object>::internalCreate()
     {
-        osl::MutexGuard aGuard(m_aMutex);
         if (m_pObject == NULL)
             m_pObject = new Object();
         return m_pObject;
