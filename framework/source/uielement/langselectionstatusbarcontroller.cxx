@@ -1,0 +1,509 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: langselectionstatusbarcontroller.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:47:20 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_framework.hxx"
+
+#ifndef __FRAMEWORK_UIELEMENT_LANGSELECTIONSTATUSBARCONTROLLER_HXX_
+#include <uielement/langselectionstatusbarcontroller.hxx>
+#endif
+
+#ifndef __FRAMEWORK_CLASSES_FWKRESID_HXX_
+#include <classes/fwkresid.hxx>
+#endif
+#ifndef __FRAMEWORK_SERVICES_H_
+#include <services.h>
+#endif
+#include <classes/resource.hrc>
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
+#endif
+#ifndef _SV_STATUS_HXX
+#include <vcl/status.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
+#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
+#include <toolkit/helper/convert.hxx>
+#endif
+
+#include <com/sun/star/frame/XPopupMenuController.hpp>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <com/sun/star/awt/PopupMenuDirection.hpp>
+#include <svtools/langtab.hxx>
+#include "sal/types.h"
+#include <vcl/svapp.hxx>
+#include <com/sun/star/awt/MenuItemStyle.hpp>
+#include <com/sun/star/document/XDocumentLanguages.hpp>
+
+#ifndef INCLUDED_I18NPOOL_MSLANGID_HXX
+#include <i18npool/mslangid.hxx>
+#endif
+#include <com/sun/star/i18n/ScriptType.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULE_HPP_
+#include <com/sun/star/frame/XModule.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
+#include <com/sun/star/frame/XModel.hpp>
+#endif
+
+#include <map>
+#include <set>
+
+#ifndef __FRAMEWORK_CLASSES_FWKRESID_HXX_
+#include <classes/fwkresid.hxx>
+#endif
+#ifndef __FRAMEWORK_CLASSES_RESOURCE_HRC_
+#include <classes/resource.hrc>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCH_HPP_
+#include <com/sun/star/frame/XDispatch.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+
+#include <toolkit/unohlp.hxx>
+#include <tools/gen.hxx>
+#include <com/sun/star/awt/Command.hpp>
+#include <svtools/languageoptions.hxx>
+#include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
+
+using namespace ::rtl;
+using namespace ::cppu;
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::i18n;
+using namespace ::com::sun::star::document;
+
+namespace framework
+{
+
+DEFINE_XSERVICEINFO_MULTISERVICE        (   LangSelectionStatusbarController            ,
+                                            OWeakObject                             ,
+                                            SERVICENAME_STATUSBARCONTROLLER         ,
+                                            IMPLEMENTATIONNAME_LANGSELECTIONSTATUSBARCONTROLLER
+                                        )
+
+DEFINE_INIT_SERVICE                     (   LangSelectionStatusbarController, {} )
+
+LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::Reference< lang::XMultiServiceFactory >& xServiceManager ) :
+    svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), rtl::OUString(), 0 ),
+    m_nScriptType( 7 )
+{
+}
+
+// XInterface
+Any SAL_CALL LangSelectionStatusbarController::queryInterface( const Type& rType )
+throw ( RuntimeException )
+{
+    return svt::StatusbarController::queryInterface( rType );
+}
+
+void SAL_CALL LangSelectionStatusbarController::acquire() throw ()
+{
+    svt::StatusbarController::acquire();
+}
+
+void SAL_CALL LangSelectionStatusbarController::release() throw ()
+{
+    svt::StatusbarController::release();
+}
+
+void SAL_CALL LangSelectionStatusbarController::initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
+throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException)
+{
+    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+
+    svt::StatusbarController::initialize( aArguments );
+
+    if ( m_xParentWindow.is() && m_nID > 0 )
+    {
+        Window* pWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
+        if ( pWindow && ( pWindow->GetType() == WINDOW_STATUSBAR ))
+        {
+            StatusBar* pStatusBar = (StatusBar *)pWindow;
+            pStatusBar->SetItemText( m_nID, FwkResId( STR_LANGSTATUS_MULTIPLE_LANGUAGES ) );
+        }
+    }
+}
+
+// XComponent
+void SAL_CALL LangSelectionStatusbarController::dispose()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    svt::StatusbarController::dispose();
+}
+
+// XEventListener
+void SAL_CALL LangSelectionStatusbarController::disposing( const com::sun::star::lang::EventObject& Source )
+throw ( RuntimeException )
+{
+    svt::StatusbarController::disposing( Source );
+}
+
+// XStatusbarController
+::sal_Bool SAL_CALL LangSelectionStatusbarController::mouseButtonDown(
+    const ::com::sun::star::awt::MouseEvent& )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    return sal_False;
+}
+
+::sal_Bool SAL_CALL LangSelectionStatusbarController::mouseMove(
+    const ::com::sun::star::awt::MouseEvent& )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    return sal_False;
+}
+
+::sal_Bool SAL_CALL LangSelectionStatusbarController::mouseButtonUp(
+    const ::com::sun::star::awt::MouseEvent& )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    return sal_False;
+}
+
+//match ScriptType
+bool checkScriptType( sal_Int16 nScriptType, LanguageType nLang )
+{
+    return 0 != ( nScriptType & SvtLanguageOptions::GetScriptTypeOfLanguage( nLang ));
+}
+
+void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::RuntimeException)
+{
+    //add context menu
+    Reference< awt::XPopupMenu > xPopupMenu( m_xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.awt.PopupMenu" ) ), UNO_QUERY );
+    //sub menu that contains all items except the last two items: Separator + Set Language for Paragraph
+    Reference< awt::XPopupMenu > subPopupMenu(m_xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.awt.PopupMenu" ) ), UNO_QUERY );
+
+    std::set< ::rtl::OUString > LangItems;
+
+    SvtLanguageTable aLanguageTable;
+    USHORT nItemId=1;
+
+    //1--add current language
+    if( m_aCurLang != OUString::createFromAscii( "" ))
+        LangItems.insert( m_aCurLang );
+
+    //2--System
+    SvtLanguageTable aLangTable;
+    const AllSettings& rAllSettings = Application::GetSettings();
+    LanguageType rSystemLanguage = rAllSettings.GetLanguage();
+    if( rSystemLanguage != LANGUAGE_DONTKNOW )
+    {
+        if ( checkScriptType( m_nScriptType, rSystemLanguage ))
+            LangItems.insert( OUString( aLangTable.GetString( rSystemLanguage )) );
+    }
+
+    //3--UI
+    LanguageType rUILanguage = rAllSettings.GetUILanguage();
+    if( rUILanguage != LANGUAGE_DONTKNOW )
+    {
+        if ( checkScriptType( m_nScriptType, rUILanguage ))
+            LangItems.insert( OUString( aLangTable.GetString( rUILanguage )) );
+    }
+
+    //4--guessed language
+    uno::Reference< linguistic2::XLanguageGuessing > xLangGuess;
+    if ( xLangGuess.is() && m_aGuessedText!=OUString::createFromAscii( "" ))
+    {
+        ::com::sun::star::lang::Locale aLocale(xLangGuess->guessPrimaryLanguage( m_aGuessedText, 0, m_aGuessedText.getLength()) );
+        LanguageType nLang = MsLangId::convertLocaleToLanguageWithFallback( aLocale );
+        if (( nLang != LANGUAGE_DONTKNOW ) && ( checkScriptType( m_nScriptType, nLang )))
+            LangItems.insert( aLangTable.GetString( nLang ));
+    }
+
+    //5--keyboard language
+    if( m_aKeyboardLang != OUString::createFromAscii( "" ))
+    {
+        if ( checkScriptType( m_nScriptType, aLanguageTable.GetType( m_aKeyboardLang )))
+            LangItems.insert( m_aKeyboardLang );
+    }
+
+    //6--all languages used in current document
+    Reference< com::sun::star::frame::XModel > xModel;
+    if ( m_xFrame.is() )
+    {
+       Reference< com::sun::star::frame::XController > xController( m_xFrame->getController(), UNO_QUERY );
+       if ( xController.is() )
+           xModel = xController->getModel();
+    }
+    Reference< document::XDocumentLanguages > xDocumentLanguages( xModel, UNO_QUERY );
+    /*the description of m_nScriptType
+      LATIN : 1
+      ASIAN : 2
+      COMPLEX:4
+      LATIN  + ASIAN : 3
+      LATIN  + COMPLEX : 5
+      ASIAN + COMPLEX : 6
+      LATIN + ASIAN + COMPLEX : 7
+    */
+
+    sal_Int16 nCount=7;
+    if ( xDocumentLanguages.is() )
+    {
+        Sequence< Locale > rLocales( xDocumentLanguages->getDocumentLanguages( m_nScriptType, nCount ));
+        if ( rLocales.getLength() > 0 )
+        {
+            for ( USHORT i = 0; i<rLocales.getLength();++i )
+            {
+                if ( LangItems.size() == 7 )
+                    break;
+                const Locale& rLocale=rLocales[i];
+                if( checkScriptType( m_nScriptType, aLangTable.GetType( rLocale.Language )))
+                    LangItems.insert( OUString( rLocale.Language ) );
+            }
+        }
+    }
+    std::map< sal_Int16, ::rtl::OUString > LangTable;
+
+    for( std::set< OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it )
+    {
+        if ( *it != OUString( aLangTable.GetString( LANGUAGE_NONE ) )&&
+             *it != OUString::createFromAscii( "*" ) &&
+             *it != OUString::createFromAscii( ""  ))
+        {
+            //nItemId = xPopupMenu->getItemCount()+1;
+            nItemId++;
+            xPopupMenu->insertItem( nItemId, *it, css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+            LangTable[nItemId]=*it;
+            if( *it == m_aCurLang )
+            {
+                //make a sign for the current language
+                xPopupMenu->checkItem( nItemId, TRUE );
+            }
+        }
+    }
+
+    //7--none
+    nItemId++;
+    xPopupMenu->insertItem( nItemId, String( FwkResId( STR_LANGSTATUS_NONE )), css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+    //More...
+    nItemId++;
+    xPopupMenu->insertItem( nItemId, String( FwkResId( STR_LANGSTATUS_MORE )), css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+
+    for( ::std::set< OUString >::const_iterator it = LangItems.begin(); it != LangItems.end(); ++it )
+    {
+        if( *it != OUString( aLangTable.GetString( LANGUAGE_NONE ) )&&
+            *it != OUString::createFromAscii( "*" ) &&
+            *it != OUString::createFromAscii( ""  ))
+        {
+            nItemId++;
+            subPopupMenu->insertItem( nItemId, *it, css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+            LangTable[nItemId]=*it;
+        }
+    }
+    //7--none
+    nItemId++;
+    subPopupMenu->insertItem( nItemId, String( FwkResId( STR_LANGSTATUS_NONE )), css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+    //More
+    nItemId++;
+    subPopupMenu->insertItem( nItemId, String( FwkResId( STR_LANGSTATUS_MORE )), css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+
+    nItemId++;
+    xPopupMenu->insertSeparator(nItemId);
+
+    nItemId++;
+    xPopupMenu->insertItem( nItemId, String( FwkResId( STR_SET_LANGUAGE_FOR_PARAGRAPH )), css::awt::MenuItemStyle::RADIOCHECK, nItemId );
+    xPopupMenu->setPopupMenu( nItemId, subPopupMenu );
+
+    //display the popup menu and execute every command
+
+    Reference< awt::XWindowPeer > xParent( m_xParentWindow, UNO_QUERY );
+
+    com::sun::star::awt::Rectangle mRectangle;
+    Window* pWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
+    const Point mMousePos = pWindow->GetPointerPosPixel();
+    mRectangle.X = mMousePos.X();
+    mRectangle.Y = mMousePos.Y();
+    sal_Int16 nId = xPopupMenu->execute( xParent, mRectangle, com::sun::star::awt::PopupMenuDirection::EXECUTE_UP+16 );
+    //click "More..."
+    if ( m_xFrame.is() )
+    {
+        uno::Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+        util::URL aURL;
+
+        if ( nId < nItemId-3-subPopupMenu->getItemCount() )
+        {
+            //1..7
+            //set selected language as current language for selection
+            String SelectedLang = LangTable[nId];
+            aURL.Complete+=String::CreateFromAscii(".uno:LanguageStatus?Language:string=Current_");
+            aURL.Complete+=SelectedLang;
+        }
+        else if ( nId == nItemId-3-subPopupMenu->getItemCount() )
+        {
+            //8
+            //set None as current language for selection
+            aURL.Complete+=String::CreateFromAscii(".uno:LanguageStatus?Language:string=Current_LANGUAGE_NONE");
+        }
+        else if ( nId == nItemId-2-subPopupMenu->getItemCount() )
+        {
+            //9 (more)...
+            //open the dialog "format/character" for current selection
+            aURL.Complete+=String::CreateFromAscii(".uno:FontDialog?Language:string=*");
+        }
+        else if ( nId < nItemId-3 && nId>nItemId-2-subPopupMenu->getItemCount() )
+        {
+            //1..7 para
+            //set selected language for current paragraph
+            String SelectedLang = LangTable[nId];
+            aURL.Complete+=String::CreateFromAscii(".uno:LanguageStatus?Language:string=Paragraph_");
+            aURL.Complete+=SelectedLang;
+        }
+        else if ( nId==nItemId-3 )
+        {
+            //8 para
+            //set None as language for current paragraph
+            aURL.Complete+=String::CreateFromAscii(".uno:LanguageStatus?Language:string=Paragraph_LANGUAGE_NONE");
+        }
+        else if ( nId==nItemId-2 )
+        {
+            //9 (more) para...
+            //open the dialog "format/character" for current paragraph
+            aURL.Complete+=String::CreateFromAscii(".uno:FontDialogForParagraph");
+        }
+
+        uno::Reference< util::XURLTransformer > xURLTransformer( m_xServiceManager->createInstance( rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer" )), uno::UNO_QUERY );
+        xURLTransformer->parseStrict( aURL );
+        uno::Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch(aURL,::rtl::OUString(),0);
+        if( xDispatch.is() )
+        {
+            uno::Sequence< beans::PropertyValue > aPV;
+            xDispatch->dispatch( aURL, aPV);
+        }
+    }
+}
+
+void SAL_CALL LangSelectionStatusbarController::command(
+    const ::com::sun::star::awt::Point& /*aPos*/,
+    ::sal_Int32 nCommand,
+    ::sal_Bool /*bMouseEvent*/,
+    const ::com::sun::star::uno::Any& /*aData*/ )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    if ( nCommand & ::awt::Command::CONTEXTMENU )
+    {
+        LangMenu();
+    }
+}
+
+void SAL_CALL LangSelectionStatusbarController::paint(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics >& xGraphics,
+    const ::com::sun::star::awt::Rectangle& rOutputRectangle,
+    ::sal_Int32 nItemId,
+    ::sal_Int32 nStyle )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    svt::StatusbarController::paint( xGraphics, rOutputRectangle, nItemId, nStyle );
+}
+
+void SAL_CALL LangSelectionStatusbarController::click()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    LangMenu();
+}
+
+void SAL_CALL LangSelectionStatusbarController::doubleClick()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    svt::StatusbarController::doubleClick();
+}
+
+// XStatusListener
+void SAL_CALL LangSelectionStatusbarController::statusChanged( const FeatureStateEvent& Event )
+throw ( RuntimeException )
+{
+    vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
+
+    if ( m_bDisposed )
+        return;
+
+    m_nScriptType=7;//set the default value
+    Window* pWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
+    if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR && m_nID != 0 )
+    {
+        rtl::OUString               aStrValue;
+        Sequence< ::rtl::OUString > aSeq;
+
+        StatusBar*    pStatusBar = (StatusBar *)pWindow;
+        if ( Event.State >>= aStrValue )
+        {
+            pStatusBar->SetItemText( m_nID, aStrValue );
+            m_aCurrentLanguage = aStrValue;
+        }
+        else if ( Event.State >>= aSeq )
+        {
+            if ( aSeq.getLength() == 4 )
+            {
+                const String aMultipleLangText( FwkResId( STR_LANGSTATUS_MULTIPLE_LANGUAGES ) );
+                ::rtl::OUString aStatusText = aSeq[0];
+                if ( 0 == aStatusText.compareToAscii( "*" ))
+                    aStatusText = aMultipleLangText;
+                pStatusBar->SetItemText( m_nID, aStatusText );
+
+                // Retrieve all other values from the sequence and
+                // store it members!
+                m_aCurLang      = aSeq[0];
+                m_nScriptType   = static_cast< sal_Int16 >( aSeq[1].toInt32() );
+                m_aKeyboardLang = aSeq[2];
+                m_aGuessedText  = aSeq[3];
+            }
+        }
+        else if ( !Event.State.hasValue() )
+        {
+            pStatusBar->SetItemText( m_nID, String() );
+        }
+    }
+}
+
+}
