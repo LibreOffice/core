@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:32:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:47:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,12 +222,12 @@ TemplateProvider_Impl::TemplateProvider_Impl(TemplateManagerRef const & xProvide
 }
 //-----------------------------------------------------------------------------
 
-data::TreeSegment TemplateProvider_Impl::instantiate(data::Accessor const& _aSourceAccessor, TemplateHolder const& aTemplate)
+data::TreeSegment TemplateProvider_Impl::instantiate(TemplateHolder const& aTemplate)
 {
     data::TreeSegment pRet;
     if (aTemplate.is())
     {
-        data::TreeAccessor aTemplateData = m_xProvider->requestTemplate(_aSourceAccessor, aTemplate->getName(), aTemplate->getModule());
+        data::TreeAccessor aTemplateData = m_xProvider->requestTemplate(aTemplate->getName(), aTemplate->getModule());
 
         pRet = cloneExpandedForLocale(aTemplateData, m_aOptions.getLocale());
     }
@@ -261,12 +261,12 @@ namespace
 
     private: // NodeAction implementation
         Result handle(ValueNodeAccess const& _aValueNode);
-        Result handle(NodeAccessRef const& _aNonValueNode);
+        Result handle(NodeAccess const& _aNonValueNode);
     };
 //-----------------------------------------------------------------------------
     static UnoType detectNodeType(TreeAccessor const& _aElement)
     {
-        if (!_aElement.isValid())
+        if (_aElement == NULL)
             throw configuration::Exception("Could not load required template to detect set elements");
 
         TypeDetector aDetector;
@@ -343,7 +343,7 @@ TemplateHolder TemplateProvider_Impl::makeElementTemplateWithType(TemplateName c
             OSL_ASSERT(_aNames.aName == _aSet.getElementTemplateName());
             OSL_ASSERT(_aNames.aModule == _aSet.getElementTemplateModule());
 
-            data::TreeAccessor aTemplateData = m_xProvider->requestTemplate(_aSet.accessor(), _aNames.aName, _aNames.aModule);
+            data::TreeAccessor aTemplateData = m_xProvider->requestTemplate(_aNames.aName, _aNames.aModule);
 
             aType = detectNodeType(aTemplateData); // throws if necessary
         }
@@ -417,7 +417,7 @@ namespace
         return CONTINUE; // always continue to detect errors in data
     }
 //-----------------------------------------------------------------------------
-    TypeDetector::Result TypeDetector::handle(NodeAccessRef const& _aNonValueNode)
+    TypeDetector::Result TypeDetector::handle(NodeAccess const& _aNonValueNode)
     {
             { (void)_aNonValueNode; }
         OSL_ENSURE(!ValueNodeAccess::isInstance(_aNonValueNode),"Value node dipatched to wrong handler");
