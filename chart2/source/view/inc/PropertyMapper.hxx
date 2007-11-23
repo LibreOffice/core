@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMapper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:20:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,7 @@ public:
     static const tMakePropertyNameMap& getPropertyNameMapForFillProperties();
     static const tMakePropertyNameMap& getPropertyNameMapForLineProperties();
     static const tMakePropertyNameMap& getPropertyNameMapForFillAndLineProperties();
+    static const tMakePropertyNameMap& getPropertyNameMapForTextShapeProperties();
 
     static const tMakePropertyNameMap& getPropertyNameMapForFilledSeriesProperties();
     static const tMakePropertyNameMap& getPropertyNameMapForLineSeriesProperties();
@@ -125,6 +126,15 @@ public:
                 , bool bName=true
                 , sal_Int32 nLimitedSpace=-1
                 , bool bLimitedHeight=false );
+
+    /** adds line-, fill- and character properties and sets some suitable
+        defaults for auto-grow properties
+     */
+    static void getPreparedTextShapePropertyLists(
+        const ::com::sun::star::uno::Reference<
+              ::com::sun::star::beans::XPropertySet >& xSourceProp
+        , tNameSequence& rPropNames
+        , tAnySequence& rPropValues );
 };
 
 //.............................................................................
