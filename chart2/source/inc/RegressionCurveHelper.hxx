@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCurveHelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:21:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:58:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,27 +35,16 @@
 #ifndef CHART2_REGRESSIONCURVEHELPER_HXX
 #define CHART2_REGRESSIONCURVEHELPER_HXX
 
-#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVE_HPP_
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVECALCULATOR_HPP_
 #include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATASOURCE_HPP_
 #include <com/sun/star/chart2/data/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
 #include <com/sun/star/chart2/XDataSeries.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/chart2/XDiagram.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
+
+#include <vector>
 
 namespace chart
 {
@@ -136,7 +125,10 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
 
-    /** xPropertySource is taken as source to copy all properties from if not null
+    /** @param xPropertySource is taken as source to copy all properties from if
+               not null
+        @param xEquationProperties is set at the new regression curve as
+               equation properties if not null
     */
     static void addRegressionCurve( tRegressionType eType,
             ::com::sun::star::uno::Reference<
@@ -144,11 +136,31 @@ public:
             const ::com::sun::star::uno::Reference<
                 ::com::sun::star::uno::XComponentContext > & xContext,
             const ::com::sun::star::uno::Reference<
-                ::com::sun::star::beans::XPropertySet >& xPropertySource );
+                ::com::sun::star::beans::XPropertySet >& xPropertySource =
+                                ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::beans::XPropertySet >(),
+            const ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet >& xEquationProperties =
+                                ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::beans::XPropertySet >()
+        );
 
     static bool removeAllExceptMeanValueLine(
         ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt );
+
+    /** adds the given regression curve if there was none before. If there are
+        regression curves, the first one is replaced by the one given by the
+        type. All remaining curves are remnoved.
+
+        <p>This fuction ignores mean-value lines.</p>
+     */
+    static void replaceOrAddCurveAndReduceToOne(
+        tRegressionType eType,
+        ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurveContainer > & xRegCnt,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext > & xContext );
 
     // ------------------------------------------------------------
 
@@ -200,6 +212,14 @@ public:
 
     static ::rtl::OUString getUINameForRegressionCurve( const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurve >& xCurve );
+
+    static ::std::vector< ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurve > > getAllRegressionCurvesNotMeanValueLine(
+                const ::com::sun::star::uno::Reference<
+                    ::com::sun::star::chart2::XDiagram > & xDiagram );
+
+    static void resetEquationPosition( const ::com::sun::star::uno::Reference<
+                                       ::com::sun::star::chart2::XRegressionCurve > & xCurve );
 
 private:
     // not implemented
