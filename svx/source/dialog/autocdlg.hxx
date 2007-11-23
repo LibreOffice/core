@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:24:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:37:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,12 @@
 #ifndef _OFA_AUTOCDLG_HXX
 #define _OFA_AUTOCDLG_HXX
 
+#include <svtools/langtab.hxx>
+
 #ifndef _SFXTABDLG_HXX
 #include <sfx2/tabdlg.hxx>
 #endif
-#ifndef _SVX_LANGTAB_HXX //autogen
-#include "langtab.hxx"
-#endif
+
 #ifndef _TOOLS_TABLE_HXX //autogen
 #include <tools/table.hxx>
 #endif
