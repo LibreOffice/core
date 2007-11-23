@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 14:01:27 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 14:31:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,10 +57,7 @@ SLOFILES=\
     $(SLO)$/treesegment.obj		\
     $(SLO)$/nodevisitor.obj		\
     $(SLO)$/nodeaccess.obj		\
-    $(SLO)$/treeaccessor.obj	\
     $(SLO)$/valuenodeaccess.obj	\
-    $(SLO)$/groupnodeaccess.obj	\
-    $(SLO)$/setnodeaccess.obj	\
     $(SLO)$/changes.obj			\
     $(SLO)$/treenodefactory.obj			\
     $(SLO)$/treechangefactory.obj		\
