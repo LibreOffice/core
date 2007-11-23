@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collectchanges.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:26:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:39:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,6 @@ namespace configmgr
             NodeChangesInformation& m_rTargetList;
             RelativePath            m_aAccessor;
             Name                    m_aContextTypeName;
-            data::Accessor          m_aDataAccessor;
             TreeImpl*               m_pBaseTree;
             NodeOffset              m_nBaseNode;
             TreeDepth               m_nDepthLeft;
@@ -80,7 +79,6 @@ namespace configmgr
         public:
             /// Constructs a Visitor object, sets the output target list and context
             CollectChanges( NodeChangesInformation& rTargetList_,
-                            data::Accessor const& _aDataAccessor,
                             TreeImpl& rStartTree_, NodeOffset nStartNode_,
                             TemplateHolder aElementTemplate_,
                             TreeDepth nMaxDepth = c_TreeDepthAll);
