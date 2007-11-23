@@ -4,9 +4,9 @@
  *
  *  $RCSfile: valuenodeaccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:24:22 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:34:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,6 @@
 
 #include "valuenodeaccess.hxx"
 
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
-#endif
-
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -53,30 +49,11 @@ namespace configmgr
 // -----------------------------------------------------------------------------
     namespace data
     {
-    // -------------------------------------------------------------------------
-        using memory::Pointer;
-    // -------------------------------------------------------------------------
-        static
-        ValueNodeAddress::DataType* accessValue(Pointer const& _p, memory::UpdateAccessor& _rUpdateAccess)
-        {
-            return static_cast<ValueNodeAddress::DataType*>( _rUpdateAccess.validate(_p) );
-        }
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
 
-        Pointer ValueNodeAccess::check(NodeAccessRef const& _aNode)
-        {
-            if (sharable::Node const* pNode = _aNode.getDataPtr())
-                return _aNode.accessor().address(pNode->valueData());
-
-            else
-                return Pointer();
-        }
-    // -------------------------------------------------------------------------
-
-void ValueNodeAccess::setValue(memory::UpdateAccessor & _aUpdater, NodeAddressType _aValueNode, uno::Any const& _aValue)
+void ValueNodeAccess::setValue(ValueNodeAddress _aValueNode,
+                               uno::Any const& _aValue)
 {
-    sharable::ValueNode * node = accessValue(_aValueNode.m_pData,_aUpdater);
+    sharable::ValueNode * node = _aValueNode;
 
     using namespace sharable;
     AnyData::TypeCode aType = AnyData::TypeCode( node->info.type & Type::mask_valuetype );
@@ -86,8 +63,8 @@ void ValueNodeAccess::setValue(memory::UpdateAccessor & _aUpdater, NodeAddressTy
     {
         OSL_ASSERT(aType != Type::value_any);
 
-        freeData(_aUpdater.allocator(),aType,node->value);
-        node = accessValue(_aValueNode.m_pData,_aUpdater);
+        freeData(aType,node->value);
+        node = _aValueNode;
 
         node->value.data = 0;
         node->info.flags ^= Flags::valueAvailable;
@@ -114,8 +91,8 @@ void ValueNodeAccess::setValue(memory::UpdateAccessor & _aUpdater, NodeAddressTy
         if (aType == aNewType)
         {
             // store the data
-            sharable::AnyData aNewData = allocData(_aUpdater.allocator(),aType,_aValue);
-            node = accessValue(_aValueNode.m_pData,_aUpdater);
+            sharable::AnyData aNewData = allocData(aType,_aValue);
+            node = _aValueNode;
 
             node->value = aNewData;
             node->info.flags |= Flags::valueAvailable;
@@ -125,9 +102,9 @@ void ValueNodeAccess::setValue(memory::UpdateAccessor & _aUpdater, NodeAddressTy
 }
 //-----------------------------------------------------------------------------
 
-void ValueNodeAccess::setToDefault(memory::UpdateAccessor & _aUpdater, NodeAddressType _aValueNode)
+void ValueNodeAccess::setToDefault(ValueNodeAddress _aValueNode)
 {
-    sharable::ValueNode * node = accessValue(_aValueNode.m_pData,_aUpdater);
+    sharable::ValueNode * node = _aValueNode;
 
     using namespace sharable;
     OSL_ENSURE(node->hasUsableDefault(), "ERROR: setToDefault() - Value does not have a default");
@@ -138,8 +115,8 @@ void ValueNodeAccess::setToDefault(memory::UpdateAccessor & _aUpdater, NodeAddre
         AnyData::TypeCode aType = AnyData::TypeCode( node->info.type & Type::mask_valuetype );
         OSL_ASSERT(aType != Type::value_any);
 
-        freeData(_aUpdater.allocator(),aType,node->value);
-        node = accessValue(_aValueNode.m_pData,_aUpdater);
+        freeData(aType,node->value);
+        node = _aValueNode;
 
         node->value.data = 0;
         node->info.flags ^= Flags::valueAvailable;
@@ -149,9 +126,10 @@ void ValueNodeAccess::setToDefault(memory::UpdateAccessor & _aUpdater, NodeAddre
 }
 //-----------------------------------------------------------------------------
 
-void ValueNodeAccess::changeDefault(memory::UpdateAccessor & _aUpdater, NodeAddressType _aValueNode, uno::Any const& _aValue)
+void ValueNodeAccess::changeDefault(ValueNodeAddress _aValueNode,
+                                    uno::Any const& _aValue)
 {
-    sharable::ValueNode * node = accessValue(_aValueNode.m_pData,_aUpdater);
+    sharable::ValueNode * node = _aValueNode;
 
     using namespace sharable;
     AnyData::TypeCode aType = AnyData::TypeCode( node->info.type & Type::mask_valuetype );
@@ -161,8 +139,8 @@ void ValueNodeAccess::changeDefault(memory::UpdateAccessor & _aUpdater, NodeAddr
     {
         OSL_ASSERT(aType != Type::value_any);
 
-        freeData(_aUpdater.allocator(),aType,node->defaultValue);
-        node = accessValue(_aValueNode.m_pData,_aUpdater);
+        freeData(aType,node->defaultValue);
+        node = _aValueNode;
 
         node->defaultValue.data = 0;
         node->info.flags ^= Flags::defaultAvailable;
@@ -189,8 +167,8 @@ void ValueNodeAccess::changeDefault(memory::UpdateAccessor & _aUpdater, NodeAddr
         if (aType == aNewType)
         {
             // store the data
-            sharable::AnyData aNewData = allocData(_aUpdater.allocator(),aType,_aValue);
-            node = accessValue(_aValueNode.m_pData,_aUpdater);
+            sharable::AnyData aNewData = allocData(aType,_aValue);
+            node = _aValueNode;
 
             node->defaultValue = aNewData;
             node->info.flags |= Flags::defaultAvailable;
@@ -198,32 +176,7 @@ void ValueNodeAccess::changeDefault(memory::UpdateAccessor & _aUpdater, NodeAddr
     }
 }
 
-//-----------------------------------------------------------------------------
-/*
-void ValueNode::clearData(data::Allocator const & _aAlloc)
-{
-    AnyData::TypeCode aType = info.type & Type::mask_valuetype;
-
-    if (info.flags & Flags::valueAvailable)
-    {
-        OSL_ASSERT(aType != Type::value_any);
-        freeData(_aAlloc,aType,this->value);
-        info.flags ^= Flags::valueAvailable;
-        this->value.data = 0;
-    }
-
-    if (info.flags & Flags::defaultAvailable)
-    {
-        OSL_ASSERT(aType != Type::value_any);
-        freeData(_aAlloc,aType,this->defaultValue);
-        info.flags ^= Flags::defaultAvailable;
-        this->defaultValue.data = 0;
-    }
-}
-*/
-//-----------------------------------------------------------------------------
-    }
-// -----------------------------------------------------------------------------
+    } // namespace data
 } // namespace configmgr
 
 
