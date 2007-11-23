@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLSeries2Context.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:05:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:37:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,9 @@ namespace com { namespace sun { namespace star {
         class XChartDocument;
         class XDataSeries;
     }
+    namespace awt {
+        struct Size;
+    }
 }}}
 
 // class for child contexts: series, data point and statistics objects
@@ -91,6 +94,7 @@ private:
     tSchXMLLSequencesPerIndex maPostponedSequences;
     bool& mrGlobalChartTypeUsedBySeries;
     bool mbSymbolSizeIsMissingInFile;
+    ::com::sun::star::awt::Size maChartSize;
 
 public:
     SchXMLSeries2Context( SchXMLImportHelper& rImpHelper,
@@ -109,7 +113,8 @@ public:
                           const ::rtl::OUString & aGlobalChartTypeName,
                           tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
                           sal_Int32& rCurrentDataIndex,
-                          bool& rGlobalChartTypeUsedBySeries );
+                          bool& rGlobalChartTypeUsedBySeries,
+                          const ::com::sun::star::awt::Size & rChartSize );
     virtual ~SchXMLSeries2Context();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLSeries2Context.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:05:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:37:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,46 +42,21 @@
 #include "SchXMLTools.hxx"
 #include "PropertyMap.hxx"
 
-#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
 #include <com/sun/star/chart2/XDataSeries.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATASINK_HPP_
+#include <com/sun/star/chart2/XRegressionCurve.hpp>
 #include <com/sun/star/chart2/data/XDataSink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATARECEIVER_HPP_
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XRANGEXMLCONVERSION_HPP_
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_CHART_CHARTAXISASSIGN_HPP_
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTSYMBOLTYPE_HPP_
 #include <com/sun/star/chart/ChartSymbolType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTLEGENDPOSITION_HPP_
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
 #include <com/sun/star/embed/XVisualObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
 
 // header for define DBG_ERROR1
 #ifndef _TOOLS_DEBUG_HXX
@@ -275,7 +250,8 @@ SchXMLSeries2Context::SchXMLSeries2Context(
     const OUString & aGlobalChartTypeName,
     tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
     sal_Int32& rCurrentDataIndex,
-    bool& rGlobalChartTypeUsedBySeries ) :
+    bool& rGlobalChartTypeUsedBySeries,
+    const awt::Size & rChartSize ) :
         SvXMLImportContext( rImport, XML_NAMESPACE_CHART, rLocalName ),
         mrImportHelper( rImpHelper ),
         mxNewDoc( xNewDoc ),
@@ -297,7 +273,8 @@ SchXMLSeries2Context::SchXMLSeries2Context(
         mrLSequencesPerIndex( rLSequencesPerIndex ),
         mrCurrentDataIndex( rCurrentDataIndex ),
         mrGlobalChartTypeUsedBySeries( rGlobalChartTypeUsedBySeries ),
-        mbSymbolSizeIsMissingInFile(false)
+        mbSymbolSizeIsMissingInFile(false),
+        maChartSize( rChartSize )
 {
     if( 0 == aGlobalChartTypeName.reverseCompareToAsciiL( RTL_CONSTASCII_STRINGPARAM( "com.sun.star.chart2.DonutChartType" ) ) )
     {
@@ -716,21 +693,24 @@ SvXMLImportContext* SchXMLSeries2Context::CreateChildContext(
                 mrImportHelper, GetImport(),
                 nPrefix, rLocalName,
                 mrStyleList, m_xSeries,
-                SchXMLStatisticsObjectContext::CONTEXT_TYPE_MEAN_VALUE_LINE );
+                SchXMLStatisticsObjectContext::CONTEXT_TYPE_MEAN_VALUE_LINE,
+                maChartSize );
             break;
         case XML_TOK_SERIES_REGRESSION_CURVE:
             pContext = new SchXMLStatisticsObjectContext(
                 mrImportHelper, GetImport(),
                 nPrefix, rLocalName,
                 mrStyleList, m_xSeries,
-                SchXMLStatisticsObjectContext::CONTEXT_TYPE_REGRESSION_CURVE );
+                SchXMLStatisticsObjectContext::CONTEXT_TYPE_REGRESSION_CURVE,
+                maChartSize );
             break;
         case XML_TOK_SERIES_ERROR_INDICATOR:
             pContext = new SchXMLStatisticsObjectContext(
                 mrImportHelper, GetImport(),
                 nPrefix, rLocalName,
                 mrStyleList, m_xSeries,
-                SchXMLStatisticsObjectContext::CONTEXT_TYPE_ERROR_INDICATOR );
+                SchXMLStatisticsObjectContext::CONTEXT_TYPE_ERROR_INDICATOR,
+                maChartSize );
             break;
 
         case XML_TOK_SERIES_DATA_POINT:
@@ -931,32 +911,42 @@ void SchXMLSeries2Context::setStylesToStatisticsObjects( SeriesDefaultsAndStyles
                             dynamic_cast< const XMLPropStyleContext * >( rpStyle ));
                     if( pPropStyleContext )
                     {
-                        uno::Any aAny;
+                        Reference< beans::XPropertySet > xStatPropSet;
                         switch( iStyle->meType )
                         {
                             case DataRowPointStyle::MEAN_VALUE:
-                                aAny = xSeriesProp->getPropertyValue(
+                                xSeriesProp->getPropertyValue(
                                     OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                  "DataMeanValueProperties" )));
+                                                  "DataMeanValueProperties" ))) >>= xStatPropSet;
                                 break;
                             case DataRowPointStyle::REGRESSION:
-                                aAny = xSeriesProp->getPropertyValue(
+                                xSeriesProp->getPropertyValue(
                                     OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                  "DataRegressionProperties" )));
+                                                  "DataRegressionProperties" ))) >>= xStatPropSet;
                                 break;
                             case DataRowPointStyle::ERROR_INDICATOR:
-                                aAny = xSeriesProp->getPropertyValue(
+                                xSeriesProp->getPropertyValue(
                                     OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                                  "DataErrorProperties" )));
+                                                  "DataErrorProperties" )))  >>= xStatPropSet;
                                 break;
                             default:
                                 break;
                         }
-                        Reference< beans::XPropertySet > xProp;
-                        if( (aAny >>= xProp) &&
-                            xProp.is())
-                            pPropStyleContext->FillPropertySet( xProp );
+                        if( xStatPropSet.is())
+                            pPropStyleContext->FillPropertySet( xStatPropSet );
                     }
+                }
+
+                // set equation properties at a regression curve
+                // note: this must be done after setting the regression
+                // properties at the old API, otherwise the curve itself does
+                // not exist here
+                if( iStyle->meType == DataRowPointStyle::REGRESSION && iStyle->m_xEquationProperties.is())
+                {
+                    OSL_ASSERT( iStyle->m_xSeries.is());
+                    Reference< chart2::XRegressionCurve > xRegCurve( SchXMLTools::getRegressionCurve( iStyle->m_xSeries ));
+                    if( xRegCurve.is())
+                        xRegCurve->setEquationProperties( iStyle->m_xEquationProperties );
                 }
             }
             catch( uno::Exception & rEx )
