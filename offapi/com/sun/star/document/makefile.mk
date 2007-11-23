@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: kz $ $Date: 2007-10-09 15:14:40 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 16:32:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,9 +105,10 @@ IDLFILES=\
     XStorageChangeListener.idl\
     XTypeDetection.idl\
     XViewDataSupplier.idl\
-        LinkUpdateModes.idl\
-        XDocumentRevisionListPersistence.idl\
-        DocumentRevisionListPersistence.idl
+    LinkUpdateModes.idl\
+    XDocumentRevisionListPersistence.idl\
+    DocumentRevisionListPersistence.idl \
+    XDocumentLanguages.idl
 
 # ------------------------------------------------------------------
 
