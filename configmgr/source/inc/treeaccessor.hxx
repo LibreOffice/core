@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeaccessor.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:48:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:25:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,108 +36,60 @@
 #ifndef CONFIGMGR_TREEACCESSOR_HXX
 #define CONFIGMGR_TREEACCESSOR_HXX
 
-#ifndef CONFIGMGR_TREEADDRESS_HXX
-#include "treeaddress.hxx"
-#endif
-#ifndef CONFIGMGR_ACCESSOR_HXX
-#include "accessor.hxx"
-#endif
 #ifndef CONFIGMGR_NODEACCESS_HXX
 #include "nodeaccess.hxx"
+#endif
+#ifndef INCLUDED_SHARABLE_TREEFRAGMENT_HXX
+#include "treefragment.hxx"
 #endif
 
 #ifndef INCLUDED_CSTDDEF
 #include <cstddef>
 #define INCLUDED_CSTDDEF
 #endif
+#ifndef CONFIGMGR_BUILDDATA_HXX
+#include <builddata.hxx>
+#endif
 
 namespace configmgr
 {
 // -----------------------------------------------------------------------------
 
-    namespace memory { class UpdateAccessor; }
 // -----------------------------------------------------------------------------
     namespace data
     {
-    // -------------------------------------------------------------------------
-        using memory::Accessor;
-    // -------------------------------------------------------------------------
-        class ValueNodeAccess;
-        class GroupNodeAccess;
-        class SetNodeAccess;
     // -------------------------------------------------------------------------
         /** class that mediates access to the data of a tree fragment
         */
         class TreeAccessor
         {
         public:
-            typedef configuration::Name     Name;
-            typedef node::Attributes        Attributes;
-            typedef TreeAddress                 DataAddressType;
-            typedef TreeAddress::DataType const DataType;
-            typedef DataType  * DataPointerType;
+            TreeAccessor(sharable::TreeFragment *_aTreeRef)
+                : m_pTree(_aTreeRef) {}
+            TreeAccessor(const sharable::TreeFragment * _pTree)
+                : m_pTree((sharable::TreeFragment *)_pTree) {}
 
-            static TreeAccessor emptyTree() { return TreeAccessor(); }
+            inline configuration::Name getName() const
+                { return configuration::makeName( m_pTree->getName(),
+                                                  configuration::Name::NoValidate() ); }
 
-            TreeAccessor(Accessor const& _aAccessor, DataAddressType const& _aTreeRef)
-            : m_aAccessor(_aAccessor)
-            , m_pBase(_aTreeRef.m_pData)
-            {}
+            NodeAccess getRootNode() const
+                { return NodeAccess(m_pTree ? const_cast<sharable::Node *>(m_pTree->nodes) : NULL); }
 
-            TreeAccessor(Accessor const& _aAccessor, DataPointerType _pTree)
-            : m_aAccessor(_aAccessor)
-            , m_pBase(_aAccessor.address(_pTree))
-            {}
+            TreeAddress copyTree() const
+                { return data::buildTree(*this); }
+            static void freeTree(TreeAddress _aTree)
+                { data::destroyTree(_aTree); }
 
-            bool isValid() const { return m_pBase.is(); }
+            // make it look like a pointer ...
+            operator sharable::TreeFragment *() const { return (sharable::TreeFragment *)m_pTree; }
+            sharable::TreeFragment* operator->() const { return m_pTree; }
+            bool operator == (sharable::TreeFragment *pTree) const { return pTree == m_pTree; }
+            bool operator != (sharable::TreeFragment *pTree) const { return pTree != m_pTree; }
 
-            bool isDefault() const { return data().isDefault(); }
-
-            Attributes getAttributes() const { return data().getAttributes(); }
-            Name getName() const;
-
-            NodeAccessRef getRootNode() const { return NodeAccessRef(&m_aAccessor,rootAddress(m_pBase)); }
-
-            DataAddressType address() const { return m_pBase; }
-            Accessor const& accessor() const { return m_aAccessor; }
-
-            DataType& data() const { return *static_cast<DataPointerType>(m_aAccessor.validate(m_pBase.m_pData)); }
-            DataPointerType getDataPtr() const { return access(m_pBase,m_aAccessor); }
-
-            TreeAddress copyTree(memory::UpdateAccessor & _aTargetSpace) const;
-            static void freeTree(memory::UpdateAccessor & _aTargetSpace, TreeAddress _aTree);
-
-            static Name wrapName(rtl::OUString const& _aNameString)
-            { return configuration::makeName( _aNameString, Name::NoValidate() ); }
-
-            static TreeAddress::DataType* access(DataAddressType const& _aTreeRef, memory::UpdateAccessor& _rUpdateAccess);
-            static TreeAddress::DataType const* access(DataAddressType const& _aTreeRef, Accessor const& _rReaderAccess)
-            { return static_cast<DataPointerType>(_rReaderAccess.access(_aTreeRef.m_pData)); }
         private:
-            NodeAddress rootAddress(DataAddressType const& p) const;
-
-            TreeAccessor();
-        private:
-            Accessor            m_aAccessor;
-            DataAddressType     m_pBase;
+            TreeAddress  m_pTree;
         };
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
-        inline
-        TreeAccessor::Name TreeAccessor::getName() const
-        {
-            return wrapName( data().getName() );
-        }
-    // -------------------------------------------------------------------------
-        inline
-        NodeAddress TreeAccessor::rootAddress(DataAddressType const& p) const
-        {
-            sharable::Address aAddr = p.addressValue();
-
-            if (aAddr) aAddr += offsetof(TreeAddress::DataType,nodes);
-
-            return NodeAddress( memory::Pointer(aAddr) );
-        }
     // -------------------------------------------------------------------------
     }
 // -----------------------------------------------------------------------------
