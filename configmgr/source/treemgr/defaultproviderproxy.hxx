@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultproviderproxy.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:28:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:41:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,11 +45,6 @@
 #ifndef CONFIGMGR_MISC_REQUESTOPTIONS_HXX_
 #include "requestoptions.hxx"
 #endif
-
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/simplereferenceobject.hxx>
-#endif
-
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
@@ -67,18 +62,13 @@ namespace configmgr
     class IDefaultableTreeManager;
     class OOptions;
 //-----------------------------------------------------------------------------
-    namespace memory
-    {
-        class UpdateAccessor;
-    }
-//-----------------------------------------------------------------------------
     namespace configuration
     {
 //-----------------------------------------------------------------------------
 
         /// provides access to the defaults for a given request
         class DefaultProviderProxy
-        : public salhelper::SimpleReferenceObject
+        : public configmgr::SimpleReferenceObject
         {
             // the data defining a request
             AbsolutePath            m_aBaseLocation;
@@ -99,7 +89,7 @@ namespace configmgr
             ~DefaultProviderProxy();
 
         /// tries to load a default instance of the specified node (which must be within the request range owned)
-            std::auto_ptr<ISubtree> getDefaultTree(memory::UpdateAccessor& _aDestinationSpace, AbsolutePath const& _aLocation) const CFG_UNO_THROW_ALL();
+            std::auto_ptr<ISubtree> getDefaultTree(AbsolutePath const& _aLocation) const CFG_UNO_THROW_ALL();
 
             /// tries to load default data into the owned tree - call only outside of any locks
             bool fetchDefaultData() CFG_UNO_THROW_ALL();
