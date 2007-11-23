@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configgroup.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:27:53 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:40:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -378,9 +378,7 @@ GroupDefaulter::GroupDefaulter(Tree const& _aParentTree, NodeRef const& _aGroupN
 //-----------------------------------------------------------------------------
 bool GroupDefaulter::isDataAvailable(TreeRef const& _aParentTree, NodeRef const& _aGroupNode)
 {
-    data::Accessor aTempAccess( getRootSegment(_aParentTree) );
-
-    Tree aTempTree(aTempAccess, _aParentTree);
+    Tree aTempTree(_aParentTree);
 
     return aTempTree.areValueDefaultsAvailable(_aGroupNode);
 }
