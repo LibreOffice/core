@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-10-15 16:34:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:10:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,16 +149,13 @@ public:
     ::basegfx::B2DRectangle     getScaledLogicClipDoubleRect() const;
     ::com::sun::star::drawing::Direction3D getScaledLogicWidth() const;
 
-    /** return a label alignment that shifts a text in the indicated direction
-    if the direction is not unique a centered alignement is returned
-    */
-    LabelAlignment getLabelAlignmentForDimension( sal_Int32 nDimensionIndex ) const;
-
     inline bool isSwapXAndY() const;
 
     bool isPercentY() const;
 
     double getBaseValueY() const;
+
+    inline bool maySkipPointsInRegressionCalculation() const;
 
 protected: //member
     ::com::sun::star::uno::Sequence<
@@ -174,6 +171,8 @@ protected: //member
     sal_Int32 m_nXResolution;
     sal_Int32 m_nYResolution;
     sal_Int32 m_nZResolution;
+
+    bool m_bMaySkipPointsInRegressionCalculation;
 };
 
 //describes wich axis of the drawinglayer scene or sreen axis are the normal axis
@@ -429,6 +428,10 @@ inline bool PlottingPositionHelper::isMathematicalOrientationZ() const
 inline bool PlottingPositionHelper::isSwapXAndY() const
 {
     return m_bSwapXAndY;
+}
+inline bool PlottingPositionHelper::maySkipPointsInRegressionCalculation() const
+{
+    return m_bMaySkipPointsInRegressionCalculation;
 }
 
 //.............................................................................
