@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MeanValueRegressionCurveCalculator.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:54:56 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:06:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,14 +37,9 @@
 #include "precompiled_chart2.hxx"
 #include "MeanValueRegressionCurveCalculator.hxx"
 #include "macros.hxx"
-#include "RegressionCalculationHelper.hxx"
 
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -55,11 +50,9 @@ namespace chart
 {
 
 MeanValueRegressionCurveCalculator::MeanValueRegressionCurveCalculator() :
-        m_fMeanValue( 0.0 ),
-        m_fCorrelationCoeffitient( 0.0 )
+        m_fMeanValue( 0.0 )
 {
     ::rtl::math::setNan( & m_fMeanValue );
-    ::rtl::math::setNan( & m_fCorrelationCoeffitient );
 }
 
 MeanValueRegressionCurveCalculator::~MeanValueRegressionCurveCalculator()
@@ -121,18 +114,36 @@ double SAL_CALL MeanValueRegressionCurveCalculator::getCurveValue( double /*x*/ 
     return m_fMeanValue;
 }
 
-double SAL_CALL MeanValueRegressionCurveCalculator::getCorrelationCoefficient()
-    throw (uno::RuntimeException)
+
+uno::Sequence< geometry::RealPoint2D > SAL_CALL MeanValueRegressionCurveCalculator::getCurveValues(
+    double min, double max, ::sal_Int32 nPointCount,
+    const uno::Reference< chart2::XScaling >& xScalingX,
+    const uno::Reference< chart2::XScaling >& xScalingY,
+    ::sal_Bool bMaySkipPointsInCalculation )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException)
 {
-    return m_fCorrelationCoeffitient;
+    if( bMaySkipPointsInCalculation )
+    {
+        // optimize result
+        uno::Sequence< geometry::RealPoint2D > aResult( 2 );
+        aResult[0].X = min;
+        aResult[0].Y = m_fMeanValue;
+        aResult[1].X = max;
+        aResult[1].Y = m_fMeanValue;
+
+        return aResult;
+    }
+    return RegressionCurveCalculator::getCurveValues( min, max, nPointCount, xScalingX, xScalingY, bMaySkipPointsInCalculation );
 }
 
-OUString SAL_CALL MeanValueRegressionCurveCalculator::getRepresentation()
-    throw (uno::RuntimeException)
+OUString MeanValueRegressionCurveCalculator::ImplGetRepresentation(
+    const uno::Reference< util::XNumberFormatter >& xNumFormatter,
+    ::sal_Int32 nNumberFormatKey ) const
 {
     OUStringBuffer aBuf( C2U( "f(x) = " ));
 
-    aBuf.append( NUMBER_TO_STR( m_fMeanValue ));
+    aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fMeanValue ));
 
     return aBuf.makeStringAndClear();
 }
