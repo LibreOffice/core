@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XRegressionCurveCalculator.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:04:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:43:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,10 @@
 
 #include <com/sun/star/uno/XInterface.idl>
 
-#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/util/XNumberFormatsSupplier.idl>
 #include <com/sun/star/lang/IllegalArgumentException.idl>
-#endif
+#include <com/sun/star/geometry/RealPoint2D.idl>
+#include <com/sun/star/chart2/XScaling.idl>
 
 module com
 {
@@ -85,6 +86,38 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
     double getCurveValue( [in] double x )
         raises( com::sun::star::lang::IllegalArgumentException );
 
+    /** calculate multiple points of a regression curve at once. Note
+        that this method may optimize the output by returning less
+        points, e.g. for a line you may get only two resulting points
+        instead of <member>nPointCount</member> points.  This is only
+        allowed if the parameter
+        <member>bMaySkipPointsInCalculation</member> is set to
+        </TRUE>.
+
+        <p>It is important that a renderer takes the scalings into
+        account. When one of these parameters is unknown, no
+        optimization must be done.</p>
+
+        @param bMaySkipPointsInCalculation determines whether it is
+               allowed to skip points in the calculation. When this
+               parameter is </TRUE> it is assumed that the underlying
+               coordinate system is cartesian.
+
+        @param xScalingX a scaling that is used for the values in
+               x-direction
+
+        @param xScalingY a scaling that is used for the values in
+               y-direction
+     */
+    sequence< com::sun::star::geometry::RealPoint2D > getCurveValues(
+        [in] double min,
+        [in] double max,
+        [in] long nPointCount,
+        [in] XScaling xScalingX,
+        [in] XScaling xScalingY,
+        [in] boolean bMaySkipPointsInCalculation )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
     /** Returns the value of the correlation coefficient for the given
         regression.  This value is often denoted as <it>r</it> or
         <it>R</it>.
@@ -109,6 +142,14 @@ interface XRegressionCurveCalculator : com::sun::star::uno::XInterface
             you might get <pre>"f(x) = 0.341 x + 1.45"</pre>.
      */
     string getRepresentation();
+
+    /** Returns a representation using the given numnber format for formatting all numbers
+        contained in the formula.
+
+        @see getRepresentation
+     */
+    string getFormattedRepresentation( [in] com::sun::star::util::XNumberFormatsSupplier xNumFmtSupplier,
+                                       [in] long nNumberFormatKey );
 };
 
 } ; // chart2
