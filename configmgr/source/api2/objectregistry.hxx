@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectregistry.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:16:14 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:07:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,6 @@ namespace configmgr
             ObjectRegistry() {}
             ~ObjectRegistry();
 
-            osl::Mutex& mutex() const { return m_aMutex; }
-
             Element findElement(Key const& aNode) const
             {
                 ObjectMap::const_iterator aFound = m_aMap.find(aNode);
@@ -101,7 +99,6 @@ namespace configmgr
                 }
             }
         private:
-            mutable osl::Mutex m_aMutex;
             ObjectMap m_aMap;
         };
 //-----------------------------------------------------------------------------
