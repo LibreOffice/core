@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MultipleChartConverters.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:51:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:51:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ AllDataLabelItemConverter::AllDataLabelItemConverter(
 
         m_aConverters.push_back( new ::chart::wrapper::DataPointItemConverter(
                                          xChartModel, xContext,
-                                         xObjectProperties, rItemPool, rDrawModel, NULL,
+                                         xObjectProperties, *aIt, rItemPool, rDrawModel, NULL,
                                          xNamedPropertyContainerFactory,
                                          GraphicPropertyItemConverter::FILLED_DATA_POINT,
                                          ::std::auto_ptr< awt::Size >( pRefSize.get() ? new awt::Size( *pRefSize ) : 0),
