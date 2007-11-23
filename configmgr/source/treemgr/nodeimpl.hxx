@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodeimpl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:31:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:44:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,66 +39,62 @@
 #ifndef CONFIGMGR_CONFIGURATION_ATTRIBUTES_HXX_
 #include "attributes.hxx"
 #endif
-#ifndef CONFIGMGR_NODEADDRESS_HXX
-#include "nodeaddress.hxx"
+#ifndef INCLUDED_SHARABLE_NODE_HXX
+#include "node.hxx"
 #endif
-
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/simplereferenceobject.hxx>
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
 
+#include "nodeaccess.hxx"
+
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-    namespace memory { class Accessor; }
-    namespace data { class NodeAccessRef; }
+    namespace data { class NodeAccess; }
     namespace view { class ViewStrategy; }
 //-----------------------------------------------------------------------------
     namespace configuration
     {
+    //-----------------------------------------------------------------------------
+    typedef unsigned int NodeOffset;
+
+    class TreeImpl;
+
+    class Name;
+
+    class NodeChange;
+    class NodeChanges;
+    class NodeChangesInformation;
+
 //-----------------------------------------------------------------------------
-        typedef unsigned int NodeOffset;
-
-        class TreeImpl;
-
-        class Name;
-
-        class NodeChange;
-        class NodeChanges;
-        class NodeChangesInformation;
-//-----------------------------------------------------------------------------
-
 // Specific types of nodes
 //-----------------------------------------------------------------------------
 
-        class NodeImpl;
-        typedef rtl::Reference<NodeImpl> NodeImplHolder;
+    class NodeImpl;
+    struct INodeHandler;
 
-        struct INodeHandler;
+    // Almost an interface, but derives from concrete OReference
+    class NodeImpl : public configmgr::SimpleReferenceObject
+    {
+        friend class view::ViewStrategy;
+            data::NodeAddress m_pNodeRef;
+    public:
+            NodeImpl(data::NodeAddress _pNodeRef)
+        : m_pNodeRef(_pNodeRef) {}
 
-        // Almost an interface, but derives from concrete OReference
-        class NodeImpl : public salhelper::SimpleReferenceObject
-        {
-            friend class view::ViewStrategy;
-            data::NodeAddress m_aNodeRef_;
-        public:
-            NodeImpl(data::NodeAddress const & _aNodeRef)
-            : m_aNodeRef_(_aNodeRef)
-            {}
+    public:
+        /// provide access to the address of the underlying node
+        data::NodeAddress getOriginalNodeAddress() const
+            { return m_pNodeRef; }
 
-        public:
-//          void directCommitChanges(memory::Accessor const& _aAccessor) { doCommitChanges(_aAccessor); }
-
-            /// provide access to the address of the underlying node
-            data::NodeAddress getOriginalNodeAddress() const
-            { return m_aNodeRef_; }
-
-            /// provide access to the data of the underlying node
-            data::NodeAccessRef getOriginalNodeAccessRef(memory::Accessor const * _pAccessor) const;
-        };
+        /// provide access to the data of the underlying node
+        data::NodeAccess getOriginalNodeAccess() const
+        { return data::NodeAccess( m_pNodeRef ); }
+    };
 
 //-----------------------------------------------------------------------------
         class ValueElementNodeImpl;
