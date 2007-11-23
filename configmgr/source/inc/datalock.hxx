@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datalock.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:46:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:18:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,31 +33,42 @@
  *
  ************************************************************************/
 
-#ifndef CONFIGMGR_DATALOCK_HXX
-#define CONFIGMGR_DATALOCK_HXX
+#ifndef CONFIGMGR_DATALOCK_HXX_
+#define CONFIGMGR_DATALOCK_HXX_
 
-namespace configmgr
-{
-// -----------------------------------------------------------------------------
-    namespace memory
+#include <osl/mutex.hxx>
+namespace configmgr {
+
+    class UnoApiLock
     {
-    // -------------------------------------------------------------------------
+        static osl::Mutex aCoreLock;
+    public:
+        static volatile oslInterlockedCount nHeld;
+        UnoApiLock()  { acquire(); }
+        ~UnoApiLock() { release(); }
 
-        /// class controlling access to a memory::Segment
-        struct DataLock
-        {
-            virtual void acquireReadAccess() = 0;
-            virtual void releaseReadAccess() = 0;
+        static osl::Mutex &getLock() { return aCoreLock; }
+        static void acquire() { aCoreLock.acquire(); nHeld++; }
+        static void release() { nHeld--; aCoreLock.release(); }
+        static bool isHeld() { return nHeld != 0; }
+    };
+    class UnoApiLockReleaser
+    {
+        oslInterlockedCount mnCount;
+    public:
+        UnoApiLockReleaser();
+        ~UnoApiLockReleaser();
+    };
+    class UnoApiLockClearable : public UnoApiLock
+    {
+        bool mbSet;
+    public:
+        UnoApiLockClearable() : mbSet(true)  { acquire(); }
+        ~UnoApiLockClearable() { clear(); }
+        void clear() { if (mbSet) { mbSet = false; release(); } }
+    };
+}
 
-            virtual void acquireWriteAccess() = 0;
-            virtual void releaseWriteAccess() = 0;
-        protected:
-            virtual ~DataLock() {}
-        };
-    // -------------------------------------------------------------------------
-    }
-// -----------------------------------------------------------------------------
-} // namespace configmgr
+using configmgr::UnoApiLock;
 
-#endif // CONFIGMGR_DATALOCK_HXX
-
+#endif // CONFIGMGR_DATALOCK_HXX_
