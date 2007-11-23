@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templateimpl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:34:41 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:47:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,8 @@
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/simplereferenceobject.hxx>
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 
 #ifndef INCLUDED_MAP
@@ -193,7 +193,7 @@ namespace configmgr
         // class SpecialTemplateProvider_Impl
         //---------------------------------------------------------------------
 
-        struct SpecialTemplateProvider_Impl : salhelper::SimpleReferenceObject
+        struct SpecialTemplateProvider_Impl : configmgr::SimpleReferenceObject
         {
             SpecialTemplateProvider_Impl();
 
@@ -207,13 +207,13 @@ namespace configmgr
         // class TemplateProvider_Impl
         //---------------------------------------------------------------------
 
-        struct TemplateProvider_Impl : salhelper::SimpleReferenceObject
+        struct TemplateProvider_Impl : configmgr::SimpleReferenceObject
         {
             typedef TemplateProvider::TemplateManagerRef TemplateManagerRef;
 
             TemplateProvider_Impl(TemplateManagerRef const & xProvider, RequestOptions const& aOptions);
 
-            data::TreeSegment instantiate(memory::Accessor const& _aSourceAccessor, TemplateHolder const& aTemplate);
+            data::TreeSegment instantiate(TemplateHolder const& aTemplate);
 
             TemplateHolder makeElementTemplateWithType(TemplateName const& _aNames, data::SetNodeAccess const& _aSet);
         private:
