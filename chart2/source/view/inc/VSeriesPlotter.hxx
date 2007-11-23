@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:56:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:11:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@ namespace com { namespace sun { namespace star {
     }
     namespace chart2 {
         class XColorScheme;
+        class XRegressionCurveCalculator;
     }
 }}}
 
@@ -301,6 +302,7 @@ public:
 
     void setDiagramReferenceSize( const ::com::sun::star::awt::Size & rDiagramRefSize );
 
+    void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );
     //better performance for big data
     void setCoordinateSystemResolution( const ::com::sun::star::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
 
@@ -308,6 +310,8 @@ public:
     double  getTransformedDepth() const;
 
     void    releaseShapes();
+
+    virtual void rearrangeLabelToAvoidOverlapIfRequested( const ::com::sun::star::awt::Size& rPageSize );
 
     //-------------------------------------------------------------------------
     //-------------------------------------------------------------------------
@@ -350,7 +354,8 @@ protected: //methods
             , const::com::sun::star:: uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget );
 
-    void createDataLabel( const ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+        createDataLabel( const ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes >& xTarget
                 , VDataSeries& rDataSeries
                 , sal_Int32 nPointIndex
@@ -399,9 +404,21 @@ protected: //methods
         , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::drawing::XShapes >& xTarget );
 
-    virtual void createRegressionCurvesShapes( const VDataSeries& rVDataSeries
+    virtual void createRegressionCurvesShapes( VDataSeries& rVDataSeries
         , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget );
+                ::com::sun::star::drawing::XShapes >& xTarget
+        , const ::com::sun::star::uno::Reference<
+                ::com::sun::star::drawing::XShapes >& xEquationTarget
+        , bool bMaySkipPointsInRegressionCalculation );
+
+    virtual void createRegressionCurveEquationShapes( const ::rtl::OUString & rEquationCID
+        , const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > & xEquationProperties
+        , const ::com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::XShapes >& xEquationTarget
+        , const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XRegressionCurveCalculator > & xRegressionCurveCalculator
+        , ::com::sun::star::awt::Point aDefaultPos );
 
     virtual void setMappedProperties(
           const ::com::sun::star::uno::Reference<
@@ -446,6 +463,7 @@ private: //member
     typedef std::map< sal_Int32 , PlottingPositionHelper* > tSecondaryPosHelperMap;
     mutable tSecondaryPosHelperMap   m_aSecondaryPosHelperMap;
     ::com::sun::star::awt::Size      m_aDiagramReferenceSize;
+    ::com::sun::star::awt::Size      m_aPageReferenceSize;
 };
 
 //.............................................................................
