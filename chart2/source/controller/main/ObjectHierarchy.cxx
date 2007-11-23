@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectHierarchy.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:56:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:55:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
+#include <com/sun/star/chart2/ErrorBarStyle.hpp>
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/awt/Key.hpp>
@@ -378,6 +379,17 @@ void ImplObjectHierarchy::createDataSeriesTree(
                             bool bIsAverageLine = RegressionCurveHelper::isMeanValueLine( aCurves[nCurveIdx] );
                             aSeriesSubContainer.push_back(
                                 ObjectIdentifier::createDataCurveCID( aSeriesParticle, nCurveIdx, bIsAverageLine ));
+                            Reference< beans::XPropertySet > xEqProp( aCurves[nCurveIdx]->getEquationProperties());
+                            bool bShowEq = false;
+                            bool bShowCoeff = false;
+                            if( xEqProp.is() &&
+                                ( (xEqProp->getPropertyValue( C2U("ShowEquation")) >>= bShowEq) ||
+                                  (xEqProp->getPropertyValue( C2U("ShowCorrelationCoefficient")) >>= bShowCoeff) ) &&
+                                ( bShowEq || bShowCoeff ) )
+                            {
+                                aSeriesSubContainer.push_back(
+                                    ObjectIdentifier::createDataCurveEquationCID( aSeriesParticle, nCurveIdx ));
+                            }
                         }
                         Reference< beans::XPropertySet > xSeriesProp( aSeriesSeq[nSeriesIdx], uno::UNO_QUERY );
                         Reference< beans::XPropertySet > xErrorBarProp;
@@ -385,9 +397,14 @@ void ImplObjectHierarchy::createDataSeriesTree(
                             (xSeriesProp->getPropertyValue( C2U("ErrorBarY")) >>= xErrorBarProp) &&
                             xErrorBarProp.is())
                         {
-                            aSeriesSubContainer.push_back(
-                                ObjectIdentifier::createClassifiedIdentifierWithParent(
-                                    OBJECTTYPE_DATA_ERRORS, OUString(), aSeriesParticle ));
+                            chart2::ErrorBarStyle eStyle = chart2::ErrorBarStyle_NONE;
+                            if( ( xErrorBarProp->getPropertyValue( C2U("ErrorBarStyle")) >>= eStyle ) &&
+                                ( eStyle != chart2::ErrorBarStyle_NONE ) )
+                            {
+                                aSeriesSubContainer.push_back(
+                                    ObjectIdentifier::createClassifiedIdentifierWithParent(
+                                        OBJECTTYPE_DATA_ERRORS, OUString(), aSeriesParticle ));
+                            }
                         }
                     }
 
