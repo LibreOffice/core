@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StopMessageDispatcherTest.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:56:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:09:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,13 @@
 
 package com.sun.star.lib.uno.bridges.javaremote;
 
-import com.sun.star.bridge.XBridge;
 import com.sun.star.bridge.XInstanceProvider;
 import com.sun.star.lang.DisposedException;
 import com.sun.star.lib.TestBed;
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XInterface;
 import complexlib.ComplexTestCase;
 
@@ -67,9 +67,9 @@ public final class StopMessageDispatcherTest extends ComplexTestCase {
             new Client().execute();
         }
 
-        protected boolean run(XBridge bridge) throws Throwable {
+        protected boolean run(XComponentContext context) throws Throwable {
             XTest test = (XTest) UnoRuntime.queryInterface(
-                XTest.class, bridge.getInstance("Test"));
+                XTest.class, getBridge(context).getInstance("Test"));
             Thread[] threads = new Thread[101];
             int n = Thread.enumerate(threads);
             if (n > 100) {
