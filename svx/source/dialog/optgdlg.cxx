@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-05 17:43:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:41:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,8 @@
 #include <svtools/ctloptions.hxx>
 #endif
 
+#include <svtools/langtab.hxx>
+
 #include <unotools/localfilehelper.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -150,9 +152,6 @@
 #endif
 #ifndef _SVX_TAB_AREA_HXX
 #include "cuitabarea.hxx"
-#endif
-#ifndef _SVX_LANGTAB_HXX //autogen
-#include "langtab.hxx"
 #endif
 #ifndef _SVX_DIALOGS_HRC
 #include <svx/dialogs.hrc>
@@ -1249,7 +1248,7 @@ OfaLanguagesTabPage::OfaLanguagesTabPage( Window* pParent, const SfxItemSet& rSe
     FreeResource();
 
     // initialize user interface language selection
-    SvxLanguageTable* pLanguageTable = new SvxLanguageTable;
+    SvtLanguageTable* pLanguageTable = new SvtLanguageTable;
     String aStr( pLanguageTable->GetString( LANGUAGE_SYSTEM ) );
     aUserInterfaceLB.InsertEntry(aStr);
     aUserInterfaceLB.SetEntryData(0, 0);
@@ -1745,6 +1744,8 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     sal_Bool bEnable = !pLangConfig->aLinguConfig.IsReadOnly( C2U("DefaultLocale") );
     aWesternLanguageFT.Enable( bEnable );
     aWesternLanguageLB.Enable( bEnable );
+
+
     aWesternLanguageFI.Show(!bEnable);
 
     // #i15812# controls for CJK/CTL already enabled/disabled from LocaleSettingHdl
@@ -1757,6 +1758,17 @@ void OfaLanguagesTabPage::Reset( const SfxItemSet& rSet )
     aComplexLanguageFT.Enable( bEnable );
     aComplexLanguageLB.Enable( bEnable );
 #endif
+    /*---------------------07-05-07--------------------------
+    check the box "For the current document only"
+    set the focus to the Western Language box
+    --------------------------------------------------------*/
+    const SfxPoolItem* pLang = 0;
+    if ( SFX_ITEM_SET == rSet.GetItemState(SID_SET_DOCUMENT_LANGUAGE, FALSE, &pLang ) &&( (const SfxBoolItem*)pLang)->GetValue() == TRUE )
+    {
+        aWesternLanguageLB.GrabFocus();
+        aCurrentDocCB.Enable(TRUE);
+        aCurrentDocCB.Check(TRUE);
+    }
 }
 /* -----------------------------20.04.01 15:09--------------------------------
 
