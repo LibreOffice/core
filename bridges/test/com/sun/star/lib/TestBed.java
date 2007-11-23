@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TestBed.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:53:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:06:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,9 +120,20 @@ public final class TestBed {
     }
 
     public static abstract class Client {
-        protected abstract boolean run(XBridge bridge) throws Throwable;
+        protected abstract boolean run(XComponentContext context)
+            throws Throwable;
 
-        protected final XBridge getBridge() throws com.sun.star.uno.Exception {
+        protected final String getConnectionDescription() {
+            return connectionDescription;
+        }
+
+        protected final String getProtocolDescription() {
+            return protocolDescription;
+        }
+
+        protected final XBridge getBridge(XComponentContext context)
+            throws com.sun.star.uno.Exception
+        {
             XConnector connector = Connector.create(context);
             XBridgeFactory factory = (XBridgeFactory) UnoRuntime.queryInterface(
                 XBridgeFactory.class,
@@ -140,8 +151,7 @@ public final class TestBed {
         protected final void execute() {
             int status = CLIENT_FAILED;
             try {
-                context = Bootstrap.createInitialComponentContext(null);
-                if (run(getBridge())) {
+                if (run(Bootstrap.createInitialComponentContext(null))) {
                     status = CLIENT_DONE;
                 }
             } catch (Throwable e) {
@@ -149,8 +159,6 @@ public final class TestBed {
             }
             System.exit(status);
         }
-
-        private XComponentContext context;
     }
 
     private static final class Server extends Thread {
