@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachedata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:25:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:35:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,17 +38,8 @@
 
 #include "cachedata.hxx"
 
-#ifndef CONFIGMGR_ACCESSOR_HXX
-#include "accessor.hxx"
-#endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
-#endif
-#ifndef CONFIGMGR_NODEADDRESS_HXX
-#include "nodeaddress.hxx"
-#endif
-#ifndef CONFIGMGR_TREEADDRESS_HXX
-#include "treeaddress.hxx"
+#ifndef INCLUDED_SHARABLE_NODE_HXX
+#include "node.hxx"
 #endif
 #ifndef CONFIGMGR_NODEACCESS_HXX
 #include "nodeaccess.hxx"
@@ -120,15 +111,14 @@ namespace configmgr
     };
 
 // -----------------------------------------------------------------------------
-    static inline CacheData::ModuleName implExtractModuleName(CacheData::Path const& aConfigPath)
+    static inline CacheLine::Name implExtractModuleName(CacheLine::Path const& aConfigPath)
     {
         return aConfigPath.getModuleName();
     }
 
 // -----------------------------------------------------------------------------
 
-    CacheData::CacheData(memory::HeapManager & _rHeapManager)
-    : m_rHeapManager(_rHeapManager)
+    CacheData::CacheData()
     {
     }
 // -----------------------------------------------------------------------------
@@ -139,13 +129,13 @@ namespace configmgr
     }
 // -----------------------------------------------------------------------------
 
-    CacheData::ModuleName CacheData::extractModuleName(Path const& _aPath)
+    CacheLine::Name CacheData::extractModuleName(CacheLine::Path const& _aPath)
     {
         return implExtractModuleName(_aPath);
     }
 // -----------------------------------------------------------------------------
     inline
-    CacheLineRef CacheData::internalGetModule(const ModuleName& _aModuleName ) const
+    CacheLineRef CacheData::internalGetModule(const CacheLine::Name& _aModuleName ) const
     {
         OSL_ASSERT(!_aModuleName.isEmpty());
 
@@ -155,14 +145,14 @@ namespace configmgr
     }
 // -----------------------------------------------------------------------------
     inline
-    CacheLineRef CacheData::internalGetModule(const Path&  _aPath) const
+    CacheLineRef CacheData::internalGetModule(const CacheLine::Path&  _aPath) const
     {
         return internalGetModule( implExtractModuleName(_aPath) );
     }
 // -----------------------------------------------------------------------------
 
     inline
-    void CacheData::internalAddModule(const ModuleName& _aName, const ModuleRef & _aModule)
+    void CacheData::internalAddModule(const CacheLine::Name& _aName, const CacheLineRef & _aModule)
     {
         //OSL_PRECOND(m_aModules.find(_aName) == m_aModules.end(), "ERROR: Module already present in CacheData");
 
@@ -173,50 +163,39 @@ namespace configmgr
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-    CacheLineRef CacheData::internalAttachModule(const memory::SegmentAddress & _aLocation, const ModuleName& _aName) CFG_UNO_THROW_RTE(  )
+    CacheLineRef CacheData::internalAttachModule(data::TreeAddress _aLocation, const CacheLine::Name& _aName) CFG_UNO_THROW_RTE(  )
     {
-        CacheLineRef aNewModule = doCreateAttachedModule(this->internalHeapManager(), _aLocation,_aName);
+        CacheLineRef aNewModule = doCreateAttachedModule(_aLocation,_aName);
 
         internalAddModule( _aName, aNewModule );
 
         return aNewModule;
     }
-// -----------------------------------------------------------------------------
 
-    /// creates a new data segment reference for the given path - creates if necessary
-    memory::Segment * CacheData::attachDataSegment(memory::SegmentAddress const & _aLocation, ModuleName const & _aModule)
+// -------------------------------------------------------------------------
+
+    void CacheData::attachModule(data::TreeAddress _aLocation, CacheLine::Name const & _aModule)
     {
-        CacheLineRef aModule = this->internalAttachModule(_aLocation,_aModule);
-
-        return aModule.is() ? aModule->getDataSegment() : NULL;
+        this->internalAttachModule(_aLocation,_aModule);
     }
 // -------------------------------------------------------------------------
 
-    CacheLineRef CacheData::doCreateAttachedModule(memory::HeapManager & _rHeapManager, const memory::SegmentAddress & _aLocation, const ModuleName& _aName) CFG_UNO_THROW_RTE(  )
+    CacheLineRef CacheData::doCreateAttachedModule(data::TreeAddress _aLocation, const CacheLine::Name& _aName) CFG_UNO_THROW_RTE(  )
     {
-        return CacheLine::createAttached( _aName, _rHeapManager, _aLocation );
+        return CacheLine::createAttached( _aName, _aLocation );
     }
 // -----------------------------------------------------------------------------
 
     /// gets a data segment reference for the given path if exists
-    memory::Segment * CacheData::getDataSegment(const ModuleName & _aModule)
+    data::TreeAddress CacheData::getTreeAddress(const CacheLine::Name & _aModule) const
     {
         CacheLineRef aModule = internalGetModule(_aModule);
 
-        return aModule.is() ? aModule->getDataSegment() : NULL;
+        return aModule.is() ? aModule->getTreeAddress() : NULL;
     }
 // -------------------------------------------------------------------------
 
-    /// gets a data segment reference for the given path if exists
-    memory::SegmentAddress CacheData::getDataSegmentAddress(const ModuleName & _aModule) const
-    {
-        CacheLineRef aModule = internalGetModule(_aModule);
-
-        return aModule.is() ? aModule->getDataSegmentAddress() : memory::SegmentAddress();
-    }
-// -------------------------------------------------------------------------
-
-    bool CacheData::hasModule(const ModuleName & _aModule) const
+    bool CacheData::hasModule(const CacheLine::Name & _aModule) const
     {
         CacheLineRef aModule = internalGetModule(_aModule);
 
@@ -224,27 +203,27 @@ namespace configmgr
     }
 // -------------------------------------------------------------------------
 
-    bool CacheData::hasModuleDefaults(memory::Accessor const & _aAccessor, const ModuleName & _aModule) const
+    bool CacheData::hasModuleDefaults(const CacheLine::Name & _aModule) const
     {
         CacheLineRef aModule = internalGetModule(_aModule);
 
-        return aModule.is() && !aModule->hasDefaults(_aAccessor);
+        return aModule.is() && !aModule->hasDefaults();
     }
 // -------------------------------------------------------------------------
 
-    data::TreeAddress CacheData::internalGetPartialTree(memory::Accessor const & _aAccessor, const Path& aComponentName ) const
+    data::TreeAddress CacheData::internalGetPartialTree(const CacheLine::Path& aComponentName ) const
     {
-        CacheLineRef xModule = internalGetModule(aComponentName);
+    CacheLineRef xModule = internalGetModule(aComponentName);
 
-        if ( !xModule.is() )
-            return data::TreeAddress();
+    if ( !xModule.is() )
+            return NULL;
 
-        data::TreeAddress pSubtree = xModule->getPartialTree(_aAccessor,aComponentName);
+        data::TreeAddress pSubtree = xModule->getPartialTree(aComponentName);
 
-        OSL_ENSURE( pSubtree.isNull() || xModule->clientReferences() != 0 ,
+        OSL_ENSURE( pSubtree == NULL || xModule->clientReferences() != 0 ,
                     "WARNING: returning subtree from module without clients\n" );
 #ifdef CFG_ENABLE_TRACING
-        if( pSubtree.is() && xModule->clientReferences() == 0)
+        if( pSubtree != NULL && xModule->clientReferences() == 0)
         {
             CFG_TRACE_WARNING("CacheData data: returning subtree %s from module without clients", OUSTRING2ASCII( aComponentName.toString() ) );
         }
@@ -253,7 +232,7 @@ namespace configmgr
         return pSubtree;
     }
 // -----------------------------------------------------------------------------
-    data::NodeAddress CacheData::internalGetNode(memory::Accessor const & _aAccessor, const Path& aComponentName ) const
+    data::NodeAddress CacheData::internalGetNode(const CacheLine::Path& aComponentName ) const
     {
         CacheLineRef xModule = internalGetModule(aComponentName);
 
@@ -263,12 +242,12 @@ namespace configmgr
         if ( xModule->isEmpty() )
             return data::NodeAddress();
 
-        data::NodeAddress pNode = xModule->getNode(_aAccessor,aComponentName);
+        data::NodeAddress pNode = xModule->getNode(aComponentName);
 
-        OSL_ENSURE( pNode.isNull() || xModule->clientReferences() != 0,
+        OSL_ENSURE( pNode == NULL || xModule->clientReferences() != 0,
                     "WARNING: returning node from module without clients\n" );
     #ifdef CFG_ENABLE_TRACING
-        if( pNode.is() && xModule->clientReferences() == 0)
+        if( pNode != NULL && xModule->clientReferences() == 0)
         {
             CFG_TRACE_WARNING("CacheData data: returning node %s from module without clients", OUSTRING2ASCII( aComponentName.toString() ) );
         }
@@ -278,43 +257,41 @@ namespace configmgr
     }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-    data::TreeAddress CacheData::acquireModule(ModuleName const & _aModule)
+    bool CacheData::acquireModule(CacheLine::Name const & _aModule)
     {
         CacheLineRef xModule = internalGetModule(_aModule);
 
-        CacheLineClientRef aClientRef(xModule);
-
-        data::TreeAddress aModuleAddr = xModule.is() ? xModule->getModuleRootAddress() : data::TreeAddress();
-
-        if (aModuleAddr.is())
+        if (xModule.is())
+        {
+            CacheLineClientRef aClientRef(xModule);
             aClientRef.keep();
+        }
 
-        return aModuleAddr;
+        return xModule.is();
     }
 // -----------------------------------------------------------------------------
-    data::NodeAddress CacheData::acquireNode(memory::Accessor const & _aAccessor, Path const& _aPath)
+    data::NodeAddress CacheData::acquireNode(CacheLine::Path const& _aPath)
     {
-        CacheLineClientRef aClientRef(internalGetModule(_aPath));
+    CacheLineClientRef aClientRef(internalGetModule(_aPath));
 
-        data::NodeAddress aNodeAddr = internalGetNode(_aAccessor,_aPath);
+        data::NodeAddress aNodeAddr = internalGetNode(_aPath);
 
-        if (sharable::Node const * pNode = data::NodeAccess::access(aNodeAddr,_aAccessor))
-        {
+        if (sharable::Node const * pNode = aNodeAddr)
+    {
             if (pNode->isValue())
                 aNodeAddr = data::NodeAddress(); // invalid: cannot acquire single value
-        }
+    }
         else
-            OSL_ASSERT( !aNodeAddr.is() );
+            OSL_ASSERT( aNodeAddr == NULL );
 
-        if (aNodeAddr.is())
+        if (aNodeAddr != NULL)
             aClientRef.keep();
 
         return aNodeAddr;
     }
 // -----------------------------------------------------------------------------
 
-    bool CacheData::insertDefaults( memory::UpdateAccessor& _aAccessToken,
-                                    backend::NodeInstance const & _aDefaultInstance) CFG_UNO_THROW_RTE(  )
+    bool CacheData::insertDefaults( backend::NodeInstance const & _aDefaultInstance) CFG_UNO_THROW_RTE(  )
     {
         OSL_PRECOND(_aDefaultInstance.data().get(), "insertDefaults: Data must not be NULL");
         OSL_PRECOND(_aDefaultInstance.root().isModuleRoot(), "insertDefaults: Default tree being added must be for module");
@@ -327,22 +304,22 @@ namespace configmgr
         if (!xModule.is()) return false;
 
         // make sure to keep the module alive
-        CacheLineClientRef( xModule ).keep();
+    CacheLineClientRef( xModule ).keep();
 
-        data::TreeAddress aResultTree = xModule->insertDefaults(_aAccessToken, _aDefaultInstance);
+    data::TreeAddress aResultTree = xModule->insertDefaults(_aDefaultInstance);
 
-        return aResultTree.is();
+    return aResultTree != NULL;
     }
 // -----------------------------------------------------------------------------
 
-    void CacheData::applyUpdate(memory::UpdateAccessor & _aAccessToken, backend::UpdateInstance & _anUpdate ) CFG_UNO_THROW_RTE(  )
+    void CacheData::applyUpdate( backend::UpdateInstance & _anUpdate ) CFG_UNO_THROW_RTE(  )
     {
         // request the subtree, atleast one level must exist!
-        data::NodeAddress aNodeAddr = internalGetNode(_aAccessToken.accessor(),_anUpdate.root().location());
+        data::NodeAddress aNodeAddr = internalGetNode(_anUpdate.root().location());
 
-        if (aNodeAddr.is())
+        if (aNodeAddr != NULL)
         {
-            applyUpdateToTree(*_anUpdate.data(),_aAccessToken,aNodeAddr);
+            applyUpdateToTree(*_anUpdate.data(),aNodeAddr);
         }
         else
         {
@@ -355,18 +332,18 @@ namespace configmgr
         }
     }
 // -----------------------------------------------------------------------------
-    CacheLine::RefCount CacheData::releaseModule( ModuleName const & _aModule, bool _bKeepDeadModule )
+    oslInterlockedCount CacheData::releaseModule( CacheLine::Name const & _aModule, bool _bKeepDeadModule )
     {
         CacheLineRef xModule = internalGetModule(_aModule);
 
-        const CacheLine::RefCount c_nErrorCount = -1;
+        const oslInterlockedCount c_nErrorCount = -1;
 
         OSL_ENSURE( xModule.is(), "ERROR: Releasing non-existent subtree");
         if ( !xModule.is()) return c_nErrorCount;
 
         OSL_ENSURE( xModule->clientReferences() > 0, "ERROR: Releasing non-referenced subtree");
 
-        CacheLine::RefCount nResult = xModule->clientRelease();
+        oslInterlockedCount nResult = xModule->clientRelease();
 
         if (nResult == 0 && !_bKeepDeadModule)
         {
@@ -376,43 +353,32 @@ namespace configmgr
     }
 
 // -----------------------------------------------------------------------------
-    data::TreeAddress CacheData::getTemplateTree( memory::Accessor const & _aAccessor, Path const& aTemplateName ) const
+    data::TreeAddress CacheData::getTemplateTree(CacheLine::Path const& aTemplateName ) const
     {
-        return internalGetPartialTree(_aAccessor,aTemplateName);
+        return internalGetPartialTree(aTemplateName);
     }
 // -----------------------------------------------------------------------------
-    data::NodeAddress CacheData::getNode(memory::Accessor const & _aAccessor, const Path& _rPath)
+    data::NodeAddress CacheData::getNode(const CacheLine::Path& _rPath)
     {
-        return internalGetNode(_aAccessor,_rPath);
+        return internalGetNode(_rPath);
     }
 // -----------------------------------------------------------------------------
-    bool CacheData::hasNode(memory::Accessor const & _aAccessor, const Path& _rPath) const
+    bool CacheData::hasNode(const CacheLine::Path& _rPath) const
     {
-        return internalGetNode(_aAccessor,_rPath).is();
+        return internalGetNode(_rPath) != NULL;
     }
-// -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 
-    /// gets a data segment reference for the given path - creates if necessary
-    memory::Segment * TemplateCacheData::createDataSegment(ModuleName const & _aModule)
-    {
-        CacheLineRef aModule = implNewCacheLine(_aModule);
-
-        return aModule.is() ? aModule->getDataSegment() : NULL;
-    }
-// -------------------------------------------------------------------------
-
-    data::TreeAddress TemplateCacheData::addTemplates(  memory::UpdateAccessor& _aUpdateToken,
-                                                        backend::ComponentData const & _aComponentInstance) CFG_UNO_THROW_RTE(  )
+    data::TreeAddress TemplateCacheData::addTemplates( backend::ComponentData const & _aComponentInstance) CFG_UNO_THROW_RTE(  )
     {
         OSL_PRECOND(_aComponentInstance.data.get(), "addTemplates: Data must not be NULL");
         // we should already have the module in cache !
-        ModuleName aModuleName ( _aComponentInstance.name);
+        CacheLine::Name aModuleName ( _aComponentInstance.name);
         CacheLineRef xModule = internalGetModule(aModuleName);
 
         OSL_ENSURE( xModule.is(), "ExtendedCacheData::addTemplates: No module to add the templates to - where did the data segment come from ?");
 
-        if (!xModule.is()) return data::TreeAddress();
+        if (!xModule.is()) return NULL;
 
         // make sure to keep the module alive
         CacheLineClientRef( xModule ).keep();
@@ -421,31 +387,27 @@ namespace configmgr
         static const OUString aDummyTemplateModule(RTL_CONSTASCII_USTRINGPARAM("cfg:Templates"));
         _aComponentInstance.data->makeSetNode(aDummyTemplateName,aDummyTemplateModule);
 
-        data::TreeAddress aResult = xModule->setComponentData(_aUpdateToken, _aComponentInstance, true);
+        data::TreeAddress aResult = xModule->setComponentData(_aComponentInstance, true);
 
-        OSL_ASSERT(aResult.is());
+        OSL_ASSERT(aResult != NULL);
 
-        return aResult;
+    return aResult;
     }
 // -----------------------------------------------------------------------------
 
-    CacheLineRef TemplateCacheData::doCreateAttachedModule(memory::HeapManager & _rHeapManager, const memory::SegmentAddress & _aLocation, const ModuleName& _aName) CFG_UNO_THROW_RTE(  )
+    CacheLineRef TemplateCacheData::doCreateAttachedModule(data::TreeAddress _aLocation, const CacheLine::Name& _aName) CFG_UNO_THROW_RTE(  )
     {
-        CacheLineRef aNewModule =
-            CacheLine::createAttached(_aName, _rHeapManager, _aLocation);
+        CacheLineRef aNewModule =  CacheLine::createAttached(_aName, _aLocation);
 
         return aNewModule.get();
     }
 // -----------------------------------------------------------------------------
 
-    CacheLineRef TemplateCacheData::implNewCacheLine(const ModuleName& _aModule) CFG_UNO_THROW_RTE(  )
+    void TemplateCacheData::createModule(const CacheLine::Name& _aModule) CFG_UNO_THROW_RTE()
     {
-        CacheLineRef aNewModule =
-            CacheLine::createNew(_aModule, this->internalHeapManager());
+        CacheLineRef aNewModule = CacheLine::createNew(_aModule);
 
         internalAddModule( _aModule, aNewModule.get() );
-
-        return aNewModule;
     }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
@@ -459,38 +421,25 @@ namespace configmgr
 
 // -----------------------------------------------------------------------------
 
-    CacheLineRef ExtendedCacheData::doCreateAttachedModule(memory::HeapManager & _rHeapManager, const memory::SegmentAddress & _aLocation, const ModuleName& _aName) CFG_UNO_THROW_RTE(  )
+    CacheLineRef ExtendedCacheData::doCreateAttachedModule(data::TreeAddress _aLocation, const CacheLine::Name& _aName) CFG_UNO_THROW_RTE(  )
     {
         ExtendedCacheLineRef aNewModule =
-            ExtendedCacheLine::createAttached(_aName, _rHeapManager, _aLocation);
+            ExtendedCacheLine::createAttached(_aName, _aLocation);
 
         return CacheLineRef( aNewModule.get() );
     }
 // -----------------------------------------------------------------------------
 
-    ExtendedCacheLineRef ExtendedCacheData::implNewCacheLine(const ModuleName& _aModule) CFG_UNO_THROW_RTE(  )
+    void ExtendedCacheData::createModule(const CacheLine::Name& _aModule) CFG_UNO_THROW_RTE()
     {
-        ExtendedCacheLineRef aNewModule =
-            ExtendedCacheLine::createNew(_aModule, this->internalHeapManager());
+        ExtendedCacheLineRef aNewModule = ExtendedCacheLine::createNew(_aModule);
 
         internalAddModule( _aModule, aNewModule.get() );
-
-        return aNewModule;
     }
 // -----------------------------------------------------------------------------
 
-    /// gets a data segment reference for the given path - creates if necessary
-    memory::Segment * ExtendedCacheData::createDataSegment(ModuleName const & _aModule)
-    {
-        ExtendedCacheLineRef aModule = implNewCacheLine(_aModule);
-
-        return aModule.is() ? aModule->getDataSegment() : NULL;
-    }
-// -------------------------------------------------------------------------
-
-    data::TreeAddress ExtendedCacheData::addComponentData(memory::UpdateAccessor& _aUpdateToken,
-                                                    backend::ComponentInstance const & _aComponentInstance,
-                                                    bool _bWithDefaults) CFG_UNO_THROW_RTE(  )
+    data::TreeAddress ExtendedCacheData::addComponentData(backend::ComponentInstance const & _aComponentInstance,
+                              bool _bWithDefaults) CFG_UNO_THROW_RTE(  )
     {
         OSL_PRECOND(_aComponentInstance.data().get(), "addComponentData: Data must not be NULL");
         // we should already have the module in cache !
@@ -499,17 +448,17 @@ namespace configmgr
 
         OSL_ENSURE( xModule.is(), "ExtendedCacheData::addComponentData: No module to add the subtree to - where did the data segment come from ?");
 
-        if (!xModule.is()) return data::TreeAddress();
+        if (!xModule.is()) return NULL;
 
         CacheLineClientRef aClientRef( xModule );
 
-        data::TreeAddress aResult = xModule->setComponentData(_aUpdateToken,_aComponentInstance.componentNodeData(), _bWithDefaults);
+        data::TreeAddress aResult = xModule->setComponentData(_aComponentInstance.componentNodeData(), _bWithDefaults);
 
-        OSL_ASSERT(aResult.is());
+        OSL_ASSERT(aResult != NULL);
 
-        if (aResult.is()) aClientRef.keep();
+    if (aResult != NULL) aClientRef.keep();
 
-        return aResult;
+    return aResult;
     }
 // -----------------------------------------------------------------------------
 
@@ -529,7 +478,7 @@ namespace configmgr
     }
 // -----------------------------------------------------------------------------
 
-    std::auto_ptr<SubtreeChange> ExtendedCacheData::releasePending(ModuleName const& _aModule)
+    std::auto_ptr<SubtreeChange> ExtendedCacheData::releasePending(CacheLine::Name const& _aModule)
     {
         ExtendedCacheLineRef xModule = implExtended(internalGetModule(_aModule));
 
@@ -548,12 +497,13 @@ namespace configmgr
     }
 // -----------------------------------------------------------------------------
 
-    bool ExtendedCacheData::hasPending(ModuleName const & _aModule)
+    bool ExtendedCacheData::hasPending(CacheLine::Name const & _aModule)
     {
         ExtendedCacheLineRef xModule = implExtended(internalGetModule(_aModule));
 
-        return xModule.is() && xModule->hasPending();
+    return xModule.is() && xModule->hasPending();
     }
+
 // -----------------------------------------------------------------------------
 
     void ExtendedCacheData::findPendingModules( PendingModuleList & _rPendingList )
