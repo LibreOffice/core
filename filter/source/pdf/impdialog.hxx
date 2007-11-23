@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:02:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 10:41:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -401,3 +401,5 @@ public:
 };
 
 #endif // IMPDIALOG_HXX
+
+
