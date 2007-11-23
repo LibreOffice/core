@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:34:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:42:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -686,16 +686,18 @@ sal_Bool OfaOptionsTreeListBox::Collapse( SvLBoxEntry* pParent )
     bForgetSelection    ( sal_False ),\
     bImageResized       ( sal_False ),\
     bInSelectHdl_Impl   ( false ),\
-    bIsFromExtensionManager( false )
+    bIsFromExtensionManager( false ), \
+    bIsForSetDocumentLanguage( false )
 
 // Ctor() with Frame -----------------------------------------------------
 using namespace ::com::sun::star;
-OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const Reference< XFrame >& _xFrame ) :
+OfaTreeOptionsDialog::OfaTreeOptionsDialog(
+    Window* pParent,
+    const Reference< XFrame >& _xFrame,
+    bool bActivateLastSelection ) :
 
     SfxModalDialog( pParent, SVX_RES( RID_OFADLG_OPTIONS_TREE ) ),
-
     INI_LIST()
-
 {
     FreeResource();
 
@@ -703,7 +705,8 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const Reference< XF
     Initialize( _xFrame );
     LoadExtensionOptions( rtl::OUString() );
     ResizeTreeLB();
-    ActivateLastSelection();
+    if (bActivateLastSelection)
+        ActivateLastSelection();
 }
 
 // Ctor() with ExtensionId -----------------------------------------------
@@ -1020,6 +1023,14 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
  * --------------------------------------------------*/
 void OfaTreeOptionsDialog::ActivatePage( sal_uInt16 nResId )
 {
+
+    bIsForSetDocumentLanguage = false;
+    if (nResId == OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE)
+    {
+        bIsForSetDocumentLanguage = true;
+        nResId = OFA_TP_LANGUAGES;
+    }
+
     DBG_ASSERT( !bIsFromExtensionManager, "OfaTreeOptionsDialog::ActivatePage(): call from extension manager" );
     if ( !pLastPageSaver )
         pLastPageSaver = new LastPageSaver;
@@ -1634,6 +1645,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                     SID_ATTR_LANGUAGE, SID_AUTOSPELL_MARKOFF,
                     SID_ATTR_CHAR_CJK_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE,
                     SID_OPT_LOCALE_CHANGED, SID_OPT_LOCALE_CHANGED,
+                    SID_SET_DOCUMENT_LANGUAGE, SID_SET_DOCUMENT_LANGUAGE,
                     0 );
 
             // fuer die Linguistik
@@ -1701,6 +1713,7 @@ SfxItemSet* OfaTreeOptionsDialog::CreateItemSet( sal_uInt16 nId )
                     pRet->Put(SfxBoolItem(SID_AUTOSPELL_MARKOFF, bVal));
                 }
             }
+            pRet->Put( SfxBoolItem( SID_SET_DOCUMENT_LANGUAGE, bIsForSetDocumentLanguage ) );
         }
         break;
         case SID_INET_DLG :
