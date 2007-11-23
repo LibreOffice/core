@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCurveModel.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:00:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:07:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,9 @@
 #include "LineProperties.hxx"
 #include "RegressionCurveHelper.hxx"
 #include "RegressionCalculationHelper.hxx"
+#include "RegressionEquation.hxx"
 #include "ContainerHelper.hxx"
+#include "CloneHelper.hxx"
 
 #ifndef CHART_PROPERTYHELPER_HXX
 #include "PropertyHelper.hxx"
@@ -75,6 +77,9 @@ static const OUString lcl_aImplementationName_Exponential(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.ExponentialRegressionCurve" ));
 static const OUString lcl_aImplementationName_Potential(
     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.chart2.PotentialRegressionCurve" ));
+
+static const OUString lcl_aServiceName(
+    RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.RegressionCurve" ));
 
 const uno::Sequence< Property > & lcl_GetPropertySequence()
 {
@@ -119,8 +124,14 @@ RegressionCurveModel::RegressionCurveModel(
         ::property::OPropertySet( m_aMutex ),
     m_xContext( xContext ),
     m_eRegressionCurveType( eCurveType ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex )),
+        m_xEquationProperties( new RegressionEquation( xContext ))
 {
+    // set 0 line width (default) hard, so that it is always written to XML,
+    // because the old implementation uses different defaults
+    setFastPropertyValue_NoBroadcast(
+        LineProperties::PROP_LINE_WIDTH, uno::makeAny( sal_Int32( 0 )));
+    ModifyListenerHelper::addListener( m_xEquationProperties, m_xModifyEventForwarder );
 }
 
 RegressionCurveModel::RegressionCurveModel( const RegressionCurveModel & rOther ) :
@@ -130,7 +141,10 @@ RegressionCurveModel::RegressionCurveModel( const RegressionCurveModel & rOther 
     m_xContext( rOther.m_xContext ),
     m_eRegressionCurveType( rOther.m_eRegressionCurveType ),
     m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
-{}
+{
+    m_xEquationProperties.set( CloneHelper::CreateRefClone< uno::Reference< beans::XPropertySet > >()( rOther.m_xEquationProperties ));
+    ModifyListenerHelper::addListener( m_xEquationProperties, m_xModifyEventForwarder );
+}
 
 RegressionCurveModel::~RegressionCurveModel()
 {}
@@ -141,6 +155,26 @@ uno::Reference< chart2::XRegressionCurveCalculator > SAL_CALL
     throw (uno::RuntimeException)
 {
     return RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( getServiceName());
+}
+
+uno::Reference< beans::XPropertySet > SAL_CALL RegressionCurveModel::getEquationProperties()
+    throw (uno::RuntimeException)
+{
+    return m_xEquationProperties;
+}
+
+void SAL_CALL RegressionCurveModel::setEquationProperties( const uno::Reference< beans::XPropertySet >& xEquationProperties )
+    throw (uno::RuntimeException)
+{
+    if( xEquationProperties.is())
+    {
+        if( m_xEquationProperties.is())
+            ModifyListenerHelper::removeListener( m_xEquationProperties, m_xModifyEventForwarder );
+
+        m_xEquationProperties.set( xEquationProperties );
+        ModifyListenerHelper::addListener( m_xEquationProperties, m_xModifyEventForwarder );
+        fireModifyEvent();
+    }
 }
 
 // ____ XServiceName ____
@@ -296,7 +330,7 @@ MeanValueRegressionCurve::~MeanValueRegressionCurve()
 uno::Sequence< ::rtl::OUString > MeanValueRegressionCurve::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.RegressionCurve" );
+    aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = C2U( "com.sun.star.chart2.MeanValueRegressionCurve" );
     return aServices;
 }
@@ -324,7 +358,7 @@ LinearRegressionCurve::~LinearRegressionCurve()
 uno::Sequence< ::rtl::OUString > LinearRegressionCurve::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.RegressionCurve" );
+    aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = C2U( "com.sun.star.chart2.LinearRegressionCurve" );
     return aServices;
 }
@@ -352,7 +386,7 @@ LogarithmicRegressionCurve::~LogarithmicRegressionCurve()
 uno::Sequence< ::rtl::OUString > LogarithmicRegressionCurve::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.RegressionCurve" );
+    aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = C2U( "com.sun.star.chart2.LogarithmicRegressionCurve" );
     return aServices;
 }
@@ -380,7 +414,7 @@ ExponentialRegressionCurve::~ExponentialRegressionCurve()
 uno::Sequence< ::rtl::OUString > ExponentialRegressionCurve::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.RegressionCurve" );
+    aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = C2U( "com.sun.star.chart2.ExponentialRegressionCurve" );
     return aServices;
 }
@@ -408,7 +442,7 @@ PotentialRegressionCurve::~PotentialRegressionCurve()
 uno::Sequence< ::rtl::OUString > PotentialRegressionCurve::getSupportedServiceNames_Static()
 {
     uno::Sequence< ::rtl::OUString > aServices( 2 );
-    aServices[ 0 ] = C2U( "com.sun.star.chart2.RegressionCurve" );
+    aServices[ 0 ] = lcl_aServiceName;
     aServices[ 1 ] = C2U( "com.sun.star.chart2.PotentialRegressionCurve" );
     return aServices;
 }
