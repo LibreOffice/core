@@ -4,9 +4,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:30:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:45:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ namespace configmgr
 view::ViewTreeAccess Tree::getView() const
 {
     OSL_ENSURE(!isEmpty(),"Accessing view for tree: Tree must not be nil");
-    return view::ViewTreeAccess(this->getDataAccessor(),*m_ref);
+    return view::ViewTreeAccess(*m_ref);
 }
 //-----------------------------------------------------------------------------
 // class TreeImplHelper (declared in treeimpl.hxx)
@@ -214,7 +214,7 @@ namespace
 
         if (TreeImpl* pTree = anEntry.tree())
         {
-            Tree aTree( anEntry.accessor(), pTree );
+            Tree aTree( pTree );
             NodeRef aTreeRoot = aTree.getRootNode();
 
             OSL_ASSERT( Result(NodeVisitor::DONE) == SetNodeVisitor::DONE );
@@ -304,7 +304,7 @@ namespace
 
         if (TreeImpl* pTree = anEntry.tree())
         {
-            Tree aTree( anEntry.accessor(), pTree );
+            Tree aTree( pTree );
 
             node::Attributes aElementAttributes = aTree.getAttributes(aTree.getRootNode());
 
@@ -801,19 +801,16 @@ NodeOffset TreeRef::getContainedInnerNodeCount() const
 // class Tree
 //-----------------------------------------------------------------------------
 
-Tree::Tree(data::Accessor const& _accessor, TreeImpl* pImpl)
-: m_accessor(_accessor)
-, m_ref(pImpl)
+Tree::Tree(TreeImpl* pImpl)
+: m_ref(pImpl)
 {
 }
-//-----------------------------------------------------------------------------
 
-// just DTRT
-Tree::Tree(data::Accessor const& _accessor, TreeRef const& _ref)
-: m_accessor(_accessor)
-, m_ref(_ref)
+Tree::Tree(TreeRef const& _ref)
+: m_ref(_ref)
 {
 }
+
 //-----------------------------------------------------------------------------
 
 void TreeRef::disposeData()
@@ -1269,7 +1266,7 @@ TreeRef TreeRef::getContextTree() const
 
 Tree Tree::getContextTree() const
 {
-    return Tree(m_accessor, m_ref.getContextTree());
+    return Tree(m_ref.getContextTree());
 }
 //-----------------------------------------------------------------------------
 
@@ -1412,19 +1409,6 @@ NodeVisitor::Result Tree::dispatchToChildren(NodeRef const& aNode, NodeVisitor& 
 
     return aRet;
 }
-//-----------------------------------------------------------------------------
-
-void Tree::rebind(data::Accessor const& _aAccessor)
-{
-    m_accessor = _aAccessor;
-}
-//-----------------------------------------------------------------------------
-
-void Tree::unbind()
-{
-    m_accessor.clear();
-}
-//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // hashing any pointer
@@ -1566,13 +1550,13 @@ bool SubNodeID::isEmpty() const
 }
 //-----------------------------------------------------------------------------
 
-bool SubNodeID::isValidNode(data::Accessor const& _accessor) const
+bool SubNodeID::isValidNode() const
 {
     if (!m_aParentID.isValidNode()) return false;
 
     OSL_ENSURE(!m_sNodeName.isEmpty(),"Invalid subnode ID: Missing Name");
 
-    Tree aCheck( _accessor, TreeImplHelper::tree(m_aParentID) );
+    Tree aCheck( TreeImplHelper::tree(m_aParentID) );
     return aCheck.hasChild( TreeImplHelper::makeNode(m_aParentID),m_sNodeName );
 }
 //-----------------------------------------------------------------------------
@@ -1735,7 +1719,7 @@ bool findInnerChildOrAvailableElement(Tree& aTree, NodeRef& aNode, Name const& a
         ElementRef aElement = aTree.getAvailableElement(aNode,aName);
         if (aElement.isValid())
         {
-            aTree = aElement.getElementTree(aTree.getDataAccessor()).getTree();
+            aTree = aElement.getElementTree().getTree();
             aNode = aTree.getRootNode();
             return true;
         }
@@ -1767,7 +1751,7 @@ AnyNodeRef getChildOrElement(Tree& aTree, NodeRef const& aParentNode, Name const
         ElementRef aElement = aTree.getElement(aParentNode,aName);
         if (aElement.isValid())
         {
-            aTree = aElement.getElementTree(aTree.getDataAccessor()).getTree();
+            aTree = aElement.getElementTree().getTree();
             return AnyNodeRef(aTree.getRootNode());
         }
     }
@@ -1811,7 +1795,7 @@ bool findElement(Tree& aTree, NodeRef& aNode, Path::Component const& aName)
 
     if (!aElement.isValid()) return false;
 
-    Tree aFoundTree = aElement.getElementTree(aTree.getDataAccessor()).getTree();
+    Tree aFoundTree = aElement.getElementTree().getTree();
 
     OSL_ENSURE(matches(aFoundTree.getRootName(),aName), "Element found, but type prefix does not match - failing");
     if ( !matches(aFoundTree.getRootName(),aName) ) return false;
@@ -1945,13 +1929,13 @@ void getAllContainedNodes(Tree const& aTree, NodeIDList& aList)
 }
 //-----------------------------------------------------------------------------
 
-void getAllChildrenHelper(data::Accessor const& _aAccessor, NodeID const& aNode, SubNodeIDList& aList)
+void getAllChildrenHelper(NodeID const& aNode, SubNodeIDList& aList)
 {
     aList.clear();
 
     if (TreeImpl* pTreeImpl = TreeImplHelper::tree(aNode))
     {
-        view::ViewTreeAccess aView(_aAccessor, *pTreeImpl);
+        view::ViewTreeAccess aView(*pTreeImpl);
 
         if (NodeOffset const nParent = TreeImplHelper::offset(aNode))
         {
@@ -2084,25 +2068,6 @@ UnoAny getSimpleElementValue(Tree const& aTree, NodeRef const& aNode)
     view::ViewTreeAccess aView = aTree.getView();
 
     return aView.getValue(aView.toValueNode(aNode));
-}
-
-//-----------------------------------------------------------------------------
-
-osl::Mutex& getRootLock(TreeRef const& aTree)
-{
-    TreeImpl* pImpl = TreeImplHelper::impl(aTree);
-    OSL_PRECOND( pImpl, "ERROR: Configuration: Tree locking requires a non-NULL Tree");
-
-    return pImpl->getRootLock();
-}
-//-----------------------------------------------------------------------------
-
-memory::Segment const * getRootSegment(TreeRef const& aTree)
-{
-    TreeImpl* pImpl = TreeImplHelper::impl(aTree);
-    OSL_PRECOND( pImpl, "ERROR: Configuration: Tree locking requires a non-NULL Tree");
-
-    return pImpl ? pImpl->getRootSegment() : NULL;
 }
 
 //-----------------------------------------------------------------------------
