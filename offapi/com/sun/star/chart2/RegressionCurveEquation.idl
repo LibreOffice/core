@@ -1,0 +1,73 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: RegressionCurveEquation.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:43:12 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef com_sun_star_chart2_RegressionCurveEquation_idl
+#define com_sun_star_chart2_RegressionCurveEquation_idl
+
+#include <com/sun/star/beans/PropertySet.idl>
+#include <com/sun/star/drawing/LineProperties.idl>
+#include <com/sun/star/drawing/FillProperties.idl>
+#include <com/sun/star/style/CharacterProperties.idl>
+
+module com
+{
+module sun
+{
+module star
+{
+module chart2
+{
+
+service RegressionCurveEquation
+{
+    service       ::com::sun::star::beans::PropertySet;
+    service       ::com::sun::star::drawing::FillProperties;
+    service       ::com::sun::star::drawing::LineProperties;
+    service       ::com::sun::star::style::CharacterProperties;
+
+    [property]             boolean                                     ShowEquation;
+    [property]             boolean                                     ShowCorrelationCoefficient;
+
+    [property, maybevoid]  ::com::sun::star::chart2::RelativePosition  RelativePosition;
+    [property, maybevoid]  ::com::sun::star::awt::Size                 ReferencePageSize;
+
+    [property]             long                                        NumberFormat;
+};
+
+} ; // chart2
+} ; // com
+} ; // sun
+} ; // star
+
+#endif
