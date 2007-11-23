@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cacheaccess.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:24:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:34:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,6 @@
 
 #include "cacheaccess.hxx"
 
-#ifndef CONFIGMGR_ACCESSOR_HXX
-#include "accessor.hxx"
-#endif
-#ifndef CONFIGMGR_NODEADDRESS_HXX
-#include "nodeaddress.hxx"
-#endif
 #ifndef CONFIGMGR_NODEACCESS_HXX
 #include "nodeaccess.hxx"
 #endif
@@ -62,11 +56,8 @@ namespace configmgr
 
 // -------------------------------------------------------------------------
 
-CacheClientAccess::CacheClientAccess(memory::HeapManager & _rHeapManager,
-                                     ConfigChangeBroadcastHelper *  _pBroadcastHelper)
-: m_aMutex()
-, m_aData(_rHeapManager)
-, m_pBroadcastHelper( _pBroadcastHelper )
+CacheClientAccess::CacheClientAccess(ConfigChangeBroadcastHelper *  _pBroadcastHelper)
+: m_pBroadcastHelper( _pBroadcastHelper )
 {
 }
 // -------------------------------------------------------------------------
@@ -79,65 +70,37 @@ CacheClientAccess::~CacheClientAccess()
 
 ConfigChangeBroadcastHelper *  CacheClientAccess::releaseBroadcaster()
 {
-    osl::MutexGuard aGuard(m_aMutex);
     ConfigChangeBroadcastHelper * pRet = m_pBroadcastHelper;
     m_pBroadcastHelper = NULL;
     return pRet;
 }
+
 // -------------------------------------------------------------------------
 
-/// gets a data segment reference for the given path - creates if necessary
-memory::Segment * CacheLoadingAccess::createNewDataSegment(ModuleName const & _aModule)
+bool CacheClientAccess::hasModule(const CacheLine::Path& _aLocation)
 {
-    osl::MutexGuard aGuard( this->m_aMutex );
-
-    return this->m_aData.createDataSegment(_aModule);
-}
-// -------------------------------------------------------------------------
-
-/// gets a data segment reference for the given path - creates if necessary
-memory::Segment * CacheClientAccess::attachDataSegment(const memory::SegmentAddress & _aSegment, const Path& _aLocation)
-{
-    osl::MutexGuard aGuard( this->m_aMutex );
-
-    return this->m_aData.attachDataSegment(_aSegment,_aLocation.getModuleName());
-}
-// -------------------------------------------------------------------------
-
-/// gets a data segment reference for the given path if exists
-memory::Segment * CacheClientAccess::getDataSegment(const Path& _aLocation)
-{
-    osl::MutexGuard aGuard( this->m_aMutex );
-
-    return this->m_aData.getDataSegment(_aLocation.getModuleName());
-}
-// -------------------------------------------------------------------------
-
-bool CacheClientAccess::hasModule(const Path& _aLocation)
-{
-    osl::MutexGuard aGuard( this->m_aMutex );
-
     return this->m_aData.hasModule(_aLocation.getModuleName());
 }
 // -------------------------------------------------------------------------
 
-bool CacheClientAccess::hasModuleDefaults(memory::Accessor const& _aAccessor, Path const& _aLocation)
+bool CacheClientAccess::hasModuleDefaults(CacheLine::Path const& _aLocation)
 {
-    osl::MutexGuard aGuard( this->m_aMutex );
-
-    return this->m_aData.hasModuleDefaults(_aAccessor, _aLocation.getModuleName());
+    return this->m_aData.hasModuleDefaults(_aLocation.getModuleName());
+}
+// -------------------------------------------------------------------------
+void CacheClientAccess::attachModule(data::TreeAddress _aLocation, CacheLine::Name const & _aModule)
+{
+    this->m_aData.attachModule(_aLocation, _aModule);
 }
 // -------------------------------------------------------------------------
 
-data::NodeAddress CacheClientAccess::acquireNode(memory::Accessor const& _aAccessor, Path const& rLocation )
+data::NodeAddress CacheClientAccess::acquireNode(CacheLine::Path const& rLocation )
 {
-    osl::MutexGuard aGuard( this->m_aMutex );
-
     CFG_TRACE_INFO("CacheClientAccess: Requesting data for path '%s'", OUSTRING2ASCII(rLocation.toString()) );
 
-    data::NodeAddress aResult = this->m_aData.acquireNode(_aAccessor,rLocation);
+    data::NodeAddress aResult = this->m_aData.acquireNode(rLocation);
 
-    if (aResult.is())
+    if (aResult != NULL)
     {
         CFG_TRACE_INFO_NI("- Data is available - returning Subtree");
     }
@@ -148,35 +111,29 @@ data::NodeAddress CacheClientAccess::acquireNode(memory::Accessor const& _aAcces
 }
 // -------------------------------------------------------------------------
 
-CacheLine::RefCount CacheClientAccess::releaseNode( Path const& rLocation )
+oslInterlockedCount CacheClientAccess::releaseNode( CacheLine::Path const& rLocation )
 {
-    osl::MutexGuard aGuard( this->m_aMutex );
-
     CFG_TRACE_INFO("Tree Info: Releasing subtree data for path '%s'", OUSTRING2ASCII(rLocation.toString()) );
 
-    Module::RefCount nRet = this->m_aData.releaseModule(rLocation.getModuleName(),false);
+    oslInterlockedCount nRet = this->m_aData.releaseModule(rLocation.getModuleName(),false);
 
     return nRet;
 }
 // -----------------------------------------------------------------------------
 
-void CacheClientAccess::applyUpdate(memory::UpdateAccessor& _aUpdateToken,  backend::UpdateInstance & _aUpdate) CFG_UNO_THROW_RTE( )
+void CacheClientAccess::applyUpdate(backend::UpdateInstance & _aUpdate) CFG_UNO_THROW_RTE( )
 {
-    osl::MutexGuard aGuard( this->m_aMutex ); // needed to protect the map access in the Tree
-
     CFG_TRACE_INFO("CacheClientAccess: Merging changes into subtree '%s'", OUSTRING2ASCII(_aUpdate.root().toString()) );
 
-    this->m_aData.applyUpdate(_aUpdateToken, _aUpdate );
+    this->m_aData.applyUpdate(_aUpdate );
 }
 
 // -----------------------------------------------------------------------------
-data::NodeAddress CacheClientAccess::findInnerNode( data::Accessor const& _aAccess, Path const& aComponentName )
+data::NodeAddress CacheClientAccess::findInnerNode( CacheLine::Path const& aComponentName )
 {
-    osl::MutexGuard aGuard( this->m_aMutex ); // needed to protect the map access in the Tree
+    data::NodeAddress aNode = this->m_aData.getNode(aComponentName);
 
-    data::NodeAddress aNode = this->m_aData.getNode(_aAccess, aComponentName);
-
-    if (aNode.is() && data::NodeAccessRef(&_aAccess,aNode).data().isValue() )
+    if (aNode != NULL && data::NodeAccess(aNode)->isValue() )
         aNode = data::NodeAddress();
 
     return aNode;
@@ -184,22 +141,17 @@ data::NodeAddress CacheClientAccess::findInnerNode( data::Accessor const& _aAcce
 
 // -------------------------------------------------------------------------
 
-bool CacheClientAccess::insertDefaults( memory::UpdateAccessor& _aAccessToken,
-                                        backend::NodeInstance const & _aDefaultData ) CFG_UNO_THROW_RTE(  )
+bool CacheClientAccess::insertDefaults( backend::NodeInstance const & _aDefaultData ) CFG_UNO_THROW_RTE(  )
 {
-    osl::MutexGuard aGuard( this->m_aMutex );
-
     CFG_TRACE_INFO("Tree Info: Adding default data for path '%s'", OUSTRING2ASCII(_aDefaultData.root().toString()) );
 
-    return this->m_aData.insertDefaults(_aAccessToken, _aDefaultData);
+    return this->m_aData.insertDefaults(_aDefaultData);
 }
 // -------------------------------------------------------------------------
 
 bool CacheClientAccess::isEmpty()
 {
-    osl::MutexGuard aGuard( this->m_aMutex );
-
-    Data::ModuleList& rModules = this->m_aData.accessModuleList();
+    CacheData::ModuleList& rModules = this->m_aData.accessModuleList();
 
     bool bRet = rModules.empty();
 
@@ -210,10 +162,8 @@ bool CacheClientAccess::isEmpty()
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 
-CacheLoadingAccess::CacheLoadingAccess(memory::HeapManager & _rHeapManager)
-: m_aMutex()
-, m_aData(_rHeapManager)
-, m_aDeadModules()
+CacheLoadingAccess::CacheLoadingAccess()
+: m_aDeadModules()
 {
 }
 // -------------------------------------------------------------------------
@@ -221,70 +171,49 @@ CacheLoadingAccess::CacheLoadingAccess(memory::HeapManager & _rHeapManager)
 CacheLoadingAccess::~CacheLoadingAccess()
 {
 }
+
 // -------------------------------------------------------------------------
 
-/// gets a data segment reference for the given path - creates if necessary
-memory::Segment * CacheLoadingAccess::attachDataSegment(const memory::SegmentAddress & _aSegment, ModuleName const & _aModule)
+/// gets a tree reference for the given path if exists
+data::TreeAddress CacheLoadingAccess::getTreeAddress(CacheLine::Name const & _aModule)
 {
-    osl::MutexGuard aGuard( this->m_aMutex );
-
-    return this->m_aData.attachDataSegment(_aSegment,_aModule);
+    return this->m_aData.getTreeAddress(_aModule);
 }
 // -------------------------------------------------------------------------
-
-/// gets a data segment reference for the given path if exists
-memory::Segment * CacheLoadingAccess::getDataSegment(ModuleName const & _aModule)
+void CacheLoadingAccess::createModule(CacheLine::Name const & _aModule)
 {
-    osl::MutexGuard aGuard( this->m_aMutex );
-
-    return this->m_aData.getDataSegment(_aModule);
+    this->m_aData.createModule(_aModule);
 }
 // -------------------------------------------------------------------------
-
-/// gets a data segment reference for the given path if exists
-memory::SegmentAddress CacheLoadingAccess::getDataSegmentAddress(ModuleName const & _aModule)
+bool CacheLoadingAccess::hasModule(CacheLine::Name const & _aModule)
 {
-    osl::MutexGuard aGuard( this->m_aMutex );
-
-    return this->m_aData.getDataSegmentAddress(_aModule);
-}
-// -------------------------------------------------------------------------
-
-bool CacheLoadingAccess::hasModule(ModuleName const & _aModule)
-{
-    osl::MutexGuard aGuard( this->m_aMutex );
-
     return this->m_aData.hasModule(_aModule);
 }
 // -------------------------------------------------------------------------
 
-data::TreeAddress CacheLoadingAccess::acquireModule(ModuleName const & _aModule )
+bool CacheLoadingAccess::acquireModule(CacheLine::Name const & _aModule)
 {
-    osl::MutexGuard aGuard( this->m_aMutex );
+    CFG_TRACE_INFO("Tree Info: Requesting data for module '%s'", OUSTRING2ASCII(_aModule.toString()));
 
-    CFG_TRACE_INFO("Tree Info: Requesting data for module '%s'", OUSTRING2ASCII(_aModule.toString()) );
-
-    data::TreeAddress aResult = this->m_aData.acquireModule(_aModule);
-
-    if (aResult.is())
+    if (this->m_aData.acquireModule(_aModule))
     {
-        m_aDeadModules.erase( _aModule );
-        CFG_TRACE_INFO_NI("- Data is available - returning Subtree");
+    m_aDeadModules.erase( _aModule );
+    CFG_TRACE_INFO_NI("- Data is available - returning Subtree");
+    return true;
     }
     else
-        CFG_TRACE_INFO_NI("- Data is not available - returning NULL");
-
-    return aResult;
+    {
+    CFG_TRACE_INFO_NI("- Data is not available - returning NULL");
+    return false;
+    }
 }
 // -------------------------------------------------------------------------
 
-CacheLine::RefCount CacheLoadingAccess::releaseModule( ModuleName const & _aModule )
+oslInterlockedCount CacheLoadingAccess::releaseModule( CacheLine::Name const & _aModule )
 {
-    osl::MutexGuard aGuard( this->m_aMutex );
-
     CFG_TRACE_INFO("Tree Info: Releasing data for module '%s'", OUSTRING2ASCII(_aModule.toString()) );
 
-    Module::RefCount nRet = this->m_aData.releaseModule(_aModule,true); // keep
+    oslInterlockedCount nRet = this->m_aData.releaseModule(_aModule,true); // keep
     if (nRet == 0)
     {
         m_aDeadModules[ _aModule ] = TimeStamp::getCurrentTime();
@@ -295,21 +224,17 @@ CacheLine::RefCount CacheLoadingAccess::releaseModule( ModuleName const & _aModu
 }
 // -----------------------------------------------------------------------------
 
-void CacheLoadingAccess::applyUpdate(memory::UpdateAccessor& _aUpdateToken,  backend::UpdateInstance & _aUpdate) CFG_UNO_THROW_RTE( )
+void CacheLoadingAccess::applyUpdate(backend::UpdateInstance & _aUpdate) CFG_UNO_THROW_RTE( )
 {
-    osl::MutexGuard aGuard( this->m_aMutex ); // needed to protect the map access in the Tree
-
     CFG_TRACE_INFO("CacheLoadingAccess: Merging changes into subtree '%s'", OUSTRING2ASCII(_aUpdate.root().toString()) );
 
-    this->m_aData.applyUpdate(_aUpdateToken, _aUpdate);
+    this->m_aData.applyUpdate(_aUpdate);
 }
 
 // -----------------------------------------------------------------------------
-data::NodeAddress CacheLoadingAccess::findNode( data::Accessor const& _aAccess, Path const& aComponentName )
+data::NodeAddress CacheLoadingAccess::findNode( CacheLine::Path const& aComponentName )
 {
-    osl::MutexGuard aGuard( this->m_aMutex ); // needed to protect the map access in the Tree
-
-    data::NodeAddress aNode = this->m_aData.getNode(_aAccess, aComponentName);
+    data::NodeAddress aNode = this->m_aData.getNode(aComponentName);
 
     return aNode;
 }
@@ -318,9 +243,7 @@ data::NodeAddress CacheLoadingAccess::findNode( data::Accessor const& _aAccess, 
 
 bool CacheLoadingAccess::isEmpty()
 {
-    osl::MutexGuard aGuard( this->m_aMutex );
-
-    Data::ModuleList& rModules = this->m_aData.accessModuleList();
+    ExtendedCacheData::ModuleList& rModules = this->m_aData.accessModuleList();
 
     bool bRet = rModules.empty();
 
@@ -331,18 +254,16 @@ bool CacheLoadingAccess::isEmpty()
 }
 // -------------------------------------------------------------------------
 
-data::TreeAddress CacheLoadingAccess::addComponentData( memory::UpdateAccessor& _aAccessToken,
-                                                        backend::ComponentInstance const & _aComponentInstance,
+data::TreeAddress CacheLoadingAccess::addComponentData( backend::ComponentInstance const & _aComponentInstance,
                                                         bool _bIncludesDefaults
                                                        ) CFG_UNO_THROW_RTE()
 {
-    osl::MutexGuard aGuard( this->m_aMutex );
     CFG_TRACE_INFO("CacheLoadingAccess: Adding component data for module '%s' : %s",
                     OUSTRING2ASCII(_aComponentInstance.component().toString()),
                     _bIncludesDefaults ? "Data includes defaults." : "Data does not include defaults." );
 
-    data::TreeAddress aResult = this->m_aData.addComponentData(_aAccessToken, _aComponentInstance, _bIncludesDefaults);
-    if (aResult.is())
+    data::TreeAddress aResult = this->m_aData.addComponentData(_aComponentInstance, _bIncludesDefaults);
+    if (aResult != NULL)
     {
         m_aDeadModules.erase( _aComponentInstance.component() );
         CFG_TRACE_INFO_NI("- Data added successfully - returning Subtree");
@@ -357,26 +278,21 @@ data::TreeAddress CacheLoadingAccess::addComponentData( memory::UpdateAccessor& 
 void CacheLoadingAccess::addChangesToPending( backend::ConstUpdateInstance const& _anUpdate ) CFG_UNO_THROW_RTE(  )
 {
     // NICE: m_pPending[_rLocation] += pSubtreeChange;
-
-    osl::MutexGuard aGuard( this->m_aMutex ); // needed to protect the map access in the Data
-
     CFG_TRACE_INFO("CacheLoadingAccess: Adding pending changes for subtree '%s'", OUSTRING2ASCII(_anUpdate.root().toString()) );
 
     this->m_aData.addPending(_anUpdate);
 }
 
 // -----------------------------------------------------------------------------
-std::auto_ptr<SubtreeChange> CacheLoadingAccess::releasePendingChanges(ModuleName const& _aComponentName)
+std::auto_ptr<SubtreeChange> CacheLoadingAccess::releasePendingChanges(CacheLine::Name const& _aComponentName)
 {
-    osl::MutexGuard aGuard( this->m_aMutex ); // needed to protect the map access in the Data
     CFG_TRACE_INFO("Tree Info: extract pending changes from subtree '%s'", OUSTRING2ASCII(_aComponentName.toString()) );
     return this->m_aData.releasePending(_aComponentName);
 }
 
 // -----------------------------------------------------------------------------
-bool CacheLoadingAccess::findPendingChangedModules( Data::PendingModuleList & _rPendingList )
+bool CacheLoadingAccess::findPendingChangedModules( ExtendedCacheData::PendingModuleList & _rPendingList )
 {
-    osl::MutexGuard aGuard( this->m_aMutex ); // needed to protect the map access in the Data
     this->m_aData.findPendingModules(_rPendingList);
     return !_rPendingList.empty();
 }
@@ -384,11 +300,9 @@ bool CacheLoadingAccess::findPendingChangedModules( Data::PendingModuleList & _r
 // -----------------------------------------------------------------------------
 void CacheLoadingAccess::clearData(DisposeList& _rList) CFG_NOTHROW()
 {
-    osl::MutexGuard aGuard( this->m_aMutex );
-
     CFG_TRACE_INFO("Tree Info: Removing all module trees for cleanup" );
 
-    typedef Data::ModuleList ModuleList;
+    typedef ExtendedCacheData::ModuleList ModuleList;
 
     ModuleList& rModules = this->m_aData.accessModuleList();
 
@@ -409,11 +323,9 @@ TimeStamp CacheLoadingAccess::collectDisposeList(CacheLoadingAccess::DisposeList
 {
     TimeStamp aRetTime = TimeStamp::never();
 
-    osl::MutexGuard aGuard( this->m_aMutex );
-
     CFG_TRACE_INFO("Tree Info: Collecting disposable module trees for cleanup" );
 
-    Data::ModuleList& rActiveModules = this->m_aData.accessModuleList();
+    ExtendedCacheData::ModuleList& rActiveModules = this->m_aData.accessModuleList();
 
     DeadModuleList::iterator it = m_aDeadModules.begin();
 
@@ -429,11 +341,11 @@ TimeStamp CacheLoadingAccess::collectDisposeList(CacheLoadingAccess::DisposeList
         TimeStamp aExpireTime = current->second + _aDelay;
         if (aExpireTime <= _aLimitTime)
         {
-            Data::ModuleList::iterator itModule = rActiveModules.find( current->first );
+            ExtendedCacheData::ModuleList::iterator itModule = rActiveModules.find( current->first );
 
             if (itModule != rActiveModules.end())
             {
-                ModuleRef xModule = itModule->second;
+                CacheLineRef xModule = itModule->second;
 
                 bool bHandled = false;
 
