@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_TextSeparator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:47:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:48:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,16 @@ void TextSeparatorResources::PositionBelowControl( const Window& rWindow )
     m_aLB_Separator.SetPosPixel( Point( aPoint.X()+m_aFT_Separator.GetSizePixel().Width()+aDistanceSize.Width(), aPoint.Y()-aDistanceSize.Height()-1) );
 }
 
+long TextSeparatorResources::GetBottom() const
+{
+    Point aPoint( m_aLB_Separator.GetPosPixel() );
+    aPoint.Y() += m_aLB_Separator.GetSizePixel().Height();
+    return aPoint.Y();
+}
+
 void TextSeparatorResources::AlignListBoxWidthAndXPos( long nWantedLeftBorder /*use -1 to indicate that this can be automatic*/
-                                                     , long nWantedRightBorder /*use -1 to indicate that this can be automatic*/ )
+                                                     , long nWantedRightBorder /*use -1 to indicate that this can be automatic*/
+                                                     , long nMinimumListBoxWidth /*use -1 to indicate that this can be automatic*/ )
 {
     long nMinPossibleLeftBorder = m_aFT_Separator.GetPosPixel().X() + m_aFT_Separator.GetSizePixel().Width() + 1 ;
     if( nWantedLeftBorder >= 0 && nWantedLeftBorder>nMinPossibleLeftBorder )
@@ -108,12 +116,25 @@ void TextSeparatorResources::AlignListBoxWidthAndXPos( long nWantedLeftBorder /*
     }
 
     long nMinPossibleRightBorder = m_aLB_Separator.GetPosPixel().X() + m_aLB_Separator.CalcMinimumSize().Width() - 1 ;
+    if( nWantedRightBorder < m_aLB_Separator.GetPosPixel().X() + nMinimumListBoxWidth )
+        nWantedRightBorder = m_aLB_Separator.GetPosPixel().X() + nMinimumListBoxWidth;
+
     if( nWantedRightBorder >= 0 && nWantedRightBorder > nMinPossibleRightBorder )
     {
         Size aSize( m_aLB_Separator.GetSizePixel() );
         aSize.Width() = nWantedRightBorder-m_aLB_Separator.GetPosPixel().X();
         m_aLB_Separator.SetSizePixel(aSize);
     }
+}
+
+Point TextSeparatorResources::GetCurrentListBoxPosition() const
+{
+    return m_aLB_Separator.GetPosPixel();
+}
+
+Size TextSeparatorResources::GetCurrentListBoxSize() const
+{
+    return m_aLB_Separator.GetSizePixel();
 }
 
 void TextSeparatorResources::SetValue( const rtl::OUString& rSeparator )
