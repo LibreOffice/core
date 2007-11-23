@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointProperties.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:53:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:58:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -341,6 +341,13 @@ void DataPointProperties::AddPropertiesToVector(
     rOutProperties.push_back(
         Property( C2U( "PercentageNumberFormat" ),
                   PROP_DATAPOINT_PERCENTAGE_NUMBER_FORMAT,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "LabelPlacement" ),
+                  PROP_DATAPOINT_LABEL_PLACEMENT,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
