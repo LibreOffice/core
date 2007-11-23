@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.141 $
+ *  $Revision: 1.142 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:04:14 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 10:43:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6207,3 +6207,5 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
         </group>
 	</component>
 </oor:component-schema>
+
+
