@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:57:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:37:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1843,19 +1843,42 @@ struct TempFontItem
     TempFontItem* mpNextItem;
 };
 
+#ifdef FR_PRIVATE
+static int WINAPI __AddFontResourceExW( LPCWSTR lpszfileName, DWORD fl, PVOID pdv )
+{
+    typedef int (WINAPI *AddFontResourceExW_FUNC)(LPCWSTR, DWORD, PVOID );
+
+    static AddFontResourceExW_FUNC  pFunc = NULL;
+    static HMODULE                  hmGDI = NULL;
+
+    if ( !pFunc && !hmGDI )
+    {
+        hmGDI = GetModuleHandleA( "GDI32" );
+        if ( hmGDI )
+            pFunc = reinterpret_cast<AddFontResourceExW_FUNC>( GetProcAddress( hmGDI, "AddFontResourceExW" ) );
+    }
+
+    if ( pFunc )
+        return pFunc( lpszfileName, fl, pdv );
+    else
+    {
+        SetLastError( ERROR_CALL_NOT_IMPLEMENTED );
+        return 0;
+    }
+}
+#endif
+
 bool ImplAddTempFont( SalData& rSalData, const String& rFontFileURL )
 {
     int nRet = 0;
     ::rtl::OUString aUSytemPath;
     OSL_VERIFY( !osl::FileBase::getSystemPathFromFileURL( rFontFileURL, aUSytemPath ) );
 
-#ifdef FR_PRIVATE   // wingdi.h, but only if _WIN32_WINNT >= 0x0500, which is currently not true.
-    if( aSalShlData.maVersionInfo.dwMajorVersion >= 5 )
-    {
-        nRet = AddFontResourceExW( reinterpret_cast<LPCWSTR>(aUSytemPath.getStr()), FR_PRIVATE, NULL );
-    }
-    else
+#ifdef FR_PRIVATE
+    nRet = __AddFontResourceExW( reinterpret_cast<LPCWSTR>(aUSytemPath.getStr()), FR_PRIVATE, NULL );
 #endif
+
+    if ( !nRet )
     {
         static int nCounter = 0;
         char aFileName[] = "soAA.fot";
