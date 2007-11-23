@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:05:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:00:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #include "DataInterpreter.hxx"
 #include "CommonConverters.hxx"
 #include "ContainerHelper.hxx"
+#include "ChartTypeHelper.hxx"
 
 #include "Scaling.hxx"
 #include "CartesianCoordinateSystem.hxx"
@@ -127,6 +128,42 @@ void lcl_applyDefaultStyle(
             xSeriesProp->setPropertyValue(
                 C2U("Color"),
                 uno::makeAny( xColorScheme->getColorByIndex( nIndex )));
+    }
+}
+
+void lcl_ensureCorrectLabelPlacement( const Reference< beans::XPropertySet >& xProp, const uno::Sequence < sal_Int32 >& rAvailablePlacements )
+{
+    sal_Int32 nLabelPlacement=0;
+    if( xProp->getPropertyValue( C2U( "LabelPlacement" ) ) >>= nLabelPlacement )
+    {
+        bool bValid = false;
+        for( sal_Int32 nN = 0; nN < rAvailablePlacements.getLength(); nN++ )
+        {
+            if( rAvailablePlacements[nN] == nLabelPlacement )
+            {
+                bValid = true;
+                break;
+            }
+        }
+        if( !bValid )
+        {
+            uno::Any aNewValue;
+            //otherwise use the first supported one
+            if( rAvailablePlacements.getLength() )
+                aNewValue <<=rAvailablePlacements[0];
+            xProp->setPropertyValue( C2U("LabelPlacement"), aNewValue );
+        }
+    }
+}
+
+void lcl_resetLabelPlacementIfDefault( const Reference< beans::XPropertySet >& xProp, sal_Int32 nDefaultPlacement )
+{
+
+    sal_Int32 nLabelPlacement=0;
+    if( xProp->getPropertyValue( C2U( "LabelPlacement" ) ) >>= nLabelPlacement )
+    {
+        if( nDefaultPlacement == nLabelPlacement )
+            xProp->setPropertyValue( C2U("LabelPlacement"), uno::Any() );
     }
 }
 
@@ -439,6 +476,18 @@ void SAL_CALL ChartTypeTemplate::applyStyle(
                 ? chart2::StackingDirection_Z_STACKING
                 : chart2::StackingDirection_NO_STACKING );
             xSeriesProp->setPropertyValue( C2U("StackingDirection"), aPropValue );
+
+            //ensure valid label placement
+            {
+                uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
+                            getChartTypeForIndex( nChartTypeIndex ), getDimension(), isSwapXAndY(), xSeries ) );
+                lcl_ensureCorrectLabelPlacement( xSeriesProp, aAvailablePlacements );
+
+                uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+                if( xSeriesProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+                    for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
+                        lcl_ensureCorrectLabelPlacement( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]), aAvailablePlacements );
+            }
         }
         catch( const uno::Exception & ex )
         {
@@ -470,6 +519,60 @@ void SAL_CALL ChartTypeTemplate::resetStyles( const Reference< chart2::XDiagram 
             }
         }
     }
+
+    //reset label placement if default
+    {
+        uno::Reference< XCoordinateSystemContainer > xCooSysContainer( xDiagram, uno::UNO_QUERY );
+        if( xCooSysContainer.is() )
+        {
+            uno::Sequence< uno::Reference< XCoordinateSystem > > aCooSysList( xCooSysContainer->getCoordinateSystems() );
+            for( sal_Int32 nCS = 0; nCS < aCooSysList.getLength(); ++nCS )
+            {
+                uno::Reference< XCoordinateSystem > xCooSys( aCooSysList[nCS] );
+
+                //iterate through all chart types in the current coordinate system
+                uno::Reference< XChartTypeContainer > xChartTypeContainer( xCooSys, uno::UNO_QUERY );
+                OSL_ASSERT( xChartTypeContainer.is());
+                if( !xChartTypeContainer.is() )
+                    continue;
+                uno::Sequence< uno::Reference< XChartType > > aChartTypeList( xChartTypeContainer->getChartTypes() );
+                for( sal_Int32 nT = 0; nT < aChartTypeList.getLength(); ++nT )
+                {
+                    uno::Reference< XChartType > xChartType( aChartTypeList[nT] );
+
+                    //iterate through all series in this chart type
+                    uno::Reference< XDataSeriesContainer > xDataSeriesContainer( xChartType, uno::UNO_QUERY );
+                    OSL_ASSERT( xDataSeriesContainer.is());
+                    if( !xDataSeriesContainer.is() )
+                        continue;
+
+                    uno::Sequence< uno::Reference< XDataSeries > > aSeriesList( xDataSeriesContainer->getDataSeries() );
+                    for( sal_Int32 nS = 0; nS < aSeriesList.getLength(); ++nS )
+                    {
+                        Reference< XDataSeries > xSeries(aSeriesList[nS]);
+                        Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
+                        if(!xSeries.is() || !xSeriesProp.is() )
+                            continue;
+
+                        uno::Sequence < sal_Int32 > aAvailablePlacements( ChartTypeHelper::getSupportedLabelPlacements(
+                            xChartType, getDimension(), isSwapXAndY(), xSeries ) );
+                        if(!aAvailablePlacements.getLength())
+                            continue;
+
+                        sal_Int32 nDefaultPlacement = aAvailablePlacements[0];
+
+                        lcl_resetLabelPlacementIfDefault( xSeriesProp, nDefaultPlacement );
+
+                        uno::Sequence< sal_Int32 > aAttributedDataPointIndexList;
+                        if( xSeriesProp->getPropertyValue( C2U( "AttributedDataPoints" ) ) >>= aAttributedDataPointIndexList )
+                            for(sal_Int32 nN=aAttributedDataPointIndexList.getLength();nN--;)
+                                lcl_resetLabelPlacementIfDefault( xSeries->getDataPointByIndex(aAttributedDataPointIndexList[nN]), nDefaultPlacement );
+                    }
+                }
+            }
+        }
+    }
+
     return;
 }
 
@@ -490,6 +593,11 @@ sal_Int32 ChartTypeTemplate::getDimension() const
 StackMode ChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ ) const
 {
     return StackMode_NONE;
+}
+
+bool ChartTypeTemplate::isSwapXAndY() const
+{
+    return false;
 }
 
 bool ChartTypeTemplate::supportsCategories() const
