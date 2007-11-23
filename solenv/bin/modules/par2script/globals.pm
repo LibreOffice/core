@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 15:28:51 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 13:34:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,8 @@ BEGIN
 
     @allitems = ("Installation", "ScpAction", "Directory", "File",
                  "Shortcut", "Unixlink", "Module", "Profile", "ProfileItem",
-                 "Folder", "FolderItem", "RegistryItem", "WindowsCustomAction");
+                 "Folder", "FolderItem", "RegistryItem", "WindowsCustomAction",
+                 "MergeModule");
 
     @items_assigned_at_modules = ("File", "Directory", "Unixlink");
     @items_with_directories = ("File", "Profile", "Shortcut", "Unixlink");
