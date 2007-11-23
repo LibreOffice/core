@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointItemConverter.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:51:08 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:51:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@
 #include "StatisticsItemConverter.hxx"
 #include "SeriesOptionsItemConverter.hxx"
 #include "DataSeriesHelper.hxx"
+#include "DiagramHelper.hxx"
+#include "ChartModelHelper.hxx"
+#include "ChartTypeHelper.hxx"
 
 #ifndef _SVX_CHRTITEM_HXX
 #include <svx/chrtitem.hxx>
@@ -73,6 +76,11 @@
 #ifndef _SVX_BRSHITEM_HXX
 #include <svx/brshitem.hxx>
 #endif
+//SfxIntegerListItem
+#include <svtools/ilstitem.hxx>
+#define _SVSTDARR_ULONGS
+#include <svtools/svstdarr.hxx>
+
 #ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
 #endif
@@ -89,6 +97,7 @@
 #include <algorithm>
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::chart2;
 using ::com::sun::star::uno::Reference;
 
 namespace
@@ -237,6 +246,7 @@ DataPointItemConverter::DataPointItemConverter(
     const uno::Reference< frame::XModel > & xChartModel,
     const uno::Reference< uno::XComponentContext > & xContext,
     const uno::Reference< beans::XPropertySet > & rPropertySet,
+    const uno::Reference< XDataSeries > & xSeries,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     NumberFormatterWrapper * pNumFormatter,
@@ -257,7 +267,8 @@ DataPointItemConverter::DataPointItemConverter(
         m_bUseSpecialFillColor(bUseSpecialFillColor),
         m_nSpecialFillColor(nSpecialFillColor),
         m_nNumberFormat(nNumberFormat),
-        m_nPercentNumberFormat(nPercentNumberFormat)
+        m_nPercentNumberFormat(nPercentNumberFormat),
+        m_aAvailableLabelPlacements()
 {
     m_aConverters.push_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel, xNamedPropertyContainerFactory, eMapTo ));
@@ -268,6 +279,13 @@ DataPointItemConverter::DataPointItemConverter(
         m_aConverters.push_back( new StatisticsItemConverter( xChartModel, rPropertySet, rItemPool ));
         m_aConverters.push_back( new SeriesOptionsItemConverter( xChartModel, xContext, rPropertySet, rItemPool ));
     }
+
+    uno::Reference< XDiagram > xDiagram( ChartModelHelper::findDiagram(xChartModel) );
+    uno::Reference< XChartType > xChartType( DiagramHelper::getChartTypeOfSeries( xDiagram , xSeries ) );
+    bool bFound = false;
+    bool bAmbiguous = false;
+    sal_Bool bSwapXAndY = DiagramHelper::getVertical( xDiagram, bFound, bAmbiguous );
+    m_aAvailableLabelPlacements = ChartTypeHelper::getSupportedLabelPlacements( xChartType, DiagramHelper::getDimension( xDiagram ), bSwapXAndY, xSeries );
 }
 
 DataPointItemConverter::~DataPointItemConverter()
@@ -388,9 +406,54 @@ bool DataPointItemConverter::ApplySpecialItem(
             try
             {
                 GetPropertySet()->getPropertyValue( C2U( "LabelSeparator" ) ) >>= aOldValue;
-                if( !aOldValue.equals(aNewValue) )
+                if( m_bOverwriteLabelsForAttributedDataPointsAlso )
+                {
+                    Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
+                    if( !aOldValue.equals(aNewValue) ||
+                        DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, C2U( "LabelSeparator" ), uno::makeAny( aOldValue ) ) )
+                    {
+                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "LabelSeparator" ), uno::makeAny( aNewValue ) );
+                        bChanged = true;
+                    }
+                }
+                else if( !aOldValue.equals(aNewValue) )
                 {
                     GetPropertySet()->setPropertyValue( C2U( "LabelSeparator" ), uno::makeAny( aNewValue ));
+                    bChanged = true;
+                }
+            }
+            catch( uno::Exception& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
+        }
+        break;
+
+        case SCHATTR_DATADESCR_PLACEMENT:
+        {
+
+            try
+            {
+                sal_Int32 nNew = static_cast< const SfxInt32Item & >( rItemSet.Get( nWhichId )).GetValue();
+                sal_Int32 nOld =0;
+                if( !(GetPropertySet()->getPropertyValue( C2U( "LabelPlacement" ) ) >>= nOld) )
+                {
+                    if( m_aAvailableLabelPlacements.getLength() )
+                        nOld = m_aAvailableLabelPlacements[0];
+                }
+                if( m_bOverwriteLabelsForAttributedDataPointsAlso )
+                {
+                    Reference< chart2::XDataSeries > xSeries( GetPropertySet(), uno::UNO_QUERY);
+                    if( nOld!=nNew ||
+                        DataSeriesHelper::hasAttributedDataPointDifferentValue( xSeries, C2U( "LabelPlacement" ), uno::makeAny( nOld ) ) )
+                    {
+                        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints( xSeries, C2U( "LabelPlacement" ), uno::makeAny( nNew ) );
+                        bChanged = true;
+                    }
+                }
+                else if( nOld!=nNew )
+                {
+                    GetPropertySet()->setPropertyValue( C2U( "LabelPlacement" ), uno::makeAny( nNew ));
                     bChanged = true;
                 }
             }
@@ -567,6 +630,32 @@ void DataPointItemConverter::FillSpecialItem(
             {
                 ASSERT_EXCEPTION( e );
             }
+        }
+        break;
+
+        case SCHATTR_DATADESCR_PLACEMENT:
+        {
+            try
+            {
+                sal_Int32 nPlacement=0;
+                if( GetPropertySet()->getPropertyValue( C2U( "LabelPlacement" ) ) >>= nPlacement )
+                    rOutItemSet.Put( SfxInt32Item( nWhichId, nPlacement ));
+                else if( m_aAvailableLabelPlacements.getLength() )
+                    rOutItemSet.Put( SfxInt32Item( nWhichId, m_aAvailableLabelPlacements[0] ));
+            }
+            catch( uno::Exception& e )
+            {
+                ASSERT_EXCEPTION( e );
+            }
+        }
+        break;
+
+        case SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS:
+        {
+            SvULongs aList;
+            for ( sal_Int32 nN=0; nN<m_aAvailableLabelPlacements.getLength(); nN++ )
+                aList.Insert( m_aAvailableLabelPlacements[nN], sal::static_int_cast< USHORT >(nN) );
+            rOutItemSet.Put( SfxIntegerListItem( nWhichId, aList ) );
         }
         break;
 
