@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:56:56 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:12:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,8 @@
 #endif
 
 #include <time.h>
+
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 
 #ifndef _COM_SUN_STAR_CHART2_EXPLICITSUBINCREMENT_HPP_
 #include <com/sun/star/chart2/ExplicitSubIncrement.hpp>
@@ -1075,6 +1077,7 @@ bool SeriesPlotterContainer::shouldKeep2DAspectRatio()
 
 namespace
 {
+
 bool lcl_resizeAfterCompleteCreation( const uno::Reference< XDiagram >& xDiagram )
 {
     //special treatment for pie charts
@@ -1228,6 +1231,7 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
     {
         //------------ set transformation to plotter / create series
         VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
+        pSeriesPlotter->setPageReferenceSize( rPageSize );
         rtl::OUString aCID; //III
         pSeriesPlotter->initPlotter(xCoordinateRegionTarget,xTextTargetShapes,m_xShapeFactory,aCID);
         pSeriesPlotter->setDiagramReferenceSize( rAvailableSize );
@@ -1300,6 +1304,11 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
         xDiagramPlusAxes_KeepRatio->setPosition( aNewPos );
         xDiagramPlusAxes_KeepRatio->setSize( aNewSize );
         */
+        for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
+        {
+            VSeriesPlotter* pSeriesPlotter = *aPlotterIter;
+            pSeriesPlotter->rearrangeLabelToAvoidOverlapIfRequested( rPageSize );
+        }
     }
 }
 
