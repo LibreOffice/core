@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propsetaccessimpl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:59:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:08:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,75 +215,7 @@ CollectProperties::Result CollectProperties::handle(Tree const& _aTree, NodeRef 
 
     return CONTINUE;
 }
-//-----------------------------------------------------------------------------------
-// another helper class - disabled, as it doesn't work well with Accessor changes
-//-----------------------------------------------------------------------------------
-#if 0
 
-class TreeNodePropertySetInfo
-    :public ::cppu::WeakImplHelper1< beans::XPropertySetInfo >
-{
-    configapi::NodeAccess&  m_rNodeAccess;
-    configuration::Tree     m_aTree;
-    configuration::NodeRef  m_aNode;
-    sal_Bool                m_bReadonly;
-
-public:
-    TreeNodePropertySetInfo(NodeGroupInfoAccess& _rNode, sal_Bool _bReadonly )
-        :m_rNodeAccess(_rNode)
-        ,m_aTree(_rNode.getTree())
-        ,m_aNode(_rNode.getNode())
-        ,m_bReadonly(_bReadonly)
-    {
-        // TODO: need to be a event listener on the node
-    }
-
-    // XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties() throw(RuntimeException);
-    virtual Property SAL_CALL   getPropertyByName(const OUString& _rPropertyName) throw(UnknownPropertyException, RuntimeException);
-    virtual sal_Bool SAL_CALL   hasPropertyByName(const OUString& _rPropertyName) throw(RuntimeException);
-};
-
-//-----------------------------------------------------------------------------------
-uno::Sequence< beans::Property > SAL_CALL TreeNodePropertySetInfo::getProperties() throw(RuntimeException)
-{
-    OReadSynchronized aGuard(m_rNodeAccess.getDataLock());
-    return CollectProperties(m_bReadonly).forChildren(m_aTree, m_aNode);
-}
-
-//-----------------------------------------------------------------------------------
-Property SAL_CALL TreeNodePropertySetInfo::getPropertyByName(const OUString& _rPropertyName)
-    throw(UnknownPropertyException, RuntimeException)
-{
-    OReadSynchronized aGuard(m_rNodeAccess.getDataLock());
-
-    Name aName = configuration::makeNodeName(_rPropertyName, Name::NoValidate());
-
-    if (!m_aTree.hasChild(m_aNode, aName))
-    {
-        OUString sMessage = OUString::createFromAscii("Configuration - ");
-        sMessage += OUString::createFromAscii("No Property named '");
-        sMessage += _rPropertyName;
-        sMessage += OUString::createFromAscii("' in this PropertySetInfo");
-        throw UnknownPropertyException(sMessage, static_cast<XPropertySetInfo*>(this));
-    }
-
-    AnyNodeRef aNode = m_aTree.getAnyChild(m_aNode, aName);
-    OSL_ENSURE(aNode.isValid(), "NodePropertySetInfo::getPropertyByName: got no node although hasChild returned TRUE!");
-    return CollectProperties(m_bReadonly, 1).forNode(m_aTree, aNode);
-}
-
-//-----------------------------------------------------------------------------------
-sal_Bool SAL_CALL TreeNodePropertySetInfo::hasPropertyByName(const OUString& _rPropertyName)
-    throw(RuntimeException)
-{
-    OReadSynchronized aGuard(m_rNodeAccess.getDataLock());
-
-    Name aName = configuration::makeNodeName(_rPropertyName, Name::NoValidate());
-
-    return m_aTree.hasChild(m_aNode, aName);
-}
-#endif
 //-----------------------------------------------------------------------------------
 // yet another helper class (more robust, but can't well be extended to be a HierarchicalPropertySetInfo though)
 //-----------------------------------------------------------------------------------
@@ -299,7 +231,7 @@ public:
     {
     }
 
-    static NodePropertySetInfo* create(NodeGroupInfoAccess& _rNode, data::Accessor const& _aDataAccessor, sal_Bool _bReadonly ) throw(RuntimeException);
+    static NodePropertySetInfo* create(NodeGroupInfoAccess& _rNode, sal_Bool _bReadonly ) throw(RuntimeException);
     Property const* begin() const throw() { return m_aProperties.getConstArray(); }
     Property const* end()   const throw() { return m_aProperties.getConstArray() + m_aProperties.getLength(); }
 
@@ -313,11 +245,11 @@ public:
 
 //-----------------------------------------------------------------------------------
 //-----------------------------------------------------------------------------------
-NodePropertySetInfo* NodePropertySetInfo::create(NodeGroupInfoAccess& _rNode, data::Accessor const& _aDataAccessor, sal_Bool _bReadonly ) throw(RuntimeException)
+NodePropertySetInfo* NodePropertySetInfo::create(NodeGroupInfoAccess& _rNode, sal_Bool _bReadonly ) throw(RuntimeException)
 {
-    osl::MutexGuard aGuard(_rNode.getDataLock());
+    UnoApiLock aLock;
 
-    configuration::Tree aTree( _rNode.getTree(_aDataAccessor) );
+    configuration::Tree aTree( _rNode.getTree() );
     OSL_ENSURE( !aTree.isEmpty(), "WARNING: Getting Tree information requires a valid tree");
     if (aTree.isEmpty()) return NULL;
 
@@ -362,6 +294,8 @@ uno::Sequence< beans::Property > SAL_CALL NodePropertySetInfo::getProperties() t
 Property SAL_CALL NodePropertySetInfo::getPropertyByName(const OUString& _rPropertyName)
     throw(UnknownPropertyException, RuntimeException)
 {
+    UnoApiLock aLock;
+
     Property const* pFound = find(_rPropertyName);
 
     if (pFound == this->end())
@@ -380,6 +314,8 @@ Property SAL_CALL NodePropertySetInfo::getPropertyByName(const OUString& _rPrope
 sal_Bool SAL_CALL NodePropertySetInfo::hasPropertyByName(const OUString& _rPropertyName)
     throw(RuntimeException)
 {
+    UnoApiLock aLock;
+
     Property const* pFound = find(_rPropertyName);
 
     return (pFound != this->end());
@@ -398,7 +334,7 @@ Reference< beans::XPropertySetInfo > implGetPropertySetInfo( NodeGroupInfoAccess
     throw(RuntimeException)
 {
     GuardedNodeDataAccess lock( rNode );
-    return NodePropertySetInfo::create(rNode, lock.getDataAccessor(), !_bWriteable);
+    return NodePropertySetInfo::create(rNode, !_bWriteable);
 }
 
 // XHierarchicalPropertySet & XHierarchicalMultiPropertySet
@@ -1162,6 +1098,7 @@ void implSetPropertyToDefault( NodeGroupAccess& rNode, const OUString& sProperty
 {
     try
     {
+        UnoApiLock aWithDefaultLock;
         GuardedGroupUpdateAccess lock( withDefaultData( rNode ) );
 
         Tree const aTree( lock.getTree() );
@@ -1216,6 +1153,7 @@ void implSetPropertiesToDefault( NodeGroupAccess& rNode, const Sequence< OUStrin
 {
     try
     {
+        UnoApiLock aWithDefaultLock;
         GuardedGroupUpdateAccess lock( withDefaultData( rNode ) );
 
         Tree const aTree( lock.getTree() );
@@ -1309,6 +1247,7 @@ void implSetAllPropertiesToDefault( NodeGroupAccess& rNode )
 {
     try
     {
+        UnoApiLock aWithDefaultLock;
         GuardedGroupUpdateAccess lock( withDefaultData( rNode ) );
 
         Tree const aTree( lock.getTree() );
