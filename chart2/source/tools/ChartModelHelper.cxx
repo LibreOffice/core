@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartModelHelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 15:01:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:04:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,14 +127,6 @@ uno::Reference< XChartType > ChartModelHelper::getChartTypeOfSeries(
                               , const uno::Reference< XDataSeries >&   xGivenDataSeries )
 {
     return DiagramHelper::getChartTypeOfSeries( ChartModelHelper::findDiagram( xModel ), xGivenDataSeries );
-}
-
-//static
-uno::Reference< XCoordinateSystem > ChartModelHelper::getCoordinateSystemOfChartType(
-            const uno::Reference< frame::XModel >& xModel
-            , const uno::Reference< XChartType >& xGivenChartType )
-{
-    return DiagramHelper::getCoordinateSystemOfChartType( ChartModelHelper::findDiagram( xModel ), xGivenChartType );
 }
 
 awt::Size ChartModelHelper::getPageSize( const uno::Reference< frame::XModel >& xModel )
