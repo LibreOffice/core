@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachecontroller.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:22:14 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:35:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,6 @@ namespace configmgr
         */
         explicit
         CacheController(BackendRef const & _xBackend,
-                        memory::HeapManager & _rCacheHeapManager,
                         const uno::Reference<uno::XComponentContext>& xContext);
 
     // ICachedDataProvider implementation
@@ -309,8 +308,6 @@ namespace configmgr
     protected:
         // ref counted, that's why no public dtor
         ~CacheController();
-
-        memory::HeapManager & getCacheHeapManager() const;
     // implementation
     private:
         typedef CacheLoadingAccess      Cache;
@@ -364,17 +361,12 @@ namespace configmgr
 
         void closeModules(Cache::DisposeList & _aList, RequestOptions const & _aOptions);
     private:
-        typedef AutoReferenceMap<RequestOptions,Cache,lessRequestOptions>   CacheList;
-        typedef TemplateCacheData TemplateCache;
-
+        typedef AutoReferenceMap<RequestOptions,Cache,lessRequestOptions>   CacheMap;
 
         CacheChangeMulticaster  m_aNotifier;
-        BackendRef              m_xBackend;
-
-        CacheList               m_aCacheList; // Map
-        TemplateCache           m_aTemplates;
-
-        osl::Mutex              m_aTemplatesMutex;
+        BackendRef      m_xBackend;
+        CacheMap        m_aCacheMap;
+        TemplateCacheData   m_aTemplates;
 
         OTreeDisposeScheduler*  m_pDisposer;
         OCacheWriteScheduler *  m_pCacheWriter;
