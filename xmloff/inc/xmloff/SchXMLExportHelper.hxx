@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExportHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:03:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:33:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,12 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGMAPPING_HPP_
 #include <com/sun/star/util/XStringMapping.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_POINT_HPP_
+#include <com/sun/star/awt/Point.hpp>
 #endif
 
 #ifndef _XMLOFF_PROPERTYSETMAPPER_HXX
@@ -159,6 +165,7 @@ private:
     SAL_DLLPRIVATE void exportPlotArea(
         com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > xDiagram,
         com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > xNewDiagram,
+        const ::com::sun::star::awt::Size & rPageSize,
         sal_Bool bExportContent,
         sal_Bool bIncludeTable );
     SAL_DLLPRIVATE void exportAxes( const com::sun::star::uno::Reference< com::sun::star::chart::XDiagram > & xDiagram,
@@ -167,6 +174,7 @@ private:
 
     SAL_DLLPRIVATE void exportSeries(
         const com::sun::star::uno::Reference< com::sun::star::chart2::XDiagram > & xNewDiagram,
+        const ::com::sun::star::awt::Size & rPageSize,
         sal_Bool bExportContent,
         sal_Bool bHasTwoYAxes );
     SAL_DLLPRIVATE void exportCandleStickSeries(
@@ -184,10 +192,19 @@ private:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XDiagram > & xDiagram,
         sal_Bool bExportContent );
+    SAL_DLLPRIVATE void exportRegressionCurve(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDataSeries > & xSeries,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::beans::XPropertySet > & xSeriesProp,
+        const ::com::sun::star::awt::Size & rPageSize,
+        sal_Bool bExportContent );
 
     /// add svg position as attribute for current element
+    SAL_DLLPRIVATE void addPosition( const ::com::sun::star::awt::Point & rPosition );
     SAL_DLLPRIVATE void addPosition( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
     /// add svg size as attribute for current element
+    SAL_DLLPRIVATE void addSize( const ::com::sun::star::awt::Size & rSize );
     SAL_DLLPRIVATE void addSize( com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape );
     /// fills the member msString with the appropriate String (i.e. "A3")
     SAL_DLLPRIVATE void getCellAddress( sal_Int32 nCol, sal_Int32 nRow );
@@ -247,6 +264,10 @@ public:
     static ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataProvider >
         GetDataProvider( const ::com::sun::star::uno::Reference<
                              ::com::sun::star::chart2::XChartDocument > & xChartDoc );
+
+    ::com::sun::star::awt::Size getPageSize(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XChartDocument > & xChartDoc ) const;
 };
 
 #endif  // _XMLOFF_SCH_XMLEXPORTHELPER_HXX_

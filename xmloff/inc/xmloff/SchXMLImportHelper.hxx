@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLImportHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:04:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:34:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@ private:
     SvXMLTokenMap* mpAutoStyleAttrTokenMap;
     SvXMLTokenMap* mpCellAttrTokenMap;
     SvXMLTokenMap* mpSeriesAttrTokenMap;
+    SvXMLTokenMap* mpRegEquationAttrTokenMap;
 
 public:
 
@@ -147,6 +148,7 @@ public:
     const SvXMLTokenMap& GetAutoStyleAttrTokenMap();
     const SvXMLTokenMap& GetCellAttrTokenMap();
     const SvXMLTokenMap& GetSeriesAttrTokenMap();
+    const SvXMLTokenMap& GetRegEquationAttrTokenMap();
 
     static sal_uInt16 GetChartFamilyID() { return XML_STYLE_FAMILY_SCH_CHART_ID; }
 
