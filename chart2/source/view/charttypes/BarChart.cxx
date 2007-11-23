@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChart.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:55:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:09:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,8 @@
 #include "macros.hxx"
 #include "AxisIndexDefines.hxx"
 #include "Clipping.hxx"
+
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 
 #ifndef _COM_SUN_STAR_CHART2_DATAPOINTGEOMETRY3D_HPP_
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
@@ -201,26 +203,122 @@ APPHELPER_XSERVICEINFO_IMPL(BarChart,CHART2_VIEW_BARCHART_SERVICE_IMPLEMENTATION
 */
 
 awt::Point BarChart::getLabelScreenPositionAndAlignment(
-                     LabelAlignment& rAlignment, bool bMiddlePosition
+                     LabelAlignment& rAlignment, sal_Int32 nLabelPlacement
                      , double fScaledX, double fScaledLowerYValue, double fScaledUpperYValue, double fScaledZ
-                     , double fScaledLowerBarDepth, double fScaledUpperBarDepth
+                     , double fScaledLowerBarDepth, double fScaledUpperBarDepth, double fBaseValue
                      , BarPositionHelper* pPosHelper
                      ) const
 {
     double fX = fScaledX;
     double fY = fScaledUpperYValue;
     double fZ = fScaledZ;
+    bool bReverse = !pPosHelper->isMathematicalOrientationY();
+    bool bNormalOutside = (!bReverse == !!(fBaseValue < fScaledUpperYValue));
 
-    if(bMiddlePosition)
+    switch(nLabelPlacement)
     {
+    case ::com::sun::star::chart::DataLabelPlacement::TOP:
+        {
+            if( !pPosHelper->isSwapXAndY() )
+            {
+                fY = bReverse ? fScaledLowerYValue : fScaledUpperYValue;
+                rAlignment = LABEL_ALIGN_TOP;
+            }
+            else
+            {
+                fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
+                rAlignment = LABEL_ALIGN_CENTER;
+                DBG_ERROR( "top label placement is not really supported by horizontal bar charts" );
+            }
+        }
+        break;
+    case ::com::sun::star::chart::DataLabelPlacement::BOTTOM:
+        {
+            if(!pPosHelper->isSwapXAndY())
+            {
+                fY = bReverse ? fScaledUpperYValue : fScaledLowerYValue;
+                rAlignment = LABEL_ALIGN_BOTTOM;
+            }
+            else
+            {
+                fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
+                rAlignment = LABEL_ALIGN_CENTER;
+                DBG_ERROR( "bottom label placement is not supported by horizontal bar charts" );
+            }
+        }
+        break;
+    case ::com::sun::star::chart::DataLabelPlacement::LEFT:
+        {
+            if( pPosHelper->isSwapXAndY() )
+            {
+                fY = bReverse ? fScaledUpperYValue : fScaledLowerYValue;
+                rAlignment = LABEL_ALIGN_LEFT;
+            }
+            else
+            {
+                fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
+                rAlignment = LABEL_ALIGN_CENTER;
+                DBG_ERROR( "left label placement is not supported by column charts" );
+            }
+        }
+        break;
+    case ::com::sun::star::chart::DataLabelPlacement::RIGHT:
+        {
+            if( pPosHelper->isSwapXAndY() )
+            {
+                fY = bReverse ? fScaledLowerYValue : fScaledUpperYValue;
+                rAlignment = LABEL_ALIGN_RIGHT;
+            }
+            else
+            {
+                fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
+                rAlignment = LABEL_ALIGN_CENTER;
+                DBG_ERROR( "right label placement is not supported by column charts" );
+            }
+        }
+        break;
+    case ::com::sun::star::chart::DataLabelPlacement::OUTSIDE:
+        {
+        fY = (fBaseValue < fScaledUpperYValue) ? fScaledUpperYValue : fScaledLowerYValue;
+        if( pPosHelper->isSwapXAndY() )
+            rAlignment = bNormalOutside ? LABEL_ALIGN_RIGHT : LABEL_ALIGN_LEFT;
+        else
+            rAlignment = bNormalOutside ? LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
+        }
+        break;
+    case ::com::sun::star::chart::DataLabelPlacement::INSIDE:
+        {
+        fY = (fBaseValue < fScaledUpperYValue) ? fScaledUpperYValue : fScaledLowerYValue;
+        if( pPosHelper->isSwapXAndY() )
+            rAlignment = bNormalOutside ? LABEL_ALIGN_LEFT : LABEL_ALIGN_RIGHT;
+        else
+            rAlignment = bNormalOutside ? LABEL_ALIGN_BOTTOM : LABEL_ALIGN_TOP;
+        }
+        break;
+    case ::com::sun::star::chart::DataLabelPlacement::NEAR_ORIGIN:
+        {
+        fY = (fBaseValue < fScaledUpperYValue) ? fScaledLowerYValue : fScaledUpperYValue;
+        if( pPosHelper->isSwapXAndY() )
+            rAlignment = bNormalOutside ? LABEL_ALIGN_RIGHT : LABEL_ALIGN_LEFT;
+        else
+            rAlignment = bNormalOutside ? LABEL_ALIGN_TOP : LABEL_ALIGN_BOTTOM;
+        }
+        break;
+    case ::com::sun::star::chart::DataLabelPlacement::CENTER:
         fY -= (fScaledUpperYValue-fScaledLowerYValue)/2.0;
         rAlignment = LABEL_ALIGN_CENTER;
+        break;
+    default:
+        DBG_ERROR("this label alignment is not implemented yet");
+
+        break;
     }
+
     if(3==m_nDimension)
     {
         rAlignment = LABEL_ALIGN_CENTER;
         double fDepth = fScaledUpperBarDepth;
-        if(bMiddlePosition)
+        if(nLabelPlacement==::com::sun::star::chart::DataLabelPlacement::CENTER)
             fDepth = fabs(fScaledUpperBarDepth-fScaledLowerBarDepth)/2.0;
         fZ -= fDepth/2.0;
     }
@@ -295,7 +393,7 @@ bool lcl_hasGeometry3DVariableWidth( sal_Int32 nGeometry3D )
     }
     return bRet;
 }
-}
+}// end anonymous namespace
 
 void BarChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlot, sal_Int32 ySlot )
 {
@@ -392,6 +490,8 @@ void BarChart::createShapes()
 
 
     //---------------------------------------------
+    uno::Reference< drawing::XShapes > xRegressionCurveEquationTarget(
+        m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() ));
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
 
     double fLogicZ        = 0.0;//as defined
@@ -528,7 +628,8 @@ void BarChart::createShapes()
                     bOnlyConnectionLinesForThisPoint = false;
 
                     if(nCatIndex==nStartCategoryIndex)//do not create a regression line for each point
-                        createRegressionCurvesShapes( **aSeriesIter, xRegressionCurveTarget );
+                        createRegressionCurvesShapes( **aSeriesIter, xRegressionCurveTarget, xRegressionCurveEquationTarget,
+                                                      m_pPosHelper->maySkipPointsInRegressionCalculation());
 
                     if( !bDrawConnectionLinesInited )
                     {
@@ -801,13 +902,16 @@ void BarChart::createShapes()
                         if( (**aSeriesIter).getDataPointLabelIfLabel(nCatIndex) )
                         {
                             double fLogicSum = aLogicYSumMap[nAttachedAxisIndex];
-                            LabelAlignment eAlignment(pPosHelper->getLabelAlignmentForDimension( 1 ));
+
+                            LabelAlignment eAlignment(LABEL_ALIGN_CENTER);
+                            sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nCatIndex, m_xChartTypeModel, m_nDimension, pPosHelper->isSwapXAndY() );
+
                             awt::Point aScreenPosition2D( this->getLabelScreenPositionAndAlignment(
-                                eAlignment, pSeriesList->size() > 1
+                                eAlignment, nLabelPlacement
                                 , fLogicX, fLowerYValue, fUpperYValue, fLogicZ
-                                , fLogicBarDepth, fLogicBarDepth, pPosHelper ));
+                                , fLogicBarDepth, fLogicBarDepth, fBaseValue, pPosHelper ));
                             sal_Int32 nOffset = 0;
-                            if(LABEL_ALIGN_RIGHT==eAlignment)
+                            if(LABEL_ALIGN_CENTER!=eAlignment)
                                 nOffset = 100;//add some spacing //@todo maybe get more intelligent values
                             this->createDataLabel( xTextTarget, **aSeriesIter, nCatIndex
                                             , fLogicBarHeight, fLogicSum, aScreenPosition2D, eAlignment, nOffset );
