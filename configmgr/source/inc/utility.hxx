@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 12:49:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:27:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@
 #ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
 #include <salhelper/simplereferenceobject.hxx>
 #endif
+#include "datalock.hxx"
+
+#include "osl/diagnose.h"
 
 #define CFG_NOTHROW() SAL_THROW( () )
 
@@ -97,11 +100,41 @@ namespace configmgr
         void operator=  (Noncopyable& notImplemented);
     };
 
-    struct Refcounted
-    : virtual salhelper::SimpleReferenceObject
+    // Used for internal, non-UNO objects
+    class SimpleReferenceObject
     {
+    public:
+        inline SimpleReferenceObject() SAL_THROW(()): m_nCount(0) {}
+#define SIMPLE_REFERENCE_FAST
+#ifdef SIMPLE_REFERENCE_FAST
+        inline void acquire() SAL_THROW(())
+        {
+            OSL_ASSERT(UnoApiLock::isHeld());
+            m_nCount++;
+        }
+        inline void release() SAL_THROW(())
+        {
+            OSL_ASSERT(UnoApiLock::isHeld());
+            if (--m_nCount == 0)
+                delete this;
+        }
+#else
+        void acquire() SAL_THROW(());
+        void release() SAL_THROW(());
+#endif
+
+    protected:
+        virtual ~SimpleReferenceObject() SAL_THROW(());
+    private:
+        sal_uInt32 m_nCount;
+        // not implemented:
+        SimpleReferenceObject(SimpleReferenceObject &);
+        void operator =(SimpleReferenceObject);
     };
 
+    struct Refcounted : virtual configmgr::SimpleReferenceObject
+    {
+    };
 }
 
 #endif // CONFIGMGR_UTILITY_HXX_
