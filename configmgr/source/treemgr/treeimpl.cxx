@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:32:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,12 +87,6 @@
 #endif
 #ifndef CONFIGMGR_CONFIGNODEFACTORY_HXX_
 #include "nodefactory.hxx"
-#endif
-#ifndef CONFIGMGR_SEGMENT_HXX
-#include "segment.hxx"
-#endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
 #endif
 
 #ifndef _OSL_DIAGNOSE_H_
@@ -195,7 +189,7 @@ VisitorStatus TreeImplBuilder::handle(data::SetNodeAccess const& _aSet)
 
 void TreeImplBuilder::addValueElement(data::ValueNodeAccess const& _aValue)
 {
-    NodeImplHolder aValueNode( m_rFactory.makeValueNode(_aValue) );
+    rtl::Reference<NodeImpl> aValueNode( m_rFactory.makeValueNode(_aValue) );
     OSL_ENSURE( aValueNode.is(), "could not make value node wrapper" );
 
     OSL_ENSURE( m_nParent == 0, "Adding value element that is not root of its fragment" );
@@ -216,7 +210,7 @@ void TreeImplBuilder::addValueMember(data::ValueNodeAccess const& )
 
 void TreeImplBuilder::addGroup(data::GroupNodeAccess const& _aTree)
 {
-    NodeImplHolder aGroupNode( m_rFactory.makeGroupNode(_aTree) );
+    rtl::Reference<NodeImpl> aGroupNode( m_rFactory.makeGroupNode(_aTree) );
     OSL_ENSURE( aGroupNode.is(), "could not make group node wrapper" );
 
     // TODO:!isValid() => maybe substitute a SimpleValueNodeImpl if possible
@@ -258,7 +252,7 @@ void TreeImplBuilder::addSet(data::SetNodeAccess const& _aSet)
     OSL_ASSERT(aTemplate.is());
     OSL_ENSURE(aTemplate->isInstanceTypeKnown(),"ERROR: Cannor create set instance without knowing the instance type");
 
-    NodeImplHolder aSetNode( m_rFactory.makeSetNode(_aSet,aTemplate.get()) );
+    rtl::Reference<NodeImpl> aSetNode( m_rFactory.makeSetNode(_aSet,aTemplate.get()) );
     OSL_ENSURE( aSetNode.is(), "could not make set node wrapper" );
 
     // TODO:!isValid() => maybe substitute a SimpleValueNodeImpl if possible
@@ -278,41 +272,36 @@ void TreeImplBuilder::addSet(data::SetNodeAccess const& _aSet)
 // class NodeData
 //-----------------------------------------------------------------------------
 
-NodeData::NodeData(NodeImplHolder const& aSpecificNode, Name const& aName, NodeOffset nParent)
+NodeData::NodeData(rtl::Reference<NodeImpl> const& aSpecificNode, Name const& aName, NodeOffset nParent)
 : m_pSpecificNode(aSpecificNode)
 , m_aName_(aName)
 , m_nParent(nParent)
 {
 }
+
 //-----------------------------------------------------------------------------
 
-data::NodeAccessRef NodeData::getOriginalNodeAccessRef(data::Accessor const * _pAccessor) const
-{
-    return data::NodeAccessRef(_pAccessor, m_pSpecificNode->getOriginalNodeAddress());
-}
-//-----------------------------------------------------------------------------
-
-void NodeData::rebuild(rtl::Reference<view::ViewStrategy> const & _xNewStrategy, data::NodeAccessRef const & _aNewData, data::Accessor const& _aOldAccessor)
+void NodeData::rebuild(rtl::Reference<view::ViewStrategy> const & _xNewStrategy, data::NodeAccess const & _aNewData)
 {
     using namespace data;
 
-    NodeImplHolder aNewImpl;
-    if (this->isSetNode(_aOldAccessor))
+    rtl::Reference<NodeImpl> aNewImpl;
+    if (this->isSetNode())
     {
         SetNodeAccess aNewSet(_aNewData);
         aNewImpl = _xNewStrategy->getNodeFactory().makeSetNode(aNewSet,NULL);
 
-        SetNodeImpl & rOldSetData = this->setImpl(_aOldAccessor);
+        SetNodeImpl & rOldSetData = this->setImpl();
         SetNodeImpl & rNewSetData = static_cast<SetNodeImpl &>(*aNewImpl);
 
-        SetNodeAccess aOldSet = rOldSetData.getDataAccess(_aOldAccessor);
+        SetNodeAccess aOldSet = rOldSetData.getDataAccess();
 
-        rNewSetData.rebuildFrom(rOldSetData,aNewSet,aOldSet);
+        rNewSetData.rebuildFrom(rOldSetData,aNewSet);
     }
-    else if (this->isGroupNode(_aOldAccessor))
+    else if (this->isGroupNode())
         aNewImpl = _xNewStrategy->getNodeFactory().makeGroupNode(GroupNodeAccess(_aNewData));
 
-    else if (this->isValueElementNode(_aOldAccessor))
+    else if (this->isValueElementNode())
         aNewImpl = _xNewStrategy->getNodeFactory().makeValueNode(ValueNodeAccess(_aNewData));
 
     m_pSpecificNode = aNewImpl;
@@ -320,54 +309,54 @@ void NodeData::rebuild(rtl::Reference<view::ViewStrategy> const & _xNewStrategy,
 
 //-----------------------------------------------------------------------------
 
-bool NodeData::isSetNode(data::Accessor const& _aAccessor) const
+bool NodeData::isSetNode() const
 {
-    return data::SetNodeAccess::isInstance(getOriginalNodeAccessRef(&_aAccessor));
+    return data::SetNodeAccess::isInstance(getOriginalNodeAccess());
 }
 //-----------------------------------------------------------------------------
 
-bool NodeData::isValueElementNode(data::Accessor const& _aAccessor) const
+bool NodeData::isValueElementNode() const
 {
-    return data::ValueNodeAccess::isInstance(getOriginalNodeAccessRef(&_aAccessor));
+    return data::ValueNodeAccess::isInstance(getOriginalNodeAccess());
 }
 //-----------------------------------------------------------------------------
 
-bool NodeData::isGroupNode(data::Accessor const& _aAccessor) const
+bool NodeData::isGroupNode() const
 {
-    return data::GroupNodeAccess::isInstance(getOriginalNodeAccessRef(&_aAccessor));
+    return data::GroupNodeAccess::isInstance(getOriginalNodeAccess());
 }
 //-----------------------------------------------------------------------------
 
-SetNodeImpl&   NodeData::implGetSetImpl(data::Accessor const& _aAccessor)   const
+SetNodeImpl&   NodeData::implGetSetImpl()   const
 {
     OSL_ASSERT(m_pSpecificNode != 0);
-    OSL_ASSERT(isSetNode(_aAccessor));
+    OSL_ASSERT(isSetNode());
 
-    if (!isSetNode(_aAccessor))
+    if (!isSetNode())
             throw Exception( "INTERNAL ERROR: Node is not a set node. Cast failing." );
 
     return static_cast<SetNodeImpl&>(*m_pSpecificNode);
 }
 //---------------------------------------------------------------------
 
-GroupNodeImpl& NodeData::implGetGroupImpl(data::Accessor const& _aAccessor) const
+GroupNodeImpl& NodeData::implGetGroupImpl() const
 {
     OSL_ASSERT(m_pSpecificNode != 0);
-    OSL_ASSERT(isGroupNode(_aAccessor));
+    OSL_ASSERT(isGroupNode());
 
-    if (!isGroupNode(_aAccessor))
+    if (!isGroupNode())
             throw Exception( "INTERNAL ERROR: Node is not a group node. Cast failing." );
 
     return static_cast<GroupNodeImpl&>(*m_pSpecificNode);
 }
 //---------------------------------------------------------------------
 
-ValueElementNodeImpl& NodeData::implGetValueImpl(data::Accessor const& _aAccessor) const
+ValueElementNodeImpl& NodeData::implGetValueImpl() const
 {
     OSL_ASSERT(m_pSpecificNode != 0);
-    OSL_ASSERT(isValueElementNode(_aAccessor));
+    OSL_ASSERT(isValueElementNode());
 
-    if (!isValueElementNode(_aAccessor))
+    if (!isValueElementNode())
             throw Exception( "INTERNAL ERROR: Node is not a value node. Cast failing." );
 
     return static_cast<ValueElementNodeImpl&>(*m_pSpecificNode);
@@ -407,39 +396,20 @@ TreeImpl::~TreeImpl()
 void TreeImpl::disposeData()
 {
     m_aNodes.clear();
-    if (m_xStrategy.is()) m_xStrategy->releaseDataSegment();
-}
-//-----------------------------------------------------------------------------
-
-data::Accessor TreeImpl::getDataAccessor(data::Accessor const& _aExternalAccessor) const
-{
-    if (memory::Segment const* pDataSegment = getDataSegment())
-        return data::Accessor(pDataSegment);
-
-    else
-        return _aExternalAccessor;
-}
-//-----------------------------------------------------------------------------
-
-data::TreeAccessor ElementTreeImpl::getOriginalTreeAccess(data::Accessor const& _aAccessor) const
-{
-    data::Accessor const& aRealAccessor = this->getDataAccessor(_aAccessor);
-//    data::NodeAccess aRoot = nodeData(root_())->getOriginalNodeAccess(aRealAccessor);
-    return data::TreeAccessor(aRealAccessor, m_aDataAddress/*aRoot.getDataPtr()*/);
 }
 
 //-----------------------------------------------------------------------------
-void TreeImpl::rebuild(rtl::Reference<view::ViewStrategy> const & _xNewStrategy, data::NodeAccessRef const & _aNewData, data::Accessor const& _aOldAccessor)
+void TreeImpl::rebuild(rtl::Reference<view::ViewStrategy> const & _xNewStrategy, data::NodeAccess const & _aNewData)
 {
     m_xStrategy = _xNewStrategy;
-    this->implRebuild( this->root_(), _aNewData, _aOldAccessor);
+    this->implRebuild( this->root_(), _aNewData);
 }
 
 //-----------------------------------------------------------------------------
-void TreeImpl::implRebuild(NodeOffset nNode, data::NodeAccessRef const & _aNewData, data::Accessor const& _aOldAccessor)
+void TreeImpl::implRebuild(NodeOffset nNode, data::NodeAccess const & _aNewData)
 {
     NodeData * pNode = nodeData(nNode);
-    if (pNode->isGroupNode(_aOldAccessor))
+    if (pNode->isGroupNode())
     {
         // first rebuild the children
         data::GroupNodeAccess aNewGroupAccess(_aNewData);
@@ -447,13 +417,13 @@ void TreeImpl::implRebuild(NodeOffset nNode, data::NodeAccessRef const & _aNewDa
 
         for (NodeOffset nChild = firstChild_(nNode); isValidNode(nChild); nChild = findNextChild_(nNode,nChild))
         {
-            data::NodeAccessRef aChildAccess = aNewGroupAccess.getChildNode(implGetOriginalName(nChild));
+            data::NodeAccess aChildAccess = aNewGroupAccess.getChildNode(implGetOriginalName(nChild));
             OSL_ASSERT(aChildAccess.isValid());
-            implRebuild(nChild,aChildAccess,_aOldAccessor);
+            implRebuild(nChild,aChildAccess);
         }
     }
 
-    pNode->rebuild(m_xStrategy,_aNewData,_aOldAccessor);
+    pNode->rebuild(m_xStrategy,_aNewData);
 }
 
 //-----------------------------------------------------------------------------
@@ -495,7 +465,7 @@ AbsolutePath TreeImpl::getRootPath() const
     return AbsolutePath(aPath);
 }
 //-----------------------------------------------------------------------------
-void TreeImpl::build(rtl::Reference<view::ViewStrategy> const& _xStrategy, data::NodeAccessRef const& _aRootNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider)
+void TreeImpl::build(rtl::Reference<view::ViewStrategy> const& _xStrategy, data::NodeAccess const& _aRootNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider)
 {
     OSL_ASSERT(m_aNodes.empty());
     m_nDepth = nDepth;
@@ -568,6 +538,15 @@ Path::Component ElementTreeImpl::doGetRootName() const
 
 //-----------------------------------------------------------------------------
 
+Name ElementTreeImpl::getSimpleRootName() const
+{
+    // TreeImpl::getSimpleRootName tends to parse &
+    // then split the same name, burning CPU L&R
+    return Name( m_aElementName );
+}
+
+//-----------------------------------------------------------------------------
+
 Path::Component RootTreeImpl::doGetRootName() const
 {
     return m_aRootPath.getLocalName();
@@ -587,6 +566,7 @@ Name TreeImpl::getSimpleRootName() const
 {
     return doGetRootName().getName();
 }
+
 //-----------------------------------------------------------------------------
 
 Path::Component TreeImpl::getExtendedRootName() const
@@ -664,31 +644,6 @@ NodeOffset TreeImpl::findChild_(NodeOffset nParent, Name const& aName) const
     }
     return 0;
 }
-
-//-----------------------------------------------------------------------------
-// locking
-//-----------------------------------------------------------------------------
-osl::Mutex& TreeImpl::getRootLock() const
-{
-    if ( m_pParentTree )
-        return m_pParentTree->getRootLock();
-    else
-        return m_aOwnLock;
-}
-//-----------------------------------------------------------------------------
-memory::Segment const * TreeImpl::getRootSegment() const
-{
-    if ( m_pParentTree )
-        return m_pParentTree->getRootSegment();
-    else
-        return this->getDataSegment();
-}
-//-----------------------------------------------------------------------------
-memory::Segment const * TreeImpl::getDataSegment() const
-{
-    return m_xStrategy->getDataSegment();
-}
-//-----------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // dynamic-casting
@@ -780,7 +735,7 @@ ElementTreeImpl::ElementTreeImpl(   rtl::Reference<view::ViewStrategy> const& _x
 : TreeImpl()
 , m_aInstanceInfo(aTemplateInfo)
 , m_aElementName(_aCacheTree.getName())
-, m_aDataAddress(_aCacheTree.address())
+, m_aDataAddress(_aCacheTree)
 , m_aOwnData()
 {
     TreeImpl::build( _xStrategy, _aCacheTree.getRootNode(), nDepth, aTemplateProvider );
@@ -795,7 +750,7 @@ ElementTreeImpl::ElementTreeImpl(   rtl::Reference<view::ViewStrategy> const& _x
 : TreeImpl( rParentTree, nParentNode )
 , m_aInstanceInfo(aTemplateInfo)
 , m_aElementName(_aCacheTree.getName())
-, m_aDataAddress(_aCacheTree.address())
+, m_aDataAddress(_aCacheTree)
 , m_aOwnData()
 {
     TreeImpl::build( _xStrategy, _aCacheTree.getRootNode(), nDepth, aTemplateProvider );
@@ -812,11 +767,9 @@ ElementTreeImpl::ElementTreeImpl(   data::TreeSegment const& pNewTree,
 , m_aOwnData(pNewTree)
 {
     if (!pNewTree.is())
-    {
-        throw Exception("ERROR: Provider can't create Element Instance From Template");
-    }
+    throw Exception("ERROR: Provider can't create Element Instance From Template");
 
-    data::NodeAccess aNewNodeWrapper( m_aOwnData.getAccessor(), m_aOwnData.getSegmentRootNode() );
+    data::NodeAccess aNewNodeWrapper( m_aOwnData.getSegmentRootNode() );
 
     TreeImpl::build( view::createDirectAccessStrategy(m_aOwnData), aNewNodeWrapper, c_TreeDepthAll, aTemplateProvider );
 }
@@ -827,9 +780,10 @@ ElementTreeImpl::~ElementTreeImpl()
 }
 //-----------------------------------------------------------------------------
 
-memory::Segment * ElementTreeImpl::getUpdatableSegment(TreeImpl& _rTree)
+bool ElementTreeImpl::isUpdatableSegment(TreeImpl& _rTree)
 {
     TreeImpl * pTree = &_rTree;
+
     while (ElementTreeImpl * pElement = pTree->asElementTree())
     {
         if (pElement->m_aOwnData.is())
@@ -837,10 +791,7 @@ memory::Segment * ElementTreeImpl::getUpdatableSegment(TreeImpl& _rTree)
             OSL_ENSURE( pElement->getContextTree()==NULL ||
                         pElement->getContextTree()->getViewBehavior() != pElement->getViewBehavior(),
                         "ElementTree with parent in same fragment should not own its data");
-
-            memory::Segment * pSegment = pElement->m_aOwnData.getSegment();
-            OSL_ASSERT(_rTree.getDataSegment() == pSegment);
-            return pSegment;
+            return true;
         }
 
         pTree = pElement->getContextTree();
@@ -848,15 +799,13 @@ memory::Segment * ElementTreeImpl::getUpdatableSegment(TreeImpl& _rTree)
         if (!pTree)
         {
             OSL_ENSURE( false, "ElementTree without own data should have a parent");
-
-            return NULL;
+            return false;
         }
 
     }
     OSL_ENSURE( false, "Tree is not part of free-floating segment - cannot support direct update");
 
-    return NULL;
-
+    return false;
 }
 //-----------------------------------------------------------------------------
 
@@ -882,26 +831,15 @@ Path::Component ElementTreeImpl::makeExtendedName(Name const& _aSimpleName) cons
 
 // ownership handling
 //-----------------------------------------------------------------------------
-void ElementTreeImpl::rebuild(rtl::Reference<view::ViewStrategy> const & _aStrategy, data::TreeAccessor const & _aNewTree, data::Accessor const& _aOldAccessor)
+void ElementTreeImpl::rebuild(rtl::Reference<view::ViewStrategy> const & _aStrategy, data::TreeAccessor const & _aNewTree)
 {
-    TreeImpl::rebuild(_aStrategy,_aNewTree.getRootNode(),_aOldAccessor);
-    m_aDataAddress = _aNewTree.address();
+    TreeImpl::rebuild(_aStrategy,_aNewTree.getRootNode());
+    m_aDataAddress = _aNewTree;
     m_aElementName = _aNewTree.getName();
 }
 
 //-----------------------------------------------------------------------------
-#if 0
-void ElementTreeImpl::rebuild(rtl::Reference<view::ViewStrategy> const & _xStrategy, data::TreeAccessor const & _aNewTree)
-{
-    data::Accessor aOldAccessor( getViewBehavior()->getDataSegment() );
-    this->rebuild(_xStrategy,_aNewTree,aOldAccessor);
-}
-#endif
-//-----------------------------------------------------------------------------
 /// transfer ownership to the given set
-
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 void ElementTreeImpl::attachTo(data::SetNodeAccess const & aOwningSet, Name const& aElementName)
 {
@@ -915,20 +853,18 @@ void ElementTreeImpl::attachTo(data::SetNodeAccess const & aOwningSet, Name cons
         TreeImpl* pOwningTree = this->getContextTree();
         OSL_ENSURE(pOwningTree, "Element Tree Context must be set before attaching data");
 
-        if (memory::Segment * pTargetSpace = getUpdatableSegment(*pOwningTree))
+        if (isUpdatableSegment(*pOwningTree))
         {
-            memory::UpdateAccessor aTargetAccessor(pTargetSpace);
-
             // copy over to the new segment
-            data::TreeAddress aNewElement = m_aOwnData.getTreeAccess().copyTree(aTargetAccessor);
+            data::TreeAddress aNewElement = m_aOwnData.getTreeAccess().copyTree();
 
-            data::SetNodeAccess::addElement(aTargetAccessor,aOwningSet.address(),  aNewElement);
+            data::SetNodeAccess::addElement(aOwningSet,  aNewElement);
 
-            data::TreeAccessor aNewAccessor(aTargetAccessor.downgrade(),aNewElement);
+            data::TreeAccessor aNewAccessor(aNewElement);
 
             rtl::Reference<view::ViewStrategy> xNewBehavior = pOwningTree->getViewBehavior();
 
-            this->rebuild(xNewBehavior,aNewAccessor,m_aOwnData.getAccessor());
+            this->rebuild(xNewBehavior,aNewAccessor);
         }
         else
             OSL_ENSURE( false, "Cannot attach directly to new tree - no update access available");
@@ -950,26 +886,21 @@ void ElementTreeImpl::detachFrom(data::SetNodeAccess const & aOwningSet, Name co
         rtl::Reference< view::ViewStrategy > xOldStrategy = this->getViewBehavior();
         OSL_ENSURE(xOldStrategy.is(), "Element Tree Context must still have the old strategy when detaching data");
 
-        if (memory::Segment * pTargetSpace = xOldStrategy->getDataSegmentForUpdate())
         {
             using namespace data;
 
             // make a new segment with a copy of the data
-            TreeSegment aNewSegment = TreeSegment::createNew( this->getOriginalTreeAccess(aOwningSet.accessor()) );
+            TreeSegment aNewSegment = TreeSegment::createNew( this->getOriginalTreeAccess() );
 
             OSL_ENSURE(aNewSegment.is(),"ERROR: Could not create detached copy of elment data");
 
-            this->takeTreeAndRebuild( aNewSegment, aOwningSet.accessor() );
+            this->takeTreeAndRebuild( aNewSegment );
 
-            memory::UpdateAccessor aTargetAccessor(pTargetSpace);
+            TreeAddress aOldElement = data::SetNodeAccess::removeElement(aOwningSet, aElementName );
+        OSL_ENSURE(aOldElement != NULL,"ERROR: Detached node not found in the given subtree");
 
-            TreeAddress aOldElement = data::SetNodeAccess::removeElement(aTargetAccessor,aOwningSet.address(), aElementName );
-            OSL_ENSURE(aOldElement.is(),"ERROR: Detached node not found in the given subtree");
-
-            TreeAccessor::freeTree(aTargetAccessor,aOldElement);
+            TreeAccessor::freeTree(aOldElement);
         }
-        else
-            OSL_ENSURE( false, "Cannot detach directly from old tree - no update access available");
 
         OSL_ENSURE(m_aOwnData.is(),"ERROR: Could not create own data segment for detached node");
     }
@@ -993,14 +924,13 @@ void ElementTreeImpl::takeTreeBack(data::TreeSegment const & _aDataSegment)
 //-----------------------------------------------------------------------------
 
 /// transfer ownership from the given owner
-void ElementTreeImpl::takeTreeAndRebuild(data::TreeSegment const & _aDataSegment, data::Accessor const & _aOldAccessor)
+void ElementTreeImpl::takeTreeAndRebuild(data::TreeSegment const & _aDataSegment)
 {
     OSL_ENSURE(!m_aOwnData.is(),"ERROR: Cannot take over a node - already owning");
     OSL_ENSURE(_aDataSegment.is(),"ERROR: Cannot take over NULL tree segment");
     if (!m_aOwnData.is())
     {
-        this->rebuild(view::createDirectAccessStrategy(_aDataSegment), _aDataSegment.getTreeAccess(),_aOldAccessor);
-
+        this->rebuild(view::createDirectAccessStrategy(_aDataSegment), _aDataSegment.getTreeAccess());
         m_aOwnData = _aDataSegment;
         OSL_ENSURE(m_aOwnData.is(),"ERROR: Could not take over data segment");
     }
