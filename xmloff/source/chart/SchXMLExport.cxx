@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:32:43 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:35:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,118 +96,50 @@
 #include <list>
 #include <typeinfo>
 
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
 #include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/lang/XServiceName.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-//todo remove if model changes are notified and view is updated automatically
-#ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
 #include <com/sun/star/util/XRefreshable.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_CHART_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart/XChartDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTLEGENDPOSITION_HPP_
 #include <com/sun/star/chart/ChartLegendPosition.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_XTWOAXISXSUPPLIER_HPP_
 #include <com/sun/star/chart/XTwoAxisXSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_XTWOAXISYSUPPLIER_HPP_
 #include <com/sun/star/chart/XTwoAxisYSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_XAXISZSUPPLIER_HPP_
 #include <com/sun/star/chart/XAxisZSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_XCHARTDATAARRAY_HPP_
 #include <com/sun/star/chart/XChartDataArray.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTAXISASSIGN_HPP_
 #include <com/sun/star/chart/ChartAxisAssign.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTSERIESADDRESS_HPP_
 #include <com/sun/star/chart/ChartSeriesAddress.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_X3DDISPLAY_HPP_
 #include <com/sun/star/chart/X3DDisplay.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_XSTATISTICDISPLAY_HPP_
 #include <com/sun/star/chart/XStatisticDisplay.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
 #include <com/sun/star/chart2/XDiagram.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEMCONTAINER_HPP_
+#include <com/sun/star/chart2/RelativePosition.hpp>
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPECONTAINER_HPP_
+#include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDATASERIESCONTAINER_HPP_
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATASOURCE_HPP_
 #include <com/sun/star/chart2/data/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATASINK_HPP_
 #include <com/sun/star/chart2/data/XDataSink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATARECEIVER_HPP_
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATAPROVIDER_HPP_
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XRANGEXMLCONVERSION_HPP_
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XTEXTUALDATASEQUENCE_HPP_
 #include <com/sun/star/chart2/data/XTextualDataSequence.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XNUMERICALDATASEQUENCE_HPP_
 #include <com/sun/star/chart2/data/XNumericalDataSequence.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_UTIL_XSTRINGMAPPING_HPP_
 #include <com/sun/star/util/XStringMapping.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_HOMOGENMATRIX_HPP_
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPES_HPP_
 #include <com/sun/star/drawing/XShapes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
 #include <com/sun/star/embed/XVisualObject.hpp>
-#endif
 
-#include    "MultiPropertySetHandler.hxx"
-#include    "PropertyMap.hxx"
+#include "MultiPropertySetHandler.hxx"
+#include "PropertyMap.hxx"
 
 using namespace rtl;
 using namespace com::sun::star;
@@ -868,7 +800,7 @@ void SchXMLExportHelper::exportAutoStyles()
 
 void SchXMLExportHelper::collectAutoStyles( Reference< chart::XChartDocument > rChartDoc )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogContext, "xmloff", "bm93744", "::SchXMLExportHelper::collectAutoStyles" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogContext, "xmloff", "bm", "::SchXMLExportHelper::collectAutoStyles" );
 
     parseDocument( rChartDoc, sal_False );
 }
@@ -876,7 +808,7 @@ void SchXMLExportHelper::collectAutoStyles( Reference< chart::XChartDocument > r
 void SchXMLExportHelper::exportChart( Reference< chart::XChartDocument > rChartDoc,
                                       sal_Bool bIncludeTable )
 {
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogContext, "xmloff", "bm93744", "::SchXMLExportHelper::exportChart" );
+    RTL_LOGFILE_CONTEXT_AUTHOR( aLogContext, "xmloff", "bm", "::SchXMLExportHelper::exportChart" );
 
     parseDocument( rChartDoc, sal_True, bIncludeTable );
     DBG_ASSERT( maAutoStyleNameQueue.empty(), "There are still remaining autostyle names in the queue" );
@@ -921,6 +853,9 @@ void SchXMLExportHelper::parseDocument( Reference< chart::XChartDocument >& rCha
         return;
     }
 
+    awt::Size aPageSize( getPageSize( xNewDoc ));
+    if( bExportContent )
+        addSize( aPageSize );
     Reference< chart::XDiagram > xDiagram = rChartDoc->getDiagram();
     Reference< chart2::XDiagram > xNewDiagram;
     if( xNewDoc.is())
@@ -1197,7 +1132,7 @@ void SchXMLExportHelper::parseDocument( Reference< chart::XChartDocument >& rCha
     // plot-area element
     // -----------------
     if( xDiagram.is())
-        exportPlotArea( xDiagram, xNewDiagram, bExportContent, bIncludeTable );
+        exportPlotArea( xDiagram, xNewDiagram, aPageSize, bExportContent, bIncludeTable );
 
     // export additional shapes
     // ------------------------
@@ -1368,6 +1303,7 @@ void SchXMLExportHelper::exportTable()
 void SchXMLExportHelper::exportPlotArea(
     Reference< chart::XDiagram > xDiagram,
     Reference< chart2::XDiagram > xNewDiagram,
+    const awt::Size & rPageSize,
     sal_Bool bExportContent,
     sal_Bool bIncludeTable )
 {
@@ -1545,7 +1481,7 @@ void SchXMLExportHelper::exportPlotArea(
 
     // series elements
     // ---------------
-    exportSeries( xNewDiagram, bExportContent, bHasTwoYAxes );
+    exportSeries( xNewDiagram, rPageSize, bExportContent, bHasTwoYAxes );
 
     // stock-chart elements
     OUString sChartType ( xDiagram->getDiagramType());
@@ -2223,6 +2159,7 @@ void SchXMLExportHelper::exportAxes(
 
 void SchXMLExportHelper::exportSeries(
     const Reference< chart2::XDiagram > & xNewDiagram,
+    const awt::Size & rPageSize,
     sal_Bool bExportContent,
     sal_Bool bHasTwoYAxes )
 {
@@ -2517,39 +2454,7 @@ void SchXMLExportHelper::exportSeries(
                         xPropSet.is() &&
                         mxExpPropMapper.is() )
                     {
-                        Reference< beans::XPropertySet > xStatProp;
-                        try
-                        {
-                            Any aPropAny( xPropSet->getPropertyValue(
-                                            OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRegressionProperties" ))));
-                            aPropAny >>= xStatProp;
-                        }
-                        catch( uno::Exception & rEx )
-                        {
-                            (void)rEx; // avoid warning for pro build
-                            DBG_ERROR1( "Exception caught during Export of series - optional DataRegressionProperties not available: %s",
-                                        OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-                        }
-
-                        if( xStatProp.is() )
-                        {
-                            aPropertyStates = mxExpPropMapper->Filter( xStatProp );
-
-                            if( aPropertyStates.size() > 0 )
-                            {
-                                // write element
-                                if( bExportContent )
-                                {
-                                    // add style name attribute
-                                    AddAutoStyleAttribute( aPropertyStates );
-                                    SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_REGRESSION_CURVE, sal_True, sal_True );
-                                }
-                                else    // autostyles
-                                {
-                                    CollectAutoStyle( aPropertyStates );
-                                }
-                            }
-                        }
+                        exportRegressionCurve( aSeriesSeq[nSeriesIdx], xPropSet, rPageSize, bExportContent );
                     }
 
                     if( eErrorType != chart::ChartErrorIndicatorType_NONE &&
@@ -2601,6 +2506,110 @@ void SchXMLExportHelper::exportSeries(
                 }
             }
             aPropertyStates.clear();
+        }
+    }
+}
+
+void SchXMLExportHelper::exportRegressionCurve(
+    const Reference< chart2::XDataSeries > & xSeries,
+    const Reference< beans::XPropertySet > & xSeriesProp,
+    const awt::Size & rPageSize,
+    sal_Bool bExportContent )
+{
+    OSL_ASSERT( mxExpPropMapper.is());
+
+    std::vector< XMLPropertyState > aPropertyStates;
+    std::vector< XMLPropertyState > aEquationPropertyStates;
+    Reference< beans::XPropertySet > xStatProp;
+    try
+    {
+        Any aPropAny( xSeriesProp->getPropertyValue(
+                          OUString( RTL_CONSTASCII_USTRINGPARAM( "DataRegressionProperties" ))));
+        aPropAny >>= xStatProp;
+    }
+    catch( uno::Exception & rEx )
+    {
+        (void)rEx; // avoid warning for pro build
+        DBG_ERROR1( "Exception caught during Export of series - optional DataRegressionProperties not available: %s",
+                    OUStringToOString( rEx.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+    }
+
+    if( xStatProp.is() )
+    {
+        Reference< chart2::XRegressionCurve > xRegCurve( SchXMLTools::getRegressionCurve( xSeries ));
+        Reference< beans::XPropertySet > xEquationProperties;
+        if( xRegCurve.is())
+            xEquationProperties.set( xRegCurve->getEquationProperties());
+
+        bool bShowEquation = false;
+        bool bShowRSquared = false;
+        bool bExportEquation = false;
+        aPropertyStates = mxExpPropMapper->Filter( xStatProp );
+        if( xEquationProperties.is())
+        {
+            xEquationProperties->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ShowEquation" )))
+                >>= bShowEquation;
+            xEquationProperties->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "ShowCorrelationCoefficient" )))
+                >>= bShowRSquared;
+            bExportEquation = ( bShowEquation || bShowRSquared );
+            if( bExportEquation )
+            {
+                // number format
+                sal_Int32 nNumberFormat = 0;
+                if( ( xEquationProperties->getPropertyValue(
+                          OUString( RTL_CONSTASCII_USTRINGPARAM( "NumberFormat" ))) >>= nNumberFormat ) &&
+                    nNumberFormat != -1 )
+                {
+                    mrExport.addDataStyle( nNumberFormat );
+                }
+                aEquationPropertyStates = mxExpPropMapper->Filter( xEquationProperties );
+            }
+        }
+
+        if( !aPropertyStates.empty() || bExportEquation )
+        {
+            // write element
+            if( bExportContent )
+            {
+                // add style name attribute
+                if( !aPropertyStates.empty())
+                    AddAutoStyleAttribute( aPropertyStates );
+                SvXMLElementExport aRegressionExport( mrExport, XML_NAMESPACE_CHART, XML_REGRESSION_CURVE, sal_True, sal_True );
+                if( bExportEquation )
+                {
+                    // default is true
+                    if( !bShowEquation )
+                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DISPLAY_EQUATION, XML_FALSE );
+                    // default is false
+                    if( bShowRSquared )
+                        mrExport.AddAttribute( XML_NAMESPACE_CHART, XML_DISPLAY_R_SQUARE, XML_TRUE );
+
+                    // export position
+                    chart2::RelativePosition aRelativePosition;
+                    if( xEquationProperties->getPropertyValue(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("RelativePosition"))) >>= aRelativePosition )
+                    {
+                        double fX = aRelativePosition.Primary * rPageSize.Width;
+                        double fY = aRelativePosition.Secondary * rPageSize.Height;
+                        awt::Point aPos;
+                        aPos.X = static_cast< sal_Int32 >( ::rtl::math::round( fX ));
+                        aPos.Y = static_cast< sal_Int32 >( ::rtl::math::round( fY ));
+                        addPosition( aPos );
+                    }
+
+                    if( !aEquationPropertyStates.empty())
+                        AddAutoStyleAttribute( aEquationPropertyStates );
+
+                    SvXMLElementExport( mrExport, XML_NAMESPACE_CHART, XML_EQUATION, sal_True, sal_True );
+                }
+            }
+            else    // autostyles
+            {
+                if( !aPropertyStates.empty())
+                    CollectAutoStyle( aPropertyStates );
+                if( bExportEquation && !aEquationPropertyStates.empty())
+                    CollectAutoStyle( aEquationPropertyStates );
+            }
         }
     }
 }
@@ -2980,36 +2989,49 @@ void SchXMLExportHelper::getCellAddress( sal_Int32 nCol, sal_Int32 nRow )
     msStringBuffer.append( nRow + (sal_Int32)1 );
 }
 
+void SchXMLExportHelper::addPosition( const awt::Point & rPosition )
+{
+    mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, rPosition.X );
+    msString = msStringBuffer.makeStringAndClear();
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_X, msString );
+
+    mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, rPosition.Y );
+    msString = msStringBuffer.makeStringAndClear();
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y, msString );
+}
+
 void SchXMLExportHelper::addPosition( Reference< drawing::XShape > xShape )
 {
     if( xShape.is())
-    {
-        awt::Point aPos = xShape->getPosition();
+        addPosition( xShape->getPosition());
+}
 
-        mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, aPos.X );
-        msString = msStringBuffer.makeStringAndClear();
-        mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_X, msString );
+void SchXMLExportHelper::addSize( const awt::Size & rSize )
+{
+    mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, rSize.Width );
+    msString = msStringBuffer.makeStringAndClear();
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,  msString );
 
-        mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, aPos.Y );
-        msString = msStringBuffer.makeStringAndClear();
-        mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_Y, msString );
-    }
+    mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, rSize.Height );
+    msString = msStringBuffer.makeStringAndClear();
+    mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, msString );
 }
 
 void SchXMLExportHelper::addSize( Reference< drawing::XShape > xShape )
 {
     if( xShape.is())
-    {
-        awt::Size aSize = xShape->getSize();
+        addSize( xShape->getSize() );
+}
 
-        mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, aSize.Width );
-        msString = msStringBuffer.makeStringAndClear();
-        mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,  msString );
+awt::Size SchXMLExportHelper::getPageSize( const Reference< chart2::XChartDocument > & xChartDoc ) const
+{
+    awt::Size aSize( 8000, 7000 );
+    uno::Reference< embed::XVisualObject > xVisualObject( xChartDoc, uno::UNO_QUERY );
+    DBG_ASSERT( xVisualObject.is(),"need XVisualObject for page size" );
+    if( xVisualObject.is() )
+        aSize = xVisualObject->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
 
-        mrExport.GetMM100UnitConverter().convertMeasure( msStringBuffer, aSize.Height );
-        msString = msStringBuffer.makeStringAndClear();
-        mrExport.AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, msString );
-    }
+    return aSize;
 }
 
 void SchXMLExportHelper::swapDataArray( Sequence< Sequence< double > >& rSequence )
@@ -3118,27 +3140,6 @@ void SchXMLExport::_ExportContent()
     Reference< chart::XChartDocument > xChartDoc( GetModel(), uno::UNO_QUERY );
     if( xChartDoc.is())
     {
-        // add size for chart element in standalone case
-        awt::Size aSize( 8000, 7000 );
-        uno::Reference< embed::XVisualObject > xVisualObject(GetModel(),uno::UNO_QUERY);
-        DBG_ASSERT(xVisualObject.is(),"need xVisualObject for page size");
-        if( xVisualObject.is() )
-            aSize = xVisualObject->getVisualAreaSize( embed::Aspects::MSOLE_CONTENT );
-
-        //set the size
-        {
-            OUStringBuffer sStringBuffer;
-            OUString sString;
-
-            GetMM100UnitConverter().convertMeasure( sStringBuffer, aSize.Width );
-            sString = sStringBuffer.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,  sString );
-
-            GetMM100UnitConverter().convertMeasure( sStringBuffer, aSize.Height );
-            sString = sStringBuffer.makeStringAndClear();
-            AddAttribute( XML_NAMESPACE_SVG, XML_HEIGHT, sString );
-        }
-
         // determine if data comes from the outside
         sal_Bool bIncludeTable = sal_True;
 
