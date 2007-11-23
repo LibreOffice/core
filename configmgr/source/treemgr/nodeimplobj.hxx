@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodeimplobj.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:33:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:45:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #ifndef CONFIGMGR_NODEIMPLOBJECTS_HXX_
 #define CONFIGMGR_NODEIMPLOBJECTS_HXX_
 
+#ifndef INCLUDED_SHARABLE_NODE_HXX
+#include "node.hxx"
+#endif
 #ifndef CONFIGMGR_CONFIGNODEBEHAVIOR_HXX_
 #include "nodeimpl.hxx"
 #endif
@@ -48,12 +51,9 @@
 #ifndef CONFIGMGR_VALUENODEBEHAVIOR_HXX_
 #include "valuenodeimpl.hxx"
 #endif
-#ifndef CONFIGMGR_NODEADDRESS_HXX
-#include "nodeaddress.hxx"
-#endif
 
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/simplereferenceobject.hxx>
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 
 #ifndef INCLUDED_MEMORY
@@ -73,7 +73,7 @@ namespace configmgr
 // Value Nodes
 //-----------------------------------------------------------------------------
 
-        class ValueMemberNode::DeferredImpl : public salhelper::SimpleReferenceObject
+        class ValueMemberNode::DeferredImpl : public configmgr::SimpleReferenceObject
         {
             data::ValueNodeAddress m_aValueRef;
 
@@ -81,18 +81,18 @@ namespace configmgr
             bool        m_bToDefault;
             bool        m_bChange;
         public:
-            explicit DeferredImpl(data::ValueNodeAccess const& _aValueNode) ;
+            explicit DeferredImpl(data::ValueNodeAccess const& _aValueNode);
 
             /// does this wrap a change
             bool isChange() const   { return m_bChange; }
 
             /// retrieve the underlying (original) node location
             data::ValueNodeAddress getOriginalNodeAddress() const
-            { return m_aValueRef; }
+                { return m_aValueRef; }
 
             /// retrieve the underlying (original) node
-            data::ValueNodeAccess getOriginalNode(data::Accessor const& _aAccessor) const
-            { return data::ValueNodeAccess(_aAccessor,m_aValueRef); }
+            data::ValueNodeAccess getOriginalNode() const
+        { return data::ValueNodeAccess(m_aValueRef); }
 
             /// Does this node change to default
             bool isToDefault()      const { return m_bToDefault; }
@@ -108,14 +108,12 @@ namespace configmgr
 
         public:
             // commit protocol
-            std::auto_ptr<ValueChange> preCommitChange(data::Accessor const& _aAccessor);
-            void finishCommit(ValueChange& rChange, data::Accessor const& _aAccessor);
-            void revertCommit(ValueChange& rChange, data::Accessor const& _aAccessor);
-            void failedCommit(ValueChange& rChange, data::Accessor const& _aAccessor);
+            std::auto_ptr<ValueChange> preCommitChange();
+            void finishCommit(ValueChange& rChange);
+            void revertCommit(ValueChange& rChange);
+            void failedCommit(ValueChange& rChange);
 
-            // void commitDirect(data::Accessor const& _aAccessor);
-
-            ValueChangeImpl* collectChange(data::Accessor const& _aAccessor);
+            ValueChangeImpl* collectChange();
             ValueChangeImpl* adjustToChange(ValueChange const& rExternalChange);
 
             // notification protocol
@@ -141,12 +139,12 @@ namespace configmgr
 
         public:
         // commit protocol
-            std::auto_ptr<SubtreeChange> preCommitValueChanges(data::Accessor const& _aAccessor);
-            void finishCommit(data::Accessor const& _aAccessor, SubtreeChange& rChange);
-            void revertCommit(data::Accessor const& _aAccessor, SubtreeChange& rChange);
-            void failedCommit(data::Accessor const& _aAccessor, SubtreeChange& rChange);
+            std::auto_ptr<SubtreeChange> preCommitValueChanges();
+            void finishCommit(SubtreeChange& rChange);
+            void revertCommit(SubtreeChange& rChange);
+            void failedCommit(SubtreeChange& rChange);
 
-            void collectValueChanges(data::Accessor const& _aAccessor, NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
+            void collectValueChanges(NodeChanges& rChanges, TreeImpl* pParent, NodeOffset nNode) const;
 
         public:
         // data access
@@ -157,7 +155,7 @@ namespace configmgr
             MemberChange findValueChange(Name const& aName);
 
             using GroupNodeImpl::makeValueMember;
-            ValueMemberNode makeValueMember(data::Accessor const& _aAccessor, Name const& _aName, bool _bForUpdate);
+            ValueMemberNode makeValueMember(Name const& _aName, bool _bForUpdate);
 
         private:
             typedef std::map< Name, MemberChange > MemberChanges;
@@ -178,13 +176,13 @@ namespace configmgr
         public:
             bool hasChanges() const;
             void markChanged();
-            void collectElementChanges(data::Accessor const& _aAccessor, NodeChanges& rChanges) const;
+            void collectElementChanges(NodeChanges& rChanges) const;
 
         public:
-            std::auto_ptr<SubtreeChange> preCommitChanges(data::Accessor const& _aAccessor, ElementList& _rRemovedElements);
-            void failedCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges);
-            void finishCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges);
-            void revertCommit(data::Accessor const& _aAccessor, SubtreeChange& rChanges);
+            std::auto_ptr<SubtreeChange> preCommitChanges(ElementList& _rRemovedElements);
+            void failedCommit(SubtreeChange& rChanges);
+            void finishCommit(SubtreeChange& rChanges);
+            void revertCommit(SubtreeChange& rChanges);
 
             void insertNewElement(Name const& aName, Element const& aNewElement);
             void removeOldElement(Name const& aName);
@@ -193,20 +191,20 @@ namespace configmgr
         // NodeImpl implementation
             virtual bool                   doIsEmpty() const;
             virtual ElementTreeImpl*       doFindElement(Name const& aName) ;
-            virtual SetNodeVisitor::Result doDispatchToElements(data::Accessor const& _aAccessor, SetNodeVisitor& aVisitor);
+            virtual SetNodeVisitor::Result doDispatchToElements(SetNodeVisitor& aVisitor);
 
-            virtual void doDifferenceToDefaultState(data::Accessor const& _aAccessor, SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree);
+            virtual void doDifferenceToDefaultState(SubtreeChange& _rChangeToDefault, ISubtree& _rDefaultTree);
 
-            virtual SetElementChangeImpl* doAdjustToAddedElement(data::Accessor const& _aAccessor, Name const& aName, AddNode const& aAddNodeChange, Element const & aNewElement);
-            virtual SetElementChangeImpl* doAdjustToRemovedElement(data::Accessor const& _aAccessor, Name const& aName, RemoveNode const& aRemoveNodeChange);
+            virtual SetElementChangeImpl* doAdjustToAddedElement(Name const& aName, AddNode const& aAddNodeChange, Element const & aNewElement);
+            virtual SetElementChangeImpl* doAdjustToRemovedElement(Name const& aName, RemoveNode const& aRemoveNodeChange);
 
-            virtual SetElementChangeImpl* doAdjustChangedElement(data::Accessor const& _aAccessor, NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
+            virtual SetElementChangeImpl* doAdjustChangedElement(NodeChangesInformation& rLocalChanges, Name const& aName, Change const& aChange);
 
             virtual void doTransferElements(ElementSet& rReplacement);
 
         // Implementation
         private:
-            void rebuildElement(data::Accessor const& _aAccessor, Name const& aName, Element const& _aElement);
+            void rebuildElement(Name const& aName, Element const& _aElement);
 
         private:
             ElementSet m_aChangedData;
