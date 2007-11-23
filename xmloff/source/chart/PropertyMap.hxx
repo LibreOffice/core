@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:32:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:34:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,9 @@
 #ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CHART_DATALABELPLACEMENT_HPP_
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
+#endif
 
 // custom types
 #define XML_SCH_TYPE_AXIS_ARRANGEMENT       ( XML_SCH_TYPES_START + 0 )
@@ -85,6 +88,7 @@
 #define XML_SCH_TYPE_INTERPOLATION          ( XML_SCH_TYPES_START + 8 )
 #define XML_SCH_TYPE_SYMBOL_TYPE            ( XML_SCH_TYPES_START + 9 )
 #define XML_SCH_TYPE_NAMED_SYMBOL           ( XML_SCH_TYPES_START + 10 )
+#define XML_SCH_TYPE_LABEL_PLACEMENT_TYPE   ( XML_SCH_TYPES_START + 11 )
 
 // context ids
 #define XML_SCH_CONTEXT_USER_SYMBOL                 ( XML_SCH_CTF_START + 0 )
@@ -203,6 +207,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_SPECIAL( "DataCaption", CHART, XML_DATA_LABEL_TEXT, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_TEXT ),       // to 'tristate' and two bools
     MAP_SPECIAL( "DataCaption", CHART, XML_DATA_LABEL_SYMBOL, XML_TYPE_NUMBER | MID_FLAG_MERGE_PROPERTY, DATA_LABEL_SYMBOL ),
     MAP_SPECIAL( "LabelSeparator", CHART, XML_LABEL_SEPARATOR, XML_TYPE_STRING | MID_FLAG_ELEMENT_ITEM, LABEL_SEPARATOR ),
+    MAP_ENTRY( "LabelPlacement", CHART, XML_LABEL_POSITION, XML_SCH_TYPE_LABEL_PLACEMENT_TYPE ),
     MAP_ENTRY( "SegmentOffset", CHART, XML_PIE_OFFSET, XML_TYPE_NUMBER ),
     MAP_SPECIAL( "PercentageNumberFormat", STYLE, XML_PERCENTAGE_DATA_STYLE_NAME, XML_TYPE_NUMBER, NUMBER_FORMAT ),
 
@@ -282,6 +287,25 @@ SvXMLEnumMapEntry aXMLChartInterpolationTypeEnumMap[] =
     { ::xmloff::token::XML_B_SPLINE,     2 },
     { ::xmloff::token::XML_TOKEN_INVALID,0 }
 };
+
+SvXMLEnumMapEntry aXMLChartDataLabelPlacementEnumMap[] =
+{
+    { ::xmloff::token::XML_AVOID_OVERLAP,   ::com::sun::star::chart::DataLabelPlacement::AVOID_OVERLAP },
+    { ::xmloff::token::XML_CENTER,          ::com::sun::star::chart::DataLabelPlacement::CENTER },
+    { ::xmloff::token::XML_TOP,             ::com::sun::star::chart::DataLabelPlacement::TOP },
+    { ::xmloff::token::XML_TOP_LEFT,        ::com::sun::star::chart::DataLabelPlacement::TOP_LEFT },
+    { ::xmloff::token::XML_LEFT,            ::com::sun::star::chart::DataLabelPlacement::LEFT },
+    { ::xmloff::token::XML_BOTTOM_LEFT,     ::com::sun::star::chart::DataLabelPlacement::BOTTOM_LEFT },
+    { ::xmloff::token::XML_BOTTOM,          ::com::sun::star::chart::DataLabelPlacement::BOTTOM },
+    { ::xmloff::token::XML_BOTTOM_RIGHT,    ::com::sun::star::chart::DataLabelPlacement::BOTTOM_RIGHT },
+    { ::xmloff::token::XML_RIGHT,           ::com::sun::star::chart::DataLabelPlacement::RIGHT },
+    { ::xmloff::token::XML_TOP_RIGHT,       ::com::sun::star::chart::DataLabelPlacement::TOP_RIGHT },
+    { ::xmloff::token::XML_INSIDE,          ::com::sun::star::chart::DataLabelPlacement::INSIDE },
+    { ::xmloff::token::XML_OUTSIDE,         ::com::sun::star::chart::DataLabelPlacement::OUTSIDE },
+    { ::xmloff::token::XML_NEAR_ORIGIN,     ::com::sun::star::chart::DataLabelPlacement::NEAR_ORIGIN },
+    { ::xmloff::token::XML_TOKEN_INVALID, 0 }
+};
+
 
 #endif  // XML_SCH_CREATE_GLOBAL_MAPS
 
