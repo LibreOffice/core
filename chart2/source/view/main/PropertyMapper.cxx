@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:25:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:13:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,18 +39,11 @@
 #include "ContainerHelper.hxx"
 #include "macros.hxx"
 
-#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_TEXTVERTICALADJUST_HPP_
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_TEXTHORIZONTALADJUST_HPP_
 #include <com/sun/star/drawing/TextHorizontalAdjust.hpp>
-#endif
+#include <com/sun/star/drawing/LineJoint.hpp>
 
 //.............................................................................
 namespace chart
@@ -339,6 +332,29 @@ const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForFillAndLineProp
 }
 
 //static
+const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForTextShapeProperties()
+{
+    static tMakePropertyNameMap m_aShapePropertyMapForTextShapeProperties =
+        tMakePropertyNameMap
+        ( PropertyMapper::getPropertyNameMapForCharacterProperties() )
+        ( PropertyMapper::getPropertyNameMapForFillProperties() )
+        ( PropertyMapper::getPropertyNameMapForLineProperties() )
+//         ( PropertyMapper::getPropertyNameMapForParagraphProperties() )
+        // some text properties
+//         ( C2U( "TextHorizontalAdjust" ),   C2U( "TextHorizontalAdjust" ) )
+//         ( C2U( "TextVerticalAdjust" ),     C2U( "TextVerticalAdjust" ) )
+//         ( C2U( "TextAutoGrowHeight" ),     C2U( "TextAutoGrowHeight" ) )
+//         ( C2U( "TextAutoGrowWidth" ),      C2U( "TextAutoGrowWidth" ) )
+//         ( C2U( "TextLeftDistance" ),       C2U( "TextLeftDistance" ) )
+//         ( C2U( "TextRightDistance" ),      C2U( "TextRightDistance" ) )
+//         ( C2U( "TextUpperDistance" ),      C2U( "TextUpperDistance" ) )
+//         ( C2U( "TextLowerDistance" ),      C2U( "TextLowerDistance" ) )
+        ;
+
+    return m_aShapePropertyMapForTextShapeProperties;
+}
+
+//static
 const tMakePropertyNameMap& PropertyMapper::getPropertyNameMapForLineSeriesProperties()
 {
     //shape property -- chart model object property
@@ -480,6 +496,37 @@ void PropertyMapper::getTextLabelMultiPropertyLists(
     if( eHorizontalAdjust == drawing::TextHorizontalAdjust_RIGHT )
         eParaAdjust = style::ParagraphAdjust_RIGHT;
     */
+
+    PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );
+}
+
+void PropertyMapper::getPreparedTextShapePropertyLists(
+    const uno::Reference< beans::XPropertySet >& xSourceProp
+    , tNameSequence& rPropNames, tAnySequence& rPropValues )
+{
+    //fill character, line and fill properties into the ValueMap
+    tPropertyNameValueMap aValueMap;
+    PropertyMapper::getValueMap( aValueMap
+            , PropertyMapper::getPropertyNameMapForTextShapeProperties()
+            , xSourceProp );
+
+    // auto-grow makes sure the shape has the correct size after setting text
+    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextHorizontalAdjust"), uno::makeAny( drawing::TextHorizontalAdjust_CENTER )));
+    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextVerticalAdjust"), uno::makeAny( drawing::TextVerticalAdjust_CENTER )));
+    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextAutoGrowHeight"), uno::makeAny( true )));
+    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextAutoGrowWidth"), uno::makeAny( true )));
+
+    // set some distance to the border, in case it is shown
+    const sal_Int32 nWidthDist  = 250;
+    const sal_Int32 nHeightDist = 125;
+    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextLeftDistance"),  uno::makeAny( nWidthDist )));
+    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextRightDistance"), uno::makeAny( nWidthDist )));
+    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextUpperDistance"), uno::makeAny( nHeightDist )));
+    aValueMap.insert( tPropertyNameValueMap::value_type( C2U("TextLowerDistance"), uno::makeAny( nHeightDist )));
+
+    // use a line-joint showing the border of thick lines like two rectangles
+    // filled in between.
+    aValueMap[C2U("LineJoint")] <<= drawing::LineJoint_MITER;
 
     PropertyMapper::getMultiPropertyListsFromValueMap( rPropNames, rPropValues, aValueMap );
 }
