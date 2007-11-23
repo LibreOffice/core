@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:43:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:46:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,14 @@ String STR_PAGE_ILLUMINATION
 {
     Text [ en-US ] = "Illumination" ;
 };
+String STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS
+{
+    Text [ en-US ] = "Average value line with value %AVERAGE_VALUE and standard deviation %STD_DEVIATION";
+};
+String STR_PAGE_REGRESSION_OPTIONS
+{
+    Text [ en-US ] = "Equation";
+};
 
 String STR_OBJECT_AXIS
 {
@@ -276,10 +284,11 @@ String STR_OBJECT_AVERAGE_LINE
 {
     Text [ en-US ] = "Average Value Line";
 };
-String STR_OBJECT_AVERAGE_LINE_WITH_PARAMETERS
+String STR_OBJECT_CURVE_EQUATION
 {
-    Text [ en-US ] = "Average value line with value %AVERAGE_VALUE and standard deviation %STD_DEVIATION";
+    Text[ en-US ] = "Equation";
 };
+
 String STR_OBJECT_ERROR_INDICATOR
 {
     Text [ en-US ] = "Error Indicator";
