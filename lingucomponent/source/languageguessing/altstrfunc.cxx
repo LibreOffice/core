@@ -4,9 +4,9 @@
  *
  *  $RCSfile: altstrfunc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 10:54:22 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:51:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ std::string upperCase(const std::string &s) {
 }
 
 
-int start( const std::string &s1, const std::string &s2 ){
+int start(const std::string &s1, const std::string &s2){
     size_t i;
     int ret = 0;
 
