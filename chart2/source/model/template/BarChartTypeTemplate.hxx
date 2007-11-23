@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:45:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:00:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,11 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
     // ____ ChartTypeTemplate ____
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >
+                getChartTypeForIndex( sal_Int32 nChartTypeIndex );
     virtual sal_Int32 getDimension() const;
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
+    virtual bool isSwapXAndY() const;
 
     virtual void createCoordinateSystems(
         const ::com::sun::star::uno::Reference<
