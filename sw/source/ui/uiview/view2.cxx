@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:41:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,6 +364,31 @@ using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::ui::dialogs;
+
+
+static void lcl_SetAllTextToDefaultLanguage( SwWrtShell &rWrtSh, USHORT nWhichId )
+{
+    if (nWhichId == RES_CHRATR_LANGUAGE ||
+        nWhichId == RES_CHRATR_CJK_LANGUAGE ||
+        nWhichId == RES_CHRATR_CTL_LANGUAGE)
+    {
+        rWrtSh.StartAction();
+        rWrtSh.LockView( TRUE );
+        rWrtSh.Push();
+
+        // prepare to apply new language to all text in document
+        rWrtSh.SelAll();
+
+        // set language attribute to default for all text
+        SvUShortsSort aAttribs;
+        aAttribs.Insert( nWhichId );
+        rWrtSh.ResetAttr( &aAttribs );
+
+        rWrtSh.Pop( FALSE );
+        rWrtSh.LockView( FALSE );
+        rWrtSh.EndAction();
+    }
+}
 
 /*---------------------------------------------------------------------------
     Beschreibung:   String fuer die Seitenanzeige in der Statusbar basteln.
@@ -1093,18 +1118,21 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
         {
             SvxLanguageItem aLang(((SvxLanguageItem*)pItem)->GetLanguage(), RES_CHRATR_LANGUAGE);
             pWrtShell->SetDefault( aLang );
+            lcl_SetAllTextToDefaultLanguage( *pWrtShell, RES_CHRATR_LANGUAGE );
         }
         break;
         case  SID_ATTR_CHAR_CTL_LANGUAGE:
         if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(RES_CHRATR_CTL_LANGUAGE, FALSE, &pItem))
         {
             pWrtShell->SetDefault( *pItem );
+            lcl_SetAllTextToDefaultLanguage( *pWrtShell, RES_CHRATR_CTL_LANGUAGE );
         }
         break;
         case  SID_ATTR_CHAR_CJK_LANGUAGE:
         if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(RES_CHRATR_CJK_LANGUAGE, FALSE, &pItem))
         {
             pWrtShell->SetDefault( *pItem );
+            lcl_SetAllTextToDefaultLanguage( *pWrtShell, RES_CHRATR_CJK_LANGUAGE );
         }
         break;
         case FN_SCROLL_NEXT_PREV:
