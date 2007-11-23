@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mergechange.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:16:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:29:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,20 +93,20 @@ namespace configmgr
 // -----------------------------------------------------------------------------
     // -----------------------------------------------------------------------------
     // TODO: check name match
-    void applyUpdateWithAdjustment(TreeChangeList & _anUpdate, memory::UpdateAccessor& _aUpdateAccess, data::NodeAddress const & _aBaseAddress)
+    void applyUpdateWithAdjustment(TreeChangeList & _anUpdate, data::NodeAddress const & _aBaseAddress)
     {
-        OSL_ASSERT(_aBaseAddress.is());
+        OSL_ASSERT(_aBaseAddress != NULL);
 
-        applyUpdateWithAdjustmentToTree(_anUpdate.root,_aUpdateAccess,_aBaseAddress);
+        applyUpdateWithAdjustmentToTree(_anUpdate.root,_aBaseAddress);
     }
 
     // -----------------------------------------------------------------------------
     // TODO: check name match
-    bool adjustUpdate(TreeChangeList & _anUpdate, memory::UpdateAccessor& _aUpdateAccess, data::NodeAddress const & _aBaseAddress)
+    bool adjustUpdate(TreeChangeList & _anUpdate, data::NodeAddress const & _aBaseAddress)
     {
-        OSL_ASSERT(_aBaseAddress.is());
+        OSL_ASSERT(_aBaseAddress != NULL);
 
-        return adjustUpdateToTree(_anUpdate.root,_aUpdateAccess,_aBaseAddress);
+        return adjustUpdateToTree(_anUpdate.root,_aBaseAddress);
     }
     // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
