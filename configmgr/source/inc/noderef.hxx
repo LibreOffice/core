@@ -4,9 +4,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 17:53:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:21:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 #ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
 #endif
-#ifndef CONFIGMGR_ACCESSOR_HXX
-#include "accessor.hxx"
-#endif
 
 #ifndef INCLUDED_VECTOR
 #include <vector>
@@ -55,16 +52,16 @@ namespace configmgr
 {
     class INode;
 
-    namespace data      { using memory::Accessor; class TreeAccessor; }
+    namespace data      { class TreeAccessor; }
     namespace view      { class ViewTreeAccess; }
     namespace configapi { class Factory; }
     namespace node      { struct Attributes; }
     namespace configuration
     {
     //-------------------------------------------------------------------------
-        class Name;
-        class AbsolutePath;
-        class RelativePath;
+    class Name;
+    class AbsolutePath;
+    class RelativePath;
         namespace Path { class Component; }
 
         class NodeChange;
@@ -222,9 +219,8 @@ namespace configmgr
             typedef node::Attributes NodeAttributes;
         public:
             /// create a tree with a given implementation
-            Tree(data::Accessor const& _accessor, TreeImpl* pImpl);
-            /// create a tree with a given implementation
-            Tree(data::Accessor const& _accessor, TreeRef const& _aTree);
+            Tree(TreeImpl* pImpl);
+            Tree(TreeRef const& _aTree);
 
             /// checks, if this refers to an existing tree
             bool isValid() const
@@ -467,18 +463,13 @@ namespace configmgr
 
         // view & data layer binding
         public:
-            data::Accessor const & getDataAccessor() const { return m_accessor; }
-
             view::ViewTreeAccess getView() const;
 
-            void rebind(data::Accessor const& _aAccessor);
-            void unbind();
         // Comparison
         public:
             friend bool equalTree(Tree const& lhs, Tree const& rhs) { return equalTreeRef(lhs.m_ref, rhs.m_ref); }
         private:
             friend class TreeImplHelper;
-            data::Accessor  m_accessor;
             TreeRef         m_ref;
         };
     //-------------------------------------------------------------------------
@@ -615,9 +606,6 @@ namespace configmgr
 
         /// test whether the given inner node is a set node
         bool isSetNode(Tree const& aTree, NodeRef const& aNode);
-
-        osl::Mutex&             getRootLock(TreeRef const& aTree);
-        memory::Segment const * getRootSegment(TreeRef const& aTree);
 
         typedef std::vector<NodeID>     NodeIDList;
 
