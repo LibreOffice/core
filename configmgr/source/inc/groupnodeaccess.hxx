@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupnodeaccess.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:47:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:18:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,85 +49,59 @@ namespace configmgr
         class GroupNodeAccess
         {
         public:
-            typedef NodeAccess::Name        Name;
-            typedef NodeAccess::Attributes  Attributes;
-            typedef GroupNodeAddress                    NodeAddressType;
-            typedef GroupNodeAddress::AddressType       AddressType;
-            typedef GroupNodeAddress::DataType const    DataType;
-            typedef DataType * NodePointerType;
-            typedef NodeAddress                         ChildAddressType;
-            typedef NodeAccessRef                       ChildAccessType;
-
-            GroupNodeAccess(Accessor const& _aAccessor, NodeAddressType const& _aNodeRef)
-            : m_aAccessor(_aAccessor)
-            , m_pData(_aNodeRef.m_pData)
-            {}
-
-            GroupNodeAccess(Accessor const& _aAccessor, NodePointerType _pNode)
-            : m_aAccessor(_aAccessor)
-            , m_pData(check(_aAccessor,_pNode))
+            GroupNodeAccess(const sharable::GroupNode *_pNodeRef)
+            : m_pData((GroupNodeAddress)_pNodeRef)
             {}
 
             explicit
             GroupNodeAccess(NodeAccess const & _aNode)
-            : m_aAccessor(_aNode.accessor())
-            , m_pData(check(_aNode))
-            {
-            }
+            : m_pData(check(_aNode))
+            {}
 
-            explicit
-            GroupNodeAccess(NodeAccessRef const & _aNode)
-            : m_aAccessor(_aNode.accessor())
-            , m_pData(check(_aNode))
-            {
-            }
+            ~GroupNodeAccess() {}
 
-            static bool isInstance(NodeAccessRef const & _aNode)
-            {
-                return check(_aNode) != NULL;
-            }
+            static bool isInstance(NodeAccess const & _aNode)
+                { return check(_aNode) != NULL; }
 
             bool isValid() const { return m_pData != NULL; }
 
-            Name getName() const;
-            Attributes getAttributes() const;
+            configuration::Name getName() const;
+            node::Attributes getAttributes() const;
 
             bool isDefault()   const;
 
-            bool hasChild(Name const& _aName) const
-            { return implGetChild(_aName).is(); }
+            bool hasChild(configuration::Name const& _aName) const
+                { return implGetChild(_aName) != NULL; }
 
-            bool hasChildren() const;
+            bool hasChildren() const
+                { return m_pData->numDescendants > 0 ? true : false; }
 
-            ChildAccessType getChildNode(Name const& _aName) const
-            { return NodeAccessRef(&m_aAccessor, implGetChild(_aName)); }
+            NodeAccess getChildNode(configuration::Name const& _aName) const
+                { return NodeAccess(implGetChild(_aName)); }
 
-            NodeAddressType address()   const { return NodeAddressType(m_pData); }
-            Accessor const& accessor()  const { return m_aAccessor; }
+            operator NodeAccess() const { return NodeAccess(NodeAddress(m_pData)); }
 
-            operator NodeAccessRef()    const { return NodeAccessRef(&m_aAccessor,NodeAddress(m_pData)); }
-
-            DataType& data() const { return *static_cast<NodePointerType>(m_aAccessor.validate(m_pData)); }
+            sharable::GroupNode& data() const { return *m_pData; }
+            operator GroupNodeAddress () const { return (GroupNodeAddress)m_pData; }
 
         private:
-            static AddressType check(NodeAccessRef const&);
-            static AddressType check(Accessor const&, NodePointerType);
+            NodeAddress implGetChild(configuration::Name const& _aName) const;
+            static GroupNodeAddress check(sharable::Node *pNode)
+                { return pNode ? const_cast<GroupNodeAddress>(pNode->groupData()) : NULL; }
+            static GroupNodeAddress check(NodeAccess const&aRef)
+                { return check(static_cast<sharable::Node *>(aRef)); }
 
-            ChildAddressType implGetChild(Name const& _aName) const;
-
-            Accessor    m_aAccessor;
-            AddressType m_pData;
+            GroupNodeAddress m_pData;
         };
 
-        GroupNodeAddress toGroupNodeAddress(memory::Accessor const & _aAccess, NodeAddress const & _aNodeAddr);
-        GroupNodeAddress toGroupNodeAddress(memory::UpdateAccessor & _aAccess, NodeAddress const & _aNodeAddr);
+        GroupNodeAddress toGroupNodeAddress(NodeAddress const & _aNodeAddr);
     // -------------------------------------------------------------------------
         inline
-        NodeAccess::Name GroupNodeAccess::getName() const
+        configuration::Name GroupNodeAccess::getName() const
         { return NodeAccess::wrapName( data().info.getName() ); }
 
         inline
-        NodeAccess::Attributes GroupNodeAccess::getAttributes() const
+        node::Attributes GroupNodeAccess::getAttributes() const
         { return sharable::node(data()).getAttributes(); }
 
         inline
