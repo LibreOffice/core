@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodevisitor.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:22:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:32:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,14 +77,12 @@ typedef NodeVisitor::Result Result;
     struct NodeVisitor::Dispatcher
     {
         NodeVisitor& m_target;
-        Accessor const & m_accessor;
         Result       m_result;
 
-        Dispatcher(NodeVisitor& _rTarget, Accessor const * _pAccessor)
+    Dispatcher(NodeVisitor& _rTarget)
         : m_target(_rTarget)
-        , m_accessor(*_pAccessor)
         , m_result(NodeVisitor::CONTINUE)
-        {}
+            {}
 
         void applyToNode(sharable::Node const & _aNode);
         void applyToChildren(sharable::GroupNode const & _aNode);
@@ -96,19 +94,17 @@ typedef NodeVisitor::Result Result;
     struct SetVisitor::Dispatcher
     {
         SetVisitor&  m_target;
-        Accessor const & m_accessor;
         Result       m_result;
 
-        Dispatcher(SetVisitor& _rTarget, Accessor const * _pAccessor)
+        Dispatcher(SetVisitor& _rTarget)
         : m_target(_rTarget)
-        , m_accessor(*_pAccessor)
         , m_result(NodeVisitor::CONTINUE)
         {}
 
         void applyToTree(sharable::TreeFragment const & _aElement);
         void applyToElements(sharable::SetNode const & _aNode);
 
-        Result dispatch(sharable::TreeFragment const& _aElement);
+    Result dispatch(sharable::TreeFragment const & _aElement);
     };
 
     // -------------------------------------------------------------------------
@@ -120,17 +116,17 @@ typedef NodeVisitor::Result Result;
         switch (_aNode.node.info.type & mask_nodetype)
         {
         case nodetype_value:
-            return m_target.handle( ValueNodeAccess(m_accessor, &_aNode.value) );
+            return m_target.handle( ValueNodeAccess(&_aNode.value) );
 
         case nodetype_group:
-            return m_target.handle( GroupNodeAccess(m_accessor, &_aNode.group) );
+            return m_target.handle( GroupNodeAccess(&_aNode.group) );
 
         case nodetype_set:
-            return m_target.handle( SetNodeAccess(m_accessor, &_aNode.set) );
+            return m_target.handle( SetNodeAccess(&_aNode.set) );
 
         default:
             OSL_ENSURE(false,"NodeVisitor: invalid node type detected"); // invalid node
-            return m_target.handle( NodeAccessRef(&m_accessor, &_aNode) );
+            return m_target.handle( NodeAccess(&_aNode) );
         }
     }
     // -------------------------------------------------------------------------
@@ -138,7 +134,8 @@ typedef NodeVisitor::Result Result;
     inline
     Result SetVisitor::Dispatcher::dispatch(sharable::TreeFragment const& _aElement)
     {
-        return m_target.handle( TreeAccessor(m_accessor, &_aElement) );
+        return m_target.handle
+      (TreeAccessor((sharable::TreeFragment *)(& _aElement )));
     }
     // -------------------------------------------------------------------------
 
@@ -169,20 +166,20 @@ typedef NodeVisitor::Result Result;
     void SetVisitor::Dispatcher::applyToElements(sharable::SetNode const & _aNode)
     {
         using sharable::TreeFragment;
-        for (TreeFragment const * pElement = _aNode.getFirstElement(m_accessor);
+        for (TreeFragment const * pElement = _aNode.getFirstElement();
                 pElement != NULL && m_result != NodeVisitor::DONE;
-                pElement = _aNode.getNextElement(m_accessor,pElement) )
+                pElement = _aNode.getNextElement(pElement) )
             m_result = dispatch(*pElement);
 
     }
     // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
 
-Result NodeVisitor::visitNode(NodeAccessRef const& _aNode)
+Result NodeVisitor::visitNode(NodeAccess const& _aNode)
 {
-    Dispatcher aDispatcher(*this, &_aNode.accessor());
+    Dispatcher aDispatcher(*this);
 
-    aDispatcher.applyToNode(_aNode.data());
+    aDispatcher.applyToNode(*static_cast<configmgr::sharable::Node *>(_aNode));
 
     return aDispatcher.m_result;
 }
@@ -190,9 +187,9 @@ Result NodeVisitor::visitNode(NodeAccessRef const& _aNode)
 
 Result SetVisitor::visitTree(TreeAccessor const& _aNode)
 {
-    Dispatcher aDispatcher(*this, &_aNode.accessor());
+    Dispatcher aDispatcher(*this);
 
-    aDispatcher.applyToTree(_aNode.data());
+    aDispatcher.applyToTree(*_aNode);
 
     return aDispatcher.m_result;
 }
@@ -200,7 +197,7 @@ Result SetVisitor::visitTree(TreeAccessor const& _aNode)
 
 Result NodeVisitor::visitChildren(GroupNodeAccess const& _aNode)
 {
-    Dispatcher aDispatcher(*this, &_aNode.accessor());
+    Dispatcher aDispatcher(*this);
 
     aDispatcher.applyToChildren(_aNode.data());
 
@@ -210,7 +207,7 @@ Result NodeVisitor::visitChildren(GroupNodeAccess const& _aNode)
 
 Result SetVisitor::visitElements(SetNodeAccess const& _aNode)
 {
-    Dispatcher aDispatcher(*this, &_aNode.accessor());
+    Dispatcher aDispatcher(*this);
 
     aDispatcher.applyToElements(_aNode.data());
 
@@ -218,7 +215,7 @@ Result SetVisitor::visitElements(SetNodeAccess const& _aNode)
 }
 // -------------------------------------------------------------------------
 
-Result NodeVisitor::handle(NodeAccessRef const& /*_aNode*/)
+Result NodeVisitor::handle(NodeAccess const& /*_aNode*/)
 {
     return CONTINUE;
 }
@@ -226,19 +223,19 @@ Result NodeVisitor::handle(NodeAccessRef const& /*_aNode*/)
 
 Result NodeVisitor::handle(ValueNodeAccess const& _aNode)
 {
-    return handle(static_cast<NodeAccessRef>(_aNode));
+    return handle(NodeAccess(_aNode));
 }
 // -------------------------------------------------------------------------
 
 Result NodeVisitor::handle(GroupNodeAccess const& _aNode)
 {
-    return handle(static_cast<NodeAccessRef>(_aNode));
+    return handle(NodeAccess(_aNode));
 }
 // -------------------------------------------------------------------------
 
 Result NodeVisitor::handle(SetNodeAccess const& _aNode)
 {
-    return handle(static_cast<NodeAccessRef>(_aNode));
+    return handle(NodeAccess(static_cast<const sharable::Node *>(_aNode)));
 }
 // -------------------------------------------------------------------------
 
