@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AreaChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:04:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:59:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,9 +262,7 @@ void SAL_CALL AreaChartTypeTemplate::resetStyles( const Reference< chart2::XDiag
     }
 }
 
-Reference< chart2::XChartType > SAL_CALL AreaChartTypeTemplate::getChartTypeForNewSeries(
-        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
-    throw (uno::RuntimeException)
+Reference< chart2::XChartType > AreaChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
 {
     Reference< chart2::XChartType > xResult;
 
@@ -274,13 +272,21 @@ Reference< chart2::XChartType > SAL_CALL AreaChartTypeTemplate::getChartTypeForN
             GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
         xResult.set( xFact->createInstance(
                          CHART2_SERVICE_NAME_CHARTTYPE_AREA ), uno::UNO_QUERY_THROW );
-        ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
     }
     catch( uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
 
+    return xResult;
+}
+
+Reference< chart2::XChartType > SAL_CALL AreaChartTypeTemplate::getChartTypeForNewSeries(
+        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
+    throw (uno::RuntimeException)
+{
+    Reference< chart2::XChartType > xResult( getChartTypeForIndex( 0 ) );
+    ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
     return xResult;
 }
 
