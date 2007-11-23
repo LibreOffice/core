@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLChartContext.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:47:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:35:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,9 @@
 
 #ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
 #endif
 
 #include "transporttypes.hxx"
@@ -132,6 +135,8 @@ private:
     ::rtl::OUString msColTrans;
     ::rtl::OUString msRowTrans;
     ::rtl::OUString maChartTypeServiceName;
+
+    ::com::sun::star::awt::Size maChartSize;
 
     ::com::sun::star::uno::Sequence< sal_Int32 > GetNumberSequenceFromString( const ::rtl::OUString& rStr, bool bAddOneToEachOldIndex );
     void MergeSeriesForStockChart();
