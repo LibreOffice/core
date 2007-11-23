@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatedispatch.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:07:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -454,22 +454,21 @@ data::SetVisitor::Result UpdateDispatcher::handle(data::SetNodeAccess const& _aN
 }
 // -----------------------------------------------------------------------------
 
-bool UpdateDispatcher::testReplacedAndGetName(data::NodeAccessRef const & _aNode, OUString & _aName)
+bool UpdateDispatcher::testReplacedAndGetName(data::NodeAccess const & _aNode, OUString & _aName)
 {
     if (m_aElementName.getLength())
     {
-        OSL_ENSURE( _aNode.isLocalRoot(), "ERROR - UpdateDispatcher: Found orphaned 'element' name for inner node");
+        OSL_ENSURE( _aNode->isFragmentRoot(), "ERROR - UpdateDispatcher: Found orphaned 'element' name for inner node");
         _aName = m_aElementName;
         m_aElementName = OUString();
         return true;
     }
     else
     {
-        OSL_ENSURE(!_aNode.isLocalRoot(), "ERROR - UpdateDispatcher: Found no 'element' name for fragment root node");
+        OSL_ENSURE(!_aNode->isFragmentRoot(), "ERROR - UpdateDispatcher: Found no 'element' name for fragment root node");
         _aName = _aNode.getName().toString();
         return false;
     }
-    // return _aNode.isLocalRoot();
 }
 // -----------------------------------------------------------------------------
 
