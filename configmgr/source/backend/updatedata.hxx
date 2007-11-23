@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatedata.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:35:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:10:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,8 +50,8 @@
 #include <rtl/ustring.hxx>
 #endif
 
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/simplereferenceobject.hxx>
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 
 #ifndef INCLUDED_SET
@@ -91,7 +91,7 @@ namespace configmgr
 
 // -----------------------------------------------------------------------------
 
-        class NamedUpdate : public salhelper::SimpleReferenceObject
+        class NamedUpdate : public configmgr::SimpleReferenceObject
         {
             OUString const  m_aName;
 
