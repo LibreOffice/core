@@ -4,9 +4,9 @@
  *
  *  $RCSfile: deferredview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:28:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:41:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,12 +51,9 @@ namespace configmgr
 
         class DeferredViewStrategy : public ViewStrategy
         {
-            memory::Segment const * m_pSegment;
         public:
             explicit
-            DeferredViewStrategy(memory::Segment const * _pSegment)
-            : m_pSegment(_pSegment)
-            {}
+            DeferredViewStrategy() {}
 
         // ViewStrategy implementation
         private:
@@ -87,9 +84,6 @@ namespace configmgr
             // set element access
             virtual void doInsertElement(SetNode const& _aNode, Name const& aName, configuration::SetEntry const& aNewEntry);
             virtual void doRemoveElement(SetNode const& _aNode, Name const& aName);
-
-            virtual void doReleaseDataSegment() { m_pSegment = NULL; }
-            virtual memory::Segment const * doGetDataSegment() const { return m_pSegment; }
 
             virtual NodeFactory& doGetNodeFactory();
         private:
