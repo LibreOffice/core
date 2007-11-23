@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprovider.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:47:05 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:18:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,11 +68,6 @@ namespace configmgr
         class AbsolutePath;
     }
     //-------------------------
-    namespace memory
-    {
-        class Segment;
-    }
-    //-------------------------
     class ISubtree;
     class RequestOptions;
     //==========================================================================
@@ -111,10 +106,6 @@ namespace configmgr
     class SAL_NO_VTABLE IDefaultableTreeManager
     {
     public:
-        /// get a data segment to host the given location - also available in ITreeManager
-        virtual memory::Segment* getDataSegment(configuration::AbsolutePath const& _rAccessor,
-                                                const RequestOptions& _aOptions) = 0;
-
         /** attempt to load default data into the tree named by a path using certain options
             and requiring a specific loading depth.
 
@@ -122,10 +113,9 @@ namespace configmgr
                 <TRUE/>,  if some default data is available within the tree
                 <FALSE/>, if no default data is available for the tree
         */
-        virtual sal_Bool fetchDefaultData(  memory::UpdateAccessor& _aAccessToken,
-                                            configuration::AbsolutePath const& aSubtreePath,
-                                            const RequestOptions& _xOptions
-                                         ) CFG_UNO_THROW_ALL(  ) = 0;
+        virtual sal_Bool fetchDefaultData(configuration::AbsolutePath const& aSubtreePath,
+                                          const RequestOptions& _xOptions
+                                          ) CFG_UNO_THROW_ALL(  ) = 0;
 
     };
 
