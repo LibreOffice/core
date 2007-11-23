@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apinodeaccess.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 10:01:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,19 +44,10 @@
 #include "noderef.hxx"
 #endif
 
-#ifndef CONFIGMGR_ACCESSOR_HXX
-#include <accessor.hxx>
-#endif
-
 namespace osl { class Mutex; }
 
 namespace configmgr
 {
-    namespace memory
-    {
-        class Accessor;
-        class Segment;
-    }
     namespace configuration
     {
         class Name;
@@ -82,7 +73,7 @@ namespace configmgr
         typedef uno::XInterface UnoInterface;
         typedef uno::Any UnoAny;
 
-    // API object implementation wrappers
+        // API object implementation wrappers
         // these objects just provide the pieces needed to navigate and manipulate trees and nodes
 
         // The common part of all nodes, provides all you need to read and listen
@@ -94,7 +85,7 @@ namespace configmgr
         // model access
             configuration::NodeRef  getNodeRef() const;
             configuration::TreeRef  getTreeRef() const;
-            configuration::Tree     getTree(memory::Accessor const& _aAccessor) const;
+            configuration::Tree     getTree() const;
 
         // self-locked methods for dispose handling
             void checkAlive() const;
@@ -105,11 +96,6 @@ namespace configmgr
             { return doGetUnoInstance(); }
             Factory&                getFactory() const;
             Notifier                getNotifier() const;
-
-        // locking support
-            osl::Mutex&             getDataLock() const;
-            memory::Segment const*  getSourceData() const;
-            osl::Mutex&             getApiLock();
 
         protected:
             virtual configuration::NodeRef  doGetNode() const = 0;
@@ -151,7 +137,7 @@ namespace configmgr
         {
             friend class SetElement;
         public:
-            configuration::SetElementInfo getElementInfo(memory::Accessor const& _aAccessor) const;
+            configuration::SetElementInfo getElementInfo() const;
         };
 
         /** extracts a <type scope='configmgr::configuration'>ElementTree</type> from a <type scope='com::sun::star::uno'>Any</type>
@@ -167,21 +153,27 @@ namespace configmgr
         /// finds a existing <type>SetElement</type> for a given <type scope='configmgr::configuration'>ElementTree</type>
         SetElement* findSetElement(Factory& rFactory, configuration::ElementRef const& aElementTree);
 
-    // Guarding and locking implementations
-        /// guards a NodeAccess; provides an object (read) lock, ensures object was not disposed
+        // Guarding and locking implementations
+        /// guards a NodeAccess; provides an object (read) lock,
+        /// ensures object was not disposed
+
+// FIXME: can evaporate this class [ I think ]
         class NodeReadGuardImpl : Noncopyable
         {
-            osl::MutexGuard     m_aLock;
-            NodeAccess&         m_rNode;
+            NodeAccess &m_rNode;
         public:
-            NodeReadGuardImpl(NodeAccess& rNode);
-            ~NodeReadGuardImpl() throw ();
+            NodeReadGuardImpl(NodeAccess& rNode)
+                : m_rNode(rNode)
+                { rNode.checkAlive(); }
+            ~NodeReadGuardImpl()
+                {}
         public:
             NodeAccess& get() const { return m_rNode; }
 
-            configuration::Tree     getTree(memory::Accessor const& _aAccessor) const;
-            configuration::NodeRef  getNode() const;
-
+            configuration::Tree     getTree() const
+                { return m_rNode.getTree(); }
+            configuration::NodeRef  getNode() const
+                { return m_rNode.getNodeRef(); }
         };
 
     // Thin Wrappers around NodeAccesses: Provide guarding and convenient access
@@ -197,12 +189,13 @@ namespace configmgr
         };
         typedef GuardedNode<NodeAccess> GuardedNodeAccess;
 
-        /// wraps a NodeAccess; provides both object and provider (read) locks, ensures object was not disposed
+        /// wraps a NodeAccess; provides both object and provider (read) locks,
+        // ensures object was not disposed
         template <class Access>
         class GuardedNodeData
         {
-            memory::Accessor        m_aDataAccess;
-            NodeReadGuardImpl   m_aViewLock;
+            UnoApiLock              m_aLock;
+            NodeReadGuardImpl       m_aViewLock;
         public:
             GuardedNodeData(Access& rNode);
         public:
@@ -210,22 +203,19 @@ namespace configmgr
 
             configuration::Tree     getTree() const;
             configuration::NodeRef  getNode() const;
-
-            memory::Accessor const & getDataAccessor() const { return m_aDataAccess; }
         };
         typedef GuardedNodeData<NodeAccess> GuardedNodeDataAccess;
 
         template <class Access>
         GuardedNodeData<Access>::GuardedNodeData(Access& rNode)
-        : m_aDataAccess(rNode.getSourceData())
-        , m_aViewLock(rNode)
+        : m_aViewLock(rNode)
         {
         }
 
         template <class Access>
         configuration::Tree GuardedNodeData<Access>::getTree() const
         {
-            return (configuration::Tree) m_aViewLock.getTree(m_aDataAccess);
+            return (configuration::Tree) m_aViewLock.getTree();
         }
 
         template <class Access>
