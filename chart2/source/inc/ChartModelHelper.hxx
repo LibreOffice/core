@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartModelHelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-11 14:58:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:55:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,14 +93,6 @@ public:
                 ::com::sun::star::frame::XModel >& xModel
             , const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries >& xGivenDataSeries );
-
-    static ::com::sun::star::uno::Reference<
-    ::com::sun::star::chart2::XCoordinateSystem >
-        getCoordinateSystemOfChartType(
-            const ::com::sun::star::uno::Reference<
-                ::com::sun::star::frame::XModel >& xModel
-            , const ::com::sun::star::uno::Reference<
-                ::com::sun::star::chart2::XChartType >& xGivenChartType );
 
     static ::com::sun::star::awt::Size getPageSize(
         const ::com::sun::star::uno::Reference<
