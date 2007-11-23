@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 14:55:37 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 16:50:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,8 @@ SRC1FILES=\
     iniman.src 	\
     ehdl.src \
     imagemgr.src      \
-    helpagent.src
+    helpagent.src \
+    langtab.src 
 
 SRS2NAME=ehdl
 SRC2FILES=\
@@ -83,7 +84,8 @@ SLOFILES=\
     $(SLO)$/vcldata.obj             \
     $(SLO)$/restrictedpaths.obj     \
     $(SLO)$/dialogclosedlistener.obj\
-    $(SLO)$/dialogcontrolling.obj
+    $(SLO)$/dialogcontrolling.obj   \
+    $(SLO)$/langtab.obj
 
 # --- Targets -------------------------------------------------------
 
