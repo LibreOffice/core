@@ -4,9 +4,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 09:51:07 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 13:33:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -111,6 +111,8 @@ sub check_system_path
         else
         {
             installer::logger::print_message( "\tFound: $$fileref\n" );
+            # Saving the absolut path for msitran.exe. This is required for the determination of the checksum.
+            if ( $onefile eq "msitran.exe" ) { $installer::globals::msitranpath = $$fileref; }
         }
     }
 
