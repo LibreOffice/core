@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodechange.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:29:14 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:42:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ sal_uInt32 NodeChange::getChangeInfos(NodeChangesInformation& _rInfos) const
 
         for (NodeChangeImpl::ChangeCount ix = 0; ix < nChanges; ++ix)
         {
-            NodeChangeInformation aSingleInfo(m_pImpl->getDataAccessor());
+        NodeChangeInformation aSingleInfo;
             aSingleInfo.change.type = NodeChangeData::eNoChange;
 
             m_pImpl->fillChangeInfo(aSingleInfo,ix);
@@ -151,7 +151,7 @@ bool NodeChange::getChangeLocation(NodeChangeLocation& rLoc) const
 
 Tree NodeChange::getBaseTree() const
 {
-    return Tree(m_pImpl->getDataAccessor(), m_pImpl->getTargetTree().get());
+    return Tree(m_pImpl->getTargetTree().get());
 }
 //-----------------------------------------------------------------------------
 
@@ -174,9 +174,9 @@ NodeRef NodeChange::getBaseNode() const
 Tree NodeChange::getAffectedTree() const
 {
     if (this->maybeChange())
-        return Tree(m_pImpl->getDataAccessor(), m_pImpl->getTargetTree().get());
+        return Tree(m_pImpl->getTargetTree().get());
     else
-        return Tree(m_pImpl->getDataAccessor(), 0);
+        return Tree(NULL);
 }
 //-----------------------------------------------------------------------------
 
