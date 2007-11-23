@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCurveModel.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:10:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,29 +40,15 @@
 #include "ServiceMacros.hxx"
 #include "ModifyListenerHelper.hxx"
 
-#ifndef _CPPUHELPER_IMPLBASE6_HXX_
 #include <cppuhelper/implbase6.hxx>
-#endif
-#ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVE_HPP_
 #include <com/sun/star/chart2/XRegressionCurve.hpp>
-#endif
 
-#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICENAME_HPP_
 #include <com/sun/star/lang/XServiceName.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
 #include <com/sun/star/util/XCloneable.hpp>
-#endif
 
 namespace chart
 {
@@ -122,6 +108,11 @@ protected:
     virtual ::com::sun::star::uno::Reference<
             ::com::sun::star::chart2::XRegressionCurveCalculator > SAL_CALL getCalculator()
         throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL getEquationProperties()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setEquationProperties(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xEquationProperties )
+        throw (::com::sun::star::uno::RuntimeException);
 
     // ____ XServiceName ____
     virtual ::rtl::OUString SAL_CALL getServiceName()
@@ -165,6 +156,7 @@ private:
     const tCurveType    m_eRegressionCurveType;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener > m_xModifyEventForwarder;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > m_xEquationProperties;
 };
 
 // implementations for factory instantiation
