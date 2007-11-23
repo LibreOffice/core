@@ -4,9 +4,9 @@
  *
  *  $RCSfile: requesttypes.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:54:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:23:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,8 @@
 #include "configpath.hxx"
 #endif
 
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/simplereferenceobject.hxx>
+#ifndef _CONFIGMGR_UTILITY_HXX_
+#include <utility.hxx>
 #endif
 
 #ifndef INCLUDED_MEMORY
@@ -218,9 +218,10 @@ namespace configmgr
         template <class Instance_>
         class ResultHolder
         {
-            struct RCInstance : public salhelper::SimpleReferenceObject
+            struct RCInstance : public configmgr::SimpleReferenceObject
             {
-                RCInstance(Instance_ & _instance) : instance(_instance) {}
+                RCInstance(Instance_ & _instance)
+                    : instance(_instance) {}
                 Instance_ instance;
             };
             typedef rtl::Reference< RCInstance > InstanceRef;
