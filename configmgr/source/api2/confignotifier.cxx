@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confignotifier.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:56:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:05:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,12 +87,6 @@ Notifier::~Notifier()
 }
 // ---------------------------------------------------------------------------------------------------
 
-osl::Mutex&  Notifier::getMutex() const
-{
-    return m_aImpl->mutex();
-}
-// ---------------------------------------------------------------------------------------------------
-
 Broadcaster Notifier::makeBroadcaster(NodeChange const& aChange, bool bLocal) const
 {
     return Broadcaster(*this,aChange,bLocal);
@@ -107,8 +101,7 @@ Broadcaster Notifier::makeBroadcaster(NodeChanges const& aChanges, bool bLocal) 
 // ---------------------------------------------------------------------------------------------------
 
 NotifierImpl::NotifierImpl(configuration::TreeRef const& aTree)
-: m_aMutex()
-, m_aListeners(m_aMutex, aTree.getContainedInnerNodeCount(), SubNodeToIndex(aTree))
+: m_aListeners(aTree.getContainedInnerNodeCount(), SubNodeToIndex(aTree))
 {
 }
 // ---------------------------------------------------------------------------------------------------
@@ -245,14 +238,12 @@ void Notifier::remove(NodeRef const& aNode, uno::Reference< css::beans::XPropert
 // ---------------------------------------------------------------------------------------------------
 // ---------------------------------------------------------------------------------------------------
 
-DisposeGuardImpl::DisposeGuardImpl(NotifierImpl& rNotifierImpl) throw()
-: m_aLock(rNotifierImpl.mutex())
+DisposeGuardImpl::DisposeGuardImpl(NotifierImpl&) throw()
 {
 }
 // ---------------------------------------------------------------------------------------------------
 
-DisposeGuardImpl::DisposeGuardImpl(Notifier const& rNotifier) throw()
-: m_aLock(rNotifier.getMutex())
+DisposeGuardImpl::DisposeGuardImpl(Notifier const&) throw()
 {
 }
 // ---------------------------------------------------------------------------------------------------
