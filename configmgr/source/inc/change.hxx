@@ -4,9 +4,9 @@
  *
  *  $RCSfile: change.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 12:48:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:16:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #endif
 #ifndef CONFIGMGR_TREESEGMENT_HXX
 #include "treesegment.hxx"
-#endif
-#ifndef CONFIGMGR_TREEADDRESS_HXX
-#include "treeaddress.hxx"
 #endif
 
 #ifndef _SAL_TYPES_H_
@@ -242,7 +239,7 @@ namespace configmgr
         bool isReplacing() const { return m_bReplacing; }
 
         /// has this been applied and inserted
-        bool wasInserted() const { return m_aInsertedTree.is(); }
+        bool wasInserted() const { return m_aInsertedTree != NULL; }
 
         /** returns the node this change represents, even if this node does not own the new Node object any more.
             This is somewhat dangerous if the node referenced by this object dies before the object itself does.<BR>
