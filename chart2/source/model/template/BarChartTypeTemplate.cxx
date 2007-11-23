@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:04:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:59:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,6 +165,11 @@ StackMode BarChartTypeTemplate::getStackMode( sal_Int32 /* nChartTypeIndex */ ) 
     return m_eStackMode;
 }
 
+bool BarChartTypeTemplate::isSwapXAndY() const
+{
+    return (m_eBarDirection == HORIZONTAL);
+}
+
 // ____ XChartTypeTemplate ____
 sal_Bool SAL_CALL BarChartTypeTemplate::matchesTemplate(
     const Reference< chart2::XDiagram >& xDiagram,
@@ -237,26 +242,31 @@ sal_Bool SAL_CALL BarChartTypeTemplate::matchesTemplate(
 
     return bResult;
 }
-
-Reference< chart2::XChartType > SAL_CALL BarChartTypeTemplate::getChartTypeForNewSeries(
-        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
-    throw (uno::RuntimeException)
+Reference< chart2::XChartType > BarChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
 {
-        Reference< chart2::XChartType > xResult;
+    Reference< chart2::XChartType > xResult;
 
     try
     {
         Reference< lang::XMultiServiceFactory > xFact(
             GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
         xResult.set( xFact->createInstance(
-            CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ), uno::UNO_QUERY_THROW );
-        ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
+                         CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ), uno::UNO_QUERY_THROW );
     }
     catch( uno::Exception & ex )
     {
         ASSERT_EXCEPTION( ex );
     }
 
+    return xResult;
+}
+
+Reference< chart2::XChartType > SAL_CALL BarChartTypeTemplate::getChartTypeForNewSeries(
+        const uno::Sequence< Reference< chart2::XChartType > >& aFormerlyUsedChartTypes )
+    throw (uno::RuntimeException)
+{
+    Reference< chart2::XChartType > xResult( getChartTypeForIndex( 0 ) );
+    ChartTypeTemplate::copyPropertiesFromOldToNewCoordianteSystem( aFormerlyUsedChartTypes, xResult );
     return xResult;
 }
 
