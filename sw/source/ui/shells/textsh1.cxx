@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:41:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:27:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,13 @@
 #ifndef _HELPID_H
 #include <helpid.h>
 #endif
+
+#include <i18npool/mslangid.hxx>
+#include <svtools/languageoptions.hxx>
+#include <svx/langitem.hxx>
+#include <svtools/langtab.hxx>
+#include <svtools/slstitm.hxx>
+#include <string.h>
 
 #ifndef _SFXSTRITEM_HXX
 #include <svtools/stritem.hxx>
@@ -243,6 +250,20 @@
 #include "chrdlg.hrc"
 #include <IDocumentStatistics.hxx>
 
+#include <sfx2/sfxdlg.hxx>
+#include <svtools/languageoptions.hxx>
+#include <svtools/lingucfg.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/util/XChangesBatch.hpp>
+#include <com/sun/star/uno/Any.hxx>
+#include <svx/unolingu.hxx>
+#include <svtools/syslocaleoptions.hxx>
+#include <doc.hxx>
+#include <view.hxx>
+#include <ndtxt.hxx>
+#include <pam.hxx>
+
+
 using namespace ::com::sun::star;
 
 /*--------------------------------------------------------------------
@@ -270,9 +291,346 @@ short lcl_AskRedlineMode(Window *pWin)
     return aQBox.Execute();
 }
 
-/*--------------------------------------------------------------------
-    Beschreibung:
- --------------------------------------------------------------------*/
+void lcl_SelectCurrentPara( SwWrtShell &rWrtSh )
+{
+    // select current para
+    if (!rWrtSh.IsSttPara())
+        rWrtSh.MovePara( fnParaCurr, fnParaStart );
+    if (!rWrtSh.HasMark())
+        rWrtSh.SetMark();
+    rWrtSh.SwapPam();
+    if (!rWrtSh.IsEndPara())
+        rWrtSh.MovePara( fnParaCurr, fnParaEnd );
+#if OSL_DEBUG_LEVEL > 1
+    String aSelTxt;
+    rWrtSh.GetSelectedText( aSelTxt );
+    (void) aSelTxt;
+#endif
+}
+
+// also used in olmenu.cxx
+void lcl_SetLanguage( SwWrtShell& rWrtSh, const String &rLangText, bool bIsForSelection, SfxItemSet &rCoreSet)
+{
+    const LanguageType nLang = SvtLanguageTable().GetType( rLangText );
+    if (nLang != LANGUAGE_DONTKNOW)
+    {
+        USHORT nScriptType = SvtLanguageOptions::GetScriptTypeOfLanguage( nLang );
+
+        //get ScriptType
+        USHORT nLangWhichId = 0;
+        bool bIsSingleScriptType = true;
+        switch (nScriptType)
+        {
+             case SCRIPTTYPE_LATIN :    nLangWhichId = RES_CHRATR_LANGUAGE; break;
+             case SCRIPTTYPE_ASIAN :    nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
+             case SCRIPTTYPE_COMPLEX :  nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
+             default:
+                bIsSingleScriptType = false;
+                DBG_ERROR( "unexpected case" );
+        }
+        if (bIsSingleScriptType)
+        {
+            if (bIsForSelection)
+            {
+                // apply language to current selection
+                rWrtSh.GetAttr( rCoreSet );
+                rCoreSet.Put( SvxLanguageItem( nLang, nLangWhichId ));
+                rWrtSh.SetAttr( rCoreSet );
+            }
+            else // change document language
+            {
+                // set document default language
+                rWrtSh.SetDefault( SvxLanguageItem( nLang, nLangWhichId ) );
+
+                // set respective language attribute to default
+                // (for all text in the document - which should be selected by now...)
+                SvUShortsSort aAttribs;
+                aAttribs.Insert( nLangWhichId );
+                rWrtSh.ResetAttr( &aAttribs );
+            }
+        }
+    }
+}
+
+// also used in olmenu.cxx
+void lcl_SetLanguage_None( SwWrtShell& rWrtSh, bool bIsForSelection, SfxItemSet &rCoreSet )
+{
+    const USHORT aLangWhichId[3] =
+    {
+        RES_CHRATR_LANGUAGE,
+        RES_CHRATR_CJK_LANGUAGE,
+        RES_CHRATR_CTL_LANGUAGE
+    };
+
+    if (bIsForSelection)
+    {
+        rWrtSh.GetAttr( rCoreSet );
+        // apply language to current selection
+        for (sal_uInt16 i = 0; i < 3; ++i)
+            rCoreSet.Put( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId[i] ));
+        rWrtSh.SetAttr( rCoreSet );
+    }
+    else // change document language
+    {
+        SvUShortsSort aAttribs;
+
+        // set document default language
+        for (sal_uInt16 i = 0; i < 3; ++i)
+        {
+            rWrtSh.SetDefault( SvxLanguageItem( LANGUAGE_NONE, aLangWhichId[i] ) );
+            aAttribs.Insert( aLangWhichId[i] );
+        }
+
+        // set all language attributes to default
+        // (for all text in the document - which should be selected by now...)
+        rWrtSh.ResetAttr( &aAttribs );
+    }
+}
+
+
+/// @returns : the language for the selected text that is set for the
+///     specified attribute (script type).
+///     If there are more than one languages used LANGUAGE_DONTKNOW will be returned.
+/// @param nLangWhichId : one of
+///     RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE,
+// also used in olmenu.cxx...
+LanguageType lcl_GetLanguage( SwWrtShell &rSh, USHORT nLangWhichId )
+{
+    LanguageType nLang = LANGUAGE_SYSTEM;
+
+    SfxItemSet aSet( rSh.GetAttrPool(), nLangWhichId, nLangWhichId );
+    rSh.GetAttr( aSet );
+
+    const SfxPoolItem *pItem = 0;
+    SfxItemState nState = aSet.GetItemState( nLangWhichId, TRUE, &pItem );
+    if (nState > SFX_ITEM_DEFAULT && pItem)
+    {
+        // the item is set and can be used
+        nLang = (dynamic_cast< const SvxLanguageItem* >(pItem))->GetLanguage();
+    }
+    else if (nState == SFX_ITEM_DEFAULT)
+    {
+        // since the attribute is not set: retrieve the default value
+        nLang = (dynamic_cast< const SvxLanguageItem& >(aSet.GetPool()->GetDefaultItem( nLangWhichId ))).GetLanguage();
+    }
+    else if (nState == SFX_ITEM_DONTCARE)
+    {
+        // there is more than one language...
+        nLang = LANGUAGE_DONTKNOW;
+    }
+    DBG_ASSERT( nLang != LANGUAGE_SYSTEM, "failed to get the language?" );
+
+    return nLang;
+}
+
+/// @returns: the language in use for the selected text.
+///     'In use' means the language(s) matching the script type(s) of the
+///     selected text. Or in other words, the language a spell checker would use.
+///     If there is more than one language LANGUAGE_DONTKNOW will be returned.
+// also used in olmenu.cxx...
+LanguageType lcl_GetCurrentLanguage( SwWrtShell &rSh )
+{
+    // get all script types used in current selection
+    const USHORT nScriptType = rSh.GetScriptType();
+
+    //set language attribute to use according to the script type
+    USHORT nLangWhichId = 0;
+    bool bIsSingleScriptType = true;
+    switch (nScriptType)
+    {
+         case SCRIPTTYPE_LATIN :    nLangWhichId = RES_CHRATR_LANGUAGE; break;
+         case SCRIPTTYPE_ASIAN :    nLangWhichId = RES_CHRATR_CJK_LANGUAGE; break;
+         case SCRIPTTYPE_COMPLEX :  nLangWhichId = RES_CHRATR_CTL_LANGUAGE; break;
+         default: bIsSingleScriptType = false; break;
+    }
+
+    // get language according to the script type(s) in use
+    LanguageType nCurrentLang = LANGUAGE_SYSTEM;
+    if (bIsSingleScriptType)
+        nCurrentLang = lcl_GetLanguage( rSh, nLangWhichId );
+    else
+    {
+        // check if all script types are set to LANGUAGE_NONE and return
+        // that if this is the case. Otherwise, having multiple script types
+        // in use always means there are several languages in use...
+        const USHORT aScriptTypes[3] =
+        {
+            RES_CHRATR_LANGUAGE,
+            RES_CHRATR_CJK_LANGUAGE,
+            RES_CHRATR_CTL_LANGUAGE
+        };
+        nCurrentLang = LANGUAGE_NONE;
+        for (sal_uInt16 i = 0; i < 3; ++i)
+        {
+            LanguageType nTmpLang = lcl_GetLanguage( rSh, aScriptTypes[i] );
+            if (nTmpLang != LANGUAGE_NONE)
+            {
+                nCurrentLang = LANGUAGE_DONTKNOW;
+                break;
+            }
+        }
+    }
+    DBG_ASSERT( nCurrentLang != LANGUAGE_SYSTEM, "failed to get the language?" );
+
+    return nCurrentLang;
+}
+
+String lcl_GetTextForLanguageGuessing( SwWrtShell &rSh )
+{
+    // string for guessing language
+    String aText;
+    SwPaM *pCrsr = rSh.GetCrsr();
+    SwTxtNode *pNode = pCrsr->GetNode()->GetTxtNode();
+    if (pNode)
+    {
+        aText = pNode->GetTxt();
+        if (aText.Len() > 0)
+        {
+            xub_StrLen nStt = 0;
+            xub_StrLen nEnd = pCrsr->GetPoint()->nContent.GetIndex();
+            // at most 100 chars to the left...
+            nStt = nEnd > 100 ? nEnd - 100 : 0;
+            // ... and 100 to the right of the cursor position
+            nEnd = aText.Len() - nEnd > 100 ? nEnd + 100 : aText.Len();
+            aText = aText.Copy( nStt, nEnd - nStt );
+        }
+    }
+    return aText;
+}
+
+// also used in olmenu.cxx...
+void lcl_CharDialog( SwWrtShell &rWrtSh, BOOL bUseDialog, USHORT nSlot,
+    const SfxItemSet *pArgs, SfxRequest *pReq )
+{
+    FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &rWrtSh.GetView()));
+    SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)));
+    SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(),
+                        RES_CHRATR_BEGIN,      RES_CHRATR_END-1,
+                        RES_TXTATR_INETFMT,    RES_TXTATR_INETFMT,
+                        RES_BACKGROUND,        RES_BACKGROUND,
+                        FN_PARAM_SELECTION,    FN_PARAM_SELECTION,
+                        SID_HTML_MODE,         SID_HTML_MODE,
+                        SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,   SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
+                        0 );
+    rWrtSh.GetAttr( aCoreSet );
+    BOOL bSel = rWrtSh.HasSelection();
+    BOOL bSelectionPut = FALSE;
+    if(bSel || rWrtSh.IsInWord())
+    {
+        if(!bSel)
+        {
+            rWrtSh.StartAction();
+            rWrtSh.Push();
+            if(!rWrtSh.SelectTxtAttr( RES_TXTATR_INETFMT ))
+                rWrtSh.SelWrd();
+        }
+        aCoreSet.Put(SfxStringItem(FN_PARAM_SELECTION, rWrtSh.GetSelTxt()));
+        bSelectionPut = TRUE;
+        if(!bSel)
+        {
+            rWrtSh.Pop(FALSE);
+            rWrtSh.EndAction();
+        }
+    }
+
+    aCoreSet.Put( SfxUInt16Item( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
+                    rWrtSh.GetScalingOfSelectedText() ) );
+
+    // Das CHRATR_BACKGROUND-Attribut wird fuer den Dialog in
+    // ein RES_BACKGROUND verwandelt und wieder zurueck ...
+    const SfxPoolItem *pTmpBrush;
+    if( SFX_ITEM_SET == aCoreSet.GetItemState( RES_CHRATR_BACKGROUND, TRUE, &pTmpBrush ) )
+    {
+        SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
+        aTmpBrush.SetWhich( RES_BACKGROUND );
+        aCoreSet.Put( aTmpBrush );
+    }
+
+    aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(rWrtSh.GetView().GetDocShell())));
+    SfxAbstractTabDialog* pDlg = NULL;
+    if ( bUseDialog && GetActiveView() )
+    {
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
+
+        pDlg = pFact->CreateSwCharDlg( rWrtSh.GetView().GetWindow(), rWrtSh.GetView(), aCoreSet, DLG_CHAR );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");
+        if( FN_INSERT_HYPERLINK == nSlot )
+            pDlg->SetCurPageId(TP_CHAR_URL);
+    }
+
+    const SfxItemSet* pSet = NULL;
+    if ( !bUseDialog )
+        pSet = pArgs;
+    else if ( NULL != pDlg && pDlg->Execute() == RET_OK ) /* #110771# pDlg can be NULL */
+    {
+        pSet = pDlg->GetOutputItemSet();
+    }
+
+    if ( pSet)
+    {
+        SfxItemSet aTmpSet( *pSet );
+        if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BACKGROUND, FALSE, &pTmpBrush ) )
+        {
+            SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
+            aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
+            aTmpSet.Put( aTmpBrush );
+        }
+
+        aTmpSet.ClearItem( RES_BACKGROUND );
+
+        const SfxPoolItem* pSelectionItem;
+        BOOL bInsert = FALSE;
+        xub_StrLen nInsert = 0;
+
+        // aus ungeklaerter Ursache ist das alte Item wieder im Set
+        if( !bSelectionPut && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, FALSE, &pSelectionItem) )
+        {
+            String sInsert = ((const SfxStringItem*)pSelectionItem)->GetValue();
+            bInsert = sInsert.Len() != 0;
+            if(bInsert)
+            {
+                nInsert = sInsert.Len();
+                rWrtSh.StartAction();
+                rWrtSh.Insert( sInsert );
+                rWrtSh.SetMark();
+                rWrtSh.ExtendSelection(FALSE, sInsert.Len());
+                SfxRequest aReq( rWrtSh.GetView().GetViewFrame(), FN_INSERT_STRING );
+                aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sInsert ) );
+                aReq.Done();
+                SfxRequest aReq1( rWrtSh.GetView().GetViewFrame(), FN_CHAR_LEFT );
+                aReq1.AppendItem( SfxInt16Item(FN_PARAM_MOVE_COUNT, nInsert) );
+                aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, TRUE) );
+                aReq1.Done();
+            }
+        }
+        aTmpSet.ClearItem(FN_PARAM_SELECTION);
+
+        SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
+        if(bSel && rWrtSh.IsSelFullPara() && pColl && pColl->IsAutoUpdateFmt())
+        {
+            rWrtSh.AutoUpdatePara(pColl, aTmpSet);
+        }
+        else
+            rWrtSh.SetAttr( aTmpSet );
+        if (pReq)
+            pReq->Done(aTmpSet);
+        if(bInsert)
+        {
+            SfxRequest aReq1( rWrtSh.GetView().GetViewFrame(), FN_CHAR_RIGHT );
+            aReq1.AppendItem( SfxInt16Item(FN_PARAM_MOVE_COUNT, nInsert) );
+            aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, FALSE) );
+            aReq1.Done();
+            rWrtSh.SwapPam();
+            rWrtSh.ClearMark();
+            rWrtSh.DontExpandFmt();
+            rWrtSh.EndAction();
+        }
+    }
+
+    delete pDlg;
+}
+
 
 void SwTextShell::Execute(SfxRequest &rReq)
 {
@@ -285,6 +643,103 @@ void SwTextShell::Execute(SfxRequest &rReq)
         pArgs->GetItemState(GetPool().GetWhich(nSlot), FALSE, &pItem);
     switch( nSlot )
     {
+        case SID_LANGUAGE_STATUS:
+        {
+            // get the language
+            String aNewLangTxt;
+            SFX_REQUEST_ARG( rReq, pItem2, SfxStringItem, SID_LANGUAGE_STATUS , sal_False );
+            if (pItem2)
+                aNewLangTxt = pItem2->GetValue();
+
+            //!! Remember the view frame right now...
+            //!! (call to GetView().GetViewFrame() will break if the
+            //!! SwTextShell got destroyed meanwhile.)
+            SfxViewFrame *pViewFrame = GetView().GetViewFrame();
+
+            if (aNewLangTxt.EqualsAscii( "*" ))
+            {
+                // open the dialog "Tools/Options/Language Settings - Language"
+                // to set the documents default language
+                SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+                if (pFact)
+                {
+                    VclAbstractDialog* pDlg = pFact->CreateVclDialog( GetView().GetWindow(), SID_LANGUAGE_OPTIONS );
+                    pDlg->Execute();
+                    delete pDlg;
+                }
+            }
+            else
+            {
+                //!! We have to use StartAction / EndAction bracketing in
+                //!! order to prevent possible destruction of the SwTextShell
+                //!! due to the selection changes coming below.
+                rWrtSh.StartAction();
+                // prevent view from jumping because of (temporary) selection changes
+                rWrtSh.LockView( TRUE );
+                // save selection for later restoration
+                rWrtSh.Push();
+
+                // setting the new language...
+                if (aNewLangTxt.Len() > 0)
+                {
+                    const String aSelectionLangPrefix( String::CreateFromAscii("Current_") );
+                    const String aParagraphLangPrefix( String::CreateFromAscii("Paragraph_") );
+                    const String aDocumentLangPrefix( String::CreateFromAscii("Default_") );
+                    const String aStrNone( String::CreateFromAscii("LANGUAGE_NONE") );
+
+                    SfxItemSet aCoreSet( GetPool(),
+                            RES_CHRATR_LANGUAGE,        RES_CHRATR_LANGUAGE,
+                            RES_CHRATR_CJK_LANGUAGE,    RES_CHRATR_CJK_LANGUAGE,
+                            RES_CHRATR_CTL_LANGUAGE,    RES_CHRATR_CTL_LANGUAGE,
+                            0 );
+
+                    xub_StrLen nPos = 0;
+                    bool bForSelection = true;
+                    bool bForParagraph = false;
+                    if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aSelectionLangPrefix, 0 )))
+                    {
+                        // ... for the current selection
+                        aNewLangTxt = aNewLangTxt.Erase( nPos, aSelectionLangPrefix.Len() );
+                        bForSelection = true;
+                    }
+                    else if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aParagraphLangPrefix , 0 )))
+                    {
+                        // ... for the current paragraph language
+                        aNewLangTxt = aNewLangTxt.Erase( nPos, aParagraphLangPrefix.Len() );
+                        bForSelection = true;
+                        bForParagraph = true;
+                    }
+                    else if (STRING_NOTFOUND != (nPos = aNewLangTxt.Search( aDocumentLangPrefix , 0 )))
+                    {
+                        // ... as default document language
+                        aNewLangTxt = aNewLangTxt.Erase( nPos, aDocumentLangPrefix.Len() );
+                        bForSelection = false;
+                    }
+
+                    if (bForParagraph)
+                        lcl_SelectCurrentPara( rWrtSh );
+                    if (!bForSelection) // document language to be changed...
+                        rWrtSh.SelAll();
+                    if (aNewLangTxt != aStrNone)
+                        lcl_SetLanguage( rWrtSh, aNewLangTxt, bForSelection, aCoreSet );
+                    else
+                        lcl_SetLanguage_None( rWrtSh, bForSelection, aCoreSet );
+                }
+
+                // restore selection...
+                rWrtSh.Pop( FALSE );
+
+                rWrtSh.LockView( FALSE );
+                rWrtSh.EndAction();
+            }
+
+            // invalidate slot to get the new language displayed
+            pViewFrame->GetBindings().Invalidate( nSlot );
+
+            rReq.Done();
+            break;
+        }
+
         case FN_INSERT_SYMBOL:
         {
             InsertSymbol( rReq );
@@ -361,9 +816,28 @@ void SwTextShell::Execute(SfxRequest &rReq)
             break;
         }
         case FN_FORMAT_RESET:
-            rWrtSh.ResetAttr();
+        {
+            // #i78856, reset all attributes but not the language attributes
+            // (for this build an array of all relevant attributes and
+            // remove the languages from that)
+            SvUShortsSort aAttribs;
+            USHORT __FAR_DATA *pUShorts = aTxtNodeSetRange;
+            while (*pUShorts)
+            {
+                USHORT nL = pUShorts[1] - pUShorts[0] + 1;
+                USHORT nE = pUShorts[0];
+                for (USHORT i = 0; i < nL; ++i)
+                    aAttribs.Insert( nE++ );
+                pUShorts += 2;
+            }
+            aAttribs.Remove( RES_CHRATR_LANGUAGE );
+            aAttribs.Remove( RES_CHRATR_CJK_LANGUAGE );
+            aAttribs.Remove( RES_CHRATR_CTL_LANGUAGE );
+
+            rWrtSh.ResetAttr( &aAttribs );
             rReq.Done();
             break;
+        }
         case FN_INSERT_BREAK_DLG:
         {
             USHORT nKind=0, nPageNumber=0;
@@ -655,132 +1129,15 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         case SID_CHAR_DLG:
         {
-            FieldUnit eMetric = ::GetDfltMetric(0 != PTR_CAST(SwWebView, &GetView()));
-            SW_MOD()->PutItem(SfxUInt16Item(SID_ATTR_METRIC, static_cast< UINT16 >(eMetric)));
-            SfxItemSet aCoreSet( GetPool(),
-                                RES_CHRATR_BEGIN,      RES_CHRATR_END-1,
-                                RES_TXTATR_INETFMT,    RES_TXTATR_INETFMT,
-                                RES_BACKGROUND,        RES_BACKGROUND,
-                                FN_PARAM_SELECTION,    FN_PARAM_SELECTION,
-                                SID_HTML_MODE,         SID_HTML_MODE,
-                                SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,   SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
-                                0 );
-            rWrtSh.GetAttr( aCoreSet );
-            BOOL bSel = rWrtSh.HasSelection();
-            BOOL bSelectionPut = FALSE;
-            if(bSel || rWrtSh.IsInWord())
-            {
-                if(!bSel)
-                {
-                    rWrtSh.StartAction();
-                    rWrtSh.Push();
-                    if(!rWrtSh.SelectTxtAttr( RES_TXTATR_INETFMT ))
-                        rWrtSh.SelWrd();
-                }
-                aCoreSet.Put(SfxStringItem(FN_PARAM_SELECTION, rWrtSh.GetSelTxt()));
-                bSelectionPut = TRUE;
-                if(!bSel)
-                {
-                    rWrtSh.Pop(FALSE);
-                    rWrtSh.EndAction();
-                }
-            }
-
-            aCoreSet.Put( SfxUInt16Item( SID_ATTR_CHAR_WIDTH_FIT_TO_LINE,
-                            rWrtSh.GetScalingOfSelectedText() ) );
-
-            // Das CHRATR_BACKGROUND-Attribut wird fuer den Dialog in
-            // ein RES_BACKGROUND verwandelt und wieder zurueck ...
-            const SfxPoolItem *pTmpBrush;
-            if( SFX_ITEM_SET == aCoreSet.GetItemState( RES_CHRATR_BACKGROUND, TRUE, &pTmpBrush ) )
-            {
-                SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
-                aTmpBrush.SetWhich( RES_BACKGROUND );
-                aCoreSet.Put( aTmpBrush );
-            }
-
-            aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
-            SfxAbstractTabDialog* pDlg = NULL;
-            if ( bUseDialog && GetActiveView() )
-            {
-                SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-                DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");
-
-                pDlg = pFact->CreateSwCharDlg( GetView().GetWindow(), GetView(), aCoreSet, DLG_CHAR );
-                DBG_ASSERT(pDlg, "Dialogdiet fail!");
-                if( FN_INSERT_HYPERLINK == nSlot )
-                    pDlg->SetCurPageId(TP_CHAR_URL);
-            }
-
-            const SfxItemSet* pSet = NULL;
-            if ( !bUseDialog )
-                pSet = pArgs;
-            else if ( NULL != pDlg && pDlg->Execute() == RET_OK ) /* #110771# pDlg can be NULL */
-            {
-                pSet = pDlg->GetOutputItemSet();
-            }
-
-            if ( pSet)
-            {
-                SfxItemSet aTmpSet( *pSet );
-                if( SFX_ITEM_SET == aTmpSet.GetItemState( RES_BACKGROUND, FALSE, &pTmpBrush ) )
-                {
-                    SvxBrushItem aTmpBrush( *((SvxBrushItem*)pTmpBrush) );
-                    aTmpBrush.SetWhich( RES_CHRATR_BACKGROUND );
-                    aTmpSet.Put( aTmpBrush );
-                }
-
-                aTmpSet.ClearItem( RES_BACKGROUND );
-
-                const SfxPoolItem* pSelectionItem;
-                BOOL bInsert = FALSE;
-                xub_StrLen nInsert = 0;
-
-                // aus ungeklaerter Ursache ist das alte Item wieder im Set
-                if( !bSelectionPut && SFX_ITEM_SET == aTmpSet.GetItemState(FN_PARAM_SELECTION, FALSE, &pSelectionItem) )
-                {
-                    String sInsert = ((const SfxStringItem*)pSelectionItem)->GetValue();
-                    bInsert = sInsert.Len() != 0;
-                    if(bInsert)
-                    {
-                        nInsert = sInsert.Len();
-                        rWrtSh.StartAction();
-                        rWrtSh.Insert( sInsert );
-                        rWrtSh.SetMark();
-                        rWrtSh.ExtendSelection(FALSE, sInsert.Len());
-                        SfxRequest aReq( GetView().GetViewFrame(), FN_INSERT_STRING );
-                        aReq.AppendItem( SfxStringItem( FN_INSERT_STRING, sInsert ) );
-                        aReq.Done();
-                        SfxRequest aReq1( GetView().GetViewFrame(), FN_CHAR_LEFT );
-                        aReq1.AppendItem( SfxInt16Item(FN_PARAM_MOVE_COUNT, nInsert) );
-                        aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, TRUE) );
-                        aReq1.Done();
-                    }
-                }
-                aTmpSet.ClearItem(FN_PARAM_SELECTION);
-
-                SwTxtFmtColl* pColl = rWrtSh.GetCurTxtFmtColl();
-                if(bSel && rWrtSh.IsSelFullPara() && pColl && pColl->IsAutoUpdateFmt())
-                {
-                    rWrtSh.AutoUpdatePara(pColl, aTmpSet);
-                }
-                else
-                    rWrtSh.SetAttr( aTmpSet );
-                rReq.Done(aTmpSet);
-                if(bInsert)
-                {
-                    SfxRequest aReq1( GetView().GetViewFrame(), FN_CHAR_RIGHT );
-                    aReq1.AppendItem( SfxInt16Item(FN_PARAM_MOVE_COUNT, nInsert) );
-                    aReq1.AppendItem( SfxBoolItem(FN_PARAM_MOVE_SELECTION, FALSE) );
-                    aReq1.Done();
-                    rWrtSh.SwapPam();
-                    rWrtSh.ClearMark();
-                    rWrtSh.DontExpandFmt();
-                    rWrtSh.EndAction();
-                }
-            }
-
-            delete pDlg;
+            lcl_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
+        }
+        break;
+        case SID_CHAR_DLG_FOR_PARAGRAPH:
+        {
+            rWrtSh.Push();          //save current cursor
+            lcl_SelectCurrentPara( rWrtSh );
+            lcl_CharDialog( rWrtSh, bUseDialog, nSlot, pArgs, &rReq );
+            rWrtSh.Pop( FALSE );    //restore old cursor
         }
         break;
         case SID_ATTR_LRSPACE :
@@ -1247,6 +1604,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     }
 }
 
+
 /*--------------------------------------------------------------------
     Beschreibung:
  --------------------------------------------------------------------*/
@@ -1261,6 +1619,42 @@ void SwTextShell::GetState( SfxItemSet &rSet )
     {
         switch ( nWhich )
         {
+        case SID_LANGUAGE_STATUS:
+            {
+                // the value of used script types
+                String aScriptTypesInUse( String::CreateFromInt32( rSh.GetScriptType() ) );
+
+                SvtLanguageTable aLangTable;
+
+                // get keyboard language
+                String aKeyboardLang;
+                LanguageType nLang = LANGUAGE_DONTKNOW;
+                SwEditWin& rEditWin = GetView().GetEditWin();
+                nLang = rEditWin.GetInputLanguage();
+                if (nLang != LANGUAGE_DONTKNOW && nLang != LANGUAGE_SYSTEM)
+                    aKeyboardLang = aLangTable.GetString( nLang );
+
+                // get the language that is in use
+                const String aMultipleLanguages = String::CreateFromAscii("*");
+                String aCurrentLang = aMultipleLanguages;
+                nLang = lcl_GetCurrentLanguage( rSh );
+                if (nLang != LANGUAGE_DONTKNOW)
+                    aCurrentLang = aLangTable.GetString( nLang );
+
+                // build sequence for status value
+                uno::Sequence< ::rtl::OUString > aSeq( 4 );
+                aSeq[0] = aCurrentLang;
+                aSeq[1] = aScriptTypesInUse;
+                aSeq[2] = aKeyboardLang;
+                aSeq[3] = lcl_GetTextForLanguageGuessing( rSh );
+
+                // set sequence as status value
+                SfxStringListItem aItem( SID_LANGUAGE_STATUS );
+                aItem.SetStringList( aSeq );
+                rSet.Put( aItem, SID_LANGUAGE_STATUS );
+            }
+        break;
+
         case FN_NUMBER_NEWSTART :
             if(!rSh.GetCurNumRule())
                     rSet.DisableItem(nWhich);
