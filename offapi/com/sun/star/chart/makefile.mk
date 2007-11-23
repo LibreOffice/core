@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:01:07 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 11:42:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ IDLFILES=\
     ChartTitle.idl\
     ChartTwoAxisXSupplier.idl\
     ChartTwoAxisYSupplier.idl\
+    DataLabelPlacement.idl\
     Diagram.idl\
     Dim3DDiagram.idl\
     DonutDiagram.idl\
