@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autoreferencemap.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:42:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:15:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,9 @@
 #ifndef CONFIGMGR_AUTOREFERENCEMAP_HXX
 #define CONFIGMGR_AUTOREFERENCEMAP_HXX
 
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
-#endif
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
-
 #ifndef INCLUDED_MAP
 #include <map>
 #define INCLUDED_MAP
@@ -91,7 +87,6 @@ namespace configmgr
         Ref insert(Key const & _aKey, Ref const & _anEntry);
         Ref remove(Key const & _aKey);
 
-        osl::Mutex & mutex() const { return m_aMutex; }
     private:
         Ref internalGet(Key const & _aKey) const
         {
@@ -110,7 +105,6 @@ namespace configmgr
             m_aMap.erase(_aKey);
         }
     private:
-        mutable osl::Mutex  m_aMutex;
         Map                 m_aMap;
     };
 //-----------------------------------------------------------------------------
@@ -118,7 +112,6 @@ namespace configmgr
     template < class Key, class Object, class KeyCompare >
     bool AutoReferenceMap<Key,Object,KeyCompare>::has(Key const & _aKey) const
     {
-        osl::MutexGuard aGuard(m_aMutex);
         return internalGet(_aKey).is();
     }
 //-----------------------------------------------------------------------------
@@ -126,7 +119,6 @@ namespace configmgr
     template < class Key, class Object, class KeyCompare >
     rtl::Reference<Object> AutoReferenceMap<Key,Object,KeyCompare>::get(Key const & _aKey) const
     {
-        osl::MutexGuard aGuard(m_aMutex);
         return internalGet(_aKey);
     }
 //-----------------------------------------------------------------------------
@@ -134,7 +126,6 @@ namespace configmgr
     template < class Key, class Object, class KeyCompare >
     rtl::Reference<Object> AutoReferenceMap<Key,Object,KeyCompare>::insert(Key const & _aKey, Ref const & _anEntry)
     {
-        osl::MutexGuard aGuard(m_aMutex);
         Ref aRef = internalAdd(_aKey,_anEntry);
         return aRef;
 
@@ -144,7 +135,6 @@ namespace configmgr
     template < class Key, class Object, class KeyCompare >
     rtl::Reference<Object> AutoReferenceMap<Key,Object,KeyCompare>::remove(Key const & _aKey)
     {
-        osl::MutexGuard aGuard(m_aMutex);
         Ref aRef = internalGet(_aKey);
         internalDrop(_aKey);
         return aRef;

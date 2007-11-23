@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confsvccomponent.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:46:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:17:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,6 @@ namespace configmgr
         : public ServiceImplBase
     {
     protected:
-        ::osl::Mutex m_aMutex;
         ServiceImplementationInfo const*const     m_info;
     public:
         ServiceComponentImpl(ServiceImplementationInfo const* aInfo);
