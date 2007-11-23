@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updateimpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:00:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:10:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ void implReplaceByName(NodeTreeSetAccess& rNode, const OUString& sName, const An
             throw NoSuchElementException( sMessage, xContext );
         }
 
-        ElementTree aElementTree = configapi::extractElementTree(rNode.getFactory(), rElement, rNode.getElementInfo(lock.getDataAccessor()) );
+        ElementTree aElementTree = configapi::extractElementTree(rNode.getFactory(), rElement, rNode.getElementInfo());
         if (!aElementTree.isValid())
         {
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot replace Set Element: ") );
@@ -395,7 +395,7 @@ void implInsertByName(NodeTreeSetAccess& rNode, const OUString& sName, const Any
         }
         OSL_ENSURE(!configuration::hasChildOrElement(aTree,aNode,aChildName),"ERROR: Configuration: Existing Set element not found by implementation");
 
-        ElementTree aElementTree = configapi::extractElementTree(rNode.getFactory(), rElement, rNode.getElementInfo(lock.getDataAccessor()) );
+        ElementTree aElementTree = configapi::extractElementTree(rNode.getFactory(), rElement, rNode.getElementInfo());
         if (!aElementTree.isValid())
         {
             OUString sMessage( RTL_CONSTASCII_USTRINGPARAM("Configuration - Cannot insert into Set: ") );
@@ -715,8 +715,7 @@ Reference< uno::XInterface > implCreateElement(NodeTreeSetAccess& rNode )
     {
         GuardedNodeData<NodeSetAccess> lock( rNode ); // no provider lock needed ? => if template lock is separate - OK
 
-        data::Accessor aDataAccess = lock.getDataAccessor();
-        ElementTree aNewElement( rNode.getElementFactory(aDataAccess).instantiateTemplate(rNode.getElementInfo(aDataAccess).getTemplate()) );
+        ElementTree aNewElement( rNode.getElementFactory().instantiateTemplate(rNode.getElementInfo().getTemplate()) );
 
         Any aAny = configapi::makeElement( rNode.getFactory(), aNewElement );
         if (!(aAny >>= xRet)) // no parent available
