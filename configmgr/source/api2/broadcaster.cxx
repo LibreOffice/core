@@ -4,9 +4,9 @@
  *
  *  $RCSfile: broadcaster.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:55:56 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:04:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -408,6 +408,8 @@ namespace configmgr
                     if (pListeners)
                     {
                         ListenerIterator aIterator(*pListeners);
+
+                        UnoApiLockReleaser aGuardReleaser;
                         while (aIterator.hasMoreElements())
                         try
                         {
@@ -419,6 +421,8 @@ namespace configmgr
                     if (pSpecial)
                     {
                         ListenerIterator aIterator(*pSpecial);
+
+                        UnoApiLockReleaser aGuardReleaser;
                         while (aIterator.hasMoreElements())
                         try
                         {
@@ -456,6 +460,7 @@ namespace configmgr
 
                     ContainerListenerIterator aIterator(*pContainerListeners);
 
+                    UnoApiLockReleaser aGuardReleaser;
                     while (aIterator.hasMoreElements())
                     try
                     {
@@ -503,6 +508,7 @@ namespace configmgr
                 if (pPropertyListeners)
                 {
                     PropertyListenerIterator aIterator(*pPropertyListeners);
+                    UnoApiLockReleaser aGuardReleaser;
                     while (aIterator.hasMoreElements())
                         try { aIterator.next()->propertyChange(rEvent); } catch (uno::Exception & ) {}
                 }
@@ -511,6 +517,7 @@ namespace configmgr
                 if (pSpecialListeners)
                 {
                     PropertyListenerIterator aIterator(*pSpecialListeners);
+                    UnoApiLockReleaser aGuardReleaser;
                     while (aIterator.hasMoreElements())
                         try { aIterator.next()->propertyChange(rEvent); } catch (uno::Exception & ) {}
                 }
@@ -597,11 +604,9 @@ namespace configmgr
             using css::beans::XPropertiesChangeListener;
             using css::beans::PropertyChangeEvent;
 
-
             OSL_ASSERT(aChanges.size() <= 1);
             if (!aChanges.empty())
             {
-
                 PropertyChangeEvent aEvent;
                 PropertyChangeEvent * pEventNext = &aEvent;
 
@@ -625,6 +630,7 @@ namespace configmgr
                     if (pContainer)
                     {
                         ListenerIterator aIterator(*pContainer);
+                        UnoApiLockReleaser aGuardReleaser;
                         while (aIterator.hasMoreElements())
                             try { aIterator.next()->propertiesChange(aPropertyEvents); } catch (uno::Exception & ) {}
                     }
@@ -751,6 +757,7 @@ namespace configmgr
                 if (pContainer)
                 {
                     ListenerIterator aIterator(*pContainer);
+                    UnoApiLockReleaser aGuardReleaser;
                     while (aIterator.hasMoreElements())
                         try { aIterator.next()->propertiesChange(aPropertyEvents); } catch (uno::Exception & ) {}
                 }
@@ -1071,8 +1078,7 @@ namespace configmgr
         for (NodeChangesInformation::Iterator pos = aRawInfos.begin(); pos != aRawInfos.end(); ++pos)
         {
             NodeChangeInformation aInfo = *pos;
-
-            if( !configapi::rebaseChange(aInfo.accessor,aInfo.location,aBaseTree) )
+            if( !configapi::rebaseChange(aInfo.location,aBaseTree) )
             {
                 OSL_TRACE("Change is not within expected tree - skipping for notification");
                 continue;
@@ -1080,7 +1086,7 @@ namespace configmgr
 
             OSL_ENSURE(!pos->isEmptyChange(), "Empty Change Found for Notification");
             // it actually is expected that elements may not be found - thus ignoring result
-            configapi::resolveToUno(aInfo.change, aInfo.accessor, rFactory);
+            configapi::resolveToUno(aInfo.change, rFactory);
 
             aNewInfos.push_back( aInfo );
         }
@@ -1103,16 +1109,15 @@ namespace configmgr
         for (NodeChangesInformation::Iterator it = aChanges.begin(); it != aChanges.end(); ++it)
         {
             NodeChangeInformation aInfo(*it);
-
             // enabling the Single base optimization requires a base node (not only a base tree) for correct accessors
             //if (!bSingleBase || !configuration::equalTree(aBaseTree,aNewChange.info.baseTree))
-            if( !configapi::rebaseChange(aInfo.accessor,aInfo.location,aBaseTree) )
+            if( !configapi::rebaseChange(aInfo.location,aBaseTree) )
             {
                 OSL_TRACE("Change is not within expected tree - skipping for notification");
                 continue;
             }
 
-            if( !configapi::resolveToUno(aInfo.change,aInfo.accessor,rFactory) )
+            if( !configapi::resolveToUno(aInfo.change,rFactory) )
             {
                 // it actually is expected that elements may not be found
                 // OSL_TRACE("Cannot find affected elements of Change");
@@ -1133,8 +1138,6 @@ namespace configmgr
         ApiTreeRef pRootTree( m_aNotifierData.second->getRootTreeImpl() );
         if (pRootTree.is())
         {
-            osl::ClearableMutexGuard aGuardRoot( pRootTree->getApiLock() );
-
             NotifierHolder aRootNotifier = BroadcasterHelper::getImpl(pRootTree->getNotifier());
             if (aRootNotifier.isValid())
             {
@@ -1162,8 +1165,8 @@ namespace configmgr
 
                     // now notify
                     ListenerContainerIterator< css::util::XChangesListener > aIter(*pContainer);
-                    aGuardRoot.clear();
 
+                    UnoApiLockReleaser aGuardReleaser;
                     while (aIter.hasMoreElements())
                         try { aIter.next()->changesOccurred(aEvent); } catch (uno::Exception & ) {}
                 }
