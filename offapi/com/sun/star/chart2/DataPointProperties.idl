@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPointProperties.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:40:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:42:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,6 +281,12 @@ service DataPointProperties
     /** specifies a number format for the display of the percentage value in the data label
      */
     [optional, property] long PercentageNumberFormat;
+
+    /** specifies a relative position for the data label
+
+        @see ::com::sun::star::chart::DataLabelPlacement
+     */
+    [optional, property] long LabelPlacement;
 
     /** The size of the diagram at the moment when the font size for
         data labels was set.
