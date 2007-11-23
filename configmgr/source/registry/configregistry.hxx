@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configregistry.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:15:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:30:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
 #endif
 
 #ifndef CONFIGMGR_API_SVCCOMPONENT_HXX_
