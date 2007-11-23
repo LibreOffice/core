@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treefragment.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:51:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:33:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
+
+// memset
+#include <string.h>
 
 namespace configmgr
 {
@@ -125,6 +128,19 @@ configmgr::node::Attributes TreeFragment::getAttributes() const
     aResult.setLocalized ( !!(aRootNodeInfo.flags & Flags::localized));
 
     return aResult;
+}
+
+TreeFragment *TreeFragment::allocate(sal_uInt32 nFragments)
+{
+    sal_uInt32 nSize = sizeof(TreeFragment) + sizeof(Node) * (nFragments-1);
+    sal_uInt8 *pMem = new sal_uInt8 [nSize];
+    memset (pMem, 0, nSize);
+    return reinterpret_cast<TreeFragment *>(pMem);
+}
+
+void TreeFragment::free_shallow(TreeFragment *pFragment )
+{
+    delete[] (sal_uInt8 *) pFragment;
 }
 
 //-----------------------------------------------------------------------------
