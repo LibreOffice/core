@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCalculationHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:59:53 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:07:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,10 @@
 
 #define NUMBER_TO_STR(number) (::rtl::OStringToOUString(::rtl::math::doubleToString( \
           number, rtl_math_StringFormat_G, 4, '.', true ),RTL_TEXTENCODING_ASCII_US ))
+
+#define UC_SPACE (sal_Unicode(' '))
+#define UC_MINUS_SIGN (sal_Unicode('-'))
+// #define UC_MINUS_SIGN (sal_Unicode(0x2212))
 
 namespace chart
 {
