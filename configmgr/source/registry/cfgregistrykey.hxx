@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgregistrykey.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:14:56 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:29:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,10 +53,6 @@
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #endif
 
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/Mutex.hxx>
-#endif
-
 //..........................................................................
 namespace configmgr
 {
@@ -73,7 +69,6 @@ typedef ::cppu::WeakImplHelper1 <   ::com::sun::star::registry::XRegistryKey
 class OConfigurationRegistryKey
         :public OConfigurationRegistryKey_Base
 {
-    ::osl::Mutex    m_aMutex;           /// access safety
     sal_Bool        m_bReadOnly;        /// is the key readonly ?
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
