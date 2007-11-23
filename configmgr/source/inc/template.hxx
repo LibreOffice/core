@@ -4,9 +4,9 @@
  *
  *  $RCSfile: template.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:57:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:24:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,15 +43,11 @@
 #include "configpath.hxx"
 #endif
 
-#ifndef CONFIGMGR_ACCESSOR_HXX
-#include "accessor.hxx"
-#endif
-
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
 #endif
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/simplereferenceobject.hxx>
+#ifndef _CONFIGMGR_UTILITY_HXX_
+#include <utility.hxx>
 #endif
 
 namespace configmgr
@@ -116,7 +112,7 @@ namespace configmgr
         typedef rtl::Reference<Template> TemplateHolder;
 
         /// provides information about the elements of a <type>Node</type> that is a Container ("set").
-        class Template : public salhelper::SimpleReferenceObject
+        class Template : public configmgr::SimpleReferenceObject
         {
             Name        m_aName;
             Name        m_aModule;
