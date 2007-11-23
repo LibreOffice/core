@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:05:23 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:37:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,7 @@ private:
     tSchXMLLSequencesPerIndex & mrLSequencesPerIndex;
     sal_Int32 mnCurrentDataIndex;
     bool mbGlobalChartTypeUsedBySeries;
+    ::com::sun::star::awt::Size maChartSize;
 
 public:
     SchXMLPlotAreaContext( SchXMLImportHelper& rImpHelper,
@@ -136,7 +137,8 @@ public:
                            ::com::sun::star::chart::ChartDataRowSource & rDataRowSource,
                            SeriesDefaultsAndStyles& rSeriesDefaultsAndStyles,
                            const ::rtl::OUString& aChartTypeServiceName,
-                           tSchXMLLSequencesPerIndex & rLSequencesPerIndex );
+                           tSchXMLLSequencesPerIndex & rLSequencesPerIndex,
+                           const ::com::sun::star::awt::Size & rChartSize );
     virtual ~SchXMLPlotAreaContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
@@ -301,11 +303,16 @@ public:
         ::std::list< DataRowPointStyle >& rStyleList,
         const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries >& xSeries,
-        ContextType eContextType );
+        ContextType eContextType,
+        const ::com::sun::star::awt::Size & rChartSize );
 
     virtual ~SchXMLStatisticsObjectContext();
 
     virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+    virtual SvXMLImportContext* CreateChildContext(
+        USHORT nPrefix,
+        const rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
 private:
     SchXMLImportHelper &                           mrImportHelper;
@@ -313,6 +320,34 @@ private:
     ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries > m_xSeries;
     ContextType                                    meContextType;
+    ::com::sun::star::awt::Size                    maChartSize;
+};
+
+// ----------------------------------------
+
+class SchXMLEquationContext : public SvXMLImportContext
+{
+public:
+    SchXMLEquationContext(
+        SchXMLImportHelper& rImportHelper,
+        SvXMLImport& rImport,
+        sal_uInt16 nPrefix,
+        const rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XDataSeries >& xSeries,
+        const ::com::sun::star::awt::Size & rChartSize,
+        DataRowPointStyle & rRegressionStyle );
+
+    virtual ~SchXMLEquationContext();
+
+    virtual void StartElement( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+private:
+    SchXMLImportHelper &                           mrImportHelper;
+    DataRowPointStyle &                            mrRegressionStyle;
+    ::com::sun::star::uno::Reference<
+                ::com::sun::star::chart2::XDataSeries > m_xSeries;
+    ::com::sun::star::awt::Size maChartSize;
 };
 
 #endif  // _SCH_XMLPLOTAREACONTEXT_HXX_
