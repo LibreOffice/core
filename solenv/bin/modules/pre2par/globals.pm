@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-12 11:17:41 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 13:35:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,8 @@ BEGIN
 
     @allitems = ("Installation", "ScpAction", "HelpText", "Directory", "DataCarrier", "StarRegistry", "File",
                  "Shortcut", "Custom", "Unixlink", "Procedure", "Module", "Profile", "ProfileItem",
-                 "Folder", "FolderItem", "RegistryItem", "StarRegistryItem", "WindowsCustomAction");
+                 "Folder", "FolderItem", "RegistryItem", "StarRegistryItem", "WindowsCustomAction",
+                 "MergeModule");
 
     $logging     = 0;
     $logfilename = "logfile.log";   # the default logfile name for global errors
