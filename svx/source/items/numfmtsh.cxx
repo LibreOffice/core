@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmtsh.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:28:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:43:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,7 @@
 #include <svtools/zformat.hxx>
 #endif
 
-#ifndef _SVX_LANGTAB_HXX //autogen
-#include <langtab.hxx>
-#endif
+#include <svtools/langtab.hxx>
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -1582,7 +1580,7 @@ void SvxNumberFormatShell::GetCurrencySymbols(SvStringsDtor& rList,const XubStri
     const NfCurrencyTable& rCurrencyTable=SvNumberFormatter::GetTheCurrencyTable();
     sal_uInt16 nCount=rCurrencyTable.Count();
 
-    SvxLanguageTable* pLanguageTable=new SvxLanguageTable;
+    SvtLanguageTable* pLanguageTable=new SvtLanguageTable;
 
     sal_uInt16 nStart=1;
     sal_uInt16 i,j;
