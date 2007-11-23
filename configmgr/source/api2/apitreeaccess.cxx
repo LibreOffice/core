@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apitreeaccess.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:55:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:03:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,9 @@ void NodeElement::checkAlive() const
 }
 //-----------------------------------------------------------------------------
 
-configuration::Tree TreeElement::getTree(data::Accessor const& _aAccessor) const
+configuration::Tree TreeElement::getTree() const
 {
-    return configuration::Tree(_aAccessor, this->getTreeRef());
+    return configuration::Tree(this->getTreeRef());
 }
 //-----------------------------------------------------------------------------
 
@@ -84,18 +84,6 @@ Factory& TreeElement::getFactory()
 Notifier TreeElement::getNotifier()
 {
     return getApiTree().getNotifier();
-}
-//-----------------------------------------------------------------------------
-
-osl::Mutex& TreeElement::getDataLock() const
-{
-    return getApiTree().getDataLock();
-}
-//-----------------------------------------------------------------------------
-
-osl::Mutex& TreeElement::getApiLock()
-{
-    return getApiTree().getApiLock();
 }
 //-----------------------------------------------------------------------------
 
@@ -130,12 +118,6 @@ bool RootElement::disposeTree()
 }
 //-----------------------------------------------------------------------------
 
-memory::Segment const* RootElement::getSourceData()
-{
-    return getApiTree().getSourceData();
-}
-//-----------------------------------------------------------------------------
-
 Committer UpdateRootElement::getCommitter()
 {
     return Committer(getRootTree());
@@ -143,8 +125,7 @@ Committer UpdateRootElement::getCommitter()
 //-----------------------------------------------------------------------------
 
 TreeReadGuardImpl::TreeReadGuardImpl(TreeElement& rTree)
-: m_aViewLock(rTree.getDataLock())
-, m_rTree(rTree)
+: m_rTree(rTree)
 {
     rTree.checkAlive();
 }
@@ -156,15 +137,14 @@ TreeReadGuardImpl::~TreeReadGuardImpl() throw ()
 //-----------------------------------------------------------------------------
 
 GuardedRootElement::GuardedRootElement(RootElement& rTree)
-: m_aDataAccess(rTree.getSourceData())
-, m_aImpl(rTree)
+: m_aImpl(rTree)
 {
 }
 //-----------------------------------------------------------------------------
 
 configuration::Tree GuardedRootElement::getTree() const
 {
-    return this->get().getTree(m_aDataAccess);
+    return this->get().getTree();
 }
 
 //-----------------------------------------------------------------------------
