@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLImport.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:48:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:36:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -307,6 +307,16 @@ static __FAR_DATA SvXMLTokenMapEntry aSeriesAttrTokenMap[] =
     XML_TOKEN_MAP_END
 };
 
+static __FAR_DATA SvXMLTokenMapEntry aRegressionEquationAttrTokenMap[] =
+{
+    { XML_NAMESPACE_CHART,  XML_STYLE_NAME,             XML_TOK_REGEQ_STYLE_NAME         },
+    { XML_NAMESPACE_CHART,  XML_DISPLAY_EQUATION,       XML_TOK_REGEQ_DISPLAY_EQUATION   },
+    { XML_NAMESPACE_CHART,  XML_DISPLAY_R_SQUARE,       XML_TOK_REGEQ_DISPLAY_R_SQUARE   },
+    { XML_NAMESPACE_SVG,    XML_X,                      XML_TOK_REGEQ_POS_X              },
+    { XML_NAMESPACE_SVG,    XML_Y,                      XML_TOK_REGEQ_POS_Y              },
+    XML_TOKEN_MAP_END
+};
+
 // ========================================
 
 SchXMLImportHelper::SchXMLImportHelper() :
@@ -325,7 +335,8 @@ SchXMLImportHelper::SchXMLImportHelper() :
         mpLegendAttrTokenMap( 0 ),
         mpAutoStyleAttrTokenMap( 0 ),
         mpCellAttrTokenMap( 0 ),
-        mpSeriesAttrTokenMap( 0 )
+        mpSeriesAttrTokenMap( 0 ),
+        mpRegEquationAttrTokenMap( 0 )
 {
 }
 
@@ -479,6 +490,13 @@ const SvXMLTokenMap& SchXMLImportHelper::GetSeriesAttrTokenMap()
     if( ! mpSeriesAttrTokenMap )
         mpSeriesAttrTokenMap = new SvXMLTokenMap( aSeriesAttrTokenMap );
     return *mpSeriesAttrTokenMap;
+}
+
+const SvXMLTokenMap& SchXMLImportHelper::GetRegEquationAttrTokenMap()
+{
+    if( ! mpRegEquationAttrTokenMap )
+        mpRegEquationAttrTokenMap = new SvXMLTokenMap( aRegressionEquationAttrTokenMap );
+    return *mpRegEquationAttrTokenMap;
 }
 
 // ----------------------------------------
