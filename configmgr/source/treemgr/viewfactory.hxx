@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfactory.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:36:44 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:49:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 namespace configmgr
 {
 //-----------------------------------------------------------------------------
-    namespace memory { class Segment; }
     namespace data { class TreeSegment; }
 
     namespace view
@@ -49,9 +48,9 @@ namespace configmgr
         typedef rtl::Reference<ViewStrategy> ViewStrategyRef;
 
         /// provides a factory for read-only node implementations
-        ViewStrategyRef createReadOnlyStrategy(memory::Segment const * _pSegment);
+        ViewStrategyRef createReadOnlyStrategy();
         /// provides a factory for nodes that cache changes temporarily
-        ViewStrategyRef createDeferredChangeStrategy(memory::Segment const * _pSegment);
+        ViewStrategyRef createDeferredChangeStrategy();
         /// provides a factory for immediately commiting node implementations
         ViewStrategyRef createDirectAccessStrategy(data::TreeSegment const & _aTreeSegment);
     //---------------------------------------------------------------------
