@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:31:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:43:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,9 @@
 #ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
 #endif
+
+#include <svtools/langtab.hxx>
+
 #ifndef _SFXITEMPOOL_HXX
 #include <svtools/itempool.hxx>
 #endif
@@ -186,7 +189,6 @@
 #include <svx/charreliefitem.hxx>
 #include <svx/itemtype.hxx>
 #include <svx/dialmgr.hxx>
-#include "langtab.hxx"
 #include "dlgutil.hxx"
 
 // #90477#
@@ -2639,7 +2641,7 @@ USHORT SvxLanguageItem::GetValueCount() const
     // #i50205# got rid of class International
     DBG_ERRORFILE("SvxLanguageItem::GetValueCount: supposed to return a count of what?");
     // FIXME: previously returned LANGUAGE_COUNT from tools/intn.hxx which was wrong anyway.
-    // Could be SvxLanguageTable::GetEntryCount() (all locales with resource string)?
+    // Could be SvtLanguageTable::GetEntryCount() (all locales with resource string)?
     // Could be LocaleDataWrapper::getInstalledLanguageTypes() (all locales with locale data)?
     return 0;
 }
@@ -2687,7 +2689,7 @@ SfxItemPresentation SvxLanguageItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
-            SvxLanguageTable aLangTable;
+            SvtLanguageTable aLangTable;
             rText = aLangTable.GetString( (LanguageType)GetValue() );
             return ePres;
         }
