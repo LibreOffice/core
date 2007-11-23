@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChart.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:16:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:10:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,13 @@
 
 #include "VSeriesPlotter.hxx"
 
+#ifndef _BGFX_VECTOR_B2DVECTOR_HXX
+#include <basegfx/vector/b2dvector.hxx>
+#endif
+#ifndef _BGFX_RANGE_B2IRECTANGLE_HXX
+#include <basegfx/range/b2irectangle.hxx>
+#endif
+
 //.............................................................................
 namespace chart
 {
@@ -60,6 +67,7 @@ public:
     //-------------------------------------------------------------------------
 
     virtual void SAL_CALL createShapes();
+    virtual void rearrangeLabelToAvoidOverlapIfRequested( const ::com::sun::star::awt::Size& rPageSize );
 
     virtual void SAL_CALL setScales(
           const ::com::sun::star::uno::Sequence<
@@ -109,10 +117,37 @@ private: //methods
 
     bool                isSingleRingChart() const;
     double              getMaxOffset() const;
+    bool                detectLabelOverlapsAndMove(const ::com::sun::star::awt::Size& rPageSize);//returns true when there might be more to do
+    void                resetLabelPositionsToPreviousState();
+struct PieLabelInfo;
+    bool                tryMoveLabels( PieLabelInfo* pFirstBorder, PieLabelInfo* pSecondBorder
+                                , PieLabelInfo* pCenter, bool bSingleCenter, bool& rbAlternativeMoveDirection
+                                , const ::com::sun::star::awt::Size& rPageSize );
 
 private: //member
     PiePositionHelper*    m_pPosHelper;
     bool                  m_bUseRings;
+
+    struct PieLabelInfo
+    {
+        PieLabelInfo();
+        bool moveAwayFrom( const PieLabelInfo* pFix, const ::com::sun::star::awt::Size& rPageSize
+            , bool bMoveHalfWay, bool bMoveClockwise, bool bAlternativeMoveDirection );
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xTextShape;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape > xLabelGroupShape;
+        ::basegfx::B2IVector aFirstPosition;
+        ::basegfx::B2IVector aOrigin;
+        double fValue;
+        bool bMovementAllowed;
+        bool bMoved;
+        ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > xTextTarget;
+        PieLabelInfo* pPrevious;
+        PieLabelInfo* pNext;
+        ::com::sun::star::awt::Point aPreviousPosition;
+    };
+
+    ::std::vector< PieLabelInfo > m_aLabelInfoList;
 };
 //.............................................................................
 } //namespace chart
