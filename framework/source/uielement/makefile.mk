@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: ihi $ $Date: 2007-07-10 15:12:01 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 16:47:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,10 @@ SLOFILES=			\
                     $(SLO)$/spinfieldtoolbarcontroller.obj    \
                     $(SLO)$/edittoolbarcontroller.obj         \
                     $(SLO)$/dropdownboxtoolbarcontroller.obj \
-                    $(SLO)$/menubarmerger.obj				\
-                    $(SLO)$/toolbarmerger.obj
+                    $(SLO)$/menubarmerger.obj \
+                    $(SLO)$/toolbarmerger.obj \
+                    $(SLO)$/langselectionstatusbarcontroller.obj \
+                    $(SLO)$/langselectionmenucontroller.obj
 
 # --- Targets ------------------------------------------------------
 
