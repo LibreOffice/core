@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodefactory.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:30:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:43:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ namespace view
 namespace
 {
 //---------------------------------------------------------------------
-    using configuration::NodeImplHolder;
+    using configuration::NodeImpl;
     using configuration::Template;
     using data::ValueNodeAccess;
     using data::GroupNodeAccess;
@@ -89,27 +89,27 @@ namespace
 //---------------------------------------------------------------------
     struct BasicNodeFactory : NodeFactory
     {
-        NodeImplHolder makeValueNode(ValueNodeAccess const& _aNodeAccess);
-        NodeImplHolder makeGroupNode(GroupNodeAccess const& _aNodeAccess);
-        NodeImplHolder makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate);
+        rtl::Reference<NodeImpl> makeValueNode(ValueNodeAccess const& _aNodeAccess);
+        rtl::Reference<NodeImpl> makeGroupNode(GroupNodeAccess const& _aNodeAccess);
+        rtl::Reference<NodeImpl> makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate);
     };
     //-------------------------------------------------------------------------
 
-    NodeImplHolder BasicNodeFactory::makeValueNode(ValueNodeAccess const& _aNodeAccess)
+    rtl::Reference<NodeImpl> BasicNodeFactory::makeValueNode(ValueNodeAccess const& _aNodeAccess)
     {
-        return new configuration::ValueElementNodeImpl(_aNodeAccess.address());
+        return new configuration::ValueElementNodeImpl(_aNodeAccess);
     }
     //-------------------------------------------------------------------------
 
-    NodeImplHolder BasicNodeFactory::makeGroupNode(GroupNodeAccess const& _aNodeAccess)
+    rtl::Reference<NodeImpl> BasicNodeFactory::makeGroupNode(GroupNodeAccess const& _aNodeAccess)
     {
-        return new configuration::GroupNodeImpl(_aNodeAccess.address());
+        return new configuration::GroupNodeImpl(_aNodeAccess);
     }
     //-------------------------------------------------------------------------
 
-    NodeImplHolder BasicNodeFactory::makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate)
+    rtl::Reference<NodeImpl> BasicNodeFactory::makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate)
     {
-        return new configuration::SetNodeImpl(_aNodeAccess.address(),pTemplate);
+        return new configuration::SetNodeImpl(_aNodeAccess,pTemplate);
     }
     //-------------------------------------------------------------------------
 
@@ -117,30 +117,30 @@ namespace
 /*
     struct DirectNodeFactory : NodeFactory
     {
-        NodeImplHolder makeValueNode(ValueNodeAccess const& _aNodeAccess);
-        NodeImplHolder makeGroupNode(GroupNodeAccess const& _aNodeAccess);
-        NodeImplHolder makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate);
+        rtl::Reference<NodeImpl> makeValueNode(ValueNodeAccess const& _aNodeAccess);
+        rtl::Reference<NodeImpl> makeGroupNode(GroupNodeAccess const& _aNodeAccess);
+        rtl::Reference<NodeImpl> makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate);
     };
     //-------------------------------------------------------------------------
 
-    NodeImplHolder DirectNodeFactory::makeValueNode(ValueNodeAccess const& _aNodeAccess)
+    rtl::Reference<NodeImpl> DirectNodeFactory::makeValueNode(ValueNodeAccess const& _aNodeAccess)
     {
-        return new DirectValueElementNodeImpl(_aNodeAccess.address());
+        return new DirectValueElementNodeImpl(_aNodeAccess);
     }
     //-------------------------------------------------------------------------
 
-    NodeImplHolder DirectNodeFactory::makeGroupNode(GroupNodeAccess const& _aNodeAccess)
+    rtl::Reference<NodeImpl> DirectNodeFactory::makeGroupNode(GroupNodeAccess const& _aNodeAccess)
     {
-        return new DirectGroupNodeImpl(_aNodeAccess.address());
+        return new DirectGroupNodeImpl(_aNodeAccess);
     }
     //-------------------------------------------------------------------------
 
-    NodeImplHolder DirectNodeFactory::makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate)
+    rtl::Reference<NodeImpl> DirectNodeFactory::makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate)
     {
         if (isTreeSet(_aNodeAccess,pTemplate))
-            return new DirectTreeSetNodeImpl(_aNodeAccess.address(),pTemplate);
+            return new DirectTreeSetNodeImpl(_aNodeAccess,pTemplate);
         else
-            return new DirectValueSetNodeImpl(_aNodeAccess.address(),pTemplate);
+            return new DirectValueSetNodeImpl(_aNodeAccess,pTemplate);
     }
     //-------------------------------------------------------------------------
 */
@@ -148,28 +148,28 @@ namespace
 
     struct DeferredNodeFactory : NodeFactory
     {
-        NodeImplHolder makeValueNode(ValueNodeAccess const& _aNodeAccess);
-        NodeImplHolder makeGroupNode(GroupNodeAccess const& _aNodeAccess);
-        NodeImplHolder makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate);
+        rtl::Reference<NodeImpl> makeValueNode(ValueNodeAccess const& _aNodeAccess);
+        rtl::Reference<NodeImpl> makeGroupNode(GroupNodeAccess const& _aNodeAccess);
+        rtl::Reference<NodeImpl> makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate);
     };
     //-------------------------------------------------------------------------
 
-    NodeImplHolder DeferredNodeFactory::makeValueNode(ValueNodeAccess const& _aNodeAccess)
+    rtl::Reference<NodeImpl> DeferredNodeFactory::makeValueNode(ValueNodeAccess const& _aNodeAccess)
     {
     //    OSL_ENSURE(false, "Wrong factory for value elements - should be immutable (=read-only)");
-        return new configuration::ValueElementNodeImpl(_aNodeAccess.address());
+        return new configuration::ValueElementNodeImpl(_aNodeAccess);
     }
     //-------------------------------------------------------------------------
 
-    NodeImplHolder DeferredNodeFactory::makeGroupNode(GroupNodeAccess const& _aNodeAccess)
+    rtl::Reference<NodeImpl> DeferredNodeFactory::makeGroupNode(GroupNodeAccess const& _aNodeAccess)
     {
-        return new configuration::DeferredGroupNodeImpl(_aNodeAccess.address());
+        return new configuration::DeferredGroupNodeImpl(_aNodeAccess);
     }
     //-------------------------------------------------------------------------
 
-    NodeImplHolder DeferredNodeFactory::makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate)
+    rtl::Reference<NodeImpl> DeferredNodeFactory::makeSetNode  (SetNodeAccess const& _aNodeAccess, Template* pTemplate)
     {
-        return new configuration::DeferredSetNodeImpl(_aNodeAccess.address(),pTemplate);
+        return new configuration::DeferredSetNodeImpl(_aNodeAccess,pTemplate);
     }
     //-------------------------------------------------------------------------
 
