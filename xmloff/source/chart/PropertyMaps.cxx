@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:32:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:35:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,11 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
                 // here we have a constant rather than an enum
                 pHdl = new XMLEnumPropertyHdl( aXMLChartSolidTypeEnumMap,
                                                ::getCppuType((const sal_Int32*)0) );
+                break;
+            case XML_SCH_TYPE_LABEL_PLACEMENT_TYPE:
+                // here we have a constant rather than an enum
+                pHdl = new XMLEnumPropertyHdl( aXMLChartDataLabelPlacementEnumMap,
+                                                ::getCppuType((const sal_Int32*)0) );
                 break;
             case XML_SCH_TYPE_DATAROWSOURCE:
                 pHdl = new XMLEnumPropertyHdl( aXMLChartDataRowSourceTypeEnumMap,
