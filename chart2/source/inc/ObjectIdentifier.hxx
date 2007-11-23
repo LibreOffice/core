@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectIdentifier.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:57:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:57:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@ enum ObjectType
     OBJECTTYPE_DATA_ERRORS_Z,
     OBJECTTYPE_DATA_CURVE,//e.g. a statistical method printed as line
     OBJECTTYPE_DATA_AVERAGE_LINE,
+    OBJECTTYPE_DATA_CURVE_EQUATION,
     OBJECTTYPE_DATA_STOCK_RANGE,
     OBJECTTYPE_DATA_STOCK_LOSS,
     OBJECTTYPE_DATA_STOCK_GAIN,
@@ -226,6 +227,7 @@ public:
     static rtl::OUString createPointCID( const rtl::OUString& rPointCID_Stub, sal_Int32 nIndex  );
 
     static rtl::OUString createDataCurveCID( const rtl::OUString& rSeriesParticle, sal_Int32 nCurveIndex, bool bAverageLine );
+    static rtl::OUString createDataCurveEquationCID( const rtl::OUString& rSeriesParticle, sal_Int32 nCurveIndex );
 
     static rtl::OUString getObjectID( const rtl::OUString& rCID );
     static rtl::OUString getParticleID( const rtl::OUString& rCID );
