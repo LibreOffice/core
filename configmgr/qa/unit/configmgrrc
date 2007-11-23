@@ -1,0 +1,22 @@
+[Bootstrap]
+CFG_ServerType=uno
+BootstrapFile=$ORIGIN/bootstraprc
+VersionFile=$ORIGIN/versionrc
+UnoFile=$ORIGIN/unorc
+BaseInstallation=${$BootstrapFile:BaseInstallation}
+UserInstallation=${$BootstrapFile:UserInstallation}
+CFG_SchemaVersion=${$VersionFile:buildid}
+CFG_SchemaDataUrl=$BaseInstallation/schema
+CFG_DefaultLayerUrls=$BaseInstallation
+CFG_CacheDisposeDelay=900
+CFG_CacheDisposeInterval=60
+CFG_CacheWriteInterval=2
+CFG_UserLayerUrl=$UserInstallation
+CFG_CacheUrl=$BaseInstallation/cache
+CFG_DefaultLayerUrl=$BaseInstallation
+CFG_BackendService=com.sun.star.comp.configuration.backend.MultiStratumBackend
+CFG_SchemaSupplier=com.sun.star.comp.configuration.backend.LocalSchemaSupplier
+CFG_LocalDataSvc=com.sun.star.comp.configuration.backend.LocalStratum
+CFG_LocalModuleDataSvc=com.sun.star.comp.configuration.backend.LocalMultiStratum
+# CFG_Strata=${CFG_LocalDataSvc}:$CFG_DefaultLayerUrl;?com.sun.star.comp.configuration.backend.SystemIntegration:;?com.sun.star.comp.configuration.backend.PolicyLayerBackend:;${CFG_LocalDataSvc}:$CFG_UserLayerUrl
+CFG_Strata=${CFG_LocalDataSvc}:$CFG_DefaultLayerUrl;${CFG_LocalDataSvc}:$CFG_UserLayerUrl
