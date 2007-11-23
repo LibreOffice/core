@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:44:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:20:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,42 +93,35 @@ namespace configmgr
 
             Node * getFirstChild();
             Node * getNextChild(Node * _pChild);
-
             Node const * getFirstChild()  const;
             Node const * getNextChild(Node const * _pChild) const;
+
         };
     //-----------------------------------------------------------------------------
+        typedef sal_uInt8 * SetElementAddress;
         struct SetNode
         {
+
             NodeInfo info;
-            Address  elementType; // points to template
+            SetElementAddress  elementType; // points to template [MM:SetNode *?]
             List     elements;    // points to first element (TreeFragmentHeader)
 
             bool isLocalizedValue() const;
 
-            rtl::OUString getElementTemplateName  (memory::Accessor const & _anAccessor) const;
-            rtl::OUString getElementTemplateModule(memory::Accessor const & _anAccessor) const;
+            rtl::OUString getElementTemplateName() const;
+            rtl::OUString getElementTemplateModule() const;
 
-            TreeFragment const  * getFirstElement(memory::Accessor const & _anAccessor) const;
-            TreeFragment const  * getNextElement(memory::Accessor const & _anAccessor, TreeFragment const * _pElement) const;
+            TreeFragment const  * getFirstElement() const;
+            TreeFragment const  * getNextElement(TreeFragment const * _pElement) const;
 
             // low-level helper for template data abstraction
             static
-            Address allocTemplateData(memory::Allocator const & _anAllocator,
-                                      const rtl::OUString &rName,
+            SetElementAddress allocTemplateData(const rtl::OUString &rName,
                                       const rtl::OUString &rModule);
             static
-            Address copyTemplateData(memory::Allocator const & _anAllocator,
-                                     Address _aTemplateData);
+            SetElementAddress copyTemplateData(SetElementAddress _aTemplateData);
             static
-            void releaseTemplateData(memory::Allocator const & _anAllocator, Address _aTemplateData);
-
-            static
-            rtl::OUString getTemplateDataName(memory::Accessor const & _anAccessor,
-                                              Address _aTemplateData);
-            static
-            rtl::OUString getTemplateDataModule(memory::Accessor const & _anAccessor,
-                                                Address _aTemplateData);
+            void releaseTemplateData(SetElementAddress _aTemplateData);
         };
     //-----------------------------------------------------------------------------
         struct ValueNode
@@ -141,10 +134,10 @@ namespace configmgr
             bool isNull()       const;
             bool hasUsableDefault()   const;
 
-            uno::Type   getValueType()  const;
-            uno::Any    getValue(memory::Accessor const & _aAccessor)      const;
-            uno::Any    getUserValue(memory::Accessor const & _aAccessor)    const;
-            uno::Any    getDefaultValue(memory::Accessor const & _aAccessor) const;
+            uno::Any    getValue() const;
+            uno::Type   getValueType() const;
+            uno::Any    getUserValue() const;
+            uno::Any    getDefaultValue() const;
         };
     //-----------------------------------------------------------------------------
         // TODO: optimized representation of localized values (now as set; mapping locale->element-name)
@@ -165,17 +158,17 @@ namespace configmgr
             bool isLocalized() const;
 
             // type checks
-            bool isGroup()  const;
-            bool isSet()    const;
-            bool isValue()  const;
+            bool isGroup()  const  { return typeIs (Type::nodetype_group); }
+            bool isSet()    const  { return typeIs (Type::nodetype_set); }
+            bool isValue()  const  { return typeIs (Type::nodetype_value); }
 
             // checked access
-            GroupNode       * groupData();
-            SetNode         * setData();
-            ValueNode       * valueData();
-            GroupNode const * groupData() const;
-            SetNode   const * setData()   const;
-            ValueNode const * valueData() const;
+            inline GroupNode       * groupData();
+            inline GroupNode const * groupData() const;
+            inline SetNode         * setData();
+            inline SetNode   const * setData()   const;
+            inline ValueNode       * valueData();
+            inline ValueNode const * valueData() const;
 
             // navigation
             bool isFragmentRoot() const;
@@ -185,8 +178,25 @@ namespace configmgr
 
             TreeFragment        * getTreeFragment();
             TreeFragment const  * getTreeFragment() const;
+            private:
+            bool typeIs(Type::Type eType) const
+                { return (node.info.type & Type::mask_nodetype) == eType; }
         };
+
     //-----------------------------------------------------------------------------
+        inline GroupNode       * Node::groupData()
+            { return isGroup() ? &this->group : NULL; }
+        inline GroupNode const * Node::groupData() const
+            { return isGroup() ? &this->group : NULL; }
+        inline SetNode       * Node::setData()
+            { return isSet() ? &this->set : NULL; }
+        inline SetNode const * Node::setData()   const
+            { return isSet() ? &this->set : NULL; }
+        inline ValueNode       * Node::valueData()
+            { return isValue() ? &this->value : NULL; }
+        inline ValueNode const * Node::valueData() const
+            { return isValue() ? &this->value : NULL; }
+
         inline Node * node(ValueNode * pNode)
         { return reinterpret_cast<Node*>(pNode); }
         inline Node * node(GroupNode * pNode)
@@ -215,6 +225,13 @@ namespace configmgr
         inline Node const & node(SetNode const& pNode)
         { return reinterpret_cast<Node const&>(pNode); }
     //-----------------------------------------------------------------------------
+    }
+
+    namespace data {
+        typedef sharable::Node      * NodeAddress;
+        typedef sharable::ValueNode * ValueNodeAddress;
+        typedef sharable::GroupNode * GroupNodeAddress;
+        typedef sharable::SetNode   * SetNodeAddress;
     }
 //-----------------------------------------------------------------------------
 }
