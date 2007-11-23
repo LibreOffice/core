@@ -4,9 +4,9 @@
  *
  *  $RCSfile: notifierimpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:16:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:07:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@
 #include "propertiesfilterednotifier.hxx"
 
 #include <vos/refernce.hxx>
-#include <osl/mutex.hxx>
 
 namespace configmgr
 {
@@ -62,8 +61,6 @@ namespace configmgr
         /// manages collections of event listeners observing a whole config tree, thread-safe
         class NotifierImpl : public vos::OReference
         {
-        private:
-            mutable osl::Mutex m_aMutex;
         public:
             typedef configuration::SubNodeID        SubNodeID;
             typedef configuration::SubNodeIDList    SubNodeList;
@@ -80,17 +77,16 @@ namespace configmgr
             };
             struct SubNodeToIndex
             {
-                typedef data::Accessor const & KeyFinder;
                 configuration::TreeRef aTree;
 
                 SubNodeToIndex( configuration::TreeRef const& rTree ) : aTree(rTree) {}
 
-                bool findKeysForIndex(KeyFinder _anAccessor, NodeOffset nNode, SubNodeList& aList)
+                bool findKeysForIndex(NodeOffset nNode, SubNodeList& aList)
                 {
                     using configuration::getAllChildrenHelper;
                     using configuration::findNodeFromIndex;
                     aList.clear();
-                    getAllChildrenHelper(_anAccessor,findNodeFromIndex(aTree,nNode), aList);
+                    getAllChildrenHelper(findNodeFromIndex(aTree,nNode), aList);
                     return !aList.empty();
                 }
                 NodeOffset findIndexForKey(SubNodeID const& aNode)
@@ -108,9 +104,6 @@ namespace configmgr
             explicit
             NotifierImpl(configuration::TreeRef const& aTree);
             ~NotifierImpl();
-
-            /// retrieve the mutex that is used by this
-            osl::Mutex& mutex() const { return m_aMutex; }
 
             /// Add a <type scope='com::sun::star::lang'>XEventListener</type> observing <var>aNode</var>.
             void add(NodeID const& aNode, uno::Reference< css::lang::XEventListener > const& xListener)
