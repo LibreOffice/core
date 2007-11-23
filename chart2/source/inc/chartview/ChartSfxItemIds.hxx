@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartSfxItemIds.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:53:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:58:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,9 @@
 #define SCHATTR_DATADESCR_SHOW_CATEGORY     (SCHATTR_DATADESCR_START + 2)
 #define SCHATTR_DATADESCR_SHOW_SYMBOL       (SCHATTR_DATADESCR_START + 3)
 #define SCHATTR_DATADESCR_SEPARATOR         (SCHATTR_DATADESCR_START + 4)
-#define SCHATTR_DATADESCR_END               SCHATTR_DATADESCR_SEPARATOR
+#define SCHATTR_DATADESCR_PLACEMENT         (SCHATTR_DATADESCR_START + 5)
+#define SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS   (SCHATTR_DATADESCR_START + 6)
+#define SCHATTR_DATADESCR_END               SCHATTR_DATADESCR_AVAILABLE_PLACEMENTS
 
 #define SCHATTR_LEGEND_START                (SCHATTR_DATADESCR_END + 1)
 #define SCHATTR_LEGEND_POS                  SCHATTR_LEGEND_START
@@ -118,11 +120,8 @@
 #define SCHATTR_AXISTYPE                    (SCHATTR_Z_AXIS_END + 1)
 #define SCHATTR_PERCENT_NUMBERFORMAT_VALUE  (SCHATTR_Z_AXIS_END + 2)
 #define SCHATTR_PERCENT_NUMBERFORMAT_SOURCE (SCHATTR_Z_AXIS_END + 3)
-#define SCHATTR_DUMMY2                      (SCHATTR_Z_AXIS_END + 4)
-#define SCHATTR_DUMMY3                      (SCHATTR_Z_AXIS_END + 5)
-#define SCHATTR_DUMMY_END                   (SCHATTR_Z_AXIS_END + 6)
 
-#define SCHATTR_STAT_START                  (SCHATTR_DUMMY_END + 1)
+#define SCHATTR_STAT_START                  (SCHATTR_PERCENT_NUMBERFORMAT_SOURCE + 1)
 #define SCHATTR_STAT_AVERAGE                SCHATTR_STAT_START
 #define SCHATTR_STAT_KIND_ERROR             (SCHATTR_STAT_START + 1)
 #define SCHATTR_STAT_PERCENT                (SCHATTR_STAT_START + 2)
@@ -136,11 +135,7 @@
 #define SCHATTR_TEXT2_START                 ( SCHATTR_STAT_END + 1)
 #define SCHATTR_TEXT_DEGREES                ( SCHATTR_TEXT2_START   )
 #define SCHATTR_TEXT_OVERLAP                (SCHATTR_TEXT2_START +1)
-#define SCHATTR_TEXT_DUMMY0                 (SCHATTR_TEXT2_START + 2)
-#define SCHATTR_TEXT_DUMMY1                 (SCHATTR_TEXT2_START + 3)
-#define SCHATTR_TEXT_DUMMY2                 (SCHATTR_TEXT2_START + 4)
-#define SCHATTR_TEXT_DUMMY3                 (SCHATTR_TEXT2_START + 5)
-#define SCHATTR_TEXT2_END                   ( SCHATTR_TEXT_DUMMY3 )
+#define SCHATTR_TEXT2_END                   ( SCHATTR_TEXT_OVERLAP )
 
 // --------------------------------------------------------
 // these attributes are for replacement of enum eChartStyle
