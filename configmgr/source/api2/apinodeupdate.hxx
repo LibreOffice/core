@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apinodeupdate.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:07:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:03:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,6 @@
 
 #ifndef CONFIGMGR_API_NODEACCESS_HXX_
 #include "apinodeaccess.hxx"
-#endif
-#ifndef CONFIGMGR_ACCESSOR_HXX
-#include "accessor.hxx"
 #endif
 #ifndef CONFIGMGR_UTILITY_HXX_
 #include "utility.hxx"
@@ -76,8 +73,8 @@ namespace configmgr
         public:
             typedef configuration::GroupUpdater     NodeUpdater;
             typedef configuration::GroupDefaulter   NodeDefaulter;
-            NodeUpdater     getNodeUpdater(memory::Accessor const& _aAccessor);
-            NodeDefaulter   getNodeDefaulter(memory::Accessor const& _aAccessor);
+            NodeUpdater     getNodeUpdater();
+            NodeDefaulter   getNodeDefaulter();
 
             /** ensures that the default data for a group is loaded (if possible)
                 <p>Must be called outside of any locks !</p>
@@ -91,7 +88,7 @@ namespace configmgr
         public:
             typedef struct SetUpdater_PlaceHolder   NodeUpdater;
             typedef configuration::SetDefaulter     NodeDefaulter;
-            NodeDefaulter     getNodeDefaulter(memory::Accessor const& _aAccessor);
+            NodeDefaulter     getNodeDefaulter();
         };
 
         // Updating access for Set Nodes containing whole trees
@@ -99,9 +96,9 @@ namespace configmgr
         {
         public:
             typedef configuration::TreeSetUpdater     NodeUpdater;
-            NodeUpdater     getNodeUpdater(memory::Accessor const& _aAccessor);
+            NodeUpdater     getNodeUpdater();
 
-            configuration::SetElementFactory    getElementFactory(memory::Accessor const& _aAccessor);
+            configuration::SetElementFactory    getElementFactory();
         };
 
         // Updating access for Set Nodes containing simple values
@@ -109,7 +106,7 @@ namespace configmgr
         {
         public:
             typedef configuration::ValueSetUpdater     NodeUpdater;
-            NodeUpdater     getNodeUpdater(memory::Accessor const& _aAccessor);
+            NodeUpdater     getNodeUpdater();
         };
 
         /// informs a <type>SetElement</type> that it should now link to the given SetElement
@@ -124,13 +121,11 @@ namespace configmgr
         /// informs a <type>SetElement</type> that it should now unlink from its owning SetElement
         bool detachSetElement(Factory& rFactory, configuration::ElementRef const& aElementTree);
 
-    // Guarding and locking implementations
+        /// Guarding and locking implementations
         /// guards a NodeGroupAccess, or NodeSetAccess; provides an object (write)/provider(read) lock; ensures object was not disposed
         class UpdateGuardImpl : Noncopyable
         {
-            memory::Accessor                m_aDataAccess;
-            osl::MutexGuard             m_aViewLock;
-            NodeAccess&                 m_rNode;
+            NodeAccess&      m_rNode;
         public:
             UpdateGuardImpl(NodeGroupAccess& rNode);
             UpdateGuardImpl(NodeSetAccess& rNode);
@@ -139,8 +134,6 @@ namespace configmgr
             NodeAccess& get()        const { return m_rNode; }
 
             void downgrade() {  }
-
-            memory::Accessor const& accessor() const { return m_aDataAccess; }
         };
 
     // Thin Wrappers around NodeAccesses: Provide guarding and convenient access
@@ -148,6 +141,7 @@ namespace configmgr
         template <class Access>
         class GuardedNodeUpdate
         {
+            UnoApiLock      m_aLock;
             UpdateGuardImpl m_aImpl;
         public:
             GuardedNodeUpdate(Access& rNode) : m_aImpl(rNode) {}
@@ -163,15 +157,13 @@ namespace configmgr
             Updater    getNodeUpdater() const;
             Defaulter  getNodeDefaulter() const;
 
-            memory::Accessor const& getDataAccessor() const { return m_aImpl.accessor(); }
-
             void clearForBroadcast() { m_aImpl.downgrade(); }
         };
 
         template <class Access>
         configuration::Tree GuardedNodeUpdate<Access>::getTree() const
         {
-            return get().getTree(this->getDataAccessor());
+            return get().getTree();
         }
 
         template <class Access>
@@ -183,13 +175,13 @@ namespace configmgr
         template <class Access>
         typename GuardedNodeUpdate<Access>::Updater GuardedNodeUpdate<Access>::getNodeUpdater() const
         {
-            return get().getNodeUpdater(this->getDataAccessor());
+            return get().getNodeUpdater();
         }
 
         template <class Access>
         typename GuardedNodeUpdate<Access>::Defaulter GuardedNodeUpdate<Access>::getNodeDefaulter() const
         {
-            return get().getNodeDefaulter(this->getDataAccessor());
+            return get().getNodeDefaulter();
         }
 
         /// wraps a NodeGroupAccess; provides an object (write) lock, ensures object was not disposed
