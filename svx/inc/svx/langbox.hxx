@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:59:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:35:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@
 #include <tools/solar.h>
 #endif
 
-class SvxLanguageTable;
+class SvtLanguageTable;
 
 #define LANG_LIST_EMPTY         0x0000
 #define LANG_LIST_ALL           0x0001
@@ -84,7 +84,7 @@ private:
     Image                   m_aCheckedImageHC;
     String                  m_aAllString;
     com::sun::star::uno::Sequence< INT16 >  *m_pSpellUsedLang;
-    SvxLanguageTable*       m_pLangTable;
+    SvtLanguageTable*       m_pLangTable;
     INT16                   m_nLangList;
     BOOL                    m_bHasLangNone;
     BOOL                    m_bLangNoneIsLangAll;
