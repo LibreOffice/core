@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:49:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:26:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,11 @@
 #ifndef INCLUDED_SHARABLE_BASETYPES_HXX
 #define INCLUDED_SHARABLE_BASETYPES_HXX
 
-#ifndef CONFIGMGR_MEMORYMODEL_HXX
-#include "memorymodel.hxx"
-#endif
-
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
-#ifndef _RTL_USTRING_H_
-#include <rtl/ustring.h>
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
 #endif
 
 //-----------------------------------------------------------------------------
@@ -57,33 +53,38 @@ namespace configmgr
     {
     //-----------------------------------------------------------------------------
     // some base types
-        typedef memory::Address  Address;  // points to absolute location in memory segment
-        typedef memory::HeapSize HeapSize; // size of memory block within heap
         typedef sal_uInt16 Offset;  // Offset relative to 'this' in array of nodes
-        typedef sal_uInt8  Byte;
 
     // some derived types
         typedef rtl_uString *  Name;
         typedef rtl_uString *  String;
-        typedef Address List;    // singly linked intrusive, used for set elements
-        typedef Address Vector;   // points to counted sequence of some type
+        typedef struct TreeFragment * List; // singly linked intrusive, used for set elements
+        typedef sal_uInt8 *           Vector;   // points to counted sequence of some type
 
     //-----------------------------------------------------------------------------
 
-        Name allocName(::rtl::OUString const & _sString);
-        void freeName(Name _aName);
-        ::rtl::OUString readName(Name _aName);
+        inline String allocString(::rtl::OUString const & _sString)
+        {
+            rtl_uString_acquire(_sString.pData);
+            return _sString.pData;
+        }
+        inline void freeString(String _aString)
+        {   rtl_uString_release(_aString);    }
+        inline ::rtl::OUString readString(String _aString)
+        {   return rtl::OUString(_aString);   }
 
     //-----------------------------------------------------------------------------
 
-        String allocString(::rtl::OUString const & _sString);
-        void   freeString(String _aString);
-        ::rtl::OUString readString(String _aString);
+        inline Name allocName(::rtl::OUString const & _aName)
+        {   return allocString(_aName); }
+        inline void freeName(Name _aName)
+        {   freeString(_aName); }
+        inline ::rtl::OUString readName(Name _aName)
+        {   return readString(_aName); }
 
     //-----------------------------------------------------------------------------
     }
 //-----------------------------------------------------------------------------
 }
-
 
 #endif // INCLUDED_SHARABLE_BASETYPES_HXX
