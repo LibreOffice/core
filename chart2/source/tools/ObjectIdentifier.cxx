@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ObjectIdentifier.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:09:26 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -719,6 +719,7 @@ bool ObjectIdentifier::isDragableObject( const OUString& rClassifiedIdentifier )
         case OBJECTTYPE_TITLE:
         case OBJECTTYPE_LEGEND:
         case OBJECTTYPE_DIAGRAM:
+        case OBJECTTYPE_DATA_CURVE_EQUATION:
         //case OBJECTTYPE_DIAGRAM_WALL:
             return true;
         default:
@@ -874,6 +875,9 @@ OUString ObjectIdentifier::getStringForType( ObjectType eObjectType )
         case OBJECTTYPE_DATA_CURVE:
                 aRet=C2U("Curve");
                 break;
+        case OBJECTTYPE_DATA_CURVE_EQUATION:
+                aRet=C2U("Equation");
+                break;
         case OBJECTTYPE_DATA_AVERAGE_LINE:
                 aRet=C2U("Average");
                 break;
@@ -949,6 +953,8 @@ ObjectType ObjectIdentifier::getObjectType( const OUString& rCID )
         eRet = OBJECTTYPE_DATA_ERRORS;
     else if( rCID.match(C2U("Curve"),nLastSign) )
         eRet = OBJECTTYPE_DATA_CURVE;
+    else if( rCID.match(C2U("Equation"),nLastSign) )
+        eRet = OBJECTTYPE_DATA_CURVE_EQUATION;
     else if( rCID.match(C2U("Average"),nLastSign) )
         eRet = OBJECTTYPE_DATA_AVERAGE_LINE;
     else if( rCID.match(C2U("StockRange"),nLastSign) )
@@ -972,6 +978,15 @@ OUString ObjectIdentifier::createDataCurveCID(
     OUString aParticleID( OUString::valueOf( nCurveIndex ) );
     ObjectType eType = bAverageLine ? OBJECTTYPE_DATA_AVERAGE_LINE : OBJECTTYPE_DATA_CURVE;
     return createClassifiedIdentifierWithParent( eType, aParticleID, rSeriesParticle );
+}
+
+//static
+OUString ObjectIdentifier::createDataCurveEquationCID(
+                                const OUString& rSeriesParticle
+                                , sal_Int32 nCurveIndex )
+{
+    OUString aParticleID( OUString::valueOf( nCurveIndex ) );
+    return createClassifiedIdentifierWithParent( OBJECTTYPE_DATA_CURVE_EQUATION, aParticleID, rSeriesParticle );
 }
 
 //static
@@ -1226,8 +1241,8 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     break;
             case OBJECTTYPE_DATA_AVERAGE_LINE:
             case OBJECTTYPE_DATA_CURVE:
+            case OBJECTTYPE_DATA_CURVE_EQUATION:
                 {
-
                     Reference< XRegressionCurveContainer > xRegressionContainer( ObjectIdentifier::getDataSeriesForCID(
                         rObjectCID, xChartModel ), uno::UNO_QUERY );
                     if(xRegressionContainer.is())
@@ -1236,7 +1251,12 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                         uno::Sequence< Reference< XRegressionCurve > > aCurveList =
                             xRegressionContainer->getRegressionCurves();
                         if( nIndex >= 0 && nIndex <aCurveList.getLength() )
-                            xObjectProperties = Reference< beans::XPropertySet >( aCurveList[nIndex], uno::UNO_QUERY );
+                        {
+                            if( eObjectType == OBJECTTYPE_DATA_CURVE_EQUATION )
+                                xObjectProperties.set( aCurveList[nIndex]->getEquationProperties());
+                            else
+                                xObjectProperties.set( aCurveList[nIndex], uno::UNO_QUERY );
+                        }
                     }
                     break;
                 }
