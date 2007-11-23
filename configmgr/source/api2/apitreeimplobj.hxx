@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apitreeimplobj.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:09:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:04:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,11 +171,6 @@ namespace configmgr
             ApiProvider&                getProvider()           { return m_rProvider; }
             UnoInterfaceRef             getUnoProviderInstance() const; //  { return m_xProvider; }
 
-        // locking support
-            memory::Segment const *     getSourceData() const   { return configuration::getRootSegment(m_aTree); }
-            osl::Mutex&                 getDataLock() const     { return configuration::getRootLock(m_aTree); }
-            osl::Mutex&                 getApiLock() const;
-
             /// wire this to a new parent tree
             void                        haveNewParent(ApiTreeImpl* pNewParent);
         private:
@@ -183,8 +178,8 @@ namespace configmgr
             void setParentTree(ApiTreeImpl* pNewParentTree);
             void deinit();
 
-            bool implDisposeTree(data::Accessor const& _aAccessor);
-            void implDisposeNode(data::Accessor const & _anAccessor, configuration::NodeRef const& aNode, UnoInterface* pInstance);
+            bool implDisposeTree();
+            void implDisposeNode(configuration::NodeRef const& aNode, UnoInterface* pInstance);
 
             friend class ComponentAdapter;
             void disposing(com::sun::star::lang::EventObject const& rEvt) throw();
@@ -227,8 +222,8 @@ namespace configmgr
         // IConfigListener
             void disposing(IConfigBroadcaster* pSource) ;
         //INodeListener : IConfigListener
-            void nodeChanged(data::Accessor const& _aChangedDataAccessor, Change const& aChange, AbsolutePath const& aPath, IConfigBroadcaster* pSource);
-            void nodeDeleted(data::Accessor const& _aChangedDataAccessor, AbsolutePath const& aPath, IConfigBroadcaster* pSource);
+            void nodeChanged(Change const& aChange, AbsolutePath const& aPath, IConfigBroadcaster* pSource);
+            void nodeDeleted(AbsolutePath const& aPath, IConfigBroadcaster* pSource);
 
         private:
             ApiTreeImpl                 m_aTreeImpl;
