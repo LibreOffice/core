@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configpath.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:28:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@
 #ifndef CFG_PATH_STRICT
 //#define CFG_PATH_STRICT 1
 #endif
+
+#define dprint(a,b,c)
 
 namespace configmgr
 {
@@ -854,6 +856,9 @@ namespace
     {
         Path::Rep aResult;
 
+        dprint (stderr, "implParsePath '%s' ",
+                 rtl::OUStringToOString(_aPathString, RTL_TEXTENCODING_UTF8).getStr());
+
         StrPos pBegin = _aPathString.getStr();
         StrPos pEnd   = pBegin + _aPathString.getLength();
 
@@ -905,14 +910,20 @@ namespace
                     throw InvalidName(_aPathString, "is not a valid path. Invalid type tag for predicate");
             }
             if (pQuoteStart != pEnd)
-                aElementName += implNormalizePredicate(pQuoteStart,pEnd);
+            {
+                dprint (stderr, "add 'normalize predicate'", "");
+                OUString aPred = implNormalizePredicate(pQuoteStart,pEnd);
+                aElementName += aPred;
+                dprint (stderr, " [result pred '%s']",
+                         rtl::OUStringToOString(aPred, RTL_TEXTENCODING_UTF8).getStr());
+            }
 
             aResult.prepend( Path::Component(aElementName, Path::PackageOnly()) );
 
             pEnd = pNameStart;
             if (pNameStart != pBegin) --pEnd;
         }
-
+        dprint (stderr, "\n", "");
         return aResult;
     }
 //-----------------------------------------------------------------------------
@@ -928,11 +939,17 @@ namespace
         else if (!isWildcardType(_sBaseName) && !isSimpleName(_sBaseName))
             throw InvalidName(_sBaseName, "The base-name (type) part of a composite node name must be a simple word");
 
+        dprint (stderr, "implMakeNormalizePred '%s' ",
+                rtl::OUStringToOString(_sPredicate, RTL_TEXTENCODING_UTF8).getStr());
+
         StrPos pPredStart = _sPredicate.getStr();
         StrPos pPredEnd   = pPredStart + _sPredicate.getLength();
 
         if (pPredStart != pPredEnd)
             sComposite += implMakeNormalizedPredicate(pPredStart, pPredEnd, NULL);
+
+        dprint (stderr, " [result pred '%s']\n",
+                rtl::OUStringToOString(sComposite, RTL_TEXTENCODING_UTF8).getStr());
 
         return Name( sComposite, Path::PackageOnly() );
     }
