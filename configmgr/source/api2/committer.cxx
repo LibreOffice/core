@@ -4,9 +4,9 @@
  *
  *  $RCSfile: committer.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:56:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:05:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,6 @@
 #endif
 #ifndef CONFIGMGR_API_PROVIDERIMPL2_HXX_
 #include "confproviderimpl2.hxx"
-#endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
 #endif
 #ifndef CONFIGMGR_TREEACCESSOR_HXX
 #include "treeaccessor.hxx"
@@ -117,44 +114,31 @@ void Committer::commit()
     ITreeManager* pUpdateProvider = getUpdateProvider();
     OSL_ASSERT(pUpdateProvider);
 
-    memory::Segment * pCacheSegment = pUpdateProvider->getDataSegment(m_rTree.getLocation(),aOptions);
-    OSL_ASSERT(rApiTree.getSourceData() == pCacheSegment);
-
-    memory::UpdateAccessor aUpdateAccessor(pCacheSegment);
-    osl::ClearableMutexGuard aLocalGuard(rApiTree.getDataLock());
-
-    Tree aTree( aUpdateAccessor.accessor(), rApiTree.getTree());
+    Tree aTree( rApiTree.getTree());
     if (!aTree.hasChanges()) return;
 
     TreeChangeList  aChangeList(aOptions,
-                                aTree.getRootPath(),
-                                aTree.getAttributes(aTree.getRootNode()));
-
-    aTree.unbind();
+                    aTree.getRootPath(),
+                    aTree.getAttributes(aTree.getRootNode()));
 
     // now do the commit
     CommitHelper    aHelper(rApiTree.getTree());
-    if (aHelper.prepareCommit(aUpdateAccessor.accessor(),aChangeList))
+    if (aHelper.prepareCommit(aChangeList))
     try
     {
-        pUpdateProvider->updateTree(aUpdateAccessor,aChangeList);
+        pUpdateProvider->updateTree(aChangeList);
 
-        aHelper.finishCommit(aUpdateAccessor.accessor(),aChangeList);
+        aHelper.finishCommit(aChangeList);
 
-        aLocalGuard.clear();        // done locally
-
-        data::Accessor aNotifyAccessor = aUpdateAccessor.downgrade(); // keep a read lock for notification
-
-        NotifyDisabler  aDisableNotify(m_rTree);    // do not notify self
-        pUpdateProvider->saveAndNotifyUpdate(aNotifyAccessor,aChangeList);
+        NotifyDisabler  aDisableNotify(m_rTree);        // do not notify self
+        pUpdateProvider->saveAndNotifyUpdate(aChangeList);
     }
     catch(...)
     {
         // should be a special clean-up routine, but for now we just need a consistent state
         try
         {
-//          aHelper.finishCommit(aChangeList);
-            aHelper.failedCommit(aUpdateAccessor.accessor(),aChangeList);
+            aHelper.failedCommit(aChangeList);
         }
         catch(configuration::Exception&)
         {
