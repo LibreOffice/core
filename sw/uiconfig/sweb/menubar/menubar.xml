@@ -323,9 +323,14 @@
             <menu:menuitem menu:id=".uno:SpellDialog"/>
             <menu:menu menu:id=".uno:LanguageMenu">
                 <menu:menupopup>
+                    <menu:menuitem menu:id=".uno:SetLanguageSelectionMenu"/>
+                    <menu:menuitem menu:id=".uno:SetLanguageParagraphMenu"/>
+                    <menu:menuitem menu:id=".uno:SetLanguageAllTextMenu"/>
+                    <menu:menuseparator/>
                     <menu:menuitem menu:id=".uno:HangulHanjaConversion"/>
                     <menu:menuitem menu:id=".uno:ChineseConversion"/>
                     <menu:menuitem menu:id=".uno:ThesaurusDialog"/>
+                    <menu:menuitem menu:id=".uno:Hyphenate"/>
                 </menu:menupopup>
             </menu:menu>
             <menu:menuitem menu:id=".uno:WordCountDialog"/>
