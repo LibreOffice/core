@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgutil.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:02:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:37:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #include <unolingu.hxx>
 #endif
 
+#include <svtools/langtab.hxx>
 #include <svtools/itemset.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/objsh.hxx>
@@ -59,13 +60,12 @@
 
 #include "dlgutil.hxx"
 #include <svx/dialmgr.hxx>
-#include "langtab.hxx"
 
 // -----------------------------------------------------------------------
 
 String GetLanguageString( LanguageType eType )
 {
-    static const SvxLanguageTable aLangTable;
+    static const SvtLanguageTable aLangTable;
     return aLangTable.GetString( eType );
 }
 
