@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicbox.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:20:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:44:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,9 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-#ifndef _SVX_LANGTAB_HXX
-#include <svx/langtab.hxx>
-#endif
+
+#include <svtools/langtab.hxx>
+
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
@@ -447,7 +447,7 @@ void BasicLanguageBox::FillBox()
     if ( pCurMgr->isLibraryLocalized() )
     {
         Enable();
-        SvxLanguageTable aLangTable;
+        SvtLanguageTable aLangTable;
         Locale aDefaultLocale = pCurMgr->getStringResourceManager()->getDefaultLocale();
         Locale aCurrentLocale = pCurMgr->getStringResourceManager()->getCurrentLocale();
         Sequence< Locale > aLocaleSeq = pCurMgr->getStringResourceManager()->getLocales();
