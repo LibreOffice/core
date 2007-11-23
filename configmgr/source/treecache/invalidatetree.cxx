@@ -4,9 +4,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:26:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:38:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,6 @@
 #ifndef CONFIGMGR_TREEACCESSOR_HXX
 #include "treeaccessor.hxx"
 #endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
-#endif
 
 #ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
@@ -93,7 +90,7 @@ namespace configmgr
 namespace backend
 {
 // -----------------------------------------------------------------------------
-std::auto_ptr<SubtreeChange> createDiffs(data::NodeAccessRef const& _aCachedNode,
+std::auto_ptr<SubtreeChange> createDiffs(data::NodeAccess const& _aCachedNode,
                                             ISubtree const * _pLoadedSubtree,
                                             AbsolutePath const& _aAbsoluteSubtreePath)
 {
@@ -152,7 +149,8 @@ class OInvalidateTreeThread: public vos::OThread
     RequestOptions      m_aOptions;
 
 public:
-    OInvalidateTreeThread(CacheManager* _rTreeManager,  Name const & _aComponentName,
+    OInvalidateTreeThread(CacheManager* _rTreeManager,
+                          Name const & _aComponentName,
                           const RequestOptions& _aOptions)
     : m_rTreeManager(_rTreeManager)
     , m_aComponentName(_aComponentName)
@@ -193,13 +191,11 @@ void CacheController::invalidateComponent(ComponentRequest const & _aComponent) 
 
 CacheLocation CacheController::refreshComponent(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL()
 {
-    if (m_bDisposing) return CacheLocation();
+    if (m_bDisposing) return NULL;
 
     CacheRef aCache = this->getCacheAlways(_aRequest.getOptions());
 
-    if (!aCache.is()) return CacheLocation();
-
-    osl::MutexGuard aCacheLineGuard(aCache->mutex());
+    if (!aCache.is()) return NULL;
 
     // load the Node direct from the session, without using the cache
     ComponentRequest aForcedRequest(_aRequest);
@@ -210,39 +206,32 @@ CacheLocation CacheController::refreshComponent(ComponentRequest const & _aReque
     NodeInstance aNodeInstance(aLoadedInstance.mutableInstance().mutableData(),aRequestPath) ;
     NodeResult aLoadedNodeInstance(aNodeInstance) ;
 
-    CacheLocation aResult;
+    data::TreeAddress aResult = NULL;
     if (aLoadedNodeInstance.is())
     {
         Name aModuleName = aLoadedNodeInstance->root().getModuleName();
 
-        memory::UpdateAccessor aChangingAccessor( aCache->getDataSegment(aModuleName) );
-        OSL_ENSURE(aChangingAccessor.is(), "No existing cache line for tree being refreshed");
+        bool bAcquired = aCache->acquireModule(aModuleName);
+        aResult = CacheLocation( aCache->getTreeAddress(aModuleName) );
 
-        data::TreeAddress aCachedTreeAddress = aCache->acquireModule(aModuleName);
-
-        aResult.segment = aCache->getDataSegmentAddress(aModuleName);
-        aResult.address = aCachedTreeAddress.addressValue();
-
-        if (aCachedTreeAddress.is())
+        if (bAcquired)
         try
-        {
+    {
             std::auto_ptr<SubtreeChange> aTreeChanges;
             data::NodeAddress aRootAddress;
 
             {
-                data::TreeAccessor aTreeAccess(aChangingAccessor.accessor(),aCachedTreeAddress);
-                data::NodeAccessRef aRootNode = aTreeAccess.getRootNode();
+                data::TreeAccessor aTreeAccess(aResult);
+                data::NodeAccess aRootNode = aTreeAccess.getRootNode();
 
                 aTreeChanges = createDiffs(aRootNode, aLoadedNodeInstance->data().get(), aLoadedNodeInstance->root().location());
-                aRootAddress = aRootNode.address();
+                aRootAddress = aRootNode;
             }
 
             if (aTreeChanges.get() != NULL)
             {
-                // change all Values... found in the Subtree in the CacheTree
-                applyUpdateWithAdjustmentToTree(*aTreeChanges, aChangingAccessor, aRootAddress);
-
-                data::Accessor aNotifyLock = aChangingAccessor.downgrade(); // keep a read lock during notification
+        // change all Values... found in the Subtree in the CacheTree
+        applyUpdateWithAdjustmentToTree(*aTreeChanges, aRootAddress);
 
                 UpdateRequest anUpdateReq(  aTreeChanges.get(),
                                             aLoadedNodeInstance->root().location(),
@@ -251,12 +240,11 @@ CacheLocation CacheController::refreshComponent(ComponentRequest const & _aReque
 
                 m_aNotifier.notifyChanged(anUpdateReq);
             }
-
-            aCache->releaseModule(aModuleName);
+        aCache->releaseModule(aModuleName);
         }
         catch (...)
         {
-            aCache->releaseModule(aModuleName);
+        aCache->releaseModule(aModuleName);
             throw;
         }
     }
@@ -268,6 +256,7 @@ void OInvalidateTreeThread::run()
 {
     try
     {
+        UnoApiLock aLock;
         ComponentRequest aRequest(m_aComponentName, m_aOptions);
         m_rTreeManager->refreshComponent(aRequest);
     }
