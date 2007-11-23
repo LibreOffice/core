@@ -1,0 +1,285 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: langtab.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:50:22 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+ // include ---------------------------------------------------------------
+#include <svtools/svtools.hrc>
+
+#define RSC_RESOURCE_USAGE 1
+#include <i18npool/lang.h>
+
+#define PairedList ItemList
+
+ // STR_ARR_SVT_LANGUAGE_TABLE ----------------------------------------------------
+StringArray STR_ARR_SVT_LANGUAGE_TABLE
+{
+    PairedList [ en-US ] =
+    {
+        < "[None]" ; LANGUAGE_NONE ; > ;
+        < "Unknown" ; LANGUAGE_DONTKNOW ; > ;
+        < "Default" ; LANGUAGE_SYSTEM ; > ;
+        < "Afrikaans (South Africa)" ; LANGUAGE_AFRIKAANS ; > ;
+        < "Albanian" ; LANGUAGE_ALBANIAN ; > ;
+        < "Arabic (Iraq)" ; LANGUAGE_ARABIC_IRAQ ; > ;
+        < "Arabic (Egypt)" ; LANGUAGE_ARABIC_EGYPT ; > ;
+        < "Arabic (Libya)" ; LANGUAGE_ARABIC_LIBYA ; > ;
+        < "Arabic (Algerian)" ; LANGUAGE_ARABIC_ALGERIA ; > ;
+        < "Arabic (Morocco)" ; LANGUAGE_ARABIC_MOROCCO ; > ;
+        < "Arabic (Tunisia)" ; LANGUAGE_ARABIC_TUNISIA ; > ;
+        < "Arabic (Oman)" ; LANGUAGE_ARABIC_OMAN ; > ;
+        < "Arabic (Yemen)" ; LANGUAGE_ARABIC_YEMEN ; > ;
+        < "Arabic (Syria)" ; LANGUAGE_ARABIC_SYRIA ; > ;
+        < "Arabic (Jordan)" ; LANGUAGE_ARABIC_JORDAN ; > ;
+        < "Arabic (Lebanon)" ; LANGUAGE_ARABIC_LEBANON ; > ;
+        < "Arabic (Kuwait)" ; LANGUAGE_ARABIC_KUWAIT ; > ;
+        < "Arabic (UAE)" ; LANGUAGE_ARABIC_UAE ; > ;
+        < "Arabic (Bahrain)" ; LANGUAGE_ARABIC_BAHRAIN ; > ;
+        < "Arabic (Qatar)" ; LANGUAGE_ARABIC_QATAR ; > ;
+        < "Arabic (Saudi Arabia)" ; LANGUAGE_ARABIC_SAUDI_ARABIA ; > ;
+        < "Armenian" ; LANGUAGE_ARMENIAN ; > ;
+        < "Assami" ; LANGUAGE_ASSAMESE ; > ;
+        < "Azerbaijani Latin" ; LANGUAGE_AZERI_LATIN ; > ;
+        < "Azerbaijani Cyrillic" ; LANGUAGE_AZERI_CYRILLIC ; > ;
+        < "Basque" ; LANGUAGE_BASQUE ; > ;
+        < "Bengali (India)" ; LANGUAGE_BENGALI ; > ;
+        < "Bulgarian" ; LANGUAGE_BULGARIAN ; > ;
+        < "Byelorussian" ; LANGUAGE_BELARUSIAN ; > ;
+        < "Catalan" ; LANGUAGE_CATALAN ; > ;
+        < "Chinese (traditional)" ; LANGUAGE_CHINESE_TRADITIONAL ; > ;
+        < "Chinese (simplified)" ; LANGUAGE_CHINESE_SIMPLIFIED ; > ;
+        < "Chinese (Hong Kong)" ; LANGUAGE_CHINESE_HONGKONG ; > ;
+        < "Chinese (Singapore)" ; LANGUAGE_CHINESE_SINGAPORE ; > ;
+        < "Chinese (Macau)" ; LANGUAGE_CHINESE_MACAU ; > ;
+        < "Croatian" ; LANGUAGE_CROATIAN ; > ;
+        < "Czech" ; LANGUAGE_CZECH ; > ;
+        < "Danish" ; LANGUAGE_DANISH ; > ;
+        < "Dutch (Netherlands)" ; LANGUAGE_DUTCH ; > ;
+        < "Dutch (Belgium)" ; LANGUAGE_DUTCH_BELGIAN ; > ;
+        < "English (USA)" ; LANGUAGE_ENGLISH_US ; > ;
+        < "English (UK)" ; LANGUAGE_ENGLISH_UK ; > ;
+        < "English (Australia)" ; LANGUAGE_ENGLISH_AUS ; > ;
+        < "English (Canada)" ; LANGUAGE_ENGLISH_CAN ; > ;
+        < "English (New Zealand)" ; LANGUAGE_ENGLISH_NZ ; > ;
+        < "English (Eire)" ; LANGUAGE_ENGLISH_EIRE ; > ;
+        < "English (South Africa)" ; LANGUAGE_ENGLISH_SAFRICA ; > ;
+        < "English (Jamaica)" ; LANGUAGE_ENGLISH_JAMAICA ; > ;
+        < "English (Caribbean)" ; LANGUAGE_ENGLISH_CARRIBEAN ; > ;
+        < "English (Belize)" ; LANGUAGE_ENGLISH_BELIZE ; > ;
+        < "English (Trinidad)" ; LANGUAGE_ENGLISH_TRINIDAD ; > ;
+        < "English (Zimbabwe)" ; LANGUAGE_ENGLISH_ZIMBABWE ; > ;
+        < "English (Philippines)" ; LANGUAGE_ENGLISH_PHILIPPINES ; > ;
+        < "English (India)" ; LANGUAGE_ENGLISH_INDIA ; > ;
+        < "Estonian" ; LANGUAGE_ESTONIAN ; > ;
+        < "Finnish" ; LANGUAGE_FINNISH ; > ;
+        < "Faroese" ; LANGUAGE_FAEROESE ; > ;
+        < "Farsi" ; LANGUAGE_FARSI ; > ;
+        < "French (France)" ; LANGUAGE_FRENCH ; > ;
+        < "French (Belgium)" ; LANGUAGE_FRENCH_BELGIAN ; > ;
+        < "French (Canada)" ; LANGUAGE_FRENCH_CANADIAN ; > ;
+        < "French (Switzerland)" ; LANGUAGE_FRENCH_SWISS ; > ;
+        < "French (Luxembourg)" ; LANGUAGE_FRENCH_LUXEMBOURG ; > ;
+        < "French (Monaco)" ; LANGUAGE_FRENCH_MONACO ; > ;
+        < "Gascon" ; LANGUAGE_USER_GASCON ; > ;
+        < "German (Germany)" ; LANGUAGE_GERMAN ; > ;
+        < "German (Switzerland)" ; LANGUAGE_GERMAN_SWISS ; > ;
+        < "German (Austria)" ; LANGUAGE_GERMAN_AUSTRIAN ; > ;
+        < "German (Luxembourg)" ; LANGUAGE_GERMAN_LUXEMBOURG ; > ;
+        < "German (Liechtenstein)" ; LANGUAGE_GERMAN_LIECHTENSTEIN ; > ;
+        < "Greek" ; LANGUAGE_GREEK ; > ;
+        < "Gujarati" ; LANGUAGE_GUJARATI ; > ;
+        < "Hebrew" ; LANGUAGE_HEBREW ; > ;
+        < "Hindi" ; LANGUAGE_HINDI ; > ;
+        < "Hungarian" ; LANGUAGE_HUNGARIAN ; > ;
+        < "Icelandic" ; LANGUAGE_ICELANDIC ; > ;
+        < "Indonesian" ; LANGUAGE_INDONESIAN ; > ;
+        < "Italian (Italy)" ; LANGUAGE_ITALIAN ; > ;
+        < "Italian (Switzerland)" ; LANGUAGE_ITALIAN_SWISS ; > ;
+        < "Japanese" ; LANGUAGE_JAPANESE ; > ;
+        < "Kannada" ; LANGUAGE_KANNADA ; > ;
+        < "Kashmiri (Kashmir)" ; LANGUAGE_KASHMIRI ; > ;
+        < "Kashmiri (India)" ; LANGUAGE_KASHMIRI_INDIA ; > ;
+        < "Kazak" ; LANGUAGE_KAZAK ; > ;
+        < "Konkani" ; LANGUAGE_KONKANI ; > ;
+        < "Korean (RoK)" ; LANGUAGE_KOREAN ; > ;
+        < "Latvian" ; LANGUAGE_LATVIAN ; > ;
+        < "Lithuanian" ; LANGUAGE_LITHUANIAN ; > ;
+        < "Macedonian" ; LANGUAGE_MACEDONIAN ; > ;
+        < "Malay (Malaysia)" ; LANGUAGE_MALAY_MALAYSIA ; > ;
+        < "Malay (Brunei Darusalam)" ; LANGUAGE_MALAY_BRUNEI_DARUSSALAM ; > ;
+        < "Malayalam" ; LANGUAGE_MALAYALAM ; > ;
+        < "Manipuri" ; LANGUAGE_MANIPURI ; > ;
+        < "Marathi" ; LANGUAGE_MARATHI ; > ;
+        < "Nepali (Nepal)" ; LANGUAGE_NEPALI ; > ;
+        < "Nepali (India)" ; LANGUAGE_NEPALI_INDIA ; > ;
+        < "Norwegian, Bokmål" ; LANGUAGE_NORWEGIAN_BOKMAL ; > ;
+        < "Norwegian, Nynorsk" ; LANGUAGE_NORWEGIAN_NYNORSK ; > ;
+        < "Oriya" ; LANGUAGE_ORIYA ; > ;
+        < "Polish" ; LANGUAGE_POLISH ; > ;
+        < "Portuguese (Portugal)" ; LANGUAGE_PORTUGUESE ; > ;
+        < "Portuguese (Brazil)" ; LANGUAGE_PORTUGUESE_BRAZILIAN ; > ;
+        < "Punjabi" ; LANGUAGE_PUNJABI ; > ;
+        < "Rhaeto-Romance" ; LANGUAGE_RHAETO_ROMAN ; > ;
+        < "Romanian" ; LANGUAGE_ROMANIAN ; > ;
+        < "Russian" ; LANGUAGE_RUSSIAN ; > ;
+        < "Sanskrit" ; LANGUAGE_SANSKRIT ; > ;
+        < "Serbian Cyrillic (Serbia and Montenegro)" ; LANGUAGE_SERBIAN_CYRILLIC ; > ;
+        < "Serbian Latin (Serbia and Montenegro)" ; LANGUAGE_SERBIAN_LATIN ; > ;
+        < "Serbian Cyrillic (Serbia)" ; LANGUAGE_USER_SERBIAN_CYRILLIC_SERBIA ; > ;
+        < "Serbian Latin (Serbia)" ; LANGUAGE_USER_SERBIAN_LATIN_SERBIA ; > ;
+        < "Serbian Cyrillic (Montenegro)" ; LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO ; > ;
+        < "Serbian Latin (Montenegro)" ; LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO ; > ;
+        < "Sindhi" ; LANGUAGE_SINDHI ; > ;
+        < "Slovakian" ; LANGUAGE_SLOVAK ; > ;
+        < "Slovenian" ; LANGUAGE_SLOVENIAN ; > ;
+        < "Spanish (Spain)" ; LANGUAGE_SPANISH ; > ;
+        < "Spanish (Mexico)" ; LANGUAGE_SPANISH_MEXICAN ; > ;
+        < "Spanish, Modern (Spain)" ; LANGUAGE_SPANISH_MODERN ; > ;
+        < "Spanish (Guatemala)" ; LANGUAGE_SPANISH_GUATEMALA ; > ;
+        < "Spanish (Costa Rica)" ; LANGUAGE_SPANISH_COSTARICA ; > ;
+        < "Spanish (Panama)" ; LANGUAGE_SPANISH_PANAMA ; > ;
+        < "Spanish (Dom. Rep.)" ; LANGUAGE_SPANISH_DOMINICAN_REPUBLIC ; > ;
+        < "Spanish (Venezuela)" ; LANGUAGE_SPANISH_VENEZUELA ; > ;
+        < "Spanish (Colombia)" ; LANGUAGE_SPANISH_COLOMBIA ; > ;
+        < "Spanish (Peru)" ; LANGUAGE_SPANISH_PERU ; > ;
+        < "Spanish (Argentina)" ; LANGUAGE_SPANISH_ARGENTINA ; > ;
+        < "Spanish (Ecuador)" ; LANGUAGE_SPANISH_ECUADOR ; > ;
+        < "Spanish (Chile)" ; LANGUAGE_SPANISH_CHILE ; > ;
+        < "Spanish (Uruguay)" ; LANGUAGE_SPANISH_URUGUAY ; > ;
+        < "Spanish (Paraguay)" ; LANGUAGE_SPANISH_PARAGUAY ; > ;
+        < "Spanish (Bolivia)" ; LANGUAGE_SPANISH_BOLIVIA ; > ;
+        < "Spanish (El Salvador)" ; LANGUAGE_SPANISH_EL_SALVADOR ; > ;
+        < "Spanish (Honduras)" ; LANGUAGE_SPANISH_HONDURAS ; > ;
+        < "Spanish (Nicaragua)" ; LANGUAGE_SPANISH_NICARAGUA ; > ;
+        < "Spanish (Puerto Rico)" ; LANGUAGE_SPANISH_PUERTO_RICO ; > ;
+        < "Swahili (Kenya)" ; LANGUAGE_SWAHILI ; > ;
+        < "Swedish (Sweden)" ; LANGUAGE_SWEDISH ; > ;
+        < "Swedish (Finland)" ; LANGUAGE_SWEDISH_FINLAND ; > ;
+        < "Tajik" ; LANGUAGE_TAJIK ; > ;
+        < "Tamil" ; LANGUAGE_TAMIL ; > ;
+        < "Tatar" ; LANGUAGE_TATAR ; > ;
+        < "Telugu" ; LANGUAGE_TELUGU ; > ;
+        < "Thai" ; LANGUAGE_THAI ; > ;
+        < "Turkish" ; LANGUAGE_TURKISH ; > ;
+        < "Urdu (Pakistan)" ; LANGUAGE_URDU_PAKISTAN ; > ;
+        < "Urdu (India)" ; LANGUAGE_URDU_INDIA ; > ;
+        < "Ukrainian" ; LANGUAGE_UKRAINIAN ; > ;
+        < "Uzbek Latin" ; LANGUAGE_UZBEK_LATIN ; > ;
+        < "Welsh" ; LANGUAGE_WELSH ; > ;
+        < "User 1" ; LANGUAGE_USER1 ; > ;
+        < "User 2" ; LANGUAGE_USER2 ; > ;
+        < "User 3" ; LANGUAGE_USER3 ; > ;
+        < "User 4" ; LANGUAGE_USER4 ; > ;
+        < "User 5" ; LANGUAGE_USER5 ; > ;
+        < "User 6" ; LANGUAGE_USER6 ; > ;
+        < "User 7" ; LANGUAGE_USER7 ; > ;
+        < "User 8" ; LANGUAGE_USER8 ; > ;
+        < "User 9" ; LANGUAGE_USER9 ; > ;
+        < "Latin" ; LANGUAGE_LATIN ; > ;
+        < "Esperanto" ; LANGUAGE_USER_ESPERANTO ; > ;
+        < "Kinyarwanda (Rwanda)" ; LANGUAGE_USER_KINYARWANDA ; > ;
+        < "Maori (New Zealand)" ; LANGUAGE_MAORI_NEW_ZEALAND ; > ;
+        < "Galician" ; LANGUAGE_GALICIAN ; > ;
+        < "Dhivehi" ; LANGUAGE_DHIVEHI ; > ;
+        < "Northern Sotho" ; LANGUAGE_SEPEDI ; > ;
+        < "Gaelic (Scotland)" ; LANGUAGE_GAELIC_SCOTLAND ; > ;
+        < "Mongolian" ; LANGUAGE_MONGOLIAN ; > ;
+        < "Interlingua" ; LANGUAGE_USER_INTERLINGUA ; > ;
+        < "Bosnian" ; LANGUAGE_BOSNIAN_BOSNIA_HERZEGOVINA ; > ;
+        < "Bengali (Bangladesh)" ; LANGUAGE_BENGALI_BANGLADESH ; > ;
+        < "Occitan" ; LANGUAGE_USER_OCCITAN ; > ;
+        < "Khmer" ; LANGUAGE_KHMER ; > ;
+        < "Kurdish (Turkey)" ; LANGUAGE_USER_KURDISH_TURKEY ; > ;
+        < "Kurdish (Syria)" ; LANGUAGE_USER_KURDISH_SYRIA ; > ;
+        < "Kurdish (Iraq)" ; LANGUAGE_USER_KURDISH_IRAQ ; > ;
+        < "Kurdish (Iran)" ; LANGUAGE_USER_KURDISH_IRAN ; > ;
+        < "Sardinian" ; LANGUAGE_USER_SARDINIAN ; > ;
+        < "Dzongkha" ; LANGUAGE_DZONGKHA ; > ;
+        < "Swahili (Tanzania)" ; LANGUAGE_USER_SWAHILI_TANZANIA ; > ;
+        < "Lao" ; LANGUAGE_LAO ; > ;
+        < "Irish" ; LANGUAGE_GAELIC_IRELAND ; > ;
+        < "Tibetan (PR China)" ; LANGUAGE_TIBETAN ; > ;
+        < "Georgian" ; LANGUAGE_GEORGIAN ; > ;
+        < "Frisian" ; LANGUAGE_FRISIAN_NETHERLANDS ; > ;
+        < "Tswana (South Africa)" ; LANGUAGE_TSWANA ; > ;
+        < "Zulu" ; LANGUAGE_ZULU ; > ;
+        < "Vietnamese" ; LANGUAGE_VIETNAMESE ; > ;
+        < "Breton" ; LANGUAGE_USER_BRETON ; > ;
+        < "Kalaallisut" ; LANGUAGE_USER_KALAALLISUT ; > ;
+        < "Ndebele, South" ; LANGUAGE_USER_NDEBELE_SOUTH ; > ;
+        < "Southern Sotho" ; LANGUAGE_SESOTHO ; > ;
+        < "Swazi" ; LANGUAGE_USER_SWAZI ; > ;
+        < "Tsonga" ; LANGUAGE_TSONGA ; > ;
+        < "Venda" ; LANGUAGE_VENDA ; > ;
+        < "Tswana (Botswana)" ; LANGUAGE_USER_TSWANA_BOTSWANA ; > ;
+        < "Xhosa" ; LANGUAGE_XHOSA ; > ;
+        < "Sinhala" ; LANGUAGE_SINHALESE_SRI_LANKA ; > ;
+        < "Moore" ; LANGUAGE_USER_MOORE ; > ;
+        < "Bambara" ; LANGUAGE_USER_BAMBARA ; > ;
+        < "Akan" ; LANGUAGE_USER_AKAN ; > ;
+        < "Luxembourgish" ; LANGUAGE_USER_LUXEMBOURGISH ; > ;
+        < "Friulian" ; LANGUAGE_USER_FRIULIAN ; > ;
+        < "Fijian" ; LANGUAGE_USER_FIJIAN ; > ;
+        < "Afrikaans (Namibia)" ; LANGUAGE_USER_AFRIKAANS_NAMIBIA ; > ;
+        < "English (Namibia)" ; LANGUAGE_USER_ENGLISH_NAMIBIA ; > ;
+        < "Walloon" ; LANGUAGE_USER_WALLOON ; > ;
+        < "Coptic" ; LANGUAGE_USER_COPTIC ; > ;
+        < "Tigrigna (Eritrea)" ; LANGUAGE_TIGRIGNA_ERITREA ; > ;
+        < "Tigrigna (Ethiopia)" ; LANGUAGE_TIGRIGNA_ETHIOPIA ; > ;
+        < "Amharic" ; LANGUAGE_AMHARIC_ETHIOPIA ; > ;
+        < "Kirghiz" ; LANGUAGE_KIRGHIZ ; > ;
+        < "German (Belgium)" ; LANGUAGE_USER_GERMAN_BELGIUM ; > ;
+        < "Chuvash" ; LANGUAGE_USER_CHUVASH ; > ;
+        < "Burmese" ; LANGUAGE_BURMESE ; > ;
+        < "Hausa (Nigeria)" ; LANGUAGE_HAUSA_NIGERIA ; > ;
+        < "Hausa (Ghana)" ; LANGUAGE_USER_HAUSA_GHANA ; > ;
+        < "Éwé" ; LANGUAGE_USER_EWE_GHANA ; > ;
+        < "English (Ghana)" ; LANGUAGE_USER_ENGLISH_GHANA ; > ;
+        < "Sango" ; LANGUAGE_USER_SANGO ; > ;
+        < "Tagalog" ; LANGUAGE_USER_TAGALOG ; > ;
+        < "Ganda" ; LANGUAGE_USER_GANDA ; > ;
+        < "Lingala" ; LANGUAGE_USER_LINGALA_DRCONGO ; > ;
+        < "Low German" ; LANGUAGE_USER_LOW_GERMAN ; > ;
+        < "Hiligaynon" ; LANGUAGE_USER_HILIGAYNON ; > ;
+        < "Nyanja" ; LANGUAGE_USER_NYANJA ; > ;
+        < "Kashubian" ; LANGUAGE_USER_KASHUBIAN ; > ;
+        < "Spanish (Cuba)" ; LANGUAGE_USER_SPANISH_CUBA ; > ;
+        < "Tetun" ; LANGUAGE_USER_TETUN ; > ;
+        < "Quechua (Bolivia, North)" ; LANGUAGE_USER_QUECHUA_NORTH_BOLIVIA ; > ;
+        < "Quechua (Bolivia, South)" ; LANGUAGE_USER_QUECHUA_SOUTH_BOLIVIA ; > ;
+        < "Somali" ; LANGUAGE_SOMALI ; > ;
+    };
+};
+
+// ********************************************************************** EOF
+
