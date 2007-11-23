@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transporttypes.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:06:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:38:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,10 @@ struct SchXMLAxis
 
 // ----------------------------------------
 
+// struct PostponedStyleObject
+// {
+// };
+
 struct DataRowPointStyle
 {
     enum StyleType
@@ -155,6 +159,8 @@ struct DataRowPointStyle
                 ::com::sun::star::chart2::XDataSeries > m_xSeries;
     ::com::sun::star::uno::Reference<
                 ::com::sun::star::beans::XPropertySet > m_xOldAPISeries;
+    ::com::sun::star::uno::Reference<
+                ::com::sun::star::beans::XPropertySet > m_xEquationProperties;
     sal_Int32 m_nPointIndex;
     sal_Int32 m_nPointRepeat;
     ::rtl::OUString msStyleName;
