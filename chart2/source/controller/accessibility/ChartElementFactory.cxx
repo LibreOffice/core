@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartElementFactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:52:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:44:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,7 @@ AccessibleBase* ChartElementFactory::CreateChartElement( const AccessibleElement
         case OBJECTTYPE_DATA_STOCK_RANGE:
         case OBJECTTYPE_DATA_STOCK_LOSS:
         case OBJECTTYPE_DATA_STOCK_GAIN:
+        case OBJECTTYPE_DATA_CURVE_EQUATION:
             return new AccessibleChartElement( rAccInfo, true, false );
         case OBJECTTYPE_UNKNOWN:
             break;
