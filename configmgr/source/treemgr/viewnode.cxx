@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewnode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:32:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:49:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,33 +121,27 @@ namespace configmgr
         }
 
 //-----------------------------------------------------------------------------
-/*        data::TreeAccessor Tree::getAccess() const   // has a TreeAccessor
+        data::NodeAccess Node::getAccessRef() const
         {
-            return get_impl()->getOriginalTreeAccess(m_accessor);
-        }
-*/
-//-----------------------------------------------------------------------------
-        data::NodeAccessRef Node::getAccessRef() const
-        {
-            return get_impl()->getOriginalNodeAccessRef(&accessor());
+            return get_impl()->getOriginalNodeAccess();
         }
 
 //-----------------------------------------------------------------------------
         data::ValueNodeAccess ValueNode::getAccess() const
         {
-            return get_impl()->getDataAccess(accessor());
+            return get_impl()->getDataAccess();
         }
 
 //-----------------------------------------------------------------------------
         data::GroupNodeAccess GroupNode::getAccess() const
         {
-            return get_impl()->getDataAccess(accessor());
+            return get_impl()->getDataAccess();
         }
 
 //-----------------------------------------------------------------------------
         data::SetNodeAccess SetNode::getAccess() const
         {
-            return get_impl()->getDataAccess(accessor());
+            return get_impl()->getDataAccess();
         }
 
 //-----------------------------------------------------------------------------
