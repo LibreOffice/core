@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCurveHelper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:00:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:07:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,15 +49,11 @@
 #include "PropertyHelper.hxx"
 #include "ResId.hxx"
 #include "Strings.hrc"
+#include "DiagramHelper.hxx"
 
 #ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #endif
-
-//.............................................................................
-namespace chart
-{
-//.............................................................................
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -69,6 +65,39 @@ using ::com::sun::star::lang::XServiceName;
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Exception;
 using ::rtl::OUString;
+
+namespace
+{
+OUString lcl_getServiceNameForType( ::chart::RegressionCurveHelper::tRegressionType eType )
+{
+    OUString aServiceName;
+    switch( eType )
+    {
+        case ::chart::RegressionCurveHelper::REGRESSION_TYPE_LINEAR:
+            aServiceName = C2U( "com.sun.star.chart2.LinearRegressionCurve" );
+            break;
+        case ::chart::RegressionCurveHelper::REGRESSION_TYPE_LOG:
+            aServiceName = C2U( "com.sun.star.chart2.LogarithmicRegressionCurve" );
+            break;
+        case ::chart::RegressionCurveHelper::REGRESSION_TYPE_EXP:
+            aServiceName = C2U( "com.sun.star.chart2.ExponentialRegressionCurve" );
+            break;
+        case ::chart::RegressionCurveHelper::REGRESSION_TYPE_POWER:
+            aServiceName = C2U( "com.sun.star.chart2.PotentialRegressionCurve" );
+            break;
+        default:
+            OSL_ENSURE(false,"unknown regression curve type - use linear instead");
+            aServiceName = C2U( "com.sun.star.chart2.LinearRegressionCurve" );
+            break;
+    }
+    return aServiceName;
+}
+} // anonymous namespace
+
+//.............................................................................
+namespace chart
+{
+//.............................................................................
 
 // static
 Reference< XRegressionCurve > RegressionCurveHelper::createMeanValueLine(
@@ -361,7 +390,8 @@ void RegressionCurveHelper::addRegressionCurve(
     tRegressionType eType,
     uno::Reference< XRegressionCurveContainer > & xRegCnt,
     const uno::Reference< XComponentContext > & /* xContext */,
-    const uno::Reference< beans::XPropertySet >& xPropertySource )
+    const uno::Reference< beans::XPropertySet >& xPropertySource,
+    const uno::Reference< beans::XPropertySet >& xEquationProperties )
 {
     if( !xRegCnt.is() )
         return;
@@ -373,33 +403,16 @@ void RegressionCurveHelper::addRegressionCurve(
     }
 
     uno::Reference< chart2::XRegressionCurve > xCurve;
-    ::rtl::OUString aServiceName;
-
-    switch( eType )
-    {
-        case REGRESSION_TYPE_LINEAR:
-            aServiceName = C2U( "com.sun.star.chart2.LinearRegressionCurve" );
-            break;
-        case REGRESSION_TYPE_LOG:
-            aServiceName = C2U( "com.sun.star.chart2.LogarithmicRegressionCurve" );
-            break;
-        case REGRESSION_TYPE_EXP:
-            aServiceName = C2U( "com.sun.star.chart2.ExponentialRegressionCurve" );
-            break;
-        case REGRESSION_TYPE_POWER:
-            aServiceName = C2U( "com.sun.star.chart2.PotentialRegressionCurve" );
-            break;
-        default:
-            OSL_ENSURE(false,"unknown regression curve type - use linear instead");
-            aServiceName = C2U( "com.sun.star.chart2.LinearRegressionCurve" );
-            break;
-    }
+    ::rtl::OUString aServiceName( lcl_getServiceNameForType( eType ));
 
     if( aServiceName.getLength())
     {
         // todo: use a valid context
         xCurve.set( createRegressionCurveByServiceName(
                          uno::Reference< uno::XComponentContext >(), aServiceName ));
+
+        if( xEquationProperties.is())
+            xCurve->setEquationProperties( xEquationProperties );
 
         uno::Reference< beans::XPropertySet > xProp( xCurve, uno::UNO_QUERY );
         if( xProp.is())
@@ -414,7 +427,7 @@ void RegressionCurveHelper::addRegressionCurve(
                     xProp->setPropertyValue( C2U( "LineColor" ),
                                              xSeriesProp->getPropertyValue( C2U( "Color" )));
                 }
-                xProp->setPropertyValue( C2U( "LineWidth" ), uno::makeAny( sal_Int32( 100 )));
+//                 xProp->setPropertyValue( C2U( "LineWidth" ), uno::makeAny( sal_Int32( 100 )));
             }
         }
     }
@@ -456,6 +469,29 @@ bool RegressionCurveHelper::removeAllExceptMeanValueLine(
         }
     }
     return bRemovedSomething;
+}
+
+// static
+void RegressionCurveHelper::replaceOrAddCurveAndReduceToOne(
+    tRegressionType eType,
+    uno::Reference< XRegressionCurveContainer > & xRegCnt,
+    const uno::Reference< XComponentContext > & xContext )
+{
+    uno::Reference< chart2::XRegressionCurve > xRegressionCurve( getFirstCurveNotMeanValueLine( xRegCnt ));
+    if( ! xRegressionCurve.is())
+        RegressionCurveHelper::addRegressionCurve( eType, xRegCnt, xContext );
+    else
+    {
+        OUString aServiceName( lcl_getServiceNameForType( eType ));
+        if( aServiceName.getLength())
+        {
+            RegressionCurveHelper::removeAllExceptMeanValueLine( xRegCnt );
+            RegressionCurveHelper::addRegressionCurve(
+                eType, xRegCnt, xContext,
+                Reference< beans::XPropertySet >( xRegressionCurve, uno::UNO_QUERY ),
+                xRegressionCurve->getEquationProperties());
+        }
+    }
 }
 
 // static
@@ -581,6 +617,53 @@ OUString RegressionCurveHelper::getUINameForRegressionCurve( const Reference< XR
 
     return aResult;
 }
+
+// static
+::std::vector< Reference< chart2::XRegressionCurve > >
+    RegressionCurveHelper::getAllRegressionCurvesNotMeanValueLine(
+        const Reference< chart2::XDiagram > & xDiagram )
+{
+    ::std::vector< Reference< chart2::XRegressionCurve > > aResult;
+    ::std::vector< Reference< chart2::XDataSeries > > aSeries( DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+    for( ::std::vector< Reference< chart2::XDataSeries > >::iterator aIt( aSeries.begin());
+         aIt != aSeries.end(); ++aIt )
+    {
+        Reference< chart2::XRegressionCurveContainer > xCurveCnt( *aIt, uno::UNO_QUERY );
+        if( xCurveCnt.is())
+        {
+            uno::Sequence< uno::Reference< chart2::XRegressionCurve > > aCurves(
+                xCurveCnt->getRegressionCurves());
+            for( sal_Int32 i = 0; i < aCurves.getLength(); ++i )
+            {
+                if( ! isMeanValueLine( aCurves[i] ))
+                    aResult.push_back( aCurves[i] );
+            }
+        }
+    }
+
+    return aResult;
+}
+
+// static
+void RegressionCurveHelper::resetEquationPosition(
+    const Reference< chart2::XRegressionCurve > & xCurve )
+{
+    if( xCurve.is())
+    {
+        try
+        {
+            const OUString aPosPropertyName( RTL_CONSTASCII_USTRINGPARAM( "RelativePosition" ));
+            Reference< beans::XPropertySet > xEqProp( xCurve->getEquationProperties()); // since m233: , uno::UNO_SET_THROW );
+            if( xEqProp->getPropertyValue( aPosPropertyName ).hasValue())
+                xEqProp->setPropertyValue( aPosPropertyName, uno::Any());
+        }
+        catch( const uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+    }
+}
+
 
 //.............................................................................
 } //namespace chart
