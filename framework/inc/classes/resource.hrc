@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 08:49:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:45:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,12 @@
 #define STR_CORRUPT_UICFG_SHARE                 (RID_STR_START+12)
 #define STR_CORRUPT_UICFG_USER                  (RID_STR_START+13)
 #define STR_CORRUPT_UICFG_GENERAL               (RID_STR_START+14)
+#define STR_LANGSTATUS_MULTIPLE_LANGUAGES       (RID_STR_START+15)
+#define STR_LANGSTATUS_NONE                     (RID_STR_START+16)
+#define STR_LANGSTATUS_MORE                     (RID_STR_START+17)
+#define STR_SET_LANGUAGE_FOR_SELECTION          (RID_STR_START+18)
+#define STR_SET_LANGUAGE_FOR_PARAGRAPH          (RID_STR_START+19)
+#define STR_SET_LANGUAGE_FOR_ALL_TEXT           (RID_STR_START+20)
 
 #define POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION    (RID_MENU_START+0)
 
