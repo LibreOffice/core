@@ -4,9 +4,9 @@
  *
  *  $RCSfile: readonlyview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:33:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:45:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,12 +51,9 @@ namespace configmgr
 
         class ReadOnlyViewStrategy : public ViewStrategy
         {
-            memory::Segment const * m_pSegment;
         public:
             explicit
-            ReadOnlyViewStrategy(memory::Segment const * _pSegment)
-            : m_pSegment(_pSegment)
-            {}
+            ReadOnlyViewStrategy() {}
 
         protected:
             // change handling -required
@@ -72,9 +69,6 @@ namespace configmgr
             // set element access
             virtual void doInsertElement(SetNode const& _aNode, Name const& aName, SetNodeEntry const& aNewEntry);
             virtual void doRemoveElement(SetNode const& _aNode, Name const& aName);
-
-            virtual void doReleaseDataSegment() { m_pSegment = NULL; }
-            virtual memory::Segment const * doGetDataSegment() const { return m_pSegment; }
 
             virtual NodeFactory& doGetNodeFactory();
         private:

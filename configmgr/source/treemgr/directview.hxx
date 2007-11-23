@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:29:14 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:42:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,6 @@ namespace configmgr
             // change handling -required
             virtual bool doHasChanges(Node const& _aNode) const;
             virtual void doMarkChanged(Node const& _aNode);
-
-            // direct data access
-            virtual void doReleaseDataSegment() { m_aTreeSegment.clear(); }
-            virtual memory::Segment const * doGetDataSegment()    const { return m_aTreeSegment.getSegment(); }
-            virtual memory::Segment * doGetDataSegmentForUpdate()       { return m_aTreeSegment.getSegment(); }
 
             // common attributes
             virtual node::Attributes doAdjustAttributes(node::Attributes const& _aAttributes) const;
