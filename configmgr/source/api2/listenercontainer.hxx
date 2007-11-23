@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:15:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:07:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,10 @@
 
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
+#endif
+
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 
 #include <osl/diagnose.h>
@@ -132,7 +136,6 @@ namespace configmgr
             typedef typename BasicContainerHelperArray::size_type   Index;
 
             typedef Key_ Key;
-            typedef typename KeyToIndex_::KeyFinder KeyFinder;
             typedef cppu::OMultiTypeInterfaceContainerHelperVar< Key_,KeyHash_,KeyEq_ > SpecialContainerHelper;
             typedef cppu::OBroadcastHelperVar< SpecialContainerHelper, Key >            SpecialBroadcastHelper;
             typedef std::vector<Key> KeyList;
@@ -140,13 +143,9 @@ namespace configmgr
         public:
             /**
              * Create a container of interface containers.
-             *
-             * @param rMutex    the mutex to protect multi thread access.
-             *                  The lifetime must be longer than the lifetime
-             *                  of this object.
              */
-            SpecialListenerContainer(osl::Mutex& rMutex, Index nCount, KeyToIndex_ aMapper)
-            : m_aSpecialHelper(rMutex)
+            SpecialListenerContainer(Index nCount, KeyToIndex_ aMapper)
+            : m_aSpecialHelper(UnoApiLock::getLock())
             , m_aContainers(nCount)
             , m_aMapper(aMapper)
             , m_bDisposeLock(false)
@@ -155,12 +154,8 @@ namespace configmgr
             ~SpecialListenerContainer()
             {
                 OSL_ENSURE(isDisposed(), "ERROR: Object was not disposed properly");
-                if (m_bDisposeLock) mutex().release();
             }
         public:
-            /// get the mutex thatthis object uses
-            osl::Mutex& mutex() const { return m_aSpecialHelper.rMutex; }
-
             /**
              * check whether this is disposed or still alive
              * @param pObject
@@ -182,20 +177,17 @@ namespace configmgr
             /// return whether the object is present in this container
             bool isAvailable(Index nIndex)  const throw()
             {
-                osl::MutexGuard aGuard(mutex());
                 return nIndex < m_aContainers.size() && m_aContainers[nIndex].pInterface;
             }
 
             Index getSize() const
             {
-                osl::MutexGuard aGuard(mutex());
                 return m_aContainers.size();
             }
 
             /// return the interface associated with an index
             void setObjectAt(Index nIndex, UnoInterface* pInterface)
             {
-                osl::MutexGuard aGuard(mutex());
                 OSL_ENSURE( !isDisposed(), "object is disposed" );
 
                 if (isAlive())
@@ -216,7 +208,6 @@ namespace configmgr
             /// return the interface associated with an index
             UnoInterfaceRef getObjectAt(Index nIndex) const
             {
-                osl::MutexGuard aGuard(mutex());
                 UnoInterfaceRef xRet( nIndex < m_aContainers.size() ? m_aContainers[nIndex].pInterface : 0 );
                 return xRet;
             }
@@ -224,27 +215,20 @@ namespace configmgr
             /// return the interface associated with an index
             UnoInterfaceRef getObjectForKey(Key const& aKey ) const
             {
-                osl::MutexGuard aGuard(mutex());
                 Index nIndex = m_aMapper.findIndexForKey(aKey);
                 UnoInterfaceRef xRet( nIndex < m_aContainers.size() ? m_aContainers[nIndex].pInterface : 0 );
                 return xRet;
             }
 
             /**
-             * Call disposing on all object in all the containers that
-             * support XEventListener. Then clear the container.
-             */
-            bool disposeAll(KeyFinder _aFinder) throw();
-
-            /**
              * Call disposing on all object in all the container for anIndex
              * and in the containers for the associated indices
              * support XEventListener. Then clear the container.
              */
-            bool disposeOne( KeyFinder _aFinder, Index anIndex ) throw();
+            bool disposeOne( Index anIndex ) throw();
 
             /**
-             * Start disposing this object, leave the mutex locked for dispose processing
+             * Start disposing this object
              * @return <TRUE/>
              *      if disposing has been started
              * @return <FALSE/>
@@ -252,7 +236,7 @@ namespace configmgr
              */
             bool beginDisposing() throw();
             /**
-             * Continue disposing this object leave the mutex unlocked
+             * Continue disposing this object
              * <p>  Call disposing on all object in all the containers that
              *      support XEventListener. Then clear the container.
              * </p>
@@ -261,7 +245,7 @@ namespace configmgr
              * @return <FALSE/>
              *      if disposing had already been started before
              */
-            void notifyDisposing(KeyFinder _aFinder) throw();
+            void notifyDisposing() throw();
 
             /// mark the end of the dispose processing
             void endDisposing() throw();
@@ -282,7 +266,6 @@ namespace configmgr
              */
             BasicContainerHelper *  getContainerHelper( Index nIndex) const
             {
-                osl::MutexGuard aGuard(mutex());
                 return ((nIndex < m_aContainers.size()) ? m_aContainers[nIndex].pContainer : 0 );
             }
             /**
@@ -292,7 +275,6 @@ namespace configmgr
              */
             ListenerContainer *  getContainer( Index nIndex, const UnoType & aType) const
             {
-                osl::MutexGuard aGuard(mutex());
                 BasicContainerHelper* pContainer = (nIndex < m_aContainers.size()) ? m_aContainers[nIndex].pContainer : 0 ;
 
                 return pContainer ? pContainer->getContainer(aType) : 0;
@@ -338,7 +320,7 @@ namespace configmgr
             sal_Int32 removeSpecialListener( const Key_& aKey, uno::Reference< lang::XEventListener > const& xListener) throw();
 
         private:
-            void implFillDisposer(DisposeNotifier& aNotifier, KeyFinder _aFinder, Index nIndex);
+            void implFillDisposer(DisposeNotifier& aNotifier, Index nIndex);
 
             SpecialBroadcastHelper      m_aSpecialHelper;
             BasicContainerHelperArray   m_aContainers;
@@ -381,25 +363,9 @@ namespace configmgr
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeAll(KeyFinder _aFinder) throw()
-        {
-            if (beginDisposing())
-            {
-                notifyDisposing();
-                endDisposing();
-                return true;
-            }
-            else
-                return false;
-        }
-//-----------------------------------------------------------------------------
-        template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeOne(KeyFinder _aFinder, Index nIndex) throw()
+        bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::disposeOne(Index nIndex) throw()
         {
     //      OSL_ENSURE(!isDisposed(),"Object is already disposed in toto");
-
-            osl::ClearableMutexGuard aGuard(mutex());
-
             if (isAlive())
             {
                 if (nIndex < m_aContainers.size())
@@ -408,11 +374,9 @@ namespace configmgr
                     {
                         DisposeNotifier aNotifier(pObject);
 
-                        implFillDisposer(aNotifier, _aFinder, nIndex);
+                        implFillDisposer(aNotifier, nIndex);
                         m_aContainers[nIndex].pInterface = 0;
                         delete m_aContainers[nIndex].pContainer;
-
-                        aGuard.clear();
 
                         aNotifier.notify();
                     }
@@ -426,10 +390,8 @@ namespace configmgr
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
         bool SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::beginDisposing() throw()
         {
-            osl::MutexGuard aGuard( mutex() );
             if (isAlive())
             {
-                mutex().acquire();
                 m_aSpecialHelper.bInDispose = sal_True;
                 m_bDisposeLock = true;
 
@@ -439,7 +401,7 @@ namespace configmgr
         }
 //-----------------------------------------------------------------------------
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::notifyDisposing(KeyFinder _aFinder) throw()
+        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::notifyDisposing() throw()
         {
             OSL_ENSURE(isDisposing(),"Disposing isn't in progress on this object");
             OSL_ENSURE(m_bDisposeLock,"Duplicate call for dispose notification or disposing is not taking place");
@@ -461,7 +423,7 @@ namespace configmgr
                         if (m_aContainers[ix].pInterface)
                         {
                             aNotifiers.push_back(DisposeNotifier(m_aContainers[ix].pInterface));
-                            implFillDisposer(aNotifiers.back(), _aFinder, ix);
+                            implFillDisposer(aNotifiers.back(), ix);
                             m_aContainers[ix].pInterface = 0;
                             delete m_aContainers[ix].pContainer;
                         }
@@ -469,7 +431,6 @@ namespace configmgr
                 }
 
                 m_bDisposeLock = false;
-                mutex().release();
 
                 for(Index jx = 0, count = aNotifiers.size(); jx < count; ++jx)
                 {
@@ -495,7 +456,6 @@ namespace configmgr
                 if (m_bDisposeLock)
                 {
                     m_bDisposeLock = false;
-                    mutex().release();
                 }
             }
         }
@@ -503,14 +463,12 @@ namespace configmgr
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
         sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addListener( Index nIndex, const UnoType& aType, const uno::Reference< lang::XEventListener > & xListener ) throw()
         {
-            osl::ClearableMutexGuard aGuard( mutex() );
-
             if ( nIndex < m_aContainers.size() && m_aContainers[nIndex].pInterface  )
             {
                 if ( isAlive() )
                 {
                     if (m_aContainers[nIndex].pContainer == 0)
-                        m_aContainers[nIndex].pContainer = new BasicContainerHelper(mutex());
+                        m_aContainers[nIndex].pContainer = new BasicContainerHelper(UnoApiLock::getLock());
 
                     return m_aContainers[nIndex].pContainer->addInterface(aType,xListener);
                 }
@@ -518,7 +476,6 @@ namespace configmgr
                 else if (xListener.is())
                 {
                     lang::EventObject aEvent(m_aContainers[nIndex].pInterface);
-                    aGuard.clear();
                     try { xListener->disposing(aEvent); } catch (uno::Exception & ) {}
                 }
 
@@ -532,8 +489,6 @@ namespace configmgr
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
         sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::addSpecialListener( const Key_& aKey, const uno::Reference< lang::XEventListener > & xListener ) throw()
         {
-            osl::ClearableMutexGuard aGuard( mutex() );
-
             Index nIndex = m_aMapper.findIndexForKey(aKey);
             if ( nIndex < m_aContainers.size() && m_aContainers[nIndex].pInterface  )
             {
@@ -545,7 +500,6 @@ namespace configmgr
                 else if (xListener.is())
                 {
                     lang::EventObject aEvent(m_aContainers[nIndex].pInterface);
-                    aGuard.clear();
                     try { xListener->disposing(aEvent); } catch (uno::Exception & ) {}
                 }
             }
@@ -559,7 +513,6 @@ namespace configmgr
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
         sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::removeListener( Index nIndex, const UnoType& aType, const uno::Reference< lang::XEventListener > & xListener ) throw()
         {
-            osl::MutexGuard aGuard( mutex() );
             OSL_ENSURE( !isDisposed(), "object is disposed" );
 
             if ( isAlive() )
@@ -576,7 +529,6 @@ namespace configmgr
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
         sal_Int32 SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::removeSpecialListener( const Key_& aKey, const uno::Reference< lang::XEventListener > & xListener ) throw()
         {
-            osl::MutexGuard aGuard( mutex() );
             OSL_ENSURE( !isDisposed(), "object is disposed" );
 
             if ( isAlive() )
@@ -605,7 +557,7 @@ namespace configmgr
 *///-----------------------------------------------------------------------------
     // relation function. Uses KeyToIndex
         template <class Key_, class KeyHash_, class KeyEq_, class KeyToIndex_>
-        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::implFillDisposer(DisposeNotifier& aNotifier, KeyFinder _aFinder, Index nIndex)
+        void SpecialListenerContainer<Key_,KeyHash_,KeyEq_, KeyToIndex_>::implFillDisposer(DisposeNotifier& aNotifier, Index nIndex)
         {
             if (BasicContainerHelper* pMultiContainer = m_aContainers[nIndex].pContainer)
             {
@@ -619,7 +571,7 @@ namespace configmgr
                 }
             }
             KeyList aKeys;
-            if (m_aMapper.findKeysForIndex(_aFinder, nIndex,aKeys))
+            if (m_aMapper.findKeysForIndex(nIndex,aKeys))
             {
                 for(typename KeyList::iterator it = aKeys.begin(); it != aKeys.end(); ++it)
                 {
