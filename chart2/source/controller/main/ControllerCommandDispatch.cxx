@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ControllerCommandDispatch.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:45:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,22 +47,14 @@
 #include "ChartTypeHelper.hxx"
 #include "DiagramHelper.hxx"
 #include "ChartController.hxx"
+#include "RegressionCurveHelper.hxx"
 
-#ifndef _COM_SUN_STAR_UTIL_XMODIFYBROADCASTER_HPP_
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
 #include <com/sun/star/frame/XStorable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPE_HPP_
 #include <com/sun/star/chart2/XChartType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDATASERIES_HPP_
 #include <com/sun/star/chart2/XDataSeries.hpp>
-#endif
+#include <com/sun/star/chart2/XRegressionCurve.hpp>
 
 // only needed until #i68864# is fixed
 #ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
@@ -141,6 +133,10 @@ struct ControllerState
     // format>arrangement).
     bool bMayMoveSeriesForward;
     bool bMayMoveSeriesBackward;
+
+    // trendlines
+    bool bMayAddTrendline;
+    bool bMayAddTrendlineEquation;
 };
 
 
@@ -151,7 +147,9 @@ ControllerState::ControllerState() :
         bIsDeleteableObjectSelected(false),
         bIsFormateableObjectSelected(false),
         bMayMoveSeriesForward( false ),
-        bMayMoveSeriesBackward( false )
+        bMayMoveSeriesBackward( false ),
+        bMayAddTrendline( false ),
+        bMayAddTrendlineEquation( false )
 {}
 
 void ControllerState::update(
@@ -194,6 +192,39 @@ void ControllerState::update(
             ChartModelHelper::findDiagram( xModel ),
             xGivenDataSeries,
             MOVE_SERIES_BACKWARD );
+
+        bMayAddTrendline = false;
+        bMayAddTrendlineEquation = false;
+        if( bHasSelectedObject )
+        {
+            if( aObjectType == OBJECTTYPE_DATA_SERIES )
+            {
+                // @todo: only if trendlines are supported for the current chart
+                // type
+                uno::Reference< chart2::XRegressionCurveContainer > xRegCurveCnt(
+                    ObjectIdentifier::getObjectPropertySet( aSelObjCID, xModel ), uno::UNO_QUERY );
+                if( xRegCurveCnt.is())
+                    bMayAddTrendline = ! RegressionCurveHelper::getFirstCurveNotMeanValueLine( xRegCurveCnt ).is();
+            }
+            else if( aObjectType == OBJECTTYPE_DATA_CURVE )
+            {
+                uno::Reference< chart2::XRegressionCurve > xRegCurve(
+                    ObjectIdentifier::getObjectPropertySet( aSelObjCID, xModel ), uno::UNO_QUERY );
+                if( xRegCurve.is())
+                {
+                    uno::Reference< beans::XPropertySet > xEqProp( xRegCurve->getEquationProperties());
+                    bool bShowEq = false;
+                    bool bShowCorr = false;
+                    if( xEqProp.is())
+                    {
+                        xEqProp->getPropertyValue( C2U("ShowEquation")) >>= bShowEq;
+                        xEqProp->getPropertyValue( C2U("ShowCorrelationCoefficient")) >>= bShowCorr;
+
+                        bMayAddTrendlineEquation = ! (bShowEq || bShowCorr);
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -502,6 +533,9 @@ void ControllerCommandDispatch::fireStatusEvent(
                                       m_apControllerState->bMayMoveSeriesForward, xSingleListener );
     conditionalFireStatusEventForURL( rURL, C2U(".uno:Backward"), aEmptyArg, bIsWritable && bControllerStateIsValid &&
                                       m_apControllerState->bMayMoveSeriesBackward, xSingleListener );
+
+    conditionalFireStatusEventForURL( rURL, C2U(".uno:InsertTrendline"), aEmptyArg, bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendline, xSingleListener );
+    conditionalFireStatusEventForURL( rURL, C2U(".uno:InsertTrendlineEquation"), aEmptyArg, bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendlineEquation, xSingleListener );
 }
 
 // ____ XDispatch ____
