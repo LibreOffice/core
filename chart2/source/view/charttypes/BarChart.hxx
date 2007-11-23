@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChart.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:55:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:10:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,9 +98,9 @@ private: //methods
                         , sal_Int32 nGeometry3D );
 
     ::com::sun::star::awt::Point getLabelScreenPositionAndAlignment(
-                        LabelAlignment& rAlignment, bool bMiddlePosition
+                        LabelAlignment& rAlignment, sal_Int32 nLabelPlacement
                         , double fScaledX, double fScaledLowerYValue, double fScaledUpperYValue, double fScaledZ
-                        , double fScaledLowerBarDepth, double fScaledUpperBarDepth
+                        , double fScaledLowerBarDepth, double fScaledUpperBarDepth, double fBaseValue
                         , BarPositionHelper* pPosHelper ) const;
 
     virtual PlottingPositionHelper& getPlottingPositionHelper( sal_Int32 nAxisIndex ) const;//nAxisIndex indicates wether the position belongs to the main axis ( nAxisIndex==0 ) or secondary axis ( nAxisIndex==1 )
