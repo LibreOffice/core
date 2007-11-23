@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anydata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:23:44 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:11:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,6 @@
 #ifndef INCLUDED_DATA_FLAGS_HXX
 #include "flags.hxx"
 #endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
-#endif
-
 #ifndef CONFIGMGR_TYPECONVERTER_HXX
 #include "typeconverter.hxx"
 #endif
@@ -61,7 +57,6 @@ namespace configmgr
         namespace Type = data::Type;
         namespace uno = ::com::sun::star::uno;
         typedef AnyData::TypeCode TypeCode;
-        using memory::Pointer;
 //-----------------------------------------------------------------------------
 
 TypeCode getTypeCode(uno::Type const & _aType)
@@ -200,7 +195,7 @@ uno::Type getUnoType( TypeCode _aType)
 //-----------------------------------------------------------------------------
 
 static
-AnyData allocSimpleData(memory::Allocator const& _anAllocator, TypeCode _aSimpleType, uno::Any const & _aAny)
+AnyData allocSimpleData(TypeCode _aSimpleType, uno::Any const & _aAny)
 {
     OSL_ENSURE( _aSimpleType == (_aSimpleType & Type::mask_basetype), "Invalid type code" );
 
@@ -234,9 +229,7 @@ AnyData allocSimpleData(memory::Allocator const& _anAllocator, TypeCode _aSimple
             sal_Int64 nValue = 0;
             OSL_VERIFY(_aAny >>= nValue);
 
-            Address aStorage = _anAllocator.allocate( sizeof nValue );
-            *static_cast<sal_Int64*>( _anAllocator.access(aStorage) ) = nValue;
-            aResult.longValue = aStorage;
+            aResult.longValue = new sal_Int64( nValue );
         }
         break;
 
@@ -245,9 +238,7 @@ AnyData allocSimpleData(memory::Allocator const& _anAllocator, TypeCode _aSimple
             double dValue = 0;
             OSL_VERIFY(_aAny >>= dValue);
 
-            Address aStorage = _anAllocator.allocate( sizeof dValue );
-            *static_cast<double*>( _anAllocator.access(aStorage) ) = dValue;
-            aResult.doubleValue = aStorage;
+            aResult.doubleValue = new double( dValue );
         }
         break;
 
@@ -255,7 +246,7 @@ AnyData allocSimpleData(memory::Allocator const& _anAllocator, TypeCode _aSimple
         {
             uno::Sequence<sal_Int8> aValue;
             OSL_VERIFY(_aAny >>= aValue);
-            aResult.binaryValue = allocBinary(_anAllocator,aValue);
+            aResult.binaryValue = allocBinary(aValue);
         }
         break;
 
@@ -290,7 +281,7 @@ sal_Sequence const * extractSequenceData(uno::Sequence< E > & _rSeq, uno::Any co
 //-----------------------------------------------------------------------------
 
 static
-AnyData allocSequenceData(memory::Allocator const& _anAllocator, TypeCode _aSimpleType, uno::Any const & _aAny)
+AnyData allocSequenceData(TypeCode _aSimpleType, uno::Any const & _aAny)
 {
     OSL_ENSURE( _aSimpleType == (_aSimpleType & Type::mask_basetype), "Invalid type code" );
 
@@ -302,7 +293,7 @@ AnyData allocSequenceData(memory::Allocator const& _anAllocator, TypeCode _aSimp
         {
             uno::Sequence<rtl::OUString> aSeqValue;
             if (sal_Sequence const * pData = extractSequenceData(aSeqValue,_aAny))
-                aSequence = allocSequence(_anAllocator,_aSimpleType,pData);
+                aSequence = allocSequence(_aSimpleType,pData);
         }
         break;
 
@@ -310,7 +301,7 @@ AnyData allocSequenceData(memory::Allocator const& _anAllocator, TypeCode _aSimp
         {
             uno::Sequence<sal_Bool> aSeqValue;
             if (sal_Sequence const * pData = extractSequenceData(aSeqValue,_aAny))
-                aSequence = allocSequence(_anAllocator,_aSimpleType,pData);
+                aSequence = allocSequence(_aSimpleType,pData);
         }
         break;
 
@@ -318,7 +309,7 @@ AnyData allocSequenceData(memory::Allocator const& _anAllocator, TypeCode _aSimp
         {
             uno::Sequence<sal_Int16> aSeqValue;
             if (sal_Sequence const * pData = extractSequenceData(aSeqValue,_aAny))
-                aSequence = allocSequence(_anAllocator,_aSimpleType,pData);
+                aSequence = allocSequence(_aSimpleType,pData);
         }
         break;
 
@@ -326,7 +317,7 @@ AnyData allocSequenceData(memory::Allocator const& _anAllocator, TypeCode _aSimp
         {
             uno::Sequence<sal_Int32> aSeqValue;
             if (sal_Sequence const * pData = extractSequenceData(aSeqValue,_aAny))
-                aSequence = allocSequence(_anAllocator,_aSimpleType,pData);
+                aSequence = allocSequence(_aSimpleType,pData);
         }
         break;
 
@@ -334,7 +325,7 @@ AnyData allocSequenceData(memory::Allocator const& _anAllocator, TypeCode _aSimp
         {
             uno::Sequence<sal_Int64> aSeqValue;
             if (sal_Sequence const * pData = extractSequenceData(aSeqValue,_aAny))
-                aSequence = allocSequence(_anAllocator,_aSimpleType,pData);
+                aSequence = allocSequence(_aSimpleType,pData);
         }
         break;
 
@@ -342,7 +333,7 @@ AnyData allocSequenceData(memory::Allocator const& _anAllocator, TypeCode _aSimp
         {
             uno::Sequence<double> aSeqValue;
             if (sal_Sequence const * pData = extractSequenceData(aSeqValue,_aAny))
-                aSequence = allocSequence(_anAllocator,_aSimpleType,pData);
+                aSequence = allocSequence(_aSimpleType,pData);
         }
         break;
 
@@ -350,7 +341,7 @@ AnyData allocSequenceData(memory::Allocator const& _anAllocator, TypeCode _aSimp
         {
             uno::Sequence<uno::Sequence<sal_Int8> > aSeqValue;
             if (sal_Sequence const * pData = extractSequenceData(aSeqValue,_aAny))
-                aSequence = allocSequence(_anAllocator,_aSimpleType,pData);
+                aSequence = allocSequence(_aSimpleType,pData);
         }
         break;
 
@@ -366,28 +357,20 @@ AnyData allocSequenceData(memory::Allocator const& _anAllocator, TypeCode _aSimp
 }
 //-----------------------------------------------------------------------------
 
-AnyData allocData(memory::Allocator const& _anAllocator, TypeCode _aType, uno::Any const & _aAny)
+AnyData allocData(TypeCode _aType, uno::Any const & _aAny)
 {
     OSL_ENSURE( _aType == (_aType & Type::mask_valuetype), "Invalid type code" );
     OSL_ENSURE( _aType == getTypeCode(_aAny.getValueType()), "Type code does not match value" );
 
     if (_aType & Type::flag_sequence)
-        return allocSequenceData(_anAllocator,TypeCode( _aType & Type::mask_basetype),_aAny);
-
+        return allocSequenceData(TypeCode( _aType & Type::mask_basetype),_aAny);
     else
-        return allocSimpleData(_anAllocator,_aType,_aAny);
+        return allocSimpleData(_aType,_aAny);
 }
-//-----------------------------------------------------------------------------
-/*
-AnyData copyData(memory::Allocator const& _anAllocator, TypeCode _aType, AnyData _aData)
-{
-    OSL_ENSURE( _aType == (_aType & Type::mask_valuetype), "Invalid type code" );
-}
-*/
 //-----------------------------------------------------------------------------
 
 static
-void freeSimpleData(memory::Allocator const& _anAllocator, TypeCode _aSimpleType, AnyData const & _aData)
+void freeSimpleData(TypeCode _aSimpleType, AnyData const & _aData)
 {
     OSL_ENSURE( _aSimpleType == (_aSimpleType & Type::mask_basetype), "Invalid type code" );
 
@@ -405,15 +388,15 @@ void freeSimpleData(memory::Allocator const& _anAllocator, TypeCode _aSimpleType
 
         // free memory for oversized values
     case Type::value_long:
-        _anAllocator.deallocate(_aData.longValue);
+        delete _aData.longValue;
         break;
 
     case Type::value_double:
-        _anAllocator.deallocate(_aData.doubleValue);
+        delete _aData.doubleValue;
         break;
 
     case Type::value_binary:
-        freeBinary(_anAllocator, _aData.binaryValue);
+        freeBinary(_aData.binaryValue);
         break;
 
     case Type::value_any:
@@ -427,20 +410,20 @@ void freeSimpleData(memory::Allocator const& _anAllocator, TypeCode _aSimpleType
 }
 //-----------------------------------------------------------------------------
 
-void    freeData(memory::Allocator const& _anAllocator, TypeCode _aType, AnyData _aData)
+void    freeData(TypeCode _aType, AnyData _aData)
 {
     OSL_ENSURE( _aType == (_aType & Type::mask_valuetype), "Invalid type code" );
 
     if (_aType & Type::flag_sequence)
-        freeSequence(_anAllocator,TypeCode(_aType & Type::mask_basetype),_aData.sequenceValue);
+        freeSequence(TypeCode(_aType & Type::mask_basetype),_aData.sequenceValue);
 
     else
-        freeSimpleData(_anAllocator,_aType,_aData);
+        freeSimpleData(_aType,_aData);
 }
 //-----------------------------------------------------------------------------
 
 static
-uno::Any readSimpleData(memory::Accessor const& _anAccessor, TypeCode _aSimpleType, AnyData const & _aData)
+uno::Any readSimpleData(TypeCode _aSimpleType, AnyData const & _aData)
 {
     OSL_ENSURE( _aSimpleType == (_aSimpleType & Type::mask_basetype), "Invalid type code" );
 
@@ -462,22 +445,14 @@ uno::Any readSimpleData(memory::Accessor const& _anAccessor, TypeCode _aSimpleTy
         return uno::makeAny( _aData.intValue );
 
     case Type::value_long:
-        {
-            void const * pStorage = _anAccessor.validate( Pointer(_aData.longValue) );
-            sal_Int64 const * pValue = static_cast<sal_Int64 const *>(pStorage);
-            return uno::makeAny( *pValue );
-        }
+    return uno::makeAny( *_aData.longValue );
 
     case Type::value_double:
-        {
-            void const * pStorage = _anAccessor.validate( Pointer(_aData.doubleValue) );
-            double const * pValue = static_cast<double const *>(pStorage);
-            return uno::makeAny( *pValue );
-        }
+    return uno::makeAny( *_aData.doubleValue );
 
     case Type::value_binary:
         {
-            uno::Sequence<sal_Int8> aValue = readBinary( _anAccessor, _aData.binaryValue );
+            uno::Sequence<sal_Int8> aValue = readBinary( _aData.binaryValue );
             return uno::makeAny( aValue );
         }
 
@@ -491,15 +466,15 @@ uno::Any readSimpleData(memory::Accessor const& _anAccessor, TypeCode _aSimpleTy
 }
 //-----------------------------------------------------------------------------
 
-uno::Any readData(memory::Accessor const& _anAccessor, TypeCode _aType, AnyData _aData)
+uno::Any readData(TypeCode _aType, AnyData _aData)
 {
     OSL_ENSURE( _aType == (_aType & Type::mask_valuetype), "Invalid type code" );
 
     if (_aType & Type::flag_sequence)
-        return readAnySequence(_anAccessor,TypeCode(_aType & Type::mask_basetype),_aData.sequenceValue);
+        return readAnySequence(TypeCode(_aType & Type::mask_basetype),_aData.sequenceValue);
 
     else
-        return readSimpleData(_anAccessor,_aType,_aData);
+        return readSimpleData(_aType,_aData);
 }
 
 //-----------------------------------------------------------------------------
