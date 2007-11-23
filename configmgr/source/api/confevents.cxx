@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confevents.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:53:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:01:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ namespace configmgr
         ConfigChangeBroadcastHelper();
         ~ConfigChangeBroadcastHelper();
 
-        void broadcast(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& anUpdate, sal_Bool bError, IConfigBroadcaster* pSource);
+        void broadcast(TreeChangeList const& anUpdate, sal_Bool bError, IConfigBroadcaster* pSource);
 
     public:
         // IConfigBroadcaster implementation helper
@@ -118,20 +118,12 @@ namespace configmgr
         }
     }
 
-/*  void ConfigChangeBroadcaster::removeNode(OUString const& aPath, const vos::ORef < OOptions >& _xOptions, bool bRemovedFromModel)
-    {
-        if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(_xOptions,false))
-        {
-            pHelper->removeNode(aPath, bRemovedFromModel, this);
-        }
-    }
-*/
     /////////////////////////////////////////////////////////////////////////
-    void ConfigChangeBroadcaster::fireChanges(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& rList_, sal_Bool bError_)
+    void ConfigChangeBroadcaster::fireChanges(TreeChangeList const& rList_, sal_Bool bError_)
     {
         if (ConfigChangeBroadcastHelper* pHelper = getBroadcastHelper(rList_.getOptions(),false))
         {
-            pHelper->broadcast(_aChangedDataAccessor, rList_, bError_, this);
+            pHelper->broadcast(rList_, bError_, this);
         }
     }
 
@@ -167,9 +159,9 @@ namespace configmgr
     }
 */
     /////////////////////////////////////////////////////////////////////////
-    void ConfigChangeBroadcastHelper::broadcast(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& anUpdate, sal_Bool bError, IConfigBroadcaster* pSource)
+    void ConfigChangeBroadcastHelper::broadcast(TreeChangeList const& anUpdate, sal_Bool bError, IConfigBroadcaster* pSource)
     {
-        m_changes.dispatch(_aChangedDataAccessor, anUpdate, bError, pSource);
+        m_changes.dispatch(anUpdate, bError, pSource);
     }
 
 
