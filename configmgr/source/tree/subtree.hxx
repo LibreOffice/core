@@ -4,9 +4,9 @@
  *
  *  $RCSfile: subtree.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:30:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:33:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,22 +44,12 @@
 
 #include <memory>
 #include <set>
+#include <vector>
 
 namespace configmgr
 {
-
-// ---------------------------------- STL set ----------------------------------
-    struct ltNode
-    {
-        bool operator()(const configmgr::INode* n1, const configmgr::INode* n2) const
-            {
-                // return strcmp(n1->GetName(), n2->GetName()) < 0;
-                return (n1->getName().compareTo(n2->getName()) < 0) ? 1 : 0;
-            }
-    };
-
-
-    typedef std::set<INode*, ltNode> ChildList;
+    // List sorted by name for binary search
+    typedef std::vector< INode* > ChildList;
 
     class ChildListSet {
         ChildList m_aChildList;
@@ -67,10 +57,13 @@ namespace configmgr
         ChildListSet(ChildListSet const&);
         ChildListSet& operator=(ChildListSet const& aSet);
     public:
-        ChildList& GetSet() {return m_aChildList;}
-        ChildList const& GetSet() const {return m_aChildList;}
+        ChildList::iterator begin() const { return const_cast<ChildList*>(&m_aChildList)->begin(); }
+        ChildList::iterator end()   const { return const_cast<ChildList*>(&m_aChildList)->end(); }
+        INode *erase(INode *pNode);
+        ChildList::iterator find(INode *pNode) const;
+        std::pair<ChildList::iterator, bool> insert(INode *aInsert);
 
-        ChildListSet() {}
+        ChildListSet() : m_aChildList(0) {}
         ChildListSet(ChildListSet const&, treeop::DeepChildCopy);
         ~ChildListSet();
     };
@@ -78,8 +71,7 @@ namespace configmgr
 // Inner Node
     class Subtree : public ISubtree
     {
-        //  set<Node*> children;
-        ChildListSet        m_aChildren;
+        ChildListSet   m_aChildren;
         virtual INode* doGetChild(OUString const& name) const;
 
     public:
