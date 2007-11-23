@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apifactory.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:06:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@
 #include <cppuhelper/typeprovider.hxx>
 #endif
 
-namespace osl { class Mutex; }
 namespace configmgr
 {
     namespace configuration
@@ -140,8 +139,6 @@ namespace configmgr
 
             static ApiTreeImpl& getImplementation(NodeElement& pElement);
         private:
-            osl::Mutex&     doGetMutex();
-
             static configuration::TemplateHolder implGetSetElementTemplate(configuration::Tree const& aTree, configuration::NodeRef const& aNode);
             static UnoInterfaceRef implToUno(NodeElement* pNode);
             void implHaveNewElement(configuration::NodeID aNodeID, NodeElement* pNode);
