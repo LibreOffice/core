@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configdefaultprovider.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:27:26 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:39:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,6 @@
 #endif
 #ifndef CONFIGMGR_CONFIGNODEIMPL_HXX_
 #include "treeimpl.hxx"
-#endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
 #endif
 #ifndef CONFIGMGR_MISC_OPTIONS_HXX_
 #include "options.hxx"
@@ -118,7 +115,6 @@ DefaultProvider::DefaultProvider(rtl::Reference< DefaultProviderProxy > const& _
 
 /// tries to load a default instance of the specified node
 std::auto_ptr<ISubtree> DefaultProvider::getDefaultTree(
-            memory::UpdateAccessor& _aTreeAccessor,
             Tree const& _aTree, NodeRef const& _aNode
      ) const CFG_UNO_THROW_ALL()
 {
@@ -130,9 +126,7 @@ std::auto_ptr<ISubtree> DefaultProvider::getDefaultTree(
 //        clone the ISubtree (no interface for that) :-(
 
     if (m_aProxy.is() && aAttributes.existsInDefault())
-    {
-        aRet = m_aProxy->getDefaultTree(_aTreeAccessor,_aTree.getAbsolutePath(_aNode));
-    }
+        aRet = m_aProxy->getDefaultTree(_aTree.getAbsolutePath(_aNode));
 
     return aRet;
 }
@@ -143,9 +137,7 @@ static bool shouldFetchDefaultData(TreeRef const& _aTreeRef, bool & _rbHasDefaul
 {
     bool bShouldFetch = false;
 
-    data::Accessor aTempAccess( getRootSegment(_aTreeRef) );
-
-    Tree aTempTree(aTempAccess, _aTreeRef);
+    Tree aTempTree(_aTreeRef);
 
     node::Attributes aAttributes = aTempTree.getAttributes(aTempTree.getRootNode());
 
