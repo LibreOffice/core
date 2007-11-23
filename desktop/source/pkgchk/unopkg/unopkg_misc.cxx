@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_misc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:05:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:24:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include "../../app/lockfile.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
+#include "rtl/bootstrap.hxx"
 #include "rtl/strbuf.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "osl/process.h"
@@ -436,9 +437,16 @@ Reference<XComponentContext> connectToOffice(
 
 //==============================================================================
 Reference<XComponentContext> getUNO(
-    DisposeGuard & disposeGuard, bool verbose, bool bGui,
+    DisposeGuard & disposeGuard, bool verbose, bool shared, bool bGui,
     Reference<XComponentContext> & out_localContext)
 {
+    // do not create any user data (for the root user) in --shared mode:
+    if (shared) {
+        rtl::Bootstrap::set(
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CFG_CacheUrl")),
+            rtl::OUString());
+    }
+
     // hold lock during process runtime:
     static ::desktop::Lockfile s_lockfile( false /* no IPC server */ );
     Reference<XComponentContext> xComponentContext(
