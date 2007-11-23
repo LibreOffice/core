@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:37:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:33:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,16 @@ enum SchXMLSeriesAttrMap
     XML_TOK_SERIES_LABEL_ADDRESS,
     XML_TOK_SERIES_ATTACHED_AXIS,
     XML_TOK_SERIES_STYLE_NAME,
-    XML_TOK_SERIES_CHART_CLASS          // not available yet
+    XML_TOK_SERIES_CHART_CLASS
+};
+
+enum SchXMLRegEquationAttrMap
+{
+    XML_TOK_REGEQ_STYLE_NAME,
+    XML_TOK_REGEQ_DISPLAY_EQUATION,
+    XML_TOK_REGEQ_DISPLAY_R_SQUARE,
+    XML_TOK_REGEQ_POS_X,
+    XML_TOK_REGEQ_POS_Y
 };
 
 class SchXMLImport : public SvXMLImport
