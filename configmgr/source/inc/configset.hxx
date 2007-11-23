@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configset.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:46:23 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:17:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,8 +107,7 @@ namespace configmgr
 
             TemplateHolder getTemplate() const;
 
-            ElementTree getElementTree(data::Accessor const& _accessor) const;
-            osl::Mutex& getTreeLock() const;
+            ElementTree getElementTree() const;
 
             TreeRef getTreeRef() const;
 
@@ -120,12 +119,11 @@ namespace configmgr
         class ElementTree
         {
             ElementTreeHolder m_aTreeHolder;
-            data::Accessor    m_accessor;
         public:
             static ElementTree emptyElement() { return ElementTree(); }
 
-            ElementTree(data::Accessor const& _accessor, ElementTreeImpl* pTree);
-            ElementTree(data::Accessor const& _accessor, ElementTreeHolder const& pTree);
+            ElementTree(ElementTreeImpl* pTree);
+            ElementTree(ElementTreeHolder const& pTree);
             ElementTree(ElementTree const& aOther);
             ElementTree& operator=(ElementTree const& aOther);
             ~ElementTree();
@@ -171,16 +169,13 @@ namespace configmgr
         class SetElementInfo
         {
             TemplateInfo    m_aTemplateInfo;
-            data::Accessor  m_aSetAccessor;
         public:
-            SetElementInfo(data::Accessor const& _aSetAccessor, TemplateHolder const& aTemplate);
+            SetElementInfo(TemplateHolder const& aTemplate);
 
             TemplateHolder getTemplate()        const;
             TemplateInfo   getTemplateInfo()    const;
 
             UnoType  getElementType() const { return m_aTemplateInfo.getType(); }
-
-            data::Accessor  getSetDataAccessor() const { return m_aSetAccessor; }
 
             static TemplateHolder extractElementInfo(Tree const& aTree, NodeRef const& aNode);
         };
@@ -189,11 +184,8 @@ namespace configmgr
         class SetElementFactory
         {
             TemplateProvider m_aProvider;
-            data::Accessor m_aDataAccessor;
-
-            data::Accessor const& getDataAccessor() const { return m_aDataAccessor; };
         public:
-            SetElementFactory(data::Accessor const& _aDataAccessor, TemplateProvider const& aProvider);
+            SetElementFactory(TemplateProvider const& aProvider);
             SetElementFactory(SetElementFactory const& aOther);
             SetElementFactory& operator=(SetElementFactory const& aOther);
             ~SetElementFactory();
