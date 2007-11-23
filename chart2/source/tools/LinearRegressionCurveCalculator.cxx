@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LinearRegressionCurveCalculator.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:01:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:05:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,8 @@
 #include "macros.hxx"
 #include "RegressionCalculationHelper.hxx"
 
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 
 using namespace ::com::sun::star;
 
@@ -56,12 +52,10 @@ namespace chart
 
 LinearRegressionCurveCalculator::LinearRegressionCurveCalculator() :
         m_fSlope( 0.0 ),
-        m_fIntercept( 0.0 ),
-        m_fCorrelationCoeffitient( 0.0 )
+        m_fIntercept( 0.0 )
 {
     ::rtl::math::setNan( & m_fSlope );
     ::rtl::math::setNan( & m_fIntercept );
-    ::rtl::math::setNan( & m_fCorrelationCoeffitient );
 }
 
 LinearRegressionCurveCalculator::~LinearRegressionCurveCalculator()
@@ -122,14 +116,33 @@ double SAL_CALL LinearRegressionCurveCalculator::getCurveValue( double x )
     return fResult;
 }
 
-double SAL_CALL LinearRegressionCurveCalculator::getCorrelationCoefficient()
-    throw (uno::RuntimeException)
+uno::Sequence< geometry::RealPoint2D > SAL_CALL LinearRegressionCurveCalculator::getCurveValues(
+    double min, double max, ::sal_Int32 nPointCount,
+    const uno::Reference< chart2::XScaling >& xScalingX,
+    const uno::Reference< chart2::XScaling >& xScalingY,
+    ::sal_Bool bMaySkipPointsInCalculation )
+    throw (lang::IllegalArgumentException,
+           uno::RuntimeException)
 {
-    return m_fCorrelationCoeffitient;
+    if( bMaySkipPointsInCalculation &&
+        isLinearScaling( xScalingX ) &&
+        isLinearScaling( xScalingY ))
+    {
+        // optimize result
+        uno::Sequence< geometry::RealPoint2D > aResult( 2 );
+        aResult[0].X = min;
+        aResult[0].Y = this->getCurveValue( min );
+        aResult[1].X = max;
+        aResult[1].Y = this->getCurveValue( max );
+
+        return aResult;
+    }
+    return RegressionCurveCalculator::getCurveValues( min, max, nPointCount, xScalingX, xScalingY, bMaySkipPointsInCalculation );
 }
 
-OUString SAL_CALL LinearRegressionCurveCalculator::getRepresentation()
-    throw (uno::RuntimeException)
+OUString LinearRegressionCurveCalculator::ImplGetRepresentation(
+    const uno::Reference< util::XNumberFormatter >& xNumFormatter,
+    ::sal_Int32 nNumberFormatKey ) const
 {
     OUStringBuffer aBuf( C2U( "f(x) = " ));
 
@@ -137,33 +150,35 @@ OUString SAL_CALL LinearRegressionCurveCalculator::getRepresentation()
 
     if( m_fSlope != 0.0 )
     {
-        aBuf.append( NUMBER_TO_STR( m_fSlope ));
-        aBuf.append( sal_Unicode( ' ' ));
-        aBuf.append( sal_Unicode( 0x00b7 ));
-        aBuf.append( sal_Unicode( ' ' ));
+        if( ::rtl::math::approxEqual( fabs( m_fSlope ), 1.0 ))
+        {
+            if( m_fSlope < 0 )
+                aBuf.append( UC_MINUS_SIGN );
+        }
+        else
+            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fSlope ));
         aBuf.append( sal_Unicode( 'x' ));
         bHaveSlope = true;
     }
 
-    if( m_fIntercept != 0.0 )
+    if( bHaveSlope )
     {
-        if( ! bHaveSlope )
+        if( m_fIntercept < 0.0 )
         {
-            aBuf.append( NUMBER_TO_STR( m_fIntercept ));
+            aBuf.append( UC_SPACE );
+            aBuf.append( UC_MINUS_SIGN );
+            aBuf.append( UC_SPACE );
+            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, fabs( m_fIntercept )));
         }
-        else
+        else if( m_fIntercept > 0.0 )
         {
-            if( m_fIntercept < 0.0 )
-            {
-                aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " - " ));
-                aBuf.append( NUMBER_TO_STR( fabs( m_fIntercept )));
-            }
-            else
-            {
-                aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " + " ));
-                aBuf.append( NUMBER_TO_STR( m_fIntercept ));
-            }
+            aBuf.appendAscii( RTL_CONSTASCII_STRINGPARAM( " + " ));
+            aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
         }
+    }
+    else
+    {
+        aBuf.append( getFormattedString( xNumFormatter, nNumberFormatKey, m_fIntercept ));
     }
 
     return aBuf.makeStringAndClear();
