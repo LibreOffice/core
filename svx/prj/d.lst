@@ -129,7 +129,6 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\label3d.hxx %_DEST%\inc%_EXT%\svx\label3d.hxx
 ..\inc\svx\langbox.hxx %_DEST%\inc%_EXT%\svx\langbox.hxx
 ..\inc\svx\langitem.hxx %_DEST%\inc%_EXT%\svx\langitem.hxx
-..\inc\langtab.hxx %_DEST%\inc%_EXT%\svx\langtab.hxx
 ..\inc\layctrl.hxx %_DEST%\inc%_EXT%\svx\layctrl.hxx
 ..\inc\lboxctrl.hxx %_DEST%\inc%_EXT%\svx\lboxctrl.hxx
 ..\inc\svx\lcolitem.hxx %_DEST%\inc%_EXT%\svx\lcolitem.hxx
