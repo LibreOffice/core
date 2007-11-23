@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: kz $ $Date: 2007-10-09 15:34:35 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 13:20:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,8 @@ SLOFILES=	\
             $(SLO)$/SelectionMultiplex.obj \
             $(SLO)$/namedvaluecollection.obj \
             $(SLO)$/logging.obj \
-            $(SLO)$/documentinfo.obj
+            $(SLO)$/documentinfo.obj \
+            $(SLO)$/string.obj
 
 # --- Targets ----------------------------------
 
