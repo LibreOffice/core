@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configdefaultprovider.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:45:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:17:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,6 @@ namespace configmgr
 
     namespace uno = com::sun::star::uno;
 //-----------------------------------------------------------------------------
-    namespace memory
-    {
-        class UpdateAccessor;
-    }
-//-----------------------------------------------------------------------------
     namespace configuration
     {
 //-----------------------------------------------------------------------------
@@ -103,7 +98,7 @@ namespace configmgr
             bool isValid() const { return !! m_aProxy.is(); }
 
         /// tries to load a default instance of the specified node
-            std::auto_ptr<ISubtree> getDefaultTree(memory::UpdateAccessor& _aDestinationSpace, Tree const& _aTree, NodeRef const& _aNode) const CFG_UNO_THROW_ALL();
+            std::auto_ptr<ISubtree> getDefaultTree(Tree const& _aTree, NodeRef const& _aNode) const CFG_UNO_THROW_ALL();
 
         /// tries to load default data into the specified tree
             bool fetchDefaultData(TreeRef const& _aTreeRef) const CFG_UNO_THROW_ALL();
