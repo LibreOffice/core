@@ -4,9 +4,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:23:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:08:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,6 +366,7 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     OProviderImpl::~OProviderImpl()
     {
+        UnoApiLock aLock; // hmm...
         clearTreeManager();
 
         delete m_pNewProviders;
@@ -425,11 +426,10 @@ namespace configmgr
     {
         rtl::Reference< TreeManager > xTreeManager = getTreeManager();
 
-        data::NodeAccess aTree = data::NodeAccess::emptyNode();
+        data::NodeAccess aTree( NULL );
         try
         {
             aTree = xTreeManager->requestSubtree(aSubtreePath, _aOptions);
-
         }
         catch(uno::Exception&e)
         {
@@ -454,9 +454,9 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  )
+    void OProviderImpl::updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  )
     {
-        getTreeManager()->updateTree(_aAccessToken, aChanges);
+        getTreeManager()->updateTree(aChanges);
     }
 
     //-----------------------------------------------------------------------------
@@ -476,9 +476,9 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    void OProviderImpl::saveAndNotifyUpdate(data::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  )
+    void OProviderImpl::saveAndNotifyUpdate(TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  )
     {
-        getTreeManager()->saveAndNotifyUpdate(_aChangedDataAccessor,aChanges);
+        getTreeManager()->saveAndNotifyUpdate(aChanges);
     }
 
     //-----------------------------------------------------------------------------
@@ -490,9 +490,9 @@ namespace configmgr
     }
 
     //-----------------------------------------------------------------------------
-    sal_Bool OProviderImpl::fetchDefaultData(memory::UpdateAccessor& _aAccessToken, AbsolutePath const& aSubtreePath, RequestOptions const& _aOptions) CFG_UNO_THROW_ALL(  )
+    sal_Bool OProviderImpl::fetchDefaultData(AbsolutePath const& aSubtreePath, RequestOptions const& _aOptions) CFG_UNO_THROW_ALL(  )
     {
-        return getTreeManager()->fetchDefaultData(_aAccessToken, aSubtreePath, _aOptions);
+        return getTreeManager()->fetchDefaultData(aSubtreePath, _aOptions);
     }
     //-----------------------------------------------------------------------------------
     void OProviderImpl::refreshAll()CFG_UNO_THROW_ALL(  )
@@ -526,12 +526,6 @@ namespace configmgr
     uno::XInterface* OProviderImpl::getProviderInstance()
     {
         return static_cast<com::sun::star::lang::XMultiServiceFactory*>(m_pProvider);
-    }
-
-    //-----------------------------------------------------------------------------
-    memory::Segment* OProviderImpl::getDataSegment(AbsolutePath const& _rAccessor, RequestOptions const& _aOptions)
-    {
-        return getTreeManager()->getDataSegment(_rAccessor, _aOptions);
     }
 
     //-----------------------------------------------------------------------------------
@@ -590,8 +584,7 @@ namespace configmgr
             RTL_LOGFILE_CONTEXT_AUTHOR(aLog2, "configmgr::OProviderImpl", "jb99855", "configmgr: createReadOnlyTree()");
 
             RootTree aRootTree( createReadOnlyTree(
-                    aAccessorPath, this->getDataSegment(aAccessorPath,_aOptions),
-                    aTree, nDepth,
+                    aAccessorPath, aTree, nDepth,
                     TemplateProvider( this->getTemplateProvider(), _aOptions )
                 ));
 
@@ -632,8 +625,7 @@ namespace configmgr
             RTL_LOGFILE_CONTEXT_AUTHOR(aLog2, "configmgr::OProviderImpl", "jb99855", "createUpdatableTree()");
 
             RootTree aRootTree( createUpdatableTree(
-                                    aAccessorPath, this->getDataSegment(aAccessorPath,_aOptions),
-                                    aTree, nDepth,
+                                    aAccessorPath, aTree, nDepth,
                                     TemplateProvider( this->getTemplateProvider(), _aOptions )
                                 ));
 
@@ -908,6 +900,8 @@ namespace configmgr
                                                         RequestOptions & /* [in/out] */ _aOptions )
         CFG_THROW1 (lang::IllegalArgumentException)
     {
+        UnoApiLock aLock;
+
         _nLevels = treeop::ALL_LEVELS; // setting a fallback
 
         // the args have to be a sequence of property or named values
