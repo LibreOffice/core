@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apinodeupdate.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:54:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:03:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,42 +75,42 @@ NodeGroupAccess& withDefaultData(NodeGroupAccess& _aGroup)
 }
 //-----------------------------------------------------------------------------
 
-configuration::GroupUpdater NodeGroupAccess::getNodeUpdater(data::Accessor const& _aAccessor)
+configuration::GroupUpdater NodeGroupAccess::getNodeUpdater()
 {
-    return configuration::GroupUpdater(getTree(_aAccessor),getNodeRef(), getApiTree().getProvider().getTypeConverter());
+    return configuration::GroupUpdater(getTree(),getNodeRef(), getApiTree().getProvider().getTypeConverter());
 }
 //-----------------------------------------------------------------------------
 
-configuration::GroupDefaulter NodeGroupAccess::getNodeDefaulter(data::Accessor const& _aAccessor)
+configuration::GroupDefaulter NodeGroupAccess::getNodeDefaulter()
 {
-    return configuration::GroupDefaulter(getTree(_aAccessor),getNodeRef(), getApiTree().getDefaultProvider());
+    return configuration::GroupDefaulter(getTree(),getNodeRef(), getApiTree().getDefaultProvider());
 }
 //-----------------------------------------------------------------------------
 
-configuration::SetElementFactory NodeTreeSetAccess::getElementFactory(data::Accessor const& _aAccessor)
+configuration::SetElementFactory NodeTreeSetAccess::getElementFactory()
 {
     using namespace configuration;
-    TemplateProvider aProvider = SetElementFactory::findTemplateProvider(getTree(_aAccessor),getNodeRef());
-    return SetElementFactory(_aAccessor,aProvider);
+    TemplateProvider aProvider = SetElementFactory::findTemplateProvider(getTree(),getNodeRef());
+    return SetElementFactory(aProvider);
 }
 //-----------------------------------------------------------------------------
 
-configuration::SetDefaulter NodeSetAccess::getNodeDefaulter(data::Accessor const& _aAccessor)
+configuration::SetDefaulter NodeSetAccess::getNodeDefaulter()
 {
-    return configuration::SetDefaulter(getTree(_aAccessor),getNodeRef(), getApiTree().getDefaultProvider());
+    return configuration::SetDefaulter(getTree(),getNodeRef(), getApiTree().getDefaultProvider());
 }
 //-----------------------------------------------------------------------------
 
-configuration::TreeSetUpdater NodeTreeSetAccess::getNodeUpdater(data::Accessor const& _aAccessor)
+configuration::TreeSetUpdater NodeTreeSetAccess::getNodeUpdater()
 {
-    return configuration::TreeSetUpdater(getTree(_aAccessor),getNodeRef(),getElementInfo(_aAccessor));
+    return configuration::TreeSetUpdater(getTree(),getNodeRef(),getElementInfo());
 }
 //-----------------------------------------------------------------------------
 
 
-configuration::ValueSetUpdater NodeValueSetAccess::getNodeUpdater(data::Accessor const& _aAccessor)
+configuration::ValueSetUpdater NodeValueSetAccess::getNodeUpdater()
 {
-    return configuration::ValueSetUpdater(getTree(_aAccessor),getNodeRef(),getElementInfo(_aAccessor), getApiTree().getProvider().getTypeConverter());
+    return configuration::ValueSetUpdater(getTree(),getNodeRef(),getElementInfo(), getApiTree().getProvider().getTypeConverter());
 }
 //-----------------------------------------------------------------------------
 
@@ -178,18 +178,14 @@ bool detachSetElement(Factory& rFactory, configuration::ElementRef const& aEleme
 //-----------------------------------------------------------------------------
 
 UpdateGuardImpl::UpdateGuardImpl(NodeGroupAccess& rNode)
-: m_aDataAccess(rNode.getSourceData())
-, m_aViewLock(rNode.getDataLock())
-, m_rNode(rNode)
+: m_rNode(rNode)
 {
     rNode.checkAlive();
 }
 //-----------------------------------------------------------------------------
 
 UpdateGuardImpl::UpdateGuardImpl(NodeSetAccess& rNode)
-: m_aDataAccess(rNode.getSourceData())
-, m_aViewLock(rNode.getDataLock())
-, m_rNode(rNode)
+: m_rNode(rNode)
 {
 }
 //-----------------------------------------------------------------------------
