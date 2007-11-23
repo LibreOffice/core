@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeprovider.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:00:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:26:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,13 +76,6 @@ namespace configmgr
         class AbsolutePath;
     }
     //-------------------------
-    namespace memory
-    {
-        class Segment;
-        class Accessor;
-        class UpdateAccessor;
-    }
-    //-------------------------
     namespace data
     {
         class NodeAccess;
@@ -104,10 +97,6 @@ namespace configmgr
     public:
         typedef configuration::AbsolutePath AbsolutePath;
 
-        /// get a data segment to host the given location
-        virtual memory::Segment* getDataSegment(  AbsolutePath const& _rAccessor,
-                                                    const RequestOptions& _aOptions) = 0;
-
        /** request that the tree named by a path is added to the collection of managed trees
             respecting certain options and requiring a specific loading depth.
             Return a reference to that managed tree.
@@ -123,10 +112,10 @@ namespace configmgr
                                   const RequestOptions& _aOptions) CFG_NOTHROW() = 0;
 
         /// update the managed data according to a changes list - update the changes list accordingly with old values
-        virtual void updateTree(memory::UpdateAccessor& _aAccessToken, TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  ) = 0;
+        virtual void updateTree(TreeChangeList& aChanges) CFG_UNO_THROW_ALL(  ) = 0;
 
         // notification
-        virtual void saveAndNotifyUpdate(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges ) CFG_UNO_THROW_ALL(  ) = 0;
+        virtual void saveAndNotifyUpdate(TreeChangeList const& aChanges ) CFG_UNO_THROW_ALL(  ) = 0;
 
         // bookkeeping support
         virtual void releaseSubtree(AbsolutePath const& aSubtreePath,
@@ -172,9 +161,8 @@ namespace configmgr
         typedef configuration::Name         Name;
 
         virtual data::TreeAccessor requestTemplate(
-                                            memory::Accessor const& _aAccessor,
-                                            Name const& aName, Name const& aModule
-                                        ) CFG_UNO_THROW_ALL( ) = 0;
+            Name const& aName, Name const& aModule
+            ) CFG_UNO_THROW_ALL( ) = 0;
 
     };
 
