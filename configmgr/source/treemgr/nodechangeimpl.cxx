@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:29:27 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:43:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,8 +80,7 @@ enum { eTestedChange = 0x01, eAppliedChange = 0x02, eNoCheck = 0x07 };
 //-----------------------------------------------------------------------------
 
 NodeChangeImpl::NodeChangeImpl(bool bNoCheck)
-: m_aDataAccessor( data::Accessor(NULL) )
-, m_aAffectedTree()
+: m_aAffectedTree()
 , m_nAffectedNode(0)
 , m_nState(0)
 {
@@ -93,7 +92,7 @@ view::ViewTreeAccess NodeChangeImpl::getTargetView()
 {
     OSL_ENSURE( m_aAffectedTree.is(), "ERROR: Configuration Change: Target Tree Access has not been set up" );
 
-    return Tree(m_aDataAccessor,m_aAffectedTree.get()).getView();
+    return Tree(m_aAffectedTree.get()).getView();
 }
 //-----------------------------------------------------------------------------
 
@@ -119,10 +118,10 @@ NodeOffset NodeChangeImpl::getTargetNode() const
 
 void NodeChangeImpl::setTarget(view::Node _aAffectedNode)
 {
-    this->setTarget(_aAffectedNode.accessor(), _aAffectedNode.tree().get_impl(), _aAffectedNode.get_offset());
+    this->setTarget(_aAffectedNode.tree().get_impl(), _aAffectedNode.get_offset());
 
 }
-void NodeChangeImpl::setTarget(data::Accessor const& _aAccessor, TreeHolder const& _aAffectedTree, NodeOffset _nAffectedNode)
+void NodeChangeImpl::setTarget(TreeHolder const& _aAffectedTree, NodeOffset _nAffectedNode)
 {
     OSL_ENSURE(m_nState == 0 || (!m_aAffectedTree.is() && m_nState == eNoCheck), "WARNING: Configuration: Retargeting change that already was tested or applied");
 
@@ -132,7 +131,6 @@ void NodeChangeImpl::setTarget(data::Accessor const& _aAccessor, TreeHolder cons
 
     if (m_nState != eNoCheck) m_nState = 0; // previous checks are invalidated
 
-    m_aDataAccessor = _aAccessor;
     m_aAffectedTree = _aAffectedTree;
     m_nAffectedNode = _nAffectedNode;
 }
@@ -292,11 +290,11 @@ void ValueChangeImpl::setTarget(view::GroupNode const& _aParentNode, Name const&
 }
 //-----------------------------------------------------------------------------
 
-void ValueChangeImpl::setTarget(data::Accessor const& _aAccessor, TreeHolder const& aAffectedTree, NodeOffset nParentNode, Name const& sNodeName)
+void ValueChangeImpl::setTarget(TreeHolder const& aAffectedTree, NodeOffset nParentNode, Name const& sNodeName)
 {
     OSL_ENSURE(!sNodeName.isEmpty(), "ValueChangeTarget is being set without a name");
 
-    NodeChangeImpl::setTarget(_aAccessor,aAffectedTree,nParentNode);
+    NodeChangeImpl::setTarget(aAffectedTree,nParentNode);
     m_aName = sNodeName;
 }
 //-----------------------------------------------------------------------------
@@ -607,7 +605,7 @@ void SetResetImpl::doApply( view::Node const& rTarget)
 
         if (it->m_aAddedElement.is())
         {
-            SetEntry aNewEntry( rTarget.accessor(), it->m_aAddedElement.get() );
+            SetEntry aNewEntry( it->m_aAddedElement.get() );
             accessor.insertElement(aTargetSet, aElementName, aNewEntry);
         }
 
@@ -682,7 +680,7 @@ void SetInsertImpl::doApplyToElement( view::SetNode const& _aNode, Name const& a
 {
     if (m_aNewTree.is())
     {
-        SetEntry aNewEntry( _aNode.accessor(), m_aNewTree.get() );
+        SetEntry aNewEntry( m_aNewTree.get() );
         getTargetView().insertElement( _aNode, aName, aNewEntry);
     }
 }
@@ -753,7 +751,7 @@ void SetReplaceImpl::doApplyToElement( view::SetNode const& _aNode, Name const& 
         OSL_ENSURE(m_aNewTree.is(), "ERROR: Configuration: Replacing a node with nothing");
         if (m_aNewTree.is())
         {
-            SetEntry aNewEntry( _aNode.accessor(), m_aNewTree.get() );
+            SetEntry aNewEntry( m_aNewTree.get() );
             aTargetView.insertElement( _aNode, aName, aNewEntry);
         }
     }
