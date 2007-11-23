@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodeaccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:21:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,10 +38,6 @@
 
 #include "nodeaccess.hxx"
 
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
-#endif
-
 #ifndef CONFIGMGR_TREEACCESSOR_HXX
 #include "treeaccessor.hxx"
 #endif
@@ -66,88 +62,138 @@ namespace configmgr
 // -----------------------------------------------------------------------------
     namespace data
     {
-    // -------------------------------------------------------------------------
+        // -------------------------------------------------------------------------
 
-        NodeAddress::DataType* NodeAccess::access(NodeAddressType const& _aNodeRef, memory::UpdateAccessor& _rUpdateAccess)
-        {
-            return static_cast<NodeAddress::DataType*>(_rUpdateAccess.access(_aNodeRef.m_pData));
-        }
-    // -------------------------------------------------------------------------
-
-        NodeAccess getSubnode(NodeAccessRef const & _aParent, NodeAccess::Name const & _aName)
+        NodeAccess getSubnode(NodeAccess const & _aParent, configuration::Name const & _aName)
         {
             if (GroupNodeAccess::isInstance(_aParent))
             {
-                return GroupNodeAccess(_aParent).getChildNode(_aName).toNodeAccess();
+                return GroupNodeAccess(_aParent).getChildNode(_aName);
             }
             else if (SetNodeAccess::isInstance(_aParent))
             {
                 TreeAccessor aElement = SetNodeAccess(_aParent).getElementTree(_aName);
-                return aElement.isValid() ? aElement.getRootNode().toNodeAccess() : NodeAccess::emptyNode();
+                return aElement != NULL ? aElement.getRootNode() : NodeAccess(NULL);
             }
             else
             {
                 OSL_ENSURE( ValueNodeAccess::isInstance(_aParent),"ERROR: Unknown node type");
                 OSL_ENSURE(!ValueNodeAccess::isInstance(_aParent),"ERROR: Trying to access child of value node");
-                return NodeAccess::emptyNode();
+                return NULL;
             }
         }
-    // -------------------------------------------------------------------------
+        // -------------------------------------------------------------------------
 
-        NodeAddress getSubnodeAddress(memory::Accessor const& _aAccess, NodeAddress const & _aNodeAddress, NodeAccess::Name const & _aName)
+        NodeAddress getSubnodeAddress(NodeAddress const & _aNodeAddress, configuration::Name const & _aName)
         {
-            return getSubnode( NodeAccessRef(&_aAccess,_aNodeAddress), _aName ).address();
+            return getSubnode( NodeAccess(_aNodeAddress), _aName );
         }
-    // -------------------------------------------------------------------------
+        // -------------------------------------------------------------------------
 
-        NodeAddress getSubnodeAddress(memory::UpdateAccessor& _aAccess, NodeAddress const & _aNodeAddress, NodeAccess::Name const & _aName)
+        SetNodeAddress toSetNodeAddress(NodeAddress const & _aNodeAddr)
         {
-            memory::Accessor aAccess = _aAccess.accessor();
-            return getSubnode( NodeAccessRef(&aAccess,_aNodeAddress), _aName ).address();
+            SetNodeAccess aNodeAccess(_aNodeAddr);
+            return aNodeAccess;
         }
-    // -------------------------------------------------------------------------
+        // -------------------------------------------------------------------------
 
-        SetNodeAddress toSetNodeAddress(memory::Accessor const & _aAccess, NodeAddress const & _aNodeAddr)
+        GroupNodeAddress toGroupNodeAddress(NodeAddress const & _aNodeAddr)
         {
-            SetNodeAccess aNodeAccess( NodeAccessRef(&_aAccess,_aNodeAddr) );
-            return aNodeAccess.address();
+            GroupNodeAccess aNodeAccess( _aNodeAddr );
+            return aNodeAccess;
         }
-    // -------------------------------------------------------------------------
 
-        SetNodeAddress toSetNodeAddress(memory::UpdateAccessor & _aAccess, NodeAddress const & _aNodeAddr)
-        {
-            SetNodeAccess aNodeAccess( NodeAccess(_aAccess.accessor(),_aNodeAddr) );
-            return aNodeAccess.address();
-        }
-    // -------------------------------------------------------------------------
+        // -------------------------------------------------------------------------
+        // GroupNodeAccess ...
+        // -------------------------------------------------------------------------
 
-        GroupNodeAddress toGroupNodeAddress(memory::Accessor const & _aAccess, NodeAddress const & _aNodeAddr)
+        NodeAddress GroupNodeAccess::implGetChild(configuration::Name const& _aName) const
         {
-            GroupNodeAccess aNodeAccess( NodeAccess(_aAccess,_aNodeAddr) );
-            return aNodeAccess.address();
-        }
-    // -------------------------------------------------------------------------
+            using namespace sharable;
+            rtl::OUString aNodeName = _aName.toString();
 
-        GroupNodeAddress toGroupNodeAddress(memory::UpdateAccessor & _aAccess, NodeAddress const & _aNodeAddr)
-        {
-            GroupNodeAccess aNodeAccess( NodeAccess(_aAccess.accessor(),_aNodeAddr) );
-            return aNodeAccess.address();
+            GroupNode const  & aNode = data();
+            for (Node const * pChild = aNode.getFirstChild();
+                              pChild != NULL;
+                              pChild = aNode.getNextChild(pChild))
+            {
+                if (pChild->isNamed(aNodeName))
+                {
+                    NodeAccess aChildNode(pChild);
+                    return aChildNode;
+                }
+            }
+            return NodeAddress();
         }
-    // -------------------------------------------------------------------------
 
-        ValueNodeAddress toValueNodeAddress(memory::Accessor const & _aAccess, NodeAddress const & _aNodeAddr)
-        {
-            ValueNodeAccess aNodeAccess( NodeAccess(_aAccess,_aNodeAddr) );
-            return aNodeAccess.address();
-        }
-    // -------------------------------------------------------------------------
+        // -------------------------------------------------------------------------
+        // SetNodeAccess ...
+        // -------------------------------------------------------------------------
 
-        ValueNodeAddress toValueNodeAddress(memory::UpdateAccessor & _aAccess, NodeAddress const & _aNodeAddr)
+        TreeAddress SetNodeAccess::implGetElement(configuration::Name const& _aName) const
         {
-            ValueNodeAccess aNodeAccess( NodeAccess(_aAccess.accessor(),_aNodeAddr) );
-            return aNodeAccess.address();
+            using namespace sharable;
+            SetNode const  & aNode = data();
+            for (TreeFragment const * pElement = aNode.getFirstElement();
+                 pElement  != NULL;
+                 pElement  = aNode.getNextElement(pElement))
+            {
+                if (pElement->isNamed(_aName.toString()))
+                    return (TreeAddress)pElement;
+            }
+            return NULL;
         }
-    // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------*/
+
+        void SetNodeAccess::addElement(SetNodeAddress _aSetAddress,
+                       ElementAddress _aNewElement)
+        {
+            using namespace sharable;
+
+            SetNode * pNode = _aSetAddress;
+            OSL_ENSURE(pNode, "ERROR: Trying to add an element to a NULL set node");
+
+            // to do(?): insert sorted - find location here
+            TreeFragment * pElement = _aNewElement;
+            OSL_ENSURE(pElement, "ERROR: Trying to add a NULL element to a set node");
+
+            pElement->header.next   = pNode->elements;
+            pElement->header.parent = reinterpret_cast<Node *>(pNode);
+
+            pNode->elements = _aNewElement;
+        }
+    // -------------------------------------------------------------------------*/
+
+        TreeAddress SetNodeAccess::removeElement(SetNodeAddress _aSetAddress,
+                         configuration::Name const & _aName)
+        {
+            using namespace sharable;
+
+            SetNode * pNode = _aSetAddress;
+            OSL_ENSURE(pNode, "ERROR: Trying to add an element to a NULL set node");
+
+            TreeAddress aRemoved = NULL;
+
+            List * pLink = & pNode->elements;
+            while( TreeFragment * pElement = reinterpret_cast<TreeFragment *>(*pLink) )
+            {
+                if (pElement->isNamed(_aName.toString()))
+                {
+                    aRemoved = *pLink;
+
+                    *pLink = pElement->header.next;
+                    pElement->header.next   = 0;
+                    pElement->header.parent = 0;
+
+                    break;
+                }
+
+                pLink = & pElement->header.next;
+            }
+
+            return aRemoved;
+        }
+
     }
 // -----------------------------------------------------------------------------
 } // namespace configmgr
