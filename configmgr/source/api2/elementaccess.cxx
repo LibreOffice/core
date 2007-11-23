@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementaccess.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:57:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,43 +65,41 @@ void SAL_CALL BasicRootElement  ::acquire() throw() { BaseImplHelper::acquire();
 void SAL_CALL BasicUpdateElement::acquire() throw() { BaseImplHelper::acquire(); }
 //-----------------------------------------------------------------------------------
 
+// FIXME: this looks highly flaky wrt. weak-refs etc.
+#define LOCKED_RELEASE \
+    bool bLastRef = (1 == m_refCount); \
+    if (bLastRef) \
+    { \
+        UnoApiLock::acquire(); \
+        configapi::implDisposeObject( getNodeAccess(), getElementClass() ); \
+    } \
+    BaseImplHelper::release(); \
+    if (bLastRef) \
+        UnoApiLock::release()
+
+
+
 void SAL_CALL BasicInnerElement::release() throw()
 {
-    if (1 == m_refCount)
-    {
-        configapi::implDisposeObject( getNodeAccess(), getElementClass() );
-    }
-    BaseImplHelper::release();
+    LOCKED_RELEASE;
 }
 //-----------------------------------------------------------------------------------
 
 void SAL_CALL BasicSetElement::release() throw()
 {
-    if (1 == m_refCount)
-    {
-        configapi::implDisposeObject( getNodeAccess(), getElementClass() );
-    }
-    BaseImplHelper::release();
+    LOCKED_RELEASE;
 }
 //-----------------------------------------------------------------------------------
 
 void SAL_CALL BasicRootElement::release() throw()
 {
-    if (1 == m_refCount)
-    {
-        configapi::implDisposeObject( getNodeAccess(), getElementClass() );
-    }
-    BaseImplHelper::release();
+    LOCKED_RELEASE;
 }
 //-----------------------------------------------------------------------------------
 
 void SAL_CALL BasicUpdateElement::release() throw()
 {
-    if (1 == m_refCount)
-    {
-        configapi::implDisposeObject( getNodeAccess(), getElementClass() );
-    }
-    BaseImplHelper::release();
+    LOCKED_RELEASE;
 }
 //-----------------------------------------------------------------------------------
 
