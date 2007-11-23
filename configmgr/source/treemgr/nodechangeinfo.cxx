@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodechangeinfo.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:29:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:43:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,15 +86,15 @@ bool NodeChangeData::isDataChange() const
 }
 //-----------------------------------------------------------------------------
 
-Tree NodeChangeData::getNewElementTree(data::Accessor const& aAccessor) const
+Tree NodeChangeData::getNewElementTree() const
 {
-    return Tree( aAccessor, element.newValue.get() );
+    return Tree( element.newValue.get() );
 }
 //-----------------------------------------------------------------------------
 
-Tree NodeChangeData::getOldElementTree(data::Accessor const& aAccessor) const
+Tree NodeChangeData::getOldElementTree() const
 {
-    return Tree( aAccessor, element.oldValue.get() );
+    return Tree( element.oldValue.get() );
 }
 //-----------------------------------------------------------------------------
 
@@ -156,22 +156,20 @@ NodeChangeLocation::NodeChangeLocation()
 {
 }
 //-----------------------------------------------------------------------------
-bool NodeChangeLocation::isValidLocation(data::Accessor const& aAccessor) const
+bool NodeChangeLocation::isValidLocation() const
 {
-    // TODO: Validate that base,target and accessor relate correctly (?)
     return   m_base.isValidNode() &&
             (m_affected.isEmpty()
                 ?   ! m_bSubNodeChanging
                 :   ( m_affected.isValidNode() &&
                       (! m_bSubNodeChanging ||
                          (!m_path.isEmpty() &&
-                            SubNodeID(m_affected,m_path.getLocalName().getName()).isValidNode(aAccessor)
+                            SubNodeID(m_affected,m_path.getLocalName().getName()).isValidNode()
                     ) )  ) );
 }
 //-----------------------------------------------------------------------------
 bool NodeChangeLocation::isValidData() const
 {
-    // TODO: Validate that base,target and accessor relate correctly (?)
     return   m_base.isValidNode() &&
             (m_affected.isEmpty()
                 ?   ! m_bSubNodeChanging
@@ -210,10 +208,10 @@ void NodeChangeLocation::setChangingSubnode( bool bSubnode )
 }
 //-----------------------------------------------------------------------------
 
-Tree NodeChangeLocation::getBaseTree(data::Accessor const& aAccessor) const
+Tree NodeChangeLocation::getBaseTree() const
 {
     OSL_ENSURE(m_base.isValidNode(), "Invalid base location set in NodeChangeLocation");
-    return Tree( aAccessor, TreeImplHelper::tree(m_base) );
+    return Tree( TreeImplHelper::tree(m_base) );
 }
 //-----------------------------------------------------------------------------
 
@@ -231,9 +229,9 @@ TreeRef NodeChangeLocation::getAffectedTreeRef() const
 }
 //-----------------------------------------------------------------------------
 
-Tree NodeChangeLocation::getAffectedTree(data::Accessor const& aAccessor) const
+Tree NodeChangeLocation::getAffectedTree() const
 {
-    return Tree( aAccessor, getAffectedTreeRef() );
+    return Tree( getAffectedTreeRef() );
 }
 //-----------------------------------------------------------------------------
 
