@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.77 $
+#   $Revision: 1.78 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 14:28:10 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 13:34:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,15 @@ BEGIN
     $infodirectory = "";
     $currentcontent = "";
 
+    %mergemodules = ();
+    %merge_media_line = ();
+    %merge_allfeature_hash = ();
+    %merge_alldirectory_hash = ();
+    %copy_msm_files = ();
+    $mergefeaturecollected = 0;
+    $mergedirectoriescollected = 0;
+    $lastsequence_before_merge = 0;
+
     $createdxpddefaultlang = 0;
     $xpddir = "";
     $productxpdfile = "setup.xpd";
@@ -251,6 +260,7 @@ BEGIN
     $prepare_winpatch = 0;
     $previous_idt_dir = "";
     $updatepack = 0;
+    $msitranpath = "";
 
     $saveinstalldir = "";
     $csp_installdir = "";       # global installdir of createsimplepackage() in simplepackage.pm
@@ -270,6 +280,7 @@ BEGIN
     $subdir = "";
     $postprocess_specialepm = 0;
     $postprocess_standardepm = 0;
+    $mergemodules_analyzed = 0;
 
     $starttime = "";
 
