@@ -4,9 +4,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:26:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:38:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,6 @@ void OTreeDisposeScheduler::scheduleCleanup(RequestOptions const& _aOptions)
 {
     OSL_ENSURE(_aOptions.hasLocale(), "ERROR: OTreeDisposeScheduler: cannot handle complete user scheduling");
 
-    osl::MutexGuard aGuard( m_aMutex );
-
     CFG_TRACE_INFO("Scheduling data cleanup for user '%s' with locale '%s'",
                     OUSTRING2ASCII(_aOptions.getEntity()),
                     OUSTRING2ASCII(_aOptions.getLocale()));
@@ -99,8 +97,6 @@ bool equivalentOptions(RequestOptions const& lhs, RequestOptions const& rhs)
 
 void OTreeDisposeScheduler::clearTasks(RequestOptions const& _aOptions)
 {
-    osl::MutexGuard aOwnGuard( m_aMutex );
-
     CFG_TRACE_INFO("Cancelling all data cleanup tasks for user '%s' with locale '%s'",
                     OUSTRING2ASCII(_aOptions.getEntity()),
                     OUSTRING2ASCII(_aOptions.getLocale()));
@@ -120,8 +116,6 @@ void OTreeDisposeScheduler::clearTasks(RequestOptions const& _aOptions)
 
 void OTreeDisposeScheduler::stopAndClearTasks()
 {
-    osl::MutexGuard aOwnGuard( m_aMutex );
-
     CFG_TRACE_INFO("Cancelling all data cleanup tasks, Stopping Cleanup timer");
     CFG_TRACE_INFO_NI("- %d cleanup tasks were pending", int(m_aAgenda.size()) );
 
@@ -136,7 +130,6 @@ OTreeDisposeScheduler::Task OTreeDisposeScheduler::getTask(TimeStamp const& _aAc
 {
     OSL_ASSERT( _rNextTime.isNever() ); // internal contract, we set this only in the positive case
 
-    osl::MutexGuard aOwnGuard( m_aMutex );
     Task aTask( false, RequestOptions() );
 
     if (!m_aAgenda.empty())
@@ -163,7 +156,7 @@ OTreeDisposeScheduler::Task OTreeDisposeScheduler::getTask(TimeStamp const& _aAc
 
 void OTreeDisposeScheduler::Timer::onShot()
 {
-    osl::MutexGuard aGuard(m_aMutex);
+    UnoApiLock aLock;
     if (pParent)
         pParent->onTimerShot();
 }
@@ -197,7 +190,7 @@ void OTreeDisposeScheduler::onTimerShot()
         OSL_ENSURE(false, "ERROR: Unknown Exception left a disposer");
     }
 
-    osl::MutexGuard aGuard(m_aMutex);
+    OSL_ASSERT(UnoApiLock::isHeld());
     implStartBefore(aNextTime);
 }
 // -------------------------------------------------------------------------
@@ -208,7 +201,7 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
     TimeStamp aNextTime = TimeStamp::never();
     OSL_ASSERT(aNextTime.isNever());
 
-    osl::ClearableMutexGuard aGuard( m_rTreeManager.m_aCacheList.mutex() );
+    OSL_ASSERT(UnoApiLock::isHeld());
 
     Task aTask = this->getTask( _aActualTime, aNextTime );
     if (aTask.first)
@@ -219,7 +212,7 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
                         OUSTRING2ASCII(rTaskOptions.getEntity()),
                         OUSTRING2ASCII(rTaskOptions.getLocale()));
 
-        CacheManager::CacheRef aCache = m_rTreeManager.m_aCacheList.get(rTaskOptions);
+        CacheManager::CacheRef aCache = m_rTreeManager.m_aCacheMap.get(rTaskOptions);
         if (aCache.is())
         {
             CFG_TRACE_INFO_NI("- Found matching data container (TreeInfo) - collecting data");
@@ -235,7 +228,7 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
                 OSL_ENSURE( !aCache->isEmpty(), "ERROR: Empty TreeInfo returning finite dispose time");
 
                 // repost with new time
-                osl::MutexGuard aOwnGuard( m_aMutex );
+                OSL_ASSERT(UnoApiLock::isHeld());
 
                 CFG_TRACE_INFO_NI("- Rescheduling current option set" );
 
@@ -270,9 +263,6 @@ TimeStamp OTreeDisposeScheduler::runDisposer(TimeStamp const& _aActualTime)
             }
             else
                 CFG_TRACE_INFO_NI("- Currently no more cleanup tasks for this options set" );
-
-            // clear the guard and throw away the nodes
-            aGuard.clear();
 
             if (!aDisposeList.empty())
             {
@@ -354,15 +344,14 @@ void OTreeDisposeScheduler::implStartBefore(TimeStamp const& _aTime)
 }
 // -------------------------------------------------------------------------
 
-// should be called guarded only (m_aMutex must be locked)
 TimeStamp OTreeDisposeScheduler::implAddTask(RequestOptions const& _aOptions, TimeStamp const& _aTime)
 {
-    typedef Agenda::value_type AgendaType;
+    OSL_ASSERT(UnoApiLock::isHeld());
 
     // try to insert after euivalent entries (but STL may ignore the hint)
     Agenda::iterator where = m_aAgenda.upper_bound(_aTime);
 
-    m_aAgenda.insert(where, AgendaType(_aTime,_aOptions));
+    m_aAgenda.insert(where, Agenda::value_type(_aTime,_aOptions));
 
     OSL_ASSERT(!m_aAgenda.empty());
 
