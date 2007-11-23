@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StockChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:07:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:04:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,6 +330,35 @@ void SAL_CALL StockChartTypeTemplate::resetStyles(
     }
 
     DiagramHelper::setVertical( xDiagram, false );
+}
+
+Reference< XChartType > StockChartTypeTemplate::getChartTypeForIndex( sal_Int32 nChartTypeIndex )
+{
+    Reference< XChartType > xCT;
+    Reference< lang::XMultiServiceFactory > xFact(
+            GetComponentContext()->getServiceManager(), uno::UNO_QUERY );
+    if(xFact.is())
+    {
+        bool bHasVolume = false;
+        getFastPropertyValue( PROP_STOCKCHARTTYPE_TEMPLATE_VOLUME ) >>= bHasVolume;
+        if( bHasVolume )
+        {
+            if( nChartTypeIndex == 0 )
+                xCT.set( xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_COLUMN ), uno::UNO_QUERY );
+            else if( nChartTypeIndex == 1 )
+                xCT.set( xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ), uno::UNO_QUERY );
+            else
+                xCT.set( xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY );
+        }
+        else
+        {
+            if( nChartTypeIndex == 0 )
+                xCT.set( xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK ), uno::UNO_QUERY );
+            else
+                xCT.set( xFact->createInstance( CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY );
+        }
+    }
+    return xCT;
 }
 
 void StockChartTypeTemplate::createChartTypes(
