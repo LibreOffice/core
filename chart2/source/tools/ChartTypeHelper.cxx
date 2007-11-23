@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeHelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:54:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:04:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include "servicenames_charttypes.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 
 //.............................................................................
@@ -242,6 +243,115 @@ sal_Bool ChartTypeHelper::isSupportingBarConnectors(
             return sal_True;  // note: old chart was false here
     }
     return sal_False;
+}
+
+uno::Sequence < sal_Int32 > ChartTypeHelper::getSupportedLabelPlacements( const uno::Reference< chart2::XChartType >& xChartType
+                                                                         , sal_Int32 nDimensionCount, sal_Bool bSwapXAndY
+                                                                         , const uno::Reference< chart2::XDataSeries >& xSeries )
+{
+    (void)nDimensionCount;
+
+    uno::Sequence < sal_Int32 > aRet;
+    if( !xChartType.is() )
+        return aRet;
+
+    rtl::OUString aChartTypeName = xChartType->getChartType();
+    if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_PIE) )
+    {
+        bool bDonut = false;
+        uno::Reference< beans::XPropertySet > xChartTypeProp( xChartType, uno::UNO_QUERY_THROW );
+        if(xChartTypeProp.is())
+            xChartTypeProp->getPropertyValue( C2U("UseRings")) >>= bDonut;
+
+        if(!bDonut)
+        {
+            aRet.realloc(4);
+            sal_Int32* pSeq = aRet.getArray();
+            *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::AVOID_OVERLAP;
+            *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::OUTSIDE;
+            *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::INSIDE;
+            *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::CENTER;
+        }
+        else
+        {
+            aRet.realloc(1);
+            sal_Int32* pSeq = aRet.getArray();
+            *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::CENTER;
+        }
+    }
+    else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_LINE)
+        )
+    {
+        aRet.realloc(5);
+        sal_Int32* pSeq = aRet.getArray();
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::TOP;
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::BOTTOM;
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::LEFT;
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::RIGHT;
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::CENTER;
+    }
+    else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN)
+        || aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_BAR) )
+    {
+
+        bool bStacked = false;
+        {
+            uno::Reference< beans::XPropertySet > xSeriesProp( xSeries, uno::UNO_QUERY );
+            chart2::StackingDirection eStacking = chart2::StackingDirection_NO_STACKING;
+            xSeriesProp->getPropertyValue( C2U("StackingDirection") ) >>= eStacking;
+            bStacked = (chart2::StackingDirection_Y_STACKING == eStacking);
+        }
+
+        aRet.realloc( bStacked ? 3 : 6 );
+        sal_Int32* pSeq = aRet.getArray();
+        if(!bStacked)
+        {
+            if(bSwapXAndY)
+            {
+                *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::RIGHT;
+                *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::LEFT;
+            }
+            else
+            {
+                *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::TOP;
+                *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::BOTTOM;
+            }
+        }
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::CENTER;
+        if(!bStacked)
+            *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::OUTSIDE;
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::INSIDE;
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::NEAR_ORIGIN;
+    }
+    else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_AREA) )
+    {
+        aRet.realloc(1);
+        sal_Int32* pSeq = aRet.getArray();
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::TOP;
+    }
+    else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_NET) )
+    {
+        aRet.realloc(5);
+        sal_Int32* pSeq = aRet.getArray();
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::TOP;
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::BOTTOM;
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::LEFT;
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::RIGHT;
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::CENTER;
+    }
+    else if( aChartTypeName.match(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK) )
+    {
+        aRet.realloc( 1 );
+        sal_Int32* pSeq = aRet.getArray();
+        *pSeq++ = ::com::sun::star::chart::DataLabelPlacement::OUTSIDE;
+    }
+    else
+    {
+        OSL_ENSURE( false, "unknown charttype" );
+    }
+
+    return aRet;
 }
 
 sal_Bool ChartTypeHelper::isSupportingRightAngledAxes( const uno::Reference< chart2::XChartType >& xChartType )
