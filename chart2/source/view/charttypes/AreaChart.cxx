@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AreaChart.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2007-10-15 16:33:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:09:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #ifndef _COM_SUN_STAR_CHART2_SYMBOL_HPP_
 #include <com/sun/star/chart2/Symbol.hpp>
 #endif
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -115,6 +116,7 @@ AreaChart::AreaChart( const uno::Reference<XChartType>& xChartTypeModel
         , m_xSeriesTarget(0)
         , m_xErrorBarTarget(0)
         , m_xTextTarget(0)
+        , m_xRegressionCurveEquationTarget(0)
 {
     if( !m_pMainPosHelper )
         m_pMainPosHelper = new PlottingPositionHelper();
@@ -464,7 +466,8 @@ void AreaChart::impl_createSeriesShapes()
                     pPosHelper = m_pMainPosHelper;
                 PlotterBase::m_pPosHelper = pPosHelper;
 
-                createRegressionCurvesShapes( **aSeriesIter, m_xErrorBarTarget );
+                createRegressionCurvesShapes( **aSeriesIter, m_xErrorBarTarget, m_xRegressionCurveEquationTarget,
+                                              m_pPosHelper->maySkipPointsInRegressionCalculation());
 
                 pSeriesPoly = &(*aSeriesIter)->m_aPolyPolygonShape3D;
                 if( m_bArea )
@@ -558,6 +561,7 @@ void AreaChart::createShapes()
     else
         m_xErrorBarTarget = m_xSeriesTarget;
     m_xTextTarget     = m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() );
+    m_xRegressionCurveEquationTarget = m_pShapeFactory->createGroup2D( m_xFinalTarget,rtl::OUString() );
 
     //---------------------------------------------
     //check necessary here that different Y axis can not be stacked in the same group? ... hm?
@@ -824,8 +828,41 @@ void AreaChart::createShapes()
                         {
                             LabelAlignment eAlignment = LABEL_ALIGN_TOP;
                             drawing::Position3D aScenePosition3D( aScenePosition.PositionX
-                                        , aScenePosition.PositionY-aSymbolSize.DirectionY/2-1
+                                        , aScenePosition.PositionY
                                         , aScenePosition.PositionZ+this->getTransformedDepth() );
+
+                            sal_Int32 nLabelPlacement = pSeries->getLabelPlacement( nIndex, m_xChartTypeModel, m_nDimension, pPosHelper->isSwapXAndY() );
+
+                            switch(nLabelPlacement)
+                            {
+                            case ::com::sun::star::chart::DataLabelPlacement::TOP:
+                                aScenePosition3D.PositionY -= (aSymbolSize.DirectionY/2+1);
+                                eAlignment = LABEL_ALIGN_TOP;
+                                break;
+                            case ::com::sun::star::chart::DataLabelPlacement::BOTTOM:
+                                aScenePosition3D.PositionY += (aSymbolSize.DirectionY/2+1);
+                                eAlignment = LABEL_ALIGN_BOTTOM;
+                                break;
+                            case ::com::sun::star::chart::DataLabelPlacement::LEFT:
+                                aScenePosition3D.PositionX -= (aSymbolSize.DirectionX/2+1);
+                                eAlignment = LABEL_ALIGN_LEFT;
+                                break;
+                            case ::com::sun::star::chart::DataLabelPlacement::RIGHT:
+                                aScenePosition3D.PositionX += (aSymbolSize.DirectionX/2+1);
+                                eAlignment = LABEL_ALIGN_RIGHT;
+                                break;
+                            case ::com::sun::star::chart::DataLabelPlacement::CENTER:
+                                eAlignment = LABEL_ALIGN_CENTER;
+                                //todo implement this different for area charts
+                                break;
+                            default:
+                                DBG_ERROR("this label alignment is not implemented yet");
+                                aScenePosition3D.PositionY -= (aSymbolSize.DirectionY/2+1);
+                                eAlignment = LABEL_ALIGN_TOP;
+                                break;
+                            }
+
+
                             awt::Point aScreenPosition2D( LabelPositionHelper(pPosHelper,m_nDimension,m_xLogicTarget,m_pShapeFactory)
                                 .transformSceneToScreenPosition( aScenePosition3D ) );
                             this->createDataLabel( m_xTextTarget, **aSeriesIter, nIndex
