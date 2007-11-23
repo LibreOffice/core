@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AreaChart.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:14:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:09:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,8 @@ private: //member
                     ::com::sun::star::drawing::XShapes > m_xErrorBarTarget;
     ::com::sun::star::uno::Reference<
                     ::com::sun::star::drawing::XShapes > m_xTextTarget;
+    ::com::sun::star::uno::Reference<
+                    ::com::sun::star::drawing::XShapes > m_xRegressionCurveEquationTarget;
 };
 //.............................................................................
 } //namespace chart
