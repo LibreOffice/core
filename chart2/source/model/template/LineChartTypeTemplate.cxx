@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LineChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:06:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:01:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,6 +302,36 @@ sal_Bool SAL_CALL LineChartTypeTemplate::matchesTemplate(
     }
 
     return bResult;
+}
+
+Reference< chart2::XChartType > LineChartTypeTemplate::getChartTypeForIndex( sal_Int32 /*nChartTypeIndex*/ )
+{
+    Reference< chart2::XChartType > xResult;
+
+    try
+    {
+        Reference< lang::XMultiServiceFactory > xFact(
+            GetComponentContext()->getServiceManager(), uno::UNO_QUERY_THROW );
+        xResult.set( xFact->createInstance(
+                         CHART2_SERVICE_NAME_CHARTTYPE_LINE ), uno::UNO_QUERY_THROW );
+
+        Reference< beans::XPropertySet > xCTProp( xResult, uno::UNO_QUERY );
+        if( xCTProp.is())
+        {
+            xCTProp->setPropertyValue(
+                C2U( "CurveStyle" ), getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_STYLE ));
+            xCTProp->setPropertyValue(
+                C2U( "CurveResolution" ), getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_CURVE_RESOLUTION ));
+            xCTProp->setPropertyValue(
+                C2U( "SplineOrder" ), getFastPropertyValue( PROP_LINECHARTTYPE_TEMPLATE_SPLINE_ORDER ));
+        }
+    }
+    catch( uno::Exception & ex )
+    {
+        ASSERT_EXCEPTION( ex );
+    }
+
+    return xResult;
 }
 
 Reference< chart2::XChartType > SAL_CALL LineChartTypeTemplate::getChartTypeForNewSeries(
