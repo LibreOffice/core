@@ -4,9 +4,9 @@
  *
  *  $RCSfile: managelang.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:33:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:44:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,9 +80,9 @@
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
-#ifndef _SVX_LANGTAB_HXX
-#include <svx/langtab.hxx>
-#endif
+
+#include <svtools/langtab.hxx>
+
 #include <sfx2/bindings.hxx>
 
 using namespace ::com::sun::star::i18n;
@@ -210,7 +210,7 @@ void ManageLanguageDialog::FillLanguageBox()
 
     if ( m_pLocalizationMgr->isLibraryLocalized() )
     {
-        SvxLanguageTable aLangTable;
+        SvtLanguageTable aLangTable;
         Locale aDefaultLocale = m_pLocalizationMgr->getStringResourceManager()->getDefaultLocale();
         Sequence< Locale > aLocaleSeq = m_pLocalizationMgr->getStringResourceManager()->getLocales();
         const Locale* pLocale = aLocaleSeq.getConstArray();
