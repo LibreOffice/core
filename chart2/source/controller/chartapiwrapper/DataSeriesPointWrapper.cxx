@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataSeriesPointWrapper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:42:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:45:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,7 @@ enum
     PROP_SERIES_DATAPOINT_LABEL_SEPARATOR,
     PROP_SERIES_NUMBERFORMAT,
     PROP_SERIES_PERCENTAGE_NUMBERFORMAT,
+    PROP_SERIES_DATAPOINT_LABEL_PLACEMENT,
     //other series properties
     PROP_SERIES_ATTACHED_AXIS
 };
@@ -163,6 +164,13 @@ void lcl_AddPropertiesToVector_PointProperties(
     rOutProperties.push_back(
         Property( C2U( "PercentageNumberFormat" ),
                   PROP_SERIES_PERCENTAGE_NUMBERFORMAT,
+                  ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+
+    rOutProperties.push_back(
+        Property( C2U( "LabelPlacement" ),
+                  PROP_SERIES_DATAPOINT_LABEL_PLACEMENT,
                   ::getCppuType( reinterpret_cast< const sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEVOID ));
