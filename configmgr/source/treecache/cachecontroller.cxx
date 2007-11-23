@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:24:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:35:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,15 +45,6 @@
 #include "cachewritescheduler.hxx"
 #endif
 
-#ifndef CONFIGMGR_ACCESSOR_HXX
-#include "accessor.hxx"
-#endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
-#endif
-#ifndef CONFIGMGR_TREEADDRESS_HXX
-#include "treeaddress.hxx"
-#endif
 #ifndef CONFIGMGR_TREEACCESSOR_HXX
 #include "treeaccessor.hxx"
 #endif
@@ -142,23 +133,15 @@ OCacheWriteScheduler* CacheController::createCacheWriter(const CreationContext& 
 
 CacheController::CacheRef CacheController::getCacheAlways(RequestOptions const & _aOptions)
 {
-    osl::MutexGuard aGuard( m_aCacheList.mutex() );
-
-    CacheRef aResult = m_aCacheList.get(_aOptions);
+    CacheRef aResult = m_aCacheMap.get(_aOptions);
     if (!aResult.is())
     {
-        CacheRef aNewCache( new Cache(getCacheHeapManager()) );
-        aResult = m_aCacheList.insert(_aOptions,aNewCache);
+        CacheRef aNewCache( new Cache() );
+        aResult = m_aCacheMap.insert(_aOptions,aNewCache);
     }
     return aResult;
 }
 
-// -------------------------------------------------------------------------
-
-memory::HeapManager & CacheController::getCacheHeapManager() const
-{
-    return m_aTemplates.getHeapManager();
-}
 // -------------------------------------------------------------------------
 
 // disposing
@@ -166,19 +149,17 @@ memory::HeapManager & CacheController::getCacheHeapManager() const
 void CacheController::disposeAll(bool _bFlushRemainingUpdates)
 {
     CFG_TRACE_INFO("CacheController: Disposing all data" );
-    CacheList::Map aReleaseList;
+    CacheMap::Map aReleaseList;
 
     if (m_pDisposer)
     {
-        osl::MutexGuard aShotGuard(m_pDisposer->getShotMutex());
-        osl::MutexGuard aGuard(m_aCacheList.mutex());
         m_pDisposer->stopAndClearTasks();
-        m_aCacheList.swap(aReleaseList); // move data out of m_aCacheList and empty m_aCacheList
+        m_aCacheMap.swap(aReleaseList); // move data out of m_aCacheMap and empty m_aCacheMap
     }
 
     if (_bFlushRemainingUpdates)
     {
-        for (CacheList::Map::iterator it = aReleaseList.begin(); it != aReleaseList.end(); ++it)
+        for (CacheMap::Map::iterator it = aReleaseList.begin(); it != aReleaseList.end(); ++it)
             saveAllPendingChanges(it->second,it->first);
     }
     // free all the trees
@@ -188,6 +169,8 @@ void CacheController::disposeAll(bool _bFlushRemainingUpdates)
 // -------------------------------------------------------------------------
 void CacheController::dispose() CFG_UNO_THROW_RTE()
 {
+    UnoApiLock aLock;
+
     CFG_TRACE_INFO("CacheController: dispose()" );
 
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::CacheController", "jb99855", "configmgr: CacheController::dispose(), disable lazy write cache.");
@@ -203,8 +186,6 @@ void CacheController::dispose() CFG_UNO_THROW_RTE()
 // -------------------------------------------------------------------------
 void CacheController::disposeOne(RequestOptions const & _aOptions, bool _bFlushUpdates)
 {
-    osl::ClearableMutexGuard aGuard(m_aCacheList.mutex());
-
     CFG_TRACE_INFO("CacheController: Disposing data and TreeInfo for user '%s' with locale '%s'",
                     OUSTRING2ASCII(_aOptions.getEntity()), OUSTRING2ASCII(_aOptions.getLocale()) );
 
@@ -218,12 +199,11 @@ void CacheController::disposeOne(RequestOptions const & _aOptions, bool _bFlushU
         CFG_TRACE_WARNING_NI("Found orphaned Changes in the cache - Discarding.");
     }
 
-    CacheRef aRemoved = m_aCacheList.remove(_aOptions);
+    CacheRef aRemoved = m_aCacheMap.remove(_aOptions);
 
     if (aRemoved.is())
     {
         // got it out of reachability - now dispose/notify without lock
-        aGuard.clear();
         implDisposeOne(aRemoved, _aOptions, _bFlushUpdates);
     }
     else
@@ -233,8 +213,6 @@ void CacheController::disposeOne(RequestOptions const & _aOptions, bool _bFlushU
 // -------------------------------------------------------------------------
 void CacheController::disposeUser(RequestOptions const & _aUserOptions, bool _bFlushUpdates)
 {
-    osl::ClearableMutexGuard aGuard(m_aCacheList.mutex());
-
     CFG_TRACE_INFO("CacheController: Disposing data and TreeInfo(s) for user '%s'",
                     OUSTRING2ASCII(_aUserOptions.getEntity()) );
 
@@ -250,14 +228,14 @@ void CacheController::disposeUser(RequestOptions const & _aUserOptions, bool _bF
         // so that all options belonging to one user are together
         // (and that options with only a user set, sort first)
 
-        CacheList::Map aCacheData;
-        m_aCacheList.swap(aCacheData);
+        CacheMap::Map aCacheData;
+        m_aCacheMap.swap(aCacheData);
 
         // find the lower_bound of all options for the user
-        CacheList::Map::iterator const aFirst = aCacheData.lower_bound(_aUserOptions);
+        CacheMap::Map::iterator const aFirst = aCacheData.lower_bound(_aUserOptions);
 
         // find the upper_bound of all options for the user (using the lower one)
-        CacheList::Map::iterator aLast = aFirst;
+        CacheMap::Map::iterator aLast = aFirst;
         while (aLast != aCacheData.end() && aLast->first.getEntity() == sUser)
             ++aLast;
 
@@ -267,7 +245,7 @@ void CacheController::disposeUser(RequestOptions const & _aUserOptions, bool _bF
 
             bool bHasPendingChanges = false;
 
-            for (CacheList::Map::iterator it = aFirst; it != aLast; ++it)
+            for (CacheMap::Map::iterator it = aFirst; it != aLast; ++it)
             {
                 CFG_TRACE_INFO_NI("- Found TreeInfo for locale '%s'", OUSTRING2ASCII(it->first.getLocale()) );
                 m_pDisposer->clearTasks(it->first);
@@ -295,12 +273,10 @@ void CacheController::disposeUser(RequestOptions const & _aUserOptions, bool _bF
             CFG_TRACE_INFO_NI("- No affected TreeInfo found" );
 
         // replace the data into the map
-        m_aCacheList.swap(aCacheData);
+        m_aCacheMap.swap(aCacheData);
     }
 
     // got all out of external reach - now dispose/notify without lock
-    aGuard.clear();
-
     for (DisposeList::iterator i = aDisposeList.begin(); i != aDisposeList.end(); ++i)
     {
         if (i->second.is())
@@ -343,12 +319,11 @@ void CacheController::implDisposeOne(CacheRef const & _aDisposedCache, RequestOp
 
 // -------------------------------------------------------------------------
 CacheController::CacheController(BackendRef const & _xBackend,
-                                 memory::HeapManager & _rCacheHeapManager,
                                  const uno::Reference<uno::XComponentContext>& xContext)
 : m_aNotifier()
 , m_xBackend(_xBackend)
-, m_aCacheList()
-, m_aTemplates(_rCacheHeapManager)
+, m_aCacheMap()
+, m_aTemplates()
 , m_pDisposer()
 , m_pCacheWriter()
 , m_bDisposing(false)
@@ -406,22 +381,7 @@ std::auto_ptr<ISubtree> reduceSubtreeForLocale(std::auto_ptr<ISubtree> _pSubtree
     return aRet;
 }
 #endif
-// -------------------------------------------------------------------------
 
-static
-CacheLocation makeCacheLocation(memory::SegmentAddress const & _aSegment, memory::Heap::Address const & _anAddress)
-{
-    OSL_PRECOND(!_aSegment.isNull() || _anAddress == 0,"ERROR: Got Non-null address for NULL segment ?!");
-
-    CacheLocation aResult;
-
-    aResult.segment = _aSegment;
-    aResult.address = _anAddress;
-
-    OSL_ASSERT(!_aSegment.isNull() || aResult.isNull());
-
-    return aResult;
-}
 // -------------------------------------------------------------------------
 CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
 {
@@ -434,9 +394,6 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
 
     OSL_ENSURE(aCache.is(), "Could not create CacheAccess");
 
-    osl::MutexGuard aCacheLineGuard(aCache->mutex());
-
-    data::TreeAddress aResultAddress;
     data::TreeAddress aTemplateResultAdddress;
 
     OSL_ENSURE(!_aRequest.isForcingReload(),"CacheController: No support for forced requests");
@@ -447,7 +404,7 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
         {
             refreshComponent(_aRequest);
         }
-        aResultAddress = aCache->acquireModule(_aRequest.getComponentName());
+        aCache->acquireModule(_aRequest.getComponentName());
     }
     else
     {
@@ -457,20 +414,17 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
 
         CFG_TRACE_INFO_NI("CacheController: adding loaded data to the cache");
 
-        memory::UpdateAccessor aTargetSpace( aCache->createNewDataSegment(_aRequest.getComponentName()) );
+        aCache->createModule(_aRequest.getComponentName());
 
-        aResultAddress = aCache->addComponentData(aTargetSpace, aData.instance(), bWithDefaults);
+        aCache->addComponentData(aData.instance(), bWithDefaults);
         if (aData.instance().templateData().get()!=NULL)
-        {
-            aTemplateResultAdddress = addTemplates(aData.mutableInstance().componentTemplateData () );
-        }
+            aTemplateResultAdddress = addTemplates(aData.mutableInstance().componentTemplateData() );
+
         // notify the new data to all clients
         m_aNotifier.notifyCreated(_aRequest);
     }
 
-    return makeCacheLocation( aCache->getDataSegmentAddress(_aRequest.getComponentName()),
-                              aResultAddress.addressValue());
-
+    return aCache->getTreeAddress(_aRequest.getComponentName());
 }
 // -------------------------------------------------------------------------
 
@@ -480,7 +434,6 @@ ComponentResult CacheController::getComponentData(ComponentRequest const & _aReq
     // TODO: Insert check here, if the data is in the cache already - and then clone
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::CacheController", "jb99855", "configmgr: CacheController::getComponentData()");
     RTL_LOGFILE_CONTEXT_TRACE1(aLog, "component: %s", RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) );
-
 
     ComponentResult aRet = this->loadDirectly(_aRequest, _bAddListenter);
 
@@ -563,17 +516,17 @@ std::auto_ptr<ISubtree> CacheController::loadTemplateData(TemplateRequest const 
 data::TreeAddress CacheController::addTemplates ( backend::ComponentData const & _aComponentInstance )
 {
     OSL_PRECOND(_aComponentInstance.data.get(), "addTemplates: Data must not be NULL");
-    osl::MutexGuard aGuard(m_aTemplatesMutex);
-    TemplateCacheData::ModuleName aModuleName = _aComponentInstance.name;
-    memory::UpdateAccessor aTemplatesUpdater( m_aTemplates.createDataSegment(aModuleName) );
+    CacheLine::Name aModuleName = _aComponentInstance.name;
+    m_aTemplates.createModule(aModuleName);
     AbsolutePath aTemplateLocation = AbsolutePath::makeModulePath(_aComponentInstance.name , AbsolutePath::NoValidate());
-    data::TreeAddress aTemplateAddr;
-    if (!m_aTemplates.hasNode(aTemplatesUpdater.accessor(),aTemplateLocation ))
+    data::TreeAddress aTemplateAddr = NULL;
+
+    if (!m_aTemplates.hasNode(aTemplateLocation ))
     {
         CFG_TRACE_INFO_NI("CacheController: cache miss for that template - loading from backend");
-        aTemplateAddr = m_aTemplates.addTemplates(aTemplatesUpdater, _aComponentInstance );
+        aTemplateAddr = m_aTemplates.addTemplates(_aComponentInstance );
     }
-    OSL_ASSERT (aTemplateAddr.is());
+    OSL_ASSERT (aTemplateAddr != NULL);
     return aTemplateAddr;
  }
 // -------------------------------------------------------------------------
@@ -591,15 +544,13 @@ CacheLocation CacheController::loadTemplate(TemplateRequest const & _aRequest) C
 
     AbsolutePath aTemplateLocation = encodeTemplateLocation(_aRequest.getTemplateName(), _aRequest.getComponentName());
 
-    TemplateCacheData::ModuleName aModuleName =  aTemplateLocation.getModuleName();
-    osl::MutexGuard aGuard(m_aTemplatesMutex);
-    memory::Accessor aTemplatesAccessor( m_aTemplates.getDataSegment(aModuleName) );
+    CacheLine::Name aModuleName =  aTemplateLocation.getModuleName();
+
     AbsolutePath aTemplateParent (aTemplateLocation.getParentPath());
 
     //Load-if-not-there (componentwise)
-    if (!m_aTemplates.hasNode(aTemplatesAccessor, aTemplateParent))
+    if (!m_aTemplates.hasNode(aTemplateParent))
     {
-        aTemplatesAccessor.clear();
         OSL_ENSURE(aTemplateLocation.getDepth() > 1, "CacheController::ensureTemplate : invalid template location !");
         TemplateRequest aTemplateRequest = TemplateRequest::forComponent(_aRequest.getComponentName());
 
@@ -608,12 +559,11 @@ CacheLocation CacheController::loadTemplate(TemplateRequest const & _aRequest) C
         addTemplates(backend::ComponentData(aMultiTemplates, aModuleName));
 
     }
-    memory::Accessor aTemplateAccessor( m_aTemplates.getDataSegment(aModuleName) );
-    data::TreeAddress aTemplateAddr = m_aTemplates.getTemplateTree(aTemplateAccessor,aTemplateLocation);
-    if (aTemplateAddr.isNull())
+    data::TreeAddress aTemplateAddr = m_aTemplates.getTemplateTree(aTemplateLocation);
+    if (aTemplateAddr == NULL)
         throw uno::Exception(::rtl::OUString::createFromAscii("Unknown template. Type description could not be found in the given module."), NULL);
 
-    return makeCacheLocation( m_aTemplates.getDataSegmentAddress(aTemplateLocation.getModuleName()) , aTemplateAddr.addressValue());
+    return m_aTemplates.getTreeAddress(aTemplateLocation.getModuleName());
 }
 // -----------------------------------------------------------------------------
 
@@ -622,26 +572,20 @@ TemplateResult CacheController::getTemplateData(TemplateRequest const & _aReques
 {
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::CacheController", "jb99855", "configmgr: CacheController::getTemplateData()");
     RTL_LOGFILE_CONTEXT_TRACE2(aLog, "requested template: %s/%s",
-                                    RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) ,
-                                    _aRequest.isComponentRequest() ?
-                                        "*" : RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) );
-
-
+                   RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) ,
+                   _aRequest.isComponentRequest() ?
+                   "*" : RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) );
 
     AbsolutePath aTemplateLocation = encodeTemplateLocation(_aRequest.getTemplateName(), _aRequest.getComponentName());
 
     loadTemplate(_aRequest);
     //AbsolutePath aTemplateLocation = ensureTemplate(_aRequest.getTemplateName(), _aRequest.getComponentName());
 
-    memory::Segment * pTemplatesSegment = m_aTemplates.getDataSegment(aTemplateLocation.getModuleName());
+    data::TreeAddress aTemplateAddr = m_aTemplates.getTemplateTree(aTemplateLocation);
+    if (aTemplateAddr == NULL)
+    throw uno::Exception(::rtl::OUString::createFromAscii("Unknown template. Type description could not be found in the given module."), NULL);
 
-    memory::Accessor aTemplatesAccessor( pTemplatesSegment );
-
-    data::TreeAddress aTemplateAddr = m_aTemplates.getTemplateTree(aTemplatesAccessor,aTemplateLocation);
-    if (aTemplateAddr.isNull())
-        throw uno::Exception(::rtl::OUString::createFromAscii("Unknown template. Type description could not be found in the given module."), NULL);
-
-    data::TreeAccessor aTemplateTree(aTemplatesAccessor,aTemplateAddr);
+    data::TreeAccessor aTemplateTree(aTemplateAddr);
 
     std::auto_ptr<INode> aResultTree = data::convertTree(aTemplateTree, true);
 
@@ -661,7 +605,7 @@ void CacheController::saveAndNotify(UpdateRequest const & _anUpdate) CFG_UNO_THR
         // caller must own a read lock on this cache line
         CFG_TRACE_INFO("CacheController: saving an update for '%s'",OUSTRING2ASCII(_anUpdate.getUpdateRoot().toString()));
 
-        CacheRef aCache = m_aCacheList.get(_anUpdate.getOptions());
+        CacheRef aCache = m_aCacheMap.get(_anUpdate.getOptions());
 
         OSL_ENSURE(aCache.is(), "No cache data to update in saveAndNotify");
 
@@ -697,11 +641,9 @@ void CacheController::saveAndNotify(UpdateRequest const & _anUpdate) CFG_UNO_THR
 
 void CacheController::flushPendingUpdates()CFG_UNO_THROW_ALL()
 {
-    osl::ClearableMutexGuard aGuard(m_aCacheList.mutex());
-    CacheList::Map aFlushList = m_aCacheList.copy();
-    aGuard.clear();
+    CacheMap::Map aFlushList = m_aCacheMap.copy();
 
-    for (CacheList::Map::iterator it = aFlushList.begin(); it != aFlushList.end(); ++it)
+    for (CacheMap::Map::iterator it = aFlushList.begin(); it != aFlushList.end(); ++it)
         saveAllPendingChanges(it->second,it->first);
 }
 
@@ -711,8 +653,6 @@ void CacheController::flushCacheWriter()CFG_NOTHROW()
 
     if (m_pCacheWriter)
     {
-        osl::MutexGuard aShotGuard(m_pCacheWriter->getShotMutex());
-
         CFG_TRACE_INFO("CacheController: flushing all pending updates");
 
         m_pCacheWriter->stopAndWriteCache();
@@ -768,7 +708,7 @@ ComponentResult CacheController::loadDirectly(ComponentRequest const & _aRequest
 
     if (!normalizeResult( aResult.mutableInstance().mutableData(),_aRequest.getOptions()))
     {
-        CFG_TRACE_ERROR_NI(" - cannot normalized result: failing");
+    CFG_TRACE_ERROR_NI(" - cannot normalized result: failing");
 
         OUString sMsg(RTL_CONSTASCII_USTRINGPARAM("Requested data at '"));
         sMsg += aRequestPath.toString();
@@ -801,7 +741,7 @@ NodeResult CacheController::loadDefaultsDirectly(NodeRequest const & _aRequest) 
 
 void CacheController::saveDirectly(UpdateRequest const & _anUpdate) CFG_UNO_THROW_ALL(  )
 {
-        m_xBackend->updateNodeData(_anUpdate);
+    m_xBackend->updateNodeData(_anUpdate);
 }
 // -----------------------------------------------------------------------------
 
@@ -811,13 +751,13 @@ void CacheController::savePendingChanges(CacheRef const & _aCache, ComponentRequ
 
     try
     {
-        CFG_TRACE_INFO2("CacheController: saving updates for tree: '%s'", OUSTRING2ASCII(_aComponent.getComponentName().toString()));
+    CFG_TRACE_INFO2("CacheController: saving updates for tree: '%s'", OUSTRING2ASCII(_aComponent.getComponentName().toString()));
 
-          std::auto_ptr<SubtreeChange> aChangeData = _aCache->releasePendingChanges(_aComponent.getComponentName());
+    std::auto_ptr<SubtreeChange> aChangeData = _aCache->releasePendingChanges(_aComponent.getComponentName());
 
         if (aChangeData.get())
         {
-            CFG_TRACE_INFO_NI("- found changes - sending to backend");
+        CFG_TRACE_INFO_NI("- found changes - sending to backend");
 
             AbsolutePath aRootPath = AbsolutePath::makeModulePath(_aComponent.getComponentName(), AbsolutePath::NoValidate());
 
@@ -827,22 +767,22 @@ void CacheController::savePendingChanges(CacheRef const & _aCache, ComponentRequ
 
             this->saveDirectly(anUpdateSpec);
 
-            CFG_TRACE_INFO_NI("- saving changes completed successfully");
+        CFG_TRACE_INFO_NI("- saving changes completed successfully");
         }
         else
-            CFG_TRACE_WARNING_NI("- no changes found - cannot save");
+        CFG_TRACE_WARNING_NI("- no changes found - cannot save");
     }
     catch(uno::Exception& e)
     {
-            (void)e;
-        CFG_TRACE_ERROR_NI("CacheController: saving tree '%s' failed: %s",
-                                OUSTRING2ASCII(_aComponent.getComponentName().toString()),
-                                OUSTRING2ASCII(e.Message) );
+    (void)e;
+    CFG_TRACE_ERROR_NI("CacheController: saving tree '%s' failed: %s",
+               OUSTRING2ASCII(_aComponent.getComponentName().toString()),
+               OUSTRING2ASCII(e.Message) );
 
-        this->invalidateComponent(_aComponent);
-        CFG_TRACE_INFO_NI("- component data invalidated");
+    this->invalidateComponent(_aComponent);
+    CFG_TRACE_INFO_NI("- component data invalidated");
 
-        throw;
+    throw;
     }
 }
 // -----------------------------------------------------------------------------
@@ -853,7 +793,7 @@ bool CacheController::saveAllPendingChanges(CacheRef const & _aCache, RequestOpt
     CFG_TRACE_INFO("CacheController: Saving all pending changes for cache line");
     OSL_ASSERT(_aCache.is());
 
-    typedef Cache::Data::PendingModuleList PMList;
+    typedef ExtendedCacheData::PendingModuleList PMList;
 
     PMList aPendingModules;
     _aCache->findPendingChangedModules(aPendingModules);
@@ -890,7 +830,7 @@ void CacheController::freeComponent(ComponentRequest const & _aRequest) CFG_NOTH
                     OUSTRING2ASCII(_aRequest.getOptions().getEntity()),
                     OUSTRING2ASCII(_aRequest.getOptions().getLocale()) );
 
-    CacheRef aCache = m_aCacheList.get(_aRequest.getOptions());
+    CacheRef aCache = m_aCacheMap.get(_aRequest.getOptions());
 
     OSL_ENSURE(aCache.is(), "Releasing a nonexisting module");
 
@@ -911,11 +851,9 @@ void CacheController::dataChanged(const ComponentRequest& _aRequest) CFG_NOTHROW
 // -----------------------------------------------------------------------------
 void CacheController::refreshAllComponents() CFG_UNO_THROW_ALL()
 {
-    osl::ClearableMutexGuard aGuard(m_aCacheList.mutex());
-    CacheList::Map aRefreshList = m_aCacheList.copy();
-    aGuard.clear();
+    CacheMap::Map aRefreshList = m_aCacheMap.copy();
 
-    for (CacheList::Map::iterator i = aRefreshList.begin();
+    for (CacheMap::Map::iterator i = aRefreshList.begin();
         i != aRefreshList.end(); ++i)
     {
         if (!i->second->isEmpty())
@@ -946,45 +884,6 @@ void CacheController::refreshAllComponents() CFG_UNO_THROW_ALL()
         }
     }
 }
-// INotifyListener
-// ----------------------------------------------------------------------------
-/*
-void CacheController::nodeUpdated(TreeChangeList& _rChanges)
-{
-    CFG_TRACE_INFO("cache manager: updating the tree from a notification");
-    try
-    {
-        if (TreeInfo* pInfo = requestTreeInfo(_rChanges.getOptions(),false))
-        {
-            // first approve the changes and merge them with the current tree
-            AbsolutePath aSubtreeName = _rChanges.getRootNodePath();
-
-            memory::UpdateAccessor aUpdateAccess( pInfo->getDataSegment(aSubtreeName) );
-            OSL_ENSURE(aUpdateAccess.is(), "CacheController::nodeUpdated : missing cache line!");
-
-            data::NodeAddress aCacheTree = pInfo->getSubtree(aUpdateAccess.accessor(),aSubtreeName);
-            OSL_ENSURE(aCacheTree.is(), "CacheController::nodeUpdated : node not found in cache!");
-
-            if (aCacheTree.is())
-            {
-                if (adjustUpdate(_rChanges,aUpdateAccess,aCacheTree))
-                {
-                    pInfo->updateTree(aUpdateAccess,_rChanges);
-
-                    data::Accessor aNotifyLock = aUpdateAccess.downgrade(); // keep a read lock during notification
-
-                    notifyUpdate(aNotifyLock,_rChanges);
-                }
-            }
-        }
-    }
-    catch (uno::RuntimeException&)
-    {
-        CFG_TRACE_ERROR("CacheController::nodeUpdated : could not insert notifications, data may be inconsistent !");
-    }
-}
-*/
-
 
 // -------------------------------------------------------------------------
     } // namespace
