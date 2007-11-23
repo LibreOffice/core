@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 13:06:53 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 13:38:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -487,6 +487,10 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Msvcr70,
 	gid_File_Lib_Msvcr71,
 	gid_File_Lib_Msvcp71,
+	gid_File_Lib_Msvcr80,
+	gid_File_Lib_Msvcp80,
+	gid_File_Lib_Msvcm80,
+	gid_File_Msvcm80crt_Manifest,
 	gid_File_Lib_Ole,
 	gid_File_Lib_Patchmsi,
 	gid_File_Lib_Reg4msdocmsi,
