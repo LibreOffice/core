@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Controller.xcu,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 17:11:27 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,39 @@
         </prop>
         <prop oor:name="Controller">
           <value>com.sun.star.comp.framework.NewMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c13" oor:op="replace">
+        <prop oor:name="Command">
+            <value>.uno:SetLanguageSelectionMenu</value>
+        </prop>
+        <prop oor:name="Module">
+            <value/>
+        </prop>
+        <prop oor:name="Controller">
+            <value>com.sum.star.comp.framework.LanguageSelectionMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c14" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:SetLanguageAllTextMenu</value>
+        </prop>
+        <prop oor:name="Module">
+          <value/>
+        </prop>
+        <prop oor:name="Controller">
+            <value>com.sum.star.comp.framework.LanguageSelectionMenuController</value>
+        </prop>
+      </node>
+      <node oor:name="c15" oor:op="replace">
+        <prop oor:name="Command">
+            <value>.uno:SetLanguageParagraphMenu</value>
+        </prop>
+        <prop oor:name="Module">
+            <value/>
+        </prop>
+        <prop oor:name="Controller">
+            <value>com.sum.star.comp.framework.LanguageSelectionMenuController</value>
         </prop>
       </node>
     </node>
@@ -369,6 +402,17 @@
         </prop>
         <prop oor:name="Controller">
             <value>com.sun.star.comp.framework.LogoTextStatusbarController</value>
+        </prop>
+      </node>
+      <node oor:name="c7" oor:op="replace">
+        <prop oor:name="Command">
+            <value>.uno:LanguageStatus</value>
+        </prop>
+        <prop oor:name="Module">
+            <value/>
+        </prop>
+        <prop oor:name="Controller">
+            <value>com.sun.star.comp.framework.LangSelectionStatusbarController</value>
         </prop>
       </node>
     </node>
