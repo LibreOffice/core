@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roottree.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:54:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:23:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,13 +53,6 @@ namespace configmgr
     struct TreeChangeList;
 //-----------------------------------------------------------------------------
 
-    namespace memory
-    {
-        class Segment;
-        class Accessor;
-    }
-//-----------------------------------------------------------------------------
-
     namespace data
     {
         class NodeAccess;
@@ -82,13 +75,11 @@ namespace configmgr
 //-----------------------------------------------------------------------------
 
         RootTree createReadOnlyTree(    AbsolutePath const& aRootPath,
-                                        memory::Segment const* _pDataSegment,
                                         data::NodeAccess const& _aCacheNode,
                                         TreeDepth nDepth,
                                         TemplateProvider const& aTemplateProvider);
 
         RootTree createUpdatableTree(   AbsolutePath const& aRootPath,
-                                        memory::Segment const* _pDataSegment,
                                         data::NodeAccess const& _aCacheNode,
                                         TreeDepth nDepth,
                                         TemplateProvider const& aTemplateProvider);
@@ -105,14 +96,14 @@ namespace configmgr
             ~CommitHelper();
 
             // collect all changes into rChangeList
-            bool prepareCommit(memory::Accessor const & _aAccessor, TreeChangeList& rChangeList);
+            bool prepareCommit(TreeChangeList& rChangeList);
 
             // finish and clean up the changes in rChangeList after they are integrated
-            void finishCommit(memory::Accessor const & _aAccessor, TreeChangeList& rChangeList);
+            void finishCommit(TreeChangeList& rChangeList);
             // restore the changes in rChangeList as pending
-            void revertCommit(memory::Accessor const & _aAccessor, TreeChangeList& rChangeList);
+            void revertCommit(TreeChangeList& rChangeList);
             // throw away and clean up the changes in rChangeList after a commit failed
-            void failedCommit(memory::Accessor const & _aAccessor, TreeChangeList& rChangeList);
+            void failedCommit(TreeChangeList& rChangeList);
 
             // dispose of auxiliary data for a commit operation
             void reset();
