@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treesegment.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:51:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:33:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,25 +41,13 @@
 #ifndef CONFIGMGR_BUILDDATA_HXX
 #include "builddata.hxx"
 #endif
-#ifndef CONFIGMGR_SEGMENT_HXX
-#include "segment.hxx"
-#endif
-#ifndef CONFIGMGR_HEAPFACTORY_HXX
-#include "heapfactory.hxx"
-#endif
-#ifndef CONFIGMGR_ACCESSOR_HXX
-#include "accessor.hxx"
-#endif
-#ifndef CONFIGMGR_UPDATEACCESSOR_HXX
-#include "updateaccessor.hxx"
-#endif
 #ifndef CONFIGMGR_TREEACCESSOR_HXX
 #include "treeaccessor.hxx"
 #endif
-
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/simplereferenceobject.hxx>
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -72,23 +60,13 @@ namespace configmgr
     namespace data
     {
 // -----------------------------------------------------------------------------
-
-//        typedef std::auto_ptr<INode> RawTreeData;
-//        typedef configuration::Name  Name;
-        using memory::Pointer;
-
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
-struct TreeSegment::Impl : salhelper::SimpleReferenceObject
+struct TreeSegment::Impl : configmgr::SimpleReferenceObject
 {
-    Impl() : data( memory::localHeap() ), base() {}
+    Impl() : base() {}
     ~Impl();
 
-    memory::Segment     data;
     data::TreeAddress   base;
 };
-// -----------------------------------------------------------------------------
-// -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
 TreeSegment::TreeSegment()
@@ -127,32 +105,17 @@ void TreeSegment::clear()
 }
 
 // -----------------------------------------------------------------------------
-memory::Segment * TreeSegment::getSegment() const
+TreeAccessor TreeSegment::getTreeAccess() const
 {
-    return is() ? &m_pImpl->data : 0;
-}
-
-// -----------------------------------------------------------------------------
-memory::Accessor  TreeSegment::getAccessor() const
-{
-    return memory::Accessor(getSegment());
-}
-
-// -----------------------------------------------------------------------------
-TreeAccessor    TreeSegment::getTreeAccess() const
-{
-    return TreeAccessor( getAccessor(), getTreeData() );
+    return TreeAccessor(getTreeData());
 }
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
 TreeSegment::Impl::~Impl()
 {
-    if (base.is())
-    {
-        memory::UpdateAccessor aAccess( & this->data );
-        destroyTree(aAccess,base);
-    }
+    if (base != NULL)
+        destroyTree(base);
 }
 
 // -----------------------------------------------------------------------------
@@ -162,11 +125,9 @@ TreeSegment::Impl* TreeSegment::createNewSegment(RawTreeData& _aTree, RawName co
 
     std::auto_ptr<Impl> aNewImpl( new Impl );
 
-    memory::UpdateAccessor aNewAccess( & aNewImpl->data );
+    aNewImpl->base = buildElementTree(*_aTree,_aTypeName,false); // no defaults for set element trees
 
-    aNewImpl->base = buildElementTree(aNewAccess,*_aTree,_aTypeName,false); // no defaults for set element trees
-
-    if (!aNewImpl->base.is()) aNewImpl.reset();
+    if (aNewImpl->base == NULL) aNewImpl.reset();
 
     return aNewImpl.release();
 }
@@ -178,11 +139,9 @@ TreeSegment::Impl* TreeSegment::createNewSegment(RawName const & _aTreeName, Raw
 
     std::auto_ptr<Impl> aNewImpl( new Impl );
 
-    memory::UpdateAccessor aNewAccess( & aNewImpl->data );
+    aNewImpl->base = buildTree(_aTreeName,*_aTree,false); // no defaults for set element trees
 
-    aNewImpl->base = buildTree(aNewAccess,_aTreeName,*_aTree,false); // no defaults for set element trees
-
-    if (!aNewImpl->base.is()) aNewImpl.reset();
+    if (aNewImpl->base == NULL) aNewImpl.reset();
 
     return aNewImpl.release();
 }
@@ -191,15 +150,13 @@ TreeSegment::Impl* TreeSegment::createNewSegment(RawName const & _aTreeName, Raw
 // -----------------------------------------------------------------------------
 TreeSegment::Impl* TreeSegment::createNewSegment(TreeAccessor const & _aTree)
 {
-    if (!_aTree.isValid()) return NULL;
+    if (_aTree == NULL) return NULL;
 
     std::auto_ptr<Impl> aNewImpl( new Impl );
 
-    memory::UpdateAccessor aNewAccess( & aNewImpl->data );
+    aNewImpl->base = _aTree.copyTree();
 
-    aNewImpl->base = _aTree.copyTree(aNewAccess);
-
-    if (!aNewImpl->base.is()) aNewImpl.reset();
+    if (aNewImpl->base == NULL) aNewImpl.reset();
 
     return aNewImpl.release();
 }
@@ -207,7 +164,7 @@ TreeSegment::Impl* TreeSegment::createNewSegment(TreeAccessor const & _aTree)
 // -----------------------------------------------------------------------------
 TreeSegment::RawTreeData TreeSegment::cloneData(bool _bUseTreeName) const
 {
-    return convertTree( this->getTreeAccess(), _bUseTreeName );
+    return convertTree(this->getTreeAccess(),_bUseTreeName);
 }
 
 // -----------------------------------------------------------------------------
@@ -221,7 +178,7 @@ TreeSegment TreeSegment::cloneSegment() const
 // -----------------------------------------------------------------------------
 bool TreeSegment::is() const
 {
-    return hasData() && m_pImpl->base.is();
+    return hasData() && m_pImpl->base != NULL;
 }
 
 // -----------------------------------------------------------------------------
@@ -241,13 +198,11 @@ void TreeSegment::setName(Name const & _aNewName)
 
     if (is())
     {
-        memory::UpdateAccessor aUpdater( this->getSegment() );
-
-        sharable::String aOldName = getTreeDataForUpdate(aUpdater)->header.name;
+        sharable::String aOldName = getTreeDataForUpdate()->header.name;
 
         sharable::String aNewName = sharable::allocString(_aNewName.toString());
 
-        getTreeDataForUpdate(aUpdater)->header.name = aNewName;
+        getTreeDataForUpdate()->header.name = aNewName;
 
         sharable::freeString(aOldName);
     }
@@ -258,15 +213,12 @@ void TreeSegment::markRemovable()
     OSL_ENSURE(is(), "Operation requires a valid tree");
 
     if (is())
-    {
-        memory::UpdateAccessor aUpdater( this->getSegment() );
-        getTreeDataForUpdate(aUpdater)->header.state |= State::flag_removable;
-    }
+        getTreeDataForUpdate()->header.state |= State::flag_removable;
 }
 // -----------------------------------------------------------------------------
 TreeAddress TreeSegment::getBaseAddress() const
 {
-    return hasData() ? m_pImpl->base : TreeAddress();
+    return hasData() ? m_pImpl->base : NULL;
 }
 
 // -----------------------------------------------------------------------------
@@ -274,18 +226,17 @@ TreeSegment::TreeDataPtr TreeSegment::getTreeData() const
 {
     if (!is()) return NULL;
 
-    return TreeAccessor::access(m_pImpl->base, this->getAccessor());
+    return m_pImpl->base;
 }
 
 // -----------------------------------------------------------------------------
-TreeSegment::TreeDataUpdatePtr TreeSegment::getTreeDataForUpdate(memory::UpdateAccessor& _anUpdater) const
+TreeSegment::TreeDataUpdatePtr TreeSegment::getTreeDataForUpdate() const
 {
-    OSL_ASSERT(_anUpdater.is());
     OSL_ASSERT(this->is());
 
     if (!is()) return NULL;
 
-    return TreeAccessor::access(m_pImpl->base,_anUpdater);
+    return m_pImpl->base;
 }
 
 // -----------------------------------------------------------------------------
