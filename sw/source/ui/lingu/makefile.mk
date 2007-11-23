@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-25 09:16:44 $
+#   last change: $Author: ihi $ $Date: 2007-11-23 16:25:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@ TARGET=lingu
 .INCLUDE :  $(PRJ)$/inc$/sw.mk
 
 # --- Files --------------------------------------------------------
+
+EXCEPTIONSFILES= \
+        $(SLO)$/olmenu.obj \
 
 SLOFILES =  \
         $(SLO)$/hyp.obj \
