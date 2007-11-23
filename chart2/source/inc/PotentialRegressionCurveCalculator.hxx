@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PotentialRegressionCurveCalculator.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:45:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 11:57:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,26 +35,24 @@
 #ifndef CHART2_POTENTIALREGRESSIONCURVECALCULATOR_HXX
 #define CHART2_POTENTIALREGRESSIONCURVECALCULATOR_HXX
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVECALCULATOR_HPP_
-#include <com/sun/star/chart2/XRegressionCurveCalculator.hpp>
-#endif
+#include "RegressionCurveCalculator.hxx"
 
 namespace chart
 {
 
 
-class PotentialRegressionCurveCalculator : public
-    ::cppu::WeakImplHelper1< ::com::sun::star::chart2::XRegressionCurveCalculator >
+class PotentialRegressionCurveCalculator : public RegressionCurveCalculator
 {
 public:
     PotentialRegressionCurveCalculator();
     virtual ~PotentialRegressionCurveCalculator();
 
 protected:
+    virtual ::rtl::OUString ImplGetRepresentation(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& xNumFormatter,
+        ::sal_Int32 nNumberFormatKey ) const;
+
+private:
     // ____ XRegressionCurveCalculator ____
     virtual void SAL_CALL recalculateRegression(
         const ::com::sun::star::uno::Sequence< double >& aXValues,
@@ -63,16 +61,19 @@ protected:
     virtual double SAL_CALL getCurveValue( double x )
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::uno::RuntimeException);
-    virtual double SAL_CALL getCorrelationCoefficient()
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual ::rtl::OUString SAL_CALL getRepresentation()
-        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::geometry::RealPoint2D > SAL_CALL getCurveValues(
+        double min,
+        double max,
+        ::sal_Int32 nPointCount,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling >& xScalingX,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XScaling >& xScalingY,
+        ::sal_Bool bMaySkipPointsInCalculation )
+        throw (::com::sun::star::lang::IllegalArgumentException,
+               ::com::sun::star::uno::RuntimeException);
 
-private:
     // formula is: f(x) = x ^ m_fSlope * m_fIntercept
     double m_fSlope;
     double m_fIntercept;
-    double m_fCorrelationCoeffitient;
 };
 
 } //  namespace chart
