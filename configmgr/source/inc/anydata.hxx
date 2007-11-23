@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anydata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:41:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:14:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,28 +51,23 @@ namespace configmgr
 {
 //-----------------------------------------------------------------------------
 
-    namespace memory { class Allocator; class Accessor; }
-    //-----------------------------------------------------------------------------
-
     namespace sharable
     {
     //-----------------------------------------------------------------------------
 
-        //typedef Address AnyData; // data that fits is stored inline
         union AnyData
         {
-            typedef Byte TypeCode;
+            typedef sal_uInt8 TypeCode;
 
-            Address     data;
             sal_Bool    boolValue;
             sal_Int16   shortValue;
             sal_Int32   intValue;
-            Address     longValue;      // points to sal_Int64
-            Address     doubleValue;    // points to double (IEEE 8-bit) ...
-       //     float       floatValue;     // ... or should we use float (IEEE 4-bit) ?
+            sal_Int64  *longValue;
+            double     *doubleValue;
             Vector      binaryValue;    // points to counted sal_(u)Int8 []
             String      stringValue;    // points to counted sal_Unicode []
             Vector      sequenceValue;  // points to counted AnyData [] (or SomeType [] ?)
+            void       *data;           // used to initialize to 0
         };
 
     //-----------------------------------------------------------------------------
@@ -80,10 +75,9 @@ namespace configmgr
         AnyData::TypeCode getTypeCode(::com::sun::star::uno::Type const & _aType);
         ::com::sun::star::uno::Type getUnoType( AnyData::TypeCode _aType);
 
-        AnyData allocData(memory::Allocator const& _anAllocator, AnyData::TypeCode _aType, ::com::sun::star::uno::Any const & _aAny);
-    //    AnyData copyData(memory::Allocator const& _anAllocator, AnyData::TypeCode _aType, AnyData _aData);
-        void    freeData(memory::Allocator const& _anAllocator, AnyData::TypeCode _aType, AnyData _aData);
-        ::com::sun::star::uno::Any readData(memory::Accessor const& _anAccessor, AnyData::TypeCode _aType, AnyData _aData);
+        AnyData allocData(AnyData::TypeCode _aType, ::com::sun::star::uno::Any const & _aAny);
+        void    freeData(AnyData::TypeCode _aType, AnyData _aData);
+        ::com::sun::star::uno::Any readData(AnyData::TypeCode _aType, AnyData _aData);
 
     //-----------------------------------------------------------------------------
     }
