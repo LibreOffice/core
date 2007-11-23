@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnLineChartTypeTemplate.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:47:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 12:01:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,9 @@ protected:
                   ::com::sun::star::uno::Reference<
                       ::com::sun::star::chart2::XChartType > > & aOldChartTypesSeq
             );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XChartType >
+                getChartTypeForIndex( sal_Int32 nChartTypeIndex );
 
     virtual StackMode getStackMode( sal_Int32 nChartTypeIndex ) const;
 
