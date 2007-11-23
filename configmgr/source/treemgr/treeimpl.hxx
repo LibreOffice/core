@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeimpl.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:34:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 14:47:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,8 @@
 #include "treeaccessor.hxx"
 #endif
 
-#ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
-#include <salhelper/simplereferenceobject.hxx>
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
 #endif
 #ifndef _RTL_REF_HXX_
 #include <rtl/ref.hxx>
@@ -152,13 +152,13 @@ namespace configmgr
         */
         class NodeData
         {
-            NodeImplHolder      m_pSpecificNode;
-            Name                m_aName_; // cached for better performance
-            NodeOffset          m_nParent;
+            rtl::Reference<NodeImpl> m_pSpecificNode;
+            Name                     m_aName_; // cached for better performance
+            NodeOffset               m_nParent;
         public:
-            NodeData(NodeImplHolder const& aSpecificNodeImpl, Name const& aName, NodeOffset nParent);
+            NodeData(rtl::Reference<NodeImpl> const& aSpecificNodeImpl, Name const& aName, NodeOffset nParent);
 
-            void rebuild(rtl::Reference<view::ViewStrategy> const& _xNewStrategy, data::NodeAccessRef const & _aNewData, data::Accessor const & _aOldAccessor);
+            void rebuild(rtl::Reference<view::ViewStrategy> const& _xNewStrategy, data::NodeAccess const & _aNewData);
         // COMMON: information
             Name                getName()       const { return m_aName_; }
             NodeOffset          getParent()     const { return m_nParent; }
@@ -170,29 +170,30 @@ namespace configmgr
             NodeImpl const &    nodeImpl() const    { return implGetNodeImpl(); }
 
         // SET: access to child elements
-            bool                isSetNode(data::Accessor const& _aAccessor)     const;
-            SetNodeImpl&        setImpl(data::Accessor const& _aAccessor)             { return implGetSetImpl(_aAccessor); }
-            SetNodeImpl const&  setImpl(data::Accessor const& _aAccessor)       const { return implGetSetImpl(_aAccessor); }
+            bool                isSetNode()     const;
+            SetNodeImpl&        setImpl()             { return implGetSetImpl(); }
+            SetNodeImpl const&  setImpl()       const { return implGetSetImpl(); }
 
         // VALUES: access to data
-            bool                        isValueElementNode(data::Accessor const& _aAccessor)    const;
-            ValueElementNodeImpl&       valueElementImpl(data::Accessor const& _aAccessor)            { return implGetValueImpl(_aAccessor); }
-            ValueElementNodeImpl const& valueElementImpl(data::Accessor const& _aAccessor)      const { return implGetValueImpl(_aAccessor); }
+            bool                        isValueElementNode()    const;
+            ValueElementNodeImpl&       valueElementImpl()            { return implGetValueImpl(); }
+            ValueElementNodeImpl const& valueElementImpl()      const { return implGetValueImpl(); }
 
         // GROUP: access to children
-            bool                isGroupNode(data::Accessor const& _aAccessor)   const;
-            GroupNodeImpl&      groupImpl(data::Accessor const& _aAccessor)           { return implGetGroupImpl(_aAccessor); }
-            GroupNodeImpl const&groupImpl(data::Accessor const& _aAccessor)     const { return implGetGroupImpl(_aAccessor); }
+            bool                isGroupNode()   const;
+            GroupNodeImpl&      groupImpl()           { return implGetGroupImpl(); }
+            GroupNodeImpl const&groupImpl()     const { return implGetGroupImpl(); }
 
         // access helper
         public:
-            data::NodeAccessRef getOriginalNodeAccessRef(data::Accessor const * _pAccessor) const;
+            data::NodeAccess getOriginalNodeAccess() const
+                { return data::NodeAccess(m_pSpecificNode->getOriginalNodeAddress()); }
 
         private:
             NodeImpl&       implGetNodeImpl() const;
-            SetNodeImpl&    implGetSetImpl(data::Accessor const& _aAccessor)   const;
-            GroupNodeImpl&  implGetGroupImpl(data::Accessor const& _aAccessor) const ;
-            ValueElementNodeImpl& implGetValueImpl(data::Accessor const& _aAccessor) const ;
+            SetNodeImpl&    implGetSetImpl()   const;
+            GroupNodeImpl&  implGetGroupImpl() const ;
+            ValueElementNodeImpl& implGetValueImpl() const ;
         };
 //-----------------------------------------------------------------------------
         class RootTreeImpl; // for 'dynamic-casting'
@@ -208,7 +209,7 @@ namespace configmgr
             <p> Also provides for navigation to the context this tree is located in
             </p>
         */
-        class TreeImpl : public salhelper::SimpleReferenceObject
+        class TreeImpl : public configmgr::SimpleReferenceObject
         {
             friend class view::ViewStrategy;
             friend class TreeSetNodeImpl;
@@ -227,13 +228,11 @@ namespace configmgr
             TreeImpl(TreeImpl& rParentTree, NodeOffset nParentNode);
 
             /// fills this TreeImpl starting from _aRootNode, using the given factory and the tree's template provider
-            void build(rtl::Reference<view::ViewStrategy> const& _xStrategy, data::NodeAccessRef const& _aRootNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider);
+            void build(rtl::Reference<view::ViewStrategy> const& _xStrategy, data::NodeAccess const& _aRootNode, TreeDepth nDepth, TemplateProvider const& aTemplateProvider);
 
-            void rebuild(rtl::Reference<view::ViewStrategy> const& _xNewStrategy, data::NodeAccessRef const & _aNewData, data::Accessor const & _aOldAccessor);
+            void rebuild(rtl::Reference<view::ViewStrategy> const& _xNewStrategy, data::NodeAccess const & _aNewData);
 
         public:
-            data::Accessor      getDataAccessor(data::Accessor const& _aExternalAccessor) const;
-
             /// destroys a TreeImpl
             virtual ~TreeImpl();
 
@@ -270,7 +269,7 @@ namespace configmgr
 
             /** gets the simple <type>Name</type> of the root node (i.e. of the tree as a whole)
             */
-            Name            getSimpleRootName() const;
+            virtual Name            getSimpleRootName() const;
 
             /** gets the full name of the root node
             */
@@ -289,7 +288,7 @@ namespace configmgr
             void    prependLocalPathTo(NodeOffset nNode, Path::Rep& rNames);
 
             // check whether defaults are available
-            bool    hasDefaults(NodeOffset _nNode, data::Accessor const& _aAccessor) const;
+            bool    hasDefaults(NodeOffset _nNode) const;
         public:
             /// gets the <type>NodeOffset</type> of the root node in this tree
             NodeOffset      root_() const { return m_nRoot; }
@@ -362,11 +361,6 @@ namespace configmgr
             ElementTreeImpl     * asElementTree();
             ElementTreeImpl const* asElementTree() const;
 
-        // synchronization and memory managers
-            osl::Mutex& getRootLock() const;
-            memory::Segment const * getRootSegment() const;
-            memory::Segment const * getDataSegment() const;
-
         // Behavior
             rtl::Reference< view::ViewStrategy > getViewBehavior() const;
         protected:
@@ -376,7 +370,7 @@ namespace configmgr
 
             void implCommitDirectFrom(NodeOffset nNode);
 */
-            void implRebuild(NodeOffset nNode, data::NodeAccessRef const & _aNewData, data::Accessor const & _aOldAccessor);
+            void implRebuild(NodeOffset nNode, data::NodeAccess const & _aNewData);
 
         protected:
             /// set a new parent context for this tree
@@ -397,9 +391,6 @@ namespace configmgr
             /// prepend the absolute path to the root of this tree (no context use)
             virtual void doFinishRootPath(Path::Rep& rPath) const = 0;
 
-            osl::Mutex& doGetRootLock() const;
-            mutable osl::Mutex m_aOwnLock;
-
             rtl::Reference<view::ViewStrategy> m_xStrategy;
             NodeList    m_aNodes;
             TreeImpl*   m_pParentTree;
@@ -407,7 +398,6 @@ namespace configmgr
             TreeDepth   m_nDepth;
 
             enum { m_nRoot = 1 }; /// base of <type>NodeOffset</type>s used in this class
-            //NodeOffset    const m_nRoot; /// base of <type>NodeOffset</type>s used in this class
 
             /// prepend the absolute path to the root of this tree (using context if present)
             void implPrependRootPath(Path::Rep& rPath) const;
@@ -447,13 +437,13 @@ namespace configmgr
 
         // rebuilding
             using TreeImpl::rebuild;
-            void rebuild(rtl::Reference<view::ViewStrategy> const& _xNewStrategy, data::TreeAccessor const & _aNewData,
-                            data::Accessor const & _aOldAccessor);
+            void rebuild(rtl::Reference<view::ViewStrategy> const& _xNewStrategy, data::TreeAccessor const & _aNewData);
 
         // data access
-            data::TreeAccessor  getOriginalTreeAccess(data::Accessor const& _aAccessor) const;
+            data::TreeAccessor  getOriginalTreeAccess() const { return data::TreeAccessor(m_aDataAddress); }
 
         // Tree information
+            virtual Name            getSimpleRootName() const;
             /// checks whether this is an instance of a known template
             bool isTemplateInstance() const { return !!m_aInstanceInfo.is(); }
             /// checks whether this is an instance of the given template
@@ -473,7 +463,7 @@ namespace configmgr
             void detachFrom(data::SetNodeAccess const & _aUpdatableSetNode, Name const& aElementName);
 
             /// take ownership of the given tree (which must not already be the one in use)
-            void takeTreeAndRebuild(data::TreeSegment const& _aElementData, data::Accessor const & _aOldDataAccessor);
+            void takeTreeAndRebuild(data::TreeSegment const& _aElementData);
             /// take ownership of the given tree (which must already be the one in use)
             void takeTreeBack(data::TreeSegment const& _aElementData);
 
@@ -491,7 +481,7 @@ namespace configmgr
             void detachTree();
 
         private:
-            static memory::Segment * getUpdatableSegment(TreeImpl& _rTree);
+            static bool isUpdatableSegment(TreeImpl& _rTree);
 
             virtual RootTreeImpl const* doCastToRootTree() const;
             virtual ElementTreeImpl const* doCastToElementTree() const;
