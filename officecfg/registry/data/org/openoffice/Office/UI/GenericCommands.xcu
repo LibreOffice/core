@@ -5,9 +5,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:26:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-23 16:18:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2090,7 +2090,12 @@
                     <value xml:lang="en-US">~Uppercase</value>
                 </prop>
             </node>
-            <node oor:name=".uno:ChooseControls" oor:op="replace">
+                        <node oor:name=".uno:LanguageStatus" oor:op="replace">
+                                <prop oor:name="Label" oor:type="xs:string">
+                                        <value xml:lang="en-US">Language Status</value>
+                                </prop>
+                        </node>
+                        <node oor:name=".uno:ChooseControls" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Insert Controls</value>
                 </prop>
@@ -5301,6 +5306,21 @@
             <node oor:name=".uno:CurrentLanguage" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">Current Language</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SetLanguageSelectionMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">For Selection</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SetLanguageParagraphMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">For Paragraph</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:SetLanguageAllTextMenu" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">For all Text</value>
                 </prop>
             </node>
         </node>
