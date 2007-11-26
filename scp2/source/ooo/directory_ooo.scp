@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directory_ooo.scp,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:55:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:18:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,16 @@ Directory gid_Dir_Program
     DosName = "MacOS";
 #endif
 End
+
+#if defined MACOSX
+Unixlink gid_Unixlink_Applications
+    BIN_FILE_BODY;
+    Styles = (PATCH);
+    Dir = PD_PROGDIR;
+    Name = "Applications";
+    Target = "/Applications";
+End
+#endif
 
 #if defined MACOSX
 Unixlink gid_Unixlink_Program
@@ -379,21 +389,21 @@ Directory gid_Dir_Plugin
 End
 
 Directory gid_Dir_Readme
-    ParentID = PD_PROGDIR;
 #ifndef MACOSX
-    DosName = "readmes";
+    ParentID = PD_PROGDIR;
 #else
-    DosName = "READMEs";
+    ParentID = gid_Dir_Bundle_Contents;
 #endif
+    DosName = "readmes";
 End
 
 Directory gid_Dir_License
-    ParentID = PD_PROGDIR;
 #ifndef MACOSX
-    DosName = "licenses";
+    ParentID = PD_PROGDIR;
 #else
-    DosName = "LICENSEs";
+    ParentID = gid_Dir_Bundle_Contents;
 #endif
+    DosName = "licenses";
 End
 
 Directory gid_Dir_Share
