@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:29:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:33:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1948,26 +1948,26 @@ interface DrawView
          //StateMethod = GetMenuState ;
     ]
      // Neue Slots fuer Optionsleiste
-    SID_GRAPHIC_DRAFT // ole : ?, status : ?
-    [
-        ExecMethod = ExecOptionsBar ;
-        StateMethod = GetOptionsBarState ;
-    ]
-    SID_FILL_DRAFT // ole : ?, status : ?
-    [
-        ExecMethod = ExecOptionsBar ;
-        StateMethod = GetOptionsBarState ;
-    ]
-    SID_TEXT_DRAFT // ole : ?, status : ?
-    [
-        ExecMethod = ExecOptionsBar ;
-        StateMethod = GetOptionsBarState ;
-    ]
-    SID_LINE_DRAFT // ole : ?, status : ?
-    [
-        ExecMethod = ExecOptionsBar ;
-        StateMethod = GetOptionsBarState ;
-    ]
+//#i80528#    SID_GRAPHIC_DRAFT // ole : ?, status : ?
+//#i80528#    [
+//#i80528#        ExecMethod = ExecOptionsBar ;
+//#i80528#        StateMethod = GetOptionsBarState ;
+//#i80528#    ]
+//#i80528#    SID_FILL_DRAFT // ole : ?, status : ?
+//#i80528#    [
+//#i80528#        ExecMethod = ExecOptionsBar ;
+//#i80528#        StateMethod = GetOptionsBarState ;
+//#i80528#    ]
+//#i80528#    SID_TEXT_DRAFT // ole : ?, status : ?
+//#i80528#    [
+//#i80528#        ExecMethod = ExecOptionsBar ;
+//#i80528#        StateMethod = GetOptionsBarState ;
+//#i80528#    ]
+//#i80528#    SID_LINE_DRAFT // ole : ?, status : ?
+//#i80528#    [
+//#i80528#        ExecMethod = ExecOptionsBar ;
+//#i80528#        StateMethod = GetOptionsBarState ;
+//#i80528#    ]
     SID_HANDLES_DRAFT // ole : ?, status : ?
     [
         ExecMethod = ExecOptionsBar ;
