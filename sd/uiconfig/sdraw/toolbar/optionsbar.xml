@@ -21,10 +21,5 @@
  <toolbar:toolbaritem xlink:href=".uno:BigHandles" toolbar:helpid="helpid:27168"  toolbar:style="auto" />
  <toolbar:toolbaritem xlink:href=".uno:SolidCreate" toolbar:helpid="helpid:27151"  toolbar:style="auto" />
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:GraphicDraft" toolbar:helpid="helpid:27146"  toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:FillDraft" toolbar:helpid="helpid:27147"  toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:TextDraft" toolbar:helpid="helpid:27148"  toolbar:style="auto" />
- <toolbar:toolbaritem xlink:href=".uno:LineDraft" toolbar:helpid="helpid:27149"  toolbar:style="auto" />
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LeaveAllGroups" toolbar:helpid="helpid:27345"  toolbar:style="auto" />
 </toolbar:toolbar>
