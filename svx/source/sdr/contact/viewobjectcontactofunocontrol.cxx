@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofunocontrol.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:29:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:52:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1363,28 +1363,7 @@ namespace sdr { namespace contact {
             return;
 
         const Rectangle& rPaintRect( pUnoObject->GetLogicRect() );
-
-        SdrPageView* pPageView = _rDisplayInfo.GetPageView();
-        if ( pPageView && pPageView->GetView().IsFillDraft() )
-        {
-            XOutputDevice* pExtendedDevice( _rDisplayInfo.GetExtendedOutputDevice() );
-            if ( pExtendedDevice )
-            {
-                const SfxItemSet& rSet = pUnoObject->GetProperties().GetObjectItemSet();
-
-                // perepare ItemSet to avoid old XOut filling
-                SfxItemSet aFillDescriptor( *rSet.GetPool() );
-                aFillDescriptor.Put( XFillStyleItem( XFILL_NONE ) );
-                pExtendedDevice->SetFillAttr( aFillDescriptor );
-                pExtendedDevice->SetLineAttr( rSet );
-
-                pExtendedDevice->DrawRect( rPaintRect );
-            }
-        }
-        else
-        {
-            UnoControlContactHelper::drawControl( m_xControl, rPaintRect.TopLeft(), _rDisplayInfo.GetOutputDevice() );
-        }
+        UnoControlContactHelper::drawControl( m_xControl, rPaintRect.TopLeft(), _rDisplayInfo.GetOutputDevice() );
     }
 
     //--------------------------------------------------------------------
