@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:31:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,9 +162,11 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* pApp ) :
     , pInterfaces( 0 )
     , nDocNo(0)
     , nInterfaces( 0 )
-    , bDowning( sal_True ),
-        bInQuit(sal_False),
-        bInvalidateOnUnlock(sal_False)
+    , bDowning( sal_True )
+    , bInQuit( sal_False )
+    , bInvalidateOnUnlock( sal_False )
+    , bODFVersionWarningLater( sal_False )
+
 {
     BasicManagerRepository::registerCreationListener( *pBasMgrListener );
 }
