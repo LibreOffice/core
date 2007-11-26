@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:00:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:53:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -817,10 +817,6 @@ sal_Bool SdrObjEditView::SdrBeginTextEdit(
             if(pWin)
             {
                 sal_Bool bExtraInvalidate(sal_False);
-
-                // #91453#
-                if(!bExtraInvalidate && IsTextDraft())
-                    bExtraInvalidate = sal_True;
 
                 // #71519#
                 if(!bExtraInvalidate)
