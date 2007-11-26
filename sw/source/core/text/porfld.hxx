@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfld.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:16:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:29:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,12 +67,13 @@ protected:
     sal_Bool bAnimated : 1;         // wird von SwGrfNumPortion benutzt
     sal_Bool bNoPaint : 1;          // wird von SwGrfNumPortion benutzt
     sal_Bool bReplace : 1;          // wird von SwGrfNumPortion benutzt
+    sal_Bool bPlaceHolder : 1;
 
     inline void SetFont( SwFont *pNew ) { pFnt = pNew; }
     inline const SwFont *GetFont() const { return pFnt; }
 public:
     SwFldPortion( const SwFldPortion& rFld );
-    SwFldPortion( const XubString &rExpand, SwFont *pFnt = 0 );
+    SwFldPortion( const XubString &rExpand, SwFont *pFnt = 0, sal_Bool bPlaceHolder = sal_False );
     ~SwFldPortion();
 
     void TakeNextOffset( const SwFldPortion* pFld );
