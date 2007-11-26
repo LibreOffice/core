@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:47:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:28:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ rtl::OUString getReleaseNote(const UpdateInfo& rInfo, sal_uInt8 pos, bool autoDo
 namespace
 {
 
-static rtl::OUString getBuildId()
+static rtl::OUString getBootstrapValue(const rtl::OUString& aFile, const rtl::OUString& aValue)
 {
     rtl::OUString aPath, aRet;
     if( osl_getExecutableFile(&aPath.pData) == osl_Process_E_None )
@@ -160,13 +160,27 @@ static rtl::OUString getBuildId()
         if ( lastIndex > 0 )
         {
             aPath = aPath.copy( 0, lastIndex+1 );
-            aPath  += UNISTRING( SAL_CONFIGFILE( "version" ) );
+            aPath  += aFile;
         }
 
         rtl::Bootstrap aVersionFile(aPath);
-        aVersionFile.getFrom(UNISTRING("buildid"), aRet, rtl::OUString());
+        aVersionFile.getFrom(aValue, aRet, rtl::OUString());
     }
     return aRet;
+}
+
+//------------------------------------------------------------------------------
+
+static inline rtl::OUString getBuildId()
+{
+    return getBootstrapValue(UNISTRING( SAL_CONFIGFILE( "version" ) ), UNISTRING("buildid") );
+}
+
+//------------------------------------------------------------------------------
+
+static inline rtl::OUString getBaseInstallation()
+{
+    return getBootstrapValue(UNISTRING( SAL_CONFIGFILE( "bootstrap" ) ), UNISTRING("BaseInstallation") );
 }
 
 //------------------------------------------------------------------------------
@@ -176,6 +190,84 @@ inline bool isObsoleteUpdateInfo(const rtl::OUString& rBuildId)
     return sal_True != rBuildId.equals(getBuildId()) && rBuildId.getLength() > 0;
 }
 
+
+//------------------------------------------------------------------------------
+
+rtl::OUString getImageFromFileName(const rtl::OUString& aFile)
+{
+#ifndef WNT
+    rtl::OUString aUnpackPath;
+    if( osl_getExecutableFile(&aUnpackPath.pData) == osl_Process_E_None )
+    {
+        sal_uInt32 lastIndex = aUnpackPath.lastIndexOf('/');
+        if ( lastIndex > 0 )
+        {
+            aUnpackPath = aUnpackPath.copy( 0, lastIndex+1 );
+            aUnpackPath  += UNISTRING( "unpack_update" );
+        }
+
+        oslFileHandle hOut = NULL;
+        oslProcess hProcess = NULL;
+
+        rtl::OUString aSystemPath;
+        osl::File::getSystemPathFromFileURL(aFile, aSystemPath);
+
+        oslProcessError rc = osl_executeProcess_WithRedirectedIO(
+            aUnpackPath.pData,                                  // [in] Image name
+            &aSystemPath.pData, 1,                              // [in] Arguments
+            osl_Process_WAIT || osl_Process_NORMAL,             // [in] Options
+            NULL,                                               // [in] Security
+            NULL,                                               // [in] Working directory
+            NULL, 0,                                            // [in] Environment variables
+            &hProcess,                                          // [out] Process handle
+            NULL, &hOut, NULL                                   // [out] File handles for redirected I/O
+        );
+
+        if( osl_Process_E_None == rc )
+        {
+            oslProcessInfo aInfo;
+            aInfo.Size = sizeof(oslProcessInfo);
+
+            if( osl_Process_E_None == osl_getProcessInfo(hProcess, osl_Process_EXITCODE, &aInfo) )
+            {
+                if( 0 == aInfo.Code )
+                {
+                    sal_Char   szBuffer[4096];
+                    sal_uInt64 nBytesRead = 0;
+                    const sal_uInt64 nBytesToRead = sizeof(szBuffer) - 1;
+
+                    rtl::OUString aImageName;
+                    while( osl_File_E_None == osl_readFile(hOut, szBuffer, nBytesToRead, &nBytesRead) )
+                    {
+                        sal_Char *pc = szBuffer + nBytesRead;
+                        do
+                        {
+                            *pc = '\0'; --pc;
+                        }
+                        while( ('\n' == *pc) || ('\r' == *pc) );
+
+                        aImageName += rtl::OUString(szBuffer, pc - szBuffer + 1, osl_getThreadTextEncoding());
+
+                        if( nBytesRead < nBytesToRead )
+                            break;
+                    }
+
+                    if( osl::FileBase::E_None == osl::FileBase::getFileURLFromSystemPath(aImageName, aImageName) )
+                        return aImageName;
+                }
+            }
+
+            osl_closeFile(hOut);
+            osl_freeProcessHandle(hProcess);
+        }
+    }
+#endif
+
+    return aFile;
+}
+
+
+//------------------------------------------------------------------------------
 
 static uno::Reference< beans::XPropertySet > createMenuBarUI(
     const uno::Reference< uno::XComponentContext >& xContext,
@@ -882,9 +974,21 @@ UpdateCheck::install()
         {
             rtl::OUString aInstallImage(m_aImageName);
             osl::FileBase::getSystemPathFromFileURL(aInstallImage, aInstallImage);
-            xShellExecute->execute(aInstallImage, rtl::OUString(), c3s::SystemShellExecuteFlags::DEFAULTS);
-            ShutdownThread *pShutdownThread;
-            pShutdownThread = new ShutdownThread( m_xContext );
+
+            rtl::OUString aParameter;
+            sal_Int32 nFlags = c3s::SystemShellExecuteFlags::DEFAULTS;
+#if ( defined LINUX || defined SOLARIS )
+            nFlags = 42;
+            aParameter = getBaseInstallation();
+            if( aParameter.getLength() > 0 )
+                osl::FileBase::getSystemPathFromFileURL(aParameter, aParameter);
+
+            aParameter += UNISTRING(" &");
+            OSL_TRACE(" Length: %d", aParameter.getLength());
+#endif
+            xShellExecute->execute(aInstallImage, aParameter, nFlags);
+            ShutdownThread *pShutdownThread = new ShutdownThread( m_xContext );
+            (void) pShutdownThread;
         }
     } catch(c3s::SystemShellExecuteException&) {
         m_aUpdateHandler->setErrorMessage( m_aUpdateHandler->getDefaultInstErrMsg() );
@@ -1095,7 +1199,7 @@ UpdateCheck::downloadFinished(const rtl::OUString& rLocalFileName)
     rtl::Reference< UpdateCheckConfig > rModel = UpdateCheckConfig::get(m_xContext);
     rModel->clearLocalFileName();
 
-    m_aImageName = rLocalFileName;
+    m_aImageName = getImageFromFileName(rLocalFileName);
     UpdateInfo aUpdateInfo(m_aUpdateInfo);
 
     aGuard.clear();
