@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charmap.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:52:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:10:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,7 @@ SvxShowCharSet::SvxShowCharSet( Window* pParent, const ResId& rResId ) :
 
     SetStyle( GetStyle() | WB_CLIPCHILDREN );
     aVscrollSB.SetScrollHdl( LINK( this, SvxShowCharSet, VscrollHdl ) );
+    aVscrollSB.EnableDrag( TRUE );
     // other settings like aVscroll depend on selected font => see SetFont
 
     bDrag = FALSE;
@@ -384,8 +385,7 @@ void SvxShowCharSet::DrawChars_Impl( int n1, int n2 )
         DrawLine( Point( 0, nY * i ), Point( aOutputSize.Width(), nY * i ) );
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    svtools::ColorConfig aColorConfig;
-    Color aWindowTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+    const Color aWindowTextColor( rStyleSettings.GetFieldTextColor() );
     Color aHighlightColor( rStyleSettings.GetHighlightColor() );
     Color aHighlightTextColor( rStyleSettings.GetHighlightTextColor() );
     Color aFaceColor( rStyleSettings.GetFaceColor() );
@@ -487,8 +487,7 @@ void SvxShowCharSet::InitSettings( BOOL bForeground, BOOL bBackground )
 
     if ( bForeground )
     {
-        svtools::ColorConfig aColorConfig;
-        Color aTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+        Color aTextColor( rStyleSettings.GetDialogTextColor() );
 
         if ( IsControlForeground() )
             aTextColor = GetControlForeground();
@@ -760,8 +759,8 @@ void SvxShowText::Paint( const Rectangle& )
 {
     Color aTextCol = GetTextColor();
 
-    svtools::ColorConfig aColorConfig;
-    Color aWindowTextColor( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    const Color aWindowTextColor( rStyleSettings.GetDialogTextColor() );
     SetTextColor( aWindowTextColor );
 
     const String aText = GetText();
@@ -959,18 +958,9 @@ IMPL_LINK( SvxCharMapData, OKHdl, OKButton *, EMPTYARG )
     if ( !aStr.Len() )
     {
         sal_UCS4 cChar = aShowSet.GetSelectCharacter();
-        if( cChar >= 0x10000 )
-        {
-            // TODO: replace once there is a String(sal_UCS4) constructor
-            sal_Unicode cU16[2];
-            cChar -= 0x10000;
-            cU16[0] = static_cast<sal_Unicode>(0xD800 + (cChar >> 10));
-            cU16[1] = static_cast<sal_Unicode>(0xDC00 + (cChar & 0x3FF));
-            aStr = String( cU16, 2);
-        }
-        else if( cChar > 0 )
-            aStr = static_cast<sal_Unicode>(cChar);
-        aShowText.SetText( aStr );
+        // using the new UCS4 constructor
+    rtl::OUString aOUStr( &cChar, 1 );
+        aShowText.SetText( aOUStr );
     }
     mpDialog->EndDialog( TRUE );
     return 0;
@@ -1069,18 +1059,9 @@ IMPL_LINK( SvxCharMapData, CharSelectHdl, Control *, EMPTYARG )
         else
         {
             sal_UCS4 cChar = aShowSet.GetSelectCharacter();
-            if( cChar >= 0x10000 )
-            {
-                // TODO: replace once there is a String(sal_UCS4) constructor
-                sal_Unicode cU16[2];
-                cChar -= 0x10000;
-                cU16[0] = static_cast<sal_Unicode>(0xD800 + (cChar >> 10));
-                cU16[1] = static_cast<sal_Unicode>(0xDC00 + (cChar & 0x3FF));
-                aText += String( cU16, 2 );
-            }
-            else if( cChar > 0 )
-                aText += static_cast<sal_Unicode>(cChar);
-            aShowText.SetText( aText );
+            // using the new UCS4 constructor
+            rtl::OUString aOUStr( &cChar, 1 );
+            aShowText.SetText( aText + aOUStr );
         }
 
     }
@@ -1099,17 +1080,8 @@ IMPL_LINK( SvxCharMapData, CharHighlightHdl, Control *, EMPTYARG )
     // show char sample
     if ( bSelect )
     {
-        if( cChar >= 0x10000 )
-        {
-            // TODO: replace once there is a String(sal_UCS4) constructor
-            sal_Unicode cU16[2];
-            unsigned n = cChar - 0x10000;
-            cU16[0] = static_cast<sal_Unicode>(0xD800 + (n >> 10));
-            cU16[1] = static_cast<sal_Unicode>(0xDC00 + (n & 0x3FF));
-            aText = String( cU16, 2);
-        }
-        else if( cChar > 0 )
-            aText = static_cast<sal_Unicode>(cChar);
+        // using the new UCS4 constructor
+        aText = rtl::OUString( &cChar, 1 );
 
         const Subset* pSubset = NULL;
         if( pSubsetMap )
