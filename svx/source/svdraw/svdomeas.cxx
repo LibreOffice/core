@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdomeas.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:06:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:55:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -663,15 +663,9 @@ sal_Bool SdrMeasureObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRe
     // #b4899532# if not filled but fill draft, avoid object being invisible in using
     // a hair linestyle and COL_LIGHTGRAY
     SfxItemSet aItemSet(rSet);
-    BOOL bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
-    if(bIsFillDraft && XLINE_NONE == ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue())
-    {
-        ImpPrepareLocalItemSetForDraftLine(aItemSet);
-    }
 
     // prepare line geometry
-    BOOL bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
-    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet, bIsLineDraft) );
+    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet) );
 
     // Shadows
     BOOL bShadOn = ((SdrShadowItem&)(aItemSet.Get(SDRATTR_SHADOW))).GetValue();
@@ -1372,7 +1366,7 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
     SetTextDirty();
 }
 
-::std::auto_ptr< SdrLineGeometry > SdrMeasureObj::CreateLinePoly(sal_Bool bForceOnePixel, sal_Bool bForceTwoPixel, sal_Bool bIsLineDraft ) const
+::std::auto_ptr< SdrLineGeometry > SdrMeasureObj::CreateLinePoly(sal_Bool bForceOnePixel, sal_Bool bForceTwoPixel) const
 {
     basegfx::B2DPolyPolygon aAreaPolyPolygon;
     basegfx::B2DPolyPolygon aLinePolyPolygon;
@@ -1381,8 +1375,8 @@ void SdrMeasureObj::RestGeoData(const SdrObjGeoData& rGeo)
     XPolyPolygon aTmpPolyPolygon(TakeXorPoly(TRUE));
 
     // get ImpLineStyleParameterPack
-    ImpLineStyleParameterPack aLineAttr(GetMergedItemSet(), bForceOnePixel || bForceTwoPixel || bIsLineDraft);
-    ImpLineGeometryCreator aLineCreator(aLineAttr, aAreaPolyPolygon, aLinePolyPolygon, bIsLineDraft);
+    ImpLineStyleParameterPack aLineAttr(GetMergedItemSet(), bForceOnePixel || bForceTwoPixel);
+    ImpLineGeometryCreator aLineCreator(aLineAttr, aAreaPolyPolygon, aLinePolyPolygon);
     UINT16 nCount(aTmpPolyPolygon.Count());
     basegfx::B2DPolygon aCandidate;
     UINT16 nLoopStart(0);
