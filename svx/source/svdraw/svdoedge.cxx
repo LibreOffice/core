@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoedge.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:05:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -458,8 +458,6 @@ void SdrEdgeObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 sal_Bool SdrEdgeObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     bool bHideContour(IsHideContour());
-    bool bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
-    bool bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
 
     // prepare ItemSet of this object
     const SfxItemSet& rSet = GetObjectItemSet();
@@ -472,16 +470,12 @@ sal_Bool SdrEdgeObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
     // #b4899532# if not filled but fill draft, avoid object being invisible in using
     // a hair linestyle and COL_LIGHTGRAY
     SfxItemSet aItemSet(rSet);
-    if(bIsFillDraft && XLINE_NONE == ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue())
-    {
-        ImpPrepareLocalItemSetForDraftLine(aItemSet);
-    }
 
     // #103692# prepare ItemSet for shadow fill attributes
     SfxItemSet aShadowSet(aItemSet);
 
     // prepare line geometry
-    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet, bIsLineDraft) );
+    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet) );
 
     // Shadows
     if(!bHideContour && ImpSetShadowAttributes(aItemSet, aShadowSet))
@@ -509,17 +503,9 @@ sal_Bool SdrEdgeObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
     // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
     rXOut.SetLineAttr(aEmptySet);
 
-    if(bIsFillDraft)
+    if(bHideContour)
     {
-        // perepare ItemSet to avoid XOut filling
-        rXOut.SetFillAttr(aEmptySet);
-    }
-    else
-    {
-        if(bHideContour)
-        {
-            rXOut.SetFillAttr(aItemSet);
-        }
+        rXOut.SetFillAttr(aItemSet);
     }
 
     if (!bHideContour) {
