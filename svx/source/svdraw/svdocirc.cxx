@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:57:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:54:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,8 +388,6 @@ void SdrCircObj::RecalcBoundRect()
 sal_Bool SdrCircObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     bool bHideContour(IsHideContour());
-    bool bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
-    bool bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
 
     // prepare ItemSet of this object
     const SfxItemSet& rSet = GetObjectItemSet();
@@ -402,21 +400,17 @@ sal_Bool SdrCircObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
     // #b4899532# if not filled but fill draft, avoid object being invisible in using
     // a hair linestyle and COL_LIGHTGRAY
     SfxItemSet aItemSet(rSet);
-    if(bIsFillDraft && XLINE_NONE == ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue())
-    {
-        ImpPrepareLocalItemSetForDraftLine(aItemSet);
-    }
 
     // #103692# prepare ItemSet for shadow fill attributes
     SfxItemSet aShadowSet(aItemSet);
 
     // prepare line geometry
-    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet, bIsLineDraft) );
+    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet) );
 
     // Shadows
     if(!bHideContour && ImpSetShadowAttributes(aItemSet, aShadowSet))
     {
-        if( meCircleKind==OBJ_CARC || bIsFillDraft )
+        if( meCircleKind==OBJ_CARC )
             rXOut.SetFillAttr(aEmptySet);
         else
             rXOut.SetFillAttr(aShadowSet);
@@ -474,8 +468,7 @@ sal_Bool SdrCircObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
 
     // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
     rXOut.SetLineAttr(aEmptySet);
-
-    rXOut.SetFillAttr( bIsFillDraft ? aEmptySet : aItemSet );
+    rXOut.SetFillAttr( aItemSet );
 
     if (!bHideContour) {
         if (PaintNeedsXPolyCirc())
@@ -485,13 +478,12 @@ sal_Bool SdrCircObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
                 const XPolygon& rXP=GetXPoly(); // In dieser Reihenfolge, damit bXPolyIsLine gueltig ist.
 
                 // #100127# Output original geometry for metafiles
-                ImpGraphicFill aFill( *this, rXOut, bIsFillDraft ? aEmptySet : aItemSet );
-
+                ImpGraphicFill aFill( *this, rXOut, aItemSet );
                 rXOut.DrawPolygon(rXP.getB2DPolygon());
             }
         } else {
             // #100127# Output original geometry for metafiles
-            ImpGraphicFill aFill( *this, rXOut, bIsFillDraft ? aEmptySet : aItemSet );
+            ImpGraphicFill aFill( *this, rXOut, aItemSet );
 
             if (meCircleKind==OBJ_CIRC) {
                 rXOut.DrawEllipse(aRect);
