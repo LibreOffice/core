@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.265 $
+ *  $Revision: 1.266 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 13:06:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:15:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -745,6 +745,7 @@ void Window::ImplInitWindowData( WindowType nType )
     mpWindowImpl->mbDrawSelectionBackground = FALSE;    // TRUE: draws transparent window background to indicate (toolbox) selection
     mpWindowImpl->mbIsInTaskPaneList = FALSE;           // TRUE: window was added to the taskpanelist in the topmost system window
     mpWindowImpl->mnNativeBackground  = 0;              // initialize later, depends on type
+    mpWindowImpl->mbCallHandlersDuringInputDisabled = FALSE; // TRUE: call event handlers even if input is disabled
 
     mbEnableRTL         = TRUE;         // TRUE: this outdev will be mirrored if RTL window layout (UI mirroring) is globally active
 }
@@ -1513,7 +1514,7 @@ PointerStyle Window::ImplGetMousePointer() const
     PointerStyle    ePointerStyle;
     BOOL            bWait = FALSE;
 
-    if ( IsEnabled() && IsInputEnabled() )
+    if ( IsEnabled() && IsInputEnabled() && ! IsInModalMode() )
         ePointerStyle = GetPointer().GetStyle();
     else
         ePointerStyle = POINTER_ARROW;
@@ -3937,21 +3938,22 @@ void Window::ImplGrabFocus( USHORT nFlags )
     // => prepare for the worst
     ImplDelData aDogTag( this );
 
-    // Es soll immer das Client-Fenster den Focus bekommen. Falls
-    // wir mal auch Border-Fenstern den Focus geben wollen,
-    // muessten wir bei allen GrabFocus()-Aufrufen in VCL dafuer
-    // sorgen, das es an der Stelle gemacht wird. Dies wuerde
-    // beispielsweise bei ToTop() der Fall sein.
+    // Currently the client window should always get the focus
+    // Should the border window at some point be focusable
+    // we need to change all GrabFocus() instances in VCL,
+    // e.g. in ToTop()
 
     if ( mpWindowImpl->mpClientWindow )
     {
-        // Wegen nicht ganz durchdachtem Konzept muessen wir hier
-        // leider noch einen Hack einbauen, damit wenn Dialoge
-        // geschlossen werden der Focus wieder auf das richtige
-        // Fenster zurueckgesetzt wird
+        // For a lack of design we need a little hack here to
+        // ensure that dialogs on close pass the focus back to
+        // the correct window
         if ( mpWindowImpl->mpLastFocusWindow && (mpWindowImpl->mpLastFocusWindow != this) &&
              !(mpWindowImpl->mnDlgCtrlFlags & WINDOW_DLGCTRL_WANTFOCUS) &&
-             mpWindowImpl->mpLastFocusWindow->IsEnabled() && mpWindowImpl->mpLastFocusWindow->IsInputEnabled() )
+             mpWindowImpl->mpLastFocusWindow->IsEnabled() &&
+             mpWindowImpl->mpLastFocusWindow->IsInputEnabled() &&
+             ! mpWindowImpl->mpLastFocusWindow->IsInModalMode()
+             )
             mpWindowImpl->mpLastFocusWindow->GrabFocus();
         else
             mpWindowImpl->mpClientWindow->GrabFocus();
@@ -3959,21 +3961,23 @@ void Window::ImplGrabFocus( USHORT nFlags )
     }
     else if ( mpWindowImpl->mbFrame )
     {
-        // Wegen nicht ganz durchdachtem Konzept muessen wir hier
-        // leider noch einen Hack einbauen, damit wenn Dialoge
-        // geschlossen werden der Focus wieder auf das richtige
-        // Fenster zurueckgesetzt wird
+        // For a lack of design we need a little hack here to
+        // ensure that dialogs on close pass the focus back to
+        // the correct window
         if ( mpWindowImpl->mpLastFocusWindow && (mpWindowImpl->mpLastFocusWindow != this) &&
              !(mpWindowImpl->mnDlgCtrlFlags & WINDOW_DLGCTRL_WANTFOCUS) &&
-             mpWindowImpl->mpLastFocusWindow->IsEnabled() && mpWindowImpl->mpLastFocusWindow->IsInputEnabled() )
+             mpWindowImpl->mpLastFocusWindow->IsEnabled() &&
+             mpWindowImpl->mpLastFocusWindow->IsInputEnabled() &&
+             ! mpWindowImpl->mpLastFocusWindow->IsInModalMode()
+             )
         {
             mpWindowImpl->mpLastFocusWindow->GrabFocus();
             return;
         }
     }
 
-    // If the Windows is disabled, then we doesn't change the focus
-    if ( !IsEnabled() || !IsInputEnabled() )
+    // If the Window is disabled, then we don't change the focus
+    if ( !IsEnabled() || !IsInputEnabled() || IsInModalMode() )
         return;
 
     // we only need to set the focus if it is not already set
@@ -4622,7 +4626,7 @@ Window::~Window()
             else if ( ImplIsOverlapWindow() )
                 pParent = mpWindowImpl->mpOverlapWindow;
 
-            if ( pParent && pParent->IsEnabled() && pParent->IsInputEnabled() )
+            if ( pParent && pParent->IsEnabled() && pParent->IsInputEnabled() && ! pParent->IsInModalMode() )
                 pParent->GrabFocus();
             else
                 mpWindowImpl->mpFrameWindow->GrabFocus();
@@ -6431,7 +6435,10 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
                 // Focus umsetzen
                 if ( !(nFlags & SHOW_NOFOCUSCHANGE) && HasChildPathFocus() )
                 {
-                    if ( mpWindowImpl->mpOverlapWindow->IsEnabled() && mpWindowImpl->mpOverlapWindow->IsInputEnabled() )
+                    if ( mpWindowImpl->mpOverlapWindow->IsEnabled() &&
+                         mpWindowImpl->mpOverlapWindow->IsInputEnabled() &&
+                         ! mpWindowImpl->mpOverlapWindow->IsInModalMode()
+                         )
                         mpWindowImpl->mpOverlapWindow->GrabFocus();
                 }
             }
@@ -6695,6 +6702,20 @@ void Window::Enable( bool bEnable, bool bChild )
 
     if ( IsReallyVisible() )
         ImplGenerateMouseMove();
+}
+
+// -----------------------------------------------------------------------
+
+void Window::SetCallHandlersOnInputDisabled( bool bCall )
+{
+    mpWindowImpl->mbCallHandlersDuringInputDisabled = bCall ? TRUE : FALSE;
+}
+
+// -----------------------------------------------------------------------
+
+bool Window::IsCallHandlersOnInputDisabled() const
+{
+    return mpWindowImpl->mbCallHandlersDuringInputDisabled ? true : false;
 }
 
 // -----------------------------------------------------------------------
@@ -9346,11 +9367,31 @@ BOOL Window::IsInModalMode() const
 }
 void Window::ImplIncModalCount()
 {
-    mpWindowImpl->mpFrameWindow->mpWindowImpl->mpFrameData->mnModalMode++;
+    Window* pFrameWindow = mpWindowImpl->mpFrameWindow;
+    Window* pParent = pFrameWindow;
+    while( pFrameWindow )
+    {
+        pFrameWindow->mpWindowImpl->mpFrameData->mnModalMode++;
+        while( pParent && pParent->mpWindowImpl->mpFrameWindow == pFrameWindow )
+        {
+            pParent = pParent->GetParent();
+        }
+        pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow : NULL;
+    }
 }
 void Window::ImplDecModalCount()
 {
-    mpWindowImpl->mpFrameWindow->mpWindowImpl->mpFrameData->mnModalMode--;
+    Window* pFrameWindow = mpWindowImpl->mpFrameWindow;
+    Window* pParent = pFrameWindow;
+    while( pFrameWindow )
+    {
+        pFrameWindow->mpWindowImpl->mpFrameData->mnModalMode--;
+        while( pParent && pParent->mpWindowImpl->mpFrameWindow == pFrameWindow )
+        {
+            pParent = pParent->GetParent();
+        }
+        pFrameWindow = pParent ? pParent->mpWindowImpl->mpFrameWindow : NULL;
+    }
 }
 BOOL Window::ImplIsInTaskPaneList()
 {
