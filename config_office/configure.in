@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-11-26 13:17:47 $
+dnl * Date: $Date: 2007-11-26 18:03:39 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.231 $ )
+AC_REVISION( $Revision: 1.232 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -769,7 +769,7 @@ case "$build_os" in
       			AC_MSG_ERROR([only sparc and i386 processors are supported])
    		fi
 		;;
-	linux-gnu)
+	linux-gnu*)
 		test_gtk=yes
 		build_cairo=yes
 		test_kde=yes
