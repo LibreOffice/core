@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:35:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:38:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 // Resource-Id's ------------------------------------------------------------
 
 // Bitte FIRSTFREE pflegen!!! (gilt nicht f"ur Strings)
-#define RID_SVX_FIRSTFREE                   300
+#define RID_SVX_FIRSTFREE                   302
 
 // ResId fuer die Hintergrund-TabPage
 #define RID_SVXPAGE_BACKGROUND              (RID_SVX_START +   1)
@@ -431,6 +431,8 @@
 #define RID_SVXDLG_ASSIGNCOMPONENT          (RID_SVX_START + 297)
 #define RID_SVXPAGE_ONLINEUPDATE            (RID_SVX_START + 298)
 #define RID_OPTPAGE_CHART_DEFCOLORS         (RID_SVX_START + 299)
+#define RID_SVXDLG_SECURITY_OPTIONS         (RID_SVX_START + 300)
+#define RID_SVXDLG_WEBCONNECTION_INFO       (RID_SVX_START + 301)
 // !!! please update RID_SVX_FIRSTFREE !!! see line 46
 
 // Strings ------------------------------------------------------------------
