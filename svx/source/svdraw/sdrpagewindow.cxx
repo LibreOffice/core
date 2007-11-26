@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpagewindow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:57:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:53:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,6 @@ SdrPaintInfoRec* SdrPageWindow::ImpCreateNewPageInfoRec(const Rectangle& rDirtyR
     const sal_Bool bPrinter(GetPaintWindow().OutputToPrinter());
     Rectangle aCheckRect(rDirtyRect);
     Size a1PixSiz(GetPaintWindow().GetOutputDevice().PixelToLogic(Size(1, 1)));
-    const SdrView& rView = mrPageView.GetView();
 
     aCheckRect.Left() -= a1PixSiz.Width();
     aCheckRect.Top() -= a1PixSiz.Height();
@@ -242,22 +241,6 @@ SdrPaintInfoRec* SdrPageWindow::ImpCreateNewPageInfoRec(const Rectangle& rDirtyR
     pInfoRec->bPrinter = bPrinter;
     pInfoRec->aDirtyRect = rDirtyRect;
     pInfoRec->aCheckRect = aCheckRect;
-
-    if(bPrinter)
-    {
-        if(rView.IsLineDraftPrn()) nPaintMode |= SDRPAINTMODE_DRAFTLINE;
-        if(rView.IsFillDraftPrn()) nPaintMode |= SDRPAINTMODE_DRAFTFILL;
-        if(rView.IsTextDraftPrn()) nPaintMode |= SDRPAINTMODE_DRAFTTEXT;
-        if(rView.IsGrafDraftPrn()) nPaintMode |= SDRPAINTMODE_DRAFTGRAF;
-    }
-    else
-    {
-        if(rView.IsLineDraft()) nPaintMode |= SDRPAINTMODE_DRAFTLINE;
-        if(rView.IsFillDraft()) nPaintMode |= SDRPAINTMODE_DRAFTFILL;
-        if(rView.IsTextDraft()) nPaintMode |= SDRPAINTMODE_DRAFTTEXT;
-        if(rView.IsGrafDraft()) nPaintMode |= SDRPAINTMODE_DRAFTGRAF;
-        if(rView.IsHideGrafDraft()) nPaintMode |= SDRPAINTMODE_HIDEDRAFTGRAF;
-    }
 
     if(pId)
     {
