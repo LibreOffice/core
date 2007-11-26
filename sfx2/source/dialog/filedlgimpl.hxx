@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlgimpl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:32:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:47:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,6 +219,7 @@ namespace sfx2
                                     FileDialogHelper* _pAntiImpl,
                                     const short nDialogType,
                                     sal_Int64 nFlags,
+                                    sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG,
                                     Window* _pPreferredParentWindow = NULL
                                 );
         virtual                 ~FileDialogHelper_Impl();
