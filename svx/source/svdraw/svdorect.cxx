@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdorect.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:08:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:56:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,8 +284,7 @@ void SdrRectObj::TakeUnrotatedSnapRect(Rectangle& rRect) const
 //////////////////////////////////////////////////////////////////////////////
 // #i25616#
 
-void SdrRectObj::ImpDoPaintRectObjShadow(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec,
-    sal_Bool bPaintFill, sal_Bool bPaintLine) const
+void SdrRectObj::ImpDoPaintRectObjShadow(XOutputDevice& rXOut, sal_Bool bPaintFill, sal_Bool bPaintLine) const
 {
     const bool bHideContour(IsHideContour());
     const SfxItemSet& rSet = GetObjectItemSet();
@@ -293,21 +292,11 @@ void SdrRectObj::ImpDoPaintRectObjShadow(XOutputDevice& rXOut, const SdrPaintInf
 
     if(!bHideContour && ImpSetShadowAttributes(rSet, aShadowSet))
     {
-        const sal_Bool bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
-
         // perepare ItemSet to avoid old XOut line drawing
         SfxItemSet aEmptySet(*rSet.GetPool());
         aEmptySet.Put(XLineStyleItem(XLINE_NONE));
         aEmptySet.Put(XFillStyleItem(XFILL_NONE));
-
-        if( bIsFillDraft )
-        {
-            rXOut.SetFillAttr(aEmptySet);
-        }
-        else
-        {
-            rXOut.SetFillAttr(aShadowSet);
-        }
+        rXOut.SetFillAttr(aShadowSet);
 
         sal_uInt32 nXDist(((SdrShadowXDistItem&)(rSet.Get(SDRATTR_SHADOWXDIST))).GetValue());
         sal_uInt32 nYDist(((SdrShadowYDistItem&)(rSet.Get(SDRATTR_SHADOWYDIST))).GetValue());
@@ -338,18 +327,12 @@ void SdrRectObj::ImpDoPaintRectObjShadow(XOutputDevice& rXOut, const SdrPaintInf
         if(bPaintLine)
         {
             // prepare line geometry
-            const sal_Bool bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
-
             // #b4899532# if not filled but fill draft, avoid object being invisible in using
             // a hair linestyle and COL_LIGHTGRAY
             SfxItemSet aItemSet(rSet);
-            if(bIsFillDraft && XLINE_NONE == ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue())
-            {
-                ImpPrepareLocalItemSetForDraftLine(aItemSet);
-            }
 
             // prepare line geometry
-            ::std::auto_ptr< SdrLineGeometry > pLineGeometry(ImpPrepareLineGeometry(rXOut, aItemSet, bIsLineDraft));
+            ::std::auto_ptr< SdrLineGeometry > pLineGeometry(ImpPrepareLineGeometry(rXOut, aItemSet));
 
             // new shadow line drawing
             if( pLineGeometry.get() )
@@ -364,8 +347,7 @@ void SdrRectObj::ImpDoPaintRectObjShadow(XOutputDevice& rXOut, const SdrPaintInf
 //////////////////////////////////////////////////////////////////////////////
 // #i25616#
 
-void SdrRectObj::ImpDoPaintRectObj(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec,
-    sal_Bool bPaintFill, sal_Bool bPaintLine) const
+void SdrRectObj::ImpDoPaintRectObj(XOutputDevice& rXOut, sal_Bool bPaintFill, sal_Bool bPaintLine) const
 {
     const bool bHideContour(IsHideContour());
 
@@ -381,14 +363,12 @@ void SdrRectObj::ImpDoPaintRectObj(XOutputDevice& rXOut, const SdrPaintInfoRec& 
 
         // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
         rXOut.SetLineAttr(aEmptySet);
-
-        const sal_Bool bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
-        rXOut.SetFillAttr( bIsFillDraft ? aEmptySet : rSet );
+        rXOut.SetFillAttr( rSet );
 
         if (!bHideContour && bPaintFill)
         {
             // #100127# Output original geometry for metafiles
-            ImpGraphicFill aFill( *this, rXOut, bIsFillDraft ? aEmptySet : rSet );
+            ImpGraphicFill aFill( *this, rXOut, rSet );
             const sal_Int32 nEckRad(GetEckenradius());
 
             if (PaintNeedsXPoly(nEckRad))
@@ -408,18 +388,12 @@ void SdrRectObj::ImpDoPaintRectObj(XOutputDevice& rXOut, const SdrPaintInfoRec& 
         if( !bHideContour && bPaintLine)
         {
             // prepare line geometry
-            const sal_Bool bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
-
             // #b4899532# if not filled but fill draft, avoid object being invisible in using
             // a hair linestyle and COL_LIGHTGRAY
             SfxItemSet aItemSet(rSet);
-            if(bIsFillDraft && XLINE_NONE == ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue())
-            {
-                ImpPrepareLocalItemSetForDraftLine(aItemSet);
-            }
 
             // prepare line geometry
-            ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet, bIsLineDraft) );
+            ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet) );
 
             if( pLineGeometry.get() )
             {
@@ -443,10 +417,10 @@ sal_Bool SdrRectObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
     sal_Bool bOk(sal_True);
 
     // draw shadow
-    ImpDoPaintRectObjShadow(rXOut, rInfoRec, sal_True, sal_True);
+    ImpDoPaintRectObjShadow(rXOut, sal_True, sal_True);
 
     // draw geometry
-    ImpDoPaintRectObj(rXOut, rInfoRec, sal_True, sal_True);
+    ImpDoPaintRectObj(rXOut, sal_True, sal_True);
 
     // draw text
     if(HasText() && !LineIsOutsideGeometry())
