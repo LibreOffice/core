@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:21:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:35:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1627,6 +1627,22 @@ void SdrOle2Obj::ImpSetVisAreaSize()
 
 void SdrOle2Obj::NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact)
 {
+    if( pModel && !pModel->isLocked() )
+    {
+        GetObjRef();
+        if ( xObjRef.is() && ( xObjRef->getStatus( GetAspect() ) & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE ) )
+        {
+            // if the object needs recompose on resize
+            // the client site should be created before the resize will take place
+            // check whether there is no client site and create it if necessary
+            if ( !SfxInPlaceClient::GetClient( pModel->GetPersist(), xObjRef.GetObject() )
+              && !( mpImpl->pLightClient && xObjRef->getClientSite() == uno::Reference< embed::XEmbeddedClient >( mpImpl->pLightClient ) ) )
+            {
+                AddOwnLightClient();
+            }
+        }
+    }
+
     SdrRectObj::NbcResize(rRef,xFact,yFact);
     if (aGeo.nShearWink!=0 || aGeo.nDrehWink!=0) { // kleine Korrekturen
         if (aGeo.nDrehWink>=9000 && aGeo.nDrehWink<27000) {
