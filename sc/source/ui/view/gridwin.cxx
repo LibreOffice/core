@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:43:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:21:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,7 @@
 #include <svx/svditer.hxx>
 #include <svx/svdpagv.hxx>
 
+#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
@@ -2032,7 +2033,15 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 }
             }
             else
-                Sound::Beep();      // nothing to expand/collapse
+            {
+                // Check if the data area is double-clicked.
+
+                std::vector<sheet::DataPilotFieldFilter> aFilters;
+                if ( !pDPObj->IsServiceData() && pDPObj->GetDataFieldPositionData( aFilters, aCellPos ) )
+                    pViewData->GetView()->ShowDataPilotSourceData( *pDPObj, aFilters );
+                else
+                    Sound::Beep();  // nothing to expand/collapse/show
+            }
 
             return;
         }
