@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:44:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,9 @@
 #include <sfx2/request.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <objshimp.hxx>
+
+#include "sfxresid.hxx"
+#include "doc.hrc"
 
 using namespace ::com::sun::star;
 
@@ -495,11 +498,13 @@ struct SfxDocumentInfoObject_Impl
         // we can't set it too high because every name/value pair will be written to the file (even if empty)
         // currently our dialog has only 4 user keys so 4 is still a reasonable number
         aUserKeys.realloc(4);
-        const ::rtl::OUString aInf( DEFINE_CONST_UNICODE( "Info " ) );
-        for( sal_Int32 i = 0; i<4; ++i )
+        const String sInfo( SfxResId( STR_DOCINFO_INFOFIELD ) );
+        const String sVar( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
+        for( sal_Int32 i = 0; i < MAXDOCUSERKEYS; ++i )
         {
-            aUserKeys[i].First = aInf;
-            aUserKeys[i].First += String::CreateFromInt32(i+1);
+            String sTitle( sInfo );
+            sTitle.SearchAndReplace( sVar, String::CreateFromInt32(i+1) );
+            aUserKeys[i].First = sTitle;
         }
     }
 
