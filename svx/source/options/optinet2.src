@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 10:01:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:41:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -440,125 +440,96 @@ TabPage RID_SVXPAGE_INET_SECURITY
     Hide = TRUE;
     Text [ en-US ] = "Security";
 
-    FixedLine FL_SEC_SECOPTIONS
+    FixedLine FL_SEC_SECURITYOPTIONS
     {
         Pos = MAP_APPFONT( COL_0, ROW_0 );
-        Size = MAP_APPFONT( COL_6-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ en-US ] = "Security Options";
+        Size = MAP_APPFONT( COL_5-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Text [ en-US ] = "Security options and warnings";
     };
-    FixedText FI_SEC_SECOPTIONS
+    FixedText FI_SEC_SECURITYOPTIONS
     {
         Pos = MAP_APPFONT( COL_1, ROW_1 );
-        Size = MAP_APPFONT( COL_5-COL_1, 2*RSC_CD_FIXEDLINE_HEIGHT );
+        Size = MAP_APPFONT( COL_2-COL_1, 3*RSC_CD_FIXEDLINE_HEIGHT );
         Wordbreak = TRUE;
-        Text [ en-US ] = "Warn if document contains recorded changes, versions, hidden information or notes:";
+        Text [ en-US ] = "Adjust security related options and define warnings for hidden information in documents.";
     };
-    FixedImage FI_SEC_SAVEORSENDDOCS
+    PushButton PB_SEC_SECURITYOPTIONS
     {
-        Pos = MAP_APPFONT( COL_2 - 7, ROW_2 + 2 );
-        Size = MAP_APPFONT( 6, 6 );
+        Pos = MAP_APPFONT( COL_3, ROW_2a );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "Options...";
     };
-    CheckBox CB_SEC_SAVEORSENDDOCS
+    FixedLine FL_SEC_PASSWORDS
     {
-        Pos = MAP_APPFONT( COL_2, ROW_2 );
-        Size = MAP_APPFONT( CHECKBOX_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ en-US ] = "When saving or sending";
+        Pos = MAP_APPFONT( COL_0, ROW_2 );
+        Size = MAP_APPFONT( COL_5-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Text [ en-US ] = "Passwords for web connections";
     };
-    FixedImage FI_SEC_SIGNDOCS
+    CheckBox CB_SEC_SAVEPASSWORDS
     {
-        Pos = MAP_APPFONT( COL_2 + CHECKBOX_WIDTH + RSC_SP_CTRL_X - 7, ROW_2 + 2 );
-        Size = MAP_APPFONT( 6, 6 );
+        Pos = MAP_APPFONT( COL_1, ROW_3 );
+        Size = MAP_APPFONT( COL_2-COL_1, RSC_CD_CHECKBOX_HEIGHT );
+        Text [ en-US ] = "Persistently save passwords protected by a master password";
     };
-    CheckBox CB_SEC_SIGNDOCS
+    PushButton PB_SEC_MASTERPASSWORD
     {
-        Pos = MAP_APPFONT( COL_2 + CHECKBOX_WIDTH + RSC_SP_CTRL_X, ROW_2 );
-        Size = MAP_APPFONT( CHECKBOX_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ en-US ] = "When signing";
+        Pos = MAP_APPFONT( COL_3, ROW_3 - 2 );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "Master Password...";
     };
-    FixedImage FI_SEC_PRINTDOCS
-    {
-        Pos = MAP_APPFONT( COL_2 - 7, ROW_3 + 2 );
-        Size = MAP_APPFONT( 6, 6 );
-    };
-    CheckBox CB_SEC_PRINTDOCS
-    {
-        Pos = MAP_APPFONT( COL_2, ROW_3 );
-        Size = MAP_APPFONT( CHECKBOX_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ en-US ] = "When printing";
-    };
-    FixedImage FI_SEC_CREATEPDF
-    {
-        Pos = MAP_APPFONT( COL_2 + CHECKBOX_WIDTH + RSC_SP_CTRL_X - 7, ROW_3 + 2 );
-        Size = MAP_APPFONT( 6, 6 );
-    };
-    CheckBox CB_SEC_CREATEPDF
-    {
-        Pos = MAP_APPFONT( COL_2 + CHECKBOX_WIDTH + RSC_SP_CTRL_X, ROW_3 );
-        Size = MAP_APPFONT( CHECKBOX_WIDTH, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ en-US ] = "When creating PDF files";
-    };
-    FixedImage FI_SEC_REMOVEPERSINFO
-    {
-        Pos = MAP_APPFONT( COL_1 - 7, ROW_4 + 2 );
-        Size = MAP_APPFONT( 6, 6 );
-    };
-    CheckBox CB_SEC_REMOVEPERSINFO
+    FixedText FI_SEC_MASTERPASSWORD
     {
         Pos = MAP_APPFONT( COL_1, ROW_4 );
-        Size = MAP_APPFONT( COL_5-COL_1, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ en-US ] = "Remove personal information on saving";
+        Size = MAP_APPFONT( COL_2-COL_1, 4*RSC_CD_FIXEDLINE_HEIGHT );
+        Wordbreak = TRUE;
+        Text [ en-US ] = "Passwords are protected by a master password. You will be asked to enter it once per session, if OpenOffice.org retrieves a password from the protected password list.";
     };
-    FixedImage FI_SEC_RECOMMPASSWD
+    PushButton PB_SEC_SHOWPASSWORDS
     {
-        Pos = MAP_APPFONT( COL_1 - 7, ROW_5 + 2 );
-        Size = MAP_APPFONT( 6, 6 );
-    };
-    CheckBox CB_SEC_RECOMMPASSWD
-    {
-        Pos = MAP_APPFONT( COL_1, ROW_5 );
-        Size = MAP_APPFONT( COL_5-COL_1, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ en-US ] = "Recommend password protection on saving";
+        Pos = MAP_APPFONT( COL_3, ROW_5a );
+        Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
+        Text [ en-US ] = "Show Passwords...";
     };
     FixedLine FL_SEC_MACROSEC
     {
-        Pos = MAP_APPFONT( COL_0, ROW_6 );
-        Size = MAP_APPFONT( COL_6-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Pos = MAP_APPFONT( COL_0, ROW_5 );
+        Size = MAP_APPFONT( COL_5-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ en-US ] = "Macro security";
     };
     FixedText FI_SEC_MACROSEC
     {
-        Pos = MAP_APPFONT( COL_1, ROW_7 );
-        Size = MAP_APPFONT( COL_3-COL_1, ROW_9 - ROW_7 - RSC_SP_FLGR_SPACE_Y );
+        Pos = MAP_APPFONT( COL_1, ROW_6 );
+        Size = MAP_APPFONT( COL_2-COL_1, ROW_8 - ROW_6 - RSC_SP_FLGR_SPACE_Y );
         Wordbreak = TRUE;
         Text [ en-US ] = "Adjust the security level for executing macros and specify trusted macro developers.";
     };
     PushButton PB_SEC_MACROSEC
     {
-        Pos = MAP_APPFONT( COL_4, ROW_8 );
+        Pos = MAP_APPFONT( COL_3, ROW_7 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         Text [ en-US ] = "Macro Security...";
     };
     FixedLine FL_SEC_FILESHARING
     {
-        Pos = MAP_APPFONT( COL_0, ROW_9 );
-        Size = MAP_APPFONT( COL_6-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
+        Pos = MAP_APPFONT( COL_0, ROW_8 );
+        Size = MAP_APPFONT( COL_5-COL_0, RSC_CD_FIXEDLINE_HEIGHT );
         Text [ en-US ] = "File sharing options for this document";
     };
     CheckBox CB_SEC_RECOMMREADONLY
     {
-        Pos = MAP_APPFONT( COL_1, ROW_10 );
-        Size = MAP_APPFONT( COL_5-COL_1, RSC_CD_CHECKBOX_HEIGHT );
+        Pos = MAP_APPFONT( COL_1, ROW_9 );
+        Size = MAP_APPFONT( COL_2-COL_1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Open this document in read-only mode";
     };
     CheckBox CB_SEC_RECORDCHANGES
     {
-        Pos = MAP_APPFONT( COL_1, ROW_11 );
-        Size = MAP_APPFONT( COL_5-COL_1, RSC_CD_CHECKBOX_HEIGHT );
+        Pos = MAP_APPFONT( COL_1, ROW_10 );
+        Size = MAP_APPFONT( COL_2-COL_1, RSC_CD_CHECKBOX_HEIGHT );
         Text [ en-US ] = "Record changes";
     };
     PushButton PB_SEC_PROTRECORDS
     {
-        Pos = MAP_APPFONT( COL_2, ROW_12 );
+        Pos = MAP_APPFONT( COL_3, ROW_11a );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
     };
     String STR_SEC_PROTRECORDS
@@ -568,6 +539,10 @@ TabPage RID_SVXPAGE_INET_SECURITY
     String STR_SEC_UNPROTRECORDS
     {
         Text [ en-US ] = "Unprotect...";
+    };
+    String STR_SEC_NOPASSWDSAVE
+    {
+        Text [ en-US ] = "Disabling the function to persistently store passwords deletes the list of passwords stored and resets the master password.\n\nDo you want to delete password list and reset master password?";
     };
 };
 
