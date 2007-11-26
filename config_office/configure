@@ -2955,7 +2955,7 @@ echo "$as_me: error: only sparc and i386 processors are supported" >&2;}
    { (exit 1); exit 1; }; }
    		fi
 		;;
-	linux-gnu)
+	linux-gnu*)
 		test_gtk=yes
 		build_cairo=yes
 		test_kde=yes
