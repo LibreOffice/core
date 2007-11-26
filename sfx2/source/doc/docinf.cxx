@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:57:53 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:34:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,8 @@
 #define SFXDOCINFO_THEMELENMAX      63
 #define SFXDOCINFO_COMMENTLENMAX    255
 #define SFXDOCINFO_KEYWORDLENMAX    127
+
+#define NR_BUILTIN_PROPS 23
 
 // stream names
 #define STREAM_SUMMARYINFO      "\005SummaryInformation"
@@ -333,7 +335,7 @@ sal_uInt32 SfxDocumentInfo::LoadPropertySet( SotStorage* pStorage )
             ::rtl::OUString aPropName = xCustomSect->GetPropertyName( *aIt );
             uno::Any aPropValue = xCustomSect->GetAnyValue( *aIt );
             if( (aPropName.getLength() > 0) && aPropValue.hasValue() )
-                SetCustomProperty( aPropName, aPropValue );
+                InsertCustomProperty( aPropName, aPropValue );
         }
     }
 
@@ -536,7 +538,7 @@ String SfxDocumentInfo::GetUserKeyWord(USHORT n) const
     return n<GetUserKeyCount() ? String(pImp->xDocInfo->getUserFieldValue(n)) : String();
 }
 
-BOOL SfxDocumentInfo::SetCustomProperty(const ::rtl::OUString& aPropertyName, const uno::Any& aValue)
+BOOL SfxDocumentInfo::InsertCustomProperty(const ::rtl::OUString& aPropertyName, const uno::Any& aValue)
 {
     /*SfxExtendedItemPropertyMap aProp;
     aProp.pName    = 0; // superflous -> held as hash key.
@@ -995,4 +997,33 @@ void SfxDocumentInfo::ResetUserData( const String& rAuthor )
             pImp->pListener->mpDoc->FlushDocInfo();
         pImp->pListener->bGotModified = FALSE;
     }
+}
+
+uno::Sequence < ::rtl::OUString > SfxDocumentInfo::GetCustomPropertyNames() const
+{
+    uno::Reference< beans::XPropertySetInfo > xSetInfo = pImp->xSet->getPropertySetInfo();
+    const uno::Sequence< beans::Property > lProps = xSetInfo->getProperties();
+    sal_Int32 nProps = lProps.getLength();
+    nProps -= NR_BUILTIN_PROPS;
+    if ( nProps > 0 )
+    {
+        uno::Sequence < ::rtl::OUString > aRet(nProps);
+        sal_Int32 c = lProps.getLength();
+        sal_Int32 n = 0;
+        for (sal_Int32 i=0; i<c; ++i)
+        {
+            if ( lProps[i].Attributes & ::com::sun::star::beans::PropertyAttribute::REMOVABLE )
+            {
+                if ( n == nProps )
+                    aRet.realloc(++nProps);
+                aRet[n++] = lProps[i].Name;
+            }
+        }
+
+        if ( n < nProps )
+            aRet.realloc(n);
+        return aRet;
+    }
+
+    return uno::Sequence < ::rtl::OUString >();
 }
