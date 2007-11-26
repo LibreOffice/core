@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 16:13:05 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:39:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     SVLook = TRUE ;
     OutputSize = TRUE ;
     Moveable = TRUE ;
-    Size = MAP_APPFONT ( 260 , 169 ) ;
+    Size = MAP_APPFONT ( 260 , 210 ) ;
     Text [ en-US ] = "Print" ;
     FixedLine FL_PRINTER
     {
@@ -59,7 +59,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     ListBox LB_NAMES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 60 , 12 ) ;
+        Pos = MAP_APPFONT ( 60 , 13 ) ;
         Size = MAP_APPFONT ( 125 , 80 ) ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -73,134 +73,157 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     FixedText FT_STATUS
     {
         Pos = MAP_APPFONT ( 12 , 29 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
         Text [ en-US ] = "Status" ;
     };
     FixedText FI_STATUS
     {
         Pos = MAP_APPFONT ( 60 , 29 ) ;
-        Size = MAP_APPFONT ( 188 , 10 ) ;
+        Size = MAP_APPFONT ( 188 , 8 ) ;
     };
     FixedText FT_TYPE
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
         Text [ en-US ] = "Type" ;
     };
     FixedText FI_TYPE
     {
         Pos = MAP_APPFONT ( 60 , 40 ) ;
-        Size = MAP_APPFONT ( 188 , 10 ) ;
+        Size = MAP_APPFONT ( 188 , 8 ) ;
     };
     FixedText FT_LOCATION
     {
         Pos = MAP_APPFONT ( 12 , 51 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
         Text [ en-US ] = "Location" ;
     };
     FixedText FI_LOCATION
     {
         Pos = MAP_APPFONT ( 60 , 51 ) ;
-        Size = MAP_APPFONT ( 188 , 10 ) ;
+        Size = MAP_APPFONT ( 188 , 8 ) ;
     };
     FixedText FT_COMMENT
     {
         Pos = MAP_APPFONT ( 12 , 62 ) ;
-        Size = MAP_APPFONT ( 45 , 10 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
         Text [ en-US ] = "Comment" ;
     };
     FixedText FI_COMMENT
     {
         Pos = MAP_APPFONT ( 60 , 62 ) ;
-        Size = MAP_APPFONT ( 188 , 10 ) ;
+        Size = MAP_APPFONT ( 188 , 8 ) ;
     };
     FixedText FI_FAXNO
     {
-        Pos = MAP_APPFONT ( 12 , 77 ) ;
-        Size = MAP_APPFONT ( 75 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 75 ) ;
+        Size = MAP_APPFONT ( 45 , 8 ) ;
         Text [ en-US ] = "Fax number";
     };
     Edit EDT_FAXNO
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 90 , 77 );
-        Size = MAP_APPFONT ( 141 , 12 );
+        Pos = MAP_APPFONT ( 60 , 73 );
+        Size = MAP_APPFONT ( 188 , 12 );
     };
     CheckBox CBX_FILEPRINT
     {
-        Pos = MAP_APPFONT ( 12 , 77 ) ;
+        Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         Text [ en-US ] = "Print to file" ;
     };
     FixedText FI_PRINTFILE
     {
-        Pos = MAP_APPFONT ( 90 , 77 ) ;
-        Size = MAP_APPFONT ( 141 , 12 ) ;
+        Pos = MAP_APPFONT ( 90 , 74 ) ;
+        Size = MAP_APPFONT ( 158 , 8 ) ;
     };
+    /*!!!
     PushButton BTN_BROWSE
     {
         Pos = MAP_APPFONT ( 234 , 75 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Text = "~..." ;
+        Hide = TRUE ;
+    };
+    */
+    FixedLine FL_PRINT
+    {
+        Pos = MAP_APPFONT ( 6 , 91 ) ;
+        Size = MAP_APPFONT ( 117 , 8 ) ;
+        Text [ en-US ] = "Print" ;
+    };
+    RadioButton RBT_ALL_SHEETS
+    {
+        Pos = MAP_APPFONT ( 12 , 102 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Text [ en-US ] = "All sheets" ;
+    };
+    RadioButton RBT_SELECTED_SHEETS
+    {
+        Pos = MAP_APPFONT ( 12 , 115 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Text [ en-US ] = "Selected sheets" ;
+    };
+    RadioButton RBT_SELECTED_CELLS
+    {
+        Pos = MAP_APPFONT ( 12 , 128 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Text [ en-US ] = "Selected cells" ;
     };
     FixedLine FL_PRINTRANGE
     {
-        Pos = MAP_APPFONT ( 6 , 96 ) ;
+        Pos = MAP_APPFONT ( 6 , 141 ) ;
         Size = MAP_APPFONT ( 117 , 8 ) ;
         Text [ en-US ] = "Print range" ;
     };
     RadioButton RBT_ALL
     {
-        Pos = MAP_APPFONT ( 12 , 105 ) ;
+        Pos = MAP_APPFONT ( 12 , 152 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
-        Text [ en-US ] = "All" ;
+        Text [ en-US ] = "All pages" ;
     };
     RadioButton RBT_PAGES
     {
-        Pos = MAP_APPFONT ( 12 , 117 ) ;
+        Pos = MAP_APPFONT ( 12 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Text [ en-US ] = "Pages" ;
-    };
-    RadioButton RBT_SELECTION
-    {
-        Pos = MAP_APPFONT ( 12 , 129 ) ;
-        Size = MAP_APPFONT ( 105 , 10 ) ;
-        Text [ en-US ] = "Selection" ;
     };
     Edit EDT_PAGES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 65 , 116 ) ;
+        Pos = MAP_APPFONT ( 65 , 164 ) ;
         Size = MAP_APPFONT ( 52 , 12 ) ;
+    };
+    RadioButton RBT_SELECTION
+    {
+        Hide = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 179 ) ;
+        Size = MAP_APPFONT ( 105 , 10 ) ;
+        Text [ en-US ] = "Selection" ;
     };
     FixedLine FL_SEPCOPIESRANGE
     {
-        Pos = MAP_APPFONT( 126, 105 );
-        Size = MAP_APPFONT( 1, 35 );
+        Pos = MAP_APPFONT( 126, 102 );
+        Size = MAP_APPFONT( 1, 74 );
         Vert = TRUE;
-    };
-    FixedLine FL_SEPBUTTONLINE
-    {
-        Pos = MAP_APPFONT( 0, 140 );
-        Size = MAP_APPFONT( 260, 8 );
     };
     FixedLine FL_COPIES
     {
-        Pos = MAP_APPFONT ( 129 , 96 ) ;
+        Pos = MAP_APPFONT ( 129 , 91 ) ;
         Size = MAP_APPFONT ( 125 , 8 ) ;
         Text [ en-US ] = "Copies" ;
     };
     FixedText FT_COPIES
     {
-        Pos = MAP_APPFONT ( 135 , 106 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Pos = MAP_APPFONT ( 135 , 104 ) ;
+        Size = MAP_APPFONT ( 63 , 8 ) ;
         Text [ en-US ] = "Number of copies" ;
     };
     NumericField NUM_COPIES
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 201 , 105 ) ;
-        Size = MAP_APPFONT ( 39 , 12 ) ;
+        Pos = MAP_APPFONT ( 201 , 102 ) ;
+        Size = MAP_APPFONT ( 33 , 12 ) ;
         Repeat = TRUE ;
         Spin = TRUE ;
         Minimum = 1 ;
@@ -217,39 +240,42 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     };
     FixedImage IMG_COLLATE
     {
-        Pos = MAP_APPFONT ( 132 , 118 ) ;
+        Pos = MAP_APPFONT ( 132 , 117 ) ;
         Size = MAP_APPFONT ( 67 , 22 ) ;
         Hide = TRUE ;
     };
     FixedImage IMG_NOT_COLLATE
     {
-        Pos = MAP_APPFONT ( 132 , 118 ) ;
+        Pos = MAP_APPFONT ( 132 , 117 ) ;
         Size = MAP_APPFONT ( 67 , 22 ) ;
         Hide = TRUE ;
+    };
+    FixedLine FL_SEPBUTTONLINE
+    {
+        Pos = MAP_APPFONT( 0, 179 );
+        Size = MAP_APPFONT( 260, 8 );
     };
     PushButton BTN_OPTIONS
     {
         Hide = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 149 ) ;
+        Pos = MAP_APPFONT ( 6 , 190 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? Zusätze... : Zusõtze... */
-        /* ### ACHTUNG: Neuer Text in Resource? Zusätze... : Zusõtze... */
         Text [ en-US ] = "~Options..." ;
     };
     OKButton BTN_OK
     {
-        Pos = MAP_APPFONT ( 95 , 149 ) ;
+        Pos = MAP_APPFONT ( 95 , 190 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
     };
     CancelButton BTN_CANCEL
     {
-        Pos = MAP_APPFONT ( 148 , 149 ) ;
+        Pos = MAP_APPFONT ( 148 , 190 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     HelpButton BTN_HELP
     {
-        Pos = MAP_APPFONT ( 204 , 149 ) ;
+        Pos = MAP_APPFONT ( 204 , 190 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
     String STR_ALLFILTER
