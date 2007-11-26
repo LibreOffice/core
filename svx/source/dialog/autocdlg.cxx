@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autocdlg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:24:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:09:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -882,23 +882,9 @@ IMPL_LINK(OfaSwAutoFmtOptionsPage, EditHdl, PushButton*, EMPTYARG)
             Font aFont(pMapDlg->GetCharFont());
             *pUserData->pFont = aFont;
             sal_UCS4 aChar = pMapDlg->GetChar();
-            // TODO: replace code below once the String gets an UCS4 constructor
-            sal_Unicode cUTF16[2];
-            xub_StrLen nLen;
-            if( aChar <= 0xFFFF )
-            {
-                cUTF16[0] = static_cast<sal_Unicode>(aChar);
-                nLen = 1;
-            }
-            else
-            {
-                aChar -= 0x10000;
-                cUTF16[0] = static_cast<sal_Unicode>(0xD800+(aChar>>10));
-                cUTF16[1] = static_cast<sal_Unicode>(0xDC00+(aChar&0x3FF));
-                nLen = 2;
-
-            }
-            *pUserData->pString = String( cUTF16, nLen);
+            // using the UCS4 constructor
+            rtl::OUString aOUStr( &aChar, 1 );
+            *pUserData->pString = aOUStr;
         }
         delete pMapDlg;
     }
@@ -2315,50 +2301,31 @@ IMPL_LINK( OfaQuoteTabPage, StdQuoteHdl, PushButton*, pBtn )
     return 0;
 }
 
-/*-----------------15.10.96 16.25-------------------
-
---------------------------------------------------*/
-
+// --------------------------------------------------
 
 String OfaQuoteTabPage::ChangeStringExt_Impl( sal_UCS4 cChar )
 {
-    if( cChar )
-    {
-        // TODO: replace code below once the String gets an UCS4 constructor
-        sal_Unicode cUTF16[2];
-        xub_StrLen nLen;
-        if( cChar <= 0xFFFF )
-        {
-            cUTF16[0] = static_cast<sal_Unicode>(cChar);
-            nLen = 1;
-        }
-        else
-        {
-            cChar -= 0x10000;
-            cUTF16[0] = static_cast<sal_Unicode>(0xD800+(cChar>>10));
-            cUTF16[1] = static_cast<sal_Unicode>(0xDC00+(cChar&0x3FF));
-            nLen = 2;
-        }
-        String sExt( cUTF16, nLen );
-        sExt += String::CreateFromAscii(" ( 0x");
+    if( !cChar )
+        return sStandard;
 
-        //convert value to hex display
-        xub_StrLen nHexLen = 4;
-           while( cChar >= (1U << (4*nHexLen)) )
-            ++nHexLen;
-        String sHex = String( nHexLen );
-        for( xub_StrLen i = 0; i < nLen; ++i )
-        {
-            sal_Unicode cValue = static_cast<sal_Unicode>(cChar & 0x0f);
-            cChar >>= 4;
-            sal_Unicode cResult = cValue > 9 ? ('A' + cValue - 10) : ('0' + cValue);
-            sHex.SetChar( nHexLen - i - 1, cResult);
-        }
-        sExt += sHex;
-        sExt += String::CreateFromAscii(" )");
-        return sExt;
+    // convert codepoint value to unicode-hex string
+    sal_UCS4 aStrCodes[32] = { 0, ' ', '(', 'U', '+', '0' };
+    aStrCodes[0] = cChar;
+    int nFullLen = 5;
+    int nHexLen = 4;
+    while( (cChar >> (4*nHexLen)) != 0 )
+        ++nHexLen;
+    for( int i = nHexLen; --i >= 0;)
+    {
+        sal_UCS4 cHexDigit = ((cChar >> (4*i)) & 0x0f) + '0';
+        if( cHexDigit > '9' )
+            cHexDigit += 'A' - ('9' + 1);
+        aStrCodes[ nFullLen++ ] = cHexDigit;
     }
-    return sStandard;
+    aStrCodes[ nFullLen++ ] = ')';
+    // using the new UCS4 constructor
+    rtl::OUString aOUStr( aStrCodes, nFullLen );
+    return aOUStr;
 }
 
 OfaAutoCompleteTabPage::OfaAutoCompleteTabPage( Window* pParent,
