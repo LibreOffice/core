@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ofopxmlhelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:50:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:52:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< i
     ::rtl::OUString aRelElement( RTL_CONSTASCII_USTRINGPARAM( "Relationship" ) );
     ::rtl::OUString aIDAttr( RTL_CONSTASCII_USTRINGPARAM( "Id" ) );
     ::rtl::OUString aTypeAttr( RTL_CONSTASCII_USTRINGPARAM( "Type" ) );
-    ::rtl::OUString aTargetTypeAttr( RTL_CONSTASCII_USTRINGPARAM( "TargetType" ) );
+    ::rtl::OUString aTargetModeAttr( RTL_CONSTASCII_USTRINGPARAM( "TargetMode" ) );
     ::rtl::OUString aTargetAttr( RTL_CONSTASCII_USTRINGPARAM( "Target" ) );
     ::rtl::OUString aCDATAString( RTL_CONSTASCII_USTRINGPARAM ( "CDATA" ) );
     ::rtl::OUString aWhiteSpace( RTL_CONSTASCII_USTRINGPARAM ( " " ) );
@@ -126,7 +126,7 @@ void SAL_CALL OFOPXMLHelper::WriteRelationsInfoSequence( const uno::Reference< i
         {
             if ( aSequence[nInd][nSecInd].First.equals( aIDAttr )
               || aSequence[nInd][nSecInd].First.equals( aTypeAttr )
-              || aSequence[nInd][nSecInd].First.equals( aTargetTypeAttr )
+              || aSequence[nInd][nSecInd].First.equals( aTargetModeAttr )
               || aSequence[nInd][nSecInd].First.equals( aTargetAttr ) )
             {
                 pAttrList->AddAttribute( aSequence[nInd][nSecInd].First, aCDATAString, aSequence[nInd][nSecInd].Second );
@@ -245,7 +245,7 @@ OFOPXMLHelper::OFOPXMLHelper( sal_uInt16 nFormat )
 , m_aRelElement( RTL_CONSTASCII_USTRINGPARAM( "Relationship" ) )
 , m_aIDAttr( RTL_CONSTASCII_USTRINGPARAM( "Id" ) )
 , m_aTypeAttr( RTL_CONSTASCII_USTRINGPARAM( "Type" ) )
-, m_aTargetTypeAttr( RTL_CONSTASCII_USTRINGPARAM( "TargetType" ) )
+, m_aTargetModeAttr( RTL_CONSTASCII_USTRINGPARAM( "TargetMode" ) )
 , m_aTargetAttr( RTL_CONSTASCII_USTRINGPARAM( "Target" ) )
 , m_aTypesElement( RTL_CONSTASCII_USTRINGPARAM( "Types" ) )
 , m_aDefaultElement( RTL_CONSTASCII_USTRINGPARAM( "Default" ) )
@@ -320,7 +320,7 @@ void SAL_CALL OFOPXMLHelper::startElement( const ::rtl::OUString& aName, const u
 
             ::rtl::OUString aTypeValue = xAttribs->getValueByName( m_aTypeAttr );
             ::rtl::OUString aTargetValue = xAttribs->getValueByName( m_aTargetAttr );
-            ::rtl::OUString aTargetTypeValue = xAttribs->getValueByName( m_aTargetTypeAttr );
+            ::rtl::OUString aTargetModeValue = xAttribs->getValueByName( m_aTargetModeAttr );
 
             m_aResultSeq[nNewEntryNum-1][++nAttrNum - 1].First = m_aIDAttr;
             m_aResultSeq[nNewEntryNum-1][nAttrNum - 1].Second = aIDValue;
@@ -337,10 +337,10 @@ void SAL_CALL OFOPXMLHelper::startElement( const ::rtl::OUString& aName, const u
                 m_aResultSeq[nNewEntryNum-1][nAttrNum - 1].Second = aTargetValue;
             }
 
-            if ( aTargetTypeValue.getLength() )
+            if ( aTargetModeValue.getLength() )
             {
-                m_aResultSeq[nNewEntryNum-1][++nAttrNum - 1].First = m_aTargetTypeAttr;
-                m_aResultSeq[nNewEntryNum-1][nAttrNum - 1].Second = aTargetTypeValue;
+                m_aResultSeq[nNewEntryNum-1][++nAttrNum - 1].First = m_aTargetModeAttr;
+                m_aResultSeq[nNewEntryNum-1][nAttrNum - 1].Second = aTargetModeValue;
             }
 
             m_aResultSeq[nNewEntryNum-1].realloc( nAttrNum );
