@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:27:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:03:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1437,8 +1437,6 @@ uno::Any SAL_CALL SdXImpressDocument::getPropertyValue( const OUString& Property
 
                 const Rectangle& aRect = pEmbeddedObj->GetVisArea();
                 awt::Rectangle aVisArea( aRect.nLeft, aRect.nTop, aRect.getWidth(), aRect.getHeight() );
-
-                DBG_ASSERT( (aVisArea.Width >= 0) && (aVisArea.Height >= 0), "corrupted visible area for sd document! [CL]" );
                 aAny <<= aVisArea;
             }
             break;
