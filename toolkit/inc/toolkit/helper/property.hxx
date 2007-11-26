@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:54:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:25:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,6 +193,7 @@ namespace rtl {
 #define BASEPROPERTY_TREE_ROWHEIGHT                 130
 #define BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING    131
 #define BASEPROPERTY_TREE_END                       131
+#define BASEPROPERTY_DIALOGSOURCEURL                132
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
 #define BASEPROPERTY_FONTDESCRIPTORPART_START           1000
