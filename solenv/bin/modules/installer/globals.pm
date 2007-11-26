@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.78 $
+#   $Revision: 1.79 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-23 13:34:13 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 13:15:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,7 @@ BEGIN
     $linuxlibrarypatchlevel = "1.1";
     @linuxlinks = ();
     @linkrpms = ();
+        $archiveformat = "";
 
     $strip = 1;
     $solarjava = 0;
@@ -336,6 +337,7 @@ BEGIN
         $libextension = "\.dll";
         $isunix = 0;
         $iswin = 1;
+                $archiveformat = ".zip";
         $wrapcmd = "";
         %savedmapping = ();
         %savedrevmapping = ();
@@ -354,6 +356,7 @@ BEGIN
         $quote = "\'";
         $isunix = 0;
         $iswin = 1;
+                $archiveformat = ".zip";
         $wrapcmd = $ENV{'WRAPCMD'}." -env ";
         %savedmapping = ();
         %savedrevmapping = ();
@@ -371,10 +374,12 @@ BEGIN
         if ( $plat =~ /darwin/i )
         {
             $libextension = "\.dylib";
+            $archiveformat = ".dmg";
         }
         else
         {
             $libextension = "\.so";
+            $archiveformat = ".tar.gz";
         }
         $quote = "\'";
         $isunix = 1;
