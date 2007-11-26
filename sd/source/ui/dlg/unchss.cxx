@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unchss.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:11:08 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:01:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 #include "stlsheet.hxx"
-
+#include "glob.hrc"
 
 
 TYPEINIT1(StyleSheetUndoAction, SdUndoAction);
@@ -94,6 +94,38 @@ StyleSheetUndoAction::StyleSheetUndoAction(SdDrawDocument* pTheDoc,
     USHORT nPos = aName.Search(aSep);
     if( nPos != STRING_NOTFOUND )
         aName.Erase(0, nPos + aSep.Len());
+
+    if (aName == String(SdResId(STR_LAYOUT_TITLE)))
+    {
+        aName = String(SdResId(STR_PSEUDOSHEET_TITLE));
+    }
+    else if (aName == String(SdResId(STR_LAYOUT_SUBTITLE)))
+    {
+        aName = String(SdResId(STR_PSEUDOSHEET_SUBTITLE));
+    }
+    else if (aName == String(SdResId(STR_LAYOUT_BACKGROUND)))
+    {
+        aName = String(SdResId(STR_PSEUDOSHEET_BACKGROUND));
+    }
+    else if (aName == String(SdResId(STR_LAYOUT_BACKGROUNDOBJECTS)))
+    {
+        aName = String(SdResId(STR_PSEUDOSHEET_BACKGROUNDOBJECTS));
+    }
+    else if (aName == String(SdResId(STR_LAYOUT_NOTES)))
+    {
+        aName = String(SdResId(STR_PSEUDOSHEET_NOTES));
+    }
+    else
+    {
+        String aOutlineStr(SdResId(STR_PSEUDOSHEET_OUTLINE));
+        nPos = aName.Search(aOutlineStr);
+        if (nPos != STRING_NOTFOUND)
+        {
+            String aNumStr(aName.Copy(aOutlineStr.Len()));
+            aName = String(SdResId(STR_LAYOUT_OUTLINE));
+            aName += aNumStr;
+        }
+    }
 
     // Platzhalter durch Vorlagennamen ersetzen
     nPos = aComment.Search(sal_Unicode('$'));
