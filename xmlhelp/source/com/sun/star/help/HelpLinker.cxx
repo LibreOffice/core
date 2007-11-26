@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpLinker.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 12:59:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:04:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,11 +418,11 @@ int readInt(std::fstream &in)
 {
     HCDBG(std::cerr << "want to read at " << in.tellg() << std::endl);
     int ret = 0;
-    for (char i = 3; i >= 0; --i)
+    for (int i = 3; i >= 0; --i)
     {
         unsigned char byte;
         in.read( (char*)&byte, 1 );
-        ret |= (byte << (i*8));
+        ret |= (static_cast<unsigned int>(byte) << (i*8));
         HCDBG(fprintf(stderr, "inputting %x ret is now %x\n", byte, ret));
     }
     return ret;
