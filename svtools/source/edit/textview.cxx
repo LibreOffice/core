@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 15:03:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:05:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1957,6 +1957,8 @@ bool TextView::ImplTruncateNewText( rtl::OUString& rNewText ) const
     }
 
     ULONG nMaxLen = mpImpl->mpTextEngine->GetMaxTextLen();
+    if( nMaxLen == 0 )   // 0 means unlimited
+        nMaxLen = 65534; // limit to string api
     ULONG nCurLen = mpImpl->mpTextEngine->GetTextLen();
 
     sal_uInt32 nNewLen = rNewText.getLength();
