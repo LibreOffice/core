@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-14 08:23:39 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 12:47:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,44 +63,51 @@ CONFIGURE_ACTION=config
 CONFIGURE_FLAGS=-I$(SYSBASE)$/usr$/include -L$(SYSBASE)$/usr$/lib shared 
 
 BUILD_DIR=.
-BUILD_ACTION=make
+BUILD_ACTION=make CC='$(CC)'
 
 OUT2LIB = libssl.*
 OUT2LIB += libcrypto.*
 OUT2INC += include/openssl/*
 
 .IF "$(OS)" == "LINUX"
+
 PATCH_FILE_NAME=openssllnx.patch
+ADDITIONAL_FILES:= \
+    libcrypto_OOo_0_9_8e.map \
+    libssl_OOo_0_9_8e.map
 # if you build openssl as shared library you have to patch the Makefile.Shared "LD_LIBRARY_PATH=$$LD_LIBRARY_PATH \"
 #BUILD_ACTION=make 'SHARED_LDFLAGS=-Wl,--version-script=./lib$$(SHLIBDIRS)_OOo_0_9_8e.map'
 .ENDIF
 
 .IF "$(OS)" == "SOLARIS"
 PATCH_FILE_NAME=opensslsol.patch
+ADDITIONAL_FILES:= \
+    libcrypto_OOo_0_9_8e.map \
+    libssl_OOo_0_9_8e.map
 #BUILD_ACTION=make 'SHARED_LDFLAGS=-G -dy -z text -M./lib$$$$$$$$(SHLIBDIRS)_OOo_0_9_8e.map'
 .ENDIF
 
 .IF "$(OS)" == "WNT"
+.IF "$(COM)" != "gcc"
 
-#CYGWIN
-OUT2BIN = cygcrypto-0.9.8.dll
-OUT2BIN += cygssl-0.9.8.dll
-# 4NT
-.IF "$(USE_SHELL)"== "4nt"
+.IF "$(MAKETARGETS)" == ""
 PATCH_FILE_NAME=openssl.patch
+# The env. var PERL is used by nmake, and nmake insists on '\'s
+PERL!:=$(subst,/,\ $(normpath,1 $(PERL)))
+.EXPORT : PERL
+.ENDIF
+
 CONFIGURE_DIR=. 
-CONFIGURE_ACTION=$(PERL) configure
+CONFIGURE_ACTION=$(PERL:s!\!/!) configure
 CONFIGURE_FLAGS=VC-WIN32
 BUILD_DIR=.
-BUILD_ACTION=cmd /c "ms\do_ms $(PERL)" && nmake -f ms/ntdll.mak
+BUILD_ACTION=cmd /c "ms$(EMQ)\do_ms.bat $(PERL:s!\!/!) && set CC=test" && nmake -f ms/ntdll.mak
 
-OUT2LIB = out32dll\ssleay32.lib
-OUT2LIB += out32dll\libeay32.lib
-OUT2LIB += out32dll\ssleay32.lib
-OUT2LIB += out32dll\libeay32.lib
-OUT2BIN = out32dll\ssleay32.dll
-OUT2BIN += out32dll\libeay32.dll
-OUT2INC = inc32\openssl\*
+OUT2LIB = out32dll$/ssleay32.lib
+OUT2LIB += out32dll$/libeay32.lib
+OUT2BIN = out32dll$/ssleay32.dll
+OUT2BIN += out32dll$/libeay32.dll
+OUT2INC = inc32$/openssl$/*
 .ENDIF
 .ENDIF
 
