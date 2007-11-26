@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews8.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:13:41 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:03:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,6 +325,7 @@ void DrawViewShell::FuTemp01(SfxRequest& rReq)
         }
         break;
 
+        case SID_SELECT_BACKGROUND:
         case SID_PAGESETUP:  // BASIC ??
         {
             SetCurrentFunction( FuPage::Create( this, GetActiveWindow(), mpDrawView, GetDoc(), rReq ) );
