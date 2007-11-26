@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loadenv.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:16:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:45:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1455,9 +1455,9 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     // such search is allowed for special requests only ...
     // or better its not allowed for some requests in general :-)
     if (
-        (!TargetHelper::matchSpecialTarget(m_sTarget, TargetHelper::E_DEFAULT)                                                        ) ||
+        ( ! TargetHelper::matchSpecialTarget(m_sTarget, TargetHelper::E_DEFAULT)                                               ) ||
         (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_ASTEMPLATE() , sal_False) == sal_True) ||
-        (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN()     , sal_False) == sal_True) ||
+//      (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN()     , sal_False) == sal_True) ||
         (m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_OPENNEWVIEW(), sal_False) == sal_True)
        )
     {
@@ -1489,6 +1489,12 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
     // document has different versions! Then its URLs are the same ...
     sal_Int16 nNewVersion = m_lMediaDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_VERSION(), (sal_Int16)(-1));
 
+    // will be used to save the first hidden frame referring the searched model
+    // Normaly we are interested on visible frames ... but if there is no such visible
+    // frame we referr to any hidden frame also (but as fallback only).
+    css::uno::Reference< css::frame::XFrame > xHiddenTask;
+    css::uno::Reference< css::frame::XFrame > xTask;
+
     sal_Int32 count = xTaskList->getCount();
     for (sal_Int32 i=0; i<count; ++i)
     {
@@ -1497,23 +1503,32 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             // locate model of task
             // Note: Without a model there is no chance to decide if
             // this task contains the searched document or not!
-            css::uno::Reference< css::frame::XFrame > xTask;
             xTaskList->getByIndex(i) >>= xTask;
             if (!xTask.is())
                 continue;
 
             css::uno::Reference< css::frame::XController > xController = xTask->getController();
             if (!xController.is())
+            {
+                xTask.clear ();
                 continue;
+            }
 
             css::uno::Reference< css::frame::XModel > xModel = xController->getModel();
             if (!xModel.is())
+            {
+                xTask.clear ();
                 continue;
+            }
 
             // don't check the complete URL here.
             // use its main part - ignore optional jumpmarks!
-            if (!m_aURL.Main.equals(xModel->getURL()))
+            const ::rtl::OUString sURL = xModel->getURL();
+            if (!m_aURL.Main.equals(sURL))
+            {
+                xTask.clear ();
                 continue;
+            }
 
             // get the original load arguments from the current document
             // and decide if its realy the same then the one will be.
@@ -1522,34 +1537,58 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
             ::comphelper::MediaDescriptor lOldDocDescriptor(xModel->getArgs());
 
             if (lOldDocDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_VERSION(), (sal_Int32)(-1)) != nNewVersion)
+            {
+                xTask.clear ();
                 continue;
+            }
 
-            if (lOldDocDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN(), sal_False) == sal_True)
+            // Hidden frames are special.
+            // They will be used as "last chance" if there is no visible frame pointing to the same model.
+            // Safe the result but continue with current loop might be looking for other visible frames.
+            ::sal_Bool bIsHidden = lOldDocDescriptor.getUnpackedValueOrDefault(::comphelper::MediaDescriptor::PROP_HIDDEN(), sal_False);
+            if (
+                (   bIsHidden       ) &&
+                ( ! xHiddenTask.is())
+               )
+            {
+                xHiddenTask = xTask;
+                xTask.clear ();
                 continue;
+            }
 
-            // Now we are shure, that this task includes the searched document.
-            // It's time to activate it. As special feature we try to jump internaly
-            // if an optional jumpmark is given too.
-            if (m_aURL.Mark.getLength())
-                impl_jumpToMark(xTask, m_aURL);
-
-            // bring it to front ...
-            impl_makeFrameWindowVisible(xTask->getContainerWindow(), sal_True);
-
-            // It doesn't matter if we was able to bring it to front.
-            // But we have found such task and can return it as our result.
-            return xTask;
+            // We found a visible task pointing to the right model ...
+            // Break search.
+            break;
         }
-        catch(const css::uno::RuntimeException&)
-            { throw; }
+        catch(const css::uno::RuntimeException& exRun)
+            { throw exRun; }
         catch(const css::uno::Exception&)
             { continue; }
+    }
+
+    css::uno::Reference< css::frame::XFrame > xResult;
+    if (xTask.is())
+        xResult = xTask;
+    else
+    if (xHiddenTask.is())
+        xResult = xHiddenTask;
+
+    if (xResult.is())
+    {
+        // Now we are shure, that this task includes the searched document.
+        // It's time to activate it. As special feature we try to jump internaly
+        // if an optional jumpmark is given too.
+        if (m_aURL.Mark.getLength())
+            impl_jumpToMark(xResult, m_aURL);
+
+        // bring it to front and make sure it's visible...
+        impl_makeFrameWindowVisible(xResult->getContainerWindow(), sal_True);
     }
 
     aReadLock.unlock();
     // <- SAFE
 
-    return css::uno::Reference< css::frame::XFrame >();
+    return xResult;
 }
 
 /*-----------------------------------------------
