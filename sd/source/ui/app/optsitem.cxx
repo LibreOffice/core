@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:29:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:33:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -414,12 +414,7 @@ SdOptionsContents::SdOptionsContents( USHORT nConfigId, BOOL bUseConfig ) :
                       ( ( SDCFG_DRAW == nConfigId ) ?
                         B2U( "Office.Draw/Content" ) :
                         B2U( "Office.Impress/Content" ) ) :
-                      OUString() ),
-
-    bExternGraphic( FALSE ),
-    bOutlineMode( FALSE ),
-    bHairlineMode( FALSE),
-    bNoText( FALSE )
+                      OUString() )
 {
     EnableModify( TRUE );
 }
@@ -428,20 +423,13 @@ SdOptionsContents::SdOptionsContents( USHORT nConfigId, BOOL bUseConfig ) :
 
 void SdOptionsContents::SetDefaults()
 {
-    SetExternGraphic( FALSE );
-    SetOutlineMode( FALSE );
-    SetHairlineMode( FALSE);
-    SetNoText( FALSE );
 }
 
 // -----------------------------------------------------------------------------
 
-BOOL SdOptionsContents::operator==( const SdOptionsContents& rOpt ) const
+BOOL SdOptionsContents::operator==(const SdOptionsContents&) const
 {
-    return( IsExternGraphic() == rOpt.IsExternGraphic() &&
-            IsOutlineMode() == rOpt.IsOutlineMode() &&
-            IsHairlineMode() == rOpt.IsHairlineMode() &&
-            IsNoText() == rOpt.IsNoText() );
+    return true;
 }
 
 // -----------------------------------------------------------------------------
@@ -462,13 +450,8 @@ void SdOptionsContents::GetPropNameArray( const char**& ppNames, ULONG& rCount )
 
 // -----------------------------------------------------------------------------
 
-BOOL SdOptionsContents::ReadData( const Any* pValues )
+BOOL SdOptionsContents::ReadData(const Any*)
 {
-    if( pValues[0].hasValue() ) SetExternGraphic( *(sal_Bool*) pValues[ 0 ].getValue() );
-    if( pValues[1].hasValue() ) SetOutlineMode( *(sal_Bool*)pValues[ 1 ].getValue() );
-    if( pValues[2].hasValue() ) SetHairlineMode( *(sal_Bool*) pValues[ 2 ].getValue() );
-    if( pValues[3].hasValue() ) SetNoText( *(sal_Bool*) pValues[ 3 ].getValue() );
-
     return TRUE;
 }
 
@@ -476,10 +459,11 @@ BOOL SdOptionsContents::ReadData( const Any* pValues )
 
 BOOL SdOptionsContents::WriteData( Any* pValues ) const
 {
-    pValues[ 0 ] <<= IsExternGraphic();
-    pValues[ 1 ] <<= IsOutlineMode();
-    pValues[ 2 ] <<= IsHairlineMode();
-    pValues[ 3 ] <<= IsNoText();
+    //#i80528# no draft anymore
+    pValues[ 0 ] <<= (BOOL)false;
+    pValues[ 1 ] <<= (BOOL)false;
+    pValues[ 2 ] <<= (BOOL)false;
+    pValues[ 3 ] <<= (BOOL)false;
 
     return TRUE;
 }
@@ -498,24 +482,10 @@ SdOptionsContentsItem::SdOptionsContentsItem( USHORT _nWhich )
 
 // ----------------------------------------------------------------------
 
-SdOptionsContentsItem::SdOptionsContentsItem( USHORT _nWhich, SdOptions* pOpts, ::sd::FrameView* pView )
+SdOptionsContentsItem::SdOptionsContentsItem(USHORT _nWhich, SdOptions*, ::sd::FrameView*)
 :   SfxPoolItem         ( _nWhich )
 ,   maOptionsContents   ( 0, FALSE )
 {
-    if( pView )
-    {
-        maOptionsContents.SetExternGraphic( pView->IsGrafDraft() );
-        maOptionsContents.SetOutlineMode( pView->IsFillDraft() );
-        maOptionsContents.SetHairlineMode( pView->IsLineDraft() );
-        maOptionsContents.SetNoText( pView->IsTextDraft() );
-    }
-    else if( pOpts )
-    {
-        maOptionsContents.SetExternGraphic( pOpts->IsExternGraphic() );
-        maOptionsContents.SetOutlineMode( pOpts->IsOutlineMode() );
-        maOptionsContents.SetHairlineMode( pOpts->IsHairlineMode() );
-        maOptionsContents.SetNoText( pOpts->IsNoText() );
-    }
 }
 
 // ----------------------------------------------------------------------
@@ -536,15 +506,8 @@ int SdOptionsContentsItem::operator==( const SfxPoolItem& rAttr ) const
 
 // -----------------------------------------------------------------------
 
-void SdOptionsContentsItem::SetOptions( SdOptions* pOpts ) const
+void SdOptionsContentsItem::SetOptions(SdOptions*) const
 {
-    if( pOpts )
-    {
-        pOpts->SetExternGraphic( maOptionsContents.IsExternGraphic() );
-        pOpts->SetOutlineMode( maOptionsContents.IsOutlineMode() );
-        pOpts->SetHairlineMode( maOptionsContents.IsHairlineMode() );
-        pOpts->SetNoText( maOptionsContents.IsNoText() );
-    }
 }
 
 /*************************************************************************
