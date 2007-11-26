@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfldi.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:55:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,6 +247,7 @@ const sal_Char sAPI_docinfo_info0[]             = "DocInfo.Info0";
 const sal_Char sAPI_docinfo_info1[]             = "DocInfo.Info1";
 const sal_Char sAPI_docinfo_info2[]             = "DocInfo.Info2";
 const sal_Char sAPI_docinfo_info3[]             = "DocInfo.Info3";
+const sal_Char sAPI_docinfo_custom[]            = "DocInfo.Custom";
 const sal_Char sAPI_docinfo_print_author[]      = "DocInfo.PrintAuthor";
 const sal_Char sAPI_docinfo_print_date_time[]   = "DocInfo.PrintDateTime";
 const sal_Char sAPI_docinfo_keywords[]          = "DocInfo.KeyWords";
@@ -1981,6 +1982,9 @@ const sal_Char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
         case XML_TOK_TEXT_DOCUMENT_INFORMATION_3:
             pServiceName = sAPI_docinfo_info3;
             break;
+        case XML_TOK_TEXT_DOCUMENT_USER_DEFINED:
+            pServiceName = sAPI_docinfo_custom;
+            break;
         case XML_TOK_TEXT_DOCUMENT_PRINT_AUTHOR:
             pServiceName = sAPI_docinfo_print_author;
             break;
@@ -2011,10 +2015,10 @@ const sal_Char* XMLSimpleDocInfoImportContext::MapTokenToServiceName(
         case XML_TOK_TEXT_DOCUMENT_TITLE:
             pServiceName = sAPI_docinfo_title;
             break;
-        case XML_TOK_TEXT_DOCUMENT_USER_DEFINED:
+/*      case XML_TOK_TEXT_DOCUMENT_USER_DEFINED:
             // hack: service name not used in XMLUserDocInfoImportContext
             pServiceName = sAPI_docinfo_info0;
-            break;
+            break;*/
 
         default:
             DBG_ERROR("no docinfo field token");
@@ -2190,7 +2194,9 @@ XMLUserDocInfoImportContext::XMLUserDocInfoImportContext(
         XMLSimpleDocInfoImportContext(rImport, rHlp, nPrfx,
                                       sLocalName, nToken,
                                       sal_False, sal_False)
+    , sPropertyName(RTL_CONSTASCII_USTRINGPARAM(sAPI_name))
 {
+    bValid = sal_False;
 }
 
 void XMLUserDocInfoImportContext::ProcessAttribute(
@@ -2227,6 +2233,13 @@ void XMLUserDocInfoImportContext::ProcessAttribute(
                     break; // for loop; no need to check remainder
                 }
             }
+
+            if (!bValid)
+            {
+                SetServiceName(OUString::createFromAscii( sAPI_docinfo_custom ) );
+                aName = sAttrValue;
+                bValid = sal_True;
+            }
             break;
         }
 
@@ -2237,6 +2250,17 @@ void XMLUserDocInfoImportContext::ProcessAttribute(
     }
 }
 
+void XMLUserDocInfoImportContext::PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet)
+{
+    if ( aName.getLength() )
+    {
+        uno::Any aAny;
+        aAny <<= aName;
+        xPropertySet->setPropertyValue(sPropertyName, aAny);
+    }
+}
 
 
 //
