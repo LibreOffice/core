@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpids.h,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:36:43 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:57:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,3 +272,6 @@
 #define HID_SD_CUSTOMANIMATIONPANE_FONTSTYLEPROPERTYBOX     (HID_SD_START + 189)
 
 #define HID_SD_SLIDESHOW_DISPLAY                            (HID_SD_START + 190)
+
+#define HID_SD_RULER_HORIZONTAL                             (HID_SD_START + 191)
+#define HID_SD_RULER_VERTICAL                               (HID_SD_START + 192)
