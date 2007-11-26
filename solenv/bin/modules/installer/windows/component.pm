@@ -4,9 +4,9 @@
 #
 #   $RCSfile: component.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-26 08:48:21 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 16:18:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -226,6 +226,8 @@ sub get_registry_component_attributes
 
     $attributes = 4;
 
+    if ( exists($installer::globals::dontdeletecomponents{$componentname}) ) { $attributes = $attributes + 16; }
+
     return $attributes
 }
 
@@ -240,6 +242,11 @@ sub get_file_component_condition
     my ($componentname, $filesref) = @_;
 
     my $condition = "";
+
+    if (exists($installer::globals::componentcondition{$componentname}))
+    {
+        $condition = $installer::globals::componentcondition{$componentname};
+    }
 
     return $condition
 }
