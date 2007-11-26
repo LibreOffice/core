@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:41:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:54:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -619,7 +619,7 @@ sal_Bool SdrGrafObj::ImpUpdateGraphicLink() const
 //////////////////////////////////////////////////////////////////////////////
 // #i25616#
 
-void SdrGrafObj::ImpDoPaintGrafObjShadow( XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const
+void SdrGrafObj::ImpDoPaintGrafObjShadow( XOutputDevice& rOut) const
 {
     const sal_Bool bShadOn(((SdrShadowItem&)(GetObjectItem(SDRATTR_SHADOW))).GetValue());
 
@@ -631,105 +631,100 @@ void SdrGrafObj::ImpDoPaintGrafObjShadow( XOutputDevice& rOut, const SdrPaintInf
         if(bDoPaintFilling || bDoPaintLine)
         {
             ((SdrGrafObj*)this)->mbInsidePaint = sal_True;
-            SdrRectObj::ImpDoPaintRectObjShadow(rOut, rInfoRec, bDoPaintFilling, bDoPaintLine);
+            SdrRectObj::ImpDoPaintRectObjShadow(rOut, bDoPaintFilling, bDoPaintLine);
             ((SdrGrafObj*)this)->mbInsidePaint = sal_False;
         }
 
-        const sal_Bool bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
+        OutputDevice* pOutDev = rOut.GetOutDev();
+        const sal_uInt32 nXDist(((SdrShadowXDistItem&)GetObjectItem(SDRATTR_SHADOWXDIST)).GetValue());
+        const sal_uInt32 nYDist(((SdrShadowYDistItem&)GetObjectItem(SDRATTR_SHADOWYDIST)).GetValue());
+        const Color aShadowColor(((SdrShadowColorItem&)GetObjectItem(SDRATTR_SHADOWCOLOR)).GetColorValue());
+        const sal_uInt16 nShadowTransparence(((SdrShadowTransparenceItem&)GetObjectItem(SDRATTR_SHADOWTRANSPARENCE)).GetValue());
 
-        if(!bIsFillDraft)
+        if(IsObjectTransparent())
         {
-            OutputDevice* pOutDev = rOut.GetOutDev();
-            const sal_uInt32 nXDist(((SdrShadowXDistItem&)GetObjectItem(SDRATTR_SHADOWXDIST)).GetValue());
-            const sal_uInt32 nYDist(((SdrShadowYDistItem&)GetObjectItem(SDRATTR_SHADOWYDIST)).GetValue());
-            const Color aShadowColor(((SdrShadowColorItem&)GetObjectItem(SDRATTR_SHADOWCOLOR)).GetColorValue());
-            const sal_uInt16 nShadowTransparence(((SdrShadowTransparenceItem&)GetObjectItem(SDRATTR_SHADOWTRANSPARENCE)).GetValue());
+            // object which casts the shadow is somehow transparent, create a transparent
+            // shadow
+            Rectangle aSnapRect(GetSnapRect());
+            aSnapRect.Move(nXDist, nYDist);
+            const Rectangle aSnapRectPixel(pOutDev->LogicToPixel(aSnapRect));
 
-            if(IsObjectTransparent())
+            // get BitmapEx
+            Graphic aTempGraphic = GetTransformedGraphic();
+            Size aPixelSize(aSnapRectPixel.GetSize());
+
+            // #i48495#
+            // When this is done on a very fine resolution OutputDevice (e.g. PDF export) it may lead
+            // to problems since huge pixel bitmaps may be created. Sizes need to be cropped here. Later
+            // it may be nice to have the quadratic pixel size configurable somewhere.
+            const sal_uInt32 nMaxBitmapPixels(800L * 800L);
+            const sal_uInt32 nAllPixels(aPixelSize.getWidth() * aPixelSize.getHeight());
+
+            if(nAllPixels > nMaxBitmapPixels)
             {
-                // object which casts the shadow is somehow transparent, create a transparent
-                // shadow
-                Rectangle aSnapRect(GetSnapRect());
-                aSnapRect.Move(nXDist, nYDist);
-                const Rectangle aSnapRectPixel(pOutDev->LogicToPixel(aSnapRect));
+                const double fScale(sqrt((double)nMaxBitmapPixels) / sqrt((double)nAllPixels));
+                aPixelSize.setWidth(FRound(aPixelSize.getWidth() * fScale));
+                aPixelSize.setHeight(FRound(aPixelSize.getHeight() * fScale));
+            }
 
-                // get BitmapEx
-                Graphic aTempGraphic = GetTransformedGraphic();
-                Size aPixelSize(aSnapRectPixel.GetSize());
+            BitmapEx aTempBitmapEx = aTempGraphic.GetBitmapEx(&aPixelSize);
 
-                // #i48495#
-                // When this is done on a very fine resolution OutputDevice (e.g. PDF export) it may lead
-                // to problems since huge pixel bitmaps may be created. Sizes need to be cropped here. Later
-                // it may be nice to have the quadratic pixel size configurable somewhere.
-                const sal_uInt32 nMaxBitmapPixels(800L * 800L);
-                const sal_uInt32 nAllPixels(aPixelSize.getWidth() * aPixelSize.getHeight());
-
-                if(nAllPixels > nMaxBitmapPixels)
+            // paint
+            if(aTempBitmapEx.IsTransparent())
+            {
+                if(aTempBitmapEx.IsAlpha())
                 {
-                    const double fScale(sqrt((double)nMaxBitmapPixels) / sqrt((double)nAllPixels));
-                    aPixelSize.setWidth(FRound(aPixelSize.getWidth() * fScale));
-                    aPixelSize.setHeight(FRound(aPixelSize.getHeight() * fScale));
+                    BitmapPalette aTempBitmapPalette(2);
+                    aTempBitmapPalette[0] = aShadowColor;
+                    aTempBitmapPalette[1] = Color(COL_BLACK);
+                    Bitmap aSingleColorBitmap(aPixelSize, 1, &aTempBitmapPalette);
+                    AlphaMask aTempAlphaMask(aTempBitmapEx.GetAlpha());
+                    BitmapEx aTempMaskedBitmap(aSingleColorBitmap, aTempAlphaMask);
+                    pOutDev->DrawBitmapEx(aSnapRect.TopLeft(), aTempMaskedBitmap);
                 }
-
-                BitmapEx aTempBitmapEx = aTempGraphic.GetBitmapEx(&aPixelSize);
-
-                // paint
-                if(aTempBitmapEx.IsTransparent())
+                else
                 {
-                    if(aTempBitmapEx.IsAlpha())
+                    if(0 != nShadowTransparence && 100 > nShadowTransparence)
                     {
+                        Bitmap aTempBitmapMask(aTempBitmapEx.GetMask());
+                        aTempBitmapMask.Invert();
+                        BYTE bEraseValue(0xff);
+                        AlphaMask aTempAlphaMask(aPixelSize, &bEraseValue);
+                        BYTE aReplaceTransparency(sal::static_int_cast< BYTE >((nShadowTransparence * 0x00ff) / 100));
+                        aTempAlphaMask.Replace(aTempBitmapMask, aReplaceTransparency);
+
                         BitmapPalette aTempBitmapPalette(2);
                         aTempBitmapPalette[0] = aShadowColor;
                         aTempBitmapPalette[1] = Color(COL_BLACK);
                         Bitmap aSingleColorBitmap(aPixelSize, 1, &aTempBitmapPalette);
-                        AlphaMask aTempAlphaMask(aTempBitmapEx.GetAlpha());
+
                         BitmapEx aTempMaskedBitmap(aSingleColorBitmap, aTempAlphaMask);
                         pOutDev->DrawBitmapEx(aSnapRect.TopLeft(), aTempMaskedBitmap);
                     }
                     else
                     {
-                        if(0 != nShadowTransparence && 100 > nShadowTransparence)
-                        {
-                            Bitmap aTempBitmapMask(aTempBitmapEx.GetMask());
-                            aTempBitmapMask.Invert();
-                            BYTE bEraseValue(0xff);
-                            AlphaMask aTempAlphaMask(aPixelSize, &bEraseValue);
-                            BYTE aReplaceTransparency(sal::static_int_cast< BYTE >((nShadowTransparence * 0x00ff) / 100));
-                            aTempAlphaMask.Replace(aTempBitmapMask, aReplaceTransparency);
-
-                            BitmapPalette aTempBitmapPalette(2);
-                            aTempBitmapPalette[0] = aShadowColor;
-                            aTempBitmapPalette[1] = Color(COL_BLACK);
-                            Bitmap aSingleColorBitmap(aPixelSize, 1, &aTempBitmapPalette);
-
-                            BitmapEx aTempMaskedBitmap(aSingleColorBitmap, aTempAlphaMask);
-                            pOutDev->DrawBitmapEx(aSnapRect.TopLeft(), aTempMaskedBitmap);
-                        }
-                        else
-                        {
-                            Bitmap aTempBitmapMask(aTempBitmapEx.GetMask());
-                            pOutDev->DrawMask(aSnapRect.TopLeft(), aTempBitmapMask, aShadowColor);
-                        }
+                        Bitmap aTempBitmapMask(aTempBitmapEx.GetMask());
+                        pOutDev->DrawMask(aSnapRect.TopLeft(), aTempBitmapMask, aShadowColor);
                     }
                 }
             }
+        }
+        else
+        {
+            // shadow for the whole rectangle
+            pOutDev->SetFillColor(aShadowColor);
+            pOutDev->SetLineColor();
+            Polygon aOutputPoly(basegfx::tools::adaptiveSubdivideByAngle(GetXPoly().getB2DPolygon()));
+            aOutputPoly.Move(nXDist, nYDist);
+
+            if(0 != nShadowTransparence && 100 > nShadowTransparence)
+            {
+                PolyPolygon aPolyPoly(aOutputPoly);
+                pOutDev->DrawTransparent(aPolyPoly, nShadowTransparence);
+            }
             else
             {
-                // shadow for the whole rectangle
-                pOutDev->SetFillColor(aShadowColor);
-                pOutDev->SetLineColor();
-                Polygon aOutputPoly(basegfx::tools::adaptiveSubdivideByAngle(GetXPoly().getB2DPolygon()));
-                aOutputPoly.Move(nXDist, nYDist);
-
-                if(0 != nShadowTransparence && 100 > nShadowTransparence)
-                {
-                    PolyPolygon aPolyPoly(aOutputPoly);
-                    pOutDev->DrawTransparent(aPolyPoly, nShadowTransparence);
-                }
-                else
-                {
-                    pOutDev->DrawPolygon(aOutputPoly);
-                }
+                pOutDev->DrawPolygon(aOutputPoly);
             }
         }
     }
@@ -738,7 +733,7 @@ void SdrGrafObj::ImpDoPaintGrafObjShadow( XOutputDevice& rOut, const SdrPaintInf
 //////////////////////////////////////////////////////////////////////////////
 // #i25616#
 
-void SdrGrafObj::ImpDoPaintGrafObj( XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const
+void SdrGrafObj::ImpDoPaintGrafObj(XOutputDevice& rOut) const
 {
     const sal_Bool bDoPaintFilling(IsObjectTransparent());
     const sal_Bool bDoPaintLine(XLINE_NONE != ((XLineStyleItem&)(GetObjectItem(XATTR_LINESTYLE))).GetValue());
@@ -746,7 +741,7 @@ void SdrGrafObj::ImpDoPaintGrafObj( XOutputDevice& rOut, const SdrPaintInfoRec& 
     if(bDoPaintFilling || bDoPaintLine)
     {
         ((SdrGrafObj*)this)->mbInsidePaint = sal_True;
-        SdrRectObj::ImpDoPaintRectObj(rOut, rInfoRec, bDoPaintFilling, bDoPaintLine);
+        SdrRectObj::ImpDoPaintRectObj(rOut, bDoPaintFilling, bDoPaintLine);
         ((SdrGrafObj*)this)->mbInsidePaint = sal_False;
     }
 }
@@ -765,6 +760,29 @@ sal_Bool SdrGrafObj::DoPaintObject( XOutputDevice& rOut, const SdrPaintInfoRec& 
         // This should not happen. If it happens, someone is using DoPaintObject
         // directly. This would require a draft paint. All this cases are handled
         // from the DrawContact object.
+    }
+    else if(SDRPAINTMODE_CONTOUR & rInfoRec.nPaintMode)
+    {
+        //#i80528# to not run i a recursion in TakeContour, do not setup an outliner but just
+        // use a polygon paint; the paint is executed to get a contour of the object anyways
+        OutputDevice* pOutDev = rOut.GetOutDev();
+        pOutDev->SetFillColor();
+        pOutDev->SetLineColor(COL_BLACK);
+        Polygon aOutputPoly(basegfx::tools::adaptiveSubdivideByAngle(GetXPoly().getB2DPolygon()));
+
+        // draw content replacement
+        pOutDev->DrawPolygon(aOutputPoly);
+
+        const sal_Bool bShadOn(((SdrShadowItem&)(GetObjectItem(SDRATTR_SHADOW))).GetValue());
+
+        if(bShadOn)
+        {
+            // draw shadow replacement
+            const sal_uInt32 nXDist(((SdrShadowXDistItem&)GetObjectItem(SDRATTR_SHADOWXDIST)).GetValue());
+            const sal_uInt32 nYDist(((SdrShadowYDistItem&)GetObjectItem(SDRATTR_SHADOWYDIST)).GetValue());
+            aOutputPoly.Move(nXDist, nYDist);
+            pOutDev->DrawPolygon(aOutputPoly);
+        }
     }
     else
     {
@@ -789,10 +807,10 @@ sal_Bool SdrGrafObj::DoPaintObject( XOutputDevice& rOut, const SdrPaintInfoRec& 
         sal_Bool bVMirr((3 == nMirrorCase ) || (4 == nMirrorCase));
 
         // #i25616#
-        ImpDoPaintGrafObjShadow( rOut, rInfoRec );
+        ImpDoPaintGrafObjShadow(rOut);
 
         // #i25616#
-        ImpDoPaintGrafObj( rOut, rInfoRec );
+        ImpDoPaintGrafObj(rOut);
 
         aAttr.SetMirrorFlags((bHMirr ? BMP_MIRROR_HORZ : 0)|(bVMirr ? BMP_MIRROR_VERT : 0));
 
