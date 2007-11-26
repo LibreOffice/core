@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:34:56 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:42:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,6 +235,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                         SfxItemSet* pSet = new SfxItemSet( *pDoc->GetPool(),
                                 SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                                 SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
+                                SID_PRINT_SELECTEDSHEET,   SID_PRINT_SELECTEDSHEET,
                                 SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS,
                                 NULL );
                         pDocShell->SetPrinter( SfxPrinter::Create( aStream, pSet ) );
