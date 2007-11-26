@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_onlineupdate.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:33:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:19:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,3 +53,11 @@ File gid_File_Registry_Spool_Oo_Office_Jobs_Onlineupdate_Xcu
     Name = "/registry/spool/org/openoffice/Office/Jobs/Jobs-onlineupdate.xcu";
 End
 
+#if defined LINUX || defined SOLARIS
+File gid_File_Bin_UnpackUpdate
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Name = "unpack_update";
+    Styles = (PACKED, PATCH);
+End
+#endif
