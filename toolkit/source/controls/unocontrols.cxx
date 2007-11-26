@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 08:43:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:27:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3816,6 +3816,7 @@ sal_Int32 UnoProgressBarControl::getValue() throw(::com::sun::star::uno::Runtime
 //  ----------------------------------------------------
 UnoControlFixedLineModel::UnoControlFixedLineModel()
 {
+    ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
     ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
     ImplRegisterProperty( BASEPROPERTY_ENABLED );
     ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
