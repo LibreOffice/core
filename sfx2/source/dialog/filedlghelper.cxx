@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:31:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:47:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1017,11 +1017,18 @@ sal_Bool lcl_isSystemFilePicker( const uno::Reference< XFilePicker >& _rxFP )
 // -----------      FileDialogHelper_Impl       ---------------------------
 // ------------------------------------------------------------------------
 
-FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_Int16 nDialogType, sal_Int64 nFlags, Window* _pPreferredParentWindow )
+FileDialogHelper_Impl::FileDialogHelper_Impl( FileDialogHelper* _pAntiImpl, sal_Int16 nDialogType, sal_Int64 nFlags, sal_Int16 nDialog, Window* _pPreferredParentWindow )
     :m_nDialogType          ( nDialogType )
     ,meContext              ( FileDialogHelper::UNKNOWN_CONTEXT )
 {
-    OUString aService( RTL_CONSTASCII_USTRINGPARAM( FILE_OPEN_SERVICE_NAME ) );
+    const char* pServiceName=0;
+    if ( nDialog == SFX2_IMPL_DIALOG_SYSTEM )
+        pServiceName = FILE_OPEN_SERVICE_NAME_OOO;
+    else if ( nDialog == SFX2_IMPL_DIALOG_OOO )
+        pServiceName = FILE_OPEN_SERVICE_NAME_OOO;
+    else
+        pServiceName = FILE_OPEN_SERVICE_NAME;
+    OUString aService = ::rtl::OUString::createFromAscii( pServiceName );
 
     uno::Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
 
@@ -1781,9 +1788,11 @@ void FileDialogHelper_Impl::displayFolder( const ::rtl::OUString& _rPath )
         // nothing to do
         return;
 
+    /*
     if ( !::utl::UCBContentHelper::IsFolder( _rPath ) )
         // only valid folders accepted here
         return;
+    */
 
     maPath = _rPath;
     if ( mxFileDlg.is() )
@@ -2361,6 +2370,20 @@ FileDialogHelper::FileDialogHelper(
     mpImp->addFilters( nFlags, SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
 }
 
+FileDialogHelper::FileDialogHelper(
+    sal_Int64 nFlags,
+    const String& rFact,
+    sal_Int16 nDialog,
+    SfxFilterFlags nMust,
+    SfxFilterFlags nDont )
+{
+    mpImp = new FileDialogHelper_Impl( this, getDialogType( nFlags ), nFlags, nDialog );
+    mxImp = mpImp;
+
+    // create the list of filters
+    mpImp->addFilters( nFlags, SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
+}
+
 // ------------------------------------------------------------------------
 FileDialogHelper::FileDialogHelper( sal_Int64 nFlags )
 {
@@ -2389,9 +2412,25 @@ FileDialogHelper::FileDialogHelper(
 FileDialogHelper::FileDialogHelper(
     sal_Int16 nDialogType,
     sal_Int64 nFlags,
+    const String& rFact,
+    sal_Int16 nDialog,
+    SfxFilterFlags nMust,
+    SfxFilterFlags nDont )
+{
+    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, nDialog );
+    mxImp = mpImp;
+
+    // create the list of filters
+    mpImp->addFilters( nFlags, SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
+}
+
+// ------------------------------------------------------------------------
+FileDialogHelper::FileDialogHelper(
+    sal_Int16 nDialogType,
+    sal_Int64 nFlags,
     Window* _pPreferredParent )
 {
-    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, _pPreferredParent );
+    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent );
     mxImp = mpImp;
 }
 
@@ -2403,7 +2442,7 @@ FileDialogHelper::FileDialogHelper(
     const ::rtl::OUString& aExtName,
     Window* _pPreferredParent )
 {
-    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, _pPreferredParent );
+    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, SFX2_IMPL_DIALOG_CONFIG, _pPreferredParent );
     mxImp = mpImp;
 
     // the wildcard here is expected in form "*.extension"
@@ -2464,15 +2503,16 @@ IMPL_LINK( FileDialogHelper, ExecuteSystemFilePicker, void*, EMPTYARG )
 }
 
 // ------------------------------------------------------------------------
-ErrCode FileDialogHelper::Execute( const String&   rPath,
-                                   SvStringsDtor*& rpURLList,
+// rDirPath has to be a directory
+ErrCode FileDialogHelper::Execute( SvStringsDtor*& rpURLList,
                                    SfxItemSet *&   rpSet,
-                                   String&         rFilter )
+                                   String&         rFilter,
+                                   const String&   rDirPath )
 {
-    SetDisplayDirectory( rPath );
-
+    SetDisplayFolder( rDirPath );
     return mpImp->execute( rpURLList, rpSet, rFilter );
 }
+
 
 // ------------------------------------------------------------------------
 ErrCode FileDialogHelper::Execute()
@@ -2752,16 +2792,17 @@ ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              SvStringsDtor *& rpURLList,
                              String& rFilter,
                              SfxItemSet *& rpSet,
-                             const String* pPath )
+                             const String* pPath,
+                             sal_Int16 nDialog)
 {
     ErrCode nRet;
-    FileDialogHelper aDialog( nFlags, rFact );
+    FileDialogHelper aDialog( nFlags, rFact, nDialog, 0, 0 );
 
     String aPath;
     if ( pPath )
         aPath = *pPath;
 
-    nRet = aDialog.Execute( aPath, rpURLList, rpSet, rFilter );
+    nRet = aDialog.Execute( rpURLList, rpSet, rFilter, aPath );
     DBG_ASSERT( rFilter.SearchAscii(": ") == STRING_NOTFOUND, "Old filter name used!");
 
     return nRet;
