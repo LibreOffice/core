@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.221 $
+#   $Revision: 1.222 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:44:55 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 12:45:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,8 @@ MKFILENAME:=SETTINGS.MK
 # smaller/greater arithmetic's like ".IF 400<=200" are an OOo extention to
 # the initial dmake 4.1PL0 (unfortunately called 4.10) version and are
 # tested implicitly by the construction below.
-.IF $(MAKEVERSION:s/-cvs//:s/.//:s/410/41/)<=45
-.ERROR : ; @echo Forced error: dmake version 4.6 or newer is needed!
+.IF $(MAKEVERSION:s/-cvs//:s/.//)<=410
+.ERROR : ; @echo Forced error: dmake version 4.10 or newer is needed!
 force_dmake_to_error
 .ENDIF
 
