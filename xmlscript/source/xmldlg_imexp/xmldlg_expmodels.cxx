@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:57:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:35:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1119,6 +1119,10 @@ void ElementDescriptor::readDialogModel( StyleBag * all_styles )
     if ( (aDecorationAny >>= bDecoration) && !bDecoration )
         addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":withtitlebar") ),
                       OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) );
+
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-src") ) );
+
     readEvents();
 }
 
