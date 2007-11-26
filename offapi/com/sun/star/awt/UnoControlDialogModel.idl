@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoControlDialogModel.idl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:30:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:33:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #include <com/sun/star/util/Color.idl>
 #endif
 
+#ifndef com_sun_star_graphic_XGraphic_idl
+#include <com/sun/star/graphic/XGraphic.idl>
+#endif
 
 //=============================================================================
 
@@ -169,6 +172,29 @@ published service UnoControlDialogModel
         @since OOo 2.3.0
      */
     [optional, property] boolean DesktopAsParent;
+
+    /** specifies a URL that references a graphic that should be used as a
+        background image.
+            @see Graphic
+
+        @since OOo 2.4.0
+    */
+    [optional, property] string ImageURL;
+
+    /** specifies a graphic to be displayed as a background image
+
+        <p>If this property is present, it interacts with the <member>ImageURL</member>in the
+        following way:
+        <ul><li>If <member>ImageURL</member> is set, <member>Graphic</member> will be reset
+            to an object as loaded from the given image URL, or <NULL/> if <member>ImageURL</member>
+            does not point to a valid image file.</li>
+            <li>If <member>Graphic</member> is set, <member>ImageURL</member> will be reset
+            to an empty string.</li>
+        </ul></p>
+
+        @since OOo 2.4.0
+     */
+    [optional, property, transient] com::sun::star::graphic::XGraphic Graphic;
 
 };
 
