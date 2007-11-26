@@ -4,9 +4,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:35:30 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:50:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2826,428 +2826,425 @@ void E3dCompoundObject::operator=(const SdrObject& rObj)
 |*
 \************************************************************************/
 
-sal_Bool E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* pBase3D, UINT16 nDrawFlags, BOOL bGhosted, BOOL bIsFillDraft)
+sal_Bool E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* pBase3D, UINT16 nDrawFlags, BOOL bGhosted)
 {
     sal_Bool bDrawObject(sal_True);
 
-    if(!bIsFillDraft)
-    {
-        const SfxItemSet& rSet = GetObjectItemSet();
-        const XFillStyle eFillStyle = ((const XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
+    const SfxItemSet& rSet = GetObjectItemSet();
+    const XFillStyle eFillStyle = ((const XFillStyleItem&)(rSet.Get(XATTR_FILLSTYLE))).GetValue();
 
-        if(eFillStyle == XFILL_NONE)
+    if(eFillStyle == XFILL_NONE)
+    {
+        bDrawObject = FALSE;
+    }
+    else
+    {
+        sal_uInt16 nFillTrans = ((const XFillTransparenceItem&)(rSet.Get(XATTR_FILLTRANSPARENCE))).GetValue();
+        const XFillFloatTransparenceItem& rFloatTrans = ((const XFillFloatTransparenceItem&)(rSet.Get(XATTR_FILLFLOATTRANSPARENCE)));
+        BOOL bFillTransparence = (nFillTrans != 0);
+        BOOL bFloatTransparence = rFloatTrans.IsEnabled();
+        BOOL bAnyTransparence = (bFillTransparence || bFloatTransparence);
+        BOOL bDrawTransparence = ((nDrawFlags & E3D_DRAWFLAG_TRANSPARENT) != 0);
+
+        // force no fill transparence when float transparence
+        if(bFloatTransparence)
+        {
+            bFillTransparence = FALSE;
+            nFillTrans = 0;
+        }
+
+        if(bAnyTransparence != bDrawTransparence)
         {
             bDrawObject = FALSE;
         }
         else
         {
-            sal_uInt16 nFillTrans = ((const XFillTransparenceItem&)(rSet.Get(XATTR_FILLTRANSPARENCE))).GetValue();
-            const XFillFloatTransparenceItem& rFloatTrans = ((const XFillFloatTransparenceItem&)(rSet.Get(XATTR_FILLFLOATTRANSPARENCE)));
-            BOOL bFillTransparence = (nFillTrans != 0);
-            BOOL bFloatTransparence = rFloatTrans.IsEnabled();
-            BOOL bAnyTransparence = (bFillTransparence || bFloatTransparence);
-            BOOL bDrawTransparence = ((nDrawFlags & E3D_DRAWFLAG_TRANSPARENT) != 0);
-
-            // force no fill transparence when float transparence
-            if(bFloatTransparence)
+            // get base color
+            Color aColorSolid = ((const XFillColorItem&) (rSet.Get(XATTR_FILLCOLOR))).GetColorValue();
+            if(bGhosted)
             {
-                bFillTransparence = FALSE;
-                nFillTrans = 0;
+                aColorSolid = Color(
+                    (aColorSolid.GetRed() >> 1) + 0x80,
+                    (aColorSolid.GetGreen() >> 1) + 0x80,
+                    (aColorSolid.GetBlue() >> 1) + 0x80);
             }
 
-            if(bAnyTransparence != bDrawTransparence)
+            // prepare custom colors for linear transparency and black/white mode
+            Color aColorSolidWithTransparency(aColorSolid);
+            aColorSolidWithTransparency.SetTransparency((UINT8)(nFillTrans * 255 / 100));
+            Color aColorWhite(COL_WHITE);
+            Color aColorWhiteWithTransparency(COL_WHITE);
+            aColorWhiteWithTransparency.SetTransparency((UINT8)(nFillTrans * 255 / 100));
+
+            // set base materials (if no drawmode is set)
+            pBase3D->SetMaterial(aColorWhite, Base3DMaterialAmbient);
+            pBase3D->SetMaterial(aColorWhiteWithTransparency, Base3DMaterialDiffuse);
+            pBase3D->SetMaterial(GetMaterialSpecular(), Base3DMaterialSpecular);
+            pBase3D->SetMaterial(GetMaterialEmission(), Base3DMaterialEmission);
+            pBase3D->SetShininess(GetMaterialSpecularIntensity());
+            if(GetUseDifferentBackMaterial())
             {
-                bDrawObject = FALSE;
+                pBase3D->SetMaterial(aColorWhite, Base3DMaterialAmbient, Base3DMaterialBack);
+                pBase3D->SetMaterial(aColorWhiteWithTransparency, Base3DMaterialDiffuse, Base3DMaterialBack);
+                pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialSpecular), Base3DMaterialSpecular, Base3DMaterialBack);
+                pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialEmission), Base3DMaterialEmission, Base3DMaterialBack);
+                pBase3D->SetShininess(aBackMaterial.GetShininess(), Base3DMaterialBack);
             }
-            else
+
+            // prepare some more later used texture parameters
+            B3dTexture* pTexture = NULL;
+            Base3DTextureWrap eWrapX(Base3DTextureRepeat);
+            Base3DTextureWrap eWrapY(Base3DTextureRepeat);
+            basegfx::B2DHomMatrix mTexture;
+
+            // now test the different draw modes and cases
+            if((pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_WHITEFILL) != 0)
             {
-                // get base color
-                Color aColorSolid = ((const XFillColorItem&) (rSet.Get(XATTR_FILLCOLOR))).GetColorValue();
-                if(bGhosted)
-                {
-                    aColorSolid = Color(
-                        (aColorSolid.GetRed() >> 1) + 0x80,
-                        (aColorSolid.GetGreen() >> 1) + 0x80,
-                        (aColorSolid.GetBlue() >> 1) + 0x80);
-                }
-
-                // prepare custom colors for linear transparency and black/white mode
-                Color aColorSolidWithTransparency(aColorSolid);
-                aColorSolidWithTransparency.SetTransparency((UINT8)(nFillTrans * 255 / 100));
-                Color aColorWhite(COL_WHITE);
-                Color aColorWhiteWithTransparency(COL_WHITE);
-                aColorWhiteWithTransparency.SetTransparency((UINT8)(nFillTrans * 255 / 100));
-
-                // set base materials (if no drawmode is set)
+                // set material to black and white mode
                 pBase3D->SetMaterial(aColorWhite, Base3DMaterialAmbient);
                 pBase3D->SetMaterial(aColorWhiteWithTransparency, Base3DMaterialDiffuse);
-                pBase3D->SetMaterial(GetMaterialSpecular(), Base3DMaterialSpecular);
-                pBase3D->SetMaterial(GetMaterialEmission(), Base3DMaterialEmission);
-                pBase3D->SetShininess(GetMaterialSpecularIntensity());
                 if(GetUseDifferentBackMaterial())
                 {
                     pBase3D->SetMaterial(aColorWhite, Base3DMaterialAmbient, Base3DMaterialBack);
                     pBase3D->SetMaterial(aColorWhiteWithTransparency, Base3DMaterialDiffuse, Base3DMaterialBack);
-                    pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialSpecular), Base3DMaterialSpecular, Base3DMaterialBack);
-                    pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialEmission), Base3DMaterialEmission, Base3DMaterialBack);
-                    pBase3D->SetShininess(aBackMaterial.GetShininess(), Base3DMaterialBack);
                 }
 
-                // prepare some more later used texture parameters
-                B3dTexture* pTexture = NULL;
-                Base3DTextureWrap eWrapX(Base3DTextureRepeat);
-                Base3DTextureWrap eWrapY(Base3DTextureRepeat);
-                basegfx::B2DHomMatrix mTexture;
+                // Color stays white, just set render mode
+                pBase3D->SetRenderMode(Base3DRenderFill);
+            }
+            else if((pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_SETTINGSFILL) != 0)
+            {
+                Color aColorFill(Application::GetSettings().GetStyleSettings().GetWindowColor());
+                Color aColorFillWithTransparency(aColorFill);
+                aColorFillWithTransparency.SetTransparency((UINT8)(nFillTrans * 255 / 100));
 
-                // now test the different draw modes and cases
-                if((pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_WHITEFILL) != 0)
+                // set material to black and white mode
+                pBase3D->SetMaterial(aColorFill, Base3DMaterialAmbient);
+                pBase3D->SetMaterial(aColorFillWithTransparency, Base3DMaterialDiffuse);
+                if(GetUseDifferentBackMaterial())
                 {
-                    // set material to black and white mode
-                    pBase3D->SetMaterial(aColorWhite, Base3DMaterialAmbient);
-                    pBase3D->SetMaterial(aColorWhiteWithTransparency, Base3DMaterialDiffuse);
-                    if(GetUseDifferentBackMaterial())
-                    {
-                        pBase3D->SetMaterial(aColorWhite, Base3DMaterialAmbient, Base3DMaterialBack);
-                        pBase3D->SetMaterial(aColorWhiteWithTransparency, Base3DMaterialDiffuse, Base3DMaterialBack);
-                    }
-
-                    // Color stays white, just set render mode
-                    pBase3D->SetRenderMode(Base3DRenderFill);
+                    pBase3D->SetMaterial(aColorFill, Base3DMaterialAmbient, Base3DMaterialBack);
+                    pBase3D->SetMaterial(aColorFillWithTransparency, Base3DMaterialDiffuse, Base3DMaterialBack);
                 }
-                else if((pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_SETTINGSFILL) != 0)
+
+                // Color stays solid, just set render mode
+                pBase3D->SetRenderMode(Base3DRenderFill);
+            }
+            else if(eFillStyle == XFILL_BITMAP)
+            {
+                // bitmap fill, use bitmap texture from 2D defines
+                BitmapEx aBmpEx;
+
+                if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLBITMAP, TRUE))
                 {
-                    Color aColorFill(Application::GetSettings().GetStyleSettings().GetWindowColor());
-                    Color aColorFillWithTransparency(aColorFill);
-                    aColorFillWithTransparency.SetTransparency((UINT8)(nFillTrans * 255 / 100));
-
-                    // set material to black and white mode
-                    pBase3D->SetMaterial(aColorFill, Base3DMaterialAmbient);
-                    pBase3D->SetMaterial(aColorFillWithTransparency, Base3DMaterialDiffuse);
-                    if(GetUseDifferentBackMaterial())
-                    {
-                        pBase3D->SetMaterial(aColorFill, Base3DMaterialAmbient, Base3DMaterialBack);
-                        pBase3D->SetMaterial(aColorFillWithTransparency, Base3DMaterialDiffuse, Base3DMaterialBack);
-                    }
-
-                    // Color stays solid, just set render mode
-                    pBase3D->SetRenderMode(Base3DRenderFill);
+                    // EIndeutige Bitmap, benutze diese
+                    aBmpEx = BitmapEx((((const XFillBitmapItem&) (rSet.Get(XATTR_FILLBITMAP))).GetBitmapValue()).GetBitmap());
                 }
-                else if(eFillStyle == XFILL_BITMAP)
+
+                // #i29168#
+                // The received Bitmap may still be empty (see bug), so the fix needs
+                // his own if, it is not enough to use the else-tree
+                if(aBmpEx.IsEmpty())
                 {
-                    // bitmap fill, use bitmap texture from 2D defines
-                    BitmapEx aBmpEx;
+                    // Keine eindeutige Bitmap. benutze default
+                    //
+                    // DIES IST EINE NOTLOESUNG, BIS MAN IRGENDWO AN DIE
+                    // DEAULT-BITMAP RANKOMMT (IST VON KA IN VORBEREITUNG)
+                    //
+                    aBmpEx = BitmapEx(Bitmap(Size(4,4), 8));
+                }
 
-                    if(SFX_ITEM_SET == rSet.GetItemState(XATTR_FILLBITMAP, TRUE))
+                // Texturattribute bilden
+                TextureAttributesBitmap aTexAttr(
+                    bGhosted,
+                    (void*)&rSet.Get(XATTR_FILLFLOATTRANSPARENCE),
+                    aBmpEx.GetBitmap());
+                pTexture = pBase3D->ObtainTexture(aTexAttr);
+                if(!pTexture)
+                {
+                    if(bGhosted)
+                        aBmpEx.Adjust( 50 );
+
+                    if(bFloatTransparence)
+                        // add alpha channel to bitmap
+                        aBmpEx = BitmapEx(aBmpEx.GetBitmap(), GetAlphaMask(rSet, aBmpEx.GetSizePixel()));
+
+                    pTexture = pBase3D->ObtainTexture(aTexAttr, aBmpEx);
+                }
+
+                //sal_uInt16 nOffX = ((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_TILEOFFSETX))).GetValue();
+                //sal_uInt16 nOffY = ((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_TILEOFFSETY))).GetValue();
+                sal_uInt16 nOffPosX = ((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_POSOFFSETX))).GetValue();
+                sal_uInt16 nOffPosY = ((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_POSOFFSETY))).GetValue();
+                RECT_POINT eRectPoint = (RECT_POINT)((const SfxEnumItem&) (rSet.Get(XATTR_FILLBMP_POS))).GetValue();
+                BOOL bTile = ((const SfxBoolItem&) (rSet.Get(XATTR_FILLBMP_TILE))).GetValue();
+                BOOL bStretch = ((const SfxBoolItem&) (rSet.Get(XATTR_FILLBMP_STRETCH))).GetValue();
+                BOOL bLogSize = ((const SfxBoolItem&) (rSet.Get(XATTR_FILLBMP_SIZELOG))).GetValue();
+                Size aSize(
+                    labs(((const SfxMetricItem&)(rSet.Get(XATTR_FILLBMP_SIZEX))).GetValue()),
+                    labs(((const SfxMetricItem&)(rSet.Get(XATTR_FILLBMP_SIZEY))).GetValue()));
+                basegfx::B2DPoint aScaleVector(1.0, 1.0);
+                basegfx::B2DPoint aTranslateVector(0.0, 0.0);
+
+                // Groesse beachten, logische Groesse einer Kachel bestimmen
+                // erst mal in 1/100 mm
+                Size aLogicalSize = aBmpEx.GetPrefSize();
+                const Volume3D& rVol = GetBoundVolume();
+                if(aLogicalSize.Width() == 0 || aLogicalSize.Height() == 0)
+                {
+                    // Keine logische Groesse, nimm Pixelgroesse
+                    // und wandle diese um
+                    aLogicalSize = Application::GetDefaultDevice()->PixelToLogic(aBmpEx.GetSizePixel(), MAP_100TH_MM);
+                }
+                else
+                {
+                    if ( aBmpEx.GetPrefMapMode() == MAP_PIXEL )
+                        aLogicalSize = Application::GetDefaultDevice()->PixelToLogic( aLogicalSize, MAP_100TH_MM );
+                    else
+                        aLogicalSize = OutputDevice::LogicToLogic( aLogicalSize, aBmpEx.GetPrefMapMode(), MAP_100TH_MM );
+                }
+
+                if(bLogSize)
+                {
+                    // logische Groesse
+                    if(aSize.Width() == 0 && aSize.Height() == 0)
                     {
-                        // EIndeutige Bitmap, benutze diese
-                        aBmpEx = BitmapEx((((const XFillBitmapItem&) (rSet.Get(XATTR_FILLBITMAP))).GetBitmapValue()).GetBitmap());
-                    }
+                        // Originalgroesse benutzen, Original flagy
 
-                    // #i29168#
-                    // The received Bitmap may still be empty (see bug), so the fix needs
-                    // his own if, it is not enough to use the else-tree
-                    if(aBmpEx.IsEmpty())
-                    {
-                        // Keine eindeutige Bitmap. benutze default
-                        //
-                        // DIES IST EINE NOTLOESUNG, BIS MAN IRGENDWO AN DIE
-                        // DEAULT-BITMAP RANKOMMT (IST VON KA IN VORBEREITUNG)
-                        //
-                        aBmpEx = BitmapEx(Bitmap(Size(4,4), 8));
-                    }
-
-                    // Texturattribute bilden
-                    TextureAttributesBitmap aTexAttr(
-                        bGhosted,
-                        (void*)&rSet.Get(XATTR_FILLFLOATTRANSPARENCE),
-                        aBmpEx.GetBitmap());
-                    pTexture = pBase3D->ObtainTexture(aTexAttr);
-                    if(!pTexture)
-                    {
-                        if(bGhosted)
-                            aBmpEx.Adjust( 50 );
-
-                        if(bFloatTransparence)
-                            // add alpha channel to bitmap
-                            aBmpEx = BitmapEx(aBmpEx.GetBitmap(), GetAlphaMask(rSet, aBmpEx.GetSizePixel()));
-
-                        pTexture = pBase3D->ObtainTexture(aTexAttr, aBmpEx);
-                    }
-
-                    //sal_uInt16 nOffX = ((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_TILEOFFSETX))).GetValue();
-                    //sal_uInt16 nOffY = ((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_TILEOFFSETY))).GetValue();
-                    sal_uInt16 nOffPosX = ((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_POSOFFSETX))).GetValue();
-                    sal_uInt16 nOffPosY = ((const SfxUInt16Item&) (rSet.Get(XATTR_FILLBMP_POSOFFSETY))).GetValue();
-                    RECT_POINT eRectPoint = (RECT_POINT)((const SfxEnumItem&) (rSet.Get(XATTR_FILLBMP_POS))).GetValue();
-                    BOOL bTile = ((const SfxBoolItem&) (rSet.Get(XATTR_FILLBMP_TILE))).GetValue();
-                    BOOL bStretch = ((const SfxBoolItem&) (rSet.Get(XATTR_FILLBMP_STRETCH))).GetValue();
-                    BOOL bLogSize = ((const SfxBoolItem&) (rSet.Get(XATTR_FILLBMP_SIZELOG))).GetValue();
-                    Size aSize(
-                        labs(((const SfxMetricItem&)(rSet.Get(XATTR_FILLBMP_SIZEX))).GetValue()),
-                        labs(((const SfxMetricItem&)(rSet.Get(XATTR_FILLBMP_SIZEY))).GetValue()));
-                    basegfx::B2DPoint aScaleVector(1.0, 1.0);
-                    basegfx::B2DPoint aTranslateVector(0.0, 0.0);
-
-                    // Groesse beachten, logische Groesse einer Kachel bestimmen
-                    // erst mal in 1/100 mm
-                    Size aLogicalSize = aBmpEx.GetPrefSize();
-                    const Volume3D& rVol = GetBoundVolume();
-                    if(aLogicalSize.Width() == 0 || aLogicalSize.Height() == 0)
-                    {
-                        // Keine logische Groesse, nimm Pixelgroesse
-                        // und wandle diese um
-                        aLogicalSize = Application::GetDefaultDevice()->PixelToLogic(aBmpEx.GetSizePixel(), MAP_100TH_MM);
+                        // Um ein vernuenftiges Mapping bei defaults auch
+                        // fuer 3D-Objekte zu erreichen, nimm die logische
+                        // groesse einfach als groesser an
+                        aLogicalSize.Width() /= 5; //10;
+                        aLogicalSize.Height() /= 5; //10;
                     }
                     else
                     {
-                        if ( aBmpEx.GetPrefMapMode() == MAP_PIXEL )
-                            aLogicalSize = Application::GetDefaultDevice()->PixelToLogic( aLogicalSize, MAP_100TH_MM );
-                        else
-                            aLogicalSize = OutputDevice::LogicToLogic( aLogicalSize, aBmpEx.GetPrefMapMode(), MAP_100TH_MM );
+                        // Groesse in 100TH_MM in aSize, keine Flags
+                        aLogicalSize = aSize;
+
+                        // Um ein vernuenftiges Mapping bei defaults auch
+                        // fuer 3D-Objekte zu erreichen, nimm die logische
+                        // groesse einfach als groesser an
+                        aLogicalSize.Width() /= 5; //10;
+                        aLogicalSize.Height() /= 5; //10;
                     }
+                }
+                else
+                {
+                    // relative Groesse
+                    // 0..100 Prozent in aSize, relativ flag
+                    aLogicalSize = Size(
+                        (long)((rVol.getWidth() * (double)aSize.Width() / 100.0) + 0.5),
+                        (long)((rVol.getHeight() * (double)aSize.Height() / 100.0) + 0.5));
+                }
 
-                    if(bLogSize)
+                // Skalieren
+                aScaleVector.setX(rVol.getWidth() / (double)aLogicalSize.Width());
+                aScaleVector.setY(rVol.getHeight() / (double)aLogicalSize.Height());
+
+                if(bTile)
+                {
+                    // Aneinandergefuegt drauflegen
+                    double fLeftBound, fTopBound;
+
+                    // Vertikal
+                    if(eRectPoint == RP_LT || eRectPoint == RP_LM || eRectPoint == RP_LB)
                     {
-                        // logische Groesse
-                        if(aSize.Width() == 0 && aSize.Height() == 0)
-                        {
-                            // Originalgroesse benutzen, Original flagy
-
-                            // Um ein vernuenftiges Mapping bei defaults auch
-                            // fuer 3D-Objekte zu erreichen, nimm die logische
-                            // groesse einfach als groesser an
-                            aLogicalSize.Width() /= 5; //10;
-                            aLogicalSize.Height() /= 5; //10;
-                        }
-                        else
-                        {
-                            // Groesse in 100TH_MM in aSize, keine Flags
-                            aLogicalSize = aSize;
-
-                            // Um ein vernuenftiges Mapping bei defaults auch
-                            // fuer 3D-Objekte zu erreichen, nimm die logische
-                            // groesse einfach als groesser an
-                            aLogicalSize.Width() /= 5; //10;
-                            aLogicalSize.Height() /= 5; //10;
-                        }
+                        // Links aligned starten
+                        fLeftBound = 0.0;
+                    }
+                    else if(eRectPoint == RP_MT || eRectPoint == RP_MM || eRectPoint == RP_MB)
+                    {
+                        // Mittig
+                        fLeftBound = (rVol.getWidth() / 2.0) - ((double)aLogicalSize.Width() / 2.0);
                     }
                     else
                     {
-                        // relative Groesse
-                        // 0..100 Prozent in aSize, relativ flag
-                        aLogicalSize = Size(
-                            (long)((rVol.getWidth() * (double)aSize.Width() / 100.0) + 0.5),
-                            (long)((rVol.getHeight() * (double)aSize.Height() / 100.0) + 0.5));
+                        // Rechts aligned starten
+                        fLeftBound = rVol.getWidth() - (double)aLogicalSize.Width();
                     }
 
-                    // Skalieren
-                    aScaleVector.setX(rVol.getWidth() / (double)aLogicalSize.Width());
-                    aScaleVector.setY(rVol.getHeight() / (double)aLogicalSize.Height());
-
-                    if(bTile)
+                    // Horizontal
+                    if(eRectPoint == RP_LT || eRectPoint == RP_MT || eRectPoint == RP_RT)
                     {
-                        // Aneinandergefuegt drauflegen
-                        double fLeftBound, fTopBound;
+                        // Top aligned starten
+                        fTopBound = 0.0;
+                    }
+                    else if(eRectPoint == RP_LM || eRectPoint == RP_MM || eRectPoint == RP_RM)
+                    {
+                        // Mittig
+                        fTopBound = (rVol.getHeight() / 2.0) - ((double)aLogicalSize.Height() / 2.0);
+                    }
+                    else
+                    {
+                        // Bottom aligned starten
+                        fTopBound = rVol.getHeight() - (double)aLogicalSize.Height();
+                    }
 
-                        // Vertikal
-                        if(eRectPoint == RP_LT || eRectPoint == RP_LM || eRectPoint == RP_LB)
-                        {
-                            // Links aligned starten
-                            fLeftBound = 0.0;
-                        }
-                        else if(eRectPoint == RP_MT || eRectPoint == RP_MM || eRectPoint == RP_MB)
-                        {
-                            // Mittig
-                            fLeftBound = (rVol.getWidth() / 2.0) - ((double)aLogicalSize.Width() / 2.0);
-                        }
-                        else
-                        {
-                            // Rechts aligned starten
-                            fLeftBound = rVol.getWidth() - (double)aLogicalSize.Width();
-                        }
+                    // Verschieben
+                    aTranslateVector.setX(fLeftBound);
+                    aTranslateVector.setY(fTopBound);
 
-                        // Horizontal
-                        if(eRectPoint == RP_LT || eRectPoint == RP_MT || eRectPoint == RP_RT)
-                        {
-                            // Top aligned starten
-                            fTopBound = 0.0;
-                        }
-                        else if(eRectPoint == RP_LM || eRectPoint == RP_MM || eRectPoint == RP_RM)
-                        {
-                            // Mittig
-                            fTopBound = (rVol.getHeight() / 2.0) - ((double)aLogicalSize.Height() / 2.0);
-                        }
-                        else
-                        {
-                            // Bottom aligned starten
-                            fTopBound = rVol.getHeight() - (double)aLogicalSize.Height();
-                        }
+                    // Offset beachten
+                    if(nOffPosX || nOffPosY)
+                    {
+                        aTranslateVector.setX(aTranslateVector.getX() + (double)aLogicalSize.Width() * ((double)nOffPosX / 100.0));
+                        aTranslateVector.setY(aTranslateVector.getY() + (double)aLogicalSize.Height() * ((double)nOffPosY / 100.0));
+                    }
+                }
+                else
+                {
+                    if(bStretch)
+                    {
+                        // 1x drauflegen, alles wie gehabt
+                        // fertig
+                        aScaleVector.setX(1.0);
+                        aScaleVector.setY(1.0);
+                    }
+                    else
+                    {
+                        // nur einmal benutzen
+                        eWrapX = Base3DTextureSingle;
+                        eWrapY = Base3DTextureSingle;
+
+                        // Groesse beachten, zentriert anlegen
+                        double fLeftBound = (rVol.getWidth() / 2.0) - ((double)aLogicalSize.Width() / 2.0);
+                        double fTopBound = (rVol.getHeight() / 2.0) - ((double)aLogicalSize.Height() / 2.0);
 
                         // Verschieben
                         aTranslateVector.setX(fLeftBound);
                         aTranslateVector.setY(fTopBound);
-
-                        // Offset beachten
-                        if(nOffPosX || nOffPosY)
-                        {
-                            aTranslateVector.setX(aTranslateVector.getX() + (double)aLogicalSize.Width() * ((double)nOffPosX / 100.0));
-                            aTranslateVector.setY(aTranslateVector.getY() + (double)aLogicalSize.Height() * ((double)nOffPosY / 100.0));
-                        }
-                    }
-                    else
-                    {
-                        if(bStretch)
-                        {
-                            // 1x drauflegen, alles wie gehabt
-                            // fertig
-                            aScaleVector.setX(1.0);
-                            aScaleVector.setY(1.0);
-                        }
-                        else
-                        {
-                            // nur einmal benutzen
-                            eWrapX = Base3DTextureSingle;
-                            eWrapY = Base3DTextureSingle;
-
-                            // Groesse beachten, zentriert anlegen
-                            double fLeftBound = (rVol.getWidth() / 2.0) - ((double)aLogicalSize.Width() / 2.0);
-                            double fTopBound = (rVol.getHeight() / 2.0) - ((double)aLogicalSize.Height() / 2.0);
-
-                            // Verschieben
-                            aTranslateVector.setX(fLeftBound);
-                            aTranslateVector.setY(fTopBound);
-                        }
-                    }
-
-                    // TranslateVector anpassen
-                    if(aTranslateVector.getX())
-                        aTranslateVector.setX(aTranslateVector.getX() / -rVol.getWidth());
-                    if(aTranslateVector.getY())
-                        aTranslateVector.setY(aTranslateVector.getY() / -rVol.getHeight());
-
-                    // Texturtransformation setzen
-                    mTexture.translate(aTranslateVector.getX(),aTranslateVector.getY());
-                    mTexture.scale(aScaleVector.getX(),aScaleVector.getY());
-                }
-                else if(eFillStyle == XFILL_GRADIENT)
-                {
-                    // gradient fill. Create texture and set.
-                    TextureAttributesGradient aTexAttr(
-                        bGhosted,
-                        (void*)&rSet.Get(XATTR_FILLFLOATTRANSPARENCE),
-                        (void*)&rSet.Get(XATTR_FILLGRADIENT),
-                        (void*)&rSet.Get(XATTR_GRADIENTSTEPCOUNT));
-
-                    pTexture = pBase3D->ObtainTexture(aTexAttr);
-                    if(!pTexture)
-                    {
-                        BitmapEx aBmpEx = BitmapEx(GetGradientBitmap(rSet));
-
-                        if(bFloatTransparence)
-                            // add alpha channel to bitmap
-                            aBmpEx = BitmapEx(aBmpEx.GetBitmap(), GetAlphaMask(rSet, aBmpEx.GetSizePixel()));
-
-                        if(bGhosted)
-                            aBmpEx.Adjust( 50 );
-                        pTexture = pBase3D->ObtainTexture(aTexAttr, aBmpEx);
                     }
                 }
-                else if(eFillStyle == XFILL_HATCH)
+
+                // TranslateVector anpassen
+                if(aTranslateVector.getX())
+                    aTranslateVector.setX(aTranslateVector.getX() / -rVol.getWidth());
+                if(aTranslateVector.getY())
+                    aTranslateVector.setY(aTranslateVector.getY() / -rVol.getHeight());
+
+                // Texturtransformation setzen
+                mTexture.translate(aTranslateVector.getX(),aTranslateVector.getY());
+                mTexture.scale(aScaleVector.getX(),aScaleVector.getY());
+            }
+            else if(eFillStyle == XFILL_GRADIENT)
+            {
+                // gradient fill. Create texture and set.
+                TextureAttributesGradient aTexAttr(
+                    bGhosted,
+                    (void*)&rSet.Get(XATTR_FILLFLOATTRANSPARENCE),
+                    (void*)&rSet.Get(XATTR_FILLGRADIENT),
+                    (void*)&rSet.Get(XATTR_GRADIENTSTEPCOUNT));
+
+                pTexture = pBase3D->ObtainTexture(aTexAttr);
+                if(!pTexture)
                 {
-                    // hatch fill. Create texture and set.
-                    TextureAttributesHatch aTexAttr(
-                        bGhosted,
-                        (void*)&rSet.Get(XATTR_FILLFLOATTRANSPARENCE),
-                        (void*)&rSet.Get(XATTR_FILLHATCH));
+                    BitmapEx aBmpEx = BitmapEx(GetGradientBitmap(rSet));
 
-                    pTexture = pBase3D->ObtainTexture(aTexAttr);
-                    if(!pTexture)
-                    {
-                        BitmapEx aBmpEx = GetHatchBitmap(rSet);
-
-                        if(bFloatTransparence)
-                            // add alpha channel to bitmap
-                            aBmpEx = BitmapEx(aBmpEx.GetBitmap(), GetAlphaMask(rSet, aBmpEx.GetSizePixel()));
-
-                        if(bGhosted)
-                            aBmpEx.Adjust( 50 );
-                        pTexture = pBase3D->ObtainTexture(aTexAttr, aBmpEx);
-                    }
-
-                    // set different texture transformation
-                    mTexture.scale(20.0, 20.0);
-                }
-                else if(eFillStyle == XFILL_SOLID)
-                {
                     if(bFloatTransparence)
+                        // add alpha channel to bitmap
+                        aBmpEx = BitmapEx(aBmpEx.GetBitmap(), GetAlphaMask(rSet, aBmpEx.GetSizePixel()));
+
+                    if(bGhosted)
+                        aBmpEx.Adjust( 50 );
+                    pTexture = pBase3D->ObtainTexture(aTexAttr, aBmpEx);
+                }
+            }
+            else if(eFillStyle == XFILL_HATCH)
+            {
+                // hatch fill. Create texture and set.
+                TextureAttributesHatch aTexAttr(
+                    bGhosted,
+                    (void*)&rSet.Get(XATTR_FILLFLOATTRANSPARENCE),
+                    (void*)&rSet.Get(XATTR_FILLHATCH));
+
+                pTexture = pBase3D->ObtainTexture(aTexAttr);
+                if(!pTexture)
+                {
+                    BitmapEx aBmpEx = GetHatchBitmap(rSet);
+
+                    if(bFloatTransparence)
+                        // add alpha channel to bitmap
+                        aBmpEx = BitmapEx(aBmpEx.GetBitmap(), GetAlphaMask(rSet, aBmpEx.GetSizePixel()));
+
+                    if(bGhosted)
+                        aBmpEx.Adjust( 50 );
+                    pTexture = pBase3D->ObtainTexture(aTexAttr, aBmpEx);
+                }
+
+                // set different texture transformation
+                mTexture.scale(20.0, 20.0);
+            }
+            else if(eFillStyle == XFILL_SOLID)
+            {
+                if(bFloatTransparence)
+                {
+                    // Texturattribute bilden
+                    TextureAttributesColor aTexAttr(
+                        bGhosted,
+                        (void*)&rSet.Get(XATTR_FILLFLOATTRANSPARENCE),
+                        aColorSolid);
+
+                    pTexture = pBase3D->ObtainTexture(aTexAttr);
+                    if(!pTexture)
                     {
-                        // Texturattribute bilden
-                        TextureAttributesColor aTexAttr(
-                            bGhosted,
-                            (void*)&rSet.Get(XATTR_FILLFLOATTRANSPARENCE),
-                            aColorSolid);
+                        // build single colored bitmap with draw color and add transparence bitmap
+                        Size aSizeBitmap(128, 128);
+                        Bitmap aForeground(aSizeBitmap, 24);
+                        aForeground.Erase(aColorSolid);
 
-                        pTexture = pBase3D->ObtainTexture(aTexAttr);
-                        if(!pTexture)
-                        {
-                            // build single colored bitmap with draw color and add transparence bitmap
-                            Size aSizeBitmap(128, 128);
-                            Bitmap aForeground(aSizeBitmap, 24);
-                            aForeground.Erase(aColorSolid);
+                        if(bGhosted)
+                            aForeground.Adjust( 50 );
 
-                            if(bGhosted)
-                                aForeground.Adjust( 50 );
+                        // add alpha channel to bitmap
+                        BitmapEx aBmpEx(aForeground, GetAlphaMask(rSet, aSizeBitmap));
 
-                            // add alpha channel to bitmap
-                            BitmapEx aBmpEx(aForeground, GetAlphaMask(rSet, aSizeBitmap));
-
-                            pTexture = pBase3D->ObtainTexture(aTexAttr, aBmpEx);
-                        }
-                    }
-                    else
-                    {
-                        // set material to base color
-                        pBase3D->SetMaterial(aColorSolid, Base3DMaterialAmbient);
-                        pBase3D->SetMaterial(aColorSolidWithTransparency, Base3DMaterialDiffuse);
-                        if(GetUseDifferentBackMaterial())
-                        {
-                            pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialAmbient), Base3DMaterialAmbient, Base3DMaterialBack);
-                            pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialDiffuse), Base3DMaterialDiffuse, Base3DMaterialBack);
-                        }
-
-                        // and at last, the render mode.
-                        pBase3D->SetRenderMode(Base3DRenderFill);
+                        pTexture = pBase3D->ObtainTexture(aTexAttr, aBmpEx);
                     }
                 }
                 else
                 {
-                    DBG_ERROR("unknown drawing mode (!)");
-                }
+                    // set material to base color
+                    pBase3D->SetMaterial(aColorSolid, Base3DMaterialAmbient);
+                    pBase3D->SetMaterial(aColorSolidWithTransparency, Base3DMaterialDiffuse);
+                    if(GetUseDifferentBackMaterial())
+                    {
+                        pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialAmbient), Base3DMaterialAmbient, Base3DMaterialBack);
+                        pBase3D->SetMaterial(aBackMaterial.GetMaterial(Base3DMaterialDiffuse), Base3DMaterialDiffuse, Base3DMaterialBack);
+                    }
 
-                // use texture?
-                if(pTexture)
-                {
-                    // set values for texture modes
-                    pTexture->SetTextureKind(GetTextureKind());
-                    pTexture->SetTextureMode(GetTextureMode());
-                    pTexture->SetTextureFilter(GetTextureFilter() ? Base3DTextureLinear : Base3DTextureNearest);
-                    pTexture->SetTextureWrapS(eWrapX);
-                    pTexture->SetTextureWrapT(eWrapY);
-                    pTexture->SetBlendColor(aColorSolid);
-                    pTexture->SetTextureColor(aColorSolid);
-
-                    // activate texture
-                    pBase3D->SetActiveTexture(pTexture);
+                    // and at last, the render mode.
                     pBase3D->SetRenderMode(Base3DRenderFill);
+                }
+            }
+            else
+            {
+                DBG_ERROR("unknown drawing mode (!)");
+            }
 
-                    // set texture transformation
-                    GetScene()->GetCameraSet().SetTexture(mTexture);
-                }
-                else
-                {
-                    // switch it off.texture usage
-                    pBase3D->SetActiveTexture();
-                }
+            // use texture?
+            if(pTexture)
+            {
+                // set values for texture modes
+                pTexture->SetTextureKind(GetTextureKind());
+                pTexture->SetTextureMode(GetTextureMode());
+                pTexture->SetTextureFilter(GetTextureFilter() ? Base3DTextureLinear : Base3DTextureNearest);
+                pTexture->SetTextureWrapS(eWrapX);
+                pTexture->SetTextureWrapT(eWrapY);
+                pTexture->SetBlendColor(aColorSolid);
+                pTexture->SetTextureColor(aColorSolid);
+
+                // activate texture
+                pBase3D->SetActiveTexture(pTexture);
+                pBase3D->SetRenderMode(Base3DRenderFill);
+
+                // set texture transformation
+                GetScene()->GetCameraSet().SetTexture(mTexture);
+            }
+            else
+            {
+                // switch it off.texture usage
+                pBase3D->SetActiveTexture();
             }
         }
     }
@@ -3255,7 +3252,7 @@ sal_Bool E3dCompoundObject::ImpSet3DParForFill(XOutputDevice& /*rOut*/, Base3D* 
     return bDrawObject;
 }
 
-sal_Bool E3dCompoundObject::ImpSet3DParForLine(XOutputDevice& rOut, Base3D* pBase3D, UINT16 nDrawFlags, BOOL /*bGhosted*/, BOOL bIsLineDraft, BOOL bIsFillDraft)
+sal_Bool E3dCompoundObject::ImpSet3DParForLine(XOutputDevice& rOut, Base3D* pBase3D, UINT16 nDrawFlags, BOOL /*bGhosted*/)
 {
     sal_Bool bDrawOutline(sal_True);
 
@@ -3268,10 +3265,6 @@ sal_Bool E3dCompoundObject::ImpSet3DParForLine(XOutputDevice& rOut, Base3D* pBas
     // #b4899532# if not filled but fill draft, avoid object being invisible in using
     // a hair linestyle and COL_LIGHTGRAY
     SfxItemSet aItemSet(rSet);
-    if(bIsFillDraft && XLINE_NONE == ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue())
-    {
-        ImpPrepareLocalItemSetForDraftLine(aItemSet);
-    }
 
     if(bLineTransparence != bDrawTransparence)
     {
@@ -3305,18 +3298,11 @@ sal_Bool E3dCompoundObject::ImpSet3DParForLine(XOutputDevice& rOut, Base3D* pBas
             aColorLine = Color( aColorConfig.GetColorValue( svtools::FONTCOLOR ).nColor );
         }
 
-        if(nLineWidth && !bIsLineDraft)
-        {
-            Point aPnt(nLineWidth, 0);
-            aPnt = pBase3D->GetOutputDevice()->LogicToPixel(aPnt) - pBase3D->GetOutputDevice()->LogicToPixel(Point());
-            if(aPnt.X() <= 0)
-                aPnt.X() = 1;
-            pBase3D->SetLineWidth((double)aPnt.X());
-        }
-        else
-        {
-            pBase3D->SetLineWidth(1.0);
-        }
+        Point aPnt(nLineWidth, 0);
+        aPnt = pBase3D->GetOutputDevice()->LogicToPixel(aPnt) - pBase3D->GetOutputDevice()->LogicToPixel(Point());
+        if(aPnt.X() <= 0)
+            aPnt.X() = 1;
+        pBase3D->SetLineWidth((double)aPnt.X());
 
         // Material setzen
         pBase3D->SetColor(aColorLine);
@@ -3326,16 +3312,19 @@ sal_Bool E3dCompoundObject::ImpSet3DParForLine(XOutputDevice& rOut, Base3D* pBas
 }
 
 void E3dCompoundObject::SetBase3DParams(XOutputDevice& rOut, Base3D* pBase3D,
-    BOOL& bDrawObject, BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL bGhosted,
-    BOOL bIsLineDraft, BOOL bIsFillDraft)
+    BOOL& bDrawObject, BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL bGhosted)
 {
     bDrawObject = ((nDrawFlags & E3D_DRAWFLAG_FILLED) != 0);
     if(bDrawObject)
-        bDrawObject = ImpSet3DParForFill(rOut, pBase3D, nDrawFlags, bGhosted, bIsFillDraft);
+    {
+        bDrawObject = ImpSet3DParForFill(rOut, pBase3D, nDrawFlags, bGhosted);
+    }
 
     bDrawOutline = ((nDrawFlags & E3D_DRAWFLAG_OUTLINE) != 0);
     if(bDrawOutline)
-        bDrawOutline = ImpSet3DParForLine(rOut, pBase3D, nDrawFlags, bGhosted, bIsLineDraft, bIsFillDraft);
+    {
+        bDrawOutline = ImpSet3DParForLine(rOut, pBase3D, nDrawFlags, bGhosted);
+    }
 
     // Set ObjectTrans if line or fill is still set (maybe retet by upper calls)
     if(bDrawObject || bDrawOutline)
@@ -4192,11 +4181,8 @@ void E3dCompoundObject::Paint3D(XOutputDevice& rOut, Base3D* pBase3D,
         // Ausgabeparameter setzen
         BOOL bDrawOutline;
         BOOL bDrawObject;
-        BOOL bIsLineDraft((rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE) != 0);
-        BOOL bIsFillDraft((rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL) != 0);
         BOOL bGhosted((rInfoRec.pPV && rInfoRec.pPV->GetView().DoVisualizeEnteredGroup()) ? rInfoRec.bNotActive : FALSE);
-        SetBase3DParams(rOut, pBase3D, bDrawObject, bDrawOutline, nDrawFlags,
-            bGhosted, bIsLineDraft, bIsFillDraft);
+        SetBase3DParams(rOut, pBase3D, bDrawObject, bDrawOutline, nDrawFlags, bGhosted);
 
         // Culling?
         pBase3D->SetCullMode(GetDoubleSided() ? Base3DCullNone : Base3DCullBack);
