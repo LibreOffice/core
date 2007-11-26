@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:19:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:13:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ protected:
     void ShowDragObj();
     void HideDragObj();
     sal_Bool ImpBegInsObjPoint(sal_Bool bIdxZwang, sal_uInt32 nIdx, const Point& rPnt, sal_Bool bNewObj, OutputDevice* pOut);
+    void SetMarkHandles();
 
 protected:
     // #i71538# make constructors of SdrView sub-components protected to avoid incomplete incarnations which may get casted to SdrView
