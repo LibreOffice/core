@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: kz $ $Date: 2007-10-02 15:20:16 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 13:16:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -479,6 +479,7 @@ sub replace_setup_variables
         $value =~ s/\<productupdate\>/$productupdatestring/;
         $value =~ s/\<updateid\>/$updateid/;
         $value =~ s/\<useragent\>/$useragent/;
+        $value =~ s/\<pkgformat\>/$installer::globals::packageformat/;
 
         $oneitem->{'Value'} = $value;
     }
