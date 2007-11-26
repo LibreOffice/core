@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:39:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:37:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,10 +221,6 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
 //      SetMasterPagePaintCaching( pFrameView->IsMasterPagePaintCaching() );
         SetDesignMode( pFrameView->IsDesignMode() );
 
-        SetLineDraft( pFrameView->IsLineDraft() );
-        SetFillDraft( pFrameView->IsFillDraft() );
-        SetTextDraft( pFrameView->IsTextDraft() );
-        SetGrafDraft( pFrameView->IsGrafDraft() );
         SetSolidMarkHdl( pFrameView->IsSolidMarkHdl() );
         SetSolidDragging( pFrameView->IsSolidDragging() );
 
@@ -394,10 +390,6 @@ void FrameView::Update(SdOptions* pOptions)
 //      SetMasterPagePaintCaching( pOptions->IsMasterPagePaintCaching() );
         GetModel()->SetPickThroughTransparentTextFrames( pOptions->IsPickThrough() );
 
-        SetLineDraft( pOptions->IsHairlineMode() );
-        SetFillDraft( pOptions->IsOutlineMode() );
-        SetTextDraft( pOptions->IsNoText() );
-        SetGrafDraft( pOptions->IsExternGraphic() );
         SetSolidMarkHdl( pOptions->IsSolidMarkHdl() );
         SetSolidDragging( pOptions->IsSolidDragging() );
 
