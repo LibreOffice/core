@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabpage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:34:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:42:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 #ifndef _SV_TABCTRL_HXX
 #include <vcl/tabctrl.hxx>
 #endif
+#include <vcl/bitmapex.hxx>
 
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -190,14 +191,24 @@ void TabPage::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, UL
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
 
-    ImplInitSettings();
+    Wallpaper aWallpaper = GetBackground();
+    if ( !aWallpaper.IsBitmap() )
+        ImplInitSettings();
 
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetLineColor();
-    pDev->SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
 
-    pDev->DrawRect( Rectangle( aPos, aSize ) );
+    if ( aWallpaper.IsBitmap() )
+        pDev->DrawBitmapEx( aPos, aSize, aWallpaper.GetBitmap() );
+    else
+    {
+        if( aWallpaper.GetColor() == COL_AUTO )
+            pDev->SetFillColor( GetSettings().GetStyleSettings().GetDialogColor() );
+        else
+            pDev->SetFillColor( aWallpaper.GetColor() );
+        pDev->DrawRect( Rectangle( aPos, aSize ) );
+    }
 
     pDev->Pop();
 }
