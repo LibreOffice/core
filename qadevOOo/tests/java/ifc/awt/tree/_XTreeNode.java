@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XTreeNode.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:51:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:17:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ import lib.StatusException;
  *  <li><code> getChildCount()</code></li>
  *  <li><code> getParent()</code></li>
  *  <li><code> getIndex()</code></li>
- *  <li><code> hasChildsOnDemand()</code></li>
+ *  <li><code> hasChildrenOnDemand()</code></li>
  *  <li><code> getDisplayValue()</code></li>
  *  <li><code> getNodeGraphicURL()</code></li>
  *  <li><code> getExpandedGraphicURL()</code></li>
@@ -186,12 +186,12 @@ public class _XTreeNode extends MultiMethodTest {
     }
 
 
-    public void _hasChildsOnDemand(){
+    public void _hasChildrenOnDemand(){
 
         boolean bOK = true;
 
-        bOK = oObj.hasChildsOnDemand();
-        tRes.tested("hasChildsOnDemand()", bOK);
+        bOK = oObj.hasChildrenOnDemand();
+        tRes.tested("hasChildrenOnDemand()", bOK);
     }
 
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XMutableTreeNode.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:51:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:17:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ import lib.StatusException;
  *  <li><code> appendChild()</code></li>
  *  <li><code> insertChildByIndex()</code></li>
  *  <li><code> removeChildByIndex()</code></li>
- *  <li><code> setHasChildsOnDemand()</code></li>
+ *  <li><code> setHasChildrenOnDemand()</code></li>
  *  <li><code> setDisplayValue()</code></li>
  *  <li><code> setNodeGraphicURL()</code></li>
  *  <li><code> setExpandedGraphicURL()</code></li>
@@ -200,16 +200,16 @@ public class _XMutableTreeNode extends MultiMethodTest {
         tRes.tested("removeChildByIndex()", bOK);
     }
 
-     public void _setHasChildsOnDemand(){
+     public void _setHasChildrenOnDemand(){
         boolean bOK = true;
 
-        log.println("setHasChildsOnDemand(true)");
-        oObj.setHasChildsOnDemand(true);
+        log.println("setHasChildrenOnDemand(true)");
+        oObj.setHasChildrenOnDemand(true);
 
-        log.println("setHasChildsOnDemand(false)");
-        oObj.setHasChildsOnDemand(false);
+        log.println("setHasChildrenOnDemand(false)");
+        oObj.setHasChildrenOnDemand(false);
 
-        tRes.tested("setHasChildsOnDemand()", bOK);
+        tRes.tested("setHasChildrenOnDemand()", bOK);
     }
 
      public void _setDisplayValue(){
