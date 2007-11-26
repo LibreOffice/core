@@ -4,9 +4,9 @@
 #
 #   $RCSfile: simplepackage.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 14:19:22 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 13:16:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -146,12 +146,13 @@ sub register_extensions
 #############################################
 # Creating the "simple" package.
 # "zip" for Windows
+# "dmg" on Mac OS X
 # "tar.gz" for all other platforms
 #############################################
 
 sub create_package
 {
-    my ( $installdir, $packagename, $includepatharrayref ) = @_;
+    my ( $installdir, $packagename, $allvariables, $includepatharrayref ) = @_;
 
     # moving dir into temporary directory
     my $pid = $$; # process id
@@ -164,24 +165,24 @@ sub create_package
     # creating new directory with original name
     installer::systemactions::create_directory($installdir);
 
-    if ( $installer::globals::iswindowsbuild )  # Windows specific part
-    {
-        $fileextension = ".zip";
-        my $zipfilename = $packagename . $fileextension;
-        $zipfilename = $installdir . $installer::globals::separator . $zipfilename;
+        my $archive =  $installdir . $installer::globals::separator . $packagename . $installer::globals::archiveformat;
 
+    if ( $archive =~ /zip$/ )
+    {
         $from = cwd();
         $return_to_start = 1;
         chdir($tempdir);
-        $systemcall = "$installer::globals::zippath -qr $zipfilename .";
-        # $systemcall = "$installer::globals::zippath -r $zipfilename .";
+        $systemcall = "$installer::globals::zippath -qr $archive .";
+        # $systemcall = "$installer::globals::zippath -r $archive .";
     }
-    else    # Non-Windows specific part
+     elsif ( $archive =~ /dmg$/ )
     {
-        $fileextension = ".tar.gz";
-        my $targzname = $packagename . $fileextension;
-        $targzname = $installdir . $installer::globals::separator . $targzname;
-
+        installer::worker::put_scpactions_into_installset("$tempdir/$packagename");
+        my $folder = ( -l "$tempdir/$packagename/Applications" ) ? $packagename : "\.";
+        $systemcall = "cd $tempdir && hdiutil makehybrid -hfs -hfs-openfolder $folder $folder -hfs-volume-name $allvariables->{'PRODUCTNAME'} -ov -o $installdir/tmp && hdiutil convert -ov -format UDZO $installdir/tmp.dmg -o $archive && rm -f $installdir/tmp.dmg";
+    }
+    else
+    {
         # getting the path of the getuid.so (only required for Solaris and Linux)
         my $getuidlibrary = "";
         my $ldpreloadstring = "";
@@ -191,7 +192,7 @@ sub create_package
             if ( $getuidlibrary ne "" ) { $ldpreloadstring = "LD_PRELOAD=" . $getuidlibrary; }
         }
 
-        $systemcall = "cd $tempdir; $ldpreloadstring tar -cf - . | gzip > $targzname";
+        $systemcall = "cd $tempdir; $ldpreloadstring tar -cf - . | gzip > $archive";
     }
 
     print "... $systemcall ...\n";
@@ -387,7 +388,7 @@ sub create_simple_package
             # -> tar.gz for all other platforms
             installer::logger::print_message( "... creating archive file ...\n" );
             installer::logger::include_header_into_logfile("Creating archive file:");
-            create_package($installdir, $packagename, $includepatharrayref);
+            create_package($installdir, $packagename, $allvariables, $includepatharrayref);
         }
     }
 
