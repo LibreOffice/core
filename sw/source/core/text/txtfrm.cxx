@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 12:18:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:30:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -475,7 +475,7 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
 
     if ( pVsh && ( bHiddenCharsHidePara || bHiddenParaField ) )
     {
-        if ( !pVsh->GetWin() ||
+        if (
              ( bHiddenParaField &&
                ( !pVsh->GetViewOptions()->IsShowHiddenPara() &&
                  !pVsh->GetViewOptions()->IsFldName() ) ) ||
