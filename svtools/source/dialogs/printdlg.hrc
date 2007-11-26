@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdlg.hrc,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:28:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:38:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,10 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #include <svtools/svtools.hrc>
 
-#define FL_PRINTER          1
+#define FL_PRINTER              1
 #define LB_NAMES                2
 #define BTN_PROPERTIES          3
 #define FT_NAME                 4
@@ -48,28 +49,34 @@
 #define FI_COMMENT              12
 #define CBX_FILEPRINT           13
 #define FI_PRINTFILE            14
-#define BTN_BROWSE              15
+#define FI_FAXNO                15
+#define EDT_FAXNO               16
 
-#define FL_PRINTRANGE           16
-#define RBT_ALL                 17
-#define RBT_PAGES               18
-#define RBT_SELECTION           19
-#define EDT_PAGES               20
+#define FL_PRINT                20
+#define RBT_ALL_SHEETS          21
+#define RBT_SELECTED_SHEETS     22
+#define RBT_SELECTED_CELLS      23
 
-#define FL_COPIES               21
-#define FT_COPIES               22
-#define NUM_COPIES              23
-#define CBX_COLLATE             24
-#define IMG_COLLATE             25
-#define IMG_NOT_COLLATE         26
+#define FL_PRINTRANGE           30
+#define RBT_ALL                 31
+#define RBT_PAGES               32
+#define EDT_PAGES               33
+#define RBT_SELECTION           34
 
-#define BTN_OK                  27
-#define BTN_CANCEL              28
-#define BTN_HELP                29
-#define BTN_OPTIONS             30
+#define FL_SEPCOPIESRANGE       35
 
-#define FI_FAXNO                31
-#define EDT_FAXNO               32
-#define FL_SEPCOPIESRANGE       33
-#define FL_SEPBUTTONLINE        34
-#define STR_ALLFILTER           35
+#define FL_COPIES               40
+#define FT_COPIES               41
+#define NUM_COPIES              42
+#define CBX_COLLATE             43
+#define IMG_COLLATE             44
+#define IMG_NOT_COLLATE         45
+
+#define FL_SEPBUTTONLINE        50
+#define BTN_OK                  51
+#define BTN_CANCEL              52
+#define BTN_HELP                53
+#define BTN_OPTIONS             54
+
+#define STR_ALLFILTER           10
+
