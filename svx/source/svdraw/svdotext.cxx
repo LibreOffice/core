@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:29:40 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:56:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1238,209 +1238,209 @@ sal_Bool SdrTextObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
         rInfoRec.pPV->GetView().GetTextEditObject()==(SdrObject*)this)
         return bOk; // Textobjekt wird gerade editiert in der auffordernen View
 
-    if ((rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTTEXT) ==0)
+    if (pOutlinerParaObject!=NULL || (pEdtOutl!=NULL && HasEditText()))
     {
-        if (pOutlinerParaObject!=NULL || (pEdtOutl!=NULL && HasEditText()))
-        {
-            SdrOutliner& rOutliner=ImpGetDrawOutliner();
+        SdrOutliner& rOutliner=ImpGetDrawOutliner();
 
+        {
+            SvtAccessibilityOptions aOptions;
+            bool bForceAutoColor = aOptions.GetIsAutomaticFontColor();
+            //#106611# don't use automatic colors in WYSIWYG Print Previews
+            if(bPrintPreView&& !aOptions.GetIsForPagePreviews())
+                bForceAutoColor = false;
+            rOutliner.ForceAutoColor( bForceAutoColor );
+        }
+
+        FASTBOOL bContourFrame=IsContourTextFrame();
+        if (IsFontwork() && !bContourFrame)
+        { // FontWork
+            if (pModel!=NULL)
             {
-                SvtAccessibilityOptions aOptions;
-                bool bForceAutoColor = aOptions.GetIsAutomaticFontColor();
-                //#106611# don't use automatic colors in WYSIWYG Print Previews
-                if(bPrintPreView&& !aOptions.GetIsForPagePreviews())
-                    bForceAutoColor = false;
-                rOutliner.ForceAutoColor( bForceAutoColor );
+                rOutliner.SetUpdateMode(TRUE); // hier kann ggf. noch optimiert werden !!!
+                ImpTextPortionHandler aTPHandler(rOutliner,*this);
+
+                // #78478# to have the outline color in XOutputDevice::ImpDrawFormText(...)
+                // SetLineAttr(...) needs to be called if the outline item is set
+                const SfxItemSet& rSet = GetObjectItemSet();
+                BOOL bFormTextOutline = ((XFormTextOutlineItem&)(rSet.Get(XATTR_FORMTXTOUTLINE))).GetValue();
+
+                if(bFormTextOutline)
+                    rXOut.SetLineAttr(rSet);
+
+                rXOut.SetTextAttr(rSet);
+
+                aTPHandler.DrawTextToPath(rXOut); // drucken bei aktivem Textedit fehlt hier
+                rOutliner.Clear();
+            }
+        }
+        else if(SDRPAINTMODE_CONTOUR & rInfoRec.nPaintMode)
+        {
+            //#i80528# to not run i a recursion in TakeContour, do not setup an outliner but just
+            // use a polygon paint; the paint is executed to get a contour of the object anyways
+            FASTBOOL bFill=HasFill();
+            FASTBOOL bLine=HasLine();
+            FASTBOOL bHide=IsFontwork() && IsHideContour() && pFormTextBoundRect!=NULL;
+
+            if (bHide)
+            {
+                bFill=FALSE;
+                bLine=FALSE;
             }
 
-            FASTBOOL bContourFrame=IsContourTextFrame();
-            if (IsFontwork() && !bContourFrame)
-            { // FontWork
-                if (pModel!=NULL)
+            if ((bTextFrame && !bLine && !bFill) || bHide)
+            {
+                OutputDevice* pOut=rXOut.GetOutDev();
+                Polygon aPoly;
+
+                if (bHide)
+                    aPoly=Polygon(*pFormTextBoundRect);
+                else
+                    aPoly=Rect2Poly(aRect,aGeo);
+
+                if (aPoly.GetSize()>=4)
                 {
-                    rOutliner.SetUpdateMode(TRUE); // hier kann ggf. noch optimiert werden !!!
-                    ImpTextPortionHandler aTPHandler(rOutliner,*this);
+                    pOut->SetLineColor(Color(COL_BLACK));
+                    pOut->DrawPolyLine(aPoly);
+                    pOut->DrawLine(aPoly[0],aPoly[2]);
+                    pOut->DrawLine(aPoly[1],aPoly[3]);
+                }
+            }
+        }
+        else
+        {
+            // sonst kein Fontwork
+            // hier findet das richtige Painten des Textes statt
+            Rectangle aTextRect;
+            Rectangle aAnchorRect;
+            Rectangle aPaintRect;
+            Fraction aFitXKorreg(1,1);
 
-                    // #78478# to have the outline color in XOutputDevice::ImpDrawFormText(...)
-                    // SetLineAttr(...) needs to be called if the outline item is set
-                    const SfxItemSet& rSet = GetObjectItemSet();
-                    BOOL bFormTextOutline = ((XFormTextOutlineItem&)(rSet.Get(XATTR_FORMTXTOUTLINE))).GetValue();
+            // the outliner needs the paint info so that CalcFieldValueHdl knows the context for
+            // calculating field values
+            rOutliner.SetPaintInfoRec( &rInfoRec );
 
-                    if(bFormTextOutline)
-                        rXOut.SetLineAttr(rSet);
+            // #101029#: Extracted Outliner setup to ImpSetupDrawOutlinerForPaint
+            ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXKorreg );
+            OutputDevice* pOutDev=rXOut.GetOutDev();
 
-                    rXOut.SetTextAttr(rSet);
+            GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
 
-                    aTPHandler.DrawTextToPath(rXOut); // drucken bei aktivem Textedit fehlt hier
-                    rOutliner.Clear();
+            // #110496# Apply verbose mode to outliner
+            BOOL bOldVerboseState( rOutliner.IsVerboseTextComments() );
+            BOOL bWritePaintEndComment( FALSE );
+            if( rInfoRec.nPaintMode & SDRPAINTMODE_VERBOSE_MTF )
+            {
+                rOutliner.EnableVerboseTextComments(TRUE);
+
+                if( pMtf != NULL )
+                {
+                    // #110496# Added some more optional metafile comments.
+                    pMtf->AddAction( new MetaCommentAction( "XTEXT_PAINTSHAPE_BEGIN" ) );
+
+                    bWritePaintEndComment = TRUE;
+                }
+            }
+
+            if (aGeo.nDrehWink!=0)
+            {
+                // #49328# bei AutoGrowHeight()=TRUE nicht mehr clippen
+                FASTBOOL bNeedClip=(bTextFrame && !IsAutoGrowHeight()) || bContourFrame;
+                // ClipRegion setzen. Das macht Malte bei gedrehter Ausgabe naemlich nicht!
+                FASTBOOL bMtf=pOutDev->GetConnectMetaFile()!=NULL;
+                // Clipping merken
+                FASTBOOL bClip0=pOutDev->IsClipRegion();
+                Region   aClip0(pOutDev->GetClipRegion());
+                if (bNeedClip)
+                {
+                    if (bMtf) pOutDev->Push();
+                    // Neues Clipping setzen
+                    Rectangle aClipRect(aPaintRect);
+                    if (bPrinter)
+                    { // #42520#: Bei HP-Druckern fehlt sonst oefter der letzte Buchstabe einer Zeile
+                        Size a1Pix(pOutDev->PixelToLogic(Size(1,1)));
+                        aClipRect.Top()-=a1Pix.Width();
+                        aClipRect.Left()-=a1Pix.Height();
+                        aClipRect.Right()+=a1Pix.Width();
+                        aClipRect.Bottom()+=a1Pix.Height();
+                    }
+                    Polygon aClipPoly(aClipRect);
+                    RotatePoly(aClipPoly,aPaintRect.TopLeft(),aGeo.nSin,aGeo.nCos);
+                    // Intersect geht leider nicht, weil Poly statt Rect
+                    pOutDev->SetClipRegion(aClipPoly);
+                    if (bClip0)
+                    {
+                        // Aber wenn's vorher nur ein Rechteck war, dann
+                        // intersecte ich mein Poly nun mit diesem
+                        pOutDev->IntersectClipRegion(aClip0.GetBoundRect());
+                    }
+                }
+                // Textausgabe
+                rOutliner.Draw(pOutDev,aPaintRect.TopLeft(),(short)(aGeo.nDrehWink/10));
+                if (bNeedClip)
+                {
+                    // Clipping restaurieren
+                    if (bMtf)
+                        pOutDev->Pop();
+                    else
+                    {
+                        if (bClip0)
+                            pOutDev->SetClipRegion(aClip0);
+                        else
+                            pOutDev->SetClipRegion();
+                    }
                 }
             }
             else
             {
-                // sonst kein Fontwork
-                // hier findet das richtige Painten des Textes statt
-                Rectangle aTextRect;
-                Rectangle aAnchorRect;
-                Rectangle aPaintRect;
-                Fraction aFitXKorreg(1,1);
-
-                // the outliner needs the paint info so that CalcFieldValueHdl knows the context for
-                // calculating field values
-                rOutliner.SetPaintInfoRec( &rInfoRec );
-
-                // #101029#: Extracted Outliner setup to ImpSetupDrawOutlinerForPaint
-                ImpSetupDrawOutlinerForPaint( bContourFrame, rOutliner, aTextRect, aAnchorRect, aPaintRect, aFitXKorreg );
-                OutputDevice* pOutDev=rXOut.GetOutDev();
-
-                GDIMetaFile* pMtf = pOutDev->GetConnectMetaFile();
-
-                // #110496# Apply verbose mode to outliner
-                BOOL bOldVerboseState( rOutliner.IsVerboseTextComments() );
-                BOOL bWritePaintEndComment( FALSE );
-                if( rInfoRec.nPaintMode & SDRPAINTMODE_VERBOSE_MTF )
+                if(IsVerticalWriting())
                 {
-                    rOutliner.EnableVerboseTextComments(TRUE);
-
-                    if( pMtf != NULL )
+                    // new try for #82826#
+                    if(aAnchorRect.GetWidth() > aPaintRect.GetWidth())
                     {
-                        // #110496# Added some more optional metafile comments.
-                        pMtf->AddAction( new MetaCommentAction( "XTEXT_PAINTSHAPE_BEGIN" ) );
+                        aPaintRect = Rectangle(
+                            aPaintRect.Right() - aAnchorRect.GetWidth(), aPaintRect.Top(),
+                            aPaintRect.Right(), aPaintRect.Bottom());
+                    }
 
-                        bWritePaintEndComment = TRUE;
-                    }
-                }
-
-                if (aGeo.nDrehWink!=0)
-                {
-                    // #49328# bei AutoGrowHeight()=TRUE nicht mehr clippen
-                    FASTBOOL bNeedClip=(bTextFrame && !IsAutoGrowHeight()) || bContourFrame;
-                    // ClipRegion setzen. Das macht Malte bei gedrehter Ausgabe naemlich nicht!
-                    FASTBOOL bMtf=pOutDev->GetConnectMetaFile()!=NULL;
-                    // Clipping merken
-                    FASTBOOL bClip0=pOutDev->IsClipRegion();
-                    Region   aClip0(pOutDev->GetClipRegion());
-                    if (bNeedClip)
-                    {
-                        if (bMtf) pOutDev->Push();
-                        // Neues Clipping setzen
-                        Rectangle aClipRect(aPaintRect);
-                        if (bPrinter)
-                        { // #42520#: Bei HP-Druckern fehlt sonst oefter der letzte Buchstabe einer Zeile
-                            Size a1Pix(pOutDev->PixelToLogic(Size(1,1)));
-                            aClipRect.Top()-=a1Pix.Width();
-                            aClipRect.Left()-=a1Pix.Height();
-                            aClipRect.Right()+=a1Pix.Width();
-                            aClipRect.Bottom()+=a1Pix.Height();
-                        }
-                        Polygon aClipPoly(aClipRect);
-                        RotatePoly(aClipPoly,aPaintRect.TopLeft(),aGeo.nSin,aGeo.nCos);
-                        // Intersect geht leider nicht, weil Poly statt Rect
-                        pOutDev->SetClipRegion(aClipPoly);
-                        if (bClip0)
-                        {
-                            // Aber wenn's vorher nur ein Rechteck war, dann
-                            // intersecte ich mein Poly nun mit diesem
-                            pOutDev->IntersectClipRegion(aClip0.GetBoundRect());
-                        }
-                    }
-                    // Textausgabe
-                    rOutliner.Draw(pOutDev,aPaintRect.TopLeft(),(short)(aGeo.nDrehWink/10));
-                    if (bNeedClip)
-                    {
-                        // Clipping restaurieren
-                        if (bMtf)
-                            pOutDev->Pop();
-                        else
-                        {
-                            if (bClip0)
-                                pOutDev->SetClipRegion(aClip0);
-                            else
-                                pOutDev->SetClipRegion();
-                        }
-                    }
+                    // #91744# for vertical writing the original fix #82826#
+                    // needs to be taken out.
+                    rOutliner.Draw(pOutDev, aPaintRect);
                 }
                 else
                 {
-                    if(IsVerticalWriting())
+                    // new try for #82826#
+                    if(aAnchorRect.GetHeight() > aPaintRect.GetHeight())
                     {
-                        // new try for #82826#
-                        if(aAnchorRect.GetWidth() > aPaintRect.GetWidth())
-                        {
-                            aPaintRect = Rectangle(
-                                aPaintRect.Right() - aAnchorRect.GetWidth(), aPaintRect.Top(),
-                                aPaintRect.Right(), aPaintRect.Bottom());
-                        }
-
-                        // #91744# for vertical writing the original fix #82826#
-                        // needs to be taken out.
-                        rOutliner.Draw(pOutDev, aPaintRect);
+                        aPaintRect = Rectangle(
+                            aPaintRect.Left(), aPaintRect.Top(),
+                            aPaintRect.Right(), aPaintRect.Top() + aAnchorRect.GetHeight());
                     }
-                    else
-                    {
-                        // new try for #82826#
-                        if(aAnchorRect.GetHeight() > aPaintRect.GetHeight())
-                        {
-                            aPaintRect = Rectangle(
-                                aPaintRect.Left(), aPaintRect.Top(),
-                                aPaintRect.Right(), aPaintRect.Top() + aAnchorRect.GetHeight());
-                        }
 
-                        // #91809# for horizontal writing the original fix #82826#
-                        // needs to be taken out, too.
-                        rOutliner.Draw(pOutDev, aPaintRect);
+                    // #91809# for horizontal writing the original fix #82826#
+                    // needs to be taken out, too.
+                    rOutliner.Draw(pOutDev, aPaintRect);
 
-                        // #82826# for correct preview of outliner views
-                        //// rOutliner.Draw(pOutDev,aPaintRect);
-                        //if(aPaintRect.Top() > aAnchorRect.Top())
-                        //  rOutliner.Draw(pOutDev, aPaintRect);
-                        //else
-                        //  rOutliner.Draw(pOutDev, aAnchorRect);
-                    }
+                    // #82826# for correct preview of outliner views
+                    //// rOutliner.Draw(pOutDev,aPaintRect);
+                    //if(aPaintRect.Top() > aAnchorRect.Top())
+                    //  rOutliner.Draw(pOutDev, aPaintRect);
+                    //else
+                    //  rOutliner.Draw(pOutDev, aAnchorRect);
                 }
-
-                // #110496# Added some more optional metafile comments.
-                if( bWritePaintEndComment )
-                    pMtf->AddAction( new MetaCommentAction( "XTEXT_PAINTSHAPE_END" ) );
-
-                // #110496# Restore previous value
-                rOutliner.EnableVerboseTextComments( bOldVerboseState );
-
-                rOutliner.Clear();
-                rOutliner.ClearPaintInfoRec();
             }
+
+            // #110496# Added some more optional metafile comments.
+            if( bWritePaintEndComment )
+                pMtf->AddAction( new MetaCommentAction( "XTEXT_PAINTSHAPE_END" ) );
+
+            // #110496# Restore previous value
+            rOutliner.EnableVerboseTextComments( bOldVerboseState );
+
+            rOutliner.Clear();
+            rOutliner.ClearPaintInfoRec();
         }
     }
-    else
-    {
-        FASTBOOL bFill=HasFill();
-        FASTBOOL bLine=HasLine();
-        FASTBOOL bHide=IsFontwork() && IsHideContour() && pFormTextBoundRect!=NULL;
 
-        if (bHide)
-        {
-            bFill=FALSE;
-            bLine=FALSE;
-        }
-
-        if ((bTextFrame && !bLine && !bFill) || bHide)
-        {
-            OutputDevice* pOut=rXOut.GetOutDev();
-            Polygon aPoly;
-
-            if (bHide)
-                aPoly=Polygon(*pFormTextBoundRect);
-            else
-                aPoly=Rect2Poly(aRect,aGeo);
-
-            if (aPoly.GetSize()>=4)
-            {
-                pOut->SetLineColor(Color(COL_BLACK));
-                pOut->DrawPolyLine(aPoly);
-                pOut->DrawLine(aPoly[0],aPoly[2]);
-                pOut->DrawLine(aPoly[1],aPoly[3]);
-            }
-        }
-    }
     return bOk;
 }
 
