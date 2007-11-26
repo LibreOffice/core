@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:29:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:37:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,22 +311,6 @@ void DrawViewShell::ReadFrameViewData(FrameView* pView)
     if (mpDrawView->IsEliminatePolyPoints() != pView->IsEliminatePolyPoints() )
         mpDrawView->SetEliminatePolyPoints( pView->IsEliminatePolyPoints() );
 
-    if (mpDrawView->IsLineDraft() != pView->IsLineDraft() )
-        mpDrawView->SetLineDraft( pView->IsLineDraft() );
-
-    if (mpDrawView->IsFillDraft() != pView->IsFillDraft() )
-    {
-// #110094#-7
-//      mpDrawView->ReleaseMasterPagePaintCache();
-        mpDrawView->SetFillDraft( pView->IsFillDraft() );
-    }
-
-    if (mpDrawView->IsTextDraft() != pView->IsTextDraft() )
-        mpDrawView->SetTextDraft( pView->IsTextDraft() );
-
-    if (mpDrawView->IsGrafDraft() != pView->IsGrafDraft() )
-        mpDrawView->SetGrafDraft( pView->IsGrafDraft() );
-
     if (mpDrawView->IsSolidMarkHdl() != pView->IsSolidMarkHdl() )
         mpDrawView->SetSolidMarkHdl( pView->IsSolidMarkHdl() );
 
@@ -444,10 +428,6 @@ void DrawViewShell::WriteFrameViewData()
     mpFrameView->SetEliminatePolyPointLimitAngle( mpDrawView->GetEliminatePolyPointLimitAngle() );
     mpFrameView->SetEliminatePolyPoints( mpDrawView->IsEliminatePolyPoints() );
 
-    mpFrameView->SetLineDraft( mpDrawView->IsLineDraft() );
-    mpFrameView->SetFillDraft( mpDrawView->IsFillDraft() );
-    mpFrameView->SetTextDraft( mpDrawView->IsTextDraft() );
-    mpFrameView->SetGrafDraft( mpDrawView->IsGrafDraft() );
     mpFrameView->SetSolidMarkHdl( mpDrawView->IsSolidMarkHdl() );
     mpFrameView->SetSolidDragging( mpDrawView->IsSolidDragging() );
     mpFrameView->SetQuickEdit( mpDrawView->IsQuickTextEditMode() );
