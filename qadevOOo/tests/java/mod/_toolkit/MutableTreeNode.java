@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MutableTreeNode.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:59:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:17:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ public class MutableTreeNode extends TestCase {
         xNode.setExpandedGraphicURL(sExpandedGraphicURL);
         xNode.setCollapsedGraphicURL(sCollapsedGraphicURL);
         xNode.setNodeGraphicURL(sNodeGraphicURL);
-        xNode.setHasChildsOnDemand(true);
+        xNode.setHasChildrenOnDemand(true);
 
         fillNode(xNode);
 
