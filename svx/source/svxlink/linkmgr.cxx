@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:14:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:36:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -389,6 +389,7 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
         {
             SfxStringItem aName( SID_FILE_NAME, sTopic );
             SfxBoolItem aMinimized(SID_MINIMIZED, TRUE);
+            SfxBoolItem aHidden(SID_HIDDEN, TRUE);
             SfxStringItem aTarget( SID_TARGETNAME, String::CreateFromAscii("_blank") );
             SfxStringItem aReferer( SID_REFERER, sReferer );
             SfxUInt16Item aUpdate( SID_UPDATEDOCMODE, nUpdateMode );
@@ -397,6 +398,7 @@ BOOL SvxInternalLink::Connect( sfx2::SvBaseLink* pLink )
             SfxAllItemSet aArgs( SFX_APP()->GetPool() );
             aArgs.Put(aReferer);
             aArgs.Put(aTarget);
+            aArgs.Put(aHidden);
             aArgs.Put(aMinimized);
             aArgs.Put(aName);
             aArgs.Put(aUpdate);
