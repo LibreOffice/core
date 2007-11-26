@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:23:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:29:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_SCRIPT_XTYPECONVERTER_HPP_
+#include <com/sun/star/script/XTypeConverter.hpp>
+#endif
 #ifndef _COM_SUN_STAR_TEXT_SETVARIABLETYPE_HPP_
 #include <com/sun/star/text/SetVariableType.hpp>
 #endif
@@ -1026,7 +1029,7 @@ void lcl_GetLocalDataWrapper( ULONG nLang,
 
  ---------------------------------------------------------------------------*/
 String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
-                                    sal_uInt16 nLang) const
+                                    sal_uInt16 nLang, const String& rName ) const
 {
     String aStr;
     LocaleDataWrapper *pAppLocalData = 0, *pLocalData = 0;
@@ -1060,6 +1063,24 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
             aStr = ExpandValue(fVal, nFormat, nLang);
         }
         break;
+    case DI_CUSTOM:
+        {
+            ::rtl::OUString sVal;
+            try
+            {
+                uno::Any aAny;
+                uno::Reference < beans::XPropertySet > xSet( pInf->GetInfo(), uno::UNO_QUERY );
+                aAny = xSet->getPropertyValue( rName );
+
+                uno::Reference < script::XTypeConverter > xConverter( comphelper::getProcessServiceFactory()
+                    ->createInstance(::rtl::OUString::createFromAscii("com.sun.star.script.Converter")), uno::UNO_QUERY );
+                uno::Any aNew;
+                    aNew = xConverter->convertToSimpleType( aAny, uno::TypeClass_STRING );
+                aNew >>= sVal;
+            }
+            catch (uno::Exception&) {}
+            return sVal;
+        }
 
     default:
         {
@@ -1139,18 +1160,20 @@ String SwDocInfoFieldType::Expand( sal_uInt16 nSub, sal_uInt32 nFormat,
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
-SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, sal_uInt32 nFmt) :
+SwDocInfoField::SwDocInfoField(SwDocInfoFieldType* pTyp, sal_uInt16 nSub, const String& rName, sal_uInt32 nFmt) :
     SwValueField(pTyp, nFmt), nSubType(nSub)
 {
-    aContent = ((SwDocInfoFieldType*)GetTyp())->Expand(nSubType, nFmt, GetLanguage());
+    aName = rName;
+    aContent = ((SwDocInfoFieldType*)GetTyp())->Expand(nSubType, nFmt, GetLanguage(), aName);
 }
+
 /* ---------------------------------------------------------------------------
 
  ---------------------------------------------------------------------------*/
 String SwDocInfoField::Expand() const
 {
     if (!IsFixed()) // aContent fuer Umschaltung auf fixed mitpflegen
-        ((SwDocInfoField*)this)->aContent = ((SwDocInfoFieldType*)GetTyp())->Expand(nSubType, GetFormat(), GetLanguage());
+        ((SwDocInfoField*)this)->aContent = ((SwDocInfoFieldType*)GetTyp())->Expand(nSubType, GetFormat(), GetLanguage(), aName);
 
     return aContent;
 }
@@ -1176,6 +1199,9 @@ String SwDocInfoField::GetCntnt(sal_Bool bName) const
                 const SfxDocumentInfo*  pInf = GetDoc()->GetDocumentInfo();
                 aStr += pInf->GetUserKeyTitle(nSub - DI_INFO1);
             }
+            case DI_CUSTOM:
+                aStr += aName;
+                break;
             break;
 
             default:
@@ -1193,7 +1219,7 @@ String SwDocInfoField::GetCntnt(sal_Bool bName) const
  ---------------------------------------------------------------------------*/
 SwField* SwDocInfoField::Copy() const
 {
-    SwDocInfoField* pFld = new SwDocInfoField((SwDocInfoFieldType*)GetTyp(), nSubType, GetFormat());
+    SwDocInfoField* pFld = new SwDocInfoField((SwDocInfoFieldType*)GetTyp(), nSubType, aName, GetFormat());
     pFld->SetAutomaticLanguage(IsAutomaticLanguage());
     pFld->aContent = aContent;
 
@@ -1232,6 +1258,10 @@ BOOL SwDocInfoField::QueryValue( uno::Any& rAny, USHORT nWhichId ) const
     {
     case FIELD_PROP_PAR1:
         rAny <<= OUString(aContent);
+        break;
+
+    case FIELD_PROP_PAR4:
+        rAny <<= OUString(aName);
         break;
 
     case FIELD_PROP_USHORT1:
