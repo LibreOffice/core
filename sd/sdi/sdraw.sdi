@@ -6808,6 +6808,31 @@ SfxVoidItem CloseMasterView SID_CLOSE_MASTER_VIEW()
     ToolBoxConfig = TRUE,
     GroupId = GID_FORMAT;
 ]
+
+SfxVoidItem SelectBackground SID_SELECT_BACKGROUND
+()
+[
+    /* flags: */
+    AutoUpdate = FALSE,
+    Cachable = Cachable,
+    FastCall = FALSE,
+    HasCoreId = FALSE,
+    HasDialog = TRUE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Synchron;
+
+    /* config: */
+    AccelConfig = FALSE,
+    MenuConfig = FALSE,
+    StatusBarConfig = FALSE,
+    ToolBoxConfig = FALSE,
+    GroupId = GID_OPTIONS;
+]
+
 SfxBoolItem DisplayMasterBackground SID_DISPLAY_MASTER_BACKGROUND
 [
     /* flags: */
