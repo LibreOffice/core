@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:10:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:21:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,8 @@
 //#define TP_CONFIG_OBJECTBAR             ( RC_DIALOG_BEGIN + 31)
 //#define TP_CONFIG_EVENT                 ( RC_DIALOG_BEGIN + 32)
 //#define DLG_CONFIG                      ( RC_DIALOG_BEGIN + 23)
+
+#define RID_DLG_NEWER_VERSION_WARNING   ( RC_DIALOG_BEGIN + 21)
 
 #define IBX_MNUCFG_ALREADY_INCLUDED     ( RC_DIALOG_BEGIN + 24)
 #define QBX_MNUCFG_UNDEFINED_FUNCTIONS  ( RC_DIALOG_BEGIN + 25)
