@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-01 10:52:48 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:44:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,8 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         enum ExecuteCommand
         {
             EXEC_CMD_CLOSETOOLBAR,
+            EXEC_CMD_DOCKTOOLBAR,
+            EXEC_CMD_DOCKALLTOOLBARS,
             EXEC_CMD_NONE,
             EXEC_CMD_COUNT
         };
