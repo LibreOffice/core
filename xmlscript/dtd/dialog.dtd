@@ -5,9 +5,9 @@
  
     $RCSfile: dialog.dtd,v $
  
-    $Revision: 1.26 $
+    $Revision: 1.27 $
  
-    last change: $Author: rt $ $Date: 2007-07-03 12:56:35 $
+    last change: $Author: ihi $ $Date: 2007-11-26 16:34:47 $
  
     The Contents of this file are made available subject to
     the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,8 @@
                      dlg:moveable %boolean; #IMPLIED
                      dlg:resizeable %boolean; #IMPLIED
                      dlg:title CDATA #IMPLIED
+				     dlg:withtitlebar CDATA #IMPLIED
+					 dlg:image-src CDATA #IMPLIED
                      xmlns:dlg CDATA #FIXED "http://openoffice.org/2000/dialog"
                      xmlns:script CDATA #FIXED "http://openoffice.org/2000/script"
                      >
