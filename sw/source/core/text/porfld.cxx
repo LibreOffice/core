@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:16:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,9 +136,9 @@ void SwFldPortion::TakeNextOffset( const SwFldPortion* pFld )
     bFollow = sal_True;
 }
 
-SwFldPortion::SwFldPortion( const XubString &rExpand, SwFont *pFont )
+SwFldPortion::SwFldPortion( const XubString &rExpand, SwFont *pFont, sal_Bool bPlaceHold )
     : aExpand(rExpand), pFnt(pFont), nNextOffset(0), nNextScriptChg(STRING_LEN), nViewWidth(0),
-      bFollow( sal_False ), bHasFollow( sal_False )
+      bFollow( sal_False ), bHasFollow( sal_False ), bPlaceHolder( bPlaceHold )
 {
     SetWhichPor( POR_FLD );
 }
@@ -152,7 +152,8 @@ SwFldPortion::SwFldPortion( const SwFldPortion& rFld )
       bLeft( rFld.IsLeft() ),
       bHide( rFld.IsHide() ),
       bCenter( rFld.IsCenter() ),
-      bHasFollow( rFld.HasFollow() )
+      bHasFollow( rFld.HasFollow() ),
+      bPlaceHolder( rFld.bPlaceHolder )
 {
     if ( rFld.HasFont() )
         pFnt = new SwFont( *rFld.GetFont() );
@@ -463,7 +464,7 @@ void SwFldPortion::Paint( const SwTxtPaintInfo &rInf ) const
     SwFontSave aSave( rInf, pFnt );
 
     ASSERT( GetLen() <= 1, "SwFldPortion::Paint: rest-portion polution?" );
-    if( Width() )
+    if( Width() && ( !bPlaceHolder || rInf.GetOpt().IsShowPlaceHolderFields() ) )
     {
         // Dies ist eine freizuegige Auslegung der Hintergrundbelegung ...
         rInf.DrawViewOpt( *this, POR_FLD );
