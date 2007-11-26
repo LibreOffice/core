@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:12:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:31:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1088,6 +1088,8 @@ private:
     bool bDropCap;
     int nDropCap;
 
+    int nIdctHint;
+
 //---------------------------------------------
 
     const SprmReadInfo& GetSprmReadInfo(USHORT nId) const;
@@ -1124,6 +1126,7 @@ private:
     bool ReadChar(long nPosCp, long nCpOfs);
     bool ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs);
     bool ReadChars(WW8_CP& rPos, WW8_CP nNextAttr, long nTextEnd, long nCpOfs);
+    sal_Unicode TranslateToHindiNumbers(sal_Unicode);
 
     void SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection);
 
@@ -1446,6 +1449,7 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_DontAddEqual(USHORT , const BYTE *pData, short nLen);
     void Read_LineSpace(        USHORT, const BYTE*, short nLen );
     void Read_Justify(USHORT, const BYTE*, short nLen);
+    void Read_IdctHint(USHORT, const BYTE*, short nLen);
     bool IsRightToLeft();
     void Read_RTLJustify(USHORT, const BYTE*, short nLen);
     void Read_Hyphenation(      USHORT, const BYTE* pData, short nLen );
