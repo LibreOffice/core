@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfunc3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:43:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:21:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDGROUPBY_HPP_
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #endif
+#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 #include <hash_set>
 
@@ -78,6 +79,7 @@
 #include "dpdimsave.hxx"
 #include "dbdocfun.hxx"
 #include "dpoutput.hxx"
+#include "dptabsrc.hxx"
 #include "editable.hxx"
 
 using namespace com::sun::star;
@@ -1715,6 +1717,39 @@ void ScDBFunc::SetDataPilotDetails( BOOL bShow, const String* pNewDimensionName 
                 Unmark();
             }
         }
+    }
+}
+
+void ScDBFunc::ShowDataPilotSourceData( ScDPObject& rDPObj, const std::vector<sheet::DataPilotFieldFilter>& rFilters )
+{
+    uno::Reference<sheet::XDimensionsSupplier> xSource = rDPObj.GetSource();
+    ScDPSource* pTabSource = dynamic_cast<ScDPSource*>(xSource.get());
+    DBG_ASSERT( pTabSource, "can't get ScDPSource" );
+    if ( pTabSource )
+    {
+        // output into clipboard document (for easy undo)
+        ScDocument* pDoc = GetViewData()->GetDocument();
+        SCTAB nNewTab = GetViewData()->GetTabNo();
+        ScDocument* pInsDoc = new ScDocument( SCDOCMODE_CLIP );
+        pInsDoc->ResetClip( pDoc, nNewTab );
+        pTabSource->WriteDrillDownData( pInsDoc, ScAddress( 0, 0, nNewTab ), rFilters );
+        SCCOL nEndCol = 0;
+        SCROW nEndRow = 0;
+        pInsDoc->GetCellArea( nNewTab, nEndCol, nEndRow );
+        pInsDoc->SetClipArea( ScRange( 0, 0, nNewTab, nEndCol, nEndRow, nNewTab ) );
+
+        SfxUndoManager* pMgr = GetViewData()->GetDocShell()->GetUndoManager();
+        String aUndo = ScGlobal::GetRscString( STR_UNDO_DOOUTLINE );
+        pMgr->EnterListAction( aUndo, aUndo );
+
+        // insert new sheet and paste result
+        String aNewTabName;
+        pDoc->CreateValidTabName(aNewTabName);
+        if ( InsertTable( aNewTabName, nNewTab ) )
+            PasteFromClip( IDF_ALL, pInsDoc );
+
+        pMgr->LeaveListAction();
+        delete pInsDoc;
     }
 }
 
