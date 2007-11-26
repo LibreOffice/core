@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipbm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:15:40 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:05:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,7 +270,7 @@ BOOL PBMReader::ImplReadBody()
     ULONG   nGrey, nRGB[3];
     ULONG   nWidth = 0;
     ULONG   nHeight = 0;
-    char    nShift = 0;
+    signed char nShift = 0;
 
     if ( mbRaw )
     {
