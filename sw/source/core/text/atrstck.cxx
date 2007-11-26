@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrstck.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:11:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:28:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -818,7 +818,8 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
                                           CharFmt::GetItem( *pTopAt, RES_CHRATR_HIDDEN ) :
                                           pDefaultArray[ nStackPos ];
 
-            if ( pTmpItem && !static_cast<const SvxCharHiddenItem*>(pTmpItem)->GetValue() )
+            if( (mpShell && !mpShell->GetWin()) ||
+                pTmpItem && !static_cast<const SvxCharHiddenItem*>(pTmpItem)->GetValue() )
             {
                 rFnt.SetUnderline( ((SvxUnderlineItem&)rItem).GetUnderline() );
                 rFnt.SetUnderColor( ((SvxUnderlineItem&)rItem).GetColor() );
@@ -898,10 +899,13 @@ void SwAttrHandler::FontChg(const SfxPoolItem& rItem, SwFont& rFnt, sal_Bool bPu
             rFnt.SetRelief( (FontRelief)((SvxCharReliefItem&)rItem).GetValue() );
             break;
         case RES_CHRATR_HIDDEN :
-            if ( ((SvxCharHiddenItem&)rItem).GetValue() )
-                rFnt.SetUnderline( UNDERLINE_DOTTED );
-            else
-                ActivateTop( rFnt, RES_CHRATR_UNDERLINE );
+            if( mpShell && mpShell->GetWin())
+            {
+                if ( ((SvxCharHiddenItem&)rItem).GetValue() )
+                    rFnt.SetUnderline( UNDERLINE_DOTTED );
+                else
+                    ActivateTop( rFnt, RES_CHRATR_UNDERLINE );
+            }
             break;
         case RES_CHRATR_ROTATE :
         {
