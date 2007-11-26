@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:23:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:15:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1248,13 +1248,13 @@ BOOL Window::HandleScrollCommand( const CommandEvent& rCmd,
                 if ( pHScrl )
                 {
                     if ( (pHScrl->GetVisibleSize() < pHScrl->GetRangeMax()) &&
-                         pHScrl->IsEnabled() && pHScrl->IsInputEnabled() )
+                         pHScrl->IsEnabled() && pHScrl->IsInputEnabled() && ! pHScrl->IsInModalMode() )
                         nFlags |= AUTOSCROLL_HORZ;
                 }
                 if ( pVScrl )
                 {
                     if ( (pVScrl->GetVisibleSize() < pVScrl->GetRangeMax()) &&
-                         pVScrl->IsEnabled() && pVScrl->IsInputEnabled() )
+                         pVScrl->IsEnabled() && pVScrl->IsInputEnabled() && ! pVScrl->IsInModalMode() )
                         nFlags |= AUTOSCROLL_VERT;
                 }
 
@@ -1320,7 +1320,7 @@ BOOL Window::HandleScrollCommand( const CommandEvent& rCmd,
 void Window::ImplHandleScroll( ScrollBar* pHScrl, long nX,
                                ScrollBar* pVScrl, long nY )
 {
-    if ( pHScrl && nX && pHScrl->IsEnabled() && pHScrl->IsInputEnabled() )
+    if ( pHScrl && nX && pHScrl->IsEnabled() && pHScrl->IsInputEnabled() && ! pHScrl->IsInModalMode() )
     {
         long nNewPos = pHScrl->GetThumbPos();
 
@@ -1343,7 +1343,7 @@ void Window::ImplHandleScroll( ScrollBar* pHScrl, long nX,
         pHScrl->DoScroll( nNewPos );
     }
 
-    if ( pVScrl && nY && pVScrl->IsEnabled() && pVScrl->IsInputEnabled() )
+    if ( pVScrl && nY && pVScrl->IsEnabled() && pVScrl->IsInputEnabled() && ! pVScrl->IsInModalMode() )
     {
         long nNewPos = pVScrl->GetThumbPos();
 
