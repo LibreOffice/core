@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scpaction_ooo.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 13:19:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:27:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,19 +321,12 @@ ScpAction scp_Copy_Xpd_Help_Html_Uninstallationprologue_En_Us
     Subdir = "installdata/html";
 End
 
-#ifdef MACOSX
-ScpAction scp_Copy_Dmg_Background_Image
-    Copy = "osxdndinstall.png";
-    Name = "background.png";
-    UnixRights = 444;
-    Styles = ();
-    Subdir = ".background";
-End
-
-ScpAction scp_Copy_Ds_Store
-    Copy = "DS_Store";
-    Name = ".DS_Store";
-    UnixRights = 444;
-    Styles = ();
+#if defined LINUX || defined SOLARIS
+ScpAction scp_Copy_Update_Script
+    Copy = "update";
+    Name = "update";
+    Styles = (SCPZIP_REPLACE);
+    UnixRights = 775;
 End
 #endif
+
