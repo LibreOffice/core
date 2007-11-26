@@ -4,9 +4,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:32:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:04:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,17 +225,19 @@ void PresentationViewShell::FinishInitialization (
 
     // Start the show.
     if (mpSlideShow->startShow(0))
+    {
         mbShowStarted = sal_True;
+
+        Resize();
+        GetViewFrame()->Show();
+
+        Activate(TRUE);
+    }
     else
     {
-        delete mpSlideShow;
-        mpSlideShow = 0;
+        if( GetViewFrame() && GetViewFrame()->GetDispatcher() )
+            GetViewFrame()->GetDispatcher()->Execute(SID_PRESENTATION_END, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD );
     }
-
-    Resize();
-    GetViewFrame()->Show();
-
-    Activate(TRUE);
 }
 
 
