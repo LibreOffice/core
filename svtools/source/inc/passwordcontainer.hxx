@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwordcontainer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 21:10:40 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:44:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 #ifndef INCLUDED_COMPHELPER_PASSWORDCONTAINER_HXX
 #define INCLUDED_COMPHELPER_PASSWORDCONTAINER_HXX
 
+#include <list>
 #include <vector>
 #include <map>
 
@@ -62,8 +63,12 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 
-#ifndef _CPPUHELPER_IMPLBASE2_HXX_
-#include <cppuhelper/implbase3.hxx>
+#ifndef _COM_SUN_STAR_TASK_XMASTERPASSWORDHANDLING_HPP_
+#include <com/sun/star/task/XMasterPasswordHandling.hpp>
+#endif
+
+#ifndef _CPPUHELPER_IMPLBASE4_HXX_
+#include <cppuhelper/implbase4.hxx>
 #endif
 
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
@@ -122,8 +127,8 @@ struct NamePassRecord
 
 //----------------------------------------------------------------------------------
 
-typedef ::std::pair< const ::rtl::OUString, ::std::vector< NamePassRecord > > PairUrlRecord;
-typedef ::std::map< ::rtl::OUString, ::std::vector< NamePassRecord > > PassMap;
+typedef ::std::pair< const ::rtl::OUString, ::std::list< NamePassRecord > > PairUrlRecord;
+typedef ::std::map< ::rtl::OUString, ::std::list< NamePassRecord > > PassMap;
 
 //----------------------------------------------------------------------------------
 
@@ -152,6 +157,7 @@ public:
 
     sal_Bool getEncodedMP( ::rtl::OUString& aResult );
     void setEncodedMP( const ::rtl::OUString& aResult );
+    void setUseStorage( sal_Bool bUse );
     sal_Bool useStorage();
 
     virtual void            Notify( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPropertyNames );
@@ -166,52 +172,52 @@ enum PasswordState {
     cancelled
 };
 
-class PasswordContainer : public ::cppu::WeakImplHelper3< ::com::sun::star::task::XPasswordContainer, ::com::sun::star::lang::XServiceInfo,
- ::com::sun::star::lang::XEventListener >
+class PasswordContainer : public ::cppu::WeakImplHelper4<
+        ::com::sun::star::task::XPasswordContainer,
+        ::com::sun::star::task::XMasterPasswordHandling,
+        ::com::sun::star::lang::XServiceInfo,
+        ::com::sun::star::lang::XEventListener >
 {
 private:
     PassMap  container;
-    StorageItem* storageFile;
+    StorageItem* m_pStorageFile;
     ::osl::Mutex mMutex;
-    sal_Bool hasMasterPasswd;
-    ::rtl::OUString masterPasswd;
+    ::rtl::OUString m_aMasterPasswd; // master password is set when the string is not empty
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent > mComponent;
 
-    PassMap getInfoFromStorageFile();
-    void removeFromStorageFile( const ::rtl::OUString& url, const ::rtl::OUString& rec );
-    void clearStorageFile();
-
-    ::com::sun::star::uno::Sequence< ::com::sun::star::task::UserRecord > copyToUserRecordSequence(
-                                        const ::std::vector< NamePassRecord >& original,
+    ::com::sun::star::uno::Sequence< ::com::sun::star::task::UserRecord > CopyToUserRecordSequence(
+                                        const ::std::list< NamePassRecord >& original,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::task::UserRecord > findUsr(
-                                        const ::std::vector< NamePassRecord >& userlist,
+    ::com::sun::star::uno::Sequence< ::com::sun::star::task::UserRecord > FindUsr(
+                                        const ::std::list< NamePassRecord >& userlist,
                                         const ::rtl::OUString& name,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
-    void getMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
+    ::rtl::OUString RequestPasswordFromUser(
+                    ::com::sun::star::task::PasswordRequestMode aRMode,
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler );
+
+    ::rtl::OUString GetMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
-    void updateVector( const ::rtl::OUString& url, ::std::vector< NamePassRecord >& toUpdate, NamePassRecord& rec, sal_Bool writeFile,
+    void UpdateVector( const ::rtl::OUString& url, ::std::list< NamePassRecord >& toUpdate, NamePassRecord& rec, sal_Bool writeFile,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
-    void privateAdd( const ::rtl::OUString& aUrl,
+    void PrivateAdd( const ::rtl::OUString& aUrl,
                               const ::rtl::OUString& aUserName,
                               const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aPasswords,
                               char  aMode,
                               const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
-    ::std::vector< ::rtl::OUString > decodePasswords( ::rtl::OUString aLine,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
+    ::std::vector< ::rtl::OUString > DecodePasswords( const ::rtl::OUString& aLine, const ::rtl::OUString& aMasterPassword )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
-    ::rtl::OUString encodePasswords( ::std::vector< ::rtl::OUString > lines,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
+    ::rtl::OUString EncodePasswords( ::std::vector< ::rtl::OUString > lines, const ::rtl::OUString& aMasterPassword )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
 public:
@@ -275,6 +281,14 @@ public:
     virtual void SAL_CALL       disposing( const ::com::sun::star::lang::EventObject& Source )
                                     throw(::com::sun::star::uno::RuntimeException);
 
+    // XMasterPasswordHandling
+    virtual ::sal_Bool SAL_CALL authorizateWithMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL changeMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeMasterPassword() throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasMasterPassword(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL allowPersistentStoring( ::sal_Bool bAllow ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isPersistentStoringAllowed(  ) throw (::com::sun::star::uno::RuntimeException);
 
     void            Notify();
 };
