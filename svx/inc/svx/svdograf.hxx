@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdograf.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:23:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:48:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,8 +150,8 @@ protected:
                             DECL_LINK( ImpSwapHdl, GraphicObject* );
 
     // #i25616#
-    void ImpDoPaintGrafObjShadow( XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const;
-    void ImpDoPaintGrafObj( XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec ) const;
+    void ImpDoPaintGrafObjShadow(XOutputDevice& rOut) const;
+    void ImpDoPaintGrafObj(XOutputDevice& rOut) const;
 
 public:
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdorect.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:25:26 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:49:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,10 +111,8 @@ public:
     virtual ~SdrRectObj();
 
     // #i25616#
-    void ImpDoPaintRectObjShadow(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec,
-        sal_Bool bPaintFill, sal_Bool bPaintLine) const;
-    void ImpDoPaintRectObj(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec,
-        sal_Bool bPaintFill, sal_Bool bPaintLine) const;
+    void ImpDoPaintRectObjShadow(XOutputDevice& rXOut, sal_Bool bPaintFill, sal_Bool bPaintLine) const;
+    void ImpDoPaintRectObj(XOutputDevice& rXOut, sal_Bool bPaintFill, sal_Bool bPaintLine) const;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
     virtual UINT16 GetObjIdentifier() const;

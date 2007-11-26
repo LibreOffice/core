@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdomeas.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:24:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ public:
     virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
 
     virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
-    virtual ::std::auto_ptr< SdrLineGeometry > CreateLinePoly(sal_Bool bForceOnePixel, sal_Bool bForceTwoPixel, sal_Bool bIsLineDraft) const;
+    virtual ::std::auto_ptr< SdrLineGeometry > CreateLinePoly(sal_Bool bForceOnePixel, sal_Bool bForceTwoPixel) const;
 
     virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
     virtual const Size& GetTextSize() const;

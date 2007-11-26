@@ -4,9 +4,9 @@
  *
  *  $RCSfile: obj3d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:02:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:48:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -611,12 +611,10 @@ public :
     virtual void operator=(const SdrObject&);
 
     // Ausgabeparameter an 3D-Kontext setzen
-    void SetBase3DParams(XOutputDevice& rOut, Base3D*,
-        BOOL& bDrawObject, BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL bGhosted,
-        BOOL bIsLineDraft = FALSE, BOOL bIsFillDraft = FALSE);
+    void SetBase3DParams(XOutputDevice& rOut, Base3D*, BOOL& bDrawObject, BOOL& bDrawOutline, UINT16 nDrawFlags, BOOL bGhosted);
 private:
-    SVX_DLLPRIVATE sal_Bool ImpSet3DParForFill(XOutputDevice& rOut, Base3D* pBase3D, UINT16 nDrawFlags, BOOL bGhosted, BOOL bIsFillDraft);
-    SVX_DLLPRIVATE sal_Bool ImpSet3DParForLine(XOutputDevice& rOut, Base3D* pBase3D, UINT16 nDrawFlags, BOOL bGhosted, BOOL bIsLineDraft, BOOL bIsFillDraft);
+    SVX_DLLPRIVATE sal_Bool ImpSet3DParForFill(XOutputDevice& rOut, Base3D* pBase3D, UINT16 nDrawFlags, BOOL bGhosted);
+    SVX_DLLPRIVATE sal_Bool ImpSet3DParForLine(XOutputDevice& rOut, Base3D* pBase3D, UINT16 nDrawFlags, BOOL bGhosted);
 public:
 
     // DisplayGeometry rausruecken
