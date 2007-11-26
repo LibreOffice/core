@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMutableTreeDataModel.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:27:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:08:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ interface XMutableTreeDataModel : XTreeDataModel
             should be convertable to a string and is used by the <type>XTreeControl</type>
             as a textual represenation of the created node.
 
-        @param ChildsOnDemand
+        @param ChildrenOnDemand
             if <TRUE/> is used as a parameter, the created node will be treated as a non-leaf
             node by the <type>XTreeControl</type>, even when it has no child nodes.
 
@@ -70,9 +70,9 @@ interface XMutableTreeDataModel : XTreeDataModel
             a new <type>XMutableTreeNode</type> that can be used for this model.
 
         @see XTreeNode::getDisplayValue()
-        @see XTreeNode::hasChildsOnDemand()
+        @see XTreeNode::hasChildrenOnDemand()
     */
-    XMutableTreeNode createNode( [in] any DisplayValue, [in] boolean ChildsOnDemand );
+    XMutableTreeNode createNode( [in] any DisplayValue, [in] boolean ChildrenOnDemand );
 
     /** changes the root node of this model to <var>RootNode</var>.
 

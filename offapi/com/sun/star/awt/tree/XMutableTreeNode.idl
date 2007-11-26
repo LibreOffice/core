@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMutableTreeNode.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:27:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:08:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,11 +91,11 @@ interface XMutableTreeNode : XTreeNode
     void removeChildByIndex( [in] long Index )
             raises( com::sun::star::lang::IndexOutOfBoundsException );
 
-    /** Changes if the childs of this node are created on demand.
+    /** Changes if the children of this node are created on demand.
 
-        @see XTreeNode::hasChildsOnDemand()
+        @see XTreeNode::hasChildrenOnDemand()
     */
-    void setHasChildsOnDemand( [in] boolean ChildsOnDemand );
+    void setHasChildrenOnDemand( [in] boolean ChildrenOnDemand );
 
     /** sets the display value of this node */
     void setDisplayValue( [in] any Value );

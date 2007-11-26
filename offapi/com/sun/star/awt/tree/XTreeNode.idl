@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTreeNode.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:29:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:09:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,14 +77,14 @@ interface XTreeNode
     */
     long getIndex( [in] XTreeNode Node);
 
-    /** Returns <TRUE/> if the childs of this node are created on demand.
+    /** Returns <TRUE/> if the children of this node are created on demand.
         <p>A <type>TreeControl</type> will handle a node that returns <TRUE/> always
         like a node that has child nodes, even if <member>getChildCount</member>
         returns 0.</p>
 
         @see TreeExpansionListener;
     */
-    boolean hasChildsOnDemand();
+    boolean hasChildrenOnDemand();
 
     /** If not empty, the textual representation of this any is used as the text part of this node.
     */
