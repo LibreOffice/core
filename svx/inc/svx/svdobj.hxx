@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:44:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,16 +192,13 @@ enum SdrObjKind {OBJ_NONE       = 0,  // Abstraktes Objekt (SdrObject)
 // Paintmodes, die den SdrObject::Paint-Methoden mitgegeben werden.
 #define SDRPAINTMODE_MASTERPAGE     0x0001 /* Obj gehoert zur eingeblendeten Masterpage */
 #define SDRPAINTMODE_TEXTEDIT       0x0002 /* An diesem Objekt ist z.Zt. TextEdit aktiv */
-#define SDRPAINTMODE_DRAFTTEXT      0x0004 /* Entwurfsmodus, Text weglassen bzw. nur andeuten (Ersatzdarstellung) */
-#define SDRPAINTMODE_DRAFTGRAF      0x0008 /* Entwurfsmodus, Grafiken nur andeuten (Ersatzdarstellung) */
-
-// #110094#-13
-// #define SDRPAINTMODE_GLUEPOINTS      0x0010 /* Klebepunkte anzeigen */
 
 #define SDRPAINTMODE_ANILIKEPRN     0x0020 /* Animationen so malen, als ob gedruckt wird (z.B. fuer Laufschrift im SdrPageObj) */
-#define SDRPAINTMODE_HIDEDRAFTGRAF  0x0040 /* Entwurfsmodus, angedeutete Grafiken nicht darstellen */
-#define SDRPAINTMODE_DRAFTLINE      0x0080 /* draftmode for LINE */
-#define SDRPAINTMODE_DRAFTFILL      0x0100 /* draftmode for FILL */
+
+//#i80528# for TakeContour, a special paint mode is needed to not run into a recurive
+// loop when painting objects containing text. Also used for graphics to paint just a polygon
+// in that case
+#define SDRPAINTMODE_CONTOUR        0x0040
 
 // #109985#
 // New paint modes to support SC features showing/hiding/drafting special object types
@@ -209,11 +206,6 @@ enum SdrObjKind {OBJ_NONE       = 0,  // Abstraktes Objekt (SdrObject)
 #define SDRPAINTMODE_SC_HIDE_CHART  0x0400 /* SC paint optins VOBJ_MODE_SHOW VOBJ_TYPE_CHART */
 #define SDRPAINTMODE_SC_HIDE_DRAW   0x0800 /* SC paint optins VOBJ_MODE_SHOW VOBJ_TYPE_DRAW */
 #define SDRPAINTMODE_SC_ALL_HIDE (SDRPAINTMODE_SC_HIDE_OLE|SDRPAINTMODE_SC_HIDE_CHART|SDRPAINTMODE_SC_HIDE_DRAW)
-
-#define SDRPAINTMODE_SC_DRAFT_OLE   0x1000 /* SC paint as draft optins VOBJ_MODE_SHOW VOBJ_TYPE_OLE */
-#define SDRPAINTMODE_SC_DRAFT_CHART 0x2000 /* SC paint as draft optins VOBJ_MODE_SHOW VOBJ_TYPE_CHART */
-#define SDRPAINTMODE_SC_DRAFT_DRAW  0x4000 /* SC paint as draft optins VOBJ_MODE_SHOW VOBJ_TYPE_DRAW */
-#define SDRPAINTMODE_SC_ALL_DRAFT (SDRPAINTMODE_SC_DRAFT_OLE|SDRPAINTMODE_SC_DRAFT_CHART|SDRPAINTMODE_SC_DRAFT_DRAW)
 
 // #110496# Verbose metafile creation for slideshow
 #define SDRPAINTMODE_VERBOSE_MTF    0x8000
@@ -838,13 +830,10 @@ public:
         @param rSet
         Item set attributing the line style
 
-        @param bIsLineDraft
-        Set to TRUE, if fast draft mode is requested (prevents thick lines)
-
         @return the generated line geometry. Ownership of the pointer
         transfers to the caller.
      */
-    ::std::auto_ptr< SdrLineGeometry > ImpPrepareLineGeometry(XOutputDevice& rXOut, const SfxItemSet& rSet, sal_Bool bIsLineDraft = sal_False) const;
+    ::std::auto_ptr< SdrLineGeometry > ImpPrepareLineGeometry(XOutputDevice& rXOut, const SfxItemSet& rSet) const;
     void ImpDrawLineGeometry(   XOutputDevice&  rXOut,
                                 Color&              rColor,
                                 sal_uInt16          nTransparence,
@@ -869,13 +858,10 @@ public:
         width (in device resolution). This is achieved by outputting a
         one pixel hair line four times.
 
-        @param bIsLineDraft
-        Set to TRUE, if fast draft mode is requested (prevents thick lines)
-
         @return the generated line geometry. Ownership of the pointer
         transfers to the caller.
      */
-    virtual ::std::auto_ptr< SdrLineGeometry > CreateLinePoly(sal_Bool bForceOnePixel, sal_Bool bForceTwoPixel, sal_Bool bIsLineDraft) const;
+    virtual ::std::auto_ptr< SdrLineGeometry > CreateLinePoly(sal_Bool bForceOnePixel, sal_Bool bForceTwoPixel) const;
     BOOL LineGeometryUsageIsNecessary() const;
 
     // HitTest, 2. Stufe. nTol ist die zulaessige Toleranz in logischen Einheiten.
@@ -1283,7 +1269,6 @@ public:
 protected:
     // #b4899532#
     // Force LineStyle with hard attributes to hair line in COL_LIGHTGRAY
-    void ImpPrepareLocalItemSetForDraftLine(SfxItemSet& rItemSet) const;
     /** only for internal use!
         The returned SvxShape pointer may be null and if not it is only valid as long as you
         hold the xShapeGuard reference.
