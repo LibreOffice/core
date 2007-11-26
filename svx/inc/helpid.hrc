@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:29:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:37:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -515,6 +515,8 @@
 #define HID_HANGULDLG_BUTTON_CHANGEALL          (HID_SVX_EXT0_START + 25)
 #define HID_SPLDLG_EDIT_NEWWORD                 (HID_SVX_EXT0_START + 26)
 #define HID_HANGULDLG_EDIT_NEWWORD              (HID_SVX_EXT0_START + 27)
+#define HID_DLG_SECURITY_OPTIONS                (HID_SVX_EXT0_START + 28)
+#define HID_DLG_WEBCONNECTION_INFO              (HID_SVX_EXT0_START + 29)
 
 #define HID_AUTOCORR_DLG                (HID_OFA_START +  0)
 #define HID_OFAPAGE_AUTOCORR_OPTIONS    (HID_OFA_START +  1)
