@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 16:37:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:45:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,17 @@ IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, EMPTYARG )
     if ( !_pOptions )
         _pOptions = ( (SfxPrinter*)_pParent->GetPrinter() )->GetOptions().Clone();
 
+    if ( _pOptions && _pParent && _pParent->IsSheetRangeAvailable() )
+    {
+        SfxItemState eState = _pOptions->GetItemState( SID_PRINT_SELECTEDSHEET );
+        if ( eState != SFX_ITEM_UNKNOWN )
+        {
+            PrintSheetRange eRange = _pParent->GetCheckedSheetRange();
+            BOOL bValue = ( PRINTSHEETS_ALL != eRange );
+            _pOptions->Put( SfxBoolItem( SID_PRINT_SELECTEDSHEET, bValue ) );
+        }
+    }
+
     // Dialog ausf"uhren
     SfxPrintOptionsDialog* pDlg = new SfxPrintOptionsDialog( _pParent, _pViewSh, _pOptions );
     if ( _bHelpDisabled )
@@ -175,6 +186,16 @@ IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, EMPTYARG )
     {
         delete _pOptions;
         _pOptions = pDlg->GetOptions().Clone();
+
+        if ( _pOptions && _pParent && _pParent->IsSheetRangeAvailable() )
+        {
+            const SfxPoolItem* pItem;
+            if ( SFX_ITEM_SET == _pOptions->GetItemState( SID_PRINT_SELECTEDSHEET, FALSE , &pItem ) )
+            {
+                _pParent->CheckSheetRange( ( (const SfxBoolItem*)pItem )->GetValue()
+                    ? PRINTSHEETS_SELECTED_SHEETS : PRINTSHEETS_ALL );
+            }
+        }
     }
     delete pDlg;
 
@@ -788,7 +809,7 @@ PrintDialog* SfxViewShell::CreatePrintDialog( Window* pParent )
 */
 
 {
-    PrintDialog *pDlg = new PrintDialog( pParent );
+    PrintDialog *pDlg = new PrintDialog( pParent, false );
     pDlg->SetFirstPage( 1 );
     pDlg->SetLastPage( 9999 );
     pDlg->EnableCollate();
