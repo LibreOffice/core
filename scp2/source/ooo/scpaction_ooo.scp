@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scpaction_ooo.scp,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 15:52:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:19:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,11 @@ ScpAction scp_Copy_License_Html
     README_TXT_ALL_LANG(Name, license, html);
   #endif
     Styles = (SCPZIP_REPLACE);
+  #ifndef MACOSX
     Subdir = "licenses";
+  #else
+    Subdir = "LICENSEs";
+  #endif
 End
 
 ScpAction scp_Copy_License_Txt
@@ -56,7 +60,11 @@ ScpAction scp_Copy_License_Txt
     README_TXT_ALL_LANG(Name, license, txt);
   #endif
     Styles = (SCPZIP_REPLACE);
+  #ifndef MACOSX
     Subdir = "licenses";
+  #else
+    Subdir = "LICENSEs";
+  #endif
 End
 
 ScpAction scp_Copy_Readme_Html
@@ -68,7 +76,11 @@ ScpAction scp_Copy_Readme_Html
     README_TXT_ALL_LANG(Name, readme, html);
   #endif
     Styles = (SCPZIP_REPLACE);
+  #ifndef MACOSX
     Subdir = "readmes";
+  #else
+    Subdir = "READMEs";
+  #endif
 End
 
 ScpAction scp_Copy_Readme_Txt
@@ -80,7 +92,11 @@ ScpAction scp_Copy_Readme_Txt
     README_TXT_ALL_LANG(Name, readme, txt);
   #endif
     Styles = (SCPZIP_REPLACE);
+  #ifndef MACOSX
     Subdir = "readmes";
+  #else
+    Subdir = "READMEs";
+  #endif
 End
 
 #if defined(WNT) && defined(_gcc3)
@@ -304,3 +320,20 @@ ScpAction scp_Copy_Xpd_Help_Html_Uninstallationprologue_En_Us
     Styles = (XPD_ONLY);
     Subdir = "installdata/html";
 End
+
+#ifdef MACOSX
+ScpAction scp_Copy_Dmg_Background_Image
+    Copy = "osxdndinstall.png";
+    Name = "background.png";
+    UnixRights = 444;
+    Styles = ();
+    Subdir = ".background";
+End
+
+ScpAction scp_Copy_Ds_Store
+    Copy = "DS_Store";
+    Name = ".DS_Store";
+    UnixRights = 444;
+    Styles = ();
+End
+#endif
