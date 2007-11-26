@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofe3dscene.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:44:41 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:51:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,25 +118,18 @@ namespace sdr
 
             if(GetE3dScene().GetSubList() && GetE3dScene().GetSubList()->GetObjCount())
             {
-                if(DoDraftForCalc(rDisplayInfo))
-                {
-                    bRetval = PaintCalcDraftObject(rDisplayInfo, rPaintRectangle);
-                }
-                else
-                {
-                    // copy the saved original PaintMode from the DisplayInfo to the old
-                    // structures so that it is available for the old 3D rendering.
-                    rDisplayInfo.GetPaintInfoRec()->nOriginalDrawMode = rDisplayInfo.GetOriginalDrawMode();
-                    rDisplayInfo.GetPaintInfoRec()->bNotActive = rDisplayInfo.IsGhostedDrawModeActive();
+                // copy the saved original PaintMode from the DisplayInfo to the old
+                // structures so that it is available for the old 3D rendering.
+                rDisplayInfo.GetPaintInfoRec()->nOriginalDrawMode = rDisplayInfo.GetOriginalDrawMode();
+                rDisplayInfo.GetPaintInfoRec()->bNotActive = rDisplayInfo.IsGhostedDrawModeActive();
 
-                    // Paint the 3D scene. Just hand over to the old Paint() ATM.
-                    GetSdrObject().DoPaintObject(
-                        *rDisplayInfo.GetExtendedOutputDevice(),
-                        *rDisplayInfo.GetPaintInfoRec());
+                // Paint the 3D scene. Just hand over to the old Paint() ATM.
+                GetSdrObject().DoPaintObject(
+                    *rDisplayInfo.GetExtendedOutputDevice(),
+                    *rDisplayInfo.GetPaintInfoRec());
 
-                    rPaintRectangle = GetPaintRectangle();
-                    bRetval = sal_True;
-                }
+                rPaintRectangle = GetPaintRectangle();
+                bRetval = sal_True;
             }
             else
             {
