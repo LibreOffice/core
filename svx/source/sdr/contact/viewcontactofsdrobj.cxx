@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-09-06 15:22:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:52:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,19 +184,6 @@ namespace sdr
             return bRetval;
         }
 
-        // For calc draft object display
-        sal_Bool ViewContactOfSdrObj::PaintCalcDraftObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle)
-        {
-            OutputDevice* pOut = rDisplayInfo.GetOutputDevice();
-            rPaintRectangle = GetPaintRectangle();
-
-            pOut->SetFillColor(COL_LIGHTGRAY);
-            pOut->SetLineColor(COL_BLACK);
-            pOut->DrawRect(rPaintRectangle);
-
-            return sal_True;
-        }
-
         ViewContactOfSdrObj::ViewContactOfSdrObj(SdrObject& rObj)
         :   ViewContact(),
             mrObject(rObj),
@@ -282,20 +269,13 @@ namespace sdr
         {
             sal_Bool bRetval(sal_False);
 
-            if(DoDraftForCalc(rDisplayInfo))
-            {
-                bRetval = PaintCalcDraftObject(rDisplayInfo, rPaintRectangle);
-            }
-            else
-            {
-                // Paint the object. Just hand over to the old Paint() ATM.
-                GetSdrObject().DoPaintObject(
-                    *rDisplayInfo.GetExtendedOutputDevice(),
-                    *rDisplayInfo.GetPaintInfoRec());
+            // Paint the object. Just hand over to the old Paint() ATM.
+            GetSdrObject().DoPaintObject(
+                *rDisplayInfo.GetExtendedOutputDevice(),
+                *rDisplayInfo.GetPaintInfoRec());
 
-                rPaintRectangle = GetPaintRectangle();
-                bRetval = sal_True;
-            }
+            rPaintRectangle = GetPaintRectangle();
+            bRetval = sal_True;
 
             return bRetval;
         }
@@ -358,53 +338,6 @@ namespace sdr
             }
 
             return sal_True;
-        }
-
-        // New methodology to test for the new SC drawing flags (SDRPAINTMODE_SC_)
-        sal_Bool ViewContactOfSdrObj::DoDraftForCalc(DisplayInfo& rDisplayInfo) const
-        {
-            const sal_uInt16 nPaintMode = rDisplayInfo.GetPaintInfoRec()->nPaintMode;
-
-            if(nPaintMode & SDRPAINTMODE_SC_ALL_DRAFT)
-            {
-                if(OBJ_OLE2 == GetSdrObject().GetObjIdentifier())
-                {
-                    if(((SdrOle2Obj&)GetSdrObject()).IsChart())
-                    {
-                        // chart
-                        if(nPaintMode & SDRPAINTMODE_SC_DRAFT_CHART)
-                        {
-                            return sal_True;
-                        }
-                    }
-                    else
-                    {
-                        // OLE
-                        if(nPaintMode & SDRPAINTMODE_SC_DRAFT_OLE)
-                        {
-                            return sal_True;
-                        }
-                    }
-                }
-                else if(OBJ_GRAF == GetSdrObject().GetObjIdentifier())
-                {
-                    // graphic handled like OLE
-                    if(nPaintMode & SDRPAINTMODE_SC_DRAFT_OLE)
-                    {
-                        return sal_True;
-                    }
-                }
-                else
-                {
-                    // any other draw object
-                    if(nPaintMode & SDRPAINTMODE_SC_DRAFT_DRAW)
-                    {
-                        return sal_True;
-                    }
-                }
-            }
-
-            return sal_False;
         }
 
         // Paint a shadowed frame in object size. Fill it with a default gray if last parameter is sal_True.
