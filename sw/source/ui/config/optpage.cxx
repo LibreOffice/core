@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:23:27 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:32:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,6 +420,8 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aCtrlFldCB       (this, SW_RES(CB_CTRLFLD)),
     aBackgroundCB    (this, SW_RES(CB_BACKGROUND)),
     aBlackFontCB     (this, SW_RES(CB_BLACK_FONT)),
+    aPrintHiddenTextCB(this, SW_RES(CB_HIDDEN_TEXT)),
+    aPrintTextPlaceholderCB(this, SW_RES(CB_TEXT_PLACEHOLDER)),
     aSeparatorLFL    (this, SW_RES(FL_SEP_PRT_LEFT )),
     aFL2          (this, SW_RES(FL_2)),
     aLeftPageCB      (this, SW_RES(CB_LEFTP)),
@@ -454,6 +456,8 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aCtrlFldCB.SetClickHdl( aLk );
     aBackgroundCB.SetClickHdl( aLk );
     aBlackFontCB.SetClickHdl( aLk );
+    aPrintHiddenTextCB.SetClickHdl( aLk );
+    aPrintTextPlaceholderCB.SetClickHdl( aLk );
     aReverseCB.SetClickHdl( aLk );
     aProspectCB.SetClickHdl( aLk );
     aProspectCB_RTL.SetClickHdl( aLk );
@@ -473,11 +477,14 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
         aDrawCB      .Hide();
         aLeftPageCB  .Hide();
         aRightPageCB .Hide();
+        aPrintHiddenTextCB.Hide();
+        aPrintTextPlaceholderCB.Hide();
         Point rPt(aReverseCB .GetPosPixel());
         rPt.setX(rPt.getX() + 15); // indent
         aProspectCB_RTL.SetPosPixel(rPt);
         aReverseCB.SetPosPixel(aLeftPageCB  .GetPosPixel());
         aProspectCB.SetPosPixel(aRightPageCB .GetPosPixel());
+        aPrintHiddenTextCB.SetPosPixel(aBlackFontCB.GetPosPixel());
         aBlackFontCB.SetPosPixel(aBackgroundCB.GetPosPixel());
         aBackgroundCB.SetPosPixel(aCtrlFldCB.GetPosPixel());
         aCtrlFldCB.SetPosPixel(aDrawCB.GetPosPixel());
@@ -528,6 +535,8 @@ BOOL    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
         aAddPrinterAttr.bPrintControl   = aCtrlFldCB.IsChecked();
         aAddPrinterAttr.bPrintPageBackground = aBackgroundCB.IsChecked();
         aAddPrinterAttr.bPrintBlackFont = aBlackFontCB.IsChecked();
+        aAddPrinterAttr.bPrintHiddenText = aPrintHiddenTextCB.IsChecked();
+        aAddPrinterAttr.bPrintTextPlaceholder = aPrintTextPlaceholderCB.IsChecked();
 
         aAddPrinterAttr.bPrintLeftPage  = aLeftPageCB.IsChecked();
         aAddPrinterAttr.bPrintRightPage = aRightPageCB.IsChecked();
@@ -570,6 +579,8 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
         aCtrlFldCB.Check(       pAddPrinterAttr->bPrintControl);
         aBackgroundCB.Check(    pAddPrinterAttr->bPrintPageBackground);
         aBlackFontCB.Check(     pAddPrinterAttr->bPrintBlackFont);
+        aPrintHiddenTextCB.Check( pAddPrinterAttr->bPrintHiddenText);
+        aPrintTextPlaceholderCB.Check(pAddPrinterAttr->bPrintTextPlaceholder);
         aLeftPageCB.Check(      pAddPrinterAttr->bPrintLeftPage);
         aRightPageCB.Check(     pAddPrinterAttr->bPrintRightPage);
         aReverseCB.Check(       pAddPrinterAttr->bPrintReverse);
