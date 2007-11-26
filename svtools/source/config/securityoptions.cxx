@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityoptions.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:16:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:44:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@ using namespace ::com::sun::star::uno   ;
 //_________________________________________________________________________________________________________________
 
 #define ROOTNODE_SECURITY               OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Security/Scripting"))
-//#define   ROOTNODE_SECURITY               OUString(RTL_CONSTASCII_USTRINGPARAM("Office.Common/Security"))
 #define DEFAULT_SECUREURL               Sequence< OUString >()
 #define DEFAULT_SECLEVEL                3
 #define DEFAULT_TRUSTEDAUTHORS          Sequence< SvtSecurityOptions::Certificate >()
@@ -108,6 +107,7 @@ using namespace ::com::sun::star::uno   ;
 #define CSTR_DOCWARN_CREATEPDF          "WarnCreatePDF"
 #define CSTR_DOCWARN_REMOVEPERSONALINFO "RemovePersonalInfoOnSaving"
 #define CSTR_DOCWARN_RECOMMENDPASSWORD  "RecommendPasswordProtection"
+#define CSTR_CTRLCLICK_HYPERLINK        "HyperlinksWithCtrlClick"
 #define CSTR_MACRO_SECLEVEL             "MacroSecurityLevel"
 #define CSTR_MACRO_TRUSTEDAUTHORS       "TrustedAuthors"
 #define CSTR_MACRO_DISABLE              "DisableMacrosExecution"
@@ -122,6 +122,7 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYNAME_DOCWARN_CREATEPDF          OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_CREATEPDF             ))
 #define PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_REMOVEPERSONALINFO    ))
 #define PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD  OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_DOCWARN_RECOMMENDPASSWORD     ))
+#define PROPERTYNAME_CTRLCLICK_HYPERLINK        OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_CTRLCLICK_HYPERLINK           ))
 #define PROPERTYNAME_MACRO_SECLEVEL             OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_SECLEVEL                ))
 #define PROPERTYNAME_MACRO_TRUSTEDAUTHORS       OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_TRUSTEDAUTHORS          ))
 #define PROPERTYNAME_MACRO_DISABLE              OUString(RTL_CONSTASCII_USTRINGPARAM(CSTR_MACRO_DISABLE                 ))
@@ -152,11 +153,12 @@ using namespace ::com::sun::star::uno   ;
 #define PROPERTYHANDLE_DOCWARN_CREATEPDF            8
 #define PROPERTYHANDLE_DOCWARN_REMOVEPERSONALINFO   9
 #define PROPERTYHANDLE_DOCWARN_RECOMMENDPASSWORD    10
-#define PROPERTYHANDLE_MACRO_SECLEVEL               11
-#define PROPERTYHANDLE_MACRO_TRUSTEDAUTHORS         12
-#define PROPERTYHANDLE_MACRO_DISABLE                13
+#define PROPERTYHANDLE_CTRLCLICK_HYPERLINK          11
+#define PROPERTYHANDLE_MACRO_SECLEVEL               12
+#define PROPERTYHANDLE_MACRO_TRUSTEDAUTHORS         13
+#define PROPERTYHANDLE_MACRO_DISABLE                14
 
-#define PROPERTYCOUNT                               14
+#define PROPERTYCOUNT                               15
 #define PROPERTYHANDLE_INVALID                      -1
 
 #define CFG_READONLY_DEFAULT                        sal_False
@@ -266,6 +268,7 @@ private:
         sal_Bool                                    m_bCreatePDF;
         sal_Bool                                    m_bRemoveInfo;
         sal_Bool                                    m_bRecommendPwd;
+        sal_Bool                                    m_bCtrlClickHyperlink;
         sal_Int32                                   m_nSecLevel;
         Sequence< SvtSecurityOptions::Certificate > m_seqTrustedAuthors;
         sal_Bool                                    m_bDisableMacros;
@@ -277,6 +280,7 @@ private:
         sal_Bool                                    m_bROCreatePDF;
         sal_Bool                                    m_bRORemoveInfo;
         sal_Bool                                    m_bRORecommendPwd;
+        sal_Bool                                    m_bROCtrlClickHyperlink;
         sal_Bool                                    m_bROSecLevel;
         sal_Bool                                    m_bROTrustedAuthors;
         sal_Bool                                    m_bRODisableMacros;
@@ -429,6 +433,12 @@ void SvtSecurityOptions_Impl::SetProperty( sal_Int32 nProperty, const Any& rValu
             m_bRORecommendPwd = bRO;
         }
 
+        case PROPERTYHANDLE_CTRLCLICK_HYPERLINK:
+        {
+            rValue >>= m_bCtrlClickHyperlink;
+            m_bROCtrlClickHyperlink = bRO;
+        }
+
         case PROPERTYHANDLE_MACRO_SECLEVEL:
         {
             rValue >>= m_nSecLevel;
@@ -548,6 +558,8 @@ sal_Int32 SvtSecurityOptions_Impl::GetHandle( const OUString& rName )
         nHandle = PROPERTYHANDLE_DOCWARN_REMOVEPERSONALINFO;
     else if( rName.compareToAscii( CSTR_DOCWARN_RECOMMENDPASSWORD ) == 0 )
         nHandle = PROPERTYHANDLE_DOCWARN_RECOMMENDPASSWORD;
+    else if( rName.compareToAscii( CSTR_CTRLCLICK_HYPERLINK ) == 0 )
+        nHandle = PROPERTYHANDLE_CTRLCLICK_HYPERLINK;
     else if( rName.compareToAscii( CSTR_MACRO_SECLEVEL ) == 0 )
         nHandle = PROPERTYHANDLE_MACRO_SECLEVEL;
     else if( rName.compareToAscii( CSTR_MACRO_TRUSTEDAUTHORS ) == 0 )
@@ -599,6 +611,10 @@ bool SvtSecurityOptions_Impl::GetOption( SvtSecurityOptions::EOption eOption, sa
         case SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD:
             rpValue = &m_bRecommendPwd;
             rpRO = &m_bRORecommendPwd;
+            break;
+        case SvtSecurityOptions::E_CTRLCLICK_HYPERLINK:
+            rpValue = &m_bCtrlClickHyperlink;
+            rpRO = &m_bROCtrlClickHyperlink;
             break;
         default:
             rpValue = NULL;
@@ -703,6 +719,14 @@ void SvtSecurityOptions_Impl::Commit()
                 bDone = !m_bRORecommendPwd;
                 if( bDone )
                     lValues[ nRealCount ] <<= m_bRecommendPwd;
+            }
+            break;
+
+            case PROPERTYHANDLE_CTRLCLICK_HYPERLINK:
+            {
+                bDone = !m_bROCtrlClickHyperlink;
+                if( bDone )
+                    lValues[ nRealCount ] <<= m_bCtrlClickHyperlink;
             }
             break;
 
@@ -843,6 +867,9 @@ sal_Bool SvtSecurityOptions_Impl::IsReadOnly( SvtSecurityOptions::EOption eOptio
             break;
         case SvtSecurityOptions::E_MACRO_DISABLE:
             bReadonly = m_bRODisableMacros;
+            break;
+        case SvtSecurityOptions::E_CTRLCLICK_HYPERLINK:
+            bReadonly = m_bROCtrlClickHyperlink;
             break;
 
 
@@ -1040,6 +1067,7 @@ Sequence< OUString > SvtSecurityOptions_Impl::GetPropertyNames()
         PROPERTYNAME_DOCWARN_CREATEPDF,
         PROPERTYNAME_DOCWARN_REMOVEPERSONALINFO,
         PROPERTYNAME_DOCWARN_RECOMMENDPASSWORD,
+        PROPERTYNAME_CTRLCLICK_HYPERLINK,
         PROPERTYNAME_MACRO_SECLEVEL,
         PROPERTYNAME_MACRO_TRUSTEDAUTHORS,
         PROPERTYNAME_MACRO_DISABLE
