@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 11:35:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:02:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,15 +116,7 @@
 #include "slideshow.hrc"
 #include "canvas/elapsedtime.hxx"
 #include "canvas/prioritybooster.hxx"
-
-// TODO(Q3): This breaks encapsulation. Either export
-// these strings from avmedia, or provide an XManager
-// factory there
-#ifdef WNT
-#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_DirectX"
-#else
-#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_Java"
-#endif
+#include "avmedia/mediawindow.hxx"
 
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -218,6 +210,8 @@ public:
     sal_Int32 getPreviousSlideIndex() const;
 
     bool isVisibleSlideNumber( sal_Int32 nSlideNumber ) const;
+
+    bool hasSlides() const { return !maSlideNumbers.empty(); }
 
 private:
     sal_Int32 getNextSlideNumber() const;
@@ -822,141 +816,144 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
         if( pStartPage )
             mnRestoreSlide = ( pStartPage->GetPageNum() - 1 ) / 2;
 
-        // hide child windows
-        hideChildWindows();
-
-        mpShowWindow = new ShowWindow( mpParentWindow );
-        mpShowWindow->SetMouseAutoHide( !maPresSettings.mbMouseVisible );
-        if( mpViewShell )
+        if( mpSlideController->hasSlides() )
         {
-            mpViewShell->SetActiveWindow( mpShowWindow );
-            mpShowWindow->SetViewShell (mpViewShell);
-            mpViewShell->GetViewShellBase().ShowUIControls (false);
-            mpPaneHider.reset(new PaneHider(*mpViewShell));
+            // hide child windows
+            hideChildWindows();
 
-            if( getViewFrame() )
-                getViewFrame()->SetChildWindow( SID_NAVIGATOR, maPresSettings.mbStartWithNavigator );
-        }
+            mpShowWindow = new ShowWindow( mpParentWindow );
+            mpShowWindow->SetMouseAutoHide( !maPresSettings.mbMouseVisible );
+            if( mpViewShell )
+            {
+                mpViewShell->SetActiveWindow( mpShowWindow );
+                mpShowWindow->SetViewShell (mpViewShell);
+                mpViewShell->GetViewShellBase().ShowUIControls (false);
+                mpPaneHider.reset(new PaneHider(*mpViewShell));
 
-        // these Slots are forbiden in other views for this document
-        if( mpDocSh )
-        {
-            mpDocSh->SetSlotFilter( TRUE, sizeof( pAllowed ) / sizeof( USHORT ), pAllowed );
-            mpDocSh->ApplySlotFilter();
-        }
+                if( getViewFrame() )
+                    getViewFrame()->SetChildWindow( SID_NAVIGATOR, maPresSettings.mbStartWithNavigator );
+            }
 
-        Help::DisableContextHelp();
-        Help::DisableExtHelp();
+            // these Slots are forbiden in other views for this document
+            if( mpDocSh )
+            {
+                mpDocSh->SetSlotFilter( TRUE, sizeof( pAllowed ) / sizeof( USHORT ), pAllowed );
+                mpDocSh->ApplySlotFilter();
+            }
 
-    //  mpTimeButton = new PushButton( mpShowWindow, SdResId( RID_TIME_BUTTON ) );
-    //  maPencil = Pointer( POINTER_PEN );
-    //  mpTimeButton->Hide();
+            Help::DisableContextHelp();
+            Help::DisableExtHelp();
 
-        if( maPresSettings.mbFullScreen )
-        {
-            // disable basic ide error handling
-            maStarBASICGlobalErrorHdl = StarBASIC::GetGlobalErrorHdl();
-            StarBASIC::SetGlobalErrorHdl( Link() );
-        }
+        //  mpTimeButton = new PushButton( mpShowWindow, SdResId( RID_TIME_BUTTON ) );
+        //  maPencil = Pointer( POINTER_PEN );
+        //  mpTimeButton->Hide();
 
-        // call resize handler
-        maPresSize = mpParentWindow->GetSizePixel();
-        if( !maPresSettings.mbFullScreen && mpViewShell )
-        {
-            const Rectangle& aClientRect = mpViewShell->GetViewShellBase().getClientRectangle();
-            maPresSize = aClientRect.GetSize();
-            mpShowWindow->SetPosPixel( aClientRect.TopLeft() );
-            resize( maPresSize );
-        }
+            if( maPresSettings.mbFullScreen )
+            {
+                // disable basic ide error handling
+                maStarBASICGlobalErrorHdl = StarBASIC::GetGlobalErrorHdl();
+                StarBASIC::SetGlobalErrorHdl( Link() );
+            }
 
-        // #i41824#
-        // Note: In FullScreen Mode the OS (window manager) sends a resize to
-        // the WorkWindow once it actually resized it to full size.  The
-        // WorkWindow propagates the resize to the DrawViewShell which calls
-        // resize() at the SlideShow (this).  Calling resize here results in a
-        // temporary display of a black window in the window's default size
+            // call resize handler
+            maPresSize = mpParentWindow->GetSizePixel();
+            if( !maPresSettings.mbFullScreen && mpViewShell )
+            {
+                const Rectangle& aClientRect = mpViewShell->GetViewShellBase().getClientRectangle();
+                maPresSize = aClientRect.GetSize();
+                mpShowWindow->SetPosPixel( aClientRect.TopLeft() );
+                resize( maPresSize );
+            }
+
+            // #i41824#
+            // Note: In FullScreen Mode the OS (window manager) sends a resize to
+            // the WorkWindow once it actually resized it to full size.  The
+            // WorkWindow propagates the resize to the DrawViewShell which calls
+            // resize() at the SlideShow (this).  Calling resize here results in a
+            // temporary display of a black window in the window's default size
 
 /*
-        if ( mbRehearseTimings )
-        {
-            Size  aButtonSizePixel( pTimeButton->GetSizePixel() );
-            Point aButtonPosPixel( aButtonSizePixel.Width() >> 1, pShowWindow->GetSizePixel().Height() - aButtonSizePixel.Height() * 5 / 2);
+            if ( mbRehearseTimings )
+            {
+                Size  aButtonSizePixel( pTimeButton->GetSizePixel() );
+                Point aButtonPosPixel( aButtonSizePixel.Width() >> 1, pShowWindow->GetSizePixel().Height() - aButtonSizePixel.Height() * 5 / 2);
 
-            pTimeButton->SetPosPixel( aButtonPosPixel );
-            aTimer.SetTimeoutHdl( LINK( this,FuSlideShow, TimeButtonTimeOutHdl ) );
-            pTimeButton->SetClickHdl( LINK( this, FuSlideShow, TimeButtonHdl ) );
-        }
+                pTimeButton->SetPosPixel( aButtonPosPixel );
+                aTimer.SetTimeoutHdl( LINK( this,FuSlideShow, TimeButtonTimeOutHdl ) );
+                pTimeButton->SetClickHdl( LINK( this, FuSlideShow, TimeButtonHdl ) );
+            }
 */
 
-        if( mpView )
-        {
-            mpView->AddWindowToPaintView( mpShowWindow );
-            mpView->SetAnimationPause( TRUE );
-        }
+            if( mpView )
+            {
+                mpView->AddWindowToPaintView( mpShowWindow );
+                mpView->SetAnimationPause( TRUE );
+            }
 
-        SfxBindings* pBindings = getBindings();
-        if( pBindings )
-        {
-            pBindings->Invalidate( SID_PRESENTATION );
-            pBindings->Invalidate( SID_REHEARSE_TIMINGS );
-        }
+            SfxBindings* pBindings = getBindings();
+            if( pBindings )
+            {
+                pBindings->Invalidate( SID_PRESENTATION );
+                pBindings->Invalidate( SID_REHEARSE_TIMINGS );
+            }
 
-        mpShowWindow->GrabFocus();
+            mpShowWindow->GrabFocus();
 
-        std::vector<beans::PropertyValue> aProperties;
-        aProperties.reserve( 4 );
+            std::vector<beans::PropertyValue> aProperties;
+            aProperties.reserve( 4 );
 
-        aProperties.push_back(
-            beans::PropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("AdvanceOnClick") ),
-                -1, Any( ! (maPresSettings.mbLockedPages != sal_False) ),
-                beans::PropertyState_DIRECT_VALUE ) );
-
-        aProperties.push_back(
-            beans::PropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAnimationsAllowed") ),
-                -1, Any( maPresSettings.mbAnimationAllowed != sal_False ),
-                beans::PropertyState_DIRECT_VALUE ) );
-
-        const sal_Bool bZOrderEnabled(
-            SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsSlideshowRespectZOrder() );
-        aProperties.push_back(
-            beans::PropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("DisableAnimationZOrder") ),
-                -1, Any( bZOrderEnabled == sal_False ),
-                beans::PropertyState_DIRECT_VALUE ) );
-
-/*
-        aProperties.push_back(
-            beans::PropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("MouseVisible") ),
-                -1, Any( maPresSettings.mbMouseVisible != sal_False ),
-                beans::PropertyState_DIRECT_VALUE ) );
-*/
-        aProperties.push_back(
-            beans::PropertyValue(
-                OUString( RTL_CONSTASCII_USTRINGPARAM("ForceManualAdvance") ),
-                -1, Any( maPresSettings.mbManual != sal_False ),
-                beans::PropertyState_DIRECT_VALUE ) );
-
-        if( maPresSettings.mbMouseAsPen )
-         {
             aProperties.push_back(
                 beans::PropertyValue(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("UserPaintColor") ),
-                    -1, Any( static_cast<sal_Int32>(0x0000FF00L) ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("AdvanceOnClick") ),
+                    -1, Any( ! (maPresSettings.mbLockedPages != sal_False) ),
                     beans::PropertyState_DIRECT_VALUE ) );
-        }
 
-        if (mbRehearseTimings) {
             aProperties.push_back(
                 beans::PropertyValue(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("RehearseTimings") ),
-                    -1, Any(true), beans::PropertyState_DIRECT_VALUE ) );
-        }
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("ImageAnimationsAllowed") ),
+                    -1, Any( maPresSettings.mbAnimationAllowed != sal_False ),
+                    beans::PropertyState_DIRECT_VALUE ) );
 
-        bRet = startShowImpl( Sequence<beans::PropertyValue>(
-                                  &aProperties[0], aProperties.size() ) );
+            const sal_Bool bZOrderEnabled(
+                SD_MOD()->GetSdOptions( mpDoc->GetDocumentType() )->IsSlideshowRespectZOrder() );
+            aProperties.push_back(
+                beans::PropertyValue(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("DisableAnimationZOrder") ),
+                    -1, Any( bZOrderEnabled == sal_False ),
+                    beans::PropertyState_DIRECT_VALUE ) );
+
+/*
+            aProperties.push_back(
+                beans::PropertyValue(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("MouseVisible") ),
+                    -1, Any( maPresSettings.mbMouseVisible != sal_False ),
+                    beans::PropertyState_DIRECT_VALUE ) );
+*/
+            aProperties.push_back(
+                beans::PropertyValue(
+                    OUString( RTL_CONSTASCII_USTRINGPARAM("ForceManualAdvance") ),
+                    -1, Any( maPresSettings.mbManual != sal_False ),
+                    beans::PropertyState_DIRECT_VALUE ) );
+
+            if( maPresSettings.mbMouseAsPen )
+             {
+                aProperties.push_back(
+                    beans::PropertyValue(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("UserPaintColor") ),
+                        -1, Any( static_cast<sal_Int32>(0x0000FF00L) ),
+                        beans::PropertyState_DIRECT_VALUE ) );
+            }
+
+            if (mbRehearseTimings) {
+                aProperties.push_back(
+                    beans::PropertyValue(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM("RehearseTimings") ),
+                        -1, Any(true), beans::PropertyState_DIRECT_VALUE ) );
+            }
+
+            bRet = startShowImpl( Sequence<beans::PropertyValue>(
+                                      &aProperties[0], aProperties.size() ) );
+        }
     }
     catch( Exception& e )
     {
@@ -1703,17 +1700,7 @@ void SAL_CALL SlideshowImpl::click( const Reference< XShape >& xShape, const ::c
     {
         try
         {
-            if( !mxManager.is() )
-            {
-                uno::Reference<lang::XMultiServiceFactory> xFac( ::comphelper::getProcessServiceFactory() );
-
-                mxManager.set(
-                    xFac->createInstance(
-                        ::rtl::OUString::createFromAscii( AVMEDIA_MANAGER_SERVICE_NAME ) ),
-                    uno::UNO_QUERY_THROW );
-            }
-
-            mxPlayer.set( mxManager->createPlayer( pEvent->maStrBookmark ), uno::UNO_QUERY_THROW );
+                        mxPlayer.set(avmedia::MediaWindow::createPlayer(pEvent->maStrBookmark), uno::UNO_QUERY_THROW );
             mxPlayer->start();
         }
         catch( uno::Exception& e )
