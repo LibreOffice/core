@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-01 11:09:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:45:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1871,27 +1871,25 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu )
 
             case MENUITEM_TOOLBAR_DOCKTOOLBAR:
             {
-                Reference< XLayoutManager > xLayoutManager = getLayoutManagerFromFrame( m_xFrame );
-                if ( xLayoutManager.is() )
-                {
-                    ::com::sun::star::awt::Point aPoint;
-                    aPoint.X = aPoint.Y = LONG_MAX;
-                    xLayoutManager->dockWindow( m_aResourceName,
-                                                DockingArea_DOCKINGAREA_DEFAULT,
-                                                aPoint );
-                }
+                ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+
+                pExecuteInfo->aToolbarResName = m_aResourceName;
+                pExecuteInfo->nCmd            = EXEC_CMD_DOCKTOOLBAR;
+                pExecuteInfo->xLayoutManager  = getLayoutManagerFromFrame( m_xFrame );
+
+                Application::PostUserEvent( STATIC_LINK(0, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
                 break;
             }
 
             case MENUITEM_TOOLBAR_DOCKALLTOOLBAR:
             {
-                Reference< XLayoutManager > xLayoutManager = getLayoutManagerFromFrame( m_xFrame );
-                if ( xLayoutManager.is() )
-                {
-                    ::com::sun::star::awt::Point aPoint;
-                    aPoint.X = aPoint.Y = LONG_MAX;
-                    xLayoutManager->dockAllWindows( UIElementType::TOOLBAR );
-                }
+                ExecuteInfo* pExecuteInfo = new ExecuteInfo;
+
+                pExecuteInfo->aToolbarResName = m_aResourceName;
+                pExecuteInfo->nCmd            = EXEC_CMD_DOCKALLTOOLBARS;
+                pExecuteInfo->xLayoutManager  = getLayoutManagerFromFrame( m_xFrame );
+
+                Application::PostUserEvent( STATIC_LINK(0, ToolBarManager, ExecuteHdl_Impl), pExecuteInfo );
                 break;
             }
 
@@ -2126,6 +2124,20 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExe
             DockingWindow* pDockWin = dynamic_cast< DockingWindow* >( pWin );
             if ( pDockWin )
                 pDockWin->Close();
+        }
+        else if (( pExecuteInfo->nCmd == EXEC_CMD_DOCKTOOLBAR ) &&
+                 ( pExecuteInfo->xLayoutManager.is() ))
+        {
+            ::com::sun::star::awt::Point aPoint;
+            aPoint.X = aPoint.Y = LONG_MAX;
+            pExecuteInfo->xLayoutManager->dockWindow( pExecuteInfo->aToolbarResName,
+                                                      DockingArea_DOCKINGAREA_DEFAULT,
+                                                      aPoint );
+        }
+        else if (( pExecuteInfo->nCmd == EXEC_CMD_DOCKALLTOOLBARS ) &&
+                 ( pExecuteInfo->xLayoutManager.is() ))
+        {
+            pExecuteInfo->xLayoutManager->dockAllWindows( UIElementType::TOOLBAR );
         }
     }
     catch ( Exception& )
