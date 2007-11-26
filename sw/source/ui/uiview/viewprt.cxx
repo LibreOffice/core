@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:34:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:44:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -533,8 +533,7 @@ SfxTabPage* __EXPORT SwView::CreatePrintOptionsPage(Window* pParent,
 
 PrintDialog* CreatePrintDialog( Window* pParent, USHORT nPg, SwWrtShell* pSh )
 {
-    PrintDialog *pDlg =
-        new PrintDialog( pParent );
+    PrintDialog *pDlg = new PrintDialog( pParent, false );
 //  pDlg->ChangeFirstPage( 1 );
 
     if ( !nPg )
