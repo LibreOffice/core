@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:07:02 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:46:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -936,7 +936,10 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
         String aFilter;
         SfxItemSet* pSet = NULL;
         String aPath;
-        if ( nSID == SID_OPENTEMPLATE )
+        SFX_REQUEST_ARG( rReq, pFolderNameItem, SfxStringItem, SID_PATH, FALSE );
+        if ( pFolderNameItem )
+            aPath = pFolderNameItem->GetValue();
+        else if ( nSID == SID_OPENTEMPLATE )
         {
             aPath = SvtPathOptions().GetTemplatePath();
             sal_Int32 nTokenCount = aPath.GetTokenCount( ';' );
@@ -946,8 +949,13 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                 ';' );
         }
 
+        sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG;
+        SFX_REQUEST_ARG( rReq, pSystemDialogItem, SfxBoolItem, SID_FILE_DIALOG, FALSE );
+        if ( pSystemDialogItem )
+            nDialog = pSystemDialogItem->GetValue() ? SFX2_IMPL_DIALOG_SYSTEM : SFX2_IMPL_DIALOG_OOO;
+
         ULONG nErr = sfx2::FileOpenDialog_Impl(
-                WB_OPEN | SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, String(), pURLList, aFilter, pSet, &aPath );
+                WB_OPEN | SFXWB_MULTISELECTION | SFXWB_SHOWVERSIONS, String(), pURLList, aFilter, pSet, &aPath, nDialog );
 
         if ( nErr == ERRCODE_ABORT )
         {
