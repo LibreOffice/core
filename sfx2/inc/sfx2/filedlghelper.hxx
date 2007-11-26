@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 15:30:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:46:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,8 @@ class Window;
 
 #define FILE_OPEN_SERVICE_NAME      "com.sun.star.ui.dialogs.FilePicker"
 #define FOLDER_PICKER_SERVICE_NAME  "com.sun.star.ui.dialogs.FolderPicker"
+#define FILE_OPEN_SERVICE_NAME_SYSTEM "com.sun.star.ui.dialogs.SystemFilePicker"
+#define FILE_OPEN_SERVICE_NAME_OOO   "com.sun.star.ui.dialogs.OfficeFilePicker"
 
 //*****************************************************************************
 // SfxUrlDialog
@@ -206,6 +208,12 @@ private:
 public:
                             FileDialogHelper( sal_Int64 nFlags,
                                               const String& rFactory,
+                                              sal_Int16 nDialog,
+                                              SfxFilterFlags nMust,
+                                              SfxFilterFlags nDont );
+
+                            FileDialogHelper( sal_Int64 nFlags,
+                                              const String& rFactory,
                                               SfxFilterFlags nMust = 0,
                                               SfxFilterFlags nDont = 0 );
 
@@ -214,6 +222,13 @@ public:
                                               const String& rFactory,
                                               SfxFilterFlags nMust = 0,
                                               SfxFilterFlags nDont = 0 );
+
+                            FileDialogHelper( sal_Int16 nDialogType,
+                                              sal_Int64 nFlags,
+                                              const String& rFactory,
+                                              sal_Int16 nDialog,
+                                              SfxFilterFlags nMust,
+                                              SfxFilterFlags nDont );
 
                             FileDialogHelper( sal_Int64 nFlags );
 
@@ -323,14 +338,18 @@ public:
    DECL_LINK( ExecuteSystemFilePicker, void* );
 
 //#if 0 // _SOLAR__PRIVATE
-    ErrCode                  Execute( const String&   rPath,
-                                      SvStringsDtor*& rpURLList,
+    ErrCode                  Execute( SvStringsDtor*& rpURLList,
                                       SfxItemSet *&   rpSet,
-                                      String&         rFilter );
+                                      String&         rFilter,
+                                      const String&   rDirPath );
     ErrCode                  Execute( SfxItemSet *&   rpSet,
                                       String&         rFilter );
 //#endif
 };
+
+#define SFX2_IMPL_DIALOG_CONFIG 0
+#define SFX2_IMPL_DIALOG_SYSTEM 1
+#define SFX2_IMPL_DIALOG_OOO 2
 
 //#if 0 // _SOLAR__PRIVATE
 ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
@@ -338,7 +357,8 @@ ErrCode FileOpenDialog_Impl( sal_Int64 nFlags,
                              SvStringsDtor *& rpURLList,
                              String& rFilter,
                              SfxItemSet *& rpSet,
-                             const String* pPath = NULL );
+                             const String* pPath = NULL,
+                             sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG);
 //#endif
 }
 
