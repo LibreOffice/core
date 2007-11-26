@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 13:40:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:24:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,6 +252,7 @@ static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_INFO0[] = "DocInfo.Info0"
 static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_INFO1[] = "DocInfo.Info1";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_INFO2[] = "DocInfo.Info2";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_INFO3[] = "DocInfo.Info3";
+static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_CUSTOM[] = "DocInfo.Custom";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR[] = "DocInfo.PrintAuthor";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME[] = "DocInfo.PrintDateTime";
 static sal_Char __READONLY_DATA FIELD_SERVICE_DOC_INFO_KEY_WORDS[] = "DocInfo.KeyWords";
@@ -316,6 +317,7 @@ SvXMLEnumStringMapEntry __READONLY_DATA aFieldServiceNameMapping[] =
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_INFO1, FIELD_ID_DOCINFO_INFORMATION1 ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_INFO2, FIELD_ID_DOCINFO_INFORMATION2 ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_INFO3, FIELD_ID_DOCINFO_INFORMATION3 ),
+    ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_CUSTOM, FIELD_ID_DOCINFO_CUSTOM ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_PRINT_AUTHOR, FIELD_ID_DOCINFO_PRINT_AUTHOR ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_PRINT_DATE_TIME, FIELD_ID_DOCINFO_PRINT_TIME ),
     ENUM_STRING_MAP_ENTRY( FIELD_SERVICE_DOC_INFO_KEY_WORDS, FIELD_ID_DOCINFO_KEYWORDS ),
@@ -715,6 +717,7 @@ enum FieldIdEnum XMLTextFieldExport::MapFieldName(
         case FIELD_ID_DOCINFO_INFORMATION1:
         case FIELD_ID_DOCINFO_INFORMATION2:
         case FIELD_ID_DOCINFO_INFORMATION3:
+        case FIELD_ID_DOCINFO_CUSTOM:
         case FIELD_ID_DOCINFO_PRINT_AUTHOR:
         case FIELD_ID_DOCINFO_TITLE:
         case FIELD_ID_DOCINFO_SUBJECT:
@@ -835,6 +838,7 @@ sal_Bool XMLTextFieldExport::IsStringField(
     case FIELD_ID_DOCINFO_INFORMATION1:
     case FIELD_ID_DOCINFO_INFORMATION2:
     case FIELD_ID_DOCINFO_INFORMATION3:
+    case FIELD_ID_DOCINFO_CUSTOM:
     case FIELD_ID_DOCINFO_PRINT_AUTHOR:
     case FIELD_ID_DOCINFO_TITLE:
     case FIELD_ID_DOCINFO_SUBJECT:
@@ -1046,6 +1050,7 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
     case FIELD_ID_DOCINFO_INFORMATION1:
     case FIELD_ID_DOCINFO_INFORMATION2:
     case FIELD_ID_DOCINFO_INFORMATION3:
+    case FIELD_ID_DOCINFO_CUSTOM:
     case FIELD_ID_DOCINFO_PRINT_AUTHOR:
     case FIELD_ID_DOCINFO_TITLE:
     case FIELD_ID_DOCINFO_SUBJECT:
@@ -1615,6 +1620,17 @@ void XMLTextFieldExport::ExportFieldHelper(
                               nToken - FIELD_ID_DOCINFO_INFORMATION0)));
         ProcessBoolean(XML_FIXED,
                        GetBoolProperty(sPropertyIsFixed, rPropSet), sal_False);
+        ExportElement(XML_USER_DEFINED, sPresentation);
+        break;
+    }
+
+    case FIELD_ID_DOCINFO_CUSTOM:
+    {
+        uno::Any aAny = rPropSet->getPropertyValue( sPropertyName );
+        ::rtl::OUString sName;
+        aAny >>= sName;
+        ProcessString(XML_NAME, sName);
+        ProcessBoolean(XML_FIXED, GetBoolProperty(sPropertyIsFixed, rPropSet), sal_False);
         ExportElement(XML_USER_DEFINED, sPresentation);
         break;
     }
