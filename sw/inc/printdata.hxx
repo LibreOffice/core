@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdata.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:08:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:27:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,10 @@
 struct SwPrintData
 {
     sal_Bool bPrintGraphic, bPrintTable, bPrintDraw, bPrintControl, bPrintPageBackground,
-             bPrintBlackFont, bPrintLeftPage, bPrintRightPage, bPrintReverse, bPrintProspect,
+             bPrintBlackFont,
+             //#i81434# - printing of hidden text
+             bPrintHiddenText, bPrintTextPlaceholder,
+             bPrintLeftPage, bPrintRightPage, bPrintReverse, bPrintProspect,
              bPrintProspect_RTL,
              bPrintSingleJobs, bPaperFromSetup,
              // --> FME 2005-12-13 #b6354161# Print empty pages
@@ -77,7 +80,9 @@ struct SwPrintData
         bPrintProspect_RTL      =
         bPrintSingleJobs        =
         bModified               =
-        bPrintBlackFont         = sal_False;
+        bPrintBlackFont         =
+        bPrintHiddenText       =
+        bPrintTextPlaceholder   = sal_False;
 
         nPrintPostIts           = 0;
     }
@@ -103,7 +108,9 @@ struct SwPrintData
         bPrintEmptyPages    ==   rData.bPrintEmptyPages   &&
         bUpdateFieldsInPrinting == rData.bUpdateFieldsInPrinting &&
         nPrintPostIts       ==   rData.nPrintPostIts       &&
-        sFaxName            ==   rData.sFaxName;
+        sFaxName            ==   rData.sFaxName         &&
+        bPrintHiddenText       ==   rData.bPrintHiddenText &&
+        bPrintTextPlaceholder   ==   rData.bPrintTextPlaceholder;
     }
     sal_Bool IsPrintGraphic()   const { return bPrintGraphic; }
     sal_Bool IsPrintTable()     const { return bPrintTable; }
@@ -121,6 +128,8 @@ struct SwPrintData
     sal_Bool IsPrintSingleJobs() const { return bPrintSingleJobs;}
     sal_Int16 GetPrintPostIts() const { return nPrintPostIts; }
     const rtl::OUString     GetFaxName() const{return sFaxName;}
+    sal_Bool IsPrintHiddenText() const {return bPrintHiddenText;}
+    sal_Bool IsPrintTextPlaceholder() const {return bPrintTextPlaceholder;}
 
     void SetPrintGraphic  ( sal_Bool b ) { doSetModified(); bPrintGraphic = b;}
     void SetPrintTable    ( sal_Bool b ) { doSetModified(); bPrintTable = b;}
@@ -137,6 +146,8 @@ struct SwPrintData
     void SetPrintBlackFont(sal_Bool b){ doSetModified(); bPrintBlackFont = b;}
     void SetPrintSingleJobs(sal_Bool b){ doSetModified(); bPrintSingleJobs = b;}
     void SetFaxName(const rtl::OUString& rSet){sFaxName = rSet;}
+    void SetPrintHiddenText(sal_Bool b){ doSetModified(); bPrintHiddenText = b;}
+    void SetPrintTextPlaceholder(sal_Bool b){ doSetModified(); bPrintTextPlaceholder = b;}
     virtual void doSetModified () { bModified = sal_True;}
 };
 
