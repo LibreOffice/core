@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofgraphic.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:58:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:50:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ namespace sdr
                 DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle, const ViewObjectContact& rAssociatedVOC);
 
             // Decide if graphic should be painted as draft
-            sal_Bool DoPaintGraphicDraft(DisplayInfo& rDisplayInfo) const;
+            sal_Bool DoPaintGraphicDraft() const;
 
             // Methods to react on start getting viewed or stop getting
             // viewed. This info is derived from the count of members of
