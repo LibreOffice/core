@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:25:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:33:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1897,7 +1897,7 @@ int SalGtkFilePicker::implAddFilter( const OUString& rFilter, const OUString& rT
     static const OUString aStarDot = OUString::createFromAscii( "*." );
     OUString aTokens;
 
-    bool bAllGlob = !rType.compareToAscii( "*.*" );
+    bool bAllGlob = !rType.compareToAscii( "*.*" ) || !rType.compareToAscii( "*" );
     if (bAllGlob)
         gtk_file_filter_add_pattern( filter, "*" );
     else
