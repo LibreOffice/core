@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrobj.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:02:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:50:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,12 +100,8 @@ namespace sdr
             // those groupings are empty.
             sal_Bool PaintReplacementObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle);
 
-            // For calc draft object display
-            sal_Bool PaintCalcDraftObject(DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle);
-
             // New methodology to test for the new SC drawing flags (SDRPAINTMODE_SC_)
             sal_Bool DoPaintForCalc(DisplayInfo& rDisplayInfo) const;
-            sal_Bool DoDraftForCalc(DisplayInfo& rDisplayInfo) const;
 
             // Paint a shadowed frame in object size. Fill it with a default gray if last parameter is sal_True.
             sal_Bool PaintShadowedFrame(
