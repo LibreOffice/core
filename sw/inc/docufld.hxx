@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:00:08 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:27:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,8 @@ namespace nsSwDocInfoSubType
     const SwDocInfoSubType DI_PRINT         = 10;
     const SwDocInfoSubType DI_DOCNO         = 11;
     const SwDocInfoSubType DI_EDIT          = 12;
-    const SwDocInfoSubType DI_SUBTYPE_END   = 13;
+    const SwDocInfoSubType DI_CUSTOM        = 13;
+    const SwDocInfoSubType DI_SUBTYPE_END   = 14;
 
     const SwDocInfoSubType DI_SUB_AUTHOR    = 0x0100;
     const SwDocInfoSubType DI_SUB_TIME      = 0x0200;
@@ -552,7 +553,7 @@ class SwDocInfoFieldType : public SwValueFieldType
 public:
     SwDocInfoFieldType(SwDoc* pDc);
 
-    String                  Expand(USHORT nSubType, sal_uInt32 nFormat, USHORT nLang) const;
+    String                  Expand(USHORT nSubType, sal_uInt32 nFormat, USHORT nLang, const String& rName) const;
     virtual SwFieldType*    Copy() const;
 };
 
@@ -560,9 +561,10 @@ class SwDocInfoField : public SwValueField
 {
     USHORT  nSubType;
     String  aContent;
+    String  aName;
 
 public:
-    SwDocInfoField(SwDocInfoFieldType*, USHORT nSub, sal_uInt32 nFmt=0);
+    SwDocInfoField(SwDocInfoFieldType*, USHORT nSub, const String& rName, sal_uInt32 nFmt=0);
 
     virtual void            SetSubType(USHORT);
     virtual USHORT          GetSubType() const;
@@ -570,7 +572,7 @@ public:
     virtual String          Expand() const;
     virtual String          GetCntnt(BOOL bName = FALSE) const;
     virtual SwField*        Copy() const;
-
+    String                  GetName() { return aName; }
     inline void             SetExpansion(const String& rStr) { aContent = rStr; }
     virtual BOOL        QueryValue( com::sun::star::uno::Any& rVal, USHORT nWhich ) const;
     virtual BOOL        PutValue( const com::sun::star::uno::Any& rVal, USHORT nWhich );
