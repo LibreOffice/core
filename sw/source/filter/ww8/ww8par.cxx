@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.183 $
+ *  $Revision: 1.184 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-26 11:52:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:31:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3756,7 +3756,7 @@ void SwWW8ImplReader::ReadDocVars()
                 ::rtl::OUString name(aDocVarStrings[i]);
                 uno::Any aValue;
                 aValue <<= ::rtl::OUString(aDocValueStrings[i]);
-                pDoc->GetDocumentInfo()->SetCustomProperty( name, aValue );
+                pDoc->GetDocumentInfo()->InsertCustomProperty( name, aValue );
             }
         }
     }
