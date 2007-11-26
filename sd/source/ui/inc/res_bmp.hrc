@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_bmp.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:51:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:01:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
 #define IMAGE_MASK_STDCOLOR_HC IMAGE_MASK_STDCOLOR
 #define IMAGE_STDBTN_COLOR_HC COL_LIGHTMAGENTA
 
-#define RID_TIME_BUTTON           RID_APP_START
 #define RID_ALIGNMENT             RID_APP_START+1
 #define RID_ZOOM                  RID_APP_START+2
 #define RID_CONTROLS              RID_APP_START+3
@@ -53,8 +52,6 @@
 #define RID_ZOOM_TBX            RID_APP_START+6
 #define RID_CHOOSE_MODE         RID_APP_START+7
 #define RID_CHOOSE_MODE_TBX     RID_APP_START+8
-
-#define RID_PREVIEW_BUTTON      RID_APP_START+9
 
 #define RID_TEXT                RID_APP_START+10
 #define RID_TEXT_TBX            RID_APP_START+11
@@ -77,18 +74,6 @@
 #define RID_DRAW_DOCWINDOWICON  RID_APP_START+28
 #define RID_GRAFFILTERS         RID_APP_START+29
 #define RID_GRAFFILTERS_TBX     RID_APP_START+30
-
-#define BMP_SW_PRESENTATION     RID_APP_START
-#define BMP_SW_SLIDE            RID_APP_START+1
-#define BMP_SW_DRAW             RID_APP_START+2
-#define BMP_SW_OUTLINE          RID_APP_START+3
-#define BMP_SW_NOTES            RID_APP_START+4
-#define BMP_SW_HANDOUT          RID_APP_START+5
-
-// Bitmaps fuer TabBar-Modusumschaltung-Buttons
-#define BMP_TAB_PAGEMODE        RID_APP_START+6
-#define BMP_TAB_MASTERPAGE      RID_APP_START+7
-#define BMP_TAB_LAYERMODE       RID_APP_START+8
 
 #define BMP_FOIL_00             RID_APP_START+10
 #define BMP_FOIL_01             RID_APP_START+11
@@ -133,67 +118,6 @@
 #define BMP_GRAPHIC             RID_APP_START+53
 
 // Bimaps fuer ValueSet im EffekteWindow
-#define BMP_EFFECT_FADE_FROM_UL             RID_APP_START+54
-#define BMP_EFFECT_FADE_FROM_T              RID_APP_START+55
-#define BMP_EFFECT_FADE_FROM_UR             RID_APP_START+56
-#define BMP_EFFECT_FADE_FROM_L              RID_APP_START+57
-#define BMP_EFFECT_FADE_FROM_R              RID_APP_START+58
-#define BMP_EFFECT_FADE_FROM_LL             RID_APP_START+59
-#define BMP_EFFECT_FADE_FROM_B              RID_APP_START+60
-#define BMP_EFFECT_FADE_FROM_LR             RID_APP_START+61
-
-#define BMP_EFFECT_DISCARD_FROM_T           RID_APP_START+62
-#define BMP_EFFECT_DISCARD_FROM_L           RID_APP_START+63
-#define BMP_EFFECT_DISCARD_FROM_R           RID_APP_START+64
-#define BMP_EFFECT_DISCARD_FROM_B           RID_APP_START+65
-
-#define BMP_EFFECT_FADE_TO_CENTER           RID_APP_START+66
-#define BMP_EFFECT_FADE_FROM_CENTER         RID_APP_START+67
-#define BMP_EFFECT_VERTICAL_STRIPES         RID_APP_START+68
-#define BMP_EFFECT_HORIZONTAL_STRIPES       RID_APP_START+69
-#define BMP_EFFECT_CLOCKWISE                RID_APP_START+70
-#define BMP_EFFECT_COUNTERCLOCKWISE         RID_APP_START+71
-
-#define BMP_EFFECT_OPEN_VERTICAL            RID_APP_START+72
-#define BMP_EFFECT_OPEN_HORIZONTAL          RID_APP_START+73
-#define BMP_EFFECT_CLOSE_VERTICAL           RID_APP_START+74
-#define BMP_EFFECT_CLOSE_HORIZONTAL         RID_APP_START+75
-
-#define BMP_EFFECT_WAVYLINE_FROM_T          RID_APP_START+76
-#define BMP_EFFECT_WAVYLINE_FROM_L          RID_APP_START+77
-#define BMP_EFFECT_WAVYLINE_FROM_R          RID_APP_START+78
-#define BMP_EFFECT_WAVYLINE_FROM_B          RID_APP_START+79
-
-#define BMP_EFFECT_SPIRALIN_L               RID_APP_START+80
-#define BMP_EFFECT_SPIRALIN_R               RID_APP_START+81
-#define BMP_EFFECT_SPIRALOUT_L              RID_APP_START+82
-#define BMP_EFFECT_SPIRALOUT_R              RID_APP_START+83
-
-#define BMP_EFFECT_LASER_FROM_UL            RID_APP_START+84
-#define BMP_EFFECT_LASER_FROM_T             RID_APP_START+85
-#define BMP_EFFECT_LASER_FROM_UR            RID_APP_START+86
-#define BMP_EFFECT_LASER_FROM_L             RID_APP_START+87
-#define BMP_EFFECT_LASER_FROM_R             RID_APP_START+88
-#define BMP_EFFECT_LASER_FROM_LL            RID_APP_START+89
-#define BMP_EFFECT_LASER_FROM_B             RID_APP_START+90
-#define BMP_EFFECT_LASER_FROM_LR            RID_APP_START+91
-
-#define BMP_EFFECT_VERTICAL_LINES           RID_APP_START+92
-#define BMP_EFFECT_HORIZONTAL_LINES         RID_APP_START+93
-#define BMP_EFFECT_DISSOLVE                 RID_APP_START+94
-#define BMP_EFFECT_RANDOM                   RID_APP_START+95
-#define BMP_EFFECT_PATH                     RID_APP_START+96
-
-#define BMP_EFFECT_ROLL_FROM_T              RID_APP_START+97
-#define BMP_EFFECT_ROLL_FROM_L              RID_APP_START+98
-#define BMP_EFFECT_ROLL_FROM_R              RID_APP_START+99
-#define BMP_EFFECT_ROLL_FROM_B              RID_APP_START+100
-
-#define BMP_EFFECT_STRETCH_FROM_T           RID_APP_START+101
-#define BMP_EFFECT_STRETCH_FROM_L           RID_APP_START+102
-#define BMP_EFFECT_STRETCH_FROM_R           RID_APP_START+103
-#define BMP_EFFECT_STRETCH_FROM_B           RID_APP_START+104
-
 #define BMP_EFFECT_NONE                     RID_APP_START+105
 #define BMP_TEXTEFFECT_DISCARD_FROM_T       RID_APP_START+106
 #define BMP_TEXTEFFECT_FADE_FROM_CENTER     RID_APP_START+107
@@ -204,8 +128,6 @@
 
 #define BMP_FOIL_NONE                       RID_APP_START+120
 #define BMP_GROUP                           RID_APP_START+121
-#define BMP_PAGE_ON                         RID_APP_START+122
-#define BMP_PAGE_OFF                        RID_APP_START+123
 #define BMP_WAIT_ICON                       RID_APP_START+124
 
 // -----------------------------------------------------------------------------
@@ -251,18 +173,6 @@
 #define BMP_EFFECT_UNCOVER_TO_LR            RID_APP_START+170
 #define BMP_EFFECT_UNCOVER_TO_B             RID_APP_START+171
 #define BMP_EFFECT_UNCOVER_TO_LL            RID_APP_START+172
-
-// high contrast images
-#define BMP_TAB_PAGEMODE_H                  RID_SD_START+173
-#define BMP_TAB_MASTERPAGE_H                RID_SD_START+174
-#define BMP_TAB_LAYERMODE_H                 RID_SD_START+175
-
-#define BMP_SW_PRESENTATION_H               RID_SD_START+176
-#define BMP_SW_SLIDE_H                      RID_SD_START+177
-#define BMP_SW_DRAW_H                       RID_SD_START+178
-#define BMP_SW_OUTLINE_H                    RID_SD_START+179
-#define BMP_SW_NOTES_H                      RID_SD_START+180
-#define BMP_SW_HANDOUT_H                    RID_SD_START+181
 
 #define BMP_FOIL_00_H                       RID_SD_START+182
 #define BMP_FOIL_01_H                       RID_SD_START+183
@@ -311,100 +221,7 @@
 
 #define BMP_FOIL_NONE_H                     RID_SD_START+225
 #define BMP_GROUP_H                         RID_SD_START+226
-#define BMP_PAGE_ON_H                       RID_SD_START+227
-#define BMP_PAGE_OFF_H                      RID_SD_START+228
 #define BMP_WAIT_ICON_H                     RID_SD_START+229
-
-#define BMP_EFFECT_FADE_FROM_UL_H           RID_SD_START+230
-#define BMP_EFFECT_FADE_FROM_T_H            RID_SD_START+231
-#define BMP_EFFECT_FADE_FROM_UR_H           RID_SD_START+232
-#define BMP_EFFECT_FADE_FROM_L_H            RID_SD_START+233
-#define BMP_EFFECT_FADE_FROM_R_H            RID_SD_START+234
-#define BMP_EFFECT_FADE_FROM_LL_H           RID_SD_START+235
-#define BMP_EFFECT_FADE_FROM_B_H            RID_SD_START+236
-#define BMP_EFFECT_FADE_FROM_LR_H           RID_SD_START+237
-#define BMP_EFFECT_DISCARD_FROM_T_H         RID_SD_START+238
-#define BMP_EFFECT_DISCARD_FROM_L_H         RID_SD_START+239
-#define BMP_EFFECT_DISCARD_FROM_R_H         RID_SD_START+240
-#define BMP_EFFECT_DISCARD_FROM_B_H         RID_SD_START+241
-#define BMP_EFFECT_FADE_TO_CENTER_H         RID_SD_START+242
-#define BMP_EFFECT_FADE_FROM_CENTER_H       RID_SD_START+243
-#define BMP_EFFECT_VERTICAL_STRIPES_H       RID_SD_START+244
-#define BMP_EFFECT_HORIZONTAL_STRIPES_H     RID_SD_START+245
-#define BMP_EFFECT_CLOCKWISE_H              RID_SD_START+246
-#define BMP_EFFECT_COUNTERCLOCKWISE_H       RID_SD_START+247
-#define BMP_EFFECT_OPEN_VERTICAL_H          RID_SD_START+248
-#define BMP_EFFECT_OPEN_HORIZONTAL_H        RID_SD_START+249
-#define BMP_EFFECT_CLOSE_VERTICAL_H         RID_SD_START+250
-#define BMP_EFFECT_CLOSE_HORIZONTAL_H       RID_SD_START+251
-#define BMP_EFFECT_WAVYLINE_FROM_T_H        RID_SD_START+252
-#define BMP_EFFECT_WAVYLINE_FROM_L_H        RID_SD_START+253
-#define BMP_EFFECT_WAVYLINE_FROM_R_H        RID_SD_START+254
-#define BMP_EFFECT_WAVYLINE_FROM_B_H        RID_SD_START+255
-#define BMP_EFFECT_SPIRALIN_L_H             RID_SD_START+256
-#define BMP_EFFECT_SPIRALIN_R_H             RID_SD_START+257
-#define BMP_EFFECT_SPIRALOUT_L_H            RID_SD_START+258
-#define BMP_EFFECT_SPIRALOUT_R_H            RID_SD_START+259
-#define BMP_EFFECT_LASER_FROM_UL_H          RID_SD_START+260
-#define BMP_EFFECT_LASER_FROM_T_H           RID_SD_START+261
-#define BMP_EFFECT_LASER_FROM_UR_H          RID_SD_START+262
-#define BMP_EFFECT_LASER_FROM_L_H           RID_SD_START+263
-#define BMP_EFFECT_LASER_FROM_R_H           RID_SD_START+264
-#define BMP_EFFECT_LASER_FROM_LL_H          RID_SD_START+265
-#define BMP_EFFECT_LASER_FROM_B_H           RID_SD_START+266
-#define BMP_EFFECT_LASER_FROM_LR_H          RID_SD_START+267
-#define BMP_EFFECT_VERTICAL_LINES_H         RID_SD_START+268
-#define BMP_EFFECT_HORIZONTAL_LINES_H       RID_SD_START+269
-#define BMP_EFFECT_DISSOLVE_H               RID_SD_START+270
-#define BMP_EFFECT_RANDOM_H                 RID_SD_START+271
-#define BMP_EFFECT_PATH_H                   RID_SD_START+272
-#define BMP_EFFECT_ROLL_FROM_T_H            RID_SD_START+278
-#define BMP_EFFECT_ROLL_FROM_L_H            RID_SD_START+279
-#define BMP_EFFECT_ROLL_FROM_R_H            RID_SD_START+280
-#define BMP_EFFECT_ROLL_FROM_B_H            RID_SD_START+281
-#define BMP_EFFECT_STRETCH_FROM_T_H         RID_SD_START+282
-#define BMP_EFFECT_STRETCH_FROM_L_H         RID_SD_START+283
-#define BMP_EFFECT_STRETCH_FROM_R_H         RID_SD_START+284
-#define BMP_EFFECT_STRETCH_FROM_B_H         RID_SD_START+285
-#define BMP_EFFECT_NONE_H                   RID_SD_START+286
-#define BMP_TEXTEFFECT_DISCARD_FROM_T_H     RID_SD_START+287
-#define BMP_TEXTEFFECT_FADE_FROM_CNTR_H     RID_SD_START+288
-#define BMP_EFFECT_HIDE_H                   RID_SD_START+289
-#define BMP_EFFECT_APPEAR_H                 RID_SD_START+290
-#define BMP_EFFECT_DISCARD_FROM_UL_H        RID_SD_START+291
-#define BMP_EFFECT_DISCARD_FROM_UR_H        RID_SD_START+292
-#define BMP_EFFECT_DISCARD_FROM_LR_H        RID_SD_START+293
-#define BMP_EFFECT_DISCARD_FROM_LL_H        RID_SD_START+294
-#define BMP_EFFECT_DISCARD_S_FROM_L_H       RID_SD_START+295
-#define BMP_EFFECT_DISCARD_S_FROM_UL_H      RID_SD_START+296
-#define BMP_EFFECT_DISCARD_S_FROM_T_H       RID_SD_START+297
-#define BMP_EFFECT_DISCARD_S_FROM_UR_H      RID_SD_START+298
-#define BMP_EFFECT_DISCARD_S_FROM_R_H       RID_SD_START+299
-#define BMP_EFFECT_DISCARD_S_FROM_LR_H      RID_SD_START+300
-#define BMP_EFFECT_DISCARD_S_FROM_B_H       RID_SD_START+301
-#define BMP_EFFECT_DISCARD_S_FROM_LL_H      RID_SD_START+302
-#define BMP_EFFECT_VERT_CHECKBRD_H          RID_SD_START+303
-#define BMP_EFFECT_HOR_CHECKBRD_H           RID_SD_START+304
-#define BMP_EFFECT_STRTCH_FROM_L_H          RID_SD_START+305
-#define BMP_EFFECT_STRTCH_FROM_UL_H         RID_SD_START+306
-#define BMP_EFFECT_STRTCH_FROM_T_H          RID_SD_START+307
-#define BMP_EFFECT_STRTCH_FROM_UR_H         RID_SD_START+308
-#define BMP_EFFECT_STRTCH_FROM_R_H          RID_SD_START+309
-#define BMP_EFFECT_STRTCH_FROM_LR_H         RID_SD_START+310
-#define BMP_EFFECT_STRTCH_FROM_B_H          RID_SD_START+311
-#define BMP_EFFECT_STRTCH_FROM_LL_H         RID_SD_START+312
-#define BMP_EFFECT_STRTCH_HORIZONTAL_H      RID_SD_START+313
-#define BMP_EFFECT_STRTCH_VERTICAL_H        RID_SD_START+314
-#define BMP_EFFECT_ROTATE_HORIZONTAL_H      RID_SD_START+315
-#define BMP_EFFECT_ROTATE_VERTICAL_H        RID_SD_START+316
-#define BMP_EFFECT_UNCOVER_TO_L_H           RID_SD_START+317
-#define BMP_EFFECT_UNCOVER_TO_UL_H          RID_SD_START+318
-#define BMP_EFFECT_UNCOVER_TO_T_H           RID_SD_START+319
-#define BMP_EFFECT_UNCOVER_TO_UR_H          RID_SD_START+320
-#define BMP_EFFECT_UNCOVER_TO_R_H           RID_SD_START+321
-#define BMP_EFFECT_UNCOVER_TO_LR_H          RID_SD_START+322
-#define BMP_EFFECT_UNCOVER_TO_B_H           RID_SD_START+323
-#define BMP_EFFECT_UNCOVER_TO_LL_H          RID_SD_START+324
 
 #define BMP_CLOSE_DOC                       RID_SD_START+325
 #define BMP_CLOSE_DOC_H                     RID_SD_START+326
@@ -417,29 +234,11 @@
 
 // -----------------------------------------------------------------------------
 
-#define IMG_EFFECT                          RID_APP_START+4
-#define IMG_EXTRAS                          RID_APP_START+5
-#define IMG_TEXT                            RID_APP_START+6
-#define IMG_ORDER                           RID_APP_START+7
-#define IMG_APPLY_H                         RID_APP_START+10
-#define IMG_EFFECT_H                        RID_APP_START+11
-#define IMG_TEXT_H                          RID_APP_START+12
-#define IMG_EXTRAS_H                        RID_APP_START+13
-#define IMG_EFFECT_ORDER_H                  RID_APP_START+14
-#define IMG_PREVIEW_H                       RID_APP_START+15
-#define IMG_INVISIBLE_H                     RID_APP_START+16
-#define IMG_FADEOUT_H                       RID_APP_START+17
-#define IMG_SOUND_H                         RID_APP_START+18
-#define IMG_PLAYFULL_H                      RID_APP_START+19
-#define IMG_BROWSE_H                        RID_APP_START+20
 #define IMG_PIPETTE_H                       RID_APP_START+21
 #define IMG_GET1OBJECT_H                    RID_APP_START+22
 #define IMG_GETALLOBJECT_H                  RID_APP_START+23
 #define IMG_REMOVEBMP_H                     RID_APP_START+24
 #define IMG_REMOVEALLBMP_H                  RID_APP_START+25
-#define IMG_SLIDE_SEMI_H                    RID_APP_START+26
-#define IMG_SLIDE_AUTO_H                    RID_APP_START+27
-#define IMG_SLIDE_MANU_H                    RID_APP_START+28
 
 /*
  *  ResourceIDs fuer Popup-Menues brauchen keinen Dummy-String !!!
