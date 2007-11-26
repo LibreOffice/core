@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopti.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:42:22 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:41:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,7 +280,14 @@ SvStream& operator>>( SvStream& rStream, ScViewOptions& rOpt )
         rStream >> rOpt.aOptArr[i];
 
     for ( i=0; i<MAX_TYPE; i++ )
-        rStream >> n, rOpt.aModeArr[i] = (ScVObjMode)n;
+    {
+        rStream >> n;
+
+        //#i80528# adapt to new range eventually
+        if((BYTE)VOBJ_MODE_HIDE < n) n = (BYTE)VOBJ_MODE_SHOW;
+
+        rOpt.aModeArr[i] = (ScVObjMode)n;
+    }
 
     rStream >> rOpt.aGridCol;
     rStream.ReadByteString( rOpt.aGridColName, rStream.GetStreamCharSet() );
@@ -644,15 +651,30 @@ ScViewCfg::ScViewCfg() :
                         break;
                     case SCDISPLAYOPT_OBJECTGRA:
                         if ( pValues[nProp] >>= nIntVal )
-                            SetObjMode( VOBJ_TYPE_OLE, (ScVObjMode) nIntVal );
+                        {
+                            //#i80528# adapt to new range eventually
+                            if((sal_Int32)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int32)VOBJ_MODE_SHOW;
+
+                            SetObjMode( VOBJ_TYPE_OLE, (ScVObjMode)nIntVal);
+                        }
                         break;
                     case SCDISPLAYOPT_CHART:
                         if ( pValues[nProp] >>= nIntVal )
-                            SetObjMode( VOBJ_TYPE_CHART, (ScVObjMode) nIntVal );
+                        {
+                            //#i80528# adapt to new range eventually
+                            if((sal_Int32)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int32)VOBJ_MODE_SHOW;
+
+                            SetObjMode( VOBJ_TYPE_CHART, (ScVObjMode)nIntVal);
+                        }
                         break;
                     case SCDISPLAYOPT_DRAWING:
                         if ( pValues[nProp] >>= nIntVal )
-                            SetObjMode( VOBJ_TYPE_DRAW, (ScVObjMode) nIntVal );
+                        {
+                            //#i80528# adapt to new range eventually
+                            if((sal_Int32)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int32)VOBJ_MODE_SHOW;
+
+                            SetObjMode( VOBJ_TYPE_DRAW, (ScVObjMode)nIntVal);
+                        }
                         break;
                 }
             }
