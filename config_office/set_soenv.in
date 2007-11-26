@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.162 $
-# Date:        $Date: 2007-11-14 16:45:56 $
+# Version:     $Revision: 1.163 $
+# Date:        $Date: 2007-11-26 12:47:08 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1894,6 +1894,9 @@ ToFile( "BUILD_EPM",         "@BUILD_EPM@",        "e" );
 ToFile( "PKGFORMAT",         "@PKGFORMAT@",        "e" );
 ToFile( "SYSTEM_STDLIBS",    "@SYSTEM_STDLIBS@",   "e" );
 ToFile( "SYSTEM_ZLIB",       "@SYSTEM_ZLIB@",      "e" );
+ToFile( "SYSTEM_OPENSSL",    "@SYSTEM_OPENSSL@",   "e" );
+ToFile( "OPENSSL_CFLAGS",    "@OPENSSL_CFLAGS@",   "e" );
+ToFile( "OPENSSL_LIBS",      "@OPENSSL_LIBS@",     "e" );
 ToFile( "SYSTEM_PYTHON",     "@SYSTEM_PYTHON@",    "e" );
 ToFile( "PYTHON_CFLAGS",     "@PYTHON_CFLAGS@",    "e" );
 ToFile( "PYTHON_LIBS",       "@PYTHON_LIBS@",      "e" );
