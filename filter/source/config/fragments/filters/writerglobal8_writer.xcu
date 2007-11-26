@@ -7,7 +7,4 @@
         <prop oor:name="Type"><value>writer8</value></prop>
         <prop oor:name="TemplateName"/>
         <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
-        <prop oor:name="UIName">
-            <value xml:lang="x-default">OpenDocument Text</value>
-        </prop>
     </node>
