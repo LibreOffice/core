@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:40:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:31:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SECURITYOPTIONS_HXX
+#include <svtools/securityoptions.hxx>
 #endif
 #ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
@@ -246,19 +249,29 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 #endif
 
             case SwContentAtPos::SW_INETATTR:
+            {
                 sTxt = ((SfxStringItem*)aCntntAtPos.aFnd.pAttr)->GetValue();
                 sTxt = URIHelper::removePassword( sTxt,
                                         INetURLObject::WAS_ENCODED,
                                            INetURLObject::DECODE_UNAMBIGUOUS);
+
+
                 // --> OD 2007-07-26 #i80029#
-                if ( !rView.GetDocShell()->IsReadOnly() )
+                BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
+                if ( !bExecHyperlinks )
                 {
-                    sTxt.InsertAscii( ": ", 0 );
-                    sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
+                    SvtSecurityOptions aSecOpts;
+                    bExecHyperlinks = !aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+
+                    if ( !bExecHyperlinks )
+                    {
+                        sTxt.InsertAscii( ": ", 0 );
+                        sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
+                    }
                 }
                 // <--
                 break;
-
+            }
             case SwContentAtPos::SW_SMARTTAG:
                 sTxt = SW_RESSTR(STR_SMARTTAG_CLICK);
                 break;
