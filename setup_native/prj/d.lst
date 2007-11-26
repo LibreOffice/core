@@ -12,6 +12,8 @@ mkdir: %_DEST%\bin%_EXT%\userscripts
 ..\%__SRC%\bin\downloadscript.sh %_DEST%\bin%_EXT%\downloadscript.sh
 ..\%__SRC%\bin\register_extensions %_DEST%\bin%_EXT%\register_extensions
 ..\%__SRC%\bin\deregister_extensions %_DEST%\bin%_EXT%\deregister_extensions
+..\%__SRC%\bin\unpack_update.sh %_DEST%\bin%_EXT%\unpack_update
+..\%__SRC%\bin\update.sh %_DEST%\bin%_EXT%\update
 ..\%__SRC%\bin\javaloader.sh %_DEST%\bin%_EXT%\javaloader.sh
 ..\%__SRC%\bin\stclient_wrapper.sh %_DEST%\bin%_EXT%\stclient_wrapper
 ..\%__SRC%\bin\stclient_wrapper.exe %_DEST%\bin%_EXT%\stclient_wrapper.exe
