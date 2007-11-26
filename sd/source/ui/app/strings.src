@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:36:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:00:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,6 @@ String STR_GRAPHIC_OPTIONS_TOOLBOX
 };
 String STR_DRAW_COMMONTASK_TOOLBOX
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Präsentation : Prõsentation */
     Text [ en-US ] = "Presentation" ;
 };
 String STR_SLIDE_OBJ_TOOLBOX
@@ -77,7 +76,6 @@ String STR_SLIDE_OBJ_TOOLBOX
 };
 String STR_BEZIER_TOOLBOX
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Bézierobjektleiste : BÚzierobjektleiste */
     Text [ en-US ] = "BÃ©zier object bar" ;
 };
 String STR_GLUEPOINTS_TOOLBOX
@@ -100,169 +98,21 @@ String STR_DEFAULTVIEW
 {
     Text [ en-US ] = "Default" ;
 };
-String STR_SPECIALVIEW
-{
-    Text [ en-US ] = "Special" ;
-};
-String STR_DIAVIEW
-{
-    Text [ en-US ] = "Slide" ;
-};
 String STR_NULL
 {
     Text [ en-US ] = "None" ;
 };
-String STR_SOLID
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Durchgängig : Durchgõngig */
-    Text [ en-US ] = "Continuous" ;
-};
-String STR_DOT
-{
-    Text [ en-US ] = "Dots" ;
-};
-String STR_DASH
-{
-    Text [ en-US ] = "Dashes" ;
-};
-String STR_DASHDOT
-{
-    Text [ en-US ] = "Dashes and Dots" ;
-};
-String STR_BLACK
-{
-    Text [ en-US ] = "Black" ;
-};
-String STR_BLUE
-{
-    Text [ en-US ] = "Blue" ;
-};
-String STR_RED
-{
-    Text [ en-US ] = "Red" ;
-};
-String STR_GREEN
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Grün : Gr³n */
-    Text [ en-US ] = "Green" ;
-};
-String STR_CYAN
-{
-    Text [ en-US ] = "Cyan" ;
-};
-String STR_MAGENTA
-{
-    Text [ en-US ] = "Magenta" ;
-};
-String STR_YELLOW
-{
-    Text [ en-US ] = "Yellow" ;
-};
-String STR_WHITE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Weiß : Wei˜ */
-    Text [ en-US ] = "White" ;
-};
-String STR_BROWN
-{
-    Text [ en-US ] = "Brown" ;
-};
-String STR_GRAY
-{
-    Text [ en-US ] = "Gray" ;
-};
-String STR_LIGHTGRAY
-{
-    Text [ en-US ] = "Light Gray" ;
-};
-String STR_LIGHTBLUE
-{
-    Text [ en-US ] = "Light Blue" ;
-};
-String STR_LIGHTGREEN
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Hellgrün : Hellgr³n */
-    Text [ en-US ] = "Light Green" ;
-};
-String STR_LIGHTRED
-{
-    Text [ en-US ] = "Light Red" ;
-};
-String STR_LIGHTMAGENTA
-{
-    Text [ en-US ] = "Light Magenta" ;
-};
-String STR_LIGHTCYAN
-{
-    Text [ en-US ] = "Light Cyan" ;
-};
-String STR_BRUSH_SOLID
-{
-    Text [ en-US ] = "Solid" ;
-};
-String STR_HORZ
-{
-    Text [ en-US ] = "Horizontal" ;
-};
-String STR_VERT
-{
-    Text [ en-US ] = "Vertical" ;
-};
-String STR_CROSS
-{
-    Text [ en-US ] = "Checkered" ;
-};
-String STR_DIAGCROSS
-{
-    Text [ en-US ] = "Checkered Diagonal" ;
-};
-String STR_UPDIAG
-{
-    Text [ en-US ] = "Diagonal Up" ;
-};
-String STR_DOWNDIAG
-{
-    Text [ en-US ] = "Diagonal Down" ;
-};
-String STR_25
-{
-    Text [ en-US ] = "25%" ;
-};
-String STR_50
-{
-    Text [ en-US ] = "50%" ;
-};
-String STR_75
-{
-    Text [ en-US ] = "75%" ;
-};
-String STR_NO_BRUSH
-{
-    Text [ en-US ] = "No pattern" ;
-};
 String STR_INSERTPAGE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Seite einfügen : Seite einf³gen */
     Text [ en-US ] = "Insert Slide" ;
-};
-String STR_MODIFYPAGE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Seitenlayout ändern : Seitenlayout õndern */
-    Text [ en-US ] = "Slide Layout" ;
 };
 String STR_INSERTLAYER
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Ebene einfügen : Ebene einf³gen */
     Text [ en-US ] = "Insert Layer" ;
 };
 String STR_MODIFYLAYER
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Ebene ändern : Ebene õndern */
     Text [ en-US ] = "Modify Layer" ;
-};
-String STR_NO_EFFECT
-{
-    Text [ en-US ] = "No Effect" ;
 };
 String STR_UNDO_SLIDE_PARAMS
 {
@@ -280,30 +130,6 @@ String STR_UNDO_REPLACE
 {
     Text [ en-US ] = "Replace" ;
 };
-String STR_ALIGN_LEFT
-{
-    Text [ en-US ] = "Align left" ;
-};
-String STR_ALIGN_CENTER
-{
-    Text [ en-US ] = "Align centered" ;
-};
-String STR_ALIGN_RIGHT
-{
-    Text [ en-US ] = "Align right" ;
-};
-String STR_ALIGN_UP
-{
-    Text [ en-US ] = "Align top" ;
-};
-String STR_ALIGN_MIDDLE
-{
-    Text [ en-US ] = "Align middle" ;
-};
-String STR_ALIGN_DOWN
-{
-    Text [ en-US ] = "Align bottom" ;
-};
 String STR_UNDO_DRAGDROP
 {
     Text [ en-US ] = "Drag and Drop" ;
@@ -311,50 +137,6 @@ String STR_UNDO_DRAGDROP
 String STR_INSERTGRAPHIC
 {
     Text [ en-US ] = "Insert picture" ;
-};
-String STR_LINESTYLE
-{
-    Text [ en-US ] = "Line Style" ;
-};
-String STR_DESC_LINESTYLE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den neuen Linienstil ein: : Geben Sie hier bitte den Namen f³r den neuen Linienstil ein: */
-    Text [ en-US ] = "Please enter a name for the new line style:" ;
-};
-String STR_DEL_LINESTYLE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Linienstil löschen : Linienstil l÷schen */
-    Text [ en-US ] = "Delete line style" ;
-};
-String STR_ASK_DEL_LINESTYLE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Soll der Linienstil wirklich gelöscht werden? : Soll der Linienstil wirklich gel÷scht werden? */
-    Text [ en-US ] = "Do you want to delete the line style?" ;
-};
-String STR_INVISIBLE
-{
-    Text [ en-US ] = "Invisible" ;
-};
-String STR_COLOR
-{
-    Text [ en-US ] = "Color" ;
-};
-String STR_HATCH
-{
-    Text [ en-US ] = "Hatching" ;
-};
-String STR_AREA
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Fläche : Flõche */
-    Text [ en-US ] = "Area" ;
-};
-String STR_LINE
-{
-    Text [ en-US ] = "Line" ;
-};
-String STR_EFFECT
-{
-    Text [ en-US ] = "Effect" ;
 };
 String STR_SLOW
 {
@@ -368,51 +150,10 @@ String STR_FAST
 {
     Text [ en-US ] = "Fast" ;
 };
-String STR_CHANGE
-{
-    Text [ en-US ] = "Transition" ;
-};
-String STR_AUTO
-{
-    Text [ en-US ] = "Automatic" ;
-};
-String STR_SEMIAUTO
-{
-    Text [ en-US ] = "Semiautomatic" ;
-};
-String STR_MANUEL
-{
-    Text [ en-US ] = "Manual" ;
-};
-String STR_BASIC_IDE
-{
-    Text [ en-US ] = "Basic IDE" ;
-};
- //-------------------------------------
-String STR_BEZ_CONV_LINE
-{
-    Text [ en-US ] = "~To Line" ;
-};
-String STR_BEZ_CONV_CURVE
-{
-    Text [ en-US ] = "~To Curve" ;
-};
- //-------------------------------------
-String STR_UNDO_BEZCONV
-{
-    Text [ en-US ] = "Convert polygon segment" ;
-};
-String STR_UNDO_BEZSMOOTH
-{
-    /* ### ACHTUNG: Neuer Text in Resource? ändern Kurvenglättung : õndern Kurvenglõttung */
-    Text [ en-US ] = "Modify curve smoothing" ;
-};
 String STR_UNDO_BEZCLOSE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Polygon schließen : Polygon schlie˜en */
     Text [ en-US ] = "Close Polygon" ;
 };
- //-------------------------------------
 String STR_SLIDE_MODE
 {
     Text [ en-US ] = "Slide Sorter" ;
@@ -432,11 +173,6 @@ String STR_NOTES_MODE
 String STR_HANDOUT_MODE
 {
     Text [ en-US ] = "Handout" ;
-};
-String STR_PRESENTATION_LAYOUT
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Präsentationslayout : Prõsentationslayout */
-    Text [ en-US ] = "Presentation layout" ;
 };
 String STR_AUTOLAYOUT_NONE
 {
@@ -461,10 +197,6 @@ String STR_AUTOLAYOUT_ENUM
 String STR_AUTOLAYOUT_CHART
 {
     Text [ en-US ] = "Title, Chart" ;
-};
-String STR_AUTOLAYOUT_ORG
-{
-    Text [ en-US ] = "Title, Organization Chart" ;
 };
 String STR_AUTOLAYOUT_TAB
 {
@@ -504,7 +236,6 @@ String STR_AUTOLAYOUT_OBJTEXT
 };
 String STR_AUTOLAYOUT_OBJOVERTEXT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Titel, Objekt über Text : Titel, Objekt ³ber Text */
     Text [ en-US ] = "Title, Object Above Text" ;
 };
 String STR_AUTOLAYOUT_2OBJTEXT
@@ -513,12 +244,10 @@ String STR_AUTOLAYOUT_2OBJTEXT
 };
 String STR_AUTOLAYOUT_2OBJOVERTEXT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Titel, 2 Objekte über Text : Titel, 2 Objekte ³ber Text */
     Text [ en-US ] = "Title, 2 Objects Above Text" ;
 };
 String STR_AUTOLAYOUT_TEXTOVEROBJ
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Titel, Text über Objekt : Titel, Text ³ber Objekt */
     Text [ en-US ] = "Title, Text Above Object" ;
 };
 String STR_AUTOLAYOUT_4OBJ
@@ -570,41 +299,12 @@ String STR_TRANSFORM
 {
     Text [ en-US ] = "transform" ;
 };
-/* ### ACHTUNG: Neuer Text in Resource! */
-String STR_PAGEMODE
-{
-    Text [ en-US ] = "Slide View" ;
-
-};
-/* ### ACHTUNG: Neuer Text in Resource! */
-String STR_LAYERMODE
-{
-    Text [ en-US ] = "Layer View" ;
-
-};
-/* ### ACHTUNG: Neuer Text in Resource! */
-String STR_MASTERPAGEMODE
-{
-    Text [ en-US ] = "Master View" ;
-
-};
-String STR_OPEN_OBJECT
-{
-    /* ### ACHTUNG: Neuer Text in Resource? ~Objekt öffnen : ~Objekt ÷ffnen */
-    Text [ en-US ] = "Open ~object" ;
-};
-String STR_CLOSE_OBJECT
-{
-    /* ### ACHTUNG: Neuer Text in Resource? ~Objekt schließen : ~Objekt schlie˜en */
-    Text [ en-US ] = "Close ~Object" ;
-};
 String STR_LINEEND
 {
     Text [ en-US ] = "Line Ends" ;
 };
 String STR_DESC_LINEEND
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für das neue Linienende ein: : Geben Sie hier bitte den Namen f³r das neue Linienende ein: */
     Text [ en-US ] = "Please enter a name for the new arrowhead:" ;
 };
 String STR_WARN_NAME_DUPLICATE
@@ -615,26 +315,6 @@ String STR_UNDO_ANIMATION
 {
     Text [ en-US ] = "Animation parameters" ;
 };
-String STR_UNDO_ANIMATION_ORDER
-{
-    Text [ en-US ] = "Animation order" ;
-};
-String STR_EXPORT_ALL
-{
-    Text [ en-US ] = "[All formats]" ;
-};
-String STR_EXPORT_UNKNOWN_FORMAT
-{
-    Text [ en-US ] = "Unknown file format!" ;
-};
-String STR_EXPORT_PATH_NOT_FOUND1
-{
-    Text [ en-US ] = "The directory '" ;
-};
-String STR_EXPORT_PATH_NOT_FOUND2
-{
-    Text [ en-US ] = "' does not exist." ;
-};
 String STR_EXPORT_HTML_NAME
 {
     Text [ en-US ] = "Web Page";
@@ -643,69 +323,9 @@ String STR_EXPORT_HTML_FILTER
 {
     Text = "*.html;*.htm" ;
 };
-String STR_EXPORT_IMP_GROUP
-{
-    Text = "Graphics Filters - Import" ;
-};
-String STR_EXPORT_EXP_GROUP
-{
-    Text = "Graphics Filters - Export" ;
-};
-String STR_EXPORT_GRFILTER_OPENERROR
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Grafikdatei kann nicht geöffnet werden : Grafikdatei kann nicht ge÷ffnet werden */
-    Text [ en-US ] = "Graphics file cannot be opened" ;
-};
-String STR_EXPORT_GRFILTER_IOERROR
-{
-    Text [ en-US ] = "Graphics file cannot be read" ;
-};
-String STR_EXPORT_GRFILTER_FORMATERROR
-{
-    Text [ en-US ] = "Unknown graphics format" ;
-};
-String STR_EXPORT_GRFILTER_VERSIONERROR
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Die Version der Grafikdatei wird nicht unterstützt : Die Version der Grafikdatei wird nicht unterst³tzt */
-    Text [ en-US ] = "This graphics file version is not supported." ;
-};
-String STR_EXPORT_GRFILTER_FILTERERROR
-{
-    Text [ en-US ] = "Graphics filter not found" ;
-};
-String STR_EXPORT_GRFILTER_TOOBIG
-{
-    Text [ en-US ] = "Insufficient memory for exporting graphics" ;
-};
-String STR_EXPORT_PROPERTIES
-{
-    Text [ en-US ] = "~Properties..." ;
-};
-String STR_EXPORT_STANDARD
-{
-    Text [ en-US ] = "Default" ;
-};
-String STR_EXPORT_LINK
-{
-    /* ### ACHTUNG: Neuer Text in Resource? ~Verknüpfen : ~Verkn³pfen */
-    Text [ en-US ] = "~Link" ;
-};
-String STR_EXPORT_PREVIEW
-{
-    Text [ en-US ] = "Pr~eview" ;
-};
-String STR_EXPORT_IMPORTGRAPHIC_COUNT
-{
-    Text [ en-US ] = "Graphics filter" ;
-};
 String STR_EXPORT_DIALOG_TITLE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Exportieren : Graphik exportieren*/
     Text [ en-US ] = "Export" ;
-};
-String STR_EXPORT_MODULES_PATH
-{
-    Text = "filter" ;
 };
 String STR_HTMLEXP_DEFAULT_EXTENSION
 {
@@ -713,7 +333,6 @@ String STR_HTMLEXP_DEFAULT_EXTENSION
 };
 String STR_UNDO_COPYOBJECTS
 {
-    /* ### ACHTUNG: Neuer Text in Resource? vervielfältigen : vervielfõltigen */
     Text [ en-US ] = "Duplicate" ;
 };
 String STR_TITLE_NAMEGROUP
@@ -724,18 +343,9 @@ String STR_DESC_NAMEGROUP
 {
     Text [ en-US ] = "Name";
 };
-String STR_UNDEFINED_NAME
-{
-    Text [ en-US ] = "Unspecific Name" ;
-};
 String STR_WARN_PAGE_EXISTS
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Der Seitenname ist schon vorhanden oder ungültig.Geben Sie bitte einen anderen Namen ein : Der Seitenname ist schon vorhanden oder ung³ltig.Geben Sie bitte einen anderen Namen ein */
     Text [ en-US ] = "The slide name already exists or is invalid. Please enter another name." ;
-};
-String STR_WARN_OBJECT_EXISTS
-{
-    Text [ en-US ] = "The object name already exists. Please enter another name." ;
 };
 String STR_SNAPDLG_SETLINE
 {
@@ -755,54 +365,15 @@ String STR_POPUP_EDIT_SNAPPOINT
 };
 String STR_POPUP_DELETE_SNAPLINE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Fanglinie löschen : Fanglinie l÷schen */
     Text [ en-US ] = "Delete Snap Line" ;
 };
 String STR_POPUP_DELETE_SNAPPOINT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Fangpunkt löschen : Fangpunkt l÷schen */
     Text [ en-US ] = "Delete Snap Point" ;
-};
-String STR_UNDO_FORMTEXT
-{
-    Text [ en-US ] = "Align text to object" ;
-};
-String STR_GRAPHIC
-{
-    Text [ en-US ] = "StarDraw 4.0" ;
 };
 String STR_IMPRESS
 {
     Text [ en-US ] = "StarImpress 4.0" ;
-};
-String STR_WINDOWS_BITMAP
-{
-    Text [ en-US ] = "Windows Bitmap" ;
-};
-String STR_WINDOWS_METAFILE
-{
-    Text [ en-US ] = "Windows Metafile" ;
-};
-String STR_OS2_METAFILE
-{
-    Text [ en-US ] = "OS/2 Metafile" ;
-};
-String STR_MAC_PICTURE
-{
-    Text [ en-US ] = "Mac-Picture" ;
-};
-String STR_OTHER_FORMAT
-{
-    Text [ en-US ] = "Other format" ;
-};
-String STR_DELETED
-{
-    /* ### ACHTUNG: Neuer Text in Resource? gelöscht : gel÷scht */
-    Text [ en-US ] = "deleted" ;
-};
-String STR_BREAK_ACTION
-{
-    Text [ en-US ] = "Action canceled" ;
 };
 String STR_LAYER
 {
@@ -810,27 +381,22 @@ String STR_LAYER
 };
 String STR_UNDO_DELETEPAGES
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Seiten löschen : Seiten l÷schen */
     Text [ en-US ] = "Delete slides" ;
 };
 String STR_UNDO_INSERTPAGES
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Seiten einfügen : Seiten einf³gen */
     Text [ en-US ] = "Insert slides" ;
 };
 String STR_ASK_DELETE_LAYER
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie die Ebene '$' wirklich löschen?\nHinweis: Alle Objekte auf dieser Ebene werden ebenfalls gelöscht! : Wollen Sie die Ebene '$' wirklich l÷schen?\nHinweis: Alle Objekte auf dieser Ebene werden ebenfalls gel÷scht! */
     Text [ en-US ] = "Are you sure you want to delete the level \"$\"?\nNote: All objects on this level will be deleted!" ;
 };
 String STR_ASK_DELETE_ALL_PICTURES
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Sollen wirklich alle Bilder gelöscht werden? : Sollen wirklich alle Bilder gel÷scht werden? */
     Text [ en-US ] = "Do you really want to delete all images?" ;
 };
 String STR_UNDO_CHANGE_TITLE_AND_LAYOUT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Titel und Gliederung ändern : Titel und Gliederung õndern */
     Text [ en-US ] = "Modify title and outline" ;
 };
 String STR_WAV_FILE
@@ -861,49 +427,21 @@ String STR_SD_PAGE
 {
     Text [ en-US ] = "Slide" ;
 };
-String STR_INSERT_AS_TEXTOBJECT
-{
-    Text [ en-US ] = "As Object" ;
-};
 String STR_ALL_FILES
 {
     Text [ en-US ] = "All files (*.*)" ;
 };
 String STR_UNDO_INSERT_TEXTFRAME
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Textrahmen einfügen : Textrahmen einf³gen */
     Text [ en-US ] = "Insert text frame" ;
-};
-String STR_OPEN_DOCUMENT
-{
-    Text [ en-US ] = "Load document" ;
-};
-String STR_SAVE_DOCUMENT
-{
-    Text [ en-US ] = "Save document" ;
-};
-String STR_SAVE_PACKED_DOCUMENT
-{
-    Text [ en-US ] = "Pack document";
 };
 String STR_ACTION_NOTPOSSIBLE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die Funktion kann mit den selektierten \nObjekten nicht ausgeführt werden : Die Funktion kann mit den selektierten \nObjekten nicht ausgef³hrt werden */
     Text [ en-US ] = "This function cannot be run \nwith the selected objects." ;
 };
 String STR_DLG_INSERT_PAGES_FROM_FILE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Datei einfügen : Datei einf³gen */
     Text [ en-US ] = "Insert File" ;
-};
-String STR_DLG_INSERT_PAGES_FROM_OUTLINE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Seiten aus Gliederung einfügen : Seiten aus Gliederung einf³gen */
-    Text [ en-US ] = "Insert slides from outline" ;
-};
-String STR_WRITE_DATA_ERROR
-{
-    Text [ en-US ] = "The file could not be saved!" ;
 };
 String STR_READ_DATA_ERROR
 {
@@ -911,7 +449,6 @@ String STR_READ_DATA_ERROR
 };
 String STR_SCALE_OBJECTS
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Das Format der neuen Seiten wird angepaßt.\nWollen Sie die Objekte auch anpassen? : Das Format der neuen Seiten wird angepa˜t.\nWollen Sie die Objekte auch anpassen? */
     Text [ en-US ] = "The format of the new pages will be adapted.\nDo you want to adapt the objects, too?" ;
 };
 String STR_CREATE_PAGES
@@ -920,39 +457,16 @@ String STR_CREATE_PAGES
 };
 String STR_UNDO_CHANGE_PAGEFORMAT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Seitenformat ändern : Seitenformat õndern */
     Text [ en-US ] = "Modify page format" ;
 };
 String STR_UNDO_CHANGE_PAGEBORDER
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Seitenränder ändern : Seitenrõnder õndern */
     Text [ en-US ] = "Modify page margins" ;
 };
 String STR_EDIT_OBJ
 {
     Text [ en-US ] = "~Edit" ;
 };
-String STR_SOUNDFILE1
-{
-    Text [ en-US ] = "System sound" ;
-};
-String STR_SOUNDFILE2
-{
-    Text [ en-US ] = "AIFF - Audio Interchange File Format" ;
-};
-String STR_SOUNDFILE3
-{
-    Text [ en-US ] = "<Sound Format 3>" ;
-};
-String STR_SOUNDFILE4
-{
-    Text [ en-US ] = "<Sound Format 4>" ;
-};
-String STR_SOUNDFILE5
-{
-    Text [ en-US ] = "<Sound Format 5>" ;
-};
-
 ModalDialog RID_UNDO_DELETE_WARNING
 {
     OutputSize = TRUE;
@@ -994,29 +508,8 @@ ModalDialog RID_UNDO_DELETE_WARNING
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
-String STR_DEL_SHAPE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Symbol löschen : Symbol l÷schen */
-    Text [ en-US ] = "Delete icon" ;
-};
-String STR_WARN_DEL_SHAPE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Soll das Symbol wirklich gelöscht werden? : Soll das Symbol wirklich gel÷scht werden? */
-    Text [ en-US ] = "Are you sure you want to delete this symbol?" ;
-};
-String STR_MODIFY_SHAPE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Symbol ändern : Symbol õndern */
-    Text [ en-US ] = "Modify Symbol" ;
-};
-String STR_WARN_MODIFY_SHAPE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Soll das Symbol wirklich geändert werden? : Soll das Symbol wirklich geõndert werden? */
-    Text [ en-US ] = "Are you sure you want to modify the symbol?" ;
-};
 String STR_DELETE_PAGES
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Seiten löschen : Seiten l÷schen */
     Text [ en-US ] = "Delete slides" ;
 };
 String STR_WARN_PRINTFORMAT_FAILURE
@@ -1025,12 +518,10 @@ String STR_WARN_PRINTFORMAT_FAILURE
 };
 String STR_REMOVE_LINK
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Diese Grafik ist mit dem Dokument verknüpft. \nMöchten Sie die Verknüpfung aufheben, um die Grafik zu bearbeiten? : Diese Grafik ist mit dem Dokument verkn³pft. \nM÷chten Sie die Verkn³pfung aufheben, um die Grafik zu bearbeiten? */
     Text [ en-US ] = "This graphic is linked to a document. \nDo you want to unlink the graphic in order to edit it?" ;
 };
 String STR_IMPORT_GRFILTER_OPENERROR
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Grafikdatei kann nicht geöffnet werden : Grafikdatei kann nicht ge÷ffnet werden */
     Text [ en-US ] = "Graphics file cannot be opened" ;
 };
 String STR_IMPORT_GRFILTER_IOERROR
@@ -1043,7 +534,6 @@ String STR_IMPORT_GRFILTER_FORMATERROR
 };
 String STR_IMPORT_GRFILTER_VERSIONERROR
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die Version der Grafikdatei wird nicht unterstützt : Die Version der Grafikdatei wird nicht unterst³tzt */
     Text [ en-US ] = "This graphics file version is not supported" ;
 };
 String STR_IMPORT_GRFILTER_FILTERERROR
@@ -1060,49 +550,30 @@ String STR_OBJECTS
 };
 String STR_END_SEARCHING
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die Suche für dieses Dokument ist abgeschlossen! : Die Suche f³r dieses Dokument ist abgeschlossen! */
     Text [ en-US ] = "The document search is finished." ;
 };
 String STR_END_SPELLING
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibprüfung für dieses Dokument ist abgeschlossen! : Die Rechtschreibpr³fung f³r dieses Dokument ist abgeschlossen! */
     Text [ en-US ] = "Spellcheck of entire document has been completed." ;
 };
 String STR_END_SPELLING_OBJ
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibprüfung für die selektierten Objekte ist abgeschlossen! : Die Rechtschreibpr³fung f³r die selektierten Objekte ist abgeschlossen! */
     Text [ en-US ] = "The spellcheck for the selected objects has been completed." ;
 };
 String STR_NOLANGUAGE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Die eingestellte Sprache ist nicht verfügbar. : Die eingestellte Sprache ist nicht verf³gbar. */
     Text [ en-US ] = "The selected language is not available." ;
-};
-String STR_LAYER_LOCKED
-{
-    Text [ en-US ] = "Active layer is locked." ;
-};
-String STR_CLPBRD_CLEAR
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Sie haben größere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verfügung gestellt werden? : Sie haben gr÷˜ere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verf³gung gestellt werden? */
-    Text [ en-US ] = "You have a large amount of data saved in the clipboard.\nDo you want the clipboard content to be available for other applications?" ;
 };
 String STR_ASK_FOR_CONVERT_TO_BEZIER
 {
     Text [ en-US ] = "Convert selected object to curve?" ;
 };
-String STR_TEMPLATE
-{
-    Text [ en-US ] = "StarImpress 4.0 Template" ;
-};
 String STR_UNDO_CHANGE_PRES_OBJECT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Präsentationsobjekt '$' ändern : Prõsentationsobjekt '$' õndern */
     Text [ en-US ] = "Modify presentation object '$'" ;
 };
 String STR_UNDO_MODIFY_PAGE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Seite ändern : Seite õndern */
     Text [ en-US ] = "Slide layout" ;
 };
 String STR_STATSTR_PRINT
@@ -1111,36 +582,23 @@ String STR_STATSTR_PRINT
 };
 String STR_UNDO_INSERT_FILE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Datei einfügen : Datei einf³gen */
     Text [ en-US ] = "Insert file" ;
 };
 String STR_SCALE_OBJS_TO_PAGE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Sollen die Grafikobjekte an das neue Seitenformat angepaßt werden? : Sollen die Grafikobjekte an das neue Seitenformat angepa˜t werden? */
     Text [ en-US ] = "Should the graphics be scaled to the new slide format?" ;
 };
 String STR_UNDO_INSERT_SPECCHAR
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Sonderzeichen einfügen : Sonderzeichen einf³gen */
     Text [ en-US ] = "Insert special character" ;
 };
 String STR_UNDO_SET_PRESLAYOUT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Präsentationslayout zuweisen : Prõsentationslayout zuweisen */
     Text [ en-US ] = "Apply presentation layout" ;
-};
-String STR_DEMO_EXPORT_LIMIT
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Es können max. 10 Objekte exportiert werden : Es k÷nnen max. 10 Objekte exportiert werden */
-    Text [ en-US ] = "A maximum of 10 objects can be exported" ;
 };
 String STR_STRING_NOTFOUND
 {
     Text [ en-US ] = "Search key not found." ;
-};
-String STR_DRAW_FILTERPROGRESS
-{
-    Text [ en-US ] = "Graphics filter" ;
 };
 String STR_PLAY
 {
@@ -1150,19 +608,9 @@ String STR_STOP
 {
     Text [ en-US ] = "Sto~p" ;
 };
-String STR_CANT_READ_OLD_FORMAT_ERROR
-{
-    Text [ en-US ] = "The previous StarDraw format cannot be read." ;
-};
 String STR_UNDO_ORIGINALSIZE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Originalgröße : Originalgr÷˜e */
     Text [ en-US ] = "Original Size" ;
-};
-String STR_EXPORT_EMPTYGRAPHIC
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Leere Grafiken werden nicht unterstützt : Leere Grafiken werden nicht unterst³tzt */
-    Text [ en-US ] = "Blank graphics are not supported." ;
 };
 String STR_PRINT_DRAWING
 {
@@ -1182,7 +630,6 @@ String STR_PRINT_OUTLINE
 };
 String STR_WARN_SCALE_FAIL
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Der eingegebene Maßstab ist ungültig.\nWollen Sie einen neuen eingeben? : Der eingegebene Ma˜stab ist ung³ltig.\nWollen Sie einen neuen eingeben? */
     Text [ en-US ] = "The specified scale is invalid.\nDo you want to enter a new one?" ;
 };
 String STR_CLICK_ACTION_NONE
@@ -1195,7 +642,6 @@ String STR_CLICK_ACTION_PREVPAGE
 };
 String STR_CLICK_ACTION_NEXTPAGE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Sprung zur nächsten Seite : Sprung zur nõchsten Seite */
     Text [ en-US ] = "Go to next slide" ;
 };
 String STR_CLICK_ACTION_FIRSTPAGE
@@ -1228,27 +674,19 @@ String STR_CLICK_ACTION_SOUND
 };
 String STR_CLICK_ACTION_VERB
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Objektaktion ausführen : Objektaktion ausf³hren */
     Text [ en-US ] = "Start object action" ;
 };
 String STR_CLICK_ACTION_PROGRAM
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Programm ausführen : Programm ausf³hren */
     Text [ en-US ] = "Run program" ;
 };
 String STR_CLICK_ACTION_MACRO
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Makro ausführen : Makro ausf³hren */
     Text [ en-US ] = "Run macro" ;
 };
 String STR_CLICK_ACTION_STOPPRESENTATION
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Präsentation beenden : Prõsentation beenden */
     Text [ en-US ] = "Exit presentation" ;
-};
-String STR_START_PRESENTATION
-{
-    Text [ en-US ] = "Start Slide Show" ;
 };
 String STR_EFFECTDLG_JUMP
 {
@@ -1261,10 +699,6 @@ String STR_EFFECTDLG_ACTION
 String STR_EFFECTDLG_SOUND
 {
     Text [ en-US ] = "Sound" ;
-};
-String STR_EFFECTDLG_OBJECT
-{
-    Text [ en-US ] = "Object" ;
 };
 String STR_EFFECTDLG_PAGE_OBJECT
 {
@@ -1287,410 +721,8 @@ String STR_EFFECT_NONE
 {
     Text [ en-US ] = "No Effect" ;
 };
-String STR_EFFECT_FADE_FROM_L
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Von links überblenden : Von links ³berblenden */
-    Text [ en-US ] = "Cross-Fade From Left" ;
-};
-String STR_EFFECT_FADE_FROM_T
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Von oben überblenden : Von oben ³berblenden */
-    Text [ en-US ] = "Cross-Fade From Top" ;
-};
-String STR_EFFECT_FADE_FROM_R
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Von rechts überblenden : Von rechts ³berblenden */
-    Text [ en-US ] = "Cross-Fade From Right" ;
-};
-String STR_EFFECT_FADE_FROM_B
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Von unten überblenden : Von unten ³berblenden */
-    Text [ en-US ] = "Cross-Fade From Bottom" ;
-};
-String STR_EFFECT_FADE_TO_CENTER
-{
-    Text [ en-US ] = "Fade To Center" ;
-};
-String STR_EFFECT_FADE_FROM_CENTER
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Blende nach außen : Blende nach au˜en */
-    Text [ en-US ] = "Fade From Center" ;
-};
-
-String STR_EFFECT_DISCARD_FROM_L
-{
-    Text [ en-US ] = "Fly In From Left" ;
-};
-String STR_EFFECT_DISCARD_FROM_UL
-{
-    Text [ en-US ] = "Fly In From Top Left" ;
-};
-String STR_EFFECT_DISCARD_FROM_T
-{
-    Text [ en-US ] = "Fly In From Top" ;
-};
-String STR_EFFECT_DISCARD_FROM_UR
-{
-    Text [ en-US ] = "Fly In From Upper Right" ;
-};
-String STR_EFFECT_DISCARD_FROM_R
-{
-    Text [ en-US ] = "Fly In From Right" ;
-};
-String STR_EFFECT_DISCARD_FROM_LR
-{
-    Text [ en-US ] = "Fly In From Lower Right" ;
-};
-String STR_EFFECT_DISCARD_FROM_B
-{
-    Text [ en-US ] = "Fly In From Bottom" ;
-};
-String STR_EFFECT_DISCARD_FROM_LL
-{
-    Text [ en-US ] = "Fly In From Lower Left" ;
-};
-String STR_EFFECT_DISCARD_S_FROM_L
-{
-    Text [ en-US ] = "Short Fly In From Left" ;
-};
-String STR_EFFECT_DISCARD_S_FROM_UL
-{
-    Text [ en-US ] = "Short Fly In From Upper Left" ;
-};
-String STR_EFFECT_DISCARD_S_FROM_T
-{
-    Text [ en-US ] = "Short Fly In From Top" ;
-};
-String STR_EFFECT_DISCARD_S_FROM_UR
-{
-    Text [ en-US ] = "Short Fly In From Upper Right" ;
-};
-String STR_EFFECT_DISCARD_S_FROM_R
-{
-    Text [ en-US ] = "Short Fly In From Right" ;
-};
-String STR_EFFECT_DISCARD_S_FROM_LR
-{
-    Text [ en-US ] = "Short Fly In From Lower Right" ;
-};
-String STR_EFFECT_DISCARD_S_FROM_B
-{
-    Text [ en-US ] = "Short Fly In From Bottom" ;
-};
-String STR_EFFECT_DISCARD_S_FROM_LL
-{
-    Text [ en-US ] = "Short Fly In From Lower Left" ;
-};
-String STR_EFFECT_VERTICAL_STRIPES
-{
-    Text [ en-US ] = "Fade Vertically" ;
-};
-String STR_EFFECT_HORIZONTAL_STRIPES
-{
-    Text [ en-US ] = "Fade Horizontally" ;
-};
-String STR_EFFECT_VERTICAL_LINES
-{
-    Text [ en-US ] = "Vertical Lines" ;
-};
-String STR_EFFECT_HORIZONTAL_LINES
-{
-    Text [ en-US ] = "Horizontal Lines" ;
-};
-String STR_EFFECT_VERTICAL_CHECKERBOARD
-{
-    Text [ en-US ] = "Vertical Checkerboard";
-};
-String STR_EFFECT_HORIZONTAL_CHECKERBOARD
-{
-    Text [ en-US ] = "Horizontal Checkerboard";
-};
-String STR_EFFECT_ROLL_FROM_L
-{
-    Text [ en-US ] = "Roll From Left" ;
-};
-String STR_EFFECT_ROLL_FROM_T
-{
-    Text [ en-US ] = "Roll From Top" ;
-};
-String STR_EFFECT_ROLL_FROM_R
-{
-    Text [ en-US ] = "Roll From Right" ;
-};
-String STR_EFFECT_ROLL_FROM_B
-{
-    Text [ en-US ] = "Roll From Bottom" ;
-};
-String STR_EFFECT_WAVYLINE_FROM_L
-{
-    Text [ en-US ] = "Wavy Line From Left" ;
-};
-String STR_EFFECT_WAVYLINE_FROM_R
-{
-    Text [ en-US ] = "Wavy Line From Right" ;
-};
-String STR_EFFECT_WAVYLINE_FROM_T
-{
-    Text [ en-US ] = "Wavy Line From Top" ;
-};
-String STR_EFFECT_WAVYLINE_FROM_B
-{
-    Text [ en-US ] = "Wavy Line From Bottom" ;
-};
-String STR_EFFECT_CLOCKWISE
-{
-    Text [ en-US ] = "Fade Clockwise" ;
-};
-String STR_EFFECT_COUNTERCLOCKWISE
-{
-    Text [ en-US ] = "Fade Counter-Clockwise" ;
-};
-String STR_EFFECT_FADE_FROM_UL
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Von links oben überblenden : Von links oben blenden */
-    /* ### ACHTUNG: Neuer Text in Resource? Von links oben überblenden : Von links oben blenden */
-    /* ### ACHTUNG: Neuer Text in Resource? Von links oben überblenden : Von links oben ³berblenden */
-    Text [ en-US ] = "Fade From Top Left" ;
-};
-String STR_EFFECT_FADE_FROM_UR
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Von rechts oben überblenden : Von rechts oben blenden */
-    /* ### ACHTUNG: Neuer Text in Resource? Von rechts oben überblenden : Von rechts oben blenden */
-    /* ### ACHTUNG: Neuer Text in Resource? Von rechts oben überblenden : Von rechts oben ³berblenden */
-    Text [ en-US ] = "Fade From Top Right" ;
-};
-String STR_EFFECT_FADE_FROM_LL
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Von links unten überblenden : Von links unten blenden */
-    /* ### ACHTUNG: Neuer Text in Resource? Von links unten überblenden : Von links unten blenden */
-    /* ### ACHTUNG: Neuer Text in Resource? Von links unten überblenden : Von links unten ³berblenden */
-    Text [ en-US ] = "Fade From Bottom Left" ;
-};
-String STR_EFFECT_FADE_FROM_LR
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Von rechts unten überblenden : Von rechts unten blenden */
-    /* ### ACHTUNG: Neuer Text in Resource? Von rechts unten überblenden : Von rechts unten blenden */
-    /* ### ACHTUNG: Neuer Text in Resource? Von rechts unten überblenden : Von rechts unten ³berblenden */
-    Text [ en-US ] = "Fade From Bottom Right" ;
-};
-String STR_EFFECT_CLOSE_VERTICAL
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Vertikal schließen : Vertikal schlie˜en */
-    Text [ en-US ] = "Close Vertically" ;
-};
-String STR_EFFECT_CLOSE_HORIZONTAL
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Horizontal schließen : Horizontal schlie˜en */
-    Text [ en-US ] = "Close Horizontally" ;
-};
-String STR_EFFECT_OPEN_VERTICAL
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Vertikal öffnen : Vertikal ÷ffnen */
-    Text [ en-US ] = "Open Vertically" ;
-};
-String STR_EFFECT_OPEN_HORIZONTAL
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Horizontal öffnen : Horizontal ÷ffnen */
-    Text [ en-US ] = "Open Horizontally" ;
-};
-String STR_EFFECT_PATH
-{
-    Text [ en-US ] = "Move Along Curve" ;
-};
-
-String STR_EFFECT_UNCOVER
-{
-    Text [ en-US ] = "Uncover";
-};
-String STR_EFFECT_UNCOVER_TO_L
-{
-    Text [ en-US ] = "Uncover To Left" ;
-};
-String STR_EFFECT_UNCOVER_TO_UL
-{
-    Text [ en-US ] = "Uncover To Upper Left" ;
-};
-String STR_EFFECT_UNCOVER_TO_T
-{
-    Text [ en-US ] = "Uncover Upwards" ;
-};
-String STR_EFFECT_UNCOVER_TO_UR
-{
-    Text [ en-US ] = "Uncover To Upper Right" ;
-};
-String STR_EFFECT_UNCOVER_TO_R
-{
-    Text [ en-US ] = "Uncover To Right" ;
-};
-String STR_EFFECT_UNCOVER_TO_LR
-{
-    Text [ en-US ] = "Uncover To Lower Right" ;
-};
-String STR_EFFECT_UNCOVER_TO_B
-{
-    Text [ en-US ] = "Uncover Downwards" ;
-};
-String STR_EFFECT_UNCOVER_TO_LL
-{
-    Text [ en-US ] = "Uncover To Lower Left" ;
-};
-
-String STR_EFFECT_MOVE_TO_L
-{
-    Text [ en-US ] = "Fly Out Left" ;
-};
-String STR_EFFECT_MOVE_TO_UL
-{
-    Text [ en-US ] = "Fly Out Upper Left" ;
-};
-String STR_EFFECT_MOVE_TO_T
-{
-    Text [ en-US ] = "Fly Out Top" ;
-};
-String STR_EFFECT_MOVE_TO_UR
-{
-    Text [ en-US ] = "Fly Out Upper Right" ;
-};
-String STR_EFFECT_MOVE_TO_R
-{
-    Text [ en-US ] = "Fly Out Right" ;
-};
-String STR_EFFECT_MOVE_TO_LR
-{
-    Text [ en-US ] = "Fly Out Lower Right" ;
-};
-String STR_EFFECT_MOVE_TO_B
-{
-    Text [ en-US ] = "Fly Out Bottom" ;
-};
-String STR_EFFECT_MOVE_TO_LL
-{
-    Text [ en-US ] = "Fly Out Lower Left" ;
-};
-String STR_EFFECT_MOVE_S_TO_L
-{
-    Text [ en-US ] = "Short Fly Out Left" ;
-};
-String STR_EFFECT_MOVE_S_TO_UL
-{
-    Text [ en-US ] = "Short Fly Out Upper Left" ;
-};
-String STR_EFFECT_MOVE_S_TO_T
-{
-    Text [ en-US ] = "Short Fly Out Top" ;
-};
-String STR_EFFECT_MOVE_S_TO_UR
-{
-    Text [ en-US ] = "Short Fly Out Upper Right" ;
-};
-String STR_EFFECT_MOVE_S_TO_R
-{
-    Text [ en-US ] = "Short Fly Out Right" ;
-};
-String STR_EFFECT_MOVE_S_TO_LR
-{
-    Text [ en-US ] = "Short Fly Out Lower Right" ;
-};
-String STR_EFFECT_MOVE_S_TO_B
-{
-    Text [ en-US ] = "Short Fly Out Bottom" ;
-};
-String STR_EFFECT_MOVE_S_TO_LL
-{
-    Text [ en-US ] = "Short Fly Out Lower Left" ;
-};
-String STR_EFFECT_SPIRALIN_L
-{
-    Text [ en-US ] = "Spiral Inward Clockwise" ;
-};
-String STR_EFFECT_SPIRALIN_R
-{
-    Text [ en-US ] = "Spiral Inward Counter-Clockwise" ;
-};
-String STR_EFFECT_SPIRALOUT_L
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Spirale nach außen links : Spirale nach au˜en links */
-    Text [ en-US ] = "Spiral Outward Clockwise" ;
-};
-String STR_EFFECT_SPIRALOUT_R
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Spirale nach außen rechts : Spirale nach au˜en rechts */
-    Text [ en-US ] = "Spiral Outward Counter-Clockwise" ;
-};
-String STR_EFFECT_DISSOLVE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Auflösen : Aufl÷sen */
-    Text [ en-US ] = "Dissolve" ;
-};
-String STR_EFFECT_HIDE
-{
-    Text [ en-US ] = "Fade Out" ;
-};
-String STR_EFFECT_STRTCH
-{
-    Text [ en-US ] = "Stretch";
-};
-String STR_EFFECT_STRTCH_FROM_L
-{
-    Text [ en-US ] = "Stretch From Left";
-};
-String STR_EFFECT_STRTCH_FROM_UL
-{
-    Text [ en-US ] = "Stretch From Upper Left";
-};
-String STR_EFFECT_STRTCH_FROM_T
-{
-    Text [ en-US ] = "Stretch From Top";
-};
-String STR_EFFECT_STRTCH_FROM_UR
-{
-    Text [ en-US ] = "Stretch From Upper Right";
-};
-String STR_EFFECT_STRTCH_FROM_R
-{
-    Text [ en-US ] = "Stretch From Right";
-};
-String STR_EFFECT_STRTCH_FROM_LR
-{
-    Text [ en-US ] = "Stretch From Lower Right";
-};
-String STR_EFFECT_STRTCH_FROM_B
-{
-    Text [ en-US ] = "Stretch From Bottom";
-};
-String STR_EFFECT_STRTCH_FROM_LL
-{
-    Text [ en-US ] = "Stretch From Lower Left";
-};
-String STR_EFFECT_STRTCH_ROTATE
-{
-    Text [ en-US ] = "Stretch And Rotate";
-};
-String STR_EFFECT_STRTCH_HORIZONTAL
-{
-    Text [ en-US ] = "Stretch Horizontally";
-};
-String STR_EFFECT_STRTCH_VERTICAL
-{
-    Text [ en-US ] = "Stretch Vertically";
-};
-String STR_EFFECT_ROTATE_HORIZONTAL
-{
-    Text [ en-US ] = "Rotate Horizontally";
-};
-String STR_EFFECT_ROTATE_VERTICAL
-{
-    Text [ en-US ] = "Rotate Vertically";
-};
-
-String STR_GENERAL_PUBLISHING_ERROR
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Beim Speichern der Veröffentlichung ist ein Fehler aufgetreten. : Beim Speichern der Ver÷ffentlichung ist ein Fehler aufgetreten. */
-    Text [ en-US ] = "An error occurred while saving the publication." ;
-};
 String STR_INSERT_TEXT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Text einfügen : Text einf³gen */
     Text [ en-US ] = "Insert Text" ;
 };
 String STR_SLIDE_SINGULAR
@@ -1701,164 +733,21 @@ String STR_SLIDE_PLURAL
 {
     Text [ en-US ] = " Slides" ;
 };
-String STR_CHART_MAINTITLE
-{
-    Text [ en-US ] = "Main Title" ;
-};
-String STR_CHART_SUBTITLE
-{
-    Text [ en-US ] = "Subtitle" ;
-};
-String STR_CHART_TITLE_X
-{
-    Text [ en-US ] = "X axis title" ;
-};
-String STR_CHART_TITLE_Y
-{
-    Text [ en-US ] = "Y axis title" ;
-};
-String STR_CHART_TITLE_Z
-{
-    Text [ en-US ] = "Z axis title" ;
-};
-String STR_CHART_NAME_COLUMN
-{
-    Text [ en-US ] = "Column" ;
-};
-String STR_CHART_NAME_ROW
-{
-    Text [ en-US ] = "Row" ;
-};
-String STR_RESOLUTION
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Auflösung : Aufl÷sung */
-    Text [ en-US ] = "Resolution" ;
-};
 String STR_LOAD_PRESENTATION_LAYOUT
 {
     Text [ en-US ] = "Load Slide Design" ;
 };
-String STR_EFFECT_RANDOM
-{
-    Text [ en-US ] = "Automatic (random)" ;
-};
-String STR_EFFECT_STRETCH_FROM_L
-{
-    Text [ en-US ] = "Build From Left" ;
-};
-String STR_EFFECT_STRETCH_FROM_T
-{
-    Text [ en-US ] = "Build From Top" ;
-};
-String STR_EFFECT_STRETCH_FROM_R
-{
-    Text [ en-US ] = "Build From Right" ;
-};
-String STR_EFFECT_STRETCH_FROM_B
-{
-    Text [ en-US ] = "Build From Bottom" ;
-};
 String STR_DRAGTYPE_URL
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Als Hyperlink einfügen : Als URL einfügen */
-    /* ### ACHTUNG: Neuer Text in Resource? Als Hyperlink einfügen : Als Hyperlink einf³gen */
     Text [ en-US ] = "Insert as hyperlink" ;
 };
 String STR_DRAGTYPE_EMBEDDED
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Als Kopie einfügen : Als Kopie einf³gen */
     Text [ en-US ] = "Insert as copy" ;
 };
 String STR_DRAGTYPE_LINK
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Als Verknüpfung einfügen : Als Verkn³pfung einf³gen */
     Text [ en-US ] = "Insert as link" ;
-};
-String STR_EFFECT_LASER_FROM_L
-{
-    Text [ en-US ] = "Laser Effect From Left" ;
-};
-String STR_EFFECT_LASER_FROM_T
-{
-    Text [ en-US ] = "Laser Effect From Top" ;
-};
-String STR_EFFECT_LASER_FROM_R
-{
-    Text [ en-US ] = "Laser Effect From Right" ;
-};
-String STR_EFFECT_LASER_FROM_B
-{
-    Text [ en-US ] = "Laser Effect From Bottom" ;
-};
-String STR_EFFECT_LASER_FROM_UL
-{
-    Text [ en-US ] = "Laser Effect From Top Left" ;
-};
-String STR_EFFECT_LASER_FROM_UR
-{
-    Text [ en-US ] = "Laser Effect From Top Right" ;
-};
-String STR_EFFECT_LASER_FROM_LL
-{
-    Text [ en-US ] = "Laser Effect From Bottom Left" ;
-};
-String STR_EFFECT_LASER_FROM_LR
-{
-    Text [ en-US ] = "Laser Effect From Bottom Right" ;
-};
-String STR_EFFECT_FAVOURITES
-{
-    Text [ en-US ] = "Favorites" ;
-};
-String STR_EFFECT_FADEFROM
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Überblenden : šberblenden */
-    Text [ en-US ] = "Cross-fading" ;
-};
-String STR_EFFECT_DISCARD
-{
-    Text [ en-US ] = "Fly In" ;
-};
-String STR_EFFECT_DISCARD_SHORT
-{
-    Text [ en-US ] = "Short Fly In" ;
-};
-String STR_EFFECT_FADE
-{
-    Text [ en-US ] = "Fade" ;
-};
-String STR_EFFECT_OPEN_CLOSE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Öffnen / Schließen : Íffnen / Schlie˜en */
-    Text [ en-US ] = "Open / Close" ;
-};
-String STR_EFFECT_WAVYLINE
-{
-    Text [ en-US ] = "Wavy Line" ;
-};
-String STR_EFFECT_SPIRAL
-{
-    Text [ en-US ] = "Spiral" ;
-};
-String STR_EFFECT_LASER
-{
-    Text [ en-US ] = "Laser" ;
-};
-String STR_EFFECT_EXTRA
-{
-    Text [ en-US ] = "Other" ;
-};
-String STR_EFFECT_ROLL
-{
-    Text [ en-US ] = "Roll" ;
-};
-String STR_EFFECT_STRETCH
-{
-    Text [ en-US ] = "Build Up" ;
-};
-String STR_EFFECT_APPEAR
-{
-    Text [ en-US ] = "Appear";
 };
 String STR_GLUE_ESCDIR_SMART
 {
@@ -1910,12 +799,10 @@ String STR_GLUE_ESCDIR_ALL
 };
 String STR_CANT_PERFORM_IN_LIVEMODE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Diese Aktion kann nicht im Livemodus ausgeführt werden. : Diese Aktion kann nicht im Livemodus ausgef³hrt werden. */
     Text [ en-US ] = "This action can't be run in the live mode." ;
 };
 String STR_PUBLISH_BACK
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
     Text [ en-US ] = "Back" ;
 };
 String STR_PUBLISH_NEXT
@@ -1924,7 +811,6 @@ String STR_PUBLISH_NEXT
 };
 String STR_PUBLISH_OUTLINE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Übersicht : šbersicht */
     Text [ en-US ] = "Overview" ;
 };
 String STR_EYEDROPPER
@@ -1933,40 +819,10 @@ String STR_EYEDROPPER
 };
 String STR_UNDO_MORPHING
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Überblenden : šberblenden */
     Text [ en-US ] = "Cross-fading" ;
-};
-String STR_VIEWTYPE_EFFECT
-{
-    Text [ en-US ] = "Effects" ;
-};
-String STR_VIEWTYPE_EXTRAS
-{
-    Text [ en-US ] = "Extras" ;
-};
-String STR_VIEWTYPE_TEXT
-{
-    Text [ en-US ] = "Text Effects" ;
-};
-String STR_VIEWTYPE_ORDER
-{
-    Text [ en-US ] = "Order" ;
-};
-String STR_SIMPRESS
-{
-    Text = "STARIMPRESS" ;
-};
-String STR_FORMAT_HTML
-{
-    Text [ en-US ] = "HTML" ;
-};
-String STR_UNDO_3D_DIALOG
-{
-    Text [ en-US ] = "Properties of 3D objects" ;
 };
 String STR_UNDO_COLORRESOLUTION
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Farbauflösung : Farbaufl÷sung */
     Text [ en-US ] = "Color resolution" ;
 };
 String STR_UNDO_EXPAND_PAGE
@@ -1977,21 +833,13 @@ String STR_UNDO_SUMMARY_PAGE
 {
     Text [ en-US ] = "Table of Contents Slide" ;
 };
-String STR_ASK_GALLERY_INSERT
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Soll der Sound zum Gallery-Thema hinzugefügt werden? : Soll der Sound zum Gallery-Thema hinzugef³gt werden? */
-    Text [ en-US ] = "Do you want to add the sound to the Gallery?" ;
-};
-
 String STR_TWAIN_NO_SOURCE_UNX
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Zur Zeit ist leider keine SANE-Quelle verfügbar. : Zur Zeit ist leider keine SANE-Quelle verf³gbar. */
     Text [ en-US ] = "No SANE source is available at the moment." ;
 };
 
 String STR_TWAIN_NO_SOURCE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Zur Zeit ist leider keine TWAIN-Quelle verfügbar. : Zur Zeit ist leider keine TWAIN-Quelle verf³gbar. */
     Text [ en-US ] = "At present, no TWAIN source is available." ;
 };
 
@@ -2033,21 +881,18 @@ String STR_FILEFORMAT_NAME
 };
 String STR_RELEASE_GRAPHICLINK
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Diese Grafik ist mit dem Dokument verknüpft. Möchten Sie die Verknüpfung aufheben, um die Grafik zu bearbeiten? : Diese Grafik ist mit dem Dokument verkn³pft. M÷chten Sie die Verkn³pfung aufheben, um die Grafik zu bearbeiten? */
     Text [ en-US ] = "This graphic is linked to a document. Do you want to unlink the graphic in order to edit it?" ;
 };
 String STR_NEW_CUSTOMSHOW
 {
     Text [ en-US ] = "New Custom Slide Show" ;
 };
- // Das Leerzeichen ist beabsichtigt !!!
 String STR_COPY_CUSTOMSHOW
 {
     Text [ en-US ] = "Copy " ;
 };
 String STR_IMPRESS_DOCUMENT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Präsentation : Prõsentation */
     Text [ en-US ] = "Presentation" ;
 };
 String STR_IMPRESS_DOCUMENT_FULLTYPE_60
@@ -2061,22 +906,6 @@ String STR_GRAPHIC_DOCUMENT
 String STR_GRAPHIC_DOCUMENT_FULLTYPE_60
 {
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Drawing" ;
-};
-String STR_VIEWTYPE_VIEW
-{
-    Text [ en-US ] = "Shading" ;
-};
-String STR_VIEWTYPE_GEO
-{
-    Text [ en-US ] = "Geometry" ;
-};
-String STR_VIEWTYPE_TEXTURE
-{
-    Text [ en-US ] = "Texture" ;
-};
-String STR_VIEWTYPE_MATERIAL
-{
-    Text [ en-US ] = "Material" ;
 };
 String STR_BREAK_METAFILE
 {
@@ -2148,11 +977,6 @@ String STR_HTMLEXP_INFO
     Text [ en-US ] = "Further information";
 };
 
-String STR_HTMLEXP_CREATED
-{
-    Text [ en-US ] = "Best viewed with";
-};
-
 String STR_HTMLEXP_DOWNLOAD
 {
     Text [ en-US ] = "Download presentation";
@@ -2218,11 +1042,6 @@ STRING STR_WIZARD_ORIGINAL
     Text [ en-US ] = "<Original>";
 };
 
-STRING STR_WIZARD_POSITION
-{
-    Text [ en-US ] = "<Other position>";
-};
-
 STRING STR_ISLOADING
 {
     Text [ en-US ] = "Loading...";
@@ -2257,12 +1076,6 @@ String STR_UNDO_CONVERT_TO_BITMAP
 {
     Text [ en-US ] = "Convert to bitmap" ;
 };
-String STR_PACKNGO_FILEDLG_TITLE
-{
-/* ### ACHTUNG: Neuer Text in Resource! "Einpacken" statt "Pack & Go" !!!!! */
-    Text [ en-US ] = "Pack - Save as" ;
-};
-
 String STR_HTMLEXP_ERROR_CREATE_FILE
 {
     Text [ en-US ] = "Cannot create the file $(URL1).";
@@ -2275,16 +1088,6 @@ String STR_HTMLEXP_ERROR_COPY_FILE
 {
     Text [ en-US ] = "The file $(URL1) could not be copied to $(URL2)";
 };
-String STR_HTMLEXP_ERROR_GALLERY
-{
-    Text [ en-US ] = "An error occurred while copying graphic files from the Gallery.";
-};
-
-String STR_UNDO_CONVERT_TO_CONTOUR
-{
-    Text [ en-US ] = "Convert to contour";
-};
-
 String STR_PAGE_BACKGROUND_TITLE
 {
     Text [ en-US ] = "Page Settings" ;
@@ -2292,42 +1095,6 @@ String STR_PAGE_BACKGROUND_TITLE
 String STR_PAGE_BACKGROUND_TXT
 {
     Text [ en-US ] = "Background settings for all pages?" ;
-};
-String STR_GRAFCROP
-{
-    Text [ en-US ] = "Crop";
-};
-String STR_UNDO_GRAFMODE
-{
-    Text [ en-US ] = "Graphics Mode";
-};
-String STR_UNDO_GRAFRED
-{
-    Text [ en-US ] = "Red";
-};
-String STR_UNDO_GRAFGREEN
-{
-    Text [ en-US ] = "Green";
-};
-String STR_UNDO_GRAFBLUE
-{
-    Text [ en-US ] = "Blue";
-};
-String STR_UNDO_GRAFLUMINANCE
-{
-    Text [ en-US ] = "Brightness";
-};
-String STR_UNDO_GRAFCONTRAST
-{
-    Text [ en-US ] = "Contrast";
-};
-String STR_UNDO_GRAFGAMMA
-{
-    Text [ en-US ] = "Gamma";
-};
-String STR_UNDO_GRAFTRANSPARENCY
-{
-    Text [ en-US ] = "Transparency";
 };
 String STR_TITLE_RENAMESLIDE
 {
@@ -2434,10 +1201,6 @@ String STR_TASKPANEL_MASTER_PAGE_MENU_UNLOCK
 {
     Text [ en-US ] = "~Undock Task Pane";
 };
-String STR_TASKPANEL_MASTER_PAGE_MENU_CLOSE
-{
-    Text [ en-US ] = "~Close Task Pane";
-};
 String STR_TASKPANEL_CURRENT_MASTER_PAGES_TITLE
 {
     Text [ en-US ] = "Used in This Presentation";
@@ -2478,3 +1241,9 @@ String STR_NAVIGATOR_SHAPE_BASE_NAME
 {
     Text [ en-US ] = "Shape %1";
 };
+String STR_SET_BACKGROUND_PICTURE
+{
+    Text [ en-US ] = "Set Background Picture for Slide ..." ;
+};
+
+ 
