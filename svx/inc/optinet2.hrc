@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 10:00:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,32 +110,27 @@
 #define PB_INFO_PERSCERT            133
 #define PB_DELETE_PERSCERT          134
 
-// Scripting  --------------------------------------------------------------
-#define FL_SEC_SECOPTIONS           1
-#define FI_SEC_SECOPTIONS           2
-#define CB_SEC_SAVEORSENDDOCS       3
-#define CB_SEC_SIGNDOCS             4
-#define CB_SEC_PRINTDOCS            5
-#define CB_SEC_CREATEPDF            6
-#define CB_SEC_REMOVEPERSINFO       7
-#define CB_SEC_RECOMMPASSWD         8
-#define PB_SEC_ADVANCED             9
-#define FL_SEC_MACROSEC             10
-#define FI_SEC_MACROSEC             11
-#define PB_SEC_MACROSEC             12
-#define FL_SEC_FILESHARING          13
-#define CB_SEC_RECOMMREADONLY       14
-#define CB_SEC_RECORDCHANGES        15
-#define PB_SEC_PROTRECORDS          16
-#define FI_SEC_SAVEORSENDDOCS       17
-#define FI_SEC_SIGNDOCS             18
-#define FI_SEC_PRINTDOCS            19
-#define FI_SEC_CREATEPDF            20
-#define FI_SEC_REMOVEPERSINFO       21
-#define FI_SEC_RECOMMPASSWD         22
+// Security  -------------------------------------------------------------
+
+#define FL_SEC_SECURITYOPTIONS      10
+#define FI_SEC_SECURITYOPTIONS      11
+#define PB_SEC_SECURITYOPTIONS      12
+#define FL_SEC_PASSWORDS            13
+#define CB_SEC_SAVEPASSWORDS        14
+#define PB_SEC_MASTERPASSWORD       15
+#define FI_SEC_MASTERPASSWORD       16
+#define PB_SEC_SHOWPASSWORDS        17
+#define FL_SEC_MACROSEC             18
+#define FI_SEC_MACROSEC             19
+#define PB_SEC_MACROSEC             20
+#define FL_SEC_FILESHARING          21
+#define CB_SEC_RECOMMREADONLY       22
+#define CB_SEC_RECORDCHANGES        23
+#define PB_SEC_PROTRECORDS          24
 
 #define STR_SEC_PROTRECORDS         10
 #define STR_SEC_UNPROTRECORDS       11
+#define STR_SEC_NOPASSWDSAVE        12
 
 #define TP_WIDTH                    260
 #define TP_HEIGHT                   185
@@ -143,26 +138,26 @@
 #define BORDER_OFFSET               8
 #define COL_0                       (RSC_SP_TBPG_INNERBORDER_LEFT)
 #define COL_1                       (COL_0+RSC_SP_FLGR_SPACE_X)
-#define COL_2                       (COL_1+RSC_SP_CHK_TEXTINDENT)
-#define COL_6                       (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
-#define COL_5                       (COL_6-RSC_SP_FLGR_SPACE_X)
-#define COL_4                       (COL_5-RSC_CD_PUSHBUTTON_WIDTH)
-#define COL_3                       (COL_4-RSC_SP_CTRL_X)
-#define CHECKBOX_WIDTH              ((COL_5-COL_2-RSC_SP_CTRL_X)/2)
+#define COL_5                       (TP_WIDTH-RSC_SP_TBPG_INNERBORDER_RIGHT)
+#define COL_4                       (COL_5-RSC_SP_FLGR_SPACE_X)
+#define COL_3                       (COL_4-RSC_CD_PUSHBUTTON_WIDTH)
+#define COL_2                       (COL_3-RSC_SP_CTRL_X)
 
 #define ROW_0                       (RSC_SP_FLGR_INNERBORDER_TOP)
 #define ROW_1                       (ROW_0+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-#define ROW_2                       (ROW_1+2*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-#define ROW_3                       (ROW_2+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_2                       (ROW_1+3*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_2a                      (ROW_2-RSC_SP_FLGR_SPACE_Y-RSC_CD_PUSHBUTTON_HEIGHT)
+#define ROW_3                       (ROW_2+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
 #define ROW_4                       (ROW_3+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-#define ROW_5                       (ROW_4+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-#define ROW_6                       (ROW_5+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-#define ROW_7                       (ROW_6+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-#define ROW_8                       (ROW_7+2*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_FLGR_SPACE_Y+OFFS_BUTTON_Y)
-#define ROW_9                       (ROW_8+RSC_CD_PUSHBUTTON_HEIGHT)
-#define ROW_10                      (ROW_9+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_5                       (ROW_4+4*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_5a                      (ROW_5-RSC_SP_FLGR_SPACE_Y-RSC_CD_PUSHBUTTON_HEIGHT)
+#define ROW_6                       (ROW_5+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_7                       (ROW_6+2*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_FLGR_SPACE_Y+OFFS_BUTTON_Y)
+#define ROW_8                       (ROW_7+RSC_CD_PUSHBUTTON_HEIGHT)
+#define ROW_9                       (ROW_8+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_10                      (ROW_9+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y)
 #define ROW_11                      (ROW_10+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y)
-#define ROW_12                      (ROW_11+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y/2)
+#define ROW_11a                     (ROW_11-RSC_SP_FLGR_SPACE_Y-RSC_CD_PUSHBUTTON_HEIGHT)
 
 // Defines - JavaScriptDisableQueryBox_Impl -------------------------------
 
