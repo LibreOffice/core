@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 08:49:59 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 15:29:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,8 @@ SLOFILES =	\
         $(SLO)$/usrfld.obj
 
 EXCEPTIONSFILES = \
-                $(SLO)$/flddropdown.obj
+        $(SLO)$/flddropdown.obj \
+        $(SLO)$/docufld.obj 
 
 # --- Tagets -------------------------------------------------------
 
