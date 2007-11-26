@@ -749,9 +749,6 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 #endif
     }
     rc = FT_Select_Charmap( maFaceFT, eEncoding );
-    if( rc != FT_Err_Ok )
-        return;
-
     // no standard encoding applies => we need an encoding converter
     if( rc != FT_Err_Ok )
     {
