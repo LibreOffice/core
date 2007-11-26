@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:41:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:16:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,26 @@ namespace vcl_sal {
         { XK_space, "Space" },
         { XK_minus, "-" },
         { XK_plus, "+" }
+    };
+
+    static const struct KeysymNameReplacement aImplReplacements_Turkish[] =
+    {
+        { XK_Control_L, "Ctrl" },
+        { XK_Control_R, "Ctrl" },
+        { XK_Right, "Sağ" },
+        { XK_Left, "Sol" },
+        { XK_Up, "Yukarı" },
+        { XK_Down, "Aşağı" },
+        { XK_space, "Boşluk" }
+    };
+
+    static const struct KeysymNameReplacement aImplReplacements_Russian[] =
+    {
+        { XK_Right, "Вправо" },
+        { XK_Left, "Влево" },
+        { XK_Up, "Вверх" },
+        { XK_Down, "Вниз" },
+        { XK_space, "Пробел" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_German[] =
@@ -401,6 +421,10 @@ namespace vcl_sal {
         { "Swed", aImplReplacements_Swedish, sizeof(aImplReplacements_Swedish)/sizeof(aImplReplacements_Swedish[0]) },
         { "Netherland", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
         { "Dutch", aImplReplacements_Dutch, sizeof(aImplReplacements_Dutch)/sizeof(aImplReplacements_Dutch[0]) },
+        // Turkish, Turkey
+        { "Turk", aImplReplacements_Turkish, sizeof(aImplReplacements_Turkish)/sizeof(aImplReplacements_Turkish[0]) },
+        // Russian, Russia
+        { "Russia", aImplReplacements_Russian, sizeof(aImplReplacements_Russian)/sizeof(aImplReplacements_Russian[0]) },
         { "English", aImplReplacements_English, sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]) }
     };
 
