@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:21:55 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 16:58:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,7 @@ SRC1FILES =	\
         res_bmp.src 		\
         tbx_ww.src			\
         popup.src			\
-        sdstring.src		\
-        pseudo.src
+        sdstring.src
 
 #OBJFILES = \
 #		$(OBJ)$/sdlib.obj	\
