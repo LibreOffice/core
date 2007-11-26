@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:33:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:24:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,7 @@ public:
     BOOL                        bDowning:1;   // TRUE ab Exit und danach
     BOOL                        bInQuit : 1;
     BOOL                        bInvalidateOnUnlock : 1;
+    BOOL                        bODFVersionWarningLater : 1;
 
                                 SfxAppData_Impl( SfxApplication* );
                                 ~SfxAppData_Impl();
