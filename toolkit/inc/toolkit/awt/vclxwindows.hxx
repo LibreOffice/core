@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:13:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:25:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -504,6 +504,39 @@ public:
 
     // ::com::sun::star::awt::XDevice,
     ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XVclWindowPeer
+    void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+
+};
+
+//  ----------------------------------------------------
+//  class VCLXTabPage
+//  ----------------------------------------------------
+class VCLXTabPage : public VCLXContainer
+{
+public:
+                        VCLXTabPage();
+                        ~VCLXTabPage();
+
+    // ::com::sun::star::uno::XInterface
+    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
+    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+
+    // ::com::sun::star::lang::XTypeProvider
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XView
+    void SAL_CALL draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XDevice,
+    ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XVclWindowPeer
+    void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+
 };
 
 //  ----------------------------------------------------
