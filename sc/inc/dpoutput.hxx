@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpoutput.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:42:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:18:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,10 @@
 #endif
 
 #include <vector>
+
+namespace com { namespace sun { namespace star { namespace sheet {
+    struct DataPilotFieldFilter;
+}}}}
 
 class Rectangle;
 class SvStream;
@@ -166,6 +170,11 @@ public:
     BOOL            HasError();         // range overflow or exception from source
 
     void            GetPositionData( ScDPPositionData& rData, const ScAddress& rPos );
+
+    /** Get filtering criteria based on the position of the cell within data
+        field region. */
+    bool            GetDataFieldPositionData(::std::vector< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters, const ScAddress& rPos);
+
     BOOL            GetPivotData( ScDPGetPivotDataField& rTarget, /* returns result */
                                   const std::vector< ScDPGetPivotDataField >& rFilters );
     long            GetHeaderDim( const ScAddress& rPos, USHORT& rOrient );
