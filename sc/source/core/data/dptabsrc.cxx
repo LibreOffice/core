@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:41:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:20:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,12 @@
 #include <rtl/math.hxx>
 #include <svtools/itemprop.hxx>
 
+#include "scitems.hxx"
+#include "document.hxx"
+#include "docpool.hxx"
+#include "patattr.hxx"
+#include "cell.hxx"
+
 #include "dptabsrc.hxx"
 #include "dptabres.hxx"
 #include "dptabdat.hxx"
@@ -57,6 +63,7 @@
 #include "unonames.hxx"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
@@ -884,6 +891,105 @@ void ScDPSource::CreateRes_Impl()
             // ----------------------------------------------------------------
         }
     }
+}
+
+void ScDPSource::WriteDrillDownData( ScDocument* pDoc, const ScAddress& rPos,
+                    const std::vector< sheet::DataPilotFieldFilter > rFilters )
+{
+    ScAddress aOutPos( rPos );
+    long nCol;
+    long nColumnCount = GetData()->GetColumnCount();
+
+    // count non-group columns (for output - still included in filtering)
+    long nSourceCount = 0;
+    while ( nSourceCount < nColumnCount && pData->GetGroupBase(nSourceCount) < 0 )
+        ++nSourceCount;
+
+    // collect ScDPItemData for each filtered column
+    std::vector<bool> aFilterFlags( nColumnCount, false );
+    std::vector<ScDPItemData> aFilterValues( nColumnCount );
+    for ( std::vector<sheet::DataPilotFieldFilter>::const_iterator aFilterIter = rFilters.begin();
+          aFilterIter != rFilters.end(); ++aFilterIter )
+    {
+        String aFieldName( aFilterIter->FieldName );
+        for (nCol=0; nCol<nColumnCount; ++nCol)
+            if ( aFieldName == pData->getDimensionName( nCol ) )
+            {
+                ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nCol );
+                ScDPMembers* pMembers = pDim->GetHierarchiesObject()->getByIndex(0)->
+                                        GetLevelsObject()->getByIndex(0)->GetMembersObject();
+                sal_Int32 nIndex = pMembers->GetIndexFromName( aFilterIter->MatchValue );
+                if ( nIndex >= 0 )
+                {
+                    aFilterFlags[nCol] = true;
+                    pMembers->getByIndex(nIndex)->FillItemData( aFilterValues[nCol] );
+                }
+            }
+    }
+
+    // add filter conditions for page fields
+    for (long nPagePos=0; nPagePos<nPageDimCount; ++nPagePos)
+    {
+        nCol = nPageDims[nPagePos];
+        ScDPDimension* pDim = GetDimensionsObject()->getByIndex( nCol );
+        if ( pDim->HasSelectedPage() )
+        {
+            aFilterFlags[nCol] = true;
+            aFilterValues[nCol] = pDim->GetSelectedData();
+        }
+    }
+
+    // output column headers
+    for (nCol=0; nCol<nSourceCount; ++nCol)
+    {
+        pDoc->PutCell( aOutPos, new ScStringCell( pData->getDimensionName( nCol ) ) );
+        aOutPos.SetCol( aOutPos.Col() + 1 );
+    }
+    aOutPos.SetRow( aOutPos.Row() + 1 );
+
+    // get all fields from source as column fields
+    ScDPItemData aColData[SC_DAPI_MAXFIELDS];
+    long nFields[SC_DAPI_MAXFIELDS];
+    for (sal_Int32 i=0; i<nColumnCount; ++i)
+        nFields[i] = i;
+    ScDPTableIteratorParam aIterPar( nColumnCount, nFields, aColData,   // column fields
+                                     0, NULL, NULL,                     // row fields
+                                     0, NULL, NULL,                     // page fields
+                                     0, NULL, NULL );                   // data fields
+    pData->ResetIterator();
+    while ( pData->GetNextRow( aIterPar ) )
+    {
+        bool bInclude = true;
+        for (nCol=0; nCol<nColumnCount; ++nCol)
+        {
+            if ( aFilterFlags[nCol] && !aColData[nCol].IsCaseInsEqual( aFilterValues[nCol] ) )
+                bInclude = false;
+        }
+
+        if ( bInclude )         // output data row
+        {
+            aOutPos.SetCol( rPos.Col() );
+            for (nCol=0; nCol<nSourceCount; ++nCol)
+            {
+                if ( aColData[nCol].bHasValue )
+                    pDoc->SetValue( aOutPos.Col(), aOutPos.Row(), aOutPos.Tab(), aColData[nCol].fValue );
+                else if ( aColData[nCol].aString.Len() )
+                    pDoc->PutCell( aOutPos, new ScStringCell( aColData[nCol].aString ) );
+                aOutPos.SetCol( aOutPos.Col() + 1 );
+            }
+            aOutPos.SetRow( aOutPos.Row() + 1 );
+        }
+    }
+
+    // set number format (important for dates)
+    if ( aOutPos.Row() > rPos.Row() + 1 )
+        for (nCol=0; nCol<nSourceCount; ++nCol)
+        {
+            ScPatternAttr aPattern( pDoc->GetPool() );
+            aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALUE_FORMAT, pData->GetNumberFormat(nCol) ) );
+            SCCOL nFmtCol = static_cast<SCCOL>( rPos.Col() + nCol );
+            pDoc->ApplyPatternAreaTab( nFmtCol, rPos.Row() + 1, nFmtCol, aOutPos.Row() - 1, rPos.Tab(), aPattern );
+        }
 }
 
 void ScDPSource::DumpState( ScDocument* pDoc, const ScAddress& rPos )
