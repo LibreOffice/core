@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:20:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:30:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
     pFld->SetLanguage( GetFnt()->GetLanguage() );
 
     ViewShell *pSh = rInf.GetVsh();
+    sal_Bool bPlaceHolder = sal_False;
 
     switch( pFld->GetTyp()->Which() )
     {
@@ -230,6 +231,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
             if( !bName )
                 pChFmt =  ((SwJumpEditField*)pFld)->GetCharFmt();
             bNewFlyPor = sal_True;
+            bPlaceHolder = sal_True;
             break;
 
         default:
@@ -258,7 +260,7 @@ SwExpandPortion *SwTxtFormatter::NewFldPortion( SwTxtFormatInfo &rInf,
             else
                 pTmpFnt->SetDiffFnt( &pChFmt->GetAttrSet(), pFrm->GetTxtNode()->getIDocumentSettingAccess() );
         }
-        pRet = new SwFldPortion( pFld->GetCntnt( bName ), pTmpFnt );
+        pRet = new SwFldPortion( pFld->GetCntnt( bName ), pTmpFnt, bPlaceHolder );
     }
 
     return pRet;
