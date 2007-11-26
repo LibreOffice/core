@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:19:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:14:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,7 +375,7 @@ sal_Int32 DNDEventDispatcher::fireDragEnterEvent( Window *pWindow,
 {
     sal_Int32 n = 0;
 
-    if( pWindow && pWindow->IsInputEnabled() )
+    if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
         OClearableGuard aGuard( Application::GetSolarMutex() );
 
@@ -411,7 +411,7 @@ sal_Int32 DNDEventDispatcher::fireDragOverEvent( Window *pWindow,
 {
     sal_Int32 n = 0;
 
-    if( pWindow && pWindow->IsInputEnabled() )
+    if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
         OClearableGuard aGuard( Application::GetSolarMutex() );
 
@@ -440,7 +440,7 @@ sal_Int32 DNDEventDispatcher::fireDragExitEvent( Window *pWindow ) throw(Runtime
 {
     sal_Int32 n = 0;
 
-    if( pWindow && pWindow->IsInputEnabled() )
+    if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
         OClearableGuard aGuard( Application::GetSolarMutex() );
 
@@ -471,7 +471,7 @@ sal_Int32 DNDEventDispatcher::fireDropActionChangedEvent( Window *pWindow,
 {
     sal_Int32 n = 0;
 
-    if( pWindow && pWindow->IsInputEnabled() )
+    if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
         OClearableGuard aGuard( Application::GetSolarMutex() );
 
@@ -504,7 +504,7 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( Window *pWindow,
 {
     sal_Int32 n = 0;
 
-    if( pWindow && pWindow->IsInputEnabled() )
+    if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
         OClearableGuard aGuard( Application::GetSolarMutex() );
 
@@ -549,7 +549,7 @@ sal_Int32 DNDEventDispatcher::fireDragGestureEvent( Window *pWindow,
 {
     sal_Int32 n = 0;
 
-    if( pWindow && pWindow->IsInputEnabled() )
+    if( pWindow && pWindow->IsInputEnabled() && ! pWindow->IsInModalMode() )
     {
         OClearableGuard aGuard( Application::GetSolarMutex() );
 
