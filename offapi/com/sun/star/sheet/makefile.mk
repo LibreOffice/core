@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 15:11:32 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 15:23:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,7 @@ IDLFILES=\
     DataPilotDescriptor.idl\
     DataPilotField.idl\
     DataPilotFieldAutoShowInfo.idl\
+    DataPilotFieldFilter.idl\
     DataPilotFieldGroup.idl\
     DataPilotFieldGroupBy.idl\
     DataPilotFieldGroupInfo.idl\
