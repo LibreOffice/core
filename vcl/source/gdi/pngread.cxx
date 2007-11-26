@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pngread.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 15:06:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:13:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ private:
     BYTE*               mpColorTable;   //
     sal_Size            mnStreamSize;   // estimate of PNG file size
     sal_uInt32          mnChunkType;    // Type of current PNG chunk
-    sal_uInt32          mnChunkLen;     // Length of current PNG chunk
+    sal_Int32           mnChunkLen;     // Length of current PNG chunk
     Size                maOrigSize;     // pixel size of the full image
     Size                maTargetSize;   // pixel size of the result image
     Size                maPhysSize;     // prefered size in MAP_100TH_MM units
@@ -284,7 +284,9 @@ bool PNGReaderImpl::ReadNextChunk()
         mrPNGStream >> mnChunkLen >> mnChunkType;
         rChunkData.nType = mnChunkType;
 
-        // #128377# sanity check for chunk length
+        // #128377#/#149343# sanity check for chunk length
+        if( mnChunkLen < 0 )
+            return false;
         const sal_Size nStreamPos = mrPNGStream.Tell();
         if( nStreamPos + mnChunkLen >= mnStreamSize )
             return false;
@@ -301,7 +303,7 @@ bool PNGReaderImpl::ReadNextChunk()
         {
             rChunkData.aData.resize( mnChunkLen );
 
-            sal_Size nBytesRead = 0;
+            sal_Int32 nBytesRead = 0;
             do {
                 sal_uInt8* pPtr = &rChunkData.aData[ nBytesRead ];
                 nBytesRead += mrPNGStream.Read( pPtr, mnChunkLen - nBytesRead );
@@ -347,9 +349,14 @@ void PNGReaderImpl::SkipRemainingChunks()
         return;
 
     // read from the stream until the IEND chunk is found
+    const sal_Size nStreamPos = mrPNGStream.Tell();
     while( !mrPNGStream.IsEof() && (mrPNGStream.GetError() == ERRCODE_NONE) )
     {
         mrPNGStream >> mnChunkLen >> mnChunkType;
+        if( mnChunkLen < 0 )
+            break;
+        if( nStreamPos + mnChunkLen >= mnStreamSize )
+            break;
         mrPNGStream.SeekRel( mnChunkLen + 4 );  // skip data + CRC
         if( mnChunkType == PNGCHUNK_IEND )
             break;
@@ -789,7 +796,7 @@ BOOL PNGReaderImpl::ImplReadTransparent()
                     maDataIter += mnChunkLen;
                     mbTransparent = true;
                     // need alpha transparency if not on/off masking
-                    for( unsigned i = 0; i < mnChunkLen; ++i )
+                    for( int i = 0; i < mnChunkLen; ++i )
                        bNeedAlpha |= (mpTransTab[i]!=0x00) && (mpTransTab[i]!=0xFF);
                 }
             }
@@ -916,7 +923,7 @@ sal_uInt8 PNGReaderImpl::ImplScaleColor()
 
 void PNGReaderImpl::ImplReadIDAT()
 {
-    if ( mnChunkLen )       // Chunk empty ?
+    if( mnChunkLen > 0 )
     {
         if ( mbzCodecInUse == FALSE )
         {
