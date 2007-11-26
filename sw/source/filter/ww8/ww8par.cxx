@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.184 $
+ *  $Revision: 1.185 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:31:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:30:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2523,6 +2523,14 @@ sal_Unicode Custom8BitToUnicode(rtl_TextToUnicodeConverter hConverter,
         return cChar;
 }
 
+sal_Unicode SwWW8ImplReader::TranslateToHindiNumbers(sal_Unicode nChar)
+{
+    if (nChar >= 0x0030 && nChar <= 0x0039)
+        return nChar + 0x0630;
+
+    return nChar;
+}
+
 // Returnwert: true for no Sonderzeichen
 bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
 {
@@ -2605,6 +2613,11 @@ bool SwWW8ImplReader::ReadPlainChars(WW8_CP& rPos, long nEnd, long nCpOfs)
         }
         else
             *pWork = Custom8BitToUnicode(hConverter, nBCode);
+
+        if (nIdctHint == 2)
+        {
+            *pWork = TranslateToHindiNumbers(*pWork);
+        }
     }
 
     if (nL2)
@@ -3288,7 +3301,8 @@ SwWW8ImplReader::SwWW8ImplReader(BYTE nVersionPara, SvStorage* pStorage,
     pAuthorInfos(0),
     sBaseURL(rBaseURL),
     mbNewDoc(bNewDoc),
-    nDropCap(0)
+    nDropCap(0),
+    nIdctHint(0)
 {
     pStrm->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
     nWantedVersion = nVersionPara;
