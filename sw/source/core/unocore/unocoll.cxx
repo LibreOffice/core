@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:35:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,6 +230,7 @@ const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { "com.sun.star.text.TextField.DocInfo.Info1",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1 },
     { "com.sun.star.text.TextField.DocInfo.Info2",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2 },
     { "com.sun.star.text.TextField.DocInfo.Info3",            SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3 },
+    { "com.sun.star.text.TextField.DocInfo.Custom",           SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM },
     { "com.sun.star.text.TextField.DocInfo.PrintAuthor",      SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR },
     { "com.sun.star.text.TextField.DocInfo.PrintDateTime",    SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME },
     { "com.sun.star.text.TextField.DocInfo.KeyWords",         SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS },
@@ -322,6 +323,7 @@ const ProvNamesId_Type __FAR_DATA aProvNamesId[] =
     { CSS_TEXT_TEXTFIELD_DOCINFO_SUBJECT,             SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT },
     { CSS_TEXT_TEXTFIELD_DOCINFO_TITLE,               SW_SERVICE_FIELDTYPE_DOCINFO_TITLE },
     { CSS_TEXT_TEXTFIELD_DOCINFO_REVISION,            SW_SERVICE_FIELDTYPE_DOCINFO_REVISION },
+    { CSS_TEXT_TEXTFIELD_DOCINFO_CUSTOM,              SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM },
     { CSS_TEXT_TEXTFIELD_BIBLIOGRAPHY,                SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY },
     { CSS_TEXT_TEXTFIELD_COMBINED_CHARACTERS,         SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS },
     { CSS_TEXT_TEXTFIELD_DROP_DOWN,                   SW_SERVICE_FIELDTYPE_DROPDOWN },
@@ -580,6 +582,7 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1            :
         case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2            :
         case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3            :
+        case SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM            :
         case SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR      :
         case SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME   :
         case SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS         :
