@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:16:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:20:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,7 +215,7 @@ ProfileItem gid_Profileitem_Version_Updateurl
     Order = 15;
     Key = "UpdateURL";
   #if defined(BUILD_SPECIAL)
-    Value = "${UPDATEURL}";
+    Value = "${UPDATEURL}?pkgfmt=<pkgformat>";
   #else
     Value = "";
   #endif
