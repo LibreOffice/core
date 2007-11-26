@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:12:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:43:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1197,9 +1197,15 @@ PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
     SfxPrinter* pPrinter = GetPrinter();
 
     String          aStrRange;
-    PrintDialog*    pDlg        = new PrintDialog( pParent);
+    PrintDialog*    pDlg        = new PrintDialog( pParent, true );
     SCTAB           nTabCount   = pDoc->GetTableCount();
     long            nDocPageMax = 0;
+
+    pDlg->EnableSheetRange( true, PRINTSHEETS_ALL );
+    pDlg->EnableSheetRange( true, PRINTSHEETS_SELECTED_SHEETS );
+    pDlg->EnableSheetRange( true, PRINTSHEETS_SELECTED_CELLS );
+    bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
+    pDlg->CheckSheetRange( bAllTabs ? PRINTSHEETS_ALL : PRINTSHEETS_SELECTED_SHEETS );
 
     for ( SCTAB i=0; i<nTabCount; i++ )
     {
@@ -1219,7 +1225,6 @@ PrintDialog* __EXPORT ScTabViewShell::CreatePrintDialog( Window *pParent )
 
     pDlg->SetRangeText  ( aStrRange );
     pDlg->EnableRange   ( PRINTDIALOG_ALL );
-    pDlg->EnableRange   ( PRINTDIALOG_SELECTION );
     pDlg->EnableRange   ( PRINTDIALOG_RANGE );
     pDlg->SetFirstPage  ( 1 );
     pDlg->SetMinPage    ( 1 );
@@ -1288,16 +1293,8 @@ USHORT __EXPORT ScTabViewShell::Print( SfxProgress& rProgress, BOOL bIsAPI,
     ScDocShell* pDocShell = GetViewData()->GetDocShell();
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
 
-    //  get the list of affected sheets (using the "only selected sheets" option) before SfxViewShell::Print
-    ScPrintOptions aOptions;
-    const SfxItemSet& rOptionSet = pDocShell->GetPrinter()->GetOptions();
-    const SfxPoolItem* pItem;
-    BOOL bHasOptions = ( rOptionSet.GetItemState(SID_SCPRINTOPTIONS, FALSE, &pItem) == SFX_ITEM_SET );
-    if (bHasOptions)
-        aOptions = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
-    else
-        aOptions = SC_MOD()->GetPrintOptions();     // use configuration
-    BOOL bAllTabs = aOptions.GetAllSheets();
+    // get the list of affected sheets before SfxViewShell::Print
+    bool bAllTabs = ( pPrintDialog ? ( pPrintDialog->GetCheckedSheetRange() == PRINTSHEETS_ALL ) : SC_MOD()->GetPrintOptions().GetAllSheets() );
 
     uno::Sequence<sal_Int32> aSheets;
     SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
