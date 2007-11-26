@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpoutput.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:43:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:19:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@
 #include <com/sun/star/sheet/XDataPilotMemberResults.hpp>
 #include <com/sun/star/sheet/DataResultFlags.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
+#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
 #include <com/sun/star/sheet/TableFilterField.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
@@ -993,6 +994,72 @@ void ScDPOutput::GetPositionData( ScDPPositionData& rData, const ScAddress& rPos
             return;
         }
     }
+}
+
+bool ScDPOutput::GetDataFieldPositionData(std::vector<sheet::DataPilotFieldFilter>& rFilters, const ScAddress& rPos)
+{
+    SCCOL nCol = rPos.Col();
+    SCROW nRow = rPos.Row();
+    SCTAB nTab = rPos.Tab();
+    if ( nTab != aStartPos.Tab() )
+        return false;                                     // wrong sheet
+
+    CalcSizes();
+
+    // test for data area.
+    if (nCol < nDataStartCol || nCol > nTabEndCol || nRow < nDataStartRow || nRow > nTabEndRow)
+    {
+        // Cell is outside the data field area.
+        return false;
+    }
+
+    rtl::OUString sTotal( ScGlobal::GetRscString(STR_PIVOT_TOTAL) );
+
+    // column fields
+    for (SCCOL nColField = 0; nColField < nColFieldCount; ++nColField)
+    {
+        sheet::DataPilotFieldFilter filter;
+        filter.FieldName = pColFields[nColField].aCaption;
+
+        const uno::Sequence<sheet::MemberResult> rSequence = pColFields[nColField].aResult;
+        const sheet::MemberResult* pArray = rSequence.getConstArray();
+
+        DBG_ASSERT(nDataStartCol + rSequence.getLength() - 1 == nTabEndCol,
+                    "ScDPOutput::GetDataFieldCellData: error in geometric assumption");
+
+        long nItem = nCol - nDataStartCol;
+                //  get origin of "continue" fields
+        while ( nItem > 0 && (pArray[nItem].Flags & sheet::MemberResultFlags::CONTINUE) )
+            --nItem;
+
+        filter.MatchValue = pArray[nItem].Name;
+        if (pArray[nItem].Name.getLength() > 0 && pArray[nItem].Name != sTotal)
+            rFilters.push_back(filter);
+    }
+
+    // row fields
+    for (SCROW nRowField = 0; nRowField < nRowFieldCount; ++nRowField)
+    {
+        sheet::DataPilotFieldFilter filter;
+        filter.FieldName = pRowFields[nRowField].aCaption;
+
+        const uno::Sequence<sheet::MemberResult> rSequence = pRowFields[nRowField].aResult;
+        const sheet::MemberResult* pArray = rSequence.getConstArray();
+
+        DBG_ASSERT(nDataStartRow + rSequence.getLength() - 1 == nTabEndRow,
+                    "ScDPOutput::GetDataFieldCellData: error in geometric assumption");
+
+        long nItem = nRow - nDataStartRow;
+            //  get origin of "continue" fields
+        while ( nItem > 0 && (pArray[nItem].Flags & sheet::MemberResultFlags::CONTINUE) )
+            --nItem;
+
+        filter.MatchValue = pArray[nItem].Name;
+        if (pArray[nItem].Name.getLength() > 0 && pArray[nItem].Name != sTotal)
+            rFilters.push_back(filter);
+    }
+
+    return true;
 }
 
 //
