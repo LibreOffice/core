@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:42:43 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:20:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONOPTION_HPP_
 #include <com/sun/star/i18n/TextConversionOption.hpp>
 #endif
+#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
 #include "scitems.hxx"
 #include <sfx2/viewfrm.hxx>
@@ -972,6 +973,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                                     GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
                 if ( pDPObj )
                 {
+                    std::vector<sheet::DataPilotFieldFilter> aFilters;
                     USHORT nOrientation;
                     if ( pTabViewShell->HasSelectionForDrillDown( nOrientation ) )
                     {
@@ -987,6 +989,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             pTabViewShell->SetDataPilotDetails( TRUE, &aNewDimName );
                         }
                     }
+                    else if ( !pDPObj->IsServiceData() &&
+                               pDPObj->GetDataFieldPositionData( aFilters,
+                                        ScAddress( GetViewData()->GetCurX(), GetViewData()->GetCurY(),
+                                                   GetViewData()->GetTabNo() ) ) )
+                        pTabViewShell->ShowDataPilotSourceData( *pDPObj, aFilters );
                     else
                         pTabViewShell->SetDataPilotDetails( TRUE );
                 }
