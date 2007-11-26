@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 10:44:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:13:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,8 @@ using namespace rtl;
 
 #if OSL_DEBUG_LEVEL < 2
 #define COMPRESS_PAGES
+#else
+#define DEBUG_DISABLE_PDFCOMPRESSION // also do not compress streams
 #endif
 
 #ifdef DO_TEST_PDF
@@ -647,15 +649,33 @@ static void appendUnicodeTextString( const rtl::OUString& rString, OStringBuffer
 OString PDFWriterImpl::convertWidgetFieldName( const rtl::OUString& rString )
 {
     OStringBuffer aBuffer( rString.getLength()+64 );
-    appendName( rString, aBuffer );
 
-    // replace all '.' by '_'
-    sal_Int32 nLen = aBuffer.getLength();
-    for( sal_Int32 i = 0; i < nLen; i++ )
+    /* #i80258# previously we use appendName here
+       however we need a slightly different coding scheme than the normal
+       name encoding for field names
+
+       also replace all '.' by '_' as '.' indicates a hierarchy level which
+       we do not have here
+    */
+
+    OString aStr( OUStringToOString( rString, RTL_TEXTENCODING_UTF8 ) );
+    const sal_Char* pStr = aStr.getStr();
+    int nLen = aStr.getLength();
+    for( int i = 0; i < nLen; i++ )
     {
-        sal_Char aChar = aBuffer.charAt( i );
-        if( aChar == '.' )
-            aBuffer.setCharAt( i, '_' );
+        /*  #i16920# PDF recommendation: output UTF8, any byte
+         *  outside the interval [33(=ASCII'!');126(=ASCII'~')]
+         *  should be escaped hexadecimal
+         */
+        if( pStr[i] == '.' )
+            aBuffer.append( '_' );
+        else if( (pStr[i] >= 33 && pStr[i] <= 126 ) )
+            aBuffer.append( pStr[i] );
+        else
+        {
+            aBuffer.append( '#' );
+            appendHex( (sal_Int8)pStr[i], aBuffer );
+        }
     }
 
     OString aRet = aBuffer.makeStringAndClear();
