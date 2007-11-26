@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:04:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:52:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1594,18 +1594,18 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
     aEntryPos.X() *= -1; // Umrechnung Dokumentkoord.
     long nMaxRight = nWidth + aEntryPos.X() - 1;
 
-    Font aBackupFont( GetFont() );
+    Color aBackupTextColor( GetTextColor() );
     Color aBackupColor = GetFillColor();
 
-    int bCurFontIsSel = FALSE;
+    bool bCurFontIsSel = false;
     BOOL bInUse = pEntry->HasInUseEmphasis();
     // wenn eine ClipRegion von aussen gesetzt wird, dann
     // diese nicht zuruecksetzen
     BOOL bResetClipRegion = !bHasClipRegion;
     BOOL bHideSelection = ((nWindowStyle & WB_HIDESELECTION) && !HasFocus())!=0;
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
-    Font aHiliteFont( GetFont() );
-    aHiliteFont.SetColor( rSettings.GetHighlightTextColor() );
+
+    Color aHighlightTextColor( rSettings.GetHighlightTextColor() );
 
     Size aRectSize( 0, nTempEntryHeight );
 
@@ -1678,10 +1678,10 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
                          aWallpaper.GetColor().IsBright() != rSettings.GetDeactiveColor().IsBright() )
                         aNewWallColor = rSettings.GetDeactiveColor();
                     // set font color to highlight
-                    if ( !bCurFontIsSel && nItemType == SV_ITEM_ID_LBOXSTRING )
+                    if ( !bCurFontIsSel )
                     {
-                        Control::SetFont( aHiliteFont );
-                        bCurFontIsSel = TRUE;
+                        SetTextColor( aHighlightTextColor );
+                        bCurFontIsSel = true;
                     }
                 }
                 aWallpaper.SetColor( aNewWallColor );
@@ -1690,10 +1690,10 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
             {
                 if( bInUse && nItemType == SV_ITEM_ID_LBOXCONTEXTBMP )
                     aWallpaper.SetColor( rSettings.GetFieldColor() );
-                else if( bCurFontIsSel && nItemType == SV_ITEM_ID_LBOXSTRING )
+                else if( bCurFontIsSel )
                 {
-                    bCurFontIsSel = FALSE;
-                    Control::SetFont( aBackupFont );
+                    bCurFontIsSel = false;
+                    SetTextColor( aBackupTextColor );
                 }
             }
 
@@ -1772,7 +1772,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
     }
 
     if( bCurFontIsSel )
-        Control::SetFont( aBackupFont );
+        SetTextColor( aBackupTextColor );
 
     USHORT nFirstDynTabPos;
     SvLBoxTab* pFirstDynamicTab = GetFirstDynamicTab( nFirstDynTabPos );
