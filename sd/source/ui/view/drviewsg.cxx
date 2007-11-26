@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:16:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:37:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,23 +167,6 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
     switch( nSlot )
     {
-        // Ersatzdarstellung-Optionen
-        case SID_GRAPHIC_DRAFT:
-            pOptions->SetExternGraphic( !mpDrawView->IsGrafDraft() );
-        break;
-
-        case SID_FILL_DRAFT:
-            pOptions->SetOutlineMode( !mpDrawView->IsFillDraft() );
-        break;
-
-        case SID_TEXT_DRAFT:
-            pOptions->SetNoText( !mpDrawView->IsTextDraft() );
-        break;
-
-        case SID_LINE_DRAFT:
-            pOptions->SetHairlineMode( !mpDrawView->IsLineDraft() );
-        break;
-
         case SID_HANDLES_DRAFT:
             pOptions->SetSolidMarkHdl( !mpDrawView->IsSolidMarkHdl() );
         break;
@@ -306,10 +289,6 @@ void DrawViewShell::ExecOptionsBar( SfxRequest& rReq )
 
 void DrawViewShell::GetOptionsBarState( SfxItemSet& rSet )
 {
-    rSet.Put( SfxBoolItem( SID_GRAPHIC_DRAFT, mpDrawView->IsGrafDraft() ) );
-    rSet.Put( SfxBoolItem( SID_FILL_DRAFT, mpDrawView->IsFillDraft() ) );
-    rSet.Put( SfxBoolItem( SID_TEXT_DRAFT, mpDrawView->IsTextDraft() ) );
-    rSet.Put( SfxBoolItem( SID_LINE_DRAFT, mpDrawView->IsLineDraft() ) );
     rSet.Put( SfxBoolItem( SID_HANDLES_DRAFT, !mpDrawView->IsSolidMarkHdl() ) );
     rSet.Put( SfxBoolItem( SID_SOLID_CREATE, mpDrawView->IsSolidDragging() ) );
     rSet.Put( SfxBoolItem( SID_GRID_VISIBLE, mpDrawView->IsGridVisible() ) );
