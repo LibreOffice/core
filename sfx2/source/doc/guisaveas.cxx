@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:07:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:47:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -291,7 +291,9 @@ public:
                                 const ::comphelper::SequenceAsHashMap& aPreselectedFilterPropsHM,
                                 sal_Bool bSetStandardName,
                                 ::rtl::OUString& aUserSelectedName,
-                                sal_Bool bPreselectPassword );
+                                sal_Bool bPreselectPassword,
+                                const ::rtl::OUString& rPath,
+                                sal_Int16 nDialog);
 
     sal_Bool ShowDocumentInfoDialog();
 };
@@ -780,7 +782,9 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                                             const ::comphelper::SequenceAsHashMap& aPreselectedFilterPropsHM,
                                             sal_Bool bSetStandardName,
                                             ::rtl::OUString& aUserSelectedName,
-                                            sal_Bool bPreselectPassword )
+                                            sal_Bool bPreselectPassword,
+                                            const ::rtl::OUString& rPath,
+                                            sal_Int16 nDialog)
 {
     sal_Bool bUseFilterOptions = sal_False;
 
@@ -848,7 +852,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         else
         {
             // This is the normal dialog
-            pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nMust, nDont );
+            pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont );
         }
 
         if( aDocServiceName.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) )
@@ -876,7 +880,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     else
     {
         // This is the normal dialog
-        pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nMust, nDont );
+        pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nDialog, nMust, nDont );
         pFileDlg->CreateMatcher( aDocServiceName );
     }
 
@@ -970,6 +974,9 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
             ? SvtPathOptions().GetGraphicPath() : SvtPathOptions().GetWorkPath();
         pFileDlg->SetDisplayDirectory( sDirectory );
     }
+
+    if ( rPath.getLength() )
+        pFileDlg->SetDisplayDirectory( rPath );
 
     uno::Reference < view::XSelectionSupplier > xSel( GetModel()->getCurrentController(), uno::UNO_QUERY );
     if ( xSel.is() && xSel->getSelection().hasValue() )
@@ -1349,11 +1356,33 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
 
     if ( aFileNameIter == aModelData.GetMediaDescr().end() )
     {
+        sal_Int16 nDialog = SFX2_IMPL_DIALOG_CONFIG;
+        ::rtl::OUString aPath;
+        ::comphelper::SequenceAsHashMap::const_iterator aDlgIter =
+            aModelData.GetMediaDescr().find( ::rtl::OUString::createFromAscii( "UseSystemDialog" ) );
+        if ( aDlgIter != aModelData.GetMediaDescr().end() )
+        {
+            sal_Bool bUseSystemDialog = sal_True;
+            if ( aDlgIter->second >>= bUseSystemDialog )
+                if ( bUseSystemDialog )
+                    nDialog = SFX2_IMPL_DIALOG_SYSTEM;
+                else
+                    nDialog = SFX2_IMPL_DIALOG_OOO;
+        }
+
+        ::comphelper::SequenceAsHashMap::const_iterator aPathIter =
+            aModelData.GetMediaDescr().find( ::rtl::OUString::createFromAscii( "FolderName" ) );
+        if ( aPathIter != aModelData.GetMediaDescr().end() )
+            aPathIter->second >>= aPath;
+
         sal_Bool bExit = sal_False;
         ::rtl::OUString aUserSelectedName;
         while ( !bExit )
         {
-            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aUserSelectedName, bPreselectPassword );
+            bUseFilterOptions = aModelData.OutputFileDialog( nStoreMode, aFilterProps, bSetStandardName, aUserSelectedName, bPreselectPassword, aPath, nDialog );
+
+            // in case the dialog is opend a second time the folder should be the same as before, not what was handed over by parameters
+            aPath = ::rtl::OUString();
             if ( nStoreMode == SAVEAS_REQUESTED )
             {
                 // in case of saving check filter for possible alien warning
