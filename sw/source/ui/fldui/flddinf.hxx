@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddinf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:36:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:32:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@
 /*--------------------------------------------------------------------
    Beschreibung:
  --------------------------------------------------------------------*/
-
+class SfxDocumentInfoItem;
 class SwFldDokInfPage : public SwFldPage
 {
     FixedText           aTypeFT;
@@ -72,6 +72,7 @@ class SwFldDokInfPage : public SwFldPage
     CheckBox            aFixedCB;
 
     SvLBoxEntry*        pSelEntry;
+    com::sun::star::uno::Sequence < ::rtl::OUString > aPropertyNames;
 
     String              aInfoStr;
 
