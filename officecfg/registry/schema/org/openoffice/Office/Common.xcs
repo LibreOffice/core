@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 10:43:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:25:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -878,7 +878,7 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				<info>
 					<desc>Specifies if passwords can be stored persistently.</desc>
 				</info>
-				<value>true</value>
+				<value>false</value>
 			</prop>
 			<prop oor:name="HasMaster" oor:type="xs:boolean">
 				<info>
@@ -2314,6 +2314,13 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 					</info>
 					<value>false</value>
 				</prop>
+                                <prop oor:name="HyperlinksWithCtrlClick" oor:type="xs:boolean">
+                                        <info>
+                                                <author>PB</author>
+                                                <desc>Specifies whether ctrl-click is required to follow hyperlinks.</desc>
+                                        </info>
+                                        <value>true</value>
+                                </prop>
 				<prop oor:name="MacroSecurityLevel" oor:type="xs:int">
 					<info>
 						<author>GT</author>
