@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorcache.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:40:27 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:44:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,9 +245,24 @@ void AcceleratorCache::removeKey(const css::awt::KeyEvent& aKey)
 }
 
 //-----------------------------------------------
-void AcceleratorCache::removeCommand(const ::rtl::OUString& /*sCommand*/)
+void AcceleratorCache::removeCommand(const ::rtl::OUString& sCommand)
 {
-    LOG_WARNING("AcceleratorCache::removeCommand()", "TODO implement me")
+    // SAFE -> ----------------------------------
+    WriteGuard aWriteLock(m_aLock);
+
+    const TKeyList&                            lKeys = getKeysByCommand(sCommand);
+    AcceleratorCache::TKeyList::const_iterator pKey ;
+    for (  pKey  = lKeys.begin();
+           pKey != lKeys.end()  ;
+         ++pKey                 )
+    {
+        const css::awt::KeyEvent& rKey = *pKey;
+        removeKey(rKey);
+    }
+    m_lCommand2Keys.erase(sCommand);
+
+    aWriteLock.unlock();
+    // <- SAFE ----------------------------------
 }
 
 } // namespace framework
