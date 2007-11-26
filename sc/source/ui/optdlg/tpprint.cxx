@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpprint.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:54:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:42:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #undef SC_DLLIMPLEMENTATION
 
-
+#include <svtools/eitem.hxx>
 
 #include "tpprint.hxx"
 #include "printopt.hxx"
@@ -108,8 +108,17 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
         aOptions = SC_MOD()->GetPrintOptions();
     }
 
+    if ( SFX_ITEM_SET == rCoreSet.GetItemState( SID_PRINT_SELECTEDSHEET, FALSE , &pItem ) )
+    {
+        BOOL bChecked = ( (const SfxBoolItem*)pItem )->GetValue();
+        aSelectedSheetsCB.Check( bChecked );
+    }
+    else
+    {
+        aSelectedSheetsCB.Check( !aOptions.GetAllSheets() );
+    }
+
     aSkipEmptyPagesCB.Check( aOptions.GetSkipEmpty() );
-    aSelectedSheetsCB.Check( !aOptions.GetAllSheets() );
     aSkipEmptyPagesCB.SaveValue();
     aSelectedSheetsCB.SaveValue();
 }
@@ -118,19 +127,26 @@ void ScTpPrintOptions::Reset( const SfxItemSet& rCoreSet )
 
 BOOL ScTpPrintOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 {
-    if (   aSkipEmptyPagesCB.GetSavedValue() != aSkipEmptyPagesCB.IsChecked()
-        || aSelectedSheetsCB.GetSavedValue() != aSelectedSheetsCB.IsChecked() )
+    rCoreAttrs.ClearItem( SID_PRINT_SELECTEDSHEET );
+
+    bool bSkipEmptyChanged = ( aSkipEmptyPagesCB.GetSavedValue() != aSkipEmptyPagesCB.IsChecked() );
+    bool bSelectedSheetsChanged = ( aSelectedSheetsCB.GetSavedValue() != aSelectedSheetsCB.IsChecked() );
+
+    if ( bSkipEmptyChanged || bSelectedSheetsChanged )
     {
         ScPrintOptions aOpt;
-
         aOpt.SetSkipEmpty( aSkipEmptyPagesCB.IsChecked() );
         aOpt.SetAllSheets( !aSelectedSheetsCB.IsChecked() );
-
         rCoreAttrs.Put( ScTpPrintItem( SID_SCPRINTOPTIONS, aOpt ) );
+        if ( bSelectedSheetsChanged )
+        {
+            rCoreAttrs.Put( SfxBoolItem( SID_PRINT_SELECTEDSHEET, aSelectedSheetsCB.IsChecked() ) );
+        }
         return TRUE;
     }
     else
+    {
         return FALSE;
+    }
 }
-
 
