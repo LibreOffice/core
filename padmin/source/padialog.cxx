@@ -4,9 +4,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 15:01:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:17:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,10 +199,12 @@ long PADialog::Notify( NotifyEvent& rEv )
         (rEv.GetType() == EVENT_GETFOCUS || rEv.GetType() == EVENT_LOSEFOCUS )
       )
     {
-        if( m_rPIManager.checkPrintersChanged( false ) )
+        if( m_rPIManager.checkPrintersChanged( true ) )
         {
+            String aSelectEntry = m_aDevicesLB.GetSelectEntry();
             UpdateDevice();
             UpdateText();
+            m_aDevicesLB.SelectEntry( aSelectEntry );
         }
     }
     return ModalDialog::Notify( rEv );
