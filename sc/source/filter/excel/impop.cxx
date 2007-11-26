@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:09:14 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:41:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -781,7 +781,7 @@ void ImportExcel::Hideobj( void )
     {
         case 1:                         // Placeholders
             eOle   = VOBJ_MODE_SHOW;    // in Excel 97 werden nur Charts als Platzhalter angezeigt
-            eChart = VOBJ_MODE_DUMMY;
+            eChart = VOBJ_MODE_SHOW;    //#i80528# VOBJ_MODE_DUMMY replaced by VOBJ_MODE_SHOW now
             eDraw  = VOBJ_MODE_SHOW;
             break;
         case 2:                         // Hide all
