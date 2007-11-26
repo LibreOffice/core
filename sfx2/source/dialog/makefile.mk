@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: obo $ $Date: 2007-06-11 14:02:00 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 18:22:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,9 @@ EXCEPTIONSFILES=\
         $(SLO)$/itemconnect.obj     \
         $(SLO)$/mailmodel.obj		\
         $(SLO)$/partwnd.obj         \
-        $(SLO)$/recfloat.obj \
-        $(SLO)$/templdlg.obj
+        $(SLO)$/recfloat.obj        \
+        $(SLO)$/templdlg.obj        \
+        $(SLO)$/newerverwarn.obj
 
 SLOFILES =\
         $(EXCEPTIONSFILES)			\
@@ -99,7 +100,8 @@ SRC1FILES =\
         templdlg.src		\
         versdlg.src			\
         printopt.src        \
-        srchdlg.src
+        srchdlg.src         \
+        newerverwarn.src
 
 .IF "$(BUILD_VER_STRING)"!=""
 .IF "$(GUI)"=="UNX"
