@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdetc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 13:21:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:53:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,11 @@
 #include <vcl/svapp.hxx> //add CHINA001
 #endif
 
+//#i80528#
+#ifndef _SDR_CONTACT_VIEWCONTACT_HXX
+#include <svx/sdr/contact/viewcontact.hxx>
+#endif
+
 /******************************************************************************
 * Globale Daten der DrawingEngine
 ******************************************************************************/
@@ -249,19 +254,20 @@ BOOL OLEObjCache::UnloadObj(SdrOle2Obj* pObj)
     BOOL bUnloaded = FALSE;
     if (pObj)
     {
-        BOOL bVisible = FALSE;
-          SdrViewIter aIter(pObj);
-        SdrView* pView = aIter.FirstView();
+        //#i80528# The old mechanism is completely useless, only taking into account if
+        // in all views the GrafDraft feature is used. This will nearly never have been the
+        // case since no one ever used this option.
+        //
+        // A much better (and working) criteria would be the VOC contact count.
+        // The quesion is what will happen whe i make it work now suddenly? I
+        // will try it for 2.4.
+        const sdr::contact::ViewContact& rViewContact = pObj->GetViewContact();
+        const bool bVisible(rViewContact.HasViewObjectContacts() && !rViewContact.IsPreviewRendererOnly());
 
-        while (!bVisible && pView!=NULL)
+        if(!bVisible)
         {
-            bVisible = !pView->IsGrafDraft();
-            if (!bVisible)
-                pView = aIter.NextView();
-        }
-
-        if (!bVisible)
             bUnloaded = pObj->Unload();
+        }
     }
 
     return bUnloaded;
