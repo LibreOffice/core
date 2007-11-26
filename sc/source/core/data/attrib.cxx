@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrib.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:42:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:41:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1389,16 +1389,16 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
 
 String ScViewObjectModeItem::GetValueText( USHORT nVal ) const
 {
-    DBG_ASSERT( nVal <= VOBJ_MODE_DUMMY, "enum overflow!" );
+    DBG_ASSERT( nVal <= VOBJ_MODE_HIDE, "enum overflow!" );
 
-    return ScGlobal::GetRscString( STR_VOBJ_MODE_SHOW + nVal );
+    return ScGlobal::GetRscString( STR_VOBJ_MODE_SHOW + (nVal % 2));
 }
 
 //------------------------------------------------------------------------
 
 USHORT ScViewObjectModeItem::GetValueCount() const
 {
-    return 3;
+    return 2;
 }
 
 //------------------------------------------------------------------------
@@ -1430,7 +1430,11 @@ SfxPoolItem* ScViewObjectModeItem::Create(
     {
         USHORT nVal;
         rStream >> nVal;
-        return new ScViewObjectModeItem( Which(), (ScVObjMode)nVal );
+
+        //#i80528# adapt to new range eventually
+        if((USHORT)VOBJ_MODE_HIDE < nVal) nVal = (USHORT)VOBJ_MODE_SHOW;
+
+        return new ScViewObjectModeItem( Which(), (ScVObjMode)nVal);
     }
 }
 
