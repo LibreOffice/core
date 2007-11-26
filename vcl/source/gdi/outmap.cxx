@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outmap.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:13:23 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:12:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -426,6 +426,8 @@ inline void ImplCalcMapResolution( const MapMode& rMapMode,
 static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
 {
+    // To "use" it...
+    (void) nThres;
 #ifdef USE_64BIT_INTS
 #if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
@@ -489,6 +491,8 @@ static long ImplLogicToPixel( long n, long nDPI, long nMapNum, long nMapDenom,
 static long ImplPixelToLogic( long n, long nDPI, long nMapNum, long nMapDenom,
                               long nThres )
 {
+    // To "use" it...
+   (void) nThres;
 #ifdef USE_64BIT_INTS
 #if (SAL_TYPES_SIZEOFLONG < 8)
     if( (+n < nThres) && (-n < nThres) )
@@ -1045,7 +1049,11 @@ basegfx::B2DHomMatrix OutputDevice::GetViewTransformation() const
 {
     if(mbMap)
     {
-        const_cast< OutputDevice* >(this)->ImplInitOutDevData();
+        // #i82615#
+        if(!mpOutDevData)
+        {
+            const_cast< OutputDevice* >(this)->ImplInitOutDevData();
+        }
 
         if(!mpOutDevData->mpViewTransform)
         {
@@ -1077,6 +1085,12 @@ basegfx::B2DHomMatrix OutputDevice::GetInverseViewTransformation() const
 {
     if(mbMap)
     {
+        // #i82615#
+        if(!mpOutDevData)
+        {
+            const_cast< OutputDevice* >(this)->ImplInitOutDevData();
+        }
+
         if(!mpOutDevData->mpInverseViewTransform)
         {
             GetViewTransformation();
