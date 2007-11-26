@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 10:01:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:38:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,6 +225,10 @@
 #endif
 
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
+#include "com/sun/star/task/XMasterPasswordHandling.hpp"
+#include "com/sun/star/task/XPasswordContainer.hpp"
+#include "securityoptions.hxx"
+#include "webconninfo.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -1388,20 +1392,15 @@ void SvxScriptExecListBox::RequestHelp( const HelpEvent& rHEvt )
 
 SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet )
     :SfxTabPage         ( pParent, SVX_RES( RID_SVXPAGE_INET_SECURITY ), rSet )
-    ,maSecOptionsFL     ( this, SVX_RES( FL_SEC_SECOPTIONS ) )
-    ,maSecOptionsFI     ( this, SVX_RES( FI_SEC_SECOPTIONS ) )
-    ,maSaveOrSendDocsFI ( this, SVX_RES( FI_SEC_SAVEORSENDDOCS ) )
-    ,maSaveOrSendDocsCB ( this, SVX_RES( CB_SEC_SAVEORSENDDOCS ) )
-    ,maSignDocsFI       ( this, SVX_RES( FI_SEC_SIGNDOCS ) )
-    ,maSignDocsCB       ( this, SVX_RES( CB_SEC_SIGNDOCS ) )
-    ,maPrintDocsFI      ( this, SVX_RES( FI_SEC_PRINTDOCS ) )
-    ,maPrintDocsCB      ( this, SVX_RES( CB_SEC_PRINTDOCS ) )
-    ,maCreatePdfFI      ( this, SVX_RES( FI_SEC_CREATEPDF ) )
-    ,maCreatePdfCB      ( this, SVX_RES( CB_SEC_CREATEPDF ) )
-    ,maRemovePersInfoFI ( this, SVX_RES( FI_SEC_REMOVEPERSINFO ) )
-    ,maRemovePersInfoCB ( this, SVX_RES( CB_SEC_REMOVEPERSINFO ) )
-    ,maRecommPasswdFI   ( this, SVX_RES( FI_SEC_RECOMMPASSWD ) )
-    ,maRecommPasswdCB   ( this, SVX_RES( CB_SEC_RECOMMPASSWD ) )
+
+    ,maSecurityOptionsFL( this, SVX_RES( FL_SEC_SECURITYOPTIONS ) )
+    ,maSecurityOptionsFI( this, SVX_RES( FI_SEC_SECURITYOPTIONS ) )
+    ,maSecurityOptionsPB( this, SVX_RES( PB_SEC_SECURITYOPTIONS ) )
+    ,maPasswordsFL      ( this, SVX_RES( FL_SEC_PASSWORDS ) )
+    ,maSavePasswordsCB  ( this, SVX_RES( CB_SEC_SAVEPASSWORDS ) )
+    ,maMasterPasswordPB ( this, SVX_RES( PB_SEC_MASTERPASSWORD ) )
+    ,maMasterPasswordFI ( this, SVX_RES( FI_SEC_MASTERPASSWORD ) )
+    ,maShowPasswordsPB  ( this, SVX_RES( PB_SEC_SHOWPASSWORDS ) )
     ,maMacroSecFL       ( this, SVX_RES( FL_SEC_MACROSEC ) )
     ,maMacroSecFI       ( this, SVX_RES( FI_SEC_MACROSEC ) )
     ,maMacroSecPB       ( this, SVX_RES( PB_SEC_MACROSEC ) )
@@ -1409,15 +1408,22 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
     ,maRecommReadOnlyCB ( this, SVX_RES( CB_SEC_RECOMMREADONLY ) )
     ,maRecordChangesCB  ( this, SVX_RES( CB_SEC_RECORDCHANGES ) )
     ,maProtectRecordsPB ( this, SVX_RES( PB_SEC_PROTRECORDS ) )
+
     ,mpSecOptions       ( new SvtSecurityOptions )
+    ,mpSecOptDlg        ( NULL )
     ,meRedlingMode      ( RL_NONE )
     ,msProtectRecordsStr(       SVX_RES( STR_SEC_PROTRECORDS ) )
     ,msUnprotectRecordsStr(     SVX_RES( STR_SEC_UNPROTRECORDS ) )
+    ,msPasswordStoringDeactivateStr( SVX_RES( STR_SEC_NOPASSWDSAVE ) )
 {
     FreeResource();
 
     InitControls();
 
+    maSecurityOptionsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, SecurityOptionsHdl ) );
+    maSavePasswordsCB.SetClickHdl( LINK( this, SvxSecurityTabPage, SavePasswordHdl ) );
+    maMasterPasswordPB.SetClickHdl( LINK( this, SvxSecurityTabPage, MasterPasswordHdl ) );
+    maShowPasswordsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ShowPasswordsHdl ) );
     maMacroSecPB.SetClickHdl( LINK( this, SvxSecurityTabPage, MacroSecPBHdl ) );
     maProtectRecordsPB.SetClickHdl( LINK( this, SvxSecurityTabPage, ProtectRecordsPBHdl ) );
     maRecordChangesCB.SetClickHdl( LINK( this, SvxSecurityTabPage, RecordChangesCBHdl ) );
@@ -1428,10 +1434,103 @@ SvxSecurityTabPage::SvxSecurityTabPage( Window* pParent, const SfxItemSet& rSet 
 SvxSecurityTabPage::~SvxSecurityTabPage()
 {
     delete mpSecOptions;
+    delete mpSecOptDlg;
 }
 
-IMPL_LINK( SvxSecurityTabPage, AdvancedPBHdl, void*, EMPTYARG )
+IMPL_LINK( SvxSecurityTabPage, SecurityOptionsHdl, PushButton*, EMPTYARG )
 {
+    if ( !mpSecOptDlg )
+        mpSecOptDlg = new svx::SecurityOptionsDialog( this, mpSecOptions );
+    mpSecOptDlg->Execute();
+    return 0;
+}
+
+IMPL_LINK( SvxSecurityTabPage, SavePasswordHdl, void*, EMPTYARG )
+{
+    try
+    {
+        Reference< task::XMasterPasswordHandling > xMasterPasswd(
+            comphelper::getProcessServiceFactory()->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.PasswordContainer" ) ) ),
+            UNO_QUERY_THROW );
+
+        if ( maSavePasswordsCB.IsChecked() )
+        {
+            sal_Bool bOldValue = xMasterPasswd->allowPersistentStoring( sal_True );
+            xMasterPasswd->removeMasterPassword();
+            if ( xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() ) )
+            {
+                maMasterPasswordPB.Enable( TRUE );
+                maShowPasswordsPB.Enable( TRUE );
+            }
+            else
+            {
+                xMasterPasswd->allowPersistentStoring( bOldValue );
+                maSavePasswordsCB.Check( FALSE );
+            }
+        }
+        else
+        {
+            QueryBox aQuery( this, WB_YES_NO|WB_DEF_NO, msPasswordStoringDeactivateStr );
+            USHORT nRet = aQuery.Execute();
+
+            if( RET_YES == nRet )
+            {
+                xMasterPasswd->allowPersistentStoring( sal_False );
+                maMasterPasswordPB.Enable( FALSE );
+                maShowPasswordsPB.Enable( FALSE );
+            }
+            else
+            {
+                maSavePasswordsCB.Check( TRUE );
+                maMasterPasswordPB.Enable( TRUE );
+                maShowPasswordsPB.Enable( TRUE );
+            }
+        }
+    }
+    catch( Exception& )
+    {
+        maSavePasswordsCB.Check( !maSavePasswordsCB.IsChecked() );
+    }
+
+    return 0;
+}
+
+IMPL_LINK( SvxSecurityTabPage, MasterPasswordHdl, PushButton*, EMPTYARG )
+{
+    try
+    {
+        Reference< task::XMasterPasswordHandling > xMasterPasswd(
+            comphelper::getProcessServiceFactory()->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.PasswordContainer" ) ) ),
+            UNO_QUERY );
+
+        if ( xMasterPasswd.is() && xMasterPasswd->isPersistentStoringAllowed() )
+            xMasterPasswd->changeMasterPassword( Reference< task::XInteractionHandler >() );
+    }
+    catch( Exception& )
+    {}
+
+    return 0;
+}
+
+IMPL_LINK( SvxSecurityTabPage, ShowPasswordsHdl, PushButton*, EMPTYARG )
+{
+    try
+    {
+        Reference< task::XMasterPasswordHandling > xMasterPasswd(
+            comphelper::getProcessServiceFactory()->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.PasswordContainer" ) ) ),
+            UNO_QUERY );
+
+        if ( xMasterPasswd.is() && xMasterPasswd->isPersistentStoringAllowed() && xMasterPasswd->authorizateWithMasterPassword( Reference< task::XInteractionHandler>() ) )
+        {
+            svx::WebConnectionInfoDialog aDlg( this );
+            aDlg.Execute();
+        }
+    }
+    catch( Exception& )
+    {}
     return 0;
 }
 
@@ -1569,8 +1668,6 @@ void SvxSecurityTabPage::CheckRecordChangesState( void )
 
 void SvxSecurityTabPage::InitControls()
 {
-    const long nOffset = 10;
-
     // Hide all controls which belong to the macro security button in case the macro
     // security settings managed by the macro security dialog opened via the button
     // are all readonly or if the macros are disabled in general.
@@ -1602,47 +1699,75 @@ void SvxSecurityTabPage::InitControls()
             (*pCurrent)->SetPosPixel( aNewPos );
         }
     }
-    else
+
+    // one button too small for its text?
+    sal_Int32 i = 0;
+    long nBtnTextWidth = 0;
+    Window* pButtons[] = { &maSecurityOptionsPB, &maMasterPasswordPB,
+                            &maShowPasswordsPB, &maMacroSecPB, &maProtectRecordsPB };
+    Window** pButton = pButtons;
+    const sal_Int32 nBCount = sizeof( pButtons ) / sizeof( pButtons[ 0 ] );
+    for ( ; i < nBCount; ++i, ++pButton )
     {
-        // if the button text is too wide, then broaden the button
-        String sText = maMacroSecPB.GetText();
-        long nTxtW = maMacroSecPB.GetTextWidth( sText );
-        if ( sText.Search( '~' ) == STRING_NOTFOUND )
-            nTxtW += nOffset;
-        long nBtnW = maMacroSecPB.GetSizePixel().Width();
-        if ( nTxtW > nBtnW )
+        long nTemp = (*pButton)->GetCtrlTextWidth( (*pButton)->GetText() );
+        if ( nTemp > nBtnTextWidth )
+            nBtnTextWidth = nTemp;
+    }
+    nBtnTextWidth = nBtnTextWidth * 115 / 100; // a little offset
+    long nButtonWidth = maSecurityOptionsPB.GetSizePixel().Width();
+    long nMaxWidth = nButtonWidth * 130 / 100;
+    nBtnTextWidth = std::min( nBtnTextWidth, nMaxWidth );
+    if ( nBtnTextWidth > nButtonWidth )
+    {
+        // so make the buttons broader and its control in front of it smaller
+        long nDelta = nBtnTextWidth - nButtonWidth;
+        pButton = pButtons;
+        for ( i = 0; i < nBCount; ++i, ++pButton )
         {
-            // broaden the button
-            long nDelta = nTxtW - nBtnW;
-            Size aNewSize = maMacroSecPB.GetSizePixel();
-            aNewSize.Width() += nDelta;
-            maMacroSecPB.SetSizePixel( aNewSize );
-            Point aNewPos = maMacroSecPB.GetPosPixel();
+            Point aNewPos = (*pButton)->GetPosPixel();
             aNewPos.X() -= nDelta;
-            maMacroSecPB.SetPosPixel( aNewPos );
-            // and narrow the fixedtext of the left side
-            aNewSize = maMacroSecFI.GetSizePixel();
+            Size aNewSize = (*pButton)->GetSizePixel();
+            aNewSize.Width() += nDelta;
+            (*pButton)->SetPosSizePixel( aNewPos, aNewSize );
+        }
+
+        Window* pControls[] = { &maSecurityOptionsFI, &maSavePasswordsCB,
+                                &maMasterPasswordFI, &maMacroSecFI,
+                                &maRecommReadOnlyCB, &maRecordChangesCB };
+        Window** pControl = pControls;
+        const sal_Int32 nCCount = sizeof( pControls ) / sizeof( pControls[ 0 ] );
+        for ( i = 0; i < nCCount; ++i, ++pControl )
+        {
+            Size aNewSize = (*pControl)->GetSizePixel();
             aNewSize.Width() -= nDelta;
-            maMacroSecFI.SetSizePixel( aNewSize );
+            (*pControl)->SetSizePixel( aNewSize );
         }
     }
 
-    long nTxtW1 = maProtectRecordsPB.GetTextWidth( msProtectRecordsStr );
-    if ( msProtectRecordsStr.Search( '~' ) == STRING_NOTFOUND )
-        nTxtW1 += nOffset;
-    long nTxtW2 = maProtectRecordsPB.GetTextWidth( msUnprotectRecordsStr );
-    if ( msUnprotectRecordsStr.Search( '~' ) == STRING_NOTFOUND )
-        nTxtW2 += nOffset;
-    long nTxtW = Max( nTxtW1, nTxtW2 );
-    long nBtnW = maProtectRecordsPB.GetSizePixel().Width();
-    if ( nTxtW > nBtnW )
+    maMasterPasswordPB.Enable( FALSE );
+    maShowPasswordsPB.Enable( FALSE );
+
+    // initialize the password saving checkbox
+    try
     {
-        // broaden the button
-        long nDelta = nTxtW - nBtnW;
-        Size aNewSize = maProtectRecordsPB.GetSizePixel();
-        aNewSize.Width() += nDelta;
-        maProtectRecordsPB.SetSizePixel( aNewSize );
+        Reference< task::XMasterPasswordHandling > xMasterPasswd(
+            comphelper::getProcessServiceFactory()->createInstance(
+                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.task.PasswordContainer" ) ) ),
+            UNO_QUERY_THROW );
+
+        if ( xMasterPasswd->isPersistentStoringAllowed() )
+        {
+            maMasterPasswordPB.Enable( TRUE );
+            maShowPasswordsPB.Enable( TRUE );
+            maSavePasswordsCB.Check( TRUE );
+        }
     }
+    catch( Exception& )
+    {
+        maSavePasswordsCB.Enable( FALSE );
+    }
+
+
 }
 
 SfxTabPage* SvxSecurityTabPage::Create(Window* pParent, const SfxItemSet& rAttrSet )
@@ -1682,16 +1807,15 @@ namespace
         return b;
     }
 
-    bool CheckAndSave( SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, const CheckBox& _rCtrl, bool& _rModfied )
+    bool CheckAndSave( SvtSecurityOptions& _rOpt, SvtSecurityOptions::EOption _eOpt, const bool _bIsChecked, bool& _rModfied )
     {
-        bool    bModified = false;
-        if( _rOpt.IsOptionEnabled( _eOpt ) )
+        bool bModified = false;
+        if ( _rOpt.IsOptionEnabled( _eOpt ) )
         {
-            bool    bNew = _rCtrl.IsChecked();
-            bModified = _rOpt.IsOptionSet( _eOpt ) != bNew;
-            if( bModified )
+            bModified = _rOpt.IsOptionSet( _eOpt ) != _bIsChecked;
+            if ( bModified )
             {
-                _rOpt.SetOption( _eOpt, bNew );
+                _rOpt.SetOption( _eOpt, _bIsChecked );
                 _rModfied = true;
             }
         }
@@ -1704,12 +1828,16 @@ BOOL SvxSecurityTabPage::FillItemSet( SfxItemSet& )
 {
     bool bModified = false;
 
-    CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SAVEORSEND, maSaveOrSendDocsCB, bModified );
-    CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SIGNING, maSignDocsCB, bModified );
-    CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_PRINT, maPrintDocsCB, bModified );
-    CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_CREATEPDF, maCreatePdfCB, bModified );
-    CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO, maRemovePersInfoCB, bModified );
-    CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD, maRecommPasswdCB, bModified );
+    if ( mpSecOptDlg )
+    {
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SAVEORSEND, mpSecOptDlg->IsSaveOrSendDocsChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SIGNING, mpSecOptDlg->IsSignDocsChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_PRINT, mpSecOptDlg->IsPrintDocsChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_CREATEPDF, mpSecOptDlg->IsCreatePdfChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO, mpSecOptDlg->IsRemovePersInfoChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD, mpSecOptDlg->IsRecommPasswdChecked(), bModified );
+        CheckAndSave( *mpSecOptions, SvtSecurityOptions::E_CTRLCLICK_HYPERLINK, mpSecOptDlg->IsCtrlHyperlinkChecked(), bModified );
+    }
 
     // document options
     SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
@@ -1727,13 +1855,6 @@ BOOL SvxSecurityTabPage::FillItemSet( SfxItemSet& )
 
 void SvxSecurityTabPage::Reset( const SfxItemSet& )
 {
-    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SAVEORSEND, maSaveOrSendDocsCB, maSaveOrSendDocsFI );
-    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_SIGNING, maSignDocsCB, maSignDocsFI );
-    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_PRINT, maPrintDocsCB, maPrintDocsFI );
-    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_CREATEPDF, maCreatePdfCB, maCreatePdfFI );
-    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_REMOVEPERSONALINFO, maRemovePersInfoCB, maRemovePersInfoFI );
-    EnableAndSet( *mpSecOptions, SvtSecurityOptions::E_DOCWARN_RECOMMENDPASSWORD, maRecommPasswdCB, maRecommPasswdFI );
-
     String sNewText = msProtectRecordsStr;
     SfxObjectShell* pCurDocShell = SfxObjectShell::Current();
     if( pCurDocShell )
