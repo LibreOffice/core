@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupage.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:30:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:01:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,12 @@
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
+#include <svx/xbtmpit.hxx>
+#include <svx/xsetit.hxx>
+#include <svtools/itempool.hxx>
+#include <svx/ulspitem.hxx>
+#include <svx/lrspitem.hxx>
+
 #include "glob.hrc"
 #include <svx/shaditem.hxx>
 #include <svx/boxitem.hxx>
@@ -87,7 +93,7 @@
 #include <svx/lrspitem.hxx>
 #include <svx/pbinitem.hxx>
 #include <sfx2/app.hxx>
-
+#include <svx/opengrf.hxx>
 
 #include "strings.hrc"
 #include "sdpage.hxx"
@@ -321,13 +327,39 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
         }
     }
 
-    // create the dialog
-    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-    std::auto_ptr<SfxAbstractTabDialog> pDlg( pFact ? pFact->CreateSdTabPageDialog(NULL, &aMergedAttr, mpDocSh, mbDisplayBackgroundTabPage ) : 0 );
-    if( pDlg.get() && pDlg->Execute() == RET_OK )
+    std::auto_ptr< SfxItemSet > pTempSet;
+
+    if( GetSlotID() == SID_SELECT_BACKGROUND )
     {
-        SfxItemSet aTempSet(*pDlg->GetOutputItemSet());
-        pStyleSheet->AdjustToFontHeight(aTempSet);
+        SvxOpenGraphicDialog    aDlg(SdResId(STR_SET_BACKGROUND_PICTURE));
+
+        if( aDlg.Execute() == GRFILTER_OK )
+        {
+            Graphic     aGraphic;
+            int nError = aDlg.GetGraphic(aGraphic);
+            if( nError == GRFILTER_OK )
+            {
+                pTempSet.reset( new SfxItemSet( mpDoc->GetPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST, 0) );
+
+                pTempSet->Put( XFillStyleItem( XFILL_BITMAP ) );
+                pTempSet->Put( XFillBitmapItem( String(), XOBitmap(aGraphic) ) );
+                pTempSet->Put( XFillBmpStretchItem( TRUE ));
+                pTempSet->Put( XFillBmpTileItem( FALSE ));
+            }
+        }
+    }
+    else
+    {
+        // create the dialog
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+        std::auto_ptr<SfxAbstractTabDialog> pDlg( pFact ? pFact->CreateSdTabPageDialog(NULL, &aMergedAttr, mpDocSh, mbDisplayBackgroundTabPage ) : 0 );
+        if( pDlg.get() && pDlg->Execute() == RET_OK )
+            pTempSet.reset( new SfxItemSet(*pDlg->GetOutputItemSet()) );
+    }
+
+    if( pTempSet.get() )
+    {
+        pStyleSheet->AdjustToFontHeight(*pTempSet);
 
         if( mbDisplayBackgroundTabPage )
         {
@@ -338,17 +370,17 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
             {
                 if( aMergedAttr.GetItemState( i ) != SFX_ITEM_DEFAULT )
                 {
-                    if( aTempSet.GetItemState( i ) == SFX_ITEM_DEFAULT )
-                        aTempSet.Put( aMergedAttr.Get( i ) );
+                    if( pTempSet->GetItemState( i ) == SFX_ITEM_DEFAULT )
+                        pTempSet->Put( aMergedAttr.Get( i ) );
                     else
-                        if( aMergedAttr.GetItem( i ) != aTempSet.GetItem( i ) )
+                        if( aMergedAttr.GetItem( i ) != pTempSet->GetItem( i ) )
                             bChanges = TRUE;
                 }
             }
 
             // if the background for this page was set to invisible, the background-object has to be deleted, too.
-            if( ( ( (XFillStyleItem*) aTempSet.GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ||
-                ( ( aTempSet.GetItemState( XATTR_FILLSTYLE ) == SFX_ITEM_DEFAULT ) &&
+            if( ( ( (XFillStyleItem*) pTempSet->GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ||
+                ( ( pTempSet->GetItemState( XATTR_FILLSTYLE ) == SFX_ITEM_DEFAULT ) &&
                     ( ( (XFillStyleItem*) aMergedAttr.GetItem( XATTR_FILLSTYLE ) )->GetValue() == XFILL_NONE ) ) )
                 mbPageBckgrdDeleted = TRUE;
 
@@ -385,18 +417,18 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
             // zurueckgesetzen (sonst landen INVALIDs oder
             // Pointer auf die DefaultItems in der Vorlage;
             // beides wuerde die Attribut-Vererbung unterbinden)
-            aTempSet.ClearInvalidItems();
+            pTempSet->ClearInvalidItems();
 
             if( mbMasterPage )
             {
-                StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, (SfxStyleSheet*)pStyleSheet, &aTempSet);
+                StyleSheetUndoAction* pAction = new StyleSheetUndoAction(mpDoc, (SfxStyleSheet*)pStyleSheet, &(*pTempSet.get()));
                 mpDocSh->GetUndoManager()->AddUndoAction(pAction);
-                pStyleSheet->GetItemSet().Put( aTempSet );
+                pStyleSheet->GetItemSet().Put( *(pTempSet.get()) );
                 pStyleSheet->Broadcast(SfxSimpleHint(SFX_HINT_DATACHANGED));
             }
 
             const SfxPoolItem *pItem;
-            if( SFX_ITEM_SET == aTempSet.GetItemState( EE_PARA_WRITINGDIR, sal_False, &pItem ) )
+            if( SFX_ITEM_SET == pTempSet->GetItemState( EE_PARA_WRITINGDIR, sal_False, &pItem ) )
             {
                 sal_uInt32 nVal = ((SvxFrameDirectionItem*)pItem)->GetValue();
                 mpDoc->SetDefaultWritingMode( nVal == FRMDIR_HORI_RIGHT_TOP ? ::com::sun::star::text::WritingMode_RL_TB : ::com::sun::star::text::WritingMode_LR_TB );
@@ -415,7 +447,7 @@ const SfxItemSet* FuPage::ExecuteDialog( Window* pParent )
             }
         }
 
-        aNewAttr.Put(aTempSet);
+        aNewAttr.Put(*(pTempSet.get()));
         mrReq.Done( aNewAttr );
 
         return mrReq.GetArgs();
