@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2007-10-15 16:27:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:13:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
 
         // If Parent is disabled, then we search for a modal dialog
         // in this frame
-        if ( pParent && !pParent->IsInputEnabled() )
+        if ( pParent && (!pParent->IsInputEnabled() || pParent->IsInModalMode()) )
         {
             ImplSVData* pSVData = ImplGetSVData();
             Dialog*     pExeDlg = pSVData->maWinData.mpLastExecuteDlg;
@@ -328,7 +328,7 @@ void Dialog::ImplInit( Window* pParent, WinBits nStyle )
                 // Nur wenn er sichtbar und enabled ist
                 if ( pParent->ImplGetFirstOverlapWindow()->IsWindowOrChild( pExeDlg, TRUE ) &&
                      pExeDlg->IsReallyVisible() &&
-                     pExeDlg->IsEnabled() && pExeDlg->IsInputEnabled() )
+                     pExeDlg->IsEnabled() && pExeDlg->IsInputEnabled() && !pExeDlg->IsInModalMode() )
                 {
                     pParent = pExeDlg;
                     break;
@@ -657,7 +657,10 @@ BOOL Dialog::ImplStartExecuteModal()
         DBG_ASSERT( pParent->IsReallyVisible(),
                     "Dialog::StartExecuteModal() - Parent not visible" );
         DBG_ASSERT( pParent->IsInputEnabled(),
-                    "Dialog::StartExecuteModal() - Parent already disabled, use another parent to ensure modality!" );
+                    "Dialog::StartExecuteModal() - Parent input disabled, use another parent to ensure modality!" );
+        DBG_ASSERT( ! pParent->IsInModalMode(),
+                    "Dialog::StartExecuteModal() - Parent already modally disabled, use another parent to ensure modality!" );
+
     }
 #endif
 
@@ -878,19 +881,10 @@ void Dialog::SetModalInputMode( BOOL bModal )
         if ( pParent )
         {
             // #103716# dialogs should always be modal to the whole frame window
-            mpDialogParent = pParent->mpWindowImpl->mpFrameWindow;
-
             // #115933# disable the whole frame hierarchie, useful if our parent
             // is a modeless dialog
-            Window *pFrame = mpDialogParent;
-            while( pFrame )
-            {
-                pFrame->EnableInput( FALSE, TRUE, TRUE, this );
-                if( pFrame->GetParent() )
-                    pFrame = pFrame->GetParent()->mpWindowImpl->mpFrameWindow;
-                else
-                    pFrame = NULL;
-            }
+            mpDialogParent = pParent->mpWindowImpl->mpFrameWindow;
+            mpDialogParent->ImplIncModalCount();
         }
 
     }
@@ -903,16 +897,7 @@ void Dialog::SetModalInputMode( BOOL bModal )
             // #115933# re-enable the whole frame hierarchie again (see above)
             // note that code in getfocus assures that we do not accidentally enable
             // windows that were disabled before
-            Window *pFrame = mpDialogParent;
-            while( pFrame )
-            {
-                pFrame->EnableInput( TRUE, TRUE, TRUE, this );
-                if( pFrame->GetParent() )
-                    pFrame = pFrame->GetParent()->mpWindowImpl->mpFrameWindow;
-                else
-                    pFrame = NULL;
-            }
-
+            mpDialogParent->ImplDecModalCount();
         }
 
         // Enable the prev Modal Dialog
