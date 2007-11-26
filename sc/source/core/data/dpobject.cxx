@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:43:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:19:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -599,6 +599,13 @@ void ScDPObject::WriteRefsTo( ScDPObject& r ) const
     r.SetOutRange( aOutRange );
     if ( pSheetDesc )
         r.SetSheetDesc( *pSheetDesc );
+}
+
+bool ScDPObject::GetDataFieldPositionData( std::vector< sheet::DataPilotFieldFilter >& rFilters, const ScAddress& rPos )
+{
+    CreateOutput();             // create xSource and pOutput if not already done
+
+    return pOutput->GetDataFieldPositionData( rFilters, rPos );
 }
 
 BOOL ScDPObject::IsDimNameInUse( const String& rName ) const
