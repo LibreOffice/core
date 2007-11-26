@@ -4,9 +4,9 @@
  *
  *  $RCSfile: displayinfo.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:02:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,13 +245,6 @@ namespace sdr
             // access to master page painting flag
             sal_Bool GetMasterPagePainting() const;
             void SetMasterPagePainting(sal_Bool bNew);
-
-            // Infos about draft painting. These may get bitfield members later.
-            sal_Bool IsDraftText() const;
-            sal_Bool IsDraftGraphic() const;
-            sal_Bool IsDraftLine() const;
-            sal_Bool IsDraftFill() const;
-            sal_Bool IsHideDraftGraphic() const;
         };
     } // end of namespace contact
 } // end of namespace sdr
