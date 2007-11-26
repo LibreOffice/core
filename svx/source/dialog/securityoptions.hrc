@@ -1,0 +1,88 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: securityoptions.hrc,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:39:34 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _SVX_SECURITYOPTIONS_HRC
+#define _SVX_SECURITYOPTIONS_HRC
+
+#define FL_WARNINGS         10
+#define FI_WARNINGS         11
+#define FI_SAVESENDDOCS     12
+#define CB_SAVESENDDOCS     13
+#define FI_SIGNDOCS         14
+#define CB_SIGNDOCS         15
+#define FI_PRINTDOCS        16
+#define CB_PRINTDOCS        17
+#define FI_CREATEPDF        18
+#define CB_CREATEPDF        19
+#define FL_OPTIONS          20
+#define FI_REMOVEINFO       21
+#define CB_REMOVEINFO       22
+#define FI_RECOMMENDPWD     23
+#define CB_RECOMMENDPWD     24
+#define FI_CTRLHYPERLINK    25
+#define CB_CTRLHYPERLINK    26
+#define FL_BUTTONS          27
+#define PB_OK               28
+#define PB_CANCEL           29
+#define PB_HELP             30
+
+#define DLG_WIDTH           260
+
+#define COL_0               (RSC_SP_DLG_INNERBORDER_LEFT)
+#define COL_1               (COL_0+RSC_SP_FLGR_SPACE_X)
+#define COL_2               (COL_1+RSC_SP_CHK_TEXTINDENT)
+#define COL_4               (DLG_WIDTH-RSC_SP_DLG_INNERBORDER_RIGHT)
+#define COL_3               (COL_4-RSC_SP_FLGR_SPACE_X)
+
+#define COL_C               (COL_4-RSC_CD_PUSHBUTTON_WIDTH)
+#define COL_B               (COL_C-RSC_SP_CTRL_X-RSC_CD_PUSHBUTTON_WIDTH)
+#define COL_A               (COL_B-RSC_SP_CTRL_GROUP_X-RSC_CD_PUSHBUTTON_WIDTH)
+
+#define CHECKBOX_WIDTH      ((COL_3-COL_2-RSC_SP_CTRL_X)/2)
+
+#define ROW_0               (RSC_SP_DLG_INNERBORDER_TOP)
+#define ROW_1               (ROW_0+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_2               (ROW_1+2*RSC_CD_FIXEDTEXT_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_3               (ROW_2+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_4               (ROW_3+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_5               (ROW_4+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_6               (ROW_5+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_7               (ROW_6+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_8               (ROW_7+RSC_CD_CHECKBOX_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_9               (ROW_8+RSC_CD_FIXEDLINE_HEIGHT+RSC_SP_FLGR_SPACE_Y)
+#define ROW_10              (ROW_9+RSC_CD_PUSHBUTTON_HEIGHT+RSC_SP_DLG_INNERBORDER_BOTTOM)
+
+#endif // #ifndef _SVX_SECURITYOPTIONS_HRC
+
