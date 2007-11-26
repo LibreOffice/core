@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:12:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:05:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,7 +256,7 @@ void XPMWriter::ImplWriteColor( USHORT nNumber )
     *mpOStm << "c #";   // # zeigt einen folgenden Hexwert an
     const BitmapColor& rColor = mpAcc->GetPaletteColor( nNumber );
     nTmp = ( rColor.GetRed() << 16 ) | ( rColor.GetGreen() << 8 ) | rColor.GetBlue();
-    for ( char i = 20; i >= 0 ; i-=4 )
+    for ( signed char i = 20; i >= 0 ; i-=4 )
     {
         if ( ( j = (BYTE)( nTmp >> i ) & 0xf ) > 9 )
             j += 'A' - 10;
