@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 14:06:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:11:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,6 +788,32 @@ public:
     BOOL                IsInputEnabled() const;
     void                AlwaysEnableInput( BOOL bAlways, BOOL bChild = TRUE );
     BOOL                IsAlwaysEnableInput() const;
+    /** usually event handlers (see AddEventListener and AddChildEventListener)
+    are not called on disabled, modal or input disabled windows. There are however rare cases
+    in which one wants a Window or rather one of its Control subclasses to
+    not evaluate events but still react to those events externally. In these
+    rare cases call SetCallHandlersOnInputDisabled( true ) to have your handler
+    called anyway.
+
+    Currently only mouse events get this special treatment.
+
+    Use this sparingly, chances are if you want to use it you're wroking around
+    the real problem.
+
+    @param bCall
+    Enable/Disable calling event handlers for this disabled, modal or input disabled window
+    */
+    void                SetCallHandlersOnInputDisabled( bool bCall );
+    /** get state of SetCallHandlersOnInputDisabled
+
+    @returns whether handlers are called regardless of input enabled state
+    */
+    bool                IsCallHandlersOnInputDisabled() const;
+    /** A window is in modal mode if one of its children or subchildren
+        is a running modal window (a modal dialog)
+
+        @returns TRUE if a child or subchild is a running modal window
+    */
     BOOL                IsInModalMode() const;
 
     void                SetActivateMode( USHORT nMode );
