@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpoption.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:14:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:34:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,11 +193,6 @@ SfxTabPage* SdTpOptionsSnap::Create( Window* pWindow,
 
 SdTpOptionsContents::SdTpOptionsContents( Window* pParent, const SfxItemSet& rInAttrs  ) :
         SfxTabPage          ( pParent, SdResId( TP_OPTIONS_CONTENTS ), rInAttrs ),
-        aGrpViewSubstitute  ( this, SdResId( GRP_VIEW_SUBSTITUTE ) ),
-        aCbxExternGraphic   ( this, SdResId( CBX_EXTERN_GRAPHIC ) ),
-        aCbxOutlineMode     ( this, SdResId( CBX_OUTLINEMODE ) ),
-        aCbxNoText          ( this, SdResId( CBX_NOTEXT ) ),
-        aCbxHairlineMode    ( this, SdResId( CBX_HAIRLINEMODE ) ),
         aGrpDisplay         ( this, SdResId( GRP_DISPLAY ) ),
         aCbxRuler           ( this, SdResId( CBX_RULER ) ),
         aCbxDragStripes     ( this, SdResId( CBX_HELPLINES ) ),
@@ -218,23 +213,6 @@ SdTpOptionsContents::~SdTpOptionsContents()
 BOOL SdTpOptionsContents::FillItemSet( SfxItemSet& rAttrs )
 {
     BOOL bModified = FALSE;
-
-    if( aCbxExternGraphic.GetSavedValue()   != aCbxExternGraphic.IsChecked() ||
-        aCbxOutlineMode.GetSavedValue()     != aCbxOutlineMode.IsChecked() ||
-        aCbxNoText.GetSavedValue()          != aCbxNoText.IsChecked() ||
-        aCbxHairlineMode.GetSavedValue()    != aCbxHairlineMode.IsChecked() )
-    {
-        SdOptionsContentsItem aOptsItem( ATTR_OPTIONS_CONTENTS );
-
-        aOptsItem.GetOptionsContents().SetExternGraphic( aCbxExternGraphic.IsChecked() );
-        aOptsItem.GetOptionsContents().SetOutlineMode( aCbxOutlineMode.IsChecked() );
-        aOptsItem.GetOptionsContents().SetNoText( aCbxNoText.IsChecked() );
-        aOptsItem.GetOptionsContents().SetHairlineMode( aCbxHairlineMode.IsChecked() );
-
-        rAttrs.Put( aOptsItem );
-
-        bModified = TRUE;
-    }
 
     if( aCbxRuler.GetSavedValue()           != aCbxRuler.IsChecked() ||
         aCbxMoveOutline.GetSavedValue()     != aCbxMoveOutline.IsChecked() ||
@@ -262,16 +240,6 @@ void SdTpOptionsContents::Reset( const SfxItemSet& rAttrs )
 {
     SdOptionsContentsItem aOptsItem( (const SdOptionsContentsItem&) rAttrs.
                         Get( ATTR_OPTIONS_CONTENTS ) );
-
-    aCbxExternGraphic.Check( aOptsItem.GetOptionsContents().IsExternGraphic() );
-    aCbxOutlineMode.Check(aOptsItem.GetOptionsContents().IsOutlineMode() );
-    aCbxNoText.Check( aOptsItem.GetOptionsContents().IsNoText() );
-    aCbxHairlineMode.Check( aOptsItem.GetOptionsContents().IsHairlineMode() );
-
-    aCbxExternGraphic.SaveValue();
-    aCbxOutlineMode.SaveValue();
-    aCbxNoText.SaveValue();
-    aCbxHairlineMode.SaveValue();
 
     SdOptionsLayoutItem aLayoutItem( (const SdOptionsLayoutItem&) rAttrs.
                         Get( ATTR_OPTIONS_LAYOUT ) );
