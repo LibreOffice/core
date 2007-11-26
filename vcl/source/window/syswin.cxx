@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:22:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:15:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -704,15 +704,15 @@ void SystemWindow::SetWindowStateData( const WindowStateData& rData )
                         if( abs(g.nX-aState.mnX) < 2 && abs(g.nY-aState.mnY) < 5 )
                         {
                             long displacement = g.nTopDecoration ? g.nTopDecoration : 20;
-                            if( aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > (unsigned long) aDesktop.nRight ||
-                                aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > (unsigned long) aDesktop.nBottom )
+                            if( (unsigned long) (aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > (unsigned long) aDesktop.nRight ||
+                                (unsigned long) (aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > (unsigned long) aDesktop.nBottom )
                             {
                                 // displacing would leave screen
                                 aState.mnX = g.nLeftDecoration ? g.nLeftDecoration : 10; // should result in (0,0)
                                 aState.mnY = displacement;
                                 if( bWrapped ||
-                                    aState.mnX + displacement + aState.mnWidth + g.nRightDecoration > (unsigned long) aDesktop.nRight ||
-                                    aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration > (unsigned long) aDesktop.nBottom )
+                                    (unsigned long) (aState.mnX + displacement + aState.mnWidth + g.nRightDecoration) > (unsigned long) aDesktop.nRight ||
+                                    (unsigned long) (aState.mnY + displacement + aState.mnHeight + g.nBottomDecoration) > (unsigned long) aDesktop.nBottom )
                                     break;  // further displacement not possible -> break
                                 // avoid endless testing
                                 bWrapped = TRUE;
