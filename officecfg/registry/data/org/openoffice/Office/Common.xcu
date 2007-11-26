@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:51:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:24:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -561,6 +561,13 @@
   <node oor:name="Save">
     <node oor:name="Document">
       <prop oor:name="SaveBackwardCompatibleODF" oor:type="xs:boolean">
+        <value>true</value>
+      </prop>
+    </node>
+  </node>
+  <node oor:name="Security">
+    <node oor:name="Scripting">
+      <prop oor:name="HyperlinksWithCtrlClick" oor:type="xs:boolean">
         <value>true</value>
       </prop>
     </node>
