@@ -4,9 +4,9 @@
  *
  *  $RCSfile: displayinfo.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:43:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,28 +379,6 @@ namespace sdr
             {
                 mbMasterPagePainting = bNew;
             }
-        }
-
-        // Infos about draft painting. These may get bitfield members later.
-        sal_Bool DisplayInfo::IsDraftText() const
-        {
-            return (0 != (mpPaintInfoRec->nPaintMode & SDRPAINTMODE_DRAFTTEXT));
-        }
-        sal_Bool DisplayInfo::IsDraftGraphic() const
-        {
-            return (0 != (mpPaintInfoRec->nPaintMode & SDRPAINTMODE_DRAFTGRAF));
-        }
-        sal_Bool DisplayInfo::IsDraftLine() const
-        {
-            return (0 != (mpPaintInfoRec->nPaintMode & SDRPAINTMODE_DRAFTLINE));
-        }
-        sal_Bool DisplayInfo::IsDraftFill() const
-        {
-            return (0 != (mpPaintInfoRec->nPaintMode & SDRPAINTMODE_DRAFTFILL));
-        }
-        sal_Bool DisplayInfo::IsHideDraftGraphic() const
-        {
-            return (0 != (mpPaintInfoRec->nPaintMode & SDRPAINTMODE_HIDEDRAFTGRAF));
         }
     } // end of namespace contact
 } // end of namespace sdr
