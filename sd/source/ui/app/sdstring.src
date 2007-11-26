@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdstring.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:21:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:00:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,116 +34,6 @@
  ************************************************************************/
 
 #include "sdstring.hrc"
-String STR_SOLID
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Durchgängig : Durchgõngig */
-    Text [ en-US ] = "Continuous" ;
-};
-String STR_GRADIENT
-{
-    Text [ en-US ] = "Gradient" ;
-};
-String STR_DESC_GRADIENT
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den neuen Farbverlauf ein: : Geben Sie hier bitte den Namen f³r den neuen Farbverlauf ein: */
-    Text [ en-US ] = "Please enter a name for the new gradient:" ;
-};
-String STR_DEL_GRADIENT
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Farbverlauf löschen : Farbverlauf l÷schen */
-    Text [ en-US ] = "Delete gradient" ;
-};
-String STR_ASK_DEL_GRADIENT
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Soll der Farbverlauf wirklich gelöscht werden? : Soll der Farbverlauf wirklich gel÷scht werden? */
-    Text [ en-US ] = "Do you want to delete the gradient?" ;
-};
-String STR_ASK_CHANGE_GRADIENT
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Der Farbverlauf wurde geändert und nicht gesichert. \nSie können den selektierten Farbverlauf ändern \noder einen neuen Farbverlauf hinzufügen. : Der Farbverlauf wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Farbverlauf õndern \noder einen neuen Farbverlauf hinzuf³gen. */
-    Text [ en-US ] = "The gradient was modified without saving. \nYou can change the selected gradient \nor add a new one." ;
-};
-String STR_BITMAP
-{
-    Text [ en-US ] = "Bitmap" ;
-};
-String STR_DESC_NEW_BITMAP
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die neue Bitmap ein: : Geben Sie hier bitte den Namen f³r die neue Bitmap ein: */
-    Text [ en-US ] = "Please enter a name for the new bitmap:" ;
-};
-String STR_DESC_EXT_BITMAP
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für die externe Bitmap ein: : Geben Sie hier bitte den Namen f³r die externe Bitmap ein: */
-    Text [ en-US ] = "Please enter the name of the external bitmap:" ;
-};
-String STR_DEL_BITMAP
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Bitmap löschen : Bitmap l÷schen */
-    Text [ en-US ] = "Delete bitmap" ;
-};
-String STR_ASK_DEL_BITMAP
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Soll die Bitmap wirklich gelöscht werden? : Soll die Bitmap wirklich gel÷scht werden? */
-    Text [ en-US ] = "Do you want to delete the bitmap?" ;
-};
-String STR_ASK_CHANGE_BITMAP
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Die Bitmap wurde geändert und nicht gesichert. \nSie können die selektierte Bitmap ändern \noder eine neue Bitmap hinzufügen. : Die Bitmap wurde geõndert und nicht gesichert. \nSie k÷nnen die selektierte Bitmap õndern \noder eine neue Bitmap hinzuf³gen. */
-    Text [ en-US ] = "The bitmap was modified without saving. \nYou can change the selected bitmap \\or add a new one." ;
-};
-String STR_LINESTYLE
-{
-    Text [ en-US ] = "Line style" ;
-};
-String STR_DESC_LINESTYLE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Geben Sie hier bitte den Namen für den neuen Linienstil ein: : Geben Sie hier bitte den Namen f³r den neuen Linienstil ein: */
-    Text [ en-US ] = "Please enter a name for the new line style:" ;
-};
-String STR_DEL_LINESTYLE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Linienstil löschen : Linienstil l÷schen */
-    Text [ en-US ] = "Delete line style" ;
-};
-String STR_ASK_DEL_LINESTYLE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Soll der Linienstil wirklich gelöscht werden? : Soll der Linienstil wirklich gel÷scht werden? */
-    Text [ en-US ] = "Do you want to delete the line style?" ;
-};
-String STR_ASK_CHANGE_LINESTYLE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Der Linienstil wurde geändert und nicht gesichert. \nSie können den selektierten Linienstil ändern \noder einen neuen Linienstil hinzufügen. : Der Linienstil wurde geõndert und nicht gesichert. \nSie k÷nnen den selektierten Linienstil õndern \noder einen neuen Linienstil hinzuf³gen. */
-    Text [ en-US ] = "The line style was modified without saving. \nYou can change the selected line style \nor add a new one." ;
-};
-String STR_INVISIBLE
-{
-    Text [ en-US ] = "Invisible" ;
-};
-String STR_COLOR
-{
-    Text [ en-US ] = "Color" ;
-};
-String STR_HATCH
-{
-    Text [ en-US ] = "Hatching" ;
-};
-String STR_CHANGE
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Ändern : Žndern */
-    Text [ en-US ] = "Modify" ;
-};
-String STR_ADD
-{
-    /* ### ACHTUNG: Neuer Text in Resource? Hinzufügen : Hinzuf³gen */
-    Text [ en-US ] = "Add" ;
-};
-
-String STR_SAR_TITLE
-{
-    Text [ en-US ] = "Find & Replace";
-};
-
 String STR_SAR_NOT_FOUND
 {
     Text [ en-US ] = "Search key not found.";
@@ -168,26 +58,3 @@ String STR_SAR_WRAP_BACKWARD_DRAW
 {
     Text [ en-US ] = "%PRODUCTNAME Draw has searched to the beginning of the document. Do you want to continue at the end?";
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
