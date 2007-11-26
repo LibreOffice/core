@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngr.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:06:47 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 18:00:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,14 +39,20 @@
 ASM=
 AFLAGS=
 
-SOLAR_JAVA=
+SOLAR_JAVA*=
 JAVAFLAGSDEBUG=-g
 
 # filter for supressing verbose messages from linker
-LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
+#not needed at the moment
+#LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=$(PTHREAD_CFLAGS) -DGLIBC=2 -DARM32 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -DSTLPORT_VERSION=400
+CDEFS+=$(PTHREAD_CFLAGS) -DGLIBC=2 -DARM32 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=400
+
+# enable visibility define in "sal/types.h"
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CDEFS += -DHAVE_GCC_VISIBILITY_FEATURE
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 
 # this is a platform with JAVA support
 .IF "$(SOLAR_JAVA)"!=""
@@ -56,7 +62,7 @@ JAVA_RUNTIME=-ljava
 .ELSE
 JAVA_RUNTIME=-ljava_g
 .ENDIF
-.ENDIF 
+.ENDIF
 
 # architecture dependent flags for the C and C++ compiler that can be changed by
 # exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
@@ -66,22 +72,35 @@ ARCH_FLAGS*=
 CXX*=g++
 # name of C Compiler
 CC*=gcc
-# flags for C and C++ Compiler
-# do not use standard header search paths
-# here the Compiler is installed in the solenv hierarchy, to be changed
-# if installed elsewhere
-CFLAGS=-nostdinc -c
-# flags for the C++ Compiler
-CFLAGSCC=$(ARCH_FLAGS)
+.IF "$(SYSBASE)"!=""
+CFLAGS_SYSBASE:=-isystem $(SYSBASE)$/usr$/include
+CXX+:=$(CFLAGS_SYSBASE)
+CC+:=$(CFLAGS_SYSBASE)
+.ENDIF          # "$(SYSBASE)"!=""
+CFLAGS+=-Wreturn-type -fmessage-length=0 -c
+# flags to enable build with symbols; required for crashdump feature
+.IF "$(ENABLE_SYMBOLS)"=="SMALL"
+CFLAGSENABLESYMBOLS=-g1
+.ELSE
+CFLAGSENABLESYMBOLS=-g # was temporarily commented out, reenabled before Beta
 
+.ENDIF
+
+CFLAGS+=-march=armv5te -fno-omit-frame-pointer
+# flags for the C++ Compiler
+CFLAGSCC= -pipe $(ARCH_FLAGS)
 # Flags for enabling exception handling
-CFLAGSEXCEPTIONS=-fexceptions
+CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
-CFLAGSCXX=$(ARCH_FLAGS)
-
+CFLAGSCXX= -pipe $(ARCH_FLAGS)
+CFLAGSCXX+= -Wno-ctor-dtor-privacy
+CFLAGSCXX+= -fno-use-cxa-atexit
 PICSWITCH:=-fpic
+.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
+CFLAGSCXX += -fvisibility-inlines-hidden
+.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=
@@ -97,24 +116,37 @@ CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
 # Compiler flags for enabling optimizations
-CFLAGSOPT=-O2
+.IF "$(PRODUCT)"!=""
+CFLAGSOPT=-Os -fno-strict-aliasing             # optimizing for products
+CFLAGSOPT+=-Wuninitialized                             # not supported without optimization
+.ELSE  # "$(PRODUCT)"!=""
+CFLAGSOPT=                                                     # no optimizing for non products
+.ENDIF # "$(PRODUCT)"!=""
 # Compiler flags for disabling optimizations
-CFLAGSNOOPT=-O
+CFLAGSNOOPT=-O0
 # Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
+# Enable all warnings
+CFLAGSWALL=-Wall
+# Set default warn level
+CFLAGSDFLTWARN=
 
 # switches for dynamic and static linking
 STATIC		= -Wl,-Bstatic
 DYNAMIC		= -Wl,-Bdynamic
 
 # name of linker
-LINK=$(CC)
+LINK*=$(CXX)
+LINKC*=$(CC)
+
 # default linker flags
-LINKFLAGS=
+LINKFLAGSDEFS*=-Wl,-z,defs
+LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
+LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
 
 # linker flags for linking applications
-LINKFLAGSAPPGUI= -Wl,-export-dynamic 
-LINKFLAGSAPPCUI= -Wl,-export-dynamic
+LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
+LINKFLAGSAPPCUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
 # linker flags for linking shared libraries
 LINKFLAGSSHLGUI= -shared
 LINKFLAGSSHLCUI= -shared
@@ -124,14 +156,10 @@ LINKFLAGSPROF=
 LINKFLAGSDEBUG=-g
 LINKFLAGSOPT=
 
-.IF "$(NO_BSYMBOLIC)"==""
-.IF "$(PRJNAME)" != "envtest"
-LINKFLAGSSHLGUI+=-Wl,-Bsymbolic
-LINKFLAGSSHLCUI+=-Wl,-Bsymbolic
-.ENDIF
-.ENDIF				# "$(NO_BSYMBOLIC)"==""
-
-LINKVERSIONMAPFLAG=-Wl,--version-script
+# linker flags for optimization (symbol hashtable)
+# for now, applied to symbol scoped libraries, only
+LINKFLAGSOPTIMIZE*=-Wl,-O1
+LINKVERSIONMAPFLAG=$(LINKFLAGSOPTIMIZE) -Wl,--version-script
 
 SONAME_SWITCH=-Wl,-h
 
@@ -140,17 +168,30 @@ SONAME_SWITCH=-Wl,-h
 STDLIBCPP=-lstdc++
 
 # default objectfilenames to link
+STDOBJVCL=$(L)$/salmain.o
 STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
 # libraries for linking applications
-STDLIBGUIMT=-ldl -lpthread -lm -lstlport_gcc
-STDLIBCUIMT=-ldl -lpthread -lm -lstlport_gcc
+STDLIBGUIMT=-lX11 -ldl -lpthread -lm
+STDLIBCUIMT=-ldl -lpthread -lm
 # libraries for linking shared libraries
-STDSHLGUIMT=-lX11 -lXext -ldl -lpthread -lm -lstlport_gcc
-STDSHLCUIMT=-ldl -lpthread -lm -lstlport_gcc
+STDSHLGUIMT=-lX11 -lXext -ldl -lpthread -lm
+STDSHLCUIMT=-ldl -lpthread -lm
+
+LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
+
+.IF "$(USE_STLP_DEBUG)" != ""
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc_stldebug
+LIBSTLPORTST=$(STATIC) -lstlport_gcc_stldebug $(DYNAMIC)
+.ELSE # "$(USE_STLP_DEBUG)" != ""
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
+LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
+.ENDIF # "$(USE_STLP_DEBUG)" != ""
+
+#FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
 # name of library manager
 LIBMGR=ar
