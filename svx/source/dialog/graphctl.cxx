@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:08:26 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:13:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,8 @@ GraphCtrl::GraphCtrl( Window* pParent, const WinBits nWinBits ) :
     aUpdateTimer.Start();
 
     SetWinStyle( nWinBits );
+
+    EnableRTL( FALSE );
 }
 
 
@@ -153,6 +155,7 @@ GraphCtrl::GraphCtrl( Window* pParent, const ResId& rResId ) :
     aUpdateTimer.SetTimeout( 500 );
     aUpdateTimer.SetTimeoutHdl( LINK( this, GraphCtrl, UpdateHdl ) );
     aUpdateTimer.Start();
+    EnableRTL( FALSE );
 }
 
 
