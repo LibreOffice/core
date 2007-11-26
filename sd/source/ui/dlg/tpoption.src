@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:31:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:35:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,70 +45,36 @@ TabPage TP_OPTIONS_CONTENTS
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
     Text [ en-US ] = "Contents" ;
-    FixedLine GRP_VIEW_SUBSTITUTE
-    {
-        Pos = MAP_APPFONT ( 6 , 3  ) ;
-        Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ en-US ] = "Alternative display" ;
-    };
-    CheckBox CBX_EXTERN_GRAPHIC
-    {
-        Pos = MAP_APPFONT ( 12 , 14  ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Image placeholders" ;
-    };
-    CheckBox CBX_OUTLINEMODE
-    {
-        Pos = MAP_APPFONT ( 12 , 28  ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "C~ontour mode" ;
-    };
-    CheckBox CBX_NOTEXT
-    {
-        Pos = MAP_APPFONT ( 12 , 42  ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Text placeholders" ;
-    };
-    CheckBox CBX_HAIRLINEMODE
-    {
-        Pos = MAP_APPFONT ( 12 , 56  ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
-        TabStop = TRUE ;
-        Text [ en-US ] = "~Line contour only" ;
-    };
     FixedLine GRP_DISPLAY
     {
-        Pos = MAP_APPFONT ( 6 , 72  ) ;
+        Pos = MAP_APPFONT ( 6 , 72 - 69 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text [ en-US ] = "Display" ;
     };
     CheckBox CBX_RULER
     {
-        Pos = MAP_APPFONT ( 12 , 83  ) ;
+        Pos = MAP_APPFONT ( 12 , 83 - 69 ) ;
         Size = MAP_APPFONT ( 134 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Rulers visible" ;
     };
     CheckBox CBX_HELPLINES
     {
-        Pos = MAP_APPFONT ( 12 , 97  ) ;
+        Pos = MAP_APPFONT ( 12 , 97 - 69 ) ;
         Size = MAP_APPFONT ( 134 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Guides when moving" ;
     };
     CheckBox CBX_HANDLES_BEZIER
     {
-        Pos = MAP_APPFONT ( 12 , 111  ) ;
+        Pos = MAP_APPFONT ( 12 , 111 - 69 ) ;
         Size = MAP_APPFONT ( 134 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~All control points in Bézier editor" ;
     };
     CheckBox CBX_MOVE_OUTLINE
     {
-        Pos = MAP_APPFONT ( 12 , 125  ) ;
+        Pos = MAP_APPFONT ( 12 , 125 - 69 ) ;
         Size = MAP_APPFONT ( 134 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Contour of each individual object" ;
