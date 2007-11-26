@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:43:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:46:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2263,14 +2263,6 @@ void ViewShell::ImplApplyViewOptions( const SwViewOption &rOpt )
         Fraction aSnGrWdtY(rSz.Height(), rOpt.GetDivisionY() + 1);
         pDView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
 
-        if ( pOpt->IsDraw() != rOpt.IsDraw() )
-        {
-            BOOL bDraw = !rOpt.IsDraw();
-            pDView->SetLineDraft( bDraw );
-            pDView->SetFillDraft( bDraw );
-            pDView->SetGrafDraft( bDraw );
-            pDView->SetTextDraft( bDraw );
-        }
         if ( pOpt->IsSolidMarkHdl() != rOpt.IsSolidMarkHdl() )
             pDView->SetSolidMarkHdl( rOpt.IsSolidMarkHdl() );
 
