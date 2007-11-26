@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 14:24:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -654,7 +654,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
         index = GetUInt16(ptr, 2, 1);
         ptr += 4;
 
-        if (listFind(glyphlist, (void *) (int) index)) {
+        if (listFind(glyphlist, (void *) (sal_IntPtr) index)) {
 #if OSL_DEBUG_LEVEL > 1
             fprintf(stderr, "Endless loop found in a compound glyph.\n");
             fprintf(stderr, "%d -> ", index);
@@ -668,7 +668,7 @@ static int GetCompoundTTOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPo
 #endif
         }
 
-        listAppend(glyphlist, (void *) (int) index);
+        listAppend(glyphlist, (void *) (sal_IntPtr) index);
 
 #ifdef DEBUG2
         fprintf(stderr,"glyphlist: += %d\n", index);
@@ -852,7 +852,7 @@ static int GetTTGlyphOutline(TrueTypeFont *ttf, sal_uInt32 glyphID, ControlPoint
         if (!glyphlist) {
             glyphlistFlag = 1;
             glyphlist = listNewEmpty();
-            listAppend(glyphlist, (void *) glyphID);
+            listAppend(glyphlist, (void *) (sal_IntPtr) glyphID);
         }
         res = GetCompoundTTOutline(ttf, glyphID, pointArray, metrics, glyphlist);
         if (glyphlistFlag) {
@@ -1948,7 +1948,7 @@ int GetTTGlyphComponents(TrueTypeFont *ttf, sal_uInt32 glyphID, list glyphlist)
     if (glyphID >= ttf->nglyphs) return 0;
     ptr = glyf + ttf->goffsets[glyphID];
 
-    listAppend(glyphlist, (void *) glyphID);
+    listAppend(glyphlist, (void *) (sal_IntPtr) glyphID);
 
     if (GetInt16(ptr, 0, 1) == -1) {
         sal_uInt16 flags, index;
