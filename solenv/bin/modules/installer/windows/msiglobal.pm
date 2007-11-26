@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-23 13:34:41 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 16:30:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -506,7 +506,10 @@ sub get_msidatabasename
     $databasename =~ s/\s//g;
 
     # possibility to overwrite the name with variable DATABASENAME
-    if ( $allvariableshashref->{'DATABASENAME'} ) { $databasename = $allvariableshashref->{'DATABASENAME'}; }
+    if ( $allvariableshashref->{'DATABASENAME'} )
+    {
+        $databasename = $allvariableshashref->{'DATABASENAME'};
+    }
 
     if ( $language )
     {
@@ -947,7 +950,33 @@ sub rename_msi_database_in_installset
     $olddatabasename = $installdir . $installer::globals::separator . $olddatabasename;
 
     my $newdatabasename = get_msidatabasename($allvariableshashref);
+
+    $installer::globals::shortmsidatabasename = $newdatabasename;
+
     $newdatabasename = $installdir . $installer::globals::separator . $newdatabasename;
+
+    installer::systemactions::rename_one_file($olddatabasename, $newdatabasename);
+
+    $installer::globals::msidatabasename = $newdatabasename;
+}
+
+#########################################################################
+# Adding the language to the name of the msi databasename,
+# if this is required (ADDLANGUAGEINDATABASENAME)
+#########################################################################
+
+sub add_language_to_msi_database
+{
+    my ($defaultlanguage, $installdir, $allvariables) = @_;
+
+    my $languagestring = $defaultlanguage;
+    if ( $allvariables->{'USELANGUAGECODE'} ) { $languagestring = installer::windows::language::get_windows_language($defaultlanguage); }
+    my $newdatabasename = $installer::globals::shortmsidatabasename;
+    $newdatabasename =~ s/\.msi\s*$/_$languagestring\.msi/;
+    $installer::globals::shortmsidatabasename = $newdatabasename;
+    $newdatabasename = $installdir . $installer::globals::separator . $newdatabasename;
+
+    my $olddatabasename = $installer::globals::msidatabasename;
 
     installer::systemactions::rename_one_file($olddatabasename, $newdatabasename);
 
@@ -1189,7 +1218,7 @@ sub copy_scpactions_into_installset
 
 sub copy_windows_installer_files_into_installset
 {
-    my ($installdir, $includepatharrayref) = @_;
+    my ($installdir, $includepatharrayref, $allvariables) = @_;
 
     installer::logger::include_header_into_logfile("Copying Windows installer files into installation set");
 
@@ -1197,6 +1226,8 @@ sub copy_windows_installer_files_into_installset
     push(@copyfile, "instmsia.exe");
     push(@copyfile, "instmsiw.exe");
     push(@copyfile, "loader2.exe");
+
+    if ( $allvariables->{'NOLOADERREQUIRED'} ) { @copyfile = (); }
 
     for ( my $i = 0; $i <= $#copyfile; $i++ )
     {
