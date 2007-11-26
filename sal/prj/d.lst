@@ -18,7 +18,7 @@ mkdir: %_DEST%\inc%_EXT%\systools\win32
 ..\%__SRC%\obj\delayloadinit.obj %_DEST%\lib%_EXT%\delayloadinit.obj
 ..\systools\win32\delayload\delayload.hxx %_DEST%\inc%_EXT%\sal\delayload.hxx
 
-..\%__SRC%\lib\lib*.so.* %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\lib*.so* %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\*.sl %_DEST%\lib%_EXT%\*.sl
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\lib\*.dylib.* %_DEST%\lib%_EXT%\*.dylib.*
@@ -38,4 +38,3 @@ mkdir: %_DEST%\inc%_EXT%\systools\win32
 
 ..\%__SRC%\inc\udkversion.h %_DEST%\inc%_EXT%\sal\udkversion.h
 
-linklib: libuno_sal.*.*
