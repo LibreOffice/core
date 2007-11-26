@@ -1,5 +1,5 @@
     <node oor:name="calc8">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">OpenDocument Spreadsheet</value>
+            <value xml:lang="en-US">ODF Spreadsheet</value>
                     </prop>
     </node>

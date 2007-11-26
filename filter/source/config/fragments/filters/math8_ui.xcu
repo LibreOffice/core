@@ -1,5 +1,5 @@
     <node oor:name="math8">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">OpenDocument Formula</value>
+            <value xml:lang="en-US">ODF Formula</value>
                     </prop>
     </node>

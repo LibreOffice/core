@@ -1,5 +1,5 @@
     <node oor:name="impress8_draw">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">OpenDocument Drawing (Impress)</value>
+            <value xml:lang="en-US">ODF Drawing (Impress)</value>
                     </prop>
     </node>

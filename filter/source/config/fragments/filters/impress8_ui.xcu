@@ -1,5 +1,5 @@
     <node oor:name="impress8">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">OpenDocument Presentation</value>
+            <value xml:lang="en-US">ODF Presentation</value>
                     </prop>
     </node>

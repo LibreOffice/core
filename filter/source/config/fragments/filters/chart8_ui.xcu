@@ -1,5 +1,5 @@
     <node oor:name="chart8">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">OpenDocument Chart</value>
+            <value xml:lang="en-US">ODF Chart</value>
                     </prop>
     </node>

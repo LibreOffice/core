@@ -1,5 +1,5 @@
     <node oor:name="draw8">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">OpenDocument Drawing</value>
+            <value xml:lang="en-US">ODF Drawing</value>
                     </prop>
     </node>

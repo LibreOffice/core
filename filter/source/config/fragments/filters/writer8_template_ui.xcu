@@ -1,5 +1,5 @@
     <node oor:name="writer8_template">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">OpenDocument Text Template</value>
+            <value xml:lang="en-US">ODF Text Document Template</value>
                     </prop>
     </node>
