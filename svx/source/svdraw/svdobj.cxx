@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:51:05 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:53:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1016,10 +1016,7 @@ sal_Bool SdrObject::SingleObjectPainter(XOutputDevice& rXOut, const SdrPaintInfo
     return sal_True;
 }
 
-::std::auto_ptr< SdrLineGeometry >  SdrObject::CreateLinePoly(
-    sal_Bool bForceOnePixel,
-    sal_Bool bForceTwoPixel,
-    sal_Bool bIsLineDraft ) const
+::std::auto_ptr< SdrLineGeometry >  SdrObject::CreateLinePoly(sal_Bool bForceOnePixel, sal_Bool bForceTwoPixel) const
 {
     basegfx::B2DPolyPolygon aAreaPolyPolygon;
     basegfx::B2DPolyPolygon aLinePolyPolygon;
@@ -1028,8 +1025,8 @@ sal_Bool SdrObject::SingleObjectPainter(XOutputDevice& rXOut, const SdrPaintInfo
     basegfx::B2DPolyPolygon aTmpPolyPolygon(TakeXorPoly(TRUE));
 
     // get ImpLineStyleParameterPack
-    ImpLineStyleParameterPack aLineAttr(GetMergedItemSet(), bForceOnePixel || bForceTwoPixel || bIsLineDraft);
-    ImpLineGeometryCreator aLineCreator(aLineAttr, aAreaPolyPolygon, aLinePolyPolygon, bIsLineDraft);
+    ImpLineStyleParameterPack aLineAttr(GetMergedItemSet(), bForceOnePixel || bForceTwoPixel);
+    ImpLineGeometryCreator aLineCreator(aLineAttr, aAreaPolyPolygon, aLinePolyPolygon);
 
     // compute single lines
     for(sal_uInt32 a(0L); a < aTmpPolyPolygon.count(); a++)
@@ -1057,8 +1054,7 @@ sal_Bool SdrObject::SingleObjectPainter(XOutputDevice& rXOut, const SdrPaintInfo
     }
 }
 
-::std::auto_ptr< SdrLineGeometry > SdrObject::ImpPrepareLineGeometry( XOutputDevice& rXOut, const SfxItemSet& rSet,
-                                                                      BOOL bIsLineDraft) const
+::std::auto_ptr< SdrLineGeometry > SdrObject::ImpPrepareLineGeometry( XOutputDevice& rXOut, const SfxItemSet& rSet) const
 {
     XLineStyle eXLS = (XLineStyle)((const XLineStyleItem&)rSet.Get(XATTR_LINESTYLE)).GetValue();
     if(eXLS != XLINE_NONE)
@@ -1076,15 +1072,14 @@ sal_Bool SdrObject::SingleObjectPainter(XOutputDevice& rXOut, const SdrPaintInfo
             bForceTwoPixel = FALSE;
 
         // #78210# switch off bForceTwoPixel when line draft mode
-        if(bForceTwoPixel && bIsLineDraft)
+        if(bForceTwoPixel)
         {
             bForceTwoPixel = FALSE;
             bForceOnePixel = TRUE;
         }
 
         // create line geometry
-        return CreateLinePoly(
-            bForceOnePixel, bForceTwoPixel, bIsLineDraft);
+        return CreateLinePoly(bForceOnePixel, bForceTwoPixel);
     }
 
     return ::std::auto_ptr< SdrLineGeometry > (0L);
@@ -1690,7 +1685,15 @@ basegfx::B2DPolyPolygon SdrObject::TakeContour() const
     pClone->SetMergedItemSet(aNewSet);
 
     aMtf.Record( &aBlackHole );
-    aPaintInfo.nPaintMode = SDRPAINTMODE_DRAFTTEXT | SDRPAINTMODE_DRAFTGRAF;
+
+    //#i80528# SDRPAINTMODE_DRAFTTEXT|SDRPAINTMODE_DRAFTGRAF removed, need to test if contour
+    // still works. Maybe i need to add evaluation of graphic and text actions and create
+    // polygons accordingly.
+    // I knew it: With text-using objects, this runs into a recursion with SdrTextObj::DoPaintObject
+    // and the DrawOutliner setup. That setup uses TakeContour itself. Need to protect using the new
+    // SDRPAINTMODE_CONTOUR. I will also use that for graphics.
+    aPaintInfo.nPaintMode = SDRPAINTMODE_CONTOUR;
+
     pClone->SingleObjectPainter( aXOut, aPaintInfo ); // #110094#-17
     delete pClone;
     aMtf.Stop();
@@ -2937,7 +2940,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, BOOL bForceLineDas
 
     if(pRet->LineGeometryUsageIsNecessary())
     {
-        ::std::auto_ptr< SdrLineGeometry > aLineGeom( pRet->CreateLinePoly(sal_False, sal_False, sal_False));
+        ::std::auto_ptr< SdrLineGeometry > aLineGeom( pRet->CreateLinePoly(sal_False, sal_False));
         if( aLineGeom.get() )
         {
             basegfx::B2DPolyPolygon aAreaPolyPolygon = aLineGeom->GetAreaPolyPolygon();
@@ -3607,7 +3610,7 @@ bool SdrObject::ImpAddLineGeomteryForMiteredLines()
                 // get XOR Poly as base
                 basegfx::B2DPolyPolygon aTmpPolyPolygon(TakeXorPoly(TRUE));
                 ImpLineStyleParameterPack aLineAttr(GetMergedItemSet(), false);
-                ImpLineGeometryCreator aLineCreator(aLineAttr, aAreaPolyPolygon, aLinePolyPolygon, true);
+                ImpLineGeometryCreator aLineCreator(aLineAttr, aAreaPolyPolygon, aLinePolyPolygon);
 
                 // compute single lines
                 for(sal_uInt32 a(0L); a < aTmpPolyPolygon.count(); a++)
@@ -3687,16 +3690,6 @@ Rectangle SdrObject::GetBLIPSizeRectangle() const
 void SdrObject::SetBLIPSizeRectangle( const Rectangle& aRect )
 {
     maBLIPSizeRectangle = aRect;
-}
-
-// #b4899532#
-// Force LineStyle with hard attributes to hair line in COL_LIGHTGRAY
-void SdrObject::ImpPrepareLocalItemSetForDraftLine(SfxItemSet& rItemSet) const
-{
-    rItemSet.Put(XLineStyleItem(XLINE_SOLID));
-    rItemSet.Put(XLineWidthItem(0));
-    rItemSet.Put(XLineColorItem(String(), Color(COL_LIGHTGRAY)));
-    rItemSet.Put(XLineTransparenceItem(0));
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
