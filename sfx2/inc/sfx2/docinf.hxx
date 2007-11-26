@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:57:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:34:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,8 +175,8 @@ public:
     BOOL LoadFromBinaryFormat( SotStorage* rStream );
     BOOL SaveToBinaryFormat( SotStorage* rStream ) const;
 
-    BOOL SetCustomProperty(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue);
-
+    BOOL InsertCustomProperty(const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue);
+    com::sun::star::uno::Sequence < ::rtl::OUString > GetCustomPropertyNames() const;
 };
 
 DECL_PTRHINT(SFX2_DLLPUBLIC, SfxDocumentInfoHint, SfxDocumentInfo);
