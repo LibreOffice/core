@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 16:25:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,10 +439,16 @@ PrintDialog* __EXPORT ScPreviewShell::CreatePrintDialog( Window* pParent )
 
     const long   nCurPage    = pPreview->GetPageNo()+1;
     const long   nDocPageMax = pPreview->GetTotalPages();
-    PrintDialog* pDlg        = new PrintDialog( pParent );
+    PrintDialog* pDlg        = new PrintDialog( pParent, true );
 // wenn zu langsam wieder einbauen
 //  if ( pPreview->AllTested() )
 //      nPageMax = pPreview->GetTotalPages();
+
+    pDlg->EnableSheetRange( true, PRINTSHEETS_ALL );
+    pDlg->EnableSheetRange( true, PRINTSHEETS_SELECTED_SHEETS );
+    pDlg->EnableSheetRange( false, PRINTSHEETS_SELECTED_CELLS );
+    bool bAllTabs = SC_MOD()->GetPrintOptions().GetAllSheets();
+    pDlg->CheckSheetRange( bAllTabs ? PRINTSHEETS_ALL : PRINTSHEETS_SELECTED_SHEETS );
 
     if ( nDocPageMax > 0 )
         pDlg->SetRangeText( String::CreateFromInt32( nCurPage ) );
@@ -501,21 +507,8 @@ USHORT __EXPORT ScPreviewShell::Print( SfxProgress& rProgress, BOOL bIsAPI, Prin
 {
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
 
-    // get the list of affected sheets (using the "only selected sheets" option)
-    // before SfxViewShell::Print
-    ScPrintOptions aOptions;
-    const SfxItemSet& rOptionSet = pDocShell->GetPrinter()->GetOptions();
-    const SfxPoolItem* pItem;
-    if ( rOptionSet.GetItemState( SID_SCPRINTOPTIONS, FALSE, &pItem ) == SFX_ITEM_SET )
-    {
-        aOptions = ((const ScTpPrintItem*)pItem)->GetPrintOptions();
-    }
-    else
-    {
-        // use configuration
-        aOptions = SC_MOD()->GetPrintOptions();
-    }
-    bool bAllTabs = aOptions.GetAllSheets();
+    // get the list of affected sheets before SfxViewShell::Print
+    bool bAllTabs = ( pPrintDialog ? ( pPrintDialog->GetCheckedSheetRange() == PRINTSHEETS_ALL ) : SC_MOD()->GetPrintOptions().GetAllSheets() );
 
     ScMarkData aMarkData;
     aMarkData.SelectTable( static_cast< SCTAB >( pPreview->GetTab() ), TRUE );
