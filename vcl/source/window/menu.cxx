@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:52:56 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:14:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3270,7 +3270,7 @@ BOOL MenuBar::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu )
 
     // Enabled-Abfragen, falls diese Methode von einem anderen Fenster gerufen wurde...
     Window* pWin = ImplGetWindow();
-    if ( pWin && pWin->IsEnabled() && pWin->IsInputEnabled() )
+    if ( pWin && pWin->IsEnabled() && pWin->IsInputEnabled()  && ! pWin->IsInModalMode() )
         bDone = ((MenuBarWindow*)pWin)->ImplHandleKeyEvent( rKEvent, bFromMenu );
     return bDone;
 }
