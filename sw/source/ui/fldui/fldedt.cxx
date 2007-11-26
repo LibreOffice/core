@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:46:53 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:32:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
+#include <sfx2/docinf.hxx>
 
 #ifndef _SV_MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -242,9 +242,16 @@ SfxTabPage* SwFldEditDlg::CreatePage(USHORT nGroup)
             nHelpId = HID_EDIT_FLD_REF;
             break;
         case GRP_REG:
-            pTabPage = SwFldDokInfPage::Create(this, *(SfxItemSet*)0);
-            nHelpId = HID_EDIT_FLD_DOKINF;
-            break;
+            {
+                SfxObjectShell* pDocSh = SfxObjectShell::Current();
+                SfxItemSet* pSet = new SfxItemSet( pDocSh->GetPool(), SID_DOCINFO, SID_DOCINFO );
+                com::sun::star::uno::Any aAny;
+                aAny <<= pDocSh->GetDocInfo().GetCustomPropertyNames();
+                pSet->Put( SfxUnoAnyItem( SID_DOCINFO, aAny ) );
+                pTabPage = SwFldDokInfPage::Create(this, *pSet);
+                nHelpId = HID_EDIT_FLD_DOKINF;
+                break;
+            }
         case GRP_DB:
             pTabPage = SwFldDBPage::Create(this, *(SfxItemSet*)0);
             static_cast<SwFldDBPage*>(pTabPage)->SetWrtShell(*pSh);
