@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:07:31 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:42:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@
 #include "validat.hxx"      // fuer HasMacroCalls
 #include "markdata.hxx"
 #include "scmod.hxx"
+#include "printopt.hxx"
 #include "globstr.hrc"
 #include "sc.hrc"
 
@@ -181,9 +182,10 @@ SfxPrinter* ScDocument::GetPrinter(BOOL bCreateIfNotExist)
     {
         SfxItemSet* pSet =
             new SfxItemSet( *xPoolHelper->GetDocPool(),
-                            SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
-                            SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
-                            SID_SCPRINTOPTIONS,        SID_SCPRINTOPTIONS,
+                            SID_PRINTER_NOTFOUND_WARN,  SID_PRINTER_NOTFOUND_WARN,
+                            SID_PRINTER_CHANGESTODOC,   SID_PRINTER_CHANGESTODOC,
+                            SID_PRINT_SELECTEDSHEET,    SID_PRINT_SELECTEDSHEET,
+                            SID_SCPRINTOPTIONS,         SID_SCPRINTOPTIONS,
                             NULL );
 
         SfxMiscCfg* pOffCfg = SFX_APP()->GetMiscConfig();
