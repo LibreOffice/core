@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 15:02:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:38:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #include <tools/urlobj.hxx>
 
 #include "printdlg.hrc"
+#include "controldims.hrc"
 #include <svtools/prnsetup.hxx>
 #include <svtools/printdlg.hxx>
 #include <svtools/svtdata.hxx>
@@ -90,10 +91,12 @@ using namespace com::sun::star;
 
 struct SvtPrinterImpl
 {
-    Printer*    m_pTempPrinter;
-    sal_Bool    m_bHelpDisabled;
+    Printer*        m_pTempPrinter;
+    sal_Bool        m_bHelpDisabled;
+    PrintSheetRange m_eSheetRange;
 
-    SvtPrinterImpl() : m_pTempPrinter( NULL ), m_bHelpDisabled( sal_False ) {}
+    SvtPrinterImpl() :
+        m_pTempPrinter( NULL ), m_bHelpDisabled( sal_False ), m_eSheetRange( PRINTSHEETS_ALL ) {}
     ~SvtPrinterImpl() { delete m_pTempPrinter; }
 };
 
@@ -101,7 +104,7 @@ struct SvtPrinterImpl
 
 // =======================================================================
 
-PrintDialog::PrintDialog( Window* pWindow ) :
+PrintDialog::PrintDialog( Window* pWindow, bool bWithSheetsAndCells ) :
     ModalDialog     ( pWindow, SvtResId( DLG_SVT_PRNDLG_PRINTDLG ) ),
     maFlPrinter     ( this, SvtResId( FL_PRINTER ) ),
     maFtName        ( this, SvtResId( FT_NAME ) ),
@@ -119,25 +122,30 @@ PrintDialog::PrintDialog( Window* pWindow ) :
     maFiPrintFile   ( this, SvtResId( FI_PRINTFILE ) ),
     maFiFaxNo       ( this, SvtResId( FI_FAXNO ) ),
     maEdtFaxNo      ( this, SvtResId( EDT_FAXNO ) ),
-    maBtnBrowse_nomore  ( this, SvtResId( BTN_BROWSE ) ),
-    maFlPrintRange  ( this, SvtResId( FL_PRINTRANGE ) ),
-    maRbtAll        ( this, SvtResId( RBT_ALL ) ),
-    maRbtPages      ( this, SvtResId( RBT_PAGES ) ),
-    maRbtSelection  ( this, SvtResId( RBT_SELECTION ) ),
-    maEdtPages      ( this, SvtResId( EDT_PAGES ) ),
-    maFlCopies      ( this, SvtResId( FL_COPIES ) ),
-    maFtCopies      ( this, SvtResId( FT_COPIES ) ),
-    maNumCopies     ( this, SvtResId( NUM_COPIES ) ),
-    maImgCollate    ( this, SvtResId( IMG_COLLATE ) ),
-    maImgNotCollate ( this, SvtResId( IMG_NOT_COLLATE ) ),
-    maCbxCollate    ( this, SvtResId( CBX_COLLATE ) ),
-    maBtnOptions    ( this, SvtResId( BTN_OPTIONS ) ),
-    maBtnOK         ( this, SvtResId( BTN_OK ) ),
-    maBtnCancel     ( this, SvtResId( BTN_CANCEL ) ),
-    maBtnHelp       ( this, SvtResId( BTN_HELP ) ),
-    maFlSepCopiesRange( this, SvtResId( FL_SEPCOPIESRANGE ) ),
-    maFlSepButtonLine( this, SvtResId( FL_SEPBUTTONLINE ) ),
-    maAllFilterStr  ( SvtResId( STR_ALLFILTER ) )
+    maFlPrint       ( this, SvtResId( FL_PRINT ) ),
+    maRbtAllSheets  ( this, SvtResId( RBT_ALL_SHEETS ) ),
+    maRbtSelectedSheets ( this, SvtResId( RBT_SELECTED_SHEETS ) ),
+    maRbtSelectedCells  ( this, SvtResId( RBT_SELECTED_CELLS ) ),
+    maFlPrintRange      ( this, SvtResId( FL_PRINTRANGE ) ),
+    maRbtAll            ( this, SvtResId( RBT_ALL ) ),
+    maRbtPages          ( this, SvtResId( RBT_PAGES ) ),
+    maEdtPages          ( this, SvtResId( EDT_PAGES ) ),
+    maRbtSelection      ( this, SvtResId( RBT_SELECTION ) ),
+    maFlSepCopiesRange  ( this, SvtResId( FL_SEPCOPIESRANGE ) ),
+    maFlCopies          ( this, SvtResId( FL_COPIES ) ),
+    maFtCopies          ( this, SvtResId( FT_COPIES ) ),
+    maNumCopies         ( this, SvtResId( NUM_COPIES ) ),
+    maImgCollate        ( this, SvtResId( IMG_COLLATE ) ),
+    maImgNotCollate     ( this, SvtResId( IMG_NOT_COLLATE ) ),
+    maCbxCollate        ( this, SvtResId( CBX_COLLATE ) ),
+    maFlSepButtonLine   ( this, SvtResId( FL_SEPBUTTONLINE ) ),
+    maBtnOptions        ( this, SvtResId( BTN_OPTIONS ) ),
+    maBtnOK             ( this, SvtResId( BTN_OK ) ),
+    maBtnCancel         ( this, SvtResId( BTN_CANCEL ) ),
+    maBtnHelp           ( this, SvtResId( BTN_HELP ) ),
+    mbWithSheetsAndCells( bWithSheetsAndCells ),
+    maAllFilterStr      (       SvtResId( STR_ALLFILTER ) )
+
 {
     FreeResource();
 
@@ -153,8 +161,8 @@ PrintDialog::PrintDialog( Window* pWindow ) :
     mbSelection     = FALSE;
     mbFromTo        = FALSE;
     mbRange         = FALSE;
-    mbCollate       = FALSE;
-    mbCollateCheck  = FALSE;
+    mbCollate       = TRUE;
+    mbCollateCheck  = TRUE;
     mbOptions       = FALSE;
 
     maStatusTimer.SetTimeout( IMPL_PRINTDLG_STATUS_UPDATE );
@@ -232,18 +240,30 @@ void PrintDialog::ImplSetInfo()
     {
         maFiPrintFile.Show( FALSE );
         maCbxFilePrint.Show( FALSE );
-        maBtnBrowse_nomore.Show( FALSE );
         maFiFaxNo.Show( TRUE );
         maEdtFaxNo.Show( TRUE );
         Printer* pPrinter = TEMPPRINTER() ? TEMPPRINTER() : mpPrinter;
         maEdtFaxNo.SetText( pPrinter->GetJobValue( String::CreateFromAscii( "FAX#" ) ) );
+
+        Size aFTSize = maFiFaxNo.GetSizePixel();
+        long nTextWidth = maFiFaxNo.GetCtrlTextWidth( maFiFaxNo.GetText() ) + 10;
+        if ( aFTSize.Width() < nTextWidth )
+        {
+            long nDelta = nTextWidth - aFTSize.Width();
+            aFTSize.Width() = aFTSize.Width() + nDelta;
+            maFiFaxNo.SetSizePixel( aFTSize );
+            Size aEdtSize = maEdtFaxNo.GetSizePixel();
+            aEdtSize.Width() = aEdtSize.Width() - nDelta;
+            Point aEdtPos = maEdtFaxNo.GetPosPixel();
+            aEdtPos.X() = aEdtPos.X() + nDelta;
+            maEdtFaxNo.SetPosSizePixel( aEdtPos, aEdtSize );
+        }
     }
     else
 #endif
     {
         maFiPrintFile.Show( TRUE );
         maCbxFilePrint.Show( TRUE );
-        maBtnBrowse_nomore.Show( FALSE );
         maFiFaxNo.Show( FALSE );
         maEdtFaxNo.Show( FALSE );
     }
@@ -327,6 +347,48 @@ void PrintDialog::ImplInitControls()
     // Zusaetze-Button
     if ( mbOptions )
         maBtnOptions.Show();
+
+    if ( !mbWithSheetsAndCells )
+    {
+        Size aMarginSize =
+            LogicToPixel( Size( RSC_SP_CTRL_GROUP_X, RSC_SP_CTRL_GROUP_Y ), MAP_APPFONT );
+        long nTempPos = maImgCollate.GetPosPixel().Y() +
+            maImgCollate.GetSizePixel().Height() +  aMarginSize.Height();
+        long nDelta1 = maFlPrintRange.GetPosPixel().Y() - maFlPrint.GetPosPixel().Y();
+        long nDelta2 = maFlSepButtonLine.GetPosPixel().Y() - nTempPos;
+
+        maFlPrint.Hide();
+        maRbtAllSheets.Hide();
+        maRbtSelectedSheets.Hide();
+        maRbtSelectedCells.Hide();
+        maRbtSelection.Show();
+
+        Size aNewSize = GetSizePixel();
+        aNewSize.Height() -= nDelta2;
+        SetSizePixel( aNewSize );
+        aNewSize = maFlSepCopiesRange.GetSizePixel();
+        aNewSize.Height() -= nDelta2;
+        maFlSepCopiesRange.SetSizePixel( aNewSize );
+
+        long nDelta = nDelta1;
+        Window* pControls[] = { &maFlPrintRange, &maRbtAll,
+                                &maRbtPages, &maEdtPages, &maRbtSelection, NULL,
+                                &maFlSepButtonLine, &maBtnOptions, &maBtnOK,
+                                &maBtnCancel, &maBtnHelp };
+        Window** pCtrl = pControls;
+        const sal_Int32 nCount = sizeof( pControls ) / sizeof( pControls[0] );
+        for ( sal_Int32 i = 0; i < nCount; ++i, ++pCtrl )
+        {
+            if ( NULL == *pCtrl )
+            {
+                nDelta = nDelta2;
+                continue;
+            }
+            Point aNewPos = (*pCtrl)->GetPosPixel();
+            aNewPos.Y() -= nDelta;
+            (*pCtrl)->SetPosPixel( aNewPos );
+        }
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -507,12 +569,13 @@ IMPL_LINK( PrintDialog, ImplModifyControlHdl, void*, p )
     {
         if ( p )
             bNumCopies = TRUE;
-        BOOL bCopies = maNumCopies.GetValue() > 1;
-        maCbxCollate.Enable( bCopies && mbCollate );
+        //BOOL bCopies = maNumCopies.GetValue() > 1;
+        maCbxCollate.Enable( mbCollate );
 
-        if ( !bCopies )
+        /*if ( !bCopies )
             maCbxCollate.Check( FALSE );
-        else if ( mbCollateCheck )
+        else*/
+        if ( mbCollateCheck )
             maCbxCollate.Check( TRUE );
     }
 
@@ -566,6 +629,117 @@ long PrintDialog::OK()
         return maOKHdlLink.Call( this );
     else
         return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+void PrintDialog::EnableSheetRange( bool bEnable, PrintSheetRange eRange )
+{
+    if ( mbWithSheetsAndCells )
+    {
+        switch ( eRange )
+        {
+            case PRINTSHEETS_ALL :
+                maRbtAllSheets.Enable( bEnable != false );
+                break;
+            case PRINTSHEETS_SELECTED_SHEETS :
+                maRbtSelectedSheets.Enable( bEnable != false );
+                break;
+            case PRINTSHEETS_SELECTED_CELLS :
+                maRbtSelectedCells.Enable( bEnable != false );
+                break;
+            default:
+                DBG_ERRORFILE( "PrintDialog::EnableSheetRange(): invalid range" );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+bool PrintDialog::IsSheetRangeEnabled( PrintSheetRange eRange ) const
+{
+    if ( !mbWithSheetsAndCells )
+        return false;
+
+    bool bRet = false;
+    switch ( eRange )
+    {
+        case PRINTSHEETS_ALL :
+            bRet = maRbtAllSheets.IsEnabled() != FALSE;
+            break;
+        case PRINTSHEETS_SELECTED_SHEETS :
+            bRet = maRbtSelectedSheets.IsEnabled() != FALSE;
+            break;
+        case PRINTSHEETS_SELECTED_CELLS :
+            bRet = maRbtSelectedCells.IsEnabled() != FALSE;
+            break;
+        default:
+            DBG_ERRORFILE( "PrintDialog::IsSheetRangeEnabled(): invalid range" );
+    }
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+void PrintDialog::CheckSheetRange( PrintSheetRange eRange )
+{
+    if ( mbWithSheetsAndCells )
+    {
+        switch ( eRange )
+        {
+            case PRINTSHEETS_ALL :
+                maRbtAllSheets.Check();
+                break;
+            case PRINTSHEETS_SELECTED_SHEETS :
+                maRbtSelectedSheets.Check();
+                break;
+            case PRINTSHEETS_SELECTED_CELLS :
+                maRbtSelectedCells.Check();
+                break;
+            default:
+                DBG_ERRORFILE( "PrintDialog::CheckSheetRange(): invalid range" );
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+PrintSheetRange PrintDialog::GetCheckedSheetRange() const
+{
+    PrintSheetRange eRange = PRINTSHEETS_ALL;
+    if ( mbWithSheetsAndCells )
+    {
+        if ( maRbtSelectedSheets.IsChecked() )
+            eRange = PRINTSHEETS_SELECTED_SHEETS;
+        else if ( maRbtSelectedCells.IsChecked() )
+            eRange = PRINTSHEETS_SELECTED_CELLS;
+    }
+    return eRange;
+}
+
+// -----------------------------------------------------------------------
+
+bool PrintDialog::IsSheetRangeChecked( PrintSheetRange eRange ) const
+{
+    if ( !mbWithSheetsAndCells )
+        return false;
+
+    bool bRet = false;
+    switch ( eRange )
+    {
+        case PRINTSHEETS_ALL :
+            bRet = maRbtAllSheets.IsChecked() != FALSE;
+            break;
+        case PRINTSHEETS_SELECTED_SHEETS :
+            bRet = maRbtSelectedSheets.IsChecked() != FALSE;
+            break;
+        case PRINTSHEETS_SELECTED_CELLS :
+            bRet = maRbtSelectedCells.IsChecked() != FALSE;
+            break;
+        default:
+            DBG_ERRORFILE( "PrintDialog::IsSheetRangeChecked(): invalid range" );
+    }
+    return bRet;
 }
 
 // -----------------------------------------------------------------------
