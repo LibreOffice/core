@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.161 $
+#   $Revision: 1.162 $
 #
-#   last change: $Author: vg $ $Date: 2007-11-22 14:44:59 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 18:59:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.161 $ ';
+    $id_str = ' $Revision: 1.162 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -220,7 +220,11 @@
     provide_consistency() if (defined $ENV{CWS_WORK_STAMP} && defined($ENV{COMMON_ENV_TOOLS}));
 
     $deliver_command = $ENV{DELIVER};
-    $deliver_command .= ' '. $dlv_switch if ($dlv_switch);
+    if ($dlv_switch) {
+        $deliver_command .= ' '. $dlv_switch;
+    } else {
+        $deliver_command .= " -quiet";
+    }
     $ENV{mk_tmp}++;
     %prj_platform = ();
     $check_error_string = '';
@@ -1152,7 +1156,7 @@ sub usage {
     print STDERR "Keys:   --all        - build all projects from very beginning till current one\n";
     print STDERR "        --from       - build all projects dependent from the specified (including it) till current one\n";
     print STDERR "        --mode OOo   - build only projects needed for OpenOffice.org\n";
-    print STDERR "        --prepare-   - clear all projects for incompatible build from prj_name till current one [for platform] (cws version)\n";
+    print STDERR "        --prepare    - clear all projects for incompatible build from prj_name till current one [for platform] (cws version)\n";
     print STDERR "        --with_branches- build all projects in neighbour branches and current branch starting from actual project\n";
     print STDERR "        --since      - build all projects beginning from the specified till current one (the same as \"--all:prj_name\", but skipping prj_name)\n";
     print STDERR "        --checkmodules      - check if all required parent projects are availlable\n";
