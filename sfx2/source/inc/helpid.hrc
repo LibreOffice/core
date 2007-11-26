@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpid.hrc,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 15:01:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:24:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,12 +362,11 @@
 #define HID_XMLSEC_INFO_WRONGDOCFORMAT              (HID_SFX_START + 318)
 #define HID_WARNING_MACROSDISABLED                  (HID_SFX_START + 319)
 #define HID_WARNING_ALIENFORMAT                     (HID_SFX_START + 320)
-
 #define HID_HELP_ONSTARTUP_BOX                      (HID_SFX_START + 321)
-
 #define HID_DLG_CHECKFORONLINEUPDATE                (HID_SFX_START + 322)
+#define HID_DLG_NEWERVERSIONWARNING                 (HID_SFX_START + 323)
 
-#define ACT_SFX_HID_END HID_HELP_ONSTARTUP_BOX
+#define ACT_SFX_HID_END HID_DLG_NEWERVERSIONWARNING
 
 // "Uberlaufpr"ufung --------------------------------------------------------
 
