@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabsrc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:40:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:19:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,10 @@
 #include "dptabdat.hxx"
 #endif
 
+namespace com { namespace sun { namespace star { namespace sheet {
+    struct DataPilotFieldFilter;
+}}}}
+
 class ScDPResultMember;
 class ScDPResultData;
 struct ScDPItemData;
@@ -222,6 +226,9 @@ public:
     ScDPDimensions*         GetDimensionsObject();
 
     void                    DumpState( ScDocument* pDoc, const ScAddress& rPos );
+
+    void                    WriteDrillDownData( ScDocument* pDoc, const ScAddress& rPos,
+                                    const ::std::vector< ::com::sun::star::sheet::DataPilotFieldFilter > rFilters );
 
                             // XDimensionsSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
