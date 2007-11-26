@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:14:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -966,6 +966,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_TABPAGE:
                 pNewWindow = new TabPage( pParent, nWinBits );
+                *ppNewComp = new VCLXTabPage;
             break;
             case WINDOW_TIMEBOX:
                 pNewWindow = new TimeBox( pParent, nWinBits );
