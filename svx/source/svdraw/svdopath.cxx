@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-13 15:32:22 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1918,8 +1918,6 @@ void SdrPathObj::RecalcBoundRect()
 sal_Bool SdrPathObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& rInfoRec) const
 {
     const bool bHideContour(IsHideContour());
-    const bool bIsFillDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTFILL));
-    const bool bIsLineDraft(0 != (rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTLINE));
 
     // prepare ItemSet of this object
     const SfxItemSet& rSet = GetObjectItemSet();
@@ -1932,21 +1930,17 @@ sal_Bool SdrPathObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
     // #b4899532# if not filled but fill draft, avoid object being invisible in using
     // a hair linestyle and COL_LIGHTGRAY
     SfxItemSet aItemSet(rSet);
-    if(bIsFillDraft && XLINE_NONE == ((const XLineStyleItem&)(rSet.Get(XATTR_LINESTYLE))).GetValue())
-    {
-        ImpPrepareLocalItemSetForDraftLine(aItemSet);
-    }
 
     // #103692# prepare ItemSet for shadow fill attributes
     SfxItemSet aShadowSet(aItemSet);
 
     // prepare line geometry
-    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet, bIsLineDraft) );
+    ::std::auto_ptr< SdrLineGeometry > pLineGeometry( ImpPrepareLineGeometry(rXOut, aItemSet) );
 
     // Shadows
     if (!bHideContour && ImpSetShadowAttributes(aItemSet, aShadowSet))
     {
-        if( !IsClosed() || bIsFillDraft )
+        if( !IsClosed() )
             rXOut.SetFillAttr(aEmptySet);
         else
             rXOut.SetFillAttr(aShadowSet);
@@ -1989,15 +1983,14 @@ sal_Bool SdrPathObj::DoPaintObject(XOutputDevice& rXOut, const SdrPaintInfoRec& 
     // Before here the LineAttr were set: if(pLineAttr) rXOut.SetLineAttr(*pLineAttr);
     // avoid line drawing in XOut
     rXOut.SetLineAttr(aEmptySet);
-
-    rXOut.SetFillAttr( bIsFillDraft || !IsClosed() ? aEmptySet : aItemSet );
+    rXOut.SetFillAttr( !IsClosed() ? aEmptySet : aItemSet );
 
     if( !bHideContour )
     {
         if( IsClosed() )
         {
             // #100127# Output original geometry for metafiles
-            ImpGraphicFill aFill( *this, rXOut, bIsFillDraft || !IsClosed() ? aEmptySet : aItemSet );
+            ImpGraphicFill aFill( *this, rXOut, !IsClosed() ? aEmptySet : aItemSet );
 
             rXOut.DrawPolyPolygon(GetPathPoly());
         }
