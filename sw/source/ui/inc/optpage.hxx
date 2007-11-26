@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:21:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:34:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,8 @@ class SwAddPrinterTabPage : public SfxTabPage
     CheckBox        aCtrlFldCB;
     CheckBox        aBackgroundCB;
     CheckBox        aBlackFontCB;
+    CheckBox        aPrintHiddenTextCB;
+    CheckBox        aPrintTextPlaceholderCB;
 
     FixedLine       aSeparatorLFL;
 
