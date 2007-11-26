@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocoll.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:14:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:28:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,48 +179,49 @@ class SwUnoCollection
 #define SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1             63
 #define SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2             64
 #define SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3             65
-#define SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR       66
-#define SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME    67
-#define SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS          68
-#define SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT            69
-#define SW_SERVICE_FIELDTYPE_DOCINFO_TITLE              70
-#define SW_SERVICE_FIELDTYPE_DOCINFO_REVISION           71
-#define SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY               72
-#define SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS        73
-#define SW_SERVICE_FIELDTYPE_DROPDOWN                   74
-#define SW_SERVICE_FIELDTYPE_DUMMY_4                    75
-#define SW_SERVICE_FIELDTYPE_DUMMY_5                    76
-#define SW_SERVICE_FIELDTYPE_DUMMY_6                    77
-#define SW_SERVICE_FIELDTYPE_DUMMY_7                    78
-#define SW_SERVICE_FIELDTYPE_DUMMY_8                    79
-#define SW_SERVICE_FIELDMASTER_USER                     80
-#define SW_SERVICE_FIELDMASTER_DDE                      81
-#define SW_SERVICE_FIELDMASTER_SET_EXP                  82
-#define SW_SERVICE_FIELDMASTER_DATABASE                 83
-#define SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY             84
-#define SW_SERVICE_FIELDMASTER_DUMMY2                   85
-#define SW_SERVICE_FIELDMASTER_DUMMY3                   86
-#define SW_SERVICE_FIELDMASTER_DUMMY4                   87
-#define SW_SERVICE_FIELDMASTER_DUMMY5                   88
-#define SW_SERVICE_INDEX_ILLUSTRATIONS                  89
-#define SW_SERVICE_INDEX_OBJECTS                        90
-#define SW_SERVICE_INDEX_TABLES                         91
-#define SW_SERVICE_INDEX_BIBLIOGRAPHY                   92
-#define SW_SERVICE_PARAGRAPH                            93
-#define SW_SERVICE_FIELDTYPE_INPUT_USER                 94
-#define SW_SERVICE_FIELDTYPE_HIDDEN_TEXT                95
-#define SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE    96
-#define SW_SERVICE_NUMBERING_RULES                      97
-#define SW_SERVICE_TEXT_COLUMNS                         98
-#define SW_SERVICE_INDEX_HEADER_SECTION                 99
-#define SW_SERVICE_DEFAULTS                             100
-#define SW_SERVICE_IMAP_RECTANGLE                       101
-#define SW_SERVICE_IMAP_CIRCLE                          102
-#define SW_SERVICE_IMAP_POLYGON                         103
-#define SW_SERVICE_TYPE_TEXT_GRAPHIC                    104
-#define SW_SERVICE_CHART2_DATA_PROVIDER                 105
+#define SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM             66
+#define SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR       67
+#define SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME    68
+#define SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS          69
+#define SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT            70
+#define SW_SERVICE_FIELDTYPE_DOCINFO_TITLE              71
+#define SW_SERVICE_FIELDTYPE_DOCINFO_REVISION           72
+#define SW_SERVICE_FIELDTYPE_BIBLIOGRAPHY               73
+#define SW_SERVICE_FIELDTYPE_COMBINED_CHARACTERS        74
+#define SW_SERVICE_FIELDTYPE_DROPDOWN                   75
+#define SW_SERVICE_FIELDTYPE_DUMMY_4                    76
+#define SW_SERVICE_FIELDTYPE_DUMMY_5                    77
+#define SW_SERVICE_FIELDTYPE_DUMMY_6                    78
+#define SW_SERVICE_FIELDTYPE_DUMMY_7                    79
+#define SW_SERVICE_FIELDTYPE_DUMMY_8                    80
+#define SW_SERVICE_FIELDMASTER_USER                     81
+#define SW_SERVICE_FIELDMASTER_DDE                      82
+#define SW_SERVICE_FIELDMASTER_SET_EXP                  83
+#define SW_SERVICE_FIELDMASTER_DATABASE                 84
+#define SW_SERVICE_FIELDMASTER_BIBLIOGRAPHY             85
+#define SW_SERVICE_FIELDMASTER_DUMMY2                   86
+#define SW_SERVICE_FIELDMASTER_DUMMY3                   87
+#define SW_SERVICE_FIELDMASTER_DUMMY4                   88
+#define SW_SERVICE_FIELDMASTER_DUMMY5                   89
+#define SW_SERVICE_INDEX_ILLUSTRATIONS                  90
+#define SW_SERVICE_INDEX_OBJECTS                        91
+#define SW_SERVICE_INDEX_TABLES                         92
+#define SW_SERVICE_INDEX_BIBLIOGRAPHY                   93
+#define SW_SERVICE_PARAGRAPH                            94
+#define SW_SERVICE_FIELDTYPE_INPUT_USER                 95
+#define SW_SERVICE_FIELDTYPE_HIDDEN_TEXT                96
+#define SW_SERVICE_STYLE_CONDITIONAL_PARAGRAPH_STYLE    97
+#define SW_SERVICE_NUMBERING_RULES                      98
+#define SW_SERVICE_TEXT_COLUMNS                         99
+#define SW_SERVICE_INDEX_HEADER_SECTION                 100
+#define SW_SERVICE_DEFAULTS                             101
+#define SW_SERVICE_IMAP_RECTANGLE                       102
+#define SW_SERVICE_IMAP_CIRCLE                          103
+#define SW_SERVICE_IMAP_POLYGON                         104
+#define SW_SERVICE_TYPE_TEXT_GRAPHIC                    105
+#define SW_SERVICE_CHART2_DATA_PROVIDER                 106
 
-#define SW_SERVICE_LAST                 SW_SERVICE_CHART2_DATA_PROVIDER
+#define SW_SERVICE_LAST                 SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM
 
 #define SW_SERVICE_INVALID          USHRT_MAX
 
@@ -277,6 +278,7 @@ class SwUnoCollection
 #define CSS_TEXT_TEXTFIELD_DOCINFO_SUBJECT              "com.sun.star.text.textfield.docinfo.Subject"
 #define CSS_TEXT_TEXTFIELD_DOCINFO_TITLE                "com.sun.star.text.textfield.docinfo.Title"
 #define CSS_TEXT_TEXTFIELD_DOCINFO_REVISION             "com.sun.star.text.textfield.docinfo.Revision"
+#define CSS_TEXT_TEXTFIELD_DOCINFO_CUSTOM               "com.sun.star.text.textfield.docinfo.Custom"
 #define CSS_TEXT_TEXTFIELD_BIBLIOGRAPHY                 "com.sun.star.text.textfield.Bibliography"
 #define CSS_TEXT_TEXTFIELD_COMBINED_CHARACTERS          "com.sun.star.text.textfield.CombinedCharacters"
 #define CSS_TEXT_TEXTFIELD_DROP_DOWN                    "com.sun.star.text.textfield.DropDown"
