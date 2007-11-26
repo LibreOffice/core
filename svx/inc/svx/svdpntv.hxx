@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpntv.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:43:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:49:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,14 +233,6 @@ protected:
     unsigned                    bGlueVisible2 : 1;   // Klebepunkte auch bei GluePointEdit anzeigen
     unsigned                    bGlueVisible3 : 1;   // Klebepunkte auch bei EdgeTool anzeigen
     unsigned                    bGlueVisible4 : 1;   // Klebepunkte anzeigen, wenn 1 Edge markiert
-    unsigned                    mbLineDraft : 1;
-    unsigned                    mbFillDraft : 1;
-    unsigned                    mbTextDraft : 1;
-    unsigned                    mbGrafDraft : 1;
-    unsigned                    mbLineDraftPrn : 1;
-    unsigned                    mbFillDraftPrn : 1;
-    unsigned                    mbTextDraftPrn : 1;
-    unsigned                    mbGrafDraftPrn : 1;
     unsigned                    bRestoreColors : 1;   // Pens und Brushes werden zurueckgesetzt.
     unsigned                    bSomeObjChgdFlag : 1;
     unsigned                    bSwapAsynchron : 1;
@@ -251,7 +243,6 @@ protected:
     // beispielsweise beim Chart auf FALSE gesetzt, da dort
     // die Ghosted-Effekte zur Darstellug unerwuenscht sind.
     unsigned                    bVisualizeEnteredGroup : 1;
-    unsigned                    mbHideGrafDraft : 1;
     unsigned                    bAnimationPause : 1;
 
     // #114898#
@@ -476,26 +467,7 @@ public:
     void SetGlueVisible(bool bOn = true) { if (bGlueVisible!=(unsigned)bOn) { bGlueVisible=bOn; if (!bGlueVisible2 && !bGlueVisible3 && !bGlueVisible4) GlueInvalidate(); } }
     void SetGridColor( Color aColor );
 
-    sal_Bool IsLineDraft() const { return (sal_Bool )mbLineDraft; } // Linien nur andeuten (alle Linien als Haarlinien)
-    sal_Bool IsFillDraft() const { return (sal_Bool )mbFillDraft; } // Ersatzdarstellung fuer Bitmapfuellungen und Farbverlaeufe
-    sal_Bool IsTextDraft() const { return (sal_Bool )mbTextDraft; } // Ersatzdarstellung fuer Text
-    sal_Bool IsGrafDraft() const { return (sal_Bool )mbGrafDraft; } // Ersatzdarstellung fuer Grafiken und OLE
-    sal_Bool IsHideGrafDraft() const { return (sal_Bool )mbHideGrafDraft; } // Ersatzdarstellung fuer Grafiken und OLE nicht anzeigen
-    sal_Bool IsLineDraftPrn() const { return (sal_Bool )mbLineDraftPrn; } // Beim drucken: Linien nur andeuten (alle Linien als Haarlinien)
-    sal_Bool IsFillDraftPrn() const { return (sal_Bool )mbFillDraftPrn; } // Beim drucken: Ersatzdarstellung fuer Bitmapfuellungen und Farbverlaeufe
-    sal_Bool IsTextDraftPrn() const { return (sal_Bool )mbTextDraftPrn; } // Beim drucken: Ersatzdarstellung fuer Text
-    sal_Bool IsGrafDraftPrn() const { return (sal_Bool )mbGrafDraftPrn; } // Beim drucken: Ersatzdarstellung fuer Grafiken und OLE
     sal_Bool IsPreviewRenderer() const { return (sal_Bool )mbPreviewRenderer; }
-
-    void SetLineDraft(bool bOn) { if((unsigned)bOn != mbLineDraft) { mbLineDraft=bOn; InvalidateAllWin(); }}
-    void SetFillDraft(bool bOn) { if((unsigned)bOn != mbFillDraft) { mbFillDraft=bOn; InvalidateAllWin(); }}
-    void SetTextDraft(bool bOn) { if((unsigned)bOn != mbTextDraft) { mbTextDraft=bOn; InvalidateAllWin(); }}
-    void SetGrafDraft(bool bOn) { if((unsigned)bOn != mbGrafDraft) { mbGrafDraft=bOn; InvalidateAllWin(); }}
-    void SetHideGrafDraft(bool bOn) { if((unsigned)bOn != mbHideGrafDraft) { mbHideGrafDraft=bOn; InvalidateAllWin(); }}
-    void SetLineDraftPrn(bool bOn) { if((unsigned)bOn != mbLineDraftPrn) { mbLineDraftPrn=bOn; }}
-    void SetFillDraftPrn(bool bOn) { if((unsigned)bOn != mbFillDraftPrn) { mbFillDraftPrn=bOn; }}
-    void SetTextDraftPrn(bool bOn) { if((unsigned)bOn != mbTextDraftPrn) { mbTextDraftPrn=bOn; }}
-    void SetGrafDraftPrn(bool bOn) { if((unsigned)bOn != mbGrafDraftPrn) { mbGrafDraftPrn=bOn; }}
     void SetPreviewRenderer(bool bOn) { if((unsigned)bOn != mbPreviewRenderer) { mbPreviewRenderer=bOn; }}
 
     /*alt*/void SetGridCoarse(const Size& rSiz) { aGridBig=rSiz; SetGridWidth(Fraction(rSiz.Width(),1),Fraction(rSiz.Height(),1)); }
