@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.123 $
+#   $Revision: 1.124 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 18:40:14 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 19:00:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.123 $ ';
+$id_str = ' $Revision: 1.124 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -108,6 +108,7 @@ $opt_force          = 0;            # option force copy
 $opt_minor          = 0;            # option deliver in minor
 $opt_check          = 0;            # do actually execute any action
 $opt_zip            = 0;            # create an additional zip file
+$opt_silent         = 0;            # be silent, only report errors
 $opt_log            = 1;            # create an additional log file
 $opt_link           = 0;            # hard link files into the solver to save disk space
 $opt_deloutput      = 0;            # delete the output tree for the project once successfully delivered
@@ -161,7 +162,7 @@ write_log() if $opt_log;
 zip_files() if $opt_zip;
 cleanup() if $opt_delete;
 delete_output() if $opt_deloutput;
-print_stats();
+print_stats() if !$opt_silent;
 
 exit($error);
 
@@ -248,8 +249,7 @@ sub do_linklib
     foreach $lib (@globbed_files) {
         $lib = basename($lib);
         if ( $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)(\.(\d+))?$/
-             || $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)$/
-         || $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.jnilib$/ )
+             || $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)$/ )
         {
            push(@{$globbed_hash{$1}}, $lib);
         }
@@ -284,8 +284,8 @@ sub do_linklib
         }
         else {
             if ( $opt_delete ) {
-                print "REMOVE: $to_dir/$lib_major\n" if $long;
-                print "REMOVE: $to_dir/$lib_base\n";
+                print "REMOVE: $to_dir/$lib_major\n" if ($long && !$opt_silent);
+                print "REMOVE: $to_dir/$lib_base\n" if !$opt_silent;
                 unlink "$to_dir/$lib_major" if $long;
                 unlink "$to_dir/$lib_base";
                 if ( $opt_zip ) {
@@ -307,7 +307,7 @@ sub do_linklib
             # remove old symlinks
             unlink(@symlibs);
             foreach $symlib (@symlibs) {
-                print "LINKLIB: $lib -> $symlib\n";
+                print "LINKLIB: $lib -> $symlib\n" if !$opt_silent;
                 if ( !symlink("$lib", "$symlib") ) {
                     print_error("can't symlink $lib -> $symlib: $!",0);
                 }
@@ -367,14 +367,14 @@ sub do_symlink
         }
     }
     else {
-        print "REMOVE: $to\n";
+        print "REMOVE: $to\n" if !$opt_silent;
         unlink $to;
         if ( $opt_delete ) {
             push_on_ziplist($to) if $opt_zip;
             return;
         }
 
-        print "SYMLIB: $from -> $to\n";
+        print "SYMLIB: $from -> $to\n" if !$opt_silent;
         if ( !symlink("$from", "$to") ) {
             print_error("can't symlink $from -> $to: $!",0);
         }
@@ -407,6 +407,7 @@ sub parse_options
         $arg =~ /^-force$/  and $opt_force  = 1 and next;
         $arg =~ /^-minor$/  and $opt_minor  = 1 and next;
         $arg =~ /^-check$/  and $opt_check  = 1 and next;
+        $arg =~ /^-quiet$/  and $opt_silent = 1 and next;
         $arg =~ /^-zip$/    and $opt_zip    = 1 and next;
         $arg =~ /^-delete$/ and $opt_delete = 1 and next;
         $arg =~ /^-dontdeletecommon$/ and $dontdeletecommon = 1 and next;
@@ -423,6 +424,11 @@ sub parse_options
     }
     # $dest and $opt_zip or $opt_delete are mutually exclusive
     if ( $dest and ($opt_zip || $opt_delete) ) {
+        usage(1);
+    }
+    # $opt_check and $opt_silent are mutually exclusive
+    if ( $opt_check and $opt_silent ) {
+        print STDERR "Error on command line: options '-check' and '-quiet' are mutually exclusive.\n";
         usage(1);
     }
     if ($dontdeletecommon) {
@@ -767,11 +773,11 @@ sub copy_if_newer
     return 0 unless ($from_stat_ref = is_newer($from, $to, $touch));
 
     if ( $opt_delete ) {
-        print "REMOVE: $to\n";
+        print "REMOVE: $to\n" if !$opt_silent;
         $rc = unlink($to) unless $opt_check;
         # handle special packaging of *.dylib files for Mac OS X
         if ( $to =~ s/\.dylib$/.jnilib/ ) {
-            print "REMOVE: $to\n";
+            print "REMOVE: $to\n" if !$opt_silent;
             $rc += unlink "$to" unless $opt_check;
         }
         return 1 if $opt_check;
@@ -781,16 +787,16 @@ sub copy_if_newer
     if( !$opt_check && $opt_link ) {
         # hard link if possible
         if( link($from, $to) ){
-            print "LINK: $from -> $to\n";
+            print "LINK: $from -> $to\n" if !$opt_silent;
             return 1;
         }
     }
 
     if( $touch ) {
-       print "TOUCH: $from -> $to\n";
+       print "TOUCH: $from -> $to\n" if !$opt_silent;
     }
     else {
-       print "COPY: $from -> $to\n";
+       print "COPY: $from -> $to\n" if !$opt_silent;
     }
 
     return 1 if( $opt_check );
@@ -825,7 +831,7 @@ sub copy_if_newer
                     $bundlelib =~ s/\.dylib$//;
                     $bundlelib .= ".jnilib";
                     if ( $opt_delete ) {
-                        print "REMOVE: $bundlelib\n";
+                        print "REMOVE: $bundlelib\n" if !$opt_silent;
                         unlink "$bundlelib" unless $opt_check;
                     } else {
                         push_on_ziplist($bundlelib) if $opt_zip;
@@ -1055,14 +1061,14 @@ sub add_incpath_if_newer
     push_on_loglist("ADDINCPATH", "$from", "$to") if $opt_log;
 
     if ( $opt_delete ) {
-        print "REMOVE: $to\n";
+        print "REMOVE: $to\n" if !$opt_silent;
         my $rc = unlink($to);
         return 1 if $rc;
         return 0;
     }
 
     if ( $from_stat_ref = is_newer($from, $to) ) {
-        print "ADDINCPATH: $from -> $to\n";
+        print "ADDINCPATH: $from -> $to\n" if !$opt_silent;
 
         return 1 if $opt_check;
 
@@ -1178,7 +1184,7 @@ sub zip_files
         push @zipfiles, ($common_zip_file);
     }
     foreach my $zip_file ( @zipfiles ) {
-        print "ZIP: updating $zip_file\n";
+        print "ZIP: updating $zip_file\n" if !$opt_silent;
         next if ( $opt_check );
 
         local $work_file = "";
@@ -1299,11 +1305,11 @@ sub write_log
     foreach my $log ( @logs ) {
         $log_file{$log} = expand_macros( $log_file{$log} );
         if ( $opt_delete ) {
-            print "LOG: removing $log_file{$log}\n";
+            print "LOG: removing $log_file{$log}\n" if !$opt_silent;
             next if ( $opt_check );
             unlink $log_file{$log};
         } else {
-            print "LOG: writing $log_file{$log}\n";
+            print "LOG: writing $log_file{$log}\n" if !$opt_silent;
             next if ( $opt_check );
             open( LOGFILE, "> $log_file{$log}" ) or warn "Error: could not open log file.";
             foreach my $item ( @$log ) {
@@ -1373,7 +1379,7 @@ sub cleanup
     foreach my $path ( @dirlist ) {
         $path = expand_macros($path);
         if ( $opt_check ) {
-            print "RMDIR: $path\n";
+            print "RMDIR: $path\n" if !$opt_silent;
         } else {
             rmdir $path;
         }
@@ -1470,8 +1476,10 @@ sub usage
         print STDERR "  -link        hard link files into the solver to save disk space\n";
     }
     print STDERR "  -minor       deliver into minor (milestone)\n";
+    print STDERR "  -quiet       be quiet, only report errors\n";
     print STDERR "  -zip         additionally create zip files of delivered content\n";
-    print STDERR "The option -zip and a destination-path are mutually exclusive.\n";
+    print STDERR "Option '-zip' and a destination-path are mutually exclusive.\n";
+    print STDERR "Options '-check' and '-quiet' are mutually exclusive.\n";
     exit($exit_code);
 }
 
