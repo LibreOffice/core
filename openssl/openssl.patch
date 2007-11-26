@@ -29,3 +29,58 @@
  
  ($ssl,$crypto)=("ssl","crypto");
 
+--- misc/build/openssl-0.9.8e/util/pl/VC-32.pl	2006-01-15 14:46:20.000000000 +0100
++++ misc/build/openssl-0.9.8e/util/pl/VC-32.pl	2007-11-21 10:05:05.156250000 +0100
+@@ -14,7 +14,7 @@
+ $zlib_lib="zlib1.lib";
+ 
+ # C compiler stuff
+-$cc='cl';
++$cc=$ENV{'CC'};
+ if ($FLAVOR =~ /WIN64/)
+     {
+     # Note that we currently don't have /WX on Win64! There is a lot of
+@@ -83,19 +83,19 @@
+     }
+ 
+     $cc='$(CC)';
+-    $base_cflags=' /W3 /WX /GF /Gy /nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -I$(WCECOMPAT)/include -DOPENSSL_SMALL_FOOTPRINT';
++    $base_cflags=' -W3 -WX -GF -Gy -nologo -DUNICODE -D_UNICODE -DOPENSSL_SYSNAME_WINCE -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32 -DNO_CHMOD -I$(WCECOMPAT)/include -DOPENSSL_SMALL_FOOTPRINT';
+     $base_cflags.=" $wcecdefs";
+-    $opt_cflags=' /MC /O1i';	# optimize for space, but with intrinsics...
+-    $dbg_clfags=' /MC /Od -DDEBUG -D_DEBUG';
++    $opt_cflags=' -MC -O1i';	# optimize for space, but with intrinsics...
++    $dbg_clfags=' -MC -Od -DDEBUG -D_DEBUG';
+     $lflags="/nologo /opt:ref $wcelflag";
+     }
+ else	# Win32
+     {
+-    $base_cflags=' /W3 /WX /Gs0 /GF /Gy /nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32';
++    $base_cflags=' -W3 -WX -Gs0 -GF -Gy -nologo -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -DDSO_WIN32';
+     $base_cflags.=' -D_CRT_SECURE_NO_DEPRECATE';	# shut up VC8
+     $base_cflags.=' -D_CRT_NONSTDC_NO_DEPRECATE';	# shut up VC8
+-    $opt_cflags=' /MD /Ox /O2 /Ob2';
+-    $dbg_cflags=' /MDd /Od -DDEBUG -D_DEBUG';
++    $opt_cflags=' -MD -Ox -O2 -Ob2';
++    $dbg_cflags=' -MDd -Od -DDEBUG -D_DEBUG';
+     $lflags="/nologo /subsystem:console /opt:ref";
+     }
+ $mlflags='';
+@@ -116,7 +116,7 @@
+ 	}
+ 
+ $obj='.obj';
+-$ofile="/Fo";
++$ofile="-Fo.\\";
+ 
+ # EXE linking stuff
+ $link="link";
+@@ -234,7 +234,7 @@
+ 	$tmp_def='tmp32dll_$(TARGETCPU)';
+ 	}
+ 
+-$cflags.=" /Fd$out_def";
++$cflags.=" -Fd$out_def";
+ 
+ sub do_lib_rule
+ 	{
