@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 14:16:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:07:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -524,6 +524,14 @@ void CUPSManager::initialize()
         if( pDest->is_default )
             m_aDefaultPrinter = aPrinterName;
 
+        for( int k = 0; k < pDest->num_options; k++ )
+        {
+            if(!strcmp(pDest->options[k].name, "printer-info"))
+                aPrinter.m_aInfo.m_aComment=OStringToOUString(pDest->options[k].value, aEncoding);
+            if(!strcmp(pDest->options[k].name, "printer-location"))
+                aPrinter.m_aInfo.m_aLocation=OStringToOUString(pDest->options[k].value, aEncoding);
+        }
+
 
         OUStringBuffer aBuf( 256 );
         aBuf.appendAscii( "CUPS:" );
@@ -896,15 +904,38 @@ void CUPSManager::changePrinterInfo( const OUString& rPrinter, const PrinterInfo
 bool CUPSManager::checkPrintersChanged( bool bWait )
 {
     bool bChanged = false;
-    if( bWait && m_aDestThread )
+    if( bWait )
     {
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "syncing cups discovery thread\n" );
-        #endif
-        osl_joinWithThread( m_aDestThread );
-        #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "done: syncing cups discovery thread\n" );
-        #endif
+        if(  m_aDestThread )
+        {
+            // initial asynchronous detection still running
+            #if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "syncing cups discovery thread\n" );
+            #endif
+            osl_joinWithThread( m_aDestThread );
+            osl_destroyThread( m_aDestThread );
+            m_aDestThread = NULL;
+            #if OSL_DEBUG_LEVEL > 1
+            fprintf( stderr, "done: syncing cups discovery thread\n" );
+            #endif
+        }
+        else
+        {
+            // #i82321# check for cups printer updates
+            // with this change the whole asynchronous detection in a thread is
+            // almost useless. The only relevance left is for some stalled systems
+            // where the user can set SAL_DISABLE_SYNCHRONOUS_PRINTER_DETECTION
+            // (see vcl/unx/source/gdi/salprnpsp.cxx)
+            // so that checkPrintersChanged( true ) will never be called
+
+            // there is no way to query CUPS whether the printer list has changed
+            // so get the dest list anew
+            if( m_nDests && m_pDests )
+                m_pCUPSWrapper->cupsFreeDests( m_nDests, (cups_dest_t*)m_pDests );
+            m_nDests = 0;
+            m_pDests = NULL;
+            runDests();
+        }
     }
     if( m_aCUPSMutex.tryToAcquire() )
     {
