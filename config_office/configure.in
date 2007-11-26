@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-11-21 16:40:28 $
+dnl * Date: $Date: 2007-11-26 12:46:22 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.229 $ )
+AC_REVISION( $Revision: 1.230 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -277,6 +277,9 @@ AC_ARG_WITH(system-jars,
 ],,)
 AC_ARG_WITH(system-zlib,
 [  --with-system-zlib      Use zlib already on system
+],,)
+AC_ARG_WITH(system-openssl,
+[  --with-system-openssl   Use OpenSSL already on system
 ],,)
 AC_ARG_WITH(system-jpeg,
 [  --with-system-jpeg      Use jpeg already on system
@@ -2652,17 +2655,13 @@ else
        AC_MSG_RESULT([yes])
        AC_MSG_CHECKING([the dmake version])
        DMAKE_VERSION=`$DMAKE -V | $SED -n 's/.*Version \([[0-9.]]\+\).*/\1/p'`
-       if test "$DMAKE_VERSION" = "4.10"; then
-	 AC_MSG_RESULT([too old. >= 4.7 is needed. (Your old 4.1 version identifies itself as 4.10, PL 0.)])
-	 echo "A newer dmake will be built on ./bootstrap"
-	 BUILD_DMAKE=YES
-       elif test "`echo $DMAKE_VERSION | cut -d'.' -f1`" -gt "4"; then
-	 AC_MSG_RESULT([OK, >= 4.7])
+       if test "`echo $DMAKE_VERSION | cut -d'.' -f1`" -gt "4"; then
+	 AC_MSG_RESULT([OK, >= 4.11])       
        elif test "`echo $DMAKE_VERSION | cut -d'.' -f1`" = "4" && \
-	    test "`echo $DMAKE_VERSION | cut -d'.' -f2`" -ge "7"; then
-	 AC_MSG_RESULT([OK, >= 4.7])
+	    test "`echo $DMAKE_VERSION | cut -d'.' -f2`" -ge "11"; then
+	 AC_MSG_RESULT([OK, >= 4.11])
        else
-	 AC_MSG_RESULT([too old. >= 4.7 is needed])
+	 AC_MSG_RESULT([too old. >= 4.11 is needed])
 	 echo "A newer dmake will be built on ./bootstrap"
 	 BUILD_DMAKE=YES
        fi
@@ -3025,6 +3024,24 @@ else
     BUILD_TYPE="$BUILD_TYPE ZLIB"
 fi
 AC_SUBST(SYSTEM_ZLIB)
+
+if test "$_os" = "Darwin" && test "$with_system_openssl" != "no"; then
+   with_system_openssl=yes
+fi
+AC_MSG_CHECKING([which libssl to use])
+if test -n "$with_system_openssl" -o -n "$with_system_libs" && \
+        test "$with_system_openssl" != "no"; then
+    AC_MSG_RESULT([external])
+    PKG_CHECK_MODULES( OPENSSL, openssl )
+    SYSTEM_OPENSSL=YES
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_OPENSSL=NO
+    BUILD_TYPE="$BUILD_TYPE OPENSSL"
+fi
+AC_SUBST(SYSTEM_OPENSSL)
+AC_SUBST(OPENSSL_CFLAGS)
+AC_SUBST(OPENSSL_LIBS)
 
 dnl ===================================================================
 dnl Check for system jpeg
