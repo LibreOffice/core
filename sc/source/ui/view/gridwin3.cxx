@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:51:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:43:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,12 +218,8 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, UL
     sal_Bool bDrawAtAll(sal_False);
     const ScViewOptions& rOpts = pViewData->GetOptions();
 
-    if(VOBJ_MODE_DUMMY == rOpts.GetObjMode(VOBJ_TYPE_OLE))
-    {
-        nPaintMode |= SDRPAINTMODE_SC_DRAFT_OLE;
-        bDrawAtAll = sal_True;
-    }
-    else if(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_OLE))
+    //#i80528# reduced to on/off support
+    if(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_OLE))
     {
         bDrawAtAll = sal_True;
     }
@@ -232,12 +228,8 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, UL
         nPaintMode |= SDRPAINTMODE_SC_HIDE_OLE;
     }
 
-    if(VOBJ_MODE_DUMMY == rOpts.GetObjMode(VOBJ_TYPE_CHART))
-    {
-        nPaintMode |= SDRPAINTMODE_SC_DRAFT_CHART;
-        bDrawAtAll = sal_True;
-    }
-    else if(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_CHART))
+    //#i80528# reduced to on/off support
+    if(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_CHART))
     {
         bDrawAtAll = sal_True;
     }
@@ -246,12 +238,8 @@ void ScGridWindow::DrawRedraw( ScOutputData& rOutputData, ScUpdateMode eMode, UL
         nPaintMode |= SDRPAINTMODE_SC_HIDE_CHART;
     }
 
-    if(VOBJ_MODE_DUMMY == rOpts.GetObjMode(VOBJ_TYPE_DRAW))
-    {
-        nPaintMode |= SDRPAINTMODE_SC_DRAFT_DRAW;
-        bDrawAtAll = sal_True;
-    }
-    else if(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_DRAW))
+    //#i80528# reduced to on/off support
+    if(VOBJ_MODE_SHOW == rOpts.GetObjMode(VOBJ_TYPE_DRAW))
     {
         bDrawAtAll = sal_True;
     }
