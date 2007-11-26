@@ -4,9 +4,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:49:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:48:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -876,6 +876,7 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
                                     UNOStorageHolder* pHolder =
                                             new UNOStorageHolder( *this, *pChildStorage, xDuplStorage, pTempFile );
                                     pHolder->acquire();
+                                    pTempFile = NULL;
                                     pUNOStorageHolderList->push_back( pHolder );
                                     xResult = xDuplStorage;
                                 }
@@ -888,6 +889,9 @@ uno::Reference< embed::XStorage > SotStorage::GetUNOAPIDuplicate( const String& 
                         }
                     }
             }
+
+            if ( pTempFile != NULL )
+                delete pTempFile;
         }
         else
             SetError( pChildStorage->GetError() );
