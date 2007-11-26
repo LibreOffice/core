@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:57:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:35:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2201,6 +2201,10 @@ void WindowElement::endElement()
     ctx.importBooleanProperty(
         OUString( RTL_CONSTASCII_USTRINGPARAM("Decoration") ),
         OUString( RTL_CONSTASCII_USTRINGPARAM("withtitlebar") ),
+        _xAttributes );
+    ctx.importStringProperty(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("ImageURL") ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("image-src") ),
         _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
