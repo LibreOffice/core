@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipsd.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:16:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:06:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,7 +372,7 @@ BOOL PSDReader::ImplReadBody()
 {
     ULONG       nX, nY;
     char        nRunCount = 0;
-    char        nBitCount = -1;
+    signed char nBitCount = -1;
     BYTE        nDat = 0, nDummy, nRed, nGreen, nBlue;
     BitmapColor aBitmapColor;
     nX = nY = 0;
