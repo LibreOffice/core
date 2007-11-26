@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menuids_tmpl.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:20:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:58:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,13 @@
         HelpID = SID_INSERTPAGE ; \
         Text [ en-US ] = "~New Page" ; \
     };
+#define MN_SELECT_BACKGROUND \
+    MenuItem\
+    {\
+        Identifier = SID_SELECT_BACKGROUND ; \
+        HelpID = SID_SELECT_BACKGROUND ; \
+        Text [ en-US ] = "Set Background Picture for Slide ..." ; \
+    };
 #define MN_DISPLAY_MASTER_BACKGROUND \
     MenuItem\
     {\
@@ -208,6 +215,7 @@
                 MN_FORMAT_PAGE\
                 MN_PRESENTATION_LAYOUT\
                 MN_MODIFY_PAGE\
+                MN_SELECT_BACKGROUND\
                 MN_RENAME_SLIDE\
                 SEPARATOR\
                 MN_DISPLAY_MASTER_BACKGROUND\
