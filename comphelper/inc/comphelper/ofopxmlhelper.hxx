@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ofopxmlhelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:40:08 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:51:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ class COMPHELPER_DLLPUBLIC OFOPXMLHelper : public cppu::WeakImplHelper1 < com::s
     ::rtl::OUString m_aRelElement;
     ::rtl::OUString m_aIDAttr;
     ::rtl::OUString m_aTypeAttr;
-    ::rtl::OUString m_aTargetTypeAttr;
+    ::rtl::OUString m_aTargetModeAttr;
     ::rtl::OUString m_aTargetAttr;
 
     // ContentType related strings
