@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:34:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:03:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -722,6 +722,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     if (mePageKind == PK_HANDOUT)
     {
         rSet.DisableItem(SID_PRESENTATION_LAYOUT);
+        rSet.DisableItem(SID_SELECT_BACKGROUND);
     }
 
     if (mePageKind == PK_NOTES)
@@ -737,6 +738,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         if (meEditMode == EM_MASTERPAGE)
             rSet.DisableItem(SID_MODIFYPAGE);
 
+        rSet.DisableItem(SID_SELECT_BACKGROUND);
         rSet.DisableItem(SID_INSERTLAYER);
         rSet.DisableItem(SID_LAYERMODE);
         rSet.DisableItem(SID_INSERTFILE);
@@ -756,6 +758,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_LAYERMODE);
         rSet.DisableItem(SID_INSERTFILE);
         rSet.DisableItem(SID_PAGEMODE);
+        rSet.DisableItem(SID_SELECT_BACKGROUND);
     }
     else
     {
