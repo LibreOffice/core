@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.56 $
+#   $Revision: 1.57 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:38:33 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 13:16:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2248,6 +2248,14 @@ sub get_platform_name
     elsif ( $installer::globals::iswindowsbuild )
     {
         $platformname = "Win32Intel";
+    }
+    elsif ( $installer::globals::compiler =~ /^unxmacxi/ )
+    {
+        $platformname = "MacOSXIntel";
+    }
+    elsif ( $installer::globals::compiler =~ /^unxmacxp/ )
+    {
+        $platformname = "MacOSXPowerPC";
     }
     else
     {
