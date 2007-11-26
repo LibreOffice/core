@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _drvwsh.sdi,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:33:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:57:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2461,6 +2461,11 @@ interface DrawView
     SID_CLOSE_MASTER_VIEW
     [
         ExecMethod = FuSupport ;
+        StateMethod = GetMenuState ;
+    ]
+    SID_SELECT_BACKGROUND
+    [
+        ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
     SID_DISPLAY_MASTER_BACKGROUND
