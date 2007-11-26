@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:17:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:28:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,7 @@ protected:
     BOOL            bFormView : 1;
     // <--
     BOOL            bBookview : 1;      // view mode for page preview
+    sal_Bool        bShowPlaceHolderFields : 1; //only used in printing!
 
     // Maszstab
     USHORT          nZoom;              // Angaben in Prozent
@@ -559,6 +560,9 @@ public:
 
     BYTE            GetShdwCrsrFillMode() const { return nShdwCrsrFillMode; }
     void            SetShdwCrsrFillMode( BYTE nMode ) { nShdwCrsrFillMode = nMode; };
+
+    sal_Bool        IsShowPlaceHolderFields() const { return bShowPlaceHolderFields; }
+    void            SetShowPlaceHolderFields(sal_Bool bSet) { bShowPlaceHolderFields = bSet; }
 
     static Color&   GetDocColor();
     static Color&   GetDocBoundariesColor();
