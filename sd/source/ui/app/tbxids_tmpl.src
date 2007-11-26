@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxids_tmpl.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:20:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -530,38 +530,6 @@
     {\
         Identifier = SID_SOLID_CREATE ; \
         HelpID = SID_SOLID_CREATE ; \
-        AutoCheck = TRUE ; \
-    };
-
-#define TBI_GRAPHIC_DRAFT \
-    ToolBoxItem\
-    {\
-        Identifier = SID_GRAPHIC_DRAFT ; \
-        HelpID = SID_GRAPHIC_DRAFT ; \
-        AutoCheck = TRUE ; \
-    };
-
-#define TBI_FILL_DRAFT \
-    ToolBoxItem\
-    {\
-        Identifier = SID_FILL_DRAFT ; \
-        HelpID = SID_FILL_DRAFT ; \
-        AutoCheck = TRUE ; \
-    };
-
-#define TBI_TEXT_DRAFT \
-    ToolBoxItem\
-    {\
-        Identifier = SID_TEXT_DRAFT ; \
-        HelpID = SID_TEXT_DRAFT ; \
-        AutoCheck = TRUE ; \
-    };
-
-#define TBI_LINE_DRAFT \
-    ToolBoxItem\
-    {\
-        Identifier = SID_LINE_DRAFT ; \
-        HelpID = SID_LINE_DRAFT ; \
         AutoCheck = TRUE ; \
     };
 
