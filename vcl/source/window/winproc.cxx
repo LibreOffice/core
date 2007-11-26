@@ -322,7 +322,7 @@ static void ImplHandleMouseHelpRequest( Window* pChild, const Point& rMousePos )
             nHelpMode |= HELPMODE_BALLOON;
         if ( nHelpMode )
         {
-            if ( pChild->IsInputEnabled() )
+            if ( pChild->IsInputEnabled() && ! pChild->IsInModalMode() )
             {
                 HelpEvent aHelpEvent( rMousePos, nHelpMode );
                 pSVData->maHelpData.mbRequestingHelp = TRUE;
@@ -538,17 +538,24 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
 
         // no mouse messages to disabled windows
         // #106845# if the window was disabed during capturing we have to pass the mouse events to release capturing
-        if ( pSVData->maWinData.mpCaptureWin != pChild && (!pChild->IsEnabled() || !pChild->IsInputEnabled()) )
+        if ( pSVData->maWinData.mpCaptureWin != pChild && (!pChild->IsEnabled() || !pChild->IsInputEnabled() || pChild->IsInModalMode() ) )
         {
             ImplHandleMouseFloatMode( pChild, aMousePos, nCode, nSVEvent, bMouseLeave );
             if ( nSVEvent == EVENT_MOUSEMOVE )
+            {
                 ImplHandleMouseHelpRequest( pChild, aMousePos );
+                if( pWinFrameData->mpMouseMoveWin != pChild )
+                    nMode |= MOUSE_ENTERWINDOW;
+            }
 
             // Call the hook also, if Window is disabled
             Point aChildPos = pChild->ImplFrameToOutput( aMousePos );
             MouseEvent aMEvt( aChildPos, pWinFrameData->mnClickCount, nMode, nCode, nCode );
             NotifyEvent aNEvt( nSVEvent, pChild, &aMEvt );
             Application::CallEventHooks( aNEvt );
+
+            if( pChild->IsCallHandlersOnInputDisabled() )
+                pChild->ImplNotifyKeyMouseCommandEventListeners( aNEvt );
 
             if ( nSVEvent == EVENT_MOUSEBUTTONDOWN )
             {
@@ -1018,7 +1025,7 @@ static Window* ImplGetKeyInputWindow( Window* pWindow )
                        "ImplHandleKey: Keyboard-Input is sent to a frame without focus" );
 
     // no keyinput to disabled windows
-    if ( !pChild->IsEnabled() || !pChild->IsInputEnabled() )
+    if ( !pChild->IsEnabled() || !pChild->IsInputEnabled() || pChild->IsInModalMode() )
         return 0;
 
     return pChild;
@@ -1572,7 +1579,7 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
                     pWindow->ScreenToOutputPixel( aMousePos ) ) ) ) );
 
     if ( pMouseWindow &&
-         pMouseWindow->IsEnabled() && pMouseWindow->IsInputEnabled() )
+         pMouseWindow->IsEnabled() && pMouseWindow->IsInputEnabled() && ! pMouseWindow->IsInModalMode() )
     {
         // transform coordinates to float window frame coordinates
         Point aRelMousePos( pMouseWindow->OutputToScreenPixel(
@@ -1590,7 +1597,7 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
              (pFocusWindow == pSVData->maWinData.mpFocusWin) )
         {
             // no wheel-messages to disabled windows
-            if ( pFocusWindow->IsEnabled() && pFocusWindow->IsInputEnabled() )
+            if ( pFocusWindow->IsEnabled() && pFocusWindow->IsInputEnabled() && ! pFocusWindow->IsInModalMode() )
             {
                 // transform coordinates to focus window frame coordinates
                 Point aRelMousePos( pFocusWindow->OutputToScreenPixel(
@@ -1784,7 +1791,8 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
         if ( ImplGetWindowImpl()->mpFrameData->mpFocusWin )
         {
             BOOL bHandled = FALSE;
-            if ( ImplGetWindowImpl()->mpFrameData->mpFocusWin->IsInputEnabled() )
+            if ( ImplGetWindowImpl()->mpFrameData->mpFocusWin->IsInputEnabled() &&
+                 ! ImplGetWindowImpl()->mpFrameData->mpFocusWin->IsInModalMode() )
             {
                 if ( ImplGetWindowImpl()->mpFrameData->mpFocusWin->IsEnabled() )
                 {
@@ -1803,7 +1811,8 @@ IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
             {
                 ImplSVData* pSVData = ImplGetSVData();
                 Window*     pTopLevelWindow = ImplGetWindowImpl()->mpFrameData->mpFocusWin->ImplGetFirstOverlapWindow();
-                if ( !pTopLevelWindow->IsInputEnabled() && pSVData->maWinData.mpLastExecuteDlg )
+                if ( ( ! pTopLevelWindow->IsInputEnabled() || pTopLevelWindow->IsInModalMode() )
+                     && pSVData->maWinData.mpLastExecuteDlg )
                     pSVData->maWinData.mpLastExecuteDlg->ToTop( TOTOP_RESTOREWHENMIN | TOTOP_GRABFOCUSONLY);
                 else
                     pTopLevelWindow->GrabFocus();
@@ -1989,7 +1998,7 @@ void ImplHandleClose( Window* pWindow )
     {
         Window *pWin = pWindow->ImplGetWindow();
         // check whether close is allowed
-        if ( !pWin->IsEnabled() || !pWin->IsInputEnabled() )
+        if ( !pWin->IsEnabled() || !pWin->IsInputEnabled() || pWin->IsInModalMode() )
             Sound::Beep( SOUND_DISABLE, pWin );
         else
         {
