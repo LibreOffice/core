@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 11:31:44 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:34:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,7 +277,6 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
             bPrintSelection = 0;
     }
 
-
 //  Der PrintProgress stellt Handler am Printer der ViewShell ein.
 //  Das kann natuerlich erste nach dem evtl. Umschalten des Druckers korrekt
 //  funktionieren. #55210#
@@ -311,11 +310,73 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
         SwPrtOptions aOpts( sDocumentTitle );
         BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
         nMergeType = pMgr->GetMergeType();
+
+        BOOL bPrtPros;
+        BOOL bPrtPros_RTL;
+        SwView::MakeOptions( pDlg, aOpts, &bPrtPros, &bPrtPros_RTL, bWeb, GetPrinter(),
+                        pSh->getIDocumentDeviceAccess()->getPrintData() );
+
+        //set the appropriate view options to print
+        //on silent mode the field commands have to be switched off always
+        //on default print the user is asked what to do
+        const SwViewOption* pCurrentViewOptions = pSh->GetViewOptions();
+        bool bSwitchOff_IsFldName = pCurrentViewOptions->IsFldName() && pSh->IsAnyFieldInDoc();
+
+        if(!bSilent && bSwitchOff_IsFldName)
+        {
+            QueryBox aBox( &GetEditWin(), SW_RES( DLG_PRT_FIELDNAME ) );
+            USHORT nRet = aBox.Execute();
+            if( RET_CANCEL == nRet)
+                return ERRCODE_IO_ABORT;
+            // disable field commands
+            if( RET_NO != nRet )
+            {
+                bSwitchOff_IsFldName = false;
+            }
+        }
+        bool bApplyViewOptions = bSwitchOff_IsFldName;
+        //switch off display of hidden characters if on and hidden characters are in use
+        const sal_Bool bOldShowHiddenChar = pCurrentViewOptions->IsShowHiddenChar();
+        const sal_Bool bOldMetaChars = pCurrentViewOptions->IsViewMetaChars();
+        if( bOldShowHiddenChar != aOpts.IsPrintHiddenText()
+            && pSh->GetDoc()->ContainsHiddenChars())
+            bApplyViewOptions |= true;
+        //switch off display of hidden paragraphs if on and hidden paragraphs are in use
+        const sal_Bool bOldShowHiddenPara = pCurrentViewOptions->IsShowHiddenPara();
+        if( aOpts.IsPrintHiddenText() != bOldShowHiddenPara )
+        {
+            const SwFieldType* pFldType = pSh->GetDoc()->GetSysFldType(RES_HIDDENPARAFLD);
+            if( pFldType && pFldType->GetDepends())
+                bApplyViewOptions |= true;
+        }
+        const sal_Bool bOldShowHiddenField = pCurrentViewOptions->IsShowHiddenField();
+        if( aOpts.IsPrintHiddenText() != bOldShowHiddenField )
+        {
+            const SwFieldType* pFldType = pSh->GetDoc()->GetSysFldType(RES_HIDDENTXTFLD);
+            if( pFldType || pFldType->GetDepends())
+                bApplyViewOptions |= true;
+        }
+
+        SwViewOption* pOrgViewOption = 0;
+        bApplyViewOptions |= !aOpts.IsPrintTextPlaceholder();
+        if(bApplyViewOptions)
+        {
+            pOrgViewOption = new SwViewOption(*pSh->GetViewOptions());
+            if(bSwitchOff_IsFldName)
+                pOrgViewOption->SetFldName(aOpts.IsPrintHiddenText());
+
+            pOrgViewOption->SetShowHiddenChar(aOpts.IsPrintHiddenText());
+            pOrgViewOption->SetViewMetaChars(sal_True);
+            pOrgViewOption->SetShowHiddenPara(aOpts.IsPrintHiddenText());
+            pOrgViewOption->SetShowHiddenField(aOpts.IsPrintHiddenText());
+            pOrgViewOption->SetShowPlaceHolderFields( aOpts.bPrintTextPlaceholder );
+
+            SW_MOD()->ApplyUsrPref(*pOrgViewOption, this, VIEWOPT_DEST_VIEW_ONLY );
+        }
+
         if( nMergeType == DBMGR_MERGE_MAILMERGE ||
                 DBMGR_MERGE_DOCUMENTS == nMergeType )
         {
-            SwView::MakeOptions( pDlg, aOpts, 0, 0, bWeb, GetPrinter(),
-                            pSh->getIDocumentDeviceAccess()->getPrintData() );
             if(DBMGR_MERGE_DOCUMENTS == nMergeType)
                 bStartJob = pMgr->MergePrintDocuments( *this, aOpts, *pProgress, bIsAPI );
             else
@@ -357,14 +418,10 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
             if( !bIsModified )
                 pSh->ResetModified();
 
-            BOOL bPrtPros;
-            BOOL bPrtPros_RTL;
-            SwView::MakeOptions( pDlg, aOpts, &bPrtPros, &bPrtPros_RTL, bWeb, GetPrinter(),
-                            pSh->getIDocumentDeviceAccess()->getPrintData() );
             if( -1 != bPrintSelection )
                 aOpts.bPrintSelection = 0 != bPrintSelection;
 
-            uno::Sequence< beans::PropertyValue> aViewProperties(16);
+            uno::Sequence< beans::PropertyValue> aViewProperties(18);
             beans::PropertyValue* pViewProperties =  aViewProperties.getArray();
             pViewProperties[1].Name = C2U("PrintGraphics");
             pViewProperties[1].Value <<= (sal_Bool)aOpts.IsPrintGraphic();
@@ -398,6 +455,10 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
             pViewProperties[14].Value <<= (sal_Bool)aOpts.bPrintSelection;
             pViewProperties[15].Name = C2U("PrintEmptyPages");
             pViewProperties[15].Value <<= (sal_Bool)aOpts.bPrintEmptyPages;
+            pViewProperties[16].Name = C2U("PrintHiddenText");
+            pViewProperties[16].Value <<= (sal_Bool)aOpts.bPrintHiddenText;
+            pViewProperties[17].Name = C2U("PrintTextPlaceholder");
+            pViewProperties[17].Value <<= (sal_Bool)aOpts.bPrintTextPlaceholder;
             SetAdditionalPrintOptions(aViewProperties);
 
             SfxViewShell::Print(*pProgress, bIsAPI );
@@ -425,6 +486,19 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
                 bStartJob = FALSE;
 
             pSh->LockView( bLockedView );
+        }
+        if(pOrgViewOption)
+        {
+            if(bSwitchOff_IsFldName)
+                pOrgViewOption->SetFldName(TRUE);
+            pOrgViewOption->SetShowHiddenChar(bOldShowHiddenChar);
+            pOrgViewOption->SetViewMetaChars(bOldMetaChars);
+            pOrgViewOption->SetShowHiddenField(bOldShowHiddenField);
+            pOrgViewOption->SetShowHiddenPara(bOldShowHiddenPara);
+            //must to be set to sal_True anyway
+            pOrgViewOption->SetShowPlaceHolderFields( sal_True );
+            SW_MOD()->ApplyUsrPref(*pOrgViewOption, this, VIEWOPT_DEST_VIEW_ONLY );
+            delete pOrgViewOption;
         }
     }
 
@@ -502,8 +576,8 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
     {
         case FN_FAX:
         {
-            SwPrintOptions* pOpt = SW_MOD()->GetPrtOptions(bWeb);
-            String sFaxName(pOpt->GetFaxName());
+            SwPrintOptions* pPrintOptions = SW_MOD()->GetPrtOptions(bWeb);
+            String sFaxName(pPrintOptions->GetFaxName());
             if (sFaxName.Len())
             {
                 SfxStringItem aPrinterName(SID_PRINTER_NAME, sFaxName);
@@ -531,7 +605,6 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
         case SID_PRINTDOCDIRECT:
         {
             SwWrtShell* pSh = &GetWrtShell();
-            SwViewOption* pOrgViewOption = 0;
             SFX_REQUEST_ARG(rReq, pSilentItem, SfxBoolItem, SID_SILENT, FALSE);
             BOOL bSilent = pSilentItem ? pSilentItem->GetValue() : FALSE;
             SFX_REQUEST_ARG(rReq, pPrintFromMergeItem, SfxBoolItem, FN_QRY_MERGE, FALSE);
@@ -554,63 +627,7 @@ void __EXPORT SwView::ExecutePrint(SfxRequest& rReq)
                 }
             }
 
-            //set the appropriate view options to print
-            //on silent mode the field commands have to be switched off always
-            //on default print the user is asked what to do
-            const SwViewOption* pCurrentViewOptions = pSh->GetViewOptions();
-            bool bSwitchOff_IsFldName = pCurrentViewOptions->IsFldName() && pSh->IsAnyFieldInDoc();
-
-            if(!bSilent && bSwitchOff_IsFldName)
-            {
-                QueryBox aBox( &GetEditWin(), SW_RES( DLG_PRT_FIELDNAME ) );
-                USHORT nRet = aBox.Execute();
-                if( RET_CANCEL == nRet)
-                    return;
-                // disable field commands
-                if( RET_NO != nRet )
-                {
-                    bSwitchOff_IsFldName = false;
-                }
-            }
-            bool bApplyViewOptions = bSwitchOff_IsFldName;
-            //switch off display of hidden characters if on and hidden characters are in use
-            bool bSwitchOff_HiddenChar = pCurrentViewOptions->IsShowHiddenChar() && pSh->GetDoc()->ContainsHiddenChars();
-            //switch off display of hidden paragraphs if on and hidden paragraphs are in use
-            bool bSwitchOff_HiddenParagraphs = pCurrentViewOptions->IsShowHiddenPara();
-            if(bSwitchOff_HiddenParagraphs)
-            {
-                const SwFieldType* pFldType = pSh->GetDoc()->GetSysFldType(RES_HIDDENPARAFLD);
-                if(!pFldType || !pFldType->GetDepends())
-                    bSwitchOff_HiddenParagraphs = false;
-            }
-
-            bApplyViewOptions |= bSwitchOff_HiddenChar;
-            bApplyViewOptions |= bSwitchOff_HiddenParagraphs;
-            if(bApplyViewOptions)
-            {
-                pOrgViewOption = new SwViewOption(*pSh->GetViewOptions());
-                if(bSwitchOff_IsFldName)
-                    pOrgViewOption->SetFldName(FALSE);
-                if(bSwitchOff_HiddenChar)
-                    pOrgViewOption->SetShowHiddenChar(FALSE);
-                if(bSwitchOff_HiddenParagraphs)
-                    pOrgViewOption->SetShowHiddenPara(FALSE);
-
-                SW_MOD()->ApplyUsrPref(*pOrgViewOption, this, VIEWOPT_DEST_VIEW_ONLY );
-            }
-
             SfxViewShell::ExecuteSlot( rReq, SfxViewShell::GetInterface() );
-            if(pOrgViewOption)
-            {
-                if(bSwitchOff_IsFldName)
-                    pOrgViewOption->SetFldName(TRUE);
-                if(bSwitchOff_HiddenChar)
-                    pOrgViewOption->SetShowHiddenChar(TRUE);
-                if(bSwitchOff_HiddenParagraphs)
-                    pOrgViewOption->SetShowHiddenPara(TRUE);
-                SW_MOD()->ApplyUsrPref(*pOrgViewOption, this, VIEWOPT_DEST_VIEW_ONLY );
-                delete pOrgViewOption;
-            }
             return;
         }
         default:
