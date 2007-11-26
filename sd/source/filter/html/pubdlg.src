@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pubdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:40:08 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:58:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,7 +393,6 @@ ModalDialog DLG_PUBLISHING
         Pos = MAP_APPFONT( 12, 49 );
         Size = MAP_APPFONT( 116, 10 );
         Text [ en-US ] = "~PNG";
-        Text [ DE ] = "~PNG";
     };
 
     RadioButton PAGE3_GIF
