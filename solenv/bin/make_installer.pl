@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.96 $
+#   $Revision: 1.97 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-23 13:33:45 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 16:17:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -986,7 +986,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         # Now the Profiles can be created
 
-        installer::profiles::create_profiles($profilesinproductlanguageresolvedarrayref, $profileitemsinproductlanguageresolvedarrayref, $filesinproductlanguageresolvedarrayref, $languagestringref);
+        installer::profiles::create_profiles($profilesinproductlanguageresolvedarrayref, $profileitemsinproductlanguageresolvedarrayref, $filesinproductlanguageresolvedarrayref, $languagestringref, $allvariableshashref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles15.log", $filesinproductlanguageresolvedarrayref); }
     }
 
@@ -2027,9 +2027,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             installer::windows::msiglobal::rename_msi_database_in_installset($defaultlanguage, $installdir, $allvariableshashref);
 
+            if ( $allvariableshashref->{'ADDLANGUAGEINDATABASENAME'} ) { installer::windows::msiglobal::add_language_to_msi_database($defaultlanguage, $installdir, $allvariableshashref); }
+
             installer::logger::print_message( "... generating setup.ini ...\n" );
 
-            installer::windows::msiglobal::create_setup_ini($languagesarrayref, $defaultlanguage, $installdir, $allvariableshashref);
+            if ( ! $allvariableshashref->{'NOLOADERREQUIRED'} ) { installer::windows::msiglobal::create_setup_ini($languagesarrayref, $defaultlanguage, $installdir, $allvariableshashref); }
         }
 
         # Analyzing the ScpActions and copying the files into the installation set
@@ -2042,7 +2044,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         # ... copying the setup.exe, instmsia.exe and instmsiw.exe
 
-        installer::windows::msiglobal::copy_windows_installer_files_into_installset($installdir, $includepatharrayref);
+        installer::windows::msiglobal::copy_windows_installer_files_into_installset($installdir, $includepatharrayref, $allvariableshashref);
 
         # ... copying MergeModules into installation set
 
