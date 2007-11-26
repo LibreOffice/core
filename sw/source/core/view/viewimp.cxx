@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:42:37 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:45:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,13 +115,6 @@ void SwViewImp::Init( const SwViewOption *pNewOpt )
     Fraction aSnGrWdtX(rSz.Width(), pNewOpt->GetDivisionX() + 1);
     Fraction aSnGrWdtY(rSz.Height(), pNewOpt->GetDivisionY() + 1);
     pDrawView->SetSnapGridWidth( aSnGrWdtX, aSnGrWdtY );
-
-    //Ersatzdarstellung
-    BOOL bDraw = !pNewOpt->IsDraw();
-    pDrawView->SetLineDraft( bDraw );
-    pDrawView->SetFillDraft( bDraw );
-    pDrawView->SetGrafDraft( bDraw );
-    pDrawView->SetTextDraft( bDraw );
 
     if ( pRoot->Frm().HasArea() )
         pDrawView->SetWorkArea( pRoot->Frm().SVRect() );
