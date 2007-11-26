@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfldi.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:45:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:24:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -771,6 +771,9 @@ protected:
 /** import user docinfo field (<text:user-defined>) */
 class XMLUserDocInfoImportContext : public XMLSimpleDocInfoImportContext
 {
+    rtl::OUString aName;
+    const ::rtl::OUString sPropertyName;
+
 public:
 
     TYPEINFO();
@@ -786,6 +789,9 @@ protected:
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const ::rtl::OUString& sAttrValue );
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet);
 };
 
 
@@ -1564,6 +1570,34 @@ public:
         XMLTextImportHelper& rHlp,              /// Text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const ::rtl::OUString& sLocalName);     /// element name w/o prefix
+
+    /// process attribute values
+    virtual void ProcessAttribute( sal_uInt16 nAttrToken,
+                                   const ::rtl::OUString& sAttrValue );
+
+    /// prepare XTextField for insertion into document
+    virtual void PrepareField(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::beans::XPropertySet> & xPropertySet);
+};
+
+class XMLCustomPropertyFieldImportContext : public XMLTextFieldImportContext
+{
+    ::rtl::OUString sName;
+    ::com::sun::star::uno::Any aValue;
+    const ::rtl::OUString sPropertyName;
+    const ::rtl::OUString sPropertyValue;
+
+public:
+
+    TYPEINFO();
+
+    XMLCustomPropertyFieldImportContext (SvXMLImport& rImport,
+                                    XMLTextImportHelper& rHlp,
+                                    sal_uInt16 nPrfx,
+                                    const ::rtl::OUString& sLocalName);
+
+protected:
 
     /// process attribute values
     virtual void ProcessAttribute( sal_uInt16 nAttrToken,
