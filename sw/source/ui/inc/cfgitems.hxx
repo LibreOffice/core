@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitems.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:16:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:33:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,10 @@ public:
     BOOL IsPrintEmptyPages() const { return bPrintEmptyPages; }
     BOOL IsPrintPageBackground() const { return bPrintPageBackground; }
     BOOL IsPrintBlackFont() const { return bPrintBlackFont; }
+    //#i81434# - printing of hidden text
+    sal_Bool IsPrintHiddenText() const { return bPrintHiddenText; }
+    sal_Bool IsPrintTextPlaceholder() const { return bPrintTextPlaceholder; }
+
     BOOL IsPrintSingleJobs() const { return bPrintSingleJobs; }
     ULONG GetPrintPostIts () const { return nPrintPostIts; }
 
