@@ -10936,7 +10936,7 @@ echo $ECHO_N "checking which package format to use... $ECHO_C" >&6
 		PKGFORMAT=native
 		;;
 	Darwin)
-		PKGFORMAT=portable
+		PKGFORMAT=archive
 		;;
 	SunOS)
 		PKGFORMAT=pkg
