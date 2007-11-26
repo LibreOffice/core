@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:49:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -672,5 +672,9 @@ PushButton PB_FLDEDT_ADDRESS
     Hide = TRUE ;
     Text [ en-US ] = "Edit" ;
     Helpid = HID_DLG_FLDEDT_ADDRESS ;
+};
+String STR_CUSTOM
+{
+    Text [ en-US ] = "Custom" ;
 };
 
