@@ -1,5 +1,5 @@
     <node oor:name="writerglobal8_writer">
         <prop oor:name="UIName">
-            <value xml:lang="en-US">OpenDocument Text</value>
+            <value xml:lang="en-US">ODF Text Document</value>
                     </prop>
     </node>
