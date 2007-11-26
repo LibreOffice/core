@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.210 $
+ *  $Revision: 1.211 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:35:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:11:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
+#include <memory>
 #include <unistd.h>
 #include "app.hxx"
 #include "desktop.hrc"
@@ -314,8 +315,6 @@
 #include <svtools/filter.hxx>
 
 #include "langselect.hxx"
-
-#include <stdio.h>
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
 #define U2S(STRING)                                ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
@@ -1358,8 +1357,8 @@ void Desktop::Main()
     Reference< XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
 
-    SvtLanguageOptions* pLanguageOptions = NULL;
-    SvtPathOptions* pPathOptions = NULL;
+    std::auto_ptr<SvtLanguageOptions> pLanguageOptions;
+    std::auto_ptr<SvtPathOptions> pPathOptions;
 
     try
     {
@@ -1466,7 +1465,7 @@ void Desktop::Main()
         SetDisplayName( aTitle );
 //        SetSplashScreenProgress(30);
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create SvtPathOptions and SvtLanguageOptions" );
-        pPathOptions = new SvtPathOptions;
+        pPathOptions.reset( new SvtPathOptions);
 //        SetSplashScreenProgress(40);
 //        pLanguageOptions = new SvtLanguageOptions(sal_True);
 //        SetSplashScreenProgress(45);
@@ -1516,7 +1515,7 @@ void Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} FirstStartWizard" );
 
         // keep a language options instance...
-        pLanguageOptions = new SvtLanguageOptions(sal_True);
+        pLanguageOptions.reset( new SvtLanguageOptions(sal_True));
 
         if (xGlobalBroadcaster.is())
         {
@@ -1725,11 +1724,11 @@ void Desktop::Main()
 
     tools::DeInitTestToolLib();
 
+    // be sure that path/language options gets destroyed before
+    // UCB is deinitialized
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> dispose path/language options" );
-    if (pLanguageOptions != NULL)
-        delete pLanguageOptions;
-    if (pPathOptions != NULL)
-        delete pPathOptions;
+    pLanguageOptions.reset( 0 );
+    pPathOptions.reset( 0 );
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "<- dispose path/language options" );
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "-> deinit ucb" );
