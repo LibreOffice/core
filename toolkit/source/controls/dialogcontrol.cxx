@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 08:43:40 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:27:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,8 @@
 #include "precompiled_toolkit.hxx"
 
 #include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
+#include <vcl/wall.hxx>
 #include <vos/mutex.hxx>
 #ifndef TOOLKIT_DIALOG_CONTROL_HXX
 #include <toolkit/controls/dialogcontrol.hxx>
@@ -74,6 +76,7 @@
 #ifndef _COM_SUN_STAR_RESOURCE_XSTRINGRESOURCERESOLVER_HPP_
 #include <com/sun/star/resource/XStringResourceResolver.hpp>
 #endif
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
 #endif
@@ -99,11 +102,19 @@
 #include <comphelper/types.hxx>
 #endif
 
+#include <comphelper/componentcontext.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/image.hxx>
+
 #include "tree/treecontrol.hxx"
 
 #include <map>
 #include <algorithm>
 #include <functional>
+#include "tools/urlobj.hxx"
+#include "osl/file.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -114,7 +125,13 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::util;
 using namespace toolkit;
 
-#define PROPERTY_RESOURCERESOLVER rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ))
+#define PROPERTY_RESOURCERESOLVER ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ResourceResolver" ))
+#define PROPERTY_DIALOGSOURCEURL ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogSourceURL" ))
+#define PROPERTY_IMAGEURL ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ImageURL" ))
+#define PROPERTY_GRAPHIC ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Graphic" ))
+
+//HELPER
+::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl );
 
 struct LanguageDependentProp
 {
@@ -141,6 +158,33 @@ namespace
         }
         return s_aLanguageDependentProperties;
     }
+
+    static uno::Reference< graphic::XGraphic > lcl_getGraphicFromURL_nothrow( const ::rtl::OUString& _rURL )
+    {
+        uno::Reference< graphic::XGraphic > xGraphic;
+        if ( !_rURL.getLength() )
+            return xGraphic;
+
+        try
+        {
+            ::comphelper::ComponentContext aContext( ::comphelper::getProcessServiceFactory() );
+            uno::Reference< graphic::XGraphicProvider > xProvider;
+            if ( aContext.createComponent( "com.sun.star.graphic.GraphicProvider", xProvider ) )
+            {
+                uno::Sequence< beans::PropertyValue > aMediaProperties(1);
+                aMediaProperties[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) );
+                aMediaProperties[0].Value <<= _rURL;
+                xGraphic = xProvider->queryGraphic( aMediaProperties );
+            }
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+
+        return xGraphic;
+    }
+
 }
 
 // ----------------------------------------------------------------------------
@@ -266,6 +310,9 @@ UnoControlDialogModel::UnoControlDialogModel()
     ImplRegisterProperty( BASEPROPERTY_SIZEABLE );
     ImplRegisterProperty( BASEPROPERTY_DESKTOP_AS_PARENT );
     ImplRegisterProperty( BASEPROPERTY_DECORATION );
+    ImplRegisterProperty( BASEPROPERTY_DIALOGSOURCEURL );
+    ImplRegisterProperty( BASEPROPERTY_GRAPHIC );
+    ImplRegisterProperty( BASEPROPERTY_IMAGEURL );
 
     Any aBool;
     aBool <<= (sal_Bool) sal_True;
@@ -604,6 +651,31 @@ void UnoControlDialogModel::insertByName( const ::rtl::OUString& aName, const An
 
     Reference< XControlModel > xM;
     aElement >>= xM;
+
+    if ( xM.is() )
+    {
+        Reference< beans::XPropertySet > xProps( xM, UNO_QUERY );
+            if ( xProps.is() )
+            {
+
+                Reference< beans::XPropertySetInfo > xPropInfo = xProps.get()->getPropertySetInfo();
+
+                ::rtl::OUString sImageSourceProperty = GetPropertyName( BASEPROPERTY_IMAGEURL );
+                if ( xPropInfo.get()->hasPropertyByName(  sImageSourceProperty ))
+                {
+                    Any aUrl = xProps.get()->getPropertyValue(  sImageSourceProperty );
+
+                    ::rtl::OUString absoluteUrl =
+                        getPhysicalLocation( getPropertyValue( GetPropertyName( BASEPROPERTY_DIALOGSOURCEURL ) ), aUrl );
+
+                    aUrl <<= absoluteUrl;
+
+                    xProps.get()->setPropertyValue(  sImageSourceProperty , aUrl );
+                }
+            }
+    }
+
+
 
     if ( !aName.getLength() || !xM.is() )
         lcl_throwIllegalArgumentException();
@@ -1602,6 +1674,24 @@ void UnoDialogControl::PrepareWindowDescriptor( ::com::sun::star::awt::WindowDes
         // Now we have to manipulate the WindowDescriptor
         rDesc.WindowAttributes = rDesc.WindowAttributes | ::com::sun::star::awt::WindowAttribute::NODECORATION;
     }
+
+    // We have to set the graphic property before the peer
+    // will be created. Otherwise the properties will be copied
+    // into the peer via propertiesChangeEvents. As the order of
+    // can lead to overwrites we have to set the graphic property
+    // before the propertiesChangeEvents are sent!
+    ::rtl::OUString aImageURL;
+    Reference< graphic::XGraphic > xGraphic;
+    if (( ImplGetPropertyValue( PROPERTY_IMAGEURL ) >>= aImageURL ) &&
+        ( aImageURL.getLength() > 0 ))
+    {
+        ::rtl::OUString absoluteUrl =
+            getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
+                                 ImplGetPropertyValue( PROPERTY_IMAGEURL ));
+
+        xGraphic = lcl_getGraphicFromURL_nothrow( absoluteUrl );
+        ImplSetPropertyValue( PROPERTY_GRAPHIC, uno::makeAny( xGraphic ), sal_True );
+    }
 }
 
 void UnoDialogControl::elementInserted( const ContainerEvent& Event ) throw(RuntimeException)
@@ -1813,6 +1903,31 @@ void UnoDialogControl::ImplModelPropertiesChanged( const Sequence< PropertyChang
         }
     }
 
+    sal_Int32 nLen = rEvents.getLength();
+    for( sal_Int32 i = 0; i < nLen; i++ )
+    {
+        const PropertyChangeEvent& rEvt = rEvents.getConstArray()[i];
+        Reference< XControlModel > xModel( rEvt.Source, UNO_QUERY );
+        sal_Bool bOwnModel = (XControlModel*)xModel.get() == (XControlModel*)getModel().get();
+        if ( bOwnModel && rEvt.PropertyName.equalsAsciiL( "ImageURL", 8 ))
+        {
+            ::rtl::OUString aImageURL;
+            Reference< graphic::XGraphic > xGraphic;
+            if (( ImplGetPropertyValue( PROPERTY_IMAGEURL ) >>= aImageURL ) &&
+                ( aImageURL.getLength() > 0 ))
+            {
+                ::rtl::OUString absoluteUrl =
+                    getPhysicalLocation( ImplGetPropertyValue( PROPERTY_DIALOGSOURCEURL ),
+                                         ImplGetPropertyValue( PROPERTY_IMAGEURL ));
+
+                xGraphic = lcl_getGraphicFromURL_nothrow( absoluteUrl );
+            }
+
+            ImplSetPropertyValue( PROPERTY_GRAPHIC, uno::makeAny( xGraphic ), sal_True );
+            break;
+        }
+    }
+
     UnoControlContainer::ImplModelPropertiesChanged( rEvents );
 }
 
@@ -1988,3 +2103,26 @@ throw (RuntimeException)
 {
     ImplUpdateResourceResolver();
 }
+
+//  ----------------------------------------------------
+//  Helper Method to convert relative url to physical location
+//  ----------------------------------------------------
+
+::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl )
+{
+    ::rtl::OUString ret;
+
+    ::rtl::OUString baseLocation;
+    ::rtl::OUString url;
+
+    rbase  >>= baseLocation;
+    rUrl  >>= url;
+
+    INetURLObject urlObj(baseLocation);
+    urlObj.removeSegment();
+    baseLocation = urlObj.GetMainURL( INetURLObject::NO_DECODE );
+    ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, ret );
+
+    return ret;
+}
+
