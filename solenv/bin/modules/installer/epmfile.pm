@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-09 11:40:20 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 13:16:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -432,7 +432,7 @@ sub create_epm_header
                 }
             }
 
-            if ( $installer::globals::debian )
+            if ( $installer::globals::debian && $variableshashref->{'UNIXPRODUCTNAME'} eq 'openoffice.org' )
             {
                 $line = "%provides" . " openoffice.org-unbundled\n";
                 push(@epmheader, $line);
