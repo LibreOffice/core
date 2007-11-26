@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofgraphic.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-10-15 17:34:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:52:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,79 +124,75 @@ namespace sdr
             DisplayInfo& rDisplayInfo, const ViewObjectContact& rAssociatedVOC)
         {
             sal_Bool bRetval(sal_False);
+            SdrGrafObj& rGrafObj = GetGrafObject();
 
-            if(!rDisplayInfo.IsDraftGraphic())
+            // 2nd part should not be necessary when all graphics creationg instances set
+            // the SwapState correctly. It was there for historical reasons since before
+            // the SwapState could be set it was simply 'tried' to SwapIn a GRAPHIC_NONE
+            if(rGrafObj.IsSwappedOut() /*|| (GRAPHIC_NONE == rGrafObj.GetGraphicType())*/)
             {
-                SdrGrafObj& rGrafObj = GetGrafObject();
-
-                // 2nd part should not be necessary when all graphics creationg instances set
-                // the SwapState correctly. It was there for historical reasons since before
-                // the SwapState could be set it was simply 'tried' to SwapIn a GRAPHIC_NONE
-                if(rGrafObj.IsSwappedOut() /*|| (GRAPHIC_NONE == rGrafObj.GetGraphicType())*/)
+                if(rGrafObj.IsLinkedGraphic())
                 {
-                    if(rGrafObj.IsLinkedGraphic())
-                    {
-                        // update graphic link
-                        rGrafObj.ImpUpdateGraphicLink();
-                    }
-                    else
-                    {
-                        // SwapIn needs to be done. Decide if it can be done asynchronious.
-                        sal_Bool bSwapInAsynchronious(sal_False);
-                        ObjectContact& rObjectContact = rAssociatedVOC.GetObjectContact();
-
-                        // only when allowed from configuration
-                        if(rObjectContact.IsAsynchronGraphicsLoadingAllowed())
-                        {
-                            // direct output or vdev output (PageView buffering)
-                            if(rDisplayInfo.OutputToWindow() || rDisplayInfo.OutputToVirtualDevice())
-                            {
-                                // only when no metafile recording
-                                if(!rDisplayInfo.OutputToRecordingMetaFile())
-                                {
-                                    // allow asynchronious loading
-                                    bSwapInAsynchronious = sal_True;
-                                }
-                            }
-                        }
-
-                        if(bSwapInAsynchronious)
-                        {
-                            // maybe it's on the way, then do nothing
-                            if(!mpAsynchLoadEvent)
-                            {
-                                // Trigger asynchronious SwapIn.
-                                sdr::event::TimerEventHandler& rEventHandler = rObjectContact.GetEventHandler();
-
-                                mpAsynchLoadEvent = new sdr::event::AsynchGraphicLoadingEvent(
-                                    rEventHandler, *this);
-                            }
-                        }
-                        else
-                        {
-                            if ( rDisplayInfo.OutputToPrinter() )   // #i76395# preview mechanism is only active if
-                                rGrafObj.ForceSwapIn();             // swapin is called from inside paint, so mbInsidePaint
-                            else                                    // has to be false to be able to print with high resolution
-                            {
-                                // SwapIn direct
-                                rGrafObj.mbInsidePaint = sal_True;
-                                rGrafObj.ForceSwapIn();
-                                rGrafObj.mbInsidePaint = sal_False;
-                            }
-                            bRetval = sal_True;
-                        }
-                    }
+                    // update graphic link
+                    rGrafObj.ImpUpdateGraphicLink();
                 }
                 else
                 {
-                    // it is not swapped out, somehow it was loaded. In that case, forget
-                    // about an existing triggered event
-                    if(mpAsynchLoadEvent)
+                    // SwapIn needs to be done. Decide if it can be done asynchronious.
+                    sal_Bool bSwapInAsynchronious(sal_False);
+                    ObjectContact& rObjectContact = rAssociatedVOC.GetObjectContact();
+
+                    // only when allowed from configuration
+                    if(rObjectContact.IsAsynchronGraphicsLoadingAllowed())
                     {
-                        // just delete it, this will remove it from the EventHandler and
-                        // will trigger ForgetAsynchGraphicLoadingEvent from the destructor
-                        delete mpAsynchLoadEvent;
+                        // direct output or vdev output (PageView buffering)
+                        if(rDisplayInfo.OutputToWindow() || rDisplayInfo.OutputToVirtualDevice())
+                        {
+                            // only when no metafile recording
+                            if(!rDisplayInfo.OutputToRecordingMetaFile())
+                            {
+                                // allow asynchronious loading
+                                bSwapInAsynchronious = sal_True;
+                            }
+                        }
                     }
+
+                    if(bSwapInAsynchronious)
+                    {
+                        // maybe it's on the way, then do nothing
+                        if(!mpAsynchLoadEvent)
+                        {
+                            // Trigger asynchronious SwapIn.
+                            sdr::event::TimerEventHandler& rEventHandler = rObjectContact.GetEventHandler();
+
+                            mpAsynchLoadEvent = new sdr::event::AsynchGraphicLoadingEvent(
+                                rEventHandler, *this);
+                        }
+                    }
+                    else
+                    {
+                        if ( rDisplayInfo.OutputToPrinter() )   // #i76395# preview mechanism is only active if
+                            rGrafObj.ForceSwapIn();             // swapin is called from inside paint, so mbInsidePaint
+                        else                                    // has to be false to be able to print with high resolution
+                        {
+                            // SwapIn direct
+                            rGrafObj.mbInsidePaint = sal_True;
+                            rGrafObj.ForceSwapIn();
+                            rGrafObj.mbInsidePaint = sal_False;
+                        }
+                        bRetval = sal_True;
+                    }
+                }
+            }
+            else
+            {
+                // it is not swapped out, somehow it was loaded. In that case, forget
+                // about an existing triggered event
+                if(mpAsynchLoadEvent)
+                {
+                    // just delete it, this will remove it from the EventHandler and
+                    // will trigger ForgetAsynchGraphicLoadingEvent from the destructor
+                    delete mpAsynchLoadEvent;
                 }
             }
 
@@ -375,15 +371,8 @@ namespace sdr
         }
 
         // Decide if graphic should be painted as draft
-        sal_Bool ViewContactOfGraphic::DoPaintGraphicDraft(DisplayInfo& rDisplayInfo) const
+        sal_Bool ViewContactOfGraphic::DoPaintGraphicDraft() const
         {
-            // #115931#
-            // Take care for SDRPAINTMODE_DRAFTGRAF
-            if(rDisplayInfo.IsDraftGraphic())
-            {
-                return sal_True;
-            }
-
             SdrGrafObj& rGrafObj = GetGrafObject();
 
             if( !rGrafObj.mbIsPreview && rGrafObj.IsSwappedOut())
@@ -475,7 +464,7 @@ namespace sdr
             sal_Bool bSwapInDone = ImpPrepareForPaint(rDisplayInfo, rAssociatedVOC);
             sal_Bool bSwapInExclusiveForPrinting = (bSwapInDone && rDisplayInfo.OutputToPrinter());
 
-            if(DoPaintGraphicDraft(rDisplayInfo))
+            if(DoPaintGraphicDraft())
             {
                 if(GetGrafObject().IsEmptyPresObj())
                 {
