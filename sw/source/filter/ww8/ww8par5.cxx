@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:05:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:31:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1536,6 +1536,25 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
 
     if( 85 == pF->nId )
     {
+        String aDocProperty;
+        _ReadFieldParams aReadParam( rStr );
+        long nRet;
+        while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
+        {
+            switch( nRet )
+            {
+                case -2:
+                    if( !aDocProperty.Len() )
+                        aDocProperty = aReadParam.GetResult();
+                    break;
+                case '*':
+                    //Skip over MERGEFORMAT
+                    aReadParam.SkipToNextToken();
+                    break;
+            }
+        }
+        aDocProperty.EraseAllChars('"');
+
         /*
         There are up to 26 fields that may be meant by 'DocumentProperty'.
         Which of them is to be inserted here ?
@@ -1543,116 +1562,93 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
         method that compares the given Parameter String with the four
         possible name sets (english, german, french, spanish)
         */
-        String aStr( rStr );
-        xub_StrLen nPos1 = aStr.Search( '"' );
-        if( (STRING_NOTFOUND != nPos1) && (nPos1+1 < aStr.Len()) )
+
+        static const sal_Char* aName10 = "\x0F"; // SW field code
+        static const sal_Char* aName11 // German
+            = "TITEL";
+        static const sal_Char* aName12 // French
+            = "TITRE";
+        static const sal_Char* aName13 // English
+            = "TITLE";
+        static const sal_Char* aName14 // Spanish
+            = "TITRO";
+        static const sal_Char* aName20 = "\x15"; // SW filed code
+        static const sal_Char* aName21 // German
+            = "ERSTELLDATUM";
+        static const sal_Char* aName22 // French
+            = "CR\xC9\xC9";
+        static const sal_Char* aName23 // English
+            = "CREATED";
+        static const sal_Char* aName24 // Spanish
+            = "CREADO";
+        static const sal_Char* aName30 = "\x16"; // SW filed code
+        static const sal_Char* aName31 // German
+            = "ZULETZTGESPEICHERTZEIT";
+        static const sal_Char* aName32 // French
+            = "DERNIERENREGISTREMENT";
+        static const sal_Char* aName33 // English
+            = "SAVED";
+        static const sal_Char* aName34 // Spanish
+            = "MODIFICADO";
+        static const sal_Char* aName40 = "\x17"; // SW filed code
+        static const sal_Char* aName41 // German
+            = "ZULETZTGEDRUCKT";
+        static const sal_Char* aName42 // French
+            = "DERNI\xC8" "REIMPRESSION";
+        static const sal_Char* aName43 // English
+            = "LASTPRINTED";
+        static const sal_Char* aName44 // Spanish
+            = "HUPS PUPS";
+        static const sal_Char* aName50 = "\x18"; // SW filed code
+        static const sal_Char* aName51 // German
+            = "\xDC" "BERARBEITUNGSNUMMER";
+        static const sal_Char* aName52 // French
+            = "NUM\xC9" "RODEREVISION";
+        static const sal_Char* aName53 // English
+            = "REVISIONNUMBER";
+        static const sal_Char* aName54 // Spanish
+            = "SNUBBEL BUBBEL";
+        static const USHORT nFldCnt  = 5;
+
+        // additional fields are to be coded soon!   :-)
+
+        static const USHORT nLangCnt = 4;
+        static const sal_Char *aNameSet_26[nFldCnt][nLangCnt+1] =
         {
-            xub_StrLen nPos2 = aStr.SearchAndReplace( '"', '\0', nPos1+1 );
-            if (STRING_NOTFOUND != nPos2)
+            {aName10, aName11, aName12, aName13, aName14},
+            {aName20, aName21, aName22, aName23, aName24},
+            {aName30, aName31, aName32, aName33, aName34},
+            {aName40, aName41, aName42, aName43, aName44},
+            {aName50, aName51, aName52, aName53, aName54}
+        };
+
+        bool bFldFound= false;
+        USHORT nFIdx;
+        for(USHORT nLIdx=1; !bFldFound && (nLangCnt > nLIdx); ++nLIdx)
+        {
+            for(nFIdx = 0;  !bFldFound && (nFldCnt  > nFIdx); ++nFIdx)
             {
-                aStr.Erase(0, nPos1+1);
-                static const sal_Char* aName10 = "\x0F"; // SW field code
-                static const sal_Char* aName11 // German
-                    = "TITEL";
-                static const sal_Char* aName12 // French
-                    = "TITRE";
-                static const sal_Char* aName13 // English
-                    = "TITLE";
-                static const sal_Char* aName14 // Spanish
-                    = "TITRO";
-                static const sal_Char* aName20 = "\x15"; // SW filed code
-                static const sal_Char* aName21 // German
-                    = "ERSTELLDATUM";
-                static const sal_Char* aName22 // French
-                    = "CR\xC9\xC9";
-                static const sal_Char* aName23 // English
-                    = "CREATED";
-                static const sal_Char* aName24 // Spanish
-                    = "CREADO";
-                static const sal_Char* aName30 = "\x16"; // SW filed code
-                static const sal_Char* aName31 // German
-                    = "ZULETZTGESPEICHERTZEIT";
-                static const sal_Char* aName32 // French
-                    = "DERNIERENREGISTREMENT";
-                static const sal_Char* aName33 // English
-                    = "SAVED";
-                static const sal_Char* aName34 // Spanish
-                    = "MODIFICADO";
-                static const sal_Char* aName40 = "\x17"; // SW filed code
-                static const sal_Char* aName41 // German
-                    = "ZULETZTGEDRUCKT";
-                static const sal_Char* aName42 // French
-                    = "DERNI\xC8" "REIMPRESSION";
-                static const sal_Char* aName43 // English
-                    = "LASTPRINTED";
-                static const sal_Char* aName44 // Spanish
-                    = "HUPS PUPS";
-                static const sal_Char* aName50 = "\x18"; // SW filed code
-                static const sal_Char* aName51 // German
-                    = "\xDC" "BERARBEITUNGSNUMMER";
-                static const sal_Char* aName52 // French
-                    = "NUM\xC9" "RODEREVISION";
-                static const sal_Char* aName53 // English
-                    = "REVISIONNUMBER";
-                static const sal_Char* aName54 // Spanish
-                    = "SNUBBEL BUBBEL";
-                static const USHORT nFldCnt  = 5;
-
-                // additional fields are to be coded soon!   :-)
-
-                static const USHORT nLangCnt = 4;
-                static const sal_Char *aNameSet_26[nFldCnt][nLangCnt+1] =
+                if( aDocProperty.Equals( String( aNameSet_26[nFIdx][nLIdx],
+                    RTL_TEXTENCODING_MS_1252 ) ) )
                 {
-                    {aName10, aName11, aName12, aName13, aName14},
-                    {aName20, aName21, aName22, aName23, aName24},
-                    {aName30, aName31, aName32, aName33, aName34},
-                    {aName40, aName41, aName42, aName43, aName44},
-                    {aName50, aName51, aName52, aName53, aName54}
-                };
-                bool bFldFound= false;
-                USHORT nFIdx;
-                for(USHORT nLIdx=1; !bFldFound && (nLangCnt > nLIdx); ++nLIdx)
-                {
-                    for(nFIdx = 0;  !bFldFound && (nFldCnt  > nFIdx); ++nFIdx)
-                    {
-                        if( aStr.Equals( String( aNameSet_26[nFIdx][nLIdx],
-                            RTL_TEXTENCODING_MS_1252 ) ) )
-                        {
-                            bFldFound = true;
-                            pF->nId   = aNameSet_26[nFIdx][0][0];
-                        }
-                    }
+                    bFldFound = true;
+                    pF->nId   = aNameSet_26[nFIdx][0][0];
                 }
-                if( !bFldFound )
-                    return FLD_TEXT; // Error: give up
             }
         }
-        else
-        {
-            // MM Create a user field
-            String aDocProperty;
-            _ReadFieldParams aReadParam( aStr );
-            long nRet;
-            while( -1 != ( nRet = aReadParam.SkipToNextToken() ))
-            {
-                switch( nRet )
-                {
-                    case -2:
-                        if( !aDocProperty.Len() )
-                            aDocProperty = aReadParam.GetResult();
-                        break;
-                    case '*':
-                        //Skip over MERGEFORMAT
-                        aReadParam.SkipToNextToken();
-                        break;
-                }
-            }
 
+        if( !bFldFound )
+        {
+/*
             SwUserFieldType aTmp( &rDoc, aDocProperty );
             aTmp.SetContent(GetFieldResult( pF ));
             SwUserField aUFld( (SwUserFieldType*)rDoc.InsertFldType( aTmp ));
             aUFld.ChangeFormat( UF_STRING );
             rDoc.Insert( *pPaM, SwFmtFld( aUFld ), 0);
+*/
+            SwDocInfoField aFld( (SwDocInfoFieldType*)
+                rDoc.GetSysFldType( RES_DOCINFOFLD ), DI_CUSTOM|nReg, aDocProperty );
+            rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
 
             return FLD_OK;
         }
@@ -1729,7 +1725,7 @@ eF_ResT SwWW8ImplReader::Read_F_DocInfo( WW8FieldDesc* pF, String& rStr )
     }
 
     SwDocInfoField aFld( (SwDocInfoFieldType*)
-        rDoc.GetSysFldType( RES_DOCINFOFLD ), nSub|nReg, nFormat );
+        rDoc.GetSysFldType( RES_DOCINFOFLD ), nSub|nReg, String(), nFormat );
     if (bDateTime)
         ForceFieldLanguage(aFld, nLang);
     rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
@@ -1744,7 +1740,7 @@ eF_ResT SwWW8ImplReader::Read_F_Author( WW8FieldDesc*, String& )
         // (#56149)
     SwDocInfoField aFld( (SwDocInfoFieldType*)
                      rDoc.GetSysFldType( RES_DOCINFOFLD ),
-                     DI_CREATE|DI_SUB_AUTHOR );
+                     DI_CREATE|DI_SUB_AUTHOR, String() );
     rDoc.Insert( *pPaM, SwFmtFld( aFld ), 0 );
     return FLD_OK;
 }
