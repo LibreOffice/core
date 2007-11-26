@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 09:22:45 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:40:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -415,8 +415,8 @@ enum ScInputMode
 enum ScVObjMode                     // Ausgabemodi von Objekten auf einer Seite
 {
     VOBJ_MODE_SHOW,
-    VOBJ_MODE_HIDE,
-    VOBJ_MODE_DUMMY
+    VOBJ_MODE_HIDE
+    // #i80528# VOBJ_MODE_DUMMY removed, no longer supported
 };
 
 enum ScAnchorType                   // Verankerung eines Zeichenobjekts
