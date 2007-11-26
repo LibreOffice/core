@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-07 10:24:03 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 12:43:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,10 @@ LIBXMLINCDIR=external$/libxml
 CFLAGS+= -I$(SOLARINCDIR)$/$(LIBXMLINCDIR)
 .ENDIF
 
+.IF "$(SYSTEM_OPENSSL)" == "YES"
+CFLAGS+= $(OPENSSL_CFLAGS)
+.ENDIF
+
 # --- General -----------------------------------------------------
 
 SLOFILES=\
@@ -142,7 +146,11 @@ SHL1STDLIBS+= -lnsl -lsocket -ldl
 .IF "$(OS)"=="OS2"
 SHL1STDLIBS+= pthread.lib libz.lib
 .ENDIF # OS2
+.IF "$(SYSTEM_OPENSSL)"=="YES"
+SHL1STDLIBS+= $(OPENSSLLIB)
+.ELSE
 SHL1STDLIBS+= $(OPENSSLLIBST)
+.ENDIF
 .ENDIF # WNT
 
 
