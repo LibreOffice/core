@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:31:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:38:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,16 @@ struct SvtPrinterImpl;
 // - PrintDialog-Types -
 // ---------------------
 
-enum PrintDialogRange { PRINTDIALOG_ALL, PRINTDIALOG_SELECTION,
-                        PRINTDIALOG_FROMTO, PRINTDIALOG_RANGE };
+enum PrintDialogRange{
+    PRINTDIALOG_ALL, PRINTDIALOG_SELECTION, PRINTDIALOG_FROMTO, PRINTDIALOG_RANGE };
+
+enum PrintSheetRange
+{
+    PRINTSHEETS_ALL,
+    PRINTSHEETS_SELECTED_SHEETS,
+    PRINTSHEETS_SELECTED_CELLS
+};
+
 
 // ---------------
 // - PrintDialog -
@@ -95,30 +103,44 @@ private:
     FixedInfo           maFiLocation;
     FixedText           maFtComment;
     FixedInfo           maFiComment;
+
+    // "Print to file" or "Fax number"
     CheckBox            maCbxFilePrint;
     FixedInfo           maFiPrintFile;
     FixedText           maFiFaxNo;
     Edit                maEdtFaxNo;
-    PushButton          maBtnBrowse_nomore;
+    //PushButton         maBtnBrowse_nomore;
+
+    // "Print"
+    FixedLine           maFlPrint;
+    RadioButton         maRbtAllSheets;
+    RadioButton         maRbtSelectedSheets;
+    RadioButton         maRbtSelectedCells;
+
+    // "Print range"
     FixedLine           maFlPrintRange;
     RadioButton         maRbtAll;
     RadioButton         maRbtPages;
-    RadioButton         maRbtSelection;
     Edit                maEdtPages;
+    RadioButton         maRbtSelection;
+
+    FixedLine           maFlSepCopiesRange;
+
+    // "Copies"
     FixedLine           maFlCopies;
     FixedText           maFtCopies;
     NumericField        maNumCopies;
     FixedImage          maImgCollate;
     FixedImage          maImgNotCollate;
     CheckBox            maCbxCollate;
+
+    FixedLine           maFlSepButtonLine;
     PushButton          maBtnOptions;
     OKButton            maBtnOK;
     CancelButton        maBtnCancel;
     HelpButton          maBtnHelp;
-    AutoTimer           maStatusTimer;
-    FixedLine           maFlSepCopiesRange;
-    FixedLine           maFlSepButtonLine;
 
+    AutoTimer           maStatusTimer;
     Printer*            mpPrinter;
     SvtPrinterImpl*     mpPrinterImpl;
 
@@ -136,32 +158,40 @@ private:
     BOOL                mbCollate;
     BOOL                mbCollateCheck;
     BOOL                mbOptions;
+    bool                mbWithSheetsAndCells;
     Link                maOptionsHdlLink; // Link zum Options-Handler
     Link                maOKHdlLink;      // Link zum OK-Handler
 
     String              maAllFilterStr;
 
-    SVT_DLLPRIVATE void             ImplCheckOK();
-    SVT_DLLPRIVATE void             ImplInitControls();
-    SVT_DLLPRIVATE void             ImplFillDialogData();
-    SVT_DLLPRIVATE void             ImplSetInfo();
-    SVT_DLLPRIVATE void                ImplSetImages();
-    SVT_DLLPRIVATE bool             ImplGetFilename();
+    SVT_DLLPRIVATE void     ImplCheckOK();
+    SVT_DLLPRIVATE void     ImplInitControls();
+    SVT_DLLPRIVATE void     ImplFillDialogData();
+    SVT_DLLPRIVATE void     ImplSetInfo();
+    SVT_DLLPRIVATE void     ImplSetImages();
+    SVT_DLLPRIVATE bool     ImplGetFilename();
 
-                        DECL_DLLPRIVATE_LINK( ImplPropertiesHdl, void* );
-                        DECL_DLLPRIVATE_LINK( ImplChangePrinterHdl, void* );
-                        DECL_DLLPRIVATE_LINK( ImplModifyControlHdl, void* );
-                        DECL_DLLPRIVATE_LINK( ImplStatusHdl, Timer* );
+    DECL_DLLPRIVATE_LINK(   ImplPropertiesHdl, void* );
+    DECL_DLLPRIVATE_LINK(   ImplChangePrinterHdl, void* );
+    DECL_DLLPRIVATE_LINK(   ImplModifyControlHdl, void* );
+    DECL_DLLPRIVATE_LINK(   ImplStatusHdl, Timer* );
 
 public:
-                        PrintDialog( Window* pWindow );
-                        ~PrintDialog();
+    PrintDialog( Window* pWindow, bool bWithSheetsAndCells );
+    ~PrintDialog();
 
     virtual long        OK();
     virtual long        ClickOptionsHdl();
 
     void                SetPrinter( Printer* pNewPrinter ) { mpPrinter = pNewPrinter; }
     Printer*            GetPrinter() const { return mpPrinter; }
+
+    inline bool         IsSheetRangeAvailable() const { return mbWithSheetsAndCells; }
+    void                EnableSheetRange( bool bEnable, PrintSheetRange eRange );
+    bool                IsSheetRangeEnabled( PrintSheetRange eRange ) const;
+    void                CheckSheetRange( PrintSheetRange eRange );
+    PrintSheetRange     GetCheckedSheetRange() const;
+    bool                IsSheetRangeChecked( PrintSheetRange eRange ) const;
 
     void                EnableRange( PrintDialogRange eRange );
     void                DisableRange( PrintDialogRange eRange );
@@ -276,3 +306,4 @@ inline void PrintDialog::SetLastPage( USHORT nPage )
 }
 
 #endif // _SV_PRINTDLG_HXX_
+
