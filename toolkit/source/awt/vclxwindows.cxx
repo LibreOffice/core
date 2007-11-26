@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:15:51 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:27:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,7 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#include <vcl/tabpage.hxx>
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -2138,6 +2139,149 @@ void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::s
 #endif
 
     return aInfo;
+}
+
+
+void SAL_CALL VCLXDialog::setProperty(
+    const ::rtl::OUString& PropertyName,
+    const ::com::sun::star::uno::Any& Value )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Dialog* pDialog = (Dialog*)GetWindow();
+    if ( pDialog )
+    {
+        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_GRAPHIC:
+            {
+                Reference< XGraphic > xGraphic;
+                if (( Value >>= xGraphic ) && xGraphic.is() )
+                {
+                    Image aImage( xGraphic );
+
+                    Wallpaper aWallpaper( aImage.GetBitmapEx());
+                    aWallpaper.SetStyle( WALLPAPER_SCALE );
+                    pDialog->SetBackground( aWallpaper );
+                }
+                else if ( bVoid || !xGraphic.is() )
+                {
+                    Color aColor = pDialog->GetControlBackground().GetColor();
+                    if ( aColor == COL_AUTO )
+                        aColor = pDialog->GetSettings().GetStyleSettings().GetDialogColor();
+
+                    Wallpaper aWallpaper( aColor );
+                    pDialog->SetBackground( aWallpaper );
+                }
+            }
+            break;
+
+            default:
+            {
+                VCLXWindow::setProperty( PropertyName, Value );
+            }
+        }
+    }
+}
+
+//  ----------------------------------------------------
+//  class VCLXTabPage
+//  ----------------------------------------------------
+VCLXTabPage::VCLXTabPage()
+{
+}
+
+VCLXTabPage::~VCLXTabPage()
+{
+}
+
+::com::sun::star::uno::Any SAL_CALL VCLXTabPage::queryInterface(const ::com::sun::star::uno::Type & rType )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    return VCLXContainer::queryInterface( rType );
+}
+
+// ::com::sun::star::lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( VCLXTabPage )
+    VCLXContainer::getTypes()
+IMPL_XTYPEPROVIDER_END
+
+// ::com::sun::star::awt::XView
+void SAL_CALL VCLXTabPage::draw( sal_Int32 nX, sal_Int32 nY )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    Window* pWindow = GetWindow();
+
+    if ( pWindow )
+    {
+        OutputDevice* pDev = VCLUnoHelper::GetOutputDevice( GetViewGraphics() );
+        if ( !pDev )
+            pDev = pWindow->GetParent();
+
+        Size aSize = pDev->PixelToLogic( pWindow->GetSizePixel() );
+        Point aPos = pDev->PixelToLogic( Point( nX, nY ) );
+
+        pWindow->Draw( pDev, aPos, aSize, WINDOW_DRAW_NOCONTROLS );
+    }
+}
+
+// ::com::sun::star::awt::XDevice,
+::com::sun::star::awt::DeviceInfo SAL_CALL VCLXTabPage::getInfo()
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
+    return aInfo;
+}
+
+void SAL_CALL VCLXTabPage::setProperty(
+    const ::rtl::OUString& PropertyName,
+    const ::com::sun::star::uno::Any& Value )
+throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    TabPage* pTabPage = (TabPage*)GetWindow();
+    if ( pTabPage )
+    {
+        sal_Bool bVoid = Value.getValueType().getTypeClass() == ::com::sun::star::uno::TypeClass_VOID;
+
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_GRAPHIC:
+            {
+                Reference< XGraphic > xGraphic;
+                if (( Value >>= xGraphic ) && xGraphic.is() )
+                {
+                    Image aImage( xGraphic );
+
+                    Wallpaper aWallpaper( aImage.GetBitmapEx());
+                    aWallpaper.SetStyle( WALLPAPER_SCALE );
+                    pTabPage->SetBackground( aWallpaper );
+                }
+                else if ( bVoid || !xGraphic.is() )
+                {
+                    Color aColor = pTabPage->GetControlBackground().GetColor();
+                    if ( aColor == COL_AUTO )
+                        aColor = pTabPage->GetSettings().GetStyleSettings().GetDialogColor();
+
+                    Wallpaper aWallpaper( aColor );
+                    pTabPage->SetBackground( aWallpaper );
+                }
+            }
+            break;
+
+            default:
+            {
+                VCLXContainer::setProperty( PropertyName, Value );
+            }
+        }
+    }
 }
 
 //  ----------------------------------------------------
