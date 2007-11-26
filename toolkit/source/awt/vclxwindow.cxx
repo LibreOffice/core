@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 12:57:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:26:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1714,9 +1714,34 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case BASEPROPERTY_BACKGROUNDCOLOR:
                 if ( bVoid )
                 {
-                    if ( pWindow->IsCompoundControl() )
-                        pWindow->SetBackground();
-                    pWindow->SetControlBackground();
+//                    if ( pWindow->IsCompoundControl() )
+//                        pWindow->SetBackground();
+//                    pWindow->SetControlBackground();
+
+                    switch ( eWinType )
+                    {
+                        // set dialog color for default
+                        case WINDOW_DIALOG:
+                        case WINDOW_MESSBOX:
+                        case WINDOW_INFOBOX:
+                        case WINDOW_WARNINGBOX:
+                        case WINDOW_ERRORBOX:
+                        case WINDOW_QUERYBOX:
+                        case WINDOW_TABPAGE:
+                        {
+                            Color aColor = pWindow->GetSettings().GetStyleSettings().GetDialogColor();
+                            pWindow->SetBackground( aColor );
+                            pWindow->SetControlBackground( aColor );
+                            break;
+                        }
+
+                        default:
+                        {
+                            pWindow->SetBackground();
+                            pWindow->SetControlBackground();
+                            break;
+                        }
+                    }
                 }
                 else
                 {
@@ -1949,6 +1974,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 sal_Bool bPaintTransparent = false;
                 Value >>= bPaintTransparent;
                 pWindow->SetPaintTransparent( bPaintTransparent );
+//                pWindow->SetBackground();
             }
             break;
 
