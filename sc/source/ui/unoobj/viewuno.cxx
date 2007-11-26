@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:11:05 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:43:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1761,19 +1761,34 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
         {
             sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
-                aNewOpt.SetObjMode( VOBJ_TYPE_OLE, (ScVObjMode) nIntVal );
+            {
+                //#i80528# adapt to new range eventually
+                if((sal_Int16)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int16)VOBJ_MODE_SHOW;
+
+                aNewOpt.SetObjMode( VOBJ_TYPE_OLE, (ScVObjMode)nIntVal);
+            }
         }
         else if ( aString.EqualsAscii( SC_UNO_SHOWCHARTS ) )
         {
             sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
-                aNewOpt.SetObjMode( VOBJ_TYPE_CHART, (ScVObjMode) nIntVal );
+            {
+                //#i80528# adapt to new range eventually
+                if((sal_Int16)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int16)VOBJ_MODE_SHOW;
+
+                aNewOpt.SetObjMode( VOBJ_TYPE_CHART, (ScVObjMode)nIntVal);
+            }
         }
         else if ( aString.EqualsAscii( SC_UNO_SHOWDRAW ) )
         {
             sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
-                aNewOpt.SetObjMode( VOBJ_TYPE_DRAW, (ScVObjMode) nIntVal );
+            {
+                //#i80528# adapt to new range eventually
+                if((sal_Int16)VOBJ_MODE_HIDE < nIntVal) nIntVal = (sal_Int16)VOBJ_MODE_SHOW;
+
+                aNewOpt.SetObjMode( VOBJ_TYPE_DRAW, (ScVObjMode)nIntVal);
+            }
         }
         else if ( aString.EqualsAscii( SC_UNO_GRIDCOLOR ) )
         {
