@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 11:30:47 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:36:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -719,10 +719,6 @@ void SlideSorterViewShell::ReadFrameViewData (FrameView* pFrameView)
     if (pFrameView != NULL)
     {
         view::SlideSorterView& rView (*mpSlideSorterView);
-        rView.SetLineDraft (pFrameView->IsLineDraft());
-        rView.SetFillDraft (pFrameView->IsFillDraft());
-        rView.SetTextDraft (pFrameView->IsTextDraft());
-        rView.SetGrafDraft (pFrameView->IsGrafDraft());
 
         USHORT nSlidesPerRow (pFrameView->GetSlidesPerRow());
         if (nSlidesPerRow == 0 || ! IsMainViewShell())
@@ -751,11 +747,6 @@ void SlideSorterViewShell::WriteFrameViewData()
     if (mpFrameView != NULL)
     {
         view::SlideSorterView& rView (*mpSlideSorterView);
-        mpFrameView->SetLineDraft( rView.IsLineDraft() );
-        mpFrameView->SetFillDraft( rView.IsFillDraft() );
-        mpFrameView->SetTextDraft( rView.IsTextDraft() );
-        mpFrameView->SetGrafDraft( rView.IsGrafDraft() );
-
         mpFrameView->SetSlidesPerRow((USHORT)rView.GetLayouter().GetColumnCount());
 
         // DrawMode for 'main' window
