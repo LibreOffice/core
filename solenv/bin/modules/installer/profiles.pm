@@ -4,9 +4,9 @@
 #
 #   $RCSfile: profiles.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 15:08:57 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 16:18:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,13 +97,14 @@ sub sorting_profile
 
 sub add_profile_into_filelist
 {
-    my ($filesarrayref, $oneprofile, $completeprofilename) = @_;
+    my ($filesarrayref, $oneprofile, $completeprofilename, $allvariables) = @_;
 
     my %profile = ();
 
     # Taking the base data from the "gid_File_Lib_Vcl"
 
     my $vclgid = "gid_File_Lib_Vcl";
+    if ( $allvariables->{'GLOBALFILEGID'} ) { $vclgid = $allvariables->{'GLOBALFILEGID'}; }
     my $vclfile = installer::existence::get_specified_file($filesarrayref, $vclgid);
 
     # copying all base data
@@ -146,7 +147,7 @@ sub include_windows_lineends
 
 sub create_profiles
 {
-    my ($profilesref, $profileitemsref, $filesarrayref, $languagestringref) = @_;
+    my ($profilesref, $profileitemsref, $filesarrayref, $languagestringref, $allvariables) = @_;
 
     my $infoline;
 
@@ -221,7 +222,7 @@ sub create_profiles
 
         # Adding the file to the filearray
         # Some data are set now, others are taken from the file "soffice.exe" ("soffice.bin")
-        add_profile_into_filelist($filesarrayref, $oneprofile, $completeprofilename);
+        add_profile_into_filelist($filesarrayref, $oneprofile, $completeprofilename, $allvariables);
 
         $infoline = "Created Profile: $completeprofilename\n";
         push( @installer::globals::logfileinfo, $infoline);
