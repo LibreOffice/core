@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 16:36:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,7 +233,7 @@ PrintDialog* PrintManager::CreatePrintDialog (::Window *pParent)
 {
     PrintDialog* pDlg;
 
-    pDlg = new PrintDialog(pParent );
+    pDlg = new PrintDialog( pParent, false );
 
     ViewShell* pShell = mrBase.GetMainViewShell().get();
     if (pShell!=NULL && ! pShell->ISA(OutlineViewShell))
