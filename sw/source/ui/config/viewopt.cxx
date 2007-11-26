@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:29:40 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:33:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,6 +247,7 @@ SwViewOption::SwViewOption() :
     bFormView(FALSE),
     // <--
     bBookview(FALSE),
+    bShowPlaceHolderFields( sal_True ),
 
     nZoom( 100 ),
     eZoom( SVX_ZOOM_PERCENT ),
@@ -303,6 +304,7 @@ SwViewOption::SwViewOption(const SwViewOption& rVOpt)
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
     bStarOneSetting = rVOpt.bStarOneSetting;
     bBookview       = rVOpt.bBookview;
+    bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
 
 #ifndef PRODUCT
     bTest1          = rVOpt.bTest1      ;
@@ -340,6 +342,7 @@ SwViewOption& SwViewOption::operator=( const SwViewOption &rVOpt )
     nShdwCrsrFillMode = rVOpt.nShdwCrsrFillMode;
     bStarOneSetting = rVOpt.bStarOneSetting;
     bBookview       = rVOpt.bBookview;
+    bShowPlaceHolderFields = rVOpt.bShowPlaceHolderFields;
 
 #ifndef PRODUCT
     bTest1          = rVOpt.bTest1      ;
