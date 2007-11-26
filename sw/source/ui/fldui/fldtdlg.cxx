@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldtdlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:48:54 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:32:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,8 @@
 #ifndef _SVX_HTMLMODE_HXX //autogen
 #include <svx/htmlmode.hxx>
 #endif
+
+#include <sfx2/docinf.hxx>
 
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
@@ -198,7 +200,7 @@ SwFldDlg::~SwFldDlg()
 
 BOOL SwFldDlg::Close()
 {
-    SfxViewFrame::Current()->GetDispatcher()->
+    m_pBindings->GetDispatcher()->
         Execute(m_bDataBaseMode ? FN_INSERT_FIELD_DATA_ONLY : FN_INSERT_FIELD,
         SFX_CALLMODE_ASYNCHRON|SFX_CALLMODE_RECORD);
     return TRUE;
@@ -258,9 +260,19 @@ void SwFldDlg::Initialize(SfxChildWinInfo *pInfo)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SfxItemSet* SwFldDlg::CreateInputItemSet( USHORT  )
+SfxItemSet* SwFldDlg::CreateInputItemSet( USHORT nID  )
 {
-    return 0;
+    if ( nID == TP_FLD_DOKINF )
+    {
+        SwDocShell* pDocSh = (SwDocShell*)SfxObjectShell::Current();
+        SfxItemSet* pISet = new SfxItemSet( pDocSh->GetPool(), SID_DOCINFO, SID_DOCINFO );
+        com::sun::star::uno::Any aAny;
+        aAny <<= pDocSh->GetDocInfo().GetCustomPropertyNames();
+        pISet->Put( SfxUnoAnyItem( SID_DOCINFO, aAny ) );
+        return pISet;
+    }
+    else
+        return 0;
 }
 
 /*--------------------------------------------------------------------
