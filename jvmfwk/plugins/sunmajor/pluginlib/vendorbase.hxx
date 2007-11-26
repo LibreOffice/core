@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vendorbase.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 15:24:01 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:04:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,11 @@ namespace jfw_plugin
 #define JFW_PLUGIN_ARCH "s390"
 #elif defined X86_64
 #define JFW_PLUGIN_ARCH "amd64"
-#else // SPARC, INTEL, POWERPC, MIPS
+#elif defined ARM
+#define JFW_PLUGIN_ARCH "arm"
+#else // SPARC, INTEL, POWERPC, MIPS, ARM
 #error unknown plattform
-#endif // SPARC, INTEL, POWERPC, MIPS
+#endif // SPARC, INTEL, POWERPC, MIPS, ARM
 
 
 class MalformedVersionException
