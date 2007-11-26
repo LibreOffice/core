@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:43:36 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:46:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,6 @@ class SwDrawViewSave
 {
     String sLayerNm;
     SdrView* pDV;
-    sal_Bool bPrintDraft;
     sal_Bool bPrintControls;
 public:
     SwDrawViewSave( SdrView* pSdrView );
@@ -1673,7 +1672,6 @@ SwDrawViewSave::SwDrawViewSave( SdrView* pSdrView )
 {
     if ( pDV )
     {
-        bPrintDraft = pDV->IsLineDraftPrn();
         sLayerNm.AssignAscii( RTL_CONSTASCII_STRINGPARAM("Controls" ) );
         bPrintControls = pDV->IsLayerPrintable( sLayerNm );
     }
@@ -1683,10 +1681,6 @@ SwDrawViewSave::~SwDrawViewSave()
 {
     if ( pDV )
     {
-        pDV->SetLineDraftPrn( bPrintDraft );
-        pDV->SetFillDraftPrn( bPrintDraft );
-        pDV->SetGrafDraftPrn( bPrintDraft );
-        pDV->SetTextDraftPrn( bPrintDraft );
         pDV->SetLayerPrintable( sLayerNm, bPrintControls );
     }
 }
@@ -1706,23 +1700,6 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
     if ( HasDrawView() )
     {
         SdrView *pDrawView = GetDrawView();
-        BOOL bDraw = rOptions.bPrintDraw;
-        // OD 09.01.2003 #i6467# - consider, if view shell belongs to page preview
-        if ( !IsPreView() )
-        {
-            pDrawView->SetLineDraftPrn( !bDraw );
-            pDrawView->SetFillDraftPrn( !bDraw );
-            pDrawView->SetGrafDraftPrn( !bDraw );
-            pDrawView->SetTextDraftPrn( !bDraw );
-        }
-        else
-        {
-            pDrawView->SetLineDraft( !bDraw );
-            pDrawView->SetFillDraft( !bDraw );
-            pDrawView->SetGrafDraft( !bDraw );
-            pDrawView->SetTextDraft( !bDraw );
-        }
-
         String sLayerNm;
         sLayerNm.AssignAscii(RTL_CONSTASCII_STRINGPARAM("Controls" ));
         // OD 09.01.2003 #i6467# - consider, if view shell belongs to page preview
