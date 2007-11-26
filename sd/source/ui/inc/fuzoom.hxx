@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuzoom.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 17:19:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,10 +73,6 @@ protected:
     Rectangle   aZoomRect;
     BOOL        bVisible;
     BOOL        bStartDrag;
-    BOOL        bLineDraft;
-    BOOL        bFillDraft;
-    BOOL        bTextDraft;
-    BOOL        bGrafDraft;
     Pointer     aPtr;
 
 private:
