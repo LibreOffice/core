@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:31:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:46:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,6 +274,8 @@ static const String sDocumentBaseURL = String::CreateFromAscii( "DocumentBaseURL
 static const String sHierarchicalDocumentName = String::CreateFromAscii( "HierarchicalDocumentName" );
 static const String sCopyStreamIfPossible = String::CreateFromAscii( "CopyStreamIfPossible" );
 static const String sNoAutoSave     = String::CreateFromAscii( "NoAutoSave" );
+static const String sFolderName     = String::CreateFromAscii( "FolderName"   );
+static const String sUseSystemDialog   = String::CreateFromAscii( "UseSystemDialog"   );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -752,6 +754,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     if (bOK)
                         rSet.Put( SfxBoolItem( SID_EDITDOC, !bVal ) );
                 }
+                else if ( aName == sUseSystemDialog )
+                {
+                    sal_Bool bVal = sal_False;
+                    sal_Bool bOK = (rProp.Value >>= bVal);
+                    DBG_ASSERT( bOK, "invalid type for ViewOnly" )
+                    if (bOK)
+                        rSet.Put( SfxBoolItem( SID_FILE_DIALOG, bVal ) );
+                }
                 else if ( aName == sFileName )
                 {
                     ::rtl::OUString sVal;
@@ -767,6 +777,14 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     DBG_ASSERT( bOK, "invalid type or value for SalvageURL" )
                     if (bOK)
                         rSet.Put( SfxStringItem( SID_DOC_SALVAGE, sVal ) );
+                }
+                else if ( aName == sFolderName )
+                {
+                    ::rtl::OUString sVal;
+                    sal_Bool bOK = (rProp.Value >>= sVal);
+                    DBG_ASSERT( bOK, "invalid type or value for SalvageURL" )
+                    if (bOK)
+                        rSet.Put( SfxStringItem( SID_PATH, sVal ) );
                 }
                 else if ( aName == sFrameName )
                 {
@@ -1002,6 +1020,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 nAdditional++;
             if ( rSet.GetItemState( SID_DOC_SALVAGE ) == SFX_ITEM_SET )
                 nAdditional++;
+            if ( rSet.GetItemState( SID_PATH ) == SFX_ITEM_SET )
+                nAdditional++;
+            if ( rSet.GetItemState( SID_FILE_DIALOG ) == SFX_ITEM_SET )
+                nAdditional++;
             if ( rSet.GetItemState( SID_CONTENT ) == SFX_ITEM_SET )
                 nAdditional++;
             if ( rSet.GetItemState( SID_INPUTSTREAM ) == SFX_ITEM_SET )
@@ -1178,6 +1200,10 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                     if ( nId == SID_TARGETNAME )
                         continue;
                     if ( nId == SID_DOC_SALVAGE )
+                        continue;
+                    if ( nId == SID_PATH )
+                        continue;
+                    if ( nId == SID_FILE_DIALOG )
                         continue;
                     if ( nId == SID_CONTENTTYPE )
                         continue;
@@ -1466,6 +1492,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
                 pValue[nActProp].Name = sDontEdit;
                 pValue[nActProp++].Value <<= (sal_Bool) (!( ((SfxBoolItem*)pItem)->GetValue() ));
             }
+            if ( rSet.GetItemState( SID_FILE_DIALOG, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sUseSystemDialog;
+                pValue[nActProp++].Value <<= (sal_Bool) ( ((SfxBoolItem*)pItem)->GetValue() );
+            }
             if ( rSet.GetItemState( SID_TARGETNAME, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = sFrameName;
@@ -1474,6 +1505,11 @@ void TransformItems( sal_uInt16 nSlotId, const SfxItemSet& rSet, ::com::sun::sta
             if ( rSet.GetItemState( SID_DOC_SALVAGE, sal_False, &pItem ) == SFX_ITEM_SET )
             {
                 pValue[nActProp].Name = sSalvageURL;
+                pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
+            }
+            if ( rSet.GetItemState( SID_PATH, sal_False, &pItem ) == SFX_ITEM_SET )
+            {
+                pValue[nActProp].Name = sFolderName;
                 pValue[nActProp++].Value <<= (  ::rtl::OUString(((SfxStringItem*)pItem)->GetValue()) );
             }
             if ( rSet.GetItemState( SID_CONTENTTYPE, sal_False, &pItem ) == SFX_ITEM_SET )
