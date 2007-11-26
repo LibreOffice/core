@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.79 $
+#   $Revision: 1.80 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 13:17:41 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 13:21:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -219,6 +219,11 @@ $(MAKETARGETS) : $(ADDDEPS)
 
 .ENDIF			# "$(BUILD_SPECIAL)"!=""
 
+.IF "$(OS)" == "MACOSX"
+DMGDEPS=$(BIN)$/{osxdndinstall.png DS_Store}
+$(foreach,i,$(alllangiso) {openoffice openofficedev openofficedevarchive openofficewithjre broffice brofficedev brofficewithjre ooowoure}_$i) : $(DMGDEPS)
+.ENDIF # "$(OS)" == "MACOSX"
+
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) openoffice_$i) : $$@{$(PKGFORMAT:^".")}
 .IF "$(MAKETARGETS)"!="" && "$(PKGFORMAT)"!=""
@@ -231,21 +236,8 @@ openoffice_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
 openoffice_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
-.IF "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!="portable"
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
-    $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product OpenOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
-.ELSE                   # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice -u $(OUT) -buildid $(BUILD) -destdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b))_inprogress$/ -simple staging
-    $(RM) $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b))$/gid_*
-    -$(MKDIR) $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b))$/staging$/.background
-    $(COPY) $(PRJ)$/res/osxdndinstall.png $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b))$/staging$/.background$/background.png
-    $(COPY) $(PRJ)$/res/DS_Store $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b))$/staging$/.DS_Store
-    ln -s /Applications $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b))$/staging$/
-    cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice$/install$/ $(@:b)) && hdiutil makehybrid -hfs -hfs-openfolder staging staging \
-    -hfs-volume-name OpenOffice.org -ov -o tmp && hdiutil convert -ov -format UDZO tmp.dmg \
-    -o $(subst,$(@:s/_/ /:1),OpenOffice.org-$(shell @sed -n '/^OpenOffice$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b)) && $(RM:s/+//) tmp.dmg
-
-.ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
+    $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product OpenOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH).update.xml
 
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) openofficewithjre_$i) : $$@{$(PKGFORMAT:^".")}
@@ -262,7 +254,7 @@ openofficedev_%{$(PKGFORMAT:^".")} :
 openofficedev_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_Dev -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
-    $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product OpenOffice_Dev --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH)$(@:e).update.xml
+    $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product OpenOffice_Dev --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH).update.xml
 
 openofficedevarchive_% :
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_Dev -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles -format archive
@@ -289,14 +281,7 @@ sdkoo_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
 sdkoo_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
-.IF "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!="portable"
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) -dontstrip $(PKGFORMATSWITCH)) -log
-.ELSE                   # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_SDK -u $(OUT) -buildid $(BUILD) -destdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_SDK$/install$/ $(@:b))_inprogress$/ -simple 'SDK/OpenOffice.org SDK'
-    $(RM) $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_SDK$/install$/ $(@:b))$/gid_*
-    rmdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_SDK$/install$/ $(@:b))$/SDK/OpenOffice.org
-    cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_SDK$/install$/ $(@:b)) && hdiutil create -srcfolder 'SDK' -volname 'OpenOffice.org SDK' -ov -o $(subst,$(@:s/_/ /:1),OpenOffice.org-SDK-$(shell @sed -n '/^OpenOffice_SDK$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b))
-.ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
 
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) ure_$i) : $$@{$(PKGFORMAT:^".")}
@@ -304,19 +289,10 @@ ure_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
 ure_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
-.IF "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!="portable"
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst \
         -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p URE -u $(OUT) -buildid $(BUILD) $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH)) \
         -msitemplate $(MSIURETEMPLATEDIR) \
         -msilanguage $(COMMONMISC)$/win_ulffiles
-.ELSE                   # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
-    $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst \
-    -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p URE -u $(OUT) -buildid $(BUILD) \
-    -destdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/URE$/install$/ $(@:b))_inprogress$/ -simple 'URE/OpenOffice.org URE'
-    $(RM) $(subst,$(@:s/_/ /:1)_,$(OUT)$/URE$/install$/ $(@:b))$/gid_*
-    rmdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/URE$/install$/ $(@:b))$/URE/OpenOffice.org
-    cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/URE$/install$/ $(@:b)) && hdiutil create -srcfolder 'URE' -volname 'OpenOffice.org URE' -ov -o $(subst,$(@:s/_/ /:1),OpenOffice.org-URE-$(shell sed -n '/^URE$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b))
-.ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
 
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) broffice_$i) : $$@{$(PKGFORMAT:^".")}
@@ -330,21 +306,8 @@ broffice_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
 broffice_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
-.IF "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!="portable"
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
     $(PERL) -w $(SOLARENV)$/bin$/gen_update_info.pl --buildid $(BUILD) --arch "$(RTL_ARCH)" --os "$(RTL_OS)" --lstfile $(PRJ)$/util$/openoffice.lst --product BrOffice --languages $(subst,$(@:s/_/ /:1)_, $(@:b)) $(PRJ)$/util$/update.xml > $(MISC)/$(@:b)_$(RTL_OS)_$(RTL_ARCH).update.xml
-.ELSE                   # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice -u $(OUT) -buildid $(BUILD) -destdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b))_inprogress$/ -simple staging
-    +$(RM) $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b))$/gid_*
-    +-$(MKDIR) $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b))$/staging$/.background
-    +$(COPY) $(PRJ)$/res/osxdndinstall.png $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b))$/staging$/.background$/background.png
-    +$(COPY) $(PRJ)$/res/DS_Store $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b))$/staging$/.DS_Store
-    +ln -s /Applications $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b))$/staging$/
-    +cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice$/install$/ $(@:b)) && hdiutil makehybrid -hfs -hfs-openfolder staging staging \
-    -hfs-volume-name BrOffice.org -ov -o tmp && hdiutil convert -ov -format UDZO tmp.dmg \
-    -o $(subst,$(@:s/_/ /:1),BrOffice.org-$(shell @sed -n '/^BrOffice$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b)) && $(RM) tmp.dmg
-
-.ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
 
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) brofficewithjre_$i) : $$@{$(PKGFORMAT:^".")}
@@ -377,14 +340,7 @@ sdkbro_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
 sdkbro_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
-.IF "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!="portable"
     +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_SDK -u $(OUT) -buildid $(BUILD) -msitemplate $(MSISDKOOTEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) -dontstrip $(PKGFORMATSWITCH))
-.ELSE                   # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p BrOffice_SDK -u $(OUT) -buildid $(BUILD) -destdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice_SDK$/install$/ $(@:b))_inprogress$/ -simple 'SDK/BrOffice.org SDK'
-    +$(RM) $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice_SDK$/install$/ $(@:b))$/gid_*
-    +rmdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice_SDK$/install$/ $(@:b))$/SDK/BrOffice.org
-    +cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/BrOffice_SDK$/install$/ $(@:b)) && hdiutil create -srcfolder 'SDK' -volname 'BrOffice.org SDK' -ov -o $(subst,$(@:s/_/ /:1),BrOffice.org-SDK-$(shell @sed -n '/^BrOffice_SDK$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b))
-.ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
 
 .IF "$(PKGFORMAT)"!=""
 $(foreach,i,$(alllangiso) ooowoure_$i) : $$@{$(PKGFORMAT:^".")}
@@ -392,19 +348,7 @@ ooowoure_%{$(PKGFORMAT:^".")} :
 .ELSE			# "$(PKGFORMAT)"!=""
 ooowoure_% :
 .ENDIF			# "$(PKGFORMAT)"!=""
-.IF "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!="portable"
     $(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_woURE -u $(OUT) -buildid $(BUILD) -msitemplate $(MSIOFFICETEMPLATEDIR) -msilanguage $(COMMONMISC)$/win_ulffiles $(subst,xxx,$(@:e:s/.//) $(PKGFORMATSWITCH))
-.ELSE                   # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
-    +$(PERL) -w $(SOLARENV)$/bin$/make_installer.pl -f $(PRJ)$/util$/openoffice.lst -l $(subst,$(@:s/_/ /:1)_, $(@:b)) -p OpenOffice_woURE -u $(OUT) -buildid $(BUILD) -destdir $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_woURE$/install$/ $(@:b))_inprogress$/ -simple staging
-    +$(RM) $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_woURE$/install$/ $(@:b))$/gid_*
-    +-$(MKDIR) $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_woURE$/install$/ $(@:b))$/staging$/.background
-    +$(COPY) $(PRJ)$/res/osxdndinstall.png $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_woURE$/install$/ $(@:b))$/staging$/.background$/background.png
-    +$(COPY) $(PRJ)$/res/DS_Store $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_woURE$/install$/ $(@:b))$/staging$/.DS_Store
-    +ln -s /Applications $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_woURE$/install$/ $(@:b))$/staging$/
-    +cd $(subst,$(@:s/_/ /:1)_,$(OUT)$/OpenOffice_woURE$/install$/ $(@:b)) && hdiutil makehybrid -hfs -hfs-openfolder staging staging \
-    -hfs-volume-name OpenOffice.org -ov -o tmp && hdiutil convert -ov -format UDZO tmp.dmg \
-    -o $(subst,$(@:s/_/ /:1),OpenOffice.org-$(shell @sed -n '/^OpenOffice_woURE$$/,/^}$$/ s/.*PACKAGEVERSION //p' openoffice.lst) $(@:b)) && $(RM) tmp.dmg
-.ENDIF                  # "$(OS)"!="MACOSX" || "$(PKGFORMAT)"!=""
 
 .ELSE			# "$(alllangiso)"!=""
 openoffice:
@@ -449,6 +393,9 @@ $(BIN)$/broffice_dev$/intro.zip : $(SOLARCOMMONPCKDIR)$/broffice_dev_nologo$/int
 $(BIN)$/broffice$/intro.zip : $(SOLARCOMMONPCKDIR)$/broffice_nologo$/intro.zip
     @-$(MKDIR) $(@:d)
     $(COPY) $< $@
+
+$(BIN)$/{osxdndinstall.png DS_Store} : $(PRJ)$/res$/$$(@:f)
+    @$(COPY) $< $@
 
 hack_msitemplates .PHONY:
     -$(MKDIRHIER) $(MSIOFFICETEMPLATEDIR)
