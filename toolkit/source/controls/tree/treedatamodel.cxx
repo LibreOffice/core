@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treedatamodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:22:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:54:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ public:
     virtual void SAL_CALL appendChild( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode >& ChildNode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL insertChildByIndex( ::sal_Int32 Index, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XMutableTreeNode >& ChildNode ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeChildByIndex( ::sal_Int32 Index ) throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setHasChildsOnDemand( ::sal_Bool ChildsOnDemand ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHasChildrenOnDemand( ::sal_Bool ChildrenOnDemand ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setDisplayValue( const ::com::sun::star::uno::Any& Value ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setNodeGraphicURL( const ::rtl::OUString& URL ) throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setExpandedGraphicURL( const ::rtl::OUString& URL ) throw (::com::sun::star::uno::RuntimeException);
@@ -148,7 +148,7 @@ public:
     virtual ::sal_Int32 SAL_CALL getChildCount(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode > SAL_CALL getParent(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getIndex( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeNode >& Node ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasChildsOnDemand(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL hasChildrenOnDemand(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getDisplayValue(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getNodeGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getExpandedGraphicURL(  ) throw (::com::sun::star::uno::RuntimeException);
@@ -431,11 +431,12 @@ void SAL_CALL MutableTreeNode::appendChild( const Reference< XMutableTreeNode >&
     Reference< XTreeNode > xNode( xChildNode.get() );
     MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
 
-    if( !xImpl.is() || xImpl->mbIsInserted )
+    if( !xImpl.is() || xImpl->mbIsInserted || (this == xImpl.get()) )
         throw IllegalArgumentException();
 
     maChilds.push_back( xImpl );
     xImpl->setParent(this);
+    xImpl->mbIsInserted = true;
 
     broadcast_changes( xNode, true );
 }
@@ -451,7 +452,7 @@ void SAL_CALL MutableTreeNode::insertChildByIndex( sal_Int32 nChildIndex, const 
 
     Reference< XTreeNode > xNode( xChildNode.get() );
     MutableTreeNodeRef xImpl( dynamic_cast< MutableTreeNode* >( xNode.get() ) );
-    if( !xImpl.is() || xImpl->mbIsInserted )
+    if( !xImpl.is() || xImpl->mbIsInserted || (this == xImpl.get()) )
         throw IllegalArgumentException();
 
     xImpl->mbIsInserted = true;
@@ -498,7 +499,7 @@ void SAL_CALL MutableTreeNode::removeChildByIndex( sal_Int32 nChildIndex ) throw
 
 //---------------------------------------------------------------------
 
-void SAL_CALL MutableTreeNode::setHasChildsOnDemand( sal_Bool bChildsOnDemand ) throw (RuntimeException)
+void SAL_CALL MutableTreeNode::setHasChildrenOnDemand( sal_Bool bChildsOnDemand ) throw (RuntimeException)
 {
     bool bChanged;
 
@@ -623,7 +624,7 @@ sal_Int32 SAL_CALL MutableTreeNode::getIndex( const Reference< XTreeNode >& xNod
 
 //---------------------------------------------------------------------
 
-sal_Bool SAL_CALL MutableTreeNode::hasChildsOnDemand(  ) throw (RuntimeException)
+sal_Bool SAL_CALL MutableTreeNode::hasChildrenOnDemand(  ) throw (RuntimeException)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( maMutex );
     return mbHasChildsOnDemand;
