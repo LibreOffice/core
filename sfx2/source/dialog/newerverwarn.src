@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: newerverwarn.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:23:10 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "newerverwarn.hrc"
+#include "dialog.hrc"
+#include "helpid.hrc"
+
+#define STD_MASKCOLOR Color { Red=0xffff; Green=0x0000; Blue=0xffff; }
+
+ModalDialog RID_DLG_NEWER_VERSION_WARNING
+{
+    HelpId = HID_DLG_NEWERVERSIONWARNING;
+    OutputSize = TRUE ;
+    Size = MAP_APPFONT ( DLG_WIDTH , DLG_HEIGHT ) ;
+    SvLook = TRUE ;
+    Moveable = TRUE ;
+    Closeable = TRUE ;
+    Text [ en-US ] = "%PRODUCTNAME Update Available" ;
+    FixedImage FI_IMAGE
+    {
+        Pos = MAP_APPFONT ( COL_1 , ROW_1  );
+        Size = MAP_APPFONT ( IMAGE_WIDTH , IMAGE_HEIGHT );
+        Hide = FALSE;
+        Fixed = Image
+        {
+            ImageBitmap = Bitmap { File = "versionwarning.bmp"; };
+            MaskColor = STD_MASKCOLOR;
+        };
+    };
+    FixedText FT_INFO
+    {
+        Pos = MAP_APPFONT( COL_2, ROW_1 );
+        Size = MAP_APPFONT( INFO_WIDTH, INFO_LINES * RSC_CD_FIXEDTEXT_HEIGHT );
+        Wordbreak = TRUE;
+        Text [ en-US ] = "This document was created by a newer version of %PRODUCTNAME. It may contain features not supported by your current version.\n\nClick 'Update Now...' to run online update and get the latest version of %PRODUCTNAME.";
+    };
+    FixedLine FL_BUTTON
+    {
+        Pos = MAP_APPFONT ( 0 , ROW_2 ) ;
+        Size = MAP_APPFONT ( DLG_WIDTH , RSC_CD_FIXEDLINE_HEIGHT ) ;
+    };
+    PushButton PB_UPDATE
+    {
+        Pos = MAP_APPFONT ( COL_3 , ROW_3 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Update Now..." ;
+    };
+    CancelButton PB_LATER
+    {
+        Pos = MAP_APPFONT ( COL_4 , ROW_3 ) ;
+        Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "~Later" ;
+    };
+};
+
