@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:30:06 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:36:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,12 +231,6 @@ private:
 class SD_DLLPUBLIC SdOptionsContents : public SdOptionsGeneric
 {
 private:
-
-    BOOL    bExternGraphic  : 1; // Content/Display/PicturePlaceholder
-    BOOL    bOutlineMode    : 1; // Content/Display/ContourMode
-    BOOL    bHairlineMode   : 1; // Content/Display/LineContour
-    BOOL    bNoText         : 1; // Content/Display/TextPlaceholder
-
 protected:
 
     virtual void GetPropNameArray( const char**& ppNames, ULONG& rCount ) const;
@@ -250,16 +244,6 @@ public:
 
     void    SetDefaults();
     BOOL    operator==( const SdOptionsContents& rOpt ) const;
-
-    BOOL    IsExternGraphic() const { Init(); return (BOOL) bExternGraphic; }
-    BOOL    IsOutlineMode() const { Init(); return (BOOL) bOutlineMode; }
-    BOOL    IsHairlineMode() const { Init(); return (BOOL) bHairlineMode; }
-    BOOL    IsNoText() const { Init(); return (BOOL) bNoText; }
-
-    void    SetExternGraphic( BOOL bOn = TRUE ) { if( bExternGraphic != bOn ) { OptionsChanged(); bExternGraphic = bOn; } }
-    void    SetOutlineMode( BOOL bOn = TRUE ) { if( bOutlineMode != bOn ) { OptionsChanged(); bOutlineMode = bOn; } }
-    void    SetHairlineMode( BOOL bOn = TRUE ) { if( bHairlineMode != bOn ) { OptionsChanged(); bHairlineMode = bOn; } }
-    void    SetNoText( BOOL bOn = TRUE ) { if( bNoText != bOn ) { OptionsChanged(); bNoText = bOn; } }
 };
 
 // -----------------------------------------------------------------------------
