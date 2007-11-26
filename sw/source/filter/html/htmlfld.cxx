@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlfld.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:47:08 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:30:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -498,7 +498,7 @@ void SwHTMLParser::NewField()
                 }
 
                 pFld = new SwDocInfoField( (SwDocInfoFieldType *)pType,
-                                             nSub, nNumFmt );
+                                             nSub, String(), nNumFmt );
                 if( bHasNumValue )
                     ((SwDocInfoField*)pFld)->SetValue( dValue );
             }
