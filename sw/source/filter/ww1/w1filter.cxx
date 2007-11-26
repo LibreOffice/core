@@ -4,9 +4,9 @@
  *
  *  $RCSfile: w1filter.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:28:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:30:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -781,27 +781,27 @@ oncemore:
         break;
         case 15: // title
             pField = new SwDocInfoField((SwDocInfoFieldType*)
-             rOut.GetSysFldType(RES_DOCINFOFLD), DI_TITEL, 0);
+             rOut.GetSysFldType(RES_DOCINFOFLD), DI_TITEL, String(), 0);
         break;
         case 16: // subject
             pField = new SwDocInfoField((SwDocInfoFieldType*)
-             rOut.GetSysFldType(RES_DOCINFOFLD), DI_THEMA, 0);
+             rOut.GetSysFldType(RES_DOCINFOFLD), DI_THEMA, String(), 0);
         break;
         case 17: // author
             pField = new SwAuthorField((SwAuthorFieldType*)
-             rOut.GetSysFldType(RES_AUTHORFLD), AF_NAME);
+             rOut.GetSysFldType(RES_AUTHORFLD), AF_NAME );
         break;
         case 18: // keywords
             pField = new SwDocInfoField((SwDocInfoFieldType*)
-             rOut.GetSysFldType(RES_DOCINFOFLD), DI_KEYS, 0);
+             rOut.GetSysFldType(RES_DOCINFOFLD), DI_KEYS, String(), 0);
         break;
         case 19: // comments
             pField = new SwDocInfoField((SwDocInfoFieldType*)
-             rOut.GetSysFldType(RES_DOCINFOFLD), DI_COMMENT, 0);
+             rOut.GetSysFldType(RES_DOCINFOFLD), DI_COMMENT, String(), 0);
         break;
         case 20: // last revised by
             pField = new SwDocInfoField((SwDocInfoFieldType*)
-             rOut.GetSysFldType(RES_DOCINFOFLD), DI_CHANGE|DI_SUB_AUTHOR);
+             rOut.GetSysFldType(RES_DOCINFOFLD), DI_CHANGE|DI_SUB_AUTHOR, String());
         break;
         case 21: // creation date
         case 22: // revision date
@@ -828,12 +828,12 @@ oncemore:
                         // WW_DONTKNOW -> Default bereits gesetzt
                     }
                     pField = new SwDocInfoField((SwDocInfoFieldType*)
-                        rOut.GetSysFldType(RES_DOCINFOFLD), nSub | nReg);
+                        rOut.GetSysFldType(RES_DOCINFOFLD), nSub | nReg, String());
                 }
         break;
         case 24: // revision number
             pField = new SwDocInfoField((SwDocInfoFieldType*)
-             rOut.GetSysFldType(RES_DOCINFOFLD),  DI_DOCNO, 0);
+             rOut.GetSysFldType(RES_DOCINFOFLD),  DI_DOCNO, String(), 0);
         break;
         case 26: // number of pages
             pField = new SwDocStatField((SwDocStatFieldType*)
