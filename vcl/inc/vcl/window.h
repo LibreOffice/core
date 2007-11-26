@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 07:44:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:11:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,7 +377,8 @@ public:
                         mbMenuFloatingWindow:1,
                         mbDrawSelectionBackground:1,
                         mbIsInTaskPaneList:1,
-                        mbToolbarFloatingWindow:1;
+                        mbToolbarFloatingWindow:1,
+                        mbCallHandlersDuringInputDisabled:1;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > mxDNDListenerContainer;
 };
