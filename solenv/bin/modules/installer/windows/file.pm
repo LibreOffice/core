@@ -4,9 +4,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 09:55:08 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 16:19:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -592,6 +592,15 @@ sub create_files_table
         push(@filetable, $oneline);
 
         push(@allfiles, $onefile);
+
+        # Collecting all component conditions
+        if ( $onefile->{'ComponentCondition'} )
+        {
+            if ( ! exists($installer::globals::componentcondition{$file{'Component_'}}))
+            {
+                $installer::globals::componentcondition{$file{'Component_'}} = $onefile->{'ComponentCondition'};
+            }
+        }
 
         if ( $installer::globals::prepare_winpatch )
         {
