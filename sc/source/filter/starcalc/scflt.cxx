@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:54:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1544,7 +1544,7 @@ void Sc10Import::LoadTables()
             if ( IS_SET(dfObjectAll,Display) )          // Objekte anzeigen
                 eObjMode = VOBJ_MODE_SHOW;
             else if ( IS_SET(dfObjectFrame,Display) )   // Objekte als Platzhalter
-                eObjMode = VOBJ_MODE_DUMMY;
+                eObjMode = VOBJ_MODE_SHOW;
             else if ( IS_SET(dfObjectNone,Display) )    // Objekte nicht anzeigen
                 eObjMode = VOBJ_MODE_HIDE;
 
