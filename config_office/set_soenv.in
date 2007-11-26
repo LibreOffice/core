@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.163 $
-# Date:        $Date: 2007-11-26 12:47:08 $
+# Version:     $Revision: 1.164 $
+# Date:        $Date: 2007-11-26 18:04:00 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -504,7 +504,7 @@ elsif ( $platform =~ m/linux-gnu/ )
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
    }
-   elsif ($platform =~ m/^arm[45]l/) 
+   elsif ($platform =~ m/^arm.*?l-/)
    {  print "Setting Linux ARM specific values... ";
       $outfile        = "LinuxARMEnv.Set"; 
       $CPU            = "R";
@@ -513,6 +513,7 @@ elsif ( $platform =~ m/linux-gnu/ )
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
+      $EPM_FLAGS      = "-a arm";
    }
    elsif ($platform =~ m/^mips/)
    {  print "Setting Linux MIPS specific values... ";
