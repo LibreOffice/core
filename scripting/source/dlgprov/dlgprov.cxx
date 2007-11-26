@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgprov.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:28:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:28:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -416,7 +416,14 @@ namespace dlgprov
 
                 if ( xDialogModel.is() )
                 {
+                    Any aDialogSourceURLAny;
+                    aDialogSourceURLAny <<= aURL;
+                    ::rtl::OUString aDlgSrcUrlPropName( RTL_CONSTASCII_USTRINGPARAM( "DialogSourceURL" ) );
+                    Reference< beans::XPropertySet > xDlgPropSet( xDialogModel, UNO_QUERY );
+                    xDlgPropSet->setPropertyValue( aDlgSrcUrlPropName, aDialogSourceURLAny );
+
                     ::xmlscript::importDialogModel( xInput, xDialogModel, m_xContext );
+
                     xCtrlModel = Reference< XControlModel >( xDialogModel, UNO_QUERY );
 
                     Reference< resource::XStringResourceManager > xStringResourceManager;
