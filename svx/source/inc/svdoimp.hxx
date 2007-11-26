@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoimp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:24:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:51:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,12 +255,10 @@ public:
     ImpLineGeometryCreator(
         const ImpLineStyleParameterPack& rAttr,
         basegfx::B2DPolyPolygon& rPoPo,
-        basegfx::B2DPolyPolygon& rPoLi,
-        bool bIsLineDraft = false)
+        basegfx::B2DPolyPolygon& rPoLi)
     :   mrLineAttr(rAttr),
         maAreaPolyPolygon(rPoPo),
-        maLinePolyPolygon(rPoLi),
-        mbLineDraft(bIsLineDraft)
+        maLinePolyPolygon(rPoLi)
     {
     }
 
