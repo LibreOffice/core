@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.176 $
+ *  $Revision: 1.177 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:06:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:31:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4282,6 +4282,14 @@ void SwWW8ImplReader::Read_UL( USHORT nId, const BYTE* pData, short nLen )
     NewAttr( aUL );
 }
 
+void SwWW8ImplReader::Read_IdctHint( USHORT, const BYTE* pData, short nLen )
+{
+    if (nLen < 0)
+        nIdctHint = 0;
+    else
+        nIdctHint = *pData;
+}
+
 void SwWW8ImplReader::Read_Justify( USHORT, const BYTE* pData, short nLen )
 {
     if( nLen < 0 )
@@ -5899,7 +5907,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
                                                      //word;
         {0x486E, &SwWW8ImplReader::Read_Language},   //"sprmCRgLid1" chp.rglid[1];
                                                      //LID: for Far East text;word;
-        {0x286F, 0},                                 //"sprmCIdctHint" chp.idctHint;
+        {0x286F, &SwWW8ImplReader::Read_IdctHint},   //"sprmCIdctHint" chp.idctHint;
                                                      //IDCT: byte;
         {0x2E00, 0},                                 //"sprmPicBrcl" pic.brcl;brcl
                                                      //(see PIC structure
