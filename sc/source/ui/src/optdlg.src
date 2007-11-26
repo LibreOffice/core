@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:10:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:42:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -416,7 +416,6 @@ TabPage RID_SCPAGE_CONTENT
         {
             < "Show" ; Default ; > ;
             < "Hide" ; Default ; > ;
-            < "Placeholders" ; Default ; > ;
         };
     };
     FixedText FT_DIAGRAM
@@ -435,7 +434,6 @@ TabPage RID_SCPAGE_CONTENT
         {
             < "Show" ; Default ; > ;
             < "Hide" ; Default ; > ;
-            < "Placeholders" ; Default ; > ;
         };
 
     };
@@ -455,7 +453,6 @@ TabPage RID_SCPAGE_CONTENT
         {
             < "Show" ; Default ; > ;
             < "Hide" ; Default ; > ;
-            < "Placeholders" ; Default ; > ;
         };
 
     };
