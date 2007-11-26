@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpoption.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:49:34 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:36:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,12 +88,6 @@ public:
 class SdTpOptionsContents : public SfxTabPage
 {
 private:
-    FixedLine aGrpViewSubstitute;
-    CheckBox aCbxExternGraphic;
-    CheckBox aCbxOutlineMode;
-    CheckBox aCbxNoText;
-    CheckBox aCbxHairlineMode;
-
     FixedLine    aGrpDisplay;
     CheckBox    aCbxRuler;
     CheckBox    aCbxDragStripes;
