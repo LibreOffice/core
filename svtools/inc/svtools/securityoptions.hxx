@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityoptions.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:33:53 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:43:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,8 @@ class SVL_DLLPUBLIC SvtSecurityOptions: public svt::detail::Options
             E_DOCWARN_RECOMMENDPASSWORD,
             E_MACRO_SECLEVEL,
             E_MACRO_TRUSTEDAUTHORS,
-            E_MACRO_DISABLE
+            E_MACRO_DISABLE,
+            E_CTRLCLICK_HYPERLINK
         };
 
         enum MacroAction
