@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpobject.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:41:57 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:18:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,10 @@
 
 //------------------------------------------------------------------
 
+
+namespace com { namespace sun { namespace star { namespace sheet {
+    struct DataPilotFieldFilter;
+}}}}
 
 class Rectangle;
 class SvStream;
@@ -222,6 +226,10 @@ public:
                                          const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz );
     BOOL                RefsEqual( const ScDPObject& r ) const;
     void                WriteRefsTo( ScDPObject& r ) const;
+
+    bool                GetDataFieldPositionData(
+                            ::std::vector< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters,
+                            const ScAddress& rPos);
 
     // apply drop-down attribute, initialize nHeaderRows, without accessing the source
     // (button attribute must be present)
