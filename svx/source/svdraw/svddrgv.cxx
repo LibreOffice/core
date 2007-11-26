@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svddrgv.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:55:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:13:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1068,6 +1068,16 @@ void SdrDragView::SetDetailedEdgeDraggingLimit(USHORT nEdgeObjAnz)
         nDetailedEdgeDraggingLimit=nEdgeObjAnz;
         if (bShowHide) ShowDragObj();
     }
+}
+
+void SdrDragView::SetMarkHandles()
+{
+//  DBG_ASSERT( (pDragBla == 0) && (pDragHdl == 0), "svx::SdrDragView::SetMarkHandles(), who calls me during drag operation?" );
+
+    if( pDragHdl )
+        pDragHdl = 0;
+
+    SdrExchangeView::SetMarkHandles();
 }
 
 // eof
