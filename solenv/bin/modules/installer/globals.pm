@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.79 $
+#   $Revision: 1.80 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 13:15:57 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 16:29:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -96,6 +96,8 @@ BEGIN
     $officefolder = "OfficeFolder";
     $officemenufolder = "OfficeMenuFolder";
     $startupfolder = "StartupFolder";
+    $startmenufolder = "StartMenuFolder";
+    $desktopfolder = "DesktopFolder";
     $programfilesfolder = "ProgramFilesFolder";
     $templatefolder = "TemplateFolder";
     $templatefoldername = "Templates";
@@ -301,11 +303,11 @@ BEGIN
     @languagenames = ();
     @requiredpackages = ();
     %componentconditions = ();
-
     %allcabinets = ();
     %allcabinetassigns = ();
     %cabfilecounter = ();
     %lastsequence = ();
+    %dontdeletecomponents = ();
 
     @forced_properties = ("SERVICETAG_PRODUCTNAME", "SERVICETAG_PRODUCTVERSION", "SERVICETAG_PARENTNAME", "SERVICETAG_SOURCE", "SERVICETAG_URN");
 
