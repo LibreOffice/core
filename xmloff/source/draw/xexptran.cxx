@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xexptran.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:23:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:54:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -451,7 +451,7 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
     OUString aClosingBrace(sal_Unicode(')'));
     OUString aEmptySpace(sal_Unicode(' '));
 
-    for(sal_uInt32 a(0L); a < maList.size(); a++)
+    for(sal_uInt32 a(0UL); a < maList.size(); a++)
     {
         ImpSdXMLExpTransObj2DBase* pObj = maList[a];
         switch(pObj->mnType)
@@ -533,7 +533,7 @@ const OUString& SdXMLImExTransform2D::GetExportString(const SvXMLUnitConverter& 
         }
 
         // if not the last entry, add one space to next tag
-        if(a + 1L != maList.size())
+        if(a + 1UL != maList.size())
         {
             aNewString += aEmptySpace;
         }
@@ -924,7 +924,7 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
     OUString aClosingBrace(sal_Unicode(')'));
     OUString aEmptySpace(sal_Unicode(' '));
 
-    for(sal_uInt32 a(0L); a < maList.size(); a++)
+    for(sal_uInt32 a(0UL); a < maList.size(); a++)
     {
         ImpSdXMLExpTransObj3DBase* pObj = maList[a];
         switch(pObj->mnType)
@@ -1034,7 +1034,7 @@ const OUString& SdXMLImExTransform3D::GetExportString(const SvXMLUnitConverter& 
         }
 
         // if not the last entry, add one space to next tag
-        if(a + 1L != maList.size())
+        if(a + 1UL != maList.size())
         {
             aNewString += aEmptySpace;
         }
