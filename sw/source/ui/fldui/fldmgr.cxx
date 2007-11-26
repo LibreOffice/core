@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldmgr.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:47:20 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -715,6 +715,8 @@ BOOL SwFldMgr::GetSubTypes(USHORT nTypeId, SvStringsDtor& rToFill)
                         {
                             if (i >= DI_INFO1 && i <= DI_INFO4)
                                 pNew = new String( pSh->GetInfo()->GetUserKeyTitle(i-DI_INFO1));
+                            else if ( i == DI_CUSTOM )
+                                pNew = new String( String(SW_RES( STR_CUSTOM )) );
                             else
                                 pNew = new String(*ViewShell::GetShellRes()->aDocInfoLst[i]);
                         }
@@ -1189,7 +1191,7 @@ BOOL SwFldMgr::InsertFld(  const SwInsertFld_Data& rData )
         {
             SwDocInfoFieldType* pTyp = (SwDocInfoFieldType*)pCurShell->GetFldType(
                                             0, RES_DOCINFOFLD );
-            pFld = new SwDocInfoField(pTyp, nSubType, nFormatId);
+            pFld = new SwDocInfoField(pTyp, nSubType, rData.sPar1, nFormatId);
             break;
         }
         case TYP_EXTUSERFLD:
