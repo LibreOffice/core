@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hrc,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-10 15:32:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:33:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,10 +184,10 @@
 #define SID_CONNECTOR_LINES_CIRCLES         (SID_SD_START+145)
 
 // Options-Leisten Slot-IDs
-#define SID_GRAPHIC_DRAFT                   (SID_SD_START+146)
-#define SID_FILL_DRAFT                      (SID_SD_START+147)
-#define SID_TEXT_DRAFT                      (SID_SD_START+148)
-#define SID_LINE_DRAFT                      (SID_SD_START+149)
+//#i80528##define SID_GRAPHIC_DRAFT                 (SID_SD_START+146)
+//#i80528##define SID_FILL_DRAFT                        (SID_SD_START+147)
+//#i80528##define SID_TEXT_DRAFT                        (SID_SD_START+148)
+//#i80528##define SID_LINE_DRAFT                        (SID_SD_START+149)
 #define SID_HANDLES_DRAFT                   (SID_SD_START+150)
 #define SID_SOLID_CREATE                    (SID_SD_START+151)
 #define SID_HELPLINES_USE                   (SID_SD_START+152)
