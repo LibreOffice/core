@@ -4,9 +4,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: ihi $ $Date: 2007-10-15 17:37:39 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 16:18:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -263,6 +263,12 @@ sub add_root_directories
         }
 
         $oneline = "$installer::globals::startupfolder\tTARGETDIR\t.\n";
+        push(@{$directorytableref}, $oneline);
+
+        $oneline = "$installer::globals::desktopfolder\tTARGETDIR\t.\n";
+        push(@{$directorytableref}, $oneline);
+
+        $oneline = "$installer::globals::startmenufolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
 
         my $localtemplatefoldername = $installer::globals::templatefoldername;
