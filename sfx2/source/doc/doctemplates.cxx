@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:37:41 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:50:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,11 +144,10 @@
 #include <unotools/ucbhelper.hxx>
 
 #include "sfxresid.hxx"
-#include "doc.hrc"
-
 #include "sfxurlrelocator.hxx"
-
 #include "doctemplateslocal.hxx"
+#include <sfx2/docfac.hxx>
+#include "doc.hrc"
 
 //-----------------------------------------------------------------------------
 
@@ -1782,7 +1781,8 @@ sal_Bool SfxDocTplService_Impl::renameGroup( const OUString& rOldName,
     if ( bCanBeRenamed )
     {
         INetURLObject aGroupTargetObj( aGroupTargetURL );
-        ::rtl::OUString aFsysName = aGroupTargetObj.getName();
+        ::rtl::OUString aFsysName = aGroupTargetObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+
         if ( aGroupTargetObj.removeSegment()
           && ReplaceUINamesForTemplateDir_Impl( aGroupTargetObj.GetMainURL( INetURLObject::NO_DECODE ),
                                                   aFsysName,
@@ -1814,6 +1814,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
     OUString        aGroupURL, aTemplateURL, aTemplateToRemoveTargetURL;
     INetURLObject   aGroupObj( maRootURL );
     sal_Bool        bRemoveOldTemplateContent = sal_False;
+    ::rtl::OUString sDocServiceName;
 
     aGroupObj.insertName( rGroupName, false,
                       INetURLObject::LAST_SEGMENT, true,
@@ -1863,8 +1864,8 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             xFactory->createInstance(
                     ::rtl::OUString::createFromAscii( "com.sun.star.frame.ModuleManager" ) ),
             uno::UNO_QUERY_THROW );
-        ::rtl::OUString aDocServiceName = xModuleManager->identify( uno::Reference< uno::XInterface >( rStorable, uno::UNO_QUERY ) );
-        if ( !aDocServiceName.getLength() )
+        sDocServiceName = xModuleManager->identify( uno::Reference< uno::XInterface >( rStorable, uno::UNO_QUERY ) );
+        if ( !sDocServiceName.getLength() )
             throw uno::RuntimeException();
 
         // get the actual filter name
@@ -1888,7 +1889,7 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
             uno::UNO_QUERY_THROW );
 
         uno::Reference< container::XNameAccess > xApplConfig;
-        xSOFConfig->getByName( aDocServiceName ) >>= xApplConfig;
+        xSOFConfig->getByName( sDocServiceName ) >>= xApplConfig;
         if ( !xApplConfig.is() )
             throw uno::RuntimeException();
 
@@ -1960,7 +1961,20 @@ sal_Bool SfxDocTplService_Impl::storeTemplate( const OUString& rGroupName,
 
         // the storing was successful, now the old template with the same name can be removed if it existed
         if ( aTemplateToRemoveTargetURL.getLength() )
+        {
             removeContent( aTemplateToRemoveTargetURL );
+
+            /*
+             * pb: #i79496#
+             * if the old template was the standard template
+             * it is necessary to change the standard template with the new file name
+             */
+            String sStdTmplFile = SfxObjectFactory::GetStandardTemplate( sDocServiceName );
+            if ( INetURLObject( sStdTmplFile ) == INetURLObject( aTemplateToRemoveTargetURL ) )
+            {
+                SfxObjectFactory::SetStandardTemplate( sDocServiceName, aNewTemplateTargetURL );
+            }
+        }
 
         if ( bRemoveOldTemplateContent )
             removeContent( aTemplateToRemove );
@@ -2057,11 +2071,11 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
 
     INetURLObject aTmpURL( aSourceObj );
     aTmpURL.CutExtension();
-    ::rtl::OUString aPattern = aTmpURL.getName();
+    ::rtl::OUString aPattern = aTmpURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
 
     ::rtl::OUString aNewTemplateTargetURL = CreateNewUniqueFileWithPrefix( aTargetURL, aPattern, aSourceObj.getExtension() );
     INetURLObject aNewTemplateTargetObj( aNewTemplateTargetURL );
-    ::rtl::OUString aNewTemplateTargetName = aNewTemplateTargetObj.getName();
+    ::rtl::OUString aNewTemplateTargetName = aNewTemplateTargetObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     if ( !aNewTemplateTargetURL.getLength() || !aNewTemplateTargetName.getLength() )
         return sal_False;
 
@@ -2109,7 +2123,7 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
         {
             INetURLObject aNewTmpObj( aNewTemplateTargetObj );
             aNewTmpObj.CutExtension();
-            bCorrectTitle = ( aNewTmpObj.getName().equals( rTemplateName ) );
+            bCorrectTitle = ( aNewTmpObj.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET ).equals( rTemplateName ) );
         }
 
         if ( !bCorrectTitle )
