@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwordcontainer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:57:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:45:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@
 using namespace std;
 using namespace osl;
 using namespace utl;
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::registry;
 using namespace com::sun::star::lang;
@@ -243,16 +244,16 @@ PassMap StorageItem::getInfo()
 {
     PassMap aResult;
 
-    Sequence< ::rtl::OUString > aNodeNames   = ConfigItem::GetNodeNames( ::rtl::OUString::createFromAscii("Store") );
+    Sequence< ::rtl::OUString > aNodeNames     = ConfigItem::GetNodeNames( ::rtl::OUString::createFromAscii("Store") );
     sal_Int32 aNodeCount = aNodeNames.getLength();
     Sequence< ::rtl::OUString > aPropNames( aNodeCount );
     sal_Int32 aNodeInd;
 
     for( aNodeInd = 0; aNodeInd < aNodeCount; ++aNodeInd )
     {
-        aPropNames[aNodeInd]  = ::rtl::OUString::createFromAscii( "Store/" );
+        aPropNames[aNodeInd]  = ::rtl::OUString::createFromAscii( "Store/Passwordstorage['" );
         aPropNames[aNodeInd] += aNodeNames[aNodeInd];
-        aPropNames[aNodeInd] += ::rtl::OUString::createFromAscii( "/Password" );
+        aPropNames[aNodeInd] += ::rtl::OUString::createFromAscii( "']/Password" );
     }
 
     Sequence< Any > aPropertyValues = ConfigItem::GetProperties( aPropNames );
@@ -284,9 +285,9 @@ PassMap StorageItem::getInfo()
             else
             {
                 NamePassRecord aNewRecord( aName, aPass, PERSISTENT_RECORD );
-                vector< NamePassRecord > vectorToAdd( 1, aNewRecord );
+                list< NamePassRecord > listToAdd( 1, aNewRecord );
 
-                aResult.insert( PairUrlRecord( aUrl, vectorToAdd ) );
+                aResult.insert( PairUrlRecord( aUrl, listToAdd ) );
             }
         }
         else
@@ -294,6 +295,21 @@ PassMap StorageItem::getInfo()
     }
 
     return aResult;
+}
+
+//-------------------------------------------------------------------------
+
+void StorageItem::setUseStorage( sal_Bool bUse )
+{
+    Sequence< ::rtl::OUString > sendNames(1);
+    Sequence< uno::Any > sendVals(1);
+
+    sendNames[0] = ::rtl::OUString::createFromAscii( "UseStorage" );
+
+    sendVals[0] <<= bUse;
+
+    ConfigItem::SetModified();
+    ConfigItem::PutProperties( sendNames, sendVals );
 }
 
 //-------------------------------------------------------------------------
@@ -352,18 +368,19 @@ sal_Bool StorageItem::getEncodedMP( ::rtl::OUString& aResult )
 void StorageItem::setEncodedMP( const ::rtl::OUString& aEncoded )
 {
     Sequence< ::rtl::OUString > sendNames(2);
-    Sequence< ::com::sun::star::uno::Any > sendVals(2);
+    Sequence< uno::Any > sendVals(2);
 
     sendNames[0] = ::rtl::OUString::createFromAscii( "HasMaster" );
     sendNames[1] = ::rtl::OUString::createFromAscii( "Master" );
 
-    sendVals[0] <<= sal_True;
+    sal_Bool bHasMaster = ( aEncoded.getLength() > 0 );
+    sendVals[0] <<= bHasMaster;
     sendVals[1] <<= aEncoded;
 
     ConfigItem::SetModified();
     ConfigItem::PutProperties( sendNames, sendVals );
 
-    hasEncoded = sal_True;
+    hasEncoded = bHasMaster;
     mEncoded = aEncoded;
 }
 
@@ -377,8 +394,10 @@ void StorageItem::remove( const ::rtl::OUString& url, const ::rtl::OUString& nam
 
     Sequence< ::rtl::OUString > sendSeq(1);
 
-    sendSeq[0]  = ::rtl::OUString::createFromAscii( "Store/" );
-    sendSeq[0] += createIndex( forIndex );
+    sendSeq[0] = createIndex( forIndex );
+    // sendSeq[0]  = ::rtl::OUString::createFromAscii( "Store/Passwordstorage['" );
+    // sendSeq[0] += createIndex( forIndex );
+    // sendSeq[0] += ::rtl::OUString::createFromAscii( "']" );
 
     ConfigItem::ClearNodeElements( ::rtl::OUString::createFromAscii( "Store" ), sendSeq );
 }
@@ -400,11 +419,11 @@ void StorageItem::update( const ::rtl::OUString& url, const NamePassRecord& rec 
     forIndex.push_back( url );
     forIndex.push_back( rec.mName );
 
-    Sequence< ::com::sun::star::beans::PropertyValue > sendSeq(1);
+    Sequence< beans::PropertyValue > sendSeq(1);
 
-    sendSeq[0].Name  = ::rtl::OUString::createFromAscii( "Store/" );
+    sendSeq[0].Name  = ::rtl::OUString::createFromAscii( "Store/Passwordstorage['" );
     sendSeq[0].Name += createIndex( forIndex );
-    sendSeq[0].Name += ::rtl::OUString::createFromAscii( "/Password" );
+    sendSeq[0].Name += ::rtl::OUString::createFromAscii( "']/Password" );
 
     if( rec.mPass.size() )
     {
@@ -437,24 +456,18 @@ void StorageItem::Commit()
 //-------------------------------------------------------------------------
 
 PasswordContainer::PasswordContainer( const Reference<XMultiServiceFactory>& xServiceFactory ):
-    storageFile( NULL ),
-    hasMasterPasswd( sal_False )
+    m_pStorageFile( NULL )
 {
-    // storageFile->Notify() can be called
+    // m_pStorageFile->Notify() can be called
     ::osl::MutexGuard aGuard( mMutex );
 
     mComponent = Reference< XComponent >( xServiceFactory, UNO_QUERY );
     mComponent->addEventListener( this );
 
-    storageFile = new StorageItem( this, ::rtl::OUString::createFromAscii( "Office.Common/Passwords" ) );
-    if( storageFile )
-        if( storageFile->useStorage() )
-            container = storageFile->getInfo();
-        else
-        {
-            delete storageFile;
-            storageFile = NULL;
-        }
+    m_pStorageFile = new StorageItem( this, ::rtl::OUString::createFromAscii( "Office.Common/Passwords" ) );
+    if( m_pStorageFile )
+        if( m_pStorageFile->useStorage() )
+            container = m_pStorageFile->getInfo();
 }
 
 //-------------------------------------------------------------------------
@@ -463,10 +476,10 @@ PasswordContainer::~PasswordContainer()
 {
     ::osl::MutexGuard aGuard( mMutex );
 
-    if( storageFile )
+    if( m_pStorageFile )
     {
-        delete storageFile;
-        storageFile = NULL;
+        delete m_pStorageFile;
+        m_pStorageFile = NULL;
     }
 
     if( mComponent.is() )
@@ -482,10 +495,10 @@ void SAL_CALL PasswordContainer::disposing( const EventObject& ) throw(RuntimeEx
 {
     ::osl::MutexGuard aGuard( mMutex );
 
-    if( storageFile )
+    if( m_pStorageFile )
     {
-        delete storageFile;
-        storageFile = NULL;
+        delete m_pStorageFile;
+        m_pStorageFile = NULL;
     }
 
     if( mComponent.is() )
@@ -497,22 +510,20 @@ void SAL_CALL PasswordContainer::disposing( const EventObject& ) throw(RuntimeEx
 
 //-------------------------------------------------------------------------
 
-vector< ::rtl::OUString > PasswordContainer::decodePasswords( ::rtl::OUString aLine, const Reference< XInteractionHandler >& Handler  ) throw(RuntimeException)
+vector< ::rtl::OUString > PasswordContainer::DecodePasswords( const ::rtl::OUString& aLine, const ::rtl::OUString& aMasterPasswd ) throw(RuntimeException)
 {
-    getMasterPassword( Handler );
-
-    if( hasMasterPasswd )
+    if( aMasterPasswd.getLength() )
     {
         rtlCipher aDecoder = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream );
         OSL_ENSURE( aDecoder, "Can't create decoder\n" );
 
         if( aDecoder )
         {
-            OSL_ENSURE( masterPasswd.getLength() == RTL_DIGEST_LENGTH_MD5 * 2, "Wrong master password format!\n" );
+            OSL_ENSURE( aMasterPasswd.getLength() == RTL_DIGEST_LENGTH_MD5 * 2, "Wrong master password format!\n" );
 
             unsigned char code[RTL_DIGEST_LENGTH_MD5];
             for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
-                code[ ind ] = (char)(masterPasswd.copy( ind*2, 2 ).toInt32(16));
+                code[ ind ] = (char)(aMasterPasswd.copy( ind*2, 2 ).toInt32(16));
 
             rtlCipherError result = rtl_cipher_init (
                     aDecoder, rtl_Cipher_DirectionDecode,
@@ -551,11 +562,9 @@ vector< ::rtl::OUString > PasswordContainer::decodePasswords( ::rtl::OUString aL
 
 //-------------------------------------------------------------------------
 
-::rtl::OUString PasswordContainer::encodePasswords( vector< ::rtl::OUString > lines, const Reference< XInteractionHandler >& Handler  ) throw(RuntimeException)
+::rtl::OUString PasswordContainer::EncodePasswords( vector< ::rtl::OUString > lines, const ::rtl::OUString& aMasterPasswd ) throw(RuntimeException)
 {
-    getMasterPassword( Handler );
-
-    if( hasMasterPasswd )
+    if( aMasterPasswd.getLength() )
     {
         ::rtl::OString aSeq = ::rtl::OUStringToOString( createIndex( lines ), RTL_TEXTENCODING_UTF8 );
 
@@ -564,11 +573,11 @@ vector< ::rtl::OUString > PasswordContainer::decodePasswords( ::rtl::OUString aL
 
         if( aEncoder )
         {
-            OSL_ENSURE( masterPasswd.getLength() == RTL_DIGEST_LENGTH_MD5 * 2, "Wrong master password format!\n" );
+            OSL_ENSURE( aMasterPasswd.getLength() == RTL_DIGEST_LENGTH_MD5 * 2, "Wrong master password format!\n" );
 
             unsigned char code[RTL_DIGEST_LENGTH_MD5];
             for( int ind = 0; ind < RTL_DIGEST_LENGTH_MD5; ind++ )
-                code[ ind ] = (char)(masterPasswd.copy( ind*2, 2 ).toInt32(16));
+                code[ ind ] = (char)(aMasterPasswd.copy( ind*2, 2 ).toInt32(16));
 
             rtlCipherError result = rtl_cipher_init (
                     aEncoder, rtl_Cipher_DirectionEncode,
@@ -632,34 +641,30 @@ vector< ::rtl::OUString > PasswordContainer::decodePasswords( ::rtl::OUString aL
 
 //-------------------------------------------------------------------------
 
-void PasswordContainer::updateVector( const ::rtl::OUString& url, vector< NamePassRecord >& toUpdate, NamePassRecord& rec, sal_Bool writeFile, const Reference< XInteractionHandler >& Handler  ) throw(RuntimeException)
+void PasswordContainer::UpdateVector( const ::rtl::OUString& url, list< NamePassRecord >& toUpdate, NamePassRecord& rec, sal_Bool writeFile, const Reference< XInteractionHandler >& /*xHandler*/ ) throw(RuntimeException)
 {
-    sal_Int32 oldLen = toUpdate.size();
-
-    for( int i = 0; i < oldLen; i++ )
-        if( toUpdate[i].mName.equals( rec.mName ) )
+    for( list< NamePassRecord >::iterator aNPIter = toUpdate.begin(); aNPIter != toUpdate.end(); aNPIter++ )
+        if( aNPIter->mName.equals( rec.mName ) )
         {
-            if( toUpdate[i].mStatus == PERSISTENT_RECORD )
+            if( aNPIter->mStatus == PERSISTENT_RECORD )
                 rec.mStatus = PERSISTENT_RECORD;
 
-            if( rec.mStatus == PERSISTENT_RECORD && writeFile && storageFile )
+            if( rec.mStatus == PERSISTENT_RECORD && writeFile )
             {
-                ::rtl::OUString aEncPass = encodePasswords( rec.mPass, Handler );
-                rec.mPass = vector< ::rtl::OUString >( 1, aEncPass );
-                storageFile->update( url, rec ); // change existing ( url, name ) record in the configfile
+                // the password must be already encoded
+                m_pStorageFile->update( url, rec ); // change existing ( url, name ) record in the configfile
             }
 
-            toUpdate[i] = rec;
+            (*aNPIter) = rec;
 
             return;
         }
 
 
-    if( rec.mStatus == PERSISTENT_RECORD && writeFile && storageFile)
+    if( rec.mStatus == PERSISTENT_RECORD && writeFile )
     {
-        ::rtl::OUString aEncPass = encodePasswords( rec.mPass, Handler );
-        rec.mPass = vector< ::rtl::OUString >( 1, aEncPass );
-        storageFile->update( url, rec ); // add new name to the existing url
+        // the password must be already encoded
+        m_pStorageFile->update( url, rec ); // add new name to the existing url
     }
 
     toUpdate.insert( toUpdate.begin(), rec );
@@ -667,18 +672,28 @@ void PasswordContainer::updateVector( const ::rtl::OUString& url, vector< NamePa
 
 //-------------------------------------------------------------------------
 
-Sequence< UserRecord > PasswordContainer::copyToUserRecordSequence( const vector< NamePassRecord >& original, const Reference< XInteractionHandler >& Handler ) throw(RuntimeException)
+Sequence< UserRecord > PasswordContainer::CopyToUserRecordSequence( const list< NamePassRecord >& original, const Reference< XInteractionHandler >& Handler ) throw(RuntimeException)
 {
     Sequence< UserRecord >     aResult( original.size() );
-    for( unsigned int i = 0; i < original.size(); i++ )
+    sal_uInt32 nInd = 0;
+    for( list< NamePassRecord >::const_iterator aNPIter = original.begin();
+         aNPIter != original.end();
+         aNPIter++, nInd++ )
     {
-        if( original[i].mStatus == PERSISTENT_RECORD )
+        if( aNPIter->mStatus == PERSISTENT_RECORD )
         {
-            OSL_ENSURE( original[i].mPass.size(), "No encripted password!\n" );
-            aResult[i] = UserRecord( original[i].mName, copyVectorToSequence( decodePasswords( original[i].mPass[0], Handler ) ) );
+            OSL_ENSURE( aNPIter->mPass.size(), "No encripted password!\n" );
+            try
+            {
+                aResult[nInd] = UserRecord( aNPIter->mName, copyVectorToSequence( DecodePasswords( aNPIter->mPass[0], GetMasterPassword( Handler ) ) ) );
+            }
+            catch( NoMasterException& )
+            {
+                // if master password could not be detected the entry will be just ignored
+            }
         }
         else
-            aResult[i] = UserRecord( original[i].mName, copyVectorToSequence( original[i].mPass ) );
+            aResult[nInd] = UserRecord( aNPIter->mName, copyVectorToSequence( aNPIter->mPass ) );
     }
 
     return aResult;
@@ -690,7 +705,7 @@ void SAL_CALL PasswordContainer::add( const ::rtl::OUString& Url, const ::rtl::O
 {
     ::osl::MutexGuard aGuard( mMutex );
 
-    privateAdd( Url, UserName, Passwords, SINGLE_RECORD, Handler );
+    PrivateAdd( Url, UserName, Passwords, SINGLE_RECORD, Handler );
 }
 
 //-------------------------------------------------------------------------
@@ -699,14 +714,22 @@ void SAL_CALL PasswordContainer::addPersistent( const ::rtl::OUString& Url, cons
 {
     ::osl::MutexGuard aGuard( mMutex );
 
-    privateAdd( Url, UserName, Passwords, PERSISTENT_RECORD, Handler );
+    PrivateAdd( Url, UserName, Passwords, PERSISTENT_RECORD, Handler );
 }
 
 //-------------------------------------------------------------------------
 
-void PasswordContainer::privateAdd( const ::rtl::OUString& Url, const ::rtl::OUString& UserName, const Sequence< ::rtl::OUString >& Passwords, char Mode, const Reference< XInteractionHandler >& Handler ) throw(RuntimeException)
+void PasswordContainer::PrivateAdd( const ::rtl::OUString& Url, const ::rtl::OUString& UserName, const Sequence< ::rtl::OUString >& Passwords, char Mode, const Reference< XInteractionHandler >& Handler ) throw(RuntimeException)
 {
     vector< ::rtl::OUString > storePass = copySequenceToVector( Passwords );
+
+    if( Mode == PERSISTENT_RECORD )
+    {
+        ::rtl::OUString aEncPass = EncodePasswords( storePass, GetMasterPassword( Handler ) );
+        storePass = vector< ::rtl::OUString >( 1, aEncPass );
+    }
+    else
+        storePass = copySequenceToVector( Passwords );
 
     if( !container.empty() )
     {
@@ -715,23 +738,17 @@ void PasswordContainer::privateAdd( const ::rtl::OUString& Url, const ::rtl::OUS
         if( aIter != container.end() )
         {
             NamePassRecord aNamePassRecord( UserName, storePass, Mode );
-            updateVector( aIter->first, aIter->second, aNamePassRecord, sal_True, Handler );
+            UpdateVector( aIter->first, aIter->second, aNamePassRecord, sal_True, Handler );
             return;
         }
     }
 
-    if( Mode == PERSISTENT_RECORD && storageFile )
-    {
-        ::rtl::OUString aEncPass = encodePasswords( storePass, Handler );
-        storePass = vector< ::rtl::OUString >( 1, aEncPass );
-    }
-
     NamePassRecord aNewRecord( UserName, storePass, Mode );
-    vector< NamePassRecord > vectorToAdd( 1, aNewRecord );
-    container.insert( PairUrlRecord( Url, vectorToAdd ) );
+    list< NamePassRecord > listToAdd( 1, aNewRecord );
+    container.insert( PairUrlRecord( Url, listToAdd ) );
 
-    if( Mode == PERSISTENT_RECORD && storageFile )
-        storageFile->update( Url, aNewRecord );
+    if( Mode == PERSISTENT_RECORD && m_pStorageFile && m_pStorageFile->useStorage() )
+        m_pStorageFile->update( Url, aNewRecord );
 
 }
 
@@ -748,7 +765,7 @@ UrlRecord SAL_CALL PasswordContainer::find( const ::rtl::OUString& url, const Re
         PassMap::iterator aIter = container.find( aUrl );
 
         if( aIter != container.end() )
-            return UrlRecord( aIter->first, copyToUserRecordSequence( aIter->second, Handler ) );
+            return UrlRecord( aIter->first, CopyToUserRecordSequence( aIter->second, Handler ) );
 
         // each iteration remove last '/...' section from the aUrl
         // while it's possible, up to the most left '://'
@@ -757,7 +774,7 @@ UrlRecord SAL_CALL PasswordContainer::find( const ::rtl::OUString& url, const Re
             // first look for <url>/somename and then look for <url>/somename/...
             aIter = container.find( aUrl );
             if( aIter != container.end() )
-                return UrlRecord( aIter->first, copyToUserRecordSequence( aIter->second, Handler ) );
+                return UrlRecord( aIter->first, CopyToUserRecordSequence( aIter->second, Handler ) );
             else
             {
                 ::rtl::OUString tmpUrl( aUrl );
@@ -765,7 +782,7 @@ UrlRecord SAL_CALL PasswordContainer::find( const ::rtl::OUString& url, const Re
 
                 aIter = container.lower_bound( aUrl );
                 if( aIter != container.end() )
-                    return UrlRecord( aIter->first, copyToUserRecordSequence( aIter->second, Handler ) );
+                    return UrlRecord( aIter->first, CopyToUserRecordSequence( aIter->second, Handler ) );
             }
         }
     }
@@ -775,22 +792,27 @@ UrlRecord SAL_CALL PasswordContainer::find( const ::rtl::OUString& url, const Re
 
 //-------------------------------------------------------------------------
 
-Sequence< UserRecord > PasswordContainer::findUsr( const vector< NamePassRecord >& userlist, const ::rtl::OUString& name, const Reference< XInteractionHandler >& Handler ) throw(RuntimeException)
+Sequence< UserRecord > PasswordContainer::FindUsr( const list< NamePassRecord >& userlist, const ::rtl::OUString& name, const Reference< XInteractionHandler >& Handler ) throw(RuntimeException)
 {
-    for( unsigned int i = 0; i < userlist.size(); i++ )
-        if( userlist[i].mName.equals( name ) )
+    sal_uInt32 nInd = 0;
+    for( list< NamePassRecord >::const_iterator aNPIter = userlist.begin();
+         aNPIter != userlist.end();
+         aNPIter++, nInd++ )
+    {
+        if( aNPIter->mName.equals( name ) )
         {
             Sequence< UserRecord > aResult(1);
-            if( userlist[i].mStatus == PERSISTENT_RECORD )
+            if( aNPIter->mStatus == PERSISTENT_RECORD )
             {
-                OSL_ENSURE( userlist[i].mPass.size(), "No encripted password!\n" );
-                *aResult.getArray() = UserRecord( name, copyVectorToSequence( decodePasswords( userlist[i].mPass[0], Handler ) ) );
+                OSL_ENSURE( aNPIter->mPass.size(), "No encripted password!\n" );
+                *aResult.getArray() = UserRecord( name, copyVectorToSequence( DecodePasswords( aNPIter->mPass[0], GetMasterPassword( Handler ) ) ) );
             }
             else
-                *aResult.getArray() = UserRecord( name, copyVectorToSequence( userlist[i].mPass ) );
+                *aResult.getArray() = UserRecord( name, copyVectorToSequence( aNPIter->mPass ) );
 
             return aResult;
         }
+    }
 
     return Sequence< UserRecord >();
 }
@@ -808,7 +830,7 @@ UrlRecord SAL_CALL PasswordContainer::findForName( const ::rtl::OUString& url, c
 
         if( aIter != container.end() )
         {
-            Sequence< UserRecord > aUsrRec = findUsr( aIter->second, name, Handler );
+            Sequence< UserRecord > aUsrRec = FindUsr( aIter->second, name, Handler );
             if( aUsrRec.getLength() )
                 return UrlRecord( aIter->first, aUsrRec );
         }
@@ -821,7 +843,7 @@ UrlRecord SAL_CALL PasswordContainer::findForName( const ::rtl::OUString& url, c
             aIter = container.find( aUrl );
             if( aIter != container.end() )
             {
-                Sequence< UserRecord > aUsrRec = findUsr( aIter->second, name, Handler );
+                Sequence< UserRecord > aUsrRec = FindUsr( aIter->second, name, Handler );
                 if( aUsrRec.getLength() )
                     return UrlRecord( aIter->first, aUsrRec );
             }
@@ -833,7 +855,7 @@ UrlRecord SAL_CALL PasswordContainer::findForName( const ::rtl::OUString& url, c
                 aIter = container.lower_bound( aUrl );
                 if( aIter != container.end() )
                 {
-                    Sequence< UserRecord > aUsrRec = findUsr( aIter->second, name, Handler );
+                    Sequence< UserRecord > aUsrRec = FindUsr( aIter->second, name, Handler );
                     if( aUsrRec.getLength() )
                         return UrlRecord( aIter->first, aUsrRec );
                 }
@@ -845,67 +867,84 @@ UrlRecord SAL_CALL PasswordContainer::findForName( const ::rtl::OUString& url, c
 }
 
 //-------------------------------------------------------------------------
-
-void PasswordContainer::getMasterPassword( const Reference< XInteractionHandler >& Handler ) throw(RuntimeException)
+::rtl::OUString PasswordContainer::RequestPasswordFromUser( PasswordRequestMode aRMode, const uno::Reference< task::XInteractionHandler >& xHandler )
 {
-    if( !hasMasterPasswd && Handler.is() )
-    {
-        ::rtl::OUString encodedMP;
-        PasswordRequestMode aRMode = PasswordRequestMode_PASSWORD_ENTER;
-        sal_Bool aAskAgain;
+    // empty string means that the call was cancelled or just failed
+    ::rtl::OUString aResult;
 
-        if( storageFile && !storageFile->getEncodedMP( encodedMP ) )
+    if ( xHandler.is() )
+    {
+        ::rtl::Reference< MasterPasswordRequest_Impl > xRequest = new MasterPasswordRequest_Impl( aRMode );
+
+        xHandler->handle( xRequest.get() );
+
+        ::rtl::Reference< ucbhelper::InteractionContinuation > xSelection = xRequest->getSelection();
+
+        if ( xSelection.is() )
+        {
+            Reference< XInteractionAbort > xAbort( xSelection.get(), UNO_QUERY );
+            if ( !xAbort.is() )
+            {
+                const ::rtl::Reference< ucbhelper::InteractionSupplyAuthentication > & xSupp
+                            = xRequest->getAuthenticationSupplier();
+
+                aResult = xSupp->getPassword();
+            }
+        }
+    }
+
+    return aResult;
+}
+
+//-------------------------------------------------------------------------
+
+::rtl::OUString PasswordContainer::GetMasterPassword( const Reference< XInteractionHandler >& Handler ) throw(RuntimeException)
+{
+    PasswordRequestMode aRMode = PasswordRequestMode_PASSWORD_ENTER;
+    if( !m_pStorageFile || !m_pStorageFile->useStorage() )
+        throw NoMasterException( ::rtl::OUString::createFromAscii( "Password storing is not active!" ), Reference< XInterface >(), aRMode );
+
+    if( !m_aMasterPasswd.getLength() && Handler.is() )
+    {
+        ::rtl::OUString aEncodedMP;
+        sal_Bool bAskAgain;
+
+        if( !m_pStorageFile->getEncodedMP( aEncodedMP ) )
             aRMode = PasswordRequestMode_PASSWORD_CREATE;
 
         do {
-            aAskAgain = sal_False;
+            bAskAgain = sal_False;
 
-            ::rtl::Reference< MasterPasswordRequest_Impl > xRequest = new MasterPasswordRequest_Impl( aRMode );
-
-            Handler->handle( xRequest.get() );
-
-            ::rtl::Reference< ucbhelper::InteractionContinuation > xSelection = xRequest->getSelection();
-
-            if ( xSelection.is() )
+            ::rtl::OUString aPass = RequestPasswordFromUser( aRMode, Handler );
+            if ( aPass.getLength() )
             {
-                Reference< XInteractionAbort > xAbort( xSelection.get(), UNO_QUERY );
-                if ( xAbort.is() )
+                if( aRMode == PasswordRequestMode_PASSWORD_CREATE )
                 {
-                    masterPasswd = ::rtl::OUString();
-                    hasMasterPasswd = sal_False;
-                    throw NoMasterException( ::rtl::OUString::createFromAscii( "No master password!" ), Reference< XInterface >(), aRMode );
+                    m_aMasterPasswd = aPass;
+                    vector< ::rtl::OUString > aMaster( 1, m_aMasterPasswd );
+
+                    m_pStorageFile->setEncodedMP( EncodePasswords( aMaster, m_aMasterPasswd ) );
                 }
                 else
                 {
-                    const ::rtl::Reference< ucbhelper::InteractionSupplyAuthentication > & xSupp
-                                = xRequest->getAuthenticationSupplier();
-
-                    masterPasswd = xSupp->getPassword();
-                    hasMasterPasswd = sal_True;
-
-                    if( aRMode == PasswordRequestMode_PASSWORD_CREATE )
+                    vector< ::rtl::OUString > aRM( DecodePasswords( aEncodedMP, aPass ) );
+                    if( !aRM.size() || !aPass.equals( aRM[0] ) )
                     {
-                        vector< ::rtl::OUString > aMaster( 1, masterPasswd );
-
-                        // Handler is not needed here,
-                        // masterpassword exist
-                        if( storageFile )
-                            storageFile->setEncodedMP( encodePasswords( aMaster, Reference< XInteractionHandler >() ) );
+                        bAskAgain = sal_True;
+                        aRMode = PasswordRequestMode_PASSWORD_REENTER;
                     }
                     else
-                    {
-                        vector< ::rtl::OUString > aRM( decodePasswords( encodedMP, Handler ) );
-                        if( !aRM.size() || !masterPasswd.equals( aRM[0] ) )
-                        {
-                            aAskAgain = sal_True;
-                            aRMode = PasswordRequestMode_PASSWORD_REENTER;
-                        }
-                    }
+                        m_aMasterPasswd = aPass;
                 }
             }
 
-        } while( aAskAgain );
+        } while( bAskAgain );
     }
+
+    if ( !m_aMasterPasswd.getLength() )
+        throw NoMasterException( ::rtl::OUString::createFromAscii( "No master password!" ), Reference< XInterface >(), aRMode );
+
+    return m_aMasterPasswd;
 }
 
 //-------------------------------------------------------------------------
@@ -932,13 +971,14 @@ void SAL_CALL PasswordContainer::remove( const ::rtl::OUString& url, const ::rtl
 
         if( aIter != container.end() )
         {
-            for( vector< NamePassRecord >::iterator aVIter = aIter->second.begin(); aVIter != aIter->second.end(); aVIter++ )
-                if( aVIter->mName.equals( name ) )
+            for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); aNPIter++ )
+                if( aNPIter->mName.equals( name ) )
                 {
-                    if( aVIter->mStatus == PERSISTENT_RECORD && storageFile )
-                        storageFile->remove( url, name ); // remove record ( url, name )
+                    if( aNPIter->mStatus == PERSISTENT_RECORD && m_pStorageFile )
+                        m_pStorageFile->remove( url, name ); // remove record ( url, name )
 
-                    aIter->second.erase( aVIter );
+                    // the iterator will not be used any more so it can be removed directly
+                    aIter->second.erase( aNPIter );
 
                     if( aIter->second.begin() == aIter->second.end() )
                         container.erase( aIter );
@@ -954,9 +994,6 @@ void SAL_CALL PasswordContainer::remove( const ::rtl::OUString& url, const ::rtl
 
 void SAL_CALL PasswordContainer::removePersistent( const ::rtl::OUString& url, const ::rtl::OUString& name ) throw(RuntimeException)
 {
-    // this feature still should not be used
-    //throw RuntimeException( ::rtl::OUString::createFromAscii( "Not implememted!" ), Reference< XInterface >() );
-
     ::osl::MutexGuard aGuard( mMutex );
 
     ::rtl::OUString aUrl( url );
@@ -977,13 +1014,28 @@ void SAL_CALL PasswordContainer::removePersistent( const ::rtl::OUString& url, c
 
         if( aIter != container.end() )
         {
-            for( vector< NamePassRecord >::iterator aVIter = aIter->second.begin(); aVIter != aIter->second.end(); aVIter++ )
-                if( aVIter->mName.equals( name ) )
+            for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); aNPIter++ )
+                if( aNPIter->mName.equals( name ) )
                 {
-                    if( aVIter->mStatus == PERSISTENT_RECORD && storageFile )
+                    if( aNPIter->mStatus == PERSISTENT_RECORD )
                     {
-                        aVIter->mStatus = SINGLE_RECORD;
-                        storageFile->remove( url, name ); // remove record ( url, name )
+                        if ( m_aMasterPasswd.getLength() )
+                        {
+                            aNPIter->mPass = DecodePasswords( aNPIter->mPass[0], m_aMasterPasswd );
+                            aNPIter->mStatus = SINGLE_RECORD;
+                        }
+                        else
+                        {
+                            // the iterator will not be used any more so it can be removed directly
+                            aIter->second.erase( aNPIter );
+
+                            if( aIter->second.begin() == aIter->second.end() )
+                                container.erase( aIter );
+                        }
+
+                        if ( m_pStorageFile )
+                            m_pStorageFile->remove( url, name ); // remove record ( url, name )
+
                         return;
                     }
                 }
@@ -992,42 +1044,62 @@ void SAL_CALL PasswordContainer::removePersistent( const ::rtl::OUString& url, c
 }
 //-------------------------------------------------------------------------
 
-void SAL_CALL PasswordContainer::removeAllPersistent(  ) throw(RuntimeException)
+void SAL_CALL PasswordContainer::removeAllPersistent() throw(RuntimeException)
 {
-    // this feature still should not be used
-    //throw RuntimeException( ::rtl::OUString::createFromAscii( "Not implememted!" ), Reference< XInterface >() );
-
     ::osl::MutexGuard aGuard( mMutex );
 
-    if( storageFile )
-        storageFile->clear();
+    if( m_pStorageFile )
+        m_pStorageFile->clear();
 
-    for( PassMap::iterator aIter = container.begin(); aIter != container.end(); aIter++ )
+    for( PassMap::iterator aIter = container.begin(); aIter != container.end(); )
     {
-        for( vector< NamePassRecord >::iterator aVIter = aIter->second.begin(); aVIter != aIter->second.end(); aVIter++ )
-            if( aVIter->mStatus == PERSISTENT_RECORD )
-                aVIter->mStatus = SINGLE_RECORD;
+        for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); )
+        {
+            if( aNPIter->mStatus == PERSISTENT_RECORD )
+            {
+                if ( m_aMasterPasswd.getLength() )
+                {
+                    aNPIter->mPass = DecodePasswords( aNPIter->mPass[0], m_aMasterPasswd );
+                    aNPIter->mStatus = SINGLE_RECORD;
+                    aNPIter++;
+                }
+                else
+                {
+                    list< NamePassRecord >::iterator aIterToDelete( aNPIter );
+                    aNPIter++;
+                    aIter->second.erase( aIterToDelete );
+                }
+            }
+            else
+                aNPIter++;
+        }
+
+        if( aIter->second.begin() == aIter->second.end() )
+        {
+            PassMap::iterator aIterToDelete( aIter );
+            aIter++;
+            container.erase( aIterToDelete );
+        }
+        else
+            aIter++;
     }
 }
 //-------------------------------------------------------------------------
 
-Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Reference< XInteractionHandler >& ) throw(RuntimeException)
+Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Reference< XInteractionHandler >& xHandler ) throw(RuntimeException)
 {
-    // this feature still should not be used
-    // throw RuntimeException( ::rtl::OUString::createFromAscii( "Not implememted!" ), Reference< XInterface >() );
-
     Sequence< UrlRecord > aResult;
 
     ::osl::MutexGuard aGuard( mMutex );
     for( PassMap::iterator aIter = container.begin(); aIter != container.end(); aIter++ )
     {
         Sequence< UserRecord > aUsers;
-        for( vector< NamePassRecord >::iterator aVIter = aIter->second.begin(); aVIter != aIter->second.end(); aVIter++ )
-            if( aVIter->mStatus == PERSISTENT_RECORD )
+        for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); aNPIter++ )
+            if( aNPIter->mStatus == PERSISTENT_RECORD )
             {
                 sal_Int32 oldLen = aUsers.getLength();
                 aUsers.realloc( oldLen + 1 );
-                aUsers[ oldLen ] = UserRecord( aVIter->mName, copyVectorToSequence( aVIter->mPass ) );
+                aUsers[ oldLen ] = UserRecord( aNPIter->mName, copyVectorToSequence( DecodePasswords( aNPIter->mPass[0], GetMasterPassword( xHandler ) ) ) );
             }
 
         if( aUsers.getLength() )
@@ -1042,6 +1114,167 @@ Sequence< UrlRecord > SAL_CALL PasswordContainer::getAllPersistent( const Refere
 }
 
 //-------------------------------------------------------------------------
+sal_Bool SAL_CALL PasswordContainer::authorizateWithMasterPassword( const uno::Reference< task::XInteractionHandler >& xHandler )
+    throw (uno::RuntimeException)
+{
+    sal_Bool bResult = sal_False;
+    ::rtl::OUString aEncodedMP;
+    uno::Reference< task::XInteractionHandler > xTmpHandler = xHandler;
+    ::osl::MutexGuard aGuard( mMutex );
+
+    // the method should fail if there is no master password
+    if( m_pStorageFile && m_pStorageFile->useStorage() && m_pStorageFile->getEncodedMP( aEncodedMP ) )
+    {
+        if ( !xTmpHandler.is() )
+        {
+            uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
+            xTmpHandler.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ), uno::UNO_QUERY_THROW );
+        }
+
+        if ( m_aMasterPasswd.getLength() )
+        {
+            // there is a password, it should be just rechecked
+            PasswordRequestMode aRMode = PasswordRequestMode_PASSWORD_ENTER;
+            ::rtl::OUString aPass;
+
+            do {
+                aPass = RequestPasswordFromUser( aRMode, xTmpHandler );
+                bResult = ( aPass.getLength() && aPass.equals( m_aMasterPasswd ) );
+                aRMode = PasswordRequestMode_PASSWORD_REENTER; // further questions with error notification
+            } while( !bResult && aPass.getLength() );
+        }
+        else
+        {
+            try
+            {
+                // ask for the password, if user provide no correct password an exception will be thrown
+                bResult = ( GetMasterPassword( xTmpHandler ).getLength() > 0 );
+            }
+            catch( uno::Exception& )
+            {}
+        }
+    }
+
+    return bResult;
+}
+
+//-------------------------------------------------------------------------
+sal_Bool SAL_CALL PasswordContainer::changeMasterPassword( const uno::Reference< task::XInteractionHandler >& xHandler )
+    throw (uno::RuntimeException)
+{
+    sal_Bool bResult = sal_False;
+    uno::Reference< task::XInteractionHandler > xTmpHandler = xHandler;
+    ::osl::MutexGuard aGuard( mMutex );
+
+    if ( m_pStorageFile && m_pStorageFile->useStorage() )
+    {
+        if ( !xTmpHandler.is() )
+        {
+            uno::Reference< lang::XMultiServiceFactory > xFactory( mComponent, uno::UNO_QUERY_THROW );
+            xTmpHandler.set( xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ), uno::UNO_QUERY_THROW );
+        }
+
+        sal_Bool bCanChangePassword = sal_True;
+        // if there is already a stored master password it should be entered by the user before the change happen
+        ::rtl::OUString aEncodedMP;
+        if( m_aMasterPasswd.getLength() || m_pStorageFile->getEncodedMP( aEncodedMP ) )
+            bCanChangePassword = authorizateWithMasterPassword( xTmpHandler );
+
+        if ( bCanChangePassword )
+        {
+            // ask for the new password, but do not set it
+            PasswordRequestMode aRMode = PasswordRequestMode_PASSWORD_CREATE;
+            ::rtl::OUString aPass = RequestPasswordFromUser( aRMode, xTmpHandler );
+
+            if ( aPass.getLength() )
+            {
+                // get all the persistent entries if it is possible
+                Sequence< UrlRecord > aPersistent = getAllPersistent( uno::Reference< task::XInteractionHandler >() );
+
+                // remove the master password and the entries persistence
+                removeMasterPassword();
+
+                // store the new master password
+                m_aMasterPasswd = aPass;
+                vector< ::rtl::OUString > aMaster( 1, m_aMasterPasswd );
+                m_pStorageFile->setEncodedMP( EncodePasswords( aMaster, m_aMasterPasswd ) );
+
+                // store all the entries with the new password
+                for ( int nURLInd = 0; nURLInd < aPersistent.getLength(); nURLInd++ )
+                    for ( int nNameInd = 0; nNameInd< aPersistent[nURLInd].UserList.getLength(); nNameInd++ )
+                        addPersistent( aPersistent[nURLInd].Url,
+                                       aPersistent[nURLInd].UserList[nNameInd].UserName,
+                                       aPersistent[nURLInd].UserList[nNameInd].Passwords,
+                                       uno::Reference< task::XInteractionHandler >() );
+
+                bResult = sal_True;
+            }
+        }
+    }
+
+    return bResult;
+}
+
+//-------------------------------------------------------------------------
+void SAL_CALL PasswordContainer::removeMasterPassword()
+    throw (uno::RuntimeException)
+{
+    // remove all the stored passwords and the master password
+    removeAllPersistent();
+
+    ::osl::MutexGuard aGuard( mMutex );
+    if ( m_pStorageFile )
+    {
+        m_aMasterPasswd = ::rtl::OUString();
+        m_pStorageFile->setEncodedMP( ::rtl::OUString() ); // let the master password be removed from configuration
+    }
+}
+
+//-------------------------------------------------------------------------
+::sal_Bool SAL_CALL PasswordContainer::hasMasterPassword(  )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( mMutex );
+
+    if ( !m_pStorageFile )
+        throw uno::RuntimeException();
+
+    ::rtl::OUString aEncodedMP;
+    return ( m_pStorageFile->useStorage() && m_pStorageFile->getEncodedMP( aEncodedMP ) );
+}
+
+//-------------------------------------------------------------------------
+::sal_Bool SAL_CALL PasswordContainer::allowPersistentStoring( ::sal_Bool bAllow )
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( mMutex );
+
+    if ( !m_pStorageFile )
+        throw uno::RuntimeException();
+
+    if ( !bAllow )
+        removeMasterPassword();
+
+    if ( m_pStorageFile->useStorage() == bAllow )
+        return bAllow;
+
+    m_pStorageFile->setUseStorage( bAllow );
+    return !bAllow;
+}
+
+//-------------------------------------------------------------------------
+::sal_Bool SAL_CALL PasswordContainer::isPersistentStoringAllowed()
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( mMutex );
+
+    if ( !m_pStorageFile )
+        throw uno::RuntimeException();
+
+    return m_pStorageFile->useStorage();
+}
+
+//-------------------------------------------------------------------------
 
 void PasswordContainer::Notify()
 {
@@ -1051,21 +1284,21 @@ void PasswordContainer::Notify()
 
     for( aIter = container.begin(); aIter != container.end(); aIter++ )
     {
-        for( vector< NamePassRecord >::iterator aVIter = aIter->second.begin(); aVIter != aIter->second.end(); aVIter++ )
-            if( aVIter->mStatus == PERSISTENT_RECORD )
-                aVIter->mStatus = SINGLE_RECORD;
+        for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); aNPIter++ )
+            if( aNPIter->mStatus == PERSISTENT_RECORD )
+                aNPIter->mStatus = SINGLE_RECORD;
     }
 
     PassMap addon;
-    if( storageFile )
-        addon = storageFile->getInfo();
+    if( m_pStorageFile )
+        addon = m_pStorageFile->getInfo();
 
     for( aIter = addon.begin(); aIter != addon.end(); aIter++ )
     {
         PassMap::iterator aSearchIter = container.find( aIter->first );
         if( aSearchIter != container.end() )
-            for( vector< NamePassRecord >::iterator aVIter = aIter->second.begin(); aVIter != aIter->second.end(); aVIter++ )
-                updateVector( aSearchIter->first, aSearchIter->second, *aVIter, sal_False, Reference< XInteractionHandler >() );
+            for( list< NamePassRecord >::iterator aNPIter = aIter->second.begin(); aNPIter != aIter->second.end(); aNPIter++ )
+                UpdateVector( aSearchIter->first, aSearchIter->second, *aNPIter, sal_False, Reference< XInteractionHandler >() );
         else
             container.insert( PairUrlRecord( aIter->first, aIter->second ) );
     }
@@ -1073,14 +1306,14 @@ void PasswordContainer::Notify()
 
 //-------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL PasswordContainer::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
+::rtl::OUString SAL_CALL PasswordContainer::getImplementationName(  ) throw(uno::RuntimeException)
 {
     return impl_getStaticImplementationName();
 }
 
 //-------------------------------------------------------------------------
 
-sal_Bool SAL_CALL PasswordContainer::supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
+sal_Bool SAL_CALL PasswordContainer::supportsService( const ::rtl::OUString& ServiceName ) throw(uno::RuntimeException)
 {
     if ( ServiceName.compareToAscii("com.sun.star.task.PasswordContainer") == 0 )
         return sal_True;
@@ -1090,14 +1323,14 @@ sal_Bool SAL_CALL PasswordContainer::supportsService( const ::rtl::OUString& Ser
 
 //-------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > SAL_CALL PasswordContainer::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+Sequence< ::rtl::OUString > SAL_CALL PasswordContainer::getSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     return impl_getStaticSupportedServiceNames();
 }
 
 //-------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > SAL_CALL PasswordContainer::impl_getStaticSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+Sequence< ::rtl::OUString > SAL_CALL PasswordContainer::impl_getStaticSupportedServiceNames(  ) throw(uno::RuntimeException)
 {
     Sequence< ::rtl::OUString > aRet(1);
     *aRet.getArray() = ::rtl::OUString::createFromAscii("com.sun.star.task.PasswordContainer");
@@ -1106,7 +1339,7 @@ Sequence< ::rtl::OUString > SAL_CALL PasswordContainer::impl_getStaticSupportedS
 
 //-------------------------------------------------------------------------
 
-::rtl::OUString SAL_CALL PasswordContainer::impl_getStaticImplementationName() throw(::com::sun::star::uno::RuntimeException)
+::rtl::OUString SAL_CALL PasswordContainer::impl_getStaticImplementationName() throw(uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii("stardiv.svtools.PasswordContainer");
 }
