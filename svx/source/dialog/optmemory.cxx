@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optmemory.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:42:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:35:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,8 +334,11 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
     if ( SFX_ITEM_SET == eState )
         aQuickLaunchCB.Check( ( (SfxBoolItem*)pItem )->GetValue() );
     else if ( SFX_ITEM_DISABLED == eState )
+    {
         // quickstart not installed
-        aQuickLaunchCB.Disable();
+        aQuickLaunchFL.Hide();
+        aQuickLaunchCB.Hide();
+    }
 
     aQuickLaunchCB.SaveValue();
 }
