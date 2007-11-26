@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:40:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:31:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,9 @@
 #include <sot/storage.hxx>
 #ifndef _SFXMACITEM_HXX //autogen
 #include <svtools/macitem.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SECURITYOPTIONS_HXX
+#include <svtools/securityoptions.hxx>
 #endif
 #ifndef __SBX_SBXVARIABLE_HXX //autogen
 #include <basic/sbxvar.hxx>
@@ -543,8 +546,17 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
     // Removed ExecHyperlink option.
     //BOOL bExecHyperlinks = rSh.GetViewOptions()->IsExecHyperlinks() ^
     //                     (nModifier == KEY_MOD2 ? TRUE : FALSE);
+    BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
+    if ( !bExecHyperlinks )
+    {
+        SvtSecurityOptions aSecOpts;
+        const BOOL bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+        if ( (  bSecureOption && nModifier == KEY_MOD1 ) ||
+             ( !bSecureOption && nModifier != KEY_MOD1 ) )
+            bExecHyperlinks = TRUE;
+    }
 
-    const BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly() || nModifier == KEY_MOD1;
+    const BOOL bExecSmarttags  = nModifier == KEY_MOD1;
 
     SdrView *pSdrView = rSh.GetDrawView();
     BOOL bPrefSdrPointer = FALSE;
@@ -682,7 +694,9 @@ void SwEditWin::UpdatePointer(const Point &rLPt, USHORT nModifier )
                     const bool bClickToFollow = SwContentAtPos::SW_INETATTR == aSwContentAtPos.eCntntAtPos ||
                                                 SwContentAtPos::SW_SMARTTAG == aSwContentAtPos.eCntntAtPos;
 
-                     if( !bClickToFollow || bExecHyperlinks )
+                     if( !bClickToFollow ||
+                         (SwContentAtPos::SW_INETATTR == aSwContentAtPos.eCntntAtPos && bExecHyperlinks) ||
+                         (SwContentAtPos::SW_SMARTTAG == aSwContentAtPos.eCntntAtPos && bExecSmarttags) )
                         eStyle = POINTER_REFHAND;
                 }
             }
@@ -2838,7 +2852,15 @@ void SwEditWin::MouseButtonDown(const MouseEvent& _rMEvt)
                 }
         }
 
-        const BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly() || rMEvt.GetModifier() == KEY_MOD1;
+        BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
+        if ( !bExecHyperlinks )
+        {
+            SvtSecurityOptions aSecOpts;
+            const BOOL bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+            if ( (  bSecureOption && rMEvt.GetModifier() == KEY_MOD1 ) ||
+                 ( !bSecureOption && rMEvt.GetModifier() != KEY_MOD1 ) )
+                bExecHyperlinks = TRUE;
+        }
 
         // --> FME 2004-07-30 #i32329# Enhanced selection
         BYTE nNumberOfClicks = static_cast< BYTE >(rMEvt.GetClicks() % 4);
@@ -4149,9 +4171,21 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                         if( KEY_MOD1 == rMEvt.GetModifier() )
                             nFilter |= URLLOAD_NEWVIEW;
 
-                        BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly() || rMEvt.GetModifier() == KEY_MOD1;
+                        BOOL bExecHyperlinks = rView.GetDocShell()->IsReadOnly();
+                        if ( !bExecHyperlinks )
+                        {
+                            SvtSecurityOptions aSecOpts;
+                            const BOOL bSecureOption = aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+                            if ( (  bSecureOption && rMEvt.GetModifier() == KEY_MOD1 ) ||
+                                 ( !bSecureOption && rMEvt.GetModifier() != KEY_MOD1 ) )
+                                bExecHyperlinks = TRUE;
+                        }
+
+                        const BOOL bExecSmarttags = rMEvt.GetModifier() == KEY_MOD1;
+
                         if(pApplyTempl)
                             bExecHyperlinks = FALSE;
+
                         SwContentAtPos aCntntAtPos( SwContentAtPos::SW_CLICKFIELD |
                                                     SwContentAtPos::SW_INETATTR |
                                                     SwContentAtPos::SW_SMARTTAG );
@@ -4172,7 +4206,7 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
                             else if ( SwContentAtPos::SW_SMARTTAG == aCntntAtPos.eCntntAtPos )
                             {
                                     // execute smarttag menu
-                                    if ( bExecHyperlinks && SwSmartTagMgr::Get().IsSmartTagsEnabled() )
+                                    if ( bExecSmarttags && SwSmartTagMgr::Get().IsSmartTagsEnabled() )
                                         rView.ExecSmartTagPopup( aDocPt );
                             }
                             else // if ( SwContentAtPos::SW_INETATTR == aCntntAtPos.eCntntAtPos )
