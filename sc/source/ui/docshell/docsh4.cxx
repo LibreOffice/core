@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:41:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 18:42:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1620,7 +1620,7 @@ void ScDocShell::GetStatePageStyle( SfxViewShell&   /* rCaller */,
 
 void lcl_GetPrintData( ScDocShell* pDocShell /*in*/,
     ScDocument* pDocument /*in*/, SfxPrinter* pPrinter /*in*/,
-    PrintDialog* pPrintDialog /*in*/, PrintDialogRange eDlgOption /*in*/,
+    PrintDialog* pPrintDialog /*in*/, bool bForceSelected /*in*/,
     ScMarkData* pMarkData /*inout*/, bool& rbHasOptions /*out*/,
     ScPrintOptions& rOptions /*out*/, bool& rbAllTabs /*out*/,
     long& rnTotalPages /*out*/, long aPageArr[] /*out*/,
@@ -1651,40 +1651,30 @@ void lcl_GetPrintData( ScDocShell* pDocShell /*in*/,
         rnTotalPages += nThisTab;
     }
 
-    rbAllTabs = true;
-    if ( !rOptions.GetAllSheets() )
+    rPageRanges.SetTotalRange( Range( 0, RANGE_MAX ) );
+    rPageRanges.Select( Range( 1, rnTotalPages ) );
+
+    rbAllTabs = ( pPrintDialog ? ( pPrintDialog->GetCheckedSheetRange() == PRINTSHEETS_ALL ) : SC_MOD()->GetPrintOptions().GetAllSheets() );
+    if ( bForceSelected )
     {
         rbAllTabs = false;
     }
 
-    rPageRanges.SetTotalRange( Range( 0, RANGE_MAX ) );
-    rPageRanges.Select( Range( 1, rnTotalPages ) );
-
-    switch ( eDlgOption )
+    if ( ( pPrintDialog && pPrintDialog->GetCheckedSheetRange() == PRINTSHEETS_SELECTED_CELLS ) || bForceSelected )
     {
-        case PRINTDIALOG_RANGE:
+        if ( pMarkData && ( pMarkData->IsMarked() || pMarkData->IsMultiMarked() ) )
         {
-            rPageRanges = MultiSelection( pPrintDialog->GetRangeText() );
-            break;
+            pMarkData->MarkToMulti();
+            *ppMarkedRange = new ScRange;
+            pMarkData->GetMultiMarkArea( **ppMarkedRange );
+            pMarkData->MarkToSimple();
         }
+    }
 
-        case PRINTDIALOG_SELECTION:
-        {
-            if ( pMarkData && ( pMarkData->IsMarked() || pMarkData->IsMultiMarked() ) )
-            {
-                pMarkData->MarkToMulti();
-                *ppMarkedRange = new ScRange;
-                pMarkData->GetMultiMarkArea( **ppMarkedRange );
-                pMarkData->MarkToSimple();
-            }
-            rbAllTabs = false;
-            break;
-        }
-
-        default:
-        {
-            // added to avoid warnings
-        }
+    PrintDialogRange eDlgOption = pPrintDialog ? pPrintDialog->GetCheckedRange() : PRINTDIALOG_ALL;
+    if ( eDlgOption == PRINTDIALOG_RANGE )
+    {
+        rPageRanges = MultiSelection( pPrintDialog->GetRangeText() );
     }
 
     // get number of total pages if selection
@@ -1703,7 +1693,7 @@ void lcl_GetPrintData( ScDocShell* pDocShell /*in*/,
                 rnTotalPages += aPageArr[nTab];
             }
         }
-        if ( eDlgOption != PRINTDIALOG_RANGE )
+        if ( eDlgOption == PRINTDIALOG_ALL || bForceSelected )
         {
             rPageRanges.Select( Range( 1, rnTotalPages ) );
         }
@@ -1718,12 +1708,6 @@ bool ScDocShell::CheckPrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData, b
         return false;
     }
 
-    PrintDialogRange eDlgOption = pPrintDialog ? pPrintDialog->GetCheckedRange() : PRINTDIALOG_ALL;
-    if ( bForceSelected )
-    {
-        eDlgOption = PRINTDIALOG_SELECTION;
-    }
-
     bool bHasOptions = false;
     ScPrintOptions aOptions;
     bool bAllTabs = true;
@@ -1732,7 +1716,7 @@ bool ScDocShell::CheckPrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData, b
     MultiSelection aPageRanges;    // pages to print
     ScRange* pMarkedRange = NULL;
 
-    lcl_GetPrintData( this, &aDocument, pPrinter, pPrintDialog, eDlgOption,
+    lcl_GetPrintData( this, &aDocument, pPrinter, pPrintDialog, bForceSelected,
                       pMarkData, bHasOptions, aOptions, bAllTabs, nTotalPages,
                       aPageArr, aPageRanges, &pMarkedRange );
 
@@ -1767,8 +1751,6 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
     //! Selection etc. mit Print() zusammenfassen !!!
     //! Seiten nur einmal zaehlen
 
-    PrintDialogRange eDlgOption = pPrintDialog ? pPrintDialog->GetCheckedRange() : PRINTDIALOG_ALL;
-
     bool bHasOptions = false;
     ScPrintOptions aOptions;
     bool bAllTabs = true;
@@ -1777,7 +1759,7 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
     MultiSelection aPageRanges;    // pages to print
     ScRange* pMarkedRange = NULL;
 
-    lcl_GetPrintData( this, &aDocument, pPrinter, pPrintDialog, eDlgOption,
+    lcl_GetPrintData( this, &aDocument, pPrinter, pPrintDialog, false,
                       pMarkData, bHasOptions, aOptions, bAllTabs, nTotalPages,
                       aPageArr, aPageRanges, &pMarkedRange );
 
@@ -1856,12 +1838,6 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
         return;
     }
 
-    PrintDialogRange eDlgOption = pPrintDialog ? pPrintDialog->GetCheckedRange() : PRINTDIALOG_ALL;
-    if ( bForceSelected )
-    {
-        eDlgOption = PRINTDIALOG_SELECTION;
-    }
-
     bool bHasOptions = false;
     ScPrintOptions aOptions;
     bool bAllTabs = true;
@@ -1870,7 +1846,7 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
     MultiSelection aPageRanges;    // pages to print
     ScRange* pMarkedRange = NULL;
 
-    lcl_GetPrintData( this, &aDocument, pPrinter, pPrintDialog, eDlgOption,
+    lcl_GetPrintData( this, &aDocument, pPrinter, pPrintDialog, bForceSelected,
                       pMarkData, bHasOptions, aOptions, bAllTabs, nTotalPages,
                       aPageArr, aPageRanges, &pMarkedRange );
 
