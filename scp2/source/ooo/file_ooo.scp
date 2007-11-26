@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.224 $
+ *  $Revision: 1.225 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 17:06:23 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 13:52:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2388,7 +2388,7 @@ End
 
 File gid_File_Registry_Filter_Zip
     Dir = gid_Dir_Share_Registry_Res_Lang;
-    ARCHIVE_TXT_FILE_BODY;
+    ARCHIVE_TXT_FILE_BODY_PATCH;
     EXTRA_ALL_LANG(fcfg_langpack);
 End
 
