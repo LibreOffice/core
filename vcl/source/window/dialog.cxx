@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:13:56 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:42:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -981,14 +981,21 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULO
     Point aPos = pDev->LogicToPixel( rPos );
     Size aSize = pDev->LogicToPixel( rSize );
 
-    ImplInitSettings();
+    Wallpaper aWallpaper = GetBackground();
+    if ( !aWallpaper.IsBitmap() )
+        ImplInitSettings();
 
     pDev->Push();
     pDev->SetMapMode();
     pDev->SetLineColor();
-    pDev->SetFillColor( GetBackground().GetColor() );
 
-    pDev->DrawRect( Rectangle( aPos, aSize ) );
+    if ( aWallpaper.IsBitmap() )
+        pDev->DrawBitmapEx( aPos, aSize, aWallpaper.GetBitmap() );
+    else
+    {
+        pDev->SetFillColor( aWallpaper.GetColor() );
+        pDev->DrawRect( Rectangle( aPos, aSize ) );
+    }
 
     if (!( GetStyle() & WB_NOBORDER ))
     {
