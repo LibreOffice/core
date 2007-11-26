@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ttcr.c,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:01:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: ttcr.c,v 1.9 2007-07-31 16:01:59 hr Exp $ */
+/* $Id: ttcr.c,v 1.10 2007-11-26 15:06:52 ihi Exp $ */
 
 /*
  * TrueTypeCreator method implementation
@@ -1353,7 +1353,7 @@ sal_uInt32 glyfAdd(TrueTypeTable *table, GlyphData *glyphdata, TrueTypeFont *fnt
         listPositionAt(glyphlist, 1);       /* glyphData->glyphID is always the first glyph on the list */
         do {
             int found = 0;
-            currentID = (sal_uInt32) listCurrent(glyphlist);
+            currentID = (sal_uIntPtr) listCurrent(glyphlist);
             /* XXX expensive! should be rewritten with sorted arrays! */
             listToFirst(l);
             do {
