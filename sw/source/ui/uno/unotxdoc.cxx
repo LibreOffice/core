@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.124 $
+ *  $Revision: 1.125 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:28:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2605,6 +2605,7 @@ class SwViewOptionAdjust_Impl
     bool m_bSwitchOff_IsFldName;
     bool m_bSwitchOff_HiddenChar;
     bool m_bSwitchOff_HiddenParagraphs;
+    bool m_bSwitchOff_IsShowHiddenField;
 
     SwViewOption* m_pViewOption;
     SwWrtShell& m_rShell;
@@ -2632,9 +2633,18 @@ SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(SwWrtShell& rSh) :
         if(!pFldType || !pFldType->GetDepends())
             m_bSwitchOff_HiddenParagraphs = false;
     }
+    m_bSwitchOff_IsShowHiddenField = pCurrentViewOptions->IsShowHiddenField();
+    if(m_bSwitchOff_IsShowHiddenField)
+    {
+        const SwFieldType* pFldType = m_rShell.GetDoc()->GetSysFldType(RES_HIDDENTXTFLD);
+        if( !pFldType || !pFldType->GetDepends())
+            m_bSwitchOff_IsShowHiddenField = false;
+    }
+
 
     bApplyViewOptions |= m_bSwitchOff_HiddenChar;
     bApplyViewOptions |= m_bSwitchOff_HiddenParagraphs;
+    bApplyViewOptions |= m_bSwitchOff_IsShowHiddenField;
     if(bApplyViewOptions)
     {
         m_pViewOption = new SwViewOption(*m_rShell.GetViewOptions());
@@ -2644,6 +2654,8 @@ SwViewOptionAdjust_Impl::SwViewOptionAdjust_Impl(SwWrtShell& rSh) :
             m_pViewOption->SetShowHiddenChar(FALSE);
         if(m_bSwitchOff_HiddenParagraphs)
             m_pViewOption->SetShowHiddenPara(FALSE);
+        if(m_bSwitchOff_IsShowHiddenField)
+            m_pViewOption->SetShowHiddenField(FALSE);
         SW_MOD()->ApplyUsrPref(*m_pViewOption, &m_rShell.GetView(), VIEWOPT_DEST_VIEW_ONLY );
     }
 }
@@ -2660,6 +2672,8 @@ SwViewOptionAdjust_Impl::~SwViewOptionAdjust_Impl()
             m_pViewOption->SetShowHiddenChar(TRUE);
         if(m_bSwitchOff_HiddenParagraphs)
             m_pViewOption->SetShowHiddenPara(TRUE);
+        if(m_bSwitchOff_IsShowHiddenField)
+            m_pViewOption->SetShowHiddenField(TRUE);
         SW_MOD()->ApplyUsrPref(*m_pViewOption, &m_rShell.GetView(), VIEWOPT_DEST_VIEW_ONLY );
         delete m_pViewOption;
     }
