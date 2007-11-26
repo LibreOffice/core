@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:27:00 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:29:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,6 +224,7 @@ static const sal_uInt16 aDocInfoSubTypeFromService[] =
     DI_INFO2,                   //PROPERTY_MAP_FLDTYP_DOCINFO_INFO_1
     DI_INFO3,                   //PROPERTY_MAP_FLDTYP_DOCINFO_INFO_2
     DI_INFO4,                   //PROPERTY_MAP_FLDTYP_DOCINFO_INFO_3
+    DI_CUSTOM,                  //PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM
     DI_PRINT | DI_SUB_AUTHOR,   //PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_AUTHOR
     DI_PRINT | DI_SUB_DATE,     //PROPERTY_MAP_FLDTYP_DOCINFO_PRINT_DATE_TIME
     DI_KEYS,                    //PROPERTY_MAP_FLDTYP_DOCINFO_KEY_WORDS
@@ -282,6 +283,7 @@ static const ServiceIdResId aServiceToRes[] =
     {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1          },
     {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2          },
     {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3          },
+    {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM          },
     {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR    },
     {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME },
     {RES_DOCINFOFLD,        SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS       },
@@ -349,6 +351,7 @@ sal_uInt16 lcl_GetServiceForField( const SwField& rFld )
             case DI_THEMA:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_SUBJECT;  break;
             case DI_TITEL:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_TITLE;    break;
             case DI_DOCNO:  nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_REVISION; break;
+            case DI_CUSTOM: nSrvId = SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM;   break;
             }
         }
         break;
@@ -474,6 +477,7 @@ USHORT lcl_GetPropertyMapOfService( USHORT nServiceId )
     case SW_SERVICE_FIELDTYPE_DOCINFO_CREATE_DATE_TIME:
     case SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME: nRet = PROPERTY_MAP_FLDTYP_DOCINFO_DATE_TIME; break;
     case SW_SERVICE_FIELDTYPE_DOCINFO_EDIT_TIME: nRet = PROPERTY_MAP_FLDTYP_DOCINFO_EDIT_TIME; break;
+    case SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM: nRet = PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM; break;
     case SW_SERVICE_FIELDTYPE_DOCINFO_DESCRIPTION:
     case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_0:
     case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1:
@@ -1548,6 +1552,7 @@ void SwXTextField::attachToRange(
             case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_1            :
             case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_2            :
             case SW_SERVICE_FIELDTYPE_DOCINFO_INFO_3            :
+            case SW_SERVICE_FIELDTYPE_DOCINFO_CUSTOM            :
             case SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_AUTHOR      :
             case SW_SERVICE_FIELDTYPE_DOCINFO_PRINT_DATE_TIME   :
             case SW_SERVICE_FIELDTYPE_DOCINFO_KEY_WORDS         :
@@ -1577,7 +1582,7 @@ void SwXTextField::attachToRange(
                 }
                 if(m_pProps->bBool1)
                     nSubType |= DI_SUB_FIXED;
-                pFld = new SwDocInfoField((SwDocInfoFieldType*)pFldType, nSubType, m_pProps->nFormat);
+                pFld = new SwDocInfoField((SwDocInfoFieldType*)pFldType, nSubType, m_pProps->sPar4, m_pProps->nFormat);
                 if(m_pProps->sPar3.Len())
                     ((SwDocInfoField*)pFld)->SetExpansion(m_pProps->sPar3);
             }
@@ -2417,7 +2422,8 @@ void SwXTextField::update(  ) throw (uno::RuntimeException)
                     pDocInfFld->SetExpansion( ((SwDocInfoFieldType*)pFld->GetTyp())->Expand(
                                                 pDocInfFld->GetSubType(),
                                                 pDocInfFld->GetFormat(),
-                                                pDocInfFld->GetLanguage() ) );
+                                                pDocInfFld->GetLanguage(),
+                                                pDocInfFld->GetName() ) );
             }
             break;
         }
