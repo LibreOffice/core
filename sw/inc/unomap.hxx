@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:21:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:28:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,9 @@
 #define PROPERTY_MAP_CHAR_AUTO_STYLE                    94
 #define PROPERTY_MAP_RUBY_AUTO_STYLE                    95
 #define PROPERTY_MAP_PARA_AUTO_STYLE                    96
-#define PROPERTY_MAP_END                                97
+#define PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM              97
+
+#define PROPERTY_MAP_END                                98
 
 #define PROPERTY_SET_CHAR_STYLE             1
 #define PROPERTY_SET_PARA_STYLE             2
