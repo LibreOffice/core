@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddinf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:46:26 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:31:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,8 @@
 #undef SW_DLLIMPLEMENTATION
 #endif
 
-
+#include <sfx2/request.hxx>
+#include <sfx2/frame.hxx>
 
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
@@ -68,6 +69,8 @@
 #ifndef _WRTSH_HXX
 #include <wrtsh.hxx>
 #endif
+
+#include <fldui.hrc>
 
 #ifndef _FLDTDLG_HRC
 #include <fldtdlg.hrc>
@@ -120,6 +123,10 @@ SwFldDokInfPage::SwFldDokInfPage(Window* pWindow, const SfxItemSet& rCoreSet ) :
     aTypeTLB.SetNodeDefaultImages();
     //enable 'active' language selection
     aFormatLB.SetShowLanguageControl(TRUE);
+
+    SFX_ITEMSET_ARG( &rCoreSet, pItem, SfxUnoAnyItem, SID_DOCINFO, FALSE );
+    if ( pItem )
+        pItem->GetValue() >>= aPropertyNames;
 }
 
 /*--------------------------------------------------------------------
@@ -188,6 +195,23 @@ void __EXPORT SwFldDokInfPage::Reset(const SfxItemSet& )
                 }
                 pEntry = aTypeTLB.InsertEntry(*aLst[i], pInfo);
                 pEntry->SetUserData(reinterpret_cast<void*>(i));
+            }
+            else if (i == DI_CUSTOM )
+            {
+                if (aPropertyNames.getLength() )
+                {
+                    //if ( !IsFldEdit() )
+                    {
+                        pInfo = aTypeTLB.InsertEntry( String(SW_RES( STR_CUSTOM )) );
+                        pInfo->SetUserData(reinterpret_cast<void*>(USHRT_MAX));
+                    }
+
+                    for (sal_Int32 n=0; n<aPropertyNames.getLength(); n++)
+                    {
+                        pEntry = aTypeTLB.InsertEntry(String(aPropertyNames[n]), pInfo);
+                        pEntry->SetUserData(reinterpret_cast<void*>(i));
+                    }
+                }
             }
             else
             {
@@ -396,7 +420,7 @@ USHORT SwFldDokInfPage::FillSelectionLB(USHORT nSubType)
         nExtSubType = ((nExtSubType & ~DI_SUB_FIXED) >> 8) - 1;
     }
 
-    if (nSubType < DI_CREATE || nSubType == DI_DOCNO || nSubType == DI_EDIT)
+    if (nSubType < DI_CREATE || nSubType == DI_DOCNO || nSubType == DI_EDIT|| nSubType == DI_CUSTOM )
     {
         // Format Box ist fuer Title und Time leer
     }
@@ -456,7 +480,10 @@ BOOL __EXPORT SwFldDokInfPage::FillItemSet(SfxItemSet& )
     if (!IsFldEdit() || nOldSel != aSelectionLB.GetSelectEntryPos() ||
         nOldFormat != nFormat || aFixedCB.GetState() != aFixedCB.GetSavedValue())
     {
-        InsertFld(nTypeId, nSubType, aEmptyStr, aEmptyStr, nFormat,
+        String aPar;
+        if ( nSubType == 13 )
+            aPar = aTypeTLB.GetEntryText(pSelEntry);
+        InsertFld(nTypeId, nSubType, aPar, aEmptyStr, nFormat,
                 ' ', aFormatLB.IsAutomaticLanguage());
     }
 
