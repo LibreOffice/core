@@ -4,9 +4,9 @@
 #
 #   $RCSfile: shortcut.pm,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-11 14:18:42 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 16:20:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -373,6 +373,16 @@ sub get_folderitem_directory
     if ( $shortcut->{'FolderID'} eq "PREDEFINED_AUTOSTART" )
     {
         $directory = $installer::globals::startupfolder;
+    }
+
+    if ( $shortcut->{'FolderID'} eq "PREDEFINED_DESKTOP" )
+    {
+        $directory = $installer::globals::desktopfolder;
+    }
+
+    if ( $shortcut->{'FolderID'} eq "PREDEFINED_STARTMENU" )
+    {
+        $directory = $installer::globals::startmenufolder;
     }
 
     # saving the directory in the folderitems collector
