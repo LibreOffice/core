@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfunc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:41:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:20:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,10 @@
 #define SC_DBFUNC_HXX
 
 #include "viewfunc.hxx"
+
+namespace com { namespace sun { namespace star { namespace sheet {
+    struct DataPilotFieldFilter;
+}}}}
 
 struct ScSortParam;
 struct ScQueryParam;
@@ -104,6 +108,9 @@ public:
 
     BOOL            HasSelectionForDrillDown( USHORT& rOrientation );
     void            SetDataPilotDetails( BOOL bShow, const String* pNewDimensionName = NULL );
+
+    void            ShowDataPilotSourceData( ScDPObject& rDPObj,
+                        const ::std::vector< ::com::sun::star::sheet::DataPilotFieldFilter >& rFilters );
 
     void            MakeOutline( BOOL bColumns, BOOL bRecord = TRUE );
     void            RemoveOutline( BOOL bColumns, BOOL bRecord = TRUE );
