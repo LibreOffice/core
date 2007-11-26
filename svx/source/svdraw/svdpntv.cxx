@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:43:46 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:56:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,15 +333,6 @@ void SdrPaintView::ImpClearVars()
     bGlueVisible4=FALSE;
     bSwapAsynchron=FALSE;
     bPrintPreview=FALSE;
-    mbLineDraft=FALSE;
-    mbFillDraft=FALSE;
-    mbGrafDraft=FALSE;
-    mbHideGrafDraft=FALSE;
-    mbTextDraft=FALSE;
-    mbLineDraftPrn=FALSE;
-    mbFillDraftPrn=FALSE;
-    mbGrafDraftPrn=FALSE;
-    mbTextDraftPrn=FALSE;
     mbPreviewRenderer=FALSE;
 
     eAnimationMode = SDR_ANIMATION_ANIMATE;
