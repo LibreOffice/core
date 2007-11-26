@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdruler.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 18:24:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 17:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,8 @@
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
 #endif
+
+#include "helpids.h"
 
 namespace sd {
 
@@ -131,8 +133,16 @@ Ruler::Ruler( DrawViewShell& rViewSh, ::Window* pParent, ::sd::Window* pWin, USH
     pCtrlItem = new RulerCtrlItem(SID_RULER_NULL_OFFSET, *this, rBindings);
     rBindings.LeaveRegistrations();
 
-    if ( nWinStyle & WB_HSCROLL )   bHorz = TRUE;
-    else                            bHorz = FALSE;
+    if ( nWinStyle & WB_HSCROLL )
+    {
+        bHorz = TRUE;
+        SetHelpId( HID_SD_RULER_HORIZONTAL );
+    }
+    else
+    {
+        bHorz = FALSE;
+        SetHelpId( HID_SD_RULER_VERTICAL );
+    }
 }
 
 /*************************************************************************
