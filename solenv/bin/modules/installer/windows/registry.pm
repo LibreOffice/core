@@ -4,9 +4,9 @@
 #
 #   $RCSfile: registry.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2007-10-02 15:20:44 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 16:20:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -284,6 +284,11 @@ sub create_registry_table
             {
                 push(@{$allregistrycomponentsref}, $registry{'Component_'});
             }
+
+            # Collecting all components with DONT_DELETE style
+            my $style = "";
+            if ( $oneregistry->{'Styles'} ) { $style = $oneregistry->{'Styles'}; }
+            if ( $style =~ /\bDONT_DELETE\b/ ) { $installer::globals::dontdeletecomponents{$registry{'Component_'}} = 1; }
 
             # Collecting all component conditions
             if ( $oneregistry->{'ComponentCondition'} )
