@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.121 $
+#   $Revision: 1.122 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-19 12:57:05 $
+#   last change: $Author: ihi $ $Date: 2007-11-26 12:44:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.121 $$"
+LIBSMKREV!:="$$Revision: 1.122 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -83,8 +83,13 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 .ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 .INCLUDE .IGNORE : ucbhelper$/version.mk
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
+.IF "$(SYSTEM_OPENSSL)" == "YES"
+OPENSSLLIB=$(OPENSSL_LIBS)
+OPENSSLLIBST=$(STATIC) $(OPENSSL_LIBS) $(DYNAMIC)
+.ELSE           # "$(SYSTEM_OPENSSL)" == "YES
 OPENSSLLIB=-lssl -lcrypto
 OPENSSLLIBST=$(STATIC) -lssl -lcrypto $(DYNAMIC)
+.ENDIF          # "$(SYSTEM_OPENSSL)" == "YES"
 .IF "$(GUI)$(COM)"=="WNTGCC"
 REGLIB=-lreg$(UDK_MAJOR)
 .ELSE			# "$(GUI)$(COM)"=="WNTGCC"
@@ -348,11 +353,7 @@ LDAPBERLIB=ldapber.lib
 CPPULIB=icppu.lib
 CPPUHELPERLIB=icppuhelper.lib
 UCBHELPERLIB=iucbhelper.lib
-.IF "$(USE_SHELL)" == "4nt"
 OPENSSLLIB=ssleay32.lib libeay32.lib
-.ELSE
-OPENSSLLIB=libssl.lib libcrypto.lib
-.ENDIF
 ODBCLIB=iodbc.lib
 ODBCBASELIB=iodbcbase.lib
 DBFILELIB=ifile$(OFFICEUPD).lib
