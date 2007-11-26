@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:43:12 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:31:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,9 @@
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_SECURITYOPTIONS_HXX
+#include <svtools/securityoptions.hxx>
 #endif
 #ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
@@ -274,11 +277,19 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
             if ( sTxt.Len() )
             {
                 // --> OD 2007-07-26 #i80029#
-                if ( !rDoc.GetDocShell()->IsReadOnly() )
+                BOOL bExecHyperlinks = rDoc.GetDocShell()->IsReadOnly();
+                if ( !bExecHyperlinks )
                 {
-                    sTxt.InsertAscii( ": ", 0 );
-                    sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
+                    SvtSecurityOptions aSecOpts;
+                    bExecHyperlinks = !aSecOpts.IsOptionSet( SvtSecurityOptions::E_CTRLCLICK_HYPERLINK );
+
+                    if ( !bExecHyperlinks )
+                    {
+                        sTxt.InsertAscii( ": ", 0 );
+                        sTxt.Insert( ViewShell::GetShellRes()->aHyperlinkClick, 0 );
+                    }
                 }
+
                 // <--
 
                 if( rEvt.GetMode() & HELPMODE_BALLOON )
