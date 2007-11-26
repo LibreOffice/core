@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.200 $
+ *  $Revision: 1.201 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:37:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 15:30:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2334,6 +2334,19 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {0,0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aDocInfoStringContentPropMap;
+            }
+            break;
+            case PROPERTY_MAP_FLDTYP_DOCINFO_CUSTOM:
+            {
+                static SfxItemPropertyMap aDocInfoCustomPropMap         [] =
+                {
+                    {SW_PROP_NMID(UNO_NAME_NAME),   FIELD_PROP_PAR4,    CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_CURRENT_PRESENTATION), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),  PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_IS_FIXED),   FIELD_PROP_BOOL1,   CPPU_E2T(CPPUTYPE_BOOLEAN)  , PROPERTY_NONE,0},
+                    COMMON_FLDTYP_PROPERTIES
+                    {0,0,0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aDocInfoCustomPropMap;
             }
             break;
             case PROPERTY_MAP_FLDTYP_DOCINFO_REVISION          :
