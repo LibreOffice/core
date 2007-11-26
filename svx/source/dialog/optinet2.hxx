@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 10:01:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:39:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,9 @@ class SvtInetOptions;
 #define TYPE_CONTROLS  18
 #endif
 
+namespace svx {
+    class SecurityOptionsDialog;
+}
 
 namespace lang = ::com::sun::star::lang;
 namespace uno = ::com::sun::star::uno;
@@ -264,21 +267,17 @@ class SvxSecurityTabPage : public SfxTabPage
     using TabPage::DeactivatePage;
 public:
     enum RedliningMode  { RL_NONE, RL_WRITER, RL_CALC };
+
 private:
-    FixedLine           maSecOptionsFL;
-    FixedInfo           maSecOptionsFI;
-    ReadOnlyImage       maSaveOrSendDocsFI;
-    CheckBox            maSaveOrSendDocsCB;
-    ReadOnlyImage       maSignDocsFI;
-    CheckBox            maSignDocsCB;
-    ReadOnlyImage       maPrintDocsFI;
-    CheckBox            maPrintDocsCB;
-    ReadOnlyImage       maCreatePdfFI;
-    CheckBox            maCreatePdfCB;
-    ReadOnlyImage       maRemovePersInfoFI;
-    CheckBox            maRemovePersInfoCB;
-    ReadOnlyImage       maRecommPasswdFI;
-    CheckBox            maRecommPasswdCB;
+    FixedLine           maSecurityOptionsFL;
+    FixedInfo           maSecurityOptionsFI;
+    PushButton          maSecurityOptionsPB;
+
+    FixedLine           maPasswordsFL;
+    CheckBox            maSavePasswordsCB;
+    PushButton          maMasterPasswordPB;
+    FixedInfo           maMasterPasswordFI;
+    PushButton          maShowPasswordsPB;
 
     FixedLine           maMacroSecFL;
     FixedInfo           maMacroSecFI;
@@ -289,12 +288,18 @@ private:
     CheckBox            maRecordChangesCB;
     PushButton          maProtectRecordsPB;
 
-    SvtSecurityOptions* mpSecOptions;
+    SvtSecurityOptions*         mpSecOptions;
+    svx::SecurityOptionsDialog* mpSecOptDlg;
+
     RedliningMode       meRedlingMode;
     String              msProtectRecordsStr;
     String              msUnprotectRecordsStr;
+    String              msPasswordStoringDeactivateStr;
 
-    DECL_LINK(          AdvancedPBHdl, void* );
+    DECL_LINK(          SecurityOptionsHdl, PushButton* );
+    DECL_LINK(          SavePasswordHdl, void* );
+    DECL_LINK(          MasterPasswordHdl, PushButton* );
+    DECL_LINK(          ShowPasswordsHdl, PushButton* );
     DECL_LINK(          MacroSecPBHdl, void* );
     DECL_LINK(          RecordChangesCBHdl, void* );
     DECL_LINK(          ProtectRecordsPBHdl, void* );
