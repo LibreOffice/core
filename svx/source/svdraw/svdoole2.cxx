@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 13:35:35 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:55:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1252,56 +1252,45 @@ sal_Bool SdrOle2Obj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& r
         //if ( ( nState != embed::EmbedStates::INPLACE_ACTIVE && nState != embed::EmbedStates::UI_ACTIVE ) ||
         //       pModel && SfxInPlaceClient::GetActiveWindow( pModel->GetPersist(), xObjRef ) != pOut )
         {
-            if ((rInfoRec.nPaintMode & SDRPAINTMODE_DRAFTGRAF) ==0)
+            if ( nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
             {
-                if ( nMiscStatus & embed::EmbedMisc::MS_EMBED_ACTIVATEWHENVISIBLE )
+                // PlugIn-Objekt connecten
+                if (rInfoRec.pPV!=NULL)
                 {
-                    // PlugIn-Objekt connecten
-                    if (rInfoRec.pPV!=NULL)
-                    {
-                        SdrOle2Obj* pOle2Obj = (SdrOle2Obj*) this;
-                        SdrView* pSdrView = (SdrView*) &rInfoRec.pPV->GetView();
-                        pSdrView->DoConnect(pOle2Obj);
-                    }
+                    SdrOle2Obj* pOle2Obj = (SdrOle2Obj*) this;
+                    SdrView* pSdrView = (SdrView*) &rInfoRec.pPV->GetView();
+                    pSdrView->DoConnect(pOle2Obj);
                 }
-
-                // #108759# Temporarily set the current background
-                // color, since OLEs rely on that during
-                // auto-colored text rendering
-                Wallpaper aOldBg( pOut->GetBackground() );
-
-                if( rInfoRec.pPV && GetPage() )
-                    pOut->SetBackground( rInfoRec.pPV->GetView().CalcBackgroundColor( GetSnapRect(),
-                                                                                      rInfoRec.pPV->GetVisibleLayers(),
-                                                                                      *GetPage() ) );
-
-                pOut->Push( PUSH_CLIPREGION );
-                pOut->IntersectClipRegion( aRect );
-
-                GetGraphic();
-                PaintGraphic_Impl( rOut, rInfoRec, nState == embed::EmbedStates::ACTIVE );
-
-                /*
-                if ( !mpImpl->pMetaFile )
-                    GetGDIMetaFile();
-                if ( mpImpl->pMetaFile )
-                    mpImpl->pMetaFile->Play( pOut, aRect.TopLeft(), aRect.GetSize() );
-                //(*ppObjRef)->DoDraw(pOut,aRect.TopLeft(),aRect.GetSize(),JobSetup());
-                */
-
-                pOut->Pop();
-
-                // #108759# Restore old background
-                pOut->SetBackground( aOldBg );
             }
-            else if( ( rInfoRec.nPaintMode & SDRPAINTMODE_HIDEDRAFTGRAF ) == 0 )
-            { // sonst SDRPAINTMODE_DRAFTGRAF
-                Polygon aPoly(Rect2Poly(aRect,aGeo));
-                pOut->SetLineColor(Color(COL_BLACK));
-                pOut->DrawPolyLine(aPoly);
-                pOut->DrawLine(aPoly[0],aPoly[2]);
-                pOut->DrawLine(aPoly[1],aPoly[3]);
-            }
+
+            // #108759# Temporarily set the current background
+            // color, since OLEs rely on that during
+            // auto-colored text rendering
+            Wallpaper aOldBg( pOut->GetBackground() );
+
+            if( rInfoRec.pPV && GetPage() )
+                pOut->SetBackground( rInfoRec.pPV->GetView().CalcBackgroundColor( GetSnapRect(),
+                                                                                  rInfoRec.pPV->GetVisibleLayers(),
+                                                                                  *GetPage() ) );
+
+            pOut->Push( PUSH_CLIPREGION );
+            pOut->IntersectClipRegion( aRect );
+
+            GetGraphic();
+            PaintGraphic_Impl( rOut, rInfoRec, nState == embed::EmbedStates::ACTIVE );
+
+            /*
+            if ( !mpImpl->pMetaFile )
+                GetGDIMetaFile();
+            if ( mpImpl->pMetaFile )
+                mpImpl->pMetaFile->Play( pOut, aRect.TopLeft(), aRect.GetSize() );
+            //(*ppObjRef)->DoDraw(pOut,aRect.TopLeft(),aRect.GetSize(),JobSetup());
+            */
+
+            pOut->Pop();
+
+            // #108759# Restore old background
+            pOut->SetBackground( aOldBg );
         }
     }
     else if ( GetGraphic() )
