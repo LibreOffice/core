@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treecontrolpeer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:20:42 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 16:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -351,9 +351,9 @@ bool TreeControlPeer::updateEntry( UnoTreeListEntry* pEntry )
             }
         }
 
-        if( (pEntry->mxNode->hasChildsOnDemand() == sal_True) != (pEntry->HasChildsOnDemand() == TRUE) )
+        if( (pEntry->mxNode->hasChildrenOnDemand() == sal_True) != (pEntry->HasChildsOnDemand() == TRUE) )
         {
-            pEntry->EnableChildsOnDemand( pEntry->mxNode->hasChildsOnDemand() ? TRUE : FALSE );
+            pEntry->EnableChildsOnDemand( pEntry->mxNode->hasChildrenOnDemand() ? TRUE : FALSE );
             bChanged = true;
         }
 
