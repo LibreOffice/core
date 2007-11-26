@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuzoom.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:27:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-26 14:35:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,11 +91,7 @@ FuZoom::FuZoom(
     SfxRequest& rReq)
     : FuPoor(pViewSh, pWin, pView, pDoc, rReq),
       bVisible(FALSE),
-      bStartDrag(FALSE),
-      bLineDraft(FALSE),
-      bFillDraft(FALSE),
-      bTextDraft(FALSE),
-      bGrafDraft(FALSE)
+      bStartDrag(FALSE)
 {
 }
 
@@ -139,22 +135,6 @@ BOOL FuZoom::MouseButtonDown(const MouseEvent& rMEvt)
 
     aBeginPosPix = rMEvt.GetPosPixel();
     aBeginPos = mpWindow->PixelToLogic(aBeginPosPix);
-
-    if (nSlotId == SID_ZOOM_PANNING)
-    {
-        // Ersatzdarstellung merken
-        FrameView* pFrameView = mpViewShell->GetFrameView();
-        bLineDraft = pFrameView->IsLineDraft();
-        bFillDraft = pFrameView->IsFillDraft();
-        bTextDraft = pFrameView->IsTextDraft();
-        bGrafDraft = pFrameView->IsGrafDraft();
-
-        // Ersatzdarstellungen einschalten
-        mpView->SetLineDraft(TRUE);
-        mpView->SetFillDraft(TRUE);
-        mpView->SetTextDraft(TRUE);
-        mpView->SetGrafDraft(TRUE);
-    }
 
     return TRUE;
 }
@@ -234,16 +214,7 @@ BOOL FuZoom::MouseButtonUp(const MouseEvent& rMEvt)
 
     Point aPosPix = rMEvt.GetPosPixel();
 
-    if (nSlotId == SID_ZOOM_PANNING)
-    {
-        // Panning
-        // Ersatzdarstellung restaurieren
-        mpView->SetLineDraft(bLineDraft);
-        mpView->SetFillDraft(bFillDraft);
-        mpView->SetTextDraft(bTextDraft);
-        mpView->SetGrafDraft(bGrafDraft);
-    }
-    else
+    if(SID_ZOOM_PANNING != nSlotId)
     {
         // Zoom
         Size aZoomSizePixel = mpWindow->LogicToPixel(aZoomRect).GetSize();
