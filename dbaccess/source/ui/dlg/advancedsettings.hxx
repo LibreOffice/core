@@ -4,9 +4,9 @@
  *
  *  $RCSfile: advancedsettings.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:09:28 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:10:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@ namespace dbaui
         CheckBox*           m_pIndexAppendix;
         CheckBox*           m_pDosLineEnds;
         CheckBox*           m_pCheckRequiredFields;
+        CheckBox*           m_pIgnoreCurrency;
 
         FixedText*          m_pBooleanComparisonModeLabel;
         ListBox*            m_pBooleanComparisonMode;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: advancedsettings.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:08:56 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:09:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@ namespace dbaui
         ,m_pIndexAppendix( NULL )
         ,m_pDosLineEnds( NULL )
         ,m_pCheckRequiredFields( NULL )
+        ,m_pIgnoreCurrency(NULL)
         ,m_pBooleanComparisonModeLabel( NULL )
         ,m_pBooleanComparisonMode( NULL )
         ,m_aControlDependencies()
@@ -184,6 +185,7 @@ namespace dbaui
         DELETEZ( m_pIndexAppendix );
         DELETEZ( m_pDosLineEnds );
         DELETEZ( m_pCheckRequiredFields );
+        DELETEZ( m_pIgnoreCurrency );
         DELETEZ( m_pBooleanComparisonModeLabel );
         DELETEZ( m_pBooleanComparisonMode );
     }
@@ -207,6 +209,7 @@ namespace dbaui
             { &m_pIndexAppendix,            CB_IGNOREINDEXAPPENDIX, DSID_INDEXAPPENDIX,         false },
             { &m_pDosLineEnds,              CB_DOSLINEENDS,         DSID_DOSLINEENDS,           false },
             { &m_pCheckRequiredFields,      CB_CHECK_REQUIRED,      DSID_CHECK_REQUIRED_FIELDS, false },
+            { &m_pIgnoreCurrency,           CB_IGNORECURRENCY,      DSID_IGNORECURRENCY,        false },
             { NULL,                         0,                      0,                          false }
         };
 
