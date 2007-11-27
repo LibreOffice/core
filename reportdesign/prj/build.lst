@@ -1,10 +1,11 @@
 rd  reportdesign    :   boost jfreereport comphelper dbaccess NULL
 rd  reportdesign                                                        usr1    -   all rd_mkout NULL
 rd  reportdesign\inc                                                    nmake   -   all rd_inc NULL
-rd  reportdesign\java							                        nmake   -   all rd_java NULL
-rd  reportdesign\java\com\sun\star\report		                        nmake   -   all rd_jreport rd_java NULL
+rd  reportdesign\java							nmake   -   all rd_java NULL
+rd  reportdesign\java\com\sun\star\report		                nmake   -   all rd_jreport rd_java NULL
 rd  reportdesign\java\com\sun\star\report\util	                        nmake   -   all rd_jreport_util rd_jreport NULL
 rd  reportdesign\java\com\sun\star\report\pentaho                       nmake   -   all rd_jreport_pe rd_jreport_util NULL
+rd  reportdesign\registry\data\org\openoffice\Office                    nmake   -   all rd_reg_data_ooo NULL
 rd  reportdesign\source\core\api                                        nmake   -   all rd_api rd_inc NULL
 rd  reportdesign\source\core\resource                                   nmake   -   all rd_res rd_inc NULL
 rd  reportdesign\source\core\sdr                                        nmake   -   all rd_sdr rd_inc NULL
@@ -15,4 +16,4 @@ rd  reportdesign\source\ui\dlg                                          nmake   
 rd  reportdesign\source\ui\report                                       nmake   -   all rd_uireport rd_inc NULL
 rd  reportdesign\source\ui\inspection                                   nmake   -   all rd_uiinspection rd_inc NULL
 rd  reportdesign\source\filter\xml                                      nmake   -   all rd_filter_xml rd_inc NULL
-rd  reportdesign\util                                                   nmake   -   all rd_util rd_inc rd_jreport_pe rd_api rd_res rd_shared rd_uimisc rd_uidlg rd_uireport rd_uiinspection rd_sdr rd_misc rd_filter_xml NULL
+rd  reportdesign\util                                                   nmake   -   all rd_util rd_jreport_pe rd_api rd_res rd_shared rd_uimisc rd_uidlg rd_uireport rd_uiinspection rd_sdr rd_misc rd_filter_xml rd_reg_data_ooo NULL
