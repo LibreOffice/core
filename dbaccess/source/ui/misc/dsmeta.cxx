@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsmeta.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:24:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:13:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ namespace dbaui
     {
         // strange ctor, but makes instantiating this class more readable (see below)
         InitAdvanced( short _Generated, short _SQL, short _Append, short _As, short _Outer, short _Priv, short _Param,
-                      short _Version, short _Catalog, short _Schema, short _Index, short _DOS, short _Required, short _Bool )
+                      short _Version, short _Catalog, short _Schema, short _Index, short _DOS, short _Required, short _Bool,short _IgnoreCur )
             :AdvancedSettingsSupport()
         {
             bGeneratedValues               = ( _Generated != 0 );
@@ -69,6 +69,7 @@ namespace dbaui
             bUseDOSLineEnds                = ( _DOS       != 0 );
             bBooleanComparisonMode         = ( _Bool      != 0 );
             bFormsCheckRequiredFields      = ( _Required  != 0 );
+            bIgnoreCurrency                = ( _IgnoreCur != 0 );
         }
 
         enum Special { All, None };
@@ -90,6 +91,7 @@ namespace dbaui
             bUseDOSLineEnds                = ( _eType == All );
             bBooleanComparisonMode         = ( _eType == All );
             bFormsCheckRequiredFields      = ( _eType == All );
+            bIgnoreCurrency                = false; // Oracle special
         }
     };
 
@@ -120,17 +122,17 @@ namespace dbaui
         static AdvancedSupport s_aSupport;
         if ( s_aSupport.empty() )
         {
-            s_aSupport[ DST_MSACCESS            ] = InitAdvanced( 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1 );
-            s_aSupport[ DST_MYSQL_ODBC          ] = InitAdvanced( 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1 );
-            s_aSupport[ DST_MYSQL_JDBC          ] = InitAdvanced( 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1 );
-            s_aSupport[ DST_ORACLE_JDBC         ] = InitAdvanced( InitAdvanced::All );
-            s_aSupport[ DST_ADABAS              ] = InitAdvanced( 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1 );
+            s_aSupport[ DST_MSACCESS            ] = InitAdvanced( 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0 );
+            s_aSupport[ DST_MYSQL_ODBC          ] = InitAdvanced( 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0 );
+            s_aSupport[ DST_MYSQL_JDBC          ] = InitAdvanced( 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0 );
+            s_aSupport[ DST_ORACLE_JDBC         ] = InitAdvanced( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 );
+            s_aSupport[ DST_ADABAS              ] = InitAdvanced( 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0 );
             s_aSupport[ DST_CALC                ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[ DST_DBASE               ] = InitAdvanced( 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0 );
-            s_aSupport[ DST_FLAT                ] = InitAdvanced( 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
+            s_aSupport[ DST_DBASE               ] = InitAdvanced( 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 );
+            s_aSupport[ DST_FLAT                ] = InitAdvanced( 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
             s_aSupport[ DST_JDBC                ] = InitAdvanced( InitAdvanced::All );
             s_aSupport[ DST_ODBC                ] = InitAdvanced( InitAdvanced::All );
-            s_aSupport[ DST_ADO                 ] = InitAdvanced( 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1 );
+            s_aSupport[ DST_ADO                 ] = InitAdvanced( 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0 );
             s_aSupport[ DST_MOZILLA             ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[ DST_THUNDERBIRD         ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[ DST_LDAP                ] = InitAdvanced( InitAdvanced::None );
@@ -140,7 +142,7 @@ namespace dbaui
             s_aSupport[ DST_EVOLUTION_GROUPWISE ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[ DST_EVOLUTION_LDAP      ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[ DST_KAB                 ] = InitAdvanced( InitAdvanced::None );
-            s_aSupport[ DST_EMBEDDED_HSQLDB     ] = InitAdvanced( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0 );
+            s_aSupport[ DST_EMBEDDED_HSQLDB     ] = InitAdvanced( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0 );
             s_aSupport[ DST_USERDEFINE1         ] = InitAdvanced( InitAdvanced::All );
             s_aSupport[ DST_USERDEFINE2         ] = InitAdvanced( InitAdvanced::All );
             s_aSupport[ DST_USERDEFINE3         ] = InitAdvanced( InitAdvanced::All );
@@ -183,7 +185,7 @@ namespace dbaui
             s_aSupport[ DST_EVOLUTION_GROUPWISE ] = FeatureSupport( AuthNone    );
             s_aSupport[ DST_EVOLUTION_LDAP      ] = FeatureSupport( AuthNone    );
             s_aSupport[ DST_KAB                 ] = FeatureSupport( AuthNone    );
-            s_aSupport[ DST_EMBEDDED_HSQLDB            ] = FeatureSupport( AuthNone    );
+            s_aSupport[ DST_EMBEDDED_HSQLDB     ] = FeatureSupport( AuthNone    );
             s_aSupport[ DST_USERDEFINE1         ] = FeatureSupport( AuthUserPwd );
             s_aSupport[ DST_USERDEFINE2         ] = FeatureSupport( AuthUserPwd );
             s_aSupport[ DST_USERDEFINE3         ] = FeatureSupport( AuthUserPwd );
