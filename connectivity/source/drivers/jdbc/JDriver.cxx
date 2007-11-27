@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:03:32 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:02:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,6 +233,13 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Generate AS before table correlation names."))
                 ,sal_False
                 ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) )
+                ,aBooleanValues)
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreCurrency"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ignore the currency field from the ResultsetMetaData."))
+                ,sal_False
+                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
                 ,aBooleanValues)
                 );
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
