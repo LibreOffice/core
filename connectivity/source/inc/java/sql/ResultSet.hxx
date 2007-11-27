@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSet.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:39:55 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:04:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ namespace connectivity
                                                         ::com::sun::star::sdbc::XColumnLocate,
                                                         ::com::sun::star::lang::XServiceInfo> java_sql_ResultSet_BASE;
 
+    class java_sql_Connection;
     class java_sql_ResultSet :  public comphelper::OBaseMutex,
                                 public  java_sql_ResultSet_BASE,
                                 public  java_lang_Object,
@@ -108,6 +109,7 @@ namespace connectivity
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>            m_xStatement;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
         java::sql::ConnectionLog                                                        m_aLogger;
+        java_sql_Connection*                                                            m_pConnection;
 
         sal_Int32 getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         sal_Int32 getResultSetType()        const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -148,7 +150,7 @@ namespace connectivity
         DECLARE_SERVICE_INFO();
         static jclass getMyClass();
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_ResultSet( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rParentLogger,
+        java_sql_ResultSet( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rParentLogger,java_sql_Connection& _rConnection,
             java_sql_Statement_Base* pStmt = NULL );
 
         // ::cppu::OComponentHelper

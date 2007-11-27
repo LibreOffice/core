@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:37:27 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:03:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #ifndef _CONNECTIVITY_JAVA_SQL_RESULTSETMETADATA_HXX_
 #include "java/sql/ResultSetMetaData.hxx"
 #endif
+#include "java/sql/Connection.hxx"
 #ifndef _CONNECTIVITY_JAVA_TOOLS_HXX_
 #include "java/tools.hxx"
 #endif
@@ -54,9 +55,10 @@ using namespace ::com::sun::star::lang;
 //**************************************************************
 
 jclass java_sql_ResultSetMetaData::theClass = 0;
-java_sql_ResultSetMetaData::java_sql_ResultSetMetaData( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rResultSetLogger )
+java_sql_ResultSetMetaData::java_sql_ResultSetMetaData( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rResultSetLogger, java_sql_Connection& _rCon  )
     :java_lang_Object( pEnv, myObj )
     ,m_aLogger( _rResultSetLogger )
+    ,m_pConnection( &_rCon )
 {
     SDBThreadAttach::addRef();
 }
@@ -347,6 +349,8 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column 
 
 sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
+    if ( m_pConnection->isIgnoreCurrencyEnabled() )
+        return sal_False;
     jboolean out(sal_False);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     if( t.pEnv ){
