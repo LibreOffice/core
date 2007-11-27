@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:42:50 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:13:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,10 +206,10 @@ void OTableEditorCtrl::Init()
 
     //////////////////////////////////////////////////////////////////////
     // Spalten einfuegen
-    String aColumnName( ModuleRes(STR_TAB_FIELD_NAME) );
+    String aColumnName( ModuleRes(STR_TAB_FIELD_COLUMN_NAME) );
     InsertDataColumn( 1, aColumnName, FIELDNAME_WIDTH );
 
-    aColumnName = String( ModuleRes(STR_TAB_FIELD_DATATYPE) );
+    aColumnName = String( ModuleRes(STR_TAB_FIELD_COLUMN_DATATYPE) );
     InsertDataColumn( 2, aColumnName, FIELDTYPE_WIDTH );
 
     aColumnName = String( ModuleRes(STR_TAB_FIELD_DESCR) );
