@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-27 09:14:32 $
+#   last change: $Author: ihi $ $Date: 2007-11-27 11:43:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ PACKAGE = complex$/toolkit
 #----- compile .java files -----------------------------------------
 
 JARFILES = mysql.jar sandbox.jar ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar OOoRunner.jar 
-JAVAFILES       = CheckAccessibleStatusBar.java CheckAccessibleStatusBarItem.java
+JAVAFILES       = CheckAccessibleStatusBar.java CheckAccessibleStatusBarItem.java CheckAsyncCallback.java CallbackClass.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 SUBDIRS		= interface_tests
 

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-27 09:20:05 $
+#   last change: $Author: ihi $ $Date: 2007-11-27 11:43:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,8 @@ JAVAFILES       = _XAccessibleComponent.java         \
                   _XAccessibleContext.java           \
                   _XAccessibleExtendedComponent.java \
                   _XAccessibleEventBroadcaster.java  \
-                  _XAccessibleText.java
+                  _XAccessibleText.java              \
+                  _XRequestCallback.java
 JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 # --- Targets ------------------------------------------------------
