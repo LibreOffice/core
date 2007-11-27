@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DriverSettings.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:59:23 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:25:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,9 +121,9 @@ void ODriversSettings::getSupportedIndirectSettings( DATASOURCE_TYPE _eType, ::s
             _out_rDetailsIds.push_back(DSID_CONN_LDAP_BASEDN);
             _out_rDetailsIds.push_back(DSID_CONN_LDAP_ROWCOUNT);
             _out_rDetailsIds.push_back(DSID_CONN_LDAP_USESSL);
-            _out_rDetailsIds.push_back(DSID_DOSLINEENDS);
             break;
 
+<<<<<<< DriverSettings.cxx
         case DST_MOZILLA:
         case DST_THUNDERBIRD:
         case DST_EVOLUTION:
@@ -134,8 +134,14 @@ void ODriversSettings::getSupportedIndirectSettings( DATASOURCE_TYPE _eType, ::s
             break;
 
         case DST_JDBC:
+=======
+        case DST_JDBC:
+            _out_rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
+            break;
+>>>>>>> 1.9.4.3
         case DST_ORACLE_JDBC:
             _out_rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
+            _out_rDetailsIds.push_back(DSID_IGNORECURRENCY);
             break;
 
         default:
