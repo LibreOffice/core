@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:24:10 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:14:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -498,6 +498,7 @@ hidspecial HID_PAGE_DBWIZARD_USERDEFINED_ET_BROWSE                          { He
 hidspecial HID_PAGE_DBWIZARD_USERDEFINED_BROWSE                             { HelpId = HID_PAGE_DBWIZARD_USERDEFINED_BROWSE ; };
 hidspecial HID_DLG_DATABASE_WIZARD                                          { HelpId = HID_DLG_DATABASE_WIZARD ; };
 hidspecial HID_BROWSER_ADMINISTRATE                                         { HelpId = HID_BROWSER_ADMINISTRATE ; };
+hidspecial HID_DSADMIN_IGNORECURRENCY                                       { HelpId = HID_DSADMIN_IGNORECURRENCY ; };
 hidspecial HID_DLG_QRY_JOIN_CONTROL                                         { HelpId = HID_DLG_QRY_JOIN_CONTROL ; };
 hidspecial HID_EXTENSION_NOT_PRESENT_DLG                                    { HelpId = HID_EXTENSION_NOT_PRESENT_DLG ; };
 
