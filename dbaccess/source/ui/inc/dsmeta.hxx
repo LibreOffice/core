@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsmeta.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:22:02 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:12:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,7 @@ namespace dbaui
         bool    bUseDOSLineEnds;
         bool    bBooleanComparisonMode;
         bool    bFormsCheckRequiredFields;
+        bool    bIgnoreCurrency;
         // Note: If you extend this list, you need to adjust the ctor (of course)
         // and (maybe) the implementation of supportsAnySpecialSetting
 
@@ -133,6 +134,7 @@ namespace dbaui
             ,bUseDOSLineEnds                ( true )
             ,bBooleanComparisonMode         ( true )
             ,bFormsCheckRequiredFields      ( true )
+            ,bIgnoreCurrency                ( false )
         {
         }
 
@@ -157,7 +159,8 @@ namespace dbaui
             ||  ( bUseIndexDirectionKeyword     == true )
             ||  ( bUseDOSLineEnds               == true )
             ||  ( bBooleanComparisonMode        == true )
-            ||  ( bFormsCheckRequiredFields     == true );
+            ||  ( bFormsCheckRequiredFields     == true )
+            ||  ( bIgnoreCurrency               == true );
     }
 
 //........................................................................
