@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 11:50:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:01:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         return NULL;
 
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_SUCCESS, cMethodName );
-    return new java_sql_ResultSet( t.pEnv, out, m_aLogger );
+    return new java_sql_ResultSet( t.pEnv, out, m_aLogger,*m_pConnection);
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getProcedureColumns(
@@ -405,7 +405,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getIndexInfo(
         return NULL;
 
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_SUCCESS, cMethodName );
-    return new java_sql_ResultSet( t.pEnv, out, m_aLogger );
+    return new java_sql_ResultSet( t.pEnv, out, m_aLogger,*m_pConnection);
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier(
@@ -448,7 +448,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getBestRowIdentifier
         return NULL;
 
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_SUCCESS, cMethodName );
-    return new java_sql_ResultSet( t.pEnv, out, m_aLogger );
+    return new java_sql_ResultSet( t.pEnv, out, m_aLogger,*m_pConnection);
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
@@ -578,7 +578,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCrossReference(
         return NULL;
 
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_SUCCESS, cMethodName );
-    return new java_sql_ResultSet( t.pEnv, out, m_aLogger );
+    return new java_sql_ResultSet( t.pEnv, out, m_aLogger,*m_pConnection);
 }
 
 // -------------------------------------------------------------------------
@@ -728,7 +728,7 @@ Reference< XResultSet > java_sql_DatabaseMetaData::impl_callResultSetMethod( con
         return NULL;
 
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_SUCCESS, _pMethodName );
-    return new java_sql_ResultSet( t.pEnv, out, m_aLogger );
+    return new java_sql_ResultSet( t.pEnv, out, m_aLogger,*m_pConnection);
 }
 
 // -------------------------------------------------------------------------
@@ -800,7 +800,7 @@ Reference< XResultSet > java_sql_DatabaseMetaData::impl_callResultSetMethodWithS
         return NULL;
 
     m_aLogger.log( LogLevel::FINEST, STR_LOG_META_DATA_SUCCESS, _pMethodName );
-    return new java_sql_ResultSet( t.pEnv, out, m_aLogger );
+    return new java_sql_ResultSet( t.pEnv, out, m_aLogger,*m_pConnection);
 }
 
 // -------------------------------------------------------------------------
@@ -1596,7 +1596,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
         }
     }
 
-    return out ? new java_sql_ResultSet( t.pEnv, out, m_aLogger ) : 0;
+    return out ? new java_sql_ResultSet( t.pEnv, out, m_aLogger,*m_pConnection ) : 0;
 }
 // -------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL java_sql_DatabaseMetaData::getConnection(  ) throw(SQLException, RuntimeException)
