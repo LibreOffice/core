@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_DataLabel_tmpl.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:48:33 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 15:34:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,25 @@
 
 #include "HelpIds.hrc"
 #include "res_DataLabel_IDs.hrc"
+
+#define WORKAROUND  \
+    StringList [ en-US ] = \
+    { \
+        "Best fit" ; \
+        "Center" ; \
+        "Above" ; \
+        "Top left" ; \
+        "Left" ; \
+        "Bottom left" ; \
+        "Below" ; \
+        "Bottom right" ; \
+        "Right" ; \
+        "Top right" ; \
+        "Inside" ; \
+        "Outside" ; \
+        "Near origin" ; \
+    };
+
 
 #define RESOURCE_DATALABEL( xpos, ypos ) \
 CheckBox CB_VALUE_AS_NUMBER \
@@ -105,22 +124,7 @@ ListBox LB_LABEL_PLACEMENT \
     Group = TRUE ; \
     DropDown=TRUE; \
     DDExtraWidth = TRUE ; \
-    StringList [ en-US ] = \
-    { \
-        "Best fit" ; \
-        "Center" ; \
-        "Above" ; \
-        "Top left" ; \
-        "Left" ; \
-        "Bottom left" ; \
-        "Below" ; \
-        "Bottom right" ; \
-        "Right" ; \
-        "Top right" ; \
-        "Inside" ; \
-        "Outside" ; \
-        "Near origin" ; \
-    }; \
+    WORKAROUND          \
 };
 
 #endif
