@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportController.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:12:05 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 11:58:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2212,6 +2212,7 @@ void OReportController::onLoadedMenu(const Reference< frame::XLayoutManager >& _
         static const ::rtl::OUString s_sMenu[] = {
              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/statusbar/statusbar"))
             ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/reportcontrols"))
+            ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/drawbar"))
             ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/Formatting"))
             ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/alignmentbar"))
             ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("private:resource/toolbar/sectionalignmentbar"))
