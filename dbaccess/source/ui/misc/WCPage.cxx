@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:07:24 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:12:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,8 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView )
         SetText(String(ModuleRes(STR_COPYTABLE_TITLE_COPY)));
     else
     {
-        SetText(String(ModuleRes(STR_COPYTABLE_TITLE_MOVE)));
+        //! TODO OJ: HAS TO BE CHANGED
+        // SetText(String(ModuleRes(STR_COPYTABLE_TITLE_MOVE)));
         m_aRB_Def.Disable();
             // beim Verschieben ist der Punkt "nur Definition" nicht zulaessig
     }
