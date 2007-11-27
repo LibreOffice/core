@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:35:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 11:49:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,9 @@ void ElementDescriptor::readButtonModel( StyleBag * all_styles )
                   OUSTR(XMLNS_DIALOGS_PREFIX ":grab-focus") );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":multiline") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("NoLabel") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":nolabel") ) );
+
 
     // State
     sal_Int16 nState = 0;
@@ -182,6 +185,8 @@ void ElementDescriptor::readCheckBoxModel( StyleBag * all_styles )
                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-position") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":multiline") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("NoLabel") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":nolabel") ) );
 
     sal_Bool bTriState = sal_False;
     if ((readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TriState") ) ) >>= bTriState) && bTriState)
@@ -392,6 +397,8 @@ void ElementDescriptor::readRadioButtonModel( StyleBag * all_styles )
                            OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":image-position") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":multiline") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("NoLabel") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":nolabel") ) );
 
     sal_Int16 nState = 0;
     if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("State") ) ) >>= nState)
@@ -444,6 +451,9 @@ void ElementDescriptor::readGroupBoxModel( StyleBag * all_styles )
                              aTitle );
         addSubElement( title );
     }
+
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("NoLabel") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":nolabel") ) );
     readEvents();
 }
 //__________________________________________________________________________________________________
@@ -480,6 +490,8 @@ void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":multiline") ) );
     readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("NoLabel") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":nolabel") ) );
     readEvents();
 }
 //__________________________________________________________________________________________________
@@ -1002,6 +1014,8 @@ void ElementDescriptor::readFixedLineModel( StyleBag * all_styles )
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
     readOrientationAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Orientation") ),
                          OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("NoLabel") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":nolabel") ) );
     readEvents();
 }
 //__________________________________________________________________________________________________
