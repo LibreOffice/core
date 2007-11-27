@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.pmk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-09 11:56:41 $
+#   last change: $Author: ihi $ $Date: 2007-11-27 12:00:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,13 @@
 
 XSLDIR=$(SOLARXMLDIR)$/processing
 XCSROOT=$(SOLARXMLDIR)
+ABSXCSROOT=$(SOLARXMLDIR)
 DTDDIR=$(SOLARXMLDIR)
 PROCESSOUT=$(MISC)
 PROCESSORDIR=$(SOLARBINDIR)
+
+# no validation by inspector class
+NO_INSPECTION=TRUE
 
 JAVAPREPRO=
 .IF "$(JDK_VERSION)" == "110"

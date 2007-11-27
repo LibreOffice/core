@@ -12,13 +12,6 @@
  <toolbar:toolbaritem xlink:href=".uno:HFixedLine" toolbar:helpid="helpid:10928"  toolbar:style="radio" />
  <toolbar:toolbaritem xlink:href=".uno:VFixedLine" toolbar:helpid="helpid:10929"  toolbar:style="radio" />
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:helpid="11002" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:helpid="11003" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:helpid="11004" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes" toolbar:helpid="11005" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:helpid="11006" toolbar:style="dropdown"/>
- <toolbar:toolbaritem xlink:href=".uno:StarShapes" toolbar:helpid="11007" toolbar:style="dropdown"/>
- <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:GridVisible" toolbar:helpid="helpid:27322" toolbar:style="radio auto" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:GridUse" toolbar:helpid="helpid:27154" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:HelplinesMove" toolbar:helpid="helpid:27153" toolbar:visible="false"/>
