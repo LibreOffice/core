@@ -1,5 +1,4 @@
-#====================================================================================
-ar	autodoc	:  cosv udm NULL
+ar	autodoc	:  cosv udm sal NULL
 ar	autodoc								usr1	-	all	ar_mkout NULL
 ar	autodoc\inc							get	    -	all	ar_i NULL
 ar	autodoc\inc\ary			  			get		-	all	ar_ir NULL
