@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:26:19 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 11:57:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,9 +83,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
-#include <com/sun/star/beans/NamedValue.hpp>
 #endif
 
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
@@ -313,8 +310,10 @@ WinBits ImplGetWinBits( sal_uInt32 nComponentAttribs, sal_uInt16 nCompType )
         nWinBits |= WB_READONLY;
     if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::CLIPCHILDREN )
         nWinBits |= WB_CLIPCHILDREN;
-        if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::GROUP )
-            nWinBits |= WB_GROUP;
+    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::GROUP )
+        nWinBits |= WB_GROUP;
+    if( nComponentAttribs & ::com::sun::star::awt::VclWindowPeerAttribute::NOLABEL ) //added for issue79712
+        nWinBits |= WB_NOLABEL;
 
     // These bits are not uniqe
     if ( bMessBox )
@@ -1013,47 +1012,41 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
                                 ::com::sun::star::uno::Any anyHandle = xSystemDepParent->getWindowHandle(processIdSeq, SYSTEM_DEPENDENT_TYPE);
 
-                                // use sal_Int64 here to accomodate all int types
-                                // uno::Any shift operator whill upcast if necessary
-                                sal_Int64 nWindowHandle = 0;
-                                sal_Bool bXEmbed = sal_False;
+#if defined WNT
+                                sal_Int32 hWnd;
 
-                                bool bUseParentData = true;
-                                if( ! (anyHandle >>= nWindowHandle) )
+                                if (anyHandle >>= hWnd)
                                 {
-                                    css::uno::Sequence< css::beans::NamedValue > aProps;
-                                    if( anyHandle >>= aProps )
-                                    {
-                                        const int nProps = aProps.getLength();
-                                        const css::beans::NamedValue* pProps = aProps.getConstArray();
-                                        for( int i = 0; i < nProps; i++ )
-                                        {
-                                            if( pProps[i].Name.equalsAscii( "WINDOW" ) )
-                                                pProps[i].Value >>= nWindowHandle;
-                                            else if( pProps[i].Name.equalsAscii( "XEMBED" ) )
-                                                pProps[i].Value >>= bXEmbed;
-                                        }
-                                    }
-                                    else
-                                        bUseParentData = false;
-                                }
-
-                                if( bUseParentData )
-                                {
+                                    printf("hWnd = %ld\n", hWnd);
                                     SystemParentData aParentData;
                                     aParentData.nSize   = sizeof( aParentData );
-                                    #if defined QUARTZ
-                                    aParentData.rWindow = (WindowRef)nWindowHandle;
-                                    #elif defined UNX
-                                    aParentData.aWindow = nWindowHandle;
-                                    aParentData.bXEmbedSupport = bXEmbed;
-                                    #elif defined WNT
-                                    aParentData.hWnd = reinterpret_cast<HWND>(nWindowHandle);
-                                    #elif defined OS2
-                                    aParentData.hWnd = (HWND)nWindowHandle;
-                                    #endif
+                                    aParentData.hWnd    = (HWND)hWnd;
                                     pNewWindow = new WorkWindow( &aParentData );
                                 }
+#elif defined QUARTZ
+
+                                sal_IntPtr rWindow = 0;
+
+                                if (anyHandle >>= rWindow)
+                                {
+                                    printf("rWindow = %ld\n", rWindow);
+                                    SystemParentData aParentData;
+                                    aParentData.nSize   = sizeof( aParentData );
+                                    aParentData.rWindow = (WindowRef)rWindow;
+                                    pNewWindow = new WorkWindow( &aParentData );
+                                }
+#elif defined UNX
+                                sal_Int32 x11_id = 0;
+
+                                if (anyHandle >>= x11_id)
+                                {
+                                    printf("x11_id = %ld\n", x11_id);
+                                    SystemParentData aParentData;
+                                    aParentData.nSize   = sizeof( aParentData );
+                                    aParentData.aWindow = x11_id;
+                                    pNewWindow = new WorkWindow( &aParentData );
+                                }
+#endif
                             }
                         }
 
@@ -1103,8 +1096,6 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
     return pNewWindow;
 }
 
-extern "C" { static void SAL_CALL thisModule() {} }
-
 css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     const css::awt::WindowDescriptor& rDescriptor,
     WinBits nForceWinBits )
@@ -1141,8 +1132,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     if ( !fnSvtCreateWindow && !hSvToolsLib )
     {
         ::rtl::OUString aLibName = ::vcl::unohelper::CreateLibraryName( "svt", TRUE );
-        hSvToolsLib = osl_loadModuleRelative(
-            &thisModule, aLibName.pData, SAL_LOADMODULE_DEFAULT );
+        hSvToolsLib = osl_loadModule( aLibName.pData, SAL_LOADMODULE_DEFAULT );
         if ( hSvToolsLib )
         {
             ::rtl::OUString aFunctionName( RTL_CONSTASCII_USTRINGPARAM( "CreateWindow" ) );
@@ -1226,60 +1216,76 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     Window* pChildWindow = NULL;
     if ( nSystemType == SYSTEM_DEPENDENT_TYPE )
     {
-        // use sal_Int64 here to accomodate all int types
-        // uno::Any shift operator whill upcast if necessary
-        sal_Int64 nWindowHandle = 0;
-        sal_Bool bXEmbed = sal_False;
-
-        bool bUseParentData = true;
-        if( ! (Parent >>= nWindowHandle) )
-        {
-            css::uno::Sequence< css::beans::NamedValue > aProps;
-            if( Parent >>= aProps )
+#if defined WNT
+            sal_Int32 hWnd;
+            if ( Parent >>= hWnd)
             {
-                const int nProps = aProps.getLength();
-                const css::beans::NamedValue* pProps = aProps.getConstArray();
-                for( int i = 0; i < nProps; i++ )
+                printf("hWnd = %ld\n", hWnd);
+                SystemParentData aParentData;
+                aParentData.nSize = sizeof( aParentData );
+                aParentData.hWnd = (HWND)hWnd;
+                osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
+                try
                 {
-                    if( pProps[i].Name.equalsAscii( "WINDOW" ) )
-                        pProps[i].Value >>= nWindowHandle;
-                    else if( pProps[i].Name.equalsAscii( "XEMBED" ) )
-                        pProps[i].Value >>= bXEmbed;
+                    pChildWindow = new WorkWindow( &aParentData );
+                }
+                catch ( ::com::sun::star::uno::RuntimeException & rEx )
+                {
+                    // system child window could not be created
+                    OSL_TRACE(
+                        "VCLXToolkit::createSystemChild: caught %s\n",
+                        ::rtl::OUStringToOString(
+                            rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
+                    pChildWindow = NULL;
                 }
             }
-            else
-                bUseParentData = false;
-        }
-
-        if( bUseParentData )
-        {
-            SystemParentData aParentData;
-            aParentData.nSize   = sizeof( aParentData );
-            #if defined QUARTZ
-            aParentData.rWindow = (WindowRef)nWindowHandle;
-            #elif defined UNX
-            aParentData.aWindow = nWindowHandle;
-            aParentData.bXEmbedSupport = bXEmbed;
-            #elif defined WNT
-            aParentData.hWnd = reinterpret_cast<HWND>(nWindowHandle);
-            #elif defined OS2
-            aParentData.hWnd = (HWND)nWindowHandle;
-            #endif
-            osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
-            try
+#elif defined QUARTZ
+            sal_IntPtr rWindow = 0;
+            if ( Parent >>= rWindow)
             {
-                pChildWindow = new WorkWindow( &aParentData );
+                printf("rWindow = %ld\n", rWindow);
+                SystemParentData aParentData;
+                aParentData.nSize = sizeof( aParentData );
+                aParentData.rWindow = (WindowRef)rWindow;
+                osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
+                try
+                {
+                    pChildWindow = new WorkWindow( &aParentData );
+                }
+                catch ( ::com::sun::star::uno::RuntimeException & rEx )
+                {
+                    // system child window could not be created
+                    OSL_TRACE(
+                        "VCLXToolkit::createSystemChild: caught %s\n",
+                        ::rtl::OUStringToOString(
+                            rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
+                    pChildWindow = NULL;
+                }
             }
-            catch ( ::com::sun::star::uno::RuntimeException & rEx )
+#elif defined UNX
+            sal_Int32 x11_id = 0;
+            if ( Parent >>= x11_id )
             {
-                // system child window could not be created
-                OSL_TRACE(
-                    "VCLXToolkit::createSystemChild: caught %s\n",
-                    ::rtl::OUStringToOString(
-                        rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
-                pChildWindow = NULL;
+                printf("x11_id = %ld\n", x11_id);
+                SystemParentData aParentData;
+                aParentData.nSize = sizeof( aParentData );
+                aParentData.aWindow = x11_id;
+                osl::Guard< vos::IMutex > aGuard( Application::GetSolarMutex() );
+                try
+                {
+                    pChildWindow = new WorkWindow( &aParentData );
+                }
+                catch ( ::com::sun::star::uno::RuntimeException & rEx )
+                {
+                    // system child window could not be created
+                    OSL_TRACE(
+                        "VCLXToolkit::createSystemChild: caught %s\n",
+                        ::rtl::OUStringToOString(
+                            rEx.Message, RTL_TEXTENCODING_UTF8).getStr());
+                    pChildWindow = NULL;
+                }
             }
-        }
+#endif
     }
     else if (nSystemType == com::sun::star::lang::SystemDependent::SYSTEM_JAVA)
     {
