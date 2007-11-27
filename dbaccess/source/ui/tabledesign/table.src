@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 15:08:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:14:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,9 +93,17 @@ String STR_VALUE_NONE
 
 String STR_TAB_FIELD_NAME
 {
+    Text [ en-US ] = "Field name" ;
+};
+String STR_TAB_FIELD_COLUMN_NAME
+{
     Text [ en-US ] = "Field Name" ;
 };
 String STR_TAB_FIELD_DATATYPE
+{
+    Text [ en-US ] = "Field type" ;
+};
+String STR_TAB_FIELD_COLUMN_DATATYPE
 {
     Text [ en-US ] = "Field Type" ;
 };
@@ -197,7 +205,7 @@ String STR_TABED_UNDO_ROWDELETED
 };
 String STR_TABED_UNDO_TYPE_CHANGED
 {
-    Text [ en-US ] = "Modify Field Type";
+    Text [ en-US ] = "Modify field type";
 };
 String STR_TABED_UNDO_ROWINSERTED
 {
