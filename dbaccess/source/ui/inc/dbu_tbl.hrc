@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_tbl.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:53:18 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:12:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,14 +78,14 @@
 #define STR_FIELD_REQUIRED                  RID_STR_TBL_START + 36
 #define STR_DEFAULT_VALUE                   RID_STR_TBL_START + 37
 #define STR_TABED_UNDO_CELLMODIFIED         RID_STR_TBL_START + 38
-// empty
+#define STR_TAB_FIELD_COLUMN_NAME           RID_STR_TBL_START + 39
 #define STR_TBL_COLUMN_IS_KEYCOLUMN         RID_STR_TBL_START + 40
 #define STR_TBL_COLUMN_IS_KEYCOLUMN_TITLE   RID_STR_TBL_START + 41
 #define STR_TABLEDESIGN_ALTER_ERROR         RID_STR_TBL_START + 42
 #define STR_AUTOINCREMENT_VALUE             RID_STR_TBL_START + 43
 #define STR_HELP_FORMAT_BUTTON              RID_STR_TBL_START + 44
 #define STR_TABLEDESIGN_CONNECTION_MISSING  RID_STR_TBL_START + 45
-// empty
+#define STR_TAB_FIELD_COLUMN_DATATYPE       RID_STR_TBL_START + 46
 #define STR_TABLEDESIGN_TITLE               RID_STR_TBL_START + 47
 #define STR_NO_TYPE_INFO_AVAILABLE          RID_STR_TBL_START + 48
 #define STR_CHANGE_COLUMN_NAME              RID_STR_TBL_START + 49
