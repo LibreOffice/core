@@ -4,9 +4,9 @@
  *
  *  $RCSfile: advancedsettings.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:09:14 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:10:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef DBAUI_ADVANCEDSETTINGS_HRC
 #define DBAUI_ADVANCEDSETTINGS_HRC
 
-#define ADVANCED_CHECKBOX_OPTIONS    12
+#define ADVANCED_CHECKBOX_OPTIONS    13
 #define ADVANCED_LISTBOX_OPTIONS      1
 
 #define ADVANCED_PAGE_X     200
@@ -67,6 +67,8 @@
 #define CB_DOSLINEENDS          11
 #define CB_AS_BEFORE_CORR_NAME  12
 #define CB_CHECK_REQUIRED       13
+#define CB_IGNORECURRENCY       14
+#define CB_IGNORECURRENCY       14
 
 #define ET_AUTOINCREMENTVALUE   1
 #define ET_RETRIEVE_AUTO        2
