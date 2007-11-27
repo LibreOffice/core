@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreparedStatement.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:04:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:02:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
         }
     }
 
-    return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out, m_aLogger );
+    return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out, m_aLogger, *m_pConnection,this);
 }
 // -------------------------------------------------------------------------
 
@@ -814,7 +814,7 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(::com::sun::star::sd
         }
     }
 
-    return out==0 ? 0 : new java_sql_ResultSetMetaData( t.pEnv, out, m_aLogger );
+    return out==0 ? 0 : new java_sql_ResultSetMetaData( t.pEnv, out, m_aLogger,*m_pConnection );
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
