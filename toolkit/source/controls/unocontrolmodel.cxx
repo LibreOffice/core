@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:12:44 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 11:44:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,7 +398,8 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
             case BASEPROPERTY_REPEAT:
             case BASEPROPERTY_PAINTTRANSPARENT:
             case BASEPROPERTY_DESKTOP_AS_PARENT:
-            case BASEPROPERTY_HARDLINEBREAKS:       aDefault <<= (sal_Bool) sal_False; break;
+            case BASEPROPERTY_HARDLINEBREAKS:
+            case BASEPROPERTY_NOLABEL:              aDefault <<= (sal_Bool) sal_False; break;
 
             case BASEPROPERTY_WHEELWITHOUTFOCUS:
             case BASEPROPERTY_HIDEINACTIVESELECTION:
