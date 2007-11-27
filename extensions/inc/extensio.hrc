@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extensio.hrc,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 15:55:26 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 11:51:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -460,10 +460,10 @@
 #define HID_PROP_BORDERCOLOR                    (HID_FORMS_START + 337)
 #define UID_PROP_DLG_BORDERCOLOR                (HID_FORMS_START + 338)
 #define HID_PROP_IMAGEPOSITION                  (HID_FORMS_START + 339)
-
+#define HID_PROP_NOLABEL                       (HID_FORMS_START + 340)
     // please adjust HID_LAST_FORMS_ID if you add new ids here!
 
-#define HID_LAST_FORMS_ID   HID_PROP_IMAGEPOSITION
+#define HID_LAST_FORMS_ID   HID_PROP_NOLABEL
 
 #if HID_LAST_FORMS_ID > HID_FORMS_END
     #error id overflow
