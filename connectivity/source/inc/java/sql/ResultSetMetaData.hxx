@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:40:13 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:04:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,12 +51,13 @@ namespace connectivity
     //**************************************************************
     //************ Class: java.sql.ResultSetMetaData
     //**************************************************************
-
-        class java_sql_ResultSetMetaData :      public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>,
+    class java_sql_Connection;
+    class java_sql_ResultSetMetaData :  public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XResultSetMetaData>,
                                         public java_lang_Object
     {
     protected:
         java::sql::ConnectionLog    m_aLogger;
+        java_sql_Connection*        m_pConnection;
 
         // statische Daten fuer die Klasse
         static jclass theClass;
@@ -67,7 +68,7 @@ namespace connectivity
         static jclass getMyClass();
 
         // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
-        java_sql_ResultSetMetaData( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rResultSetLogger );
+        java_sql_ResultSetMetaData( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rResultSetLogger, java_sql_Connection& _rCon  );
 
         virtual sal_Int32 SAL_CALL getColumnCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
