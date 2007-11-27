@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:25:59 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 11:42:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,7 @@ namespace rtl {
 #define BASEPROPERTY_DESKTOP_AS_PARENT     123  // sal_Bool
 
 //#define BASEPROPERTY_RESOURCERESOLVER      124  // css.resource.XStringResourceResolver
+#define BASEPROPERTY_NOLABEL           132   // ::rtl::OUString  added for issue79712
 
 #define BASEPROPERTY_TREE_START                     124
 #define BASEPROPERTY_TREE_SELECTIONTYPE             124
