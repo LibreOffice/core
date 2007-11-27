@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JStatement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:03:49 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:02:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,7 +246,7 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  )
         }
     }
     else
-        xRes = new java_sql_ResultSet( t.pEnv, out, m_aLogger, this );
+        xRes = new java_sql_ResultSet( t.pEnv, out, m_aLogger,*m_pConnection, this );
     return xRes;
 }
 
@@ -374,7 +374,7 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const ::
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out, m_aLogger, this );
+    return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out, m_aLogger, *m_pConnection,this );
 }
 // -------------------------------------------------------------------------
 Reference< XConnection > SAL_CALL java_sql_Statement_Base::getConnection(  ) throw(SQLException, RuntimeException)
@@ -500,7 +500,7 @@ Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL java_sql_Statement_Base
         } //mID
     } //t.pEnv
     // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out, m_aLogger, this );
+    return out==0 ? 0 : new java_sql_ResultSet( t.pEnv, out, m_aLogger, *m_pConnection,this );
 }
 // -------------------------------------------------------------------------
 
