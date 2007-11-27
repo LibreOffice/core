@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachedrowset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:56:27 $
+ *  last change: $Author: rt $ $Date: 2007-11-27 16:13:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,12 @@
 #define CACHEDROWSET_HXX
 
 /** === begin UNO includes === **/
-#include <com/sun/star/sdbc/XRowSet.hpp>
+#include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
+#include <unotools/sharedunocomponent.hxx>
 
 #include <memory>
 
@@ -54,6 +55,8 @@ namespace frm
     //====================================================================
     //= CachedRowSet
     //====================================================================
+    /** caches a result set obtained from a SQL statement
+    */
     class CachedRowSet
     {
     public:
@@ -61,43 +64,35 @@ namespace frm
         ~CachedRowSet();
 
     public:
-        /** executes the row set
+        /** executes the statement
 
-            Since the class is called <code>CachedRowSet</code>, it will cache the
-            row set between the calls. If none of the parameters for the row set
-            changes inbetween, then the row set instance from the previous call will be returned,
-            without re-execution.
+            @return
+                the result set produced by the statement. The caller takes ownership of the
+                given object.
 
             @throws ::com::sun::star::sdbc::SQLException
-                if such an exception is thrown when executing the <code>XRowSet</code>
+                if such an exception is thrown when executing the statement
         */
-        void    execute();
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >
+                execute();
 
         /// determines whether the row set properties are dirty, i.e. have changed since the last call to execute
         bool    isDirty() const;
 
-        /// disposes the row set instance, and frees all associated resources
+        /// disposes the instance and frees all associated resources
         void    dispose();
 
-        /** returns the row set represented by this instance
+        /** sets the command of a query as command to be executed
 
-            If the row set has not been executed before, <NULL/> is returned. If the row set
-            properties are dirty, an old (dirty) instance of the <code>XRowSet</code> is returned.
-            The caller of the method is responsible for preventing those cases.
+            A connection must have been set before.
+
+            @throws Exception
         */
-        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >&
-                getRowSet() const;
+        void    setCommandFromQuery ( const ::rtl::OUString& _rQueryName );
 
-        void    setDataSource       ( const ::rtl::OUString& _rDataSource );
         void    setCommand          ( const ::rtl::OUString& _rCommand );
-        void    setCommandType      ( const sal_Int32 _nCommandType );
         void    setEscapeProcessing ( const sal_Bool _bEscapeProcessing );
         void    setConnection       ( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
-
-        void    setDataSource       ( const ::com::sun::star::uno::Any& _rDataSourceValue );
-        void    setCommand          ( const ::com::sun::star::uno::Any& _rCommandValue );
-        void    setEscapeProcessing ( const ::com::sun::star::uno::Any& _rEscapeProcessingValue );
-        void    setConnection       ( const ::com::sun::star::uno::Any& _rConnectionValue );
 
     private:
         ::std::auto_ptr< CachedRowSet_Data >    m_pData;

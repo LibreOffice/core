@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cachedrowset.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:56:14 $
+ *  last change: $Author: rt $ $Date: 2007-11-27 16:12:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,10 @@
 #include "frm_strings.hxx"
 
 /** === begin UNO includes === **/
-#include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
+#include <com/sun/star/sdbc/ResultSetType.hpp>
 /** === end UNO includes === **/
 
 #include <tools/diagnose_ex.h>
@@ -57,17 +58,21 @@ namespace frm
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
+    using ::com::sun::star::uno::UNO_SET_THROW;
     using ::com::sun::star::uno::Exception;
     using ::com::sun::star::uno::RuntimeException;
-    using ::com::sun::star::sdbc::XRowSet;
     using ::com::sun::star::sdbc::XConnection;
     using ::com::sun::star::lang::XComponent;
     using ::com::sun::star::beans::XPropertySet;
     using ::com::sun::star::uno::makeAny;
     using ::com::sun::star::sdbc::SQLException;
     using ::com::sun::star::uno::Any;
+    using ::com::sun::star::sdb::XQueriesSupplier;
+    using ::com::sun::star::container::XNameAccess;
+    using ::com::sun::star::sdbc::XResultSet;
+    using ::com::sun::star::sdbc::XStatement;
     /** === end UNO using === **/
-    namespace CommandType = ::com::sun::star::sdb::CommandType;
+    namespace ResultSetType = ::com::sun::star::sdbc::ResultSetType;
 
     //====================================================================
     //= CachedRowSet_Data
@@ -75,45 +80,21 @@ namespace frm
     struct CachedRowSet_Data
     {
         ::comphelper::ComponentContext  aContext;
-        ::rtl::OUString                 sDataSource;
         ::rtl::OUString                 sCommand;
-        sal_Int32                       nCommandType;
         sal_Bool                        bEscapeProcessing;
         Reference< XConnection >        xConnection;
 
-        Reference< XRowSet >            xRowSet;
-        bool                            bRowSetDirty;
+        bool                            bStatementDirty;
 
         CachedRowSet_Data( const ::comphelper::ComponentContext& _rContext )
             :aContext( _rContext )
-            ,sDataSource()
             ,sCommand()
-            ,nCommandType( CommandType::COMMAND )
-            ,bEscapeProcessing( sal_True )
+            ,bEscapeProcessing( sal_False )
             ,xConnection()
-            ,xRowSet()
-            ,bRowSetDirty( true )
+            ,bStatementDirty( true )
         {
         }
     };
-
-    //====================================================================
-    //= helper
-    //====================================================================
-    namespace
-    {
-        void lcl_clearRowSet_throw( CachedRowSet_Data& _rData )
-        {
-            if ( !_rData.xRowSet.is() )
-                return;
-
-            Reference< XComponent > xRowSetComp( _rData.xRowSet, UNO_QUERY_THROW );
-            xRowSetComp->dispose();
-
-            _rData.xRowSet.clear();
-            _rData.bRowSetDirty = true;
-        }
-    }
 
     //====================================================================
     //= CachedRowSet
@@ -131,33 +112,29 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void CachedRowSet::setDataSource( const ::rtl::OUString& _rDataSource )
-    {
-        if ( m_pData->sDataSource == _rDataSource )
-            return;
-
-        m_pData->sDataSource = _rDataSource;
-        m_pData->bRowSetDirty = true;
-    }
-
-    //--------------------------------------------------------------------
     void CachedRowSet::setCommand( const ::rtl::OUString& _rCommand )
     {
         if ( m_pData->sCommand == _rCommand )
             return;
 
         m_pData->sCommand = _rCommand;
-        m_pData->bRowSetDirty = true;
+        m_pData->bStatementDirty = true;
     }
 
     //--------------------------------------------------------------------
-    void CachedRowSet::setCommandType( const sal_Int32 _nCommandType )
+    void CachedRowSet::setCommandFromQuery( const ::rtl::OUString& _rQueryName )
     {
-        if ( m_pData->nCommandType == _nCommandType )
-            return;
+        Reference< XQueriesSupplier > xSupplyQueries( m_pData->xConnection, UNO_QUERY_THROW );
+        Reference< XNameAccess >      xQueries      ( xSupplyQueries->getQueries(), UNO_QUERY_THROW );
+        Reference< XPropertySet >     xQuery        ( xQueries->getByName( _rQueryName ), UNO_QUERY_THROW );
 
-        m_pData->nCommandType = _nCommandType;
-        m_pData->bRowSetDirty = true;
+        sal_Bool bEscapeProcessing( sal_False );
+        OSL_VERIFY( xQuery->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
+        setEscapeProcessing( bEscapeProcessing );
+
+        ::rtl::OUString sCommand;
+        OSL_VERIFY( xQuery->getPropertyValue( PROPERTY_COMMAND ) >>= sCommand );
+        setCommand( sCommand );
     }
 
     //--------------------------------------------------------------------
@@ -167,7 +144,7 @@ namespace frm
             return;
 
         m_pData->bEscapeProcessing = _bEscapeProcessing;
-        m_pData->bRowSetDirty = true;
+        m_pData->bStatementDirty = true;
     }
 
     //--------------------------------------------------------------------
@@ -177,61 +154,26 @@ namespace frm
             return;
 
         m_pData->xConnection = _rxConnection;
-        m_pData->bRowSetDirty = true;
+        m_pData->bStatementDirty = true;
     }
 
     //--------------------------------------------------------------------
-    void CachedRowSet::setDataSource( const Any& _rDataSourceValue )
+    Reference< XResultSet > CachedRowSet::execute()
     {
-        ::rtl::OUString sDataSource;
-        OSL_VERIFY( _rDataSourceValue >>= sDataSource );
-        setDataSource( sDataSource );
-    }
-
-    //--------------------------------------------------------------------
-    void CachedRowSet::setCommand( const Any& _rCommandValue )
-    {
-        ::rtl::OUString sCommand;
-        OSL_VERIFY( _rCommandValue >>= sCommand );
-        setCommand( sCommand );
-    }
-
-    //--------------------------------------------------------------------
-    void CachedRowSet::setEscapeProcessing( const Any& _rEscapeProcessingValue )
-    {
-        sal_Bool bEscapeProcessing( sal_False );
-        OSL_VERIFY( _rEscapeProcessingValue >>= bEscapeProcessing );
-        setEscapeProcessing( bEscapeProcessing );
-    }
-
-    //--------------------------------------------------------------------
-    void CachedRowSet::setConnection( const Any& _rConnectionValue )
-    {
-        Reference< XConnection > xConnection;
-        OSL_VERIFY( _rConnectionValue >>= xConnection );
-        setConnection( xConnection );
-    }
-
-    //--------------------------------------------------------------------
-    void CachedRowSet::execute()
-    {
+        Reference< XResultSet > xResult;
         try
         {
-            if ( m_pData->bRowSetDirty )
-                lcl_clearRowSet_throw( *m_pData );
+            OSL_PRECOND( m_pData->xConnection.is(), "CachedRowSet::execute: how am I expected to do this without a connection?" );
+            if ( !m_pData->xConnection.is() )
+                return xResult;
 
-            if ( !m_pData->xRowSet.is() )
-                m_pData->aContext.createComponent( "com.sun.star.sdb.RowSet", m_pData->xRowSet );
+            Reference< XStatement > xStatement( m_pData->xConnection->createStatement(), UNO_SET_THROW );
+            Reference< XPropertySet > xStatementProps( xStatement, UNO_QUERY_THROW );
+            xStatementProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( m_pData->bEscapeProcessing ) );
+            xStatementProps->setPropertyValue( PROPERTY_RESULTSET_TYPE, makeAny( ResultSetType::FORWARD_ONLY ) );
 
-            Reference< XPropertySet > xRowSetProps( m_pData->xRowSet, UNO_QUERY_THROW );
-            xRowSetProps->setPropertyValue( PROPERTY_DATASOURCE, makeAny( m_pData->sDataSource ) );
-            xRowSetProps->setPropertyValue( PROPERTY_COMMAND, makeAny( m_pData->sCommand ) );
-            xRowSetProps->setPropertyValue( PROPERTY_COMMANDTYPE, makeAny( m_pData->nCommandType ) );
-            xRowSetProps->setPropertyValue( PROPERTY_ESCAPE_PROCESSING, makeAny( m_pData->bEscapeProcessing ) );
-            xRowSetProps->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( m_pData->xConnection ) );
-
-            m_pData->xRowSet->execute();
-            m_pData->bRowSetDirty = false;
+            xResult.set( xStatement->executeQuery( m_pData->sCommand ), UNO_SET_THROW );
+            m_pData->bStatementDirty = false;
         }
         catch( const SQLException& )
         {
@@ -241,18 +183,13 @@ namespace frm
         {
             DBG_UNHANDLED_EXCEPTION();
         }
+        return xResult;
     }
 
     //--------------------------------------------------------------------
     bool CachedRowSet::isDirty() const
     {
-        return m_pData->bRowSetDirty;
-    }
-
-    //--------------------------------------------------------------------
-    const Reference< XRowSet >& CachedRowSet::getRowSet() const
-    {
-        return m_pData->xRowSet;
+        return m_pData->bStatementDirty;
     }
 
     //--------------------------------------------------------------------
@@ -260,7 +197,6 @@ namespace frm
     {
         try
         {
-            lcl_clearRowSet_throw( *m_pData );
             m_pData.reset( new CachedRowSet_Data( m_pData->aContext ) );
         }
         catch( const Exception& )
