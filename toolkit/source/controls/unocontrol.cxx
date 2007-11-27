@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrol.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:27:38 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 11:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1343,6 +1343,18 @@ void UnoControl::createPeer( const Reference< XToolkit >& rxToolkit, const Refer
             if ( ( aVal >>= b ) && b)
                 aDescr.WindowAttributes |= VclWindowPeerAttribute::AUTOVSCROLL;
         }
+
+        //added for issue79712
+        //NoLabel
+        aPropName = GetPropertyName( BASEPROPERTY_NOLABEL );
+        if ( xInfo->hasPropertyByName( aPropName ) )
+        {
+            aVal = xPSet->getPropertyValue( aPropName );
+            sal_Bool b = sal_Bool();
+            if ( ( aVal >>=b ) && b )
+                aDescr.WindowAttributes |= VclWindowPeerAttribute::NOLABEL;
+        }
+        //issue79712 ends
 
         // Align
         aPropName = GetPropertyName( BASEPROPERTY_ALIGN );
