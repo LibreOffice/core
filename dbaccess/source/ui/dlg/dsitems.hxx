@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsitems.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:13:04 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:11:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,7 @@
 #define DSID_DATABASENAME           52
 #define DSID_AS_BEFORE_CORRNAME     53
 #define DSID_CHECK_REQUIRED_FIELDS  54
+#define DSID_IGNORECURRENCY         55
     // don't forget to adjust DSID_LAST_ITEM_ID below!
 
 
@@ -100,7 +101,7 @@
 //= item range. Adjust this if you introduce new items above
 
 #define DSID_FIRST_ITEM_ID  DSID_NAME
-#define DSID_LAST_ITEM_ID   DSID_CHECK_REQUIRED_FIELDS
+#define DSID_LAST_ITEM_ID   DSID_IGNORECURRENCY
 
 #endif // _DBAUI_DATASOURCEITEMS_HXX_
 
