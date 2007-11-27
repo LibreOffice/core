@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 15:07:59 $
+#   last change: $Author: ihi $ $Date: 2007-11-27 11:44:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,8 @@ SLOFILES=   \
             $(SLO)$/vclxwindows.obj                     \
             $(SLO)$/vclxspinbutton.obj                  \
             $(SLO)$/xsimpleanimation.obj                \
-            $(SLO)$/xthrobber.obj
+            $(SLO)$/xthrobber.obj						\
+            $(SLO)$/asynccallback.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=\
