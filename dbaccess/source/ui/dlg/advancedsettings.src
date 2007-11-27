@@ -4,9 +4,9 @@
  *
  *  $RCSfile: advancedsettings.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-19 09:55:25 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:10:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,6 +182,17 @@
     };
 
 //-------------------------------------------------------------------------
+#define AUTO_IGNORECURRENCY(AUTO_Y)                                                 \
+    CheckBox CB_IGNORECURRENCY                                                      \
+    {                                                                               \
+        Pos     = MAP_APPFONT ( 6 , AUTO_Y ) ;                                      \
+        Size    = MAP_APPFONT ( ADVANCED_PAGE_X -12 , CHECKBOX_HEIGHT ) ;           \
+        TabStop = TRUE ;                                                            \
+        HelpId = HID_DSADMIN_IGNORECURRENCY;                                        \
+        Text [ en-US ] = "Ignore currency field information";                       \
+    };
+
+//-------------------------------------------------------------------------
 
 #define AUTO_CHECKREQUIRED(AUTO_Y)                                                  \
     CheckBox CB_CHECK_REQUIRED                                                      \
@@ -303,7 +314,8 @@ TabPage PAGE_ADVANCED_SETTINGS_SPECIAL
     AUTO_IGNOREINDEXAPPENDIX(  10*RELATED_CONTROLS + FIXEDTEXT_HEIGHT +  9*CHECKBOX_HEIGHT + RELATED_CONTROLS )
     AUTO_DOSLINEENDS(          11*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 10*CHECKBOX_HEIGHT + RELATED_CONTROLS )
     AUTO_CHECKREQUIRED(        12*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 11*CHECKBOX_HEIGHT + RELATED_CONTROLS )
-    AUTO_BOOLEANCOMPARISON(    13*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 12*CHECKBOX_HEIGHT + RELATED_CONTROLS + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 )
+    AUTO_IGNORECURRENCY(       13*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 12*CHECKBOX_HEIGHT + RELATED_CONTROLS )
+    AUTO_BOOLEANCOMPARISON(    14*RELATED_CONTROLS + FIXEDTEXT_HEIGHT + 13*CHECKBOX_HEIGHT + RELATED_CONTROLS + ( LISTBOX_HEIGHT - CHECKBOX_HEIGHT ) / 2 )
 };
 
 //-------------------------------------------------------------------------
