@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 16:51:09 $
+#   last change: $Author: ihi $ $Date: 2007-11-27 15:28:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,6 @@ SLOFILES+=\
     $(SLO)$/hdft.obj     \
     $(SLO)$/impgrf.obj   \
     $(SLO)$/labdlg.obj \
-    $(SLO)$/langtab.obj \
     $(SLO)$/langbox.obj \
     $(SLO)$/wrapfield.obj \
     $(SLO)$/numfmt.obj   \
