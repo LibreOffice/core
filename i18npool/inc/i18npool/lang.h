@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lang.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-13 14:32:21 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:15:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,7 +299,8 @@ typedef unsigned short LanguageType;
 #define LANGUAGE_ROMANIAN_MOLDOVA           0x0818
 #define LANGUAGE_RUSSIAN                    0x0419
 #define LANGUAGE_RUSSIAN_MOLDOVA            0x0819
-#define LANGUAGE_SAMI_LAPPISH               0x043B
+#define LANGUAGE_SAMI_NORTHERN_NORWAY       0x043B
+#define LANGUAGE_SAMI_LAPPISH               LANGUAGE_SAMI_NORTHERN_NORWAY   /* the old MS definition */
 #define LANGUAGE_SAMI_INARI                 0x243B
 #define LANGUAGE_SAMI_LULE_NORWAY           0x103B
 #define LANGUAGE_SAMI_LULE_SWEDEN           0x143B
