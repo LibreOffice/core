@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-26 14:25:36 $
+#   last change: $Author: ihi $ $Date: 2007-11-27 11:59:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,8 @@ GEN_HID_OTHER=TRUE
 no_common_build_zip=true
 
 # --- Settings ----------------------------------
-.INCLUDE :	settings.mk
+.INCLUDE :  settings.mk
 # ------------------------------------------------------------------
-
 
 # --- reportdesign core (rpt) -----------------------------------
 
@@ -212,6 +211,15 @@ ZIP1EXT=.oxt
 
 XMLFILES := $(ZIP1DIR)$/description.xml \
             $(ZIP1DIR)$/META-INF$/manifest.xml
+            
+XCU_FILES := $(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/DataAccess.xcu \
+             $(ZIP1DIR)$/merge$/org$/openoffice$/Office$/DataAccess.xcu
+
+.IF "$(WITH_LANG)"!=""
+XCU_TMP := $(MISC)$/merge$/org$/openoffice$/Office$/DataAccess.xcu
+.ELSE //"$(WITH_LANG)" != ""
+XCU_TMP := $(MISC)$/registry$/data$/org$/openoffice$/Office$/DataAccess.xcu
+.ENDIF //"$(WITH_LANG)" != ""
 
 HTMLFILES := $(ZIP1DIR)$/THIRDPARTYREADMELICENSE.html \
             $(ZIP1DIR)$/readme_en-US.html \
@@ -224,6 +232,7 @@ LICLINES:=$(foreach,i,$(TXTFILES)  <license-text xlink:href="registration/$(i:f)
 TXTFILES:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registration$/license_$i.txt)
 LICLINES:=$(foreach,i,$(TXTFILES)  <license-text xlink:href="registration/$(i:f)" lang="$(subst,.txt, $(subst,license_, $(i:f)))" license-id="$(subst,.txt, $(subst,license_, $(i:f)))" />)
 .ENDIF  # "$(GUI)"!="WNT"
+
 
 REPRORTJARFILES := \
     $(ZIP1DIR)$/jcommon-1.0.10.jar										\
@@ -246,6 +255,9 @@ REPRORTJARFILES := \
 $(ZIP1TARGETN) :  $(TXTFILES) $(XMLFILES) $(HTMLFILES) $(REPRORTJARFILES)
 .ENDIF          # "$(ZIP1TARGETN)"!="
 
+$(MISC)$/update_report.flag : $(XCU_FILES)
+    $(TOUCH) $@
+
 $(ZIP1DIR)$/description.xml : pre.xml post.xml
     @@-$(MKDIRHIER) $(@:d)
     @@-$(RM) $(ZIP1DIR)$/description.xml
@@ -265,6 +277,15 @@ $(ZIP1DIR)$/%.xml : %.xml
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
 
+$(ZIP1DIR)$/registry$/data$/org$/openoffice$/Office$/%.xcu : $(MISC)$/registry$/data$/org$/openoffice$/Office$/%.xcu
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+
+$(ZIP1DIR)$/merge$/org$/openoffice$/Office$/%.xcu : $(XCU_TMP)
+    @@-$(MKDIRHIER) $(@:d)
+    echo $(XCU_TMP)
+    $(COPY) $< $@
+
 $(ZIP1DIR)$/%.jar : $(SOLARBINDIR)$/%.jar
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
@@ -273,9 +294,9 @@ $(ZIP1DIR)$/%.jar : $(CLASSDIR)$/%.jar
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@    
 
-$(ZIP1DIR)$/META-INF$/%.xml : %.xml
+$(ZIP1DIR)$/META-INF$/manifest.xml : manifest.xml $(MISC)$/update_report.flag
     @@-$(MKDIRHIER) $(@:d)
-    $(COPY) $< $@
+    $(PERL) $(SOLARENV)$/bin$/makemani.pl $(PRJ)$/util$/manifest.xml $(ZIP1DIR) registry $(@:d:d)
 
 $(ZIP1DIR)$/readme_en-US.% : $(PRJ)$/license$/readme_en-US.%
      @@-$(MKDIRHIER) $(@:d)
