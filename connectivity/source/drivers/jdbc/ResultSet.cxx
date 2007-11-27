@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:37:11 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:03:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,11 +112,12 @@ IMPLEMENT_SERVICE_INFO(java_sql_ResultSet,"com.sun.star.sdbcx.JResultSet","com.s
 //**************************************************************
 
 jclass java_sql_ResultSet::theClass = 0;
-java_sql_ResultSet::java_sql_ResultSet( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rParentLogger, java_sql_Statement_Base* pStmt)
+java_sql_ResultSet::java_sql_ResultSet( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rParentLogger,java_sql_Connection& _rConnection, java_sql_Statement_Base* pStmt)
     :java_sql_ResultSet_BASE(m_aMutex)
     ,java_lang_Object( pEnv, myObj )
     ,OPropertySetHelper(java_sql_ResultSet_BASE::rBHelper)
     ,m_aLogger( _rParentLogger, java::sql::ConnectionLog::RESULTSET )
+    ,m_pConnection(&_rConnection)
 {
     SDBThreadAttach::addRef();
     osl_incrementInterlockedCount(&m_refCount);
@@ -510,7 +511,7 @@ sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex ) throw(SQ
         }
     }
 
-    return out==0 ? 0 : new java_sql_ResultSetMetaData( t.pEnv, out, m_aLogger );
+    return out==0 ? 0 : new java_sql_ResultSetMetaData( t.pEnv, out, m_aLogger,*m_pConnection );
 }
 // -------------------------------------------------------------------------
 Reference< XArray > SAL_CALL java_sql_ResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException)
