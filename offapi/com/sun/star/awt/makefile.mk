@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: kz $ $Date: 2007-06-20 10:32:37 $
+#   last change: $Author: ihi $ $Date: 2007-11-27 11:49:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,7 @@ IDLFILES=\
     ActionEvent.idl\
     AdjustmentEvent.idl\
     AdjustmentType.idl\
+    AsyncCallback.idl\
     CharSet.idl\
     Command.idl\
     DeviceCapability.idl\
@@ -214,6 +215,7 @@ IDLFILES=\
     XAdjustmentListener.idl\
     XBitmap.idl\
     XButton.idl\
+    XCallback.idl\
     XCheckBox.idl\
     XComboBox.idl\
     XControl.idl\
@@ -272,6 +274,7 @@ IDLFILES=\
     XProgressMonitor.idl\
     XRadioButton.idl\
     XRegion.idl\
+    XRequestCallback.idl\
     XReschedule.idl\
     XScrollBar.idl\
         XSimpleTabController.idl\
