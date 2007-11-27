@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Connection.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:07:41 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:25:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ namespace connectivity
                                 m_aLogger;
         sal_Bool                m_bParameterSubstitution;
         sal_Bool                m_bIgnoreDriverPrivileges;
+        sal_Bool                m_bIgnoreCurrency;
 
         /** transform named parameter into unnamed one.
             @param  _sSQL
@@ -121,6 +122,7 @@ namespace connectivity
             getConnectionInfo() const { return m_aConnectionInfo; }
 
         inline  sal_Bool isIgnoreDriverPrivilegesEnabled() const { return   m_bIgnoreDriverPrivileges;}
+        inline  sal_Bool isIgnoreCurrencyEnabled() const { return   m_bIgnoreCurrency; }
 
         /** returns the instance used for logging events related to this connection
         */
