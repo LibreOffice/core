@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JConnection.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:23:39 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:24:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -915,7 +915,6 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
     return Any();
 }
 // -----------------------------------------------------------------------------
-<<<<<<< JConnection.cxx
 namespace
 {
     bool lcl_setSystemProperties_nothrow( const java::sql::ConnectionLog& _rLogger,
