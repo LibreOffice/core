@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 11:29:17 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 11:52:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1383,3 +1383,7 @@ String RID_STR_DECORATION
     Text [ en-US ] = "With title bar" ;
 };
 
+String RID_STR_NOLABEL
+{
+    Text [ en-US ] = "No Label" ;
+};
