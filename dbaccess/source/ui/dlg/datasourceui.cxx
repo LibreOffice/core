@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourceui.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:09:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:11:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ namespace dbaui
         case DSID_AUTORETRIEVEENABLED:  return rAdvancedSupport.bGeneratedValues;
         case DSID_AUTOINCREMENTVALUE:   return rAdvancedSupport.bGeneratedValues;
         case DSID_AUTORETRIEVEVALUE:    return rAdvancedSupport.bGeneratedValues;
+        case DSID_IGNORECURRENCY:       return rAdvancedSupport.bIgnoreCurrency;
         }
 
         OSL_ENSURE( false, "DataSourceUI::hasSetting: this item id is currently not supported!" );
