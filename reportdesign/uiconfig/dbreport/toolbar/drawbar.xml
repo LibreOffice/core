@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:helpid="11002" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:helpid="11003" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:helpid="11004" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes" toolbar:helpid="11005" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:helpid="11006" toolbar:style="dropdown"/>
+ <toolbar:toolbaritem xlink:href=".uno:StarShapes" toolbar:helpid="11007" toolbar:style="dropdown"/>
+</toolbar:toolbar>
