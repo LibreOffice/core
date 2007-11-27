@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 12:47:43 $
+#   last change: $Author: hjs $ $Date: 2007-11-27 16:10:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -90,18 +90,19 @@ ADDITIONAL_FILES:= \
 .IF "$(OS)" == "WNT"
 .IF "$(COM)" != "gcc"
 
-.IF "$(MAKETARGETS)" == ""
 PATCH_FILE_NAME=openssl.patch
+.IF "$(MAKETARGETS)" == ""
 # The env. var PERL is used by nmake, and nmake insists on '\'s
+PERL_bak:=$(PERL)
 PERL!:=$(subst,/,\ $(normpath,1 $(PERL)))
 .EXPORT : PERL
+PERL!:=$(PERL_bak)
 .ENDIF
 
-CONFIGURE_DIR=. 
-CONFIGURE_ACTION=$(PERL:s!\!/!) configure
+#CONFIGURE_ACTION=cmd /c $(PERL:s!\!/!) configure
+CONFIGURE_ACTION=$(PERL) configure
 CONFIGURE_FLAGS=VC-WIN32
-BUILD_DIR=.
-BUILD_ACTION=cmd /c "ms$(EMQ)\do_ms.bat $(PERL:s!\!/!) && set CC=test" && nmake -f ms/ntdll.mak
+BUILD_ACTION=cmd /c "ms$(EMQ)\do_ms.bat $(subst,/,\ $(normpath,1 $(PERL))) && set CC=test" && nmake -f ms/ntdll.mak
 
 OUT2LIB = out32dll$/ssleay32.lib
 OUT2LIB += out32dll$/libeay32.lib
