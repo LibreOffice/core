@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 14:08:23 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 11:52:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,6 +284,7 @@
 #define RID_STR_SHOWS_ROOT_HANDLES          ( RID_FORMBROWSER_START + 247 )
 #define RID_STR_EDITABLE                    ( RID_FORMBROWSER_START + 248 )
 #define RID_STR_INVOKES_STOP_NOT_EDITING    ( RID_FORMBROWSER_START + 249 )
+#define RID_STR_NOLABEL                 ( RID_FORMBROWSER_START + 250 )
 
 
 // -----------------------------------------------------------------------
