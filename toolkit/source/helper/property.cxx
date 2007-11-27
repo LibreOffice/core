@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:28:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 11:45:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,6 +247,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "MultiLine",              MULTILINE,          bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "MultiSelection",         MULTISELECTION,     bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "NativeWidgetLook",       NATIVE_WIDGET_LOOK, bool,               BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "NoLabel",                NOLABEL,            bool,               BOUND, MAYBEDEFAULT ), //added for issue79712
             DECL_PROP_2     ( "Orientation",            ORIENTATION,        sal_Int32,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "PaintTransparent",       PAINTTRANSPARENT,   bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "PluginParent",           PLUGINPARENT,       sal_Int64,          BOUND, MAYBEDEFAULT ),
