@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DriverSettings.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:26:52 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:29:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,15 +121,6 @@ void ODriversSettings::getSupportedIndirectSettings( DATASOURCE_TYPE _eType, ::s
             _out_rDetailsIds.push_back(DSID_CONN_LDAP_BASEDN);
             _out_rDetailsIds.push_back(DSID_CONN_LDAP_ROWCOUNT);
             _out_rDetailsIds.push_back(DSID_CONN_LDAP_USESSL);
-            break;
-
-        case DST_MOZILLA:
-        case DST_THUNDERBIRD:
-        case DST_EVOLUTION:
-        case DST_KAB:
-        case DST_MACAB:
-        case DST_OUTLOOK:
-        case DST_OUTLOOKEXP:
             break;
 
         case DST_JDBC:
