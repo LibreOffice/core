@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JConnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:03:14 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:23:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@
 #include "resource/jdbc_log.hrc"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "jvmaccess/classpath.hxx"
-
+#include <comphelper/sequenceashashmap.hxx>
 #include <jni.h>
 
 #include <list>
@@ -308,6 +308,7 @@ java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
     ,m_aLogger( _rDriver.getLogger() )
     ,m_bParameterSubstitution(sal_False)
     ,m_bIgnoreDriverPrivileges(sal_True)
+    ,m_bIgnoreCurrency(sal_False)
 {
 }
 // -----------------------------------------------------------------------------
@@ -914,6 +915,7 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
     return Any();
 }
 // -----------------------------------------------------------------------------
+<<<<<<< JConnection.cxx
 namespace
 {
     bool lcl_setSystemProperties_nothrow( const java::sql::ConnectionLog& _rLogger,
@@ -971,43 +973,17 @@ void java_sql_Connection::loadDriverFromProperties( const Sequence< PropertyValu
     SDBThreadAttach t;
     try
     {
+        ::rtl::OUString sDriverClassPath,sDriverClass;
+        sDriverClass = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass")),sDriverClass);
+        sDriverClassPath = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClassPath")),sDriverClassPath);
+        bAutoRetrievingEnabled = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled")),bAutoRetrievingEnabled);
+        sGeneratedValueStatement = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement")),sGeneratedValueStatement);
+        m_bParameterSubstitution = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParameterNameSubstitution")),m_bParameterSubstitution);
+        m_bIgnoreDriverPrivileges = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreDriverPrivileges")),m_bIgnoreDriverPrivileges);
+        m_bIgnoreCurrency = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreCurrency")),m_bIgnoreCurrency);
         Sequence< NamedValue > aSystemProperties;
-        const PropertyValue* pJavaDriverClass = 0;
-        const PropertyValue* pJavaDriverClassPath = 0;
-        const PropertyValue* pBegin = info.getConstArray();
-        const PropertyValue* pEnd   = pBegin + info.getLength();
-        for(;pBegin != pEnd;++pBegin)
-        {
-            if (!pBegin->Name.compareToAscii("JavaDriverClass"))
-            {
-                pJavaDriverClass = pBegin;
-            }
-            else if (!pBegin->Name.compareToAscii("JavaDriverClassPath"))
-            {
-                pJavaDriverClassPath = pBegin;
-            }
-            else if(!pBegin->Name.compareToAscii("IsAutoRetrievingEnabled"))
-            {
-                OSL_VERIFY( pBegin->Value >>= bAutoRetrievingEnabled );
-            }
-            else if(!pBegin->Name.compareToAscii("AutoRetrievingStatement"))
-            {
-                OSL_VERIFY( pBegin->Value >>= sGeneratedValueStatement );
-            }
-            else if(!pBegin->Name.compareToAscii("ParameterNameSubstitution"))
-            {
-                OSL_VERIFY( pBegin->Value >>= m_bParameterSubstitution );
-            }
-            else if(!pBegin->Name.compareToAscii("IgnoreDriverPrivileges"))
-            {
-                OSL_VERIFY( pBegin->Value >>= m_bIgnoreDriverPrivileges );
-            }
-            else if(!pBegin->Name.compareToAscii("SystemProperties"))
-            {
-                OSL_VERIFY( pBegin->Value >>= aSystemProperties );
-            }
-        }
-        if ( !object && pJavaDriverClass != 0 )
+        aSystemProperties = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SystemProperties")),aSystemProperties);
+        if ( !object )
         {
             if ( !lcl_setSystemProperties_nothrow( getLogger(), *t.pEnv, aSystemProperties ) )
                 ThrowLoggedSQLException( getLogger(), t.pEnv, *this );
@@ -1018,35 +994,30 @@ void java_sql_Connection::loadDriverFromProperties( const Sequence< PropertyValu
             java_sql_SQLException_BASE::getMyClass();
             java_lang_Throwable::getMyClass();
 
-            ::rtl::OUString aStr;
-            OSL_VERIFY( pJavaDriverClass->Value >>= aStr );
-            OSL_ASSERT( aStr.getLength());
-            if ( !aStr.getLength() )
+            if ( !sDriverClass.getLength() )
             {
                 m_aLogger.log( LogLevel::SEVERE, STR_LOG_NO_DRIVER_CLASS );
                 throw SQLException(::rtl::OUString::createFromAscii("The specified driver was empty!"),*this,::rtl::OUString(),1000,Any());
             }
             else
             {
-                m_aLogger.log( LogLevel::INFO, STR_LOG_LOADING_DRIVER, aStr );
+                m_aLogger.log( LogLevel::INFO, STR_LOG_LOADING_DRIVER, sDriverClass );
                 // the driver manager holds the class of the driver for later use
                 ::std::auto_ptr< java_lang_Class > pDrvClass;
-                if ( pJavaDriverClassPath == 0 )
+                if ( !sDriverClassPath.getLength() )
                 {
                     // if forName didn't find the class it will throw an exception
-                    pDrvClass = ::std::auto_ptr< java_lang_Class >(java_lang_Class::forName(aStr));
+                    pDrvClass = ::std::auto_ptr< java_lang_Class >(java_lang_Class::forName(sDriverClass));
                 }
                 else
                 {
-                    ::rtl::OUString classpath;
-                    OSL_VERIFY( pJavaDriverClassPath->Value >>= classpath );
 
                     LocalRef< jclass > driverClass(t.env());
                     LocalRef< jobject > driverClassLoader(t.env());
 
                     loadClass(
                         m_pDriver->getContext().getUNOContext(),
-                        t.env(), classpath, aStr, &driverClassLoader, &driverClass );
+                        t.env(), sDriverClassPath, sDriverClass, &driverClassLoader, &driverClass );
 
                     m_pDriverClassLoader.set( driverClassLoader );
                     pDrvClass.reset( new java_lang_Class( t.pEnv, driverClass.release() ) );
