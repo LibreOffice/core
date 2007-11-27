@@ -4,9 +4,9 @@
  *
  *  $RCSfile: isolang.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-13 14:33:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:15:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,7 +357,7 @@ static MsLangId::IsoLangEntry const aImplIsoLangEntries[] =
     { LANGUAGE_INUKTITUT_LATIN_CANADA,      "iu", "CA" },
 //  { LANGUAGE_INUKTITUT_SYLLABICS_CANADA,  "iu", "CA" },   // script codes not supported yet
 //  { LANGUAGE_ARABIC_SUDAN,                "ar", "SD" },   // unknown MS-LCID
-//  { LANGUAGE_SAMI_LAPPISH,               "smi", ""   },   // unknown ISO code, what's "Lapp"?
+    { LANGUAGE_SAMI_NORTHERN_NORWAY,        "se", "NO" },
     { LANGUAGE_SAMI_INARI,                 "smn", "FI" },   // ISO/DIS 639-3 (!)
     { LANGUAGE_SAMI_LULE_NORWAY,           "smj", "NO" },   // ISO/DIS 639-3 (!)
     { LANGUAGE_SAMI_LULE_SWEDEN,           "smj", "SE" },   // ISO/DIS 639-3 (!)
