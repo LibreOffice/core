@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:10:16 $
+ *  last change: $Author: ihi $ $Date: 2007-11-27 12:27:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
