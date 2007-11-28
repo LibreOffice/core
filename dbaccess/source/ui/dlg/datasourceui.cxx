@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourceui.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:11:03 $
+ *  last change: $Author: ihi $ $Date: 2007-11-28 12:42:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,7 @@ namespace dbaui
         case DSID_SCHEMA:               return rAdvancedSupport.bUseSchemaInSelect;
         case DSID_INDEXAPPENDIX:        return rAdvancedSupport.bUseIndexDirectionKeyword;
         case DSID_DOSLINEENDS:          return rAdvancedSupport.bUseDOSLineEnds;
+        case DSID_BOOLEANCOMPARISON:    return rAdvancedSupport.bBooleanComparisonMode;
         case DSID_CHECK_REQUIRED_FIELDS:return rAdvancedSupport.bFormsCheckRequiredFields;
         case DSID_AUTORETRIEVEENABLED:  return rAdvancedSupport.bGeneratedValues;
         case DSID_AUTOINCREMENTVALUE:   return rAdvancedSupport.bGeneratedValues;

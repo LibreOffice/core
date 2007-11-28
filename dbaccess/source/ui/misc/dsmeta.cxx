@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsmeta.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:13:29 $
+ *  last change: $Author: ihi $ $Date: 2007-11-28 12:41:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,7 @@ namespace dbaui
             s_aSupport[ DST_EVOLUTION_GROUPWISE ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[ DST_EVOLUTION_LDAP      ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[ DST_KAB                 ] = InitAdvanced( InitAdvanced::None );
+            s_aSupport[ DST_MSACCESS_2007       ] = InitAdvanced( 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0 );
             s_aSupport[ DST_EMBEDDED_HSQLDB     ] = InitAdvanced( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0 );
             s_aSupport[ DST_USERDEFINE1         ] = InitAdvanced( InitAdvanced::All );
             s_aSupport[ DST_USERDEFINE2         ] = InitAdvanced( InitAdvanced::All );
@@ -185,6 +186,7 @@ namespace dbaui
             s_aSupport[ DST_EVOLUTION_GROUPWISE ] = FeatureSupport( AuthNone    );
             s_aSupport[ DST_EVOLUTION_LDAP      ] = FeatureSupport( AuthNone    );
             s_aSupport[ DST_KAB                 ] = FeatureSupport( AuthNone    );
+            s_aSupport[ DST_MSACCESS_2007       ] = FeatureSupport( AuthNone    );
             s_aSupport[ DST_EMBEDDED_HSQLDB     ] = FeatureSupport( AuthNone    );
             s_aSupport[ DST_USERDEFINE1         ] = FeatureSupport( AuthUserPwd );
             s_aSupport[ DST_USERDEFINE2         ] = FeatureSupport( AuthUserPwd );
