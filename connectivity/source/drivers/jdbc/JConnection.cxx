@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JConnection.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:24:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-28 11:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -972,6 +972,7 @@ void java_sql_Connection::loadDriverFromProperties( const Sequence< PropertyValu
     SDBThreadAttach t;
     try
     {
+        ::comphelper::SequenceAsHashMap aMap( info );
         ::rtl::OUString sDriverClassPath,sDriverClass;
         sDriverClass = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass")),sDriverClass);
         sDriverClassPath = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClassPath")),sDriverClassPath);
