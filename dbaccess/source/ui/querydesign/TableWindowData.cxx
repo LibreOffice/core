@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWindowData.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 17:12:15 $
+ *  last change: $Author: ihi $ $Date: 2007-11-28 16:27:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ using namespace ::com::sun::star::container;
 //==================================================================
 // class OTableWindowData
 //==================================================================
-DBG_NAME(OTableWindowData);
+//DBG_NAME(OTableWindowData);
 //------------------------------------------------------------------------------
 OTableWindowData::OTableWindowData( const Reference< XPropertySet>& _xTable
                                    ,const ::rtl::OUString& _rComposedName
