@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 11:57:07 $
+ *  last change: $Author: ihi $ $Date: 2007-11-28 12:04:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1040,7 +1040,8 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
 
                                 if (anyHandle >>= x11_id)
                                 {
-                                    printf("x11_id = %ld\n", x11_id);
+                                    //printf("x11_id = %ld\n", x11_id);
+                                    printf("x11_id = %" SAL_PRIdINTPTR " \n" , x11_id );
                                     SystemParentData aParentData;
                                     aParentData.nSize   = sizeof( aParentData );
                                     aParentData.aWindow = x11_id;
@@ -1266,7 +1267,8 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             sal_Int32 x11_id = 0;
             if ( Parent >>= x11_id )
             {
-                printf("x11_id = %ld\n", x11_id);
+                //printf("x11_id = %ld\n", x11_id);
+                printf("x11_id = %" SAL_PRIdINTPTR " \n" , x11_id );
                 SystemParentData aParentData;
                 aParentData.nSize = sizeof( aParentData );
                 aParentData.aWindow = x11_id;
