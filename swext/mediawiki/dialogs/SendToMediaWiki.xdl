@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="SendToMediaWiki" dlg:left="62" dlg:top="57" dlg:width="288" dlg:height="129" dlg:closeable="true" dlg:moveable="true">
+ <dlg:bulletinboard>
+  <dlg:text dlg:id="Label1" dlg:tab-index="0" dlg:left="9" dlg:top="10" dlg:width="62" dlg:height="10" dlg:value="~MediaWiki Server" dlg:tabstop="false"/>
+  <dlg:text dlg:id="Label2" dlg:tab-index="2" dlg:left="9" dlg:top="27" dlg:width="62" dlg:height="10" dlg:value="~Title"/>
+  <dlg:text dlg:id="Label3" dlg:tab-index="4" dlg:left="9" dlg:top="44" dlg:width="62" dlg:height="10" dlg:value="S~ummary"/>
+  <dlg:menulist dlg:id="WikiList" dlg:tab-index="1" dlg:left="73" dlg:top="7" dlg:width="142" dlg:height="14" dlg:spin="true">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:WikiListChange" script:language="UNO"/>
+  </dlg:menulist>
+  <dlg:combobox dlg:id="ArticleText" dlg:tab-index="3" dlg:left="73" dlg:top="24" dlg:width="142" dlg:height="14" dlg:spin="true">
+   <script:event script:event-name="on-textchange" script:macro-name="vnd.sun.star.UNO:ArticleTextChange" script:language="UNO"/>
+  </dlg:combobox>
+  <dlg:textfield dlg:id="CommentText" dlg:tab-index="5" dlg:left="73" dlg:top="41" dlg:width="142" dlg:height="14"/>
+  <dlg:button dlg:id="AddButton" dlg:tab-index="6" dlg:left="219" dlg:top="7" dlg:width="63" dlg:height="16" dlg:value="~Add...">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:AddWiki" script:language="UNO"/>
+  </dlg:button>
+  <dlg:checkbox dlg:id="MinorCheck" dlg:tab-index="7" dlg:left="73" dlg:top="61" dlg:width="142" dlg:height="10" dlg:value="This is a minor edit" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="BrowserCheck" dlg:tab-index="8" dlg:left="73" dlg:top="74" dlg:width="142" dlg:height="10" dlg:value="Show in web ~browser" dlg:checked="false"/>
+  <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="9" dlg:left="-5" dlg:top="100" dlg:width="294" dlg:height="4"/>
+  <dlg:button dlg:id="CancelButton" dlg:tab-index="10" dlg:left="219" dlg:top="108" dlg:width="63" dlg:height="16" dlg:value="Cancel">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Cancel" script:language="UNO"/>
+  </dlg:button>
+  <dlg:button dlg:id="SendButton" dlg:tab-index="11" dlg:disabled="true" dlg:left="153" dlg:top="108" dlg:width="63" dlg:height="16" dlg:value="~Send">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Send" script:language="UNO"/>
+  </dlg:button>
+  <dlg:button dlg:id="HelpButton" dlg:tab-index="12" dlg:left="6" dlg:top="108" dlg:width="63" dlg:height="16" dlg:value="~Help">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Help" script:language="UNO"/>
+  </dlg:button>
+ </dlg:bulletinboard>
+</dlg:window>

@@ -1,0 +1,3 @@
+mkdir: %_DEST%\bin%_EXT%\swext
+..\%__SRC%\bin\mediawiki.oxt %_DEST%\bin%_EXT%\swext\mediawiki.oxt
+

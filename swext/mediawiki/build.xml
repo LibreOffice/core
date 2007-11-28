@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--***********************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: build.xml,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: mav $ $Date: 2007-11-28 10:45:35 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************ -->
+<project default="all">
+    <target name="init">
+        <property name="ext" value="oxt"/>
+        <property name="officeroot" value="/export/home/mav/OFFICES/OOG680/m5_netbeans_pro"/>
+        <property name="office.home" value="${officeroot}"/>
+
+        <!-- fallbacks for locations, when solenv is not used -->
+        <condition property="prjname" value="wikiaddon">
+            <not><isset property="prjname"/></not>
+        </condition>
+        <condition property="out" value="./build">
+            <not><isset property="out"/></not>
+        </condition>
+        <condition property="solar.jar" value="${officeroot}/program/classes">
+            <not><isset property="solar.jar"/></not>
+        </condition>
+
+        <!-- locations used throughout the build -->
+        <property name="name" value="${target}"/>
+        <property name="dist" value="${out}/bin"/>
+        <property name="classes" value="${out}/class"/>
+        <property name="classes.test" value="${out}/class-test"/>
+        <property name="officeclasses" value="${solar.jar}"/>
+
+        <!-- build options -->
+        <property name="sourcelevel" value="1.4"/>
+        <property name="verbose" value="false"/>
+        <property name="debug" value="true"/>
+
+        <!-- build classpath -->
+        <path id="classpath">
+            <pathelement location="${officeclasses}/juh.jar"/>
+            <pathelement location="${officeclasses}/jurt.jar"/>
+            <pathelement location="${officeclasses}/jut.jar"/>
+            <pathelement location="${officeclasses}/ridl.jar"/>
+            <pathelement location="${officeclasses}/unoil.jar"/>
+            <pathelement location="${officeclasses}/xml-apis.jar"/>
+            <!-- 3rd party libs -->
+            <pathelement location="jars/commons-codec-1.3.jar"/>
+            <pathelement location="jars/commons-httpclient-3.0.1.jar"/>
+            <pathelement location="jars/commons-lang-2.0.jar"/>
+            <pathelement location="jars/commons-logging.jar"/>
+            <pathelement location="jars/Tidy.jar"/>
+        </path>
+
+        <!-- create output directories -->
+        <mkdir dir="${classes}"/>
+        <mkdir dir="${classes.test}"/>
+        <mkdir dir="${dist}"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac debug="${debug}" destdir="${classes}" classpathref="classpath"
+               source="${sourcelevel}" verbose="${verbose}">
+            <src path="src"/>
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile, init">
+        <jar basedir="${classes}" compress="true" jarfile="${dist}/${name}.jar">
+            <manifest>
+                <attribute name="Class-Path" value="commons-codec-1.3.jar commons-lang-2.3.jar commons-httpclient-3.0.1.jar commons-logging-1.1.jar"/>
+                <attribute name="RegistrationClassName" value="com.sun.star.wiki.WikiEditorImpl"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="uno-package" depends="jar, init">
+        <delete file="${dist}/${name}.${ext}"/>
+        <zip  destfile="${dist}/${name}.${ext}">
+            <fileset dir="src" includes="**/*.xcu,**/*.xcs,**/*.xml" excludes="uno-extension-manifest.xml" casesensitive="yes"/>
+            <fileset dir="${dist}" includes="**/*.jar" casesensitive="yes"/>
+            <fileset dir="." includes="images/**,dialogs/**,templates/**" casesensitive="yes"/>
+            <fileset dir="jars" includes="**/*.jar" casesensitive="yes"/>
+            <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
+            <zipfileset dir="src" includes="uno-extension-manifest.xml" fullpath="META-INF/manifest.xml"/>
+        </zip>
+    </target>
+
+    <target depends="init, jar, uno-package" description="Build everything." name="all">
+        <echo message="${name} built."/>
+    </target>
+
+    <target depends="init" description="Clean all build products." name="clean">
+        <delete dir="${classes}"/>
+        <delete dir="${dist}"/>
+    </target>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <target name="uno-deploy" description="Deploys UNO extension package" depends="uno-package">
+        <echo message="deploying UNO extension package ..."/>
+        <echo message="${office.unopkg} add -f ${uno.package.name}"/>
+        <exec executable="${office.unopkg}" dir="${office.program.dir}" failonerror="true">
+            <arg value="add"/>
+            <arg value="-f"/>
+            <arg file="${uno.package.name}"/>
+        </exec>
+    </target>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <target name="uno-debug" description="Debugss UNO extension package in Target Office" depends="uno-package">
+        <!-- security fail for executing this without netbeans -->
+        <fail unless="netbeans.home">This target can only run inside the NetBeans IDE.</fail>
+        <!-- start debugger and get connection address jpda.address -->
+        <nbjpdastart name="Debug Office" addressproperty="jpda.address" transport="dt_socket">
+            <classpath path="${build.classes.dir}"/>
+            <sourcepath path="${src.dir}"/>
+        </nbjpdastart>
+        <!-- register component in temporaary user installation -->
+        <echo message="debugging UNO extension package ..."/>
+        <echo message="wait until preparation is finished."/>
+        <echo message="  deploying UNO extension package for debugging ..."/>
+        <echo message="  ${office.unopkg} add -f ${uno.package.name}"/>
+        <exec executable="${office.unopkg}" dir="${office.program.dir}">
+            <arg value="add"/>
+            <arg value="-f"/>
+            <arg file="${uno.package.name}"/>
+            <env key="UserInstallation" value="${office.debug.user.directory}"/>
+        </exec>
+        <!-- start Office with debug Java and user installation -->
+        <echo message="  starting the Office with ..."/>
+        <echo message="  user installation: ${office.debug.user.directory}"/>
+        <echo message="  debug options:     &quot;-Xdebug&quot; &quot;-Xrunjdwp:transport=dt_socket,address=${jpda.address}&quot;"/>
+        <echo message="  ${office.soffice}"/>
+        <echo message="preparation finished."/>
+        <exec executable="${office.soffice}" dir="${office.program.dir}" failonerror="true">
+            <env key="UserInstallation" value="${office.debug.user.directory}"/>
+            <env key="JAVA_TOOL_OPTIONS" value="&quot;-Xdebug&quot; &quot;-Xrunjdwp:transport=dt_socket,address=${jpda.address}&quot;"/>
+        </exec>
+   </target>
+</project>

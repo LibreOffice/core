@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="EditSetting" dlg:left="180" dlg:top="89" dlg:width="186" dlg:height="156" dlg:closeable="true" dlg:moveable="true">
+ <dlg:bulletinboard>
+  <dlg:text dlg:id="UrlLabel" dlg:tab-index="4" dlg:left="6" dlg:top="33" dlg:width="50" dlg:height="8" dlg:value="URL" dlg:tabstop="false"/>
+  <dlg:textfield dlg:id="UrlField" dlg:tab-index="5" dlg:left="58" dlg:top="31" dlg:width="122" dlg:height="12" dlg:help-url="HID:31696"/>
+  <dlg:textfield dlg:id="UsernameField" dlg:tab-index="7" dlg:left="58" dlg:top="91" dlg:width="122" dlg:height="12" dlg:help-url="HID:31697"/>
+  <dlg:textfield dlg:id="PasswordField" dlg:tab-index="9" dlg:left="58" dlg:top="107" dlg:width="122" dlg:height="12" dlg:help-url="HID:31698" dlg:echochar="*"/>
+  <dlg:button dlg:id="All.OkButton" dlg:tab-index="12" dlg:left="77" dlg:top="139" dlg:width="50" dlg:height="14" dlg:help-url="HID:31700" dlg:default="true" dlg:value="OK">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:OK" script:language="UNO"/>
+  </dlg:button>
+  <dlg:button dlg:id="All.CancelButton" dlg:tab-index="13" dlg:left="130" dlg:top="139" dlg:width="50" dlg:height="14" dlg:help-url="HID:31701" dlg:value="Cancel">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Cancel" script:language="UNO"/>
+  </dlg:button>
+  <dlg:button dlg:id="All.HelpButton" dlg:tab-index="11" dlg:left="6" dlg:top="139" dlg:width="50" dlg:height="14" dlg:help-url="HID:31702" dlg:value="Help">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Help" script:language="UNO"/>
+  </dlg:button>
+  <dlg:fixedline dlg:id="All.WeblogLabel" dlg:tab-index="0" dlg:left="3" dlg:top="4" dlg:width="180" dlg:height="8" dlg:value="Weblog"/>
+  <dlg:text dlg:id="All.UsernameLabel" dlg:tab-index="6" dlg:left="6" dlg:top="93" dlg:width="46" dlg:height="8" dlg:value="Username" dlg:tabstop="false"/>
+  <dlg:text dlg:id="All.PasswordLabel" dlg:tab-index="8" dlg:left="6" dlg:top="109" dlg:width="46" dlg:height="8" dlg:value="Password" dlg:tabstop="false"/>
+  <dlg:checkbox dlg:id="All.SaveBox" dlg:tab-index="10" dlg:left="58" dlg:top="123" dlg:width="116" dlg:height="8" dlg:help-url="HID:31699" dlg:value="Save password" dlg:checked="false"/>
+  <dlg:fixedline dlg:id="BottomLine" dlg:tab-index="1" dlg:left="0" dlg:top="131" dlg:width="186" dlg:height="8"/>
+  <dlg:fixedline dlg:id="AccountLine" dlg:tab-index="2" dlg:left="3" dlg:top="80" dlg:width="180" dlg:height="8" dlg:value="Account"/>
+  <dlg:fixedline dlg:id="WikiLine" dlg:tab-index="3" dlg:left="3" dlg:top="4" dlg:width="180" dlg:height="8" dlg:value="Wiki"/>
+ </dlg:bulletinboard>
+</dlg:window>

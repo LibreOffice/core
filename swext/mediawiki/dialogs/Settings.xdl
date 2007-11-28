@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE dlg:window PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "dialog.dtd">
+<dlg:window xmlns:dlg="http://openoffice.org/2000/dialog" xmlns:script="http://openoffice.org/2000/script" dlg:id="Settings" dlg:left="142" dlg:top="89" dlg:width="225" dlg:height="121" dlg:closeable="true" dlg:withtitlebar="false">
+ <dlg:bulletinboard>
+  <dlg:button dlg:id="AddButton" dlg:tab-index="1" dlg:left="169" dlg:top="6" dlg:width="50" dlg:height="14" dlg:help-url="HID:31682" dlg:value="Add...">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Add" script:language="UNO"/>
+  </dlg:button>
+  <dlg:button dlg:id="EditButton" dlg:tab-index="2" dlg:left="169" dlg:top="22" dlg:width="50" dlg:height="14" dlg:help-url="HID:31683" dlg:value="Edit...">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Edit" script:language="UNO"/>
+  </dlg:button>
+  <dlg:button dlg:id="RemoveButton" dlg:tab-index="3" dlg:left="169" dlg:top="38" dlg:width="50" dlg:height="14" dlg:help-url="HID:31685" dlg:value="Remove">
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Remove" script:language="UNO"/>
+  </dlg:button>
+  <dlg:menulist dlg:id="WikiList" dlg:tab-index="0" dlg:left="6" dlg:top="6" dlg:width="160" dlg:height="90" dlg:help-url="HID:31681" dlg:multiselection="true">
+   <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:ListStatus" script:language="UNO"/>
+  </dlg:menulist>
+ </dlg:bulletinboard>
+</dlg:window>
