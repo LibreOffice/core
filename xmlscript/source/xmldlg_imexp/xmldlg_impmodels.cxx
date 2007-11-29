@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 11:49:58 $
+ *  last change: $Author: ihi $ $Date: 2007-11-29 14:16:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,9 +225,6 @@ void FixedLineElement::endElement()
     ctx.importOrientationProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Orientation") ),
                                    OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
                                    _xAttributes );
-    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("NoLabel") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("nolabel") ),
-                               _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -1262,9 +1259,6 @@ void TitledBoxElement::endElement()
                                          makeAny( _label ) );
     }
 
-    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("NoLabel") ),
-                                   OUString( RTL_CONSTASCII_USTRINGPARAM("nolabel") ),
-                                   _xAttributes );
     ctx.importEvents( _events );
     // avoid ring-reference:
     // vector< event elements > holding event elements holding this (via _pParent)
@@ -1315,9 +1309,6 @@ void TitledBoxElement::endElement()
                                          xAttributes );
         ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
                                    OUString( RTL_CONSTASCII_USTRINGPARAM("multiline") ),
-                                   xAttributes );
-        ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("NoLabel") ),
-                                   OUString( RTL_CONSTASCII_USTRINGPARAM("nolabel") ),
                                    xAttributes );
 
         sal_Int16 nVal = 0;
@@ -1446,9 +1437,6 @@ void RadioGroupElement::endElement()
                                          xAttributes );
         ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
                                    OUString( RTL_CONSTASCII_USTRINGPARAM("multiline") ),
-                                   xAttributes );
-        ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("NoLabel") ),
-                                   OUString( RTL_CONSTASCII_USTRINGPARAM("nolabel") ),
                                    xAttributes );
         sal_Int16 nVal = 0;
         sal_Bool bChecked = sal_False;
@@ -1791,9 +1779,6 @@ void CheckBoxElement::endElement()
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("multiline") ),
                                _xAttributes );
-    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("NoLabel") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("nolabel") ),
-                               _xAttributes );
 
 
     sal_Bool bTriState = sal_False;
@@ -1909,9 +1894,6 @@ void ButtonElement::endElement()
                                _xAttributes );
     ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
                                OUString( RTL_CONSTASCII_USTRINGPARAM("multiline") ),
-                               _xAttributes );
-    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("NoLabel") ),
-                               OUString( RTL_CONSTASCII_USTRINGPARAM("nolabel") ),
                                _xAttributes );
     // State
     sal_Bool bChecked = sal_False;
