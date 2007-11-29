@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listenernotification.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:54:09 $
+ *  last change: $Author: ihi $ $Date: 2007-11-29 15:33:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,9 +67,9 @@ namespace comphelper
         Using this class is pretty easy:
         <ul>
             <li>Derive from it, and overwrite implNotify.</li>
-            <li>Use <member>addListener</member> and <member>removeListener</member> in your
+            <li>Use <member>impl_addListener</member> and <member>impl_removeListener</member> in your
                 XFoo::addFooListener and XFoo::removeFooListener methods.</li>
-            <li>call <member>notify</member> whenever the event you want to notify happened</li>
+            <li>call <member>impl_notify</member> whenever the event you want to notify happened</li>
             <li>call <member>disposing</member> upon the disposal of your broadcaster.</li>
         </ul>
 
@@ -117,8 +117,8 @@ namespace comphelper
 
         virtual ~OListenerContainer();
 
-        void    addListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener );
-        void    removeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener );
+        void    impl_addListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener );
+        void    impl_removeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& _rxListener );
 
         /** notifies all listeners of the given event, using THB's notification pattern
 
@@ -130,7 +130,7 @@ namespace comphelper
 
             @see implNotify
         */
-        bool    notify( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_THROW(( ::com::sun::star::uno::Exception ));
+        bool    impl_notify( const ::com::sun::star::lang::EventObject& _rEvent ) SAL_THROW(( ::com::sun::star::uno::Exception ));
 
     protected:
         /** call a single listener
@@ -210,12 +210,12 @@ namespace comphelper
 
         inline void addListener( const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener )
         {
-            OListenerContainer::addListener( _rxListener.get() );
+            OListenerContainer::impl_addListener( _rxListener.get() );
         }
 
         inline void removeListener( const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener )
         {
-            OListenerContainer::removeListener( _rxListener.get() );
+            OListenerContainer::impl_removeListener( _rxListener.get() );
         }
 
         // publish some otherwise hidden base functionality
@@ -240,7 +240,7 @@ namespace comphelper
     inline bool OSimpleListenerContainer< LISTENER, EVENT >::notify( const EventClass& _rEvent, NotificationMethod _pNotify ) SAL_THROW(( ::com::sun::star::uno::Exception ))
     {
         m_pNotificationMethod = _pNotify;
-        bool bRet = OListenerContainer::notify( _rEvent );
+        bool bRet = OListenerContainer::impl_notify( _rEvent );
         m_pNotificationMethod = NULL;
         return bRet;
     }
@@ -277,20 +277,20 @@ namespace comphelper
 
         inline void addTypedListener( const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener )
         {
-            OListenerContainer::addListener( _rxListener.get() );
+            OListenerContainer::impl_addListener( _rxListener.get() );
         }
 
         inline void removeTypedListener( const ::com::sun::star::uno::Reference< ListenerClass >& _rxListener )
         {
-            OListenerContainer::removeListener( _rxListener.get() );
+            OListenerContainer::impl_removeListener( _rxListener.get() );
         }
 
         inline bool notify( const EventClass& _rEvent )
         {
-            return OListenerContainer::notify( _rEvent );
+            return OListenerContainer::impl_notify( _rEvent );
         }
 
-        using OListenerContainer::notify;
+        using OListenerContainer::impl_notify;
 
     protected:
         inline virtual bool    implNotify(

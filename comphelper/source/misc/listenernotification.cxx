@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listenernotification.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:12:02 $
+ *  last change: $Author: ihi $ $Date: 2007-11-29 15:34:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,15 +66,15 @@ namespace comphelper
     OListenerContainer::~OListenerContainer() {}
 
     //--------------------------------------------------------------------
-    void OListenerContainer::addListener( const Reference< XEventListener >& _rxListener )
+    void OListenerContainer::impl_addListener( const Reference< XEventListener >& _rxListener )
     {
-        OSL_PRECOND( _rxListener.is(), "OListenerContainer::addListener: a NULL listener?!" );
+        OSL_PRECOND( _rxListener.is(), "OListenerContainer::impl_addListener: a NULL listener?!" );
         if ( _rxListener.is() )
             m_aListeners.addInterface( _rxListener );
     }
 
     //--------------------------------------------------------------------
-    void OListenerContainer::removeListener( const Reference< XEventListener >& _rxListener )
+    void OListenerContainer::impl_removeListener( const Reference< XEventListener >& _rxListener )
     {
 #if OSL_DEBUG_LEVEL > 0
         ::cppu::OInterfaceIteratorHelper aIter( m_aListeners );
@@ -83,7 +83,7 @@ namespace comphelper
         {
             bFound = ( Reference< XInterface >( aIter.next() ) == _rxListener );
         }
-        OSL_ENSURE( bFound, "OListenerContainer::removeListener: sure your listener handling is correct? The given listener is not registered!" );
+        OSL_ENSURE( bFound, "OListenerContainer::impl_removeListener: sure your listener handling is correct? The given listener is not registered!" );
 #endif
         m_aListeners.removeInterface( _rxListener );
     }
@@ -101,7 +101,7 @@ namespace comphelper
     }
 
     //--------------------------------------------------------------------
-    bool OListenerContainer::notify( const EventObject& _rEvent ) SAL_THROW(( Exception ))
+    bool OListenerContainer::impl_notify( const EventObject& _rEvent ) SAL_THROW(( Exception ))
     {
         ::cppu::OInterfaceIteratorHelper aIter( m_aListeners );
         bool bCancelled = false;
@@ -120,7 +120,7 @@ namespace comphelper
                 // DisposedExceptions from the listener might indicate a
                 // broken connection to a different environment.
 
-                OSL_ENSURE( e.Context.is(), "OListenerContainer::notify: caught dispose exception with empty Context field" );
+                OSL_ENSURE( e.Context.is(), "OListenerContainer::impl_notify: caught dispose exception with empty Context field" );
 
                 // If the exception stems from the listener then remove it
                 // from the list of listeners.  If the Context field of the
