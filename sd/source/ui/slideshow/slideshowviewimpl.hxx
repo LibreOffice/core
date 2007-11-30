@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowviewimpl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:51:47 $
+ *  last change: $Author: rt $ $Date: 2007-11-30 08:56:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,7 +270,6 @@ class SlideShowViewPaintListeners : public SlideShowViewPaintListeners_Base
 public:
     SlideShowViewPaintListeners( ::osl::Mutex& rMutex );
 
-    using  comphelper::OListenerContainer::notify;
 protected:
     virtual bool implTypedNotify( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& rListener,
                              const ::com::sun::star::awt::PaintEvent&                       rEvent ) throw( ::com::sun::star::uno::Exception );
