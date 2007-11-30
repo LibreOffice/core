@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utility.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 14:27:24 $
+ *  last change: $Author: kz $ $Date: 2007-11-30 17:04:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,12 +109,12 @@ namespace configmgr
 #ifdef SIMPLE_REFERENCE_FAST
         inline void acquire() SAL_THROW(())
         {
-            OSL_ASSERT(UnoApiLock::isHeld());
+//            OSL_ASSERT(UnoApiLock::isHeld());
             m_nCount++;
         }
         inline void release() SAL_THROW(())
         {
-            OSL_ASSERT(UnoApiLock::isHeld());
+//            OSL_ASSERT(UnoApiLock::isHeld());
             if (--m_nCount == 0)
                 delete this;
         }
