@@ -4,9 +4,9 @@
 #
 #   $RCSfile: setupscript.pm,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:55:40 $
+#   last change: $Author: rt $ $Date: 2007-11-30 13:22:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -284,6 +284,9 @@ sub get_all_items_from_script
 
             while  (!( $line =~ /^\s*End\s*$/ ))
             {
+                if ( $counter > $#{$scriptref} ) {
+                    installer::exiter::exit_program("Invalid setup script file. End of file reached before 'End' line of '$searchitem' section.", "get_all_items_from_script");
+                }
                 $line = ${$scriptref}[$counter];
                 $counter++;
 
