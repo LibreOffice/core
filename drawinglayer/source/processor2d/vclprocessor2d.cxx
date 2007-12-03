@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-20 10:20:18 $
+ *  last change: $Author: aw $ $Date: 2007-12-03 13:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,13 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_TEXTLAYOUTDEVICE_HXX
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// for test, can be removed again
+
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONCLIPPER_HXX
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -625,6 +632,39 @@ namespace drawinglayer
             basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
             aLocalPolyPolygon.transform(maCurrentTransformation);
             mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
+
+            static bool bTestPolygonClipping(false);
+            if(bTestPolygonClipping)
+            {
+                static bool bInside(true);
+                static bool bFilled(false);
+                static bool bLine(false);
+
+                basegfx::B2DRange aRange(aLocalPolyPolygon.getB2DRange());
+                aRange.grow(aRange.getWidth() * -0.1);
+
+                if(bFilled)
+                {
+                    basegfx::B2DPolyPolygon aFilledClipped(basegfx::tools::clipPolyPolygonOnRange(aLocalPolyPolygon, aRange, bInside, false));
+                    basegfx::BColor aRand(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0);
+                    mpOutputDevice->SetFillColor(Color(aRand));
+                    mpOutputDevice->SetLineColor();
+                    mpOutputDevice->DrawPolyPolygon(aFilledClipped);
+                }
+
+                if(bLine)
+                {
+                    basegfx::B2DPolyPolygon aLineClipped(basegfx::tools::clipPolyPolygonOnRange(aLocalPolyPolygon, aRange, bInside, true));
+                    basegfx::BColor aRand(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0);
+                    mpOutputDevice->SetFillColor();
+                    mpOutputDevice->SetLineColor(Color(aRand));
+
+                    for(sal_uInt32 a(0); a < aLineClipped.count(); a++)
+                    {
+                        mpOutputDevice->DrawPolyLine(aLineClipped.getB2DPolygon(a));
+                    }
+                }
+            }
         }
 
         // direct draw of MetaFile
