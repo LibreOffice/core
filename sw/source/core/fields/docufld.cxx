@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docufld.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-12-03 14:20:40 $
+ *  last change: $Author: ihi $ $Date: 2007-12-03 14:25:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1198,11 +1198,11 @@ String SwDocInfoField::GetCntnt(sal_Bool bName) const
             {
                 const SfxDocumentInfo*  pInf = GetDoc()->GetDocumentInfo();
                 aStr += pInf->GetUserKeyTitle(nSub - DI_INFO1);
+                break;
             }
             case DI_CUSTOM:
                 aStr += aName;
                 break;
-//          break;
 
             default:
                 aStr += *ViewShell::GetShellRes()->aDocInfoLst[ nSub - DI_SUBTYPE_BEGIN ];
