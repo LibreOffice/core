@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-03 13:54:35 $
+ *  last change: $Author: aw $ $Date: 2007-12-04 15:21:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ namespace drawinglayer
                 if(basegfx::fTools::more(aScale.getX(), 0.0) && basegfx::fTools::more(aScale.getY(), 0.0))
                 {
                     // prepare everything that is not sheared and mirrored
-                    Font aFont(getVclFontFromFontAttributes(
+                    Font aFont(primitive2d::getVclFontFromFontAttributes(
                         rTextCandidate.getFontAttributes(), aScale.getX(), aScale.getY(), fRotate, *mpOutputDevice));
 
                     // handle additional font attributes
