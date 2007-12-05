@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scppatchsoname.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:09:57 $
+#   last change: $Author: vg $ $Date: 2007-12-05 17:36:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -167,6 +167,9 @@ sub resolving_patchsoname_flag
             }
 
             # }
+
+            # Saving the original source, where the file was found
+            $onefile->{'originalsourcepath'} = $onefile->{'sourcepath'};
 
             # Writing the new sourcepath into the hashref, even if it was no copied
 
