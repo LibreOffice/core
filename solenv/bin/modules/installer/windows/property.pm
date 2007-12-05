@@ -4,9 +4,9 @@
 #
 #   $RCSfile: property.pm,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:13:37 $
+#   last change: $Author: vg $ $Date: 2007-12-05 17:37:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -254,6 +254,9 @@ sub set_important_properties
     {
         my $onepropertyline = "ISPATCH" . "\t" . "1" . "\n";
         push(@{$propertyfile}, $onepropertyline);
+
+        $onepropertyline = "SETUP_USED" . "\t" . "0" . "\n";
+        push(@{$propertyfile}, $onepropertyline);
     }
 
     if ( $installer::globals::languagepack )
@@ -264,7 +267,6 @@ sub set_important_properties
 
     my $languagesline = "PRODUCTALLLANGUAGES" . "\t" . $$languagestringref . "\n";
     push(@{$propertyfile}, $languagesline);
-
 }
 
 ####################################################################################
