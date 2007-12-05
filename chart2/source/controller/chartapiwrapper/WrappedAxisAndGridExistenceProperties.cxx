@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedAxisAndGridExistenceProperties.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:32:08 $
+ *  last change: $Author: vg $ $Date: 2007-12-05 10:45:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ void WrappedAxisAndGridExistenceProperty::setPropertyValue( const Any& rOuterVal
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( C2U("Has axis or grid properties require boolean values"), 0, 0 );
 
-    sal_Bool bOldValue = false;
+    sal_Bool bOldValue = sal_False;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
 
     if( bOldValue == bNewValue )
@@ -290,7 +290,7 @@ void WrappedAxisTitleExistenceProperty::setPropertyValue( const Any& rOuterValue
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( C2U("Has axis or grid properties require boolean values"), 0, 0 );
 
-    sal_Bool bOldValue = false;
+    sal_Bool bOldValue = sal_False;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
 
     if( bOldValue == bNewValue )
@@ -401,7 +401,7 @@ void WrappedAxisLabelExistenceProperty::setPropertyValue( const Any& rOuterValue
     if( ! (rOuterValue >>= bNewValue) )
         throw lang::IllegalArgumentException( C2U("Has axis or grid properties require boolean values"), 0, 0 );
 
-    sal_Bool bOldValue = false;
+    sal_Bool bOldValue = sal_False;
     getPropertyValue( xInnerPropertySet ) >>= bOldValue;
 
     if( bOldValue == bNewValue )
