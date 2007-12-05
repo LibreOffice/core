@@ -432,7 +432,7 @@ int WINAPI _tWinMain( HINSTANCE /*hInstance*/, HINSTANCE, LPTSTR, int )
             }
         }
         else
-            dwExitCode = 0; // no executable found
+            dwExitCode = 1; // no executable found
     }
     else
         dwExitCode = 0; // wrong number of arguments
