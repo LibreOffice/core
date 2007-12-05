@@ -9,7 +9,7 @@ Globals
 			SERVICETAG_PRODUCTVERSION 2.4
 			SERVICETAG_PARENTNAME OpenOffice.org 2.0
 			SERVICETAG_SOURCE {buildsource}{minor}(Build:{buildid})
-			SERVICETAG_URN urn:uuid:1fa1f42d-75b5-11dc-932b-080020a9ed93
+			SERVICETAG_URN urn:uuid:0e712256-96b3-11dc-ae46-080020a9ed93
 		}
 	}
 }
@@ -54,6 +54,7 @@ OpenOffice
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
+			RELATIVE_PATHES_IN_DDF 1
 		}
 		active			1
 		compression		5
@@ -107,6 +108,7 @@ OpenOffice_wJRE
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
+			RELATIVE_PATHES_IN_DDF 1
 		}
 		active			1
 		compression		5
@@ -160,6 +162,7 @@ OpenOffice_Dev
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			LOCALUSERDIR $ORIGIN/..
+			RELATIVE_PATHES_IN_DDF 1
 		}
 		active			1
 		compression		5
@@ -193,6 +196,7 @@ URE
             SERVICESPROJEKT 1
             NATIVESERVICESURLPREFIX vnd.sun.star.expand:$URE_INTERNAL_LIB_DIR/
             JAVASERVICESURLPREFIX vnd.sun.star.expand:$URE_INTERNAL_JAVA_DIR/
+            RELATIVE_PATHES_IN_DDF 1
         }
         active 1
         compression 5
@@ -274,6 +278,7 @@ BrOffice
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
+			RELATIVE_PATHES_IN_DDF 1
 		}
 		active			1
 		compression		5
@@ -327,6 +332,7 @@ BrOffice_wJRE
 			DOWNLOADBANNER	brobanner.bmp
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
+			RELATIVE_PATHES_IN_DDF 1
 		}
 		active			1
 		compression		5
@@ -379,6 +385,7 @@ BrOffice_Dev
 			DOWNLOADBITMAP	brobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			LOCALUSERDIR $ORIGIN/..
+			RELATIVE_PATHES_IN_DDF 1
 		}
 		active			1
 		compression		5
@@ -460,6 +467,7 @@ OpenOffice_woURE
             DOWNLOADSETUPICO    ooosetup.ico
             NATIVESERVICESURLPREFIX vnd.sun.star.expand:$OOO_BASE_DIR/program/
             JAVASERVICESURLPREFIX vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/
+            RELATIVE_PATHES_IN_DDF 1
         }
         active          1
         compression     5
