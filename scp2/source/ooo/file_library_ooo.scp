@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.265 $
+ *  $Revision: 1.266 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 13:37:59 $
+ *  last change: $Author: vg $ $Date: 2007-12-05 16:15:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1576,6 +1576,7 @@ End
 
 #if defined(WNT)
 #if defined(M1400)
+#if defined(PROF_EDITION)
 File gid_File_Lib_Msvcr80
     BIN_FILE_BODY;
     Styles = (PACKED, PATCH);
@@ -1588,9 +1589,11 @@ File gid_File_Lib_Msvcr80
 End
 #endif
 #endif
+#endif
 
 #if defined(WNT)
 #if defined(M1400)
+#if defined(PROF_EDITION)
 File gid_File_Lib_Msvcp80
     BIN_FILE_BODY;
     Styles = (PACKED, PATCH);
@@ -1603,9 +1606,11 @@ File gid_File_Lib_Msvcp80
 End
 #endif
 #endif
+#endif
 
 #if defined(WNT)
 #if defined(M1400)
+#if defined(PROF_EDITION)
 File gid_File_Lib_Msvcm80
     BIN_FILE_BODY;
     Styles = (PACKED, PATCH);
@@ -1618,9 +1623,11 @@ File gid_File_Lib_Msvcm80
 End
 #endif
 #endif
+#endif
 
 #if defined(WNT)
 #if defined(M1400)
+#if defined(PROF_EDITION)
 File gid_File_Msvcm80crt_Manifest
     BIN_FILE_BODY;
     Styles = (PACKED, PATCH);
@@ -1631,6 +1638,7 @@ File gid_File_Msvcm80crt_Manifest
     Name = "Microsoft.VC80.DebugCRT.manifest";
 #endif
 End
+#endif
 #endif
 #endif
 
