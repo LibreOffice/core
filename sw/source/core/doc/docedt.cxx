@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:34:32 $
+ *  last change: $Author: vg $ $Date: 2007-12-05 16:44:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2074,27 +2074,6 @@ uno::Reference< XHyphenatedWord >  SwDoc::Hyphenate(
     return aHyphArg.GetHyphWord();  // will be set by lcl_HyphenateNode
 }
 
-void ReplaceTabsStr( String& rStr, const String& rSrch, const String& rRepl )
-{
-    xub_StrLen nPos = 0;
-    while( STRING_NOTFOUND != ( nPos = rStr.Search( rSrch, nPos )) )
-    {
-        // wurde das escaped?
-        if( nPos && '\\' == rStr.GetChar( nPos-1 ))
-        {
-            // noch nicht am Ende ??
-            rStr.Erase( nPos-1, 1 );        // den \\ noch loeschen
-            if( nPos >= rStr.Len() )
-                break;
-        }
-        else
-        {
-            rStr.Erase( nPos, rSrch.Len() );
-            rStr.Insert( rRepl, nPos );
-            nPos = nPos + rRepl.Len();
-        }
-    }
-}
 
 sal_Bool lcl_GetTokenToParaBreak( String& rStr, String& rRet, sal_Bool bRegExpRplc )
 {
@@ -2158,22 +2137,6 @@ bool SwDoc::Replace( SwPaM& rPam, const String& rStr, bool bRegExpRplc )
         xub_StrLen nStt = pStt->nContent.GetIndex(),
                 nEnd = bOneNode ? pEnd->nContent.GetIndex()
                                 : pTxtNd->GetTxt().Len();
-        if( bRegExpRplc )       // regulaer suchen ??
-        {
-            String sFndStr( pTxtNd->GetTxt().Copy( nStt, nEnd - nStt ));
-
-//JP 31.03.99: was ist, wenn im gefundenem anderer Inhalt als Text ist,
-//              wie z.B. Rahmen, Felder, Fussnoten, ... ???
-//          Die aktuelle Implementierung entfernt diese Inhalte einfach.
-//          Eigentlich muss der Inhalt immer kopiert werden!
-            sFndStr.EraseAllChars( CH_TXTATR_BREAKWORD );
-            sFndStr.EraseAllChars( CH_TXTATR_INWORD );
-
-            String sTmp( String::CreateFromAscii(
-                                    RTL_CONSTASCII_STRINGPARAM( "\\t" )));
-            ReplaceTabsStr( sRepl, String( '&' ), sFndStr );
-            ReplaceTabsStr( sRepl, sTmp, String( '\t' ) );
-        }
 
         SwDataChanged aTmp( aDelPam, 0 );
 
