@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:29:56 $
+ *  last change: $Author: vg $ $Date: 2007-12-05 16:43:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@
 using namespace ::com::sun::star;
 using namespace util;
 
+String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam );
 
 String& lcl_CleanStr( const SwTxtNode& rNd, xub_StrLen nStart,
                       xub_StrLen& rEnde, SvULongs& rArr, String& rRet,
@@ -465,7 +466,12 @@ int SwFindParaText::Find( SwPaM* pCrsr, SwMoveFn fnMove,
             ((Ring*)pRegion)->MoveRingTo( &rCursor );
         }
 
-        rCursor.GetDoc()->Replace( *pCrsr, rSearchOpt.replaceString, bRegExp );
+        String *pRepl = bRegExp ? ReplaceBackReferences( rSearchOpt, pCrsr ) : 0;
+        if( pRepl )
+            rCursor.GetDoc()->Replace( *pCrsr, *pRepl, bRegExp );
+        else
+            rCursor.GetDoc()->Replace( *pCrsr, rSearchOpt.replaceString, bRegExp );
+        delete pRepl;
         rCursor.SaveTblBoxCntnt( pCrsr->GetPoint() );
 
         if( bRegExp )
@@ -519,5 +525,40 @@ ULONG SwCursor::Find( const SearchOptions& rSearchOpt,
     return nRet;
 }
 
+String *ReplaceBackReferences( const SearchOptions& rSearchOpt, SwPaM* pPam )
+{
+    String *pRet = 0;
+    if( pPam && pPam->HasMark() &&
+        SearchAlgorithms_REGEXP == rSearchOpt.algorithmType )
+    {
+        const SwCntntNode* pTxtNode = pPam->GetCntntNode( TRUE );
+        if( pTxtNode && pTxtNode->IsTxtNode() && pTxtNode == pPam->GetCntntNode( FALSE ) )
+        {
+            utl::TextSearch aSTxt( rSearchOpt );
+            String aStr( pPam->GetTxt() );
+            String aSearchStr( rSearchOpt.searchString );
+            String aReplaceStr( rSearchOpt.replaceString );
+             aStr.EraseAllChars( CH_TXTATR_BREAKWORD );
+             aStr.EraseAllChars( CH_TXTATR_INWORD );
+            xub_StrLen nStart = 0;
+            String sX( 'x' );
+            if( pPam->Start()->nContent > 0 )
+            {
+                aStr.Insert( sX, 0 );
+                ++nStart;
+            }
+            xub_StrLen nEnd = aStr.Len();
+            if( pPam->End()->nContent < (static_cast<const SwTxtNode*>(pTxtNode))->GetTxt().Len() )
+                aStr.Insert( sX );
+            SearchResult aResult;
+            if( aSTxt.SearchFrwrd( aStr, &nStart, &nEnd, &aResult ) )
+            {
+                aSTxt.ReplaceBackReferences( aReplaceStr, aStr, aResult );
+                pRet = new String( aReplaceStr );
+            }
+        }
+    }
+    return pRet;
+}
 
 
