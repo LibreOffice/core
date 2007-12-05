@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:52:23 $
+#   last change: $Author: vg $ $Date: 2007-12-05 16:16:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,10 @@ SCPDEFS+=-DBUILD_SPECIAL
 
 .IF "$(JAVANUMVER)" >= "000100040000"
 SCPDEFS+=-DINCLUDE_JAVA_ACCESSBRIDGE
+.ENDIF
+
+.IF "$(PROF_EDITION)"!=""
+SCPDEFS+=-DPROF_EDITION
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
@@ -284,3 +288,4 @@ $(ICUVERSION_DEPENDENT_FILES) : $(SOLARINCDIR)$/icuversion.mk
 .ENDIF
 
 $(ISOLANGVERSION_DEPENDENT_FILES) : $(SOLARINCDIR)$/i18npool/version.mk
+
