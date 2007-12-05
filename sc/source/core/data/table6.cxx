@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table6.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:33:33 $
+ *  last change: $Author: vg $ $Date: 2007-12-05 16:41:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,26 +62,6 @@
 
 //--------------------------------------------------------------------------
 
-void ScTable::ScReplaceTabsStr( String& rStr, const String& rSrch, const String& rRepl )
-            // von sw  (docedt.cxx kopiert, Namen geaendert)
-{
-    xub_StrLen nPos = 0;
-    while( STRING_NOTFOUND != ( nPos = rStr.Search( rSrch, nPos )) )
-    {
-        // wurde das escaped?
-        if( nPos && '\\' == rStr.GetChar(nPos-1) )
-        {
-            // noch nicht am Ende ??
-            rStr.Erase( nPos-1,1 );     // den \\ noch loeschen
-            if( nPos < rStr.Len() )
-                continue;
-            break;
-        }
-        rStr.Erase( nPos, rSrch.Len() );
-        rStr.Insert( rRepl, nPos );
-        nPos = sal::static_int_cast<xub_StrLen>( nPos + rRepl.Len() );
-    }
-}
 
 BOOL lcl_GetTextWithBreaks( const ScEditCell& rCell, ScDocument* pDoc, String& rVal )
 {
@@ -145,19 +125,19 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
         }
         xub_StrLen nStart = 0;
         xub_StrLen nEnd = aString.Len();
-
+        ::com::sun::star::util::SearchResult aSearchResult;
         if (pSearchText)
         {
             if ( bDoBack )
             {
                 xub_StrLen nTemp=nStart; nStart=nEnd; nEnd=nTemp;
-                bFound = (BOOL)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd));
+                bFound = (BOOL)(pSearchText->SearchBkwrd(aString, &nStart, &nEnd, &aSearchResult));
                 // change results to definition before 614:
                 --nEnd;
             }
             else
             {
-                bFound = (BOOL)(pSearchText->SearchFrwrd(aString, &nStart, &nEnd));
+                bFound = (BOOL)(pSearchText->SearchFrwrd(aString, &nStart, &nEnd, &aSearchResult));
                 // change results to definition before 614:
                 --nEnd;
             }
@@ -202,11 +182,8 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 if (rSearchItem.GetRegExp())
                 {
                     String sFndStr = aString.Copy(nStart, nEnd-nStart+1);
+                    pSearchText->ReplaceBackReferences( sReplStr, aString, aSearchResult );
                     aString.Erase(nStart, nEnd-nStart+1);
-                    ScReplaceTabsStr(sReplStr, '&', sFndStr );
-                    ScReplaceTabsStr(sReplStr,
-                                    String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("\\t")),
-                                    '\t' );
                     aString.Insert(sReplStr, nStart);
                 }
                 else
