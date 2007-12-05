@@ -4,9 +4,9 @@
 #
 #   $RCSfile: archivefiles.pm,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2007-10-08 12:42:15 $
+#   last change: $Author: vg $ $Date: 2007-12-05 17:36:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -318,6 +318,8 @@ sub resolving_archive_flag
                             $newfile{'destination'} = $destination . $zipname;
                             $newfile{'sourcepath'} = $unzipdir . $zipname;
                             $newfile{'zipfilename'} = $onefile->{'Name'};
+                            $newfile{'zipfilesource'} = $onefile->{'sourcepath'};
+                            $newfile{'zipfiledestination'} = $onefile->{'destination'};
 
                             if (( $use_internal_rights ) && ( ! $installer::globals::iswin ))
                             {
