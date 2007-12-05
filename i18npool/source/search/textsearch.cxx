@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:23:23 $
+ *  last change: $Author: vg $ $Date: 2007-12-05 16:45:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -756,38 +756,38 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
             throw(RuntimeException)
 {
     SearchResult aRet;
-    sal_Int32 nOffset = 0;
     aRet.subRegExpressions = 0;
     OUString aStr( searchStr );
 
     bool bSearchInSel = (0 != (( SearchFlags::REG_NOT_BEGINOFLINE |
                     SearchFlags::REG_NOT_ENDOFLINE ) & aSrchPara.searchFlag ));
 
-    // search only in the subString
-    if (bSearchInSel)
-        aStr = aStr.copy(startPos, endPos - startPos);
-
-    if ( !bSearchInSel && startPos )
-        nOffset = startPos;
-
-    pRegExp->set_line(aStr.getStr(), aStr.getLength());
+    pRegExp->set_line(aStr.getStr(), bSearchInSel ? endPos : aStr.getLength());
 
     struct re_registers regs;
 
     // Clear structure
     memset((void *)&regs, 0, sizeof(struct re_registers));
-    if ( ! pRegExp->re_search(&regs, nOffset) )
+    if ( ! pRegExp->re_search(&regs, startPos) )
     {
         if( regs.num_of_match > 0 &&
                 (regs.start[0] != -1 && regs.end[0] != -1) )
         {
-            aRet.subRegExpressions = 1;
-            aRet.startOffset.realloc(1);
-            aRet.endOffset.realloc(1);
+            aRet.startOffset.realloc(regs.num_of_match);
+            aRet.endOffset.realloc(regs.num_of_match);
 
-            nOffset = bSearchInSel ? startPos : 0;
-            aRet.startOffset[0] = regs.start[0] + nOffset;
-            aRet.endOffset[0] = regs.end[0] + nOffset;
+            sal_Int32 i = 0, j = 0;
+            while( j < regs.num_of_match )
+            {
+                if( regs.start[j] != -1 && regs.end[j] != -1 )
+                {
+                    aRet.startOffset[i] = regs.start[j];
+                    aRet.endOffset[i] = regs.end[j];
+                    ++i;
+                }
+                ++j;
+            }
+            aRet.subRegExpressions = i;
         }
         if ( regs.num_regs > 0 )
         {
@@ -818,12 +818,18 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
     bool bSearchInSel = (0 != (( SearchFlags::REG_NOT_BEGINOFLINE |
                     SearchFlags::REG_NOT_ENDOFLINE ) & aSrchPara.searchFlag ));
 
-    // search only in the subString
-    if( bSearchInSel )
-        aStr = aStr.copy( nStrEnde, startPos - nStrEnde );
-
     if( startPos )
         nOffset = startPos - 1;
+
+    // search only in the subString
+    if( bSearchInSel && nStrEnde )
+    {
+        aStr = aStr.copy( nStrEnde, aStr.getLength() - nStrEnde );
+        if( nOffset > nStrEnde )
+            nOffset = nOffset - nStrEnde;
+        else
+            nOffset = 0;
+    }
 
     // set the length to negative for reverse search
     pRegExp->set_line( aStr.getStr(), -(aStr.getLength()) );
@@ -836,15 +842,22 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
         if( regs.num_of_match > 0 &&
                 (regs.start[0] != -1 && regs.end[0] != -1) )
         {
-            aRet.subRegExpressions = 1;
-            aRet.startOffset.realloc(1);
-            aRet.endOffset.realloc(1);
-            //      aRet.startOffset[0] = regs.start[0];
-            //      aRet.endOffset[0] = regs.end[0];
-
             nOffset = bSearchInSel ? nStrEnde : 0;
-            aRet.startOffset[0] = regs.end[0] + nOffset;
-            aRet.endOffset[0] = regs.start[0] + nOffset;
+            aRet.startOffset.realloc(regs.num_of_match);
+            aRet.endOffset.realloc(regs.num_of_match);
+
+            sal_Int32 i = 0, j = 0;
+            while( j < regs.num_of_match )
+            {
+                if( regs.start[j] != -1 && regs.end[j] != -1 )
+                {
+                    aRet.startOffset[i] = regs.end[j] + nOffset;
+                    aRet.endOffset[i] = regs.start[j] + nOffset;
+                    ++i;
+                }
+                ++j;
+            }
+            aRet.subRegExpressions = i;
         }
         if ( regs.num_regs > 0 )
         {
