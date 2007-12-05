@@ -1,0 +1,3 @@
+mkdir: %_DEST%\inc%_EXT%\xpdf
+..\%__SRC%\bin\xpdfimport.* %_DEST%\bin%_EXT%\xpdfimport.*
+..\%__SRC%\bin\xpdfimport   %_DEST%\bin%_EXT%\xpdfimport
