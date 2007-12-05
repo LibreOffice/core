@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findattr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:29:22 $
+ *  last change: $Author: vg $ $Date: 2007-12-05 16:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1253,7 +1253,12 @@ int SwFindParaAttr::Find( SwPaM* pCrsr, SwMoveFn fnMove, const SwPaM* pRegion,
             ((Ring*)pRegion)->MoveRingTo( &rCursor );
         }
 
-        rCursor.GetDoc()->Replace( *pCrsr, pSearchOpt->replaceString, bRegExp );
+        String *pRepl = bRegExp ? ReplaceBackReferences( *pSearchOpt, pCrsr ) : 0;
+        if( pRepl )
+            rCursor.GetDoc()->Replace( *pCrsr, *pRepl, bRegExp );
+        else
+            rCursor.GetDoc()->Replace( *pCrsr, pSearchOpt->replaceString, bRegExp );
+        delete pRepl;
         rCursor.SaveTblBoxCntnt( pCrsr->GetPoint() );
 
         if( bRegExp )
