@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 17:16:54 $
+ *  last change: $Author: vg $ $Date: 2007-12-05 16:44:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,7 +322,17 @@ void SwView::ExecSearch(SfxRequest& rReq, BOOL bNoMessage)
                         BOOL bBack = pSrchItem->GetBackward();
                         if (bBack)
                             pWrtShell->Push();
+                        String aReplace( pSrchItem->GetReplaceString() );
+                        SearchOptions aTmp( pSrchItem->GetSearchOptions() );
+                        String *pBackRef = ReplaceBackReferences( aTmp, pWrtShell->GetCrsr() );
+                        if( pBackRef )
+                            pSrchItem->SetReplaceString( *pBackRef );
                         Replace();
+                        if( pBackRef )
+                        {
+                            pSrchItem->SetReplaceString( aReplace );
+                            delete pBackRef;
+                        }
                         if (bBack)
                         {
                             pWrtShell->Pop();
