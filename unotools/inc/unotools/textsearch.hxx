@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:02:47 $
+ *  last change: $Author: vg $ $Date: 2007-12-05 16:41:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,15 +165,15 @@ public:
 
     /* search in the (selected) text the search string:
         rScrTxt - the text, in in which we search
-        pStart  - start position for the saerch
-        pEnde   - end postion for the search
+        pStart  - start position for the search
+        pEnde   - end position for the search
 
         RETURN values   ==  TRUE: something is found
                         - pStart start pos of the found text,
                         - pStart end pos of the found text,
-                        - pSrchResult - the search reult with all found
-                             positons. Is only filled with more positions
-                             if the regular expression handles goups.
+                        - pSrchResult - the search result with all found
+                             positions. Is only filled with more positions
+                             if the regular expression handles groups.
 
                         == FALSE: nothing found, pStart,pEnde unchanged.
 
@@ -191,6 +191,10 @@ public:
 
     void SetLocale( const ::com::sun::star::util::SearchOptions& rOpt,
                     const ::com::sun::star::lang::Locale& rLocale );
+
+    /* replace back references in the replace string by the sub expressions from the search result */
+    void ReplaceBackReferences( String& rReplaceStr, const String &rStr, const ::com::sun::star::util::SearchResult& rResult );
+
 };
 
 // ............................................................................
