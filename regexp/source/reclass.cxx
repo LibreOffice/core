@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reclass.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:05:31 $
+ *  last change: $Author: vg $ $Date: 2007-12-05 16:44:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2236,13 +2236,13 @@ Regexpr::re_match2(struct re_registers *regs, sal_Int32 pos, sal_Int32 range)
 
     /* Go through the first `min (num_regs, regs->num_regs)'
        registers, since that is all we initialized.  */
-    for (mcnt = regs->num_of_match; (unsigned) mcnt < MIN(num_regs, regs->num_regs);
+        for (mcnt = regs->num_of_match; (unsigned) mcnt < MIN(num_regs, regs->num_regs);
          mcnt++) {
-      if (REG_UNSET(regstart[mcnt]) || REG_UNSET(regend[mcnt]))
-        regs->start[mcnt] = regs->end[mcnt] = -1;
-      else {
-        regs->start[mcnt] = (sal_Int32) POINTER_TO_OFFSET(regstart[mcnt]);
-        regs->end[mcnt] = (sal_Int32) POINTER_TO_OFFSET(regend[mcnt]);
+      regs->start[mcnt] = regs->end[mcnt] = -1;
+      if( !(REG_UNSET(regstart[mcnt]) || REG_UNSET(regend[mcnt])) ) {
+        regs->start[regs->num_of_match] = (sal_Int32) POINTER_TO_OFFSET(regstart[mcnt]);
+        regs->end[regs->num_of_match] = (sal_Int32) POINTER_TO_OFFSET(regend[mcnt]);
+            regs->num_of_match++;
       }
     }
 
