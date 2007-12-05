@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.97 $
+#   $Revision: 1.98 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 16:17:46 $
+#   last change: $Author: vg $ $Date: 2007-12-05 17:35:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -2130,6 +2130,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if ( $installer::globals::debug ) { installer::logger::debuginfo("\nEnd of part 2b: The Windows platform\n"); }
 
+    # saving file_info file for later analysis
+    my $speciallogfilename = "fileinfo_" . $installer::globals::product . "\.log";
+    installer::files::save_array_of_hashes($loggingdir . $speciallogfilename, $filesinproductlanguageresolvedarrayref);
 
 }   # end of iteration for one language group
 
