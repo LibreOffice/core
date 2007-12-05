@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:46:42 $
+ *  last change: $Author: vg $ $Date: 2007-12-05 16:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,7 +249,7 @@ int TextSearch::SearchFrwrd( const String & rStr, xub_StrLen* pStart,
         {
             SearchResult aRet( xTextSearch->searchForward(
                                                     rStr, *pStart, *pEnde ));
-            if( 1 == aRet.subRegExpressions )
+            if( aRet.subRegExpressions > 0 )
             {
                 nRet = 1;
                 // the XTextsearch returns in startOffset the higher position
@@ -300,6 +300,103 @@ int TextSearch::SearchBkwrd( const String & rStr, xub_StrLen* pStart,
     }
     return nRet;
 }
+
+void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr, const SearchResult& rResult )
+{
+    if( rResult.subRegExpressions > 0 )
+    {
+        String sTab( '\t' );
+        sal_Unicode sSrchChrs[] = {'\\', '&', '$', 0};
+        String sTmp;
+        xub_StrLen nPos = 0;
+        sal_Unicode sFndChar;
+        while( STRING_NOTFOUND != ( nPos = rReplaceStr.SearchChar( sSrchChrs, nPos )) )
+        {
+            if( rReplaceStr.GetChar( nPos ) == '&')
+            {
+                USHORT nStart = (USHORT)(rResult.startOffset[0]);
+                USHORT nLength = (USHORT)(rResult.endOffset[0] - rResult.startOffset[0]);
+                rReplaceStr.Erase( nPos, 1 );   // delete ampersand
+                // replace by found string
+                rReplaceStr.Insert( rStr, nStart, nLength, nPos );
+                // jump over
+                nPos = nPos + nLength;
+            }
+            else if( rReplaceStr.GetChar( nPos ) == '$')
+            {
+                if( nPos + 1 < rReplaceStr.Len())
+                {
+                    sFndChar = rReplaceStr.GetChar( nPos + 1 );
+                    switch(sFndChar)
+                    {   // placeholder for a backward reference?
+                        case '0':
+                        case '1':
+                        case '2':
+                        case '3':
+                        case '4':
+                        case '5':
+                        case '6':
+                        case '7':
+                        case '8':
+                        case '9':
+                        {
+                            rReplaceStr.Erase( nPos, 2 );   // delete both
+                            int i = sFndChar - '0'; // index
+                            if(i < rResult.subRegExpressions)
+                            {
+                                USHORT nSttReg = (USHORT)(rResult.startOffset[i]);
+                                USHORT nRegLen = (USHORT)(rResult.endOffset[i]);
+                                if( nRegLen > nSttReg )
+                                    nRegLen = nRegLen - nSttReg;
+                                else
+                                {
+                                    nRegLen = nSttReg - nRegLen;
+                                    nSttReg = (USHORT)(rResult.endOffset[i]);
+                                }
+                                // Copy reference from found string
+                                sTmp = rStr.Copy((USHORT)nSttReg, (USHORT)nRegLen);
+                                // insert
+                                rReplaceStr.Insert( sTmp, nPos );
+                                // and step over
+                                nPos = nPos + sTmp.Len();
+                            }
+                        }
+                        break;
+                        default:
+                            nPos += 2; // leave both chars unchanged
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                // at least another character?
+                if( nPos + 1 < rReplaceStr.Len())
+                {
+                    sFndChar = rReplaceStr.GetChar( nPos + 1 );
+                    switch(sFndChar)
+                    {
+                        case '\\':
+                        case '&':
+                        case '$':
+                            rReplaceStr.Erase( nPos, 1 );
+                            nPos++;
+                        break;
+                        case 't':
+                            rReplaceStr.Erase( nPos, 2 ); // delete both
+                            rReplaceStr.Insert( sTab, nPos ); // insert tabulator
+                            nPos++; // step over
+                        break;
+                        default:
+                            nPos += 2; // ignore both characters
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 #if defined _MSC_VER
 #pragma optimize("", on)
