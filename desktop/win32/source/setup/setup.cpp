@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setup.cpp,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: gm $ $Date: 2007-05-10 11:08:28 $
+ *  last change: $Author: vg $ $Date: 2007-12-05 17:38:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@
 
 #define ERROR_SHOW_USAGE      -2
 
+#define PARAM_SETUP_USED    TEXT( " SETUP_USED=1 " )
 #define PARAM_PACKAGE       TEXT( "/I " )
 #define PARAM_ADMIN         TEXT( "/A " )
 #define PARAM_TRANSFORM     TEXT( " TRANSFORMS=" )
@@ -845,7 +846,8 @@ boolean SetupAppX::Install( long nLanguage )
         return false;
     }
 
-    int nParLen = 0;
+    // we will always use the parameter setup used
+    int nParLen = lstrlen( PARAM_SETUP_USED );
 
     if ( m_pAdvertise )
         nParLen += lstrlen( m_pAdvertise ) + 1;     // one for the space
@@ -868,12 +870,14 @@ boolean SetupAppX::Install( long nLanguage )
 
     TCHAR *pParams = new TCHAR[ nParLen ];
 
+    StringCchCopy( pParams, nParLen, PARAM_SETUP_USED );
+
     if ( m_pAdvertise )
-        StringCchCopy( pParams, nParLen, m_pAdvertise );
+        StringCchCat( pParams, nParLen, m_pAdvertise );
     else if ( m_bAdministrative )
-        StringCchCopy( pParams, nParLen, PARAM_ADMIN );
+        StringCchCat( pParams, nParLen, PARAM_ADMIN );
     else
-        StringCchCopy( pParams, nParLen, PARAM_PACKAGE );
+        StringCchCat( pParams, nParLen, PARAM_PACKAGE );
 
     StringCchCat( pParams, nParLen, TEXT( "\"" ) );
     StringCchCat( pParams, nParLen, pDataBasePath );
