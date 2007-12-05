@@ -50,8 +50,21 @@ if [ "x$SEARCHTOOLBARRPM" != "x" ]; then
   SEARCHTOOLBARINSTALLED=`grep searchtoolbar ${RPMLIST}`
 
   if [ "x$SEARCHTOOLBARINSTALLED" == "x" ]; then
-    # Install the online update rpm
+    # Install the search toolbar rpm
     RPMLIST="$RPMLIST $SEARCHTOOLBARRPM"
+  fi
+fi
+
+# Check, if kde-integration rpm is available
+KDERPM=`ls $BASEDIR/RPMS/*.rpm | grep kde-integration`
+
+if [ "x$KDERPM" != "x" ]; then
+  # Check, that $RPMLIST does not contain kde integration rpm (then it is already installed)
+  KDERPMINSTALLED=`grep kde-integration ${RPMLIST}`
+
+  if [ "x$KDERPMINSTALLED" == "x" ]; then
+    # Install the kde integration rpm
+    RPMLIST="$RPMLIST $KDERPM"
   fi
 fi
 
