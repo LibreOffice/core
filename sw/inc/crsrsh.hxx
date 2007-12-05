@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:27:25 $
+ *  last change: $Author: vg $ $Date: 2007-12-05 16:43:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,6 +179,10 @@ struct SwContentAtPos
 // ReturnWerte von SetCrsr (werden verodert)
 const int CRSR_POSOLD = 0x01,   // Cursor bleibt an alter Doc-Position
           CRSR_POSCHG = 0x02;   // Position vom Layout veraendert
+
+// Helperfunction to resolve backward references in regular expressions
+
+String *ReplaceBackReferences( const com::sun::star::util::SearchOptions& rSearchOpt, SwPaM* pPam );
 
 // die Cursor - Shell
 class SW_DLLPUBLIC SwCrsrShell : public ViewShell, public SwModify
