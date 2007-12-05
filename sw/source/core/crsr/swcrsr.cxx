@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:31:03 $
+ *  last change: $Author: vg $ $Date: 2007-12-05 16:44:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -791,6 +791,8 @@ ULONG lcl_FindSelection( SwFindParas& rParas, SwCursor* pCurCrsr,
         if( nCrsrCnt && !bIsUnoCrsr )
             pPHdl = new _PercentHdl( 0, nCrsrCnt, pDoc->GetDocShell() );
     }
+    else
+        pSaveCrsr = (SwPaM*)pSaveCrsr->GetPrev();
 
     do {
         aRegion.SetMark();
