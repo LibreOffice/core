@@ -407,8 +407,11 @@ $(SHL1TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
 .IF "$(SHL1NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL1TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL1TARGETN)
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -423,7 +426,7 @@ $(SHL1TARGETN) : \
 .IF "$(SHL1NOCHECK)"==""
     -$(RM) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
     $(RENAME) $(SHL1TARGETN) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL1TARGETN:d)check_$(SHL1TARGETN:f)
 .ENDIF				# "$(SHL1NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -854,8 +857,11 @@ $(SHL2TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
 .IF "$(SHL2NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL2TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL2TARGETN)
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -870,7 +876,7 @@ $(SHL2TARGETN) : \
 .IF "$(SHL2NOCHECK)"==""
     -$(RM) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
     $(RENAME) $(SHL2TARGETN) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL2TARGETN:d)check_$(SHL2TARGETN:f)
 .ENDIF				# "$(SHL2NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -1301,8 +1307,11 @@ $(SHL3TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
 .IF "$(SHL3NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL3TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL3TARGETN)
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -1317,7 +1326,7 @@ $(SHL3TARGETN) : \
 .IF "$(SHL3NOCHECK)"==""
     -$(RM) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
     $(RENAME) $(SHL3TARGETN) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL3TARGETN:d)check_$(SHL3TARGETN:f)
 .ENDIF				# "$(SHL3NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -1748,8 +1757,11 @@ $(SHL4TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
 .IF "$(SHL4NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL4TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL4TARGETN)
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -1764,7 +1776,7 @@ $(SHL4TARGETN) : \
 .IF "$(SHL4NOCHECK)"==""
     -$(RM) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
     $(RENAME) $(SHL4TARGETN) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL4TARGETN:d)check_$(SHL4TARGETN:f)
 .ENDIF				# "$(SHL4NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -2195,8 +2207,11 @@ $(SHL5TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
 .IF "$(SHL5NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL5TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL5TARGETN)
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -2211,7 +2226,7 @@ $(SHL5TARGETN) : \
 .IF "$(SHL5NOCHECK)"==""
     -$(RM) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
     $(RENAME) $(SHL5TARGETN) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL5TARGETN:d)check_$(SHL5TARGETN:f)
 .ENDIF				# "$(SHL5NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -2642,8 +2657,11 @@ $(SHL6TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
 .IF "$(SHL6NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL6TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL6TARGETN)
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -2658,7 +2676,7 @@ $(SHL6TARGETN) : \
 .IF "$(SHL6NOCHECK)"==""
     -$(RM) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
     $(RENAME) $(SHL6TARGETN) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL6TARGETN:d)check_$(SHL6TARGETN:f)
 .ENDIF				# "$(SHL6NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -3089,8 +3107,11 @@ $(SHL7TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
 .IF "$(SHL7NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL7TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL7TARGETN)
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -3105,7 +3126,7 @@ $(SHL7TARGETN) : \
 .IF "$(SHL7NOCHECK)"==""
     -$(RM) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
     $(RENAME) $(SHL7TARGETN) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL7TARGETN:d)check_$(SHL7TARGETN:f)
 .ENDIF				# "$(SHL7NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -3536,8 +3557,11 @@ $(SHL8TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
 .IF "$(SHL8NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL8TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL8TARGETN)
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -3552,7 +3576,7 @@ $(SHL8TARGETN) : \
 .IF "$(SHL8NOCHECK)"==""
     -$(RM) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
     $(RENAME) $(SHL8TARGETN) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL8TARGETN:d)check_$(SHL8TARGETN:f)
 .ENDIF				# "$(SHL8NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -3983,8 +4007,11 @@ $(SHL9TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
 .IF "$(SHL9NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL9TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL9TARGETN)
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -3999,7 +4026,7 @@ $(SHL9TARGETN) : \
 .IF "$(SHL9NOCHECK)"==""
     -$(RM) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
     $(RENAME) $(SHL9TARGETN) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL9TARGETN:d)check_$(SHL9TARGETN:f)
 .ENDIF				# "$(SHL9NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
@@ -4430,8 +4457,11 @@ $(SHL10TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
 .IF "$(SHL10NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL10TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL10TARGETN)
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -4446,7 +4476,7 @@ $(SHL10TARGETN) : \
 .IF "$(SHL10NOCHECK)"==""
     -$(RM) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
     $(RENAME) $(SHL10TARGETN) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL10TARGETN:d)check_$(SHL10TARGETN:f)
 .ENDIF				# "$(SHL10NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
