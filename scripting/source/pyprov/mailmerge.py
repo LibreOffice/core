@@ -36,6 +36,7 @@ from com.sun.star.mail import SendMailMessageFailedException
 from email.MIMEBase import MIMEBase
 from email.Message import Message
 from email import Encoders
+from email.Header import Header
 from email.MIMEMultipart import MIMEMultipart
 from email.Utils import formatdate
 
@@ -115,13 +116,15 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		if dbg:
 			print >> sys.stderr, "PyMailSMPTService sendMailMessage"
 		recipients = xMailMessage.getRecipients()
-		sender = xMailMessage.SenderAddress
+		sendermail = xMailMessage.SenderAddress
+                sendername = xMailMessage.SenderName
 		subject = xMailMessage.Subject
 		ccrecipients = xMailMessage.getCcRecipients()
 		bccrecipients = xMailMessage.getBccRecipients()
 		if dbg:
 			print >> sys.stderr, "PyMailSMPTService subject", subject
-			print >> sys.stderr, "PyMailSMPTService from", sender
+			print >> sys.stderr, "PyMailSMPTService from", sendername.encode('utf-8')
+                        print >> sys.stderr, "PyMailSMTPService from", sendermail
 			print >> sys.stderr, "PyMailSMPTService send to", recipients
 
 		attachments = xMailMessage.getAttachments()
@@ -146,8 +149,10 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		else:
 			msg = textmsg
 
-		msg['Subject'] = subject
-		msg['From'] = sender
+		hdr = Header(sendername, 'utf-8')
+                hdr.append('<'+sendermail+'>','us-ascii')
+                msg['Subject'] = subject
+		msg['From'] = hdr
 		msg['To'] = COMMASPACE.join(recipients)
 		if len(ccrecipients):
 			msg['Cc'] = COMMASPACE.join(ccrecipients)
@@ -185,7 +190,7 @@ class PyMailSMTPService(unohelper.Base, XSmtpService):
 		if dbg:
 			print >> sys.stderr, "PyMailSMPTService recipients are", truerecipients
 
-		self.server.sendmail(sender, truerecipients, msg.as_string())
+		self.server.sendmail(sendermail, truerecipients, msg.as_string())
 
 class PyMailIMAPService(unohelper.Base, XMailService):
 	def __init__( self, ctx ):
