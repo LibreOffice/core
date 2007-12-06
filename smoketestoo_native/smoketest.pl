@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-17 13:41:16 $
+#   last change: $Author: vg $ $Date: 2007-12-06 17:17:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -209,6 +209,9 @@ else {
     $PRODUCT="StarOffice";
 }
 
+if ($ENV{PKGFORMAT} eq "installed") {
+    $packpackage = $ENV{PKGFORMAT}; # take it for all environments
+}
 $StandDir = $ENV{SOLARSRC} . $PathSeparator;
 $SHIP = defined $ENV{SHIPDRIVE} ? $ENV{SHIPDRIVE} . $PathSeparator : "shipdrive_not_set";
 $PORDUCT = "$SHIP$ENV{INPATH}$PathSeparator$PRODUCT$PathSeparator$packpackage$PathSeparator";
@@ -257,7 +260,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.26 $ ';
+$id_str = ' $Revision: 1.27 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -489,7 +492,23 @@ sub doTest {
 sub doInstall {
     my ($installsetpath, $dest_installdir) = @_;
     my ($DirArray, $mask, $file, $Command, $optdir, $rpmdir, $system, $mach, $basedir, $output_ref, $olddir, $newdir);
-    if (($gui eq "WNT") or ($gui eq $cygwin)) {
+    if ($ENV{PKGFORMAT} eq "installed") {
+                createPath ($dest_installdir, $error_setup);
+                $Command = "$COPY_DIR \"$installsetpath\" \"$dest_installdir\"";
+            execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
+        @DirArray = ();
+        getSubDirsFullPath ($dest_installdir, \@DirArray);
+        if ($#DirArray == 0) {
+            $basedir = $DirArray[0] . $PathSeparator;
+        }
+        elsif ($#DirArray == -1) {
+            print_error ($error_setup, $show_Message);
+        }
+        else {
+            $basedir = $dest_installdir;
+        }
+    }
+    elsif (($gui eq "WNT") or ($gui eq $cygwin)) {
         $mask = "\\.msi\$";
         getSubFiles ("$installsetpath", \@DirArray, $mask);
         if ($#DirArray == -1) {
