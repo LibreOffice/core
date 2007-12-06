@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.100 $
+#   $Revision: 1.101 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 13:07:51 $
+#   last change: $Author: vg $ $Date: 2007-12-06 16:46:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -379,6 +379,9 @@ SHL4STDLIBS+=\
 
 # KDE plugin
 .IF "$(ENABLE_KDE)" != ""
+.IF "$(KDE_ROOT)"!=""
+EXTRALIBPATHS+=-L$(KDE_ROOT)$/lib
+.ENDIF
 LIB5TARGET=$(SLB)$/ikde_plug_
 LIB5FILES=$(SLB)$/kdeplug.lib
 SHL5TARGET=vclplug_kde$(UPD)$(DLLPOSTFIX)
