@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:59:16 $
+#   last change: $Author: vg $ $Date: 2007-12-06 16:45:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,10 @@ ENABLE_EXCEPTIONS=TRUE
 .IF "$(ENABLE_KAB)" == "TRUE"
 
 CFLAGS+=$(KDE_CFLAGS)
+
+.IF "$(KDE_ROOT)"!=""
+EXTRALIBPATHS+=-L$(KDE_ROOT)$/lib
+.ENDIF
 
 # === KAB base library ==========================
 
