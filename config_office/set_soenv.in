@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.164 $
-# Date:        $Date: 2007-11-26 18:04:00 $
+# Version:     $Revision: 1.165 $
+# Date:        $Date: 2007-12-06 17:43:37 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1926,7 +1926,6 @@ ToFile( "SYSTEM_EXPAT",      "@SYSTEM_EXPAT@",     "e" );
 ToFile( "SYSTEM_DB",         "@SYSTEM_DB@",        "e" );
 ToFile( "DB_VERSION",        "@DB_VERSION@",       "e" );
 ToFile( "DB_INCLUDES",       "@DB_INCLUDES@",      "e" );
-ToFile( "DB_JAR",            "@DB_JAR@",           "e" );
 ToFile( "SYSTEM_HSQLDB",     "@SYSTEM_HSQLDB@",    "e" );
 ToFile( "HSQLDB_JAR",        "@HSQLDB_JAR@",       "e" );
 ToFile( "SYSTEM_BSH",        "@SYSTEM_BSH@",       "e" );
