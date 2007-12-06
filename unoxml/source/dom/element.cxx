@@ -4,9 +4,9 @@
  *
  *  $RCSfile: element.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:17:50 $
+ *  last change: $Author: vg $ $Date: 2007-12-06 10:59:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,7 +199,7 @@ namespace DOM
     Removes an attribute by name.
     */
     void CElement::removeAttribute(const OUString& name)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         xmlChar *xName = (xmlChar*)OUStringToOString(name, RTL_TEXTENCODING_UTF8).getStr();
         if (m_aNodePtr != NULL) {
@@ -211,7 +211,7 @@ namespace DOM
     Removes an attribute by local name and namespace URI.
     */
     void CElement::removeAttributeNS(const OUString& namespaceURI, const OUString& localName)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         OString o1 = OUStringToOString(localName, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
@@ -228,7 +228,7 @@ namespace DOM
     Removes the specified attribute node.
     */
     Reference< XAttr > CElement::removeAttributeNode(const Reference< XAttr >& oldAttr)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         Reference< XAttr > aAttr;
         if(m_aNodePtr != NULL)
@@ -326,7 +326,7 @@ namespace DOM
     }
 
     Reference< XAttr > CElement::setAttributeNode(const Reference< XAttr >& newAttr)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         return _setAttributeNode(newAttr, sal_False);
     }
@@ -335,7 +335,7 @@ namespace DOM
     Adds a new attribute.
     */
     Reference< XAttr > CElement::setAttributeNodeNS(const Reference< XAttr >& newAttr)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         return _setAttributeNode(newAttr, sal_True);
     }
@@ -344,7 +344,7 @@ namespace DOM
     Adds a new attribute.
     */
     void CElement::setAttribute(const OUString& name, const OUString& value)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         OString o1 = OUStringToOString(name, RTL_TEXTENCODING_UTF8);
         xmlChar *xName = (xmlChar*)o1.getStr();
@@ -384,7 +384,7 @@ namespace DOM
     */
     void CElement::setAttributeNS(
             const OUString& namespaceURI, const OUString& qualifiedName, const OUString& value)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         if (namespaceURI.getLength() == 0) throw RuntimeException();
 
@@ -478,7 +478,7 @@ namespace DOM
         return OUString();
     }
 
-    void SAL_CALL CElement::setElementName(const OUString& aName) throw (DOMException)
+    void SAL_CALL CElement::setElementName(const OUString& aName) throw (RuntimeException, DOMException)
     {
         if (aName.getLength() > 0 && aName.indexOf(OUString::createFromAscii(":")) < 0)
         {
