@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:34:43 $
+ *  last change: $Author: vg $ $Date: 2007-12-06 11:04:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1281,7 +1281,7 @@ IMPL_LINK(SwMailMergeOutputPage, SendDocumentsHdl_Impl, PushButton*, pButton)
         else*/
         {
             uno::Sequence< beans::PropertyValue > aFilterValues(MM_DOCTYPE_TEXT == nDocType ? 2 : 1);
-            beans::PropertyValue* pFilterValues = aValues.getArray();
+            beans::PropertyValue* pFilterValues = aFilterValues.getArray();
             pFilterValues[0].Name = C2U("FilterName");
             pFilterValues[0].Value <<= ::rtl::OUString(pSfxFlt->GetFilterName());
             if(MM_DOCTYPE_TEXT == nDocType)
