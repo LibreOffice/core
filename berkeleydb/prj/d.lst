@@ -5,17 +5,11 @@ mkdir: %_DEST%\inc%_EXT%\berkeleydb
 ..\%__SRC%\inc\db.h %_DEST%\inc%_EXT%\berkeleydb\db.h
 
 ..\%__SRC%\lib\libdb42.lib %_DEST%\lib%_EXT%\libdb42.lib
-..\%__SRC%\lib\libdb_java42.lib %_DEST%\lib%_EXT%\libdb_java42.lib
 
 ..\%__SRC%\lib\libdb-4.2.so %_DEST%\lib%_EXT%\libdb-4.2.so
-..\%__SRC%\lib\libdb_java-4.2.so %_DEST%\lib%_EXT%\libdb_java-4.2.so
 
 ..\%__SRC%\lib\libdb-4.2.dylib %_DEST%\lib%_EXT%\libdb-4.2.dylib
-..\%__SRC%\lib\libdb_java-4.2.jnilib %_DEST%\lib%_EXT%\libdb_java-4.2.jnilib
 
 ..\%__SRC%\bin\libdb42.dll %_DEST%\bin%_EXT%\libdb42.dll
-..\%__SRC%\bin\libdb_java42.dll %_DEST%\bin%_EXT%\libdb_java42.dll
 ..\%__SRC%\bin\libdb_cxx42.dll %_DEST%\bin%_EXT%\libdb_cxx42.dll
 
-..\%__SRC%\bin\db.jar %_DEST%\bin%_EXT%\db.jar
-..\%__SRC%\class\db.jar %_DEST%\bin%_EXT%\db.jar
