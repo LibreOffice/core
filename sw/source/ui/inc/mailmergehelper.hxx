@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergehelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:19:54 $
+ *  last change: $Author: vg $ $Date: 2007-12-06 11:05:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,6 +304,7 @@ class SwMailMessage :
         public SwMutexBase,
         public cppu::WeakComponentImplHelper1< ::com::sun::star::mail::XMailMessage >
 {
+    ::rtl::OUString                                                                         m_sSenderName;
     ::rtl::OUString                                                                         m_sSenderAddress;
     ::rtl::OUString                                                                         m_sReplyToAddress;
     ::rtl::OUString                                                                         m_sSubject;
@@ -321,6 +322,7 @@ public:
     ~SwMailMessage();
 
     // Attributes
+    virtual ::rtl::OUString SAL_CALL    getSenderName() throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL    getSenderAddress() throw (::com::sun::star::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL    getReplyToAddress() throw (::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL               setReplyToAddress( const ::rtl::OUString& _replytoaddress ) throw (::com::sun::star::uno::RuntimeException);
@@ -347,6 +349,8 @@ public:
                                             throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::mail::MailAttachment > SAL_CALL
                                         getAttachments(  ) throw (::com::sun::star::uno::RuntimeException);
+    void                                SetSenderName(const ::rtl::OUString& rSenderName)
+                                                {m_sSenderName = rSenderName;}
     void                                SetSenderAddress(const ::rtl::OUString& rSenderAddress)
                                                 {m_sSenderAddress = rSenderAddress;}
 };
