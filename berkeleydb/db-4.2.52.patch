@@ -1,0 +1,1981 @@
+*** misc/db-4.2.52.NC/btree/bt_put.c	Mon Nov 17 20:58:20 2003
+--- misc/build/db-4.2.52.NC/btree/bt_put.c	Fri Sep 28 11:12:11 2007
+***************
+*** 702,708 ****
+  
+  	/* Sum up all the data items. */
+  	for (cnt = 0, first = indx;
+! 	    inp[first] == inp[indx] && indx < NUM_ENT(h);
+  	    ++cnt, indx += P_INDX) {
+  		bk = GET_BKEYDATA(dbp, h, indx + O_INDX);
+  		sz += B_TYPE(bk->type) == B_KEYDATA ?
+--- 702,708 ----
+  
+  	/* Sum up all the data items. */
+  	for (cnt = 0, first = indx;
+! 	    indx < NUM_ENT(h) && inp[first] == inp[indx];
+  	    ++cnt, indx += P_INDX) {
+  		bk = GET_BKEYDATA(dbp, h, indx + O_INDX);
+  		sz += B_TYPE(bk->type) == B_KEYDATA ?
+*** misc/db-4.2.52.NC/btree/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/btree/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,31 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=btree
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+! 			$(SLO)$/bt_compare.obj	\
+! 			$(SLO)$/bt_conv.obj	\
+! 			$(SLO)$/bt_curadj.obj	\
+! 			$(SLO)$/bt_cursor.obj	\
+! 			$(SLO)$/bt_delete.obj	\
+! 			$(SLO)$/bt_method.obj	\
+! 			$(SLO)$/bt_open.obj	\
+! 			$(SLO)$/bt_put.obj	\
+! 			$(SLO)$/bt_rec.obj	\
+! 			$(SLO)$/bt_reclaim.obj	\
+! 			$(SLO)$/bt_recno.obj	\
+! 			$(SLO)$/bt_rsearch.obj	\
+! 			$(SLO)$/bt_search.obj	\
+! 			$(SLO)$/bt_split.obj	\
+! 			$(SLO)$/bt_stat.obj	\
+! 			$(SLO)$/bt_upgrade.obj	\
+! 			$(SLO)$/bt_verify.obj	\
+! 			$(SLO)$/btree_auto.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/clib/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/clib/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,13 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=clib
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ../include
+! SLOFILES= $(SLO)$/strcasecmp.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/common/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/common/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,23 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=common
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+! 			$(SLO)$/db_byteorder.obj	\
+! 			$(SLO)$/db_err.obj	\
+! 			$(SLO)$/crypto_stub.obj	\
+! 			$(SLO)$/db_getlong.obj	\
+!             $(SLO)$/db_idspace.obj \
+! 			$(SLO)$/db_log2.obj	\
+!             $(SLO)$/util_arg.obj    \
+!             $(SLO)$/util_cache.obj    \
+! 			$(SLO)$/util_log.obj	\
+! 			$(SLO)$/util_sig.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/cxx/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/cxx/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,25 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=cxx
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! CDEFS+=-DDB_CREATE_DLL
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+!             $(SLO)$/cxx_db.obj     \
+!             $(SLO)$/cxx_dbc.obj     \
+!             $(SLO)$/cxx_dbt.obj     \
+!             $(SLO)$/cxx_env.obj     \
+! 			$(SLO)$/cxx_except.obj	\
+! 			$(SLO)$/cxx_lock.obj	\
+!             $(SLO)$/cxx_logc.obj     \
+! 			$(SLO)$/cxx_mpool.obj	\
+!             $(SLO)$/cxx_multi.obj   \
+! 			$(SLO)$/cxx_txn.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/db/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/db/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,40 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=db_src
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+! 			$(SLO)$/crdel_auto.obj	\
+! 			$(SLO)$/crdel_rec.obj	\
+! 			$(SLO)$/db.obj		\
+! 			$(SLO)$/db_am.obj	\
+! 			$(SLO)$/db_rename.obj	\
+! 			$(SLO)$/db_auto.obj	\
+! 			$(SLO)$/db_cam.obj	\
+! 			$(SLO)$/db_conv.obj	\
+! 			$(SLO)$/db_dispatch.obj \
+! 			$(SLO)$/db_dup.obj	\
+! 			$(SLO)$/db_iface.obj	\
+! 			$(SLO)$/db_join.obj	\
+! 			$(SLO)$/db_meta.obj	\
+! 			$(SLO)$/db_method.obj	\
+!             $(SLO)$/db_open.obj   \
+! 			$(SLO)$/db_overflow.obj \
+! 			$(SLO)$/db_ovfl_vrfy.obj \
+! 			$(SLO)$/db_pr.obj	\
+! 			$(SLO)$/db_rec.obj	\
+! 			$(SLO)$/db_reclaim.obj	\
+!             $(SLO)$/db_remove.obj  \
+! 			$(SLO)$/db_ret.obj	\
+!             $(SLO)$/db_truncate.obj  \
+! 			$(SLO)$/db_upg.obj	\
+! 			$(SLO)$/db_upg_opd.obj	\
+! 			$(SLO)$/db_vrfy.obj	\
+! 			$(SLO)$/db_vrfyutil.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/db_4_2_gcc3.map	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/db_4_2_gcc3.map	Fri Sep 28 11:14:26 2007
+***************
+*** 1 ****
+! dummy
+--- 1,1011 ----
+! DB_4_2 {
+! 	global:
+! 
+! __bam_30_btreemeta;
+! __bam_31_btreemeta;
+! __bam_31_lbtree;
+! __bam_adj_getpgnos;
+! __bam_adjindx;
+! __bam_adj_log;
+! __bam_adj_print;
+! __bam_adj_read;
+! __bam_adj_recover;
+! __bam_adjust;
+! __bam_bulk_duplicates;
+! __bam_bulk_overflow;
+! __bam_ca_delete;
+! __bam_ca_di;
+! __bam_cadjust_getpgnos;
+! __bam_cadjust_log;
+! __bam_cadjust_print;
+! __bam_cadjust_read;
+! __bam_cadjust_recover;
+! __bam_ca_dup;
+! __bam_ca_rsplit;
+! __bam_ca_split;
+! __bam_ca_undodup;
+! __bam_ca_undosplit;
+! __bam_c_count;
+! __bam_cdel_getpgnos;
+! __bam_cdel_log;
+! __bam_cdel_print;
+! __bam_cdel_read;
+! __bam_cdel_recover;
+! __bam_c_dup;
+! __bam_c_init;
+! __bam_cmp;
+! __bam_copy;
+! __bam_c_refresh;
+! __bam_c_rget;
+! __bam_curadj_getpgnos;
+! __bam_curadj_log;
+! __bam_curadj_print;
+! __bam_curadj_read;
+! __bam_curadj_recover;
+! __bam_db_close;
+! __bam_db_create;
+! __bam_defcmp;
+! __bam_defpfx;
+! __bam_ditem;
+! __bam_dpages;
+! __bam_iitem;
+! __bam_init_getpgnos;
+! __bam_init_print;
+! __bam_init_recover;
+! __bam_key_range;
+! __bam_map_flags;
+! __bam_meta2pgset;
+! __bam_metachk;
+! __bam_mswap;
+! __bam_new_file;
+! __bam_new_subdb;
+! __bam_nrecs;
+! __bam_open;
+! __bam_pgin;
+! __bam_pgout;
+! __bam_rcuradj_getpgnos;
+! __bam_rcuradj_log;
+! __bam_rcuradj_print;
+! __bam_rcuradj_read;
+! __bam_rcuradj_recover;
+! __bam_read_root;
+! __bam_reclaim;
+! __bam_repl_getpgnos;
+! __bam_repl_log;
+! __bam_repl_print;
+! __bam_repl_read;
+! __bam_repl_recover;
+! __bam_ritem;
+! __bam_root_getpgnos;
+! __bam_root_log;
+! __bam_root_print;
+! __bam_root_read;
+! __bam_root_recover;
+! __bam_rsearch;
+! __bam_rsplit_getpgnos;
+! __bam_rsplit_log;
+! __bam_rsplit_print;
+! __bam_rsplit_read;
+! __bam_rsplit_recover;
+! __bam_salvage;
+! __bam_salvage_walkdupint;
+! __bam_search;
+! __bam_set_bt_compare;
+! __bam_set_flags;
+! __bam_split;
+! __bam_split_getpgnos;
+! __bam_split_log;
+! __bam_split_print;
+! __bam_split_read;
+! __bam_split_recover;
+! __bam_stat;
+! __bam_stat_callback;
+! __bam_stkgrow;
+! __bam_stkrel;
+! __bam_total;
+! __bam_traverse;
+! __bam_truncate;
+! __bam_vrfy;
+! __bam_vrfy_itemorder;
+! __bam_vrfy_meta;
+! __bam_vrfy_structure;
+! __bam_vrfy_subtree;
+! __bss_start;
+! __crdel_init_getpgnos;
+! __crdel_init_print;
+! __crdel_init_recover;
+! __crdel_metasub_getpgnos;
+! __crdel_metasub_log;
+! __crdel_metasub_print;
+! __crdel_metasub_read;
+! __crdel_metasub_recover;
+! __crypto_region_init;
+! __db185_open;
+! __db_31_offdup;
+! __db_add_limbo;
+! __db_add_recovery;
+! __db_addrem_getpgnos;
+! __db_addrem_log;
+! __db_addrem_print;
+! __db_addrem_read;
+! __db_addrem_recover;
+! __db_appname;
+! __db_apprec;
+! __db_associate;
+! __db_associate_pp;
+! __db_backup_name;
+! __db_big_getpgnos;
+! __db_big_log;
+! __db_big_print;
+! __db_big_read;
+! __db_big_recover;
+! __db_byteorder;
+! __db_byteswap;
+! __db_c_close;
+! __db_c_close_pp;
+! __db_c_count;
+! __db_c_count_pp;
+! __db_c_del;
+! __db_c_del_arg;
+! __db_c_del_pp;
+! __db_c_del_primary;
+! __db_c_destroy;
+! __db_c_dup;
+! __db_c_dup_pp;
+! __db_c_get;
+! __db_c_get_pp;
+! __db_check_chksum;
+! __db_check_txn;
+! __db_chk_meta;
+! __db_chksum;
+! __db_c_idup;
+! __db_cksum_getpgnos;
+! __db_cksum_log;
+! __db_cksum_print;
+! __db_cksum_read;
+! __db_cksum_recover;
+! __db_close;
+! __db_close_pp;
+! __db_c_newopd;
+! __db_c_pget;
+! __db_c_pget_pp;
+! __db_c_put;
+! __db_c_put_pp;
+! db_create;
+! __db_c_secondary_get_pp;
+! __db_cursor;
+! __db_cursor_int;
+! __db_cursor_pp;
+! __db_dbenv_setup;
+! __db_dbm_close;
+! __db_dbm_delete;
+! __db_dbm_fetch;
+! __db_dbm_firstkey;
+! __db_dbm_init;
+! __db_dbm_nextkey;
+! __db_dbm_store;
+! __db_dbtype_to_string;
+! __db_debug_getpgnos;
+! __db_debug_log;
+! __db_debug_print;
+! __db_debug_read;
+! __db_debug_recover;
+! __db_default_getpgnos;
+! __db_del;
+! __db_del_pp;
+! __db_derive_mac;
+! __db_dispatch;
+! __db_ditem;
+! __db_doff;
+! __db_do_the_limbo;
+! __db_dump;
+! __db_duperr;
+! __db_e_attach;
+! __db_e_detach;
+! __dbenv_close;
+! __dbenv_close_pp;
+! __db_env_config;
+! db_env_create;
+! __dbenv_dbremove_pp;
+! __dbenv_dbrename_pp;
+! __dbenv_get_encrypt_flags;
+! __dbenv_get_errfile;
+! __dbenv_get_errpfx;
+! __dbenv_get_open_flags;
+! __dbenv_open;
+! __dbenv_remove;
+! __dbenv_set_alloc;
+! __dbenv_set_data_dir;
+! __dbenv_set_encrypt;
+! __dbenv_set_errcall;
+! __dbenv_set_errfile;
+! __dbenv_set_errpfx;
+! __dbenv_set_flags;
+! db_env_set_func_close;
+! db_env_set_func_dirfree;
+! db_env_set_func_dirlist;
+! db_env_set_func_exists;
+! db_env_set_func_free;
+! db_env_set_func_fsync;
+! db_env_set_func_ioinfo;
+! db_env_set_func_malloc;
+! db_env_set_func_map;
+! db_env_set_func_open;
+! db_env_set_func_read;
+! db_env_set_func_realloc;
+! db_env_set_func_rename;
+! db_env_set_func_seek;
+! db_env_set_func_sleep;
+! db_env_set_func_unlink;
+! db_env_set_func_unmap;
+! db_env_set_func_write;
+! db_env_set_func_yield;
+! __dbenv_set_paniccall;
+! __dbenv_set_shm_key;
+! __dbenv_set_tas_spins;
+! __dbenv_set_tmp_dir;
+! __dbenv_set_verbose;
+! __db_e_remove;
+! __db_err;
+! __db_errcall;
+! __db_errfile;
+! __db_e_stat;
+! __db_fcchk;
+! __db_fchk;
+! __db_fd_pp;
+! __db_ferr;
+! __db_fileinit;
+! __db_fnl;
+! __db_free;
+! __db_get;
+! __db_getlong;
+! __db_get_open_flags;
+! __db_get_pp;
+! __db_getulong;
+! __db_global_values;
+! __db_goff;
+! __dbh_am_chk;
+! __db_hashinit;
+! __db_hcreate;
+! __db_hdestroy;
+! __db_home;
+! __db_hsearch;
+! __db_idspace;
+! __db_init_getpgnos;
+! __db_init_print;
+! __db_init_recover;
+! __db_init_subdb;
+! __db_inmemdbflags;
+! __db_isbigendian;
+! __db_join;
+! __db_join_close;
+! __db_join_pp;
+! __db_key_range_pp;
+! __db_lastpgno;
+! __db_lget;
+! __dblist_get;
+! __db_loadme;
+! __db_log2;
+! __db_logmsg;
+! __db_log_page;
+! __db_lput;
+! __db_map_rmid;
+! __db_map_xid;
+! __db_master_open;
+! __db_master_update;
+! __db_meta_setup;
+! __db_metaswap;
+! __db_mi_env;
+! __db_mi_open;
+! __db_moff;
+! __db_mutex_free;
+! __db_mutex_setup;
+! __db_ndbm_clearerr;
+! __db_ndbm_close;
+! __db_ndbm_delete;
+! __db_ndbm_dirfno;
+! __db_ndbm_error;
+! __db_ndbm_fetch;
+! __db_ndbm_firstkey;
+! __db_ndbm_nextkey;
+! __db_ndbm_open;
+! __db_ndbm_pagfno;
+! __db_ndbm_rdonly;
+! __db_ndbm_store;
+! __db_new;
+! __db_new_file;
+! __db_noop_getpgnos;
+! __db_noop_log;
+! __db_noop_print;
+! __db_noop_read;
+! __db_noop_recover;
+! __db_not_txn_env;
+! __db_oflags;
+! __db_omode;
+! __db_open;
+! __db_open_pp;
+! __db_overwrite;
+! __db_ovref;
+! __db_ovref_getpgnos;
+! __db_ovref_log;
+! __db_ovref_print;
+! __db_ovref_read;
+! __db_ovref_recover;
+! __db_panic;
+! __db_panic_msg;
+! __db_partsize;
+! __db_pg_alloc_getpgnos;
+! __db_pg_alloc_log;
+! __db_pg_alloc_print;
+! __db_pg_alloc_read;
+! __db_pg_alloc_recover;
+! __db_pgerr;
+! __db_pget;
+! __db_pget_pp;
+! __db_pgfmt;
+! __db_pg_freedata_getpgnos;
+! __db_pg_freedata_log;
+! __db_pg_freedata_print;
+! __db_pg_freedata_read;
+! __db_pg_freedata_recover;
+! __db_pg_free_getpgnos;
+! __db_pg_free_log;
+! __db_pg_free_print;
+! __db_pg_free_read;
+! __db_pg_free_recover;
+! __db_pgin;
+! __db_pg_new_getpgnos;
+! __db_pg_new_log;
+! __db_pg_new_print;
+! __db_pg_new_read;
+! __db_pg_new_recover;
+! __db_pgout;
+! __db_pg_prepare_getpgnos;
+! __db_pg_prepare_log;
+! __db_pg_prepare_print;
+! __db_pg_prepare_read;
+! __db_pg_prepare_recover;
+! __db_pitem;
+! __db_poff;
+! __db_pr;
+! __db_pr_callback;
+! __db_prdbt;
+! __db_prflags;
+! __db_prfooter;
+! __db_prheader;
+! __db_prnpage;
+! __db_prpage;
+! __db_prqueue;
+! __db_put;
+! __db_put_pp;
+! __db_r_attach;
+! __db_r_detach;
+! __db_reclaim_callback;
+! __db_rec_repl;
+! __db_rec_toobig;
+! __db_refresh;
+! __dbreg_add_dbentry;
+! __dbreg_assign_id;
+! __dbreg_close_files;
+! __dbreg_close_id;
+! __dbreg_do_open;
+! __dbreg_fid_to_fname;
+! __dbreg_get_id;
+! __dbreg_get_name;
+! __dbreg_id_to_db;
+! __dbreg_id_to_db_int;
+! __dbreg_id_to_fname;
+! __dbreg_init_getpgnos;
+! __dbreg_init_print;
+! __dbreg_init_recover;
+! __dbreg_lazy_id;
+! __dbreg_new_id;
+! __dbreg_open_files;
+! __dbreg_pluck_id;
+! __dbreg_pop_id;
+! __dbreg_push_id;
+! __dbreg_register_getpgnos;
+! __dbreg_register_log;
+! __dbreg_register_print;
+! __dbreg_register_read;
+! __dbreg_register_recover;
+! __dbreg_rem_dbentry;
+! __dbreg_revoke_id;
+! __dbreg_setup;
+! __dbreg_teardown;
+! __db_relink;
+! __db_relink_getpgnos;
+! __db_relink_log;
+! __db_relink_print;
+! __db_relink_read;
+! __db_relink_recover;
+! __db_remove;
+! __db_remove_int;
+! __db_remove_pp;
+! __db_rename;
+! __db_rename_int;
+! __db_rename_pp;
+! __db_rep_enter;
+! __db_rep_exit;
+! __db_ret;
+! __db_retcopy;
+! __db_rmid_to_env;
+! __db_rpath;
+! __db_safe_goff;
+! __db_salvage;
+! __db_salvage_destroy;
+! __db_salvage_duptree;
+! __db_salvage_getnext;
+! __db_salvage_init;
+! __db_salvage_isdone;
+! __db_salvage_markdone;
+! __db_salvage_markneeded;
+! __db_s_done;
+! __db_secondary_corrupt;
+! __db_set_flags;
+! __db_set_lorder;
+! __db_set_pagesize;
+! __db_s_first;
+! __db_SHA1Final;
+! __db_SHA1Init;
+! __db_SHA1Transform;
+! __db_SHA1Update;
+! __db_shalloc;
+! __db_shalloc_dump;
+! __db_shalloc_free;
+! __db_shalloc_init;
+! __db_shalloc_size;
+! __db_shsizeof;
+! __db_s_next;
+! __db_stat;
+! __db_stat_pp;
+! db_strerror;
+! __db_sync;
+! __db_sync_pp;
+! __db_tablesize;
+! __db_tas_mutex_destroy;
+! __db_tas_mutex_init;
+! __db_tas_mutex_lock;
+! __db_tas_mutex_unlock;
+! __db_traverse_big;
+! __db_truncate;
+! __db_truncate_callback;
+! __db_truncate_pp;
+! __db_txn_auto_init;
+! __db_txn_auto_resolve;
+! __db_txnlist_add;
+! __db_txnlist_ckp;
+! __db_txnlist_end;
+! __db_txnlist_find;
+! __db_txnlist_gen;
+! __db_txnlist_init;
+! __db_txnlist_lsnadd;
+! __db_txnlist_lsninit;
+! __db_txnlist_remove;
+! __db_txnlist_update;
+! __db_unknown_flag;
+! __db_unknown_type;
+! __db_unmap_rmid;
+! __db_unmap_xid;
+! __db_upgrade;
+! __db_upgrade_pp;
+! __db_verify;
+! __db_verify_internal;
+! __db_verify_pp;
+! db_version;
+! __db_vrfy_ccclose;
+! __db_vrfy_ccnext;
+! __db_vrfy_ccset;
+! __db_vrfy_childcursor;
+! __db_vrfy_childput;
+! __db_vrfy_common;
+! __db_vrfy_datapage;
+! __db_vrfy_dbinfo_create;
+! __db_vrfy_dbinfo_destroy;
+! __db_vrfy_duptype;
+! __db_vrfy_getpageinfo;
+! __db_vrfy_inpitem;
+! __db_vrfy_meta;
+! __db_vrfy_overflow;
+! __db_vrfy_ovfl_structure;
+! __db_vrfy_pgset;
+! __db_vrfy_pgset_get;
+! __db_vrfy_pgset_inc;
+! __db_vrfy_pgset_next;
+! __db_vrfy_putpageinfo;
+! __db_vrfy_struct_feedback;
+! __db_xa_create;
+! db_xa_switch;
+! __db_xid_to_txn;
+! _DYNAMIC;
+! _edata;
+! _end;
+! __env_openfiles;
+! __env_rep_enter;
+! __env_rep_exit;
+! _fini;
+! __fop_create;
+! __fop_create_getpgnos;
+! __fop_create_log;
+! __fop_create_print;
+! __fop_create_read;
+! __fop_create_recover;
+! __fop_dbrename;
+! __fop_dummy;
+! __fop_file_remove_getpgnos;
+! __fop_file_remove_log;
+! __fop_file_remove_print;
+! __fop_file_remove_read;
+! __fop_file_remove_recover;
+! __fop_file_setup;
+! __fop_init_getpgnos;
+! __fop_init_print;
+! __fop_init_recover;
+! __fop_lock_handle;
+! __fop_read_meta;
+! __fop_remove;
+! __fop_remove_getpgnos;
+! __fop_remove_log;
+! __fop_remove_print;
+! __fop_remove_read;
+! __fop_remove_recover;
+! __fop_remove_setup;
+! __fop_rename;
+! __fop_rename_getpgnos;
+! __fop_rename_log;
+! __fop_rename_print;
+! __fop_rename_read;
+! __fop_rename_recover;
+! __fop_subdb_setup;
+! __fop_write;
+! __fop_write_getpgnos;
+! __fop_write_log;
+! __fop_write_print;
+! __fop_write_read;
+! __fop_write_recover;
+! _GLOBAL_OFFSET_TABLE_;
+! __ham_30_hashmeta;
+! __ham_30_sizefix;
+! __ham_31_hash;
+! __ham_31_hashmeta;
+! __ham_add_dup;
+! __ham_add_el;
+! __ham_add_ovflpage;
+! __ham_call_hash;
+! __ham_c_count;
+! __ham_c_dup;
+! __ham_chgpg_getpgnos;
+! __ham_chgpg_log;
+! __ham_chgpg_print;
+! __ham_chgpg_read;
+! __ham_chgpg_recover;
+! __ham_c_init;
+! __ham_copy_item;
+! __ham_copypage_getpgnos;
+! __ham_copypage_log;
+! __ham_copypage_print;
+! __ham_copypage_read;
+! __ham_copypage_recover;
+! __ham_c_update;
+! __ham_curadj_getpgnos;
+! __ham_curadj_log;
+! __ham_curadj_print;
+! __ham_curadj_read;
+! __ham_curadj_recover;
+! __ham_db_close;
+! __ham_db_create;
+! __ham_del_pair;
+! __ham_dirty_meta;
+! __ham_dpair;
+! __ham_dsearch;
+! __ham_dup_convert;
+! __ham_func2;
+! __ham_func3;
+! __ham_func4;
+! __ham_func5;
+! __ham_get_clist;
+! __ham_get_cpage;
+! __ham_get_meta;
+! __ham_groupalloc_getpgnos;
+! __ham_groupalloc_log;
+! __ham_groupalloc_print;
+! __ham_groupalloc_read;
+! __ham_groupalloc_recover;
+! __ham_init_dbt;
+! __ham_init_getpgnos;
+! __ham_init_print;
+! __ham_init_recover;
+! __ham_insdel_getpgnos;
+! __ham_insdel_log;
+! __ham_insdel_print;
+! __ham_insdel_read;
+! __ham_insdel_recover;
+! __ham_item;
+! __ham_item_first;
+! __ham_item_init;
+! __ham_item_last;
+! __ham_item_next;
+! __ham_item_prev;
+! __ham_item_reset;
+! __ham_lock_bucket;
+! __ham_make_dup;
+! __ham_meta2pgset;
+! __ham_metachk;
+! __ham_metagroup_getpgnos;
+! __ham_metagroup_log;
+! __ham_metagroup_print;
+! __ham_metagroup_read;
+! __ham_metagroup_recover;
+! __ham_mswap;
+! __ham_new_file;
+! __ham_newpage_getpgnos;
+! __ham_newpage_log;
+! __ham_newpage_print;
+! __ham_newpage_read;
+! __ham_newpage_recover;
+! __ham_new_subdb;
+! __ham_next_cpage;
+! __ham_onpage_replace;
+! __ham_open;
+! __ham_pgin;
+! __ham_pgout;
+! __ham_putitem;
+! __ham_quick_delete;
+! __ham_reclaim;
+! __ham_release_meta;
+! __ham_replace_getpgnos;
+! __ham_replace_log;
+! __ham_replace_print;
+! __ham_replace_read;
+! __ham_replace_recover;
+! __ham_replpair;
+! __ham_reputpair;
+! __ham_salvage;
+! __ham_splitdata_getpgnos;
+! __ham_splitdata_log;
+! __ham_splitdata_print;
+! __ham_splitdata_read;
+! __ham_splitdata_recover;
+! __ham_split_page;
+! __ham_stat;
+! __ham_test;
+! __ham_traverse;
+! __ham_truncate;
+! __ham_vrfy;
+! __ham_vrfy_hashing;
+! __ham_vrfy_meta;
+! __ham_vrfy_structure;
+! _init;
+! __lock_addfamilylocker;
+! __lock_cmp;
+! __lock_dbenv_close;
+! __lock_dbenv_create;
+! __lock_dbenv_refresh;
+! __lock_detect;
+! __lock_detect_pp;
+! __lock_downgrade;
+! __lock_dump_region;
+! __lock_expired;
+! __lock_freefamilylocker;
+! __lock_get;
+! __lock_get_list;
+! __lock_getlocker;
+! __lock_get_pp;
+! __lock_id;
+! __lock_id_free;
+! __lock_id_free_pp;
+! __lock_id_pp;
+! __lock_id_set;
+! __lock_inherit_timeout;
+! __lock_lhash;
+! __lock_locker_cmp;
+! __lock_locker_hash;
+! __lock_ohash;
+! __lock_open;
+! __lock_printlock;
+! __lock_promote;
+! __lock_put;
+! __lock_put_pp;
+! __lock_region_destroy;
+! __lock_set_env_timeout;
+! __lock_set_lk_detect;
+! __lock_set_lk_max;
+! __lock_set_lk_max_lockers;
+! __lock_set_lk_max_locks;
+! __lock_set_lk_max_objects;
+! __lock_set_timeout;
+! __lock_stat_pp;
+! __lock_vec;
+! __lock_vec_pp;
+! __log_archive;
+! __log_archive_pp;
+! __log_autoremove;
+! __log_c_close;
+! __log_c_get;
+! log_compare;
+! __log_cursor;
+! __log_cursor_pp;
+! __log_dbenv_create;
+! __log_dbenv_refresh;
+! __log_file_pp;
+! __log_find;
+! __log_flush;
+! __log_flush_int;
+! __log_flush_pp;
+! __log_get_cached_ckp_lsn;
+! __log_is_outdated;
+! __log_name;
+! __log_newfile;
+! __log_open;
+! __log_put;
+! __log_put_pp;
+! __log_region_destroy;
+! __log_rep_put;
+! __log_set_lg_bsize;
+! __log_set_lg_dir;
+! __log_set_lg_max;
+! __log_set_lg_regionmax;
+! __log_stat_pp;
+! __log_txn_lsn;
+! __log_valid;
+! __log_vtruncate;
+! __memp_alloc;
+! __memp_bhfree;
+! __memp_bhwrite;
+! __memp_dbenv_create;
+! __memp_dbenv_refresh;
+! __memp_dump_region;
+! __memp_fclose;
+! __memp_fcreate;
+! __memp_fcreate_pp;
+! __memp_fget;
+! __memp_fget_pp;
+! __memp_fn;
+! __memp_fns;
+! __memp_fopen;
+! __memp_fput;
+! __memp_fput_pp;
+! __memp_fset;
+! __memp_fset_pp;
+! __memp_fsync;
+! __memp_fsync_pp;
+! __memp_get_cachesize;
+! __memp_get_fileid;
+! __memp_get_ftype;
+! __memp_get_refcnt;
+! __memp_last_pgno;
+! __memp_mf_discard;
+! __memp_mf_sync;
+! __memp_nameop;
+! __memp_open;
+! __memp_pg;
+! __memp_pgread;
+! __memp_register;
+! __memp_register_pp;
+! __memp_set_cachesize;
+! __memp_set_clear_len;
+! __memp_set_fileid;
+! __memp_set_flags;
+! __memp_set_ftype;
+! __memp_set_lsn_offset;
+! __memp_set_mp_mmapsize;
+! __memp_set_pgcookie;
+! __memp_stat_hash;
+! __memp_stat_pp;
+! __memp_sync;
+! __memp_sync_int;
+! __memp_sync_pp;
+! __memp_trickle_pp;
+! __mpool_region_destroy;
+! __mp_xxx_fh;
+! __op_rep_enter;
+! __op_rep_exit;
+! __os_abspath;
+! __os_calloc;
+! __os_clock;
+! __os_closehandle;
+! __os_dirfree;
+! __os_dirlist;
+! __os_exists;
+! __os_fileid;
+! __os_free;
+! __os_fs_notzero;
+! __os_fsync;
+! __os_get_errno;
+! __os_get_errno_ret_zero;
+! __os_have_direct;
+! __os_id;
+! __os_io;
+! __os_ioinfo;
+! __os_isroot;
+! __os_malloc;
+! __os_mapfile;
+! __os_open;
+! __os_open_extend;
+! __os_openhandle;
+! __os_r_attach;
+! __os_r_detach;
+! __os_read;
+! __os_realloc;
+! __os_region_unlink;
+! __os_rename;
+! __os_r_sysattach;
+! __os_r_sysdetach;
+! __os_seek;
+! __os_set_errno;
+! __os_sleep;
+! __os_spin;
+! __os_strdup;
+! __os_tmpdir;
+! __os_ufree;
+! __os_umalloc;
+! __os_unlink;
+! __os_unmapfile;
+! __os_urealloc;
+! __os_write;
+! __os_yield;
+! __qam_31_qammeta;
+! __qam_32_qammeta;
+! __qam_add_getpgnos;
+! __qam_add_log;
+! __qam_add_print;
+! __qam_add_read;
+! __qam_add_recover;
+! __qam_append;
+! __qam_c_dup;
+! __qam_c_init;
+! __qam_db_close;
+! __qam_db_create;
+! __qam_delext_getpgnos;
+! __qam_delext_log;
+! __qam_delext_print;
+! __qam_delext_read;
+! __qam_delext_recover;
+! __qam_del_getpgnos;
+! __qam_del_log;
+! __qam_del_print;
+! __qam_del_read;
+! __qam_del_recover;
+! __qam_exid;
+! __qam_extent_names;
+! __qam_fclose;
+! __qam_fprobe;
+! __qam_fremove;
+! __qam_gen_filelist;
+! __qam_incfirst_getpgnos;
+! __qam_incfirst_log;
+! __qam_incfirst_print;
+! __qam_incfirst_read;
+! __qam_incfirst_recover;
+! __qam_init_getpgnos;
+! __qam_init_print;
+! __qam_init_recover;
+! __qam_metachk;
+! __qam_mswap;
+! __qam_mvptr_getpgnos;
+! __qam_mvptr_log;
+! __qam_mvptr_print;
+! __qam_mvptr_read;
+! __qam_mvptr_recover;
+! __qam_nameop;
+! __qam_new_file;
+! __qam_open;
+! __qam_pgin_out;
+! __qam_pitem;
+! __qam_position;
+! __qam_remove;
+! __qam_rename;
+! __qam_salvage;
+! __qam_set_ext_data;
+! __qam_stat;
+! __qam_sync;
+! __qam_truncate;
+! __qam_vrfy_data;
+! __qam_vrfy_meta;
+! __qam_vrfy_structure;
+! __qam_vrfy_walkqueue;
+! __ram_append;
+! __ram_ca;
+! __ram_ca_delete;
+! __ram_c_del;
+! __ram_c_get;
+! __ram_c_put;
+! __ram_getno;
+! __ram_map_flags;
+! __ram_open;
+! __ram_set_flags;
+! __ram_vrfy_leaf;
+! __ram_writeback;
+! __rep_check_alloc;
+! __rep_cmp_vote;
+! __rep_cmp_vote2;
+! __rep_dbenv_close;
+! __rep_dbenv_create;
+! __rep_dbenv_refresh;
+! __rep_elect_done;
+! __rep_elect_master;
+! __rep_get_gen;
+! __rep_grow_sites;
+! __rep_is_client;
+! __rep_new_master;
+! __rep_noarchive;
+! __rep_open;
+! __rep_preclose;
+! __rep_process_message;
+! __rep_process_txn;
+! __rep_region_destroy;
+! __rep_region_init;
+! __rep_send_message;
+! __rep_send_vote;
+! __rep_tally;
+! __txn_abort;
+! __txn_activekids;
+! __txn_begin;
+! __txn_begin_pp;
+! __txn_checkpoint;
+! __txn_checkpoint_pp;
+! __txn_child_getpgnos;
+! __txn_child_log;
+! __txn_child_print;
+! __txn_child_read;
+! __txn_child_recover;
+! __txn_ckp_getpgnos;
+! __txn_ckp_log;
+! __txn_ckp_print;
+! __txn_ckp_read;
+! __txn_ckp_recover;
+! __txn_closeevent;
+! __txn_commit;
+! __txn_compensate_begin;
+! __txn_continue;
+! __txn_dbenv_create;
+! __txn_dbenv_refresh;
+! __txn_discard;
+! __txn_doevents;
+! __txn_force_abort;
+! __txn_getckp;
+! __txn_get_prepared;
+! __txn_id;
+! __txn_id_set;
+! __txn_init_getpgnos;
+! __txn_init_print;
+! __txn_init_recover;
+! __txn_lockevent;
+! __txn_map_gid;
+! __txn_open;
+! __txn_preclose;
+! __txn_prepare;
+! __txn_recover;
+! __txn_recover_pp;
+! __txn_recycle_getpgnos;
+! __txn_recycle_log;
+! __txn_recycle_print;
+! __txn_recycle_read;
+! __txn_recycle_recover;
+! __txn_region_destroy;
+! __txn_regop_getpgnos;
+! __txn_regop_log;
+! __txn_regop_print;
+! __txn_regop_read;
+! __txn_regop_recover;
+! __txn_remevent;
+! __txn_remlock;
+! __txn_remrem;
+! __txn_reset;
+! __txn_restore_txn;
+! __txn_set_timeout;
+! __txn_set_tx_max;
+! __txn_stat_pp;
+! __txn_updateckp;
+! __txn_xa_begin;
+! __txn_xa_regop_getpgnos;
+! __txn_xa_regop_log;
+! __txn_xa_regop_print;
+! __txn_xa_regop_read;
+! __txn_xa_regop_recover;
+! __ua_memcpy;
+! __xa_get_txn;
+! 
+! 	local:
+! 		*;
+! };
+*** misc/db-4.2.52.NC/db_printlog/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/db_printlog/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,13 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=db_printlog
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= $(SLO)$/db_printlog.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/dbm/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/dbm/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,13 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=dbm
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= $(SLO)$/dbm.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/dbreg/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/dbreg/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,17 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=dbreg
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+!         $(SLO)$/dbreg_auto.obj \
+!         $(SLO)$/dbreg.obj \
+!         $(SLO)$/dbreg_rec.obj \
+!         $(SLO)$/dbreg_util.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/dist/Makefile.in	Fri Nov 28 19:50:06 2003
+--- misc/build/db-4.2.52.NC/dist/Makefile.in	Fri Sep 28 11:13:44 2007
+***************
+*** 13,19 ****
+  libdir=	@libdir@
+  docdir=	$(prefix)/docs
+  
+! dmode=	755
+  emode=	555
+  fmode=	444
+  
+--- 13,19 ----
+  libdir=	@libdir@
+  docdir=	$(prefix)/docs
+  
+! dmode=	775
+  emode=	555
+  fmode=	444
+  
+***************
+*** 57,62 ****
+--- 57,63 ----
+  CCLINK=		@MAKEFILE_CCLINK@
+  
+  LDFLAGS=	@LDFLAGS@
++ LDFLAGSVERSION=  @LDFLAGSVERSION@
+  LIBS=		@LIBS@
+  LIBSO_LIBS=	@LIBSO_LIBS@
+  
+***************
+*** 644,650 ****
+  
+  # Shared C library.
+  $(libso_target): $(C_OBJS)
+! 	$(SOLINK) $(SOFLAGS) $(LDFLAGS) -o $@ $(C_OBJS) $(LIBSO_LIBS)
+  
+  # Static C++ library named libdb_cxx.a.
+  $(libcxx): $(DEF_LIB_CXX)
+--- 645,651 ----
+  
+  # Shared C library.
+  $(libso_target): $(C_OBJS)
+! 	$(SOLINK) $(SOFLAGS) $(LDFLAGS) $(LDFLAGSVERSION) -o $@ $(C_OBJS) $(LIBSO_LIBS)
+  
+  # Static C++ library named libdb_cxx.a.
+  $(libcxx): $(DEF_LIB_CXX)
+*** misc/db-4.2.52.NC/dist/configure	Wed Dec  3 22:10:02 2003
+--- misc/build/db-4.2.52.NC/dist/configure	Fri Sep 28 11:13:08 2007
+***************
+*** 3518,3525 ****
+  # Set CFLAGS/CXXFLAGS.  We MUST set the flags before we call autoconf
+  # compiler configuration macros, because if we don't, they set CFLAGS
+  # to no optimization and -g, which isn't what we want.
+! CFLAGS=${CFLAGS-$optimize_def}
+! CXXFLAGS=${CXXFLAGS-"$CFLAGS"}
+  
+  # If the user wants a debugging environment, add -g to the CFLAGS value.
+  #
+--- 3518,3527 ----
+  # Set CFLAGS/CXXFLAGS.  We MUST set the flags before we call autoconf
+  # compiler configuration macros, because if we don't, they set CFLAGS
+  # to no optimization and -g, which isn't what we want.
+! #CFLAGS=${CFLAGS-$optimize_def}
+! #CXXFLAGS=${CXXFLAGS-"$CFLAGS"}
+! CFLAGS="$CFLAGS $optimize_def"
+! CXXFLAGS="$CXXFLAGS $CFLAGS"
+  
+  # If the user wants a debugging environment, add -g to the CFLAGS value.
+  #
+***************
+*** 5624,5630 ****
+        # Check to see if the program is GNU ld.  I'd rather use --version,
+        # but apparently some GNU ld's only accept -v.
+        # Break only if it was the GNU/non-GNU ld that we prefer.
+!       case `"$lt_cv_path_LD" -v 2>&1 </dev/null` in
+        *GNU* | *'with BFD'*)
+  	test "$with_gnu_ld" != no && break
+  	;;
+--- 5626,5632 ----
+        # Check to see if the program is GNU ld.  I'd rather use --version,
+        # but apparently some GNU ld's only accept -v.
+        # Break only if it was the GNU/non-GNU ld that we prefer.
+!       case `$lt_cv_path_LD -v 2>&1 </dev/null` in
+        *GNU* | *'with BFD'*)
+  	test "$with_gnu_ld" != no && break
+  	;;
+***************
+*** 9328,9334 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 9330,9336 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+***************
+*** 10398,10404 ****
+      #        yet detect zsh echo's removal of \ escapes.  Also zsh mangles
+      #	       `"' quotes if we put them in here... so don't!
+  		output_verbose_link_cmd='echo'
+!     archive_cmds='$CC -dynamiclib $allow_undefined_flag -o $lib $libobjs $deplibs$compiler_flags -install_name $rpath/$soname $verstring'
+      module_cmds='$CC -bundle $allow_undefined_flag -o $lib $libobjs $deplibs$compiler_flags'
+      # Don't fix this by using the ld -exported_symbols_list flag, it doesn't exist in older darwin ld's
+  		  archive_expsym_cmds='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -dynamiclib $allow_undefined_flag  -o $lib $libobjs $deplibs$compiler_flags -install_name $rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
+--- 10400,10406 ----
+      #        yet detect zsh echo's removal of \ escapes.  Also zsh mangles
+      #	       `"' quotes if we put them in here... so don't!
+  		output_verbose_link_cmd='echo'
+!     archive_cmds='$CC -dynamiclib $allow_undefined_flag -o $lib $libobjs $deplibs$compiler_flags -install_name @executable_path/$soname $verstring'
+      module_cmds='$CC -bundle $allow_undefined_flag -o $lib $libobjs $deplibs$compiler_flags'
+      # Don't fix this by using the ld -exported_symbols_list flag, it doesn't exist in older darwin ld's
+  		  archive_expsym_cmds='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -dynamiclib $allow_undefined_flag  -o $lib $libobjs $deplibs$compiler_flags -install_name $rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
+***************
+*** 11180,11186 ****
+      # linker, instead of GNU ld.  If possible, this setting should
+      # overridden to take advantage of the native linker features on
+      # the platform it is being used on.
+!     archive_cmds_CXX='$CC -shared $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags -o $lib'
+    fi
+  
+    # Commands to make compiler produce verbose output that lists
+--- 11182,11188 ----
+      # linker, instead of GNU ld.  If possible, this setting should
+      # overridden to take advantage of the native linker features on
+      # the platform it is being used on.
+!     archive_cmds_CXX='$CC -shared -nostdlib $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags -o $lib'
+    fi
+  
+    # Commands to make compiler produce verbose output that lists
+***************
+*** 11671,11679 ****
+        icpc)
+  	# Intel C++
+  	with_gnu_ld=yes
+  	archive_cmds_need_lc_CXX=no
+- 	archive_cmds_CXX='$CC -shared $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-soname $wl$soname -o $lib'
+- 	archive_expsym_cmds_CXX='$CC -shared $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-soname $wl$soname ${wl}-retain-symbols-file $wl$export_symbols -o $lib'
+  	hardcode_libdir_flag_spec_CXX='${wl}-rpath,$libdir'
+  	export_dynamic_flag_spec_CXX='${wl}--export-dynamic'
+  	whole_archive_flag_spec_CXX='${wl}--whole-archive$convenience ${wl}--no-whole-archive'
+--- 11673,11692 ----
+        icpc)
+  	# Intel C++
+  	with_gnu_ld=yes
++     # version 8.0 and above of icpc choke on multiply defined symbols
++     # if we add $predep_objects and $postdep_objects, however 7.1 and
++     # earlier do not add the objects themselves. 
++     case `$CC -V 2>&1` in
++ 	  *"Version 7."*)
++  	    archive_cmds_CXX='$CC -shared $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-soname $wl$soname -o $lib'
++  	    archive_expsym_cmds_CXX='$CC -shared $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags ${wl}-soname $wl$soname ${wl}-retain-symbols-file $wl$export_symbols -o $lib'
++ 	    ;;
++ 	  *)  # Version 8.0 or newer
++ 	    archive_cmds_CXX='$CC -shared $libobjs $deplibs $compiler_flags ${wl}-soname $wl$soname -o $lib'
++ 	    archive_expsym_cmds_CXX='$CC -shared $libobjs $deplibs $compiler_flags ${wl}-soname $wl$soname ${wl}-retain-symbols-file $wl$export_symbols -o $lib'
++ 	    ;;
++ 	esac
+  	archive_cmds_need_lc_CXX=no
+  	hardcode_libdir_flag_spec_CXX='${wl}-rpath,$libdir'
+  	export_dynamic_flag_spec_CXX='${wl}--export-dynamic'
+  	whole_archive_flag_spec_CXX='${wl}--whole-archive$convenience ${wl}--no-whole-archive'
+***************
+*** 12872,12878 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 12885,12891 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+***************
+*** 15849,15855 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 15862,15868 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+***************
+*** 18114,18120 ****
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+--- 18127,18133 ----
+    ;;
+  
+  freebsd*)
+!   objformat=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+    version_type=freebsd-$objformat
+    case $version_type in
+      freebsd-elf*)
+***************
+*** 31031,31036 ****
+--- 31044,31050 ----
+  s,@JAR@,$JAR,;t t
+  s,@JAVACFLAGS@,$JAVACFLAGS,;t t
+  s,@LDFLAGS@,$LDFLAGS,;t t
++ s,@LDFLAGSVERSION@,$LDFLAGSVERSION,;t t
+  s,@LIBJSO_LIBS@,$LIBJSO_LIBS,;t t
+  s,@LIBSO_LIBS@,$LIBSO_LIBS,;t t
+  s,@LIBTOOL@,$LIBTOOL,;t t
+*** misc/db-4.2.52.NC/dist/ltmain.sh	Sat Apr 26 19:45:37 2003
+--- misc/build/db-4.2.52.NC/dist/ltmain.sh	Fri Sep 28 11:12:11 2007
+***************
+*** 1371,1376 ****
+--- 1371,1378 ----
+  	# We need an absolute path.
+  	case $dir in
+  	[\\/]* | [A-Za-z]:[\\/]*) ;;
++ 	# or $ORIGIN altenatively
++ 	*\$ORIGIN*) ;;
+  	*)
+  	  $echo "$modename: only absolute run-paths are allowed" 1>&2
+  	  exit 1
+***************
+*** 2188,2194 ****
+  	    *)
+  	      case "$finalize_rpath " in
+  	      *" $libdir "*) ;;
+! 	      *) finalize_rpath="$finalize_rpath $libdir"
+  	      esac
+  	      ;;
+  	    esac
+--- 2190,2196 ----
+  	    *)
+  	      case "$finalize_rpath " in
+  	      *" $libdir "*) ;;
+! #	      *) finalize_rpath="$finalize_rpath $libdir"
+  	      esac
+  	      ;;
+  	    esac
+*** misc/db-4.2.52.NC/env/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/env/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,20 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=env
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+! 			$(SLO)$/db_salloc.obj	\
+!             $(SLO)$/db_shash.obj   \
+!             $(SLO)$/env_file.obj   \
+! 			$(SLO)$/env_method.obj	\
+! 			$(SLO)$/env_open.obj	\
+! 			$(SLO)$/env_recover.obj	\
+!             $(SLO)$/env_region.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/fileops/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/fileops/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,17 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=fileops
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+!           $(SLO)$/fileops_auto.obj \
+!           $(SLO)$/fop_basic.obj \
+!           $(SLO)$/fop_rec.obj \
+!           $(SLO)$/fop_util.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/hash/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/hash/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,27 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=hash
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+! 			$(SLO)$/hash.obj	\
+! 			$(SLO)$/hash_auto.obj	\
+! 			$(SLO)$/hash_conv.obj	\
+! 			$(SLO)$/hash_dup.obj	\
+! 			$(SLO)$/hash_func.obj	\
+! 			$(SLO)$/hash_meta.obj	\
+! 			$(SLO)$/hash_method.obj	\
+!             $(SLO)$/hash_open.obj   \
+! 			$(SLO)$/hash_page.obj	\
+! 			$(SLO)$/hash_rec.obj	\
+! 			$(SLO)$/hash_reclaim.obj\
+! 			$(SLO)$/hash_stat.obj	\
+! 			$(SLO)$/hash_upgrade.obj\
+! 			$(SLO)$/hash_verify.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/hmac/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/hmac/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,15 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=hmac
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+! 			$(SLO)$/hmac.obj	\
+! 			$(SLO)$/sha1.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/hsearch/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/hsearch/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,13 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=hsearch
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= $(SLO)$/hsearch.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/lock/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/lock/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,19 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=lock
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+! 			$(SLO)$/lock.obj	\
+! 			$(SLO)$/lock_deadlock.obj	\
+! 			$(SLO)$/lock_method.obj	\
+! 			$(SLO)$/lock_region.obj	\
+! 			$(SLO)$/lock_stat.obj	\
+! 			$(SLO)$/lock_util.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/log/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/log/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,19 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=log
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+! 			$(SLO)$/log.obj	\
+! 			$(SLO)$/log_archive.obj	\
+! 			$(SLO)$/log_compare.obj	\
+! 			$(SLO)$/log_get.obj	\
+! 			$(SLO)$/log_method.obj	\
+!             $(SLO)$/log_put.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,65 ----
+! PRJ=..$/..$/..$/..
+! PRJNAME=libdb42
+! TARGET=libdb42
+! USE_DEFFILE=true
+! 
+! .INCLUDE :  settings.mk
+! CFLAGS+=-GS -EHsc -Gy
+! 
+! #LINKFLAGS!:=$(LINKFLAGS:s/NODEFAULTLIB/NOLOGO/)
+! .IF "$(USE_SHELL)"!="4nt"
+! BUILD_ACTION_SEP=;
+! .ELSE # "$(USE_SHELL)"!="4nt"
+! BUILD_ACTION_SEP=^
+! .ENDIF # "$(USE_SHELL)"!="4nt"
+! 
+! CHILDREN=btree clib common cxx db dbm dbreg db_printlog env fileops hash hsearch \
+!      lock log mp mutex os os_win32 qam rep txn xa hmac
+! 
+! LIB1TARGET= $(SLB)$/$(TARGET).lib
+! LIB1FILES=  $(SLB)$/btree.lib	    \
+!             $(SLB)$/clib.lib	    \
+!             $(SLB)$/common.lib	    \
+!             $(SLB)$/cxx.lib        \
+!             $(SLB)$/db_src.lib	    \
+!             $(SLB)$/db_printlog.lib      \
+!             $(SLB)$/dbreg.lib      \
+!             $(SLB)$/dbm.lib	    \
+!             $(SLB)$/env.lib	    \
+!             $(SLB)$/fileops.lib     \
+!             $(SLB)$/hash.lib	    \
+!             $(SLB)$/hsearch.lib	    \
+!             $(SLB)$/lock.lib	    \
+!             $(SLB)$/log.lib	    \
+!             $(SLB)$/mp.lib	    \
+!             $(SLB)$/mutex.lib	    \
+!             $(SLB)$/os.lib    \
+!             $(SLB)$/os_win32.lib    \
+!             $(SLB)$/qam.lib	    \
+!             $(SLB)$/rep.lib     \
+!             $(SLB)$/txn.lib	    \
+!             $(SLB)$/xa.lib \
+! 			$(SLB)$/hmac.lib
+! 
+! SHL1LIBS=$(LIB1TARGET)
+! SHL1TARGET	=	$(TARGET)
+! SHL1DEF 	=	$(MISC)$/$(SHL1TARGET).def
+! SHL1IMPLIB      = $(SHL1TARGET)
+! SHL1LIBS	=	$(SLB)$/$(TARGET).lib
+! SHL1DEPN	=	$(CHILDREN)
+! 
+! #DEF1NAME=$(SHL1TARGET)
+! #DEF1EXPORTFILE=$(TARGET).dxp
+! 
+! # dmake builds the first rule
+! ALLTAR : $(CHILDREN)
+! 
+! $(CHILDREN) .PHONY :
+! 	cd $@ $(BUILD_ACTION_SEP) $(MAKECMD) subdmake=true $(MFLAGS) $(CALLMACROS)
+! 
+! .INCLUDE :  target.mk
+! 
+! $(MISC)$/$(SHL1TARGET).def : build_win32$/libdb.def
+! 	$(COPY) $< $@
+! 	$(DUMPBIN) -DIRECTIVES $(SLB)$/$(TARGET).lib | $(GREP) EXPORT: | $(GREP) -v ",DATA" | $(SED) "s/.*EXPORT://" >> $@
+! 
+*** misc/db-4.2.52.NC/mp/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/mp/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,25 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=mp
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+! 			$(SLO)$/mp_alloc.obj	\
+! 			$(SLO)$/mp_bh.obj	\
+! 			$(SLO)$/mp_fget.obj	\
+! 			$(SLO)$/mp_fopen.obj	\
+! 			$(SLO)$/mp_fput.obj	\
+! 			$(SLO)$/mp_fset.obj	\
+! 			$(SLO)$/mp_method.obj	\
+! 			$(SLO)$/mp_region.obj	\
+! 			$(SLO)$/mp_register.obj	\
+! 			$(SLO)$/mp_stat.obj	\
+! 			$(SLO)$/mp_sync.obj	\
+! 			$(SLO)$/mp_trickle.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/mutex/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/mutex/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,17 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=mutex
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! SOLARINC=-I..$/build_win32 -I..$/ -I$(PSDK_HOME)$/include $(PSDKINC) -I$(COMPATH)$/include
+! .INCLUDE :  settings.mk
+! 
+! 
+! CFLAGS+=-Od
+! SLOFILES= \
+!             $(SLO)$/mut_win32.obj \
+!             $(SLO)$/mutex.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/os/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/os/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,22 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=os
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+! 			$(SLO)$/os_alloc.obj	\
+!             $(SLO)$/os_id.obj    \
+! 			$(SLO)$/os_method.obj	\
+! 			$(SLO)$/os_oflags.obj	\
+! 			$(SLO)$/os_region.obj	\
+! 			$(SLO)$/os_root.obj	\
+! 			$(SLO)$/os_rpath.obj	\
+! 			$(SLO)$/os_tmpdir.obj	\
+! 			$(SLO)$/os_unlink.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/os_win32/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/os_win32/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,29 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=os_win32
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+! 			$(SLO)$/os_abs.obj	\
+!             $(SLO)$/os_clock.obj  \
+!             $(SLO)$/os_config.obj  \
+! 			$(SLO)$/os_dir.obj	\
+! 			$(SLO)$/os_errno.obj	\
+! 			$(SLO)$/os_fid.obj	\
+!             $(SLO)$/os_fsync.obj  \
+!             $(SLO)$/os_handle.obj    \
+! 			$(SLO)$/os_map.obj	\
+! 			$(SLO)$/os_open.obj	\
+! 			$(SLO)$/os_rename.obj	\
+!             $(SLO)$/os_rw.obj  \
+! 			$(SLO)$/os_seek.obj	\
+! 			$(SLO)$/os_sleep.obj	\
+! 			$(SLO)$/os_spin.obj	\
+!             $(SLO)$/os_stat.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/qam/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/qam/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,23 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=qam
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+! 			$(SLO)$/qam.obj	\
+! 			$(SLO)$/qam_auto.obj	\
+! 			$(SLO)$/qam_conv.obj	\
+! 			$(SLO)$/qam_files.obj	\
+! 			$(SLO)$/qam_method.obj	\
+! 			$(SLO)$/qam_open.obj	\
+! 			$(SLO)$/qam_rec.obj	\
+! 			$(SLO)$/qam_stat.obj	\
+! 			$(SLO)$/qam_upgrade.obj	\
+! 			$(SLO)$/qam_verify.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/rep/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/rep/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,18 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=rep
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+!     $(SLO)$/rep_method.obj \
+!     $(SLO)$/rep_record.obj \
+!     $(SLO)$/rep_region.obj \
+!     $(SLO)$/rep_util.obj
+! 
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/txn/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/txn/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,21 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=txn
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+! 			$(SLO)$/txn.obj	\
+! 			$(SLO)$/txn_auto.obj	\
+!             $(SLO)$/txn_method.obj    \
+! 			$(SLO)$/txn_rec.obj	\
+!             $(SLO)$/txn_recover.obj    \
+!             $(SLO)$/txn_region.obj  \
+!             $(SLO)$/txn_stat.obj    \
+!             $(SLO)$/txn_util.obj
+! 
+! .INCLUDE :  target.mk
+*** misc/db-4.2.52.NC/xa/makefile.mk	Fri Sep 28 11:14:47 2007
+--- misc/build/db-4.2.52.NC/xa/makefile.mk	Fri Sep 28 11:12:11 2007
+***************
+*** 1 ****
+! dummy
+--- 1,16 ----
+! PRJ=..$/..$/..$/..$/..
+! 
+! PRJNAME=berkeleydb
+! TARGET=xa
+! 
+! EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
+! 
+! .INCLUDE :  settings.mk
+! 
+! INCPRE+=..$/build_win32 ..$/
+! SLOFILES= \
+! 			$(SLO)$/xa.obj	\
+! 			$(SLO)$/xa_db.obj	\
+! 			$(SLO)$/xa_map.obj
+! 
+! .INCLUDE :  target.mk
