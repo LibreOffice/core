@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.266 $
+ *  $Revision: 1.267 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-05 16:15:49 $
+ *  last change: $Author: vg $ $Date: 2007-12-06 17:45:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -595,27 +595,6 @@ STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbacfg, dbacfg)
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Dbase2, dbase )
 
 STD_LIB_FILE_PATCH( gid_File_Lib_Dbfile , file)
-
-#ifdef SOLAR_JAVA
-#ifndef SYSTEM_DB
-
-File gid_File_Lib_Dbjava
-    TXT_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-  #ifdef UNX
-    #ifdef MACOSX
-        Name = "libdb_java-4.2.jnilib";
-    #else
-    	Name = STRING(CONCAT2(libdb_java-4.2,UNXSUFFIX));
-    #endif
- #else
-    Name = "libdb_java42.dll";
-  #endif
-End
-
-#endif
-#endif
 
 File gid_File_Lib_Dbodbcbase
     TXT_FILE_BODY;
