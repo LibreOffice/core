@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxbuilder.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:03:02 $
+ *  last change: $Author: vg $ $Date: 2007-12-06 11:01:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,7 @@ namespace DOM
 
     // document handler
 
-    void SAL_CALL  CSAXDocumentBuilder::startDocument() throw (SAXException)
+    void SAL_CALL  CSAXDocumentBuilder::startDocument() throw (RuntimeException, SAXException)
     {
 
         fprintf(stderr, "startdocument\n");
@@ -192,7 +192,7 @@ namespace DOM
         m_aState = SAXDocumentBuilderState_BUILDING_DOCUMENT;
     }
 
-    void SAL_CALL CSAXDocumentBuilder::endDocument() throw (SAXException)
+    void SAL_CALL CSAXDocumentBuilder::endDocument() throw (RuntimeException, SAXException)
     {
         fprintf(stderr, "enddocument\n");
         // there should only be the document left on the node stack
@@ -207,7 +207,7 @@ namespace DOM
     }
 
     void SAL_CALL CSAXDocumentBuilder::startElement(const OUString& aName, const Reference< XAttributeList>& attribs)
-        throw (SAXException)
+        throw (RuntimeException, SAXException)
     {
         fprintf(stderr, "startElement <%s>\n", OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
 
@@ -319,7 +319,7 @@ namespace DOM
     }
 
     void SAL_CALL CSAXDocumentBuilder::endElement(const OUString& aName)
-        throw (SAXException)
+        throw (RuntimeException, SAXException)
     {
         fprintf(stderr, "endElement </%s>\n", OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
         // pop the current element from the stack
@@ -347,7 +347,7 @@ namespace DOM
     }
 
     void SAL_CALL CSAXDocumentBuilder::characters(const OUString& aChars)
-        throw (SAXException)
+        throw (RuntimeException, SAXException)
     {
         fprintf(stderr, "characters [%s]\n", OUStringToOString(aChars, RTL_TEXTENCODING_UTF8).getStr());
         //  append text node to the current top element
@@ -360,7 +360,7 @@ namespace DOM
     }
 
     void SAL_CALL CSAXDocumentBuilder::ignorableWhitespace(const OUString& aSpaces)
-        throw (SAXException)
+        throw (RuntimeException, SAXException)
     {
         fprintf(stderr, "whitespace: [%s]\n", OUStringToOString(aSpaces, RTL_TEXTENCODING_UTF8).getStr());
         //  ignore ignorable whitespace
@@ -370,7 +370,7 @@ namespace DOM
     }
 
     void SAL_CALL CSAXDocumentBuilder::processingInstruction(const OUString& aTarget, const OUString& aData)
-        throw (SAXException)
+        throw (RuntimeException, SAXException)
     {
         fprintf(stderr, "processinginstruction: [target=%s, data=%s]\n", OUStringToOString(aTarget, RTL_TEXTENCODING_UTF8).getStr(),
                 OUStringToOString(aData, RTL_TEXTENCODING_UTF8).getStr());
@@ -385,7 +385,7 @@ namespace DOM
     }
 
     void SAL_CALL CSAXDocumentBuilder::setDocumentLocator(const Reference< XLocator >& aLocator)
-        throw (SAXException)
+        throw (RuntimeException, SAXException)
     {
         fprintf(stderr, "setdocumentlocator\n");
         // set the document locator...
