@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.116 $
+#   $Revision: 1.117 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-07 16:10:17 $
+#   last change: $Author: vg $ $Date: 2007-12-06 16:46:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -444,8 +444,11 @@ $(SHL$(TNR)TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
 .IF "$(SHL$(TNR)NOCHECK)"==""
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB) $(SHL$(TNR)TARGETN)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL$(TNR)TARGETN)
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF
 .ELSE			# "$(OS)"=="MACOSX"
@@ -460,7 +463,7 @@ $(SHL$(TNR)TARGETN) : \
 .IF "$(SHL$(TNR)NOCHECK)"==""
     -$(RM) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
     $(RENAME) $(SHL$(TNR)TARGETN) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
-    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) $(SOLARLIB:s/2.6//) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
+    $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL$(TNR)TARGETN:d)check_$(SHL$(TNR)TARGETN:f)
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
 .ENDIF			# "$(UPDATER)"=="YES"
 .ENDIF			# "$(OS)"=="MACOSX"
