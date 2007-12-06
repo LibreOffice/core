@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergechildwindow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:31:47 $
+ *  last change: $Author: vg $ $Date: 2007-12-06 11:04:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -679,6 +679,7 @@ void  SwSendMailDialog::IterateMails()
         if(m_pConfigItem->IsMailReplyTo())
             pMessage->setReplyToAddress(m_pConfigItem->GetMailReplyTo());
         pMessage->addRecipient( pCurrentMailDescriptor->sEMail );
+        pMessage->SetSenderName( m_pConfigItem->GetMailDisplayName() );
         pMessage->SetSenderAddress( m_pConfigItem->GetMailAddress() );
         if(pCurrentMailDescriptor->sAttachmentURL.getLength())
         {
