@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:44:29 $
+ *  last change: $Author: vg $ $Date: 2007-12-06 11:18:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,7 +282,7 @@ namespace DOM
     Adds the node newChild to the end of the list of children of this node.
     */
     Reference< XNode > CNode::appendChild(const Reference< XNode >& newChild)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         Reference< XNode> aNode;
         if (m_aNodePtr != NULL) {
@@ -644,7 +644,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL CNode::insertBefore(
             const Reference< XNode >& newChild, const Reference< XNode >& refChild)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
 
         if (newChild->getOwnerDocument() != getOwnerDocument()) {
@@ -707,7 +707,7 @@ namespace DOM
     and returns it.
     */
     Reference< XNode > SAL_CALL CNode::removeChild(const Reference< XNode >& oldChild)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
 
         if (oldChild->getParentNode() != Reference< XNode >(this)) {
@@ -722,7 +722,7 @@ namespace DOM
 
         if( old->type == XML_ATTRIBUTE_NODE )
         {
-          xmlAttrPtr pAttr = (xmlAttrPtr) old;
+        xmlAttrPtr pAttr = (xmlAttrPtr) old;
             xmlRemoveProp( pAttr );
             xReturn.clear();
         }
@@ -784,7 +784,7 @@ namespace DOM
     */
     Reference< XNode > SAL_CALL CNode::replaceChild(
             const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         // XXX check node types
 
@@ -866,7 +866,7 @@ namespace DOM
     The value of this node, depending on its type; see the table above.
     */
   void SAL_CALL CNode::setNodeValue(const OUString& /*nodeValue*/)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         // use specific node implememntation
         // if we end up down here, something went wrong
@@ -879,7 +879,7 @@ namespace DOM
     The namespace prefix of this node, or null if it is unspecified.
     */
     void SAL_CALL CNode::setPrefix(const OUString& prefix)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         OString o1 = OUStringToOString(prefix, RTL_TEXTENCODING_UTF8);
         xmlChar *pBuf = (xmlChar*)o1.getStr();
@@ -918,7 +918,7 @@ namespace DOM
     }
 
     sal_Bool SAL_CALL CNode::dispatchEvent(const Reference< XEvent >& evt)
-        throw(EventException)
+        throw(RuntimeException, EventException)
     {
         events::CEventDispatcher::dispatchEvent(m_aNodePtr, evt);
         return sal_True;
