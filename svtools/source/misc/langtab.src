@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langtab.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 15:24:16 $
+ *  last change: $Author: vg $ $Date: 2007-12-06 16:51:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,8 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Arabic (Saudi Arabia)" ; LANGUAGE_ARABIC_SAUDI_ARABIA ; > ;
         < "Armenian" ; LANGUAGE_ARMENIAN ; > ;
         < "Assami" ; LANGUAGE_ASSAMESE ; > ;
-        < "Azerbaijani (Latin)" ; LANGUAGE_AZERI_LATIN ; > ;
-        < "Azerbaijani (Cyrillic)" ; LANGUAGE_AZERI_CYRILLIC ; > ;
+        < "Azerbaijani Latin" ; LANGUAGE_AZERI_LATIN ; > ;
+        < "Azerbaijani Cyrillic" ; LANGUAGE_AZERI_CYRILLIC ; > ;
         < "Basque" ; LANGUAGE_BASQUE ; > ;
         < "Bengali (India)" ; LANGUAGE_BENGALI ; > ;
         < "Bulgarian" ; LANGUAGE_BULGARIAN ; > ;
@@ -142,8 +142,8 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Marathi" ; LANGUAGE_MARATHI ; > ;
         < "Nepali (Nepal)" ; LANGUAGE_NEPALI ; > ;
         < "Nepali (India)" ; LANGUAGE_NEPALI_INDIA ; > ;
-        < "Norwegian (Bokmål)" ; LANGUAGE_NORWEGIAN_BOKMAL ; > ;
-        < "Norwegian (Nynorsk)" ; LANGUAGE_NORWEGIAN_NYNORSK ; > ;
+        < "Norwegian, Bokmål" ; LANGUAGE_NORWEGIAN_BOKMAL ; > ;
+        < "Norwegian, Nynorsk" ; LANGUAGE_NORWEGIAN_NYNORSK ; > ;
         < "Oriya" ; LANGUAGE_ORIYA ; > ;
         < "Polish" ; LANGUAGE_POLISH ; > ;
         < "Portuguese (Portugal)" ; LANGUAGE_PORTUGUESE ; > ;
@@ -153,14 +153,18 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Romanian" ; LANGUAGE_ROMANIAN ; > ;
         < "Russian" ; LANGUAGE_RUSSIAN ; > ;
         < "Sanskrit" ; LANGUAGE_SANSKRIT ; > ;
-        < "Serbian (Latin)" ; LANGUAGE_SERBIAN_LATIN ; > ;
-        < "Serbian (Cyrillic)" ; LANGUAGE_SERBIAN_CYRILLIC ; > ;
+        < "Serbian Cyrillic (Serbia and Montenegro)" ; LANGUAGE_SERBIAN_CYRILLIC ; > ;
+        < "Serbian Latin (Serbia and Montenegro)" ; LANGUAGE_SERBIAN_LATIN ; > ;
+        < "Serbian Cyrillic (Serbia)" ; LANGUAGE_USER_SERBIAN_CYRILLIC_SERBIA ; > ;
+        < "Serbian Latin (Serbia)" ; LANGUAGE_USER_SERBIAN_LATIN_SERBIA ; > ;
+        < "Serbian Cyrillic (Montenegro)" ; LANGUAGE_USER_SERBIAN_CYRILLIC_MONTENEGRO ; > ;
+        < "Serbian Latin (Montenegro)" ; LANGUAGE_USER_SERBIAN_LATIN_MONTENEGRO ; > ;
         < "Sindhi" ; LANGUAGE_SINDHI ; > ;
         < "Slovakian" ; LANGUAGE_SLOVAK ; > ;
         < "Slovenian" ; LANGUAGE_SLOVENIAN ; > ;
         < "Spanish (Spain)" ; LANGUAGE_SPANISH ; > ;
         < "Spanish (Mexico)" ; LANGUAGE_SPANISH_MEXICAN ; > ;
-        < "Spanish (Modern)" ; LANGUAGE_SPANISH_MODERN ; > ;
+        < "Spanish, Modern (Spain)" ; LANGUAGE_SPANISH_MODERN ; > ;
         < "Spanish (Guatemala)" ; LANGUAGE_SPANISH_GUATEMALA ; > ;
         < "Spanish (Costa Rica)" ; LANGUAGE_SPANISH_COSTARICA ; > ;
         < "Spanish (Panama)" ; LANGUAGE_SPANISH_PANAMA ; > ;
@@ -190,7 +194,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Urdu (Pakistan)" ; LANGUAGE_URDU_PAKISTAN ; > ;
         < "Urdu (India)" ; LANGUAGE_URDU_INDIA ; > ;
         < "Ukrainian" ; LANGUAGE_UKRAINIAN ; > ;
-        < "Uzbek (Latin)" ; LANGUAGE_UZBEK_LATIN ; > ;
+        < "Uzbek Latin" ; LANGUAGE_UZBEK_LATIN ; > ;
         < "Welsh" ; LANGUAGE_WELSH ; > ;
         < "User 1" ; LANGUAGE_USER1 ; > ;
         < "User 2" ; LANGUAGE_USER2 ; > ;
@@ -232,7 +236,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Vietnamese" ; LANGUAGE_VIETNAMESE ; > ;
         < "Breton" ; LANGUAGE_USER_BRETON ; > ;
         < "Kalaallisut" ; LANGUAGE_USER_KALAALLISUT ; > ;
-        < "Ndebele (South)" ; LANGUAGE_USER_NDEBELE_SOUTH ; > ;
+        < "Ndebele, South" ; LANGUAGE_USER_NDEBELE_SOUTH ; > ;
         < "Southern Sotho" ; LANGUAGE_SESOTHO ; > ;
         < "Swazi" ; LANGUAGE_USER_SWAZI ; > ;
         < "Tsonga" ; LANGUAGE_TSONGA ; > ;
@@ -265,6 +269,15 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "Tagalog" ; LANGUAGE_USER_TAGALOG ; > ;
         < "Ganda" ; LANGUAGE_USER_GANDA ; > ;
         < "Lingala" ; LANGUAGE_USER_LINGALA_DRCONGO ; > ;
+        < "Low German" ; LANGUAGE_USER_LOW_GERMAN ; > ;
+        < "Hiligaynon" ; LANGUAGE_USER_HILIGAYNON ; > ;
+        < "Nyanja" ; LANGUAGE_USER_NYANJA ; > ;
+        < "Kashubian" ; LANGUAGE_USER_KASHUBIAN ; > ;
+        < "Spanish (Cuba)" ; LANGUAGE_USER_SPANISH_CUBA ; > ;
+        < "Tetun" ; LANGUAGE_USER_TETUN ; > ;
+        < "Quechua (Bolivia, North)" ; LANGUAGE_USER_QUECHUA_NORTH_BOLIVIA ; > ;
+        < "Quechua (Bolivia, South)" ; LANGUAGE_USER_QUECHUA_SOUTH_BOLIVIA ; > ;
+        < "Somali" ; LANGUAGE_SOMALI ; > ;
         < "Sami, Inari (Finland)" ; LANGUAGE_SAMI_INARI ; > ;
         < "Sami, Lule (Norway)" ; LANGUAGE_SAMI_LULE_NORWAY ; > ;
         < "Sami, Lule (Sweden)" ; LANGUAGE_SAMI_LULE_SWEDEN ; > ;
@@ -278,4 +291,3 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
 };
 
 // ********************************************************************** EOF
-
