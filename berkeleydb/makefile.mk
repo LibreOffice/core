@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-25 16:04:17 $
+#   last change: $Author: vg $ $Date: 2007-12-06 17:44:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,10 +57,10 @@ ADDITIONAL_FILES=    \
     makefile.mk btree$/makefile.mk clib$/makefile.mk common$/makefile.mk  \
     cxx$/makefile.mk db$/makefile.mk dbm$/makefile.mk dbreg$/makefile.mk  \
     db_printlog$/makefile.mk env$/makefile.mk fileops$/makefile.mk hash$/makefile.mk  \
-    hmac$/makefile.mk hsearch$/makefile.mk libdb_java$/makefile.mk lock$/makefile.mk  \
+    hmac$/makefile.mk hsearch$/makefile.mk lock$/makefile.mk  \
     log$/makefile.mk mp$/makefile.mk mutex$/makefile.mk os$/makefile.mk  \
     os_win32$/makefile.mk qam$/makefile.mk rep$/makefile.mk txn$/makefile.mk  \
-    xa$/makefile.mk libdb42.dxp libdb_java42.dxp db_4_2_gcc3.map
+    xa$/makefile.mk libdb42.dxp db_4_2_gcc3.map
 
 
 
@@ -104,10 +104,7 @@ CONFIGURE_DIR=out
 CONFIGURE_ACTION= \
     ..$/dist$/configure
 CONFIGURE_FLAGS=--disable-cxx --enable-dynamic --enable-shared --enable-compat185
-.IF "$(SOLAR_JAVA)"!=""
-CONFIGURE_FLAGS+=--enable-java
-ARCH_FLAGS+=-I$(JAVA_HOME)/include
-.ENDIF
+
 # just pass ARCH_FLAGS to native build
 CFLAGS+:=$(ARCH_FLAGS)
 CXXFLAGS+:=$(ARCH_FLAGS)
@@ -123,15 +120,6 @@ BUILD_ACTION=make
 .ENDIF
 
 OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*$(DLLPOST)
-.IF "$(OS)"=="MACOSX"
-OUT2LIB+=$(BUILD_DIR)$/.libs$/libdb_java*jnilib
-.ENDIF	# "$(OS)"=="MACOSX"
-
-.IF "$(SOLAR_JAVA)"!=""
-OUT2BIN=$(BUILD_DIR)$/db.jar
-OUT2CLASS=$(BUILD_DIR)$/db.jar
-.ENDIF
-
 OUT2INC= \
     $(BUILD_DIR)$/db.h
 
@@ -149,9 +137,6 @@ CONFIGURE_FLAGS=--enable-cxx --enable-dynamic --enable-shared --build=i586-pc-mi
 CONFIGURE_FLAGS+=LDFLAGS="-no-undefined -L$(SOLARVER)/$(INPATH)/lib -L$(SOLARVER)/$(INPATH)/bin -L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api -L$(COMPATH)/lib"
 .ELSE
 CONFIGURE_FLAGS+=LDFLAGS="-no-undefined -L$(SOLARVER)/$(INPATH)/lib -L$(SOLARVER)/$(INPATH)/bin -L$(COMPATH)/lib"
-.ENDIF
-.IF "$(SOLAR_JAVA)"!=""
-CONFIGURE_FLAGS+=--enable-java
 .ENDIF
 
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -182,12 +167,8 @@ BUILD_ACTION=dmake
 
 BUILD_DIR_OUT=build_win32
 #OUT2LIB= \
-#	$(BUILD_DIR_OUT)$/Release$/libdb_java42.lib \
 #	$(BUILD_DIR_OUT)$/Release$/libdb42.lib
-#OUT2BIN=$(BUILD_DIR_OUT)$/Release$/db.jar \
-#	$(BUILD_DIR_OUT)$/Release$/libdb_java42.dll \
-#	$(BUILD_DIR_OUT)$/Release$/libdb42.dll
-#OUT2CLASS=$(BUILD_DIR_OUT)$/Release$/db.jar
+#OUT2BIN=$(BUILD_DIR_OUT)$/Release$/libdb42.dll
 OUT2INC= \
     $(BUILD_DIR_OUT)$/db.h
 .ENDIF
