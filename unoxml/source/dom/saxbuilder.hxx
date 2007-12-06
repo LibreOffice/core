@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxbuilder.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:45:36 $
+ *  last change: $Author: vg $ $Date: 2007-12-06 11:02:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,23 +118,23 @@ namespace DOM
 
         // XDocumentHandler
         virtual void SAL_CALL startDocument()
-            throw( com::sun::star::xml::sax::SAXException );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException );
         virtual void SAL_CALL endDocument()
-            throw( com::sun::star::xml::sax::SAXException );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException );
         virtual void SAL_CALL startElement( const OUString& aName,
              const Reference< XAttributeList >& xAttribs )
-            throw( com::sun::star::xml::sax::SAXException );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException );
         virtual void SAL_CALL endElement( const OUString& aName )
-            throw( com::sun::star::xml::sax::SAXException );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException );
         virtual void SAL_CALL characters( const OUString& aChars )
-            throw( com::sun::star::xml::sax::SAXException );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException );
         virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
-            throw( com::sun::star::xml::sax::SAXException );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException );
         virtual void SAL_CALL processingInstruction( const OUString& aTarget,
              const OUString& aData )
-            throw( com::sun::star::xml::sax::SAXException );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException );
         virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator )
-            throw( com::sun::star::xml::sax::SAXException );
+            throw( RuntimeException, com::sun::star::xml::sax::SAXException );
 
 
         // XSAXDocumentBuilder
