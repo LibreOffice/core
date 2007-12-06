@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gnujre.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 15:23:47 $
+ *  last change: $Author: vg $ $Date: 2007-12-06 17:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,10 +72,11 @@ char const* const* GnuInfo::getJavaExePaths(int * size)
 char const* const* GnuInfo::getRuntimePaths(int * size)
 {
     static char const* ar[]= {
-          "/lib/" GCJ_JFW_PLUGIN_ARCH "/client/libjvm.so",
-          "/gcj-4.1.1/libjvm.so",
-          "/libgcj.so.7",
-          "/libgcj.so.6"
+        "/libjvm.so",
+        "/lib/" GCJ_JFW_PLUGIN_ARCH "/client/libjvm.so",
+        "/gcj-4.1.1/libjvm.so",
+        "/libgcj.so.7",
+        "/libgcj.so.6"
     };
     *size = sizeof(ar) / sizeof (char*);
     return ar;
@@ -87,6 +88,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     //javax.accessibility.assistive_technologies from system properties
 
     OUString sVendor;
+    OUString sJavaLibraryPath;
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
     OUString sVendorProperty(
         RTL_CONSTASCII_USTRINGPARAM("java.vendor"));
@@ -94,6 +96,8 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
         RTL_CONSTASCII_USTRINGPARAM("java.version"));
     OUString sJavaHomeProperty(
         RTL_CONSTASCII_USTRINGPARAM("java.home"));
+    OUString sJavaLibraryPathProperty(
+        RTL_CONSTASCII_USTRINGPARAM("java.library.path"));
     OUString sGNUHomeProperty(
         RTL_CONSTASCII_USTRINGPARAM("gnu.classpath.home.url"));
     OUString sAccessProperty(
@@ -103,6 +107,7 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     bool bVendor = false;
     bool bHome = false;
     bool bJavaHome = false;
+    bool bJavaLibraryPath = false;
     bool bAccess = false;
 
     typedef vector<pair<OUString, OUString> >::const_iterator it_prop;
@@ -138,6 +143,12 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
                    bJavaHome = true;
                }
            }
+        }
+        else if (!bJavaLibraryPath && sJavaLibraryPathProperty.equals(i->first))
+        {
+            sal_Int32 nIndex = 0;
+            osl_getFileURLFromSystemPath(i->second.getToken(0, ':', nIndex).pData, &sJavaLibraryPath.pData);
+            bJavaLibraryPath = true;
         }
         else if (!bAccess && sAccessProperty.equals(i->first))
         {
@@ -184,6 +195,25 @@ bool GnuInfo::initialize(vector<pair<OUString, OUString> > props)
     if (!bRt)
     {
         m_sHome = m_sJavaHome;
+        for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
+        {
+            //Construct an absolute path to the possible runtime
+            OUString usRt= m_sHome + *ip;
+            DirectoryItem item;
+            if(DirectoryItem::get(usRt, item) == File::E_None)
+            {
+                //found runtime lib
+                m_sRuntimeLibrary = usRt;
+                bRt = true;
+                break;
+            }
+        }
+    }
+
+    // try to find it by the java.library.path property
+    if (!bRt && m_sJavaHome != sJavaLibraryPath)
+    {
+        m_sHome = sJavaLibraryPath;
         for(i_path ip = libpaths.begin(); ip != libpaths.end(); ip++)
         {
             //Construct an absolute path to the possible runtime
