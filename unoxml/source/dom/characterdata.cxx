@@ -4,9 +4,9 @@
  *
  *  $RCSfile: characterdata.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 16:18:07 $
+ *  last change: $Author: vg $ $Date: 2007-12-06 10:58:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ namespace DOM
     Append the string to the end of the character data of the node.
     */
     void SAL_CALL CCharacterData::appendData(const OUString& arg)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         if (m_aNodePtr != NULL)
         {
@@ -80,7 +80,7 @@ namespace DOM
     Remove a range of 16-bit units from the node.
     */
     void SAL_CALL CCharacterData::deleteData(sal_Int32 offset, sal_Int32 count)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         if (m_aNodePtr != NULL)
         {
@@ -142,7 +142,7 @@ namespace DOM
     Insert a string at the specified 16-bit unit offset.
     */
     void SAL_CALL CCharacterData::insertData(sal_Int32 offset, const OUString& arg)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         if (m_aNodePtr != NULL)
         {
@@ -172,7 +172,7 @@ namespace DOM
     with the specified string.
     */
     void SAL_CALL CCharacterData::replaceData(sal_Int32 offset, sal_Int32 count, const OUString& arg)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         if (m_aNodePtr != NULL)
         {
@@ -201,7 +201,7 @@ namespace DOM
     Set the character data of the node that implements this interface.
     */
     void SAL_CALL CCharacterData::setData(const OUString& data)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         if (m_aNodePtr != NULL)
         {
@@ -217,7 +217,7 @@ namespace DOM
     Extracts a range of data from the node.
     */
     OUString SAL_CALL CCharacterData::subStringData(sal_Int32 offset, sal_Int32 count)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         OUString aStr;
         if (m_aNodePtr != NULL)
