@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergehelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:32:17 $
+ *  last change: $Author: vg $ $Date: 2007-12-06 11:04:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -895,6 +895,13 @@ SwMailMessage::SwMailMessage() :
   -----------------------------------------------------------------------*/
 SwMailMessage::~SwMailMessage()
 {
+}
+/*-- 02.07.2007 16:00:07---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+::rtl::OUString SwMailMessage::getSenderName() throw (uno::RuntimeException)
+{
+    return m_sSenderName;
 }
 /*-- 22.06.2004 16:46:06---------------------------------------------------
 
