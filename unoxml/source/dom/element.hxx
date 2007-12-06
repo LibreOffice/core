@@ -4,9 +4,9 @@
  *
  *  $RCSfile: element.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:43:33 $
+ *  last change: $Author: vg $ $Date: 2007-12-06 11:00:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,50 +127,50 @@ namespace DOM
         Removes an attribute by name.
         */
         virtual void SAL_CALL removeAttribute(const OUString& name)
-            throw (DOMException);
+            throw (RuntimeException, DOMException);
 
         /**
         Removes the specified attribute node.
         */
         virtual Reference< XAttr > SAL_CALL removeAttributeNode(const Reference< XAttr >& oldAttr)
-            throw (DOMException);
+            throw (RuntimeException, DOMException);
 
         /**
         Removes an attribute by local name and namespace URI.
         */
         virtual void SAL_CALL removeAttributeNS(const OUString& namespaceURI, const OUString& localName)
-            throw (DOMException);
+            throw (RuntimeException, DOMException);
 
         /**
         Adds a new attribute.
         */
         virtual void SAL_CALL setAttribute(const OUString& name, const OUString& value)
-            throw (DOMException);
+            throw (RuntimeException, DOMException);
 
         /**
         Adds a new attribute node.
         */
         virtual Reference< XAttr > SAL_CALL setAttributeNode(const Reference< XAttr >& newAttr)
-            throw (DOMException);
+            throw (RuntimeException, DOMException);
 
         /**
         Adds a new attribute.
         */
         virtual Reference< XAttr > SAL_CALL setAttributeNodeNS(const Reference< XAttr >& newAttr)
-            throw (DOMException);
+            throw (RuntimeException, DOMException);
 
         /**
         Adds a new attribute.
         */
         virtual void SAL_CALL setAttributeNS(
                 const OUString& namespaceURI, const OUString& qualifiedName, const OUString& value)
-            throw (DOMException);
+            throw (RuntimeException, DOMException);
 
         /**
         sets the element name
         */
         virtual void SAL_CALL setElementName(const OUString& elementName)
-            throw (DOMException);
+            throw (RuntimeException, DOMException);
 
         // overrides for XNode base
         virtual OUString SAL_CALL getNodeName()
@@ -183,7 +183,7 @@ namespace DOM
         // resolve uno inheritance problems...
         // --- delegation for XNde base.
         virtual Reference< XNode > SAL_CALL appendChild(const Reference< XNode >& newChild)
-            throw (DOMException)
+            throw (RuntimeException, DOMException)
         {
             return CNode::appendChild(newChild);
         }
@@ -259,7 +259,7 @@ namespace DOM
         }
         virtual Reference< XNode > SAL_CALL insertBefore(
                 const Reference< XNode >& newChild, const Reference< XNode >& refChild)
-            throw (DOMException)
+            throw (RuntimeException, DOMException)
         {
             return CNode::insertBefore(newChild, refChild);
         }
@@ -274,23 +274,23 @@ namespace DOM
             CNode::normalize();
         }
         virtual Reference< XNode > SAL_CALL removeChild(const Reference< XNode >& oldChild)
-            throw (DOMException)
+            throw (RuntimeException, DOMException)
         {
             return CNode::removeChild(oldChild);
         }
         virtual Reference< XNode > SAL_CALL replaceChild(
                 const Reference< XNode >& newChild, const Reference< XNode >& oldChild)
-            throw (DOMException)
+            throw (RuntimeException, DOMException)
         {
             return CNode::replaceChild(newChild, oldChild);
         }
         virtual void SAL_CALL setNodeValue(const OUString& nodeValue)
-            throw (DOMException)
+            throw (RuntimeException, DOMException)
         {
             return CNode::setNodeValue(nodeValue);
         }
         virtual void SAL_CALL setPrefix(const OUString& prefix)
-            throw (DOMException)
+            throw (RuntimeException, DOMException)
         {
             return CNode::setPrefix(prefix);
         }
