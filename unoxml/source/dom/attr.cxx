@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attr.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-10-24 07:35:44 $
+ *  last change: $Author: vg $ $Date: 2007-12-06 10:57:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ namespace DOM
     Sets the value of the attribute from a string.
     */
     void SAL_CALL CAttr::setValue(const OUString& value)
-        throw (DOMException)
+        throw (RuntimeException, DOMException)
     {
         // remember old value (for mutation event)
         OUString sOldValue = getValue();
