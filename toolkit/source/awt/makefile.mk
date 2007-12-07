@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-27 11:44:13 $
+#   last change: $Author: vg $ $Date: 2007-12-07 11:39:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,11 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
+
+.IF "$(GUIBASE)"=="aqua"
+OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
+CFLAGSCXX+=$(OBJCXXFLAGS)
+.ENDIF  # "$(GUIBASE)"=="aqua"
 
 SLOFILES=   \
             $(SLO)$/vclxaccessiblecomponent.obj         \
