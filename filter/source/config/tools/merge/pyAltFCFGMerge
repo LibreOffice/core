@@ -38,6 +38,7 @@ PROP_TCFG            = "tcfg"                     # // <= cmdline
 PROP_FCFG            = "fcfg"                     # // <= cmdline
 PROP_LCFG            = "lcfg"                     # // <= cmdline
 PROP_CCFG            = "ccfg"                     # // <= cmdline
+PROP_LANGUAGEPACK    = "languagepack"             # // <= cmdline
 PROP_ITEMS           = "items"                    # // <= pkg cfg files!
 
 #---begin java.util.Properties copy---#
@@ -79,7 +80,7 @@ one=1
 >>> print props['your name']
 I don't know
 
-$Id: pyAltFCFGMerge,v 1.2 2004-06-16 10:42:13 rt Exp $
+$Id: pyAltFCFGMerge,v 1.3 2007-12-07 10:57:44 vg Exp $
 
 """
 
@@ -396,6 +397,11 @@ class ConfigHelper:
                 "does not exists!");
         return self.props[sProp];
 
+    def getValueWithDefault(self, sProp, default):
+        if not self.props.has_key(sProp):
+		return default;
+        return self.props[sProp];
+
     def getStringList(self, sProp, sDelimiter, bTrim, bDecode):
         if not self.props.has_key(sProp):
             raise Exception("The requested config value \""+sProp+"\" does "\
@@ -415,20 +421,29 @@ class ConfigHelper:
 
         return lValue
 
-def generateHeader(sVersion, sEncoding, sPath, sPackage):
+def generateHeader(sVersion, sEncoding, sPath, sPackage, bLanguagePack):
     sHeader = "<?xml version=\""
-    sHeader = sHeader + sVersion
-    sHeader = sHeader + "\" encoding=\""
-    sHeader = sHeader + sEncoding
-    sHeader = sHeader + "\"?>\n<!DOCTYPE oor:component-data SYSTEM \"../"
-    sHeader = sHeader + "../../../component-update.dtd\">\n"
-    sHeader = sHeader + "<oor:component-data xmlns:oor=\""
-    sHeader = sHeader + "http://openoffice.org/2001/registry\" xmlns:xs=\"http"
-    sHeader = sHeader + "://www.w3.org/2001/XMLSchema\" oor:package=\""
-    sHeader = sHeader + sPath
-    sHeader = sHeader + "\" oor:name=\""
-    sHeader = sHeader + sPackage
-    sHeader = sHeader + "\">\n"
+    sHeader += sVersion
+    sHeader += "\" encoding=\""
+    sHeader += sEncoding
+    sHeader += "\"?>\n"
+
+    if bLanguagePack:
+        sHeader += "<oor:component-data oor:package=\""
+        sHeader += sPath
+        sHeader += "\" oor:name=\""
+        sHeader += sPackage
+        sHeader += "\" xmlns:install=\"http://openoffice.org/2004/installation\""
+        sHeader += " xmlns:oor=\"http://openoffice.org/2001/registry\""
+        sHeader += " xmlns:xs=\"http://www.w3.org/2001/XMLSchema\""
+        sHeader += " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n"
+    else:
+        sHeader += "<!DOCTYPE oor:component-data SYSTEM \"../../../../component-update.dtd\">\n"
+        sHeader += "<oor:component-data xmlns:oor=\"http://openoffice.org/2001/registry\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" oor:package=\""
+        sHeader += sPath
+        sHeader += "\" oor:name=\""
+        sHeader += sPackage
+        sHeader += "\">\n"
     return sHeader
 
 def generateFooter():
@@ -482,7 +497,8 @@ class Merger:
                 self.m_aCfg.getValue(PROP_XMLVERSION ),\
                 self.m_aCfg.getValue(PROP_XMLENCODING),\
                 self.m_aCfg.getValue(PROP_XMLPATH    ),\
-                self.m_aCfg.getValue(PROP_XMLPACKAGE ))
+                self.m_aCfg.getValue(PROP_XMLPACKAGE ),\
+                self.m_aCfg.getValueWithDefault(PROP_LANGUAGEPACK, False))
 
         # counts all transfered fragments
         # Can be used later to decide, if a generated package file
