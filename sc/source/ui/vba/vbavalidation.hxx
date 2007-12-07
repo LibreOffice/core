@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbavalidation.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:11:38 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:04:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,17 +38,16 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <org/openoffice/excel/XValidation.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
-#include "vbahelper.hxx"
+#include "vbahelperinterface.hxx"
 
-typedef ::cppu::WeakImplHelper1<oo::excel::XValidation > ValidationImpl_BASE;
+typedef InheritedHelperInterfaceImpl1<oo::excel::XValidation > ValidationImpl_BASE;
 
 class ScVbaValidation : public ValidationImpl_BASE
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::table::XCellRange > m_xRange;
 
 public:
-    ScVbaValidation( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange ) : m_xContext(xContext), m_xRange( xRange) {}
+    ScVbaValidation( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange ) : ValidationImpl_BASE( xParent, xContext ), m_xRange( xRange) {}
     // Attributes
     virtual ::sal_Bool SAL_CALL getIgnoreBlank() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setIgnoreBlank( ::sal_Bool _ignoreblank ) throw (css::uno::RuntimeException);
@@ -71,6 +70,9 @@ public:
     // Methods
     virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Add( const css::uno::Any& Type, const css::uno::Any& AlertStyle, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2 ) throw (css::uno::RuntimeException);
+    // XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 
 };
 

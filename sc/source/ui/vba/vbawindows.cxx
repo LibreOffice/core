@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbawindows.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:12:27 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:05:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 
 #include <tools/urlobj.hxx>
 #include "vbawindow.hxx"
+//#include "vbaworkbook.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::org::openoffice;
@@ -48,10 +49,16 @@ typedef  std::hash_map< rtl::OUString,
 sal_Int32, ::rtl::OUStringHash,
 ::std::equal_to< ::rtl::OUString > > NameIndexHash;
 
+
+uno::Reference< vba::XHelperInterface > lcl_createWorkbookHIParent( const uno::Reference< frame::XModel >& xModel, const uno::Reference< uno::XComponentContext >& xContext )
+{
+    return new ScVbaWorkbook( uno::Reference< vba::XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext,  xModel );
+}
+
 uno::Any ComponentToWindow( const uno::Any& aSource, uno::Reference< uno::XComponentContext > & xContext )
 {
     uno::Reference< frame::XModel > xModel( aSource, uno::UNO_QUERY_THROW );
-    uno::Reference< excel::XWindow > xWin( new ScVbaWindow( xContext,xModel ) );
+    uno::Reference< excel::XWindow > xWin( new ScVbaWindow( lcl_createWorkbookHIParent( xModel, xContext ), xContext,xModel ) );
     return uno::makeAny( xWin );
 }
 
@@ -135,7 +142,7 @@ public:
             {
                 m_windows.push_back( xNext );
                 uno::Reference< frame::XModel > xModel( xNext, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
-                ScVbaWindow window( m_xContext, xModel );
+                ScVbaWindow window( uno::Reference< vba::XHelperInterface >(),  m_xContext, xModel );
                 rtl::OUString sCaption;
                 window.getCaption() >>= sCaption;
                 namesToIndices[ sCaption ] = nIndex++;
@@ -203,20 +210,20 @@ public:
 };
 
 
-ScVbaWindows::ScVbaWindows( const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaWindows_BASE( xContext, xIndexAccess )
+ScVbaWindows::ScVbaWindows( const uno::Reference< oo::vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaWindows_BASE( xParent, xContext, xIndexAccess )
 {
 }
 
 uno::Reference< container::XEnumeration >
 ScVbaWindows::createEnumeration() throw (uno::RuntimeException)
 {
-    return new WindowEnumImpl( m_xContext );
+    return new WindowEnumImpl( mxContext );
 }
 
 uno::Any
 ScVbaWindows::createCollectionObject( const css::uno::Any& aSource )
 {
-    return ComponentToWindow( aSource,  m_xContext );
+    return ComponentToWindow( aSource,  mxContext );
 }
 
 uno::Type
@@ -229,8 +236,7 @@ uno::Reference< vba::XCollection >
 ScVbaWindows::Windows( const css::uno::Reference< css::uno::XComponentContext >& xContext )
 {
     uno::Reference< container::XIndexAccess > xIndex( new WindowsAccessImpl( xContext ) );
-
-    return uno::Reference< vba::XCollection >( new ScVbaWindows( xContext , xIndex ) );
+    return  new ScVbaWindows( uno::Reference< vba::XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext , xIndex );
 }
 
 void SAL_CALL
@@ -240,3 +246,21 @@ ScVbaWindows::Arrange( ::sal_Int32 /*ArrangeStyle*/, const uno::Any& /*ActiveWor
 }
 
 
+rtl::OUString&
+ScVbaWindows::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaWindows") );
+    return sImplName;
+}
+
+css::uno::Sequence<rtl::OUString>
+ScVbaWindows::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > sNames;
+    if ( sNames.getLength() == 0 )
+    {
+        sNames.realloc( 1 );
+        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Windows") );
+    }
+    return sNames;
+}
