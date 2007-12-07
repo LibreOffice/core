@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 11:42:25 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 13:01:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,6 @@ namespace rtl {
 #define BASEPROPERTY_DESKTOP_AS_PARENT     123  // sal_Bool
 
 //#define BASEPROPERTY_RESOURCERESOLVER      124  // css.resource.XStringResourceResolver
-#define BASEPROPERTY_NOLABEL           132   // ::rtl::OUString  added for issue79712
 
 #define BASEPROPERTY_TREE_START                     124
 #define BASEPROPERTY_TREE_SELECTIONTYPE             124
@@ -195,6 +194,7 @@ namespace rtl {
 #define BASEPROPERTY_TREE_INVOKESSTOPNODEEDITING    131
 #define BASEPROPERTY_TREE_END                       131
 #define BASEPROPERTY_DIALOGSOURCEURL                132
+#define BASEPROPERTY_NOLABEL           133   // ::rtl::OUString  added for issue79712
 
 // Keine gebundenen Properties, werden immer aus der Property BASEPROPERTY_FONTDESCRIPTOR entnommen.
 #define BASEPROPERTY_FONTDESCRIPTORPART_START           1000
