@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 13:54:48 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:40:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,11 @@
 #endif
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
+#endif
+#ifdef QUARTZ
+#include "premac.h"
+#include <Cocoa/Cocoa.h>
+#include "postmac.h"
 #endif
 #ifndef _SV_SYSDATA_HXX
 #include <vcl/sysdata.hxx>
@@ -103,7 +108,7 @@ void VCLXWindow::SetSystemParent_Impl( const com::sun::star::uno::Any& rHandle )
 #if defined( WIN ) || defined( WNT ) || defined ( OS2 )
     aSysParentData.hWnd = (HWND) nHandle;
 #elif defined( QUARTZ )
-    aSysParentData.rWindow = (WindowRef) nHandle;
+    aSysParentData.pView = reinterpret_cast<NSView*>(nHandle);
 #elif defined( UNX )
     aSysParentData.aWindow = (long)nHandle;
     aSysParentData.bXEmbedSupport = bXEmbed;
