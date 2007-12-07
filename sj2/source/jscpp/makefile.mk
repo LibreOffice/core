@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:31:43 $
+#   last change: $Author: vg $ $Date: 2007-12-07 11:46:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,11 @@ TARGET=jscpp
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
+
+.IF "$(GUIBASE)"=="aqua"
+OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
+CFLAGSCXX+=$(OBJCXXFLAGS)
+.ENDIF  # "$(GUIBASE)"=="aqua"
 
 SLOFILES=	\
     $(SLO)$/sjapplet.obj						\
