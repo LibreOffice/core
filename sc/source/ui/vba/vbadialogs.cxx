@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbadialogs.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 10:04:20 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:50:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,38 +54,6 @@ ScVbaDialogs::Dummy() throw (uno::RuntimeException)
 {
 }
 
-uno::Any
-ScVbaDialogs::getParent() throw (uno::RuntimeException)
-{
-    uno::Reference< vba::XGlobals > xGlobals = ScVbaGlobals::getGlobalsImpl( m_xContext );
-    uno::Reference< excel::XApplication > xApplication = xGlobals->getApplication();
-    if ( !xApplication.is() )
-    {
-        throw uno::RuntimeException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScVbaWorkbooks::getParent: Couldn't access Application               object") ),uno::Reference< XInterface >() );
-    }
-    return uno::Any(xApplication);
-}
-
-::sal_Int32
-ScVbaDialogs::getCreator() throw (uno::RuntimeException)
-{
-    // #FIXME #TODO
-    return 0;
-}
-uno::Reference< excel::XApplication >
-ScVbaDialogs::getApplication() throw (uno::RuntimeException)
-{
-    uno::Reference< excel::XApplication > xApplication =  ScVbaGlobals::getGlobalsImpl( m_xContext )->getApplication();
-    if ( !xApplication.is() )
-    {
-        throw uno::RuntimeException(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScVbaWorkbooks::getParent: Couldn't access Application object" ) ),
-        uno::Reference< XInterface >() );
-    }
-    return xApplication;
-}
-
 ::sal_Int32
 ScVbaDialogs::getCount() throw (uno::RuntimeException)
 {
@@ -99,6 +67,27 @@ ScVbaDialogs::Item( const uno::Any &aItem ) throw (uno::RuntimeException)
 {
     sal_Int32 nIndex = 0;
     aItem >>= nIndex;
-    uno::Reference< excel::XDialog > aDialog( new ScVbaDialog( nIndex, m_xContext ) );
+    uno::Reference< excel::XDialog > aDialog( new ScVbaDialog( uno::Reference< vba::XHelperInterface >( ScVbaGlobals::getGlobalsImpl( mxContext )->getApplication(), uno::UNO_QUERY_THROW ), nIndex, mxContext ) );
     return uno::Any( aDialog );
 }
+rtl::OUString&
+ScVbaDialogs::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaWorksheet") );
+    return sImplName;
+}
+
+uno::Sequence< rtl::OUString >
+ScVbaDialogs::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Worksheet" ) );
+    }
+    return aServiceNames;
+}
+
+
+
