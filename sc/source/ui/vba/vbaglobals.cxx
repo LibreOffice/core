@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaglobals.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:06:41 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:53:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,9 +32,10 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef SC_VBA_GLOBALS
+#include "helperdecl.hxx"
 #include "vbaglobals.hxx"
-#endif
+
+#include <comphelper/unwrapargs.hxx>
 
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -49,76 +50,25 @@ using namespace ::org::openoffice;
 
 
 
-namespace vbaobj
-{
-    ::rtl::OUString SAL_CALL getImplementationName()
-    {
-        static ::rtl::OUString* pImplName = 0;
-        if ( !pImplName )
-        {
-            ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-            if ( !pImplName )
-            {
-                static ::rtl::OUString aImplName( RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.vba.Globals" ) );
-                pImplName = &aImplName;
-            }
-        }
-        return *pImplName;
-    }
-
-    uno::Reference< XComponentContext > getComponentContextFromMSF( uno::Reference< lang::XMultiServiceFactory > const& xFactory )
-    {
-        uno::Reference< XComponentContext > xContext;
-
-            uno::Reference< beans::XPropertySet > xProps( xFactory, UNO_QUERY );
-        if (xProps.is())
-        {
-            xProps->getPropertyValue(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DefaultContext") ) ) >>= xContext;
-        }
-        return xContext;
-    }
-
-
-    uno::Reference< XInterface > SAL_CALL create(
-        Reference< XComponentContext > const & xContext )
-        SAL_THROW( () )
-    {
-    if ( !xContext.is() )
-    {
-        OSL_TRACE("Failed to obtain context" );
-        return uno::Reference< uno::XInterface >(NULL);
-    }
-    OSL_TRACE("In create component for vbaglobals");
-        return static_cast< lang::XTypeProvider * >( new ScVbaGlobals( xContext ) );
-    }
-
-    Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
-    {
-        const ::rtl::OUString strName( ::vbaobj::getImplementationName() );
-        return Sequence< ::rtl::OUString >( &strName, 1 );
-    }
-}
-
 // =============================================================================
 // ScVbaGlobals
 // =============================================================================
 
-ScVbaGlobals::ScVbaGlobals( const Reference< XComponentContext >& rxContext )
+ScVbaGlobals::ScVbaGlobals(  css::uno::Reference< css::uno::XComponentContext >const& rxContext )
         :m_xContext( rxContext )
 {
-//  OSL_TRACE("ScVbaGlobals::ScVbaGlobals()");
+    OSL_TRACE("ScVbaGlobals::ScVbaGlobals()");
     mxApplication = uno::Reference< excel::XApplication > ( new ScVbaApplication( m_xContext) );
 }
 
 ScVbaGlobals::~ScVbaGlobals()
 {
-//  OSL_TRACE("ScVbaGlobals::~ScVbaGlobals");
+    OSL_TRACE("ScVbaGlobals::~ScVbaGlobals");
 }
 
 // Will throw if singleton can't be accessed
 uno::Reference< vba::XGlobals >
-ScVbaGlobals::getGlobalsImpl( uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException )
+ScVbaGlobals::getGlobalsImpl( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException )
 {
     uno::Reference< vba::XGlobals > xGlobals(
         xContext->getValueByName( ::rtl::OUString::createFromAscii(
@@ -131,31 +81,6 @@ ScVbaGlobals::getGlobalsImpl( uno::Reference< uno::XComponentContext >& xContext
                     uno::Reference< XInterface >() );
     }
     return xGlobals;
-}
-
-// -----------------------------------------------------------------------------
-// XServiceInfo
-// -----------------------------------------------------------------------------
-
-::rtl::OUString ScVbaGlobals::getImplementationName(  ) throw (RuntimeException)
-{
-    return ::vbaobj::getImplementationName();
-}
-
-sal_Bool ScVbaGlobals::supportsService( const ::rtl::OUString& rServiceName ) throw (RuntimeException)
-{
-    Sequence< ::rtl::OUString > aNames( ::vbaobj::getSupportedServiceNames() );
-    const ::rtl::OUString* pNames = aNames.getConstArray();
-    const ::rtl::OUString* pEnd = pNames + aNames.getLength();
-    for ( ; pNames != pEnd && !pNames->equals( rServiceName ); ++pNames )
-        ;
-
-    return pNames != pEnd;
-}
-
-Sequence< ::rtl::OUString > ScVbaGlobals::getSupportedServiceNames(  ) throw (RuntimeException)
-{
-    return vbaobj::getSupportedServiceNames();
 }
 
 // =============================================================================
@@ -232,4 +157,19 @@ ScVbaGlobals::Range( const uno::Any& Cell1, const uno::Any& Cell2 ) throw (uno::
     return getApplication()->Range( Cell1, Cell2 );
 }
 
+uno::Any SAL_CALL
+ScVbaGlobals::Names( ) throw ( uno::RuntimeException )
+{
+    return getApplication()->Names();
+}
+
+namespace globals
+{
+namespace sdecl = comphelper::service_decl;
+sdecl::class_<ScVbaGlobals, sdecl::with_args<false> > serviceImpl;
+extern sdecl::ServiceDecl const serviceDecl(
+    serviceImpl,
+    "ScVbaGlobals",
+    "org.openoffice.vba.Globals" );
+}
 
