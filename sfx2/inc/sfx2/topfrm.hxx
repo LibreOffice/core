@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:31:22 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 12:22:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,7 @@ public:
     String              GetWindowData();
 
     void                SetPresentationMode( BOOL bSet );
+    SystemWindow* GetSystemWindow() const;
 
 //#if 0 // _SOLAR__PRIVATE
     SAL_DLLPRIVATE void LockResize_Impl( BOOL bLock );
