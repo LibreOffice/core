@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbapivottables.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:10:07 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:59:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ public:
 
 };
 
-ScVbaPivotTables::ScVbaPivotTables( const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaPivotTables_BASE( xContext, xIndexAccess )
+ScVbaPivotTables::ScVbaPivotTables( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  ):  ScVbaPivotTables_BASE( xParent, xContext, xIndexAccess )
 {
 }
 
@@ -67,17 +67,36 @@ uno::Reference< container::XEnumeration >
 ScVbaPivotTables::createEnumeration() throw (uno::RuntimeException)
 {
     uno::Reference< container::XEnumerationAccess > xEnumAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
-    return new PivotTableEnumeration( m_xContext, xEnumAccess->createEnumeration() );
+    return new PivotTableEnumeration( mxContext, xEnumAccess->createEnumeration() );
 }
 
 uno::Any
 ScVbaPivotTables::createCollectionObject( const css::uno::Any& aSource )
 {
-    return DataPilotToPivotTable( aSource,  m_xContext );
+    return DataPilotToPivotTable( aSource,  mxContext );
 }
 
 uno::Type
 ScVbaPivotTables::getElementType() throw (uno::RuntimeException)
 {
-    return excel::XPivotTables::static_type(0);
+    return excel::XPivotTable::static_type(0);
+}
+
+rtl::OUString&
+ScVbaPivotTables::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPivotTables") );
+    return sImplName;
+}
+
+css::uno::Sequence<rtl::OUString>
+ScVbaPivotTables::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > sNames;
+    if ( sNames.getLength() == 0 )
+    {
+        sNames.realloc( 1 );
+        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.PivotTables") );
+    }
+    return sNames;
 }
