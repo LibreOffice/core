@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svsys.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:12:30 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:48:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 #ifndef _SV_SVSYS_H
 #define _SV_SVSYS_H
 
-#include "tools/svwin.h"
+#include "premac.h"
+#include "Cocoa/Cocoa.h"
+#include "postmac.h"
 
 #endif // _SV_SVSYS_H
