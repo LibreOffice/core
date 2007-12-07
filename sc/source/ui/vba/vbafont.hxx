@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbafont.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:06:31 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,12 @@
 
 #include <org/openoffice/excel/XFont.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include "vbahelper.hxx"
+#include "vbahelperinterface.hxx"
 #include "vbapalette.hxx"
 
 class ScTableSheetsObj;
 
-typedef  ::cppu::WeakImplHelper1< oo::excel::XFont > ScVbaFont_BASE;
+typedef  InheritedHelperInterfaceImpl1< oo::excel::XFont > ScVbaFont_BASE;
 
 class ScVbaFont : public ScVbaFont_BASE
 {
@@ -52,7 +52,7 @@ class ScVbaFont : public ScVbaFont_BASE
     ScVbaPalette mPalette;
     SfxItemSet* mpDataSet;
 public:
-    ScVbaFont( const ScVbaPalette& dPalette, css::uno::Reference< css::beans::XPropertySet > xPropertySet, SfxItemSet* pDataSet = NULL ) throw ( css::uno::RuntimeException );
+    ScVbaFont( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const ScVbaPalette& dPalette, css::uno::Reference< css::beans::XPropertySet > xPropertySet, SfxItemSet* pDataSet = NULL ) throw ( css::uno::RuntimeException );
     virtual ~ScVbaFont() {}
 
     // Attributes
@@ -82,6 +82,11 @@ public:
     virtual void SAL_CALL setSuperscript( const css::uno::Any& _superscript ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getName() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setName( const css::uno::Any& _name ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL getColor() throw (css::uno::RuntimeException) ;
+    virtual void SAL_CALL setColor( const css::uno::Any& _color ) throw (css::uno::RuntimeException) ;
+    // XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 
 };
 

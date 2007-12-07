@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbadialogs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:06:09 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,29 +40,27 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <org/openoffice/excel/XDialogs.hpp>
 #include <org/openoffice/vba/XCollection.hpp>
+#include "vbahelperinterface.hxx"
 
 class ScModelObj;
 
-typedef ::cppu::WeakImplHelper1< oo::excel::XDialogs > ScVbaDialogs_BASE;
+typedef InheritedHelperInterfaceImpl1< oo::excel::XDialogs > ScVbaDialogs_BASE;
 
 class ScVbaDialogs : public ScVbaDialogs_BASE
 {
-    css::uno::Reference< css::uno::XComponentContext > & m_xContext;
 public:
-    ScVbaDialogs( css::uno::Reference< css::uno::XComponentContext > &xContext ):
-    m_xContext( xContext ) {}
+    ScVbaDialogs( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > &xContext ): ScVbaDialogs_BASE( xParent, xContext ) {}
     virtual ~ScVbaDialogs() {}
 
     // XCollection
     virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getParent() throw (css::uno::RuntimeException);
-    virtual ::sal_Int32 SAL_CALL getCreator() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::excel::XApplication > SAL_CALL getApplication()
-                                    throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
 
     // XDialogs
     virtual void SAL_CALL Dummy() throw (css::uno::RuntimeException);
+    // XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 
 #endif /* SC_VBA_DIALOGS_HXX */
