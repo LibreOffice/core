@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:16:48 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:49:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,12 @@
 #include "salinst.h"
 #include "vcl/salwtype.hxx"
 #include "vcl/window.hxx"
+
+#include "premac.h"
+// needed for theming
+// FIXME: move theming code to salnativewidgets.cxx
+#include <Carbon/Carbon.h>
+#include "postmac.h"
 
 #include "boost/assert.hpp"
 #include "vcl/svapp.hxx"
@@ -183,6 +189,8 @@ void AquaSalFrame::initWindowAndView()
 
     NSRect aRect = { { 0,0 }, { maGeometry.nWidth, maGeometry.nHeight } };
     mnTrackingRectTag = [mpView addTrackingRect: aRect owner: mpView userData: nil assumeInside: NO];
+
+    maSysData.pView = mpView;
 
     UpdateFrameGeometry();
 }
@@ -549,27 +557,29 @@ void AquaSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 /* nDisplay */ )
     if( bFullScreen )
     {
         NSRect aNewContentRect = maScreenRect;
+
+        // hide the dock and the menubar
+        [NSMenu setMenuBarVisible:NO];
+
         maFullScreenRect = [mpWindow frame];
         [mpWindow setFrame: [NSWindow frameRectForContentRect: aNewContentRect styleMask: mnStyleMask] display: YES];
 
         UpdateFrameGeometry();
+
         if( mbShown )
             CallCallback( SALEVENT_MOVERESIZE, NULL );
-
-        // FIXME: replace by Cocoa calls
-        SetSystemUIMode( kUIModeAllHidden, kUIOptionAutoShowMenuBar );
-        // -> Shows menubar when we move the mouse over it.
     }
     else
     {
         [mpWindow setFrame: maFullScreenRect display: YES];
 
         UpdateFrameGeometry();
+
         if( mbShown )
             CallCallback( SALEVENT_MOVERESIZE, NULL );
 
-        // FIXME: replace by Cocoa calls
-        SetSystemUIMode( kUIModeNormal, nil );
+        // show the dock and the menubar
+        [NSMenu setMenuBarVisible:YES];
     }
     if( mbShown )
         // trigger filling our backbuffer
