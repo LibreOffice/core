@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbavalidation.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:11:27 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,6 +266,10 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
                 // #TODO need to correct the ';' delimited formula on get/set
                 break;
             }
+        case excel::XlDVType::xlValidateWholeNumber:
+            nValType = sheet::ValidationType_WHOLE;
+            xProps->setPropertyValue( STYPE, uno::makeAny(nValType ));
+            break;
         default:
             throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "unsupported operation..." ) ), uno::Reference< uno::XInterface >() );
     }
@@ -317,3 +321,21 @@ ScVbaValidation::getFormula2() throw (uno::RuntimeException)
     return xCond->getFormula2();
 }
 
+rtl::OUString&
+ScVbaValidation::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaValidation") );
+    return sImplName;
+}
+
+uno::Sequence< rtl::OUString >
+ScVbaValidation::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Validation" ) );
+    }
+    return aServiceNames;
+}

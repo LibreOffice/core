@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbapivottables.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:10:18 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:59:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,16 +42,18 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 
 #include "vbahelper.hxx"
+#include "vbahelperinterface.hxx"
 #include "vbacollectionimpl.hxx"
 
 
-typedef ::cppu::ImplInheritanceHelper1< ScVbaCollectionBaseImpl, oo::excel::XPivotTables > ScVbaPivotTables_BASE;
+typedef CollTestImplHelper< oo::excel::XPivotTables > ScVbaPivotTables_BASE;
 
 class ScVbaPivotTables : public ScVbaPivotTables_BASE
 {
-protected:
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+
 public:
-    ScVbaPivotTables( const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+    ScVbaPivotTables( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
     virtual ~ScVbaPivotTables() {}
 
     // XEnumerationAccess
@@ -61,8 +63,10 @@ public:
 
     // XPivotTables
 
-    // ScVbaCollectionBaseImpl
+    // ScVbaPivotTables_BASE
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
+
+    virtual rtl::OUString& getServiceImplName();
 
 };
 

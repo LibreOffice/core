@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbapivotcache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:09:19 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:59:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,18 +39,19 @@
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
 
 #include <org/openoffice/excel/XPivotCache.hpp>
-#include "vbahelper.hxx"
+#include "vbahelperinterface.hxx"
 
-typedef ::cppu::WeakImplHelper1<oo::excel::XPivotCache > PivotCacheImpl_BASE;
+typedef InheritedHelperInterfaceImpl1<oo::excel::XPivotCache > PivotCacheImpl_BASE;
 
 class ScVbaPivotCache : public PivotCacheImpl_BASE
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::sheet::XDataPilotTable > m_xTable;
-
 public:
-    ScVbaPivotCache( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XDataPilotTable >& xTable );
+    ScVbaPivotCache( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XDataPilotTable >& xTable );
     virtual void SAL_CALL Refresh() throw (css::uno::RuntimeException);
+    // XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 
 #endif //SC_VBA_PIVOTCACHE_HXX

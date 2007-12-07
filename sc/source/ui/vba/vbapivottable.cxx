@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbapivottable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:09:30 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:59:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,33 @@
 using namespace ::com::sun::star;
 using namespace ::org::openoffice;
 
-ScVbaPivotTable::ScVbaPivotTable( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XDataPilotTable >& xTable ) : m_xContext( xContext ), m_xTable( xTable )
+ScVbaPivotTable::ScVbaPivotTable( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< sheet::XDataPilotTable >& xTable ) : PivotTableImpl_BASE( uno::Reference< vba::XHelperInterface >(),  xContext), m_xTable( xTable )
 {
 }
 
 uno::Reference< excel::XPivotCache >
 ScVbaPivotTable::PivotCache() throw (uno::RuntimeException)
 {
-    return new ScVbaPivotCache( m_xContext, m_xTable );
+    // #FIXME with a quick example failed to determine what the parent
+    // should be, leaving as null at the moment
+    return new ScVbaPivotCache( uno::Reference< vba::XHelperInterface >(), mxContext, m_xTable );
+}
+
+rtl::OUString&
+ScVbaPivotTable::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPivotTable") );
+    return sImplName;
+}
+
+uno::Sequence< rtl::OUString >
+ScVbaPivotTable::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.PivotTable" ) );
+    }
+    return aServiceNames;
 }

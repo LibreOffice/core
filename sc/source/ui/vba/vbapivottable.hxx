@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbapivottable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:09:57 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:59:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,16 +39,19 @@
 #include <com/sun/star/sheet/XDataPilotTable.hpp>
 #include <org/openoffice/excel/XPivotTable.hpp>
 #include "vbahelper.hxx"
+#include "vbahelperinterface.hxx"
 
-typedef ::cppu::WeakImplHelper1<oo::excel::XPivotTable > PivotTableImpl_BASE;
+typedef InheritedHelperInterfaceImpl1< oo::excel::XPivotTable >  PivotTableImpl_BASE;
 
 class ScVbaPivotTable : public PivotTableImpl_BASE
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::sheet::XDataPilotTable > m_xTable;
 public:
     ScVbaPivotTable( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XDataPilotTable >& xTable );
     virtual css::uno::Reference< oo::excel::XPivotCache > SAL_CALL PivotCache(  ) throw (css::uno::RuntimeException);
+    // XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 
 #endif //SC_VBA_PIVOTTABLE_HXX

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaseriescollection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:10:51 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:01:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,22 +40,8 @@
 using namespace ::com::sun::star;
 using namespace ::org::openoffice;
 
-uno::Reference< oo::excel::XApplication >
-ScVbaSeriesCollection::getApplication() throw (uno::RuntimeException)
+ScVbaSeriesCollection::ScVbaSeriesCollection( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : SeriesCollection_BASE( xParent, xContext, uno::Reference< container::XIndexAccess>() )
 {
-    return ScVbaGlobals::getGlobalsImpl( m_xContext )->getApplication();
-}
-::sal_Int32
-ScVbaSeriesCollection::getCount() throw (uno::RuntimeException)
-{
-    return 0;
-}
-
-uno::Any
-ScVbaSeriesCollection::Item( const uno::Any& /*aIndex*/ ) throw (uno::RuntimeException)
-{
-    // #TODO #FIXME some implementation would be nice !!
-    return uno::Any();
 }
 
 // XEnumerationAccess
@@ -74,35 +60,29 @@ ScVbaSeriesCollection::getElementType() throw (uno::RuntimeException)
 {
     return excel::XSeries::static_type(0);
 }
-::sal_Bool
-ScVbaSeriesCollection::hasElements() throw (uno::RuntimeException)
+
+uno::Any
+ScVbaSeriesCollection::createCollectionObject( const css::uno::Any& rSource )
 {
-    // #TODO #TOFIX Really?, how can we say that!
-    // needs to delegate to xIndex
-    return sal_True;
+    return rSource;
 }
 
-uno::Any SAL_CALL
-ScVbaSeriesCollection::getParent() throw (uno::RuntimeException)
+rtl::OUString&
+ScVbaSeriesCollection::getServiceImplName()
 {
-    uno::Reference< excel::XApplication > xApplication =
-        getApplication();
-    uno::Reference< excel::XWorkbook > xWorkbook;
-    if ( xApplication.is() )
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaSeriesCollection") );
+    return sImplName;
+}
+
+css::uno::Sequence<rtl::OUString>
+ScVbaSeriesCollection::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > sNames;
+    if ( sNames.getLength() == 0 )
     {
-        xWorkbook = xApplication->getActiveWorkbook();
+        sNames.realloc( 1 );
+        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.SeriesCollection") );
     }
-    return uno::Any( xWorkbook );
+    return sNames;
 }
-
-sal_Int32 SAL_CALL
-ScVbaSeriesCollection::getCreator() throw (uno::RuntimeException)
-{
-    // #TODO# #FIXME# implementation?
-    return 0;
-}
-
-
-
-
 
