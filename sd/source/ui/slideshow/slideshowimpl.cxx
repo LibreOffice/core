@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:02:49 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:59:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,17 @@
 #include "canvas/elapsedtime.hxx"
 #include "canvas/prioritybooster.hxx"
 #include "avmedia/mediawindow.hxx"
+
+// TODO(Q3): This breaks encapsulation. Either export
+// these strings from avmedia, or provide an XManager
+// factory there
+#ifdef WNT
+#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_DirectX"
+#elif defined QUARTZ
+#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_QuickTime"
+#else
+#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_Java"
+#endif
 
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
