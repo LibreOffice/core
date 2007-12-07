@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbahelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:07:21 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:53:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
+#include <comphelper/processfactory.hxx>
+
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
@@ -52,7 +54,9 @@
 
 #include <basic/sbx.hxx>
 #include <basic/sbstar.hxx>
+#include <rtl/math.hxx>
 
+#include <math.h>
 #include "vbahelper.hxx"
 #include "tabvwsh.hxx"
 #include "transobj.hxx"
@@ -61,6 +65,7 @@
 using namespace ::com::sun::star;
 using namespace ::org::openoffice;
 
+#define POINTTO100THMILLIMETERFACTOR 35.27778
 void unoToSbxValue( SbxVariable* pVar, const uno::Any& aValue );
 
 uno::Any sbxToUnoValue( SbxVariable* pVar );
@@ -71,6 +76,14 @@ namespace org
 namespace openoffice
 {
 
+const double Millimeter::factor =  35.27778;
+
+uno::Reference< script::XTypeConverter >
+getTypeConverter( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
+{
+    static uno::Reference< script::XTypeConverter > xTypeConv( xContext->getServiceManager()->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.Converter") ), xContext ), uno::UNO_QUERY_THROW );
+    return xTypeConv;
+}
 // helper method to determine if the view ( calc ) is in print-preview mode
 bool isInPrintPreview( SfxViewFrame* pView )
 {
@@ -99,7 +112,8 @@ private:
     bool bInitialWarningState;
     static uno::Reference< beans::XPropertySet > getGlobalSheetSettings() throw ( uno::RuntimeException )
     {
-        static uno::Reference<uno::XComponentContext > xContext( ::cppu::defaultBootstrap_InitialComponentContext(), uno::UNO_QUERY_THROW );
+        static uno::Reference< beans::XPropertySet > xTmpProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        static uno::Reference<uno::XComponentContext > xContext( xTmpProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY_THROW );
         static uno::Reference<lang::XMultiComponentFactory > xServiceManager(
                 xContext->getServiceManager(), uno::UNO_QUERY_THROW );
         static uno::Reference< beans::XPropertySet > xProps( xServiceManager->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.GlobalSheetSettings" ) ) ,xContext ), uno::UNO_QUERY_THROW );
@@ -150,7 +164,8 @@ dispatchRequests (uno::Reference< frame::XModel>& xModel,rtl::OUString & aUrl, u
     uno::Reference<frame::XDispatchProvider> xDispatchProvider (xFrame,uno::UNO_QUERY_THROW);
     try
     {
-        uno::Reference<uno::XComponentContext > xContext(  ::cppu::defaultBootstrap_InitialComponentContext());
+        uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+        uno::Reference<uno::XComponentContext > xContext( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY_THROW  );
         if ( !xContext.is() )
         {
             return ;
@@ -167,10 +182,6 @@ dispatchRequests (uno::Reference< frame::XModel>& xModel,rtl::OUString & aUrl, u
         if (!xParser.is())
             return;
         xParser->parseStrict (url);
-    }
-    catch ( ::cppu::BootstrapException & /*e*/ )
-    {
-        return ;
     }
     catch ( uno::Exception & /*e*/ )
     {
@@ -322,7 +333,9 @@ getCurrentDocument() throw (uno::RuntimeException)
             !xModel.is() )
         {
             // trying last gasp try the current component
-            uno::Reference<uno::XComponentContext > xCtx( ::cppu::defaultBootstrap_InitialComponentContext(), uno::UNO_QUERY_THROW );
+            uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
+            // test if vba service is present
+            uno::Reference< uno::XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY_THROW );
             uno::Reference<lang::XMultiComponentFactory > xSMgr( xCtx->getServiceManager(), uno::UNO_QUERY_THROW );
             uno::Reference< frame::XDesktop > xDesktop (xSMgr->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"), xCtx), uno::UNO_QUERY_THROW );
             xModel.set( xDesktop->getCurrentComponent(), uno::UNO_QUERY );
@@ -512,16 +525,228 @@ void PrintOutHelper( const uno::Any& From, const uno::Any& To, const uno::Any& C
     }
 
     // #FIXME #TODO
-    // 1 Preview ( does such a thing exist in OO.org? )
-    // 2 ActivePrinter ( how/can we switch a printer via API? )
-    // 3 PrintToFile ( ms behaviour if this option is specified but no
+    // 1 ActivePrinter ( how/can we switch a printer via API? )
+    // 2 PrintToFile ( ms behaviour if this option is specified but no
     //   filename supplied 'PrToFileName' then the user will be prompted )
-    // 4 Need to check behaviour of Selected sheets with range ( e.g. From & To
+    // 3 Need to check behaviour of Selected sheets with range ( e.g. From & To
     //    values ) in oOO these options are mutually exclusive
-    // 5 There is a pop up to do with transparent objects in the print source
+    // 4 There is a pop up to do with transparent objects in the print source
     //   should be able to disable that via configuration for the duration
     //   of this method
 }
 
+rtl::OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeException )
+{
+    uno::Type aType = pvargItem.getValueType();
+    uno::TypeClass eTypeClass = aType.getTypeClass();
+    rtl::OUString sString;
+    switch ( eTypeClass )
+    {
+        case uno::TypeClass_BOOLEAN:
+        {
+            sal_Bool bBool = sal_False;
+            pvargItem >>= bBool;
+            sString = rtl::OUString::valueOf( bBool );
+            break;
+        }
+        case uno::TypeClass_STRING:
+            pvargItem >>= sString;
+            break;
+        case uno::TypeClass_FLOAT:
+            {
+                float aFloat = 0;
+                pvargItem >>= aFloat;
+                sString = rtl::OUString::valueOf( aFloat );
+                break;
+            }
+        case uno::TypeClass_DOUBLE:
+            {
+                double aDouble = 0;
+                pvargItem >>= aDouble;
+                sString = rtl::OUString::valueOf( aDouble );
+                break;
+            }
+        case uno::TypeClass_SHORT:
+        case uno::TypeClass_LONG:
+        case uno::TypeClass_BYTE:
+            {
+                sal_Int32 aNum = 0;
+                pvargItem >>= aNum;
+                sString = rtl::OUString::valueOf( aNum );
+                break;
+            }
+
+        case uno::TypeClass_HYPER:
+            {
+                sal_Int64 aHyper = 0;
+                pvargItem >>= aHyper;
+                sString = rtl::OUString::valueOf( aHyper );
+                break;
+            }
+        default:
+                   throw uno::RuntimeException( rtl::OUString::createFromAscii( "Invalid type, can't convert" ), uno::Reference< uno::XInterface >() );
+    }
+    return sString;
 }
+
+
+rtl::OUString
+ContainerUtilities::getUniqueName( const uno::Sequence< ::rtl::OUString >&  _slist, const rtl::OUString& _sElementName, const ::rtl::OUString& _sSuffixSeparator)
+{
+    return getUniqueName(_slist, _sElementName, _sSuffixSeparator, sal_Int32(2));
 }
+
+rtl::OUString
+ContainerUtilities::getUniqueName( const uno::Sequence< rtl::OUString >& _slist, const rtl::OUString _sElementName, const rtl::OUString& _sSuffixSeparator, sal_Int32 _nStartSuffix)
+{
+    sal_Int32 a = _nStartSuffix;
+    rtl::OUString scompname = _sElementName;
+    bool bElementexists = true;
+    sal_Int32 nLen = _slist.getLength();
+    if ( nLen == 0 )
+        return _sElementName;
+
+    while (bElementexists == true)
+    {
+        for (sal_Int32 i = 0; i < nLen; i++)
+        {
+            if (FieldInList(_slist, scompname) == -1)
+            {
+                return scompname;
+            }
+        }
+        scompname = _sElementName + _sSuffixSeparator + rtl::OUString::valueOf( a++ );
+    }
+    return rtl::OUString();
+}
+
+sal_Int32
+ContainerUtilities::FieldInList( const uno::Sequence< rtl::OUString >& SearchList, const rtl::OUString& SearchString )
+{
+    sal_Int32 FieldLen = SearchList.getLength();
+    sal_Int32 retvalue = -1;
+    for (sal_Int32 i = 0; i < FieldLen; i++)
+    {
+        // I wonder why comparing lexicographically is done
+        // when its a match is whats interesting?
+        //if (SearchList[i].compareTo(SearchString) == 0)
+        if ( SearchList[i].equals( SearchString ) )
+        {
+            retvalue = i;
+            break;
+        }
+    }
+    return retvalue;
+
+}
+bool NeedEsc(sal_Unicode cCode)
+{
+    String sEsc(RTL_CONSTASCII_USTRINGPARAM(".^$+\\|{}()"));
+    return (STRING_NOTFOUND != sEsc.Search(cCode));
+}
+
+rtl::OUString VBAToRegexp(const rtl::OUString &rIn, bool bForLike )
+{
+    rtl::OUStringBuffer sResult;
+    const sal_Unicode *start = rIn.getStr();
+    const sal_Unicode *end = start + rIn.getLength();
+
+    int seenright = 0;
+    if ( bForLike )
+        sResult.append(static_cast<sal_Unicode>('^'));
+
+    while (start < end)
+    {
+        switch (*start)
+        {
+            case '?':
+                sResult.append(static_cast<sal_Unicode>('.'));
+                start++;
+                break;
+            case '*':
+                sResult.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".*")));
+                start++;
+                break;
+            case '#':
+                sResult.append(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[0-9]")));
+                start++;
+                break;
+            case '~':
+                sResult.append(static_cast<sal_Unicode>('\\'));
+                sResult.append(*(++start));
+                start++;
+                break;
+                // dump the ~ and escape the next characture
+            case ']':
+                sResult.append(static_cast<sal_Unicode>('\\'));
+                sResult.append(*start++);
+                break;
+            case '[':
+                sResult.append(*start++);
+                seenright = 0;
+                while (start < end && !seenright)
+                {
+                    switch (*start)
+                    {
+                        case '[':
+                        case '?':
+                        case '*':
+                        sResult.append(static_cast<sal_Unicode>('\\'));
+                        sResult.append(*start);
+                            break;
+                        case ']':
+                        sResult.append(*start);
+                            seenright = 1;
+                            break;
+                        case '!':
+                            sResult.append(static_cast<sal_Unicode>('^'));
+                            break;
+                        default:
+                        if (NeedEsc(*start))
+                            sResult.append(static_cast<sal_Unicode>('\\'));
+                        sResult.append(*start);
+                            break;
+                    }
+                    start++;
+                }
+                break;
+            default:
+                if (NeedEsc(*start))
+                    sResult.append(static_cast<sal_Unicode>('\\'));
+                sResult.append(*start++);
+        }
+    }
+
+    if ( bForLike )
+        sResult.append(static_cast<sal_Unicode>('$'));
+
+    return sResult.makeStringAndClear( );
+}
+
+double getPixelTo100thMillimeterConversionFactor( css::uno::Reference< css::awt::XDevice >& xDevice, sal_Bool bVertical)
+{
+    double fConvertFactor = 1.0;
+    if( bVertical )
+    {
+        fConvertFactor = xDevice->getInfo().PixelPerMeterY/100000;
+    }
+    else
+    {
+        fConvertFactor = xDevice->getInfo().PixelPerMeterX/100000;
+    }
+    return fConvertFactor;
+}
+
+double PointsToPixels( css::uno::Reference< css::awt::XDevice >& xDevice, double fPoints, sal_Bool bVertical)
+{
+    double fConvertFactor = getPixelTo100thMillimeterConversionFactor( xDevice, bVertical );
+    return fPoints * POINTTO100THMILLIMETERFACTOR * fConvertFactor;
+}
+double PixelsToPoints( css::uno::Reference< css::awt::XDevice >& xDevice, double fPixels, sal_Bool bVertical)
+{
+    double fConvertFactor = getPixelTo100thMillimeterConversionFactor( xDevice, bVertical );
+    return (fPixels/fConvertFactor)/POINTTO100THMILLIMETERFACTOR;
+}
+
+} // openoffice
+} //org
