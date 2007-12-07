@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediamisc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:49:09 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:40:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,12 @@ class ResMgr;
 #ifdef WNT
 #define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_DirectX"
 #else
+#ifdef QUARTZ
+#define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.comp.avmedia.Manager_QuickTime"
+#else
 #define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_Java"
 #endif
-
+#endif
 
 namespace avmedia
 {
