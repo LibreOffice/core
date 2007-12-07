@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:14:56 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:42:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1367,6 +1367,7 @@ ScCellRangesBase::ScCellRangesBase() :
     pCurrentFlat( NULL ),
     pCurrentDeep( NULL ),
     pCurrentDataSet( NULL ),
+    pNoDfltCurrentDataSet( NULL ),
     pMarkData( NULL ),
     nObjectId( 0 ),
     bChartColAsHdr( FALSE ),
@@ -1384,6 +1385,7 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRange& rR) :
     pCurrentFlat( NULL ),
     pCurrentDeep( NULL ),
     pCurrentDataSet( NULL ),
+    pNoDfltCurrentDataSet( NULL ),
     pMarkData( NULL ),
     nObjectId( 0 ),
     bChartColAsHdr( FALSE ),
@@ -1411,6 +1413,7 @@ ScCellRangesBase::ScCellRangesBase(ScDocShell* pDocSh, const ScRangeList& rR) :
     pCurrentFlat( NULL ),
     pCurrentDeep( NULL ),
     pCurrentDataSet( NULL ),
+    pNoDfltCurrentDataSet( NULL ),
     pMarkData( NULL ),
     aRanges( rR ),
     nObjectId( 0 ),
@@ -1450,9 +1453,11 @@ void ScCellRangesBase::ForgetCurrentAttrs()
     delete pCurrentFlat;
     delete pCurrentDeep;
     delete pCurrentDataSet;
+    delete pNoDfltCurrentDataSet;
     pCurrentFlat = NULL;
     pCurrentDeep = NULL;
     pCurrentDataSet = NULL;
+    pNoDfltCurrentDataSet = NULL;
 
     // #i62483# pMarkData can remain unchanged, is deleted only if the range changes (RefChanged)
 }
@@ -1487,7 +1492,7 @@ const ScPatternAttr* ScCellRangesBase::GetCurrentAttrsDeep()
     return pCurrentDeep;
 }
 
-SfxItemSet* ScCellRangesBase::GetCurrentDataSet()
+SfxItemSet* ScCellRangesBase::GetCurrentDataSet(bool bNoDflt)
 {
     if(!pCurrentDataSet)
     {
@@ -1496,10 +1501,11 @@ SfxItemSet* ScCellRangesBase::GetCurrentDataSet()
         {
             //  Dontcare durch Default ersetzen, damit man immer eine Reflection hat
             pCurrentDataSet = new SfxItemSet( pPattern->GetItemSet() );
+            pNoDfltCurrentDataSet = new SfxItemSet( pPattern->GetItemSet() );
             pCurrentDataSet->ClearInvalidItems();
         }
     }
-    return pCurrentDataSet;
+    return bNoDflt ? pNoDfltCurrentDataSet : pCurrentDataSet;
 }
 
 const ScMarkData* ScCellRangesBase::GetMarkData()
@@ -2396,6 +2402,7 @@ void ScCellRangesBase::GetOnePropertyValue( const SfxItemPropertyMap* pMap,
                     case ATTR_VALUE_FORMAT:
                         {
                             ScDocument* pDoc = pDocShell->GetDocument();
+
                             ULONG nOldFormat = ((const SfxUInt32Item&)
                                     pDataSet->Get( ATTR_VALUE_FORMAT )).GetValue();
                             LanguageType eOldLang = ((const SvxLanguageItem&)
