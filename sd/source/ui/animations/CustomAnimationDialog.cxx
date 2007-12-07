@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:24:40 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:45:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1945,6 +1945,8 @@ void CustomAnimationEffectTabPage::openSoundFileDialog()
 // factory there
 #ifdef WNT
 #   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_DirectX"
+#elif defined QUARTZ
+#   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_QuickTime"
 #else
 #   define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_Java"
 #endif
