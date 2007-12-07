@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.266 $
+ *  $Revision: 1.267 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:15:26 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:50:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -8427,8 +8427,8 @@ Reference< XDragSource > Window::GetDragSource()
              * Using Windows based dnd as a temporary solution        */
                         aDragSourceSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDragSource" );
                         aDropTargetSN = OUString::createFromAscii( "com.sun.star.datatransfer.dnd.OleDropTarget" );
-                        aDragSourceAL[ 1 ] = makeAny( (sal_uInt32) pEnvData->rWindow );
-                        aDropTargetAL[ 0 ] = makeAny( (sal_uInt32) pEnvData->rWindow );
+                        aDragSourceAL[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
+                        aDropTargetAL[ 0 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pEnvData->pView) ) );
 #elif defined UNX
                         aDropTargetAL.realloc( 3 );
                         aDragSourceAL.realloc( 3 );
@@ -9526,9 +9526,9 @@ Reference< rendering::XCanvas > Window::ImplGetCanvas( const Size& rFullscreenSi
     if( pSysData )
         aArg[ 1 ] = makeAny( static_cast<sal_Int32>(pSysData->hWnd) );
 #elif defined( QUARTZ )
-    // take WindowRef for Mac OS X / Quartz
+    // take NSView* for Mac OS X / Quartz
     if( pSysData )
-        aArg[ 1 ] = makeAny( reinterpret_cast<sal_IntPtr>(pSysData->rWindow) );
+        aArg[ 1 ] = makeAny( static_cast<sal_uInt64>( reinterpret_cast<sal_IntPtr>(pSysData->pView) ) );
 #elif defined( UNX )
     // take XLIB window for X11, and fake a motif widget ID from
     // that.
