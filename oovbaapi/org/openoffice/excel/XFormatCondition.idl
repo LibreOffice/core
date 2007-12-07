@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XFormatCondition.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:25:09 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __org_openoffice_excel_XFormatCondition_idl__
+#define __org_openoffice_excel_XFormatCondition_idl__
+
+#ifndef __com_sun_star_script_BasicErrorException_idl__
+#include <com/sun/star/script/BasicErrorException.idl>
+#endif
+
+#ifndef __org_openoffice_vba_XHelperInterface_idl__
+#include <org/openoffice/vba/XHelperInterface.idl>
+#endif
+
+module org { module openoffice { module excel {
+
+interface XFont;
+interface XInterior;
+interface XBorders;
+
+interface XFormatCondition
+{
+    interface  ::org::openoffice::vba::XHelperInterface;
+
+    void Delete(  ) raises ( com::sun::star::script::BasicErrorException );
+
+    /**
+    @param Type
+    @param Operator
+    Optional.
+    @param Formula1
+    Optional.
+    @param Formula2
+    Optional.
+    @return void
+    **/
+    void Modify( [in] long Type, [in]  /*Optional*/ any Operator, [in]  /*Optional*/ any Formula1, [in]  /*Optional*/ any Formula2 ) raises ( com::sun::star::script::BasicErrorException );
+
+    long Type( ) raises ( com::sun::star::script::BasicErrorException );
+
+    long Operator( ) raises ( com::sun::star::script::BasicErrorException );
+
+    string Formula1( ) raises ( com::sun::star::script::BasicErrorException );
+
+    string Formula2( ) raises ( com::sun::star::script::BasicErrorException );
+
+    XInterior Interior( ) raises ( com::sun::star::script::BasicErrorException );
+
+    any Borders( [in] any Index) raises ( com::sun::star::script::BasicErrorException );
+
+    XFont Font( ) raises ( com::sun::star::script::BasicErrorException );
+};
+
+
+}; }; };
+
+#endif

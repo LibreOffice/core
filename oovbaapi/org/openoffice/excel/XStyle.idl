@@ -1,0 +1,107 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XStyle.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:28:06 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __org_openoffice_excel_XStyle_idl__
+#define __org_openoffice_excel_XStyle_idl__
+
+#ifndef __com_sun_star_script_BasicErrorException_idl__
+#include <com/sun/star/script/BasicErrorException.idl>
+#endif
+
+#ifndef __org_openoffice_vba_XHelperInterface_idl__
+#include <org/openoffice/vba/XHelperInterface.idl>
+#endif
+#ifndef __org_openoffice_excel_XFormat_idl__
+#include <org/openoffice/excel/XFormat.idl>
+#endif
+
+module org { module openoffice { module excel {
+interface XStyle
+{
+    interface XFormat;
+
+    boolean BuiltIn()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setName([in] string Name)
+        raises(com::sun::star::script::BasicErrorException);
+
+    string getName()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setNameLocal([in] string NameLocal)
+        raises(com::sun::star::script::BasicErrorException);
+
+    string getNameLocal()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void Delete()
+        raises(com::sun::star::script::BasicErrorException);
+
+    /**    void     setValue( [in] string Value ) raises ( com::sun::star::script::BasicErrorException );
+
+     string     getValue( ) raises ( com::sun::star::script::BasicErrorException );
+
+     void       setIncludeAlignment( [in] boolean IncludeAlignment ) raises ( com::sun::star::script::BasicErrorException );
+
+     boolean        getIncludeAlignment( ) raises ( com::sun::star::script::BasicErrorException );
+
+     void       setIncludeBorder( [in] boolean IncludeBorder ) raises ( com::sun::star::script::BasicErrorException );
+
+     boolean        getIncludeBorder( ) raises ( com::sun::star::script::BasicErrorException );
+
+     void       setIncludeFont( [in] boolean IncludeFont ) raises ( com::sun::star::script::BasicErrorException );
+
+     boolean        getIncludeFont( ) raises ( com::sun::star::script::BasicErrorException );
+
+     void       setIncludeNumber( [in] boolean IncludeNumber ) raises ( com::sun::star::script::BasicErrorException );
+
+     boolean        getIncludeNumber( ) raises ( com::sun::star::script::BasicErrorException );
+
+     void       setIncludePatterns( [in] boolean IncludePatterns ) raises ( com::sun::star::script::BasicErrorException );
+
+     boolean        getIncludePatterns( ) raises ( com::sun::star::script::BasicErrorException );
+
+     void       setIncludeProtection( [in] boolean IncludeProtection ) raises ( com::sun::star::script::BasicErrorException );
+
+     boolean        getIncludeProtection( ) raises ( com::sun::star::script::BasicErrorException );
+     */
+
+};
+
+}; }; };
+
+#endif
+
