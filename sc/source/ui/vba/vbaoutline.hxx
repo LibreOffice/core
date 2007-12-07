@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaoutline.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:08:17 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:57:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,20 +39,22 @@
 #include <cppuhelper/implbase1.hxx>
 #include <org/openoffice/excel/XOutline.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
-#include "vbahelper.hxx"
+#include "vbahelperinterface.hxx"
 
-typedef ::cppu::WeakImplHelper1< oo::excel::XOutline > ScVbaOutline_BASE;
+typedef InheritedHelperInterfaceImpl1< oo::excel::XOutline > ScVbaOutline_BASE;
 
 class ScVbaOutline :  public ScVbaOutline_BASE
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::sheet::XSheetOutline > mxOutline;
 public:
-    ScVbaOutline( css::uno::Reference< css::uno::XComponentContext >& xContext,
-         css::uno::Reference<css::sheet::XSheetOutline> outline):m_xContext(xContext),mxOutline(outline)
+    ScVbaOutline( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
+         css::uno::Reference<css::sheet::XSheetOutline> outline): ScVbaOutline_BASE( xParent, xContext) , mxOutline(outline)
     {}
     virtual ~ScVbaOutline(){}
 
     virtual void SAL_CALL ShowLevels( const css::uno::Any& RowLevels, const css::uno::Any& ColumnLevels ) throw (css::uno::RuntimeException) ;
+    // XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif

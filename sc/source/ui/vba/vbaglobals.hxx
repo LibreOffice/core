@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaglobals.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:06:51 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,16 +40,15 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <org/openoffice/vba/XGlobals.hpp>
 
-#include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/implbase1.hxx>
 #include "vbahelper.hxx"
 
     // =============================================================================
     // class ScVbaGlobals
     // =============================================================================
 
-    typedef ::cppu::WeakImplHelper2<
-        oo::vba::XGlobals,
-        css::lang::XServiceInfo > ScVbaGlobals_BASE;
+    typedef ::cppu::WeakImplHelper1<
+        oo::vba::XGlobals > ScVbaGlobals_BASE;
 
 
     class ScVbaGlobals : public ScVbaGlobals_BASE
@@ -60,18 +59,10 @@
     public:
 
         ScVbaGlobals(
-            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
+            css::uno::Reference< css::uno::XComponentContext >const& rxContext );
         virtual ~ScVbaGlobals();
 
-        static  css::uno::Reference< oo::vba::XGlobals > getGlobalsImpl(css::uno::Reference< css::uno::XComponentContext >& ) throw (css::uno::RuntimeException);
-
-        // XServiceInfo
-        virtual ::rtl::OUString SAL_CALL getImplementationName(  )
-            throw (css::uno::RuntimeException);
-        virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-            throw (css::uno::RuntimeException);
-        virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  )
-            throw (css::uno::RuntimeException);
+        static  css::uno::Reference< oo::vba::XGlobals > getGlobalsImpl(const css::uno::Reference< css::uno::XComponentContext >& ) throw (css::uno::RuntimeException);
 
         // XGlobals
         virtual css::uno::Reference<
@@ -84,5 +75,6 @@
     virtual css::uno::Any SAL_CALL Sheets( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL getGlobals(  ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Range( const css::uno::Any& Cell1, const css::uno::Any& Cell2 ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Names( ) throw ( css::uno::RuntimeException );
     };
 #endif //

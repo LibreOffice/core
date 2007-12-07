@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaoutline.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:08:07 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:57:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,4 +51,23 @@ ScVbaOutline::ShowLevels( const uno::Any& RowLevels, const uno::Any& ColumnLevel
             mxOutline->showLevel(nLevel,table::TableOrientation_COLUMNS);
         }
     }
+}
+
+rtl::OUString&
+ScVbaOutline::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaOutline") );
+    return sImplName;
+}
+
+uno::Sequence< rtl::OUString >
+ScVbaOutline::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Outline" ) );
+    }
+    return aServiceNames;
 }
