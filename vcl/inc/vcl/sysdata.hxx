@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysdata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:43:30 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:50:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,6 @@
 #ifndef _SV_SYSDATA_HXX
 #define _SV_SYSDATA_HXX
 
-#if defined( QUARTZ )
-#include <premac.h>
-#include <Carbon/Carbon.h>
-#include <postmac.h>
-#endif
-
 // -----------------
 // - SystemEnvData -
 // -----------------
@@ -52,7 +46,7 @@ struct SystemEnvData
 #if defined( WNT ) || defined( OS2 )
     HWND                hWnd;           // the window hwnd
 #elif defined( QUARTZ )
-    WindowRef           rWindow;        // Window reference
+    NSView*             pView;          // the cocoa view ptr implementing this object
 #endif
 
 #if defined( UNX )
@@ -81,7 +75,7 @@ struct SystemParentData
 #if defined( WNT ) || defined( OS2 )
     HWND            hWnd;             // the window hwnd
 #elif defined( QUARTZ )
-    WindowRef       rWindow;        // Window reference
+    NSView*         pView;            // the cocoa view ptr implementing this object
 #elif defined( UNX )
     long            aWindow;          // the window of the object
     bool            bXEmbedSupport:1; // decides whether the object in question
