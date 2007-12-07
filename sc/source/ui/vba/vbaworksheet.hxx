@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaworksheet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:13:58 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:07:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 #define SC_VBA_WORKSHEET_HXX
 
 #include <cppuhelper/implbase2.hxx>
+#include <comphelper/unwrapargs.hxx>
+
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 #include <org/openoffice/excel/XWorksheet.hpp>
@@ -47,11 +49,12 @@
 #include <org/openoffice/excel/XOutline.hpp>
 #include <org/openoffice/excel/XChartObjects.hpp>
 
-#include "vbahelper.hxx"
+#include "vbahelperinterface.hxx"
 
-class ScVbaWorksheet : public ::cppu::WeakImplHelper2<oo::excel::XWorksheet, css::script::XInvocation >
+typedef InheritedHelperInterfaceImpl1< oo::excel::XWorksheet >  WorksheetImpl_BASE;
+
+class ScVbaWorksheet : public WorksheetImpl_BASE
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::sheet::XSpreadsheet > mxSheet;
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< oo::excel::XChartObjects > mxCharts;
@@ -60,21 +63,23 @@ class ScVbaWorksheet : public ::cppu::WeakImplHelper2<oo::excel::XWorksheet, css
     css::uno::Reference< oo::excel::XRange > getSheetRange() throw (css::uno::RuntimeException);
 
     css::uno::Any getControl( const rtl::OUString& sName );
+    css::uno::Any getControlShape( const rtl::OUString& sName );
 protected:
+
+    ScVbaWorksheet( const css::uno::Reference< oo::vba::XHelperInterface >& xParent,  const css::uno::Reference< css::uno::XComponentContext >& xContext );
+public:
+    ScVbaWorksheet( const css::uno::Reference< oo::vba::XHelperInterface >& xParent,
+        const css::uno::Reference< css::uno::XComponentContext >& xContext,
+        const css::uno::Reference< css::sheet::XSpreadsheet >& xSheet,
+        const css::uno::Reference< css::frame::XModel >& xModel )throw (css::uno::RuntimeException)  ;
+    ScVbaWorksheet( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext ) throw ( css::lang::IllegalArgumentException );
+
+    virtual ~ScVbaWorksheet() {}
 
     virtual css::uno::Reference< css::frame::XModel > getModel()
     { return mxModel; }
     virtual css::uno::Reference< css::sheet::XSpreadsheet > getSheet()
     { return mxSheet; }
-    ScVbaWorksheet( const css::uno::Reference< css::uno::XComponentContext >& xContext );
-public:
-    ScVbaWorksheet(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext,
-        const css::uno::Reference< css::sheet::XSpreadsheet >& xSheet,
-        const css::uno::Reference< css::frame::XModel >& xModel )throw (css::uno::RuntimeException)  ;
-
-    virtual ~ScVbaWorksheet() {}
-
 
     // Attributes
     virtual ::rtl::OUString SAL_CALL getName() throw (css::uno::RuntimeException);
@@ -114,6 +119,11 @@ public:
     virtual css::uno::Any SAL_CALL PivotTables( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL Comments( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
 
+    virtual css::uno::Any SAL_CALL OLEObjects( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Shapes( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setEnableCalculation( ::sal_Bool EnableCalculation ) throw ( css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL getEnableCalculation(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual void SAL_CALL ShowDataForm(  ) throw (css::uno::RuntimeException);
     // XInvocation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess > SAL_CALL getIntrospection(  ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL invoke( const ::rtl::OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException);
@@ -121,6 +131,14 @@ public:
     virtual css::uno::Any SAL_CALL getValue( const ::rtl::OUString& aPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL hasMethod( const ::rtl::OUString& aName ) throw (css::uno::RuntimeException);
     virtual ::sal_Bool SAL_CALL hasProperty( const ::rtl::OUString& aName ) throw (css::uno::RuntimeException);
+    // CodeName
+    virtual rtl::OUString SAL_CALL getCodeName() throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setCodeName( const rtl::OUString& sCodeName ) throw (css::uno::RuntimeException);
+    sal_Int16 getSheetID() throw (css::uno::RuntimeException);
+
+    // XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 
 #endif /* SC_VBA_WORKSHEET_HXX */
