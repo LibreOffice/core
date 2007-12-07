@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:33:21 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:41:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,9 @@
 #ifndef SC_ITEMS_HXX
 #include <scitems.hxx>
 #endif
-
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 #include <svtools/fltrcfg.hxx>
 
 #include <svtools/wmf.hxx>
@@ -289,6 +291,15 @@ void ImportExcel8::Codename( BOOL bWorkbookGlobals )
     }
 }
 
+bool lcl_hasVBAEnabled()
+{
+    uno::Reference< beans::XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY);
+        // test if vba service is present
+    uno::Reference< uno::XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), uno::UNO_QUERY );
+    uno::Reference< uno::XInterface > xGlobals( xCtx->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/org.openoffice.vba.theGlobals") ), uno::UNO_QUERY );
+
+    return xGlobals.is();
+}
 
 void ImportExcel8::ReadBasic( void )
 {
@@ -304,7 +315,7 @@ void ImportExcel8::ReadBasic( void )
         if( bLoadCode || bLoadStrg )
         {
             SvxImportMSVBasic aBasicImport( *pShell, *xRootStrg, bLoadCode, bLoadStrg );
-            aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA );
+            aBasicImport.Import( EXC_STORAGE_VBA_PROJECT, EXC_STORAGE_VBA, !lcl_hasVBAEnabled() );
         }
     }
 }
