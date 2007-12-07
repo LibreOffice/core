@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.267 $
+ *  $Revision: 1.268 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 17:45:10 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:51:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -908,6 +908,14 @@ File gid_File_Lib_MacOSXSpell
 	Styles = (PACKED,PATCH,UNO_COMPONENT);
 	RegistryID = gid_Starregistry_Services_Rdb;
 	Name = LIBNAME(MacOSXSpell);
+	Dir = gid_Dir_Program;
+End
+
+File gid_File_Lib_avmediaQuickTime
+	TXT_FILE_BODY;
+	Styles = (PACKED,PATCH,UNO_COMPONENT);
+	RegistryID = gid_Starregistry_Services_Rdb;
+	Name = LIBNAME(avmediaQuickTime);
 	Dir = gid_Dir_Program;
 End
 #endif
