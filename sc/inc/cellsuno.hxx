@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:37:43 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:40:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,6 +292,8 @@ class SC_DLLPUBLIC ScCellRangesBase : public com::sun::star::beans::XPropertySet
 {
     friend class ScTabViewObj;      // fuer select()
     friend class ScTableSheetObj;   // fuer createCursorByRange()
+    friend class NumFormatHelper;   // VBA helper Class that helps manipulate format data
+    friend class ScVbaRange;    //Main VBA helper class for Range
 
 private:
     SfxItemPropertySet      aPropSet;
@@ -300,6 +302,7 @@ private:
     ScPatternAttr*          pCurrentFlat;
     ScPatternAttr*          pCurrentDeep;
     SfxItemSet*             pCurrentDataSet;
+    SfxItemSet*             pNoDfltCurrentDataSet;
     ScMarkData*             pMarkData;
     ScRangeList             aRanges;
     sal_Int64               nObjectId;
@@ -319,7 +322,7 @@ private:
 
     const ScPatternAttr*    GetCurrentAttrsFlat();
     const ScPatternAttr*    GetCurrentAttrsDeep();
-    SfxItemSet*             GetCurrentDataSet();
+    SfxItemSet*             GetCurrentDataSet(bool bNoDflt = false);
     const ScMarkData*       GetMarkData();
     void                    ForgetMarkData();
     void                    ForgetCurrentAttrs();
