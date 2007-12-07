@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-05 08:49:23 $
+#   last change: $Author: vg $ $Date: 2007-12-07 11:52:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,11 @@ INCPRE+=-I$(SOLARINCDIR)$/mozilla$/nspr
 INCPRE+=-I$(SOLARINCDIR)$/npsdk
 CDEFS+=-DOJI
 .ENDIF
+
+.IF "$(GUIBASE)"=="aqua"
+OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
+CFLAGSCXX+=$(OBJCXXFLAGS)
+.ENDIF  # "$(GUIBASE)"=="aqua"
 
 SLOFILES=\
     $(SLO)$/macmgr.obj      \

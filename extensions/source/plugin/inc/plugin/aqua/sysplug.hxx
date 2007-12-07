@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysplug.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 15:32:25 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:53:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,10 @@
 #include <npsdk/npupp.h>
 
 #include <plugin/plcom.hxx>
-//#include <plugin/unx/plugcon.hxx>
-//#include <vcl/threadex.hxx>
-//#include <plugin/plcom.hxx>
+#include <premac.h>
+#include <Cocoa/Cocoa.h>
+#include <postmac.h>
+
 #include <vcl/sysdata.hxx>
 
 
@@ -67,7 +68,7 @@ private:
 public:
         MacPluginComm( const String& mimetype,
                        const String& library,
-                       WindowRef aParent,
+                       NSView* pParent,
                        int nDescriptor1,
                        int nDescriptor2
                        );

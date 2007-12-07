@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysplug.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 15:32:07 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:52:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ int MacPluginComm::nConnCounter = 0;
 MacPluginComm::MacPluginComm(
                              const String& mimetype,
                              const String& library,
-                             WindowRef aParent,
+                             NSView* aParent,
                              int nDescriptor1,
                              int nDescriptor2
                              ) :
