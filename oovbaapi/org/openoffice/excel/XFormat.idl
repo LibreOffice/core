@@ -1,0 +1,143 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XFormat.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:24:59 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __org_openoffice_excel_XFormat_idl__
+#define __org_openoffice_excel_XFormat_idl__
+
+#ifndef __com_sun_star_script_BasicErrorException_idl__
+#include <com/sun/star/script/BasicErrorException.idl>
+#endif
+#ifndef __org_openoffice_vba_XHelperInterface_idl__
+#include <org/openoffice/vba/XHelperInterface.idl>
+#endif
+
+module org { module openoffice { module excel {
+
+interface XBorders;
+interface XFont;
+interface XInterior;
+
+interface XFormat
+{
+    interface ::org::openoffice::vba::XHelperInterface;
+    // void         Clear(  ) raises ( com::sun::star::script::BasicErrorException );
+
+    any Borders( [in] any item )
+        raises(com::sun::star::script::BasicErrorException);
+
+    XFont Font()
+        raises(com::sun::star::script::BasicErrorException);
+
+    XInterior Interior()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setNumberFormat([in] any NumberFormat)
+        raises(com::sun::star::script::BasicErrorException);
+
+    any getNumberFormat()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setNumberFormatLocal([in] any NumberFormatLocal)
+        raises(com::sun::star::script::BasicErrorException);
+
+    any getNumberFormatLocal()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setIndentLevel([in] any IndentLevel)
+        raises(com::sun::star::script::BasicErrorException);
+
+    any getIndentLevel()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setHorizontalAlignment([in] any HorizontalAlignment)
+        raises(com::sun::star::script::BasicErrorException);
+
+    any getHorizontalAlignment()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setVerticalAlignment([in] any VerticalAlignment)
+        raises(com::sun::star::script::BasicErrorException);
+
+    any getVerticalAlignment()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setOrientation([in] any Orientation)
+        raises(com::sun::star::script::BasicErrorException);
+
+    any getOrientation()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setShrinkToFit([in] any ShrinkToFit)
+        raises(com::sun::star::script::BasicErrorException);
+
+    any getShrinkToFit()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setWrapText([in] any WrapText)
+        raises(com::sun::star::script::BasicErrorException);
+
+    any getWrapText()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setLocked([in] any Locked)
+        raises(com::sun::star::script::BasicErrorException);
+
+    any getLocked()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setFormulaHidden([in] any FormulaHidden)
+        raises(com::sun::star::script::BasicErrorException);
+
+    any getFormulaHidden()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setMergeCells([in] any MergeCells)
+        raises(com::sun::star::script::BasicErrorException);
+
+    any getMergeCells()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setReadingOrder([in] any ReadingOrder)
+        raises(com::sun::star::script::BasicErrorException);
+
+    any getReadingOrder()
+        raises(com::sun::star::script::BasicErrorException);
+
+};
+
+}; }; };
+
+#endif
+
