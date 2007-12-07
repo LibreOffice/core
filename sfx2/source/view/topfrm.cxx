@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:50:35 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 12:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -720,6 +720,12 @@ void SfxTopFrame::SetPresentationMode( BOOL bSet )
         GetWorkWindow_Impl()->SetDockingAllowed( !bSet );
     if ( GetCurrentViewFrame() )
         GetCurrentViewFrame()->GetDispatcher()->Update_Impl( TRUE );
+}
+
+SystemWindow*
+SfxTopFrame::GetSystemWindow() const
+{
+    return GetTopWindow_Impl();
 }
 
 SystemWindow* SfxTopFrame::GetTopWindow_Impl() const
