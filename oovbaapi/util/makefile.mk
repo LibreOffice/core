@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-27 07:26:44 $
+#   last change: $Author: vg $ $Date: 2007-12-07 12:18:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,14 +53,9 @@ dummy:
 UNOIDLDBFILES= \
     $(UCR)$/vba.db \
     $(UCR)$/excel.db \
-    $(UCR)$/msforms.db
+    $(UCR)$/msforms.db \
+    $(UCR)$/constants.db
 
 # --- Targets ------------------------------------------------------
-
-ALLTAR : $(UCR)$/types.db 
-
-$(UCR)$/types.db : $(UCR)$/oovbaapi.db 
-    +-$(RM) $(REGISTRYCHECKFLAG)
-    +$(GNUCOPY) -f $(UCR)$/oovbaapi.db $@
 
 .INCLUDE :  target.mk
