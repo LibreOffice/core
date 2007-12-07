@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XChart.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-27 07:39:29 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,17 +38,52 @@
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
+#ifndef __org_openoffice_vba_XHelperInterface_idl__
+#include <org/openoffice/vba/XHelperInterface.idl>
+#endif
 
+#ifndef __com_sun_star_script_BasicErrorException_idl__
+#include <com/sun/star/script/BasicErrorException.idl>
+#endif
 //=============================================================================
 
 module org {  module openoffice {  module excel {
 
 //=============================================================================
-
-interface XChart: com::sun::star::uno::XInterface
+interface XRange;
+interface XChartTitle;
+interface XChart
 {
+    interface ::org::openoffice::vba::XHelperInterface;
+
     [attribute, readonly] string Name;
     any SeriesCollection( [in] any Item );
+    long getChartType() raises(com::sun::star::script::BasicErrorException);
+
+    void setChartType([in] long chartType) raises(com::sun::star::script::BasicErrorException);
+
+    void Activate() raises(com::sun::star::script::BasicErrorException);
+    void setSourceData([in] XRange Source, [in] any PlotBy) raises(com::sun::star::script::BasicErrorException);
+
+    long Location() raises (com::sun::star::script::BasicErrorException);
+    long getLocation() raises (com::sun::star::script::BasicErrorException);
+
+    void setLocation([in] long where, [in] any Name) raises (com::sun::star::script::BasicErrorException);
+
+    boolean getHasTitle() raises(com::sun::star::script::BasicErrorException);
+
+    void setHasTitle([in] boolean bTitle) raises(com::sun::star::script::BasicErrorException);
+
+    boolean getHasLegend() raises(com::sun::star::script::BasicErrorException);
+
+    void setHasLegend([in] boolean bLegend) raises(com::sun::star::script::BasicErrorException);
+    XChartTitle getChartTitle() raises (com::sun::star::script::BasicErrorException);
+    void setPlotBy([in] long xlRowCol) raises(com::sun::star::script::BasicErrorException);
+
+    long getPlotBy() raises(com::sun::star::script::BasicErrorException);
+
+    any Axes( [in] any Type, [in] any AxisGroup ) raises (com::sun::star::script::BasicErrorException);
+
 };
 
 //=============================================================================

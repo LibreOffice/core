@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XComment.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-27 07:40:15 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:23:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,9 @@
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
+#ifndef __org_openoffice_vba_XHelperInterface_idl__
+#include <org/openoffice/vba/XHelperInterface.idl>
+#endif
 //=============================================================================
 
 module org {  module openoffice {  module excel {
@@ -48,12 +51,11 @@ module org {  module openoffice {  module excel {
 interface XApplication;
 interface XRange;
 
-interface XComment: com::sun::star::uno::XInterface
+interface XComment
 {
-    [attribute, readonly] XApplication Application;
+    interface ::org::openoffice::vba::XHelperInterface;
+
     [attribute] string Author;
-    [attribute, readonly] long Creator;
-    [attribute, readonly] XRange Parent;
 //  [attribute, readonly] Shape Shape;
     [attribute] boolean Visible;
 

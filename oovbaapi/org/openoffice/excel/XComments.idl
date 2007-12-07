@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XComments.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-27 07:40:26 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:23:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,12 +41,17 @@
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
+#ifndef __org_openoffice_vba_XCollection_idl__
+#include <org/openoffice/vba/XCollection.idl>
+#endif
+
 //=============================================================================
 
 module org {  module openoffice {  module excel {
 
-interface XComments: com::sun::star::uno::XInterface
+interface XComments
 {
+    interface org::openoffice::vba::XCollection;
 };
 
 //=============================================================================
