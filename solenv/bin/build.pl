@@ -7,9 +7,9 @@
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.162 $
+#   $Revision: 1.163 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 18:59:52 $
+#   last change: $Author: vg $ $Date: 2007-12-07 10:40:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@
 
     ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-    $id_str = ' $Revision: 1.162 $ ';
+    $id_str = ' $Revision: 1.163 $ ';
     $id_str =~ /Revision:\s+(\S+)\s+\$/
       ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -121,7 +121,9 @@
     $show = 0;
     $checkparents = 0;
     $deliver = 0;
+    $pre_custom_job = 0;
     $custom_job = 0;
+    $post_custom_job = 0;
     %LocalDepsHash = ();
     %BuildQueue = ();
     %PathHash = ();
@@ -260,7 +262,11 @@
     } else {
         BuildAll();
     }
-    cancel_build() if (scalar keys %broken_build);
+    if (scalar keys %broken_build) {
+        cancel_build();
+    } elsif (!$custom_job && $post_custom_job) {
+        do_post_custom_job(CorrectPath($StandDir.$CurrentPrj));
+    };
     if (scalar @warnings) {
         print STDERR $_ foreach (@warnings);
     };
@@ -460,7 +466,7 @@ sub initialize_html_info {
 }
 
 #
-# Start build on a given project
+# Do job
 #
 sub dmake_dir {
     my ($new_BuildDir, $OldBuildDir, $error_code);
@@ -636,6 +642,7 @@ sub get_deps_hash {
     $module_to_build = shift;
     my $dependencies_hash = shift;
     if ($deliver || $custom_job) {
+        add_pre_job($dependencies_hash, $module_to_build);
         add_post_job($dependencies_hash, $module_to_build) if ($modules_types{$module_to_build} ne 'lnk');
         return;
     };
@@ -973,11 +980,6 @@ sub check_deps_hash {
                     $string = undef;
                     if ($key =~ /(\s)/o) {
                         $string = $key;
-#                        if ($' eq $pre_job) {
-#                            push(@possible_order, $key . '<br>');
-#                        } else {
-#                            push(@possible_order, '<br>' . $key);
-#                        };
                     } else {
                         if (length($key) == length($module_path)) {
                             $string = './';
@@ -987,6 +989,9 @@ sub check_deps_hash {
                         };
                     };
                     $log_name = $string;
+                    if ($log_name eq "$module $custom_job") {
+                        $log_name = "$module custom_job";
+                    };
                     $log_name =~ s/\\|\//\./g;
                     $log_name =~ s/\s/_/g;
                     $log_name = $module if ($log_name =~ /^\.+$/);
@@ -1146,14 +1151,18 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform] [--dontchekoutmissingmodules]] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--job|-j] [-- job_options] \n";
+    print STDERR "Syntax:    build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2] [prj_name3 [...]]]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform] [--dontchekoutmissingmodules]] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes|--server [--setenvstring \"string\"] [--client_timeout MIN] [--port port1[:port2:...:portN]]] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [--mode|-m OOo[,SO[,EXT]] [--html [--html_path html_file_path] [--dontgraboutput]] [--pre_job=pre_job_sring] [--job=job_string|-j] [--post_job=post_job_sring]\n";
     print STDERR "Example1:    build --from sfx2\n";
     print STDERR "                     - build all projects dependent from sfx2, starting with sfx2, finishing with the current module\n";
     print STDERR "Example2:    build --all:sfx2\n";
     print STDERR "                     - the same as --all, but skip all projects that have been already built when using \"--all\" switch before sfx2\n";
     print STDERR "Example3:    build --all --server\n";
     print STDERR "                     - build all projects in server mode, use first available port from default range 7890-7894 (running clients required!!)\n";
-    print STDERR "Keys:   --all        - build all projects from very beginning till current one\n";
+    print STDERR "Example4(for unixes):\n";
+    print STDERR "             build --all --pre_job=echo\\ Starting\\ job\\ in\\ \\\$PWD --job=some_script.sh --post_job=echo\\ Job\\ in\\ \\\$PWD\\ is\\ made\n";
+    print STDERR "                     - go through all projects, echo \"Starting job in \$PWD\" in each module, execute script some_script.sh, and finally echo \"Job in \$PWD is made\"\n";
+    print STDERR "\nSwitches:\n";
+    print STDERR "        --all        - build all projects from very beginning till current one\n";
     print STDERR "        --from       - build all projects dependent from the specified (including it) till current one\n";
     print STDERR "        --mode OOo   - build only projects needed for OpenOffice.org\n";
     print STDERR "        --prepare    - clear all projects for incompatible build from prj_name till current one [for platform] (cws version)\n";
@@ -1177,9 +1186,12 @@ sub usage {
     print STDERR "          --html_path     - set html page path\n";
     print STDERR "          --dontgraboutput - do not grab console output when generating html page\n";
     print STDERR "        --dontchekoutmissingmodules - do not chekout missing modules when running prepare (links still will be broken)\n";
-    print STDERR "        --job        - execute custom job in (each) module. Job command should be passed after '--'\n";
+    print STDERR "   Custom jobs:\n";
+    print STDERR "        --job=job_string        - execute custom job in (each) module. job_string is a shell script/command to be executed instead of regular dmake jobs\n";
+    print STDERR "        --pre_job=pre_job_string        - execute preliminary job in (each) module. pre_job_string is a shell script/command to be executed before regular job in the module\n";
+    print STDERR "        --post_job=job_string        - execute a postprocess job in (each) module. post_job_string is a shell script/command to be executed after regular job in the module\n";
     print STDERR "Default:             - build current project\n";
-    print STDERR "Keys that are not listed above would be passed to dmake\n";
+    print STDERR "Unknown switches passed to dmake\n";
 };
 
 #
@@ -1196,8 +1208,9 @@ sub get_options {
         $arg =~ /^--checkmodules$/       and $checkparents = 1 and $ignore = 1 and next;
         $arg =~ /^-s$/        and $show = 1                         and next;
         $arg =~ /^--deliver$/    and $deliver = 1                     and next;
-        $arg =~ /^--job$/       and $custom_job = join(' ', get_job_args())                     and next;
-        $arg =~ /^-j$/          and $custom_job = join(' ', get_job_args())                    and next;
+        $arg =~ /^(--job=)/       and $custom_job = $' and next;
+        $arg =~ /^(--pre_job=)/       and $pre_custom_job = $' and next;
+        $arg =~ /^(--post_job=)/       and $post_custom_job = $' and next;
         $arg =~ /^-d$/    and $deliver = 1                     and next;
         $arg =~ /^--dlv_switch$/    and $dlv_switch = shift @ARGV    and next;
         $arg =~ /^--file$/        and $cmd_file = shift @ARGV             and next;
@@ -1244,7 +1257,7 @@ sub get_options {
         $arg =~ /^-m$/            and get_modes()         and next;
         $arg =~ /^--mode$/        and get_modes()         and next;
         if ($arg =~ /^--$/) {
-            push (@dmake_args, get_job_args()) if (!$custom_job);
+            push (@dmake_args, get_dmake_args()) if (!$custom_job);
             next;
         };
         push (@dmake_args, $arg);
@@ -1296,7 +1309,7 @@ sub get_options {
     @ARGV = @dmake_args;
 };
 
-sub get_job_args {
+sub get_dmake_args {
     my $arg;
     my @job_args = ();
     while ($arg = shift @ARGV) {
@@ -1350,7 +1363,6 @@ sub cancel_build {
 #        if ($ENV{GUI} eq 'WNT') {
             while (children_number()) {
                 handle_dead_children(1);
-#                sleep 1;
             }
             foreach (keys %broken_build) {
                 print "ERROR: error " . $broken_build{$_} . " occurred while making $_\n";
@@ -1466,13 +1478,12 @@ sub BuildDependent {
                 $child_nick = PickPrjToBuild($dependencies_hash);
                 if (!$child_nick) {
                     return if ($BuildAllParents);
-                    sleep 1 if (!$no_projects);
+                    handle_dead_children(1) if (!$no_projects);
                 };
             } while (!$no_projects);
             return if ($BuildAllParents);
             while (children_number()) {
                 handle_dead_children(1);
-#                sleep 1;
             };
 #            if (defined $last_module) {
 #                $build_is_finished{$last_module}++ if (!defined $modules_with_errors{$last_module});
@@ -1572,7 +1583,7 @@ sub build_multiprocessing {
         };
         if (!$Prj || !defined $projects_deps_hash{$Prj}) {
             cancel_build() if (!scalar @build_queue && !children_number());
-            sleep(1);
+            handle_dead_children(1);
         }
         build_actual_queue(\@build_queue);
     } while (scalar (keys %global_deps_hash));
@@ -1580,12 +1591,10 @@ sub build_multiprocessing {
     while (scalar @build_queue) {
         build_actual_queue(\@build_queue);
         handle_dead_children(1);
-#        sleep 1;
     };
     # Let all children finish their work
     while (children_number()) {
         handle_dead_children(1);
-#        sleep 1;
     };
     cancel_build() if (scalar keys %broken_build);
     mp_success_exit();
@@ -1593,6 +1602,9 @@ sub build_multiprocessing {
 
 sub mp_success_exit {
 #    close_server_socket();
+    if (!$custom_job && $post_custom_job) {
+        do_post_custom_job(CorrectPath($StandDir.$CurrentPrj));
+    };
     print "\nMultiprocessing build is finished\n";
     print "Maximal number of processes run: $maximal_processes\n";
     do_exit(0);
@@ -1637,8 +1649,23 @@ sub build_actual_queue {
 sub do_pre_job {
     my $module = shift;
     announce_module($module);
+    if ($pre_custom_job && defined $modules_types{$module} && ($modules_types{$module} eq 'mod')) {
+        my $module_path = CorrectPath($StandDir.$module);
+        chdir $module_path;
+        getcwd();
+        my $cj_error_code = system ("$pre_custom_job");
+        print_error("Cannot run pre job \"$pre_custom_job\"") if ($cj_error_code);
+    };
 };
 
+
+sub do_post_custom_job {
+    my $module_path = shift;
+    chdir $module_path;
+    getcwd();
+    my $cj_error_code = system ("$post_custom_job");
+    print_error("Cannot run post job \"$post_custom_job\"") if ($cj_error_code);
+};
 
 #
 # Print announcement for module just started
@@ -1661,8 +1688,10 @@ sub print_announce {
 #        return if (defined $module_announced{$`});
         $text = "Skipping incomplete $Prj\n";
         $build_is_finished{$Prj}++;
+    } elsif ($custom_job) {
+        $text = "Running custom job \"$custom_job\" in module $Prj\n";
     } else {
-        $text = "Building project $Prj\n";
+        $text = "Building module $Prj\n";
     };
     print $echo . "=============\n";
     print $echo . $text;
@@ -2496,6 +2525,9 @@ sub do_post_job {
         }
     };
     $build_is_finished{$module}++ if (!defined $modules_with_errors{$module});
+    if (!$error_code && $post_custom_job) {
+        do_post_custom_job(CorrectPath($StandDir.$module));
+    };
     return $error_code;
 };
 
