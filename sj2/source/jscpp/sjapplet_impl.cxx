@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:21:02 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:46:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,12 @@
 #include <tools/debug.hxx>
 
 #include <svtools/ownlist.hxx>
+
+#ifdef QUARTZ
+#include "premac.h"
+#include <Cocoa/Cocoa.h>
+#include "postmac.h"
+#endif
 
 #include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
@@ -217,14 +223,16 @@ EmbeddedWindow::EmbeddedWindow(JNIEnv * pEnv, SystemEnvData const * pEnvData) th
   /* The WNT code (above) that this code derives from, may be using quite old
      ways of interacting with native windows. More modern approaches seems to
      point towards JAWT_* and com.apple.eawt */
-
+#if 0
+// FIXME: this is not going to work on cocoa
 jclass jcFrame = pEnv->FindClass("apple/awt/CEmbeddedFrame");     testJavaException(pEnv);
 jmethodID jmFrame_rinit = pEnv->GetMethodID(jcFrame, "<init>", "(I)V"); testJavaException(pEnv);
 
 jobject joFrame = pEnv->AllocObject(jcFrame);                           testJavaException(pEnv);
-pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jint)pEnvData->rWindow);     testJavaException(pEnv);
+pEnv->CallVoidMethod(joFrame, jmFrame_rinit, (jint)pEnvData->pView);     testJavaException(pEnv);
 
 _joWindow = pEnv->NewGlobalRef(joFrame);
+#endif
 }
 
 #else
