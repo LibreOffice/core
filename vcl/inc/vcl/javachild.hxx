@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javachild.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:58:09 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:49:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ public:
                     JavaChildWindow( Window* pParent, const ResId& rResId );
                    ~JavaChildWindow();
 
-    sal_Int32       getParentWindowHandleForJava();
+    sal_IntPtr      getParentWindowHandleForJava();
 
 private:
 
