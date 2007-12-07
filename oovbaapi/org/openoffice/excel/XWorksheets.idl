@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XWorksheets.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-27 07:45:55 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:30:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,14 +49,15 @@ module org {  module openoffice {  module excel {
 
 //=============================================================================
 
-interface XWorksheets : ::com::sun::star::uno::XInterface
+interface XWorksheets
 {
+    interface ::org::openoffice::vba::XCollection;
     [attribute] any Visible;
         any  Add( [in] any Before, [in] any After, [in] any Count, [in] any Type );
         void Delete();
     void PrintOut( [in] any From, [in] any To, [in] any Copies, [in] any Preview, [in] any ActivePrinter, [in] any PrintToFile, [in] any Collate, [in] any PrToFileName );
+    void Select( [in] any Replace );
 };
-
 }; }; };
 
 #endif
