@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaworkbooks.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:13:13 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:06:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,8 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
+#include <com/sun/star/uri/XUriReference.hpp>
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <tools/urlobj.hxx>
@@ -84,7 +86,7 @@ getWorkbook( uno::Reference< uno::XComponentContext >& xContext, const uno::Refe
     if( !xModel.is() )
         return uno::Any();
 
-    ScVbaWorkbook *pWb = new ScVbaWorkbook( xContext, xModel );
+    ScVbaWorkbook *pWb = new ScVbaWorkbook(  uno::Reference< vba::XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext, xModel );
     return uno::Any( uno::Reference< excel::XWorkbook > (pWb) );
 }
 
@@ -241,7 +243,7 @@ public:
 
 };
 
-ScVbaWorkbooks::ScVbaWorkbooks( const uno::Reference< css::uno::XComponentContext >& xContext ) : ScVbaWorkbooks_BASE( xContext, uno::Reference< container::XIndexAccess >( new WorkBooksAccessImpl( xContext ) ) )
+ScVbaWorkbooks::ScVbaWorkbooks( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext >& xContext ) : ScVbaWorkbooks_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new WorkBooksAccessImpl( xContext ) ) )
 {
 }
 // XEnumerationAccess
@@ -257,14 +259,14 @@ ScVbaWorkbooks::createEnumeration() throw (uno::RuntimeException)
     // the state of this object ( although it should ) would be
     // safer to create an enumeration based on this objects state
     // rather than one effectively based of the desktop component
-    return new WorkBookEnumImpl( m_xContext, uno::Reference< container::XEnumeration >( new SpreadSheetDocEnumImpl(m_xContext) ) );
+    return new WorkBookEnumImpl( mxContext, uno::Reference< container::XEnumeration >( new SpreadSheetDocEnumImpl(mxContext) ) );
 }
 
 uno::Any
 ScVbaWorkbooks::createCollectionObject( const css::uno::Any& aSource )
 {
     uno::Reference< sheet::XSpreadsheetDocument > xDoc( aSource, uno::UNO_QUERY );
-    return getWorkbook( m_xContext, xDoc );
+    return getWorkbook( mxContext, xDoc );
 }
 
 
@@ -272,12 +274,12 @@ uno::Any SAL_CALL
 ScVbaWorkbooks::Add() throw (uno::RuntimeException)
 {
     uno::Reference< lang::XMultiComponentFactory > xSMgr(
-        m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
+        mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
 
      uno::Reference< frame::XComponentLoader > xLoader(
         xSMgr->createInstanceWithContext(
             ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),
-                m_xContext), uno::UNO_QUERY_THROW );
+                mxContext), uno::UNO_QUERY_THROW );
     uno::Reference< lang::XComponent > xComponent = xLoader->loadComponentFromURL(
                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("private:factory/scalc") ),
                                        rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_blank") ), 0,
@@ -285,7 +287,7 @@ ScVbaWorkbooks::Add() throw (uno::RuntimeException)
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xComponent, uno::UNO_QUERY_THROW );
 
     if( xSpreadDoc.is() )
-        return getWorkbook( m_xContext, xSpreadDoc );
+        return getWorkbook( mxContext, xSpreadDoc );
     return uno::Any();
 }
 
@@ -293,47 +295,77 @@ void
 ScVbaWorkbooks::Close() throw (uno::RuntimeException)
 {
     uno::Reference< lang::XMultiComponentFactory > xSMgr(
-        m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
+        mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
     uno::Reference< frame::XModel > xModel( getCurrentDocument(), uno::UNO_QUERY_THROW );
     rtl::OUString url = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CloseDoc"));
     dispatchRequests(xModel,url);
 }
 
 bool
-ScVbaWorkbooks::isTextFile( const rtl::OUString& rFileName )
+ScVbaWorkbooks::isTextFile( const rtl::OUString& sType )
 {
-    uno::Reference< document::XTypeDetection > xTypeDetect( m_xContext->getServiceManager()->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection"), m_xContext), uno::UNO_QUERY_THROW );
+    // will return true if the file is
+    // a) a variant of a text file
+    // b) a csv file
+    // c) unknown
+    // returning true basically means treat this like a csv file
+    const static rtl::OUString txtType( RTL_CONSTASCII_USTRINGPARAM("writer_Text" ) );
+    const static rtl::OUString csvType( RTL_CONSTASCII_USTRINGPARAM("calc_Text_txt_csv_StarCalc" ) );
+    const static rtl::OUString encodedTxtType( RTL_CONSTASCII_USTRINGPARAM("writer_Text_encoded" ) );
+    return sType.equals( txtType ) || sType.equals( csvType ) || ( sType.getLength() == 0 ) || sType.equals( encodedTxtType );
+}
+
+bool
+ScVbaWorkbooks::isSpreadSheetFile( const rtl::OUString& sType )
+{
+    // include calc_QPro etc. ? ( not for the moment anyway )
+    if ( sType.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("calc_MS"))) == 0
+    || sType.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("calc8"))) == 0
+    || sType.indexOf( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("calc_StarOffice"))) == 0 )
+        return true;
+    return false;
+}
+
+rtl::OUString
+ScVbaWorkbooks::getFileFilterType( const rtl::OUString& rFileName )
+{
+    uno::Reference< document::XTypeDetection > xTypeDetect( mxContext->getServiceManager()->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.document.TypeDetection"), mxContext), uno::UNO_QUERY_THROW );
     uno::Sequence< beans::PropertyValue > aMediaDesc(1);
     aMediaDesc[ 0 ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ("URL" ) );
     aMediaDesc[ 0 ].Value <<= rFileName;
     rtl::OUString sType = xTypeDetect->queryTypeByDescriptor( aMediaDesc, sal_True );
-    const static rtl::OUString txtType( RTL_CONSTASCII_USTRINGPARAM("writer_Text" ) );
-    const static rtl::OUString csvType( RTL_CONSTASCII_USTRINGPARAM("calc_Text_txt_csv_StarCalc" ) );
-    return sType.equals( txtType ) || sType.equals( csvType );
+    return sType;
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
 uno::Any
 ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLinks*/, const uno::Any& ReadOnly, const uno::Any& Format, const uno::Any& /*Password*/, const uno::Any& /*WriteResPassword*/, const uno::Any& /*IgnoreReadOnlyRecommended*/, const uno::Any& /*Origin*/, const uno::Any& Delimiter, const uno::Any& /*Editable*/, const uno::Any& /*Notify*/, const uno::Any& /*Converter*/, const uno::Any& /*AddToMru*/ ) throw (uno::RuntimeException)
 {
+    // we need to detect if this is a URL, if not then assume its a file path
         rtl::OUString aURL;
+        INetURLObject aObj;
+    aObj.SetURL( rFileName );
+    bool bIsURL = aObj.GetProtocol() != INET_PROT_NOT_VALID;
+    if ( bIsURL )
+        aURL = rFileName;
+    else
         osl::FileBase::getFileURLFromSystemPath( rFileName, aURL );
     uno::Reference< lang::XMultiComponentFactory > xSMgr(
-            m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
-
+        mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
     uno::Reference< frame::XDesktop > xDesktop
-        (xSMgr->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")                    , m_xContext),
+        (xSMgr->createInstanceWithContext(::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")                    , mxContext),
         uno::UNO_QUERY_THROW );
     uno::Reference< frame::XComponentLoader > xLoader(
         xSMgr->createInstanceWithContext(
         ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop"),
-        m_xContext),
+        mxContext),
         uno::UNO_QUERY_THROW );
     uno::Sequence< beans::PropertyValue > sProps(0);
     sal_Int32 nIndex = 0;
 
+    rtl::OUString sType = getFileFilterType( aURL );
     // A text file means it needs to be processed as a csv file
-    if ( isTextFile( aURL ) )
+    if ( isTextFile( sType ) )
     {
         // Values for format
         // 1 Tabs
@@ -343,7 +375,7 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
         // 5 Nothing
         // 6 Custom character (see the Delimiter argument
         // no format means use the current delimiter
-        sProps.realloc( 1 );
+        sProps.realloc( 3 );
         sProps[ nIndex ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FilterOptions" ) );
         sal_Int16 delims[] = { 0 /*default not used*/, 9/*tab*/, 44/*comma*/, 32/*space*/, 59/*semicolon*/ };
         static rtl::OUString sRestOfFormat( RTL_CONSTASCII_USTRINGPARAM(",34,0,1" ) );
@@ -384,7 +416,16 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
 
         sFormat = rtl::OUString::valueOf( (sal_Int32)nDelim ) + sRestOfFormat;
         sProps[ nIndex++ ].Value <<= sFormat;
+        sProps[ nIndex ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("FilterName") );
+        sProps[ nIndex++ ].Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Text - txt - csv (StarCalc)") );
+        // Ensure WORKAROUND_CSV_TXT_BUG_i60158 gets called in typedetection.cxx so
+        // csv is forced for deep detected 'writerxxx' types
+        sProps[ nIndex ].Name = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("DocumentService") );
+        sProps[ nIndex ].Value <<= rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument") );
     }
+    else if ( !isSpreadSheetFile( sType ) )
+        throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Bad Format")), uno::Reference< uno::XInterface >() );
+
     if ( ReadOnly.hasValue()  )
     {
         sal_Bool bIsReadOnly = sal_False; ReadOnly >>= bIsReadOnly;
@@ -402,7 +443,28 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
         frame::FrameSearchFlag::CREATE,
         sProps);
     uno::Reference <sheet::XSpreadsheetDocument> xSpreadDoc( xComponent, uno::UNO_QUERY_THROW );
-    return getWorkbook( m_xContext, xSpreadDoc );
+    uno::Any aRet = getWorkbook( mxContext, xSpreadDoc );
+    uno::Reference< excel::XWorkbook > xWBook( aRet, uno::UNO_QUERY );
+    if ( xWBook.is() )
+        xWBook->Activate();
+    return aRet;
 }
 
+rtl::OUString&
+ScVbaWorkbooks::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaWorkbooks") );
+    return sImplName;
+}
 
+css::uno::Sequence<rtl::OUString>
+ScVbaWorkbooks::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > sNames;
+    if ( sNames.getLength() == 0 )
+    {
+        sNames.realloc( 1 );
+        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Workbooks") );
+    }
+    return sNames;
+}
