@@ -1,0 +1,35 @@
+running dmake in this directory runs a set of regression (unit) tests.
+
+Note: 
+    o you need to set OFFICEPATH env variable to the install directory of your office installation e.g.
+    
+export OFFICEPATH="/cygdrive/f/Program\ Files/OpenOffice.org\ 2.3"
+
+    o naturally in order to run the tests you need to source the build env scripts in the top level build directory [1]
+
+    o the testclient runs looks for testdocuments in the '../TestDocuments' [3] directory. For each document the test client runs the  macro 'Standard.TestMacros.Main' located in that test document. The macro(s) write a log file, the log files end up in the Logs sub-directory ( in this directory ). A logfile exists for each testdocument that has successfully run. The log files are compared against benchmark logfiles to ensure no regressions have occured ( see [4] for directory structure and location of benchmark files ). At this point we are not concerned with known failures [5]
+
+
+[1] Ideally this should not be necessary and you should be able to run the tests without a build env - future
+
+[2] The test client should be re-written in C++ to get a better handle on lifecycle issues. E.g. currently on windows and sometimes on linux the client won't exit, also the office process doesn't alway exit
+   
+[3]
+
+The TestDocument directory contains 
+   o test documents ( *.xls )
+   o logs directory ( contains the benchmark logs to compare against )
+
+[4]
+
+The logs directory contains the following sub-directories
+   o excel ( the orig logs produced by an excel file )
+   o unix  ( the log produced by OpenOffice running imported Excel document under unix )
+   o win   ( the log produced by OpenOffice running imported Excel document under windows )
+
+[*] the seperate win & unix directories are to facilate tests that will produce different results under the different platforms e.g. paths etc.
+
+[5]
+
+o Currently the logs in the excel directory are only stored for comparison, they are not used by the tooling
+o Currently we don't measure how many tests pass or fail, the immediate focus is that we don't get any regressions ( but of course we do look at these manually and try and get all tests to pass )

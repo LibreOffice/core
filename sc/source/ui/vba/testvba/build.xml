@@ -1,0 +1,101 @@
+<!--
+
+    OpenOffice.org - a multi-platform office productivity suite
+
+    $RCSfile: build.xml,v $
+
+    $Revision: 1.2 $
+
+    last change: $Author: vg $ $Date: 2007-12-07 11:15:20 $
+
+    The Contents of this file are made available subject to
+    the terms of GNU Lesser General Public License Version 2.1.
+
+
+      GNU Lesser General Public License Version 2.1
+      =============================================
+      Copyright 2005 by Sun Microsystems, Inc.
+      901 San Antonio Road, Palo Alto, CA 94303, USA
+
+      This library is free software; you can redistribute it and/or
+      modify it under the terms of the GNU Lesser General Public
+      License version 2.1, as published by the Free Software Foundation.
+
+      This library is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+      Lesser General Public License for more details.
+
+      You should have received a copy of the GNU Lesser General Public
+      License along with this library; if not, write to the Free Software
+      Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+      MA  02111-1307  USA
+
+-->
+<project name="testvba" default="all" basedir=".">
+
+  <!-- =================== Environmental Properties ======================= -->
+
+  <property name="prj" value=".."/>
+  <property name="build.compiler"   value="classic"/>
+  <property name="optimize"   value="off"/>
+  <property name="debug"   value="on"/>
+  <property name="jardir" value="${out}/class"/>
+  <property name="bindir" value="${out}/bin"/>
+
+  <!-- ==================== build classpath setting ======================= -->
+  <path id="idlclasspath">
+    <pathelement location="${solar.jar}/jurt.jar"/>
+    <pathelement location="${solar.jar}/unoil.jar"/>
+    <pathelement location="${solar.jar}/jut.jar"/>
+    <pathelement location="${solar.jar}/juh.jar"/>
+    <pathelement location="${solar.jar}/java_uno.jar"/>
+    <pathelement location="${solar.jar}/ridl.jar"/>
+  </path>
+
+  <!-- ==================== build classpath setting ======================= -->
+  <path id="clientclasspath">
+    <pathelement location="${test.officepath}/program/classes/jurt.jar"/>
+    <pathelement location="${test.officepath}/program/classes/unoil.jar"/>
+    <pathelement location="${test.officepath}/program/classes/jut.jar"/>
+    <pathelement location="${test.officepath}/program/classes/juh.jar"/>
+    <pathelement location="${test.officepath}/program/classes/java_uno.jar"/>
+    <pathelement location="${test.officepath}/program/classes/ridl.jar"/>
+    <pathelement location="${out}/class"/>
+  </path>
+
+ <property name="debugcp" refid="clientclasspath"/>
+  <!-- ===================== Prepare Directories ========================= -->
+  <target name="prepare">
+    <mkdir dir="${jardir}"/>
+  </target>
+
+  <!-- ======================== Compile Classes ========================== -->
+  <target name="compile" depends="prepare">
+    <javac srcdir="." destdir="${jardir}"
+         includes="**/*.java" classpathref="idlclasspath"
+         debug="${debug}" optimize="${optimize}" deprecation="off">
+    </javac>
+  </target>
+
+  <!-- ====================== Clean Generated Files ===================== -->
+  <target name="clean">
+    <delete dir="${jardir}"/>
+  </target>
+  <!-- ========================= All In One Build ======================= -->
+
+  <!--
+  <target name="all" depends="compile"/>
+-->
+
+  <target name="all" depends="test"/>
+
+  <target name="test" depends="compile">
+    <echo> testcp = ${debugcp}"
+    </echo>
+       <java classname="TestVBA" fork="true" dir="." classpathref="clientclasspath">
+         <arg value="${test.documents}"/>
+         <arg value="${test.out}"/>
+       </java>
+  </target>
+</project>
