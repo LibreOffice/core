@@ -1,0 +1,122 @@
+<!-- =====================================================================
+
+  OpenOffice.org - a multi-platform office productivity suite
+
+  $RCSfile: ApiSymbols.dtd,v $
+
+  $Revision: 1.2 $
+
+  last change: $Author: vg $ $Date: 2007-12-07 11:16:20 $
+
+  The Contents of this file are made available subject to
+  the terms of GNU Lesser General Public License Version 2.1.
+
+
+    GNU Lesser General Public License Version 2.1
+    =============================================
+    Copyright 2005 by Sun Microsystems, Inc.
+    901 San Antonio Road, Palo Alto, CA 94303, USA
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License version 2.1, as published by the Free Software Foundation.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+    MA  02111-1307  USA
+
+====================================================================== -->
+
+<!ELEMENT api (element)+>
+	<!ATTLIST api
+		library-name         CDATA #REQUIRED
+		library-identifier   CDATA #REQUIRED
+		library-majorversion CDATA #IMPLIED
+		library-minorversion CDATA #IMPLIED
+		library-type         CDATA #IMPLIED
+		library-GUID         CDATA #IMPLIED
+		library-filename     CDATA #IMPLIED
+		author               CDATA #REQUIRED
+		date-created         CDATA #REQUIRED
+   >
+
+<!ELEMENT element (source, destination?)>
+	<!ATTLIST element
+		type       (class|method|property|enumeration|constant|event)  #REQUIRED
+		collection (true|false)                                        "false"
+		platform   CDATA                                               #IMPLIED
+	>
+
+<!ELEMENT source (context?, name?, type?, value?, parameter-list?)>
+	<!ATTLIST source
+		id           CDATA  #REQUIRED
+		start-index  CDATA  #IMPLIED
+	>
+
+<!ELEMENT context (#PCDATA)>
+	<!ATTLIST context
+		kind  (library|class|module|enumeration)  #REQUIRED
+	>
+
+<!ELEMENT name (#PCDATA)>
+	<!ATTLIST name
+		default  (true|false)  "false"
+	>
+
+<!ELEMENT type (#PCDATA | choice)*>
+	<!ATTLIST type
+		array CDATA #IMPLIED
+	>
+
+<!ELEMENT choice (#PCDATA)>
+
+<!ELEMENT value (#PCDATA)>
+
+<!ELEMENT parameter-list (parameter+)>
+
+<!ELEMENT parameter (type?, name)>
+	<!ATTLIST parameter
+		optional   (true|false)  "false"
+		reference  (true|false)  "false"
+	>
+
+<!ELEMENT destination (((inplace-code | property-access-code), localdecl-code*, module-code*, comment*)?)>
+    <!ATTLIST destination designation (identity|not-yet-implemented)  "not-yet-implemented">
+
+<!ELEMENT inplace-code (context-code? , name-code, parameter-code*)>
+
+<!ELEMENT context-code EMPTY>
+
+<!ELEMENT name-code (#PCDATA)>
+
+<!ELEMENT parameter-code (#PCDATA | context-code | rvalue-code | default-code)*>
+
+<!ELEMENT rvalue-code EMPTY>
+
+<!ELEMENT default-code (#PCDATA)>
+
+<!ELEMENT property-access-code (getter-code?, setter-code?)>
+
+<!ELEMENT getter-code (context-code? , name-code, parameter-code*)>
+
+<!ELEMENT module-code (#PCDATA)>
+	<!ATTLIST module-code
+		module-name  CDATA  #IMPLIED
+	>
+<!ELEMENT comment (#PCDATA)>
+	<!ATTLIST comment
+		apistatus (todo|so7|so8|noapi) #REQUIRED
+		forparams CDATA  #IMPLIED
+	>
+
+<!ELEMENT localdecl-code (#PCDATA | context-code)*>
+
+<!ELEMENT setter-code (context-code? , name-code, parameter-code*)>
+
+
