@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortparam.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:08:34 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:41:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ void ScSortParam::Clear()
 {
     nCol1=nCol2=nDestCol = 0;
     nRow1=nRow2=nDestRow = 0;
+    nCompatHeader = 2;
     nDestTab = 0;
     nUserIndex = 0;
     bHasHeader=bCaseSens=bUserDef = FALSE;
