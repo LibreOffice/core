@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2007-12-07 11:20:07 $
+#   last change: $Author: hjs $ $Date: 2007-12-07 14:17:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ PACKAGE=org$/openoffice$/constants
 .IF "$(ENABLE_VBA)"!="YES"
 dummy:
         @echo "not building vba..."
-.ENDIF
+.ELSE
 
 # ------------------------------------------------------------------------
 
@@ -58,6 +58,9 @@ MYIDLFILES=$(foreach,i,$(MYTMPIDLFILES) $(MY_GEN_IDL_PATH)$/$(i))
 MYURDFILES=$(foreach,i,$(MYIDLFILES) $(MY_GEN_UCR_PATH)$/$(i:b).urd)
 MYDBTARGET=$(OUT)$/ucr/constants.db
 
+
+.INCLUDE :  target.mk
+
 ALLTAR: $(MYDBTARGET)
 
 $(MY_GEN_UCR_PATH)$/%.urd: $(MY_GEN_IDL_PATH)$/%.idl
@@ -66,6 +69,5 @@ $(MY_GEN_UCR_PATH)$/%.urd: $(MY_GEN_IDL_PATH)$/%.idl
 $(MYDBTARGET) : $(MYURDFILES)  $(MYIDLFILES)
     $(REGMERGE) $(OUT)$/ucr/constants.db /UCR @$(mktmp $(MYURDFILES))
 
-# ------------------------------------------------------------------
+.ENDIF
 
-.INCLUDE :  target.mk
