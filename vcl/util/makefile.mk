@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.101 $
+#   $Revision: 1.102 $
 #
-#   last change: $Author: vg $ $Date: 2007-12-06 16:46:46 $
+#   last change: $Author: vg $ $Date: 2007-12-07 11:51:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,8 @@ SHL1USE_EXPORTS=ordinal
 
 .IF "$(GUIBASE)"=="aqua"
 SHL1STDLIBS+=$(BASEBMPLIB)
+SHL1STDLIBS+= \
+             -framework QTKit
 .ENDIF
 
 .IF "$(USE_BUILTIN_RASTERIZER)"!=""
