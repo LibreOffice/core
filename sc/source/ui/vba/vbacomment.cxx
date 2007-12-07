@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbacomment.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 10:04:09 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:48:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,11 +50,9 @@
 using namespace ::org::openoffice;
 using namespace ::com::sun::star;
 
-ScVbaComment::ScVbaComment( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< table::XCellRange >& xRange ) throw( lang::IllegalArgumentException )
-: mxRange( xRange ), m_xContext( xContext )
+ScVbaComment::ScVbaComment( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< table::XCellRange >& xRange ) throw( lang::IllegalArgumentException )
+: ScVbaComment_BASE( xParent, xContext ), mxRange( xRange )
 {
-    if  ( !xContext.is() )
-        throw lang::IllegalArgumentException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "context is not set " ) ), uno::Reference< uno::XInterface >() , 1 );
     if  ( !xRange.is() )
         throw lang::IllegalArgumentException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "range is not set " ) ), uno::Reference< uno::XInterface >() , 1 );
     uno::Reference< text::XSimpleText > xAnnoText( getAnnotation(), uno::UNO_QUERY );
@@ -109,22 +107,13 @@ uno::Reference< excel::XComment > SAL_CALL
 ScVbaComment::getCommentByIndex( sal_Int32 Index ) throw (uno::RuntimeException)
 {
     uno::Reference< container::XIndexAccess > xIndexAccess( getAnnotations(), uno::UNO_QUERY_THROW );
-    uno::Reference< vba::XCollection > xColl( uno::Reference< excel::XComments > ( new ScVbaComments( m_xContext, xIndexAccess ) ), uno::UNO_QUERY_THROW );
+    // parent is sheet ( parent of the range which is the parent of the comment )
+    uno::Reference< vba::XCollection > xColl(  new ScVbaComments( getParent()->getParent(), mxContext, xIndexAccess ) );
 
-    return uno::Reference< excel::XComment > ( xColl->Item( uno::makeAny( Index ) ), uno::UNO_QUERY_THROW );
+    return uno::Reference< excel::XComment > ( xColl->Item( uno::makeAny( Index ), uno::Any() ), uno::UNO_QUERY_THROW );
  }
 
 // public vba functions
-
-uno::Reference< excel::XApplication > SAL_CALL
-ScVbaComment::getApplication() throw (uno::RuntimeException)
-{
-    uno::Reference< excel::XApplication > xApplication =
-        ScVbaGlobals::getGlobalsImpl( m_xContext )->getApplication();
-    if ( xApplication.is() )
-        return xApplication;
-    return uno::Reference< excel::XApplication >(NULL);
-}
 
 rtl::OUString SAL_CALL
 ScVbaComment::getAuthor() throw (uno::RuntimeException)
@@ -136,22 +125,6 @@ void SAL_CALL
 ScVbaComment::setAuthor( const rtl::OUString& /*_author*/ ) throw (uno::RuntimeException)
 {
     // #TODO #FIXME  implementation needed
-}
-
-sal_Int32 SAL_CALL
-ScVbaComment::getCreator() throw (uno::RuntimeException)
-{
-    return excel::XlCreator::xlCreatorCode;
-}
-
-uno::Reference< excel::XRange > SAL_CALL
-ScVbaComment::getParent() throw (uno::RuntimeException)
-{
-    uno::Reference< excel::XApplication > xApplication =
-        ScVbaGlobals::getGlobalsImpl( m_xContext )->getApplication();
-    if ( xApplication.is() )
-        return xApplication->getActiveCell();
-    return uno::Reference< excel::XRange >(NULL);
 }
 
 sal_Bool SAL_CALL
@@ -231,3 +204,21 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
     return sAnnoText;
 }
 
+rtl::OUString&
+ScVbaComment::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaComment") );
+    return sImplName;
+}
+
+uno::Sequence< rtl::OUString >
+ScVbaComment::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.ScVbaComment" ) );
+    }
+    return aServiceNames;
+}
