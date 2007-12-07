@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 10:08:37 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 12:21:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,26 +96,10 @@ using namespace com::sun::star;
 
 using rtl::OUString;
 
-bool lcl_hasVBAEnabled()
-{
-    try
-    {
-        Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
-        // test if vba service is present
-        Reference< XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
-        Reference< XInterface > xGlobals( xCtx->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/org.openoffice.vba.theGlobals") ), UNO_QUERY_THROW );
-        return true;
-    }
-    catch( Exception& ) {}
-    return false;
-}
-
 int SvxImportMSVBasic::Import( const String& rStorageName,
                                 const String &rSubStorageName,
                                 BOOL bAsComment, BOOL bStripped )
 {
-    if ( lcl_hasVBAEnabled() )
-        bAsComment = FALSE;
     int nRet = 0;
     if( bImport && ImportCode_Impl( rStorageName, rSubStorageName,
                                     bAsComment, bStripped ))
