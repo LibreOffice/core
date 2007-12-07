@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortparam.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:57:52 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:41:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,7 @@ struct SC_DLLPUBLIC ScSortParam
     BOOL        bAscending[MAXSORT];
     ::com::sun::star::lang::Locale      aCollatorLocale;
     String      aCollatorAlgorithm;
+    USHORT      nCompatHeader;
 
     ScSortParam();
     ScSortParam( const ScSortParam& r );
