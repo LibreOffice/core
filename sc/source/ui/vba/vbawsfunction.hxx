@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbawsfunction.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:14:55 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:07:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,23 +35,20 @@
 #ifndef SC_VBA_INTERIOR_HXX
 #define SC_VBA_INTERIOR_HXX
 
-#include <cppuhelper/implbase2.hxx>
 #include <org/openoffice/excel/XWorksheetFunction.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include "vbarange.hxx"
 
-#include <com/sun/star/script/XInvocation.hpp>
 #include <com/sun/star/beans/XExactName.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-typedef ::cppu::WeakImplHelper2< css::beans::XExactName, css::script::XInvocation > ScVbaWSFunction_BASE;
+typedef InheritedHelperInterfaceImpl1< oo::excel::XWorksheetFunction > ScVbaWSFunction_BASE;
 
 class ScVbaWSFunction :  public ScVbaWSFunction_BASE
 {
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::container::XNameAccess > m_xNameAccess;
 public:
-    ScVbaWSFunction( css::uno::Reference< css::uno::XComponentContext >& xContext);
+    ScVbaWSFunction( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext);
     virtual ~ScVbaWSFunction(){}
 
     virtual css::uno::Reference< css::beans::XIntrospectionAccess >  SAL_CALL getIntrospection(void)  throw(css::uno::RuntimeException);
@@ -61,6 +58,9 @@ public:
     virtual sal_Bool  SAL_CALL hasMethod(const rtl::OUString& Name)  throw(css::uno::RuntimeException);
     virtual sal_Bool  SAL_CALL hasProperty(const rtl::OUString& Name)  throw(css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getExactName( const ::rtl::OUString& aApproximateName ) throw (css::uno::RuntimeException);
+    // XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 
 };
 #endif

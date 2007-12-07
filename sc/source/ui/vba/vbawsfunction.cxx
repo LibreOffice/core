@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbawsfunction.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:14:30 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,9 @@
 using namespace com::sun::star;
 using namespace org::openoffice;
 
-ScVbaWSFunction::ScVbaWSFunction( css::uno::Reference< css::uno::XComponentContext >& xContext):m_xContext(xContext)
+ScVbaWSFunction::ScVbaWSFunction( const uno::Reference< vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext): ScVbaWSFunction_BASE( xParent, xContext )
 {
-    m_xNameAccess.set(  m_xContext->getServiceManager()->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.FunctionDescriptions") ), m_xContext ), uno::UNO_QUERY_THROW );
+    m_xNameAccess.set(  mxContext->getServiceManager()->createInstanceWithContext( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.FunctionDescriptions") ), mxContext ), uno::UNO_QUERY_THROW );
 }
 
 
@@ -66,10 +66,10 @@ ScVbaWSFunction::getIntrospection(void)  throw(uno::RuntimeException)
 uno::Any SAL_CALL
 ScVbaWSFunction::invoke(const rtl::OUString& FunctionName, const uno::Sequence< uno::Any >& Params, uno::Sequence< sal_Int16 >& /*OutParamIndex*/, uno::Sequence< uno::Any >& /*OutParam*/) throw(lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
 {
-    uno::Reference< lang::XMultiComponentFactory > xSMgr( m_xContext->getServiceManager(), uno::UNO_QUERY_THROW );
+    uno::Reference< lang::XMultiComponentFactory > xSMgr( mxContext->getServiceManager(), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XFunctionAccess > xFunctionAccess(
                         xSMgr->createInstanceWithContext(::rtl::OUString::createFromAscii(
-                        "com.sun.star.sheet.FunctionAccess"), m_xContext),
+                        "com.sun.star.sheet.FunctionAccess"), mxContext),
                         ::uno::UNO_QUERY_THROW);
     uno::Sequence< uno::Any > aParamTemp;
     sal_Int32 nParamCount = Params.getLength();
@@ -135,4 +135,23 @@ ScVbaWSFunction::getExactName( const ::rtl::OUString& aApproximateName ) throw (
     if ( !hasMethod( sName ) )
         return rtl::OUString();
     return sName;
+}
+
+rtl::OUString&
+ScVbaWSFunction::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaWSFunction") );
+    return sImplName;
+}
+
+uno::Sequence< rtl::OUString >
+ScVbaWSFunction::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.WorksheetFunction" ) );
+    }
+    return aServiceNames;
 }
