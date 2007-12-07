@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxsystemdependentwindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:14:01 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:58:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,10 +49,16 @@
 #include <toolkit/helper/macros.hxx>
 #include <cppuhelper/typeprovider.hxx>
 
-#if !defined(UNX) && !defined(OS2)
+#ifdef WNT
 #include <tools/prewin.h>
 #include <windows.h>
 #include <tools/postwin.h>
+#endif
+
+#ifdef QUARTZ
+#include "premac.h"
+#include <Cocoa/Cocoa.h>
+#include "postmac.h"
 #endif
 
 #include <vcl/syschild.hxx>
@@ -108,7 +114,7 @@ IMPL_XTYPEPROVIDER_END
 #elif (defined QUARTZ)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
             {
-                 aRet <<= (sal_IntPtr)pSysData->rWindow;
+                 aRet <<= (sal_IntPtr)pSysData->pView;
             }
 #elif (defined UNX)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
