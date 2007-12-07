@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:50:51 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:53:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -542,7 +542,7 @@ void XPlugin_Impl::loadPlugin()
 #ifdef QUARTZ
                 pComm = new MacPluginComm( m_aDescription.Mimetype,
                                            m_aDescription.PluginName,
-                                           (WindowRef)pEnvData->rWindow,
+                                           pEnvData->pView,
                                            sv[0],
                                            sv[1]
                                            );
@@ -583,7 +583,8 @@ void XPlugin_Impl::loadPlugin()
     m_aNPWindow.window      = (void*)pEnvData->aWindow;
     m_aNPWindow.ws_info     = NULL;
 #else
-    m_aNPWindow.window      = (void*)pEnvData->rWindow;
+    // FIXME: this is untested and possiblz wrong
+    m_aNPWindow.window      = (void*)pEnvData->pView;
     m_aNPWindow.type        = NPWindowTypeWindow;
 #endif //QUARTZ
 #else
