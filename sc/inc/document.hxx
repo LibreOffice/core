@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.104 $
+ *  $Revision: 1.105 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:51:33 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:40:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -879,7 +879,7 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
                                             ScDirection eDir );
 
     void            FindAreaPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY );
-    void            GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY,
+    SC_DLLPUBLIC void           GetNextPos( SCCOL& rCol, SCROW& rRow, SCTAB nTab, SCsCOL nMovX, SCsROW nMovY,
                                 BOOL bMarked, BOOL bUnprotected, const ScMarkData& rMark );
 
     BOOL            GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, SCTAB nTab,
@@ -1689,7 +1689,8 @@ public:
 
     void            InvalidateStyleSheetUsage()
                         { bStyleSheetUsageInvalid = TRUE; }
-
+    void GetSortParam( ScSortParam& rParam, SCTAB nTab );
+    void SetSortParam( ScSortParam& rParam, SCTAB nTab );
 private: // CLOOK-Impl-Methoden
     void    ImplLoadDocOptions( SvStream& rStream );
     void    ImplLoadViewOptions( SvStream& rStream );
@@ -1720,7 +1721,18 @@ private: // CLOOK-Impl-Methoden
 
     BOOL    HasPartOfMerged( const ScRange& rRange );
 
+    std::map< SCTAB, ScSortParam > mSheetSortParams;
+
 };
+inline void ScDocument::GetSortParam( ScSortParam& rParam, SCTAB nTab )
+{
+    rParam = mSheetSortParams[ nTab ];
+}
+
+inline void ScDocument::SetSortParam( ScSortParam& rParam, SCTAB nTab )
+{
+    mSheetSortParams[ nTab ] = rParam;
+}
 
 
 inline ULONG ScDocument::FastGetRowHeight( SCROW nStartRow, SCROW nEndRow,
