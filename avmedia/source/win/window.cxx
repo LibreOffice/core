@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:26:55 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:43:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,12 +322,12 @@ bool Window::create( const uno::Sequence< uno::Any >& rArguments )
     if( !mnFrameWnd && pVideoWindow && mpWndClass )
     {
         awt::Rectangle  aRect;
-        sal_Int32       nWnd;
+        sal_IntPtr       nWnd;
 
         rArguments[ 0 ] >>= nWnd;
         rArguments[ 1 ] >>= aRect;
 
-        mnParentWnd = nWnd;
+        mnParentWnd = static_cast<int>(nWnd);
         mnFrameWnd = (int) ::CreateWindow( mpWndClass->lpszClassName, NULL,
                                            WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN,
                                            aRect.X, aRect.Y, aRect.Width, aRect.Height,
