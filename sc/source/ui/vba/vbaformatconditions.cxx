@@ -1,0 +1,308 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: vbaformatconditions.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:52:47 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include <org/openoffice/excel/XRange.hpp>
+#include <com/sun/star/sheet/XCellRangeAddressable.hpp>
+#include <com/sun/star/sheet/XSheetConditionalEntry.hpp>
+#include <vector>
+#include "vbaformatconditions.hxx"
+#include "vbaformatcondition.hxx"
+#include "vbaworkbook.hxx"
+#include "vbastyles.hxx"
+using namespace ::org::openoffice;
+using namespace ::com::sun::star;
+
+typedef std::vector< beans::PropertyValue > VecPropValues;
+
+static rtl::OUString OPERATOR( RTL_CONSTASCII_USTRINGPARAM("Operator") );
+static rtl::OUString FORMULA1( RTL_CONSTASCII_USTRINGPARAM("Formula1") );
+static rtl::OUString FORMULA2( RTL_CONSTASCII_USTRINGPARAM("Formula2") );
+static rtl::OUString STYLENAME( RTL_CONSTASCII_USTRINGPARAM("StyleName") );
+static rtl::OUString sStyleNamePrefix( RTL_CONSTASCII_USTRINGPARAM("Excel_CondFormat") );
+
+ScVbaFormatConditions::ScVbaFormatConditions( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< sheet::XSheetConditionalEntries >& _xSheetConditionalEntries, const uno::Reference< frame::XModel >& xModel ) : ScVbaFormatConditions_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( _xSheetConditionalEntries, uno::UNO_QUERY_THROW ) ), mxSheetConditionalEntries( _xSheetConditionalEntries )
+{
+    mxRangeParent.set( xParent, uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XWorkbook > xWorkbook = new ScVbaWorkbook(  uno::Reference< vba::XHelperInterface >( ScVbaGlobals::getGlobalsImpl( xContext )->getApplication(), uno::UNO_QUERY_THROW ), xContext, xModel );
+    mxStyles.set( xWorkbook->Styles( uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< sheet::XCellRangeAddressable > xCellRange( mxRangeParent->getCellRange(), uno::UNO_QUERY_THROW );
+    mxParentRangePropertySet.set( xCellRange, uno::UNO_QUERY_THROW );
+
+    table::CellRangeAddress rangeAddress = xCellRange->getRangeAddress();
+    maCellAddress = table::CellAddress( rangeAddress.Sheet, rangeAddress.StartColumn,  rangeAddress.StartRow );
+}
+
+void SAL_CALL
+ScVbaFormatConditions::Delete(  ) throw (script::BasicErrorException, uno::RuntimeException)
+{
+    try
+    {
+        ScVbaStyles* pStyles = static_cast< ScVbaStyles* >( mxStyles.get() );
+        if ( !pStyles )
+            DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
+        sal_Int32 nCount = mxSheetConditionalEntries->getCount();
+        for (sal_Int32 i = nCount - 1; i >= 0; i--)
+        {
+            uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry( mxSheetConditionalEntries->getByIndex(i), uno::UNO_QUERY_THROW );
+            pStyles->Delete(xSheetConditionalEntry->getStyleName());
+            mxSheetConditionalEntries->removeByIndex(i);
+        }
+        notifyRange();
+    }
+    catch (uno::Exception& )
+    {
+        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
+    }
+}
+
+uno::Type SAL_CALL
+ScVbaFormatConditions::getElementType() throw (css::uno::RuntimeException)
+{
+    return excel::XFormatCondition::static_type(0);
+}
+
+
+uno::Any xSheetConditionToFormatCondition( const uno::Reference< vba::XHelperInterface >& xRangeParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< excel::XStyles >& xStyles, const uno::Reference< excel::XFormatConditions >& xFormatConditions, const uno::Reference< beans::XPropertySet >& xRangeProps,  const uno::Any& aObject )
+{
+    uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry;
+    aObject >>= xSheetConditionalEntry;
+
+    uno::Reference< excel::XStyle > xStyle( xStyles->Item( uno::makeAny( xSheetConditionalEntry->getStyleName() ), uno::Any() ), uno::UNO_QUERY_THROW );
+    uno::Reference< excel::XFormatCondition > xCondition = new ScVbaFormatCondition( xRangeParent, xContext,  xSheetConditionalEntry, xStyle, xFormatConditions, xRangeProps );
+    return uno::makeAny( xCondition );
+}
+
+uno::Any
+ScVbaFormatConditions::createCollectionObject(const uno::Any& aObject )
+{
+    return xSheetConditionToFormatCondition( uno::Reference< vba::XHelperInterface >( mxRangeParent, uno::UNO_QUERY_THROW ), mxContext, mxStyles, this, mxParentRangePropertySet, aObject );
+}
+
+class EnumWrapper : public EnumerationHelper_BASE
+{
+        uno::Reference<container::XIndexAccess > m_xIndexAccess;
+        uno::Reference<excel::XRange > m_xParentRange;
+        uno::Reference<uno::XComponentContext > m_xContext;
+        uno::Reference<excel::XStyles > m_xStyles;
+        uno::Reference<excel::XFormatConditions > m_xParentCollection;
+        uno::Reference<beans::XPropertySet > m_xProps;
+
+        sal_Int32 nIndex;
+public:
+        EnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess, const uno::Reference<excel::XRange >& xRange, const uno::Reference<uno::XComponentContext >& xContext, const uno::Reference<excel::XStyles >& xStyles, const uno::Reference< excel::XFormatConditions >& xCollection, const uno::Reference<beans::XPropertySet >& xProps  ) : m_xIndexAccess( xIndexAccess ), m_xParentRange( xRange ), m_xContext( xContext ), m_xStyles( xStyles ), m_xParentCollection( xCollection ), m_xProps( xProps ), nIndex( 0 ) {}
+        virtual ::sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException)
+        {
+                return ( nIndex < m_xIndexAccess->getCount() );
+        }
+
+        virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException)
+        {
+                if ( nIndex < m_xIndexAccess->getCount() )
+                        return xSheetConditionToFormatCondition( uno::Reference< vba::XHelperInterface >( m_xParentRange, uno::UNO_QUERY_THROW ), m_xContext, m_xStyles, m_xParentCollection, m_xProps, m_xIndexAccess->getByIndex( nIndex++ ) );
+                throw container::NoSuchElementException();
+        }
+};
+
+uno::Reference< excel::XFormatCondition > SAL_CALL
+ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, const uno::Any& _aFormula1, const uno::Any& _aFormula2 ) throw (script::BasicErrorException, uno::RuntimeException)
+{
+    return Add( _nType, _aOperator, _aFormula1, _aFormula2, uno::Reference< excel::XStyle >() );
+}
+
+uno::Reference< excel::XFormatCondition >
+ScVbaFormatConditions::Add( ::sal_Int32 _nType, const uno::Any& _aOperator, const uno::Any& _aFormula1, const uno::Any& _aFormula2, const css::uno::Reference< excel::XStyle >& _xStyle  ) throw (script::BasicErrorException, uno::RuntimeException)
+{
+    // #TODO
+    // #FIXME
+    // This method will NOT handle r1c1 formulas [*]and only assumes that
+    // the formulas are _xlA1 based ( need to hook into calc work ths should
+    // address this )
+    // [*] reason: getA1Formula method below is just a hook and just
+    // returns whats it gets ( e.g. doesn't convert anything )
+    uno::Reference< excel::XStyle > xStyle( _xStyle );
+    uno::Reference< excel::XFormatCondition > xFormatCondition;
+    try
+    {
+        rtl::OUString sStyleName;
+        if ( !xStyle.is() )
+        {
+            sStyleName = getStyleName();
+            xStyle = mxStyles->Add(sStyleName, uno::Any() );
+        }
+        else
+        {
+            sStyleName = xStyle->getName();
+        }
+
+        VecPropValues aPropertyValueVector;
+        sheet::ConditionOperator aType = ScVbaFormatCondition::retrieveAPIType(_nType, uno::Reference< sheet::XSheetCondition >() );
+        uno::Any aValue;
+
+        if ( aType == sheet::ConditionOperator_FORMULA)
+            aValue = uno::makeAny( sheet::ConditionOperator_FORMULA );
+        else
+            aValue = uno::makeAny( ScVbaFormatCondition::retrieveAPIOperator(_aOperator) );
+
+        beans::PropertyValue aProperty( OPERATOR, 0, aValue, beans::PropertyState_DIRECT_VALUE );
+        aPropertyValueVector.push_back( aProperty );
+
+        if ( _aFormula1.hasValue() )
+        {
+            beans::PropertyValue aProp( FORMULA1, 0, uno::makeAny( getA1Formula( _aFormula1 ) ), beans::PropertyState_DIRECT_VALUE );
+            aPropertyValueVector.push_back( aProp );
+        }
+        if ( _aFormula2.hasValue() )
+        {
+            beans::PropertyValue aProp( FORMULA2, 0, uno::makeAny( getA1Formula( _aFormula2 ) ), beans::PropertyState_DIRECT_VALUE );
+            aPropertyValueVector.push_back( aProp );
+        }
+        aProperty.Name = STYLENAME;
+        aProperty.Value = uno::makeAny( sStyleName );
+
+        // convert vector to sequence
+        uno::Sequence< beans::PropertyValue > aPropertyValueList(aPropertyValueVector.size());
+        VecPropValues::iterator it = aPropertyValueVector.begin();
+        VecPropValues::iterator it_end = aPropertyValueVector.end();
+        for ( sal_Int32 index=0; it != it_end; ++it )
+            aPropertyValueList[ index++ ] = *it;
+
+        mxSheetConditionalEntries->addNew(aPropertyValueList);
+        for (sal_Int32 i = mxSheetConditionalEntries->getCount()-1; i >= 0; i--)
+        {
+            uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry( mxSheetConditionalEntries->getByIndex(i), uno::UNO_QUERY_THROW );
+            if (xSheetConditionalEntry->getStyleName().equals(sStyleName))
+            {
+                xFormatCondition =  new ScVbaFormatCondition(uno::Reference< vba::XHelperInterface >( mxRangeParent, uno::UNO_QUERY_THROW ), mxContext, xSheetConditionalEntry, xStyle, this, mxParentRangePropertySet);
+                notifyRange();
+                return xFormatCondition;
+            }
+        }
+    }
+    catch (uno::Exception& )
+    {
+    }
+    DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
+    return xFormatCondition;
+}
+
+
+uno::Reference< container::XEnumeration > SAL_CALL
+ScVbaFormatConditions::createEnumeration() throw (uno::RuntimeException)
+{
+    return new EnumWrapper( m_xIndexAccess, mxRangeParent, mxContext, mxStyles, this, mxParentRangePropertySet  );
+}
+
+
+void
+ScVbaFormatConditions::notifyRange() throw ( script::BasicErrorException )
+{
+    try
+    {
+        mxParentRangePropertySet->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ConditionalFormat")), uno::makeAny( mxSheetConditionalEntries ));
+    }
+    catch (uno::Exception& )
+    {
+        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
+    }
+}
+
+rtl::OUString
+ScVbaFormatConditions::getA1Formula(const css::uno::Any& _aFormula) throw ( script::BasicErrorException )
+{
+    // #TODO, #FIXME hook-in proper formula conversion detection & logic
+    rtl::OUString sFormula;
+    if ( !( _aFormula >>= sFormula ) )
+        DebugHelper::exception(SbERR_BAD_PARAMETER, rtl::OUString() );
+    return sFormula;
+}
+
+rtl::OUString
+ScVbaFormatConditions::getStyleName()
+{
+    ScVbaStyles* pStyles = static_cast< ScVbaStyles* >( mxStyles.get() );
+    if ( !pStyles )
+        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString() );
+    uno::Sequence< rtl::OUString > sCellStyleNames = pStyles->getStyleNames();
+    return ContainerUtilities::getUniqueName(sCellStyleNames, sStyleNamePrefix, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("_") ));
+}
+
+void
+ScVbaFormatConditions::removeFormatCondition( const rtl::OUString& _sStyleName, sal_Bool _bRemoveStyle) throw ( script::BasicErrorException )
+{
+    try
+    {
+        sal_Int32 nElems = mxSheetConditionalEntries->getCount();
+        for (sal_Int32 i = 0; i < nElems; i++)
+        {
+            uno::Reference< sheet::XSheetConditionalEntry > xSheetConditionalEntry( mxSheetConditionalEntries->getByIndex(i), uno::UNO_QUERY_THROW );
+            if (_sStyleName.equals(xSheetConditionalEntry->getStyleName()))
+            {
+                mxSheetConditionalEntries->removeByIndex(i);
+                if (_bRemoveStyle)
+                {
+                    ScVbaStyles* pStyles = static_cast< ScVbaStyles* >( mxStyles.get() );
+                    if ( !pStyles )
+                        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
+                    pStyles->Delete( _sStyleName );
+                }
+                return;
+            }
+        }
+    }
+    catch (uno::Exception& )
+    {
+        DebugHelper::exception(SbERR_METHOD_FAILED, rtl::OUString());
+    }
+}
+
+rtl::OUString&
+ScVbaFormatConditions::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaFormatConditions") );
+    return sImplName;
+}
+
+uno::Sequence< rtl::OUString >
+ScVbaFormatConditions::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.FormatConditions" ) );
+    }
+    return aServiceNames;
+}
+
