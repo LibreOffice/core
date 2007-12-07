@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_services.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 13:08:16 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:27:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_desktop.hxx"
 
-#define COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS 10
+#define COMPHELPER_SERVICEDECL_COMPONENT_HELPER_MAX_ARGS 11
 #include "comphelper/servicedecl.hxx"
 
 using namespace com::sun::star;
@@ -62,6 +62,10 @@ extern sdecl::ServiceDecl const serviceDecl;
 }
 
 namespace help {
+extern sdecl::ServiceDecl const serviceDecl;
+}
+
+namespace executable {
 extern sdecl::ServiceDecl const serviceDecl;
 }
 
@@ -109,6 +113,7 @@ sal_Bool SAL_CALL component_writeInfo(
         dp_registry::backend::help::serviceDecl,
         dp_registry::backend::script::serviceDecl,
         dp_registry::backend::sfwk::serviceDecl,
+        dp_registry::backend::executable::serviceDecl,
         dp_manager::factory::serviceDecl,
         dp_log::serviceDecl,
         dp_migration::serviceDecl,
@@ -129,6 +134,7 @@ void * SAL_CALL component_getFactory(
         dp_registry::backend::help::serviceDecl,
         dp_registry::backend::script::serviceDecl,
         dp_registry::backend::sfwk::serviceDecl,
+        dp_registry::backend::executable::serviceDecl,
         dp_manager::factory::serviceDecl,
         dp_log::serviceDecl,
         dp_migration::serviceDecl,
