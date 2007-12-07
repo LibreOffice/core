@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsselect.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:07:51 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:47:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,15 +55,6 @@
 #include <tools/rcid.h>
 #endif
 
-#if defined( WIN ) || defined( WNT )
-#define HWND    void*
-#define HMENU   void*
-typedef void*               HDC;
-    // was unable to include windows.h, that's why this direct define
-#endif
-#ifndef _SV_SYSDATA_HXX
-#include <vcl/sysdata.hxx>
-#endif
 #ifndef _COM_SUN_STAR_SDBCX_XCREATECATALOG_HPP_
 #include <com/sun/star/sdbcx/XCreateCatalog.hpp>
 #endif
