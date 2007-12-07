@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-17 13:39:10 $
+#   last change: $Author: vg $ $Date: 2007-12-07 11:52:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,11 @@ CDEFS+=-DDISABLE_XAW
 .ENDIF
 
 .IF "$(WITH_MOZILLA)" != "NO"
+
+.IF "$(GUIBASE)"=="aqua"
+OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
+CFLAGSCXX+=$(OBJCXXFLAGS)
+.ENDIF  # "$(GUIBASE)"=="aqua"
 
 SLOFILES=		\
                 $(SLO)$/plctrl.obj		\
