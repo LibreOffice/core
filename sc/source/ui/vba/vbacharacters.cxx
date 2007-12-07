@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbacharacters.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:01:38 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:45:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 using namespace ::org::openoffice;
 using namespace ::com::sun::star;
 
-ScVbaCharacters::ScVbaCharacters( const uno::Reference< uno::XComponentContext >& xContext, const ScVbaPalette& dPalette, const uno::Reference< text::XSimpleText>& xRange,const css::uno::Any& Start, const css::uno::Any& Length  ) throw ( css::lang::IllegalArgumentException ) : m_xSimpleText(xRange), m_xContext( xContext ), m_aPalette( dPalette),  nLength(-1), nStart(1)
+ScVbaCharacters::ScVbaCharacters( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const ScVbaPalette& dPalette, const uno::Reference< text::XSimpleText>& xRange,const css::uno::Any& Start, const css::uno::Any& Length, sal_Bool Replace  ) throw ( css::lang::IllegalArgumentException ) : ScVbaCharacters_BASE( xParent, xContext ), m_xSimpleText(xRange), m_aPalette( dPalette),  nLength(-1), nStart(1), bReplace( Replace )
 {
     Start >>= nStart;
     if ( nStart < 1 )
@@ -92,7 +92,7 @@ uno::Reference< excel::XFont > SAL_CALL
 ScVbaCharacters::getFont() throw (css::uno::RuntimeException)
 {
     uno::Reference< beans::XPropertySet > xProps( m_xTextRange, uno::UNO_QUERY_THROW );
-    return uno::Reference< excel::XFont >( new ScVbaFont( m_aPalette, xProps ) );
+    return uno::Reference< excel::XFont >( new ScVbaFont( this, mxContext, m_aPalette, xProps ) );
 }
 void SAL_CALL
 ScVbaCharacters::setFont( const uno::Reference< excel::XFont >& /*_font*/ ) throw (css::uno::RuntimeException)
@@ -106,7 +106,7 @@ ScVbaCharacters::setFont( const uno::Reference< excel::XFont >& /*_font*/ ) thro
 void SAL_CALL
 ScVbaCharacters::Insert( const ::rtl::OUString& String ) throw (css::uno::RuntimeException)
 {
-    m_xSimpleText->insertString( m_xTextRange, String, sal_False );
+    m_xSimpleText->insertString( m_xTextRange, String, bReplace );
 }
 
 void SAL_CALL
@@ -118,5 +118,22 @@ ScVbaCharacters::Delete(  ) throw (css::uno::RuntimeException)
 }
 
 
+rtl::OUString&
+ScVbaCharacters::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCharacters") );
+    return sImplName;
+}
 
+uno::Sequence< rtl::OUString >
+ScVbaCharacters::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Characters" ) );
+    }
+    return aServiceNames;
+}
 

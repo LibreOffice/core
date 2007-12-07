@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbacomment.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:04:48 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:48:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,14 +44,13 @@
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 
-#include "vbahelper.hxx"
+#include "vbahelperinterface.hxx"
 
-typedef ::cppu::WeakImplHelper1< oo::excel::XComment > ScVbaComment_BASE;
+typedef InheritedHelperInterfaceImpl1< oo::excel::XComment > ScVbaComment_BASE;
 
 class ScVbaComment : public ScVbaComment_BASE
 {
     css::uno::Reference< css::table::XCellRange > mxRange;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 
 private:
     css::uno::Reference< css::sheet::XSheetAnnotation > SAL_CALL getAnnotation() throw (css::uno::RuntimeException);
@@ -59,16 +58,13 @@ private:
     sal_Int32 SAL_CALL getAnnotationIndex() throw (css::uno::RuntimeException);
     css::uno::Reference< oo::excel::XComment > SAL_CALL getCommentByIndex( sal_Int32 Index ) throw (css::uno::RuntimeException);
 public:
-    ScVbaComment( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange ) throw ( css::lang::IllegalArgumentException );
+    ScVbaComment( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange ) throw ( css::lang::IllegalArgumentException );
 
     virtual ~ScVbaComment() {}
 
     // Attributes
-    virtual css::uno::Reference< oo::excel::XApplication > SAL_CALL getApplication() throw (css::uno::RuntimeException);
     virtual rtl::OUString SAL_CALL getAuthor() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setAuthor( const rtl::OUString& _author ) throw (css::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getCreator() throw (css::uno::RuntimeException);
-    virtual css::uno::Reference< oo::excel::XRange > SAL_CALL getParent() throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException);
 
@@ -77,6 +73,9 @@ public:
     virtual css::uno::Reference< oo::excel::XComment > SAL_CALL Next() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< oo::excel::XComment > SAL_CALL Previous() throw (css::uno::RuntimeException);
     virtual rtl::OUString SAL_CALL Text( const css::uno::Any& Text, const css::uno::Any& Start, const css::uno::Any& Overwrite ) throw (css::uno::RuntimeException);
+    // XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 
 #endif /* SC_VBA_COMMENT_HXX */

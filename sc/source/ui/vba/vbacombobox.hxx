@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbacombobox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:04:14 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:48:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,20 +43,26 @@
 #include <comphelper/propertycontainer.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
+#include "vbacontrol.hxx"
 #include "vbahelper.hxx"
 
-typedef ::cppu::WeakImplHelper2<oo::msforms::XComboBox, css::script::XDefaultProperty > ComboBoxImpl_BASE;
+typedef cppu::ImplInheritanceHelper2<ScVbaControl, oo::msforms::XComboBox, css::script::XDefaultProperty > ComboBoxImpl_BASE;
 class ScVbaComboBox : public ComboBoxImpl_BASE
 {
 
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::beans::XPropertySet > m_xProps;
+    //css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    //css::uno::Reference< css::beans::XPropertySet > m_xProps;
     rtl::OUString sSourceName;
     rtl::OUString msDftPropName;
 
 
 public:
-    ScVbaComboBox( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::beans::XPropertySet >& xProps );
+    ScVbaComboBox( const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                    const css::uno::Reference< css::drawing::XControlShape >& xControlShape );
+    ScVbaComboBox( const css::uno::Reference< css::uno::XComponentContext >& xContext,
+                    const css::uno::Reference< css::beans::XPropertySet >& xProps,
+                    const css::uno::Reference< css::drawing::XControlShape> xControlShape );
+
 
     // Attributes
     virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException);

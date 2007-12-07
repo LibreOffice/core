@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaborders.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:01:27 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:44:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,23 +40,21 @@
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 
-#include "vbahelper.hxx"
 #include "vbacollectionimpl.hxx"
 
-
-typedef ::cppu::ImplInheritanceHelper1< ScVbaCollectionBaseImpl, oo::excel::XBorders > ScVbaBorders_BASE;
-
+typedef CollTestImplHelper< oo::excel::XBorders > ScVbaBorders_BASE;
 class ScVbaPalette;
 class ScVbaBorders : public ScVbaBorders_BASE
 {
-protected:
     // XEnumerationAccess
     virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) throw (css::uno::RuntimeException);
-
+    bool bRangeIsSingleCell;
+    css::uno::Reference< css::beans::XPropertySet > m_xProps;
 public:
-    ScVbaBorders( const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::table::XCellRange >& xRange, ScVbaPalette& rPalette );
+    ScVbaBorders( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::table::XCellRange >& xRange, ScVbaPalette& rPalette );
     virtual ~ScVbaBorders() {}
 
     // XEnumerationAccess
@@ -77,6 +75,9 @@ public:
     virtual void SAL_CALL setLineStyle( const css::uno::Any& _linestyle ) throw (css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getWeight() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setWeight( const  css::uno::Any& ) throw (css::uno::RuntimeException);
+    // xxxxBASE
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 
 #endif //SC_VBA_BORDERS_HXX

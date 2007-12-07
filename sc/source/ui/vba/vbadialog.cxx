@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbadialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:05:22 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,37 +64,6 @@ ScVbaDialog::Show() throw(uno::RuntimeException)
     }
 }
 
-uno::Any
-ScVbaDialog::getParent() throw (uno::RuntimeException)
-{
-    uno::Reference< vba::XGlobals > xGlobals = ScVbaGlobals::getGlobalsImpl( m_xContext );
-    uno::Reference< excel::XApplication > xApplication = xGlobals->getApplication();
-    if ( !xApplication.is() )
-    {
-        throw uno::RuntimeException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScVbaDialgs::getParent: Couldn't access Application object") ),uno::Reference< XInterface >() );
-    }
-    return uno::Any(xApplication);
-}
-
-::sal_Int32
-ScVbaDialog::getCreator() throw (uno::RuntimeException)
-{
-    // #TODO #FIXME
-    return 0;
-}
-uno::Reference< excel::XApplication >
-ScVbaDialog::getApplication() throw (uno::RuntimeException)
-{
-    uno::Reference< excel::XApplication > xApplication =  ScVbaGlobals::getGlobalsImpl( m_xContext )->getApplication();
-    if ( !xApplication.is() )
-    {
-        throw uno::RuntimeException(
-        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ScVbaWorkbooks::getParent: Couldn't access Application object" ) ),
-        uno::Reference< XInterface >() );
-    }
-    return xApplication;
-}
 
 static const rtl::OUString aStringList[]=
 {
@@ -135,3 +104,21 @@ ScVbaDialog::mapIndexToName( sal_Int32 nIndex )
     return rtl::OUString();
 }
 
+rtl::OUString&
+ScVbaDialog::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPivotTable") );
+    return sImplName;
+}
+
+uno::Sequence< rtl::OUString >
+ScVbaDialog::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > aServiceNames;
+    if ( aServiceNames.getLength() == 0 )
+    {
+        aServiceNames.realloc( 1 );
+        aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.PivotTable" ) );
+    }
+    return aServiceNames;
+}

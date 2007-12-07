@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbacomments.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:05:11 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:49:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,12 +43,12 @@
 #include "vbacollectionimpl.hxx"
 #include "vbacomment.hxx"
 
-typedef ::cppu::ImplInheritanceHelper1< ScVbaCollectionBaseImpl, oo::excel::XComments > ScVbaComments_BASE;
+typedef CollTestImplHelper< oo::excel::XComments > ScVbaComments_BASE;
 
 class ScVbaComments : public ScVbaComments_BASE
 {
 public:
-    ScVbaComments( const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
+    ScVbaComments( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 
     virtual ~ScVbaComments() {}
 
@@ -56,8 +56,10 @@ public:
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException);
 
-    // ScVbaCollectionBaseImpl
+    // ScVbaComments_BASE
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 
 };
 

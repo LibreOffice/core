@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbacharacters.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:01:49 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:45:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,21 +41,22 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/text/XSimpleText.hpp>
 
-#include "vbahelper.hxx"
+#include "vbahelperinterface.hxx"
 #include "vbapalette.hxx"
-typedef ::cppu::WeakImplHelper1< oo::excel::XCharacters > ScVbaCharacters_BASE;
+typedef InheritedHelperInterfaceImpl1< oo::excel::XCharacters > ScVbaCharacters_BASE;
 
 class ScVbaCharacters : public ScVbaCharacters_BASE
 {
 private:
     css::uno::Reference< css::text::XTextRange > m_xTextRange;
     css::uno::Reference< css::text::XSimpleText > m_xSimpleText;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
     ScVbaPalette m_aPalette;
     sal_Int16 nLength;
     sal_Int16 nStart;
+    // Add becuase of MSO has diferent behavior.
+    sal_Bool bReplace;
 public:
-    ScVbaCharacters( const css::uno::Reference< css::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, const css::uno::Reference< css::text::XSimpleText >& xRange, const css::uno::Any& Start, const css::uno::Any& Length  ) throw ( css::lang::IllegalArgumentException );
+    ScVbaCharacters( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, const css::uno::Reference< css::text::XSimpleText >& xRange, const css::uno::Any& Start, const css::uno::Any& Length, sal_Bool bReplace = sal_False  ) throw ( css::lang::IllegalArgumentException );
 
     virtual ~ScVbaCharacters() {}
     // Attributes
@@ -72,6 +73,9 @@ public:
     virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException);
 
 
+    // XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 
 };
 

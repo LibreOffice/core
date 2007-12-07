@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbacombobox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:04:02 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:48:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,14 @@ using namespace org::openoffice;
 const static rtl::OUString CONTROLSOURCEPROP( RTL_CONSTASCII_USTRINGPARAM("DataFieldProperty") );
 const static rtl::OUString ITEMS( RTL_CONSTASCII_USTRINGPARAM("StringItemList") );
 
-ScVbaComboBox::ScVbaComboBox( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< beans::XPropertySet >& xProps ) : m_xContext(xContext), m_xProps( xProps )
+ScVbaComboBox::ScVbaComboBox( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< css::drawing::XControlShape >& xControlShape ) : ComboBoxImpl_BASE( xContext, xControlShape )
 {
     // grab the default value property name
+    m_xProps->getPropertyValue( CONTROLSOURCEPROP ) >>= sSourceName;
+}
+
+ScVbaComboBox::ScVbaComboBox( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< beans::XPropertySet >& xPropSet, const css::uno::Reference< css::drawing::XControlShape > xControlShape ) : ComboBoxImpl_BASE( xContext, xPropSet, xControlShape )
+{
     m_xProps->getPropertyValue( CONTROLSOURCEPROP ) >>= sSourceName;
 }
 
@@ -80,6 +85,7 @@ ScVbaComboBox::setText( const ::rtl::OUString& _text ) throw (uno::RuntimeExcept
 void SAL_CALL
 ScVbaComboBox::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex ) throw (uno::RuntimeException)
 {
+
     if ( pvargItem.hasValue()  )
     {
         uno::Sequence< rtl::OUString > sList;
@@ -136,6 +142,6 @@ ScVbaComboBox::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex ) 
 void SAL_CALL
 ScVbaComboBox::Clear(  ) throw (uno::RuntimeException)
 {
-        setValue( uno::makeAny( rtl::OUString() ) );
-        m_xProps->setPropertyValue( ITEMS, uno::makeAny( uno::Sequence< rtl::OUString >() ) );
+    setValue( uno::makeAny( rtl::OUString() ) );
+    m_xProps->setPropertyValue( ITEMS, uno::makeAny( uno::Sequence< rtl::OUString >() ) );
 }

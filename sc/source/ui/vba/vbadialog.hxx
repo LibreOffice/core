@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbadialog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:05:33 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:50:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,28 +42,24 @@
 #include <org/openoffice/excel/XApplication.hpp>
 #include <org/openoffice/excel/XDialog.hpp>
 
-#include "vbahelper.hxx"
+#include "vbahelperinterface.hxx"
 #include "vbadialog.hxx"
 
-typedef ::cppu::WeakImplHelper1< oo::excel::XDialog > ScVbaDialog_BASE;
+typedef InheritedHelperInterfaceImpl1< oo::excel::XDialog > ScVbaDialog_BASE;
 
 class ScVbaDialog : public ScVbaDialog_BASE
 {
     sal_Int32 mnIndex;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
 public:
-    ScVbaDialog( sal_Int32 nIndex, css::uno::Reference< css::uno::XComponentContext > xContext ):
-        mnIndex( nIndex ),
-        m_xContext( xContext ) {}
+    ScVbaDialog( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, sal_Int32 nIndex, const css::uno::Reference< css::uno::XComponentContext > xContext ):ScVbaDialog_BASE( xParent, xContext ), mnIndex( nIndex ) {}
     virtual ~ScVbaDialog() {}
 
-    // Attributes
-    virtual css::uno::Reference< oo::excel::XApplication > SAL_CALL getApplication() throw (css::uno::RuntimeException);
-    virtual css::uno::Any SAL_CALL getParent() throw (css::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getCreator() throw(css::uno::RuntimeException);
     // Methods
     virtual void SAL_CALL Show() throw (css::uno::RuntimeException);
     rtl::OUString mapIndexToName( sal_Int32 nIndex );
+    // XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 
 #endif /* SC_VBA_DIALOG_HXX */
