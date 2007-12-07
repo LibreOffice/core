@@ -1,0 +1,267 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XAxis.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:21:31 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __org_openoffice_excel_XAxis_idl__
+#define __org_openoffice_excel_XAxis_idl__
+
+#ifndef __com_sun_star_script_BasicErrorException_idl__
+#include <com/sun/star/script/BasicErrorException.idl>
+#endif
+
+#ifndef __org_openoffice_vba_XHelperInterface_idl__
+#include <org/openoffice/vba/XHelperInterface.idl>
+#endif
+
+module org { module openoffice { module excel {
+interface XAxisTitle;
+interface XAxis
+{
+    interface ::org::openoffice::vba::XHelperInterface;
+
+    void Delete()
+        raises(com::sun::star::script::BasicErrorException);
+
+    XAxisTitle getAxisTitle()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setDisplayUnit([in] long DisplayUnit)
+        raises(com::sun::star::script::BasicErrorException);
+
+    long getDisplayUnit()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setCrosses([in] long Crosses)
+        raises(com::sun::star::script::BasicErrorException);
+
+    long getCrosses()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setCrossesAt([in] double CrossesAt)
+        raises(com::sun::star::script::BasicErrorException);
+
+    double getCrossesAt()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setType([in] long Type)
+        raises(com::sun::star::script::BasicErrorException);
+
+    long getType()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setHasTitle([in] boolean HasTitle)
+        raises(com::sun::star::script::BasicErrorException);
+
+    boolean getHasTitle()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setMinorUnit([in] double MinorUnit)
+        raises(com::sun::star::script::BasicErrorException);
+
+    double getMinorUnit()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setMinorUnitIsAuto([in] boolean MinorUnitIsAuto)
+        raises(com::sun::star::script::BasicErrorException);
+
+    boolean getMinorUnitIsAuto()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setReversePlotOrder([in] boolean ReversePlotOrder)
+        raises(com::sun::star::script::BasicErrorException);
+
+    boolean getReversePlotOrder()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setMajorUnit([in] double MajorUnit)
+        raises(com::sun::star::script::BasicErrorException);
+
+    double getMajorUnit()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setMajorUnitIsAuto([in] boolean MajorUnitIsAuto)
+        raises(com::sun::star::script::BasicErrorException);
+
+    boolean getMajorUnitIsAuto()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setMaximumScale([in] double MaximumScale)
+        raises(com::sun::star::script::BasicErrorException);
+
+    double getMaximumScale()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setMaximumScaleIsAuto([in] boolean MaximumScaleIsAuto)
+        raises(com::sun::star::script::BasicErrorException);
+
+    boolean getMaximumScaleIsAuto()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setMinimumScale([in] double MinimumScale)
+        raises(com::sun::star::script::BasicErrorException);
+
+    double getMinimumScale()
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setMinimumScaleIsAuto([in] boolean MinimumScaleIsAuto)
+        raises(com::sun::star::script::BasicErrorException);
+
+    boolean getMinimumScaleIsAuto()
+        raises(com::sun::star::script::BasicErrorException);
+
+    long getAxisGroup();//
+        raises(com::sun::star::script::BasicErrorException);
+
+    void setScaleType([in] long ScaleType)
+        raises(com::sun::star::script::BasicErrorException);
+
+    long getScaleType()
+        raises(com::sun::star::script::BasicErrorException);
+
+    double getHeight()
+        raises (com::sun::star::script::BasicErrorException);
+
+    void setHeight([in] /* double */ double height)
+        raises(com::sun::star::script::BasicErrorException);
+
+    double getWidth()
+        raises (com::sun::star::script::BasicErrorException);
+
+    void setWidth([in] /* double */ double width)
+        raises(com::sun::star::script::BasicErrorException);
+
+    double getTop()
+        raises (com::sun::star::script::BasicErrorException);
+
+    void setTop([in] /* double */ double top)
+        raises (com::sun::star::script::BasicErrorException);
+
+    double getLeft()
+        raises (com::sun::star::script::BasicErrorException);
+
+    void setLeft([in] /* double */ double left)
+        raises (com::sun::star::script::BasicErrorException);
+
+
+    //    XBorder       getBorder( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setMinorGridlines( [in] XGridlines MinorGridlines ) raises ( com::sun::star::script::BasicErrorException );
+
+    // XGridlines       getMinorGridlines( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setMinorTickMark( [in] long MinorTickMark ) raises ( com::sun::star::script::BasicErrorException );
+
+    // long     getMinorTickMark( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setTickLabelPosition( [in] long TickLabelPosition ) raises ( com::sun::star::script::BasicErrorException );
+
+    // long     getTickLabelPosition( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setTickLabels( [in] XTickLabels TickLabels ) raises ( com::sun::star::script::BasicErrorException );
+
+    // XTickLabels      getTickLabels( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setTickLabelSpacing( [in] long TickLabelSpacing ) raises ( com::sun::star::script::BasicErrorException );
+
+    // long     getTickLabelSpacing( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setTickMarkSpacing( [in] long TickMarkSpacing ) raises ( com::sun::star::script::BasicErrorException );
+
+    // long     getTickMarkSpacing( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setMajorGridlines( [in] XGridlines MajorGridlines ) raises ( com::sun::star::script::BasicErrorException );
+
+    // XGridlines       getMajorGridlines( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setMajorTickMark( [in] long MajorTickMark ) raises ( com::sun::star::script::BasicErrorException );
+
+    // long     getMajorTickMark( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setBaseUnit( [in] long BaseUnit ) raises ( com::sun::star::script::BasicErrorException );
+
+    // long     getBaseUnit( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setBaseUnitIsAuto( [in] boolean BaseUnitIsAuto ) raises ( com::sun::star::script::BasicErrorException );
+
+    // boolean      getBaseUnitIsAuto( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setMajorUnitScale( [in] long MajorUnitScale ) raises ( com::sun::star::script::BasicErrorException );
+
+    // long     getMajorUnitScale( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setMinorUnitScale( [in] long MinorUnitScale ) raises ( com::sun::star::script::BasicErrorException );
+
+    // long     getMinorUnitScale( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setCategoryType( [in] long CategoryType ) raises ( com::sun::star::script::BasicErrorException );
+
+    // long     getCategoryType( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setHasMajorGridlines( [in] boolean HasMajorGridlines ) raises ( com::sun::star::script::BasicErrorException );
+
+    // boolean      getHasMajorGridlines( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setHasMinorGridlines( [in] boolean HasMinorGridlines ) raises ( com::sun::star::script::BasicErrorException );
+
+    // boolean      getHasMinorGridlines( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void         setCategoryNames( [in] any CategoryNames ) raises ( com::sun::star::script::BasicErrorException );
+
+    // any          getCategoryNames( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setDisplayUnitCustom( [in] double DisplayUnitCustom ) raises ( com::sun::star::script::BasicErrorException );
+
+    // double       getDisplayUnitCustom( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setHasDisplayUnitLabel( [in] boolean HasDisplayUnitLabel ) raises ( com::sun::star::script::BasicErrorException );
+
+    // boolean      getHasDisplayUnitLabel( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setDisplayUnitLabel( [in] XDisplayUnitLabel DisplayUnitLabel ) raises ( com::sun::star::script::BasicErrorException );
+
+    // XDisplayUnitLabel        getDisplayUnitLabel( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // any          Select(  ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setAxisBetweenCategories( [in] boolean AxisBetweenCategories ) raises ( com::sun::star::script::BasicErrorException );
+
+    // boolean      getAxisBetweenCategories( ) raises ( com::sun::star::script::BasicErrorException );
+
+
+};
+
+}; }; };
+
+#endif
+
