@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_treelb.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:01:41 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -786,6 +786,12 @@ void DialogImpl::TreeListBoxImpl::RequestingChilds( SvLBoxEntry * pParent )
                 packages.getConstArray();
             SetUpdateMode(FALSE);
             for ( sal_Int32 pos = packages.getLength(); pos--; ) {
+                //disregard executable (application/vnd.sun.star.executable)
+                //it will not be displayed an shall not be disabled/enabled
+                OUString sType = ppackages[ pos ]->getPackageType()->getMediaType();
+                if (sType.equals(OUSTR("application/vnd.sun.star.executable")))
+                    continue;
+
                 addPackageNode(
                     parentNode->m_lbEntry, ppackages[ pos ], xCmdEnv );
             }
