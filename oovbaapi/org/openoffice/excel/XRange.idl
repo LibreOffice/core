@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XRange.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-27 07:42:31 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:27:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,14 +41,26 @@
 #ifndef __com_sun_star_lang_IllegalArgumentException_idl__
 #include <com/sun/star/lang/IllegalArgumentException.idl>
 #endif
-#ifndef __org_openoffice_excel_XlPasteType_idl__
-#include <org/openoffice/excel/XlPasteType.idl>
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
 #endif
-#ifndef __org_openoffice_excel_XlPasteSpecialOperation_idl__
-#include <org/openoffice/excel/XlPasteSpecialOperation.idl>
+#ifndef __com_sun_star_script_XDefaultProperty_idl__
+#include <com/sun/star/script/XDefaultProperty.idl>
+#endif
+#ifndef __com_sun_star_script_XDefaultMethod_idl__
+#include <com/sun/star/script/XDefaultMethod.idl>
 #endif
 #ifndef __org_openoffice_vba_XCollection_idl__
 #include <org/openoffice/vba/XCollection.idl>
+#endif
+#ifndef __org_openoffice_excel_XFormat_idl__
+#include <org/openoffice/excel/XFormat.idl>
+#endif
+#ifndef __org_openoffice_vba_XHelperInterface_idl__
+#include <org/openoffice/vba/XHelperInterface.idl>
+#endif
+#ifndef __com_sun_star_helper_script_BasicErrorException_idl__
+#include <com/sun/star/script/BasicErrorException.idl>
 #endif
 //=============================================================================
 
@@ -58,36 +70,44 @@ interface XFont;
 interface XRows;
 interface XColumns;
 interface XComment;
+
 interface XInterior;
 interface XCharacters;
 interface XBorders;
 interface XValidation;
-published interface XWorksheet;
+interface XWorksheet;
 
-interface XRange: com::sun::star::uno::XInterface
+interface XRange
 {
+     interface com::sun::star::container::XEnumerationAccess;
+    interface com::sun::star::script::XDefaultMethod;
+    interface com::sun::star::script::XDefaultProperty;
+    interface ::org::openoffice::excel::XFormat;
+    //interface ::org::openoffice::vba::XHelperInterface;
+
     [attribute] any Value;
     [attribute] any Formula;
     [attribute] any FormulaArray;
     [attribute] any FormulaR1C1;
-    [attribute, readonly] double Count;
+    [attribute, readonly] long  Count;
     [attribute, readonly] long Row;
     [attribute, readonly] long Column;
     [attribute, readonly] string Text;
     [attribute, readonly] XRange EntireRow;
     [attribute, readonly] XRange EntireColumn;
     [attribute, readonly] XComment Comment;
-    [attribute] boolean MergeCells;
-    [attribute] any NumberFormat;
-    [attribute] any WrapText;
     [attribute] any Hidden;
     [attribute] any ColumnWidth;
     [attribute, readonly ] any Width;
     [attribute, readonly] XWorksheet Worksheet;
     [attribute] any RowHeight;
     [attribute, readonly ] any Height;
+    [attribute, readonly ] any Top;
+    [attribute, readonly ] any Left;
     [attribute] any PageBreak;
     [attribute, readonly] XValidation Validation;
+    [attribute] any Style;
+    [attribute] any AddIndent;
 
     XComment AddComment( [in] any Text );
     void Clear();
@@ -99,6 +119,7 @@ interface XRange: com::sun::star::uno::XInterface
     void FillRight();
     void FillUp();
     void FillDown();
+    XRange Item([in] any row, [in] any column) raises(com::sun::star::script::BasicErrorException);
     XRange Offset([in] any RowOffset, [in] any ColumnOffset);
     XRange CurrentRegion();
     XRange CurrentArray();
@@ -106,14 +127,14 @@ interface XRange: com::sun::star::uno::XInterface
     string Address( [in] any RowAbsolute, [in] any ColumnAbsolute, [in] any ReferenceStyle, [in] any External, [in] any RelativeTo );
     XRange Cells([in] any RowIndex, [in] any ColumnIndex);
     void Select();
+    void AutoOutline() raises(com::sun::star::script::BasicErrorException);
     void Activate();
     XRange Rows( [in] any RowIndex );
+    void Calculate() raises(com::sun::star::script::BasicErrorException);
     XRange Columns( [in] any ColumnIndex );
     void Copy([in] any Destination);
     void Cut([in] any Destination);
     XRange Resize( [in] any RowSize, [in] any ColumnSize );
-    XFont Font();
-    XInterior Interior();
     XRange Range( [in] any Cell1, [in] any Cell2 );
     any getCellRange();
     void PasteSpecial([in] any Paste, [in] any Operation,[in] any SkipBlanks, [in] any Transpose);
@@ -131,13 +152,23 @@ interface XRange: com::sun::star::uno::XInterface
     void Delete( [in] any Shift );
 
     any Areas( [in] any item );
-    any Borders( [in] any item );
     any BorderAround( [in] any LineStyle, [in] any Weight, [in] any ColorIndex, [in] any Color );
         void AutoFilter([in ] any Field, [in] any Criteria1, [in] any Operator, [in] any Criteria2, [in] any VisibleDropDown);
         void Insert([in] any Shift, [in] any CopyOrigin);
         void Autofit();
     void PrintOut([in] any From, [in] any To, [in] any Copies, [in] any Preview, [in] any ActivePrinter, [in] any PrintToFile, [in] any Collate, [in] any PrToFileName);
     void AutoFill( [in] XRange Destination, [in] any Type );
+    boolean GoalSeek( [in] any Goal, [in] XRange ChangingCell );
+    void ClearOutline() raises(com::sun::star::script::BasicErrorException);
+    void Ungroup() raises(com::sun::star::script::BasicErrorException);
+    void Group() raises(com::sun::star::script::BasicErrorException);
+    void Merge([in] any Across) raises(com::sun::star::script::BasicErrorException);
+    void UnMerge() raises(com::sun::star::script::BasicErrorException);
+    XRange Next( ) raises ( com::sun::star::script::BasicErrorException );
+    XRange Previous( ) raises ( com::sun::star::script::BasicErrorException );
+     XRange SpecialCells( [in] any Type, [in]  /*Optional*/ any Value ) raises ( com::sun::star::script::BasicErrorException );
+    void RemoveSubtotal() raises ( com::sun::star::script::BasicErrorException );
+    void    Subtotal( [in] long GroupBy, [in] long Function, [in]  /*Optional*/ sequence<long> TotalList, [in]  /*Optional*/ any Replace, [in]  /*Optional*/ any PageBreaks, [in] any SummaryBelowData ) raises ( com::sun::star::script::BasicErrorException );
 
 };
 
