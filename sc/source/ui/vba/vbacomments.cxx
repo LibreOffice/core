@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbacomments.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:04:59 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,8 @@ uno::Any AnnotationToComment( const uno::Any& aSource, uno::Reference< uno::XCom
     uno::Reference< container::XChild > xChild( xAnno, uno::UNO_QUERY_THROW );
     uno::Reference< table::XCellRange > xCellRange( xChild->getParent(), uno::UNO_QUERY_THROW );
 
-    return uno::makeAny( uno::Reference< excel::XComment > ( new ScVbaComment( xContext, xCellRange ) ) );
+    // #FIXME needs to find the correct Parent
+    return uno::makeAny( uno::Reference< excel::XComment > ( new ScVbaComment( uno::Reference< vba::XHelperInterface >(), xContext, xCellRange ) ) );
 }
 
 class CommentEnumeration : public EnumerationHelperImpl
@@ -63,8 +64,8 @@ public:
 
 };
 
-ScVbaComments::ScVbaComments( const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  )
-: ScVbaComments_BASE( xContext, xIndexAccess )
+ScVbaComments::ScVbaComments( const uno::Reference< vba::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess  )
+: ScVbaComments_BASE( xParent, xContext, xIndexAccess )
 {
 }
 
@@ -75,18 +76,36 @@ ScVbaComments::createEnumeration() throw (uno::RuntimeException)
 {
     uno::Reference< container::XEnumerationAccess > xEnumAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
 
-    return new CommentEnumeration( m_xContext, xEnumAccess->createEnumeration() );
+    return new CommentEnumeration( mxContext, xEnumAccess->createEnumeration() );
 }
 
 uno::Any
 ScVbaComments::createCollectionObject( const css::uno::Any& aSource )
 {
-    return AnnotationToComment( aSource,  m_xContext );
+    return AnnotationToComment( aSource,  mxContext );
 }
 
 uno::Type
 ScVbaComments::getElementType() throw (uno::RuntimeException)
 {
-    return excel::XComments::static_type(0);
+    return excel::XComment::static_type(0);
 }
 
+rtl::OUString&
+ScVbaComments::getServiceImplName()
+{
+    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaComments") );
+    return sImplName;
+}
+
+css::uno::Sequence<rtl::OUString>
+ScVbaComments::getServiceNames()
+{
+    static uno::Sequence< rtl::OUString > sNames;
+    if ( sNames.getLength() == 0 )
+    {
+        sNames.realloc( 1 );
+        sNames[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("org.openoffice.excel.Comments") );
+    }
+    return sNames;
+}
