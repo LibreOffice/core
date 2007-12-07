@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:47:25 $
+#   last change: $Author: vg $ $Date: 2007-12-07 11:43:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ CDEFS+= -DVERBOSE
 
 # --- Files ----------------------------------
 
-.IF "$(GUI)" == "UNX"
+.IF "$(GUI)" == "UNX"  && "$(GUIBASE)"!="aqua"
 
 SLOFILES= \
         $(SLO)$/xineuno.obj      \
