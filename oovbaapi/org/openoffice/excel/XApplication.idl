@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XApplication.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-27 07:38:44 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:21:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
+#ifndef __org_openoffice_vba_XHelperInterface_idl__
+#include <org/openoffice/vba/XHelperInterface.idl>
+#endif
+
 module org {  module openoffice {  module excel {
 
 interface XRange;
@@ -49,9 +53,12 @@ interface XWorksheetFunction;
 interface XWindow;
 interface XWorksheet;
 
-interface XApplication: com::sun::star::uno::XInterface
+interface XApplication
 {
-    [attribute, readonly] XRange Selection;
+
+    interface ::org::openoffice::vba::XHelperInterface;
+
+    [attribute, readonly] any Selection;
     [attribute, readonly] XWorkbook ActiveWorkbook;
     [attribute, readonly] XRange ActiveCell;
     [attribute, readonly] XWindow ActiveWindow;
@@ -62,12 +69,23 @@ interface XApplication: com::sun::star::uno::XInterface
     // workbook in which the 'calling' macro is running. Should be possible
     // to determine this
     [attribute, readonly] XWorkbook ThisWorkbook;
+    [attribute, readonly] string Name;
     [attribute] boolean ScreenUpdating;
     [attribute] boolean DisplayStatusBar;
+    [attribute] boolean DisplayAlerts;
+    [attribute] boolean DisplayFormulaBar;
     [attribute] any CutCopyMode;
     [attribute] any StatusBar;
     [attribute] long Cursor;
     [attribute, readonly] string Version;
+
+    void setDefaultFilePath([in] string DefaultFilePath) raises(com::sun::star::script::BasicErrorException);
+
+    string getDefaultFilePath() raises(com::sun::star::script::BasicErrorException);
+
+    string LibraryPath() raises(com::sun::star::script::BasicErrorException);
+    string TemplatesPath() raises(com::sun::star::script::BasicErrorException);
+    string PathSeparator() raises(com::sun::star::script::BasicErrorException);
     any Workbooks( [in] any aIndex );
     any Worksheets( [in] any aIndex );
     any Windows( [in] any aIndex );
@@ -75,10 +93,16 @@ interface XApplication: com::sun::star::uno::XInterface
     any Evaluate( [in] string Name );
     any Dialogs( [in] any DialogIndex );
     any Range( [in] any Cell1, [in] any Cell2 );
+    any Names();
     void GoTo( [in] any Reference, [in] any Scroll );
     // #FIXME #TODO up to 30 args needed
     double CountA( [in] any arg1 );
     void wait( [in] double time );
+    void Calculate() raises(com::sun::star::script::BasicErrorException);
+    XRange Intersect([in] XRange Arg1, [in] XRange Arg2, [in] /*Optional*/ any Arg3, [in] /*Optional*/ any Arg4, [in] /*Optional*/ any Arg5, [in] /*Optional*/ any Arg6, [in] /*Optional*/ any Arg7, [in] /*Optional*/ any Arg8, [in] /*Optional*/ any Arg9, [in] /*Optional*/ any Arg10, [in] /*Optional*/ any Arg11, [in] /*Optional*/ any Arg12, [in] /*Optional*/ any Arg13, [in] /*Optional*/ any Arg14, [in] /*Optional*/ any Arg15, [in] /*Optional*/ any Arg16, [in] /*Optional*/ any Arg17, [in] /*Optional*/ any Arg18, [in] /*Optional*/ any Arg19, [in] /*Optional*/ any Arg20, [in] /*Optional*/ any Arg21, [in] /*Optional*/ any Arg22, [in] /*Optional*/ any Arg23, [in] /*Optional*/ any Arg24, [in] /*Optional*/ any Arg25, [in] /*Optional*/ any Arg26, [in] /*Optional*/ any Arg27, [in] /*Optional*/ any Arg28, [in] /*Optional*/ any Arg29, [in] /*Optional*/ any Arg30)
+        raises(com::sun::star::script::BasicErrorException);
+    void Volatile([in] any Volatile);
+    void DoEvents();
 };
 
 }; }; };
