@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.h,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:10:18 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:48:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,23 +56,25 @@ class AquaSalObject : public SalObject
 {
 public:
     AquaSalFrame*               mpFrame;                // parent frame
-    AquaSalObject*              mpNextObject;           // pointer to next object
-    void*                   mpInst;                 // instance handle for callback
-    SALOBJECTPROC           mpProc;                 // callback proc
+    NSClipView*                 mpClipView;
+    SystemEnvData               maSysData;
+
+    long                        mnClipX;
+    long                        mnClipY;
+    long                        mnClipWidth;
+    long                        mnClipHeight;
+    bool                        mbClip;
+
+    long                        mnX;
+    long                        mnY;
+    long                        mnWidth;
+    long                        mnHeight;
 
 
-//  HWND                    mhWnd;                  // Window handle
-//  HWND                    mhWndChild;             // Child Window handle
-//  HWND                    mhLastFocusWnd;         // Child-Window, welches als letztes den Focus hatte
-//  SystemChildData         maSysData;              // SystemEnvData
-//  RGNDATA*                mpClipRgnData;          // ClipRegion-Data
-//  RGNDATA*                mpStdClipRgnData;       // Cache Standard-ClipRegion-Data
-//  RECT*                   mpNextClipRect;         // Naechstes ClipRegion-Rect
-//  BOOL                    mbFirstClipRect;        // Flag for first cliprect to insert
-//  WinSalObject*               mpNextObject;           // pointer to next object
+    void setClippedPosSize();
 
 
-    AquaSalObject();
+    AquaSalObject( AquaSalFrame* pFrame );
     virtual ~AquaSalObject();
 
     virtual void                    ResetClipRegion();
@@ -87,8 +89,6 @@ public:
     virtual void                    SetBackground();
     virtual void                    SetBackground( SalColor nSalColor );
     virtual const SystemEnvData*    GetSystemData() const;
-
-    virtual void SetCallback( void* pInst, SALOBJECTPROC pProc );
 };
 
 #endif // _SV_SALOBJ_H
