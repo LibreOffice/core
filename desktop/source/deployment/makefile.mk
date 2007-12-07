@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-19 13:08:32 $
+#   last change: $Author: vg $ $Date: 2007-12-07 10:27:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ SHL1LIBS = \
     $(SLB)$/deployment_manager.lib \
     $(SLB)$/deployment_migration.lib \
     $(SLB)$/deployment_registry.lib \
+    $(SLB)$/deployment_registry_executable.lib \
     $(SLB)$/deployment_registry_component.lib \
     $(SLB)$/deployment_registry_configuration.lib \
     $(SLB)$/deployment_registry_package.lib \
