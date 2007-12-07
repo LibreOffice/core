@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javachild.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:20:37 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:50:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,14 +128,15 @@ void JavaChildWindow::implTestJavaException( void* pEnv )
 
 // -----------------------------------------------------------------------
 
-sal_Int32 JavaChildWindow::getParentWindowHandleForJava()
+sal_IntPtr JavaChildWindow::getParentWindowHandleForJava()
 {
-    sal_Int32 nRet = 0;
+    sal_IntPtr nRet = 0;
 
 #if defined WNT
-    nRet = reinterpret_cast< sal_Int32 >( GetSystemData()->hWnd );
+    nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->hWnd );
 #elif defined QUARTZ
-    nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->rWindow );
+    // FIXME: this is wrong
+    nRet = reinterpret_cast< sal_IntPtr >( GetSystemData()->pView );
 #elif defined UNX
 #ifdef SOLAR_JAVA
     uno::Reference< lang::XMultiServiceFactory > xFactory( vcl::unohelper::GetMultiServiceFactory() );
@@ -200,14 +201,14 @@ sal_Int32 JavaChildWindow::getParentWindowHandleForJava()
                                                                 GetSystemData()->aWindow, 0, 0, aSize.Width(), aSize.Height() );
                     implTestJavaException(pEnv);
 
-                    nRet = static_cast< sal_Int32 >( ji_widget );
+                    nRet = static_cast< sal_IntPtr >( ji_widget );
                 }
                 catch( uno::RuntimeException& )
                 {
                 }
 
                 if( !nRet )
-                    nRet = static_cast< sal_Int32 >( GetSystemData()->aWindow );
+                    nRet = static_cast< sal_IntPtr >( GetSystemData()->aWindow );
             }
         }
         catch( ... )
