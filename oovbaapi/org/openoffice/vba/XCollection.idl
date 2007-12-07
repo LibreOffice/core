@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XCollection.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-27 07:33:26 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 12:17:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,23 +38,29 @@
 #ifndef __com_sun_star_uno_XInterface_idl__
 #include <com/sun/star/uno/XInterface.idl>
 #endif
-#ifndef __org_openoffice_excel_XApplication_idl__
-#include <org/openoffice/excel/XApplication.idl>
+#ifndef __com_sun_star_script_XDefaultMethod_idl__
+#include <com/sun/star/script/XDefaultMethod.idl>
+#endif
+#ifndef __com_sun_star_container_XEnumerationAccess_idl__
+#include <com/sun/star/container/XEnumerationAccess.idl>
+#endif
+
+#ifndef __org_openoffice_vba_XHelperInterface_idl__
+#include <org/openoffice/vba/XHelperInterface.idl>
 #endif
 //=============================================================================
 
 module org {  module openoffice {  module vba {
-
 //=============================================================================
 
-interface XCollection : ::com::sun::star::uno::XInterface
+interface XCollection
 {
-    [attribute, readonly] long Count;
-    [attribute, readonly] any   Parent;
-    [attribute, readonly] long Creator;
-    [attribute, readonly] org::openoffice::excel::XApplication Application;
+    interface ::org::openoffice::vba::XHelperInterface;
+    interface ::com::sun::star::script::XDefaultMethod;
+    interface ::com::sun::star::container::XEnumerationAccess;
 
-    any  Item( [in] any Index );
+    [attribute, readonly] long Count;
+    any  Item( [in] any Index1, [in] any Index2 );
 };
 
 }; }; };
