@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaworkbook.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:13:02 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:06:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,27 +35,28 @@
 #ifndef SC_VBA_WORKBOOK_HXX
 #define SC_VBA_WORKBOOK_HXX
 
-#include <cppuhelper/implbase1.hxx>
-
 #include <com/sun/star/frame/XModel.hpp>
 #include <org/openoffice/excel/XWorkbook.hpp>
-#include "vbahelper.hxx"
+#include "vbahelperinterface.hxx"
 
 class ScModelObj;
 
-typedef ::cppu::WeakImplHelper1< oo::excel::XWorkbook > ScVbaWorkbook_BASE;
+typedef InheritedHelperInterfaceImpl1< oo::excel::XWorkbook > ScVbaWorkbook_BASE;
 
 class ScVbaWorkbook : public ScVbaWorkbook_BASE
 {
     css::uno::Reference< css::frame::XModel > mxModel;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
+    static css::uno::Sequence< sal_Int32 > ColorData;
+    void initColorData( const css::uno::Sequence< sal_Int32 >& sColors );
+    void init();
 protected:
+
     virtual css::uno::Reference< css::frame::XModel >  getModel() { return mxModel; }
-    ScVbaWorkbook(  css::uno::Reference< css::uno::XComponentContext >& xContext) : mxModel(NULL), m_xContext( xContext ){}
+    ScVbaWorkbook(  const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext);
 public:
-    ScVbaWorkbook(  css::uno::Reference< css::uno::XComponentContext >& xContext,
-            css::uno::Reference< css::frame::XModel > xModel ) :
-             mxModel( xModel ), m_xContext( xContext ){}
+    ScVbaWorkbook(  const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,
+            css::uno::Reference< css::frame::XModel > xModel );
+    ScVbaWorkbook(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
     virtual ~ScVbaWorkbook() {}
 
     // Attributes
@@ -78,6 +79,21 @@ public:
     virtual void SAL_CALL Unprotect( const css::uno::Any &aPassword ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Save() throw (css::uno::RuntimeException);
     virtual void SAL_CALL Activate() throw (css::uno::RuntimeException);
+    // Amelia Wang
+    virtual css::uno::Any SAL_CALL Names( ) throw (css::uno::RuntimeException);
+
+    virtual css::uno::Any SAL_CALL Styles( const css::uno::Any& Item ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL ResetColors(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual css::uno::Any SAL_CALL Colors( const css::uno::Any& Index ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL FileFormat(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    virtual void SAL_CALL SaveCopyAs( const rtl::OUString& Filename ) throw ( css::uno::RuntimeException);
+    // code name
+    virtual ::rtl::OUString SAL_CALL getCodeName() throw ( css::uno::RuntimeException);
+    virtual void SAL_CALL setCodeName( const ::rtl::OUString& sGlobCodeName ) throw (css::uno::RuntimeException);
+
+    // XHelperInterface
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 
 #endif /* SC_VBA_WORKBOOK_HXX */
