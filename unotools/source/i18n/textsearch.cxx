@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-05 16:41:58 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 16:38:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,6 +238,8 @@ TextSearch::~TextSearch()
  */
 #if defined _MSC_VER
 #pragma optimize("", off)
+#pragma warning(push)
+#pragma warning(disable: 4748)
 #endif
 int TextSearch::SearchFrwrd( const String & rStr, xub_StrLen* pStart,
                             xub_StrLen* pEnde, SearchResult* pRes )
@@ -400,6 +402,7 @@ void TextSearch::ReplaceBackReferences( String& rReplaceStr, const String &rStr,
 
 #if defined _MSC_VER
 #pragma optimize("", on)
+#pragma warning(pop)
 #endif
 
 // ............................................................................
