@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-24 10:25:44 $
+#   last change: $Author: vg $ $Date: 2007-12-07 11:51:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ CDEFS+= -DWITH_SVP_LISTENING
 
 # --- Files --------------------------------------------------------
 
-.IF "$(GUI)" == "UNX"
+.IF "$(GUIBASE)" == "unx"
 
 SLOFILES=\
         $(SLO)$/svpinst.obj\
