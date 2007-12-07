@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-27 09:25:06 $
+#   last change: $Author: vg $ $Date: 2007-12-07 10:42:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,8 @@ SLOFILES= \
         $(SLO)$/vbaworksheets.obj \
         $(SLO)$/vbaapplication.obj \
         $(SLO)$/vbarange.obj \
+        $(SLO)$/vbaname.obj \
+        $(SLO)$/vbanames.obj \
         $(SLO)$/vbacomment.obj \
         $(SLO)$/vbacomments.obj \
         $(SLO)$/vbaworkbooks.obj \
@@ -73,7 +75,6 @@ SLOFILES= \
         $(SLO)$/vbachartobject.obj\
         $(SLO)$/vbachartobjects.obj\
         $(SLO)$/vbaseriescollection.obj\
-        $(SLO)$/vbacollectionimpl.obj\
         $(SLO)$/vbadialogs.obj \
         $(SLO)$/vbadialog.obj	\
         $(SLO)$/vbapivottable.obj \
@@ -85,7 +86,36 @@ SLOFILES= \
         $(SLO)$/vbacharacters.obj \
         $(SLO)$/vbacombobox.obj \
         $(SLO)$/vbavalidation.obj \
-        $(SLO)$/service.obj
+                $(SLO)$/vbacontrol.obj \
+                $(SLO)$/vbaoleobject.obj \
+                $(SLO)$/vbaoleobjects.obj \
+                $(SLO)$/vbabutton.obj \
+                $(SLO)$/vbalabel.obj \
+                $(SLO)$/vbatextbox.obj \
+                $(SLO)$/vbaradiobutton.obj \
+                $(SLO)$/vbalistbox.obj \
+                $(SLO)$/vbapropvalue.obj \
+                $(SLO)$/vbapane.obj \
+                $(SLO)$/vbashape.obj \
+                $(SLO)$/vbacolorformat.obj \
+                $(SLO)$/vbashapes.obj \
+                $(SLO)$/vbalineformat.obj \
+                $(SLO)$/vbafillformat.obj \
+                $(SLO)$/vbapictureformat.obj \
+                $(SLO)$/vbashaperange.obj \
+                $(SLO)$/vbatextframe.obj \
+                $(SLO)$/vbacharttitle.obj \
+                $(SLO)$/vbacharts.obj \
+                $(SLO)$/vbaaxistitle.obj \
+                $(SLO)$/vbaaxes.obj \
+                $(SLO)$/vbaaxis.obj \
+                $(SLO)$/vbaformat.obj \
+                $(SLO)$/vbacondition.obj \
+                $(SLO)$/vbaformatcondition.obj \
+                $(SLO)$/vbaformatconditions.obj \
+                $(SLO)$/vbastyle.obj \
+                $(SLO)$/vbastyles.obj \
+        $(SLO)$/service.obj \
  
 
 # --- Targets ------------------------------------------------------
