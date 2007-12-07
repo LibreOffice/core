@@ -4,9 +4,9 @@
 #
 #   $RCSfile: simplepackage.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 13:16:22 $
+#   last change: $Author: vg $ $Date: 2007-12-07 15:59:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -330,7 +330,7 @@ sub create_simple_package
                 # special unix rights "555" on cygwin
                 if (( $^O =~ /cygwin/i ) && ( $ENV{'USE_SHELL'} ne "4nt" ) && ( $unixrights =~ /444/ )) { $unixrights = "555"; }
 
-                my $localcall = "$installer::globals::wrapcmd chmod $unixrights $destination \>\/dev\/null 2\>\&1";
+                my $localcall = "$installer::globals::wrapcmd chmod $unixrights \'$destination\' \>\/dev\/null 2\>\&1";
                 system($localcall);
             }
         }
@@ -348,7 +348,7 @@ sub create_simple_package
         $destination = $subfolderdir . $installer::globals::separator . $destination;
         my $destinationfile = $onelink->{'destinationfile'};
 
-        my $localcall = "ln -sf $destinationfile $destination \>\/dev\/null 2\>\&1";
+        my $localcall = "ln -sf \'$destinationfile\' \'$destination\' \>\/dev\/null 2\>\&1";
         system($localcall);
 
         $infoline = "Creating link: \"ln -sf $destinationfile $destination\"\n";
@@ -361,7 +361,7 @@ sub create_simple_package
         my $target = $onelink->{'Target'};
         my $destination = $subfolderdir . $installer::globals::separator . $onelink->{'destination'};
 
-        my $localcall = "ln -sf $target $destination \>\/dev\/null 2\>\&1";
+        my $localcall = "ln -sf \'$target\' \'$destination\' \>\/dev\/null 2\>\&1";
         system($localcall);
 
         $infoline = "Creating Unix link: \"ln -sf $target $destination\"\n";
