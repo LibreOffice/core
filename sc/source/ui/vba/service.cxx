@@ -4,9 +4,9 @@
  *
  *  $RCSfile: service.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:00:29 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:42:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "com/sun/star/lang/XMultiServiceFactory.hpp"
 #include "com/sun/star/registry/XRegistryKey.hpp"
+#include "comphelper/servicedecl.hxx"
 
 // =============================================================================
 // component exports
@@ -42,39 +43,27 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-namespace vbaobj
+namespace sdecl = comphelper::service_decl;
+
+// reference service helper(s)
+namespace  range
 {
-    // =============================================================================
-    // component operations
-    // =============================================================================
-
-    uno::Reference< XInterface > SAL_CALL create(
-        Reference< XComponentContext > const & xContext )
-        SAL_THROW( () );
-
-    // -----------------------------------------------------------------------------
-
-    ::rtl::OUString SAL_CALL getImplementationName();
-
-    Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames();
-
-//  Reference<XInterface> SAL_CALL create(
-//      Sequence<Any> const &, Reference<XComponentContext> const & );
-} // end namespace vbaobj
+extern sdecl::ServiceDecl const serviceDecl;
+}
+namespace  workbook
+{
+extern sdecl::ServiceDecl const serviceDecl;
+}
+namespace  worksheet
+{
+extern sdecl::ServiceDecl const serviceDecl;
+}
+namespace globals
+{
+extern sdecl::ServiceDecl const serviceDecl;
+}
 
 
-    // =============================================================================
-
-    const ::cppu::ImplementationEntry s_component_entries [] =
-    {
-        {
-            ::vbaobj::create, ::vbaobj::getImplementationName,
-            ::vbaobj::getSupportedServiceNames,
-        ::cppu::createSingleComponentFactory,
-            0, 0
-        },
-        { 0, 0, 0, 0, 0, 0 }
-    };
 
 extern "C"
 {
@@ -89,9 +78,12 @@ extern "C"
         lang::XMultiServiceFactory * pServiceManager, registry::XRegistryKey * pRegistryKey )
     {
         OSL_TRACE("In component_writeInfo");
-        if ( ::cppu::component_writeInfoHelper(
-            pServiceManager, pRegistryKey, s_component_entries ) )
+
+    // Component registration
+        if ( component_writeInfoHelper( pServiceManager, pRegistryKey,
+        range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl ) )
         {
+            // Singleton registration
             try
             {
                 registry::XRegistryKey * pKey =
@@ -115,8 +107,10 @@ extern "C"
         const sal_Char * pImplName, lang::XMultiServiceFactory * pServiceManager,
         registry::XRegistryKey * pRegistryKey )
     {
-        OSL_TRACE("In component_getFactory");
-        return ::cppu::component_getFactoryHelper(
-            pImplName, pServiceManager, pRegistryKey, s_component_entries );
+        OSL_TRACE("In component_getFactory for %s", pImplName );
+    void* pRet =  component_getFactoryHelper(
+            pImplName, pServiceManager, pRegistryKey, range::serviceDecl, workbook::serviceDecl, worksheet::serviceDecl, globals::serviceDecl );
+    OSL_TRACE("Ret is 0x%x", pRet);
+    return pRet;
     }
 }
