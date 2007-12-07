@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtopwindow.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:14:37 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,12 @@
 #include <tools/prewin.h>
 #include <windows.h>
 #include <tools/postwin.h>
+#endif
+
+#ifdef QUARTZ
+#include "premac.h"
+#include <Cocoa/Cocoa.h>
+#include "postmac.h"
 #endif
 
 #include <vcl/syschild.hxx>
@@ -192,7 +198,7 @@ VCLXTopWindow::~VCLXTopWindow()
 #elif (defined QUARTZ)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_MAC )
             {
-                 aRet <<= (sal_IntPtr)pSysData->rWindow;
+                 aRet <<= (sal_IntPtr)pSysData->pView;
             }
 #elif (defined UNX)
             if( SystemType == ::com::sun::star::lang::SystemDependent::SYSTEM_XWINDOW )
