@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSeriesCollection.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-27 07:42:53 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:27:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,9 @@ module org {  module openoffice {  module excel {
 interface XSeries;
 //=============================================================================
 
-interface XSeriesCollection: ::org::openoffice::vba::XCollection
+interface XSeriesCollection
 {
+    interface ::org::openoffice::vba::XCollection;
     //XSeries Add( [in] any Source, [in] any RowCol, [in] any SeriesLabels,
     //  [in] any CategoryLabels, [in] any Replace );
     XSeries NewSeries();
