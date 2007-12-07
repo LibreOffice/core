@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 07:49:06 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 10:22:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,20 @@ void NeonUri::calculateURI ()
         nPos = mPath.lastIndexOf ('/', nPos);
     }
     if (nPos != -1)
-        return mPath.copy (nPos + 1, mPath.getLength () - nPos - 1 - nTrail);
+    {
+        rtl::OUString aTemp(
+            mPath.copy (nPos + 1, mPath.getLength () - nPos - 1 - nTrail) );
+
+        // query, fragment present?
+        nPos = aTemp.indexOf( '?' );
+        if ( nPos == -1 )
+            nPos = aTemp.indexOf( '#' );
+
+        if ( nPos != -1 )
+            aTemp = aTemp.copy( 0, nPos );
+
+        return aTemp;
+    }
     else
         return rtl::OUString::createFromAscii ("/");
 }
