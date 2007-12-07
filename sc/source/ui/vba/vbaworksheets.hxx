@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaworksheets.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 16:14:19 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:07:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,25 +43,23 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <org/openoffice/vba/XGlobals.hpp>
 
-#include "vbahelper.hxx"
 #include "vbacollectionimpl.hxx"
 
 class ScModelObj;
 
 
-typedef ::cppu::ImplInheritanceHelper1< ScVbaCollectionBaseImpl, oo::excel::XWorksheets > ScVbaWorksheets_BASE;
+typedef CollTestImplHelper< oo::excel::XWorksheets > ScVbaWorksheets_BASE;
 
 class ScVbaWorksheets : public ScVbaWorksheets_BASE
 {
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::sheet::XSpreadsheets > m_xSheets;
 protected:
-    //ScVbaCollectionBaseImpl
+    // ScVbaWorksheets_BASE
     virtual css::uno::Any getItemByStringIndex( const rtl::OUString& sIndex ) throw (css::uno::RuntimeException);
-
 public:
-    ScVbaWorksheets( const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::sheet::XSpreadsheets >& xSheets, const css::uno::Reference< css::frame::XModel >& xModel );
-    ScVbaWorksheets( const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XEnumerationAccess >& xEnum,  const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaWorksheets( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xSheets, const css::uno::Reference< css::frame::XModel >& xModel );
+    ScVbaWorksheets( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XEnumerationAccess >& xEnum,  const css::uno::Reference< css::frame::XModel >& xModel );
     virtual ~ScVbaWorksheets() {}
 
     bool isSelectedSheets();
@@ -77,8 +75,13 @@ public:
     virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Before, const css::uno::Any& After, const css::uno::Any& Count, const css::uno::Any& Type ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException);
     virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName ) throw (css::uno::RuntimeException);
-    // ScVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource );
+    virtual void SAL_CALL Select( const css::uno::Any& Replace ) throw (css::uno::RuntimeException);
+    // ScVbaWorksheets_BASE
+    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& Index2 ) throw
+(css::uno::RuntimeException);
+    virtual rtl::OUString& getServiceImplName();
+    virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 
 };
 
