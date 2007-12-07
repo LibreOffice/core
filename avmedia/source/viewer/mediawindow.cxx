@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediawindow.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:24:05 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:43:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,7 +385,8 @@ void MediaWindow::getMediaFilters( FilterNameVector& rFilterNameVector )
                                         "CD Audio", "cda",
                                         "MIDI Audio", "mid;midi",
                                         "MPEG Audio", "mp2;mp3;mpa",
-                                        "MPEG Video", "mpg;mpeg;mpv",
+                                        "MPEG Video", "mpg;mpeg;mpv;mp4",
+                                        "Ogg bitstream", "ogg",
                                         "Quicktime Video", "mov",
                                         "Vivo Video", "viv",
                                         "WAVE Audio", "wav" };
@@ -484,6 +485,8 @@ bool MediaWindow::isMediaURL( const ::rtl::OUString& rURL, bool bDeep, Size* pPr
             {
                 try
                 {
+                    fprintf(stderr, "-->%s uno reference \n\n",AVMEDIA_MANAGER_SERVICE_NAME);
+
                     uno::Reference< ::com::sun::star::media::XManager > xManager(
                         xFactory->createInstance( ::rtl::OUString::createFromAscii( AVMEDIA_MANAGER_SERVICE_NAME ) ),
                         uno::UNO_QUERY );
