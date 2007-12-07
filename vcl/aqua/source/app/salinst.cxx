@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:12:57 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -781,14 +781,11 @@ void AquaSalInstance::DestroyFrame( SalFrame* pFrame )
 
 SalObject* AquaSalInstance::CreateObject( SalFrame* pParent, SystemWindowData* /* pWindowData */ )
 {
-        // SystemWindowData is meaningless on Mac OS X
+    // SystemWindowData is meaningless on Mac OS X
     AquaSalObject *pObject = NULL;
 
     if ( pParent )
-    {
-        pObject = new AquaSalObject();
-        pObject->mpFrame = (AquaSalFrame*)pParent;
-    }
+        pObject = new AquaSalObject( static_cast<AquaSalFrame*>(pParent) );
 
     return pObject;
 }
