@@ -407,9 +407,6 @@ $(SHL1TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
-.IF "$(SOLAR_STLLIBPATH)"!=""
-EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
-.ENDIF
 .IF "$(SHL1NOCHECK)"==""
     $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL1TARGETN)
 .ENDIF				# "$(SHL1NOCHECK)"!=""
@@ -857,9 +854,6 @@ $(SHL2TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
-.IF "$(SOLAR_STLLIBPATH)"!=""
-EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
-.ENDIF
 .IF "$(SHL2NOCHECK)"==""
     $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL2TARGETN)
 .ENDIF				# "$(SHL2NOCHECK)"!=""
@@ -1307,9 +1301,6 @@ $(SHL3TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
-.IF "$(SOLAR_STLLIBPATH)"!=""
-EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
-.ENDIF
 .IF "$(SHL3NOCHECK)"==""
     $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL3TARGETN)
 .ENDIF				# "$(SHL3NOCHECK)"!=""
@@ -1757,9 +1748,6 @@ $(SHL4TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
-.IF "$(SOLAR_STLLIBPATH)"!=""
-EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
-.ENDIF
 .IF "$(SHL4NOCHECK)"==""
     $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL4TARGETN)
 .ENDIF				# "$(SHL4NOCHECK)"!=""
@@ -2207,9 +2195,6 @@ $(SHL5TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
-.IF "$(SOLAR_STLLIBPATH)"!=""
-EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
-.ENDIF
 .IF "$(SHL5NOCHECK)"==""
     $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL5TARGETN)
 .ENDIF				# "$(SHL5NOCHECK)"!=""
@@ -2657,9 +2642,6 @@ $(SHL6TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
-.IF "$(SOLAR_STLLIBPATH)"!=""
-EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
-.ENDIF
 .IF "$(SHL6NOCHECK)"==""
     $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL6TARGETN)
 .ENDIF				# "$(SHL6NOCHECK)"!=""
@@ -3107,9 +3089,6 @@ $(SHL7TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
-.IF "$(SOLAR_STLLIBPATH)"!=""
-EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
-.ENDIF
 .IF "$(SHL7NOCHECK)"==""
     $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL7TARGETN)
 .ENDIF				# "$(SHL7NOCHECK)"!=""
@@ -3557,9 +3536,6 @@ $(SHL8TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
-.IF "$(SOLAR_STLLIBPATH)"!=""
-EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
-.ENDIF
 .IF "$(SHL8NOCHECK)"==""
     $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL8TARGETN)
 .ENDIF				# "$(SHL8NOCHECK)"!=""
@@ -4007,9 +3983,6 @@ $(SHL9TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
-.IF "$(SOLAR_STLLIBPATH)"!=""
-EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
-.ENDIF
 .IF "$(SHL9NOCHECK)"==""
     $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL9TARGETN)
 .ENDIF				# "$(SHL9NOCHECK)"!=""
@@ -4457,9 +4430,6 @@ $(SHL10TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
-.IF "$(SOLAR_STLLIBPATH)"!=""
-EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
-.ENDIF
 .IF "$(SHL10NOCHECK)"==""
     $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL10TARGETN)
 .ENDIF				# "$(SHL10NOCHECK)"!=""

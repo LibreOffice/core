@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.117 $
+#   $Revision: 1.118 $
 #
-#   last change: $Author: vg $ $Date: 2007-12-06 16:46:14 $
+#   last change: $Author: hjs $ $Date: 2007-12-07 17:06:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -444,9 +444,6 @@ $(SHL$(TNR)TARGETN) : \
     @echo "Making: $@.jnilib"
     @macosx-create-bundle $@
 .IF "$(UPDATER)"=="YES"
-.IF "$(SOLAR_STLLIBPATH)"!=""
-EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
-.ENDIF
 .IF "$(SHL$(TNR)NOCHECK)"==""
     $(SOLARENV)$/bin$/checkdll.sh -L$(LB) -L$(SOLARLIBDIR) $(EXTRALIBPATHS) $(SHL$(TNR)TARGETN)
 .ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""

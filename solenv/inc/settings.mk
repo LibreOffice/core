@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.222 $
+#   $Revision: 1.223 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 12:45:12 $
+#   last change: $Author: hjs $ $Date: 2007-12-07 17:06:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -789,6 +789,13 @@ SOLARCOMMONRESDIR=$(SOLARRESDIR)
 SOLARCOMMONPCKDIR=$(SOLARPCKDIR)
 .ENDIF
 
+.IF "$(UPDATER)"=="YES"
+.IF "$(SHL$(TNR)NOCHECK)"==""
+.IF "$(SOLAR_STLLIBPATH)"!=""
+EXTRALIBPATHS+=-L$(SOLAR_STLLIBPATH)
+.ENDIF
+.ENDIF				# "$(SHL$(TNR)NOCHECK)"!=""
+.ENDIF
 
 .IF "$(PRE)"==""
 #JARDIR=$(CLASSDIR)
