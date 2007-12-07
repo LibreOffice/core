@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDialog.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-27 07:40:37 $
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 #include <com/sun/star/uno/XInterface.idl>
 #endif
 
+#ifndef __org_openoffice_vba_XHelperInterface_idl__
+#include <org/openoffice/vba/XHelperInterface.idl>
+#endif
+
 
 //=============================================================================
 
@@ -48,11 +52,10 @@ module org {  module openoffice {  module excel {
 
 interface XApplication;
 
-interface XDialog : com::sun::star::uno::XInterface
+interface XDialog
 {
-    [attribute, readonly] XApplication Application;
-    [attribute, readonly] any Parent;
-    [attribute, readonly] long Creator;
+    interface ::org::openoffice::vba::XHelperInterface;
+
     void Show();
 };
 
