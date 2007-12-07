@@ -1,0 +1,124 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XTitle.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-12-07 11:28:37 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __org_openoffice_excel_XTitle_idl__
+#define __org_openoffice_excel_XTitle_idl__
+
+#ifndef __org_openoffice_vba_XHelperInterface_idl__
+#include <org/openoffice/vba/XHelperInterface.idl>
+#endif
+
+#ifndef __com_sun_star_script_BasicErrorException_idl__
+#include <com/sun/star/script/BasicErrorException.idl>
+#endif
+
+module org { module openoffice { module excel {
+
+interface XCharacters;
+interface XFont;
+interface XBorder;
+interface XInterior;
+
+interface XTitle
+{
+    interface ::org::openoffice::vba::XHelperInterface;
+    //    XBorder           Border( ) raises ( com::sun::star::script::BasicErrorException );
+
+    XInterior Interior() raises(com::sun::star::script::BasicErrorException);
+
+    XFont Font() raises(com::sun::star::script::BasicErrorException);
+
+    void setText([in] string Text) raises(com::sun::star::script::BasicErrorException);
+
+    string getText() raises(com::sun::star::script::BasicErrorException);
+    // #FIXME existing implementation object needs to be usable for shape, chart
+    // axes etc.
+    //XCharacters Characters() raises(com::sun::star::script::BasicErrorException);
+
+    void setTop([in] double Top) raises(com::sun::star::script::BasicErrorException);
+
+    double getTop() raises(com::sun::star::script::BasicErrorException);
+
+    void setLeft([in] double Left) raises(com::sun::star::script::BasicErrorException);
+
+    double getLeft() raises(com::sun::star::script::BasicErrorException);
+
+    void setOrientation([in] long Orientation) raises(com::sun::star::script::BasicErrorException);
+
+    long getOrientation() raises(com::sun::star::script::BasicErrorException);
+
+    // any          Select(  ) raises ( com::sun::star::script::BasicErrorException );
+
+    // any          Delete(  ) raises ( com::sun::star::script::BasicErrorException );
+
+    //    void          setName( [in] string Name ) raises ( com::sun::star::script::BasicErrorException );
+
+    //    string            getName( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void     setFill( [in] XChartFillFormat Fill ) raises ( com::sun::star::script::BasicErrorException );
+
+    // XChartFillFormat     getFill( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void         setCaption( [in] string Caption ) raises ( com::sun::star::script::BasicErrorException );
+
+    // string           getCaption( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void         setHorizontalAlignment( [in] any HorizontalAlignment ) raises ( com::sun::star::script::BasicErrorException );
+
+    // any          getHorizontalAlignment( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void         setShadow( [in] boolean Shadow ) raises ( com::sun::star::script::BasicErrorException );
+
+    // boolean          getShadow( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void         setVerticalAlignment( [in] any VerticalAlignment ) raises ( com::sun::star::script::BasicErrorException );
+
+    // any          getVerticalAlignment( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void         setReadingOrder( [in] long ReadingOrder ) raises ( com::sun::star::script::BasicErrorException );
+
+    // long         getReadingOrder( ) raises ( com::sun::star::script::BasicErrorException );
+
+    // void         setAutoScaleFont( [in] any AutoScaleFont ) raises ( com::sun::star::script::BasicErrorException );
+
+    // any          getAutoScaleFont( ) raises ( com::sun::star::script::BasicErrorException );
+
+
+};
+
+}; }; };
+
+#endif
+
