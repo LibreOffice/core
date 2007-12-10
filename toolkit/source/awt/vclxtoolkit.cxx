@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:59:06 $
+ *  last change: $Author: vg $ $Date: 2007-12-10 09:46:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1262,7 +1262,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
             SystemParentData aParentData;
             aParentData.nSize   = sizeof( aParentData );
             #if defined QUARTZ
-            aParentData.rWindow = reinterpret_cast<NSView*>(nWindowHandle);
+            aParentData.pView   = reinterpret_cast<NSView*>(nWindowHandle);
             #elif defined UNX
             aParentData.aWindow = nWindowHandle;
             aParentData.bXEmbedSupport = bXEmbed;
