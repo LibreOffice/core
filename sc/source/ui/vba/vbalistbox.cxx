@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbalistbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 10:55:15 $
+ *  last change: $Author: vg $ $Date: 2007-12-10 09:31:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ ScVbaListBox::Clear(  ) throw (uno::RuntimeException)
 void
 ScVbaListBox::setValueEvent( const uno::Any& value )
 {
-    sal_Bool bValue;
+    sal_Bool bValue = sal_False;
     if( !(value >>= bValue) )
         throw uno::RuntimeException( rtl::OUString::createFromAscii(
                     "Invalid type\n. need boolean." ), uno::Reference< uno::XInterface >() );

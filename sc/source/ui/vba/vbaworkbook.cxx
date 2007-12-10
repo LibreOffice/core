@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaworkbook.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:06:05 $
+ *  last change: $Author: vg $ $Date: 2007-12-10 09:31:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,11 +436,6 @@ uno::Any SAL_CALL
 ScVbaWorkbook::Names( ) throw (uno::RuntimeException)
 {
     uno::Reference< frame::XModel > xModel( getModel() );
-    ScDocShell * pDocShell = ( ScDocShell* )SfxObjectShell::GetWorkingDocument();
-    if ( !pDocShell )
-        throw uno::RuntimeException(::rtl::OUString(
-                                RTL_CONSTASCII_USTRINGPARAM( "Cann't recognise the 'Names' interface. ") ),
-                                uno::Reference< XInterface >() );
     uno::Reference< beans::XPropertySet > xProps( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XNamedRanges > xNamedRanges(  xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("NamedRanges") ) ), uno::UNO_QUERY_THROW );
     uno::Reference< vba::XCollection > xNames( new ScVbaNames( this , mxContext , xNamedRanges , xModel ));
