@@ -4,9 +4,9 @@
  *
  *  $RCSfile: player.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:42:12 $
+ *  last change: $Author: vg $ $Date: 2007-12-10 09:40:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,7 +420,8 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
         ::avmedia::quicktime::Window* pWindow = new ::avmedia::quicktime::Window( mxMgr, *this );
         xRet = pWindow;
 
-        sal_IntPtr nPtr; aArguments[0] >>= nPtr;
+        sal_IntPtr nPtr = NULL;
+        aArguments[0] >>= nPtr;
         mpMovieView = reinterpret_cast< QTMovieView * >(nPtr);
         [mpMovieView setMovie: mpMovie];
         [mpMovieView setControllerVisible: NO];
