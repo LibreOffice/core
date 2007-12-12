@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 16:30:17 $
+#   last change: $Author: kz $ $Date: 2007-12-12 14:55:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1864,7 +1864,7 @@ sub read_saved_mappings
         <F>; <F>; <F>;
         while (<F>)
         {
-            m/^([^\t]+)\t([^\t]+)\t(([^~]+~\d.*)\|)?([^\t]*)/;
+            m/^([^\t]+)\t([^\t]+)\t((.*)\|)?([^\t]*)/;
             next if ("$1" eq "$5") && (!defined($3));
             my $lc1 = lc($1);
 
@@ -1896,7 +1896,14 @@ sub read_saved_mappings
 
             my $shortname = $4 || '';
 
-            if (( $shortname ne '' ) && ( exists($installer::globals::savedrev83mapping{$shortname}) ))
+            # Don't reuse illegal 8.3 mappings that we used to generate in 2.0.4
+            if (index($shortname, '.') > 8 ||
+                (index($shortname, '.') == -1 && length($shortname) > 8))
+            {
+                $shortname = '';
+            }
+
+            if (( $shortname ne '' ) && ( index($shortname, '~') > 0 ) && ( exists($installer::globals::savedrev83mapping{$shortname}) ))
             {
                 if ( ! $file_error_occured )
                 {
