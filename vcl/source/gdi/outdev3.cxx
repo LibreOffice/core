@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.233 $
+ *  $Revision: 1.234 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-08 15:44:29 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:20:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,16 +304,7 @@ void OutputDevice::ImplUpdateFontData( bool bNewFontLists )
                 else
                 {
                     if( mpOutDevData )
-                    {
-                        ImplFontSubstEntry* pEntry = mpOutDevData->mpFirstFontSubstEntry;
-                        while( pEntry )
-                        {
-                            ImplFontSubstEntry* pNext = pEntry->mpNext;
-                            delete pEntry;
-                            pEntry = pNext;
-                        }
-                        mpOutDevData->mpFirstFontSubstEntry = NULL;
-                    }
+                        mpOutDevData->maDevFontSubst.Clear();
                     mpGraphics->GetDevFontList( mpFontList );
                     mpGraphics->GetDevFontSubstList( this );
                 }
@@ -822,17 +813,9 @@ String GetFontToken( const String& rTokenStr, xub_StrLen nToken, xub_StrLen& rIn
 
 // =======================================================================
 
+// TODO: remove this method when the CWS-gfbfcfg dust has settled
 void ImplFreeOutDevFontData()
-{
-    ImplSVData*         pSVData = ImplGetSVData();
-    ImplFontSubstEntry* pEntry = pSVData->maGDIData.mpFirstFontSubst;
-    while( pEntry )
-    {
-        ImplFontSubstEntry* pNext = pEntry->mpNext;
-        delete pEntry;
-        pEntry = pNext;
-    }
-}
+{}
 
 // =======================================================================
 
@@ -865,20 +848,33 @@ void OutputDevice::AddFontSubstitute( const XubString& rFontName,
                                       const XubString& rReplaceFontName,
                                       USHORT nFlags )
 {
-    ImplSVData*         pSVData = ImplGetSVData();
-    ImplFontSubstEntry* pEntry = new ImplFontSubstEntry;
+    ImplDirectFontSubstitution*& rpSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
+    if( !rpSubst )
+        rpSubst = new ImplDirectFontSubstitution();
+    rpSubst->AddFontSubstitute( rFontName, rReplaceFontName, nFlags );
+    ImplGetSVData()->maGDIData.mbFontSubChanged = TRUE;
+}
 
-    pEntry->maName              = rFontName;
-    pEntry->maReplaceName       = rReplaceFontName;
-    pEntry->maSearchName        = rFontName;
-    pEntry->maSearchReplaceName = rReplaceFontName;
-    pEntry->mnFlags             = nFlags;
-    pEntry->mpNext              = pSVData->maGDIData.mpFirstFontSubst;
-    ImplGetEnglishSearchFontName( pEntry->maSearchName );
-    ImplGetEnglishSearchFontName( pEntry->maSearchReplaceName );
+// -----------------------------------------------------------------------
 
-    pSVData->maGDIData.mpFirstFontSubst = pEntry;
-    pSVData->maGDIData.mbFontSubChanged = TRUE;
+void ImplDirectFontSubstitution::AddFontSubstitute( const String& rFontName,
+    const String& rSubstFontName, USHORT nFlags )
+{
+    maFontSubstList.push_back( ImplFontSubstEntry( rFontName, rSubstFontName, nFlags ) );
+}
+
+// -----------------------------------------------------------------------
+
+ImplFontSubstEntry::ImplFontSubstEntry( const String& rFontName,
+    const String& rSubstFontName, USHORT nSubstFlags )
+:   maName( rFontName )
+,   maReplaceName( rSubstFontName )
+,   mnFlags( nSubstFlags )
+{
+    maSearchName        = rFontName;
+    maSearchReplaceName = rSubstFontName;
+    ImplGetEnglishSearchFontName( maSearchName );
+    ImplGetEnglishSearchFontName( maSearchReplaceName );
 }
 
 // -----------------------------------------------------------------------
@@ -888,63 +884,37 @@ void OutputDevice::ImplAddDevFontSubstitute( const XubString& rFontName,
                                              USHORT nFlags )
 {
     ImplInitOutDevData();
-
-    ImplFontSubstEntry* pEntry = new ImplFontSubstEntry;
-
-    pEntry->maName              = rFontName;
-    pEntry->maReplaceName       = rReplaceFontName;
-    pEntry->maSearchName        = rFontName;
-    pEntry->maSearchReplaceName = rReplaceFontName;
-    pEntry->mnFlags             = nFlags;
-    pEntry->mpNext              = mpOutDevData->mpFirstFontSubstEntry;
-    ImplGetEnglishSearchFontName( pEntry->maSearchName );
-    ImplGetEnglishSearchFontName( pEntry->maSearchReplaceName );
-
-    mpOutDevData->mpFirstFontSubstEntry = pEntry;
+    mpOutDevData->maDevFontSubst.AddFontSubstitute( rFontName, rReplaceFontName, nFlags );
 }
 
 // -----------------------------------------------------------------------
 
 void OutputDevice::RemoveFontSubstitute( USHORT n )
 {
-    ImplSVData*         pSVData = ImplGetSVData();
-    ImplFontSubstEntry* pEntry = pSVData->maGDIData.mpFirstFontSubst;
-    ImplFontSubstEntry* pPrev = NULL;
-    USHORT              nCount = 0;
+    ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
+    if( pSubst )
+        pSubst->RemoveFontSubstitute( n );
+}
 
-    while ( pEntry )
-    {
-        if ( nCount == n )
-        {
-            pSVData->maGDIData.mbFontSubChanged = TRUE;
-            if ( pPrev )
-                pPrev->mpNext = pEntry->mpNext;
-            else
-                pSVData->maGDIData.mpFirstFontSubst = pEntry->mpNext;
-            delete pEntry;
-            break;
-        }
+// -----------------------------------------------------------------------
 
-        nCount++;
-        pPrev = pEntry;
-        pEntry = pEntry->mpNext;
-    }
+void ImplDirectFontSubstitution::RemoveFontSubstitute( int nIndex )
+{
+    FontSubstList::iterator it = maFontSubstList.begin();
+    for( int nCount = 0; (it != maFontSubstList.end()) && (nCount++ != nIndex); ++it );
+    if( it != maFontSubstList.end() )
+        maFontSubstList.erase( it );
 }
 
 // -----------------------------------------------------------------------
 
 USHORT OutputDevice::GetFontSubstituteCount()
 {
-    ImplSVData*         pSVData = ImplGetSVData();
-    ImplFontSubstEntry* pEntry = pSVData->maGDIData.mpFirstFontSubst;
-    USHORT              nCount = 0;
-    while ( pEntry )
-    {
-        nCount++;
-        pEntry = pEntry->mpNext;
-    }
-
-    return nCount;
+    const ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
+    if( !pSubst )
+    return 0;
+    int nCount =  pSubst->GetFontSubstituteCount();
+    return (USHORT)nCount;
 }
 
 // -----------------------------------------------------------------------
@@ -954,29 +924,53 @@ void OutputDevice::GetFontSubstitute( USHORT n,
                                       XubString& rReplaceFontName,
                                       USHORT& rFlags )
 {
-    ImplSVData*         pSVData = ImplGetSVData();
-    ImplFontSubstEntry* pEntry = pSVData->maGDIData.mpFirstFontSubst;
-    // TODO: get rid of linear search
-    USHORT              nCount = 0;
-    while ( pEntry )
-    {
-        if ( nCount == n )
-        {
-            rFontName           = pEntry->maName;
-            rReplaceFontName    = pEntry->maReplaceName;
-            rFlags              = pEntry->mnFlags;
-            break;
-        }
+    const ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
+    if( pSubst )
+        pSubst->GetFontSubstitute( n, rFontName, rReplaceFontName, rFlags );
+}
 
-        nCount++;
-        pEntry = pEntry->mpNext;
+// -----------------------------------------------------------------------
+
+bool ImplDirectFontSubstitution::GetFontSubstitute( int nIndex,
+    String& rFontName, String& rSubstFontName, USHORT& rFlags ) const
+{
+    FontSubstList::const_iterator it = maFontSubstList.begin();
+    for( int nCount = 0; nCount++ != nIndex; ++it );
+        if( it == maFontSubstList.end() )
+        return false;
+
+    const ImplFontSubstEntry* pEntry = &(*it);
+    rFontName       = pEntry->maName;
+    rSubstFontName  = pEntry->maReplaceName;
+    rFlags          = pEntry->mnFlags;
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
+bool ImplDirectFontSubstitution::FindFontSubstitute( String& rSubstName,
+    const String& rSearchName, USHORT nFlags ) const
+{
+    // TODO: get rid of O(N) searches
+    FontSubstList::const_iterator it = maFontSubstList.begin();
+    for(; it != maFontSubstList.end(); ++it )
+    {
+        const ImplFontSubstEntry& rEntry = *it;
+        if( ((rEntry.mnFlags & nFlags) || !nFlags)
+        &&   (rEntry.maSearchName == rSearchName) )
+        {
+            rSubstName = rEntry.maSearchReplaceName;
+            return true;
+        }
     }
+
+    return false;
 }
 
 // -----------------------------------------------------------------------
 
 static void ImplFontSubstitute( String& rFontName,
-    USHORT nFlags, ImplFontSubstEntry* pDevSpecific )
+    USHORT nFlags, ImplDirectFontSubstitution* pDevSpecific )
 {
 #ifdef DBG_UTIL
     String aTempName = rFontName;
@@ -984,35 +978,24 @@ static void ImplFontSubstitute( String& rFontName,
     DBG_ASSERT( aTempName == rFontName, "ImplFontSubstitute() called without a searchname" );
 #endif
 
-    // apply font replacement (eg, from the list in Tools->Options)
-    ImplSVData*         pSVData = ImplGetSVData();
-    ImplFontSubstEntry* pEntry = pSVData->maGDIData.mpFirstFontSubst;
-    // TODO: get rid of O(N) searches
-    for(; pEntry; pEntry = pEntry->mpNext )
+    String aSubstFontName;
+
+    // apply user-configurable font replacement (eg, from the list in Tools->Options)
+    const ImplDirectFontSubstitution* pSubst = ImplGetSVData()->maGDIData.mpDirectFontSubst;
+    if( pSubst && pSubst->FindFontSubstitute( aSubstFontName, rFontName, FONT_SUBSTITUTE_ALWAYS ) )
     {
-    // only replace if
-    //     (pEntry->subst_always && nFlags.subst_always)
-    // && !(pEntry->screen_only && nFlags.screen_only)
-    // TODO: font replacement UI needs to be redesigned
-        if ( ((pEntry->mnFlags & nFlags) == FONT_SUBSTITUTE_ALWAYS)
-        &&    (pEntry->maSearchName == rFontName) )
-        {
-            rFontName = pEntry->maSearchReplaceName;
-            return;
-        }
+        rFontName = aSubstFontName;
+        return;
     }
 
     // apply device specific font replacement (e.g. to use printer builtin fonts)
     if( !pDevSpecific )
         return;
-    for( pEntry = pDevSpecific; pEntry; pEntry = pEntry->mpNext )
+
+    if( pDevSpecific->FindFontSubstitute( aSubstFontName, rFontName, nFlags ) )
     {
-        if( ((pEntry->mnFlags & nFlags) || !nFlags)
-        &&   (pEntry->maSearchName == rFontName) )
-        {
-            rFontName = pEntry->maSearchReplaceName;
-            return;
-        }
+        rFontName = aSubstFontName;
+        return;
     }
 }
 
@@ -1196,7 +1179,7 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
                         aSize.Width() = 1;
 
                     // get the name of the first available font
-                    ImplFontEntry* pEntry = pOutDev->mpFontCache->Get( pOutDev->mpFontList, aFont, aSize, pOutDev->mpOutDevData ? pOutDev->mpOutDevData->mpFirstFontSubstEntry : NULL );
+                    ImplFontEntry* pEntry = pOutDev->mpFontCache->GetFontEntry( pOutDev->mpFontList, aFont, aSize, pOutDev->mpOutDevData ? &pOutDev->mpOutDevData->maDevFontSubst : NULL );
                     aFont.SetName( pEntry->maFontSelData.maTargetName );
                 }
             }
@@ -1581,6 +1564,66 @@ bool ImplFontData::IsBetterMatch( const ImplFontSelectData& rFSD, FontMatchStatu
 
 // =======================================================================
 
+ImplFontEntry::ImplFontEntry( const ImplFontSelectData& rFontSelData )
+:   maFontSelData( rFontSelData ),
+    maMetric( rFontSelData ),
+    mpConversion( NULL ),
+    mnRefCount( 1 ),
+    mnSetFontFlags( 0 ),
+    mnOwnOrientation( 0 ),
+    mnOrientation( 0 ),
+    mbInit( false ),
+    mpUnicodeFallbackList( NULL )
+{
+    maFontSelData.mpFontEntry = this;
+}
+
+// -----------------------------------------------------------------------
+
+ImplFontEntry::~ImplFontEntry()
+{
+    delete mpUnicodeFallbackList;
+}
+
+// -----------------------------------------------------------------------
+
+inline void ImplFontEntry::AddFallbackForUnicode( sal_UCS4 cChar, const String& rFontName )
+{
+    if( !mpUnicodeFallbackList )
+        mpUnicodeFallbackList = new UnicodeFallbackList;
+    (*mpUnicodeFallbackList)[cChar] = rFontName;
+}
+
+// -----------------------------------------------------------------------
+
+inline bool ImplFontEntry::GetFallbackForUnicode( sal_UCS4 cChar, String* pFontName ) const
+{
+    if( !mpUnicodeFallbackList )
+        return false;
+
+    UnicodeFallbackList::const_iterator it = mpUnicodeFallbackList->find( cChar );
+    if( it == mpUnicodeFallbackList->end() )
+        return false;
+
+    *pFontName = (*it).second;
+    return true;
+}
+
+// -----------------------------------------------------------------------
+
+inline void ImplFontEntry::IgnoreFallbackForUnicode( sal_UCS4 cChar, const String& rFontName )
+{
+//  DBG_ASSERT( mpUnicodeFallbackList, "ImplFontEntry::IgnoreFallbackForUnicode no list" );
+    UnicodeFallbackList::iterator it = mpUnicodeFallbackList->find( cChar );
+//  DBG_ASSERT( it != mpUnicodeFallbackList->end(), "ImplFontEntry::IgnoreFallbackForUnicode no match" );
+    if( it == mpUnicodeFallbackList->end() )
+        return;
+    if( (*it).second == rFontName )
+        mpUnicodeFallbackList->erase( it );
+}
+
+// =======================================================================
+
 ImplDevFontListData::ImplDevFontListData( const String& rSearchName )
 :   mpFirst( NULL ),
     maSearchName( rSearchName ),
@@ -1796,18 +1839,33 @@ void ImplDevFontListData::UpdateCloneFontList( ImplDevFontList& rDevFontList,
 // =======================================================================
 
 ImplDevFontList::ImplDevFontList()
-{
-    mbMatchData = false;
-    mbMapNames  = false;
-    mpFallbackList  = NULL;
-    mnFallbackCount = -1;
-}
+:   mbMatchData( false )
+,   mbMapNames( false )
+,   mpPreMatchHook( NULL )
+,   mpFallbackHook( NULL )
+,   mpFallbackList( NULL )
+,   mnFallbackCount( -1 )
+{}
 
 // -----------------------------------------------------------------------
 
 ImplDevFontList::~ImplDevFontList()
 {
     Clear();
+}
+
+// -----------------------------------------------------------------------
+
+void ImplDevFontList::SetPreMatchHook( ImplPreMatchFontSubstitution* pHook )
+{
+    mpPreMatchHook = pHook;
+}
+
+// -----------------------------------------------------------------------
+
+void ImplDevFontList::SetFallbackHook( ImplGlyphFallbackFontSubstitution* pHook )
+{
+    mpFallbackHook = pHook;
 }
 
 // -----------------------------------------------------------------------
@@ -1859,26 +1917,193 @@ int FontNameHash::operator()( const String& rStr ) const
 
 // -----------------------------------------------------------------------
 
-bool ImplDevFontList::HasFallbacks() const
+void ImplDevFontList::InitGenericGlyphFallback( void ) const
 {
-    return (mnFallbackCount >= 0);
+    // normalized family names of fonts suited for glyph fallback
+    // if a font is available related fonts can be ignored
+    // TODO: implement dynamic lists
+    static const char* aGlyphFallbackList[] = {
+        // empty strings separate the names of unrelated fonts
+        "eudc", "",
+        "arialunicodems", "cyberbit", "code2000", "",
+        "andalesansui", "",
+        "starsymbol", "opensymbol", "",
+        "msmincho", "fzmingti", "fzheiti", "ipamincho", "sazanamimincho", "kochimincho", "",
+        "sunbatang", "sundotum", "baekmukdotum", "gulim", "batang", "dotum", "",
+        "hgmincholightj", "msunglightsc", "msunglighttc", "hymyeongjolightk", "",
+        "tahoma", "dejavusans", "timesnewroman", "lucidatypewriter", "lucidasans", "nimbussansl", "",
+        "shree", "mangal", "",
+        "raavi", "shruti", "tunga", "",
+        "latha", "gautami", "kartika", "vrinda", "",
+        "shayyalmt", "naskmt", "",
+        "david", "nachlieli", "lucidagrande", "",
+        "norasi", "angsanaupc", "",
+        "khmerossystem", "",
+        "phetsarathot", "",
+        0
+    };
+
+    bool bHasEudc = false;
+    int nMaxLevel = 0;
+    int nBestQuality = 0;
+    ImplDevFontListData** pFallbackList = NULL;
+    for( const char** ppNames = &aGlyphFallbackList[0];; ++ppNames )
+    {
+        // advance to next sub-list when end-of-sublist marker
+        if( !**ppNames )    // #i46456# check for empty string, i.e., deref string itself not only ptr to it
+        {
+            if( nBestQuality > 0 )
+                if( ++nMaxLevel >= MAX_FALLBACK )
+                    break;
+            if( !ppNames[1] )
+                break;
+            nBestQuality = 0;
+            continue;
+        }
+
+        // test if the glyph fallback candidate font is available and scalable
+        String aTokenName( *ppNames, RTL_TEXTENCODING_UTF8 );
+        ImplDevFontListData* pFallbackFont = FindFontFamily( aTokenName );
+        if( !pFallbackFont )
+            continue;
+        if( !pFallbackFont->IsScalable() )
+            continue;
+
+        // keep the best font of the glyph fallback sub-list
+        if( nBestQuality < pFallbackFont->GetMinQuality() )
+        {
+            nBestQuality = pFallbackFont->GetMinQuality();
+            // store available glyph fallback fonts
+            if( !pFallbackList )
+                pFallbackList = new ImplDevFontListData*[ MAX_FALLBACK ];
+            pFallbackList[ nMaxLevel ] = pFallbackFont;
+            if( !bHasEudc && !nMaxLevel )
+                bHasEudc = (0 == strncmp( *ppNames, "eudc", 5 ));
+        }
+    }
+
+    // sort the list of fonts for glyph fallback by quality (highest first)
+    // #i33947# keep the EUDC font at the front of the list
+    // an insertion sort is good enough for this short list
+    const int nSortStart = bHasEudc ? 1 : 0;
+    for( int i = nSortStart+1, j; i < nMaxLevel; ++i )
+    {
+        ImplDevFontListData* pTestFont = pFallbackList[ i ];
+        int nTestQuality = pTestFont->GetMinQuality();
+        for( j = i; --j >= nSortStart; )
+            if( nTestQuality > pFallbackList[j]->GetMinQuality() )
+                pFallbackList[ j+1 ] = pFallbackList[ j ];
+            else
+                break;
+        pFallbackList[ j+1 ] = pTestFont;
+    }
+
+#if defined(HDU_DEBUG)
+    for( int i = 0; i < nMaxLevel; ++i )
+    {
+        ImplDevFontListData* pFont = pFallbackList[ i ];
+        ByteString aFontName( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 );
+        fprintf( stderr, "GlyphFallbackFont[%d] (quality=%05d): \"%s\"\n",
+            i, pFont->GetMinQuality(), aFontName.GetBuffer() );
+    }
+#endif
+
+    mnFallbackCount = nMaxLevel;
+    mpFallbackList  = pFallbackList;
 }
 
 // -----------------------------------------------------------------------
 
-void ImplDevFontList::SetFallbacks( ImplDevFontListData** pList, int nCount )
+ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( ImplFontSelectData& rFontSelData,
+    rtl::OUString& rMissingCodes, int nFallbackLevel ) const
 {
-    mnFallbackCount = nCount;
-    mpFallbackList  = pList;
-}
+    ImplDevFontListData* pFallbackData = NULL;
 
-// -----------------------------------------------------------------------
+    // find a matching font candidate for platform specific glyph fallback
+    if( mpFallbackHook )
+    {
+        // check cache for the first matching entry
+        // to avoid calling the expensive fallback hook (#i83491#)
+        sal_UCS4 cChar = 0;
+        bool bCached = true;
+        sal_Int32 nStrIndex = 0;
+        while( nStrIndex < rMissingCodes.getLength() )
+        {
+            cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
+            bCached = rFontSelData.mpFontEntry->GetFallbackForUnicode( cChar, &rFontSelData.maSearchName );
+            // ignore entries which don't have a fallback
+            if( !bCached || (rFontSelData.maSearchName.Len() != 0) )
+                break;
+        }
 
-ImplDevFontListData* ImplDevFontList::GetFallback( int nIndex ) const
-{
-    if( nIndex < mnFallbackCount )
-        return mpFallbackList[ nIndex ];
-    return NULL;
+        if( bCached )
+        {
+            // there is a matching fallback in the cache
+            // so update rMissingCodes with codepoints not yet resolved by this fallback
+            int nRemainingLength = 0;
+            sal_UCS4* pRemainingCodes = (sal_UCS4*)alloca( rMissingCodes.getLength() * sizeof(sal_UCS4) );
+            String aFontName;
+            while( nStrIndex < rMissingCodes.getLength() )
+            {
+                cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
+                bCached = rFontSelData.mpFontEntry->GetFallbackForUnicode( cChar, &aFontName );
+                if( !bCached || (rFontSelData.maSearchName != aFontName) )
+                    pRemainingCodes[ nRemainingLength++ ] = cChar;
+            }
+            rMissingCodes = rtl::OUString( pRemainingCodes, nRemainingLength );
+        }
+        else
+        {
+            rtl::OUString aOldMissingCodes = rMissingCodes;
+            // call the hook to query the best matching glyph fallback font
+            if( mpFallbackHook->FindFontSubstitute( rFontSelData, rMissingCodes ) )
+                // apply outdev3.cxx specific fontname normalization
+                ImplGetEnglishSearchFontName( rFontSelData.maSearchName );
+            else
+                rFontSelData.maSearchName = String();
+
+            // cache the result even if there was no match
+            for(;;)
+            {
+                 if( !rFontSelData.mpFontEntry->GetFallbackForUnicode( cChar, &rFontSelData.maSearchName ) )
+                     rFontSelData.mpFontEntry->AddFallbackForUnicode( cChar, rFontSelData.maSearchName );
+                 if( nStrIndex >= aOldMissingCodes.getLength() )
+                     break;
+                 cChar = aOldMissingCodes.iterateCodePoints( &nStrIndex );
+            }
+            if( rFontSelData.maSearchName.Len() != 0 )
+            {
+                // remove cache entries that were still not resolved
+                for( nStrIndex = 0; nStrIndex < rMissingCodes.getLength(); )
+                {
+                    cChar = rMissingCodes.iterateCodePoints( &nStrIndex );
+                    rFontSelData.mpFontEntry->IgnoreFallbackForUnicode( cChar, rFontSelData.maSearchName );
+                }
+            }
+        }
+
+        // find the matching device font
+        if( rFontSelData.maSearchName.Len() != 0 )
+            pFallbackData = FindFontFamily( rFontSelData.maSearchName );
+    }
+
+    // else find a matching font candidate for generic glyph fallback
+    if( !pFallbackData )
+    {
+        // initialize font candidates for generic glyph fallback if needed
+        if( mnFallbackCount < 0 )
+            InitGenericGlyphFallback();
+        // TODO: adjust nFallbackLevel by number of levels resolved by the fallback hook
+        if( nFallbackLevel < mnFallbackCount )
+        {
+            // nFallbackLevel==0 => original font without device specific substitution
+            // nFallbackLevel>=1 => use a font from the glyph fallback font list
+            if( nFallbackLevel>=1 )
+                pFallbackData = mpFallbackList[ nFallbackLevel ];
+        }
+    }
+
+    return pFallbackData;
 }
 
 // -----------------------------------------------------------------------
@@ -2473,8 +2698,10 @@ ImplDevFontListData* ImplDevFontList::FindDefaultFont() const
 ImplDevFontList* ImplDevFontList::Clone( bool bScalable, bool bEmbeddable ) const
 {
     ImplDevFontList* pClonedList = new ImplDevFontList;
-    pClonedList->mbMatchData = mbMatchData;
-    pClonedList->mbMapNames = mbMapNames;
+    pClonedList->mbMatchData    = mbMatchData;
+    pClonedList->mbMapNames     = mbMapNames;
+    pClonedList->mpPreMatchHook = mpPreMatchHook;
+    pClonedList->mpFallbackHook = mpFallbackHook;
 
     DevFontList::const_iterator it = maDevFontList.begin();
     for(; it != maDevFontList.end(); ++it )
@@ -2576,21 +2803,6 @@ ImplFontSelectData::ImplFontSelectData( ImplFontData& rFontData,
 
 // =======================================================================
 
-ImplFontEntry::ImplFontEntry( const ImplFontSelectData& rFontSelData )
-:   maFontSelData( rFontSelData ),
-    maMetric( rFontSelData ),
-    mpConversion( NULL ),
-    mnRefCount( 1 ),
-    mnSetFontFlags( 0 ),
-    mnOwnOrientation( 0 ),
-    mnOrientation( 0 ),
-    mbInit( false )
-{
-    maFontSelData.mpFontEntry = this;
-}
-
-// =======================================================================
-
 size_t ImplFontCache::IFSD_Hash::operator()(const ImplFontSelectData& rFSD ) const
 {
     // TODO: does it pay off to improve this hash function?
@@ -2661,8 +2873,8 @@ ImplFontCache::~ImplFontCache()
 
 // -----------------------------------------------------------------------
 
-ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
-    const Font& rFont, const Size& rSize, ImplFontSubstEntry* pDevSpecific )
+ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
+    const Font& rFont, const Size& rSize, ImplDirectFontSubstitution* pDevSpecific )
 {
     String aSearchName = rFont.GetName();
 
@@ -2679,7 +2891,14 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
 
     // initialize internal font request object
     ImplFontSelectData aFontSelData( rFont, aSearchName, rSize );
+    return GetFontEntry( pFontList, aFontSelData, pDevSpecific );
+}
 
+// -----------------------------------------------------------------------
+
+ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
+    ImplFontSelectData& aFontSelData, ImplDirectFontSubstitution* pDevSpecific )
+{
     // check if a directly matching logical font instance is already cached,
     // the most recently used font usually has a hit rate of >50%
     ImplFontEntry *pEntry = NULL;
@@ -2752,7 +2971,7 @@ ImplFontEntry* ImplFontCache::Get( ImplDevFontList* pFontList,
 // -----------------------------------------------------------------------
 
 ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
-    bool bPrinter, ImplFontSubstEntry* pDevSpecific ) const
+    bool bPrinter, ImplDirectFontSubstitution* pDevSpecific ) const
 {
     // give up if no fonts are available
     if( !Count() )
@@ -2766,7 +2985,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
 
     bool bMultiToken = false;
     xub_StrLen nTokenPos = 0;
-    String aSearchName;
+    String& aSearchName = rFSD.maSearchName; // TODO: get rid of reference
     for(;;)
     {
         rFSD.maTargetName = GetNextFontToken( rFSD.maName, nTokenPos );
@@ -2774,8 +2993,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
         ImplGetEnglishSearchFontName( aSearchName );
         ImplFontSubstitute( aSearchName, nSubstFlags, pDevSpecific );
         // #114999# special emboldening for Ricoh fonts
-        // workaround until all platforms support artificial styles
-        // TODO: smarter check for special cases
+        // TODO: smarter check for special cases by using PreMatch infrastructure?
         if( (rFSD.meWeight > WEIGHT_MEDIUM)
         &&  aSearchName.EqualsAscii( "hg", 0, 2) )
         {
@@ -2802,11 +3020,19 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
             }
         }
 
-        ImplDevFontListData* pFoundData = ImplFindBySearchName( aSearchName );
+        // some systems provide special customization
+        // e.g. they suggest "serif" as UI-font, but this name cannot be used directly
+        //      because the system wants to map it to another font first, e.g. "Helvetica"
+        if( mpPreMatchHook )
+            if( mpPreMatchHook->FindFontSubstitute( rFSD ) )
+                ImplGetEnglishSearchFontName( aSearchName );
+
+        // check if the current font name token or its substitute is valid
+    ImplDevFontListData* pFoundData = ImplFindBySearchName( aSearchName );
         if( pFoundData )
             return pFoundData;
 
-        // break after last font token
+        // break after last font name token was checked unsuccessfully
         if( nTokenPos == STRING_NOTFOUND)
             break;
         bMultiToken = true;
@@ -2827,6 +3053,9 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
         }
         else
             nTokenPos = STRING_NOTFOUND;
+        if( mpPreMatchHook )
+            if( mpPreMatchHook->FindFontSubstitute( rFSD ) )
+                ImplGetEnglishSearchFontName( aSearchName );
         ImplFontSubstitute( aSearchName, nSubstFlags, pDevSpecific );
         ImplDevFontListData* pFoundData = ImplFindBySearchName( aSearchName );
         if( pFoundData )
@@ -3023,128 +3252,25 @@ ImplDevFontListData* ImplDevFontList::ImplFindByFont( ImplFontSelectData& rFSD,
 
 // -----------------------------------------------------------------------
 
-ImplFontEntry* ImplFontCache::GetFallback( ImplDevFontList* pFontList,
-    const Font& rOrigFont, const Size& rSize, int nFallbackLevel )
+ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( ImplDevFontList* pFontList,
+    ImplFontSelectData& rFontSelData, int nFallbackLevel, rtl::OUString& rMissingCodes )
 {
-    // make sure the fontlist knows it's fallbacks
-    if( !pFontList->HasFallbacks() )
+    // get a candidate font for glyph fallback
+    // unless the previously selected font got a device specific substitution
+    // e.g. PsPrint Arial->Helvetica with udiaresis, but Helvetica doesn't support it
+    if( nFallbackLevel >= 1)
     {
-        // normalized family names of fonts suited for glyph fallback
-        // if a font is available related fonts can be ignored
-        // TODO: implement dynamic lists
-        static const char* aGlyphFallbackList[] = {
-            // empty strings separate the names of unrelated fonts
-            "eudc", "",
-            "arialunicodems", "cyberbit", "code2000", "",
-            "andalesansui", "",
-            "starsymbol", "opensymbol", "",
-            "msmincho", "fzmingti", "fzheiti", "ipamincho", "sazanamimincho", "kochimincho", "",
-            "sunbatang", "sundotum", "baekmukdotum", "gulim", "batang", "dotum", "",
-            "hgmincholightj", "msunglightsc", "msunglighttc", "hymyeongjolightk", "",
-            "tahoma", "timesnewroman", "lucidatypewriter", "lucidasans", "nimbussansl", "",
-            "shree", "mangal", "",
-            "raavi", "shruti", "tunga", "",
-            "latha", "gautami", "kartika", "vrinda", "",
-            "shayyalmt", "naskmt", "",
-            "david", "nachlieli", "lucidagrande", "",
-            "norasi", "angsanaupc", "",
-            "khmerossystem", "",
-        "phetsarathot", "",
-            0
-        };
+        ImplDevFontListData* pFallbackData = pFontList->GetGlyphFallbackFont(
+            rFontSelData, rMissingCodes, nFallbackLevel-1 );
 
-        bool bHasEudc = false;
-        int nMaxLevel = 0;
-        int nBestQuality = 0;
-        ImplDevFontListData** pFallbackList = NULL;
-        for( const char** ppNames = &aGlyphFallbackList[0];; ++ppNames )
-        {
-            // advance to next sub-list when end-of-sublist marker
-            if( !**ppNames )    // #i46456# check for empty string, i.e., deref string itself not only ptr to it
-            {
-                if( nBestQuality > 0 )
-                    if( ++nMaxLevel >= MAX_FALLBACK )
-                        break;
-                if( !ppNames[1] )
-                    break;
-                nBestQuality = 0;
-                continue;
-            }
-
-            // test if the glyph fallback candidate font is available and scalable
-            String aTokenName( *ppNames, RTL_TEXTENCODING_UTF8 );
-            ImplDevFontListData* pFallbackFont = pFontList->FindFontFamily( aTokenName );
-            if( !pFallbackFont )
-                continue;
-            if( !pFallbackFont->IsScalable() )
-                continue;
-
-            // keep the best font of the glyph fallback sub-list
-            // TODO: check overlap with other glyph fallback fonts
-            if( nBestQuality < pFallbackFont->GetMinQuality() )
-            {
-                nBestQuality = pFallbackFont->GetMinQuality();
-                // store available glyph fallback fonts
-                if( !pFallbackList )
-                    pFallbackList = new ImplDevFontListData*[ MAX_FALLBACK ];
-                pFallbackList[ nMaxLevel ] = pFallbackFont;
-                if( !bHasEudc && !nMaxLevel )
-                    bHasEudc = (0 == strncmp( *ppNames, "eudc", 5 ));
-            }
-        }
-
-        // sort the list of fonts for glyph fallback by quality (highest first)
-        // #i33947# keep the EUDC font at the front of the list
-        // an insertion sort is good enough for this short list
-        const int nSortStart = bHasEudc ? 1 : 0;
-        for( int i = nSortStart+1, j; i < nMaxLevel; ++i )
-        {
-            ImplDevFontListData* pTestFont = pFallbackList[ i ];
-            int nTestQuality = pTestFont->GetMinQuality();
-            for( j = i; --j >= nSortStart; )
-                if( nTestQuality > pFallbackList[j]->GetMinQuality() )
-                    pFallbackList[ j+1 ] = pFallbackList[ j ];
-                else
-                    break;
-            pFallbackList[ j+1 ] = pTestFont;
-        }
-
-#if defined(HDU_DEBUG)
-        for( int i = 0; i < nMaxLevel; ++i )
-        {
-            ImplDevFontListData* pFont = pFallbackList[ i ];
-            ByteString aFontName( pFont->GetFamilyName(), RTL_TEXTENCODING_UTF8 );
-            fprintf( stderr, "GlyphFallbackFont[%d] (quality=%05d): \"%s\"\n",
-                i, pFont->GetMinQuality(), aFontName.GetBuffer() );
-        }
-#endif
-
-        pFontList->SetFallbacks( pFallbackList, nMaxLevel );
+        // escape when there are no font candidates
+        if( !pFallbackData  )
+        return NULL;
+        rFontSelData.maName = pFallbackData->GetFamilyName();
     }
 
-    Font aFallbackFont = rOrigFont;
-
-    // nFallbackLevel==0 => original font without device specific substitution
-    // nFallbackLevel>=1 => use a font from the glyph fallback font list
-    if( nFallbackLevel>=1 )
-    {
-        ImplDevFontListData* pFallbackData = pFontList->GetFallback( nFallbackLevel-1 );
-        if( !pFallbackData )
-            return NULL;
-
-        aFallbackFont.SetName( pFallbackData->GetSearchName() );
-    }
-
-    ImplFontEntry* pFallbackFont = Get( pFontList, aFallbackFont, rSize, NULL );
-
-    if( pFallbackFont && !pFallbackFont->mbInit )
-    {
-        // HACK: maMetrics are irrelevant for fallback fonts, but
-        // to prevent trouble at cleanup we need to set some members
-        pFallbackFont->maMetric.maName      =
-        pFallbackFont->maMetric.maStyleName = String();
-    }
-
+    // get device font without doing device specific substitutions
+    ImplFontEntry* pFallbackFont = GetFontEntry( pFontList, rFontSelData, NULL );
     return pFallbackFont;
 }
 
@@ -3382,11 +3508,11 @@ bool OutputDevice::ImplNewFont() const
         aSize.Width() = 1;
 
     // get font entry
-    ImplFontSubstEntry* pDevSpecificSubst = NULL;
+    ImplDirectFontSubstitution* pDevSpecificSubst = NULL;
     if( mpOutDevData )
-        pDevSpecificSubst = mpOutDevData->mpFirstFontSubstEntry;
+        pDevSpecificSubst = &mpOutDevData->maDevFontSubst;
     ImplFontEntry* pOldEntry = mpFontEntry;
-    mpFontEntry = mpFontCache->Get( mpFontList, maFont, aSize, pDevSpecificSubst );
+    mpFontEntry = mpFontCache->GetFontEntry( mpFontList, maFont, aSize, pDevSpecificSubst );
     if( pOldEntry )
         mpFontCache->Release( pOldEntry );
 
@@ -6107,7 +6233,7 @@ SalLayout* OutputDevice::ImplLayout( const String& rOrigStr,
     // do glyph fallback if needed
     // #105768# avoid fallback for very small font sizes
     if( aLayoutArgs.NeedFallback() )
-        if( mpFontEntry && (mpFontEntry->maFontSelData.mnHeight >= 6) )
+        if( mpFontEntry && (mpFontEntry->maFontSelData.mnHeight >= 3) )
             pSalLayout = ImplGlyphFallbackLayout( pSalLayout, aLayoutArgs );
 
     // position, justify, etc. the layout
@@ -6139,7 +6265,6 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
     rLayoutArgs.PrepareFallback();
     rLayoutArgs.mnFlags |= SAL_LAYOUT_FOR_FALLBACK;
 
-
 #if defined(HDU_DEBUG)
     {
         int nCharPos = -1;
@@ -6151,29 +6276,35 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
         rLayoutArgs.ResetPos();
     }
 #endif
+    // get list of unicodes that need glyph fallback
+    int nCharPos = -1;
+    bool bRTL = false;
+    rtl::OUStringBuffer aMissingCodeBuf;
+    while( rLayoutArgs.GetNextPos( &nCharPos, &bRTL) )
+        aMissingCodeBuf.append( rLayoutArgs.mpStr[ nCharPos ] );
+    rLayoutArgs.ResetPos();
+    rtl::OUString aMissingCodes = aMissingCodeBuf.makeStringAndClear();
 
     ImplFontSelectData aFontSelData = mpFontEntry->maFontSelData;
-    Size aFontSize( aFontSelData.mnWidth, aFontSelData.mnHeight );
-
     // when device specific font substitution may have been performed for
     // the originally selected font then make sure that a fallback to that
     // font is performed first
     int nDevSpecificFallback = 0;
-    if( mpOutDevData && mpOutDevData->mpFirstFontSubstEntry )
+    if( mpOutDevData && !mpOutDevData->maDevFontSubst.Empty() )
         nDevSpecificFallback = 1;
 
     // try if fallback fonts support the missing unicodes
     for( int nFallbackLevel = 1; nFallbackLevel < MAX_FALLBACK; ++nFallbackLevel )
     {
         // find a font family suited for glyph fallback
-        ImplFontEntry* pFallbackFont = mpFontCache->GetFallback( mpFontList,
-            maFont, aFontSize, nFallbackLevel-nDevSpecificFallback );
+        ImplFontEntry* pFallbackFont = mpFontCache->GetGlyphFallbackFont( mpFontList,
+            aFontSelData, nFallbackLevel-nDevSpecificFallback, aMissingCodes );
         if( !pFallbackFont )
             break;
 
         aFontSelData.mpFontEntry = pFallbackFont;
         aFontSelData.mpFontData = pFallbackFont->maFontSelData.mpFontData;
-        if( mpFontEntry )
+        if( mpFontEntry && nFallbackLevel < MAX_FALLBACK-1)
         {
             // ignore fallback font if it is the same as the original font
             if( mpFontEntry->maFontSelData.mpFontData == aFontSelData.mpFontData )
@@ -6207,6 +6338,8 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
                     pMultiSalLayout = new MultiSalLayout( *pSalLayout );
                 pMultiSalLayout->AddFallback( *pFallback,
                     rLayoutArgs.maRuns, aFontSelData.mpFontData );
+                if (nFallbackLevel == MAX_FALLBACK-1)
+                    pMultiSalLayout->SetInComplete();
             }
             else
                 pFallback->Release();
