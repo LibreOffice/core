@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:35:14 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:22:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,17 +200,42 @@ struct ParaRstFmt
     const SwPosition *pSttNd, *pEndNd;
     const SfxItemSet* pDelSet;
     USHORT nWhich;
-    BOOL bReset, bResetAll, bInclRefToxMark;
+    bool bReset;
+    // --> OD 2007-11-06 #i62575#
+    bool bResetListAttrs;
+    // <--
+    bool bResetAll;
+    bool bInclRefToxMark;
 
     ParaRstFmt( const SwPosition* pStt, const SwPosition* pEnd,
-            SwHistory* pHst, USHORT nWhch = 0, const SfxItemSet* pSet = 0 )
-        : pFmtColl(0), pHistory(pHst), pSttNd(pStt), pEndNd(pEnd),
-        pDelSet(pSet), nWhich(nWhch), bResetAll(TRUE), bInclRefToxMark(FALSE)
+                SwHistory* pHst, USHORT nWhch = 0, const SfxItemSet* pSet = 0 )
+        : pFmtColl(0),
+          pHistory(pHst),
+          pSttNd(pStt),
+          pEndNd(pEnd),
+          pDelSet(pSet),
+          nWhich(nWhch),
+          // --> OD 2007-11-06 #i62675#
+          bReset( false ),
+          bResetListAttrs( false ),
+          // <--
+          bResetAll( true ),
+          bInclRefToxMark( false )
     {}
 
     ParaRstFmt( SwHistory* pHst )
-        : pFmtColl(0), pHistory(pHst), pSttNd(0), pEndNd(0), pDelSet(0),
-        nWhich(0), bResetAll(TRUE), bInclRefToxMark(FALSE)
+        : pFmtColl(0),
+          pHistory(pHst),
+          pSttNd(0),
+          pEndNd(0),
+          pDelSet(0),
+          nWhich(0),
+          // --> OD 2007-11-06 #i62675#
+          bReset( false ),
+          bResetListAttrs( false ),
+          // <--
+          bResetAll( true ),
+          bInclRefToxMark( false )
     {}
 };
 
@@ -381,7 +406,7 @@ void SwDoc::RstTxtAttr(const SwPaM &rRg, BOOL bInclRefToxMark )
     }
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
     ParaRstFmt aPara( pStt, pEnd, pHst );
-    aPara.bInclRefToxMark = bInclRefToxMark;
+    aPara.bInclRefToxMark = ( bInclRefToxMark == TRUE );
     GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
                         lcl_RstTxtAttr, &aPara );
     SetModified();
@@ -573,9 +598,9 @@ void SwDoc::ResetAttr( const SwPaM &rRg, BOOL bTxtAttr,
         GetNodes().ForEach( pStt->nNode, aTmpEnd, lcl_RstAttr, &aPara );
     else if( !rRg.HasMark() )
     {
-        aPara.bResetAll = FALSE;
+        aPara.bResetAll = false ;
         ::lcl_RstAttr( &pStt->nNode.GetNode(), &aPara );
-        aPara.bResetAll = TRUE;
+        aPara.bResetAll = true ;
     }
 
     if( bTxtAttr )
@@ -1686,10 +1711,25 @@ BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
         {
             lcl_RstAttr( pCNd, pPara );
 
-            /*
-            if (pFmt && pFmt->GetNumRule().GetValue().Len() > 0)
-                pCNd->ResetAttr(RES_PARATR_NUMRULE);
-            */
+            // --> OD 2007-11-06 #i62675#
+            if ( pPara->bResetListAttrs &&
+                 pFmt->GetItemState( RES_PARATR_NUMRULE ) == SFX_ITEM_SET )
+            {
+                if ( pPara->pHistory )
+                {
+                    SwTxtNode* pTNd( dynamic_cast<SwTxtNode*>(pCNd) );
+                    ASSERT( pTNd,
+                            "<lcl_SetTxtFmtColl(..)> - text node expected -> crash" );
+                    SwRegHistory aRegH( pTNd, *pTNd, pPara->pHistory );
+
+                    pCNd->ResetAttr( RES_PARATR_NUMRULE );
+                }
+                else
+                {
+                    pCNd->ResetAttr( RES_PARATR_NUMRULE );
+                }
+            }
+            // <--
         }
 
         // erst in die History aufnehmen, damit ggfs. alte Daten
@@ -1705,7 +1745,10 @@ BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
     return TRUE;
 }
 
-BOOL SwDoc::SetTxtFmtColl(const SwPaM &rRg, SwTxtFmtColl *pFmt, BOOL bReset)
+BOOL SwDoc::SetTxtFmtColl( const SwPaM &rRg,
+                           SwTxtFmtColl *pFmt,
+                           bool bReset,
+                           bool bResetListAttrs )
 {
     SwDataChanged aTmp( rRg, 0 );
     const SwPosition *pStt = rRg.Start(), *pEnd = rRg.End();
@@ -1723,6 +1766,9 @@ BOOL SwDoc::SetTxtFmtColl(const SwPaM &rRg, SwTxtFmtColl *pFmt, BOOL bReset)
     ParaRstFmt aPara( pStt, pEnd, pHst );
     aPara.pFmtColl = pFmt;
     aPara.bReset = bReset;
+    // --> OD 2007-11-06 #i62675#
+    aPara.bResetListAttrs = bResetListAttrs;
+    // <--
 
     GetNodes().ForEach( pStt->nNode.GetIndex(), pEnd->nNode.GetIndex()+1,
                         lcl_SetTxtFmtColl, &aPara );
