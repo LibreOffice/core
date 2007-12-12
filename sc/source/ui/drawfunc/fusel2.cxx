@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:52:31 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:20:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,10 @@
 #include "detfunc.hxx"
 #include "futext.hxx"
 #include "sc.hrc"
+#include "attrib.hxx"
+#include "scitems.hxx"
+#include "userdat.hxx"
+#include "drwlayer.hxx"
 
 // -----------------------------------------------------------------------
 
@@ -130,6 +134,7 @@ BOOL FuSelection::TestComment( SdrPageView* pPV, const Point& rPos )
         return FALSE;
 
     SdrObject* pFoundObj = NULL;
+    ScAddress  aTabPos;
 
     SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
     SdrObject* pObject = aIter.Next();
@@ -139,6 +144,11 @@ BOOL FuSelection::TestComment( SdrPageView* pPV, const Point& rPos )
             && pObject->GetLogicRect().IsInside( rPos ) )
         {
             pFoundObj = pObject;
+            ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObject, pViewShell->GetViewData()->GetTabNo() );
+            if( pData )
+            {
+                aTabPos = ScAddress( pData->aStt);
+            }
             // keep searching - use the last matching object (on top)
         }
         pObject = aIter.Next();
@@ -148,11 +158,15 @@ BOOL FuSelection::TestComment( SdrPageView* pPV, const Point& rPos )
     if ( pFoundObj )
     {
         SdrLayer* pLockLayer = NULL;
-
-        // Leave the internal note object unlocked - re-lock in ScDrawView::MarkListHasChanged()
+        ScDocument* pDoc = pViewShell->GetViewData()->GetDocument();
+        SfxObjectShell* pDocSh = pViewShell->GetViewData()->GetSfxDocShell();
+        const ScProtectionAttr* pProtAttr =  static_cast< const ScProtectionAttr* > (pDoc->GetAttr(aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), ATTR_PROTECTION ) );
+        BOOL bProtectAttr = pProtAttr->GetProtection() || pProtAttr->GetHideCell() ;
+        BOOL bProtectDoc =  pDoc->IsTabProtected(aTabPos.Tab()) || pDocSh->IsReadOnly() ;
+        BOOL bProtect = bProtectDoc && bProtectAttr ;
         pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
         if (pLockLayer && pView->IsLayerLocked(pLockLayer->GetName()))
-            pView->SetLayerLocked( pLockLayer->GetName(), FALSE );
+            pView->SetLayerLocked( pLockLayer->GetName(), bProtect );
     }
 
     return (pFoundObj != NULL);
