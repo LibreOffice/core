@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxfbsd.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:40:17 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:19:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -192,11 +192,21 @@ STDSHLCUIMT=$(PTHREAD_LIBS) -lm
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
 .IF "$(USE_STLP_DEBUG)" != ""
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=$(DYNAMIC) -lstlportstlg
+LIBSTLPORTST=$(STATIC) -lstlportstlg $(DYNAMIC)
+.ELSE
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc_stldebug
 LIBSTLPORTST=$(STATIC) -lstlport_gcc_stldebug $(DYNAMIC)
+.ENDIF
 .ELSE # "$(USE_STLP_DEBUG)" != ""
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=$(DYNAMIC) -lstlport
+LIBSTLPORTST=$(STATIC) -lstlport $(DYNAMIC)
+.ELSE
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
+.ENDIF
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
 
 #FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
