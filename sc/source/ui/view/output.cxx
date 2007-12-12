@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 11:52:01 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:21:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2568,7 +2568,9 @@ void ScOutputData::DrawClipMarks()
                         long nStartPosX = nPosX;
                         if ( bLayoutRTL )
                             nStartPosX -= nOutWidth - 1;
-                        aCellRect = Rectangle( Point( nStartPosX, nPosY ), Size( nOutWidth, nOutHeight ) );
+                        // #i80447# create aCellRect from two points in case nOutWidth is 0
+                        aCellRect = Rectangle( Point( nStartPosX, nPosY ),
+                                               Point( nStartPosX+nOutWidth-1, nPosY+nOutHeight-1 ) );
                     }
 
                     aCellRect.Bottom() -= 1;    // don't paint over the cell grid
