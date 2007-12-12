@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-01 13:16:43 $
+#   last change: $Author: kz $ $Date: 2007-12-12 14:58:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,11 @@
 TARGET=writer2latex
 PRJ=../..
 PRJNAME=xmerge
+
+.IF "$(WITH_WRITER2LATEX)" == "NO"
+@all:
+        @echo "building without writer2latex"
+.ENDIF
 
 .INCLUDE : ant.mk
 ALLTAR: ANTBUILD
