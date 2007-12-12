@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:19:00 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,7 @@ public:
     // check existence of an object - either by identity or by name
     sal_Bool            HasEmbeddedObject( const ::rtl::OUString& );
     sal_Bool            HasEmbeddedObject( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
+    sal_Bool            HasInstantiatedEmbeddedObject( const ::rtl::OUString& );
 
     // get the object name of an object - this is the persist name if the object has persistence
     ::rtl::OUString     GetEmbeddedObjectName( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
