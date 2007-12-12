@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-20 14:31:18 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:23:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,11 @@ ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
 .IF "$(GUI)"=="UNX"
+.IF "$(SYSTEM_HYPH)" == "YES"
+HNJLIB=$(HYPHEN_LIB)
+.ELSE
 HNJLIB=-lhnj
+.ENDIF
 .ELIF  "$(GUI)"=="OS2"
 HNJLIB=$(SLB)\libhnj.lib
 .ELSE
