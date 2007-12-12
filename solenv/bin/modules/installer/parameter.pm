@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 09:52:48 $
+#   last change: $Author: kz $ $Date: 2007-12-12 15:33:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -308,7 +308,7 @@ sub setglobalvariables
 
     if ( $installer::globals::compiler =~ /unxso[lg]i/ ) { $installer::globals::issolarisx86build = 1; }
 
-    if ( $installer::globals::compiler =~ /unxlngi/ || $installer::globals::compiler =~ /unxlngx/ || $installer::globals::compiler =~ /unxlngs/ || $installer::globals::compiler =~ /unxlngppc/ )
+    if ( $installer::globals::compiler =~ /unxlng/ )
     {
         $installer::globals::islinuxbuild = 1;
         if ( $installer::globals::packageformat eq "rpm" )
