@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syswin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:13:42 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:19:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,7 @@ class VCL_DLLPUBLIC WindowStateData
 private:
     sal_uInt32          mnValidMask;
     int                 mnX;
-    long                mnY;
+    int                 mnY;
     unsigned int        mnWidth;
     unsigned int        mnHeight;
     int                 mnMaximizedX;
@@ -127,7 +127,7 @@ public:
     void         SetX( int nX ) { mnX = nX; }
     int          GetX() const { return mnX; }
     void         SetY( int nY ) { mnY = nY; }
-    unsigned int GetY() const { return mnY; }
+    int          GetY() const { return mnY; }
     void         SetWidth( unsigned int nWidth ) { mnWidth = nWidth; }
     unsigned int GetWidth() const { return mnWidth; }
     void         SetHeight( unsigned int nHeight ) { mnHeight = nHeight; }
