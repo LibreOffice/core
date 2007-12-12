@@ -289,7 +289,11 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
+ifeq "$(STLPORT_VER)" "500"
+STLPORTLIB=-lstlport
+else
 STLPORTLIB=-lstlport_gcc
+endif
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -387,7 +391,11 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
+ifeq "$(STLPORT_VER)" "500"
+STLPORTLIB=-lstlport -lstdc++
+else
 STLPORTLIB=-lstlport_gcc -lstdc++
+endif
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
@@ -483,7 +491,11 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
+ifeq "$(STLPORT_VER)" "500"
+STLPORTLIB=-lstlport
+else
 STLPORTLIB=-lstlport_gcc
+endif
 
 EMPTYSTRING=
 PATH_SEPARATOR=:
