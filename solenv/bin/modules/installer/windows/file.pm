@@ -4,9 +4,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 16:19:13 $
+#   last change: $Author: kz $ $Date: 2007-12-12 14:54:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -383,7 +383,14 @@ sub generate_filename_for_filetable
     if (( $installer::globals::prepare_winpatch ) && ( exists($installer::globals::savedmapping{"$fileref->{'componentname'}/$filename"}) ))
     {
         $installer::globals::savedmapping{"$fileref->{'componentname'}/$filename"} =~ m/.*;(.*)/;
-        $shortstring = $1 || $filename;
+        if ($1 ne '')
+        {
+            $shortstring = $1;
+        }
+        else
+        {
+            $shortstring = installer::windows::idtglobal::make_eight_three_conform_with_hash($filename, "file", $shortnamesref);
+        }
     }
     else
     {
