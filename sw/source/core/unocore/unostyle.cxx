@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:28:13 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3939,6 +3939,10 @@ uno::Reference< style::XAutoStyle > SwXAutoStyleFamily::insertStyle(
         catch (beans::UnknownPropertyException &)
         {
             ASSERT( false, "Unknown property" );
+        }
+        catch (lang::IllegalArgumentException &)
+        {
+            ASSERT( false, "Illegal argument" );
         }
     }
 
