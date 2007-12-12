@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.118 $
+ *  $Revision: 1.119 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:13:02 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:19:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2813,7 +2813,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
         std::list< int > aSections;
         std::list< int >::const_iterator it;
         int nIndex = 0;
-        while( pFontData[nIndex] == 0x80 )
+        while( pFontData[nIndex] == 0x80 && nIndex < nFontLen-1 )
         {
             aSections.push_back( nIndex );
             if( pFontData[nIndex+1] == 0x03 )
@@ -2876,6 +2876,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
             }
             nIndex--;
         }
+
         if( nIndex < 1 || nIndex <= nEndAsciiIndex )
             goto streamend;
         // there may be whitespace to ignore before the 512 '0'
@@ -2891,6 +2892,26 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
             }
         }
         nEndBinaryIndex = nIndex;
+
+        // and count forward again to the point where we have nFound '0'
+        // to get the corect value for nLength3
+        sal_Int32 nLength3 = 0;
+        sal_Int32 nL3Index = nIndex;
+        while( nFound && nL3Index < nFontLen )
+        {
+            for( it = aSections.begin(); it != aSections.end() && (nL3Index < *it || nL3Index > ((*it) + 5) ); ++it )
+                ;
+            if( it == aSections.end() )
+            {
+                // inside the 512 '0' block there may only be whitespace
+                // according to T1 spec; probably it would be to simple
+                // if all fonts complied
+                if( pFontData[nL3Index] == '0' )
+                    nFound--;
+                nLength3++;
+            }
+            nL3Index++;
+        }
 
         // search for beginning of binary section
         nBeginBinaryIndex = nEndAsciiIndex;
@@ -2984,7 +3005,9 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
         aLine.append( nLength1 );
         aLine.append( " /Length2 " );
         aLine.append( nLength2 );
-        aLine.append( " /Length3 0>>\n"
+        aLine.append( " /Length3 ");
+        aLine.append( nLength3 );
+        aLine.append( ">>\n"
                       "stream\n" );
         if( !writeBuffer( aLine.getStr(), aLine.getLength() ) )
             goto streamend;
@@ -3036,7 +3059,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
         {
             if( aSections.begin() == aSections.end() )
             {
-                if( ! writeBuffer( pFontData+nBeginBinaryIndex, nEndBinaryIndex-nBeginBinaryIndex+1 ) )
+                if( ! writeBuffer( pFontData+nBeginBinaryIndex, nFontLen-nBeginBinaryIndex ) )
                 {
                     endCompression();
                     disableStreamEncryption();
@@ -3047,39 +3070,27 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
             {
                 for( it = aSections.begin(); *it < nBeginBinaryIndex; ++it )
                     ;
-                if( *it > nEndBinaryIndex )
+                // write first partial section
+                if( ! writeBuffer( pFontData+nBeginBinaryIndex, (*it) - nBeginBinaryIndex ) )
                 {
-                    if( ! writeBuffer( pFontData+nBeginBinaryIndex, nEndBinaryIndex-nBeginBinaryIndex+1 ) )
-                    {
-                        endCompression();
-                        disableStreamEncryption();
-                        goto streamend;
-                    }
+                    endCompression();
+                    disableStreamEncryption();
+                    goto streamend;
                 }
-                else
+                // write following sections
+                while( it != aSections.end() )
                 {
-                    // write first partial section
-                    if( ! writeBuffer( pFontData+nBeginBinaryIndex, (*it) - nBeginBinaryIndex ) )
-                    {
-                        endCompression();
-                        disableStreamEncryption();
-                        goto streamend;
-                    }
                     nIndex = (*it)+6;
                     ++it;
-                    while( *it < nEndBinaryIndex )
+                    if( nIndex < nFontLen ) // last section marker is usually the EOF which has only 2 bytes
                     {
-                        if( ! writeBuffer( pFontData+nIndex, (*it)-nIndex ) )
+                        sal_Int32 nSectionLen = (it == aSections.end()) ? nFontLen - nIndex : (*it) - nIndex;
+                        if( ! writeBuffer( pFontData+nIndex, nSectionLen ) )
+                        {
+                            endCompression();
+                            disableStreamEncryption();
                             goto streamend;
-                        nIndex = (*it)+6;
-                        ++it;
-                    }
-                    // write partial last section
-                    if( ! writeBuffer( pFontData+nIndex, nEndBinaryIndex-nIndex+1 ) )
-                    {
-                        endCompression();
-                        disableStreamEncryption();
-                        goto streamend;
+                        }
                     }
                 }
             }
@@ -3101,7 +3112,7 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
                 {
                     nIndex += 6;
                     ++it;
-                    nNextSectionIndex = (it == aSections.end() ? 0 : *it );
+                    nNextSectionIndex = (it == aSections.end() ? nFontLen : *it );
                 }
                 unsigned char cNibble = 0x80;
                 if( pFontData[ nIndex ] >= '0' && pFontData[ nIndex ] <= '9' )
@@ -3124,8 +3135,46 @@ std::map< sal_Int32, sal_Int32 > PDFWriterImpl::emitEmbeddedFont( ImplFontData* 
                 disableStreamEncryption();
                 goto streamend;
             }
-
             rtl_freeMemory( pWriteBuffer );
+
+            if( aSections.empty() )
+            {
+                if( ! writeBuffer( pFontData+nIndex, nFontLen-nIndex ) )
+                {
+                    endCompression();
+                    disableStreamEncryption();
+                    goto streamend;
+                }
+            }
+            else
+            {
+                // write rest of this section
+                if( nIndex < nNextSectionIndex )
+                {
+                    if( ! writeBuffer( pFontData+nIndex, nNextSectionIndex - nIndex ) )
+                    {
+                        endCompression();
+                        disableStreamEncryption();
+                        goto streamend;
+                    }
+                }
+                // write following sections
+                while( it != aSections.end() )
+                {
+                    nIndex = (*it)+6;
+                    ++it;
+                    if( nIndex < nFontLen ) // last section marker is usually the EOF which has only 2 bytes
+                    {
+                        sal_Int32 nSectionLen = (it == aSections.end()) ? nFontLen - nIndex : (*it) - nIndex;
+                        if( ! writeBuffer( pFontData+nIndex, nSectionLen ) )
+                        {
+                            endCompression();
+                            disableStreamEncryption();
+                            goto streamend;
+                        }
+                    }
+                }
+            }
         }
         endCompression();
         disableStreamEncryption();
