@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 18:18:29 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:21:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1218,8 +1218,10 @@ public:
 
 class SwUndoInsLayFmt : public SwUndoFlyBase
 {
+    ULONG mnCrsrSaveIndexPara;           // Cursor position
+    xub_StrLen mnCrsrSaveIndexPos;            // for undo
 public:
-    SwUndoInsLayFmt( SwFrmFmt* pFormat );
+    SwUndoInsLayFmt( SwFrmFmt* pFormat, ULONG nNodeIdx, xub_StrLen nCntIdx );
     ~SwUndoInsLayFmt();
 
     virtual void Undo( SwUndoIter& );
