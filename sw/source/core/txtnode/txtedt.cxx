@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:28:06 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:25:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,9 @@
 #ifndef _UNOTEXTMARKUP_HXX
 #include <unotextmarkup.hxx>
 #endif
-
+#ifndef _TXTATR_HXX //autogen
+#include <txtatr.hxx>
+#endif
 #include <fmtautofmt.hxx>
 #include <istyleaccess.hxx>
 
@@ -714,7 +716,17 @@ void SwTxtNode::RstAttr(const SwIndex &rIdx, xub_StrLen nLen, USHORT nWhich,
 
                     if( nEnd < nTmpEnd )
                     {
-                         InsertItem( pHt->GetAttr(), nEnd, nTmpEnd, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                        SwTxtAttr* pNew = MakeTxtAttr( pHt->GetAttr(), nEnd, nTmpEnd );
+                        if ( pNew )
+                        {
+                            SwTxtCharFmt* pCharFmt = dynamic_cast<SwTxtCharFmt*>(pHt);
+                            if ( pCharFmt )
+                                static_cast<SwTxtCharFmt*>(pNew)->SetSortNumber( pCharFmt->GetSortNumber() );
+
+                            Insert( pNew, nsSetAttrMode::SETATTR_NOHINTADJUST );
+                        }
+
+
                         // jetzt kein i+1, weil das eingefuegte Attribut
                         // ein anderes auf die Position geschoben hat !
                         continue;
