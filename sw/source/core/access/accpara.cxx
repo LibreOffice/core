@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:23:18 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:21:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,6 +184,9 @@
 #ifndef _VIEWIMP_HXX
 #include <viewimp.hxx>
 #endif
+// <--
+// --> OD 2007-11-12 #i82637#
+#include <boost/scoped_ptr.hpp>
 // <--
 
 #include <algorithm>
@@ -1333,7 +1336,8 @@ sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
 // re-implement method on behalf of methods <_getDefaultAttributesImpl(..)> and
 // <_getRunAttributesImpl(..)>
 Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
-    sal_Int32 nIndex, const uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
+    sal_Int32 nIndex,
+    const uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
     throw (IndexOutOfBoundsException, uno::RuntimeException)
 {
 
@@ -1357,7 +1361,7 @@ Sequence<PropertyValue> SwAccessibleParagraph::getCharacterAttributes(
     Sequence< PropertyValue > aValues( aDefAttrSeq.size() );
     PropertyValue* pValues = aValues.getArray();
     sal_Int32 i = 0;
-    for ( tAccParaPropValMap::const_iterator aDefIter  = aDefAttrSeq.begin();
+    for ( tAccParaPropValMap::const_iterator aDefIter = aDefAttrSeq.begin();
           aDefIter != aDefAttrSeq.end();
           ++aDefIter )
     {
@@ -1416,144 +1420,166 @@ void SwAccessibleParagraph::_getDefaultAttributesImpl(
 {
     // retrieve default attributes
     const SwTxtNode* pTxtNode( GetTxtNode() );
-    SfxItemSet* pSet( 0L );
+    ::boost::scoped_ptr<SfxItemSet> pSet;
     if ( !bOnlyCharAttrs )
     {
-        pSet = new SfxItemSet( const_cast<SwTxtNode*>(pTxtNode)->GetDoc()->GetAttrPool(),
+        pSet.reset( new SfxItemSet( const_cast<SwAttrPool&>(pTxtNode->GetDoc()->GetAttrPool()),
                                RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
                                RES_PARATR_BEGIN, RES_PARATR_END - 1,
                                RES_FRMATR_BEGIN, RES_FRMATR_END - 1,
-                               0L );
+                               0 ) );
     }
     else
     {
-        pSet = new SfxItemSet( const_cast<SwTxtNode*>(pTxtNode)->GetDoc()->GetAttrPool(),
+        pSet.reset( new SfxItemSet( const_cast<SwAttrPool&>(pTxtNode->GetDoc()->GetAttrPool()),
                                RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
-                               0L );
+                               0 ) );
     }
-    pTxtNode->SwCntntNode::GetAttr( *pSet );
+    // --> OD 2007-11-12 #i82637#
+    // From the perspective of the a11y API the default character attributes
+    // are the character attributes, which are set at the paragraph style
+    // of the paragraph. The character attributes set at the automatic paragraph
+    // style of the paragraph are treated as run attributes.
+//    pTxtNode->SwCntntNode::GetAttr( *pSet );
+    // get default paragraph attributes, if needed, and merge these into <pSet>
+    if ( !bOnlyCharAttrs )
+    {
+        SfxItemSet aParaSet( const_cast<SwAttrPool&>(pTxtNode->GetDoc()->GetAttrPool()),
+                             RES_PARATR_BEGIN, RES_PARATR_END - 1,
+                             RES_FRMATR_BEGIN, RES_FRMATR_END - 1,
+                             0 );
+        pTxtNode->SwCntntNode::GetAttr( aParaSet );
+        pSet->Put( aParaSet );
+    }
+    // get default character attributes and merge these into <pSet>
+    ASSERT( pTxtNode->GetTxtColl(),
+            "<SwAccessibleParagraph::_getDefaultAttributesImpl(..)> - missing paragraph style. Serious defect, please inform OD!" );
+    if ( pTxtNode->GetTxtColl() )
+    {
+        SfxItemSet aCharSet( const_cast<SwAttrPool&>(pTxtNode->GetDoc()->GetAttrPool()),
+                             RES_CHRATR_BEGIN, RES_CHRATR_END - 1,
+                             0 );
+        aCharSet.Put( pTxtNode->GetTxtColl()->GetAttrSet() );
+        pSet->Put( aCharSet );
+    }
+    // <--
 
     // build-up sequence containing the run attributes <rDefAttrSeq>
+    tAccParaPropValMap aDefAttrSeq;
     {
-        tAccParaPropValMap aDefAttrSeq;
-        {
-            const SfxItemPropertySet& rPropSet =
+        const SfxItemPropertySet& rPropSet =
                     aSwMapProvider.GetPropertyMap( PROPERTY_MAP_TEXT_CURSOR );
-            const SfxItemPropertyMap* pPropMap( rPropSet.getPropertyMap() );
-            while ( pPropMap->pName )
+        const SfxItemPropertyMap* pPropMap( rPropSet.getPropertyMap() );
+        while ( pPropMap->pName )
+        {
+            const SfxPoolItem* pItem = pSet->GetItem( pPropMap->nWID );
+            if ( pItem )
             {
-                const SfxPoolItem* pItem = pSet->GetItem( pPropMap->nWID );
-                if ( pItem )
-                {
-                    Any aVal;
-                    pItem->QueryValue( aVal, pPropMap->nMemberId );
+                Any aVal;
+                pItem->QueryValue( aVal, pPropMap->nMemberId );
 
-                    PropertyValue rPropVal;
-                    rPropVal.Name = OUString::createFromAscii( pPropMap->pName );
-                    rPropVal.Value = aVal;
-                    rPropVal.Handle = -1;
-                    rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
+                PropertyValue rPropVal;
+                rPropVal.Name = OUString::createFromAscii( pPropMap->pName );
+                rPropVal.Value = aVal;
+                rPropVal.Handle = -1;
+                rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
 
-                    aDefAttrSeq[rPropVal.Name] = rPropVal;
-                }
-
-                ++pPropMap;
+                aDefAttrSeq[rPropVal.Name] = rPropVal;
             }
 
-            // --> OD 2007-01-15 #i72800#
-            // add property value entry for the paragraph style
-            if ( !bOnlyCharAttrs && pTxtNode->GetTxtColl() )
-            {
-                const OUString sParaStyleName =
-                        OUString::createFromAscii(
-                                GetPropName( UNO_NAME_PARA_STYLE_NAME ).pName );
-                if ( aDefAttrSeq.find( sParaStyleName ) == aDefAttrSeq.end() )
-                {
-                    PropertyValue rPropVal;
-                    rPropVal.Name = sParaStyleName;
-                    Any aVal( makeAny( OUString( pTxtNode->GetTxtColl()->GetName() ) ) );
-                    rPropVal.Value = aVal;
-                    rPropVal.Handle = -1;
-                    rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
+            ++pPropMap;
+        }
 
-                    aDefAttrSeq[rPropVal.Name] = rPropVal;
-                }
+        // --> OD 2007-01-15 #i72800#
+        // add property value entry for the paragraph style
+        if ( !bOnlyCharAttrs && pTxtNode->GetTxtColl() )
+        {
+            const OUString sParaStyleName =
+                    OUString::createFromAscii(
+                            GetPropName( UNO_NAME_PARA_STYLE_NAME ).pName );
+            if ( aDefAttrSeq.find( sParaStyleName ) == aDefAttrSeq.end() )
+            {
+                PropertyValue rPropVal;
+                rPropVal.Name = sParaStyleName;
+                Any aVal( makeAny( OUString( pTxtNode->GetTxtColl()->GetName() ) ) );
+                rPropVal.Value = aVal;
+                rPropVal.Handle = -1;
+                rPropVal.State = beans::PropertyState_DEFAULT_VALUE;
+
+                aDefAttrSeq[rPropVal.Name] = rPropVal;
             }
-            // <--
+        }
+        // <--
 
-            // --> OD 2007-01-15 #i73371#
-            // resolve value text::WritingMode2::PAGE of property value entry WritingMode
-            if ( !bOnlyCharAttrs && GetFrm() )
+        // --> OD 2007-01-15 #i73371#
+        // resolve value text::WritingMode2::PAGE of property value entry WritingMode
+        if ( !bOnlyCharAttrs && GetFrm() )
+        {
+            const OUString sWritingMode =
+                    OUString::createFromAscii(
+                            GetPropName( UNO_NAME_WRITING_MODE ).pName );
+            tAccParaPropValMap::iterator aIter = aDefAttrSeq.find( sWritingMode );
+            if ( aIter != aDefAttrSeq.end() )
             {
-                const OUString sWritingMode =
-                        OUString::createFromAscii(
-                                GetPropName( UNO_NAME_WRITING_MODE ).pName );
-                tAccParaPropValMap::iterator aIter = aDefAttrSeq.find( sWritingMode );
-                if ( aIter != aDefAttrSeq.end() )
+                PropertyValue rPropVal( aIter->second );
+                sal_Int16 nVal = rPropVal.Value.get<sal_Int16>();
+                if ( nVal == text::WritingMode2::PAGE )
                 {
-                    PropertyValue rPropVal( (*aIter).second );
-                    sal_Int16 nVal;
-                    rPropVal.Value >>= nVal;
-                    if ( nVal == text::WritingMode2::PAGE )
+                    const SwFrm* pUpperFrm( GetFrm()->GetUpper() );
+                    while ( pUpperFrm )
                     {
-                        const SwFrm* pUpperFrm( GetFrm()->GetUpper() );
-                        while ( pUpperFrm )
+                        if ( pUpperFrm->GetType() &
+                               ( FRM_PAGE | FRM_FLY | FRM_SECTION | FRM_TAB | FRM_CELL ) )
                         {
-                            if ( pUpperFrm->GetType() &
-                                   ( FRM_PAGE | FRM_FLY | FRM_SECTION | FRM_TAB | FRM_CELL ) )
+                            if ( pUpperFrm->IsVertical() )
                             {
-                                if ( pUpperFrm->IsVertical() )
-                                {
-                                    nVal = text::WritingMode2::TB_RL;
-                                }
-                                else if ( pUpperFrm->IsRightToLeft() )
-                                {
-                                    nVal = text::WritingMode2::RL_TB;
-                                }
-                                else
-                                {
-                                    nVal = text::WritingMode2::LR_TB;
-                                }
-                                rPropVal.Value <<= nVal;
-                                aDefAttrSeq[rPropVal.Name] = rPropVal;
-                                break;
+                                nVal = text::WritingMode2::TB_RL;
                             }
-
-                            if ( dynamic_cast<const SwFlyFrm*>(pUpperFrm) )
+                            else if ( pUpperFrm->IsRightToLeft() )
                             {
-                                pUpperFrm = dynamic_cast<const SwFlyFrm*>(pUpperFrm)->GetAnchorFrm();
+                                nVal = text::WritingMode2::RL_TB;
                             }
                             else
                             {
-                                pUpperFrm = pUpperFrm->GetUpper();
+                                nVal = text::WritingMode2::LR_TB;
                             }
+                            rPropVal.Value <<= nVal;
+                            aDefAttrSeq[rPropVal.Name] = rPropVal;
+                            break;
+                        }
+
+                        if ( dynamic_cast<const SwFlyFrm*>(pUpperFrm) )
+                        {
+                            pUpperFrm = dynamic_cast<const SwFlyFrm*>(pUpperFrm)->GetAnchorFrm();
+                        }
+                        else
+                        {
+                            pUpperFrm = pUpperFrm->GetUpper();
                         }
                     }
                 }
             }
-            // <--
         }
+        // <--
+    }
 
-        if ( aRequestedAttributes.getLength() == 0 )
+    if ( aRequestedAttributes.getLength() == 0 )
+    {
+        rDefAttrSeq = aDefAttrSeq;
+    }
+    else
+    {
+        const OUString* pReqAttrs = aRequestedAttributes.getConstArray();
+        const sal_Int32 nLength = aRequestedAttributes.getLength();
+        for( sal_Int32 i = 0; i < nLength; ++i )
         {
-            rDefAttrSeq = aDefAttrSeq;
-        }
-        else
-        {
-            const OUString* pReqAttrs = aRequestedAttributes.getConstArray();
-            const sal_Int32 nLength = aRequestedAttributes.getLength();
-            for( sal_Int32 i = 0; i < nLength; ++i )
+            tAccParaPropValMap::const_iterator const aIter = aDefAttrSeq.find( pReqAttrs[i] );
+            if ( aIter != aDefAttrSeq.end() )
             {
-                tAccParaPropValMap::iterator aIter = aDefAttrSeq.find( pReqAttrs[i] );
-                if ( aIter != aDefAttrSeq.end() )
-                {
-                    rDefAttrSeq[ (*aIter).first ] = (*aIter).second;
-                }
+                rDefAttrSeq[ aIter->first ] = aIter->second;
             }
         }
     }
-
-    delete pSet;
 }
 
 Sequence< PropertyValue > SwAccessibleParagraph::getDefaultAttributes(
@@ -1586,7 +1612,7 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
         tAccParaPropValMap& rRunAttrSeq )
 {
     // create PaM for character at position <nIndex>
-    SwPaM* pPaM( 0L );
+    SwPaM* pPaM( 0 );
     {
         const SwTxtNode* pTxtNode( GetTxtNode() );
         SwPosition* pStartPos = new SwPosition( *pTxtNode );
@@ -1603,19 +1629,52 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
     // retrieve character attributes for the created PaM <pPaM>
     SfxItemSet aSet( pPaM->GetDoc()->GetAttrPool(),
                      RES_CHRATR_BEGIN, RES_CHRATR_END -1,
-                     0L );
-    SwXTextCursor::GetCrsrAttr( *pPaM, aSet, TRUE, TRUE );
+                     0 );
+    // --> OD 2007-11-12 #i82637#
+    // From the perspective of the a11y API the character attributes, which
+    // are set at the automatic paragraph style of the paragraph are treated
+    // as run attributes.
+//    SwXTextCursor::GetCrsrAttr( *pPaM, aSet, TRUE, TRUE );
+    // get character attributes from automatic paragraph style and merge these into <aSet>
+    {
+        const SwTxtNode* pTxtNode( GetTxtNode() );
+        if ( pTxtNode->HasSwAttrSet() )
+        {
+            SfxItemSet aAutomaticParaStyleCharAttrs( pPaM->GetDoc()->GetAttrPool(),
+                                                     RES_CHRATR_BEGIN, RES_CHRATR_END -1,
+                                                     0 );
+            aAutomaticParaStyleCharAttrs.Put( *(pTxtNode->GetpSwAttrSet()), FALSE );
+            aSet.Put( aAutomaticParaStyleCharAttrs );
+        }
+    }
+    // get character attributes at <pPaM> and merge these into <aSet>
+    {
+        SfxItemSet aCharAttrsAtPaM( pPaM->GetDoc()->GetAttrPool(),
+                                    RES_CHRATR_BEGIN, RES_CHRATR_END -1,
+                                    0 );
+        SwXTextCursor::GetCrsrAttr( *pPaM, aCharAttrsAtPaM, TRUE, TRUE );
+        aSet.Put( aCharAttrsAtPaM );
+    }
+    // <--
 
     // build-up sequence containing the run attributes <rRunAttrSeq>
     {
         tAccParaPropValMap aRunAttrSeq;
         {
+            // --> OD 2007-11-12 #i82637#
+            tAccParaPropValMap aDefAttrSeq;
+            uno::Sequence< ::rtl::OUString > aDummy;
+            _getDefaultAttributesImpl( aDummy, aDefAttrSeq, true );
+            // <--
             const SfxItemPropertySet& rPropSet =
                     aSwMapProvider.GetPropertyMap( PROPERTY_MAP_TEXT_CURSOR );
             const SfxItemPropertyMap* pPropMap( rPropSet.getPropertyMap() );
             while ( pPropMap->pName )
             {
-                const SfxPoolItem* pItem( 0L );
+                const SfxPoolItem* pItem( 0 );
+                // --> OD 2007-11-12 #i82637#
+                // Found character attributes, whose value equals the value of
+                // the corresponding default character attributes, are excluded.
                 if ( aSet.GetItemState( pPropMap->nWID, TRUE, &pItem ) == SFX_ITEM_SET )
                 {
                     Any aVal;
@@ -1627,7 +1686,13 @@ void SwAccessibleParagraph::_getRunAttributesImpl(
                     rPropVal.Handle = -1;
                     rPropVal.State = PropertyState_DIRECT_VALUE;
 
-                    aRunAttrSeq[rPropVal.Name] = rPropVal;
+                    tAccParaPropValMap::const_iterator aDefIter =
+                                            aDefAttrSeq.find( rPropVal.Name );
+                    if ( aDefIter == aDefAttrSeq.end() ||
+                         rPropVal.Value != aDefIter->second.Value )
+                    {
+                        aRunAttrSeq[rPropVal.Name] = rPropVal;
+                    }
                 }
 
                 ++pPropMap;
