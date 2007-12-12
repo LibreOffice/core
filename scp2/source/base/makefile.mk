@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: fs $ $Date: 2005-11-15 12:54:19 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:28:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,10 @@ TARGETTYPE=CUI
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
+
+.IF "$(ENABLE_REPORTDESIGN)" == "YES"
+SCPDEFS += -DENABLE_REPORTDESIGN
+.ENDIF
 
 SCP_PRODUCT_TYPE=osl
 
