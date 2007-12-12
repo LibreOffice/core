@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:55:27 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:19:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -800,7 +800,8 @@ void SdrOle2Obj::Connect_Impl()
             if ( pPers )
             {
                 comphelper::EmbeddedObjectContainer& rContainer = pPers->GetEmbeddedObjectContainer();
-                if ( !rContainer.HasEmbeddedObject( mpImpl->aPersistName ) )
+                if ( !rContainer.HasEmbeddedObject( mpImpl->aPersistName )
+                  || ( xObjRef.is() && !rContainer.HasEmbeddedObject( xObjRef.GetObject() ) ) )
                 {
                     // object not known to container document
                     // No object -> disaster!
