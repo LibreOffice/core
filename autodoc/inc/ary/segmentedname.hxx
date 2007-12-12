@@ -4,9 +4,9 @@
  *
  *  $RCSfile: segmentedname.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 14:42:58 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 14:56:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ class NameSegment
                             const char *        i_name );
     explicit            NameSegment(
                             const String &      i_name );
-    explicit            NameSegment(
+                        NameSegment(
                             const NameSegment & i_segment );
                         ~NameSegment();
     // OPERATORS
