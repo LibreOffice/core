@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngr.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 18:00:27 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:20:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=$(PTHREAD_CFLAGS) -DGLIBC=2 -DARM32 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=400
+CDEFS+=$(PTHREAD_CFLAGS) -DGLIBC=2 -DARM32 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)
 
 # enable visibility define in "sal/types.h"
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
@@ -187,8 +187,13 @@ LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc_stldebug
 LIBSTLPORTST=$(STATIC) -lstlport_gcc_stldebug $(DYNAMIC)
 .ELSE # "$(USE_STLP_DEBUG)" != ""
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=$(DYNAMIC) -lstlport
+LIBSTLPORTST=$(STATIC) -lstlport $(DYNAMIC)
+.ELSE
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
+.ENDIF
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
 
 #FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
