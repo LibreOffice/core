@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csvsplits.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:18:33 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:21:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 // ============================================================================
 
 /** Constant for an invalid vector index. */
-const sal_uInt32 CSV_VEC_NOTFOUND   = ~0UL;
+const sal_uInt32 CSV_VEC_NOTFOUND   = SAL_MAX_UINT32;
 /** Constant for an invalid ruler position. */
 const sal_Int32 CSV_POS_INVALID     = -1;
 
