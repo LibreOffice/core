@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.268 $
+ *  $Revision: 1.269 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:20:34 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:21:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,6 +201,7 @@
 #endif
 
 #include <vcl/pdfextoutdevdata.hxx>
+#include <psprint/fontmanager.hxx>
 #include "vcl/lazydelete.hxx"
 
 using namespace rtl;
@@ -347,6 +348,12 @@ void Window::ImplInitAppFontData( Window* pWindow )
 
 bool Window::ImplCheckUIFont( const Font& rFont )
 {
+#ifdef UNX // TODO: use more generic solution
+    const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
+    if (rMgr.hasFontconfig())
+        return true;
+#endif
+
     String aTestText;
     aTestText.Append( Button::GetStandardText( BUTTON_OK ) );
     aTestText.Append( Button::GetStandardText( BUTTON_CANCEL ) );
@@ -4270,7 +4277,7 @@ void Window::ImplNewInputContext()
             else
                 aSize.Height() = (12*pFocusWin->mnDPIY)/72;
         }
-        pFontEntry = pFocusWin->mpFontCache->Get( pFocusWin->mpFontList, rFont, aSize, pFocusWin->mpOutDevData ? pFocusWin->mpOutDevData->mpFirstFontSubstEntry : NULL );
+        pFontEntry = pFocusWin->mpFontCache->GetFontEntry( pFocusWin->mpFontList, rFont, aSize, pFocusWin->mpOutDevData ? &pFocusWin->mpOutDevData->maDevFontSubst : NULL );
         if ( pFontEntry )
             aNewContext.mpFont = &pFontEntry->maFontSelData;
     }
