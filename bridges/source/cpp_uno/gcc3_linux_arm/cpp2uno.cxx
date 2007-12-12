@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:01:44 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 15:34:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,8 @@ namespace
         sal_Int64 * pRegisterReturn /* space for register return */ )
     {
         // pCallStack: ret, [return ptr], this, params
-        char * pCppStack = (char *)(pCallStack + 0);
+        char * pTopStack = (char *)(pCallStack + 0);
+        char * pCppStack = pTopStack;
 
         // return
         typelib_TypeDescription * pReturnTypeDescr = 0;
@@ -125,6 +126,19 @@ namespace
             if (!rParam.bOut &&
                 bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
             {
+#ifdef __ARM_EABI__
+                switch (pParamTypeDescr->eTypeClass)
+                {
+                    case typelib_TypeClass_HYPER:
+                    case typelib_TypeClass_UNSIGNED_HYPER:
+                    case typelib_TypeClass_DOUBLE:
+            if ((pCppStack - pTopStack) % 8) pCppStack+=sizeof(sal_Int32); //align to 8
+                        break;
+                    default:
+                        break;
+                }
+#endif
+
                 pCppArgs[nPos] = pCppStack;
                 pUnoArgs[nPos] = pCppStack;
                 switch (pParamTypeDescr->eTypeClass)
@@ -406,7 +420,6 @@ extern "C" sal_Int64 cpp_vtable_call( long *pFunctionAndOffset,
     sal_Int64 nRegReturn;
     cpp_mediate( pFunctionAndOffset[0], pFunctionAndOffset[1], pCallStack,
         &nRegReturn );
-
     return nRegReturn;
 }
 

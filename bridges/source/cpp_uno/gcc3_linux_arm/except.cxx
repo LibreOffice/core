@@ -4,9 +4,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:02:01 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 15:34:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,8 +284,21 @@ namespace CPPU_CURRENT_NAMESPACE
         }
         }
 
-        __cxa_throw( pCppExc, rtti, deleteException );
+
+    __cxa_throw( pCppExc, rtti, deleteException );
     }
+
+#ifdef __ARM_EABI__
+    static void* getAdjustedPtr(__cxa_exception* header)
+    {
+        return (void*)header->unwindHeader.barrier_cache.bitpattern[0];
+    }
+#else
+    static void* getAdjustedPtr(__cxa_exception* header)
+    {
+        return header->adjustedPtr;
+    }
+#endif
 
     //===================================================================
     void fillUnoException( __cxa_exception * header, uno_Any * pUnoExc, uno_Mapping * pCpp2Uno )
@@ -326,7 +339,7 @@ namespace CPPU_CURRENT_NAMESPACE
         else
         {
             // construct uno exception any
-            uno_any_constructAndConvert( pUnoExc, header->adjustedPtr, pExcTypeDescr, pCpp2Uno );
+            uno_any_constructAndConvert( pUnoExc, getAdjustedPtr(header), pExcTypeDescr, pCpp2Uno );
             typelib_typedescription_release( pExcTypeDescr );
         }
     }

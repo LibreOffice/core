@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:02:47 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 15:35:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,53 @@
 #include <stdio.h>
 #include <string.h>
 
+#if defined(__ARM_EABI__) && !defined(__SOFTFP__)
+#error Not Implemented
+
+/*
+ some possibly handy code to detect that we have VFP registers
+ */
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <elf.h>
+
+#define HWCAP_ARM_VFP 64
+
+int hasVFP(void)
+{
+    int fd = open ("/proc/self/auxv", O_RDONLY);
+    if (fd == -1)
+        return -1;
+
+    int ret = -1;
+
+    Elf32_auxv_t buf[128];
+    ssize_t n;
+    while ((ret == -1) && ((n = read(fd, buf, sizeof (buf))) > 0))
+    {
+        for (int i = 0; i < 128; ++i)
+        {
+        if (buf[i].a_type == AT_HWCAP)
+        {
+                ret = (buf[i].a_un.a_val & HWCAP_ARM_VFP) ? true : false;
+                break;
+        }
+            else if (buf[i].a_type == AT_NULL)
+            {
+                ret = -2;
+                break;
+            }
+        }
+    }
+
+    close (fd);
+    return ret;
+}
+
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -188,15 +235,39 @@ void callVirtualMethod(
         if (bOverFlow) \
                 *pDS++ = *reinterpret_cast<sal_uInt32 *>( pSV );
 
-#define INSERT_INT64( pSV, nr, pGPR, pDS, bOverflow ) \
+#ifdef __ARM_EABI__
+#define INSERT_INT64( pSV, nr, pGPR, pDS, pStart, bOverflow ) \
+        if ( (nr < arm::MAX_GPR_REGS) && (nr % 2) ) \
+        { \
+                ++nr; \
+        } \
+        if ( nr < arm::MAX_GPR_REGS ) \
+        { \
+                pGPR[nr++] = *reinterpret_cast<sal_uInt32 *>( pSV ); \
+                pGPR[nr++] = *(reinterpret_cast<sal_uInt32 *>( pSV ) + 1); \
+        } \
+        else \
+                bOverFlow = true; \
+        if (bOverFlow) \
+    { \
+        if ( (pDS - pStart) % 2) \
+                { \
+                    ++pDS; \
+                } \
+                *pDS++ = reinterpret_cast<sal_uInt32 *>( pSV )[0]; \
+                *pDS++ = reinterpret_cast<sal_uInt32 *>( pSV )[1]; \
+    }
+#else
+#define INSERT_INT64( pSV, nr, pGPR, pDS, pStart, bOverflow ) \
         INSERT_INT32( pSV, nr, pGPR, pDS, bOverflow) \
         INSERT_INT32( ((sal_uInt32*)pSV)+1, nr, pGPR, pDS, bOverflow)
+#endif
 
 #define INSERT_FLOAT( pSV, nr, pFPR, pDS, bOverflow ) \
         INSERT_INT32( pSV, nr, pGPR, pDS, bOverflow)
 
-#define INSERT_DOUBLE( pSV, nr, pFPR, pDS, bOverflow ) \
-        INSERT_INT64( pSV, nr, pGPR, pDS, bOverflow )
+#define INSERT_DOUBLE( pSV, nr, pFPR, pDS, pStart, bOverflow ) \
+        INSERT_INT64( pSV, nr, pGPR, pDS, pStart, bOverflow )
 
 #define INSERT_INT16( pSV, nr, pGPR, pDS, bOverflow ) \
         if ( nr < arm::MAX_GPR_REGS ) \
@@ -292,7 +363,7 @@ static void cpp_call(
 #ifdef CMC_DEBUG
                 fprintf(stderr, "hyper is %lx\n", pCppArgs[nPos]);
 #endif
-                INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack, bOverFlow );
+                INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack, pStackStart, bOverFlow );
                 break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
@@ -315,7 +386,7 @@ static void cpp_call(
                 INSERT_FLOAT( pCppArgs[nPos], nGPR, pGPR, pStack, bOverFlow );
                 break;
             case typelib_TypeClass_DOUBLE:
-                INSERT_DOUBLE( pCppArgs[nPos], nGPR, pGPR, pStack, bOverFlow );
+                INSERT_DOUBLE( pCppArgs[nPos], nGPR, pGPR, pStack, pStackStart, bOverFlow );
                 break;
             }
             // no longer needed

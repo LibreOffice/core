@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 18:02:19 $
+#   last change: $Author: kz $ $Date: 2007-12-12 15:35:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,13 +84,14 @@ CFLAGSCXX += -fno-omit-frame-pointer
 
 NOOPTFILES= \
     $(SLO)$/cpp2uno.obj \
+    $(SLO)$/except.obj \
     $(SLO)$/uno2cpp.obj
 
 CFLAGSNOOPT=-O0
 
 SLOFILES= \
-    $(SLO)$/except.obj \
     $(SLO)$/cpp2uno.obj \
+    $(SLO)$/except.obj \
     $(SLO)$/uno2cpp.obj \
     $(SLO)$/armhelper.obj
 

@@ -8,14 +8,15 @@
 	.global privateSnippetExecutor
 	.type privateSnippetExecutor, %function
 privateSnippetExecutor:
-        stmfd sp!, {r0-r3}         @  follow other parameters on stack
-        stmfd sp!, {fp,ip,lr}
-	add fp, sp, #28
-
+        stmfd sp!, {r0-r3}         @ follow other parameters on stack
 	mov   r0, ip               @ r0 points to functionoffset/vtable
-        add   r1, sp, #12           @ r1 points to this and params
+        mov   ip, sp		   @ fix up the ip
+        stmfd sp!, {fp,ip,lr,pc}   @ 8 x 4 => stack remains 8 aligned
+	sub   fp, ip, #4	   @ set frame pointer
+
+        add   r1, sp, #16          @ r1 points to this and params
         bl    cpp_vtable_call(PLT)
 
-        add  sp, sp, #28           @ restore stack
-        ldr  fp, [sp, #-28]        @ restore fp
-        ldr  pc, [sp, #-20]        @ return
+        add  sp, sp, #32           @ restore stack
+        ldr  fp, [sp, #-32]	   @ restore frame pointer
+        ldr  pc, [sp, #-24]        @ return
