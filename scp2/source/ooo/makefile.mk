@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.59 $
+#   $Revision: 1.60 $
 #
-#   last change: $Author: vg $ $Date: 2007-12-05 16:16:00 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:29:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -205,6 +205,11 @@ SCPDEFS+=-DISOLANG_MAJOR=$(ISOLANG_MAJOR)
 
 .IF "$(DISABLE_NEON)" == "TRUE"
 SCPDEFS+=-DDISABLE_NEON
+.ENDIF
+
+# if yes or unset (neon not used) -> do not install openssl library!
+.IF $(SYSTEM_OPENSSL) == "NO"
+SCPDEFS+=-DOPENSSL
 .ENDIF
 
 .IF "$(ENABLE_VBA)" == "YES"
