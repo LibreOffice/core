@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-16 11:41:46 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:24:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5374,7 +5374,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
         SwTwips nWidth;
         if ( GetNext() )
         {
-            SwTwips nWish = pTab->GetFmt()->GetFrmSize().GetWidth();
+            const SwTwips nWish = pTab->GetFmt()->GetFrmSize().GetWidth();
             nWidth = pAttrs->GetSize().Width();
 
             ASSERT( nWish, "Tabelle ohne Breite?" );
@@ -5387,7 +5387,7 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                 // Avoid rounding problems, at least for the new table model
                 if ( pTab->GetTable()->IsNewModel() )
                 {
-                    // 1. Calculate starting point of current cell (in model)
+                    // 1. sum of widths of cells up to this cell (in model)
                     const SwTableLine* pTabLine = GetTabBox()->GetUpper();
                     const SwTableBoxes& rBoxes = pTabLine->GetTabBoxes();
                     const SwTableBox* pTmpBox = 0;
@@ -5401,20 +5401,27 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                     }
                     while ( pTmpBox != GetTabBox() );
 
+                    // 2. calculate actual width of cells up to this one
                     double nTmpWidth = nSumWidth;
                     nTmpWidth *= nPrtWidth;
                     nTmpWidth /= nWish;
                     nWidth = (SwTwips)nTmpWidth;
 
-                    const SwTwips nStart = IsRightToLeft() ?
-                        (GetUpper()->Frm().*fnRect->fnGetRight)() - (Frm().*fnRect->fnGetRight)() :
-                        (Frm().*fnRect->fnGetLeft)() -  (GetUpper()->Frm().*fnRect->fnGetLeft)();
-                    nWidth = nWidth - nStart;
+                    // 3. calculate frame widths of cells up to this one:
+                    const SwFrm* pTmpCell = static_cast<const SwLayoutFrm*>(GetUpper())->Lower();
+                    SwTwips nSumFrameWidths = 0;
+                    while ( pTmpCell != this )
+                    {
+                        nSumFrameWidths += (pTmpCell->Frm().*fnRect->fnGetWidth)();
+                        pTmpCell = pTmpCell->GetNext();
+                    }
+
+                    nWidth = nWidth - nSumFrameWidths;
                 }
                 else
                 {
                     // #i12092# use double instead of long,
-                    // otherwise this cut lead to overflows
+                    // otherwise this could lead to overflows
                     double nTmpWidth = nWidth;
                     nTmpWidth *= nPrtWidth;
                     nTmpWidth /= nWish;
