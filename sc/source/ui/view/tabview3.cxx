@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:11:39 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:21:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -582,7 +582,7 @@ void ScTabView::TestHintWindow()
         const ScValidationData* pData = pDoc->GetValidationEntry( pItem->GetValue() );
         DBG_ASSERT(pData,"ValidationData nicht gefunden");
         String aTitle, aMessage;
-        if ( pData && pData->GetInput( aTitle, aMessage ) )
+        if ( pData && pData->GetInput( aTitle, aMessage ) && aMessage.Len() > 0 )
         {
             //! Abfrage, ob an gleicher Stelle !!!!
 
