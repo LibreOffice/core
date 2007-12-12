@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:59:32 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 14:56:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -488,6 +488,9 @@ void PrinterInfoManager::initialize()
                     aPrinter.m_aInfo.m_aCommand = String( aValue, RTL_TEXTENCODING_UTF8 );
                 }
 
+                aValue = aConfig.ReadKey( "QuickCommand" );
+                aPrinter.m_aInfo.m_aQuickCommand = String( aValue, RTL_TEXTENCODING_UTF8 );
+
                 aValue = aConfig.ReadKey( "Features" );
                 aPrinter.m_aInfo.m_aFeatures = String( aValue, RTL_TEXTENCODING_UTF8 );
 
@@ -786,6 +789,7 @@ bool PrinterInfoManager::writePrinterConfig()
             pConfig->WriteKey( "Location", ByteString( String( it->second.m_aInfo.m_aLocation ), RTL_TEXTENCODING_UTF8 ) );
             pConfig->WriteKey( "Comment", ByteString( String( it->second.m_aInfo.m_aComment ), RTL_TEXTENCODING_UTF8 ) );
             pConfig->WriteKey( "Command", ByteString( String( it->second.m_aInfo.m_aCommand ), RTL_TEXTENCODING_UTF8 ) );
+            pConfig->WriteKey( "QuickCommand", ByteString( String( it->second.m_aInfo.m_aQuickCommand ), RTL_TEXTENCODING_UTF8 ) );
             pConfig->WriteKey( "Features", ByteString( String( it->second.m_aInfo.m_aFeatures ), RTL_TEXTENCODING_UTF8 ) );
             pConfig->WriteKey( "Copies", ByteString::CreateFromInt32( it->second.m_aInfo.m_nCopies ) );
             pConfig->WriteKey( "Orientation", it->second.m_aInfo.m_eOrientation == orientation::Landscape ? "Landscape" : "Portrait" );
@@ -1100,10 +1104,26 @@ const std::list< PrinterInfoManager::SystemPrintQueue >& PrinterInfoManager::get
     return m_aSystemPrintQueues;
 }
 
-FILE* PrinterInfoManager::startSpool( const OUString& rPrintername )
+bool PrinterInfoManager::checkFeatureToken( const rtl::OUString& rPrinterName, const char* pToken ) const
+{
+    const PrinterInfo& rPrinterInfo( getPrinterInfo( rPrinterName ) );
+    sal_Int32 nIndex = 0;
+    while( nIndex != -1 )
+    {
+        OUString aOuterToken = rPrinterInfo.m_aFeatures.getToken( 0, ',', nIndex );
+        sal_Int32 nInnerIndex = 0;
+        OUString aInnerToken = aOuterToken.getToken( 0, '=', nInnerIndex );
+        if( aInnerToken.equalsIgnoreAsciiCaseAscii( pToken ) )
+            return true;
+    }
+    return false;
+}
+
+FILE* PrinterInfoManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 {
     const PrinterInfo&   rPrinterInfo   = getPrinterInfo (rPrintername);
-    const rtl::OUString& rCommand       = rPrinterInfo.m_aCommand;
+    const rtl::OUString& rCommand       = (bQuickCommand && rPrinterInfo.m_aQuickCommand.getLength() ) ?
+                                          rPrinterInfo.m_aQuickCommand : rPrinterInfo.m_aCommand;
     rtl::OString aShellCommand  = OUStringToOString (rCommand, RTL_TEXTENCODING_ISO_8859_1);
     aShellCommand += rtl::OString( " 2>/dev/null" );
 
