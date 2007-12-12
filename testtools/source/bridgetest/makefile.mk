@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 16:10:12 $
+#   last change: $Author: kz $ $Date: 2007-12-12 15:32:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -170,9 +170,9 @@ MY_CLASSPATH=$(strip $(subst,!,$(PATH_SEPERATOR) $(MY_CLASSPATH_TMP:s/ /!/)))$(P
 # Use "127.0.0.1" instead of "localhost", see #i32281#:
 $(DLLDEST)$/bridgetest_javaserver$(BATCH_SUFFIX) : makefile.mk
     -rm -f $@
-    $(WRAPCMD) echo java -classpath $(MY_CLASSPATH)$(PATH_SEPERATOR)..$/class$/testComponent.jar \
+    $(WRAPCMD) echo "java -classpath $(MY_CLASSPATH)$(PATH_SEPERATOR)..$/class$/testComponent.jar \
         com.sun.star.comp.bridge.TestComponentMain \
-        \""uno:socket,host=127.0.0.1,port=2002;urp;test"\" \
+        \"uno:socket,host=127.0.0.1,port=2002;urp;test\"" \
         > $@
     $(GIVE_EXEC_RIGHTS) $@
 
