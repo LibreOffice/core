@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edfcol.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:44:53 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,9 @@ SwTxtFmtColl& SwEditShell::GetTxtFmtColl( USHORT nFmtColl) const
     return *((*(GetDoc()->GetTxtFmtColls()))[nFmtColl]);
 }
 
-void SwEditShell::SetTxtFmtColl(SwTxtFmtColl *pFmt)
+// --> OD 2007-11-06 #i62675#
+void SwEditShell::SetTxtFmtColl( SwTxtFmtColl *pFmt,
+                                 bool bResetListAttrs )
 {
     SwTxtFmtColl *pLocal = pFmt? pFmt: (*GetDoc()->GetTxtFmtColls())[0];
     StartAllAction();
@@ -114,13 +116,13 @@ void SwEditShell::SetTxtFmtColl(SwTxtFmtColl *pFmt)
                     // --> FME 2004-06-29 #114856# Formular view
                     GetViewOptions()->IsFormView() ) )
                     // <--
-            GetDoc()->SetTxtFmtColl(*PCURCRSR, pLocal);
+            GetDoc()->SetTxtFmtColl( *PCURCRSR, pLocal, true, bResetListAttrs );
 
     FOREACHPAM_END()
     GetDoc()->EndUndo(UNDO_SETFMTCOLL, NULL);
     EndAllAction();
-
 }
+// <--
 
 
 SwTxtFmtColl* SwEditShell::MakeTxtFmtColl(const String& rFmtCollName,
