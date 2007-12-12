@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 12:20:21 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:26:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2347,7 +2347,7 @@ void SwRTFParser::SetAttrInDoc( SvxRTFItemStackType &rSet )
             MakeStyleTab();
         SwTxtFmtColl* pColl = aTxtCollTbl.Get( rSet.StyleNo() );
         if( pColl )
-            pDoc->SetTxtFmtColl( aPam, pColl, FALSE );
+            pDoc->SetTxtFmtColl( aPam, pColl, false );
     }
 
     const SfxPoolItem* pItem;
@@ -3037,6 +3037,7 @@ void SwRTFParser::ReadSectControls( int nToken )
     const SwFmtHeader* _pKeepHeader = NULL;
     const SwFmtFooter* _pKeepFooter = NULL;
     int bWeiter = true;
+    bool bKeepFooter = false;
     do {
         USHORT nValue = USHORT( nTokenValue );
         switch( nToken )
@@ -3164,15 +3165,18 @@ void SwRTFParser::ReadSectControls( int nToken )
                 if (aNewSection.mpPageHdFt!=NULL)
                 {
                     _pKeepHeader = NULL;
+                    bKeepFooter = true; // #i82008
                     _pKeepFooter = &aNewSection.mpPageHdFt->GetMaster().GetFooter();
                 }
             case RTF_FOOTER:
             case RTF_FOOTERL:
             case RTF_FOOTERR:
-                if (aNewSection.mpPageHdFt!=NULL && _pKeepFooter==NULL)
+                if (aNewSection.mpPageHdFt!=NULL && !bKeepFooter )
                 {
+                    _pKeepFooter = NULL;
                     _pKeepHeader = &aNewSection.mpPageHdFt->GetMaster().GetHeader();
                 }
+                bKeepFooter = false;
                 if (!bNewSectionHeader) { //see #117914# topic 2). If a header is redefined in a section
                     bNewSectionHeader=true;                    //  a new header must be created.
                     aNewSection.mpPageHdFt=NULL;
