@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:36:43 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2916,7 +2916,7 @@ void SwRedlineExtraData_FmtColl::Reject( SwPaM& rPam ) const
                             ? pDoc->FindTxtFmtCollByName( sFmtNm )
                             : pDoc->GetTxtCollFromPool( nPoolId );
     if( pColl )
-        pDoc->SetTxtFmtColl( rPam, pColl, FALSE );
+        pDoc->SetTxtFmtColl( rPam, pColl, false );
 
     if( pSet )
     {
