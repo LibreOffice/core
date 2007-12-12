@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prntypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:04:07 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 15:04:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,13 +120,14 @@ struct PaperInfo
 // -----------------
 
 #define PRINTER_CAPABILITIES_SUPPORTDIALOG      ((USHORT)1)
-#define PRINTER_CAPABILITIES_COPIES                 ((USHORT)2)
+#define PRINTER_CAPABILITIES_COPIES             ((USHORT)2)
 #define PRINTER_CAPABILITIES_COLLATECOPIES      ((USHORT)3)
-#define PRINTER_CAPABILITIES_SETORIENTATION         ((USHORT)4)
-#define PRINTER_CAPABILITIES_SETPAPERBIN            ((USHORT)5)
+#define PRINTER_CAPABILITIES_SETORIENTATION     ((USHORT)4)
+#define PRINTER_CAPABILITIES_SETPAPERBIN        ((USHORT)5)
 #define PRINTER_CAPABILITIES_SETPAPERSIZE       ((USHORT)6)
 #define PRINTER_CAPABILITIES_SETPAPER           ((USHORT)7)
-#define PRINTER_CAPABILITIES_FAX                    ((USHORT)8)
-#define PRINTER_CAPABILITIES_PDF                    ((USHORT)9)
+#define PRINTER_CAPABILITIES_FAX                ((USHORT)8)
+#define PRINTER_CAPABILITIES_PDF                ((USHORT)9)
+#define PRINTER_CAPABILITIES_EXTERNALDIALOG     ((USHORT)10)
 
 #endif  // _SV_PRNTYPES_HXX
