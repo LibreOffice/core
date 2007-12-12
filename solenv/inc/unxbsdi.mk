@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxbsdi.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:07:07 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:18:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=-DX86 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=400
+CDEFS+=-DX86 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)
 
 # this is a platform with JAVA support
 .IF "$(SOLAR_JAVA)"!=""
@@ -154,8 +154,13 @@ STDLIBCUIMT=-lpthread -lm
 STDSHLGUIMT=-lX11 -lXext -lpthread -lm
 STDSHLCUIMT=-lpthread -lm
 
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=$(DYNAMIC) -lstlport
+LIBSTLPORTST=$(STATIC) -lstlport $(DYNAMIC)
+.ELSE
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
+.ENDIF
 
 
 # name of library manager
