@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:18:34 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:20:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ namespace awt {
 struct ImplTimerData;
 struct ImplFileImageCacheData;
 struct ImplConfigData;
-struct ImplFontSubstEntry;
+class ImplDirectFontSubstitution;
 struct ImplHotKey;
 struct ImplEventHook;
 class Point;
@@ -217,7 +217,7 @@ struct ImplSVGDIData
     ImplPrnQueueList*       mpPrinterQueueList; // List of all printer queue
     ImplDevFontList*        mpScreenFontList;   // Screen-Font-List
     ImplFontCache*          mpScreenFontCache;  // Screen-Font-Cache
-    ImplFontSubstEntry*     mpFirstFontSubst;   // First Entry in Font-Substitute-List
+    ImplDirectFontSubstitution* mpDirectFontSubst;// Font-Substitutons defined in Tools->Options->Fonts
     GraphicConverter*       mpGrfConverter;     // Converter for graphics
     long                    mnRealAppFontX;     // AppFont X-Numenator for 40/tel Width
     long                    mnAppFontX;         // AppFont X-Numenator for 40/tel Width + DialogScaleX
