@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.79 $
+#   $Revision: 1.80 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-24 13:31:29 $
+#   last change: $Author: kz $ $Date: 2007-12-12 15:35:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,6 @@
 
 # --- Windows-NT-Environment ---------------------------------------
 # Used if "$(GUI)" == "WNT"
-
-# --- Set Wrapper command - should move to startup/wnt ---
-.IF "$(USE_SHELL)"!= "4nt"
-#Fallback, normaly set by winenv.*
-WRAPCMD*=guw.pl
-WRAPCMD_ENV*=$(WRAPCMD) -env
-.ENDIF
 
 # --- Compiler ---
 
