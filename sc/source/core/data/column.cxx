@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:52:11 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:19:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1599,7 +1599,7 @@ BOOL ScColumn::TestCopyScenarioTo( const ScColumn& rDestCol ) const
 {
     BOOL bOk = TRUE;
     ScAttrIterator aAttrIter( pAttrArray, 0, MAXROW );
-    SCROW nStart, nEnd;
+    SCROW nStart = 0, nEnd = 0;
     const ScPatternAttr* pPattern = aAttrIter.Next( nStart, nEnd );
     while (pPattern && bOk)
     {
