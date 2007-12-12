@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outfont.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:02:27 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:19:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,9 @@ class ImplDevFontListData;
 class ImplGetDevFontList;
 class ImplGetDevSizeList;
 class ImplFontEntry;
-struct ImplFontSubstEntry;
+class ImplDirectFontSubstitution;
+class ImplPreMatchFontSubstitution;
+class ImplGlyphFallbackFontSubstitution;
 class ImplFontSelectData;
 class Font;
 class ImplCvtChar;
@@ -220,22 +222,32 @@ private:
     typedef std::hash_map<const String, ImplDevFontListData*,FontNameHash> DevFontList;
     DevFontList             maDevFontList;
 
+    ImplPreMatchFontSubstitution* mpPreMatchHook;       // device specific prematch substitution
+    ImplGlyphFallbackFontSubstitution* mpFallbackHook;  // device specific glyh fallback substitution
+
 public:
                             ImplDevFontList();
                             ~ImplDevFontList();
 
+    // fill the list with device fonts
     void                    Add( ImplFontData* );
     void                    Clear();
     int                     Count() const { return maDevFontList.size(); }
 
+    // find the device font
     ImplDevFontListData*    FindFontFamily( const String& rFontName ) const;
-    ImplDevFontListData*    ImplFindByFont( ImplFontSelectData&, bool bPrinter, ImplFontSubstEntry* pDevSpecificSubst ) const;
+    ImplDevFontListData*    ImplFindByFont( ImplFontSelectData&, bool bPrinter, ImplDirectFontSubstitution* ) const;
     ImplDevFontListData*    ImplFindBySearchName( const String& ) const;
 
-    bool                    HasFallbacks() const;
-    void                    SetFallbacks( ImplDevFontListData**, int nCount );
-    ImplDevFontListData*    GetFallback( int nIndex ) const;
+    // suggest fonts for glyph fallback
+    ImplDevFontListData*    GetGlyphFallbackFont( ImplFontSelectData&,
+                        rtl::OUString& rMissingCodes, int nFallbackLevel ) const;
 
+    // prepare platform specific font substitutions
+    void                    SetPreMatchHook( ImplPreMatchFontSubstitution* );
+    void                    SetFallbackHook( ImplGlyphFallbackFontSubstitution* );
+
+    // misc utilities
     ImplDevFontList*        Clone( bool bScalable, bool bEmbeddable ) const;
     ImplGetDevFontList*     GetDevFontList() const;
     ImplGetDevSizeList*     GetDevSizeList( const String& rFontName ) const;
@@ -252,10 +264,10 @@ protected:
     ImplDevFontListData*    FindDefaultFont() const;
 
 private:
-    ImplDevFontListData**   mpFallbackList;
-    int                     mnFallbackCount;
+    void                    InitGenericGlyphFallback() const;
+    mutable ImplDevFontListData**   mpFallbackList;
+    mutable int                     mnFallbackCount;
 };
-
 
 // --------------------
 // - ImplKernPairData -
@@ -332,7 +344,7 @@ class VCL_DLLPUBLIC ImplFontEntry
 {
 public:
                         ImplFontEntry( const ImplFontSelectData& );
-    virtual             ~ImplFontEntry() {}
+    virtual             ~ImplFontEntry();
 
 public: // TODO: make data members private
     ImplFontSelectData  maFontSelData;      // FontSelectionData
@@ -344,6 +356,17 @@ public: // TODO: make data members private
     short               mnOwnOrientation;   // text angle if lower layers don't rotate text themselves
     short               mnOrientation;      // text angle in 3600 system
     bool                mbInit;             // true if maMetric member is valid
+
+    void                AddFallbackForUnicode( sal_UCS4, const String& rFontName );
+    bool                GetFallbackForUnicode( sal_UCS4, String* pFontName ) const;
+    void                IgnoreFallbackForUnicode( sal_UCS4, const String& rFontName );
+
+private:
+    // cache of Unicode characters and replacement font names
+    // TODO: a fallback map can be shared with many other ImplFontEntries
+    // TODO: at least the ones which just differ in orientation, stretching or height
+    typedef ::std::hash_map<sal_UCS4,String> UnicodeFallbackList;
+    UnicodeFallbackList* mpUnicodeFallbackList;
 };
 
 
