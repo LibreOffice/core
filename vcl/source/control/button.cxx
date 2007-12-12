@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 12:13:34 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:19:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3124,25 +3124,26 @@ static void LoadThemedImageList (const StyleSettings &rStyleSettings,
                                  ImageList *pList, const ResId &rResId,
                                  USHORT nImages)
 {
-    Color pColorAry1[6];
-    Color pColorAry2[6];
-    pColorAry1[0] = Color( 0xC0, 0xC0, 0xC0 );
-    pColorAry1[1] = Color( 0xFF, 0xFF, 0x00 );
-    pColorAry1[2] = Color( 0xFF, 0xFF, 0xFF );
-    pColorAry1[3] = Color( 0x80, 0x80, 0x80 );
-    pColorAry1[4] = Color( 0x00, 0x00, 0x00 );
-    pColorAry1[5] = Color( 0x00, 0xFF, 0x00 );
-    pColorAry2[0] = rStyleSettings.GetFaceColor();
-    pColorAry2[1] = rStyleSettings.GetWindowColor();
-    pColorAry2[2] = rStyleSettings.GetLightColor();
-    pColorAry2[3] = rStyleSettings.GetShadowColor();
-    pColorAry2[4] = rStyleSettings.GetDarkShadowColor();
-    pColorAry2[5] = rStyleSettings.GetWindowTextColor();
+    Color aColorAry1[6];
+    Color aColorAry2[6];
+    aColorAry1[0] = Color( 0xC0, 0xC0, 0xC0 );
+    aColorAry1[1] = Color( 0xFF, 0xFF, 0x00 );
+    aColorAry1[2] = Color( 0xFF, 0xFF, 0xFF );
+    aColorAry1[3] = Color( 0x80, 0x80, 0x80 );
+    aColorAry1[4] = Color( 0x00, 0x00, 0x00 );
+    aColorAry1[5] = Color( 0x00, 0xFF, 0x00 );
+    aColorAry2[0] = rStyleSettings.GetFaceColor();
+    aColorAry2[1] = rStyleSettings.GetWindowColor();
+    aColorAry2[2] = rStyleSettings.GetLightColor();
+    aColorAry2[3] = rStyleSettings.GetShadowColor();
+    aColorAry2[4] = rStyleSettings.GetDarkShadowColor();
+    aColorAry2[5] = rStyleSettings.GetWindowTextColor();
 
     Color aMaskColor(0x00, 0x00, 0xFF );
+        DBG_ASSERT( sizeof(aColorAry1) == sizeof(aColorAry2), "aColorAry1 must match aColorAry2" );
     // FIXME: do we want the mask for the checkbox ?
     pList->InsertFromHorizontalBitmap (rResId, nImages, &aMaskColor,
-                                       pColorAry1, pColorAry2, nImages);
+        aColorAry1, aColorAry2, sizeof(aColorAry1) / sizeof(Color));
 }
 
 Image RadioButton::GetRadioImage( const AllSettings& rSettings, USHORT nFlags )
