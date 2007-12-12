@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:17:01 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:27:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -887,7 +887,11 @@ USHORT SwDocShell::ApplyStyles(const String &rName, USHORT nFamily,
         }
         case SFX_STYLE_FAMILY_PARA:
         {
-            pSh->SetTxtFmtColl(pStyle->GetCollection());
+            // --> OD 2007-11-06 #i62675#
+            // clear also list attributes at affected text nodes, if paragraph
+            // style has the list style attribute set.
+            pSh->SetTxtFmtColl( pStyle->GetCollection(), true );
+            // <--
             break;
         }
         case SFX_STYLE_FAMILY_FRAME:
