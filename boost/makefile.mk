@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:32:17 $
+#   last change: $Author: kz $ $Date: 2007-12-12 15:00:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,16 @@ all:
 
 TARFILE_NAME=boost-1.30.2
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
+
+.IF "$(COMID)"=="gcc3"
+
+# enabled for gcc4.x
+.IF "$(CCNUMVER)">="000400000000" 
+  TARFILE_NAME=boost_1_34_1
+  PATCH_FILE_NAME=$(TARFILE_NAME).patch
+.ENDIF
+
+.ENDIF
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
