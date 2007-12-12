@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 14:47:46 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:24:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1938,6 +1938,37 @@ bool SwpHints::MergePortions( SwTxtNode& rNode )
     return bRet;
 }
 
+// check if there is already a character format and adjust the sort numbers
+void lcl_CheckSortNumber( const SwpHints& rHints, SwTxtCharFmt& rNewCharFmt )
+{
+    const xub_StrLen nHtStart = *rNewCharFmt.GetStart();
+    const xub_StrLen nHtEnd   = *rNewCharFmt.GetEnd();
+    USHORT nSortNumber = 0;
+
+    for ( USHORT i = 0; i < rHints.Count(); ++i )
+    {
+        const SwTxtAttr* pOtherHt = rHints[i];
+
+        const xub_StrLen nOtherStart = *pOtherHt->GetStart();
+        const xub_StrLen nOtherEnd = *pOtherHt->GetEnd();
+
+        if ( nOtherStart > nHtStart )
+            break;
+
+        if ( RES_TXTATR_CHARFMT == pOtherHt->Which() )
+        {
+            if ( nOtherStart == nHtStart && nOtherEnd == nHtEnd )
+            {
+                const USHORT nOtherSortNum = static_cast<const SwTxtCharFmt*>(pOtherHt)->GetSortNumber();
+                nSortNumber = nOtherSortNum + 1;
+            }
+        }
+    }
+
+    if ( nSortNumber > 0 )
+        rNewCharFmt.SetSortNumber( nSortNumber );
+}
+
 /*************************************************************************
  *                      SwpHints::Insert()
  *************************************************************************/
@@ -2177,13 +2208,14 @@ void SwpHints::Insert( SwTxtAttr* pHint, SwTxtNode &rNode, USHORT nMode )
 
     // I need this value later on for notification but the pointer may become invalid
     const xub_StrLen nHintEnd = *pHtEnd;
+    const bool bNoHintAdjustMode = (nsSetAttrMode::SETATTR_NOHINTADJUST & nMode);
 
     // Currently REFMARK and TOXMARK have OverlapAllowed set to true.
     // These attributes may be inserted directly.
     // Also attributes without length may be inserted directly.
     // SETATTR_NOHINTADJUST is set e.g., during undo.
     // Portion building in not necessary during XML import.
-    if ( !(nsSetAttrMode::SETATTR_NOHINTADJUST & nMode) &&
+    if ( !bNoHintAdjustMode &&
          !pHint->IsOverlapAllowedAttr() &&
          !rNode.GetDoc()->IsInXMLImport() &&
          ( RES_TXTATR_AUTOFMT == nWhich ||
@@ -2209,12 +2241,19 @@ void SwpHints::Insert( SwTxtAttr* pHint, SwTxtNode &rNode, USHORT nMode )
         // multiple times
         // Special case hyperlink: During import, the ruby attribute is set
         // multiple times
-        if ( RES_TXTATR_CHARFMT == nWhich ||
-             RES_TXTATR_CJK_RUBY == nWhich ||
-             RES_TXTATR_INETFMT == nWhich )
+        // FME 2007-11-08 #i82989# in NOHINTADJUST mode, we want to insert
+        // character attributes directly
+        if ( ( RES_TXTATR_CHARFMT  == nWhich && !bNoHintAdjustMode ) ||
+               RES_TXTATR_CJK_RUBY == nWhich ||
+               RES_TXTATR_INETFMT  == nWhich )
             BuildPortions( rNode, *pHint, nMode );
         else
         {
+            // --> FME 2007-11-08 #i82989# Check sort numbers in NoHintAdjustMode
+            if ( RES_TXTATR_CHARFMT == nWhich )
+                lcl_CheckSortNumber( *this, *static_cast<SwTxtCharFmt*>(pHint) );
+            // <--
+
             SwpHintsArr::Insert( pHint );
             if ( pHistory )
                 pHistory->Add( pHint, TRUE );
@@ -2229,7 +2268,7 @@ void SwpHints::Insert( SwTxtAttr* pHint, SwTxtNode &rNode, USHORT nMode )
     }
 
 #ifndef PRODUCT
-    if( !rNode.GetDoc()->IsInReading() )
+    if( !bNoHintAdjustMode && !rNode.GetDoc()->IsInReading() )
         CHECK;
 #endif
 
