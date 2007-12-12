@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxirgm.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:08:29 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:19:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -136,8 +136,13 @@ STDSHLGUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lX11 -lm -lgcc -lc
 STDSHLCUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lm -lgcc -lc
 THREADLIB=		-lpthread
 
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=$(DYNAMIC) -lstlport
+LIBSTLPORTST= -lstlport
+.ELSE
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
 LIBSTLPORTST= -lstlport_gcc
+.ENDIF
 
 LIBMGR=			ar
 LIBFLAGS=		-r
