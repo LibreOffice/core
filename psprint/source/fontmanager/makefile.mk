@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2007-10-01 07:50:50 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:17:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@ TARGET=fontman
 .INCLUDE :  settings.mk
 
 CFLAGS+= -I..$/fontsubset
+INCDEPN+= -I..$/fontsubset
 
 .IF "$(ENABLE_FONTCONFIG)" != ""
 CDEFS += -DENABLE_FONTCONFIG
