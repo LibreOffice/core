@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:00:38 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:14:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1114,18 +1114,6 @@ void ResMgr::TestStack( const Resource* )
 #endif
 
 // -----------------------------------------------------------------------
-OUString ResMgr::ImplGetPrefix()
-{
-    return pImpRes ? pImpRes->aPrefix : OUString();
-}
-
-com::sun::star::lang::Locale ResMgr::ImplGetLocale()
-{
-    return pImpRes ? pImpRes->aLocale : com::sun::star::lang::Locale();
-}
-
-// -----------------------------------------------------------------------
-
 BOOL ResMgr::IsAvailable( const ResId& rId, const Resource* pResObj ) const
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
