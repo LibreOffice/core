@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.102 $
+#   $Revision: 1.103 $
 #
-#   last change: $Author: vg $ $Date: 2007-12-07 11:51:18 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:22:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@ LIB1FILES=  $(SLB)$/app.lib     \
 .IF "$(GUI)" == "UNX" && "$(GUIBASE)"!="aqua"
 LIB1FILES+=$(SLB)$/salplug.lib
 SHL1STDLIBS+=\
-            -lpsp$(VERSION)$(DLLPOSTFIX)
+             $(PSPLIB)
 .ELSE
 LIB1FILES+= \
             $(SLB)$/salwin.lib  \
@@ -192,7 +192,7 @@ SHL1STDLIBS+= \
 
 .IF "$(USE_BUILTIN_RASTERIZER)"!=""
     LIB1FILES +=    $(SLB)$/glyphs.lib
-    SHL1STDLIBS+=   $(FREETYPELIB)
+    SHL1STDLIBS+=   $(FREETYPELIB)  $(PSPLIB)
 .ENDIF # USE_BUILTIN_RASTERIZER
 
 SHL1LIBS=   $(LIB1TARGET)
@@ -269,7 +269,7 @@ SHL2DEPN=$(SHL1IMPLIBN) $(SHL1TARGETN)
 # libs for generic plugin
 SHL2STDLIBS=\
             $(VCLLIB)\
-            -lpsp$(VERSION)$(DLLPOSTFIX)\
+             $(PSPLIB)\
             $(SOTLIB)           \
             $(UNOTOOLSLIB)      \
             $(TOOLSLIB)         \
@@ -365,8 +365,8 @@ SHL4NOCHECK=TRUE
 
 SHL4STDLIBS+=-l$(SHL2TARGET)
 SHL4STDLIBS+=\
-            $(VCLLIB)\
-            -lpsp$(VERSION)$(DLLPOSTFIX)\
+            $(VCLLIB)		\
+            $(PSPLIB)		\
             $(SOTLIB)           \
             $(UNOTOOLSLIB)      \
             $(TOOLSLIB)         \
@@ -395,7 +395,7 @@ SHL5STDLIBS=$(KDE_LIBS)
 SHL5STDLIBS+=-l$(SHL2TARGET)
 SHL5STDLIBS+=\
         $(VCLLIB)       \
-        -lpsp$(VERSION)$(DLLPOSTFIX)\
+        $(PSPLIB)	\
         $(TOOLSLIB)     \
         $(VOSLIB)       \
         $(SALLIB)
