@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndhints.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:25:54 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:24:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,6 +366,7 @@ BOOL SwpHintsArr::Check() const
                    "HintsCheck: Character attribute in end array" )
 
         // 8) portion check
+#if OSL_DEBUG_LEVEL > 1
         const SwTxtAttr* pHtThis = (*this)[i];
         const SwTxtAttr* pHtLast = i > 0 ? (*this)[i-1] : 0;
         CHECK_ERR( 0 == i ||
@@ -374,7 +375,8 @@ BOOL SwpHintsArr::Check() const
                     ( *pHtThis->GetStart() >= *pHtLast->GetEnd() ) ||
                     ( *pHtThis->GetStart() == *pHtLast->GetStart() && *pHtThis->GetEnd() == *pHtLast->GetEnd() ) ||
                     ( *pHtThis->GetStart() == *pHtThis->GetEnd() ),
-                   "HintsCheck: Portion inconsistency" )
+                   "HintsCheck: Portion inconsistency. This can be temporarily ok during undo operations" )
+#endif
     }
     return TRUE;
 }
