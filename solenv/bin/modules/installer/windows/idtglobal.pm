@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:56:16 $
+#   last change: $Author: kz $ $Date: 2007-12-12 14:55:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -335,14 +335,24 @@ sub make_eight_three_conform_with_hash
             $name = $name . "\~";
             ( $number, $saved ) = get_next_free_number_with_hash($name, $shortnamesref, '');
 
-            # if $number>9 the new name would be "abcdef~10.xyz", which is 9+3, and therefore not allowed
+            # if $number>9 the new name would be "abcdef~10", which is 9+0, and therefore not allowed
 
             if ( ! $saved )
             {
                 $name = substr($name, 0, 5);    # name, offset, length
                 $name = $name . "\~";
                 ( $number, $saved ) = get_next_free_number_with_hash($name, $shortnamesref, '');
-                if ( ! $saved ) { installer::exiter::exit_program("ERROR: Could not set 8+3 conform name for $inputstring !", "make_eight_three_conform_with_hash"); }
+
+                # if $number>99 the new name would be "abcde~100", which is 9+0, and therefore not allowed
+
+                if ( ! $saved )
+                {
+                    $name = substr($name, 0, 4);    # name, offset, length
+                    $name = $name . "\~";
+                    ( $number, $saved ) = get_next_free_number_with_hash($name, $shortnamesref, '');
+
+                    if ( ! $saved ) { installer::exiter::exit_program("ERROR: Could not set 8+3 conform name for $inputstring !", "make_eight_three_conform_with_hash"); }
+                }
             }
 
             $name = $name . "$number";
