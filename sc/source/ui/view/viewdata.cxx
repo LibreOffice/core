@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:12:50 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:22:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,12 +195,12 @@ void ScViewDataTable::WriteUserDataSequence(uno::Sequence <beans::PropertyValue>
         if (eHSplitMode == SC_SPLIT_FIX)
             pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosX);
         else
-            pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= nHSplitPos;
+            pSettings[SC_HORIZONTAL_SPLIT_POSITION].Value <<= sal_Int32(nHSplitPos);
         pSettings[SC_VERTICAL_SPLIT_POSITION].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_VERTICALSPLITPOSITION));
         if (eVSplitMode == SC_SPLIT_FIX)
             pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nFixPosY);
         else
-            pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= nVSplitPos;
+            pSettings[SC_VERTICAL_SPLIT_POSITION].Value <<= sal_Int32(nVSplitPos);
         pSettings[SC_ACTIVE_SPLIT_RANGE].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_ACTIVESPLITRANGE));
         pSettings[SC_ACTIVE_SPLIT_RANGE].Value <<= sal_Int16(eWhichActive);
         pSettings[SC_POSITION_LEFT].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_POSITIONLEFT));
