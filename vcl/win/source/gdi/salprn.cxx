@@ -37,6 +37,10 @@
 #include <tools/svwin.h>
 #endif
 
+#ifdef __MINGW32__
+#include <excpt.h>
+#endif
+
 #ifndef _OSL_MODULE_H
 #include <osl/module.h>
 #endif
@@ -94,6 +98,31 @@
 #endif
 
 #include <malloc.h>
+
+#ifdef __MINGW32__
+#define CATCH_DRIVER_EX_BEGIN                                               \
+    jmp_buf jmpbuf;                                                         \
+    __SEHandler han;                                                        \
+    if (__builtin_setjmp(jmpbuf) == 0)                                      \
+    {                                                                       \
+        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER)
+
+#define CATCH_DRIVER_EX_END(mes, p)                                         \
+    }                                                                       \
+    han.Reset()
+#else
+#define CATCH_DRIVER_EX_BEGIN                                               \
+    __try                                                                   \
+    {
+#define CATCH_DRIVER_EX_END(mes, p)                                         \
+    }                                                                       \
+    __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))\
+    {                                                                       \
+        DBG_ERROR( mes );                                                   \
+        p->markInvalid();                                                      \
+    }
+#endif
+
 
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
@@ -1220,12 +1249,12 @@ void WinSalInstance::DestroyInfoPrinter( SalInfoPrinter* pPrinter )
 
 // =======================================================================
 
-WinSalInfoPrinter::WinSalInfoPrinter()
+WinSalInfoPrinter::WinSalInfoPrinter() :
+    mpGraphics( NULL ),
+    mhDC( 0 ),
+    mbGraphics( FALSE )
 {
-    mhDC            = 0;
-    mpGraphics  = NULL;
-    mbGraphics  = FALSE;
-    m_bPapersInit               = FALSE;
+    m_bPapersInit = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -1616,17 +1645,19 @@ static LPDEVMODEW ImplSalSetCopies( LPDEVMODEW pDevMode, ULONG nCopies, BOOL bCo
 
 // -----------------------------------------------------------------------
 
-WinSalPrinter::WinSalPrinter()
+WinSalPrinter::WinSalPrinter() :
+    mpGraphics( NULL ),
+    mpInfoPrinter( NULL ),
+    mpNextPrinter( NULL ),
+    mhDC( 0 ),
+    mnError( 0 ),
+    mnCopies( 0 ),
+    mbCollate( FALSE ),
+    mbAbort( FALSE ),
+    mbValid( true )
 {
     SalData* pSalData = GetSalData();
-
-    mhDC            = 0;
-    mpGraphics  = NULL;
-    mbAbort     = FALSE;
-    mnCopies        = 0;
-    mbCollate   = FALSE;
-
-    // insert frame in framelist
+    // insert printer in printerlist
     mpNextPrinter = pSalData->mpFirstPrinter;
     pSalData->mpFirstPrinter = this;
 }
@@ -1662,9 +1693,37 @@ WinSalPrinter::~WinSalPrinter()
 
         pTempPrinter->mpNextPrinter = mpNextPrinter;
     }
+    mbValid = false;
 }
 
 // -----------------------------------------------------------------------
+
+void WinSalPrinter::markInvalid()
+{
+    mbValid = false;
+}
+
+// -----------------------------------------------------------------------
+
+// need wrappers for StarTocW/A to use structured exception handling
+// since SEH does not mix with standard exception handling's cleanup
+static int lcl_StartDocW( HDC hDC, DOCINFOW* pInfo, WinSalPrinter* pPrt )
+{
+    int nRet = 0;
+    CATCH_DRIVER_EX_BEGIN;
+    nRet = ::StartDocW( hDC, pInfo );
+    CATCH_DRIVER_EX_END( "exception in StartDocW", pPrt );
+    return nRet;
+}
+
+static int lcl_StartDocA( HDC hDC, DOCINFOA* pInfo, WinSalPrinter* pPrt )
+{
+    int nRet = 0;
+    CATCH_DRIVER_EX_BEGIN;
+    nRet = ::StartDocA( hDC, pInfo );
+    CATCH_DRIVER_EX_END( "exception in StartDocW", pPrt );
+    return nRet;
+}
 
 BOOL WinSalPrinter::StartJob( const XubString* pFileName,
                            const XubString& rJobName,
@@ -1831,7 +1890,8 @@ BOOL WinSalPrinter::StartJob( const XubString* pFileName,
             aInfo.lpszOutput = NULL;
 
         // start Job
-        int nRet = ::StartDocW( hDC, &aInfo );
+        int nRet = lcl_StartDocW( hDC, &aInfo, this );
+
         if ( nRet <= 0 )
         {
             long nError = GetLastError();
@@ -1844,7 +1904,7 @@ BOOL WinSalPrinter::StartJob( const XubString* pFileName,
     }
     else
     {
-        // Both strings must be exist, if StartJob() is called
+        // Both strings must exist, if StartJob() is called
         ByteString aJobName( ImplSalGetWinAnsiString( rJobName, TRUE ) );
         ByteString aFileName;
 
@@ -1866,7 +1926,7 @@ BOOL WinSalPrinter::StartJob( const XubString* pFileName,
             aInfo.lpszOutput = NULL;
 
         // start Job
-        int nRet = ::StartDocA( hDC, &aInfo );
+        int nRet = lcl_StartDocA( hDC, &aInfo, this );
         if ( nRet <= 0 )
         {
             long nError = GetLastError();
@@ -1887,7 +1947,7 @@ BOOL WinSalPrinter::EndJob()
 {
     DWORD err = 0;
     HDC hDC = mhDC;
-    if ( hDC )
+    if ( isValid() && hDC )
     {
         if ( mpGraphics )
         {
@@ -1904,10 +1964,14 @@ BOOL WinSalPrinter::EndJob()
         // framework yet to come.
         SalData* pSalData = GetSalData();
         ULONG nAcquire = pSalData->mpFirstInstance->ReleaseYieldMutex();
+        CATCH_DRIVER_EX_BEGIN;
         if( ::EndDoc( hDC ) <= 0 )
             err = GetLastError();
+        CATCH_DRIVER_EX_END( "exception in EndDoc", this );
+
         pSalData->mpFirstInstance->AcquireYieldMutex( nAcquire );
         DeleteDC( hDC );
+        mhDC = 0;
     }
 
     return TRUE;
@@ -1960,8 +2024,12 @@ void ImplSalPrinterAbortJobAsync( HDC hPrnDC )
                 pPrinter->mpGraphics = NULL;
             }
 
+            CATCH_DRIVER_EX_BEGIN;
             ::AbortDoc( hDC );
+            CATCH_DRIVER_EX_END( "exception in AbortDoc", pPrinter );
+
             DeleteDC( hDC );
+            pPrinter->mhDC = 0;
         }
     }
 }
@@ -1970,6 +2038,9 @@ void ImplSalPrinterAbortJobAsync( HDC hPrnDC )
 
 SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, BOOL bNewJobData )
 {
+    if( ! isValid() || mhDC == 0 )
+        return NULL;
+
     HDC hDC = mhDC;
     if ( pSetupData && pSetupData->mpDriverData && bNewJobData )
     {
@@ -1994,7 +2065,11 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, BOOL bNewJobDat
                 rtl_freeMemory( pDevModeA );
         }
     }
-    int nRet = ::StartPage( hDC );
+    int nRet = 0;
+    CATCH_DRIVER_EX_BEGIN;
+    nRet = ::StartPage( hDC );
+    CATCH_DRIVER_EX_END( "exception in StartPage", this );
+
     if ( nRet <= 0 )
     {
         GetLastError();
@@ -2025,7 +2100,15 @@ BOOL WinSalPrinter::EndPage()
         delete mpGraphics;
         mpGraphics = NULL;
     }
-    int nRet = ::EndPage( hDC );
+
+    if( ! isValid() )
+        return FALSE;
+
+    int nRet = 0;
+    CATCH_DRIVER_EX_BEGIN;
+    nRet = ::EndPage( hDC );
+    CATCH_DRIVER_EX_END( "exception in EndPage", this );
+
     if ( nRet > 0 )
         return TRUE;
     else
