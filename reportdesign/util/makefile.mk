@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-27 11:59:51 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:15:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -233,8 +233,7 @@ TXTFILES:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registration$/license_$i.txt)
 LICLINES:=$(foreach,i,$(TXTFILES)  <license-text xlink:href="registration/$(i:f)" lang="$(subst,.txt, $(subst,license_, $(i:f)))" license-id="$(subst,.txt, $(subst,license_, $(i:f)))" />)
 .ENDIF  # "$(GUI)"!="WNT"
 
-
-REPRORTJARFILES := \
+REPORTJARFILES := \
     $(ZIP1DIR)$/jcommon-1.0.10.jar										\
     $(ZIP1DIR)$/sac.jar													\
     $(ZIP1DIR)$/libxml-0.9.5.jar										\
@@ -245,14 +244,14 @@ REPRORTJARFILES := \
     $(ZIP1DIR)$/libformula-0.1.8.jar									\
     $(ZIP1DIR)$/librepository-0.1.1.jar									\
     $(ZIP1DIR)$/libfonts-0.2.6.jar										\
-    $(ZIP1DIR)$/jcommon-serializer-0.1.0.jar							\
+    $(ZIP1DIR)$/jcommon-serializer-0.1.0.jar								\
     $(ZIP1DIR)$/sun-report-builder.jar
 
 # --- Targets ----------------------------------
 .INCLUDE : target.mk
 
 .IF "$(ZIP1TARGETN)"!=""
-$(ZIP1TARGETN) :  $(TXTFILES) $(XMLFILES) $(HTMLFILES) $(REPRORTJARFILES)
+$(ZIP1TARGETN) :  $(TXTFILES) $(XMLFILES) $(HTMLFILES) $(REPORTJARFILES)
 .ENDIF          # "$(ZIP1TARGETN)"!="
 
 $(MISC)$/update_report.flag : $(XCU_FILES)
@@ -286,9 +285,15 @@ $(ZIP1DIR)$/merge$/org$/openoffice$/Office$/%.xcu : $(XCU_TMP)
     echo $(XCU_TMP)
     $(COPY) $< $@
 
+.IF "$(SYSTEM_JFREEREPORT)" == "YES"
+$(ZIP1DIR)$/%.jar : $(JFREEREPORT_JAR:d:d)$/%.jar
+    @@-$(MKDIRHIER) $(@:d)
+    $(COPY) $< $@
+.ELSE
 $(ZIP1DIR)$/%.jar : $(SOLARBINDIR)$/%.jar
     @@-$(MKDIRHIER) $(@:d)
     $(COPY) $< $@
+.ENDIF
 
 $(ZIP1DIR)$/%.jar : $(CLASSDIR)$/%.jar
     @@-$(MKDIRHIER) $(@:d)
