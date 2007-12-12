@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinfo.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:56:40 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:21:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #endif
 
 #define VCL_NEED_BASETSD
-#include <tools/presys.h>
+#include "tools/presys.h"
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #endif
@@ -52,16 +52,20 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
-#include <tools/postsys.h>
+#include "tools/postsys.h"
 
-#include <tools/string.hxx>
-#include <salsys.h>
-#include <salframe.h>
-#include <salinst.h>
-#include <saldata.hxx>
-#include <tools/debug.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/window.hxx>
+#include "tools/string.hxx"
+#include "salsys.h"
+#include "salframe.h"
+#include "salinst.h"
+#include "saldata.hxx"
+#include "tools/debug.hxx"
+#include "vcl/svdata.hxx"
+#include "vcl/window.hxx"
+
+#include "rtl/ustrbuf.hxx"
+
+#include <hash_map>
 
 SalSystem* WinSalInstance::CreateSalSystem()
 {
@@ -161,6 +165,7 @@ bool WinSalSystem::initMonitors()
             DISPLAY_DEVICEW aDev;
             aDev.cb = sizeof( aDev );
             DWORD nDevice = 0;
+            std::hash_map< rtl::OUString, int, rtl::OUStringHash > aDeviceStringCount;
             while( EnumDisplayDevicesW( NULL, nDevice++, &aDev, 0 ) )
             {
                 if( (aDev.StateFlags & DISPLAY_DEVICE_MIRRORING_DRIVER) == 0 ) // sort out non monitors
@@ -169,6 +174,10 @@ bool WinSalSystem::initMonitors()
                     aDev.DeviceString[127] = 0;
                     rtl::OUString aDeviceName( reinterpret_cast<const sal_Unicode *>(aDev.DeviceName) );
                     rtl::OUString aDeviceString( reinterpret_cast<const sal_Unicode *>(aDev.DeviceString) );
+                    if( aDeviceStringCount.find( aDeviceString ) == aDeviceStringCount.end() )
+                        aDeviceStringCount[ aDeviceString ] = 1;
+                    else
+                        aDeviceStringCount[ aDeviceString ]++;
                     m_aDeviceNameToMonitor[ aDeviceName ] = m_aMonitors.size();
                     m_aMonitors.push_back( DisplayMonitor( aDeviceString,
                                                            aDeviceName,
@@ -179,6 +188,24 @@ bool WinSalSystem::initMonitors()
             }
             HDC aDesktopRC = GetDC( NULL );
             EnumDisplayMonitors( aDesktopRC, NULL, ImplEnumMonitorProc, reinterpret_cast<LPARAM>(this) );
+
+            // append monitor numbers to name strings
+            std::hash_map< rtl::OUString, int, rtl::OUStringHash > aDevCount( aDeviceStringCount );
+            unsigned int nMonitors = m_aMonitors.size();
+            for( unsigned int i = 0; i < nMonitors; i++ )
+            {
+                const rtl::OUString& rDev( m_aMonitors[i].m_aName );
+                if( aDeviceStringCount[ rDev ] > 1 )
+                {
+                    int nInstance = aDeviceStringCount[ rDev ] - (-- aDevCount[ rDev ] );
+                    rtl::OUStringBuffer aBuf( rDev.getLength() + 8 );
+                    aBuf.append( rDev );
+                    aBuf.appendAscii( " (" );
+                    aBuf.append( sal_Int32( nInstance ) );
+                    aBuf.append( sal_Unicode(')') );
+                    m_aMonitors[ i ].m_aName = aBuf.makeStringAndClear();
+                }
+            }
         }
     }
     else
