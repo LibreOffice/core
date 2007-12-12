@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 18:18:50 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,7 +340,7 @@ SwFrmFmt *SwDoc::MakeLayoutFmt( RndStdIds eRequest, const SfxItemSet* pSet )
             if( DoesUndo() )
             {
                 ClearRedo();
-                AppendUndo( new SwUndoInsLayFmt( pFmt ));
+                AppendUndo( new SwUndoInsLayFmt( pFmt,0,0 ));
             }
         }
         break;
@@ -635,7 +635,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         if( DoesUndo() )
         {
             ClearRedo();
-            AppendUndo( new SwUndoInsLayFmt( pDest ));
+            AppendUndo( new SwUndoInsLayFmt( pDest,0,0 ));
         }
 
         // sorge dafuer das auch Fly's in Fly's kopiert werden
@@ -677,7 +677,7 @@ SwFrmFmt *SwDoc::CopyLayoutFmt( const SwFrmFmt& rSource,
         if( DoesUndo() )
         {
             ClearRedo();
-            AppendUndo( new SwUndoInsLayFmt( pDest ));
+            AppendUndo( new SwUndoInsLayFmt( pDest,0,0 ));
         }
     }
 
@@ -857,7 +857,9 @@ SwFlyFrmFmt* SwDoc::_MakeFlySection( const SwPosition& rAnchPos,
     if( DoesUndo() )
     {
         ClearRedo();
-        AppendUndo( new SwUndoInsLayFmt( pFmt ));
+        ULONG nNodeIdx = rAnchPos.nNode.GetIndex();
+        xub_StrLen nCntIdx = rAnchPos.nContent.GetIndex();
+        AppendUndo( new SwUndoInsLayFmt( pFmt, nNodeIdx, nCntIdx ));
     }
 
     SetModified();
@@ -1132,7 +1134,7 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
     if( DoesUndo() )
     {
         ClearRedo();
-        AppendUndo( new SwUndoInsLayFmt( pFmt ));
+        AppendUndo( new SwUndoInsLayFmt( pFmt,0,0 ));
     }
 
     SetModified();
