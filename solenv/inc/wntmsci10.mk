@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:42:27 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:15:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -334,7 +334,6 @@ OLEAUT32LIB=oleaut32.lib
 UUIDLIB=uuid.lib
 WINSPOOLLIB=winspool.lib
 IMM32LIB=imm32.lib
-PSPLIB=apsp.lib
 VERSIONLIB=version.lib
 WINMMLIB=winmm.lib
 WSOCK32LIB=wsock32.lib
