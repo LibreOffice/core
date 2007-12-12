@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:06:00 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:20:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ BOOL GtkSalGraphics::bThemeChanged = TRUE;
 BOOL GtkSalGraphics::bNeedPixmapPaint = FALSE;
 BOOL GtkSalGraphics::bGlobalNeedPixmapPaint = FALSE;
 BOOL GtkSalGraphics::bToolbarGripWorkaround = FALSE;
+BOOL GtkSalGraphics::bNeedButtonStyleAsEditBackgroundWorkaround = FALSE;
 
 GtkSalGraphics::~GtkSalGraphics()
 {
@@ -1877,13 +1878,18 @@ static void NWPaintOneEditBox(  int nScreen,
     if ( stateType == GTK_STATE_PRELIGHT )
         stateType = GTK_STATE_NORMAL;
 
-    NWSetWidgetState( gWidgetData[nScreen].gBtnWidget, nState, stateType );
-    NWSetWidgetState( widget, nState, stateType );
-
     // Blueprint needs to paint entry_bg with a Button widget, not an Entry widget to get
     // a nice white (or whatever default color) background
-    gtk_paint_flat_box( gWidgetData[nScreen].gBtnWidget->style, gdkDrawable, stateType, GTK_SHADOW_NONE,
-                        gdkRect, gWidgetData[nScreen].gBtnWidget, "entry_bg",
+    GtkWidget* pBGWidget = widget;
+    if( GtkSalGraphics::bNeedButtonStyleAsEditBackgroundWorkaround )
+    {
+        NWSetWidgetState( gWidgetData[nScreen].gBtnWidget, nState, stateType );
+        pBGWidget = gWidgetData[nScreen].gBtnWidget;
+    }
+    NWSetWidgetState( widget, nState, stateType );
+
+    gtk_paint_flat_box( pBGWidget->style, gdkDrawable, stateType, GTK_SHADOW_NONE,
+                        gdkRect, pBGWidget, "entry_bg",
                         aEditBoxRect.Left(), aEditBoxRect.Top(),
                         aEditBoxRect.GetWidth(), aEditBoxRect.GetHeight() );
     gtk_paint_shadow( widget->style, gdkDrawable, GTK_STATE_NORMAL, GTK_SHADOW_IN,
@@ -2545,6 +2551,14 @@ BOOL GtkSalGraphics::NWPaintGTKToolbar(
         // draw toolbar
         if( nPart == PART_DRAW_BACKGROUND_HORZ || nPart == PART_DRAW_BACKGROUND_VERT )
         {
+            gtk_paint_flat_box( gWidgetData[m_nScreen].gToolbarWidget->style,
+                                gdkDrawable,
+                                (GtkStateType)GTK_STATE_NORMAL,
+                                GTK_SHADOW_NONE,
+                                &clipRect,
+                                gWidgetData[m_nScreen].gToolbarWidget,
+                                "base",
+                                x, y, w, h );
             gtk_paint_box( gWidgetData[m_nScreen].gToolbarWidget->style,
                            gdkDrawable,
                            stateType,
@@ -3270,31 +3284,37 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
         g_value_unset( &aValue );
     }
     #endif
-    if( GetX11SalData()->GetDisplay()->GetServerVendor() == vendor_sun )
+    GtkSettings* pGtkSettings = gtk_settings_get_default();
+    GValue aValue;
+    memset( &aValue, 0, sizeof(GValue) );
+    g_value_init( &aValue, G_TYPE_STRING );
+    g_object_get_property( G_OBJECT(pGtkSettings), "gtk-theme-name", &aValue );
+    const gchar* pThemeName = g_value_get_string( &aValue );
+
+    // default behaviour
+    bNeedPixmapPaint = bGlobalNeedPixmapPaint;
+    bToolbarGripWorkaround = false;
+    bNeedButtonStyleAsEditBackgroundWorkaround = false;
+
+    // setup some workarounds for "blueprint" theme
+    if( pThemeName && strncasecmp( pThemeName, "blueprint", 9 ) == 0 )
     {
-        // #i52570#, #i61532# workaround a weird paint issue;
-        // on a Sunray Xserver sometimes painting buttons and edits
-        // won't work when using the blueprint theme
-        // not reproducible with simpler programs or other themes
-        GtkSettings* pGtkSettings = gtk_settings_get_default();
-        GValue aValue;
-        memset( &aValue, 0, sizeof(GValue) );
-        g_value_init( &aValue, G_TYPE_STRING );
-        g_object_get_property( G_OBJECT(pGtkSettings), "gtk-theme-name", &aValue );
-        const gchar* pThemeName = g_value_get_string( &aValue );
-        if( pThemeName && strncasecmp( pThemeName, "blueprint", 9 ) == 0 )
+        bNeedButtonStyleAsEditBackgroundWorkaround = true;
+        if( GetX11SalData()->GetDisplay()->GetServerVendor() == vendor_sun )
         {
-            bNeedPixmapPaint = true;
-            bToolbarGripWorkaround = true;
+            // #i52570#, #i61532# workaround a weird paint issue;
+            // on a Sunray Xserver sometimes painting buttons and edits
+            // won't work when using the blueprint theme
+            // not reproducible with simpler programs or other themes
+            if( pThemeName && strncasecmp( pThemeName, "blueprint", 9 ) == 0 )
+            {
+                bNeedPixmapPaint = true;
+                bToolbarGripWorkaround = true;
+            }
         }
-        else
-        {
-            bNeedPixmapPaint = bGlobalNeedPixmapPaint;
-            bToolbarGripWorkaround = false;
-        }
-        // clean up
-        g_value_unset( &aValue );
     }
+    // clean up
+    g_value_unset( &aValue );
 }
 
 
