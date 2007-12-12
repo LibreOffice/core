@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkgdi.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:07:00 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:21:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@ public:
     static  BOOL        bNeedPixmapPaint;
     static  BOOL        bGlobalNeedPixmapPaint;
     static  BOOL        bToolbarGripWorkaround;
+    static  BOOL        bNeedButtonStyleAsEditBackgroundWorkaround;
 
     // native widget methods
     virtual BOOL        IsNativeControlSupported( ControlType nType, ControlPart nPart );
