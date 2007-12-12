@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.165 $
-# Date:        $Date: 2007-12-06 17:43:37 $
+# Version:     $Revision: 1.166 $
+# Date:        $Date: 2007-12-12 13:25:12 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1563,6 +1563,7 @@ ToFile( "ANT_LIB",           "@ANT_LIB@",        "e" );
 ToFile( "ANT",               "@ANT@",            "e" );
 ToFile( "JDKLIB",            $JAVA_LIB,          "e" );
 ToFile( "STLPORT4",          $STLPORT4,          "e" );
+ToFile( "STLPORT_VER",       "@STLPORT_VER@",    "e" );
 ToFile( "ASM_PATH",          $ASM_PATH,          "e" );
 ToFile( "BUILD_SOSL",        $BUILD_SOSL,        "e" );
 ToFile( "FRAMEWORKSHOME",    $FRAMEWORKSHOME,    "e" );
@@ -1651,6 +1652,20 @@ ToFile( "GTK_LIBS",          "@GTK_LIBS@",         "e" );
 ToFile( "ENABLE_SYSTRAY_GTK", "@ENABLE_SYSTRAY_GTK@", "e" );
 ToFile( "ENABLE_STATIC_GTK", "@ENABLE_STATIC_GTK@", "e" );
 ToFile( "ENABLE_CAIRO",      "@ENABLE_CAIRO@",     "e" );
+ToFile( "ENABLE_OPENGL",     "@ENABLE_OPENGL@",    "e" );
+ToFile( "ENABLE_REPORTDESIGN","@ENABLE_REPORTDESIGN@","e" );
+ToFile( "SYSTEM_JFREEREPORT","@SYSTEM_JFREEREPORT@","e" );
+ToFile( "JCOMMON_JAR",       "@JCOMMON_JAR@",      "e" );
+ToFile( "SAC_JAR",           "@SAC_JAR@",          "e" );
+ToFile( "LIBXML_JAR",        "@LIBXML_JAR@",       "e" );
+ToFile( "FLUTE_JAR",         "@FLUTE_JAR@",        "e" );
+ToFile( "JFREEREPORT_JAR",   "@JFREEREPORT_JAR@",  "e" );
+ToFile( "LIBLAYOUT_JAR",     "@LIBLAYOUT_JAR@",    "e" );
+ToFile( "LIBLOADER_JAR",     "@LIBLOADER_JAR@",    "e" );
+ToFile( "LIBFORMULA_JAR",    "@LIBFORMULA_JAR@",   "e" );
+ToFile( "LIBREPOSITORY_JAR", "@LIBREPOSITORY_JAR@","e" );
+ToFile( "LIBFONTS_JAR",      "@LIBFONTS_JAR@",     "e" );
+ToFile( "JCOMMON_SERIALIZER_JAR","@JCOMMON_SERIALIZER_JAR@","e" );
 ToFile( "ENABLE_DBUS",       "@ENABLE_DBUS@",      "e" );
 ToFile( "ENABLE_GNOMEVFS",   "@ENABLE_GNOMEVFS@",  "e" );
 ToFile( "ENABLE_KDE",        "@ENABLE_KDE@",       "e" );
@@ -1974,6 +1989,7 @@ ToFile( "SYSTEM_HUNSPELL",   "@SYSTEM_HUNSPELL@",  "e" );
 ToFile( "HUNSPELL_CFLAGS",   "@HUNSPELL_CFLAGS@",  "e" );
 ToFile( "HUNSPELL_LIBS",     "@HUNSPELL_LIBS@",    "e" );
 ToFile( "SYSTEM_HYPH",       "@SYSTEM_HYPH@",      "e" );
+ToFile( "HYPHEN_LIB",        "@HYPHEN_LIB@",       "e" );
 ToFile( "SYSTEM_MYTHES",     "@SYSTEM_MYTHES@",    "e" );
 ToFile( "PAM",               "@PAM@",              "e" );
 ToFile( "NEW_SHADOW_API",    "@NEW_SHADOW_API@",   "e" );
