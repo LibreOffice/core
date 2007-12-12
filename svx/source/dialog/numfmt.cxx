@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:22:21 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:25:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1867,7 +1867,14 @@ long SvxNumberFormatTabPage::PreNotify( NotifyEvent& rNEvt )
 {
     if(rNEvt.GetType()==EVENT_LOSEFOCUS)
     {
-        pLastActivWindow=rNEvt.GetWindow();
+        if ( rNEvt.GetWindow() == dynamic_cast< Window* >( &aEdComment ) && !aEdComment.IsVisible() )
+        {
+            pLastActivWindow = NULL;
+        }
+        else
+        {
+            pLastActivWindow = rNEvt.GetWindow();
+        }
     }
 
     return SfxTabPage::PreNotify( rNEvt );
