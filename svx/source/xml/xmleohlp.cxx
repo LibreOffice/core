@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:29:01 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:19:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -437,11 +437,19 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplReadObject(
 
     String aSrcObjName( rObjName );
     comphelper::EmbeddedObjectContainer& rContainer = mpDocPersist->GetEmbeddedObjectContainer();
-    if( xDocStor != xCntnrStor || pTemp )
+
+    // Is the object name unique?
+    // if the object is already instantiated by GetEmbeddedObject
+    // that means that the duplication is being loaded
+    sal_Bool bDuplicate = rContainer.HasInstantiatedEmbeddedObject( rObjName );
+    DBG_ASSERT( !bDuplicate, "An object in the document is referenced twice!" );
+
+    if( xDocStor != xCntnrStor || pTemp || bDuplicate )
     {
-        // Is the object name unique?
         // TODO/LATER: make this alltogether a method in the EmbeddedObjectContainer
-        if( rContainer.HasEmbeddedObject( rObjName ) )
+
+        // create a unique name for the duplicate object
+        if( bDuplicate )
             rObjName = rContainer.CreateUniqueObjectName();
 
         if( pTemp )
