@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: vg $ $Date: 2007-12-07 13:05:34 $
+#   last change: $Author: kz $ $Date: 2007-12-12 15:38:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ GEN_HID2=TRUE
 # PERL:=@echo
 
 .IF "$(GUI)"=="WNT"
-.IF "$(USE_SHELL)"=="4nt"
+.IF "$(USE_SHELL)"=="4nt" || "$(WRAPCMD)"==""
 PYTHONPATH:=$(PWD)$/$(BIN);$(SOLARLIBDIR);$(SOLARLIBDIR)$/python;$(SOLARLIBDIR)$/python$/lib-dynload
 .ELSE			# "$(USE_SHELL)"=="4nt"
 PYTHONPATH:=$(shell @$(WRAPCMD) echo $(PWD)$/$(BIN):$(SOLARLIBDIR):$(SOLARLIBDIR)$/python:$(SOLARLIBDIR)$/python$/lib-dynload)
