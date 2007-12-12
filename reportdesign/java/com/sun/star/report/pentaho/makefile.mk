@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:42:30 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:14:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,13 @@ nodep=true
 
 #----- compile .java files -----------------------------------------
 
-JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar jcommon-1.0.10.jar libxml-0.9.5.jar jfreereport-0.9.0-05.jar libloader-0.3.4.jar sac.jar liblayout-0.2.6.jar jcommon-serializer-0.1.0.jar libfonts-0.2.6.jar libformula-0.1.8.jar
+JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
+.IF "$(SYSTEM_JFREEREPORT)" == "YES"
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(JCOMMON_JAR)$(PATH_SEPERATOR)$(LIBXML_JAR)$(PATH_SEPERATOR)$(JFREEREPORT_JAR)$(PATH_SEPERATOR)$(LIBLOADER_JAR)$(PATH_SEPERATOR)$(SAC_JAR)$(PATH_SEPERATOR)$(LIBLAYOUT_JAR)$(PATH_SEPERATOR)$(JCOMMON_SERIALIZER_JAR)$(PATH_SEPERATOR)$(LIBFONTS_JAR)$(PATH_SEPERATOR)$(LIBFORMULA_JAR)
+.ELSE
+JARFILES += jcommon-1.0.10.jar libxml-0.9.5.jar jfreereport-0.9.0-05.jar libloader-0.3.4.jar sac.jar liblayout-0.2.6.jar jcommon-serializer-0.1.0.jar libfonts-0.2.6.jar libformula-0.1.8.jar
+.ENDIF
+
 JAVAFILES       := $(shell @$(FIND) . -name "*.java")
 # JAVACLASSFILES	= $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:s/.java/.class/))
 
