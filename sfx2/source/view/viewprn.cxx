@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:45:38 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 15:02:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -718,6 +718,8 @@ void SfxViewShell::ExecPrint_Impl( SfxRequest &rReq )
                     ExecPrint_Impl( rReq );
                     return;
                 }
+
+                pPrinter->SetNextJobIsQuick();
             }
 
             // if "Collate" was checked, the SfxPrinter must handle the CopyCount itself,
