@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 13:15:33 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:22:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ MODULES_WITH_WARNINGS := \
     lingucomponent \
     soldep
 
-CDEFS+=-DSTLPORT_VERSION=400 -DWINVER=0x400 -D_WIN32_IE=0x400
+CDEFS+=-DSTLPORT_VERSION=$(STLPORT_VER) -DWINVER=0x400 -D_WIN32_IE=0x400
 CDEFS+=-D_MT
 
 COMMENTFLAG=/COMMENT:"$(PRJNAME)_$(UPD)_$(VCSID)_"
