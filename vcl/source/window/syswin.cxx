@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:15:01 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:20:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -520,7 +520,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     if ( aTokenStr.Len() )
     {
         rData.SetX( aTokenStr.ToInt32() );
-        nValidMask |= WINDOWSTATE_MASK_X;
+        if( rData.GetX() > -16384 && rData.GetX() < 16384 )
+            nValidMask |= WINDOWSTATE_MASK_X;
+        else
+            rData.SetX( 0 );
     }
     else
         rData.SetX( 0 );
@@ -528,7 +531,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     if ( aTokenStr.Len() )
     {
         rData.SetY( aTokenStr.ToInt32() );
-        nValidMask |= WINDOWSTATE_MASK_Y;
+        if( rData.GetY() > -16384 && rData.GetY() < 16384 )
+            nValidMask |= WINDOWSTATE_MASK_Y;
+        else
+            rData.SetY( 0 );
     }
     else
         rData.SetY( 0 );
@@ -536,7 +542,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     if ( aTokenStr.Len() )
     {
         rData.SetWidth( aTokenStr.ToInt32() );
-        nValidMask |= WINDOWSTATE_MASK_WIDTH;
+        if( rData.GetWidth() > 0 && rData.GetWidth() < 16384 )
+            nValidMask |= WINDOWSTATE_MASK_WIDTH;
+        else
+            rData.SetWidth( 0 );
     }
     else
         rData.SetWidth( 0 );
@@ -544,7 +553,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     if ( aTokenStr.Len() )
     {
         rData.SetHeight( aTokenStr.ToInt32() );
-        nValidMask |= WINDOWSTATE_MASK_HEIGHT;
+        if( rData.GetHeight() > 0 && rData.GetHeight() < 16384 )
+            nValidMask |= WINDOWSTATE_MASK_HEIGHT;
+        else
+            rData.SetHeight( 0 );
     }
     else
         rData.SetHeight( 0 );
@@ -566,7 +578,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     if ( aTokenStr.Len() )
     {
         rData.SetMaximizedX( aTokenStr.ToInt32() );
-        nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_X;
+        if( rData.GetMaximizedX() > -16384 && rData.GetMaximizedX() < 16384 )
+            nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_X;
+        else
+            rData.SetMaximizedX( 0 );
     }
     else
         rData.SetMaximizedX( 0 );
@@ -574,7 +589,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     if ( aTokenStr.Len() )
     {
         rData.SetMaximizedY( aTokenStr.ToInt32() );
-        nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_Y;
+        if( rData.GetMaximizedY() > -16384 && rData.GetMaximizedY() < 16384 )
+            nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_Y;
+        else
+            rData.SetMaximizedY( 0 );
     }
     else
         rData.SetMaximizedY( 0 );
@@ -582,7 +600,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     if ( aTokenStr.Len() )
     {
         rData.SetMaximizedWidth( aTokenStr.ToInt32() );
-        nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_WIDTH;
+        if( rData.GetMaximizedWidth() > 0 && rData.GetMaximizedWidth() < 16384 )
+            nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_WIDTH;
+        else
+            rData.SetMaximizedWidth( 0 );
     }
     else
         rData.SetMaximizedWidth( 0 );
@@ -590,7 +611,10 @@ static void ImplWindowStateFromStr( WindowStateData& rData, const ByteString& rS
     if ( aTokenStr.Len() )
     {
         rData.SetMaximizedHeight( aTokenStr.ToInt32() );
-        nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_HEIGHT;
+        if( rData.GetMaximizedHeight() > 0 && rData.GetMaximizedHeight() < 16384 )
+            nValidMask |= WINDOWSTATE_MASK_MAXIMIZED_HEIGHT;
+        else
+            rData.SetMaximizedHeight( 0 );
     }
     else
         rData.SetMaximizedHeight( 0 );
