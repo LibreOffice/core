@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:13:53 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:20:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -503,32 +503,19 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
     {
         pView->EndAction();
     }
-
-/*  aNewPointer = Pointer(POINTER_TEXT);
-    pViewShell->SetActivePointer(aNewPointer);
-*/
-    ForcePointer(&rMEvt);
-    pWindow->ReleaseMouse();
-
-    if ( !pView->AreObjectsMarked() )
+    else if( !pView->IsAction() )
     {
-        SdrObject* pObj;
-        SdrPageView* pPV;
+        pWindow->ReleaseMouse();
 
-        if ( pView->PickObj(aPnt, pObj, pPV) )
+        if ( !pView->AreObjectsMarked() && rMEvt.GetClicks() < 2 )
         {
-            if ( pView->MarkObj(aPnt, -2, FALSE, rMEvt.IsMod1()) )
-            {
-                UINT16 nSdrObjKind = pObj->GetObjIdentifier();
+            pView->MarkObj(aPnt, -2, FALSE, rMEvt.IsMod1());
 
-                if (nSdrObjKind != OBJ_TEXT &&
-                    nSdrObjKind != OBJ_TITLETEXT &&
-                    nSdrObjKind != OBJ_OUTLINETEXT &&
-                    ! pObj->ISA(SdrTextObj) )
-                {
-//                  pViewShell->GetViewData()->GetDispatcher().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
-                }
-            }
+            SfxDispatcher& rDisp = pViewShell->GetViewData()->GetDispatcher();
+            if ( pView->AreObjectsMarked() )
+                rDisp.Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
+            else
+                rDisp.Execute(aSfxRequest.GetSlot(), SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
         }
     }
 
