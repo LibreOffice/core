@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crstrvl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:30:34 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:22:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1815,7 +1815,7 @@ BOOL SwCrsrShell::SetShadowCrsrPos( const Point& rPt, SwFillMode eFillMode )
                 if( !n && pNextFmt )
                 {
                     *pCurCrsr->GetPoint() = aPos;
-                    GetDoc()->SetTxtFmtColl( *pCurCrsr, pNextFmt, FALSE );
+                    GetDoc()->SetTxtFmtColl( *pCurCrsr, pNextFmt, false );
                     //JP 04.11.97: erstmal keine Folgevorlage der
                     //              Folgevorlage beachten
                     // pNextFmt = pNextFmt->GetNextTxtFmtColl();
