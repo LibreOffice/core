@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:03:41 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:23:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,9 @@
 #endif
 #ifndef _SFX_PROGRESS_HXX //autogen
 #include <sfx2/progress.hxx>
+#endif
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
 #endif
 
 #include "swmodule.hxx"
@@ -2688,23 +2691,29 @@ BOOL SwLayIdle::DoIdleJob( IdleJobType eJob, BOOL bVisAreaOnly )
 {
     //Spellchecken aller Inhalte der Seiten. Entweder nur der sichtbaren
     //Seiten oder eben aller.
+    const ViewShell* pViewShell = pImp->GetShell();
+    const SwViewOption* pViewOptions = pViewShell->GetViewOptions();
+    const SwDoc* pDoc = pViewShell->GetDoc();
+
     switch ( eJob )
     {
         case ONLINE_SPELLING :
-            if( !pImp->GetShell()->GetViewOptions()->IsOnlineSpell() )
+            if( !pViewOptions->IsOnlineSpell() )
                 return FALSE;
             break;
         case AUTOCOMPLETE_WORDS :
-            if( !pImp->GetShell()->GetViewOptions()->IsAutoCompleteWords() ||
-                 pImp->GetShell()->GetDoc()->GetAutoCompleteWords().IsLockWordLstLocked())
+            if( !pViewOptions->IsAutoCompleteWords() ||
+                 pDoc->GetAutoCompleteWords().IsLockWordLstLocked())
                 return FALSE;
             break;
         case WORD_COUNT :
-            if ( !pImp->GetShell()->getIDocumentStatistics()->GetDocStat().bModified )
+            if ( !pViewShell->getIDocumentStatistics()->GetDocStat().bModified )
                 return FALSE;
             break;
         case SMART_TAGS :
-            if ( !SwSmartTagMgr::Get().IsSmartTagsEnabled() )
+            if ( pDoc->GetDocShell()->IsHelpDocument() ||
+                 pDoc->isXForms() ||
+                !SwSmartTagMgr::Get().IsSmartTagsEnabled() )
                 return FALSE;
             break;
         default: ASSERT( false, "Unknown idle job type" )
@@ -2968,11 +2977,14 @@ SwLayIdle::SwLayIdle( SwRootFrm *pRt, SwViewImp *pI ) :
 
         bool bInValid = false;
         const SwViewOption& rVOpt = *pImp->GetShell()->GetViewOptions();
+        const ViewShell* pViewShell = pImp->GetShell();
         // See conditions in DoIdleJob()
-        const BOOL bSpell = rVOpt.IsOnlineSpell();
-        const BOOL bACmplWrd = rVOpt.IsAutoCompleteWords();
-        const BOOL bWordCount = pImp->GetShell()->getIDocumentStatistics()->GetDocStat().bModified;
-        const BOOL bSmartTags = SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
+        const BOOL bSpell     = rVOpt.IsOnlineSpell();
+        const BOOL bACmplWrd  = rVOpt.IsAutoCompleteWords();
+        const BOOL bWordCount = pViewShell->getIDocumentStatistics()->GetDocStat().bModified;
+        const BOOL bSmartTags = !pViewShell->GetDoc()->GetDocShell()->IsHelpDocument() &&
+                                !pViewShell->GetDoc()->isXForms() &&
+                                SwSmartTagMgr::Get().IsSmartTagsEnabled(); // SMARTTAGS
 
         SwPageFrm *pPg = (SwPageFrm*)pRoot->Lower();
         do
