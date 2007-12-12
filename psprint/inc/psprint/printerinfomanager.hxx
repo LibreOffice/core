@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 14:15:57 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 14:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,10 @@ struct PrinterInfo : JobData
     rtl::OUString             m_aComment;
     // a command line to pipe a PS-file to
     rtl::OUString             m_aCommand;
+    // a command line to pipe a PS-file to in case of direct print
+    rtl::OUString             m_aQuickCommand;
     // a list of special features separated by ',' not used by psprint
-    // but assigned from the outside (currently only for "fax")
+    // but assigned from the outside (currently for "fax","pdf=","autoqueue","external_dialog")
     rtl::OUString             m_aFeatures;
     // a mapping of fonts to other fonts.
     // this provides a method for the user
@@ -225,7 +227,7 @@ public:
     // abstract print command
     // returns a stdio FILE* that a postscript file may be written to
     // this may either be a regular file or the result of popen()
-    virtual FILE* startSpool( const rtl::OUString& rPrinterName );
+    virtual FILE* startSpool( const rtl::OUString& rPrinterName, bool bQuickCommand );
     // close the FILE* returned by startSpool and does the actual spooling
     // returns a numerical job id
     virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData );
@@ -234,6 +236,9 @@ public:
     virtual bool addOrRemovePossible() const;
 
     bool getUseIncludeFeature() const { return m_bUseIncludeFeature; }
+
+    // check whether a printer's feature string contains a subfeature
+    bool checkFeatureToken( const rtl::OUString& rPrinterName, const char* pToken ) const;
 };
 
 } // namespace
