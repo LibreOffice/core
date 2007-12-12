@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:38:37 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 14:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,6 +788,11 @@ short PrintDialog::Execute()
         DBG_ERRORFILE( "PrinterSetupDialog::Execute() - No Printer or printer is printing" );
         return FALSE;
     }
+
+    // check if the printer brings up its own dialog
+    // in that case leave the work to that dialog
+    if( mpPrinter->GetCapabilities( PRINTER_CAPABILITIES_EXTERNALDIALOG ) )
+        return TRUE;
 
     Printer::updatePrinters();
 
