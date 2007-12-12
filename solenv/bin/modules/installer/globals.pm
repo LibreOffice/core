@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.80 $
+#   $Revision: 1.81 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 16:29:17 $
+#   last change: $Author: kz $ $Date: 2007-12-12 15:33:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -358,8 +358,13 @@ BEGIN
         $quote = "\'";
         $isunix = 0;
         $iswin = 1;
+        if ( defined $ENV{'WRAPCMD'} && "$ENV{'WRAPCMD'}" ne "" )
+        {
+            $wrapcmd = "guw.exe -env";
+        } else {
+            $wrapcmd = "";
+        }
                 $archiveformat = ".zip";
-        $wrapcmd = $ENV{'WRAPCMD'}." -env ";
         %savedmapping = ();
         %savedrevmapping = ();
         %savedrev83mapping = ();
