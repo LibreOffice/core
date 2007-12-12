@@ -4,9 +4,9 @@
  *
  *  $RCSfile: s_iterator.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-05 15:46:59 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 14:56:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ template <class, class> class const_filter_iterator;
     @collab Storage<>
 */
 template <class ENTITY>
-class iterator : public std::forward_iterator<ENTITY, ptrdiff_t>
+class iterator : public std::iterator<std::forward_iterator_tag, ENTITY>
 {
   public:
     typedef iterator<ENTITY>                            self;
@@ -98,7 +98,8 @@ class iterator : public std::forward_iterator<ENTITY, ptrdiff_t>
     @collab Storage<>
 */
 template <class ENTITY>
-class const_iterator : public std::forward_iterator<const ENTITY, ptrdiff_t>
+class const_iterator :
+    public std::iterator<std::forward_iterator_tag, const ENTITY>
 {
   public:
     typedef const_iterator<ENTITY>                      self;
@@ -149,7 +150,8 @@ class const_iterator : public std::forward_iterator<const ENTITY, ptrdiff_t>
     @collab Storage<>
 */
 template <class ENTITY, class FILTER>
-class filter_iterator : public std::forward_iterator<FILTER, ptrdiff_t>
+class filter_iterator :
+    public std::iterator<std::forward_iterator_tag, FILTER>
 {
   public:
     typedef filter_iterator<ENTITY,FILTER>              self;
@@ -198,7 +200,8 @@ class filter_iterator : public std::forward_iterator<FILTER, ptrdiff_t>
     @collab Storage<>
 */
 template <class ENTITY, class FILTER>
-class const_filter_iterator : public std::forward_iterator<const FILTER, ptrdiff_t>
+class const_filter_iterator :
+    public std::iterator<std::forward_iterator_tag, const FILTER>
 {
   public:
     typedef const_filter_iterator<ENTITY,FILTER>        self;
