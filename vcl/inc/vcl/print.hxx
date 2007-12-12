@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:13:13 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 15:03:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@ class VirtualDevice;
 class Window;
 class ImplQPrinter;
 class RmPrinter;
+struct ImplPrivatePrinterData;
 
 namespace com { namespace sun { namespace star { namespace uno {
     class Any;
@@ -239,7 +240,7 @@ class VCL_DLLPUBLIC Printer : public OutputDevice
     friend class ImplQPrinter;
 
 private:
-    void*                       mpPrinterData_NotUsedYet;
+    ImplPrivatePrinterData*     mpPrinterData;
     SalInfoPrinter*             mpInfoPrinter;
     SalPrinter*                 mpPrinter;
     Printer*                    mpJobPrinter;
@@ -286,13 +287,12 @@ private:
     SAL_DLLPRIVATE void         ImplUpdateFontList();
     SAL_DLLPRIVATE void         ImplFindPaperFormatForUserSize( JobSetup& );
     DECL_DLLPRIVATE_LINK(       ImplDestroyPrinterAsync, void* );
-//#if 0 // _SOLAR__PRIVATE
 public:
     SAL_DLLPRIVATE void         ImplEndPrint();
+    SAL_DLLPRIVATE void         ImplUpdateQuickStatus();
 private:
     SAL_DLLPRIVATE              Printer( const Printer& rPrinter );
     SAL_DLLPRIVATE Printer&     operator =( const Printer& rPrinter );
-//#endif
 
 #ifdef _SPOOLPRINTER_EXT
 public:
@@ -428,12 +428,23 @@ public:
 
     void                        Compat_OldPrinterMetrics( bool bSet );
 
+    /** Notify that the next StartJob belongs to a UI less "direct print" job
+    *
+    *   deprecated: the canonical way to notify a UI less job is to set the
+    *   JobSetup value "IsQuickJob" to "true". If set at all, the "IsQuickJob" value
+    *   on JobSetup will be preferred. However if no "IsQuickJob" value is set,
+    *   setting SetNextJobIsQuick will cause the following StartJob to set this value
+    *   to "true" in the current JobSetup.
+    */
+    void                        SetNextJobIsQuick();
+
     /** checks the printer list and updates it necessary
     *
     *   sends a DataChanged event of type DATACHANGED_PRINTER
     *   if the printer list changed
     */
     static void updatePrinters();
+
 };
 
 #endif  // _SV_PRINT_HXX
