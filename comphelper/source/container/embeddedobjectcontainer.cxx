@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 14:09:53 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:20:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,6 +318,15 @@ sal_Bool EmbeddedObjectContainer::HasEmbeddedObject( const uno::Reference < embe
     }
 
     return sal_False;
+}
+
+sal_Bool EmbeddedObjectContainer::HasInstantiatedEmbeddedObject( const ::rtl::OUString& rName )
+{
+    // allows to detect whether the object was already instantiated
+    // currently the filter instantiate it on loading, so this method allows
+    // to avoid objects pointing to the same persistence
+    EmbeddedObjectContainerNameMap::iterator aIt = pImpl->maObjectContainer.find( rName );
+    return ( aIt != pImpl->maObjectContainer.end() );
 }
 
 ::rtl::OUString EmbeddedObjectContainer::GetEmbeddedObjectName( const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& xObj )
