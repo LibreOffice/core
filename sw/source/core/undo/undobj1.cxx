@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:31:04 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,11 +272,10 @@ void SwUndoFlyBase::DelFly( SwDoc* pDoc )
 
 // ----- Undo-InsertFly ------
 
-SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat )
-    : SwUndoFlyBase( pFormat,
-                     RES_DRAWFRMFMT == pFormat->Which() ?
-                                          UNDO_INSDRAWFMT :
-                                          UNDO_INSLAYFMT )
+SwUndoInsLayFmt::SwUndoInsLayFmt( SwFrmFmt* pFormat, ULONG nNodeIdx, xub_StrLen nCntIdx )
+    : SwUndoFlyBase( pFormat, RES_DRAWFRMFMT == pFormat->Which() ?
+                                            UNDO_INSDRAWFMT : UNDO_INSLAYFMT ),
+    mnCrsrSaveIndexPara( nNodeIdx ), mnCrsrSaveIndexPos( nCntIdx )
 {
     const SwFmtAnchor& rAnchor = pFrmFmt->GetAnchor();
     nRndId = static_cast<USHORT>(rAnchor.GetAnchorId());
@@ -311,9 +310,25 @@ void SwUndoInsLayFmt::Undo( SwUndoIter& rUndoIter )
 {
     const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
     if( rCntnt.GetCntntIdx() )  // kein Inhalt
-        RemoveIdxFromSection( rUndoIter.GetDoc(),
+    {
+        bool bRemoveIdx = true;
+        if( mnCrsrSaveIndexPara > 0 )
+        {
+            SwTxtNode *pNode = rUndoIter.GetDoc().GetNodes()[mnCrsrSaveIndexPara]->GetTxtNode();
+            if( pNode )
+            {
+                SwNodeIndex aIdx( rUndoIter.GetDoc().GetNodes(), rCntnt.GetCntntIdx()->GetIndex() );
+                SwNodeIndex aEndIdx( rUndoIter.GetDoc().GetNodes(), aIdx.GetNode().EndOfSectionIndex() );
+                SwIndex aIndex( pNode, mnCrsrSaveIndexPos );
+                SwPosition aPos( *pNode, aIndex );
+                rUndoIter.GetDoc().CorrAbs( aIdx, aEndIdx, aPos, TRUE );
+                bRemoveIdx = false;
+            }
+        }
+        if( bRemoveIdx )
+            RemoveIdxFromSection( rUndoIter.GetDoc(),
                                 rCntnt.GetCntntIdx()->GetIndex() );
-
+    }
     DelFly( &rUndoIter.GetDoc() );
 }
 
