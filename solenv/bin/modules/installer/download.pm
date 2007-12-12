@@ -4,9 +4,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 14:19:05 $
+#   last change: $Author: kz $ $Date: 2007-12-12 14:54:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -421,6 +421,12 @@ sub get_downloadname_language
     if ( $languages =~ /^\s*en-US\s*$/ )
     {
         $languages = "";
+    }
+
+
+    if ( length ($languages) > $installer::globals::max_lang_length )
+    {
+        $languages = 'multi';
     }
 
     return $languages;
@@ -968,11 +974,17 @@ sub put_language_list_into_template
     my ($templatefile, $languagesarrayref) = @_;
 
     my $alllangstring = "";
+    my %nsislangs;
 
     for ( my $i = 0; $i <= $#{$languagesarrayref}; $i++ )
     {
         my $onelanguage = ${$languagesarrayref}[$i];
         my $nsislanguage = nsis_language_converter($onelanguage);
+        $nsislangs{$nsislanguage}++;
+    }
+
+    foreach my $nsislanguage ( keys(%nsislangs) )
+    {
         # Syntax: !insertmacro MUI_LANGUAGE "English"
         my $langstring = "\!insertmacro MUI_LANGUAGE_PACK " . $nsislanguage . "\n";
         $alllangstring = $alllangstring . $langstring;
