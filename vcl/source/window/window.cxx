@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.267 $
+ *  $Revision: 1.268 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:50:48 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -767,7 +767,7 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
     Window*     pRealParent = pParent;
 
     // 3D-Look vererben
-    if ( !mpWindowImpl->mbOverlapWin && (pParent->GetStyle() & WB_3DLOOK) )
+    if ( !mpWindowImpl->mbOverlapWin && pParent && (pParent->GetStyle() & WB_3DLOOK) )
         nStyle |= WB_3DLOOK;
 
     // Wenn wir einen Border haben, muessen wir ein BorderWindow anlegen
@@ -778,6 +778,11 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, SystemParentData* pSyste
         pBorderWin->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
         mpWindowImpl->mpBorderWindow  = pBorderWin;
         pParent = mpWindowImpl->mpBorderWindow;
+    }
+    else if( !mpWindowImpl->mbFrame && ! pParent )
+    {
+        mpWindowImpl->mbOverlapWin  = TRUE;
+        mpWindowImpl->mbFrame = TRUE;
     }
 
     // insert window in list
@@ -3021,34 +3026,29 @@ void Window::ImplScroll( const Rectangle& rRect,
 
     if ( bScrollChilds )
     {
-        Rectangle aDestRect( rRect );
         Window* pWindow = mpWindowImpl->mpFirstChild;
         while ( pWindow )
         {
-            Rectangle aWinRect( Point( pWindow->mnOutOffX, pWindow->mnOutOffY ),
-                                Size( pWindow->mnOutWidth, pWindow->mnOutHeight ) );
-            if ( aDestRect.IsOver( aWinRect ) )
-            {
-                pWindow->mpWindowImpl->mnX        += nHorzScroll;
-                pWindow->mpWindowImpl->maPos.X()  += nHorzScroll;
-                pWindow->mpWindowImpl->mnY        += nVertScroll;
-                pWindow->mpWindowImpl->maPos.Y()  += nVertScroll;
-                if ( pWindow->ImplUpdatePos() )
-                    pWindow->ImplUpdateSysObjPos();
-                if ( pWindow->IsReallyVisible() )
-                    pWindow->ImplSetClipFlag();
-                if ( pWindow->mpWindowImpl->mpClientWindow )
-                    pWindow->mpWindowImpl->mpClientWindow->mpWindowImpl->maPos = pWindow->mpWindowImpl->maPos;
+            pWindow->mpWindowImpl->mnX        += nHorzScroll;
+            pWindow->mpWindowImpl->maPos.X()  += nHorzScroll;
+            pWindow->mpWindowImpl->mnY        += nVertScroll;
+            pWindow->mpWindowImpl->maPos.Y()  += nVertScroll;
+            if ( pWindow->ImplUpdatePos() )
+                pWindow->ImplUpdateSysObjPos();
+            if ( pWindow->IsReallyVisible() )
+                pWindow->ImplSetClipFlag();
+            if ( pWindow->mpWindowImpl->mpClientWindow )
+                pWindow->mpWindowImpl->mpClientWindow->mpWindowImpl->maPos = pWindow->mpWindowImpl->maPos;
 
-                if ( pWindow->IsVisible() )
-                {
-                    pWindow->ImplCallMove();
-                }
-                else
-                {
-                    pWindow->mpWindowImpl->mbCallMove = TRUE;
-                }
+            if ( pWindow->IsVisible() )
+            {
+                pWindow->ImplCallMove();
             }
+            else
+            {
+                pWindow->mpWindowImpl->mbCallMove = TRUE;
+            }
+
             pWindow = pWindow->mpWindowImpl->mpNext;
         }
     }
