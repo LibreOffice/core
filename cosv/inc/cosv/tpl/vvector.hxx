@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vvector.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 17:45:03 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 15:04:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,9 +208,8 @@ class VirtualVector<XX,PTRDEL>::
 
             // This derivation provides type information for the STL
             // It introduces the types "value_type" and "difference_type".
-            : public std::random_access_iterator<
-                        const XX,
-                        typename VirtualVector<XX,PTRDEL>::difference_type>
+            : public std::iterator<std::random_access_iterator_tag,
+                        const XX>
 {
   public:
     typedef VirtualVector<XX,PTRDEL>                            my_container;
@@ -304,9 +303,8 @@ class VirtualVector<XX,PTRDEL>::
 
             // This derivation provides type information for the STL
             // It introduces the types "value_type" and "difference_type".
-            : public std::random_access_iterator<
-                        XX,
-                        typename VirtualVector<XX,PTRDEL>::difference_type>
+            : public std::iterator<std::random_access_iterator_tag,
+                        XX>
 {
   public:
     typedef VirtualVector<XX,PTRDEL>                            my_container;
