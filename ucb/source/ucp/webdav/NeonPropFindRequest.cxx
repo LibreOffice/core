@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:13:17 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 15:33:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,14 +176,19 @@ extern "C" int NPFR_propfind_iter( void* userdata,
 
 // -------------------------------------------------------------------
 extern "C" void NPFR_propfind_results( void* userdata,
+#if NEON_VERSION >= 0260
                                        const ne_uri* href_uri,
+#else
+                                       const char* href,
+#endif
                                        const NeonPropFindResultSet* set )
 {
     // @@@ href is not the uri! DAVResource ctor wants uri!
 
+#if NEON_VERSION >= 0260
     // href should be free'd? says header ...
     char* href = ne_uri_unparse(href_uri);
-
+#endif
     DAVResource theResource(
                         OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
 
@@ -213,14 +218,19 @@ extern "C" int NPFR_propnames_iter( void* userdata,
 
 // -------------------------------------------------------------------
 extern "C" void NPFR_propnames_results( void* userdata,
+#if NEON_VERSION >= 0260
                                         const ne_uri* href_uri,
+#else
+                                        const char* href,
+#endif
                                         const NeonPropFindResultSet* results )
 {
     // @@@ href is not the uri! DAVResourceInfo ctor wants uri!
 
+#if NEON_VERSION >= 0260
     // href should be free'd? says header ...
     char* href = ne_uri_unparse(href_uri);
-
+#endif
     // Create entry for the resource.
     DAVResourceInfo theResource(
                         OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
