@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.223 $
+#   $Revision: 1.224 $
 #
-#   last change: $Author: hjs $ $Date: 2007-12-07 17:06:06 $
+#   last change: $Author: kz $ $Date: 2007-12-12 15:34:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@ MKFILENAME:=SETTINGS.MK
 # the initial dmake 4.1PL0 (unfortunately called 4.10) version and are
 # tested implicitly by the construction below.
 .IF $(MAKEVERSION:s/-cvs//:s/.//)<=410
-.ERROR : ; @echo Forced error: dmake version 4.10 or newer is needed!
+.ERROR : ; @echo Forced error: dmake version 4.11 or newer is needed!
 force_dmake_to_error
 .ENDIF
 
@@ -930,7 +930,7 @@ SCPLINKFLAGS+=-v $(SCPLINKVERSION)
 .IF "$(make_srs_deps)"!=""
 RSC=$(WRAPCMD) rscdep
 .ELSE # "$(make_srs_deps)"!=""
-RSC=$(WRAPCMD) rsc
+RSC=$(FLIPCMD) rsc
 .ENDIF # "$(make_srs_deps)"!=""
 
 #new
