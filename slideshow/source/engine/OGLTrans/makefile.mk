@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-09 10:17:54 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:26:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,12 +52,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Common ----------------------------------------------------------
 #.IF "$(GUI)"=="UNX"
-
-#.IF "$(SYSTEM_OPENGL)" == "YES"
-CFLAGS+=$(OGLTRANS_CFLAGS)
-#.ELSE
-#CFLAGS+=-I$(SOLARINCDIR)/OGLTrans
-#.ENDIF
 
 SLOFILES = \
         $(SLO)$/OGLTrans_TransitionImpl.obj \
