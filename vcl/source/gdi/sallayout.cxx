@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 10:02:43 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:21:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -457,6 +457,27 @@ bool ImplLayoutRuns::PosIsInRun( int nCharPos ) const
         return false;
     return true;
 }
+
+bool ImplLayoutRuns::PosIsInAnyRun( int nCharPos ) const
+{
+    bool bRet = false;
+    int nRunIndex = mnRunIndex;
+
+    ImplLayoutRuns *pThis = const_cast<ImplLayoutRuns*>(this);
+
+    pThis->ResetPos();
+
+    for (size_t i = 0; i < maRuns.size(); i+=2)
+    {
+        if( (bRet = PosIsInRun( nCharPos )) == true )
+            break;
+        pThis->NextRun();
+    }
+
+    pThis->mnRunIndex = nRunIndex;
+    return bRet;
+}
+
 
 // -----------------------------------------------------------------------
 
@@ -1540,11 +1561,18 @@ void GenericSalLayout::SortGlyphItems()
 
 MultiSalLayout::MultiSalLayout( SalLayout& rBaseLayout )
 :   SalLayout(),
-    mnLevel( 1 )
+    mnLevel( 1 ),
+    mbInComplete( false )
 {
     //maFallbackRuns[0].Clear();
     mpLayouts[ 0 ]  = &rBaseLayout;
     mnUnitsPerPixel = rBaseLayout.GetUnitsPerPixel();
+}
+
+void MultiSalLayout::SetInComplete(bool bInComplete)
+{
+    mbInComplete = bInComplete;
+    maFallbackRuns[mnLevel-1] = ImplLayoutRuns();
 }
 
 // -----------------------------------------------------------------------
@@ -1576,7 +1604,8 @@ bool MultiSalLayout::LayoutText( ImplLayoutArgs& rArgs )
 {
     if( mnLevel <= 1 )
         return false;
-    maFallbackRuns[ mnLevel-1 ] = rArgs.maRuns;
+    if (!mbInComplete)
+        maFallbackRuns[ mnLevel-1 ] = rArgs.maRuns;
     return true;
 }
 
@@ -1675,7 +1704,12 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
         // remove unused parts of component
         if( n > 0 )
-            mpLayouts[n]->Simplify( false );
+        {
+            if (mbInComplete && (n == mnLevel-1))
+                mpLayouts[n]->Simplify( true );
+            else
+                mpLayouts[n]->Simplify( false );
+        }
 
         // prepare merging components
         nStartNew[ nLevel ] = nStartOld[ nLevel ] = 0;
@@ -1710,7 +1744,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
     {
         // find best fallback level
         for( n = 0; n < nLevel; ++n )
-            if( nValid[n] && !maFallbackRuns[n].PosIsInRun( nActiveCharPos ) )
+            if( nValid[n] && !maFallbackRuns[n].PosIsInAnyRun( nActiveCharPos ) )
                 // fallback level n wins when it requested no further fallback
                 break;
         int nFBLevel = n;
@@ -1732,7 +1766,10 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
         if( n > 0 )
         {
             // drop the NotDef glyphs in the base layout run if a fallback run exists
-            while( maFallbackRuns[ n-1 ].PosIsInRun( nCharPos[0] ) )
+            while (
+                    (maFallbackRuns[ n-1 ].PosIsInRun( nCharPos[0] ) ) &&
+                    (!maFallbackRuns[ n ].PosIsInAnyRun( nCharPos[0] ) )
+                  )
             {
                 mpLayouts[0]->DropGlyph( nStartOld[0] );
                 nStartOld[0] = nStartNew[0];
@@ -1752,6 +1789,7 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
 
             // proceed to next glyph
             nStartOld[n] = nStartNew[n];
+            int nOrigCharPos = nCharPos[n];
             nValid[n] = mpLayouts[n]->GetNextGlyphs( 1, &nDummy, aPos,
                 nStartNew[n], &nGlyphAdv[n], &nCharPos[n] );
 
@@ -1762,6 +1800,23 @@ void MultiSalLayout::AdjustLayout( ImplLayoutArgs& rArgs )
                 if( n >= nLevel-1 )
                     --nLevel;
                 break;
+            }
+
+            //If the next character is one which belongs to the next level, then we
+            //are finished here for now, and we'll pick up after the next level has
+            //been processed
+            if ((n+1 < nLevel) && (nCharPos[n] != nOrigCharPos))
+            {
+                if (nOrigCharPos < nCharPos[n])
+                {
+                    if (nCharPos[n+1] > nOrigCharPos && (nCharPos[n+1] < nCharPos[n]))
+                        break;
+                }
+                else if (nOrigCharPos > nCharPos[n])
+                {
+                    if (nCharPos[n+1] > nCharPos[n] && (nCharPos[n+1] < nOrigCharPos))
+                        break;
+                }
             }
 
             // break at end of layout run
