@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-20 14:20:33 $
+#   last change: $Author: kz $ $Date: 2007-12-12 15:03:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,11 @@ TST:
 
 .IF "$(SOLAR_JAVA)"=="TRUE"	
 .IF "$(ANT_HOME)"!="NO_ANT_HOME"
+.IF "$(JDK)"=="gcj"
+ANT_FLAGS+=-Dbuild.source=1.5
+.ELSE
+ANT_FLAGS+=-Dbuild.source=1.3
+.ENDIF
 ALLTAR: ANTBUILD
 .ENDIF
 .ENDIF
