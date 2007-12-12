@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.79 $
+#   $Revision: 1.80 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:46:17 $
+#   last change: $Author: kz $ $Date: 2007-12-12 15:34:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,17 @@
 # setup INCLUDE variable for use by VC++
 .IF "$(GUI)$(COM)"=="WNTMSC"
 .IF "$(EXT_USE_STLPORT)"==""
+.IF "$(WRAPCMD)"==""
+INCLUDE!:=$(subst,$/stl, $(SOLARINC))
+.ELSE
 INCLUDE!:=$(shell @$(4nt_force_shell)$(WRAPCMD) echo $(subst,$/stl, $(SOLARINC)))
+.ENDIF                  # "$(WRAPCMD)"==""
+.ELSE			# "$(EXT_USE_STLPORT)"==""
+.IF "$(WRAPCMD)"==""
+INCLUDE!:=$(SOLARINC)
 .ELSE
 INCLUDE!:=$(shell @$(4nt_force_shell)$(WRAPCMD) echo $(SOLARINC))
+.ENDIF                  # "$(WRAPCMD)"==""
 .ENDIF			# "$(EXT_USE_STLPORT)"==""
 INCLUDE!:=$(INCLUDE:s/ -I/;/)
 .EXPORT : INCLUDE
@@ -326,7 +334,7 @@ create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES) $(PACKAGE_DIR)$
 
 create_clean : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
     @echo done
-    
+
 patch : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
     @echo done
 
