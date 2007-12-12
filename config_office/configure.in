@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-12-12 13:24:44 $
+dnl * Date: $Date: 2007-12-12 14:54:33 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.233 $ )
+AC_REVISION( $Revision: 1.234 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -264,6 +264,11 @@ AC_ARG_WITH(myspell-dicts,
                           installation set, for people building for specific
                           distributions where the myspell dictionaries are
                           installed from other sources
+],,)
+AC_ARG_WITH(writer2latex,
+[  --without-writer2latex Removes writer2latex from openoffice.org installation
+                          set, for people building for specific distributions
+                          where writer2latex is known to be already available
 ],,)
 AC_ARG_WITH(nas,
 [  --without-nas           Build without nas support
@@ -5418,6 +5423,20 @@ else
 fi
 AC_SUBST(WITHOUT_AFMS)
 
+dnl ===================================================================
+dnl Test whether to include writer2latex
+dnl ===================================================================
+AC_MSG_CHECKING([whether to include writer2latex])
+if test "$with_writer2latex" != "no" ; then
+  AC_MSG_RESULT([yes])
+  WITH_WRITER2LATEX=YES
+else
+  AC_MSG_RESULT([no])
+  WITH_WRITER2LATEX=NO
+  SCPDEFS="$SCPDEFS -DWITHOUT_WRITER2LATEX"
+fi
+AC_SUBST(WITH_WRITER2LATEX)
+
 AC_SUBST(SCPDEFS)
 
 AC_MSG_CHECKING([whether and how to use Xinerama])
@@ -5550,7 +5569,10 @@ EOF
   if test $? = 0 && test -f ./conftest.class ; then
     AC_MSG_RESULT([Ant works]) 
     if test -z "$WITH_ANT_HOME"; then
-        ANT_HOME=`echo $ANT | $SED -n "s/\/bin\/ant.*\$//p"`
+        ANT_HOME=`$ANT -diagnostics | $EGREP "ant.home :" | $SED -e "s#ant.home : ##g"`
+        if test -z "$ANT_HOME"; then
+            ANT_HOME=`echo $ANT | $SED -n "s/\/bin\/ant.*\$//p"`
+        fi
     else
         ANT_HOME="$WITH_ANT_HOME"
     fi
