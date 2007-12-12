@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsogs.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:11:46 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:22:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@ SOLAR_JAVA=TRUE
 JAVAFLAGSDEBUG=-g
 
 # _PTHREADS is needed for the stl
-CDEFS+=-D_PTHREADS -D_REENTRANT -DSYSV -DSUN -DSUN4 -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=400 -D_USE_NAMESPACE=1 
+CDEFS+=-D_PTHREADS -D_REENTRANT -DSYSV -DSUN -DSUN4 -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=$(STLPORT_VER) -D_USE_NAMESPACE=1 
 
 
 .IF "$(SOLAR_JAVA)"!=""
@@ -119,8 +119,13 @@ STDSHLCUIMT=$(DYNAMIC) -lpthread -lthread -lm
 
 STDLIBGUIMT+=-lX11
 
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=$(DYNAMIC) -lstlport
+LIBSTLPORTST=$(STATIC) -lstlport $(DYNAMIC)
+.ELSE
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
+.ENDIF
 
 LIBMGR=ar
 LIBFLAGS=-r
