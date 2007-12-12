@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:39:40 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 15:00:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1121,7 +1121,13 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
             bMergeLock = TRUE;
             if(rOpt.IsPrintProspect())
             {
-                if( pPrt->IsJobActive() || pPrt->StartJob( rOpt.GetJobName() ))
+                if( ! pPrt->IsJobActive() )
+                {
+                    pPrt->SetJobValue( String( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ),
+                                       String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
+                    pPrt->StartJob( rOpt.GetJobName() );
+                }
+                if( pPrt->IsJobActive() )
                 {
                     pSh->PrintProspect( rOpt, rProgress, rOpt.IsPrintProspect_RTL() );
                     bRet = TRUE;
