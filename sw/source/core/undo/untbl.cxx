@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 14:50:50 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:25:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -546,8 +546,8 @@ void SwUndoTblToTxt::Undo( SwUndoIter& rUndoIter )
     SwNode2Layout aNode2Layout( aFrmIdx.GetNode() );
 
     // erzeuge die TabelleNode Structur
-    SwTableNode* pTblNd = rDoc.GetNodes().UndoTableToText( nSttNd, nEndNd,
-                                                            *pBoxSaves );
+    SwTableNode* pTblNd = rDoc.GetNodes().UndoTableToText( nSttNd, nEndNd, *pBoxSaves );
+    pTblNd->GetTable().SetTableModel( pTblSave->IsNewModel() );
     SwTableFmt* pTableFmt = rDoc.MakeTblFrmFmt( sTblNm, rDoc.GetDfltFrmFmt() );
     pTableFmt->Add( &pTblNd->GetTable() );      // das Frame-Format setzen
     pTblNd->GetTable().SetRowsToRepeat( nHdlnRpt );
