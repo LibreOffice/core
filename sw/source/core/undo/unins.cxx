@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unins.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 18:19:51 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:25:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1147,7 +1147,7 @@ void SwUndoInsertLabel::SetFlys( SwFrmFmt& rOldFly, SfxItemSet& rChgSet,
         rOldFly.SetAttr( rChgSet );
         if( aTmp.pUndo )
             OBJECT.pUndoAttr = aTmp.pUndo;
-        OBJECT.pUndoFly = new SwUndoInsLayFmt( &rNewFly );
+        OBJECT.pUndoFly = new SwUndoInsLayFmt( &rNewFly,0,0 );
     }
 }
 
