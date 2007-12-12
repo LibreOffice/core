@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerjob.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:23:13 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 14:55:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@ private:            // private data
     double          mfYScale;
 
     sal_Int32       mnErrorCode;
+    bool            m_bQuickJob;
 
 private:            // private methods
 
@@ -132,13 +133,17 @@ public:
      *  rSetupData: JobData that apply to this job
      *  pGraphics: the graphics used to print this job;
      *             this graphics must live until End/AbortJob has returned
+     *  bIsQuickJob: the job was started as "direct print" meaning
+     *               the quick command for spooling should be used instead
+     *               of the normal command
      */
     sal_Bool        StartJob (const rtl::OUString& rFileName,
                               int nMode,
                               const rtl::OUString& rJobName,
                               const rtl::OUString& rAppName,
                               const JobData& rSetupData,
-                              PrinterGfx* pGraphics
+                              PrinterGfx* pGraphics,
+                              bool bIsQuickJob
                               );
     sal_Bool        EndJob ();
 
