@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:01:01 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:19:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #endif
 
 #include <vector>
+#include <list>
 #include <set>
 
 class Size;
@@ -169,9 +170,27 @@ public:
     const String&       GetFontName() const     { return maFontName; }
 };
 
-// ----------------------
-// - ImplFontSubstEntry -
-// ----------------------
+// ------------------------
+// - ImplFontSubstitution -
+// ------------------------
+// nowadays these substitutions are needed for backward compatibility and tight platform integration:
+// - substitutions from configuration entries (Tools->Options->FontReplacement and/or fontconfig)
+// - device specific substitutions (e.g. for PS printer builtin fonts)
+// - substitutions for missing fonts defined by configuration entries (generic and/or platform dependent fallbacks)
+// - substitutions for missing fonts defined by multi-token fontnames (e.g. fontname="SpecialFont;FallbackA;FallbackB")
+// - substitutions for incomplete fonts (implicit, generic, EUDC and/or platform dependent fallbacks)
+// - substitutions for missing symbol fonts by translating code points into other symbol fonts
+
+class ImplFontSubstitution
+{
+    // TODO: there is more commonality between the different substitutions
+protected:
+    virtual ~ImplFontSubstitution() {}
+};
+
+// ImplDirectFontSubstitution is for Tools->Options->FontReplacement and PsPrinter substitutions
+// The clss is just a simple port of the unmaintainable manual-linked-list based mechanism
+// TODO: get rid of this class when the Tools->Options->FontReplacement tabpage is gone for good
 
 struct ImplFontSubstEntry
 {
@@ -180,7 +199,44 @@ struct ImplFontSubstEntry
     String                  maSearchName;
     String                  maSearchReplaceName;
     USHORT                  mnFlags;
-    ImplFontSubstEntry*     mpNext;
+
+    ImplFontSubstEntry(  const String& rFontName, const String& rSubstFontName, USHORT nSubstFlags );
+};
+
+class ImplDirectFontSubstitution
+:   public ImplFontSubstitution
+{
+private:
+    typedef std::list<ImplFontSubstEntry> FontSubstList;
+    FontSubstList maFontSubstList;
+public:
+    void    AddFontSubstitute( const String& rFontName, const String& rSubstName, USHORT nFlags );
+    void    RemoveFontSubstitute( int nIndex );
+    bool    GetFontSubstitute( int nIndex, String& rFontName, String& rSubstName, USHORT& rFlags ) const;
+    int     GetFontSubstituteCount() const { return maFontSubstList.size(); };
+    bool    Empty() const { return maFontSubstList.empty(); }
+    void    Clear() { maFontSubstList.clear(); }
+
+    bool    FindFontSubstitute( String& rSubstName, const String& rFontName, USHORT nFlags ) const;
+};
+
+// PreMatchFontSubstitution
+// abstracts the concept of a configured font substitution
+// before the availability of the originally selected font has been checked
+class ImplPreMatchFontSubstitution
+:   public ImplFontSubstitution
+{
+public:
+    virtual bool FindFontSubstitute( ImplFontSelectData& ) const = 0;
+};
+
+// ImplGlyphFallbackFontSubstitution
+// abstracts the concept of finding the best font to support an incomplete font
+class ImplGlyphFallbackFontSubstitution
+:   public ImplFontSubstitution
+{
+public:
+    virtual bool FindFontSubstitute( ImplFontSelectData&, rtl::OUString& rMissingCodes ) const = 0;
 };
 
 // -----------------
@@ -209,11 +265,12 @@ public:
                         ImplFontCache( bool bPrinter );
                         ~ImplFontCache();
 
-    ImplFontEntry*      Get( ImplDevFontList* pFontList,
-                             const Font& rFont, const Size& rSize, ImplFontSubstEntry* pDevSpecific );
-    ImplFontEntry*      GetFallback( ImplDevFontList* pFontList,
-                                     const Font& rFont, const Size& rSize,
-                                     int nFallbackLevel );
+    ImplFontEntry*      GetFontEntry( ImplDevFontList*,
+                             const Font&, const Size& rPixelSize, ImplDirectFontSubstitution* pDevSpecific );
+    ImplFontEntry*      GetFontEntry( ImplDevFontList*,
+                    ImplFontSelectData&, ImplDirectFontSubstitution* pDevSpecific );
+    ImplFontEntry*      GetGlyphFallbackFont( ImplDevFontList*, ImplFontSelectData&,
+                            int nFallbackLevel, rtl::OUString& rMissingCodes );
     void                Release( ImplFontEntry* );
     void                Invalidate();
 };
@@ -231,7 +288,7 @@ struct ImplOutDevData
     VirtualDevice*              mpRotateDev;
     vcl::ControlLayoutData*     mpRecordLayout;
     Rectangle                   maRecordRect;
-    ImplFontSubstEntry*         mpFirstFontSubstEntry;
+    ImplDirectFontSubstitution      maDevFontSubst;
 
     // #i75163#
     basegfx::B2DHomMatrix*      mpViewTransform;
