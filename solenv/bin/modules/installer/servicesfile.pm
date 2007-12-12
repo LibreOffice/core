@@ -4,9 +4,9 @@
 #
 #   $RCSfile: servicesfile.pm,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-26 11:26:52 $
+#   last change: $Author: kz $ $Date: 2007-12-12 15:34:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ sub register_unocomponents
         {
             my @regcompoutput = ();
 
-            my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -r $servicesfile -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $allvariableshashref->{'NATIVESERVICESURLPREFIX'} . $installer::globals::quote . " 2\>\&1 |";
+            my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -r ".fix_cygwin_path($servicesfile)." -c "  . $installer::globals::quote . $filestring . $installer::globals::quote . " -wop=" . $installer::globals::quote . $allvariableshashref->{'NATIVESERVICESURLPREFIX'} . $installer::globals::quote . " 2\>\&1 |";
 
             open (REG, "$systemcall");
             while (<REG>) {push(@regcompoutput, $_); }
@@ -219,7 +219,7 @@ sub register_javacomponents
             {
                 my @regcompoutput = ();
 
-                my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -br $regcomprdb -r $servicesfile -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -wop=" . $installer::globals::quote . $allvariableshashref->{'JAVASERVICESURLPREFIX'} . $installer::globals::quote ." -env:URE_INTERNAL_JAVA_DIR=" . $installer::globals::quote . make_file_url($$ure_internal_java_dir_ref) . $installer::globals::quote . " 2\>\&1 |";
+                my $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -br ".fix_cygwin_path($regcomprdb)." -r ".fix_cygwin_path($servicesfile)." -c " . $installer::globals::quote . $filestring . $installer::globals::quote . " -l com.sun.star.loader.Java2 -wop=" . $installer::globals::quote . $allvariableshashref->{'JAVASERVICESURLPREFIX'} . $installer::globals::quote ." -env:URE_INTERNAL_JAVA_DIR=" . $installer::globals::quote . make_file_url($$ure_internal_java_dir_ref) . $installer::globals::quote . " 2\>\&1 |";
 
                 open (REG, "$systemcall");
                 while (<REG>) {push(@regcompoutput, $_); }
@@ -259,6 +259,25 @@ sub register_javacomponents
 
 
 ################################################################
+# Helper routine to change cygwin (POSIX) path to DOS notation
+# if needed
+################################################################
+sub fix_cygwin_path
+{
+    my ( $path ) = @_;
+
+    if ( $installer::globals::iswin eq 1 && $ENV{'USE_SHELL'} ne "4nt" && $installer::globals::wrapcmd eq "" )
+    {
+    $path = qx{cygpath -m "$path"};
+    chomp($path);
+    }
+
+    return $path;
+}
+
+
+
+################################################################
 # Registering all uno component files in the services.rdb
 ################################################################
 sub get_source_path_cygwin_safe
@@ -270,7 +289,7 @@ sub get_source_path_cygwin_safe
     {
     if( substr( $$ret, 1,1 ) eq ":" )
     {
-        $$ret = "/cygdrive/" . substr($$ret,0,1) .  substr($$ret,2);
+        chomp($$ret = qx{cygpath -u "$$ret"});
     }
     }
     return $ret;
@@ -298,6 +317,9 @@ sub register_pythoncomponents
         if ( $installer::globals::iswin ) { $from =~ s/\//\\/g; }
 
         my $typesrdbname = "types.rdb";
+        # FIXME: Remove the unneeded
+        # get_source_path_cygwin_safe() -> fix_cygwin_path()
+        # when WRAPCMD is gone
         my $typesrdbref =
             get_source_path_cygwin_safe($typesrdbname, $includepatharrayref, 1);
 
@@ -338,8 +360,11 @@ sub register_pythoncomponents
                 my @regcompoutput = ();
 
 
-                                $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register -br " . $$typesrdbref . " -br " . $$pyunoservicesrdbref . " -r $servicesfile -c vnd.openoffice.pymodule:" . $filestring . " -l com.sun.star.loader.Python 2\>\&1 |";
-
+                $systemcall = "$installer::globals::wrapcmd $$regcompfileref -register"
+                . " -br " . fix_cygwin_path($$typesrdbref)
+                . " -br " . fix_cygwin_path($$pyunoservicesrdbref)
+                . " -r " . fix_cygwin_path($servicesfile)
+                . " -c vnd.openoffice.pymodule:" . $filestring . " -l com.sun.star.loader.Python 2\>\&1 |";
                 open (REG, "$systemcall");
                 while (<REG>) {push(@regcompoutput, $_); }
                 close (REG);
@@ -674,7 +699,7 @@ sub prepare_regcomp_rdb
 
         chdir($to);
 
-        my $systemcall = "$installer::globals::wrapcmd $regcompfile -register -s -r $regcomprdb -c $libfilename";
+        my $systemcall = "$installer::globals::wrapcmd $regcompfile -register -s -r " . fix_cygwin_path($regcomprdb) . " -c $libfilename";
 
         my $returnvalue = system($systemcall);
 
@@ -872,21 +897,12 @@ sub create_services_rdb
             # my $servicesdir = installer::systemactions::create_directories($servicesname, $languagestringref);
             my $servicesdir = installer::systemactions::create_directories($uniquedirname, $languagestringref);
 
-            if ( $^O =~ /cygwin/i) {
-                if (($ENV{'USE_SHELL'} eq '4nt') || ($ENV{'USE_SHELL'} eq 'bash')) {
-                    # $servicesdir is used as a parameter for regcomp and has to be DOS style
-                    $servicesdir =~ s/\//\\/g;
-                    $servicesdir = qx{guw.pl echo "$servicesdir"};
-                    chomp($servicesdir);
-                    if ($ENV{'USE_SHELL'} eq "bash" ) {
-                        if ($servicesdir =~ /^\w\:/) {
-                            $servicesdir =~ s/\://;
-                            $servicesdir = '/cygdrive/' . $servicesdir;
-                        };
-                        $servicesdir =~ s/\\/\//g;
-                    };
-                };
-            };
+            if ( $^O =~ /cygwin/i && $ENV{'USE_SHELL'} eq "4nt" )
+            {      # $servicesdir is used as a parameter for regcomp and has to be DOS style
+                $servicesdir = qx{guw.exe echo "$servicesdir"};
+                chomp($servicesdir);
+                $servicesdir =~ s/\\/\//g;
+            }
 
             push(@installer::globals::removedirs, $servicesdir);
 
