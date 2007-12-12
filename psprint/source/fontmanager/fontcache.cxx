@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:55:33 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:16:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -684,9 +684,9 @@ bool FontCache::getFontCacheFile( int nDirID, const OString& rFile, list< PrintF
         FontDirMap::const_iterator entry = dir->second.m_aEntries.find( rFile );
         if( entry != dir->second.m_aEntries.end() )
         {
-            bSuccess = true;
             for( FontCacheEntry::const_iterator font = entry->second.m_aEntry.begin(); font != entry->second.m_aEntry.end(); ++font )
             {
+                bSuccess = true;
                 PrintFontManager::PrintFont* pFont = clonePrintFont( *font );
                 rNewFonts.push_back( pFont );
             }
