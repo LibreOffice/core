@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsclone.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-03 10:32:05 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:17:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.5 $ ';
+my $id_str = ' $Revision: 1.6 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -133,7 +133,7 @@ $cvs_module->cvs_server($config->get_cvs_server());
 $cvs_module->cvs_repository($config->get_cvs_server_repository());
 my %cvs_aliases = $cvs_module->get_aliases_hash();
 
-foreach my $module (split( /\s+/, $cvs_aliases{'OpenOffice'})) {
+foreach my $module (split( /\s+/, $cvs_aliases{'OpenOffice2'})) {
     my $use_tag;
     my $result1;
     my $result2;
