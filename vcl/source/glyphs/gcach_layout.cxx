@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 10:02:21 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -404,6 +404,11 @@ IcuLayoutEngine::~IcuLayoutEngine()
 
 // -----------------------------------------------------------------------
 
+static bool lcl_CharIsJoiner(sal_Unicode cChar)
+{
+    return ((cChar == 0x200C) || (cChar == 0x200D));
+}
+
 bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rArgs )
 {
     LEUnicode* pIcuChars;
@@ -516,7 +521,14 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout, ImplLayoutArgs& rAr
             if( !nGlyphIndex )
             {
                 if( nCharPos >= 0 )
+                {
                     rArgs.NeedFallback( nCharPos, bRightToLeft );
+                    if ( (nCharPos > 0) && lcl_CharIsJoiner(rArgs.mpStr[nCharPos-1]) )
+                        rArgs.NeedFallback( nCharPos-1, bRightToLeft );
+                    else if ( (nCharPos + 1 < nEndRunPos) && lcl_CharIsJoiner(rArgs.mpStr[nCharPos+1]) )
+                        rArgs.NeedFallback( nCharPos+1, bRightToLeft );
+                }
+
                 if( SAL_LAYOUT_FOR_FALLBACK & rArgs.mnFlags )
                     continue;
             }
