@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:16:54 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:14:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,6 +165,12 @@ private:
     TOOLS_DLLPRIVATE static sal_uInt32  GetStringWithoutHook( UniString& rStr, const BYTE* pStr );
     // like ReadString but doesn't call the string hook
     TOOLS_DLLPRIVATE UniString          ReadStringWithoutHook();
+
+    static ResMgr* ImplCreateResMgr( InternalResMgr* pImpl ) { return new ResMgr( pImpl ); }
+
+    //No copying
+    ResMgr(const ResMgr&);
+    ResMgr& operator=(const ResMgr&);
 public:
     static void         DestroyAllResMgr();  // Wird gerufen, wenn App beendet wird
 
@@ -234,12 +240,6 @@ public:
     static void         SetReadStringHook( ResHookProc pProc );
     static ResHookProc  GetReadStringHook();
     static void         SetDefaultLocale( const com::sun::star::lang::Locale& rLocale );
-
-//    #if 0 // _SOLAR__PRIVATE
-    rtl::OUString ImplGetPrefix();
-    com::sun::star::lang::Locale ImplGetLocale();
-    static ResMgr* ImplCreateResMgr( InternalResMgr* pImpl ) { return new ResMgr( pImpl ); }
-//    #endif
 };
 
 inline sal_uInt32 RSHEADER_TYPE::GetId()
