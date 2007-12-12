@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OGLTrans_TransitionerImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 10:17:20 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:26:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -502,12 +502,21 @@ public:
     // XTransitionFactory
     virtual ::sal_Bool SAL_CALL hasTransition( ::sal_Int16 transitionType, ::sal_Int16 transitionSubType ) throw (uno::RuntimeException)
     {
-        return createTransition(transitionType,
-                                transitionSubType,
-                                uno::Reference< presentation::XSlideShowView >(),
-                                uno::Reference< rendering::XBitmap >(),
-                                uno::Reference< rendering::XBitmap >(),
-                                geometry::RealPoint2D()).is();
+        if( transitionType != animations::TransitionType::MISCSHAPEWIPE )
+            return sal_False;
+
+        switch( transitionSubType )
+        {
+            case animations::TransitionSubType::ACROSS:
+            case animations::TransitionSubType::CORNERSOUT:
+            case animations::TransitionSubType::CIRCLE:
+            case animations::TransitionSubType::FANOUTHORIZONTAL:
+            case animations::TransitionSubType::CORNERSIN:
+                return sal_True;
+
+            default:
+                return sal_False;
+        }
     }
 
     virtual uno::Reference< presentation::XTransition > SAL_CALL createTransition(
@@ -525,13 +534,13 @@ public:
         switch( transitionSubType )
         {
             case animations::TransitionSubType::ACROSS:
-                pTransition->makeNByMTileFlip(5,5);
+                pTransition->makeNByMTileFlip(8,6);
                 break;
             case animations::TransitionSubType::CORNERSOUT:
                 pTransition->makeOutsideCubeFaceToLeft();
                 break;
             case animations::TransitionSubType::CIRCLE:
-                pTransition->makeRevolvingCircles(5,20);
+                pTransition->makeRevolvingCircles(8,128);
                 break;
             case animations::TransitionSubType::FANOUTHORIZONTAL:
                 pTransition->makeHelix(20);
