@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:53:15 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:20:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -303,6 +303,9 @@
 #include "futext.hxx"
 #include "docsh.hxx"
 #include "globstr.hrc"
+#include "attrib.hxx"
+#include "scitems.hxx"
+#include "drawview.hxx"
 
 //------------------------------------------------------------------------
 
@@ -363,6 +366,12 @@ void FuText::StopEditMode(BOOL bTextDirection)
     {
         ScPostIt aNote(pDoc);
         BOOL bWas = pDoc->GetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
+        if( bWas )
+        {
+           SdrLayer* pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
+           if (pLockLayer && !pView->IsLayerLocked(pLockLayer->GetName()))
+             pView->SetLayerLocked( pLockLayer->GetName(), TRUE );
+        }
 
         //  Ignore if text unchanged. If called from a change in
         //  TextDirection mode then always enter as we need to
