@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 10:22:24 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 15:34:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,24 +73,36 @@ using namespace webdav_ucp;
 namespace {
 
 const ne_uri g_sUriDefaultsHTTP  = { "http",
+#if NEON_VERSION >= 0260
                                      NULL,
+#endif
                                      NULL,
                                      DEFAULT_HTTP_PORT,
+#if NEON_VERSION >= 0260
                                      NULL,
+#endif
                                      NULL,
                                      NULL };
 const ne_uri g_sUriDefaultsHTTPS = { "https",
+#if NEON_VERSION >= 0260
                                      NULL,
+#endif
                                      NULL,
                                      DEFAULT_HTTPS_PORT,
+#if NEON_VERSION >= 0260
                                      NULL,
+#endif
                                      NULL,
                                      NULL };
 const ne_uri g_sUriDefaultsFTP   = { "ftp",
+#if NEON_VERSION >= 0260
                                      NULL,
+#endif
                                      NULL,
                                      DEFAULT_FTP_PORT,
+#if NEON_VERSION >= 0260
                                      NULL,
+#endif
                                      NULL,
                                      NULL };
 } // namespace
@@ -176,7 +188,11 @@ void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
                     pUri->scheme ? pUri->scheme : pUriDefs->scheme,
                     RTL_TEXTENCODING_UTF8 );
     mUserInfo = rtl::OStringToOUString(
+#if NEON_VERSION >= 0260
                     pUri->userinfo ? pUri->userinfo : pUriDefs->userinfo,
+#else
+                    pUri->authinfo ? pUri->authinfo : pUriDefs->authinfo,
+#endif
                     RTL_TEXTENCODING_UTF8 );
     mHostName = rtl::OStringToOUString(
                     pUri->host ? pUri->host : pUriDefs->host,
@@ -186,6 +202,7 @@ void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
                     pUri->path ? pUri->path : pUriDefs->path,
                     RTL_TEXTENCODING_UTF8 );
 
+#if NEON_VERSION >= 0260
     if ( pUri->query )
     {
         mPath += rtl::OUString::createFromAscii( "?" );
@@ -199,6 +216,7 @@ void NeonUri::init( const rtl::OString & rUri, const ne_uri * pUri )
         mPath += rtl::OStringToOUString(
             pUri->fragment,  RTL_TEXTENCODING_UTF8 );
     }
+#endif
 }
 
 // -------------------------------------------------------------------
