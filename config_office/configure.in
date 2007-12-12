@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-12-12 15:30:49 $
+dnl * Date: $Date: 2007-12-12 15:35:15 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.235 $ )
+AC_REVISION( $Revision: 1.236 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -4238,7 +4238,7 @@ AC_MSG_CHECKING([which neon to use])
 if test -n "$with_system_neon" -o -n "$with_system_libs" && \
 	test "$with_system_neon" != "no"; then
         AC_MSG_RESULT([external])
-        PKG_CHECK_MODULES(NEON, neon >= 0.26.0, , AC_MSG_ERROR([you need neon >= 0.26.x for system-neon]))
+        PKG_CHECK_MODULES(NEON, neon >= 0.24.0, , AC_MSG_ERROR([you need neon >= 0.24.x for system-neon]))
         NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
         NEON_CFLAGS="$NEON_CFLAGS -DSYSTEM_NEON -DUSE_DAV_LOCKS=1"
         SYSTEM_NEON=YES
