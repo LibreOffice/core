@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:21:04 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:21:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,9 @@
 
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/XAccessibleStateSet.hpp>
+#include <com/sun/star/accessibility/AccessibleStateType.hpp>
+#include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 
 #ifdef ENABLE_DBUS
 #include <dbus/dbus-glib.h>
@@ -3460,13 +3463,78 @@ void GtkSalFrame::IMHandler::signalIMPreeditEnd( GtkIMContext*, gpointer im_hand
         pThis->updateIMSpotLocation();
 }
 
-gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext*, gpointer /*im_handler*/ )
+uno::Reference<accessibility::XAccessibleEditableText>
+    FindFocus(uno::Reference< accessibility::XAccessibleContext > xContext)
 {
+    if (!xContext.is())
+        uno::Reference< accessibility::XAccessibleEditableText >();
+
+    uno::Reference<accessibility::XAccessibleStateSet> xState = xContext->getAccessibleStateSet();
+    if (xState.is())
+    {
+        if (xState->contains(accessibility::AccessibleStateType::FOCUSED))
+            return uno::Reference<accessibility::XAccessibleEditableText>(xContext, uno::UNO_QUERY);
+    }
+
+    for (sal_Int32 i = 0; i < xContext->getAccessibleChildCount(); ++i)
+    {
+        uno::Reference< accessibility::XAccessible > xChild = xContext->getAccessibleChild(i);
+        if (!xChild.is())
+            continue;
+            uno::Reference< accessibility::XAccessibleContext > xChildContext = xChild->getAccessibleContext();
+        if (!xChildContext.is())
+            continue;
+        uno::Reference< accessibility::XAccessibleEditableText > xText = FindFocus(xChildContext);
+        if (xText.is())
+            return xText;
+    }
+    return uno::Reference< accessibility::XAccessibleEditableText >();
+}
+
+uno::Reference<accessibility::XAccessibleEditableText> lcl_GetxText()
+{
+    uno::Reference<accessibility::XAccessibleEditableText> xText;
+    Window* pFocusWin = ImplGetSVData()->maWinData.mpFocusWin;
+    if (!pFocusWin)
+    return xText;
+
+    uno::Reference< accessibility::XAccessible > xAccessible( pFocusWin->GetAccessible( true ) );
+    if (xAccessible.is())
+        xText = FindFocus(xAccessible->getAccessibleContext());
+    return xText;
+}
+
+gboolean GtkSalFrame::IMHandler::signalIMRetrieveSurrounding( GtkIMContext* pContext, gpointer /*im_handler*/ )
+{
+    uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText();
+
+    if (xText.is())
+    {
+        sal_uInt32 nPosition = xText->getCaretPosition();
+        rtl::OUString sAllText = xText->getText();
+        if (!sAllText.getLength())
+            return FALSE;
+    rtl::OString sUTF = rtl::OUStringToOString(sAllText, RTL_TEXTENCODING_UTF8);
+    rtl::OUString sCursorText(sAllText, nPosition);
+    gtk_im_context_set_surrounding(pContext, sUTF.getStr(), sUTF.getLength(),
+        rtl::OUStringToOString(sCursorText, RTL_TEXTENCODING_UTF8).getLength());
+    return TRUE;
+    }
+
     return FALSE;
 }
 
-gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint, gint, gpointer /*im_handler*/ )
+gboolean GtkSalFrame::IMHandler::signalIMDeleteSurrounding( GtkIMContext*, gint offset, gint nchars,
+    gpointer /*im_handler*/ )
 {
+    uno::Reference<accessibility::XAccessibleEditableText> xText = lcl_GetxText();
+
+    if (xText.is())
+    {
+        sal_uInt32 nPosition = xText->getCaretPosition();
+    xText->deleteText(nPosition + offset, nPosition + offset + nchars);
+    return TRUE;
+    }
+
     return FALSE;
 }
-
