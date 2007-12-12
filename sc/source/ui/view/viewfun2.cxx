@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:38:18 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:22:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1189,7 +1189,13 @@ BOOL ScViewFunc::TestRemoveMerge()
 BOOL ScViewFunc::RemoveMerge( BOOL bRecord )
 {
     ScRange aRange;
-    if (GetViewData()->GetSimpleArea( aRange ))
+    ScEditableTester aTester( this );
+    if (!aTester.IsEditable())
+    {
+        ErrorMessage(aTester.GetMessageId());
+        return FALSE;
+    }
+    else if (GetViewData()->GetSimpleArea( aRange ))
     {
         ScRange aExtended( aRange );
         GetViewData()->GetDocument()->ExtendMerge( aExtended );
