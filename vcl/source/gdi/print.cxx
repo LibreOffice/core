@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:20:24 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 15:04:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,6 +413,7 @@ XubString Printer::GetDefaultPrinterName()
 
 void Printer::ImplInitData()
 {
+    mpPrinterData       = new ImplPrivatePrinterData();
     mbDevOutput         = FALSE;
     meOutDevType        = OUTDEV_PRINTER;
     mbDefPrinter        = FALSE;
@@ -669,6 +670,9 @@ Printer::~Printer()
     DBG_ASSERT( !mpQPrinter, "Printer::~Printer() - QueuePrinter not destroyed" );
     DBG_ASSERT( !mpQMtf, "Printer::~Printer() - QueueMetafile not destroyed" );
 
+    delete mpPrinterData;
+    mpPrinterData = NULL;
+
     delete mpPrinterOptions;
 
     ImplReleaseGraphics();
@@ -711,6 +715,14 @@ Printer::~Printer()
         mpNext->mpPrev = mpPrev;
     else
         pSVData->maGDIData.mpLastPrinter = mpPrev;
+}
+
+// -----------------------------------------------------------------------
+void Printer::SetNextJobIsQuick()
+{
+    mpPrinterData->mbNextJobIsQuick = true;
+    if( mpQPrinter )
+        mpQPrinter->SetNextJobIsQuick();
 }
 
 // -----------------------------------------------------------------------
@@ -1387,6 +1399,31 @@ IMPL_LINK( Printer, ImplDestroyPrinterAsync, void*, pSalPrinter )
 
 // -----------------------------------------------------------------------
 
+void Printer::ImplUpdateQuickStatus()
+{
+    // remove possibly added "IsQuickJob"
+    if( mpPrinterData->mbNextJobIsQuick )
+    {
+        rtl::OUString aKey( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) );
+        // const data means not really const, but change all references
+        // to refcounted job setup
+        ImplJobSetup* pImpSetup = maJobSetup.ImplGetConstData();
+        pImpSetup->maValueMap.erase( aKey );
+        mpPrinterData->mbNextJobIsQuick = false;
+    }
+}
+
+class QuickGuard
+{
+    Printer* mpPrinter;
+    public:
+    QuickGuard( Printer* pPrn ) : mpPrinter( pPrn ) {}
+    ~QuickGuard()
+    {
+        mpPrinter->ImplUpdateQuickStatus();
+    }
+};
+
 BOOL Printer::StartJob( const XubString& rJobName )
 {
     mnError = PRINTER_OK;
@@ -1396,6 +1433,15 @@ BOOL Printer::StartJob( const XubString& rJobName )
 
     if ( IsJobActive() || IsPrinting() )
         return FALSE;
+
+    if( mpPrinterData->mbNextJobIsQuick )
+    {
+        String aKey( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) );
+        if( maJobSetup.GetValue( aKey ).Len() == 0 )
+            maJobSetup.SetValue( aKey, String( RTL_CONSTASCII_USTRINGPARAM( "true" ) ) );
+    }
+
+    QuickGuard aQGuard( this );
 
     ULONG   nCopies = mnCopyCount;
     BOOL    bCollateCopy = mbCollateCopy;
@@ -1520,6 +1566,7 @@ BOOL Printer::StartJob( const XubString& rJobName )
             return FALSE;
         }
     }
+
 
     return TRUE;
 }
