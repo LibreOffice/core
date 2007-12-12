@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:58:21 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 14:56:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,8 +230,9 @@ PrinterJob::GetCurrentPageBody ()
  */
 
 PrinterJob::PrinterJob () :
-        mpJobHeader (NULL),
-        mpJobTrailer (NULL)
+        mpJobHeader( NULL ),
+        mpJobTrailer( NULL ),
+        m_bQuickJob( false )
 {
 }
 
@@ -405,9 +406,11 @@ PrinterJob::StartJob (
                       const rtl::OUString& rJobName,
                       const rtl::OUString& rAppName,
                       const JobData& rSetupData,
-                      PrinterGfx* pGraphics
+                      PrinterGfx* pGraphics,
+                      bool bIsQuickJob
                       )
 {
+    m_bQuickJob = bIsQuickJob;
     mnMaxWidthPt = mnMaxHeightPt = 0;
     m_pGraphics = pGraphics;
     InitPaperSize (rSetupData);
@@ -574,7 +577,7 @@ PrinterJob::EndJob ()
     else
     {
         PrinterInfoManager& rPrinterInfoManager = PrinterInfoManager::get ();
-        pDestFILE = rPrinterInfoManager.startSpool( m_aLastJobData.m_aPrinterName );
+        pDestFILE = rPrinterInfoManager.startSpool( m_aLastJobData.m_aPrinterName, m_bQuickJob );
         if (pDestFILE == NULL)
             return sal_False;
     }
@@ -1177,7 +1180,10 @@ bool PrinterJob::writeSetup( osl::File* pFile, const JobData& rJob )
     }
 
     bool bSuccess = true;
-    if (rJob.m_nCopies > 1)
+    // in case of external print dialog the number of copies is prepended
+    // to the job, let us not complicate things by emitting our own copy count
+    bool bExternalDialog = PrinterInfoManager::get().checkFeatureToken( GetPrinterName(), "external_dialog" );
+    if( ! bExternalDialog && rJob.m_nCopies > 1 )
     {
         // setup code
         ByteString aLine( "/#copies " );
