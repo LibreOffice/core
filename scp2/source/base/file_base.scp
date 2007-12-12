@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_base.scp,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:25:37 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:28:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,8 @@ STD_RES_FILE_PATCH( gid_File_Res_Cnr, cnr)
 STD_RES_FILE_PATCH( gid_File_Res_Sdbcl, sdbcl)
 STD_RES_FILE_PATCH( gid_File_Res_Sdberr, sdberr)
 
+#ifdef ENABLE_REPORTDESIGN
+
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Rpt, rpt )
 STD_RES_FILE_PATCH( gid_File_Res_Rpt, rpt)
 
@@ -71,6 +73,8 @@ STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Rptui, rptui )
 STD_RES_FILE_PATCH( gid_File_Res_Rptui, rptui)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Rptxml, rptxml )
+
+#endif
 
 #if defined UNX && ! defined MACOSX
 
