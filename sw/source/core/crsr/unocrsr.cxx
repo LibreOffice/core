@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsr.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:31:42 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:22:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,8 @@ BOOL SwUnoCrsr::IsSelOvr( int eFlags )
                             rPtIdx.Assign( *pInvalidNode->EndOfSectionNode(), 1 );
 
                             if( !rPtIdx.GetNode().IsCntntNode() &&
-                                !pDoc->GetNodes().GoNextSection( &rPtIdx ))
+                                ( !pDoc->GetNodes().GoNextSection( &rPtIdx ) ||
+                                  rPtIdx > pOldSttNd->EndOfSectionIndex() ) )
                                 break;
                         }
                         else
@@ -177,7 +178,8 @@ BOOL SwUnoCrsr::IsSelOvr( int eFlags )
                             rPtIdx.Assign( *pInvalidNode, -1 );
 
                             if( !rPtIdx.GetNode().IsCntntNode() &&
-                                !pDoc->GetNodes().GoPrevSection( &rPtIdx ))
+                                ( !pDoc->GetNodes().GoPrevSection( &rPtIdx ) ||
+                                  rPtIdx < *pOldSttNd ) )
                                 break;
                         }
                     }
