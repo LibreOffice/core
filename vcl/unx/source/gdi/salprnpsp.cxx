@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:50:16 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 15:05:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -981,31 +981,11 @@ ULONG PspSalInfoPrinter::GetCapabilities( const ImplJobSetup* pJobSetup, USHORT 
         case PRINTER_CAPABILITIES_SETPAPER:
             return 0;
         case PRINTER_CAPABILITIES_FAX:
-        {
-            PrinterInfoManager& rManager = PrinterInfoManager::get();
-            PrinterInfo aInfo( rManager.getPrinterInfo( pJobSetup->maPrinterName ) );
-            String aFeatures( aInfo.m_aFeatures );
-            int nTokenCount = aFeatures.GetTokenCount( ',' );
-            for( int i = 0; i < nTokenCount; i++ )
-            {
-                if( aFeatures.GetToken( i ).CompareToAscii( "fax", 3 ) == COMPARE_EQUAL )
-                    return 1;
-            }
-            return 0;
-        }
+            return PrinterInfoManager::get().checkFeatureToken( pJobSetup->maPrinterName, "fax" ) ? 1 : 0;
         case PRINTER_CAPABILITIES_PDF:
-        {
-            PrinterInfoManager& rManager = PrinterInfoManager::get();
-            PrinterInfo aInfo( rManager.getPrinterInfo( pJobSetup->maPrinterName ) );
-            String aFeatures( aInfo.m_aFeatures );
-            int nTokenCount = aFeatures.GetTokenCount( ',' );
-            for( int i = 0; i < nTokenCount; i++ )
-            {
-                if( aFeatures.GetToken( i ).CompareToAscii( "pdf=", 4 ) == COMPARE_EQUAL )
-                    return 1;
-            }
-            return 0;
-        }
+            return PrinterInfoManager::get().checkFeatureToken( pJobSetup->maPrinterName, "pdf" ) ? 1 : 0;
+        case PRINTER_CAPABILITIES_EXTERNALDIALOG:
+            return PrinterInfoManager::get().checkFeatureToken( pJobSetup->maPrinterName, "external_dialog" ) ? 1 : 0;
         default: break;
     };
     return 0;
@@ -1106,6 +1086,15 @@ BOOL PspSalPrinter::StartJob(
     }
     m_aPrinterGfx.Init( m_aJobData );
 
+    bool bIsQuickJob = false;
+    std::hash_map< rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator quick_it =
+        pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsQuickJob" ) ) );
+    if( quick_it != pJobSetup->maValueMap.end() )
+    {
+        if( quick_it->second.equalsIgnoreAsciiCaseAscii( "true" ) )
+            bIsQuickJob = true;
+    }
+
     // set/clear backwards compatibility flag
     bool bStrictSO52Compatibility = false;
     std::hash_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
@@ -1118,7 +1107,7 @@ BOOL PspSalPrinter::StartJob(
     }
     m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
 
-    return m_aPrintJob.StartJob( m_aTmpFile.Len() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx ) ? TRUE : FALSE;
+    return m_aPrintJob.StartJob( m_aTmpFile.Len() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bIsQuickJob ) ? TRUE : FALSE;
 }
 
 // -----------------------------------------------------------------------
