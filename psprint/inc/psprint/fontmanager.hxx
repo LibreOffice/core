@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 15:04:02 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:16:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
 #ifndef _PSPRINT_HELPER_HXX_
 #include <psprint/helper.hxx>
 #endif
-
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
 #endif
@@ -244,10 +243,10 @@ class PrintFontManager
     struct TrueTypeFontFile;
     struct Type1FontFile;
     struct BuiltinFont;
-    friend class PrintFont;
-    friend class TrueTypeFontFile;
-    friend class Type1FontFile;
-    friend class BuiltinFont;
+    friend struct PrintFont;
+    friend struct TrueTypeFontFile;
+    friend struct Type1FontFile;
+    friend struct BuiltinFont;
     friend class FontCache;
 
     struct PrintFontMetrics
@@ -413,7 +412,9 @@ class PrintFontManager
     std::hash_multimap< sal_Unicode, sal_uInt8 >    m_aUnicodeToAdobecode;
     std::hash_multimap< sal_uInt8, sal_Unicode >    m_aAdobecodeToUnicode;
 
-    mutable FontCache*                          m_pFontCache;
+    mutable FontCache*                                                        m_pFontCache;
+    bool m_bFontconfigSuccess;
+
     mutable std::vector< fontID >               m_aOverrideFonts;
 
     rtl::OString getAfmFile( PrintFont* pFont ) const;
@@ -456,9 +457,22 @@ class PrintFontManager
     false else (e.g. no libfontconfig found)
     */
     bool initFontconfig();
+    int  countFontconfigFonts();
     /* deinitialize fontconfig
      */
     void deinitFontconfig();
+
+    /* register an application specific font directory for libfontconfig
+
+    since fontconfig is asked for font substitutes before OOo will check for font availability
+    and fontconfig will happily substitute fonts it doesn't know (e.g. "Arial Narrow" -> "DejaVu Sans Book"!)
+    it becomes necessary to tell the library about all the hidden font treasures
+
+    @returns
+    true if libfontconfig accepted the directory
+    false else (e.g. no libfontconfig found)
+    */
+    bool addFontconfigDir(const rtl::OString& rDirectory);
 
     static bool parseXLFD( const rtl::OString& rXLFD, XLFDEntry& rEntry );
     void parseXLFD_appendAliases( const std::list< rtl::OString >& rXLFDs, std::list< XLFDEntry >& rEntries ) const;
@@ -737,6 +751,11 @@ public:
     false else
      */
     bool matchFont( FastPrintFontInfo& rInfo, const com::sun::star::lang::Locale& rLocale );
+
+    rtl::OUString Substitute( const rtl::OUString& rFontName, rtl::OUString& rMissingCodes,
+        const rtl::OString& rLangAttrib, italic::type eItalic, weight::type eWeight,
+        width::type eWidth, pitch::type ePitch) const;
+    bool hasFontconfig() const { return m_bFontconfigSuccess; }
 
     int FreeTypeCharIndex( void *pFace, sal_uInt32 aChar );
 };
