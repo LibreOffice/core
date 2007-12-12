@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:32:42 $
+#   last change: $Author: kz $ $Date: 2007-12-12 15:04:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,11 @@ all:
 
 # --- Files --------------------------------------------------------
 
+.IF "$(COMID)"=="gcc3" && "$(CCNUMVER)">="000400000000" 
+all:
+        @echo "spirit is already included in boost 1.34"
+.ELSE
+
 TARFILE_NAME=spirit-1.6.1
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
 
@@ -87,4 +92,5 @@ $(MISC)$/$(TARGET)_remove_build.flag : $(PRJ)$/$(PATCH_FILE_NAME)
     $(REMOVE_PACKAGE_COMMAND)
     $(TOUCH) $(MISC)$/$(TARGET)_remove_build.flag
 
+.ENDIF
 .ENDIF
