@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:05:57 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:24:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2854,7 +2854,7 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
     SwRect aRect( rRect );
     aRect.Intersection( pSh->VisArea() );
 
-    BOOL bExtraData = ::IsExtraData( GetFmt()->GetDoc() );
+    const BOOL bExtraData = ::IsExtraData( GetFmt()->GetDoc() );
 
     pLines = new SwLineRects;   //Sammler fuer Umrandungen.
 
@@ -2872,7 +2872,12 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
 
     while ( pPage && !::IsShortCut( aRect, pPage->Frm() ) )
     {
-        if ( !pPage->IsEmptyPage() && aRect.IsOver( pPage->Frm() ) )
+        // --> OD 2007-11-20 #i82616#
+//        if ( !pPage->IsEmptyPage() && aRect.IsOver( pPage->Frm() ) )
+        SwRect aPaintRect;
+        pPage->GetBorderAndShadowBoundRect( pPage->Frm(), pSh, aPaintRect );
+        if ( !pPage->IsEmptyPage() && aRect.IsOver( aPaintRect ) )
+        // <--
         {
             if ( pSh->GetWin() )
             {
@@ -2881,23 +2886,38 @@ void SwRootFrm::Paint( const SwRect& rRect ) const
                 pSpecSubsLines = new SwSubsRects;
             }
 
-            // --> OD 2007-08-15 #i80691#
-            // include border and shadow area into paint area.
-//            SwRect aPaintRect( pPage->Frm() );
-            SwRect aPaintRect;
-            pPage->GetBorderAndShadowBoundRect( pPage->Frm(), pSh, aPaintRect );
-            // <--
             aPaintRect._Intersection( aRect );
 
-            if ( bExtraData )
+            // --> OD 2007-11-14 #i82616#
+            // Invalidate area for extra data (line numbers or change tracking
+            // marks), if painting on a window and the paint is trigger by an
+            // end action. The inefficient and simple enlargement of the
+            // paint area is replaced by this invalidation.
+//            if ( bExtraData )
+//            {
+//                //Ja, das ist grob, aber wie macht man es besser?
+//                SWRECTFN( pPage )
+//                (aPaintRect.*fnRect->fnSetLeftAndWidth)(
+//                    (pPage->Frm().*fnRect->fnGetLeft)(),
+//                    (pPage->Frm().*fnRect->fnGetWidth)() );
+//                aPaintRect._Intersection( pSh->VisArea() );
+//            }
+            if ( bExtraData &&
+                 pSh->GetWin() && pSh->IsInEndAction() )
             {
-                //Ja, das ist grob, aber wie macht man es besser?
+                // enlarge paint rectangle to complete page width, subtract
+                // current paint area and invalidate the resulting region.
                 SWRECTFN( pPage )
-                (aPaintRect.*fnRect->fnSetLeftAndWidth)(
-                    (pPage->Frm().*fnRect->fnGetLeft)(),
-                    (pPage->Frm().*fnRect->fnGetWidth)() );
-                aPaintRect._Intersection( pSh->VisArea() );
+                SwRect aPageRectTemp( aPaintRect );
+                (aPageRectTemp.*fnRect->fnSetLeftAndWidth)(
+                     (pPage->Frm().*fnRect->fnGetLeft)(),
+                     (pPage->Frm().*fnRect->fnGetWidth)() );
+                aPageRectTemp._Intersection( pSh->VisArea() );
+                Region aPageRectRegion( aPageRectTemp.SVRect() );
+                aPageRectRegion.Exclude( aPaintRect.SVRect() );
+                pSh->GetWin()->Invalidate( aPageRectRegion, INVALIDATE_CHILDREN );
             }
+            // <--
 
             // --> OD 2007-08-20 #i80793#
             // enlarge paint rectangle for objects overlapping the same pixel
