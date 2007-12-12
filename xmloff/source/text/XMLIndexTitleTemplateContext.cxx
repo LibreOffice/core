@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLIndexTitleTemplateContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:01:58 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:15:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,11 @@ void XMLIndexTitleTemplateContext::StartElement(
              (IsXMLToken(sLocalName, XML_STYLE_NAME)) )
         {
             sStyleName = xAttrList->getValueByIndex(nAttr);
-            bStyleNameOK = sal_True;
+            OUString sDisplayStyleName = GetImport().GetStyleDisplayName(
+                XML_STYLE_FAMILY_TEXT_PARAGRAPH, sStyleName );
+            const Reference < ::com::sun::star::container::XNameContainer >&
+                rStyles = GetImport().GetTextImport()->GetParaStyles();
+            bStyleNameOK = rStyles.is() && rStyles->hasByName( sDisplayStyleName );
         }
     }
 }
