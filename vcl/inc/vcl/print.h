@@ -4,9 +4,9 @@
  *
  *  $RCSfile: print.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:03:40 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 15:03:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,18 @@
 
 struct SalPrinterQueueInfo;
 class QueueInfo;
+
+// ------------------------
+// - private printer data -
+// ------------------------
+struct ImplPrivatePrinterData
+{
+    bool        mbNextJobIsQuick;
+
+    ImplPrivatePrinterData() :
+        mbNextJobIsQuick( false )
+    {}
+};
 
 // --------------------
 // - ImplPrnQueueData -
