@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untblk.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:33:37 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:25:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ void SwUndoInserts::SetInsertRange( const SwPaM& rPam, BOOL bScanFlys,
                 if( !pFrmFmts ||
                     USHRT_MAX == ( nFndPos = pFrmFmts->GetPos( pFmt ) ) )
                 {
-                    SwUndoInsLayFmt* pFlyUndo = new SwUndoInsLayFmt( pFmt );
+                    SwUndoInsLayFmt* pFlyUndo = new SwUndoInsLayFmt( pFmt,0,0 );
                     pFlyUndos->Insert( pFlyUndo, pFlyUndos->Count() );
                 }
                 else
