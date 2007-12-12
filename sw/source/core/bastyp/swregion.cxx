@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swregion.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:28:00 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:22:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,7 @@ inline void SwRegionRects::InsertRect( const SwRect &rRect, const USHORT nPos,
 {
     if( rDel )
     {
+        pData = (SwRect*)pData; // looks weird but seems to help gcc ->i78417
         *(pData+nPos) = rRect;
         rDel = FALSE;
     }
