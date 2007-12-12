@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 13:04:39 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:23:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,8 @@ SHL1VERSIONMAP=	$(TARGET).map
 
 SHL1STDLIBS=	$(SALLIB)
 
-.IF "$(USE_STLP_DEBUG)" != ""
+# system STLport5 needs it
+.IF "$(USE_STLP_DEBUG)" != "" || "$(STLPORT_VER)" >= "500"
 SHL1STDLIBS+=$(LIBSTLPORT)
 .ENDIF
 
