@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:35:18 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:16:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,6 +399,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments ) throw (::c
             m_nMULTIPLEAtom     = getAtom( OUString::createFromAscii( "MULTIPLE" ) );
             m_nUTF16Atom        = getAtom( OUString::createFromAscii( "ISO10646-1" ) );
 //            m_nUTF16Atom      = getAtom( OUString::createFromAscii( "text/plain;charset=ISO-10646-UCS-2" ) );
+            m_nImageBmpAtom     = getAtom( OUString::createFromAscii( "image/bmp" ) );
 
             // Atoms for Xdnd protocol
             m_nXdndAware        = getAtom( OUString::createFromAscii( "XdndAware" ) );
@@ -1129,90 +1130,100 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
     }
     else if( rType.equalsAsciiL( "image/bmp", 9 ) )
     {
-        Pixmap aPixmap = None;
-        Colormap aColormap = None;
-
-        // prepare property for MULTIPLE request
-        Sequence< sal_Int8 > aData;
-        Atom pTypes[4] = { XA_PIXMAP, XA_PIXMAP,
-                           XA_COLORMAP, XA_COLORMAP };
+        // #i83376# try if someone has the data in image/bmp already before
+        // doing the PIXMAP stuff (e.g. the gimp has this)
+        bSuccess = getPasteData( selection, m_nImageBmpAtom, rData );
+        #if OSL_DEBUG_LEVEL > 1
+        if( bSuccess )
+            fprintf( stderr, "got %d bytes of image/bmp\n" ), (int)rData.getLength();
+        #endif
+        if( ! bSuccess )
         {
-            MutexGuard aGuard(m_aMutex);
+            Pixmap aPixmap = None;
+            Colormap aColormap = None;
 
-            XChangeProperty( m_pDisplay,
-                             m_aWindow,
-                             selection,
-                             XA_ATOM,
-                             32,
-                             PropModeReplace,
-                             (unsigned char*)pTypes,
-                             4 );
-        }
-
-        // try MULTIPLE request
-        if( getPasteData( selection, m_nMULTIPLEAtom, aData ) )
-        {
-            Atom* pReturnedTypes = (Atom*)aData.getArray();
-            if( pReturnedTypes[0] == XA_PIXMAP && pReturnedTypes[1] == XA_PIXMAP )
+            // prepare property for MULTIPLE request
+            Sequence< sal_Int8 > aData;
+            Atom pTypes[4] = { XA_PIXMAP, XA_PIXMAP,
+            XA_COLORMAP, XA_COLORMAP };
             {
                 MutexGuard aGuard(m_aMutex);
 
-                Atom type = None;
-                int format = 0;
-                unsigned long nItems = 0;
-                unsigned long nBytes = 0;
-                unsigned char* pReturn = NULL;
-                XGetWindowProperty( m_pDisplay, m_aWindow, XA_PIXMAP, 0, 1, True, XA_PIXMAP, &type, &format, &nItems, &nBytes, &pReturn );
-                if( pReturn )
+                XChangeProperty( m_pDisplay,
+                    m_aWindow,
+                    selection,
+                    XA_ATOM,
+                    32,
+                    PropModeReplace,
+                    (unsigned char*)pTypes,
+                    4 );
+            }
+
+            // try MULTIPLE request
+            if( getPasteData( selection, m_nMULTIPLEAtom, aData ) )
+            {
+                Atom* pReturnedTypes = (Atom*)aData.getArray();
+                if( pReturnedTypes[0] == XA_PIXMAP && pReturnedTypes[1] == XA_PIXMAP )
                 {
-                    if( type == XA_PIXMAP )
-                        aPixmap = *(Pixmap*)pReturn;
-                    XFree( pReturn );
-                    pReturn = NULL;
-                    if( pReturnedTypes[2] == XA_COLORMAP && pReturnedTypes[3] == XA_COLORMAP )
+                    MutexGuard aGuard(m_aMutex);
+
+                    Atom type = None;
+                    int format = 0;
+                    unsigned long nItems = 0;
+                    unsigned long nBytes = 0;
+                    unsigned char* pReturn = NULL;
+                    XGetWindowProperty( m_pDisplay, m_aWindow, XA_PIXMAP, 0, 1, True, XA_PIXMAP, &type, &format, &nItems, &nBytes, &pReturn );
+                    if( pReturn )
                     {
-                        XGetWindowProperty( m_pDisplay, m_aWindow, XA_COLORMAP, 0, 1, True, XA_COLORMAP, &type, &format, &nItems, &nBytes, &pReturn );
-                        if( pReturn )
+                        if( type == XA_PIXMAP )
+                            aPixmap = *(Pixmap*)pReturn;
+                        XFree( pReturn );
+                        pReturn = NULL;
+                        if( pReturnedTypes[2] == XA_COLORMAP && pReturnedTypes[3] == XA_COLORMAP )
                         {
-                            if( type == XA_COLORMAP )
-                                aColormap = *(Colormap*)pReturn;
-                            XFree( pReturn );
+                            XGetWindowProperty( m_pDisplay, m_aWindow, XA_COLORMAP, 0, 1, True, XA_COLORMAP, &type, &format, &nItems, &nBytes, &pReturn );
+                            if( pReturn )
+                            {
+                                if( type == XA_COLORMAP )
+                                    aColormap = *(Colormap*)pReturn;
+                                XFree( pReturn );
+                            }
                         }
                     }
+                    #if OSL_DEBUG_LEVEL > 1
+                    else
+                    {
+                        fprintf( stderr, "could not get PIXMAP property: type=%s, format=%d, items=%ld, bytes=%ld, ret=0x%p\n", OUStringToOString( getString( type ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), format, nItems, nBytes, pReturn );
+                    }
+                    #endif
                 }
-#if OSL_DEBUG_LEVEL > 1
-                else
+            }
+
+            if( aPixmap == None )
+            {
+                // perhaps two normal requests will work
+                if( getPasteData( selection, XA_PIXMAP, aData ) )
                 {
-                    fprintf( stderr, "could not get PIXMAP property: type=%s, format=%d, items=%ld, bytes=%ld, ret=0x%p\n", OUStringToOString( getString( type ), RTL_TEXTENCODING_ISO_8859_1 ).getStr(), format, nItems, nBytes, pReturn );
+                    aPixmap = *(Pixmap*)aData.getArray();
+                    if( aColormap == None && getPasteData( selection, XA_COLORMAP, aData ) )
+                        aColormap = *(Colormap*)aData.getArray();
                 }
-#endif
             }
-        }
 
-        if( aPixmap == None )
-        {
-            // perhaps two normal requests will work
-            if( getPasteData( selection, XA_PIXMAP, aData ) )
+            // convert data if possible
+            if( aPixmap != None )
             {
-                aPixmap = *(Pixmap*)aData.getArray();
-                if( aColormap == None && getPasteData( selection, XA_COLORMAP, aData ) )
-                    aColormap = *(Colormap*)aData.getArray();
-            }
-        }
+                MutexGuard aGuard(m_aMutex);
 
-        // convert data if possible
-        if( aPixmap != None )
-        {
-            MutexGuard aGuard(m_aMutex);
-
-            sal_Int32 nOutSize = 0;
-            sal_uInt8* pBytes = X11_getBmpFromPixmap( m_pDisplay, aPixmap, aColormap, nOutSize );
-            if( pBytes && nOutSize )
-            {
-                rData = Sequence< sal_Int8 >( nOutSize );
-                memcpy( rData.getArray(), pBytes, nOutSize );
-                X11_freeBmp( pBytes );
-                bSuccess = true;
+                sal_Int32 nOutSize = 0;
+                sal_uInt8* pBytes = X11_getBmpFromPixmap( m_pDisplay, aPixmap, aColormap, nOutSize );
+                if( pBytes && nOutSize )
+                {
+                    rData = Sequence< sal_Int8 >( nOutSize );
+                    memcpy( rData.getArray(), pBytes, nOutSize );
+                    X11_freeBmp( pBytes );
+                    bSuccess = true;
+                }
             }
         }
     }
