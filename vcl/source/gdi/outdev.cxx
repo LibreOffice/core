@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 15:56:25 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:20:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -918,7 +918,6 @@ void OutputDevice::ImplInitOutDevData()
         mpOutDevData = new ImplOutDevData;
         mpOutDevData->mpRotateDev = NULL;
         mpOutDevData->mpRecordLayout = NULL;
-        mpOutDevData->mpFirstFontSubstEntry = NULL;
 
         // #i75163#
         mpOutDevData->mpViewTransform = NULL;
@@ -962,13 +961,6 @@ void OutputDevice::ImplDeInitOutDevData()
     {
         if ( mpOutDevData->mpRotateDev )
             delete mpOutDevData->mpRotateDev;
-        ImplFontSubstEntry* pEntry = mpOutDevData->mpFirstFontSubstEntry;
-        while( pEntry )
-        {
-            ImplFontSubstEntry* pNext = pEntry->mpNext;
-            delete pEntry;
-            pEntry = pNext;
-        }
 
         // #i75163#
         ImplInvalidateViewTransform();
