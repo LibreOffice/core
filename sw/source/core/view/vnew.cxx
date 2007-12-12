@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vnew.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:43:22 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:26:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,12 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
 
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "View::Init - before InitPrt" );
 
+    // --> FME 2007-11-06 #i82967#
+    OutputDevice* pPDFOut = 0;
+    if ( pOut && pOut->GetPDFWriter() )
+        pPDFOut = pOut;
+    // <--
+
     // --> FME 2005-01-21 #i41075#
     // Only setup the printer if we need one:
     const IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
@@ -151,7 +157,7 @@ void ViewShell::Init( const SwViewOption *pNewOpt )
                                 !pIDSA->get(IDocumentSettingAccess::USE_VIRTUAL_DEVICE);
     SfxPrinter* pPrinter = getIDocumentDeviceAccess()->getPrinter( bCreatePrinter );
     if( pPrinter )
-        InitPrt( pPrinter );
+        InitPrt( pPrinter, pPDFOut );
     // <--
 
     // --> FME 2005-03-16 #i44963# Good occasion to check if page sizes in
