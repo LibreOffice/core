@@ -1,7 +1,19 @@
 # Define additional MSDOS specific settings.
 #
 
-# Execution environment configuration.
+# --- Set Wrapper command ---
+# Provide a macro that can be used to access the wrapper and to avoid
+# hardcoding the program name everywhere
+GUWCMD*=guw.exe
+
+# Do not use WRAPCMD for 4nt or unless --enable-wrapcmd is given
+.IF "$(USE_SHELL)" != "4nt" && "$(FLIPCMD)" == "$(WRAPCMD)"
+WRAPCMD_ENV*=$(WRAPCMD) -env
+.ELSE
+
+.WINPATH !:= yes
+
+.ENDIF
 
 # Directory cache configuration.
 .DIRCACHE  *:= no
@@ -31,8 +43,7 @@ SHELL *:= $(COMSPEC)
    DIRSEPSTR        := \\
 # See iz61212 for the reason why PWD is overwritten
    PWD:=$(shell @echo %_cwd)
-.EXPORT : PWD
-   
+
 .ELSE	# Non 4nt case
 
 .IF $(USE_SHELL) == bash
@@ -55,9 +66,10 @@ SHELL *:= $(COMSPEC)
    __.DIVSEP-sh-yes *:= \\\
    __.DIVSEP-sh-no  *:= \\
    DIRSEPSTR :=/
-.EXPORT : PWD
 
 .ENDIF
+
+.EXPORT : GUWCMD PWD
 
 .IF $(USE_SHELL) == 4nt
 
