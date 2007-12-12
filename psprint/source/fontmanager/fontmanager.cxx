@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:07:44 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:17:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1213,7 +1213,8 @@ PrintFontManager::PrintFontManager() :
         m_nNextFontID( 1 ),
         m_pAtoms( new MultiAtomProvider() ),
         m_nNextDirAtom( 1 ),
-        m_pFontCache( NULL )
+        m_pFontCache( NULL ),
+    m_bFontconfigSuccess(false)
 {
     for( unsigned int i = 0; i < sizeof( aAdobeCodes )/sizeof( aAdobeCodes[0] ); i++ )
     {
@@ -2173,7 +2174,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
 #endif
 
     // first try fontconfig
-    bool bFontconfigSuccess = initFontconfig();
+    m_bFontconfigSuccess = initFontconfig();
 
     // part one - look for downloadable fonts
     rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
@@ -2189,13 +2190,19 @@ void PrintFontManager::initialize( void* pInitDisplay )
         {
             OString aToken = aPath.getToken( 0, ';', nIndex );
             normPath( aToken );
-            m_aFontDirectories.push_back( aToken );
+        addFontconfigDir( aToken );
+        m_aFontDirectories.push_back( aToken );
             m_aPrivateFontDirectories.push_back( getDirectoryAtom( aToken, true ) );
         } while( nIndex >= 0 );
     }
 
+    // now that all global and local font dirs are known to fontconfig
+    // check that there are fonts actually managed by fontconfig
+    if( m_bFontconfigSuccess )
+        m_bFontconfigSuccess = (countFontconfigFonts() > 0);
+
     // don't search through many directories fontconfig already told us about
-    if( ! bFontconfigSuccess )
+    if( ! m_bFontconfigSuccess )
     {
         Display *pDisplay = (Display*)pInitDisplay;
 
@@ -2288,7 +2295,7 @@ void PrintFontManager::initialize( void* pInitDisplay )
             }
         }
 #endif /* SOLARIS */
-    } // ! bFontconfigSuccess
+    } // ! m_bFontconfigSuccess
 
     // fill XLFD aliases from fonts.alias files
     initFontsAlias();
