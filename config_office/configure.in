@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-11-26 18:03:39 $
+dnl * Date: $Date: 2007-12-12 13:24:44 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.232 $ )
+AC_REVISION( $Revision: 1.233 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -197,6 +197,11 @@ AC_ARG_ENABLE(cairo,
 [  --enable-cairo          Determines whether to use Cairo canvas backend on
                           platforms where Cairo is available.
 ],,enable_cairo=no)
+AC_ARG_ENABLE(opengl,
+[  --enable-opengl         Determines whether to use OpenGL (for 3D transitions)
+                          This is built as an UNO extension and not deployed
+			  in the install per default.
+],,enable_opengl=no)
 AC_ARG_ENABLE(dbus,
 [  --enable-dbus           Determines whether to enable presentation mode 
                           screensaver control under GNOME via DBUS 
@@ -319,6 +324,58 @@ AC_ARG_WITH(beanshell-jar,
 [  --with-beanshell-jar=JARFILE   Specify path to jarfile manually ],
 [ BSH_JAR="$withval"
 ])
+AC_ARG_ENABLE(sdext,
+[  --enable-sdext          enables the build of the Presentation Minimizer extension
+],,)
+AC_ARG_ENABLE(ogltrans,
+[  --enable-ogltrans       enables the build of the OGLTrans extension
+],,)
+AC_ARG_ENABLE(reportdesign,
+[  --disable-reportdesign  disables the build of the Report Builder extension
+],,)
+AC_ARG_WITH(system-jfreereport,
+[  --with-system-jfreereport      Use JFreeReport already on system
+],,)
+AC_ARG_WITH(jcommon-jar,
+[  --with-jcommon-jar=JARFILE   Specify path to jarfile manually ],
+[ JCOMMON_JAR="$withval"
+])
+AC_ARG_WITH(sac-jar,
+[  --with-sac-jar=JARFILE   Specify path to jarfile manually ],
+[ SAC_JAR="$withval"
+])
+AC_ARG_WITH(libxml-jar,
+[  --with-libxml-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBXML_JAR="$withval"
+])
+AC_ARG_WITH(flute-jar,
+[  --with-flute-jar=JARFILE   Specify path to jarfile manually ],
+[ FLUTE_JAR="$withval"
+])
+AC_ARG_WITH(jfreereport-jar,
+[  --with-jfreereport-jar=JARFILE   Specify path to jarfile manually ],
+[ JFREEREPORT_JAR="$withval"
+])
+AC_ARG_WITH(liblayout-jar,
+[  --with-liblayout-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBLAYOUT_JAR="$withval"
+])
+AC_ARG_WITH(libformula-jar,
+[  --with-libformula-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBFORMULA_JAR="$withval"
+])
+AC_ARG_WITH(librepository-jar,
+[  --with-librepository-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBREPOSITORY_JAR="$withval"
+])
+AC_ARG_WITH(libfonts-java-jar,
+[  --with-libfonts-jar=JARFILE   Specify path to jarfile manually ],
+[ LIBFONTS_JAR="$withval"
+])
+AC_ARG_WITH(jcommon-serializer-jar,
+[  --with-jcommon-serializer-jar=JARFILE   Specify path to jarfile manually ],
+[ JCOMMON_SERIALIZER_JAR="$withval"
+])
 AC_ARG_WITH(system-xml-apis,
 [  --with-system-xml-apis  Use xml-apis already on system
 ],,)
@@ -403,15 +460,15 @@ AC_ARG_WITH(system-mozilla,
                           --with-system-mozilla=<flavour>. Supported are:
                           xulrunner (default), firefox, seamonkey, mozilla
 ], WITH_SYSTEM_MOZILLA=$withval, WITH_SYSTEM_MOZILLA=no)
-AC_ARG_WITH(stlport4,
-[  --with-stlport4         The location that STLport4 is installed in. The STL
+AC_ARG_WITH(stlport,
+[  --with-stlport         The location that STLport is installed in. The STL
                           header files are assumed to be in
-                          stlport4-home/stlport and the STLPort4 library in
-                          stlport4-home/lib.
+                          stlport-home/stlport and the STLPort library in
+                          stlport-home/lib.
 
-                          Usage: --with-stlport4=<absolute path to stlport4 home>
+                          Usage: --with-stlport=<absolute path to stlport home>
 
-                          Warning!!, --without-stlport4 is possible with
+                          Warning!!, --without-stlport is possible with
                           gcc >= 3.3.3, but will break ABI compatability
 ], WITH_STLPORT=$withval , WITH_STLPORT=yes)
 AC_ARG_WITH(jdk-home,
@@ -1152,15 +1209,6 @@ AC_MSG_RESULT([$USE_SHELL])
 AC_SUBST(USE_SHELL)
 AC_SUBST(WITH_MINGWIN)
 
-AC_SYS_LARGEFILE
-if test -n "$ac_cv_sys_file_offset_bits"; then
-   LFS_CFLAGS="-D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
-fi
-if test -n "$ac_cv_sys_large_files" && test "$ac_cv_sys_large_files" != "no"; then
-   LFS_CFLAGS="$LFS_CFLAGS -D_LARGE_FILES"
-fi
-AC_SUBST(LFS_CFLAGS)
-
 dnl ===================================================================
 dnl Extra check for Windows. Non 4nt-builds need gcc to build dmake
 dnl and g++ to build guw.exe although MS cl (or MinGW) is used to
@@ -1646,6 +1694,42 @@ if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
 fi
 
 dnl ===================================================================
+dnl Find pre-processors.
+dnl ===================================================================
+if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
+   AC_PROG_CXXCPP
+
+dnl Check whether there's a C pre-processor.
+dnl ===================================================================
+dnl When using SunStudio compiler, there is a bug with the cc
+dnl preprocessor, so use CC preprocessor as the cc preprocessor
+dnl See Issuezilla #445.
+dnl ===================================================================
+   if test "$_os" = "SunOS"; then
+      CPP=$CXXCPP
+   else
+      AC_PROG_CPP
+   fi
+fi
+
+AC_CHECK_SIZEOF(long)
+SIZEOF_LONG=$ac_cv_sizeof_long
+AC_SUBST(SIZEOF_LONG)
+AC_C_BIGENDIAN
+WORDS_BIGENDIAN=$ac_cv_c_bigendian
+AC_SUBST(WORDS_BIGENDIAN)
+
+dnl Check for large file support
+AC_SYS_LARGEFILE
+if test -n "$ac_cv_sys_file_offset_bits"; then
+   LFS_CFLAGS="-D_FILE_OFFSET_BITS=$ac_cv_sys_file_offset_bits"
+fi
+if test -n "$ac_cv_sys_large_files" && test "$ac_cv_sys_large_files" != "no"; then
+   LFS_CFLAGS="$LFS_CFLAGS -D_LARGE_FILES"
+fi
+AC_SUBST(LFS_CFLAGS)
+
+dnl ===================================================================
 dnl Check if we are to enable vba macro interoperability feature
 dnl ===================================================================
 AC_MSG_CHECKING([whether to disable vba feature])
@@ -1706,7 +1790,7 @@ if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "GNU"; then
     AC_CHECK_HEADER(security/pam_appl.h, [],
                     [AC_MSG_ERROR([pam_appl.h could not be found. libpam-dev or pam-devel missing?])], [])
     AC_MSG_CHECKING([whether to link to libpam])
-    if test -n "$enable_pam_link"; then
+    if test -n "$enable_pam_link" -a "$enable_pam_link" != "no"; then
       AC_MSG_RESULT([yes])
       PAM_LINK=YES
       AC_CHECK_LIB(pam, pam_start, [],
@@ -1729,7 +1813,7 @@ AC_SUBST(PAM_LINK)
 
 if test "$_os" = "Linux"; then
     AC_MSG_CHECKING([whether to link to libcrypt])
-    if test -n "$enable_crypt_link"; then
+    if test -n "$enable_crypt_link" -a "$enable_crypt_link" != "no"; then
         AC_MSG_RESULT([yes])
         CRYPT_LINK=YES
         AC_CHECK_LIB(crypt, crypt, [],
@@ -1925,8 +2009,7 @@ dnl *************************************************************
 dnl Testing for exception handling - dwarf2 or sjlj exceptions...
 dnl *************************************************************
 AC_MSG_CHECKING([exception type])
-AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
+AC_LANG_PUSH([C++])
 AC_CACHE_VAL(exceptions_type, [AC_TRY_LINK(
 	[#include <iostream>
 
@@ -1939,7 +2022,7 @@ extern "C" void __sjthrow(void) __attribute__ ((__noreturn__));
 ])
 
 AC_MSG_RESULT($exceptions_type)
-AC_LANG_RESTORE
+AC_LANG_POP([C++])
 EXCEPTIONS="$exceptions_type"
 AC_SUBST(EXCEPTIONS)
 
@@ -2045,16 +2128,6 @@ if test "$_os" = "SunOS"; then
 fi
 
 dnl ===================================================================
-dnl When using SunStudio compiler, there is a bug with the cc
-dnl preprocessor, so use CC preprocessor for the following tests.
-dnl See Issuezilla #445.
-dnl ===================================================================
-if test "$_os" = "SunOS"; then
-AC_LANG_CPLUSPLUS
-AC_TRY_CPP("", , )
-fi
-
-dnl ===================================================================
 dnl Checks for SGI STL
 dnl ===================================================================
 if test -n "$enable_sgistl" && "$enable_sgistl" != "no"; then
@@ -2072,9 +2145,9 @@ if test -n "$enable_sgistl" && "$enable_sgistl" != "no"; then
 else
 
 dnl ===================================================================
-dnl Checks for STLPORT4
+dnl Checks for STLPORT
 dnl ===================================================================
-   AC_MSG_CHECKING([for STLport4 headers])
+   AC_MSG_CHECKING([for STLport headers])
    STLPORT4=""
    USE_SYSTEM_STL=""
    if test "$WITH_STLPORT" = "yes"; then
@@ -2085,28 +2158,34 @@ dnl ===================================================================
    else
       STLPORT4=$WITH_STLPORT
       if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
-         AC_TRY_CPP($STLPORT4/stlport/hash_map, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([STLport4 headers not found.]))
+         AC_TRY_CPP($STLPORT4/stlport/hash_map, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([STLport headers not found.]))
       else
          dnl AC_TRY_CPP doesn't work for MSVC because C++ preprocessor is not found by autoconf.
          if test -f "$STLPORT4/stlport/hash_map"; then
             AC_MSG_RESULT([checked.])
          else
-            AC_MSG_ERROR([STLport4 headers not found.])
+            AC_MSG_ERROR([STLport headers not found.])
          fi
       fi
       if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
-         AC_MSG_CHECKING([for STLport4 libraries])
+         AC_MSG_CHECKING([for STLport libraries])
          if test "$_os" = "SunOS"; then
 		      if test -f "$STLPORT4/lib/libstlport_sunpro.so"; then
 			      AC_MSG_RESULT([checked])
+		      elif test -f "$STLPORT4/lib/libstlport.so"; then
+			      AC_MSG_RESULT([checked])
+			      STLPORT_VER=500
 		      else
-			      AC_MSG_ERROR([STLport4 libraries not found])
+			      AC_MSG_ERROR([STLport libraries not found])
 		      fi
 	      elif test "$_os" = "Darwin"; then
 		      if test -f "$STLPORT4/lib/libstlport_gcc.dylib"; then
 			      AC_MSG_RESULT([checked])
+		      elif test -f "$STLPORT4/lib/libstlport.dylib"; then
+			      AC_MSG_RESULT([checked])
+			      STLPORT_VER=500
 		      else
-			      AC_MSG_ERROR([STLport4 libraries not found])
+			      AC_MSG_ERROR([STLport libraries not found])
 		      fi
 	      elif test "$_os" = "IRIX" -o "$_os" = "IRIX64"; then
 		      if test -f "$STLPORT4/lib/libstlport_mipspro_41.so"; then
@@ -2114,15 +2193,21 @@ dnl ===================================================================
 			   else
 				   if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
 					   AC_MSG_RESULT([checked])
+				   elif test -f "$STLPORT4/lib/libstlport.so"; then
+					   AC_MSG_RESULT([checked])
+					   STLPORT_VER=500
 				   else
-					   AC_MSG_ERROR([STLport4 libraries not found])
+					   AC_MSG_ERROR([STLport libraries not found])
 				   fi
 			   fi
 		   else
 			   if test -f "$STLPORT4/lib/libstlport_gcc.so"; then
 				   AC_MSG_RESULT([checked])
+			   elif test -f "$STLPORT4/lib/libstlport.so"; then
+				   AC_MSG_RESULT([checked])
+				   STLPORT_VER=500
 			   else
-				   AC_MSG_ERROR([STLport4 libraries not found])
+				   AC_MSG_ERROR([STLport libraries not found])
 			   fi
 		   fi
 	   fi
@@ -2132,7 +2217,11 @@ fi
 if test -z "$STLPORT4"; then
   STLPORT4="NO_STLPORT4"
 fi
+if test -z "$STLPORT_VER"; then
+  STLPORT_VER=400
+fi
 AC_SUBST(STLPORT4)
+AC_SUBST(STLPORT_VER)
 AC_SUBST(USE_SYSTEM_STL)
 
 dnl ===================================================================
@@ -2163,13 +2252,12 @@ dnl hash_map hackery
 dnl ===================================================================
 if test "$USE_SYSTEM_STL" = "YES"; then
    AC_MSG_CHECKING([if hash_map will be in __gnu_cxx namespace])
-   AC_LANG_SAVE
-   AC_LANG_CPLUSPLUS
+   AC_LANG_PUSH([C++])
    AC_TRY_COMPILE([#include <ext/hash_map>
 using namespace __gnu_cxx;
 ],[hash_map<int, int> t; return 0;],
   ac_cv_cxx_have_ext_hash_map=yes, ac_cv_cxx_have_ext_hash_map=no)
-   AC_LANG_RESTORE
+   AC_LANG_POP([C++])
    if test "$ac_cv_cxx_have_ext_hash_map" = "no"; then
       AC_MSG_ERROR([Can't find hash_map. Try with stlport enabled])
    else
@@ -2623,17 +2711,10 @@ AC_SUBST(JAVADOC)
 dnl ===================================================================
 dnl Checks for specific files.
 dnl ===================================================================
+
 dnl ===================================================================
 dnl Checks for programs.
 dnl ===================================================================
-dnl Check whether there's a C pre-processor.
-if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "NetBSD" ; then
-   AC_PROG_CPP
-fi
-dnl Check whether there's a C++ pre-processor.
-if test "$_os" = "Linux" -o "$_os" = "FreeBSD" -o "$_os" = "NetBSD" ; then
-   AC_PROG_CXXCPP
-fi
 
 dnl ===================================================================
 dnl Check whether we already have dmake
@@ -2935,8 +3016,7 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
       if test "$MINGWSTRIP" = "false"; then
          AC_MSG_ERROR(MinGW32 binutils needed. Install them.)
       fi
-      AC_LANG_SAVE
-      AC_LANG_CPLUSPLUS
+      AC_LANG_PUSH([C++])
       save_CXX=$CXX
       save_CXXCPP=$CXXCPP
       CXX=$MINGWCXX
@@ -2957,7 +3037,7 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
       CXX=$save_CXX
       CXXCPP=$save_CXXCPP
       LIBS=$save_LIBS
-      AC_LANG_RESTORE
+      AC_LANG_POP([C++])
       fi
    fi
    BUILD_TYPE="$BUILD_TYPE ODK"
@@ -3024,24 +3104,6 @@ else
     BUILD_TYPE="$BUILD_TYPE ZLIB"
 fi
 AC_SUBST(SYSTEM_ZLIB)
-
-if test "$_os" = "Darwin" && test "$with_system_openssl" != "no"; then
-   with_system_openssl=yes
-fi
-AC_MSG_CHECKING([which libssl to use])
-if test -n "$with_system_openssl" -o -n "$with_system_libs" && \
-        test "$with_system_openssl" != "no"; then
-    AC_MSG_RESULT([external])
-    PKG_CHECK_MODULES( OPENSSL, openssl )
-    SYSTEM_OPENSSL=YES
-else
-    AC_MSG_RESULT([internal])
-    SYSTEM_OPENSSL=NO
-    BUILD_TYPE="$BUILD_TYPE OPENSSL"
-fi
-AC_SUBST(SYSTEM_OPENSSL)
-AC_SUBST(OPENSSL_CFLAGS)
-AC_SUBST(OPENSSL_LIBS)
 
 dnl ===================================================================
 dnl Check for system jpeg
@@ -3240,6 +3302,13 @@ else
    if test "z$HOME" = "z"; then
       export HOME="";
    fi
+   # bz2 tarball and bzip2 is not standard
+   if test -z "$BZIP2"; then
+	AC_PATH_PROG( BZIP2, bzip2)
+	if test -z "$BZIP2"; then
+   		AC_MSG_ERROR([the internal Python module has a .tar.bz2. You need bzip2])
+   	fi
+   fi
 fi
 AC_SUBST(SYSTEM_PYTHON)
 AC_SUBST(PYTHON_CFLAGS)
@@ -3263,7 +3332,7 @@ if test -n "$with_system_db" -o -n "$with_system_libs" && \
         ], []
     )
     AC_MSG_CHECKING([whether db is at least 4.1])
-    for v in 1 2 3 4 5; do
+    for v in 1 2 3 4 5 6; do
        AC_TRY_RUN([
 #include <db.h>
 
@@ -3515,13 +3584,12 @@ AC_MSG_CHECKING([which boost to use])
 if test -n "$with_system_boost" && test "$with_system_boost" != "no"; then
    AC_MSG_RESULT([external])
    SYSTEM_BOOST=YES
-   AC_LANG_SAVE
-   AC_LANG_CPLUSPLUS
+   AC_LANG_PUSH([C++])
    AC_CHECK_HEADER(boost/shared_ptr.hpp, [],
        [AC_MSG_ERROR(boost/shared_ptr.hpp not found. install boost)], [])
    AC_CHECK_HEADER(boost/spirit/core.hpp, [],
        [AC_MSG_ERROR(boost/spirit/core.hpp not found. install boost)], [])
-   AC_LANG_RESTORE
+   AC_LANG_POP([C++])
 else
    AC_MSG_RESULT([internal])
    BUILD_TYPE="$BUILD_TYPE BOOST"
@@ -3536,11 +3604,10 @@ AC_MSG_CHECKING([which vigra to use])
 if test -n "$with_system_vigra" && test "$with_system_vigra" != "no"; then
    AC_MSG_RESULT([external])
    SYSTEM_VIGRA=YES
-   AC_LANG_SAVE
-   AC_LANG_CPLUSPLUS
+   AC_LANG_PUSH([C++])
    AC_CHECK_HEADER(vigra/copyimage.hxx, [],
        [AC_MSG_ERROR(vigra/copyimage.hxx not found. install vigra)], [])
-   AC_LANG_RESTORE
+   AC_LANG_POP([C++])
 else
    AC_MSG_RESULT([internal])
    BUILD_TYPE="$BUILD_TYPE VIGRA"
@@ -3578,7 +3645,7 @@ AC_SUBST(WITH_MOZILLA)
 AC_MSG_CHECKING([whether to build Mozilla addressbook connectivity])
 if test "$enable_mozilla" = "no"; then
    AC_MSG_RESULT([no])
-elif test -n "$with_system_mozilla"; then
+elif test "$with_system_mozilla" = "yes"; then
    AC_MSG_RESULT([no, not possible with system-mozilla])
 else
    AC_MSG_RESULT([yes])
@@ -3587,8 +3654,6 @@ fi
 AC_MSG_CHECKING([whether to build XML Security support])
 if test "$enable_mozilla" = "no"; then
    AC_MSG_RESULT([no, since Mozilla (NSS) disabled but needed])
-elif test "$with_system_mozilla" = "yes"; then
-   AC_MSG_RESULT([yes])
 else
    AC_MSG_RESULT([yes])
 fi
@@ -3858,15 +3923,15 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
    SYSTEM_ICU=YES
    AC_MSG_CHECKING([for unicode/rbbi.h])
    AC_TRY_CPP(unicode/rbbi.h, AC_MSG_RESULT([checked.]), AC_MSG_ERROR([icu headers not found.]))
-   AC_PATH_PROG(SYSTEM_GENBRK, genbrk)
+   AC_PATH_PROG(SYSTEM_GENBRK, genbrk, [], [$PATH:/usr/sbin:/sbin])
    if test -z "$SYSTEM_GENBRK"; then
       AC_MSG_ERROR([\"genbrk\" not found in \$PATH, install the icu development tool \"genbrk"\])
    fi
-   AC_PATH_PROG(SYSTEM_GENCCODE, genccode)
+   AC_PATH_PROG(SYSTEM_GENCCODE, genccode, [], [$PATH:/usr/sbin:/sbin])
    if test -z "$SYSTEM_GENCCODE"; then
       AC_MSG_ERROR([\"genccode\" not found in \$PATH, install the icu development tool \"genccode"\])
    fi
-   AC_PATH_PROG(SYSTEM_GENCMN, gencmn)
+   AC_PATH_PROG(SYSTEM_GENCMN, gencmn, [], [$PATH:/usr/sbin:/sbin])
    if test -z "$SYSTEM_GENCMN"; then
       AC_MSG_ERROR([\"gencmn\" not found in \$PATH, install the icu development tool \"gencmn"\])
    fi
@@ -3875,13 +3940,14 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
 #include <unicode/uversion.h>
 
 int main(int argc, char **argv) {
-      if(U_ICU_VERSION_MAJOR_NUM == 3 && U_ICU_VERSION_MINOR_NUM == 6) return 0;
+      if(U_ICU_VERSION_MAJOR_NUM == 3 && (U_ICU_VERSION_MINOR_NUM == 6 ||
+      	U_ICU_VERSION_MINOR_NUM == 8)) return 0;
       else return 1;
 }
       ], [AC_MSG_RESULT(OK)], [AC_MSG_RESULT([not suitable, only 3.6 supported currently])])
      AC_MSG_CHECKING(whether setBreakType is public)
-     save_LDFLAGS="$LDFLAGS"
-     LDFLAGS="$LDFLAGS -licuuc"
+     save_LIBS="$LIBS"
+     LIBS="$LIBS -licuuc"
 	   AC_TRY_LINK([#include <unicode/rbbi.h>], [
 	   RuleBasedBreakIterator *rbi = NULL;
 	   rbi = new RuleBasedBreakIterator();
@@ -3892,7 +3958,7 @@ int main(int argc, char **argv) {
       else
         AC_MSG_RESULT(yes)
       fi
-      LDFLAGS="$save_LDFLAGS"
+      LIBS="$save_LIBS"
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU=NO
@@ -4021,7 +4087,7 @@ dnl ===================================================================
 dnl Check for system Xrender
 dnl ===================================================================
 AC_MSG_CHECKING([whether to link to Xrender])
-if test -n "$enable_xrender_link"; then
+if test -n "$enable_xrender_link" -a "$enable_xrender_link" != "no"; then
    AC_MSG_RESULT([yes])
    XRENDER_LINK=YES
    with_system_xrender_headers=yes
@@ -4151,7 +4217,7 @@ AC_SUBST(BUILD_TYPE)
 dnl ===================================================================
 dnl Check for building neon
 dnl ===================================================================
-AC_MSG_CHECKING([whether to build neon])
+AC_MSG_CHECKING([whether to use neon])
 if test "$enable_neon" = "no"; then
     AC_MSG_RESULT([no])
     DISABLE_NEON=TRUE
@@ -4176,6 +4242,34 @@ else
     NEON_CFLAGS=
     BUILD_TYPE="$BUILD_TYPE NEON"
 fi
+dnl ===================================================================
+dnl Check for system openssl (only neon needs it!)
+dnl ===================================================================
+if test "$_os" = "Darwin" && test "$with_system_openssl" != "no"; then
+   with_system_openssl=yes
+fi
+AC_MSG_CHECKING([which libssl to use])
+if test -n "$with_system_openssl" -o -n "$with_system_libs" && \
+        test "$with_system_openssl" != "no"; then
+    AC_MSG_RESULT([external])
+    # Mac OS builds should get out without extra stuff is the Mac porters'
+    # wish. And pkg-config is although Xcode ships a .pc for openssl
+    if test "$_os" = "Darwin"; then
+        OPENSSL_CFLAGS=
+        OPENSSL_LIBS="-lssl -lcrypto"
+    else
+    	PKG_CHECK_MODULES( OPENSSL, openssl )
+    fi
+    SYSTEM_OPENSSL=YES
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_OPENSSL=NO
+    BUILD_TYPE="$BUILD_TYPE OPENSSL"
+fi
+AC_SUBST(SYSTEM_OPENSSL)
+AC_SUBST(OPENSSL_CFLAGS)
+AC_SUBST(OPENSSL_LIBS)
+
 AC_SUBST(SYSTEM_NEON)
 AC_SUBST(NEON_VERSION)
 AC_SUBST(NEON_LIBS)
@@ -4240,7 +4334,7 @@ AC_MSG_CHECKING([which libhunspell to use])
 if test -n "$with_system_hunspell" && test "$with_system_hunspell" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_HUNSPELL=YES
-    AC_LANG(C++)
+    AC_LANG_PUSH([C++])
     PKG_CHECK_MODULES(HUNSPELL, hunspell, HUNSPELL_PC="TRUE", HUNSPELL_PC="" )
     if test "$HUNSPELL_PC" != "TRUE"; then
       AC_CHECK_HEADER(hunspell.hxx, [],
@@ -4252,6 +4346,7 @@ if test -n "$with_system_hunspell" && test "$with_system_hunspell" != "no"; then
            [ AC_MSG_ERROR(hunspell library not found.) ], [])
       HUNSPELL_LIBS=-lhunspell
      fi
+    AC_LANG_POP([C++])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HUNSPELL=NO
@@ -4272,13 +4367,22 @@ if test -n "$with_system_altlinuxhyph" && test "$with_system_altlinuxyph" != "no
     AC_CHECK_MEMBER(struct _HyphenDict.cset, [],
        [ AC_MSG_ERROR(no. You are sure you have altlinuyhyph headers?)],
        [#include <hyphen.h>])
-    AC_CHECK_LIB(hyph, hnj_hyphen_hyphenate2, [],
+    AC_CHECK_LIB(hyphen, hnj_hyphen_hyphenate2, [HYPHEN_LIB=-lhyphen],
         [ AC_MSG_ERROR(altlinuxhyph library not found or too old.)], [])
+    if test -z "$HYPHEN_LIB"; then
+       AC_CHECK_LIB(hyph, hnj_hyphen_hyphenate2, [HYPHEN_LIB=-lhyph],
+           [ AC_MSG_ERROR(altlinuxhyph library not found or too old.)], [])
+    fi
+    if test -z "$HYPHEN_LIB"; then
+       AC_CHECK_LIB(hnj, hnj_hyphen_hyphenate2, [HYPHEN_LIB=-lhnj],
+           [ AC_MSG_ERROR(altlinuxhyph library not found or too old.)], [])
+    fi
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HYPH=NO
 fi
 AC_SUBST(SYSTEM_HYPH)
+AC_SUBST(HYPHEN_LIB)
 
 dnl ===================================================================
 dnl Checking for mythes
@@ -4906,6 +5010,124 @@ AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
 
 dnl ===================================================================
+dnl Check whether the OpenGL libraries are available
+dnl ===================================================================
+
+AC_MSG_CHECKING([whether to build the OGLTrans extension])
+ENABLE_OPENGL=
+
+if test "x$enable_opengl" != "xno" ; then
+   AC_MSG_RESULT([yes])
+   AC_CHECK_HEADER(GL/gl.h, [],
+                   [AC_MSG_ERROR([OpenGL headers not found])], [])
+   AC_CHECK_LIB(GL, main, [],
+     [AC_MSG_ERROR(libGL not installed or functional)], [])
+   AC_CHECK_LIB(GLU, main, [],
+     [AC_MSG_ERROR(libGLU not installed or functional)], [])
+   ENABLE_OPENGL=TRUE
+else
+   AC_MSG_RESULT([no])
+fi
+
+AC_SUBST(ENABLE_OPENGL)
+
+AC_MSG_CHECKING([whether to build the Presentation Minimizer extension])
+if test -n "$enable_sdext" -a "$enable_sdext" != "no"; then
+   AC_MSG_RESULT([yes])
+   BUILD_TYPE="$BUILD_TYPE SDEXT"
+else
+   AC_MSG_RESULT([no])
+fi
+
+AC_MSG_CHECKING([whether to build the Report Builder extension])
+if test -z "$enable_reportdesign" -a "$enable_reportdesign" != "no" && test "$WITH_JAVA" != "no"; then
+  AC_MSG_RESULT([yes])
+  ENABLE_REPORTDESIGN=YES
+  AC_MSG_CHECKING([which jfreereport libs to use])
+  if test "$with_system_jfreereport" == "yes"; then
+   	SYSTEM_JFREEREPORT=YES
+  	AC_MSG_RESULT([external])
+        if test -z $JCOMMON_JAR; then
+               JCOMMON_JAR=/usr/share/java/jcommon-1.0.10.jar
+        fi
+        AC_CHECK_FILE($JCOMMON_JAR, [],
+               [AC_MSG_ERROR(jcommon.jar not found.)], [])
+        if test -z $SAC_JAR; then
+               SAC_JAR=/usr/share/java/sac.jar
+        fi
+        AC_CHECK_FILE($SAC_JAR, [],
+               [AC_MSG_ERROR(sac.jar not found.)], [])
+        if test -z $LIBXML_JAR; then
+               LIBXML_JAR=/usr/share/java/libxml-0.9.5.jar
+        fi
+        AC_CHECK_FILE($LIBXML_JAR, [],
+               [AC_MSG_ERROR(libxml.jar not found.)], [])
+        if test -z $FLUTE_JAR; then
+               FLUTE_JAR=/usr/share/java/flute-1.3-jfree-20061107.jar
+        fi
+        AC_CHECK_FILE($FLUTE_JAR, [],
+               [AC_MSG_ERROR(flute-1.3-jfree.jar not found.)], [])
+        if test -z $JFREEREPORT_JAR; then
+               JFREEREPORT_JAR=/usr/share/java/jfreereport-0.9.0-05.jar
+        fi
+        AC_CHECK_FILE($JFREEREPORT_JAR, [],
+               [AC_MSG_ERROR(jfreereport.jar not found.)], [])
+        if test -z $LIBLAYOUT_JAR; then
+               LIBLAYOUT_JAR=/usr/share/java/liblayout-0.2.6.jar
+        fi
+        AC_CHECK_FILE($LIBLAYOUT_JAR, [],
+               [AC_MSG_ERROR(liblayout.jar not found.)], [])
+        if test -z $LIBLOADER_JAR; then
+               LIBLOADER_JAR=/usr/share/java/libloader-0.3.4.jar
+        fi
+        AC_CHECK_FILE($LIBLOADER_JAR, [],
+               [AC_MSG_ERROR(libloader.jar not found.)], [])
+        if test -z $LIBFORMULA_JAR; then
+               LIBFORMULA_JAR=/usr/share/java/libformula-0.1.8.jar
+        fi
+        AC_CHECK_FILE($LIBFORMULA_JAR, [],
+               [AC_MSG_ERROR(libformula.jar not found.)], [])
+        if test -z $LIBREPOSITORY_JAR; then
+               LIBREPOSITORY_JAR=/usr/share/java/librepository-0.1.1.jar
+        fi
+        AC_CHECK_FILE($LIBREPOSITORY_JAR, [],
+               [AC_MSG_ERROR(librepository.jar not found.)], [])
+        if test -z $LIBFONTS_JAR; then
+               LIBFONTS_JAR=/usr/share/java/libfonts-0.2.6.jar
+        fi
+        AC_CHECK_FILE($LIBFONTS_JAR, [],
+               [AC_MSG_ERROR(libfonts.jar not found.)], [])
+        if test -z $JCOMMON_SERIALIZER_JAR; then
+               JCOMMON_SERIALIZER_JAR=/usr/share/java/jcommon-serializer-0.1.0.jar
+        fi
+        AC_CHECK_FILE($JCOMMON_SERIALIZER_JAR, [],
+               [AC_MSG_ERROR(jcommon-serializer.jar not found.)], [])
+  else
+     AC_MSG_RESULT([internal])
+     SYSTEM_JFREEREPORT=NO
+     BUILD_TYPE="$BUILD_TYPE JFREEREPORT"
+  fi
+  BUILD_TYPE="$BUILD_TYPE REPORTDESIGN"
+else
+  AC_MSG_RESULT([no])
+  ENABLE_REPORTDESIGN=NO
+  SYSTEM_JFREEREPORT=NO
+fi
+AC_SUBST(ENABLE_REPORTDESIGN)
+AC_SUBST(SYSTEM_JFREEREPORT)
+AC_SUBST(JCOMMON_JAR)
+AC_SUBST(SAC_JAR)
+AC_SUBST(LIBXML_JAR)
+AC_SUBST(FLUTE_JAR)
+AC_SUBST(JFREEREPORT_JAR)
+AC_SUBST(LIBLAYOUT_JAR)
+AC_SUBST(LIBLOADER_JAR)
+AC_SUBST(LIBFORMULA_JAR)
+AC_SUBST(LIBREPOSITORY_JAR)
+AC_SUBST(LIBFONTS_JAR)
+AC_SUBST(JCOMMON_SERIALIZER_JAR)
+
+dnl ===================================================================
 dnl Check whether the Qt and KDE libraries are available.
 dnl ===================================================================
 
@@ -5076,8 +5298,7 @@ dnl ===================================================================
 AC_MSG_CHECKING([whether to enable KDE address book support])
 if test "$enable_kdeab" = "yes" && test "$enable_kde" = "yes"; then
    AC_MSG_RESULT([yes])
-   AC_LANG_SAVE
-   AC_LANG_CPLUSPLUS
+   AC_LANG_PUSH([C++])
    save_CXXFLAGS=$CXXFLAGS
    CXXFLAGS="$CXXFLAGS $KDE_CFLAGS"
    AC_MSG_CHECKING([whether KDE is between 3.2 and 3.6])
@@ -5090,7 +5311,7 @@ int main(int argc, char **argv) {
 }
        ], [AC_MSG_RESULT([yes])], [AC_MSG_ERROR([KDE version too old or too recent, please use another version of KDE or disable KDE address book support])])
    CXXFLAGS=$save_CXXFLAGS
-   AC_LANG_RESTORE
+   AC_LANG_POP([C++])
    ENABLE_KAB=TRUE
 else
    AC_MSG_RESULT([no])
@@ -5206,10 +5427,10 @@ if test "$_os" = "Darwin"; then
    AC_MSG_RESULT([yes])
 elif test "$_os" = "Linux" -o "$_os" = "FreeBSD"; then
    if test -e "$XLIB/libXinerama.so" -a -e "$XLIB/libXinerama.a"; then
-      # we have both versions, let the user decide but use the static one
+      # we have both versions, let the user decide but use the dynamic one
       # per default
       USE_XINERAMA=YES
-      if test -n "$with_dynamic_xinerama" -o -n "$with_system_libs"; then
+      if test -z "$with_static_xinerama" -o -n "$with_system_libs"; then
          XINERAMA_LINK=dynamic
       else
          XINERAMA_LINK=static
@@ -5253,13 +5474,6 @@ else
 fi
 AC_SUBST(USE_XINERAMA)
 AC_SUBST(XINERAMA_LINK)
-
-AC_CHECK_SIZEOF(long)
-SIZEOF_LONG=$ac_cv_sizeof_long
-AC_SUBST(SIZEOF_LONG)
-AC_C_BIGENDIAN
-WORDS_BIGENDIAN=$ac_cv_c_bigendian
-AC_SUBST(WORDS_BIGENDIAN)
 
 dnl ===================================================================
 dnl Test for the presence of Ant and that it works
