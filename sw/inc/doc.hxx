@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:27:52 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:21:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1243,8 +1243,18 @@ public:
                                                BOOL bBroadcast = FALSE);
     void DelTxtFmtColl(sal_uInt16 nFmt, BOOL bBroadcast = FALSE);
     void DelTxtFmtColl( SwTxtFmtColl* pColl, BOOL bBroadcast = FALSE );
+    // --> OD 2007-11-06 #i62675#
+    // Add 4th optional parameter <bResetListAttrs>.
+    // 'side effect' of <SetTxtFmtColl> with <bReset = true> is that the hard
+    // attributes of the affected text nodes are cleared, except the break
+    // attribute, the page description attribute and the list style attribute.
+    // The new parameter <bResetListAttrs> indicates, if the list attributes
+    // (list style, restart at and restart with) are clearer as well in case
+    // that <bReset = true> and the paragraph style has a list style attribute set.
     sal_Bool SetTxtFmtColl( const SwPaM &rRg, SwTxtFmtColl *pFmt,
-                        sal_Bool bReset = sal_True);
+                            bool bReset = true,
+                            bool bResetListAttrs = false );
+    // <--
     SwTxtFmtColl* FindTxtFmtCollByName( const String& rName ) const
         {   return (SwTxtFmtColl*)FindFmtByName( (SvPtrarr&)*pTxtFmtCollTbl, rName ); }
 
