@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 13:22:50 $
+#   last change: $Author: kz $ $Date: 2007-12-12 15:35:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -323,7 +323,7 @@ RCSETVERSION=
 
 DLLPOSTFIX=mi
 
-CSC*=$(WRAPCMD) csc
+CSC*=$(FLIPCMD) csc
 VBC*=$(WRAPCMD) vbc
 
 ADVAPI32LIB=advapi32.lib
