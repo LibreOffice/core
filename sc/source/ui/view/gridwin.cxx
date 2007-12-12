@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:21:16 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:21:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,10 @@
 #include "compiler.hxx"
 #include "editable.hxx"
 #include "fillinfo.hxx"
+#include "scitems.hxx"
+#include "userdat.hxx"
+#include "drwlayer.hxx"
+#include "attrib.hxx"
 
 // #114409#
 #ifndef _SV_SALBTYPE_HXX
@@ -361,12 +365,13 @@ BOOL lcl_IsEditableMatrix( ScDocument* pDoc, const ScRange& rRange )
 
 }
 
-void lcl_UnLockComment( SdrView* pView, SdrPageView* pPV, SdrModel* pDoc, const Point& rPos )
+void lcl_UnLockComment( SdrView* pView, SdrPageView* pPV, SdrModel* pDrDoc, const Point& rPos ,ScViewData* pViewData )
 {
-    if (!pView && !pPV && !pDoc)
+    if (!pView && !pPV && !pDrDoc && !pViewData)
         return ;
 
     SdrObject* pFoundObj = NULL;
+    ScAddress  aTabPos;
 
     SdrObjListIter aIter( *pPV->GetObjList(), IM_FLAT );
     SdrObject* pObject = aIter.Next();
@@ -376,6 +381,11 @@ void lcl_UnLockComment( SdrView* pView, SdrPageView* pPV, SdrModel* pDoc, const 
             && pObject->GetLogicRect().IsInside( rPos ) )
         {
             pFoundObj = pObject;
+            ScDrawObjData* pData = ScDrawLayer::GetObjDataTab( pObject, pViewData->GetTabNo() );
+            if( pData )
+            {
+                aTabPos = ScAddress( pData->aStt);
+            }
         }
         pObject = aIter.Next();
     }
@@ -383,11 +393,17 @@ void lcl_UnLockComment( SdrView* pView, SdrPageView* pPV, SdrModel* pDoc, const 
     if ( pFoundObj )
     {
         SdrLayer* pLockLayer = NULL;
+        ScDocument* pDoc = pViewData->GetDocument();
+        SfxObjectShell* pDocSh = pViewData->GetSfxDocShell();
+        const ScProtectionAttr* pProtAttr =  static_cast< const ScProtectionAttr* > (pDoc->GetAttr(aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), ATTR_PROTECTION ) );
+        BOOL bProtectAttr = pProtAttr->GetProtection() || pProtAttr->GetHideCell() ;
+        BOOL bProtectDoc =  pDoc->IsTabProtected(aTabPos.Tab()) || pDocSh->IsReadOnly() ;
+        BOOL bProtect = bProtectDoc && bProtectAttr ;
 
         // Leave the internal note object unlocked - re-lock in ScDrawView::MarkListHasChanged()
-        pLockLayer = pDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
+        pLockLayer = pDrDoc->GetLayerAdmin().GetLayerPerID(SC_LAYER_INTERN);
         if (pLockLayer)
-            pView->SetLayerLocked( pLockLayer->GetName(), FALSE );
+            pView->SetLayerLocked( pLockLayer->GetName(), bProtect );
     }
 
 }
@@ -1780,8 +1796,10 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
     {
         if ( pFilterBox && pFilterBox->GetMode() == SC_FILTERBOX_FILTER )
         {
+            BOOL  bFilterActive = IsAutoFilterActive( pFilterBox->GetCol(), pFilterBox->GetRow(),
+                pViewData->GetTabNo() );
             HideCursor();
-            aComboButton.Draw( FALSE );
+            aComboButton.Draw( bFilterActive );
             ShowCursor();
         }
         nMouseStatus = SC_GM_NONE;
@@ -2909,7 +2927,7 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel )
             pDrawView->UnmarkAllObj();
             // Unlock the Internal Layer in order to activate the context menu.
             // re-lock in ScDrawView::MarkListHasChanged()
-            lcl_UnLockComment( pDrawView, pDrawView->GetSdrPageView(), pDrawView->GetModel(), aLogicPos );
+            lcl_UnLockComment( pDrawView, pDrawView->GetSdrPageView(), pDrawView->GetModel(), aLogicPos ,pViewData);
             bHitDraw = pDrawView->MarkObj( aLogicPos );
             // draw shell is activated in MarkListHasChanged
         }
