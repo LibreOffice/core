@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sallayout.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-27 10:02:57 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:19:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,6 +104,7 @@ public:
     bool    GetRun( int* nMinRunPos, int* nEndRunPos, bool* bRTL ) const;
     bool    GetNextPos( int* nCharPos, bool* bRTL );
     bool    PosIsInRun( int nCharPos ) const;
+    bool    PosIsInAnyRun( int nCharPos ) const;
 };
 
 // -----------------
@@ -284,6 +285,8 @@ public:
     ImplFontData*    GetFallbackFontData( int nFallbackLevel ) const
     { return mpFallbackFonts[ nFallbackLevel ]; }
 
+    void SetInComplete(bool bInComplete = true);
+
 protected:
     virtual         ~MultiSalLayout();
 
@@ -302,6 +305,7 @@ private:
     ImplFontData*   mpFallbackFonts[ MAX_FALLBACK ];
     ImplLayoutRuns  maFallbackRuns[ MAX_FALLBACK ];
     int             mnLevel;
+    bool            mbInComplete;
 };
 
 // --------------------
