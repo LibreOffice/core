@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.167 $
-# Date:        $Date: 2007-12-12 14:54:52 $
+# Version:     $Revision: 1.168 $
+# Date:        $Date: 2007-12-12 15:37:11 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -38,8 +38,10 @@ use File::Basename;
 # IIa. Declaring variables for the system commands, etc.
 #--------------------------------------------------------
 #
-my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment, $comment4nt, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps, $cur_dir, 
-     $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW, $USE_MINGW, $platform,
+my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment,
+     $comment4nt, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps,
+     $wps, $wps2, $cur_dir, $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW,
+     $USE_MINGW, $platform, $NOWRAPCMD,
      $cygwinver, $empty, $no_ant, $no_stl, $no_gcc_include, 
      $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $exportvars, $win_format_var, $perl_os, @mingw_lib_include_paths, $mingw_lib_include_path);
 #
@@ -60,7 +62,8 @@ my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG,
 my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE, $GUIENV,
       $GVER, $GVERDIR, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR, $XPVERSION,
       $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $CDPATHx, $JRELIBDIR,
-      $JREEXTRALIBDIR, $JRETOOLKITDIR, $JRETHREADDIR, $EXCEPTIONS, $WRAPCMD );
+      $JREEXTRALIBDIR, $JRETOOLKITDIR, $JRETHREADDIR, $EXCEPTIONS, $WRAPCMD,
+      $FLIPCMD );
 #
 #-------------------------------------------
 # IIc. Declaring the environment variables.
@@ -70,7 +73,7 @@ my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE, $GUIE
 my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, 
      $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
      $SOLARENVINC, $USR_DT, $USR_OPENWIN, $SHELL_PATH, $XLIB, $XINC,
-     $CYGWIN_PATH, $language, $dict, $ASM_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
+     $CYGWIN_PATH, $language, $dict, $ASM_PATH, $NSIS_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
      $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH );
 
 # Environment variables.
@@ -100,6 +103,21 @@ my ( $dmake, $build, $build_client, $nmake, $mkout, $deliver, $zipdep );
 # IIIa. Initialising constants.
 #-------------------------------------------------------------
 #
+# $platform and $NOWRAPCMD are needed for PathFormat()
+#
+if ('@LOCAL_SOLENV@' eq "DEFAULT")
+{  $platform          = `../solenv/bin/config.guess`;
+}
+else
+{  $platform           = `@LOCAL_SOLENV@/bin/config.guess`;
+}
+chomp( $platform );
+if( "@NOWRAPCMD@" eq "yes" or "@USE_SHELL@" eq "4nt" ) {
+    $NOWRAPCMD = 'yes';
+} else {
+    $NOWRAPCMD = '';
+}
+
 $UPD            = '@UPD@';          # the project's UPD
 $newline        = "\n";             # Perl newline character
 $unsetenv       = "unsetenv";       # c-shell command
@@ -108,6 +126,8 @@ $unset          = "unset";          # msdos batch file command
 $set            = "set";            # msdos batch file command
 $ds             = "/";              # directory separator
 $ps             = ":";              # path separator
+$wps            = ":";              # path separator, will be set to ';' for windows later.
+$wps2           = ":";              # A cludge while we use WRAPCMD.
 $cur_dir        = ".";              # current directory
 $par_dir        = "..";             # parrent directory
 $I              = " -I";            # include search path
@@ -123,12 +143,13 @@ $SYSTEM_MOZILLA = '@SYSTEM_MOZILLA@';
 $JDK 		= '@JDK@';
 $MINGW          = '@WITH_MINGWIN@'; # use MinGW for Windows build
 $USE_MINGW      = '@USE_MINGW@';     # use MinGW in cygwin or pure-mingw
-$CC             = '@CC@';           # C compiler
-$CXX            = '@CXX@';          # C++ compiler
+$CC             = PathFormat('@CC@');           # C compiler
+$CXX            = PathFormat('@CXX@');          # C++ compiler
 $EXCEPTIONS     = '@EXCEPTIONS@';   # Exception handling type
 $MOZILLA_VERSION	= '@MOZILLA_VERSION@'; # mozilla version to use to build mozilla
 $MOZILLA_TOOLKIT	= '@MOZILLA_TOOLKIT@'; # GUI toolkit to use to build mozilla
 $WRAPCMD        = "";               # Wrapper (only for winnt)
+$FLIPCMD        = "";               # Flip '/' to '\' wrapper (only for winnt)
 $GLIBC          = "";               # Whether the platform uses glibc
 $PROEXT         = "@PROEXT@";
 $EPM_FLAGS	= "";
@@ -150,16 +171,6 @@ print ("Setting up the environment for building OpenOffice.org $newline");
 #
 # A. Checking the platform first.
 #
-if ('@LOCAL_SOLENV@' eq "DEFAULT")
-{  $platform          = `../solenv/bin/config.guess`;
-}
-else
-{  $platform           = `PosixFormat('@LOCAL_SOLENV@')/bin/config.guess`;
-
-}
-
-chomp( $platform );
-
 # get perls idea for OS
 # needed to differentiate cygwin/native perl on windows
 $perl_os = $^O;
@@ -612,15 +623,15 @@ elsif ( $platform =~ m/irix/ )
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips".$ds."native_threads";
 }
 elsif ( $platform =~ m/cygwin/ ) 
-{ 
-      $COMPATH        = PosixFormat('@COMPATH@');
-      $MSPDB_PATH     = PosixFormat('@MSPDB_PATH@');
-      $MIDL_PATH      = PosixFormat('@MIDL_PATH@');
-      $CSC_PATH       = PosixFormat('@CSC_PATH@');
-      $PSDK_HOME      = PosixFormat('@PSDK_HOME@');
-      $DIRECTXSDK_LIB = PosixFormat('@DIRECTXSDK_LIB@');
+{
+      $COMPATH        = PathFormat('@COMPATH@');
+      $MSPDB_PATH     = PathFormat('@MSPDB_PATH@');
+      $MIDL_PATH      = PathFormat('@MIDL_PATH@');
+      $CSC_PATH       = PathFormat('@CSC_PATH@');
+      $PSDK_HOME      = PathFormat('@PSDK_HOME@');
+      $DIRECTXSDK_LIB = PathFormat('@DIRECTXSDK_LIB@');
       $USE_DIRECTX5   = "";
-      $FRAME_HOME     = PosixFormat('@FRAME_HOME@');
+      $FRAME_HOME     = PathFormat('@FRAME_HOME@');
       $USE_NEW_SDK    = "TRUE";
       $CPUNAME        = "INTEL";
       $CPU            = "I";
@@ -632,14 +643,24 @@ elsif ( $platform =~ m/cygwin/ )
       $DYNAMIC_CRT    = "TRUE";
       $SET_EXCEPTIONS = "TRUE";
       $use_shl_versions = "TRUE";
+      $wps = ';'; # Windows style path seperator
+      $wps2 = ';'; # Ditto, but set to ':' if WRAPCMD is used.
   if ( $MINGW eq "yes" )
   {   # At the moment this implies the use of tcsh
-	  print "Setting Windows NT cygwin MinGW specific values... ";
-	  $WRAPCMD        = "guw.exe";
+      print "Setting Windows NT cygwin MinGW specific values... ";
+      if ( "$NOWRAPCMD" ne "yes" ) {
+          $WRAPCMD        = "guw.exe";
+          $FLIPCMD        = "guw.exe";
+          $PATH_SEPERATOR = ':';
+          $wps2 = ':';
+      } else {
+          $FLIPCMD        = "slfl.pl";
+          $PATH_SEPERATOR = ';';
+      }
       $outfile        = "winmingw.set"; 
       $COM            = "GCC";
       $COMPATH        =~ s/\/bin$//i;
-      if ( $USE_MINGW ne "cygwin" )
+      if ( $USE_MINGW ne "cygwin" and "$NOWRAPCMD" ne "yes" )
       { $CC             = $WRAPCMD." ".$CC;
         $CXX            = $WRAPCMD." ".$CXX;
       }
@@ -647,7 +668,6 @@ elsif ( $platform =~ m/cygwin/ )
       $OUTPATH        = "wntgcci";
       $INPATH         = $OUTPATH.$PROEXT;
       $GVERDIR        = $INPATH;
-      $PATH_SEPERATOR = ':';
       $ATL_INCLUDE = '$SOLARVER'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$PSDK_HOME'.$ds."include".$ds."atl";
   }
   else # The MSVC section starts here
@@ -682,14 +702,22 @@ elsif ( $platform =~ m/cygwin/ )
           die "Unsupported value for COMEX variable.\n";
       }
   if ( "@USE_SHELL@" ne "4nt" )
-  {   print "Setting Windows NT cygwin without 4NT specific values... ";
-	  $WRAPCMD        = "guw.exe";
-	  $CC             = $WRAPCMD." ".$CC;
-	  $CXX            = $WRAPCMD." ".$CXX;
-      $PATH_SEPERATOR = ':';
+  {   print "Setting W32 build with bash shell specific values... ";
+      if ( "$NOWRAPCMD" ne "yes" ) {
+          $WRAPCMD        = "guw.exe";
+          $FLIPCMD        = "guw.exe";
+          $CC             = $WRAPCMD." ".$CC;
+          $CXX            = $WRAPCMD." ".$CXX;
+          $PATH_SEPERATOR = ':';
+          $wps2 = ':';
+      } else {
+          # No speacial treatment for CC an CXX anymore.
+          $FLIPCMD        = "slfl.pl";
+          $PATH_SEPERATOR = ';';
+      }
   }
   else # "@USE_SHELL@" ne "4nt"
-  {   print "Setting Windows NT with 4NT specific values... ";
+  {   print "Setting W32 build with 4NT shell specific values... ";
       # Change path to lower case.
       $COMPATH        = lc $COMPATH;
       $PATH_SEPERATOR = ';';
@@ -811,9 +839,9 @@ print "done\n";
 #
 # If the directory does not exist something is strange.
 # 1. OpenOffice.org build home directory.
-$SRC_ROOT  = `pwd`; 
+chomp($SRC_ROOT  = `pwd`);
 $SRC_ROOT =~ s/\/config_office//;
-chomp($SRC_ROOT);
+$SRC_ROOT = PathFormat($SRC_ROOT);
 CheckPathExist( $SRC_ROOT );
 
 #-----------------------------------------------------------------------------------------------------
@@ -828,7 +856,7 @@ else
 
 # 2. Java home directory.
 # JAVA_HOME as argument from autoconf.
-$JAVA_HOME = PosixFormat('@JAVA_HOME@') ;
+$JAVA_HOME = PathFormat('@JAVA_HOME@') ;
 
 if ( $platform =~ m/cygwin|os2/ ) {
    $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
@@ -861,7 +889,7 @@ if ( '@STLPORT4@' eq $no_stl )
 
 # ml.exe assembler path for Windows users.
 if ($platform =~ m/cygwin/)
-{  $ASM_PATH = PosixFormat('@ASM_HOME@');
+{  $ASM_PATH = PathFormat('@ASM_HOME@');
 }
 
 # Check for prebuild mozab libraries if we don't build them # ourselves
@@ -970,7 +998,7 @@ if ($platform =~ m/cygwin/)
    # Change $SYSTEMDRIVE to lower case.
    $SYSTEMDRIVE          = lc $SYSTEMDRIVE;
    use Env qw(SYSTEMROOT);
-   $CYGWIN_PATH          = PosixFormat('@CYGWIN_PATH@'); # Windows bash path
+   $CYGWIN_PATH          = PathFormat('@CYGWIN_PATH@'); # Windows bash path
    $WIN_GREP             = '$CYGWIN_PATH'.$ds."grep.exe";
    $WIN_FIND             = '$CYGWIN_PATH'.$ds."find.exe";
    $WIN_LS               = '$CYGWIN_PATH'.$ds."ls.exe";
@@ -985,10 +1013,10 @@ if ( $JAVA_HOME ne "" )
 }
 
 
-$PERL                 = PosixFormat('@PERL@'); # Perl program
+$PERL                 = PathFormat('@PERL@'); # Perl program
 $PERL_PATH            = dirname('@PERL@'); # Perl Path 
-$XLIB                 = PosixFormat('@XLIB@'); # X11 libraries
-$XINC                 = PosixFormat('@XINC@'); # X11 includes
+$XLIB                 = PathFormat('@XLIB@'); # X11 libraries
+$XINC                 = PathFormat('@XINC@'); # X11 includes
 
 
 # Mac OS X/Darwin only variables.
@@ -1015,14 +1043,14 @@ if ('@LOCAL_SOLENV@' eq "DEFAULT")
 {  $SOLARENV          = $SRC_ROOT.$SOLENV;
 }
 else
-{  $SOLARENV          =  PosixFormat('@LOCAL_SOLENV@');
+{  $SOLARENV          =  PathFormat('@LOCAL_SOLENV@');
 }
 # Location of the solver tree.
 if ('@LOCAL_SOLVER@' eq "DEFAULT")
 {  $SOLARVER          = $SRC_ROOT.$SOLVER.$ds.$UPD;
 }
 else
-{  $SOLARVER          = PosixFormat('@LOCAL_SOLVER@').$ds.$UPD;
+{  $SOLARVER          = PathFormat('@LOCAL_SOLVER@').$ds.$UPD;
 }
 #Location of Solar version.
 $SOLARVERSION         = '$SOLARVER';
@@ -1048,10 +1076,10 @@ $STAR_REGISTRY        = '$STAR_RESOURCEPATH'.$ds."applicat.rdb";
 $DMAKEROOT            = '$SOLARENVINC'.$ds."startup";
 # Location of JDK classes .zip file.
 # but in jdk 1.2 it is called rt.jar and it lives in jre/lib
-$CLASSPATH            = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$ps.'.';
+$CLASSPATH            = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps2.'.';
 # Location of the JDK supported standard classes.zip file.
 # see above for why the change
-$XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$ps.'.';
+$XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar".$wps2.'.';
 
 # Paths to run time shared libraries.
 if ($platform =~ m/solaris/) 
@@ -1127,39 +1155,45 @@ if ($platform =~ m/cygwin|os2/)
 
    $JAVAHOME          = '$JAVA_HOME';
 
-   $ILIB             = $cur_dir.$ps_STLPORT_LIB;
+   $ILIB             = $cur_dir;
+
+   if ($STLPORT4 ne $no_stl) {
+       $ILIB      .=   $wps.$STLPORT4.$LIB64;
+   }
+
    # Mingw is different
    if ( $COM eq "MSC" )
-   {  $ILIB       .=   $ps.$SOLARVER.$ds.$INPATH.$LIB. 
-                        $ps.$JAVA_HOME.$LIB.
-                        $ps.'$PSDK_HOME'.$LIB.
-                        $ps.'$FRAME_HOME'.$LIB.
-                        $ps.'$COMPATH'.$LIB;
+   {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB.
+                        $wps.$JAVA_HOME.$LIB.
+                        $wps.$PSDK_HOME.$LIB.
+                        $wps.$FRAME_HOME.$LIB.
+                        $wps.$COMPATH.$LIB;
       if ( '@ENABLE_DIRECTX@' ne "" ) {
-          $ILIB   .= $ps.$DIRECTXSDK_LIB;
+          $ILIB   .= $wps.$DIRECTXSDK_LIB;
           if ( '@COMEX@' eq "10" ) {
               # .NET2003 provides and compiles against DirectX 5 libraries and is
               # hereby still Win9x compatible.
-              $ILIB .= $ps.'$COMPATH'.$ds.'PlatformSDK'.$LIB;
+              $ILIB .= $wps.'$COMPATH'.$ds.'PlatformSDK'.$LIB;
               $USE_DIRECTX5 = "YES";
           }
-
       }
    }
    elsif ( $COM eq "GCC" )
-   {  $ILIB       .=    $ps.$SOLARVER.$ds.$INPATH.$LIB.
-                        $ps.$SOLARVER.$ds.$INPATH.$BIN.
-                        $ps.$JAVA_HOME.$LIB;
+   {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB.
+                        $wps.$SOLARVER.$ds.$INPATH.$BIN.
+                        $wps.$JAVA_HOME.$LIB;
       if ( $USE_MINGW eq "cygwin" )
-      {  $ILIB    .= $ps.'$COMPATH'.$LIB.$ds."mingw".
-                     $ps.'$COMPATH'.$LIB.$ds."w32api";
+      {  $ILIB    .= $wps.$COMPATH.$LIB.$ds."mingw".
+                     $wps.$COMPATH.$LIB.$ds."w32api";
       }
-      $ILIB       .= $ps.'$COMPATH'.$LIB.
-                     $ps.'$PSDK_HOME'.$LIB;
+      $ILIB       .= $wps.$COMPATH.$LIB.
+                     $wps.$PSDK_HOME.$LIB;
       if ( '@ENABLE_DIRETX@' )
-      {   $ILIB   .= $ps.'@DIRECTXSDK_LIB@';
+      {   $ILIB   .= $wps.'@DIRECTXSDK_LIB@';
       }
    }
+   # ILIB needs to use '\' directory seperators;
+   $ILIB = WinPath( $ILIB, ";" );
 
    $JAVAHOME          = '$JAVA_HOME';
 
@@ -1192,18 +1226,16 @@ if ($platform =~ m/linux-gnu|netbsd|odf1|irix|freebsd|aix|solaris/)
 }
 
 elsif ($platform =~ m/cygwin|os2/)
-{  # The PATH variable is completely created from scratch. Everything that is not
-   # needed is appended to the end.
+{  # The PATH variable is completely created from scratch. Elements
+   # from oldPATH that are not yet included are appended to PATH at
+   # the end.
 
-   my ( $noldPATH );
-   $noldPATH = $oldPATH;
-   # convert path to posix if using native NT perl
-   $noldPATH = PosixFormat($noldPATH);
+   my ( $tmppath );
 
    $PATH              = $cur_dir.
-                        $ps.'$SOLARVER'.$ds.'$INPATH'.$BIN.
-                        $ps.'$SOLARENV'.$ds."bin".
-                        $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN;
+                        $ps.CygFormat($SOLARVER).$ds.$INPATH.$BIN.
+                        $ps.CygFormat($SOLARENV).$ds."bin".
+                        $ps.CygFormat($SOLARENV).$ds.$OUTPATH.$BIN;
 
    if ( $JAVA_HOME ne "" )
    {
@@ -1212,81 +1244,89 @@ elsif ($platform =~ m/cygwin|os2/)
       # 1.3.x   -   hotspot, client missing
       # 1.4.x   -   client, hotspot missing
       
-      $PATH .= $ps.$JAVA_HOME.$BIN;
+      $PATH .= $ps.CygFormat($JAVA_HOME).$BIN;
 	  if ( -d $JAVA_HOME.$ds."jre".$ds."bin".$ds."hotspot" ) {
-		  $PATH .= $ps.$JAVA_HOME.$ds."jre".$ds."bin".$ds."hotspot";
+		  $PATH .= $ps.CygFormat($JAVA_HOME).$ds."jre".$ds."bin".$ds."hotspot";
 	  }
 	  if ( -d $JAVA_HOME.$ds."jre".$ds."bin".$ds."client" ) {
-		  $PATH .= $ps.$JAVA_HOME.$ds."jre".$ds."bin".$ds."client";
+		  $PATH .= $ps.CygFormat($JAVA_HOME).$ds."jre".$ds."bin".$ds."client";
 	  }
    }
 
    # Add path to compiler
+   $PATH .= $ps.CygFormat($COMPATH).$BIN;
+
    if ( $COM eq "MSC" ) {
-      $PATH .= $ps.'$COMPATH'.$BIN;
-   } else { # Mingw is different
-      $PATH .= $ps.$COMPATH.$BIN;
-   }
-   if ( $COM eq "MSC" ) {
+       $tmppath = CygFormat($MSPDB_PATH);
 	   # for .NET to find mspdb71.dll (needed by CL.EXE C/C++ Compiler)
-	   if ( $PATH !~ /(?:[:]|\A)(?:$MSPDB_PATH)(?:[:]|\Z)/ ) {
-		   $PATH .= $ps.$MSPDB_PATH;
+	   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+		   $PATH .= $ps.$tmppath;
 	   }
 	   if ( ( $COMEX eq "10" ) || ( $COMEX eq "11" ) ) {
 		   # .NET needs midl.exe
-		   if ( $PATH !~ /(?:[:]|\A)(?:$MIDL_PATH)(?:[:]|\Z)/ ) {
-			   $PATH .= $ps.$MIDL_PATH;
+               $tmppath = CygFormat($MIDL_PATH);
+		   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+			   $PATH .= $ps.$tmppath;
 		   }
 		   # .NET needs csc.exe
-		   if ( $PATH !~ /(?:[:]|\A)(?:$CSC_PATH)(?:[:]|\Z)/ ) {
-			   $PATH .= $ps.$CSC_PATH;
+               $tmppath = CygFormat($CSC_PATH);
+		   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+			   $PATH .= $ps.$tmppath;
 		   }
 		   # Native installer needs some files if the Windows Installer SDK
-		   if ( $PATH !~ /(?:[:]|\A)(?:$PSDK_HOME\/bin)(?:[:]|\Z)/i ) {
-			   $PATH .= $ps.$PSDK_HOME.$BIN;
+               $tmppath = CygFormat($PSDK_HOME);
+		   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath\/bin)(?:[:]|\Z)/i ) {
+			   $PATH .= $ps.$tmppath.$BIN;
 		   }
 	   }
    } else { # Mingw is different
 	   # Native installer needs some files if the Windows Installer SDK
-	   if ( $PATH !~ /(?:[:]|\A)(?:$PSDK_HOME\/bin)(?:[:]|\Z)/i ) {
-		   $PATH .= $ps.$PSDK_HOME.$BIN;
+               $tmppath = CygFormat($PSDK_HOME);
+	   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath\/bin)(?:[:]|\Z)/i ) {
+		   $PATH .= $ps.$tmppath.$BIN;
 	   }
    }
 
    if ( $ASM_PATH ne "ASM_IN_PATH" )
-   {   $PATH          .= $ps.$ASM_PATH;
+   {   $PATH          .= $ps.CygFormat($ASM_PATH);
    } 
    # zip.exe / unzip.exe path for Windows users.
-   my $zip_home_path = PosixFormat('@ZIP_HOME@');
-   if ( $PATH !~ /(?:[:]|\A)(?:$zip_home_path)(?:[:]|\Z)/ ) {
-       $PATH          .= $ps.$zip_home_path;
+   my $zip_home_path = PathFormat('@ZIP_HOME@');
+   $tmppath = CygFormat($zip_home_path);
+   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+       $PATH          .= $ps.$tmppath;
    }
 
    # Possible cygwin paths must follow behind the OOo and MS paths
 
    # Check if $PERL_PATH is already set in PATH
-   if ( ! ( $PATH =~ /(?:[:]|\A)(?:$PERL_PATH)(?:[:]|\Z)/ ) )
+   $tmppath = CygFormat($PERL_PATH);
+   if ( ! ( $PATH =~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) )
    {
-      $PATH          .= $ps.$PERL_PATH;
+      $PATH          .= $ps.$tmppath;
    }
    # Check if $SHELL_PATH is already set in PATH
-   if ( ( "@USE_SHELL@" ne "4nt" ) && ( $PATH !~ /(?:[:]|\A)(?:$SHELL_PATH)(?:[:]|\Z)/ ) )
-   {   $PATH          .= $ps.$SHELL_PATH;
+   $tmppath = CygFormat($SHELL_PATH);
+   if ( ( "@USE_SHELL@" ne "4nt" ) && ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) )
+   {   $PATH          .= $ps.$tmppath;
    }
    # Check if $CYGWIN_PATH is already set in PATH
-   if ( $PATH !~ /(?:[:]|\A)(?:$CYGWIN_PATH)(?:[:]|\Z)/ ) {
-      $PATH           .= $ps.$CYGWIN_PATH;
+   $tmppath = CygFormat($CYGWIN_PATH);
+   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+      $PATH           .= $ps.$tmppath;
    }
    $PATH              .= $ps_STLPORT_LIB;
    # nsis path for Windows users.
-   my $nsis_path = PosixFormat('@NSIS_PATH@');
-   if ( $PATH !~ /(?:[:]|\A)(?:$nsis_path)(?:[:]|\Z)/ ) {
-       $PATH          .= $ps.$nsis_path;
+   $NSIS_PATH = PathFormat('@NSIS_PATH@');
+   $tmppath = CygFormat($NSIS_PATH);
+   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+       $PATH          .= $ps.$tmppath;
    }
    # path to sn.exe (signing) for Windows users.
-   my $sn_path = PosixFormat('@FRAME_HOME@/bin');
-   if ( $PATH !~ /(?:[:]|\A)(?:$sn_path)(?:[:]|\Z)/ ) {
-       $PATH          .= $ps.$sn_path;
+   my $sn_path = PathFormat('@FRAME_HOME@/bin');
+   $tmppath = CygFormat($sn_path);
+   if ( $PATH !~ /(?:[:]|\A)(?:$tmppath)(?:[:]|\Z)/ ) {
+       $PATH          .= $ps.$tmppath;
    }
 
 
@@ -1294,15 +1334,18 @@ elsif ($platform =~ m/cygwin|os2/)
    if (($^O eq "cygwin") || ($^O eq "os2")) { # Not for ActiveState perl
        my $expandedPATH = $PATH;
        $expandedPATH =~ s/(\$\w+)/$1/eeg;
-       foreach my $pathentry (split($ps,$noldPATH)) {
+       foreach my $pathentry (split($ps,$oldPATH)) {
            if ( ! ( $expandedPATH =~ /(?:$ps|\A)(?:$pathentry)(?:$ps|\Z)/ ) ) {
                $PATH .= $ps.$pathentry;
                $expandedPATH .= $ps.$pathentry;
            }
        }
    } else {
-       $PATH          .= $ps.$noldPATH;
+       $PATH          .= $ps.$oldPATH;
    }
+
+   # The path now is in cygwin posix format
+
 }
 
 elsif ($platform =~ m/darwin/)
@@ -1461,7 +1504,7 @@ elsif ($platform =~ m/cygwin/)
    {  $SOLARINC       .= $I.'$PSDK_HOME'.$INCLUDE.
                          $I.'$COMPATH'.$ds."include";
       if ( '@ENABLE_DIRECTX@' ne "" ) {
-          $SOLARINC   .= $I.PosixFormat('@DIRECTXSDK_HOME@').$INCLUDE;
+          $SOLARINC   .= $I.PathFormat('@DIRECTXSDK_HOME@').$INCLUDE;
           if ( '@COMEX@' eq "10" ) {
               # .NET2003 provides and compiles against DirectX 5 libraries and is
               # hereby still Win9x compatible.
@@ -1487,7 +1530,7 @@ elsif ($platform =~ m/cygwin/)
                   $I.'$PSDK_HOME'.$INCLUDE;
    }
    if ( '@ENABLE_DIRECTX@' ne "" ) {
-       $SOLARINC   .= $I.PosixFormat('@DIRECTXSDK_HOME@').$INCLUDE;
+       $SOLARINC   .= $I.PathFormat('@DIRECTXSDK_HOME@').$INCLUDE;
    }
 }
 elsif ($platform =~ m/darwin/)
@@ -1504,10 +1547,14 @@ else
 {  AddWarning( "set_soenv", "$platform not configured for system dependant include dir" );
 }
 
-if ($SYSTEM_PYTHON eq "NO")
-{
-	$PYTHONPATH           = '.'.$ps.'$SOLARVER'.$ds.'$INPATH'.$ds.'lib'.$ps.'$SOLARVER'.$ds.'$INPATH'.$ds.'lib'.$ds.'python'.$ps.'$SOLARVER'.$ds.'$INPATH'.$ds.'lib'.$ds.'python'.$ds.'lib-dynload'.$ps.'$SOLARVER'.$ds.'$INPATH'.$ds.'lib'.$ds.'pyuno'.$ps.'$SOLARVER'.$ds.'$INPATH'.$ds.'bin'.$ds.'pyuno';
-	$PYTHONHOME           = '$SOLARVER'.$ds.'$INPATH';
+if ($SYSTEM_PYTHON eq "NO") {
+    $PYTHONPATH           = '.'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'python'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'python'.$ds.'lib-dynload'.$wps.$SOLARVER.$ds.$INPATH.$ds.'lib'.$ds.'pyuno'.$wps.$SOLARVER.$ds.$INPATH.$ds.'bin'.$ds.'pyuno';
+    $PYTHONHOME           = $SOLARVER.$ds.$INPATH;
+    if ($GUIBASE eq "WIN") {
+        # PYTHONPATH and PYTHONHOME need to use '\' directory seperators;
+        $PYTHONPATH = WinPath( $PYTHONPATH, ";" );
+        $PYTHONHOME = WinPath( $PYTHONHOME, ";" );
+    }
 }
 
 #
@@ -1558,9 +1605,9 @@ CreateFileHeader( *OUT_BAT, $UPD, $platform, "4nt", "rem" ) if defined($outfile_
 ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
 ToFile( "SHELL",             $SHELL,             "e" );
 ToFile( "JAVA_HOME",         $JAVA_HOME,         "e" );
-ToFile( "ANT_HOME",          "@ANT_HOME@",       "e" );
-ToFile( "ANT_LIB",           "@ANT_LIB@",        "e" );
-ToFile( "ANT",               "@ANT@",            "e" );
+ToFile( "ANT_HOME",          PathFormat("@ANT_HOME@"), "e" );
+ToFile( "ANT_LIB",           PathFormat("@ANT_LIB@"), "e" );
+ToFile( "ANT",               PathFormat("@ANT@"), "e" );
 ToFile( "JDKLIB",            $JAVA_LIB,          "e" );
 ToFile( "STLPORT4",          $STLPORT4,          "e" );
 ToFile( "STLPORT_VER",       "@STLPORT_VER@",    "e" );
@@ -1776,6 +1823,7 @@ ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
 ToFile( "SET_EXCEPTIONS",    $SET_EXCEPTIONS,    "e" );
 ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
 ToFile( "WRAPCMD",           $WRAPCMD,           "e" );
+ToFile( "FLIPCMD",           $FLIPCMD,           "e" );
 #
 # Writing the variables to file.
 # (c = comment, e = environment variable, a = alias, n = newline )
@@ -1791,9 +1839,16 @@ if ( $platform =~ m/cygwin/ )
    }
    ToFile( "MFC_LIB",           $MFC_LIB,         "e" );
    ToFile( "MFC_INCLUDE",       $MFC_INCLUDE,       "e" );
-   ToFile( "NSIS_PATH",         "@NSIS_PATH@",      "e" );
+   ToFile( "NSIS_PATH",         $NSIS_PATH,         "e" );
    ToFile( "DISABLE_ACTIVEX",   "@DISABLE_ACTIVEX@","e" );
    ToFile( "USE_NEW_SDK",       $USE_NEW_SDK,       "e" );
+
+   if ( "@NOWRAPCMD@" eq "yes" ) {
+       # Hack around dmake's mktmp not generating DOS paths.
+       my $tmpdir = qx{cygpath -m "/tmp"};
+       chomp($tmpdir);
+       ToFile( "TMPDIR",     $tmpdir,            "e" );
+   }
 }
 ToFile( "PERL",              $PERL,              "e" );
 ToFile( "RPM",               "@RPM@",            "e" );
@@ -1829,10 +1884,10 @@ if ( $GUI eq "UNX" ) {
 if ( '@JDK@' ne '' )
 { 
    ToFile( "JDK",             "@JDK@",           "e" );
-   ToFile( "JAVAINTERPRETER", "@JAVAINTERPRETER@","e" );
-   ToFile( "JAVACOMPILER",    "@JAVACOMPILER@",  "e" );
-   ToFile( "JAVAAOTCOMPILER", "@JAVAAOTCOMPILER@","e" );
-   ToFile( "JAVADOC",         "@JAVADOC@",       "e" );
+   ToFile( "JAVAINTERPRETER", PathFormat("@JAVAINTERPRETER@"), "e" );
+   ToFile( "JAVACOMPILER",    PathFormat("@JAVACOMPILER@"), "e" );
+   ToFile( "JAVAAOTCOMPILER", PathFormat("@JAVAAOTCOMPILER@"), "e" );
+   ToFile( "JAVADOC",         PathFormat("@JAVADOC@"), "e" );
 }
 if ( $platform =~ m/darwin/ )
 {  ToFile( "DYLD_LIBRARY_PATH", $LD_LIBRARY_PATH,   "e" );
@@ -2006,7 +2061,6 @@ if ($platform !~ m/cygwin|os2/)
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
 if ( $platform =~ m/cygwin/ )
 {
-   # these variables marked with "j" are used with cygwin only
    if ( $MINGW eq "yes" )
    {  my ($tempstring);
       $tempstring = $ILIB;
@@ -2016,7 +2070,7 @@ if ( $platform =~ m/cygwin/ )
       ToFile( "DIRECTXSDK_HOME",    "@DIRECTXSDK_HOME@",    "e" );
       ToFile( "USE_MINGW",         $USE_MINGW,              "e" ); }
    else
-   {  ToFile( "ILIB",              $ILIB,              "j" ); }
+   {  ToFile( "ILIB",              $ILIB,              "e" ); }
 
    ToFile( "GREP",              $WIN_GREP,          "e" );
    ToFile( "FIND",              $WIN_FIND,          "e" );
@@ -2026,8 +2080,7 @@ if ( $platform =~ m/cygwin/ )
 }
 if ( $platform =~ m/os2/ )
 {
-   # these variables marked with "j" are used with cygwin only
-   #ToFile( "ILIB",              $ILIB,              "j" );
+   #ToFile( "ILIB",              $ILIB,              "e" );
    
    ToFile( "GREP",              "grep.exe",         "e" );
    ToFile( "FIND",              "find.exe",         "e" );
@@ -2048,15 +2101,9 @@ ToFile( "MKOUT",         $perlpre."mkout.pl",       "e" );
 ToFile( "ZIPDEP",        $perlpre."zipdep.pl",      "e" );
 
 ToFile( "USE_SHELL",             '@USE_SHELL@',     "e" );
-if ($SYSTEM_PYTHON eq "NO")
-{
-  if ( $platform =~ m/cygwin/ ) {
-    ToFile( "PYTHONPATH",        $PYTHONPATH,        "j" );
-    ToFile( "PYTHONHOME",        $PYTHONHOME,        "j" );
-  } else {
+if ($SYSTEM_PYTHON eq "NO") {
     ToFile( "PYTHONPATH",        $PYTHONPATH,        "e" );
     ToFile( "PYTHONHOME",        $PYTHONHOME,        "e" );
-  }
 }
 
 #
@@ -2321,7 +2368,6 @@ sub CreateFileHeader
 #                   a - alias
 #                   c - comment
 #                   n - newline
-#                   j - env. var in DOS style (WINNT only)
 #                   x - raw, write as is to OUT_BAT
 #                   y - raw, write as is to OUT
 #                   z - raw, write as is to OUT_SH
@@ -2337,19 +2383,27 @@ sub ToFile {
              # expand the variables
              $envvar =~ s/(\$\{?\w+\}?)/$1/eeg ;
              # Some variables need to be translated
-             $win_format_var = WinFormat( $envvar );
+             if ( $_[ 0 ] =~ /^PATH$/ ) {
+                 # PATH is in cygwin format, but for 4nt it needs to be DOS.
+                 $win_format_var = WinPath( $envvar, ":" );
+             } else {
+                 $win_format_var = WinFormat( $envvar );
+             }
              # The excluded variables are translated by cygwin
              if ( $_[ 0 ] !~ /^PATH$|^TMP$|^TEMP$|^TMPDIR$|^HOME$/i ) {
                  $envvar = $win_format_var;
              }
-             # Tcsh/bash needs backslashes quoted
-             $envvar =~ s/\\/\\\\/g;
-             $envvarbash = $envvar;
          }
+
+         # Tcsh/bash needs backslashes quoted
+         $envvar =~ s/\\/\\\\/g;
+         $envvarbash = $envvar;
+
          printf("%-12s %-17s %-10s %s\n", "The variable", $_[ 0 ], "is set to:", $envvar);
          print OUT "$setenv $_[ 0 ] \"$envvar\"$newline";  # to tcsh file
          print OUT_SH "$_[ 0 ]=\"$envvarbash\"$newline";   # to sh file
          $exportvars .= " $_[ 0 ]";                        # add to export list for sh file
+
          if(defined($outfile_bat)) {
              print OUT_BAT "IF DEFINED $_[ 0 ] $unset $_[ 0 ]$newline";
              print OUT_BAT "$set $_[ 0 ]=$win_format_var$newline";
@@ -2418,163 +2472,172 @@ sub ToFile {
       #Write first argument as is, and nothing else
       print OUT_SH "$_[ 0 ]$newline";
    }
-   elsif ( $_[ 2 ] eq "j" ) {
-      if ((defined $_[ 1 ]) and ( $platform =~ m/cygwin/ )) {
-         printf("%-12s %-17s %-10s %-39s\n", "The variable", $_[ 0 ], "is set to:", $_[ 1 ]) ; # to stdout
-         $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
-         $win_format_var =~ s/\\/\\\\/g;
-         print OUT "$setenv $_[ 0 ] \"$win_format_var\"$newline";
-
-         print OUT_SH "$_[ 0 ]=\"$win_format_var\"$newline"; # to sh file
-         $exportvars .= " $_[ 0 ]";                          # add to export list for sh file
-
-         if (defined($outfile_bat)) {
-             $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
-             print OUT_BAT "IF DEFINED $_[ 0 ] $unset $_[ 0 ]$newline";
-             print OUT_BAT "$set $_[ 0 ]=$win_format_var$newline";
-         }
-      }
-      else
-      {
-          print "Type \"j\" only intended for Windows!$newline";
-          print "use \"e\" to set and unset variables.$newline";
-      }
-   }
-   else 
+   else
    {  print "Unknown type!$newline";
    }
 }
 #----------------------------------------------------------
-# Function name: PosixFormat
-# Description:   Format variables to Posix Style Format. Should only be used 
-#                with DOS-style path variables.
+# Function name: PathFormat
+# Description:   Reformat path to either POSIX or mixed mode style.
 # Arguments:     1. Variable (string)
 # Return value:  Reformatted String
 #----------------------------------------------------------
-sub PosixFormat
+sub PathFormat
 {  my ( $variable, $d1, $d2 );
    $variable = $_[ 0 ];
-   # ToDo: Do the replacement only if Windows and var contains "\" and ":"
-   if ( $platform =~ m/cygwin|os2/ )
-   {   $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;         # expand the variables
-       $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;         # expand the variables twice!
-   	   if ( ( $variable =~ /\\/ ) and ( $variable =~ /:/ ) )
-	   {   $variable =~ s{([c-z]):}{/cygdrive/$1}gi;
-		   # Map drives to /cgydrive/drive
-		   # We do this also for old cygwins, back
-		   # replacement in winformat.
-	   }
-	   $variable =~ s!\\!/!g;
-	   $variable =~ s/;/:/g;
 
-	   # Search for posix path :path with space: and replace with short dos path
-	   while ( $variable =~ /(?::|\A)[\'\"]?([^:]+ [^:]+)[\'\"]?(?::|\Z)/ ) {
-               $d1 = $1 ;
-               if ( $d1 =~ m/"$/ ) { die( "A part of $variable is enclosed in quotes, fix this!"); }
-               chomp( $d2 = qx{cygpath -d "$d1"} ) || die( "Path with space: $1 propably doesn't exist!" );
-               # Be arefull with \s
-               $d2 =~ s/\\/\\\\/g;
-               chomp( $d2 = qx{cygpath -u "$d2"} ) ;
-               $variable =~ s/\Q$d1\E/$d2/ ;
-	   }
-   }
-   if ( $platform =~ m/os2000/ )
-   {   $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;         # expand the variables
-       $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;         # expand the variables twice!
-	   $variable =~ s!\\!/!g;
-	   $variable =~ s/;/:/g;
+   if ( $platform =~ m/cygwin/ )
+   {   $variable =~ s/(\$\{?\w+\}?)/$1/eeg ; # expand the variables
+       $variable =~ s/(\$\{?\w+\}?)/$1/eeg ; # expand the variables twice!
+
+       # Complain if PosixPath is used on a PATH-like string
+       if ( $variable =~ m/;/ ) {
+           die( "Do not use on PATH lists (i.e., 'c:\\foo;d:\\bar')");
+       }
+
+       # Replace path with space with short dos path
+       if ( $variable =~ / / ) {
+           chomp( $variable = qx{cygpath -d "$variable"} ) ;
+       }
+
+       # Replace absolute paths or DOS paths with ...
+       if ( ( $variable =~ m/^\// ) or ( $variable =~ m/:/ ) ) {
+           if ( "$NOWRAPCMD" eq "yes" ) {
+               # mixed mode paths
+               chomp( $variable = qx{cygpath -m "$variable"} );
+           } else {
+               # POSIX paths
+               chomp( $variable = qx{cygpath -u "$variable"} );
+           }
+       }
    }
    return $variable;
 }
 #----------------------------------------------------------
-# Function name: WinFormat 
+# Function name: CygFormat
+# Description:   Format variables to cygwin posix style path
+#                unless .
+# Arguments:     1. Variable (string)
+# Return value:  Reformatted String
+#----------------------------------------------------------
+sub CygFormat
+{  my ( $variable, $d1, $d2 );
+   $variable = $_[ 0 ];
+   # ToDo: Do the replacement only if Windows and var contains "\" and ":"
+   if ( $platform =~ m/cygwin|os2/ )
+   {
+       # Complain if PosixPath is used on a PATH-like string
+       if ( $variable =~ m/;/ ) {
+           die( "Do not use on PATH lists (i.e., 'c:\\foo;d:\\bar')");
+       }
+
+       # Replace DOS paths with posix paths
+       if ( ( $variable =~ m/\\/ ) or ( $variable =~ m/:/ ) ) {
+           chomp( $variable = qx{cygpath -u "$variable"} );
+       }
+   }
+   return $variable;
+}
+#----------------------------------------------------------
+# Function name: WinFormat
 # Description:   Format variables to Windows Format.
 # Arguments:     1. Variable (string)
 # Return value:  Reformatted String
 #----------------------------------------------------------
-sub WinFormat         
-{  my ( $variable, $d1, $d1_prefix, $d1_fname, @split_var );  
+sub WinFormat
+{  my ( $variable, $d1 );
    $variable = $_[ 0 ];
    $variable =~ s/^\s+//g ; #remove leading spaces
    $variable =~ s/\s+$//g ; #remove trailing spaces
-   # Here should be NO "\"! If yes, PosixFormat() was forgotten before !
-   if ( $variable =~ /\\/ )
-   {
-	   die("Error! Variable contains \"\\\" : $variable PosixFormat() missing?");
-   }
-   $variable =~ s/\$\{PATH\}/%PATH/g ;     # explicit replace ${PATH}
    $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;   # expand the variables
    $variable =~ s/(\$\{?\w+\}?)/$1/eeg ;   # expand the variables twice!
    $variable =~ s/:+/:/g ;                 # remove multiple ;
 
-   if ( $platform !~ m/os2/ )
-   {
-       $variable =~ s/:/;/g;
+   # Some variables are already in DOS path format, return early.
+   if ( $variable =~ /\\/ ) {
+       return $variable;
+   }
+   if ( $variable eq ";" ) {
+       # Ignore single ';'
+       return $variable;
+   }
+   if ( $variable =~ /;/ and $variable =~ /\// ) {
+       # Mixed mode path-style entry, separated with ;, like CLASSPATH
+       return $variable;
    }
 
-       # Search for posix path entry and replace with cygpath -w entry ( -d if filename contains space )
-       if ( $variable =~ /^\s*-\w/ )
-       {
-           # Include paths
-           @split_var = split(/\s+-/,$variable);
-		   $split_var[0] =~ s/^-//; # split deletes the "-" from all but the first element
-           foreach $d1 ( @split_var )
-           {
-               $d1 = "-".$d1;
-               if ( $d1 =~ /^(-\w)[\'\"]?((?:\/[\w\.~ ]+)+)[\'\"]?/ )
-               # This regex: option -> $1, filename without quotes -> $2
-               {
-                   $d1_prefix = $1;
-                   $d1_fname = $2;
-                   if ( $d1_fname =~ / / ) {
-                       # Use DOS 8.3 style to avoid quoting
-                       chomp( $d1_fname = qx{cygpath -d "$d1_fname"} );
-                   }   # ! This fails when $d1 doesn't exist!
-                   else {
-                       chomp( $d1_fname = qx{cygpath -w "$d1_fname"} ); # Use "normal" filenames
-                   }
-                   $d1 = $d1_prefix.$d1_fname;
-               }
-               else
-               {   # relative paths here
-                   # Do nothing.
-               }
-           }
-           $variable = join(' ',@split_var);
-       }
-       elsif ( $variable eq ";" ) {}
-       else {
-           # Normal paths
+   # Search for posix path entry and replace with cygpath -w entry
+   # ( -d if filename contains space )
 
-           # One special case is if "perl " is prepended.
-           $variable =~ /^(perl\s+)?(.*)$/;
-           my $perlpre = $1;
-           if ( !defined($perlpre) ) { $perlpre = ""; }
-           $variable = $2;
+   # Normal paths
 
-           @split_var = split(/;/,$variable);
-           foreach $d1 ( @split_var ) {
-               if ( $d1 =~ /(?:^\/[\w\.~ ]+)+/ ) {
-                   if ( $d1 =~ / / ) {
-                       chomp( $d1 = qx{cygpath -d "$d1"} ); # Use DOS 8.3 style to avoid quoting
-                   }                                        # ! This fails when $d1 doesn't exist!
-                   else {
-                       chomp( $d1 = qx{cygpath -w "$d1"} ); # Use "normal" filenames
-                   }
-               }
-               else {
-                   # relative paths here
-                   # Do nothing.
-               }
-           }
-           $variable = $perlpre.join(';',@split_var);
-           if ( ($perlpre ne "") && ($^O eq "cygwin")) {
-               # Cygwin's perl needs quoted backslashes
-               $variable =~ s#\\#\\\\#g;
-           }
+   # One special case is if "perl " is prepended.
+   $variable =~ /^(perl\s+)?(.*)$/;
+   my $perlpre = $1;
+   if ( !defined($perlpre) ) {
+       $perlpre = "";
+   }
+   $variable = $2;
+
+   if ( $variable =~ /^\/[\w\.~ ]+/ ) {
+       if ( $variable =~ / / ) {
+           # Use DOS 8.3 style to avoid quoting
+           chomp( $variable = qx{cygpath -d "$variable"} );
+       } else {
+           # Use "normal" filenames
+           chomp( $variable = qx{cygpath -w "$variable"} );
        }
-       $variable =~ s/\//\\/g; # Remaining \ come from e.g.: ../foo/baa
+   } else {
+       # relative or absolute DOS paths here
+       $variable =~ s#/#\\#g;
+   }
+
+   $variable = $perlpre.$variable;
+   if ( ($perlpre ne "") && ($^O eq "cygwin")) {
+       # Cygwin's perl needs quoted backslashes
+       $variable =~ s#\\#\\\\#g;
+   }
+
    return $variable;
+}
+
+#----------------------------------------------------------
+# Function name: WinPath
+# Description:   Reformat a $sep seperated path using DOS paths.
+# Arguments:     1. Variable (string)
+#                2. Separaror (string)
+# Return value:  Reformatted String
+#----------------------------------------------------------
+sub WinPath
+{
+    my ( $variable, $d1, $sep, @split_var );
+
+    if ( $platform =~ m/cygwin/ ) {
+        $variable = $_[ 0 ];
+        $sep = $_[ 1 ];
+        $variable =~ s/^\s+//g ; #remove leading spaces
+        $variable =~ s/\s+$//g ; #remove trailing spaces
+        $variable =~ s/(\$\{?\w+\}?)/$1/eeg ; # expand the variables
+        $variable =~ s/(\$\{?\w+\}?)/$1/eeg ; # expand the variables twice!
+
+        @split_var = split(/$sep/,$variable);
+        foreach $d1 ( @split_var ) {
+            if ( $d1 =~ /(?:^\/[\w\.~ ]+)+/ ) {
+                if ( $d1 =~ / / ) {
+                    # Use DOS 8.3 style to avoid quoting
+                    chomp( $d1 = qx{cygpath -d "$d1"} );
+                } else {
+                    # Use "normal" filenames
+                    chomp( $d1 = qx{cygpath -w "$d1"} );
+                }
+            }
+        }
+        $variable = join(';',@split_var);
+
+        $variable =~ s/\//\\/g; # Remaining \ come from e.g.: ../foo/baa
+    }
+
+    return $variable;
 }
 
 #--------------------------------------------------------
