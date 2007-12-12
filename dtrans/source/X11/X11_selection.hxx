@@ -4,9 +4,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:58:16 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:16:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -379,6 +379,7 @@ namespace x11 {
         Atom                        m_nCOMPOUNDAtom;
         Atom                        m_nMULTIPLEAtom;
         Atom                        m_nUTF16Atom;
+        Atom                        m_nImageBmpAtom;
         Atom                        m_nXdndAware;
         Atom                        m_nXdndEnter;
         Atom                        m_nXdndLeave;
