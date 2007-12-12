@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:42:02 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:22:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@ ASM=/usr/ccs/bin/as
 AFLAGS=-P -xarch=v8plus -D__sparcv8plus
 
 
-CDEFS+=-D_PTHREADS -DSYSV -DSUN -DSUN4 -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=400
+CDEFS+=-D_PTHREADS -DSYSV -DSUN -DSUN4 -D_REENTRANT -D_POSIX_PTHREAD_SEMANTICS -DSTLPORT_VERSION=$(STLPORT_VER)
 
 SOLAR_JAVA*=TRUE
 .IF "$(SOLAR_JAVA)"!=""
