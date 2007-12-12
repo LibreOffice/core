@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:29:13 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 14:55:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@ public:
 
     const char* authenticateUser( const char* );
 
-    virtual FILE* startSpool( const rtl::OUString& rPrinterName );
+    virtual FILE* startSpool( const rtl::OUString& rPrinterName, bool bQuickCommand );
     virtual int endSpool( const rtl::OUString& rPrinterName, const rtl::OUString& rJobTitle, FILE* pFile, const JobData& rDocumentJobData );
     virtual void setupJobContextData( JobData& rData );
 
