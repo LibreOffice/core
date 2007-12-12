@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 12:19:53 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:26:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -368,7 +368,7 @@ ULONG SwReader::Read( const Reader& rOptions )
                             if( bSaveUndo )
                             {
                                 pDoc->SetRedlineMode_intern( eOld );
-                                pDoc->AppendUndo( new SwUndoInsLayFmt( pFrmFmt ) );
+                                pDoc->AppendUndo( new SwUndoInsLayFmt( pFrmFmt,0,0 ) );
                                 pDoc->SetRedlineMode_intern( nsRedlineMode_t::REDLINE_IGNORE );
                             }
                             if( pFrmFmt->GetDepends() )
