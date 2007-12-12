@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-12 16:20:07 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:21:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ LINKOUTPUT_FILTER=
 # Definitions that we may need on the compile line.
 # -D_PTHREADS and -D_REENTRANT are needed for STLport, and must be specified when
 #  compiling STLport sources too, either internally or externally.
-CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFINES) -DSTLPORT_VERSION=400 -D_USE_NAMESPACE=1
+CDEFS+=-DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNO_PTHREAD_PRIORITY $(PROCESSOR_DEFINES) -DSTLPORT_VERSION=$(STLPORT_VER) -D_USE_NAMESPACE=1
 .IF "$(GUIBASE)"=="unx"
 CDEFS+= -DX_LOCALE
 .ENDIF
@@ -162,11 +162,21 @@ STDLIBCPP=-lstdc++
 #  STLport library names
 # ---------------------------------
 .IF "$(USE_STLP_DEBUG)" != ""
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=-lstlportstlg
+LIBSTLPORTST=$(STATIC) -lstlportstlg
+.ELSE
 LIBSTLPORT=-lstlport_gcc_stldebug
 LIBSTLPORTST=$(SOLARVERSION)$/$(INPATH)$/lib$/libstlport_gcc_stldebug.a
+.ENDIF
 .ELSE # "$(USE_STLP_DEBUG" != ""
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=-lstlport
+LIBSTLPORTST=$(STATIC) -lstlport
+.ELSE
 LIBSTLPORT=-lstlport_gcc
 LIBSTLPORTST=$(SOLARVERSION)$/$(INPATH)$/lib$/libstlport_gcc.a
+.ENDIF
 .ENDIF # "$(USE_STLP_DEBUG" != ""
 
 # ---------------------------------
