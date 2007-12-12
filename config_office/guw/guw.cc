@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guw.cc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-05 08:16:22 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 15:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,7 +418,7 @@ int winFormat(string &para) {
     Fatal("Not converted -X/... type switch in :" + para);
   }
   // Sanity check for [-]X<something>(:|=)<abspath> case
-  if (match2s(para, "^(-?[[:alpha:]][[:alnum:]_.]*[=:])[\'\"]?((/[[:alnum:]_~. +-]+)+)",
+  if (match2s(para, "^(-?[[:alpha:]][[:alnum:]_.]+[=:])[\'\"]?((/[[:alnum:]_~. +-]+)+)",
               su1, su2)) {
     Fatal("Not processed [-]X<something>(=|:)/... in :" + para);
   }
