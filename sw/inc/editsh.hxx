@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:22:14 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,7 +327,11 @@ public:
     USHORT GetTxtFmtCollCount() const;
     SwTxtFmtColl& GetTxtFmtColl( USHORT nTxtFmtColl) const;
     SwTxtFmtColl* GetCurTxtFmtColl() const;
-    void SetTxtFmtColl(SwTxtFmtColl*);
+    // --> OD 2007-11-06 #i62675#
+    // Add 2nd optional parameter <bResetListAttrs> - see also <SwDoc::SetTxtFmtColl(..)>
+    void SetTxtFmtColl( SwTxtFmtColl*,
+                        bool bResetListAttrs = false );
+    // <--
     SwTxtFmtColl *MakeTxtFmtColl(const String &rFmtCollName,
         SwTxtFmtColl *pDerivedFrom = 0);
     void FillByEx(SwTxtFmtColl*, BOOL bReset = FALSE);
