@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxbsds.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:07:44 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:18:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=-D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=400 -DOSL_USE_SYS_V_SEMAPHORE
+CDEFS+=-D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER) -DOSL_USE_SYS_V_SEMAPHORE
 
 # this is a platform with JAVA support
 .IF "$(SOLAR_JAVA)"!=""
@@ -154,8 +154,13 @@ STDSHLCUIMT=-lpthread -lm
 
 # STLport always needs pthread. This may yield some redundant -lpthread
 # but that doesn't matter. 
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=$(DYNAMIC) -lstlport -lpthread
+LIBSTLPORTST=$(STATIC) -lstlport $(DYNAMIC) -lpthread
+.ELSE
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc -lpthread
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC) -lpthread
+.ENDIF
 
 
 # name of library manager
