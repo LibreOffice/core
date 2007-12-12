@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclpixelprocessor2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-20 10:20:08 $
+ *  last change: $Author: aw $ $Date: 2007-12-12 13:23:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,6 @@
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #endif
 
-#ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
-#include <svtools/optionsdrawinglayer.hxx>
-#endif
-
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 
@@ -56,9 +52,6 @@ namespace drawinglayer
         class VclPixelProcessor2D : public VclProcessor2D
         {
         private:
-            // SvtOptionsDrawinglayer incarnation to react on diverse settings
-            const SvtOptionsDrawinglayer                maDrawinglayerOpt;
-
         protected:
             // the local processor for BasePrinitive2D-Implementation based primitives,
             // called from the common process()-implementation

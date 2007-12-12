@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
+ *  last change: $Author: aw $ $Date: 2007-12-12 13:23:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1001,8 +1001,15 @@ namespace drawinglayer
                     const primitive2d::TextSimplePortionPrimitive2D& rTextCandidate = static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate);
                     const primitive2d::TextDecoratedPortionPrimitive2D* pTextDecoratedCandidate = dynamic_cast< const primitive2d::TextDecoratedPortionPrimitive2D* >(&rCandidate);
 
+                    // Adapt evtl. used special DrawMode
+                    const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
+                    adaptTextToFillDrawMode();
+
                     // directdraw of text simple portion; use default processing
                     RenderTextSimpleOrDecoratedPortionPrimitive2D(rTextCandidate);
+
+                    // restore DrawMode
+                    mpOutputDevice->SetDrawMode(nOriginalDrawMode);
 
                     if(pTextDecoratedCandidate)
                     {
@@ -1075,9 +1082,17 @@ namespace drawinglayer
                     SvtGraphicStroke* pSvtGraphicStroke = impTryToCreateSvtGraphicStroke(rStrokePrimitive.getB2DPolygon(), 0, &rStrokePrimitive.getLineAttribute(),
                         &rStrokePrimitive.getStrokeAttribute(), 0, 0);
 
+                    // Adapt OutDev's DrawMode if special ones were used
+                    const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
+                    adaptLineToFillDrawMode();
+
                     impStartSvtGraphicStroke(pSvtGraphicStroke);
                     process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     impEndSvtGraphicStroke(pSvtGraphicStroke);
+
+                    // restore DrawMode
+                    mpOutputDevice->SetDrawMode(nOriginalDrawMode);
+
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D :

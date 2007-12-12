@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
+ *  last change: $Author: aw $ $Date: 2007-12-12 13:23:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,13 +158,9 @@ namespace drawinglayer
                     TextLayouterDevice aTextLayouter;
                     aTextLayouter.setFontAttributes(getFontAttributes(), aFontScale.getX(), aFontScale.getY());
 
-                    // get integer DXArray for getTextOutlines call (ATM uses vcl, so this
-                    // is needed)
-                    const basegfx::B2DVector aPixelVector(getTextTransform() * basegfx::B2DVector(1.0, 0.0));
-                    const ::std::vector< sal_Int32 > aNewIntegerDXArray(getDXArray().size(), basegfx::fround(aPixelVector.getLength()));
-
-                    // get the text outlines
-                    aTextLayouter.getTextOutlines(rTarget, getText(), getTextPosition(), getTextLength(), aNewIntegerDXArray);
+                    // get the text outlines. No DXArray is given (would contain integers equal to unit vector
+                    // transformed by object's transformation), let VCL do the job
+                    aTextLayouter.getTextOutlines(rTarget, getText(), getTextPosition(), getTextLength());
 
                     // create primitives for the outlines
                     const sal_uInt32 nCount(rTarget.size());

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textlayoutdevice.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-19 10:21:42 $
+ *  last change: $Author: aw $ $Date: 2007-12-12 13:23:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,8 +104,7 @@ namespace drawinglayer
                 basegfx::B2DPolyPolygonVector&,
                 const String& rText,
                 xub_StrLen nIndex,
-                xub_StrLen nLength,
-                const ::std::vector< sal_Int32 >& rDXArray);
+                xub_StrLen nLength);
 
             basegfx::B2DRange getTextBoundRect(
                 const String& rText,

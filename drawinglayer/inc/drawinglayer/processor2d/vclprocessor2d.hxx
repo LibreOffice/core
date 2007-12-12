@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-20 10:20:08 $
+ *  last change: $Author: aw $ $Date: 2007-12-12 13:23:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,10 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
 
+#ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
+#include <svtools/optionsdrawinglayer.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 // predefines
 class OutputDevice;
@@ -93,6 +97,9 @@ namespace drawinglayer
             // the current transformation
             basegfx::B2DHomMatrix                                   maCurrentTransformation;
 
+            // SvtOptionsDrawinglayer incarnation to react on diverse settings
+            const SvtOptionsDrawinglayer                            maDrawinglayerOpt;
+
             //////////////////////////////////////////////////////////////////////////////
             // common VCL rendering support
 
@@ -111,6 +118,11 @@ namespace drawinglayer
             void RenderPointArrayPrimitive2D(const primitive2d::PointArrayPrimitive2D& rPointArrayCandidate);
             void RenderWrongSpellPrimitive2D(const primitive2d::WrongSpellPrimitive2D& rWrongSpellCandidate);
             void RenderPolygonStrokePrimitive2D(const primitive2d::PolygonStrokePrimitive2D& rPolygonStrokeCandidate);
+
+            /////////////////////////////////////////////////////////////////////////////
+            // DrawMode adaption support
+            void adaptLineToFillDrawMode() const;
+            void adaptTextToFillDrawMode() const;
 
             /////////////////////////////////////////////////////////////////////////////
             // FormControl support
@@ -132,6 +144,9 @@ namespace drawinglayer
             // directly when it's a BasePrinitive2D implementation. This is used as tooling from derived
             // implementations
             virtual void process(const primitive2d::Primitive2DSequence& rSource);
+
+            // access to Drawinglayer configuration options
+            const SvtOptionsDrawinglayer& getOptionsDrawinglayer() const { return maDrawinglayerOpt; }
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-04 15:21:39 $
+ *  last change: $Author: aw $ $Date: 2007-12-12 13:23:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1034,6 +1034,119 @@ namespace drawinglayer
             }
         }
 
+        void VclProcessor2D::adaptLineToFillDrawMode() const
+        {
+            const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
+
+            if(nOriginalDrawMode & (DRAWMODE_BLACKLINE|DRAWMODE_GRAYLINE|DRAWMODE_GHOSTEDLINE|DRAWMODE_WHITELINE|DRAWMODE_SETTINGSLINE))
+            {
+                sal_uInt32 nAdaptedDrawMode(nOriginalDrawMode);
+
+                if(nOriginalDrawMode & DRAWMODE_BLACKLINE)
+                {
+                    nAdaptedDrawMode |= DRAWMODE_BLACKFILL;
+                }
+                else
+                {
+                    nAdaptedDrawMode &= ~DRAWMODE_BLACKFILL;
+                }
+
+                if(nOriginalDrawMode & DRAWMODE_GRAYLINE)
+                {
+                    nAdaptedDrawMode |= DRAWMODE_GRAYFILL;
+                }
+                else
+                {
+                    nAdaptedDrawMode &= ~DRAWMODE_GRAYFILL;
+                }
+
+                if(nOriginalDrawMode & DRAWMODE_GHOSTEDLINE)
+                {
+                    nAdaptedDrawMode |= DRAWMODE_GHOSTEDFILL;
+                }
+                else
+                {
+                    nAdaptedDrawMode &= ~DRAWMODE_GHOSTEDFILL;
+                }
+
+                if(nOriginalDrawMode & DRAWMODE_WHITELINE)
+                {
+                    nAdaptedDrawMode |= DRAWMODE_WHITEFILL;
+                }
+                else
+                {
+                    nAdaptedDrawMode &= ~DRAWMODE_WHITEFILL;
+                }
+
+                if(nOriginalDrawMode & DRAWMODE_SETTINGSLINE)
+                {
+                    nAdaptedDrawMode |= DRAWMODE_SETTINGSFILL;
+                }
+                else
+                {
+                    nAdaptedDrawMode &= ~DRAWMODE_SETTINGSFILL;
+                }
+
+                mpOutputDevice->SetDrawMode(nAdaptedDrawMode);
+            }
+        }
+
+        void VclProcessor2D::adaptTextToFillDrawMode() const
+        {
+            const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
+            if(nOriginalDrawMode & (DRAWMODE_BLACKTEXT|DRAWMODE_GRAYTEXT|DRAWMODE_GHOSTEDTEXT|DRAWMODE_WHITETEXT|DRAWMODE_SETTINGSTEXT))
+            {
+                sal_uInt32 nAdaptedDrawMode(nOriginalDrawMode);
+
+                if(nOriginalDrawMode & DRAWMODE_BLACKTEXT)
+                {
+                    nAdaptedDrawMode |= DRAWMODE_BLACKFILL;
+                }
+                else
+                {
+                    nAdaptedDrawMode &= ~DRAWMODE_BLACKFILL;
+                }
+
+                if(nOriginalDrawMode & DRAWMODE_GRAYTEXT)
+                {
+                    nAdaptedDrawMode |= DRAWMODE_GRAYFILL;
+                }
+                else
+                {
+                    nAdaptedDrawMode &= ~DRAWMODE_GRAYFILL;
+                }
+
+                if(nOriginalDrawMode & DRAWMODE_GHOSTEDTEXT)
+                {
+                    nAdaptedDrawMode |= DRAWMODE_GHOSTEDFILL;
+                }
+                else
+                {
+                    nAdaptedDrawMode &= ~DRAWMODE_GHOSTEDFILL;
+                }
+
+                if(nOriginalDrawMode & DRAWMODE_WHITETEXT)
+                {
+                    nAdaptedDrawMode |= DRAWMODE_WHITEFILL;
+                }
+                else
+                {
+                    nAdaptedDrawMode &= ~DRAWMODE_WHITEFILL;
+                }
+
+                if(nOriginalDrawMode & DRAWMODE_SETTINGSTEXT)
+                {
+                    nAdaptedDrawMode |= DRAWMODE_SETTINGSFILL;
+                }
+                else
+                {
+                    nAdaptedDrawMode &= ~DRAWMODE_SETTINGSFILL;
+                }
+
+                mpOutputDevice->SetDrawMode(nAdaptedDrawMode);
+            }
+        }
+
         basegfx::B2DPoint VclProcessor2D::PositionAndSizeControl(const primitive2d::ControlPrimitive2D& rControlPrimitive2D)
         {
             // prepare output for given device
@@ -1106,7 +1219,8 @@ namespace drawinglayer
         :   BaseProcessor2D(rViewInformation),
             mpOutputDevice(&rOutDev),
             maBColorModifierStack(),
-            maCurrentTransformation()
+            maCurrentTransformation(),
+            maDrawinglayerOpt()
         {
             // set digit language, derived from SvtCTLOptions to have the correct
             // number display for arabic/hindi numerals

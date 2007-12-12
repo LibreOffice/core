@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclpixelprocessor2d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-20 10:20:18 $
+ *  last change: $Author: aw $ $Date: 2007-12-12 13:23:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,10 @@
 #include <com/sun/star/awt/XWindow2.hpp>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_UNIFIEDALPHAPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
@@ -112,8 +116,7 @@ namespace drawinglayer
     namespace processor2d
     {
         VclPixelProcessor2D::VclPixelProcessor2D(const geometry::ViewInformation2D& rViewInformation, OutputDevice& rOutDev)
-        :   VclProcessor2D(rViewInformation, rOutDev),
-            maDrawinglayerOpt()
+        :   VclProcessor2D(rViewInformation, rOutDev)
         {
             // prepare maCurrentTransformation matrix with viewTransformation to target directly to pixels
             maCurrentTransformation = rViewInformation.getViewTransformation();
@@ -123,7 +126,7 @@ namespace drawinglayer
             mpOutputDevice->SetMapMode();
 
             // react on AntiAliasing settings
-            if(maDrawinglayerOpt.IsAntiAliasing())
+            if(getOptionsDrawinglayer().IsAntiAliasing())
             {
                 mpOutputDevice->SetAntialiasing(mpOutputDevice->GetAntialiasing() & ~ANTIALIASING_DISABLE_POLYGONS);
             }
@@ -166,6 +169,10 @@ namespace drawinglayer
                     // directdraw of text simple portion; added test possibility to check text decompose
                     static bool bHandleSimpleTextDirectly(true);
 
+                    // Adapt evtl. used special DrawMode
+                    const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
+                    adaptTextToFillDrawMode();
+
                     if(bHandleSimpleTextDirectly)
                     {
                         RenderTextSimpleOrDecoratedPortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(rCandidate));
@@ -174,12 +181,20 @@ namespace drawinglayer
                     {
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     }
+
+                    // restore DrawMode
+                    mpOutputDevice->SetDrawMode(nOriginalDrawMode);
+
                     break;
                 }
                 case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
                 {
                     // directdraw of text simple portion; added test possibility to check text decompose
                     static bool bHandleComplexTextDirectly(false);
+
+                    // Adapt evtl. used special DrawMode
+                    const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
+                    adaptTextToFillDrawMode();
 
                     if(bHandleComplexTextDirectly)
                     {
@@ -189,6 +204,10 @@ namespace drawinglayer
                     {
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
                     }
+
+                    // restore DrawMode
+                    mpOutputDevice->SetDrawMode(nOriginalDrawMode);
+
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
@@ -237,6 +256,48 @@ namespace drawinglayer
                 {
                     // modified color group. Force output to unified color.
                     RenderModifiedColorPrimitive2D(static_cast< const primitive2d::ModifiedColorPrimitive2D& >(rCandidate));
+                    break;
+                }
+                case PRIMITIVE2D_ID_UNIFIEDALPHAPRIMITIVE2D :
+                {
+                    // Detect if a single PolyPolygonColorPrimitive2D is contained; in that case,
+                    // use the faster OutputDevice::DrawTransparent method
+                    const primitive2d::UnifiedAlphaPrimitive2D& rUniAlphaCandidate = static_cast< const primitive2d::UnifiedAlphaPrimitive2D& >(rCandidate);
+                    const primitive2d::Primitive2DSequence rContent = rUniAlphaCandidate.getChildren();
+                    bool bCouldUseDrawTransparent(false);
+
+                    // ATM need to disable this since OutputDevice::DrawTransparent uses the
+                    // old tools::Polygon classes and may not be sufficient here. HDU is evaluating...
+                    static bool bAllowUsingDrawTransparent(false);
+
+                    if(bAllowUsingDrawTransparent && rContent.hasElements() && 1 == rContent.getLength())
+                    {
+                        const primitive2d::Primitive2DReference xReference(rContent[0]);
+                        const primitive2d::PolyPolygonColorPrimitive2D* pPoPoColor = dynamic_cast< const primitive2d::PolyPolygonColorPrimitive2D* >(xReference.get());
+
+                        if(pPoPoColor && PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D == pPoPoColor->getPrimitiveID())
+                        {
+                            // single transparent PolyPolygon identified, use directly
+                            const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(pPoPoColor->getBColor()));
+                            mpOutputDevice->SetFillColor(Color(aPolygonColor));
+                            mpOutputDevice->SetLineColor();
+
+                            basegfx::B2DPolyPolygon aLocalPolyPolygon(pPoPoColor->getB2DPolyPolygon());
+                            aLocalPolyPolygon.transform(maCurrentTransformation);
+
+                            const PolyPolygon aToolsPolyPolygon(aLocalPolyPolygon);
+                            const sal_uInt16 aPercentTrans(sal_uInt16(basegfx::fround(rUniAlphaCandidate.getAlpha() * 100.0)));
+                            mpOutputDevice->DrawTransparent(aToolsPolyPolygon, aPercentTrans);
+                            bCouldUseDrawTransparent = true;
+                        }
+                    }
+
+                    if(!bCouldUseDrawTransparent)
+                    {
+                        // use decomposition
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+
                     break;
                 }
                 case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
@@ -304,10 +365,17 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D:
                 {
+                    // the stroke primitive may be decomposed to filled polygons. To keep
+                    // evtl. set DrawModes aka DRAWMODE_BLACKLINE, DRAWMODE_GRAYLINE,
+                    // DRAWMODE_GHOSTEDLINE, DRAWMODE_WHITELINE or DRAWMODE_SETTINGSLINE
+                    // working, these need to be copied to the corresponding fill modes
+                    const sal_uInt32 nOriginalDrawMode(mpOutputDevice->GetDrawMode());
+                    adaptLineToFillDrawMode();
+
                     // polygon stroke primitive
                     static bool bSuppressFatToHairlineCorrection(false);
 
-                    if(maDrawinglayerOpt.IsAntiAliasing() || bSuppressFatToHairlineCorrection)
+                    if(getOptionsDrawinglayer().IsAntiAliasing() || bSuppressFatToHairlineCorrection)
                     {
                         // with AA there is no need to handle thin lines special
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
@@ -322,6 +390,9 @@ namespace drawinglayer
 
                         RenderPolygonStrokePrimitive2D(rPolygonStrokePrimitive);
                     }
+
+                    // restore DrawMode
+                    mpOutputDevice->SetDrawMode(nOriginalDrawMode);
 
                     break;
                 }

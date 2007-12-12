@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive2d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-22 15:01:17 $
+ *  last change: $Author: aw $ $Date: 2007-12-12 13:23:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ namespace drawinglayer
                         // to be painted as a single PolyPolygon (XORed as fill rule). Alternatively, a
                         // melting process may be used here one day.
                         const basegfx::B2DPolyPolygon aNewPolyPolygon(aAreaPolyPolygon.getB2DPolygon(b));
-                        static bool bTestByUsingRandomColor(true);
+                        static bool bTestByUsingRandomColor(false);
                         const basegfx::BColor aColor(bTestByUsingRandomColor
                             ? basegfx::BColor(rand() / 32767.0, rand() / 32767.0, rand() / 32767.0)
                             : getLineAttribute().getColor());
