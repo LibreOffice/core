@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngs3904.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:07:15 $
+#   last change: $Author: kz $ $Date: 2007-12-12 13:21:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ JAVAFLAGSDEBUG=-g
 #LINKOUTPUT_FILTER=" |& $(SOLARENV)$/bin$/msg_filter"
 
 # _PTHREADS is needed for the stl
-CDEFS+=$(PTHREAD_CFLAGS) -DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=400
+CDEFS+=$(PTHREAD_CFLAGS) -DGLIBC=2 -D_PTHREADS -D_REENTRANT -DNEW_SOLAR -D_USE_NAMESPACE=1 -DSTLPORT_VERSION=$(STLPORT_VER)
 
 # this is a platform with JAVA support
 .IF "$(SOLAR_JAVA)"!=""
@@ -165,8 +165,13 @@ STDLIBCUIMT=-ldl -lpthread -lm
 STDSHLGUIMT=-lX11 -lXext -ldl -lpthread -lm
 STDSHLCUIMT=-ldl -lpthread -lm
 
+.IF "$(STLPORT_VER)" >= "500"
+LIBSTLPORT=$(DYNAMIC) -lstlport -lstdc++
+LIBSTLPORTST=$(STATIC) -lstlport $(DYNAMIC)
+.ELSE
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc -lstdc++
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
+.ENDIF
 
 #FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
