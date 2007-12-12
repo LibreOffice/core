@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:07:10 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 14:55:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -782,10 +782,10 @@ void CUPSManager::setupJobContextData(
 #endif
 }
 
-FILE* CUPSManager::startSpool( const OUString& rPrintername )
+FILE* CUPSManager::startSpool( const OUString& rPrintername, bool bQuickCommand )
 {
     if( m_aCUPSDestMap.find( rPrintername ) == m_aCUPSDestMap.end() )
-        return PrinterInfoManager::startSpool( rPrintername );
+        return PrinterInfoManager::startSpool( rPrintername, bQuickCommand );
 
 #ifdef ENABLE_CUPS
     OUString aTmpURL, aTmpFile;
