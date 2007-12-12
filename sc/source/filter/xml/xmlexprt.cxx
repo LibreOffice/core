@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.207 $
+ *  $Revision: 1.208 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:40:24 $
+ *  last change: $Author: kz $ $Date: 2007-12-12 13:20:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -795,10 +795,16 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
 
 void ScXMLExport::CollectShapesAutoStyles(const sal_Int32 nTableCount)
 {
+    // #i84077# To avoid compiler warnings about uninitialized aShapeItr,
+    // it's initialized using this dummy list. The iterator contains shapes
+    // from all sheets, so it can't be declared inside the nTable loop where
+    // it is used.
+    ScMyShapeList aDummyInitList;
+
     pSharedData->SortShapesContainer();
     pSharedData->SortNoteShapes();
     const ScMyShapeList* pShapeList(NULL);
-    ScMyShapeList::const_iterator aShapeItr;
+    ScMyShapeList::const_iterator aShapeItr = aDummyInitList.end();
     if (pSharedData->GetShapesContainer())
     {
         pShapeList = pSharedData->GetShapesContainer()->GetShapes();
@@ -3089,7 +3095,10 @@ sal_Bool ScXMLExport::IsCellEqual (ScMyCell& aCell1, ScMyCell& aCell2)
                                 aCell2.fValue = pDoc->GetValue( aCellPos2 );
                                 aCell2.bHasDoubleValue = sal_True;
                             }
-                            bIsEqual = (aCell1.fValue == aCell2.fValue);
+                            // #i29101# number format may be different from column default styles,
+                            // but can lead to different value types, so it must also be compared
+                            bIsEqual = (aCell1.nNumberFormat == aCell2.nNumberFormat) &&
+                                       (aCell1.fValue == aCell2.fValue);
                         }
                         break;
                     case table::CellContentType_TEXT :
@@ -3545,13 +3554,13 @@ void ScXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>& rProps)
                     Rectangle aRect(pEmbeddedObj->GetVisArea());
                     sal_uInt16 i(0);
                     pProps[i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleAreaTop"));
-                    pProps[i].Value <<= aRect.getY();
+                    pProps[i].Value <<= static_cast<sal_Int32>(aRect.getY());
                     pProps[++i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleAreaLeft"));
-                    pProps[i].Value <<= aRect.getX();
+                    pProps[i].Value <<= static_cast<sal_Int32>(aRect.getX());
                     pProps[++i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleAreaWidth"));
-                    pProps[i].Value <<= aRect.getWidth();
+                    pProps[i].Value <<= static_cast<sal_Int32>(aRect.getWidth());
                     pProps[++i].Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VisibleAreaHeight"));
-                    pProps[i].Value <<= aRect.getHeight();
+                    pProps[i].Value <<= static_cast<sal_Int32>(aRect.getHeight());
                 }
             }
         }
