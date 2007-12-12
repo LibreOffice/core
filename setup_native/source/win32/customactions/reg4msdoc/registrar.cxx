@@ -151,7 +151,7 @@ bool Registrar::QueryPreselectForMsApplication(const std::wstring& file_extensio
     if (!root_key->HasSubKey(file_extension))
     {
         preselect = true;
-        OutputDebugStringFormat( TEXT("QueryPreselect: No SubKey found for (%s), preselected!\n"), file_extension );
+        OutputDebugStringFormat( TEXT("QueryPreselect: No SubKey found for (%s), preselected!\n"), file_extension.c_str() );
     }
     else
     {
@@ -165,18 +165,18 @@ bool Registrar::QueryPreselectForMsApplication(const std::wstring& file_extensio
                 IsOpenOfficeRegisteredForMsApplication(RegVal->GetDataAsUniString()))
             {
                 preselect = true;
-                OutputDebugStringFormat( TEXT("QueryPreselect: (%s) registered to Office, preselected!\n"), file_extension );
+                OutputDebugStringFormat( TEXT("QueryPreselect: (%s) registered to Office, preselected!\n"), file_extension.c_str() );
             }
             else if ( (REG_SZ == RegVal->GetType()) && ! root_key->HasSubKey( RegVal->GetDataAsUniString() ) )
             {
                 preselect = true;
-                OutputDebugStringFormat( TEXT("QueryPreselect: (%s) registered but destination is empty, preselected!\n"), file_extension );
+                OutputDebugStringFormat( TEXT("QueryPreselect: (%s) registered but destination is empty, preselected!\n"), file_extension.c_str() );
             }
         }
         else
         {
             preselect = true;
-            OutputDebugStringFormat( TEXT("QueryPreselect: No default found for SubKey (%s), preselected!\n"), file_extension );
+            OutputDebugStringFormat( TEXT("QueryPreselect: No default found for SubKey (%s), preselected!\n"), file_extension.c_str() );
         }
     }
     return preselect;
