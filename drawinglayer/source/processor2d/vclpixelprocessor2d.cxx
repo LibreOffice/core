@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclpixelprocessor2d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-12 13:23:40 $
+ *  last change: $Author: aw $ $Date: 2007-12-13 16:43:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,8 @@
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_UNIFIEDALPHAPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/unifiedalphaprimitive2d.hxx>
 #endif
+
+#include <cstdio>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -230,8 +232,18 @@ namespace drawinglayer
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
                 {
-                    // direct draw of gradient
-                    RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
+                    if(getOptionsDrawinglayer().IsAntiAliasing())
+                    {
+                        // For AA, direct render has to be avoided since it uses XOR maskings which will not
+                        // work with AA. Instead, the decompose which uses MaskPrimitive2D with fillings is
+                        // used
+                        process(rCandidate.get2DDecomposition(getViewInformation2D()));
+                    }
+                    else
+                    {
+                        // direct draw of gradient
+                        RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(rCandidate));
+                    }
                     break;
                 }
                 case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
@@ -264,7 +276,7 @@ namespace drawinglayer
                     // use the faster OutputDevice::DrawTransparent method
                     const primitive2d::UnifiedAlphaPrimitive2D& rUniAlphaCandidate = static_cast< const primitive2d::UnifiedAlphaPrimitive2D& >(rCandidate);
                     const primitive2d::Primitive2DSequence rContent = rUniAlphaCandidate.getChildren();
-                    bool bCouldUseDrawTransparent(false);
+                    bool bDrawTransparentUsed(false);
 
                     // ATM need to disable this since OutputDevice::DrawTransparent uses the
                     // old tools::Polygon classes and may not be sufficient here. HDU is evaluating...
@@ -285,14 +297,12 @@ namespace drawinglayer
                             basegfx::B2DPolyPolygon aLocalPolyPolygon(pPoPoColor->getB2DPolyPolygon());
                             aLocalPolyPolygon.transform(maCurrentTransformation);
 
-                            const PolyPolygon aToolsPolyPolygon(aLocalPolyPolygon);
-                            const sal_uInt16 aPercentTrans(sal_uInt16(basegfx::fround(rUniAlphaCandidate.getAlpha() * 100.0)));
-                            mpOutputDevice->DrawTransparent(aToolsPolyPolygon, aPercentTrans);
-                            bCouldUseDrawTransparent = true;
+                            mpOutputDevice->DrawTransparent(aLocalPolyPolygon, rUniAlphaCandidate.getAlpha());
+                            bDrawTransparentUsed = true;
                         }
                     }
 
-                    if(!bCouldUseDrawTransparent)
+                    if(!bDrawTransparentUsed)
                     {
                         // use decomposition
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
@@ -377,8 +387,15 @@ namespace drawinglayer
 
                     if(getOptionsDrawinglayer().IsAntiAliasing() || bSuppressFatToHairlineCorrection)
                     {
+                        // remeber that we enter a PolygonStrokePrimitive2D decomposition,
+                        // used for AA thick line drawing
+                        mnPolygonStrokePrimitive2D++;
+
                         // with AA there is no need to handle thin lines special
                         process(rCandidate.get2DDecomposition(getViewInformation2D()));
+
+                        // leave PolygonStrokePrimitive2D
+                        mnPolygonStrokePrimitive2D--;
                     }
                     else
                     {

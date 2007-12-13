@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-12 13:23:39 $
+ *  last change: $Author: aw $ $Date: 2007-12-13 16:43:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,10 @@ namespace drawinglayer
 
             // SvtOptionsDrawinglayer incarnation to react on diverse settings
             const SvtOptionsDrawinglayer                            maDrawinglayerOpt;
+
+            // stack value (increment and decrement) to count how deep we are in
+            // PolygonStrokePrimitive2D's decompositions (normally only one)
+            sal_uInt32                                              mnPolygonStrokePrimitive2D;
 
             //////////////////////////////////////////////////////////////////////////////
             // common VCL rendering support

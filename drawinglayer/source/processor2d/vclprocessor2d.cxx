@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-12 13:23:40 $
+ *  last change: $Author: aw $ $Date: 2007-12-13 16:43:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -391,7 +391,7 @@ namespace drawinglayer
 
             basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
             aLocalPolygon.transform(maCurrentTransformation);
-            mpOutputDevice->DrawPolyLine(aLocalPolygon,0.0);
+            mpOutputDevice->DrawPolyLine(aLocalPolygon, 0.0);
         }
 
         // direct draw of transformed BitmapEx primitive
@@ -633,6 +633,20 @@ namespace drawinglayer
             aLocalPolyPolygon.transform(maCurrentTransformation);
             mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
 
+            if(mnPolygonStrokePrimitive2D && getOptionsDrawinglayer().IsAntiAliasing())
+            {
+                // when AA is on and this filled polygons are the result of stroked line geometry,
+                // draw the geometry once extra as lines to avoid AA 'gaps' between partial polygons
+                mpOutputDevice->SetFillColor();
+                mpOutputDevice->SetLineColor(Color(aPolygonColor));
+                const sal_uInt32 nCount(aLocalPolyPolygon.count());
+
+                for(sal_uInt32 a(0); a < nCount; a++)
+                {
+                    mpOutputDevice->DrawPolyLine(aLocalPolyPolygon.getB2DPolygon(a), 0.0);
+                }
+            }
+
             static bool bTestPolygonClipping(false);
             if(bTestPolygonClipping)
             {
@@ -661,7 +675,7 @@ namespace drawinglayer
 
                     for(sal_uInt32 a(0); a < aLineClipped.count(); a++)
                     {
-                        mpOutputDevice->DrawPolyLine(aLineClipped.getB2DPolygon(a));
+                        mpOutputDevice->DrawPolyLine(aLineClipped.getB2DPolygon(a), 0.0);
                     }
                 }
             }
@@ -735,13 +749,28 @@ namespace drawinglayer
                         mpOutputDevice = pLastOutputDevice;
 
                         // draw mask
-                        VirtualDevice& rMask = aBufferDevice.getMask();
-                        rMask.SetLineColor();
-                        rMask.SetFillColor(COL_BLACK);
-                        rMask.DrawPolyPolygon(aMask);
+                        if(getOptionsDrawinglayer().IsAntiAliasing())
+                        {
+                            // with AA, use 8bit AlphaMask to get nice borders
+                            VirtualDevice& rAlpha = aBufferDevice.getAlpha();
+                            rAlpha.SetLineColor();
+                            rAlpha.SetFillColor(COL_BLACK);
+                            rAlpha.DrawPolyPolygon(aMask);
 
-                        // dump buffer to outdev
-                        aBufferDevice.paint();
+                            // dump buffer to outdev
+                            aBufferDevice.paint();
+                        }
+                        else
+                        {
+                            // No AA, use 1bit mask
+                            VirtualDevice& rMask = aBufferDevice.getMask();
+                            rMask.SetLineColor();
+                            rMask.SetFillColor(COL_BLACK);
+                            rMask.DrawPolyPolygon(aMask);
+
+                            // dump buffer to outdev
+                            aBufferDevice.paint();
+                        }
                     }
                 }
             }
@@ -783,7 +812,7 @@ namespace drawinglayer
                     basegfx::BColorModifierStack aLastBColorModifierStack(maBColorModifierStack);
                     maBColorModifierStack = basegfx::BColorModifierStack();
 
-                    // paint mask to it
+                    // paint mask to it (always with alpha intensities, evtl. with AA)
                     process(rTransCandidate.getAlpha());
 
                     // back to old color stack
@@ -1220,7 +1249,8 @@ namespace drawinglayer
             mpOutputDevice(&rOutDev),
             maBColorModifierStack(),
             maCurrentTransformation(),
-            maDrawinglayerOpt()
+            maDrawinglayerOpt(),
+            mnPolygonStrokePrimitive2D(0)
         {
             // set digit language, derived from SvtCTLOptions to have the correct
             // number display for arabic/hindi numerals

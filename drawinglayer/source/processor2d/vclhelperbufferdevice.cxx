@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclhelperbufferdevice.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-07 14:27:27 $
+ *  last change: $Author: aw $ $Date: 2007-12-13 16:43:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,8 @@ namespace drawinglayer
             mpAlpha->SetOutputSizePixel(maDestPixel.GetSize(), true);
             mpAlpha->SetMapMode(maContent.GetMapMode());
 
-            // do NOT copy AA flag for alpha!
+            // copy AA flag for new target; masking needs to be smooth
+            mpAlpha->SetAntialiasing(maContent.GetAntialiasing());
         }
 
         return *mpAlpha;
