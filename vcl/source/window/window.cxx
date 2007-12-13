@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.269 $
+ *  $Revision: 1.270 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:21:36 $
+ *  last change: $Author: kz $ $Date: 2007-12-13 11:04:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,9 +349,11 @@ void Window::ImplInitAppFontData( Window* pWindow )
 bool Window::ImplCheckUIFont( const Font& rFont )
 {
 #ifdef UNX // TODO: use more generic solution
+#ifndef QUARTZ
     const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
     if (rMgr.hasFontconfig())
         return true;
+#endif
 #endif
 
     String aTestText;
