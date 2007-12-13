@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-13 10:34:07 $
+ *  last change: $Author: mav $ $Date: 2007-12-13 15:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,12 @@
 package com.sun.star.wiki;
 
 import com.sun.star.awt.XDialog;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.XComponentContext;
 import java.util.Hashtable;
-import javax.net.ssl.SSLException;
 
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.*;
-import org.apache.commons.httpclient.protocol.Protocol;
 
 public class WikiEditSettingDialog extends WikiDialog
 {
@@ -56,17 +55,19 @@ public class WikiEditSettingDialog extends WikiDialog
     private Hashtable setting;
     private boolean addMode;
 
-    public WikiEditSettingDialog( XComponentContext c, String DialogURL )
+    public WikiEditSettingDialog( XComponentContext xContext, String DialogURL )
     {
-        super( c, DialogURL );
+        super( xContext, DialogURL );
         super.setMethods( Methods );
         setting = new Hashtable();
         addMode = true;
+
+        InitSaveCheckbox( xContext );
     }
 
-    public WikiEditSettingDialog( XComponentContext c, String DialogURL, Hashtable ht )
+    public WikiEditSettingDialog( XComponentContext xContext, String DialogURL, Hashtable ht )
     {
-        super( c, DialogURL );
+        super( xContext, DialogURL );
         super.setMethods( Methods );
         setting = ht;
         try
@@ -80,18 +81,35 @@ public class WikiEditSettingDialog extends WikiDialog
             ex.printStackTrace();
         }
         addMode = false;
+
+        InitSaveCheckbox( xContext );
+    }
+
+    private void InitSaveCheckbox( XComponentContext xContext )
+    {
+        XPropertySet xSaveCheck = getPropSet( "SaveBox" );
+        try
+        {
+            xSaveCheck.setPropertyValue( "State", new Short( (short)0 ) );
+            xSaveCheck.setPropertyValue( "Enabled", new Boolean( Helper.PasswordStoringIsAllowed( xContext ) ) );
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
     }
 
     public boolean callHandlerMethod( XDialog xDialog, Object EventObject, String MethodName )
     {
         if ( MethodName.equals( sOKMethod ) )
         {
+            String sRedirectURL = "";
+            String sURL = "";
             try
             {
-                String sURL = ( String ) getPropSet( "UrlField" ).getPropertyValue( "Text" );
+                sURL = ( String ) getPropSet( "UrlField" ).getPropertyValue( "Text" );
                 String sUserName = ( String ) getPropSet( "UsernameField" ).getPropertyValue( "Text" );
                 String sPassword = ( String ) getPropSet( "PasswordField" ).getPropertyValue( "Text" );
-                String sRedirectURL = "";
 
                 HostConfiguration aHostConfig = new HostConfiguration();
                 boolean bInitHost = true;
@@ -135,7 +153,7 @@ public class WikiEditSettingDialog extends WikiDialog
                                 if ( sRedirectURL.equals( "" ) )
                                 {
                                     // show error
-                                    ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "A connection to the MediaWiki system at '" + sRedirectURL + "' could not be created." );
+                                    ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "A connection to the MediaWiki system at '" + sURL + "' could not be created." );
                                     ed.show();
                                 }
                             }
@@ -156,6 +174,20 @@ public class WikiEditSettingDialog extends WikiDialog
                                     setting.put( "Password", sPassword );
                                     if ( addMode )
                                         Settings.getSettings( m_xContext ).addWikiCon( setting );
+
+                                    if ( Helper.PasswordStoringIsAllowed( m_xContext )
+                                      && ( (Short)( getPropSet( "SaveBox" ).getPropertyValue("State") ) ) != 0 )
+                                    {
+                                        String[] pPasswords = { sPassword };
+                                        try
+                                        {
+                                            Helper.GetPasswordContainer( m_xContext ).addPersistent( sMainURL, sUserName, pPasswords, Helper.GetInteractionHandler( m_xContext ) );
+                                        }
+                                        catch( Exception e )
+                                        {
+                                            e.printStackTrace();
+                                        }
+                                    }
 
                                     m_bAction = true;
                                     xDialog.endExecute();
@@ -182,7 +214,7 @@ public class WikiEditSettingDialog extends WikiDialog
             }
             catch ( Exception ex )
             {
-                ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "A connection to the MediaWiki system at '" + sRedirectURL + "' could not be created." );
+                ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "A connection to the MediaWiki system at '" + sURL + "' could not be created." );
                 ed.show();
 
                 ex.printStackTrace();

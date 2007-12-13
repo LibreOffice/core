@@ -5,9 +5,9 @@
  *
  *  $RCSfile: EditSetting.xdl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2007-11-28 10:57:45 $
+ *  last change: $Author: mav $ $Date: 2007-12-13 15:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,10 +49,9 @@
   <dlg:button dlg:id="All.HelpButton" dlg:tab-index="11" dlg:left="6" dlg:top="139" dlg:width="50" dlg:height="14" dlg:help-url="HID:31702" dlg:value="Help">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Help" script:language="UNO"/>
   </dlg:button>
-  <dlg:fixedline dlg:id="All.WeblogLabel" dlg:tab-index="0" dlg:left="3" dlg:top="4" dlg:width="180" dlg:height="8" dlg:value="Weblog"/>
   <dlg:text dlg:id="All.UsernameLabel" dlg:tab-index="6" dlg:left="6" dlg:top="93" dlg:width="46" dlg:height="8" dlg:value="Username" dlg:tabstop="false"/>
   <dlg:text dlg:id="All.PasswordLabel" dlg:tab-index="8" dlg:left="6" dlg:top="109" dlg:width="46" dlg:height="8" dlg:value="Password" dlg:tabstop="false"/>
-  <dlg:checkbox dlg:id="All.SaveBox" dlg:tab-index="10" dlg:left="58" dlg:top="123" dlg:width="116" dlg:height="8" dlg:help-url="HID:31699" dlg:value="Save password" dlg:checked="false"/>
+  <dlg:checkbox dlg:id="SaveBox" dlg:tab-index="10" dlg:left="58" dlg:top="123" dlg:width="116" dlg:height="8" dlg:help-url="HID:31699" dlg:value="Save password" dlg:checked="false"/>
   <dlg:fixedline dlg:id="BottomLine" dlg:tab-index="1" dlg:left="0" dlg:top="131" dlg:width="186" dlg:height="8"/>
   <dlg:fixedline dlg:id="AccountLine" dlg:tab-index="2" dlg:left="3" dlg:top="80" dlg:width="180" dlg:height="8" dlg:value="Account"/>
   <dlg:fixedline dlg:id="WikiLine" dlg:tab-index="3" dlg:left="3" dlg:top="4" dlg:width="180" dlg:height="8" dlg:value="Wiki"/>

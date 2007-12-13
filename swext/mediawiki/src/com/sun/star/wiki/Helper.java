@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-13 10:34:07 $
+ *  last change: $Author: mav $ $Date: 2007-12-13 15:11:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,8 @@
 
 package com.sun.star.wiki;
 
+import com.sun.star.awt.XControl;
+import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XDialog;
 import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.PropertyValue;
@@ -53,6 +55,10 @@ import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.system.SystemShellExecuteFlags;
 import com.sun.star.system.XSystemShellExecute;
+import com.sun.star.task.UrlRecord;
+import com.sun.star.task.XInteractionHandler;
+import com.sun.star.task.XMasterPasswordHandling;
+import com.sun.star.task.XPasswordContainer;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -84,6 +90,9 @@ public class Helper
     private static HttpClient m_aClient;
     private static boolean m_bAllowConnection = true;
     private static Hashtable m_aAcceptedUnknownCerts;
+
+    private static XPasswordContainer m_xPasswordContainer;
+    private static XInteractionHandler m_xInteractionHandler;
 
     synchronized protected static HttpClient GetHttpClient()
         throws WikiCancelException
@@ -119,6 +128,42 @@ public class Helper
     synchronized protected static boolean IsConnectionAllowed()
     {
         return m_bAllowConnection;
+    }
+
+    synchronized protected static XPasswordContainer GetPasswordContainer( XComponentContext xContext )
+        throws com.sun.star.uno.Exception
+    {
+        if ( m_xPasswordContainer == null && xContext != null )
+        {
+            XMultiComponentFactory xFactory = xContext.getServiceManager();
+            if ( xFactory != null )
+                m_xPasswordContainer = (XPasswordContainer)UnoRuntime.queryInterface(
+                                        XPasswordContainer.class,
+                                        xFactory.createInstanceWithContext( "com.sun.star.task.PasswordContainer", xContext ) );
+        }
+
+        if ( m_xPasswordContainer == null )
+            throw new com.sun.star.uno.RuntimeException();
+
+        return m_xPasswordContainer;
+    }
+
+    synchronized protected static XInteractionHandler GetInteractionHandler( XComponentContext xContext )
+        throws com.sun.star.uno.Exception
+    {
+        if ( m_xInteractionHandler == null && xContext != null )
+        {
+            XMultiComponentFactory xFactory = xContext.getServiceManager();
+            if ( xFactory != null )
+                m_xInteractionHandler = ( XInteractionHandler )UnoRuntime.queryInterface(
+                                        XInteractionHandler.class,
+                                        xFactory.createInstanceWithContext( "com.sun.star.task.InteractionHandler", xContext ) );
+        }
+
+        if ( m_xInteractionHandler == null )
+            throw new com.sun.star.uno.RuntimeException();
+
+        return m_xInteractionHandler;
     }
 
     protected static Protocol GetOwnHttps( int nPort )
@@ -630,7 +675,7 @@ public class Helper
         return null;
     }
 
-    private static void SetControlPropInDialog( XDialog xDialog, String aControlName, String aPropName, Object aPropValue )
+    protected static void SetControlPropInDialog( XDialog xDialog, String aControlName, String aPropName, Object aPropValue )
     {
         if ( xDialog != null && aControlName != null && aPropName != null && aPropValue != null )
         {
@@ -645,6 +690,38 @@ public class Helper
                 e.printStackTrace();
             }
         }
+    }
+
+    protected static UrlRecord GetUsersForURL( XComponentContext xContext, String sURL )
+    {
+        UrlRecord aResult = null;
+        try
+        {
+            aResult = GetPasswordContainer( xContext ).find( sURL, GetInteractionHandler( xContext ) );
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
+
+        return aResult;
+    }
+
+    protected static boolean PasswordStoringIsAllowed( XComponentContext xContext )
+    {
+        boolean bResult = false;
+        try
+        {
+            XMasterPasswordHandling xMasterHdl = (XMasterPasswordHandling)UnoRuntime.queryInterface( XMasterPasswordHandling.class, GetPasswordContainer( xContext ) );
+            if ( xMasterHdl != null )
+                bResult = xMasterHdl.isPersistentStoringAllowed();
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
+
+        return bResult;
     }
 }
 
