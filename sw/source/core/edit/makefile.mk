@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 08:47:27 $
+#   last change: $Author: kz $ $Date: 2007-12-13 11:38:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ AUTOSEG=true
 EXCEPTIONSFILES=\
         $(SLO)$/edlingu.obj \
         $(SLO)$/edfldexp.obj \
+        $(SLO)$/eddel.obj \
         $(SLO)$/edtab.obj
 
 SLOFILES =	\
@@ -59,7 +60,6 @@ SLOFILES =	\
         $(SLO)$/autofmt.obj \
         $(SLO)$/edatmisc.obj \
         $(SLO)$/edattr.obj \
-        $(SLO)$/eddel.obj \
         $(SLO)$/edfcol.obj \
         $(SLO)$/edfld.obj \
         $(SLO)$/edfmt.obj \
