@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2007-11-28 11:13:38 $
+ *  last change: $Author: mav $ $Date: 2007-12-13 10:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -607,5 +607,44 @@ public class Helper
         return aHostConfig;
     }
 
+    private static XControl GetControlFromDialog( XDialog xDialog, String aControlName )
+    {
+        XControl xResult = null;
+        XControlContainer xControlCont = (XControlContainer) UnoRuntime.queryInterface( XControlContainer.class, xDialog );
+
+        if ( xControlCont != null )
+        {
+            Object oControl = xControlCont.getControl( aControlName );
+            xResult = ( XControl ) UnoRuntime.queryInterface( XControl.class, oControl );
+        }
+
+        return xResult;
+    }
+
+    private static XPropertySet GetSubControlPropSet( XDialog xDialog, String aControlName )
+    {
+        XControl xControl = GetControlFromDialog( xDialog, aControlName );
+        if ( xControl != null )
+            return ( XPropertySet ) UnoRuntime.queryInterface( XPropertySet.class, xControl.getModel() );
+
+        return null;
+    }
+
+    private static void SetControlPropInDialog( XDialog xDialog, String aControlName, String aPropName, Object aPropValue )
+    {
+        if ( xDialog != null && aControlName != null && aPropName != null && aPropValue != null )
+        {
+            try
+            {
+                XPropertySet xPropSet = GetSubControlPropSet( xDialog, aControlName );
+                if ( xPropSet != null )
+                    xPropSet.setPropertyValue( aPropName, aPropValue );
+            }
+            catch ( com.sun.star.uno.Exception e )
+            {
+                e.printStackTrace();
+            }
+        }
+    }
 }
 

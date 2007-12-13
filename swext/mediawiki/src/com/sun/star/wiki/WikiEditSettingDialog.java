@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2007-11-28 11:15:09 $
+ *  last change: $Author: mav $ $Date: 2007-12-13 10:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ public class WikiEditSettingDialog extends WikiDialog
                                 if ( sRedirectURL.equals( "" ) )
                                 {
                                     // show error
-                                    ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "This is not a Wiki Page!" );
+                                    ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "A connection to the MediaWiki system at '" + sRedirectURL + "' could not be created." );
                                     ed.show();
                                 }
                             }
@@ -146,7 +146,7 @@ public class WikiEditSettingDialog extends WikiDialog
                                 {
                                     // a wrong login information is provided
                                     // show error
-                                    ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "The login information is wrong! It should either be empty or correct." );
+                                    ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "User name or password is incorrect. Please try again, or leave the fields blank for an anonymous connection." );
                                     ed.show();
                                 }
                                 else
@@ -166,7 +166,7 @@ public class WikiEditSettingDialog extends WikiDialog
                         {
                             // URL invalid
                             // show error
-                            ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "The URl is invalid!" );
+                            ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "A connection could not be created, because the URL is invalid." );
                             ed.show();
                         }
                     }
@@ -174,7 +174,7 @@ public class WikiEditSettingDialog extends WikiDialog
                     {
                         // URL field empty
                         // show error
-                        ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "The URL field is empty!" );
+                        ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "Specify a MediaWiki server by providing a URL." );
                         ed.show();
 
                     }
@@ -182,7 +182,7 @@ public class WikiEditSettingDialog extends WikiDialog
             }
             catch ( Exception ex )
             {
-                ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "Can not access the provided URL for any reason!" );
+                ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "A connection to the MediaWiki system at '" + sRedirectURL + "' could not be created." );
                 ed.show();
 
                 ex.printStackTrace();

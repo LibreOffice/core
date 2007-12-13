@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2007-11-28 11:15:31 $
+ *  last change: $Author: mav $ $Date: 2007-12-13 10:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,7 +305,7 @@ public class WikiPropDialog extends WikiDialog{
             }
             else
             {
-                ErrorDialog aED = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "The sending process has been stopped. But the wiki-page might be already changed!" );
+                ErrorDialog aED = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "The transfer has been interrupted. Please check the integrity of the wiki article." );
                 aED.show();
             }
 

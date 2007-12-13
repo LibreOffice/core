@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditorImpl.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2007-11-28 11:14:58 $
+ *  last change: $Author: mav $ $Date: 2007-12-13 10:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@ public final class WikiEditorImpl extends WeakBase
     private final XComponentContext m_xContext;
     private static final String m_implementationName = WikiEditorImpl.class.getName();
     private static final String[] m_serviceNames = {"com.sun.star.wiki.WikiEditor" };
+    private static final String m_sGeneralSendError = "The operation 'Send to MediaWiki' could not be completed successfully.";
 
     // information needed for component registration
     public static final String[] supportedServiceNames = {"com.sun.star.frame.ProtocolHandler"};
@@ -399,7 +400,7 @@ public final class WikiEditorImpl extends WeakBase
 
                     if ( m_aFilterName == null || m_aFilterName.length() == 0 )
                     {
-                        ErrorDialog ed = new ErrorDialog(m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "MediaWiki filter is requered to be able to export!");
+                        ErrorDialog ed = new ErrorDialog(m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "The MediaWiki export filter cannot be found. Choose 'Tools-XML Filter Settings' to install the filter, or use the setup to install the component.");
                         ed.show();
                         throw new com.sun.star.uno.RuntimeException();
                     }
@@ -441,6 +442,8 @@ public final class WikiEditorImpl extends WeakBase
                     XDialog xDialog = WikiDialog.CreateSimpleDialog( m_xContext, "vnd.sun.star.script:WikiEditor.NewWikiPage?location=application" );
                     if ( xDialog != null )
                     {
+                        Helper.SetControlPropInDialog( xDialog, "Label1", "Label", "A wiki article with the title " + aSendDialog.m_sWikiTitle + " does not exist yet. Do you want to create a new article with that name?" );
+
                         aSendDialog.SetThrobberActive( false );
                         bAllowSending = MainThreadDialogExecutor.Execute( m_xContext, xDialog );
                         aSendDialog.SetThrobberActive( true );
@@ -486,7 +489,7 @@ public final class WikiEditorImpl extends WeakBase
                     }
                     else
                     {
-                        ErrorDialog ed = new ErrorDialog(m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "Sending of the document has failed!");
+                        ErrorDialog ed = new ErrorDialog(m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", m_sGeneralSendError );
                         MainThreadDialogExecutor.Show( m_xContext, ed );
                     }
                 }
@@ -500,7 +503,7 @@ public final class WikiEditorImpl extends WeakBase
                 if ( Helper.IsConnectionAllowed() )
                 {
                     // report the error only if sending was not cancelled
-                    ErrorDialog ed = new ErrorDialog(m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "Sending of the document has failed!");
+                    ErrorDialog ed = new ErrorDialog(m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", m_sGeneralSendError );
                     MainThreadDialogExecutor.Show( m_xContext, ed );
                 }
                 e.printStackTrace();

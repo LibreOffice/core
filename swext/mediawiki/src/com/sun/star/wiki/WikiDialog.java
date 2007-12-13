@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiDialog.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2007-11-28 11:14:46 $
+ *  last change: $Author: mav $ $Date: 2007-12-13 10:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,9 @@ public class WikiDialog implements XDialogEventHandler{
     protected XPropertySet getPropSet(String sControl) {
         XControl xControl = m_xControlContainer.getControl(sControl);
         XPropertySet xPS = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xControl.getModel() );
+        if ( xPS == null )
+            throw new com.sun.star.uno.RuntimeException();
+
         return xPS;
     }
 
