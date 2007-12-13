@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2007-12-07 14:17:37 $
+#   last change: $Author: hjs $ $Date: 2007-12-13 10:54:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ MYDBTARGET=$(OUT)$/ucr/constants.db
 ALLTAR: $(MYDBTARGET)
 
 $(MY_GEN_UCR_PATH)$/%.urd: $(MY_GEN_IDL_PATH)$/%.idl
-    $(IDLC) -C -O $(MY_GEN_UCR_PATH) -I $(MY_GEN_IDL_PATH)$(PATH_SEPERATOR)$(SOLARIDLDIR) $?
+    $(IDLC) -C -O $(MY_GEN_UCR_PATH) -I $(MY_GEN_IDL_PATH) -I $(SOLARIDLDIR) $?
 
 $(MYDBTARGET) : $(MYURDFILES)  $(MYIDLFILES)
     $(REGMERGE) $(OUT)$/ucr/constants.db /UCR @$(mktmp $(MYURDFILES))
