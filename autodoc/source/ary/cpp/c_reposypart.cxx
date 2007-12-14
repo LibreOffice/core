@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_reposypart.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-05 12:01:03 $
+ *  last change: $Author: kz $ $Date: 2007-12-14 15:39:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,6 +190,10 @@ LesserGlobal::operator()(   GlobalId            i_1,
                             if ( IsDefine(i_1) != IsDefine(i_2) )
                             {
                                 return NOT IsDefine(i_2);
+                            }
+                            else if (IsDefine(i_1))
+                            {
+                                return i_1.Class() < i_2.Class();
                             }
 
                             return Ce_GlobalCompare::Lesser_(
