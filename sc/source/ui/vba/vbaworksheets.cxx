@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaworksheets.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:07:19 $
+ *  last change: $Author: kz $ $Date: 2007-12-14 11:02:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ class SheetCollectionHelper : public SheetCollectionHelper_BASE
     SheetMap mSheetMap;
     SheetMap::iterator cachePos;
 public:
-    SheetCollectionHelper( const SheetMap& sMap ) : mSheetMap( sMap ), cachePos(0) {}
+    SheetCollectionHelper( const SheetMap& sMap ) : mSheetMap( sMap ), cachePos(mSheetMap.begin()) {}
     // XElementAccess
     virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException) { return  sheet::XSpreadsheet::static_type(0); }
     virtual ::sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException) { return ( mSheetMap.size() > 0 ); }
