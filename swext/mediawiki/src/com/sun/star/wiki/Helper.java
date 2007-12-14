@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-13 15:11:05 $
+ *  last change: $Author: mav $ $Date: 2007-12-14 09:40:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,13 @@
 
 package com.sun.star.wiki;
 
+import com.sun.star.awt.MessageBoxButtons;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XDialog;
+import com.sun.star.awt.XMessageBox;
+import com.sun.star.awt.XMessageBoxFactory;
+import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
@@ -722,6 +726,59 @@ public class Helper
         }
 
         return bResult;
+    }
+
+    protected static void ShowError( XComponentContext xContext, XWindowPeer xParentPeer, String sError )
+    {
+        if ( xContext != null && sError != null )
+        {
+            boolean bShown = false;
+
+            if ( xParentPeer != null )
+            {
+                try
+                {
+                    XMessageBoxFactory xMBFactory = null;
+                    XMultiComponentFactory xFactory = xContext.getServiceManager();
+                    if ( xFactory != null )
+                        xMBFactory = (XMessageBoxFactory)UnoRuntime.queryInterface(
+                                     XMessageBoxFactory.class,
+                                     xFactory.createInstanceWithContext( "com.sun.star.awt.Toolkit", xContext ) );
+
+                    if ( xMBFactory != null )
+                    {
+                        XMessageBox xMB = xMBFactory.createMessageBox( xParentPeer,
+                                                     new com.sun.star.awt.Rectangle(),
+                                                     "errorbox",
+                                                     MessageBoxButtons.BUTTONS_OK,
+                                                     "Error",
+                                                     sError );
+                        if ( xMB != null )
+                        {
+                            MainThreadDialogExecutor.Execute( xContext, xMB );
+                            bShown = true;
+                        }
+                    }
+                }
+                catch( Exception e )
+                {
+                    e.printStackTrace();
+                }
+            }
+
+            if ( !bShown )
+            {
+                try
+                {
+                    ErrorDialog xDialog = new ErrorDialog( xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", sError );
+                    MainThreadDialogExecutor.Show( xContext, xDialog );
+                }
+                catch( Exception e )
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
 

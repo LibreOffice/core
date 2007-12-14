@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditorImpl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-13 10:34:07 $
+ *  last change: $Author: mav $ $Date: 2007-12-14 09:40:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 package com.sun.star.wiki;
 
 import com.sun.star.awt.XDialog;
+import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.DispatchDescriptor;
 import com.sun.star.frame.XComponentLoader;
@@ -76,6 +77,7 @@ public final class WikiEditorImpl extends WeakBase
     private static final String m_implementationName = WikiEditorImpl.class.getName();
     private static final String[] m_serviceNames = {"com.sun.star.wiki.WikiEditor" };
     private static final String m_sGeneralSendError = "The operation 'Send to MediaWiki' could not be completed successfully.";
+    private static final String m_sNoWikiFilter = "The MediaWiki export filter cannot be found. Choose 'Tools-XML Filter Settings' to install the filter, or use the setup to install the component.";
 
     // information needed for component registration
     public static final String[] supportedServiceNames = {"com.sun.star.frame.ProtocolHandler"};
@@ -400,8 +402,9 @@ public final class WikiEditorImpl extends WeakBase
 
                     if ( m_aFilterName == null || m_aFilterName.length() == 0 )
                     {
-                        ErrorDialog ed = new ErrorDialog(m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "The MediaWiki export filter cannot be found. Choose 'Tools-XML Filter Settings' to install the filter, or use the setup to install the component.");
-                        ed.show();
+                        Helper.ShowError( m_xContext,
+                                          (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xFrame.getContainerWindow() ),
+                                          m_sNoWikiFilter );
                         throw new com.sun.star.uno.RuntimeException();
                     }
 
@@ -489,8 +492,9 @@ public final class WikiEditorImpl extends WeakBase
                     }
                     else
                     {
-                        ErrorDialog ed = new ErrorDialog(m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", m_sGeneralSendError );
-                        MainThreadDialogExecutor.Show( m_xContext, ed );
+                        Helper.ShowError( m_xContext,
+                                          (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xFrame.getContainerWindow() ),
+                                          m_sGeneralSendError );
                     }
                 }
             }
@@ -503,8 +507,9 @@ public final class WikiEditorImpl extends WeakBase
                 if ( Helper.IsConnectionAllowed() )
                 {
                     // report the error only if sending was not cancelled
-                    ErrorDialog ed = new ErrorDialog(m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", m_sGeneralSendError );
-                    MainThreadDialogExecutor.Show( m_xContext, ed );
+                    Helper.ShowError( m_xContext,
+                                      (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xFrame.getContainerWindow() ),
+                                      m_sGeneralSendError );
                 }
                 e.printStackTrace();
             }

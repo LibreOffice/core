@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MainThreadDialogExecutor.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2007-11-28 11:13:59 $
+ *  last change: $Author: mav $ $Date: 2007-12-14 09:40:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@ package com.sun.star.wiki;
 import com.sun.star.uno.Any;
 import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XCallback;
+import com.sun.star.awt.XMessageBox;
 import com.sun.star.awt.XRequestCallback;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
@@ -47,6 +48,7 @@ public class MainThreadDialogExecutor implements XCallback
 {
     private WikiDialog m_aWikiDialog;
     private XDialog    m_xDialog;
+    private XMessageBox m_xMessageBox;
     private boolean    m_bResult = false;
     private boolean    m_bCalled = false;
 
@@ -59,6 +61,12 @@ public class MainThreadDialogExecutor implements XCallback
     static public boolean Execute( XComponentContext xContext, XDialog xDialog )
     {
         MainThreadDialogExecutor aExecutor = new MainThreadDialogExecutor( xDialog );
+        return GetCallback( xContext, aExecutor );
+    }
+
+    static public boolean Execute( XComponentContext xContext, XMessageBox xMessageBox )
+    {
+        MainThreadDialogExecutor aExecutor = new MainThreadDialogExecutor( xMessageBox );
         return GetCallback( xContext, aExecutor );
     }
 
@@ -118,6 +126,11 @@ public class MainThreadDialogExecutor implements XCallback
         m_xDialog = xDialog;
     }
 
+    private MainThreadDialogExecutor( XMessageBox xMessageBox )
+    {
+        m_xMessageBox = xMessageBox;
+    }
+
     private boolean GetResult()
     {
         return m_bResult;
@@ -129,6 +142,8 @@ public class MainThreadDialogExecutor implements XCallback
             m_bResult = m_aWikiDialog.show();
         else if ( m_xDialog != null )
             m_bResult = ( m_xDialog.execute() == 1 );
+        else if ( m_xMessageBox != null )
+            m_bResult = ( m_xMessageBox.execute() == 1 );
 
         m_bCalled = true;
     }

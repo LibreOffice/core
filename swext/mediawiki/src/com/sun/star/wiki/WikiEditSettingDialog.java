@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-14 08:21:13 $
+ *  last change: $Author: mav $ $Date: 2007-12-14 09:40:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,9 @@
 package com.sun.star.wiki;
 
 import com.sun.star.awt.XDialog;
+import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.XPropertySet;
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import java.util.Hashtable;
 
@@ -50,6 +52,12 @@ public class WikiEditSettingDialog extends WikiDialog
     private final String sCancelMethod = "Cancel";
     private final String sHelpMethod = "Help";
 
+    private static final String m_sNoConnectionToURL1 = "A connection to the MediaWiki system at '";
+    private static final String m_sNoConnectionToURL2 = "' could not be created.";
+    private static final String m_sWrongLogin = "User name or password is incorrect. Please try again, or leave the fields blank for an anonymous connection.";
+    private static final String m_sInvalidURL = "A connection could not be created, because the URL is invalid.";
+    private static final String m_sNoURL = "Specify a MediaWiki server by providing a URL.";
+
     String[] Methods =
     {sOKMethod, sCancelMethod, sHelpMethod};
     private Hashtable setting;
@@ -61,6 +69,7 @@ public class WikiEditSettingDialog extends WikiDialog
         super.setMethods( Methods );
         setting = new Hashtable();
         addMode = true;
+        ;
 
         InitSaveCheckbox( xContext );
     }
@@ -153,8 +162,9 @@ public class WikiEditSettingDialog extends WikiDialog
                                 if ( sRedirectURL.equals( "" ) )
                                 {
                                     // show error
-                                    ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "A connection to the MediaWiki system at '" + sURL + "' could not be created." );
-                                    ed.show();
+                                    Helper.ShowError( m_xContext,
+                                                      (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xDialog ),
+                                                      m_sNoConnectionToURL1 + sURL + m_sNoConnectionToURL2 );
                                 }
                             }
                             else
@@ -164,8 +174,9 @@ public class WikiEditSettingDialog extends WikiDialog
                                 {
                                     // a wrong login information is provided
                                     // show error
-                                    ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "User name or password is incorrect. Please try again, or leave the fields blank for an anonymous connection." );
-                                    ed.show();
+                                    Helper.ShowError( m_xContext,
+                                                      (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xDialog ),
+                                                      m_sWrongLogin );
                                 }
                                 else
                                 {
@@ -198,25 +209,26 @@ public class WikiEditSettingDialog extends WikiDialog
                         {
                             // URL invalid
                             // show error
-                            ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "A connection could not be created, because the URL is invalid." );
-                            ed.show();
+                            Helper.ShowError( m_xContext,
+                                              (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xDialog ),
+                                              m_sInvalidURL );
                         }
                     }
                     else
                     {
                         // URL field empty
                         // show error
-                        ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "Specify a MediaWiki server by providing a URL." );
-                        ed.show();
-
+                        Helper.ShowError( m_xContext,
+                                          (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xDialog ),
+                                          m_sNoURL );
                     }
                 } while ( sRedirectURL.length() > 0 );
             }
             catch ( Exception ex )
             {
-                ErrorDialog ed = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "A connection to the MediaWiki system at '" + sURL + "' could not be created." );
-                ed.show();
-
+                Helper.ShowError( m_xContext,
+                                  (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xDialog ),
+                                  m_sNoConnectionToURL1 + sURL + m_sNoConnectionToURL2 );
                 ex.printStackTrace();
             }
             return true;

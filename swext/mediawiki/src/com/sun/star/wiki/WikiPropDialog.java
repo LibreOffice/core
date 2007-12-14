@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-13 10:34:07 $
+ *  last change: $Author: mav $ $Date: 2007-12-14 09:40:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@ import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XThrobber;
+import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameContainer;
@@ -50,6 +51,7 @@ import com.sun.star.uno.XComponentContext;
 
 public class WikiPropDialog extends WikiDialog{
 
+    private static final String m_sCancelSending = "The transfer has been interrupted. Please check the integrity of the wiki article.";
     WikiEditorImpl m_aWikiEditor;
 
     private final String sSendMethod = "Send";
@@ -305,8 +307,9 @@ public class WikiPropDialog extends WikiDialog{
             }
             else
             {
-                ErrorDialog aED = new ErrorDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", "The transfer has been interrupted. Please check the integrity of the wiki article." );
-                aED.show();
+                Helper.ShowError( m_xContext,
+                                  (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xDialog ),
+                                  m_sCancelSending );
             }
 
             return true;
