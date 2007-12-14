@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfioutdev_gpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: thb $ $Date: 2007-12-05 14:16:44 $
+ *  last change: $Author: akhva $ $Date: 2007-12-14 16:25:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU General Public License Version 2.
@@ -629,15 +629,15 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
 
     // normalize coordinates
     // correct from baseline to upper left corner
-    double x2(0.0), y2(0.0);
-    state->textTransformDelta( 0.0,
+   //  double x2(0.0), y2(0.0);
+  /*  state->textTransformDelta( 0.0,
                                state->getFontSize()*state->getFont()->getAscent(),
                                &x2, &y2 );
     x -= x2;
-    y += y2;
+    y += y2;*/
 
-    const double aPositionX(x-originX);
-    const double aPositionY(y-originY);
+    const double aPositionX(x/*-originX*/);
+    const double aPositionY(y/*-originY*/);
     const double nWidth(dx);
     const double nHeight(state->getFontSize());
 
