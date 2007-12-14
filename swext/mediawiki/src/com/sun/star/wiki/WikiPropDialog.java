@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-14 09:40:43 $
+ *  last change: $Author: mav $ $Date: 2007-12-14 13:03:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,7 +308,7 @@ public class WikiPropDialog extends WikiDialog{
             else
             {
                 Helper.ShowError( m_xContext,
-                                  (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xDialog ),
+                                  m_xDialog,
                                   m_sCancelSending );
             }
 

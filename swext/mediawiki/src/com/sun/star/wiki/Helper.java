@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-14 09:40:43 $
+ *  last change: $Author: mav $ $Date: 2007-12-14 13:03:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -726,6 +726,15 @@ public class Helper
         }
 
         return bResult;
+    }
+
+    protected static void ShowError( XComponentContext xContext, XDialog xDialog, String sError )
+    {
+        XWindowPeer xPeer = null;
+        XControl xControl = (XControl)UnoRuntime.queryInterface( XControl.class, xDialog );
+        if ( xControl != null )
+            xPeer = xControl.getPeer();
+        ShowError( xContext, xPeer, sError );
     }
 
     protected static void ShowError( XComponentContext xContext, XWindowPeer xParentPeer, String sError )

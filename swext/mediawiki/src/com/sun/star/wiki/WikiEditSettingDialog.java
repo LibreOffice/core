@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-14 09:40:43 $
+ *  last change: $Author: mav $ $Date: 2007-12-14 13:03:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ public class WikiEditSettingDialog extends WikiDialog
                                 {
                                     // show error
                                     Helper.ShowError( m_xContext,
-                                                      (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xDialog ),
+                                                      m_xDialog,
                                                       m_sNoConnectionToURL1 + sURL + m_sNoConnectionToURL2 );
                                 }
                             }
@@ -175,7 +175,7 @@ public class WikiEditSettingDialog extends WikiDialog
                                     // a wrong login information is provided
                                     // show error
                                     Helper.ShowError( m_xContext,
-                                                      (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xDialog ),
+                                                      m_xDialog,
                                                       m_sWrongLogin );
                                 }
                                 else
@@ -210,7 +210,7 @@ public class WikiEditSettingDialog extends WikiDialog
                             // URL invalid
                             // show error
                             Helper.ShowError( m_xContext,
-                                              (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xDialog ),
+                                              m_xDialog,
                                               m_sInvalidURL );
                         }
                     }
@@ -219,7 +219,7 @@ public class WikiEditSettingDialog extends WikiDialog
                         // URL field empty
                         // show error
                         Helper.ShowError( m_xContext,
-                                          (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xDialog ),
+                                          m_xDialog,
                                           m_sNoURL );
                     }
                 } while ( sRedirectURL.length() > 0 );
@@ -227,7 +227,7 @@ public class WikiEditSettingDialog extends WikiDialog
             catch ( Exception ex )
             {
                 Helper.ShowError( m_xContext,
-                                  (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xDialog ),
+                                  m_xDialog,
                                   m_sNoConnectionToURL1 + sURL + m_sNoConnectionToURL2 );
                 ex.printStackTrace();
             }
