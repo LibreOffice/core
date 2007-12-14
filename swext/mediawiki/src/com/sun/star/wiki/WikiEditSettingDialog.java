@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-13 15:11:05 $
+ *  last change: $Author: mav $ $Date: 2007-12-14 08:21:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,7 @@ public class WikiEditSettingDialog extends WikiDialog
                                         Settings.getSettings( m_xContext ).addWikiCon( setting );
 
                                     if ( Helper.PasswordStoringIsAllowed( m_xContext )
-                                      && ( (Short)( getPropSet( "SaveBox" ).getPropertyValue("State") ) ) != 0 )
+                                      && ( (Short)( getPropSet( "SaveBox" ).getPropertyValue("State") ) ).shortValue() != (short)0 )
                                     {
                                         String[] pPasswords = { sPassword };
                                         try
