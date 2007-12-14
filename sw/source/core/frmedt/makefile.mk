@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-13 11:40:23 $
+#   last change: $Author: kz $ $Date: 2007-12-14 09:38:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,13 +65,11 @@ CXXFILES = \
 
 
 
-SLOFILES =  \
+SLOFILES =  $(EXCEPTIONSFILES) \
         $(SLO)$/fedesc.obj \
-        $(SLO)$/fefly1.obj \
         $(SLO)$/feflyole.obj \
         $(SLO)$/feshview.obj \
         $(SLO)$/fetab.obj \
-        $(SLO)$/fews.obj \
         $(SLO)$/tblsel.obj
         
 EXCEPTIONSFILES=\
