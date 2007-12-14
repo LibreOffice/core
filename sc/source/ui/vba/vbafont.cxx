@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbafont.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 10:51:27 $
+ *  last change: $Author: kz $ $Date: 2007-12-14 12:40:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ ScVbaFont::getStandardFontSize() throw ( uno::RuntimeException )
 //XXX #TODO# #FIXME#
     throw uno::RuntimeException(
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("getStandardFontSize not supported") ), uno::Reference< uno::XInterface >() );
-    return uno::Any();
+    // return uno::Any();
 }
 
 
@@ -224,7 +224,7 @@ ScVbaFont::getStandardFont() throw ( uno::RuntimeException )
 //XXX #TODO# #FIXME#
     throw uno::RuntimeException(
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("getStandardFont not supported") ), uno::Reference< uno::XInterface >() );
-    return uno::Any();
+    // return uno::Any();
 }
 
 void SAL_CALL
@@ -243,7 +243,7 @@ ScVbaFont::getFontStyle() throw ( uno::RuntimeException )
 //XXX
     throw uno::RuntimeException(
         rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("getFontStyle not supported") ), uno::Reference< uno::XInterface >() );
-    return uno::Any();
+    // return uno::Any();
 }
 
 void SAL_CALL

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbalineformat.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 10:54:55 $
+ *  last change: $Author: kz $ $Date: 2007-12-14 12:41:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -422,7 +422,6 @@ ScVbaLineFormat::setDashStyle( sal_Int32 _dashstyle ) throw (uno::RuntimeExcepti
             break;
         default:
             throw uno::RuntimeException( rtl::OUString::createFromAscii("this MsoLineDashStyle is not supported."), uno::Reference< uno::XInterface >() );
-            break;
         }
         m_xPropertySet->setPropertyValue( rtl::OUString::createFromAscii( "LineDash" ), uno::makeAny( pLineDash ) );
     }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbachart.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 10:45:44 $
+ *  last change: $Author: kz $ $Date: 2007-12-14 12:41:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,7 +354,6 @@ try
             break;
         default:
             throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_CONVERSION, rtl::OUString() );
-        break;
     }
 
     switch (_nChartType)
@@ -707,7 +706,6 @@ ScVbaChart::getPlotBy(  ) throw (script::BasicErrorException, uno::RuntimeExcept
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
-    return xlColumns;
 }
 
 void
@@ -973,14 +971,6 @@ ScVbaChart::getSolidType(sal_Int32 _nDeep, sal_Int32 _nVertiStacked, sal_Int32 _
     catch (uno::Exception& )
     {
         throw script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
-    }
-    if (bIsVertical)
-    {
-        return _nVertiStacked;
-    }
-    else
-    {
-        return _nHoriStacked;
     }
 }
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbarange.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:01:04 $
+ *  last change: $Author: kz $ $Date: 2007-12-14 12:41:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4447,7 +4447,6 @@ ScVbaRange::AutoFill(  const uno::Reference< excel::XRange >& Destination, const
                 break;
             case excel::XlAutoFillType::xlFillFormats:
                 throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "xlFillFormat not supported for AutoFill" ) ), uno::Reference< uno::XInterface >() );
-                break;
             case excel::XlAutoFillType::xlFillValues:
             case excel::XlAutoFillType::xlFillSeries:
             case excel::XlAutoFillType::xlLinearTrend:

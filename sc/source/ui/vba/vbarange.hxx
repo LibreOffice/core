@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbarange.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:01:18 $
+ *  last change: $Author: kz $ $Date: 2007-12-14 12:41:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ public:
     ScVbaRange( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange, sal_Bool bIsRows = false, sal_Bool bIsColumns = false ) throw ( css::lang::IllegalArgumentException );
     ScVbaRange( const css::uno::Reference< oo::vba::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges, sal_Bool bIsRows = false, sal_Bool bIsColumns = false ) throw ( css::lang::IllegalArgumentException );
     ScVbaRange( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext ) throw ( css::lang::IllegalArgumentException );
-;
+
     ScDocument* getScDocument();
     ScDocShell* getScDocShell();
 
@@ -149,6 +149,7 @@ public:
     virtual ::sal_Int32 SAL_CALL getRow() throw (css::uno::RuntimeException);
     virtual ::sal_Int32 SAL_CALL getColumn() throw (css::uno::RuntimeException);
     virtual ::rtl::OUString SAL_CALL getText() throw (css::uno::RuntimeException);
+    using ScVbaRange_BASE::setNumberFormat;
     virtual void SAL_CALL setNumberFormat( const css::uno::Any& rNumberFormat ) throw ( css::script::BasicErrorException, css::uno::RuntimeException);
     virtual css::uno::Any SAL_CALL getNumberFormat() throw (css::script::BasicErrorException, css::uno::RuntimeException);
     virtual void SAL_CALL setMergeCells( const css::uno::Any& bMerge ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
