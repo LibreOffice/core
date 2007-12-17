@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfioutdev_gpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: akhva $ $Date: 2007-12-14 16:25:53 $
+ *  last change: $Author: thb $ $Date: 2007-12-17 01:21:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU General Public License Version 2.
@@ -561,7 +561,7 @@ void PDFOutDev::updateFont(GfxState *state)
                     aFont.isBold,
                     aFont.isItalic,
                     aFont.isUnderline,
-                    normalize(aFont.size),
+                    normalize(state->getTransformedFontSize()),
                     nEmbedSize,
                     escapeLineFeed(aFont.familyName.getCString()) );
         }
@@ -617,8 +617,27 @@ void PDFOutDev::eoClip(GfxState *state)
     printf( "\n" );
 }
 
+/** Output one glyph
+
+
+    @param dx
+    horizontal skip for character (already scaled with font size) +
+    inter-char space: cursor is shifted by this amount for next char
+
+    @param dy
+    vertical skip for character (zero for horizontal writing mode):
+    cursor is shifted by this amount for next char
+
+    @param originX
+    local offset of character (zero for horizontal writing mode). not
+    taken into account for output pos updates. Used for vertical writing.
+
+    @param originY
+    local offset of character (zero for horizontal writing mode). not
+    taken into account for output pos updates. Used for vertical writing.
+ */
 void PDFOutDev::drawChar(GfxState *state, double x, double y,
-                         double dx, double /*dy*/,
+                         double dx, double dy,
                          double originX, double originY,
                          CharCode, int /*nBytes*/, Unicode *u, int uLen)
 {
@@ -627,19 +646,21 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
     if( u == NULL )
         return;
 
-    // normalize coordinates
-    // correct from baseline to upper left corner
-   //  double x2(0.0), y2(0.0);
-  /*  state->textTransformDelta( 0.0,
-                               state->getFontSize()*state->getFont()->getAscent(),
+    // normalize coordinates: correct from baseline-relative to upper
+    // left corner of glyphs
+    double x2(0.0), y2(0.0);
+    state->textTransformDelta( 0.0,
+                               state->getFont()->getAscent(),
                                &x2, &y2 );
-    x -= x2;
-    y += y2;*/
+    const double fFontSize(state->getFontSize());
+    x -= x2*fFontSize;
+    y += y2*fFontSize;
 
-    const double aPositionX(x/*-originX*/);
-    const double aPositionY(y/*-originY*/);
-    const double nWidth(dx);
-    const double nHeight(state->getFontSize());
+    const double aPositionX(x-originX);
+    const double aPositionY(y-originY);
+    // TODO(F2): use leading here, when set
+    const double nWidth(dx != 0.0 ? dx : fFontSize);
+    const double nHeight(dy != 0.0 ? dy : fFontSize);
 
     const double* pTextMat=state->getTextMat();
     printf( "drawChar %f %f %f %f %f %f %f %f ",
