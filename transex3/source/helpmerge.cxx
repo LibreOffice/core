@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-26 10:28:26 $
+ *  last change: $Author: ihi $ $Date: 2007-12-17 15:01:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -454,6 +454,13 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
         return false;
     }
 
+    DirEntry aTarget( sTargetFile );
+    FileStat aFileStat( aTarget );
+    if( aFileStat.GetSize() < 1 )
+    {
+        cerr << "ERROR: - helpex - Filesize == 0 of file " << sTargetFile.GetBuffer() << "\n";
+        return false;
+    }
     return true;
 }
 
