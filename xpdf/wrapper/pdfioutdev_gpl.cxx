@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfioutdev_gpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: thb $ $Date: 2007-12-17 01:21:52 $
+ *  last change: $Author: thb $ $Date: 2007-12-17 03:44:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU General Public License Version 2.
@@ -653,7 +653,7 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
                                state->getFont()->getAscent(),
                                &x2, &y2 );
     const double fFontSize(state->getFontSize());
-    x -= x2*fFontSize;
+    x += x2*fFontSize;
     y += y2*fFontSize;
 
     const double aPositionX(x-originX);
@@ -667,7 +667,7 @@ void PDFOutDev::drawChar(GfxState *state, double x, double y,
             normalize(aPositionX),
             normalize(aPositionY),
             normalize(aPositionX+nWidth),
-            normalize(aPositionY+nHeight),
+            normalize(aPositionY-nHeight),
             normalize(pTextMat[0]),
             normalize(pTextMat[2]),
             normalize(pTextMat[1]),
