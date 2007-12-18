@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-07 14:27:17 $
+ *  last change: $Author: aw $ $Date: 2007-12-18 15:10:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,10 @@
 
 #ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
 #include <com/sun/star/i18n/XBreakIterator.hpp>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////

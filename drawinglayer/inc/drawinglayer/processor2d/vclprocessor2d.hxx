@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-13 16:43:01 $
+ *  last change: $Author: aw $ $Date: 2007-12-18 15:10:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,6 @@
 
 #ifndef _BGFX_COLOR_BCOLORMODIFIER_HXX
 #include <basegfx/color/bcolormodifier.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
-#include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
