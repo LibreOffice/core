@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-12 13:23:40 $
+ *  last change: $Author: aw $ $Date: 2007-12-20 13:13:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1363,10 +1363,12 @@ namespace drawinglayer
                             Graphic());
                     }
 
-                    // call VCL directly; encapsulate with SvtGraphicFill
-                    impStartSvtGraphicFill(pSvtGraphicFill);
+                    // set line and fill color
                     mpOutputDevice->SetFillColor(Color(aPolygonColor));
                     mpOutputDevice->SetLineColor();
+
+                    // call VCL directly; encapsulate with SvtGraphicFill
+                    impStartSvtGraphicFill(pSvtGraphicFill);
                     mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
                     impEndSvtGraphicFill(pSvtGraphicFill);
 
@@ -1490,11 +1492,13 @@ namespace drawinglayer
                                     Graphic());
                             }
 
-                            // call VCL directly; encapsulate with SvtGraphicFill
-                            impStartSvtGraphicFill(pSvtGraphicFill);
+                            // set line and fill color
                             const sal_uInt16 nTransPercentVcl((sal_uInt16)basegfx::fround(rUniAlphaCandidate.getAlpha() * 100.0));
                             mpOutputDevice->SetFillColor(Color(aPolygonColor));
                             mpOutputDevice->SetLineColor();
+
+                            // call VCL directly; encapsulate with SvtGraphicFill
+                            impStartSvtGraphicFill(pSvtGraphicFill);
                             mpOutputDevice->DrawTransparent(
                                 PolyPolygon(aLocalPolyPolygon),
                                 nTransPercentVcl);

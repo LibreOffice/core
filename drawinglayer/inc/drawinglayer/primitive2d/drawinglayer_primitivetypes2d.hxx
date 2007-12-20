@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawinglayer_primitivetypes2d.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: aw $ $Date: 2007-11-07 14:27:16 $
+ *  last change: $Author: aw $ $Date: 2007-12-20 13:13:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 #define PRIMITIVE2D_ID_RANGE_DRAWINGLAYER           (0 << 16)
 #define PRIMITIVE2D_ID_RANGE_SVX                    (1 << 16)
 #define PRIMITIVE2D_ID_RANGE_SD                     (2 << 16)
+#define PRIMITIVE2D_ID_RANGE_SW                     (3 << 16)
+#define PRIMITIVE2D_ID_RANGE_SC                     (4 << 16)
 
 //////////////////////////////////////////////////////////////////////////////
 // local primitives
@@ -93,6 +95,7 @@
 #define PRIMITIVE2D_ID_TEXTEFFECTPRIMITIVE2D                (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 44)
 #define PRIMITIVE2D_ID_TEXTHIERARCHYBULLETPRIMITIVE2D       (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 45)
 #define PRIMITIVE2D_ID_POLYPOLYGONHAIRLINEPRIMITIVE2D       (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 46)
+#define PRIMITIVE2D_ID_EXECUTEPRIMITIVE2D                   (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 47)
 
 //////////////////////////////////////////////////////////////////////////////
 
