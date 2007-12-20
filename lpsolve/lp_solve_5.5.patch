@@ -25,7 +25,7 @@
 ! if [ "$so" != "" ]
 ! then
 !   $c -K pic -s -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd -I. $opts -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src
-!   $c -G -Bsymbolic -h liblpsolve55.so -o liblpsolve55.so `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'` -lc -lm -ldl
+!   $c -G -Bsymbolic -h liblpsolve55.so -o liblpsolve55.so `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'` $SOLARLIB -lc -lm -ldl
 ! fi
 ! 
 ! rm *.o 2>/dev/null
