@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nn $ $Date: 2007-11-23 21:29:22 $
+#   last change: $Author: nn $ $Date: 2007-12-21 09:32:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,12 +63,17 @@ BUILD_ACTION=cmd /c cvc6.bat
 OUT2BIN=$(BUILD_DIR)$/lpsolve55.dll
 OUT2LIB=$(BUILD_DIR)$/lpsolve55.lib
 .ELSE
+.IF "$(OS)"=="MACOSX"
+BUILD_ACTION=sh ccc.osx
+OUT2LIB=$(BUILD_DIR)$/liblpsolve55.dylib
+.ELSE
 .IF "$(COMNAME)"=="sunpro5"
 BUILD_ACTION=sh ccc.solaris
 .ELSE
 BUILD_ACTION=sh ccc
 .ENDIF
 OUT2LIB=$(BUILD_DIR)$/liblpsolve55.so
+.ENDIF
 .ENDIF
 
 OUT2INC=lp_lib.h lp_types.h lp_utils.h lp_Hash.h lp_matrix.h lp_mipbb.h lp_SOS.h
