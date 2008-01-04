@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeloader.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-26 11:57:03 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,9 @@ int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
         _tcsncpy( szPerfTuneIniFile + len, _T("perftune.ini"), sizeof(szPerfTuneIniFile)/sizeof(szPerfTuneIniFile[0]) - len );
     }
 
+#ifndef __MINGW32__
     desktop_win32::extendLoaderEnvironment();
+#endif
 
     // Create process with same command line, environment and stdio handles which
     // are directed to the created pipes
