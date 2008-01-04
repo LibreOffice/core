@@ -4,9 +4,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 14:54:52 $
+#   last change: $Author: obo $ $Date: 2008-01-04 17:00:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ sub assign_cab_to_files
         # If modules contains a list of modules, only taking the first one.
         if ( $module =~ /^\s*(.*?)\,/ ) { $module = $1; }
 
-        if ( ! exists($installer::globals::allcabinetassigns{$module}) ) { installer::exiter::exit_program("ERROR: No cabinet file assigned to module \"$module\" !", "assign_cab_to_files"); }
+        if ( ! exists($installer::globals::allcabinetassigns{$module}) ) { installer::exiter::exit_program("ERROR: No cabinet file assigned to module \"$module\" (${$filesref}[$i]->{'gid'}) !", "assign_cab_to_files"); }
         ${$filesref}[$i]->{'assignedcabinetfile'} = $installer::globals::allcabinetassigns{$module};
 
         # Counting the files in each cabinet file
