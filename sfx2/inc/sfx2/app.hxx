@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:16:10 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:08:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,8 +189,6 @@ class SFX2_DLLPUBLIC SfxApplication: public SfxShell
     SfxAppData_Impl*            pAppData_Impl;
 
 //#if 0 // _SOLAR__PRIVATE
-    DECL_DLLPRIVATE_LINK(       SpecialService_Impl, void* );
-    DECL_DLLPRIVATE_LINK(       LateInitTimerHdl_Impl, void*);
     DECL_DLLPRIVATE_LINK(       GlobalBasicErrorHdl_Impl, StarBASIC* );
     SAL_DLLPRIVATE BOOL         SaveAll_Impl(BOOL bPrompt = FALSE, BOOL bAutoSave = FALSE);
     SAL_DLLPRIVATE short        QuerySave_Impl(SfxObjectShell &, BOOL bAutoSave = FALSE);
@@ -204,7 +202,6 @@ class SFX2_DLLPUBLIC SfxApplication: public SfxShell
     void                        Main( );
     void                        PreInit( );
     void                        Quit();
-    void                        InsertLateInitHdl(const Link&);
     void                        Deinitialize();
 
 public:
