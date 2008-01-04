@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 13:21:33 $
+#   last change: $Author: obo $ $Date: 2008-01-04 15:02:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ CXX*=g++
 CC*=gcc
 objc=cc
 
-CFLAGS=-fsigned-char -fmessage-length=0 -malign-natural -c
+CFLAGS=-fsigned-char -fmessage-length=0 -malign-natural -c $(EXTRA_CFLAGS)
 
 # ---------------------------------
 #  Compilation flags
@@ -156,6 +156,9 @@ MODULES_WITH_WARNINGS := \
 # Currently, there is no nas support for OS X...
 CDEFS+= -DNO_AUDIO
 
+#special settings form environment
+CDEFS+=$(EXTRA_CDEFS)
+
 STDLIBCPP=-lstdc++
 
 # ---------------------------------
@@ -200,6 +203,9 @@ LINKFLAGS=$(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
     # because they really aren't GUIBASE specific, so we've got to account for that here.
     INCGUI+= -I$(PRJ)$/unx/inc
 .ENDIF
+
+#special settings form environment
+LINKFLAGS+=$(EXTRA_LINKFLAGS)
 
 # Random link flags dealing with different cases of linking
 
