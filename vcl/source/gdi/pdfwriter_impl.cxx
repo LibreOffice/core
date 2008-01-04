@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:19:53 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:09:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4095,7 +4095,9 @@ we check in the following sequence:
             {
                 if( m_aContext.ConvertOOoTargetToPDFTarget )
                 {
-//examine the file type (.odt. .odp, odg, ods
+//examine the file type (.odm .odt. .odp, odg, ods)
+                    if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odm" ) ) ) )
+                        nChangeFileExtensionToPDF++;
                     if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odt" ) ) ) )
                         nChangeFileExtensionToPDF++;
                     else if( aFileExtension.equalsIgnoreAsciiCase(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "odp" ) ) ) )
@@ -5588,24 +5590,46 @@ sal_Int32 PDFWriterImpl::emitOutputIntent()
 
     OStringBuffer aLine( 1024 );
     sal_Int32 nICCObject = createObject();
+    sal_Int32 nStreamLengthObject = createObject();
 
     aLine.append( nICCObject );
 // sRGB has 3 colors, hence /N 3 below (PDF 1.4 table 4.16)
     aLine.append( " 0 obj\n<</N 3/Length " );
-    aLine.append( (sal_Int32) sizeof( nsRGB_ICC_profile ) );
-    aLine.append( "/Filter/FlateDecode>>\nstream\n" );
+    aLine.append( nStreamLengthObject );
+    aLine.append( " 0 R" );
+#ifndef DEBUG_DISABLE_PDFCOMPRESSION
+    aLine.append( "/Filter/FlateDecode" );
+#endif
+    aLine.append( ">>\nstream\n" );
     CHECK_RETURN( updateObject( nICCObject ) );
     CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+//get file position
+    sal_uInt64 nBeginStreamPos = 0;
+    osl_getFilePos( m_aFile, &nBeginStreamPos );
     beginCompression();
     checkAndEnableStreamEncryption( nICCObject );
     sal_Int32 nStreamSize = writeBuffer( nsRGB_ICC_profile, (sal_Int32) sizeof( nsRGB_ICC_profile ) );
     disableStreamEncryption();
     endCompression();
+    sal_uInt64 nEndStreamPos = 0;
+    osl_getFilePos( m_aFile, &nEndStreamPos );
+
     if( nStreamSize == 0 )
         return 0;
     if( ! writeBuffer( "\nendstream\nendobj\n\n", 19 ) )
         return 0 ;
     aLine.setLength( 0 );
+
+//emit the stream length   object
+    CHECK_RETURN( updateObject( nStreamLengthObject ) );
+    aLine.setLength( 0 );
+    aLine.append( nStreamLengthObject );
+    aLine.append( " 0 obj\n" );
+    aLine.append( (sal_Int64)(nEndStreamPos-nBeginStreamPos) );
+    aLine.append( "\nendobj\n\n" );
+    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+    aLine.setLength( 0 );
+
 //emit the OutputIntent dictionary
     sal_Int32 nOIObject = createObject();
     CHECK_RETURN( updateObject( nOIObject ) );
