@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:01:14 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:33:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #ifndef GCC
 #endif
 
+#include <stdio.h>
 #include <hash_map>
 
 #include <sfx2/docfile.hxx>
@@ -223,6 +224,14 @@ void LayoutManagerListener::setFrame( const css::uno::Reference< css::frame::XFr
                         xLayoutManager->addLayoutManagerEventListener(
                             css::uno::Reference< css::frame::XLayoutManagerListener >(
                                 static_cast< OWeakObject* >( this ), css::uno::UNO_QUERY ));
+
+                    xPropSet = css::uno::Reference< css::beans::XPropertySet >( xLayoutManager, UNO_QUERY );
+                    if ( xPropSet.is() )
+                    {
+                        aValue = xPropSet->getPropertyValue(
+                            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LockCount" )) );
+                        aValue >>= m_pWrkWin->m_nLock;
+                    }
                 }
                 catch ( css::lang::DisposedException& )
                 {
