@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unnum.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:32:05 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,8 +75,6 @@ SwUndoInsNum::SwUndoInsNum( const SwNumRule& rOldRule,
     aNumRule( rNewRule ), pHistory( 0 ), nSttSet( ULONG_MAX ),
     pOldNumRule( new SwNumRule( rOldRule )), nLRSavePos( 0 )
 {
-    ASSERT( rOldRule.IsAutoRule(),
-            "darf nur fuer AutoNumRules gerufen werden" );
 }
 
 SwUndoInsNum::SwUndoInsNum( const SwPaM& rPam, const SwNumRule& rRule )
@@ -135,11 +133,15 @@ void SwUndoInsNum::Undo( SwUndoIter& rUndoIter )
             if( !pNd && nSttNode )
                 pNd = rDoc.GetNodes()[ nSttNode ]->GetTxtNode();
 
+            // This code seems to be superfluous because the methods
+            // don't have any known side effects.
+            // ToDo: iasue i83806 should be used to remove this code
             const SwNumRule* pNdRule;
             if( pNd )
                 pNdRule = pNd->GetNumRule();
             else
                 pNdRule = rDoc.FindNumRulePtr( aNumRule.GetName() );
+            // End of ToDo for issue i83806
 
             pHistory->TmpRollback( &rDoc, nLRSavePos );
 
