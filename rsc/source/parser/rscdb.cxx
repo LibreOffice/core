@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscdb.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:58:51 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:59:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,25 +112,77 @@ RscTypCont :: RscTypCont( RscError * pErrHdl,
     Init();
 }
 
+static sal_uInt32 getLangIdAndShortenLocale( RscTypCont* pTypCont,
+                                             rtl::OString& rLang,
+                                             rtl::OString& rCountry,
+                                             rtl::OString& rVariant )
+{
+    rtl::OStringBuffer aLangStr( 64 );
+    aLangStr.append( rLang.toAsciiLowerCase() );
+    if( rCountry.getLength() )
+    {
+        aLangStr.append( '-' );
+        aLangStr.append( rCountry.toAsciiUpperCase() );
+    }
+    if( rVariant.getLength() )
+    {
+        aLangStr.append( '-' );
+        aLangStr.append( rVariant );
+    }
+    rtl::OString aL( aLangStr.makeStringAndClear() );
+    sal_uInt32 nRet = GetLangId( aL );
+    if( nRet == 0 )
+    {
+        pTypCont->AddLanguage( aL );
+        nRet = GetLangId( aL );
+    }
+    if( rVariant.getLength() )
+        rVariant = rtl::OString();
+    else if( rCountry.getLength() )
+        rCountry = rtl::OString();
+    else
+        rLang = rtl::OString();
+#if OSL_DEBUG_LEVEL > 1
+        fprintf( stderr, " %s (0x%hx)", aL.getStr(), nRet );
+#endif
+    return nRet;
+}
+
 ByteString RscTypCont::ChangeLanguage( const ByteString& rNewLang )
 {
     ByteString aRet = aLanguage;
     aLanguage = rNewLang;
 
-    ByteString aLang = aLanguage;
+    rtl::OString aLang = aLanguage;
+    rtl::OString aLg, aCountry, aVariant;
+    sal_Int32 nIndex = 0;
+    aLg = aLang.getToken( 0, '-', nIndex );
+    if( nIndex != -1 )
+        aCountry = aLang.getToken( 0, '-', nIndex );
+    if( nIndex != -1 )
+        aVariant = aLang.copy( nIndex );
+
+    bool bAppendEnUsFallback =
+        ! (rNewLang.EqualsIgnoreCaseAscii( "en-US" ) ||
+           rNewLang.EqualsIgnoreCaseAscii( "x-no-translate" ) );
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "RscTypCont::ChangeLanguage:" );
 #endif
     aLangFallbacks.clear();
+
     do
     {
-        sal_uInt32 nFallback = GetLangId( aLang );
-        aLangFallbacks.push_back( nFallback );
-#if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, " %s (0x%hx)", aLang.GetBuffer(), nFallback );
-#endif
-    } while( GetIsoFallback( aLang ) );
+        aLangFallbacks.push_back(getLangIdAndShortenLocale( this, aLg, aCountry, aVariant ) );
+    } while( aLg.getLength() );
+
+    if( bAppendEnUsFallback )
+    {
+        aLg = "en";
+        aCountry = "US";
+        aVariant = rtl::OString();
+        aLangFallbacks.push_back( getLangIdAndShortenLocale( this, aLg, aCountry, aVariant ) );
+    }
 
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "\n" );
@@ -139,6 +191,10 @@ ByteString RscTypCont::ChangeLanguage( const ByteString& rNewLang )
     return aRet;
 }
 
+Atom RscTypCont::AddLanguage( const char* pLang )
+{
+    return aLangType.AddLanguage( pLang, aNmTb );
+}
 
 
 /*************************************************************************
