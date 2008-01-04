@@ -4,9 +4,9 @@
  *
  *  $RCSfile: distrib.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 17:13:35 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 12:57:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,8 +212,8 @@ class TokenDistributor : private TokenProcessing_Types
 
     // DATA
     TokenParser_Uidl *  pTokenSource;
-    ProcessingData      aProcessingData;
     Documentation       aDocumentation;
+    ProcessingData      aProcessingData;
 };
 
 
