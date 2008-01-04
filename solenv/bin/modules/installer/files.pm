@@ -4,9 +4,9 @@
 #
 #   $RCSfile: files.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 15:01:12 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:56:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,36 @@ sub save_array_of_hashes
         {
             my $itemvalue = $hashref->{$itemkey};
             $line = $line . $itemkey . "=" . $itemvalue . "\t";
+        }
+
+        $line = $line . "\n";
+
+        push(@printcontent, $line);
+    }
+
+    open( OUT, ">$savefile" ) || installer::exiter::exit_program("ERROR: Cannot open file $savefile for writing", "save_array_of_hashes");
+    print OUT @printcontent;
+    close( OUT);
+}
+
+sub save_array_of_hashes_modules
+{
+    my ($savefile, $arrayref) = @_;
+
+    if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::save_array_of_hashes : $savefile : $#{$arrayref}"); }
+
+    my @printcontent = ();
+
+    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
+    {
+        my $line = "***************************************************\n";
+        my $hashref = ${$arrayref}[$i];
+        my $itemkey;
+
+        foreach $itemkey ( keys %{$hashref} )
+        {
+            my $itemvalue = $hashref->{$itemkey};
+            $line = $line . $itemkey . "=" . $itemvalue . "\n";
         }
 
         $line = $line . "\n";
