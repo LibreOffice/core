@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolio.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:45:11 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 14:57:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -867,8 +867,8 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
         {
             // an das Ende des eigenen Pools seeken
             rStream.Seek(nEndOfSizes);
-            CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_ENDPOOL );
-            CHECK_FILEFORMAT( rStream, SFX_ITEMPOOL_TAG_ENDPOOL );
+            CHECK_FILEFORMAT_RELEASE( rStream, SFX_ITEMPOOL_TAG_ENDPOOL, pNewArr );
+            CHECK_FILEFORMAT_RELEASE( rStream, SFX_ITEMPOOL_TAG_ENDPOOL, pNewArr );
 
             // Sekund"arpool einlesen
             pSecondary->Load1_Impl( rStream );
