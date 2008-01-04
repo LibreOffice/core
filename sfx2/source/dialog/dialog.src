@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:10:20 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:09:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,7 +316,6 @@ String STR_GROUP_STYLES
 
 String STR_PDF_EXPORT_SEND
 {
-  Text [ de ] = "Senden" ;
   Text [ en-US ] = "Send" ;
 };
 // ******************************************************************* EOF
