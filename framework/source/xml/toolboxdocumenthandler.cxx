@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:51:15 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:24:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -668,7 +668,7 @@ throw(  SAXException, RuntimeException )
 
     if ( m_xLocator.is() )
     {
-        snprintf( buffer, sizeof(buffer), "Line: %ld - ", m_xLocator->getLineNumber() );
+        snprintf( buffer, sizeof(buffer), "Line: %ld - ", static_cast<long>( m_xLocator->getLineNumber() ));
         return OUString::createFromAscii( buffer );
     }
     else
