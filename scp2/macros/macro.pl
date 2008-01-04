@@ -4,9 +4,9 @@
 #
 #   $RCSfile: macro.pl,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-21 15:16:27 $
+#   last change: $Author: obo $ $Date: 2008-01-04 17:05:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
