@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 13:09:59 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:09:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,61 +218,6 @@ bool SfxApplication::InitLabelResMgr( const char* _pLabelPrefix, bool _bExceptio
 void SfxApplication::Main( )
 {
 }
-
-//--------------------------------------------------------------------
-void SfxApplication::InsertLateInitHdl(const Link& rLink)
-{
-    if ( Application::IsInExecute() )
-           Application::PostUserEvent( rLink );
-    else
-    {
-        if ( !pAppData_Impl->pInitLinkList )
-            pAppData_Impl->pInitLinkList = new SfxInitLinkList;
-
-        Link *pLink = new Link;
-        *pLink = rLink;
-        USHORT nCount = ( USHORT ) pAppData_Impl->pInitLinkList->Count();
-        pAppData_Impl->pInitLinkList->Insert(pLink, nCount);
-    }
-}
-
-//-------------------------------------------------------------------------
-
-IMPL_LINK( SfxApplication, LateInitTimerHdl_Impl, void*, pvoid)
-{
-    (void)pvoid; // unused variable
-    if ( !SfxViewFrame::GetFirst( 0,0,FALSE ) )
-    {
-        pAppData_Impl->aLateInitTimer.Start();
-        return 0;
-    }
-
-    if ( pAppData_Impl->pInitLinkList && pAppData_Impl->pInitLinkList->Count() )
-    {
-    // Ersten Link aus der Liste holen und ausf"uhren
-    Link *pLink = (*pAppData_Impl->pInitLinkList)[0];
-    pLink->Call(0);
-
-    // Link entfernen
-    pAppData_Impl->pInitLinkList->Remove(0);
-    delete pLink;
-
-    // Timer wieder starten, wenn noch weitere Links da sind
-    if ( pAppData_Impl->pInitLinkList->Count() )
-        pAppData_Impl->aLateInitTimer.Start();
-    else
-    {
-        // LateInit ist fertig
-        DELETEZ (pAppData_Impl->pInitLinkList);
-#if SUPD<613//MUSTINI
-        pAppIniMgr->ResetLock();
-#endif
-    }
-    }
-    return 0;
-}
-
-//-------------------------------------------------------------------------
 
 //-------------------------------------------------------------------------
 
