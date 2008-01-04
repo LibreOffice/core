@@ -4,9 +4,9 @@
  *
  *  $RCSfile: roadmap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 08:57:48 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:25:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -901,13 +901,14 @@ namespace svt
 
     void ORoadmapHyperLabel::SetLabelAndSize( ItemIndex _RMIndex, ::rtl::OUString _rText, const Size& _rNewSize)
     {
-        Size rIDSize = _rNewSize;
-        rIDSize.Width() = (sal_Int32) 15;
-        ::rtl::OUString aStr = ::rtl::OUString::createFromAscii("");
-        aStr = ::rtl::OUString::valueOf( (sal_Int32)( _RMIndex + 1 ) ) +  ::rtl::OUString::createFromAscii( "." );
-        mpIDLabel->SetSizePixel(mpIDLabel->LogicToPixel( rIDSize));
-        mpIDLabel->SetText( aStr);
-        mpIDLabel->Show();
+         Size rIDSize = _rNewSize;
+         ::rtl::OUString aStr = ::rtl::OUString::valueOf( (sal_Int32)( _RMIndex + 1 ) ) +  ::rtl::OUString::createFromAscii( "." );
+        rIDSize.Width() = (sal_Int32) mpIDLabel->GetTextWidth( aStr );
+        long nMaxWidth = mpIDLabel->GetTextWidth( ::rtl::OUString::createFromAscii("100.") );
+        rIDSize.Width() = ::std::min( rIDSize.getWidth(),nMaxWidth );
+         mpIDLabel->SetSizePixel(mpIDLabel->LogicToPixel( rIDSize));
+         mpIDLabel->SetText( aStr);
+         mpIDLabel->Show();
         Size rDescSize = _rNewSize;
         rDescSize.Width() -= rIDSize.Width();
         sal_Int32 xDescPos = mpIDLabel->GetPosPixel().X() + mpIDLabel->GetSizePixel().Width();
