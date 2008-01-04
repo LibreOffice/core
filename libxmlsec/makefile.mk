@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2007-10-19 10:32:40 $
+#   last change: $Author: obo $ $Date: 2008-01-04 14:57:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -104,10 +104,13 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .IF "$(GUI)"=="UNX"
 
 .IF "$(SYSBASE)"!=""
-xmlsec_CFLAGS+=-I$(SYSBASE)$/usr$/include
+xmlsec_CFLAGS+=-I$(SYSBASE)$/usr$/include 
 .IF "$(COMNAME)"=="sunpro5"
 xmlsec_CFLAGS+=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
+.IF "$(EXTRA_CFLAGS)"!=""
+xmlsec_CFLAGS+=$(EXTRA_CFLAGS)
+.ENDIF # "$(EXTRA_CFLAGS)"!=""
 xmlsec_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
