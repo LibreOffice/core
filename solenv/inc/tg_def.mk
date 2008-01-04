@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:45:58 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:16:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,10 @@ DEF$(TNR)DEPN+=$(foreach,i,$(DEFLIB$(TNR)NAME) $(SLB)$/$(i).lib)
 .IF "$(DEF$(TNR)EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
 DEF$(TNR)EXPORTFILE=$(MISC)$/$(SHL$(TNR)VERSIONMAP:b)_$(SHL$(TNR)TARGET).dxp
+.IF "$(COM)"=="GCC"
+$(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)OBJS) $(SHL$(TNR)LIBS)
+.ENDIF # .IF "$(COM)"=="GCC"
+
 $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
