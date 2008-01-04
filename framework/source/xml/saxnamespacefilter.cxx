@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxnamespacefilter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:44:43 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:24:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -207,7 +207,7 @@ OUString SaxNamespaceFilter::getErrorLineString()
 
     if ( m_xLocator.is() )
     {
-        snprintf( buffer, sizeof(buffer), "Line: %ld - ", m_xLocator->getLineNumber() );
+        snprintf( buffer, sizeof(buffer), "Line: %ld - ", static_cast<long>( m_xLocator->getLineNumber() ));
         return OUString::createFromAscii( buffer );
     }
     else
