@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-30 08:26:11 $
+#   last change: $Author: obo $ $Date: 2008-01-04 14:57:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@ PATCH_FILE_NAME=epm-3.7.patch
 
 CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--disable-fltk
+.IF "$(OS)"=="MACOSX"
+CONFIGURE_FLAGS+=CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(EXTRA_LINKFLAGS)"
+.ENDIF
 BUILD_ACTION=make
 OUT2BIN=epm epminstall mkepmlist
 
