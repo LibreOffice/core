@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 14:58:20 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:12:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,8 @@
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
 #endif
 
+#include <unotools/docinfohelper.hxx>
+
 using namespace com::sun::star;
 using namespace ::xmloff::token;
 
@@ -109,8 +111,6 @@ using namespace ::xmloff::token;
 
 #define PROP_CHARLOCALE     "Language"
 #define PROP_DOCSTATISTIC   "DocumentStatistic"
-
-const sal_Char *sOpenOfficeOrgProject ="OpenOffice.org_project";
 
 
 //-------------------------------------------------------------------------
@@ -251,83 +251,6 @@ void SfxXMLMetaExport::SimpleDateTimeElement(
     }
 }
 
-rtl::OUString lcl_GetProductName()
-{
-    //  get the correct product name from the configuration
-
-    rtl::OUStringBuffer aName;
-
-    // First product: branded name + version
-    // version is <product_versions>_<product_extension>$<platform>
-    utl::ConfigManager* pMgr = utl::ConfigManager::GetConfigManager();
-    if (pMgr)
-    {
-        // plain product name
-        rtl::OUString aValue;
-        uno::Any aAny = pMgr->GetDirectConfigProperty(
-                                            utl::ConfigManager::PRODUCTNAME);
-        if ( (aAny >>= aValue) && aValue.getLength() )
-        {
-            aName.append( aValue.replace( ' ', '_' ) );
-            aName.append( (sal_Unicode)'/' );
-
-            aAny = pMgr->GetDirectConfigProperty(
-                                        utl::ConfigManager::PRODUCTVERSION);
-            if ( (aAny >>= aValue) && aValue.getLength() )
-            {
-                aName.append( aValue.replace( ' ', '_' ) );
-
-                aAny = pMgr->GetDirectConfigProperty(
-                                        utl::ConfigManager::PRODUCTEXTENSION);
-                if ( (aAny >>= aValue) && aValue.getLength() )
-                {
-                    aName.append( (sal_Unicode)'_' );
-                    aName.append( aValue.replace( ' ', '_' ) );
-                }
-            }
-
-            aName.append( (sal_Unicode)'$' );
-            aName.append( ::rtl::OUString::createFromAscii(
-                                    TOOLS_INETDEF_OS ).replace( ' ', '_' ) );
-
-            aName.append( (sal_Unicode)' ' );
-        }
-    }
-
-    // second product: OpenOffice.org_project/<build_information>
-    // build_information has '(' and '[' encoded as '$', ')' and ']' ignored
-    // and ':' replaced by '-'
-    {
-        aName.appendAscii( sOpenOfficeOrgProject );
-        aName.append( (sal_Unicode)'/' );
-        ::rtl::OUString aDefault;
-        ::rtl::OUString aBuildId( utl::Bootstrap::getBuildIdData( aDefault ) );
-        for( sal_Int32 i=0; i < aBuildId.getLength(); i++ )
-        {
-            sal_Unicode c = aBuildId[i];
-            switch( c )
-            {
-            case '(':
-            case '[':
-                aName.append( (sal_Unicode)'$' );
-                break;
-            case ')':
-            case ']':
-                break;
-            case ':':
-                aName.append( (sal_Unicode)'-' );
-                break;
-            default:
-                aName.append( c );
-                break;
-            }
-        }
-    }
-
-
-    return aName.makeStringAndClear();
-}
-
 void SfxXMLMetaExport::Export()
 {
     // BM: #i60323# export generator even if xInfoProp is empty (which is the
@@ -337,7 +260,7 @@ void SfxXMLMetaExport::Export()
 
     //  generator
     // first token: real product name + version
-    sValue = lcl_GetProductName();
+    sValue = ::utl::DocInfoHelper::GetGeneratorString();
     {
         SvXMLElementExport aElem( rExport, XML_NAMESPACE_META, XML_GENERATOR,
                                   sal_True, sal_True );
