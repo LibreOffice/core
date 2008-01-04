@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgdir.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:24:37 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:32:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #include "stgstrms.hxx"
 #include "stgdir.hxx"
 #include "stgio.hxx"
+
 
 //////////////////////////// class StgDirEntry /////////////////////////////
 
@@ -817,6 +818,7 @@ void StgDirStrm::SetupEntry( INT32 n, StgDirEntry* pUpper )
     {
         BOOL bOk(FALSE);
         StgDirEntry* pCur = new StgDirEntry( p, &bOk );
+
         if( !bOk )
         {
             delete pCur;
@@ -833,9 +835,17 @@ void StgDirStrm::SetupEntry( INT32 n, StgDirEntry* pUpper )
         INT32 nRight = pCur->aEntry.GetLeaf( STG_RIGHT );
         // substorage?
         INT32 nLeaf = STG_FREE;
-        if( pCur->aEntry.GetType() == STG_STORAGE
-            || pCur->aEntry.GetType() == STG_ROOT )
+        if( pCur->aEntry.GetType() == STG_STORAGE || pCur->aEntry.GetType() == STG_ROOT )
+        {
             nLeaf = pCur->aEntry.GetLeaf( STG_CHILD );
+            if (nLeaf != STG_FREE && nLeaf == n)
+            {
+                delete pCur;
+                rIo.SetError( SVSTREAM_GENERALERROR );
+                return;
+            }
+        }
+
         if( nLeaf != 0 && nLeft != 0 && nRight != 0 )
         {
             if( StgAvlNode::Insert
