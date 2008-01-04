@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:26:10 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:20:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -538,6 +538,7 @@ namespace framework
 
             void    implts_setVisibleState( sal_Bool bShow );
             void    implts_updateUIElementsVisibleState( sal_Bool bShow );
+            void    implts_setCurrentUIVisibility( sal_Bool bShow );
             sal_Bool impl_parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName );
 
             void    implts_notifyListeners( short nEvent, ::com::sun::star::uno::Any aInfoParam );
@@ -572,18 +573,19 @@ namespace framework
             css::uno::Reference< css::awt::XWindow >                                    m_xDockAreaWindows[DOCKINGAREAS_COUNT];
             sal_Int32                                                                   m_nLockCount;
             UIElementVector                                                             m_aUIElements;
-            bool                                                                        m_bActive : 1,
-                                                                                        m_bInplaceMenuSet : 1,
-                                                                                        m_bDockingInProgress : 1,
-                                                                                        m_bMenuVisible : 1,
-                                                                                        m_bComponentAttached : 1,
-                                                                                        m_bDoLayout : 1,
-                                                                                        m_bVisible : 1,
-                                                                                        m_bParentWindowVisible : 1;
-            bool                                                                        m_bMustDoLayout : 1,
-                                                                                        m_bAutomaticToolbars : 1,
-                                                                                        m_bStoreWindowState : 1;
-            sal_Bool                                                                    m_bGlobalSettings : 1;
+            bool                                                                        m_bActive;
+            bool                                                                        m_bInplaceMenuSet;
+            bool                                                                        m_bDockingInProgress;
+            bool                                                                        m_bMenuVisible;
+            bool                                                                        m_bComponentAttached;
+            bool                                                                        m_bDoLayout;
+            bool                                                                        m_bVisible;
+            bool                                                                        m_bParentWindowVisible;
+            bool                                                                        m_bMustDoLayout;
+            bool                                                                        m_bAutomaticToolbars;
+            bool                                                                        m_bStoreWindowState;
+            bool                                                                        m_bHideCurrentUI;
+            bool                                                                        m_bGlobalSettings;
             DockingOperation                                                            m_eDockOperation;
             UIElement                                                                   m_aDockUIElement;
             css::awt::Rectangle                                                         m_aDockingArea;
@@ -597,7 +599,7 @@ namespace framework
             com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >          m_xProgressBarBackup;
             css::uno::Reference< ::com::sun::star::frame::XModuleManager >              m_xModuleManager;
             css::uno::Reference< ::com::sun::star::ui::XUIElementFactory >              m_xUIElementFactoryManager;
-            bool                                                                        m_bMenuBarCloser : 1;
+            bool                                                                        m_bMenuBarCloser;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowState;
             css::uno::Reference< ::com::sun::star::container::XNameAccess >             m_xPersistentWindowStateSupplier;
             GlobalSettings*                                                             m_pGlobalSettings;
