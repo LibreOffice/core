@@ -4,9 +4,9 @@
 #
 #   $RCSfile: xpdinstaller.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: ihi $ $Date: 2007-08-20 15:27:24 $
+#   last change: $Author: obo $ $Date: 2008-01-04 17:00:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1036,6 +1036,7 @@ sub create_xpd_file
 {
     my ($onepackage, $allpackages, $languagestringref, $allvariables, $modulesarrayref, $installdir, $subdir, $linkpackage) = @_;
 
+    my $infoline = "";
     # creating the directory
     my $xpddir = installer::systemactions::create_directories("xpdinstaller", $languagestringref);
     $xpddir =~ s/\/\s*$//;
@@ -1044,22 +1045,23 @@ sub create_xpd_file
 
     my $modulegid = $onepackage->{'module'};
 
-    if ( $installer::globals::islanguagepackinunixmulti ) {
-        my $currentlanguage = $$languagestringref;
-        $currentlanguage =~ s/-/_/;
-        my $savemodulegid = $modulegid;
-        $modulegid = $modulegid . "_" . $currentlanguage;
-
-        if ( ! $installer::globals::createdxpddefaultlang )
-        {
-            my $defaultlang = $installer::globals::defaultlanguage;
-            $defaultlang =~ s/-/_/;
-            my $defaultlanggid = $savemodulegid . "_" . $defaultlang;
-            create_emptyparents_xpd_file($defaultlanggid, $modulesarrayref, $xpddir);
-            $installer::globals::createdxpddefaultlang = 1;
-        }
-
-    }
+# AAA : Important change, to get root module of language packs
+#   if ( $installer::globals::islanguagepackinunixmulti ) {
+#       my $currentlanguage = $$languagestringref;
+#       $currentlanguage =~ s/-/_/;
+#       my $savemodulegid = $modulegid;
+#       $modulegid = $modulegid . "_" . $currentlanguage;
+#
+#       if ( ! $installer::globals::createdxpddefaultlang )
+#       {
+#           my $defaultlang = $installer::globals::defaultlanguage;
+#           $defaultlang =~ s/-/_/;
+#           my $defaultlanggid = $savemodulegid . "_" . $defaultlang;
+#           create_emptyparents_xpd_file($defaultlanggid, $modulesarrayref, $xpddir);
+#           $installer::globals::createdxpddefaultlang = 1;
+#       }
+#
+#   }
 
     installer::logger::include_header_into_logfile("Creating xpd file ($modulegid):");
 
@@ -1068,6 +1070,7 @@ sub create_xpd_file
     if ( $module ne "" )
     {
         my $packagename = determine_new_packagename($installdir, $subdir);
+
         # all content saved in scp is now available and can be used to create the xpd file
         my ( $xpdfile, $parentgid ) = get_file_content($module, $packagename, $linkpackage, 0, "");
 
