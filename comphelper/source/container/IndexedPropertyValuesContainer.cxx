@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IndexedPropertyValuesContainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:06:07 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:36:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,10 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
+
 
 #ifndef __SGI_STL_VECTOR
 #include <vector>
@@ -63,7 +67,7 @@ typedef std::vector < uno::Sequence< beans::PropertyValue > > IndexedPropertyVal
 uno::Sequence< rtl::OUString > SAL_CALL IndexedPropertyValuesContainer_getSupportedServiceNames() throw();
 rtl::OUString SAL_CALL IndexedPropertyValuesContainer_getImplementationName() throw();
 uno::Reference< uno::XInterface > SAL_CALL IndexedPropertyValuesContainer_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception );
+                const uno::Reference< uno::XComponentContext > & rxContext ) throw( uno::Exception );
 
 class IndexedPropertyValuesContainer : public cppu::WeakImplHelper2< container::XIndexContainer, lang::XServiceInfo >
 {
@@ -272,7 +276,7 @@ rtl::OUString SAL_CALL IndexedPropertyValuesContainer_getImplementationName() th
 }
 
 uno::Reference< uno::XInterface > SAL_CALL IndexedPropertyValuesContainer_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & ) throw( uno::Exception )
+                const uno::Reference< uno::XComponentContext >&) throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new IndexedPropertyValuesContainer();
 }
