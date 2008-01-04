@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:51:01 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:35:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3474,9 +3474,40 @@ void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )
                 WorkWindow* pWork = (WorkWindow*) pTop->GetTopFrame_Impl()->GetTopWindow_Impl();
                 if ( pWork )
                 {
+                    com::sun::star::uno::Reference< com::sun::star::frame::XFrame > xFrame(
+                            GetFrame()->GetFrameInterface(),
+                            com::sun::star::uno::UNO_QUERY);
+
+                    Reference< ::com::sun::star::beans::XPropertySet > xPropSet( xFrame, UNO_QUERY );
+                    Reference< ::com::sun::star::frame::XLayoutManager > xLayoutManager;
+                    if ( xPropSet.is() )
+                    {
+                        try
+                        {
+                            Any aValue = xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "LayoutManager" )));
+                            aValue >>= xLayoutManager;
+                        }
+                        catch ( Exception& )
+                        {
+                        }
+                    }
+
                     BOOL bNewFullScreenMode = pItem ? pItem->GetValue() : !pWork->IsFullScreenMode();
                     if ( bNewFullScreenMode != pWork->IsFullScreenMode() )
                     {
+                        Reference< ::com::sun::star::beans::XPropertySet > xLMPropSet( xLayoutManager, UNO_QUERY );
+                        if ( xLMPropSet.is() )
+                        {
+                            try
+                            {
+                                xLMPropSet->setPropertyValue(
+                                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HideCurrentUI" )),
+                                    makeAny( bNewFullScreenMode ));
+                            }
+                            catch ( ::com::sun::star::beans::UnknownPropertyException& )
+                            {
+                            }
+                        }
                         pWork->ShowFullScreenMode( bNewFullScreenMode );
                         pWork->SetMenuBarMode( bNewFullScreenMode ? MENUBAR_MODE_HIDE : MENUBAR_MODE_NORMAL );
                         GetFrame()->GetWorkWindow_Impl()->SetFullScreen_Impl( bNewFullScreenMode );
