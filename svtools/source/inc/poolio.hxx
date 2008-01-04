@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolio.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:37:41 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 14:57:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,6 +139,20 @@ struct SfxItemPool_Impl
             /*! error-code setzen und auswerten! */ \
             (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
             pImp->bStreaming = FALSE; \
+            return rStream; \
+        } \
+    }
+
+#define CHECK_FILEFORMAT_RELEASE( rStream, nTag, pPointer ) \
+   {   USHORT nFileTag; \
+       rStream >> nFileTag; \
+       if ( nTag != nFileTag ) \
+        { \
+            DBG_ERROR( #nTag ); /*! s.u. */ \
+           /*! error-code setzen und auswerten! */ \
+           (rStream).SetError(SVSTREAM_FILEFORMAT_ERROR); \
+           pImp->bStreaming = FALSE; \
+           delete pPointer; \
             return rStream; \
         } \
     }
