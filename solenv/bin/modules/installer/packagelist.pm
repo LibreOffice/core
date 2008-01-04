@@ -4,9 +4,9 @@
 #
 #   $RCSfile: packagelist.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2007-09-07 10:56:57 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:57:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,36 +92,6 @@ sub analyze_list
         push(@allmodules, $onegid);
 
         get_children($moduleslist, $onegid, \@allmodules);
-
-        $onepackage->{'allmodules'} = \@allmodules;
-
-        push(@allpackages, $onepackage);
-    }
-
-    return \@allpackages;
-}
-
-###################################################
-# Setting the modules for language packs
-###################################################
-
-sub analyze_list_languagepack
-{
-    my ($packagelist) = @_;
-
-    @allpackages = ();
-
-    for ( my $i = 0; $i <= $#{$packagelist}; $i++ )
-    {
-        my $onepackage = ${$packagelist}[$i];
-
-        my $onegid = $onepackage->{'module'};
-
-        installer::remover::remove_leading_and_ending_whitespaces(\$onegid);
-
-        my @allmodules = ();
-
-        push(@allmodules, $onegid);
 
         $onepackage->{'allmodules'} = \@allmodules;
 
@@ -549,7 +519,7 @@ sub check_packagelist
 
 sub get_packinfo
 {
-    my ($gid, $filename, $packages, $onelanguage, $scplanguage) = @_;
+    my ($gid, $filename, $packages, $onelanguage) = @_;
 
     my $packagelist = installer::files::read_file($filename);
 
@@ -591,13 +561,22 @@ sub get_packinfo
     {
         # Adding the language to the module gid for LanguagePacks !
         # Making the module gid language specific: gid_Module_Root -> gir_Module_Root_pt_BR (as defined in scp2)
-        if ( $installer::globals::languagepack ) { $onepackage->{'module'} = $onepackage->{'module'} . "_$scplanguage"; }
-
-        # Resolving the language identifier
-        $onepackage->{'packagename'} =~ s/\%LANGUAGESTRING/$onelanguage/;
+        if ( $onelanguage ne "" ) { $onepackage->{'module'} = $onepackage->{'module'} . "_$onelanguage"; }
 
         if ( $onepackage->{'module'} eq $gid )
         {
+            # Resolving the language identifier
+            my $onekey;
+            foreach $onekey ( keys %{$onepackage} )
+            {
+                # Some keys require "-" instead of "_" for example in "en-US". All package names do not use underlines.
+                my $locallang = $onelanguage;
+                if (( $onekey eq "solarispackagename" ) ||
+                   ( $onekey eq "solarisrequires" ) ||
+                   ( $onekey eq "packagename" ) ||
+                   ( $onekey eq "requires" )) { $locallang =~ s/_/-/g; } # avoiding illegal package abbreviation
+                $onepackage->{$onekey} =~ s/\%LANGUAGESTRING/$locallang/;
+            }
             push(@{$packages}, $onepackage);
             $foundgid = 1;
             last;
@@ -614,20 +593,19 @@ sub get_packinfo
 # Collecting all packages from scp project.
 #####################################################################
 
-sub do_collect_packages
+sub collectpackages
 {
-    my ( $allmodules, $onelanguage, $packagesref ) = @_;
+    my ( $allmodules, $languagesarrayref ) = @_;
 
+    installer::logger::include_header_into_logfile("Collecting packages:");
+
+    my @packages = ();
     my %gid_analyzed = ();
-
-    my $scplanguage = $onelanguage;
-    $scplanguage =~ s/-/_/g; # pt-BR -> pt_BR in scp
 
     my $onemodule;
     foreach $onemodule ( @{$allmodules} )
     {
         my $packageinfo = "PackageInfo";
-        if ( $installer::globals::languagepack ) { $packageinfo = "LanguagePackageInfo" }
         if (( $installer::globals::tab ) && ( $onemodule->{"TabPackageInfo"} )) { $packageinfo = "TabPackageInfo" }
 
         if ( $onemodule->{$packageinfo} )   # this is a package module!
@@ -635,15 +613,25 @@ sub do_collect_packages
             my $modulegid = $onemodule->{'gid'};
 
             # Only collecting modules with correct language for language packs
-            if ( $installer::globals::languagepack ) {
-                if ( ! ( $modulegid =~ /_$scplanguage\s*$/ )) { next; }
-            }
+#           if ( $installer::globals::languagepack ) { if ( ! ( $modulegid =~ /_$onelanguage\s*$/ )) { next; } }
+            # Resetting language, if this is no language pack
+#           if ( ! $installer::globals::languagepack ) { $onelanguage = ""; }
 
             # Ignoring packages, if they are marked to be ignored. Otherwise OOo 2.x update will break.
             # Style OOOIGNORE has to be removed for OOo 3.x
             my $styles = "";
             if ( $onemodule->{'Styles'} ) { $styles = $onemodule->{'Styles'}; }
             if (( $styles =~ /\bOOOIGNORE\b/ ) && ( $installer::globals::isopensourceproduct )) { next; }
+
+            # checking modules with style LANGUAGEMODULE
+            my $islanguagemodule = 0;
+            my $onelanguage = "";
+            if ( $styles =~ /\bLANGUAGEMODULE\b/ )
+            {
+                $islanguagemodule = 1;
+                $onelanguage = $onemodule->{'Language'}; # already checked, that it is set.
+                $onelanguage =~ s/-/_/g; # pt-BR -> pt_BR in scp
+            }
 
             # Modules in different languages are listed more than once in multilingual installation sets
             if ( exists($gid_analyzed{$modulegid}) ) { next; }
@@ -654,42 +642,13 @@ sub do_collect_packages
             # The file with package information has to be found in path list
             my $fileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$packinfofile, "" , 0);
 
-            if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $packinfofile for module $modulegid!", "do_collect_packages"); }
+            if ( $$fileref eq "" ) { installer::exiter::exit_program("ERROR: Could not find file $packinfofile for module $modulegid!", "collectpackages"); }
 
             my $infoline = "$modulegid: Using packinfo: \"$$fileref\"!\n";
             push( @installer::globals::logfileinfo, $infoline);
 
-            get_packinfo($modulegid, $$fileref, $packagesref, $onelanguage, $scplanguage);
+            get_packinfo($modulegid, $$fileref, \@packages, $onelanguage);
         }
-    }
-
-}
-
-#####################################################################
-# Collecting all packages from scp project.
-#####################################################################
-
-sub collectpackages
-{
-    my ( $allmodules, $languagesarrayref ) = @_;
-
-    installer::logger::include_header_into_logfile("Collecting packages:");
-
-    # Attention: Special handling for Windows LanguagePacks with more than one language
-
-    my @packages = ();
-
-    if ( $installer::globals::languagepack )
-    {
-        my $onelang;
-        foreach $onelang ( @{$languagesarrayref} )
-        {
-            do_collect_packages($allmodules, $onelang, \@packages);
-        }
-    }
-    else
-    {
-        do_collect_packages($allmodules, "", \@packages);
     }
 
     return \@packages;
