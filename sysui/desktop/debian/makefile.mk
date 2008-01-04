@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:57:20 $
+#   last change: $Author: obo $ $Date: 2008-01-04 14:13:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@ TARGET=debian
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  packtools.mk
 
 # --- Product Version Information ----------------------------------
 
