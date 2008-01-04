@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: rene $ $Date: 2007-12-02 23:48:10 $
+#   last change: $Author: rene $ $Date: 2008-01-04 20:32:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ TARGET=hyphen
 
 TARFILE_NAME=hyphen-2.3
 
-#PATCH_FILE_NAME=hunspell-1.1.12.patch
+PATCH_FILE_NAME=hyphen-2.3.patch
 
 .IF "$(GUI)"=="UNX"
 #CONFIGURE_DIR=$(BUILD_DIR)
