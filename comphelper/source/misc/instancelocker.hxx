@@ -4,9 +4,9 @@
  *
  *  $RCSfile: instancelocker.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:48:26 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:37:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ public:
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
         impl_staticCreateSelfInstance(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager );
+            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext );
 
 // XComponent
     virtual void SAL_CALL dispose() throw (::com::sun::star::uno::RuntimeException);
