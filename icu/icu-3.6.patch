@@ -1,5 +1,5 @@
 *** misc/icu/source/common/putil.c	Mon Jul 31 20:14:28 2006
---- misc/build/icu/source/common/putil.c	Fri Oct 26 13:27:25 2007
+--- misc/build/icu/source/common/putil.c	Tue Nov 13 13:03:51 2007
 ***************
 *** 48,54 ****
   #endif
@@ -19,7 +19,7 @@
   #endif
   
 *** misc/icu/source/common/unicode/pwin32.h	Tue Aug 29 23:34:38 2006
---- misc/build/icu/source/common/unicode/pwin32.h	Fri Oct 26 13:27:25 2007
+--- misc/build/icu/source/common/unicode/pwin32.h	Tue Nov 13 13:03:51 2007
 ***************
 *** 266,273 ****
 --- 266,278 ----
@@ -37,7 +37,7 @@
   /*===========================================================================*/
   /* Code alignment and C function inlining                                    */
 *** misc/icu/source/common/unicode/rbbi.h	Fri Aug 11 07:46:40 2006
---- misc/build/icu/source/common/unicode/rbbi.h	Fri Oct 26 13:27:25 2007
+--- misc/build/icu/source/common/unicode/rbbi.h	Tue Nov 13 13:03:51 2007
 ***************
 *** 611,622 ****
 --- 611,624 ----
@@ -56,7 +56,7 @@
         * Common initialization function, used by constructors and bufferClone.
         *   (Also used by DictionaryBasedBreakIterator::createBufferClone().)
 *** misc/icu/source/common/unicode/umachine.h	Tue Feb  7 02:54:16 2006
---- misc/build/icu/source/common/unicode/umachine.h	Fri Oct 26 13:27:25 2007
+--- misc/build/icu/source/common/unicode/umachine.h	Tue Nov 13 13:03:51 2007
 ***************
 *** 322,328 ****
    */
@@ -75,7 +75,7 @@
   #else
       typedef uint16_t UChar;
 *** misc/icu/source/common/unicode/unistr.h	Tue Aug 29 23:52:50 2006
---- misc/build/icu/source/common/unicode/unistr.h	Fri Oct 26 13:27:25 2007
+--- misc/build/icu/source/common/unicode/unistr.h	Tue Nov 13 13:03:51 2007
 ***************
 *** 3280,3286 ****
   //========================================
@@ -179,7 +179,7 @@
   }
   
 *** misc/icu/source/common/unicode/ustring.h	Tue Aug 29 23:52:50 2006
---- misc/build/icu/source/common/unicode/ustring.h	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/common/unicode/ustring.h	Tue Nov 13 13:03:51 2007
 ***************
 *** 918,924 ****
    * </pre>
@@ -198,7 +198,7 @@
       /**@stable ICU 2.0 */
   #   define U_STRING_INIT(var, cs, length)
 *** misc/icu/source/config/mh-darwin	Wed Feb  1 08:52:42 2006
---- misc/build/icu/source/config/mh-darwin	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/config/mh-darwin	Tue Nov 13 13:03:51 2007
 ***************
 *** 25,31 ****
   SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS)
@@ -217,7 +217,7 @@
   ## Compiler switch to embed a runtime search path
   LD_RPATH=
 *** misc/icu/source/config/mh-irix	Thu Mar 23 19:51:52 2006
---- misc/build/icu/source/config/mh-irix	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/config/mh-irix	Tue Nov 13 13:03:52 2007
 ***************
 *** 23,28 ****
 --- 23,31 ----
@@ -231,7 +231,7 @@
   THREADSCPPFLAGS = -D_REENTRANT -D_PTHREADS
   LIBCPPFLAGS =
 *** misc/icu/source/config/mh-linux	Thu Mar 23 19:51:52 2006
---- misc/build/icu/source/config/mh-linux	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/config/mh-linux	Tue Nov 13 13:03:52 2007
 ***************
 *** 20,25 ****
 --- 20,33 ----
@@ -250,7 +250,7 @@
   LDFLAGSICUDT=-nodefaultlibs -nostdlib
   
 *** misc/icu/source/config/mh-mingw	Tue Aug 15 10:24:14 2006
---- misc/build/icu/source/config/mh-mingw	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/config/mh-mingw	Tue Nov 13 13:03:52 2007
 ***************
 *** 54,59 ****
 --- 54,62 ----
@@ -272,16 +272,19 @@
   # Current full path directory for use in source code in a -D compiler option.
   CURR_SRCCODE_FULL_DIR=$(subst /,\\\\,$(shell pwd -W))#M#
   
---- 74,80 ----
+--- 74,83 ----
   
   # The #M# is used to delete lines for icu-config
   # Current full path directory.
 ! CURR_FULL_DIR=$(subst \,/,$(shell cygpath -aw .))#M#
+! SRCDIRW:=$(SRCDIR)
+! SRCDIR:=$(foreach p,$(SRCDIR),$(shell cygpath -u $(subst \,/,$(p))))#M#
+! DATAFILEPATHS:=$(foreach p,$(DATAFILEPATHS),$(shell cygpath -u $(subst \,/,$(p))))#M#
   # Current full path directory for use in source code in a -D compiler option.
   CURR_SRCCODE_FULL_DIR=$(subst /,\\\\,$(shell pwd -W))#M#
   
 *** misc/icu/source/config/mh-solaris	Fri Feb 24 20:31:14 2006
---- misc/build/icu/source/config/mh-solaris	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/config/mh-solaris	Tue Nov 13 13:03:52 2007
 ***************
 *** 18,33 ****
   
@@ -326,7 +329,7 @@
   #LIBRARY_PATH_PREFIX=/usr/lib/lwp:
   
 *** misc/icu/source/data/Makefile.in	Sat Aug 12 00:22:24 2006
---- misc/build/icu/source/data/Makefile.in	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/data/Makefile.in	Tue Nov 13 13:03:52 2007
 ***************
 *** 344,350 ****
   ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
@@ -345,7 +348,7 @@
   	@echo "$@" > $@
   endif
 *** misc/icu/source/i18n/windtfmt.cpp	Tue Aug 15 08:48:02 2006
---- misc/build/icu/source/i18n/windtfmt.cpp	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/i18n/windtfmt.cpp	Tue Nov 13 13:03:52 2007
 ***************
 *** 232,249 ****
       UChar stackBuffer[STACK_BUFFER_SIZE];
@@ -425,7 +428,7 @@
       if (buffer != stackBuffer) {
           DELETE_ARRAY(buffer);
 *** misc/icu/source/i18n/winnmfmt.cpp	Thu Aug 17 07:21:06 2006
---- misc/build/icu/source/i18n/winnmfmt.cpp	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/i18n/winnmfmt.cpp	Tue Nov 13 13:03:52 2007
 ***************
 *** 86,95 ****
       GetLocaleInfoA(lcid, LOCALE_SGROUPING, buf, 10);
@@ -563,7 +566,7 @@
       if (buffer != stackBuffer) {
           DELETE_ARRAY(buffer);
 *** misc/icu/source/layout/CoverageTables.cpp	Sat May  8 01:28:42 2004
---- misc/build/icu/source/layout/CoverageTables.cpp	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/layout/CoverageTables.cpp	Tue Nov 13 13:03:52 2007
 ***************
 *** 44,49 ****
 --- 44,53 ----
@@ -578,7 +581,7 @@
       le_uint16 probe = power;
       le_uint16 index = 0;
 *** misc/icu/source/layout/DeviceTables.cpp	Fri Jan 14 18:25:12 2005
---- misc/build/icu/source/layout/DeviceTables.cpp	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/layout/DeviceTables.cpp	Tue Nov 13 13:03:52 2007
 ***************
 *** 22,28 ****
       le_uint16 format = SWAPW(deltaFormat) - 1;
@@ -598,7 +601,7 @@
           le_uint16 bits = fieldBits[format];
           le_uint16 count = 16 / bits;
 *** misc/icu/source/layout/GXLayoutEngine.cpp	Fri Sep  2 20:22:10 2005
---- misc/build/icu/source/layout/GXLayoutEngine.cpp	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/layout/GXLayoutEngine.cpp	Tue Nov 13 13:03:52 2007
 ***************
 *** 39,45 ****
           return 0;
@@ -617,7 +620,7 @@
       if (LE_FAILURE(success)) {
           return 0;
 *** misc/icu/source/layout/IndicClassTables.cpp	Wed Aug 23 02:12:40 2006
---- misc/build/icu/source/layout/IndicClassTables.cpp	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/layout/IndicClassTables.cpp	Tue Nov 13 13:03:52 2007
 ***************
 *** 94,100 ****
       _dr, _db, _db, _db, _db, _xx, _xx, _l1, _dl, _xx, _xx, _s1, _s2, _vr, _xx, _xx, // 09C0 - 09CF
@@ -751,7 +754,7 @@
   //
   // IndicClassTable addresses
 *** misc/icu/source/layout/IndicReordering.cpp	Tue Apr 25 21:08:12 2006
---- misc/build/icu/source/layout/IndicReordering.cpp	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/layout/IndicReordering.cpp	Tue Nov 13 13:03:52 2007
 ***************
 *** 50,55 ****
 --- 50,63 ----
@@ -856,7 +859,7 @@
   
               if ((classTable->scriptFlags & SF_MATRAS_AFTER_BASE) != 0) {
 *** misc/icu/source/layout/LESwaps.h	Thu Jun 23 00:39:36 2005
---- misc/build/icu/source/layout/LESwaps.h	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/layout/LESwaps.h	Tue Nov 13 13:03:52 2007
 ***************
 *** 2,7 ****
 --- 2,8 ----
@@ -932,7 +935,7 @@
   /**
    * This class is used to access data which stored in big endian order
 *** misc/icu/source/layout/MPreFixups.cpp	Sat May  8 01:28:44 2004
---- misc/build/icu/source/layout/MPreFixups.cpp	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/layout/MPreFixups.cpp	Tue Nov 13 13:03:52 2007
 ***************
 *** 40,45 ****
 --- 40,51 ----
@@ -949,7 +952,7 @@
   {
       for (le_int32 fixup = 0; fixup < fFixupCount; fixup += 1) {
 *** misc/icu/source/layout/MPreFixups.h	Mon Apr 12 20:51:32 2004
---- misc/build/icu/source/layout/MPreFixups.h	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/layout/MPreFixups.h	Tue Nov 13 13:03:52 2007
 ***************
 *** 31,36 ****
 --- 31,38 ----
@@ -962,7 +965,7 @@
       FixupData *fFixupData;
       le_int32   fFixupCount;
 *** misc/icu/source/stubdata/Makefile.in	Fri Dec  2 11:21:34 2005
---- misc/build/icu/source/stubdata/Makefile.in	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/stubdata/Makefile.in	Tue Nov 13 13:03:52 2007
 ***************
 *** 25,30 ****
 --- 25,36 ----
@@ -979,7 +982,7 @@
   ifneq ($(ENABLE_STATIC),)
   TARGET = $(STUBDATA_LIBDIR)$(LIBSICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).$(A)
 *** misc/icu/source/test/intltest/loctest.cpp	Thu Jul  6 03:50:04 2006
---- misc/build/icu/source/test/intltest/loctest.cpp	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/test/intltest/loctest.cpp	Tue Nov 13 13:03:52 2007
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -991,7 +994,7 @@
   #include "unicode/decimfmt.h"
   #include "unicode/ucurr.h"
 *** misc/icu/source/test/intltest/tsputil.cpp	Wed Jul 19 00:18:10 2006
---- misc/build/icu/source/test/intltest/tsputil.cpp	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/test/intltest/tsputil.cpp	Tue Nov 13 13:03:52 2007
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -1003,7 +1006,7 @@
   
   #include <float.h> // DBL_MAX, DBL_MIN
 *** misc/icu/source/test/intltest/uobjtest.cpp	Thu Mar 23 01:54:12 2006
---- misc/build/icu/source/test/intltest/uobjtest.cpp	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/test/intltest/uobjtest.cpp	Tue Nov 13 13:03:52 2007
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -1015,7 +1018,7 @@
   #include "cmemory.h" // UAlignedMemory
   #include <string.h>
 *** misc/icu/source/test/intltest/ustrtest.cpp	Tue Dec 28 22:13:54 2004
---- misc/build/icu/source/test/intltest/ustrtest.cpp	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/test/intltest/ustrtest.cpp	Tue Nov 13 13:03:52 2007
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -1027,7 +1030,7 @@
   #include "unicode/unistr.h"
   #include "unicode/uchar.h"
 *** misc/icu/source/tools/icupkg/icupkg.cpp	Fri Jul 21 23:17:52 2006
---- misc/build/icu/source/tools/icupkg/icupkg.cpp	Fri Oct 26 13:27:26 2007
+--- misc/build/icu/source/tools/icupkg/icupkg.cpp	Tue Nov 13 13:03:52 2007
 ***************
 *** 332,337 ****
 --- 332,341 ----
@@ -1041,3 +1044,63 @@
   extern int
   main(int argc, char *argv[]) {
       const char *pname, *sourcePath, *destPath, *inFilename, *outFilename, *outComment;
+*** misc/icu/source/tools/pkgdata/make.c	Wed Mar 22 09:14:10 2006
+--- misc/build/icu/source/tools/pkgdata/make.c	Tue Nov 13 13:03:52 2007
+***************
+*** 172,178 ****
+--- 172,180 ----
+                      "MODE=%s\n"
+                      "MAKEFILE=%s\n"
+                      "ENTRYPOINT=%s\n"
++ #ifndef __MINGW32__
+                      "include %s\n"
++ #endif
+                      "\n\n\n",
+                      o->shortName,
+                      o->libName,
+***************
+*** 182,189 ****
+--- 184,195 ----
+                      o->srcDir,
+                      o->mode,
+                      o->makeFile,
++ #ifdef __MINGW32__
++                     o->entryName);
++ #else
+                      o->entryName,
+                      o->options);
++ #endif
+      T_FileStream_writeLine(f, linebuf);
+      
+      /* TEMP_PATH  and TARG_PATH will be empty if the respective dir is . */
+***************
+*** 233,238 ****
+--- 239,252 ----
+  
+      pkg_writeCharListWrap(f, o->filePaths, " ", " \\\n",0);
+  
++ #ifdef __MINGW32__
++     sprintf(linebuf, "\n"
++                     "include %s\n"
++                     "\n\n\n",
++                     o->options);
++     T_FileStream_writeLine(f, linebuf);
++ #endif
++     
+      T_FileStream_writeLine(f, "\n\n\n");
+  
+  }
+***************
+*** 396,402 ****
+--- 410,420 ----
+      T_FileStream_writeLine(f, "BASE_OBJECTS=$(NAME)_dat.o\n");
+      T_FileStream_writeLine(f, "\n");
+      T_FileStream_writeLine(f, "$(TEMP_DIR)/$(NAME).dat: $(CMNLIST) $(DATAFILEPATHS)\n");
++ #ifdef __MINGW32__
++     T_FileStream_writeLine(f, "\t$(INVOKE) $(GENCMN) -c -e $(ENTRYPOINT) -n $(NAME) -s $(SRCDIRW) -t dat -d $(TEMP_DIR) 0 $(CMNLIST)\n");
++ #else
+      T_FileStream_writeLine(f, "\t$(INVOKE) $(GENCMN) -c -e $(ENTRYPOINT) -n $(NAME) -s $(SRCDIR) -t dat -d $(TEMP_DIR) 0 $(CMNLIST)\n");
++ #endif
+      T_FileStream_writeLine(f, "\n");
+      T_FileStream_writeLine(f, "$(TEMP_DIR)/$(NAME)_dat.o : $(TEMP_DIR)/$(NAME).dat\n");
+      T_FileStream_writeLine(f, "\t$(INVOKE) $(GENCCODE) $(GENCCODE_ASSEMBLY) -n $(NAME) -e $(ENTRYPOINT) -d $(TEMP_DIR) $<\n");
