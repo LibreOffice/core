@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dx_impltools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:55:36 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:14:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,14 +369,14 @@ namespace dxcanvas
             ::canvas::tools::verifyRange(rColor[2],0.0,1.0);
 
             aColor =
-                (static_cast<UINT8>( ::basegfx::fround( 255*rColor[0] ) ) << 16) |
-                (static_cast<UINT8>( ::basegfx::fround( 255*rColor[1] ) ) << 8) |
-                static_cast<UINT8>( ::basegfx::fround( 255*rColor[2] ) );
+                (static_cast<sal_uInt8>( ::basegfx::fround( 255*rColor[0] ) ) << 16) |
+                (static_cast<sal_uInt8>( ::basegfx::fround( 255*rColor[1] ) ) << 8) |
+                static_cast<sal_uInt8>( ::basegfx::fround( 255*rColor[2] ) );
 
             if( rColor.getLength() > 3 )
             {
                 ::canvas::tools::verifyRange(rColor[3],0.0,1.0);
-                aColor |= static_cast<UINT8>( ::basegfx::fround( 255*rColor[3] ) ) << 24;
+                aColor |= static_cast<sal_uInt8>( ::basegfx::fround( 255*rColor[3] ) ) << 24;
             }
 
             return aColor;

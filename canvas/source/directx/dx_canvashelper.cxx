@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dx_canvashelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:53:33 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:13:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -535,8 +535,8 @@ namespace dxcanvas
             // TODO(F2): Proper layout (BiDi, CTL)! IMHO must use
             // DrawDriverString here, and perform layouting myself...
             ENSURE_AND_THROW(
-                Gdiplus::Ok == (*aGraphics)->DrawString( text.Text.copy( text.StartPosition,
-                                                                         text.Length ).getStr(),
+                Gdiplus::Ok == (*aGraphics)->DrawString( reinterpret_cast<LPCWSTR>(text.Text.copy( text.StartPosition,
+                                                                         text.Length ).getStr()),
                                                          text.Length,
                                                          pFont->getFont().get(),
                                                          aPoint,

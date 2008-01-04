@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dx_canvasfont.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:53:00 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:13:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ namespace dxcanvas
         std::vector< sal_Unicode > pStrBuf(nLen+1,0);
         std::copy(pStr,pStr+nLen,&pStrBuf[0]);
 
-        mpFontFamily.reset( new Gdiplus::FontFamily(&pStrBuf[0],NULL) );
+        mpFontFamily.reset( new Gdiplus::FontFamily(reinterpret_cast<LPCWSTR>(&pStrBuf[0]),NULL) );
         if( !mpFontFamily->IsAvailable() )
             mpFontFamily.reset( new Gdiplus::FontFamily(L"Arial",NULL) );
 

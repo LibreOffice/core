@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dx_5rm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:50:53 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:13:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1982,7 +1982,7 @@ namespace dxcanvas
                                  Gdiplus::FontStyleRegular,
                                  Gdiplus::UnitWorld,
                                  NULL );
-            pGraphics->get()->DrawString( rStr.getStr(),
+            pGraphics->get()->DrawString( reinterpret_cast<LPCWSTR>(rStr.getStr()),
                                           rStr.getLength(),
                                           &aFont,
                                           rPos,
