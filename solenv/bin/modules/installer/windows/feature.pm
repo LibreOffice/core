@@ -4,9 +4,9 @@
 #
 #   $RCSfile: feature.pm,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 09:54:50 $
+#   last change: $Author: obo $ $Date: 2008-01-04 17:00:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -117,20 +117,16 @@ sub get_feature_display
         $display = "2";                                 # all other modules do not show subfeatures
     }
 
-    # special case: Feature is below root module and has flag "HIDDEN_ROOT" -> $display is 0
-
+    # special case: Feature has flag "HIDDEN_ROOT" -> $display is 0
     my $styles = "";
     if ( $onefeature->{'Styles'} ) { $styles = $onefeature->{'Styles'}; }
-
-    if (( $parentid eq $installer::globals::rootmodulegid ) && ( $styles =~ /\bHIDDEN_ROOT\b/ ))
-    {
-        $display = "0";
-    }
+    if ( $styles =~ /\bHIDDEN_ROOT\b/ ) { $display = "0"; }
 
     # Special handling for c05office. No program module visible.
     if (( $onefeature->{'gid'} eq "gid_Module_Prg" ) && ( $installer::globals::product =~ /c05office/i )) { $display = "0"; }
 
-    if ( $installer::globals::languagepack ) { $display = "0"; }     # making all feature invisible!
+    # making all feature invisible in Language packs!
+    if ( $installer::globals::languagepack ) { $display = "0"; }
 
     return $display
 }
@@ -201,141 +197,6 @@ sub get_feature_attributes
     else { $attributes = "10"; }
 
     return $attributes
-}
-
-#####################################################################
-# For multilingual installation sets, the language dependent files
-# are advised to the language feature.
-#####################################################################
-
-sub change_modules_in_filescollector
-{
-    my ($filesref) = @_;
-
-    push(@installer::globals::multilanguagemodules, $installer::globals::languagemodulesparent);
-
-    my $onefile;
-
-    for ( my $i = 0; $i <= $#{$filesref}; $i++ )
-    {
-        $onefile =  ${$filesref}[$i];
-
-        # Searching for multilingual files
-
-        if ( $onefile->{'ismultilingual'} )
-        {
-            my $officelanguage = $onefile->{'specificlanguage'};
-            $officelanguage =~ s/-/_/; # "en-US" to "en_US" (the latter is used in scp)
-            $feature = $installer::globals::languagemodulesbase . $officelanguage;   # "gid_Module_Root_en_US"
-            $onefile->{'modules'} = $feature;   # assigning the new language feature !
-
-            # Collecting all new feature
-            if ( ! installer::existence::exists_in_array($feature, \@installer::globals::multilanguagemodules) )
-            {
-                push(@installer::globals::multilanguagemodules, $feature);
-            }
-        }
-    }
-}
-
-##############################################################
-# Creating the feature for the language packs.
-##############################################################
-
-sub add_language_pack_feature
-{
-    my ($featuretableref, $languagemodules, $onelanguage) = @_;
-
-    for ( my $i = 0; $i <= $#installer::globals::languagepackfeature; $i++ )
-    {
-        my $gid = $installer::globals::languagepackfeature[$i];
-
-        # $languagemodules contains all modules with flag LANGUAGEMODULE
-        # Now it is time to find the correct feature using the gid.
-
-        my $onefeature = installer::worker::find_item_by_gid($languagemodules, $gid);
-        if ( $onefeature eq "" ) { installer::exiter::exit_program("ERROR: Language feature not found: $gid !", "add_language_pack_feature"); }
-
-        my %feature = ();
-
-        $feature{'feature'} = get_feature_gid($onefeature);
-        $feature{'feature_parent'} = "";
-        $feature{'Title'} = $onefeature->{'Name'};
-        $feature{'Description'} = $onefeature->{'Description'};
-        $feature{'Display'} = "1";
-        $feature{'Level'} = get_feature_level($onefeature);
-        $feature{'Directory_'} =  "INSTALLLOCATION";
-        $feature{'Attributes'} =  "8";
-
-        my $oneline = $feature{'feature'} . "\t" . $feature{'feature_parent'} . "\t" . $feature{'Title'} . "\t"
-                    . $feature{'Description'} . "\t" . $feature{'Display'} . "\t" . $feature{'Level'} . "\t"
-                    . $feature{'Directory_'} . "\t" . $feature{'Attributes'} . "\n";
-
-        push(@{$featuretableref}, $oneline);
-
-        # collecting all feature in global feature collector
-        if ( ! installer::existence::exists_in_array($feature{'feature'}, \@installer::globals::featurecollector) )
-        {
-            push(@installer::globals::featurecollector, $feature{'feature'});
-        }
-
-        # $onelanguage = "de"
-        # $gid = "gm_Langpack_de"
-        # -> only include if this is the language specific language name
-        my $comparelanguage = $onelanguage;
-        $comparelanguage =~ s/-/_/;
-        if ( $gid =~ /\_$comparelanguage\s*$/) { push(@installer::globals::languagenames, $feature{'Title'}); } # saving all titles in the global variable!
-    }
-
-}
-
-##################################################################
-# Creating the feature for the multilingual installation sets.
-##################################################################
-
-sub add_multilingual_features
-{
-    my ($featuretableref, $languagemodules, $onelanguage) = @_;
-
-    # Adding the new dynamic language modules, collected in change_modules_in_filescollector
-
-    for ( my $i = 0; $i <= $#installer::globals::multilanguagemodules; $i++ )
-    {
-        my $gid = $installer::globals::multilanguagemodules[$i];
-
-        # $languagemodules contains all modules with flag LANGUAGEMODULE
-        # Now it is time to find the correct feature using the gid.
-        my $onefeature = installer::worker::find_item_by_gid($languagemodules, $gid);
-        if ( $onefeature eq "" ) { installer::exiter::exit_program("ERROR: Language feature not found: $gid !", "add_multilingual_features"); }
-
-        my $deselectable = 1;   # feature can be deselected
-        if (( $i == 0 ) || ( $i == 1 )) { $deselectable = 0; } # Toplevel module and english cannot be deselected
-
-        my %feature = ();
-
-        $feature{'feature'} = get_feature_gid($onefeature);
-        $feature{'feature_parent'} = get_feature_parent($onefeature);
-        $feature{'Title'} = $onefeature->{'Name'};
-        $feature{'Description'} = $onefeature->{'Description'};
-        $feature{'Display'} = get_feature_display($onefeature);
-        $feature{'Level'} = get_feature_level($onefeature);
-        $feature{'Directory_'} = get_feature_directory($onefeature);
-        $feature{'Attributes'} = get_feature_attributes($onefeature);
-
-        if ( $deselectable == 0 ) { $feature{'Attributes'} = $feature{'Attributes'} + 16; } # making feature not deselectable
-
-        $oneline = $feature{'feature'} . "\t" . $feature{'feature_parent'} . "\t" . $feature{'Title'} . "\t"
-                    . $feature{'Description'} . "\t" . $feature{'Display'} . "\t" . $feature{'Level'} . "\t"
-                    . $feature{'Directory_'} . "\t" . $feature{'Attributes'} . "\n";
-
-        push(@{$featuretableref}, $oneline);
-
-        # collecting all feature in global feature collector
-        if ( ! installer::existence::exists_in_array($feature{'feature'}, \@installer::globals::featurecollector) )
-        {
-            push(@installer::globals::featurecollector, $feature{'feature'});
-        }
-    }
 }
 
 #################################################################################
@@ -519,7 +380,6 @@ sub create_feature_table
         my $infoline;
 
         my @featuretable = ();
-        my @languagefeatures = ();
 
         installer::windows::idtglobal::write_idt_header(\@featuretable, "feature");
 
@@ -538,13 +398,6 @@ sub create_feature_table
 
             if (! (!(( $onefeature->{'ismultilingual'} )) || ( $onefeature->{'specificlanguage'} eq $onelanguage )) )  { next; }
 
-            my $languagefeature = 0;
-            if ( $styles =~ /\bLANGUAGEMODULE\b/ )
-            {
-                push(@languagefeatures, $onefeature);
-                $languagefeature = 1;
-            }
-
             my %feature = ();
 
             $feature{'feature'} = get_feature_gid($onefeature);
@@ -561,20 +414,14 @@ sub create_feature_table
                     . $feature{'Description'} . "\t" . $feature{'Display'} . "\t" . $feature{'Level'} . "\t"
                     . $feature{'Directory_'} . "\t" . $feature{'Attributes'} . "\n";
 
-            if ( ! $languagefeature )
+            push(@featuretable, $oneline);
+
+            # collecting all feature in global feature collector (so that properties can be set in property table)
+            if ( ! installer::existence::exists_in_array($feature{'feature'}, \@installer::globals::featurecollector) )
             {
-                push(@featuretable, $oneline);
-                # collecting all feature in global feature collector
-                if ( ! installer::existence::exists_in_array($feature{'feature'}, \@installer::globals::featurecollector) )
-                {
-                    push(@installer::globals::featurecollector, $feature{'feature'});
-                }
+                push(@installer::globals::featurecollector, $feature{'feature'});
             }
         }
-
-        if ( $installer::globals::languagepack ) { add_language_pack_feature(\@featuretable, \@languagefeatures, $onelanguage); }
-
-        if (( $installer::globals::ismultilingual ) && ( ! $installer::globals::languagepack ) && ( ! $allvariableshashref->{'DONTUSELANGUAGEPACKFEATURE'} )) { add_multilingual_features(\@featuretable, \@languagefeatures, $onelanguage); }
 
         # Saving the file
 
