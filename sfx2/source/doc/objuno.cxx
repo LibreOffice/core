@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 15:10:09 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:34:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,86 +192,6 @@ typedef ::std::hash_map< ::rtl::OUString                    ,
                          SfxExtendedItemPropertyMap         ,
                          OUStringHashCode                   ,
                          ::std::equal_to< ::rtl::OUString > > TDynamicProps;
-
-const sal_Char *sOpenOfficeOrgProject ="OpenOffice.org_project";
-
-// QUESTION: should we set it from the outside?
-rtl::OUString lcl_GetProductName()
-{
-    //  get the correct product name from the configuration
-
-    rtl::OUStringBuffer aName;
-
-    // First product: branded name + version
-    // version is <product_versions>_<product_extension>$<platform>
-    utl::ConfigManager* pMgr = utl::ConfigManager::GetConfigManager();
-    if (pMgr)
-    {
-        // plain product name
-        rtl::OUString aValue;
-        uno::Any aAny = pMgr->GetDirectConfigProperty(
-                                            utl::ConfigManager::PRODUCTNAME);
-        if ( (aAny >>= aValue) && aValue.getLength() )
-        {
-            aName.append( aValue.replace( ' ', '_' ) );
-            aName.append( (sal_Unicode)'/' );
-
-            aAny = pMgr->GetDirectConfigProperty(
-                                        utl::ConfigManager::PRODUCTVERSION);
-            if ( (aAny >>= aValue) && aValue.getLength() )
-            {
-                aName.append( aValue.replace( ' ', '_' ) );
-
-                aAny = pMgr->GetDirectConfigProperty(
-                                        utl::ConfigManager::PRODUCTEXTENSION);
-                if ( (aAny >>= aValue) && aValue.getLength() )
-                {
-                    aName.append( (sal_Unicode)'_' );
-                    aName.append( aValue.replace( ' ', '_' ) );
-                }
-            }
-
-            aName.append( (sal_Unicode)'$' );
-            aName.append( ::rtl::OUString::createFromAscii(
-                                    TOOLS_INETDEF_OS ).replace( ' ', '_' ) );
-
-            aName.append( (sal_Unicode)' ' );
-        }
-    }
-
-    // second product: OpenOffice.org_project/<build_information>
-    // build_information has '(' and '[' encoded as '$', ')' and ']' ignored
-    // and ':' replaced by '-'
-    {
-        aName.appendAscii( sOpenOfficeOrgProject );
-        aName.append( (sal_Unicode)'/' );
-        ::rtl::OUString aDefault;
-        ::rtl::OUString aBuildId( utl::Bootstrap::getBuildIdData( aDefault ) );
-        for( sal_Int32 i=0; i < aBuildId.getLength(); i++ )
-        {
-            sal_Unicode c = aBuildId[i];
-            switch( c )
-            {
-            case '(':
-            case '[':
-                aName.append( (sal_Unicode)'$' );
-                break;
-            case ')':
-            case ']':
-                break;
-            case ':':
-                aName.append( (sal_Unicode)'-' );
-                break;
-            default:
-                aName.append( c );
-                break;
-            }
-        }
-    }
-
-
-    return aName.makeStringAndClear();
-}
 
 void Copy( const uno::Reference < document::XStandaloneDocumentInfo >& rSource, const uno::Reference < document::XStandaloneDocumentInfo >& rTarget )
 {
@@ -931,6 +851,11 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
         aValue >>= sTemp ;
         switch ( nHandle )
         {
+            case SID_APPLICATION :
+                if ( _pImp->aGenerator != sTemp )
+                    bModified = sal_True;
+                _pImp->aGenerator = sTemp;
+                break;
             case WID_FROM :
             {
                 // QUESTION: do we still need this?
@@ -1221,7 +1146,7 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
     switch ( nHandle )
     {
         case SID_APPLICATION :
-            aValue <<= lcl_GetProductName();
+            aValue <<= _pImp->aGenerator;
             break;
         case WID_CONTENT_TYPE :
             aValue <<= _pImp->aMediaType;
