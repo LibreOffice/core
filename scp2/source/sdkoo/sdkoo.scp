@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdkoo.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 10:10:05 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 17:11:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,10 +70,10 @@ File gid_File_Txt_License
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Readme;
   #ifdef UNX
-    README_ALL_LANG(Name, LICENSE);
+    Name = "LICENSE_en-US";
   #endif
   #ifdef WNT
-    README_TXT_ALL_LANG(Name, license, txt);
+    Name = "license_en-US.txt";
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
 End
@@ -82,10 +82,10 @@ File gid_File_Txt_License_Html
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Readme;
   #ifdef UNX
-    README_TXT_ALL_LANG(Name, LICENSE, html);
+    Name = "LICENSE_en-US.html";
   #endif
   #ifdef WNT
-    README_TXT_ALL_LANG(Name, license, html);
+    Name = "license_en-US.html";
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
 End
@@ -94,10 +94,10 @@ File gid_File_Txt_Readme
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Readme;
   #ifdef UNX
-    README_ALL_LANG(Name, README);
+    Name = "README_en-US";
   #endif
   #ifdef WNT
-    README_TXT_ALL_LANG(Name, readme, txt);
+    Name = "readme_en-US.txt";
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
 End
@@ -106,10 +106,10 @@ File gid_File_Txt_Readme_Html
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Readme;
   #ifdef UNX
-    README_TXT_ALL_LANG(Name, README, html);
+    Name = "README_en-US.html";
   #endif
   #ifdef WNT
-    README_TXT_ALL_LANG(Name, readme, html);
+    Name = "readme_en-US.html";
   #endif
     Styles = (PACKED, SCPZIP_REPLACE);
 End
