@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 13:45:28 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:23:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2129,7 +2129,7 @@ IMPL_STATIC_LINK_NOINSTANCE( ToolBarManager, ExecuteHdl_Impl, ExecuteInfo*, pExe
                  ( pExecuteInfo->xLayoutManager.is() ))
         {
             ::com::sun::star::awt::Point aPoint;
-            aPoint.X = aPoint.Y = LONG_MAX;
+            aPoint.X = aPoint.Y = SAL_MAX_INT32;
             pExecuteInfo->xLayoutManager->dockWindow( pExecuteInfo->aToolbarResName,
                                                       DockingArea_DOCKINGAREA_DEFAULT,
                                                       aPoint );
