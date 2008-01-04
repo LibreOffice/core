@@ -1,5 +1,5 @@
 *** misc/STLport-4.5/src/dll_main.cpp	Sat Aug 25 03:14:19 2001
---- misc/build/STLport-4.5/src/dll_main.cpp	Sun Sep 17 09:25:58 2006
+--- misc/build/STLport-4.5/src/dll_main.cpp	Fri Nov 23 14:12:12 2007
 ***************
 *** 147,152 ****
 --- 147,156 ----
@@ -13,8 +13,8 @@
   template class _STLP_CLASS_DECLSPEC __node_alloc<false,0>;
   template class _STLP_CLASS_DECLSPEC __node_alloc<true,0>;
   template class _STLP_CLASS_DECLSPEC __debug_alloc< __node_alloc<true,0> >;
-*** misc/STLport-4.5/src/gcc-3.0-freebsd.mak	Sun Sep 17 09:26:44 2006
---- misc/build/STLport-4.5/src/gcc-3.0-freebsd.mak	Sun Sep 17 09:25:58 2006
+*** misc/STLport-4.5/src/gcc-3.0-freebsd.mak	Fri Nov 23 14:22:58 2007
+--- misc/build/STLport-4.5/src/gcc-3.0-freebsd.mak	Fri Nov 23 14:12:12 2007
 ***************
 *** 1 ****
 ! dummy
@@ -78,8 +78,8 @@
 ! #	$(CXX) $(CXXFLAGS) -O4 -S -pto $<  -o $@
 ! 
 ! 
-*** misc/STLport-4.5/src/gcc-3.0-macosx.mak	Sun Sep 17 09:26:44 2006
---- misc/build/STLport-4.5/src/gcc-3.0-macosx.mak	Sun Sep 17 09:25:58 2006
+*** misc/STLport-4.5/src/gcc-3.0-macosx.mak	Fri Nov 23 14:22:58 2007
+--- misc/build/STLport-4.5/src/gcc-3.0-macosx.mak	Fri Nov 23 14:22:27 2007
 ***************
 *** 1 ****
 ! dummy
@@ -106,12 +106,12 @@
 ! LINK=libtool -static -o
 ! DYN_LINK=g++ -o
 ! 
-! LDFLAGS_COMMON_dynamic= -dynamiclib -single_module 
-!
+! LDFLAGS_COMMON_dynamic= -dynamiclib -single_module $(EXTRA_LINKFLAGS)
+! 
 ! LDFLAGS_RELEASE_dynamic=   $(LDFLAGS_COMMON_dynamic) -install_name @executable_path/libstlport_gcc.dylib
 ! LDFLAGS_DEBUG_dynamic=     $(LDFLAGS_COMMON_dynamic) -install_name @executable_path/libstlport_gcc.dylib
 ! LDFLAGS_STLDEBUG_dynamic=  $(LDFLAGS_COMMON_dynamic) -install_name @executable_path/libstlport_gcc_stldebug.dylib
-!
+! 
 ! OBJEXT=o
 ! DYNEXT=dylib
 ! STEXT=a
@@ -127,7 +127,7 @@
 ! 
 ! WARNING_FLAGS= -Wall -W -Wno-sign-compare -Wno-unused -Wno-uninitialized -Wno-long-double
 ! 
-! CXXFLAGS_COMMON =  ${ENVCDEFS} -I${STLPORT_DIR} -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -D_REENTRANT -D_PTHREADS -ftemplate-depth-32 -malign-natural -no-cpp-precomp -fexceptions ${WARNING_FLAGS} ${ARCH_FLAGS}
+! CXXFLAGS_COMMON =  ${ENVCDEFS} -I${STLPORT_DIR} -DGXX_INCLUDE_PATH=${GXX_INCLUDE_PATH} -D_REENTRANT -D_PTHREADS -ftemplate-depth-32 -malign-natural -no-cpp-precomp -fexceptions ${WARNING_FLAGS} ${ARCH_FLAGS} $(EXTRA_CDEFS) $(EXTRA_CFLAGS)
 ! 
 ! CXXFLAGS_RELEASE_static = $(CXXFLAGS_COMMON) -O2 -fPIC
 ! CXXFLAGS_RELEASE_dynamic = $(CXXFLAGS_COMMON) -O2 -fPIC
@@ -149,8 +149,8 @@
 ! #	$(CXX) $(CXXFLAGS) -O4 -S -pto $<  -o $@
 ! 
 ! 
-*** misc/STLport-4.5/src/gcc-3.0.mak	Sun Sep 17 09:26:44 2006
---- misc/build/STLport-4.5/src/gcc-3.0.mak	Sun Sep 17 09:25:58 2006
+*** misc/STLport-4.5/src/gcc-3.0.mak	Fri Nov 23 14:22:58 2007
+--- misc/build/STLport-4.5/src/gcc-3.0.mak	Fri Nov 23 14:12:12 2007
 ***************
 *** 1 ****
 ! dummy
@@ -215,7 +215,7 @@
 ! 
 ! 
 *** misc/STLport-4.5/src/gcc-freebsd.mak	Sun Jul 29 05:36:25 2001
---- misc/build/STLport-4.5/src/gcc-freebsd.mak	Sun Sep 17 09:25:58 2006
+--- misc/build/STLport-4.5/src/gcc-freebsd.mak	Fri Nov 23 14:12:12 2007
 ***************
 *** 5,12 ****
   #
@@ -276,7 +276,7 @@
   CXXFLAGS_DEBUG_static = $(CXXFLAGS_COMMON) -g
   CXXFLAGS_DEBUG_dynamic = $(CXXFLAGS_COMMON) -g -fPIC
 *** misc/STLport-4.5/stlport/config/stl_gcc.h	Tue Sep  4 19:10:16 2001
---- misc/build/STLport-4.5/stlport/config/stl_gcc.h	Sun Sep 17 09:25:58 2006
+--- misc/build/STLport-4.5/stlport/config/stl_gcc.h	Fri Nov 23 14:12:12 2007
 ***************
 *** 71,80 ****
    * static data members in template classes */
@@ -362,7 +362,7 @@
   # elif (__GNUC_MINOR__ < 8)
   
 *** misc/STLport-4.5/stlport/cwchar	Sat Jan 27 02:39:42 2001
---- misc/build/STLport-4.5/stlport/cwchar	Sun Sep 17 09:25:58 2006
+--- misc/build/STLport-4.5/stlport/cwchar	Fri Nov 23 14:12:12 2007
 ***************
 *** 21,26 ****
 --- 21,29 ----
@@ -376,7 +376,7 @@
   
   # if (_STLP_OUTERMOST_HEADER_ID == 0x120)
 *** misc/STLport-4.5/stlport/stdarg.h	Sat Jan 27 02:39:59 2001
---- misc/build/STLport-4.5/stlport/stdarg.h	Sun Sep 17 09:25:58 2006
+--- misc/build/STLport-4.5/stlport/stdarg.h	Fri Nov 23 14:12:12 2007
 ***************
 *** 20,26 ****
 --- 20,30 ----
@@ -392,7 +392,7 @@
   # if (_STLP_OUTERMOST_HEADER_ID == 0x261)
   #  if ! defined (_STLP_DONT_POP_0x261)
 *** misc/STLport-4.5/stlport/stdexcept	Tue May 22 02:50:21 2001
---- misc/build/STLport-4.5/stlport/stdexcept	Sun Sep 17 09:25:58 2006
+--- misc/build/STLport-4.5/stlport/stdexcept	Fri Nov 23 14:12:12 2007
 ***************
 *** 49,54 ****
 --- 49,61 ----
@@ -410,7 +410,7 @@
   public:
     __Named_exception(const string& __str) 
 *** misc/STLport-4.5/stlport/stl/_ios_base.h	Tue Sep  4 19:10:18 2001
---- misc/build/STLport-4.5/stlport/stl/_ios_base.h	Sun Sep 17 09:26:37 2006
+--- misc/build/STLport-4.5/stlport/stl/_ios_base.h	Fri Nov 23 14:12:12 2007
 ***************
 *** 291,297 ****
   template <class Facet>
@@ -429,7 +429,7 @@
   
   // ----------------------------------------------------------------------
 *** misc/STLport-4.5/stlport/stl/_list.h	Wed May 30 05:45:41 2001
---- misc/build/STLport-4.5/stlport/stl/_list.h	Sun Mar  4 16:42:45 2007
+--- misc/build/STLport-4.5/stlport/stl/_list.h	Fri Nov 23 14:12:12 2007
 ***************
 *** 87,93 ****
     _List_node_base* _M_node;
@@ -448,7 +448,7 @@
     void _M_incr() { _M_node = _M_node->_M_next; }
     void _M_decr() { _M_node = _M_node->_M_prev; }
 *** misc/STLport-4.5/stlport/stl/_tempbuf.h	Wed May 30 05:45:42 2001
---- misc/build/STLport-4.5/stlport/stl/_tempbuf.h	Sun Mar  4 16:41:59 2007
+--- misc/build/STLport-4.5/stlport/stl/_tempbuf.h	Fri Nov 23 14:12:12 2007
 ***************
 *** 113,118 ****
 --- 113,119 ----
@@ -460,7 +460,7 @@
         _M_len = distance(__first, __last);
         _M_allocate_buffer();
 *** misc/STLport-4.5/stlport/stl/_threads.h	Tue Sep  4 19:10:20 2001
---- misc/build/STLport-4.5/stlport/stl/_threads.h	Mon Feb 26 12:15:24 2007
+--- misc/build/STLport-4.5/stlport/stl/_threads.h	Fri Nov 23 14:12:12 2007
 ***************
 *** 42,49 ****
   #  include <cstdlib>
@@ -481,7 +481,7 @@
   # endif
   
 *** misc/STLport-4.5/stlport/stl/c_locale.h	Thu May 31 05:24:41 2001
---- misc/build/STLport-4.5/stlport/stl/c_locale.h	Sun Sep 17 09:25:58 2006
+--- misc/build/STLport-4.5/stlport/stl/c_locale.h	Fri Nov 23 14:12:12 2007
 ***************
 *** 290,305 ****
   #  define _Locale_ALPHA  256
@@ -530,7 +530,7 @@
   # elif defined (__hpux) || defined (__osf__)
    
 *** misc/STLport-4.5/stlport/wchar.h	Sat Jan 27 02:40:06 2001
---- misc/build/STLport-4.5/stlport/wchar.h	Sun Sep 17 09:25:58 2006
+--- misc/build/STLport-4.5/stlport/wchar.h	Fri Nov 23 14:12:12 2007
 ***************
 *** 28,38 ****
   using _STLP_VENDOR_CSTD::strspn;
