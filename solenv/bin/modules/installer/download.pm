@@ -4,9 +4,9 @@
 #
 #   $RCSfile: download.pm,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 14:54:35 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:56:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1445,9 +1445,6 @@ sub create_download_sets
     installer::logger::print_message( "******************************************\n" );
 
     installer::logger::include_header_into_logfile("Creating download installation sets:");
-
-    # special handling for unix multi language installation sets
-    if ( $installer::globals::is_unix_multi ) { $languagestringref = \$installer::globals::unixmultipath; }
 
     # special handling for installation sets, to which english was added automatically
     if ( $installer::globals::added_english ) { remove_english_for_nsis_installer($languagestringref, $languagesarrayref); }
