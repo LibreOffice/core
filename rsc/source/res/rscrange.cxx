@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscrange.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:02:48 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:00:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -428,7 +428,7 @@ void RscLongRange::WriteSrc( const RSCINST & rInst, FILE * fOutput,
 {
     INT32 lVal;
     GetNumber( rInst, &lVal );
-    fprintf( fOutput, "%ld", lVal );
+    fprintf( fOutput, "%d", static_cast<int>(lVal) );
 }
 
 /*************************************************************************
