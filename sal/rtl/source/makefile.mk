@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:36:22 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:20:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -135,8 +135,10 @@ OBJFILES=   \
 
 .IF "$(OS)" == "WNT"
 #Link against delayload.obj from local output tree
+.IF "$(COM)"!="GCC"
 DELAYLOADOBJ:=$(OBJ)$/delayload.obj
 APP1DEPN=$(DELAYLOADOBJ)
+.ENDIF
 .ENDIF
 
 APP1TARGET=gen_makefile
