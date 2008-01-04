@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 13:51:20 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:10:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1189,8 +1189,8 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
         {
             lang::Locale aLocale;
             aValue >>= aLocale;
-            if ( aLocale.Language != _pImp->aCharLocale.Language &&
-                 aLocale.Country !=  _pImp->aCharLocale.Country &&
+            if ( aLocale.Language != _pImp->aCharLocale.Language ||
+                 aLocale.Country !=  _pImp->aCharLocale.Country ||
                  aLocale.Variant !=  _pImp->aCharLocale.Variant   )
             {
                 bModified = sal_True;
