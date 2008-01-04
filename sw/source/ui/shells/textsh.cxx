@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 13:55:23 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:24:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1346,7 +1346,9 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
             // --> FME 2007-07-09 #i75891#
             // SETATTR_DONTEXPAND does not work if there are already hard attributes.
             // Therefore we have to restore the font attributes.
+            rSh.SetMark();
             rSh.SetAttr( aRestoreSet );
+            rSh.ClearMark();
             // <--
 
             rSh.UpdateAttr();
