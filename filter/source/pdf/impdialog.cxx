@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 10:41:07 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:08:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1347,7 +1347,8 @@ void ImpPDFTabLinksPage::ImplPDFALinkControl( sal_Bool bEnableLaunch )
         mbOpnLnksLaunchUserState = maRbOpnLnksLaunch.IsChecked();
         mbOpnLnksBrowserUserState = maRbOpnLnksBrowser.IsChecked();
         maRbOpnLnksLaunch.Enable( sal_False );
-        maRbOpnLnksBrowser.Check();
+        if( mbOpnLnksLaunchUserState )
+            maRbOpnLnksBrowser.Check();
     }
 }
 
