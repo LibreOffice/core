@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntgcci6.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:42:14 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:16:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,10 @@ CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 PICSWITCH:=
 
+CFLAGS_CREATE_PCH=-x c++-header -I$(INCPCH) -DPRECOMPILED_HEADERS
+CFLAGS_USE_PCH=-I$(SLO)$/pch -DPRECOMPILED_HEADERS -Winvalid-pch
+CFLAGS_USE_EXCEPTIONS_PCH=-I$(SLO)$/pch_ex -DPRECOMPILED_HEADERS -Winvalid-pch
+
 CFLAGSOBJGUIST=
 CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=-D_MT
@@ -71,8 +75,14 @@ CFLAGSSLOCUIMT=-D_MT $(PICSWITCH)
 CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
-CFLAGSOPT=-O3
-CFLAGSNOOPT=-O
+.IF "$(PRODUCT)"!=""
+CFLAGSOPT=-O2 -fno-strict-aliasing		# optimizing for products
+.ELSE 	# "$(PRODUCT)"!=""
+CFLAGSOPT=   							# no optimizing for non products
+.ENDIF	# "$(PRODUCT)"!=""
+# Compiler flags for disabling optimizations
+CFLAGSNOOPT=-O0
+# Compiler flags for describing the output path
 CFLAGSOUTOBJ=-o
 #plattform hart setzen
 CDEFS+=-DWIN32 -DWINVER=0x400 -D_WIN32_IE=0x400 -D_DLL -D_M_IX86 -DSTLPORT_VERSION=450 -D_NATIVE_WCHAR_T_DEFINED
@@ -166,6 +176,7 @@ RCLINKFLAGS=
 RCSETVERSION=
 
 DLLPOSTFIX=gi
+PCHPOST=.gch
 
 ADVAPI32LIB=-ladvapi32
 SHELL32LIB=-lshell32
