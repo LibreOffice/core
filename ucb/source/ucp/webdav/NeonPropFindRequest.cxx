@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 15:33:42 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 14:35:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,21 +176,11 @@ extern "C" int NPFR_propfind_iter( void* userdata,
 
 // -------------------------------------------------------------------
 extern "C" void NPFR_propfind_results( void* userdata,
-#if NEON_VERSION >= 0260
-                                       const ne_uri* href_uri,
-#else
-                                       const char* href,
-#endif
+                                       const ne_uri* uri,
                                        const NeonPropFindResultSet* set )
 {
-    // @@@ href is not the uri! DAVResource ctor wants uri!
-
-#if NEON_VERSION >= 0260
-    // href should be free'd? says header ...
-    char* href = ne_uri_unparse(href_uri);
-#endif
     DAVResource theResource(
-                        OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
+                        OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
 
     ne_propset_iterate( set, NPFR_propfind_iter, &theResource );
 
@@ -218,22 +208,14 @@ extern "C" int NPFR_propnames_iter( void* userdata,
 
 // -------------------------------------------------------------------
 extern "C" void NPFR_propnames_results( void* userdata,
-#if NEON_VERSION >= 0260
-                                        const ne_uri* href_uri,
-#else
-                                        const char* href,
-#endif
+                                        const ne_uri* uri,
                                         const NeonPropFindResultSet* results )
 {
     // @@@ href is not the uri! DAVResourceInfo ctor wants uri!
 
-#if NEON_VERSION >= 0260
-    // href should be free'd? says header ...
-    char* href = ne_uri_unparse(href_uri);
-#endif
     // Create entry for the resource.
     DAVResourceInfo theResource(
-                        OStringToOUString( href, RTL_TEXTENCODING_UTF8 ) );
+                        OStringToOUString( uri->path, RTL_TEXTENCODING_UTF8 ) );
     // Fill entry.
     ne_propset_iterate( results, NPFR_propnames_iter, &theResource );
 
