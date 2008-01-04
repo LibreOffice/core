@@ -4,9 +4,9 @@
  *
  *  $RCSfile: seqinputstreamserv.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:11:17 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:38:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,13 +46,14 @@
 #include <com/sun/star/io/XSeekableInputStream.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 
 using namespace ::com::sun::star;
 
 ::rtl::OUString SAL_CALL SequenceInputStreamService_getImplementationName();
 uno::Sequence< ::rtl::OUString > SAL_CALL SequenceInputStreamService_getSupportedServiceNames();
-uno::Reference< uno::XInterface > SAL_CALL SequenceInputStreamService_createInstance( const uno::Reference< lang::XMultiServiceFactory > & xFactory ) SAL_THROW( (uno::Exception ) );
+uno::Reference< uno::XInterface > SAL_CALL SequenceInputStreamService_createInstance( const uno::Reference< uno::XComponentContext > & rxContext ) SAL_THROW( (uno::Exception ) );
 
 
 namespace {
@@ -64,7 +65,7 @@ class SequenceInputStreamService:
         lang::XInitialization>
 {
 public:
-    explicit SequenceInputStreamService( uno::Reference< lang::XMultiServiceFactory > const & xFactory );
+    explicit SequenceInputStreamService();
 
     // ::com::sun::star::lang::XServiceInfo:
     virtual ::rtl::OUString SAL_CALL getImplementationName() throw ( uno::RuntimeException );
@@ -94,15 +95,13 @@ private:
 
 
     ::osl::Mutex m_aMutex;
-    uno::Reference< lang::XMultiServiceFactory > m_xFactory;
     sal_Bool m_bInitialized;
     uno::Reference< io::XInputStream > m_xInputStream;
     uno::Reference< io::XSeekable > m_xSeekable;
 };
 
-SequenceInputStreamService::SequenceInputStreamService( uno::Reference< lang::XMultiServiceFactory > const & xFactory )
-: m_xFactory( xFactory )
-, m_bInitialized( sal_False )
+SequenceInputStreamService::SequenceInputStreamService()
+: m_bInitialized( sal_False )
 {}
 
 // com.sun.star.uno.XServiceInfo:
@@ -247,13 +246,9 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SequenceInputStreamService_getSupporte
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SequenceInputStreamService_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & xFactory )
+    const uno::Reference< uno::XComponentContext >& )
         SAL_THROW( (uno::Exception ) )
 {
-    return static_cast< ::cppu::OWeakObject * >( new SequenceInputStreamService( xFactory ) );
+    return static_cast< ::cppu::OWeakObject * >( new SequenceInputStreamService() );
 }
-
-
-
-
 
