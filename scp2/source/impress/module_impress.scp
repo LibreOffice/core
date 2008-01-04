@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_impress.scp,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 10:05:46 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 17:07:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,10 +56,10 @@ Module gid_Module_Prg_Impress_Bin
     gid_File_Registry_Spool_Oo_TypeDetection_Impress_Filters_Xcu,gid_File_Registry_Spool_Oo_TypeDetection_Impress_Types_Xcu, gid_File_Tmp_Userinstall_Impress_Inf);
 End
 
-Module gid_Module_Prg_Impress_Help
-    MOD_NAME_DESC ( MODULE_PRG_IMPRESS_HELP );
-    ParentID = gid_Module_Prg_Impress;
-    Sortkey = "200";
-    Default = YES;
-    Files = (gid_File_Help_Simpress_Zip);
-End
+// Module gid_Module_Prg_Impress_Help
+//     MOD_NAME_DESC ( MODULE_PRG_IMPRESS_HELP );
+//     ParentID = gid_Module_Prg_Impress;
+//     Sortkey = "200";
+//     Default = YES;
+//     Files = (gid_File_Help_Simpress_Zip);
+// End
