@@ -4,9 +4,9 @@
 #
 #   $RCSfile: javainstaller.pm,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-08 08:05:23 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:57:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -275,37 +275,17 @@ sub translate_javafile
 }
 
 ###########################################################
-# changing the language in the include pathes
-###########################################################
-
-sub change_language_in_pathes
-{
-    my ($localincludepatharrayref, $language, $firstlanguage) = @_;
-
-    for ( my $i = 0; $i <= $#{$localincludepatharrayref}; $i++ )
-    {
-        ${$localincludepatharrayref}[$i] =~ s/\/$firstlanguage\//\/$language\//g;   # /en-US/ -> /de/
-    }
-}
-
-###########################################################
 # Returning the license file name for a defined language
 ###########################################################
 
 sub get_licensefilesource
 {
-    my ($language, $firstlanguage, $includepatharrayref) = @_;
+    my ($language, $includepatharrayref) = @_;
 
     my $licensefilename = "LICENSE_" . $language;
 
-    # The different license files for different languages are not in a language specific include path
-    # -> the incudepatharray for the first language is sufficient to find all license files
-    # my $localincludepatharrayref = installer::worker::copy_array_from_references($includepatharrayref);
-    # if ($language ne $firstlanguage) { change_language_in_pathes($localincludepatharrayref, $language, $firstlanguage); }
-    # my $licenseref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, $localincludepatharrayref, 0);
     my $licenseref = installer::scriptitems::get_sourcepath_from_filename_and_includepath(\$licensefilename, $includepatharrayref, 0);
     if ($$licenseref eq "") { installer::exiter::exit_program("ERROR: Could not find License file $licensefilename!", "get_licensefilesource"); }
-
 
     my $infoline = "Found licensefile $licensefilename: $$licenseref \n";
     push( @installer::globals::logfileinfo, $infoline);
@@ -607,6 +587,7 @@ sub remove_package
 
     my $packagestring = "";
     my $namestring = "";
+    my $infoline = "";
 
     if ( $installer::globals::issolarispkgbuild )
     {
@@ -618,6 +599,8 @@ sub remove_package
         $packagestring = "\<rpmunit";
         $namestring = "rpmUniqueName";
     }
+
+    my $removed_packge = 0;
 
     for ( my $i = 0; $i <= $#{$xmlfile}; $i++ )
     {
@@ -646,10 +629,23 @@ sub remove_package
             if ( $do_delete )
             {
                 splice(@{$xmlfile},$i, $linecounter);   # removing $linecounter lines, beginning in line $i
+                $removed_packge = 1;
                 last;
             }
         }
     }
+
+    if ( $removed_packge )
+    {
+        $infoline = "Package $packagename successfully removed from xml file.\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+    else
+    {
+        $infoline = "Did not find package $packagename in xml file.\n";
+        push( @installer::globals::logfileinfo, $infoline);
+    }
+
 }
 
 ##########################################################
@@ -807,27 +803,19 @@ sub remove_font_package_from_unit
 
 sub duplicate_languagepack_in_xmlfile
 {
-    my ($xmlfile) = @_;
+    my ($xmlfile, $languagesarrayref) = @_;
 
     my $unit = remove_component($xmlfile, "languagepack_ONELANGUAGE");
     my $startline = find_component_line($xmlfile, "module_languagepacks");
     $startline = $startline + 1;
 
-    for ( my $i = 1; $i <= $#installer::globals::languageproducts; $i++ )   # starting at "1", because "0" (first language) is no languagepack!
+    for ( my $i = 0; $i <= $#{$languagesarrayref}; $i++ )
     {
-        my $onelanguage = $installer::globals::languageproducts[$i];
+        my $onelanguage = ${$languagesarrayref}[$i];
         my $unitcopy = duplicate_component($unit);
 
         # replacing string ONELANGUAGE in the unit copy
         for ( my $j = 0; $j <= $#{$unitcopy}; $j++ ) { ${$unitcopy}[$j] =~ s/ONELANGUAGE/$onelanguage/g; }
-
-        # not for all languages exist a font package
-        if ( ! $installer::globals::fontpackageexists{$onelanguage} )
-        {
-            my $infoline = "Java installer: Removing font package for language $onelanguage\n";
-            push( @installer::globals::logfileinfo, $infoline);
-            remove_font_package_from_unit($unitcopy, $onelanguage);
-        }
 
         # including the unitcopy into the xml file
         include_component_at_specific_line($xmlfile, $unitcopy, $startline);
@@ -839,7 +827,7 @@ sub duplicate_languagepack_in_xmlfile
     $startline = find_component_line($xmlfile, "module_languagepacks");
     $startline = $startline + 1;
 
-    $onelanguage = $installer::globals::languageproducts[0];
+    $onelanguage = ${$languagesarrayref}[0];
     $unitcopy = duplicate_component($unit);
 
     # replacing string DEFAULT in the unit copy
@@ -862,9 +850,9 @@ sub remove_empty_packages_in_xmlfile
     for ( my $i = 0; $i <= $#installer::globals::emptypackages; $i++ )
     {
         my $packagename = $installer::globals::emptypackages[$i];
-        remove_package($xmlfile, $packagename);
         my $infoline = "Removing package $packagename from xml file.\n";
         push( @installer::globals::logfileinfo, $infoline);
+        remove_package($xmlfile, $packagename);
     }
 }
 
@@ -874,16 +862,16 @@ sub remove_empty_packages_in_xmlfile
 
 sub prepare_language_pack_in_xmlfile
 {
-    my ($xmlfile) = @_;
+    my ($xmlfile, $languagesarrayref) = @_;
 
-    if ( ! $installer::globals::is_unix_multi )
-    {
-        remove_languagepack_from_xmlfile($xmlfile);
-    }
-    else
-    {
-        duplicate_languagepack_in_xmlfile($xmlfile);
-    }
+    # if ( ! $installer::globals::is_unix_multi )
+    # {
+    #   remove_languagepack_from_xmlfile($xmlfile);
+    # }
+    # else
+    # {
+        duplicate_languagepack_in_xmlfile($xmlfile, $languagesarrayref);
+    # }
 
 }
 
@@ -1723,7 +1711,7 @@ sub create_java_installer
     # creating the directory
     my $javadir = installer::systemactions::create_directories("javainstaller", $languagestringref);
     $javadir =~ s/\/\s*$//;
-    push(@installer::globals::removedirs, $javadir);
+#   push(@installer::globals::removedirs, $javadir);
 
     # copying the content from directory install_sdk into the java directory
 
@@ -1756,18 +1744,9 @@ sub create_java_installer
     $infoline = "Translating the Java template file\n";
     push( @installer::globals::logfileinfo, $infoline);
 
-    # For Unix multi installation sets, $languagesarrayref contains only the first language
-    # Therefore the complete @installer::globals::languageproducts has to be used
-
-    my $buildlanguagesref = "";
-
-    if ( $installer::globals::is_unix_multi ) { $buildlanguagesref = \@installer::globals::languageproducts; }
-    else { $buildlanguagesref = $languagesarrayref; }
-
-    for ( my $i = 0; $i <= $#{$buildlanguagesref}; $i++ )
+    for ( my $i = 0; $i <= $#{$languagesarrayref}; $i++ )
     {
-        my $onelanguage = ${$buildlanguagesref}[$i];
-        my $firstlanguage = ${$buildlanguagesref}[0];
+        my $onelanguage = ${$languagesarrayref}[$i];
 
         # replacing all strings in the Java file with content of ulf files
 
@@ -1778,7 +1757,7 @@ sub create_java_installer
 
         # adding the license file into the Java file
 
-        my $licensefilesource = get_licensefilesource($onelanguage, $firstlanguage, $includepatharrayref);
+        my $licensefilesource = get_licensefilesource($onelanguage, $includepatharrayref);
         my $licensefile = installer::files::read_file($licensefilesource);
         add_license_file_into_javafile($templatefile, $licensefile, $includepatharrayref, $javadir, $onelanguage);
 
@@ -1807,7 +1786,7 @@ sub create_java_installer
 
     # renaming one language java file to "MyResources.java"
 
-    my $baselanguage = installer::languages::get_default_language($buildlanguagesref);
+    my $baselanguage = installer::languages::get_default_language($languagesarrayref);
     $baselanguage =~ s/\-/\_/;      # "pt-BR" -> "pt_BR"
     $baselanguage =~ s/en_US/en/;   # java file name and class name contain only "_en"
     # if ( $baselanguage =~ /^\s*(\w+)\-(\w+)\s*$/ ) { $baselanguage = $1; }     # java file name and class name contain only "_en"
@@ -1870,14 +1849,20 @@ sub create_java_installer
     # reading, editing and saving the xmlfile
 
     my $xmlfile = installer::files::read_file($xmlfilename);
+    prepare_language_pack_in_xmlfile($xmlfile, $languagesarrayref);
+    my $xmlfilename2 = $xmlfilename . ".test2";
+    installer::files::save_file($xmlfilename2, $xmlfile);
     remove_empty_packages_in_xmlfile($xmlfile);
-    prepare_language_pack_in_xmlfile($xmlfile);
+    my $xmlfilename3 = $xmlfilename . ".test3";
+    installer::files::save_file($xmlfilename3, $xmlfile);
     substitute_variables($xmlfile, $allvariableshashref);
     if (( $installer::globals::islinuxrpmbuild ) && ( $#installer::globals::linkrpms > -1 )) { prepare_linkrpm_in_xmlfile($xmlfile,\@installer::globals::linkrpms); }
     if (( $installer::globals::issolarisx86build ) || ( ! $allvariableshashref->{'ADAPRODUCT'} )) { remove_ada_from_xmlfile($xmlfile); }
     if ( $installer::globals::issolarisx86build || $installer::globals::islinuxbuild ) { remove_w4w_from_xmlfile($xmlfile); }
     remove_module_if_not_defined($xmlfile, $modulesarrayref, "gid_Module_Optional_Onlineupdate");
     replace_component_names($xmlfile, $templatefilename, $modulesarrayref, $javatemplateorigfile, $ulffile);
+    my $xmlfilename4 = $xmlfilename . ".test4";
+    installer::files::save_file($xmlfilename4, $xmlfile);
     if ( $installer::globals::islinuxrpmbuild ) { put_rpmpath_into_xmlfile($xmlfile, $listofpackages); }
     if ( $installer::globals::islinuxrpmbuild ) { put_filesize_into_xmlfile($xmlfile, $listofpackages); }
     installer::files::save_file($xmlfilename, $xmlfile);
