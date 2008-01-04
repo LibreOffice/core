@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.124 $
+#   $Revision: 1.125 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 19:00:17 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:15:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.124 $ ';
+$id_str = ' $Revision: 1.125 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -144,7 +144,6 @@ parse_options();
 if ( ! $opt_delete ) {
     if ( $ENV{GUI} eq 'WNT' ) {
         if ($ENV{COM} eq 'GCC') {
-            $strip .= 'guw ' if ($^O eq 'cygwin');
             initialize_strip() ;
         };
     } else {
@@ -705,12 +704,15 @@ sub glob_and_copy
 
 sub is_unstripped {
     my $file_name = shift;
+    my $nm_output;
 
     if (-f $file_name.$maybedot) {
         my $file_type = `file $file_name`;
         # OS X file command doesn't know if a file is stripped or not
         if (($file_type =~ /not stripped/o) || ($file_type =~ /Mach-O/o) ||
-            (($file_type =~ /PE/o) && ($ENV{GUI} eq 'WNT'))) {
+            (($file_type =~ /PE/o) && ($ENV{GUI} eq 'WNT') &&
+             ($nm_output = `nm $file_name 2>&1`) && $nm_output &&
+             !($nm_output =~ /no symbols/i) && !($nm_output =~ /not recognized/i))) {
             return '1' if ($file_name =~ /\.bin$/o);
             return '1' if ($file_name =~ /\.so\.*/o);
             return '1' if ($file_name =~ /\.dylib\.*/o);
@@ -725,6 +727,7 @@ sub is_unstripped {
 
 sub initialize_strip {
     if ((!defined $ENV{DISABLE_STRIP}) || ($ENV{DISABLE_STRIP} eq "")) {
+        $strip .= 'guw ' if ($^O eq 'cygwin');
         $strip .= 'strip';
         $strip .= " -x" if ($ENV{OS} eq 'MACOSX');
         $strip .= " -R '.comment' -s" if ($ENV{OS} eq 'LINUX');
