@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:58:22 $
+#   last change: $Author: obo $ $Date: 2008-01-04 14:14:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@ LIBSALCPPRT=$(0)
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-.INCLUDE :  packtools.mk
 .INCLUDE :  ..$/productversion.mk
 
 .IF "$(ENABLE_GNOMEVFS)"!=""
