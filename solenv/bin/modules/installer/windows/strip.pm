@@ -4,9 +4,9 @@
 #
 #   $RCSfile: strip.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 10:51:09 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:15:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,8 @@ sub need_to_strip
 
     # Check using the "nm" command
 
-    $filename =~ s/^\/cygdrive\/(\w)\//$1:\//;
+    $filename = qx{cygpath -m "$filename"};
+    $filename =~ s/[\r\n]//g;
 
     open (FILE, "nm $filename 2>&1 |");
     my $nmoutput = <FILE>;
