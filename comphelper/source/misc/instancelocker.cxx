@@ -4,9 +4,9 @@
  *
  *  $RCSfile: instancelocker.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 17:27:42 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:37:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,21 +260,9 @@ uno::Sequence< ::rtl::OUString > SAL_CALL OInstanceLocker::impl_staticGetSupport
 
 // --------------------------------------------------------
 uno::Reference< uno::XInterface > SAL_CALL OInstanceLocker::impl_staticCreateSelfInstance(
-                                const uno::Reference< lang::XMultiServiceFactory >& xServiceManager )
+                                const uno::Reference< uno::XComponentContext >& rxContext )
 {
-    uno::Reference< uno::XComponentContext > xContext;
-    uno::Reference< beans::XPropertySet > xPropSet( xServiceManager, uno::UNO_QUERY );
-    if ( xPropSet.is() )
-        xPropSet->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ) >>= xContext;
-
-    if ( !xContext.is() )
-    {
-        throw uno::RuntimeException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Unable to obtain component context from service manager!" ) ),
-            uno::Reference< uno::XInterface >() );
-    }
-
-    return static_cast< cppu::OWeakObject * >( new OInstanceLocker( xContext ) );
+    return static_cast< cppu::OWeakObject * >( new OInstanceLocker( rxContext ) );
 }
 
 
