@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 13:29:25 $
+#   last change: $Author: obo $ $Date: 2008-01-04 17:09:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -253,6 +253,7 @@ PARFILES=                          \
         module_ooo.par             \
         module_hidden_ooo.par      \
         module_langpack.par        \
+        module_lang_template.par   \
         module_java.par            \
         module_systemint.par       \
         profile_ooo.par            \
