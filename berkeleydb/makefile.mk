@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 14:58:19 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:17:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -145,10 +145,6 @@ BUILD_ACTION=make
 
 OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*42.a
 OUT2BIN=$(BUILD_DIR)$/.libs$/libdb*42.dll
-.IF "$(SOLAR_JAVA)"!=""
-OUT2BIN+=$(BUILD_DIR)$/db.jar
-OUT2CLASS=$(BUILD_DIR)$/db.jar
-.ENDIF
 
 OUT2INC= \
     $(BUILD_DIR)$/db.h
