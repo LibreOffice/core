@@ -989,13 +989,13 @@
  class GpImageAttributes;
  
 --- include/gdiplusimaging.h.orig	2003-03-26 16:34:34.000000000 +0900
-+++ include/gdiplusimaging.h	2004-12-30 21:15:38.000000000 +0900
++++ include/gdiplusimaging.h	2007-12-04 21:16:38.000000000 +0900
 @@ -153,7 +153,7 @@
      UINT Width;
      UINT Height;
      INT Stride;
 -    PixelFormat PixelFormat;
-+    PixelFormat aPixelFormat;
++    ::Gdiplus::PixelFormat PixelFormat;
      VOID* Scan0;
      UINT_PTR Reserved;
  };
