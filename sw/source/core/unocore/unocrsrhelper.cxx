@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:35:26 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:22:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -854,8 +854,15 @@ sal_Bool DocInsertStringSplitCR(
 
     OUString aTxt;
     xub_StrLen nStartIdx = 0;
+    xub_StrLen nMaxLength = STRING_LEN;
+    SwTxtNode* pTxtNd = rNewCursor.GetPoint()->nNode.GetNode().GetTxtNode();
+    if( pTxtNd )
+        nMaxLength = STRING_LEN - pTxtNd->GetTxt().Len();
     xub_StrLen nIdx = rText.Search( '\r', nStartIdx );
-    while (nIdx != STRING_NOTFOUND)
+    if( ( nIdx == STRING_NOTFOUND && nMaxLength < rText.Len() ) ||
+        ( nIdx != STRING_NOTFOUND && nMaxLength < nIdx ) )
+        nIdx = nMaxLength;
+    while (nIdx != STRING_NOTFOUND )
     {
         DBG_ASSERT( nIdx - nStartIdx >= 0, "index negative!" );
         aTxt = rText.Copy( nStartIdx, nIdx - nStartIdx );
