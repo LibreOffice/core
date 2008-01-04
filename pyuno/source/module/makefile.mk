@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 13:03:49 $
+#   last change: $Author: obo $ $Date: 2008-01-04 14:57:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,11 @@ LINKFLAGSDEFS = # do not fail with missing symbols
 DIRECT = $(LINKFLAGSDEFS)
 .ENDIF
 
+# special setting from environment
+.IF "$(EXTRA_CFLAGS)"!=""
+EXTRA_FRAMEWORK_FLAG=-framework Python
+.ENDIF # .IF "$(EXTRA_CFLAGS)"!=""
+
 .IF "$(GUI)" == "UNX"
 # python expects modules without the lib prefix 
 # pyuno.so even on Mac OS X, because it is a python module
@@ -91,7 +96,8 @@ SHL1STDLIBS= \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)	\
         $(SALLIB)		\
-        $(PYTHONLIB)
+        $(PYTHONLIB) 		\
+        $(EXTRA_FRAMEWORK_FLAG) 
 
 SHL1DEPN=
 SHL1LIBS=$(SLB)$/$(TARGET).lib
@@ -129,7 +135,7 @@ $(PYUNO_MODULE) : $(SLO)$/pyuno_dlopenwrapper.obj
 .ELIF "$(OS)" == "NETBSD"
     @echo $(LINK) $(LINKFLAGSSHLCUI) -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
 .ELIF "$(OS)" == "MACOSX"
-    @echo $(CC) -bundle -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
+    @echo $(CC) -bundle -ldl -o $@ $(SLO)$/pyuno_dlopenwrapper.o $(EXTRA_LINKFLAGS) $(EXTRA_FRAMEWORK_FLAG) > $(MISC)$/$(@:b).cmd
 .ELSE
     @echo $(LINK) $(LINKFLAGSSHLCUI) -o $@ $(SLO)$/pyuno_dlopenwrapper.o > $(MISC)$/$(@:b).cmd
 .ENDIF
