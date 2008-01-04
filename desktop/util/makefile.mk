@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.74 $
+#   $Revision: 1.75 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 13:01:22 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:21:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -213,8 +213,13 @@ APP6DEPN= $(APP1TARGETN) $(APP6RES) verinfo.rc
 APP6VERINFO=verinfo.rc
 APP6LINKRES=$(MISC)$/soffice6.res
 APP6ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
+.IF "$(COM)"=="GCC"
+APP6OBJS = \
+        $(OBJ)$/officeloader.obj
+.ELSE
 APP6OBJS = \
         $(OBJ)$/officeloader.obj $(OBJ)$/extendloaderenvironment.obj
+.ENDIF
 STDLIB6=$(ADVAPI32LIB) $(SHLWAPILIB)
 
 APP7TARGET=officeloader
@@ -224,8 +229,13 @@ APP7DEPN= $(APP1TARGETN) $(APP7RES) ooverinfo.rc
 APP7VERINFO=ooverinfo.rc
 APP7LINKRES=$(MISC)$/ooffice7.res
 APP7ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
+.IF "$(COM)"=="GCC"
+APP7OBJS = \
+        $(OBJ)$/officeloader.obj
+.ELSE
 APP7OBJS = \
         $(OBJ)$/officeloader.obj $(OBJ)$/extendloaderenvironment.obj
+.ENDIF
 STDLIB7=$(ADVAPI32LIB) $(SHLWAPILIB)
 
 # Until every DLL is linked against $(DELAYLOADOBJ) just as on wntmsci10:
