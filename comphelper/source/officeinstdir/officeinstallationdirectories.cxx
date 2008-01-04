@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeinstallationdirectories.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:15:41 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:38:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,30 +96,11 @@ rtl::OUString SAL_CALL OfficeInstallationDirectories_getSingletonServiceName()
 //=========================================================================
 uno::Reference< uno::XInterface > SAL_CALL
 OfficeInstallationDirectories_createInstance(
-        const uno::Reference< lang::XMultiServiceFactory > & xSMgr )
+        const uno::Reference< uno::XComponentContext > & rxContext )
     throw( uno::Exception )
 {
-    OSL_ENSURE( xSMgr.is(), "No service manager!" );
-
-    uno::Reference< uno::XComponentContext > xCtx;
-    uno::Reference< beans::XPropertySet > xPropSet( xSMgr, uno::UNO_QUERY );
-    if ( xPropSet.is() )
-    {
-        xPropSet->getPropertyValue(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) )
-        >>= xCtx;
-    }
-
-    if ( !xCtx.is() )
-    {
-        throw uno::RuntimeException(
-            rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                "Unable to obtain component context from service manager!" ) ),
-            uno::Reference< uno::XInterface >() );
-    }
-
     return static_cast< cppu::OWeakObject * >(
-        new OfficeInstallationDirectories( xCtx ) );
+        new OfficeInstallationDirectories( rxContext ) );
 }
 
 //=========================================================================
