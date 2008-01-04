@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.80 $
+#   $Revision: 1.81 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 15:34:49 $
+#   last change: $Author: obo $ $Date: 2008-01-04 15:01:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,11 @@ INCLUDE!:=$(INCLUDE:s/ -I/;/)
 PATCHFLAGS=-b
 .ENDIF			# "$(OS)"=="FREEBSD"
 .ENDIF			# "$(OS)"=="NETBSD"
+
+.IF "$(OS)"=="MACOSX"
+LDFLAGS:=$(EXTRA_LINKFLAGS)
+.EXPORT : LDFLAGS
+.ENDIF
 
 #override
 PACKAGE_DIR=$(MISC)$/build
