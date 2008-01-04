@@ -17,7 +17,7 @@
 # End
 
 Start
-module = "gid_Module_Root"
+module = "gid_Module_Langpack_Root"
 solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING"
 # solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-core01"
 packagename = "%UNIXPRODUCTNAME-%LANGUAGESTRING"
@@ -73,5 +73,110 @@ copyright = "1999-2007 by %PRODUCTNAME"
 solariscopyright = "solariscopyrightfile"
 vendor = "%PRODUCTNAME"
 description = "Language help module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
+End
+
+Start
+module = "gid_Module_Langpack_Writer"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-writer"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING"
+packagename = "%UNIXPRODUCTNAME-%LANGUAGESTRING-writer"
+linuxreplaces = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-writer"
+provides = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-writer"
+requires = "%UNIXPRODUCTNAME-%LANGUAGESTRING"
+copyright = "1999-2007 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Writer language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
+End
+
+Start
+module = "gid_Module_Langpack_Calc"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-calc"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING"
+packagename = "%UNIXPRODUCTNAME-%LANGUAGESTRING-calc"
+linuxreplaces = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-calc"
+provides = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-calc"
+requires = "%UNIXPRODUCTNAME-%LANGUAGESTRING"
+copyright = "1999-2007 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Calc language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
+End
+
+Start
+module = "gid_Module_Langpack_Impress"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-impress"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING"
+packagename = "%UNIXPRODUCTNAME-%LANGUAGESTRING-impress"
+linuxreplaces = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-impress"
+provides = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-impress"
+requires = "%UNIXPRODUCTNAME-%LANGUAGESTRING"
+copyright = "1999-2007 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Impress language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
+End
+
+Start
+module = "gid_Module_Langpack_Draw"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-draw"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING"
+packagename = "%UNIXPRODUCTNAME-%LANGUAGESTRING-draw"
+linuxreplaces = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-draw"
+provides = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-draw"
+requires = "%UNIXPRODUCTNAME-%LANGUAGESTRING"
+copyright = "1999-2007 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Draw language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
+End
+
+Start
+module = "gid_Module_Langpack_Math"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-math"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING"
+packagename = "%UNIXPRODUCTNAME-%LANGUAGESTRING-math"
+linuxreplaces = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-math"
+provides = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-math"
+requires = "%UNIXPRODUCTNAME-%LANGUAGESTRING"
+copyright = "1999-2007 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Math language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
+End
+
+Start
+module = "gid_Module_Langpack_Base"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-base"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING"
+packagename = "%UNIXPRODUCTNAME-%LANGUAGESTRING-base"
+linuxreplaces = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-base"
+provides = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-base"
+requires = "%UNIXPRODUCTNAME-%LANGUAGESTRING"
+copyright = "1999-2007 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Base language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
+destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
+End
+
+Start
+module = "gid_Module_Langpack_Onlineupdate"
+solarispackagename = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-onlineupd"
+solarisrequires = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING"
+packagename = "%UNIXPRODUCTNAME-%LANGUAGESTRING-onlineupd"
+linuxreplaces = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-onlineupd"
+provides = "%WITHOUTDOTUNIXPRODUCTNAME-%LANGUAGESTRING-onlineupd"
+requires = "%UNIXPRODUCTNAME-%LANGUAGESTRING"
+copyright = "1999-2007 by %PRODUCTNAME"
+solariscopyright = "solariscopyrightfile"
+vendor = "%PRODUCTNAME"
+description = "Online update language module for %PRODUCTNAME %PRODUCTVERSION, language %LANGUAGESTRING"
 destpath = "/opt/%UNIXPRODUCTNAME%PRODUCTVERSION"
 End
