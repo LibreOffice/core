@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdata.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:21:37 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:09:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,12 +181,6 @@ SfxAppData_Impl::~SfxAppData_Impl()
 
     BasicManagerRepository::revokeCreationListener( *pBasMgrListener );
     delete pBasMgrListener;
-}
-
-IMPL_STATIC_LINK( SfxAppData_Impl, CreateDocumentTemplates, void*, EMPTYARG)
-{
-    pThis->GetDocumentTemplates();
-    return 0;
 }
 
 void SfxAppData_Impl::UpdateApplicationSettings( sal_Bool bDontHide )
