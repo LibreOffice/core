@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:26:08 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:23:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3319,6 +3319,7 @@ void SAL_CALL SwXPageStyle::SetPropertyValues_Impl(
                         SfxItemSet& rSetSet = pNewSetItem->GetItemSet();
                         const SfxPoolItem* pItem = 0;
                         SfxPoolItem* pNewItem = 0;
+                        rSetSet.GetItemState(nRes, sal_True, &pItem);
                         if(!pItem && nRes != rSetSet.GetPool()->GetSlotId(nRes))
                             pItem = &rSetSet.GetPool()->GetDefaultItem(nRes);
                         if(pItem)
