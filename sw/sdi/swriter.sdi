@@ -9643,7 +9643,7 @@ SfxVoidItem WordCountDialog FN_WORDCOUNT_DIALOG
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = TRUE,
-    ReadOnlyDoc = FALSE,
+    ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
