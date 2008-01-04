@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spinfieldtoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:13:01 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -637,7 +637,7 @@ rtl::OUString SpinfieldToolbarController::impl_formatOutputString( double fValue
         if ( m_bFloat )
             snprintf( aBuffer, 128, aFormat.getStr(), fValue );
         else
-            snprintf( aBuffer, 128, aFormat.getStr(), sal_Int32( fValue ));
+            snprintf( aBuffer, 128, aFormat.getStr(), static_cast<long>( fValue ));
 
         sal_Int32 nSize = strlen( aBuffer );
         rtl::OString aTmp( aBuffer, nSize );
