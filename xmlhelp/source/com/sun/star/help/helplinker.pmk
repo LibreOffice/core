@@ -4,9 +4,9 @@
 #
 #   $RCSfile: helplinker.pmk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-19 13:00:09 $
+#   last change: $Author: obo $ $Date: 2008-01-04 14:15:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,12 @@ CDEFS += -DHELPLINKER_DLLIMPLEMENTATION
 # set default symbol visibility / scope to hidden
 .IF "$(COMNAME)" == "gcc3"
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
- CFLAGS += -fvisibility=hidden
+ CFLAGSCXXSLO += -fvisibility=hidden
 .ENDIF # HAVE_GCC_VISIBILITY_FEATURE
 .ENDIF # gcc3
 
 .IF "$(COMNAME)" == "sunpro5"
 .IF "$(CCNUMVER)" >= "00050005"
- CFLAGS += -xldscope=hidden
+ CFLAGSCXXSLO += -xldscope=hidden
 .ENDIF # 5.5
 .ENDIF # sunpro5
