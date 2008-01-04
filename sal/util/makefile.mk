@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:36:44 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:21:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -179,8 +179,12 @@ SHL1OBJS= \
 .ENDIF # lincinc
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+SHL1DEPN=   $(UWINAPILIB)
+.ELSE
 SHL1DEPN=   $(UWINAPILIB) $(DELAYLOADOBJ)
 SHL1OBJS += $(DELAYLOADOBJ)
+.ENDIF
 .ELSE
 SHL1DEPN=
 .ENDIF
