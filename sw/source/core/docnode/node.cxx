@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:42:06 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:20:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2038,6 +2038,15 @@ int SwCntntNode::CanJoinNext( SwNodeIndex* pIdx ) const
 
     if( pNd->GetNodeType() != nNdType || rNds.Count()-1 == aIdx.GetIndex() )
         return FALSE;
+    if( IsTxtNode() )
+    {   // Do not merge strings if the result exceeds the allowed string length
+        const SwTxtNode* pTxtNd = static_cast<const SwTxtNode*>(this);
+        sal_uInt64 nSum = pTxtNd->GetTxt().Len();
+        pTxtNd = static_cast<const SwTxtNode*>(pNd);
+        nSum += pTxtNd->GetTxt().Len();
+        if( nSum > STRING_LEN )
+            return FALSE;
+    }
     if( pIdx )
         *pIdx = aIdx;
     return TRUE;
