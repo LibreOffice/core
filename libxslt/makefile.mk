@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:32:10 $
+#   last change: $Author: obo $ $Date: 2008-01-04 14:56:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ LDFLAGS:=-Wl,-R'$$$$ORIGIN:$$$$ORIGIN/../ure-link/lib'
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
 
 .IF "$(SYSBASE)"!=""
-xslt_CFLAGS+=-I$(SYSBASE)$/usr$/include -I$(SOLARINCDIR)$/external
+xslt_CFLAGS+=-I$(SYSBASE)$/usr$/include -I$(SOLARINCDIR)$/external $(EXTRA_CFLAGS)
 .IF "$(OS)"=="SOLARIS" || "$(OS)"=="LINUX"
 LDFLAGS+=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lpthread -ldl
 .ENDIF
