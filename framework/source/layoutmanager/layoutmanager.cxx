@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:03:44 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:22:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -441,6 +441,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
         ,   m_bMustDoLayout( sal_True )
         ,   m_bAutomaticToolbars( sal_True )
         ,   m_bStoreWindowState( sal_False )
+        ,   m_bHideCurrentUI( false )
         ,   m_bGlobalSettings( sal_False )
         ,   m_eDockOperation( DOCKOP_ON_COLROW )
         ,   m_pInplaceMenuBar( NULL )
@@ -1665,8 +1666,8 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
             ::Point  aPos( rElement.m_aFloatingData.m_aPos.X(),
                            rElement.m_aFloatingData.m_aPos.Y() );
             sal_Bool bWriteData( sal_False );
-            sal_Bool bUndefPos = ( rElement.m_aFloatingData.m_aPos.X() == LONG_MAX ||
-                                   rElement.m_aFloatingData.m_aPos.Y() == LONG_MAX );
+            sal_Bool bUndefPos = ( rElement.m_aFloatingData.m_aPos.X() == SAL_MAX_INT32 ||
+                                   rElement.m_aFloatingData.m_aPos.Y() == SAL_MAX_INT32 );
             sal_Bool bSetSize = ( rElement.m_aFloatingData.m_aSize.Width() != 0 &&
                                   rElement.m_aFloatingData.m_aSize.Height() != 0 );
             xDockWindow->setFloatingMode( sal_True );
@@ -1726,8 +1727,8 @@ void LayoutManager::implts_setElementData( UIElement& rElement, const Reference<
                 aSize = pToolBox->CalcWindowSizePixel();
                 bSetSize = sal_True;
 
-                if (( rElement.m_aDockedData.m_aPos.X() == LONG_MAX ) &&
-                    ( rElement.m_aDockedData.m_aPos.Y() == LONG_MAX ))
+                if (( rElement.m_aDockedData.m_aPos.X() == SAL_MAX_INT32 ) &&
+                    ( rElement.m_aDockedData.m_aPos.Y() == SAL_MAX_INT32 ))
                 {
                     implts_findNextDockingPos( (DockingArea)rElement.m_aDockedData.m_nDockedArea,
                                                aSize,
@@ -1834,7 +1835,8 @@ void LayoutManager::implts_findNextDockingPos( DockingArea DockingArea, const ::
         // Retrieve output size from container Window
         vos::OGuard aGuard( Application::GetSolarMutex() );
         pDockingWindow  = VCLUnoHelper::GetWindow( xDockingWindow );
-        aDockingWinSize = pDockingWindow->GetOutputSizePixel();
+        if ( pDockingWindow )
+            aDockingWinSize = pDockingWindow->GetOutputSizePixel();
     }
 
     sal_Int32 nFreeRowColPixelPos( 0 );
@@ -2046,7 +2048,10 @@ void LayoutManager::implts_getDockingAreaElementInfos( DockingArea eDockingArea,
     sal_Int32 nLastPos( 0 );
     sal_Int32 nCurrPos( -1 );
     sal_Int32 nLastRowColPixelPos( 0 );
-    css::awt::Rectangle aDockAreaRect( xDockAreaWindow->getPosSize() );
+    css::awt::Rectangle aDockAreaRect;
+
+    if ( xDockAreaWindow.is() )
+        aDockAreaRect = xDockAreaWindow->getPosSize();
 
     if ( eDockingArea == DockingArea_DOCKINGAREA_TOP )
         nLastRowColPixelPos = 0;
@@ -2648,7 +2653,7 @@ void LayoutManager::implts_calcDockingPosSize(
 
     // determine current first row/column and last row/column
     sal_Int32 nMaxRowCol( -1 );
-    sal_Int32 nMinRowCol( LONG_MAX );
+    sal_Int32 nMinRowCol( SAL_MAX_INT32 );
     for ( sal_uInt32 i = 0; i < aRowColumnsWindowData.size(); i++ )
     {
         if ( aRowColumnsWindowData[i].nRowColumn > nMaxRowCol )
@@ -2978,8 +2983,8 @@ void LayoutManager::implts_renumberRowColumnData(
             ( pIter->m_aName != rUIElement.m_aName ))
         {
             // Don't change toolbars without a valid docking position!
-            if (( pIter->m_aDockedData.m_aPos.X() == LONG_MAX ) &&
-                ( pIter->m_aDockedData.m_aPos.Y() == LONG_MAX ))
+            if (( pIter->m_aDockedData.m_aPos.X() == SAL_MAX_INT32 ) &&
+                ( pIter->m_aDockedData.m_aPos.Y() == SAL_MAX_INT32 ))
                 continue;
 
             sal_Int32 nWindowRowCol = ( bHorzDockingArea ) ?
@@ -3021,7 +3026,7 @@ void LayoutManager::implts_renumberRowColumnData(
                         }
 
                         // Don't change toolbars without a valid docking position!
-                        if (( aDockedPos.X == LONG_MAX ) && ( aDockedPos.Y == LONG_MAX ))
+                        if (( aDockedPos.X == SAL_MAX_INT32 ) && ( aDockedPos.Y == SAL_MAX_INT32 ))
                             continue;
 
                         sal_Int32 nWindowRowCol = ( bHorzDockingArea ) ? aDockedPos.Y : aDockedPos.X;
@@ -3273,6 +3278,29 @@ void LayoutManager::implts_updateUIElementsVisibleState( sal_Bool bSetVisible )
         {
         }
     }
+}
+
+void LayoutManager::implts_setCurrentUIVisibility( sal_Bool bShow )
+{
+     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    WriteGuard aWriteLock( m_aLock );
+    UIElementVector::iterator pIter;
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+    {
+        if ( !bShow && pIter->m_bVisible && pIter->m_xUIElement.is() )
+            pIter->m_bMasterHide = true;
+        else if ( bShow && pIter->m_bMasterHide )
+            pIter->m_bMasterHide = false;
+    }
+
+    if ( !bShow && m_aStatusBarElement.m_bVisible && m_aStatusBarElement.m_xUIElement.is() )
+        m_aStatusBarElement.m_bMasterHide = true;
+    else if ( bShow && m_aStatusBarElement.m_bVisible )
+        m_aStatusBarElement.m_bMasterHide = false;
+    aWriteLock.unlock();
+     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+
+    implts_updateUIElementsVisibleState( bShow );
 }
 
 void LayoutManager::implts_destroyStatusBar()
@@ -4817,7 +4845,7 @@ throw (RuntimeException)
                     if ( DockingArea != DockingArea_DOCKINGAREA_DEFAULT )
                         aUIElement.m_aDockedData.m_nDockedArea = sal_Int16( DockingArea );
 
-                    if (( Pos.X != LONG_MAX ) && ( Pos.Y != LONG_MAX ))
+                    if (( Pos.X != SAL_MAX_INT32 ) && ( Pos.Y != SAL_MAX_INT32 ))
                         aUIElement.m_aDockedData.m_aPos = ::Point( Pos.X, Pos.Y );
 
                     if ( !xDockWindow->isFloating() )
@@ -4838,8 +4866,8 @@ throw (RuntimeException)
                             }
                         }
 
-                        if (( aUIElement.m_aDockedData.m_aPos.X() == LONG_MAX ) ||
-                            ( aUIElement.m_aDockedData.m_aPos.Y() == LONG_MAX ))
+                        if (( aUIElement.m_aDockedData.m_aPos.X() == SAL_MAX_INT32 ) ||
+                            ( aUIElement.m_aDockedData.m_aPos.Y() == SAL_MAX_INT32 ))
                         {
                             // Docking on its default position without a preset position -
                             // we have to find a good place for it.
@@ -4925,7 +4953,7 @@ throw (RuntimeException)
         for ( sal_uInt32 i = 0; i < aToolBarNameVector.size(); i++ )
         {
             ::com::sun::star::awt::Point aPoint;
-            aPoint.X = aPoint.Y = LONG_MAX;
+            aPoint.X = aPoint.Y = SAL_MAX_INT32;
             dockWindow( aToolBarNameVector[i], DockingArea_DOCKINGAREA_DEFAULT, aPoint );
         }
     }
@@ -6657,8 +6685,8 @@ throw (::com::sun::star::uno::RuntimeException)
                         pToolBox->SetAlign( WINDOWALIGN_LEFT );
                 }
 
-                sal_Bool bUndefPos = ( aUIDockingElement.m_aFloatingData.m_aPos.X() == LONG_MAX ||
-                                       aUIDockingElement.m_aFloatingData.m_aPos.Y() == LONG_MAX );
+                sal_Bool bUndefPos = ( aUIDockingElement.m_aFloatingData.m_aPos.X() == SAL_MAX_INT32 ||
+                                       aUIDockingElement.m_aFloatingData.m_aPos.Y() == SAL_MAX_INT32 );
                 sal_Bool bSetSize = ( aUIDockingElement.m_aFloatingData.m_aSize.Width() != 0 &&
                                       aUIDockingElement.m_aFloatingData.m_aSize.Height() != 0 );
 
@@ -6680,8 +6708,8 @@ throw (::com::sun::star::uno::RuntimeException)
             }
             else
             {
-                if (( aUIDockingElement.m_aDockedData.m_aPos.X() == LONG_MAX ) &&
-                    ( aUIDockingElement.m_aDockedData.m_aPos.Y() == LONG_MAX ))
+                if (( aUIDockingElement.m_aDockedData.m_aPos.X() == SAL_MAX_INT32 ) &&
+                    ( aUIDockingElement.m_aDockedData.m_aPos.Y() == SAL_MAX_INT32 ))
                 {
                     // Docking on its default position without a preset position -
                     // we have to find a good place for it.
@@ -7375,6 +7403,13 @@ sal_Bool SAL_CALL LayoutManager::convertFastPropertyValue( Any&       aConverted
                         aOldValue,
                         aConvertedValue);
                 break;
+        case LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI:
+            bReturn = PropHelper::willPropertyBeChanged(
+                        com::sun::star::uno::makeAny(m_bHideCurrentUI),
+                        aValue,
+                        aOldValue,
+                        aConvertedValue);
+                break;
     }
 
     // Return state of operation.
@@ -7407,6 +7442,16 @@ void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32        
                 implts_refreshContextToolbarsVisibility();
             break;
         }
+        case LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI:
+        {
+            sal_Bool bValue = sal_Bool();
+            if ( aValue >>= bValue )
+            {
+                m_bHideCurrentUI = bValue;
+                implts_setCurrentUIVisibility( !bValue );
+            }
+            break;
+        }
     }
 }
 
@@ -7423,6 +7468,12 @@ void SAL_CALL LayoutManager::getFastPropertyValue( com::sun::star::uno::Any& aVa
             break;
         case LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY:
             aValue <<= sal_False;
+            break;
+        case LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI:
+            aValue <<= m_bHideCurrentUI;
+            break;
+        case LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT:
+            aValue <<= m_nLockCount;
             break;
     }
 }
@@ -7489,6 +7540,8 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > LayoutMan
     static const com::sun::star::beans::Property pProperties[] =
     {
         com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_AUTOMATICTOOLBARS, LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS, ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
+        com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_HIDECURRENTUI, LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI, ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
+        com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_LOCKCOUNT, LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT, ::getCppuType((const sal_Int32*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT|com::sun::star::beans::PropertyAttribute::READONLY  ),
         com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_MENUBARCLOSER, LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER, ::getCppuType((const Reference< XStatusListener >*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  ),
         com::sun::star::beans::Property( LAYOUTMANAGER_PROPNAME_REFRESHVISIBILITY, LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY, ::getCppuType((const sal_Bool*)NULL), com::sun::star::beans::PropertyAttribute::TRANSIENT  )
     };
