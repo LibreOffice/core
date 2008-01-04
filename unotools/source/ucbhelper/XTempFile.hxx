@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTempFile.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:09:23 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:28:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,8 +32,8 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef _XTEMPFILE_HXX
-#define _XTEMPFILE_HXX
+#ifndef _XTEMPFILE_HXX_
+#define _XTEMPFILE_HXX_
 
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
@@ -47,11 +47,14 @@
 #ifndef _COM_SUN_STAR_IO_XSTREAM_HPP_
 #include <com/sun/star/io/XStream.hpp>
 #endif
+#ifndef _COM_SUN_STAR_IO_XTEMPFILE_HPP_
+#include <com/sun/star/io/XTempFile.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XTRUNCATE_HPP_
 #include <com/sun/star/io/XTruncate.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#ifndef _COM_SUN_STAR_LANG_XSINGLECOMPONENTFACTORY_HPP_
+#include <com/sun/star/lang/XSingleComponentFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -59,14 +62,11 @@
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSETINFO_HPP_
-#include <com/sun/star/beans/XPropertySetInfo.hpp>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
-#include <com/sun/star/beans/XPropertySet.hpp>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE8_HXX_
-#include <cppuhelper/implbase8.hxx>
+#ifndef _CPPUHELPER_PROPERTYSETMIXIN_HXX_
+#include <cppuhelper/propertysetmixin.hxx>
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -75,15 +75,17 @@
 class SvStream;
 namespace utl { class TempFile; }
 
-class XTempFile : public ::cppu::WeakImplHelper8<   com::sun::star::io::XInputStream
+typedef  ::cppu::WeakImplHelper5<   ::com::sun::star::io::XTempFile
+                                    ,   ::com::sun::star::io::XInputStream
                                                   , ::com::sun::star::io::XOutputStream
-                                                  , ::com::sun::star::io::XSeekable
-                                                  , ::com::sun::star::io::XStream
                                                   , ::com::sun::star::io::XTruncate
-                                                  , ::com::sun::star::beans::XPropertySetInfo
-                                                  , ::com::sun::star::beans::XPropertySet
                                                   , ::com::sun::star::lang::XServiceInfo
                                                   >
+                                    OTempFileBase;
+
+class OTempFileService :
+    public OTempFileBase,
+    public ::cppu::PropertySetMixin< ::com::sun::star::io::XTempFile >
 {
 protected:
     ::utl::TempFile*    mpTempFile;
@@ -93,32 +95,52 @@ protected:
     sal_Bool            mbInClosed;
     sal_Bool            mbOutClosed;
 
-    // intended to hold the current position in disconnected state
     sal_Int64           mnCachedPos;
     sal_Bool            mbHasCachedPos;
 
     void checkError () const;
     void checkConnected ();
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > GetProps();
-
 public:
-    XTempFile ();
-    virtual ~XTempFile ();
+    OTempFileService (::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);
+
+    //Methods
+    //  XInterface
+    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL acquire(  )
+        throw ();
+    virtual void SAL_CALL release(  )
+        throw ();
+    //  XTypeProvider
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::sal_Int8 > SAL_CALL getImplementationId(  )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    //  XTempFile
+    virtual ::sal_Bool SAL_CALL getRemoveFile()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setRemoveFile( ::sal_Bool _removefile )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getUri()
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getResourceName()
+        throw (::com::sun::star::uno::RuntimeException);
 
     // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
+    virtual ::sal_Int32 SAL_CALL readBytes( ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead )
         throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
+    virtual ::sal_Int32 SAL_CALL readSomeBytes( ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead )
         throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
+    virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip )
         throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL available(  )
+    virtual ::sal_Int32 SAL_CALL available(  )
         throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL closeInput(  )
         throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     // XOutputStream
-    virtual void SAL_CALL writeBytes( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData )
+    virtual void SAL_CALL writeBytes( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aData )
         throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL flush(  )
         throw (::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
@@ -131,49 +153,31 @@ public:
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
     virtual sal_Int64 SAL_CALL getLength(  )
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-
     // XStream
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream(  )
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL getOutputStream(  )
         throw (::com::sun::star::uno::RuntimeException);
-
     // XTruncate
     virtual void SAL_CALL truncate()
         throw (::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
-
-    // XPropertySetInfo
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const ::rtl::OUString& aName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
-    virtual ::sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& Name ) throw (::com::sun::star::uno::RuntimeException);
-
-    // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
-        throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
-        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName )
-        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener )
-        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener )
-        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
-        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
-        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
-
-    static ::rtl::OUString getImplementationName_Static ();
-    static ::com::sun::star::uno::Sequence < ::rtl::OUString > getSupportedServiceNames_Static();
-    static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleServiceFactory > createServiceFactory_Static( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory );
-
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
         throw (::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
+    virtual ::sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
         throw (::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
         throw (::com::sun::star::uno::RuntimeException);
+
+    //::com::sun::star::uno::Reference < ::com::sun::star::uno::XInterface > SAL_CALL XTempFile_createInstance( ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > const & context);
+    static ::rtl::OUString getImplementationName_Static ();
+    static ::com::sun::star::uno::Sequence < ::rtl::OUString > getSupportedServiceNames_Static();
+
+    static ::com::sun::star::uno::Reference < com::sun::star::lang::XSingleComponentFactory > createServiceFactory_Static( com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > const & rServiceFactory );
+
+private:
+    OTempFileService( OTempFileService & );
+    virtual ~OTempFileService ();
 
 };
 #endif
