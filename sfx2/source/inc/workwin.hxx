@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:01:59 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,6 +270,7 @@ class LayoutManagerListener : public ::com::sun::star::frame::XLayoutManagerList
 class SfxWorkWindow
 {
     friend class UIElementWrapper;
+    friend class LayoutManagerListener;
 
 protected:
     SvUShorts               aSortedList;
