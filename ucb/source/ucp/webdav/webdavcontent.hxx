@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavcontent.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:21:07 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 14:32:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,11 +152,17 @@ private:
                 const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XContentIdentifier >& xNewId );
 
-    const rtl::OUString getBaseURI();
+    const rtl::OUString getBaseURI( const std::auto_ptr< DAVResourceAccess > & rResAccess );
 
     const ResourceType & getResourceType(
                     const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XCommandEnvironment >& xEnv )
+        throw ( ::com::sun::star::uno::Exception );
+
+    const ResourceType & getResourceType(
+                    const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::ucb::XCommandEnvironment >& xEnv,
+                    const std::auto_ptr< DAVResourceAccess > & rResAccess )
         throw ( ::com::sun::star::uno::Exception );
 
     // Command "open"
