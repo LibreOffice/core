@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.198 $
+ *  $Revision: 1.199 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:23:43 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:34:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,6 +193,7 @@
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <unotools/tempfile.hxx>
+#include <unotools/docinfohelper.hxx>
 #include <ucbhelper/content.hxx>
 #include <sot/storinfo.hxx>
 #include <sot/exchange.hxx>
@@ -1984,6 +1985,14 @@ sal_Bool SfxObjectShell::DoSaveCompleted( SfxMedium* pNewMed )
             if( pNewMed->GetName().Len() )
                 bHasName = sal_True;
             Broadcast( SfxSimpleHint(SFX_HINT_NAMECHANGED) );
+            try
+            {
+                uno::Reference< beans::XPropertySet > xProps( GetDocInfo().GetInfo(), uno::UNO_QUERY_THROW );
+                xProps->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Generator" ) ),
+                                          uno::makeAny( ::utl::DocInfoHelper::GetGeneratorString() ) );
+            }
+            catch( uno::Exception& )
+            {}
         }
 
         uno::Reference< embed::XStorage > xStorage;
