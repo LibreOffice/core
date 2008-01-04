@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hi_env.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:01:13 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 12:57:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,15 +143,39 @@ HtmlEnvironment_Idl::create_Directory( const csv::ploc::Path & i_path )
         aCurDir.PhysicalCreate();
 }
 
+inline bool
+IsAbsoluteLink(const char * i_link)
+{
+    const char
+        shttp[] = "http://";
+    const char
+        sfile[] = "file://";
+    const int
+        csize = sizeof shttp - 1;
+    csv_assert(csize == sizeof sfile - 1);
+
+    return      strncmp(i_link,shttp,csize) == 0
+            OR  strncmp(i_link,sfile,csize) == 0;
+}
+
+
 const char *
 HtmlEnvironment_Idl::Link2Manual( const String & i_link ) const
 {
+    if ( IsAbsoluteLink(i_link.c_str()) )
+        return i_link;
+
     static StreamStr aLink_(200);
     aLink_.reset();
-    aCurPosition.Get_LinkToRoot(aLink_);
-    String sDvgRoot(pLayout->DevelopersGuideHtmlRoot());
+    String
+        sDvgRoot(pLayout->DevelopersGuideHtmlRoot());
     if (sDvgRoot.empty())
         sDvgRoot = "../DevelopersGuide";
+
+    // KORR_FUTURE
+    // Enhance performance by calculating this only one time:
+    if ( NOT IsAbsoluteLink(sDvgRoot.c_str()) )
+        aCurPosition.Get_LinkToRoot(aLink_);
     aLink_ << sDvgRoot
            << "/"
            << i_link;
