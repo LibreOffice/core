@@ -4,9 +4,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 15:33:26 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:56:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -378,8 +378,6 @@ sub determine_ship_directory
     my $shipdrive = $ENV{'SHIPDRIVE'};
 
     my $languagestring = $$languagesref;
-    if ( $installer::globals::is_unix_multi ) { $languagestring = $installer::globals::unixmultipath; }
-
     my $productstring = $installer::globals::product;
     my $productsubdir = "";
 
@@ -389,7 +387,7 @@ sub determine_ship_directory
         $productsubdir = $2;
     }
 
-    if (( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi )) { $productstring = $productstring . "_languagepack"; }
+    if ( $installer::globals::languagepack ) { $productstring = $productstring . "_languagepack"; }
     if ( $installer::globals::patch ) { $productstring = $productstring . "_patch"; }
 
     my $destdir = $shipdrive . $installer::globals::separator . $installer::globals::compiler .
@@ -639,7 +637,7 @@ sub check_java_for_xpd
 
 sub set_addchildprojects
 {
-    ($allvariables) = @_;
+    my ($allvariables) = @_;
 
     if (( $allvariables->{'JAVAPRODUCT'} ) ||
         ( $allvariables->{'ADAPRODUCT'} ) ||
@@ -653,7 +651,6 @@ sub set_addchildprojects
 
     my $infoline = "Value of \$installer::globals::addchildprojects: $installer::globals::addchildprojects\n";
     push( @installer::globals::globallogfileinfo, $infoline);
-
 }
 
 ####################################################################
@@ -662,12 +659,12 @@ sub set_addchildprojects
 
 sub set_addjavainstaller
 {
-    ($allvariables) = @_;
+    my ($allvariables) = @_;
 
     if ( $allvariables->{'JAVAINSTALLER'} ) { $installer::globals::addjavainstaller = 1; }
 
     if ( $installer::globals::patch ) { $installer::globals::addjavainstaller = 0; }
-    if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) ) { $installer::globals::addjavainstaller = 0; }
+    if ( $installer::globals::languagepack ) { $installer::globals::addjavainstaller = 0; }
     if ( $allvariableshashref->{'XPDINSTALLER'} ) { $installer::globals::addjavainstaller = 0; }
 
     my $infoline = "Value of \$installer::globals::addjavainstaller: $installer::globals::addjavainstaller\n";
@@ -680,12 +677,12 @@ sub set_addjavainstaller
 
 sub set_addsystemintegration
 {
-    ($allvariables) = @_;
+    my ($allvariables) = @_;
 
     if ( $allvariables->{'ADDSYSTEMINTEGRATION'} ) { $installer::globals::addsystemintegration = 1; }
 
     if ( $installer::globals::patch ) { $installer::globals::addsystemintegration = 0; }
-    if ( ( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi ) ) { $installer::globals::addsystemintegration = 0; }
+    if ( $installer::globals::languagepack ) { $installer::globals::addsystemintegration = 0; }
 
     my $infoline = "Value of \$installer::globals::addsystemintegration: $installer::globals::addsystemintegration\n";
     push( @installer::globals::globallogfileinfo, $infoline);
