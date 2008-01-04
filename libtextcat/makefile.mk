@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-23 16:53:35 $
+#   last change: $Author: obo $ $Date: 2008-01-04 15:02:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ ADDITIONAL_FILES= \
 #CONFIGURE_DIR=$(BUILD_DIR)
 
 #relative to CONFIGURE_DIR
-CONFIGURE_ACTION=configure
+CONFIGURE_ACTION=configure CFLAGS="$(EXTRA_CFLAGS)"
 CONFIGURE_FLAGS=
 
 BUILD_ACTION=make
