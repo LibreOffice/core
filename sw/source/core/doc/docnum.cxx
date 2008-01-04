@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:36:31 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:20:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1204,12 +1204,11 @@ void SwDoc::ChgNumRuleFmts( const SwNumRule& rRule, const String * pName )
     if( pRule )
     {
         SwUndoInsNum* pUndo = 0;
-        SwHistory* pHistory = 0;
-        if( DoesUndo() && pRule->IsAutoRule() )
+        if( DoesUndo() )
         {
             ClearRedo();
             pUndo = new SwUndoInsNum( *pRule, rRule );
-            pHistory = pUndo->GetHistory();
+            pUndo->GetHistory();
             AppendUndo( pUndo );
         }
         ::lcl_ChgNumRule( *this, rRule );
