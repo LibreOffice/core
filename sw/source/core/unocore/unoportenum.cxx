@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:38:55 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:22:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -512,6 +512,8 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                     if(!bRightMoveForbidden)
                     {
                         pUnoCrsr->Right(1,CRSR_SKIP_CHARS,FALSE,FALSE);
+                        if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
+                            break;
                         bAttrFound = sal_True;
                         ePortionType = PORTION_FIELD;
                     }
@@ -520,6 +522,8 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                     if(!bRightMoveForbidden)
                     {
                         pUnoCrsr->Right(1,CRSR_SKIP_CHARS,FALSE,FALSE);
+                        if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
+                            break; // Robust #i81708 content in covered cells
                         pUnoCrsr->Exchange();
                         bAttrFound = sal_True;
                         ePortionType = PORTION_FRAME;
@@ -530,6 +534,8 @@ Reference<XTextRange> lcl_ExportHints(SwpHints* pHints,
                     if(!bRightMoveForbidden)
                     {
                         pUnoCrsr->Right(1,CRSR_SKIP_CHARS,FALSE,FALSE);
+                        if( *pUnoCrsr->GetMark() == *pUnoCrsr->GetPoint() )
+                            break;
                         SwXTextPortion* pPortion;
                         xRef =  pPortion = new SwXTextPortion(pUnoCrsr, rParent, PORTION_FOOTNOTE);
                         Reference<XTextContent> xContent =
