@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stylepool.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:13:16 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:14:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ namespace {
     class Node
     {
         std::vector<Node*> mChildren; // child nodes, create by findChildNode(..)
-        StylePool::SfxItemSet_Pointer_t pItemSet; // shared pointer an inserted item set or nul
+        std::vector< StylePool::SfxItemSet_Pointer_t > aItemSet; // shared pointer an inserted item set or nul
         const SfxPoolItem *pItem;   // my pool item
         Node *pUpper;               // if I'm a child node that's my parent node
     public:
@@ -63,29 +63,24 @@ namespace {
         Node( const SfxPoolItem& rItem, Node* pParent ) : // child node Ctor
             pItem( rItem.Clone() ), pUpper( pParent ){}
         ~Node();
-        const bool hasItemSet() const { return 0 != pItemSet.get(); }
-        const StylePool::SfxItemSet_Pointer_t getItemSet() const { return pItemSet; }
-        void setItemSet( const SfxItemSet& rSet ){ pItemSet.reset( rSet.Clone() ); }
-        Node* findChildNode( const SfxPoolItem& rItem, bool bPoolable );
+        const bool hasItemSet() const { return 0 < aItemSet.size(); }
+        const StylePool::SfxItemSet_Pointer_t getItemSet() const { return aItemSet[aItemSet.size()-1]; }
+        void setItemSet( const SfxItemSet& rSet ){ aItemSet.push_back( StylePool::SfxItemSet_Pointer_t( rSet.Clone() ) ); }
+        Node* findChildNode( const SfxPoolItem& rItem );
         Node* nextItemSet( Node* pLast );
         const SfxPoolItem& getPoolItem() const { return *pItem; }
     };
 
-    Node* Node::findChildNode( const SfxPoolItem& rItem, bool bPoolable )
+    Node* Node::findChildNode( const SfxPoolItem& rItem )
     {
         Node* pNextNode = this;
         std::vector<Node*>::iterator aIter = mChildren.begin();
-        // Only poolable items are allowed to be reused,
-        // for non-poolable items allways newe nodes have to be created.
-        if( bPoolable )
+        while( aIter != mChildren.end() )
         {
-            while( aIter != mChildren.end() )
-            {
-                if( rItem.Which() == (*aIter)->getPoolItem().Which() &&
-                    rItem == (*aIter)->getPoolItem() )
-                    return *aIter;
-                ++aIter;
-            }
+            if( rItem.Which() == (*aIter)->getPoolItem().Which() &&
+                rItem == (*aIter)->getPoolItem() )
+                return *aIter;
+            ++aIter;
         }
         pNextNode = new Node( rItem, pNextNode );
         mChildren.push_back( pNextNode );
@@ -170,7 +165,7 @@ namespace {
                     return pNode->getItemSet();
             }
             pNode = pNode->nextItemSet( pNode );
-            if( pNode )
+            if( pNode && pNode->hasItemSet() )
                 return pNode->getItemSet();
         }
         return pReturn;
@@ -179,7 +174,7 @@ namespace {
     ::rtl::OUString Iterator::getName()
     {
         ::rtl::OUString aString;
-        if( pNode )
+        if( pNode && pNode->hasItemSet() )
             aString = StylePool::nameOf( pNode->getItemSet() );
         return aString;
     }
@@ -213,6 +208,7 @@ public:
 
 StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& rSet )
 {
+    bool bNonPoolable = false;
     Node* pCurNode = &aRoot[ rSet.GetParent() ];
     SfxItemIter aIter( rSet );
     const SfxPoolItem* pItem = aIter.GetCurItem();
@@ -220,11 +216,10 @@ StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& 
     // a complete empty SfxItemSet would stay at the root node.
     while( pItem )
     {
-        bool bPoolable = rSet.GetPool()->IsItemFlag(pItem->Which(), SFX_ITEM_POOLABLE );
-        pCurNode = pCurNode->findChildNode( *pItem, bPoolable );
-        // Optimization: If the last item wasn't poolable, we can stop inserting new nodes
-        // and insert our itemset directly into the last created node
-        pItem = bPoolable ? aIter.NextItem() : 0;
+        if( !rSet.GetPool()->IsItemFlag(pItem->Which(), SFX_ITEM_POOLABLE ) )
+            bNonPoolable = true;
+        pCurNode = pCurNode->findChildNode( *pItem );
+        pItem = aIter.NextItem();
     }
     // Every leaf node represents an inserted item set, but "non-leaf" nodes represents subsets
     // of inserted itemsets.
@@ -232,8 +227,12 @@ StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& 
     if( !pCurNode->hasItemSet() )
     {
         pCurNode->setItemSet( rSet );
+        bNonPoolable = false; // to avoid a double insertion
         ++nCount;
     }
+    // If rSet contains at least one non poolable item, a new itemset has to be inserted
+    if( bNonPoolable )
+        pCurNode->setItemSet( rSet );
 #ifdef DEBUG
     {
         sal_Int32 nCheck = -1;
@@ -244,7 +243,7 @@ StylePool::SfxItemSet_Pointer_t StylePoolImpl::insertItemSet( const SfxItemSet& 
         {
             ++nCheck;
             pTemp = pIter->getNext();
-            if( pTemp.get() == pCurNode->getItemSet().get() )
+            if( pCurNode->hasItemSet() && pTemp.get() == pCurNode->getItemSet().get() )
             {
                 ::rtl::OUString aStr = pIter->getName();
                 nNo = nCheck;
