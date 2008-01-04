@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 15:35:31 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:17:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -322,6 +322,7 @@ RCSETVERSION=
 
 
 DLLPOSTFIX=mi
+PCHPOST=.pch
 
 CSC*=$(FLIPCMD) csc
 VBC*=$(WRAPCMD) vbc
