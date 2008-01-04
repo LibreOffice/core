@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:24:22 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:21:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2749,6 +2749,17 @@ void SwTabFrm::MakeAll()
                     //Follow gleich gueltig gemacht werden.
                     if ( GetFollow() )
                     {
+                        // --> OD 2007-11-30 #i80924#
+                        // After a successful split assure that the first row
+                        // is invalid. When graphics are present, this isn't hold.
+                        // Note: defect i80924 could also be fixed, if it is
+                        // assured, that <SwLayNotify::bLowersComplete> is only
+                        // set, if all lower are valid *and* are correct laid out.
+                        if ( !bSplitError && GetFollow()->GetLower() )
+                        {
+                            GetFollow()->GetLower()->InvalidatePos();
+                        }
+                        // <--
                         SWRECTFNX( GetFollow() )
 
                         static BYTE nStack = 0;
