@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:45:04 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:24:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -513,18 +513,18 @@ void SwContentType::Init(sal_Bool* pbInvalidateWindow)
             SwClient * pFirst = aIter.GoStart();
             while(pFirst)
             {
-                if(((SwFmtFld*)pFirst)->GetTxtFld() &&
-                        ((SwFmtFld*)pFirst)->IsFldInDoc())
+                SwFmtFld* pFldFmtFirst = dynamic_cast<SwFmtFld*>(pFirst);
+                if( pFldFmtFirst && pFldFmtFirst->GetTxtFld() &&
+                      pFldFmtFirst->IsFldInDoc())
                 {
-                    SwField* pField = (SwField*)((SwFmtFld*)pFirst)
-                                                                    ->GetFld();
+                    SwField* pField = pFldFmtFirst->GetFld();
 
                     String sEntry = pField->GetPar2();
                     RemoveNewline(sEntry);
                     SwPostItContent* pCnt = new SwPostItContent(
                                         this,
                                         sEntry, // hier steht der Text
-                                        (const SwFmtFld*)pFirst,
+                                        pFldFmtFirst,
                                         nMemberCount);
                     pMember->Insert(pCnt);//, nMemberCount);
                     nMemberCount++;
@@ -855,17 +855,17 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
             SwClient * pFirst = aIter.GoStart();
             while(pFirst)
             {
-                if(((SwFmtFld*)pFirst)->GetTxtFld() &&
-                        ((SwFmtFld*)pFirst)->IsFldInDoc())
+                SwFmtFld* pFldFmtFirst = dynamic_cast<SwFmtFld*>(pFirst);
+                if(pFldFmtFirst && pFldFmtFirst->GetTxtFld() &&
+                        pFldFmtFirst->IsFldInDoc())
                 {
-                    SwField* pField = (SwField*)((SwFmtFld*)pFirst)
-                                                                    ->GetFld();
+                    SwField* pField = (SwField*)pFldFmtFirst->GetFld();
                     String sEntry = pField->GetPar2();
                     RemoveNewline(sEntry);
                     SwPostItContent* pCnt = new SwPostItContent(
                                         this,
                                         sEntry, // hier steht der Text
-                                        (const SwFmtFld*)pFirst,
+                                        pFldFmtFirst,
                                         nMemberCount);
                     pMember->Insert(pCnt);//, nMemberCount);
                     nMemberCount++;
