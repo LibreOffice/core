@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_writer.scp,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:58:46 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 17:12:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,11 +82,11 @@ Module gid_Module_Prg_Wrt_Bin
     gid_File_Xsl_MediaWiki);
 End
 
-Module gid_Module_Prg_Wrt_Help
-    MOD_NAME_DESC ( MODULE_PRG_WRT_HELP );
-    ParentID = gid_Module_Prg_Wrt;
-    Sortkey = "200";
-    Default = YES;
-    Minimal = YES;
-    Files = (gid_File_Help_Swriter_Zip);
-End
+// Module gid_Module_Prg_Wrt_Help
+//    MOD_NAME_DESC ( MODULE_PRG_WRT_HELP );
+//    ParentID = gid_Module_Prg_Wrt;
+//    Sortkey = "200";
+//    Default = YES;
+//    Minimal = YES;
+//    Files = (gid_File_Help_Swriter_Zip);
+// End
