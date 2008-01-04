@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 13:38:47 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 17:10:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,14 +100,6 @@ Module gid_Module_Root_Files_2
 	gid_File_Exe_Regdeinstall,
 	gid_File_Tmp_Inf_Oldreg,
 	gid_File_Tmp_Userinstall_Inf,
-	gid_File_Txt_License,
-	gid_File_Txt_License_Html,
-	gid_File_Txt_Readme,
-	gid_File_Txt_Readme_Html,
-	gid_File_License_License,
-	gid_File_License_License_Html,
-	gid_File_Readme_Readme,
-	gid_File_Readme_Readme_Html,
 	gid_File_Html_Thirdpartylicensereadme,
         gid_File_Config_Javasettingsunopkginstall);
 End
@@ -538,14 +530,11 @@ Module gid_Module_Root_Files_6
 	gid_File_Extra_Autotextuser,
 	gid_File_Extra_Cfgusr,
 	gid_File_Extra_Palettes,
-	gid_File_Extra_Palettes_Lang,
 	gid_File_Extra_Database,
 	gid_File_Extra_Databasebiblio,
 	gid_File_Extra_Gallsound,
 	gid_File_Extra_Autocorr,
 	gid_File_Extra_Autocorr_Lang,
-	gid_File_Extra_Autotextsharefull_Lang,
-	gid_File_Extra_Autotextshare_Lang,
 	gid_File_Extra_Gallroot,
 	gid_File_Extra_Gallbullets,
 	gid_File_Extra_Gallhtmlexpo,
@@ -558,15 +547,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Extra_Gallwwwgraf,
 	gid_File_Extra_Migration,
 	gid_File_Extra_Migration_Lang_Multi,
-	gid_File_Extra_Samnames_Lang,
-	gid_File_Extra_Tplwizdesktop_Lang,
-	gid_File_Extra_Tpllayoutimpr_Lang,
-	gid_File_Extra_Tplpresntimpr_Lang,
-	gid_File_Extra_Tplwizagenda_Lang,
-	gid_File_Extra_Tplwizbitmap,
-	gid_File_Extra_Tplwizfax_Lang,
 	gid_File_Extra_Tplwizletter,
-	gid_File_Extra_Tplwizletter_Lang,
 	gid_File_Extra_Tplwizletter_en_US,
 	gid_File_Extra_Tplwizletter_de,
 	gid_File_Extra_Tplwizletter_fr,
@@ -578,11 +559,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Extra_Tplwizletter_ko,
 	gid_File_Extra_Tplwizletter_zh_CN,
 	gid_File_Extra_Tplwizletter_zh_TW,
-	gid_File_Extra_Tplwizreport_Lang,
-	gid_File_Extra_Tplwizstyles_Lang,
 	gid_File_Extra_Tplwizmemo_Lang,
-	gid_File_Extra_Wordbook,
-	gid_File_Extra_Wordbook_Lang,
 	gid_File_Extra_Autotextuser_Lang,
 	gid_File_Extra_Dir_Fonts,
 	gid_File_Scripts_Beanshell,
@@ -861,9 +838,6 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Office_Ui_Mathwindowstate_Xcs,
 	gid_File_Oo_Office_Views_Xcu,
 	gid_File_Oo_TypeDetection_UISort_Xcu,
-	gid_File_Registry_Lang,
-	gid_File_Registry_Filter_Zip,
-	gid_File_Registry_Spool_Langpack_Lang,
 	gid_File_Registry_Spool_Oo_Office_Embedding_Chart_Xcu,
 	gid_File_Registry_Spool_Oo_TypeDetection_Base_Types_Xcu,
 	gid_File_Registry_Spool_Oo_TypeDetection_Base_Filters_Xcu,
@@ -874,10 +848,6 @@ Module gid_Module_Root_Files_6
 	gid_File_Registry_Spool_Oo_TypeDetection_InternalGraphics_Types_Xcu,
 	gid_File_Registry_Spool_Oo_TypeDetection_InternalGraphics_Filters_Xcu,
 	gid_File_Registry_Spool_Oo_Common_System_Xcu,
-	gid_File_Registry_Spool_Oo_Common_Cjk_Xcu,
-	gid_File_Registry_Spool_Oo_Common_Ctl_Xcu,
-	gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu,
-	gid_File_Registry_Spool_Oo_Common_Korean_Xcu,
 	gid_File_Registry_Spool_Oo_Office_Common_UseOOoFileDialogs_Xcu,
 	gid_File_Registry_Spool_Oo_Dataaccess_Adabasdriver_Xcu,
 	gid_File_Registry_Spool_Oo_Writer_javamail_Xcu,
@@ -949,107 +919,20 @@ Module gid_Module_Root_Files_7
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_7";
 	Description = "gid_Module_Root_Files_7";
-	Sortkey = "1700";
+	Sortkey = "1900";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Help_Common_Zip,
-	gid_File_Help_Help_Zip,
-	gid_File_Help_Sbasic_Zip,
-	gid_File_Help_Schart_Zip);
+	Files = (gid_File_Mozilla_Runtime,gid_File_Help_Help_Zip);
 End
+
+#ifdef UNX
+#if ! (defined(MACOSX) || defined (SYSTEM_FREETYPE))
 
 Module gid_Module_Root_Files_8
     PackageInfo = "packinfo_office.txt";
 	ParentID = gid_Module_Root;
 	Name = "gid_Module_Root_Files_8";
 	Description = "gid_Module_Root_Files_8";
-	Sortkey = "1800";
-	Default = YES;
-	Styles = (HIDDEN_ROOT);
-	Files = (
-	gid_File_Res_Basctl,
-	gid_File_Res_Bib,
-	gid_File_Res_Cal,
-	gid_File_Res_Chartcontroller,
-    gid_File_Res_Sdbt,
-	gid_File_Res_Dba,
-	gid_File_Res_Dbw,
-	gid_File_Res_Dkt,
-	gid_File_Res_Epb,
-	gid_File_Res_Epg,
-	gid_File_Res_Epp,
-	gid_File_Res_Eur,
-	gid_File_Res_Fps_Office,
-	gid_File_Res_Frm,
-	gid_File_Res_Fwe,
-	gid_File_Res_Gal,
-	gid_File_Res_Imp,
-	gid_File_Res_Deployment,
-	gid_File_Res_DeploymentGui,
-	gid_File_Res_Ofa,
-	gid_File_Res_Ooo,
-	gid_File_Res_Pcr,
-	gid_File_Res_Pdffilter,
-	gid_File_Res_Preload,
-	gid_File_Res_San,
-	gid_File_Res_Bf_Sch,
-	gid_File_Res_Bf_Svx,
-	gid_File_Res_Bf_Frm,
-	gid_File_Res_Bf_Ofa,
-	gid_File_Res_Bf_Sd,
-	gid_File_Res_Bf_Sw,
-	gid_File_Res_Bf_Sfx,
-	gid_File_Res_Productregistration,
-	gid_File_Res_Sd,
-	gid_File_Res_Sfx,
-	gid_File_Res_Spa,
-	gid_File_Res_Svs,
-	gid_File_Res_Svt,
-	gid_File_Res_Svp,
-	gid_File_Res_Svx,
-	gid_File_Res_TextConversionDlgs,
-	gid_File_Res_Sw,
-	gid_File_Res_Tab,
-	gid_File_Res_Tk,
-	gid_File_Res_Acc,
-	gid_File_Res_Tpl,
-	gid_File_Res_Uui,
-	gid_File_Res_Vcl,
-	gid_File_Res_Wzi,
-	gid_File_Res_Xsltdlg,
-	gid_File_Res_AVMedia,
-	gid_File_Res_XMLSecurity,
-	gid_File_Res_Dbext,
-	gid_File_Res_Gallery,
-	gid_File_Res_Iso,
-	gid_File_Res_Stt,
-	gid_File_Res_Tfu,
-	gid_File_Res_Eps,
-	gid_File_Res_Egi,
-	gid_File_Res_Ept,
-	gid_File_Res_Eme,
-    gid_File_Res_UpdChk);
-End
-
-Module gid_Module_Root_Files_9
-    PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Name = "gid_Module_Root_Files_9";
-	Description = "gid_Module_Root_Files_9";
-	Sortkey = "1900";
-	Default = YES;
-	Styles = (HIDDEN_ROOT);
-	Files = (gid_File_Mozilla_Runtime);
-End
-
-#ifdef UNX
-#if ! (defined(MACOSX) || defined (SYSTEM_FREETYPE))
-
-Module gid_Module_Root_Files_10
-    PackageInfo = "packinfo_office.txt";
-	ParentID = gid_Module_Root;
-	Name = "gid_Module_Root_Files_10";
-	Description = "gid_Module_Root_Files_10";
 	Sortkey = "2000";
 	Default = YES;
 	Styles = (HIDDEN_ROOT);
