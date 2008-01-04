@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 10:42:17 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:08:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -739,11 +739,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 Reference< frame::XModel > xModel( mxSrcDoc, UNO_QUERY );
 //then base URL
                 aContext.BaseURL = xModel->getURL();
-// get options
-//              SvtSaveOptions aSaveOpt;
 //relative link option is private to PDF Export filter and limited to local filesystem only
                 aContext.RelFsys = mbExportRelativeFsysLinks;
-//              aContext.RelInet = aSaveOpt.IsSaveRelINet();
 //determine the default acton for PDF links
                 switch( mnDefaultLinkAction )
                 {
@@ -752,14 +749,14 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 case 0:
                     aContext.DefaultLinkAction = PDFWriter::URIAction;
                     break;
-//view PDF through an Internet browser
-                case 1:
-                    aContext.DefaultLinkAction = PDFWriter::URIActionDestination;
-                    break;
 //view PDF through the reader application
-                case 2:
+                case 1:
                     aContext.ForcePDFAction = sal_True;
                     aContext.DefaultLinkAction = PDFWriter::LaunchAction;
+                    break;
+//view PDF through an Internet browser
+                case 2:
+                    aContext.DefaultLinkAction = PDFWriter::URIActionDestination;
                     break;
                 }
                 aContext.ConvertOOoTargetToPDFTarget = mbConvertOOoTargetToPDFTarget;
