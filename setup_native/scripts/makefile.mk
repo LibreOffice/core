@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 13:18:33 $
+#   last change: $Author: obo $ $Date: 2008-01-04 14:16:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,6 @@ $(BIN)$/install: install_$(OS:l).sh
 .ENDIF
 
 .IF "$(OS)" == "LINUX"
-.INCLUDE : packtools.mk
 
 $(FAKEDB) : fake-db.spec 
     $(MKDIRHIER) $(FAKEDBROOT)
