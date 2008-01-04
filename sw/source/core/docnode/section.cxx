@@ -4,9 +4,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 12:18:23 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:20:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1503,6 +1503,15 @@ void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
                     pCpyRg = new SwNodeRange( pSrcDoc->GetNodes().GetEndOfExtras(), 2,
                                           pSrcDoc->GetNodes().GetEndOfContent() );
 
+                // --> OD 2007-11-30 #i81653#
+                // Update links of extern linked document or extern linked
+                // document section, if section is protected.
+                if ( pSrcDoc != pDoc &&
+                     rSection.IsProtectFlag() )
+                {
+                    pSrcDoc->GetLinkManager().UpdateAllLinks( FALSE, TRUE, FALSE, 0 );
+                }
+                // <--
                 if( pCpyRg )
                 {
                     SwNodeIndex& rInsPos = pPam->GetPoint()->nNode;
