@@ -4,9 +4,9 @@
 #
 #   $RCSfile: languages.pm,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 13:34:48 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:57:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,38 +52,10 @@ sub analyze_languagelist
 
     $first =~ s/\_/\,/g;    # substituting "_" by ",", in case of dmake definition 01_49
 
-    # Checking if this is a multilingual installation set on Unix (languagelist contains ",")
     # Products are separated by a "#", if defined in zip-list by a "|". But "get_info_about_languages"
     # substitutes already "|" to "#". This procedure only knows "#" as product separator.
     # Different languages for one product are separated by ",". But on the command line the "_" is used.
     # Therefore "_" is replaced by "," at the beginning of this procedure.
-
-    if (( $installer::globals::compiler =~ /unx/ ) && ( $first =~ /\,/ ))
-    {
-        $installer::globals::is_unix_multi = 1;
-        my $infoline = "This is a multilingual unix product (\$installer::globals::is_unix_multi set true)\n";
-        push(@installer::globals::globallogfileinfo, $infoline);
-    }
-
-    if ( $installer::globals::is_unix_multi )
-    {
-        if ( $installer::globals::languagelist =~ /\#/ )
-        {
-            installer::exiter::exit_program("ERROR: Hash not allowed in language list for Unix multlingual installation sets: $installer::globals::languagelist", "analyze_languagelist");
-        }
-
-        $first =~ s/\,/\#/g; # !!! That is the trick, to make different products for Unix multilingual installation sets
-
-        $installer::globals::unixmultipath = $installer::globals::languagelist;
-        $installer::globals::unixmultipath =~ s/\,/\_/g;    # hashes not allowed, comma to underline
-        $installer::globals::alllanguagesinproductarrayref = installer::converter::convert_stringlist_into_array(\$installer::globals::unixmultipath, "_");
-
-        $installer::globals::unixmultipath_orig = $installer::globals::unixmultipath;
-        if (length($installer::globals::unixmultipath) > 120) {
-            chomp(my $shorter = `echo $installer::globals::unixmultipath | md5sum | sed -e "s/  -//g"` );
-            $installer::globals::unixmultipath = $shorter;
-        }
-    }
 
     while ($first =~ /^(\S+)\#(\S+?)$/) # Minimal matching, to keep the order of languages
     {
