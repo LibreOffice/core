@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-25 15:02:19 $
+#   last change: $Author: obo $ $Date: 2008-01-04 14:58:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 .ELSE
 .IF "$(SYSBASE)"!=""
-xml2_CFLAGS+=-I$(SYSBASE)$/usr$/include
+xml2_CFLAGS+=-I$(SYSBASE)$/usr$/include 
 .IF "$(COMNAME)"=="sunpro5"
 xml2_CFLAGS+=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
@@ -93,7 +93,7 @@ xml2_LDFLAGS+=-Wl,-z,noexecstack
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS)"
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS)" CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS) $(EXTRA_LINKFLAGS)"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
