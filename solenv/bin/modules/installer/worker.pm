@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.57 $
+#   $Revision: 1.58 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 13:16:38 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:59:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -394,7 +394,6 @@ sub create_installation_directory
     my $installdir = "";
 
     my $languageref = $languagestringref;
-    if ( $installer::globals::is_unix_multi ) { $languageref = \$installer::globals::unixmultipath; }
 
     if ( $installer::globals::updatepack )
     {
@@ -2023,9 +2022,6 @@ sub create_jds_sets
 
     installer::logger::include_header_into_logfile("Creating jds installation sets:");
 
-    # special handling for unix multi language installation sets
-    if ( $installer::globals::is_unix_multi ) { $languagestringref = \$installer::globals::unixmultipath; }
-
     my $firstdir = $installationdir;
     installer::pathanalyzer::get_path_from_fullqualifiedname(\$firstdir);
 
@@ -2104,10 +2100,7 @@ sub check_jds_language
 
     installer::sorter::sorting_array_of_strings($sortedarray1);
 
-    my $languagesstring = $$languagestringref;
-    if ($installer::globals::is_unix_multi) { $languagestring = $installer::globals::unixmultipath; }
-
-    my $sortedarray2 = installer::converter::convert_stringlist_into_array(\$languagestring, "_");
+    my $sortedarray2 = installer::converter::convert_stringlist_into_array($languagestringref, "_");
     installer::sorter::sorting_array_of_strings($sortedarray2);
 
     my $string1 = installer::converter::convert_array_to_comma_separated_string($sortedarray1);
@@ -2877,6 +2870,33 @@ sub resolving_hidden_flag
 
     $infoline = "\n";
     push( @installer::globals::logfileinfo, $infoline);
+}
+
+################################################
+# Controlling that all keys in hash A are
+# also key in hash B.
+################################################
+
+sub key_in_a_is_also_key_in_b
+{
+    my ( $hashref_a, $hashref_b) = @_;
+
+    my $returnvalue = 1;
+
+    my $key;
+    foreach $key ( keys %{$hashref_a} )
+    {
+        if ( ! exists($hashref_b->{$key}) )
+        {
+            print "AAA: Not in B: $key\n";
+            print "*****\n";
+            foreach $keyb ( keys %{$hashref_b} ) { print "$keyb : $hashref_b->{$keyb}\n"; }
+            print "*****\n";
+            $returnvalue = 0;
+        }
+    }
+
+    return $returnvalue;
 }
 
 1;
