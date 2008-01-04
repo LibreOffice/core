@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2007-11-09 10:41:11 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:14:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -113,15 +113,24 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
-SHL1STDLIBS += gdi32.lib
-SHL1STDLIBS += ddraw.lib
-SHL1STDLIBS += gdiplus.lib
+SHL1STDLIBS += $(GDI32LIB)
+SHL1STDLIBS += $(DDRAWLIB)
+SHL1STDLIBS += $(GDIPLUSLIB)
 
 .IF "$(USE_DIRECTX5)"!=""
+.IF "$(COM)" == "GCC"
+SHL1STDLIBS += $(DIRECTXSDK_LIB)/d3dx.lib
+.ELSE
 SHL1STDLIBS += d3dx.lib
+.ENDIF
 .ELSE # "$(USE_DIRECTX5)
+.IF "$(COM)" == "GCC"
+SHL1STDLIBS += $(DIRECTXSDK_LIB)/d3dx9.lib
+SHL1STDLIBS += $(DIRECTXSDK_LIB)/dxguid.lib
+.ELSE
 SHL1STDLIBS += d3dx9.lib     # directx 9
 SHL1STDLIBS += dxguid.lib    # directx 9
+.ENDIF
 .ENDIF # "$(USE_DIRECTX5)
 
 .IF "$(dx_debug_images)"!="" || "$(DX_DEBUG_IMAGES)"!=""
@@ -155,9 +164,13 @@ SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 DEF2NAME=$(SHL2TARGET)
 DEF2EXPORTFILE=exports.dxp
 
-SHL2STDLIBS += gdi32.lib
+SHL2STDLIBS += $(GDI32LIB)
+.IF "$(COM)" == "GCC"
+SHL2STDLIBS += $(DIRECTXSDK_LIB)/d3d9.lib
+.ELSE
 SHL2STDLIBS += d3d9.lib
-SHL2STDLIBS += gdiplus.lib
+.ENDIF
+SHL2STDLIBS += $(GDIPLUSLIB)
 
 .IF "$(dx_debug_images)"!="" || "$(DX_DEBUG_IMAGES)"!=""
 SHL2STDLIBS += imdebug.lib
