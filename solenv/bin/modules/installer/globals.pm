@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 15:33:46 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:56:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@ BEGIN
     $prog="make_installer.pl";
 
     @noMSLocaleLangs = ( "br", "dz", "km", "nr", "ns", "rw", "ss", "st", "tg", "ts", "tn", "ve", "xh", "zu" , "ne" , "bn", "bn-BD", "bn-IN", "lo", "cy" , "ku" , "as-IN" , "te-IN" , "ml-IN" , "mr-IN", "ur-IN", "ta-IN", "or-IN" , "ti-ER" , "eo" , "ka" ,"ga" , "uk"  );
+    @items_at_modules = ("Files", "Dirs", "Unixlinks");
     @asianlanguages = ("ja", "ko", "zh-CN", "zh-TW");
 
     $ziplistname = "";
@@ -123,6 +124,7 @@ BEGIN
     $max_lang_length = 50;
     $globalblock = "Globals";
     $rootmodulegid = "";
+    %alllangmodules = ();
 
     $is_special_epm = 0;
     $epm_in_path = 0;
@@ -174,7 +176,6 @@ BEGIN
 
     $ismultilingual = 0;
     @multilanguagemodules = ();
-    $languagemodulesparent = "gid_Module_Langpack_Base";
     $languagemodulesbase = "gid_Module_Root_";
     %alluniquefilenames = ();
     %alllcuniquefilenames = ();
@@ -298,7 +299,7 @@ BEGIN
     @featurecollector =();
     $msiassemblyfiles = "";
     $nsisfilename = "Nsis.mlf";
-    $linuxlinkrpms = "gid_Module_Root_Files_3,gid_Module_Root_Files_4,gid_Module_Root_Files_5";
+    $linuxlinkrpms = "";
     $extensioninstalldir = "gid_Dir_Share_Extension_Install";
     @languagenames = ();
     @requiredpackages = ();
