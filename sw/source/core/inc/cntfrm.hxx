@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cntfrm.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:44:13 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:21:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,14 @@ class SwCntntFrm: public SwFrm, public SwFlowFrm
 {
     friend void MakeNxt( SwFrm *pFrm, SwFrm *pNxt );    //ruft MakePrtArea
 
-    BOOL _WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMove );
+    // --> OD 2007-11-26 #b6614158#
+    // parameter <bObjsInNewUpper>, indicating that objects are existing in
+    // remaining area of new upper
+    BOOL _WouldFit( SwTwips nSpace,
+                    SwLayoutFrm *pNewUpper,
+                    BOOL bTstMove,
+                    const bool bObjsInNewUpper );
+    // <--
     virtual void MakeAll();
 
     void _UpdateAttr( SfxPoolItem*, SfxPoolItem*, BYTE &,
