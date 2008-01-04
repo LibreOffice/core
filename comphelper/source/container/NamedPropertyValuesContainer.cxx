@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NamedPropertyValuesContainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:06:22 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:37:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
+#include <com/sun/star/uno/XComponentContext.hpp>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
@@ -55,6 +58,7 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+
 
 #include <map>
 
@@ -66,7 +70,7 @@ DECLARE_STL_USTRINGACCESS_MAP( uno::Sequence<beans::PropertyValue>, NamedPropert
 uno::Sequence< rtl::OUString > SAL_CALL NamedPropertyValuesContainer_getSupportedServiceNames() throw();
 rtl::OUString SAL_CALL NamedPropertyValuesContainer_getImplementationName() throw();
 uno::Reference< uno::XInterface > SAL_CALL NamedPropertyValuesContainer_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception );
+                const uno::Reference< uno::XComponentContext > & rxContext ) throw( uno::Exception );
 
 class NamedPropertyValuesContainer : public cppu::WeakImplHelper2< container::XNameContainer, lang::XServiceInfo >
 {
@@ -245,7 +249,7 @@ rtl::OUString SAL_CALL NamedPropertyValuesContainer_getImplementationName() thro
 }
 
 uno::Reference< uno::XInterface > SAL_CALL NamedPropertyValuesContainer_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & ) throw( uno::Exception )
+                const uno::Reference< uno::XComponentContext >&) throw( uno::Exception )
 {
     return (cppu::OWeakObject*)new NamedPropertyValuesContainer();
 }
