@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 14:58:33 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:12:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,7 @@ using namespace ::xmloff::token;
 #define PROP_DEFAULTTARGET  "DefaultTarget"
 #define PROP_EDITINGCYCLES  "EditingCycles"
 #define PROP_EDITINGDURATION "EditingDuration"
+#define PROP_GENERATOR      "Generator"
 
 #define PROP_CHARLOCALE     "Language"
 #define PROP_DOCSTATISTIC   "DocumentStatistic"
@@ -786,6 +787,15 @@ void SfxXMLMetaElementContext::EndElement()
                     }
                 }
                 catch( Exception& )
+                {
+                }
+
+                try
+                {
+                    if ( xInfoProp.is() )
+                        xInfoProp->setPropertyValue( ::rtl::OUString::createFromAscii( PROP_GENERATOR ), uno::makeAny( sContent ) );
+                }
+                catch( uno::Exception& )
                 {
                 }
             }
