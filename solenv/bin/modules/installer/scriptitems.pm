@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 13:16:53 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:58:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -284,6 +284,32 @@ sub remove_uninstall_regitems_from_script
 }
 
 ##############################################################################
+# Searching the language module for a specified language
+##############################################################################
+
+sub get_languagespecific_module
+{
+    my ( $lang, $modulestring ) = @_;
+
+    my $langmodulestring = "";
+
+    my $module;
+    foreach $module ( keys %installer::globals::alllangmodules )
+    {
+        if (( $installer::globals::alllangmodules{$module} eq $lang ) && ( $modulestring =~ /\b$module\b/ ))
+        {
+            $langmodulestring = "$langmodulestring,$module";
+        }
+    }
+
+    $langmodulestring =~ s/^\s*,//;
+
+    if ( $langmodulestring eq "" ) { installer::exiter::exit_program("ERROR: No language pack module found for language $lang in string \"$modulestring\"!", "get_languagespecific_module");  }
+
+    return $langmodulestring;
+}
+
+##############################################################################
 # Removing all items in product lists which do not have the correct languages
 ##############################################################################
 
@@ -335,12 +361,62 @@ sub resolving_all_languages_in_productlists
 
                 $oneitemhash{'specificlanguage'} = $onelanguage;
 
+                if ( $oneitemhash{'haslanguagemodule'} )
+                {
+                    my $langmodulestring = get_languagespecific_module($onelanguage, $oneitemhash{'modules'});
+                    $oneitemhash{'modules'} = $langmodulestring;
+                }
+
                 push(@itemsinalllanguages, \%oneitemhash);
             }
         }
     }
 
     return \@itemsinalllanguages;
+}
+
+################################################################################
+# Removing all modules, that have the flag LANGUAGEMODULE, but do not
+# have the correct language
+################################################################################
+
+sub remove_not_required_language_modules
+{
+    my ($modulesarrayref, $languagesarrayref) = @_;
+
+    my @allmodules = ();
+
+    for ( my $i = 0; $i <= $#{$modulesarrayref}; $i++ )
+    {
+        my $module = ${$modulesarrayref}[$i];
+        my $styles = "";
+        if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
+
+        if ( $styles =~ /\bLANGUAGEMODULE\b/ )
+        {
+            if ( ! exists($module->{'Language'}) ) { installer::exiter::exit_program("ERROR: \"$module->{'gid'}\" has flag LANGUAGEMODULE, but does not know its language!", "remove_not_required_language_modules"); }
+            my $modulelanguage = $module->{'Language'};
+            # checking, if language is required
+            my $doinclude = 0;
+            for ( my $j = 0; $j <= $#{$languagesarrayref}; $j++ )
+            {
+                my $onelanguage = ${$languagesarrayref}[$j];
+                if ( $onelanguage eq $modulelanguage )
+                {
+                    $doinclude = 1;
+                    last;
+                }
+            }
+
+            if ( $doinclude ) { push(@allmodules, $module); }
+        }
+        else
+        {
+            push(@allmodules, $module);
+        }
+    }
+
+    return \@allmodules;
 }
 
 ################################################################################
@@ -1693,7 +1769,7 @@ sub collect_directories_with_create_flag_from_directoryarray
             my $directoryname = "";
 
             if ( $onedir->{'HostName'} ) { $directoryname = $onedir->{'HostName'}; }
-            else { installer::exiter::exit_program("ERROR: No directory name (HostName) set for specified language in gid $onedir->{'gid'}", "assigning_modules_to_items"); }
+            else { installer::exiter::exit_program("ERROR: No directory name (HostName) set for specified language in gid $onedir->{'gid'}", "collect_directories_with_create_flag_from_directoryarray"); }
 
             my $alreadyincluded = installer::existence::exists_in_array_of_hashes($searchkey, $directoryname, $directoriesforepmarrayref);
 
@@ -1746,7 +1822,7 @@ sub collect_directories_with_create_flag_from_directoryarray
             {
                 my $directoryname = "";
                 if ( $onedir->{'HostName'} ) { $directoryname = $onedir->{'HostName'}; }
-                else { installer::exiter::exit_program("ERROR: No directory name (HostName) set for specified language in gid $onedir->{'gid'}", "assigning_modules_to_items"); }
+                else { installer::exiter::exit_program("ERROR: No directory name (HostName) set for specified language in gid $onedir->{'gid'}", "collect_directories_with_create_flag_from_directoryarray"); }
 
                 my $alreadyincluded = installer::existence::exists_in_array_of_hashes($searchkey, $directoryname, $directoriesforepmarrayref);
 
@@ -1954,6 +2030,8 @@ sub get_string_of_modulegids_for_itemgid
     if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::get_string_of_modulegids_for_itemgid : $#{$modulesref} : $itemgid : $itemname"); }
 
     my $allmodules = "";
+    my $haslanguagemodule = 0;
+    my %foundmodules = ();
 
     for ( my $i = 0; $i <= $#{$modulesref}; $i++ )
     {
@@ -1965,12 +2043,23 @@ sub get_string_of_modulegids_for_itemgid
         if ( $allitems =~ /\b$itemgid\b/i )
         {
             $allmodules = $allmodules . "," . $onemodule->{'gid'};
+            $foundmodules{$onemodule->{'gid'}} = 1;
+
+            # Is this module a language module? This info should be stored at the file.
+            if ( exists($installer::globals::alllangmodules{$onemodule->{'gid'}}) ) { $haslanguagemodule = 1; }
         }
     }
 
     $allmodules =~ s/^\s*\,//;  # removing leading comma
 
-    return $allmodules;
+    # Check: All modules or no module must have flag LANGUAGEMODULE
+    if ( $haslanguagemodule )
+    {
+        my $isreallylanguagemodule = installer::worker::key_in_a_is_also_key_in_b(\%foundmodules, \%installer::globals::alllangmodules);
+        if ( ! $isreallylanguagemodule ) { installer::exiter::exit_program("ERROR: \"$itemgid\" is assigned to modules with flag \"LANGUAGEMODULE\" and also to modules without this flag! Modules: $allmodules", "get_string_of_modulegids_for_itemgid");  }
+    }
+
+    return ($allmodules, $haslanguagemodule);
 }
 
 ########################################################
@@ -1984,6 +2073,10 @@ sub assigning_modules_to_items
 
     if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::scriptitems::assigning_modules_to_items : $#{$modulesref} : $#{$itemsref} : $itemname"); }
 
+    my $infoline = "";
+    my $languageassignmenterror = 0;
+    my @languageassignmenterrors = ();
+
     for ( my $i = 0; $i <= $#{$itemsref}; $i++ )
     {
         my $oneitem = ${$itemsref}[$i];
@@ -1996,15 +2089,39 @@ sub assigning_modules_to_items
 
         # every item can belong to many modules
 
-        my $modulegids = get_string_of_modulegids_for_itemgid($modulesref, $itemgid, $itemname);
+        my ($modulegids, $haslanguagemodule) = get_string_of_modulegids_for_itemgid($modulesref, $itemgid, $itemname);
 
         if ($modulegids eq "")
         {
-            installer::exiter::exit_program("ERROR in file collection: No module found for file $oneitem->{'Name'}", "assigning_modules_to_items");
+            installer::exiter::exit_program("ERROR in file collection: No module found for $itemname $itemgid", "assigning_modules_to_items");
         }
 
         $oneitem->{'modules'} = $modulegids;
+        $oneitem->{'haslanguagemodule'} = $haslanguagemodule;
+
+        # Important check: "ismultilingual" and "haslanguagemodule" must have the same value !
+        if (( $oneitem->{'ismultilingual'} ) && ( ! $oneitem->{'haslanguagemodule'} ))
+        {
+            $infoline = "Error: \"$oneitem->{'gid'}\" is multi lingual, but not in language pack (Assigned module: $modulegids)!\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+            push( @languageassignmenterrors, $infoline );
+            $languageassignmenterror = 1;
+        }
+        if (( $oneitem->{'haslanguagemodule'} ) && ( ! $oneitem->{'ismultilingual'} ))
+        {
+            $infoline = "Error: \"$oneitem->{'gid'}\" is in language pack, but not multi lingual (Assigned module: $modulegids)!\n";
+            push( @installer::globals::globallogfileinfo, $infoline);
+            push( @languageassignmenterrors, $infoline );
+            $languageassignmenterror = 1;
+        }
     }
+
+    if ($languageassignmenterror)
+    {
+        for ( my $i = 0; $i <= $#languageassignmenterrors; $i++ ) { print "$languageassignmenterrors[$i]"; }
+        installer::exiter::exit_program("ERROR: Incorrect assignments for language packs.", "assigning_modules_to_items");
+    }
+
 }
 
 #################################################################################################
@@ -2153,6 +2270,98 @@ sub set_children_flag
         else
         {
             $onefeature->{'has_children'} = 0;
+        }
+    }
+}
+
+#################################################################################
+# All modules, that use a template module, do now get the assignments of
+# the template module.
+#################################################################################
+
+sub resolve_assigned_modules
+{
+    my ($modulesref) = @_;
+
+    # collecting all template modules
+
+    my %directaccess = ();
+
+    for ( my $i = 0; $i <= $#{$modulesref}; $i++ )
+    {
+        my $onefeature = ${$modulesref}[$i];
+        my $styles = "";
+        if ( $onefeature->{'Styles'} ) { $styles = $onefeature->{'Styles'}; }
+        if ( $styles =~ /\bTEMPLATEMODULE\b/ ) { $directaccess{$onefeature->{'gid'}} = $onefeature; }
+    }
+
+    # looking, where template modules are assigned
+
+    for ( my $i = 0; $i <= $#{$modulesref}; $i++ )
+    {
+        my $onefeature = ${$modulesref}[$i];
+        if ( $onefeature->{'Assigns'} )
+        {
+            my $templategid = $onefeature->{'Assigns'};
+
+            if ( ! exists($directaccess{$templategid}) )
+            {
+                installer::exiter::exit_program("ERROR: Did not find definition of assigned template module \"$templategid\"", "resolve_assigned_modules");
+            }
+
+            # Currently no merging of Files, Dirs, ...
+            # This has to be included here, if it is required
+            my $item;
+            foreach $item (@installer::globals::items_at_modules)
+            {
+                if ( exists($directaccess{$templategid}->{$item}) ) { $onefeature->{$item} = $directaccess{$templategid}->{$item}; }
+            }
+        }
+    }
+}
+
+#################################################################################
+# Removing the template modules from the list, after all
+# assignments are transferred to the "real" modules.
+#################################################################################
+
+sub remove_template_modules
+{
+    my ($modulesref) = @_;
+
+    my @modules = ();
+
+    for ( my $i = 0; $i <= $#{$modulesref}; $i++ )
+    {
+        my $onefeature = ${$modulesref}[$i];
+        my $styles = "";
+        if ( $onefeature->{'Styles'} ) { $styles = $onefeature->{'Styles'}; }
+        if ( $styles =~ /\bTEMPLATEMODULE\b/ ) { next; }
+
+        push(@modules, $onefeature);
+    }
+
+    return \@modules;
+}
+
+#################################################################################
+# Collecting all modules with flag LANGUAGEMODULE in a global
+# collector.
+#################################################################################
+
+sub collect_all_languagemodules
+{
+    my ($modulesref) = @_;
+
+    for ( my $i = 0; $i <= $#{$modulesref}; $i++ )
+    {
+        my $onefeature = ${$modulesref}[$i];
+        my $styles = "";
+        if ( $onefeature->{'Styles'} ) { $styles = $onefeature->{'Styles'}; }
+        if ( $styles =~ /\bLANGUAGEMODULE\b/ )
+        {
+            if ( ! exists($onefeature->{'Language'}) ) { installer::exiter::exit_program("ERROR: \"$onefeature->{'gid'}\" has flag LANGUAGEMODULE, but does not know its language!", "collect_all_languagemodules"); }
+            $installer::globals::alllangmodules{$onefeature->{'gid'}} = $onefeature->{'Language'};
         }
     }
 }
