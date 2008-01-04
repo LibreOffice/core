@@ -1,5 +1,5 @@
-*** misc/mozilla/build/autoconf/mozconfig-find	Fri Jul 16 14:13:24 2004
---- misc/build/mozilla/build/autoconf/mozconfig-find	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/build/autoconf/mozconfig-find	Fri Jul 16 20:13:24 2004
+--- misc/build/mozilla/build/autoconf/mozconfig-find	Fri Nov 16 12:42:22 2007
 ***************
 *** 51,60 ****
                  $topsrcdir/.mozconfig \
@@ -20,8 +20,8 @@
   do
     if test -f $_config; then
       echo $_config;
-*** misc/mozilla/build/cygwin-wrapper	Thu Oct 30 17:05:56 2003
---- misc/build/mozilla/build/cygwin-wrapper	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/build/cygwin-wrapper	Thu Oct 30 22:05:56 2003
+--- misc/build/mozilla/build/cygwin-wrapper	Fri Nov 16 12:42:22 2007
 ***************
 *** 1,4 ****
 ! #!/bin/sh
@@ -84,8 +84,8 @@
                       fi
                   fi
               fi
-*** misc/mozilla/calendar/Makefile.in	Sat Apr 10 10:27:46 2004
---- misc/build/mozilla/calendar/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/calendar/Makefile.in	Sat Apr 10 16:27:46 2004
+--- misc/build/mozilla/calendar/Makefile.in	Fri Nov 16 12:42:22 2007
 ***************
 *** 106,112 ****
   	mkdir -p ./xpi/bin/chrome
@@ -103,8 +103,8 @@
   	cp libxpical/_xpidlgen/calendar.xpt ./xpi/bin/components
   	cp $(srcdir)/resources/content/calendarService.js ./xpi/bin/components
   	cp -r $(srcdir)/resources/locale ./xpi/resources
-*** misc/mozilla/calendar/sunbird/Makefile.in	Wed Apr  7 15:18:59 2004
---- misc/build/mozilla/calendar/sunbird/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/calendar/sunbird/Makefile.in	Wed Apr  7 21:18:59 2004
+--- misc/build/mozilla/calendar/sunbird/Makefile.in	Fri Nov 16 12:42:22 2007
 ***************
 *** 71,87 ****
   sunbird::sunbirddirs sunbirdunix
@@ -184,8 +184,8 @@
   	cp $(topsrcdir)/dist/bin/components/docshell*.xpt ./MozillaSunbird/components
   
   sunbirdunix::
-*** misc/mozilla/config/Makefile.in	Mon Nov  1 14:30:40 2004
---- misc/build/mozilla/config/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/config/Makefile.in	Mon Nov  1 19:30:40 2004
+--- misc/build/mozilla/config/Makefile.in	Fri Nov 16 12:42:22 2007
 ***************
 *** 135,141 ****
   
@@ -203,8 +203,8 @@
   endif
   
   build_number: FORCE
-*** misc/mozilla/config/config.mk	Tue Oct 12 00:13:31 2004
---- misc/build/mozilla/config/config.mk	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/config/config.mk	Tue Oct 12 06:13:31 2004
+--- misc/build/mozilla/config/config.mk	Fri Nov 16 12:42:22 2007
 ***************
 *** 771,776 ****
 --- 771,793 ----
@@ -231,8 +231,8 @@
   # Include any personal overrides the user might think are needed.
   #
   -include $(MY_CONFIG)
-*** misc/mozilla/config/rules.mk	Thu Jun 24 14:58:48 2004
---- misc/build/mozilla/config/rules.mk	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/config/rules.mk	Thu Jun 24 20:58:48 2004
+--- misc/build/mozilla/config/rules.mk	Fri Nov 16 12:42:22 2007
 ***************
 *** 516,523 ****
   ifeq ($(OS_ARCH),WINNT)
@@ -263,8 +263,8 @@
   	$(ELOG) $(XPIDL_COMPILE) -m header -w -I$(srcdir) -I$(IDL_DIR) -o $(XPIDL_GEN_DIR)/$* $(_VPATH_SRCS)
   	@if test -n "$(findstring $*.h, $(EXPORTS) $(SDK_HEADERS))"; \
   	  then echo "*** WARNING: file $*.h generated from $*.idl overrides $(srcdir)/$*.h"; else true; fi
-*** misc/mozilla/configure	Tue Oct 12 00:13:29 2004
---- misc/build/mozilla/configure	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/configure	Tue Oct 12 06:13:29 2004
+--- misc/build/mozilla/configure	Fri Nov 16 12:42:22 2007
 ***************
 *** 5228,5234 ****
       ;;
@@ -283,6 +283,17 @@
   	DSO_LDOPTS="-shared"
       fi
 ***************
+*** 5476,5483 ****
+      case "$host" in
+      *-mingw*|*-cygwin*|*-msvc*|*-mks*)
+  
+-         MOZ_BUILD_ROOT=`cygpath -w $MOZ_BUILD_ROOT | sed -e 's|\\\\|/|g'`
+- 
+      if test -z "$MOZ_TOOLS"; then
+          { echo "configure: error: MOZ_TOOLS is not set" 1>&2; exit 1; }
+      fi
+--- 5476,5481 ----
+***************
 *** 5895,5901 ****
          MKCSHLIB='$(CC) $(CFLAGS) $(DSO_PIC_FLAGS) -G -Wl,-z -Wl,muldefs -o $@'
          MKSHLIB_FORCE_ALL='-Qoption ld -z,allextract'
@@ -291,7 +302,7 @@
          AR_LIST="$AR t"
          AR_EXTRACT="$AR x"
          AR_DELETE="$AR d"
---- 5895,5901 ----
+--- 5893,5899 ----
          MKCSHLIB='$(CC) $(CFLAGS) $(DSO_PIC_FLAGS) -G -Wl,-z -Wl,muldefs -o $@'
          MKSHLIB_FORCE_ALL='-Qoption ld -z,allextract'
          MKSHLIB_UNFORCE_ALL=''
@@ -301,7 +312,7 @@
          AR_DELETE="$AR d"
 ***************
 *** 7504,7509 ****
---- 7504,7511 ----
+--- 7502,7509 ----
   case $target in
   *-hpux11.*)
   	;;
@@ -325,8 +336,8 @@
       CC="\$(CYGWIN_WRAPPER) $CC"
       CXX="\$(CYGWIN_WRAPPER) $CXX"
       CPP="\$(CYGWIN_WRAPPER) $CPP"
-*** misc/mozilla/configure.in	Tue Oct 12 00:13:29 2004
---- misc/build/mozilla/configure.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/configure.in	Tue Oct 12 06:13:29 2004
+--- misc/build/mozilla/configure.in	Fri Nov 16 12:42:22 2007
 ***************
 *** 1006,1012 ****
       ;;
@@ -374,7 +385,7 @@
   	;;
 ***************
 *** 5692,5699 ****
---- 5692,5703 ----
+--- 5694,5705 ----
   dnl ========================================================
   case "$host_os" in
   mingw*|cygwin*|msvc*|mks*)
@@ -387,8 +398,8 @@
       CC="\$(CYGWIN_WRAPPER) $CC"
       CXX="\$(CYGWIN_WRAPPER) $CXX"
       CPP="\$(CYGWIN_WRAPPER) $CPP"
-*** misc/mozilla/directory/c-sdk/build.mk	Tue Sep 14 17:14:38 2004
---- misc/build/mozilla/directory/c-sdk/build.mk	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/directory/c-sdk/build.mk	Tue Sep 14 23:14:38 2004
+--- misc/build/mozilla/directory/c-sdk/build.mk	Fri Nov 16 12:42:22 2007
 ***************
 *** 367,373 ****
   ifdef NS_USE_GCC
@@ -406,8 +417,27 @@
   else
   DEBUG_LINK_OPT=/DEBUG
   ifeq ($(BUILD_OPT), 1)
-*** misc/mozilla/directory/c-sdk/config/Makefile	Tue Feb 10 23:01:16 2004
---- misc/build/mozilla/directory/c-sdk/config/Makefile	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/directory/c-sdk/config/FreeBSD.mk	Tue Mar 26 22:51:46 2002
+--- misc/build/mozilla/directory/c-sdk/config/FreeBSD.mk	Fri Nov 16 12:42:22 2007
+***************
+*** 66,72 ****
+  
+  ARCH			= freebsd
+  
+! MOZ_OBJFORMAT          := $(shell test -x /usr/bin/objformat && /usr/bin/objformat || echo aout)
+  
+  ifeq ($(MOZ_OBJFORMAT),elf)
+  DLL_SUFFIX		= so
+--- 66,72 ----
+  
+  ARCH			= freebsd
+  
+! MOZ_OBJFORMAT          := $(shell test -x /usr/bin/objformat && /usr/bin/objformat || echo elf)
+  
+  ifeq ($(MOZ_OBJFORMAT),elf)
+  DLL_SUFFIX		= so
+*** misc/mozilla/directory/c-sdk/config/Makefile	Wed Feb 11 05:01:16 2004
+--- misc/build/mozilla/directory/c-sdk/config/Makefile	Fri Nov 16 12:43:58 2007
 ***************
 *** 48,58 ****
   
@@ -459,20 +489,19 @@
   
   ifeq ($(MOZ_OS2_TOOLS),VACPP)
 ***************
-*** 114,121 ****
---- 118,127 ----
+*** 114,120 ****
+--- 118,126 ----
   
   OUTOPTION = -o # end of the line
   ifeq (,$(filter-out WINNT OS2,$(OS_ARCH)))
 + ifndef NS_USE_GCC
   OUTOPTION = /Fe
-  endif
 + endif
+  endif
   
   # Redefine MAKE_OBJDIR for just this directory
-  define MAKE_OBJDIR
-*** misc/mozilla/directory/c-sdk/config/autoconf.mk.in	Fri Mar  7 15:57:13 2003
---- misc/build/mozilla/directory/c-sdk/config/autoconf.mk.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/directory/c-sdk/config/autoconf.mk.in	Fri Mar  7 21:57:13 2003
+--- misc/build/mozilla/directory/c-sdk/config/autoconf.mk.in	Fri Nov 16 12:42:22 2007
 ***************
 *** 25,30 ****
 --- 25,31 ----
@@ -483,27 +512,8 @@
   ASM_SUFFIX	= @ASM_SUFFIX@
   PROG_SUFFIX	= @PROG_SUFFIX@
   MOD_NAME	= @NSPR_MODNAME@
-*** misc/mozilla/directory/c-sdk/config/FreeBSD.mk	Tue Mar 26 16:51:46 2002
---- misc/build/mozilla/directory/c-sdk/config/FreeBSD.mk	Wed Apr  4 20:56:05 2007
-***************
-*** 66,72 ****
-  
-  ARCH			= freebsd
-  
-! MOZ_OBJFORMAT          := $(shell test -x /usr/bin/objformat && /usr/bin/objformat || echo aout)
-  
-  ifeq ($(MOZ_OBJFORMAT),elf)
-  DLL_SUFFIX		= so
---- 66,72 ----
-  
-  ARCH			= freebsd
-  
-! MOZ_OBJFORMAT          := $(shell test -x /usr/bin/objformat && /usr/bin/objformat || echo elf)
-  
-  ifeq ($(MOZ_OBJFORMAT),elf)
-  DLL_SUFFIX		= so
-*** misc/mozilla/directory/c-sdk/config/cygwin-wrapper	Wed Apr  2 19:22:39 2003
---- misc/build/mozilla/directory/c-sdk/config/cygwin-wrapper	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/directory/c-sdk/config/cygwin-wrapper	Thu Apr  3 01:22:39 2003
+--- misc/build/mozilla/directory/c-sdk/config/cygwin-wrapper	Fri Nov 16 12:42:22 2007
 ***************
 *** 1,4 ****
 ! #!/bin/sh
@@ -564,8 +574,8 @@
 !    done
   fi
   exec $prog $args
-*** misc/mozilla/directory/c-sdk/configure	Tue Sep 14 17:14:38 2004
---- misc/build/mozilla/directory/c-sdk/configure	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/directory/c-sdk/configure	Tue Sep 14 23:14:38 2004
+--- misc/build/mozilla/directory/c-sdk/configure	Fri Nov 16 12:42:22 2007
 ***************
 *** 2830,2835 ****
 --- 2830,2836 ----
@@ -585,7 +595,7 @@
       if test "$MOZ_OBJFORMAT" = "elf"; then
           DLL_SUFFIX=so
       else
---- 3465,3471 ----
+--- 3466,3472 ----
   EOF
   
       CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
@@ -661,8 +671,8 @@
   s%@ASM_SUFFIX@%$ASM_SUFFIX%g
   s%@PROG_SUFFIX@%$PROG_SUFFIX%g
   s%@MKSHLIB@%$MKSHLIB%g
-*** misc/mozilla/directory/c-sdk/configure.in	Tue Sep 14 17:14:38 2004
---- misc/build/mozilla/directory/c-sdk/configure.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/directory/c-sdk/configure.in	Tue Sep 14 23:14:38 2004
+--- misc/build/mozilla/directory/c-sdk/configure.in	Fri Nov 16 12:42:22 2007
 ***************
 *** 511,516 ****
 --- 511,517 ----
@@ -682,7 +692,7 @@
       if test "$MOZ_OBJFORMAT" = "elf"; then
           DLL_SUFFIX=so
       else
---- 896,902 ----
+--- 897,903 ----
       AC_DEFINE(FREEBSD)
       AC_DEFINE(HAVE_BSD_FLOCK)
       CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
@@ -741,8 +751,8 @@
   AC_SUBST(ASM_SUFFIX)
   AC_SUBST(PROG_SUFFIX)
   AC_SUBST(MKSHLIB)
-*** misc/mozilla/directory/c-sdk/ldap/libraries/libldap/Makefile.in	Wed Mar 10 13:47:25 2004
---- misc/build/mozilla/directory/c-sdk/ldap/libraries/libldap/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/directory/c-sdk/ldap/libraries/libldap/Makefile.in	Wed Mar 10 19:47:25 2004
+--- misc/build/mozilla/directory/c-sdk/ldap/libraries/libldap/Makefile.in	Fri Nov 16 12:42:23 2007
 ***************
 *** 93,99 ****
   HDIR		= $(topsrcdir)/ldap/include
@@ -760,8 +770,8 @@
   
   INSTALLDIR	= $(DIST)/$(OBJDIR_NAME)
   
-*** misc/mozilla/directory/c-sdk/ldap/libraries/libprldap/Makefile.in	Wed Mar 10 13:47:26 2004
---- misc/build/mozilla/directory/c-sdk/ldap/libraries/libprldap/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/directory/c-sdk/ldap/libraries/libprldap/Makefile.in	Wed Mar 10 19:47:26 2004
+--- misc/build/mozilla/directory/c-sdk/ldap/libraries/libprldap/Makefile.in	Fri Nov 16 12:42:23 2007
 ***************
 *** 46,52 ****
   LIBPRLDAP =
@@ -779,8 +789,8 @@
   
   INSTALLDIR      = $(DIST)/$(OBJDIR_NAME)
   
-*** misc/mozilla/directory/c-sdk/ldap/libraries/libssldap/Makefile	Tue Feb 10 23:01:15 2004
---- misc/build/mozilla/directory/c-sdk/ldap/libraries/libssldap/Makefile	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/directory/c-sdk/ldap/libraries/libssldap/Makefile	Wed Feb 11 05:01:15 2004
+--- misc/build/mozilla/directory/c-sdk/ldap/libraries/libssldap/Makefile	Fri Nov 16 12:43:59 2007
 ***************
 *** 41,47 ****
   HDIR		= $(topsrcdir)/ldap/include
@@ -817,17 +827,17 @@
               comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib \
               rpcrt4.lib uuid.lib odbc32.lib odbccp32.lib winmm.lib
 ***************
-*** 106,111 ****
---- 115,121 ----
+*** 105,110 ****
+--- 114,120 ----
+  EXTRA_LIBS += $(dist_libdir)/$(SOFTOKN_LIBNAME).lib
   endif
   EXTRA_LIBS += $(dist_libdir)/$(SSL_LIBNAME).lib
-  endif
 + endif
+  endif
   
   ifeq ($(OS_ARCH),OS2)
-  EXTRA_LIBS = $(OS_LIBS)
-*** misc/mozilla/directory/c-sdk/ldap/libraries/libssldap/Makefile.in	Fri Mar  7 15:57:17 2003
---- misc/build/mozilla/directory/c-sdk/ldap/libraries/libssldap/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/directory/c-sdk/ldap/libraries/libssldap/Makefile.in	Fri Mar  7 21:57:17 2003
+--- misc/build/mozilla/directory/c-sdk/ldap/libraries/libssldap/Makefile.in	Fri Nov 16 12:42:23 2007
 ***************
 *** 40,46 ****
   HDIR		= $(topsrcdir)/ldap/include
@@ -845,8 +855,8 @@
   
   INSTALLDIR      = $(DIST)/$(OBJDIR_NAME)
   
-*** misc/mozilla/embedding/browser/gtk/src/Makefile.in	Thu Apr  8 15:18:25 2004
---- misc/build/mozilla/embedding/browser/gtk/src/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/embedding/browser/gtk/src/Makefile.in	Thu Apr  8 21:18:25 2004
+--- misc/build/mozilla/embedding/browser/gtk/src/Makefile.in	Fri Nov 16 12:42:23 2007
 ***************
 *** 111,117 ****
   		gtkmozembed_internal.h
@@ -881,10 +891,10 @@
   		$(MOZ_COMPONENT_LIBS) \
   		$(NULL)
   endif
-*** misc/mozilla/embedding/browser/gtk/tests/Makefile.in	Mon Oct  6 22:43:00 2003
---- misc/build/mozilla/embedding/browser/gtk/tests/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/embedding/browser/gtk/tests/Makefile.in	Tue Oct  7 04:43:00 2003
+--- misc/build/mozilla/embedding/browser/gtk/tests/Makefile.in	Fri Nov 16 12:42:23 2007
 ***************
-*** 46,55 ****
+*** 46,54 ****
   		TestGtkEmbedNotebook.cpp \
   		TestGtkEmbedSocket.cpp \
   		TestGtkEmbedChild.cpp
@@ -894,21 +904,19 @@
   
   # ENABLE_GNOME=1
   
-  ifdef ENABLE_GNOME
---- 46,56 ----
+--- 46,55 ----
   		TestGtkEmbedNotebook.cpp \
   		TestGtkEmbedSocket.cpp \
   		TestGtkEmbedChild.cpp
   
   SIMPLE_PROGRAMS = $(CPPSRCS:.cpp=)
-  
-+ endif
 + 
++ endif
+  
   # ENABLE_GNOME=1
   
-  ifdef ENABLE_GNOME
-*** misc/mozilla/embedding/config/Makefile.in	Mon Jul  7 04:02:25 2003
---- misc/build/mozilla/embedding/config/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/embedding/config/Makefile.in	Mon Jul  7 10:02:25 2003
+--- misc/build/mozilla/embedding/config/Makefile.in	Fri Nov 16 12:42:23 2007
 ***************
 *** 85,91 ****
   	$(NSINSTALL) -t $(srcdir)/installed-chrome.txt $(DIST)/Embed/chrome
@@ -926,8 +934,8 @@
   endif
   ifeq ($(OS_ARCH),WINNT)
   ifeq ($(WINAPP),mfcembed)
-*** misc/mozilla/extensions/p3p/Makefile.in	Thu Dec  4 13:20:16 2003
---- misc/build/mozilla/extensions/p3p/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/extensions/p3p/Makefile.in	Thu Dec  4 19:20:16 2003
+--- misc/build/mozilla/extensions/p3p/Makefile.in	Fri Nov 16 12:42:23 2007
 ***************
 *** 62,84 ****
   p3p200010.xsl: resources/content/p3p.xsl.in Makefile.in
@@ -977,8 +985,8 @@
   	$(PP) -DNAMESPACE=http://www.w3.org/2002/01/P3Pv1 \
 ! 	-DHAS_CALL_OURS -DHAS_PURPOSE_SRC \
   	$< > $@
-*** misc/mozilla/extensions/pref/autoconfig/src/Makefile.in	Wed Jan  7 08:36:25 2004
---- misc/build/mozilla/extensions/pref/autoconfig/src/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/extensions/pref/autoconfig/src/Makefile.in	Wed Jan  7 14:36:25 2004
+--- misc/build/mozilla/extensions/pref/autoconfig/src/Makefile.in	Fri Nov 16 12:42:23 2007
 ***************
 *** 68,74 ****
   endif
@@ -996,8 +1004,8 @@
                      $(LIBS_DIR) \
                      $(MOZ_JS_LIBS) \
                      $(MOZ_COMPONENT_LIBS) \
-*** misc/mozilla/extensions/sql/build/Makefile.in	Sun Feb  8 16:51:04 2004
---- misc/build/mozilla/extensions/sql/build/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/extensions/sql/build/Makefile.in	Sun Feb  8 22:51:04 2004
+--- misc/build/mozilla/extensions/sql/build/Makefile.in	Fri Nov 16 12:42:23 2007
 ***************
 *** 52,56 ****
   	cd $(DIST); zip -r $(XPI_FILE) \
@@ -1011,8 +1019,8 @@
   	bin/components/sqlpgsql.xpt \
 ! 	bin/components/$(DLL_PREFIX)sql$(DLL_SUFFIX) \
   	bin/chrome/sql.jar
-*** misc/mozilla/gfx/idl/nsIFreeType2.idl	Thu Apr 15 21:09:33 2004
---- misc/build/mozilla/gfx/idl/nsIFreeType2.idl	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/gfx/idl/nsIFreeType2.idl	Fri Apr 16 03:09:33 2004
+--- misc/build/mozilla/gfx/idl/nsIFreeType2.idl	Fri Nov 16 12:42:23 2007
 ***************
 *** 76,85 ****
   native FT_Sfnt_Tag(FT_Sfnt_Tag);
@@ -1089,8 +1097,8 @@
   /* #ifdef MOZ_SVG */
       void glyphTransform(in FT_Glyph glyph, in FT_Matrix_p matrix,
                           in FT_Vector_p delta);
-*** misc/mozilla/gfx/src/freetype/nsFreeType.cpp	Sat Feb  7 10:22:30 2004
---- misc/build/mozilla/gfx/src/freetype/nsFreeType.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/gfx/src/freetype/nsFreeType.cpp	Sat Feb  7 16:22:30 2004
+--- misc/build/mozilla/gfx/src/freetype/nsFreeType.cpp	Fri Nov 16 12:42:23 2007
 ***************
 *** 111,117 ****
     {"FT_Outline_Decompose",    NS_FT2_OFFSET(nsFT_Outline_Decompose),    PR_TRUE},
@@ -1184,8 +1192,8 @@
   {
     *aCache = mImageCache;
     return NS_OK;
-*** misc/mozilla/gfx/src/freetype/nsFreeType.h	Fri Apr 16 17:31:42 2004
---- misc/build/mozilla/gfx/src/freetype/nsFreeType.h	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/gfx/src/freetype/nsFreeType.h	Fri Apr 16 23:31:42 2004
+--- misc/build/mozilla/gfx/src/freetype/nsFreeType.h	Fri Nov 16 12:42:23 2007
 ***************
 *** 104,116 ****
   typedef FT_Error (*FT_New_Face_t)(FT_Library, const char*, FT_Long, FT_Face*);
@@ -1249,8 +1257,8 @@
   
     static nsHashtable   *sFontFamilies;
     static nsHashtable   *sRange1CharSetNames;
-*** misc/mozilla/gfx/src/gtk/Makefile.in	Mon Nov 10 07:24:51 2003
---- misc/build/mozilla/gfx/src/gtk/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/gfx/src/gtk/Makefile.in	Mon Nov 10 13:24:51 2003
+--- misc/build/mozilla/gfx/src/gtk/Makefile.in	Fri Nov 16 12:42:23 2007
 ***************
 *** 176,181 ****
 --- 176,185 ----
@@ -1264,8 +1272,8 @@
   ifeq ($(OS_ARCH), SunOS)
   ifndef GNU_CC
   # When using Sun's WorkShop compiler, including
-*** misc/mozilla/gfx/src/ps/nsFontMetricsPS.cpp	Wed Feb  4 20:57:05 2004
---- misc/build/mozilla/gfx/src/ps/nsFontMetricsPS.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/gfx/src/ps/nsFontMetricsPS.cpp	Thu Feb  5 02:57:05 2004
+--- misc/build/mozilla/gfx/src/ps/nsFontMetricsPS.cpp	Fri Nov 16 12:42:23 2007
 ***************
 *** 1141,1150 ****
     
@@ -1360,8 +1368,8 @@
     if (NS_FAILED(rv))
       return;
    
-*** misc/mozilla/gfx/src/ps/nsFontMetricsPS.h	Tue Apr 22 12:25:09 2003
---- misc/build/mozilla/gfx/src/ps/nsFontMetricsPS.h	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/gfx/src/ps/nsFontMetricsPS.h	Tue Apr 22 18:25:09 2003
+--- misc/build/mozilla/gfx/src/ps/nsFontMetricsPS.h	Fri Nov 16 12:42:23 2007
 ***************
 *** 320,326 ****
     nsCOMPtr<nsITrueTypeFontCatalogEntry> mFaceID;
@@ -1396,8 +1404,8 @@
   };
   #endif
   
-*** misc/mozilla/gfx/src/windows/nsDeviceContextWin.cpp	Mon Jun  7 18:17:11 2004
---- misc/build/mozilla/gfx/src/windows/nsDeviceContextWin.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/gfx/src/windows/nsDeviceContextWin.cpp	Tue Jun  8 00:17:11 2004
+--- misc/build/mozilla/gfx/src/windows/nsDeviceContextWin.cpp	Fri Nov 16 12:42:23 2007
 ***************
 *** 378,384 ****
 --- 378,388 ----
@@ -1440,8 +1448,8 @@
                         acp, acplen, NULL, NULL);
         if ( outlen > 0)
            acp[outlen] = '\0';  // null terminate
-*** misc/mozilla/gfx/src/windows/nsFontMetricsWin.cpp	Sat Oct 16 00:14:42 2004
---- misc/build/mozilla/gfx/src/windows/nsFontMetricsWin.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/gfx/src/windows/nsFontMetricsWin.cpp	Sat Oct 16 06:14:42 2004
+--- misc/build/mozilla/gfx/src/windows/nsFontMetricsWin.cpp	Fri Nov 16 12:42:23 2007
 ***************
 *** 1259,1265 ****
 --- 1259,1269 ----
@@ -1617,8 +1625,8 @@
                                          buf, nb, nsnull, nsnull);
   }
   
-*** misc/mozilla/gfx/src/windows/nsRenderingContextWin.cpp	Wed Feb  4 20:57:06 2004
---- misc/build/mozilla/gfx/src/windows/nsRenderingContextWin.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/gfx/src/windows/nsRenderingContextWin.cpp	Thu Feb  5 02:57:06 2004
+--- misc/build/mozilla/gfx/src/windows/nsRenderingContextWin.cpp	Fri Nov 16 12:42:23 2007
 ***************
 *** 2939,2955 ****
 --- 2939,2967 ----
@@ -1665,8 +1673,8 @@
             && (inStr[0] == outStr[1]) ) {
           gBidiInfo = GCP_REORDER;
   #ifdef NS_DEBUG
-*** misc/mozilla/gfx/src/x11shared/nsFontFreeType.cpp	Thu Dec 25 03:24:52 2003
---- misc/build/mozilla/gfx/src/x11shared/nsFontFreeType.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/gfx/src/x11shared/nsFontFreeType.cpp	Thu Dec 25 09:24:52 2003
+--- misc/build/mozilla/gfx/src/x11shared/nsFontFreeType.cpp	Fri Nov 16 12:42:23 2007
 ***************
 *** 177,183 ****
     FTC_Manager mgr;
@@ -1785,8 +1793,8 @@
     mFt2->GetImageCache(&icache);
     if (!icache)
       return 0;
-*** misc/mozilla/gfx/src/x11shared/nsFontFreeType.h	Tue Apr 22 12:25:13 2003
---- misc/build/mozilla/gfx/src/x11shared/nsFontFreeType.h	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/gfx/src/x11shared/nsFontFreeType.h	Tue Apr 22 18:25:13 2003
+--- misc/build/mozilla/gfx/src/x11shared/nsFontFreeType.h	Fri Nov 16 12:42:24 2007
 ***************
 *** 110,116 ****
     XImage *GetXImage(PRUint32 width, PRUint32 height);
@@ -1804,8 +1812,8 @@
     nsCOMPtr<nsIFreeType2> mFt2;
   };
   
-*** misc/mozilla/jpeg/jmorecfg.h	Thu Mar 25 21:17:16 2004
---- misc/build/mozilla/jpeg/jmorecfg.h	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/jpeg/jmorecfg.h	Fri Mar 26 02:17:16 2004
+--- misc/build/mozilla/jpeg/jmorecfg.h	Fri Nov 16 12:42:24 2007
 ***************
 *** 108,115 ****
   /* Defines for MMX/SSE2 support. */
@@ -1825,8 +1833,8 @@
   #endif
   
   /* Compressed datastreams are represented as arrays of JOCTET.
-*** misc/mozilla/js/src/xpconnect/src/Makefile.in	Wed Jan  7 08:36:33 2004
---- misc/build/mozilla/js/src/xpconnect/src/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/js/src/xpconnect/src/Makefile.in	Wed Jan  7 14:36:33 2004
+--- misc/build/mozilla/js/src/xpconnect/src/Makefile.in	Fri Nov 16 12:42:24 2007
 ***************
 *** 148,151 ****
   .NOTPARALLEL::
@@ -1834,8 +1842,8 @@
   endif
 - 
 --- 148,150 ----
-*** misc/mozilla/layout/svg/renderer/src/libart/nsSVGLibartGlyphMetricsFT.cpp	Thu Mar 18 21:36:16 2004
---- misc/build/mozilla/layout/svg/renderer/src/libart/nsSVGLibartGlyphMetricsFT.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/layout/svg/renderer/src/libart/nsSVGLibartGlyphMetricsFT.cpp	Fri Mar 19 02:36:16 2004
+--- misc/build/mozilla/layout/svg/renderer/src/libart/nsSVGLibartGlyphMetricsFT.cpp	Fri Nov 16 12:42:24 2007
 ***************
 *** 440,458 ****
       return;
@@ -1877,8 +1885,8 @@
     NS_ASSERTION(mFace, "failed to get face/size");
   }
   
-*** misc/mozilla/mailnews/addrbook/src/Makefile.in	Mon Oct  6 13:48:56 2003
---- misc/build/mozilla/mailnews/addrbook/src/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/Makefile.in	Mon Oct  6 19:48:56 2003
+--- misc/build/mozilla/mailnews/addrbook/src/Makefile.in	Fri Nov 16 12:42:24 2007
 ***************
 *** 86,91 ****
 --- 86,92 ----
@@ -1889,8 +1897,8 @@
   		$(NULL)
   
   EXPORTS		= \
-*** misc/mozilla/mailnews/addrbook/src/nsAbBoolExprToLDAPFilter.cpp	Fri Oct 11 04:17:13 2002
---- misc/build/mozilla/mailnews/addrbook/src/nsAbBoolExprToLDAPFilter.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbBoolExprToLDAPFilter.cpp	Fri Oct 11 10:17:13 2002
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbBoolExprToLDAPFilter.cpp	Fri Nov 16 12:42:24 2007
 ***************
 *** 39,44 ****
 --- 39,45 ----
@@ -2030,8 +2038,8 @@
 +         }
 +     }
 + }
-*** misc/mozilla/mailnews/addrbook/src/nsAbBoolExprToLDAPFilter.h	Fri Sep 28 16:06:21 2001
---- misc/build/mozilla/mailnews/addrbook/src/nsAbBoolExprToLDAPFilter.h	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbBoolExprToLDAPFilter.h	Fri Sep 28 22:06:21 2001
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbBoolExprToLDAPFilter.h	Fri Nov 16 12:42:24 2007
 ***************
 *** 42,47 ****
 --- 42,48 ----
@@ -2061,8 +2069,8 @@
   };
   
   #endif
-*** misc/mozilla/mailnews/addrbook/src/nsAbLDAPDirectory.cpp	Fri Feb 13 21:09:27 2004
---- misc/build/mozilla/mailnews/addrbook/src/nsAbLDAPDirectory.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbLDAPDirectory.cpp	Sat Feb 14 03:09:27 2004
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbLDAPDirectory.cpp	Fri Nov 16 12:42:24 2007
 ***************
 *** 118,128 ****
   
@@ -2176,8 +2184,8 @@
               + NS_LITERAL_CSTRING(".protocolVersion")).get(),
           getter_Copies(protocolVersion));
   
-*** misc/mozilla/mailnews/addrbook/src/nsAbLDAPDirectoryQuery.cpp	Fri Feb 13 21:09:27 2004
---- misc/build/mozilla/mailnews/addrbook/src/nsAbLDAPDirectoryQuery.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbLDAPDirectoryQuery.cpp	Sat Feb 14 03:09:27 2004
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbLDAPDirectoryQuery.cpp	Fri Nov 16 12:42:24 2007
 ***************
 *** 74,80 ****
           PRInt32 resultLimit = -1,
@@ -2280,8 +2288,8 @@
       messageListener = _messageListener;
       nsVoidKey key (NS_REINTERPRET_CAST(void *,contextID));
   
-*** misc/mozilla/mailnews/addrbook/src/nsAbLDAPDirectoryQuery.h	Fri Feb 13 21:09:27 2004
---- misc/build/mozilla/mailnews/addrbook/src/nsAbLDAPDirectoryQuery.h	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbLDAPDirectoryQuery.h	Sat Feb 14 03:09:27 2004
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbLDAPDirectoryQuery.h	Fri Nov 16 12:42:24 2007
 ***************
 *** 74,79 ****
 --- 74,80 ----
@@ -2292,8 +2300,8 @@
       nsCOMPtr<nsILDAPURL> mDirectoryUrl; // the URL for the server
       PRUint32 mProtocolVersion; // version of LDAP (see nsILDAPConnection.idl)
   
-*** misc/mozilla/mailnews/addrbook/src/nsAbLDAPProperties.cpp	Sat Mar 22 11:43:29 2003
---- misc/build/mozilla/mailnews/addrbook/src/nsAbLDAPProperties.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbLDAPProperties.cpp	Sat Mar 22 16:43:29 2003
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbLDAPProperties.cpp	Fri Nov 16 12:42:24 2007
 ***************
 *** 39,44 ****
 --- 39,45 ----
@@ -2498,11 +2506,13 @@
   
       return NS_REINTERPRET_CAST(const MozillaLdapPropertyRelation *, mLdapToMozilla.Get(&key)) ;
 ***************
-*** 289,291 ****
---- 298,361 ----
+*** 287,291 ****
+--- 296,361 ----
+          }
+      }
   
-      return rv;
-  }
++     return rv;
++ }
 + 
 + // Parse the input string which may contain a single ldap attribute or multiple attributes in the form
 + // "string" or "string1,string2,string3" respectively and assign to the array.
@@ -2562,10 +2572,10 @@
 +     }
 + 
 +     nsCRT::free(LDAPProperty);
-+     return rv;
-+ }
-*** misc/mozilla/mailnews/addrbook/src/nsAbLDAPProperties.h	Tue Apr  9 05:27:24 2002
---- misc/build/mozilla/mailnews/addrbook/src/nsAbLDAPProperties.h	Thu Mar 29 14:27:08 2007
+      return rv;
+  }
+*** misc/mozilla/mailnews/addrbook/src/nsAbLDAPProperties.h	Tue Apr  9 11:27:24 2002
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbLDAPProperties.h	Fri Nov 16 12:42:24 2007
 ***************
 *** 85,90 ****
 --- 85,91 ----
@@ -2576,8 +2586,8 @@
   };
   
   #endif
-*** misc/mozilla/mailnews/addrbook/src/nsAbMD5sum.cpp	Thu Mar 29 14:34:48 2007
---- misc/build/mozilla/mailnews/addrbook/src/nsAbMD5sum.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbMD5sum.cpp	Wed Nov 21 14:38:28 2007
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbMD5sum.cpp	Fri Nov 16 12:42:24 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3215,8 +3225,8 @@
 ! 		return 1;
 ! 	return strcmp(newSum,sum);
 ! }
-*** misc/mozilla/mailnews/addrbook/src/nsAbMDBCardProperty.cpp	Tue Nov 12 14:19:56 2002
---- misc/build/mozilla/mailnews/addrbook/src/nsAbMDBCardProperty.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbMDBCardProperty.cpp	Tue Nov 12 20:19:56 2002
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbMDBCardProperty.cpp	Fri Nov 16 12:42:24 2007
 ***************
 *** 266,273 ****
   	if (mCardDatabase)
@@ -3235,8 +3245,8 @@
   	}
   	else
   		return NS_ERROR_FAILURE;
-*** misc/mozilla/mailnews/addrbook/src/nsAbMDBDirectory.cpp	Tue Mar  9 09:42:24 2004
---- misc/build/mozilla/mailnews/addrbook/src/nsAbMDBDirectory.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbMDBDirectory.cpp	Tue Mar  9 15:42:24 2004
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbMDBDirectory.cpp	Fri Nov 16 12:42:24 2007
 ***************
 *** 537,543 ****
           }
@@ -3288,8 +3298,8 @@
   }
   
   NS_IMETHODIMP nsAbMDBDirectory::DropCard(nsIAbCard* aCard, PRBool needToCopyCard)
-*** misc/mozilla/mailnews/addrbook/src/nsAbOutlookCard.cpp	Tue Mar  9 10:18:40 2004
---- misc/build/mozilla/mailnews/addrbook/src/nsAbOutlookCard.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbOutlookCard.cpp	Tue Mar  9 16:18:40 2004
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbOutlookCard.cpp	Fri Nov 16 12:42:24 2007
 ***************
 *** 97,102 ****
 --- 97,103 ----
@@ -3444,8 +3454,8 @@
       }
       delete [] properties ;
       nsXPIDLString unichar ;
-*** misc/mozilla/mailnews/addrbook/src/nsAbOutlookDirFactory.cpp	Tue Feb 25 16:36:33 2003
---- misc/build/mozilla/mailnews/addrbook/src/nsAbOutlookDirFactory.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbOutlookDirFactory.cpp	Tue Feb 25 22:36:33 2003
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbOutlookDirFactory.cpp	Fri Nov 16 12:42:24 2007
 ***************
 *** 124,131 ****
       nsCAutoString uri ;
@@ -3465,8 +3475,8 @@
           buildAbWinUri(kOutlookDirectoryScheme, abType, uri) ;
           uri.Append(entryId) ;
           
-*** misc/mozilla/mailnews/addrbook/src/nsAbOutlookDirectory.cpp	Thu Feb  5 13:33:06 2004
---- misc/build/mozilla/mailnews/addrbook/src/nsAbOutlookDirectory.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbOutlookDirectory.cpp	Thu Feb  5 19:33:06 2004
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbOutlookDirectory.cpp	Fri Nov 16 12:42:24 2007
 ***************
 *** 126,132 ****
           PRINTF(("Cannot get type.\n")) ;
@@ -3959,8 +3969,8 @@
               nsMapiEntry parentEntry ;
               nsMapiEntry temporaryEntry ;
   
-*** misc/mozilla/mailnews/addrbook/src/nsAbOutlookDirectory.h	Thu Feb  5 13:33:06 2004
---- misc/build/mozilla/mailnews/addrbook/src/nsAbOutlookDirectory.h	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbOutlookDirectory.h	Thu Feb  5 19:33:06 2004
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbOutlookDirectory.h	Fri Nov 16 12:42:24 2007
 ***************
 *** 46,51 ****
 --- 46,52 ----
@@ -3994,8 +4004,8 @@
   
       nsMapiEntry *mMapiData ;
       // Container for the query threads
-*** misc/mozilla/mailnews/addrbook/src/nsAbWinHelper.cpp	Wed Apr 14 16:16:12 2004
---- misc/build/mozilla/mailnews/addrbook/src/nsAbWinHelper.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbWinHelper.cpp	Wed Apr 14 22:16:12 2004
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbWinHelper.cpp	Fri Nov 16 12:42:24 2007
 ***************
 *** 41,46 ****
 --- 41,49 ----
@@ -4754,8 +4764,8 @@
   }
   
   const char *kOutlookDirectoryScheme = "moz-aboutlookdirectory://" ;
-*** misc/mozilla/mailnews/addrbook/src/nsAbWinHelper.h	Wed Apr 14 16:16:12 2004
---- misc/build/mozilla/mailnews/addrbook/src/nsAbWinHelper.h	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAbWinHelper.h	Wed Apr 14 22:16:12 2004
+--- misc/build/mozilla/mailnews/addrbook/src/nsAbWinHelper.h	Fri Nov 16 12:42:24 2007
 ***************
 *** 45,50 ****
 --- 45,68 ----
@@ -4988,8 +4998,8 @@
   private:
       nsAbWinHelper *mHelper ;
   } ;
-*** misc/mozilla/mailnews/addrbook/src/nsAddrDatabase.cpp	Wed Dec 24 12:18:08 2003
---- misc/build/mozilla/mailnews/addrbook/src/nsAddrDatabase.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAddrDatabase.cpp	Wed Dec 24 18:18:08 2003
+--- misc/build/mozilla/mailnews/addrbook/src/nsAddrDatabase.cpp	Fri Nov 16 12:42:24 2007
 ***************
 *** 97,102 ****
 --- 97,105 ----
@@ -5066,8 +5076,8 @@
       return err;
   }
   
-*** misc/mozilla/mailnews/addrbook/src/nsAddrDatabase.h	Wed Jan 28 12:22:13 2004
---- misc/build/mozilla/mailnews/addrbook/src/nsAddrDatabase.h	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsAddrDatabase.h	Wed Jan 28 18:22:13 2004
+--- misc/build/mozilla/mailnews/addrbook/src/nsAddrDatabase.h	Fri Nov 16 12:42:25 2007
 ***************
 *** 396,401 ****
 --- 396,402 ----
@@ -5078,8 +5088,8 @@
   	PRBool				m_mdbTokensInitialized;
       nsVoidArray /*<nsIAddrDBListener>*/ *m_ChangeListeners;
   
-*** misc/mozilla/mailnews/addrbook/src/nsMapiAddressBook.cpp	Tue Oct 30 03:59:16 2001
---- misc/build/mozilla/mailnews/addrbook/src/nsMapiAddressBook.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsMapiAddressBook.cpp	Tue Oct 30 08:59:16 2001
+--- misc/build/mozilla/mailnews/addrbook/src/nsMapiAddressBook.cpp	Fri Nov 16 12:42:25 2007
 ***************
 *** 41,46 ****
 --- 41,62 ----
@@ -6979,8 +6989,8 @@
 +     
 +     return lpMsgStore;
 + }
-*** misc/mozilla/mailnews/addrbook/src/nsMapiAddressBook.h	Fri Sep 28 16:06:25 2001
---- misc/build/mozilla/mailnews/addrbook/src/nsMapiAddressBook.h	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsMapiAddressBook.h	Fri Sep 28 22:06:25 2001
+--- misc/build/mozilla/mailnews/addrbook/src/nsMapiAddressBook.h	Fri Nov 16 12:42:25 2007
 ***************
 *** 40,51 ****
 --- 40,81 ----
@@ -7125,8 +7135,8 @@
   } ;
   
   #endif // nsMapiAddressBook_h___
-*** misc/mozilla/mailnews/addrbook/src/nsWabAddressBook.cpp	Tue Oct 30 03:59:16 2001
---- misc/build/mozilla/mailnews/addrbook/src/nsWabAddressBook.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsWabAddressBook.cpp	Tue Oct 30 08:59:16 2001
+--- misc/build/mozilla/mailnews/addrbook/src/nsWabAddressBook.cpp	Fri Nov 16 12:42:25 2007
 ***************
 *** 47,52 ****
 --- 47,68 ----
@@ -7435,8 +7445,8 @@
       nsAutoLock guard(mMutex) ;
   
       if (!LoadWabLibrary()) {
-*** misc/mozilla/mailnews/addrbook/src/nsWabAddressBook.h	Fri Sep 28 16:06:25 2001
---- misc/build/mozilla/mailnews/addrbook/src/nsWabAddressBook.h	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/addrbook/src/nsWabAddressBook.h	Fri Sep 28 22:06:25 2001
+--- misc/build/mozilla/mailnews/addrbook/src/nsWabAddressBook.h	Fri Nov 16 12:42:25 2007
 ***************
 *** 47,52 ****
 --- 47,61 ----
@@ -7519,8 +7529,8 @@
   
   private :
   } ;
-*** misc/mozilla/mailnews/base/src/nsMessengerWinIntegration.cpp	Mon Feb  9 17:48:47 2004
---- misc/build/mozilla/mailnews/base/src/nsMessengerWinIntegration.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/base/src/nsMessengerWinIntegration.cpp	Mon Feb  9 23:48:47 2004
+--- misc/build/mozilla/mailnews/base/src/nsMessengerWinIntegration.cpp	Fri Nov 16 12:42:25 2007
 ***************
 *** 713,720 ****
 --- 713,725 ----
@@ -7583,8 +7593,8 @@
     }
   
     // do this last
-*** misc/mozilla/mailnews/mime/src/mimeeobj.h	Fri Sep 28 16:07:42 2001
---- misc/build/mozilla/mailnews/mime/src/mimeeobj.h	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/mailnews/mime/src/mimeeobj.h	Fri Sep 28 22:07:42 2001
+--- misc/build/mozilla/mailnews/mime/src/mimeeobj.h	Fri Nov 16 12:42:25 2007
 ***************
 *** 54,60 ****
     MimeLeafClass leaf;
@@ -7602,8 +7612,8 @@
   
   struct MimeExternalObject {
     MimeLeaf leaf;
-*** misc/mozilla/modules/libpref/src/Makefile.in	Fri Jan 16 14:22:37 2004
---- misc/build/mozilla/modules/libpref/src/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/modules/libpref/src/Makefile.in	Fri Jan 16 20:22:37 2004
+--- misc/build/mozilla/modules/libpref/src/Makefile.in	Fri Nov 16 12:42:25 2007
 ***************
 *** 78,84 ****
   PREF_JS_EXPORTS	+= $(srcdir)/init/non-shared.txt
@@ -7628,8 +7638,8 @@
   			all.js mailnews.js editor.js \
   			aix.js beos.js unix.js winpref.js os2prefs.js openvms.js photon.js)
 + 
-*** misc/mozilla/netwerk/protocol/http/src/nsHttpConnectionMgr.cpp	Wed Sep  1 19:45:24 2004
---- misc/build/mozilla/netwerk/protocol/http/src/nsHttpConnectionMgr.cpp	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/netwerk/protocol/http/src/nsHttpConnectionMgr.cpp	Thu Sep  2 01:45:24 2004
+--- misc/build/mozilla/netwerk/protocol/http/src/nsHttpConnectionMgr.cpp	Fri Nov 16 12:42:25 2007
 ***************
 *** 834,841 ****
   void
@@ -7649,46 +7659,8 @@
   
       switch (name) {
       case MAX_CONNECTIONS:
-*** misc/mozilla/nsprpub/configure	Tue Sep 14 17:14:38 2004
---- misc/build/mozilla/nsprpub/configure	Wed Apr  4 20:56:33 2007
-***************
-*** 3407,3413 ****
-  EOF
-  
-      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
-!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
-      if test "$MOZ_OBJFORMAT" = "elf"; then
-          DLL_SUFFIX=so
-      else
---- 3407,3413 ----
-  EOF
-  
-      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
-!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
-      if test "$MOZ_OBJFORMAT" = "elf"; then
-          DLL_SUFFIX=so
-      else
-*** misc/mozilla/nsprpub/configure.in	Tue Sep 14 17:14:38 2004
---- misc/build/mozilla/nsprpub/configure.in	Wed Apr  4 20:56:40 2007
-***************
-*** 922,928 ****
-      AC_DEFINE(HAVE_BSD_FLOCK)
-      AC_DEFINE(HAVE_SOCKLEN_T)
-      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
-!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
-      if test "$MOZ_OBJFORMAT" = "elf"; then
-          DLL_SUFFIX=so
-      else
---- 922,928 ----
-      AC_DEFINE(HAVE_BSD_FLOCK)
-      AC_DEFINE(HAVE_SOCKLEN_T)
-      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
-!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
-      if test "$MOZ_OBJFORMAT" = "elf"; then
-          DLL_SUFFIX=so
-      else
-*** misc/mozilla/nsprpub/build/cygwin-wrapper	Wed Apr  2 19:22:38 2003
---- misc/build/mozilla/nsprpub/build/cygwin-wrapper	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/nsprpub/build/cygwin-wrapper	Thu Apr  3 01:22:38 2003
+--- misc/build/mozilla/nsprpub/build/cygwin-wrapper	Fri Nov 16 12:42:26 2007
 ***************
 *** 1,4 ****
 ! #!/bin/sh
@@ -7749,8 +7721,8 @@
 !    done
   fi
   exec $prog $args
-*** misc/mozilla/nsprpub/config/autoconf.mk.in	Sat Mar 22 11:28:52 2003
---- misc/build/mozilla/nsprpub/config/autoconf.mk.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/nsprpub/config/autoconf.mk.in	Sat Mar 22 16:28:52 2003
+--- misc/build/mozilla/nsprpub/config/autoconf.mk.in	Fri Nov 16 12:42:26 2007
 ***************
 *** 22,27 ****
 --- 22,28 ----
@@ -7761,8 +7733,8 @@
   OBJ_SUFFIX	= @OBJ_SUFFIX@
   LIB_SUFFIX	= @LIB_SUFFIX@
   DLL_SUFFIX	= @DLL_SUFFIX@
-*** misc/mozilla/nsprpub/config/rules.mk	Mon Sep 15 22:00:28 2003
---- misc/build/mozilla/nsprpub/config/rules.mk	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/nsprpub/config/rules.mk	Tue Sep 16 04:00:28 2003
+--- misc/build/mozilla/nsprpub/config/rules.mk	Fri Nov 16 12:42:26 2007
 ***************
 *** 101,119 ****
   ifdef LIBRARY_NAME
@@ -7794,8 +7766,8 @@
   
   else
   
-*** misc/mozilla/nsprpub/configure	Tue Sep 14 17:14:38 2004
---- misc/build/mozilla/nsprpub/configure	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/nsprpub/configure	Tue Sep 14 23:14:38 2004
+--- misc/build/mozilla/nsprpub/configure	Fri Nov 16 12:42:26 2007
 ***************
 *** 2724,2729 ****
 --- 2724,2730 ----
@@ -7806,6 +7778,23 @@
   MKSHLIB='$(LD) $(DSO_LDOPTS) -o $@'
   PR_MD_ASFILES=
   PR_MD_CSRCS=
+***************
+*** 3407,3413 ****
+  EOF
+  
+      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
+!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+      if test "$MOZ_OBJFORMAT" = "elf"; then
+          DLL_SUFFIX=so
+      else
+--- 3408,3414 ----
+  EOF
+  
+      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
+!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+      if test "$MOZ_OBJFORMAT" = "elf"; then
+          DLL_SUFFIX=so
+      else
 ***************
 *** 3861,3867 ****
           CC="$CC -mno-cygwin"
@@ -7834,8 +7823,18 @@
           CFLAGS="$CFLAGS -W3 -nologo -GF -Gy"
   
 ***************
+*** 5634,5639 ****
+--- 5636,5642 ----
+      CC="\$(CYGWIN_WRAPPER) $CC"
+      CXX="\$(CYGWIN_WRAPPER) $CXX"
+      RC="\$(CYGWIN_WRAPPER) $RC"
++     LD="\$(CYGWIN_WRAPPER) $LD"
+      ;;
+  esac
+  
+***************
 *** 6004,6009 ****
---- 6006,6012 ----
+--- 6007,6013 ----
   s%@LIB_SUFFIX@%$LIB_SUFFIX%g
   s%@DLL_SUFFIX@%$DLL_SUFFIX%g
   s%@ASM_SUFFIX@%$ASM_SUFFIX%g
@@ -7843,8 +7842,27 @@
   s%@MKSHLIB@%$MKSHLIB%g
   s%@DSO_CFLAGS@%$DSO_CFLAGS%g
   s%@DSO_LDOPTS@%$DSO_LDOPTS%g
-*** misc/mozilla/nsprpub/lib/ds/Makefile.in	Wed Apr  9 17:49:32 2003
---- misc/build/mozilla/nsprpub/lib/ds/Makefile.in	Thu Mar 29 14:27:08 2007
+*** misc/mozilla/nsprpub/configure.in	Tue Sep 14 23:14:38 2004
+--- misc/build/mozilla/nsprpub/configure.in	Wed Nov 21 14:30:18 2007
+***************
+*** 922,928 ****
+      AC_DEFINE(HAVE_BSD_FLOCK)
+      AC_DEFINE(HAVE_SOCKLEN_T)
+      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
+!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo aout`
+      if test "$MOZ_OBJFORMAT" = "elf"; then
+          DLL_SUFFIX=so
+      else
+--- 922,928 ----
+      AC_DEFINE(HAVE_BSD_FLOCK)
+      AC_DEFINE(HAVE_SOCKLEN_T)
+      CFLAGS="$CFLAGS $(DSO_CFLAGS) -ansi -Wall"
+!     MOZ_OBJFORMAT=`test -x /usr/bin/objformat && /usr/bin/objformat || echo elf`
+      if test "$MOZ_OBJFORMAT" = "elf"; then
+          DLL_SUFFIX=so
+      else
+*** misc/mozilla/nsprpub/lib/ds/Makefile.in	Wed Apr  9 23:49:32 2003
+--- misc/build/mozilla/nsprpub/lib/ds/Makefile.in	Fri Nov 16 12:42:26 2007
 ***************
 *** 80,97 ****
   OS_LIBS = -lc
@@ -7888,8 +7906,8 @@
   endif
   endif
   
-*** misc/mozilla/nsprpub/lib/libc/src/Makefile.in	Wed Apr  9 17:49:35 2003
---- misc/build/mozilla/nsprpub/lib/libc/src/Makefile.in	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/nsprpub/lib/libc/src/Makefile.in	Wed Apr  9 23:49:35 2003
+--- misc/build/mozilla/nsprpub/lib/libc/src/Makefile.in	Fri Nov 16 12:42:26 2007
 ***************
 *** 90,107 ****
   OS_LIBS = -lc
@@ -7933,8 +7951,8 @@
   endif
   endif
   
-*** misc/mozilla/nsprpub/pr/include/prtypes.h	Tue Sep 16 16:30:38 2003
---- misc/build/mozilla/nsprpub/pr/include/prtypes.h	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/nsprpub/pr/include/prtypes.h	Tue Sep 16 22:30:38 2003
+--- misc/build/mozilla/nsprpub/pr/include/prtypes.h	Fri Nov 16 12:42:26 2007
 ***************
 *** 450,456 ****
    */
@@ -7952,8 +7970,8 @@
   typedef wchar_t PRUnichar;
   #else
   typedef PRUint16 PRUnichar;
-*** misc/mozilla/nsprpub/pr/src/misc/prnetdb.c	Wed Sep  1 19:44:37 2004
---- misc/build/mozilla/nsprpub/pr/src/misc/prnetdb.c	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/nsprpub/pr/src/misc/prnetdb.c	Thu Sep  2 01:44:37 2004
+--- misc/build/mozilla/nsprpub/pr/src/misc/prnetdb.c	Fri Nov 16 12:42:26 2007
 ***************
 *** 105,111 ****
   #define _PR_HAVE_GETPROTO_R_INT
@@ -7972,8 +7990,8 @@
   #define _PR_HAVE_GETPROTO_R
   #define _PR_HAVE_5_ARG_GETPROTO_R
   #endif
-*** misc/mozilla/profile/src/nsProfile.cpp	Sat Apr 24 13:15:40 2004
---- misc/build/mozilla/profile/src/nsProfile.cpp	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/profile/src/nsProfile.cpp	Sat Apr 24 19:15:40 2004
+--- misc/build/mozilla/profile/src/nsProfile.cpp	Fri Nov 16 12:42:26 2007
 ***************
 *** 37,43 ****
 --- 37,45 ----
@@ -8050,8 +8068,27 @@
       gDirServiceProvider->SetProfileDir(profileDir);  
       mCurrentProfileName.Assign(aCurrentProfile);    
       gProfileDataAccess->SetCurrentProfile(aCurrentProfile);
-*** misc/mozilla/security/coreconf/Linux.mk	Tue Feb 10 21:33:51 2004
---- misc/build/mozilla/security/coreconf/Linux.mk	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/coreconf/FreeBSD.mk	Thu Mar 27 02:17:25 2003
+--- misc/build/mozilla/security/coreconf/FreeBSD.mk	Fri Nov 16 12:42:26 2007
+***************
+*** 63,69 ****
+  
+  ARCH			= freebsd
+  
+! MOZ_OBJFORMAT		:= $(shell test -x /usr/bin/objformat && /usr/bin/objformat || echo aout)
+  
+  ifeq ($(MOZ_OBJFORMAT),elf)
+  DLL_SUFFIX		= so
+--- 63,69 ----
+  
+  ARCH			= freebsd
+  
+! MOZ_OBJFORMAT		:= $(shell test -x /usr/bin/objformat && /usr/bin/objformat || echo elf)
+  
+  ifeq ($(MOZ_OBJFORMAT),elf)
+  DLL_SUFFIX		= so
+*** misc/mozilla/security/coreconf/Linux.mk	Wed Feb 11 03:33:51 2004
+--- misc/build/mozilla/security/coreconf/Linux.mk	Fri Nov 16 12:42:26 2007
 ***************
 *** 123,129 ****
   
@@ -8079,8 +8116,8 @@
   DSO_LDFLAGS		=
   
   # INCLUDES += -I/usr/include -Y/usr/include/linux
-*** misc/mozilla/security/coreconf/Linux2.1.mk	Wed Nov  7 15:58:09 2001
---- misc/build/mozilla/security/coreconf/Linux2.1.mk	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/coreconf/Linux2.1.mk	Wed Nov  7 21:58:09 2001
+--- misc/build/mozilla/security/coreconf/Linux2.1.mk	Fri Nov 16 12:42:26 2007
 ***************
 *** 36,42 ****
   include $(CORE_DEPTH)/coreconf/Linux.mk
@@ -8098,8 +8135,8 @@
           ifdef BUILD_OPT
                   OPTIMIZER       = -O2
           endif
-*** misc/mozilla/security/coreconf/Linux2.2.mk	Wed Nov  7 15:56:18 2001
---- misc/build/mozilla/security/coreconf/Linux2.2.mk	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/coreconf/Linux2.2.mk	Wed Nov  7 21:56:18 2001
+--- misc/build/mozilla/security/coreconf/Linux2.2.mk	Fri Nov 16 12:42:26 2007
 ***************
 *** 36,42 ****
   include $(CORE_DEPTH)/coreconf/Linux.mk
@@ -8117,8 +8154,8 @@
   ifdef BUILD_OPT
               OPTIMIZER       = -O2
   endif
-*** misc/mozilla/security/coreconf/Linux2.4.mk	Wed Nov  7 15:56:18 2001
---- misc/build/mozilla/security/coreconf/Linux2.4.mk	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/coreconf/Linux2.4.mk	Wed Nov  7 21:56:18 2001
+--- misc/build/mozilla/security/coreconf/Linux2.4.mk	Fri Nov 16 12:42:26 2007
 ***************
 *** 36,42 ****
   include $(CORE_DEPTH)/coreconf/Linux.mk
@@ -8136,8 +8173,8 @@
   ifdef BUILD_OPT
               OPTIMIZER       = -O2
   endif
-*** misc/mozilla/security/coreconf/Linux2.5.mk	Sat Jan 26 19:45:37 2002
---- misc/build/mozilla/security/coreconf/Linux2.5.mk	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/coreconf/Linux2.5.mk	Sun Jan 27 01:45:37 2002
+--- misc/build/mozilla/security/coreconf/Linux2.5.mk	Fri Nov 16 12:42:26 2007
 ***************
 *** 36,42 ****
   include $(CORE_DEPTH)/coreconf/Linux.mk
@@ -8155,8 +8192,8 @@
   ifdef BUILD_OPT
               OPTIMIZER       = -O2
   endif
-*** misc/mozilla/security/coreconf/Linux2.6.mk	Sat Jul 19 17:21:50 2003
---- misc/build/mozilla/security/coreconf/Linux2.6.mk	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/coreconf/Linux2.6.mk	Sat Jul 19 23:21:50 2003
+--- misc/build/mozilla/security/coreconf/Linux2.6.mk	Fri Nov 16 12:42:26 2007
 ***************
 *** 36,42 ****
   include $(CORE_DEPTH)/coreconf/Linux.mk
@@ -8174,8 +8211,8 @@
   ifdef BUILD_OPT
               OPTIMIZER       = -O2
   endif
-*** misc/mozilla/security/coreconf/SunOS5.mk	Fri Oct 15 19:52:29 2004
---- misc/build/mozilla/security/coreconf/SunOS5.mk	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/coreconf/SunOS5.mk	Sat Oct 16 01:52:29 2004
+--- misc/build/mozilla/security/coreconf/SunOS5.mk	Fri Nov 16 12:42:26 2007
 ***************
 *** 164,175 ****
 --- 164,177 ----
@@ -8203,8 +8240,95 @@
   endif
   
   # -KPIC generates position independent code for use in shared libraries.
-*** misc/mozilla/security/coreconf/WIN954.0.mk	Fri Oct 15 19:52:29 2004
---- misc/build/mozilla/security/coreconf/WIN954.0.mk	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/coreconf/WIN32.mk	Tue Sep 14 23:14:39 2004
+--- misc/build/mozilla/security/coreconf/WIN32.mk	Fri Nov 16 12:42:26 2007
+***************
+*** 39,62 ****
+  DEFAULT_COMPILER = cl
+  
+  ifdef NS_USE_GCC
+! 	CC           = gcc
+! 	CCC          = g++
+! 	LINK         = ld
+! 	AR           = ar
+  	AR          += cr $@
+! 	RANLIB       = ranlib
+  	BSDECHO      = echo
+! 	RC           = windres.exe -O coff --use-temp-file
+! 	LINK_DLL      = $(CC) $(OS_DLLFLAGS) $(DLLFLAGS)
+  else
+! 	CC           = cl
+! 	CCC          = cl
+! 	LINK         = link
+! 	AR           = lib
+  	AR          += -NOLOGO -OUT:"$@"
+  	RANLIB       = echo
+  	BSDECHO      = echo
+! 	RC           = rc.exe
+  endif
+  
+  ifdef BUILD_TREE
+--- 39,62 ----
+  DEFAULT_COMPILER = cl
+  
+  ifdef NS_USE_GCC
+! 	CC           = $(CYGWIN_WRAPPER) gcc
+! 	CCC          = $(CYGWIN_WRAPPER) g++
+! 	LINK         = $(CYGWIN_WRAPPER) ld
+! 	AR           = $(CYGWIN_WRAPPER) ar
+  	AR          += cr $@
+! 	RANLIB       = $(CYGWIN_WRAPPER) ranlib
+  	BSDECHO      = echo
+! 	RC           = $(CYGWIN_WRAPPER) windres.exe -O coff --use-temp-file
+! 	LINK_DLL      =$(CYGWIN_WRAPPER)  $(CC) $(OS_DLLFLAGS) $(DLLFLAGS)
+  else
+! 	CC           = $(CYGWIN_WRAPPER) cl
+! 	CCC          = $(CYGWIN_WRAPPER) cl
+! 	LINK         = $(CYGWIN_WRAPPER) link
+! 	AR           = $(CYGWIN_WRAPPER) lib
+  	AR          += -NOLOGO -OUT:"$@"
+  	RANLIB       = echo
+  	BSDECHO      = echo
+! 	RC           = $(CYGWIN_WRAPPER) rc.exe
+  endif
+  
+  ifdef BUILD_TREE
+***************
+*** 64,70 ****
+  else
+  NSINSTALL_DIR  = $(CORE_DEPTH)/coreconf/nsinstall
+  endif
+! NSINSTALL      = nsinstall
+  
+  MKDEPEND_DIR    = $(CORE_DEPTH)/coreconf/mkdepend
+  MKDEPEND        = $(MKDEPEND_DIR)/$(OBJDIR_NAME)/mkdepend.exe
+--- 64,70 ----
+  else
+  NSINSTALL_DIR  = $(CORE_DEPTH)/coreconf/nsinstall
+  endif
+! NSINSTALL      = $(CYGWIN_WRAPPER) nsinstall
+  
+  MKDEPEND_DIR    = $(CORE_DEPTH)/coreconf/mkdepend
+  MKDEPEND        = $(MKDEPEND_DIR)/$(OBJDIR_NAME)/mkdepend.exe
+***************
+*** 87,93 ****
+  ifdef NS_USE_GCC
+      OS_CFLAGS += -mno-cygwin -mms-bitfields
+      _GEN_IMPORT_LIB=-Wl,--out-implib,$(IMPORT_LIBRARY)
+!     DLLFLAGS  += -mno-cygwin -o $@ -shared -Wl,--export-all-symbols $(if $(IMPORT_LIBRARY),$(_GEN_IMPORT_LIB))
+      ifdef BUILD_OPT
+  	OPTIMIZER  += -O2
+  	DEFINES    += -UDEBUG -U_DEBUG -DNDEBUG
+--- 87,93 ----
+  ifdef NS_USE_GCC
+      OS_CFLAGS += -mno-cygwin -mms-bitfields
+      _GEN_IMPORT_LIB=-Wl,--out-implib,$(IMPORT_LIBRARY)
+!     DLLFLAGS  += -mno-cygwin -o $@ -shared -Wl,--enable-runtime-pseudo-reloc,--export-all-symbols $(if $(IMPORT_LIBRARY),$(_GEN_IMPORT_LIB))
+      ifdef BUILD_OPT
+  	OPTIMIZER  += -O2
+  	DEFINES    += -UDEBUG -U_DEBUG -DNDEBUG
+*** misc/mozilla/security/coreconf/WIN954.0.mk	Sat Oct 16 01:52:29 2004
+--- misc/build/mozilla/security/coreconf/WIN954.0.mk	Fri Nov 16 12:42:26 2007
 ***************
 *** 64,66 ****
 --- 64,70 ----
@@ -8215,27 +8339,8 @@
 + ifdef NS_USE_GCC
 + NSPR31_LIB_PREFIX = lib
 + endif
-*** misc/mozilla/security/coreconf/FreeBSD.mk	Wed Mar 26 20:17:25 2003
---- misc/build/mozilla/security/coreconf/FreeBSD.mk	Wed Apr  4 20:56:48 2007
-***************
-*** 63,69 ****
-  
-  ARCH			= freebsd
-  
-! MOZ_OBJFORMAT		:= $(shell test -x /usr/bin/objformat && /usr/bin/objformat || echo aout)
-  
-  ifeq ($(MOZ_OBJFORMAT),elf)
-  DLL_SUFFIX		= so
---- 63,69 ----
-  
-  ARCH			= freebsd
-  
-! MOZ_OBJFORMAT		:= $(shell test -x /usr/bin/objformat && /usr/bin/objformat || echo elf)
-  
-  ifeq ($(MOZ_OBJFORMAT),elf)
-  DLL_SUFFIX		= so
-*** misc/mozilla/security/coreconf/command.mk	Fri Feb 15 17:53:12 2002
---- misc/build/mozilla/security/coreconf/command.mk	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/coreconf/command.mk	Fri Feb 15 23:53:12 2002
+--- misc/build/mozilla/security/coreconf/command.mk	Fri Nov 16 12:42:26 2007
 ***************
 *** 42,48 ****
   LINK_DLL      = $(LINK) $(OS_DLLFLAGS) $(DLLFLAGS)
@@ -8253,8 +8358,56 @@
   		$(XCFLAGS)
   RANLIB        = echo
   TAR           = /bin/tar
-*** misc/mozilla/security/coreconf/rules.mk	Mon Mar 22 20:56:47 2004
---- misc/build/mozilla/security/coreconf/rules.mk	Thu Mar 29 14:32:45 2007
+*** misc/mozilla/security/coreconf/rules.mk	Tue Mar 23 01:56:47 2004
+--- misc/build/mozilla/security/coreconf/rules.mk	Fri Nov 16 12:42:26 2007
+***************
+*** 286,292 ****
+  $(PROGRAM): $(OBJS) $(EXTRA_LIBS)
+  	@$(MAKE_OBJDIR)
+  ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+! 	$(MKPROG) $(subst /,\\,$(OBJS)) -Fe$@ -link $(LDFLAGS) $(subst /,\\,$(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS))
+  else
+  ifdef XP_OS2_VACPP
+  	$(MKPROG) -Fe$@ $(CFLAGS) $(OBJS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
+--- 286,292 ----
+  $(PROGRAM): $(OBJS) $(EXTRA_LIBS)
+  	@$(MAKE_OBJDIR)
+  ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+! 	$(MKPROG) $(OBJS) -Fe$@ -link $(LDFLAGS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
+  else
+  ifdef XP_OS2_VACPP
+  	$(MKPROG) -Fe$@ $(CFLAGS) $(OBJS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS)
+***************
+*** 301,311 ****
+  $(LIBRARY): $(OBJS)
+  	@$(MAKE_OBJDIR)
+  	rm -f $@
+- ifeq (,$(filter-out _WIN%,$(NS_USE_GCC)_$(OS_TARGET)))
+- 	$(AR) $(subst /,\\,$(OBJS))
+- else
+  	$(AR) $(OBJS)
+- endif
+  	$(RANLIB) $@
+  
+  
+--- 301,307 ----
+***************
+*** 340,346 ****
+  ifdef NS_USE_GCC
+  	$(LINK_DLL) $(OBJS) $(SUB_SHLOBJS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS) $(LD_LIBS) $(RES)
+  else
+! 	$(LINK_DLL) -MAP $(DLLBASE) $(subst /,\\,$(OBJS) $(SUB_SHLOBJS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS) $(LD_LIBS) $(RES))
+  endif
+  else
+  ifdef XP_OS2_VACPP
+--- 336,342 ----
+  ifdef NS_USE_GCC
+  	$(LINK_DLL) $(OBJS) $(SUB_SHLOBJS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS) $(LD_LIBS) $(RES)
+  else
+! 	$(LINK_DLL) -MAP $(DLLBASE) $(OBJS) $(SUB_SHLOBJS) $(EXTRA_LIBS) $(EXTRA_SHARED_LIBS) $(OS_LIBS) $(LD_LIBS) $(RES)
+  endif
+  else
+  ifdef XP_OS2_VACPP
 ***************
 *** 406,423 ****
   endif
@@ -8275,7 +8428,7 @@
   else
   	$(CC) -o $@ -c $(CFLAGS) $<
   endif
---- 406,423 ----
+--- 402,419 ----
   endif
   
   ifdef NEED_ABSOLUTE_PATH
@@ -8306,7 +8459,7 @@
   else
   	$(CC) -o $@ -c $(CFLAGS) $<
   endif
---- 425,434 ----
+--- 421,430 ----
   
   $(PROG_PREFIX)%$(OBJ_SUFFIX): %.c
   ifdef USE_NT_C_SYNTAX
@@ -8329,7 +8482,7 @@
   else
   	$(CCC) -o $@ -c $(CFLAGS) $<
   endif
---- 457,466 ----
+--- 453,462 ----
   $(OBJDIR)/$(PROG_PREFIX)%: %.cpp
   	@$(MAKE_OBJDIR)
   ifdef USE_NT_C_SYNTAX
@@ -8352,7 +8505,7 @@
   else
   	$(CCC) -o $@ -c $(CFLAGS) $<
   endif
---- 481,490 ----
+--- 477,486 ----
   	rm -f $(OBJDIR)/t_$*.cc
   else
   ifdef USE_NT_C_SYNTAX
@@ -8363,8 +8516,36 @@
   else
   	$(CCC) -o $@ -c $(CFLAGS) $<
   endif
-*** misc/mozilla/security/nss/lib/ckfw/builtins/config.mk	Fri Oct 15 19:52:32 2004
---- misc/build/mozilla/security/nss/lib/ckfw/builtins/config.mk	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/manager/Makefile.in	Tue Mar 23 05:15:56 2004
+--- misc/build/mozilla/security/manager/Makefile.in	Fri Nov 16 12:42:27 2007
+***************
+*** 89,94 ****
+--- 89,95 ----
+  endif
+  ifeq ($(OS_ARCH),WINNT)
+  DEFAULT_GMAKE_FLAGS += OS_TARGET=WIN95
++ DEFAULT_GMAKE_FLAGS += CYGWIN_WRAPPER=@CYGWIN_WRAPPER@
+  ifdef MOZ_DEBUG
+  ifndef MOZ_NO_DEBUG_RTL
+  DEFAULT_GMAKE_FLAGS += USE_DEBUG_RTL=1
+*** misc/mozilla/security/nss/cmd/shlibsign/Makefile	Wed Apr 16 00:42:09 2003
+--- misc/build/mozilla/security/nss/cmd/shlibsign/Makefile	Fri Nov 16 12:42:27 2007
+***************
+*** 103,109 ****
+--- 103,113 ----
+  ifeq ($(OS_TARGET), OS2)
+  	@cmd.exe /c sign.cmd $(DIST) $(OBJDIR) $(OS_TARGET) $<
+  else
++ ifeq ($(OS_TARGET), WIN95)
++ 	@sh $(CYGWIN_WRAPPER) ./sign.sh $(DIST) $(OBJDIR) $(OS_TARGET) $<
++ else
+  	@sh ./sign.sh $(DIST) $(OBJDIR) $(OS_TARGET) $<
++ endif
+  endif
+  
+  libs install :: $(CHECKLOC)
+*** misc/mozilla/security/nss/lib/ckfw/builtins/config.mk	Sat Oct 16 01:52:32 2004
+--- misc/build/mozilla/security/nss/lib/ckfw/builtins/config.mk	Fri Nov 16 12:42:27 2007
 ***************
 *** 59,67 ****
   DSO_LDOPTS = -bundle
@@ -8377,8 +8558,8 @@
 - endif
   
 --- 59,62 ----
-*** misc/mozilla/security/nss/lib/freebl/Makefile	Fri Oct 15 19:52:33 2004
---- misc/build/mozilla/security/nss/lib/freebl/Makefile	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/nss/lib/freebl/Makefile	Sat Oct 16 01:52:33 2004
+--- misc/build/mozilla/security/nss/lib/freebl/Makefile	Fri Nov 16 12:42:27 2007
 ***************
 *** 179,189 ****
   
@@ -8410,8 +8591,8 @@
   endif # NS_USE_GCC
   ifdef USE_PURE_32
   # this builds for Sparc v8 pure 32-bit architecture
-*** misc/mozilla/security/nss/lib/nss/config.mk	Fri Oct 15 19:52:33 2004
---- misc/build/mozilla/security/nss/lib/nss/config.mk	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/nss/lib/nss/config.mk	Sat Oct 16 01:52:33 2004
+--- misc/build/mozilla/security/nss/lib/nss/config.mk	Fri Nov 16 12:42:27 2007
 ***************
 *** 107,120 ****
   # The -R '$ORIGIN' linker option instructs this library to search for its
@@ -8441,8 +8622,8 @@
   
   
   ifeq (,$(filter-out WINNT WIN95,$(OS_TARGET)))
-*** misc/mozilla/security/nss/lib/nss/nss.def	Fri Oct 15 19:52:33 2004
---- misc/build/mozilla/security/nss/lib/nss/nss.def	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/nss/lib/nss/nss.def	Sat Oct 16 01:52:33 2004
+--- misc/build/mozilla/security/nss/lib/nss/nss.def	Fri Nov 16 12:42:27 2007
 ***************
 *** 60,65 ****
 --- 60,66 ----
@@ -8453,8 +8634,8 @@
   CERT_DecodeDERCrl;
   CERT_DestroyCertificateRequest;
   CERT_DestroyCertList;
-*** misc/mozilla/security/nss/lib/pki1/oiddata.h	Fri Jan  4 00:22:07 2002
---- misc/build/mozilla/security/nss/lib/pki1/oiddata.h	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/nss/lib/pki1/oiddata.h	Fri Jan  4 06:22:07 2002
+--- misc/build/mozilla/security/nss/lib/pki1/oiddata.h	Fri Nov 16 12:42:27 2007
 ***************
 *** 39,49 ****
   static const char OIDDATA_CVS_ID[] = "@(#) $RCSfile$ $Revision$ $Date$ $Name$ ; @(#) $RCSfile$ $Revision$ $Date$ $Name$";
@@ -8481,8 +8662,8 @@
   extern const PRUint32 nss_builtin_oid_count;
   
   /*extern const nssAttributeTypeAliasTable nss_attribute_type_aliases[];*/
-*** misc/mozilla/security/nss/lib/smime/config.mk	Fri Oct 15 19:52:34 2004
---- misc/build/mozilla/security/nss/lib/smime/config.mk	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/nss/lib/smime/config.mk	Sat Oct 16 01:52:34 2004
+--- misc/build/mozilla/security/nss/lib/smime/config.mk	Fri Nov 16 12:42:27 2007
 ***************
 *** 85,94 ****
   	../pkcs12 \
@@ -8496,8 +8677,8 @@
 - endif
 - 
 --- 85,87 ----
-*** misc/mozilla/security/nss/lib/softoken/config.mk	Fri Oct 15 19:52:35 2004
---- misc/build/mozilla/security/nss/lib/softoken/config.mk	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/nss/lib/softoken/config.mk	Sat Oct 16 01:52:35 2004
+--- misc/build/mozilla/security/nss/lib/softoken/config.mk	Fri Nov 16 12:42:27 2007
 ***************
 *** 83,94 ****
   	$(NULL)
@@ -8513,8 +8694,8 @@
   DEFINES += -DDBM_USING_NSPR
   endif
 --- 83,88 ----
-*** misc/mozilla/security/nss/lib/ssl/config.mk	Fri Oct 15 19:52:35 2004
---- misc/build/mozilla/security/nss/lib/ssl/config.mk	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/security/nss/lib/ssl/config.mk	Sat Oct 16 01:52:35 2004
+--- misc/build/mozilla/security/nss/lib/ssl/config.mk	Fri Nov 16 12:42:27 2007
 ***************
 *** 78,87 ****
   EXTRA_SHARED_LIBS += -dylib_file @executable_path/libsoftokn3.dylib:$(DIST)/lib/libsoftokn3.dylib
@@ -8528,8 +8709,8 @@
 - 
   endif
 --- 78,81 ----
-*** misc/mozilla/uriloader/exthandler/win/nsOSHelperAppService.cpp	Wed Oct 20 12:26:10 2004
---- misc/build/mozilla/uriloader/exthandler/win/nsOSHelperAppService.cpp	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/uriloader/exthandler/win/nsOSHelperAppService.cpp	Wed Oct 20 18:26:10 2004
+--- misc/build/mozilla/uriloader/exthandler/win/nsOSHelperAppService.cpp	Fri Nov 16 12:42:27 2007
 ***************
 *** 171,183 ****
 --- 171,191 ----
@@ -8568,8 +8749,8 @@
       }
       else {
         nsCAutoString ansiKey;
-*** misc/mozilla/webshell/tests/viewer/Makefile.in	Thu Apr  8 04:06:32 2004
---- misc/build/mozilla/webshell/tests/viewer/Makefile.in	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/webshell/tests/viewer/Makefile.in	Thu Apr  8 10:06:32 2004
+--- misc/build/mozilla/webshell/tests/viewer/Makefile.in	Fri Nov 16 12:42:27 2007
 ***************
 *** 163,169 ****
   GTK_LIBS		= unix/gtk/libviewer_gtk_s.a -lgtksuperwin $(XP_LIBS) $(MOZ_GTK_LDFLAGS)
@@ -8587,8 +8768,8 @@
   
   EXTRA_DEPS		= \
   			$(XP_DIST_DEP_LIBS) \
-*** misc/mozilla/widget/src/gtk2/nsDragService.cpp	Wed Oct 29 21:48:41 2003
---- misc/build/mozilla/widget/src/gtk2/nsDragService.cpp	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/widget/src/gtk2/nsDragService.cpp	Thu Oct 30 02:48:41 2003
+--- misc/build/mozilla/widget/src/gtk2/nsDragService.cpp	Fri Nov 16 12:42:27 2007
 ***************
 *** 838,844 ****
               (GtkTargetEntry *)g_malloc(sizeof(GtkTargetEntry));
@@ -8674,8 +8855,8 @@
                               PR_LOG(sDragLm, PR_LOG_DEBUG,
                                      ("automatically adding target %s with \
                                      id %ld\n", urlTarget->target, urlAtom));
-*** misc/mozilla/widget/src/windows/nsDataObj.cpp	Wed Oct 27 01:50:31 2004
---- misc/build/mozilla/widget/src/windows/nsDataObj.cpp	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/widget/src/windows/nsDataObj.cpp	Wed Oct 27 07:50:31 2004
+--- misc/build/mozilla/widget/src/windows/nsDataObj.cpp	Fri Nov 16 12:42:27 2007
 ***************
 *** 504,515 ****
 --- 504,523 ----
@@ -8699,8 +8880,8 @@
         } 
       }
       titleStr[lenTitleStr] = '\0';
-*** misc/mozilla/widget/src/windows/nsFilePicker.cpp	Wed Dec  8 16:58:30 2004
---- misc/build/mozilla/widget/src/windows/nsFilePicker.cpp	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/widget/src/windows/nsFilePicker.cpp	Wed Dec  8 22:58:30 2004
+--- misc/build/mozilla/widget/src/windows/nsFilePicker.cpp	Fri Nov 16 12:42:27 2007
 ***************
 *** 117,123 ****
 --- 117,127 ----
@@ -8792,8 +8973,8 @@
           }
         }
       }
-*** misc/mozilla/widget/src/windows/nsWindow.cpp	Sat May 29 16:27:51 2004
---- misc/build/mozilla/widget/src/windows/nsWindow.cpp	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/widget/src/windows/nsWindow.cpp	Sat May 29 22:27:51 2004
+--- misc/build/mozilla/widget/src/windows/nsWindow.cpp	Fri Nov 16 12:42:28 2007
 ***************
 *** 444,449 ****
 --- 444,452 ----
@@ -8915,8 +9096,8 @@
                               nsCRT::strlen(mIMEReconvertUnicode),
                               (LPSTR) (aData + sizeof(RECONVERTSTRING)),
                               len,
-*** misc/mozilla/xpcom/base/nsStackFrameUnix.cpp	Mon Mar  8 02:47:44 2004
---- misc/build/mozilla/xpcom/base/nsStackFrameUnix.cpp	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/xpcom/base/nsStackFrameUnix.cpp	Mon Mar  8 08:47:44 2004
+--- misc/build/mozilla/xpcom/base/nsStackFrameUnix.cpp	Fri Nov 16 12:42:28 2007
 ***************
 *** 78,102 ****
   }
@@ -8960,8 +9141,8 @@
   
     int skip = 2;
     for ( ; (void**)*bp > bp; bp = (void**)*bp) {
-*** misc/mozilla/xpcom/base/nsTraceRefcntImpl.cpp	Wed Feb 11 02:16:10 2004
---- misc/build/mozilla/xpcom/base/nsTraceRefcntImpl.cpp	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/xpcom/base/nsTraceRefcntImpl.cpp	Wed Feb 11 08:16:10 2004
+--- misc/build/mozilla/xpcom/base/nsTraceRefcntImpl.cpp	Fri Nov 16 12:42:28 2007
 ***************
 *** 50,68 ****
   
@@ -9073,8 +9254,8 @@
   nsTraceRefcntImpl::WalkTheStack(FILE* aStream)
   {
   	fprintf(aStream, "write me, dammit!\n");
-*** misc/mozilla/xpcom/base/nscore.h	Thu Mar 25 15:55:16 2004
---- misc/build/mozilla/xpcom/base/nscore.h	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/xpcom/base/nscore.h	Thu Mar 25 20:55:16 2004
+--- misc/build/mozilla/xpcom/base/nscore.h	Fri Nov 16 12:42:28 2007
 ***************
 *** 282,288 ****
      * commercial build.  When this is fixed there will be no need for the
@@ -9092,8 +9273,8 @@
       typedef wchar_t PRUnichar;
     #else
       typedef PRUint16 PRUnichar;
-*** misc/mozilla/xpcom/io/nsLocalFileWin.cpp	Thu May 13 16:59:45 2004
---- misc/build/mozilla/xpcom/io/nsLocalFileWin.cpp	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/xpcom/io/nsLocalFileWin.cpp	Thu May 13 22:59:45 2004
+--- misc/build/mozilla/xpcom/io/nsLocalFileWin.cpp	Fri Nov 16 12:42:28 2007
 ***************
 *** 552,558 ****
 --- 552,562 ----
@@ -9108,8 +9289,8 @@
               else
                   rv = NS_ERROR_FAILURE;
   
-*** misc/mozilla/xpcom/io/nsNativeCharsetUtils.cpp	Mon Nov  8 09:44:27 2004
---- misc/build/mozilla/xpcom/io/nsNativeCharsetUtils.cpp	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/xpcom/io/nsNativeCharsetUtils.cpp	Mon Nov  8 15:44:27 2004
+--- misc/build/mozilla/xpcom/io/nsNativeCharsetUtils.cpp	Fri Nov 16 12:42:28 2007
 ***************
 *** 890,896 ****
 --- 890,900 ----
@@ -9152,8 +9333,8 @@
                                 &defaultChar, NULL);
       }
       return NS_OK;
-*** misc/mozilla/xpcom/reflect/xptinfo/public/xptinfo.h	Tue Jun 24 18:12:34 2003
---- misc/build/mozilla/xpcom/reflect/xptinfo/public/xptinfo.h	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/xpcom/reflect/xptinfo/public/xptinfo.h	Wed Jun 25 00:12:34 2003
+--- misc/build/mozilla/xpcom/reflect/xptinfo/public/xptinfo.h	Fri Nov 16 12:42:28 2007
 ***************
 *** 132,138 ****
           }
@@ -9188,8 +9369,8 @@
       {
           T_I8                = TD_INT8             ,
           T_I16               = TD_INT16            ,
-*** misc/mozilla/xpfe/appshell/src/nsXULWindow.cpp	2004-08-21 19:17:14.000000000 +0200
---- misc/build/mozilla/xpfe/appshell/src/nsXULWindow.cpp	2007-03-24 11:19:03.000000000 +0200
+*** misc/mozilla/xpfe/appshell/src/nsXULWindow.cpp	Sat Aug 21 19:17:14 2004
+--- misc/build/mozilla/xpfe/appshell/src/nsXULWindow.cpp	Fri Nov 16 12:42:29 2007
 ***************
 *** 73,79 ****
 --- 73,81 ----
@@ -9202,11 +9383,11 @@
   #include "nsIWebShellWindow.h"
   #include "nsWebShellWindow.h" // get rid of this one, too...
   
-*** misc/mozilla/xpfe/bootstrap/Makefile.in	Thu Jun 24 14:58:48 2004
---- misc/build/mozilla/xpfe/bootstrap/Makefile.in	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/xpfe/bootstrap/Makefile.in	Thu Jun 24 20:58:48 2004
+--- misc/build/mozilla/xpfe/bootstrap/Makefile.in	Fri Nov 16 12:42:29 2007
 ***************
-*** 84,94 ****
---- 84,97 ----
+*** 84,93 ****
+--- 84,96 ----
   
   include $(topsrcdir)/config/config.mk
   
@@ -9216,13 +9397,12 @@
   PROGRAM		= mozilla$(BIN_SUFFIX)
   else
   PROGRAM		= mozilla-bin$(BIN_SUFFIX)
-  endif
 + endif
+  endif
   
   # Force applications to be built non-statically
-  # when building the mozcomps meta component
-*** misc/mozilla/xpfe/bootstrap/nsNativeAppSupportWin.cpp	Tue Dec 14 11:26:56 2004
---- misc/build/mozilla/xpfe/bootstrap/nsNativeAppSupportWin.cpp	Thu Mar 29 14:27:09 2007
+*** misc/mozilla/xpfe/bootstrap/nsNativeAppSupportWin.cpp	Tue Dec 14 17:26:56 2004
+--- misc/build/mozilla/xpfe/bootstrap/nsNativeAppSupportWin.cpp	Fri Nov 16 12:42:29 2007
 ***************
 *** 113,119 ****
 --- 113,123 ----
