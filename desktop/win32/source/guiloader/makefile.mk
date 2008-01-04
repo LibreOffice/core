@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 13:02:32 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:22:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,13 +49,21 @@ TARGETTYPE=GUI
 APP1TARGET=guiloader
 APP1NOSAL=TRUE
 APP1ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
+.IF "$(COM)"=="GCC"
+APP1OBJS=$(OBJ)$/genericloader.obj
+.ELSE
 APP1OBJS=$(OBJ)$/genericloader.obj $(OBJ)$/extendloaderenvironment.obj
+.ENDIF
 STDLIB1=$(SHLWAPILIB)
 
 APP2TARGET=so$/guiloader
 APP2NOSAL=TRUE
 APP2ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
+.IF "$(COM)"=="GCC"
+APP2OBJS=$(OBJ)$/genericloader.obj
+.ELSE
 APP2OBJS=$(OBJ)$/genericloader.obj $(OBJ)$/extendloaderenvironment.obj
+.ENDIF
 STDLIB2=$(SHLWAPILIB)
 
 # Until every DLL is linked against $(DELAYLOADOBJ) just as on wntmsci10:
