@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nmspmap.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:56:21 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:15:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,9 +161,12 @@ sal_uInt16 SvXMLNamespaceMap::AddIfKnown( const OUString& rPrefix, const OUStrin
     if( XML_NAMESPACE_NONE == nKey )
         return XML_NAMESPACE_UNKNOWN;
 
-    if( XML_NAMESPACE_UNKNOWN != nKey &&
-        aNameHash.find ( rPrefix ) == aNameHash.end() )
-        nKey = _Add( rPrefix, rName, nKey );
+    if( XML_NAMESPACE_UNKNOWN != nKey )
+    {
+        NameSpaceHash::const_iterator aIter = aNameHash.find( rPrefix );
+        if( aIter == aNameHash.end() || (*aIter).second->sName != rName )
+            nKey = _Add( rPrefix, rName, nKey );
+    }
 
     return nKey;
 }
