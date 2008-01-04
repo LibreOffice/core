@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porfly.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:16:29 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:22:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -390,6 +390,15 @@ void SwFlyCntPortion::SetBase( const SwTxtFrm& rFrm, const Point &rBase,
             ASSERT( false, "SwFlyCntPortion::SetBase(..) - No drawing object found by <GetDrawContact()->GetDrawObjectByAnchorFrm( rFrm )>" );
             pSdrObj = GetDrawContact()->GetMaster();
         }
+        // --> OD 2007-11-29 #i65798#
+        // call <SwAnchoredDrawObject::MakeObjPos()> to assure that flag at
+        // the <DrawFrmFmt> and at the <SwAnchoredDrawObject> instance are
+        // correctly set.
+        if ( pSdrObj )
+        {
+            GetDrawContact()->GetAnchoredObj( pSdrObj )->MakeObjPos();
+        }
+        // <--
     }
     else
     {
