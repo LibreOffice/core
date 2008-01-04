@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 10:04:23 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 14:32:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1449,22 +1449,18 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 
     if ( !xProps.get() )
     {
-        // No server access if only Title property is requested because
-        // it's always calculated from Content's URI.
-        if ( ( rProperties.getLength() == 1 ) &&
-             rProperties[ 0 ].Name.equalsAsciiL(
-                                RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
-            xProps.reset( new ContentProperties( aEscapedTitle ) );
-    }
-
-    if ( !xProps.get() )
-    {
         /////////////////////////////////////////////////////////////////////
         // Obtain values from server...
         /////////////////////////////////////////////////////////////////////
 
         // First, identify whether resource is DAV or not
-        const ResourceType & rType = getResourceType( xEnv );
+        const ResourceType & rType = getResourceType( xEnv, xResAccess );
+
+        // getResourceType() accesses server and might trigger HTTP redirect.
+        // Therefore, title must be upadated here.
+        NeonUri aUri( xResAccess->getURL() );
+        aEscapedTitle = aUri.GetPathBaseName();
+
         if ( rType == UNKNOWN )
         {
             xProps.reset(
@@ -1623,7 +1619,8 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     xProps->addProperty( rtl::OUString(
                                             RTL_CONSTASCII_USTRINGPARAM(
                                                 "BaseURI" ) ),
-                                         uno::makeAny( getBaseURI() ),
+                                         uno::makeAny(
+                                            getBaseURI( xResAccess ) ),
                                          true );
                     break;
                 }
@@ -1631,11 +1628,20 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         }
     }
 
-    return getPropertyValues( xSMgr,
-                              rProperties,
-                              *xProps,
-                              xProvider,
-                              xIdentifier->getContentIdentifier() );
+    uno::Reference< sdbc::XRow > xResultRow
+        = getPropertyValues( xSMgr,
+                             rProperties,
+                             *xProps,
+                             xProvider,
+                             xIdentifier->getContentIdentifier() );
+
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+        m_aEscapedTitle = aEscapedTitle;
+    }
+
+    return xResultRow;
 }
 
 //=========================================================================
@@ -1848,7 +1854,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             }
             else
             {
-                if ( getResourceType( xEnv ) == DAV )
+                if ( getResourceType( xEnv, xResAccess ) == DAV )
                 {
                     // Property value will be set on server.
                     ProppatchValue aValue( PROPSET, rName, rValue.Value );
@@ -2050,6 +2056,11 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
           notifyPropertiesChange( aChanges );
     }
 
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+    }
+
     return aRet;
 }
 
@@ -2153,6 +2164,9 @@ uno::Any Content::open(
 
                     // cache headers.
                     m_xCachedProps.reset( new ContentProperties( aResource ) );
+
+                    m_xResAccess.reset(
+                        new DAVResourceAccess( *xResAccess.get() ) );
                 }
             }
             catch ( DAVException const & e )
@@ -2494,6 +2508,12 @@ void Content::insert(
                         // Insert (recursion!).
                         insert( xInputStream, bReplaceExisting, Environment );
 
+                        {
+                            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+                            m_xResAccess.reset(
+                                new DAVResourceAccess( *xResAccess.get() ) );
+                        }
+
                         // Success!
                         return;
                     }
@@ -2561,6 +2581,11 @@ void Content::insert(
             cancelCommandExecution( e, Environment, sal_True );
             // Unreachable
         }
+    }
+
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
     }
 }
 
@@ -2786,6 +2811,11 @@ void Content::transfer(
 
         cancelCommandExecution( e, Environment, sal_True );
         // Unreachable
+    }
+
+    {
+        osl::Guard< osl::Mutex > aGuard( m_aMutex );
+        m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
     }
 }
 
@@ -3051,7 +3081,7 @@ void Content::cancelCommandExecution(
 }
 
 //=========================================================================
-const rtl::OUString Content::getBaseURI()
+const rtl::OUString Content::getBaseURI( const std::auto_ptr< DAVResourceAccess > & rResAccess )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -3069,7 +3099,7 @@ const rtl::OUString Content::getBaseURI()
                 // Do not use m_xIdentifier->getContentIdentifier() because it
                 // for example does not reflect redirects applied to requests
                 // done using the original URI but m_xResAccess' URI does.
-                return rtl::Uri::convertRelToAbs( m_xResAccess->getURL(),
+                return rtl::Uri::convertRelToAbs( rResAccess->getURL(),
                                                   aLocation );
             }
             catch ( rtl::MalformedUriException const & )
@@ -3078,27 +3108,25 @@ const rtl::OUString Content::getBaseURI()
         }
     }
 
-    return rtl::OUString( m_xResAccess->getURL() );
+    return rtl::OUString( rResAccess->getURL() );
 }
 
 //=========================================================================
 const Content::ResourceType & Content::getResourceType(
-                    const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+                    const uno::Reference< ucb::XCommandEnvironment >& xEnv,
+                    const std::auto_ptr< DAVResourceAccess > & rResAccess )
     throw ( uno::Exception )
 {
-    std::auto_ptr< DAVResourceAccess > xResAccess;
     ResourceType eResourceType;
 
     {
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-
-        xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
         eResourceType = m_eResourceType;
     }
 
     if ( eResourceType == UNKNOWN )
     {
-        const rtl::OUString & rURL = xResAccess->getURL();
+        const rtl::OUString & rURL = rResAccess->getURL();
         const rtl::OUString aScheme(
             rURL.copy( 0, rURL.indexOf( ':' ) ).toAsciiLowerCase() );
 
@@ -3112,7 +3140,7 @@ const Content::ResourceType & Content::getResourceType(
             try
             {
                 DAVCapabilities caps;
-                xResAccess->OPTIONS( caps, xEnv );
+                rResAccess->OPTIONS( caps, xEnv );
 
                 if ( caps.class1 )
                 {
@@ -3141,7 +3169,7 @@ const Content::ResourceType & Content::getResourceType(
                         std::vector< rtl::OUString > aPropNames;
                         aPropNames.push_back( DAVProperties::RESOURCETYPE );
                         std::vector< DAVResource > resources;
-                        xResAccess->PROPFIND(
+                        rResAccess->PROPFIND(
                             DAVZERO, aPropNames, resources, xEnv );
 
                         eResourceType = DAV;
@@ -3154,7 +3182,7 @@ const Content::ResourceType & Content::getResourceType(
                             {
                                 std::vector< rtl::OUString > aHeaderNames;
                                 DAVResource resource;
-                                xResAccess->HEAD(
+                                rResAccess->HEAD(
                                     aHeaderNames, resource, xEnv );
 
                                 eResourceType = NON_DAV;
@@ -3186,4 +3214,12 @@ const Content::ResourceType & Content::getResourceType(
         }
     }
     return m_eResourceType;
+}
+
+//=========================================================================
+const Content::ResourceType & Content::getResourceType(
+                    const uno::Reference< ucb::XCommandEnvironment >& xEnv )
+    throw ( uno::Exception )
+{
+    return getResourceType( xEnv, m_xResAccess );
 }
