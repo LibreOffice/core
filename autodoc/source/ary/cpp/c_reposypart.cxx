@@ -4,9 +4,9 @@
  *
  *  $RCSfile: c_reposypart.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-14 15:39:30 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 12:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -363,9 +363,12 @@ RepositoryPartition::Connect_AllTypes_2_TheirRelated_CodeEntites()
         aHierarchyLinker(*this);
     filter_class_iter itEnd( pCes->Storage().End() );
     for ( filter_class_iter it( pCes->Storage().BeginUnreserved() );
-          it != itEnd AND it.IsValid();
+          it != itEnd;
           ++it )
     {
+        if (NOT it.IsValid())
+            continue;
+
         if (is_type<Class>(*it))
             aHierarchyLinker(ary_cast<Class>(*it));
     }
