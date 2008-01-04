@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:02:23 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -584,7 +584,7 @@ void SwFlyAtCntFrm::MakeAll()
                     // Wenn ein mehrspaltiger Rahmen wg. Positionswechsel ungueltige
                     // Spalten hinterlaesst, so drehen wir lieber hier eine weitere
                     // Runde und formatieren unseren Inhalt via FormatWidthCols nochmal.
-                    _InvalidateSize();
+                        _InvalidateSize();
                     bExtra = FALSE; // Sicherhaltshalber gibt es nur eine Ehrenrunde.
                 }
             } while ( !IsValid() && !bOsz &&
@@ -598,6 +598,28 @@ void SwFlyAtCntFrm::MakeAll()
 
             // --> OD 2004-08-25 #i3317# - instead of attribute change apply
             // temporarly the 'straightforward positioning process'.
+            // --> OD 2007-11-29 #i80924#
+            // handle special case during splitting of table rows
+            if ( bConsiderWrapInfluenceDueToMovedFwdAnchor &&
+                 GetAnchorFrm()->IsInTab() &&
+                 GetAnchorFrm()->IsInFollowFlowRow() )
+            {
+                const SwFrm* pCellFrm = GetAnchorFrm();
+                while ( pCellFrm && !pCellFrm->IsCellFrm() )
+                {
+                    pCellFrm = pCellFrm->GetUpper();
+                }
+                if ( pCellFrm )
+                {
+                    SWRECTFN( pCellFrm )
+                    if ( (pCellFrm->Frm().*fnRect->fnGetTop)() == 0 &&
+                         (pCellFrm->Frm().*fnRect->fnGetHeight)() == 0 )
+                    {
+                        bConsiderWrapInfluenceDueToMovedFwdAnchor = false;
+                    }
+                }
+            }
+            // <--
             if ( bOsz || bConsiderWrapInfluenceDueToOverlapPrevCol ||
                  // --> OD 2005-01-14 #i40444#
                  bConsiderWrapInfluenceDueToMovedFwdAnchor )
