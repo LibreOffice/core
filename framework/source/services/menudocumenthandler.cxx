@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:10:46 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:22:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ throw(  SAXException, RuntimeException )
 
     if ( m_xLocator.is() )
     {
-        snprintf( buffer, sizeof(buffer), "Line: %ld - ", m_xLocator->getLineNumber() );
+        snprintf( buffer, sizeof(buffer), "Line: %ld - ", static_cast<long>( m_xLocator->getLineNumber() ));
         return OUString::createFromAscii( buffer );
     }
     else
