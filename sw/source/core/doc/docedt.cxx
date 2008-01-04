@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-05 16:44:24 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:19:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1474,6 +1474,26 @@ SvUShorts * lcl_RangesToUShorts(USHORT * pRanges)
     return pResult;
 }
 
+bool lcl_StrLenOverFlow( const SwPaM& rPam )
+{
+    // If we try to merge two paragraph we have to test if afterwards
+    // the string doesn't exceed the allowed string length
+    bool bRet = false;
+    if( rPam.GetPoint()->nNode != rPam.GetMark()->nNode )
+    {
+        const SwPosition* pStt = rPam.Start(), *pEnd = rPam.End();
+        const SwTxtNode* pEndNd = pEnd->nNode.GetNode().GetTxtNode();
+        if( (0 != pEndNd) && pStt->nNode.GetNode().IsTxtNode() )
+        {
+            sal_uInt64 nSum = pStt->nContent.GetIndex() +
+                pEndNd->GetTxt().Len() - pEnd->nContent.GetIndex();
+            if( nSum > STRING_LEN )
+                bRet = true;
+        }
+    }
+    return bRet;
+}
+
 void lcl_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
 {
     if( rPam.GetPoint()->nNode != rPam.GetMark()->nNode )
@@ -1627,6 +1647,8 @@ void lcl_JoinText( SwPaM& rPam, sal_Bool bJoinPrev )
 
 bool SwDoc::DeleteAndJoin( SwPaM & rPam )
 {
+    if( lcl_StrLenOverFlow( rPam ) )
+        return sal_False;
     if( IsRedlineOn() )
     {
         sal_uInt16 nUndoSize = 0;
