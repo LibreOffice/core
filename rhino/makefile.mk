@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 13:15:44 $
+#   last change: $Author: obo $ $Date: 2008-01-04 15:22:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,20 +45,21 @@ TARGET=ooo_rhino
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=rhino15R4
-TARFILE_ROOTDIR=rhino1_5R4
+TARFILE_NAME=rhino1_5R5
+TARFILE_ROOTDIR=rhino1_5R5
 
-ADDITIONAL_FILES=makefile.mk \
-    toolsrc/org/mozilla/javascript/tools/debugger/AbstractCellEditor.java \
-    toolsrc/org/mozilla/javascript/tools/debugger/AbstractTreeTableModel.java \
-    toolsrc/org/mozilla/javascript/tools/debugger/JTreeTable.java \
-    toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java \
-    toolsrc/org/mozilla/javascript/tools/debugger/TreeTableModelAdapter.java \
-    toolsrc/org/mozilla/javascript/tools/debugger/TreeTableModel.java
+ADDITIONAL_FILES= \
+    toolsrc/org/mozilla/javascript/tools/debugger/OfficeScriptInfo.java
 
-PATCH_FILE_NAME=rhino1_5R4.patch
+PATCH_FILE_NAME=rhino1_5R5.patch
 
-BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
+.IF "$(JAVACISGCJ)"=="yes"
+JAVA_HOME=
+.EXPORT : JAVA_HOME
+BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj jar
+.ELSE
+BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" jar
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
