@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:04:47 $
+#   last change: $Author: obo $ $Date: 2008-01-04 15:00:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -77,8 +77,8 @@ icu_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 icu_LDFLAGS+=-Wl,-z,noexecstack
 .ENDIF
 
-icu_CFLAGS+=-O $(ARCH_FLAGS)
-icu_CXXFLAGS+=-O $(ARCH_FLAGS)
+icu_CFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CFLAGS)
+icu_CXXFLAGS+=-O $(ARCH_FLAGS) $(EXTRA_CFLAGS)
 
 # until someone introduces SOLARIS 64-bit builds
 .IF "$(OS)"=="SOLARIS"
