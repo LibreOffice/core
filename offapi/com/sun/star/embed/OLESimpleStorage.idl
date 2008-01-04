@@ -1,0 +1,90 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: OLESimpleStorage.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:16:19 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_embed_OLESimpleStorage_idl__
+#define __com_sun_star_embed_OLESimpleStorage_idl__
+
+#ifndef __com_sun_star_embed_XOLESimpleStorage_idl__
+#include <com/sun/star/embed/XOLESimpleStorage.idl>
+#endif
+
+#ifndef __com_sun_star_io_XInputStream_idl__
+#include <com/sun/star/io/XInputStream.idl>
+#endif
+
+#ifndef __com_sun_star_io_XStream_idl__
+#include <com/sun/star/io/XStream.idl>
+#endif
+
+//============================================================================
+module com { module sun { module star { module embed {
+//============================================================================
+/** This service provides a simple functionality to allow
+    read/write the storages in OLE storage format.
+*/
+service OLESimpleStorage: XOLESimpleStorage
+{
+    // CONSTRUCTORS ----------------------------------------------------------
+    /** is used to initialize the object on it's creation.
+
+        @param xInputStream
+                [in] the InputStream that contains data in OLE storage format.
+
+        @param bNoTempCopy
+                [in] specifies whether a temporary copy should be created during
+                substreams opening. If the copy is not created the storage must
+                stay alive while the opened substreams are used.
+
+     */
+    createFromInputStream ([in] ::com::sun::star::io::XInputStream xInputStream, [in] boolean bNoTempCopy);
+
+    /** is used to initialize the object on it's creation.
+
+        @param xStream
+                [in] the Stream that contains data in OLE storage format.
+
+        @param bNoTempCopy
+                [in] specifies whether a temporary copy should be created during
+                substreams opening. If the copy is not created the storage must
+                stay alive while the opened substreams are used.
+
+     */
+    createFromStream ([in] ::com::sun::star::io::XStream xStream, [in] boolean bNoTempCopy);
+};
+
+//============================================================================
+
+}; }; }; };
+
+#endif
