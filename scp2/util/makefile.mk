@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-01 18:05:02 $
+#   last change: $Author: obo $ $Date: 2008-01-04 17:13:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ SCP1FILES  = installation_ooo.par          \
              module_ooo.par                \
              module_hidden_ooo.par         \
              module_langpack.par           \
+             module_lang_template.par      \
              profile_ooo.par               \
              profileitem_ooo.par           \
              module_writer.par             \
@@ -200,6 +201,7 @@ SCP2FILES  = installation_ooo.par          \
              module_ooo.par                \
              module_hidden_ooo.par         \
              module_langpack.par           \
+             module_lang_template.par      \
              module_java.par               \
              profile_ooo.par               \
              profileitem_ooo.par           \
