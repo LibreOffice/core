@@ -4,9 +4,9 @@
  *
  *  $RCSfile: codegen.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 09:59:33 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:06:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -538,5 +538,7 @@ void NeverRunsEver()
     // this to force instatiation of the template. Otherwise using the template
     // in another code module results in link errors :-(
     PCodeBuffConvertor< UINT16, UINT32 > aInst1(0,0);
+    aInst1.convert();
     PCodeBuffConvertor< UINT32, UINT16 > aInst2(0,0);
+    aInst2.convert();
 }
