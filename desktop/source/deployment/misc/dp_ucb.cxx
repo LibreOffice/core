@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_ucb.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 15:05:48 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 14:34:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,15 +70,23 @@ bool create_ucb_content(
     bool throw_exc )
 {
     try {
+        // Existense check...
+        // content ctor/isFolder() will throw exception in case the resource
+        // does not exist.
+
         // dilemma: no chance to use the given iahandler here, because it would
         //          raise no such file dialogs, else no interaction for
         //          passwords, ...? xxx todo
         ::ucbhelper::Content ucbContent(
             url, Reference<XCommandEnvironment>() );
-        if (! ucbContent.isFolder())
-            ucbContent.openStream()->closeInput();
+
+        ucbContent.isFolder();
+
         if (ret_ucbContent != 0)
-            *ret_ucbContent = ::ucbhelper::Content( url, xCmdEnv );
+        {
+            ucbContent.setCommandEnvironment( xCmdEnv );
+            *ret_ucbContent = ucbContent;
+        }
         return true;
     }
     catch (RuntimeException &) {
