@@ -4,9 +4,9 @@
  *
  *  $RCSfile: plugcon.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:18:46 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:09:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,9 @@
 #define MOZ_X11
 #include <stdio.h>
 #ifdef SYSTEM_MOZILLA
-#define OJI
+#ifndef OJI
+#  define OJI
+#endif
 #define MOZ_X11
 #include <npupp.h>
 #include <npapi.h>
