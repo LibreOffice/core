@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-26 08:54:34 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 14:33:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -563,7 +563,7 @@ OUString PackageManagerImpl::insertToActivationLayer(
     }
     if (! destFolderContent.transferContent(
             sourceContent, ::ucbhelper::InsertOperation_COPY,
-            OUString(), NameClash::OVERWRITE ))
+            title, NameClash::OVERWRITE ))
         throw RuntimeException( OUSTR("UCB transferContent() failed!"), 0 );
 
     // write to DB:
