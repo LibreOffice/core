@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-05 16:44:07 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:19:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -402,13 +402,27 @@ BOOL SwCursor::IsSelOvr( int eFlags )
         if( pFrm && pFrm->IsValid() && 0 == pFrm->Frm().Height() &&
             0 != ( nsSwCursorSelOverFlags::SELOVER_CHANGEPOS & eFlags ) )
         {
-            // skip to the next / prev valida paragraph with a layout
+            // skip to the next / prev valid paragraph with a layout
             SwNodeIndex& rPtIdx = GetPoint()->nNode;
             int bGoNxt = pSavePos->nNode < rPtIdx.GetIndex();
             while( 0 != ( pFrm = ( bGoNxt ? pFrm->GetNextCntntFrm()
                                           : pFrm->GetPrevCntntFrm() )) &&
                     0 == pFrm->Frm().Height() )
                 ;
+
+            // --> LIJIAN/FME 2007-11-27 #i72394# skip to prev /next valid paragraph
+            // with a layout in case the first search did not succeed:
+            if( !pFrm )
+            {
+                bGoNxt = !bGoNxt;
+                pFrm = ((SwCntntNode*)pNd)->GetFrm();
+                while ( pFrm && 0 == pFrm->Frm().Height() )
+                {
+                    pFrm = bGoNxt ? pFrm->GetNextCntntFrm()
+                        :   pFrm->GetPrevCntntFrm();
+                }
+            }
+            // <--
 
             SwCntntNode* pCNd;
             if( pFrm && 0 != (pCNd = (SwCntntNode*)pFrm->GetNode()) )
