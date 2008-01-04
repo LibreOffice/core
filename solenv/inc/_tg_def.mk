@@ -17,6 +17,10 @@ DEF1DEPN+=$(foreach,i,$(DEFLIB1NAME) $(SLB)$/$(i).lib)
 .IF "$(DEF1EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
 DEF1EXPORTFILE=$(MISC)$/$(SHL1VERSIONMAP:b)_$(SHL1TARGET).dxp
+.IF "$(COM)"=="GCC"
+$(DEF1EXPORTFILE) : $(SHL1OBJS) $(SHL1LIBS)
+.ENDIF # .IF "$(COM)"=="GCC"
+
 $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
@@ -245,6 +249,10 @@ DEF2DEPN+=$(foreach,i,$(DEFLIB2NAME) $(SLB)$/$(i).lib)
 .IF "$(DEF2EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
 DEF2EXPORTFILE=$(MISC)$/$(SHL2VERSIONMAP:b)_$(SHL2TARGET).dxp
+.IF "$(COM)"=="GCC"
+$(DEF2EXPORTFILE) : $(SHL2OBJS) $(SHL2LIBS)
+.ENDIF # .IF "$(COM)"=="GCC"
+
 $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
@@ -473,6 +481,10 @@ DEF3DEPN+=$(foreach,i,$(DEFLIB3NAME) $(SLB)$/$(i).lib)
 .IF "$(DEF3EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
 DEF3EXPORTFILE=$(MISC)$/$(SHL3VERSIONMAP:b)_$(SHL3TARGET).dxp
+.IF "$(COM)"=="GCC"
+$(DEF3EXPORTFILE) : $(SHL3OBJS) $(SHL3LIBS)
+.ENDIF # .IF "$(COM)"=="GCC"
+
 $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
@@ -701,6 +713,10 @@ DEF4DEPN+=$(foreach,i,$(DEFLIB4NAME) $(SLB)$/$(i).lib)
 .IF "$(DEF4EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
 DEF4EXPORTFILE=$(MISC)$/$(SHL4VERSIONMAP:b)_$(SHL4TARGET).dxp
+.IF "$(COM)"=="GCC"
+$(DEF4EXPORTFILE) : $(SHL4OBJS) $(SHL4LIBS)
+.ENDIF # .IF "$(COM)"=="GCC"
+
 $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
@@ -929,6 +945,10 @@ DEF5DEPN+=$(foreach,i,$(DEFLIB5NAME) $(SLB)$/$(i).lib)
 .IF "$(DEF5EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
 DEF5EXPORTFILE=$(MISC)$/$(SHL5VERSIONMAP:b)_$(SHL5TARGET).dxp
+.IF "$(COM)"=="GCC"
+$(DEF5EXPORTFILE) : $(SHL5OBJS) $(SHL5LIBS)
+.ENDIF # .IF "$(COM)"=="GCC"
+
 $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
@@ -1157,6 +1177,10 @@ DEF6DEPN+=$(foreach,i,$(DEFLIB6NAME) $(SLB)$/$(i).lib)
 .IF "$(DEF6EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
 DEF6EXPORTFILE=$(MISC)$/$(SHL6VERSIONMAP:b)_$(SHL6TARGET).dxp
+.IF "$(COM)"=="GCC"
+$(DEF6EXPORTFILE) : $(SHL6OBJS) $(SHL6LIBS)
+.ENDIF # .IF "$(COM)"=="GCC"
+
 $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
@@ -1385,6 +1409,10 @@ DEF7DEPN+=$(foreach,i,$(DEFLIB7NAME) $(SLB)$/$(i).lib)
 .IF "$(DEF7EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
 DEF7EXPORTFILE=$(MISC)$/$(SHL7VERSIONMAP:b)_$(SHL7TARGET).dxp
+.IF "$(COM)"=="GCC"
+$(DEF7EXPORTFILE) : $(SHL7OBJS) $(SHL7LIBS)
+.ENDIF # .IF "$(COM)"=="GCC"
+
 $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
@@ -1613,6 +1641,10 @@ DEF8DEPN+=$(foreach,i,$(DEFLIB8NAME) $(SLB)$/$(i).lib)
 .IF "$(DEF8EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
 DEF8EXPORTFILE=$(MISC)$/$(SHL8VERSIONMAP:b)_$(SHL8TARGET).dxp
+.IF "$(COM)"=="GCC"
+$(DEF8EXPORTFILE) : $(SHL8OBJS) $(SHL8LIBS)
+.ENDIF # .IF "$(COM)"=="GCC"
+
 $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
@@ -1841,6 +1873,10 @@ DEF9DEPN+=$(foreach,i,$(DEFLIB9NAME) $(SLB)$/$(i).lib)
 .IF "$(DEF9EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
 DEF9EXPORTFILE=$(MISC)$/$(SHL9VERSIONMAP:b)_$(SHL9TARGET).dxp
+.IF "$(COM)"=="GCC"
+$(DEF9EXPORTFILE) : $(SHL9OBJS) $(SHL9LIBS)
+.ENDIF # .IF "$(COM)"=="GCC"
+
 $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
@@ -2069,6 +2105,10 @@ DEF10DEPN+=$(foreach,i,$(DEFLIB10NAME) $(SLB)$/$(i).lib)
 .IF "$(DEF10EXPORTFILE)"==""
 .IF "$(GUI)"=="WNT"
 DEF10EXPORTFILE=$(MISC)$/$(SHL10VERSIONMAP:b)_$(SHL10TARGET).dxp
+.IF "$(COM)"=="GCC"
+$(DEF10EXPORTFILE) : $(SHL10OBJS) $(SHL10LIBS)
+.ENDIF # .IF "$(COM)"=="GCC"
+
 $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
     $(TYPE) $< | $(AWK) -f $(SOLARENV)$/bin$/getcsym.awk > $@
 .IF "$(COM)"=="GCC"
