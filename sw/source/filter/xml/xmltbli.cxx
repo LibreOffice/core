@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:13:51 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2591,7 +2591,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             }
         }
 
-        if( nAbsWidth < nWidth )
+        if( nAbsWidth && nAbsWidth < nWidth )
         {
             // If the table's width is larger than the absolute column widths,
             // every column get some extra width.
