@@ -4,9 +4,9 @@
  *
  *  $RCSfile: properties.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-08 08:30:26 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:20:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,16 +202,22 @@ namespace framework{
 #define LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER      "MenuBarCloser"
 #define LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS  "AutomaticToolbars"
 #define LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY  "RefreshContextToolbarVisibility"
+#define LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI      "HideCurrentUI"
+#define LAYOUTMANAGER_PROPNAME_ASCII_LOCKCOUNT          "LockCount"
 
 #define LAYOUTMANAGER_PROPNAME_MENUBARCLOSER            ::rtl::OUString::createFromAscii( LAYOUTMANAGER_PROPNAME_ASCII_MENUBARCLOSER )
 #define LAYOUTMANAGER_PROPNAME_AUTOMATICTOOLBARS        ::rtl::OUString::createFromAscii( LAYOUTMANAGER_PROPNAME_ASCII_AUTOMATICTOOLBARS )
 #define LAYOUTMANAGER_PROPNAME_REFRESHVISIBILITY        ::rtl::OUString::createFromAscii( LAYOUTMANAGER_PROPNAME_ASCII_REFRESHVISIBILITY )
+#define LAYOUTMANAGER_PROPNAME_HIDECURRENTUI            ::rtl::OUString::createFromAscii( LAYOUTMANAGER_PROPNAME_ASCII_HIDECURRENTUI )
+#define LAYOUTMANAGER_PROPNAME_LOCKCOUNT                ::rtl::OUString::createFromAscii( LAYOUTMANAGER_PROPNAME_ASCII_LOCKCOUNT )
 
 #define LAYOUTMANAGER_PROPHANDLE_MENUBARCLOSER          0
 #define LAYOUTMANAGER_PROPHANDLE_AUTOMATICTOOLBARS      1
 #define LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY      2
+#define LAYOUTMANAGER_PROPHANDLE_HIDECURRENTUI          3
+#define LAYOUTMANAGER_PROPHANDLE_LOCKCOUNT              4
 
-#define LAYOUTMANAGER_PROPCOUNT                         3
+#define LAYOUTMANAGER_PROPCOUNT                         5
 
 //_______________________________________________
 /** properties for "UICommandDescription" class */
