@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdata.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:24:02 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:10:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,6 @@ class SfxAppData_Impl
 {
 public:
     IndexBitSet                         aIndexBitSet;           // for counting noname documents
-    Timer                               aLateInitTimer;
     String                              aLastDir;               // for IO dialog
 
     // DDE stuff
@@ -180,7 +179,6 @@ public:
 
     void                        UpdateApplicationSettings( BOOL bDontHide );
     SfxDocumentTemplates*       GetDocumentTemplates();
-    DECL_STATIC_LINK(           SfxAppData_Impl, CreateDocumentTemplates, void* );
     void                        DeInitDDE();
 
     /** called when the Application's BasicManager has been created. This can happen
