@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscconst.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:01:55 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,6 +419,7 @@ ERRTYPE RscEnum::WriteRc( const RSCINST & rInst, RscWriteRc & aMem,
 }
 
 RscLangEnum::RscLangEnum()
-        : RscEnum( pHS->getID( "LangEnum" ), RSC_NOTYPE )
+        : RscEnum( pHS->getID( "LangEnum" ), RSC_NOTYPE ),
+          mnLangId( 0x400 )
 {
 }
