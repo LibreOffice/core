@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updateinstalldialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:03:07 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 14:33:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -608,18 +608,21 @@ void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     ::ucbhelper::Content sourceContent;
     dp_misc::create_ucb_content( &sourceContent, sDownloadURL, m_updateCmdEnv.get() );
 
+    const OUString sTitle(sourceContent.getPropertyValue(
+                          dp_misc::StrTitle::get() ).get<OUString>() );
+
     if (destFolderContent.transferContent(
             sourceContent, ::ucbhelper::InsertOperation_COPY,
-            OUSTR(""), css::ucb::NameClash::OVERWRITE ))
+            sTitle, css::ucb::NameClash::OVERWRITE ))
     {
-        //the user may have been cancelled the dialog because downloading took to look
+        //the user may have cancelled the dialog because downloading took to long
         {
             ::vos::OGuard g(Application::GetSolarMutex());
             if (m_stop) {
                 return;
             }
             //all errors should be handeld by the command environment.
-            aUpdateData.sLocalURL = destFolder + sDownloadURL.copy( sDownloadURL.lastIndexOf('/'));
+            aUpdateData.sLocalURL = destFolder + OUString( RTL_CONSTASCII_USTRINGPARAM( "/" ) ) + sTitle;
         }
     }
 }
