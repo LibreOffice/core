@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xolesimplestorage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:11:50 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:32:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,9 +102,8 @@ OLESimpleStorage::~OLESimpleStorage()
 //-------------------------------------------------------------------------
 uno::Sequence< ::rtl::OUString > SAL_CALL OLESimpleStorage::impl_staticGetSupportedServiceNames()
 {
-    uno::Sequence< ::rtl::OUString > aRet(2);
+    uno::Sequence< ::rtl::OUString > aRet(1);
     aRet[0] = ::rtl::OUString::createFromAscii("com.sun.star.embed.OLESimpleStorage");
-    aRet[1] = ::rtl::OUString::createFromAscii("com.sun.star.comp.embed.OLESimpleStorage");
     return aRet;
 }
 
