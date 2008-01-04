@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 12:20:39 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:23:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2981,6 +2981,7 @@ void WW8TabDesc::FinishSwTable()
                         pLine->GetTabBoxes().C40_INSERT( SwTableBox,
                             pTargetBox, nPos );
                         // dann die Nodes loeschen!!
+                        pIo->pAnchorStck->Flush();
                         pIo->rDoc.DeleteSection( pSttNd );
                     }
                     break;
