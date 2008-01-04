@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:28:01 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 14:57:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,6 +461,10 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                         bROAutoSaveTime = pROStates[nProp];
                         break;
 
+                    case FORMAT:
+                        // not supported anymore
+                        break;
+
                     default:
                     {
                         sal_Bool bTemp = sal_Bool();
@@ -533,8 +537,9 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                             }
                         }
                         else
+                        {
                             DBG_ERROR( "Wrong Type!" );
-
+                        }
                     }
                 }
             }
