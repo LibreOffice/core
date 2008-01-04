@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-21 18:49:57 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:59:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -370,7 +370,7 @@ sub create_directories
             $localproductsubdir = $2;
         }
 
-        if (( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi )) { $path = $path . $localproductname . "_languagepack" . $installer::globals::separator; }
+        if ( $installer::globals::languagepack ) { $path = $path . $localproductname . "_languagepack" . $installer::globals::separator; }
         elsif ( $installer::globals::patch ) { $path = $path . $localproductname . "_patch" . $installer::globals::separator; }
         else { $path = $path . $localproductname . $installer::globals::separator; }
 
@@ -402,7 +402,6 @@ sub create_directories
                 $languagestring = $shorter;
             }
 
-            if ($installer::globals::is_unix_multi) { $languagestring = $installer::globals::unixmultipath; }
             $path = $path . $languagestring  . $installer::globals::separator;
             create_directory($path);
         }
