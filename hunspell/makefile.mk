@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: rene $ $Date: 2007-10-05 11:54:26 $
+#   last change: $Author: rene $ $Date: 2008-01-04 19:47:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ TARGET=hunspell
 TARFILE_NAME=hunspell-1.1.12-2
 TARFILE_ROOTDIR=hunspell-1.1.12
 
-#PATCH_FILE_NAME=hunspell-1.1.12.patch
+PATCH_FILE_NAME=hunspell-1.1.12.patch
 
 .IF "$(GUI)"=="UNX"
 #CONFIGURE_DIR=$(BUILD_DIR)
