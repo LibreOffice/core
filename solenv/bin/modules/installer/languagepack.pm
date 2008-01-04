@@ -4,9 +4,9 @@
 #
 #   $RCSfile: languagepack.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 09:52:02 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:57:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -89,27 +89,30 @@ sub select_language_items
             {
                 # $oneitem->{'modules'} = $installer::globals::rootmodulegid;    # all files in a language pack are root files
                 # Using $installer::globals::languagemodulesbase (?)
-                $oneitem->{'modules'} = $installer::globals::rootmodulegid . "_$locallang";      # all files in a language pack are root files
 
-                if (( $installer::globals::islinuxbuild ) || ( $installer::globals::issolarispkgbuild ))
-                {
-                    if ( $oneitem->{'Dir'} )
-                    {
-                        if ( $oneitem->{'Dir'} eq "gid_Dir_Fonts_Truetype" ) { $oneitem->{'modules'} = "gid_Module_Langpack_Fonts_$locallang"; }
-                        if ( $oneitem->{'Dir'} eq "gid_Dir_Resource" ) { $oneitem->{'modules'} = "gid_Module_Langpack_Resource_$locallang"; }
-                        if ( $oneitem->{'Dir'} eq "gid_Dir_Help_Isolanguage" ) { $oneitem->{'modules'} = "gid_Module_Langpack_Help_$locallang"; }
-                    }
-                }
+#               # no more automatic change of module assignments
+#               $oneitem->{'modules'} = $installer::globals::rootmodulegid . "_$locallang";      # all files in a language pack are root files
+#
+#               if (( $installer::globals::islinuxbuild ) || ( $installer::globals::issolarispkgbuild ))
+#               {
+#                   if ( $oneitem->{'Dir'} )
+#                   {
+#                       if ( $oneitem->{'Dir'} eq "gid_Dir_Fonts_Truetype" ) { $oneitem->{'modules'} = "gid_Module_Langpack_Fonts_$locallang"; }
+#                       if ( $oneitem->{'Dir'} eq "gid_Dir_Resource" ) { $oneitem->{'modules'} = "gid_Module_Langpack_Resource_$locallang"; }
+#                       if ( $oneitem->{'Dir'} eq "gid_Dir_Help_Isolanguage" ) { $oneitem->{'modules'} = "gid_Module_Langpack_Help_$locallang"; }
+#                   }
+#               }
 
                 # preparing different modules for Windows Installer language packs
                 # my $underlinelanguage = $specificlanguage;
                 # $underlinelanguage =~ s/-/_/;
                 # if ( $installer::globals::iswindowsbuild ) { $oneitem->{'modules'} = $installer::globals::languagemodulesbase . $underlinelanguage; }
 
-                if (! installer::existence::exists_in_array($oneitem->{'modules'}, \@installer::globals::languagepackfeature))
-                {
-                    push(@installer::globals::languagepackfeature, $oneitem->{'modules'});  # Collecting all language pack feature
-                }
+#               # no more collecting of language pack feature
+#               if (! installer::existence::exists_in_array($oneitem->{'modules'}, \@installer::globals::languagepackfeature))
+#               {
+#                   push(@installer::globals::languagepackfeature, $oneitem->{'modules'});  # Collecting all language pack feature
+#               }
 
                 push(@itemsarray, $oneitem);
             }
