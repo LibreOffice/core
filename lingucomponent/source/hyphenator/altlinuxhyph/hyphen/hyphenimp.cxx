@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphenimp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 09:25:13 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,8 +186,8 @@ Sequence< Locale > SAL_CALL Hyphenator::getLocales()
 
             int numusr;          // number of user dictionary entries
             int numshr;          // number of shared dictionary entries
-            dictentry * spdict;  // shared dict entry pointer
-            dictentry * updict;  // user dict entry pointer
+            dictentry * spdict = NULL;  // shared dict entry pointer
+            dictentry * updict = NULL;  // user dict entry pointer
         std::vector<dictentry*> postspdict;
         std::vector<dictentry*> postupdict;
 
@@ -548,15 +548,15 @@ Hyphenator::hyphenate( const ::rtl::OUString& aWord,
             }
 
                     // handle shortening
-                    int nPos = (nHyphenationPosAltHyph < nHyphenationPos) ?
-                        nHyphenationPosAltHyph : nHyphenationPos;
+                    INT16 nPos = (INT16) ((nHyphenationPosAltHyph < nHyphenationPos) ?
+                        nHyphenationPosAltHyph : nHyphenationPos);
                     // dicretionary hyphenation
                 xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ), nPos,
                 aWord.replaceAt(nHyphenationPosAlt + 1, cut[nHyphenationPos], repHyph),
-                        nHyphenationPosAltHyph);
+                        (INT16) nHyphenationPosAltHyph);
                 } else {
                 xRes = new HyphenatedWord( aWord, LocaleToLanguage( aLocale ), nHyphenationPos,
-                       aWord, nHyphenationPos);
+                       aWord, (INT16) nHyphenationPos);
                 }
         }
 
