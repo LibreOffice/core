@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:42:26 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:19:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,19 +308,24 @@ struct ModuleToGroupNameMap_Impl
     USHORT      m_nNodeId;
 };
 
-static String sEmpty;
 static OfaPageResource* pPageRes = NULL;
 
 static ModuleToGroupNameMap_Impl ModuleMap[] =
 {
-    { "Writer", sEmpty, SID_SW_EDITOPTIONS },
-    { "WriterWeb", sEmpty, SID_SW_ONLINEOPTIONS },
-    { "Calc", sEmpty, SID_SC_EDITOPTIONS },
-    { "Draw", sEmpty, SID_SD_GRAPHIC_OPTIONS },
-    { "Impress", sEmpty, SID_SD_EDITOPTIONS },
-    { "Math", sEmpty, SID_SM_EDITOPTIONS },
-    { "Base", sEmpty, SID_SB_STARBASEOPTIONS },
-    { NULL, sEmpty, 0xFFFF }
+    { "ProductName", String::EmptyString(), SID_GENERAL_OPTIONS },
+    { "LanguageSettings", String::EmptyString(), SID_LANGUAGE_OPTIONS },
+    { "Internet", String::EmptyString(), SID_INET_DLG },
+    { "LoadSave", String::EmptyString(), SID_FILTER_DLG },
+    { "Writer", String::EmptyString(), SID_SW_EDITOPTIONS },
+    { "WriterWeb", String::EmptyString(), SID_SW_ONLINEOPTIONS },
+    { "Math", String::EmptyString(), SID_SM_EDITOPTIONS },
+    { "Calc", String::EmptyString(), SID_SC_EDITOPTIONS },
+    { "Impress", String::EmptyString(), SID_SD_EDITOPTIONS },
+    { "Draw", String::EmptyString(), SID_SD_GRAPHIC_OPTIONS },
+    { "Charts", String::EmptyString(), SID_SCH_EDITOPTIONS },
+    { "Base", String::EmptyString(), SID_SB_STARBASEOPTIONS },
+
+    { NULL, String::EmptyString(), 0xFFFF }
 };
 
 static void setGroupName( const rtl::OUString& rModule, const String& rGroupName )
@@ -382,7 +387,7 @@ static void deleteGroupNames()
 {
     USHORT nIndex = 0;
     while ( ModuleMap[ nIndex ].m_pModule )
-        ModuleMap[ nIndex++ ].m_sGroupName = sEmpty;
+        ModuleMap[ nIndex++ ].m_sGroupName = String::EmptyString();
 }
 
 static USHORT getGroupNodeId( const rtl::OUString& rModule )
