@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2007-09-06 14:10:35 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:19:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,8 @@ FILES_TO_COPY_FROM_ATL=atlbase.h \
                atlwin.h \
                statreg.h
 
-FILES_TO_COPY_FROM_DIRECTXSDK=dxtrans.h
+FILES_TO_COPY_FROM_DIRECTXSDK=dxtrans.h \
+                  d3dx9.h
 
 $(MISC)$/mingwheader_patch_all : $(MISC)$/mingwheader_patch $(LB)$/libmsvcrt.a
 
