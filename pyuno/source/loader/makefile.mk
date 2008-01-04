@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2007-09-27 12:51:55 $
+#   last change: $Author: obo $ $Date: 2008-01-04 14:57:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@ DIRECT = $(LINKFLAGSDEFS)
 .IF "$(SYSTEM_PYTHON)" == "YES"
 PYTHONLIB=$(PYTHON_LIBS)
 CFLAGS+=$(PYTHON_CFLAGS)
+.IF "$(EXTRA_CFLAGS)"!=""
+PYTHONLIB+=-framework Python
+.ENDIF # "$(EXTRA_CFLAGS)"!=""
 .ELSE
 .INCLUDE :  pyversion.mk
 
