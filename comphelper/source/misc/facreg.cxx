@@ -4,9 +4,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:10:54 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:37:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,31 +63,34 @@ using namespace com::sun::star;
 // IndexedPropertyValuesContainer
 extern uno::Sequence< OUString > SAL_CALL IndexedPropertyValuesContainer_getSupportedServiceNames() throw();
 extern OUString SAL_CALL IndexedPropertyValuesContainer_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL IndexedPropertyValuesContainer_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL IndexedPropertyValuesContainer_createInstance(const uno::Reference< uno::XComponentContext > & rxContext) throw( uno::Exception );
 
 // NamedPropertyValuesContainer
 extern uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer_getSupportedServiceNames() throw();
 extern OUString SAL_CALL NamedPropertyValuesContainer_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL NamedPropertyValuesContainer_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL NamedPropertyValuesContainer_createInstance(const uno::Reference< uno::XComponentContext > & rxContext) throw( uno::Exception );
 
 // AnyCompareFactory
 extern uno::Sequence< OUString > SAL_CALL AnyCompareFactory_getSupportedServiceNames() throw();
 extern OUString SAL_CALL AnyCompareFactory_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL AnyCompareFactory_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL AnyCompareFactory_createInstance(const uno::Reference< uno::XComponentContext > & rxContext) throw( uno::Exception );
 
 // OfficeInstallationDirectories
 extern uno::Sequence< OUString > SAL_CALL OfficeInstallationDirectories_getSupportedServiceNames() throw();
 extern OUString SAL_CALL OfficeInstallationDirectories_getImplementationName() throw();
 extern OUString SAL_CALL OfficeInstallationDirectories_getSingletonName() throw();
 extern OUString SAL_CALL OfficeInstallationDirectories_getSingletonServiceName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL OfficeInstallationDirectories_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL OfficeInstallationDirectories_createInstance(const uno::Reference< uno::XComponentContext > & rxContext) throw( uno::Exception );
 
 // SequenceInputStreamService
 extern uno::Sequence< OUString > SAL_CALL SequenceInputStreamService_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SequenceInputStreamService_getImplementationName() throw();
-extern uno::Reference< uno::XInterface > SAL_CALL SequenceInputStreamService_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+extern uno::Reference< uno::XInterface > SAL_CALL SequenceInputStreamService_createInstance(const uno::Reference< uno::XComponentContext > & rxContext) throw( uno::Exception );
 
-
+//SequenceOutputStreamService
+extern uno::Sequence< OUString > SAL_CALL SequenceOutputStreamService_getSupportedServiceNames() throw();
+extern OUString SAL_CALL SequenceOutputStreamService_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL SequenceOutputStreamService_createInstance(const uno::Reference< uno::XComponentContext >& rxContext) throw( uno::Exception );
 
 
 //
@@ -146,6 +149,8 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo( void *, void * pRegi
             writeInfo( pKey, OInstanceLocker::impl_staticGetImplementationName(), OInstanceLocker::impl_staticGetSupportedServiceNames() );
             // SequenceInputStreamService
             writeInfo( pKey, SequenceInputStreamService_getImplementationName(), SequenceInputStreamService_getSupportedServiceNames() );
+            // SequenceOutputStreamService
+            writeInfo( pKey, SequenceOutputStreamService_getImplementationName(), SequenceOutputStreamService_getSupportedServiceNames() );
 
         }
         catch (registry::InvalidRegistryException &)
@@ -161,58 +166,63 @@ SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory( const sal_Char * pImp
     void * pRet = 0;
     if( pServiceManager )
     {
-        uno::Reference< lang::XMultiServiceFactory > xMSF( reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
-
-        uno::Reference< lang::XSingleServiceFactory > xFactory;
+        uno::Reference<lang::XSingleComponentFactory> xComponentFactory;
 
         const sal_Int32 nImplNameLen = strlen( pImplName );
         if( IndexedPropertyValuesContainer_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                IndexedPropertyValuesContainer_getImplementationName(),
+            xComponentFactory = ::cppu::createSingleComponentFactory(
                 IndexedPropertyValuesContainer_createInstance,
+                IndexedPropertyValuesContainer_getImplementationName(),
                 IndexedPropertyValuesContainer_getSupportedServiceNames() );
         }
         else if( NamedPropertyValuesContainer_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                NamedPropertyValuesContainer_getImplementationName(),
+            xComponentFactory = ::cppu::createSingleComponentFactory(
                 NamedPropertyValuesContainer_createInstance,
+                NamedPropertyValuesContainer_getImplementationName(),
                 NamedPropertyValuesContainer_getSupportedServiceNames() );
         }
         else if( AnyCompareFactory_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                AnyCompareFactory_getImplementationName(),
+            xComponentFactory = ::cppu::createSingleComponentFactory(
                 AnyCompareFactory_createInstance,
+                AnyCompareFactory_getImplementationName(),
                 AnyCompareFactory_getSupportedServiceNames() );
         }
         else if( OfficeInstallationDirectories_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                OfficeInstallationDirectories_getImplementationName(),
+            xComponentFactory = ::cppu::createSingleComponentFactory(
                 OfficeInstallationDirectories_createInstance,
+                OfficeInstallationDirectories_getImplementationName(),
                 OfficeInstallationDirectories_getSupportedServiceNames() );
         }
         else if( OInstanceLocker::impl_staticGetImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                OInstanceLocker::impl_staticGetImplementationName(),
+            xComponentFactory = ::cppu::createSingleComponentFactory(
                 OInstanceLocker::impl_staticCreateSelfInstance,
+                OInstanceLocker::impl_staticGetImplementationName(),
                 OInstanceLocker::impl_staticGetSupportedServiceNames() );
         }
         else if( SequenceInputStreamService_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
-            xFactory = ::cppu::createSingleFactory( xMSF,
-                SequenceInputStreamService_getImplementationName(),
+            xComponentFactory = ::cppu::createSingleComponentFactory(
                 SequenceInputStreamService_createInstance,
+                SequenceInputStreamService_getImplementationName(),
                 SequenceInputStreamService_getSupportedServiceNames() );
         }
-
-        if( xFactory.is())
+        else if ( SequenceOutputStreamService_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
-            xFactory->acquire();
-            pRet = xFactory.get();
+            xComponentFactory = ::cppu::createSingleComponentFactory(
+                SequenceOutputStreamService_createInstance,
+                SequenceOutputStreamService_getImplementationName(),
+                SequenceOutputStreamService_getSupportedServiceNames() );
+        }
+
+        if( xComponentFactory.is())
+        {
+            xComponentFactory->acquire();
+            pRet = xComponentFactory.get();
         }
     }
     return pRet;
