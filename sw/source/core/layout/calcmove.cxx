@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:01:12 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:21:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,15 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
                     // _WouldFit kann auch gefragt werden, wenn _nur_ fremdverankerte Flys vorliegen,
                     // dabei ist sogar die Breite egal, da ein TestFormat in der neuen Umgebung
                     // vorgenommen wird.
-                    return _WouldFit( nSpace, pNewUpper, nMoveAnyway == 2 );
+                    // --> OD 2007-11-26 #b6614158#
+                    const BYTE nBwdMoveNecessaryResult =
+                                            BwdMoveNecessary( pNewPage, aRect);
+                    const bool bObjsInNewUpper( nBwdMoveNecessaryResult == 2 ||
+                                                nBwdMoveNecessaryResult == 3 );
+
+                    return _WouldFit( nSpace, pNewUpper, nMoveAnyway == 2,
+                                      bObjsInNewUpper );
+                    // <--
                 }
                 //Bei einem spaltigen Bereichsfrischling kann _WouldFit kein
                 //brauchbares Ergebnis liefern, also muessen wir wirklich
@@ -1880,7 +1888,12 @@ BOOL lcl_IsNextFtnBoss( const SwFrm *pFrm, const SwFrm* pNxt )
     return ( pFrm && pNxt && pFrm->GetNext() == pNxt );
 }
 
-BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMove )
+// --> OD 2007-11-26 #b6614158#
+BOOL SwCntntFrm::_WouldFit( SwTwips nSpace,
+                            SwLayoutFrm *pNewUpper,
+                            BOOL bTstMove,
+                            const bool bObjsInNewUpper )
+// <--
 {
     //Damit die Fussnote sich ihren Platz sorgsam waehlt, muss
     //sie in jedem Fall gemoved werden, wenn zwischen dem
@@ -2067,8 +2080,15 @@ BOOL SwCntntFrm::_WouldFit( SwTwips nSpace, SwLayoutFrm *pNewUpper, BOOL bTstMov
                   pNxt->FindFtnFrm()->GetAttr() == pFtnFrm->GetAttr() ) ) )
             {
                 // ProbeFormatierung vertraegt keine absatz- oder gar zeichengebundene Objekte
-                if( bTstMove && pNxt->GetDrawObjs() )
+                // --> OD 2007-11-26 #b6614158#
+                // current solution for the test formatting doesn't work, if
+                // objects are present in the remaining area of the new upper
+                if ( bTstMove &&
+                     ( pNxt->GetDrawObjs() || bObjsInNewUpper ) )
+                {
                     return TRUE;
+                }
+                // <--
 
                 if ( !pNxt->IsValid() )
                     MakeNxt( pFrm, pNxt );
