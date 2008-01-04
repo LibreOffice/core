@@ -4,9 +4,9 @@
 #
 #   $RCSfile: files.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:03:17 $
+#   last change: $Author: obo $ $Date: 2008-01-04 15:01:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,19 @@ sub check_file
 sub read_file
 {
     my ($localfile) = @_;
+    my @localfile = ();
 
     if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::read_file : $localfile"); }
 
     open( IN, "<$localfile" ) || installer::exiter::exit_program("ERROR: Cannot open file $localfile for reading", "read_file");
-    my @localfile = <IN>;
+
+#   Don't use "my @localfile = <IN>" here, because
+#   perl has a problem with the internal "large_and_huge_malloc" function
+#   when calling perl using MacOS 10.5 with a perl built with MacOS 10.4
+    while ( $line = <IN> ) {
+        push @localfile, $line;
+    }
+
     close( IN );
 
     return \@localfile;
