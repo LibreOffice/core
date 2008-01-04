@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:17:30 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:09:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,6 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     utl::ConfigManager::GetConfigManager()->StoreConfigItems();
     SfxApplication* pApp = SFX_APP();
-    pApp->Get_Impl()->aLateInitTimer.Stop();
     pApp->Broadcast( SfxSimpleHint( SFX_HINT_DEINITIALIZING ) );
     pApp->Get_Impl()->pAppDispatch->ReleaseAll();
     pApp->Get_Impl()->pAppDispatch->release();
@@ -386,9 +385,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAppData_Impl->pPool = NoChaos::GetItemPool();
     SetPool( pAppData_Impl->pPool );
 
-    InsertLateInitHdl( LINK(this, SfxApplication,SpecialService_Impl) );
-    InsertLateInitHdl( STATIC_LINK( pAppData_Impl, SfxAppData_Impl, CreateDocumentTemplates ) );
-
     if ( pAppData_Impl->bDowning )
         return sal_False;
 
@@ -396,12 +392,6 @@ FASTBOOL SfxApplication::Initialize_Impl()
     pAppData_Impl->pAppDispat->Push(*this);
     pAppData_Impl->pAppDispat->Flush();
     pAppData_Impl->pAppDispat->DoActivate_Impl( sal_True, NULL );
-
-    // start LateInit
-    SfxAppData_Impl *pAppData = Get_Impl();
-    pAppData->aLateInitTimer.SetTimeout( 250 );
-    pAppData->aLateInitTimer.SetTimeoutHdl( LINK( this, SfxApplication, LateInitTimerHdl_Impl ) );
-    pAppData->aLateInitTimer.Start();
 
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
@@ -411,18 +401,3 @@ FASTBOOL SfxApplication::Initialize_Impl()
 
     return sal_True;
 }
-
-IMPL_LINK( SfxApplication, SpecialService_Impl, void*, )
-{
-    // StarOffice registration
-    INetURLObject aORegObj( SvtPathOptions().GetUserConfigPath(), INET_PROT_FILE );
-    aORegObj.insertName( DEFINE_CONST_UNICODE( "oreg.ini" ) );
-    Config aCfg( aORegObj.PathToFileName() );
-    aCfg.SetGroup( "reg" );
-    sal_uInt16 nRegKey = (sal_uInt16) aCfg.ReadKey( "registration", "0" ).ToInt32();
-    if( nRegKey == 0 )
-        GetAppDispatcher_Impl()->Execute(SID_ONLINE_REGISTRATION_DLG, SFX_CALLMODE_ASYNCHRON);
-
-    return 0;
-}
-
