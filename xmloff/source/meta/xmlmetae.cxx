@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 12:59:05 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 14:58:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,15 +157,13 @@ SfxXMLMetaExport::SfxXMLMetaExport(
         xInfoProp = uno::Reference<beans::XPropertySet>( xDocInfo, uno::UNO_QUERY );
     }
 
-    uno::Reference<beans::XPropertySet> xDocProp( rDocModel, uno::UNO_QUERY );
-    if ( xDocProp.is() )
+    if ( xInfoProp.is() )
     {
         //  get document language from document properties
         //  (not available for all document types)
-
         try
         {
-            uno::Any aLocAny = xDocProp->getPropertyValue(
+            uno::Any aLocAny = xInfoProp->getPropertyValue(
                         rtl::OUString::createFromAscii( PROP_CHARLOCALE ) );
             aLocAny >>= aLocale;
         }
