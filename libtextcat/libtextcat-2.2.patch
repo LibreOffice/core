@@ -1,5 +1,5 @@
 *** misc/libtextcat-2.2/configure	Thu May 22 13:39:55 2003
---- misc/build/libtextcat-2.2/configure	Thu Nov  1 12:53:31 2007
+--- misc/build/libtextcat-2.2/configure	Tue Nov 27 13:51:14 2007
 ***************
 *** 5391,5397 ****
   allow_undefined_flag=
@@ -19,6 +19,23 @@
   # flags to be left without arguments
   archive_cmds=
 ***************
+*** 5785,5791 ****
+      #        cross-compilation, but unfortunately the echo tests do not
+      #        yet detect zsh echo's removal of \ escapes.  Also zsh mangles
+      #	     `"' quotes if we put them in here... so don't!
+!     archive_cmds='$CC -r -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs && $CC $(test .$module = .yes && echo -bundle || echo -dynamiclib) $allow_undefined_flag -o $lib ${lib}-master.o $deplibs$linker_flags $(test .$module != .yes && echo -install_name $rpath/$soname $verstring)'
+      # We need to add '_' to the symbols in $export_symbols first
+      #archive_expsym_cmds="$archive_cmds"' && strip -s $export_symbols'
+      hardcode_direct=yes
+--- 5786,5792 ----
+      #        cross-compilation, but unfortunately the echo tests do not
+      #        yet detect zsh echo's removal of \ escapes.  Also zsh mangles
+      #	     `"' quotes if we put them in here... so don't!
+!     archive_cmds='$CC -r -keep_private_externs -nostdlib -o ${lib}-master.o $libobjs && $CC $(test .$module = .yes && echo -bundle || echo -dynamiclib) $allow_undefined_flag -o $lib ${lib}-master.o $deplibs$compiler_flags $(test .$module != .yes && echo -install_name $rpath/$soname $verstring)'
+      # We need to add '_' to the symbols in $export_symbols first
+      #archive_expsym_cmds="$archive_cmds"' && strip -s $export_symbols'
+      hardcode_direct=yes
+***************
 *** 6280,6286 ****
     ;;
   
@@ -36,7 +53,7 @@
     case $version_type in
       freebsd-elf*)
 *** misc/libtextcat-2.2/src/Makefile.in	Thu May 22 13:39:52 2003
---- misc/build/libtextcat-2.2/src/Makefile.in	Thu Nov  1 12:53:31 2007
+--- misc/build/libtextcat-2.2/src/Makefile.in	Tue Nov 27 13:49:17 2007
 ***************
 *** 124,143 ****
   target_vendor = @target_vendor@
@@ -185,7 +202,7 @@
   distclean-depend:
   	-rm -rf ./$(DEPDIR)
 *** misc/libtextcat-2.2/src/common.c	Thu May 22 13:32:43 2003
---- misc/build/libtextcat-2.2/src/common.c	Thu Nov  1 13:06:37 2007
+--- misc/build/libtextcat-2.2/src/common.c	Tue Nov 27 13:49:17 2007
 ***************
 *** 3,25 ****
    *
@@ -572,7 +589,7 @@
   		}
   		*w++ = *p++;
 *** misc/libtextcat-2.2/src/common.h	Thu May 22 15:02:29 2003
---- misc/build/libtextcat-2.2/src/common.h	Thu Nov  1 12:53:31 2007
+--- misc/build/libtextcat-2.2/src/common.h	Tue Nov 27 13:49:17 2007
 ***************
 *** 1,28 ****
   #ifndef _COMMON_H_
@@ -679,7 +696,7 @@
   #endif
   
 *** misc/libtextcat-2.2/src/constants.h	Thu May 22 13:32:43 2003
---- misc/build/libtextcat-2.2/src/constants.h	Thu Nov  1 13:05:24 2007
+--- misc/build/libtextcat-2.2/src/constants.h	Tue Nov 27 13:49:17 2007
 ***************
 *** 39,44 ****
 --- 39,46 ----
@@ -713,14 +730,14 @@
   
 ! /* Maximum number of character of an n-gram? */
 ! #define MAXNGRAMSYMBOL 5
-! 
-! /* Maximum size of the string representing an n-gram (must be greater than number of symbol) */
-! #ifdef _UTF8_
-! #define MAXNGRAMSIZE 20
-! #else
-! #define MAXNGRAMSIZE MAXNGRAMSYMBOL
-! #endif
   
++ /* Maximum size of the string representing an n-gram (must be greater than number of symbol) */
++ #ifdef _UTF8_
++ #define MAXNGRAMSIZE 20
++ #else
++ #define MAXNGRAMSIZE MAXNGRAMSYMBOL
++ #endif
++ 
   /* Which characters are not acceptable in n-grams? */
 ! #define INVALID(c) (isspace((unsigned char)c) || isdigit((unsigned char)c)) 
   
@@ -740,7 +757,7 @@
 + 
   #endif
 *** misc/libtextcat-2.2/src/fingerprint.c	Thu May 22 13:32:43 2003
---- misc/build/libtextcat-2.2/src/fingerprint.c	Thu Nov  1 12:53:31 2007
+--- misc/build/libtextcat-2.2/src/fingerprint.c	Tue Nov 27 13:49:18 2007
 ***************
 *** 6,28 ****
    * All rights reserved.
@@ -917,8 +934,8 @@
 - 	}
 - 	return 1;
 - }
-- 
   
+- 
   /* increases frequency of ngram(p,len) */
 ! static inline int increasefreq( table_t *t, char *p, int len ) 
 ! {	
@@ -1079,7 +1096,7 @@
   	result->table = (entry_t **)wg_zalloc( sizeof(entry_t*) * TABLESIZE );
   	result->pool = wgmempool_Init( 10000, 10 );
 ***************
-*** 347,360 ****
+*** 347,353 ****
   	wgmempool_Done(t->pool);
   	wg_free(t->table);
   	wg_free(t->heap);
@@ -1087,14 +1104,7 @@
   }
   
   
-  extern void *fp_Init(const char *name)
-  {
-  	fp_t *h = (fp_t *)wg_zalloc( sizeof(fp_t) );
-! 	
-  	if ( name ) {
-  		h->name = wg_strdup(name);
-  	}
---- 338,351 ----
+--- 338,344 ----
   	wgmempool_Done(t->pool);
   	wg_free(t->table);
   	wg_free(t->heap);
@@ -1102,6 +1112,16 @@
   }
   
   
+***************
+*** 354,360 ****
+  extern void *fp_Init(const char *name)
+  {
+  	fp_t *h = (fp_t *)wg_zalloc( sizeof(fp_t) );
+! 	
+  	if ( name ) {
+  		h->name = wg_strdup(name);
+  	}
+--- 345,351 ----
   extern void *fp_Init(const char *name)
   {
   	fp_t *h = (fp_t *)wg_zalloc( sizeof(fp_t) );
@@ -1427,7 +1447,7 @@
   
   
 *** misc/libtextcat-2.2/src/fingerprint.h	Mon May 19 14:16:31 2003
---- misc/build/libtextcat-2.2/src/fingerprint.h	Thu Nov  1 12:53:31 2007
+--- misc/build/libtextcat-2.2/src/fingerprint.h	Tue Nov 27 13:49:18 2007
 ***************
 *** 41,47 ****
 --- 41,53 ----
@@ -1444,8 +1464,8 @@
   extern void fp_Print( void *handle, FILE *fp );
   
   #endif
-*** misc/libtextcat-2.2/src/libtextcat.map	Thu Nov  1 13:07:33 2007
---- misc/build/libtextcat-2.2/src/libtextcat.map	Thu Nov  1 12:53:31 2007
+*** misc/libtextcat-2.2/src/libtextcat.map	Tue Nov 27 13:51:28 2007
+--- misc/build/libtextcat-2.2/src/libtextcat.map	Tue Nov 27 13:49:18 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1490,8 +1510,8 @@
 ! 	local:
 ! 		*;
 ! }
-*** misc/libtextcat-2.2/src/makefile.mk	Thu Nov  1 13:07:33 2007
---- misc/build/libtextcat-2.2/src/makefile.mk	Thu Nov  1 12:53:31 2007
+*** misc/libtextcat-2.2/src/makefile.mk	Tue Nov 27 13:51:28 2007
+--- misc/build/libtextcat-2.2/src/makefile.mk	Tue Nov 27 13:49:18 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1500,9 +1520,9 @@
 ! #
 ! #   $RCSfile: libtextcat-2.2.patch,v $
 ! #
-! #   $Revision: 1.6 $
+! #   $Revision: 1.7 $
 ! #
-! #   last change: $Author: hr $ $Date: 2007-11-01 12:11:32 $
+! #   last change: $Author: obo $ $Date: 2008-01-04 15:02:30 $
 ! #
 ! #*  The Contents of this file are made available subject to
 ! #*  the terms of GNU Lesser General Public License Version 2.1.
@@ -1589,7 +1609,7 @@
 !     @echo _real>>$@
 !     @echo unnamed>>$@
 *** misc/libtextcat-2.2/src/textcat.c	Thu May 22 13:32:43 2003
---- misc/build/libtextcat-2.2/src/textcat.c	Thu Nov  1 12:53:31 2007
+--- misc/build/libtextcat-2.2/src/textcat.c	Tue Nov 27 13:49:18 2007
 ***************
 *** 4,26 ****
    * Copyright (C) 2003 WiseGuys Internet B.V.
@@ -1712,7 +1732,7 @@
   		/*** Skip comments ***/
   #ifdef HAVE_STRCHR
 ***************
-*** 156,172 ****
+*** 156,162 ****
   		/*** Ensure enough space ***/
   		if ( h->size == h->maxsize ) {
   			h->maxsize *= 2;
@@ -1720,6 +1740,17 @@
   		}
   
   		/*** Load data ***/
+--- 169,176 ----
+  		/*** Ensure enough space ***/
+  		if ( h->size == h->maxsize ) {
+  			h->maxsize *= 2;
+! 			h->fprint = (void **)wg_realloc( h->fprint, sizeof(void*) * h->maxsize );
+!                         h->fprint_disable = (char *)wg_realloc( h->fprint_disable, sizeof(char*) * h->maxsize );
+  		}
+  
+  		/*** Load data ***/
+***************
+*** 163,172 ****
   		if ((h->fprint[ h->size ] = fp_Init( segment[1] ))==NULL) {
   			goto ERROR;
   		}
@@ -1730,15 +1761,7 @@
   		h->size++;
   	}
   
---- 169,191 ----
-  		/*** Ensure enough space ***/
-  		if ( h->size == h->maxsize ) {
-  			h->maxsize *= 2;
-! 			h->fprint = (void **)wg_realloc( h->fprint, sizeof(void*) * h->maxsize );
-!                         h->fprint_disable = (char *)wg_realloc( h->fprint_disable, sizeof(char*) * h->maxsize );
-  		}
-  
-  		/*** Load data ***/
+--- 177,191 ----
   		if ((h->fprint[ h->size ] = fp_Init( segment[1] ))==NULL) {
   			goto ERROR;
   		}
@@ -1831,7 +1854,7 @@
   #undef SHOULD_FREE
   #endif
 *** misc/libtextcat-2.2/src/textcat.h	Mon May 19 14:16:31 2003
---- misc/build/libtextcat-2.2/src/textcat.h	Thu Nov  1 12:53:31 2007
+--- misc/build/libtextcat-2.2/src/textcat.h	Tue Nov 27 13:49:18 2007
 ***************
 *** 40,45 ****
 --- 40,48 ----
@@ -1877,8 +1900,8 @@
 + }
 + #endif
   #endif
-*** misc/libtextcat-2.2/src/utf8misc.c	Thu Nov  1 13:07:33 2007
---- misc/build/libtextcat-2.2/src/utf8misc.c	Thu Nov  1 12:53:31 2007
+*** misc/libtextcat-2.2/src/utf8misc.c	Tue Nov 27 13:51:28 2007
+--- misc/build/libtextcat-2.2/src/utf8misc.c	Tue Nov 27 13:49:18 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2015,8 +2038,8 @@
 !     return char_counter;
 ! }
 ! 
-*** misc/libtextcat-2.2/src/utf8misc.h	Thu Nov  1 13:07:33 2007
---- misc/build/libtextcat-2.2/src/utf8misc.h	Thu Nov  1 12:53:31 2007
+*** misc/libtextcat-2.2/src/utf8misc.h	Tue Nov 27 13:51:28 2007
+--- misc/build/libtextcat-2.2/src/utf8misc.h	Tue Nov 27 13:49:18 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2109,8 +2132,8 @@
 ! 
 ! #endif
 ! 
-*** misc/libtextcat-2.2/src/win32_config.h	Thu Nov  1 13:07:33 2007
---- misc/build/libtextcat-2.2/src/win32_config.h	Thu Nov  1 12:53:31 2007
+*** misc/libtextcat-2.2/src/win32_config.h	Tue Nov 27 13:51:28 2007
+--- misc/build/libtextcat-2.2/src/win32_config.h	Tue Nov 27 13:49:18 2007
 ***************
 *** 1 ****
 ! dummy
