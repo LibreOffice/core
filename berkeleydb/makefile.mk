@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: vg $ $Date: 2007-12-06 17:44:06 $
+#   last change: $Author: obo $ $Date: 2008-01-04 14:58:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,8 @@ CXXFLAGS:=
 # disable aliasing for all GCC platforms, at least GCC 4.x needs it if
 # optimization level >= 2
 .IF "$(COM)"=="GCC"
-CFLAGS:=-fno-strict-aliasing
-CXXFLAGS:=-fno-strict-aliasing
+CFLAGS:=-fno-strict-aliasing $(EXTRA_CFLAGS)
+CXXFLAGS:=-fno-strict-aliasing $(EXTRA_CFLAGS)
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
