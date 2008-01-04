@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscibas.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:59:03 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:59:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ void RscLangEnum::Init( RscNameTable& rNames )
     SetConstant( rNames.Put( "DONTKNOW", CONSTNAME, LANGUAGE_DONTKNOW ), LANGUAGE_DONTKNOW );
 
     sal_Int32 nIndex = 0;
-    unsigned long nI = 0x400; // stay away from selfdefined...
+    mnLangId = 0x400; // stay away from selfdefined...
     char csep = '-';
     const MsLangId::IsoLangEntry* pLangEntry;
     ByteString aCountry, aLang;
@@ -130,39 +130,39 @@ void RscLangEnum::Init( RscNameTable& rNames )
         aCountry = pLangEntry->maCountry;
         if ( aLang.EqualsIgnoreCaseAscii( aCountry ) ||  ! aCountry.Len() )
         {
-            SetConstant( rNames.Put( aLang.GetBuffer(), CONSTNAME, nI ), nI );
+            SetConstant( rNames.Put( aLang.GetBuffer(), CONSTNAME, mnLangId ), mnLangId );
             if ( ! GetLangId( aLang ))
-                ULong_Iso_map[ aLang ] = nI;
+                ULong_Iso_map[ aLang ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-            fprintf( stderr, "ISO Language out: %s 0x%hx\n", aLang.GetBuffer(), nI );
+            fprintf( stderr, "ISO Language out: %s 0x%hx\n", aLang.GetBuffer(), mnLangId );
 #endif
-            nI++;
+            mnLangId++;
         }
         else
         {
-            SetConstant( rNames.Put( aLang.GetBuffer(), CONSTNAME, nI ), nI );
+            SetConstant( rNames.Put( aLang.GetBuffer(), CONSTNAME, mnLangId ), mnLangId );
             if ( ! GetLangId( aLang ))
-                ULong_Iso_map[ aLang ] = nI;
+                ULong_Iso_map[ aLang ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-            fprintf( stderr, "ISO Language out: %s 0x%hx", aLang.GetBuffer(), nI );
+            fprintf( stderr, "ISO Language out: %s 0x%hx", aLang.GetBuffer(), mnLangId );
 #endif
-            nI++;
+            mnLangId++;
             aLang += csep;
             aLang += aCountry.ToUpperAscii();
-            SetConstant( rNames.Put( aLang.GetBuffer(), CONSTNAME, nI ), nI );
+            SetConstant( rNames.Put( aLang.GetBuffer(), CONSTNAME, mnLangId ), mnLangId );
             if ( ! GetLangId( aLang ))
-                ULong_Iso_map[ aLang ] = nI;
+                ULong_Iso_map[ aLang ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-            fprintf( stderr, " %s 0x%hx\n", aLang.GetBuffer(), nI );
+            fprintf( stderr, " %s 0x%hx\n", aLang.GetBuffer(), mnLangId );
 #endif
-            nI++;
+            mnLangId++;
 // hack - survive "x-no-translate"
             if ( aLang == "en-US" )
             {
-//                SetConstant( rNames.Put( "x-no-translate", CONSTNAME, nI ), nI );
-//                nI++;
-                SetConstant( rNames.Put( "x-comment", CONSTNAME, nI ), nI );
-                nI++;
+//                SetConstant( rNames.Put( "x-no-translate", CONSTNAME, mnLangId ), mnLangId );
+//                mnLangId++;
+                SetConstant( rNames.Put( "x-comment", CONSTNAME, mnLangId ), mnLangId );
+                mnLangId++;
             }
         }
         nIndex++;
@@ -179,13 +179,13 @@ void RscLangEnum::Init( RscNameTable& rNames )
             aIsoToken = aEnvIsoTokens.GetToken( nTokenCounter, ' ' );
             if ( aIsoToken.Len() )
             {
-                SetConstant( rNames.Put( aIsoToken.GetBuffer(), CONSTNAME, nI ), nI );
+                SetConstant( rNames.Put( aIsoToken.GetBuffer(), CONSTNAME, mnLangId ), mnLangId );
                 if ( ! GetLangId( aIsoToken ))
-                    ULong_Iso_map[ aIsoToken ] = nI;
+                    ULong_Iso_map[ aIsoToken ] = mnLangId;
 #if OSL_DEBUG_LEVEL > 2
-                fprintf( stderr, "Env ISO Language out: %s 0x%hx\n", aIsoToken.GetBuffer(), nI );
+                fprintf( stderr, "Env ISO Language out: %s 0x%hx\n", aIsoToken.GetBuffer(), mnLangId );
 #endif
-                nI++;
+                mnLangId++;
             }
             else
                 bOneMore = 0;
@@ -202,6 +202,26 @@ void RscLangEnum::Init( RscNameTable& rNames )
     SetConstant( rNames.Put( "LANGUAGE_USER7", CONSTNAME, LANGUAGE_USER7 ), LANGUAGE_USER7 );
     SetConstant( rNames.Put( "LANGUAGE_USER8", CONSTNAME, LANGUAGE_USER8 ), LANGUAGE_USER8 );
     SetConstant( rNames.Put( "EXTERN", CONSTNAME, LANGUAGE_USER9 ), LANGUAGE_USER9 );
+}
+
+Atom RscLangEnum::AddLanguage( const char* pLang, RscNameTable& rNames )
+{
+    Atom nResult = 0;
+    KEY_STRUCT aStruct;
+    if( ! rNames.Get( nResult = pHS->getID( pLang ), &aStruct ) )
+    {
+        SetConstant( nResult = rNames.Put( pLang, CONSTNAME, mnLangId ), mnLangId );
+        // insert new lang to ULong_Iso_map
+        rtl::OString aLang( pLang );
+        if ( ! GetLangId( aLang ))
+            ULong_Iso_map[ aLang ] = mnLangId;
+        // increase id counter
+        mnLangId++;
+    }
+    #if OSL_DEBUG_LEVEL > 2
+    fprintf( stderr, "AddLanguage( %s ) = 0x%lx\n", pLang, nResult );
+    #endif
+    return nResult;
 }
 
 RscEnum * RscTypCont::InitLangType()
