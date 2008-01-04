@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:50:05 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:23:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2996,6 +2996,15 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
     else
     {
         SwTableNode *pTblNd = pNd->FindTableNode();
+        if( pTblNd->GetTable().GetHTMLTableLayout() )
+        { // if there is already a HTMTableLayout, this table is already finished
+          // and we have to look for the right table in the environment
+            SwTableNode *pOutTbl = pTblNd;
+            do {
+                pTblNd = pOutTbl;
+                pOutTbl = pOutTbl->StartOfSectionNode()->FindTableNode();
+            } while( pOutTbl && pTblNd->GetTable().GetHTMLTableLayout() );
+        }
         SwNodeIndex aIdx( *pTblNd->EndOfSectionNode() );
         pStNd = pDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
                                                   pColl );
