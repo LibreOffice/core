@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nthesimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:41:49 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:49:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,8 +168,8 @@ Sequence< Locale > SAL_CALL Thesaurus::getLocales()
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-        dictentry * spthes;  // shared thesaurus list entry pointer
-        dictentry * upthes;  // shared thesaurus list entry pointer
+        dictentry * spthes = NULL;  // shared thesaurus list entry pointer
+        dictentry * upthes = NULL;  // shared thesaurus list entry pointer
     std::vector<dictentry*> postspthes;
     std::vector<dictentry*> postupthes;
         SvtPathOptions aPathOpt;
