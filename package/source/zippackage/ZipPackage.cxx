@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 18:39:08 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 14:32:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -656,8 +656,9 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
                     Any aAny = aContent.getPropertyValue( OUString::createFromAscii( "Size" ) );
                     sal_uInt64 aSize = 0;
                     // kind of optimisation: treat empty files as nonexistent files
-                    // and write to such files directly
-                    if( ( aAny >>= aSize ) && aSize )
+                    // and write to such files directly. Note that "Size" property is optional.
+                    bool bHasSizeProperty = aAny >>= aSize;
+                    if( !bHasSizeProperty || ( bHasSizeProperty && aSize ) )
                     {
                         uno::Reference < XActiveDataSink > xSink = new ZipPackageSink;
                         if (aContent.openStream ( xSink ) )
