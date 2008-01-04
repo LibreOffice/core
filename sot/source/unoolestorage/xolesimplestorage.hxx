@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xolesimplestorage.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-09 15:42:46 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,10 @@
 #ifndef __XOLESIMPLESTORAGE_HXX_
 #define __XOLESIMPLESTORAGE_HXX_
 
+#ifndef _COM_SUN_STAR_EMBED_XOLESIMPLESTORAGE_HPP_
+#include <com/sun/star/embed/XOLESimpleStorage.hpp>
+#endif
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
@@ -62,9 +66,8 @@
 #include <com/sun/star/io/XOutputStream.hpp>
 #endif
 
-
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#include <cppuhelper/implbase6.hxx>
+#ifndef _CPPUHELPER_IMPLBASE3_HXX_
+#include <cppuhelper/implbase3.hxx>
 #endif
 
 #ifndef _CPPUHELPER_INTERFACECONTAINER_H_
@@ -76,12 +79,9 @@
 #include <stg.hxx>
 
 
-class OLESimpleStorage  : public ::cppu::WeakImplHelper6
-                < ::com::sun::star::container::XNameContainer
-                , ::com::sun::star::lang::XComponent
+class OLESimpleStorage  : public ::cppu::WeakImplHelper3
+    < ::com::sun::star::embed::XOLESimpleStorage
                 , ::com::sun::star::lang::XInitialization
-                , ::com::sun::star::embed::XTransactedObject
-                , ::com::sun::star::embed::XClassifiedObject
                 , ::com::sun::star::lang::XServiceInfo >
 {
     ::osl::Mutex m_aMutex;
