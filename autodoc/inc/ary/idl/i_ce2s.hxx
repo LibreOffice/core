@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_ce2s.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 15:05:49 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 12:56:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,8 @@ class Ce_2s
 };
 
 
+
+
 }   // namespace idl
 }   // namespace ary
-
-
 #endif
