@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 15:38:30 $
+#   last change: $Author: obo $ $Date: 2008-01-04 16:18:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,30 @@ ADDITIONAL_FILES:= \
 .ENDIF
 
 .IF "$(OS)" == "WNT"
-.IF "$(COM)" != "gcc"
+
+.IF "$(COM)"=="GCC"
+PATCH_FILE_NAME=opensslmingw.patch
+.IF "$(USE_MINGW)" == "cygwin"
+CONFIGURE_ACTION=$(PERL) configure
+CONFIGURE_FLAGS=mingw shared 
+INSTALL_ACTION=mv libcrypto.a libcrypto_static.a && mv libcrypto.dll.a libcrypto.a && mv libssl.a libssl_static.a && mv libssl.dll.a libssl.a
+OUT2LIB = libcrypto_static.*
+OUT2LIB += libssl_static.*
+OUT2LIB += libcrypto.*
+OUT2LIB += libssl.*
+OUT2BIN = ssleay32.dll
+OUT2BIN += libeay32.dll
+.ELSE
+CONFIGURE_ACTION=
+BUILD_ACTION=cmd /c "ms\mingw32"
+OUT2LIB = out/libcrypto_static.*
+OUT2LIB += out/libssl_static.*
+OUT2LIB += out/libcrypto.*
+OUT2LIB += out/libssl.*
+OUT2BIN = out/ssleay32.dll
+OUT2BIN += out/libeay32.dll
+.ENDIF
+.ELSE
 
 PATCH_FILE_NAME=openssl.patch
 .IF "$(MAKETARGETS)" == ""
