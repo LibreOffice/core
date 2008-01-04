@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i2s_calculator.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 15:42:24 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 12:57:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,9 +198,12 @@ SecondariesCalculator::CheckAllInterfaceBases()
 
     interface_iterator itEnd( my_CeStorage().End() );
     for ( interface_iterator it( my_CeStorage().BeginUnreserved() );
-          it != itEnd AND it.IsValid();
+          it != itEnd;
           ++it )
     {
+        if (NOT it.IsValid())
+            continue;
+
         Interface &
             rInterface = *it;
         if (     NOT rInterface.HasBase()               // According to UNO IDL syntax, an interface without base has com::sun::star::uno::XInterface as base.
@@ -216,9 +219,12 @@ SecondariesCalculator::Connect_Types2Ces()
 {
     explicittype_iterator itEnd( my_TypeStorage().End() );
     for ( explicittype_iterator it( my_TypeStorage().BeginUnreserved() );
-          it != itEnd AND it.IsValid();
+          it != itEnd;
           ++it )
     {
+        if (NOT it.IsValid())
+            continue;
+
         ExplicitType &
             rType = ary_cast<ExplicitType>(*it);
         Ce_id
@@ -578,9 +584,12 @@ SecondariesCalculator::gather_Synonyms()
         cstrg = my_CeStorage();
     typedef_citerator itEnd(cstrg.End());
     for ( typedef_citerator it(cstrg.Begin());
-          it != itEnd AND it.IsValid();
+          it != itEnd;
           ++it )
     {
+        if (NOT it.IsValid())
+            continue;
+
         const Typedef &
             rTypedef = *it;
         recursive_AssignAsSynonym(rTypedef.CeId(), rTypedef);
@@ -975,10 +984,13 @@ SecondariesCalculator::Read_Links2DevManual( csv::bstream & i_file )
         {
             eCurMode = link2ref;
         }
-        else if (static_cast<UINT8>(*rLine.c_str()) >= cMaxASCIINumWhiteSpace)
+        else if (static_cast<UINT8>(*rLine.c_str()) > cMaxASCIINumWhiteSpace)
         {
             assign_CurLink(rLine.begin(), sCurLink, sCurLinkUI, eCurMode == link2descr, lineCount);
         }
+     // else
+        //  Ignore empty line.
+
     }   // end while
 }
 
