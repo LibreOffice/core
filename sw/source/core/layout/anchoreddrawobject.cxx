@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoreddrawobject.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:00:38 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:21:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -825,7 +825,7 @@ void SwAnchoredDrawObject::ObjectAttachedToAnchorFrame()
     }
 }
 
-/** method to set positioning attributes (not for as-character anchored)
+/** method to set positioning attributes
 
     OD 2004-10-20 #i35798#
     During load the positioning attributes aren't set.
@@ -902,11 +902,12 @@ void SwAnchoredDrawObject::_SetPositioningAttr()
         GetFrmFmt().SetPositionLayoutDir(
             text::PositionLayoutDir::PositionInLayoutDirOfAnchor );
         // <--
-        // --> OD 2005-05-10 #i45952# - indicate that position
-        // attributes are set now.
-        static_cast<SwDrawFrmFmt&>(GetFrmFmt()).PosAttrSet();
-        // <--
     }
+    // --> OD 2007-11-29 #i65798# - also for as-character anchored objects
+    // --> OD 2005-05-10 #i45952# - indicate that position
+    // attributes are set now.
+    static_cast<SwDrawFrmFmt&>(GetFrmFmt()).PosAttrSet();
+    // <--
 }
 
 void SwAnchoredDrawObject::NotifyBackground( SwPageFrm* _pPageFrm,
