@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:30:19 $
+ *  last change: $Author: hr $ $Date: 2008-01-04 13:19:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3224,6 +3224,25 @@ void SwCrsrShell::SetSelection( const SwPaM& rCrsr )
     EndAction();
 }
 
+void lcl_RemoveMark( SwPaM* pPam )
+{
+    ASSERT( pPam->HasMark(), "Don't remove pPoint!" )
+    pPam->GetMark()->nContent.Assign( 0, 0 );
+    pPam->GetMark()->nNode = 0;
+    pPam->DeleteMark();
+}
+
+const SwStartNode* lcl_NodeContext( const SwNode& rNode )
+{
+    const SwStartNode *pRet = rNode.StartOfSectionNode();
+    while( pRet->IsSectionNode() || pRet->IsTableNode() ||
+        pRet->GetStartNodeType() == SwTableBoxStartNode )
+    {
+        pRet = pRet->StartOfSectionNode();
+    }
+    return pRet;
+}
+
 /**
    Checks if a position is valid. To be valid the position's node must
    be a content node and the content must not be unregistered.
@@ -3275,17 +3294,29 @@ void SwCrsrShell::ClearUpCrsrs()
         pCrsr = pTmpCrsr;
     }
 
-    /*
-      If the start entry of the ring is invalid replace it with a
-      cursor pointing to the beginning of the first content node in
-      the document.
-    */
-    if (! lcl_CrsrOk(*pStartCrsr))
+    if( pStartCrsr->HasMark() && !lcl_PosOk( *pStartCrsr->GetMark() ) )
+    {
+        lcl_RemoveMark( pStartCrsr );
+        bChanged = true;
+    }
+    if( !lcl_PosOk( *pStartCrsr->GetPoint() ) )
     {
         SwNodes & aNodes = GetDoc()->GetNodes();
-        SwNodeIndex aIdx(*(aNodes.GetEndOfContent().StartOfSectionNode()));
-
-        SwNode * pNode = aNodes.GoNext(&aIdx);
+        const SwNode* pStart = lcl_NodeContext( pStartCrsr->GetPoint()->nNode.GetNode() );
+        SwNodeIndex aIdx( pStartCrsr->GetPoint()->nNode );
+        SwNode * pNode = aNodes.GoPrevious(&aIdx);
+        if( pNode == NULL || lcl_NodeContext( *pNode ) != pStart )
+            aNodes.GoNext( &aIdx );
+        if( pNode == NULL || lcl_NodeContext( *pNode ) != pStart )
+        {
+            /*
+              If the start entry of the ring is invalid replace it with a
+              cursor pointing to the beginning of the first content node in
+              the document.
+            */
+            aIdx = (*(aNodes.GetEndOfContent().StartOfSectionNode()));
+            pNode = aNodes.GoNext( &aIdx );
+        }
         bool bFound = (pNode != NULL);
 
         ASSERT(bFound, "no content node found");
