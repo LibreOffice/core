@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxrtf.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:20:01 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:08:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,17 +63,34 @@
 #include <svtools/itempool.hxx>
 #endif
 
-
+#include <com/sun/star/lang/Locale.hpp>
 #include <svx/scriptspaceitem.hxx>
 #include "fontitem.hxx"
 #include <svx/colritem.hxx>
 #include "svxrtf.hxx"
 #include <svx/svxids.hrc>
-
+#include <vcl/svapp.hxx>
 
 SV_IMPL_PTRARR( SvxRTFColorTbl, ColorPtr )
 SV_IMPL_PTRARR( SvxRTFItemStackList, SvxRTFItemStackType* )
 
+const CharSet lcl_GetDefaultTextEncodingForRTF()
+{
+
+    ::com::sun::star::lang::Locale aLocale;
+    ::rtl::OUString aLangString;
+
+    aLocale = Application::GetSettings().GetLocale();
+    aLangString = aLocale.Language;
+
+    if ( aLangString.equals( ::rtl::OUString::createFromAscii( "ru" ) )
+      || aLangString.equals( ::rtl::OUString::createFromAscii( "uk" ) ) )
+        return RTL_TEXTENCODING_MS_1251;
+    if ( aLangString.equals( ::rtl::OUString::createFromAscii( "tr" ) ) )
+        return RTL_TEXTENCODING_MS_1254;
+    else
+        return RTL_TEXTENCODING_MS_1252;
+}
 
 // -------------- Methoden --------------------
 
@@ -514,6 +531,10 @@ void SvxRTFParser::ReadFontTable()
     String sAltNm, sFntNm;
     BOOL bIsAltFntNm = FALSE, bCheckNewFont;
 
+    CharSet nSystemChar = lcl_GetDefaultTextEncodingForRTF();
+    pFont->SetCharSet( nSystemChar );
+    SetEncoding( nSystemChar );
+
     while( _nOpenBrakets && IsParserWorking() )
     {
         bCheckNewFont = FALSE;
@@ -623,6 +644,7 @@ void SvxRTFParser::ReadFontTable()
             pFont->SetName( sFntNm );
             aFontTbl.Insert( nInsFontNo, pFont );
             pFont = new Font();
+            pFont->SetCharSet( nSystemChar );
             sAltNm.Erase();
             sFntNm.Erase();
         }
