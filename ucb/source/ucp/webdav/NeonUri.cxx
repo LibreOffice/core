@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NeonUri.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 15:34:20 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 14:32:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,8 +248,31 @@ void NeonUri::calculateURI ()
     {
         aBuf.append( mHostName );
     }
-    aBuf.appendAscii( ":" );
-    aBuf.append( rtl::OUString::valueOf( mPort ) );
+
+    // append port, but only, if not default port.
+    bool bAppendPort = true;
+    switch ( mPort )
+    {
+    case DEFAULT_HTTP_PORT:
+        bAppendPort
+            = !mScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "http" ) );
+        break;
+
+    case DEFAULT_HTTPS_PORT:
+        bAppendPort
+            = !mScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "https" ) );
+        break;
+
+    case DEFAULT_FTP_PORT:
+        bAppendPort
+            = !mScheme.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "ftp" ) );
+        break;
+    }
+    if ( bAppendPort )
+    {
+        aBuf.appendAscii( ":" );
+        aBuf.append( rtl::OUString::valueOf( mPort ) );
+    }
     aBuf.append( mPath );
 
     mURI = aBuf.makeStringAndClear();
