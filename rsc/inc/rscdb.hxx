@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rscdb.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:44:30 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 15:58:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -321,6 +321,8 @@ public:
 
     RscTypCont( RscError *, RSCBYTEORDER_TYPE, const ByteString & rSearchPath, sal_uInt32 nFlags );
     ~RscTypCont();
+
+    Atom AddLanguage( const char* );
 
     BOOL            IsPreload() const
                     { return (nFlags & PRELOAD_FLAG) ? TRUE : FALSE; }
