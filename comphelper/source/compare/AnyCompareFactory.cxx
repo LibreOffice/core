@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AnyCompareFactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:05:52 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 16:36:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,9 @@
 #ifndef _COM_SUN_STAR_LANG_ILLEGALARGUMENTEXCEPTION_HPP_
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#endif
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
@@ -88,14 +91,17 @@ class AnyCompare : public ::cppu::WeakImplHelper1< XAnyCompare >
     Reference< XCollator > m_rCollator;
 
 public:
-    AnyCompare( Reference< XMultiServiceFactory > xFactory, const Locale& rLocale ) throw()
+    AnyCompare( Reference< XComponentContext > xContext, const Locale& rLocale ) throw()
+    {
+        Reference< XMultiComponentFactory > xFactory = xContext->getServiceManager();
+        if ( xFactory.is() )
     {
         m_rCollator = Reference< XCollator >(
-                        xFactory->createInstance( OUString::createFromAscii( "com.sun.star.i18n.Collator" ) ),
+                xFactory->createInstanceWithContext( OUString::createFromAscii( "com.sun.star.i18n.Collator" ), xContext ),
                         UNO_QUERY );
-
         m_rCollator->loadDefaultCollator( rLocale,
                                           0 ); //???
+        }
 
     }
 
@@ -107,18 +113,17 @@ public:
 Sequence< rtl::OUString > SAL_CALL AnyCompareFactory_getSupportedServiceNames() throw();
 rtl::OUString SAL_CALL AnyCompareFactory_getImplementationName() throw();
 Reference< XInterface > SAL_CALL AnyCompareFactory_createInstance(
-                const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception );
+                const Reference< XComponentContext >& rxContext ) throw( Exception );
 
 class AnyCompareFactory : public cppu::WeakImplHelper3< XAnyCompareFactory, XInitialization, XServiceInfo >
 {
     Reference< XAnyCompare >            m_rAnyCompare;
-    Reference< XMultiServiceFactory >   m_rFactory;
+    Reference< XComponentContext >      m_rContext;
     Locale                              m_Locale;
 
 public:
-    AnyCompareFactory( Reference< XMultiServiceFactory > xFactory ) : m_rFactory( xFactory )
-    {
-    }
+    AnyCompareFactory( Reference< XComponentContext > xContext ) : m_rContext( xContext )
+    {}
 
     // XAnyCompareFactory
     virtual Reference< XAnyCompare > SAL_CALL createAnyCompareByName ( const OUString& aPropertyName ) throw(::com::sun::star::uno::RuntimeException);
@@ -172,14 +177,11 @@ void SAL_CALL AnyCompareFactory::initialize( const Sequence< Any >& aArguments )
     {
         if( aArguments[0] >>= m_Locale )
         {
-            m_rAnyCompare = new AnyCompare( m_rFactory, m_Locale );
+            m_rAnyCompare = new AnyCompare( m_rContext, m_Locale );
             return;
         }
     }
 
-    throw IllegalArgumentException( OUString::createFromAscii( "The Any object does not contain Locale!\n" ),
-                                    Reference< XInterface >(),
-                                    1 );
 }
 
 OUString SAL_CALL AnyCompareFactory::getImplementationName(  ) throw( RuntimeException )
@@ -212,8 +214,7 @@ rtl::OUString SAL_CALL AnyCompareFactory_getImplementationName() throw()
 }
 
 Reference< XInterface > SAL_CALL AnyCompareFactory_createInstance(
-                const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception )
+                const Reference< XComponentContext >& rxContext ) throw( Exception )
 {
-    return (cppu::OWeakObject*)new AnyCompareFactory( rSMgr );
+    return (cppu::OWeakObject*)new AnyCompareFactory( rxContext );
 }
-
