@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2007-10-09 15:06:10 $
+#   last change: $Author: obo $ $Date: 2008-01-04 14:59:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@ PRJNAME=extensions
 TARGET=spotlightplugin
 
 # --- Settings ----------------------------------
-
 .INCLUDE : settings.mk
 
 .IF "$(OS)"!="MACOSX"
@@ -92,7 +91,7 @@ $(CONTENTS)$/%.plist : mdimporter/%.plist
     
 $(MACOS)$/OOoSpotlightImporter: $(SLOFILES)
     $(MKDIRHIER) $(@:d)
-    $(CC) -o $(MACOS)$/OOoSpotlightImporter $(SLOFILES:s/.obj/.o/) $(BUNDLELIBS) -bundle
+    $(CC) -o $(MACOS)$/OOoSpotlightImporter $(SLOFILES:s/.obj/.o/) $(EXTRA_LINKFLAGS) $(BUNDLELIBS) -bundle
 # we have to change the zlib install name, otherwise the plugin will not work
     .IF "$(SYSTEM_ZLIB)"=="NO"
     install_name_tool -change @executable_path/libz.1.dylib @executable_path/../../../../MacOS/libz.1.dylib $(MACOS)$/OOoSpotlightImporter
