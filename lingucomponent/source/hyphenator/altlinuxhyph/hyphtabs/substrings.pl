@@ -2,9 +2,6 @@
 # convert TeX (Patgen) hyphenation patterns to Libhnj format
 # (A utility for finding substring embeddings in patterns)
 # usage: substrings.pl inputfile outputfile [encoding]
-# author: Raph Leaven
-# non-standard hyphenation: László Németh
-# fix combine(): Nanning Buitenhuis
 
 if (!defined $ARGV[1]) {
     print "" .
@@ -87,7 +84,7 @@ foreach $pat (@patlist) {
         } else {
             $tmp =  $newpattab{$newpat};
             $newpattab{$newpat} =
-            combine ($newpattab{$newpat}, $pattab{$subpat}, $i);
+            combine ($newpattab{$newpat}, $pattab{$subpat});
             print "$tmp + $pattab{$subpat} -> $newpattab{$newpat}\n";
         }
         }
@@ -127,10 +124,16 @@ sub expand {
 sub combine {
     my @exp = expand shift;
     my @subexp = expand shift;
-    my $i = shift;
+    my $pat1, $pat2;
+    my $i;
+
+    $pat1 = join ('', map { $_ =~ /\d/ ? () : $_ } @exp);
+    $pat2 = join ('', map { $_ =~ /\d/ ? () : $_ } @subexp);
 
     $begcorr = ($pat1 =~ /^[.]/) ? 1 : 0;
 
+    for $i (0..length ($pat1) - length ($pat2)) {
+    if (substr ($pat1, $i, length $pat2) eq $subpat) {
         for ($j = 0; $j < @subexp; $j += 2) {
         if ($subexp[$j] > $exp[2 * $i + $j]) {
             $exp[2 * $i + $j] = $subexp[$j];
@@ -143,6 +146,8 @@ sub combine {
         }
         }
         print ("$pat1 includes $pat2 at pos $i\n");
+    }
+    }
     return join ('', map { $_ eq '0' ? () : $_ } @exp);
 }
 
