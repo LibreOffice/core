@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucbcmds.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 17:52:36 $
+ *  last change: $Author: obo $ $Date: 2008-01-04 14:31:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2045,7 +2045,7 @@ void UniversalContentBroker::globalTransfer(
 
     // Obtain interesting property values from source...
 
-    uno::Sequence< beans::Property > aProps( 3 );
+    uno::Sequence< beans::Property > aProps( 4 );
 
     aProps[ 0 ].Name   = rtl::OUString::createFromAscii( "IsFolder" );
     aProps[ 0 ].Handle = -1; /* unknown */
@@ -2053,6 +2053,8 @@ void UniversalContentBroker::globalTransfer(
     aProps[ 1 ].Handle = -1; /* unknown */
     aProps[ 2 ].Name   = rtl::OUString::createFromAscii( "TargetURL" );
     aProps[ 2 ].Handle = -1; /* unknown */
+    aProps[ 3 ].Name   = rtl::OUString::createFromAscii( "BaseURI" );
+    aProps[ 3 ].Handle = -1; /* unknown */
 
     ucb::Command aGetPropsCommand(
                 rtl::OUString::createFromAscii( "getPropertyValues" ),
@@ -2081,11 +2083,22 @@ void UniversalContentBroker::globalTransfer(
         // Unreachable
     }
 
+    ucb_commands::TransferCommandContext aTransferCtx(
+        m_xSMgr, this, xLocalEnv, xEnv, rArg );
+
+    if ( rArg.NewTitle.getLength() == 0 )
+    {
+        // BaseURI: property is optional.
+        rtl::OUString aBaseURI( xRow->getString( 4 ) );
+        if ( aBaseURI.getLength() )
+        {
+            aTransferCtx.aArg.NewTitle
+                = ucb_commands::createDesiredName( aBaseURI, rtl::OUString() );
+        }
+    }
+
     // Do it!
-    ucb_commands::globalTransfer(
-        ucb_commands::TransferCommandContext(
-            m_xSMgr, this, xLocalEnv, xEnv, rArg ),
-        xSource, xTarget, xRow );
+    ucb_commands::globalTransfer( aTransferCtx, xSource, xTarget, xRow );
 
     //////////////////////////////////////////////////////////////////////
     //
