@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nranges.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 08:51:55 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:55:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,19 +62,7 @@
 
 //========================================================================
 
-#if SUPD<=383
-
-#if ( defined SOLARIS && defined X86 ) || ( defined SINIX && defined GCC ) || defined SCO
 #define NUMTYPE_ARG int
-#else
-#define NUMTYPE_ARG NUMTYPE
-#endif
-
-#else
-
-#define NUMTYPE_ARG int
-
-#endif
 
 class SfxNumRanges
 {
