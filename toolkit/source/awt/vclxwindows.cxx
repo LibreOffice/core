@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:27:00 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:33:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2131,12 +2131,10 @@ void SAL_CALL VCLXDialog::draw( sal_Int32 nX, sal_Int32 nY ) throw(::com::sun::s
 {
     ::com::sun::star::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
 
-#if SUPD >= 634
     ::vos::OGuard aGuard( GetMutex() );
     Dialog* pDlg = (Dialog*) GetWindow();
     if ( pDlg )
         pDlg->GetDrawWindowBorder( aInfo.LeftInset, aInfo.TopInset, aInfo.RightInset, aInfo.BottomInset );
-#endif
 
     return aInfo;
 }
