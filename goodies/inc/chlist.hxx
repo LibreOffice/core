@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chlist.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:15:55 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:59:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,13 +84,9 @@ DECLARE_LIST(NotifyList, NotifyItem*)
 
 #ifndef STRING_LIST
 #define STRING_LIST
-#if SUPD >= 380
 #define _TOOLS_STRINGLIST
 #ifndef _SSTRING_HXX
 #include <tools/sstring.hxx>
-#endif
-#else
-DECLARE_LIST(StringList, String*)
 #endif
 #endif
 
