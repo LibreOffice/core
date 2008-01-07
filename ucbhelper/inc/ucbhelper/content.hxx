@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:48:25 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:42:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -607,17 +607,6 @@ public:
       */
     void
     abortCommand();
-
-#if SUPD<615
-    /**
-      * This method returns the command environment of the content.
-      *
-      * @return the command environment.
-      */
-    ::com::sun::star::uno::Reference<
-        ::com::sun::star::ucb::XCommandEnvironment >
-    getCommandEnvironment();
-#endif
 
     //////////////////////////////////////////////////////////////////////
     // Special commands.
