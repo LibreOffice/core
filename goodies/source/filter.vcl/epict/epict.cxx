@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epict.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:11:21 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:59:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_goodies.hxx"
 
-#if SUPD <= 364
-#include <svtfilt.hxx>
-#include <solar.hrc>
-#include <fltcall.hxx>
-#else
 #include <vcl/metaact.hxx>
 #include <svtools/filter.hxx>
 #include <svtools/solar.hrc>
 #include <svtools/fltcall.hxx>
-#endif
 
 #include <math.h>
 #include <vcl/bmpacc.hxx>
