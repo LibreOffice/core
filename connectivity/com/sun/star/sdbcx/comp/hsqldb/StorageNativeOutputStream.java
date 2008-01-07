@@ -5,28 +5,17 @@
  */
 
 package com.sun.star.sdbcx.comp.hsqldb;
-import com.sun.star.lib.util.NativeLibraryLoader;
 import com.sun.star.embed.ElementModes;
 /**
  *
  * @author  oj93728
  */
 public class StorageNativeOutputStream {
+    static { NativeLibraries.load(); }
+
     String name;
     Object key;
-    static {
-    // preload shared libraries whichs import lips are linked to jpipe
-    if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
-    {
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "msvcr71");
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "uwinapi");
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "sal3");
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "dbtools680mi");
-    }
 
-    // load shared library for JNI code
-        NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "hsqldb2");
-    }
     /** Creates a new instance of StorageNativeOutputStream */
     public StorageNativeOutputStream(String _name,Object _key) {
         name = _name;
