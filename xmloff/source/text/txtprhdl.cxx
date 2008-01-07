@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:17:12 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:48:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,10 +79,8 @@
 #ifndef _COM_SUN_STAR_TEXT_FONTEMPHASIS_HPP_
 #include <com/sun/star/text/FontEmphasis.hpp>
 #endif
-#if SUPD > 630
 #ifndef _COM_SUN_STAR_TEXT_PARAGRAPHVERTALIGN_HPP_
 #include <com/sun/star/text/ParagraphVertAlign.hpp>
-#endif
 #endif
 
 #ifndef _XMLOFF_XMLTYPES_HXX
@@ -293,19 +291,11 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_FontRelief_Enum[] =
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_VerticalAlign_Enum[] =
 {
-#if SUPD > 630
     { XML_TOP,          ParagraphVertAlign::TOP     },
     { XML_MIDDLE,       ParagraphVertAlign::CENTER  },
     { XML_BOTTOM,       ParagraphVertAlign::BOTTOM  },
     { XML_BASELINE,     ParagraphVertAlign::BASELINE    },
     { XML_AUTO,         ParagraphVertAlign::AUTOMATIC   },
-#else
-    { XML_TOP,          2   },
-    { XML_MIDDLE,       3   },
-    { XML_BOTTOM,       4   },
-    { XML_BASELINE,     1   },
-    { XML_AUTO,         0   },
-#endif
     { XML_TOKEN_INVALID, 0 }
 };
 
