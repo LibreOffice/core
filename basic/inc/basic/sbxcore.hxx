@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxcore.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 12:53:57 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:44:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,11 +150,9 @@ public:
 
     static SbxBase* Create( UINT16, UINT32=SBXCR_SBX );
     static SbxObject* CreateObject( const String& );
-#if SUPD >= 507
     // Sbx-Loesung als Ersatz fuer SfxBroadcaster::Enable()
     static void StaticEnableBroadcasting( BOOL bEnable );
     static BOOL StaticIsEnabledBroadcasting( void );
-#endif
 };
 
 #ifndef SBX_BASE_DECL_DEFINED
