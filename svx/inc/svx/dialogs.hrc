@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.hrc,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:38:06 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:36:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -442,15 +442,6 @@
 #define RID_SVXSTR_LANGUAGE_BEGIN           (RID_SVX_START +   0)
 #define RID_SVXSTR_LANGUAGE_ALL             (RID_SVX_START +  15)
 
-#if SUPD < 547
-// Strings fuer die verschieden Fontmaps (ZeichenTabPage)
-#define RID_SVXSTR_FONTMAP_WINDOW           (RID_SVX_START +  50)
-#define RID_SVXSTR_FONTMAP_PRINTER          (RID_SVX_START +  51)
-#define RID_SVXSTR_FONTMAP_EQUAL            (RID_SVX_START +  52)
-#define RID_SVXSTR_FONTMAP_SYNTHETIC        (RID_SVX_START +  53)
-#define RID_SVXSTR_FONTMAP_NOTAVAILABLE     (RID_SVX_START +  54)
-#endif
-
 // Messages im DBMgr-Bereich
 #define RID_SVXSTR_DBINI                    (RID_SVX_START +  60)
 #define RID_SVXSTR_DBDRV                    (RID_SVX_START +  61)
@@ -599,11 +590,6 @@
 
 // "Tabelle"
 #define RID_SVXSTR_TABLE                    (RID_SVX_START + 220)
-
-#if SUPD < 547
-// Fehler-String "Windows: keine Kombination von Kontur und Schatten"
-#define RID_SVXSTR_WINERR_FONT              (RID_SVX_START + 221)
-#endif
 
 #define RID_SVXSTR_XMLSEC_SIG_OK            (RID_SVX_START + 222)
 #define RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY  (RID_SVX_START + 223)
