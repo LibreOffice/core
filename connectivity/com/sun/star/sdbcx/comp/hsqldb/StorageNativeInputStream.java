@@ -5,26 +5,14 @@
  */
 
 package com.sun.star.sdbcx.comp.hsqldb;
-import com.sun.star.lib.util.NativeLibraryLoader;
 import com.sun.star.embed.ElementModes;
 /**
  *
  * @author  Ocke
  */
 public class StorageNativeInputStream {
-    static {
-    // preload shared libraries whichs import lips are linked to hsqldb
-    if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
-    {
-            NativeLibraryLoader.loadLibrary(StorageNativeInputStream.class.getClassLoader(), "msvcr71");
-            NativeLibraryLoader.loadLibrary(StorageNativeInputStream.class.getClassLoader(), "uwinapi");
-            NativeLibraryLoader.loadLibrary(StorageNativeInputStream.class.getClassLoader(), "sal3");
-            NativeLibraryLoader.loadLibrary(StorageNativeInputStream.class.getClassLoader(), "dbtools680mi");
-    }
+    static { NativeLibraries.load(); }
 
-    // load shared library for JNI code
-        NativeLibraryLoader.loadLibrary(StorageNativeInputStream.class.getClassLoader(), "hsqldb2");
-    }
     /** Creates a new instance of StorageNativeInputStream */
     public StorageNativeInputStream(String key,String _file) {
         openStream(key,_file, ElementModes.READ);
