@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NativeStorageAccess.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 10:39:42 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:45:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,20 +45,10 @@ package com.sun.star.sdbcx.comp.hsqldb;
  * @author  oj93728
  */
 import com.sun.star.embed.ElementModes;
-import com.sun.star.lib.util.NativeLibraryLoader;
 
 public class NativeStorageAccess {
-    static
-    {
-        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
-        {
-            NativeLibraryLoader.loadLibrary(NativeStorageAccess.class.getClassLoader(), "msvcr71");
-            NativeLibraryLoader.loadLibrary(NativeStorageAccess.class.getClassLoader(), "uwinapi");
-            NativeLibraryLoader.loadLibrary(NativeStorageAccess.class.getClassLoader(), "sal3");
-        }
-        // load shared library for JNI code
-        NativeLibraryLoader.loadLibrary(NativeStorageAccess.class.getClassLoader(), "hsqldb2");
-    }
+    static { NativeLibraries.load(); }
+
     /** Creates a new instance of StorageAccess */
     public NativeStorageAccess(String name,String _mode,Object key) throws java.io.IOException{
         try {
