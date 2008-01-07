@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:10:47 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:53:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,17 +233,9 @@ void SwXMLExport::_ExportStyles( sal_Bool bUsed )
     // drawing defaults
     GetShapeExport()->ExportGraphicDefaults();
 
-#if SUPD <628 && !defined(TEST_MIB)
-    GetTextParagraphExport()->SetProgress( IsShowProgress() ? 1 : 0 );
-#endif
     GetTextParagraphExport()->exportTextStyles( bUsed
-#if SUPD >627 || defined(TEST_MIB)
                                              ,IsShowProgress()
-#endif
                                               );
-#if SUPD <628 && !defined(TEST_MIB)
-    GetTextParagraphExport()->SetProgress( 0 );
-#endif
 }
 
 void SwXMLExport::_ExportAutoStyles()
