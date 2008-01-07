@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:01:23 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:46:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,10 +284,10 @@ namespace connectivity
                     ::rtl::OUString(
 #ifdef SYSTEM_HSQLDB
                         RTL_CONSTASCII_USTRINGPARAM(HSQLDB_JAR
-                        " vnd.sun.star.expand:$ORIGIN/classes/sdbc_hsqldb.jar" )
+                        " vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/sdbc_hsqldb.jar" )
 #else
-                        RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$ORIGIN/classes/hsqldb.jar"
-                        " vnd.sun.star.expand:$ORIGIN/classes/sdbc_hsqldb.jar" )
+                        RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/hsqldb.jar"
+                        " vnd.sun.star.expand:$OOO_BASE_DIR/program/classes/sdbc_hsqldb.jar" )
 #endif
                         ) );
 
