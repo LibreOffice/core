@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:58:52 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:53:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_vcl.hxx"
 
 #include <sal/main.h>
+#include <tools/extendapplicationenvironment.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <vcl/event.hxx>
@@ -59,6 +60,8 @@ void Main();
 
 SAL_IMPLEMENT_MAIN()
 {
+    tools::extendApplicationEnvironment();
+
     Reference< XMultiServiceFactory > xMS;
     xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
 
