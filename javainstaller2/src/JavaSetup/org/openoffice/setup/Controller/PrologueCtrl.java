@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrologueCtrl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 11:52:02 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 12:32:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,20 +35,16 @@
 
 package org.openoffice.setup.Controller;
 
-import java.io.File;
 import org.openoffice.setup.InstallData;
 import org.openoffice.setup.Installer.Installer;
 import org.openoffice.setup.Installer.InstallerFactory;
 import org.openoffice.setup.PanelController;
 import org.openoffice.setup.Panel.Prologue;
-import org.openoffice.setup.ResourceManager;
 import org.openoffice.setup.SetupData.PackageDescription;
 import org.openoffice.setup.SetupData.SetupDataProvider;
 import org.openoffice.setup.Util.Controller;
 import org.openoffice.setup.Util.Dumper;
-import org.openoffice.setup.Util.Informer;
-import org.openoffice.setup.Util.InstallChangeCtrl;
-import org.openoffice.setup.Util.LogManager;
+import org.openoffice.setup.Util.ModuleCtrl;
 import org.openoffice.setup.Util.SystemManager;
 
 public class PrologueCtrl extends PanelController {
@@ -73,6 +69,10 @@ public class PrologueCtrl extends PanelController {
                     Controller.checkPackagePathExistence(installData);
                     Controller.checkPackageFormat(installData);
 
+                    if ( installData.getOSType().equalsIgnoreCase("SunOS") ) {
+                        Controller.collectSystemLanguages(installData);
+                    }
+
                     PackageDescription packageData = SetupDataProvider.getPackageDescription();
                     Installer installer = InstallerFactory.getInstance();
                     installer.preInstall(packageData);
@@ -85,6 +85,14 @@ public class PrologueCtrl extends PanelController {
 
                     if ( installData.logModuleStates() ) {
                         Dumper.logModuleStates(packageData, "Prologue Dialog");
+                    }
+
+                    if ( installData.getOSType().equalsIgnoreCase("SunOS") ) {
+                        ModuleCtrl.checkLanguagesPackages(packageData, installData);
+
+                        if ( installData.logModuleStates() ) {
+                            Dumper.logModuleStates(packageData, "Prologue Dialog Language Selection");
+                        }
                     }
 
                     if ( installData.isRootInstallation() ) {
