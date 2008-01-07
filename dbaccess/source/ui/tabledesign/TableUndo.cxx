@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableUndo.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:44:17 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,9 +64,7 @@
 #endif
 
 using namespace dbaui;
-#if SUPD > 636
 using namespace ::svt;
-#endif
 
 TYPEINIT1( OCommentUndoAction,          SfxUndoAction );
 TYPEINIT1( OTableDesignUndoAct,         OCommentUndoAction );
