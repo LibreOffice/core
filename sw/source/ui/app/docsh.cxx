@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 13:45:41 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:53:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1483,7 +1483,6 @@ uno::Reference< frame::XController >
 /* -----------------------------12.02.01 12:08--------------------------------
 
  ---------------------------------------------------------------------------*/
-#if SUPD>620
 Sequence< OUString >    SwDocShell::GetEventNames()
 {
     Sequence< OUString > aRet = SfxObjectShell::GetEventNames();
@@ -1494,7 +1493,6 @@ Sequence< OUString >    SwDocShell::GetEventNames()
     pNames[nLen] = OUString::createFromAscii("OnPageCountChange");
     return aRet;
 }
-#endif
 /*
 void SwTmpPersist::FillClass( SvGlobalName * pClassName,
                             ULONG * pClipFormat,
