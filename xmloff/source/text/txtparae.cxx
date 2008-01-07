@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:10:23 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:48:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -881,9 +881,6 @@ void XMLTextParagraphExport::exportListChange(
 XMLTextParagraphExport::XMLTextParagraphExport(
         SvXMLExport& rExp,
         SvXMLAutoStylePoolP & rASP
-#if SUPD < 628 && !defined( TEST_MIB )
-        , sal_Int32 nProg
-#endif
         ) :
     XMLStyleExport( rExp, OUString(), &rASP ),
     rAutoStylePool( rASP ),
