@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svpclient.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:34:32 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:53:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include <vcl/lstbox.hxx>
 #include <vcl/imgctrl.hxx>
 #include <vcl/bitmapex.hxx>
+#include <tools/extendapplicationenvironment.hxx>
 #include <tools/stream.hxx>
 
 #include <rtl/strbuf.hxx>
@@ -74,6 +75,8 @@ void Main();
 
 SAL_IMPLEMENT_MAIN()
 {
+    tools::extendApplicationEnvironment();
+
     Reference< XMultiServiceFactory > xMS;
     xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
 
