@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setupstrings.ulf,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-06 14:16:11 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 12:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,6 +293,12 @@ en-US = "An error has occured. Thus the Uninstallation Wizard could not remove $
 
 [STRING_INSTALLERFACTORY_OS_NOT_SUPPORTED]
 en-US = "Sorry, this Operating System is not supported yet."
+
+[STRING_OLDER_VERSION_INSTALLED_FOUND]
+en-US = "An older version of ${PRODUCT_NAME} was found on your system in:"
+
+[STRING_OLDER_VERSION_INSTALLED_REMOVE]
+en-US = "You have to remove the older version of ${PRODUCT_NAME} before you can install the newer one."
 
 [STRING_NEWER_VERSION_INSTALLED_FOUND]
 en-US = "A newer version of ${PRODUCT_NAME} was found on your system in:"
