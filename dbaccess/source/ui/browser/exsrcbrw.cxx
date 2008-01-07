@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exsrcbrw.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:58:15 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:40:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,10 +340,6 @@ Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL SbaExternalSourceBrows
         if (xFrameDispatcher.is())
             xReturn = xFrameDispatcher->queryDispatch(aNewUrl, aTargetFrameName, FrameSearchFlag::PARENT);
 
-#if SUPD<=548 && !PRIV_DEBUG
-        xReturn = NULL;
-        // in version 548 the dispatch interception and the task-local beamer will work ... me hopes
-#endif
     }
 
     if (!xReturn.is())
