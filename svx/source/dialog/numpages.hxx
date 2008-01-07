@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:23:16 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,18 +76,6 @@ class ValueSet;
 class SvxNumberingPreview;
 class SvxBrushItem;
 
-#if SUPD>642
-#else
-//assert compatibility to removed NumMenuButton
-class NumLocalExtMenuButton : public MenuButton
-{
-    Link            maClickHdl_Impl;
-    public:
-        NumLocalExtMenuButton(Window* pParent, const ResId& rResId) :
-            MenuButton(pParent, rResId){}
-
-};
-#endif
 /*-----------------13.02.97 14.02-------------------
 
 --------------------------------------------------*/
