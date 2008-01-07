@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:14:47 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,7 +427,6 @@ sal_Bool IsFormComponentList( const SdrObjList& rSdrObjList )
     return sal_True;
 }
 
-#if SUPD>500
 //========================================================================
 // class FmDesignModeChangedHint
 //========================================================================
@@ -443,7 +442,6 @@ FmDesignModeChangedHint::FmDesignModeChangedHint( sal_Bool bDesMode )
 FmDesignModeChangedHint::~FmDesignModeChangedHint()
 {
 }
-#endif
 
 //========================================================================
 const sal_uInt32 FM_UI_FEATURE_SHOW_DATABASEBAR         = 0x00000001;
