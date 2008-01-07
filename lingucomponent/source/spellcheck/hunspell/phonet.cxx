@@ -27,6 +27,8 @@
                 Porting from Aspell to Hunspell using C-like structs
 */
 
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_lingucomponent.hxx"
 #ifndef MOZILLA_CLIENT
 #include <cstdlib>
 #include <cstring>
