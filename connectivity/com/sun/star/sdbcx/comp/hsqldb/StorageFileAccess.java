@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StorageFileAccess.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 10:40:07 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:45:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 
 package com.sun.star.sdbcx.comp.hsqldb;
 import org.hsqldb.lib.FileAccess;
-import com.sun.star.lib.util.NativeLibraryLoader;
 import org.hsqldb.lib.FileSystemRuntimeException;
 
 /**
@@ -48,17 +47,8 @@ import org.hsqldb.lib.FileSystemRuntimeException;
  * @author  oj93728
  */
 public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
-    static {
-        if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
-        {
-            NativeLibraryLoader.loadLibrary(StorageFileAccess.class.getClassLoader(), "msvcr71");
-            NativeLibraryLoader.loadLibrary(StorageFileAccess.class.getClassLoader(), "uwinapi");
-            NativeLibraryLoader.loadLibrary(StorageFileAccess.class.getClassLoader(), "sal3");
-        //  NativeLibraryLoader.loadLibrary(StorageFileAccess.class.getClassLoader(), "dbtools680mi");
-        }
-    // load shared library for JNI code
-        NativeLibraryLoader.loadLibrary(StorageFileAccess.class.getClassLoader(), "hsqldb2");
-    }
+    static { NativeLibraries.load(); }
+
     String ds_name;
     String key;
     /** Creates a new instance of StorageFileAccess */
