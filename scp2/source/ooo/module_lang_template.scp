@@ -179,7 +179,8 @@ Module gid_Module_Langpack_Base_Template
              gid_File_Res_Dbu,
              gid_File_Res_Rpt,
              gid_File_Res_Rptui,
-             gid_File_Res_Sdbcl);
+             gid_File_Res_Sdbcl,
+             gid_File_Res_Sdberr);
 End
 
 Module gid_Module_Langpack_Onlineupdate_Template
