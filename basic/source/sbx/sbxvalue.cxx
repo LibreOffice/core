@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxvalue.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 10:02:21 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:45:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#if SUPD > 375
-
 #define _TLBIGINT_INT64
 #ifndef _BIGINT_HXX //autogen
 #include <tools/bigint.hxx>
@@ -45,21 +43,6 @@
 #ifndef _STREAM_HXX //autogen
 #include <tools/stream.hxx>
 #endif
-
-// fuer MIX364
-#else
-
-#include <tlgen.hxx>
-
-#define _TLBIGINT_INT64
-#include <tlbigint.hxx>
-
-#ifndef _STREAM_HXX //autogen
-#include <tools/stream.hxx>
-#endif
-
-#endif
-
 
 #include <basic/sbx.hxx>
 #include "sbxconv.hxx"
