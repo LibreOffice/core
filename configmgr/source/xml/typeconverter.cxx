@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:35:34 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:41:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -325,12 +325,7 @@ namespace configmgr
             // build version comparison is made using
             // a decimal number
 
-#if ( SUPD >= 601 )
             return uno::Type(pSequenceTD->pType);
-#else
-            OSL_ASSERT(pSequenceTD->pType);
-            return uno::Type(pSequenceTD->pType->pWeakRef);
-#endif
         } //if
 
         return uno::Type();
