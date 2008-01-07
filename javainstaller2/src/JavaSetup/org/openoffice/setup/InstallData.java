@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InstallData.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 11:18:04 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 12:31:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ public class InstallData
     static private boolean olderVersionExists = false;
     static private boolean sameVersionExists = false;
     static private boolean newerVersionExists = false;
+    static private boolean dontUpdate = false;
     static private String installType;            /* custom or typical installation */
     static private String osType;                 /* Linux, SunOS, ...              */
     static private String installDir = null;
@@ -99,6 +100,7 @@ public class InstallData
     static private PackageDescription updatePackage = null;
     static private Vector removeFiles = new Vector();  /* Files to remove, if installation is aborted */
     static private Vector installPackages = new Vector();
+    static private Vector systemLanguages = new Vector();
 
     public static InstallData getInstance()
     {
@@ -521,6 +523,14 @@ public class InstallData
         newerVersionExists = exists;
     }
 
+    public boolean dontUpdate() {
+        return dontUpdate;
+    }
+
+    public void setDontUpdate(boolean value) {
+        dontUpdate = value;
+    }
+
     public PackageDescription getUpdatePackage() {
         return updatePackage;
     }
@@ -543,6 +553,14 @@ public class InstallData
 
     public void setInstallPackages(Vector packages) {
         installPackages = packages;
+    }
+
+    public Vector getSystemLanguages() {
+        return systemLanguages;
+    }
+
+    public void setSystemLanguages(Vector languages) {
+        systemLanguages = languages;
     }
 
     public void setShellEnvironment(HashMap environment) {
