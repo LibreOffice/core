@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:48:07 $
+#   last change: $Author: obo $ $Date: 2008-01-07 09:51:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,15 +48,13 @@ TARGET=salapp
 
 # --- Files --------------------------------------------------------
 
-YD00_CXXFILES=	salmain.cxx 		\
+YD00_CXXFILES=\
             salshl.cxx			\
             salinst.cxx 		\
             sallang.cxx 		\
             saltimer.cxx		\
             salsound.cxx		\
             salsys.cxx
-
-OBJFILES=	$(OBJ)$/salmain.obj
 
 SLOFILES=	$(SLO)$/salshl.obj	\
             $(SLO)$/printf.obj \
