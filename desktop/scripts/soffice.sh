@@ -5,9 +5,9 @@
 #
 #   $RCSfile: soffice.sh,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: vg $ $Date: 2007-10-15 12:58:46 $
+#   last change: $Author: obo $ $Date: 2008-01-07 09:56:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -175,10 +175,6 @@ do
        -env:*) BOOTSTRAPVARS=$BOOTSTRAPVARS" ""$arg";;
   esac
 done
-
-# set URE_BOOTSTRAP (if not yet set):
-: ${URE_BOOTSTRAP="file://$sd_prog/fundamentalrc"}
-export URE_BOOTSTRAP
 
 # extend the ld_library_path for java: javaldx checks the sofficerc for us
 unset java_ld_library_path
