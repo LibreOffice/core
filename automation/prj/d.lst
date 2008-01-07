@@ -14,7 +14,7 @@ mkdir: %_DEST%\inc%_EXT%\automation
 ..\inc\automation\communi.hxx %_DEST%\inc%_EXT%\automation\communi.hxx
 ..\inc\automation\simplecm.hxx %_DEST%\inc%_EXT%\automation\simplecm.hxx
 
-..\%__SRC%\bin\testtool.exe %_DEST%\bin%_EXT%\testtool.exe
+..\%__SRC%\bin\testtool.exe %_DEST%\bin%_EXT%\testtool.bin
 ..\%__SRC%\bin\testtool %_DEST%\bin%_EXT%\testtool.bin
 ..\%__SRC%\inc\classes %_DEST%\bin%_EXT%\classes
 ..\%__SRC%\inc\keycodes %_DEST%\bin%_EXT%\keycodes
