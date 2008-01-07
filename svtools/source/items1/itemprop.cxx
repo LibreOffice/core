@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemprop.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:44:35 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:56:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,11 +175,7 @@ Any SfxItemPropertySet::getPropertyValue( const OUString &rName,
 
  ---------------------------------------------------------------------------*/
 void SfxItemPropertySet::setPropertyValue( const SfxItemPropertyMap& rMap,
-#if SUPD>633
                                             const Any& aVal,
-#else
-                                            const Any aVal,
-#endif
                                             SfxItemSet& rSet ) const
                                             throw(RuntimeException,
                                                     IllegalArgumentException)
@@ -220,11 +216,7 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertyMap& rMap,
 
  ---------------------------------------------------------------------------*/
 void SfxItemPropertySet::setPropertyValue( const OUString &rName,
-#if SUPD>633
                                             const Any& aVal,
-#else
-                                            const Any aVal,
-#endif
                                             SfxItemSet& rSet ) const
                                             throw(RuntimeException,
                                                     IllegalArgumentException,
