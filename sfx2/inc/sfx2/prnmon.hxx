@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnmon.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:27:15 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:02:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,9 +97,7 @@ class SfxPrintOptionsDialog : public ModalDialog
 private:
     OKButton                aOkBtn;
     CancelButton            aCancelBtn;
-#if SUPD > 640
     HelpButton              aHelpBtn;
-#endif
     SfxPrintOptDlg_Impl*    pDlgImpl;
     SfxViewShell*           pViewSh;
     SfxItemSet*             pOptions;

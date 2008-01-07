@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:24:37 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:02:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,9 +276,7 @@ public:
     USHORT                      nArgDefCount;   // Anzahl der formalen Argumente
     long                        nDisableFlags;      // DisableFlags, die vorhanden sein
                                                 // m"ussen, damit der Slot enabled ist
-#if SUPD>380
     const char __FAR_DATA*      pUnoName;       // UnoName des Slots
-#endif
 
 public:
 
@@ -292,9 +290,7 @@ public:
     USHORT          GetWhich( const SfxItemPool &rPool ) const;
     USHORT          GetValue() const { return nValue; }
     const SfxType*  GetType() const { return pType; }
-#if SUPD>380
     const char*     GetUnoName() const { return pUnoName; }
-#endif
 
     USHORT          GetFormalArgumentCount() const { return nArgDefCount; }
     const SfxFormalArgument& GetFormalArgument( USHORT nNo ) const
