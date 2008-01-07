@@ -5,9 +5,9 @@
  *
  *  $RCSfile: unopkg_app.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 13:24:10 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include "unopkg_shared.h"
 #include "dp_identifier.hxx"
 #include "sal/main.h"
+#include "tools/extendapplicationenvironment.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/uri.hxx"
 #include "osl/thread.h"
@@ -206,6 +207,8 @@ void disposeBridges(Reference<css::uno::XComponentContext> ctx)
 //##############################################################################
 SAL_IMPLEMENT_MAIN()
 {
+    tools::extendApplicationEnvironment();
+
     DisposeGuard disposeGuard;
     rtl_TextEncoding textenc = osl_getThreadTextEncoding();
 
