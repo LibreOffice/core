@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InstallChangeCtrl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:02:11 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 12:33:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@ import org.openoffice.setup.InstallData;
 import org.openoffice.setup.Installer.Installer;
 import org.openoffice.setup.Installer.InstallerFactory;
 import org.openoffice.setup.Panel.ChooseDirectory;
+import org.openoffice.setup.ResourceManager;
 import org.openoffice.setup.SetupData.PackageDescription;
 import org.openoffice.setup.SetupData.SetupDataProvider;
 import java.util.Enumeration;
@@ -86,6 +87,7 @@ public class InstallChangeCtrl {
 
             boolean packageIsInstalled = installer.isPackageInstalled(data.getUpdatePackage(), data);
             if ( packageIsInstalled ) {
+
                 // Checking version of installed package:
                 // If installed package is older: Force update mode, no selection of packages
                 // If installed package is equal: Force maintenance mode, only selection of packages
@@ -109,6 +111,20 @@ public class InstallChangeCtrl {
                 if ( data.isRootInstallation() ) {
                     setChangeInstallDir(data, installer);
                     data.setIsChangeInstallation(true);
+                }
+
+                // Exit installation, if update is not wanted and this is a root installation.
+                // In installations without root privileges, the user can choose another installation
+                // directory (ChooseDirectoryCtrl.java).
+                if ( data.isRootInstallation() && data.dontUpdate() && data.olderVersionExists() ) {
+                    System.err.println("Error: An older version is already installed in directory " + data.getInstallDir() + "!");
+                    String message1 = ResourceManager.getString("String_Older_Version_Installed_Found")
+                                    + "\n" + data.getInstallDir() + "\n";
+                    String message2 = ResourceManager.getString("String_Older_Version_Installed_Remove");
+                    String message = message1 + "\n" + message2;
+                    String title = ResourceManager.getString("String_Error");
+                    Informer.showErrorMessage(message, title);
+                    System.exit(1);
                 }
             }
         }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChooseDirectoryCtrl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 11:50:30 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 12:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,6 +253,24 @@ public class ChooseDirectoryCtrl extends PanelController {
                     // Possibility to select a new directory, in which no
                     // newer product exists
                     String message = ResourceManager.getString("String_Newer_Version_Installed_Found") + "\n" + data.getInstallDir() + "\n" +
+                                     ResourceManager.getString("String_Newer_Version_Database") + ": " + data.getDatabasePath() + "\n" +
+                                     ResourceManager.getString("String_Newer_Version_Tip");
+                    String title = ResourceManager.getString("String_Error");
+                    Informer.showErrorMessage(message, title);
+
+                    repeatDialog = true;
+                }
+
+                // If an older version is found, and the update is forbidden, the user
+                // can select another installation directory.
+
+                if ( data.olderVersionExists() && data.dontUpdate() ) {
+                    // This can happen only in installation with user privileges.
+                    // Installations with root privileges have cancelled installation
+                    // already at first dialog (InstallChangeCtrl.java).
+                    // Possibility to select a new directory, in which no
+                    // older product exists
+                    String message = ResourceManager.getString("String_Older_Version_Installed_Found") + "\n" + data.getInstallDir() + "\n" +
                                      ResourceManager.getString("String_Newer_Version_Database") + ": " + data.getDatabasePath() + "\n" +
                                      ResourceManager.getString("String_Newer_Version_Tip");
                     String title = ResourceManager.getString("String_Error");
