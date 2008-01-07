@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprn.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 15:02:02 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:04:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,11 +223,6 @@ BOOL UseStandardPrinter_Impl( Window* /*pParent*/, SfxPrinter* pDocPrinter )
     {
         // Geht nicht mehr ohne OrigJobSetup!
         String aTmp( SfxResId( STR_PRINTER_NOTAVAIL ) );
-#if SUPD<532
-        aTmp.SearchAndReplace( "$1",
-                pDocPrinter->GetOrigJobSetup().GetPrinterName() );
-        aTmp.SearchAndReplace( "$2", pDocPrinter->GetName() );
-#endif
         QueryBox aBox( pParent, WB_OK_CANCEL | WB_DEF_OK, aTmp );
         return RET_OK == aBox.Execute();
     }
