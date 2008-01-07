@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexcollection.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:55:12 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:40:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,27 +47,6 @@
 #endif
 #ifndef _DBAUI_INDEXES_HXX_
 #include "indexes.hxx"
-#endif
-
-#if SUPD<625
-    // In SRC624 and below, the SAL_THROW was defined in another way -> redefine it the way it's used from SRC625 onwards
-    // (more precise: from UDK211 onwards, but we don't have a variable for this ...)
-
-    #ifdef __cplusplus
-
-        #undef SAL_THROW
-
-        #if defined(__GNUC__) || defined(__SUNPRO_CC)
-            #define SAL_THROW( exc )
-        #else
-            #define SAL_THROW( exc ) throw exc
-        #endif
-        #define SAL_THROW_EXTERN_C() throw ()
-
-    #else
-        #define SAL_THROW_EXTERN_C()
-    #endif
-
 #endif
 
 //......................................................................
