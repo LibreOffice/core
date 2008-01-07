@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModuleCtrl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:35:07 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 12:33:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ package org.openoffice.setup.Util;
 
 import java.io.File;
 import java.util.Enumeration;
+import java.util.Vector;
 import org.openoffice.setup.InstallData;
 import org.openoffice.setup.Installer.Installer;
 import org.openoffice.setup.Installer.InstallerFactory;
@@ -320,40 +321,58 @@ public class ModuleCtrl {
                 packageData.setSelectionState(PackageDescription.IGNORE);
             }
         } else {
-            if ( isInstalled ) {
-                boolean installedPackageIsOlder = installer.isInstalledPackageOlder(packageData, installData);
-                if ( ! installedPackageIsOlder ) {
-                    // The package is already installed in the same or in a newer version
-                    packageData.setSelectionState(PackageDescription.IGNORE);
-                } else {
-                    // This is also something like migrating feature states
-                    packageData.setSelectionState(PackageDescription.INSTALL);
+            boolean goodDepends = true;
+            if ( installData.getOSType().equalsIgnoreCase("SunOS") ) {
+                if (( packageData.getCheckSolaris() != null ) && ( ! packageData.getCheckSolaris().equals("") )) {
+                    // the package has to be installed. Creating a new package with only packagename
+                    if ( ! installer.isPackageNameInstalled(packageData.getCheckSolaris(), installData) ) {
+                        goodDepends = false;
+                    }
                 }
             }
+
+            if ( ! goodDepends ) {
+                // The package dependencies are not valid -> ignoring package.
+                packageData.setSelectionState(PackageDescription.IGNORE);
+                // too late to hide the module
+                // packageData.setIsHidden(true);
+            }
             else {
-                // Special handling for core modules, which are required, but not installed.
-                // This can be deinstalled by hand for example.
-                boolean isRequiredCoreModule = checkRequiredCoreModule(packageData);
-                if ( isRequiredCoreModule ) {
-                    packageData.setSelectionState(PackageDescription.INSTALL);
-                    LogManager.addLogfileComment("<b>Adding required package:</b> " + packageData.getPackageName() + "</br>");
-                    // This package has to exist!
-                    if ( ! packageExists(packageData, installData) ) {
+                if ( isInstalled ) {
+                    boolean installedPackageIsOlder = installer.isInstalledPackageOlder(packageData, installData);
+                    if ( ! installedPackageIsOlder ) {
+                        // The package is already installed in the same or in a newer version
+                        packageData.setSelectionState(PackageDescription.IGNORE);
+                    } else {
+                        // This is also something like migrating feature states
+                        packageData.setSelectionState(PackageDescription.INSTALL);
+                    }
+                }
+                else {
+                    // Special handling for core modules, which are required, but not installed.
+                    // This can be deinstalled by hand for example.
+                    boolean isRequiredCoreModule = checkRequiredCoreModule(packageData);
+                    if ( isRequiredCoreModule ) {
+                        packageData.setSelectionState(PackageDescription.INSTALL);
+                        LogManager.addLogfileComment("<b>Adding required package:</b> " + packageData.getPackageName() + "</br>");
+                        // This package has to exist!
+                        if ( ! packageExists(packageData, installData) ) {
 
-                        String packagePath = installData.getPackagePath();
-                        if (( packageData.getPkgSubdir() != null ) && ( ! packageData.getPkgSubdir().equals("") )) {
-                            File completePackageFile = new File(packagePath, packageData.getPkgSubdir());
-                            packagePath = completePackageFile.getPath();
+                            String packagePath = installData.getPackagePath();
+                            if (( packageData.getPkgSubdir() != null ) && ( ! packageData.getPkgSubdir().equals("") )) {
+                                File completePackageFile = new File(packagePath, packageData.getPkgSubdir());
+                                packagePath = completePackageFile.getPath();
+                            }
+                            String packageName = packageData.getPackageName();
+                            File packageFile = new File(packagePath, packageName);
+
+                            String log = "<b>Error: Missing required package " + packageFile.getPath() + "</b><br>";
+                            System.err.println(log);
+                            String message = ResourceManager.getString("String_File_Not_Found") + ": " + packageFile.getPath();
+                            String title = ResourceManager.getString("String_Error");
+                            Informer.showErrorMessage(message, title);
+                            System.exit(1);
                         }
-                        String packageName = packageData.getPackageName();
-                        File packageFile = new File(packagePath, packageName);
-
-                        String log = "<b>Error: Missing required package " + packageFile.getPath() + "</b><br>";
-                        System.err.println(log);
-                        String message = ResourceManager.getString("String_File_Not_Found") + ": " + packageFile.getPath();
-                        String title = ResourceManager.getString("String_Error");
-                        Informer.showErrorMessage(message, title);
-                        System.exit(1);
                     }
                 }
             }
@@ -564,6 +583,36 @@ public class ModuleCtrl {
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
             PackageDescription child = (PackageDescription) e.nextElement();
             setUpdateOlderProductSettings(child, data, installer);
+        }
+    }
+
+    static public void checkLanguagesPackages(PackageDescription packageData, InstallData installData) {
+        if (( packageData.getPkgLanguage() != null ) && ( ! packageData.getPkgLanguage().equals(""))) {
+            // This is a package with a specific language.
+            // pkgLanguage can be a comma separated list, for example "ja,ja_JP.PCK,ja_JP.UTF-8"
+            String allLang = packageData.getPkgLanguage();
+            String[] allLangs = allLang.split(",");
+
+            Vector systemLanguages = installData.getSystemLanguages();
+
+            boolean foundLang = false;
+            for (int i = 0; i < allLangs.length; i++) {
+                String oneLang = allLangs[i];
+                oneLang = oneLang.trim();
+                if ( systemLanguages.contains(oneLang)) {
+                    foundLang = true;
+                    break;
+                }
+            }
+
+            if ( ! foundLang ) {
+                packageData.setSelectionState(PackageDescription.DONT_INSTALL);
+            }
+        }
+
+        for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
+            PackageDescription child = (PackageDescription) e.nextElement();
+            checkLanguagesPackages(child, installData);
         }
     }
 
