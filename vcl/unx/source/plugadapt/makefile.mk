@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:19:24 $
+#   last change: $Author: obo $ $Date: 2008-01-07 09:52:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,6 @@ PRJ=..$/..$/..
 
 PRJNAME=vcl
 TARGET=salplug
-LIBTARGET=NO
 
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
@@ -57,13 +56,7 @@ dummy:
 
 CFLAGS+=-DSAL_DLLPOSTFIX=\"$(DLLPOSTFIX)\"
 
-SLOFILES=\
-    $(SLO)$/salmain.obj \
-    $(SLO)$/salplug.obj
-
-LIB1TARGET=$(SLB)$/$(TARGET).lib
-LIB1OBJFILES=\
-    $(SLO)$/salplug.obj
+SLOFILES=$(SLO)$/salplug.obj
 
 .ENDIF		# "$(GUIBASE)"!="unx"
 
