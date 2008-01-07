@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: kz $ $Date: 2007-10-09 15:22:30 $
+#   last change: $Author: obo $ $Date: 2008-01-07 09:53:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,13 +76,7 @@ APP1STDLIBS=	$(CPPULIB)			\
 
 APP2TARGET= outdevgrind
 APP2OBJS=	\
-    $(OBJ)$/outdevgrind.obj
-
-.IF "$(GUI)"!="UNX"
-    APP2OBJS += $(OBJ)$/salmain.obj
-.ELSE
-    APP2OBJS += $(SLO)$/salmain.obj
-.ENDIF
+    $(OBJ)$/outdevgrind.obj $(OBJ)$/salmain.obj
 
 APP2NOSAL=		TRUE
 APP2STDLIBS=$(TOOLSLIB) 		\
