@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:22:06 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:49:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,17 +166,12 @@ OOdbcLibWrapper::OOdbcLibWrapper()
 #endif
 
 //-------------------------------------------------------------------------
-#ifdef HAVE_ODBC_SUPPORT
-extern "C" { static void SAL_CALL thisModule() {} }
-#endif
-
 sal_Bool OOdbcLibWrapper::load(const sal_Char* _pLibPath)
 {
     m_sLibPath = ::rtl::OUString::createFromAscii(_pLibPath);
 #ifdef HAVE_ODBC_SUPPORT
     // load the module
-    m_pOdbcLib = osl_loadModuleRelative(
-        &thisModule, m_sLibPath.pData, SAL_LOADMODULE_NOW);
+    m_pOdbcLib = osl_loadModule(m_sLibPath.pData, SAL_LOADMODULE_NOW);
     return (NULL != m_pOdbcLib);
 #endif
 }
