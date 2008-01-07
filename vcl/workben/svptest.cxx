@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svptest.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:34:41 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:54:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 
 #include <sal/main.h>
+#include <tools/extendapplicationenvironment.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <vcl/event.hxx>
@@ -65,6 +66,8 @@ void Main();
 
 SAL_IMPLEMENT_MAIN()
 {
+    tools::extendApplicationEnvironment();
+
     Reference< XMultiServiceFactory > xMS;
     xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
 
