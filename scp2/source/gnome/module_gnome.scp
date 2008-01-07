@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_gnome.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 10:05:18 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 12:35:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@ Module gid_Module_Optional_Gnome
     PackageInfo = "packinfo_office.txt";
     MOD_NAME_DESC(MODULE_OPTIONAL_GNOME);
     Styles = (DONTSHOWINUSERINSTALL);
+    XpdCheckSolaris = "SUNWgnome-vfs";
     Files = (gid_File_Lib_Gnomevfs, gid_File_Lib_Gconfbe, gid_File_Bin_Gnome_Set_Default_Application);
 End
 
