@@ -12,7 +12,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 ..\%__SRC%\lib\ivcl.lib %_DEST%\lib%_EXT%\ivcl.lib
 ..\%__SRC%\misc\vcl?????.map %_DEST%\bin%_EXT%\vcl?????.map
 ..\%__SRC%\obj\salmain.obj %_DEST%\lib%_EXT%\salmain.obj
-..\%__SRC%\slo\salmain.o %_DEST%\lib%_EXT%\salmain.o
+..\%__SRC%\obj\salmain.o %_DEST%\lib%_EXT%\salmain.o
 
 ..\inc\vcl\accel.hxx %_DEST%\inc%_EXT%\vcl\accel.hxx
 ..\inc\vcl\alpha.hxx %_DEST%\inc%_EXT%\vcl\alpha.hxx
