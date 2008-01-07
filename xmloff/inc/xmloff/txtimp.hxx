@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 12:25:10 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:46:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -905,14 +905,10 @@ inline const SvXMLTokenMap& XMLTextImportHelper::GetTextFrameAttrTokenMap()
 
 inline const SvXMLTokenMap& XMLTextImportHelper::GetTextContourAttrTokenMap()
 {
-#if SUPD > 627
     if( !pTextContourAttrTokenMap )
         pTextContourAttrTokenMap = _GetTextContourAttrTokenMap();
 
     return *pTextContourAttrTokenMap;
-#else
-    return *_GetTextContourAttrTokenMap();
-#endif
 }
 
 inline const SvXMLTokenMap& XMLTextImportHelper::GetTextHyperlinkAttrTokenMap()
