@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OFunctions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:31:13 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:47:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,8 +112,6 @@ T3SQLNativeSql pODBC3SQLNativeSql;
 
 sal_Bool LoadFunctions(oslModule pODBCso);
 // -------------------------------------------------------------------------
-extern "C" { static void SAL_CALL thisModule() {} }
-
 // Dynamisches Laden der DLL/shared lib und Adressen der Funktionen besorgen:
 // Liefert sal_True bei Erfolg.
 sal_Bool LoadLibrary_ODBC3(::rtl::OUString &_rPath)
@@ -135,8 +133,7 @@ sal_Bool LoadLibrary_ODBC3(::rtl::OUString &_rPath)
      _rPath = ::rtl::OUString::createFromAscii("libiodbc.dylib");
  #else
     _rPath = ::rtl::OUString::createFromAscii("libodbc.so.1");
-    pODBCso = osl_loadModuleRelative(
-        &thisModule,_rPath.pData,SAL_LOADMODULE_NOW );
+    pODBCso = osl_loadModule( _rPath.pData,SAL_LOADMODULE_NOW );
     if ( !pODBCso )
         _rPath = ::rtl::OUString::createFromAscii("libodbc.so");
  #endif   /* MACOSX */
@@ -146,15 +143,13 @@ sal_Bool LoadLibrary_ODBC3(::rtl::OUString &_rPath)
 #endif
 
     if ( !pODBCso )
-        pODBCso = osl_loadModuleRelative(
-            &thisModule,_rPath.pData,SAL_LOADMODULE_NOW );
+        pODBCso = osl_loadModule( _rPath.pData,SAL_LOADMODULE_NOW );
     if( !pODBCso)
 #ifdef OS2
     {
         delete pODBCso;
         _rPath = ::rtl::OUString::createFromAscii("WOD402");
-        pODBCso = osl_loadModuleRelative(
-            &thisModule,_rPath.pData,SAL_LOADMODULE_NOW );
+        pODBCso = osl_loadModule( _rPath.pData,SAL_LOADMODULE_NOW );
         if( !pODBCso)
             return sal_False;
     }
