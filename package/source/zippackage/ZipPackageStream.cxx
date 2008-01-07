@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:52:21 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:05:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -753,11 +753,7 @@ void SAL_CALL ZipPackageStream::setPropertyValue( const OUString& aPropertyName,
         else
             bHaveOwnKey = sal_False;
     }
-#if SUPD>617
     else if (aPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Compressed" ) ) )
-#else
-    else if (aPropertyName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "Compress" ) ) )
-#endif
     {
         sal_Bool bCompr = sal_False;
 
