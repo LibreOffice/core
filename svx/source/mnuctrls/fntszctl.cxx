@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntszctl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:32:41 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:39:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,11 +184,7 @@ void SvxFontSizeMenuControl::StateChanged(
                 (const SvxFontListItem*)pSh->GetItem( SID_ATTR_CHAR_FONTLIST );
             const FontList* pList = pFonts ? pFonts->GetFontList(): NULL;
             if ( pList )
-#if SUPD < 547
-                pMenu->Fill( pList->Get(0), pList );
-#else
                 pMenu->Fill( pList->GetFontName(0), pList );
-#endif
         }
     }
 }
