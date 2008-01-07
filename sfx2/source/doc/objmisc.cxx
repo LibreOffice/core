@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:47:33 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:04:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,14 +233,6 @@ sal_Bool SfxObjectShell::IsAbortingImport() const
 {
     return pImp->bIsAbortingImport;
 }
-
-//-------------------------------------------------------------------------
-
-#if SUPD<604
-void SfxObjectShell::NotifyReloadAvailable()
-{
-}
-#endif
 
 //-------------------------------------------------------------------------
 
