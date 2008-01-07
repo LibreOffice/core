@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:34:03 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:58:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,12 +82,6 @@
 #include <svtools/parhtml.hxx>
 #include <vcl/outdev.hxx>
 #include <stdio.h>
-
-#if defined(GetNumberFormat) && SUPD<356
-// xoutbmp.hxx -> svimbase.hxx -> sysdep.hxx -> windows.h ->
-// define GetNumberFormat GetNumberFormatA
-#undef GetNumberFormat
-#endif
 
 #include "htmlexp.hxx"
 #include "filter.hxx"
