@@ -4,9 +4,9 @@
  *
  *  $RCSfile: command.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:48:39 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:41:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,14 +400,12 @@ SvCommand::SvCommand( int argc, char ** argv )
             }
             else
             {
-#if SUPD>589
                 // temporary compatibility hack
                 printf(
                     "unknown switch: %s\n",
                     rtl::OUStringToOString(
                         aParam, RTL_TEXTENCODING_UTF8).getStr());
                 exit( -1 );
-#endif
             }
         }
         else
