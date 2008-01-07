@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: obo $ $Date: 2007-07-17 13:30:49 $
+#   last change: $Author: obo $ $Date: 2008-01-07 09:48:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,8 @@ LIB1FILES+=  \
             $(SLB)$/debug.lib       \
             $(SLB)$/zcodec.lib      \
             $(SLB)$/inet.lib        \
-            $(SLB)$/testtoolloader.lib
+            $(SLB)$/testtoolloader.lib \
+            $(SLB)$/misc.lib
 
 .IF "$(OS)"=="MACOSX"
 SHL1STDLIBS += $(UCBHELPERLIB) \
