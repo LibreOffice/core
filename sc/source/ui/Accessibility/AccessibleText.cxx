@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:53:34 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:58:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1152,11 +1152,9 @@ SvxTextForwarder* ScAccessibleEditLineTextData::GetTextForwarder()
                 pEnginePool->FreezeIdRanges();
                 mpEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
                 mbEditEngineCreated = sal_True;
-#if SUPD > 600
                 //  currently, GetPortions doesn't work if UpdateMode is FALSE,
                 //  this will be fixed (in EditEngine) by src600
         //      pEditEngine->SetUpdateMode( FALSE );
-#endif
                 mpEditEngine->EnableUndo( FALSE );
                 mpEditEngine->SetRefMapMode( MAP_100TH_MM );
                 mpForwarder = new SvxEditEngineForwarder(*mpEditEngine);
@@ -1396,11 +1394,9 @@ SvxTextForwarder* ScAccessiblePreviewHeaderCellTextData::GetTextForwarder()
             pEnginePool->FreezeIdRanges();
             pEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
         }
-#if SUPD > 600
         //  currently, GetPortions doesn't work if UpdateMode is FALSE,
         //  this will be fixed (in EditEngine) by src600
 //      pEditEngine->SetUpdateMode( FALSE );
-#endif
         pEditEngine->EnableUndo( FALSE );
         if (pDocShell)
             pEditEngine->SetRefDevice(pDocShell->GetRefDevice());
@@ -1653,11 +1649,9 @@ SvxTextForwarder* ScAccessibleNoteTextData::GetTextForwarder()
             pEnginePool->FreezeIdRanges();
             mpEditEngine = new ScFieldEditEngine( pEnginePool, NULL, TRUE );
         }
-#if SUPD > 600
         //  currently, GetPortions doesn't work if UpdateMode is FALSE,
         //  this will be fixed (in EditEngine) by src600
 //      pEditEngine->SetUpdateMode( FALSE );
-#endif
         mpEditEngine->EnableUndo( FALSE );
         if (mpDocSh)
             mpEditEngine->SetRefDevice(mpDocSh->GetRefDevice());
