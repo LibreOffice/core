@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Installer.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 11:53:48 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 12:32:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,10 @@ public abstract class Installer {
 
     public String getChangeInstallDir(PackageDescription packageData) {
         return null;
+    }
+
+    public boolean isPackageNameInstalled(String packageName, InstallData installData) {
+        return false;
     }
 
     public abstract void installPackage(PackageDescription packageData);

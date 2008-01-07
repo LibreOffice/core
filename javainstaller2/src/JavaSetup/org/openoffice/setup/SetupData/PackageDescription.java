@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PackageDescription.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 11:59:00 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 12:33:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ public class PackageDescription implements TreeNode {
     /* display information */
     private String  dpyName            = "";
     private String  dpyDescription     = "";
+    private String  checkSolaris       = "";
     private int     instSize    = 0;
     private int     dpySortKey  = 0;
     private boolean isDefault   = true;
@@ -95,6 +96,7 @@ public class PackageDescription implements TreeNode {
     private String  pkgRelease = null;
     private String  pkgRealName = null;
     private String  pkgSubdir = null;
+    private String  pkgLanguage = null;
     private int     pkgSize     = 0;
     private int     pkgType     = NOTA_UNIT;
     private boolean pkgExists = true;  // must be default, especially for uninstallation
@@ -142,6 +144,10 @@ public class PackageDescription implements TreeNode {
 
     public String getDescription() {
         return dpyDescription;
+    }
+
+    public String getCheckSolaris() {
+        return checkSolaris;
     }
 
     public int getSize() {
@@ -312,6 +318,14 @@ public class PackageDescription implements TreeNode {
         pkgSubdir = subdir;
     }
 
+    public String getPkgLanguage() {
+        return pkgLanguage;
+    }
+
+    public void setPkgLanguage(String language) {
+        pkgLanguage = language;
+    }
+
     /**
      * extract the name and the description according to the locale
      */
@@ -386,6 +400,11 @@ public class PackageDescription implements TreeNode {
                 // dontUninstall = Boolean.parseBoolean(dontUninstallValue);
             }
 
+            subSection = section.getElement("checksolaris");
+            if (subSection != null) {
+                checkSolaris = subSection.getValue();
+            }
+
             subSection = section.getElement("isupdatepackage");
             if (subSection != null) {
                 String isUpdatePackageValue = subSection.getValue();
@@ -445,6 +464,11 @@ public class PackageDescription implements TreeNode {
                 isRelocatable = Parser.parseBoolean(relocatableValue);
                 // isRelocatable = Boolean.parseBoolean(relocatableValue);
             }
+            subSection = section.getElement("solarislanguage");
+            if (subSection != null) {
+                pkgLanguage = subSection.getValue();
+            }
+
         }
 
         /* line up the subpackages */

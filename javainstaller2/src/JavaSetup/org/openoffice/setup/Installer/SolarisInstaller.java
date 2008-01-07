@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SolarisInstaller.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 11:54:27 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 12:32:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,6 +313,52 @@ public class SolarisInstaller extends Installer {
 
     }
 
+    public boolean isPackageNameInstalled(String packageName, InstallData installData) {
+        String rootString = "";
+        String rootPath = null;
+        String pkgCommand;
+        String[] pkgCommandArray;
+        boolean useLocalRoot = false;
+        boolean isInstalled = false;
+
+        if (installData.isUserInstallation()) {
+            rootPath = installData.getDatabasePath();
+        }
+
+        if (( rootPath != null ) && (! rootPath.equals("null"))) {
+            rootString = "-R";
+            useLocalRoot = true;
+        }
+
+        if (useLocalRoot) {
+            pkgCommand = "pkginfo " + rootString + " " + rootPath + " " + packageName;
+            pkgCommandArray = new String[4];
+            pkgCommandArray[0] = "pkginfo";
+            pkgCommandArray[1] = rootString;
+            pkgCommandArray[2] = rootPath;
+            pkgCommandArray[3] = packageName;
+        } else {
+            pkgCommand = "pkginfo " + packageName;
+            pkgCommandArray = new String[2];
+            pkgCommandArray[0] = "pkginfo";
+            pkgCommandArray[1] = packageName;
+        }
+
+        // Vector returnVector = new Vector();
+        int returnValue = ExecuteProcess.executeProcessReturnValue(pkgCommandArray);
+
+        if ( returnValue == 0 ) {
+            isInstalled = true;
+            String log = pkgCommand + "<br><b>Returns: " + returnValue + " Package is installed" + "</b><br>";
+            LogManager.addCommandsLogfileComment(log);
+        } else {
+            String log = pkgCommand + "<br><b>Returns: " + returnValue + " Package is not installed" + "</b><br>";
+            LogManager.addCommandsLogfileComment(log);
+        }
+
+        return isInstalled;
+    }
+
     public boolean isPackageInstalled(PackageDescription packageData, InstallData installData) {
         boolean isInstalled = false;
 
@@ -323,47 +369,7 @@ public class SolarisInstaller extends Installer {
         }
 
         if ( packageName != null ) {
-            String rootString = "";
-            String rootPath = null;
-            String pkgCommand;
-            String[] pkgCommandArray;
-            boolean useLocalRoot = false;
-
-            if (installData.isUserInstallation()) {
-                rootPath = installData.getDatabasePath();
-            }
-
-            if (( rootPath != null ) && (! rootPath.equals("null"))) {
-                rootString = "-R";
-                useLocalRoot = true;
-            }
-
-            if (useLocalRoot) {
-                pkgCommand = "pkginfo " + rootString + " " + rootPath + " " + packageName;
-                pkgCommandArray = new String[4];
-                pkgCommandArray[0] = "pkginfo";
-                pkgCommandArray[1] = rootString;
-                pkgCommandArray[2] = rootPath;
-                pkgCommandArray[3] = packageName;
-            } else {
-                pkgCommand = "pkginfo " + packageName;
-                pkgCommandArray = new String[2];
-                pkgCommandArray[0] = "pkginfo";
-                pkgCommandArray[1] = packageName;
-            }
-
-            // Vector returnVector = new Vector();
-            int returnValue = ExecuteProcess.executeProcessReturnValue(pkgCommandArray);
-
-            if ( returnValue == 0 ) {
-                isInstalled = true;
-                String log = pkgCommand + "<br><b>Returns: " + returnValue + " Package is installed" + "</b><br>";
-                LogManager.addCommandsLogfileComment(log);
-            } else {
-                String log = pkgCommand + "<br><b>Returns: " + returnValue + " Package is not installed" + "</b><br>";
-                LogManager.addCommandsLogfileComment(log);
-            }
-
+            isInstalled = isPackageNameInstalled(packageName, installData);
         }
 
         return isInstalled;
