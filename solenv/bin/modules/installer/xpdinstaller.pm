@@ -4,9 +4,9 @@
 #
 #   $RCSfile: xpdinstaller.pm,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 17:00:05 $
+#   last change: $Author: obo $ $Date: 2008-01-07 15:11:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -284,6 +284,21 @@ sub get_dontuninstall_value
     my $styles = "";
     if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
     if ( $styles =~ /\bDONTUNINSTALL\b/ ) { $value = "true"; }
+
+    return $value;
+}
+
+###################################################
+# Asking module for XpdCheckSolaris entry
+# (belongs to scp module)
+###################################################
+
+sub get_checksolaris_value
+{
+    my ( $module ) = @_;
+
+    my $value = "";
+    if ( $module->{'XpdCheckSolaris'} ) { $value = $module->{'XpdCheckSolaris'}; }
 
     return $value;
 }
@@ -714,6 +729,21 @@ sub set_macro_tag
 }
 
 ###################################################
+# Setting the update behaviour
+###################################################
+
+sub set_update_tag
+{
+    my ($allvariables, $indent) = @_;
+
+    my $updateflag = "false";
+    if ( $allvariables->{"DONTUPDATE"} ) { $updateflag = "true"; }
+    my $tag = $indent . "<dontupdate>" . $updateflag . "</dontupdate>" . "\n";
+
+    return $tag;
+}
+
+###################################################
 # Setting default directory
 ###################################################
 
@@ -815,6 +845,9 @@ sub get_setup_file_content
     $tag = set_defaultdir_tag($allvariables, $singleindent);
     push(@xpdfile, $tag);
 
+    $tag = set_update_tag($allvariables, $singleindent);
+    push(@xpdfile, $tag);
+
     $tag = set_packagedir_tag($singleindent);
     push(@xpdfile, $tag);
 
@@ -837,7 +870,7 @@ sub get_setup_file_content
 
 sub get_file_content
 {
-    my ( $module, $packagename, $linkpackage, $isemptyparent, $subdir ) = @_;
+    my ( $module, $packagename, $solslanguage, $linkpackage, $isemptyparent, $subdir ) = @_;
 
     my @xpdfile = ();
     my $value = "";
@@ -868,6 +901,10 @@ sub get_file_content
 
     $value = get_dontuninstall_value($module);
     $line = get_tag_line($doubleindent, "dontuninstall", $value);
+    push(@xpdfile, $line);
+
+    $value = get_checksolaris_value($module);
+    $line = get_tag_line($doubleindent, "checksolaris", $value);
     push(@xpdfile, $line);
 
     $value = get_isupdatepackage_value($module);
@@ -920,6 +957,9 @@ sub get_file_content
 
         $value = get_relocatable_value($module);
         $line = get_tag_line($doubleindent, "relocatable", $value);
+        push(@xpdfile, $line);
+
+        $line = get_tag_line($doubleindent, "solarislanguage", $solslanguage);
         push(@xpdfile, $line);
 
         $tag = get_end_tag("installunit", $singleindent);
@@ -1012,7 +1052,7 @@ sub create_emptyparents_xpd_file
     {
         my $packagename = "";
         # all content saved in scp is now available and can be used to create the xpd file
-        my ( $xpdfile, $newparentgid ) = get_file_content($module, $packagename, 0, 1, "");
+        my ( $xpdfile, $newparentgid ) = get_file_content($module, $packagename, "", 0, 1, "");
 
         my $xpdfilename = get_xpd_filename($parentgid, 0);
         $xpdfilename = $xpddir . $installer::globals::separator . $xpdfilename;
@@ -1045,7 +1085,7 @@ sub create_xpd_file
 
     my $modulegid = $onepackage->{'module'};
 
-# AAA : Important change, to get root module of language packs
+#   Important change, to get root module of language packs
 #   if ( $installer::globals::islanguagepackinunixmulti ) {
 #       my $currentlanguage = $$languagestringref;
 #       $currentlanguage =~ s/-/_/;
@@ -1063,6 +1103,14 @@ sub create_xpd_file
 #
 #   }
 
+    my $onelanguage = $$languagestringref;
+    my $solslanguage = "";
+
+    if (( $installer::globals::issolarispkgbuild ) && ( $installer::globals::languagepack ))
+    {
+        $solslanguage = installer::epmfile::get_solaris_language_for_langpack($onelanguage);
+    }
+
     installer::logger::include_header_into_logfile("Creating xpd file ($modulegid):");
 
     my $module = get_module($modulegid, $modulesarrayref);
@@ -1072,7 +1120,7 @@ sub create_xpd_file
         my $packagename = determine_new_packagename($installdir, $subdir);
 
         # all content saved in scp is now available and can be used to create the xpd file
-        my ( $xpdfile, $parentgid ) = get_file_content($module, $packagename, $linkpackage, 0, "");
+        my ( $xpdfile, $parentgid ) = get_file_content($module, $packagename, $solslanguage, $linkpackage, 0, "");
 
         my $xpdfilename = get_xpd_filename($modulegid, $linkpackage);
         $xpdfilename = $xpddir . $installer::globals::separator . $xpdfilename;
@@ -1118,7 +1166,7 @@ sub create_xpd_file_for_childproject
     my $completepackage = $currentdir . $installer::globals::separator . $destdir . $installer::globals::separator . $packagename;
 
     # all content saved in scp is now available and can be used to create the xpd file
-    my ( $xpdfile, $parentgid ) = get_file_content($module, $completepackage, 0, 0, "");
+    my ( $xpdfile, $parentgid ) = get_file_content($module, $completepackage, "", 0, 0, "");
 
     my $xpdfilename = get_xpd_filename($modulegid, 0);
     $xpdfilename = $installer::globals::xpddir . $installer::globals::separator . $xpdfilename;
@@ -1179,7 +1227,7 @@ sub create_xpd_file_for_systemintegration
         $childmodule->{'Description'} = $modulegid;
 
         # all content saved in scp is now available and can be used to create the xpd file
-        my ( $xpdfile, $parentgid_ ) = get_file_content($childmodule, $newpackagename, 0, 0, $subdir);
+        my ( $xpdfile, $parentgid_ ) = get_file_content($childmodule, $newpackagename, "", 0, 0, $subdir);
 
         my $xpdfilename = get_xpd_filename($modulegid, 0);
         $xpdfilename = $installer::globals::xpddir . $installer::globals::separator . $xpdfilename;
