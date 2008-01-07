@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 13:20:58 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:54:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -808,6 +808,15 @@ ProfileItem gid_Profileitem_Uno_Ure_Bin_Dir
     Order = 13;
     Key = "URE_BIN_DIR";
     Value = "$ORIGIN";
+End
+
+ProfileItem gid_Profileitem_Uno_Ooo_Base_Dir
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 14;
+    Key = "OOO_BASE_DIR";
+    Value = "$ORIGIN/..";
 End
 
 
