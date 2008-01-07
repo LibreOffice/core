@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:08:00 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:04:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,11 +210,7 @@ GDIMetaFile* SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, 
 //REMOVE                SfxTopFrame* pTop = (SfxTopFrame*) pFrame->GetFrame();
 //REMOVE                pTop->GetTopWindow_Impl();
 //REMOVE
-//REMOVE    #if SUPD<613//MUSTINI
-//REMOVE                char cToken = SfxIniManager::GetToken();
-//REMOVE    #else
 //REMOVE                char cToken = ',';
-//REMOVE    #endif
 //REMOVE                const BOOL bActWin = pActFrame == pFrame;
 //REMOVE                String aUserData;
 //REMOVE                pFrame->GetViewShell()->WriteUserData(aUserData);
@@ -230,9 +226,6 @@ GDIMetaFile* SfxObjectShell::CreatePreviewMetaFile_Impl( sal_Bool bFullContent, 
 //REMOVE                    aWinData += SFX_WINSIZE_MIN;
 //REMOVE                else
 //REMOVE    */
-//REMOVE    #if SUPD<613//MUSTINI
-//REMOVE                aWinData += SfxIniManager::GetString( pWin->GetPosPixel(), pWin->GetSizePixel() );
-//REMOVE    #endif
 //REMOVE                aWinData += cToken;
 //REMOVE                aWinData += aUserData;
 //REMOVE
