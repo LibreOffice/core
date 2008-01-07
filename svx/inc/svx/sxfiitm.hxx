@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sxfiitm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:34:14 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,7 @@ public:
     virtual int              operator==(const SfxPoolItem&) const;
     virtual SfxItemPresentation GetPresentation(SfxItemPresentation ePresentation, SfxMapUnit eCoreMetric, SfxMapUnit ePresentationMetric, String &rText, const IntlWrapper * = 0) const;
     virtual SfxPoolItem*     Create(SvStream&, USHORT nVer) const;
-#if SUPD <= 345
-    virtual SvStream&        Store(SvStream&) const;
-#else
     virtual SvStream&        Store(SvStream&, USHORT nItemVers) const;
-#endif
     virtual SfxPoolItem*     Clone(SfxItemPool *pPool=NULL) const;
             const Fraction&  GetValue() const { return nValue; }
             void             SetValue(const Fraction& rVal) { nValue = rVal; }
