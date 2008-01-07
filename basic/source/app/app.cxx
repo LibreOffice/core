@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:50:21 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_basic.hxx"
 
-#ifndef _RTL_USTRBUF_HXX_
-#include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _OSL_PROCESS_H_
-#include <osl/process.h>
-#endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
 #endif
@@ -105,8 +99,7 @@
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/beans/XComponent.hpp>
 #endif
-#include <cppuhelper/servicefactory.hxx>
-#include <com/sun/star/registry/XImplementationRegistration.hpp>
+#include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/ucb/XContentProviderManager.hpp>
 
@@ -122,7 +115,6 @@ using namespace rtl;
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
-using namespace com::sun::star::registry;
 using namespace com::sun::star::ucb;
 using namespace com::sun::star::beans;
 
@@ -266,82 +258,19 @@ static const char * const components[] =
 
 uno::Reference< XContentProviderManager > InitializeUCB( void )
 {
-    OUString path;
-    if( osl_Process_E_None != osl_getExecutableFile( (rtl_uString**)&path ) )
-    {
-        InfoBox( NULL, String::CreateFromAscii( "Couldn't retrieve directory of executable" ) ).Execute();
-        exit( 1 );
-    }
-    OSL_ASSERT( path.lastIndexOf( '/' ) >= 0 );
-
-
-    ::rtl::OUStringBuffer bufServices( path.copy( 0, path.lastIndexOf( '/' )+1 ) );
-    bufServices.appendAscii("services.rdb");
-    OUString services = bufServices.makeStringAndClear();
-
-    ::rtl::OUStringBuffer bufTypes( path.copy( 0, path.lastIndexOf( '/' )+1 ) );
-    bufTypes.appendAscii("types.rdb");
-    OUString types = bufTypes.makeStringAndClear();
-
-
     uno::Reference< XMultiServiceFactory > xSMgr;
     try
     {
-        xSMgr = createRegistryServiceFactory( types, services, sal_True );
+        xSMgr = uno::Reference< XMultiServiceFactory >(
+            defaultBootstrap_InitialComponentContext()->getServiceManager(),
+            UNO_QUERY_THROW);
     }
-    catch( com::sun::star::uno::Exception & )
+    catch( com::sun::star::uno::Exception & exc )
     {
-        try
-        {
-            {
-                uno::Reference< XMultiServiceFactory > interimSmgr =
-                    createRegistryServiceFactory( types, sal_True );
-                uno::Reference< XImplementationRegistration > xIR(
-                    interimSmgr->createInstance(
-                        OUString::createFromAscii(
-                            "com.sun.star.registry.ImplementationRegistration" ) ), UNO_QUERY );
-
-                uno::Reference< XSimpleRegistry > xReg(
-                    interimSmgr->createInstance(
-                        OUString::createFromAscii(
-                            "com.sun.star.registry.SimpleRegistry" ) ), UNO_QUERY );
-                if ( xReg.is() )
-                {
-                    xReg->open(services, sal_False, sal_True);
-                    if ( xReg->isValid() )
-                    {
-                        OUString loader( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.loader.SharedLibrary" ));
-                        for( sal_Int32 i = 0; components[i] ; i ++ )
-                        {
-                            printf("Registering %s ... ", components[i]);
-                            xIR->registerImplementation(
-                                loader, OUString::createFromAscii(components[i]),xReg);
-                            printf("done\n");
-                        }
-                        xReg->close();
-                    } else
-                    {
-                        printf("Cannot open Registry. Terminating Program\n");
-                        exit (1);
-                    }
-                }
-
-                uno::Reference< XComponent > xComp( interimSmgr, UNO_QUERY );
-                if( xComp.is() )
-                    xComp->dispose();
-            }
-
-            // now try it again readonly
-            printf("Opening Registry readonly\n");
-            xSMgr = createRegistryServiceFactory( types, services, sal_True );
-        }
-        catch( com::sun::star::uno::Exception & exc )
-        {
-            fprintf( stderr, "Couldn't bootstrap uno servicemanager for reason : %s\n" ,
-                     OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
-            InfoBox( NULL, String( exc.Message ) ).Execute();
-            throw ;
-        }
+        fprintf( stderr, "Couldn't bootstrap uno servicemanager for reason : %s\n" ,
+                 OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        InfoBox( NULL, String( exc.Message ) ).Execute();
+        throw ;
     }
 
 
