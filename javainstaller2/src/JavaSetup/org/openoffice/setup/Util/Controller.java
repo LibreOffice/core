@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Controller.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:00:16 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 12:33:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,11 @@
 package org.openoffice.setup.Util;
 
 import java.io.File;
+import java.util.Vector;
 import org.openoffice.setup.InstallData;
 import org.openoffice.setup.ResourceManager;
 import org.openoffice.setup.SetupData.SetupDataProvider;
+import org.openoffice.setup.Util.LogManager;
 
 public class Controller {
 
@@ -83,6 +85,40 @@ public class Controller {
             String title = ResourceManager.getString("String_Error");
             Informer.showErrorMessage(message, title);
             System.exit(1);
+        }
+    }
+
+    static public void collectSystemLanguages(InstallData installData) {
+        String pkgCommand = "";
+        String[] pkgCommandArray;
+        String adminFileName = "";
+        String log = "";
+        Vector returnVector = new Vector();
+        Vector returnErrorVector = new Vector();
+        int returnValue;
+
+        pkgCommand = "locale -a";
+        pkgCommandArray = new String[2];
+        pkgCommandArray[0] = "locale";
+        pkgCommandArray[1] = "-a";
+        returnValue = ExecuteProcess.executeProcessReturnVector(pkgCommandArray, returnVector, returnErrorVector);
+
+        if ( returnValue == 0 ) {
+            log = pkgCommand + "<br><b>Returns: " + returnValue + " Successful command</b><br>";
+            LogManager.addCommandsLogfileComment(log);
+            // System.err.println("Available languages: ");
+            // for (int i = 0; i < returnVector.size(); i++) {
+            //     System.err.println(returnVector.get(i));
+            // }
+            installData.setSystemLanguages(returnVector);
+        } else {    // an error occured
+            log = pkgCommand + "<br><b>Returns: " + returnValue + " An error occured</b><br>";
+            LogManager.addCommandsLogfileComment(log);
+            System.err.println("Error in command: " + pkgCommand);
+            for (int i = 0; i < returnErrorVector.size(); i++) {
+                LogManager.addCommandsLogfileComment((String)returnErrorVector.get(i));
+                System.err.println(returnErrorVector.get(i));
+            }
         }
     }
 
