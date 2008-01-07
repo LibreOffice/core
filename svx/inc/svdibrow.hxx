@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdibrow.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:43:34 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:35:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,11 +83,7 @@ protected:
     virtual long GetRowCount() const;
     virtual BOOL SeekRow(long nRow);
     virtual void PaintField(OutputDevice& rDev, const Rectangle& rRect, USHORT nColumnId) const;
-#if SUPD >= 345
     virtual void DoubleClick(const BrowserMouseEvent&);
-#else
-    virtual void DoubleClick();
-#endif
     virtual void KeyInput(const KeyEvent& rEvt);
     virtual void Select();
     virtual void SetDirty(); // wird z.B. bei Modusumschaltungen gerufen
