@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mnuitem.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:31:17 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -421,9 +421,6 @@ SfxMenuControl* SfxMenuControl::CreateControl( USHORT nId, Menu &rMenu, SfxBindi
     return 0;
 }
 
-
-
-#if SUPD>633
 BOOL SfxMenuControl::IsSpecialControl( USHORT nId, SfxModule* pMod  )
 {
     TypeId aSlotType = SFX_SLOTPOOL().GetSlotType( nId );
@@ -453,40 +450,6 @@ BOOL SfxMenuControl::IsSpecialControl( USHORT nId, SfxModule* pMod  )
     }
     return 0;
 }
-#else
-BOOL SfxMenuControl::IsSpecialControl( USHORT nId, SfxBindings& rBindings  )
-{
-    TypeId aSlotType = SFX_SLOTPOOL().GetSlotType( nId );
-    if ( aSlotType )
-    {
-        SfxApplication *pApp = SFX_APP();
-        SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
-        SfxModule *pMod = pDisp ? pApp->GetActiveModule( pDisp->GetFrame() ) :0;
-        if ( pMod )
-        {
-            SfxMenuCtrlFactArr_Impl *pFactories = pMod->GetMenuCtrlFactories_Impl();
-            if ( pFactories )
-            {
-                SfxMenuCtrlFactArr_Impl &rFactories = *pFactories;
-                for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
-                    if ( rFactories[nFactory]->nTypeId == aSlotType &&
-                         ( ( rFactories[nFactory]->nSlotId == 0 ) ||
-                           ( rFactories[nFactory]->nSlotId == nId) ) )
-                        return TRUE;
-            }
-        }
-
-        SfxMenuCtrlFactArr_Impl &rFactories = pApp->GetMenuCtrlFactories_Impl();
-
-        for ( USHORT nFactory = 0; nFactory < rFactories.Count(); ++nFactory )
-            if ( rFactories[nFactory]->nTypeId == aSlotType &&
-                 ( ( rFactories[nFactory]->nSlotId == 0 ) ||
-                   ( rFactories[nFactory]->nSlotId == nId) ) )
-                return TRUE;
-    }
-    return 0;
-}
-#endif
 
 //--------------------------------------------------------------------
 
