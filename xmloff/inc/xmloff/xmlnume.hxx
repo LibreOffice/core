@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnume.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:33:52 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:46:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,10 +117,6 @@ public:
                const ::com::sun::star::uno::Reference<
                             ::com::sun::star::frame::XModel > & rModel );
 
-#if SUPD < 627
-    static const sal_Char *GetNumFormatValue( sal_Int16 eNumType );
-    static const sal_Char *GetNumLetterSync( sal_Int16 eNumType );
-#endif
 };
 
 #endif  //  _XMLOFF_XMLNUME_HXX

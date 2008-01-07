@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnumi.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:34:41 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:47:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,13 +114,6 @@ public:
             ::com::sun::star::container::XIndexReplace > & rNumRule,
         sal_Int16 nLevel,
         sal_Bool bOrdered );
-
-#if SUPD < 627
-    static sal_Int16 GetNumType( const ::rtl::OUString& rNumFmt,
-            const ::rtl::OUString& rLetterSync,
-            sal_Int16 eDflt = ::com::sun::star::style::NumberingType::ARABIC,
-            sal_Bool bNumberNone = sal_False );
-#endif
 
     virtual void CreateAndInsertLate( sal_Bool bOverwrite );
 
