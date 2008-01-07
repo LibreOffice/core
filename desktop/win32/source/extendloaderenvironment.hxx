@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extendloaderenvironment.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:01:43 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:57:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,8 @@
 
 namespace desktop_win32 {
 
-// Set the PATH and URE_BOOTSTRAP environment variables in the current (loader)
-// process, so that a following CreateProcess has the necessary environment:
+// Set the PATH environment variable in the current (loader) process, so that a
+// following CreateProcess has the necessary environment:
 void extendLoaderEnvironment();
 
 }

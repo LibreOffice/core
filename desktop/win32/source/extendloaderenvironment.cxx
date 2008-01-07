@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extendloaderenvironment.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:01:32 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:57:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@
 #endif
 #include <windows.h>
 #include <shlwapi.h>
-#include <wininet.h>
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
@@ -115,29 +114,6 @@ void extendLoaderEnvironment() {
         }
         if (set && !SetEnvironmentVariableA("PATH", pad)) {
             abort();
-        }
-        if (GetEnvironmentVariableA("URE_BOOTSTRAP", pad, 0) == 0) {
-            if (GetLastError() != ERROR_ENVVAR_NOT_FOUND) {
-                abort();
-            } else {
-                static char const suffix[] = "/fundamental.ini";
-                char url[INTERNET_MAX_URL_LENGTH + RTL_CONSTASCII_LENGTH(suffix)
-                         + 1];
-                    // hopefully std::size_t is large enough to not overflow;
-                    // unclear whether UrlCreateFromPathA counts
-                    // INTERNET_MAX_URL_LENGTH including or excluding the
-                    // terminating null character, so +1 for safety
-                DWORD n = INTERNET_MAX_URL_LENGTH;
-                if (UrlCreateFromPathA(programPath, url, &n, 0) != S_OK) {
-                    abort();
-                }
-                char * p = url + n; // cannot overflow
-                strcpy(p, suffix + (p == url || p[-1] != '/' ? 0 : 1));
-                    // cannot overflow
-                if (!SetEnvironmentVariableA("URE_BOOTSTRAP", url)) {
-                    abort();
-                }
-            }
         }
     }
 }
