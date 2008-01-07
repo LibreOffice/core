@@ -4,9 +4,9 @@
  *
  *  $RCSfile: style.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:35:52 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:55:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,11 +110,7 @@ SfxStyleSheetHint( SFX_STYLESHEET_ERASED, *p ) aus:
 
 =========================================================================*/
 
-#if SUPD > 509
 #define VIRTUAL510 virtual
-#else
-#define VIRTUAL510
-#endif
 
 class SVT_DLLPUBLIC SfxStyleSheetBase
 {
@@ -256,9 +252,7 @@ public:
     SfxItemPool&                GetPool();
     const SfxItemPool&          GetPool() const;
 
-#if SUPD > 363
     virtual SfxStyleSheetIterator* CreateIterator(SfxStyleFamily, USHORT nMask);
-#endif
     virtual USHORT              Count();
     virtual SfxStyleSheetBase*  operator[](USHORT nIdx);
 

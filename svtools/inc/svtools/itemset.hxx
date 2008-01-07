@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemset.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:25:37 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:55:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,11 +130,7 @@ protected:
 public:
                                 SfxItemSet( const SfxItemSet& );
 
-#if SUPD<367 || defined(SFX_ITEMSET_NO_DEFAULT_CTOR)
-                                SfxItemSet( SfxItemPool&, BOOL bTotalPoolRanges );
-#else
                                 SfxItemSet( SfxItemPool&, BOOL bTotalPoolRanges = FALSE );
-#endif
                                 SfxItemSet( SfxItemPool&, USHORT nWhich1, USHORT nWhich2 );
                                 SfxItemSet( SfxItemPool&, USHORT_ARG nWh1, USHORT_ARG nWh2, USHORT_ARG nNull, ... );
                                 SfxItemSet( SfxItemPool&, const USHORT* nWhichPairTable );
