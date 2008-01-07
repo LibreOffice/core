@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:23:58 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:44:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,13 +326,11 @@ WinBits SvtFilePicker::getWinBits( WinBits& rExtraBits )
     {
         nBits = WB_SAVEAS;
     }
-#if SUPD>639
     else if ( m_nServiceType == TemplateDescription::FILESAVE_AUTOEXTENSION )
     {
         nBits = WB_SAVEAS;
         rExtraBits = SFX_EXTRA_AUTOEXTENSION;
     }
-#endif
     else if ( m_nServiceType == TemplateDescription::FILESAVE_AUTOEXTENSION_PASSWORD )
     {
         nBits = WB_SAVEAS | SFXWB_PASSWORD;
