@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmldraw.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:46:38 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:52:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -889,20 +889,11 @@ Writer& OutHTML_DrawFrmFmtAsMarquee( Writer& rWrt,
     rWrt.Strm() << '>';
 
     // Was jetzt kommt ist das Gegenstueck zu SdrTextObjectt::SetText()
-#if SUPD>601
     Outliner aOutliner(0, OUTLINERMODE_TEXTOBJECT);
-#else
-    Outliner aOutliner;
-#endif
     aOutliner.SetUpdateMode( sal_False );
     aOutliner.SetText( *pOutlinerParaObj );
-#if SUPD>601
     String aText( aOutliner.GetText( aOutliner.GetParagraph(0),
                                      aOutliner.GetParagraphCount() ) );
-#else
-    String aText( aOutliner.GetText( aOutliner.First(),
-                                     aOutliner.GetParagraphCount() ) );
-#endif
     HTMLOutFuncs::Out_String( rWrt.Strm(), aText,
                                 rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
 
