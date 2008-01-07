@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-06 16:30:41 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:38:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -729,10 +729,8 @@ void SvxStdParagraphTabPage::EnableNegativeMode()
 {
     aLeftIndent.SetMin(-9999);
     aRightIndent.SetMin(-9999);
-#if SUPD>629
     aRightIndent.EnableNegativeMode();
     aLeftIndent.EnableNegativeMode();
-#endif
     bNegativeIndents = TRUE;
 }
 
