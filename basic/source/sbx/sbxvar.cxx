@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxvar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:33:40 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:45:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,11 +138,7 @@ SfxBroadcaster& SbxVariable::GetBroadcaster()
 
 void SbxVariable::Broadcast( ULONG nHintId )
 {
-#if SUPD >= 507
     if( pCst && !IsSet( SBX_NO_BROADCAST ) && StaticIsEnabledBroadcasting() )
-#else
-    if( pCst && !IsSet( SBX_NO_BROADCAST ) )
-#endif
     {
         // Da die Methode von aussen aufrufbar ist, hier noch einmal
         // die Berechtigung testen
@@ -539,11 +535,7 @@ SbxAlias::~SbxAlias()
 
 void SbxAlias::Broadcast( ULONG nHt )
 {
-#if SUPD >= 507
     if( xAlias.Is() && StaticIsEnabledBroadcasting() )
-#else
-    if( xAlias.Is() )
-#endif
     {
         xAlias->SetParameters( GetParameters() );
         if( nHt == SBX_HINT_DATAWANTED )
