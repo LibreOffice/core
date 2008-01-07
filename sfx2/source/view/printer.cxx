@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 13:12:50 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:04:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,15 +118,9 @@ struct SfxPrinter_Impl
 
 struct SfxPrintOptDlg_Impl
 {
-#if SUPD <= 640
-    HelpButton*     mpHelpBtn;
-#endif
     sal_Bool        mbHelpDisabled;
 
     SfxPrintOptDlg_Impl() :
-#if SUPD <= 640
-        mpHelpBtn       ( NULL ),
-#endif
         mbHelpDisabled  ( sal_False ) {}
 };
 
@@ -558,18 +552,13 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
 
     aOkBtn      ( this ),
     aCancelBtn  ( this ),
-#if SUPD > 640
     aHelpBtn    ( this ),
-#endif
     pDlgImpl    ( new SfxPrintOptDlg_Impl ),
     pViewSh     ( pViewShell ),
     pOptions    ( pSet->Clone() ),
     pPage       ( NULL )
 
 {
-#if SUPD <= 640
-    pDlgImpl->mpHelpBtn = new HelpButton( this );
-#endif
     SetText( SfxResId( STR_PRINT_OPTIONS_TITLE ) );
 
     // TabPage einh"angen
@@ -598,28 +587,17 @@ SfxPrintOptionsDialog::SfxPrintOptionsDialog( Window *pParent,
     aBtnPos.Y() += aBtnSz.Height() + ( a6Sz.Height() / 2 );
     aCancelBtn.SetPosSizePixel( aBtnPos, aBtnSz );
     aBtnPos.Y() += aBtnSz.Height() + a6Sz.Height();
-#if SUPD > 640
     aHelpBtn.SetPosSizePixel( aBtnPos, aBtnSz );
-#else
-    pDlgImpl->mpHelpBtn->SetPosSizePixel( aBtnPos, aBtnSz );
-#endif
 
     aCancelBtn.Show();
     aOkBtn.Show();
-#if SUPD > 640
     aHelpBtn.Show();
-#else
-    pDlgImpl->mpHelpBtn->Show();
-#endif
 }
 
 //--------------------------------------------------------------------
 
 SfxPrintOptionsDialog::~SfxPrintOptionsDialog()
 {
-#if SUPD <= 640
-    delete pDlgImpl->mpHelpBtn;
-#endif
     delete pDlgImpl;
     delete pPage;
     delete pOptions;
@@ -656,10 +634,6 @@ void SfxPrintOptionsDialog::DisableHelp()
 {
     pDlgImpl->mbHelpDisabled = sal_True;
 
-#if SUPD > 640
     aHelpBtn.Disable();
-#else
-    pDlgImpl->mpHelpBtn->Disable();
-#endif
 }
 
