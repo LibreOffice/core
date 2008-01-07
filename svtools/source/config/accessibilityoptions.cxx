@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibilityoptions.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:09:48 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,16 +394,12 @@ void SvtAccessibilityOptions::Commit()
 
 sal_Bool SvtAccessibilityOptions::GetIsForDrawings() const
 {
-#if SUPD>644
     DBG_ERROR( "SvtAccessibilityOptions::GetIsForDrawings: is obsolete!" );
-#endif // SUPD>644
     return sal_False;
 }
 sal_Bool SvtAccessibilityOptions::GetIsForBorders() const
 {
-#if SUPD>644
     DBG_ERROR( "SvtAccessibilityOptions::GetIsForBorders: is obsolete!" );
-#endif // SUPD>644
     return sal_False;
 }
 sal_Bool SvtAccessibilityOptions::GetAutoDetectSystemHC() const
