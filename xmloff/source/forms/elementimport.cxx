@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 13:40:33 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1922,11 +1922,6 @@ namespace xmloff
         else if (s_sDetailFieldsAttributeName == _rLocalName)
             implTranslateStringListProperty(PROPERTY_DETAILFIELDS, _rValue);
 
-#if SUPD<632
-        // for compatibility (had a typo in the attribute name)
-        else if (0 == _rLocalName.compareToAscii("tabbing-cycle"))
-            OFormImport_Base::handleAttribute(_nNamespaceKey, ::rtl::OUString::createFromAscii("tab-cycle"), _rValue);
-#endif
         else
             OFormImport_Base::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
     }
