@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.269 $
+ *  $Revision: 1.270 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:29:11 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:43:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -457,12 +457,8 @@ File gid_File_Lib_Comphelper2
     Name = STRING(CONCAT3(comphelp4,COMID,.dll));
   #endif
     Dir = gid_Dir_Program;
-  #if SUPD < 627
-    Styles = (PACKED);
-  #else
     Styles = (PACKED,UNO_COMPONENT,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
-  #endif
 End
 
 File gid_File_Lib_Connectr
