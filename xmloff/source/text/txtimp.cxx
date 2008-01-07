@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 12:25:23 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:48:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,9 +213,7 @@ using namespace ::xmloff::token;
 using ::com::sun::star::util::DateTime;
 using namespace ::com::sun::star::ucb;
 
-#if SUPD > 632 || DVO_TEST
 using ::comphelper::UStringLess;
-#endif
 
 static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
 {
