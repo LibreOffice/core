@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-02 09:27:52 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:50:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,9 +405,6 @@ BOOL SdPageObjsTLB::HasSelectedChilds( const String& rName )
                 bFound = TRUE;
                 BOOL bExpanded = IsExpanded( pEntry );
                 long nCount = GetChildSelectionCount( pEntry );
-#if SUPD < 335
-                nCount++;
-#endif
                 if( bExpanded && nCount > 0 )
                     bChilds = TRUE;
             }
