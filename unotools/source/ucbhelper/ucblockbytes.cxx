@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 10:12:48 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:00:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1727,28 +1727,11 @@ UcbLockBytesRef UcbLockBytes::CreateLockBytes( const Reference < XContent >& xCo
     xLockBytes->SetSynchronMode( !pHandler );
     Reference< XActiveDataControl > xSink = (XActiveDataControl*) new UcbDataSink_Impl( xLockBytes );
 
-#if SUPD<640
-    if ( rProps.getLength() )
-    {
-        Reference < XCommandProcessor > xProcessor( xContent, UNO_QUERY );
-        Command aCommand;
-        aCommand.Name     = ::rtl::OUString::createFromAscii("setPropertyValues");
-        aCommand.Handle   = -1; /* unknown */
-        aCommand.Argument <<= rProps;
-        xProcessor->execute( aCommand, 0, Reference < XCommandEnvironment >() );
-    }
-
-    PostCommandArgument aArgument;
-    aArgument.Source = xPostData;
-    aArgument.Sink = xSink;
-
-#else
     PostCommandArgument2 aArgument;
     aArgument.Source = xPostData;
     aArgument.Sink = xSink;
     aArgument.MediaType = rMediaType;
     aArgument.Referer = rReferer;
-#endif
 
     Command aCommand;
     aCommand.Name = ::rtl::OUString::createFromAscii ("post");
