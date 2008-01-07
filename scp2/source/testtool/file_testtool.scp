@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_testtool.scp,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 10:25:33 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:55:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,15 +38,20 @@
 STD_LIB_FILE( gid_File_Lib_Communi, communi )
 STD_LIB_FILE( gid_File_Lib_Simplecm, simplecm )
 
+#if defined WNT
+File gid_File_Exe_Testtool
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+    Name = "testtool.exe";
+End
+#endif
+
 File gid_File_Bin_Testtool
     BIN_FILE_BODY;
     Dir = gid_Dir_Program;
     Styles = (PACKED);
-  #ifdef UNX
     Name = "testtool.bin";
-  #else
-    Name = "testtool.exe";
-  #endif
 End
 
 File gid_File_Hid_Testtool
