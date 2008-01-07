@@ -4,9 +4,9 @@
  *
  *  $RCSfile: base3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-09 13:25:15 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:59:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,11 +337,7 @@ public:
 
     // Erzeugen bzw. Zerstoeren eines Base3D Kontextes
     static Base3D* Create(OutputDevice* pOutDev, BOOL bForcePrinter=FALSE);
-#if SUPD > 375
     virtual void Destroy(OutputDevice *pOutDev);
-#else
-    void Destroy(OutputDevice *pOutDev);
-#endif
 
     // Gueltigkeit des Kontextes nach der Inkarnation
     // ueberpruefen
