@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:17:05 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:03:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1738,7 +1738,6 @@ void SfxTabDialog::SetInputSet( const SfxItemSet* pInSet )
     }
 }
 
-#if SUPD>=636
 long SfxTabDialog::Notify( NotifyEvent& rNEvt )
 {
     if ( rNEvt.GetType() == EVENT_GETFOCUS )
@@ -1761,5 +1760,4 @@ long SfxTabDialog::Notify( NotifyEvent& rNEvt )
 
     return TabDialog::Notify( rNEvt );
 }
-#endif
 
