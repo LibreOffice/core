@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:12:50 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:03:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,28 +308,7 @@ void _SfxMacroTabPage::AddEvent( const String & rEventName, USHORT nEventId )
 void _SfxMacroTabPage::ScriptChanged( const String& aLangName )
 {
     // neue Bereiche und deren Funktionen besorgen
-#if SUPD<582
-    if ( aLangName == "JavaScript" )
     {
-        const SvLBoxEntry* pE = pEventLB->FirstSelected();
-        if( pE )
-        {
-            const SvxMacro* pM = aTbl.Get( (USHORT)(ULONG)pE->GetUserData() );
-            if ( pM && pM->GetMacName().Len() && aLangName == pM->GetLanguage() )
-                pJavaED->SetText( pM->GetMacName() );
-        }
-
-        pJavaED->Show();
-        pGroupLB->Hide();
-        pMacroLB->Hide();
-        pMacroFT->SetText( *pJavaStr );
-    }
-    else
-#endif
-    {
-#if SUPD<582
-        pJavaED->Hide();
-#endif
         mpImpl->pGroupLB->SetScriptType( aLangName );
         mpImpl->pGroupLB->Show();
         mpImpl->pMacroLB->Show();
