@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fcode.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:36:03 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:16:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,15 +338,6 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
         case DataType::CHAR:
         case DataType::VARCHAR:
         {
-#if SUPD < 632
-            static String sLanguage;
-            static String sCountry;
-            if (!sLanguage.Len())
-                MsLangId::convertLanguageToIsoNames(Application::GetAppInternational().GetLanguage(), sLanguage, sCountry);
-
-            static rtl::OLocale aLocale = rtl::OLocale::registerLocale(sLanguage, sCountry);
-            INT32 nRes = compareIgnoreCase(aLH, aRH, aLocale);
-#else
             rtl::OUString sLH = aLH, sRH = aRH;
             INT32 nRes = rtl_ustr_compareIgnoreAsciiCase_WithLength
                 (
@@ -354,7 +345,6 @@ sal_Bool OOp_COMPARE::operate(const OOperand* pLeft, const OOperand* pRight) con
                  sLH.pData->length,
                  sRH.pData->buffer,
                  sRH.pData->length );
-#endif
             switch(aPredicateType)
             {
                 case SQLFilterOperator::EQUAL:          bResult = (nRes == 0); break;
