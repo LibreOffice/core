@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vcldemo.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:22:43 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_vcl.hxx"
 
 #include <sal/main.h>
+#include <tools/extendapplicationenvironment.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <vcl/event.hxx>
@@ -64,6 +65,8 @@ void Main();
 
 SAL_IMPLEMENT_MAIN()
 {
+    tools::extendApplicationEnvironment();
+
     Reference< XMultiServiceFactory > xMS;
     xMS = cppu::createRegistryServiceFactory( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "applicat.rdb" ) ), sal_True );
 
