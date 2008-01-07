@@ -4,9 +4,9 @@
 #
 #   $RCSfile: simplepackage.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2007-12-07 15:59:34 $
+#   last change: $Author: obo $ $Date: 2008-01-07 12:20:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -224,26 +224,18 @@ sub create_package
 
 sub create_simple_package
 {
-    my ( $filesref, $dirsref, $scpactionsref, $linksref, $unixlinksref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref, $allvariables, $includepatharrayref, $isfirstrun, $islastrun ) = @_;
+    my ( $filesref, $dirsref, $scpactionsref, $linksref, $unixlinksref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref, $allvariables, $includepatharrayref ) = @_;
 
     # Creating directories
 
     my $current_install_number = "";
     my $infoline = "";
 
-    if ( $isfirstrun )
-    {
-        installer::logger::print_message( "... creating installation directory ...\n" );
-        installer::logger::include_header_into_logfile("Creating installation directory");
+    installer::logger::print_message( "... creating installation directory ...\n" );
+    installer::logger::include_header_into_logfile("Creating installation directory");
 
-        $installer::globals::csp_installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
-        $installer::globals::csp_installlogdir = installer::systemactions::create_directory_next_to_directory($installer::globals::csp_installdir, "log");
-    }
-    else
-    {
-        installer::logger::print_message( "... using remembered installation directory ...\n" );
-        installer::logger::include_header_into_logfile("Creating installation directory");
-    }
+    $installer::globals::csp_installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
+    $installer::globals::csp_installlogdir = installer::systemactions::create_directory_next_to_directory($installer::globals::csp_installdir, "log");
 
     my $installdir = $installer::globals::csp_installdir;
     my $installlogdir = $installer::globals::csp_installlogdir;
@@ -253,11 +245,7 @@ sub create_simple_package
 
     if ( $installer::globals::packageformat eq "archive" )
     {
-        if ( $isfirstrun )
-        {
-            if ( $installer::globals::is_unix_multi ) { $installer::globals::csp_languagestring = $installer::globals::unixmultipath; }
-            else { $installer::globals::csp_languagestring = $$languagestringref; }
-        }
+        $installer::globals::csp_languagestring = $$languagestringref;
 
         my $locallanguage = $installer::globals::csp_languagestring;
 
@@ -370,35 +358,26 @@ sub create_simple_package
 
     # Registering the extensions
 
-    if ( $islastrun )
-    {
-        installer::logger::print_message( "... registering extensions ...\n" );
-        installer::logger::include_header_into_logfile("Registering extensions:");
-        register_extensions($subfolderdir);
-    }
+    installer::logger::print_message( "... registering extensions ...\n" );
+    installer::logger::include_header_into_logfile("Registering extensions:");
+    register_extensions($subfolderdir);
 
     # Creating archive file
 
-    if ( $islastrun )
+    if ( $installer::globals::packageformat eq "archive" )
     {
-        if ( $installer::globals::packageformat eq "archive" )
-        {
-            # creating a package
-            # -> zip for Windows
-            # -> tar.gz for all other platforms
-            installer::logger::print_message( "... creating archive file ...\n" );
-            installer::logger::include_header_into_logfile("Creating archive file:");
-            create_package($installdir, $packagename, $allvariables, $includepatharrayref);
-        }
+        # creating a package
+        # -> zip for Windows
+        # -> tar.gz for all other platforms
+        installer::logger::print_message( "... creating archive file ...\n" );
+        installer::logger::include_header_into_logfile("Creating archive file:");
+        create_package($installdir, $packagename, $allvariables, $includepatharrayref);
     }
 
     # Analyzing the log file
 
-    if ( $islastrun )
-    {
-        installer::worker::clean_output_tree(); # removing directories created in the output tree
-        installer::worker::analyze_and_save_logfile($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
-    }
+    installer::worker::clean_output_tree(); # removing directories created in the output tree
+    installer::worker::analyze_and_save_logfile($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
 }
 
 1;
