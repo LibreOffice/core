@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-05 08:18:05 $
+#   last change: $Author: obo $ $Date: 2008-01-07 09:50:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,16 +56,10 @@ dummy:
 
 #CFLAGS+=-x objective-c++
 
-OBJFILES=	$(OBJ)$/salmain.obj
-
 SLOFILES=   $(SLO)$/salinst.obj			\
             $(SLO)$/saltimer.obj		\
             $(SLO)$/salsound.obj		\
-            $(SLO)$/salsys.obj			\
-            $(SLO)$/salmain.obj
-
-EXCEPTIONSFILES=$(SLO)$/salmain.obj	\
-            $(OBJ)$/salmain.obj
+            $(SLO)$/salsys.obj
 
 .ENDIF		# "$(GUIBASE)"!="aqua"
 
