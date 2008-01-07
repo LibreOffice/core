@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 14:32:52 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 09:05:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1547,11 +1547,7 @@ uno::Reference < XInterface >SAL_CALL ZipPackage_createInstance(
 
 OUString ZipPackage::static_getImplementationName()
 {
-#if SUPD>625
     return OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.packages.comp.ZipPackage" ) );
-#else
-    return OUString( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.package.Package" ) );
-#endif
 }
 
 Sequence< OUString > ZipPackage::static_getSupportedServiceNames()
