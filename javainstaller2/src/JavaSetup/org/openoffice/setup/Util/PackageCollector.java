@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PackageCollector.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:02:48 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 12:34:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ public class PackageCollector {
 
     static public void collectUninstallPackages(PackageDescription packageData, Vector allPackages) {
         if (( packageData.isLeaf() ) && ( packageData.getSelectionState() == packageData.REMOVE )) {
-            allPackages.add(packageData);
+            allPackages.add(0, packageData);
         }
 
         // also allowing packages at nodes!
@@ -78,7 +78,7 @@ public class PackageCollector {
                 ( packageData.getPackageName() != null ) &&
                 ( ! packageData.getPackageName().equals("")) &&
                 ( packageData.getSelectionState() == packageData.REMOVE )) {
-            allPackages.add(packageData);
+            allPackages.add(0, packageData);
         }
 
         for (Enumeration e = packageData.children(); e.hasMoreElements(); ) {
