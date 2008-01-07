@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuitabline.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:59:15 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:37:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,21 +96,6 @@ public:
 |* Linien-Tab-Page
 |*
 \************************************************************************/
-
-
-
-#if SUPD>642
-#else
-//assert compatibility to removed NumMenuButton
-class LineLocalExtMenuButton : public MenuButton
-{
-    Link            maClickHdl_Impl;
-    public:
-        LineLocalExtMenuButton(Window* pParent, const ResId& rResId) :
-            MenuButton(pParent, rResId){}
-
-};
-#endif
 
 class SvxLineTabPage : public SvxTabPage
 {
