@@ -48,6 +48,7 @@ mkdir: %_DEST%\inc%_EXT%\bootstrp
 ..\inc\tools\dynary.hxx %_DEST%\inc%_EXT%\tools\dynary.hxx
 ..\inc\tools\errcode.hxx %_DEST%\inc%_EXT%\tools\errcode.hxx
 ..\inc\tools\errinf.hxx %_DEST%\inc%_EXT%\tools\errinf.hxx
+..\inc\tools\extendapplicationenvironment.hxx %_DEST%\inc%_EXT%\tools\extendapplicationenvironment.hxx
 ..\inc\tools\fract.hxx %_DEST%\inc%_EXT%\tools\fract.hxx
 ..\inc\tools\fsys.hxx %_DEST%\inc%_EXT%\tools\fsys.hxx
 ..\inc\tools\eacopier.hxx %_DEST%\inc%_EXT%\tools\eacopier.hxx
