@@ -4,9 +4,9 @@
  *
  *  $RCSfile: relfld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:36:15 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:38:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,7 @@
 SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nWinSize ) :
     MetricField( pParent, nWinSize )
 {
-#if SUPD>629
     bNegativeEnabled = FALSE;
-#endif
     bRelativeMode = FALSE;
     bRelative     = FALSE;
 
@@ -62,9 +60,7 @@ SvxRelativeField::SvxRelativeField( Window* pParent, WinBits nWinSize ) :
 SvxRelativeField::SvxRelativeField( Window* pParent, const ResId& rResId ) :
     MetricField( pParent, rResId )
 {
-#if SUPD>629
     bNegativeEnabled = FALSE;
-#endif
     bRelativeMode = FALSE;
     bRelative     = FALSE;
 
