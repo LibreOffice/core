@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.99 $
+#   $Revision: 1.100 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:55:25 $
+#   last change: $Author: obo $ $Date: 2008-01-07 12:31:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1521,9 +1521,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 ###########################################
 
                 # creating the xpd file for the package
+
                 if ( $installer::globals::isxpdplatform )
                 {
-                    if (( ! $installer::globals::languagepack ) && ( ! $installer::globals::patch ))
+                    if ( (( ! $installer::globals::languagepack ) && ( ! $installer::globals::patch )) || (( $installer::globals::islanguagepackinunixmulti ) && ( ! $installer::globals::patch )) )
                     {
                         if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::call_epm != 0 ))
                         {
