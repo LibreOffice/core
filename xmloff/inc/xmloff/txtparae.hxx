@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:09:12 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:46:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -516,9 +516,6 @@ public:
     XMLTextParagraphExport(
             SvXMLExport& rExp,
                SvXMLAutoStylePoolP & rASP
-#if SUPD < 628 && !defined( TEST_MIB )
-            , sal_Int32 nProg=0
-#endif
                           );
     virtual ~XMLTextParagraphExport();
 
@@ -554,9 +551,7 @@ public:
 
     // This methods exports all (or all used) styles
     void exportTextStyles( sal_Bool bUsed
-#if SUPD > 627 || defined( TEST_MIB )
                            , sal_Bool bProg = sal_False
-#endif
                          );
 
     /// This method exports (text field) declarations etc.
@@ -698,9 +693,6 @@ public:
     }
     inline const XMLTextListAutoStylePool& GetListAutoStylePool() const;
 
-#if SUPD < 628 && !defined( TEST_MIB )
-    inline void SetProgress( sal_Int32 nProg ) { nProgress = nProg; }
-#endif
     void SetBlockMode( sal_Bool bSet ) { bBlock = bSet; }
     sal_Bool IsBlockMode() const { return bBlock; }
 
