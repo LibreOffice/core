@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgutil.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:28:58 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 08:35:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,23 +51,6 @@
 #endif
 
 // macro -----------------------------------------------------------------
-
-#if SUPD<609
-#define GET_MODULE_FIELDUNIT( eFieldUnit )                                  \
-{                                                                           \
-    SfxApplication* pSfxApp = SFX_APP();                                    \
-    eFieldUnit = pSfxApp->GetOptions().GetMetric();                         \
-    SfxModule* pModule = pSfxApp->GetActiveModule();                        \
-                                                                            \
-    if ( pModule )                                                          \
-    {                                                                       \
-        const SfxPoolItem* pItem = pModule->GetItem( SID_ATTR_METRIC );     \
-                                                                            \
-        if ( pItem )                                                        \
-            eFieldUnit = (FieldUnit)( (SfxUInt16Item*)pItem )->GetValue();  \
-    }                                                                       \
-}
-#endif
 
 // typedef ---------------------------------------------------------------
 
