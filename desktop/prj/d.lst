@@ -110,4 +110,6 @@ mkdir: %COMMON_DEST%\pck%_EXT%\broffice_nologo
 ..\%__SRC%\bin\nologo_dev_broffice\intro.zip %COMMON_DEST%\pck%_EXT%\broffice_dev_nologo\intro.zip
 ..\%__SRC%\bin\nologo_broffice\intro.zip %COMMON_DEST%\pck%_EXT%\broffice_nologo\intro.zip
 
+..\%__SRC%\bin\guiloader.exe %_DEST%\bin%_EXT%\testtool.exe
+
 ..\scripts\ure-link %_DEST%\bin%_EXT%\ure-link
