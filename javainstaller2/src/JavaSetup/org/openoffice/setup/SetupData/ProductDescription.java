@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProductDescription.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-12 11:18:27 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 12:33:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 package org.openoffice.setup.SetupData;
 
 import org.openoffice.setup.InstallData;
+import org.openoffice.setup.Util.Parser;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -212,6 +213,17 @@ public class ProductDescription {
                 if ((value != null) && (! value.equals(""))) {
                     installData.setArchitecture(value);
                 }
+            }
+
+            /* check for the update behaviour of this installation set */
+            section = data.getElement("dontupdate");
+            if (section != null) {
+                String value = section.getValue();
+                boolean dontupdate = false;
+                if ((value != null) && (! value.equals(""))) {
+                    dontupdate = Parser.parseBoolean(value);
+                }
+                installData.setDontUpdate(dontupdate);
             }
 
             /* check for any macro definitions */
