@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_base.scp,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:25:52 $
+ *  last change: $Author: obo $ $Date: 2008-01-07 12:23:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,27 +54,24 @@ Module gid_Module_Prg_Base_Bin
         ,gid_File_Registry_Spool_Oo_TypeDetection_Database_Types_Xcu
         ,gid_File_Registry_Spool_Oo_TypeDetection_Database_Filters_Xcu
         ,gid_File_Registry_Spool_Oo_TypeDetection_Database_Others_Xcu
-        ,gid_File_Lib_Abp,gid_File_Res_Abp
-        ,gid_File_Lib_Dbp,gid_File_Res_Dbp
-        ,gid_File_Lib_Dbu,gid_File_Res_Dbu
-        ,gid_File_Res_Cnr
-        ,gid_File_Res_Sdbcl
-        ,gid_File_Res_Sdberr
+        ,gid_File_Lib_Abp
+        ,gid_File_Lib_Dbp
+        ,gid_File_Lib_Dbu
         ,gid_File_Registry_Spool_Oo_Setup_Report_Xcu,gid_File_Registry_Spool_Oo_Embedding_Report_Xcu
         ,gid_File_Oo_Office_Ui_Reportcommands_Xcs,gid_File_Oo_Office_Ui_Reportcommands_Xcu
         ,gid_File_Oo_Office_Ui_Dbreportwindowstate_Xcs,gid_File_Oo_Office_Ui_Dbreportwindowstate_xcu
         ,gid_File_Oo_Office_Reportdesign_Xcs
-        ,gid_File_Lib_Rpt,gid_File_Res_Rpt
-        ,gid_File_Lib_Rptui,gid_File_Res_Rptui
+        ,gid_File_Lib_Rpt
+        ,gid_File_Lib_Rptui
         ,gid_File_Lib_Rptxml
     );
 End
 
-Module gid_Module_Prg_Base_Help
-    MOD_NAME_DESC ( MODULE_PRG_BASE_HELP );
-    ParentID = gid_Module_Prg_Base;
-    Sortkey = "200";
-    Minimal = NO;
-    Default = YES;
-    Files = (gid_File_Help_Sdatabase_Zip);
-End
+// Module gid_Module_Prg_Base_Help
+//     MOD_NAME_DESC ( MODULE_PRG_BASE_HELP );
+//     ParentID = gid_Module_Prg_Base;
+//     Sortkey = "200";
+//     Minimal = NO;
+//     Default = YES;
+//     Files = (gid_File_Help_Sdatabase_Zip);
+// End
