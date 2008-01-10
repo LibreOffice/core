@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-21 09:22:54 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:11:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1765,9 +1765,8 @@ BOOL ScDocument::IsDocProtected() const
 
 BOOL ScDocument::IsDocEditable() const
 {
-    // import into read-only document is possible - must be extended if other filters use api
-
-    return !bProtected && ( !pShell || !pShell->IsReadOnly() || bImportingXML );
+    // import into read-only document is possible
+    return !bProtected && ( bImportingXML || mbChangeReadOnlyEnabled || !pShell || !pShell->IsReadOnly() );
 }
 
 BOOL ScDocument::IsTabProtected( SCTAB nTab ) const
