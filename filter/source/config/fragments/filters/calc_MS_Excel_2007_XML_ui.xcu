@@ -1,0 +1,6 @@
+<node oor:name="Calc MS Excel 2007 XML">
+    <prop oor:name="UIName">
+        <value xml:lang="en-US">Office Open XML Spreadsheet Document</value>
+        <value xml:lang="de">Office Open XML Tabellendokument</value>
+    </prop>
+</node>
