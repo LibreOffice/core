@@ -55,7 +55,7 @@ F4_CALC = \
     DIF \
     HTML__StarCalc_ \
     Lotus \
-        QPro \
+    QPro \
     MS_Excel_4_0 \
     MS_Excel_4_0_Vorlage_Template \
     MS_Excel_5_0_95 \
@@ -75,7 +75,7 @@ F4_CALC = \
     dBase \
     calc8 \
     calc8_template \
-    MS_Excel_2003_XML 
+    MS_Excel_2003_XML
 
 # -----------------------------------------------
 # count = 14
@@ -94,8 +94,8 @@ F4_UI_CALC = \
     calc_StarOffice_XML_Calc_Template_ui \
     calc8_ui \
     calc8_template_ui \
-    MS_Excel_2003_XML_ui 
-    
+    MS_Excel_2003_XML_ui
+
 # -----------------------------------------------
 # count = 0
 L4_CALC =
@@ -119,7 +119,7 @@ ALL_4fcfg_calc = \
     $(UI_FILTERS_4fcfg_calc) \
     $(FRAMELOADERS_4fcfg_calc) \
     $(CONTENTHANDLERS_4fcfg_calc)
-    
+
 ALL_UI_FILTERS+=$(UI_FILTERS_4fcfg_calc)
 
 ALL_PACKAGES+=calc
