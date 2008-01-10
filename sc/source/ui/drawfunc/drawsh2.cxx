@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:42:40 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:16:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@
 #include "viewdata.hxx"
 #include "sc.hrc"
 #include "tabvwsh.hxx"
+#include "document.hxx"
 #include "drwlayer.hxx"
 #include "userdat.hxx"
 
@@ -86,7 +87,12 @@ ScDrawShell::ScDrawShell( ScViewData* pData ) :
     pViewData( pData )
 {
     SetPool( &pViewData->GetScDrawView()->GetModel()->GetItemPool() );
-    SetUndoManager( pViewData->GetSfxDocShell()->GetUndoManager() );
+    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    SetUndoManager( pMgr );
+    if ( !pViewData->GetDocument()->IsUndoEnabled() )
+    {
+        pMgr->SetMaxUndoActionCount( 0 );
+    }
     SetHelpId( HID_SCSHELL_DRAWSH );
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Drawing")));
 }
