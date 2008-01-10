@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerhelper.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:14:49 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:31:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -793,35 +793,6 @@ namespace sw
             <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
         */
         bool HasPageBreak(const SwNode &rNode);
-
-        /** Shift tabstops from a given start position to a new start position
-
-            For no good reason except to complicate my life writer tabs are
-            relative to the left of the paragraph text body indent. More
-            reasonably word's are absolute.
-
-            AdjustTabs converts the tabs in rTabs originally relative from
-            nScrLeft to be relative to nDestLeft. For example nSrcLeft would be
-            0 when converting from word to writer, and vice versa when
-            converting to word, and both values are set when moving writer tabs
-            after an indent change
-
-            @param rTabs
-            The SvxTabStopItem whose tabs we want to change
-
-            @param nSrcLeft
-            The original offset that rTabs are relative to
-
-            @param nDestLeft
-            The new offset to change rTabs to be relative to
-
-            @return true if there was any tabs changed, false otherwise
-
-            @author
-            <a href="mailto:cmc@openoffice.org">Caol&aacute;n McNamara</a>
-
-       */
-        bool AdjustTabs(SvxTabStopItem &rTabs, long nSrcLeft, long nDestLeft);
 
 
         /** Make a best fit Polygon from a PolyPolygon
