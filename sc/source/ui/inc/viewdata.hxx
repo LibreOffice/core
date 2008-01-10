@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:10:07 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:17:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,9 +99,9 @@ class SfxDispatcher;
 class ScPatternAttr;
 class ScRangeListRef;
 class ScExtDocOptions;
+class ScViewData;
 
 //--------------------------------------------------------------------------
-
 
 class ScViewDataTable                           // Daten pro Tabelle
 {
@@ -139,12 +139,15 @@ private:
     BOOL            bOldCurValid;               // "virtuelle" Cursorpos. bei zusammengefassten
 
                     ScViewDataTable();
-                    ScViewDataTable( const ScViewDataTable& rDataTable );
                     ~ScViewDataTable();
 
-    void            WriteUserDataSequence(com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings);
-    void            ReadUserDataSequence(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings,
-                                         bool& rHasZoom);
+    void            WriteUserDataSequence(
+                        com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings,
+                        const ScViewData& rViewData, SCTAB nTab );
+
+    void            ReadUserDataSequence(
+                        const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& rSettings,
+                        ScViewData& rViewData, SCTAB nTab, bool& rHasZoom);
 };
 
 // ---------------------------------------------------------------------------
