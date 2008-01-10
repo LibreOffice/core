@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:46:04 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:31:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -909,6 +909,21 @@ void ViewShell::SetTabCompat( bool bNew )
     {
         SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
         pIDSA->set(IDocumentSettingAccess::TAB_COMPAT, bNew );
+        const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
+        lcl_InvalidateAllCntnt( *this, nInv );
+    }
+}
+
+/*-- 29.11.2007 09:03:18---------------------------------------------------
+    //#i24363# tab stops relative to indent
+  -----------------------------------------------------------------------*/
+void ViewShell::SetTabsRelativeToIndent(bool bNew)
+{
+    IDocumentSettingAccess* pIDSA = getIDocumentSettingAccess();
+    if( pIDSA->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) != bNew  )
+    {
+        SwWait aWait( *GetDoc()->GetDocShell(), TRUE );
+        pIDSA->set(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT, bNew );
         const BYTE nInv = INV_PRTAREA | INV_SIZE | INV_TABLE | INV_SECTION;
         lcl_InvalidateAllCntnt( *this, nInv );
     }
