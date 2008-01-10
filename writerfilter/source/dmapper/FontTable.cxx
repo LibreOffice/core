@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FontTable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2007-06-18 12:33:06 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:38:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,9 @@
 #include <vector>
 #include <stdio.h>
 
+namespace writerfilter {
 namespace dmapper
 {
-using namespace writerfilter;
 
 struct FontTable_Impl
 {
@@ -71,7 +71,7 @@ FontTable::~FontTable()
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::attribute(doctok::Id Name, doctok::Value & val)
+void FontTable::attribute(Id Name, Value & val)
 {
     OSL_ENSURE( m_pImpl->pCurrentEntry, "current entry has to be set here");
     if(!m_pImpl->pCurrentEntry)
@@ -79,6 +79,7 @@ void FontTable::attribute(doctok::Id Name, doctok::Value & val)
     int nIntValue = val.getInt();
     ::rtl::OUString sValue = val.getString();
     //printf ( "FontTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
+    /* WRITERFILTERSTATUS: table: FontTable_attributedata */
     switch(Name)
     {
 //        case NS_rtf::LN_ISTD: break;
@@ -110,30 +111,41 @@ void FontTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_UNUSED4: break;
 //        case NS_rtf::LN_UNUSED8: break;
 //        case NS_rtf::LN_CLFOLVL: break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_CBFFNM1:
             m_pImpl->pCurrentEntry->sFontName1 = sValue;
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_PRQ:
             m_pImpl->pCurrentEntry->nPitchRequest = static_cast<sal_Int16>( nIntValue );
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_FTRUETYPE:
             m_pImpl->pCurrentEntry->bTrueType = nIntValue == 1 ? true : false;
         break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED1_3: //unused
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FF: //unused
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED1_7: //unused
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_WWEIGHT:
             m_pImpl->pCurrentEntry->nBaseWeight = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_CHS:
             m_pImpl->pCurrentEntry->nTextEncoding = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_IXCHSZALT:
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_PANOSE:
             m_pImpl->pCurrentEntry->sPanose += sValue;
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_FS:
             m_pImpl->pCurrentEntry->sFontSignature += sValue;
         break;
@@ -492,10 +504,13 @@ void FontTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_LFO: break;
         case NS_rtf::LN_F:
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_ALTFONTNAME:
             m_pImpl->pCurrentEntry->sAlternativeFont = sValue;
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_XSZFFN:
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Font_name:
             m_pImpl->pCurrentEntry->sFontName = sValue;
         break;
@@ -529,7 +544,7 @@ void FontTable::attribute(doctok::Id Name, doctok::Value & val)
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::sprm(doctok::Sprm& rSprm)
+void FontTable::sprm(Sprm& rSprm)
 {
     OSL_ENSURE( m_pImpl->pCurrentEntry, "current entry has to be set here");
     if(!m_pImpl->pCurrentEntry)
@@ -537,7 +552,7 @@ void FontTable::sprm(doctok::Sprm& rSprm)
     sal_uInt32 nSprmId = rSprm.getId();
     (void)nSprmId;
 
-    doctok::Value::Pointer_t pValue = rSprm.getValue();
+    Value::Pointer_t pValue = rSprm.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     (void)nIntValue;
     rtl::OUString sStringValue = pValue->getString();
@@ -549,7 +564,7 @@ void FontTable::sprm(doctok::Sprm& rSprm)
     default:
         {
             OSL_ASSERT("FontTable::sprm()"); //
-            //doctok::Value::Pointer_t pValue_ = rSprm.getValue();
+            //Value::Pointer_t pValue_ = rSprm.getValue();
         }
     }*/
 }
@@ -557,7 +572,7 @@ void FontTable::sprm(doctok::Sprm& rSprm)
 /*-- 19.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::entry(int /*pos*/, doctok::Reference<Properties>::Pointer_t ref)
+void FontTable::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t ref)
 {
     //create a new font entry
     OSL_ENSURE( !m_pImpl->pCurrentEntry, "current entry has to be NULL here");
@@ -618,19 +633,19 @@ void FontTable::utext(const sal_uInt8* , size_t)
 /*-- 19.06.2006 12:04:37---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::props(doctok::Reference<Properties>::Pointer_t)
+void FontTable::props(writerfilter::Reference<Properties>::Pointer_t)
 {
 }
 /*-- 19.06.2006 12:04:37---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::table(doctok::Id, doctok::Reference<Table>::Pointer_t)
+void FontTable::table(Id, writerfilter::Reference<Table>::Pointer_t)
 {
 }
 /*-- 19.06.2006 12:04:38---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FontTable::substream(doctok::Id, ::doctok::Reference<Stream>::Pointer_t)
+void FontTable::substream(Id, ::writerfilter::Reference<Stream>::Pointer_t)
 {
 }
 /*-- 19.06.2006 12:04:39---------------------------------------------------
@@ -660,4 +675,4 @@ sal_uInt32 FontTable::size()
 }
 
 }//namespace dmapper
-
+}//namespace writerfilter
