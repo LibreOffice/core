@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8PropertySetImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2007-04-25 11:40:45 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:48:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,11 @@
 #include <doctok/resourceids.hxx>
 #include <resourcemodel/QNameToString.hxx>
 
+namespace writerfilter {
 namespace doctok
 {
+
+
 bool operator != (const WW8PropertySetIterator & rA,
                   const WW8PropertySetIterator & rB)
 {
@@ -405,4 +408,4 @@ string WW8PropertySetIteratorImpl::toString() const
     return sResult;
 }
 
-}
+}}
