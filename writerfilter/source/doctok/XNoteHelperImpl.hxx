@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XNoteHelperImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-12 09:08:42 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #ifndef INCLUDED_X_NOTE_HELPER_IMPL_HXX
 #define INCLUDED_X_NOTE_HELPER_IMPL_HXX
 
+namespace writerfilter {
 namespace doctok
 {
 template <class T>
@@ -78,20 +79,20 @@ CpAndFc XNoteHelper<T>::getRefCpAndFc(sal_uInt32 nPos)
 }
 
 template <class T>
-doctok::Reference<Stream>::Pointer_t
+writerfilter::Reference<Stream>::Pointer_t
 XNoteHelper<T>::get(sal_uInt32 nPos)
 {
     // There are getCount() entries => greater or equal
     if (nPos >= getCount())
         throw ExceptionNotFound("get");
 
-    doctok::Reference<Stream>::Pointer_t pResult;
+    writerfilter::Reference<Stream>::Pointer_t pResult;
 
     CpAndFc aCpAndFcStart(getCpAndFc(nPos));
     CpAndFc aCpAndFcEnd(getCpAndFc(nPos + 1));
 
     if (aCpAndFcStart < aCpAndFcEnd)
-        pResult = doctok::Reference<Stream>::Pointer_t
+        pResult = writerfilter::Reference<Stream>::Pointer_t
             (new WW8DocumentImpl(*mpDocument, aCpAndFcStart, aCpAndFcEnd));
 
     return pResult;
@@ -122,10 +123,10 @@ sal_uInt32 XNoteHelper<T>::getIndexOfCpAndFc(const CpAndFc & rCpAndFc)
 }
 
 template <class T>
-doctok::Reference<Stream>::Pointer_t
+writerfilter::Reference<Stream>::Pointer_t
 XNoteHelper<T>::get(const CpAndFc & rCpAndFc)
 {
-    doctok::Reference<Stream>::Pointer_t pResult;
+    writerfilter::Reference<Stream>::Pointer_t pResult;
 
     sal_uInt32 n = getIndexOfCpAndFc(rCpAndFc);
 
@@ -170,6 +171,6 @@ void XNoteHelper<T>::init()
         mpDocument->insertCpAndFc(aCpAndFcRef);
     }
 }
-}
+}}
 
 #endif // INCLUDED_X_NOTE_HELPER_IMPL_HXX
