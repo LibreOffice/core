@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8StreamImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-14 15:34:34 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:49:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 
+namespace writerfilter {
 namespace doctok
 {
 using namespace ::com::sun::star;
@@ -204,4 +205,4 @@ void WW8StreamImpl::dump(OutputWithDepth<string> & o) const
     o.addItem("</stream>");
 }
 
-}
+}}
