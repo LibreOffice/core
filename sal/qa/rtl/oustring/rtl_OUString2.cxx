@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OUString2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:44:07 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,6 +348,33 @@ sal_Int16 SAL_CALL checkPrecisionSize()
 
     };
 
+    class toInt: public CppUnit::TestFixture {
+    public:
+        void test() {
+            CPPUNIT_ASSERT_EQUAL(
+                static_cast< sal_Int32 >(-0x76543210),
+                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("-76543210")).
+                 toInt32(16)));
+            CPPUNIT_ASSERT_EQUAL(
+                static_cast< sal_Int32 >(0xFEDCBA98),
+                (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("+FEDCBA98")).
+                 toInt32(16)));
+            CPPUNIT_ASSERT_EQUAL(
+                static_cast< sal_Int64 >(-SAL_CONST_INT64(0x76543210FEDCBA98)),
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("-76543210FEDCBA98")).
+                 toInt64(16)));
+            CPPUNIT_ASSERT_EQUAL(
+                static_cast< sal_Int64 >(SAL_CONST_INT64(0xFEDCBA9876543210)),
+                (rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("+FEDCBA9876543210")).
+                 toInt64(16)));
+        }
+
+        CPPUNIT_TEST_SUITE(toInt);
+        CPPUNIT_TEST(test);
+        CPPUNIT_TEST_SUITE_END();
+    };
 
 // -----------------------------------------------------------------------------
 // - toDouble (tests)
@@ -1195,6 +1222,7 @@ void iterateCodePoints::testNotWellFormed() {
 
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::valueOf, "rtl_OUString");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toInt, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toDouble, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toFloat, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::lastIndexOf, "rtl_OUString");
