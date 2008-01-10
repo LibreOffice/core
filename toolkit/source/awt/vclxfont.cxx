@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxfont.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:30:48 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:20:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@ BOOL VCLXFont::ImplAssertValidFontMetric()
 {
     ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XFont*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XFont2*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XUnoTunnel*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XTypeProvider*, this ) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
@@ -102,7 +103,7 @@ IMPL_XUNOTUNNEL( VCLXFont )
 
 // ::com::sun::star::lang::XTypeProvider
 IMPL_XTYPEPROVIDER_START( VCLXFont )
-    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont>* ) NULL )
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont2>* ) NULL )
 IMPL_XTYPEPROVIDER_END
 
 
@@ -239,5 +240,21 @@ void VCLXFont::getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& rnC
     }
 }
 
+// ::com::sun::star::awt::XFont2
+sal_Bool VCLXFont::hasGlyphs( const ::rtl::OUString& aText )
+    throw(::com::sun::star::uno::RuntimeException)
+{
+    ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
+    OutputDevice* pOutDev = VCLUnoHelper::GetOutputDevice( mxDevice );
+    if ( pOutDev )
+    {
+        String aStr( aText );
+        if ( pOutDev->HasGlyphs( maFont, aStr, 0, aStr.Len() ) == STRING_LEN )
+        {
+            return sal_True;
+        }
+    }
 
+    return sal_False;
+}
