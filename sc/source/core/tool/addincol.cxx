@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:34:33 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:12:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@
 #include "optutil.hxx"
 #include "addincfg.hxx"
 #include "scmod.hxx"
+#include "rangeseq.hxx"
 
 using namespace com::sun::star;
 
@@ -205,6 +206,47 @@ void ScUnoAddInFuncData::SetCompNames( const uno::Sequence< sheet::LocalizedName
     bCompInitialized = TRUE;
 }
 
+BOOL ScUnoAddInFuncData::GetExcelName( LanguageType eDestLang, String& rRetExcelName ) const
+{
+    const uno::Sequence<sheet::LocalizedName>& rSequence = GetCompNames();
+    long nSeqLen = rSequence.getLength();
+    if ( nSeqLen )
+    {
+        const sheet::LocalizedName* pArray = rSequence.getConstArray();
+        long i;
+
+        rtl::OUString aLangStr, aCountryStr;
+        MsLangId::convertLanguageToIsoNames( eDestLang, aLangStr, aCountryStr );
+        rtl::OUString aUserLang = aLangStr.toAsciiLowerCase();
+        rtl::OUString aUserCountry = aCountryStr.toAsciiUpperCase();
+
+        //  first check for match of both language and country
+
+        for ( i=0; i<nSeqLen; i++)
+            if ( pArray[i].Locale.Language == aUserLang &&
+                    pArray[i].Locale.Country  == aUserCountry )
+            {
+                rRetExcelName = pArray[i].Name;
+                return TRUE;
+            }
+
+        //  second: check only language
+
+        for ( i=0; i<nSeqLen; i++)
+            if ( pArray[i].Locale.Language == aUserLang )
+            {
+                rRetExcelName = pArray[i].Name;
+                return TRUE;
+            }
+
+        //  third: use first (default) entry
+
+        rRetExcelName = pArray[0].Name;
+        return TRUE;
+    }
+    return FALSE;
+}
+
 void ScUnoAddInFuncData::SetFunction( const uno::Reference< reflection::XIdlMethod>& rNewFunc, const uno::Any& rNewObj )
 {
     xFunction = rNewFunc;
@@ -229,38 +271,6 @@ void ScUnoAddInFuncData::SetArguments( long nNewCount, const ScAddInArgDesc* pNe
 void ScUnoAddInFuncData::SetCallerPos( long nNewPos )
 {
     nCallerPos = nNewPos;
-}
-
-//------------------------------------------------------------------------
-
-BOOL lcl_ConvertToDouble( const uno::Any& rAny, double& rOut )
-{
-    BOOL bRet = FALSE;
-    uno::TypeClass eClass = rAny.getValueTypeClass();
-    switch (eClass)
-    {
-        //! extract integer values
-        case uno::TypeClass_ENUM:
-        case uno::TypeClass_BOOLEAN:
-        case uno::TypeClass_CHAR:
-        case uno::TypeClass_BYTE:
-        case uno::TypeClass_SHORT:
-        case uno::TypeClass_UNSIGNED_SHORT:
-        case uno::TypeClass_LONG:
-        case uno::TypeClass_UNSIGNED_LONG:
-        case uno::TypeClass_FLOAT:
-        case uno::TypeClass_DOUBLE:
-            rAny >>= rOut;
-            bRet = TRUE;
-            break;
-        default:
-        {
-            // added to avoid warnings
-        }
-    }
-    if (!bRet)
-        rOut = 0.0;
-    return bRet;
 }
 
 //------------------------------------------------------------------------
@@ -657,44 +667,7 @@ BOOL ScUnoAddInCollection::GetExcelName( const String& rCalcName,
 {
     const ScUnoAddInFuncData* pFuncData = GetFuncData( rCalcName );
     if ( pFuncData )
-    {
-        const uno::Sequence<sheet::LocalizedName>& rSequence = pFuncData->GetCompNames();
-        long nSeqLen = rSequence.getLength();
-        if ( nSeqLen )
-        {
-            const sheet::LocalizedName* pArray = rSequence.getConstArray();
-            long i;
-
-            rtl::OUString aLangStr, aCountryStr;
-            MsLangId::convertLanguageToIsoNames( eDestLang, aLangStr, aCountryStr );
-            rtl::OUString aUserLang = aLangStr.toAsciiLowerCase();
-            rtl::OUString aUserCountry = aCountryStr.toAsciiUpperCase();
-
-            //  first check for match of both language and country
-
-            for ( i=0; i<nSeqLen; i++)
-                if ( pArray[i].Locale.Language == aUserLang &&
-                     pArray[i].Locale.Country  == aUserCountry )
-                {
-                    rRetExcelName = pArray[i].Name;
-                    return TRUE;
-                }
-
-            //  second: check only language
-
-            for ( i=0; i<nSeqLen; i++)
-                if ( pArray[i].Locale.Language == aUserLang )
-                {
-                    rRetExcelName = pArray[i].Name;
-                    return TRUE;
-                }
-
-            //  third: use first (default) entry
-
-            rRetExcelName = pArray[0].Name;
-            return TRUE;
-        }
-    }
+        return pFuncData->GetExcelName( eDestLang, rRetExcelName);
     return FALSE;
 }
 
@@ -1305,6 +1278,16 @@ const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( const String& rName
     return NULL;
 }
 
+const ScUnoAddInFuncData* ScUnoAddInCollection::GetFuncData( long nIndex )
+{
+    if (!bInitialized)
+        Initialize();
+
+    if (nIndex < nFuncCount)
+        return ppFuncData[nIndex];
+    return NULL;
+}
+
 void ScUnoAddInCollection::LocalizeString( String& rName )
 {
     if (!bInitialized)
@@ -1412,7 +1395,7 @@ ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const String& rName
     nErrCode( errNoCode ),      // before function was called
     bHasString( TRUE ),
     fValue( 0.0 ),
-    pMatrix( NULL )
+    xMatrix( NULL )
 {
     pFuncData = rColl.GetFuncData( rName, true );           // need fully initialized data
     DBG_ASSERT( pFuncData, "Function Data missing" );
@@ -1447,9 +1430,6 @@ ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const String& rName
 ScUnoAddInCall::~ScUnoAddInCall()
 {
     // pFuncData is deleted with ScUnoAddInCollection
-
-    if ( pMatrix )
-        pMatrix->Delete();
 }
 
 BOOL ScUnoAddInCall::ValidParamCount()
@@ -1638,8 +1618,11 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
         case uno::TypeClass_UNSIGNED_LONG:
         case uno::TypeClass_FLOAT:
         case uno::TypeClass_DOUBLE:
-            lcl_ConvertToDouble( rNewRes, fValue );
-            bHasString = FALSE;
+            {
+                uno::TypeClass eMyClass;
+                ScApiTypeConversion::ConvertAnyToDouble( fValue, eMyClass, rNewRes);
+                bHasString = FALSE;
+            }
             break;
 
         case uno::TypeClass_STRING:
@@ -1688,9 +1671,10 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     }
                     if ( nMaxColCount && nRowCount )
                     {
-                        pMatrix = new ScMatrix(
+                        xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount) );
+                        ScMatrix* pMatrix = xMatrix;
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
@@ -1730,9 +1714,10 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     }
                     if ( nMaxColCount && nRowCount )
                     {
-                        pMatrix = new ScMatrix(
+                        xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount) );
+                        ScMatrix* pMatrix = xMatrix;
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
@@ -1772,9 +1757,10 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
                     }
                     if ( nMaxColCount && nRowCount )
                     {
-                        pMatrix = new ScMatrix(
+                        xMatrix = new ScMatrix(
                                 static_cast<SCSIZE>(nMaxColCount),
                                 static_cast<SCSIZE>(nRowCount) );
+                        ScMatrix* pMatrix = xMatrix;
                         for (nRow=0; nRow<nRowCount; nRow++)
                         {
                             long nColCount = pRowArr[nRow].getLength();
@@ -1793,68 +1779,10 @@ void ScUnoAddInCall::SetResult( const uno::Any& rNewRes )
             }
             else if ( aType.equals( getCppuType( (uno::Sequence< uno::Sequence<uno::Any> > *)0 ) ) )
             {
-                const uno::Sequence< uno::Sequence<uno::Any> >* pRowSeq = NULL;
-
-                //! use pointer from any!
-                uno::Sequence< uno::Sequence<uno::Any> > aSequence;
-                if ( rNewRes >>= aSequence )
-                    pRowSeq = &aSequence;
-
-                if ( pRowSeq )
-                {
-                    long nRowCount = pRowSeq->getLength();
-                    const uno::Sequence<uno::Any>* pRowArr = pRowSeq->getConstArray();
-                    long nMaxColCount = 0;
-                    long nCol, nRow;
-                    for (nRow=0; nRow<nRowCount; nRow++)
-                    {
-                        long nTmp = pRowArr[nRow].getLength();
-                        if ( nTmp > nMaxColCount )
-                            nMaxColCount = nTmp;
-                    }
-                    if ( nMaxColCount && nRowCount )
-                    {
-                        rtl::OUString aUStr;
-                        pMatrix = new ScMatrix(
-                                static_cast<SCSIZE>(nMaxColCount),
-                                static_cast<SCSIZE>(nRowCount) );
-                        for (nRow=0; nRow<nRowCount; nRow++)
-                        {
-                            long nColCount = pRowArr[nRow].getLength();
-                            const uno::Any* pColArr = pRowArr[nRow].getConstArray();
-                            for (nCol=0; nCol<nColCount; nCol++)
-                            {
-                                //Reflection* pRefl = pColArr[nCol].getReflection();
-                                //if ( pRefl->equals( *OUString_getReflection() ) )
-                                if ( pColArr[nCol] >>= aUStr )
-                                    pMatrix->PutString( String( aUStr ),
-                                        static_cast<SCSIZE>(nCol),
-                                        static_cast<SCSIZE>(nRow) );
-                                else
-                                {
-                                    // try to convert to double, empty if not possible
-
-                                    double fCellVal;
-                                    if ( lcl_ConvertToDouble( pColArr[nCol], fCellVal ) )
-                                        pMatrix->PutDouble( fCellVal,
-                                                static_cast<SCSIZE>(nCol),
-                                                static_cast<SCSIZE>(nRow) );
-                                    else
-                                        pMatrix->PutEmpty(
-                                                static_cast<SCSIZE>(nCol),
-                                                static_cast<SCSIZE>(nRow) );
-                                }
-                            }
-                            for (nCol=nColCount; nCol<nMaxColCount; nCol++)
-                                pMatrix->PutString( EMPTY_STRING,
-                                        static_cast<SCSIZE>(nCol),
-                                        static_cast<SCSIZE>(nRow) );
-                        }
-                    }
-                }
+                xMatrix = ScSequenceToMatrix::CreateMixedMatrix( rNewRes );
             }
 
-            if (!pMatrix)                       // no array found
+            if (!xMatrix)                       // no array found
                 nErrCode = errNoValue;          //! code for error in return type???
     }
 }
