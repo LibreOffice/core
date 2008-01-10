@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableHandler.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2007-05-03 06:25:37 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:37:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #define INCLUDED_DOMAIN_MAPPER_TABLE_HANDLER_HXX
 
 #ifndef INCLUDED_TABLE_MANAGER_HXX
-#include <doctok/TableManager.hxx>
+#include <resourcemodel/TableManager.hxx>
 #endif
 #ifndef INCLUDED_DMAPPER_PROPERTYMAP_HXX
 #include "PropertyMap.hxx"
@@ -44,6 +44,7 @@
 
 #include <com/sun/star/text/XTextAppendAndConvert.hpp>
 
+namespace writerfilter {
 namespace dmapper {
 
 typedef ::com::sun::star::text::XTextRange TextRange_t;
@@ -64,7 +65,7 @@ typedef ::com::sun::star::uno::Sequence< RowPropertyValuesSeq_t>    CellProperty
 typedef std::vector<PropertyMapPtr>     PropertyMapVector1;
 typedef std::vector<PropertyMapVector1> PropertyMapVector2;
 
-class DomainMapperTableHandler : public doctok::TableDataHandler<Handle_t , PropertyMapPtr >
+class DomainMapperTableHandler : public TableDataHandler<Handle_t , PropertyMapPtr >
 {
     TextReference_t         m_xText;
     CellSequencePointer_t   m_pCellSeq;
@@ -99,6 +100,6 @@ public:
     virtual void endCell(const Handle_t & end);
 };
 
-}
+}}
 
 #endif // INCLUDED_DOMAIN_MAPPER_TABLE_HANDLER_HXX
