@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-01-30 13:22:54 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 #include <resources.hxx>
 #endif
 #ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
-#include <doctok/WW8ResourceModel.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #endif
 #ifndef INCLUDED_PLCF_HXX
 #include <PLCF.hxx>
@@ -59,6 +59,7 @@
 #include <XNoteHelper.hxx>
 #endif
 
+namespace writerfilter {
 namespace doctok
 {
 
@@ -67,16 +68,16 @@ class WW8DocumentImpl;
 /**
    A bookmark.
 */
-class Bookmark : public doctok::Reference<Properties>
+class Bookmark : public writerfilter::Reference<Properties>
 {
     /// bookmark first descriptor
-    doctok::Reference<Properties>::Pointer_t mpBKF;
+    writerfilter::Reference<Properties>::Pointer_t mpBKF;
 
     /// name of bookmark
     rtl::OUString mName;
 
 public:
-    Bookmark(doctok::Reference<Properties>::Pointer_t pBKF,
+    Bookmark(writerfilter::Reference<Properties>::Pointer_t pBKF,
              rtl::OUString & rName);
 
     /**
@@ -163,7 +164,8 @@ public:
 
        @param rCpAndFc       CpAndFc of the bookmark
      */
-    doctok::Reference<Properties>::Pointer_t getBKF(const CpAndFc & rCpAndFc);
+    writerfilter::Reference<Properties>::Pointer_t getBKF
+    (const CpAndFc & rCpAndFc);
 
     /**
        Return the name of a bookmark.
@@ -176,7 +178,7 @@ public:
        Return bookmark.
        @param rCpAndFc       CpAndFc of the bookmark
      */
-    doctok::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t
     getBookmark(const CpAndFc & rCpAndFc);
 };
 
@@ -200,7 +202,7 @@ public:
 
     void init();
 
-    doctok::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t
     getShape(const CpAndFc & rCpAndFc);
 
 };
@@ -225,7 +227,7 @@ public:
 
     void init();
 
-    doctok::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t
     getField(const CpAndFc & rCpAndFc);
 
     WW8FLD::Pointer_t getWW8FLD(const CpAndFc & rCpAndFc);
@@ -249,7 +251,7 @@ public:
 
     void init();
 
-    doctok::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t
     getBreak(const CpAndFc & rCpAndFc);
 };
 
@@ -514,7 +516,7 @@ public:
 
        @param rCpAndFc    CpAndFc to look at
      */
-    doctok::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t
     getProperties(const CpAndFc & rCpAndFc);
 
     /**
@@ -522,7 +524,7 @@ public:
 
        @param rCpAndFc       CpAndFc where subdocument is referenced
      */
-    doctok::Reference<Stream>::Pointer_t
+    writerfilter::Reference<Stream>::Pointer_t
     getSubDocument(const CpAndFc & rCpAndFc);
 
     /**
@@ -535,22 +537,22 @@ public:
     /**
        Return reference to list table.
      */
-    doctok::Reference<Table>::Pointer_t getListTable() const;
+    writerfilter::Reference<Table>::Pointer_t getListTable() const;
 
     /**
        Return reference to table of list level overrides.
     */
-    doctok::Reference<Table>::Pointer_t getLFOTable() const;
+    writerfilter::Reference<Table>::Pointer_t getLFOTable() const;
 
     /**
        Return reference to font table.
      */
-    doctok::Reference<Table>::Pointer_t getFontTable() const;
+    writerfilter::Reference<Table>::Pointer_t getFontTable() const;
 
     /**
        Return reference to style sheet.
     */
-    doctok::Reference<Table>::Pointer_t getStyleSheet() const;
+    writerfilter::Reference<Table>::Pointer_t getStyleSheet() const;
 
     /**
        Return count of headers/footers.
@@ -569,7 +571,7 @@ public:
 
        @param nPos   index in the list of headers and footers
      */
-    doctok::Reference<Stream>::Pointer_t getHeader(sal_uInt32 nPos);
+    writerfilter::Reference<Stream>::Pointer_t getHeader(sal_uInt32 nPos);
 
     /**
        Return count of footnotes.
@@ -581,14 +583,15 @@ public:
 
        @param nPos     index of the footnote
     */
-    doctok::Reference<Stream>::Pointer_t getFootnote(sal_uInt32 nPos);
+    writerfilter::Reference<Stream>::Pointer_t getFootnote(sal_uInt32 nPos);
 
     /**
        Return subdocument for footnote at a certain position in document.
 
        @param rCpAndFc      position in document
      */
-    doctok::Reference<Stream>::Pointer_t getFootnote(const CpAndFc & rCpAndFc);
+    writerfilter::Reference<Stream>::Pointer_t getFootnote
+    (const CpAndFc & rCpAndFc);
 
     /**
        Return count of endnotes.
@@ -600,14 +603,15 @@ public:
 
        @param nPos       index of the endnote
      */
-    doctok::Reference<Stream>::Pointer_t getEndnote(sal_uInt32 nPos);
+    writerfilter::Reference<Stream>::Pointer_t getEndnote(sal_uInt32 nPos);
 
     /**
        Return subdocument for an endnote.
 
        @param rCpAndFc    CpAndFc where endnote is referenced
      */
-    doctok::Reference<Stream>::Pointer_t getEndnote(const CpAndFc & rCpAndFc);
+    writerfilter::Reference<Stream>::Pointer_t getEndnote
+    (const CpAndFc & rCpAndFc);
 
     /**
        Return count of annotations.
@@ -619,14 +623,14 @@ public:
 
        @param nPos       index of the annotation
      */
-    doctok::Reference<Stream>::Pointer_t getAnnotation(sal_uInt32 nPos);
+    writerfilter::Reference<Stream>::Pointer_t getAnnotation(sal_uInt32 nPos);
 
     /**
        Return subdocument for an annotation.
 
        @param rCpAndFc    CpAndFc where annotation is referenced
      */
-    doctok::Reference<Stream>::Pointer_t getAnnotation
+    writerfilter::Reference<Stream>::Pointer_t getAnnotation
     (const CpAndFc & rCpAndFc);
 
     /**
@@ -634,7 +638,7 @@ public:
 
        @param rCpAndFc    CpAndFc where bookmark begins or ends
      */
-    doctok::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t
     getBookmark(const CpAndFc & rCpAndFc) const;
 
     /**
@@ -642,10 +646,10 @@ public:
 
        @param rCpAndFc    CpAndFc of the shape
      */
-    doctok::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t
     getShape(const CpAndFc & rCpAndFc) const;
 
-    doctok::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t
     getShape(sal_uInt32 nSpid);
 
     /**
@@ -653,7 +657,7 @@ public:
 
        @param nBlib  number of the blip to return
     */
-    doctok::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t
     getBlip(sal_uInt32 nBlib);
 
     /**
@@ -661,7 +665,7 @@ public:
 
        @param rCpAndFc    CpAndFc of the break
     */
-    doctok::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t
     getBreak(const CpAndFc & rCpAndFc) const;
 
 
@@ -670,7 +674,7 @@ public:
 
        @param rCpAndFc    CpAndFc of the field
      */
-    doctok::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t
     getField(const CpAndFc & rCpAndFc) const;
 
     /**
@@ -683,7 +687,7 @@ public:
 
        @param nShpId    shape id of text box
      */
-    doctok::Reference<Stream>::Pointer_t
+    writerfilter::Reference<Stream>::Pointer_t
     getTextboxText(sal_uInt32 nShpId) const;
 
     /**
@@ -787,10 +791,11 @@ public:
      */
     WW8DocumentIterator & operator--();
 
-    virtual doctok::Reference<Properties>::Pointer_t getProperties() const;
+    virtual writerfilter::Reference<Properties>::Pointer_t getProperties()
+        const;
     //void setAttributes(const IAttributeSet & aAttributeSet);
 
-    virtual doctok::Reference<Stream>::Pointer_t getSubDocument() const;
+    virtual writerfilter::Reference<Stream>::Pointer_t getSubDocument() const;
 
     /** Return if the text the iterator points to is complex.
 
@@ -811,7 +816,7 @@ public:
        Return pointer to the shape at character position the iterator
        is pointing to.
      */
-    virtual doctok::Reference<Properties>::Pointer_t getShape() const;
+    virtual writerfilter::Reference<Properties>::Pointer_t getShape() const;
 
     /**
        Return pointer to section description at character position the
@@ -825,5 +830,5 @@ public:
  */
 string propertyTypeToString(PropertyType nType);
 
-}
+}}
 #endif // INCLUDED_WW8_DOCUMENT_IMPL_HXX
