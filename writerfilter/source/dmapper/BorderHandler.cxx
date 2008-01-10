@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BorderHandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2007-06-27 08:54:24 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:35:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,37 +32,29 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef INCLUDED_BORDERHANDLER_HXX
 #include <BorderHandler.hxx>
-#endif
-#ifndef INCLUDED_DMAPPER_PROPERTYMAP_HXX
 #include <PropertyMap.hxx>
-#endif
-#ifndef INCLUDED_RESOURCESIDS
 #include <doctok/resourceids.hxx>
-#endif
-#ifndef INCLUDED_DMAPPER_CONVERSIONHELPER_HXX
 #include <ConversionHelper.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
-#endif
+#include <ooxml/resourceids.hxx>
 
+namespace writerfilter {
 namespace dmapper {
 
 using namespace ::com::sun::star;
-using namespace writerfilter;
 //using namespace ::std;
 
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-BorderHandler::BorderHandler() :
+BorderHandler::BorderHandler( bool bOOXML ) :
     m_nCurrentBorderPosition( BORDER_TOP ),
     m_nLineWidth(0),
     m_nLineType(0),
     m_nLineColor(0),
-    m_nLineDistance(0)
+    m_nLineDistance(0),
+    m_bOOXML( bOOXML )
 {
 }
 /*-- 24.04.2007 09:06:35---------------------------------------------------
@@ -74,63 +66,41 @@ BorderHandler::~BorderHandler()
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void BorderHandler::attribute(doctok::Id rName, doctok::Value & rVal)
+void BorderHandler::attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
+    /* WRITERFILTERSTATUS: table: BorderHandler_attributedata */
     switch( rName )
     {
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_rgbrc:
         {
-            doctok::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
             if( pProperties.get())
             {
                 pProperties->resolve(*this);
-                //
-//                table::BorderLine* pToFill = 0;
-//                switch(m_nCurrentBorderPosition)
-//                {
-//                    case BORDER_TOP:
-//                        pToFill = &m_aTableBorder.TopLine;
-//                        m_aTableBorder.IsTopLineValid = sal_True;
-//                    break;
-//                    case BORDER_LEFT:
-//                        pToFill = &m_aTableBorder.LeftLine;
-//                        m_aTableBorder.IsLeftLineValid = sal_True;
-//                    break;
-//                    case BORDER_BOTTOM:
-//                        pToFill = &m_aTableBorder.BottomLine;
-//                        m_aTableBorder.IsBottomLineValid = sal_True;;
-//                    break;
-//                    case BORDER_RIGHT:
-//                        pToFill = &m_aTableBorder.RightLine;
-//                        m_aTableBorder.IsRightLineValid = sal_True;
-//                    break;
-//                    case BORDER_HORIZONTAL:
-//                        pToFill = &m_aTableBorder.HorizontalLine;
-//                        m_aTableBorder.IsHorizontalLineValid = sal_True;;
-//                    break;
-//                    case BORDER_VERTICAL:
-//                        m_aTableBorder.IsVerticalLineValid = sal_True;;
-//                    default:
-//                        pToFill = &m_aTableBorder.VerticalLine; break;
-//                }
                 ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
-                                                                                m_aBorderLines[m_nCurrentBorderPosition] );
+                                                                                m_aBorderLines[m_nCurrentBorderPosition], m_bOOXML );
                 OSL_ENSURE(m_nCurrentBorderPosition < BORDER_COUNT, "too many border values");
                 ++m_nCurrentBorderPosition;
             }
         }
         break;
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_DPTLINEWIDTH: // 0x2871
             //  width of a single line in 1/8 pt, max of 32 pt -> twip * 5 / 2.
-            m_nLineWidth = ConversionHelper::convertToMM100( nIntValue * 5 / 2 );
+            m_nLineWidth = ConversionHelper::convertTwipToMM100( nIntValue * 5 / 2 );
         break;
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCTYPE:    // 0x2872
             m_nLineType = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_Border_color:
         case NS_rtf::LN_ICO:        // 0x2873
             m_nLineColor = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_DPTSPACE:   // 0x2874
             m_nLineDistance = nIntValue;
         break;
@@ -140,6 +110,8 @@ void BorderHandler::attribute(doctok::Id rName, doctok::Value & rVal)
         case NS_rtf::LN_UNUSED2_15: // 0x2877
             // ignored
         break;
+        case NS_ooxml::LN_CT_Border_themeTint: break;
+        case NS_ooxml::LN_CT_Border_themeColor: break;
         default:
             OSL_ASSERT("unknown attribute");
     }
@@ -147,9 +119,33 @@ void BorderHandler::attribute(doctok::Id rName, doctok::Value & rVal)
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void BorderHandler::sprm(doctok::Sprm & rSprm)
+void BorderHandler::sprm(Sprm & rSprm)
 {
-    (void)rSprm;
+    /* WRITERFILTERSTATUS: table: BorderHandler_sprm */
+    switch( rSprm.getId())
+    {
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_TblBorders_top:
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_TblBorders_left:
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_TblBorders_bottom:
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_TblBorders_right:
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_TblBorders_insideH:
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_TblBorders_insideV:
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if( pProperties.get())
+                pProperties->resolve(*this);
+            ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
+                                   m_aBorderLines[rSprm.getId() - NS_ooxml::LN_CT_TblBorders_top], m_bOOXML );
+        }
+        break;
+        default:;
+    }
 }
 /*-- 24.04.2007 09:09:01---------------------------------------------------
 
@@ -174,4 +170,14 @@ PropertyMapPtr  BorderHandler::getProperties()
     }
     return pPropertyMap;
 }
+/*-- 14.11.2007 12:42:52---------------------------------------------------
+    used only in OOXML import
+  -----------------------------------------------------------------------*/
+table::BorderLine BorderHandler::getBorderLine()
+{
+    table::BorderLine aBorderLine;
+    ConversionHelper::MakeBorderLine( m_nLineWidth, m_nLineType, m_nLineColor, aBorderLine, m_bOOXML );
+    return aBorderLine;
+}
 } //namespace dmapper
+} //namespace writerfilter
