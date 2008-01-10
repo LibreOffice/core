@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servuno.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:56:51 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:10:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,10 @@ class ScDocShell;
 // BM
 #define SC_SERVICE_CHDATAPROV   37
 
-#define SC_SERVICE_COUNT        38
+#define SC_SERVICE_FORMULAPARS  38
+#define SC_SERVICE_OPCODEMAPPER 39
+
+#define SC_SERVICE_COUNT        40
 #define SC_SERVICE_INVALID      USHRT_MAX
 
 
