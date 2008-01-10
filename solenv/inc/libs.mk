@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.123 $
+#   $Revision: 1.124 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 13:15:14 $
+#   last change: $Author: obo $ $Date: 2008-01-10 13:02:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.123 $$"
+LIBSMKREV!:="$$Revision: 1.124 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -189,6 +189,7 @@ SVLLIB=-lsvl$(OFFICEUPD)$(DLLPOSTFIX)
 TKTLIB=-ltkt$(OFFICEUPD)$(DLLPOSTFIX)
 SJLIB=-lj$(OFFICEUPD)$(DLLPOSTFIX)_g
 GOODIESLIB=-lgo$(OFFICEUPD)$(DLLPOSTFIX)
+SAXLIB=-lsax$(OFFICEUPD)$(DLLPOSTFIX)
 MAILLIB=-lmail
 DOCMGRLIB=-ldmg$(OFFICEUPD)$(DLLPOSTFIX)
 BASICLIB=-lsb$(OFFICEUPD)$(DLLPOSTFIX)
@@ -404,6 +405,7 @@ AUTOMATIONLIB=ists.lib
 SVLLIB=isvl.lib
 PLUGAPPLIB=plugapp.lib
 GOODIESLIB=igo.lib
+SAXLIB=isax.lib
 MAILLIB=mail.lib
 DOCMGRLIB=docmgr.lib
 BASICLIB=basic.lib
