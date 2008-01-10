@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:31:28 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:10:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,17 @@
 #define SC_UNONAMES_HXX
 
 // service names
-#define SC_SERVICENAME_VALBIND      "com.sun.star.table.CellValueBinding"
-#define SC_SERVICENAME_LISTCELLBIND "com.sun.star.table.ListPositionCellBinding"
-#define SC_SERVICENAME_LISTSOURCE   "com.sun.star.table.CellRangeListSource"
-#define SC_SERVICENAME_CELLADDRESS  "com.sun.star.table.CellAddressConversion"
-#define SC_SERVICENAME_RANGEADDRESS "com.sun.star.table.CellRangeAddressConversion"
-#define SC_SERVICENAME_CHDATAPROV   "com.sun.star.chart2.data.DataProvider"
-#define SC_SERVICENAME_CHRANGEHILIGHT "com.sun.star.chart2.data.RangeHighlightListener"
+#define SC_SERVICENAME_VALBIND          "com.sun.star.table.CellValueBinding"
+#define SC_SERVICENAME_LISTCELLBIND     "com.sun.star.table.ListPositionCellBinding"
+#define SC_SERVICENAME_LISTSOURCE       "com.sun.star.table.CellRangeListSource"
+#define SC_SERVICENAME_CELLADDRESS      "com.sun.star.table.CellAddressConversion"
+#define SC_SERVICENAME_RANGEADDRESS     "com.sun.star.table.CellRangeAddressConversion"
+
+#define SC_SERVICENAME_FORMULAPARS      "com.sun.star.sheet.FormulaParser"
+#define SC_SERVICENAME_OPCODEMAPPER     "com.sun.star.sheet.FormulaOpCodeMapper"
+
+#define SC_SERVICENAME_CHDATAPROV       "com.sun.star.chart2.data.DataProvider"
+#define SC_SERVICENAME_CHRANGEHILIGHT   "com.sun.star.chart2.data.RangeHighlightListener"
 
 //  document
 #define SC_UNO_AREALINKS            "AreaLinks"
@@ -294,6 +298,7 @@
 #define SC_UNONAME_ENABSORT         "EnableSort"
 #define SC_UNONAME_FROMSELECT       "FromSelection"
 #define SC_UNONAME_CONRES           "ConnectionResource"
+#define SC_UNONAME_TOKENINDEX       "TokenIndex"
 
 //  text fields
 #define SC_UNONAME_ANCTYPE          "AnchorType"
@@ -454,23 +459,29 @@
 #define SC_UNO_PAGE_FTRSHARED       "FooterIsShared"
 
 //  document settings
-#define SC_UNO_CALCASSHOWN          "CalcAsShown"
-#define SC_UNO_DEFTABSTOP           "DefaultTabStop"
-#define SC_UNO_TABSTOPDIS           "TabStopDistance" // is the same like the before, but only the writer name
-#define SC_UNO_IGNORECASE           "IgnoreCase"
-#define SC_UNO_ITERCOUNT            "IterationCount"
-#define SC_UNO_ITERENABLED          "IsIterationEnabled"
-#define SC_UNO_ITEREPSILON          "IterationEpsilon"
-#define SC_UNO_LOOKUPLABELS         "LookUpLabels"
-#define SC_UNO_MATCHWHOLE           "MatchWholeCell"
-#define SC_UNO_NULLDATE             "NullDate"
-#define SC_UNO_SPELLONLINE          "SpellOnline"
-#define SC_UNO_STANDARDDEC          "StandardDecimals"
-#define SC_UNO_REGEXENABLED         "RegularExpressions"
-#define SC_UNO_BASICLIBRARIES       "BasicLibraries"
-#define SC_UNO_DIALOGLIBRARIES      "DialogLibraries"
-#define SC_UNO_RUNTIMEUID           "RuntimeUID"
-#define SC_UNO_HASVALIDSIGNATURES   "HasValidSignatures"
+#define SC_UNO_CALCASSHOWN              "CalcAsShown"
+#define SC_UNO_DEFTABSTOP               "DefaultTabStop"
+#define SC_UNO_TABSTOPDIS               "TabStopDistance" // is the same like the before, but only the writer name
+#define SC_UNO_IGNORECASE               "IgnoreCase"
+#define SC_UNO_ITERCOUNT                "IterationCount"
+#define SC_UNO_ITERENABLED              "IsIterationEnabled"
+#define SC_UNO_ITEREPSILON              "IterationEpsilon"
+#define SC_UNO_LOOKUPLABELS             "LookUpLabels"
+#define SC_UNO_MATCHWHOLE               "MatchWholeCell"
+#define SC_UNO_NULLDATE                 "NullDate"
+#define SC_UNO_SPELLONLINE              "SpellOnline"
+#define SC_UNO_STANDARDDEC              "StandardDecimals"
+#define SC_UNO_REGEXENABLED             "RegularExpressions"
+#define SC_UNO_BASICLIBRARIES           "BasicLibraries"
+#define SC_UNO_DIALOGLIBRARIES          "DialogLibraries"
+#define SC_UNO_RUNTIMEUID               "RuntimeUID"
+#define SC_UNO_HASVALIDSIGNATURES       "HasValidSignatures"
+#define SC_UNO_ISLOADED                 "IsLoaded"
+#define SC_UNO_ISUNDOENABLED            "IsUndoEnabled"
+#define SC_UNO_ISADJUSTHEIGHTENABLED    "IsAdjustHeightEnabled"
+#define SC_UNO_ISEXECUTELINKENABLED     "IsExecuteLinkEnabled"
+#define SC_UNO_ISCHANGEREADONLYENABLED  "IsChangeReadOnlyEnabled"
+#define SC_UNO_REFERENCEDEVICE          "ReferenceDevice"
 
 //  document properties from FormModel
 #define SC_UNO_APPLYFMDES           "ApplyFormDesignMode"
@@ -581,6 +592,14 @@
 // --> PB 2004-08-23 #i33095# Security Options
 #define SC_UNO_LOADREADONLY         "LoadReadonly"
 // <--
+
+// FormulaParser
+#define SC_UNO_REFERENCEPOS         "ReferencePosition"
+#define SC_UNO_COMPILEENGLISH       "CompileEnglish"
+#define SC_UNO_R1C1NOTATION         "R1C1Notation"
+#define SC_UNO_COMPATIBILITY3D      "Compatibility3DNotation"
+#define SC_UNO_IGNORELEADING        "IgnoreLeadingSpaces"
+#define SC_UNO_OPCODEMAP            "OpCodeMap"
 
 // Chart2
 #define SC_UNONAME_ISHIDDEN         "IsHidden"
