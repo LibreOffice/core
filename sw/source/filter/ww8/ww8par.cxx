@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.185 $
+ *  $Revision: 1.186 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:30:58 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1039,36 +1039,8 @@ const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
 void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
     SwFltStackEntry* pEntry)
 {
-    using sw::util::AdjustTabs;
     switch( pEntry->pAttr->Which() )
     {
-        case RES_PARATR_TABSTOP:
-            {
-                /*
-                Loop over the affected nodes and adjust the 0 based word style
-                tabstops to writer style tabstops relative to the paragraph
-                indent
-                */
-                SwPaM aRegion(rTmpPos);
-                if (pEntry->MakeRegion(pDoc, aRegion, false))
-                {
-                    SvxTabStopItem aTabStops(*(SvxTabStopItem*)pEntry->pAttr);
-                    ULONG nStart = aRegion.Start()->nNode.GetIndex();
-                    ULONG nEnd = aRegion.End()->nNode.GetIndex();
-                    for(; nStart <= nEnd; ++nStart)
-                    {
-                        SwCntntNode *pNd =
-                            pDoc->GetNodes()[nStart]->GetCntntNode();
-                        if (!pNd)
-                            continue;
-                        const SvxLRSpaceItem &rLR = (const SvxLRSpaceItem&)
-                            pNd->GetAttr(RES_LR_SPACE);
-                        AdjustTabs(aTabStops, 0, rLR.GetTxtLeft());
-                        pNd->SetAttr(aTabStops);
-                    }
-                }
-            }
-        break;
         case RES_LR_SPACE:
             {
                 /*
@@ -1111,13 +1083,6 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
 
                         pNd->SetAttr(aNewLR);
 
-                        SvxTabStopItem aTabs = (const SvxTabStopItem&)
-                            pNd->GetAttr(RES_PARATR_TABSTOP);
-                        if (AdjustTabs(aTabs, aOldLR.GetTxtLeft(),
-                            aNewLR.GetTxtLeft()))
-                        {
-                            pNd->SetAttr(aTabs);
-                        }
                     }
                 }
             }
@@ -1441,23 +1406,6 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
         }
     }
 
-    //Now turn back into 0 based word-style index, during style import
-    //we're already in word based 0 index, we only move into crackpot
-    //writer style when we're finished importing the styles. For
-    //explicit tabstops we'll have to adjust on setting into the
-    //document
-    long nLeftPMgn(0);
-    if (pAktColl)
-        nLeftPMgn = 0;  //During style import we are always 0 based (word style)
-    else if (nAktColl < nColls && pCollA[nAktColl].pFmt)
-    {
-        //otherwise we are writer x based, so turn back into 0 based word style
-        const SvxLRSpaceItem &rLR = pCollA[nAktColl].pFmt->GetLRSpace();
-        nLeftPMgn = rLR.GetTxtLeft();
-    }
-
-    sw::util::AdjustTabs(aAttr, nLeftPMgn, 0);
-
     SvxTabStop aTabStop;
     for (i=0; i < nDel; ++i)
     {
@@ -1566,6 +1514,8 @@ void SwWW8ImplReader::ImportDop()
     maTracer.Log(sw::log::eDontUseHTMLAutoSpacing);
     // move tabs on alignment
     rDoc.set(IDocumentSettingAccess::TAB_COMPAT, true);
+    // #i24363# tab stops relative to indent
+    rDoc.set(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT, false);
     maTracer.Log(sw::log::eTabStopDistance);
     // OD 14.10.2003 #i18732# - adjust default of option 'FollowTextFlow'
     rDoc.SetDefault( SwFmtFollowTextFlow( FALSE ) );
