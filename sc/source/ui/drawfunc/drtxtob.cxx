@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:44:35 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:16:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,12 @@ ScDrawTextObjectBar::ScDrawTextObjectBar(ScViewData* pData) :
     SetPool( pViewData->GetScDrawView()->GetDefaultAttr().GetPool() );
 
     //  UndoManager wird beim Umschalten in den Edit-Modus umgesetzt...
-    SetUndoManager( pViewData->GetSfxDocShell()->GetUndoManager() );
+    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    SetUndoManager( pMgr );
+    if ( !pViewData->GetDocument()->IsUndoEnabled() )
+    {
+        pMgr->SetMaxUndoActionCount( 0 );
+    }
 
     SetHelpId( HID_SCSHELL_DRTXTOB );
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("DrawText")));
