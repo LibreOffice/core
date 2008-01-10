@@ -1,0 +1,114 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: FormulaParser.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:40:07 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_FormulaParser_idl__
+#define __com_sun_star_sheet_FormulaParser_idl__
+
+#ifndef __com_sun_star_beans_PropertySet_idl__
+#include <com/sun/star/beans/PropertySet.idl>
+#endif
+#ifndef __com_sun_star_sheet_XFormulaParser_idl__
+#include <com/sun/star/sheet/XFormulaParser.idl>
+#endif
+#ifndef __com_sun_star_table_CellAddress_idl__
+#include <com/sun/star/table/CellAddress.idl>
+#endif
+#ifndef __com_sun_star_sheet_FormulaOpCodeMapEntry_idl__
+#include <com/sun/star/sheet/FormulaOpCodeMapEntry.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+service FormulaParser
+{
+    // ------------------------------------------------------------------------
+
+    service com::sun::star::beans::PropertySet;
+
+    // ------------------------------------------------------------------------
+
+    interface XFormulaParser;
+
+    // ------------------------------------------------------------------------
+
+    [property] com::sun::star::table::CellAddress ReferencePosition;
+
+    // ------------------------------------------------------------------------
+
+    /** Whether to use English parser and formatter.
+
+        Note: When changing this, an already existing
+        <member>OpCodeMap</member> needs to be recreated internally, so
+        for performance reasons set this _before_ setting the OpCodeMap.
+     */
+    [property] boolean CompileEnglish;
+
+    // ------------------------------------------------------------------------
+
+    [property] boolean R1C1Notation;
+
+    // ------------------------------------------------------------------------
+
+    [property] boolean Compatibility3DNotation;
+
+    // ------------------------------------------------------------------------
+
+    [property] boolean IgnoreLeadingSpaces;
+
+    // ------------------------------------------------------------------------
+
+    [property] string ParameterSeparator;
+
+    // ------------------------------------------------------------------------
+
+    /** The complete mapping of Names to OpCodes.
+
+        Names and symbols not defined here lead to a parser/print error.
+     */
+    [property] sequence< FormulaOpCodeMapEntry > OpCodeMap;
+
+    // ------------------------------------------------------------------------
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
