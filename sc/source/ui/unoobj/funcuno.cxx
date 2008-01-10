@@ -4,9 +4,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:45:57 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:18:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,14 +331,10 @@ BOOL lcl_AddFunctionToken( ScTokenArray& rArray, const rtl::OUString& rName )
     // same options as in ScCompiler::IsOpCode:
     // 1. built-in function name
 
-    DBG_ASSERT( ScCompiler::pSymbolHashMapEnglish, "no symbol hash map" );
-    if (!ScCompiler::pSymbolHashMapEnglish)
-        return FALSE;
-
-    ScOpCodeHashMap::const_iterator iLook( ScCompiler::pSymbolHashMapEnglish->find( aUpper ) );
-    if ( iLook != ScCompiler::pSymbolHashMapEnglish->end() )
+    OpCode eOp = ScCompiler::GetEnglishOpCode( aUpper );
+    if ( eOp != ocNone )
     {
-        rArray.AddOpCode( iLook->second );
+        rArray.AddOpCode( eOp );
         return TRUE;
     }
 
@@ -521,11 +517,8 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
     if ( !pDoc->HasTable( nTempSheet ) )
         pDoc->MakeTable( nTempSheet );
 
-    if (!ScCompiler::pSymbolTableEnglish)
-    {
-        ScCompiler aComp( pDoc, ScAddress() );
-        aComp.SetCompileEnglish( TRUE );        // setup english symbol table
-    }
+    if (!ScCompiler::IsInitialized())
+        ScCompiler::InitSymbolsEnglish();
 
     //
     //  find function
