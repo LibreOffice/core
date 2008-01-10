@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.135 $
+ *  $Revision: 1.136 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:23:39 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:32:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4242,13 +4242,6 @@ void WW8RStyle::RecursiveReg(USHORT nNr)
 
     pIo->RegisterNumFmtOnStyle(nNr);
 
-    long nTabPosStart = 0;
-    if (pIo->pCollA[nNr].pFmt)
-    {
-        const SvxLRSpaceItem &rLR = pIo->pCollA[nNr].pFmt->GetLRSpace();
-        nTabPosStart = rLR.GetTxtLeft();
-    }
-    pIo->AdjustStyleTabStops(nTabPosStart, rSI);
 }
 
 /*
