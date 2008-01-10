@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parclass.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: gm $ $Date: 2007-04-26 07:39:05 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:14:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #if OSL_DEBUG_LEVEL > 1
 // the documentation thingy
 #include <stdio.h>
+#include <com/sun/star/sheet/FormulaLanguage.hpp>
 #include "compiler.hxx"
 #include "sc.hrc"   // VAR_ARGS
 #endif
@@ -306,7 +307,7 @@ ScParameterClassification::Type ScParameterClassification::GetParameterType(
             // added to avoid warnings
         }
     }
-    if ( eOp <= SC_OPCODE_LAST_OPCODE_ID )
+    if ( 0 <= (short)eOp && eOp <= SC_OPCODE_LAST_OPCODE_ID )
     {
         if ( nParameter < CommonData::nMaxParams )
         {
@@ -453,20 +454,19 @@ void ScParameterClassification::GenerateDocumentation()
     if ( !getenv( aEnvVarName) )
         return;
     MergeArgumentsFromFunctionResource();
-    // only to initialize English resources
-    {
-        ScCompiler aComp( 0, ScAddress());
-        aComp.SetCompileEnglish( TRUE);
-    }
-    const String* pSym = ScCompiler::pSymbolTableEnglish;
+    ScCompiler::OpCodeMapPtr xMap( ScCompiler::GetOpCodeMap(
+                ::com::sun::star::sheet::FormulaLanguage::ENGLISH));
+    if (!xMap)
+        return;
     fflush( stderr);
-    for ( size_t i=0; i<ScCompiler::nAnzStrings; ++i )
+    size_t nCount = xMap->getSymbolCount();
+    for ( size_t i=0; i<nCount; ++i )
     {
-        if ( pSym[i].Len() )
+        OpCode eOp = OpCode(i);
+        if ( xMap->getSymbol(eOp).Len() )
         {
-            OpCode eOp = OpCode(i);
             fprintf( stdout, "%s: ", aEnvVarName);
-            ByteString aStr( pSym[i], RTL_TEXTENCODING_UTF8);
+            ByteString aStr( xMap->getSymbol(eOp), RTL_TEXTENCODING_UTF8);
             aStr += "(";
             ScByteToken aToken( eOp);
             BYTE nParams = GetMinimumParameters( eOp);
