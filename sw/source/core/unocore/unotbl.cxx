@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:28:26 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:31:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1231,15 +1231,33 @@ uno::Reference< beans::XPropertySetInfo >  SwXCell::getPropertySetInfo(void) thr
 /*-- 11.12.98 10:56:34---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue) throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
+void SwXCell::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
+    throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     if(IsValid())
     {
-        SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
-        SwAttrSet aSet(pBoxFmt->GetAttrSet());
-        aPropSet.setPropertyValue(rPropertyName, aValue, aSet);
-        pBoxFmt->GetDoc()->SetAttr(aSet, *pBoxFmt);
+        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                    aPropSet.getPropertyMap(), rPropertyName);
+        if( !pMap )
+        {
+            beans::UnknownPropertyException aEx;
+            aEx.Message = rPropertyName;
+            throw( aEx );
+        }
+        if( pMap->nWID == FN_UNO_CELL_ROW_SPAN )
+        {
+            sal_Int32 nRowSpan = 0;
+            if( aValue >>= nRowSpan )
+                pBox->setRowSpan( nRowSpan );
+        }
+        else
+        {
+            SwFrmFmt* pBoxFmt = pBox->ClaimFrmFmt();
+            SwAttrSet aSet(pBoxFmt->GetAttrSet());
+            aPropSet.setPropertyValue(rPropertyName, aValue, aSet);
+            pBoxFmt->GetDoc()->SetAttr(aSet, *pBoxFmt);
+        }
     }
 }
 /*-- 11.12.98 10:56:34---------------------------------------------------
@@ -1252,35 +1270,50 @@ uno::Any SwXCell::getPropertyValue(const OUString& rPropertyName)
     uno::Any aRet;
     if(IsValid())
     {
-        if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_TEXT_SECTION)))
+        const SfxItemPropertyMap*   pMap = SfxItemPropertyMap::GetByName(
+                                    aPropSet.getPropertyMap(), rPropertyName);
+        if( !pMap )
         {
-            SwFrmFmt* pTblFmt = GetFrmFmt();
-            SwTable* pTable = SwTable::FindTable( pTblFmt );
-            SwTableNode* pTblNode = pTable->GetTableNode();
-            SwSectionNode* pSectionNode =  pTblNode->FindSectionNode();
-            if(pSectionNode)
+            beans::UnknownPropertyException aEx;
+            aEx.Message = rPropertyName;
+            throw( aEx );
+        }
+        switch( pMap->nWID )
+        {
+            case FN_UNO_CELL_ROW_SPAN:
+                aRet <<= pBox->getRowSpan();
+            break;
+            case FN_UNO_TEXT_SECTION:
             {
-                const SwSection& rSect = pSectionNode->GetSection();
-                uno::Reference< text::XTextSection >  xSect =
-                                SwXTextSections::GetObject( *rSect.GetFmt() );
-                aRet <<= xSect;
+                SwFrmFmt* pTblFmt = GetFrmFmt();
+                SwTable* pTable = SwTable::FindTable( pTblFmt );
+                SwTableNode* pTblNode = pTable->GetTableNode();
+                SwSectionNode* pSectionNode =  pTblNode->FindSectionNode();
+                if(pSectionNode)
+                {
+                    const SwSection& rSect = pSectionNode->GetSection();
+                    uno::Reference< text::XTextSection >  xSect =
+                                    SwXTextSections::GetObject( *rSect.GetFmt() );
+                    aRet <<= xSect;
+                }
             }
-        }
-        else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_CELL_NAME)))
-        {
-            aRet <<= OUString ( pBox->GetName() );
-        }
-        else if(rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_START_REDLINE))||
-                rPropertyName.equalsAsciiL(SW_PROP_NAME(UNO_NAME_END_REDLINE)))
-        {
-            //redline can only be returned if it's a living object
-            aRet = SwXText::getPropertyValue(rPropertyName);
-        }
-        else
-        {
-            const SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
-            const SwAttrSet& rSet = pBoxFmt->GetAttrSet();
-            aRet = aPropSet.getPropertyValue(rPropertyName, rSet);
+            break;
+            case FN_UNO_CELL_NAME:
+                aRet <<= OUString ( pBox->GetName() );
+            break;
+            case FN_UNO_REDLINE_NODE_START:
+            case FN_UNO_REDLINE_NODE_END:
+            {
+                //redline can only be returned if it's a living object
+                aRet = SwXText::getPropertyValue(rPropertyName);
+            }
+            break;
+            default:
+            {
+                const SwFrmFmt* pBoxFmt = pBox->GetFrmFmt();
+                const SwAttrSet& rSet = pBoxFmt->GetAttrSet();
+                aRet = aPropSet.getPropertyValue(rPropertyName, rSet);
+            }
         }
     }
     return aRet;
