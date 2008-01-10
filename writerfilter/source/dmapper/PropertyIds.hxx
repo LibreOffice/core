@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: os $ $Date: 2007-06-18 12:32:26 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:41:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 #define INCLUDED_DMAPPER_PROPERTYIDS_HXX
 
 namespace rtl{ class OUString;}
+
+namespace writerfilter {
 namespace dmapper{
 enum PropertyIds
 {
@@ -238,23 +240,23 @@ enum PropertyIds
 /*196*/ ,PROP_SIZE_TYPE
 /*197*/ ,PROP_TABLE_COLUMN_SEPARATORS
 /*198*/ ,META_PROP_TABLE_STYLE_NAME
-///*199*/ ,PROP_
-///*200*/ ,PROP_
-///*201*/ ,PROP_
-///*202*/ ,PROP_
-///*203*/ ,PROP_
-///*204*/ ,PROP_
-///*205*/ ,PROP_
-///*206*/ ,PROP_
-///*207*/ ,PROP_
-///*208*/ ,PROP_
-///*209*/ ,PROP_
-///*210*/ ,PROP_
-///*211*/ ,PROP_
-///*212*/ ,PROP_
-///*213*/ ,PROP_
-///*214*/ ,PROP_
-///*215*/ ,PROP_
+/*199*/ ,PROP_REDLINE_AUTHOR
+/*200*/ ,PROP_REDLINE_DATE_TIME
+/*201*/ ,PROP_REDLINE_COMMENT
+/*202*/ ,PROP_REDLINE_TYPE
+/*203*/ ,PROP_REDLINE_SUCCESSOR_DATA
+/*204*/ ,PROP_REDLINE_IDENTIFIER
+/*205*/ ,PROP_SIZE_PROTECTED
+/*206*/ ,PROP_POSITION_PROTECTED
+/*207*/ ,PROP_OPAQUE
+/*208*/ ,PROP_VERTICAL_MERGE
+/*209*/ ,PROP_BULLET_CHAR
+/*210*/ ,PROP_BULLET_FONT_NAME
+/*211*/ ,PROP_PARA_BACK_COLOR
+/*212*/ ,PROP_TABS_RELATIVE_TO_INDENT
+/*213*/ ,PROP_PREFIX
+/*214*/ ,PROP_SUFFIX
+///*215*/ ,
 ///*216*/ ,PROP_
 ///*217*/ ,PROP_
 ///*218*/ ,PROP_
@@ -279,4 +281,5 @@ public:
     static PropertyNameSupplier& GetPropertyNameSupplier();
 };
 } //namespace dmapper
+} // namespace writerfilter
 #endif
