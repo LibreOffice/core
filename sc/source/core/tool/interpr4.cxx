@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:12:51 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:13:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1088,6 +1088,7 @@ bool ScInterpreter::ConvertMatrixParameters()
                 case svDouble:
                 case svString:
                 case svSingleRef:
+                case svMissing:
                     // nothing to do
                 break;
                 case svMatrix:
@@ -2272,19 +2273,8 @@ void ScInterpreter::ScExternal()
             }
             else if ( aCall.HasMatrix() )
             {
-                const ScMatrix* pLinkMat = aCall.GetMatrix();       // not NULL
-
-                // copy matrix result
-                SCSIZE nC, nR;
-                pLinkMat->GetDimensions(nC, nR);
-                ScMatrixRef pNewMat = GetNewMat( nC, nR);
-                if (pNewMat)
-                {
-                    pLinkMat->MatCopy(*pNewMat);
-                    PushMatrix( pNewMat );
-                }
-                else
-                    PushError();
+                ScMatrixRef xMat = aCall.GetMatrix();
+                PushMatrix( xMat );
             }
             else if ( aCall.HasString() )
                 PushString( aCall.GetString() );
