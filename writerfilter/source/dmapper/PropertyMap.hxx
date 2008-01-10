@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2007-06-27 08:54:25 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:41:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@ namespace com{namespace sun{namespace star{
     }
 }}}
 
+namespace writerfilter {
 namespace dmapper{
 class DomainMapper_Impl;
 enum BorderPosition
@@ -308,6 +309,9 @@ class StyleSheetPropertyMap : public PropertyMap
 
     bool                    mbCT_TblWidth_wSet;
     bool                    mbCT_TblWidth_typeSet;
+
+    sal_Int32               mnListId;
+    sal_Int16               mnListLevel;
 public:
     explicit StyleSheetPropertyMap();
     ~StyleSheetPropertyMap();
@@ -376,7 +380,13 @@ public:
             rToFill = mnCT_TcPrBase_vAlign;
         return mbCT_TcPrBase_vAlignSet;
     }
+    sal_Int32   GetListId() const               { return mnListId; }
+    void        SetListId(sal_Int32 nId)        { mnListId = nId; }
+
+    sal_Int16   GetListLevel() const            { return mnListLevel; }
+    void        SetListLevel(sal_Int16 nLevel)  { mnListLevel = nLevel; }
 
 };
 } //namespace dmapper
+} //namespace writerfilter
 #endif
