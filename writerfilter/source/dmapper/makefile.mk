@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: os $ $Date: 2007-05-09 13:51:06 $
+#   last change: $Author: obo $ $Date: 2008-01-10 11:42:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,15 +53,17 @@ SLOFILES=           $(SLO)$/BorderHandler.obj \
                     $(SLO)$/DomainMapper_Impl.obj \
                     $(SLO)$/DomainMapperTableHandler.obj \
                     $(SLO)$/DomainMapperTableManager.obj \
+                    $(SLO)$/FontTable.obj   \
+                    $(SLO)$/GraphicImport.obj  \
+                    $(SLO)$/LFOTable.obj    \
+                    $(SLO)$/ListTable.obj  \
+                    $(SLO)$/MeasureHandler.obj \
                     $(SLO)$/PropertyMap.obj  \
                     $(SLO)$/PropertyIds.obj  \
-                    $(SLO)$/FontTable.obj   \
                     $(SLO)$/StyleSheetTable.obj \
-                    $(SLO)$/MeasureHandler.obj \
                     $(SLO)$/TDefTableHandler.obj \
-                    $(SLO)$/ListTable.obj  \
-                    $(SLO)$/LFOTable.obj    \
-                    $(SLO)$/GraphicImport.obj  \
+            $(SLO)$/ThemeTable.obj \
+                    $(SLO)$/ModelEventListener.obj
 
 # --- Targets ----------------------------------
 
