@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LFOTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:24 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:39:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #endif
 #include <vector>
 
+namespace writerfilter {
 namespace dmapper
 {
 using namespace std;
@@ -94,19 +95,24 @@ LFOTable::~LFOTable()
 /*-- 27.06.2006 15:13:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void LFOTable::attribute(doctok::Id Name, doctok::Value & val)
+void LFOTable::attribute(Id Name, Value & val)
 {
     OSL_ENSURE(m_pImpl->m_pCurrentEntry, "no current entry to write to");
     if(!m_pImpl->m_pCurrentEntry)
         return;
 
     int nIntValue = val.getInt();
+    /* WRITERFILTERSTATUS: table: LFOTable_attributedata */
     switch( Name )
     {
 //        case NS_rtf::LN_ISTD: break;//index of applied style
+        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_rtf::LN_ISTARTAT:
+        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_rtf::LN_ILVL:
+        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_rtf::LN_FSTARTAT:
+        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_rtf::LN_FFORMATTING:
             if(m_pImpl->m_pCurrentEntry->aLFOLevels.size())
             {
@@ -143,6 +149,7 @@ void LFOTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_DXAINDENT: break;
 //        case NS_rtf::LN_CBGRPPRLCHPX: break;
 //        case NS_rtf::LN_CBGRPPRLPAPX: break;
+        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_rtf::LN_LSID:
             m_pImpl->m_pCurrentEntry->nListId = nIntValue;
         break;
@@ -152,10 +159,13 @@ void LFOTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_FRESTARTHDN: break;
 //        case NS_rtf::LN_UNSIGNED26_2: break;
 //        case NS_rtf::LN_UNSIGNED4_6: break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED4:
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED8:
             // as the names state they are unused
         break;
+        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_rtf::LN_CLFOLVL:
             m_pImpl->m_pCurrentEntry->nCLFOLevel = nIntValue;
         break;
@@ -522,9 +532,10 @@ void LFOTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_BOOKMARKNAME: break;
 
 //        case NS_rtf::LN_LISTLEVEL: break;
+        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_rtf::LN_LFO:
         {
-            doctok::Reference<Properties>::Pointer_t pProperties;
+            writerfilter::Reference<Properties>::Pointer_t pProperties;
             if(m_pImpl->m_pCurrentEntry && (pProperties = val.getProperties()).get())
             {
                 LFOLevelPtr pLevel( new LFOLevel );
@@ -566,14 +577,14 @@ void LFOTable::attribute(doctok::Id Name, doctok::Value & val)
 /*-- 27.06.2006 15:13:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void LFOTable::sprm(doctok::Sprm& )
+void LFOTable::sprm(Sprm& )
 {
     OSL_ASSERT("Which sprm should be handled here?");
 }
 /*-- 27.06.2006 15:13:04---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void LFOTable::entry(int, doctok::Reference<Properties>::Pointer_t ref)
+void LFOTable::entry(int, writerfilter::Reference<Properties>::Pointer_t ref)
 {
     //create a new LFO entry
     OSL_ENSURE( !m_pImpl->m_pCurrentEntry.get(), "current entry has to be NULL here");
@@ -593,6 +604,15 @@ sal_Int32 LFOTable::GetListID(sal_uInt32 nLFO)
         nRet = m_pImpl->m_aLFOEntries[nLFO - 1]->nListId;
     return nRet;
 }
+/*-- 12.11.2007 10:31:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void LFOTable::AddListID( sal_Int32 nAbstractNumId )
+{
+    LFOEntryPtr pNew( new LFOEntry );
+    pNew->nListId = nAbstractNumId;
+    m_pImpl->m_aLFOEntries.push_back( pNew );
+}
 
 }//namespace dmapper
-
+}//namespace writerfilter
