@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:45:25 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:15:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,10 @@ BOOL ScDocFunc::AdjustRowHeight( const ScRange& rRange, BOOL bPaint )
     if ( pDoc->IsImportingXML() )
     {
         //  for XML import, all row heights are updated together after importing
+        return FALSE;
+    }
+    if ( !pDoc->IsAdjustHeightEnabled() )
+    {
         return FALSE;
     }
 
@@ -2329,7 +2333,8 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
     if ( bRecord && !pDoc->IsUndoEnabled() )
         bRecord = FALSE;
 
-    if ( !rDocShell.IsEditable() )
+    // import into read-only document is possible
+    if ( !pDoc->IsChangeReadOnlyEnabled() && !rDocShell.IsEditable() )
     {
         if (!bApi)
             rDocShell.ErrorMessage(STR_PROTECTIONERR);      //! eigene Meldung?
@@ -2925,6 +2930,7 @@ BOOL ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
 //------------------------------------------------------------------------
 
 BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
+                                const ScTokenArray* pTokenArray,
                                 const String& rString, BOOL bApi, BOOL bEnglish )
 {
     ScDocShellModificator aModificator( rDocShell );
@@ -2964,7 +2970,12 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
             pDoc->CopyToDocument( rRange, IDF_ALL, FALSE, pUndoDoc );
         }
 
-        if ( pDoc->IsImportingXML() )
+        // use TokenArray if given, string (and flags) otherwise
+        if ( pTokenArray )
+        {
+            pDoc->InsertMatrixFormula(nStartCol,nStartRow,nEndCol,nEndRow,aMark,EMPTY_STRING,pTokenArray);
+        }
+        else if ( pDoc->IsImportingXML() )
         {
             ScTokenArray* pCode = lcl_ScDocFunc_CreateTokenArrayXML( rString );
             pDoc->InsertMatrixFormula(nStartCol,nStartRow,nEndCol,nEndRow,aMark,EMPTY_STRING,pCode);
@@ -3612,7 +3623,7 @@ BOOL ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, BOOL /* bApi */ )    
     // #i55926# While loading XML, formula cells only have a single string token,
     // so CompileNameFormula would never find any name (index) tokens, and would
     // unnecessarily loop through all cells.
-    BOOL bCompile = !pDoc->IsImportingXML();
+    BOOL bCompile = ( !pDoc->IsImportingXML() && pDoc->GetNamedRangesLockCount() == 0 );
 
     if ( bCompile )
         pDoc->CompileNameFormula( TRUE );   // CreateFormulaString
@@ -3915,11 +3926,11 @@ BOOL ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
 
         if ( DeleteContents( aMark, IDF_CONTENTS, TRUE, bApi ) )
         {
-            bRet = EnterMatrix( aNewRange, &aMark, aFormula, bApi, FALSE );
+            bRet = EnterMatrix( aNewRange, &aMark, NULL, aFormula, bApi, FALSE );
             if (!bRet)
             {
                 //  versuchen, alten Zustand wiederherzustellen
-                EnterMatrix( rOldRange, &aMark, aFormula, bApi, FALSE );
+                EnterMatrix( rOldRange, &aMark, NULL, aFormula, bApi, FALSE );
             }
         }
 
