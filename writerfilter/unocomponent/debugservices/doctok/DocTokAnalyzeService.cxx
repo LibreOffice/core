@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocTokAnalyzeService.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2007-06-19 05:32:46 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,8 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <doctok/WW8ResourceModel.hxx>
-#include <doctok/exceptions.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/exceptions.hxx>
 #include <doctok/WW8Document.hxx>
 
 #include <ctype.h>
@@ -227,8 +227,8 @@ sal_Int32 SAL_CALL AnalyzeService::run
                                 (doctok::WW8DocumentFactory::createDocument
                                 (pDocStream));
 
-                            doctok::Stream::Pointer_t pAnalyzer =
-                                doctok::createAnalyzer();
+                            Stream::Pointer_t pAnalyzer =
+                                writerfilter::createAnalyzer();
                             pDocument->resolve(*pAnalyzer);
                         }
                         else
@@ -242,7 +242,7 @@ sal_Int32 SAL_CALL AnalyzeService::run
 
                     xInputStream->closeInput();
                 }
-                catch (doctok::Exception e)
+                catch (Exception e)
                 {
                     fprintf(stdout, "<exception>%s</exception>\n",
                             e.getText().c_str());
