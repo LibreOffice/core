@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:33:19 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:11:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -569,7 +569,7 @@ void ScGlobal::Init()
     pProtectedBrushItem = new SvxBrushItem( Color( COL_LIGHTGRAY ), ATTR_BACKGROUND );
 
     UpdatePPT(NULL);
-    ScCompiler::Init();
+    ScCompiler::InitSymbolsNative();
     // ScParameterClassification _after_ Compiler, needs function resources if
     // arguments are to be merged in, which in turn need strings of function
     // names from the compiler.
@@ -1396,7 +1396,7 @@ ScFuncRes::ScFuncRes( ResId &aRes, ScFuncDesc* pDesc )
             pDesc->aDefArgOpt[i] = (BOOL)GetNum();
     }
 
-    pDesc->pFuncName = new String( ScCompiler::pSymbolTableNative[aRes.GetId()] );
+    pDesc->pFuncName = new String( ScCompiler::GetNativeSymbol( static_cast<OpCode>( aRes.GetId())));
     pDesc->pFuncDesc = new String(ScResId(1));
 
     if (nArgs)
