@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dff.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:41 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,10 @@
 
 #include "Dff.hxx"
 #include <doctok/resourceids.hxx>
-#include <doctok/WW8ResourceModel.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #include "resources.hxx"
 
+namespace writerfilter {
 namespace doctok {
 
 typedef boost::shared_ptr<WW8Value> WW8ValueSharedPointer_t;
@@ -322,19 +323,19 @@ Value::Pointer_t DffRecord::getValue()
     return Value::Pointer_t();
 }
 
-doctok::Reference<BinaryObj>::Pointer_t DffRecord::getBinary()
+writerfilter::Reference<BinaryObj>::Pointer_t DffRecord::getBinary()
 {
-    return doctok::Reference<BinaryObj>::Pointer_t();
+    return writerfilter::Reference<BinaryObj>::Pointer_t();
 }
 
-doctok::Reference<Stream>::Pointer_t DffRecord::getStream()
+writerfilter::Reference<Stream>::Pointer_t DffRecord::getStream()
 {
-    return doctok::Reference<Stream>::Pointer_t();
+    return writerfilter::Reference<Stream>::Pointer_t();
 }
 
-doctok::Reference<Properties>::Pointer_t DffRecord::getProps()
+writerfilter::Reference<Properties>::Pointer_t DffRecord::getProps()
 {
-    return doctok::Reference<Properties>::Pointer_t(this->clone());
+    return writerfilter::Reference<Properties>::Pointer_t(this->clone());
 }
 
 string DffRecord::toString() const
@@ -385,7 +386,7 @@ DffBlock::DffBlock(WW8StructBase * pParent, sal_uInt32 nOffset,
 }
 
 DffBlock::DffBlock(const DffBlock & rSrc)
-: WW8StructBase(rSrc), doctok::Reference<Properties>(rSrc),
+: WW8StructBase(rSrc), writerfilter::Reference<Properties>(rSrc),
   bInitialized(false), mnPadding(rSrc.mnPadding)
 {
 }
@@ -521,4 +522,4 @@ string DffBlock::getType() const
     return "DffBlock";
 }
 
-}
+}}
