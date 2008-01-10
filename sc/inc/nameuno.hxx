@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nameuno.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:45:29 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:09:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGE_HPP_
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_XFORMULATOKENS_HPP_
+#include <com/sun/star/sheet/XFormulaTokens.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGES_HPP_
 #include <com/sun/star/sheet/XNamedRanges.hpp>
 #endif
@@ -71,6 +74,9 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
+#include <com/sun/star/document/XActionLockable.hpp>
+#endif
 
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
@@ -78,16 +84,18 @@
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 
 class ScDocShell;
 class ScRangeData;
+class ScTokenArray;
 
 
-class ScNamedRangeObj : public ::cppu::WeakImplHelper4<
+class ScNamedRangeObj : public ::cppu::WeakImplHelper5<
                             ::com::sun::star::sheet::XNamedRange,
+                            ::com::sun::star::sheet::XFormulaTokens,
                             ::com::sun::star::sheet::XCellRangeReferrer,
                             ::com::sun::star::beans::XPropertySet,
                             ::com::sun::star::lang::XServiceInfo >,
@@ -99,7 +107,8 @@ private:
 
 private:
     ScRangeData*            GetRangeData_Impl();
-    void                    Modify_Impl( const String* pNewName, const String* pNewContent,
+    void                    Modify_Impl( const String* pNewName,
+                                        const ScTokenArray* pNewTokens, const String* pNewContent,
                                         const ScAddress* pNewPos, const sal_uInt16* pNewType );
 
 public:
@@ -119,6 +128,13 @@ public:
                                     throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int32       SAL_CALL getType() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setType( sal_Int32 nType ) throw(::com::sun::star::uno::RuntimeException);
+
+                            // XFormulaTokens
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > SAL_CALL getTokens()
+                                throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setTokens( const ::com::sun::star::uno::Sequence<
+                                    ::com::sun::star::sheet::FormulaToken >& aTokens )
+                                throw (::com::sun::star::uno::RuntimeException);
 
                             // XNamed
     virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
@@ -180,10 +196,11 @@ public:
 };
 
 
-class ScNamedRangesObj : public ::cppu::WeakImplHelper4<
+class ScNamedRangesObj : public ::cppu::WeakImplHelper5<
                             ::com::sun::star::sheet::XNamedRanges,
                             ::com::sun::star::container::XEnumerationAccess,
                             ::com::sun::star::container::XIndexAccess,
+                            ::com::sun::star::document::XActionLockable,
                             ::com::sun::star::lang::XServiceInfo >,
                         public SfxListener
 {
@@ -192,6 +209,13 @@ private:
 
     ScNamedRangeObj*        GetObjectByIndex_Impl(sal_uInt16 nIndex);
     ScNamedRangeObj*        GetObjectByName_Impl(const ::rtl::OUString& aName);
+
+protected:
+    /** called from the XActionLockable interface methods on initial locking */
+    virtual void            lock();
+
+    /** called from the XActionLockable interface methods on final unlock */
+    virtual void            unlock();
 
 public:
                             ScNamedRangesObj(ScDocShell* pDocSh);
@@ -236,6 +260,13 @@ public:
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XActionLockable
+    virtual sal_Bool SAL_CALL isActionLocked() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addActionLock() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeActionLock() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setActionLocks( sal_Int16 nLock ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Int16 SAL_CALL resetActionLocks() throw(::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
