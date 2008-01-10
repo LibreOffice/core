@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:27:06 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:28:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -898,6 +898,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_UNO_GRAPHIC                      (FN_EXTRA2 + 102)
 
 #define FN_UNO_REPLACEMENT_GRAPHIC_URL      (FN_EXTRA2 + 102)
+#define FN_UNO_CELL_ROW_SPAN                (FN_EXTRA2 + 103)
 
 /*--------------------------------------------------------------------
     Bereich: Hilfe
