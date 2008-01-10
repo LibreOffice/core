@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:45:42 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:57:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,22 +39,38 @@
 #include <ooxml/OOXMLDocument.hxx>
 #endif
 
+#ifndef _COM_SUN_STAR_XML_SAX_XFAST_TOKEN_HANDLER_HPP_
+#include <com/sun/star/xml/sax/XFastTokenHandler.hpp>
+#endif
+
+#include "OOXMLPropertySet.hxx"
+
+namespace writerfilter {
 namespace ooxml
 {
+
+using namespace ::com::sun::star;
 
 class OOXMLDocumentImpl : public OOXMLDocument
 {
     OOXMLStream::Pointer_t mpStream;
     rtl::OUString msXNoteId;
 
-protected:
-    virtual void resolveSubStream(Stream & rStream,
-                                  OOXMLStream::StreamType_t nType);
+    uno::Reference<frame::XModel> mxModel;
+    uno::Reference<drawing::XShapes> mxShapes;
 
-    doctok::Reference<Stream>::Pointer_t
+protected:
+    virtual void resolveFastSubStream(Stream & rStream,
+                                      OOXMLStream::StreamType_t nType);
+
+    virtual void resolveFastSubStreamWithId(Stream & rStream,
+                                      writerfilter::Reference<Stream>::Pointer_t pStream,
+                      sal_uInt32 nId);
+
+    writerfilter::Reference<Stream>::Pointer_t
     getSubStream(const rtl::OUString & rId);
 
-    doctok::Reference<Stream>::Pointer_t
+    writerfilter::Reference<Stream>::Pointer_t
     getXNoteStream(OOXMLStream::StreamType_t nType,
                    const rtl::OUString & rNoteId);
 
@@ -80,6 +96,17 @@ public:
                                const rtl::OUString & rId);
 
     virtual void resolveComment(Stream & rStream, const rtl::OUString & rId);
+
+    virtual OOXMLPropertySet * getPicturePropSet
+    (const ::rtl::OUString & rId);
+    virtual void resolvePicture(Stream & rStream, const rtl::OUString & rId);
+
+    virtual ::rtl::OUString getTargetForId(const ::rtl::OUString & rId);
+
+    virtual void setModel(uno::Reference<frame::XModel> xModel);
+    virtual uno::Reference<frame::XModel> getModel();
+    virtual void setShapes(uno::Reference<drawing::XShapes> xShapes);
+    virtual uno::Reference<drawing::XShapes> getShapes();
 };
-}
+}}
 #endif // OOXML_DOCUMENT_IMPL_HXX
