@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 20:11:40 $
+#   last change: $Author: obo $ $Date: 2008-01-10 13:18:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@ SLO1FILES =  \
         $(SLO)$/defltuno.obj \
         $(SLO)$/drdefuno.obj \
         $(SLO)$/cellsuno.obj \
+        $(SLO)$/tokenuno.obj \
         $(SLO)$/textuno.obj \
         $(SLO)$/notesuno.obj \
         $(SLO)$/cursuno.obj \
