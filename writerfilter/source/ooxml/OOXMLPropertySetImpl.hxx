@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-29 15:27:06 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:59:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,25 @@
 
 #include <vector>
 #include "OOXMLPropertySet.hxx"
+#include "OOXMLBinaryObjectReference.hxx"
 
+namespace com {
+namespace sun {
+namespace star {
+namespace drawing {
+class XShape;
+}}}}
+
+namespace writerfilter {
 namespace ooxml
 {
 using namespace ::std;
-using namespace doctok;
+using ::com::sun::star::drawing::XShape;
 
 class OOXMLValue : public Value
 {
 public:
-    typedef auto_ptr<OOXMLValue> Pointer_t;
+    typedef boost::shared_ptr<OOXMLValue> Pointer_t;
     OOXMLValue(const rtl::OUString & rValue);
     OOXMLValue();
     virtual ~OOXMLValue();
@@ -55,9 +64,9 @@ public:
     virtual bool getBool() const;
     virtual ::rtl::OUString getString() const;
     virtual uno::Any getAny() const;
-    virtual doctok::Reference<Properties>::Pointer_t getProperties();
-    virtual doctok::Reference<Stream>::Pointer_t getStream();
-    virtual doctok::Reference<BinaryObj>::Pointer_t getBinary();
+    virtual writerfilter::Reference<Properties>::Pointer_t getProperties();
+    virtual writerfilter::Reference<Stream>::Pointer_t getStream();
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
     virtual string toString() const;
     virtual OOXMLValue * clone() const;
 };
@@ -80,14 +89,27 @@ public:
 
     virtual sal_uInt32 getId() const;
     virtual Value::Pointer_t getValue();
-    virtual doctok::Reference<BinaryObj>::Pointer_t getBinary();
-    virtual doctok::Reference<Stream>::Pointer_t getStream();
-    virtual doctok::Reference<Properties>::Pointer_t getProps();
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
+    virtual writerfilter::Reference<Stream>::Pointer_t getStream();
+    virtual writerfilter::Reference<Properties>::Pointer_t getProps();
     virtual string getName() const;
     virtual Kind getKind();
     virtual string toString() const;
     virtual Sprm * clone();
-    virtual void resolve(doctok::Properties & rProperties);
+    virtual void resolve(Properties & rProperties);
+};
+
+class OOXMLBinaryValue : public OOXMLValue
+{
+protected:
+    mutable OOXMLBinaryObjectReference::Pointer_t mpBinaryObj;
+public:
+    explicit OOXMLBinaryValue(OOXMLBinaryObjectReference::Pointer_t pBinaryObj);
+    virtual ~OOXMLBinaryValue();
+
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
+    virtual string toString() const;
+    virtual OOXMLValue * clone() const;
 };
 
 class OOXMLBooleanValue : public OOXMLValue
@@ -132,6 +154,7 @@ public:
     typedef vector<OOXMLProperty::Pointer_t> OOXMLProperties_t;
 private:
     OOXMLProperties_t mProperties;
+    string msType;
 public:
     OOXMLPropertySetImpl();
     virtual ~OOXMLPropertySetImpl();
@@ -139,10 +162,15 @@ public:
     virtual void resolve(Properties & rHandler);
     virtual string getType() const;
     virtual void add(OOXMLProperty::Pointer_t pProperty);
+    virtual void add(OOXMLPropertySet::Pointer_t pPropertySet);
     virtual OOXMLPropertySet * clone() const;
 
     OOXMLProperties_t::iterator begin();
     OOXMLProperties_t::iterator end();
+
+    virtual void setType(const string & rsType);
+
+    virtual string toString();
 };
 
 class OOXMLPropertySetValue : public OOXMLValue
@@ -152,7 +180,7 @@ public:
     OOXMLPropertySetValue(OOXMLPropertySet::Pointer_t pPropertySet);
     virtual ~OOXMLPropertySetValue();
 
-    virtual doctok::Reference<Properties>::Pointer_t getProperties();
+    virtual writerfilter::Reference<Properties>::Pointer_t getProperties();
     virtual string toString() const;
     virtual OOXMLValue * clone() const;
 };
@@ -194,6 +222,19 @@ public:
     virtual ~OOXMLListValue();
 };
 
+class OOXMLShapeValue : public OOXMLValue
+{
+protected:
+    uno::Reference<XShape> mrShape;
+public:
+    explicit OOXMLShapeValue(uno::Reference<XShape> rShape);
+    virtual ~OOXMLShapeValue();
+
+    virtual uno::Any getAny() const;
+    virtual string toString() const;
+    virtual OOXMLValue * clone() const;
+};
+
 class OOXMLTableImpl : public OOXMLTable
 {
 public:
@@ -212,8 +253,38 @@ public:
     virtual OOXMLTable * clone() const;
 };
 
+class OOXMLPropertySetEntryToString : public Properties
+{
+    Id mnId;
+    ::rtl::OUString mStr;
+
+public:
+    OOXMLPropertySetEntryToString(Id nId);
+    virtual ~OOXMLPropertySetEntryToString();
+
+    virtual void sprm(Sprm & rSprm);
+    virtual void attribute(Id nId, Value & rValue);
+
+    const ::rtl::OUString & getString() const;
+};
+
+class OOXMLPropertySetEntryToInteger : public Properties
+{
+    Id mnId;
+    int mnValue;
+public:
+    OOXMLPropertySetEntryToInteger(Id nId);
+    virtual ~OOXMLPropertySetEntryToInteger();
+
+    virtual void sprm(Sprm & rSprm);
+    virtual void attribute(Id nId, Value & rValue);
+
+    int getValue() const;
+};
+
 Sprm::Kind SprmKind(sal_uInt32 nSprmCode);
 
 }  // namespace ooxml
+} // namespace writerfilter
 
 #endif // INCLUDED_OOXML_PROPERTY_SET_IMPL_HXX
