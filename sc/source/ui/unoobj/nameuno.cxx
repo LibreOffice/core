@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:46:17 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:19:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,8 @@ using namespace ::com::sun::star;
 #include "cellsuno.hxx"
 #include "convuno.hxx"
 #include "targuno.hxx"
+#include "tokenuno.hxx"
+#include "tokenarray.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
 #include "rangenam.hxx"
@@ -69,6 +71,7 @@ const SfxItemPropertyMap* lcl_GetNamedRangeMap()
     {
         {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  0,  &getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((rtl::OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_TOKENINDEX),0, &getCppuType((sal_Int32*)0),                    beans::PropertyAttribute::READONLY, 0 },
         {0,0,0,0,0,0}
     };
     return aNamedRangeMap_Impl;
@@ -137,7 +140,7 @@ ScRangeData* ScNamedRangeObj::GetRangeData_Impl()
 
 // sheet::XNamedRange
 
-void ScNamedRangeObj::Modify_Impl( const String* pNewName, const String* pNewContent,
+void ScNamedRangeObj::Modify_Impl( const String* pNewName, const ScTokenArray* pNewTokens, const String* pNewContent,
                                     const ScAddress* pNewPos, const sal_uInt16* pNewType )
 {
     if (pDocShell)
@@ -166,8 +169,11 @@ void ScNamedRangeObj::Modify_Impl( const String* pNewName, const String* pNewCon
                 if (pNewType)
                     nType = *pNewType;
 
-                ScRangeData* pNew = new ScRangeData( pDoc, aInsName, aContent,
-                                                    aPos, nType, sal_True );
+                ScRangeData* pNew = NULL;
+                if ( pNewTokens )
+                    pNew = new ScRangeData( pDoc, aInsName, *pNewTokens, aPos, nType );
+                else
+                    pNew = new ScRangeData( pDoc, aInsName, aContent, aPos, nType, sal_True );
                 pNew->SetIndex( pOld->GetIndex() );
 
                 pNewRanges->AtFree( nPos );
@@ -202,7 +208,7 @@ void SAL_CALL ScNamedRangeObj::setName( const rtl::OUString& aNewName )
     //! Formeln anpassen ?????
 
     String aNewStr(aNewName);
-    Modify_Impl( &aNewStr, NULL, NULL, NULL );
+    Modify_Impl( &aNewStr, NULL, NULL, NULL, NULL );
 
     if ( aName != aNewStr )                 // some error occured...
         throw uno::RuntimeException();      // no other exceptions specified
@@ -223,7 +229,7 @@ void SAL_CALL ScNamedRangeObj::setContent( const rtl::OUString& aContent )
 {
     ScUnoGuard aGuard;
     String aContStr(aContent);
-    Modify_Impl( NULL, &aContStr, NULL, NULL );
+    Modify_Impl( NULL, NULL, &aContStr, NULL, NULL );
 }
 
 table::CellAddress SAL_CALL ScNamedRangeObj::getReferencePosition()
@@ -257,7 +263,7 @@ void SAL_CALL ScNamedRangeObj::setReferencePosition( const table::CellAddress& a
 {
     ScUnoGuard aGuard;
     ScAddress aPos( (SCCOL)aReferencePosition.Column, (SCROW)aReferencePosition.Row, aReferencePosition.Sheet );
-    Modify_Impl( NULL, NULL, &aPos, NULL );
+    Modify_Impl( NULL, NULL, NULL, &aPos, NULL );
 }
 
 sal_Int32 SAL_CALL ScNamedRangeObj::getType() throw(uno::RuntimeException)
@@ -286,8 +292,33 @@ void SAL_CALL ScNamedRangeObj::setType( sal_Int32 nUnoType ) throw(uno::RuntimeE
     if ( nUnoType & sheet::NamedRangeFlag::COLUMN_HEADER )      nNewType |= RT_COLHEADER;
     if ( nUnoType & sheet::NamedRangeFlag::ROW_HEADER )         nNewType |= RT_ROWHEADER;
 
-    Modify_Impl( NULL, NULL, NULL, &nNewType );
+    Modify_Impl( NULL, NULL, NULL, NULL, &nNewType );
 }
+
+// XFormulaTokens
+
+uno::Sequence<sheet::FormulaToken> SAL_CALL ScNamedRangeObj::getTokens() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    uno::Sequence<sheet::FormulaToken> aSequence;
+    ScRangeData* pData = GetRangeData_Impl();
+    if (pData)
+    {
+        ScTokenArray* pTokenArray = pData->GetCode();
+        if ( pTokenArray )
+            (void)ScTokenConversion::ConvertToTokenSequence( aSequence, *pTokenArray );
+    }
+    return aSequence;
+}
+
+void SAL_CALL ScNamedRangeObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rTokens ) throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScTokenArray aTokenArray;
+    (void)ScTokenConversion::ConvertToTokenArray( aTokenArray, rTokens );
+    Modify_Impl( NULL, &aTokenArray, NULL, NULL, NULL );
+}
+
 
 // XCellRangeSource
 
@@ -342,6 +373,13 @@ uno::Any SAL_CALL ScNamedRangeObj::getPropertyValue( const rtl::OUString& aPrope
     }
     else if ( aString.EqualsAscii( SC_UNO_LINKDISPNAME ) )
         aRet <<= rtl::OUString( aName );
+    else if ( aString.EqualsAscii( SC_UNONAME_TOKENINDEX ) )
+    {
+        // get index for use in formula tokens (read-only)
+        ScRangeData* pData = GetRangeData_Impl();
+        if (pData)
+            aRet <<= static_cast<sal_Int32>(pData->GetIndex());
+    }
     return aRet;
 }
 
@@ -652,6 +690,87 @@ sal_Bool SAL_CALL ScNamedRangesObj::hasByName( const rtl::OUString& aName )
         }
     }
     return sal_False;
+}
+
+/** called from the XActionLockable interface methods on initial locking */
+void ScNamedRangesObj::lock()
+{
+    pDocShell->GetDocument()->CompileNameFormula( TRUE ); // CreateFormulaString
+}
+
+/** called from the XActionLockable interface methods on final unlock */
+void ScNamedRangesObj::unlock()
+{
+    pDocShell->GetDocument()->CompileNameFormula( FALSE ); // CompileFormulaString
+}
+
+// document::XActionLockable
+
+sal_Bool ScNamedRangesObj::isActionLocked() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    return pDocShell->GetDocument()->GetNamedRangesLockCount() != 0;
+}
+
+void ScNamedRangesObj::addActionLock() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScDocument* pDoc = pDocShell->GetDocument();
+    sal_Int16 nLockCount = pDoc->GetNamedRangesLockCount();
+    ++nLockCount;
+    if ( nLockCount == 1 )
+    {
+        lock();
+    }
+    pDoc->SetNamedRangesLockCount( nLockCount );
+}
+
+void ScNamedRangesObj::removeActionLock() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScDocument* pDoc = pDocShell->GetDocument();
+    sal_Int16 nLockCount = pDoc->GetNamedRangesLockCount();
+    if ( nLockCount > 0 )
+    {
+        --nLockCount;
+        if ( nLockCount == 0 )
+        {
+            unlock();
+        }
+        pDoc->SetNamedRangesLockCount( nLockCount );
+    }
+}
+
+void ScNamedRangesObj::setActionLocks( sal_Int16 nLock ) throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    if ( nLock >= 0 )
+    {
+        ScDocument* pDoc = pDocShell->GetDocument();
+        sal_Int16 nLockCount = pDoc->GetNamedRangesLockCount();
+        if ( nLock == 0 && nLockCount > 0 )
+        {
+            unlock();
+        }
+        if ( nLock > 0 && nLockCount == 0 )
+        {
+            lock();
+        }
+        pDoc->SetNamedRangesLockCount( nLock );
+    }
+}
+
+sal_Int16 ScNamedRangesObj::resetActionLocks() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScDocument* pDoc = pDocShell->GetDocument();
+    sal_Int16 nLockCount = pDoc->GetNamedRangesLockCount();
+    if ( nLockCount > 0 )
+    {
+        unlock();
+    }
+    pDoc->SetNamedRangesLockCount( 0 );
+    return nLockCount;
 }
 
 //------------------------------------------------------------------------
