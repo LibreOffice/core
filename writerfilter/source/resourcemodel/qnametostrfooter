@@ -1,2 +1,54 @@
+QNameToString::QNameToString()
+{
+    init_doctok();
+    init_ooxml();
 }
+
+string xmlify(const string & str)
+{
+    string result = "";
+    char sBuffer[16];
+
+    for (string::const_iterator aIt = str.begin(); aIt != str.end(); ++aIt)
+    {
+        char c = *aIt;
+
+        if (isprint(c) && c != '\"')
+        {
+            if (c == '<')
+                result += "&lt;";
+            else if (c == '>')
+                result += "&gt;";
+            else if (c == '&')
+                result += "&amp;";
+            else
+                result += c;
+        }
+        else
+        {
+            snprintf(sBuffer, sizeof(sBuffer), "\\%03d", c);
+            result += sBuffer;
+        }
+    }
+
+    return result;
+}
+
+void WRITERFILTER_DLLPUBLIC analyzerIds()
+{
+    cout << "<ids type=\"sprm\">" << endl;
+    
+    sprmidsToXML(cout);
+    ooxmlsprmidsToXML(cout);
+
+    cout << "</ids>" << endl;
+
+    cout << "<ids type=\"attribute\">" << endl;
+    
+    doctokidsToXML(cout);
+    ooxmlidsToXML(cout);
+
+    cout << "</ids>" << endl;
+}
+
 }
