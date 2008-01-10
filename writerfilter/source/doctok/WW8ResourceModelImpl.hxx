@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 13:29:20 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:49:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
-#include <doctok/WW8ResourceModel.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #endif
 
 #ifndef INCLUDED_WW8_STRUCT_BASE_HXX
@@ -49,17 +49,17 @@
 #endif
 
 #ifndef INCLUDED_OUTPUT_WITH_DEPTH_HXX
-#include <doctok/OutputWithDepth.hxx>
+#include <resourcemodel/OutputWithDepth.hxx>
 #endif
 
-#include <odiapi/qname/QName.hxx>
 #include <map>
 
+namespace writerfilter {
 namespace doctok
 {
 using namespace ::std;
 
-class WW8PropertiesReference : public doctok::Reference<Properties>
+class WW8PropertiesReference : public writerfilter::Reference<Properties>
 {
     WW8PropertySet::Pointer_t mpPropSet;
 
@@ -79,7 +79,7 @@ public:
     virtual string getType() const;
 };
 
-class WW8TableReference : public doctok::Reference<Table>
+class WW8TableReference : public writerfilter::Reference<Table>
 {
 public:
     WW8TableReference()
@@ -95,7 +95,7 @@ public:
     virtual string getType() const;
 };
 
-class WW8BinaryObjReference : public doctok::Reference<BinaryObj>,
+class WW8BinaryObjReference : public writerfilter::Reference<BinaryObj>,
                               public WW8StructBase
 {
 public:
@@ -117,7 +117,7 @@ public:
     {
     }
 
-    virtual doctok::Reference<BinaryObj>::Pointer_t getBinary();
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
 
     virtual void resolve(BinaryObj & rHandler);
 
@@ -156,9 +156,9 @@ public:
     }
 
     virtual Value::Pointer_t getValue();
-    virtual doctok::Reference<BinaryObj>::Pointer_t getBinary();
-    virtual doctok::Reference<Stream>::Pointer_t getStream();
-    virtual doctok::Reference<Properties>::Pointer_t getProps();
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
+    virtual writerfilter::Reference<Stream>::Pointer_t getStream();
+    virtual writerfilter::Reference<Properties>::Pointer_t getProps();
     virtual Kind getKind();
 
     virtual sal_uInt32 getId() const;
@@ -178,9 +178,9 @@ public:
     virtual int getInt() const;
     virtual ::rtl::OUString getString() const;
     virtual uno::Any getAny() const;
-    virtual doctok::Reference<Properties>::Pointer_t getProperties();
-    virtual doctok::Reference<Stream>::Pointer_t getStream();
-    virtual doctok::Reference<BinaryObj>::Pointer_t getBinary();
+    virtual writerfilter::Reference<Properties>::Pointer_t getProperties();
+    virtual writerfilter::Reference<Stream>::Pointer_t getStream();
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
     virtual WW8Value * clone() const = 0;
 };
 
@@ -235,10 +235,10 @@ WW8Value::Pointer_t createValue(const rtl::OUString & rStr);
 
 class WW8PropertiesValue : public WW8Value
 {
-    mutable doctok::Reference<Properties>::Pointer_t mRef;
+    mutable writerfilter::Reference<Properties>::Pointer_t mRef;
 
 public:
-    WW8PropertiesValue(doctok::Reference<Properties>::Pointer_t rRef)
+    WW8PropertiesValue(writerfilter::Reference<Properties>::Pointer_t rRef)
     : mRef(rRef)
     {
     }
@@ -247,7 +247,7 @@ public:
     {
     }
 
-    virtual doctok::Reference<Properties>::Pointer_t getProperties();
+    virtual writerfilter::Reference<Properties>::Pointer_t getProperties();
 
     virtual string toString() const;
 
@@ -256,10 +256,10 @@ public:
 
 class WW8StreamValue : public WW8Value
 {
-    mutable doctok::Reference<Stream>::Pointer_t mRef;
+    mutable writerfilter::Reference<Stream>::Pointer_t mRef;
 
 public:
-    WW8StreamValue(doctok::Reference<Stream>::Pointer_t rRef)
+    WW8StreamValue(writerfilter::Reference<Stream>::Pointer_t rRef)
     : mRef(rRef)
     {
     }
@@ -268,7 +268,7 @@ public:
     {
     }
 
-    virtual doctok::Reference<Stream>::Pointer_t getStream();
+    virtual writerfilter::Reference<Stream>::Pointer_t getStream();
 
     virtual string toString() const;
 
@@ -280,7 +280,7 @@ public:
 
    @param rRef   reference to create value from.
 */
-WW8Value::Pointer_t createValue(doctok::Reference<Properties>::Pointer_t rRef);
+WW8Value::Pointer_t createValue(writerfilter::Reference<Properties>::Pointer_t rRef);
 
 /**
    Creates value from another value.
@@ -294,14 +294,14 @@ WW8Value::Pointer_t createValue(WW8Value::Pointer_t value);
 
    @param rRef    reference to the stream
  */
-WW8Value::Pointer_t createValue(doctok::Reference<Stream>::Pointer_t rRef);
+WW8Value::Pointer_t createValue(writerfilter::Reference<Stream>::Pointer_t rRef);
 
 class WW8BinaryObjValue : public WW8Value
 {
-    mutable doctok::Reference<BinaryObj>::Pointer_t mRef;
+    mutable writerfilter::Reference<BinaryObj>::Pointer_t mRef;
 
 public:
-    WW8BinaryObjValue(doctok::Reference<BinaryObj>::Pointer_t rRef)
+    WW8BinaryObjValue(writerfilter::Reference<BinaryObj>::Pointer_t rRef)
     : mRef(rRef)
     {
     }
@@ -310,7 +310,7 @@ public:
     {
     }
 
-    virtual doctok::Reference<BinaryObj>::Pointer_t getBinary();
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
 
     virtual string toString() const;
 
@@ -322,92 +322,10 @@ public:
 
    @param rRef    reference to the stream
  */
-WW8Value::Pointer_t createValue(doctok::Reference<BinaryObj>::Pointer_t rRef);
-
-class WW8StreamHandler : public Stream
-{
-public:
-    WW8StreamHandler();
-    virtual ~WW8StreamHandler();
-
-    virtual void startSectionGroup();
-    virtual void endSectionGroup();
-    virtual void startParagraphGroup();
-    virtual void endParagraphGroup();
-    virtual void startCharacterGroup();
-    virtual void endCharacterGroup();
-    virtual void text(const sal_uInt8 * data, size_t len);
-    virtual void utext(const sal_uInt8 * data, size_t len);
-
-    virtual void props(doctok::Reference<Properties>::Pointer_t ref);
-    virtual void table(Id name,
-                       doctok::Reference<Table>::Pointer_t ref);
-
-    virtual void substream(Id name, doctok::Reference<Stream>::Pointer_t ref);
-
-    virtual void info(const string & info);
-};
-
-class WW8PropertiesHandler : public Properties
-{
-    typedef boost::shared_ptr<Sprm> SprmSharedPointer_t;
-    typedef vector<SprmSharedPointer_t> SprmPointers_t;
-    SprmPointers_t sprms;
-
-public:
-    WW8PropertiesHandler()
-    {
-    }
-
-    virtual ~WW8PropertiesHandler()
-    {
-    }
-
-    virtual void attribute(Id name, Value & val);
-    virtual void sprm(Sprm & sprm);
-
-    void dumpSprm(SprmSharedPointer_t sprm);
-    void dumpSprms();
-
-    static bool compare(SprmSharedPointer_t sprm1, SprmSharedPointer_t sprm2);
-};
-
-class WW8BinaryObjHandler : public BinaryObj
-{
-public:
-    WW8BinaryObjHandler()
-    {
-    }
-
-    virtual ~WW8BinaryObjHandler()
-    {
-    }
-
-    virtual void data(const sal_uInt8* buf, size_t len,
-                      doctok::Reference<Properties>::Pointer_t ref);
-};
-
-class WW8TableHandler : public Table
-{
-public:
-    WW8TableHandler()
-    {
-    }
-
-    virtual ~WW8TableHandler()
-    {
-    }
-
-    void entry(int pos, doctok::Reference<Properties>::Pointer_t ref);
-};
+WW8Value::Pointer_t createValue(writerfilter::Reference<BinaryObj>::Pointer_t rRef);
 
 Sprm::Kind SprmKind(sal_uInt32 sprmCode);
 
-void dump(OutputWithDepth<string> & o, const char * name, doctok::Reference<Properties>::Pointer_t props);
-void dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n);
-void dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
-          const rtl::OUString & /*str*/);
-
-}
+}}
 
 #endif // INCLUDED_WW8_RESOURCE_MODEL_IMPL_HXX
