@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pgbrksh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:06:15 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:20:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,13 @@ ScPageBreakShell::ScPageBreakShell( ScTabViewShell* pViewSh ) :
     SfxShell(pViewSh)
 {
     SetPool( &pViewSh->GetPool() );
-    SetUndoManager( pViewSh->GetViewData()->GetSfxDocShell()->GetUndoManager() );
+    ScViewData* pViewData = pViewSh->GetViewData();
+    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    SetUndoManager( pMgr );
+    if ( !pViewData->GetDocument()->IsUndoEnabled() )
+    {
+        pMgr->SetMaxUndoActionCount( 0 );
+    }
     SetHelpId( HID_SCSHELL_PAGEBREAK );
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("PageBreak")));
 }
