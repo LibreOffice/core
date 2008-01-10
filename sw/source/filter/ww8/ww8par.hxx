@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.153 $
+ *  $Revision: 1.154 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:31:19 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1442,7 +1442,6 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_NoLineNumb(       USHORT nId, const BYTE* pData, short nLen );
 
     void Read_LR(               USHORT nId, const BYTE*, short nLen );
-    void AdjustStyleTabStops(long nLeft, SwWW8StyInf &rSty);
     void Read_UL(               USHORT nId, const BYTE*, short nLen );
     void Read_ParaAutoBefore(USHORT , const BYTE *pData, short nLen);
     void Read_ParaAutoAfter(USHORT , const BYTE *pData, short nLen);
