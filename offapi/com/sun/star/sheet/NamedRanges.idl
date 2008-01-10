@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NamedRanges.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:45:07 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:40:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 #ifndef __com_sun_star_container_XIndexAccess_idl__
 #include <com/sun/star/container/XIndexAccess.idl>
 #endif
+#ifndef __com_sun_star_document_XActionLockable_idl__
+#include <com/sun/star/document/XActionLockable.idl>
+#endif
 
 //=============================================================================
 
@@ -88,6 +91,14 @@ published service NamedRanges
 
      */
     interface com::sun::star::container::XEnumerationAccess;
+
+    //-------------------------------------------------------------------------
+
+    /** provides methods to control the internal update of named ranges.
+
+        @since CWS xmlfilter02
+     */
+    [optional] interface com::sun::star::document::XActionLockable;
 
 };
 
