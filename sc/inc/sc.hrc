@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:08:19 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:09:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1159,7 +1159,7 @@
 #define RID_SC_FUNCTION_DESCRIPTIONS2   (SC_RESOURCE_START+44)
 #define RID_POPUP_CONTROL       (SC_RESOURCE_START+45)
 #define RID_POPUP_PAGEBREAK     (SC_RESOURCE_START+46)
-    // FREE
+#define RID_SC_FUNCTION_NAMES_ENGLISH_ODFF  (SC_RESOURCE_START+47)
 #define RID_POPUP_DRAWFORM      (SC_RESOURCE_START+48)
 #define RID_SC_ADDIN_ROT13      (SC_RESOURCE_START+50)
 #define RID_SC_ADDIN_DFA        (SC_RESOURCE_START+51)
