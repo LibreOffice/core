@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MeasureHandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2007-06-25 09:09:14 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,10 @@
 #ifndef INCLUDED_WRITERFILTERDLLAPI_H
 #include <WriterFilterDllApi.hxx>
 #endif
-#include <doctok/WW8ResourceModel.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #include <boost/shared_ptr.hpp>
 
+namespace writerfilter {
 namespace dmapper
 {
 class PropertyMap;
@@ -48,7 +49,7 @@ class PropertyMap;
     - Left indent of tables
     - Preferred width of tables
  */
-class WRITERFILTER_DLLPRIVATE MeasureHandler : public doctok::Properties
+class WRITERFILTER_DLLPRIVATE MeasureHandler : public Properties
 {
     sal_Int32 m_nMeasureValue;
     sal_Int32 m_nUnit;
@@ -59,8 +60,8 @@ public:
     virtual ~MeasureHandler();
 
     // Properties
-    virtual void attribute(doctok::Id Name, doctok::Value & val);
-    virtual void sprm(doctok::Sprm & sprm);
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
 
     sal_Int32 getMeasureValue() const;
     //at least tables can have automatic width
@@ -70,6 +71,6 @@ public:
 };
 typedef boost::shared_ptr
     < MeasureHandler >  MeasureHandlerPtr;
-}
+}}
 
 #endif //
