@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmatrix.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:05:40 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:09:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,12 @@ public:
     inline static bool IsValueType( ScMatValType nType )
     {
         return nType <= SC_MATVAL_BOOLEAN;
+    }
+
+    /// Boolean.
+    inline static bool IsBooleanType( ScMatValType nType )
+    {
+        return nType == SC_MATVAL_BOOLEAN;
     }
 
     /// String, empty or empty path, but not value nor boolean.
@@ -280,6 +286,10 @@ public:
         { return !mnValType || IsValueType( mnValType[ nC * nRowCount + nR ]) ||
             ((mnValType[ nC * nRowCount + nR ] & SC_MATVAL_EMPTY) ==
              SC_MATVAL_EMPTY); }
+    BOOL IsBoolean( SCSIZE nIndex ) const
+        { return mnValType && IsBooleanType( mnValType[nIndex]); }
+    BOOL IsBoolean( SCSIZE nC, SCSIZE nR ) const
+        { return mnValType && IsBooleanType( mnValType[ nC * nRowCount + nR ]); }
 
     /// @return <TRUE/> if entire matrix is numeric, including booleans, with no strings or empties
     BOOL IsNumeric() const
