@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 10:40:37 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:07:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,6 +131,12 @@
 #ifndef _COM_SUN_STAR_SHEET_XMULTIPLEOPERATION_HPP_
 #include <com/sun/star/sheet/XMultipleOperation.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_XFORMULATOKENS_HPP_
+#include <com/sun/star/sheet/XFormulaTokens.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XARRAYFORMULATOKENS_HPP_
+#include <com/sun/star/sheet/XArrayFormulaTokens.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SHEET_XCELLADDRESSABLE_HPP_
 #include <com/sun/star/sheet/XCellAddressable.hpp>
 #endif
@@ -211,6 +217,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XTOLERANTMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XTolerantMultiPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XEXTERNALSHEETNAME_HPP_
+#include <com/sun/star/sheet/XExternalSheetName.hpp>
 #endif
 
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
@@ -712,6 +721,7 @@ class SC_DLLPUBLIC ScCellRangeObj : public ScCellRangesBase,
                        public com::sun::star::sheet::XCellRangeAddressable,
                        public com::sun::star::sheet::XSheetCellRange,
                        public com::sun::star::sheet::XArrayFormulaRange,
+                       public com::sun::star::sheet::XArrayFormulaTokens,
                        public com::sun::star::sheet::XCellRangeData,
                        public com::sun::star::sheet::XCellRangeFormula,
                        public com::sun::star::sheet::XMultipleOperation,
@@ -778,6 +788,13 @@ public:
     virtual ::rtl::OUString SAL_CALL getArrayFormula() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL   setArrayFormula( const ::rtl::OUString& aFormula )
                                 throw(::com::sun::star::uno::RuntimeException);
+
+                            // XArrayFormulaTokens
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > SAL_CALL getArrayTokens()
+                                throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setArrayTokens( const ::com::sun::star::uno::Sequence<
+                                    ::com::sun::star::sheet::FormulaToken >& aTokens )
+                                throw (::com::sun::star::uno::RuntimeException);
 
                             // XCellRangeData
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence<
@@ -919,6 +936,7 @@ class ScCellObj : public ScCellRangeObj,
                   public com::sun::star::text::XText,
                   public com::sun::star::container::XEnumerationAccess,
                   public com::sun::star::table::XCell,
+                  public com::sun::star::sheet::XFormulaTokens,
                   public com::sun::star::sheet::XCellAddressable,
                   public com::sun::star::sheet::XSheetAnnotationAnchor,
                   public com::sun::star::text::XTextFieldsSupplier,
@@ -1030,6 +1048,13 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getError() throw(::com::sun::star::uno::RuntimeException);
 
+                            // XFormulaTokens
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > SAL_CALL getTokens()
+                                throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   setTokens( const ::com::sun::star::uno::Sequence<
+                                    ::com::sun::star::sheet::FormulaToken >& aTokens )
+                                throw (::com::sun::star::uno::RuntimeException);
+
                             // XCellAddressable
     virtual ::com::sun::star::table::CellAddress SAL_CALL getCellAddress()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -1092,7 +1117,8 @@ class ScTableSheetObj : public ScCellRangeObj,
                         public com::sun::star::sheet::XSheetOutline,
                         public com::sun::star::util::XProtectable,
                         public com::sun::star::sheet::XScenario,
-                        public com::sun::star::sheet::XScenarioEnhanced
+                        public com::sun::star::sheet::XScenarioEnhanced,
+                        public com::sun::star::sheet::XExternalSheetName
 {
     friend class ScTableSheetsObj;      // fuer insertByName()
 
@@ -1291,6 +1317,11 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::table::CellRangeAddress > SAL_CALL
                             getRanges(  )
                                     throw(::com::sun::star::uno::RuntimeException);
+
+                            // XExternalSheetName
+    virtual void SAL_CALL   setExternalName( const ::rtl::OUString& aUrl, const ::rtl::OUString& aSheetName )
+                                throw (::com::sun::star::container::ElementExistException,
+                                       ::com::sun::star::uno::RuntimeException);
 
                             // XPropertySet ueberladen wegen Sheet-Properties
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
