@@ -5,9 +5,9 @@
  *
  *  $RCSfile: sprmids.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-29 15:34:47 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:54:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,9 @@
  *
  *  $RCSfile: sprmids.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-29 15:34:47 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:54:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,10 +86,11 @@
 #ifndef INCLUDED_SPRMIDS
 #define INCLUDED_SPRMIDS
 
-namespace writerfilter {</xsl:text>
+#include &lt;sal/types.h&gt;
+
+</xsl:text>
 <xsl:apply-templates select=".//UML:Model" mode="sprmids"/>
 <xsl:text>
-}
 
 #endif // INCLUDED_SPRMIDS&#xa;</xsl:text>
     </out>
