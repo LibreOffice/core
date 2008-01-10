@@ -1,0 +1,204 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XFastParser.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:45:42 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_xml_sax_XFastParser_idl__
+#define __com_sun_star_xml_sax_XFastParser_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_InputSource_idl__
+#include <com/sun/star/xml/sax/InputSource.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_SAXException_idl__
+#include <com/sun/star/xml/sax/SAXException.idl>
+#endif
+
+#ifndef __com_sun_star_io_IOException_idl__
+#include <com/sun/star/io/IOException.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XFastDocumentHandler_idl__
+#include <com/sun/star/xml/sax/XFastDocumentHandler.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XFastTokenHandler_idl__
+#include <com/sun/star/xml/sax/XFastTokenHandler.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XErrorHandler_idl__
+#include <com/sun/star/xml/sax/XErrorHandler.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XDTDHandler_idl__
+#include <com/sun/star/xml/sax/XDTDHandler.idl>
+#endif
+
+#ifndef __com_sun_star_xml_sax_XEntityResolver_idl__
+#include <com/sun/star/xml/sax/XEntityResolver.idl>
+#endif
+
+#ifndef __com_sun_star_lang_Locale_idl__
+#include <com/sun/star/lang/Locale.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module xml {  module sax {
+
+//=============================================================================
+
+/** specifies a SAX parser that uses integer values for known xml names
+    (elements, attributes and attribute values). The parser also handles
+    namespaces and allows to have individual contexts for each xml element.
+
+    <p>Before parsing is possible you have to set your
+    <type>XFastDocumentHandler</type> using <member>setFastDocumentHandler</member>.
+
+    <p>Parsing starts with calling <member>parseStream</member>. If the parser
+    finds a valid xml file with the given <type>InputSource</type>, it calls
+    <member>XFastDocumentHandler::startDocument</member> first.
+
+    <p>This parser generates either 'fast' events that use integer token
+    values for namespaces, elements and attributes or 'unknown' events for
+    elements that are unknown.
+
+    <p>A namespace is unknown if the namespace URL was not registered with
+    <member>registerNamespace</member>.
+
+    <p>An element is unknown if no <type>XFastTokenHandler</type> is set
+    or if the <type>XFastTokenHandler</type> does not return a valid
+    identifier for the elements local name. An element is also unknown if
+    the elements local name is known but it uses a namespace that is unknown.
+
+    <p>Setting a <type>XFastTokenHandler</type> with <member>setTokenHandler</member>
+    is optional, but without a <type>XFastTokenHandler</type> you will only
+    get unknown sax events. This can be usefull if you are only interested
+    in the namespace handling and/or the context feature.
+
+    <p>For each element the parser sends a create child element event to the
+    elements parent context by calling
+    <member>XFastContextHandler::createFastChildContext</member> for known
+    elements or <member>XFastContextHandler::createUnknownChildContext</member>
+    for unknown elements.
+    <br>The parent context for the root element is the <type>XFastDocumentHandler</type>
+    itself.
+
+    <p>If the parent context returns an empty reference, no further events for
+    the element and all of its childs are created.
+
+    <p>If a valid context is returned this context gets a start event by a call to
+    <member>XFastContextHandler::startFastElement</member> for known elements or
+    <member>XFastContextHandler::startUnknownElement</member> for unknown elements.
+
+    <p>After processing all its child elements the context gets an end event by a call to
+    <member>XFastContextHandler::endFastElement</member> for known elements or
+    <member>XFastContextHandler::endUnknownElement</member> for unknown elements.
+
+    <p>It is valid to return one instance of <type>XFastContextHandler</type> more
+    than once. It is even possible to only use the <type>XFastDocumentHandler</type>
+    by always returning a reference to itself for each create child context event.
+
+    <p>After the last element is processed the parser generates an end document
+    event at the <type>XFastDocumentHandler</type> by calling
+    <member>XFastDocumentHandler::endDocument</member>.
+
+    @see http://wiki.services.openoffice.org/wiki/FastParser
+*/
+interface XFastParser: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+    /** parses an XML document from a stream.
+
+        <p>Set the desired handlers before calling this method.</p>
+     */
+    void parseStream( [in] InputSource aInputSource )
+            raises( SAXException, com::sun::star::io::IOException );
+
+    //-------------------------------------------------------------------------
+
+    /** Application must register a document event handler to get
+        sax events for the parsed stream.
+     */
+    void setFastDocumentHandler( [in] XFastDocumentHandler Handler );
+
+    //-------------------------------------------------------------------------
+
+    /** must be registered to translate known xml names to integer tokens.
+     */
+    void setTokenHandler( [in] XFastTokenHandler Handler );
+
+    //-------------------------------------------------------------------------
+
+    /** registers a known namespace url with the given integer token.<br>
+        @param NamespaceToken
+            an integer token that must be greater than FastToken::NAMESPACE.
+     */
+    void registerNamespace( [in] string NamespaceURL, [in] long NamespaceToken )
+        raises( com::sun::star::lang::IllegalArgumentException );
+
+    //-------------------------------------------------------------------------
+    /** allows an application to register an error event handler.
+
+        <p>Note that the error handler can throw an exception when an error or
+        warning occurs.  Note that an exception is thrown by the parser when
+        an unrecoverable (fatal) error occurs.</p>
+     */
+    void setErrorHandler( [in] XErrorHandler Handler );
+
+    //-------------------------------------------------------------------------
+    /** allows an application to register a DTD-Handler.
+     */
+    void setEntityResolver( [in] XEntityResolver Resolver );
+
+    //-------------------------------------------------------------------------
+    /** sets a locale specified for localization of warnings and error messages.
+
+        <p>Set the language of the error messages. Useful when the parsing
+        errors will be presented to the user.</p>
+     */
+    void setLocale( [in] com::sun::star::lang::Locale locale );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+#endif
