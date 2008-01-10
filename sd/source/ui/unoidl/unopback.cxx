@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopback.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:02:01 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:22:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,22 @@ void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) 
                 if( pAny )
                 {
                     OUString aPropertyName( OUString::createFromAscii(pMap->pName));
-                    setPropertyValue( aPropertyName, *pAny );
+                    if ( pMap->nWID == XATTR_FILLBITMAP )
+                    {
+                        if ( ( ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap >*)0) ) ||
+                                ( pAny->getValueType() == ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic >*)0) ) ) &&
+                                ( pMap->nMemberId == MID_BITMAP ) )
+                        {
+                            setPropertyValue( aPropertyName, *pAny );
+                        }
+                        else if ( ( pAny->getValueType() == ::getCppuType((const ::rtl::OUString*)0) ) &&
+                                    ( ( pMap->nMemberId == MID_NAME ) || ( pMap->nMemberId == MID_GRAFURL ) ) )
+                        {
+                            setPropertyValue( aPropertyName, *pAny );
+                        }
+                    }
+                    else
+                        setPropertyValue( aPropertyName, *pAny );
                 }
                 pMap++;
             }
