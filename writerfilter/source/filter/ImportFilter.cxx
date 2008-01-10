@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImportFilter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-02-22 17:16:06 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:54:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
 #endif
+#ifndef _COM_SU_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
 #endif
@@ -53,6 +56,10 @@
 #endif
 #ifndef INCLUDED_OOXML_DOCUMENT_HXX
 #include <ooxml/OOXMLDocument.hxx>
+#endif
+#ifdef DEBUG_IMPORT
+#include <iostream>
+#include <osl/process.h>
 #endif
 
 using namespace ::rtl;
@@ -80,20 +87,52 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
         return sal_False;
     }
 
-    doctok::Stream::Pointer_t pStream(new dmapper::DomainMapper(m_xContext, m_xDoc));
+#ifdef DEBUG_IMPORT
+    TimeValue t1;
+    osl_getSystemTime(&t1);
+
+    writerfilter::logger("DEBUG", "<out>");
+    writerfilter::logger("DEBUG", string("<starttime>") + string(t1.Seconds)
+                         + "</starttime>");
+#endif
+
+    writerfilter::dmapper::SourceDocumentType eType = m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_2007" ) ) ?
+                writerfilter::dmapper::DOCUMENT_OOXML : writerfilter::dmapper::DOCUMENT_DOC;
+    writerfilter::Stream::Pointer_t pStream(new writerfilter::dmapper::DomainMapper(m_xContext, m_xDoc, eType));
     //create the tokenizer and domain mapper
-    if( m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_2007" ) ))
+    if( eType == writerfilter::dmapper::DOCUMENT_OOXML )
     {
-        ooxml::OOXMLStream::Pointer_t pDocStream = ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream);
-        ooxml::OOXMLDocument::Pointer_t pDocument(ooxml::OOXMLDocumentFactory::createDocument(pDocStream));
+        writerfilter::ooxml::OOXMLStream::Pointer_t pDocStream = writerfilter::ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream);
+        writerfilter::ooxml::OOXMLDocument::Pointer_t pDocument(writerfilter::ooxml::OOXMLDocumentFactory::createDocument(pDocStream));
+
+        uno::Reference<frame::XModel> xModel(m_xDoc, uno::UNO_QUERY_THROW);
+        pDocument->setModel(xModel);
+
+        uno::Reference<drawing::XDrawPageSupplier> xDrawings
+            (m_xDoc, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShapes> xShapes
+            (xDrawings->getDrawPage(), uno::UNO_QUERY_THROW);
+        pDocument->setShapes(xShapes);
+
         pDocument->resolve(*pStream);
     }
     else
     {
-        doctok::WW8Stream::Pointer_t pDocStream = doctok::WW8DocumentFactory::createStream(m_xContext, xInputStream);
-        doctok::WW8Document::Pointer_t pDocument(doctok::WW8DocumentFactory::createDocument(pDocStream));
+        writerfilter::doctok::WW8Stream::Pointer_t pDocStream = writerfilter::doctok::WW8DocumentFactory::createStream(m_xContext, xInputStream);
+        writerfilter::doctok::WW8Document::Pointer_t pDocument(writerfilter::doctok::WW8DocumentFactory::createDocument(pDocStream));
+
         pDocument->resolve(*pStream);
     }
+
+#ifdef DEBUG_IMPORT
+    TimeValue t2;
+    osl_getSystemTime(&t2);
+
+    writerfilter::logger("DEBUG", string("<importtime>")
+                         + string(t2.Seconds - t1.Seconds) + "</importtime>");
+    writerfilter::logger("DEBUG", "</out>");
+#endif
+
     return sal_True;
 }
 /*-- 09.06.2006 10:15:20---------------------------------------------------
