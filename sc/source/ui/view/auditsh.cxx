@@ -4,9 +4,9 @@
  *
  *  $RCSfile: auditsh.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:50:46 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:19:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #include "tabvwsh.hxx"
 #include "scresid.hxx"
 #include "sc.hrc"
+#include "document.hxx"
 
 //------------------------------------------------------------------------
 
@@ -75,7 +76,12 @@ ScAuditingShell::ScAuditingShell(ScViewData* pData) :
     nFunction( SID_FILL_ADD_PRED )
 {
     SetPool( &pViewData->GetViewShell()->GetPool() );
-    SetUndoManager( pViewData->GetSfxDocShell()->GetUndoManager() );
+    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    SetUndoManager( pMgr );
+    if ( !pViewData->GetDocument()->IsUndoEnabled() )
+    {
+        pMgr->SetMaxUndoActionCount( 0 );
+    }
     SetHelpId( HID_SCSHELL_AUDIT );
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Auditing")));
 }
