@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.164 $
+ *  $Revision: 1.165 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:45:51 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3016,7 +3016,6 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
             catch( beans::UnknownPropertyException& e )
             {
                 (void)e;
-                DBG_ERROR("svx::SvxShape::setPropertyValues(), unknown property!" );
             }
             catch( uno::Exception& ex )
             {
@@ -3039,7 +3038,6 @@ void SAL_CALL SvxShape::setPropertyValues( const ::com::sun::star::uno::Sequence
             catch( beans::UnknownPropertyException& e )
             {
                 (void)e;
-                DBG_ERROR("svx::SvxShape::setPropertyValues(), unknown property!" );
             }
             catch( uno::Exception& ex )
             {
