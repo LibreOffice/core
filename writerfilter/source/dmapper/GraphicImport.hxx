@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicImport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 13:29:20 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:39:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 //#ifndef INCLUDED_WRITERFILTERDLLAPI_H
 //#include <WriterFilterDllApi.hxx>
 //#endif
-#include <doctok/WW8ResourceModel.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 //#include <com/sun/star/lang/XComponent.hpp>
 namespace com{ namespace sun { namespace star {
     namespace uno{
@@ -52,14 +52,28 @@ namespace com{ namespace sun { namespace star {
     {
         class XTextContent;
     }
+    namespace drawing
+    {
+        class XShape;
+    }
 }}}
 
+namespace writerfilter {
 namespace dmapper
 {
 using namespace std;
 struct GraphicImport_Impl;
-class WRITERFILTER_DLLPRIVATE GraphicImport : public doctok::Properties, public doctok::Table
-                    ,public doctok::BinaryObj, public doctok::Stream
+
+enum GraphicImportType
+{
+    IMPORT_AS_GRAPHIC,
+    IMPORT_AS_SHAPE,
+    IMPORT_AS_DETECTED_INLINE,
+    IMPORT_AS_DETECTED_ANCHOR
+};
+
+class WRITERFILTER_DLLPRIVATE GraphicImport : public Properties, public Table
+                    ,public BinaryObj, public Stream
 {
     GraphicImport_Impl* m_pImpl;
     ::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >    m_xComponentContext;
@@ -67,23 +81,24 @@ class WRITERFILTER_DLLPRIVATE GraphicImport : public doctok::Properties, public 
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > m_xGraphicObject;
 
-    void ProcessShapeOptions(doctok::Value & val);
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape> m_xShape;
+    void ProcessShapeOptions(Value & val);
 
 public:
     explicit GraphicImport(::com::sun::star::uno::Reference < ::com::sun::star::uno::XComponentContext >    xComponentContext,
                   ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xTextFactory,
-                  bool bIsShape);
+                  GraphicImportType eGraphicImportType);
     virtual ~GraphicImport();
 
     // Properties
-    virtual void attribute(doctok::Id Name, doctok::Value & val);
-    virtual void sprm(doctok::Sprm & sprm);
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
 
     // Table
-    virtual void entry(int pos, doctok::Reference<Properties>::Pointer_t ref);
+    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 
     // BinaryObj
-    virtual void data(const sal_uInt8* buf, size_t len, doctok::Reference<Properties>::Pointer_t ref);
+    virtual void data(const sal_uInt8* buf, size_t len, writerfilter::Reference<Properties>::Pointer_t ref);
 
     // Stream
     virtual void startSectionGroup();
@@ -94,16 +109,17 @@ public:
     virtual void endCharacterGroup();
     virtual void text(const sal_uInt8 * data, size_t len);
     virtual void utext(const sal_uInt8 * data, size_t len);
-    virtual void props(doctok::Reference<Properties>::Pointer_t ref);
-    virtual void table(doctok::Id name,
-                       doctok::Reference<Table>::Pointer_t ref);
-    virtual void substream(doctok::Id name,
-                           ::doctok::Reference<Stream>::Pointer_t ref);
+    virtual void props(writerfilter::Reference<Properties>::Pointer_t ref);
+    virtual void table(Id name,
+                       writerfilter::Reference<Table>::Pointer_t ref);
+    virtual void substream(Id name,
+                           ::writerfilter::Reference<Stream>::Pointer_t ref);
     virtual void info(const string & info);
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > GetGraphicObject() {return m_xGraphicObject; }
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent > GetGraphicObject();
+    bool    IsGraphic() const;
 };
 typedef boost::shared_ptr< GraphicImport >          GraphicImportPtr;
-}
+}}
 
 #endif //
