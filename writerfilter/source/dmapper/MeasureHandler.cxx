@@ -5,9 +5,9 @@
  *
  *  $RCSfile: MeasureHandler.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2007-06-25 09:09:14 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:40:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <ooxml/resourceids.hxx>
 #include <com/sun/star/text/SizeType.hpp>
 
-using namespace ::writerfilter;
+namespace writerfilter {
 namespace dmapper {
 
 using namespace ::com::sun::star;
@@ -63,18 +63,22 @@ MeasureHandler::~MeasureHandler()
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void MeasureHandler::attribute(doctok::Id rName, doctok::Value & rVal)
+void MeasureHandler::attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
     (void)rName;
+    /* WRITERFILTERSTATUS: table: MeasureHandler_attributedata */
     switch( rName )
     {
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_unit:
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_TblWidth_type:// = 90668;
             //can be: NS_ooxml::LN_Value_ST_TblWidth_nil, NS_ooxml::LN_Value_ST_TblWidth_pct,
             //        NS_ooxml::LN_Value_ST_TblWidth_dxa, NS_ooxml::LN_Value_ST_TblWidth_auto;
             m_nUnit = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Height_hRule: // 90666;
         {
             ::rtl::OUString sHeightType = rVal.getString();
@@ -82,11 +86,14 @@ void MeasureHandler::attribute(doctok::Id rName, doctok::Value & rVal)
                 m_nRowHeightSizeType = text::SizeType::FIX;
         }
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_trleft:
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_preferredWidth:
         case NS_ooxml::LN_CT_TblWidth_w:// = 90667;
             m_nMeasureValue = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_ooxml::LN_CT_Height_val: // 90665 -- a string value
         {
             m_nUnit = NS_ooxml::LN_Value_ST_TblWidth_dxa;
@@ -101,7 +108,7 @@ void MeasureHandler::attribute(doctok::Id rName, doctok::Value & rVal)
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void MeasureHandler::sprm(doctok::Sprm & rSprm)
+void MeasureHandler::sprm(Sprm & rSprm)
 {
     (void)rSprm;
 }
@@ -114,8 +121,8 @@ sal_Int32 MeasureHandler::getMeasureValue() const
     if( m_nMeasureValue != 0 && m_nUnit >= 0 )
     {
         // TODO m_nUnit 3 - twip, other values unknown :-(
-        if( m_nUnit == 3 || m_nUnit == NS_ooxml::LN_Value_ST_TblWidth_dxa)
-            nRet = ConversionHelper::convertToMM100( m_nMeasureValue );
+        if( m_nUnit == 3 || sal::static_int_cast<Id>(m_nUnit) == NS_ooxml::LN_Value_ST_TblWidth_dxa)
+            nRet = ConversionHelper::convertTwipToMM100( m_nMeasureValue );
         //todo: handle additional width types:
         //NS_ooxml::LN_Value_ST_TblWidth_nil, NS_ooxml::LN_Value_ST_TblWidth_pct,
         //NS_ooxml::LN_Value_ST_TblWidth_dxa, NS_ooxml::LN_Value_ST_TblWidth_auto;
@@ -127,7 +134,8 @@ sal_Int32 MeasureHandler::getMeasureValue() const
   -----------------------------------------------------------------------*/
 bool MeasureHandler::isAutoWidth() const
 {
-    return m_nUnit == NS_ooxml::LN_Value_ST_TblWidth_auto;
+    return sal::static_int_cast<Id>(m_nUnit) == NS_ooxml::LN_Value_ST_TblWidth_auto;
 }
 
 } //namespace dmapper
+} //namespace writerfilter
