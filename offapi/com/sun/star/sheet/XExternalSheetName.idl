@@ -1,0 +1,90 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XExternalSheetName.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:42:39 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XExternalSheetName_idl__
+#define __com_sun_star_sheet_XExternalSheetName_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_container_ElementExistException_idl__
+#include <com/sun/star/container/ElementExistException.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** provides a method to set an external name at the sheet.
+
+    <p>An external reference in a cell formula is implemented using a
+    hidden sheet which is linked to the sheet in the external document.
+    The name of the hidden sheet is composed of the URL of the external
+    document and the external sheet name.</p>
+
+    @since CWS xmlfilter02
+ */
+interface XExternalSheetName: com::sun::star::uno::XInterface
+{
+    //-------------------------------------------------------------------------
+
+    /** sets an external name at the sheet.
+
+        <p>This method allows to compose the sheet name from the URL of the
+        external document and the name of the external sheet.</p>
+
+        @param aUrl
+            the URL of the external document.
+
+        @param aSheetName
+            the name of the sheet in the external document.
+
+        @throws ::com::sun::star::container::ElementExistException
+            a sheet with that external name already exists in this document
+     */
+    void setExternalName( [in] string aUrl, [in] string aSheetName )
+        raises (com::sun::star::container::ElementExistException);
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
