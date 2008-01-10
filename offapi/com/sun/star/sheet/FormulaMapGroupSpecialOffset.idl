@@ -1,0 +1,74 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: FormulaMapGroupSpecialOffset.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:39:46 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_FormulaMapGroupSpecialOffset_idl__
+#define __com_sun_star_sheet_FormulaMapGroupSpecialOffset_idl__
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** Constants designating the offsets within the sequence returned by
+    <member>XFormurmulaOpCodeMapper::getAvailableMappings</member> when
+    called for group <type>FormulaMapGroup</type> SPECIAL.
+
+    The number of constants may grow in future versions!
+ */
+constants FormulaMapGroupSpecialOffset
+{
+    const long PUSH               = 0;
+    const long CALL               = 1;
+    const long STOP               = 2;
+    const long EXTERNAL           = 3;
+    const long NAME               = 4;
+    const long NO_NAME            = 5;
+    const long MISSING            = 6;
+    const long BAD                = 7;
+    const long SPACES             = 8;
+    const long MAT_REF            = 9;
+    const long DB_AREA            = 10;
+    const long MACRO              = 11;
+    const long COL_ROW_NAME       = 12;
+    const long COL_ROW_NAME_AUTO  = 13;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
