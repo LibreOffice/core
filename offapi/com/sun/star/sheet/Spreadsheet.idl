@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Spreadsheet.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:52:05 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:41:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,10 @@
 
 #ifndef __com_sun_star_sheet_Scenario_idl__
 #include <com/sun/star/sheet/Scenario.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_XExternalSheetName_idl__
+#include <com/sun/star/sheet/XExternalSheetName.idl>
 #endif
 
 //=============================================================================
@@ -210,6 +214,14 @@ service Spreadsheet
      */
     interface com::sun::star::sheet::XSheetLinkable;
 
+    //-------------------------------------------------------------------------
+
+    /** provides a method to set an external name at the sheet.
+
+        @since CWS xmlfilter02
+     */
+    [optional] interface com::sun::star::sheet::XExternalSheetName;
+
     //=========================================================================
 
     /** specifies if the sheet is visible.
@@ -221,6 +233,19 @@ service Spreadsheet
     /** specifies the page style of the sheet.
      */
     [property] string PageStyle;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the direction of the columns in the spreadsheet.
+
+        <p>Possible values are com::sun::star::text::WritingMode2::LR_TB to
+        order the columns from left to right, and
+            com::sun::star::text::WritingMode2::RL_TB to order the columns from
+        right to left.</p>
+
+        @see com::sun::star::text::WritingMode2
+     */
+    [optional, property] short TableLayout;
 
     //-------------------------------------------------------------------------
 
