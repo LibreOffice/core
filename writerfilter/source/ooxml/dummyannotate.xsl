@@ -5,9 +5,9 @@
  *
  *  $RCSfile: dummyannotate.xsl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-03 13:44:06 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:02:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,9 +788,70 @@
     </xsl:for-each>
   </xsl:template>
 
+  <xsl:key name="resources" match="resource" use="@resource"/>
+
+  <xsl:template name="resources">
+    <xsl:for-each select="//resource">
+      <xsl:if test="generate-id(.) = generate-id(key('resources', @resource)[1])">
+        <xsl:element name="resource">
+          <xsl:attribute name="resource">
+            <xsl:value-of select="@resource"/>
+          </xsl:attribute>
+        </xsl:element>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="genfastresxsl">
+    <xsl:for-each select="//namespace[not(@name = 'wml')]">
+      <xsl:text>
+sed "s/wml/</xsl:text>
+<xsl:value-of select="@name"/>
+<xsl:text>/" &lt; fastresourcesimpl_wml.xsl &gt; fastresourcesimpl_</xsl:text>
+<xsl:value-of select="@name"/>
+<xsl:text>.xsl</xsl:text>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="genresxsl">
+    <xsl:for-each select="//namespace">
+      <xsl:text>
+sed "s/wml/</xsl:text>
+<xsl:value-of select="@name"/>
+<xsl:text>/;s/_WML_/_</xsl:text>
+<xsl:value-of select="translate(@name, 'abcdefghijklmnopqrstuvwxyz-', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ_')"/>
+<xsl:text>_/" &lt; fastresources_.xsl &gt; fastresources_</xsl:text>
+<xsl:value-of select="@name"/>
+<xsl:text>.xsl</xsl:text>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="findpath">
+    <xsl:param name="path"/>
+    <xsl:variable name="name" select="@name"/>
+    <xsl:if test="not(contains($path, concat(@name, ',')))">
+      <xsl:for-each select="ancestor::rng:grammar//rng:ref[@name=$name]">
+        <xsl:for-each select="ancestor::rng:define">
+          <xsl:call-template name="findpath">
+            <xsl:with-param name="path" select="concat($path, @name, ',')"/>
+          </xsl:call-template>
+          <xsl:value-of select="@name"/>
+          <xsl:text> -> </xsl:text>
+          <xsl:value-of select="$name"/>
+        <xsl:text>&#xa;</xsl:text>
+        </xsl:for-each>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:template>
+
   <xsl:template match="/">
     <out>
-      <xsl:apply-templates select="//rng:define[@name='CT_TrPrBase']" mode="resourcesPropertySetValue"/>
+      <xsl:apply-templates select="//rng:define[@name='CT_GradientStopList']" 
+                           mode='resourcesPropertySetValue'/>
+      <xsl:apply-templates select="//rng:define[@name='CT_GradientFillProperties']" 
+                           mode='resourcesPropertySetValue'/>
+      <xsl:apply-templates select="//rng:define[@name='EG_LineFillProperties']"
+                           mode='resourcesPropertySetValue'/>
     </out>
   </xsl:template>
 </xsl:stylesheet>
