@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8inc.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:33 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:51:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
