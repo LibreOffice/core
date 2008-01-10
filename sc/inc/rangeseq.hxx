@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangeseq.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:50:20 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:09:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,13 @@
 #include <com/sun/star/uno/Any.h>
 #endif
 
+#ifndef SC_MATRIX_HXX
+#include "scmatrix.hxx"
+#endif
+
 class SvNumberFormatter;
 class ScDocument;
 class ScRange;
-class ScMatrix;
 
 class ScRangeToSequence
 {
@@ -67,8 +70,50 @@ public:
     static BOOL FillMixedArray( com::sun::star::uno::Any& rAny,
                                 ScDocument* pDoc, const ScRange& rRange,
                                 BOOL bAllowNV = FALSE );
+
+    /** @param bDataTypes
+            Additionally to the differentiation between string and double allow
+            differentiation between other types such as as boolean. Needed for
+            implementation of XFormulaParser. If <FALSE/>, boolean values are
+            treated as ordinary double values 1 (true) and 0 (false).
+     */
     static BOOL FillMixedArray( com::sun::star::uno::Any& rAny,
-                                const ScMatrix* pMatrix );
+                                const ScMatrix* pMatrix, bool bDataTypes = false );
+};
+
+
+class ScApiTypeConversion
+{
+public:
+
+    /** Convert an uno::Any to double if possible, including integer types.
+        @param o_fVal
+            Out: the double value on successful conversion.
+        @param o_eClass
+            Out: the uno::TypeClass of rAny.
+        @returns <TRUE/> if successfully converted.
+     */
+    static  bool        ConvertAnyToDouble(
+                            double & o_fVal,
+                            com::sun::star::uno::TypeClass & o_eClass,
+                            const com::sun::star::uno::Any & rAny );
+
+};
+
+
+class ScSequenceToMatrix
+{
+public:
+
+    /** Convert a sequence of mixed elements to ScMatrix.
+
+        Precondition: rAny.getValueType().equals( getCppuType( (uno::Sequence< uno::Sequence< uno::Any > > *)0))
+
+        @returns a new'd ScMatrix as ScMatrixRef, NULL if rAny couldn't be read
+        as type Sequence<Sequence<Any>>
+     */
+    static  ScMatrixRef CreateMixedMatrix( const com::sun::star::uno::Any & rAny );
+
 };
 
 
