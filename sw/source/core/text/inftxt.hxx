@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:13:19 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:29:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,9 +118,8 @@ class SwLineInfo
 public:
     inline SwLineInfo( const SwAttrSet& rAttrSet )
            { CtorInitLineInfo( rAttrSet ); }
-    // Liefert den Tabstop, der auf LinePos folgt, oder 0.
-    const SvxTabStop *GetTabStop( const SwTwips nLinePos,
-                                 const SwTwips nLeft,
+    // #i24363# tab stops relative to indent - returns the tab stop following nSearchPos or NULL
+    const SvxTabStop *GetTabStop( const SwTwips nSearchPos,
                                  const SwTwips nRight ) const;
     inline const SvxLineSpacingItem *GetLineSpacing() const { return pSpace; }
     inline KSHORT GetDefTabStop() const { return nDefTabStop; }
