@@ -1,10 +1,10 @@
-    <node oor:name="MS Excel 97 Vorlage/Template" oor:op="replace">
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE TEMPLATEPATH ALIEN</value></prop>
-        <prop oor:name="UIComponent"/>
-        <prop oor:name="FilterService"/>
-        <prop oor:name="UserData"><value></value></prop>
-        <prop oor:name="FileFormatVersion"><value>0</value></prop>
-        <prop oor:name="Type"><value>calc_MS_Excel_97_VorlageTemplate</value></prop>
-        <prop oor:name="TemplateName"/>
-        <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
-    </node>
+<node oor:name="MS Excel 97 Vorlage/Template" oor:op="replace">
+    <prop oor:name="Flags"><value>IMPORT EXPORT ALIEN TEMPLATE TEMPLATEPATH</value></prop>
+    <prop oor:name="UIComponent"/>
+    <prop oor:name="FilterService"/>
+    <prop oor:name="UserData"/>
+    <prop oor:name="FileFormatVersion"><value>0</value></prop>
+    <prop oor:name="Type"><value>calc_MS_Excel_97_VorlageTemplate</value></prop>
+    <prop oor:name="TemplateName"/>
+    <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
+</node>
