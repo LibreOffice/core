@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.270 $
+ *  $Revision: 1.271 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:43:30 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:26:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1452,6 +1452,8 @@ End
 
 STD_UNO_LIB_FILE_PATCH(gid_File_Lib_Wpft,wpft)
 
+STD_UNO_LIB_FILE_PATCH(gid_File_Lib_Writerfilter,writerfilter)
+
 #if !defined(MACOSX) && ( !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) )
 
 File gid_File_Lib_Mozabdrv
@@ -1892,7 +1894,7 @@ File gid_File_Lib_Salhelper
   #endif
 End
 
-File gid_File_Lib_Sax
+File gid_File_Lib_Sax_Uno
     TXT_FILE_BODY;
     Styles = (PACKED,UNO_COMPONENT,DONT_OVERWRITE,PATCH);
     RegistryID = gid_Starregistry_Services_Rdb;
@@ -1903,6 +1905,22 @@ File gid_File_Lib_Sax
     Name = "sax.uno.dll";
   #endif
 End
+
+File gid_File_Lib_Fastsax_Uno
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT,DONT_OVERWRITE,PATCH);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT2(fastsax.uno,UNXSUFFIX));
+  #else
+    Name = "fastsax.uno.dll";
+  #endif
+End
+
+STD_LIB_FILE_PATCH( gid_File_Lib_Sax , sax)
+
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Oox , oox)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Sb , sb)
 
