@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DffImpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-28 09:17:57 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:43:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,10 @@
 #include "resources.hxx"
 #include "WW8DocumentImpl.hxx"
 
+namespace writerfilter {
 namespace doctok
 {
+
 class ShapeTypeToString
 {
     typedef boost::shared_ptr<ShapeTypeToString> Pointer_t;
@@ -281,13 +283,13 @@ sal_uInt32 DffOPT::get_property_count()
     return getInstance();
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 DffOPT::get_property(sal_uInt32 nPos)
 {
     WW8FOPTE * pTmp = new WW8FOPTE(this, 0x8 + nPos * WW8FOPTE::getSize());
     pTmp->setIndex(nPos);
 
-    return doctok::Reference<Properties>::Pointer_t(pTmp);
+    return writerfilter::Reference<Properties>::Pointer_t(pTmp);
 }
 
 sal_uInt32 DffOPT::get_extraoffset_count()
@@ -328,10 +330,10 @@ sal_uInt32 DffDGG::get_fidcl_count()
     return (getCount() - 0x18) / WW8FIDCL::getSize();
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 DffDGG::get_fidcl(sal_uInt32 pos)
 {
-    return doctok::Reference<Properties>::Pointer_t
+    return writerfilter::Reference<Properties>::Pointer_t
         (new WW8FIDCL(this, 0x18 + pos * WW8FIDCL::getSize()));
 }
 
@@ -349,10 +351,10 @@ rtl::OUString DffBSE::get_blipname()
     return sResult;
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 DffBSE::get_blip()
 {
-    doctok::Reference<Properties>::Pointer_t pResult;
+    writerfilter::Reference<Properties>::Pointer_t pResult;
 
     WW8FBSE aFBSE(this, 8);
     sal_uInt32 nOffset = 8 + WW8FBSE::getSize() + aFBSE.get_cbName();
@@ -370,7 +372,7 @@ DffBSE::get_blip()
         {
             DffRecord * pRecord = createDffRecord(this, nOffset);
 
-            pResult = doctok::Reference<Properties>::Pointer_t(pRecord);
+            pResult = writerfilter::Reference<Properties>::Pointer_t(pRecord);
         }
     }
     else
@@ -385,7 +387,7 @@ DffBSE::get_blip()
                 createDffRecord(*getDocument()->getDocStream(),
                                 aFBSE.get_foDelay());
 
-            pResult = doctok::Reference<Properties>::Pointer_t(pRecord);
+            pResult = writerfilter::Reference<Properties>::Pointer_t(pRecord);
         }
     }
 
@@ -454,10 +456,10 @@ rtl::OUString DffFSP::get_shptypename()
 
 // DffSpContainer
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 DffSpContainer::get_blip()
 {
-    doctok::Reference<Properties>::Pointer_t pResult;
+    writerfilter::Reference<Properties>::Pointer_t pResult;
 
     if (getShapeType() == 75)
     {
@@ -470,10 +472,10 @@ DffSpContainer::get_blip()
     return pResult;
 }
 
-doctok::Reference<Stream>::Pointer_t
+writerfilter::Reference<Stream>::Pointer_t
 DffSpContainer::get_shptxt()
 {
-    doctok::Reference<Stream>::Pointer_t pResult;
+    writerfilter::Reference<Stream>::Pointer_t pResult;
 
     if (getShapeType() == 202)
     {
@@ -521,4 +523,4 @@ void DffUDefProp::resolveNoAuto(Properties & rHandler)
     }
 }
 
-}
+}}
