@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLStreamImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-08 14:54:08 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:00:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #include <com/sun/star/io/XStream.hpp>
 #endif
 
+namespace writerfilter {
 namespace ooxml
 {
 
@@ -58,18 +59,26 @@ using namespace com::sun::star;
 
 class OOXMLStreamImpl : public OOXMLStream
 {
-protected:
+    void init();
+
     uno::Reference<uno::XComponentContext> mxContext;
     uno::Reference<embed::XStorage> mxStorage;
     uno::Reference<io::XInputStream> mxInputStream;
     uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
     uno::Reference<io::XStream> mxDocumentStream;
+    uno::Reference<xml::sax::XFastParser> mxFastParser;
+    uno::Reference<xml::sax::XFastTokenHandler> mxFastTokenHandler;
 
     StreamType_t mnStreamType;
 
     rtl::OUString msId;
     rtl::OUString msPath;
 
+    bool getTarget(uno::Reference<embed::XRelationshipAccess>
+                   xRelationshipAccess,
+                   StreamType_t nStreamType,
+                   const ::rtl::OUString & rId,
+                   ::rtl::OUString & rDocumentTarget);
 public:
     typedef boost::shared_ptr<OOXMLStreamImpl> Pointer_t;
 
@@ -87,13 +96,13 @@ public:
 
     virtual ~OOXMLStreamImpl();
 
-    void init();
-
-    OOXMLStream::Pointer_t getSubStream(StreamType_t nStreamType);
-
     virtual uno::Reference<xml::sax::XParser> getParser();
+    virtual uno::Reference<xml::sax::XFastParser> getFastParser();
     virtual uno::Reference<io::XInputStream> getInputStream();
     virtual uno::Reference<uno::XComponentContext> getContext();
+    ::rtl::OUString getTargetForId(const ::rtl::OUString & rId);
+    virtual uno::Reference<xml::sax::XFastTokenHandler>
+    getFastTokenHandler(uno::Reference<uno::XComponentContext> rContext);
 };
-}
+}}
 #endif // INCLUDED_OOXML_STREAM_IMPL_HXX
