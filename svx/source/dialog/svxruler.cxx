@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:42:41 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:48:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,6 +244,8 @@ struct SvxRuler_Impl  {
                                       // Muesste vielleicht fuer weitere Werte
                                       // aufgebohrt werden
     BOOL bIsTableRows : 1;      // pColumnItem contains table rows instead of columns
+    //#i24363# tab stops relative to indent
+    BOOL bIsTabsRelativeToIndent : 1; // Tab stops relative to paragraph indent?
     SvxRuler_Impl() :
     pPercBuf(0), pBlockBuf(0),
     nPercSize(0), nTotalDist(0),
@@ -255,7 +257,8 @@ struct SvxRuler_Impl  {
     nIdx(0),
     nColLeftPix(0), nColRightPix(0),
 
-    bIsTableRows(FALSE)
+    bIsTableRows(FALSE),
+    bIsTabsRelativeToIndent(TRUE)
     {
     }
     ~SvxRuler_Impl()
@@ -1229,8 +1232,13 @@ void SvxRuler::UpdateTabs()
         long nLeftFrameMargin = GetLeftFrameMargin();
         long nRightFrameMargin = GetRightFrameMargin();
 
-        const long lParaIndent =
-            nLeftFrameMargin + pParaItem->GetTxtLeft();
+    //#i24363# tab stops relative to indent
+        const long nParaItemTxtLeft = pRuler_Imp->bIsTabsRelativeToIndent ?
+                                      pParaItem->GetTxtLeft() :
+                                      0;
+
+        const long lParaIndent = nLeftFrameMargin + nParaItemTxtLeft;
+
         const long lLastTab =
              pTabStopItem->Count()?
               ConvertHPosPixel((*pTabStopItem)[pTabStopItem->Count()-1].GetTabPos()): 0;
@@ -1256,7 +1264,8 @@ void SvxRuler::UpdateTabs()
 
         nTabCount = 0;
         USHORT j;
-        const long lRightPixMargin = ConvertSizePixel(nRightFrameMargin - pParaItem->GetTxtLeft());
+        //#i24363# tab stops relative to indent
+        const long lRightPixMargin = ConvertSizePixel(nRightFrameMargin - nParaItemTxtLeft );
         const long lParaIndentPix = ConvertSizePixel(lParaIndent);
         for(j = 0; j < pTabStopItem->Count(); ++j)
         {
@@ -2496,12 +2505,27 @@ void SvxRuler::ApplyTabs()
         else
         {
             if(bRTL)
+            {
+                //#i24363# tab stops relative to indent
+                const long nTmpLeftIndent = pRuler_Imp->bIsTabsRelativeToIndent ?
+                                            GetLeftIndent() :
+                                            ConvertHPosPixel( GetRightFrameMargin() + lAppNullOffset );
+
                 aTabStop.GetTabPos() = PixelHAdjust(
-                    ConvertHPosLogic(GetLeftIndent() - pTabs[nCoreIdx+TAB_GAP].nPos) - lAppNullOffset,
+                    ConvertHPosLogic( nTmpLeftIndent - pTabs[nCoreIdx+TAB_GAP].nPos) - lAppNullOffset,
                                                                                         aTabStop.GetTabPos());
+            }
             else
+            {
+                //#i24363# tab stops relative to indent
+                const long nTmpLeftIndent = pRuler_Imp->bIsTabsRelativeToIndent ?
+                                            GetLeftIndent() :
+                                            0;
+
                 aTabStop.GetTabPos() = PixelHAdjust(
-                    ConvertHPosLogic(pTabs[nCoreIdx+TAB_GAP].nPos - GetLeftIndent()) - lAppNullOffset, aTabStop.GetTabPos());
+                    ConvertHPosLogic( pTabs[nCoreIdx+TAB_GAP].nPos - nTmpLeftIndent ) - lAppNullOffset,
+                                                                                         aTabStop.GetTabPos() );
+            }
         }
         pTabStopItem->Remove(nCoreIdx);
         pTabStopItem->Insert(aTabStop);
@@ -2805,10 +2829,18 @@ void __EXPORT SvxRuler::Click()
         {
             //convert position in left-to-right text
             long nTabPos;
+    //#i24363# tab stops relative to indent
             if(bRTL)
-                nTabPos = GetLeftIndent() - lPos;
+                nTabPos = ( pRuler_Imp->bIsTabsRelativeToIndent ?
+                            GetLeftIndent() :
+                            ConvertHPosPixel( GetRightFrameMargin() + lAppNullOffset ) ) -
+                          lPos;
             else
-                nTabPos = lPos - GetLeftIndent();
+                nTabPos = lPos -
+                          ( pRuler_Imp->bIsTabsRelativeToIndent ?
+                            GetLeftIndent() :
+                            0 );
+
             SvxTabStop aTabStop(ConvertHPosLogic(nTabPos),
                                 ToAttrTab_Impl(nDefTabType));
             pTabStopItem->Insert(aTabStop);
@@ -3905,5 +3937,12 @@ long SvxRuler::CalcPropMaxRight(USHORT nCol) const
             return GetMargin2()-GetMargin1()-lWidth;
         }
     }
+}
+/*-- 29.11.2007 08:24:23---------------------------------------------------
+    //#i24363# tab stops relative to indent
+  -----------------------------------------------------------------------*/
+void SvxRuler::SetTabsRelativeToIndent( BOOL bRel )
+{
+    pRuler_Imp->bIsTabsRelativeToIndent = bRel;
 }
 
