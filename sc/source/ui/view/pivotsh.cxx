@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pivotsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:57:21 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:20:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,13 @@ ScPivotShell::ScPivotShell( ScTabViewShell* pViewSh ) :
     pViewShell( pViewSh )
 {
     SetPool( &pViewSh->GetPool() );
-    SetUndoManager( pViewSh->GetViewData()->GetSfxDocShell()->GetUndoManager() );
+    ScViewData* pViewData = pViewSh->GetViewData();
+    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    SetUndoManager( pMgr );
+    if ( !pViewData->GetDocument()->IsUndoEnabled() )
+    {
+        pMgr->SetMaxUndoActionCount( 0 );
+    }
     SetHelpId( HID_SCSHELL_PIVOTSH );
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Pivot")));
 }
