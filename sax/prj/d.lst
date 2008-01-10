@@ -1,3 +1,11 @@
-..\%__SRC%\bin\sax*.dll %_DEST%\bin%_EXT%\sax*.dll
-..\%__SRC%\lib\sax.uno.so %_DEST%\lib%_EXT%\sax.uno.so
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
+
+mkdir: %_DEST%\inc%_EXT%\sax
+mkdir: %_DEST%\inc%_EXT%\sax\tools
+..\inc\sax\dllapi.h %_DEST%\inc%_EXT%\sax\dllapi.h
+..\inc\sax\tools\converter.hxx %_DEST%\inc%_EXT%\sax\tools\converter.hxx
+
+dos: sh -c "if test %OS% = MACOSX; then macosx-create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
