@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: os $ $Date: 2007-06-18 12:32:26 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:40:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #include <rtl/ustring.hxx>
 #include <map>
 
+namespace writerfilter {
 namespace dmapper{
 
 typedef ::std::map< PropertyIds, ::rtl::OUString> PropertyNameMap_t;
@@ -278,9 +279,22 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_SIZE_TYPE             :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SizeType")); break;
             case PROP_TABLE_COLUMN_SEPARATORS:   sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableColumnSeparators")); break;
             case META_PROP_TABLE_STYLE_NAME  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableStyleName")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+            case PROP_REDLINE_AUTHOR        :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedlineAuthor")); break;
+            case PROP_REDLINE_DATE_TIME     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedlineDateTime")); break;
+            case PROP_REDLINE_COMMENT       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedlineComment")); break;
+            case PROP_REDLINE_TYPE          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedlineType")); break;
+            case PROP_REDLINE_SUCCESSOR_DATA:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedlineSuccessorData")); break;
+            case PROP_REDLINE_IDENTIFIER    :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RedlineIdentifier")); break;
+            case PROP_SIZE_PROTECTED        :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SizeProtected")); break;
+            case PROP_POSITION_PROTECTED    :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("PositionProtected")); break;
+            case PROP_OPAQUE                :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Opaque")); break;
+            case PROP_VERTICAL_MERGE   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VerticalMerge")); break;
+            case PROP_BULLET_CHAR      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletChar")); break;
+            case PROP_BULLET_FONT_NAME :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BulletFontName")); break;
+            case PROP_PARA_BACK_COLOR  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBackColor")); break;
+            case PROP_TABS_RELATIVE_TO_INDENT:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TabsRelativeToIndent")); break;
+            case PROP_PREFIX           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Prefix")); break;
+            case PROP_SUFFIX           :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Suffix")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
@@ -305,3 +319,4 @@ PropertyNameSupplier& PropertyNameSupplier::GetPropertyNameSupplier()
 }
 
 } //namespace dmapper
+} //namespace writerfilter
