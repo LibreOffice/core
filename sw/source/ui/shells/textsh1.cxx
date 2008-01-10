@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:27:22 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:33:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,7 @@
 #ifndef _SVTOOLS_CTLOPTIONS_HXX
 #include <svtools/ctloptions.hxx>
 #endif
+#include <IDocumentSettingAccess.hxx>
 
 #ifndef _CHARFMT_HXX
 #include <charfmt.hxx>
@@ -1194,11 +1195,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
             aCoreSet.Put( aTabPos );
 
             // linker Rand als Offset
-            const long nOff = ((SvxLRSpaceItem&)aCoreSet.Get( RES_LR_SPACE )).
-                                                                GetTxtLeft();
+            //#i24363# tab stops relative to indent
+            const long nOff = rWrtSh.getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) ?
+                ((SvxLRSpaceItem&)aCoreSet.Get( RES_LR_SPACE )).GetTxtLeft() : 0;
             SfxInt32Item aOff( SID_ATTR_TABSTOP_OFFSET, nOff );
             aCoreSet.Put( aOff );
-
 
             // BoxInfo setzen
             ::PrepareBoxInfo( aCoreSet, rWrtSh );
