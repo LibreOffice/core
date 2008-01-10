@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resources.xsl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:42:08 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:53:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,9 @@
  *
  *  $RCSfile: resources.xsl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-04 08:42:08 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:53:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@
 #include &lt;boost/shared_ptr.hpp&gt;
 
 #ifndef INCLUDED_OUTPUT_WITH_DEPTH_HXX
-#include &lt;doctok/OutputWithDepth.hxx&gt;
+#include &lt;resourcemodel/OutputWithDepth.hxx&gt;
 #endif
 
 #ifndef INCLUDED_RESOURCESIDS_HXX
@@ -111,6 +111,7 @@
 #include &lt;Dff.hxx&gt;
 #endif
 
+namespace writerfilter {
 namespace doctok {
 
 class WW8DocumentImpl;
@@ -121,7 +122,7 @@ using namespace ::std;&#xa;</xsl:text>
       <xsl:text>
 rtl::OUString getDffOptName(sal_uInt32 nPid);
 bool isBooleanDffOpt(sal_uInt32 nId);
-}
+}}
 #endif // INCLUDED_RESOURCES_HXX&#xa;</xsl:text></out>
 </xsl:template>
   
@@ -187,7 +188,7 @@ class </xsl:text>
     <xsl:text>: public </xsl:text>
     <xsl:value-of select='$superclass'/>
     <xsl:if test='$parentresource != ""'>
-      <xsl:text>, public doctok::Reference&lt; </xsl:text>
+      <xsl:text>, public writerfilter::Reference&lt; </xsl:text>
       <xsl:value-of select='$parentresource'/>
       <xsl:text>&gt;</xsl:text>
     </xsl:if>
@@ -391,7 +392,7 @@ class </xsl:text>
       </xsl:text>
     </xsl:if>
     <xsl:if test='.//UML:Stereotype[@xmi.idref ="ww8sprm"]'>
-      <xsl:variable name='propsreftype'>doctok::Reference &lt; Properties &gt;::Pointer_t</xsl:variable>      
+      <xsl:variable name='propsreftype'>writerfilter::Reference &lt; Properties &gt;::Pointer_t</xsl:variable>      
       <xsl:text>    /**
       Return reference to properties of Sprm.
     */
@@ -410,7 +411,7 @@ class </xsl:text>
 
     <xsl:if test='.//UML:Stereotype[@xmi.idref ="ww8sprmbinary"]'>
       <xsl:text>
-        virtual doctok::Reference &lt; BinaryObj &gt; ::Pointer_t getBinary();
+        virtual writerfilter::Reference &lt; BinaryObj &gt; ::Pointer_t getBinary();
       </xsl:text>
     </xsl:if>
 
@@ -483,7 +484,7 @@ class </xsl:text>
 
 <xsl:template match="UML:Class" mode="declsTable">
   sal_uInt32 getEntryCount();
-  doctok::Reference&lt; Properties &gt;::Pointer_t getEntry(sal_uInt32 nIndex);
+  writerfilter::Reference&lt; Properties &gt;::Pointer_t getEntry(sal_uInt32 nIndex);
 </xsl:template>
 
 <xsl:template match="UML:Class" mode="resolveTable">
@@ -576,7 +577,7 @@ class </xsl:text>
     </xsl:if>
     <xsl:choose>
       <xsl:when test='././/UML:Stereotype[@xmi.idref="attributeremainder"]'>
-        <xsl:text>return doctok::Reference &lt; BinaryObj &gt;::Pointer_t(new WW8BinaryObjReference(getRemainder(</xsl:text>
+        <xsl:text>return writerfilter::Reference &lt; BinaryObj &gt;::Pointer_t(new WW8BinaryObjReference(getRemainder(</xsl:text>
         <xsl:value-of select="$offset"/>
         <xsl:text>)));&#xa;</xsl:text>
       </xsl:when>
@@ -773,7 +774,7 @@ class </xsl:text>
       <xsl:value-of select="$type"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:text>doctok::Reference &lt; </xsl:text>
+      <xsl:text>writerfilter::Reference &lt; </xsl:text>
       <xsl:value-of select='$parenttype'/>
       <xsl:text> &gt;::Pointer_t</xsl:text>
     </xsl:otherwise>
@@ -905,7 +906,9 @@ class </xsl:text>
 
 <xsl:template name="parenttype">
   <xsl:param name='type'/>
-  <xsl:value-of select='//UML:Generalization[UML:Generalization.child/UML:Class/@xmi.idref=$type]/UML:Generalization.parent/UML:Class/@xmi.idref'/>
+  <xsl:for-each select='/XMI/XMI.content/UML:Model/UML:Namespace.ownedElement/UML:Generalization[UML:Generalization.child/UML:Class/@xmi.idref=$type]'>
+    <xsl:value-of select='./UML:Generalization.parent/UML:Class/@xmi.idref'/>
+  </xsl:for-each>
 </xsl:template>
 
 <xsl:template match="UML:Attribute" mode="returntype">
