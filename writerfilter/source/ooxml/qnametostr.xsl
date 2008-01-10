@@ -5,9 +5,9 @@
  *
  *  $RCSfile: qnametostr.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-12 12:18:07 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:13:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@
 
   <xsl:template match="/">
     <xsl:call-template name="qnametostr"/>
+    <xsl:call-template name="ooxmlidstoxml"/>
   </xsl:template>
 
 </xsl:stylesheet>
