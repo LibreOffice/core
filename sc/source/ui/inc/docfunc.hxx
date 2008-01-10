@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:58:57 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:16:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ class ScPatternAttr;
 class ScRange;
 class ScRangeName;
 class ScBaseCell;
+class ScTokenArray;
 struct ScTabOpParam;
 
 
@@ -147,6 +148,7 @@ public:
                                     USHORT nFormatNo, BOOL bRecord, BOOL bApi );
 
     BOOL            EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
+                                    const ScTokenArray* pTokenArray,
                                     const String& rString, BOOL bApi, BOOL bEnglish );
 
     BOOL            TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
