@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8OutputWithDepth.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:54:37 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,14 @@
 #define INCLUDED_WW8_OUTPUT_WITH_DEPTH
 
 #ifndef INCLUDED_OUTPUT_WITH_DEPTH
-#include <doctok/OutputWithDepth.hxx>
+#include <resourcemodel/OutputWithDepth.hxx>
 #endif
 
 #include <string>
 
 using namespace ::std;
 
+namespace writerfilter {
 namespace doctok
 {
 class WW8OutputWithDepth : public OutputWithDepth<string>
@@ -57,6 +58,6 @@ public:
 
 extern WW8OutputWithDepth output;
 
-}
+}}
 
 #endif // INCLUDED_WW8_OUTPUT_WITH_DEPTH

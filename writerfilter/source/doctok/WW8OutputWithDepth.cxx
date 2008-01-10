@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8OutputWithDepth.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 15:54:04 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include <iostream>
 #include "WW8OutputWithDepth.hxx"
 
+namespace writerfilter {
 namespace doctok
 {
 
@@ -53,4 +54,4 @@ void WW8OutputWithDepth::output(const string & str) const
 
 WW8OutputWithDepth output;
 
-}
+}}

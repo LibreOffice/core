@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8FKPImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:31 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:46:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,10 @@
 #endif
 
 #ifndef INCLUDED_OUTPUT_WITH_DEPTH_HXX
-#include <doctok/OutputWithDepth.hxx>
+#include <resourcemodel/OutputWithDepth.hxx>
 #endif
 
+namespace writerfilter {
 namespace doctok
 {
 /**
@@ -94,7 +95,7 @@ public:
     {
     }
 
-    virtual doctok::Reference<Properties>::Pointer_t
+    virtual writerfilter::Reference<Properties>::Pointer_t
     getProperties(const Fc & rFc) const;
 
     virtual void dump(OutputWithDepth<string> & o) const;
@@ -113,7 +114,7 @@ public:
     {
     }
 
-    virtual doctok::Reference<Properties>::Pointer_t
+    virtual writerfilter::Reference<Properties>::Pointer_t
     getProperties(const Fc & rFc) const;
 
     virtual void dump(OutputWithDepth<string> & o) const;
@@ -218,6 +219,6 @@ public:
     {
     }
 };
-}
+}}
 
 #endif // INCLUDED_WW8_FKP_IMPL_HXX

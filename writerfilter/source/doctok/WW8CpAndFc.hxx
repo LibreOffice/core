@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8CpAndFc.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:31:22 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:45:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <hash_map>
 #include <iostream>
 
+namespace writerfilter {
 namespace doctok
 {
 using namespace ::std;
@@ -364,5 +365,6 @@ struct CpAndFcHash
 typedef hash_map<Cp, Fc, CpHash, CpEq> Cp2FcHashMap_t;
 
 } // namespace doctok
+} // namespace writerfilter
 
 #endif // INCLUDED_WW8_CP_AND_FC_HXX

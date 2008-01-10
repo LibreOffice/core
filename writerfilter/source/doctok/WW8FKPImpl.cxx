@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8FKPImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:31 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:46:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include "WW8FKPImpl.hxx"
 #include "WW8PropertySetImpl.hxx"
 
+namespace writerfilter {
 namespace doctok
 {
 #if 0
@@ -74,9 +75,9 @@ sal_uInt32 WW8FKPImpl::getIndex(const Fc & rFc) const
 #endif
 
 
-doctok::Reference<Properties>::Pointer_t WW8CHPFKPImpl::getProperties(const Fc & rFc) const
+writerfilter::Reference<Properties>::Pointer_t WW8CHPFKPImpl::getProperties(const Fc & rFc) const
 {
-    doctok::Reference<Properties>::Pointer_t pResult;
+    writerfilter::Reference<Properties>::Pointer_t pResult;
 
     sal_uInt32 n = getIndex(rFc);
 
@@ -88,7 +89,7 @@ doctok::Reference<Properties>::Pointer_t WW8CHPFKPImpl::getProperties(const Fc &
 
         if (nCbChpx > 1 && nOffset + nCbChpx + 1 <= 511)
         {
-            pResult = doctok::Reference<Properties>::Pointer_t
+            pResult = writerfilter::Reference<Properties>::Pointer_t
                 (new WW8PropertySetImpl(*this, nOffset + 1, nCbChpx));
         }
     }
@@ -122,10 +123,10 @@ void WW8CHPFKPImpl::dump(OutputWithDepth<string> & o) const
     o.addItem("</fkp>");
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8PAPFKPImpl::getProperties(const Fc & rFc) const
 {
-    doctok::Reference<Properties>::Pointer_t pResult;
+    writerfilter::Reference<Properties>::Pointer_t pResult;
 
     sal_uInt32 n = getIndex(rFc);
 
@@ -149,7 +150,7 @@ WW8PAPFKPImpl::getProperties(const Fc & rFc) const
 
             if (nCbPapx > 1 && nOffset + nCbPapx <= 511)
             {
-                pResult = doctok::Reference<Properties>::Pointer_t
+                pResult = writerfilter::Reference<Properties>::Pointer_t
                     (new WW8PropertySetImpl(*this, nOffsetIStd,
                                             nOffsetEnd - nOffsetIStd,
                                             true));
@@ -244,5 +245,4 @@ WW8FKP::Pointer_t WW8PAPFKPCacheImpl::createFKP(sal_uInt32 nPageNumber,
     return WW8FKP::Pointer_t(new WW8PAPFKPImpl
                              (*mpStream, nPageNumber, bComplex));
 }
-}
-
+}}
