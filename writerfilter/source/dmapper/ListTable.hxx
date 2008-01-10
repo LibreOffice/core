@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListTable.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2007-04-25 11:31:49 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:39:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #ifndef INCLUDED_DMAPPER_PROPERTYMAP_HXX
 #include <PropertyMap.hxx>
 #endif
-#include <doctok/WW8ResourceModel.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 
 namespace com{ namespace sun { namespace star {
     namespace text{
@@ -54,16 +54,21 @@ namespace com{ namespace sun { namespace star {
         class XMultiServiceFactory;
     }
 }}}
+
+namespace writerfilter {
 namespace dmapper
 {
 class DomainMapper;
 struct ListTable_Impl;
 class WRITERFILTER_DLLPRIVATE ListTable :
-        public doctok::Properties,
-        public doctok::Table
+        public Properties,
+        public Table
 {
     ListTable_Impl   *m_pImpl;
+    sal_Int32       m_nOverwriteListId;
+    sal_Int32       m_nOverwriteLevel;
 
+    void    ApplyLevelValues( sal_Int32 nId, sal_Int32 nIntValue);
 public:
     ListTable(
             DomainMapper& rDMapper,
@@ -71,21 +76,24 @@ public:
     virtual ~ListTable();
 
     // Properties
-    virtual void attribute(doctok::Id Name, doctok::Value & val);
-    virtual void sprm(doctok::Sprm & sprm);
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
 
     // Table
-    virtual void entry(int pos, doctok::Reference<Properties>::Pointer_t ref);
+    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 
     // BinaryObj
 //    virtual void data(const sal_Int8* buf, size_t len,
-//                      doctok::Reference<Properties>::Pointer_t ref);
+//                      writerfilter::Reference<Properties>::Pointer_t ref);
 
     sal_uInt32          size() const;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace >
             GetNumberingRules(sal_Int32 nListId);
+
+    void setOverwriteLevel(sal_Int32 nAbstractNumId, sal_Int32 nLevel);
+    void resetOverwrite();
 };
 typedef boost::shared_ptr< ListTable >          ListTablePtr;
-}
+}}
 
 #endif //
