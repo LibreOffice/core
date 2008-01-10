@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 10:40:50 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:08:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -421,6 +421,12 @@ private:
 
     mutable BOOL        bStyleSheetUsageInvalid;
 
+    BOOL                bUndoEnabled;
+    bool                mbAdjustHeightEnabled;
+    bool                mbExecuteLinkEnabled;
+    bool                mbChangeReadOnlyEnabled;    // allow changes in read-only document (for API import filters)
+
+    sal_Int16           mnNamedRangesLockCount;
 
     inline BOOL         RowHidden( SCROW nRow, SCTAB nTab );        // FillInfo
 
@@ -919,7 +925,16 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     BOOL            IsClipOrUndo() const                        { return bIsClip || bIsUndo; }
     BOOL            IsUndo() const                              { return bIsUndo; }
     BOOL            IsClipboard() const                         { return bIsClip; }
-    BOOL            IsUndoEnabled() const                       { return !bImportingXML; }
+    BOOL            IsUndoEnabled() const                       { return bUndoEnabled; }
+    void            EnableUndo( BOOL bVal )                     { bUndoEnabled = bVal; }
+    bool            IsAdjustHeightEnabled() const               { return mbAdjustHeightEnabled; }
+    void            EnableAdjustHeight( bool bVal )             { mbAdjustHeightEnabled = bVal; }
+    bool            IsExecuteLinkEnabled() const                { return mbExecuteLinkEnabled; }
+    void            EnableExecuteLink( bool bVal )              { mbExecuteLinkEnabled = bVal; }
+    bool            IsChangeReadOnlyEnabled() const             { return mbChangeReadOnlyEnabled; }
+    void            EnableChangeReadOnly( bool bVal )           { mbChangeReadOnlyEnabled = bVal; }
+    sal_Int16       GetNamedRangesLockCount() const             { return mnNamedRangesLockCount; }
+    void            SetNamedRangesLockCount( sal_Int16 nCount ) { mnNamedRangesLockCount = nCount; }
     void            ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks );
     void            ResetClip( ScDocument* pSourceDoc, SCTAB nTab );
     void            SetCutMode( BOOL bCut );
