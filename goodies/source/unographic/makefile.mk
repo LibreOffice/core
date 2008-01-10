@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:28:14 $
+#   last change: $Author: obo $ $Date: 2008-01-10 13:22:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,14 +50,16 @@ CXXFILES=							\
             descriptor.cxx			\
             provider.cxx			\
             graphic.cxx				\
-            renderer.cxx			
+            renderer.cxx			\
+            transformer.cxx
 
 SLOFILES=							\
             $(SLO)$/graphicuno.obj	\
             $(SLO)$/descriptor.obj	\
             $(SLO)$/provider.obj	\
             $(SLO)$/graphic.obj		\
-            $(SLO)$/renderer.obj	
+            $(SLO)$/renderer.obj	\
+            $(SLO)$/transformer.obj
 
 # --- Target -------------------------------------------------------
 
