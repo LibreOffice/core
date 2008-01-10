@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:06:31 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:17:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 
 #include <svtools/numuno.hxx>
 #include <svtools/smplhint.hxx>
+#include <svtools/undoopt.hxx>
 #include <sfx2/printer.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
@@ -141,6 +142,12 @@ const SfxItemPropertyMap* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_REGEXENABLED),      0, &getBooleanCppuType(),                                    0, 0},
         {MAP_CHAR_LEN(SC_UNO_RUNTIMEUID),        0, &getCppuType(static_cast< const rtl::OUString * >(0)),    beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(SC_UNO_HASVALIDSIGNATURES),0, &getBooleanCppuType(),                                    beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(SC_UNO_ISLOADED),          0, &getBooleanCppuType(),                                    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ISUNDOENABLED),     0, &getBooleanCppuType(),                                    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ISADJUSTHEIGHTENABLED), 0, &getBooleanCppuType(),                                0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ISEXECUTELINKENABLED), 0, &getBooleanCppuType(),                                 0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ISCHANGEREADONLYENABLED), 0, &getBooleanCppuType(),                              0, 0},
+        {MAP_CHAR_LEN(SC_UNO_REFERENCEDEVICE),   0, &getCppuType((uno::Reference<awt::XDevice>*)0),           beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN("BuildId"),                0, &::getCppuType(static_cast< const rtl::OUString * >(0)), 0, 0},
 
         {0,0,0,0,0,0}
@@ -1356,6 +1363,38 @@ void SAL_CALL ScModelObj::setPropertyValue(
             if (pBindings)
                 pBindings->Invalidate( SID_FM_AUTOCONTROLFOCUS );
         }
+        else if ( aString.EqualsAscii( SC_UNO_ISLOADED ) )
+        {
+            pDocShell->SetEmpty( !ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        }
+        else if ( aString.EqualsAscii( SC_UNO_ISUNDOENABLED ) )
+        {
+            BOOL bUndoEnabled = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+            pDoc->EnableUndo( bUndoEnabled );
+            USHORT nCount = ( bUndoEnabled ?
+                static_cast< USHORT >( SvtUndoOptions().GetUndoCount() ) : 0 );
+            pDocShell->GetUndoManager()->SetMaxUndoActionCount( nCount );
+        }
+        else if ( aString.EqualsAscii( SC_UNO_ISADJUSTHEIGHTENABLED ) )
+        {
+            bool bAdjustHeightEnabled = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+            pDoc->EnableAdjustHeight( bAdjustHeightEnabled );
+            if ( bAdjustHeightEnabled )
+            {
+                for ( SCTAB nTab = 0; nTab < pDoc->GetTableCount(); ++nTab )
+                {
+                    pDocShell->AdjustRowHeight( 0, MAXROW, nTab );
+                }
+            }
+        }
+        else if ( aString.EqualsAscii( SC_UNO_ISEXECUTELINKENABLED ) )
+        {
+            pDoc->EnableExecuteLink( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        }
+        else if ( aString.EqualsAscii( SC_UNO_ISCHANGEREADONLYENABLED ) )
+        {
+            pDoc->EnableChangeReadOnly( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
+        }
         else if ( aString.EqualsAscii( "BuildId" ) )
         {
             aValue >>= maBuildId;
@@ -1490,6 +1529,32 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         else if ( aString.EqualsAscii( SC_UNO_HASVALIDSIGNATURES ) )
         {
             aRet <<= hasValidSignatures();
+        }
+        else if ( aString.EqualsAscii( SC_UNO_ISLOADED ) )
+        {
+            ScUnoHelpFunctions::SetBoolInAny( aRet, !pDocShell->IsEmpty() );
+        }
+        else if ( aString.EqualsAscii( SC_UNO_ISUNDOENABLED ) )
+        {
+            ScUnoHelpFunctions::SetBoolInAny( aRet, pDoc->IsUndoEnabled() );
+        }
+        else if ( aString.EqualsAscii( SC_UNO_ISADJUSTHEIGHTENABLED ) )
+        {
+            ScUnoHelpFunctions::SetBoolInAny( aRet, pDoc->IsAdjustHeightEnabled() );
+        }
+        else if ( aString.EqualsAscii( SC_UNO_ISEXECUTELINKENABLED ) )
+        {
+            ScUnoHelpFunctions::SetBoolInAny( aRet, pDoc->IsExecuteLinkEnabled() );
+        }
+        else if ( aString.EqualsAscii( SC_UNO_ISCHANGEREADONLYENABLED ) )
+        {
+            ScUnoHelpFunctions::SetBoolInAny( aRet, pDoc->IsChangeReadOnlyEnabled() );
+        }
+        else if ( aString.EqualsAscii( SC_UNO_REFERENCEDEVICE ) )
+        {
+            VCLXDevice* pXDev = new VCLXDevice();
+            pXDev->SetOutputDevice( pDoc->GetRefDevice() );
+            aRet <<= uno::Reference< awt::XDevice >( pXDev );
         }
         else if ( aString.EqualsAscii( "BuildId" ) )
         {
