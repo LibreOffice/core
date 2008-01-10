@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkuno.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:56:50 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:08:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,12 @@
 #ifndef _COM_SUN_STAR_SHEET_XDDELINK_HPP_
 #include <com/sun/star/sheet/XDDELink.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SHEET_XDDELINKRESULTS_HPP_
+#include <com/sun/star/sheet/XDDELinkResults.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SHEET_XDDELINKS_HPP_
+#include <com/sun/star/sheet/XDDELinks.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SHEET_XAREALINK_HPP_
 #include <com/sun/star/sheet/XAreaLink.hpp>
 #endif
@@ -80,6 +86,9 @@
 #endif
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE5_HXX_
+#include <cppuhelper/implbase5.hxx>
 #endif
 
 
@@ -405,10 +414,11 @@ public:
 
 //! order of XNamed and DDELink changed to avoid "duplicate comdat" symbols
 
-class ScDDELinkObj : public cppu::WeakImplHelper4<
+class ScDDELinkObj : public cppu::WeakImplHelper5<
                             com::sun::star::sheet::XDDELink,
                             com::sun::star::container::XNamed,
                             com::sun::star::util::XRefreshable,
+                            com::sun::star::sheet::XDDELinkResults,
                             com::sun::star::lang::XServiceInfo >,
                         public SfxListener
 {
@@ -447,6 +457,14 @@ public:
                                     ::com::sun::star::util::XRefreshListener >& l )
                                 throw(::com::sun::star::uno::RuntimeException);
 
+                            // XDDELinkResults
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >
+        SAL_CALL getResults(  )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setResults(
+        const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > >& aResults )
+        throw (::com::sun::star::uno::RuntimeException);
+
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
                                 throw(::com::sun::star::uno::RuntimeException);
@@ -458,9 +476,9 @@ public:
 
 
 class ScDDELinksObj : public cppu::WeakImplHelper4<
-                            com::sun::star::container::XNameAccess,
                             com::sun::star::container::XEnumerationAccess,
                             com::sun::star::container::XIndexAccess,
+                            com::sun::star::sheet::XDDELinks,
                             com::sun::star::lang::XServiceInfo >,
                         public SfxListener
 {
@@ -501,6 +519,12 @@ public:
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType()
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XDDELinks
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XDDELink > SAL_CALL addDDELink(
+        const ::rtl::OUString& aApplication, const ::rtl::OUString& aTopic,
+        const ::rtl::OUString& aItem, ::com::sun::star::sheet::DDELinkMode nMode )
+        throw (::com::sun::star::uno::RuntimeException);
 
                             // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName()
