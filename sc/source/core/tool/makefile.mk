@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 13:07:03 $
+#   last change: $Author: obo $ $Date: 2008-01-10 13:13:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@ SLOFILES =  \
         $(SLO)$/interpr6.obj \
         $(SLO)$/lookupcache.obj \
         $(SLO)$/navicfg.obj \
+        $(SLO)$/odffmap.obj \
         $(SLO)$/optutil.obj \
         $(SLO)$/parclass.obj \
         $(SLO)$/printopt.obj \
