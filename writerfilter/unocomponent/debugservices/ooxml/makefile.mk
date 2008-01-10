@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.1 $
+#  $Revision: 1.2 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-02-21 13:38:10 $
+#  last change: $Author: obo $ $Date: 2008-01-10 12:19:36 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,21 @@ ENABLE_EXCEPTIONS=TRUE
 
 .INCLUDE :  settings.mk
 
-SHL1STDLIBS=$(COMPHELPERLIB)
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+RESSOUREMODELLIB=-lresourcemodel
+.ELIF "$(GUI)"=="WNT"
+RESOURCEMODELLIB=$(LB)$/iresourcemodel.lib
+.ENDIF
+
+SHL1STDLIBS= \
+    $(COMPHELPERLIB) \
+    $(RESOURCEMODELLIB)
 
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
-    $(SLO)$/OOXMLTestService.obj
+    $(SLO)$/OOXMLTestService.obj \
+    $(SLO)$/OOXMLAnalyzeService.obj
 
 # --- Targets ------------------------------------------------------
 
