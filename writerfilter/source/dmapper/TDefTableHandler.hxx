@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TDefTableHandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2007-05-24 11:32:50 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:42:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 #ifndef INCLUDED_WRITERFILTERDLLAPI_H
 #include <WriterFilterDllApi.hxx>
 #endif
-#include <doctok/WW8ResourceModel.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #include <boost/shared_ptr.hpp>
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
@@ -47,10 +47,12 @@
 namespace com{ namespace sun{ namespace star{namespace table {
     struct BorderLine;
 }}}}
+
+namespace writerfilter {
 namespace dmapper
 {
 class PropertyMap;
-class WRITERFILTER_DLLPRIVATE TDefTableHandler : public doctok::Properties
+class WRITERFILTER_DLLPRIVATE TDefTableHandler : public Properties
 {
 public:
 
@@ -69,13 +71,16 @@ private:
     sal_Int32                                           m_nLineColor;
     sal_Int32                                           m_nLineDistance;
 
+    bool                                                m_bOOXML;
+
+    void localResolve(Id Name, writerfilter::Reference<Properties>::Pointer_t pProperties);
 public:
-    TDefTableHandler( );
+    TDefTableHandler( bool bOOXML );
     virtual ~TDefTableHandler();
 
     // Properties
-    virtual void attribute(doctok::Id Name, doctok::Value & val);
-    virtual void sprm(doctok::Sprm & sprm);
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
 
     size_t                                      getCellCount() const;
     ::boost::shared_ptr<PropertyMap>            getCellProperties( size_t nCell ) const;
@@ -83,6 +88,6 @@ public:
     sal_Int32                                   getTableWidth() const;
 };
 typedef boost::shared_ptr< TDefTableHandler >          TDefTableHandlerPtr;
-}
+}}
 
 #endif //
