@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SheetCell.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 15:10:25 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:41:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,14 @@
 
 #ifndef __com_sun_star_style_ParagraphProperties_idl__
 #include <com/sun/star/style/ParagraphProperties.idl>
+#endif
+
+#ifndef __com_sun_star_style_ParagraphPropertiesAsian_idl__
+#include <com/sun/star/style/ParagraphPropertiesAsian.idl>
+#endif
+
+#ifndef __com_sun_star_style_ParagraphPropertiesComplex_idl__
+#include <com/sun/star/style/ParagraphPropertiesComplex.idl>
 #endif
 
 #ifndef __com_sun_star_sheet_SheetRangesQuery_idl__
@@ -165,6 +173,18 @@ published service SheetCell
     /** contributes properties for paragraph formatting.
      */
     service com::sun::star::style::ParagraphProperties;
+
+    //-------------------------------------------------------------------------
+
+    /** contributes properties for paragraph formatting of Asian text.
+     */
+    [optional] service com::sun::star::style::ParagraphPropertiesAsian;
+
+    //-------------------------------------------------------------------------
+
+    /** contributes properties for paragraph formatting of Complex text.
+     */
+    [optional] service com::sun::star::style::ParagraphPropertiesComplex;
 
     //-------------------------------------------------------------------------
 
