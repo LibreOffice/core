@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8StyleSheet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-27 13:14:23 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:50:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #include <resources.hxx>
 
+namespace writerfilter {
 namespace doctok {
 
 void WW8StyleSheet::initPayload()
@@ -68,10 +69,10 @@ sal_uInt32 WW8StyleSheet::getEntryCount()
     return get_cstd();
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8StyleSheet::getEntry(sal_uInt32 nIndex)
 {
-    doctok::Reference<Properties>::Pointer_t pResult;
+    writerfilter::Reference<Properties>::Pointer_t pResult;
 
     sal_uInt32 nCount = entryOffsets[nIndex + 1] - entryOffsets[nIndex];
 
@@ -81,7 +82,7 @@ WW8StyleSheet::getEntry(sal_uInt32 nIndex)
 
         pStyle->setIndex(nIndex);
 
-        pResult = doctok::Reference<Properties>::Pointer_t(pStyle);
+        pResult = writerfilter::Reference<Properties>::Pointer_t(pStyle);
     }
 
     return pResult;
@@ -169,9 +170,10 @@ sal_uInt32 WW8Style::get_upx_count()
     return get_cupx();
 }
 
-doctok::Reference<Properties>::Pointer_t WW8Style::get_upx(sal_uInt32 nIndex)
+writerfilter::Reference<Properties>::Pointer_t WW8Style::get_upx
+(sal_uInt32 nIndex)
 {
-    doctok::Reference<Properties>::Pointer_t pResult;
+    writerfilter::Reference<Properties>::Pointer_t pResult;
 
     WW8StructBaseTmpOffset aOffset(this);
 
@@ -203,15 +205,15 @@ doctok::Reference<Properties>::Pointer_t WW8Style::get_upx(sal_uInt32 nIndex)
             WW8PropertiesReference * pRef =
                 new WW8PropertiesReference(pProps);
 
-            pResult = doctok::Reference<Properties>::Pointer_t(pRef);
+            pResult = writerfilter::Reference<Properties>::Pointer_t(pRef);
         }
     }
 
     return pResult;
 }
 
-void WW8Style::resolveNoAuto(doctok::Properties & /*rHandler*/)
+void WW8Style::resolveNoAuto(Properties & /*rHandler*/)
 {
 }
 
-}
+}}

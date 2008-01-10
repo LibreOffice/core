@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Text.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:49:15 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:51:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #include <resources.hxx>
 
+namespace writerfilter {
 namespace doctok {
 sal_uInt32 WW8sprmPChgTabsPapx::calcSize()
 {
@@ -66,18 +67,18 @@ sal_uInt32 WW8sprmPChgTabsPapx::get_tbdAdd_count()
     return get_dxaAdd_count();
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8sprmPChgTabsPapx::get_tbdAdd(sal_uInt32 pos)
 {
     //wntmsci compiler cannot handle 'too many inlines' ;-)
-    doctok::Reference<Properties>::Pointer_t pRet( new WW8TBD(this,
+    writerfilter::Reference<Properties>::Pointer_t pRet( new WW8TBD(this,
                     0x4 + get_dxaDel_count() * 2 + 1 + get_dxaAdd_count() * 2
                     + pos, 1));
     return pRet;
 
-/*    return doctok::Reference<Properties>::Pointer_t
+/*    return writerfilter::Reference<Properties>::Pointer_t
         (new WW8TBD(this,
                     0x4 + get_dxaDel_count() * 2 + 1 + get_dxaAdd_count() * 2
                     + pos, 1));*/
 }
-}
+}}
