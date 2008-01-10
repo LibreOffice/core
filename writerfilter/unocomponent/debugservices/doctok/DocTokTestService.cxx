@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocTokTestService.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2007-06-19 05:32:46 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,8 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
-#include <doctok/WW8ResourceModel.hxx>
-#include <doctok/exceptions.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
+#include <resourcemodel/exceptions.hxx>
 #include <doctok/WW8Document.hxx>
 
 #include <ctype.h>
@@ -119,7 +119,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
         TimeValue t1; osl_getSystemTime(&t1);
 #endif
 
-        doctok::Stream::Pointer_t pStream = doctok::createStreamHandler();
+        Stream::Pointer_t pStream = createStreamHandler();
         pDocument->resolve(*pStream);
 
 #if 0
