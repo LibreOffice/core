@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CellColorHandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-03 10:07:16 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:36:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,19 +32,13 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef INCLUDED_CELLCOLORHANDLER_HXX
 #include <CellColorHandler.hxx>
-#endif
-#ifndef INCLUDED_DMAPPER_PROPERTYMAP_HXX
 #include <PropertyMap.hxx>
-#endif
-#ifndef INCLUDED_RESOURCESIDS
 #include <doctok/resourceids.hxx>
-#endif
-#ifndef INCLUDED_DMAPPER_CONVERSIONHELPER_HXX
 #include <ConversionHelper.hxx>
-#endif
+#include <ooxml/resourceids.hxx>
 
+namespace writerfilter {
 namespace dmapper {
 
 using namespace ::com::sun::star;
@@ -54,7 +48,12 @@ using namespace ::writerfilter;
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-CellColorHandler::CellColorHandler()
+CellColorHandler::CellColorHandler() :
+    m_nShadowType( 0 ),
+    m_nColor( 0xffffffff ),
+    m_nFillColor( 0xffffffff ),
+    m_bOOXMLColor( false ),
+    m_bParagraph( false )
 {
 }
 /*-- 24.04.2007 09:06:35---------------------------------------------------
@@ -66,22 +65,45 @@ CellColorHandler::~CellColorHandler()
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void CellColorHandler::attribute(doctok::Id rName, doctok::Value & rVal)
+void CellColorHandler::attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
     (void)nIntValue;
     (void)rName;
+    /* WRITERFILTERSTATUS: table: CellColor_attributedata */
     switch( rName )
     {
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_cellTopColor:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_cellLeftColor:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_cellBottomColor:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_cellRightColor:
             // nIntValue contains the color, directly
         break;
+        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_Shd_val:
+        {
+            //might be clear, pct5...90, some hatch types
+            //TODO: The values need symbolic names!
+            m_nShadowType = nIntValue; //clear == 0, solid: 1, pct5: 2, pct50:8, pct95: x3c, horzStripe:0x0e, thinVertStripe: 0x15
+            m_bOOXMLColor = true;
+        }
+        break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_Shd_fill:
+            m_nFillColor = nIntValue;
+        break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_Shd_color:
+            //color of the shading
+            m_nColor = nIntValue;
+        break;
 //        case NS_rtf::LN_rgbrc:
 //        {
-//            doctok::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
+//            writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
 //            if( pProperties.get())
 //            {
 //                pProperties->resolve(*this);
@@ -96,7 +118,7 @@ void CellColorHandler::attribute(doctok::Id rName, doctok::Value & rVal)
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void CellColorHandler::sprm(doctok::Sprm & rSprm)
+void CellColorHandler::sprm(Sprm & rSprm)
 {
     (void)rSprm;
 }
@@ -106,6 +128,12 @@ void CellColorHandler::sprm(doctok::Sprm & rSprm)
 PropertyMapPtr  CellColorHandler::getProperties()
 {
     PropertyMapPtr pPropertyMap(new PropertyMap);
+    if( m_bOOXMLColor )
+    {
+        pPropertyMap->Insert( m_bParagraph ? PROP_PARA_BACK_COLOR : PROP_BACK_COLOR, false,
+                                uno::makeAny( m_nShadowType ? m_nColor : m_nFillColor ));
+    }
     return pPropertyMap;
 }
 } //namespace dmapper
+} //namespace writerfilter
