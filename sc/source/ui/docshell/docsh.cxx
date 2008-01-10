@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-23 14:45:22 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:15:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -534,6 +534,7 @@ void ScDocShell::BeforeXMLLoading()
     pModificator = new ScDocShellModificator( *this );
 
     aDocument.SetImportingXML( TRUE );
+    aDocument.EnableUndo( FALSE );
     // prevent unnecessary broadcasts and "half way listeners"
     aDocument.SetInsertingFromOtherDoc( TRUE );
 
@@ -613,6 +614,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
         aDocument.SetInsertingFromOtherDoc( FALSE );
 
     aDocument.SetImportingXML( FALSE );
+    aDocument.EnableUndo( TRUE );
     bIsEmpty = FALSE;
 
     if (pModificator)
