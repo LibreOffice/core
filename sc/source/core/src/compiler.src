@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:48:53 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:12:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -402,7 +402,7 @@ Resource RID_SC_FUNCTION_NAMES
     {
         Text [ en-US ] = "ERRORTYPE" ;
     };
-    String SC_OPCODE_ERR_CELL { Text = "ZellError" ; };  // ?? Text klein, dt. & engl. gemischt ??
+    String SC_OPCODE_ERR_CELL { Text = "ZellError" ; };  // TODO: ancient legacy only, remove?
     String SC_OPCODE_FORMULA
     {
         Text [ en-US ] = "FORMULA" ;
@@ -803,7 +803,7 @@ Resource RID_SC_FUNCTION_NAMES
     {
         Text [ en-US ] = "HLOOKUP" ;
     };
-    String SC_OPCODE_MULTI_AREA
+    String SC_OPCODE_MULTI_AREA     // TODO: legacy for range list (union), remove if done.
     {
         Text [ en-US ] = "MULTIRANGE" ;
     };
@@ -1169,6 +1169,11 @@ Resource RID_SC_FUNCTION_NAMES
         Text [ en-US ] = "GETPIVOTDATA";
     };
 };
+
+
+// DO NOT CHANGE!
+// These English names are used internally to store/load ODF v1.0/v1.1 and for
+// API XFunctionAccess.
 Resource RID_SC_FUNCTION_NAMES_ENGLISH
 {
     String SC_OPCODE_IF { Text = "IF" ; };
@@ -1280,7 +1285,7 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_S_NORM_INV { Text = "NORMSINV" ; };
     String SC_OPCODE_GAMMA_LN { Text = "GAMMALN" ; };
     String SC_OPCODE_ERROR_TYPE { Text = "ERRORTYPE" ; };
-    String SC_OPCODE_ERR_CELL { Text = "ZellError" ; };  // ?? Text klein, dt. & engl. gemischt ??
+    String SC_OPCODE_ERR_CELL { Text = "ZellError" ; };  // TODO: ancient legacy only, remove?
     String SC_OPCODE_FORMULA { Text = "FORMULA"; };
     String SC_OPCODE_ARC_TAN_2 { Text = "ATAN2" ; };
     String SC_OPCODE_CEIL { Text = "CEILING" ; };
@@ -1380,7 +1385,7 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_LOOKUP { Text = "LOOKUP" ; };
     String SC_OPCODE_V_LOOKUP { Text = "VLOOKUP" ; };
     String SC_OPCODE_H_LOOKUP { Text = "HLOOKUP" ; };
-    String SC_OPCODE_MULTI_AREA { Text = "MULTIRANGE" ; };
+    String SC_OPCODE_MULTI_AREA { Text = "MULTIRANGE" ; };      // TODO: legacy for range list (union), remove if done.
     String SC_OPCODE_OFFSET { Text = "OFFSET" ; };
     String SC_OPCODE_INDEX { Text = "INDEX" ; };
     String SC_OPCODE_AREAS { Text = "AREAS" ; };
@@ -1474,3 +1479,310 @@ Resource RID_SC_FUNCTION_NAMES_ENGLISH
     String SC_OPCODE_GET_PIVOT_DATA { Text = "GETPIVOTDATA" ; };
 };
 
+
+// DO NOT CHANGE!
+// These English names are used internally to store/load ODFF as of ODF v1.2
+Resource RID_SC_FUNCTION_NAMES_ENGLISH_ODFF
+{
+    String SC_OPCODE_IF { Text = "IF" ; };
+    String SC_OPCODE_CHOSE { Text = "CHOOSE" ; };
+    String SC_OPCODE_OPEN { Text = "(" ; };
+    String SC_OPCODE_CLOSE { Text = ")" ; };
+    String SC_OPCODE_ARRAY_OPEN { Text = "{" ; };
+    String SC_OPCODE_ARRAY_CLOSE { Text = "}" ; };
+    String SC_OPCODE_ARRAY_ROW_SEP { Text = "|" ; };
+    String SC_OPCODE_ARRAY_COL_SEP { Text = ";" ; };
+    String SC_OPCODE_SEP { Text = ";" ; };
+    String SC_OPCODE_PERCENT_SIGN { Text = "%" ; };
+    String SC_OPCODE_ADD { Text = "+" ; };
+    String SC_OPCODE_SUB { Text = "-" ; };
+    String SC_OPCODE_MUL { Text = "*" ; };
+    String SC_OPCODE_DIV { Text = "/" ; };
+    String SC_OPCODE_AMPERSAND { Text = "&" ; };
+    String SC_OPCODE_POW { Text = "^" ; };
+    String SC_OPCODE_EQUAL { Text = "=" ; };
+    String SC_OPCODE_NOT_EQUAL { Text = "<>" ; };
+    String SC_OPCODE_LESS { Text = "<" ; };
+    String SC_OPCODE_GREATER { Text = ">" ; };
+    String SC_OPCODE_LESS_EQUAL { Text = "<=" ; };
+    String SC_OPCODE_GREATER_EQUAL { Text = ">=" ; };
+    String SC_OPCODE_AND { Text = "AND" ; };
+    String SC_OPCODE_OR { Text = "OR" ; };
+    String SC_OPCODE_INTERSECT { Text = "!" ; };
+    String SC_OPCODE_UNION { Text = "~" ; };
+    String SC_OPCODE_RANGE { Text = ":" ; };
+    String SC_OPCODE_NOT { Text = "NOT" ; };
+    String SC_OPCODE_NEG { Text = "NEG" ; };
+    String SC_OPCODE_NEG_SUB { Text = "-" ; };
+    String SC_OPCODE_PI { Text = "PI" ; };
+    String SC_OPCODE_RANDOM { Text = "RAND" ; };
+    String SC_OPCODE_TRUE { Text = "TRUE" ; };
+    String SC_OPCODE_FALSE { Text = "FALSE" ; };
+    String SC_OPCODE_GET_ACT_DATE { Text = "TODAY" ; };
+    String SC_OPCODE_GET_ACT_TIME { Text = "NOW" ; };
+    String SC_OPCODE_NO_VALUE { Text = "NA" ; };
+    String SC_OPCODE_CURRENT { Text = "ORG.OPENOFFICE.CURRENT" ; };
+    String SC_OPCODE_DEG { Text = "DEGREES" ; };
+    String SC_OPCODE_RAD { Text = "RADIANS" ; };
+    String SC_OPCODE_SIN { Text = "SIN" ; };
+    String SC_OPCODE_COS { Text = "COS" ; };
+    String SC_OPCODE_TAN { Text = "TAN" ; };
+    String SC_OPCODE_COT { Text = "COT" ; };
+    String SC_OPCODE_ARC_SIN { Text = "ASIN" ; };
+    String SC_OPCODE_ARC_COS { Text = "ACOS" ; };
+    String SC_OPCODE_ARC_TAN { Text = "ATAN" ; };
+    String SC_OPCODE_ARC_COT { Text = "ACOT" ; };
+    String SC_OPCODE_SIN_HYP { Text = "SINH" ; };
+    String SC_OPCODE_COS_HYP { Text = "COSH" ; };
+    String SC_OPCODE_TAN_HYP { Text = "TANH" ; };
+    String SC_OPCODE_COT_HYP { Text = "COTH" ; };
+    String SC_OPCODE_ARC_SIN_HYP { Text = "ASINH" ; };
+    String SC_OPCODE_ARC_COS_HYP { Text = "ACOSH" ; };
+    String SC_OPCODE_ARC_TAN_HYP { Text = "ATANH" ; };
+    String SC_OPCODE_ARC_COT_HYP { Text = "ACOTH" ; };
+    String SC_OPCODE_EXP { Text = "EXP" ; };
+    String SC_OPCODE_LN { Text = "LN" ; };
+    String SC_OPCODE_SQRT { Text = "SQRT" ; };
+    String SC_OPCODE_FACT { Text = "FACT" ; };
+    String SC_OPCODE_GET_YEAR { Text = "YEAR" ; };
+    String SC_OPCODE_GET_MONTH { Text = "MONTH" ; };
+    String SC_OPCODE_GET_DAY { Text = "DAY" ; };
+    String SC_OPCODE_GET_HOUR { Text = "HOUR" ; };
+    String SC_OPCODE_GET_MIN { Text = "MINUTE" ; };
+    String SC_OPCODE_GET_SEC { Text = "SECOND" ; };
+    String SC_OPCODE_PLUS_MINUS { Text = "SIGN" ; };
+    String SC_OPCODE_ABS { Text = "ABS" ; };
+    String SC_OPCODE_INT { Text = "INT" ; };
+    String SC_OPCODE_PHI { Text = "PHI" ; };
+    String SC_OPCODE_GAUSS { Text = "GAUSS" ; };
+    String SC_OPCODE_IS_EMPTY { Text = "ISBLANK" ; };
+    String SC_OPCODE_IS_STRING { Text = "ISTEXT" ; };
+    String SC_OPCODE_IS_NON_STRING { Text = "ISNONTEXT" ; };
+    String SC_OPCODE_IS_LOGICAL { Text = "ISLOGICAL" ; };
+    String SC_OPCODE_TYPE { Text = "TYPE" ; };
+    String SC_OPCODE_CELL { Text = "CELL" ; };
+    String SC_OPCODE_IS_REF { Text = "ISREF" ; };
+    String SC_OPCODE_IS_VALUE { Text = "ISNUMBER" ; };
+    String SC_OPCODE_IS_FORMULA { Text = "ISFORMULA" ; };
+    String SC_OPCODE_IS_NV { Text = "ISNA" ; };
+    String SC_OPCODE_IS_ERR { Text = "ISERR" ; };
+    String SC_OPCODE_IS_ERROR { Text = "ISERROR" ; };
+    String SC_OPCODE_IS_EVEN { Text = "ISEVEN" ; };
+    String SC_OPCODE_IS_ODD { Text = "ISODD" ; };
+    String SC_OPCODE_N { Text = "N" ; };
+    String SC_OPCODE_GET_DATE_VALUE { Text = "DATEVALUE" ; };
+    String SC_OPCODE_GET_TIME_VALUE { Text = "TIMEVALUE" ; };
+    String SC_OPCODE_CODE { Text = "CODE" ; };
+    String SC_OPCODE_TRIM { Text = "TRIM" ; };
+    String SC_OPCODE_UPPER { Text = "UPPER" ; };
+    String SC_OPCODE_PROPPER { Text = "PROPER" ; };
+    String SC_OPCODE_LOWER { Text = "LOWER" ; };
+    String SC_OPCODE_LEN { Text = "LEN" ; };
+    String SC_OPCODE_T { Text = "T" ; };
+    String SC_OPCODE_VALUE { Text = "VALUE" ; };
+    String SC_OPCODE_CLEAN { Text = "CLEAN" ; };
+    String SC_OPCODE_CHAR { Text = "CHAR" ; };
+    String SC_OPCODE_JIS { Text = "JIS" ; };
+    String SC_OPCODE_ASC { Text = "ASC" ; };
+    String SC_OPCODE_LOG10 { Text = "LOG10" ; };
+    String SC_OPCODE_EVEN { Text = "EVEN" ; };
+    String SC_OPCODE_ODD { Text = "ODD" ; };
+    String SC_OPCODE_STD_NORM_DIST { Text = "LEGACY.NORMSDIST" ; };
+    String SC_OPCODE_FISHER { Text = "FISHER" ; };
+    String SC_OPCODE_FISHER_INV { Text = "FISHERINV" ; };
+    String SC_OPCODE_S_NORM_INV { Text = "LEGACY.NORMSINV" ; };
+    String SC_OPCODE_GAMMA_LN { Text = "GAMMALN" ; };
+    String SC_OPCODE_ERROR_TYPE { Text = "ERROR.TYPE" ; };
+    String SC_OPCODE_ERR_CELL { Text = "ZellError" ; };  // TODO: ancient legacy only, remove?
+    String SC_OPCODE_FORMULA { Text = "FORMULA"; };
+    String SC_OPCODE_ARC_TAN_2 { Text = "ATAN2" ; };
+    String SC_OPCODE_CEIL { Text = "CEILING" ; };
+    String SC_OPCODE_FLOOR { Text = "FLOOR" ; };
+    String SC_OPCODE_ROUND { Text = "ROUND" ; };
+    String SC_OPCODE_ROUND_UP { Text = "ROUNDUP" ; };
+    String SC_OPCODE_ROUND_DOWN { Text = "ROUNDDOWN" ; };
+    String SC_OPCODE_TRUNC { Text = "TRUNC" ; };
+    String SC_OPCODE_LOG { Text = "LOG" ; };
+    String SC_OPCODE_POWER { Text = "POWER" ; };
+    String SC_OPCODE_GGT { Text = "GCD" ; };
+    String SC_OPCODE_KGV { Text = "LCM" ; };
+    String SC_OPCODE_MOD { Text = "MOD" ; };
+    String SC_OPCODE_SUM_PRODUCT { Text = "SUMPRODUCT" ; };
+    String SC_OPCODE_SUM_SQ { Text = "SUMSQ" ; };
+    String SC_OPCODE_SUM_X2MY2 { Text = "SUMX2MY2" ; };
+    String SC_OPCODE_SUM_X2DY2 { Text = "SUMX2PY2" ; };
+    String SC_OPCODE_SUM_XMY2 { Text = "SUMXMY2" ; };
+    String SC_OPCODE_GET_DATE { Text = "DATE" ; };
+    String SC_OPCODE_GET_TIME { Text = "TIME" ; };
+    String SC_OPCODE_GET_DIFF_DATE { Text = "DAYS" ; };
+    String SC_OPCODE_GET_DIFF_DATE_360 { Text = "DAYS360" ; };
+    String SC_OPCODE_MIN { Text = "MIN" ; };
+    String SC_OPCODE_MIN_A { Text = "MINA" ; };
+    String SC_OPCODE_MAX { Text = "MAX" ; };
+    String SC_OPCODE_MAX_A { Text = "MAXA" ; };
+    String SC_OPCODE_SUM { Text = "SUM" ; };
+    String SC_OPCODE_PRODUCT { Text = "PRODUCT" ; };
+    String SC_OPCODE_AVERAGE { Text = "AVERAGE" ; };
+    String SC_OPCODE_AVERAGE_A { Text = "AVERAGEA" ; };
+    String SC_OPCODE_COUNT { Text = "COUNT" ; };
+    String SC_OPCODE_COUNT_2 { Text = "COUNTA" ; };
+    String SC_OPCODE_NBW { Text = "NPV" ; };
+    String SC_OPCODE_IKV { Text = "IRR" ; };
+    String SC_OPCODE_MIRR { Text = "MIRR" ; };
+    String SC_OPCODE_ISPMT { Text = "ISPMT" ; };
+    String SC_OPCODE_VAR { Text = "VAR" ; };
+    String SC_OPCODE_VAR_A { Text = "VARA" ; };
+    String SC_OPCODE_VAR_P { Text = "VARP" ; };
+    String SC_OPCODE_VAR_P_A { Text = "VARPA" ; };
+    String SC_OPCODE_ST_DEV { Text = "STDEV" ; };
+    String SC_OPCODE_ST_DEV_A { Text = "STDEVA" ; };
+    String SC_OPCODE_ST_DEV_P { Text = "STDEVP" ; };
+    String SC_OPCODE_ST_DEV_P_A { Text = "STDEVPA" ; };
+    String SC_OPCODE_B { Text = "B" ; };
+    String SC_OPCODE_NORM_DIST { Text = "NORMDIST" ; };
+    String SC_OPCODE_EXP_DIST { Text = "EXPONDIST" ; };
+    String SC_OPCODE_BINOM_DIST { Text = "BINOMDIST" ; };
+    String SC_OPCODE_POISSON_DIST { Text = "POISSON" ; };
+    String SC_OPCODE_KOMBIN { Text = "COMBIN" ; };
+    String SC_OPCODE_KOMBIN_2 { Text = "COMBINA" ; };
+    String SC_OPCODE_VARIATIONEN { Text = "PERMUT" ; };
+    String SC_OPCODE_VARIATIONEN_2 { Text = "PERMUTATIONA" ; };
+    String SC_OPCODE_BW { Text = "PV" ; };
+    String SC_OPCODE_DIA { Text = "SYD" ; };
+    String SC_OPCODE_GDA { Text = "DDB" ; };
+    String SC_OPCODE_GDA_2 { Text = "DB" ; };
+    String SC_OPCODE_VBD { Text = "VDB" ; };
+    String SC_OPCODE_LAUFZ { Text = "PDURATION" ; };
+    String SC_OPCODE_LIA { Text = "SLN" ; };
+    String SC_OPCODE_RMZ { Text = "PMT" ; };
+    String SC_OPCODE_COLUMNS { Text = "COLUMNS" ; };
+    String SC_OPCODE_ROWS { Text = "ROWS" ; };
+    String SC_OPCODE_TABLES { Text = "SHEETS" ; };
+    String SC_OPCODE_COLUMN { Text = "COLUMN" ; };
+    String SC_OPCODE_ROW { Text = "ROW" ; };
+    String SC_OPCODE_TABLE { Text = "SHEET" ; };
+    String SC_OPCODE_ZGZ { Text = "ZGZ" ; };
+    String SC_OPCODE_ZW { Text = "FV" ; };
+    String SC_OPCODE_ZZR { Text = "NPER" ; };
+    String SC_OPCODE_ZINS { Text = "RATE" ; };
+    String SC_OPCODE_ZINS_Z { Text = "IPMT" ; };
+    String SC_OPCODE_KAPZ { Text = "PPMT" ; };
+    String SC_OPCODE_KUM_ZINS_Z { Text = "CUMIPMT" ; };
+    String SC_OPCODE_KUM_KAP_Z { Text = "CUMPRINC" ; };
+    String SC_OPCODE_EFFEKTIV { Text = "EFFECT" ; };
+    String SC_OPCODE_NOMINAL { Text = "NOMINAL" ; };
+    String SC_OPCODE_SUB_TOTAL { Text = "SUBTOTAL" ; };
+    String SC_OPCODE_DB_SUM { Text = "DSUM" ; };
+    String SC_OPCODE_DB_COUNT { Text = "DCOUNT" ; };
+    String SC_OPCODE_DB_COUNT_2 { Text = "DCOUNTA" ; };
+    String SC_OPCODE_DB_AVERAGE { Text = "DAVERAGE" ; };
+    String SC_OPCODE_DB_GET { Text = "DGET" ; };
+    String SC_OPCODE_DB_MAX { Text = "DMAX" ; };
+    String SC_OPCODE_DB_MIN { Text = "DMIN" ; };
+    String SC_OPCODE_DB_PRODUCT { Text = "DPRODUCT" ; };
+    String SC_OPCODE_DB_STD_DEV { Text = "DSTDEV" ; };
+    String SC_OPCODE_DB_STD_DEV_P { Text = "DSTDEVP" ; };
+    String SC_OPCODE_DB_VAR { Text = "DVAR" ; };
+    String SC_OPCODE_DB_VAR_P { Text = "DVARP" ; };
+    String SC_OPCODE_INDIRECT { Text = "INDIRECT" ; };
+    String SC_OPCODE_ADDRESS { Text = "ADDRESS" ; };
+    String SC_OPCODE_MATCH { Text = "MATCH" ; };
+    String SC_OPCODE_COUNT_EMPTY_CELLS { Text = "COUNTBLANK" ; };
+    String SC_OPCODE_COUNT_IF { Text = "COUNTIF" ; };
+    String SC_OPCODE_SUM_IF { Text = "SUMIF" ; };
+    String SC_OPCODE_LOOKUP { Text = "LOOKUP" ; };
+    String SC_OPCODE_V_LOOKUP { Text = "VLOOKUP" ; };
+    String SC_OPCODE_H_LOOKUP { Text = "HLOOKUP" ; };
+    String SC_OPCODE_MULTI_AREA { Text = "MULTIRANGE" ; };      // TODO: legacy for range list (union), remove if done.
+    String SC_OPCODE_OFFSET { Text = "OFFSET" ; };
+    String SC_OPCODE_INDEX { Text = "INDEX" ; };
+    String SC_OPCODE_AREAS { Text = "AREAS" ; };
+    String SC_OPCODE_CURRENCY { Text = "DOLLAR" ; };
+    String SC_OPCODE_REPLACE { Text = "REPLACE" ; };
+    String SC_OPCODE_FIXED { Text = "FIXED" ; };
+    String SC_OPCODE_FIND { Text = "FIND" ; };
+    String SC_OPCODE_EXACT { Text = "EXACT" ; };
+    String SC_OPCODE_LEFT { Text = "LEFT" ; };
+    String SC_OPCODE_RIGHT { Text = "RIGHT" ; };
+    String SC_OPCODE_SEARCH { Text = "SEARCH" ; };
+    String SC_OPCODE_MID { Text = "MID" ; };
+    String SC_OPCODE_TEXT { Text = "TEXT" ; };
+    String SC_OPCODE_SUBSTITUTE { Text = "SUBSTITUTE" ; };
+    String SC_OPCODE_REPT { Text = "REPT" ; };
+    String SC_OPCODE_CONCAT { Text = "CONCATENATE" ; };
+    String SC_OPCODE_MAT_VALUE { Text = "MVALUE" ; };
+    String SC_OPCODE_MAT_DET { Text = "MDETERM" ; };
+    String SC_OPCODE_MAT_INV { Text = "MINVERSE" ; };
+    String SC_OPCODE_MAT_MULT { Text = "MMULT" ; };
+    String SC_OPCODE_MAT_TRANS { Text = "TRANSPOSE" ; };
+    String SC_OPCODE_MATRIX_UNIT { Text = "MUNIT" ; };
+    String SC_OPCODE_BACK_SOLVER { Text = "GOALSEEK" ; };
+    String SC_OPCODE_HYP_GEOM_DIST { Text = "HYPGEOMDIST" ; };
+    String SC_OPCODE_LOG_NORM_DIST { Text = "LOGNORMDIST" ; };
+    String SC_OPCODE_T_DIST { Text = "TDIST" ; };
+    String SC_OPCODE_F_DIST { Text = "LEGACY.FDIST" ; };
+    String SC_OPCODE_CHI_DIST { Text = "LEGACY.CHIDIST" ; };
+    String SC_OPCODE_WEIBULL { Text = "WEIBULL" ; };
+    String SC_OPCODE_NEG_BINOM_VERT { Text = "NEGBINOMDIST" ; };
+    String SC_OPCODE_KRIT_BINOM { Text = "CRITBINOM" ; };
+    String SC_OPCODE_KURT { Text = "KURT" ; };
+    String SC_OPCODE_HAR_MEAN { Text = "HARMEAN" ; };
+    String SC_OPCODE_GEO_MEAN { Text = "GEOMEAN" ; };
+    String SC_OPCODE_STANDARD { Text = "STANDARDIZE" ; };
+    String SC_OPCODE_AVE_DEV { Text = "AVEDEV" ; };
+    String SC_OPCODE_SCHIEFE { Text = "SKEW" ; };
+    String SC_OPCODE_DEV_SQ { Text = "DEVSQ" ; };
+    String SC_OPCODE_MEDIAN { Text = "MEDIAN" ; };
+    String SC_OPCODE_MODAL_VALUE { Text = "MODE" ; };
+    String SC_OPCODE_Z_TEST { Text = "ZTEST" ; };
+    String SC_OPCODE_T_TEST { Text = "TTEST" ; };
+    String SC_OPCODE_RANK { Text = "RANK" ; };
+    String SC_OPCODE_PERCENTILE { Text = "PERCENTILE" ; };
+    String SC_OPCODE_PERCENT_RANK { Text = "PERCENTRANK" ; };
+    String SC_OPCODE_LARGE { Text = "LARGE" ; };
+    String SC_OPCODE_SMALL { Text = "SMALL" ; };
+    String SC_OPCODE_FREQUENCY { Text = "FREQUENCY" ; };
+    String SC_OPCODE_QUARTILE { Text = "QUARTILE" ; };
+    String SC_OPCODE_NORM_INV { Text = "NORMINV" ; };
+    String SC_OPCODE_CONFIDENCE { Text = "CONFIDENCE" ; };
+    String SC_OPCODE_F_TEST { Text = "FTEST" ; };
+    String SC_OPCODE_TRIM_MEAN { Text = "TRIMMEAN" ; };
+    String SC_OPCODE_PROB { Text = "PROB" ; };
+    String SC_OPCODE_CORREL { Text = "CORREL" ; };
+    String SC_OPCODE_COVAR { Text = "COVAR" ; };
+    String SC_OPCODE_PEARSON { Text = "PEARSON" ; };
+    String SC_OPCODE_RSQ { Text = "RSQ" ; };
+    String SC_OPCODE_STEYX { Text = "STEYX" ; };
+    String SC_OPCODE_SLOPE { Text = "SLOPE" ; };
+    String SC_OPCODE_INTERCEPT { Text = "INTERCEPT" ; };
+    String SC_OPCODE_TREND { Text = "TREND" ; };
+    String SC_OPCODE_GROWTH { Text = "GROWTH" ; };
+    String SC_OPCODE_RGP { Text = "LINEST" ; };
+    String SC_OPCODE_RKP { Text = "LOGEST" ; };
+    String SC_OPCODE_FORECAST { Text = "FORECAST" ; };
+    String SC_OPCODE_CHI_INV { Text = "LEGACY.CHIINV" ; };
+    String SC_OPCODE_GAMMA_DIST { Text = "GAMMADIST" ; };
+    String SC_OPCODE_GAMMA_INV { Text = "GAMMAINV" ; };
+    String SC_OPCODE_T_INV { Text = "TINV" ; };
+    String SC_OPCODE_F_INV { Text = "LEGACY.FINV" ; };
+    String SC_OPCODE_CHI_TEST { Text = "LEGACY.CHITEST" ; };
+    String SC_OPCODE_LOG_INV { Text = "LOGINV" ; };
+    String SC_OPCODE_TABLE_OP { Text = "MULTIPLE.OPERATIONS" ; };
+    String SC_OPCODE_BETA_DIST { Text = "BETADIST" ; };
+    String SC_OPCODE_BETA_INV { Text = "BETAINV" ; };
+    String SC_OPCODE_WEEK { Text = "ISOWEEKNUM" ; };
+    String SC_OPCODE_EASTERSUNDAY { Text = "EASTERSUNDAY" ; };
+    String SC_OPCODE_GET_DAY_OF_WEEK { Text = "WEEKDAY" ; };
+    String SC_OPCODE_NO_NAME { Text = "#NAME!" ; };
+    String SC_OPCODE_STYLE { Text = "ORG.OPENOFFICE.STYLE" ; };
+    String SC_OPCODE_DDE { Text = "DDE" ; };
+    String SC_OPCODE_BASE { Text = "BASE" ; };
+    String SC_OPCODE_DECIMAL { Text = "DECIMAL" ; };
+    String SC_OPCODE_CONVERT { Text = "ORG.OPENOFFICE.CONVERT" ; };
+    String SC_OPCODE_ROMAN { Text = "ROMAN" ; };
+    String SC_OPCODE_ARABIC { Text = "ARABIC" ; };
+    String SC_OPCODE_HYPERLINK { Text = "HYPERLINK" ; };
+    String SC_OPCODE_INFO { Text = "INFO" ; };
+    String SC_OPCODE_BAHTTEXT { Text = "COM.MICROSOFT.BAHTTEXT" ; };
+    String SC_OPCODE_GET_PIVOT_DATA { Text = "GETPIVOTDATA" ; };
+};
