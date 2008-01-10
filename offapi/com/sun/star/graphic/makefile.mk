@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:08:16 $
+#   last change: $Author: obo $ $Date: 2008-01-10 12:38:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,8 @@ IDLFILES= \
     MediaProperties.idl \
     XGraphic.idl \
     XGraphicProvider.idl \
-    XGraphicRenderer.idl	
+    XGraphicRenderer.idl \
+    XGraphicTransformer.idl
     
 # --- Targets ------------------------------------------------------
 
