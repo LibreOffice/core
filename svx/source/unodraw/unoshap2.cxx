@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:35:31 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:49:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1738,6 +1738,15 @@ void SAL_CALL SvxGraphicObject::setPropertyValue( const OUString& aPropertyName,
                 }
             }
         }
+        else if( aValue.getValueType() == INTERFACE_TYPE( graphic::XGraphic ))
+        {
+            Reference< graphic::XGraphic > xGraphic( aValue, UNO_QUERY );
+            if( xGraphic.is() )
+            {
+                Graphic aGraphic( xGraphic );
+                ((SdrGrafObj*)mpObj.get())->SetGraphic(aGraphic);
+            }
+        }
     }
     else if( mpObj.is() && aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_NAME_GRAPHOBJ_GRAFURL)))
     {
@@ -2187,6 +2196,7 @@ void SAL_CALL SvxCustomShape::setPropertyValue( const OUString& aPropertyName, c
 
     if ( bCustomShapeGeometry )
     {
+        ((SdrObjCustomShape*)pObject)->MergeDefaultAttributes(0);
         Rectangle aRect( pObject->GetSnapRect() );
 
         // #i38892#
