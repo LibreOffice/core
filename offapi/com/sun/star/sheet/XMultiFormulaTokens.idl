@@ -1,0 +1,107 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XMultiFormulaTokens.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:43:22 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XMultiFormulaTokens_idl__
+#define __com_sun_star_sheet_XMultiFormulaTokens_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_FormulaToken_idl__
+#include <com/sun/star/sheet/FormulaToken.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IndexOutOfBoundsException_idl__
+#include <com/sun/star/lang/IndexOutOfBoundsException.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** gives access to multiple sets of formula tokens.
+
+    A service implementing this interface can internally set an arbitrary
+    number of formula token sequences. The number of allowed formula token
+    sequences must be returned by the
+    <member scope="com::sun::star::sheet">XMultiFormulaTokens::getCount</member>
+    method. When the client code tries to access formula tokens at index that
+    is outside the allowed index range, the implementation shall return an
+    <type scope="com::sun::star::lang">IndexOutOfBoundsException</member>.
+ */
+interface XMultiFormulaTokens
+{
+    //-------------------------------------------------------------------------
+
+    /** returns the formula at specified index as sequence of tokens.
+
+        @throws IndexOutOfBoundsException
+            If the given index lies not in the valid range then an
+            <type scope="com::sun::star::lang">IndexOutOfBoundsException</type>
+            exception is thrown.
+     */
+    sequence< FormulaToken > getTokens( [in] long nIndex )
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    //-------------------------------------------------------------------------
+
+    /** sets the formula at specified index as sequence of tokens.
+
+        @throws IndexOutOfBoundsException
+            If the given index lies not in the valid range then an
+            <type scope="com::sun::star::lang">IndexOutOfBoundsException</type>
+            exception is thrown.
+     */
+    void setTokens( [in] long nIndex, [in] sequence< FormulaToken > aTokens )
+        raises (::com::sun::star::lang::IndexOutOfBoundsException);
+
+    //-------------------------------------------------------------------------
+
+    /** returns the number of formulas allowed in this formula token set.
+
+       @return the number of formulas the implementation supports.
+     */
+    long getCount();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
