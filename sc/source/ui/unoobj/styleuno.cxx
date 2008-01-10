@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:59:42 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:19:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,7 @@
 #include "unonames.hxx"
 #include "unowids.hxx"
 #include "globstr.hrc"
+#include "cellsuno.hxx"
 
 using namespace ::com::sun::star;
 
@@ -1269,7 +1270,7 @@ const SfxItemSet* ScStyleObj::GetStyleItemSet_Impl( const String& rPropName,
             }
         }
         pMap = SfxItemPropertyMap::GetByName( aPropSet.getPropertyMap(), rPropName );
-        if ( pMap && IsScItemWid( pMap->nWID ) )
+        if ( pMap )
         {
             rpResultEntry = pMap;
             return &pStyle->GetItemSet();
@@ -1293,21 +1294,28 @@ beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const rtl::OUString&
     if ( pItemSet && pResultEntry )
     {
         USHORT nWhich = pResultEntry->nWID;
-        SfxItemState eState = pItemSet->GetItemState( nWhich, sal_False );
+        if ( nWhich == SC_WID_UNO_TBLBORD )
+        {
+            nWhich = ATTR_BORDER;
+        }
+        if ( IsScItemWid( nWhich ) )
+        {
+            SfxItemState eState = pItemSet->GetItemState( nWhich, sal_False );
 
-//       //  if no rotate value is set, look at orientation
-//       //! also for a fixed value of 0 (in case orientation is ambiguous)?
-//       if ( nWhich == ATTR_ROTATE_VALUE && eState == SFX_ITEM_DEFAULT )
-//           eState = pItemSet->GetItemState( ATTR_ORIENTATION, sal_False );
+//           //  if no rotate value is set, look at orientation
+//           //! also for a fixed value of 0 (in case orientation is ambiguous)?
+//           if ( nWhich == ATTR_ROTATE_VALUE && eState == SFX_ITEM_DEFAULT )
+//               eState = pItemSet->GetItemState( ATTR_ORIENTATION, sal_False );
 
-        if ( eState == SFX_ITEM_SET )
-            eRet = beans::PropertyState_DIRECT_VALUE;
-        else if ( eState == SFX_ITEM_DEFAULT )
-            eRet = beans::PropertyState_DEFAULT_VALUE;
-        else if ( eState == SFX_ITEM_DONTCARE )
-            eRet = beans::PropertyState_AMBIGUOUS_VALUE;    // kann eigentlich nicht sein...
-        else
-            DBG_ERROR("unbekannter ItemState");
+            if ( eState == SFX_ITEM_SET )
+                eRet = beans::PropertyState_DIRECT_VALUE;
+            else if ( eState == SFX_ITEM_DEFAULT )
+                eRet = beans::PropertyState_DEFAULT_VALUE;
+            else if ( eState == SFX_ITEM_DONTCARE )
+                eRet = beans::PropertyState_AMBIGUOUS_VALUE;    // kann eigentlich nicht sein...
+            else
+                DBG_ERROR("unbekannter ItemState");
+        }
     }
     return eRet;
 }
@@ -1356,51 +1364,78 @@ uno::Any SAL_CALL ScStyleObj::getPropertyDefault( const rtl::OUString& aProperty
     {
         USHORT nWhich = pResultEntry->nWID;
 
-        //  Default ist Default vom ItemPool, nicht vom Standard-Style,
-        //  damit es zu setPropertyToDefault passt
-        SfxItemSet aEmptySet( *pStyleSet->GetPool(), pStyleSet->GetRanges() );
-        //  #65253# Default-Items mit falscher Slot-ID funktionieren im SfxItemPropertySet3 nicht
-        //! Slot-IDs aendern...
-        if ( aEmptySet.GetPool()->GetSlotId(nWhich) == nWhich &&
-             aEmptySet.GetItemState(nWhich, sal_False) == SFX_ITEM_DEFAULT )
+        if ( IsScItemWid( nWhich ) )
         {
-            aEmptySet.Put( aEmptySet.Get( nWhich ) );
-        }
-        const SfxItemSet* pItemSet = &aEmptySet;
+            //  Default ist Default vom ItemPool, nicht vom Standard-Style,
+            //  damit es zu setPropertyToDefault passt
+            SfxItemSet aEmptySet( *pStyleSet->GetPool(), pStyleSet->GetRanges() );
+            //  #65253# Default-Items mit falscher Slot-ID funktionieren im SfxItemPropertySet3 nicht
+            //! Slot-IDs aendern...
+            if ( aEmptySet.GetPool()->GetSlotId(nWhich) == nWhich &&
+                 aEmptySet.GetItemState(nWhich, sal_False) == SFX_ITEM_DEFAULT )
+            {
+                aEmptySet.Put( aEmptySet.Get( nWhich ) );
+            }
+            const SfxItemSet* pItemSet = &aEmptySet;
 
-        switch ( nWhich )       // fuer Item-Spezial-Behandlungen
+            switch ( nWhich )       // fuer Item-Spezial-Behandlungen
+            {
+                case ATTR_VALUE_FORMAT:
+                    //  default has no language set
+                    aAny <<= sal_Int32( ((const SfxUInt32Item&)pItemSet->Get(nWhich)).GetValue() );
+                    break;
+                case ATTR_INDENT:
+                    aAny <<= sal_Int16( TwipsToHMM(((const SfxUInt16Item&)
+                                    pItemSet->Get(nWhich)).GetValue()) );
+                    break;
+                case ATTR_PAGE_SCALE:
+                case ATTR_PAGE_SCALETOPAGES:
+                case ATTR_PAGE_FIRSTPAGENO:
+                    aAny <<= sal_Int16( ((const SfxUInt16Item&)pItemSet->Get(nWhich)).GetValue() );
+                    break;
+                case ATTR_PAGE_CHARTS:
+                case ATTR_PAGE_OBJECTS:
+                case ATTR_PAGE_DRAWINGS:
+                    //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
+                    aAny <<= sal_Bool( ((const ScViewObjectModeItem&)pItemSet->Get(nWhich)).
+                                    GetValue() == VOBJ_MODE_SHOW );
+                    break;
+                case ATTR_PAGE_SCALETO:
+                    {
+                        const ScPageScaleToItem aItem((const ScPageScaleToItem&)pItemSet->Get(nWhich));
+                        if (aString.EqualsAscii( SC_UNO_PAGE_SCALETOX ))
+                            aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetWidth()));
+                        else
+                            aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetHeight()));
+                    }
+                    break;
+                default:
+                    aAny = aPropSet.getPropertyValue( *pResultEntry, *pItemSet );
+            }
+        }
+        else if ( IsScUnoWid( nWhich ) )
         {
-            case ATTR_VALUE_FORMAT:
-                //  default has no language set
-                aAny <<= sal_Int32( ((const SfxUInt32Item&)pItemSet->Get(nWhich)).GetValue() );
-                break;
-            case ATTR_INDENT:
-                aAny <<= sal_Int16( TwipsToHMM(((const SfxUInt16Item&)
-                                pItemSet->Get(nWhich)).GetValue()) );
-                break;
-            case ATTR_PAGE_SCALE:
-            case ATTR_PAGE_SCALETOPAGES:
-            case ATTR_PAGE_FIRSTPAGENO:
-                aAny <<= sal_Int16( ((const SfxUInt16Item&)pItemSet->Get(nWhich)).GetValue() );
-                break;
-            case ATTR_PAGE_CHARTS:
-            case ATTR_PAGE_OBJECTS:
-            case ATTR_PAGE_DRAWINGS:
-                //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
-                aAny <<= sal_Bool( ((const ScViewObjectModeItem&)pItemSet->Get(nWhich)).
-                                GetValue() == VOBJ_MODE_SHOW );
-                break;
-            case ATTR_PAGE_SCALETO:
-                {
-                    const ScPageScaleToItem aItem((const ScPageScaleToItem&)pItemSet->Get(nWhich));
-                    if (aString.EqualsAscii( SC_UNO_PAGE_SCALETOX ))
-                        aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetWidth()));
-                    else
-                        aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetHeight()));
-                }
-                break;
-            default:
-                aAny = aPropSet.getPropertyValue( *pResultEntry, *pItemSet );
+            SfxItemSet aEmptySet( *pStyleSet->GetPool(), pStyleSet->GetRanges() );
+            const SfxItemSet* pItemSet = &aEmptySet;
+            switch ( nWhich )
+            {
+                case SC_WID_UNO_TBLBORD:
+                    {
+                        const SfxPoolItem* pItem = &pItemSet->Get( ATTR_BORDER );
+                        if ( pItem )
+                        {
+                            SvxBoxItem aOuter( *( static_cast<const SvxBoxItem*>( pItem ) ) );
+                            SvxBoxInfoItem aInner( ATTR_BORDER_INNER );
+                            table::TableBorder aBorder;
+                            ScHelperFunctions::FillTableBorder( aBorder, aOuter, aInner );
+                            aBorder.IsHorizontalLineValid = sal_False;
+                            aBorder.IsVerticalLineValid = sal_False;
+                            aBorder.IsDistanceValid = sal_False;
+                            aAny <<= aBorder;
+                        }
+                    }
+                    break;
+            }
         }
     }
     return aAny;
@@ -1646,178 +1681,212 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
         {
             const SfxItemPropertyMap* pOwnMap =
                     SfxItemPropertyMap::GetByName( aPropSet.getPropertyMap(), aString );
-            if ( pOwnMap && IsScItemWid( pOwnMap->nWID ) )
+            if ( pOwnMap )
             {
-                if (pValue)
+                if ( IsScItemWid( pOwnMap->nWID ) )
                 {
-                    switch ( pOwnMap->nWID )        // fuer Item-Spezial-Behandlungen
+                    if (pValue)
                     {
-                        case ATTR_VALUE_FORMAT:
-                            {
-                                // #67847# language for number formats
-                                SvNumberFormatter* pFormatter =
-                                        pDocShell->GetDocument()->GetFormatTable();
-                                UINT32 nOldFormat = ((const SfxUInt32Item&)
-                                        rSet.Get( ATTR_VALUE_FORMAT )).GetValue();
-                                LanguageType eOldLang = ((const SvxLanguageItem&)
-                                        rSet.Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
-                                nOldFormat = pFormatter->
-                                        GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
-
-                                UINT32 nNewFormat = 0;
-                                *pValue >>= nNewFormat;
-                                rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
-
-                                const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewFormat );
-                                LanguageType eNewLang =
-                                    pNewEntry ? pNewEntry->GetLanguage() : LANGUAGE_DONTKNOW;
-                                if ( eNewLang != eOldLang && eNewLang != LANGUAGE_DONTKNOW )
-                                    rSet.Put( SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
-
-                                //! keep default state of number format if only language changed?
-                            }
-                            break;
-                        case ATTR_INDENT:
-                            {
-                                sal_Int16 nVal = 0;
-                                *pValue >>= nVal;
-                                rSet.Put( SfxUInt16Item( pOwnMap->nWID, (USHORT)HMMToTwips(nVal) ) );
-                            }
-                            break;
-                        case ATTR_ROTATE_VALUE:
-                            {
-                                sal_Int32 nRotVal = 0;
-                                if ( *pValue >>= nRotVal )
+                        switch ( pOwnMap->nWID )        // fuer Item-Spezial-Behandlungen
+                        {
+                            case ATTR_VALUE_FORMAT:
                                 {
-                                    //  stored value is always between 0 and 360 deg.
-                                    nRotVal %= 36000;
-                                    if ( nRotVal < 0 )
-                                        nRotVal += 36000;
-                                    rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, nRotVal ) );
+                                    // #67847# language for number formats
+                                    SvNumberFormatter* pFormatter =
+                                            pDocShell->GetDocument()->GetFormatTable();
+                                    UINT32 nOldFormat = ((const SfxUInt32Item&)
+                                            rSet.Get( ATTR_VALUE_FORMAT )).GetValue();
+                                    LanguageType eOldLang = ((const SvxLanguageItem&)
+                                            rSet.Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
+                                    nOldFormat = pFormatter->
+                                            GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
+
+                                    UINT32 nNewFormat = 0;
+                                    *pValue >>= nNewFormat;
+                                    rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
+
+                                    const SvNumberformat* pNewEntry = pFormatter->GetEntry( nNewFormat );
+                                    LanguageType eNewLang =
+                                        pNewEntry ? pNewEntry->GetLanguage() : LANGUAGE_DONTKNOW;
+                                    if ( eNewLang != eOldLang && eNewLang != LANGUAGE_DONTKNOW )
+                                        rSet.Put( SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
+
+                                    //! keep default state of number format if only language changed?
                                 }
-                            }
-                            break;
-                        case ATTR_STACKED:
-                            {
-                                table::CellOrientation eOrient;
-                                if( *pValue >>= eOrient )
+                                break;
+                            case ATTR_INDENT:
                                 {
-                                    switch( eOrient )
+                                    sal_Int16 nVal = 0;
+                                    *pValue >>= nVal;
+                                    rSet.Put( SfxUInt16Item( pOwnMap->nWID, (USHORT)HMMToTwips(nVal) ) );
+                                }
+                                break;
+                            case ATTR_ROTATE_VALUE:
+                                {
+                                    sal_Int32 nRotVal = 0;
+                                    if ( *pValue >>= nRotVal )
                                     {
-                                        case table::CellOrientation_STANDARD:
-                                            rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
-                                        break;
-                                        case table::CellOrientation_TOPBOTTOM:
-                                            rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
-                                            rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
-                                        break;
-                                        case table::CellOrientation_BOTTOMTOP:
-                                            rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
-                                            rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
-                                        break;
-                                        case table::CellOrientation_STACKED:
-                                            rSet.Put( SfxBoolItem( ATTR_STACKED, TRUE ) );
-                                        break;
-                                        default:
+                                        //  stored value is always between 0 and 360 deg.
+                                        nRotVal %= 36000;
+                                        if ( nRotVal < 0 )
+                                            nRotVal += 36000;
+                                        rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, nRotVal ) );
+                                    }
+                                }
+                                break;
+                            case ATTR_STACKED:
+                                {
+                                    table::CellOrientation eOrient;
+                                    if( *pValue >>= eOrient )
+                                    {
+                                        switch( eOrient )
                                         {
-                                            // added to avoid warnings
+                                            case table::CellOrientation_STANDARD:
+                                                rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                            break;
+                                            case table::CellOrientation_TOPBOTTOM:
+                                                rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                                rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 27000 ) );
+                                            break;
+                                            case table::CellOrientation_BOTTOMTOP:
+                                                rSet.Put( SfxBoolItem( ATTR_STACKED, FALSE ) );
+                                                rSet.Put( SfxInt32Item( ATTR_ROTATE_VALUE, 9000 ) );
+                                            break;
+                                            case table::CellOrientation_STACKED:
+                                                rSet.Put( SfxBoolItem( ATTR_STACKED, TRUE ) );
+                                            break;
+                                            default:
+                                            {
+                                                // added to avoid warnings
+                                            }
                                         }
                                     }
                                 }
-                            }
-                            break;
-                        case ATTR_PAGE_SCALE:
-                        case ATTR_PAGE_SCALETOPAGES:
-                        case ATTR_PAGE_FIRSTPAGENO:
-                            {
-                                rSet.ClearItem(ATTR_PAGE_SCALETOPAGES);
-                                rSet.ClearItem(ATTR_PAGE_SCALE);
-                                rSet.ClearItem(ATTR_PAGE_SCALETO);
-                                sal_Int16 nVal = 0;
-                                *pValue >>= nVal;
-                                rSet.Put( SfxUInt16Item( pOwnMap->nWID, nVal ) );
-                            }
-                            break;
-                        case ATTR_PAGE_CHARTS:
-                        case ATTR_PAGE_OBJECTS:
-                        case ATTR_PAGE_DRAWINGS:
-                            {
-                                sal_Bool bBool = sal_Bool();
-                                *pValue >>= bBool;
-                                //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
-                                rSet.Put( ScViewObjectModeItem( pOwnMap->nWID,
-                                    bBool ? VOBJ_MODE_SHOW : VOBJ_MODE_HIDE ) );
-                            }
-                            break;
-                        case ATTR_PAGE_PAPERBIN:
-                            {
-                                BYTE nTray = PAPERBIN_PRINTER_SETTINGS;
-                                BOOL bFound = FALSE;
-
-                                rtl::OUString aName;
-                                if ( *pValue >>= aName )
+                                break;
+                            case ATTR_PAGE_SCALE:
+                            case ATTR_PAGE_SCALETOPAGES:
                                 {
-                                    if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_PAPERBIN_DEFAULTNAME ) ) )
-                                        bFound = TRUE;
-                                    else
-                                    {
-                                        Printer* pPrinter = pDocShell->GetPrinter();
-                                        if (pPrinter)
-                                        {
-                                            String aNameStr = aName;
-                                            USHORT nCount = pPrinter->GetPaperBinCount();
-                                            for (USHORT i=0; i<nCount; i++)
-                                                if ( aNameStr == pPrinter->GetPaperBinName(i) )
-                                                {
-                                                    nTray = (BYTE) i;
-                                                    bFound = TRUE;
-                                                    break;
-                                                }
-                                        }
-                                    }
-                                }
-                                if ( bFound )
-                                    rSet.Put( SvxPaperBinItem( ATTR_PAGE_PAPERBIN, nTray ) );
-                                else
-                                    throw lang::IllegalArgumentException();
-                            }
-                            break;
-                        case ATTR_PAGE_SCALETO:
-                            {
-                                sal_Int16 nPages = 0;
-                                if (*pValue >>= nPages)
-                                {
-                                    ScPageScaleToItem aItem = ((const ScPageScaleToItem&)rSet.Get(ATTR_PAGE_SCALETO));
-                                    if ( aString.EqualsAscii(SC_UNO_PAGE_SCALETOX))
-                                        aItem.SetWidth(static_cast<sal_uInt16>(nPages));
-                                    else
-                                        aItem.SetHeight(static_cast<sal_uInt16>(nPages));
-                                    rSet.Put( aItem );
                                     rSet.ClearItem(ATTR_PAGE_SCALETOPAGES);
                                     rSet.ClearItem(ATTR_PAGE_SCALE);
+                                    rSet.ClearItem(ATTR_PAGE_SCALETO);
+                                    sal_Int16 nVal = 0;
+                                    *pValue >>= nVal;
+                                    rSet.Put( SfxUInt16Item( pOwnMap->nWID, nVal ) );
+                                }
+                                break;
+                            case ATTR_PAGE_FIRSTPAGENO:
+                                {
+                                    sal_Int16 nVal = 0;
+                                    *pValue >>= nVal;
+                                    rSet.Put( SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, nVal ) );
+                                }
+                                break;
+                            case ATTR_PAGE_CHARTS:
+                            case ATTR_PAGE_OBJECTS:
+                            case ATTR_PAGE_DRAWINGS:
+                                {
+                                    sal_Bool bBool = sal_False;
+                                    *pValue >>= bBool;
+                                    //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
+                                    rSet.Put( ScViewObjectModeItem( pOwnMap->nWID,
+                                        bBool ? VOBJ_MODE_SHOW : VOBJ_MODE_HIDE ) );
+                                }
+                                break;
+                            case ATTR_PAGE_PAPERBIN:
+                                {
+                                    BYTE nTray = PAPERBIN_PRINTER_SETTINGS;
+                                    BOOL bFound = FALSE;
+
+                                    rtl::OUString aName;
+                                    if ( *pValue >>= aName )
+                                    {
+                                        if ( aName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( SC_PAPERBIN_DEFAULTNAME ) ) )
+                                            bFound = TRUE;
+                                        else
+                                        {
+                                            Printer* pPrinter = pDocShell->GetPrinter();
+                                            if (pPrinter)
+                                            {
+                                                String aNameStr = aName;
+                                                USHORT nCount = pPrinter->GetPaperBinCount();
+                                                for (USHORT i=0; i<nCount; i++)
+                                                    if ( aNameStr == pPrinter->GetPaperBinName(i) )
+                                                    {
+                                                        nTray = (BYTE) i;
+                                                        bFound = TRUE;
+                                                        break;
+                                                    }
+                                            }
+                                        }
+                                    }
+                                    if ( bFound )
+                                        rSet.Put( SvxPaperBinItem( ATTR_PAGE_PAPERBIN, nTray ) );
+                                    else
+                                        throw lang::IllegalArgumentException();
+                                }
+                                break;
+                            case ATTR_PAGE_SCALETO:
+                                {
+                                    sal_Int16 nPages = 0;
+                                    if (*pValue >>= nPages)
+                                    {
+                                        ScPageScaleToItem aItem = ((const ScPageScaleToItem&)rSet.Get(ATTR_PAGE_SCALETO));
+                                        if ( aString.EqualsAscii(SC_UNO_PAGE_SCALETOX))
+                                            aItem.SetWidth(static_cast<sal_uInt16>(nPages));
+                                        else
+                                            aItem.SetHeight(static_cast<sal_uInt16>(nPages));
+                                        rSet.Put( aItem );
+                                        rSet.ClearItem(ATTR_PAGE_SCALETOPAGES);
+                                        rSet.ClearItem(ATTR_PAGE_SCALE);
+                                    }
+                                }
+                                break;
+                            default:
+                                //  #65253# Default-Items mit falscher Slot-ID
+                                //  funktionieren im SfxItemPropertySet3 nicht
+                                //! Slot-IDs aendern...
+                                if ( rSet.GetPool()->GetSlotId(pOwnMap->nWID) == pOwnMap->nWID &&
+                                     rSet.GetItemState(pOwnMap->nWID, sal_False) == SFX_ITEM_DEFAULT )
+                                {
+                                    rSet.Put( rSet.Get(pOwnMap->nWID) );
+                                }
+                                aPropSet.setPropertyValue( *pOwnMap, *pValue, rSet );
+                        }
+                    }
+                    else
+                    {
+                        rSet.ClearItem( pOwnMap->nWID );
+                        // #67847# language for number formats
+                        if ( pOwnMap->nWID == ATTR_VALUE_FORMAT )
+                            rSet.ClearItem( ATTR_LANGUAGE_FORMAT );
+
+                        //! for ATTR_ROTATE_VALUE, also reset ATTR_ORIENTATION?
+                    }
+                }
+                else if ( IsScUnoWid( pOwnMap->nWID ) )
+                {
+                    switch ( pOwnMap->nWID )
+                    {
+                        case SC_WID_UNO_TBLBORD:
+                            {
+                                if (pValue)
+                                {
+                                    table::TableBorder aBorder;
+                                    if ( *pValue >>= aBorder )
+                                    {
+                                        SvxBoxItem aOuter( ATTR_BORDER );
+                                        SvxBoxInfoItem aInner( ATTR_BORDER_INNER );
+                                        ScHelperFunctions::FillBoxItems( aOuter, aInner, aBorder );
+                                        rSet.Put( aOuter );
+                                    }
+                                }
+                                else
+                                {
+                                    rSet.ClearItem( ATTR_BORDER );
                                 }
                             }
                             break;
-                        default:
-                            //  #65253# Default-Items mit falscher Slot-ID
-                            //  funktionieren im SfxItemPropertySet3 nicht
-                            //! Slot-IDs aendern...
-                            if ( rSet.GetPool()->GetSlotId(pOwnMap->nWID) == pOwnMap->nWID &&
-                                 rSet.GetItemState(pOwnMap->nWID, sal_False) == SFX_ITEM_DEFAULT )
-                            {
-                                rSet.Put( rSet.Get(pOwnMap->nWID) );
-                            }
-                            aPropSet.setPropertyValue( *pOwnMap, *pValue, rSet );
                     }
-                }
-                else
-                {
-                    rSet.ClearItem( pOwnMap->nWID );
-                    // #67847# language for number formats
-                    if ( pOwnMap->nWID == ATTR_VALUE_FORMAT )
-                        rSet.ClearItem( ATTR_LANGUAGE_FORMAT );
-
-                    //! for ATTR_ROTATE_VALUE, also reset ATTR_ORIENTATION?
                 }
             }
         }
@@ -1864,82 +1933,107 @@ uno::Any SAL_CALL ScStyleObj::getPropertyValue( const rtl::OUString& aPropertyNa
     {
         USHORT nWhich = pResultEntry->nWID;
 
-        switch ( nWhich )       // fuer Item-Spezial-Behandlungen
+        if ( IsScItemWid( nWhich ) )
         {
-            case ATTR_VALUE_FORMAT:
-                if ( pDocShell )
-                {
-                    UINT32 nOldFormat = ((const SfxUInt32Item&)
-                            pItemSet->Get( ATTR_VALUE_FORMAT )).GetValue();
-                    LanguageType eOldLang = ((const SvxLanguageItem&)
-                            pItemSet->Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
-                    nOldFormat = pDocShell->GetDocument()->GetFormatTable()->
-                            GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
-                    aAny <<= nOldFormat;
-                }
-                break;
-            case ATTR_INDENT:
-                aAny <<= sal_Int16( TwipsToHMM(((const SfxUInt16Item&)
-                                pItemSet->Get(nWhich)).GetValue()) );
-                break;
-            case ATTR_STACKED:
-                {
-                    sal_Int32 nRot = ((const SfxInt32Item&)pItemSet->Get(ATTR_ROTATE_VALUE)).GetValue();
-                    BOOL bStacked = ((const SfxBoolItem&)pItemSet->Get(nWhich)).GetValue();
-                    SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aAny );
-                }
-                break;
-            case ATTR_PAGE_SCALE:
-            case ATTR_PAGE_SCALETOPAGES:
-            case ATTR_PAGE_FIRSTPAGENO:
-                aAny <<= sal_Int16( ((const SfxUInt16Item&)pItemSet->Get(nWhich)).GetValue() );
-                break;
-            case ATTR_PAGE_CHARTS:
-            case ATTR_PAGE_OBJECTS:
-            case ATTR_PAGE_DRAWINGS:
-                //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
-                aAny <<= sal_Bool( ((const ScViewObjectModeItem&)pItemSet->
-                                Get(nWhich)).GetValue() == VOBJ_MODE_SHOW );
-                break;
-            case ATTR_PAGE_PAPERBIN:
-                {
-                    // property PrinterPaperTray is the name of the tray
-
-                    BYTE nValue = ((const SvxPaperBinItem&)pItemSet->Get(nWhich)).GetValue();
-                    rtl::OUString aName;
-                    if ( nValue == PAPERBIN_PRINTER_SETTINGS )
-                        aName = rtl::OUString::createFromAscii( SC_PAPERBIN_DEFAULTNAME );
-                    else
+            switch ( nWhich )       // fuer Item-Spezial-Behandlungen
+            {
+                case ATTR_VALUE_FORMAT:
+                    if ( pDocShell )
                     {
-                        Printer* pPrinter = pDocShell->GetPrinter();
-                        if (pPrinter)
-                            aName = pPrinter->GetPaperBinName( nValue );
+                        UINT32 nOldFormat = ((const SfxUInt32Item&)
+                                pItemSet->Get( ATTR_VALUE_FORMAT )).GetValue();
+                        LanguageType eOldLang = ((const SvxLanguageItem&)
+                                pItemSet->Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
+                        nOldFormat = pDocShell->GetDocument()->GetFormatTable()->
+                                GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
+                        aAny <<= nOldFormat;
                     }
-                    aAny <<= aName;
-                }
-                break;
-            case ATTR_PAGE_SCALETO:
-                {
-                    ScPageScaleToItem aItem((const ScPageScaleToItem&)pItemSet->Get(ATTR_PAGE_SCALETO));
-                    if (aString.EqualsAscii(SC_UNO_PAGE_SCALETOX))
-                        aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetWidth()));
+                    break;
+                case ATTR_INDENT:
+                    aAny <<= sal_Int16( TwipsToHMM(((const SfxUInt16Item&)
+                                    pItemSet->Get(nWhich)).GetValue()) );
+                    break;
+                case ATTR_STACKED:
+                    {
+                        sal_Int32 nRot = ((const SfxInt32Item&)pItemSet->Get(ATTR_ROTATE_VALUE)).GetValue();
+                        BOOL bStacked = ((const SfxBoolItem&)pItemSet->Get(nWhich)).GetValue();
+                        SvxOrientationItem( nRot, bStacked, 0 ).QueryValue( aAny );
+                    }
+                    break;
+                case ATTR_PAGE_SCALE:
+                case ATTR_PAGE_SCALETOPAGES:
+                case ATTR_PAGE_FIRSTPAGENO:
+                    aAny <<= sal_Int16( ((const SfxUInt16Item&)pItemSet->Get(nWhich)).GetValue() );
+                    break;
+                case ATTR_PAGE_CHARTS:
+                case ATTR_PAGE_OBJECTS:
+                case ATTR_PAGE_DRAWINGS:
+                    //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
+                    aAny <<= sal_Bool( ((const ScViewObjectModeItem&)pItemSet->
+                                    Get(nWhich)).GetValue() == VOBJ_MODE_SHOW );
+                    break;
+                case ATTR_PAGE_PAPERBIN:
+                    {
+                        // property PrinterPaperTray is the name of the tray
+
+                        BYTE nValue = ((const SvxPaperBinItem&)pItemSet->Get(nWhich)).GetValue();
+                        rtl::OUString aName;
+                        if ( nValue == PAPERBIN_PRINTER_SETTINGS )
+                            aName = rtl::OUString::createFromAscii( SC_PAPERBIN_DEFAULTNAME );
+                        else
+                        {
+                            Printer* pPrinter = pDocShell->GetPrinter();
+                            if (pPrinter)
+                                aName = pPrinter->GetPaperBinName( nValue );
+                        }
+                        aAny <<= aName;
+                    }
+                    break;
+                case ATTR_PAGE_SCALETO:
+                    {
+                        ScPageScaleToItem aItem((const ScPageScaleToItem&)pItemSet->Get(ATTR_PAGE_SCALETO));
+                        if (aString.EqualsAscii(SC_UNO_PAGE_SCALETOX))
+                            aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetWidth()));
+                        else
+                            aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetHeight()));
+                    }
+                    break;
+                default:
+                    //  #65253# Default-Items mit falscher Slot-ID
+                    //  funktionieren im SfxItemPropertySet3 nicht
+                    //! Slot-IDs aendern...
+                    if ( pItemSet->GetPool()->GetSlotId(nWhich) == nWhich &&
+                         pItemSet->GetItemState(nWhich, sal_False) == SFX_ITEM_DEFAULT )
+                    {
+                        SfxItemSet aNoEmptySet( *pItemSet );
+                        aNoEmptySet.Put( aNoEmptySet.Get( nWhich ) );
+                        aAny = aPropSet.getPropertyValue( *pResultEntry, aNoEmptySet );
+                    }
                     else
-                        aAny = uno::makeAny(static_cast<sal_Int16>(aItem.GetHeight()));
-                }
-                break;
-            default:
-                //  #65253# Default-Items mit falscher Slot-ID
-                //  funktionieren im SfxItemPropertySet3 nicht
-                //! Slot-IDs aendern...
-                if ( pItemSet->GetPool()->GetSlotId(nWhich) == nWhich &&
-                     pItemSet->GetItemState(nWhich, sal_False) == SFX_ITEM_DEFAULT )
-                {
-                    SfxItemSet aNoEmptySet( *pItemSet );
-                    aNoEmptySet.Put( aNoEmptySet.Get( nWhich ) );
-                    aAny = aPropSet.getPropertyValue( *pResultEntry, aNoEmptySet );
-                }
-                else
-                    aAny = aPropSet.getPropertyValue( *pResultEntry, *pItemSet );
+                        aAny = aPropSet.getPropertyValue( *pResultEntry, *pItemSet );
+            }
+        }
+        else if ( IsScUnoWid( nWhich ) )
+        {
+            switch ( nWhich )
+            {
+                case SC_WID_UNO_TBLBORD:
+                    {
+                        const SfxPoolItem* pItem = &pItemSet->Get( ATTR_BORDER );
+                        if ( pItem )
+                        {
+                            SvxBoxItem aOuter( *( static_cast<const SvxBoxItem*>( pItem ) ) );
+                            SvxBoxInfoItem aInner( ATTR_BORDER_INNER );
+                            table::TableBorder aBorder;
+                            ScHelperFunctions::FillTableBorder( aBorder, aOuter, aInner );
+                            aBorder.IsHorizontalLineValid = sal_False;
+                            aBorder.IsVerticalLineValid = sal_False;
+                            aBorder.IsDistanceValid = sal_False;
+                            aAny <<= aBorder;
+                        }
+                    }
+                    break;
+            }
         }
     }
     else if ( aString.EqualsAscii( SC_UNONAME_DISPNAME ) )      // read-only
