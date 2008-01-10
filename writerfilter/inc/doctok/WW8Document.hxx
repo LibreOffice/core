@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Document.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 15:06:32 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #include <com/sun/star/uno/Reference.hxx>
 #endif
 #ifndef INCLUDED_SUB_SEQUENCE_HXX
-#include <doctok/SubSequence.hxx>
+#include <resourcemodel/SubSequence.hxx>
 #endif
 #ifndef _COM_SUN_STAR_IO_XINPUTSTREAM_HPP_
 #include <com/sun/star/io/XInputStream.hpp>
@@ -54,15 +54,16 @@
 #endif
 
 #ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
-#include <doctok/WW8ResourceModel.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #endif
 
 #ifndef INCLUDED_OUTPUT_WITH_DEPTH
-#include <OutputWithDepth.hxx>
+#include <resourcemodel/OutputWithDepth.hxx>
 #endif
 
 #include <WriterFilterDllApi.hxx>
 
+namespace writerfilter {
 namespace doctok {
 
 using namespace ::com::sun::star;
@@ -322,9 +323,11 @@ public:
 
        @return pointer to set of properties
      */
-    virtual doctok::Reference<Properties>::Pointer_t getProperties() const = 0;
+    virtual writerfilter::Reference<Properties>::Pointer_t getProperties()
+        const = 0;
 
-    virtual doctok::Reference<Stream>::Pointer_t getSubDocument() const = 0;
+    virtual writerfilter::Reference<Stream>::Pointer_t getSubDocument()
+        const = 0;
 
     /**
        Returns text run at the character position the iterator points
@@ -336,7 +339,7 @@ public:
        Return pointer to the shape at character position the iterator
        is pointing to.
      */
-    virtual doctok::Reference<Properties>::Pointer_t getShape() const = 0;
+    virtual writerfilter::Reference<Properties>::Pointer_t getShape() const = 0;
 
     /**
        Checks if the characters of the entity the iterator points to
@@ -412,7 +415,8 @@ public:
 /**
    A Word 8 document.
 */
-class WRITERFILTER_DLLPUBLIC WW8Document : public doctok::Reference<Stream>
+class WRITERFILTER_DLLPUBLIC WW8Document :
+    public writerfilter::Reference<Stream>
 {
 public:
     typedef boost::shared_ptr<WW8Document> Pointer_t;
@@ -453,6 +457,11 @@ public:
     static WW8Document *
     createDocument(WW8Stream::Pointer_t rpStream);
 };
-}
+
+void sprmidsToXML(::std::iostream & out);
+
+void doctokidsToXML(::std::iostream & out);
+
+}}
 
 #endif // INCLUDED_WW8_DOCUMENT_HXX
