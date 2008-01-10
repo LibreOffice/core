@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-29 15:26:21 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:38:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #endif
+#include <dmapper/DomainMapper.hxx>
 #ifndef INCLUDED_DOMAIN_MAPPER_TABLE_MANAGER_HXX
 #include <DomainMapperTableManager.hxx>
 #endif
@@ -69,6 +70,9 @@
 #ifndef INCLUDED_STYLESHEETTABLE_HXX
 #include <StyleSheetTable.hxx>
 #endif
+#ifndef INCLUDED_THEMETABLE_HXX
+#include <ThemeTable.hxx>
+#endif
 #ifndef INCLUDED_GRAPHICIMPORT_HXX
 #include <GraphicImport.hxx>
 #endif
@@ -86,13 +90,36 @@ namespace com{ namespace sun{ namespace star{
         namespace beans{ class XPropertySet;}
 }}}
 
+namespace writerfilter {
 namespace dmapper {
 
-using namespace writerfilter;
 using namespace com::sun::star;
 
 //#define TWIP_TO_MM100(TWIP)     ((TWIP) >= 0 ? (((TWIP)*127L+36L)/72L) : (((TWIP)*127L-36L)/72L))
 //sal_Int32 lcl_convertToMM100(sal_Int32 _t);
+
+struct _PageMar
+{
+    sal_Int32 top;
+    sal_Int32 right;
+    sal_Int32 bottom;
+    sal_Int32 left;
+    sal_Int32 header;
+    sal_Int32 footer;
+    sal_Int32 gutter;
+    public:
+        _PageMar();
+};
+enum PageMarElement
+{
+    PAGE_MAR_TOP,
+    PAGE_MAR_RIGHT,
+    PAGE_MAR_BOTTOM,
+    PAGE_MAR_LEFT,
+    PAGE_MAR_HEADER,
+    PAGE_MAR_FOOTER,
+    PAGE_MAR_GUTTER
+};
 
 /*-- 14.06.2006 07:42:52---------------------------------------------------
     property stack element
@@ -104,6 +131,12 @@ enum ContextType
     CONTEXT_CHARACTER,
     CONTEXT_STYLESHEET,
     NUMBER_OF_CONTEXTS
+};
+
+enum BreakType
+{
+    PAGE_BREAK,
+    COLUMN_BREAK
 };
 /*-----------------29.01.2007 11:47-----------------
    field stack element
@@ -150,7 +183,6 @@ typedef boost::shared_ptr<FieldContext>  FieldContextPtr;
 
 typedef std::stack<ContextType>                 ContextStack;
 typedef std::stack<PropertyMapPtr>              PropertyStack;
-typedef boost::shared_ptr< StyleSheetTable >    StyleSheetTablePtr;
 typedef std::stack< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppendAndConvert > >
                                                 TextAppendStack;
 typedef std::stack<FieldContextPtr>                FieldStack;
@@ -171,8 +203,8 @@ class FIB
 
         sal_Int32 GetLNCHS() const {return nLNCHS;}
         void      SetLNCHS(sal_Int32 nValue) {nLNCHS = nValue;}
-        sal_Int32 GetData( doctok::Id nName );
-        void      SetData( doctok::Id nName, sal_Int32 nValue );
+        sal_Int32 GetData( Id nName );
+        void      SetData( Id nName, sal_Int32 nValue );
 };
 
 /*-- 17.07.2006 09:14:13---------------------------------------------------
@@ -206,11 +238,12 @@ class DomainMapper;
 class DomainMapper_Impl
 {
 public:
-    typedef doctok::TableManager< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableManager_t;
-    typedef doctok::TableDataHandler< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableDataHandler_t;
+    typedef TableManager< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableManager_t;
+    typedef TableDataHandler< ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >, PropertyMapPtr > TableDataHandler_t;
     typedef std::map < ::rtl::OUString, BookmarkInsertPosition > BookmarkMap_t;
 
 private:
+    SourceDocumentType                                                              m_eDocumentType;
     DomainMapper&                                                                   m_rDMapper;
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument >       m_xTextDocument;
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDocumentSettings;
@@ -225,8 +258,13 @@ private:
     bool                                                                            m_bFieldMode;
     bool                                                                            m_bSetUserFieldContent;
     bool                                                                            m_bIsFirstSection;
+    bool                                                                            m_bIsColumnBreakDeferred;
+    bool                                                                            m_bIsPageBreakDeferred;
 
     BookmarkMap_t                                                                   m_aBookmarkMap;
+
+    _PageMar                                                                        m_aPageMargins;
+
 
     DomainMapperTableManager m_TableManager;
 
@@ -238,6 +276,7 @@ private:
     ListTablePtr            m_pListTable;
     LFOTablePtr             m_pLFOTable;
     StyleSheetTablePtr      m_pStyleSheetTable;
+    ThemeTablePtr           m_pThemeTable;
     GraphicImportPtr        m_pGraphicImport;
 
     PropertyMapPtr                  m_pTopContext;
@@ -245,7 +284,8 @@ private:
     ::std::vector<DeletableTabStop> m_aCurrentTabStops;
     sal_uInt32                      m_nCurrentTabStopIndex;
     ::rtl::OUString                 m_sCurrentParaStyleId;
-    bool                            m_bInStyleSheetImport;
+    bool                            m_bInStyleSheetImport; //in import of fonts, styles, lists or lfos
+    bool                            m_bInAnyTableImport; //in import of fonts, styles, lists or lfos
 
     bool                            m_bLineNumberingSet;
 
@@ -262,23 +302,27 @@ public:
     DomainMapper_Impl(
             DomainMapper& rDMapper,
             uno::Reference < uno::XComponentContext >  xContext,
-            uno::Reference< lang::XComponent >  xModel );
+            uno::Reference< lang::XComponent >  xModel,
+            SourceDocumentType eDocumentType );
     DomainMapper_Impl();
     virtual ~DomainMapper_Impl();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > GetPageStyles();
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XText >               GetBodyText();
-    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > GetTextFactory()
+    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory > GetTextFactory() const
     {
         return m_xTextFactory;
     }
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument >       GetTextDocument()
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument >       GetTextDocument() const
     {
         return m_xTextDocument;
     }
     void SetDocumentSettingsProperty( const ::rtl::OUString& rPropName, const uno::Any& rValue );
 
+    void deferBreak( BreakType deferredBreakType );
+    bool isBreakDeferred( BreakType deferredBreakType );
+    void clearDeferredBreaks();
     void finishParagraph( PropertyMapPtr pPropertyMap );
     void appendTextPortion( const ::rtl::OUString& rString, PropertyMapPtr pPropertyMap );
     void appendTextContent( const ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextContent >,
@@ -295,39 +339,47 @@ public:
     void    PopProperties(ContextType eId);
 
     PropertyMapPtr GetTopContext()
-            {
-                return m_pTopContext;
-            }
+    {
+        return m_pTopContext;
+    }
     PropertyMapPtr GetTopContextOfType(ContextType eId);
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextAppendAndConvert >  GetTopTextAppendAndConvert();
 
     FontTablePtr GetFontTable()
-            {
-                if(!m_pFontTable)
-                    m_pFontTable.reset(new FontTable());
-                return m_pFontTable;
-            }
+    {
+        if(!m_pFontTable)
+            m_pFontTable.reset(new FontTable());
+         return m_pFontTable;
+    }
     StyleSheetTablePtr GetStyleSheetTable()
-            {
-                if(!m_pStyleSheetTable)
-                    m_pStyleSheetTable.reset(new StyleSheetTable( m_rDMapper ));
-                return m_pStyleSheetTable;
-            }
+    {
+        if(!m_pStyleSheetTable)
+            m_pStyleSheetTable.reset(new StyleSheetTable( m_rDMapper ));
+        return m_pStyleSheetTable;
+    }
     ListTablePtr GetListTable();
     LFOTablePtr GetLFOTable()
-            {
-                if(!m_pLFOTable)
-                    m_pLFOTable.reset( new LFOTable );
-                return m_pLFOTable;
-            }
-    GraphicImportPtr GetGraphicImport(bool bIsShape );
+    {
+        if(!m_pLFOTable)
+            m_pLFOTable.reset( new LFOTable );
+        return m_pLFOTable;
+    }
+    ThemeTablePtr GetThemeTable()
+    {
+        if(!m_pThemeTable)
+            m_pThemeTable.reset( new ThemeTable );
+        return m_pThemeTable;
+    }
+
+    GraphicImportPtr GetGraphicImport( GraphicImportType eGraphicImportType );
+    void            ResetGraphicImport();
     // this method deletes the current m_pGraphicImport after import
-    void    ImportGraphic(doctok::Reference< doctok::Properties>::Pointer_t, bool bIsShape );
+    void    ImportGraphic(writerfilter::Reference< Properties>::Pointer_t, GraphicImportType eGraphicImportType );
 
     void    InitTabStopFromStyle( const ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >& rInitTabStops );
-    void    ModifyCurrentTabStop( doctok::Id nId, sal_Int32 nValue);
-    void    IncorporateTabStop (DeletableTabStop &aTabStop);
+    void    ModifyCurrentTabStop( Id nId, sal_Int32 nValue);
+    void    IncorporateTabStop( const DeletableTabStop &aTabStop );
     ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >     GetCurrentTabStopAndClear();
     void                                NextTabStop() {++m_nCurrentTabStopIndex;}
 
@@ -337,6 +389,8 @@ public:
     ::com::sun::star::uno::Any    GetPropertyFromStyleSheet(PropertyIds eId);
     void        SetStyleSheetImport( bool bSet ) { m_bInStyleSheetImport = bSet;}
     bool        IsStyleSheetImport()const { return m_bInStyleSheetImport;}
+    void        SetAnyTableImport( bool bSet ) { m_bInAnyTableImport = bSet;}
+    bool        IsAnyTableImport()const { return m_bInAnyTableImport;}
 
     void PushPageHeader(SectionPropertyMap::PageType eType);
     void PushPageFooter(SectionPropertyMap::PageType eType);
@@ -371,6 +425,12 @@ public:
 
     DeletableTabStop                m_aCurrentTabStop;
 
+    bool IsOOXMLImport() const { return m_eDocumentType == DOCUMENT_OOXML; }
+
+    void InitPageMargins() { m_aPageMargins = _PageMar(); }
+    void SetPageMarginTwip( PageMarElement eElement, sal_Int32 nValue );
+    const _PageMar& GetPageMargins() const {return m_aPageMargins;}
 };
 } //namespace dmapper
+} //namespace writerfilter
 #endif
