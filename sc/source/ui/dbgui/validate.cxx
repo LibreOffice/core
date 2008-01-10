@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validate.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:05:45 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:15:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,9 +250,9 @@ ScTPValidationValue::ScTPValidationValue( Window* pParent, const SfxItemSet& rAr
 
     // list separator in formulas
     //CHINA001 const String& rListSep = ScCompiler::pSymbolTableNative[ ocSep ];
-    const String& rListSep = ::GetScCompilerpSymbolTableNative()[ocSep]; //CHINA001
-    DBG_ASSERT( rListSep.Len() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
-    mcFmlaSep = rListSep.Len() ? rListSep.GetChar( 0 ) : ';';
+    String aListSep = ::GetScCompilerNativeSymbol( ocSep ); //CHINA001
+    DBG_ASSERT( aListSep.Len() == 1, "ScTPValidationValue::ScTPValidationValue - list separator error" );
+    mcFmlaSep = aListSep.Len() ? aListSep.GetChar( 0 ) : ';';
 }
 
 ScTPValidationValue::~ScTPValidationValue()
