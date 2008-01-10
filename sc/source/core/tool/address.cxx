@@ -4,9 +4,9 @@
  *
  *  $RCSfile: address.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:11:39 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:12:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,7 +272,12 @@ lcl_ScRange_Parse_XL_Header( ScRange& r,
             nFlags |= SCA_VALID_TAB2 | SCA_TAB2_3D | SCA_TAB2_ABSOLUTE;
         }
         else
-            r.aEnd.SetTab( 0 );
+        {
+            // If only one sheet is given, the full reference is still valid,
+            // only the second 3D flag is not set.
+            nFlags |= SCA_VALID_TAB2 | SCA_TAB2_ABSOLUTE;
+            r.aEnd.SetTab( r.aStart.Tab() );
+        }
 
         if( *p++ != '!' )
             return start;   // syntax error
@@ -616,9 +621,14 @@ lcl_ScRange_Parse_XL_A1( ScRange& r,
     }
 
     // prepare as if it's a singleton, in case we want to fall back */
-    r.aEnd = r.aStart;
+    r.aEnd.SetCol( r.aStart.Col() );
+    r.aEnd.SetRow( r.aStart.Row() );    // don't overwrite sheet number as parsed in lcl_ScRange_Parse_XL_Header
     if( *tmp2 != ':' )
+    {
+        if ( !bOnlyAcceptSingle )
+            nFlags &= ~SCA_VALID;   // when looking for a double ref, a single-cell ref must not be accepted
         return nFlags;
+    }
 
     p = tmp2;
     tmp1 = lcl_a1_get_col( p+1, &r.aEnd, &nFlags2 );
