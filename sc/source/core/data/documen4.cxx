@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:01:47 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:11:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,8 +237,7 @@ void ScDocument::InsertTableOp(const ScTabOpParam& rParam,      // Mehrfachopera
 
     ScRefAddress aRef;
     String aForString = '=';
-    if (ScCompiler::pSymbolTableNative)
-        aForString += ScCompiler::pSymbolTableNative[SC_OPCODE_TABLE_OP];
+    aForString += ScCompiler::GetNativeSymbol(ocTableOp);
     aForString += '(';
     if (rParam.nMode == 0)                          // nur Spalte
     {
