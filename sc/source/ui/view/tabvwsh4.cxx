@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:43:29 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:21:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1163,7 +1163,15 @@ void ScTabViewShell::SetDrawTextUndo( SfxUndoManager* pNewUndoMgr )
         pNewUndoMgr = GetViewData()->GetDocShell()->GetUndoManager();
 
     if (pDrawTextShell)
+    {
         pDrawTextShell->SetUndoManager(pNewUndoMgr);
+        ScDocShell* pDocSh = GetViewData()->GetDocShell();
+        if ( pNewUndoMgr == pDocSh->GetUndoManager() &&
+             !pDocSh->GetDocument()->IsUndoEnabled() )
+        {
+            pNewUndoMgr->SetMaxUndoActionCount( 0 );
+        }
+    }
     else
         DBG_ERROR("SetDrawTextUndo ohne DrawTextShell");
 }
@@ -1797,8 +1805,13 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
         MakeDrawView( nForceDesignMode );
     ViewOptionsHasChanged(FALSE);   // legt auch evtl. DrawView an
 
-    SetUndoManager( pDocSh->GetUndoManager() );
-    pFormShell->SetUndoManager( pDocSh->GetUndoManager() );
+    SfxUndoManager* pMgr = pDocSh->GetUndoManager();
+    SetUndoManager( pMgr );
+    pFormShell->SetUndoManager( pMgr );
+    if ( !pDoc->IsUndoEnabled() )
+    {
+        pMgr->SetMaxUndoActionCount( 0 );
+    }
     SetRepeatTarget( &aTarget );
     pFormShell->SetRepeatTarget( &aTarget );
     SetHelpId( HID_SCSHELL_TABVWSH );
@@ -1819,7 +1832,7 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
                     pDoc->MakeTable(i);
             }
 
-            pDocSh->ResetEmpty();           // #i6232# make sure this is done only once
+            pDocSh->SetEmpty( FALSE );          // #i6232# make sure this is done only once
         }
 
         // ReadExtOptions is now in Activate
