@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FontTable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-05-04 13:29:20 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:38:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,10 @@
 #ifndef INCLUDED_WRITERFILTERDLLAPI_H
 #include <WriterFilterDllApi.hxx>
 #endif
-#include <doctok/WW8ResourceModel.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 
+namespace writerfilter {
 namespace dmapper
 {
 using namespace std;
@@ -69,8 +70,8 @@ struct FontEntry
         nAltFontIndex( 0 )
         {}
 };
-class WRITERFILTER_DLLPRIVATE FontTable : public doctok::Properties, public doctok::Table
-                    /*,public doctok::BinaryObj*/, public doctok::Stream
+class WRITERFILTER_DLLPRIVATE FontTable : public Properties, public Table
+                    /*,public BinaryObj*/, public Stream
 {
     FontTable_Impl   *m_pImpl;
 
@@ -79,15 +80,15 @@ public:
     virtual ~FontTable();
 
     // Properties
-    virtual void attribute(doctok::Id Name, doctok::Value & val);
-    virtual void sprm(doctok::Sprm & sprm);
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
 
     // Table
-    virtual void entry(int pos, doctok::Reference<Properties>::Pointer_t ref);
+    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 
     // BinaryObj
 //    virtual void data(const sal_Int8* buf, size_t len,
-//                      doctok::Reference<Properties>::Pointer_t ref);
+//                      writerfilter::Reference<Properties>::Pointer_t ref);
 
     // Stream
     virtual void startSectionGroup();
@@ -98,17 +99,17 @@ public:
     virtual void endCharacterGroup();
     virtual void text(const sal_uInt8 * data, size_t len);
     virtual void utext(const sal_uInt8 * data, size_t len);
-    virtual void props(doctok::Reference<Properties>::Pointer_t ref);
-    virtual void table(doctok::Id name,
-                       doctok::Reference<Table>::Pointer_t ref);
-    virtual void substream(doctok::Id name,
-                           ::doctok::Reference<Stream>::Pointer_t ref);
+    virtual void props(writerfilter::Reference<Properties>::Pointer_t ref);
+    virtual void table(Id name,
+                       writerfilter::Reference<Table>::Pointer_t ref);
+    virtual void substream(Id name,
+                           ::writerfilter::Reference<Stream>::Pointer_t ref);
     virtual void info(const string & info);
 
     const FontEntry*    getFontEntry(sal_uInt32 nIndex);
     sal_uInt32          size();
 };
 typedef boost::shared_ptr< FontTable >          FontTablePtr;
-}
+}}
 
 #endif //
