@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TDefTableHandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2007-06-27 08:54:25 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:42:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,44 +32,29 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef INCLUDED_TDEFTABLEHANDLER_HXX
 #include <TDefTableHandler.hxx>
-#endif
-#ifndef INCLUDED_DMAPPER_PROPERTYMAP_HXX
 #include <PropertyMap.hxx>
-#endif
-#ifndef INCLUDED_DMAPPER_CONVERSIONHELPER_HXX
 #include <ConversionHelper.hxx>
-#endif
-#ifndef INCLUDED_QNAME_HXX
-#include <odiapi/qname.hxx>
-#endif
-#ifndef INCLUDED_RESOURCESIDS
+#include <ooxml/resourceids.hxx>
 #include <doctok/resourceids.hxx>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_TABLECOLUMNSEPARATOR_HPP_
 #include <com/sun/star/text/TableColumnSeparator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_VERTORIENTATION_HDL_
 #include <com/sun/star/text/VertOrientation.hpp>
-#endif
 
+namespace writerfilter {
 namespace dmapper {
 
 using namespace ::com::sun::star;
-using namespace ::writerfilter;
 
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-TDefTableHandler::TDefTableHandler() :
+TDefTableHandler::TDefTableHandler(bool bOOXML) :
     m_nLineWidth(0),
     m_nLineType(0),
     m_nLineColor(0),
-    m_nLineDistance(0)
+    m_nLineDistance(0),
+    m_bOOXML( bOOXML )
 {
 }
 /*-- 24.04.2007 09:06:35---------------------------------------------------
@@ -81,23 +66,26 @@ TDefTableHandler::~TDefTableHandler()
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void TDefTableHandler::attribute(doctok::Id rName, doctok::Value & rVal)
+void TDefTableHandler::attribute(Id rName, Value & rVal)
 {
     sal_Int32 nIntValue = rVal.getInt();
     (void)nIntValue;
     (void)rName;
+    /* WRITERFILTERSTATUS: table: TDefTable_attributedata */
     switch( rName )
     {
+        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_rtf::LN_cellx:
             // nIntValue contains the vert. line position
             //TODO: nIntValue is wrong for negative values!
             if( nIntValue > 0x7fff )
                 nIntValue -= 0xffff;
-            m_aCellBorderPositions.push_back( ConversionHelper::convertToMM100( nIntValue ) );
+            m_aCellBorderPositions.push_back( ConversionHelper::convertTwipToMM100( nIntValue ) );
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_tc:
         {
-            doctok::Reference<doctok::Properties>::Pointer_t pProperties = rVal.getProperties();
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
             if( pProperties.get())
             {
                 pProperties->resolve( *this );
@@ -105,71 +93,70 @@ void TDefTableHandler::attribute(doctok::Id rName, doctok::Value & rVal)
         }
         break;
         //from LN_tc
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FFIRSTMERGED:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FMERGED:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FVERTICAL:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FBACKWARD:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FROTATEFONT:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FVERTMERGE:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FVERTRESTART:
         break;
+        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_rtf::LN_VERTALIGN:
             //TODO: m_aCellVertAlign is just a temporary solution! 0 - top 1 - center 2 - bottom
             m_aCellVertAlign.push_back( nIntValue );
         break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FUNUSED:
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_CellPrefferedSize:
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCTOP:
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCLEFT:
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCBOTTOM:
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCRIGHT:
         {
-            doctok::Reference<doctok::Properties>::Pointer_t pProperties = rVal.getProperties();
-            if( pProperties.get())
-            {
-                m_nLineWidth = m_nLineType = m_nLineColor = m_nLineDistance = 0;
-                pProperties->resolve( *this );
-                table::BorderLine aBorderLine;
-                ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
-                                                                                aBorderLine );
-
-                switch( rName )
-                {
-                    case NS_rtf::LN_BRCTOP:
-                        m_aTopBorderLines.push_back(aBorderLine);
-                    break;
-                    case NS_rtf::LN_BRCLEFT:
-                        m_aLeftBorderLines.push_back(aBorderLine);
-                    break;
-                    case NS_rtf::LN_BRCBOTTOM:
-                        m_aBottomBorderLines.push_back(aBorderLine);
-                    break;
-                    case NS_rtf::LN_BRCRIGHT:
-                        m_aRightBorderLines.push_back(aBorderLine);
-                    break;
-                    default:;
-                }
-            }
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rVal.getProperties();
+            localResolve( rName, pProperties );
         }
         break;
         //from LN_BRCXXXX - handled within the BorderHandler
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_DPTLINEWIDTH: // 0x2871
             //  width of a single line in 1/8 pt, max of 32 pt -> twip * 5 / 2.
-            m_nLineWidth = ConversionHelper::convertToMM100( nIntValue * 5 / 2 );
+            m_nLineWidth = ConversionHelper::convertTwipToMM100( nIntValue * 5 / 2 );
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCTYPE:    // 0x2872
             m_nLineType = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_Border_color:
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_ICO:        // 0x2873
             m_nLineColor = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
         case NS_rtf::LN_DPTSPACE:   // 0x2874
             m_nLineDistance = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FSHADOW:    // 0x2875
             //if 1 then line has shadow - unsupported
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FFRAME:     // 0x2876
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED2_15: // 0x2877
             // ignored
         break;
@@ -177,12 +164,73 @@ void TDefTableHandler::attribute(doctok::Id rName, doctok::Value & rVal)
             OSL_ASSERT("unknown attribute");
     }
 }
+/*-- 08.10.2007 12:55:32---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void TDefTableHandler::localResolve(Id rName, writerfilter::Reference<Properties>::Pointer_t pProperties)
+{
+    if( pProperties.get())
+    {
+        m_nLineWidth = m_nLineType = m_nLineColor = m_nLineDistance = 0;
+        pProperties->resolve( *this );
+        table::BorderLine aBorderLine;
+        ConversionHelper::MakeBorderLine( m_nLineWidth,   m_nLineType, m_nLineColor,
+                                                                        aBorderLine, m_bOOXML );
+
+        /* WRITERFILTERSTATUS: table: TDefTable_localresolve */
+        switch( rName )
+        {
+            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+            case NS_ooxml::LN_CT_TcBorders_top:
+            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+            case NS_rtf::LN_BRCTOP:
+                m_aTopBorderLines.push_back(aBorderLine);
+            break;
+            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+            case NS_ooxml::LN_CT_TcBorders_left:
+            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+            case NS_rtf::LN_BRCLEFT:
+                m_aLeftBorderLines.push_back(aBorderLine);
+            break;
+            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+            case NS_ooxml::LN_CT_TcBorders_bottom:
+            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+            case NS_rtf::LN_BRCBOTTOM:
+                m_aBottomBorderLines.push_back(aBorderLine);
+            break;
+            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+            case NS_ooxml::LN_CT_TcBorders_right:
+            /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+            case NS_rtf::LN_BRCRIGHT:
+                m_aRightBorderLines.push_back(aBorderLine);
+            break;
+            default:;
+        }
+    }
+}
 /*-- 24.04.2007 09:06:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void TDefTableHandler::sprm(doctok::Sprm & rSprm)
+void TDefTableHandler::sprm(Sprm & rSprm)
 {
-    (void)rSprm;
+    /* WRITERFILTERSTATUS: table: TDefTable_sprm */
+    switch( rSprm.getId() )
+    {
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_TcBorders_top:
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_TcBorders_left:
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_TcBorders_bottom:
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_TcBorders_right:
+        {
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            localResolve( rSprm.getId(), pProperties );
+        }
+        break;
+        default:;
+    }
 }
 /*-- 24.04.2007 09:09:01---------------------------------------------------
 
@@ -262,3 +310,4 @@ size_t TDefTableHandler::getCellCount() const
 }
 
 } //namespace dmapper
+} //namespace writerfilter
