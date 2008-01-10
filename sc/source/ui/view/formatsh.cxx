@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 09:45:01 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:20:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,12 @@ ScFormatShell::ScFormatShell(ScViewData* pData) :
     ScTabViewShell* pTabViewShell = GetViewData()->GetViewShell();
 
     SetPool( &pTabViewShell->GetPool() );
-    SetUndoManager( pViewData->GetSfxDocShell()->GetUndoManager() );
+    SfxUndoManager* pMgr = pViewData->GetSfxDocShell()->GetUndoManager();
+    SetUndoManager( pMgr );
+    if ( !pViewData->GetDocument()->IsUndoEnabled() )
+    {
+        pMgr->SetMaxUndoActionCount( 0 );
+    }
     SetHelpId(HID_SCSHELL_FORMATSH);
     SetName(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("Format")));
 }
