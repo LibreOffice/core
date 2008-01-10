@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.168 $
-# Date:        $Date: 2007-12-12 15:37:11 $
+# Version:     $Revision: 1.169 $
+# Date:        $Date: 2008-01-10 13:05:20 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -442,6 +442,7 @@ elsif ( $platform =~ m/linux-gnu/ )
       $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."xawt";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."server";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."native_threads";
+      $JREEXTRALIBDIR = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."amd64".$ds."xawt";
    }
    elsif ($platform =~ m/^sparc/)
  
