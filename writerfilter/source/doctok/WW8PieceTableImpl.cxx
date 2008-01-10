@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8PieceTableImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-15 16:36:44 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:48:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include <iterator>
 
 #ifndef INCLUDED_DOCTOK_EXCEPTIONS
-#include <doctok/exceptions.hxx>
+#include <resourcemodel/exceptions.hxx>
 #endif
 #ifndef INCLUDED_WW8_PIECE_TABLE_IMPL_HXX
 #include <WW8PieceTableImpl.hxx>
@@ -46,6 +46,7 @@
 #include <WW8Clx.hxx>
 #endif
 
+namespace writerfilter {
 namespace doctok
 {
 using namespace ::std;
@@ -307,4 +308,4 @@ void WW8PieceTableImpl::dump(ostream & o) const
     copy(mEntries.begin(), mEntries.end(), ostream_iterator<CpAndFc>(o, "\n"));
     o << "</piecetable>" << endl;
 }
-}
+}}
