@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dff.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:41 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,9 @@
  *
  *  $RCSfile: Dff.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:41 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:43:20 $
  *
  ******************************************************************/
 
@@ -50,13 +50,14 @@
 #include <WW8StructBase.hxx>
 #include <WW8ResourceModelImpl.hxx>
 
+namespace writerfilter {
 namespace doctok
 {
 using std::vector;
 
 class DffBlock;
 
-class DffRecord : public WW8StructBase, public doctok::Reference<Properties>,
+class DffRecord : public WW8StructBase, public writerfilter::Reference<Properties>,
                   public Sprm
 {
     bool bInitialized;
@@ -108,9 +109,9 @@ public:
     /* Sprm methods */
     virtual sal_uInt32 getId() const { return getRecordType(); }
     virtual Value::Pointer_t getValue();
-    virtual doctok::Reference<BinaryObj>::Pointer_t getBinary();
-    virtual doctok::Reference<Stream>::Pointer_t getStream();
-    virtual doctok::Reference<Properties>::Pointer_t getProps();
+    virtual writerfilter::Reference<BinaryObj>::Pointer_t getBinary();
+    virtual writerfilter::Reference<Stream>::Pointer_t getStream();
+    virtual writerfilter::Reference<Properties>::Pointer_t getProps();
 
     virtual string toString() const;
     virtual string getName() const;
@@ -122,7 +123,8 @@ public:
 
 typedef vector<DffRecord::Pointer_t> Records_t;
 
-class DffBlock : public WW8StructBase, public doctok::Reference<Properties>
+class DffBlock : public WW8StructBase,
+                 public writerfilter::Reference<Properties>
 {
     bool bInitialized;
     sal_uInt32 mnPadding;
@@ -164,6 +166,6 @@ DffRecord *
 createDffRecord(WW8Stream & rStream, sal_uInt32 nOffset,
                 sal_uInt32 * nSize = NULL);
 
-}
+}}
 
 #endif
