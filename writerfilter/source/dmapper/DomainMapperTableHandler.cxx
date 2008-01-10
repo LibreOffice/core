@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableHandler.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2007-06-27 08:54:24 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:37:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #ifdef DEBUG
 #include <iostream>
 #endif
+
+namespace writerfilter {
 namespace dmapper {
 
 using namespace ::com::sun::star;
@@ -49,6 +51,8 @@ using namespace ::std;
 #ifdef DEBUG
 static void lcl_printHandle(const Handle_t rHandle)
 {
+    if (!rHandle.get())
+        return;
     rtl::OUString aOUStr = rHandle->getString();
     rtl::OString aOStr(aOUStr.getStr(), aOUStr.getLength(),  RTL_TEXTENCODING_ASCII_US );
 
@@ -374,6 +378,8 @@ void DomainMapperTableHandler::startCell(const Handle_t & start,
 //        m_pCellProperties.push_back( RowProperties_t() );
 //    m_pCellProperties[m_nRowIndex].push_back( pProps );
     m_pCellSeq = CellSequencePointer_t(new CellSequence_t(2));
+    if (!start.get())
+        return;
     (*m_pCellSeq)[0] = start->getStart();
 }
 
@@ -384,9 +390,11 @@ void DomainMapperTableHandler::endCell(const Handle_t & end)
     clog << "</table.cell>" << endl;
 #endif
 
+    if (!end.get())
+        return;
     (*m_pCellSeq)[1] = end->getEnd();
     (*m_pRowSeq)[m_nCellIndex] = *m_pCellSeq;
     ++m_nCellIndex;
 }
 
-}
+}}
