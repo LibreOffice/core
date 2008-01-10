@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DDELink.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:27:43 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:38:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,10 @@
 #include <com/sun/star/util/XRefreshable.idl>
 #endif
 
+#ifndef __com_sun_star_sheet_XDDELinkResults_idl__
+#include <com/sun/star/sheet/XDDELinkResults.idl>
+#endif
+
 //=============================================================================
 
 module com {  module sun {  module star {  module sheet {
@@ -79,6 +83,14 @@ published service DDELink
     /** provides methods to reload the external linked data.
      */
     interface com::sun::star::util::XRefreshable;
+
+    //-------------------------------------------------------------------------
+
+    /** provides access to the DDE link results.
+
+        @since CWS xmlfilter02
+     */
+    [optional] interface com::sun::star::sheet::XDDELinkResults;
 
 };
 
