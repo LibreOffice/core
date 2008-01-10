@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:00:49 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:10:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -567,6 +567,26 @@ void ScConditionEntry::SetSrcString( const String& rNew )
     DBG_ASSERT( pDoc->IsImportingXML(), "SetSrcString is only valid for XML import" );
 
     aSrcString = rNew;
+}
+
+void ScConditionEntry::SetFormula1( const ScTokenArray& rArray )
+{
+    DELETEZ( pFormula1 );
+    if( rArray.GetLen() > 0 )
+    {
+        pFormula1 = new ScTokenArray( rArray );
+        bRelRef1 = lcl_HasRelRef( pDoc, pFormula1 );
+    }
+}
+
+void ScConditionEntry::SetFormula2( const ScTokenArray& rArray )
+{
+    DELETEZ( pFormula2 );
+    if( rArray.GetLen() > 0 )
+    {
+        pFormula2 = new ScTokenArray( rArray );
+        bRelRef2 = lcl_HasRelRef( pDoc, pFormula2 );
+    }
 }
 
 void lcl_CondUpdateInsertTab( ScTokenArray& rCode, SCTAB nInsTab, SCTAB nPosTab, BOOL& rChanged )
