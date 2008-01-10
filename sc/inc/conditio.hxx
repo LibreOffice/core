@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conditio.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:54:31 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:08:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,9 @@ public:
     ScAddress       GetValidSrcPos() const;     // adjusted to allow textual representation of expressions
 
     void            SetSrcString( const String& rNew );     // for XML import
+
+    void            SetFormula1( const ScTokenArray& rArray );
+    void            SetFormula2( const ScTokenArray& rArray );
 
     String          GetExpression( const ScAddress& rCursor, USHORT nPos, ULONG nNumFmt = 0,
                                     BOOL bEnglish = FALSE, BOOL bCompileXML = FALSE,
