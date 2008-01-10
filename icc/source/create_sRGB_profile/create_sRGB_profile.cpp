@@ -4,9 +4,9 @@
  *
  *  $RCSfile: create_sRGB_profile.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2008-01-10 15:39:13 $
+ *  last change: $Author: pl $ $Date: 2008-01-10 16:17:14 $
 
   Derived by beppec56@openoffice.org from various examples
   in SampleICC library, the original copyright retained.
@@ -182,7 +182,7 @@ icFloatNumber computeIEC_XYZtoRGB( icFloatNumber indata )
     if(indata < 0.0031308)
         retval = indata*12.92;
     else // apply the other conversion
-        retval =  1.055*pow( indata , 1.0/2.4) - 0.055;
+        retval =  1.055*pow( indata , icFloatNumber(1.0/2.4)) - 0.055;
 
     //  cout << retval << endl;
     return retval;
@@ -554,7 +554,7 @@ int main(int argc, char* argv[])
 
         return EXIT_SUCCESS;
     }
-    catch (const exception& e)
+    catch (const std::exception& e)
     {
         cout << myName << ": error: " << e.what() << endl;
         return EXIT_FAILURE;
