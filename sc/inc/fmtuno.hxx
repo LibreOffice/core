@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtuno.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:40:53 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:08:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,9 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#include <com/sun/star/sheet/XMultiFormulaTokens.hpp>
+#include <com/sun/star/sheet/FormulaToken.hpp>
+
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
 #endif
@@ -90,7 +93,17 @@ class ScConditionalFormat;
 class ScValidationData;
 
 
-//  "erstmal" nur dummer Container
+struct ScCondFormatEntryItem
+{
+    ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > maTokens1;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > maTokens2;
+    String      maExpr1;
+    String      maExpr2;
+    String      maPosStr;   // formula position as text
+    String      maStyle;    // display name as stored in ScStyleSheet
+    ScAddress   maPos;
+    USHORT      mnMode;     // stores enum ScConditionMode
+};
 
 class ScTableConditionalFormat : public cppu::WeakImplHelper5<
                             com::sun::star::sheet::XSheetConditionalEntries,
@@ -103,9 +116,7 @@ private:
     List    aEntries;
 
     ScTableConditionalEntry*    GetObjectByIndex_Impl(USHORT nIndex) const;
-    void                        AddEntry_Impl( USHORT nMode,
-                                    const String& rExpr1, const String& rExpr2,
-                                    const ScAddress& rPos, const String& rPosStr, const String& rStyle );
+    void                        AddEntry_Impl(const ScCondFormatEntryItem& aEntry);
 
 public:
                             ScTableConditionalFormat();
@@ -178,23 +189,15 @@ class ScTableConditionalEntry : public cppu::WeakImplHelper3<
 {
 private:
     ScTableConditionalFormat*   pParent;
-    USHORT                      nMode;      // enum ScConditionMode
-    String                      aExpr1;
-    String                      aExpr2;
-    ScAddress                   aSrcPos;
-    String                      aPosString; // formula position as text - set only in ctor
-    String                      aStyle;     // display name as stored in ScStyleSheet
+    ScCondFormatEntryItem       aData;
 
 public:
                             ScTableConditionalEntry();
-                            ScTableConditionalEntry( ScTableConditionalFormat* pPar,
-                                                     USHORT nM, const String& rEx1,
-                                                     const String& rEx2, const ScAddress& rPos,
-                                                     const String& rPosStr, const String& rSt );
+                            ScTableConditionalEntry(ScTableConditionalFormat* pPar,
+                                                    const ScCondFormatEntryItem& aItem);
     virtual                 ~ScTableConditionalEntry();
 
-    void                    GetData( USHORT& rM, String& rEx1, String& rEx2,
-                                        ScAddress& rPos, String& rPosStr, String& rSt ) const;
+    void                    GetData(ScCondFormatEntryItem& rData) const;
 
                             // XSheetCondition
     virtual ::com::sun::star::sheet::ConditionOperator SAL_CALL getOperator()
@@ -228,8 +231,9 @@ public:
 
 
 
-class ScTableValidationObj : public cppu::WeakImplHelper4<
+class ScTableValidationObj : public cppu::WeakImplHelper5<
                             com::sun::star::sheet::XSheetCondition,
+                            com::sun::star::sheet::XMultiFormulaTokens,
                             com::sun::star::beans::XPropertySet,
                             com::sun::star::lang::XUnoTunnel,
                             com::sun::star::lang::XServiceInfo >
@@ -239,6 +243,8 @@ private:
     USHORT              nMode;          // enum ScConditionMode
     String              aExpr1;
     String              aExpr2;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > aTokens1;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken > aTokens2;
     ScAddress           aSrcPos;
     String              aPosString;     // formula position as text
     USHORT              nValMode;       // enum ScValidationMode
@@ -279,6 +285,15 @@ public:
                                 throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setSourcePosition( const ::com::sun::star::table::CellAddress& aSourcePosition )
                                 throw(::com::sun::star::uno::RuntimeException);
+
+                            // XMultiFormulaTokens
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >
+                            SAL_CALL getTokens( sal_Int32 nIndex )
+                                throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IndexOutOfBoundsException);
+    virtual void SAL_CALL setTokens( sal_Int32 nIndex,
+                                     const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken >& aTokens )
+                                throw(::com::sun::star::uno::RuntimeException,::com::sun::star::lang::IndexOutOfBoundsException);
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
 
                             // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >
