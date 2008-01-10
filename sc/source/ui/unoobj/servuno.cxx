@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servuno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:11:51 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:19:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@
 #include "celllistsource.hxx"
 #include "addruno.hxx"
 #include "chart2uno.hxx"
+#include "tokenuno.hxx"
 
 // #100263# Support creation of GraphicObjectResolver and EmbeddedObjectResolver
 #ifndef _XMLEOHLP_HXX
@@ -125,7 +126,9 @@ static const sal_Char* __FAR_DATA aProvNames[SC_SERVICE_COUNT] =
 
         "com.sun.star.sheet.DocumentSettings",      // SC_SERVICE_SHEETDOCSET
 
-        SC_SERVICENAME_CHDATAPROV                  // SC_SERVICE_CHDATAPROV
+        SC_SERVICENAME_CHDATAPROV,                  // SC_SERVICE_CHDATAPROV
+        SC_SERVICENAME_FORMULAPARS,                 // SC_SERVICE_FORMULAPARS
+        SC_SERVICENAME_OPCODEMAPPER                 // SC_SERVICE_OPCODEMAPPER
     };
 
 //
@@ -175,7 +178,9 @@ static const sal_Char* __FAR_DATA aOldNames[SC_SERVICE_COUNT] =
         "",                                         // SC_SERVICE_CELLADDRESS
         "",                                         // SC_SERVICE_RANGEADDRESS
         "",                                         // SC_SERVICE_SHEETDOCSET
-        ""                                          // SC_SERVICE_CHDATAPROV
+        "",                                         // SC_SERVICE_CHDATAPROV
+        "",                                         // SC_SERVICE_FORMULAPARS
+        ""                                          // SC_SERVICE_OPCODEMAPPER
     };
 
 
@@ -203,11 +208,14 @@ sal_uInt16 ScServiceProvider::GetProviderType(const String& rServiceName)
                 return i;
 
         for (i=0; i<SC_SERVICE_COUNT; i++)
+        {
+            DBG_ASSERT( aOldNames[i], "ScServiceProvider::GetProviderType: no oldname => crash");
             if (rServiceName.EqualsAscii( aOldNames[i] ))
             {
                 DBG_ERROR("old service name used");
                 return i;
             }
+        }
     }
     return SC_SERVICE_INVALID;
 }
@@ -355,6 +363,15 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
         case SC_SERVICE_CHDATAPROV:
             if (pDocShell && pDocShell->GetDocument())
                 xRet = *new ScChart2DataProvider( pDocShell->GetDocument() );
+            break;
+
+        case SC_SERVICE_FORMULAPARS:
+            if (pDocShell)
+                xRet.set(static_cast<sheet::XFormulaParser*>(new ScFormulaParserObj( pDocShell )));
+            break;
+
+        case SC_SERVICE_OPCODEMAPPER:
+            xRet.set(static_cast<sheet::XFormulaOpCodeMapper*>(new ScFormulaOpCodeMapperObj));
             break;
     }
     return xRet;
