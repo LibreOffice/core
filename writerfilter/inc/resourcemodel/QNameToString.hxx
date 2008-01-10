@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QNameToString.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2007-04-16 11:03:31 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:32:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,9 @@
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <string>
-#include <odiapi/qname/QName.hxx>
+#include <iostream>
+#include <resourcemodel/WW8ResourceModel.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
 
 namespace writerfilter
 {
@@ -47,10 +49,14 @@ using namespace ::std;
 class WRITERFILTER_DLLPUBLIC QNameToString
 {
     typedef boost::shared_ptr<QNameToString> Pointer_t;
+    typedef map < Id, string > Map;
 
     static Pointer_t pInstance;
 
-    map < writerfilter::QName_t, string > mMap;
+    void init_doctok();
+    void init_ooxml();
+
+    Map mMap;
 
 protected:
     /**
@@ -61,7 +67,7 @@ protected:
 public:
     static Pointer_t Instance();
 
-    string operator()(writerfilter::QName_t qName);
+    string operator()(Id qName);
 };
 
 class WRITERFILTER_DLLPUBLIC SprmIdToString
@@ -82,6 +88,11 @@ public:
     static Pointer_t Instance();
     string operator()(sal_uInt32 nId);
 };
+
+string WRITERFILTER_DLLPUBLIC xmlify(const string & str);
+
+string WRITERFILTER_DLLPUBLIC propertysetToString
+(uno::Reference<beans::XPropertySet> const & rProps);
 
 }
 
