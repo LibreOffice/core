@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: pl $ $Date: 2008-01-10 15:38:31 $
+#   last change: $Author: pl $ $Date: 2008-01-10 19:42:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,12 @@ CONVERTFILES= \
     Contrib/ICC_utils/Vetters.cpp
 
 .IF "$(GUI)"=="WNT"
+.IF "$(USE_SHELL)"=="4nt"
+CONFIGURE_ACTION= $(GNUCOPY) -r $(BACK_PATH)../source/create_sRGB_profile Contrib/CmdLine && unzip $(BACK_PATH)..$/makefiles.zip
+BUILD_ACTION=dmake &&  cd Contrib/CmdLine/create_sRGB_profile && ./create_sRGB_profile
+.ELSE
 CONFIGURE_ACTION= $(COPY) -r $(BACK_PATH)../source/create_sRGB_profile Contrib/CmdLine && CC="" CXX="" ./configure
+.ENDIF
 .ELSE
 CONFIGURE_ACTION= $(COPY) -r $(BACK_PATH)../source/create_sRGB_profile Contrib/CmdLine && ./configure
 .ENDIF

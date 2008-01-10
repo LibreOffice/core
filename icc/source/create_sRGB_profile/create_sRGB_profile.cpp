@@ -4,9 +4,9 @@
  *
  *  $RCSfile: create_sRGB_profile.cpp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2008-01-10 16:17:14 $
+ *  last change: $Author: pl $ $Date: 2008-01-10 19:41:56 $
 
   Derived by beppec56@openoffice.org from various examples
   in SampleICC library, the original copyright retained.
@@ -481,7 +481,7 @@ int main(int argc, char* argv[])
 
         // Out it goes
         CIccFileIO out;
-        out.Open(out_file_pathname, "w+");
+        out.Open(out_file_pathname, "wb+");
         profile.Write(&out);
         out.Close();
 
@@ -511,7 +511,7 @@ int main(int argc, char* argv[])
 
             int achar, number = 1;
 
-            infile = fopen(out_file_pathname,"r");
+            infile = fopen(out_file_pathname,"rb");
 
             fseek(infile,0,SEEK_END);
             long int thesize= ftell(infile);
