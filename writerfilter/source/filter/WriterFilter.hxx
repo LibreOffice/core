@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WriterFilter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2007-02-22 13:43:48 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:55:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,7 @@ public:
 
 };
 
+
 ::rtl::OUString WriterFilter_getImplementationName()
     throw ( ::com::sun::star::uno::RuntimeException );
 
@@ -115,6 +116,5 @@ sal_Bool SAL_CALL WriterFilter_supportsService( const ::rtl::OUString& ServiceNa
                                                                         const ::com::sun::star::uno::Reference<
                                                                         ::com::sun::star::uno::XComponentContext > &xContext)
     throw( ::com::sun::star::uno::Exception );
-
 #endif
 
