@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 12:58:06 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:30:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -771,7 +771,8 @@ const SwPropNameTab aPropNameTab = {
 /* 0713 UNO_NAME_TOOLTIP */ {MAP_CHAR_LEN("Tooltip")},
 /* 0714 UNO_NAME_DIALOG_LIBRARIES*/     {MAP_CHAR_LEN("DialogLibraries")},
 /* 0715 UNO_NAME_HEADER_ROW_COUNT*/     {MAP_CHAR_LEN("HeaderRowCount")},
-/* 0716 UNO_NAME_INPUT */                {MAP_CHAR_LEN("Input")}
+/* 0716 UNO_NAME_INPUT */                {MAP_CHAR_LEN("Input")},
+/* 0717 UNO_NAME_ROW_SPAN */            {MAP_CHAR_LEN("RowSpan")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
