@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parclass.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:34:41 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:12:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,8 +94,9 @@ public:
                                     ForceArray. */
     static  inline  bool        HasForceArray( OpCode eOp)
                                     {
-                                        return eOp <= SC_OPCODE_LAST_OPCODE_ID
-                                            && pData[eOp].bHasForceArray;
+                                        return 0 <= (short)eOp &&
+                                            eOp <= SC_OPCODE_LAST_OPCODE_ID &&
+                                            pData[eOp].bHasForceArray;
                                     }
 
 private:
