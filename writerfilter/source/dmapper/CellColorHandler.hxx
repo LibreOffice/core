@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CellColorHandler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2007-05-03 06:24:01 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:36:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,20 +38,25 @@
 #ifndef INCLUDED_WRITERFILTERDLLAPI_H
 #include <WriterFilterDllApi.hxx>
 #endif
-#include <doctok/WW8ResourceModel.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #include <boost/shared_ptr.hpp>
 //#include <com/sun/star/table/TableBorder.hpp>
 #ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
 #endif
 
+namespace writerfilter {
 namespace dmapper
 {
 class PropertyMap;
-class WRITERFILTER_DLLPRIVATE CellColorHandler : public doctok::Properties
+class WRITERFILTER_DLLPRIVATE CellColorHandler : public Properties
 {
 public:
-
+    sal_Int32 m_nShadowType;
+    sal_Int32 m_nColor;
+    sal_Int32 m_nFillColor;
+    bool      m_bOOXMLColor;
+    bool      m_bParagraph;
 private:
 
 public:
@@ -59,12 +64,14 @@ public:
     virtual ~CellColorHandler();
 
     // Properties
-    virtual void attribute(doctok::Id Name, doctok::Value & val);
-    virtual void sprm(doctok::Sprm & sprm);
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
 
     ::boost::shared_ptr<PropertyMap>            getProperties();
+
+    void setParagraph() { m_bParagraph = true; }
 };
 typedef boost::shared_ptr< CellColorHandler >          CellColorHandlerPtr;
-}
+}}
 
 #endif //
