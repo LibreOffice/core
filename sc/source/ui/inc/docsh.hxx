@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:43:58 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:16:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,7 +365,7 @@ public:
 
     void            SetInplace( BOOL bInplace );
     BOOL            IsEmpty() const;
-    void            ResetEmpty();
+    void            SetEmpty(BOOL bSet);
 
     BOOL            IsInUndo() const                { return bIsInUndo; }
     void            SetInUndo(BOOL bSet);
