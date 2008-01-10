@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseRange.idl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:37:50 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:39:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,9 +151,22 @@ published service DatabaseRange
     /** specifies whether the imported data is only a selection of the database.
 
         @since OOo 2.0.0
-
      */
     [optional, property] boolean FromSelection;
+
+    //-------------------------------------------------------------------------
+
+    /** returns the index used to refer to this range in token arrays.
+
+        <p>A token describing a database range shall contain the op-code
+        OPCODE_DB_AREA and this index as data part.</p>
+
+        @see com::sun::star::sheet::FormulaToken
+        @see com::sun::star::sheet::FormulaMapGroupSpecialOffset::DB_AREA
+
+        @since OOo 2.x
+     */
+    [optional, readonly, property] long TokenIndex;
 };
 
 //=============================================================================
