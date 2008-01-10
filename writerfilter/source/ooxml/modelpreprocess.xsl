@@ -5,9 +5,9 @@
  *
  *  $RCSfile: modelpreprocess.xsl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-14 15:54:27 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:13:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@
   </xsl:template>
 
   <xsl:template name="prefixforgrammar">
-    <xsl:variable name="ns" select="ancestor::rng:grammar/@ns"/>
+    <xsl:variable name="ns" select="ancestor::namespace/rng:grammar/@ns"/>
     <xsl:variable name="prefix" select="key('namespace-aliases', $ns)/@alias"/>
     <xsl:choose>
       <xsl:when test="string-length($prefix) > 0">
@@ -105,17 +105,22 @@
   </xsl:template>
 
   <xsl:template name="nsforgrammar">
-    <xsl:value-of select="ancestor::rng:grammar/@ns"/>
+    <xsl:value-of select="ancestor::namespace/rng:grammar/@ns"/>
   </xsl:template>
 
-  <xsl:template match="rng:element[@name] | rng:attribute[@name]">
+  <xsl:template match="rng:element[@name] | rng:attribute[@name] | element | attribute">
     <xsl:variable name="prefix">
       <xsl:choose>
         <xsl:when test="contains(@name, ':')">
           <xsl:variable name="myname" select="@name"/>
           <xsl:call-template name="prefixfromurl">
-            <xsl:with-param name="url" select="string(ancestor::rng:grammar/namespace::*[local-name(.) = substring-before($myname, ':')])"/>
+            <xsl:with-param name="url" select="string(namespace::*[local-name(.) = substring-before($myname, ':')])"/>
           </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="name(.)='attribute'">
+          <xsl:if test="ancestor::rng:grammar/@attributeFormDefault='qualified'">
+            <xsl:call-template name="prefixforgrammar"/>
+          </xsl:if>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="prefixforgrammar"/>
@@ -126,7 +131,12 @@
       <xsl:choose>
         <xsl:when test="contains(@name, ':')">
           <xsl:variable name="myname" select="@name"/>
-          <xsl:value-of select="string(ancestor::rng:grammar/namespace::*[local-name(.) = substring-before($myname, ':')])"/>
+          <xsl:value-of select="string(namespace::*[local-name(.) = substring-before($myname, ':')])"/>
+        </xsl:when>
+        <xsl:when test="name(.)='attribute'">
+          <xsl:if test="ancestor::rng:grammar/@attributeFormDefault='qualified'">
+            <xsl:call-template name="nsforgrammar"/>
+          </xsl:if>
         </xsl:when>
         <xsl:otherwise>
           <xsl:call-template name="nsforgrammar"/>
@@ -146,15 +156,25 @@
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
       <xsl:attribute name="enumname">
-        <xsl:value-of select="$prefix"/>
-        <xsl:text>:</xsl:text>
+        <xsl:if test="string-length($prefix) > 0">
+          <xsl:value-of select="$prefix"/>
+          <xsl:text>:</xsl:text>
+        </xsl:if>
         <xsl:value-of select="$localname"/>
       </xsl:attribute>
       <xsl:attribute name="qname">
-        <xsl:value-of select="$ns"/>
-        <xsl:text>:</xsl:text>
+        <xsl:if test="string-length($ns) > 0">
+          <xsl:value-of select="$ns"/>
+          <xsl:text>:</xsl:text>
+        </xsl:if>
         <xsl:value-of select="$localname"/>
       </xsl:attribute>
+      <xsl:attribute name="prefix">
+        <xsl:value-of select="$prefix"/>
+      </xsl:attribute>
+      <xsl:attribute name="localname">
+        <xsl:value-of select="$localname"/>
+      </xsl:attribute>      
       <xsl:apply-templates/>      
     </xsl:copy>    
   </xsl:template>
@@ -183,10 +203,28 @@
    </xsl:copy>
   </xsl:template>
 
+  <xsl:template match="rng:define|rng:ref">
+   <xsl:copy>
+     <xsl:apply-templates select="@*"/>
+     <xsl:attribute name="classfordefine">
+       <xsl:variable name="name" select="@name"/>
+       <xsl:choose>
+         <xsl:when test="(starts-with(@name, 'CT_') or starts-with(@name, 'EG_') or starts-with(@name, 'AG_'))">1</xsl:when>
+         <xsl:when test="ancestor::namespace//start[@name=$name]">1</xsl:when>
+         <xsl:otherwise>0</xsl:otherwise>
+       </xsl:choose>
+     </xsl:attribute>
+     <xsl:apply-templates/>
+   </xsl:copy>
+  </xsl:template>
+
   <xsl:template match="namespace">
     <xsl:variable name="ns" select=".//rng:grammar/@ns"/>
    <xsl:copy>
      <xsl:apply-templates select="@*"/>
+     <xsl:attribute name="namespacealias">
+       <xsl:value-of select="key('namespace-aliases', $ns)/@alias"/>
+     </xsl:attribute>
      <xsl:attribute name="prefix"><xsl:value-of select="translate(substring-after($ns, 'http://schemas.openxmlformats.org/'), '/', '_')"/></xsl:attribute>
      <xsl:apply-templates/>
    </xsl:copy>
