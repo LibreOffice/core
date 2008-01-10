@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtuno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:45:20 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:18:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@
 #include "unoguard.hxx"
 #include "unonames.hxx"
 #include "styleuno.hxx"     // ScStyleNameConversion
+#include "tokenarray.hxx"
+#include "tokenuno.hxx"
 
 using namespace com::sun::star;
 
@@ -153,14 +155,15 @@ ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
                 USHORT nEntryCount = pFormat->Count();
                 for (USHORT i=0; i<nEntryCount; i++)
                 {
+                    ScCondFormatEntryItem aItem;
                     const ScCondFormatEntry* pFormatEntry = pFormat->GetEntry(i);
-                    ScConditionMode eMode = pFormatEntry->GetOperation();
-                    ScAddress aPos(pFormatEntry->GetValidSrcPos());    // #b4974740# valid pos for expressions
-                    String aExpr1(pFormatEntry->GetExpression( aPos, 0, 0, bEnglish, bCompileXML ));
-                    String aExpr2(pFormatEntry->GetExpression( aPos, 1, 0, bEnglish, bCompileXML ));
-                    String aStyle(pFormatEntry->GetStyle());
+                    aItem.mnMode = sal::static_int_cast<USHORT>(pFormatEntry->GetOperation());
+                    aItem.maPos = pFormatEntry->GetValidSrcPos();
+                    aItem.maExpr1 = pFormatEntry->GetExpression(aItem.maPos, 0, 0, bEnglish, bCompileXML);
+                    aItem.maExpr2 = pFormatEntry->GetExpression(aItem.maPos, 1, 0, bEnglish, bCompileXML);
+                    aItem.maStyle = pFormatEntry->GetStyle();
 
-                    AddEntry_Impl( sal::static_int_cast<USHORT>(eMode), aExpr1, aExpr2, aPos, EMPTY_STRING, aStyle );
+                    AddEntry_Impl(aItem);
                 }
             }
         }
@@ -177,18 +180,31 @@ void ScTableConditionalFormat::FillFormat( ScConditionalFormat& rFormat,
     for (USHORT i=0; i<nCount; i++)
     {
         ScTableConditionalEntry* pEntry = (ScTableConditionalEntry*)aEntries.GetObject(i);
-        if (pEntry)
+        if ( !pEntry )
+            continue;
+
+        ScCondFormatEntryItem aData;
+        pEntry->GetData(aData);
+        ScCondFormatEntry aCoreEntry( static_cast<ScConditionMode>(aData.mnMode),
+            aData.maExpr1, aData.maExpr2, pDoc, aData.maPos, aData.maStyle, bEnglish, bCompileXML );
+
+        if ( aData.maPosStr.Len() )
+            aCoreEntry.SetSrcString( aData.maPosStr );
+
+        if ( aData.maTokens1.getLength() )
         {
-            USHORT nMode;
-            String aExpr1, aExpr2, aStyle, aPosStr;
-            ScAddress aPos;
-            pEntry->GetData( nMode, aExpr1, aExpr2, aPos, aPosStr, aStyle );
-            ScCondFormatEntry aCoreEntry( (ScConditionMode)nMode,
-                                aExpr1, aExpr2, pDoc, aPos, aStyle, bEnglish, bCompileXML );
-            if ( aPosStr.Len() )
-                aCoreEntry.SetSrcString( aPosStr );
-            rFormat.AddEntry( aCoreEntry );
+            ScTokenArray aTokenArray;
+            if ( ScTokenConversion::ConvertToTokenArray(aTokenArray, aData.maTokens1) )
+                aCoreEntry.SetFormula1(aTokenArray);
         }
+
+        if ( aData.maTokens2.getLength() )
+        {
+            ScTokenArray aTokenArray;
+            if ( ScTokenConversion::ConvertToTokenArray(aTokenArray, aData.maTokens2) )
+                aCoreEntry.SetFormula2(aTokenArray);
+        }
+        rFormat.AddEntry( aCoreEntry );
     }
 }
 
@@ -200,12 +216,9 @@ ScTableConditionalFormat::~ScTableConditionalFormat()
         pEntry->release();
 }
 
-void ScTableConditionalFormat::AddEntry_Impl( USHORT nMode,
-                        const String& rExpr1, const String& rExpr2,
-                        const ScAddress& rPos, const String& rPosStr, const String& rStyle )
+void ScTableConditionalFormat::AddEntry_Impl(const ScCondFormatEntryItem& aEntry)
 {
-    ScTableConditionalEntry* pNew = new ScTableConditionalEntry(
-                                        this, nMode, rExpr1, rExpr2, rPos, rPosStr, rStyle );
+    ScTableConditionalEntry* pNew = new ScTableConditionalEntry(this, aEntry);
     pNew->acquire();
     aEntries.Insert( pNew, LIST_APPEND );
 }
@@ -227,12 +240,8 @@ void SAL_CALL ScTableConditionalFormat::addNew(
                     throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    ScConditionMode eMode = SC_COND_NONE;
-    String aExpr1;
-    String aExpr2;
-    ScAddress aPos;
-    String aPosStr;
-    String aStyle;
+    ScCondFormatEntryItem aEntry;
+    aEntry.mnMode = sal::static_int_cast<USHORT>(SC_COND_NONE);
 
     const beans::PropertyValue* pPropArray = aConditionalEntry.getConstArray();
     long nPropCount = aConditionalEntry.getLength();
@@ -245,37 +254,49 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         {
             sheet::ConditionOperator eOper = (sheet::ConditionOperator)
                             ScUnoHelpFunctions::GetEnumFromAny( rProp.Value );
-            eMode = lcl_ConditionOperatorToMode( eOper );
+            aEntry.mnMode = sal::static_int_cast<USHORT>(lcl_ConditionOperatorToMode( eOper ));
         }
         else if ( aPropName.EqualsAscii( SC_UNONAME_FORMULA1 ) )
         {
             rtl::OUString aStrVal;
+            uno::Sequence<sheet::FormulaToken> aTokens;
             if ( rProp.Value >>= aStrVal )
-                aExpr1 = String( aStrVal );
+                aEntry.maExpr1 = String( aStrVal );
+            else if ( rProp.Value >>= aTokens )
+            {
+                aEntry.maExpr1.Erase();
+                aEntry.maTokens1 = aTokens;
+            }
         }
         else if ( aPropName.EqualsAscii( SC_UNONAME_FORMULA2 ) )
         {
             rtl::OUString aStrVal;
+            uno::Sequence<sheet::FormulaToken> aTokens;
             if ( rProp.Value >>= aStrVal )
-                aExpr2 = String( aStrVal );
+                aEntry.maExpr2 = String( aStrVal );
+            else if ( rProp.Value >>= aTokens )
+            {
+                aEntry.maExpr2.Erase();
+                aEntry.maTokens2 = aTokens;
+            }
         }
         else if ( aPropName.EqualsAscii( SC_UNONAME_SOURCEPOS ) )
         {
             table::CellAddress aAddress;
             if ( rProp.Value >>= aAddress )
-                aPos = ScAddress( (SCCOL)aAddress.Column, (SCROW)aAddress.Row, aAddress.Sheet );
+                aEntry.maPos = ScAddress( (SCCOL)aAddress.Column, (SCROW)aAddress.Row, aAddress.Sheet );
         }
         else if ( aPropName.EqualsAscii( SC_UNONAME_SOURCESTR ) )
         {
             rtl::OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
-                aPosStr = String( aStrVal );
+                aEntry.maPosStr = String( aStrVal );
         }
         else if ( aPropName.EqualsAscii( SC_UNONAME_STYLENAME ) )
         {
             rtl::OUString aStrVal;
             if ( rProp.Value >>= aStrVal )
-                aStyle = ScStyleNameConversion::ProgrammaticToDisplayName(
+                aEntry.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName(
                                                 aStrVal, SFX_STYLE_FAMILY_PARA );
         }
         else
@@ -285,7 +306,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         }
     }
 
-    AddEntry_Impl( sal::static_int_cast<USHORT>(eMode), aExpr1, aExpr2, aPos, aPosStr, aStyle );
+    AddEntry_Impl(aEntry);
     DataChanged();
 }
 
@@ -463,16 +484,10 @@ ScTableConditionalEntry::ScTableConditionalEntry() :
 {
 }
 
-ScTableConditionalEntry::ScTableConditionalEntry( ScTableConditionalFormat* pPar,
-                             USHORT nM, const String& rEx1, const String& rEx2,
-                             const ScAddress& rPos, const String& rPosStr, const String& rSt ) :
+ScTableConditionalEntry::ScTableConditionalEntry(ScTableConditionalFormat* pPar,
+                                                 const ScCondFormatEntryItem& aItem) :
     pParent( pPar ),
-    nMode( nM ),
-    aExpr1( rEx1 ),
-    aExpr2( rEx2 ),
-    aSrcPos( rPos ),
-    aPosString( rPosStr ),
-    aStyle( rSt )
+    aData( aItem )
 {
     if (pParent)
         pParent->acquire();
@@ -484,15 +499,9 @@ ScTableConditionalEntry::~ScTableConditionalEntry()
         pParent->release();
 }
 
-void ScTableConditionalEntry::GetData( USHORT& rM, String& rEx1, String& rEx2,
-                                        ScAddress& rPos, String& rPosStr, String& rSt ) const
+void ScTableConditionalEntry::GetData(ScCondFormatEntryItem& rData) const
 {
-    rM   = nMode;
-    rEx1 = aExpr1;
-    rEx2 = aExpr2;
-    rPos = aSrcPos;
-    rPosStr = aPosString;
-    rSt  = aStyle;
+    rData = aData;
 }
 
 // XSheetCondition
@@ -501,14 +510,14 @@ sheet::ConditionOperator SAL_CALL ScTableConditionalEntry::getOperator()
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return lcl_ConditionModeToOperator( (ScConditionMode)nMode );
+    return lcl_ConditionModeToOperator( static_cast<ScConditionMode>(aData.mnMode) );
 }
 
 void SAL_CALL ScTableConditionalEntry::setOperator( sheet::ConditionOperator nOperator )
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    nMode = sal::static_int_cast<USHORT>( lcl_ConditionOperatorToMode( nOperator ) );
+    aData.mnMode = sal::static_int_cast<USHORT>( lcl_ConditionOperatorToMode( nOperator ) );
     if (pParent)
         pParent->DataChanged();
 }
@@ -516,14 +525,14 @@ void SAL_CALL ScTableConditionalEntry::setOperator( sheet::ConditionOperator nOp
 rtl::OUString SAL_CALL ScTableConditionalEntry::getFormula1() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return aExpr1;
+    return aData.maExpr1;
 }
 
 void SAL_CALL ScTableConditionalEntry::setFormula1( const rtl::OUString& aFormula1 )
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    aExpr1 = String( aFormula1 );
+    aData.maExpr1 = String( aFormula1 );
     if (pParent)
         pParent->DataChanged();
 }
@@ -531,14 +540,14 @@ void SAL_CALL ScTableConditionalEntry::setFormula1( const rtl::OUString& aFormul
 rtl::OUString SAL_CALL ScTableConditionalEntry::getFormula2() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return aExpr2;
+    return aData.maExpr2;
 }
 
 void SAL_CALL ScTableConditionalEntry::setFormula2( const rtl::OUString& aFormula2 )
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    aExpr2 = String( aFormula2 );
+    aData.maExpr2 = String( aFormula2 );
     if (pParent)
         pParent->DataChanged();
 }
@@ -547,9 +556,9 @@ table::CellAddress SAL_CALL ScTableConditionalEntry::getSourcePosition() throw(u
 {
     ScUnoGuard aGuard;
     table::CellAddress aRet;
-    aRet.Column = aSrcPos.Col();
-    aRet.Row    = aSrcPos.Row();
-    aRet.Sheet  = aSrcPos.Tab();
+    aRet.Column = aData.maPos.Col();
+    aRet.Row    = aData.maPos.Row();
+    aRet.Sheet  = aData.maPos.Tab();
     return aRet;
 }
 
@@ -557,7 +566,7 @@ void SAL_CALL ScTableConditionalEntry::setSourcePosition( const table::CellAddre
                                             throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    aSrcPos.Set( (SCCOL)aSourcePosition.Column, (SCROW)aSourcePosition.Row, aSourcePosition.Sheet );
+    aData.maPos.Set( (SCCOL)aSourcePosition.Column, (SCROW)aSourcePosition.Row, aSourcePosition.Sheet );
     if (pParent)
         pParent->DataChanged();
 }
@@ -567,14 +576,14 @@ void SAL_CALL ScTableConditionalEntry::setSourcePosition( const table::CellAddre
 rtl::OUString SAL_CALL ScTableConditionalEntry::getStyleName() throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    return ScStyleNameConversion::DisplayToProgrammaticName( aStyle, SFX_STYLE_FAMILY_PARA );
+    return ScStyleNameConversion::DisplayToProgrammaticName( aData.maStyle, SFX_STYLE_FAMILY_PARA );
 }
 
 void SAL_CALL ScTableConditionalEntry::setStyleName( const rtl::OUString& aStyleName )
                                             throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    aStyle = ScStyleNameConversion::ProgrammaticToDisplayName( aStyleName, SFX_STYLE_FAMILY_PARA );
+    aData.maStyle = ScStyleNameConversion::ProgrammaticToDisplayName( aStyleName, SFX_STYLE_FAMILY_PARA );
     if (pParent)
         pParent->DataChanged();
 }
@@ -628,6 +637,20 @@ ScValidationData* ScTableValidationObj::CreateValidationData( ScDocument* pDoc,
                                                    bEnglish, bCompileXML );
     pRet->SetIgnoreBlank(bIgnoreBlank);
     pRet->SetListType(nShowList);
+
+    if ( aTokens1.getLength() )
+    {
+        ScTokenArray aTokenArray;
+        if ( ScTokenConversion::ConvertToTokenArray(aTokenArray, aTokens1) )
+            pRet->SetFormula1(aTokenArray);
+    }
+
+    if ( aTokens2.getLength() )
+    {
+        ScTokenArray aTokenArray;
+        if ( ScTokenConversion::ConvertToTokenArray(aTokenArray, aTokens2) )
+            pRet->SetFormula2(aTokenArray);
+    }
 
     // set strings for error / input even if disabled (and disable afterwards)
     pRet->SetInput( aInputTitle, aInputMessage );
@@ -731,6 +754,40 @@ void SAL_CALL ScTableValidationObj::setSourcePosition( const table::CellAddress&
     ScUnoGuard aGuard;
     aSrcPos.Set( (SCCOL)aSourcePosition.Column, (SCROW)aSourcePosition.Row, aSourcePosition.Sheet );
     DataChanged();
+}
+
+uno::Sequence<sheet::FormulaToken> SAL_CALL ScTableValidationObj::getTokens( sal_Int32 nIndex )
+                                            throw(uno::RuntimeException,lang::IndexOutOfBoundsException)
+{
+    ScUnoGuard aGuard;
+    if (nIndex >= 2 || nIndex < 0)
+        throw lang::IndexOutOfBoundsException();
+
+    return nIndex == 0 ? aTokens1 : aTokens2;
+}
+
+void SAL_CALL ScTableValidationObj::setTokens( sal_Int32 nIndex, const uno::Sequence<sheet::FormulaToken>& aTokens )
+                                            throw(uno::RuntimeException,lang::IndexOutOfBoundsException)
+{
+    ScUnoGuard aGuard;
+    if (nIndex >= 2 || nIndex < 0)
+        throw lang::IndexOutOfBoundsException();
+
+    if (nIndex == 0)
+    {
+        aTokens1 = aTokens;
+        aExpr1.Erase();
+    }
+    else if (nIndex == 1)
+    {
+        aTokens2 = aTokens;
+        aExpr2.Erase();
+    }
+}
+
+sal_Int32 SAL_CALL ScTableValidationObj::getCount() throw(uno::RuntimeException)
+{
+    return 2;
 }
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScTableValidationObj::getPropertySetInfo()
