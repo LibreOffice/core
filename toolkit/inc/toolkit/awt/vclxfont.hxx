@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxfont.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:44:01 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:20:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,8 @@
 #include <toolkit/dllapi.h>
 #endif
 
-#ifndef _COM_SUN_STAR_AWT_XFONT_HPP_
-#include <com/sun/star/awt/XFont.hpp>
+#ifndef _COM_SUN_STAR_AWT_XFONT2_HPP_
+#include <com/sun/star/awt/XFont2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XDEVICE_HPP_
 #include <com/sun/star/awt/XDevice.hpp>
@@ -69,7 +69,7 @@
 //  class VCLXFont
 //  ----------------------------------------------------
 
-class TOOLKIT_DLLPUBLIC VCLXFont :  public ::com::sun::star::awt::XFont,
+class TOOLKIT_DLLPUBLIC VCLXFont :  public ::com::sun::star::awt::XFont2,
                     public ::com::sun::star::lang::XTypeProvider,
                     public ::com::sun::star::lang::XUnoTunnel,
                     public ::cppu::OWeakObject
@@ -113,6 +113,9 @@ public:
     sal_Int32                                       SAL_CALL getStringWidth( const ::rtl::OUString& str ) throw(::com::sun::star::uno::RuntimeException);
     sal_Int32                                       SAL_CALL getStringWidthArray( const ::rtl::OUString& str, ::com::sun::star::uno::Sequence< sal_Int32 >& rDXArray ) throw(::com::sun::star::uno::RuntimeException);
     void                                            SAL_CALL getKernPairs( ::com::sun::star::uno::Sequence< sal_Unicode >& rnChars1, ::com::sun::star::uno::Sequence< sal_Unicode >& rnChars2, ::com::sun::star::uno::Sequence< sal_Int16 >& rnKerns ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::lang::XFont2
+    sal_Bool                                        SAL_CALL hasGlyphs( const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 
