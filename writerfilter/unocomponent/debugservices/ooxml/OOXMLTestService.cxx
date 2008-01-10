@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLTestService.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2007-06-19 05:33:42 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:19:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #include <hash_set>
 #include <assert.h>
 #include <cppuhelper/implbase2.hxx>
+#include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
@@ -83,6 +84,8 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <ooxml/OOXMLDocument.hxx>
 
 #include <ctype.h>
@@ -111,37 +114,50 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
     uno::Reference<lang::XMultiComponentFactory> xFactory(xContext->getServiceManager(), uno::UNO_QUERY_THROW );
     if (::ucbhelper::ContentBroker::initialize(xServiceFactory, aUcbInitSequence))
     {
-            rtl::OUString arg=aArguments[0];
+        rtl::OUString arg=aArguments[0];
 
-            ::comphelper::setProcessServiceFactory(xServiceFactory);
+        ::comphelper::setProcessServiceFactory(xServiceFactory);
 
-            uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess(
-            xFactory->createInstanceWithContext(
-                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")),
-                xContext), uno::UNO_QUERY_THROW );
+        uno::Reference<com::sun::star::ucb::XSimpleFileAccess> xFileAccess
+            (xFactory->createInstanceWithContext
+             (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                              ("com.sun.star.ucb.SimpleFileAccess")),
+              xContext), uno::UNO_QUERY_THROW );
 
-            rtl_uString *dir=NULL;
-            osl_getProcessWorkingDir(&dir);
-            rtl::OUString absFileUrl;
-            osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrl.pData);
-            rtl_uString_release(dir);
+        rtl_uString *dir=NULL;
+        osl_getProcessWorkingDir(&dir);
+        rtl::OUString absFileUrl;
+        osl_getAbsoluteFileURL(dir, arg.pData, &absFileUrl.pData);
+        rtl_uString_release(dir);
 
-            uno::Reference<io::XInputStream> xInputStream = xFileAccess->openFileRead(absFileUrl);
-            ooxml::OOXMLStream::Pointer_t pDocStream = ooxml::OOXMLDocumentFactory::createStream(xContext, xInputStream);
+        uno::Reference<io::XInputStream> xInputStream =
+            xFileAccess->openFileRead(absFileUrl);
+        ooxml::OOXMLStream::Pointer_t pDocStream =
+            ooxml::OOXMLDocumentFactory::createStream(xContext, xInputStream);
 
-            ooxml::OOXMLDocument::Pointer_t pDocument(ooxml::OOXMLDocumentFactory::createDocument(pDocStream));
+        ooxml::OOXMLDocument::Pointer_t pDocument
+            (ooxml::OOXMLDocumentFactory::createDocument(pDocStream));
 
 #if 0
-        TimeValue t1; osl_getSystemTime(&t1);
+        uno::Reference<text::XTextDocument> xDocument
+            (xFactory->createInstanceWithContext
+             (::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
+                              ("com.sun.star.text.TextDocument")),
+              xContext), uno::UNO_QUERY_THROW );
+        uno::Reference<frame::XModel> xModel
+            (xDocument, uno::UNO_QUERY_THROW);
+
+        uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier
+            (xDocument, uno::UNO_QUERY_THROW);
+        uno::Reference<drawing::XShapes> xShapes
+            (xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY_THROW);
+
+        pDocument->setModel(xModel);
+        pDocument->setShapes(xShapes);
 #endif
 
-        doctok::Stream::Pointer_t pStream = doctok::createStreamHandler();
+        Stream::Pointer_t pStream = createStreamHandler();
         pDocument->resolve(*pStream);
-
-#if 0
-        TimeValue t2; osl_getSystemTime(&t2);
-        printf("time=%is\n", t2.Seconds-t1.Seconds);
-#endif
 
         ::ucbhelper::ContentBroker::deinitialize();
     }
