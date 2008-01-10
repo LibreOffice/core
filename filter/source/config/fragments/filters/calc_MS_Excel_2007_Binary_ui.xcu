@@ -1,0 +1,6 @@
+<node oor:name="Calc MS Excel 2007 Binary">
+    <prop oor:name="UIName">
+        <value xml:lang="en-US">Microsoft Excel 2007 Binary Spreadsheet Document</value>
+        <value xml:lang="de">Microsoft Excel 2007 Binärtabellendokument</value>
+    </prop>
+</node>
