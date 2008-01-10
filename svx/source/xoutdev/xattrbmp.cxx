@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xattrbmp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:33:53 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:49:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 #include <com/sun/star/awt/XBitmap.hpp>
+#include <com/sun/star/graphic/XGraphic.hpp>
 #include <tools/stream.hxx>
 #include <vcl/window.hxx>
 #include <vcl/virdev.hxx>
@@ -802,6 +803,7 @@ sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE
     ::rtl::OUString aName;
     ::rtl::OUString aURL;
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XBitmap > xBmp;
+    ::com::sun::star::uno::Reference< ::com::sun::star::graphic::XGraphic > xGraphic;
 
     bool bSetName   = false;
     bool bSetURL    = false;
@@ -812,7 +814,11 @@ sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE
     else if( nMemberId == MID_GRAFURL )
         bSetURL = (rVal >>= aURL);
     else if( nMemberId == MID_BITMAP )
+    {
         bSetBitmap = (rVal >>= xBmp);
+        if ( !bSetBitmap )
+            bSetBitmap = (rVal >>= xGraphic );
+    }
     else
     {
         DBG_ASSERT( nMemberId == 0, "invalid member-id" );
@@ -843,8 +849,17 @@ sal_Bool XFillBitmapItem::PutValue( const ::com::sun::star::uno::Any& rVal, BYTE
     }
     if( bSetBitmap )
     {
-        BitmapEx aInputEx( VCLUnoHelper::GetBitmap( xBmp ) );
-        Bitmap aInput( aInputEx.GetBitmap() );
+        Bitmap aInput;
+        if ( xBmp.is() )
+        {
+            BitmapEx aInputEx( VCLUnoHelper::GetBitmap( xBmp ) );
+            aInput = aInputEx.GetBitmap();
+        }
+        else if ( xGraphic.is() )
+        {
+            Graphic aGraphic( xGraphic );
+            aInput = aGraphic.GetBitmap();
+        }
 
         // note: aXOBitmap is the member bitmap
         aXOBitmap.SetBitmap( aInput );
