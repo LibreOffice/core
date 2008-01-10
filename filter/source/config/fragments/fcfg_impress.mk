@@ -28,7 +28,7 @@ F4_IMPRESS_BINFILTER =
 .ENDIF
 
 # -----------------------------------------------
-# count = 18
+# count = 19
 T4_IMPRESS = \
     draw_StarOffice_XML_Draw \
     impress_MS_PowerPoint_97 \
@@ -43,7 +43,7 @@ T4_IMPRESS = \
     draw8
 
 # -----------------------------------------------
-# count = 19
+# count = 20
 F4_IMPRESS = \
     MS_PowerPoint_97 \
     MS_PowerPoint_97_Vorlage \
