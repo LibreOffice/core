@@ -4,9 +4,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 13:36:51 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,12 @@
 #include <debugservices/ooxml/OOXMLTestService.hxx>
 #endif
 
+#ifndef INCLUDED_OOXML_ANALYZE_SERVICE_HXX
+#include <debugservices/ooxml/OOXMLAnalyzeService.hxx>
+#endif
+
+#include <stdio.h>
+
 using namespace com::sun::star;
 
 
@@ -102,6 +108,7 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
     DOCTOK_SCANNERTESTSERVICE_COMPONENT_ENTRY, /* debugservices.doctok.ScannerTestService */
     DOCTOK_ANALYZESERVICE_COMPONENT_ENTRY, /* debugservices.doctok.AnalyzeService */
     OOXML_SCANNERTESTSERVICE_COMPONENT_ENTRY, /* debugservices.ooxml.ScannerTestService */
+    OOXML_ANALYZESERVICE_COMPONENT_ENTRY, /* debugservices.ooxml.AnalyzeService */
     { 0, 0, 0, 0, 0, 0 } // terminate with NULL
 };
 
@@ -119,7 +126,13 @@ sal_Bool SAL_CALL component_writeInfo( ::com::sun::star::lang::XMultiServiceFact
 
 void * SAL_CALL component_getFactory(sal_Char const * implName, ::com::sun::star::lang::XMultiServiceFactory * xMgr, ::com::sun::star::registry::XRegistryKey * xRegistry )
 {
-    return ::cppu::component_getFactoryHelper(implName, xMgr, xRegistry, s_component_entries );
+    fprintf(stderr, "Loading service: %s: ", implName);
+
+    void * pResult = ::cppu::component_getFactoryHelper(implName, xMgr, xRegistry, s_component_entries );
+
+    fprintf(stderr, "%p\n", pResult);
+
+    return pResult;
 }
 
 }
