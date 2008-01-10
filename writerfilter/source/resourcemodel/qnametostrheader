@@ -4,9 +4,9 @@
  *
  *  $RCSfile: qnametostrheader,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:05:32 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:17:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,14 @@
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #include <resourcemodel/QNameToString.hxx>
+#include <stdio.h>
 
 namespace writerfilter
 {
 
 QNameToString::Pointer_t QNameToString::pInstance;
 
-QNameToString::Pointer_t QNameToString::Instance()
+QNameToString::Pointer_t WRITERFILTER_DLLPUBLIC QNameToString::Instance()
 {
     if (pInstance.get() == NULL)
         pInstance = QNameToString::Pointer_t(new QNameToString());
@@ -50,10 +51,15 @@ QNameToString::Pointer_t QNameToString::Instance()
     return pInstance;
 }
 
-string QNameToString::operator()(writerfilter::QName_t qName)
+string WRITERFILTER_DLLPUBLIC QNameToString::operator()(Id qName)
 {
+    string sResult;
+
+    Map::const_iterator aIt = mMap.find(qName);
+    
+    if (aIt != mMap.end())
+        sResult = aIt->second;
+
     return mMap[qName];
 }
 
-QNameToString::QNameToString()
-{
