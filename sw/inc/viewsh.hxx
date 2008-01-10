@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:17:31 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:29:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -407,6 +407,9 @@ public:
 
     // compatible behaviour of tabs
     void SetTabCompat( bool bNew );
+
+    //#i24363# tab stops relative to indent
+    void SetTabsRelativeToIndent( bool bNew );
 
     // font metric attribute "External Leading" should be considered
     void SetAddExtLeading( bool bNew );
