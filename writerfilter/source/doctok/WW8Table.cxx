@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Table.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:32 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:51:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #include <resources.hxx>
 
+namespace writerfilter {
 namespace doctok {
 
 /* WW8sprmTDefTable */
@@ -54,10 +55,10 @@ sal_uInt32 WW8sprmTDefTable::get_tc_count()
     return get_cellx_count() - 1;
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8sprmTDefTable::get_tc(sal_uInt32 pos)
 {
-    return doctok::Reference<Properties>::Pointer_t
+    return writerfilter::Reference<Properties>::Pointer_t
         (new WW8TC(this,
                    0x5 + get_cellx_count() * 2 + pos * WW8TC::getSize()));
 }
@@ -69,10 +70,10 @@ sal_uInt32 WW8sprmTTableBorders::get_rgbbrc_count()
     return 6;
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8sprmTTableBorders::get_rgbbrc(sal_uInt32 pos)
 {
-    return doctok::Reference<Properties>::Pointer_t
+    return writerfilter::Reference<Properties>::Pointer_t
         (new WW8BRC(*this, 0x3 + pos * WW8BRC::getSize()));
 }
 
@@ -163,10 +164,10 @@ sal_uInt32 WW8sprmTDefTableShd::get_shd_count()
     return getU8(0x2) / WW8SHD::getSize();
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8sprmTDefTableShd::get_shd(sal_uInt32 pos)
 {
-    return doctok::Reference<Properties>::Pointer_t
+    return writerfilter::Reference<Properties>::Pointer_t
         (new WW8SHD(*this, 0x3 + pos * WW8SHD::getSize()));
 }
 
@@ -182,10 +183,10 @@ sal_uInt32 WW8sprmTCellShd::get_shd_count()
     return getU8(0x2) / WW8CellShd::getSize();
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8sprmTCellShd::get_shd(sal_uInt32 pos)
 {
-    return doctok::Reference<Properties>::Pointer_t
+    return writerfilter::Reference<Properties>::Pointer_t
         (new WW8CellShd(*this, 0x3 + pos * WW8CellShd::getSize()));
 }
 
@@ -201,11 +202,11 @@ sal_uInt32 WW8sprmTCellShadow::get_cellShadow_count()
     return getU8(0x2) / WW8CellShd::getSize();
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8sprmTCellShadow::get_cellShadow(sal_uInt32 pos)
 {
-    return doctok::Reference<Properties>::Pointer_t
+    return writerfilter::Reference<Properties>::Pointer_t
         (new WW8CellShd(*this, 0x3 + pos * WW8CellShd::getSize()));
 }
 
-}
+}}

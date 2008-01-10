@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Sttbf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:32 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:50:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #include <WW8Sttbf.hxx>
 
+namespace writerfilter {
 namespace doctok
 {
 
@@ -93,4 +94,4 @@ WW8StructBase::Pointer_t WW8Sttbf::getExtraData(sal_uInt32 nPos)
         (new WW8StructBase(*this, getExtraOffset(nPos), mnExtraDataCount));
 }
 
-}
+}}

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XNoteHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:33 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #include <WW8DocumentImpl.hxx>
 #endif
 
+namespace writerfilter {
 namespace doctok
 {
 /**
@@ -124,14 +125,14 @@ public:
 
         @param nIndex  index of X-note.
     */
-    doctok::Reference<Stream>::Pointer_t get(sal_uInt32 nIndex);
+    writerfilter::Reference<Stream>::Pointer_t get(sal_uInt32 nIndex);
 
     /**
        Return subdocument containing X-note.
 
        @param rCpAndFc     CpAndFc of the X-note's reference
     */
-    doctok::Reference<Stream>::Pointer_t get(const CpAndFc & rCpAndFc);
+    writerfilter::Reference<Stream>::Pointer_t get(const CpAndFc & rCpAndFc);
 
     /**
        Return reference data structure of X-note.
@@ -148,6 +149,6 @@ public:
     T * getRef(const CpAndFc & rCpAndFc);
 };
 
-}
+}}
 
 #endif // INCLUDED_X_NOTE_HELPER_HXX
