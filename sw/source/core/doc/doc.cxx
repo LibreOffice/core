@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:32:40 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:29:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,6 +299,7 @@ bool SwDoc::get(/*[in]*/ DocumentSettingId id) const
         // <--
         case UNIX_FORCE_ZERO_EXT_LEADING: return mbUnixForceZeroExtLeading;
         case USE_OLD_PRINTER_METRICS: return mbOldPrinterMetrics;
+        case TABS_RELATIVE_TO_INDENT : return mbTabRelativeToIndent;
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE: return mbBrowseMode;
@@ -411,7 +412,9 @@ void SwDoc::set(/*[in]*/ DocumentSettingId id, /*[in]*/ bool value)
         case USE_OLD_PRINTER_METRICS:
             mbOldPrinterMetrics = value;
             break;
-
+        case TABS_RELATIVE_TO_INDENT:
+            mbTabRelativeToIndent = value;
+        break;
          // COMPATIBILITY FLAGS END
 
         case BROWSE_MODE:
