@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 19:26:50 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,22 @@ void SAL_CALL SvxOle2Shape::setPropertyValue( const OUString& aPropertyName, con
             return;
         }
 
+        throw IllegalArgumentException();
+    }
+    else if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "Graphic" ) ) )
+    {
+        uno::Reference< graphic::XGraphic > xGraphic;
+        if( aValue >>= xGraphic )
+        {
+            SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
+            if( pOle )
+            {
+                GraphicObject aGrafObj( xGraphic );
+                const Graphic aGraphic( aGrafObj.GetGraphic() );
+                pOle->SetGraphicToObj( aGraphic, rtl::OUString() );
+            }
+            return;
+        }
         throw IllegalArgumentException();
     }
     else if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( UNO_NAME_OLE2_PERSISTNAME ) ) )
