@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Graphic.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:37:55 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,11 +51,16 @@ module com { module sun { module star { module graphic
     access to the attributes of the graphic.
 
     @see XGraphic
+    @see XGraphicTtransformer
     @see GraphicDescriptor
 */
 published service Graphic
 {
     interface ::com::sun::star::graphic::XGraphic;
+
+    /**
+    [optional] interface ::com::sun::star::graphic::XGraphicTransformer;
+    */
 
     service ::com::sun::star::graphic::GraphicDescriptor;
 };
