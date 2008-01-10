@@ -1,12 +1,12 @@
 /*************************************************************************
-*
+ *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 17:10:02 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:26:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,6 +218,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Lng,
 	gid_File_Lib_Lnth,
 	gid_File_Lib_Offacc,
+	gid_File_Lib_Oox,
 	gid_File_Lib_Bindet,
 	gid_File_Lib_Pcr,
 	gid_File_Lib_Pdffilter,
@@ -227,6 +228,7 @@ Module gid_Module_Root_Files_4
 	gid_File_Lib_Sf_Prothdlr,
 	gid_File_Lib_Psp,
 	gid_File_Lib_Res,
+	gid_File_Lib_Sax,
 	gid_File_Lib_Sb,
 	gid_File_Lib_Scn,
 	gid_File_Lib_Sd,
@@ -386,7 +388,8 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Sal,
 	gid_File_Lib_Salhelper,
 	gid_File_Lib_Proxyfac,
-	gid_File_Lib_Sax,
+	gid_File_Lib_Sax_Uno,
+	gid_File_Lib_Fastsax_Uno,
 	gid_File_Lib_Slideshow,
 	gid_File_Lib_Stm,
 	gid_File_Lib_Recentfile,
@@ -605,7 +608,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Extra_Round_Gorilla_Zip,
 	gid_File_Extra_Glas_Red_Zip,
 	gid_File_Extra_Glas_Green_Zip,
-	gid_File_Extra_Glas_Blue_Zip,	
+	gid_File_Extra_Glas_Blue_Zip,
 	gid_File_Zip_Writingaids,
 	gid_File_Zip_Writingaids_So,
 	gid_File_Share_Config_Sofficecfg_uiconfig_Zip,
@@ -747,7 +750,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Office_Common_Xcs,
 	gid_File_Oo_Office_Extendedcolorscheme_Xcs,
 	gid_File_Oo_Office_Extendedcolorscheme_Xcu,
-    gid_File_Oo_Office_OptionsDialog_Xcs,
+	gid_File_Oo_Office_OptionsDialog_Xcs,
 	gid_File_Oo_Office_Recovery_Xcs,
 	gid_File_Oo_Office_Common_Xcu,
 	gid_File_Oo_Office_Compatibility_Xcs,
