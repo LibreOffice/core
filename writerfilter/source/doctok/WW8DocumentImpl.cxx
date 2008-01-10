@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-05-08 14:53:32 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:46:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#include <doctok/exceptions.hxx>
+#include <resourcemodel/exceptions.hxx>
 #include <WW8DocumentImpl.hxx>
 #include <WW8FKPImpl.hxx>
 #include <WW8PieceTableImpl.hxx>
@@ -44,6 +44,7 @@
 #include <iterator>
 #include <XNoteHelperImpl.hxx>
 
+namespace writerfilter {
 namespace doctok
 {
 
@@ -106,13 +107,13 @@ bool WW8DocumentIteratorImpl::equal(const WW8DocumentIterator & rIt_) const
     return mCpAndFc == rIt.mCpAndFc && mpDocument == rIt.mpDocument;
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8DocumentIteratorImpl::getProperties() const
 {
     return mpDocument->getProperties(mCpAndFc);
 }
 
-doctok::Reference<Stream>::Pointer_t
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentIteratorImpl::getSubDocument() const
 {
     return mpDocument->getSubDocument(mCpAndFc);
@@ -128,7 +129,7 @@ WW8Stream::Sequence WW8DocumentIteratorImpl::getText()
     return mpDocument->getText(mCpAndFc);
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8DocumentIteratorImpl::getShape() const
 {
     return mpDocument->getShape(mCpAndFc);
@@ -832,10 +833,10 @@ WW8FKP::Pointer_t WW8DocumentImpl::getFKPPAPX(sal_uInt32 nIndex,
     return mpPAPFKPCache->get(nIndex, bComplex);
 }
 
-doctok::Reference<Properties>::Pointer_t WW8DocumentImpl::getProperties
+writerfilter::Reference<Properties>::Pointer_t WW8DocumentImpl::getProperties
 (const CpAndFc & rCpAndFc)
 {
-    doctok::Reference<Properties>::Pointer_t pResult;
+    writerfilter::Reference<Properties>::Pointer_t pResult;
 
     switch (rCpAndFc.getType())
     {
@@ -857,7 +858,7 @@ doctok::Reference<Properties>::Pointer_t WW8DocumentImpl::getProperties
 
     case PROP_SEC:
         {
-            pResult = doctok::Reference<Properties>::Pointer_t
+            pResult = writerfilter::Reference<Properties>::Pointer_t
                 (getSED(rCpAndFc));
         }
 
@@ -865,21 +866,21 @@ doctok::Reference<Properties>::Pointer_t WW8DocumentImpl::getProperties
 
     case PROP_FOOTNOTE:
         {
-            pResult = doctok::Reference<Properties>::Pointer_t
+            pResult = writerfilter::Reference<Properties>::Pointer_t
                 (mpFootnoteHelper->getRef(rCpAndFc));
         }
         break;
 
     case PROP_ENDNOTE:
         {
-            pResult = doctok::Reference<Properties>::Pointer_t
+            pResult = writerfilter::Reference<Properties>::Pointer_t
                 (mpEndnoteHelper->getRef(rCpAndFc));
         }
         break;
 
     case PROP_ANNOTATION:
         {
-            pResult = doctok::Reference<Properties>::Pointer_t
+            pResult = writerfilter::Reference<Properties>::Pointer_t
                 (mpAnnotationHelper->getRef(rCpAndFc));
         }
         break;
@@ -916,10 +917,10 @@ doctok::Reference<Properties>::Pointer_t WW8DocumentImpl::getProperties
     return pResult;
 }
 
-doctok::Reference<Stream>::Pointer_t
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getSubDocument(const CpAndFc & rCpAndFc)
 {
-    doctok::Reference<Stream>::Pointer_t pResult;
+    writerfilter::Reference<Stream>::Pointer_t pResult;
 
     switch (rCpAndFc.getType())
     {
@@ -951,9 +952,9 @@ WW8SED * WW8DocumentImpl::getSED(const CpAndFc & rCpAndFc) const
     return pResult;
 }
 
-doctok::Reference<Table>::Pointer_t WW8DocumentImpl::getListTable() const
+writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getListTable() const
 {
-    doctok::Reference<Table>::Pointer_t pResult;
+    writerfilter::Reference<Table>::Pointer_t pResult;
 
     if (mpFib->get_fcPlcfLst() != 0 && mpFib->get_lcbPlcfLst() > 0)
     {
@@ -965,15 +966,15 @@ doctok::Reference<Table>::Pointer_t WW8DocumentImpl::getListTable() const
         pList->setPayloadOffset(mpFib->get_lcbPlcfLst());
         pList->initPayload();
 
-        pResult = doctok::Reference<Table>::Pointer_t(pList);
+        pResult = writerfilter::Reference<Table>::Pointer_t(pList);
     }
 
     return pResult;
 }
 
-doctok::Reference<Table>::Pointer_t WW8DocumentImpl::getLFOTable() const
+writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getLFOTable() const
 {
-    doctok::Reference<Table>::Pointer_t pResult;
+    writerfilter::Reference<Table>::Pointer_t pResult;
 
     if (mpFib->get_fcPlfLfo() != 0 && mpFib->get_lcbPlfLfo() > 0)
     {
@@ -986,7 +987,7 @@ doctok::Reference<Table>::Pointer_t WW8DocumentImpl::getLFOTable() const
             pLFOs->setPayloadOffset(mpFib->get_lcbPlcfLst());
             pLFOs->initPayload();
 
-            pResult = doctok::Reference<Table>::Pointer_t(pLFOs);
+            pResult = writerfilter::Reference<Table>::Pointer_t(pLFOs);
         }
         catch (Exception e)
         {
@@ -997,9 +998,9 @@ doctok::Reference<Table>::Pointer_t WW8DocumentImpl::getLFOTable() const
     return pResult;
 }
 
-doctok::Reference<Table>::Pointer_t WW8DocumentImpl::getFontTable() const
+writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getFontTable() const
 {
-    doctok::Reference<Table>::Pointer_t pResult;
+    writerfilter::Reference<Table>::Pointer_t pResult;
 
     if (mpFib->get_fcSttbfffn() != 0 && mpFib->get_lcbSttbfffn() > 0)
     {
@@ -1009,15 +1010,15 @@ doctok::Reference<Table>::Pointer_t WW8DocumentImpl::getFontTable() const
 
         pFonts->initPayload();
 
-        pResult = doctok::Reference<Table>::Pointer_t(pFonts);
+        pResult = writerfilter::Reference<Table>::Pointer_t(pFonts);
     }
 
     return pResult;
 }
 
-doctok::Reference<Table>::Pointer_t WW8DocumentImpl::getStyleSheet() const
+writerfilter::Reference<Table>::Pointer_t WW8DocumentImpl::getStyleSheet() const
 {
-    doctok::Reference<Table>::Pointer_t pResult;
+    writerfilter::Reference<Table>::Pointer_t pResult;
 
     if (mpFib->get_lcbStshf() > 0)
     {
@@ -1027,7 +1028,7 @@ doctok::Reference<Table>::Pointer_t WW8DocumentImpl::getStyleSheet() const
 
         pStyles->initPayload();
 
-        pResult = doctok::Reference<Table>::Pointer_t(pStyles);
+        pResult = writerfilter::Reference<Table>::Pointer_t(pStyles);
     }
 
     return pResult;
@@ -1065,13 +1066,13 @@ CpAndFc WW8DocumentImpl::getHeaderCpAndFc(sal_uInt32 nPos)
 
 }
 
-doctok::Reference<Stream>::Pointer_t WW8DocumentImpl::getHeader(sal_uInt32 nPos)
+writerfilter::Reference<Stream>::Pointer_t WW8DocumentImpl::getHeader(sal_uInt32 nPos)
 {
     // There are getHeaderCount() headers => greater or equal
     if (nPos >= getHeaderCount())
         throw ExceptionNotFound("getHeader");
 
-    doctok::Reference<Stream>::Pointer_t pResult;
+    writerfilter::Reference<Stream>::Pointer_t pResult;
 
     CpAndFc aCpAndFcStart(getHeaderCpAndFc(nPos));
     CpAndFc aCpAndFcEnd(getHeaderCpAndFc(nPos + 1));
@@ -1087,7 +1088,7 @@ doctok::Reference<Stream>::Pointer_t WW8DocumentImpl::getHeader(sal_uInt32 nPos)
 #endif
 
     if (aCpAndFcStart < aCpAndFcEnd)
-        pResult = doctok::Reference<Stream>::Pointer_t
+        pResult = writerfilter::Reference<Stream>::Pointer_t
             (new WW8DocumentImpl(*this, aCpAndFcStart, aCpAndFcEnd));
 
     return pResult;
@@ -1098,10 +1099,10 @@ sal_uInt32 WW8DocumentImpl::getFootnoteCount() const
     return (mpFootnoteHelper.get() != NULL) ? mpFootnoteHelper->getCount() : 0;
 }
 
-doctok::Reference<Stream>::Pointer_t
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getFootnote(sal_uInt32 nPos)
 {
-    doctok::Reference<Stream>::Pointer_t pResult;
+    writerfilter::Reference<Stream>::Pointer_t pResult;
 
     if (! bSubDocument)
         pResult = mpFootnoteHelper->get(nPos);
@@ -1109,10 +1110,10 @@ WW8DocumentImpl::getFootnote(sal_uInt32 nPos)
     return pResult;
 }
 
-doctok::Reference<Stream>::Pointer_t
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getFootnote(const CpAndFc & rCpAndFc)
 {
-    doctok::Reference<Stream>::Pointer_t pResult;
+    writerfilter::Reference<Stream>::Pointer_t pResult;
 
     if (! bSubDocument)
         pResult = mpFootnoteHelper->get(rCpAndFc);
@@ -1125,10 +1126,10 @@ sal_uInt32 WW8DocumentImpl::getEndnoteCount() const
     return mpEndnoteHelper.get() != NULL ? mpEndnoteHelper->getCount() : 0;
 }
 
-doctok::Reference<Stream>::Pointer_t
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getEndnote(sal_uInt32 nPos)
 {
-    doctok::Reference<Stream>::Pointer_t pResult;
+    writerfilter::Reference<Stream>::Pointer_t pResult;
 
     if (! bSubDocument)
         pResult = mpEndnoteHelper->get(nPos);
@@ -1136,10 +1137,10 @@ WW8DocumentImpl::getEndnote(sal_uInt32 nPos)
     return pResult;
 }
 
-doctok::Reference<Stream>::Pointer_t
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getEndnote(const CpAndFc & rCpAndFc)
 {
-    doctok::Reference<Stream>::Pointer_t pResult;
+    writerfilter::Reference<Stream>::Pointer_t pResult;
 
     if (! bSubDocument)
         pResult = mpEndnoteHelper->get(rCpAndFc);
@@ -1153,10 +1154,10 @@ sal_uInt32 WW8DocumentImpl::getAnnotationCount() const
         mpAnnotationHelper->getCount() : 0;
 }
 
-doctok::Reference<Stream>::Pointer_t
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getAnnotation(sal_uInt32 nPos)
 {
-    doctok::Reference<Stream>::Pointer_t pResult;
+    writerfilter::Reference<Stream>::Pointer_t pResult;
 
     if (! bSubDocument)
         pResult = mpAnnotationHelper->get(nPos);
@@ -1164,10 +1165,10 @@ WW8DocumentImpl::getAnnotation(sal_uInt32 nPos)
     return pResult;
 }
 
-doctok::Reference<Stream>::Pointer_t
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getAnnotation(const CpAndFc & rCpAndFc)
 {
-    doctok::Reference<Stream>::Pointer_t pResult;
+    writerfilter::Reference<Stream>::Pointer_t pResult;
 
     if (! bSubDocument)
         pResult = mpAnnotationHelper->get(rCpAndFc);
@@ -1175,22 +1176,22 @@ WW8DocumentImpl::getAnnotation(const CpAndFc & rCpAndFc)
     return pResult;
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8DocumentImpl::getBookmark(const CpAndFc & rCpAndFc) const
 {
     return mpBookmarkHelper->getBookmark(rCpAndFc);
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8DocumentImpl::getShape(const CpAndFc & rCpAndFc) const
 {
     return mpShapeHelper->getShape(rCpAndFc);
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8DocumentImpl::getShape(sal_uInt32 nSpid)
 {
-    doctok::Reference<Properties>::Pointer_t pResult;
+    writerfilter::Reference<Properties>::Pointer_t pResult;
     DffRecord::Pointer_t pShape = mpDffBlock->getShape(nSpid);
 
     if (pShape.get() != NULL)
@@ -1198,22 +1199,22 @@ WW8DocumentImpl::getShape(sal_uInt32 nSpid)
         DffSpContainer * pTmp = new DffSpContainer(*pShape);
         pTmp->setDocument(this);
 
-        pResult = doctok::Reference<Properties>::Pointer_t(pTmp);
+        pResult = writerfilter::Reference<Properties>::Pointer_t(pTmp);
     }
 
     return pResult;
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8DocumentImpl::getBreak(const CpAndFc & rCpAndFc) const
 {
     return mpBreakHelper->getBreak(rCpAndFc);
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8DocumentImpl::getBlip(sal_uInt32 nBid)
 {
-    doctok::Reference<Properties>::Pointer_t pResult;
+    writerfilter::Reference<Properties>::Pointer_t pResult;
 
     if (mpDffBlock != NULL)
     {
@@ -1224,14 +1225,14 @@ WW8DocumentImpl::getBlip(sal_uInt32 nBid)
             DffBSE * pBlip = new DffBSE(*pDffRecord);
 
             if (pBlip != NULL)
-            pResult = doctok::Reference<Properties>::Pointer_t(pBlip);
+            pResult = writerfilter::Reference<Properties>::Pointer_t(pBlip);
         }
     }
 
     return pResult;
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8DocumentImpl::getField(const CpAndFc & rCpAndFc) const
 {
     return mpFieldHelper->getField(rCpAndFc);
@@ -1262,10 +1263,10 @@ void WW8DocumentImpl::setPicIsData(bool bPicIsData)
     mbPicIsData = bPicIsData;
 }
 
-doctok::Reference<Stream>::Pointer_t
+writerfilter::Reference<Stream>::Pointer_t
 WW8DocumentImpl::getTextboxText(sal_uInt32 nShpId) const
 {
-    doctok::Reference<Stream>::Pointer_t pResult;
+    writerfilter::Reference<Stream>::Pointer_t pResult;
 
     if (mpTextBoxStories.get() != NULL)
     {
@@ -1292,7 +1293,7 @@ WW8DocumentImpl::getTextboxText(sal_uInt32 nShpId) const
             aCpEnd += getEndnoteEndCp().getCp().get();
             CpAndFc aCpAndFcEnd = mpPieceTable->createCpAndFc(aCpEnd, PROP_DOC);
 
-            pResult = doctok::Reference<Stream>::Pointer_t
+            pResult = writerfilter::Reference<Stream>::Pointer_t
                 (new WW8DocumentImpl(*this, aCpAndFcStart, aCpAndFcEnd));
         }
     }
@@ -1300,9 +1301,9 @@ WW8DocumentImpl::getTextboxText(sal_uInt32 nShpId) const
     return pResult;
 }
 
-QName_t lcl_headerQName(sal_uInt32 nIndex)
+Id lcl_headerQName(sal_uInt32 nIndex)
 {
-    QName_t qName = NS_rtf::LN_header;
+    Id qName = NS_rtf::LN_header;
 
     if (nIndex > 5)
     {
@@ -1375,7 +1376,7 @@ void WW8DocumentImpl::resolvePicture(Stream & rStream)
             WW8PICF * pPicf = new WW8PICF(*pStream, mfcPicLoc, nCount);
             pPicf->setDocument(this);
 
-            doctok::Reference<Properties>::Pointer_t pProps(pPicf);
+            writerfilter::Reference<Properties>::Pointer_t pProps(pPicf);
 
             rStream.props(pProps);
         }
@@ -1539,7 +1540,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         }
 #endif
 
-        doctok::Reference<Properties>::Pointer_t pFib
+        writerfilter::Reference<Properties>::Pointer_t pFib
             (new WW8Fib(*mpFib));
         rStream.props(pFib);
 
@@ -1567,8 +1568,8 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         {
             DffBlock * pTmp = new DffBlock(*mpDffBlock);
             //pTmp->dump(clog);
-            doctok::Reference<Properties>::Pointer_t pDffBlock =
-                doctok::Reference<Properties>::Pointer_t(pTmp);
+            writerfilter::Reference<Properties>::Pointer_t pDffBlock =
+                writerfilter::Reference<Properties>::Pointer_t(pTmp);
 
             rStream.props(pDffBlock);
         }
@@ -1590,7 +1591,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             {
                 //clog << "<footnote num=\"" << n << "\"/>" << endl;
 
-                doctok::Reference<Stream>::Pointer_t pFootnote(getFootnote(n));
+                writerfilter::Reference<Stream>::Pointer_t pFootnote(getFootnote(n));
 
                 if (pFootnote.get() != NULL)
                     rStream.substream(NS_rtf::LN_footnote, pFootnote);
@@ -1602,7 +1603,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             {
                 //clog << "<endnote num=\"" << n << "\"/>" << endl;
 
-                doctok::Reference<Stream>::Pointer_t pEndnote(getEndnote(n));
+                writerfilter::Reference<Stream>::Pointer_t pEndnote(getEndnote(n));
 
                 if (pEndnote.get() != NULL)
                     rStream.substream(NS_rtf::LN_endnote, pEndnote);
@@ -1611,24 +1612,24 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 #endif
 
 
-        doctok::Reference<Table>::Pointer_t pListTable = getListTable();
+        writerfilter::Reference<Table>::Pointer_t pListTable = getListTable();
 
         if (pListTable.get() != NULL)
             rStream.table(NS_rtf::LN_LISTTABLE, pListTable);
 
-        doctok::Reference<Table>::Pointer_t pLFOTable = getLFOTable();
+        writerfilter::Reference<Table>::Pointer_t pLFOTable = getLFOTable();
 
         if (pLFOTable.get() != NULL)
             rStream.table(NS_rtf::LN_LFOTABLE, pLFOTable);
 
-        doctok::Reference<Table>::Pointer_t pFontTable = getFontTable();
+        writerfilter::Reference<Table>::Pointer_t pFontTable = getFontTable();
 
         if (pFontTable.get() != NULL)
             rStream.table(NS_rtf::LN_FONTTABLE, pFontTable);
 
         try
         {
-            doctok::Reference<Table>::Pointer_t pStyleSheet = getStyleSheet();
+            writerfilter::Reference<Table>::Pointer_t pStyleSheet = getStyleSheet();
 
             if (pStyleSheet.get() != NULL)
                 rStream.table(NS_rtf::LN_STYLESHEET, pStyleSheet);
@@ -1653,7 +1654,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 
     while (! pIt->equal(*pItEnd))
     {
-        Reference<doctok::Properties>::Pointer_t
+        writerfilter::Reference<Properties>::Pointer_t
             pProperties(pIt->getProperties());
 
         switch (pIt->getPropertyType())
@@ -1661,7 +1662,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         case PROP_FOOTNOTE:
             {
                 rStream.info(pIt->toString());
-                doctok::Reference<Stream>::Pointer_t
+                writerfilter::Reference<Stream>::Pointer_t
                     pFootnote(pIt->getSubDocument());
 
                 if (pFootnote.get() != NULL)
@@ -1671,7 +1672,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         case PROP_ENDNOTE:
             {
                 rStream.info(pIt->toString());
-                doctok::Reference<Stream>::Pointer_t
+                writerfilter::Reference<Stream>::Pointer_t
                     pEndnote(pIt->getSubDocument());
 
                 if (pEndnote.get() != NULL)
@@ -1681,7 +1682,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
         case PROP_ANNOTATION:
             {
                 rStream.info(pIt->toString());
-                doctok::Reference<Stream>::Pointer_t
+                writerfilter::Reference<Stream>::Pointer_t
                     pAnnotation(pIt->getSubDocument());
 
                 if (pAnnotation.get() != NULL)
@@ -1751,10 +1752,10 @@ void WW8DocumentImpl::resolve(Stream & rStream)
 
                 for (sal_uInt32 n = nHeaderStartIndex; n < nHeaderEndIndex; ++n)
                 {
-                    doctok::Reference<Stream>::Pointer_t
+                    writerfilter::Reference<Stream>::Pointer_t
                         pHeader(getHeader(n));
 
-                    QName_t qName = lcl_headerQName(n);
+                    Id qName = lcl_headerQName(n);
 
                     if (pHeader.get() != NULL)
                         rStream.substream(qName, pHeader);
@@ -1808,15 +1809,15 @@ WW8DocumentFactory::createDocument(WW8Stream::Pointer_t rpStream)
     return new WW8DocumentImpl(rpStream);
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8SED::get_sepx()
 {
-    doctok::Reference<Properties>::Pointer_t pResult;
+    writerfilter::Reference<Properties>::Pointer_t pResult;
 
     if (get_fcSepx() != 0xffffffff)
     {
         WW8StructBase aTmp(*mpDoc->getDocStream(), get_fcSepx(), 2);
-        pResult = doctok::Reference<Properties>::Pointer_t
+        pResult = writerfilter::Reference<Properties>::Pointer_t
             (new WW8PropertySetImpl
              (*mpDoc->getDocStream(), get_fcSepx() + 2,
               (sal_uInt32) aTmp.getU16(0), false));
@@ -1910,7 +1911,7 @@ string CpAndFc::toString() const
 
 // Bookmark
 
-Bookmark::Bookmark(doctok::Reference<Properties>::Pointer_t pBKF,
+Bookmark::Bookmark(writerfilter::Reference<Properties>::Pointer_t pBKF,
                    rtl::OUString & rName)
 : mpBKF(pBKF), mName(rName)
 {
@@ -2048,25 +2049,25 @@ void BookmarkHelper::init()
     }
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 BookmarkHelper::getBKF(const CpAndFc & rCpAndFc)
 {
     sal_uInt32 nIndex = getIndex(rCpAndFc);
 
-    return doctok::Reference<Properties>::Pointer_t
+    return writerfilter::Reference<Properties>::Pointer_t
         (mpStartCps->getEntryPointer(nIndex));
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 BookmarkHelper::getBookmark(const CpAndFc & rCpAndFc)
 {
-    doctok::Reference<Properties>::Pointer_t pResult;
+    writerfilter::Reference<Properties>::Pointer_t pResult;
 
     try
     {
         rtl::OUString aName = getName(rCpAndFc);
 
-        pResult = doctok::Reference<Properties>::Pointer_t
+        pResult = writerfilter::Reference<Properties>::Pointer_t
             (new Bookmark(getBKF(rCpAndFc), aName));
     }
     catch (ExceptionNotFound e)
@@ -2137,12 +2138,12 @@ WW8FLD::Pointer_t FieldHelper::getWW8FLD(const CpAndFc & rCpAndFc)
     return pFld;
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 FieldHelper::getField(const CpAndFc & rCpAndFc)
 {
     WW8FLD::Pointer_t pFLD = getWW8FLD(rCpAndFc);
 
-    return doctok::Reference<Properties>::Pointer_t
+    return writerfilter::Reference<Properties>::Pointer_t
         (new WW8FLD(*pFLD));
 }
 
@@ -2167,12 +2168,12 @@ void ShapeHelper::init()
     }
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 ShapeHelper::getShape(const CpAndFc & rCpAndFc)
 {
     WW8FSPA::Pointer_t pFSPA = mMap[rCpAndFc];
 
-    return doctok::Reference<Properties>::Pointer_t
+    return writerfilter::Reference<Properties>::Pointer_t
         (new WW8FSPA(*pFSPA));
 }
 
@@ -2194,14 +2195,14 @@ void BreakHelper::init()
     }
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 BreakHelper::getBreak(const CpAndFc & rCpAndFc)
 {
     WW8BKD::Pointer_t pBKD = mMap[rCpAndFc];
 
-    return doctok::Reference<Properties>::Pointer_t
+    return writerfilter::Reference<Properties>::Pointer_t
         (new WW8BKD(*pBKD));
 }
 
 
-}
+}}
