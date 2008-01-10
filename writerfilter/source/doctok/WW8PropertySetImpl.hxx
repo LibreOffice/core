@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8PropertySetImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:02:15 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define INCLUDED_WW8_PROEPRTY_SET_IMPL_HXX
 
 #ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
-#include <doctok/WW8ResourceModel.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #endif
 
 #ifndef INCLUDED_WW8_DOCUMENT_HXX
@@ -54,6 +54,7 @@
 
 #include <map>
 
+namespace writerfilter {
 namespace doctok
 {
 
@@ -89,7 +90,7 @@ public:
 };
 
 class WW8PropertySetImpl : public WW8PropertySet, public WW8StructBase,
-                           public ::doctok::Reference<Properties>
+                           public ::writerfilter::Reference<Properties>
 {
     bool mbPap;
 
@@ -153,10 +154,10 @@ public:
     virtual string toString() const;
 };
 
-::doctok::Reference<Properties>::Pointer_t createSprmProps
+::writerfilter::Reference<Properties>::Pointer_t createSprmProps
 (WW8PropertyImpl & rProp);
-::doctok::Reference<BinaryObj>::Pointer_t createSprmBinary
+::writerfilter::Reference<BinaryObj>::Pointer_t createSprmBinary
 (WW8PropertyImpl & rProp);
-}
+}}
 
 #endif // INCLUDED_WW8_PROPERTY_SET_IMPL_HXX
