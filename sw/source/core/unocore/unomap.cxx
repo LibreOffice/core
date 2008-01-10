@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.201 $
+ *  $Revision: 1.202 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:30:24 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:30:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1074,6 +1074,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_CELL_NAME), FN_UNO_CELL_NAME,            CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::READONLY,0},
                     { SW_PROP_NMID(UNO_NAME_VERT_ORIENT), RES_VERT_ORIENT,      CPPU_E2T(CPPUTYPE_INT16),           PROPERTY_NONE ,MID_VERTORIENT_ORIENT    },
                     { SW_PROP_NMID(UNO_NAME_WRITING_MODE), RES_FRAMEDIR, CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, 0 },
+                    { SW_PROP_NMID(UNO_NAME_ROW_SPAN),     FN_UNO_CELL_ROW_SPAN, CPPU_E2T(CPPUTYPE_INT32),  0, 0 },
                     _REDLINE_NODE_PROPERTIES
                     {0,0,0,0,0,0}
                 };
