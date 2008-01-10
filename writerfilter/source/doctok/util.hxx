@@ -4,9 +4,9 @@
  *
  *  $RCSfile: util.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:34 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:54:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include <string>
 #include <iostream>
 
+namespace writerfilter {
 namespace doctok {
 using namespace ::std;
 
@@ -59,6 +60,6 @@ void util_assert(bool bTest);
    @param str    string to print
  */
 void printBytes(ostream & o, const string & str);
-}
+}}
 
 #endif // INCLUDED_UTIL_HXX
