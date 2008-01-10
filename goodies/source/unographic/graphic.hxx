@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphic.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:14:22 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:22:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@
 #include <com/sun/star/awt/XBitmap.hpp>
 
 #include "descriptor.hxx"
+#include "transformer.hxx"
 
 using namespace com::sun::star;
 
@@ -62,7 +63,8 @@ namespace unographic {
 class Graphic : public ::com::sun::star::graphic::XGraphic,
                 public ::com::sun::star::awt::XBitmap,
                 public ::com::sun::star::lang::XUnoTunnel,
-                public ::unographic::GraphicDescriptor
+                public ::unographic::GraphicDescriptor,
+                public ::unographic::GraphicTransformer
 {
 public:
 

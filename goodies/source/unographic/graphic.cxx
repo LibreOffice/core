@@ -4,9 +4,9 @@
  *
  *  $RCSfile: graphic.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 09:14:09 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:22:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,10 @@
 #include <com/sun/star/graphic/GraphicType.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICTRANSOFMER_HPP_
+#include <com/sun/star/graphic/XGraphicTransformer.hpp>
+#endif
+
 #include <vcl/graph.hxx>
 #include "graphic.hxx"
 
@@ -90,7 +94,6 @@ uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
     throw( uno::RuntimeException )
 {
     uno::Any aAny;
-
     if( rType == ::getCppuType((const uno::Reference< graphic::XGraphic >*)0) )
         aAny <<= uno::Reference< graphic::XGraphic >( this );
     else if( rType == ::getCppuType((const uno::Reference< awt::XBitmap >*)0) )
@@ -108,7 +111,10 @@ uno::Any SAL_CALL Graphic::queryAggregation( const uno::Type& rType )
 uno::Any SAL_CALL Graphic::queryInterface( const uno::Type & rType )
     throw( uno::RuntimeException )
 {
-    return ::unographic::GraphicDescriptor::queryInterface( rType );
+    ::com::sun::star::uno::Any aReturn = ::unographic::GraphicDescriptor::queryInterface( rType );
+    if ( !aReturn.hasValue() )
+        aReturn = ::cppu::queryInterface ( rType, static_cast< graphic::XGraphicTransformer*>( this ) );
+    return aReturn;
 }
 
 // ------------------------------------------------------------------------------
