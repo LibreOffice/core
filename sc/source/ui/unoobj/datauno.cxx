@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:45:54 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:17:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,7 @@ const SfxItemPropertyMap* lcl_GetDBRangePropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_MOVCELLS), 0,  &getBooleanCppuType(),                      0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_REFPERIOD), 0, &getCppuType((sal_Int32*)0),                0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_STRIPDAT), 0,  &getBooleanCppuType(),                      0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_TOKENINDEX),0, &getCppuType((sal_Int32*)0),     beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_USEFLTCRT),0,  &getBooleanCppuType(),                      0, 0},
         {0,0,0,0,0,0}
     };
@@ -2053,6 +2054,11 @@ uno::Any SAL_CALL ScDatabaseRangeObj::getPropertyValue( const rtl::OUString& aPr
         }
         else if (aString.EqualsAscii( SC_UNONAME_CONRES ))
         {
+        }
+        else if (aString.EqualsAscii( SC_UNONAME_TOKENINDEX ))
+        {
+            // get index for use in formula tokens (read-only)
+            aRet <<= static_cast<sal_Int32>(GetDBData_Impl()->GetIndex());
         }
     }
     return aRet;
