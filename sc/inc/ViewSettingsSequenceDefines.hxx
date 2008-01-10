@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewSettingsSequenceDefines.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:07:44 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:07:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,19 +92,23 @@
 #define SC_VERTICALSPLITMODE                "VerticalSplitMode"
 #define SC_HORIZONTALSPLITPOSITION          "HorizontalSplitPosition"
 #define SC_VERTICALSPLITPOSITION            "VerticalSplitPosition"
+#define SC_HORIZONTALSPLITPOSITION_TWIPS    "HorizontalSplitPositionTwips"
+#define SC_VERTICALSPLITPOSITION_TWIPS      "VerticalSplitPositionTwips"
 #define SC_ACTIVESPLITRANGE                 "ActiveSplitRange"
 #define SC_POSITIONLEFT                     "PositionLeft"
 #define SC_POSITIONRIGHT                    "PositionRight"
 #define SC_POSITIONTOP                      "PositionTop"
 #define SC_POSITIONBOTTOM                   "PositionBottom"
+#define SC_TABLESELECTED                    "TableSelected"
 
 #define SC_TABLES                           "Tables"
 #define SC_ACTIVETABLE                      "ActiveTable"
 #define SC_HORIZONTALSCROLLBARWIDTH         "HorizontalScrollbarWidth"
+#define SC_RELHORIZONTALTABBARWIDTH         "RelativeHorizontalTabbarWidth"
 #define SC_ZOOMTYPE                         "ZoomType"
 #define SC_ZOOMVALUE                        "ZoomValue"
 #define SC_PAGEVIEWZOOMVALUE                "PageViewZoomValue"
-#define SC_SHOWPAGEBREAKPREVIEW                 "ShowPageBreakPreview"
+#define SC_SHOWPAGEBREAKPREVIEW             "ShowPageBreakPreview"
 #define SC_VIEWID                           "ViewId"
 #define SC_VIEW                             "View"
 
