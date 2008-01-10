@@ -5,9 +5,9 @@
  *
  *  $RCSfile: qnametostr.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-08 16:19:08 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:52:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,5 +43,7 @@
 
 <xsl:template match="/">
   <xsl:apply-templates select=".//UML:Model" mode="qnametostr"/>
+  <xsl:apply-templates select='.//UML:Model' mode='sprmidstoxml'/>
+  <xsl:apply-templates select='.//UML:Model' mode='analyzerdoctokids'/>
 </xsl:template>
 </xsl:stylesheet>
