@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangeseq.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:41:27 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:14:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -309,7 +309,7 @@ BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, ScDocument* pDoc, const 
 }
 
 
-BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix )
+BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix, bool bDataTypes )
 {
     if (!pMatrix)
         return FALSE;
@@ -334,7 +334,13 @@ BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix 
                 pColAry[nCol] <<= rtl::OUString( aStr );
             }
             else
-                pColAry[nCol] <<= (double) pMatrix->GetDouble( nCol, nRow );
+            {
+                double fVal = pMatrix->GetDouble( nCol, nRow );
+                if (bDataTypes && pMatrix->IsBoolean( nCol, nRow ))
+                    pColAry[nCol] <<= (fVal ? true : false);
+                else
+                    pColAry[nCol] <<= fVal;
+            }
         }
 
         pRowAry[nRow] = aColSeq;
@@ -342,6 +348,119 @@ BOOL ScRangeToSequence::FillMixedArray( uno::Any& rAny, const ScMatrix* pMatrix 
 
     rAny <<= aRowSeq;
     return TRUE;
+}
+
+//------------------------------------------------------------------------
+
+// static
+bool ScApiTypeConversion::ConvertAnyToDouble( double & o_fVal,
+        com::sun::star::uno::TypeClass & o_eClass,
+        const com::sun::star::uno::Any & rAny )
+{
+    bool bRet = false;
+    o_eClass = rAny.getValueTypeClass();
+    switch (o_eClass)
+    {
+        //! extract integer values
+        case uno::TypeClass_ENUM:
+        case uno::TypeClass_BOOLEAN:
+        case uno::TypeClass_CHAR:
+        case uno::TypeClass_BYTE:
+        case uno::TypeClass_SHORT:
+        case uno::TypeClass_UNSIGNED_SHORT:
+        case uno::TypeClass_LONG:
+        case uno::TypeClass_UNSIGNED_LONG:
+        case uno::TypeClass_FLOAT:
+        case uno::TypeClass_DOUBLE:
+            rAny >>= o_fVal;
+            bRet = true;
+            break;
+        default:
+            ;   // nothing, avoid warning
+    }
+    if (!bRet)
+        o_fVal = 0.0;
+    return bRet;
+}
+
+//------------------------------------------------------------------------
+
+// static
+ScMatrixRef ScSequenceToMatrix::CreateMixedMatrix( const com::sun::star::uno::Any & rAny )
+{
+    ScMatrixRef xMatrix;
+    uno::Sequence< uno::Sequence< uno::Any > > aSequence;
+    if ( rAny >>= aSequence )
+    {
+        sal_Int32 nRowCount = aSequence.getLength();
+        const uno::Sequence<uno::Any>* pRowArr = aSequence.getConstArray();
+        sal_Int32 nMaxColCount = 0;
+        sal_Int32 nCol, nRow;
+        for (nRow=0; nRow<nRowCount; nRow++)
+        {
+            sal_Int32 nTmp = pRowArr[nRow].getLength();
+            if ( nTmp > nMaxColCount )
+                nMaxColCount = nTmp;
+        }
+        if ( nMaxColCount && nRowCount )
+        {
+            rtl::OUString aUStr;
+            xMatrix = new ScMatrix(
+                    static_cast<SCSIZE>(nMaxColCount),
+                    static_cast<SCSIZE>(nRowCount) );
+            ScMatrix* pMatrix = xMatrix;
+            SCSIZE nCols, nRows;
+            pMatrix->GetDimensions( nCols, nRows);
+            if (nCols != static_cast<SCSIZE>(nMaxColCount) || nRows != static_cast<SCSIZE>(nRowCount))
+            {
+                DBG_ERRORFILE( "ScSequenceToMatrix::CreateMixedMatrix: matrix exceeded max size, returning NULL matrix");
+                return NULL;
+            }
+            for (nRow=0; nRow<nRowCount; nRow++)
+            {
+                sal_Int32 nColCount = pRowArr[nRow].getLength();
+                const uno::Any* pColArr = pRowArr[nRow].getConstArray();
+                for (nCol=0; nCol<nColCount; nCol++)
+                {
+                    double fVal;
+                    uno::TypeClass eClass;
+                    if (ScApiTypeConversion::ConvertAnyToDouble( fVal, eClass, pColArr[nCol]))
+                    {
+                        if (eClass == uno::TypeClass_BOOLEAN)
+                            pMatrix->PutBoolean( (fVal ? true : false),
+                                    static_cast<SCSIZE>(nCol),
+                                    static_cast<SCSIZE>(nRow) );
+                        else
+                            pMatrix->PutDouble( fVal,
+                                    static_cast<SCSIZE>(nCol),
+                                    static_cast<SCSIZE>(nRow) );
+                    }
+                    else
+                    {
+                        // Try string, else use empty as last resort.
+
+                        //Reflection* pRefl = pColArr[nCol].getReflection();
+                        //if ( pRefl->equals( *OUString_getReflection() ) )
+                        if ( pColArr[nCol] >>= aUStr )
+                            pMatrix->PutString( String( aUStr ),
+                                    static_cast<SCSIZE>(nCol),
+                                    static_cast<SCSIZE>(nRow) );
+                        else
+                            pMatrix->PutEmpty(
+                                    static_cast<SCSIZE>(nCol),
+                                    static_cast<SCSIZE>(nRow) );
+                    }
+                }
+                for (nCol=nColCount; nCol<nMaxColCount; nCol++)
+                {
+                    pMatrix->PutEmpty(
+                            static_cast<SCSIZE>(nCol),
+                            static_cast<SCSIZE>(nRow) );
+                }
+            }
+        }
+    }
+    return xMatrix;
 }
 
 
