@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addincol.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:50:56 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:07:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,10 @@
 
 #ifndef _RTL_USTRING_H_
 #include <rtl/ustring.h>
+#endif
+
+#ifndef SC_SCMATRIX_HXX
+#include "scmatrix.hxx"
 #endif
 
 #include <hash_map>
@@ -162,6 +166,7 @@ public:
     USHORT                  GetHelpId() const           { return nHelpId; }
 
     const com::sun::star::uno::Sequence< com::sun::star::sheet::LocalizedName>&  GetCompNames() const;
+    BOOL                    GetExcelName( LanguageType eDestLang, String& rRetExcelName ) const;
 
     void    SetFunction( const com::sun::star::uno::Reference< com::sun::star::reflection::XIdlMethod>& rNewFunc,
                          const com::sun::star::uno::Any& rNewObj );
@@ -203,6 +208,12 @@ public:
                         // are initialized (component may have to be loaded).
     const ScUnoAddInFuncData*   GetFuncData( const String& rName, bool bComplete = false );
 
+                        /** For enumeration in ScCompiler::OpCodeMap::getAvailableMappings().
+                            @param nIndex
+                                0 <= nIndex < GetFuncCount()
+                         */
+    const ScUnoAddInFuncData*   GetFuncData( long nIndex );
+
     void                Clear();
 
     void                LocalizeString( String& rName );    // modify rName - input: exact name
@@ -231,7 +242,7 @@ private:
     BOOL                        bHasString;
     double                      fValue;
     String                      aString;
-    ScMatrix*                   pMatrix;
+    ScMatrixRef                 xMatrix;
     com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult> xVarRes;
 
     void            ExecuteCallWithArgs(
@@ -258,11 +269,11 @@ public:
 
     USHORT              GetErrCode() const      { return nErrCode; }
     BOOL                HasString() const       { return bHasString; }
-    BOOL                HasMatrix() const       { return ( pMatrix != NULL ); }
+    BOOL                HasMatrix() const       { return ( xMatrix.Is() ); }
     BOOL                HasVarRes() const       { return ( xVarRes.is() ); }
     double              GetValue() const        { return fValue; }
     const String&       GetString() const       { return aString; }
-    const ScMatrix*     GetMatrix() const       { return pMatrix; }
+    ScMatrixRef         GetMatrix() const       { return xMatrix; }
     com::sun::star::uno::Reference<com::sun::star::sheet::XVolatileResult>
                         GetVarRes() const       { return xVarRes; }
 };
