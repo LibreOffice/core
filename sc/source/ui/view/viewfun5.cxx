@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:58:50 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:21:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -730,15 +730,9 @@ BOOL ScViewFunc::PasteDDE( const uno::Reference<datatransfer::XTransferable>& rx
     String aTopic( aByteTopic, eSysEnc );
     String aItem( aByteItem, eSysEnc );
 
-    if (!ScCompiler::pSymbolTableNative)
-    {
-        DBG_ERROR("ScCompiler::pSymbolTableNative missing");
-        return FALSE;
-    }
-
     //! use tokens
     String aFormula( '=' );
-    aFormula += ScCompiler::pSymbolTableNative[SC_OPCODE_DDE];
+    aFormula += ScCompiler::GetNativeSymbol(ocDde);
     aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("(\""));
     aFormula += aApp;
     aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\";\""));
