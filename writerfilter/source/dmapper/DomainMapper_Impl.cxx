@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-29 15:28:37 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:38:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <com/sun/star/style/NumberingType.hpp>
 //#include <com/sun/star/text/XRelativeTextContentInsert.hpp>
 //#include <com/sun/star/text/XRelativeTextContentRemove.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/text/ChapterFormat.hpp>
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/text/XTextField.hpp>
@@ -61,13 +62,14 @@
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <rtl/ustrbuf.hxx>
 #include <rtl/string.h>
+#include <resourcemodel/QNameToString.hxx>
 
 
 #include <map>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
-using namespace ::writerfilter;
+namespace writerfilter {
 namespace dmapper{
 /*-- 08.09.2006 09:39:50---------------------------------------------------
 
@@ -314,6 +316,15 @@ enum FieldId
      example: TOC "EntryText \f \l 2 \n
      */
     ,FIELD_TC
+    /* document statistic - number of characters
+     */
+    ,FIELD_NUMCHARS
+    /* document statistic - number of words
+     */
+    ,FIELD_NUMWORDS
+    /* document statistic - number of pages
+     */
+    ,FIELD_NUMPAGES
 };
 struct FieldConversion
 {
@@ -329,7 +340,7 @@ typedef ::std::map< ::rtl::OUString, FieldConversion>
 /*-- 18.07.2006 08:56:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Int32 FIB::GetData( doctok::Id nName )
+sal_Int32 FIB::GetData( Id nName )
 {
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR)
         return aFIBData[nName - NS_rtf::LN_WIDENT];
@@ -339,7 +350,7 @@ sal_Int32 FIB::GetData( doctok::Id nName )
 /*-- 18.07.2006 08:56:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void FIB::SetData( doctok::Id nName, sal_Int32 nValue )
+void FIB::SetData( Id nName, sal_Int32 nValue )
 {
     OSL_ENSURE( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR, "invalid index in FIB");
     if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR)
@@ -351,7 +362,9 @@ void FIB::SetData( doctok::Id nName, sal_Int32 nValue )
 DomainMapper_Impl::DomainMapper_Impl(
             DomainMapper& rDMapper,
             uno::Reference < uno::XComponentContext >  xContext,
-            uno::Reference< lang::XComponent >  xModel) :
+            uno::Reference< lang::XComponent >  xModel,
+            SourceDocumentType eDocumentType) :
+        m_eDocumentType( eDocumentType ),
         m_rDMapper( rDMapper ),
         m_xTextDocument( xModel, uno::UNO_QUERY ),
         m_xTextFactory( xModel, uno::UNO_QUERY ),
@@ -359,9 +372,13 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bFieldMode( false ),
         m_bSetUserFieldContent( false ),
         m_bIsFirstSection( true ),
+        m_bIsColumnBreakDeferred( false ),
+        m_bIsPageBreakDeferred( false ),
+        m_TableManager( eDocumentType == DOCUMENT_OOXML ),
         m_nCurrentTabStopIndex( 0 ),
         m_sCurrentParaStyleId(),
         m_bInStyleSheetImport( false ),
+        m_bInAnyTableImport( false ),
         m_bLineNumberingSet( false )
 {
     GetBodyText();
@@ -525,7 +542,7 @@ void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabSto
 /*-- 29.06.2006 13:35:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void DomainMapper_Impl::ModifyCurrentTabStop( doctok::Id nId, sal_Int32 nValue)
+void DomainMapper_Impl::ModifyCurrentTabStop( Id nId, sal_Int32 nValue)
 {
     OSL_ENSURE(nId == NS_rtf::LN_dxaAdd || m_nCurrentTabStopIndex < m_aCurrentTabStops.size(),
         "tab stop creation error");
@@ -554,14 +571,14 @@ void DomainMapper_Impl::ModifyCurrentTabStop( doctok::Id nId, sal_Int32 nValue)
     {
         case NS_rtf::LN_dxaAdd: //set tab
             m_aCurrentTabStops.push_back(
-                    DeletableTabStop(style::TabStop(ConversionHelper::convertToMM100(nValue), style::TabAlign_LEFT, ' ', ' ')));
+                    DeletableTabStop(style::TabStop(ConversionHelper::convertTwipToMM100(nValue), style::TabAlign_LEFT, ' ', ' ')));
         break;
         case NS_rtf::LN_dxaDel: //deleted tab
         {
             //mark the tab stop at the given position as deleted
             ::std::vector<DeletableTabStop>::iterator aIt = m_aCurrentTabStops.begin();
             ::std::vector<DeletableTabStop>::iterator aEndIt = m_aCurrentTabStops.end();
-            sal_Int32 nConverted = ConversionHelper::convertToMM100(nValue);
+            sal_Int32 nConverted = ConversionHelper::convertTwipToMM100(nValue);
             for( ; aIt != aEndIt; ++aIt)
             {
                 if( aIt->Position == nConverted )
@@ -585,9 +602,26 @@ void DomainMapper_Impl::ModifyCurrentTabStop( doctok::Id nId, sal_Int32 nValue)
     }
 }
 
-void DomainMapper_Impl::IncorporateTabStop (DeletableTabStop & /* aTabStop */)
+void DomainMapper_Impl::IncorporateTabStop( const DeletableTabStop &  rTabStop )
 {
-    // PLEASE, implement me !!!!!
+    ::std::vector<DeletableTabStop>::iterator aIt = m_aCurrentTabStops.begin();
+    ::std::vector<DeletableTabStop>::iterator aEndIt = m_aCurrentTabStops.end();
+    sal_Int32 nConverted = rTabStop.Position;
+    bool bFound = false;
+    for( ; aIt != aEndIt; ++aIt)
+    {
+        if( aIt->Position == nConverted )
+        {
+            bFound = true;
+            if( rTabStop.bDeleted )
+                m_aCurrentTabStops.erase( aIt );
+            else
+                *aIt = rTabStop;
+            break;
+        }
+    }
+    if( !bFound )
+        m_aCurrentTabStops.push_back( rTabStop );
 }
 /*-- 29.06.2006 13:35:33---------------------------------------------------
 
@@ -654,6 +688,41 @@ ListTablePtr DomainMapper_Impl::GetListTable()
             new ListTable( m_rDMapper, m_xTextFactory ));
     return m_pListTable;
 }
+
+
+void DomainMapper_Impl::deferBreak( BreakType deferredBreakType)
+{
+    switch (deferredBreakType)
+    {
+    case COLUMN_BREAK:
+        m_bIsColumnBreakDeferred = true;
+        break;
+    case PAGE_BREAK:
+        m_bIsPageBreakDeferred = true;
+        break;
+    default:
+        return;
+    }
+}
+
+bool DomainMapper_Impl::isBreakDeferred( BreakType deferredBreakType )
+{
+    switch (deferredBreakType)
+    {
+    case COLUMN_BREAK:
+        return m_bIsColumnBreakDeferred;
+    case PAGE_BREAK:
+        return m_bIsPageBreakDeferred;
+    default:
+        return false;
+    }
+}
+
+void DomainMapper_Impl::clearDeferredBreaks()
+{
+    m_bIsColumnBreakDeferred = false;
+    m_bIsPageBreakDeferred = false;
+}
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -664,17 +733,56 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
     {
         try
         {
+
+            uno::Sequence< beans::PropertyValue > aProperties;
+            sal_Int32 nLeftMargin = 0;
+            if( pPropertyMap.get() )
+            {
+                //align tab stops if left indent != 0
+                PropertyMap::const_iterator aPropertyIter =
+                        pPropertyMap->find(PropertyDefinition(PROP_PARA_LEFT_MARGIN, false ));
+                if( aPropertyIter != pPropertyMap->end())
+                {
+                    //either from paragraph
+                    aPropertyIter->second >>= nLeftMargin;
+                }
+                else
+                {
+                    //or from style
+                    uno::Any aValue = GetPropertyFromStyleSheet(PROP_PARA_LEFT_MARGIN);
+                    aValue >>= nLeftMargin;
+                }
+/*              //#i24363# tab stops relative to indent - conversion not necessary anymore
+                if( nLeftMargin != 0 )
+                {
+                    PropertyMap::const_iterator aTabStopIter =
+                            pPropertyMap->find(PropertyDefinition(PROP_PARA_TAB_STOPS, false ));
+                    uno::Sequence< style::TabStop > aTabStops;
+                    if( aTabStopIter != pPropertyMap->end() &&
+                        (aTabStopIter->second >>= aTabStops))
+                    {
+                        //relocate tab stops
+                        style::TabStop* pTabs = aTabStops.getArray();
+                        for( sal_Int32 nTab = 0; nTab < aTabStops.getLength(); ++nTab )
+                            pTabs[nTab].Position -= nLeftMargin;
+                        //put the property into the map
+                        pPropertyMap->Insert(PROP_PARA_TAB_STOPS, true, uno::makeAny( aTabStops ));
+                    }
+                }*/
+                aProperties = pPropertyMap->GetPropertyValues();
+            }
             uno::Reference< text::XTextRange > xTextRange =
-                xTextAppendAndConvert->finishParagraph
-                (pPropertyMap->GetPropertyValues());
+                xTextAppendAndConvert->finishParagraph( aProperties );
 
             m_TableManager.handle(xTextRange);
         }
-        catch(const lang::IllegalArgumentException& )
+        catch(const lang::IllegalArgumentException& rIllegal)
         {
+            (void)rIllegal;
         }
-        catch(const uno::Exception& )
+        catch(const uno::Exception& rEx)
         {
+            (void)rEx;
         }
     }
 }
@@ -875,6 +983,20 @@ void DomainMapper_Impl::PushPageFooter(SectionPropertyMap::PageType eType)
   -----------------------------------------------------------------------*/
 void DomainMapper_Impl::PopPageHeaderFooter()
 {
+    //header and footer always have an empty paragraph at the end
+    //this has to be removed
+    uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
+    try
+    {
+        uno::Reference< text::XTextCursor > xCursor = xTextAppendAndConvert->createTextCursor();
+        xCursor->gotoEnd(false);
+        xCursor->goLeft( 1, true );
+        xCursor->setString(::rtl::OUString());
+    }
+    catch( const uno::Exception& rEx)
+    {
+        (void)rEx;
+    }
     m_aTextAppendStack.pop();
 }
 /*-- 24.05.2007 14:22:28---------------------------------------------------
@@ -1999,6 +2121,9 @@ void DomainMapper_Impl::CloseFieldCommand()
     //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("USERNAME")),      "ExtendedUser",             "", FIELD_USERNAME     }
                 {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TOC")), "com.sun.star.text.ContentIndex", "", FIELD_TOC},
                 {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TC")), "com.sun.star.text.ContentIndexMark", "", FIELD_TC},
+                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMCHARS")), "CharacterCount", "", FIELD_NUMCHARS},
+                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMWORDS")), "WordCount", "", FIELD_NUMWORDS},
+                {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NUMPAGES")), "PageCount", "", FIELD_NUMPAGES},
 
     //            {::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")), "", "", FIELD_},
 
@@ -2016,8 +2141,8 @@ void DomainMapper_Impl::CloseFieldCommand()
         try
         {
             uno::Reference< uno::XInterface > xFieldInterface;
-            //at first determine the field type - skip first space
-            ::rtl::OUString sCommand( pContext->GetCommand().copy(pContext->GetCommand().getLength() ? 1 : 0) );
+            //at first determine the field type - erase leading and trailing whitespaces
+            ::rtl::OUString sCommand( pContext->GetCommand().trim() );
             sal_Int32 nSpaceIndex = sCommand.indexOf( ' ' );
             if( 0 <= nSpaceIndex )
                 sCommand = sCommand.copy( 0, nSpaceIndex );
@@ -2465,6 +2590,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.IllustrationsIndex")) :
                                     ::rtl::OUString::createFromAscii(aIt->second.cFieldServiceName)),
                                     uno::UNO_QUERY_THROW);
+                        xTOC->setPropertyValue(rPropNameSupplier.GetName( PROP_TITLE ), uno::makeAny(::rtl::OUString()));
                         if( !bTableOfFigures )
                         {
                             xTOC->setPropertyValue( rPropNameSupplier.GetName( PROP_CREATE_FROM_OUTLINE ), uno::makeAny( bFromOutline ));
@@ -2565,6 +2691,14 @@ void DomainMapper_Impl::CloseFieldCommand()
                         pContext->SetTC( xTC );
                     }
                     break;
+                    case  FIELD_NUMCHARS:
+                    case  FIELD_NUMWORDS:
+                    case  FIELD_NUMPAGES:
+                        xFieldProperties->setPropertyValue(
+                            rPropNameSupplier.GetName(PROP_NUMBERING_TYPE),
+                            uno::makeAny( lcl_ParseNumberingType(pContext->GetCommand()) ));
+                        break;
+
                 }
             }
             //set the text field if there is any
@@ -2793,21 +2927,74 @@ void DomainMapper_Impl::AddBookmark( const ::rtl::OUString& rBookmarkName )
 /*-- 01.11.2006 14:57:44---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-GraphicImportPtr DomainMapper_Impl::GetGraphicImport(bool bIsShape)
+GraphicImportPtr DomainMapper_Impl::GetGraphicImport(GraphicImportType eGraphicImportType)
 {
     if(!m_pGraphicImport)
-        m_pGraphicImport.reset( new GraphicImport( m_xComponentContext, m_xTextFactory, bIsShape ) );
+        m_pGraphicImport.reset( new GraphicImport( m_xComponentContext, m_xTextFactory, eGraphicImportType ) );
     return m_pGraphicImport;
+}
+/*-- 09.08.2007 10:19:45---------------------------------------------------
+    reset graphic import if the last import resulted in a shape, not a graphic
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::ResetGraphicImport()
+{
+    m_pGraphicImport.reset();
 }
 /*-- 01.11.2006 09:25:40---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void  DomainMapper_Impl::ImportGraphic(doctok::Reference< doctok::Properties >::Pointer_t ref, bool bIsShape)
+void  DomainMapper_Impl::ImportGraphic(writerfilter::Reference< Properties >::Pointer_t ref, GraphicImportType eGraphicImportType)
 {
-    //create the graphic
-    ref->resolve( *GetGraphicImport(bIsShape) );
+    GetGraphicImport(eGraphicImportType);
+    if( eGraphicImportType != IMPORT_AS_DETECTED_INLINE && eGraphicImportType != IMPORT_AS_DETECTED_ANCHOR )
+    {
+        //create the graphic
+        ref->resolve( *m_pGraphicImport );
+    }
+#ifdef DEBUG_DOMAINMAPPER
+    {
+        uno::Reference<drawing::XShape> xShape
+            (m_pGraphicImport->GetGraphicObject(),
+             uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xPropSet
+            (xShape, uno::UNO_QUERY_THROW);
+        logger("DOMAINMAPPER", "<shapeprops-before>");
+        try
+        {
+            logger("DOMAINMAPPER", propertysetToString(xPropSet));
+        }
+        catch (...)
+        {
+            logger("DOMAINMAPPER", "<exception/>");
+        }
+        logger("DOMAINMAPPER", "</shapeprops-before>");
+    }
+#endif
     //insert it into the document at the current cursor position
-    appendTextContent( m_pGraphicImport->GetGraphicObject(), uno::Sequence< beans::PropertyValue >() );
+    uno::Reference<text::XTextContent> xTextContent
+        (m_pGraphicImport->GetGraphicObject());
+    appendTextContent( xTextContent, uno::Sequence< beans::PropertyValue >() );
+
+#ifdef DEBUG_DOMAINMAPPER
+    {
+        uno::Reference<drawing::XShape> xShape
+            (m_pGraphicImport->GetGraphicObject(),
+             uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xPropSet
+            (xShape, uno::UNO_QUERY_THROW);
+        logger("DOMAINMAPPER", "<shapeprops-after>");
+        try
+        {
+            logger("DOMAINMAPPER", propertysetToString(xPropSet));
+        }
+        catch (...)
+        {
+            logger("DOMAINMAPPER", "<exception/>");
+        }
+        logger("DOMAINMAPPER", "</shapeprops-after>");
+    }
+#endif
+
     m_pGraphicImport.reset();
 }
 
@@ -2829,7 +3016,7 @@ void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal
             xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_COUNT_EMPTY_LINES      ), aTrue );
             xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_COUNT_LINES_IN_FRAMES  ), uno::makeAny( false ) );
             xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_INTERVAL               ), uno::makeAny( static_cast< sal_Int16 >( nLnnMod )));
-            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_DISTANCE               ), uno::makeAny( ConversionHelper::convertToMM100(ndxaLnn) ));
+            xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_DISTANCE               ), uno::makeAny( ConversionHelper::convertTwipToMM100(ndxaLnn) ));
             xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_NUMBER_POSITION        ), uno::makeAny( style::LineNumberPosition::LEFT));
             xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_NUMBERING_TYPE         ), uno::makeAny( style::NumberingType::ARABIC));
             xProperties->setPropertyValue( rPropNameSupplier.GetName( PROP_RESTART_AT_EACH_PAGE   ), uno::makeAny( nLnc == 0 ));
@@ -2855,7 +3042,32 @@ void DomainMapper_Impl::SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal
     }
     m_bLineNumberingSet = true;
 }
+/*-- 31.08.2007 13:50:49---------------------------------------------------
 
-
+  -----------------------------------------------------------------------*/
+void DomainMapper_Impl::SetPageMarginTwip( PageMarElement eElement, sal_Int32 nValue )
+{
+    nValue = ConversionHelper::convertTwipToMM100(nValue);
+    switch(eElement)
+    {
+        case PAGE_MAR_TOP    : m_aPageMargins.top     = nValue; break;
+        case PAGE_MAR_RIGHT  : m_aPageMargins.right   = nValue; break;
+        case PAGE_MAR_BOTTOM : m_aPageMargins.bottom  = nValue; break;
+        case PAGE_MAR_LEFT   : m_aPageMargins.left    = nValue; break;
+        case PAGE_MAR_HEADER : m_aPageMargins.header  = nValue; break;
+        case PAGE_MAR_FOOTER : m_aPageMargins.footer  = nValue; break;
+        case PAGE_MAR_GUTTER : m_aPageMargins.gutter  = nValue; break;
+    }
 }
 
+/*-- 31.08.2007 13:47:50---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+_PageMar::_PageMar()
+{
+    header = footer = top = bottom = ConversionHelper::convertTwipToMM100( sal_Int32(1440));
+    right = left = ConversionHelper::convertTwipToMM100( sal_Int32(1800));
+    gutter = 0;
+}
+
+}}
