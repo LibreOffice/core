@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:32:36 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:33:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,8 @@ enum SwDocumentSettingsPropertyHandles
     HANDLE_DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE,
     HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES,
     HANDLE_UNIX_FORCE_ZERO_EXT_LEADING,
-    HANDLE_USE_OLD_PRINTER_METRICS
+    HANDLE_USE_OLD_PRINTER_METRICS,
+    HANDLE_TABS_RELATIVE_TO_INDENT
 };
 
 MasterPropertySetInfo * lcl_createSettingsInfo()
@@ -209,6 +210,7 @@ MasterPropertySetInfo * lcl_createSettingsInfo()
         { RTL_CONSTASCII_STRINGPARAM("ClipAsCharacterAnchoredWriterFlyFrames"), HANDLE_CLIP_AS_CHARACTER_ANCHORED_WRITER_FLY_FRAMES, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("UnxForceZeroExtLeading"), HANDLE_UNIX_FORCE_ZERO_EXT_LEADING, CPPUTYPE_BOOLEAN, 0, 0},
         { RTL_CONSTASCII_STRINGPARAM("UseOldPrinterMetrics"), HANDLE_USE_OLD_PRINTER_METRICS, CPPUTYPE_BOOLEAN, 0, 0},
+        { RTL_CONSTASCII_STRINGPARAM("TabsRelativeToIndent"), HANDLE_TABS_RELATIVE_TO_INDENT, CPPUTYPE_BOOLEAN, 0, 0},
 
 /*
  * As OS said, we don't have a view when we need to set this, so I have to
@@ -683,7 +685,12 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             mpDoc->set(IDocumentSettingAccess::USE_OLD_PRINTER_METRICS, bTmp);
         }
         break;
-
+        case HANDLE_TABS_RELATIVE_TO_INDENT:
+        {
+            sal_Bool bTmp = *(sal_Bool*)rValue.getValue();
+            mpDoc->set(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT, bTmp);
+        }
+        break;
         default:
             throw UnknownPropertyException();
     }
@@ -974,6 +981,12 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         case HANDLE_USE_OLD_PRINTER_METRICS:
         {
             sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::USE_OLD_PRINTER_METRICS);
+            rValue.setValue( &bTmp, ::getBooleanCppuType() );
+        }
+        break;
+        case HANDLE_TABS_RELATIVE_TO_INDENT:
+        {
+            sal_Bool bTmp = mpDoc->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT);
             rValue.setValue( &bTmp, ::getBooleanCppuType() );
         }
         break;
