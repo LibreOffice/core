@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:52:38 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:11:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3520,8 +3520,8 @@ BOOL ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                         SCCOL nEndCol, SCROW nEndRow,
                                         BOOL* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
-    // import into read-only document is possible - must be extended if other filters use api
-    if ( pShell && pShell->IsReadOnly() && !bImportingXML )
+    // import into read-only document is possible
+    if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )
     {
         if ( pOnlyNotBecauseOfMatrix )
             *pOnlyNotBecauseOfMatrix = FALSE;
@@ -3544,8 +3544,8 @@ BOOL ScDocument::IsSelectedBlockEditable( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow,
                                             const ScMarkData& rMark ) const
 {
-    // import into read-only document is possible - must be extended if other filters use api
-    if ( pShell && pShell->IsReadOnly() && !bImportingXML )
+    // import into read-only document is possible
+    if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )
         return FALSE;
 
     BOOL bOk = TRUE;
@@ -3562,8 +3562,8 @@ BOOL ScDocument::IsSelectedBlockEditable( SCCOL nStartCol, SCROW nStartRow,
 BOOL ScDocument::IsSelectionEditable( const ScMarkData& rMark,
             BOOL* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
-    // import into read-only document is possible - must be extended if other filters use api
-    if ( pShell && pShell->IsReadOnly() && !bImportingXML )
+    // import into read-only document is possible
+    if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )
     {
         if ( pOnlyNotBecauseOfMatrix )
             *pOnlyNotBecauseOfMatrix = FALSE;
@@ -3613,8 +3613,8 @@ BOOL ScDocument::IsSelectionOrBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW 
                                         SCCOL nEndCol, SCROW nEndRow,
                                         const ScMarkData& rMark ) const
 {
-    // import into read-only document is possible - must be extended if other filters use api
-    if ( pShell && pShell->IsReadOnly() && !bImportingXML )
+    // import into read-only document is possible
+    if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )
         return FALSE;
 
     BOOL bOk = TRUE;
@@ -3646,8 +3646,8 @@ BOOL ScDocument::IsSelectedOrBlockEditable( SCCOL nStartCol, SCROW nStartRow,
                                             SCCOL nEndCol, SCROW nEndRow,
                                             const ScMarkData& rMark ) const
 {
-    // import into read-only document is possible - must be extended if other filters use api
-    if ( pShell && pShell->IsReadOnly() && !bImportingXML )
+    // import into read-only document is possible
+    if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )
         return FALSE;
 
     BOOL bOk = TRUE;
