@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 14:06:07 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:25:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -852,15 +852,10 @@ sal_Bool SAL_CALL IMPL_RTL_STRNAME( toBoolean )( const IMPL_RTL_STRCODE* pStr )
 
 /* ----------------------------------------------------------------------- */
 
-#define INT32_MIN_VALUE     ((sal_Int32)0x80000000);
-#define INT32_MAX_VALUE     ((sal_Int32)0x7fffffff);
-
 sal_Int32 SAL_CALL IMPL_RTL_STRNAME( toInt32 )( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix )
 {
     sal_Bool    bNeg;
-    sal_Int32   nLimit;
-    sal_Int32   nMultMin;
     sal_Int16   nDigit;
     sal_Int32   n = 0;
 
@@ -874,7 +869,6 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( toInt32 )( const IMPL_RTL_STRCODE* pStr,
     if ( *pStr == '-' )
     {
         bNeg = sal_True;
-        nLimit = INT32_MIN_VALUE;
         pStr++;
     }
     else
@@ -882,9 +876,7 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( toInt32 )( const IMPL_RTL_STRCODE* pStr,
         if ( *pStr == '+' )
             pStr++;
         bNeg = sal_False;
-        nLimit = -INT32_MAX_VALUE;
     }
-    nMultMin = nLimit / nRadix;
 
     while ( *pStr )
     {
@@ -892,39 +884,24 @@ sal_Int32 SAL_CALL IMPL_RTL_STRNAME( toInt32 )( const IMPL_RTL_STRCODE* pStr,
         if ( nDigit < 0 )
             break;
 
-        if ( n < nMultMin )
-            break;
-
         n *= nRadix;
-        if ( n < (nLimit+nDigit) )
-            break;
-        n -= nDigit;
+        n += nDigit;
 
         pStr++;
     }
 
     if ( bNeg )
-        return n;
-    else
         return -n;
+    else
+        return n;
 }
 
 /* ----------------------------------------------------------------------- */
-
-#ifndef WNT
-#define INT64_MIN_VALUE     0x8000000000000000LL;
-#define INT64_MAX_VALUE     0x7fffffffffffffffLL;
-#else
-#define INT64_MIN_VALUE     0x8000000000000000L;
-#define INT64_MAX_VALUE     0x7fffffffffffffffL;
-#endif
 
 sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
                                                 sal_Int16 nRadix )
 {
     sal_Bool    bNeg;
-    sal_Int64   nLimit;
-    sal_Int64   nMultMin;
     sal_Int16   nDigit;
     sal_Int64   n = 0;
 
@@ -938,7 +915,6 @@ sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
     if ( *pStr == '-' )
     {
         bNeg = sal_True;
-        nLimit = INT64_MIN_VALUE;
         pStr++;
     }
     else
@@ -946,9 +922,7 @@ sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
         if ( *pStr == '+' )
             pStr++;
         bNeg = sal_False;
-        nLimit = -INT64_MAX_VALUE;
     }
-    nMultMin = nLimit / nRadix;
 
     while ( *pStr )
     {
@@ -956,21 +930,16 @@ sal_Int64 SAL_CALL IMPL_RTL_STRNAME( toInt64 )( const IMPL_RTL_STRCODE* pStr,
         if ( nDigit < 0 )
             break;
 
-        if ( n < nMultMin )
-            break;
-
         n *= nRadix;
-        if ( n < (nLimit+nDigit) )
-            break;
-        n -= nDigit;
+        n += nDigit;
 
         pStr++;
     }
 
     if ( bNeg )
-        return n;
-    else
         return -n;
+    else
+        return n;
 }
 
 /* ======================================================================= */
