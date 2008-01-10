@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcetools.xsl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-06-15 09:25:18 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:54:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,18 @@
 <xsl:output method="text" />
 
 <xsl:template name='idtoqname'>
-<xsl:param name='id'/>NS_<xsl:value-of select='substring-before($id, ":")'/>::LN_<xsl:value-of select='substring-after($id, ":")'/>
+  <xsl:param name='id'/>
+  <xsl:text>NS_</xsl:text>
+  <xsl:value-of select='substring-before($id, ":")'/>
+  <xsl:text>::LN_</xsl:text>
+  <xsl:value-of select='substring-after($id, ":")'/>
 </xsl:template>
 
 <xsl:template name="parenttype">
   <xsl:param name='type'/>
-  <xsl:value-of select='//UML:Generalization[UML:Generalization.child/UML:Class/@xmi.idref=$type]/UML:Generalization.parent/UML:Class/@xmi.idref'/>
+  <xsl:for-each select='/XMI/XMI.content/UML:Model/UML:Namespace.ownedElement/UML:Generalization[UML:Generalization.child/UML:Class/@xmi.idref=$type]'>
+    <xsl:value-of select='./UML:Generalization.parent/UML:Class/@xmi.idref'/>
+  </xsl:for-each>
 </xsl:template>
 
 <xsl:template name='saltype'>
@@ -60,7 +66,7 @@
     <xsl:when test="$type='S32'">sal_Int32</xsl:when>
     <xsl:when test="$type='String'">rtl::OUString</xsl:when>
     <xsl:otherwise>
-      <xsl:text>doctok::Reference &lt; </xsl:text>
+      <xsl:text>writerfilter::Reference &lt; </xsl:text>
       <xsl:value-of select='$parenttype'/>
       <xsl:text> &gt;::Pointer_t</xsl:text>
     </xsl:otherwise>
@@ -100,60 +106,86 @@
   </xsl:call-template>
 </xsl:template>
 
+<xsl:template name="qnametostrattrs">
+  <xsl:text>
+    /* Attributes */</xsl:text>
+    <xsl:for-each select='.//UML:Attribute[@name!="reserved"]'>
+      <xsl:for-each select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="attrid"]'>
+        <xsl:choose>
+          <xsl:when test='.//UML:Stereotype[@xmi.idref="noresolve"]'>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>
+    mMap[</xsl:text>
+    <xsl:call-template name='idtoqname'>
+      <xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>] = "</xsl:text>
+    <xsl:value-of select='.//UML:TaggedValue.dataValue'/>
+    <xsl:text>";</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
+    </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="qnametostrops">
+  <xsl:text>
+    /* Operations */</xsl:text>
+    <xsl:for-each select='.//UML:Operation[@name!="reserved"]'>
+      <xsl:for-each select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="opid"]'>
+        <xsl:choose>
+          <xsl:when test='.//UML:Stereotype[@xmi.idref="noresolve"]'>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>
+    mMap[</xsl:text>
+    <xsl:call-template name='idtoqname'>
+      <xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>] = "</xsl:text>
+    <xsl:value-of select='.//UML:TaggedValue.dataValue'/>
+    <xsl:text>";</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
+    </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="qnametostrclasses">
+  <xsl:text>
+    /* Classes */</xsl:text>
+    <xsl:for-each select='.//UML:Class[@name!="reserved"]'>
+      <xsl:for-each select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="classid"]'>
+        <xsl:text>
+    mMap[</xsl:text>
+    <xsl:call-template name='idtoqname'>
+      <xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>] = "</xsl:text>
+    <xsl:value-of select='.//UML:TaggedValue.dataValue'/>
+    <xsl:text>";</xsl:text>
+      </xsl:for-each>
+    </xsl:for-each>
+</xsl:template>
+
 <xsl:template match='UML:Model' mode='qnametostr'>
-<xsl:variable name='tmp'>map &lt; sal_uInt32, string &gt; </xsl:variable>
-        /* Attributes */
-<xsl:for-each select='.//UML:Attribute[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="attrid"]'>
-<xsl:choose>
-<xsl:when test='.//UML:Stereotype[@xmi.idref="noresolve"]'>
-</xsl:when>
-<xsl:otherwise>
-<xsl:text>    mMap[</xsl:text>
-<xsl:call-template name='idtoqname'>
-<xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
-</xsl:call-template>
-<xsl:text>]= "</xsl:text>
-<xsl:value-of select='.//UML:TaggedValue.dataValue'/>
-<xsl:text>";
+  <xsl:text>
+void QNameToString::init_doctok()
+{</xsl:text>
+<xsl:call-template name="qnametostrattrs"/>
+<xsl:call-template name="qnametostrops"/>
+<xsl:call-template name="qnametostrclasses"/>
+<xsl:text>
+}
 </xsl:text>
-</xsl:otherwise>
-</xsl:choose>
-</xsl:for-each>
-        /* Operations */
-<xsl:for-each select='.//UML:Operation[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="opid"]'>
-<xsl:choose>
-<xsl:when test='.//UML:Stereotype[@xmi.idref="noresolve"]'>
-</xsl:when>
-<xsl:otherwise>
-<xsl:text>    mMap[</xsl:text>
-<xsl:call-template name='idtoqname'>
-<xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
-</xsl:call-template>
-<xsl:text>] = "</xsl:text>
-<xsl:value-of select='.//UML:TaggedValue.dataValue'/>
-<xsl:text>";
-</xsl:text>
-</xsl:otherwise>
-</xsl:choose>
-</xsl:for-each>
-        /* Classes */
-<xsl:for-each select='.//UML:Class[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="classid"]'>
-<xsl:text>    mMap[</xsl:text>
-<xsl:call-template name='idtoqname'>
-<xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
-</xsl:call-template>
-<xsl:text>] = "</xsl:text>
-<xsl:value-of select='.//UML:TaggedValue.dataValue'/>
-<xsl:text>";
-</xsl:text>
-</xsl:for-each>
 </xsl:template>
 
 <xsl:key name="ids" match='UML:Attribute[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="attrid"]|UML:Operation[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="opid"]' use=".//UML:TaggedValue.dataValue"/>
 
 <xsl:template match="UML:Model" mode="qnametostrfunc">
   <xsl:text>
-string qnameToString(writerfilter::QName_t nToken)
+string qnameToString(sal_uInt32 nToken)
 {
     string sResult;
 
@@ -331,6 +363,62 @@ namespace NS_sprm { </xsl:text>
 </xsl:text>
 </xsl:template>
 
+<xsl:template match="UML:Model" mode='sprmidsed'>
+  <xsl:text>#!/bin/sh
+  cat $1 \&#xa;</xsl:text>
+  <xsl:for-each select=".//UML:Class[.//UML:Stereotype/@xmi.idref='ww8sprm']">
+    <xsl:variable name="sprmcode">
+      <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref = 'sprmcode']/UML:TaggedValue.dataValue"/>
+    </xsl:variable>
+    <xsl:variable name="sprmcodelower">
+      <xsl:value-of select="translate($sprmcode, 'ABCDEF', 'abcdef')"/>
+    </xsl:variable>
+    <xsl:variable name="sprmidname">
+      <xsl:text>NS_sprm::LN_</xsl:text>
+      <xsl:value-of select="substring-after(@name, 'sprm')"/>
+    </xsl:variable>
+    <xsl:text>| sed "s/</xsl:text>
+<xsl:value-of select="$sprmcode"/>
+<xsl:text>/</xsl:text>
+<xsl:value-of select="$sprmidname"/>
+<xsl:text>/g" \&#xa;</xsl:text>
+    <xsl:text>| sed "s/</xsl:text>
+<xsl:value-of select="$sprmcodelower"/>
+<xsl:text>/</xsl:text>
+<xsl:value-of select="$sprmidname"/>
+<xsl:text>/g" \&#xa;</xsl:text>
+  </xsl:for-each>
+  <xsl:text> | cat&#xa;</xsl:text>
+</xsl:template>
+
+<xsl:template match="UML:Model" mode="sprmidstoxml">
+  <xsl:text>
+void sprmidsToXML(::std::ostream &amp; out)
+{
+  </xsl:text>
+  <xsl:for-each select=".//UML:Class[.//UML:Stereotype/@xmi.idref='ww8sprm']">
+    <xsl:variable name="sprmcode">
+      <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref = 'sprmcode']/UML:TaggedValue.dataValue"/>
+    </xsl:variable>
+    <xsl:variable name="sprmcodelower">
+      <xsl:value-of select="translate($sprmcode, 'ABCDEF', 'abcdef')"/>
+    </xsl:variable>
+    <xsl:variable name="sprmidname">
+      <xsl:text>sprm:</xsl:text>
+      <xsl:value-of select="substring-after(@name, 'sprm')"/>
+    </xsl:variable>
+    <xsl:text>
+    out &lt;&lt; "&lt;theid name=\"</xsl:text>
+    <xsl:value-of select="$sprmidname"/>
+    <xsl:text>\"&gt;</xsl:text>
+    <xsl:value-of select="$sprmcodelower"/>
+    <xsl:text>&lt;/theid&gt;" &lt;&lt; endl;</xsl:text>
+  </xsl:for-each>
+  <xsl:text>
+}
+  </xsl:text>
+</xsl:template>
+
 <xsl:template match="UML:Model" mode='sprmreplace'>
   <xsl:for-each select=".//UML:Class[.//UML:Stereotype/@xmi.idref='ww8sprm']">
     <xsl:variable name="pattern">
@@ -367,4 +455,128 @@ sed "s/</xsl:text>
   <xsl:text>&#xa;</xsl:text>
 </xsl:template>
 
+<!-- Key all attributes with the same name and same value -->
+<xsl:key name="same-valued-tagged-data"
+         match="UML:TaggedValue.dataValue" use="." />
+
+<xsl:template name="analyzerdoctokidsattrs">
+  <xsl:text>
+  /* Attributes */</xsl:text>
+  <xsl:for-each select='.//UML:Attribute[@name!="reserved"]'>
+    <xsl:if test='count(.//UML:Stereotype[@xmi.idref="noqname"]) = 0'>
+      <xsl:for-each select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="attrid"]'>
+        <xsl:choose>
+          <xsl:when test='generate-id(UML:TaggedValue.dataValue) != generate-id(key("same-valued-tagged-data", UML:TaggedValue.dataValue)[1])'/>
+          <xsl:otherwise>
+            <xsl:text>
+    out &lt;&lt; "&lt;theid name=\"</xsl:text>
+    <xsl:value-of select=".//UML:TaggedValue.dataValue"/>
+    <xsl:text>\"&gt;</xsl:text>
+    <xsl:value-of select='10000 + position()'/>
+    <xsl:text>&lt;/theid&gt;" &lt;&lt; endl;</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="analyzerdoctokidsops">
+  <xsl:text>
+  /* Operations */</xsl:text>
+  <xsl:for-each select='.//UML:Operation[@name!="reserved"]'>
+    <xsl:if test='count(.//UML:Stereotype[@xmi.idref="noqname"]) = 0'>
+      <xsl:for-each select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="opid"]'>
+        <xsl:choose>
+          <xsl:when test='generate-id(UML:TaggedValue.dataValue) != generate-id(key("same-valued-tagged-data", UML:TaggedValue.dataValue)[1])'/>
+          <xsl:otherwise>
+            <xsl:text>
+    out &lt;&lt; "&lt;theid name=\"</xsl:text>
+    <xsl:value-of select=".//UML:TaggedValue.dataValue"/>
+    <xsl:text>\"&gt;</xsl:text>
+    <xsl:value-of select='20000 + position()'/>
+    <xsl:text>&lt;/theid&gt;" &lt;&lt; endl;</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
+    </xsl:if>
+  </xsl:for-each>
+</xsl:template>
+
+<xsl:template name="analyzerdoctokidsclasses">
+  <xsl:text>
+  /* clases */</xsl:text>
+  <xsl:for-each select='.//UML:Class[@name!="reserved"]'>
+    <xsl:for-each select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="classid"]'>
+      <xsl:choose>
+        <xsl:when test='.//UML:Stereotype[@xmi.idref="noqname"]'/>
+        <xsl:when test='generate-id(UML:TaggedValue.dataValue) != generate-id(key("same-valued-tagged-data", UML:TaggedValue.dataValue)[1])'/>
+        <xsl:otherwise>
+          <xsl:text>
+    out &lt;&lt; "&lt;theid name=\"</xsl:text>
+    <xsl:value-of select=".//UML:TaggedValue.dataValue"/>
+    <xsl:text>\"&gt;</xsl:text>
+    <xsl:value-of select='30000 + position()'/>
+    <xsl:text>&lt;/theid&gt;" &lt;&lt; endl;</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+  </xsl:for-each>
+  </xsl:for-each>
+</xsl:template>
+
+<xsl:template match="UML:Model" mode="analyzerdoctokids">
+  <xsl:text>
+void doctokidsToXML(::std::ostream &amp; out)
+{</xsl:text>
+<xsl:call-template name="analyzerdoctokidsattrs"/>
+<xsl:call-template name="analyzerdoctokidsops"/>
+<xsl:call-template name="analyzerdoctokidsclasses"/>
+<xsl:text>
+}
+  </xsl:text>
+</xsl:template>
+
+  <xsl:template name="licenseheader">
+    <xsl:text>
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: resourcetools.xsl,v $
+ *
+ *  $Revision: 1.7 $
+ *
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:54:23 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+/*      
+
+  THIS FILE IS GENERATED AUTOMATICALLY! DO NOT EDIT!
+
+*/
+&#xa;</xsl:text>
+  </xsl:template>
 </xsl:stylesheet>
