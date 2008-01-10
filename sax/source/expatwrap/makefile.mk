@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 12:56:43 $
+#   last change: $Author: obo $ $Date: 2008-01-10 12:51:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,17 +35,25 @@
 PRJ=..$/..
 
 PRJNAME=sax
-TARGET=expatwrap
-NO_BSYMBOLIC=TRUE
+TARGET=sax.uno
 ENABLE_EXCEPTIONS=TRUE
+
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :  settings.mk
-#-----------------------------------------------------------
+DLLPRE =
+
+.IF "$(SYSTEM_ZLIB)" == "YES"
+CFLAGS+=-DSYSTEM_ZLIB
+.ENDIF
+
 .IF "$(SYSTEM_EXPAT)" == "YES"
 CFLAGS+=-DSYSTEM_EXPAT
 .ELSE
 CFLAGS += -DXML_UNICODE
 .ENDIF
+
+#-----------------------------------------------------------
 
 SLOFILES =\
         $(SLO)$/xml2utf.obj\
@@ -53,7 +61,23 @@ SLOFILES =\
         $(SLO)$/sax_expat.obj \
         $(SLO)$/saxwriter.obj
 
+SHL1TARGET= $(TARGET)
+SHL1IMPLIB= i$(TARGET)
+
+SHL1STDLIBS= \
+        $(SALLIB)  \
+        $(CPPULIB) \
+        $(CPPUHELPERLIB)\
+        $(EXPAT3RDLIB)
+
+SHL1DEPN=
+SHL1VERSIONMAP=	$(SOLARENV)$/src$/component.map
+SHL1LIBS=		$(SLB)$/$(TARGET).lib
+SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=		$(SHL1TARGET)
+
 # --- Targets ------------------------------------------------------
+
 .INCLUDE :	target.mk
 
 
