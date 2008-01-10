@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:21:08 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:28:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -588,6 +588,9 @@ class SwDoc :
     // SO8pu8
     // mbOldPrinterMetrics                      def = FALSE, hidden
     //
+    // SO9
+    // #i24363# tab stops relative to indent
+    // mbTabRelativeToIndent                    def = TRUE, hidden
 
     bool mbParaSpaceMax                     : 1;
     bool mbParaSpaceMaxAtPages              : 1;
@@ -615,6 +618,7 @@ class SwDoc :
     bool mbClipAsCharacterAnchoredWriterFlyFrames   : 1;   // OD 2006-04-13 #b6402800#
     bool mbUnixForceZeroExtLeading                  : 1;   // FME 2006-10-09 #i60945#
     bool mbOldPrinterMetrics                        : 1;   // FME 2007-05-14 #147385#
+    bool mbTabRelativeToIndent;                            // #i24363# tab stops relative to indent
 
     // #i78591#
     sal_uInt32  n32DummyCompatabilityOptions1;
