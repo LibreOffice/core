@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-29 15:27:25 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:41:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,12 +46,14 @@
 #include <FontTable.hxx>
 #endif
 #ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
-#include <doctok/WW8ResourceModel.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #endif
 
 namespace com{ namespace sun { namespace star { namespace text{
     class XTextDocument;
 }}}}
+
+namespace writerfilter {
 namespace dmapper
 {
 
@@ -83,8 +85,8 @@ struct StyleSheetEntry
 };
 class DomainMapper;
 class WRITERFILTER_DLLPRIVATE StyleSheetTable :
-        public doctok::Properties,
-        public doctok::Table
+        public Properties,
+        public Table
 {
     StyleSheetTable_Impl   *m_pImpl;
 
@@ -93,23 +95,26 @@ public:
     virtual ~StyleSheetTable();
 
     // Properties
-    virtual void attribute(doctok::Id Name, doctok::Value & val);
-    virtual void sprm(doctok::Sprm & sprm);
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
 
     // Table
-    virtual void entry(int pos, doctok::Reference<Properties>::Pointer_t ref);
+    virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref);
 
     void ApplyStyleSheets(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument> xTextDocument, FontTablePtr rFontTable);
-    const StyleSheetEntry* FindStyleSheetByISTD(const ::rtl::OUString sIndex);
+    const StyleSheetEntry* FindStyleSheetByISTD(const ::rtl::OUString& sIndex);
     // returns the parent of the one with the given name - if empty the parent of the current style sheet is returned
     const StyleSheetEntry* FindParentStyleSheet(::rtl::OUString sBaseStyle);
 
-    ::rtl::OUString ConvertStyleName( const ::rtl::OUString& rWWName/*, bool bParagraphStyle*/ );
+    ::rtl::OUString ConvertStyleName( const ::rtl::OUString& rWWName, bool bExtendedSearch = false );
     ::rtl::OUString GetStyleIdFromIndex(const sal_uInt32 sti);
 private:
-    void resolveAttributeProperties(doctok::Value & val);
-    void resolveSprmProps(doctok::Sprm & sprm_);
+    void resolveAttributeProperties(Value & val);
+    void resolveSprmProps(Sprm & sprm_);
+    void applyDefaults(bool bParaProperties);
 };
-}
+typedef boost::shared_ptr< StyleSheetTable >    StyleSheetTablePtr;
+
+}}
 
 #endif //
