@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ruler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:06:52 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:48:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,6 +281,9 @@ public:
     BOOL IsActive() const { return bActive; }
 
     void ForceUpdate() { Update(); }
+
+    //#i24363# tab stops relative to indent
+    void SetTabsRelativeToIndent( BOOL bRel = TRUE );
 };
 
 #endif
