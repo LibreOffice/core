@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkuno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:46:55 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@
 #include "unoguard.hxx"
 #include "hints.hxx"
 #include "unonames.hxx"
+#include "rangeseq.hxx"
 
 using namespace com::sun::star;
 
@@ -1189,6 +1190,77 @@ void SAL_CALL ScDDELinkObj::removeRefreshListener(
     }
 }
 
+// XDDELinkResults
+
+uno::Sequence< uno::Sequence< uno::Any > > ScDDELinkObj::getResults(  )
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    uno::Sequence< uno::Sequence< uno::Any > > aReturn;
+    bool bSuccess = false;
+
+    if ( pDocShell )
+    {
+        ScDocument* pDoc = pDocShell->GetDocument();
+        if ( pDoc )
+        {
+            USHORT nPos = 0;
+            if ( pDoc->FindDdeLink( aAppl, aTopic, aItem, SC_DDE_IGNOREMODE, nPos ) )
+            {
+                const ScMatrix* pMatrix = pDoc->GetDdeLinkResultMatrix( nPos );
+                if ( pMatrix )
+                {
+                    uno::Any aAny;
+                    if ( ScRangeToSequence::FillMixedArray( aAny, pMatrix, true ) )
+                    {
+                        aAny >>= aReturn;
+                    }
+                }
+                bSuccess = true;
+            }
+        }
+    }
+
+    if ( !bSuccess )
+    {
+        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+            "ScDDELinkObj::getResults: failed to get results!" ) ),
+            uno::Reference< uno::XInterface >() );
+    }
+
+    return aReturn;
+}
+
+void ScDDELinkObj::setResults( const uno::Sequence< uno::Sequence< uno::Any > >& aResults )
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    bool bSuccess = false;
+
+    if ( pDocShell )
+    {
+        ScDocument* pDoc = pDocShell->GetDocument();
+        if ( pDoc )
+        {
+            USHORT nPos = 0;
+            if ( pDoc->FindDdeLink( aAppl, aTopic, aItem, SC_DDE_IGNOREMODE, nPos ) )
+            {
+                uno::Any aAny;
+                aAny <<= aResults;
+                ScMatrixRef xMatrix = ScSequenceToMatrix::CreateMixedMatrix( aAny );
+                bSuccess = pDoc->SetDdeLinkResultMatrix( nPos, xMatrix );
+            }
+        }
+    }
+
+    if ( !bSuccess )
+    {
+        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+            "ScDDELinkObj::setResults: failed to set results!" ) ),
+            uno::Reference< uno::XInterface >() );
+    }
+}
+
 void ScDDELinkObj::Refreshed_Impl()
 {
     lang::EventObject aEvent;
@@ -1356,8 +1428,61 @@ sal_Bool SAL_CALL ScDDELinksObj::hasByName( const rtl::OUString& aName )
     return FALSE;
 }
 
+// XDDELinks
+
+uno::Reference< sheet::XDDELink > ScDDELinksObj::addDDELink(
+    const ::rtl::OUString& aApplication, const ::rtl::OUString& aTopic,
+    const ::rtl::OUString& aItem, ::com::sun::star::sheet::DDELinkMode nMode )
+    throw (uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    uno::Reference< sheet::XDDELink > xLink;
+
+    if ( pDocShell )
+    {
+        ScDocument* pDoc = pDocShell->GetDocument();
+        if ( pDoc )
+        {
+            BYTE nMod = SC_DDE_DEFAULT;
+            switch ( nMode )
+            {
+                case sheet::DDELinkMode_DEFAULT:
+                    {
+                        nMod = SC_DDE_DEFAULT;
+                    }
+                    break;
+                case sheet::DDELinkMode_ENGLISH:
+                    {
+                        nMod = SC_DDE_ENGLISH;
+                    }
+                    break;
+                case sheet::DDELinkMode_TEXT:
+                    {
+                        nMod = SC_DDE_TEXT;
+                    }
+                    break;
+                default:
+                    {
+                    }
+                    break;
+            }
+
+            if ( pDoc->CreateDdeLink( aApplication, aTopic, aItem, nMod ) )
+            {
+                const ::rtl::OUString aName( lcl_BuildDDEName( aApplication, aTopic, aItem ) );
+                xLink.set( GetObjectByName_Impl( aName ) );
+            }
+        }
+    }
+
+    if ( !xLink.is() )
+    {
+        throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+            "ScDDELinksObj::addDDELink: cannot add DDE link!" ) ),
+            uno::Reference< uno::XInterface >() );
+    }
+
+    return xLink;
+}
+
 //------------------------------------------------------------------------
-
-
-
-
