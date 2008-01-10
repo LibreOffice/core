@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unosett.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:27:54 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:30:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1984,7 +1984,20 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     OUString uTmp;
                     pData->aVal >>= uTmp;
                     String sBulletFontName(uTmp);
-                    sNewBulletFontNames[(sal_uInt16)nIndex] = sBulletFontName;
+                    SwDocShell* pLclDocShell = pDocShell ? pDocShell : pDoc ? pDoc->GetDocShell() : 0;
+                    if( sBulletFontName.Len() && pLclDocShell )
+                    {
+                        const SvxFontListItem* pFontListItem =
+                                (const SvxFontListItem* )pLclDocShell
+                                                    ->GetItem( SID_ATTR_CHAR_FONTLIST );
+                        const FontList*  pList = pFontListItem->GetFontList();
+                        FontInfo aInfo = pList->Get(
+                            sBulletFontName, WEIGHT_NORMAL, ITALIC_NONE);
+                        Font aFont(aInfo);
+                        aFmt.SetBulletFont(&aFont);
+                    }
+                    else
+                        sNewBulletFontNames[(sal_uInt16)nIndex] = sBulletFontName;
                 }
                 break;
                 case 13: //"BulletChar",
