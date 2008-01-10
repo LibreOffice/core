@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:39:23 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:31:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@
 #ifndef _UNOMAP_HXX
 #include <unomap.hxx>
 #endif
+#include <unoprnms.hxx>
 #ifndef _UNDOBJ_HXX
 #include <undobj.hxx>
 #endif
@@ -122,7 +123,9 @@
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
 #endif
+#include <com/sun/star/text/TableColumnSeparator.hpp>
 #include <memory>
+#include <stdlib.h>
 
 using namespace ::com::sun::star;
 using namespace ::rtl;
@@ -1746,6 +1749,25 @@ uno::Reference< text::XTextContent > SwXText::convertToTextFrame(
     Move previously imported paragraphs into a new text table.
 
   -----------------------------------------------------------------------*/
+struct VerticallyMergedCell
+{
+    std::vector<uno::Reference< beans::XPropertySet > > aCells;
+    sal_Int32                                           nLeftPosition;
+    bool                                                bOpen;
+
+    VerticallyMergedCell( uno::Reference< beans::XPropertySet >&   rxCell, sal_Int32 nLeft ) :
+        nLeftPosition( nLeft ),
+        bOpen( true )
+        {
+            aCells.push_back( rxCell );
+        }
+};
+#define COL_POS_FUZZY 2
+bool lcl_SimilarPosition( sal_Int32 nPos1, sal_Int32 nPos2 )
+{
+    return abs( nPos1 - nPos2 ) < COL_POS_FUZZY;
+}
+
 uno::Reference< text::XTextTable > SwXText::convertToTable(
     const uno::Sequence< uno::Sequence< uno::Sequence< uno::Reference< text::XTextRange > > > >& rTableRanges,
    const uno::Sequence< uno::Sequence< uno::Sequence< beans::PropertyValue > > >& rCellProperties,
@@ -1898,6 +1920,10 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
         throw lang::IllegalArgumentException();
     }
 
+    typedef uno::Sequence< text::TableColumnSeparator > TableColumnSeparators;
+    std::vector< TableColumnSeparators > aRowSeparators(rRowProperties.getLength());
+    std::vector<VerticallyMergedCell>       aMergedCells;
+
     const SwTable* pTable = pDoc->TextToTable( aTableNodes );
     SwXTextTable* pTextTable = 0;
     uno::Reference< text::XTextTable > xRet = pTextTable = new SwXTextTable( *pTable->GetFrmFmt() );
@@ -1925,7 +1951,17 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
             xRows->getByIndex( nRow ) >>= xRow;
             const beans::PropertyValue* pProperties = pRowProperties[nRow].getConstArray();
             for( nProperty = 0; nProperty < pRowProperties[nRow].getLength(); ++nProperty)
+            {
+                if( pProperties[ nProperty ].Name.equalsAsciiL(
+                                RTL_CONSTASCII_STRINGPARAM ( "TableColumnSeparators" )))
+                {
+                    //add the separators to access the cell's positions for vertical merging later
+                    TableColumnSeparators aSeparators;
+                    pProperties[ nProperty ].Value >>= aSeparators;
+                    aRowSeparators[nRow] = aSeparators;
+                }
                 xRow->setPropertyValue( pProperties[ nProperty ].Name, pProperties[ nProperty ].Value );
+            }
         }
 
 #ifdef DEBUG
@@ -1968,8 +2004,97 @@ uno::Reference< text::XTextTable > SwXText::convertToTable(
                 uno::Reference< beans::XPropertySet > xCell( pTextTable->getCellByPosition(nCell, nRow), uno::UNO_QUERY );
                 for( nProperty = 0; nProperty < nCellProperties; ++nProperty)
                 {
-                    xCell->setPropertyValue(aCellProperties[nProperty].Name, aCellProperties[nProperty].Value);
+                    if(aCellProperties[nProperty].Name.equalsAsciiL(
+                                RTL_CONSTASCII_STRINGPARAM ( "VerticalMerge")))
+                    {
+                        //determine left border position
+                        //add the cell to a queue of merged cells
+                        //
+                        sal_Bool bMerge = sal_False;
+                        aCellProperties[nProperty].Value >>= bMerge;
+                        sal_Int32 nLeftPos = -1;
+                        if( !nCell )
+                            nLeftPos = 0;
+                        else if( aRowSeparators[nRow].getLength() >= nCell )
+                        {
+                            const text::TableColumnSeparator* pSeparators = aRowSeparators[nRow].getConstArray();
+                            nLeftPos = pSeparators[nCell - 1].Position;
+                        }
+                        if( bMerge )
+                        {
+                            // 'close' all the cell with the same left position
+                            // if separate vertical merges in the same column exist
+                            if( aMergedCells.size() )
+                            {
+                                std::vector<VerticallyMergedCell>::iterator aMergedIter = aMergedCells.begin();
+                                while( aMergedIter != aMergedCells.end())
+                                {
+                                    if( lcl_SimilarPosition( aMergedIter->nLeftPosition, nLeftPos) )
+                                    {
+                                        aMergedIter->bOpen = false;
+                                    }
+                                    ++aMergedIter;
+                                }
+                            }
+                            //add the new group of merged cells
+                            aMergedCells.push_back(VerticallyMergedCell(xCell, nLeftPos ));
+                        }
+                        else
+                        {
+                            //find the cell that
+                            DBG_ASSERT(aMergedCells.size(), "the first merged cell is missing")
+                            if( aMergedCells.size() )
+                            {
+                                std::vector<VerticallyMergedCell>::iterator aMergedIter = aMergedCells.begin();
+#if OSL_DEBUG_LEVEL > 1
+                                bool bDbgFound = false;
+#endif
+                                while( aMergedIter != aMergedCells.end())
+                                {
+                                    if( aMergedIter->bOpen &&
+                                        lcl_SimilarPosition( aMergedIter->nLeftPosition, nLeftPos) )
+                                    {
+                                        aMergedIter->aCells.push_back( xCell );
+#if OSL_DEBUG_LEVEL > 1
+                                        bDbgFound = true;
+#endif
+                                    }
+                                    ++aMergedIter;
+                                }
+#if OSL_DEBUG_LEVEL > 1
+                                DBG_ASSERT( bDbgFound, "couldn't find first vertically merged cell" )
+#endif
+                            }
+                        }
+                    }
+                    else
+                        xCell->setPropertyValue(aCellProperties[nProperty].Name, aCellProperties[nProperty].Value);
                 }
+            }
+        }
+        //now that the cell properties are set the vertical merge values have to be applied
+        if( aMergedCells.size() )
+        {
+            std::vector<VerticallyMergedCell>::iterator aMergedIter = aMergedCells.begin();
+            while( aMergedIter != aMergedCells.end())
+            {
+                sal_Int32 nCellCount = (sal_Int32)aMergedIter->aCells.size();
+                std::vector<uno::Reference< beans::XPropertySet > >::iterator aCellIter = aMergedIter->aCells.begin();
+                bool bFirstCell = true;
+                //the first of the cells get's the number of cells set as RowSpan
+                //the others get the inverted number of remaining merged cells (3,-2,-1)
+                while( aCellIter != aMergedIter->aCells.end() )
+                {
+                    (*aCellIter)->setPropertyValue(C2U(SW_PROP_NAME_STR(UNO_NAME_ROW_SPAN)), uno::makeAny( nCellCount ));
+                    if( bFirstCell )
+                    {
+                        nCellCount *= -1;
+                        bFirstCell = false;
+                    }
+                    ++nCellCount;
+                    ++aCellIter;
+                }
+                ++aMergedIter;
             }
         }
     }
