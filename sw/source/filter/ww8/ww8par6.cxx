@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.177 $
+ *  $Revision: 1.178 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 17:31:48 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:32:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3935,52 +3935,6 @@ void SwWW8ImplReader::Read_NoLineNumb(USHORT , const BYTE* pData, short nLen)
     SwFmtLineNumber aLN;
     aLN.SetCountLines( pData && (0 == *pData) );
     NewAttr( aLN );
-}
-
-void SwWW8ImplReader::AdjustStyleTabStops(long nLeft, SwWW8StyInf &rWWSty)
-{
-    const SfxPoolItem* pTabs=0;
-    bool bOnMarginStyle(false);
-    if (rWWSty.pFmt)
-    {
-        bOnMarginStyle = rWWSty.pFmt->GetAttrSet().GetItemState(
-                RES_PARATR_TABSTOP, false, &pTabs ) == SFX_ITEM_SET;
-    }
-
-    if (pTabs)
-    {
-        SvxTabStopItem aTStop(*(const SvxTabStopItem*)pTabs);
-        long nOldLeft = 0;
-
-        const SwTxtFmtColl* pSty = 0;
-        USHORT nTabBase = rWWSty.nBase;
-        if (nTabBase < nColls)              // Based On
-            pSty = (const SwTxtFmtColl*)pCollA[nTabBase].pFmt;
-
-        while (pSty && !bOnMarginStyle)
-        {
-            bOnMarginStyle = pSty->GetAttrSet().GetItemState(RES_PARATR_TABSTOP,
-                false, &pTabs ) == SFX_ITEM_SET;
-            if (bOnMarginStyle)
-            {
-                const SvxLRSpaceItem &rLR =
-                    ItemGet<SvxLRSpaceItem>(*pSty, RES_LR_SPACE);
-                nOldLeft = rLR.GetTxtLeft();
-            }
-            else
-            {
-                // If based on another
-                if( nTabBase < nColls &&
-                    (nTabBase = pCollA[nTabBase].nBase) < nColls )
-                    pSty = (const SwTxtFmtColl*)pCollA[nTabBase].pFmt;
-                else
-                    pSty = 0;                           // gib die Suche auf
-            }
-        }
-
-        if (sw::util::AdjustTabs(aTStop, nOldLeft, nLeft))
-            rWWSty.pFmt->SetAttr(aTStop);
-    }
 }
 
 // Sprm 16, 17
