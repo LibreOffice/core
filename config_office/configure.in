@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-12-12 15:36:54 $
+dnl * Date: $Date: 2008-01-10 13:05:06 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.237 $ )
+AC_REVISION( $Revision: 1.238 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2973,6 +2973,14 @@ else
    EPM=NO
 fi
 AC_SUBST(EPM)
+
+dnl ===================================================================
+dnl Check for gperf
+dnl ===================================================================
+AC_PATH_PROG(GPERF, gperf)
+if test -z "$GPERF"; then
+	AC_MSG_ERROR([gperf not found but needed. Install it.])
+fi
 
 dnl ===================================================================
 dnl Check for building ODK
