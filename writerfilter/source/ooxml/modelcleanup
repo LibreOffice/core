@@ -1,4 +1,3 @@
 #!/bin/sh
-xalan -indent 2 -xml -xsl modelcleanup.xsl -in model.xml > model.xml.tmp && \
-xmllint --format model.xml.tmp >model.xml && \
-rm -f model.xml.tmp
+xsltproc modelcleanup.xsl model.xml | xmllint --format - > model.xml.tmp && \
+rm model.xml.tmp
