@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2007-06-27 08:54:25 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:39:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,10 @@
 #ifndef INCLUDED_RESOURCESIDS
 #include <doctok/resourceids.hxx>
 #endif
+#include <doctok/sprmids.hxx>
+#include <ooxml/resourceids.hxx>
 #ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
-#include <doctok/WW8ResourceModel.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
 #include <com/sun/star/container/XIndexReplace.hpp>
@@ -62,11 +64,83 @@
 #include <vector>
 
 #define NUMBERING_MAX_LEVELS    10
+namespace writerfilter {
 namespace dmapper
 {
-using namespace writerfilter;
 using namespace com::sun::star;
+/*-- 12.11.2007 11:38:57---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+class WRITERFILTER_DLLPRIVATE Numbering_numHdl : public Properties
+{
+    ListTable&      m_rListTable;
+    sal_Int32       m_nAbstractNumId;
+    ::rtl::OUString m_sNumId;
+public:
+    Numbering_numHdl( ListTable& rListTable ) :
+        m_rListTable( rListTable ),
+        m_nAbstractNumId( -1 )
+        {}
+    virtual ~Numbering_numHdl();
+
+    // Properties
+    virtual void attribute(Id Name, Value & val);
+    virtual void sprm(Sprm & sprm);
+
+    sal_Int32       GetAbstractNumId() const { return m_nAbstractNumId;}
+    sal_Int32       GetNumId() const { return m_sNumId.toInt32(); }
+
+};
+typedef boost::shared_ptr< Numbering_numHdl >          Numbering_numHdlPtr;
+/*-- 12.11.2007 11:42:04---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+Numbering_numHdl::~Numbering_numHdl()
+{
+}
+/*-- 12.11.2007 11:42:22---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void Numbering_numHdl::attribute(Id nName, Value & rVal)
+{
+    switch( nName )
+    {
+        case NS_ooxml::LN_CT_Num_numId:
+            m_sNumId = rVal.getString();
+        break;
+        case NS_ooxml::LN_CT_NumLvl_ilvl :
+            m_rListTable.setOverwriteLevel(m_nAbstractNumId, rVal.getInt());
+        break;
+        default:;
+    }
+}
+/*-- 12.11.2007 11:42:22---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void Numbering_numHdl::sprm(Sprm & rSprm)
+{
+    sal_uInt32 nSprmId = rSprm.getId();
+    switch( nSprmId )
+    {
+        case NS_ooxml::LN_CT_Num_abstractNumId:
+        {
+            m_nAbstractNumId = rSprm.getValue()->getInt();
+        }
+        break;
+        case NS_ooxml::LN_CT_Num_lvlOverride:
+        {
+            //contains a list override
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+            if(pProperties.get())
+                pProperties->resolve(*this);
+            m_rListTable.resetOverwrite();
+        }
+        case NS_ooxml::LN_CT_NumLvl_lvl:
+            m_rListTable.sprm( rSprm );
+        break;
+        default:;
+    }
+}
 /*-- 26.06.2006 13:14:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -75,21 +149,86 @@ sal_Int16 lcl_ConvertNumberingType(sal_Int32 nNFC)
     sal_Int16 nRet;
     switch(nNFC)
     {
+        case NS_ooxml::LN_Value_ST_NumberFormat_decimal:
         case 0: nRet = style::NumberingType::ARABIC;                break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_upperRoman:
         case 1: nRet = style::NumberingType::ROMAN_UPPER;           break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_lowerRoman:
         case 2: nRet = style::NumberingType::ROMAN_LOWER;           break;
         case 3: nRet = style::NumberingType::CHARS_UPPER_LETTER_N;  break;
         case 4: nRet = style::NumberingType::CHARS_LOWER_LETTER_N;  break;
         case 5: nRet = style::NumberingType::ARABIC;                break;//ORDINAL
+        case NS_ooxml::LN_Value_ST_NumberFormat_bullet:
         case 23:
         case 25:
             nRet = style::NumberingType::CHAR_SPECIAL;
         break;
         case 255: nRet = style::NumberingType::NUMBER_NONE; break;
+        case NS_ooxml::LN_Value_ST_NumberFormat_upperLetter:
+            nRet = style::NumberingType::CHARS_UPPER_LETTER;
+        break;
+        case  NS_ooxml::LN_Value_ST_NumberFormat_lowerLetter:
+            nRet = style::NumberingType::CHARS_LOWER_LETTER;
+        break;
         default: nRet = style::NumberingType::ARABIC;
     }
     return nRet;
 }
+/*  TODO: Lots of additional values are available - some are supported in the I18 framework
+    NS_ooxml::LN_Value_ST_NumberFormat_ordinal = 91682;
+    NS_ooxml::LN_Value_ST_NumberFormat_cardinalText = 91683;
+    NS_ooxml::LN_Value_ST_NumberFormat_ordinalText = 91684;
+    NS_ooxml::LN_Value_ST_NumberFormat_hex = 91685;
+    NS_ooxml::LN_Value_ST_NumberFormat_chicago = 91686;
+    NS_ooxml::LN_Value_ST_NumberFormat_ideographDigital = 91687;
+    NS_ooxml::LN_Value_ST_NumberFormat_japaneseCounting = 91688;
+    NS_ooxml::LN_Value_ST_NumberFormat_aiueo = 91689;
+    NS_ooxml::LN_Value_ST_NumberFormat_iroha = 91690;
+    NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth = 91691;
+    NS_ooxml::LN_Value_ST_NumberFormat_decimalHalfWidth = 91692;
+    NS_ooxml::LN_Value_ST_NumberFormat_japaneseLegal = 91693;
+    NS_ooxml::LN_Value_ST_NumberFormat_japaneseDigitalTenThousand = 91694;
+    NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedCircle = 91695;
+    NS_ooxml::LN_Value_ST_NumberFormat_decimalFullWidth2 = 91696;
+    NS_ooxml::LN_Value_ST_NumberFormat_aiueoFullWidth = 91697;
+    NS_ooxml::LN_Value_ST_NumberFormat_irohaFullWidth = 91698;
+    NS_ooxml::LN_Value_ST_NumberFormat_decimalZero = 91699;
+    NS_ooxml::LN_Value_ST_NumberFormat_ganada = 91701;
+    NS_ooxml::LN_Value_ST_NumberFormat_chosung = 91702;
+    NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedFullstop = 91703;
+    NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedParen = 91704;
+    NS_ooxml::LN_Value_ST_NumberFormat_decimalEnclosedCircleChinese = 91705;
+    NS_ooxml::LN_Value_ST_NumberFormat_ideographEnclosedCircle = 91706;
+    NS_ooxml::LN_Value_ST_NumberFormat_ideographTraditional = 91707;
+    NS_ooxml::LN_Value_ST_NumberFormat_ideographZodiac = 91708;
+    NS_ooxml::LN_Value_ST_NumberFormat_ideographZodiacTraditional = 91709;
+    NS_ooxml::LN_Value_ST_NumberFormat_taiwaneseCounting = 91710;
+    NS_ooxml::LN_Value_ST_NumberFormat_ideographLegalTraditional = 91711;
+    NS_ooxml::LN_Value_ST_NumberFormat_taiwaneseCountingThousand = 91712;
+    NS_ooxml::LN_Value_ST_NumberFormat_taiwaneseDigital = 91713;
+    NS_ooxml::LN_Value_ST_NumberFormat_chineseCounting = 91714;
+    NS_ooxml::LN_Value_ST_NumberFormat_chineseLegalSimplified = 91715;
+    NS_ooxml::LN_Value_ST_NumberFormat_chineseCountingThousand = 91716;
+    NS_ooxml::LN_Value_ST_NumberFormat_koreanDigital = 91717;
+    NS_ooxml::LN_Value_ST_NumberFormat_koreanCounting = 91718;
+    NS_ooxml::LN_Value_ST_NumberFormat_koreanLegal = 91719;
+    NS_ooxml::LN_Value_ST_NumberFormat_koreanDigital2 = 91720;
+    NS_ooxml::LN_Value_ST_NumberFormat_vietnameseCounting = 91721;
+    NS_ooxml::LN_Value_ST_NumberFormat_russianLower = 91722;
+    NS_ooxml::LN_Value_ST_NumberFormat_russianUpper = 91723;
+    NS_ooxml::LN_Value_ST_NumberFormat_none = 91724;
+    NS_ooxml::LN_Value_ST_NumberFormat_numberInDash = 91725;
+    NS_ooxml::LN_Value_ST_NumberFormat_hebrew1 = 91726;
+    NS_ooxml::LN_Value_ST_NumberFormat_hebrew2 = 91727;
+    NS_ooxml::LN_Value_ST_NumberFormat_arabicAlpha = 91728;
+    NS_ooxml::LN_Value_ST_NumberFormat_arabicAbjad = 91729;
+    NS_ooxml::LN_Value_ST_NumberFormat_hindiVowels = 91730;
+    NS_ooxml::LN_Value_ST_NumberFormat_hindiConsonants = 91731;
+    NS_ooxml::LN_Value_ST_NumberFormat_hindiNumbers = 91732;
+    NS_ooxml::LN_Value_ST_NumberFormat_hindiCounting = 91733;
+    NS_ooxml::LN_Value_ST_NumberFormat_thaiLetters = 91734;
+    NS_ooxml::LN_Value_ST_NumberFormat_thaiNumbers = 91735;
+    NS_ooxml::LN_Value_ST_NumberFormat_thaiCounting = 91736;*/
 /*-- 26.06.2006 13:14:29---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -107,6 +246,8 @@ class ListPropertyMap : public PropertyMap
     sal_Int32                                       nFWord6;         //LN_FWORD6
     ::rtl::OUString                                 sRGBXchNums;     //LN_RGBXCHNUMS
     sal_Int32                                       nXChFollow;      //LN_IXCHFOLLOW
+    ::rtl::OUString                                 sBulletChar;
+    ::rtl::OUString                                 sBulletFont;
     PropertyMapPtr                                  pProperties;    //LN_LISTLEVEL
 public:
     ListPropertyMap() :
@@ -147,11 +288,18 @@ uno::Sequence< beans::PropertyValue >  ListPropertyMap::GetPropertyValues()
     if( nIStartAt >= 0)
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_START_WITH, (sal_Int16)nIStartAt) );
 
+    sal_Int16 nNumberFormat = lcl_ConvertNumberingType(nNFC);
     if( nNFC >= 0)
-        aNumberingProperties.push_back( MAKE_PROPVAL(PROP_NUMBERING_TYPE, lcl_ConvertNumberingType(nNFC)));
+        aNumberingProperties.push_back( MAKE_PROPVAL(PROP_NUMBERING_TYPE, nNumberFormat ));
 
     if( nJC >= 0 && nJC <= sal::static_int_cast<sal_Int32>(sizeof(aWWToUnoAdjust) / sizeof(sal_Int16)) )
         aNumberingProperties.push_back( MAKE_PROPVAL(PROP_ADJUST, aWWToUnoAdjust[nJC]));
+
+    // todo: this is not the bullet char
+    if( nNumberFormat == style::NumberingType::CHAR_SPECIAL && sBulletChar.getLength() )
+        aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_CHAR, sBulletChar.copy(0,1)));
+    if( sBulletFont.getLength())
+        aNumberingProperties.push_back( MAKE_PROPVAL(PROP_BULLET_FONT_NAME, sBulletFont));
 
     //TODO: handling of nFLegal?
     //TODO: nFNoRestart lower levels do not restart when higher levels are incremented, like:
@@ -203,6 +351,7 @@ struct ListEntry
     sal_Int32                                       nSimpleList;    //LN_FSIMPLELIST
     sal_Int32                                       nRestart;       //LN_FRESTARTHDN
     sal_Int32                                       nUnsigned;      //LN_UNSIGNED26_2
+    sal_Int32                                       nAbstractNumId;
 
     ::std::vector< ListPropertyMapPtr >             aLevelProperties; //properties of each level
 
@@ -222,6 +371,7 @@ ListEntry::ListEntry() :
     ,nSimpleList(-1)
     ,nRestart(-1)
     ,nUnsigned(-1)
+    ,nAbstractNumId(-1)
 {
 }
 /*-- 23.06.2006 13:58:51---------------------------------------------------
@@ -258,7 +408,9 @@ void ListTable_Impl::AddLevel()
 ListTable::ListTable(
         DomainMapper& rDMapper,
         const uno::Reference< lang::XMultiServiceFactory > xFactory) :
-    m_pImpl( new ListTable_Impl(rDMapper, xFactory) )
+    m_pImpl( new ListTable_Impl(rDMapper, xFactory) ),
+    m_nOverwriteListId( -1 ),
+    m_nOverwriteLevel( -1 )
 {
 }
 /*-- 23.06.2006 12:04:33---------------------------------------------------
@@ -271,62 +423,61 @@ ListTable::~ListTable()
 /*-- 23.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void ListTable::attribute(doctok::Id Name, doctok::Value & val)
+void ListTable::attribute(Id nName, Value & rVal)
 {
     OSL_ENSURE( m_pImpl->m_pCurrentEntry.get(), "current entry has to be set here");
     if(!m_pImpl->m_pCurrentEntry.get())
         return ;
-    int nIntValue = val.getInt();
-    switch(Name)
+    int nIntValue = rVal.getInt();
+    /* WRITERFILTERSTATUS: table: ListTable_attributedata */
+    switch(nName)
     {
-//        case NS_rtf::LN_ISTD: break;
-        case NS_rtf::LN_ISTARTAT:
-        case NS_rtf::LN_NFC:
-        case NS_rtf::LN_JC:
-        case NS_rtf::LN_FLEGAL:
-        case NS_rtf::LN_FNORESTART:
-        case NS_rtf::LN_FPREV:
-        case NS_rtf::LN_FPREVSPACE:
-        case NS_rtf::LN_FWORD6:
+        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
         case NS_rtf::LN_RGBXCHNUMS:
-        case NS_rtf::LN_IXCHFOLLOW:
             if(m_pImpl->m_pCurrentEntry->pCurrentProperties.get())
-            switch(Name)
-            {
-                case NS_rtf::LN_ISTARTAT:
-                        m_pImpl->m_pCurrentEntry->pCurrentProperties->nIStartAt = nIntValue;
-                break;
-                case NS_rtf::LN_NFC:
-                    m_pImpl->m_pCurrentEntry->pCurrentProperties->nNFC = nIntValue;
-                break;
-                case NS_rtf::LN_JC:
-                    m_pImpl->m_pCurrentEntry->pCurrentProperties->nJC = nIntValue;
-                break;
-                case NS_rtf::LN_FLEGAL:
-                    m_pImpl->m_pCurrentEntry->pCurrentProperties->nFLegal = nIntValue;
-                break;
-                case NS_rtf::LN_FNORESTART:
-                    m_pImpl->m_pCurrentEntry->pCurrentProperties->nFNoRestart = nIntValue;
-                break;
-                case NS_rtf::LN_FPREV:
-                    m_pImpl->m_pCurrentEntry->pCurrentProperties->nFPrev = nIntValue;
-                break;
-                case NS_rtf::LN_FPREVSPACE:
-                    m_pImpl->m_pCurrentEntry->pCurrentProperties->nFPrevSpace = nIntValue;
-                break;
-                case NS_rtf::LN_FWORD6:
-                    m_pImpl->m_pCurrentEntry->pCurrentProperties->nFWord6 = nIntValue;
-                break;
-                case NS_rtf::LN_RGBXCHNUMS:
-                    m_pImpl->m_pCurrentEntry->pCurrentProperties->sRGBXchNums += val.getString();
-                break;
-                case NS_rtf::LN_IXCHFOLLOW:
-                    m_pImpl->m_pCurrentEntry->pCurrentProperties->nXChFollow = nIntValue;
-                break;
-                default:
-                    OSL_ASSERT("this line should never be reached");
-            }
+                m_pImpl->m_pCurrentEntry->pCurrentProperties->sRGBXchNums += rVal.getString();
         break;
+        /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_LevelText_val:
+        {
+            //this strings contains the definition of the level
+            //the level number is marked as %n
+            //these numbers can be mixed randomly toghether with seperators pre- and suffixes
+            //the Writer supports only a number of upper levels to show, separators is always a dot
+            //and each level can have a prefix and a suffix
+            if(m_pImpl->m_pCurrentEntry->pCurrentProperties.get())
+            {
+                m_pImpl->m_pCurrentEntry->pCurrentProperties->sBulletChar = rVal.getString();
+            }
+        }
+        break;
+        /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_Fonts_ascii :
+            if(m_pImpl->m_pCurrentEntry->pCurrentProperties.get())
+                m_pImpl->m_pCurrentEntry->pCurrentProperties->sBulletFont += rVal.getString();
+        break;
+//        case NS_rtf::LN_ISTD: break;
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_rtf::LN_ISTARTAT:
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_rtf::LN_NFC:
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_rtf::LN_JC:
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_rtf::LN_FLEGAL:
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_rtf::LN_FNORESTART:
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_rtf::LN_FPREV:
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_rtf::LN_FPREVSPACE:
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_rtf::LN_FWORD6:
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+        case NS_rtf::LN_IXCHFOLLOW:
+            ApplyLevelValues( nName, nIntValue);
+        break;
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED5_7:
             //unused
         break;
@@ -334,21 +485,27 @@ void ListTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_DXAINDENT: break;
 //        case NS_rtf::LN_CBGRPPRLCHPX: break;
 //        case NS_rtf::LN_CBGRPPRLPAPX: break;
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_LSID:
             m_pImpl->m_pCurrentEntry->nListId = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_TPLC:
             m_pImpl->m_pCurrentEntry->nTPLC = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_RGISTD:
-            m_pImpl->m_pCurrentEntry->sRGISTD += val.getString();
+            m_pImpl->m_pCurrentEntry->sRGISTD += rVal.getString();
         break;
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_FSIMPLELIST:
             m_pImpl->m_pCurrentEntry->nSimpleList = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_FRESTARTHDN:
             m_pImpl->m_pCurrentEntry->nRestart = nIntValue;
         break;
+        /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
         case NS_rtf::LN_UNSIGNED26_2:
             m_pImpl->m_pCurrentEntry->nUnsigned = nIntValue;
         break;
@@ -721,13 +878,14 @@ void ListTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_endnote: break;
 //        case NS_rtf::LN_BOOKMARKNAME: break;
 
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_LISTLEVEL:
         {
             //add a new level to the level vector and make it the current one
             m_pImpl->AddLevel();
 
-            doctok::Reference<Properties>::Pointer_t pProperties;
-            if((pProperties = val.getProperties()).get())
+            writerfilter::Reference<Properties>::Pointer_t pProperties;
+            if((pProperties = rVal.getProperties()).get())
                 pProperties->resolve(*this);
         }
         break;
@@ -753,10 +911,18 @@ void ListTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_LFOTABLE: break;
 //        case NS_rtf::LN_FONTTABLE: break;
 //        case NS_rtf::LN_STYLESHEET: break;
+        /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+        case NS_ooxml::LN_CT_AbstractNum_abstractNumId:
+        {
+            sal_Int32 nVal = rVal.getString().toInt32();
+            m_pImpl->m_pCurrentEntry->nAbstractNumId = nVal;
+            m_pImpl->m_pCurrentEntry->nListId = nVal;
+        }
+        break;
         default:
         {
             //---->debug
-            int nVal = val.getInt();
+            int nVal = rVal.getInt();
             ++nVal;
             //<----debug
         }
@@ -765,27 +931,176 @@ void ListTable::attribute(doctok::Id Name, doctok::Value & val)
 /*-- 23.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void ListTable::sprm(doctok::Sprm & sprm_)
+void ListTable::sprm(Sprm & rSprm)
 {
     //fill the attributes of the style sheet
-    if(m_pImpl->m_pCurrentEntry.get())
+    sal_uInt32 nSprmId = rSprm.getId();
+    if( m_pImpl->m_pCurrentEntry.get() ||
+        nSprmId == NS_ooxml::LN_CT_Numbering_abstractNum ||
+        nSprmId == NS_ooxml::LN_CT_Numbering_num )
     {
-        m_pImpl->m_rDMapper.sprm( sprm_,
-                m_pImpl->m_pCurrentEntry->pCurrentProperties->GetProperties(), SPRM_LIST);
+        sal_Int32 nIntValue = rSprm.getValue()->getInt();
+        /* WRITERFILTERSTATUS: table: ListTable_sprm */
+        switch( nSprmId )
+        {
+            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+            case NS_ooxml::LN_CT_Numbering_abstractNum:
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if(pProperties.get())
+                {
+                    //create a new list entry
+                    OSL_ENSURE( !m_pImpl->m_pCurrentEntry.get(), "current entry has to be NULL here");
+                    m_pImpl->m_pCurrentEntry.reset( new ListEntry );
+                    pProperties->resolve( *this );
+                    //append it to the table
+                    m_pImpl->m_aListEntries.push_back( m_pImpl->m_pCurrentEntry );
+                    m_pImpl->m_pCurrentEntry = ListEntryPtr();
+                }
+            }
+            break;
+            /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
+            case NS_ooxml::LN_CT_Numbering_num:
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if(pProperties.get())
+                {
+                    Numbering_numHdlPtr pNumHdl( new Numbering_numHdl( *this ) );
+                    pProperties->resolve(*pNumHdl);
+                    //todo: is the order of numberings guaranteed?
+                    //sal_Int32       pNumhdl->GetNumId();
+                    m_pImpl->m_rDMapper.AddListIDToLFOTable( pNumHdl->GetAbstractNumId() );
+                }
+            }
+            break;
+            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+            case NS_ooxml::LN_CT_AbstractNum_multiLevelType:
+            break;
+            /* WRITERFILTERSTATUS: done: 50, planned: 0, spent: 0 */
+            case NS_rtf::LN_TPLC:
+                m_pImpl->m_pCurrentEntry->nTPLC = nIntValue;
+            break;
+            /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
+            case NS_ooxml::LN_CT_AbstractNum_lvl:
+            {
+                m_pImpl->AddLevel();
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if(pProperties.get())
+                    pProperties->resolve(*this);
+                }
+            break;
+// not a useful number in ooxml
+//            case NS_rtf::LN_LSID:
+//                m_pImpl->m_pCurrentEntry->nListId = nIntValue;
+//            break;
+            /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
+            case NS_rtf::LN_RGBXCHNUMS: break;
+            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+            case NS_rtf::LN_ISTARTAT:
+            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+            case NS_rtf::LN_NFC:
+            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+            case NS_rtf::LN_JC:
+            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+            case NS_rtf::LN_FLEGAL:
+            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+            case NS_rtf::LN_FNORESTART:
+            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+            case NS_rtf::LN_FPREV:
+            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+            case NS_rtf::LN_FPREVSPACE:
+            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+            case NS_rtf::LN_FWORD6:
+            /* WRITERFILTERSTATUS: done: 75, planned: 0, spent: 0 */
+            case NS_rtf::LN_IXCHFOLLOW:
+                ApplyLevelValues( nSprmId, nIntValue );
+            break;
+            case NS_ooxml::LN_CT_Lvl_lvlText:
+            case NS_ooxml::LN_CT_Lvl_rPr : //contains LN_EG_RPrBase_rFonts
+            case NS_ooxml::LN_EG_RPrBase_rFonts: //contains font properties
+            {
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if(pProperties.get())
+                    pProperties->resolve(*this);
+            }
+            break;
+            case NS_ooxml::LN_CT_NumLvl_lvl:
+            {
+                // overwrite level
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if(pProperties.get())
+                    pProperties->resolve(*this);
+            }
+            break;
+            case NS_sprm::LN_CHps:    // sprmCHps
+                //TODO: how to handle numbering symbol size?
+            break;
+            default:
+                if(m_pImpl->m_pCurrentEntry->pCurrentProperties.get())
+                    m_pImpl->m_rDMapper.sprm( rSprm,
+                        m_pImpl->m_pCurrentEntry->pCurrentProperties->GetProperties(), SPRM_LIST);
+        }
+    }
+}
+/*-- 12.11.2007 09:36:09---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void    ListTable::ApplyLevelValues( sal_Int32 nId, sal_Int32 nIntValue)
+{
+    if(m_pImpl->m_pCurrentEntry->pCurrentProperties.get())
+    switch(nId)
+    {
+        case NS_rtf::LN_ISTARTAT:
+                m_pImpl->m_pCurrentEntry->pCurrentProperties->nIStartAt = nIntValue;
+        break;
+        case NS_rtf::LN_NFC:
+            m_pImpl->m_pCurrentEntry->pCurrentProperties->nNFC = nIntValue;
+        break;
+        case NS_rtf::LN_JC:
+            m_pImpl->m_pCurrentEntry->pCurrentProperties->nJC = nIntValue;
+        break;
+        case NS_rtf::LN_FLEGAL:
+            m_pImpl->m_pCurrentEntry->pCurrentProperties->nFLegal = nIntValue;
+        break;
+        case NS_rtf::LN_FNORESTART:
+            m_pImpl->m_pCurrentEntry->pCurrentProperties->nFNoRestart = nIntValue;
+        break;
+        case NS_rtf::LN_FPREV:
+            m_pImpl->m_pCurrentEntry->pCurrentProperties->nFPrev = nIntValue;
+        break;
+        case NS_rtf::LN_FPREVSPACE:
+            m_pImpl->m_pCurrentEntry->pCurrentProperties->nFPrevSpace = nIntValue;
+        break;
+        case NS_rtf::LN_FWORD6:
+            m_pImpl->m_pCurrentEntry->pCurrentProperties->nFWord6 = nIntValue;
+        break;
+        case NS_rtf::LN_IXCHFOLLOW:
+            m_pImpl->m_pCurrentEntry->pCurrentProperties->nXChFollow = nIntValue;
+        break;
+        default:
+            OSL_ASSERT("this line should never be reached");
     }
 }
 /*-- 23.06.2006 12:04:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void ListTable::entry(int, doctok::Reference<Properties>::Pointer_t ref)
+void ListTable::entry(int, writerfilter::Reference<Properties>::Pointer_t ref)
 {
-    //create a new list entry
-    OSL_ENSURE( !m_pImpl->m_pCurrentEntry.get(), "current entry has to be NULL here");
-    m_pImpl->m_pCurrentEntry.reset( new ListEntry );
-    ref->resolve(*this);
-    //append it to the table
-    m_pImpl->m_aListEntries.push_back( m_pImpl->m_pCurrentEntry );
-    m_pImpl->m_pCurrentEntry = ListEntryPtr();
+
+    if( m_pImpl->m_rDMapper.IsOOXMLImport() )
+    {
+        ref->resolve(*this);
+    }
+    else
+    {
+        //create a new list entry
+        OSL_ENSURE( !m_pImpl->m_pCurrentEntry.get(), "current entry has to be NULL here");
+        m_pImpl->m_pCurrentEntry.reset( new ListEntry );
+        ref->resolve(*this);
+        //append it to the table
+        m_pImpl->m_aListEntries.push_back( m_pImpl->m_pCurrentEntry );
+        m_pImpl->m_pCurrentEntry = ListEntryPtr();
+    }
 }
 /*-- 26.06.2006 10:27:55---------------------------------------------------
 
@@ -818,9 +1133,58 @@ uno::Reference< container::XIndexReplace > ListTable::GetNumberingRules(sal_Int3
                     ::std::vector< ListPropertyMapPtr >::const_iterator aIter = (*aIt)->aLevelProperties.begin();
                     ::std::vector< ListPropertyMapPtr >::const_iterator aEnd = (*aIt)->aLevelProperties.end();
                     sal_Int32 nLevel = 0;
+                    PropertyNameSupplier& aPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
                     while(aIter != aEnd)
                     {
                         uno::Sequence< beans::PropertyValue> aValues = (*aIter)->GetPropertyValues();
+                        //now parse the text to find %n from %1 to %nLevel+1
+                        //everything before the first % and the last %x is prefix and suffix
+                        ::rtl::OUString sLevelText( (*aIter)->sBulletChar );
+                        sal_Int32 nCurrentIndex = 0;
+                        sal_Int32 nFound = sLevelText.indexOf( '%', nCurrentIndex );
+                        if( nFound > 0 )
+                        {
+                            ::rtl::OUString sPrefix = sLevelText.copy( 0, nFound );
+                            aValues.realloc( aValues.getLength() + 1 );
+                            aValues[ aValues.getLength() - 1 ] = MAKE_PROPVAL(PROP_PREFIX, sPrefix);
+                            sLevelText = sLevelText.copy( nFound );
+                        }
+                        sal_Int32 nMinLevel = nLevel;
+                        //now the text should either be empty or start with %
+                        nFound = 0;
+                        while( nFound >= 0 )
+                        {
+                            if( sLevelText.getLength() > 1 )
+                            {
+                                sal_Unicode cLevel = sLevelText.getStr()[1];
+                                if( cLevel >= '1' && cLevel <= '9' )
+                                {
+                                    if( cLevel - '1' < nMinLevel )
+                                        nMinLevel = cLevel - '1';
+                                    //remove first char - next char is removed later
+                                    sLevelText = sLevelText.copy( 1 );
+                                }
+                            }
+                            //remove old '%' or number
+                            sLevelText = sLevelText.copy( 1 );
+                            nCurrentIndex = 0;
+                            nFound = sLevelText.indexOf( '%', nCurrentIndex );
+                            //remove the text before the next %
+                            if(nFound > 0)
+                                sLevelText = sLevelText.copy( nFound -1 );
+                        }
+                        if( nMinLevel < nLevel )
+                        {
+                            aValues.realloc( aValues.getLength() + 1);
+                            aValues[ aValues.getLength() - 1 ] =
+                                MAKE_PROPVAL(PROP_PARENT_NUMBERING, sal_Int16( nLevel - nMinLevel ));
+                        }
+                        if( sLevelText.getLength() )
+                        {
+                            aValues.realloc( aValues.getLength() + 1);
+                            aValues[ aValues.getLength() - 1 ] = MAKE_PROPVAL(PROP_SUFFIX, sLevelText);
+                        }
+
                         (*aIt)->m_xNumRules->replaceByIndex(nLevel, uno::makeAny(aValues));
 
                         ++aIter;
@@ -838,6 +1202,36 @@ uno::Reference< container::XIndexReplace > ListTable::GetNumberingRules(sal_Int3
     }
     return xRet;
 }
+/*-- 19.11.2007 13:25:32---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void ListTable::setOverwriteLevel(sal_Int32 nAbstractNumId, sal_Int32 nLevel)
+{
+    m_nOverwriteListId = nAbstractNumId;
+    m_nOverwriteLevel = nLevel;
+    OSL_ENSURE(!m_pImpl->m_pCurrentEntry.get(), "where to put the overwrite level");
+    std::vector< ListEntryPtr >::const_iterator aIt = m_pImpl->m_aListEntries.begin();
+    std::vector< ListEntryPtr >::const_iterator aEndIt = m_pImpl->m_aListEntries.end();
+    for(; aIt != aEndIt; ++aIt)
+    {
+        if( (*aIt)->nListId == nAbstractNumId )
+        {
+            m_pImpl->m_pCurrentEntry = *aIt;
+            break;
+        }
+    }
+    OSL_ENSURE( m_pImpl->m_pCurrentEntry.get(), "list not found");
+}
+/*-- 19.11.2007 13:25:32---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void ListTable::resetOverwrite()
+{
+    m_nOverwriteListId =  -1;
+    m_nOverwriteLevel = -1;
+    m_pImpl->m_pCurrentEntry.reset();
+}
 
 }//namespace dmapper
+}//namespace writerfilter
 
