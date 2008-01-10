@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IDocumentSettingAccess.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 07:54:04 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:27:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@ namespace com { namespace sun { namespace star { namespace i18n { struct Forbidd
 
          UNIX_FORCE_ZERO_EXT_LEADING,
          USE_OLD_PRINTER_METRICS,
+         TABS_RELATIVE_TO_INDENT,
          // COMPATIBILITY FLAGS END
 
          BROWSE_MODE,
