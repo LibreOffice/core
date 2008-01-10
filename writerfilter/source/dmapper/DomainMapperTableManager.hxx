@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableManager.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-29 15:30:38 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:37:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,21 +35,16 @@
 #ifndef INCLUDED_DOMAIN_MAPPER_TABLE_MANAGER_HXX
 #define INCLUDED_DOMAIN_MAPPER_TABLE_MANAGER_HXX
 
-#ifndef INCLUDED_TABLE_MANAGER_HXX
-#include <doctok/TableManager.hxx>
-#endif
-#ifndef INCLUDED_DMAPPER_PROPERTYMAP_HXX
-#include "PropertyMap.hxx"
-#endif
-
-#ifndef _COM_SUN_STAR_TEXT_XTEXTRANGE_HPP_
+#include <resourcemodel/TableManager.hxx>
+#include <PropertyMap.hxx>
+#include <StyleSheetTable.hxx>
 #include <com/sun/star/text/XTextRange.hpp>
-#endif
 #include <vector>
 
+namespace writerfilter {
 namespace dmapper {
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange > Handle_t;
-typedef doctok::TableManager<Handle_t , PropertyMapPtr > DomainMapperTableManager_Base_t;
+typedef TableManager<Handle_t , PropertyMapPtr > DomainMapperTableManager_Base_t;
 class DomainMapperTableManager : public DomainMapperTableManager_Base_t
 {
     sal_uInt32      m_nRow;
@@ -60,24 +55,31 @@ class DomainMapperTableManager : public DomainMapperTableManager_Base_t
     sal_Int32       m_nLeftMargin; // to-be-combined width m_nGapHalf
     sal_Int32       m_nTableWidth; //might be set directly or has to be calculated from the column positions
     bool            m_bFullWidth; //width is set to full, disable setting of different orientation values
+    bool            m_bOOXML;
     ::rtl::OUString m_sTableStyleName;
-    ::std::vector<sal_Int32>  m_aCellWidths;
+    PropertyMapPtr  m_pTableStyleTextProperies;
+
+    ::std::vector<sal_Int32>  m_aTableGrid;
+    ::std::vector<sal_Int32>  m_aGridSpans;
 
     virtual void clearData();
 
 public:
 
-    DomainMapperTableManager();
+    DomainMapperTableManager(bool bOOXML);
     virtual ~DomainMapperTableManager();
 
-    virtual bool sprm(doctok::Sprm & rSprm);
+    virtual bool sprm(Sprm & rSprm);
 
     virtual void endOfCellAction();
     virtual void endOfRowAction();
 
     const ::rtl::OUString& getTableStyleName() const { return m_sTableStyleName; }
+    /// copy the text properties of the table style and its parent into pContext
+    void    CopyTextProperties(PropertyMapPtr pContext, StyleSheetTablePtr pStyleSheetTable);
+
 };
 
-}
+}}
 
 #endif // INCLUDED_DOMAIN_MAPPER_TABLE_MANAGER_HXX
