@@ -14,7 +14,7 @@
 
 #include <doctok/exceptions.hxx>
 #include <doctok/WW8Document.hxx>
-#include <doctok/WW8ResourceModel.hxx>
+#include <resourcemodel/WW8ResourceModel.hxx>
 
 #include <iostream>
 
