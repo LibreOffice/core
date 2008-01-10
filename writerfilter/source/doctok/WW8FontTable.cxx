@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8FontTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:31 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:47:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #include <resources.hxx>
 
+namespace writerfilter {
 namespace doctok {
 
 void WW8FontTable::initPayload()
@@ -69,10 +70,10 @@ sal_uInt32 WW8FontTable::getEntryCount()
     return entryOffsets.size() - 1;
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8FontTable::getEntry(sal_uInt32 nIndex)
 {
-    doctok::Reference<Properties>::Pointer_t pResult;
+    writerfilter::Reference<Properties>::Pointer_t pResult;
 
     sal_uInt32 nCount = entryOffsets[nIndex + 1] - entryOffsets[nIndex];
 
@@ -83,7 +84,7 @@ WW8FontTable::getEntry(sal_uInt32 nIndex)
 
         pFont->setIndex(nIndex);
 
-        pResult = doctok::Reference<Properties>::Pointer_t(pFont);
+        pResult = writerfilter::Reference<Properties>::Pointer_t(pFont);
     }
 
     return pResult;
@@ -122,4 +123,4 @@ rtl::OUString WW8Font::get_altName()
     return rtl::OUString(pNew);
 }
 
-}
+}}

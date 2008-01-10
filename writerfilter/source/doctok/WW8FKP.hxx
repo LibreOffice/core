@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8FKP.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:30 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:46:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include <WW8StructBase.hxx>
 #endif
 
+namespace writerfilter {
 namespace doctok
 {
 
@@ -110,7 +111,7 @@ public:
 
        @param rFc   FC to look for
      */
-    virtual doctok::Reference<Properties>::Pointer_t
+    virtual writerfilter::Reference<Properties>::Pointer_t
     getProperties(const Fc & rFc)
         const = 0;
 };
@@ -135,6 +136,6 @@ public:
      */
     virtual WW8FKP::Pointer_t get(sal_uInt32 nPageNumber, bool bComplex) = 0;
 };
-}
+}}
 
 #endif // INCLUDED_WW8_FKP_HXX

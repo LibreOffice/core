@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8LFOTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:31 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:47:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,12 +36,13 @@
 /*
    $RCSfile: WW8LFOTable.cxx,v $
 
-   $Revision: 1.2 $
+   $Revision: 1.3 $
 
 */
 
 #include "resources.hxx"
 
+namespace writerfilter {
 namespace doctok {
 
 void WW8LFOTable::initPayload()
@@ -90,14 +91,14 @@ sal_uInt32 WW8LFOTable::getEntryCount()
     return getU32(0);
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8LFOTable::getEntry(sal_uInt32 nIndex)
 {
     WW8LFO * pLFO = new WW8LFO(this, entryOffsets[nIndex]);
 
     pLFO->setIndex(nIndex);
 
-    return doctok::Reference<Properties>::Pointer_t(pLFO);
+    return writerfilter::Reference<Properties>::Pointer_t(pLFO);
 }
 
 sal_uInt32 WW8LFO::get_lfolevel_count()
@@ -105,7 +106,7 @@ sal_uInt32 WW8LFO::get_lfolevel_count()
     return get_clfolvl();
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8LFO::get_lfolevel(sal_uInt32 nIndex)
 {
     WW8LFOTable * pLFOTable = dynamic_cast<WW8LFOTable *>(mpParent);
@@ -113,7 +114,7 @@ WW8LFO::get_lfolevel(sal_uInt32 nIndex)
     sal_uInt32 nPayloadOffset = pLFOTable->getPayloadOffset(nPayloadIndex);
     sal_uInt32 nPayloadSize = pLFOTable->getPayloadSize(nPayloadIndex);
 
-    return doctok::Reference<Properties>::Pointer_t
+    return writerfilter::Reference<Properties>::Pointer_t
         (new WW8LFOLevel(mpParent, nPayloadOffset, nPayloadSize));
 }
 
@@ -140,4 +141,4 @@ sal_uInt32 WW8LFOLevel::calcSize()
     return nResult;
 }
 
-}
+}}
