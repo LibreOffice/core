@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConversionHelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-29 15:27:15 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:36:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-
+#include <com/sun/star/util/DateTime.hpp>
 namespace com{ namespace sun{ namespace star{
     namespace lang{
         struct Locale;
@@ -50,7 +50,7 @@ namespace com{ namespace sun{ namespace star{
         struct BorderLine;
 }}}}
 
-
+namespace writerfilter {
 namespace dmapper{
 namespace ConversionHelper{
 
@@ -58,14 +58,19 @@ namespace ConversionHelper{
     sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, ::com::sun::star::table::BorderLine& rToFill );
     void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
                               sal_Int32 nLineColor,
-                              ::com::sun::star::table::BorderLine& rToFill );
+                              ::com::sun::star::table::BorderLine& rToFill, bool bIsOOXML );
     //convert the number format string form MS format to SO format
     ::rtl::OUString ConvertMSFormatStringToSO(
             const ::rtl::OUString& rFormat, ::com::sun::star::lang::Locale& rLocale, bool bHijri);
-    sal_Int32 convertToMM100(sal_Int32 _t);
+    sal_Int32 convertTwipToMM100(sal_Int32 _t);
+    // probably the most useless unit in the world - English Metric Units (EMU) 360 000 EMU == 1cm
+    sal_Int32 convertEMUToMM100(sal_Int32 _t);
     sal_Int32 ConvertColor(sal_Int32 nWordColor );
     sal_Int32 SnapPageDimension( sal_Int32 nVal );
+    sal_Int16 convertTableJustification( sal_Int32 nIntValue );
+    ::com::sun::star::util::DateTime convertDateTime( const ::rtl::OUString& rDateTimeString );
 
 } // namespace ConversionHelper
 } //namespace dmapper
+} // namespace writerfilter
 #endif

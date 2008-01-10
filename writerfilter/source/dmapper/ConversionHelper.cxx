@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConversionHelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-29 15:28:22 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:36:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,9 @@
 #ifndef INCLUDED_DMAPPER_CONVERSIONHELPER_HXX
 #include <ConversionHelper.hxx>
 #endif
-#ifndef _COM_SUN_STAR_TABLE_BORDERLINE_HPP_
 #include <com/sun/star/table/BorderLine.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
+#include <com/sun/star/text/HoriOrientation.hpp>
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
@@ -55,6 +52,7 @@
 
 using namespace com::sun::star;
 
+namespace writerfilter {
 namespace dmapper{
 namespace ConversionHelper{
 
@@ -114,6 +112,7 @@ namespace ConversionHelper{
 
 sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, table::BorderLine& rToFill )
 {
+    //TODO: Lines are always solid
     //Border
     //borders are defined as:
     // 0x XX XX XX XX
@@ -131,12 +130,12 @@ sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, table::BorderLine& rToFill )
     sal_Int32 nLineColor    = (nSprmValue & 0xff0000)>>16;
     sal_Int32 nLineDistance = (((nSprmValue & 0x3f000000)>>24) * 2540 + 36)/72L;
     sal_Int32 nLineThickness = TWIP_TO_MM100(nLineThicknessTwip);
-    MakeBorderLine( nLineThickness, nLineType, nLineColor, rToFill);
+    MakeBorderLine( nLineThickness, nLineType, nLineColor, rToFill, false);
     return nLineDistance;
 }
 void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
                                             sal_Int32 nLineColor,
-                                            table::BorderLine& rToFill )
+                                            table::BorderLine& rToFill, bool bIsOOXML )
 {
     static const sal_Int32 aBorderDefColor[] =
     {
@@ -148,7 +147,7 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
     //no auto color for borders
     if(!nLineColor)
         ++nLineColor;
-    if(sal::static_int_cast<sal_uInt32>(nLineColor) <
+    if(!bIsOOXML && sal::static_int_cast<sal_uInt32>(nLineColor) <
        sizeof(aBorderDefColor) / sizeof(nLineColor))
         nLineColor = aBorderDefColor[nLineColor];
 
@@ -167,7 +166,7 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
     switch(nLineType)
     {
         // First the single lines
-        case  1:
+        case  1: break;
         case  2:
         case  5:
         // and the unsupported special cases which we map to a single line
@@ -321,9 +320,19 @@ void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
     };
 
     rToFill.Color = nLineColor;
-    rToFill.InnerLineWidth = aLineTab[eCodeIdx].nIn;
-    rToFill.OuterLineWidth = aLineTab[eCodeIdx].nOut;
-    rToFill.LineDistance = aLineTab[eCodeIdx].nDist;
+    if( nLineType == 1)
+    {
+        rToFill.InnerLineWidth = 0;
+        rToFill.OuterLineWidth = sal_Int16(nLineThickness);
+        rToFill.LineDistance = 0;
+
+    }
+    else
+    {
+        rToFill.InnerLineWidth = aLineTab[eCodeIdx].nIn;
+        rToFill.OuterLineWidth = aLineTab[eCodeIdx].nOut;
+        rToFill.LineDistance = aLineTab[eCodeIdx].nDist;
+    }
 }
 
 void lcl_SwapQuotesInField(::rtl::OUString &rFmt)
@@ -461,10 +470,18 @@ bool lcl_IsNotAM(::rtl::OUString& rFmt, sal_Int32 nPos)
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_Int32 convertToMM100(sal_Int32 _t)
+sal_Int32 convertTwipToMM100(sal_Int32 _t)
 {
     return TWIP_TO_MM100( _t );
 }
+/*-- 09.08.2007 09:34:44---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int32 convertEMUToMM100(sal_Int32 _t)
+{
+    return _t / 360;
+}
+
 /*-- 21.11.2006 08:47:12---------------------------------------------------
     contains a color from 0xTTRRGGBB to 0xTTRRGGBB
   -----------------------------------------------------------------------*/
@@ -528,6 +545,67 @@ sal_Int32 SnapPageDimension( sal_Int32 nVal )
 
     return nVal;
 }
+/*-- 27.06.2007 13:42:32---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+sal_Int16 convertTableJustification( sal_Int32 nIntValue )
+{
+    sal_Int16 nOrient = text::HoriOrientation::LEFT_AND_WIDTH;
+    switch( nIntValue )
+    {
+        case 1 : nOrient = text::HoriOrientation::CENTER; break;
+        case 2 : nOrient = text::HoriOrientation::RIGHT; break;
+        case 0 :
+        //no break
+        default:;
+
+    }
+    return nOrient;
+}
+/*-- 06.08.2007 15:27:30---------------------------------------------------
+     conversion form xsd::DateTime
+    [-]CCYY-MM-DDThh:mm:ss[Z|(+|-)hh:mm]
+  -----------------------------------------------------------------------*/
+com::sun::star::util::DateTime convertDateTime( const ::rtl::OUString& rDateTimeString )
+{
+    util::DateTime aRet( 0, 0, 0, 0, 1, 1, 1901 );
+    //
+    sal_Int32 nIndex = 0;
+    ::rtl::OUString sDate( rDateTimeString.getToken( 0, 'T', nIndex ));
+    sal_Int32 nDateIndex = 0;
+    aRet.Year = (sal_uInt16)sDate.getToken( 0, '-', nDateIndex ).toInt32();
+    if( nDateIndex > 0)
+        aRet.Month = (sal_uInt16)sDate.getToken( 0, '-', nDateIndex ).toInt32();
+    if( nDateIndex > 0)
+        aRet.Day = (sal_uInt16)sDate.getToken( 0, '-', nDateIndex ).toInt32();
+    ::rtl::OUString sTime;
+    if(nIndex > 0)
+    {
+        sTime = ( rDateTimeString.getToken( 0, 'Z', nIndex ));
+        sal_Int32 nTimeIndex = 0;
+        aRet.Hours = (sal_uInt16)sTime.getToken( 0, ':', nTimeIndex ).toInt32();
+        if( nTimeIndex > 0)
+            aRet.Minutes = (sal_uInt16)sTime.getToken( 0, ':', nTimeIndex ).toInt32();
+        if( nTimeIndex > 0)
+        {
+            ::rtl::OUString sSeconds = sTime.getToken( 0, ':', nTimeIndex );
+            nTimeIndex = 0;
+            aRet.Seconds = (sal_uInt16)sSeconds.getToken( 0, '.', nTimeIndex ).toInt32();
+            aRet.HundredthSeconds = (sal_uInt16)sSeconds.getToken( 0, '.', nTimeIndex ).toInt32();
+        }
+
+// todo: ignore time offset for a while - there's no time zone available
+//        nIndex = 0;
+//        ::rtl::OUString sOffset( rDateTimeString.getToken( 1, 'Z', nIndex ));
+//        if( sOffset.getLength() )
+//        {
+//              add hour and minute offset and increase/decrease date if necessary
+//        }
+    }
+    return aRet;
+}
+
 
 } // namespace ConversionHelper
 } //namespace dmapper
+} //namespace writerfilter
