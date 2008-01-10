@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opcode.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:30:35 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:09:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ enum OpCodeEnum
 {
     // Special commands
         ocPush              = SC_OPCODE_PUSH,
-        ocJump              = SC_OPCODE_JUMP,
+        ocCall              = SC_OPCODE_CALL,
         ocStop              = SC_OPCODE_STOP,
         ocExternal          = SC_OPCODE_EXTERNAL,
         ocName              = SC_OPCODE_NAME,
