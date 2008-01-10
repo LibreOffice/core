@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:00:54 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:31:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -719,26 +719,6 @@ namespace sw
             if (pBreak && pBreak->GetBreak() == SVX_BREAK_PAGE_BEFORE)
                 return true;
             return false;
-        }
-
-        bool AdjustTabs(SvxTabStopItem &rTStop, long nSrcLeft, long nDestLeft)
-        {
-            bool bChanged = false;
-            if (nDestLeft != nSrcLeft)
-            {
-                USHORT nCount = rTStop.Count();
-                for (USHORT nCnt = 0; nCnt < nCount; ++nCnt)
-                {
-                    SvxTabStop& rTab = const_cast<SvxTabStop&>(rTStop[nCnt]);
-                    if (SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment())
-                    {
-                        rTab.GetTabPos() += nSrcLeft;
-                        rTab.GetTabPos() -= nDestLeft;
-                        bChanged = true;
-                    }
-                }
-            }
-            return bChanged;
         }
 
         Polygon PolygonFromPolyPolygon(const PolyPolygon &rPolyPoly)
