@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 12:57:23 $
+#   last change: $Author: obo $ $Date: 2008-01-10 12:53:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,31 +32,45 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
+
 PRJ=..
 
 PRJNAME=sax
-TARGET = sax.uno
-NO_BSYMBOLIC=TRUE
-ENABLE_EXCEPTIONS=TRUE
+TARGET=sax
+
+USE_DEFFILE=TRUE
+
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :  settings.mk
-DLLPRE =
-#-----------------------------------------------------------
 
+# ------------------------------------------------------------------
 
-SHL1TARGET= $(TARGET)
+LIB1TARGET= $(SLB)$/$(TARGET).lib
+LIB1FILES=\
+            $(SLB)$/saxtools.lib
+
+# sax
+
+SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
+SHL1USE_EXPORTS=ordinal
 
+SHL1LIBS=	$(LIB1TARGET)
 SHL1STDLIBS= \
-        $(SALLIB)  \
-        $(CPPULIB) \
-        $(CPPUHELPERLIB)\
-            $(EXPAT3RDLIB)
+                $(VOSLIB)		\
+                $(CPPULIB)		\
+                $(CPPUHELPERLIB)\
+                $(COMPHELPERLIB)\
+                $(RTLLIB)		\
+                $(SALLIB)		\
+                $(ONELIB)		\
+                $(SALHELPERLIB)
 
-SHL1LIBS=		$(SLB)$/expatwrap.lib 
-SHL1VERSIONMAP=		$(SOLARENV)$/src$/component.map
-SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=		$(SHL1TARGET)
+SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=	$(SHL1TARGET)
+DEFLIB1NAME=$(TARGET)
 
 # --- Targets ------------------------------------------------------
+
 .INCLUDE :	target.mk
