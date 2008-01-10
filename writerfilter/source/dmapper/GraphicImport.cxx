@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicImport.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2007-04-23 09:11:31 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:38:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #ifndef INCLUDED_RESOURCESIDS
 #include <doctok/resourceids.hxx>
 #endif
+#include <ooxml/resourceids.hxx>
 #ifndef INCLUDED_DMAPPER_CONVERSIONHELPER_HXX
 #include <ConversionHelper.hxx>
 #endif
@@ -57,9 +58,11 @@
 #ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
 #endif
+#include <com/sun/star/container/XNamed.hpp>
 #ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
 #include <com/sun/star/drawing/ColorMode.hpp>
 #endif
+
 //#ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCESEQUENCE_HPP_
 //#include <com/sun/star/drawing/PointSequenceSequence.hpp>
 //#endif
@@ -96,16 +99,20 @@
 #ifndef _COM_SUN_STAR_TEXT_WRAPTEXTMODE_HPP_
 #include <com/sun/star/text/WrapTextMode.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
+#include <com/sun/star/drawing/XShape.hpp>
+#endif
 #include <rtl/ustrbuf.hxx>
 
 
 #include <iostream>
+#include <resourcemodel/QNameToString.hxx>
 
+namespace writerfilter {
 namespace dmapper
 {
 using namespace ::std;
 using namespace ::com::sun::star;
-using namespace writerfilter;
 
 class XInputStreamHelper : public cppu::WeakImplHelper1
 <    io::XInputStream   >
@@ -232,7 +239,7 @@ struct GraphicBorderLine
 };
 struct GraphicImport_Impl
 {
-    bool      bIsShapeImport;
+    GraphicImportType eGraphicImportType;
 
     sal_Int32 nHoriScaling;
     sal_Int32 nVertScaling;
@@ -247,12 +254,15 @@ struct GraphicImport_Impl
     sal_Int32 nRightCrop;
     sal_Int32 nBottomCrop;
 
+    bool      bUseSimplePos;
+
     sal_Int16 nHoriOrient;
     sal_Int16 nHoriRelation;
     bool      bPageToggle;
     sal_Int16 nVertOrient;
     sal_Int16 nVertRelation;
     sal_Int32 nWrap;
+    bool      bOpaque;
     bool      bContour;
     bool      bIgnoreWRK;
 
@@ -273,6 +283,7 @@ struct GraphicImport_Impl
     sal_Int32           nCurrentBorderLine;
 
     sal_Int32       nDffType;
+    bool            bIsGraphic;
     bool            bIsBitmap;
     bool            bIsTiff;
     sal_Int32       nBitsPerPixel;
@@ -280,13 +291,17 @@ struct GraphicImport_Impl
     bool            bHoriFlip;
     bool            bVertFlip;
 
+    bool            bSizeProtected;
+    bool            bPositionProtected;
+
     bool            bInShapeOptionMode;
     sal_Int32       nShapeOptionType;
 
+    ::rtl::OUString sName;
     ::rtl::OUString sAlternativeText;
 
-    GraphicImport_Impl(bool bIsShape) :
-        bIsShapeImport( bIsShape )
+    GraphicImport_Impl(GraphicImportType eImportType) :
+        eGraphicImportType( eImportType )
         ,nHoriScaling(0)
         ,nVertScaling(0)
         ,nXSize(0)
@@ -299,12 +314,14 @@ struct GraphicImport_Impl
         ,nTopCrop (0)
         ,nRightCrop (0)
         ,nBottomCrop(0)
+        ,bUseSimplePos(false)
         ,nHoriOrient(   text::HoriOrientation::NONE )
         ,nHoriRelation( text::RelOrientation::FRAME )
         ,bPageToggle( false )
         ,nVertOrient(  text::VertOrientation::NONE )
         ,nVertRelation( text::RelOrientation::FRAME )
         ,nWrap(0)
+        ,bOpaque( true )
         ,bContour(false)
         ,bIgnoreWRK(true)
         ,nLeftMargin(319)
@@ -318,11 +335,14 @@ struct GraphicImport_Impl
         ,eColorMode( drawing::ColorMode_STANDARD )
         ,nCurrentBorderLine(BORDER_TOP)
         ,nDffType( 0 )
+        ,bIsGraphic(false)
         ,bIsBitmap(false)
         ,bIsTiff(false)
         ,nBitsPerPixel(0)
         ,bHoriFlip(false)
         ,bVertFlip(false)
+        ,bSizeProtected(false)
+        ,bPositionProtected(false)
         ,bInShapeOptionMode(false)
         {}
 };
@@ -331,8 +351,8 @@ struct GraphicImport_Impl
   -----------------------------------------------------------------------*/
 GraphicImport::GraphicImport(uno::Reference < uno::XComponentContext >    xComponentContext,
                              uno::Reference< lang::XMultiServiceFactory > xTextFactory,
-                             bool bIsShape )
-: m_pImpl( new GraphicImport_Impl( bIsShape ))
+                             GraphicImportType eImportType )
+: m_pImpl( new GraphicImport_Impl( eImportType ))
   ,m_xComponentContext( xComponentContext )
   ,m_xTextFactory( xTextFactory)
 {
@@ -347,11 +367,16 @@ GraphicImport::~GraphicImport()
 /*-- 01.11.2006 09:45:01---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
+void GraphicImport::attribute(Id nName, Value & val)
 {
+#ifdef DEBUG_DOMAINMAPPER
+    logger("DOMAINMAPPER", string("<attribute name=\"") +
+           (*QNameToString::Instance())(nName) + "\">");
+    //logger("DOMAINMAPPER", string("<value>") + val.toString() + "</value>");
+#endif
     sal_Int32 nIntValue = val.getInt();
     /* WRITERFILTERSTATUS: table: PICFattribute */
-    switch( Name )
+    switch( nName )
     {
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_LCB: break;//byte count
@@ -378,7 +403,7 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_blip: //the binary graphic data in a shape
             {
-                switch(Name)
+                switch(nName)
                 {
                     case NS_rtf::LN_BRCTOP: //top border
                         m_pImpl->nCurrentBorderLine = BORDER_TOP;
@@ -397,14 +422,12 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
                     break;
                     default:;
                 }
-            doctok::Reference<Properties>::Pointer_t pProperties = val.getProperties();
+            writerfilter::Reference<Properties>::Pointer_t pProperties = val.getProperties();
             if( pProperties.get())
             {
-                string sName = pProperties->getType();
                 pProperties->resolve(*this);
-                sName = "";
             }
-                switch(Name)
+                switch(nName)
                 {
                     case NS_rtf::LN_shpopt:
                         m_pImpl->bInShapeOptionMode = false;
@@ -415,7 +438,7 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
         break;
         case NS_rtf::LN_payload :
         {
-            doctok::Reference<BinaryObj>::Pointer_t pPictureData = val.getBinary();
+            writerfilter::Reference<BinaryObj>::Pointer_t pPictureData = val.getBinary();
             if( pPictureData.get())
                 pPictureData->resolve(*this);
         }
@@ -433,13 +456,13 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_MY: m_pImpl->nVertScaling = nIntValue; break;// vert scaling in 0.001%
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_rtf::LN_DXACROPLEFT:    m_pImpl->nLeftCrop  = ConversionHelper::convertToMM100(nIntValue); break;// left crop in twips
+        case NS_rtf::LN_DXACROPLEFT:    m_pImpl->nLeftCrop  = ConversionHelper::convertTwipToMM100(nIntValue); break;// left crop in twips
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_rtf::LN_DYACROPTOP:     m_pImpl->nTopCrop   = ConversionHelper::convertToMM100(nIntValue); break;// top crop in twips
+        case NS_rtf::LN_DYACROPTOP:     m_pImpl->nTopCrop   = ConversionHelper::convertTwipToMM100(nIntValue); break;// top crop in twips
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_rtf::LN_DXACROPRIGHT:   m_pImpl->nRightCrop = ConversionHelper::convertToMM100(nIntValue); break;// right crop in twips
+        case NS_rtf::LN_DXACROPRIGHT:   m_pImpl->nRightCrop = ConversionHelper::convertTwipToMM100(nIntValue); break;// right crop in twips
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_rtf::LN_DYACROPBOTTOM:  m_pImpl->nBottomCrop = ConversionHelper::convertToMM100(nIntValue); break;// bottom crop in twips
+        case NS_rtf::LN_DYACROPBOTTOM:  m_pImpl->nBottomCrop = ConversionHelper::convertTwipToMM100(nIntValue); break;// bottom crop in twips
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_BRCL:           break;//border type - legacy -
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
@@ -569,7 +592,7 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
         /* WRITERFILTERSTATUS: done: 50, planned: 10, spent: 5 */
         case NS_rtf::LN_shpop:
         {
-            if(NS_dff::LN_shpwzDescription != m_pImpl->nShapeOptionType )
+            if(NS_dff::LN_shpwzDescription != sal::static_int_cast<Id>(m_pImpl->nShapeOptionType) )
                 ProcessShapeOptions( val );
         }
         break;
@@ -578,7 +601,7 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_shpvalue:
         {
-            if( NS_dff::LN_shpwzDescription == m_pImpl->nShapeOptionType )
+            if( NS_dff::LN_shpwzDescription == sal::static_int_cast<Id>(m_pImpl->nShapeOptionType) )
                 ProcessShapeOptions( val );
         }
         break;
@@ -661,13 +684,13 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_SPID: break;
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_rtf::LN_XALEFT: m_pImpl->nLeftPosition = ConversionHelper::convertToMM100(nIntValue); break; //left position
+        case NS_rtf::LN_XALEFT: m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue); break; //left position
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_rtf::LN_YATOP:  m_pImpl->nTopPosition = ConversionHelper::convertToMM100(nIntValue); break; //top position
+        case NS_rtf::LN_YATOP:  m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue); break; //top position
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_rtf::LN_XARIGHT:  m_pImpl->nRightPosition = ConversionHelper::convertToMM100(nIntValue); break; //right position
+        case NS_rtf::LN_XARIGHT:  m_pImpl->nRightPosition = ConversionHelper::convertTwipToMM100(nIntValue); break; //right position
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
-        case NS_rtf::LN_YABOTTOM: m_pImpl->nBottomPosition = ConversionHelper::convertToMM100(nIntValue); break;//bottom position
+        case NS_rtf::LN_YABOTTOM: m_pImpl->nBottomPosition = ConversionHelper::convertTwipToMM100(nIntValue); break;//bottom position
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
         case NS_rtf::LN_FHDR:
@@ -851,17 +874,185 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
         case NS_rtf::LN_shpTop = 10425;
             break;*/
         case NS_rtf::LN_dffheader: break;
+        case NS_ooxml::LN_CT_PositiveSize2D_cx:// 90407;
+        case NS_ooxml::LN_CT_PositiveSize2D_cy:// 90408;
+        {
+            sal_Int32 nDim = ConversionHelper::convertEMUToMM100( nIntValue );
+            if( nName == NS_ooxml::LN_CT_PositiveSize2D_cx )
+                m_pImpl->nXSize = nDim;
+            else
+                m_pImpl->nYSize = nDim;
+        }
+        break;
+        case NS_ooxml::LN_CT_EffectExtent_l:// 90907;
+        case NS_ooxml::LN_CT_EffectExtent_t:// 90908;
+        case NS_ooxml::LN_CT_EffectExtent_r:// 90909;
+        case NS_ooxml::LN_CT_EffectExtent_b:// 90910;
+            //todo: extends the wrapping size of the object, e.g. if shadow is added
+        break;
+        case NS_ooxml::LN_CT_NonVisualDrawingProps_id:// 90650;
+            //id of the object - ignored
+        break;
+        case NS_ooxml::LN_CT_NonVisualDrawingProps_name:// 90651;
+            //name of the object
+            m_pImpl->sName = val.getString();
+        break;
+        case NS_ooxml::LN_CT_NonVisualDrawingProps_descr:// 90652;
+            //alternative text
+            m_pImpl->sAlternativeText = val.getString();
+        break;
+        case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noChangeAspect://90644;
+            //disallow aspect ratio change - ignored
+        break;
+        case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noMove:// 90645;
+            m_pImpl->bPositionProtected = true;
+        break;
+        case NS_ooxml::LN_CT_GraphicalObjectFrameLocking_noResize: // 90646;
+            m_pImpl->bSizeProtected = true;
+        break;
+        case NS_ooxml::LN_CT_Anchor_distT: // 90983;
+        case NS_ooxml::LN_CT_Anchor_distB: // 90984;
+        case NS_ooxml::LN_CT_Anchor_distL: // 90985;
+        case NS_ooxml::LN_CT_Anchor_distR: // 90986;
+        {
+            //redirect to shape option processing
+            switch( nName )
+            {
+                case NS_ooxml::LN_CT_Anchor_distT: // 90983;
+                    m_pImpl->nShapeOptionType = NS_dff::LN_shpdyWrapDistTop;
+                break;
+                case NS_ooxml::LN_CT_Anchor_distB: // 90984;
+                    m_pImpl->nShapeOptionType = NS_dff::LN_shpdyWrapDistBottom;
+                break;
+                case NS_ooxml::LN_CT_Anchor_distL: // 90985;
+                    m_pImpl->nShapeOptionType = NS_dff::LN_shpdxWrapDistLeft;
+                break;
+                case NS_ooxml::LN_CT_Anchor_distR: // 90986;
+                    m_pImpl->nShapeOptionType = NS_dff::LN_shpdxWrapDistRight;
+                break;
+                //m_pImpl->nShapeOptionType = NS_dff::LN_shpcropFromTop
+                default: ;
+            }
+            ProcessShapeOptions(val);
+        }
+        break;
+        case NS_ooxml::LN_CT_Anchor_simplePos_attr: // 90987;
+            m_pImpl->bUseSimplePos = nIntValue > 0;
+        break;
+        case NS_ooxml::LN_CT_Anchor_relativeHeight: // 90988;
+            //z-order
+        break;
+        case NS_ooxml::LN_CT_Anchor_behindDoc: // 90989; - in background
+            if( nIntValue > 0 )
+                    m_pImpl->bOpaque = false;
+        break;
+        case NS_ooxml::LN_CT_Anchor_locked: // 90990; - ignored
+        case NS_ooxml::LN_CT_Anchor_layoutInCell: // 90991; - ignored
+            //true: inside cell, cell resizes, false: table is resized or relocated, object might be outside of the table
+        case NS_ooxml::LN_CT_Anchor_hidden: // 90992; - ignored
+        break;
+        case NS_ooxml::LN_CT_Anchor_allowOverlap: // 90993;
+            //enable overlapping - ignored
+        break;
+        case NS_ooxml::LN_CT_Point2D_x: // 90405;
+        case NS_ooxml::LN_CT_Point2D_y: // 90406;
+            if( m_pImpl->bUseSimplePos )
+            {
+                //todo: absolute positioning
+                NS_ooxml::LN_CT_Point2D_x == nName ? m_pImpl->nLeftPosition = ConversionHelper::convertTwipToMM100(nIntValue) :
+                                                        m_pImpl->nTopPosition = ConversionHelper::convertTwipToMM100(nIntValue);
+
+            }
+        break;
+        case NS_ooxml::LN_CT_WrapTight_wrapText: // 90934;
+            m_pImpl->bContour = true;
+            //no break;
+        case NS_ooxml::LN_CT_WrapSquare_wrapText: //90928;
+            switch ( val.getInt() )
+            {
+                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_bothSides: // 90920;
+                    m_pImpl->nWrap = text::WrapTextMode_PARALLEL;
+                break;
+                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_left: // 90921;
+                    m_pImpl->nWrap = text::WrapTextMode_LEFT;
+                break;
+                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_right: // 90922;
+                    m_pImpl->nWrap = text::WrapTextMode_RIGHT;
+                break;
+                case NS_ooxml::LN_Value_wordprocessingDrawing_ST_WrapText_largest: // 90923;
+                    m_pImpl->nWrap = text::WrapTextMode_DYNAMIC;
+                break;
+                default:;
+            }
+        break;
+        case NS_ooxml::LN_shape:
+            /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
+            {
+                val.getAny() >>= m_xShape;
+
+                if (m_xShape.is())
+                {
+                    uno::Reference< beans::XPropertySet > xShapeProps
+                        (m_xShape, uno::UNO_QUERY_THROW);
+
+                    PropertyNameSupplier& rPropNameSupplier =
+                        PropertyNameSupplier::GetPropertyNameSupplier();
+                    xShapeProps->setPropertyValue
+                        (rPropNameSupplier.GetName(PROP_ANCHOR_TYPE),
+                         uno::makeAny
+                         (text::TextContentAnchorType_AS_CHARACTER));
+
+                    awt::Size aSize(m_xShape->getSize());
+                    aSize.Width = m_pImpl->nXSize;
+                    aSize.Height = m_pImpl->nYSize;
+
+                    m_xShape->setSize(aSize);
+
+#ifdef DEBUG_DOMAINMAPPER
+                    char buffer[256];
+                    snprintf(buffer, sizeof(buffer),
+                             "<shape width=\"%ld\" height=\"%ld\">",
+                             aSize.Width, aSize.Height);
+                    logger("DOMAINMAPPER", buffer);
+                    logger("DOMAINMAPPER", "</shape>");
+#endif
+                    m_pImpl->bIsGraphic = true;
+                }
+#ifdef DEBUG_DOMAINMAPPER
+                else
+                    logger("DOMAINMAPPER", "<shape/>");
+#endif
+
+            }
+            break;
         default: val.getInt();
     }
-
+#ifdef DEBUG_DOMAINMAPPER
+    logger("DOMAINMAPPER", string("</attribute>"));
+#endif
 }
+
+uno::Reference<text::XTextContent> GraphicImport::GetGraphicObject()
+{
+    uno::Reference<text::XTextContent> xResult;
+
+    if (m_xGraphicObject.is())
+        xResult = m_xGraphicObject;
+    else if (m_xShape.is())
+    {
+        xResult.set(m_xShape, uno::UNO_QUERY_THROW);
+    }
+
+    return xResult;
+}
+
 /*-- 22.11.2006 09:46:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::ProcessShapeOptions(doctok::Value& val)
+void GraphicImport::ProcessShapeOptions(Value& val)
 {
     sal_Int32 nIntValue = val.getInt();
-    sal_Int32 nTwipValue = ConversionHelper::convertToMM100(nIntValue);
+    sal_Int32 nTwipValue = ConversionHelper::convertTwipToMM100(nIntValue);
     /* WRITERFILTERSTATUS: table: ShapeOptionsAttribute */
     switch( m_pImpl->nShapeOptionType )
     {
@@ -1222,7 +1413,7 @@ void GraphicImport::ProcessShapeOptions(doctok::Value& val)
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_dff::LN_shplineWidth           /*459*/:
             //1pt == 12700 units
-            m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineWidth = ConversionHelper::convertToMM100(nIntValue / 635);
+            m_pImpl->aBorders[m_pImpl->nCurrentBorderLine].nLineWidth = ConversionHelper::convertTwipToMM100(nIntValue / 635);
         break;
         /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
 //        case NS_dff::LN_shplineMiterLimit /*460*/:
@@ -1529,52 +1720,101 @@ void GraphicImport::ProcessShapeOptions(doctok::Value& val)
 /*-- 01.11.2006 09:45:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::sprm(doctok::Sprm & sprm_)
+void GraphicImport::sprm(Sprm & rSprm)
 {
-    sal_uInt32 nId = sprm_.getId();
+#ifdef DEBUG_DOMAINMAPPER
+    logger("DOMAINMAPPER", string("<sprm>") + rSprm.toString());
+#endif
+
+    sal_uInt32 nSprmId = rSprm.getId();
+    Value::Pointer_t pValue = rSprm.getValue();
+
     /* WRITERFILTERSTATUS: table: PICFsprmdata */
-    switch(nId)
+    switch(nSprmId)
     {
         case 0xf004: //dff record
         case 0xf00a: //part of 0xf004 - shape properties
         case 0xf00b: //part of 0xf004
         case 0xf007:
         case 0xf122: //udefprop
+        case NS_ooxml::LN_CT_Inline_extent: // 90911;
+        case NS_ooxml::LN_CT_Inline_effectExtent: // 90912;
+        case NS_ooxml::LN_CT_Inline_docPr: // 90913;
+        case NS_ooxml::LN_CT_Inline_cNvGraphicFramePr: // 90914;
+        case NS_ooxml::LN_CT_NonVisualGraphicFrameProperties_graphicFrameLocks:// 90657
+        case NS_ooxml::LN_CT_Inline_a_graphic:// 90915
+        case NS_ooxml::LN_CT_Anchor_simplePos_elem: // 90975;
+        case NS_ooxml::LN_CT_Anchor_positionH: // 90976;
+        case NS_ooxml::LN_CT_Anchor_positionV: // 90977;
+        case NS_ooxml::LN_CT_Anchor_extent: // 90978;
+        case NS_ooxml::LN_CT_Anchor_effectExtent: // 90979;
+        case NS_ooxml::LN_EG_WrapType_wrapSquare: // 90945;
+        case NS_ooxml::LN_EG_WrapType_wrapTight: // 90946;
+        case NS_ooxml::LN_CT_Anchor_docPr: // 90980;
+        case NS_ooxml::LN_CT_Anchor_cNvGraphicFramePr: // 90981;
+        case NS_ooxml::LN_CT_Anchor_a_graphic: // 90982;
+        case NS_ooxml::LN_CT_WrapPath_start: // 90924;
+        case NS_ooxml::LN_CT_WrapPath_lineTo: // 90925;
+        case NS_ooxml::LN_CT_WrapTight_wrapPolygon: // 90933;
+        case NS_ooxml::LN_graphic_graphic:
+        case NS_ooxml::LN_pic_pic:
         {
-            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
+            writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
             if( pProperties.get())
             {
-                string sName = pProperties->getType();
                 pProperties->resolve(*this);
-                sName = "";
             }
         }
         break;
         case 0x271b:
         case 0x271c:
         {
-            if( nId != 0x271c || m_pImpl->nDffType == 0xf01f || m_pImpl->nDffType == 0xf01e )
+            if( nSprmId != 0x271c || m_pImpl->nDffType == 0xf01f || m_pImpl->nDffType == 0xf01e )
             {
-                doctok::Reference<BinaryObj>::Pointer_t pPictureData = sprm_.getBinary();
+                writerfilter::Reference<BinaryObj>::Pointer_t pPictureData = rSprm.getBinary();
                 if( pPictureData.get())
                     pPictureData->resolve(*this);
             }
         }
         break;
+        case NS_ooxml::LN_EG_WrapType_wrapNone: // 90944; - doesn't contain attributes
+            //depending on the behindDoc attribute text wraps through behind or in fron of the object
+            m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
+        break;
+        case NS_ooxml::LN_EG_WrapType_wrapTopAndBottom: // 90948;
+            m_pImpl->nWrap = text::WrapTextMode_NONE;
+        break;
+        case NS_ooxml::LN_EG_WrapType_wrapThrough: // 90947;
+            m_pImpl->nWrap = text::WrapTextMode_THROUGHT;
+        break;
         case 0xf010:
         case 0xf011:
             //ignore - doesn't contain useful members
         break;
+        case NS_ooxml::LN_CT_GraphicalObject_graphicData:// 90660;
+            {
+                m_pImpl->bIsGraphic = true;
+
+                writerfilter::Reference<Properties>::Pointer_t pProperties = rSprm.getProps();
+                if( pProperties.get())
+                    pProperties->resolve(*this);
+            }
+        break;
         default:
-            doctok::Value::Pointer_t pValue = sprm_.getValue();
             if( pValue.get() )
                 pValue->getInt();
     }
+
+
+
+#ifdef DEBUG_DOMAINMAPPER
+    logger("DOMAINMAPPER", "</sprm>");
+#endif
 }
 /*-- 01.11.2006 09:45:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::entry(int /*pos*/, doctok::Reference<Properties>::Pointer_t /*ref*/)
+void GraphicImport::entry(int /*pos*/, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
 /*-- 16.11.2006 16:14:32---------------------------------------------------
@@ -1590,7 +1830,7 @@ void lcl_CalcCrop( sal_Int32& nCrop, sal_Int32 nRef )
 /*-- 01.11.2006 09:45:02---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Properties>::Pointer_t /*ref*/)
+void GraphicImport::data(const sal_uInt8* buf, size_t len, writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
     try
     {
@@ -1617,7 +1857,7 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Pro
             uno::UNO_QUERY_THROW);
             xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_GRAPHIC), uno::makeAny( xGraphic ));
             xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_ANCHOR_TYPE),
-                uno::makeAny( m_pImpl->bIsShapeImport ?
+                uno::makeAny( m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR ?
                                     text::TextContentAnchorType_AT_CHARACTER :
                                     text::TextContentAnchorType_AS_CHARACTER ));
             m_xGraphicObject = uno::Reference< text::XTextContent >( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
@@ -1626,11 +1866,11 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Pro
             table::BorderLine aBorderLine;
             for( sal_Int32 nBorder = 0; nBorder < 4; ++nBorder )
             {
-                if( !m_pImpl->bIsShapeImport || !nBorder )
+                if( m_pImpl->eGraphicImportType == IMPORT_AS_GRAPHIC || !nBorder )
                 {
-                    aBorderLine.Color = m_pImpl->aBorders[m_pImpl->bIsShapeImport ? BORDER_TOP : static_cast<BorderPosition>(nBorder) ].nLineColor;
+                    aBorderLine.Color = m_pImpl->aBorders[m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE ? BORDER_TOP : static_cast<BorderPosition>(nBorder) ].nLineColor;
                     aBorderLine.InnerLineWidth = 0;
-                    aBorderLine.OuterLineWidth = (sal_Int16)m_pImpl->aBorders[m_pImpl->bIsShapeImport ? BORDER_TOP : static_cast<BorderPosition>(nBorder) ].nLineWidth;
+                    aBorderLine.OuterLineWidth = (sal_Int16)m_pImpl->aBorders[m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE ? BORDER_TOP : static_cast<BorderPosition>(nBorder) ].nLineWidth;
                     aBorderLine.LineDistance = 0;
                 }
                 PropertyIds aBorderProps[4] =
@@ -1643,12 +1883,25 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Pro
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( aBorderProps[nBorder]), uno::makeAny(aBorderLine));
             }
 
-            if( m_pImpl->bIsShapeImport )
+            // setting properties for all types
+            xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_ALTERNATIVE_TEXT ),
+                uno::makeAny( m_pImpl->sAlternativeText ));
+            if( m_pImpl->bPositionProtected )
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_POSITION_PROTECTED ),
+                    uno::makeAny(true));
+            if( m_pImpl->bSizeProtected )
+                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SIZE_PROTECTED ),
+                    uno::makeAny(true));
+
+            if( m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR )
             {
                 sal_Int32 nWidth = m_pImpl->nRightPosition - m_pImpl->nLeftPosition;
-                sal_Int32 nHeight = m_pImpl->nBottomPosition - m_pImpl->nTopPosition;
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SIZE),
-                    uno::makeAny( awt::Size( nWidth, nHeight )));
+                if( m_pImpl->eGraphicImportType == IMPORT_AS_SHAPE )
+                {
+                    sal_Int32 nHeight = m_pImpl->nBottomPosition - m_pImpl->nTopPosition;
+                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SIZE),
+                        uno::makeAny( awt::Size( nWidth, nHeight )));
+                }
                 //adjust margins
                 if( (m_pImpl->nHoriOrient == text::HoriOrientation::LEFT &&
                     (m_pImpl->nHoriRelation == text::RelOrientation::PAGE_PRINT_AREA ||
@@ -1707,8 +1960,14 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Pro
                     uno::makeAny(m_pImpl->nTopPosition));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_ORIENT_RELATION ),
                 uno::makeAny(m_pImpl->nVertRelation));
+                if( !m_pImpl->bOpaque )
+                {
+                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_OPAQUE ),
+                        uno::makeAny(m_pImpl->bOpaque));
+                }
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND ),
-                    uno::makeAny(m_pImpl->nWrap));
+                        uno::makeAny(m_pImpl->nWrap));
+
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_SURROUND_CONTOUR ),
                     uno::makeAny(m_pImpl->bContour));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_CONTOUR_OUTSIDE ),
@@ -1754,8 +2013,6 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Pro
                 if( m_pImpl->bVertFlip )
                     xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_VERT_MIRRORED ),
                         uno::makeAny( m_pImpl->bVertFlip ));
-                xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_ALTERNATIVE_TEXT ),
-                    uno::makeAny( m_pImpl->sAlternativeText ));
                 xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_BACK_COLOR ),
                     uno::makeAny( m_pImpl->nFillColor ));
                 //there seems to be no way to detect the original size via _real_ API
@@ -1773,6 +2030,24 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Pro
 
                     xGraphicProperties->setPropertyValue(rPropNameSupplier.GetName( PROP_GRAPHIC_CROP ),
                         uno::makeAny(text::GraphicCrop(m_pImpl->nTopCrop, m_pImpl->nBottomCrop, m_pImpl->nLeftCrop, m_pImpl->nRightCrop)));
+                }
+            }
+
+            if(m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_INLINE || m_pImpl->eGraphicImportType == IMPORT_AS_DETECTED_ANCHOR)
+            {
+                if( m_pImpl->nXSize && m_pImpl->nYSize )
+                    xGraphicObjectProperties->setPropertyValue(rPropNameSupplier.GetName(PROP_SIZE),
+                        uno::makeAny( awt::Size( m_pImpl->nXSize, m_pImpl->nYSize )));
+                try
+                {
+                    if( m_pImpl->sName.getLength() )
+                    {
+                        uno::Reference< container::XNamed > xNamed( xGraphicObjectProperties, uno::UNO_QUERY_THROW );
+                        xNamed->setName( m_pImpl->sName );
+                    }
+                }
+                catch( const uno::Exception& )
+                {
                 }
             }
         }
@@ -1834,19 +2109,19 @@ void GraphicImport::utext(const sal_uInt8 * /*_data*/, size_t /*len*/)
 /*-- 01.11.2006 09:45:05---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::props(doctok::Reference<Properties>::Pointer_t /*ref*/)
+void GraphicImport::props(writerfilter::Reference<Properties>::Pointer_t /*ref*/)
 {
 }
 /*-- 01.11.2006 09:45:06---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::table(doctok::Id /*name*/, doctok::Reference<Table>::Pointer_t /*ref*/)
+void GraphicImport::table(Id /*name*/, writerfilter::Reference<Table>::Pointer_t /*ref*/)
 {
 }
 /*-- 01.11.2006 09:45:07---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void GraphicImport::substream(doctok::Id /*name*/, ::doctok::Reference<Stream>::Pointer_t /*ref*/)
+void GraphicImport::substream(Id /*name*/, ::writerfilter::Reference<Stream>::Pointer_t /*ref*/)
 {
 }
 /*-- 01.11.2006 09:45:07---------------------------------------------------
@@ -1855,5 +2130,13 @@ void GraphicImport::substream(doctok::Id /*name*/, ::doctok::Reference<Stream>::
 void GraphicImport::info(const string & /*info*/)
 {
 }
+/*-- 09.08.2007 10:17:00---------------------------------------------------
 
+  -----------------------------------------------------------------------*/
+bool    GraphicImport::IsGraphic() const
+{
+    return m_pImpl->bIsGraphic;
+}
+
+}
 }
