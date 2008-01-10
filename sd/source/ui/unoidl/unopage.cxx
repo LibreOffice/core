@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 13:39:06 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:22:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,6 +176,7 @@ using ::com::sun::star::animations::XAnimationNode;
 using ::com::sun::star::animations::XAnimationNodeSupplier;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+
 using namespace ::vos;
 using namespace ::osl;
 using namespace ::com::sun::star;
@@ -543,6 +544,7 @@ Any SAL_CALL SdGenericDrawPage::queryInterface( const uno::Type & rType )
     else QUERYINT( document::XLinkTargetSupplier );
     else QUERYINT( drawing::XShapeCombiner );
     else QUERYINT( drawing::XShapeBinder );
+    else QUERYINT( beans::XMultiPropertySet );
     else if( rType == ITYPE( XAnimationNodeSupplier ) )
     {
         if( mbIsImpressDocument )
@@ -1065,7 +1067,7 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
 
                         SvMemoryStream aDestStrm( 65535, 65535 );
                         ConvertGDIMetaFileToWMF( *pMetaFile, aDestStrm, NULL, sal_False );
-                        uno::Sequence<sal_Int8> aSeq( (sal_Int8*)aDestStrm.GetData(), aDestStrm.Tell() );
+                        Sequence<sal_Int8> aSeq( (sal_Int8*)aDestStrm.GetData(), aDestStrm.Tell() );
                         aAny <<= aSeq;
                         delete pMetaFile;
                     }
@@ -1260,6 +1262,64 @@ void SAL_CALL SdGenericDrawPage::removePropertyChangeListener( const OUString& ,
 void SAL_CALL SdGenericDrawPage::addVetoableChangeListener( const OUString& , const Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 void SAL_CALL SdGenericDrawPage::removeVetoableChangeListener( const OUString& , const Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) {}
 
+// XMultiPropertySet
+void SAL_CALL SdGenericDrawPage::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues ) throw (beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, RuntimeException )
+{
+    if( aPropertyNames.getLength() != aValues.getLength() )
+        throw lang::IllegalArgumentException();
+
+    const OUString* pNames = aPropertyNames.getConstArray();
+    const Any* pValues = aValues.getConstArray();
+    sal_uInt32 nCount = aValues.getLength();
+    while( nCount-- )
+    {
+        try
+        {
+            setPropertyValue( *pNames++, *pValues++ );
+        }
+        catch( beans::UnknownPropertyException& )
+        {
+            // ignore for multi property set
+            // todo: optimize this!
+        }
+    }
+}
+
+Sequence< Any > SAL_CALL SdGenericDrawPage::getPropertyValues( const Sequence< OUString >& aPropertyNames ) throw (RuntimeException)
+{
+    const OUString* pNames = aPropertyNames.getConstArray();
+    sal_uInt32 nCount = aPropertyNames.getLength();
+    Sequence< Any > aValues( nCount );
+    Any* pValues = aValues.getArray();
+    while( nCount-- )
+    {
+        Any aValue;
+        try
+        {
+            aValue = getPropertyValue( *pNames++ );
+        }
+        catch( beans::UnknownPropertyException& )
+        {
+            // ignore for multi property set
+            // todo: optimize this!
+        }
+        *pValues++ = aValue;
+    }
+    return aValues;
+}
+
+void SAL_CALL SdGenericDrawPage::addPropertiesChangeListener( const Sequence< OUString >& , const Reference< beans::XPropertiesChangeListener >&  ) throw (RuntimeException)
+{
+}
+
+void SAL_CALL SdGenericDrawPage::removePropertiesChangeListener( const Reference< beans::XPropertiesChangeListener >&  ) throw (RuntimeException)
+{
+}
+
+void SAL_CALL SdGenericDrawPage::firePropertiesChangeEvent( const Sequence< OUString >& , const Reference< beans::XPropertiesChangeListener >&  ) throw (RuntimeException)
+{
+}
+
 Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj ) const throw()
 {
     DBG_ASSERT( GetPage(), "SdGenericDrawPage::_CreateShape(), can't create shape for disposed page!" );
@@ -1384,10 +1444,10 @@ Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *pObj )
 //----------------------------------------------------------------------
 
 // XServiceInfo
-uno::Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
+Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSeq( SvxFmDrawPage::getSupportedServiceNames() );
+    Sequence< OUString > aSeq( SvxFmDrawPage::getSupportedServiceNames() );
     SvxServiceInfoHelper::addToSequence( aSeq, 3, "com.sun.star.drawing.GenericDrawPage",
                                                   "com.sun.star.document.LinkTarget",
                                                   "com.sun.star.document.LinkTargetSupplier");
@@ -1844,7 +1904,7 @@ Any SAL_CALL SdPageLinkTargets::getByName( const OUString& aName )
     throw container::NoSuchElementException();
 }
 
-uno::Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
+Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
     throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
@@ -1866,7 +1926,7 @@ uno::Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
         }
     }
 
-    uno::Sequence< OUString > aSeq( nObjCount );
+    Sequence< OUString > aSeq( nObjCount );
     if( nObjCount > 0 )
     {
         OUString* pStr = aSeq.getArray();
@@ -1931,11 +1991,11 @@ sal_Bool SAL_CALL SdPageLinkTargets::supportsService( const OUString& ServiceNam
     return SvxServiceInfoHelper::supportsService( ServiceName, getSupportedServiceNames() );
 }
 
-uno::Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
+Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
     throw(uno::RuntimeException)
 {
     const OUString aSN( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.LinkTargets") );
-    uno::Sequence< OUString > aSeq( &aSN, 1);
+    Sequence< OUString > aSeq( &aSN, 1);
     return aSeq;
 }
 
@@ -1989,7 +2049,7 @@ void SAL_CALL SdDrawPage::release() throw()
 UNO3_GETIMPLEMENTATION2_IMPL( SdDrawPage, SdGenericDrawPage );
 
 // XTypeProvider
-uno::Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeException)
+Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -2012,13 +2072,14 @@ uno::Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExc
         aTypes.push_back(ITYPE(document::XLinkTargetSupplier));
         aTypes.push_back(ITYPE( drawing::XShapeCombiner ));
         aTypes.push_back(ITYPE( drawing::XShapeBinder ));
+        aTypes.push_back(ITYPE( beans::XMultiPropertySet ));
         if( bPresPage )
             aTypes.push_back(ITYPE(presentation::XPresentationPage));
         if( bPresPage && ePageKind == PK_STANDARD )
             aTypes.push_back(ITYPE(XAnimationNodeSupplier));
 
         // Get types of base class.
-        const uno::Sequence< uno::Type > aBaseTypes( SdGenericDrawPage::getTypes() );
+        const Sequence< uno::Type > aBaseTypes( SdGenericDrawPage::getTypes() );
         const sal_Int32 nBaseTypes = aBaseTypes.getLength();
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
 
@@ -2035,13 +2096,13 @@ uno::Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExc
     return maTypeSequence;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SdDrawPage::getImplementationId() throw(uno::RuntimeException)
+Sequence< sal_Int8 > SAL_CALL SdDrawPage::getImplementationId() throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
     throwIfDisposed();
 
-    static uno::Sequence< sal_Int8 > aId;
+    static Sequence< sal_Int8 > aId;
     if( aId.getLength() == 0 )
     {
         aId.realloc( 16 );
@@ -2096,7 +2157,7 @@ OUString SdDrawPage::getPageApiNameFromUiName( const String& rUIName )
     return getPageApiNameFromUiNameImpl( rUIName );
 }
 
-String getUiNameFromPageApiNameImpl( const ::rtl::OUString& rApiName )
+String getUiNameFromPageApiNameImpl( const OUString& rApiName )
 {
     const String aDefPageName(RTL_CONSTASCII_USTRINGPARAM( sEmptyPageName ));
     if( rApiName.compareTo( aDefPageName, aDefPageName.Len() ) == 0 )
@@ -2134,7 +2195,7 @@ String getUiNameFromPageApiNameImpl( const ::rtl::OUString& rApiName )
     return rApiName;
 }
 
-String SdDrawPage::getUiNameFromPageApiName( const ::rtl::OUString& rApiName )
+String SdDrawPage::getUiNameFromPageApiName( const OUString& rApiName )
 {
     return getUiNameFromPageApiNameImpl( rApiName );
 }
@@ -2145,13 +2206,13 @@ OUString SAL_CALL SdDrawPage::getImplementationName() throw(uno::RuntimeExceptio
     return OUString( RTL_CONSTASCII_USTRINGPARAM("SdDrawPage") );
 }
 
-uno::Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames() throw(uno::RuntimeException)
+Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames() throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
     throwIfDisposed();
 
-    uno::Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
+    Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
     SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.DrawPage" );
 
     if( mbIsImpressDocument )
@@ -2453,7 +2514,7 @@ void SdDrawPage::setBackground( const Any& rValue )
         Reference< beans::XPropertySet >  xDestSet( (beans::XPropertySet*)pBackground );
         Reference< beans::XPropertySetInfo >  xDestSetInfo( xDestSet->getPropertySetInfo() );
 
-        uno::Sequence< beans::Property > aProperties( xDestSetInfo->getProperties() );
+        Sequence< beans::Property > aProperties( xDestSetInfo->getProperties() );
         sal_Int32 nCount = aProperties.getLength();
         beans::Property* pProp = aProperties.getArray();
 
@@ -2653,7 +2714,7 @@ void SAL_CALL SdMasterPage::release() throw()
 UNO3_GETIMPLEMENTATION2_IMPL( SdMasterPage, SdGenericDrawPage );
 
 // XTypeProvider
-uno::Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeException)
+Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
@@ -2675,13 +2736,14 @@ uno::Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeE
         aTypes.push_back(ITYPE(document::XLinkTargetSupplier));
         aTypes.push_back(ITYPE( drawing::XShapeCombiner ));
         aTypes.push_back(ITYPE( drawing::XShapeBinder ));
+        aTypes.push_back(ITYPE( beans::XMultiPropertySet ));
         if( bPresPage )
             aTypes.push_back(ITYPE(presentation::XPresentationPage));
         if( bPresPage && ePageKind == PK_STANDARD )
             aTypes.push_back(ITYPE(XAnimationNodeSupplier));
 
         // Get types of base class.
-        const uno::Sequence< uno::Type > aBaseTypes( SdGenericDrawPage::getTypes() );
+        const Sequence< uno::Type > aBaseTypes( SdGenericDrawPage::getTypes() );
         const sal_Int32 nBaseTypes = aBaseTypes.getLength();
         const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
 
@@ -2698,13 +2760,13 @@ uno::Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeE
     return maTypeSequence;
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SdMasterPage::getImplementationId() throw(uno::RuntimeException)
+Sequence< sal_Int8 > SAL_CALL SdMasterPage::getImplementationId() throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
     throwIfDisposed();
 
-    static uno::Sequence< sal_Int8 > aId;
+    static Sequence< sal_Int8 > aId;
     if( aId.getLength() == 0 )
     {
         aId.realloc( 16 );
@@ -2719,13 +2781,13 @@ OUString SAL_CALL SdMasterPage::getImplementationName() throw(uno::RuntimeExcept
     return OUString( RTL_CONSTASCII_USTRINGPARAM("SdMasterPage") );
 }
 
-uno::Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames() throw(uno::RuntimeException)
+Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames() throw(uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
     throwIfDisposed();
 
-    uno::Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
+    Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
     SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.MasterPage" );
 
     if( SvxFmDrawPage::mpPage && ((SdPage*)SvxFmDrawPage::mpPage)->GetPageKind() == PK_HANDOUT )
@@ -2811,7 +2873,7 @@ void SdMasterPage::setBackground( const Any& rValue )
                 Reference< beans::XPropertySet >  xStyleSet( xFamily->getByName( aStyleName ), UNO_QUERY_THROW );
 
                 Reference< beans::XPropertySetInfo >  xSetInfo( xInputSet->getPropertySetInfo(), UNO_QUERY_THROW );
-                Reference< beans::XPropertyState > xSetStates( xInputSet, UNO_QUERY_THROW );
+                Reference< beans::XPropertyState > xSetStates( xInputSet, UNO_QUERY );
 
                 const SfxItemPropertyMap* pMap = ImplGetPageBackgroundPropertyMap();
                 while( pMap->pName )
