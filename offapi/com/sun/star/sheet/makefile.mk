@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 15:23:16 $
+#   last change: $Author: obo $ $Date: 2008-01-10 12:43:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,52 +47,20 @@ PACKAGE=com$/sun$/star$/sheet
 
 IDLFILES=\
     AccessibleCell.idl\
+    AccessibleCsvCell.idl\
+    AccessibleCsvRuler.idl\
+    AccessibleCsvTable.idl\
+    AccessiblePageHeaderFooterAreasView.idl\
     AccessibleSpreadsheet.idl\
     AccessibleSpreadsheetDocumentView.idl\
     AccessibleSpreadsheetPageView.idl\
-    AccessiblePageHeaderFooterAreasView.idl\
-    AccessibleCsvRuler.idl\
-    AccessibleCsvTable.idl\
-    AccessibleCsvCell.idl\
     ActivationEvent.idl\
-    CellAnnotationsEnumeration.idl\
-    CellAreaLinksEnumeration.idl\
-    DatabaseRangesEnumeration.idl\
-    DataPilotFieldsEnumeration.idl\
-    DataPilotItem.idl\
-    DataPilotItems.idl\
-    DataPilotItemsEnumeration.idl\
-    DataPilotTablesEnumeration.idl\
-    DDELinksEnumeration.idl\
-    FunctionCategory.idl\
-    FunctionDescriptionEnumeration.idl\
-    LabelRangesEnumeration.idl\
-    MoveDirection.idl\
-    NamedRangesEnumeration.idl\
-    ScenariosEnumeration.idl\
-    SheetCellRangesEnumeration.idl\
-    SheetLinksEnumeration.idl\
-    SpreadsheetsEnumeration.idl\
-    SpreadsheetViewPanesEnumeration.idl\
-    StatusBarFunction.idl\
-    SubTotalFieldsEnumeration.idl\
-    TableAutoFormatEnumeration.idl\
-    TableAutoFormatsEnumeration.idl\
-    TableCellStyle.idl\
-    TableConditionalEntryEnumeration.idl\
-    UniqueCellFormatRanges.idl\
-    UniqueCellFormatRangesEnumeration.idl\
-    RangeSelectionArguments.idl\
-    RangeSelectionEvent.idl\
-    XRangeSelection.idl\
-    XRangeSelectionChangeListener.idl\
-    XRangeSelectionListener.idl\
     AddIn.idl\
     Border.idl\
     CellAnnotation.idl\
+    CellAnnotationShape.idl\
     CellAnnotations.idl\
     CellAnnotationsEnumeration.idl\
-    CellAnnotationShape.idl\
     CellAreaLink.idl\
     CellAreaLinks.idl\
     CellAreaLinksEnumeration.idl\
@@ -103,12 +71,12 @@ IDLFILES=\
     CellInsertMode.idl\
     Cells.idl\
     CellsEnumeration.idl\
+    ComplexReference.idl\
     ConditionOperator.idl\
     ConsolidationDescriptor.idl\
-    DatabaseImportDescriptor.idl\
-    DatabaseRange.idl\
-    DatabaseRanges.idl\
-    DatabaseRangesEnumeration.idl\
+    DDELink.idl\
+    DDELinks.idl\
+    DDELinksEnumeration.idl\
     DataImportMode.idl\
     DataPilotDescriptor.idl\
     DataPilotField.idl\
@@ -123,13 +91,16 @@ IDLFILES=\
     DataPilotFieldLayoutMode.idl\
     DataPilotFieldOrientation.idl\
     DataPilotFieldReference.idl\
-    DataPilotFieldReferenceType.idl\
     DataPilotFieldReferenceItemType.idl\
+    DataPilotFieldReferenceType.idl\
     DataPilotFieldShowItemsMode.idl\
     DataPilotFieldSortInfo.idl\
     DataPilotFieldSortMode.idl\
     DataPilotFields.idl\
     DataPilotFieldsEnumeration.idl\
+    DataPilotItem.idl\
+    DataPilotItems.idl\
+    DataPilotItemsEnumeration.idl\
     DataPilotSource.idl\
     DataPilotSourceDimension.idl\
     DataPilotSourceDimensions.idl\
@@ -144,22 +115,30 @@ IDLFILES=\
     DataPilotTablesEnumeration.idl\
     DataResult.idl\
     DataResultFlags.idl\
-    DDELink.idl\
-    DDELinks.idl\
-    DDELinksEnumeration.idl\
+    DatabaseImportDescriptor.idl\
+    DatabaseRange.idl\
+    DatabaseRanges.idl\
+    DatabaseRangesEnumeration.idl\
+    DDELinkMode.idl\
     DocumentSettings.idl\
     FillDateMode.idl\
     FillDirection.idl\
     FillMode.idl\
     FilterConnection.idl\
     FilterOperator.idl\
+    FormulaLanguage.idl\
+    FormulaMapGroup.idl\
+    FormulaMapGroupSpecialOffset.idl\
+    FormulaOpCodeMapEntry.idl\
+    FormulaParser.idl\
     FormulaResult.idl\
+    FormulaToken.idl\
     FunctionAccess.idl\
     FunctionArgument.idl\
     FunctionCategory.idl\
     FunctionDescription.idl\
-    FunctionDescriptions.idl\
     FunctionDescriptionEnumeration.idl\
+    FunctionDescriptions.idl\
     GeneralFunction.idl\
     GlobalSheetSettings.idl\
     GoalResult.idl\
@@ -179,6 +158,7 @@ IDLFILES=\
     RangeSelectionArguments.idl\
     RangeSelectionEvent.idl\
     RecentFunctions.idl\
+    ReferenceFlags.idl\
     ResultEvent.idl\
     Scenario.idl\
     Scenarios.idl\
@@ -197,16 +177,17 @@ IDLFILES=\
     SheetRangesQuery.idl\
     SheetSortDescriptor.idl\
     SheetSortDescriptor2.idl\
+    SingleReference.idl\
     Spreadsheet.idl\
     SpreadsheetDocument.idl\
     SpreadsheetDocumentSettings.idl\
     SpreadsheetDrawPage.idl\
-    Spreadsheets.idl\
-    SpreadsheetsEnumeration.idl\
     SpreadsheetView.idl\
     SpreadsheetViewPane.idl\
     SpreadsheetViewPanesEnumeration.idl\
     SpreadsheetViewSettings.idl\
+    Spreadsheets.idl\
+    SpreadsheetsEnumeration.idl\
     StatusBarFunction.idl\
     SubTotalColumn.idl\
     SubTotalDescriptor.idl\
@@ -218,6 +199,7 @@ IDLFILES=\
     TableAutoFormats.idl\
     TableAutoFormatsEnumeration.idl\
     TableCellStyle.idl\
+    TableCellStyle.idl\
     TableConditionalEntry.idl\
     TableConditionalEntryEnumeration.idl\
     TableConditionalFormat.idl\
@@ -226,34 +208,36 @@ IDLFILES=\
     TablePageBreakData.idl\
     TablePageStyle.idl\
     TableValidation.idl\
+    TableValidationVisibility.idl\
     UniqueCellFormatRanges.idl\
     UniqueCellFormatRangesEnumeration.idl\
-    TableValidationVisibility.idl\
     ValidationAlertStyle.idl\
     ValidationType.idl\
     VolatileResult.idl\
-    XActivationEventListener.idl\
     XActivationBroadcaster.idl\
+    XActivationEventListener.idl\
     XAddIn.idl\
     XAreaLink.idl\
     XAreaLinks.idl\
     XArrayFormulaRange.idl\
+    XArrayFormulaTokens.idl\
     XCalculatable.idl\
     XCellAddressable.idl\
     XCellFormatRangesSupplier.idl\
-    XCellRangesAccess.idl\
     XCellRangeAddressable.idl\
     XCellRangeData.idl\
     XCellRangeFormula.idl\
     XCellRangeMovement.idl\
     XCellRangeReferrer.idl\
+    XCellRangesAccess.idl\
     XCellRangesQuery.idl\
     XCellSeries.idl\
     XCompatibilityNames.idl\
     XConsolidatable.idl\
     XConsolidationDescriptor.idl\
-    XDatabaseRange.idl\
-    XDatabaseRanges.idl\
+    XDDELink.idl\
+    XDDELinkResults.idl\
+    XDDELinks.idl\
     XDataPilotDescriptor.idl\
     XDataPilotField.idl\
     XDataPilotFieldGrouping.idl\
@@ -262,12 +246,17 @@ IDLFILES=\
     XDataPilotTable.idl\
     XDataPilotTables.idl\
     XDataPilotTablesSupplier.idl\
-    XDDELink.idl\
+    XDatabaseRange.idl\
+    XDatabaseRanges.idl\
     XDimensionsSupplier.idl\
     XDocumentAuditing.idl\
     XEnhancedMouseClickBroadcaster.idl\
+    XExternalSheetName.idl\
     XFillAcrossSheet.idl\
+    XFormulaOpCodeMapper.idl\
+    XFormulaParser.idl\
     XFormulaQuery.idl\
+    XFormulaTokens.idl\
     XFunctionAccess.idl\
     XFunctionDescriptions.idl\
     XGoalSeek.idl\
@@ -277,6 +266,7 @@ IDLFILES=\
     XLabelRanges.idl\
     XLevelsSupplier.idl\
     XMembersSupplier.idl\
+    XMultiFormulaTokens.idl\
     XMultipleOperation.idl\
     XNamedRange.idl\
     XNamedRanges.idl\
@@ -292,8 +282,8 @@ IDLFILES=\
     XScenariosSupplier.idl\
     XSheetAnnotation.idl\
     XSheetAnnotationAnchor.idl\
-    XSheetAnnotations.idl\
     XSheetAnnotationShapeSupplier.idl\
+    XSheetAnnotations.idl\
     XSheetAnnotationsSupplier.idl\
     XSheetAuditing.idl\
     XSheetCellCursor.idl\
@@ -303,9 +293,9 @@ IDLFILES=\
     XSheetCondition.idl\
     XSheetConditionalEntries.idl\
     XSheetConditionalEntry.idl\
+    XSheetFilterDescriptor.idl\
     XSheetFilterable.idl\
     XSheetFilterableEx.idl\
-    XSheetFilterDescriptor.idl\
     XSheetLinkable.idl\
     XSheetOperation.idl\
     XSheetOutline.idl\
@@ -313,8 +303,8 @@ IDLFILES=\
     XSheetPastable.idl\
     XSpreadsheet.idl\
     XSpreadsheetDocument.idl\
-    XSpreadsheets.idl\
     XSpreadsheetView.idl\
+    XSpreadsheets.idl\
     XSubTotalCalculatable.idl\
     XSubTotalDescriptor.idl\
     XSubTotalField.idl\
@@ -325,7 +315,7 @@ IDLFILES=\
     XViewPanesSupplier.idl\
     XViewSplitable.idl\
     XVolatileResult.idl\
-    _NamedRange.idl\
+    _NamedRange.idl
 
 # ------------------------------------------------------------------
 
