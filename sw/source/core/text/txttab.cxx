@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txttab.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:21:54 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 12:30:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,31 +67,21 @@
  *                    SwLineInfo::GetTabStop()
  *************************************************************************/
 
-/* Die Werte in SvxTabStop::nTabPos liegen immer relativ zum linken PrtRand
- * vor. Tabs, die im Bereich des Erstzeileneinzugs liegen, sind also negativ.
- * nLeft  ist der linke PrtRand
- * nRight ist der rechte PrtRand
- * nLinePos die aktuelle Position.
- * Es wird der erste Tabstop returnt, der groesser ist als nLinePos.
- */
-
-const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nLinePos,
-    const SwTwips nLeft, const SwTwips nRight ) const
+//#i24363# tab stops relative to indent
+/* Return the first tab stop that is > nSearchPos.
+ * If the tab stop is outside the print area, we
+ * return 0 if it is not the first tab stop.*/
+const SvxTabStop *SwLineInfo::GetTabStop( const SwTwips nSearchPos,
+                                         const SwTwips nRight ) const
 {
     // Mit den KSHORTs aufpassen, falls nLinePos < nLeft
-    SwTwips nPos = nLinePos;
-    nPos -= nLeft;
     for( MSHORT i = 0; i < pRuler->Count(); ++i )
     {
         const SvxTabStop &rTabStop = pRuler->operator[](i);
         if( rTabStop.GetTabPos() > SwTwips(nRight) )
-        {
-            if ( i )
-                return 0;
-            else
-                return &rTabStop;
-        }
-        if( rTabStop.GetTabPos() > nPos )
+            return i ? 0 : &rTabStop;
+
+        if( rTabStop.GetTabPos() > nSearchPos )
             return &rTabStop;
     }
     return 0;
@@ -118,32 +108,50 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         if( pLastTab->PostFormat( rInf ) )
             return 0;
 
-    // Wir suchen den naechsten Tab. Wenn gerade ein rechts-Tab unterwegs
-    // ist, so koennen wir uns nicht auf rInf.X() beziehen.
-    SwTwips nTabPos = rInf.GetLastTab() ? rInf.GetLastTab()->GetTabPos() : 0;
-    if( nTabPos < rInf.X() )
-        nTabPos = rInf.X();
-
     xub_Unicode cFill = 0;
     xub_Unicode cDec = 0;
     SvxTabAdjust eAdj;
 
     KSHORT nNewTabPos;
     {
-       /*
-        nPos ist der Offset in der Zeile.
-        Die Tabulatoren haben ihren 0-Punkt bei Frm().Left().
-        Die Zeilen beginnen ab Frm.Left() + Prt.Left().
-        In dieser Methode wird zwischen beiden Koordinatensystemen
-        konvertiert (vgl. rInf.GetTabPos).
-       */
-        const SwTwips nTabLeft = pFrm->Frm().Left() +
-                                 ( pFrm->IsRightToLeft() ?
-                                   pFrm->GetAttrSet()->GetLRSpace().GetRight() :
-                                   pFrm->GetAttrSet()->GetLRSpace().GetTxtLeft() );
+        const bool bRTL = pFrm->IsRightToLeft();
+        // #i24363# tab stops relative to indent
+        // nTabLeft: The absolute value, the tab stops are relative to: Tabs origin.
+        //
+        const SwTwips nTmpIndent = pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TABS_RELATIVE_TO_INDENT) ?
+                                   pFrm->GetAttrSet()->GetLRSpace().GetTxtLeft() : 0;
 
-        const SwTwips nLinePos = GetLeftMargin();
-        const SwTwips nLineTab = nLinePos + nTabPos;
+        const SwTwips nTabLeft = bRTL ?
+                                 pFrm->Frm().Right() -
+                                 nTmpIndent :
+                                 pFrm->Frm().Left() +
+                                 nTmpIndent;
+
+        //
+        // nLinePos: The absolute position, where we started the line formatting.
+        //
+        SwTwips nLinePos = GetLeftMargin();
+        if ( bRTL )
+        {
+            Point aPoint( nLinePos, 0 );
+            pFrm->SwitchLTRtoRTL( aPoint );
+            nLinePos = aPoint.X();
+        }
+
+        //
+        // nTabPos: The current position, relative to the line start.
+        //
+        SwTwips nTabPos = rInf.GetLastTab() ? rInf.GetLastTab()->GetTabPos() : 0;
+       if( nTabPos < rInf.X() )
+           nTabPos = rInf.X();
+
+        //
+        // nCurrentAbsPos: The current position in absolute coordinates.
+        //
+        const SwTwips nCurrentAbsPos = bRTL ?
+                                       nLinePos - nTabPos :
+                                       nLinePos + nTabPos;
+
         SwTwips nMyRight = Right();
 
         if ( pFrm->IsVertical() )
@@ -154,6 +162,14 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         }
 
         SwTwips nNextPos;
+
+        // #i24363# tab stops relative to indent
+        // nSearchPos: The current position relative to the tabs origin.
+        //
+       const SwTwips nSearchPos = bRTL ?
+                                   nTabLeft - nCurrentAbsPos :
+                                   nCurrentAbsPos - nTabLeft;
+
         //
         // First, we examine the tab stops set at the paragraph style or
         // any hard set tab stops:
@@ -161,7 +177,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
         // default tab stop.
         //
         const SvxTabStop* pTabStop =
-            aLineInf.GetTabStop( nLineTab, nTabLeft, nMyRight );
+            aLineInf.GetTabStop( nSearchPos, nMyRight );
         if( pTabStop )
         {
             cFill = ' ' != pTabStop->GetFill() ? pTabStop->GetFill() : 0;
@@ -183,8 +199,7 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
                     nDefTabDist = SVX_TAB_DEFDIST;
                 aLineInf.SetDefTabStop( nDefTabDist );
             }
-            SwTwips nCount = nLineTab;
-            nCount -= nTabLeft;
+            SwTwips nCount = nSearchPos;
 
             // Bei negativen Werten rundet "/" auf, "%" liefert negative Reste,
             // bei positiven Werten rundet "/" ab, "%" liefert positvie Reste!
@@ -196,7 +211,8 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             // --> FME 2004-09-21 #117919 Minimum tab stop width is 1 or 51 twips:
             const SwTwips nMinimumTabWidth = pFrm->GetTxtNode()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::TAB_COMPAT) ? 0 : 50;
             // <--
-            if( nNextPos + nTabLeft <= nLineTab + nMinimumTabWidth )
+           if( (  bRTL && nTabLeft - nNextPos >= nCurrentAbsPos - nMinimumTabWidth ) ||
+                ( !bRTL && nNextPos + nTabLeft <= nCurrentAbsPos + nMinimumTabWidth  ) )
                 nNextPos += nDefTabDist;
             cFill = 0;
             eAdj = SVX_TAB_ADJUST_LEFT;
@@ -210,14 +226,16 @@ SwTabPortion *SwTxtFormatter::NewTabPortion( SwTxtFormatInfo &rInf, bool bAuto )
             if( pPor )
                 nForced = pPor->Width();
         }
-        if( nTabLeft + nForced > nLineTab && nNextPos > 0 )
+
+        if( nNextPos > 0 &&
+             (  bRTL && nTabLeft - nForced < nCurrentAbsPos ||
+               !bRTL && nTabLeft + nForced > nCurrentAbsPos ) )
         {
             eAdj = SVX_TAB_ADJUST_DEFAULT;
             cFill = 0;
             nNextPos = nForced;
         }
-        nNextPos += nTabLeft;
-        nNextPos -= nLinePos;
+        nNextPos += bRTL ? nLinePos - nTabLeft : nTabLeft - nLinePos;
         ASSERT( nNextPos >= 0, "GetTabStop: Don't go back!" );
         nNewTabPos = KSHORT(nNextPos);
     }
