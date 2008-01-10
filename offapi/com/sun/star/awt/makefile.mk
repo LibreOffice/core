@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-27 11:49:14 $
+#   last change: $Author: obo $ $Date: 2008-01-10 12:37:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -243,6 +243,7 @@ IDLFILES=\
     XFixedText.idl\
     XFocusListener.idl\
     XFont.idl\
+    XFont2.idl\
     XGraphics.idl\
     XImageButton.idl\
     XImageConsumer.idl\
