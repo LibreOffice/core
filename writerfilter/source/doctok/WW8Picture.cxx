@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Picture.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-21 11:37:11 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include <resources.hxx>
 #include <WW8DocumentImpl.hxx>
 
+namespace writerfilter {
 namespace doctok
 {
 
@@ -44,7 +45,7 @@ void WW8PICF::resolveNoAuto(Properties & rHandler)
     WW8Stream::Pointer_t pStream = getDocument()->getDataStream();
 
     {
-        doctok::Reference<Properties>::Pointer_t pContent;
+        writerfilter::Reference<Properties>::Pointer_t pContent;
         if (getDocument()->isPicData())
         {
             WW8Value::Pointer_t pValue = createValue(get_ffdata());
@@ -58,19 +59,19 @@ void WW8PICF::resolveNoAuto(Properties & rHandler)
     }
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8PICF::get_DffRecord()
 {
-    doctok::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t
         pRet(new DffBlock(this, get_cbHeader(), getCount() - get_cbHeader(),
                           0));
     return pRet;
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8PICF::get_ffdata()
 {
-    doctok::Reference<Properties>::Pointer_t
+    writerfilter::Reference<Properties>::Pointer_t
         pRet(new WW8FFDATA(this, get_cbHeader(), getCount() - get_cbHeader()));
 
     WW8StructBase::Pointer_t pStruct
@@ -82,7 +83,7 @@ WW8PICF::get_ffdata()
     return pRet;
 }
 
-doctok::Reference<Properties>::Pointer_t
+writerfilter::Reference<Properties>::Pointer_t
 WW8FSPA::get_shape()
 {
     return getDocument()->getShape(get_spid());
@@ -212,4 +213,4 @@ sal_uInt16 WW8FFDATA::get_checked()
 
     return nResult;
 }
-}
+}}
