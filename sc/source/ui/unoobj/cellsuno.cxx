@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.108 $
+ *  $Revision: 1.109 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 10:42:15 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:17:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,7 @@
 #include "convuno.hxx"
 #include "srchuno.hxx"
 #include "targuno.hxx"
+#include "tokenuno.hxx"
 #include "docsh.hxx"
 #include "markdata.hxx"
 #include "patattr.hxx"
@@ -4806,6 +4807,7 @@ uno::Any SAL_CALL ScCellRangeObj::queryInterface( const uno::Type& rType )
     SC_QUERYINTERFACE( table::XCellRange )
     SC_QUERYINTERFACE( sheet::XSheetCellRange )
     SC_QUERYINTERFACE( sheet::XArrayFormulaRange )
+    SC_QUERYINTERFACE( sheet::XArrayFormulaTokens )
     SC_QUERYINTERFACE( sheet::XCellRangeData )
     SC_QUERYINTERFACE( sheet::XCellRangeFormula )
     SC_QUERYINTERFACE( sheet::XMultipleOperation )
@@ -4843,24 +4845,25 @@ uno::Sequence<uno::Type> SAL_CALL ScCellRangeObj::getTypes() throw(uno::RuntimeE
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
-        aTypes.realloc( nParentLen + 16 );
+        aTypes.realloc( nParentLen + 17 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XCellRangeAddressable>*)0);
         pPtr[nParentLen + 1] = getCppuType((const uno::Reference<sheet::XSheetCellRange>*)0);
         pPtr[nParentLen + 2] = getCppuType((const uno::Reference<sheet::XArrayFormulaRange>*)0);
-        pPtr[nParentLen + 3] = getCppuType((const uno::Reference<sheet::XCellRangeData>*)0);
-        pPtr[nParentLen + 4] = getCppuType((const uno::Reference<sheet::XCellRangeFormula>*)0);
-        pPtr[nParentLen + 5] = getCppuType((const uno::Reference<sheet::XMultipleOperation>*)0);
-        pPtr[nParentLen + 6] = getCppuType((const uno::Reference<util::XMergeable>*)0);
-        pPtr[nParentLen + 7] = getCppuType((const uno::Reference<sheet::XCellSeries>*)0);
-        pPtr[nParentLen + 8] = getCppuType((const uno::Reference<table::XAutoFormattable>*)0);
-        pPtr[nParentLen + 9] = getCppuType((const uno::Reference<util::XSortable>*)0);
-        pPtr[nParentLen +10] = getCppuType((const uno::Reference<sheet::XSheetFilterableEx>*)0);
-        pPtr[nParentLen +11] = getCppuType((const uno::Reference<sheet::XSubTotalCalculatable>*)0);
-        pPtr[nParentLen +12] = getCppuType((const uno::Reference<table::XColumnRowRange>*)0);
-        pPtr[nParentLen +13] = getCppuType((const uno::Reference<util::XImportable>*)0);
-        pPtr[nParentLen +14] = getCppuType((const uno::Reference<sheet::XCellFormatRangesSupplier>*)0);
-        pPtr[nParentLen +15] = getCppuType((const uno::Reference<sheet::XUniqueCellFormatRangesSupplier>*)0);
+        pPtr[nParentLen + 3] = getCppuType((const uno::Reference<sheet::XArrayFormulaTokens>*)0);
+        pPtr[nParentLen + 4] = getCppuType((const uno::Reference<sheet::XCellRangeData>*)0);
+        pPtr[nParentLen + 5] = getCppuType((const uno::Reference<sheet::XCellRangeFormula>*)0);
+        pPtr[nParentLen + 6] = getCppuType((const uno::Reference<sheet::XMultipleOperation>*)0);
+        pPtr[nParentLen + 7] = getCppuType((const uno::Reference<util::XMergeable>*)0);
+        pPtr[nParentLen + 8] = getCppuType((const uno::Reference<sheet::XCellSeries>*)0);
+        pPtr[nParentLen + 9] = getCppuType((const uno::Reference<table::XAutoFormattable>*)0);
+        pPtr[nParentLen +10] = getCppuType((const uno::Reference<util::XSortable>*)0);
+        pPtr[nParentLen +11] = getCppuType((const uno::Reference<sheet::XSheetFilterableEx>*)0);
+        pPtr[nParentLen +12] = getCppuType((const uno::Reference<sheet::XSubTotalCalculatable>*)0);
+        pPtr[nParentLen +13] = getCppuType((const uno::Reference<table::XColumnRowRange>*)0);
+        pPtr[nParentLen +14] = getCppuType((const uno::Reference<util::XImportable>*)0);
+        pPtr[nParentLen +15] = getCppuType((const uno::Reference<sheet::XCellFormatRangesSupplier>*)0);
+        pPtr[nParentLen +16] = getCppuType((const uno::Reference<sheet::XUniqueCellFormatRangesSupplier>*)0);
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -5109,11 +5112,77 @@ void SAL_CALL ScCellRangeObj::setArrayFormula( const rtl::OUString& aFormula )
                 throw uno::RuntimeException();
             }
 
-            aFunc.EnterMatrix( aRange, NULL, aString, TRUE, TRUE );
+            aFunc.EnterMatrix( aRange, NULL, NULL, aString, TRUE, TRUE );
         }
         else
         {
             //  empty string -> erase array formula
+            ScMarkData aMark;
+            aMark.SetMarkArea( aRange );
+            aMark.SelectTable( aRange.aStart.Tab(), TRUE );
+            aFunc.DeleteContents( aMark, IDF_CONTENTS, TRUE, TRUE );
+        }
+    }
+}
+
+// XArrayFormulaTokens
+
+uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellRangeObj::getArrayTokens() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+
+    // same cell logic as in getArrayFormula
+
+    uno::Sequence<sheet::FormulaToken> aSequence;
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh )
+    {
+        ScDocument* pDoc = pDocSh->GetDocument();
+        const ScBaseCell* pCell1 = pDoc->GetCell( aRange.aStart );
+        const ScBaseCell* pCell2 = pDoc->GetCell( aRange.aEnd );
+        if ( pCell1 && pCell2 && pCell1->GetCellType() == CELLTYPE_FORMULA &&
+                                 pCell2->GetCellType() == CELLTYPE_FORMULA )
+        {
+            const ScFormulaCell* pFCell1 = (const ScFormulaCell*)pCell1;
+            const ScFormulaCell* pFCell2 = (const ScFormulaCell*)pCell2;
+            ScAddress aStart1;
+            ScAddress aStart2;
+            if ( pFCell1->GetMatrixOrigin( aStart1 ) && pFCell2->GetMatrixOrigin( aStart2 ) )
+            {
+                if ( aStart1 == aStart2 )
+                {
+                    ScTokenArray* pTokenArray = pFCell1->GetCode();
+                    if ( pTokenArray )
+                        (void)ScTokenConversion::ConvertToTokenSequence( aSequence, *pTokenArray );
+                }
+            }
+        }
+    }
+    return aSequence;
+}
+
+void SAL_CALL ScCellRangeObj::setArrayTokens( const uno::Sequence<sheet::FormulaToken>& rTokens ) throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh )
+    {
+        ScDocFunc aFunc(*pDocSh);
+        if ( rTokens.getLength() )
+        {
+            if ( ScTableSheetObj::getImplementation( (cppu::OWeakObject*)this ) )
+            {
+                throw uno::RuntimeException();
+            }
+
+            ScTokenArray aTokenArray;
+            (void)ScTokenConversion::ConvertToTokenArray( aTokenArray, rTokens );
+
+            aFunc.EnterMatrix( aRange, NULL, &aTokenArray, EMPTY_STRING, TRUE, TRUE );
+        }
+        else
+        {
+            //  empty sequence -> erase array formula
             ScMarkData aMark;
             aMark.SetMarkArea( aRange );
             aMark.SelectTable( aRange.aStart.Tab(), TRUE );
@@ -6029,6 +6098,7 @@ void ScCellObj::RefChanged()
 uno::Any SAL_CALL ScCellObj::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException)
 {
     SC_QUERYINTERFACE( table::XCell )
+    SC_QUERYINTERFACE( sheet::XFormulaTokens )
     SC_QUERYINTERFACE( sheet::XCellAddressable )
     SC_QUERYINTERFACE( text::XText )
     SC_QUERYINTERFACE( text::XSimpleText )
@@ -6061,7 +6131,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellObj::getTypes() throw(uno::RuntimeExcept
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
-        aTypes.realloc( nParentLen + 7 );
+        aTypes.realloc( nParentLen + 8 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<table::XCell>*)0);
         pPtr[nParentLen + 1] = getCppuType((const uno::Reference<sheet::XCellAddressable>*)0);
@@ -6070,6 +6140,7 @@ uno::Sequence<uno::Type> SAL_CALL ScCellObj::getTypes() throw(uno::RuntimeExcept
         pPtr[nParentLen + 4] = getCppuType((const uno::Reference<sheet::XSheetAnnotationAnchor>*)0);
         pPtr[nParentLen + 5] = getCppuType((const uno::Reference<text::XTextFieldsSupplier>*)0);
         pPtr[nParentLen + 6] = getCppuType((const uno::Reference<document::XActionLockable>*)0);
+        pPtr[nParentLen + 7] = getCppuType((const uno::Reference<sheet::XFormulaTokens>*)0);
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -6468,6 +6539,43 @@ sal_Int32 SAL_CALL ScCellObj::getError() throw(uno::RuntimeException)
     return nError;
 }
 
+// XFormulaTokens
+
+uno::Sequence<sheet::FormulaToken> SAL_CALL ScCellObj::getTokens() throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    uno::Sequence<sheet::FormulaToken> aSequence;
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh )
+    {
+        ScDocument* pDoc = pDocSh->GetDocument();
+        ScBaseCell* pCell = pDoc->GetCell( aCellPos );
+        if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
+        {
+            ScTokenArray* pTokenArray = static_cast<ScFormulaCell*>(pCell)->GetCode();
+            if ( pTokenArray )
+                (void)ScTokenConversion::ConvertToTokenSequence( aSequence, *pTokenArray );
+        }
+    }
+    return aSequence;
+}
+
+void SAL_CALL ScCellObj::setTokens( const uno::Sequence<sheet::FormulaToken>& rTokens ) throw(uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh )
+    {
+        ScDocument* pDoc = pDocSh->GetDocument();
+        ScTokenArray aTokenArray;
+        (void)ScTokenConversion::ConvertToTokenArray( aTokenArray, rTokens );
+
+        ScDocFunc aFunc( *pDocSh );
+        ScBaseCell* pNewCell = new ScFormulaCell( pDoc, aCellPos, &aTokenArray );
+        (void)aFunc.PutCell( aCellPos, pNewCell, TRUE );
+    }
+}
+
 // XCellAddressable
 
 table::CellAddress SAL_CALL ScCellObj::getCellAddress() throw(uno::RuntimeException)
@@ -6730,6 +6838,7 @@ uno::Any SAL_CALL ScTableSheetObj::queryInterface( const uno::Type& rType ) thro
     SC_QUERYINTERFACE( sheet::XScenario )
     SC_QUERYINTERFACE( sheet::XScenarioEnhanced )
     SC_QUERYINTERFACE( sheet::XSheetLinkable )
+    SC_QUERYINTERFACE( sheet::XExternalSheetName )
 
     return ScCellRangeObj::queryInterface( rType );
 }
@@ -6753,7 +6862,7 @@ uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes() throw(uno::Runtime
         long nParentLen = aParentTypes.getLength();
         const uno::Type* pParentPtr = aParentTypes.getConstArray();
 
-        aTypes.realloc( nParentLen + 16 );
+        aTypes.realloc( nParentLen + 17 );
         uno::Type* pPtr = aTypes.getArray();
         pPtr[nParentLen + 0] = getCppuType((const uno::Reference<sheet::XSpreadsheet>*)0);
         pPtr[nParentLen + 1] = getCppuType((const uno::Reference<container::XNamed>*)0);
@@ -6771,6 +6880,7 @@ uno::Sequence<uno::Type> SAL_CALL ScTableSheetObj::getTypes() throw(uno::Runtime
         pPtr[nParentLen +13] = getCppuType((const uno::Reference<sheet::XScenario>*)0);
         pPtr[nParentLen +14] = getCppuType((const uno::Reference<sheet::XScenarioEnhanced>*)0);
         pPtr[nParentLen +15] = getCppuType((const uno::Reference<sheet::XSheetLinkable>*)0);
+        pPtr[nParentLen +16] = getCppuType((const uno::Reference<sheet::XExternalSheetName>*)0);
 
         for (long i=0; i<nParentLen; i++)
             pPtr[i] = pParentPtr[i];                // parent types first
@@ -7568,7 +7678,7 @@ void SAL_CALL ScTableSheetObj::link( const rtl::OUString& aUrl, const rtl::OUStr
 
         //! Undo fuer Link-Daten an der Table
 
-        if ( nLinkMode != SC_LINK_NONE )        // Link updaten
+        if ( nLinkMode != SC_LINK_NONE && pDoc->IsExecuteLinkEnabled() )        // Link updaten
         {
             //  Update immer, auch wenn der Link schon da war
             //! Update nur fuer die betroffene Tabelle???
@@ -8026,6 +8136,29 @@ uno::Sequence< table::CellRangeAddress > SAL_CALL ScTableSheetObj::getRanges(  )
         }
     }
     return uno::Sequence< table::CellRangeAddress > ();
+}
+
+// XExternalSheetName
+
+void ScTableSheetObj::setExternalName( const ::rtl::OUString& aUrl, const ::rtl::OUString& aSheetName )
+    throw (container::ElementExistException, uno::RuntimeException)
+{
+    ScUnoGuard aGuard;
+    ScDocShell* pDocSh = GetDocShell();
+    if ( pDocSh )
+    {
+        ScDocument* pDoc = pDocSh->GetDocument();
+        if ( pDoc )
+        {
+            const SCTAB nTab = GetTab_Impl();
+            const String aAbsDocName( ScGlobal::GetAbsDocName( aUrl, pDocSh ) );
+            const String aDocTabName( ScGlobal::GetDocTabName( aAbsDocName, aSheetName ) );
+            if ( !pDoc->RenameTab( nTab, aDocTabName, FALSE /*bUpdateRef*/, TRUE /*bExternalDocument*/ ) )
+            {
+                throw container::ElementExistException( ::rtl::OUString(), *this );
+            }
+        }
+    }
 }
 
 // XPropertySet erweitert fuer Sheet-Properties
