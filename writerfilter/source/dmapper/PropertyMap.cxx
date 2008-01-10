@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-10-29 13:55:24 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 11:41:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@
 
 using namespace ::com::sun::star;
 
+namespace writerfilter {
 namespace dmapper{
 
 /*-- 21.06.2006 09:30:56---------------------------------------------------
@@ -109,10 +110,17 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
             pValues[nValue].Value = aCharStyleIter->second;
             ++nValue;
         }
+        PropertyMap::iterator aNumRuleIter = find(PropertyDefinition( PROP_NUMBERING_RULES, false ) );
+        if( aNumRuleIter != end())
+        {
+            pValues[nValue].Name = rPropNameSupplier.GetName( aNumRuleIter->first.eId );
+            pValues[nValue].Value = aNumRuleIter->second;
+            ++nValue;
+        }
         PropertyMap::iterator aMapIter = begin();
         for( ; nValue < m_aValues.getLength(); ++aMapIter )
         {
-            if( aMapIter != aParaStyleIter && aMapIter != aCharStyleIter)
+            if( aMapIter != aParaStyleIter && aMapIter != aCharStyleIter && aMapIter != aNumRuleIter )
             {
                 pValues[nValue].Name = rPropNameSupplier.GetName( aMapIter->first.eId );
                 pValues[nValue].Value = aMapIter->second;
@@ -438,7 +446,7 @@ void SectionPropertyMap::ApplyBorderToPageStyles(
             if(xSecond.is())
                 xSecond->setPropertyValue( sBorderName, uno::makeAny( *m_pBorderLines[nBorder] ));
         }
-        if( m_nBorderDistances[4] >= 0 )
+        if( m_nBorderDistances[nBorder] >= 0 )
         {
             const ::rtl::OUString sBorderDistanceName = rPropNameSupplier.GetName( aBorderDistanceIds[nBorder] );
             xFirst->setPropertyValue( sBorderDistanceName, uno::makeAny( m_nBorderDistances[nBorder] ));
@@ -593,7 +601,7 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     sal_Int32 nBottomMargin = m_nBottomMargin;
     if( HasFooter( bFirstPage ) )
     {
-        nBottomMargin = m_nHeaderBottom;
+        m_nBottomMargin = m_nHeaderBottom;
         if( nBottomMargin > 0 && nBottomMargin > m_nHeaderBottom )
             m_nHeaderBottom = nBottomMargin - m_nHeaderBottom;
         else
@@ -620,8 +628,8 @@ void SectionPropertyMap::PrepareHeaderFooterProperties( bool bFirstPage )
     }
 
     //now set the top/bottom margin for the follow page style
-    operator[]( PropertyDefinition( PROP_TOP_MARGIN, false )) = uno::makeAny( nTopMargin );
-    operator[]( PropertyDefinition( PROP_BOTTOM_MARGIN, false )) = uno::makeAny( nBottomMargin );
+    operator[]( PropertyDefinition( PROP_TOP_MARGIN, false )) = uno::makeAny( m_nTopMargin );
+    operator[]( PropertyDefinition( PROP_BOTTOM_MARGIN, false )) = uno::makeAny( m_nBottomMargin );
 }
 /*-- 11.12.2006 08:31:46---------------------------------------------------
 
@@ -736,7 +744,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             {
                 double fHeight = 0;
                 if( aElement_->second >>= fHeight )
-                    nCharWidth = ConversionHelper::convertToMM100( (long)( fHeight * 20.0 + 0.5 ));
+                    nCharWidth = ConversionHelper::convertTwipToMM100( (long)( fHeight * 20.0 + 0.5 ));
             }
         }
 
@@ -747,11 +755,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
             //main lives in top 20 bits, and is signed.
             sal_Int32 nMain = (nCharSpace & 0xFFFFF000);
             nMain /= 0x1000;
-            nCharWidth += ConversionHelper::convertToMM100( nMain * 20 );
+            nCharWidth += ConversionHelper::convertTwipToMM100( nMain * 20 );
 
             sal_Int32 nFraction = (nCharSpace & 0x00000FFF);
             nFraction = (nFraction * 20)/0xFFF;
-            nCharWidth += ConversionHelper::convertToMM100( nFraction );
+            nCharWidth += ConversionHelper::convertTwipToMM100( nFraction );
         }
         operator[]( PropertyDefinition( PROP_GRID_BASE_HEIGHT, false )) = uno::makeAny( nCharWidth );
         sal_Int32 nRubyHeight = m_nGridLinePitch - nCharWidth;
@@ -803,7 +811,7 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         catch( const uno::Exception& rEx)
         {
             (void)rEx;
-        }
+       }
     }
 }
 /*-- 11.12.2006 08:31:46---------------------------------------------------
@@ -869,7 +877,9 @@ StyleSheetPropertyMap::StyleSheetPropertyMap() :
     mbCT_TrPrBase_jcSet( false ),
     mbCT_TcPrBase_vAlignSet( false ),
     mbCT_TblWidth_wSet( false ),
-    mbCT_TblWidth_typeSet( false )
+    mbCT_TblWidth_typeSet( false ),
+    mnListId( -1 ),
+    mnListLevel( -1 )
 {
 }
 /*-- 14.06.2007 13:57:43---------------------------------------------------
@@ -880,3 +890,4 @@ StyleSheetPropertyMap::~StyleSheetPropertyMap()
 }
 
 }//namespace dmapper
+}//namespace writerfilter
