@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:21:19 $
+ *  last change: $Author: obo $ $Date: 2008-01-10 13:20:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3896,7 +3896,7 @@ sal_Int8 ScGridWindow::DropTransferObj( ScTransferObj* pTransObj, SCCOL nDestPos
 
                     //! use tokens
                     String aFormula( '=' );
-                    aFormula += ScCompiler::pSymbolTableNative[SC_OPCODE_DDE];
+                    aFormula += ScCompiler::GetNativeSymbol(ocDde);
                     aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("(\""));
                     aFormula += aApp;
                     aFormula.AppendAscii(RTL_CONSTASCII_STRINGPARAM("\";\""));
