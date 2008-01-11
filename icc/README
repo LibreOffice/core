@@ -1,4 +1,4 @@
-Date: 2007-12-10
+Date: 2008-01-11
 
 This project is used to generate the ICC color
 profile needed in module vcl in order to export
@@ -24,4 +24,18 @@ on 2007-08-23.
 For information on ICC profiles, you may want to visit:
 http://www.color.org
 
+Notes for porters
+=================
+the endianess and other platform specific configuration
+are in:
+
+<build>/misc/build/SampleICC-1.3.2/IccProfLib/IccProfLibConf.h
+
+The patches:
+SampleICC-1.3.2.patch is the file to be used for Linux and Windows
+SampleICC-1.3.2-bendian.patch is the file to be used for
+big endian platform, formed from the above patch plus the big endian
+forcing.
+
 beppec56@openoffice.org
+
