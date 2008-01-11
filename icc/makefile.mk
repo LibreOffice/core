@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: pl $ $Date: 2008-01-10 19:42:35 $
+#   last change: $Author: pl $ $Date: 2008-01-11 09:58:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,12 @@ TARGET=icc
 # --- Files --------------------------------------------------------
 
 TARFILE_NAME=SampleICC-1.3.2
+#checking for endianess
+.IF "$(CPU)"=="I"
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
+.ELSE
+PATCH_FILE_NAME=$(TARFILE_NAME)-bendian.patch
+.ENDIF
 BUILD_ACTION=$(GNUMAKE) && cd Contrib/CmdLine/create_sRGB_profile && ./create_sRGB_profile
 CONVERTFILES= \
     IccProfLib/IccTagProfSeqId.h \
