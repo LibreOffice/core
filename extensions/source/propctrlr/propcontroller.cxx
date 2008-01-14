@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propcontroller.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:52:26 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:59:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -917,16 +917,9 @@ namespace pcr
                     else
                         xComp->removeEventListener( static_cast< XPropertyChangeListener* >( this ) );
             }
-            catch( const Exception& e )
+            catch( const Exception& )
             {
-            #if OSL_DEBUG_LEVEL > 0
-                ::rtl::OString sMessage( "OPropertyBrowserController::impl_toggleInspecteeListening_nothrow: caught an exception!\n" );
-                sMessage += "message:\n";
-                sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-                OSL_ENSURE( false, sMessage );
-            #else
-                e; // make compiler happy
-            #endif
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
     }
@@ -1378,20 +1371,9 @@ namespace pcr
                 m_sPageSelection = m_sLastValidPageSelection;
             selectPageFromViewData();
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-        #if OSL_DEBUG_LEVEL > 0
-            Any caught( ::cppu::getCaughtException() );
-
-            ::rtl::OString sMessage( "OPropertyBrowserController::UpdateUI: caught an exception!" );
-            sMessage += "\ntype: ";
-            sMessage += ::rtl::OString( caught.getValueTypeName().getStr(), caught.getValueTypeName().getLength(), osl_getThreadTextEncoding() );
-            sMessage += "\nmessage: ";
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-            OSL_ENSURE( false, sMessage );
-        #else
-            e; // make compiler happy
-        #endif
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
