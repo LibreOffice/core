@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unowrapper.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 14:28:36 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:58:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ using namespace ::com::sun::star;
         // case WINDOW_SCROLLBARBOX:
         // case WINDOW_PATTERNBOX:
         // case WINDOW_CURRENCYBOX:
-        default:                    return new VCLXWindow;
+        default:                    return new VCLXWindow( true );
     }
 }
 
