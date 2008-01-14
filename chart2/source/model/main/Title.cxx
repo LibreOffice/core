@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Title.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:03:14 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:02:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,14 +251,14 @@ namespace chart
 
 Title::Title( uno::Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 Title::Title( const Title & rOther ) :
         MutexContainer(),
         impl::Title_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     CloneHelper::CloneRefSequence< uno::Reference< chart2::XFormattedString > >(
         rOther.m_aStrings, m_aStrings );
@@ -267,7 +267,10 @@ Title::Title( const Title & rOther ) :
 }
 
 Title::~Title()
-{}
+{
+    ModifyListenerHelper::removeListenerFromAllElements(
+        ContainerHelper::SequenceToVector( m_aStrings ), m_xModifyEventForwarder );
+}
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL Title::createClone()
