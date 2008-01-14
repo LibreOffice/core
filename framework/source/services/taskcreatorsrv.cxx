@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskcreatorsrv.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:45:54 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:24:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,6 +107,14 @@
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
+
+#ifndef _SV_WINDOW_HXX
+#include <vcl/window.hxx>
 #endif
 
 //_______________________________________________
@@ -222,6 +230,24 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
         xContainerWindow = implts_createContainerWindow(xParentWindow, aPosSize, bCreateTopWindow);
     }
 
+    //------------------->
+    // HACK  #125187# + #i53630#
+    // Mark all document windows as "special ones", so VCL can bind
+    // special features to it. Because VCL doesnt know anything about documents ...
+    // Note: Doing so it's no longer supported, that e.g. our wizards can use findFrame(_blank)
+    // to create it's previes frames. They must do it manually by using WindowDescriptor+Toolkit!
+    css::uno::Reference< css::frame::XDesktop > xDesktop(xParentFrame, css::uno::UNO_QUERY);
+    ::sal_Bool bTopLevelDocumentWindow = (
+                                            (sRightName.getLength () < 1) &&
+                                            (
+                                                (! xParentFrame.is() )    ||
+                                                (  xDesktop.is()     )
+                                            )
+                                         );
+    if (bTopLevelDocumentWindow)
+        implts_applyDocStyleToWindow(xContainerWindow);
+    //------------------->
+
     // create the new frame
     css::uno::Reference< css::frame::XFrame > xFrame = implts_createFrame(xParentFrame, xContainerWindow, sRightName);
 
@@ -237,6 +263,18 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
         xContainerWindow->setVisible(bVisible);
 
     return css::uno::Reference< css::uno::XInterface >(xFrame, css::uno::UNO_QUERY_THROW);
+}
+
+//-----------------------------------------------
+void TaskCreatorService::implts_applyDocStyleToWindow(const css::uno::Reference< css::awt::XWindow >& xWindow) const
+{
+    // SYNCHRONIZED ->
+    ::vos::OClearableGuard aSolarGuard(Application::GetSolarMutex());
+    Window* pVCLWindow = VCLUnoHelper::GetWindow(xWindow);
+    if (pVCLWindow)
+        pVCLWindow->SetExtendedStyle(WB_EXT_DOCUMENT);
+    aSolarGuard.clear();
+    // <- SYNCHRONIZED
 }
 
 //-----------------------------------------------
