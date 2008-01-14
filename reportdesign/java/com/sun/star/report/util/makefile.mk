@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 13:14:59 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 15:24:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ PACKAGE = com$/sun$/star$/report$/util
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
 CLASSPATH!:=$(CLASSPATH)$(PATH_SEPERATOR)$(JCOMMON_JAR)$(PATH_SEPERATOR)$(LIBXML_JAR)$(PATH_SEPERATOR)$(JFREEREPORT_JAR)
 .ELSE
-JARFILES        = jcommon-1.0.10.jar libxml-0.9.5.jar jfreereport-0.9.0-05.jar
+JARFILES        = jcommon-1.0.10.jar libxml-0.9.9.jar pentaho-reporting-flow-engine-0.9.2.jar
 .ENDIF
 
 JAVAFILES       = DefaultJobProperties.java DefaultParameterMap.java DefaultReportJobDefinition.java FileRepository.java ManifestWriter.java
