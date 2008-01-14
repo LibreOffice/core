@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Legend.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:54:28 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:01:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,7 @@ namespace chart
 
 Legend::Legend( Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
 }
 
@@ -193,7 +193,7 @@ Legend::Legend( const Legend & rOther ) :
         MutexContainer(),
         impl::Legend_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     CloneHelper::CloneRefVector< Reference< chart2::XLegendEntry > >( rOther.m_aLegendEntries, m_aLegendEntries );
     ModifyListenerHelper::addListenerToAllElements( m_aLegendEntries, m_xModifyEventForwarder );
