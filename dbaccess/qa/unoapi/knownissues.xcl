@@ -1,50 +1,28 @@
-### 109883 ###
-# dbaccess.SbaXGridControl::com::sun::star::form::XUpdateBroadcaster
-
-### 112604 ###
-# dbaccess.SbaXGridControl::com::sun::star::awt::XWindow
-
 ### 114044 ###
 dbaccess.ORowSet::com::sun::star::sdbc::XWarningsSupplier
-
-### 99122 ###
-# dbaccess.ODatasourceBrowser::com::sun::star::form::XFormController
-
-### i25950 ###
-# dbaccess.ConnectionLineAccessibility::com::sun::star::accessibility::XAccessibleEventBroadcaster
-# dbaccess.TableWindowAccessibility::com::sun::star::accessibility::XAccessibleEventBroadcaster
 
 ### i38209 ###
 dbaccess.ODatasourceAdministrationDialog::com::sun::star::sdb::DatasourceAdministrationDialog
 
-### i47523 ###
-# dbaccess.SbaXGridControl::com::sun::star::awt::XView
-
-### i47968 ###
-# dbaccess.SbaXGridControl::com::sun::star::view::XSelectionSupplier
-
-### i54394 ###
-dbaccess.ORowSet::com::sun::star::sdbc::XResultSetUpdate
-
 ### i55579 ###
 dbaccess.OQueryDesign::com::sun::star::frame::XController
 
-### i67034 ###
-dbaccess.ConnectionLineAccessibility::com::sun::star::accessibility::XAccessibleEventBroadcaster
-dbaccess.ConnectionLineAccessibility::com::sun::star::accessibility::XAccessible
-dbaccess.ConnectionLineAccessibility::com::sun::star::accessibility::XAccessibleContext
-dbaccess.TableWindowAccessibility::com::sun::star::accessibility::XAccessibleEventBroadcaster
-dbaccess.TableWindowAccessibility::com::sun::star::accessibility::XAccessible
-dbaccess.TableWindowAccessibility::com::sun::star::accessibility::XAccessibleContext
-dbaccess.JoinViewAccessibility::com::sun::star::accessibility::XAccessibleEventBroadcaster
-dbaccess.JoinViewAccessibility::com::sun::star::accessibility::XAccessible
-dbaccess.JoinViewAccessibility::com::sun::star::accessibility::XAccessibleContext
-
-### failures wirhout issue ###
-dbaccess.ODatabaseSource::com::sun::star::beans::XPropertySet
+### i84113 ###
 # dbaccess.ConnectionLineAccessibility -> disabled in dbaccess.sce
+
+### i84114 ###
 # dbaccess.JoinViewAccessibility -> disabled in dbaccess.sce
+
+### i84116 ###
 # dbaccess.OQueryDesign -> disabled in dbaccess.sce
+
+### i84125 ###
+dbaccess.SbaXGridControl::com::sun::star::view::XSelectionSupplier
+
+### i84127 ###
+dbaccess.SbaXGridControl::com::sun::star::awt::XWindow
 # dbaccess.SbaXGridControl -> disabled in dbaccess.sce
+
+### i84128 ###
 # dbaccess.TableWindowAccessibility -> disabled in dbaccess.sce
 
