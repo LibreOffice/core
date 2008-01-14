@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:25:32 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:55:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,9 @@
 #ifndef _COM_SUN_STAR_AWT_XNUMERICFIELD_HPP_
 #include <com/sun/star/awt/XNumericField.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_XMetricFIELD_HPP_
+#include <com/sun/star/awt/XMetricField.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_XBUTTON_HPP_
 #include <com/sun/star/awt/XButton.hpp>
 #endif
@@ -265,6 +268,10 @@ protected:
         @see GetBitmap
     */
     virtual void    ImplSetNewImage();
+public:
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
+
 };
 
 //  ----------------------------------------------------
@@ -310,6 +317,9 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -330,6 +340,8 @@ public:
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
 
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 protected:
     virtual void    ImplSetNewImage();
 };
@@ -387,6 +399,9 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -405,7 +420,6 @@ protected:
     void            ImplClickedOrToggled( BOOL bToggled );
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
-
 
 public:
                     VCLXRadioButton();
@@ -442,6 +456,9 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -470,6 +487,9 @@ public:
     void SAL_CALL setMessageText( const ::rtl::OUString& aText ) throw(::com::sun::star::uno::RuntimeException);
     ::rtl::OUString SAL_CALL getMessageText(  ) throw(::com::sun::star::uno::RuntimeException);
     sal_Int16 SAL_CALL execute(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 
@@ -504,6 +524,9 @@ public:
 
     // ::com::sun::star::awt::XDevice,
     ::com::sun::star::awt::DeviceInfo SAL_CALL getInfo() throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 
     // ::com::sun::star::awt::XVclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
@@ -571,6 +594,9 @@ public:
     ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -585,7 +611,6 @@ private:
 protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
-
 
 public:
                     VCLXScrollBar();
@@ -626,6 +651,9 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -691,6 +719,9 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -762,6 +793,9 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -820,6 +854,9 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -855,6 +892,9 @@ public:
     void SAL_CALL first(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL last(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL enableRepeat( sal_Bool bRepeat ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -880,6 +920,9 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -923,6 +966,9 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -963,6 +1009,9 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -1005,6 +1054,61 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
+};
+
+//  ----------------------------------------------------
+//  class VCLXMetricField
+//  ----------------------------------------------------
+class MetricFormatter;
+class MetricField;
+class VCLXMetricField : public ::com::sun::star::awt::XMetricField,
+                        public VCLXFormattedSpinField
+{
+    MetricFormatter *GetMetricFormatter() throw(::com::sun::star::uno::RuntimeException);
+    MetricField     *GetMetricField() throw(::com::sun::star::uno::RuntimeException);
+    void CallListeners();
+public:
+    VCLXMetricField();
+    ~VCLXMetricField();
+
+    // ::com::sun::star::uno::XInterface
+    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
+    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+
+    // ::com::sun::star::lang::XTypeProvider
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XMetricField
+    virtual void SAL_CALL setValue( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setUserValue( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int64 SAL_CALL getValue( ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int64 SAL_CALL getCorrectedValue( ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setMin( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int64 SAL_CALL getMin( ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setMax( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int64 SAL_CALL getMax( ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setFirst( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int64 SAL_CALL getFirst( ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setLast( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int64 SAL_CALL getLast( ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setSpinSize( ::sal_Int64 Value ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int64 SAL_CALL getSpinSize(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setDecimalDigits( ::sal_Int16 nDigits ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Int16 SAL_CALL getDecimalDigits(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setStrictFormat( ::sal_Bool bStrict ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::sal_Bool SAL_CALL isStrictFormat(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::VclWindowPeer
+    void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -1048,6 +1152,9 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
@@ -1081,6 +1188,9 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
