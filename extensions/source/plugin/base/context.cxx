@@ -4,9 +4,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:07:11 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:50:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ XPluginContext_Impl::~XPluginContext_Impl()
 {
 }
 
-::rtl::OUString XPluginContext_Impl::getValue( const Reference< ::com::sun::star::plugin::XPlugin > & plugin, ::com::sun::star::plugin::PluginVariable variable )
+::rtl::OUString XPluginContext_Impl::getValue( const Reference< ::com::sun::star::plugin::XPlugin > & /*plugin*/, ::com::sun::star::plugin::PluginVariable /*variable*/ )
     throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
     return ::rtl::OUString();
@@ -188,13 +188,13 @@ void XPluginContext_Impl::getURLNotify(const Reference< ::com::sun::star::plugin
         listener->disposing( ::com::sun::star::lang::EventObject() );
 }
 
-::rtl::OUString XPluginContext_Impl::getUserAgent(const Reference< ::com::sun::star::plugin::XPlugin > & plugin)
+::rtl::OUString XPluginContext_Impl::getUserAgent(const Reference< ::com::sun::star::plugin::XPlugin > & /*plugin*/)
     throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
     return ::rtl::OUString::createFromAscii( "Mozilla 3.0" );
 }
 
-void XPluginContext_Impl::displayStatusText(const Reference< ::com::sun::star::plugin::XPlugin > & plugin, const ::rtl::OUString& message)
+void XPluginContext_Impl::displayStatusText(const Reference< ::com::sun::star::plugin::XPlugin > & /*plugin*/, const ::rtl::OUString& /*message*/)
     throw( ::com::sun::star::plugin::PluginException, RuntimeException )
 {
 }
@@ -280,9 +280,9 @@ FileSink::FileSink( const Reference< ::com::sun::star::lang::XMultiServiceFactor
                     const ::rtl::OUString& mimetype,
                     const ::rtl::OUString& target, const Reference< ::com::sun::star::io::XActiveDataSource > & source ) :
         m_xSMgr( rSMgr ),
+        m_xPlugin( plugin ),
         m_aMIMEType( mimetype ),
-        m_aTarget( target ),
-        m_xPlugin( plugin )
+        m_aTarget( target )
 {
     DirEntry aEntry;
     m_aFileName = aEntry.TempName().GetFull();
