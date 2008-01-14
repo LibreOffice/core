@@ -309,7 +309,6 @@ STDAPI DllUnregisterServerNative( int nMode, BOOL bForAllUsers )
     HKEY        hkey = NULL;
     BOOL        fErr = FALSE;
     char        aSubKey[513];
-    HKEY        aIter[2] = { HKEY_LOCAL_MACHINE, HKEY_CURRENT_USER };
     const char* aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
 
       for( int ind = 0; ind < SUPPORTED_EXT_NUM; ind++ )
@@ -486,7 +485,6 @@ STDAPI DllUnregisterServerDoc( int nMode, BOOL bForAllUsers )
     HKEY        hkey = NULL;
     BOOL        fErr = FALSE;
     char        aSubKey[513];
-    HKEY        aIter[2] = { HKEY_LOCAL_MACHINE, HKEY_CURRENT_USER };
     const char* aPrefix = aLocalPrefix; // bForAllUsers ? "" : aLocalPrefix;
 
       for( int ind = 0; ind < SUPPORTED_MSEXT_NUM; ind++ )
