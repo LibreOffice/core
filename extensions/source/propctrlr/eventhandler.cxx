@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventhandler.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:21:37 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:57:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,11 +144,11 @@ namespace pcr
     //====================================================================
     EventDescription::EventDescription( EventId _nId, const sal_Char* _pListenerNamespaceAscii, const sal_Char* _pListenerClassAsciiName,
             const sal_Char* _pListenerMethodAsciiName, sal_uInt16 _nDisplayNameResId, sal_Int32 _nHelpId, sal_Int32 _nUniqueBrowseId )
-        :nId( _nId )
+        :sDisplayName( String( PcrRes( _nDisplayNameResId ) ) )
         ,sListenerMethodName( ::rtl::OUString::createFromAscii( _pListenerMethodAsciiName ) )
-        ,sDisplayName( String( PcrRes( _nDisplayNameResId ) ) )
         ,nHelpId( _nHelpId )
         ,nUniqueBrowseId( _nUniqueBrowseId )
+        ,nId( _nId )
     {
         ::rtl::OUStringBuffer aQualifiedListenerClass;
         aQualifiedListenerClass.appendAscii( "com.sun.star." );
@@ -527,9 +527,9 @@ namespace pcr
     EventHandler::EventHandler( const Reference< XComponentContext >& _rxContext )
         :EventHandler_Base( m_aMutex )
         ,m_aContext( _rxContext )
+        ,m_aPropertyListeners( m_aMutex )
         ,m_bEventsMapInitialized( false )
         ,m_bIsDialogElement( false )
-        ,m_aPropertyListeners( m_aMutex )
     {
         DBG_CTOR( EventHandler, NULL );
     }
@@ -706,6 +706,7 @@ namespace pcr
 
         OSL_ENSURE( _rControlValueType.getTypeClass() == TypeClass_STRING,
             "EventHandler::convertToControlValue: unexpected ControlValue type class!" );
+        (void)_rControlValueType;
         return makeAny( aScriptEvent.ScriptCode );
     }
 
