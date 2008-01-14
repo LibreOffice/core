@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:57:13 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:44:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1062,6 +1062,8 @@ BOOL ViewShell::ActivateObject(SdrOle2Obj* pObj, long nVerb)
 
         MapMode aMapMode( GetDoc()->GetScaleUnit() );
         Size aObjAreaSize = pObj->GetOrigObjSize( &aMapMode );
+        if( pObj->IsChart() ) //charts never should be stretched see #i84323# for example
+            aObjAreaSize = aDrawSize;
 
         Fraction aScaleWidth (aDrawSize.Width(),  aObjAreaSize.Width() );
         Fraction aScaleHeight(aDrawSize.Height(), aObjAreaSize.Height() );
