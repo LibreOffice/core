@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formlinkdialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:07:30 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:58:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -533,7 +533,8 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_Bool FormLinkDialog::getExistingRelation( const Reference< XPropertySet >& _rxLHS, const Reference< XPropertySet >& _rxRHS,
+    sal_Bool FormLinkDialog::getExistingRelation( const Reference< XPropertySet >& _rxLHS, const Reference< XPropertySet >& /*_rxRHS*/,
+            // TODO: fix the usage of _rxRHS. This is issue #i81956#.
         Sequence< ::rtl::OUString >& _rLeftFields, Sequence< ::rtl::OUString >& _rRightFields ) const
     {
         try
@@ -557,32 +558,33 @@ namespace pcr
                     xKeys->getByIndex( key ) >>= xKey;
                     sal_Int32 nKeyType = 0;
                     xKey->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Type" ) ) ) >>= nKeyType;
-                    if ( nKeyType == KeyType::FOREIGN )
-                    {
-                        xKeyColumns.clear();
-                        xKeyColSupp = xKeyColSupp.query( xKey );
-                        if ( xKeyColSupp.is() )
-                            xKeyColumns = xKeyColumns.query( xKeyColSupp->getColumns() );
-                        OSL_ENSURE( xKeyColumns.is(), "FormLinkDialog::getExistingRelation: could not obtain the columns for the key!" );
-                        if ( xKeyColumns.is() )
-                        {
-                            const sal_Int32 columnCount = xKeyColumns->getCount();
-                            _rLeftFields.realloc( columnCount );
-                            _rRightFields.realloc( columnCount );
-                            for ( sal_Int32 column = 0; column < columnCount; ++column )
-                            {
-                                xKeyColumn.clear();
-                                xKeyColumns->getByIndex( column ) >>= xKeyColumn;
-                                OSL_ENSURE( xKeyColumn.is(), "FormLinkDialog::getExistingRelation: invalid key column!" );
-                                if ( xKeyColumn.is() )
-                                {
-                                    xKeyColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumnName;
-                                    xKeyColumn->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RelatedColumn" ) ) ) >>= sRelatedColumnName;
+                    if ( nKeyType != KeyType::FOREIGN )
+                        continue;
 
-                                    _rLeftFields[ column ]  = sColumnName;
-                                    _rRightFields[ column ] = sRelatedColumnName;
-                                }
-                            }
+                    xKeyColumns.clear();
+                    xKeyColSupp = xKeyColSupp.query( xKey );
+                    if ( xKeyColSupp.is() )
+                        xKeyColumns = xKeyColumns.query( xKeyColSupp->getColumns() );
+                    OSL_ENSURE( xKeyColumns.is(), "FormLinkDialog::getExistingRelation: could not obtain the columns for the key!" );
+
+                    if ( !xKeyColumns.is() )
+                        continue;
+
+                    const sal_Int32 columnCount = xKeyColumns->getCount();
+                    _rLeftFields.realloc( columnCount );
+                    _rRightFields.realloc( columnCount );
+                    for ( sal_Int32 column = 0; column < columnCount; ++column )
+                    {
+                        xKeyColumn.clear();
+                        xKeyColumns->getByIndex( column ) >>= xKeyColumn;
+                        OSL_ENSURE( xKeyColumn.is(), "FormLinkDialog::getExistingRelation: invalid key column!" );
+                        if ( xKeyColumn.is() )
+                        {
+                            xKeyColumn->getPropertyValue( PROPERTY_NAME ) >>= sColumnName;
+                            xKeyColumn->getPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "RelatedColumn" ) ) ) >>= sRelatedColumnName;
+
+                            _rLeftFields[ column ]  = sColumnName;
+                            _rRightFields[ column ] = sRelatedColumnName;
                         }
                     }
                 }
