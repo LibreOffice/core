@@ -2,7 +2,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/plugcon.cxx,v 1.6 2006-09-16 13:10:44 obo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/plugcon.cxx,v 1.7 2008-01-14 14:54:04 ihi Exp $
 
 *************************************************************************/
 
@@ -36,10 +36,10 @@ struct PtrStruct
     ULONG nBytes;
 };
 
-DECLARE_LIST( PtrStructList, PtrStruct* );
+DECLARE_LIST( PtrStructList, PtrStruct* )
 
 ULONG PluginConnector::FillBuffer( char*& rpBuffer,
-                                   char* pFunction,
+                                   const char* pFunction,
                                    ULONG nFunctionLen,
                                    va_list ap )
 {
@@ -67,7 +67,7 @@ ULONG PluginConnector::FillBuffer( char*& rpBuffer,
     memcpy( pRun, pFunction, nFunctionLen );
     pRun += nFunctionLen;
 
-    while( pPtrStruct = aList.Remove( (ULONG) 0 ) )
+    while( (pPtrStruct = aList.Remove( (ULONG) 0 )) )
     {
         memcpy( pRun, &pPtrStruct->nBytes, sizeof( ULONG ) );
         pRun += sizeof( ULONG );
@@ -78,7 +78,7 @@ ULONG PluginConnector::FillBuffer( char*& rpBuffer,
     return nDataSize;
 }
 
-MediatorMessage* PluginConnector::Transact( char* pFunction,
+MediatorMessage* PluginConnector::Transact( const char* pFunction,
                                             ULONG nFunctionLen, ... )
 {
     va_list ap;
@@ -135,7 +135,7 @@ MediatorMessage* PluginConnector::WaitForAnswer( ULONG nMessageID )
     {
         {
             NAMESPACE_VOS(OGuard) aGuard( m_aQueueMutex );
-            for( int i = 0; i < m_aMessageQueue.Count(); i++ )
+            for( ULONG i = 0; i < m_aMessageQueue.Count(); i++ )
             {
                 ULONG nID = m_aMessageQueue.GetObject( i )->m_nID;
                 if(  ( nID & 0xff000000 ) &&
@@ -155,12 +155,12 @@ ConnectorInstance::ConnectorInstance( NPP inst, char* type,
                                       char* pargvbuf, ULONG nargvbytes,
                                       char* savedata, ULONG savebytes ) :
         instance( inst ),
+        pShell( NULL ),
+        pWidget( NULL ),
+        pForm( NULL ),
         nArg( args ),
         pArgnBuf( pargnbuf ),
-        pArgvBuf( pargvbuf ),
-        pShell( NULL ),
-        pForm( NULL ),
-        pWidget( NULL )
+        pArgvBuf( pargvbuf )
 {
     memset( &window, 0, sizeof(window) );
     pMimeType = new char[ strlen( type ) + 1 ];
@@ -197,10 +197,10 @@ ConnectorInstance::~ConnectorInstance()
     delete [] argv;
     delete [] pArgnBuf;
     delete [] pArgvBuf;
-    delete [] aData.buf;
+    delete [] (char*)aData.buf;
 }
 
-char* GetCommandName( CommandAtoms eCommand )
+const char* GetCommandName( CommandAtoms eCommand )
 {
     switch( eCommand )
     {
