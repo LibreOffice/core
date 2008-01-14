@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PageBackground.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:02:34 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:01:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ namespace chart
 PageBackground::PageBackground( const uno::Reference< uno::XComponentContext > & xContext ) :
         ::property::OPropertySet( m_aMutex ),
     m_xContext( xContext ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 PageBackground::PageBackground( const PageBackground & rOther ) :
@@ -129,7 +129,7 @@ PageBackground::PageBackground( const PageBackground & rOther ) :
         impl::PageBackground_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 PageBackground::~PageBackground()
