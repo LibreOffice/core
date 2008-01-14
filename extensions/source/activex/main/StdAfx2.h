@@ -16,6 +16,15 @@
 #define _ATL_APARTMENT_THREADED
 #define _ATL_STATIC_REGISTRY
 
+#pragma warning (disable:4505)
+    //  globally disable "unreferenced local function has been removed"
+
+#pragma warning (push,1)
+#pragma warning (disable:4548)
+    //  expression before comma has no effect; expected expression with side-effect
+#pragma warning (disable:4555)
+    //  expression has no effect; expected expression with side-effect
+
 #define min(a, b)  (((a) < (b)) ? (a) : (b))
 #include <atlbase.h>
 
@@ -24,6 +33,8 @@
 extern CComModule _Module;
 #include <atlcom.h>
 #include <atlctl.h>
+
+#pragma warning (pop)
 
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
