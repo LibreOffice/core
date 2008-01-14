@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewWrapper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:39:00 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:57:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,14 +175,17 @@ void lcl_initOutliner( SdrOutliner* pTargetOutliner, SdrOutliner* pSourceOutline
 }
 */
 
-DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut)
+DrawViewWrapper::DrawViewWrapper( SdrModel* pSdrModel, OutputDevice* pOut, bool bPaintPageForEditMode)
             : E3dView(pSdrModel, pOut)
             , m_pMarkHandleProvider(NULL)
             , m_apOutliner( SdrMakeOutliner( OUTLINERMODE_TEXTOBJECT, pSdrModel ) )
+            , m_bRestoreMapMode( false )
 {
     // #114898#
     SetBufferedOutputAllowed(true);
     SetBufferedOverlayAllowed(true);
+
+    SetPagePaintingAllowed(bPaintPageForEditMode);
 
     ReInit();
 }
@@ -194,19 +197,20 @@ void DrawViewWrapper::ReInit()
     if(pOutDev)
         aOutputSize = pOutDev->GetOutputSize();
 
-    this->ShowSdrPage(this->GetModel()->GetPage(0));
+    bPageVisible = false;
+    bPageBorderVisible = false;
+    bBordVisible = false;
+    bGridVisible = false;
+    bHlplVisible = false;
 
-    this->SetPageBorderVisible(false);
-    this->SetBordVisible(false);
-    this->SetGridVisible(false);
-    this->SetGridFront(false);
-    this->SetHlplVisible(false);
     this->SetNoDragXorPolys(true);//for interactive 3D resize-dragging: paint only a single rectangle (not a simulated 3D object)
     //this->SetResizeAtCenter(true);//for interactive resize-dragging: keep the object center fix
 
     //a correct work area is at least necessary for correct values in the position and  size dialog
     Rectangle aRect(Point(0,0), aOutputSize);
     this->SetWorkArea(aRect);
+
+    this->ShowSdrPage(this->GetModel()->GetPage(0));
 }
 
 DrawViewWrapper::~DrawViewWrapper()
@@ -363,12 +367,43 @@ bool DrawViewWrapper::IsObjectHit( SdrObject* pObj, const Point& rPnt ) const
 
 void DrawViewWrapper::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
 {
-        //prevent wrong reselection of objects
-        SdrModel* pSdrModel( this->GetModel() );
-        if( pSdrModel && pSdrModel->isLocked() )
-            return;
+    //prevent wrong reselection of objects
+    SdrModel* pSdrModel( this->GetModel() );
+    if( pSdrModel && pSdrModel->isLocked() )
+        return;
 
-        E3dView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
+    E3dView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
+
+    const SdrHint* pSdrHint = dynamic_cast< const SdrHint* >( &rHint );
+    if( pSdrHint != 0 )
+    {
+        SdrHintKind eKind = pSdrHint->GetKind();
+        if( eKind == HINT_BEGEDIT )
+        {
+            // #i79965# remember map mode
+            OSL_ASSERT( ! m_bRestoreMapMode );
+            OutputDevice* pOutDev = this->GetFirstOutputDevice();
+            if( pOutDev )
+            {
+                m_aMapModeToRestore = pOutDev->GetMapMode();
+                m_bRestoreMapMode = true;
+            }
+        }
+        else if( eKind == HINT_ENDEDIT )
+        {
+            // #i79965# scroll back view when ending text edit
+            OSL_ASSERT( m_bRestoreMapMode );
+            if( m_bRestoreMapMode )
+            {
+                OutputDevice* pOutDev = this->GetFirstOutputDevice();
+                if( pOutDev )
+                {
+                    pOutDev->SetMapMode( m_aMapModeToRestore );
+                    m_bRestoreMapMode = false;
+                }
+            }
+        }
+    }
 }
 
 //static
