@@ -4,9 +4,9 @@
  *
  *  $RCSfile: so_closelistener.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:02:37 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:45:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,17 +40,17 @@
 
 using namespace ::com::sun::star;
 
-void SAL_CALL PluginDocumentClosePreventer::queryClosing( const lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
+void SAL_CALL PluginDocumentClosePreventer::queryClosing( const lang::EventObject& /*aEvent*/, sal_Bool /*bDeliverOwnership*/ )
         throw ( uno::RuntimeException, util::CloseVetoException )
 {
     if ( m_bPreventClose )
         throw util::CloseVetoException();
 }
 
-void SAL_CALL PluginDocumentClosePreventer::notifyClosing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException )
+void SAL_CALL PluginDocumentClosePreventer::notifyClosing( const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException )
 {}
 
-void SAL_CALL PluginDocumentClosePreventer::disposing( const lang::EventObject& aEvent ) throw ( uno::RuntimeException )
+void SAL_CALL PluginDocumentClosePreventer::disposing( const lang::EventObject& /*aEvent*/ ) throw ( uno::RuntimeException )
 {}
 
 
