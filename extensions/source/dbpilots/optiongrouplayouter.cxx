@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optiongrouplayouter.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:00:38 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:43:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,6 @@ namespace dbp
         sal_Int32 nRadioButtons = _rSettings.aLabels.size();
 
         sal_Int32 nTopSpace = 0;
-        sal_Int32 nButtonSpace = 0;
 
         // the shape of the groupbox
         ::com::sun::star::awt::Size aControlShapeSize = _rContext.xObjectShape->getSize();
