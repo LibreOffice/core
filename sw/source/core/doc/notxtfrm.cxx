@@ -4,9 +4,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:38:50 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:48:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,6 +177,7 @@
 #endif
 
 #include <svtools/embedhlp.hxx>
+#include <svx/chartprettypainter.hxx>
 
 using namespace com::sun::star;
 
@@ -1037,6 +1038,16 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea ) cons
         }
         if( bForceSwap )
             pGrfNd->SwapOut();
+    }
+    else if( pOLENd
+        //charts must be painted resolution dependent!! #i82893#, #i75867#
+        && ChartPrettyPainter::IsChart(pOLENd->GetOLEObj().GetObject())
+        && ChartPrettyPainter::ShouldPrettyPaintChartOnThisDevice( pOut )
+        && svt::EmbeddedObjectRef::TryRunningState( pOLENd->GetOLEObj().GetOleRef() )
+        && ChartPrettyPainter::DoPrettyPaintChart( uno::Reference< frame::XModel >(
+            pOLENd->GetOLEObj().GetOleRef()->getComponent(), uno::UNO_QUERY), pOut, aAlignedGrfArea.SVRect() ) )
+    {
+        (void)(0);//all was done in if statement
     }
     else if( pOLENd )
     {
