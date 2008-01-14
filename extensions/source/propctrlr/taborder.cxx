@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taborder.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:09:05 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:01:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,18 +119,18 @@ namespace pcr
     TabOrderDialog::TabOrderDialog( Window* _pParent, const Reference< XTabControllerModel >& _rxTabModel,
                     const Reference< XControlContainer >& _rxControlCont, const Reference< XMultiServiceFactory >& _rxORB )
         :ModalDialog( _pParent, PcrRes( RID_DLG_TABORDER ) )
-        ,aPB_OK( this, PcrRes( PB_OK ) )
-        ,aPB_CANCEL( this, PcrRes( PB_CANCEL ) )
-        ,aPB_HELP( this, PcrRes( PB_HELP ) )
-        ,aFT_Controls( this, PcrRes( FT_CONTROLS ) )
-        ,aPB_MoveUp( this, PcrRes( PB_MOVE_UP ) )
-        ,aPB_MoveDown( this, PcrRes( PB_MOVE_DOWN ) )
-        ,aPB_AutoOrder( this, PcrRes( PB_AUTO_ORDER ) )
-        ,aLB_Controls( this, PcrRes( CTRL_TREE ) )
-        ,pImageList( NULL )
         ,m_xModel( _rxTabModel )
         ,m_xControlContainer( _rxControlCont )
         ,m_xORB( _rxORB )
+        ,aFT_Controls( this, PcrRes( FT_CONTROLS ) )
+        ,aLB_Controls( this, PcrRes( CTRL_TREE ) )
+        ,aPB_OK( this, PcrRes( PB_OK ) )
+        ,aPB_CANCEL( this, PcrRes( PB_CANCEL ) )
+        ,aPB_HELP( this, PcrRes( PB_HELP ) )
+        ,aPB_MoveUp( this, PcrRes( PB_MOVE_UP ) )
+        ,aPB_MoveDown( this, PcrRes( PB_MOVE_DOWN ) )
+        ,aPB_AutoOrder( this, PcrRes( PB_AUTO_ORDER ) )
+        ,pImageList( NULL )
     {
         DBG_CTOR(TabOrderDialog,NULL);
 
