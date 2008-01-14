@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtopwindow.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:46:57 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:55:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,9 @@ public:
     void SAL_CALL toFront(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL toBack(  ) throw(::com::sun::star::uno::RuntimeException);
     void SAL_CALL setMenuBar( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMenuBar >& xMenu ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 
