@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeWatcher.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:23:56 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:21:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,24 +35,18 @@
 
 package helper;
 
-import java.lang.Thread;
 import lib.TestParameters;
-import share.LogWriter;
-
-import com.sun.star.frame.XComponentLoader;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.lang.XComponent;
-import com.sun.star.beans.PropertyValue;
 import java.util.StringTokenizer;
 
 public class OfficeWatcher extends Thread implements share.Watcher {
 
     public boolean finish;
-
     TestParameters params;
     int StoredPing = 0;
 
-    /** Creates new OfficeWatcher */
+    /** Creates new OfficeWatcher
+     * @param param
+     */
     public OfficeWatcher(TestParameters param) {
         finish = false;
         this.params = param;
@@ -62,17 +56,18 @@ public class OfficeWatcher extends Thread implements share.Watcher {
      * pings the office watcher to check for changes
      */
     public void ping() {
-        try{
-            StoredPing ++;
-        } catch (Exception e){
-            StoredPing=0;
+        try {
+            StoredPing++;
+        } catch (Exception e) {
+            StoredPing = 0;
         }
     }
 
     /**
      * returns the amount of pings
+     * @return returns the amount of pings
      */
-    public int getPing(){
+    public int getPing() {
         return StoredPing;
     }
 
@@ -86,9 +81,9 @@ public class OfficeWatcher extends Thread implements share.Watcher {
         while (!isDone) {
             timeOut = params.getInt("TimeOut");
             int previous = StoredPing;
-            shortWait(timeOut==0?30000:timeOut);
+            shortWait(timeOut == 0 ? 30000 : timeOut);
             // a timeout with value 0 lets watcher not react.
-            if ((StoredPing == previous) && timeOut != 0){
+            if ((StoredPing == previous) && timeOut != 0) {
                 isDone = true;
             }
             // execute in case the watcher is not needed anymore
@@ -96,40 +91,35 @@ public class OfficeWatcher extends Thread implements share.Watcher {
                 return;
             }
         }
-        if (ph !=null) {
-            System.out.println("OfficeWatcher: the Office is idle for " + timeOut/1000
-                        + " seconds, it probably hangs and is killed NOW.");
+        if (ph != null) {
+            System.out.println("OfficeWatcher: the Office is idle for " + timeOut / 1000 + " seconds, it probably hangs and is killed NOW.");
             String AppKillCommand = (String) params.get ("AppKillCommand");
-            if (AppKillCommand != null)
-            {
-                StringTokenizer aKillCommandToken = new StringTokenizer( AppKillCommand,";" );
-                while (aKillCommandToken.hasMoreTokens())
-                {
+            if (AppKillCommand != null) {
+                StringTokenizer aKillCommandToken = new StringTokenizer(AppKillCommand, ";");
+                while (aKillCommandToken.hasMoreTokens()) {
                     String sKillCommand = aKillCommandToken.nextToken();
 
                     System.out.println("User defined an application to destroy the started process.");
-                    System.out.println("Trying to execute: "+sKillCommand);
-                    try
-                    {
-                        Runtime.getRuntime().exec(sKillCommand);
-                        shortWait(2000);
-                    }
-                    catch (java.io.IOException e)
-                    {
-                        e.printStackTrace ();
+                    System.out.println("Trying to execute: " + sKillCommand);
+                    try {
+                        Process myprc = Runtime.getRuntime().exec(sKillCommand);
+                        myprc.waitFor();
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    } catch (java.io.IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }
             ph.kill();
         }
-        shortWait(timeOut==0?30000:timeOut);
+        shortWait(timeOut == 0 ? 30000 : timeOut);
     }
 
     protected void shortWait(int timeOut) {
         try {
-            this.sleep(timeOut);
-        } catch (java.lang.InterruptedException ie) {}
+            OfficeWatcher.sleep(timeOut);
+        } catch (java.lang.InterruptedException ie) {
+        }
     }
-
-
 }
