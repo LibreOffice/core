@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fieldmappingpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:04:35 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:34:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( FieldMappingPage, OnInvokeDialog, void*, NOTINTERESTEDIN )
+    IMPL_LINK( FieldMappingPage, OnInvokeDialog, void*, /*NOTINTERESTEDIN*/ )
     {
         AddressSettings& rSettings = getSettings();
 
