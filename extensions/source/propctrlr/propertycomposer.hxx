@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertycomposer.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 07:59:36 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:00:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ namespace pcr
         virtual sal_Bool                            SAL_CALL suspend( sal_Bool _bSuspend ) throw (::com::sun::star::uno::RuntimeException);
 
         // XComponent
-        DECLARE_XCOMPONENT();
+        DECLARE_XCOMPONENT()
         virtual void                                SAL_CALL disposing();
 
         // XPropertyChangeListener
