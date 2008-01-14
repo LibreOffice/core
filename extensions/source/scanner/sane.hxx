@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sane.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:37:12 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:03:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #define _SANE_HXX
 
 #include <osl/thread.h>
+#include <osl/module.h>
 #include <tools/string.hxx>
 #include <vcl/bitmap.hxx>
 #include <sane/sane.h>
@@ -79,7 +80,7 @@ class Sane
 {
 private:
     static int              nRefCount;
-    static void*            pSaneLib;
+    static oslModule        pSaneLib;
 
     static SANE_Status      (*p_init)( SANE_Int*,
                                        SANE_Auth_Callback );
@@ -114,7 +115,8 @@ private:
 
     Link                        maReloadOptionsLink;
 
-    inline void*    LoadSymbol( char* );
+    inline oslGenericFunction
+                    LoadSymbol( const char* );
     void            Init();
     void            DeInit();
     void            Stop();
