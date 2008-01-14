@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oemwiz.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:07:19 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:55:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ namespace preload
     //=====================================================================
     //---------------------------------------------------------------------
     OEMPreloadDialog::OEMPreloadDialog( Window* _pParent,
-            const Reference< XPropertySet >& _rxObjectModel, const Reference< XMultiServiceFactory >& _rxORB )
+            const Reference< XPropertySet >& /*_rxObjectModel*/, const Reference< XMultiServiceFactory >& /*_rxORB*/ )
         :WizardDialog(_pParent, ModuleRes(RID_DLG_OEMWIZARD)/*, _rxObjectModel, _rxORB*/)
         ,aPrevPB(this,      ModuleRes(PB_PREV   ))
         ,aNextPB(this,      ModuleRes(PB_NEXT   ))
@@ -465,7 +465,7 @@ namespace preload
     }
 
     //------------------------------------------------------------------------
-    void LicenceView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+    void LicenceView::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
     {
         if ( rHint.IsA( TYPE(TextHint) ) )
         {
