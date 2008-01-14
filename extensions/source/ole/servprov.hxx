@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servprov.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 13:54:52 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ public:
 
     ProviderOleWrapper_Impl( const Reference<XMultiServiceFactory>& smgr,
                              const Reference<XSingleServiceFactory>& xSFactory, GUID* pGuid);
-    ~ProviderOleWrapper_Impl();
+    virtual ~ProviderOleWrapper_Impl();
 
     sal_Bool registerClass();
     sal_Bool deregisterClass();
@@ -143,7 +143,7 @@ class OneInstanceOleWrapper_Impl : public IClassFactoryWrapper
 public:
 
     OneInstanceOleWrapper_Impl( const Reference<XMultiServiceFactory>& smgr, const Reference<XInterface>& xInst, GUID* pGuid, sal_Bool bAsApplication );
-    ~OneInstanceOleWrapper_Impl();
+    virtual ~OneInstanceOleWrapper_Impl();
 
     sal_Bool registerClass();
     sal_Bool deregisterClass();
