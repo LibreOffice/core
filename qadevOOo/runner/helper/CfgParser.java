@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CfgParser.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:49:55 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:19:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@ import lib.TestParameters;
 import java.util.Properties;
 import java.util.Enumeration;
 import java.io.FileInputStream;
+import util.PropertyName;
 
 /**
  * This class parses the ini files and stores the data
@@ -67,33 +68,40 @@ public class CfgParser {
         } else {
             cfg = getProperties(iniFile);
         }
+
         if (cfg != null) {
             Enumeration cfgEnum = cfg.keys();
             while (cfgEnum.hasMoreElements()) {
                 String pName = (String) cfgEnum.nextElement();
                 Object pValue = cfg.getProperty(pName);
-                if (pValue instanceof String)
-                    pValue = ((String)pValue).trim();
+
+                if (pValue instanceof String) pValue = ((String)pValue).trim();
+
                 param.put(pName.trim(),pValue);
 
-                if (pName.equals("TestDocumentPath")) {
-                    System.setProperty("DOCPTH",(String)pValue);
+                if (pName.equals(PropertyName.TEST_DOCUMENT_PATH)) {
+
                     param.put("DOCPTH",(String)pValue);
+                    System.setProperty("DOCPTH",(String)pValue);
+
                 }
             }
         }
 
+        debug = param.DebugIsActive;
+
         //check for platform dependend parameters
         //this would have a $OperatingSystem as prefix
-        String os = (String) param.get("OperatingSystem");
+        String os = (String) param.get(PropertyName.OPERATING_SYSTEM);
         if (os != null && os.length()>1) {
+
             //found something that could be a prefex
             //check all parameters for this
             Enumeration keys = param.keys();
             while (keys.hasMoreElements()) {
                 String key = (String) keys.nextElement();
-                Object oldValue = param.get(key);
                 if (key.startsWith(os)) {
+                    Object oldValue = param.get(key);
                     String newKey = key.substring(os.length()+1);
                     param.remove(key);
                     param.put(newKey,oldValue);
