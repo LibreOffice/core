@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LabeledDataSequence.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:59:59 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,13 +51,13 @@ namespace chart
 
 LabeledDataSequence::LabeledDataSequence( const Reference< uno::XComponentContext > & xContext ) :
         m_xContext( xContext ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 LabeledDataSequence::LabeledDataSequence(
     const uno::Reference< chart2::data::XDataSequence > & rValues ) :
         m_xData( rValues ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     ModifyListenerHelper::addListener( m_xData, m_xModifyEventForwarder );
 }
@@ -67,7 +67,7 @@ LabeledDataSequence::LabeledDataSequence(
     const uno::Reference< chart2::data::XDataSequence > & rLabel ) :
         m_xData( rValues ),
         m_xLabel( rLabel ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     ModifyListenerHelper::addListener( m_xData, m_xModifyEventForwarder );
     ModifyListenerHelper::addListener( m_xLabel, m_xModifyEventForwarder );
