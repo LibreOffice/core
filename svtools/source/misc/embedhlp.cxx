@@ -4,9 +4,9 @@
  *
  *  $RCSfile: embedhlp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:49:05 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:41:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #include <toolkit/helper/vclunohelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
+
+#include <tools/globname.hxx>
+#include <sot/clsids.hxx>
 
 #ifndef _COM_SUN_STAR_UTIL_XMODIFYLISTENER_HPP_
 #include <com/sun/star/util/XModifyListener.hpp>
@@ -172,9 +175,17 @@ void SAL_CALL EmbedEventListener_Impl::stateChanged( const lang::EventObject&,
     {
         // TODO/LATER: container must be set before!
         // When is this event created? Who sets the new container when it changed?
-        if( ( pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON ) && nOldState != embed::EmbedStates::LOADED )
+        if( ( pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON ) && nOldState != embed::EmbedStates::LOADED && !pObject->IsChart() )
             // get new replacement after deactivation
             pObject->UpdateReplacement();
+
+        if( pObject->IsChart() && nOldState == embed::EmbedStates::UI_ACTIVE )
+        {
+            //create a new metafile replacement when leaving the edit mode
+            //for buggy documents where the old image looks different from the correct one
+            if( xMod.is() && !xMod->isModified() )//in case of modification a new replacement will be requested anyhow
+                pObject->UpdateReplacementOnDemand();
+        }
 
         if ( xMod.is() && nOldState == embed::EmbedStates::LOADED )
             // listen for changes (update replacements in case of changes)
@@ -196,7 +207,10 @@ void SAL_CALL EmbedEventListener_Impl::modified( const lang::EventObject& ) thro
         if ( nState == embed::EmbedStates::RUNNING )
         {
             // updates only necessary in non-active states
-            pObject->UpdateReplacement();
+            if( pObject->IsChart() )
+                pObject->UpdateReplacementOnDemand();
+            else
+                pObject->UpdateReplacement();
         }
         else if ( nState == embed::EmbedStates::UI_ACTIVE || nState == embed::EmbedStates::INPLACE_ACTIVE )
         {
@@ -220,7 +234,7 @@ void SAL_CALL EmbedEventListener_Impl::notifyEvent( const document::EventObject&
     }
     else
 #endif
-    if ( pObject && aEvent.EventName.equalsAscii("OnVisAreaChanged") && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON )
+    if ( pObject && aEvent.EventName.equalsAscii("OnVisAreaChanged") && pObject->GetViewAspect() != embed::Aspects::MSOLE_ICON && !pObject->IsChart() )
     {
         pObject->UpdateReplacement();
     }
@@ -904,6 +918,37 @@ void EmbeddedObjectRef::UpdateReplacementOnDemand()
     DELETEZ( mpImp->pGraphic );
     mpImp->bNeedUpdate = sal_True;
     if ( mpImp->pHCGraphic ) DELETEZ( mpImp->pHCGraphic );
+
+    if( mpImp->pContainer )
+    {
+        //remove graphic from container thus a new up to date one is requested on save
+        mpImp->pContainer->RemoveGraphicStream( mpImp->aPersistName );
+    }
+}
+
+BOOL EmbeddedObjectRef::IsChart() const
+{
+    //todo maybe for 3.0:
+    //if the changes work good for chart
+    //we should apply them for all own ole objects
+
+    //#i83708# #i81857# #i79578# request an ole replacement image only if really necessary
+    //as this call can be very expensive and does block the user interface as long at it takes
+
+    if ( !mxObj.is() )
+        return false;
+
+    SvGlobalName aObjClsId( mxObj->getClassID() );
+    if(
+        SvGlobalName(SO3_SCH_CLASSID_30) == aObjClsId
+        || SvGlobalName(SO3_SCH_CLASSID_40) == aObjClsId
+        || SvGlobalName(SO3_SCH_CLASSID_50) == aObjClsId
+        || SvGlobalName(SO3_SCH_CLASSID_60) == aObjClsId)
+    {
+        return sal_True;
+    }
+
+    return sal_False;
 }
 
 }
