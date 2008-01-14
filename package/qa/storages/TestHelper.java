@@ -654,7 +654,9 @@ public class TestHelper  {
     public boolean InternalCheckStream( XStream xStream,
                                         String sName,
                                         String sMediaType,
-                                        byte[] pBytes )
+                                        boolean bCompressed,
+                                        byte[] pBytes,
+                                        boolean bCheckCompressed )
     {
         // get input stream of substream
         XInputStream xInput = xStream.getInputStream();
@@ -713,6 +715,7 @@ public class TestHelper  {
                 // get "MediaType" and "Size" properties and control there values
                 String sPropMediaType = AnyConverter.toString( xPropSet.getPropertyValue( "MediaType" ) );
                 int nPropSize = AnyConverter.toInt( xPropSet.getPropertyValue( "Size" ) );
+                boolean bPropCompress = AnyConverter.toBoolean( xPropSet.getPropertyValue( "Compressed" ) );
 
                 bOk = true;
                 if ( !sPropMediaType.equals( sMediaType ) )
@@ -725,6 +728,12 @@ public class TestHelper  {
                 if ( nPropSize != pBytes.length )
                 {
                     Error( "'Size' property contains wrong value for stream'" + sName + "'!" );
+                    bOk = false;
+                }
+
+                if ( bCheckCompressed && bPropCompress != bCompressed )
+                {
+                    Error( "'Compressed' property contains wrong value for stream'" + sName + "'!" );
                     bOk = false;
                 }
             }
@@ -744,6 +753,7 @@ public class TestHelper  {
     public boolean checkStream( XStorage xParentStorage,
                                 String sName,
                                 String sMediaType,
+                                boolean bCompressed,
                                 byte[] pBytes )
     {
         // open substream element first
@@ -764,7 +774,7 @@ public class TestHelper  {
             return false;
         }
 
-        boolean bResult = InternalCheckStream( xSubStream, sName, sMediaType, pBytes );
+        boolean bResult = InternalCheckStream( xSubStream, sName, sMediaType, bCompressed, pBytes, true );
 
         // free the stream resources, garbage collector may remove the object too late
         if ( !disposeStream( xSubStream, sName ) )
@@ -829,7 +839,10 @@ public class TestHelper  {
             return false;
         }
 
-        boolean bResult = InternalCheckStream( xSubStream, sName, sMediaType, pBytes );
+        // encrypted streams will be compressed always, so after the storing this property is always true,
+        // although before the storing it can be set to false ( it is not always clear whether a stream is encrypted
+        // before the storing )
+        boolean bResult = InternalCheckStream( xSubStream, sName, sMediaType, true, pBytes, false );
 
         // free the stream resources, garbage collector may remove the object too late
         if ( !disposeStream( xSubStream, sName ) )
@@ -841,6 +854,7 @@ public class TestHelper  {
     public boolean checkStreamH( XStorage xParentStorage,
                                 String sPath,
                                 String sMediaType,
+                                boolean bCompressed,
                                 byte[] pBytes )
     {
         // open substream element first
@@ -869,7 +883,7 @@ public class TestHelper  {
             return false;
         }
 
-        boolean bResult = InternalCheckStream( xSubStream, sPath, sMediaType, pBytes );
+        boolean bResult = InternalCheckStream( xSubStream, sPath, sMediaType, bCompressed, pBytes, true );
 
         // free the stream resources, garbage collector may remove the object too late
         if ( !disposeStream( xSubStream, sPath ) )
@@ -943,7 +957,10 @@ public class TestHelper  {
             return false;
         }
 
-        boolean bResult = InternalCheckStream( xSubStream, sPath, sMediaType, pBytes );
+        // encrypted streams will be compressed always, so after the storing this property is always true,
+        // although before the storing it can be set to false ( it is not always clear whether a stream is encrypted
+        // before the storing )
+        boolean bResult = InternalCheckStream( xSubStream, sPath, sMediaType, true, pBytes, false );
 
         // free the stream resources, garbage collector may remove the object too late
         if ( !disposeStream( xSubStream, sPath ) )
