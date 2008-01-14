@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:14:21 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:52:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2018,14 +2018,23 @@ long SwTxtFormatter::CalcOptRepaint( xub_StrLen nOldLineEnd,
         // step back two positions for smoother repaint
         nReformat -= 2;
 
+#ifndef QUARTZ
         // --> FME 2004-09-27 #i28795#, #i34607#, #i38388#
         // step back six(!) more characters for complex scripts
         // this is required e.g., for Khmer (thank you, Javier!)
         const SwScriptInfo& rSI = GetInfo().GetParaPortion()->GetScriptInfo();
-        if ( ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
+        xub_StrLen nMaxContext = 0;
+        if( ScriptType::COMPLEX == rSI.ScriptType( nReformat ) )
+            nMaxContext = 6;
+#else
+        // some fonts like Quartz's Zapfino need more context
+        // TODO: query FontInfo for maximum unicode context
+        static const xub_StrLen nMaxContext = 8;
+#endif
+        if( nMaxContext > 0 )
         {
-            if ( nReformat > GetInfo().GetLineStart() + 6 )
-                nReformat -= 6;
+            if ( nReformat > GetInfo().GetLineStart() + nMaxContext )
+                nReformat = nReformat - nMaxContext;
             else
                 nReformat = GetInfo().GetLineStart();
         }
