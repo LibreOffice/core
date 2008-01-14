@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConvWatchStarter.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 13:29:35 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:16:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ import convwatch.GraphicalTestArguments;
 import convwatch.NameHelper;
 import convwatch.HTMLOutputter;
 import helper.OfficeProvider;
+import helper.OfficeWatcher;
 import convwatch.PerformanceContainer;
 
 /**
@@ -201,6 +202,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
     public void compareGraphicalDiffs()
         {
             GlobalLogWriter.set(log);
+            String sDBConnection = (String)param.get( PropertyName.DB_CONNECTION_STRING );
             // check if all need software is installed and accessable
             checkEnvironment(mustInstalledSoftware());
 
@@ -216,6 +218,8 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
 
             initMember();
 
+            aGTA.allowStore();
+
             String sBuildID = aGTA.getBuildID();
             log.println("Current Office has buildid: " + sBuildID);
 
@@ -225,16 +229,27 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             //     System.out.println(e.nextElement());
             // }
 
-            HTMLOutputter HTMLoutput = HTMLOutputter.create(m_sOutputPath, "index.html", "", "");
+            String fs = System.getProperty("file.separator");
+
+            String sHTMLName = "index.html";
+            File aInputPathTest = new File(m_sInputPath);
+            if (!aInputPathTest.isDirectory())
+            {
+                int n = m_sInputPath.lastIndexOf(fs);
+                sHTMLName = m_sInputPath.substring(n + 1);
+                sHTMLName += ".html";
+            }
+            HTMLOutputter HTMLoutput = HTMLOutputter.create(m_sOutputPath, sHTMLName, "", "");
             HTMLoutput.header( m_sOutputPath );
             HTMLoutput.indexSection( m_sOutputPath );
             LISTOutputter LISToutput = LISTOutputter.create(m_sOutputPath, "allfiles.txt");
+
+            DB.init(aGTA.getDBInfoString() + "," + sDBConnection);
 
             File aInputPath = new File(m_sInputPath);
             if (aInputPath.isDirectory())
             {
                 // check a whole directory
-                String fs = System.getProperty("file.separator");
                 // a whole directory
                 FileFilter aFileFilter = aGTA.getFileFilter();
 
@@ -294,6 +309,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             LISToutput.close();
             HTMLoutput.close();
             log.println("The file '" + HTMLoutput.getFilename() + "' shows a html based status.");
+            DB.writeHTMLFile(HTMLoutput.getFilename());
         }
 
 
@@ -304,13 +320,13 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             GraphicalTestArguments aGTA = getGraphicalTestArguments();
 
             OfficeProvider aProvider = null;
-            SimpleFileSemaphore aSemaphore = new SimpleFileSemaphore();
+            // SimpleFileSemaphore aSemaphore = new SimpleFileSemaphore();
             if (aGTA.shouldOfficeStart())
             {
-                if (OSHelper.isWindows())
-                {
-                    aSemaphore.P(aSemaphore.getSemaphoreFile());
-                }
+                // if (OSHelper.isWindows())
+                // {
+                //     aSemaphore.P(aSemaphore.getSemaphoreFile());
+                // }
 
                 aGTA.getPerformance().startTime(PerformanceContainer.OfficeStart);
                 aProvider = new OfficeProvider();
@@ -327,7 +343,7 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             // As long as a log comes, it pings the Watcher and says the office is alive, if not an
             // internal counter increase and at a given point (300 seconds) the office is killed.
             GlobalLogWriter.get().println("Set office watcher");
-            Object aWatcher = param.get("Watcher");
+            OfficeWatcher aWatcher = (OfficeWatcher)param.get("Watcher");
             GlobalLogWriter.get().setWatcher(aWatcher);
             // initializeWatcher(param);
 
@@ -335,48 +351,50 @@ public class ConvWatchStarter extends EnhancedComplexTestCase
             String sStatusMessage = "";
             try
             {
-                DB.startFile(aGTA.getDBInfoString(), _sInputFile);
+                DB.destination_start();
                 // better was:
                 // load document
                 // create postscript from document
                 // check file
                 GraphicalDifferenceCheck.checkOneFile(_sInputFile, _sOutputPath, _sReferencePath, _sDiffPath, aGTA);
                 sStatusRunThrough = "PASSED, OK";
-                DB.finishedFile(aGTA.getDBInfoString(), _sInputFile);
+                DB.destination_finished();
             }
             catch(ConvWatchCancelException e)
             {
                 assure(e.getMessage(), false, true);
                 sStatusRunThrough = "CANCELLED, FAILED";
                 sStatusMessage = e.getMessage();
-                DB.reallyfailedFile(aGTA.getDBInfoString(), _sInputFile);
+                DB.destination_failed(sStatusRunThrough, sStatusMessage);
             }
             catch(ConvWatchException e)
             {
                 assure(e.getMessage(), false, true);
                 sStatusMessage = e.getMessage();
                 sStatusRunThrough = "PASSED, FAILED";
-                DB.failedFile(aGTA.getDBInfoString(), _sInputFile);
+                DB.destination_failed(sStatusRunThrough, sStatusMessage);
             }
             catch(com.sun.star.lang.DisposedException e)
             {
                 assure(e.getMessage(), false, true);
                 sStatusMessage = e.getMessage();
                 sStatusRunThrough = "FAILED, FAILED";
-                DB.reallyfailedFile(aGTA.getDBInfoString(), _sInputFile);
+                DB.destination_failed(sStatusRunThrough, sStatusMessage);
             }
+
+            GlobalLogWriter.get().println("Watcher count is: " + aWatcher.getPing());
 
             // Office shutdown
             if (aProvider != null)
             {
                 aProvider.closeExistingOffice(param, true);
-                if (OSHelper.isWindows())
-                {
-                    aSemaphore.V(aSemaphore.getSemaphoreFile());
-                    aSemaphore.sleep(6);
-                    // wait some time maybe an other process will take the semaphore
-                    // I know, this is absolutly dirty, but the whole convwatch is dirty and need a big cleanup.
-                }
+                // if (OSHelper.isWindows())
+                // {
+                //     aSemaphore.V(aSemaphore.getSemaphoreFile());
+                //     aSemaphore.sleep(2);
+                //     // wait some time maybe an other process will take the semaphore
+                //     // I know, this is absolutly dirty, but the whole convwatch is dirty and need a big cleanup.
+                // }
             }
 
             // -------------------- Status --------------------
