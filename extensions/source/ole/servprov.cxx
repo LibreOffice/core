@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 13:54:38 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:47:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,7 @@ STDMETHODIMP ProviderOleWrapper_Impl::CreateInstance(IUnknown FAR* punkOuter,
     return ret;
 }
 
-STDMETHODIMP ProviderOleWrapper_Impl::LockServer(int fLock)
+STDMETHODIMP ProviderOleWrapper_Impl::LockServer(int /*fLock*/)
 {
     return NOERROR;
 }
@@ -359,7 +359,7 @@ STDMETHODIMP OneInstanceOleWrapper_Impl::CreateInstance(IUnknown FAR* punkOuter,
     return ret;
 }
 
-STDMETHODIMP OneInstanceOleWrapper_Impl::LockServer(int fLock)
+STDMETHODIMP OneInstanceOleWrapper_Impl::LockServer(int /*fLock*/)
 {
     return NOERROR;
 }
@@ -611,7 +611,7 @@ Reference<XInterface> SAL_CALL OleClient_Impl::createInstance(const OUString& Se
     return ret;
 }
 
-Reference<XInterface> SAL_CALL OleClient_Impl::createInstanceWithArguments(const OUString& ServiceSpecifier, const Sequence< Any >& Arguments) throw (Exception, RuntimeException)
+Reference<XInterface> SAL_CALL OleClient_Impl::createInstanceWithArguments(const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/) throw (Exception, RuntimeException)
 {
     return createInstance( ServiceSpecifier);
 }
@@ -670,6 +670,7 @@ OleServer_Impl::OleServer_Impl( const Reference<XMultiServiceFactory>& smgr):
     sal_Bool bOLERegister = sal_True;
 #endif
     sal_Bool ret = provideInstance( m_smgr, (GUID*)&OID_ServiceManager, bOLERegister );
+    (void)ret;
 }
 
 OleServer_Impl::~OleServer_Impl()
@@ -737,8 +738,6 @@ Sequence< sal_Int8 > SAL_CALL OleServer_Impl::getImplementationId() throw(Runtim
 
 sal_Bool OleServer_Impl::provideService(const Reference<XSingleServiceFactory>& xSFact, GUID* guid)
 {
-    sal_Bool ret = FALSE;
-
     IClassFactoryWrapper* pFac = new ProviderOleWrapper_Impl( m_smgr, xSFact, guid);
 
     pFac->AddRef();
@@ -750,8 +749,6 @@ sal_Bool OleServer_Impl::provideService(const Reference<XSingleServiceFactory>& 
 
 sal_Bool OleServer_Impl::provideInstance(const Reference<XInterface>& xInst, GUID* guid, sal_Bool bAsApplication )
 {
-    sal_Bool    ret = FALSE;
-
     IClassFactoryWrapper* pFac = new OneInstanceOleWrapper_Impl( m_smgr, xInst, guid, bAsApplication );
 
     pFac->AddRef();
