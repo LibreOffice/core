@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartType.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:53:14 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:03:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ namespace chart
 ChartType::ChartType(
     const Reference< uno::XComponentContext > & xContext ) :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex )),
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
         m_xContext( xContext ),
         m_bNotifyChanges( true )
 {}
@@ -77,7 +77,7 @@ ChartType::ChartType( const ChartType & rOther ) :
         MutexContainer(),
         impl::ChartType_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex )),
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
     m_xContext( rOther.m_xContext ),
     m_bNotifyChanges( true )
 {
