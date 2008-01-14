@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediator.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:09:43 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:53:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ BOOL Mediator::WaitForMessage( ULONG nTimeOut )
     if( ! m_pListener )
         return FALSE;
 
-    int nItems = m_aMessageQueue.Count();
+    ULONG nItems = m_aMessageQueue.Count();
 
     if( ! nTimeOut && nItems > 0 )
         return TRUE;
@@ -138,7 +138,7 @@ MediatorMessage* Mediator::WaitForAnswer( ULONG nMessageID )
     {
         {
             NAMESPACE_VOS(OGuard) aGuard( m_aQueueMutex );
-            for( int i = 0; i < m_aMessageQueue.Count(); i++ )
+            for( ULONG i = 0; i < m_aMessageQueue.Count(); i++ )
             {
                 ULONG nID = m_aMessageQueue.GetObject( i )->m_nID;
                 if(  ( nID & 0xff000000 ) &&
@@ -159,7 +159,7 @@ MediatorMessage* Mediator::GetNextMessage( BOOL bWait )
             // guard must be after WaitForMessage, else the listener
             // cannot insert a new one -> deadlock
             NAMESPACE_VOS(OGuard) aGuard( m_aQueueMutex );
-            for( int i = 0; i < m_aMessageQueue.Count(); i++ )
+            for( ULONG i = 0; i < m_aMessageQueue.Count(); i++ )
                 if( ! ( m_aMessageQueue.GetObject( i )->m_nID & 0xff000000 ) )
                     return m_aMessageQueue.Remove( i );
             if( ! bWait )
@@ -198,7 +198,7 @@ void MediatorListener::run()
             if( nHeader[ 0 ] == 0 && nHeader[ 1 ] == 0 )
                 return;
             char* pBuffer = new char[ nHeader[ 1 ] ];
-            if( m_pMediator && read( m_pMediator->m_nSocket, pBuffer, nHeader[ 1 ] ) == nHeader[ 1 ] )
+            if( m_pMediator && (ULONG)read( m_pMediator->m_nSocket, pBuffer, nHeader[ 1 ] ) == nHeader[ 1 ] )
             {
                 ::vos::OGuard aMyGuard( m_aMutex );
                 {
