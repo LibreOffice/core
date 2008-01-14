@@ -50,8 +50,8 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SOCOMWINDOWPEER)
 
 // ISOComWindowPeer
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE getWindowHandle(
-            /* [in] */ SAFEARRAY __RPC_FAR * procId,
-            /* [in] */ short s,
+            /* [in] */ SAFEARRAY __RPC_FAR * /*procId*/,
+            /* [in] */ short /*s*/,
             /* [retval][out] */ long __RPC_FAR *ret)
         {
             *ret = (long) m_hwnd;
@@ -66,26 +66,26 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SOCOMWINDOWPEER)
         }
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setPointer(
-            /* [in] */ IDispatch __RPC_FAR *xPointer)
+            /* [in] */ IDispatch __RPC_FAR* /*xPointer*/)
         {
             return S_OK;
         }
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE setBackground(
-            /* [in] */ int nColor)
+            /* [in] */ int /*nColor*/)
         {
             return S_OK;
         }
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE invalidate(
-            /* [in] */ short __MIDL_0015)
+            /* [in] */ short /*__MIDL_0015*/)
         {
             return S_OK;
         }
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE invalidateRect(
-            /* [in] */ IDispatch __RPC_FAR *aRect,
-            /* [in] */ short nFlags)
+            /* [in] */ IDispatch __RPC_FAR* /*aRect*/,
+            /* [in] */ short /*nFlags*/)
         {
             return S_OK;
         }
@@ -96,13 +96,13 @@ DECLARE_REGISTRY_RESOURCEID(IDR_SOCOMWINDOWPEER)
         }
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE addEventListener(
-            /* [in] */ IDispatch __RPC_FAR *xListener)
+            /* [in] */ IDispatch __RPC_FAR* /*xListener*/)
         {
             return S_OK;
         }
 
         virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE removeEventListener(
-            /* [in] */ IDispatch __RPC_FAR *xListener)
+            /* [in] */ IDispatch __RPC_FAR* /*xListener*/)
         {
             return S_OK;
         }
