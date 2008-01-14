@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tkscrollbar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:18:48 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:57:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #include <tools/debug.hxx>
 #endif
 
+// for introspection
+#include <toolkit/awt/vclxwindows.hxx>
+
 //........................................................................
 namespace toolkit
 {
@@ -66,25 +69,7 @@ namespace toolkit
     //--------------------------------------------------------------------
     UnoControlScrollBarModel::UnoControlScrollBarModel()
     {
-        ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
-        ImplRegisterProperty( BASEPROPERTY_BLOCKINCREMENT );
-        ImplRegisterProperty( BASEPROPERTY_BORDER );
-        ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
-        ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
-        ImplRegisterProperty( BASEPROPERTY_ENABLED );
-        ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
-        ImplRegisterProperty( BASEPROPERTY_HELPURL );
-        ImplRegisterProperty( BASEPROPERTY_LINEINCREMENT );
-        ImplRegisterProperty( BASEPROPERTY_LIVE_SCROLL );
-        ImplRegisterProperty( BASEPROPERTY_ORIENTATION );
-        ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
-        ImplRegisterProperty( BASEPROPERTY_REPEAT_DELAY );
-        ImplRegisterProperty( BASEPROPERTY_SCROLLVALUE );
-        ImplRegisterProperty( BASEPROPERTY_SCROLLVALUE_MAX );
-        ImplRegisterProperty( BASEPROPERTY_SCROLLVALUE_MIN );
-        ImplRegisterProperty( BASEPROPERTY_SYMBOL_COLOR );
-        ImplRegisterProperty( BASEPROPERTY_TABSTOP );
-        ImplRegisterProperty( BASEPROPERTY_VISIBLESIZE );
+        UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXScrollBar );
     }
 
     //--------------------------------------------------------------------
