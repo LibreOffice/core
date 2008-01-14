@@ -4,9 +4,9 @@
  *
  *  $RCSfile: service.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:09:13 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:51:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,12 +91,12 @@ void registerPluginService( const Reference< ::com::sun::star::lang::XMultiServi
 extern "C" {
     void SAL_CALL component_getImplementationEnvironment(
         const sal_Char** ppEnvTypeName,
-        uno_Environment** ppEnv )
+        uno_Environment** /*ppEnv*/ )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
 
-    sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pXUnoKey )
+    sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pXUnoKey )
     {
         if( pXUnoKey )
         {
@@ -126,7 +126,7 @@ extern "C" {
     void* SAL_CALL component_getFactory(
         const sal_Char* pImplementationName,
         void* pXUnoSMgr,
-        void* pXUnoKey
+        void* /*pXUnoKey*/
         )
     {
         void* pRet = 0;
