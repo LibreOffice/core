@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwizard.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:06:32 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:43:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,9 +225,9 @@ namespace dbp
             ConstStringArrayIterator pColumnServiceName = aColumnServiceNames.begin();
             ConstStringArrayIterator pColumnLabelPostfix = aColumnLabelPostfixes.begin();
             ConstStringArrayIterator pFormFieldName = aFormFieldNames.begin();
-            ConstStringArrayIterator pEnd = aColumnServiceNames.end();
+            ConstStringArrayIterator pColumnServiceNameEnd = aColumnServiceNames.end();
 
-            for (;pColumnServiceName < pEnd; ++pColumnServiceName, ++pColumnLabelPostfix, ++pFormFieldName)
+            for (;pColumnServiceName < pColumnServiceNameEnd; ++pColumnServiceName, ++pColumnLabelPostfix, ++pFormFieldName)
             {
                 // create a (grid)column for the (resultset)column
                 try
@@ -398,12 +398,12 @@ namespace dbp
             return sal_False;
 
         OGridSettings& rSettings = getSettings();
-        WizardState nSelected = m_aSelFields.GetEntryCount();
+        USHORT nSelected = m_aSelFields.GetEntryCount();
 
         rSettings.aSelectedFields.realloc(nSelected);
         ::rtl::OUString* pSelected = rSettings.aSelectedFields.getArray();
 
-        for (WizardState i=0; i<nSelected; ++i, ++pSelected)
+        for (USHORT i=0; i<nSelected; ++i, ++pSelected)
             *pSelected = m_aSelFields.GetEntry(i);
 
         return sal_True;
@@ -432,7 +432,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK(OGridFieldsSelection, OnEntrySelected, ListBox*, NOTINTERESTEDIN)
+    IMPL_LINK(OGridFieldsSelection, OnEntrySelected, ListBox*, /*NOTINTERESTEDIN*/)
     {
         implCheckButtons();
         return 0L;
@@ -445,11 +445,11 @@ namespace dbp
         ListBox& rMoveTo = bMoveRight ? m_aSelFields : m_aExistFields;
 
         // the index of the selected entry
-        WizardState nSelected = bMoveRight ? m_aExistFields.GetSelectEntryPos() : m_aSelFields.GetSelectEntryPos();
+        USHORT nSelected = bMoveRight ? m_aExistFields.GetSelectEntryPos() : m_aSelFields.GetSelectEntryPos();
         // the (original) relative position of the entry
         sal_IntPtr nRelativeIndex = reinterpret_cast<sal_IntPtr>(bMoveRight ? m_aExistFields.GetEntryData(nSelected) : m_aSelFields.GetEntryData(nSelected));
 
-        WizardState nInsertPos = LISTBOX_APPEND;
+        USHORT nInsertPos = LISTBOX_APPEND;
         if (!bMoveRight)
         {   // need to determine an insert pos which reflects the original
             nInsertPos = 0;
@@ -472,7 +472,7 @@ namespace dbp
         // remove the entry from it's old list
         if (bMoveRight)
         {
-            WizardState nSelectPos = m_aExistFields.GetSelectEntryPos();
+            USHORT nSelectPos = m_aExistFields.GetSelectEntryPos();
             m_aExistFields.RemoveEntry(nSelected);
             if ((LISTBOX_ENTRY_NOTFOUND != nSelectPos) && (nSelectPos < m_aExistFields.GetEntryCount()))
                 m_aExistFields.SelectEntryPos(nSelectPos);
@@ -481,7 +481,7 @@ namespace dbp
         }
         else
         {
-            WizardState nSelectPos = m_aSelFields.GetSelectEntryPos();
+            USHORT nSelectPos = m_aSelFields.GetSelectEntryPos();
             m_aSelFields.RemoveEntry(nSelected);
             if ((LISTBOX_ENTRY_NOTFOUND != nSelectPos) && (nSelectPos < m_aSelFields.GetEntryCount()))
                 m_aSelFields.SelectEntryPos(nSelectPos);
