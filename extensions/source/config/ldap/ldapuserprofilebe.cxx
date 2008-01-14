@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldapuserprofilebe.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:57:51 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:41:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -406,7 +406,7 @@ bool LdapUserProfileBe::getLdapStringParam(
 }
 //------------------------------------------------------------------------------
 uno::Reference<backend::XLayer> SAL_CALL LdapUserProfileBe::getLayer(
-        const rtl::OUString& aComponent, const rtl::OUString& aTimestamp)
+        const rtl::OUString& /*aComponent*/, const rtl::OUString& /*aTimestamp*/)
     throw (backend::BackendAccessException, lang::IllegalArgumentException,uno::RuntimeException)
 {
     OSL_PRECOND(mLdapSource->mConnection.isConnected(), "LdapUserProfileBackend invoked without a connection");
@@ -425,7 +425,7 @@ uno::Reference<backend::XLayer> SAL_CALL LdapUserProfileBe::getLayer(
 
 //------------------------------------------------------------------------------
 uno::Reference<backend::XUpdatableLayer> SAL_CALL
-LdapUserProfileBe::getUpdatableLayer(const rtl::OUString& aComponent)
+LdapUserProfileBe::getUpdatableLayer(const rtl::OUString& /*aComponent*/)
     throw (backend::BackendAccessException,lang::NoSupportException,
            lang::IllegalArgumentException,uno::RuntimeException)
 {
@@ -433,8 +433,6 @@ LdapUserProfileBe::getUpdatableLayer(const rtl::OUString& aComponent)
         rtl::OUString::createFromAscii(
         "LdapUserProfileBe: No Update Operation allowed, Read Only access"),
         *this) ;
-
-    return NULL;
 }
 //------------------------------------------------------------------------------
 rtl::OUString SAL_CALL LdapUserProfileBe::getLdapUserProfileBeName(void) {
