@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bibconfig.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:54:36 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ using namespace ::com::sun::star::lang;
 
  --------------------------------------------------*/
 typedef Mapping* MappingPtr;
-SV_DECL_PTRARR_DEL(MappingArray, MappingPtr, 2, 2);
+SV_DECL_PTRARR_DEL(MappingArray, MappingPtr, 2, 2)
 SV_IMPL_PTRARR(MappingArray, MappingPtr);
 
 #define C2U(cChar) OUString::createFromAscii(cChar)
@@ -81,7 +81,7 @@ const char* cDataSourceHistory = "DataSourceHistory";
 /* -----------------------------13.11.00 12:21--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence<OUString>& BibConfig::GetPropertyNames()
+Sequence<OUString> BibConfig::GetPropertyNames()
 {
     static Sequence<OUString> aNames;
     if(!aNames.getLength())
@@ -143,12 +143,12 @@ BibConfig::BibConfig() :
     aColumnDefaults[30] = C2U("Custom5");
 
 
-    Sequence<OUString>& aNames = GetPropertyNames();
-    Sequence<Any> aValues = GetProperties(aNames);
-    const Any* pValues = aValues.getConstArray();
-    if(aValues.getLength() == aNames.getLength())
+    const Sequence< OUString > aPropertyNames = GetPropertyNames();
+    const Sequence<Any> aPropertyValues = GetProperties( aPropertyNames );
+    const Any* pValues = aPropertyValues.getConstArray();
+    if(aPropertyValues.getLength() == aPropertyNames.getLength())
     {
-        for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+        for(int nProp = 0; nProp < aPropertyNames.getLength(); nProp++)
         {
             if(pValues[nProp].hasValue())
             {
@@ -175,27 +175,29 @@ BibConfig::BibConfig() :
     const OUString* pNodeNames = aNodeNames.getConstArray();
     for(sal_Int32 nNode = 0; nNode < aNodeNames.getLength(); nNode++)
     {
-        Sequence<OUString> aNames(3);
-        OUString* pNames = aNames.getArray();
+        Sequence<OUString> aHistoryNames(3);
+        OUString* pHistoryNames = aHistoryNames.getArray();
+
         OUString sPrefix(C2U(cDataSourceHistory));
         sPrefix += C2U("/");
         sPrefix += pNodeNames[nNode];
         sPrefix += C2U("/");
-        pNames[0] = sPrefix;
-        pNames[0] += sName;
-        pNames[1] = sPrefix;
-        pNames[1] += sTable;
-        pNames[2] = sPrefix;
-        pNames[2] += sCommandType;
-        Sequence<Any> aValues = GetProperties(aNames);
-        const Any* pValues = aValues.getConstArray();
-        if(aValues.getLength() == aNames.getLength())
+        pHistoryNames[0] = sPrefix;
+        pHistoryNames[0] += sName;
+        pHistoryNames[1] = sPrefix;
+        pHistoryNames[1] += sTable;
+        pHistoryNames[2] = sPrefix;
+        pHistoryNames[2] += sCommandType;
+
+        Sequence<Any> aHistoryValues = GetProperties( aHistoryNames );
+        const Any* pHistoryValues = aHistoryValues.getConstArray();
+
+        if(aHistoryValues.getLength() == aHistoryNames.getLength())
         {
             Mapping* pMapping = new Mapping;
-            sal_Int32 nColumnIndex = 0;
-            pValues[0] >>= pMapping->sURL;
-            pValues[1] >>= pMapping->sTableName;
-            pValues[2] >>= pMapping->nCommandType;
+            pHistoryValues[0] >>= pMapping->sURL;
+            pHistoryValues[1] >>= pMapping->sTableName;
+            pHistoryValues[2] >>= pMapping->nCommandType;
             //field assignment is contained in another set
             sPrefix += C2U("Fields");
             Sequence< OUString > aAssignmentNodeNames = GetNodeNames(sPrefix);
@@ -231,7 +233,6 @@ BibConfig::BibConfig() :
             }
             pMappingsArr->Insert(pMapping, pMappingsArr->Count());
         }
-        pValues = aValues.getConstArray();
     }
 }
 /* -----------------------------13.11.00 11:00--------------------------------
@@ -278,12 +279,11 @@ OUString lcl_GetRealNameFor(const OUString& rLogName, const Mapping& rMapping)
 //---------------------------------------------------------------------------
 void    BibConfig::Commit()
 {
-    Sequence<OUString>& aNames = GetPropertyNames();
-    Sequence<Any> aValues(aNames.getLength());
+    const Sequence<OUString> aPropertyNames = GetPropertyNames();
+    Sequence<Any> aValues(aPropertyNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
-    for(int nProp = 0; nProp < aNames.getLength(); nProp++)
+    for(int nProp = 0; nProp < aPropertyNames.getLength(); nProp++)
     {
         switch(nProp)
         {
@@ -299,7 +299,7 @@ void    BibConfig::Commit()
             break;
         }
     }
-    PutProperties(aNames, aValues);
+    PutProperties(aPropertyNames, aValues);
     ClearNodeSet( C2U(cDataSourceHistory));
     OUString sEmpty;
     Sequence< PropertyValue > aNodeValues(pMappingsArr->Count() * 3);

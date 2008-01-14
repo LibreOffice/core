@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bibcont.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:54:50 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:37:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,7 +203,7 @@ void BibBookContainer::Split()
 {
     aTimer.Start();
 }
-IMPL_LINK( BibBookContainer, SplitHdl, Timer*,pT)
+IMPL_LINK( BibBookContainer, SplitHdl, Timer*,/*pT*/)
 {
     long nSize= GetItemSize( TOP_WINDOW);
     BibConfig* pConfig = BibModul::GetConfig();
