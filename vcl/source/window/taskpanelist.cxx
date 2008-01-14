@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:35:04 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,7 +385,13 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, BOOL bForward )
                     ++p;
                 if( p == mTaskPanes.end() )
                     break; // do not wrap, send focus back to document at end of list
-                if( (*p)->IsReallyVisible() && !(*p)->ImplIsSplitter() )
+                /* #i83908# do not use the menubar if it is native and invisible
+                   this relies on MenuBar::ImplCreate setting the height of the menubar
+                   to 0 in this case
+                */
+                if( (*p)->IsReallyVisible() && !(*p)->ImplIsSplitter() &&
+                    ( (*p)->GetType() != WINDOW_MENUBARWINDOW || (*p)->GetSizePixel().Height() > 0 )
+                    )
                 {
                     pWindow = *p;
                     break;
