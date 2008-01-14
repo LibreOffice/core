@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framectr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:18:05 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:39:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ public:
 };
 
 typedef BibStatusDispatch* BibStatusDispatchPtr;
-SV_DECL_PTRARR_DEL( BibStatusDispatchArr, BibStatusDispatchPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( BibStatusDispatchArr, BibStatusDispatchPtr, 4, 4 )
 
 class BibFrameController_Impl : public cppu::WeakImplHelper5 <
     ::com::sun::star::lang::XServiceInfo,
