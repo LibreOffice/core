@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ca_ce.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 15:28:40 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:43:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -447,7 +447,7 @@ CeAdmin::Get_SignatureText( StreamStr &                 o_rOut,
     OperationSignature::ParameterTypeList::const_iterator
             it_end = i_signature.Parameters().end();
 
-    StringVector aDummy;
+    const StringVector aDummy;
     StringVector::const_iterator
             itName = i_sParameterNames != 0
                             ?   i_sParameterNames->begin()
