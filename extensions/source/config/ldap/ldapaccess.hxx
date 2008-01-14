@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldapaccess.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:22:43 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:41:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,14 +36,7 @@
 #ifndef EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
 #define EXTENSIONS_CONFIG_LDAP_LDAPACCESS_HXX_
 
-#ifdef WITH_OPENLDAP
-#include <ldap.h>
-#else
-#ifndef LDAP_INCLUDED
-#define LDAP_INCLUDED
-#include <ldap/ldap.h>
-#endif // LDAP_INCLUDED
-#endif
+#include "wrapldapinclude.hxx"
 
 #ifndef _COM_SUN_STAR_LDAP_LDAPGENERICEXCEPTION_HPP_
 #include <com/sun/star/ldap/LdapGenericException.hpp>
