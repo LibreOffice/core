@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bibcont.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:13:23 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:38:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,8 @@ class BibWindowContainer : public BibWindow     //Window
         virtual void            GetFocus();
 
         virtual BOOL            HandleShortCutKey( const KeyEvent& rKeyEvent ); // returns true, if key was handled
+
+        using Window::GetChild;
 };
 
 inline Window* BibWindowContainer::GetChild()
@@ -94,11 +96,11 @@ class BibBookContainer: public BibSplitWindow
 
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xTopPeerRef;
         ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >              xBottomPeerRef;
-        sal_Bool                    bFirstTime;
 
+        BibDataManager*         pDatMan;
         BibWindowContainer*     pTopWin;
         BibWindowContainer*     pBottomWin;
-        BibDataManager*         pDatMan;
+        sal_Bool                    bFirstTime;
         HdlBibModul             pBibMod;
         Timer                   aTimer;
 
