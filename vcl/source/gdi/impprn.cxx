@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impprn.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:19:55 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:22:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -489,6 +489,7 @@ void ImplQPrinter::EndQueuePrint()
                                  maJobSetup.ImplGetConstData(),
                                  this );
             mpPrinter->EndJob();
+            mbJobActive = mbPrinting = FALSE;
             mpParent->ImplEndPrint();
         }
     }
