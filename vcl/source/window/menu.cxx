@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:14:44 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4545,7 +4545,6 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                                        CTRL_STATE_ENABLED,
                                        ImplControlValue(),
                                        OUString() );
-                    Pop();
                     if( bHighlight &&
                         IsNativeControlSupported( CTRL_MENU_POPUP, PART_MENU_ITEM ) )
                     {
@@ -4561,6 +4560,7 @@ void MenuFloatingWindow::HighlightItem( USHORT nPos, BOOL bHighlight )
                     }
                     else
                         bDrawItemRect = bHighlight;
+                    Pop();
                 }
                 if( bDrawItemRect )
                 {
@@ -4860,7 +4860,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             else
             {
                 // Bei ungueltigen Tasten Beepen, aber nicht bei HELP und F-Tasten
-                if ( !rKEvent.GetKeyCode().IsControlMod() && ( nCode != KEY_HELP ) && ( rKEvent.GetKeyCode().GetGroup() != KEYGROUP_FKEYS ) )
+                if ( ( nCode != KEY_HELP ) && ( rKEvent.GetKeyCode().GetGroup() != KEYGROUP_FKEYS ) )
                     Sound::Beep();
                 FloatingWindow::KeyInput( rKEvent );
             }
@@ -5595,7 +5595,7 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
         }
     }
 
-    if ( !bDone && ( bFromMenu || rKEvent.GetKeyCode().IsControlMod() ) )
+    if ( !bDone && bFromMenu )
     {
         xub_Unicode nCharCode = rKEvent.GetCharCode();
         if ( nCharCode )
