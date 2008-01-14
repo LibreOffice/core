@@ -653,7 +653,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
                                 ::com::sun::star::awt::MouseEvent aMouseEvent(
                                     static_cast < ::com::sun::star::uno::XInterface * > ( 0 ),
 #ifdef MACOSX
-                    nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD5),
+                    nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3),
 #else
                                     nCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2),
 #endif
@@ -1083,11 +1083,7 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
     {
 #ifdef DBG_UTIL
         // #105224# use Ctrl-Alt-Shift-D, Ctrl-Shift-D must be useable by app
-        #ifdef MACOSX
-        if ( aKeyCode.IsShift() && aKeyCode.IsMod1() && (aKeyCode.IsMod2() || aKeyCode.IsMod5()) && (aKeyCode.GetCode() == KEY_D) )
-        #else
-        if ( aKeyCode.IsShift() && aKeyCode.IsMod1() && aKeyCode.IsMod2() && (aKeyCode.GetCode() == KEY_D) )
-        #endif
+        if ( aKeyCode.IsShift() && aKeyCode.IsMod1() && (aKeyCode.IsMod2() || aKeyCode.IsMod3()) && (aKeyCode.GetCode() == KEY_D) )
         {
             DBGGUI_START();
             return 1;
@@ -2100,7 +2096,7 @@ inline long ImplHandleSalMouseButtonDown( Window* pWindow, SalMouseEvent* pEvent
                                  pEvent->mnX, pEvent->mnY,
                                  pEvent->mnTime,
 #ifdef MACOSX
-                 pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD5)),
+                 pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)),
 #else
                                  pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)),
 #endif
@@ -2115,7 +2111,7 @@ inline long ImplHandleSalMouseButtonUp( Window* pWindow, SalMouseEvent* pEvent )
                                  pEvent->mnX, pEvent->mnY,
                                  pEvent->mnTime,
 #ifdef MACOSX
-                 pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD5)),
+                 pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3)),
 #else
                                  pEvent->mnButton | (pEvent->mnCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2)),
 #endif
@@ -2178,7 +2174,7 @@ static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
     if ( pTrackWin )
         pWindow = pTrackWin;
 #ifdef MACOSX
-    USHORT nOldCode = pWindow->ImplGetWindowImpl()->mpFrameData->mnMouseCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD5);
+    USHORT nOldCode = pWindow->ImplGetWindowImpl()->mpFrameData->mnMouseCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3);
 #else
     USHORT nOldCode = pWindow->ImplGetWindowImpl()->mpFrameData->mnMouseCode & (KEY_SHIFT | KEY_MOD1 | KEY_MOD2);
 #endif
@@ -2186,7 +2182,7 @@ static void ImplHandleSalKeyMod( Window* pWindow, SalKeyModEvent* pEvent )
     if ( nOldCode != nNewCode )
     {
 #ifdef MACOSX
-    nNewCode |= pWindow->ImplGetWindowImpl()->mpFrameData->mnMouseCode & ~(KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD5);
+    nNewCode |= pWindow->ImplGetWindowImpl()->mpFrameData->mnMouseCode & ~(KEY_SHIFT | KEY_MOD1 | KEY_MOD2 | KEY_MOD3);
 #else
         nNewCode |= pWindow->ImplGetWindowImpl()->mpFrameData->mnMouseCode & ~(KEY_SHIFT | KEY_MOD1 | KEY_MOD2);
 #endif
