@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-10 12:37:22 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 13:01:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,7 @@ IDLFILES=\
     EndDockingEvent.idl\
     EndPopupModeEvent.idl\
     EnhancedMouseEvent.idl\
+    FieldUnit.idl\
     FocusChangeReason.idl\
     FocusEvent.idl\
     FontDescriptor.idl\
@@ -260,6 +261,7 @@ IDLFILES=\
     XMenuListener.idl\
     XMessageBox.idl\
     XMessageBoxFactory.idl\
+    XMetricField.idl\
     XMouseClickHandler.idl\
     XMouseListener.idl\
     XMouseMotionListener.idl\
