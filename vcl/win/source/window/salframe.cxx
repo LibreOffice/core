@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:22:11 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:25:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3727,12 +3727,7 @@ static long ImplHandleKeyMsg( HWND hWnd, UINT nMsg,
     if ( GetKeyState( VK_CONTROL ) & 0x8000 )
         nModCode |= KEY_MOD1;
     if ( GetKeyState( VK_MENU ) & 0x8000 )
-    {
         nModCode |= KEY_MOD2;
-        if ( !(nModCode & KEY_MOD1) &&
-             ((nMsg == WM_SYSKEYDOWN) || (nMsg == WM_SYSKEYUP)) )
-            nModCode |= KEY_CONTROLMOD;
-    }
 
     if ( (nMsg == WM_CHAR) || (nMsg == WM_SYSCHAR) )
     {
@@ -3990,11 +3985,7 @@ long ImplHandleSalObjKeyMsg( HWND hWnd, UINT nMsg,
         if ( GetKeyState( VK_CONTROL ) & 0x8000 )
             nModCode |= KEY_MOD1;
         if ( GetKeyState( VK_MENU ) & 0x8000 )
-        {
             nModCode |= KEY_MOD2;
-            if ( !(nModCode & KEY_MOD1) )
-                nModCode |= KEY_CONTROLMOD;
-        }
 
         if ( (wParam != VK_SHIFT) && (wParam != VK_CONTROL) && (wParam != VK_MENU) )
         {
@@ -4045,8 +4036,6 @@ long ImplHandleSalObjSysCharMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
     if ( GetKeyState( VK_CONTROL ) & 0x8000 )
         nModCode |= KEY_MOD1;
     nModCode |= KEY_MOD2;
-    if ( !(nModCode & KEY_MOD1) )
-        nModCode |= KEY_CONTROLMOD;
 
     // KeyEvent zusammenbauen
     SalKeyEvent aKeyEvt;
@@ -5264,8 +5253,6 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
                     if ( GetKeyState( VK_CONTROL ) & 0x8000 )
                         nModCode |= KEY_MOD1;
                     nModCode |= KEY_MOD2;
-                    if ( !(nModCode & KEY_MOD1) )
-                        nModCode |= KEY_CONTROLMOD;
 
                     SalKeyEvent aKeyEvt;
                     aKeyEvt.mnTime      = GetMessageTime();
