@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramHelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:41:35 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:59:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,6 +342,16 @@ public:
 
     static bool isPieOrDonutChart( const ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDiagram >& xDiagram );
+
+    static sal_Int32 getGeometry3D(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDiagram > & xDiagram,
+        bool& rbFound, bool& rbAmbiguous );
+
+    static void setGeometry3D(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::chart2::XDiagram > & xDiagram,
+        sal_Int32 nNewGeometry );
 
 private:
     // not implemented
