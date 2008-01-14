@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComplexDescGetter.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:18:26 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:20:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,11 @@ import share.DescGetter;
 import share.ComplexTest;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.lang.reflect.Method;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import lib.TestParameters;
+import share.LogWriter;
 
 /**
  *
@@ -79,7 +82,6 @@ public class ComplexDescGetter extends DescGetter {
     protected DescEntry getDescriptionForSingleJob(String className, String descPath, boolean debug) {
         DynamicClassLoader dcl = new DynamicClassLoader();
         String methodNames[] = null;
-        boolean returnVal = true;
 
         if (debug) {
             System.out.println("Searching Class: " + className);
@@ -119,18 +121,30 @@ public class ComplexDescGetter extends DescGetter {
             System.out.println("Got test: "+((Object)testClass).toString());
         }
 
-/*        String testObjectName = testClass.getTestObjectName();
-        if (testObjectName != null) {
-            if (testObjectName.equals(""))
-                testObjectName = className;
-        }
-        else */
         String testObjectName = className;
+        String[] testMethodNames = null;
 
-        String[] testMethodName = testClass.getTestMethodNames();
-        if (methodNames != null) {
-            testMethodName = methodNames;
+        if (testMethodNames == null){
+            testMethodNames = testClass.getTestMethodNames();
         }
+        if (methodNames != null) {
+            testMethodNames = methodNames;
+        }
+
+        DescEntry dEntry = createTestDesc(testObjectName, className, testMethodNames, null);
+
+        return dEntry;
+    }
+
+    /**
+     * Creates a description exntry for the given parameter
+     * @param testObjectName the name of the object
+     * @param className the class name of the class to load
+     * @param testMethodNames list of all methods to test
+     * @param log
+     * @return filled description entry
+     */
+    public DescEntry createTestDesc(String testObjectName, String className, String[] testMethodNames, LogWriter log){
 
         DescEntry dEntry = new DescEntry();
 
@@ -139,16 +153,18 @@ public class ComplexDescGetter extends DescGetter {
         dEntry.isOptional = false;
         dEntry.EntryType = "unit";
         dEntry.isToTest = true;
-        dEntry.SubEntryCount = testMethodName.length;
+        dEntry.Logger = log;
+        dEntry.SubEntryCount = testMethodNames.length;
         dEntry.SubEntries = new DescEntry[dEntry.SubEntryCount];
         for (int i=0; i<dEntry.SubEntryCount; i++) {
             DescEntry aEntry = new DescEntry();
-            aEntry.entryName = testMethodName[i];
+            aEntry.entryName = testMethodNames[i];
             aEntry.longName = testObjectName +"::" + aEntry.entryName;
             aEntry.isOptional = false;
             aEntry.EntryType = "method";
             aEntry.isToTest = true;
             dEntry.SubEntries[i] = aEntry;
+            dEntry.Logger = log;
         }
 
         return dEntry;
