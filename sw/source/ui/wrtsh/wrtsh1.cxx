@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:43:13 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:48:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -824,7 +824,12 @@ void SwWrtShell::CalcAndSetScale( svt::EmbeddedObjectRef& xObj,
                         bResetEnableSetModified = true;
                     }
 
-                    xObj.UpdateReplacement();
+                    //#i79576# don't destroy chart replacement images on load
+                    //#i79578# don't request a new replacement image for charts to often
+                    //a chart sends a modified call to the framework if it was changed
+                    //thus the replacement update is already handled elsewhere
+                    if ( !SotExchange::IsChart( xObj->getClassID() ) )
+                        xObj.UpdateReplacement();
 
                     if ( bResetEnableSetModified )
                     {
