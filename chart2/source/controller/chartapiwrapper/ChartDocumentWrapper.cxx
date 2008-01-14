@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartDocumentWrapper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:26:34 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:55:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 #include "LegendWrapper.hxx"
 #include "AreaWrapper.hxx"
 #include "WrappedAddInProperty.hxx"
+#include "ChartRenderer.hxx"
 
 #ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
 #include <com/sun/star/chart2/XTitled.hpp>
@@ -1445,6 +1446,12 @@ uno::Reference< uno::XInterface > SAL_CALL ChartDocumentWrapper::createInstance(
             }
         }
 
+        bServiceFound = true;
+    }
+    else if( aServiceSpecifier.equals( CHART_RENDERER_SERVICE_IMPLEMENTATION_NAME ) )
+    {
+        Reference< lang::XUnoTunnel > xChartRenderer( new ChartRenderer( m_spChart2ModelContact->getChartModel() ) );
+        xResult.set( xChartRenderer );
         bServiceFound = true;
     }
     else if( aServiceSpecifier.equals( C2U("com.sun.star.comp.chart2.DataSeriesWrapper") ) )
