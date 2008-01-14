@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:06:07 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:42:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -481,10 +481,10 @@ namespace dbp
                     }
                     else
                     {   // can be a draw/impress doc only
-                        Reference< XDrawView > xView(xController, UNO_QUERY);
-                        DBG_ASSERT(xView.is(), "OControlWizard::implDeterminePage: no alternatives left ... can't determine the page!");
-                        if (xView.is())
-                            xPage = xView->getCurrentPage();
+                        Reference< XDrawView > xDrawView(xController, UNO_QUERY);
+                        DBG_ASSERT(xDrawView.is(), "OControlWizard::implDeterminePage: no alternatives left ... can't determine the page!");
+                        if (xDrawView.is())
+                            xPage = xDrawView->getCurrentPage();
                     }
                 }
             }
@@ -638,7 +638,8 @@ namespace dbp
 
                 // calculate the connection the rowset is working with
                 Reference< XConnection > xConnection;
-                if ( !(m_aContext.bEmbedded = ::dbtools::isEmbeddedInDatabase(m_aContext.xForm,xConnection)) )
+                m_aContext.bEmbedded = ::dbtools::isEmbeddedInDatabase( m_aContext.xForm, xConnection );
+                if ( !m_aContext.bEmbedded )
                     xConnection = ::dbtools::connectRowset( m_aContext.xRowSet, getServiceFactory(), sal_True );
 
                 // get the fields
