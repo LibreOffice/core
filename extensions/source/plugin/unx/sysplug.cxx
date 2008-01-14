@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysplug.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:10:58 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:54:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
 int UnxPluginComm::nConnCounter = 0;
 
 UnxPluginComm::UnxPluginComm(
-                             const String& mimetype,
+                             const String& /*mimetype*/,
                              const String& library,
                              XLIB_Window aParent,
                              int nDescriptor1,
@@ -58,12 +58,12 @@ UnxPluginComm::UnxPluginComm(
 {
     char pDesc[32];
     char pWindow[32];
-    sprintf( pWindow, "%d", aParent );
+    sprintf( pWindow, "%d", (int)aParent );
     sprintf( pDesc, "%d", nDescriptor1 );
     ByteString aLib( library, osl_getThreadTextEncoding() );
 
     char* pArgs[5];
-    pArgs[0] = "pluginapp.bin";
+    pArgs[0] = const_cast<char*>("pluginapp.bin");
     pArgs[1] = pDesc;
     pArgs[2] = const_cast<char*>(aLib.GetBuffer());
     pArgs[3] = pWindow;
@@ -93,7 +93,7 @@ UnxPluginComm::UnxPluginComm(
         {
             MediatorMessage* pMessage = GetNextMessage( TRUE );
             Respond( pMessage->m_nID,
-                     "init ack",8,
+                     const_cast<char*>("init ack"),8,
                      NULL );
             delete pMessage;
             NPP_Initialize();
@@ -110,6 +110,8 @@ UnxPluginComm::~UnxPluginComm()
         pid_t nExit = waitpid( m_nCommPID, &status, WUNTRACED );
 #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "child %d (plugin app child %d) exited with status %d\n", nExit, m_nCommPID, WEXITSTATUS(status) );
+#else
+        (void)nExit;
 #endif
     }
 }
