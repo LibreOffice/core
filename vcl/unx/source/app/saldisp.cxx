@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 16:10:02 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:25:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1207,7 +1207,7 @@ XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
 {
     String aStrMap;
 #ifdef MACOSX
-    if( nKeyCode & KEY_MOD5 )
+    if( nKeyCode & KEY_MOD3 )
     {
     aStrMap += GetKeyNameFromKeySym( nMod2KeySym_ );
     }
