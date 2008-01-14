@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WrappedScaleProperty.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:42:42 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:56:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,27 +189,27 @@ void WrappedScaleProperty::setPropertyValue( tScaleProperty eScaleProperty, cons
         }
         case SCALE_PROP_STEPHELP:
         {
-            if( aScaleData.IncrementData.Distance.hasValue() )
+            Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
+            if( rSubIncrements.getLength() == 0 )
+                rSubIncrements.realloc( 1 );
+
+            double fStepMain = 0, fStepHelp = 0;
+            if( (rOuterValue >>= fStepHelp) )
             {
-                // todo: evaluate PostEquidistant
-                Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
-
-                if( rSubIncrements.getLength() == 0 )
-                    rSubIncrements.realloc( 1 );
-
-                double fStepMain = 0, fStepHelp = 0;
-                if( (rOuterValue >>= fStepHelp) &&
-                    (aScaleData.IncrementData.Distance >>= fStepMain) &&
-                    (fStepHelp != 0.0) )
+                if( AxisHelper::isLogarithmic(aScaleData.Scaling) )
                 {
-                    // approximate interval count
-                    sal_Int32 nIntervalCount = static_cast< sal_Int32 >
-                        (fStepMain / fStepHelp);
-
+                    sal_Int32 nIntervalCount = static_cast< sal_Int32 >(fStepHelp);
                     rSubIncrements[ 0 ].IntervalCount <<= nIntervalCount;
                 }
-                bSetScaleData = true;
+                else if( (fStepHelp != 0.0) &&
+                    (aScaleData.IncrementData.Distance >>= fStepMain) )
+                {
+                    // approximate interval count
+                    sal_Int32 nIntervalCount = static_cast< sal_Int32 >(fStepMain / fStepHelp);
+                    rSubIncrements[ 0 ].IntervalCount <<= nIntervalCount;
+                }
             }
+            bSetScaleData = true;
             break;
         }
         case SCALE_PROP_AUTO_MAX:
@@ -364,9 +364,21 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
         {
             // todo: evaluate PostEquidistant
             bool bNeedToCalculateExplicitValues = true;
-            if( aScaleData.IncrementData.Distance.hasValue() )
+
+            bool bLogarithmic( AxisHelper::isLogarithmic(aScaleData.Scaling) );
+            Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
+            if( bLogarithmic )
             {
-                Sequence< chart2::SubIncrement >& rSubIncrements( aScaleData.IncrementData.SubIncrements );
+                if( rSubIncrements.getLength() > 0 )
+                {
+                    sal_Int32 nIntervalCount = 0;
+                    rSubIncrements[ 0 ].IntervalCount >>= nIntervalCount;
+                    aRet = uno::makeAny( double(nIntervalCount) );
+                    bNeedToCalculateExplicitValues = false;
+                }
+            }
+            else if( aScaleData.IncrementData.Distance.hasValue() )
+            {
                 if( rSubIncrements.getLength() > 0 )
                 {
                     double fStepMain = 0;
@@ -385,6 +397,7 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                     bNeedToCalculateExplicitValues = false;
                 }
             }
+
             if( bNeedToCalculateExplicitValues )
             {
                 m_spChart2ModelContact->getExplicitValuesForAxis(
@@ -392,12 +405,26 @@ Any WrappedScaleProperty::getPropertyValue( tScaleProperty eScaleProperty, const
                 if( aExplicitIncrement.SubIncrements.getLength() > 0 &&
                      aExplicitIncrement.SubIncrements[ 0 ].IntervalCount > 0 )
                 {
-                    aRet <<= ( aExplicitIncrement.Distance /
+                    if( bLogarithmic )
+                    {
+                        if( rSubIncrements.getLength() > 0 )
+                        {
+                            sal_Int32 nIntervalCount = aExplicitIncrement.SubIncrements[ 0 ].IntervalCount;
+                            aRet = uno::makeAny( double(nIntervalCount) );
+                        }
+                    }
+                    else
+                        aRet <<= ( aExplicitIncrement.Distance /
                                 static_cast< double >(
                                     aExplicitIncrement.SubIncrements[ 0 ].IntervalCount ));
                 }
                 else
-                    aRet <<= aExplicitIncrement.Distance;
+                {
+                    if( bLogarithmic )
+                        aRet <<= 5.0;
+                    else
+                        aRet <<= aExplicitIncrement.Distance;
+                }
             }
             break;
         }
