@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PlottingPositionHelper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:12:34 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:07:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -464,6 +464,10 @@ double PolarPlottingPositionHelper::getWidthAngleDegree( double& fStartLogicValu
     double fStartAngleDegree = this->transformToAngleDegree( fStartLogicValueOnAngleAxis );
     double fEndAngleDegree   = this->transformToAngleDegree( fEndLogicValueOnAngleAxis );
     double fWidthAngleDegree = fEndAngleDegree - fStartAngleDegree;
+
+    if( ::rtl::math::approxEqual( fStartAngleDegree, fEndAngleDegree )
+        && !::rtl::math::approxEqual( fStartLogicValueOnAngleAxis, fEndLogicValueOnAngleAxis ) )
+        fWidthAngleDegree = 360.0;
 
     while(fWidthAngleDegree<0.0)
         fWidthAngleDegree+=360.0;
