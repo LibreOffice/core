@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewWrapper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:39:24 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:57:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ public:
 class DrawViewWrapper : public E3dView
 {
 public:
-    DrawViewWrapper(SdrModel* pModel, OutputDevice* pOut);
+    DrawViewWrapper(SdrModel* pModel, OutputDevice* pOut, bool bPaintPageForEditMode);
     virtual ~DrawViewWrapper();
 
     //triggers the use of an updated first page
@@ -115,6 +115,10 @@ private:
     mutable MarkHandleProvider*     m_pMarkHandleProvider;
 
     ::std::auto_ptr< SdrOutliner >  m_apOutliner;
+
+    // #i79965# scroll back view when ending text edit
+    bool m_bRestoreMapMode;
+    MapMode m_aMapModeToRestore;
 };
 
 //.............................................................................
