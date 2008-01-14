@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-06 13:19:54 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 13:52:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@ SLOFILES=\
          $(SLO)$/svdcrtv.obj         \
          $(SLO)$/svdograf.obj        \
          $(SLO)$/svdoole2.obj        \
+         $(SLO)$/chartprettypainter.obj \
          $(SLO)$/svdhdl.obj          \
          $(SLO)$/svdmrkv.obj         \
          $(SLO)$/svdogrp.obj         \
