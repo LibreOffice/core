@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keycodes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:59:01 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:20:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,13 +177,8 @@
 #define KEY_SHIFT       ((USHORT)0x1000)
 #define KEY_MOD1        ((USHORT)0x2000)
 #define KEY_MOD2        ((USHORT)0x4000)
-#ifdef MACOSX
-#define KEY_MOD5    ((USHORT)0x8000)
+#define KEY_MOD3    ((USHORT)0x8000)
 #define KEY_MODTYPE ((USHORT)0xF000)
-#else
-#define KEY_MODTYPE     ((USHORT)0x7000)
-#define KEY_CONTROLMOD  ((USHORT)0x8000)
-#endif
 #define KEY_ALLMODTYPE  ((USHORT)0xF000)
 
 // extended Modifier-Keys (only used for modkey events)

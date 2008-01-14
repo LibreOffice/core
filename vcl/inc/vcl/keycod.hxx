@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keycod.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:58:51 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:19:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,11 +95,7 @@ public:
                 KeyCode( KeyFuncType eFunction );
 
     USHORT      GetFullCode() const { return nCode; }
-#ifdef MACOSX
     USHORT      GetFullKeyCode() const { return (nCode) ; }
-#else
-    USHORT      GetFullKeyCode() const { return (nCode & ~KEY_CONTROLMOD); }
-#endif
     KeyFuncType GetFullFunction() const { return eFunc; }
     BOOL        IsDefinedKeyCodeEqual( const KeyCode& rKeyCode ) const;
 
@@ -116,16 +112,8 @@ public:
                     { return ((nCode & KEY_MOD1) != 0); }
     BOOL        IsMod2() const
                     { return ((nCode & KEY_MOD2) != 0); }
-#ifdef MACOSX
-    //  [ericb 07/2006]] Remap ALT with mod5, working fine with Tiger
-    BOOL        IsMod5() const
-                    { return ((nCode & KEY_MOD5) != 0); }
-    BOOL        IsControlMod() const
-                    { return (IsMod2() && IsMod1() && IsMod5()); }
-#else
-    BOOL        IsControlMod() const
-                    { return ((nCode & KEY_CONTROLMOD) != 0); }
-#endif
+    BOOL        IsMod3() const
+                    { return ((nCode & KEY_MOD3) != 0); }
     USHORT      GetGroup() const
                     { return (nCode & KEYGROUP_TYPE); }
 
