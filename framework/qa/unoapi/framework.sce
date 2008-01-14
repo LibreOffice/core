@@ -3,7 +3,7 @@
 -o fwl.FrameLoaderFactory
 -o fwl.SubstituteVariables
 -o fwl.TypeDetection
-# -o fwl.PathSettings
+#i84346 -o fwl.PathSettings
 -o fwk.DispatchRecorder
 -o fwk.DispatchRecorderSupplier
 -o fwk.FooterMenuController
@@ -11,8 +11,8 @@
 -o fwk.StatusBarControllerFactory
 -o fwk.ToolBarsMenuController
 -o fwk.UICategoryDescription
-#-o fwk.JobExecutor
-#-o fwk.JobHandler
+#i84423 -o fwk.JobExecutor
+#i84423 -o fwk.JobHandler
 -o fwk.MailToDispatcher
 -o fwk.ServiceHandler
 -o fwk.SoundHandler
@@ -30,7 +30,7 @@
 -o fwk.FontMenuController
 -o fwk.ModuleUIConfigurationManagerSupplier
 -o fwk.ModuleUIConfigurationManager
--o fwk.PopupMenuControllerFactory
+# i84321 -o fwk.PopupMenuControllerFactory
 -o fwk.Frame
 -o fwk.Desktop
 
