@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmxtrct.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:54:34 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:06:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ ErrCode XMXLockBytes::ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount, sal
 
 // ------------------------------------------------------------------------
 
-ErrCode XMXLockBytes::WriteAt( sal_Size nPos, const void* pBuffer, sal_Size nCount, sal_Size* pWritten )
+ErrCode XMXLockBytes::WriteAt( sal_Size /*nPos*/, const void* /*pBuffer*/, sal_Size /*nCount*/, sal_Size* /*pWritten*/ )
 {
     return ERRCODE_IO_CANTWRITE;
 }
@@ -136,14 +136,14 @@ ErrCode XMXLockBytes::Flush() const
 
 // ------------------------------------------------------------------------
 
-ErrCode XMXLockBytes::SetSize( sal_Size nSize )
+ErrCode XMXLockBytes::SetSize( sal_Size /*nSize*/ )
 {
     return ERRCODE_IO_CANTWRITE;
 }
 
 // ------------------------------------------------------------------------
 
-ErrCode XMXLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag eFlag ) const
+ErrCode XMXLockBytes::Stat( SvLockBytesStat* pStat, SvLockBytesStatFlag /*eFlag*/ ) const
 {
     pStat->nSize = maSeq.getLength();
     return ERRCODE_NONE;
