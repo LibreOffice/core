@@ -4,9 +4,9 @@
  *
  *  $RCSfile: so_env.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:02:57 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:45:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,10 @@
 #ifdef WNT
 #define _WINDOWS
 
+#pragma warning (push,1)
+#pragma warning (disable:4668)
+#pragma warning (disable:4917)
+
 #include <windows.h>
 #include <direct.h>
 #include <stdlib.h>
@@ -59,6 +63,8 @@
 #include <objidl.h>
 // For vsnprintf()
 #define NSP_vsnprintf _vsnprintf
+
+#pragma warning (pop)
 #endif // End WNT
 
 #include <sys/stat.h>
@@ -126,7 +132,7 @@ restoreUTF8(char *pPath)
 }
 
 // *aResult points the static string holding "/opt/staroffice8"
-int findReadSversion(void** aResult, int bWnt, const char* tag, const char* entry)
+int findReadSversion(void** aResult, int /*bWnt*/, const char* /*tag*/, const char* /*entry*/)
 {
 #ifdef UNIX
     // The real space to hold "/opt/staroffice8"
@@ -191,7 +197,7 @@ const char* findInstallDir()
     {
         findReadSversion((void**)&pInstall, 0, "["SECTION_NAME"]", SOFFICE_VERSION"=");
         if (!pInstall)
-            pInstall = "";
+            pInstall = const_cast< char* >( "" );
     }
     return pInstall;
 }
@@ -367,7 +373,10 @@ char* NSP_getPluginDesc()
 
 void NSP_WriteLog(int level,  const char* pFormat, ...)
 {
-#ifdef DEBUG
+#ifndef DEBUG
+    (void)level;
+    (void)pFormat;
+#else
     va_list      ap;
     char         msgBuf[NPP_BUFFER_SIZE];
     static char  logName[NPP_PATH_MAX] = {0};
