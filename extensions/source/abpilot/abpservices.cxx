@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abpservices.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:51:30 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:32:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ extern "C" void SAL_CALL abp_initializeModule()
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
-                uno_Environment **ppEnv
+                uno_Environment ** /*ppEnv*/
             )
 {
     abp_initializeModule();
@@ -100,7 +100,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 extern "C" void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
-                    void* pRegistryKey)
+                    void* /*pRegistryKey*/)
 {
     Reference< XInterface > xRet;
     if (pServiceManager && pImplementationName)
