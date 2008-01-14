@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldapuserprofilelayer.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:24:42 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:42:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,8 @@ typedef rtl::Reference< LdapUserProfileSource > LdapUserProfileSourceRef;
         rtl::OUString mUser;
         rtl::OUString mTimestamp;
         ProfileData * mProfile;
+    private:
+        using cppu::OPropertySetHelper::getFastPropertyValue;
   } ;
 }}}
 #endif // EXTENSIONS_CONFIG_LDAP_LADPUSERPROFILELAYER_HXX_
