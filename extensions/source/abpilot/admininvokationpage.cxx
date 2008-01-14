@@ -4,9 +4,9 @@
  *
  *  $RCSfile: admininvokationpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:04:23 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:33:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ namespace abp
     //---------------------------------------------------------------------
     void AdminDialogInvokationPage::implTryConnect()
     {
-        sal_Bool bConnected = getDialog()->connectToDataSource( sal_True );
+        getDialog()->connectToDataSource( sal_True );
 
         // show our error message if and only if we could not connect
         implUpdateErrorMessage();
@@ -117,7 +117,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( AdminDialogInvokationPage, OnInvokeAdminDialog, void*, NOTINTERESTEDIN )
+    IMPL_LINK( AdminDialogInvokationPage, OnInvokeAdminDialog, void*, /*NOTINTERESTEDIN*/ )
     {
         OAdminDialogInvokation aInvokation( getORB(), getDialog()->getDataSource().getDataSource(), getDialog() );
         if ( aInvokation.invokeAdministration( AST_LDAP == getSettings().eType ) )

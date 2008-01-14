@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tableselectionpage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:04:46 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:34:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( TableSelectionPage, OnTableDoubleClicked, void*, NOTINTERESTEDIN )
+    IMPL_LINK( TableSelectionPage, OnTableDoubleClicked, void*, /*NOTINTERESTEDIN*/ )
     {
         if ( 1 == m_aTableList.GetSelectEntryCount() )
             getDialog()->travelNext();
@@ -121,7 +121,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( TableSelectionPage, OnTableSelected, void*, NOTINTERESTEDIN )
+    IMPL_LINK( TableSelectionPage, OnTableSelected, void*, /*NOTINTERESTEDIN*/ )
     {
         implCheckNextButton();
         return 0L;
