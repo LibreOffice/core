@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-07 09:50:48 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 16:15:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,10 @@ dummy:
 #CFLAGS+=-x objective-c++
 
 SLOFILES=   $(SLO)$/salinst.obj			\
+            $(SLO)$/saldata.obj         \
+            $(SLO)$/vclnsapp.obj        \
             $(SLO)$/saltimer.obj		\
+            $(SLO)$/salnstimer.obj		\
             $(SLO)$/salsound.obj		\
             $(SLO)$/salsys.obj
 
