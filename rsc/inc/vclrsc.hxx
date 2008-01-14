@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclrsc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:11:22 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:54:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,8 +214,8 @@ enum TimeFieldFormat {TIMEF_NONE, TIMEF_SEC, TIMEF_100TH_SEC, TIMEF_SEC_CS, Time
 #define KEY_SHIFT       ((sal_uInt16)0x1000)
 #define KEY_MOD1        ((sal_uInt16)0x2000)
 #define KEY_MOD2        ((sal_uInt16)0x4000)
-#define KEY_MODTYPE     ((sal_uInt16)0x7000)
-#define KEY_CONTROLMOD  ((sal_uInt16)0x8000)
+#define KEY_MOD3        ((sal_uInt16)0x8000)
+#define KEY_MODTYPE     ((sal_uInt16)0xF000)
 #define KEY_ALLMODTYPE  ((sal_uInt16)0xF000)
 
 
