@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spinfieldtoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 16:23:04 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:24:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,13 +468,13 @@ void SpinfieldToolbarController::executeControlCommand( const ::com::sun::star::
     {
         for ( sal_Int32 i = 0; i < rControlCommand.Arguments.getLength(); i++ )
         {
-            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Value", 4 ))
+            if ( rControlCommand.Arguments[i].Name.equalsAsciiL( "Value", 5 ))
             {
                 sal_Int32   nValue;
                 double      fValue;
                 bool        bFloat( false );
 
-                if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, m_bFloat ))
+                if ( impl_getValue( rControlCommand.Arguments[i].Value, nValue, fValue, bFloat ))
                 {
                     aValue = bFloat ? ::rtl::OUString::valueOf( fValue ) : ::rtl::OUString::valueOf( nValue );
                     bFloatValue = bFloat;
