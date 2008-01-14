@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framectr.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:49:30 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:39:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,7 +253,7 @@ void BibFrameCtrl_Impl::frameAction(const FrameActionEvent& aEvent) throw( uno::
     }
 }
 
-void BibFrameCtrl_Impl::disposing( const lang::EventObject& Source )
+void BibFrameCtrl_Impl::disposing( const lang::EventObject& /*Source*/ )
     throw (::com::sun::star::uno::RuntimeException)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -336,7 +336,7 @@ void BibFrameController_Impl::attachFrame( const uno::Reference< XFrame > & xArg
     xFrame->addFrameActionListener( pImp );
 }
 
-sal_Bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & xModel ) throw (::com::sun::star::uno::RuntimeException)
+sal_Bool BibFrameController_Impl::attachModel( const uno::Reference< XModel > & /*xModel*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
     return sal_False;
 }
@@ -355,7 +355,7 @@ uno::Any BibFrameController_Impl::getViewData() throw (::com::sun::star::uno::Ru
     return uno::Any();
 }
 
-void BibFrameController_Impl::restoreViewData( const uno::Any& Value ) throw (::com::sun::star::uno::RuntimeException)
+void BibFrameController_Impl::restoreViewData( const uno::Any& /*Value*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
 }
 
@@ -390,7 +390,7 @@ void BibFrameController_Impl::removeEventListener( const uno::Reference< lang::X
     pImp->aLC.removeInterface( ::getCppuType((const Reference< lang::XEventListener >*)0), aListener );
 }
 
-uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( const util::URL& aURL, const rtl::OUString& aTarget, sal_Int32 nSearchFlags ) throw (::com::sun::star::uno::RuntimeException)
+uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( const util::URL& aURL, const rtl::OUString& /*aTarget*/, sal_Int32 /*nSearchFlags*/ ) throw (::com::sun::star::uno::RuntimeException)
 {
     if ( !bDisposing )
     {
@@ -409,7 +409,10 @@ uno::Reference< frame::XDispatch >  BibFrameController_Impl::queryDispatch( cons
 
 uno::Sequence<uno::Reference< XDispatch > > BibFrameController_Impl::queryDispatches( const uno::Sequence<DispatchDescriptor>& aDescripts ) throw (::com::sun::star::uno::RuntimeException)
 {
-    return uno::Sequence<uno::Reference< XDispatch > >();
+    uno::Sequence< uno::Reference< XDispatch > > aDispatches( aDescripts.getLength() );
+    for ( sal_Int32 i=0; i<aDescripts.getLength(); ++i )
+        aDispatches[i] = queryDispatch( aDescripts[i].FeatureURL, aDescripts[i].FrameName, aDescripts[i].SearchFlags );
+    return aDispatches;
 }
 
 uno::Sequence< ::sal_Int16 > SAL_CALL BibFrameController_Impl::getSupportedCommandGroups()
@@ -430,7 +433,6 @@ throw (::com::sun::star::uno::RuntimeException)
 {
     const CmdToInfoCache& rCmdCache = GetCommandToInfoCache();
 
-    sal_Int32                                   i( 0 );
     sal_Bool                                    bGroupFound( sal_False );
     frame::DispatchInformation                  aDispatchInfo;
     std::list< frame::DispatchInformation >     aDispatchInfoList;
@@ -527,7 +529,7 @@ Window* lcl_GetFocusChild( Window* pParent )
 }
 
 //class XDispatch
-void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs) throw (::com::sun::star::uno::RuntimeException)
+void BibFrameController_Impl::dispatch(const util::URL& _rURL, const uno::Sequence< beans::PropertyValue >& aArgs) throw (::com::sun::star::uno::RuntimeException)
 {
     if ( !bDisposing )
     {
@@ -535,7 +537,7 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
         Window* pParent = VCLUnoHelper::GetWindow( xWindow );
         WaitObject aWaitObject( pParent );
 
-        String aCommand( aURL.Path);
+        String aCommand( _rURL.Path);
         if(aCommand.EqualsAscii("Bib/Mapping"))
         {
             pDatMan->CreateMappingDialog(pParent);
@@ -551,11 +553,11 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
             {
                 try
                 {
-                    uno::Sequence< beans::PropertyValue >   aArgs(2);
-                    beans::PropertyValue* pProps = aArgs.getArray();
+                    uno::Sequence< beans::PropertyValue > aNewDataSource(2);
+                    beans::PropertyValue* pProps = aNewDataSource.getArray();
                     pProps[0].Value <<= rtl::OUString();
                     pProps[1].Value <<= aURL;
-                    ChangeDataSource(aArgs);
+                    ChangeDataSource(aNewDataSource);
                 }
                 catch(const Exception&)
                 {
@@ -671,7 +673,7 @@ void BibFrameController_Impl::dispatch(const util::URL& aURL, const uno::Sequenc
         {
             RemoveFilter();
         }
-        else if(aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:5503")) ||
+        else if(_rURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("slot:5503")) ||
                 aCommand.EqualsAscii("CloseDoc"))
         {
             Application::PostUserEvent( STATIC_LINK( this, BibFrameController_Impl,
@@ -957,7 +959,6 @@ void BibFrameController_Impl::RemoveFilter()
     pDatMan->startQueryWith(aQuery);
 
     sal_uInt16 nCount = aStatusListeners.Count();
-    FeatureStateEvent  aEvent;
 
     sal_Bool bRemoveFilter=sal_False;
     sal_Bool bQueryText=sal_False;
@@ -977,7 +978,7 @@ void BibFrameController_Impl::RemoveFilter()
         }
         else if(pObj->aURL.Path == C2U("Bib/query"))
         {
-            FeatureStateEvent aEvent;
+            FeatureStateEvent  aEvent;
             aEvent.FeatureURL = pObj->aURL;
             aEvent.IsEnabled  = sal_True;
             aEvent.Requery    = sal_False;
@@ -1019,7 +1020,6 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
 
 
     sal_uInt16 nCount = aStatusListeners.Count();
-    FeatureStateEvent  aEvent;
 
     sal_Bool bMenuFilter=sal_False;
     sal_Bool bQueryText=sal_False;
@@ -1028,6 +1028,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
         BibStatusDispatch *pObj = aStatusListeners[n];
         if(COMPARE_EQUAL == pObj->aURL.Path.compareToAscii("Bib/MenuFilter"))
         {
+            FeatureStateEvent  aEvent;
             aEvent.FeatureURL = pObj->aURL;
             aEvent.IsEnabled  = sal_True;
             aEvent.Requery    = sal_False;
@@ -1042,7 +1043,7 @@ void BibFrameController_Impl::ChangeDataSource(const uno::Sequence< beans::Prope
         }
         else if(COMPARE_EQUAL == pObj->aURL.Path.compareToAscii("Bib/query"))
         {
-            FeatureStateEvent aEvent;
+            FeatureStateEvent  aEvent;
             aEvent.FeatureURL = pObj->aURL;
             aEvent.IsEnabled  = sal_True;
             aEvent.Requery    = sal_False;
