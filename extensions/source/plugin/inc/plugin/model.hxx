@@ -4,9 +4,9 @@
  *
  *  $RCSfile: model.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:53:04 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:51:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ class PluginModel : public BroadcasterHelperHolder,
                                                          const Any& rValue ) throw();
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
                                                             const Any& rValue )
-        throw();
+        throw(::com::sun::star::uno::Exception);
     virtual void SAL_CALL getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const throw();
     virtual Reference< com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw();
 
@@ -159,6 +159,8 @@ class PluginModel : public BroadcasterHelperHolder,
     virtual void SAL_CALL addEventListener( const Reference< com::sun::star::lang::XEventListener > & l ) throw();
     virtual void SAL_CALL removeEventListener( const Reference< com::sun::star::lang::XEventListener > & l ) throw();
     virtual void SAL_CALL dispose() throw();
+  private:
+    using cppu::OPropertySetHelper::getFastPropertyValue;
 };
 Reference< XInterface >  SAL_CALL PluginModel_CreateInstance( const Reference< com::sun::star::lang::XMultiServiceFactory >  & ) throw( Exception );
 
