@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FileHelper.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 14:18:01 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:17:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,8 +201,21 @@ public class FileHelper
     //
     public static void makeDirectories(String first, String path)
         {
-            String already_done = null;
+            makeDirectories(first, path, "0777");
+        }
+
+    public static void makeDirectories(String first, String path, String _sMode)
+        {
             String fs = System.getProperty("file.separator");
+            if (path.startsWith(fs + fs)) // starts with UNC Path
+            {
+                int n = path.indexOf(fs, 2);
+                n = path.indexOf(fs, n + 1);
+                first = path.substring(0, n);
+                path = path.substring(n + 1);
+            }
+
+            String already_done = null;
             StringTokenizer path_tokenizer = new StringTokenizer(path,fs,false);
             already_done = first;
             while (path_tokenizer.hasMoreTokens())
@@ -213,8 +226,27 @@ public class FileHelper
                 // System.out.println(already_done);
                 //create the directory
                 new_dir.mkdirs();
+                if (OSHelper.isUnix() &&
+                    _sMode.length() > 0)
+                {
+                    try
+                    {
+                        chmod(new_dir, _sMode);
+                    }
+                    catch (java.io.IOException e)
+                    {
+                        GlobalLogWriter.get().println("Exception caught. FileHelper.makeDirectories('" + new_dir.getAbsolutePath() + "')");
+                    }
+                }
             }
             // return;
+        }
+
+    public static void chmod(File file, String mode) throws java.io.IOException
+        {
+            Runtime.getRuntime().exec
+                (new String[]
+                    {"chmod", mode, file.getAbsolutePath()});
         }
 
     public static String removeFirstDirectorysAndBasenameFrom(String _sName, String _sRemovePath)
@@ -282,13 +314,14 @@ public class FileHelper
         }
         else if (_sFileURL.startsWith("file://"))
         {
-            sSystemFile = _sFileURL.substring(7);
+            sSystemFile = _sFileURL.substring(5);
         }
         String fs = System.getProperty("file.separator");
         if (! fs.equals("/"))
         {
             sSystemFile = sSystemFile.replace ('/', fs.toCharArray ()[0]);
         }
+// FEATURE FOR UNC NEED!!!
         return sSystemFile;
     }
 
@@ -315,4 +348,28 @@ public class FileHelper
             return bDebug;
         }
 
+    public static void copy(String _sSource, String _sDestination)
+        {
+            try
+            {
+                File inputFile = new File(_sSource);
+                File outputFile = new File(_sDestination);
+
+                java.io.FileReader in = new java.io.FileReader(inputFile);
+                java.io.FileWriter out = new java.io.FileWriter(outputFile);
+                int c;
+
+                while ((c = in.read()) != -1)
+                    out.write(c);
+
+                in.close();
+                out.close();
+            }
+            catch (java.io.IOException e)
+            {
+                GlobalLogWriter.get().println("Exception caught. FileHelper.copy('" + _sSource + ", " + _sDestination + "')");
+                GlobalLogWriter.get().println("Message: " + e.getMessage());
+            }
+        }
 }
+
