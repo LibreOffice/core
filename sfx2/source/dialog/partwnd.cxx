@@ -4,9 +4,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 13:35:23 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:28:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,8 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame > xFrame(
             ::comphelper::getProcessServiceFactory()->createInstance(
             DEFINE_CONST_UNICODE("com.sun.star.frame.Frame") ), ::com::sun::star::uno::UNO_QUERY );
+    xFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
+
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > xPropSet(
         xFrame, ::com::sun::star::uno::UNO_QUERY );
     try
@@ -209,7 +211,6 @@ SfxPartDockWnd_Impl::SfxPartDockWnd_Impl
     {
     }
 
-    xFrame->initialize( VCLUnoHelper::GetInterface ( this ) );
     pChildWin->SetFrame( xFrame );
     if ( pBind->GetDispatcher() )
     {
