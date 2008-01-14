@@ -4,9 +4,9 @@
  *
  *  $RCSfile: so_instance.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 13:53:54 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:45:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ private:
     int m_nHeight;
     int m_nX;
     int m_nY;
-    int m_nFlag;            // Set to 12 during initialization
+    sal_Int16 m_nFlag;            // Set to 12 during initialization
     ::rtl::OUString m_sURL; // URL of the document to be loaded
     sal_Bool m_bInit;       // If the Plugin instance is initilaized.
     NSP_HWND m_hParent;       // Windows handle of parent window
@@ -130,7 +130,7 @@ private:
     PluginDocumentClosePreventer* m_pCloseListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloseListener > m_xCloseListener;
 
-    int LoadDocument(NSP_HWND hParent);
+    bool LoadDocument(NSP_HWND hParent);
     sal_Bool Connect(void);
 
     long m_dParentStyl;       // Old Windows style of parent window
@@ -149,7 +149,7 @@ public:
     static sal_Bool SetSODir(char * sDir);
     static char* GetSODir(void) {return sSO_Dir;};
     void SetPosSize(int x, int y, int w, int h);
-    void Setflag(int n);
+    void Setflag(sal_Int16 n);
     long GetParent(void) {return m_pParent;};
 };
 
