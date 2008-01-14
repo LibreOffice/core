@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-14 15:33:32 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:55:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,8 @@
 #include <cppuhelper/propshlp.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
+#include <list>
+
 class ImplPropertyTable;
 
 //  ----------------------------------------------------
@@ -99,6 +101,7 @@ private:
 
 protected:
     void                                        ImplRegisterProperty( sal_uInt16 nPropType );
+    void                                        ImplRegisterProperties( const std::list< sal_uInt16 > &rIds );
     void                                        ImplRegisterProperty( sal_uInt16 nPropId, const ::com::sun::star::uno::Any& rDefault );
     ::com::sun::star::uno::Sequence<sal_Int32>  ImplGetPropertyIds() const;
     virtual void                                ImplPropertyChanged( sal_uInt16 nPropId );
@@ -193,8 +196,12 @@ public:
     void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values ) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 };
 
-
-
+#define UNO_CONTROL_MODEL_REGISTER_PROPERTIES(a) \
+    do { \
+        std::list< sal_uInt16 > aIds; \
+        a::ImplGetPropertyIds( aIds ); \
+        ImplRegisterProperties( aIds ); \
+    } while (0)
 
 #endif // _TOOLKIT_AWT_UNOCONTROLMODEL_HXX_
 
