@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eformshelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:16:03 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,9 @@
 #endif
 /** === end UNO includes === **/
 
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
 #endif
@@ -611,13 +614,9 @@ namespace pcr
                 }
             }
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-#if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "EFormsHelper::createNewBinding: caught an exception:\n" );
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
-            OSL_ENSURE( sal_False, sMessage.getStr() );
-#endif
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         return xBinding;
