@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmxuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:31:19 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,13 +55,13 @@ extern "C"
 {
 //==================================================================================================
 void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 //==================================================================================================
 sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, void * pRegistryKey )
+    void * /*pServiceManager*/, void * pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -82,7 +82,7 @@ sal_Bool SAL_CALL component_writeInfo(
 }
 //==================================================================================================
 void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /*pRegistryKey*/ )
 {
     void * pRet = 0;
 
