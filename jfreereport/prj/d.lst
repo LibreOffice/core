@@ -1,11 +1,1 @@
-..\%__SRC%\misc\build\flute\flute-1.3-jfree-20061107.jar %_DEST%\bin%_EXT%\flute-1.3-jfree-20061107.jar
-..\%__SRC%\misc\build\libxml\libxml-0.9.5.jar %_DEST%\bin%_EXT%\libxml-0.9.5.jar
-..\%__SRC%\misc\build\libloader\libloader-0.3.4.jar %_DEST%\bin%_EXT%\libloader-0.3.4.jar
-..\%__SRC%\misc\build\libfonts\libfonts-0.2.6.jar %_DEST%\bin%_EXT%\libfonts-0.2.6.jar
-..\%__SRC%\misc\build\libformula\libformula-0.1.8.jar %_DEST%\bin%_EXT%\libformula-0.1.8.jar
-..\%__SRC%\misc\build\librepository\librepository-0.1.1.jar %_DEST%\bin%_EXT%\librepository-0.1.1.jar
-..\%__SRC%\misc\build\librepository\lib\jcommon-1.0.10.jar %_DEST%\bin%_EXT%\jcommon-1.0.10.jar
-..\%__SRC%\misc\build\jcommon-serializer\jcommon-serializer-0.1.0.jar %_DEST%\bin%_EXT%\jcommon-serializer-0.1.0.jar
-..\%__SRC%\misc\build\jfreereport\jfreereport-0.9.0-05.jar %_DEST%\bin%_EXT%\jfreereport-0.9.0-05.jar
-..\%__SRC%\misc\build\jfreereport\lib\sac.jar %_DEST%\bin%_EXT%\sac.jar
-..\%__SRC%\misc\build\liblayout\liblayout-0.2.6.jar %_DEST%\bin%_EXT%\liblayout-0.2.6.jar
+..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
