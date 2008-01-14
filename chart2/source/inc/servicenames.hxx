@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servicenames.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:25:41 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:59:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,9 @@ namespace chart
 
 #define CHART_ACCESSIBLE_TEXT_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.AccessibleTextComponent")
 #define CHART_ACCESSIBLE_TEXT_SERVICE_NAME ::rtl::OUString::createFromAscii("com.sun.star.accessibility.AccessibleTextComponent")
+
+#define CHART_RENDERER_SERVICE_IMPLEMENTATION_NAME ::rtl::OUString::createFromAscii("com.sun.star.comp.chart2.ChartRenderer")
+
 //.............................................................................
 } //namespace chart
 //.............................................................................
