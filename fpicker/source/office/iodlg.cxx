@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:24:16 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:09:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3079,6 +3079,10 @@ Control* SvtFileDialog::getControl( sal_Int16 _nControlId, sal_Bool _bLabelContr
 
         case TOOLBOXBUTOON_NEW_FOLDER:
             pReturn = _pImp->_pBtnNewFolder;
+            break;
+
+        case LISTBOX_FILTER_SELECTOR:
+            // only exists on SalGtkFilePicker
             break;
 
         default:
