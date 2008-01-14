@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:42:49 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:21:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,15 +292,16 @@ public:
     USHORT              AddGroup(   const String& rGroupName,  SfxShell* pCreateShell,
                                     SfxModule* pCreateModule, USHORT nDialogId );
 
-    void    ActivateLastSelection();
-    void    ActivatePage(USHORT nResId);
-    void    ApplyItemSets();
+    void                ActivateLastSelection();
+    void                ActivatePage( USHORT nResId );
+    void                ActivatePage( const String& rPageURL );
+    void                ApplyItemSets();
 
-    USHORT                  GetColorChanged() const { return nChangeType; }
-    XColorTable*            GetColorTable() { return pColorTab; }
+    USHORT              GetColorChanged() const { return nChangeType; }
+    XColorTable*        GetColorTable() { return pColorTab; }
 
     // helper functions to call the language settings TabPage from the SpellDialog
-    static  void ApplyLanguageOptions(const SfxItemSet& rSet);
+    static void         ApplyLanguageOptions(const SfxItemSet& rSet);
 };
 
 // class OfaPageResource -------------------------------------------------
