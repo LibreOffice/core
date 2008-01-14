@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:12:41 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:55:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ extern "C" void SAL_CALL preload_initializeModule()
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
                 const sal_Char  **ppEnvTypeName,
-                uno_Environment **ppEnv
+                uno_Environment **  /*ppEnv*/
             )
 {
     preload_initializeModule();
@@ -100,7 +100,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
 extern "C" void* SAL_CALL component_getFactory(
                     const sal_Char* pImplementationName,
                     void* pServiceManager,
-                    void* pRegistryKey)
+                    void* /*pRegistryKey*/)
 {
     Reference< XInterface > xRet;
     if (pServiceManager && pImplementationName)
