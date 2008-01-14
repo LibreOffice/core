@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nfuncs.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 14:24:17 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:50:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,7 @@ IMPL_LINK( AsynchronousGetURL, getURL, XPlugin_Impl*, pImpl )
     }
     catch( ::com::sun::star::plugin::PluginException& e )
     {
+        (void)e;
     }
     pImpl->leavePluginCallback();
     delete this;
@@ -202,13 +203,13 @@ extern "C" {
         free( pMem );
     }
 
-    uint32 SAL_CALL NP_LOADDS  NPN_MemFlush( uint32 nSize )
+    uint32 SAL_CALL NP_LOADDS  NPN_MemFlush( uint32 /*nSize*/ )
     {
         TRACE( "NPN_MemFlush" );
         return 0;
     }
 
-    NPError SAL_CALL NP_LOADDS  NPN_DestroyStream( NPP instance, NPStream* stream, NPError reason )
+    NPError SAL_CALL NP_LOADDS  NPN_DestroyStream( NPP instance, NPStream* stream, NPError /*reason*/ )
     {
         TRACE( "NPN_DestroyStream" );
         XPlugin_Impl* pImpl = XPluginManager_Impl::getXPluginFromNPP( instance );
@@ -235,7 +236,7 @@ extern "C" {
         return NULL;
     }
 
-    jref SAL_CALL NP_LOADDS  NPN_GetJavaPeer( NPP instance )
+    jref SAL_CALL NP_LOADDS  NPN_GetJavaPeer( NPP /*instance*/ )
     {
         TRACE( "NPN_GetJavaPeer" );
         return NULL;
@@ -407,11 +408,14 @@ extern "C" {
         XPlugin_Impl* pPlugin = NULL;
         PluginStream* pStream = NULL;
         for( iter = rList.begin(); iter!= rList.end(); ++iter )
-            if( ( pStream = (*iter)->getStreamFromNPStream( stream ) ) )
+        {
+            pStream = (*iter)->getStreamFromNPStream( stream );
+            if( pStream )
             {
                 pPlugin = *iter;
                 break;
             }
+        }
         if( ! pPlugin )
             return NPERR_INVALID_INSTANCE_ERROR;
         if( ! pStream || pStream->getStreamType() != InputStream )
@@ -589,30 +593,30 @@ NPError SAL_CALL NP_LOADDS  NPN_GetValue( NPP instance, NPNVariable variable, vo
     return aResult;
 }
 
-void SAL_CALL NP_LOADDS  NPN_ReloadPlugins(NPBool reloadPages)
+void SAL_CALL NP_LOADDS  NPN_ReloadPlugins(NPBool /*reloadPages*/)
 {
     TRACE( "NPN_ReloadPlugins" );
 }
 
 
-NPError SAL_CALL NP_LOADDS  NPN_SetValue(NPP instance, NPPVariable variable,
-                         void *value)
+NPError SAL_CALL NP_LOADDS  NPN_SetValue(NPP /*instance*/, NPPVariable /*variable*/,
+                         void* /*value*/)
 {
     TRACE( "NPN_SetValue" );
     return 0;
 }
 
-void SAL_CALL NP_LOADDS  NPN_InvalidateRect(NPP instance, NPRect *invalidRect)
+void SAL_CALL NP_LOADDS  NPN_InvalidateRect(NPP /*instance*/, NPRect* /*invalidRect*/)
 {
     TRACE( "NPN_InvalidateRect" );
 }
 
-void SAL_CALL NP_LOADDS  NPN_InvalidateRegion(NPP instance, NPRegion invalidRegion)
+void SAL_CALL NP_LOADDS  NPN_InvalidateRegion(NPP /*instance*/, NPRegion /*invalidRegion*/)
 {
     TRACE( "NPN_InvalidateRegion" );
 }
 
-void SAL_CALL NP_LOADDS  NPN_ForceRedraw(NPP instance)
+void SAL_CALL NP_LOADDS  NPN_ForceRedraw(NPP /*instance*/)
 {
     TRACE( "NPN_ForceRedraw" );
 }
