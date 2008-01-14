@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPoint.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:49:31 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:00:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,20 +104,20 @@ namespace chart
 
 DataPoint::DataPoint() :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 DataPoint::DataPoint( const uno::Reference< beans::XPropertySet > & rParentProperties ) :
         ::property::OPropertySet( m_aMutex ),
         m_xParentProperties( rParentProperties ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 DataPoint::DataPoint( const DataPoint & rOther ) :
         MutexContainer(),
         impl::DataPoint_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     // m_xParentProperties has to be set from outside, like in the method
     // DataSeries::createClone
