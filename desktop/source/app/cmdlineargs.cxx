@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-26 11:55:47 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:26:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,7 +276,25 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier, bool convert )
                             bStartEvent     = sal_False;
                             bDisplaySpec    = sal_True;
                     }
-
+                    #ifdef MACOSX
+                    /* #i84053# ignore -psn on Mac
+                       Platform dependent #ifdef here is ugly, however this is currently
+                       the only platform dependent parameter. Should more appear
+                       we should find a better solution
+                    */
+                    else if ( aArgStr.CompareToAscii( "-psn", 4 ) == COMPARE_EQUAL )
+                    {
+                            // finder argument from MacOSX
+                            bOpenEvent      = sal_False;
+                               bPrintEvent     = sal_False;
+                            bForceOpenEvent = sal_False;
+                            bPrintToEvent   = sal_False;
+                            bForceNewEvent  = sal_False;
+                            bViewEvent      = sal_False;
+                            bStartEvent     = sal_False;
+                            bDisplaySpec    = sal_False;
+                    }
+                    #endif
                 }
                 else
                 {
@@ -445,6 +463,18 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
         SetBoolParam_Impl( CMD_BOOLPARAM_HELPMATH, sal_True );
         return sal_True;
     }
+    #ifdef MACOSX
+    /* #i84053# ignore -psn on Mac
+       Platform dependent #ifdef here is ugly, however this is currently
+       the only platform dependent parameter. Should more appear
+       we should find a better solution
+    */
+    else if ( aArg.compareToAscii( "-psn", 4 ) == 0 )
+    {
+        SetBoolParam_Impl( CMD_BOOLPARAM_PSN, sal_True );
+        return sal_True;
+    }
+    #endif
     else if ( aArgStr.Copy(0, 8).EqualsIgnoreCaseAscii( "-accept=" ))
     {
         AddStringListParam_Impl( CMD_STRINGPARAM_ACCEPT, aArgStr.Copy( 8 ) );
@@ -899,7 +929,9 @@ sal_Bool CommandLineArgs::IsEmptyOrAcceptOnly() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
 
-    return m_eArgumentCount == NONE || ( ( m_eArgumentCount == ONE ) && ( m_aStrParams[ CMD_STRINGPARAM_ACCEPT ].getLength() ) );
+    return m_eArgumentCount == NONE ||
+           ( ( m_eArgumentCount == ONE ) && ( m_aStrParams[ CMD_STRINGPARAM_ACCEPT ].getLength() )) ||
+           ( ( m_eArgumentCount == ONE ) && ( m_aBoolParams[ CMD_BOOLPARAM_PSN ] ));
 }
 
 } // namespace desktop
