@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChart.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:09:46 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:05:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -504,6 +504,7 @@ void BarChart::createShapes()
 
     //better performance for big data
     std::map< VDataSeries*, FormerBarPoint > aSeriesFormerPointMap;
+    m_bPointsWereSkipped = false;
     sal_Int32 nSkippedPoints = 0;
     sal_Int32 nCreatedPoints = 0;
     //
@@ -665,6 +666,7 @@ void BarChart::createShapes()
                     if( ::rtl::math::isNan( fLogicBarHeight )) //no value at this category
                         continue;
 
+                    double fLogicValueForLabeDisplay = fLogicBarHeight;
                     fLogicBarHeight-=fBaseValue;
 
                     if(fLogicBarHeight==0.0 )//@todo: continue also if the resolution to small
@@ -785,6 +787,7 @@ void BarChart::createShapes()
                                                             )
                         {
                             nSkippedPoints++;
+                            m_bPointsWereSkipped = true;
                             continue;
                         }
                         aSeriesFormerPointMap[pSeries] = FormerBarPoint(fLogicX,fUpperYValue,fLowerYValue,fLogicZ);
@@ -914,7 +917,7 @@ void BarChart::createShapes()
                             if(LABEL_ALIGN_CENTER!=eAlignment)
                                 nOffset = 100;//add some spacing //@todo maybe get more intelligent values
                             this->createDataLabel( xTextTarget, **aSeriesIter, nCatIndex
-                                            , fLogicBarHeight, fLogicSum, aScreenPosition2D, eAlignment, nOffset );
+                                            , fLogicValueForLabeDisplay, fLogicSum, aScreenPosition2D, eAlignment, nOffset );
                         }
 
                     }//end iteration through partial points
