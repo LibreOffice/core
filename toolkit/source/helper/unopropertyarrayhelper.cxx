@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopropertyarrayhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:33:28 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:58:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,13 @@ UnoPropertyArrayHelper::UnoPropertyArrayHelper( const ::com::sun::star::uno::Seq
     const sal_Int32* pIDs = rIDs.getConstArray();
     for ( sal_Int32 n = 0; n < nIDs; n++ )
         maIDs.Insert( pIDs[n], (void*)1L );
+}
+
+UnoPropertyArrayHelper::UnoPropertyArrayHelper( const std::list< sal_uInt16 > &rIDs )
+{
+    std::list< sal_uInt16 >::const_iterator iter;
+    for( iter = rIDs.begin(); iter != rIDs.end(); iter++)
+      maIDs.Insert( *iter, (void*)1L);
 }
 
 sal_Bool UnoPropertyArrayHelper::ImplHasProperty( sal_uInt16 nPropId ) const
