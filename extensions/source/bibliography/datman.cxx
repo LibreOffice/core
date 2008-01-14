@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datman.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:05:34 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:38:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,6 +246,7 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
         }
         catch(Exception eEx)
         {
+            (void) eEx; // make compiler happy
             DBG_ERROR("Exception caught in ODatabaseContext::getRegisteredObject()")
         }
     }
@@ -277,7 +278,7 @@ Reference< XConnection > getConnection(const ::rtl::OUString& _rURL)
         }
         catch(Exception& e )
         {
-            e;  // make compiler happy
+            (void) e;   // make compiler happy
         }
 
     }
@@ -304,7 +305,7 @@ Reference< XConnection >    getConnection(const Reference< XInterface > & xRowSe
     }
     catch(Exception& e )
     {
-        e;  // make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("exception in getConnection");
     }
 
@@ -366,57 +367,61 @@ Reference< XNameAccess >  getColumns(const Reference< XForm > & _rxForm)
  --------------------------------------------------*/
 class MappingDialog_Impl : public ModalDialog
 {
+    BibDataManager* pDatMan;
+    OKButton        aOKBT;
+    CancelButton    aCancelBT;
+    HelpButton      aHelpBT;
     FixedLine       aMapGB;
     FixedText       aIdentifierFT;
     ListBox         aIdentifierLB;
     FixedText       aAuthorityTypeFT;
     ListBox         aAuthorityTypeLB;
-    FixedText       aYearFT;
-    ListBox         aYearLB;
     FixedText       aAuthorFT;
     ListBox         aAuthorLB;
     FixedText       aTitleFT;
     ListBox         aTitleLB;
+    FixedText       aMonthFT;
+    ListBox         aMonthLB;
+    FixedText       aYearFT;
+    ListBox         aYearLB;
+    FixedText       aISBNFT;
+    ListBox         aISBNLB;
+    FixedText       aBooktitleFT;
+    ListBox         aBooktitleLB;
+    FixedText       aChapterFT;
+    ListBox         aChapterLB;
+    FixedText       aEditionFT;
+    ListBox         aEditionLB;
+    FixedText       aEditorFT;
+    ListBox         aEditorLB;
+    FixedText       aHowpublishedFT;
+    ListBox         aHowpublishedLB;
+    FixedText       aInstitutionFT;
+    ListBox         aInstitutionLB;
+    FixedText       aJournalFT;
+    ListBox         aJournalLB;
+    FixedText       aNoteFT;
+    ListBox         aNoteLB;
+    FixedText       aAnnoteFT;
+    ListBox         aAnnoteLB;
+    FixedText       aNumberFT;
+    ListBox         aNumberLB;
+    FixedText       aOrganizationsFT;
+    ListBox         aOrganizationsLB;
+    FixedText       aPagesFT;
+    ListBox         aPagesLB;
     FixedText       aPublisherFT;
     ListBox         aPublisherLB;
     FixedText       aAddressFT;
     ListBox         aAddressLB;
-    FixedText       aISBNFT;
-    ListBox         aISBNLB;
-    FixedText       aChapterFT;
-    ListBox         aChapterLB;
-    FixedText       aPagesFT;
-    ListBox         aPagesLB;
-    FixedText       aEditorFT;
-    ListBox         aEditorLB;
-    FixedText       aEditionFT;
-    ListBox         aEditionLB;
-    FixedText       aBooktitleFT;
-    ListBox         aBooktitleLB;
-    FixedText       aVolumeFT;
-    ListBox         aVolumeLB;
-    FixedText       aHowpublishedFT;
-    ListBox         aHowpublishedLB;
-    FixedText       aOrganizationsFT;
-    ListBox         aOrganizationsLB;
-    FixedText       aInstitutionFT;
-    ListBox         aInstitutionLB;
     FixedText       aSchoolFT;
     ListBox         aSchoolLB;
-    FixedText       aReportTypeFT;
-    ListBox         aReportTypeLB;
-    FixedText       aMonthFT;
-    ListBox         aMonthLB;
-    FixedText       aJournalFT;
-    ListBox         aJournalLB;
-    FixedText       aNumberFT;
-    ListBox         aNumberLB;
     FixedText       aSeriesFT;
     ListBox         aSeriesLB;
-    FixedText       aAnnoteFT;
-    ListBox         aAnnoteLB;
-    FixedText       aNoteFT;
-    ListBox         aNoteLB;
+    FixedText       aReportTypeFT;
+    ListBox         aReportTypeLB;
+    FixedText       aVolumeFT;
+    ListBox         aVolumeLB;
     FixedText       aURLFT;
     ListBox         aURLLB;
     FixedText       aCustom1FT;
@@ -429,17 +434,12 @@ class MappingDialog_Impl : public ModalDialog
     ListBox         aCustom4LB;
     FixedText       aCustom5FT;
     ListBox         aCustom5LB;
-
-    OKButton        aOKBT;
-    CancelButton    aCancelBT;
-    HelpButton      aHelpBT;
-
     ListBox*        aListBoxes[COLUMN_COUNT];
     String          sNone;
 
     sal_Bool        bModified;
 
-    BibDataManager* pDatMan;
+
 
     DECL_LINK(OkHdl, OKButton*);
     DECL_LINK(ListBoxSelectHdl, ListBox*);
@@ -712,14 +712,12 @@ IMPL_LINK(MappingDialog_Impl, OkHdl, OKButton*, EMPTYARG)
  --------------------------------------------------*/
 class DBChangeDialog_Impl : public ModalDialog
 {
-    FixedLine       aSelectionGB;
-    SvTabListBox    aSelectionLB;
-    HeaderBar       aSelectionHB;
-
     OKButton        aOKBT;
     CancelButton    aCancelBT;
     HelpButton      aHelpBT;
-
+    FixedLine       aSelectionGB;
+    SvTabListBox    aSelectionLB;
+    HeaderBar       aSelectionHB;
     DBChangeDialogConfig_Impl   aConfig;
     String          aEntryST;
     String          aURLST;
@@ -785,7 +783,7 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
     }
     catch(Exception& e )
     {
-        e;  // make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("Exception in BibDataManager::DBChangeDialog_Impl::DBChangeDialog_Impl")
     }
 
@@ -794,7 +792,7 @@ DBChangeDialog_Impl::DBChangeDialog_Impl(Window* pParent, BibDataManager* pMan )
 /* -----------------06.12.99 12:09-------------------
 
  --------------------------------------------------*/
-IMPL_LINK(DBChangeDialog_Impl, DoubleClickHdl, SvTabListBox*, pLB)
+IMPL_LINK(DBChangeDialog_Impl, DoubleClickHdl, SvTabListBox*, /*pLB*/)
 {
     EndDialog(RET_OK);
     return 0;
@@ -918,13 +916,14 @@ void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const ::com::sun:
 
 BibDataManager::BibDataManager()
     :BibDataManager_Base( GetMutex() )
-    ,pToolbar(0)
-    ,pBibView( NULL )
-    ,m_aLoadListeners(m_aMutex)
     // #100312# --------------
     ,m_pInterceptorHelper( NULL )
+    ,m_aLoadListeners(m_aMutex)
+    ,pBibView( NULL )
+    ,pToolbar(0)
 {
 }
+
 /* --------------------------------------------------
 
  --------------------------------------------------*/
@@ -1036,7 +1035,7 @@ void BibDataManager::InsertFields(const Reference< XFormComponent > & _rxGrid)
     }
     catch(Exception& e )
     {
-        e;  // make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("Exception in BibDataManager::InsertFields")
     }
 }
@@ -1075,7 +1074,7 @@ Reference< awt::XControlModel > BibDataManager::updateGridModel(const Reference<
     }
     catch(Exception& e )
     {
-        e;  // make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::updateGridModel: something went wrong !");
     }
 
@@ -1161,7 +1160,7 @@ Reference< XForm >  BibDataManager::createDatabaseForm(BibDBDescriptor& rDesc)
     }
     catch(Exception& e )
     {
-        e;  // make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::createDatabaseForm: something went wrong !");
     }
 
@@ -1184,7 +1183,7 @@ Sequence< ::rtl::OUString > BibDataManager::getDataSources()
     }
     catch(Exception& e )
     {
-        e;  // make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::getDataSources: something went wrong !");
     }
 
@@ -1215,7 +1214,7 @@ void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
     }
     catch(Exception& e )
     {
-        e;  // make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::setFilterOnActiveDataSource: something went wrong !");
     }
 
@@ -1238,7 +1237,7 @@ void BibDataManager::setFilter(const ::rtl::OUString& rQuery)
     }
     catch(Exception& e )
     {
-        e;  // make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::getFilterOnActiveDataSource: something went wrong !");
     }
 
@@ -1438,7 +1437,7 @@ void BibDataManager::setActiveDataTable(const ::rtl::OUString& rTable)
     }
     catch(Exception& e )
     {
-        e;  // make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::setActiveDataTable: something went wrong !");
     }
 
@@ -1571,7 +1570,7 @@ Reference< awt::XControlModel > BibDataManager::createGridModel(const ::rtl::OUS
     }
     catch(Exception& e )
     {
-        e;  // make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::createGridModel: something went wrong !");
     }
 
@@ -1643,8 +1642,6 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
             ::rtl::OUString sCurrentModelType;
             const ::rtl::OUString sType(C2U("Type"));
             sal_Int32 nFormatKey = 0;
-            sal_Bool bIsFormatted           = sal_False;
-            sal_Bool bFormattedIsNumeric    = sal_True;
             xField->getPropertyValue(sType) >>= nFormatKey;
 
             ::rtl::OUString aInstanceName(C2U("com.sun.star.form.component."));
@@ -1696,7 +1693,7 @@ Reference< awt::XControlModel > BibDataManager::loadControlModel(
     }
     catch(Exception& e )
     {
-        e;  // make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::loadControlModel: something went wrong !");
     }
     return xModel;
@@ -1719,14 +1716,20 @@ void BibDataManager::saveCtrModel(const ::rtl::OUString& rName,const Reference< 
         }
         catch(Exception& e )
         {
-            e;  // make compiler happy
+            (void) e;   // make compiler happy
             DBG_ERROR("::saveCtrModel: something went wrong !");
         }
     }
 
 }
 //------------------------------------------------------------------------
-void BibDataManager::disposing( const EventObject& Source ) throw( ::com::sun::star::uno::RuntimeException )
+void SAL_CALL BibDataManager::disposing()
+{
+    BibDataManager_Base::WeakComponentImplHelperBase::disposing();
+}
+
+//------------------------------------------------------------------------
+void BibDataManager::disposing( const EventObject& /*Source*/ ) throw( ::com::sun::star::uno::RuntimeException )
 {
     // not interested in
 }
@@ -1755,7 +1758,7 @@ void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw
     }
     catch(Exception& e )
     {
-        e;  // make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("::propertyChange: something went wrong !");
     }
 
@@ -1800,7 +1803,7 @@ try
 }
 catch(Exception& e )
 {
-    e;  // make compiler happy
+    (void) e;   // make compiler happy
     DBG_ERROR("Exception in BibDataManager::SetMeAsUidListener")
 }
 
@@ -1846,7 +1849,7 @@ try
 }
 catch(Exception& e )
 {
-    e;  // make compiler happy
+    (void) e;   // make compiler happy
     DBG_ERROR("Exception in BibDataManager::RemoveMeAsUidListener")
 }
 
@@ -1871,7 +1874,7 @@ sal_Bool BibDataManager::moveRelative(sal_Int32 nCount)
     }
     catch(Exception& e )
     {
-        e;  // make compiler happy
+        (void) e;   // make compiler happy
         DBG_ERROR("Exception in BibDataManager::moveRelative")
     }
 
