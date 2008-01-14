@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Wall.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:03:42 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:02:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,14 +140,14 @@ namespace chart
 
 Wall::Wall() :
         ::property::OPropertySet( m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 Wall::Wall( const Wall & rOther ) :
         MutexContainer(),
         impl::Wall_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 Wall::~Wall()
