@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmenu.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:10:05 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:14:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,35 +84,5 @@ public:
 
     std::vector< AquaSalMenuItem* > maItems;
 };
-
-class AquaSalMenuItem : public SalMenuItem
-{
-public:
-    AquaSalMenuItem( const SalItemParams* );
-    virtual ~AquaSalMenuItem();
-
-    USHORT              mnId;                 // Item ID
-    Menu*               mpVCLMenu;            // VCL Menu into which this MenuItem is inserted
-    AquaSalMenu*        mpParentMenu;         // The menu in which this menu item is inserted
-    AquaSalMenu*        mpSubMenu;            // Sub menu of this item (if defined)
-    NSMenuItem*         mpMenuItem;           // The NSMenuItem
-};
-
-@interface SalNSMenu : NSMenu
-{
-    AquaSalMenu*        mpMenu;
-}
--(id)initWithMenu: (AquaSalMenu*)pMenu;
--(void)menuNeedsUpdate: (NSMenu*)pMenu;
--(void)setSalMenu: (AquaSalMenu*)pMenu;
-@end
-
-@interface SalNSMenuItem : NSMenuItem
-{
-    AquaSalMenuItem*    mpMenuItem;
-}
--(id)initWithMenuItem: (AquaSalMenuItem*)pMenuItem;
--(void)menuItemTriggered: (id)aSender;
-@end
 
 #endif // _SV_SALMENU_H
