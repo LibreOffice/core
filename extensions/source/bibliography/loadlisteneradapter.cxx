@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loadlisteneradapter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:56:43 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:39:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ namespace bib
     }
 
     //---------------------------------------------------------------------
-    void OComponentListener::_disposing( const EventObject& _rSource ) throw( RuntimeException)
+    void OComponentListener::_disposing( const EventObject& /*_rSource*/ ) throw( RuntimeException)
     {
         // nothing to do here, overrride if you're interested in
     }
