@@ -2,7 +2,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/nppapi.cxx,v 1.6 2006-09-16 13:10:13 obo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/nppapi.cxx,v 1.7 2008-01-14 14:53:38 ihi Exp $
 
 *************************************************************************/
 
@@ -31,7 +31,7 @@ PluginConnector::~PluginConnector()
     allConnectors.Remove( this );
 }
 
-IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, pMediator )
+IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
 {
     NAMESPACE_VOS(OGuard) aGuard( m_aUserEventMutex );
     if( allConnectors.GetPos( this ) == LIST_ENTRY_NOTFOUND )
@@ -40,7 +40,7 @@ IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, pMediator )
     return 0;
 }
 
-IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
+IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
 {
     if( allConnectors.GetPos( this ) == LIST_ENTRY_NOTFOUND )
         return 0;
@@ -53,8 +53,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
 
     MediatorMessage* pMessage;
     CommandAtoms nCommand;
-    char* pRun;
-    while( pMessage = GetNextMessage( FALSE ) )
+    while( (pMessage = GetNextMessage( FALSE )) )
     {
         nCommand = (CommandAtoms)pMessage->GetUINT32();
         medDebug( 1, "%s\n", GetCommandName( nCommand ) );
@@ -256,7 +255,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 Respond( pMessage->m_nID,
                          (char*)&nRet, sizeof( nRet ),
                          NULL );
-                delete [] pBuffer;
+                delete [] (char*)pBuffer;
                 delete instance;
             }
             break;
@@ -279,9 +278,12 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
     return 0;
 }
 
-#define GET_INSTANCE( err ) \
+#define GET_INSTANCE() \
     UINT32 nInstance;  \
-    nInstance = GetNPPID( instance ); \
+    nInstance = GetNPPID( instance );
+
+#define GET_INSTANCE_RET( err ) \
+    GET_INSTANCE() \
     if( nInstance == PluginConnector::UnknownNPPID ) \
         return err
 
@@ -291,7 +293,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
 NPError UnxPluginComm::NPP_Destroy( NPP instance, NPSavedData** save )
 {
     NPError aRet = NPERR_GENERIC_ERROR;
-    GET_INSTANCE( aRet );
+    GET_INSTANCE_RET( aRet );
     MediatorMessage* pMes =
         Transact( eNPP_Destroy,
                   POST_INSTANCE(),
@@ -309,7 +311,7 @@ NPError UnxPluginComm::NPP_Destroy( NPP instance, NPSavedData** save )
     aRet = GetNPError( pMes );
     ULONG nSaveBytes;
     void* pSaveData = pMes->GetBytes( nSaveBytes );
-    if( nSaveBytes == 4 && *(UINT32*)pSaveData == '0000' )
+    if( nSaveBytes == 4 && *(UINT32*)pSaveData == 0 )
         *save = NULL;
     else
     {
@@ -325,7 +327,7 @@ NPError UnxPluginComm::NPP_Destroy( NPP instance, NPSavedData** save )
 NPError UnxPluginComm::NPP_DestroyStream( NPP instance, NPStream* stream, NPError reason )
 {
     NPError aRet = NPERR_GENERIC_ERROR;
-    GET_INSTANCE( aRet );
+    GET_INSTANCE_RET( aRet );
     UINT32 nFileID = GetStreamID( stream );
     if( nFileID == PluginConnector::UnknownStreamID )
         return NPERR_GENERIC_ERROR;
@@ -429,7 +431,7 @@ NPError UnxPluginComm::NPP_NewStream( NPP instance, NPMIMEType type, NPStream* s
                        NPBool seekable, uint16* stype )
 {
     NPError aRet = NPERR_GENERIC_ERROR;
-    GET_INSTANCE( aRet );
+    GET_INSTANCE_RET( aRet );
 
     m_aNPWrapStreams.Insert( stream, LIST_APPEND );
     MediatorMessage* pMes =
@@ -454,14 +456,14 @@ NPError UnxPluginComm::NPP_NewStream( NPP instance, NPMIMEType type, NPStream* s
     return aRet;
 }
 
-void UnxPluginComm::NPP_Print( NPP instance, NPPrint* platformPrint )
+void UnxPluginComm::NPP_Print( NPP /*instance*/, NPPrint* /*platformPrint*/ )
 {
 }
 
 NPError UnxPluginComm::NPP_SetWindow( NPP instance, NPWindow* window )
 {
     NPError aRet = NPERR_GENERIC_ERROR;
-    GET_INSTANCE( aRet );
+    GET_INSTANCE_RET( aRet );
 
     MediatorMessage* pMes =
         Transact( eNPP_SetWindow,
@@ -509,7 +511,7 @@ void UnxPluginComm::NPP_URLNotify( NPP instance, const char* url, NPReason reaso
 
 int32 UnxPluginComm::NPP_Write( NPP instance, NPStream* stream, int32 offset, int32 len, void* buffer )
 {
-    GET_INSTANCE( -1 );
+    GET_INSTANCE_RET( -1 );
     UINT32 nFileID = GetStreamID( stream );
     if( nFileID == PluginConnector::UnknownStreamID )
         return -1;
@@ -532,7 +534,7 @@ int32 UnxPluginComm::NPP_Write( NPP instance, NPStream* stream, int32 offset, in
 
 int32 UnxPluginComm::NPP_WriteReady( NPP instance, NPStream* stream )
 {
-    GET_INSTANCE( -1 );
+    GET_INSTANCE_RET( -1 );
     UINT32 nFileID = GetStreamID( stream );
     if( nFileID == PluginConnector::UnknownStreamID )
         return -1;
@@ -559,7 +561,7 @@ char* UnxPluginComm::NPP_GetMIMEDescription()
         Transact( eNPP_GetMIMEDescription,
                   NULL );
     if( ! pMes )
-        return "";
+        return (char*)"";
 
     if( pDesc )
         delete [] pDesc;
@@ -568,12 +570,12 @@ char* UnxPluginComm::NPP_GetMIMEDescription()
     return pDesc;
 }
 
-NPError UnxPluginComm::NPP_GetValue( NPP instance, NPPVariable variable, void* value )
+NPError UnxPluginComm::NPP_GetValue( NPP /*instance*/, NPPVariable /*variable*/, void* /*value*/ )
 {
     return 0;
 }
 
-NPError UnxPluginComm::NPP_SetValue( NPP instance, NPNVariable variable, void* value )
+NPError UnxPluginComm::NPP_SetValue( NPP /*instance*/, NPNVariable /*variable*/, void* /*value*/ )
 {
     return 0;
 }
