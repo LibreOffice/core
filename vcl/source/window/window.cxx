@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.270 $
+ *  $Revision: 1.271 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-13 11:04:26 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:23:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,6 +338,30 @@ void Window::ImplInitAppFontData( Window* pWindow )
         nTextWidth = nSymHeight+5;
     pSVData->maGDIData.mnAppFontX = nTextWidth * 10 / 8;
     pSVData->maGDIData.mnAppFontY = nTextHeight * 10;
+
+    // FIXME: this is currently only on aqua, check with other
+    // platforms
+    if( pSVData->maNWFData.mbNoFocusRects )
+    {
+        // try to find out wether there is a large correction
+        // of control sizes, if yes, make app font scalings larger
+        // so dialog positioning is not completely off
+        ImplControlValue aControlValue;
+        Region aCtrlRegion( Rectangle( Point(), Size( nTextWidth < 10 ? 10 : nTextWidth, nTextHeight < 10 ? 10 : nTextHeight ) ) );
+        Region aBoundingRgn( aCtrlRegion );
+        Region aContentRgn( aCtrlRegion );
+        if( pWindow->GetNativeControlRegion( CTRL_EDITBOX, PART_ENTIRE_CONTROL, aCtrlRegion,
+                                             CTRL_STATE_ENABLED, aControlValue, rtl::OUString(),
+                                             aBoundingRgn, aContentRgn ) )
+        {
+            Rectangle aContentRect( aContentRgn.GetBoundRect() );
+            // comment: the magical +6 is for the extra border in bordered
+            // (which is the standard) edit fields
+            if( aContentRect.GetHeight() - nTextHeight > (nTextHeight+4)/4 )
+                pSVData->maGDIData.mnAppFontY = (aContentRect.GetHeight()-4) * 10;
+        }
+    }
+
 
     pSVData->maGDIData.mnRealAppFontX = pSVData->maGDIData.mnAppFontX;
     if ( pSVData->maAppData.mnDialogScaleX )
