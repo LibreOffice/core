@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:17:44 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:27:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,6 +838,10 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
     {
         case SID_OPTIONS_TREEDIALOG:
         {
+            String sPageURL;
+            SFX_REQUEST_ARG( rReq, pURLItem, SfxStringItem, SID_OPTIONS_PAGEURL, sal_False );
+            if ( pURLItem )
+                sPageURL = pURLItem->GetValue();
             const SfxItemSet* pArgs = rReq.GetInternalArgs_Impl();
             const SfxPoolItem* pItem = NULL;
             Reference < XFrame > xFrame;
@@ -846,7 +850,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
             if ( pFact )
             {
-                VclAbstractDialog* pDlg = pFact->CreateFrameDialog( NULL, xFrame, rReq.GetSlot() );
+                VclAbstractDialog* pDlg =
+                    pFact->CreateFrameDialog( NULL, xFrame, rReq.GetSlot(), sPageURL );
                   pDlg->Execute();
                   delete pDlg;
             }
