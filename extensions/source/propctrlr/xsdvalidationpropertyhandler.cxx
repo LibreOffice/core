@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsdvalidationpropertyhandler.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:53:19 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -679,7 +679,7 @@ namespace pcr
                 PROPERTY_XSD_MIN_EXCLUSIVE_DATE_TIME
             };
 
-            sal_Int32 i=0;
+            size_t i=0;
             const ::rtl::OUString* pLoop = NULL;
             for ( i = 0, pLoop = aFacets;
                   i < sizeof( aFacets ) / sizeof( aFacets[0] );
