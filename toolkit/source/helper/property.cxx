@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 11:45:24 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:58:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_DEP_PROP_3 ( "BorderColor",            BORDERCOLOR,        sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "Closeable",              CLOSEABLE,          bool,               BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "CurrencySymbol",         CURRENCYSYMBOL,     ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "CustomUnitText",         CUSTOMUNITTEXT,     ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
             DECL_DEP_PROP_3 ( "Date",                   DATE,               sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "DateFormat",             EXTDATEFORMAT,      sal_Int16,          BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "DateMax",                DATEMAX,            sal_Int32,          BOUND, MAYBEDEFAULT ),
@@ -290,6 +291,7 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "Toggle",                 TOGGLE,                 bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "TreatAsNumber",          TREATASNUMBER,          bool,           BOUND, MAYBEDEFAULT,TRANSIENT ),
             DECL_PROP_2     ( "TriState",               TRISTATE,               bool,           BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "Unit",                   UNIT,                   sal_Int16,      BOUND, MAYBEDEFAULT ),
             DECL_PROP_2     ( "VScroll",                VSCROLL,                bool,           BOUND, MAYBEDEFAULT ),
             DECL_DEP_PROP_3 ( "Value",                  VALUE_DOUBLE,           double,         BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "ValueMax",               VALUEMAX_DOUBLE,        double,         BOUND, MAYBEDEFAULT ),
