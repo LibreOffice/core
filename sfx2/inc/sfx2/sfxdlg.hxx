@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxdlg.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-20 10:44:22 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ class SFX2_DLLPUBLIC SfxAbstractDialogFactory : public VclAbstractDialogFactory
 public:
     static SfxAbstractDialogFactory*    Create();
     virtual VclAbstractDialog*          CreateSfxDialog( Window* pParent, const SfxBindings& rBindings, sal_uInt32 nResId ) = 0;
-    virtual VclAbstractDialog*          CreateFrameDialog( Window* pParent, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, sal_uInt32 nResId ) = 0;
+    virtual VclAbstractDialog*          CreateFrameDialog( Window* pParent, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame, sal_uInt32 nResId, const String& rParameter ) = 0;
     virtual SfxAbstractTabDialog*       CreateTabDialog( sal_uInt32 nResId,
                                             Window* pParent,
                                             const SfxItemSet* pAttrSet,
