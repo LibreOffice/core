@@ -1,12 +1,12 @@
-/*n***********************************************************************
+/************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:49:23 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:18:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #include "salmenu.h"
 #include "saltimer.h"
 #include "salinst.h"
+#include "salframeview.h"
 #include "vcl/salwtype.hxx"
 #include "vcl/window.hxx"
 
@@ -57,12 +58,15 @@
 #include "vcl/svapp.hxx"
 #include "rtl/ustrbuf.hxx"
 
+#include <premac.h>
+#include <CoreFoundation/CoreFoundation.h>
+#include <postmac.h>
+
 using namespace std;
 
 // =======================================================================
 
 AquaSalFrame* AquaSalFrame::s_pCaptureFrame = NULL;
-
 
 // =======================================================================
 
@@ -76,7 +80,8 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, ULONG salFrameStyle ) :
     mnMinHeight(0),
     mnMaxWidth(0),
     mnMaxHeight(0),
-    mbGraphics(FALSE),
+    mbGraphics(false),
+    mbFullScreen( false ),
     mbShown(false),
     mbInitShow(true),
     mbPositioned(false),
@@ -88,7 +93,8 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, ULONG salFrameStyle ) :
     mpMenu( NULL ),
     mnExtStyle( 0 ),
     mePointerStyle( POINTER_ARROW ),
-    mnTrackingRectTag( 0 )
+    mnTrackingRectTag( 0 ),
+    mrClippingPath( 0 )
 {
     maSysData.nSize     = sizeof( SystemEnvData );
 
@@ -105,6 +111,11 @@ AquaSalFrame::AquaSalFrame( SalFrame* pParent, ULONG salFrameStyle ) :
 
 AquaSalFrame::~AquaSalFrame()
 {
+    // cleanup clipping stuff
+    ResetClipRegion();
+
+    [SalFrameView unsetMouseFrame: this];
+
     SalData* pSalData = GetSalData();
     pSalData->maFrames.remove( this );
     pSalData->maFrameCheck.erase( this );
@@ -130,15 +141,18 @@ AquaSalFrame::~AquaSalFrame()
 void AquaSalFrame::initWindowAndView()
 {
     // initialize mirroring parameters
-    // FIXME: multiple screens, screens changing
-    maScreenRect = [[NSScreen mainScreen] frame];
+    // FIXME: screens changing
+    NSScreen * pScreen = [mpWindow screen];
+    if( pScreen == nil )
+        pScreen = [NSScreen mainScreen];
+    maScreenRect = [pScreen frame];
 
     // calculate some default geometry
-    NSRect aVisibleRect = [[NSScreen mainScreen] visibleFrame];
+    NSRect aVisibleRect = [pScreen visibleFrame];
     CocoaToVCL( aVisibleRect );
 
-    maGeometry.nX = aVisibleRect.origin.x + aVisibleRect.size.width / 10;
-    maGeometry.nY = aVisibleRect.origin.y + aVisibleRect.size.height / 10;
+    maGeometry.nX = static_cast<int>(aVisibleRect.origin.x + aVisibleRect.size.width / 10);
+    maGeometry.nY = static_cast<int>(aVisibleRect.origin.y + aVisibleRect.size.height / 10);
     maGeometry.nWidth = static_cast<unsigned int>(aVisibleRect.size.width * 0.8);
     maGeometry.nHeight = static_cast<unsigned int>(aVisibleRect.size.height * 0.8);
 
@@ -153,10 +167,10 @@ void AquaSalFrame::initWindowAndView()
                       NSResizableWindowMask         |
                       NSClosableWindowMask;
         // make default window "maximized"
-        maGeometry.nX = aVisibleRect.origin.x;
-        maGeometry.nY = aVisibleRect.origin.y;
-        maGeometry.nWidth = aVisibleRect.size.width;
-        maGeometry.nHeight = aVisibleRect.size.height;
+        maGeometry.nX = static_cast<int>(aVisibleRect.origin.x);
+        maGeometry.nY = static_cast<int>(aVisibleRect.origin.y);
+        maGeometry.nWidth = static_cast<int>(aVisibleRect.size.width);
+        maGeometry.nHeight = static_cast<int>(aVisibleRect.size.height);
         mbPositioned = mbSized = true;
     }
     else
@@ -227,6 +241,17 @@ void AquaSalFrame::VCLToCocoa( NSPoint& io_rPoint, bool bRelativeToScreen )
         io_rPoint.y = maScreenRect.size.height - io_rPoint.y;
     else
         io_rPoint.y = maGeometry.nHeight - io_rPoint.y;
+}
+
+// -----------------------------------------------------------------------
+
+void AquaSalFrame::screenParametersChanged()
+{
+    UpdateFrameGeometry();
+
+    if( mpGraphics )
+        mpGraphics->updateResolution();
+    CallCallback( SALEVENT_DISPLAYCHANGED, 0 );
 }
 
 // -----------------------------------------------------------------------
@@ -305,7 +330,7 @@ void AquaSalFrame::SetIcon( USHORT nIcon )
 void AquaSalFrame::initShow()
 {
     mbInitShow = false;
-    if( ! mbPositioned )
+    if( ! mbPositioned && ! mbFullScreen )
     {
         Rectangle aScreenRect;
         GetWorkArea( aScreenRect );
@@ -376,6 +401,7 @@ void AquaSalFrame::Show(BOOL bVisible, BOOL bNoActivate)
     }
     else
     {
+        [SalFrameView unsetMouseFrame: this];
         if( mpParent )
             [mpParent->mpWindow removeChildWindow: mpWindow];
 
@@ -474,6 +500,7 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
 
     // set normal state
     NSRect aStateRect = [mpWindow frame];
+    aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
     CocoaToVCL( aStateRect );
     if( pState->mnMask & SAL_FRAMESTATE_MASK_X )
         aStateRect.origin.x = float(pState->mnX);
@@ -484,12 +511,13 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
     if( pState->mnMask & SAL_FRAMESTATE_MASK_HEIGHT )
         aStateRect.size.height = float(pState->mnHeight);
     VCLToCocoa( aStateRect );
+    aStateRect = [NSWindow frameRectForContentRect: aStateRect styleMask: mnStyleMask];
     [mpWindow setFrame: aStateRect display: FALSE];
 
     // FIXME: HTH maximized state ?
-    if( mbShown )
-        // trigger filling our backbuffer
-        SendPaintEvent();
+
+    // get new geometry
+    UpdateFrameGeometry();
 
     USHORT nEvent = 0;
     if( pState->mnMask & (SAL_FRAMESTATE_MASK_X | SAL_FRAMESTATE_MASK_X) )
@@ -503,8 +531,15 @@ void AquaSalFrame::SetWindowState( const SalFrameState* pState )
         mbSized = true;
         nEvent = (nEvent == SALEVENT_MOVE) ? SALEVENT_MOVERESIZE : SALEVENT_RESIZE;
     }
+    // send event that we were moved/sized
     if( nEvent )
         CallCallback( nEvent, NULL );
+
+    if( mbShown )
+        // trigger filling our backbuffer
+        SendPaintEvent();
+
+    [mpWindow display];
 }
 
 // -----------------------------------------------------------------------
@@ -526,6 +561,7 @@ BOOL AquaSalFrame::GetWindowState( SalFrameState* pState )
                      SAL_FRAMESTATE_MASK_STATE;
 
     NSRect aStateRect = [mpWindow frame];
+    aStateRect = [NSWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
     CocoaToVCL( aStateRect );
     pState->mnX         = long(aStateRect.origin.x);
     pState->mnY         = long(aStateRect.origin.y);
@@ -546,7 +582,7 @@ BOOL AquaSalFrame::GetWindowState( SalFrameState* pState )
 
 // -----------------------------------------------------------------------
 
-void AquaSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 /* nDisplay */ )
+void AquaSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 nDisplay )
 {
     AquaLog( ">*>_> %s\n",__func__);
 
@@ -556,10 +592,55 @@ void AquaSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 /* nDisplay */ )
     mbFullScreen = bFullScreen;
     if( bFullScreen )
     {
-        NSRect aNewContentRect = maScreenRect;
+        // hide the dock and the menubar if we are on the menu screen
+        // which is always on index 0 according to documentation
+        bool bHideMenu = (nDisplay == 0);
 
-        // hide the dock and the menubar
-        [NSMenu setMenuBarVisible:NO];
+        NSRect aNewContentRect = { { 0, 0 }, { 0, 0 } };
+        // get correct screen
+        NSScreen* pScreen = nil;
+        NSArray* pScreens = [NSScreen screens];
+        if( pScreens )
+        {
+            if( nDisplay >= 0 && (unsigned int)nDisplay < [pScreens count] )
+                pScreen = [pScreens objectAtIndex: nDisplay];
+            else
+            {
+                // this means span all screens
+                bHideMenu = true;
+                NSEnumerator* pEnum = [pScreens objectEnumerator];
+                while( (pScreen = [pEnum nextObject]) != nil )
+                {
+                    NSRect aScreenRect = [pScreen frame];
+                    if( aScreenRect.origin.x < aNewContentRect.origin.x )
+                    {
+                        aNewContentRect.size.width += aNewContentRect.origin.x - aScreenRect.origin.x;
+                        aNewContentRect.origin.x = aScreenRect.origin.x;
+                    }
+                    if( aScreenRect.origin.y < aNewContentRect.origin.y )
+                    {
+                        aNewContentRect.size.height += aNewContentRect.origin.y - aScreenRect.origin.y;
+                        aNewContentRect.origin.y = aScreenRect.origin.y;
+                    }
+                    if( aScreenRect.origin.x + aScreenRect.size.width > aNewContentRect.origin.x + aNewContentRect.size.width )
+                        aNewContentRect.size.width = aScreenRect.origin.x + aScreenRect.size.width - aNewContentRect.origin.x;
+                    if( aScreenRect.origin.y + aScreenRect.size.height > aNewContentRect.origin.y + aNewContentRect.size.height )
+                        aNewContentRect.size.height = aScreenRect.origin.y + aScreenRect.size.height - aNewContentRect.origin.y;
+                }
+            }
+        }
+        if( aNewContentRect.size.width == 0 && aNewContentRect.size.height == 0 )
+        {
+            if( pScreen == nil )
+                pScreen = [mpWindow screen];
+            if( pScreen == nil )
+                pScreen = [NSScreen mainScreen];
+
+            aNewContentRect = [pScreen frame];
+        }
+
+        if( bHideMenu )
+            [NSMenu setMenuBarVisible:NO];
 
         maFullScreenRect = [mpWindow frame];
         [mpWindow setFrame: [NSWindow frameRectForContentRect: aNewContentRect styleMask: mnStyleMask] display: YES];
@@ -572,7 +653,6 @@ void AquaSalFrame::ShowFullScreen( BOOL bFullScreen, sal_Int32 /* nDisplay */ )
     else
     {
         [mpWindow setFrame: maFullScreenRect display: YES];
-
         UpdateFrameGeometry();
 
         if( mbShown )
@@ -629,8 +709,8 @@ NSCursor* AquaSalFrame::getCurrentCursor() const
     case POINTER_MOVE:      pCursor = [NSCursor openHandCursor];        break;
     case POINTER_NSIZE:     pCursor = [NSCursor resizeUpCursor];        break;
     case POINTER_SSIZE:     pCursor = [NSCursor resizeDownCursor];      break;
-    case POINTER_ESIZE:     pCursor = [NSCursor resizeLeftCursor];      break;
-    case POINTER_WSIZE:     pCursor = [NSCursor resizeRightCursor];     break;
+    case POINTER_ESIZE:     pCursor = [NSCursor resizeRightCursor];      break;
+    case POINTER_WSIZE:     pCursor = [NSCursor resizeLeftCursor];     break;
     case POINTER_ARROW:     pCursor = [NSCursor arrowCursor];           break;
     case POINTER_VSPLIT:
     case POINTER_VSIZEBAR:
@@ -645,8 +725,12 @@ NSCursor* AquaSalFrame::getCurrentCursor() const
     case POINTER_REFHAND:   pCursor = [NSCursor pointingHandCursor];    break;
 
     default:
-        DBG_ERROR( "unmapped cursor" );
-        pCursor = [NSCursor arrowCursor];
+        pCursor = GetSalData()->getCursor( mePointerStyle );
+        if( pCursor == nil )
+        {
+            DBG_ERROR( "unmapped cursor" );
+            pCursor = [NSCursor arrowCursor];
+        }
         break;
     }
     return pCursor;
@@ -656,10 +740,8 @@ void AquaSalFrame::SetPointer( PointerStyle ePointerStyle )
 {
     if( ePointerStyle >= POINTER_COUNT || ePointerStyle == mePointerStyle )
         return;
-
     mePointerStyle = ePointerStyle;
 
-    AquaLog( ">*>_> %s\n",__func__);
     [mpWindow invalidateCursorRectsForView: mpView];
 }
 
@@ -797,8 +879,8 @@ XubString AquaSalFrame::GetKeyName( USHORT nKeyCode )
         if( (nKeyCode & KEY_MOD1) != 0 )
             aResult.append( sal_Unicode( 0x2303 ) );
         // we do not really handle Alt (see below)
-        // we map it to MOD5, whichis actually Command
-        if( (nKeyCode & (KEY_MOD2|KEY_MOD5)) != 0 )
+        // we map it to MOD3, whichis actually Command
+        if( (nKeyCode & (KEY_MOD2|KEY_MOD3)) != 0 )
             aResult.append( sal_Unicode( 0x2318 ) );
 
         aResult.append( it->second );
@@ -815,247 +897,7 @@ XubString AquaSalFrame::GetSymbolKeyName( const XubString&, USHORT nKeyCode )
     return GetKeyName( nKeyCode );
 }
 
-// we have to get Quartz color in preferences, and convert them into sal colors
-static short getHighlightColorFromPrefs( Color* pColor )
-{
-    // default value, when never modified, is light blue ( 0.7098 , 0.8353 , 1.00 )
-    BYTE aRed = static_cast<BYTE>( 0.7098*255);
-    BYTE aGreen = static_cast<BYTE>( 0.8353*255);
-    BYTE aBlue = static_cast<BYTE>( 1.0000*255);
-
-    // get the key in ~/Library/Preferences/.GlobalPreferences.plist
-    CFStringRef aPreferedHighlightColor = CFSTR("AppleHighlightColor");
-    if (aPreferedHighlightColor)
-    {
-        CFStringRef aHighLightColor = ( (CFStringRef)CFPreferencesCopyAppValue( aPreferedHighlightColor, kCFPreferencesCurrentApplication ) );
-        if (aHighLightColor)
-        {
-            // create a CFArray containing all the values, as CFString
-            CFStringRef aSeparator = CFSTR(" ");
-            if (aSeparator)
-            {
-                CFArrayRef aCFArray = CFStringCreateArrayBySeparatingStrings ( kCFAllocatorDefault, aHighLightColor, aSeparator);
-                if (aCFArray)
-                {
-                    // create an array of double, containing Quartz values
-                    double aColorArray[3];
-                    short i;
-                    for (i=0; i<3 ; i++)
-                    {
-                        aColorArray[i] = CFStringGetDoubleValue ( (CFStringRef)CFArrayGetValueAtIndex(aCFArray, i) );
-                    }
-
-                    // we no longer need The CFArray
-                    CFRelease(aCFArray);
-                    AquaLog( ">*>_> %s R %f V %f B %f \n",__func__, aColorArray[0],aColorArray[1],aColorArray[2]);
-
-                    // the colors (uff)
-                    aRed = static_cast<BYTE>( aColorArray[0]*255);
-                    aGreen = static_cast<BYTE>( aColorArray[1]*255);
-                    aBlue = static_cast<BYTE>( aColorArray[2]*255);
-                }
-                CFRelease (aSeparator);
-            }
-            CFRelease(aHighLightColor);
-        }
-        CFRelease(aPreferedHighlightColor);
-    }
-    pColor->SetRed( aRed );
-    pColor->SetGreen( aGreen );
-    pColor->SetBlue( aBlue );
-    return 0;
-}
-
 // -----------------------------------------------------------------------
-
-OSStatus AquaGetThemeFont( ThemeFontID eThemeFontID, ScriptCode eScriptCode, Str255 aFontFamilyName, SInt16 *nFontSize, Str255 aFontStyleName ) {
-
-    OSStatus eStatus = ::GetThemeFont( eThemeFontID, eScriptCode, aFontFamilyName, nFontSize, aFontStyleName );
-
-    // #i78983# GetThemeFont doesn't return its corresponding Font
-    // with script code for some languages
-    switch ( eScriptCode ) {
-    case kFontArabicScript:
-        strcpy( (char *)&aFontFamilyName[1], "Geeza Pro" );
-        aFontFamilyName[0] = strlen( (char *)&aFontFamilyName[1] );
-    break;
-    // TODO: any other language?
-    default:
-    break;
-    }
-
-    return eStatus;
-}
-
-static std::hash_map<rtl::OUString, ScriptCode, rtl::OUStringHash> LocaleScriptMapInit() {
-    std::hash_map <rtl::OUString, ScriptCode, rtl::OUStringHash> m;
-
-    // FIXME: the mapping mechanism leads to unsuitable fonts in some languages (e.g. cs)
-    // need to check each language and add the correct mapping
-    #if 0
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "en" ) )] = kFontRomanScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "es" ) )] = kFontRomanScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "de" ) )] = kFontRomanScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "fr" ) )] = kFontRomanScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "it" ) )] = kFontRomanScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ca" ) )] = kFontRomanScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "gl" ) )] = kFontRomanScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "da" ) )] = kFontRomanScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "fi" ) )] = kFontRomanScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "is" ) )] = kFontRomanScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "nl" ) )] = kFontRomanScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "no" ) )] = kFontRomanScript;
-    #endif
-
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ja" ) )] = kFontJapaneseScript;
-
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "zh_HK" ) )] = kFontTraditionalChineseScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "zh_MO" ) )] = kFontTraditionalChineseScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "zh_SG" ) )] = kFontTraditionalChineseScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "zh_TW" ) )] = kFontTraditionalChineseScript;
-
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ko" ) )] = kFontKoreanScript;
-
-    #if 0
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ar" ) )] = kFontArabicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "he" ) )] = kFontHebrewScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "el" ) )] = kFontGreekScript;
-
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "be" ) )] = kFontCyrillicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bg" ) )] = kFontCyrillicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cv" ) )] = kFontCyrillicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ky" ) )] = kFontCyrillicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "mk" ) )] = kFontCyrillicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ru" ) )] = kFontCyrillicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sh" ) )] = kFontCyrillicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sr" ) )] = kFontCyrillicScript;
-
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hi" ) )] = kFontDevanagariScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pa" ) )] = kFontGurmukhiScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "gu" ) )] = kFontGujaratiScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "or" ) )] = kFontOriyaScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bn" ) )] = kFontBengaliScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ta" ) )] = kFontTamilScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "te" ) )] = kFontTeluguScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "kn" ) )] = kFontKannadaScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ml" ) )] = kFontMalayalamScript;
-    // kFontSinhaleseScript; // si
-    // kFontBurmeseScript; // my
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hm" ) )] = kFontKhmerScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "th" ) )] = kFontThaiScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "lo" ) )] = kFontLaotianScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ka" ) )] = kFontGeorgianScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hy" ) )] = kFontArmenianScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "zh_CN" ) )] = kFontSimpleChineseScript;
-
-    // kFontTibetanScript; // bo
-    // kFontMongolianScript; // mm
-    // kFontGeezScript; // gez in ISO 639-2
-    // kFontSlavicScript; // sla in ISO 639-2
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "bs" ) )] = kFontSlavicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cs" ) )] = kFontSlavicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "hr" ) )] = kFontSlavicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "lv" ) )] = kFontSlavicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "mk" ) )] = kFontSlavicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pl" ) )] = kFontSlavicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sk" ) )] = kFontSlavicScript;
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "sl" ) )] = kFontSlavicScript;
-
-    m[rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "vi" ) )] = kFontVietnameseScript;
-    // kFontExtendedArabicScript; // ??
-    // kFontSindhiScript; // sd
-    #endif
-
-    return m;
-}
-
-static ScriptCode GetScriptCodeForUiLocale()
-{
-    static std::hash_map<rtl::OUString, ScriptCode, rtl::OUStringHash> aLocaleScriptMap( LocaleScriptMapInit() );
-
-    const com::sun::star::lang::Locale& rLocale = Application::GetSettings().GetUILocale();
-    rtl::OUString aLocaleStr( rLocale.Language );
-    ScriptCode eScriptCode = smSystemScript;
-
-    // special case for zh
-    if ( aLocaleStr.equalsAscii( "zh" ) )
-    {
-        rtl::OUString aCountryStr( rLocale.Country );
-        rtl::OUStringBuffer aBuf( 8 );
-        aBuf.append( aLocaleStr );
-        if ( aCountryStr.equalsAscii("TW") ||
-             aCountryStr.equalsAscii("HK") ||
-             aCountryStr.equalsAscii("MO") ||
-             aCountryStr.equalsAscii("SG") )
-        {
-            aBuf.appendAscii( "_" );
-            aBuf.append( aCountryStr );
-        }
-        else
-        {
-            aBuf.appendAscii( "_CN" );
-        }
-        aLocaleStr = aBuf.makeStringAndClear();
-    }
-
-    std::hash_map<rtl::OUString, ScriptCode, rtl::OUStringHash>::const_iterator it;
-    it = aLocaleScriptMap.find( aLocaleStr );
-    if ( it != aLocaleScriptMap.end() )
-    {
-        eScriptCode = it->second;
-    }
-    else
-    {
-        eScriptCode = smSystemScript;
-    }
-
-    return eScriptCode;
-}
-
-static bool GetSystemFontSetting( ThemeFontID eThemeFontID, int nDPIY, Font* pFont )
-{
-    // TODO: also allow non-roman font names
-    Str255 aFontFamilyName = "";
-    Str255 aFontStyleName = "";
-    SInt16 nFontPixelSize;
-    const rtl_TextEncoding eNameEncoding = RTL_TEXTENCODING_APPLE_ROMAN;
-
-    ScriptCode eScriptCode = GetScriptCodeForUiLocale();
-    OSStatus eStatus = AquaGetThemeFont( eThemeFontID, eScriptCode, aFontFamilyName, &nFontPixelSize, aFontStyleName );
-    AquaLog("GetSystemFontSetting(id=%d) => err=%d => (\"%s\", \"%s\", h=%d)\n",eThemeFontID,eStatus,aFontFamilyName+1,aFontStyleName+1,nFontPixelSize);
-    if( eStatus != noErr )
-        return false;
-
-    // Convert font name using a font specific encoding into the roman name
-    ATSUFontID fontID;
-    ByteCount oNameLen;
-    ItemCount oNameIndex;
-    char oNameString[512];
-
-    eStatus = ATSUFindFontFromName(&aFontFamilyName[1], aFontFamilyName[0], kFontFamilyName, kFontNoPlatformCode, kFontNoScriptCode, kFontNoLanguageCode, &fontID);
-    if ( eStatus == noErr )
-    {
-        eStatus = ATSUFindFontName(fontID, kFontFamilyName, kFontNoPlatformCode, kFontRomanScript, kFontNoLanguageCode, sizeof(oNameString), oNameString, &oNameLen, &oNameIndex);
-    }
-    else
-    {
-        // See http://lists.apple.com/archives/carbon-dev/2006/Nov/msg00046.html
-        eStatus = ATSUFindFontFromName(&aFontFamilyName[1], aFontFamilyName[0], kFontFullName, kFontNoPlatformCode, kFontNoScriptCode, kFontNoLanguageCode, &fontID);
-        if( eStatus != noErr )
-            return false;
-        eStatus = ATSUFindFontName(fontID, kFontFullName, kFontNoPlatformCode, kFontRomanScript, kFontNoLanguageCode, sizeof(oNameString), oNameString, &oNameLen, &oNameIndex);
-    }
-    if( eStatus != noErr )
-        return false;
-    oNameString[oNameLen] = '\0';
-
-    pFont->SetName( String( oNameString, eNameEncoding ) );
-    pFont->SetStyleName( String( (const sal_Char*)aFontStyleName+1, aFontStyleName[0], eNameEncoding ) );
-
-    const long nFontPointSize = static_cast<long>(nFontPixelSize * 72.0 / nDPIY);
-    pFont->SetHeight( nFontPointSize );
-    return true;
-}
 
 static void getAppleScrollBarVariant(void)
 {
@@ -1085,18 +927,41 @@ static void getAppleScrollBarVariant(void)
     GetSalData()->mbIsScrollbarDoubleMax = bIsScrollbarDoubleMax;
 }
 
-static bool GetSystemFontColor( ThemeTextColor eThemeTextColor, Color* pColor )
+static Color getColor( NSColor* pSysColor, const Color& rDefault, NSWindow* pWin )
 {
-    RGBColor aRGBColor;
-    OSStatus eStatus = ::GetThemeTextColor( eThemeTextColor, 24, true, &aRGBColor );
-    AquaLog("GetSystemFontColor(%d) => err=%d => (#%02X%02X%02X)\n",eThemeTextColor,(aRGBColor.red>>8),(aRGBColor.green>>8),(aRGBColor.blue>>8));
-    if( eStatus != noErr )
-        return false;
+    Color aRet( rDefault );
+    if( pSysColor )
+    {
+        // transform to RGB
+        NSColor* pRBGColor = [pSysColor colorUsingColorSpaceName: NSDeviceRGBColorSpace device: [pWin deviceDescription]];
+        if( pRBGColor )
+        {
+            float r = 0, g = 0, b = 0, a = 0;
+            [pRBGColor getRed: &r green: &g blue: &b alpha: &a];
+            aRet = Color( int(r*255.999), int(g*255.999), int(b*255.999) );
+            /*
+            do not release here; leads to duplicate free in yield
+            it seems the converted color comes out autoreleased, although this
+            is not documented
+            [pRBGColor release];
+            */
+        }
+    }
+    return aRet;
+}
 
-    pColor->SetRed( static_cast<UINT8>(aRGBColor.red >> 8U) );
-    pColor->SetGreen( static_cast<UINT8>(aRGBColor.green >> 8U) );
-    pColor->SetBlue( static_cast<UINT8>(aRGBColor.blue >> 8U) );
-    return true;
+static Font getFont( NSFont* pFont, long nDPIY, const Font& rDefault )
+{
+    Font aResult( rDefault );
+    if( pFont )
+    {
+        aResult.SetName( GetOUString( [pFont familyName] ) );
+        aResult.SetHeight( static_cast<int>(([pFont pointSize] * 72.0 / (float)nDPIY)+0.5) );
+        aResult.SetItalic( ([pFont italicAngle] != 0.0) ? ITALIC_NORMAL : ITALIC_NONE );
+        // FIMXE: bold ?
+    }
+
+    return aResult;
 }
 
 // on OSX-Aqua the style settings are independent of the frame, so it does
@@ -1119,50 +984,52 @@ void AquaSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSettings.SetLightBorderColor( aBackgroundColor );
 
     // get the system font settings
-    Font aFont = aStyleSettings.GetAppFont();
+    Font aAppFont = aStyleSettings.GetAppFont();
     GetGraphics();
     long nDPIX = 72, nDPIY = 72;
     mpGraphics->GetResolution( nDPIX, nDPIY );
-    if( GetSystemFontSetting( kThemeApplicationFont, nDPIY, &aFont ) )
-    {
-        // TODO: better mapping of aqua<->ooo font settings
-    aStyleSettings.SetAppFont( aFont );
-    aStyleSettings.SetHelpFont( aFont );
-    aStyleSettings.SetTitleFont( aFont );
-    aStyleSettings.SetFloatTitleFont( aFont );
+    aAppFont = getFont( [NSFont systemFontOfSize: 0], nDPIY, aAppFont );
 
-    GetSystemFontSetting( kThemeMenuItemFont, nDPIY, &aFont );
-    aStyleSettings.SetMenuFont( aFont );
+    // TODO: better mapping of aqua<->ooo font settings
+    aStyleSettings.SetAppFont( aAppFont );
+    aStyleSettings.SetHelpFont( aAppFont );
+    aStyleSettings.SetPushButtonFont( aAppFont );
 
-    GetSystemFontSetting( kThemeToolbarFont, nDPIY, &aFont );
-    aStyleSettings.SetToolFont( aFont );
+    Font aTitleFont( getFont( [NSFont titleBarFontOfSize: 0], nDPIY, aAppFont ) );
+    aStyleSettings.SetTitleFont( aTitleFont );
+    aStyleSettings.SetFloatTitleFont( aTitleFont );
 
-    GetSystemFontSetting( kThemeLabelFont, nDPIY, &aFont );
-    aStyleSettings.SetLabelFont( aFont );
-    aStyleSettings.SetInfoFont( aFont );
-    aStyleSettings.SetRadioCheckFont( aFont );
-    aStyleSettings.SetFieldFont( aFont );
-    aStyleSettings.SetGroupFont( aFont );
-    aStyleSettings.SetIconFont( aFont );
+    Font aMenuFont( getFont( [NSFont menuFontOfSize: 0], nDPIY, aAppFont ) );
+    aStyleSettings.SetMenuFont( aMenuFont );
 
-    GetSystemFontSetting( kThemePushButtonFont, nDPIY, &aFont );
-    aStyleSettings.SetPushButtonFont( aFont );
-    }
+    aStyleSettings.SetToolFont( aAppFont );
 
-    Color aSelectTextBackgroundColor;
-    if( getHighlightColorFromPrefs( &aSelectTextBackgroundColor ) == 0 )
-    {
-        aStyleSettings.SetHighlightTextColor( Color(0x0,0x0,0x0) );
-        aStyleSettings.SetHighlightColor( aSelectTextBackgroundColor );
-    }
+    Font aLabelFont( getFont( [NSFont labelFontOfSize: 0], nDPIY, aAppFont ) );
+    aStyleSettings.SetLabelFont( aLabelFont );
+    aStyleSettings.SetInfoFont( aLabelFont );
+    aStyleSettings.SetRadioCheckFont( aLabelFont );
+    aStyleSettings.SetFieldFont( aLabelFont );
+    aStyleSettings.SetGroupFont( aLabelFont );
+    aStyleSettings.SetIconFont( aLabelFont );
 
-    Color aColor = aStyleSettings.GetMenuTextColor();
-    if( GetSystemFontColor( kThemeTextColorRootMenuActive, &aColor ) )
-    {
-    // TODO: better mapping of aqua<->ooo color settings
-    aStyleSettings.SetMenuTextColor( aColor );
-    // TODO: ...
-    }
+    Color aHighlightColor( getColor( [NSColor selectedTextBackgroundColor],
+                                      aStyleSettings.GetHighlightColor(), mpWindow ) );
+    aStyleSettings.SetHighlightColor( aHighlightColor );
+    Color aHighlightTextColor( getColor( [NSColor selectedTextColor],
+                                         aStyleSettings.GetHighlightTextColor(), mpWindow ) );
+    aStyleSettings.SetHighlightTextColor( aHighlightTextColor );
+
+    Color aMenuHighlightColor( getColor( [NSColor selectedMenuItemColor],
+                                         aStyleSettings.GetMenuHighlightColor(), mpWindow ) );
+    aStyleSettings.SetMenuHighlightColor( aMenuHighlightColor );
+    Color aMenuHighlightTextColor( getColor( [NSColor selectedMenuItemTextColor],
+                                             aStyleSettings.GetMenuHighlightTextColor(), mpWindow ) );
+    aStyleSettings.SetMenuHighlightTextColor( aMenuHighlightTextColor );
+
+    aStyleSettings.SetMenuColor( aBackgroundColor );
+    Color aMenuTextColor( getColor( [NSColor textColor],
+                                    aStyleSettings.GetMenuTextColor(), mpWindow ) );
+    aStyleSettings.SetMenuTextColor( aMenuTextColor );
 
     aStyleSettings.SetCursorBlinkTime( 500 );
 
@@ -1186,7 +1053,7 @@ const SystemEnvData* AquaSalFrame::GetSystemData() const
 
 void AquaSalFrame::Beep( SoundType eSoundType )
 {
-    SysBeep(1);
+    NSBeep();
 }
 
 // -----------------------------------------------------------------------
@@ -1278,13 +1145,15 @@ void AquaSalFrame::SetPosSize(long nX, long nY, long nWidth, long nHeight, USHOR
 
 void AquaSalFrame::GetWorkArea( Rectangle& rRect )
 {
-    // FIXME: multiple screens
-    NSRect aRect = [[NSScreen mainScreen] visibleFrame];
+    NSScreen* pScreen = [mpWindow screen];
+    if( pScreen ==  nil )
+        pScreen = [NSScreen mainScreen];
+    NSRect aRect = [pScreen visibleFrame];
     CocoaToVCL( aRect );
-    rRect.nLeft     = aRect.origin.x;
-    rRect.nTop      = aRect.origin.y;
-    rRect.nRight    = aRect.origin.x + aRect.size.width - 1;
-    rRect.nBottom   = aRect.origin.y + aRect.size.height - 1;
+    rRect.nLeft     = static_cast<long>(aRect.origin.x);
+    rRect.nTop      = static_cast<long>(aRect.origin.y);
+    rRect.nRight    = static_cast<long>(aRect.origin.x + aRect.size.width - 1);
+    rRect.nBottom   = static_cast<long>(aRect.origin.y + aRect.size.height - 1);
 }
 
 SalPointerState AquaSalFrame::GetPointerState()
@@ -1296,7 +1165,7 @@ SalPointerState AquaSalFrame::GetPointerState()
     // get position
     NSPoint aPt = [mpWindow mouseLocationOutsideOfEventStream];
     CocoaToVCL( aPt, false );
-    state.maPos = Point( aPt.x, aPt.y );
+    state.maPos = Point(static_cast<long>(aPt.x), static_cast<long>(aPt.y));
 
     // FIXME: replace Carbon by Cocoa
     // Cocoa does not have an equivalent for GetCurrentEventButtonState
@@ -1416,6 +1285,11 @@ void AquaSalFrame::UpdateFrameGeometry()
     // keep in mind that view and window coordinates are lower left
     // whereas vcl's are upper left
 
+    // update screen rect
+    NSScreen * pScreen = [mpWindow screen];
+    if( pScreen )
+        maScreenRect = [pScreen frame];
+
     NSRect aFrameRect = [mpWindow frame];
     NSRect aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: mnStyleMask];
 
@@ -1429,19 +1303,19 @@ void AquaSalFrame::UpdateFrameGeometry()
     CocoaToVCL( aFrameRect );
     CocoaToVCL( aContentRect );
 
-    maGeometry.nX = aContentRect.origin.x;
-    maGeometry.nY = aContentRect.origin.y;
+    maGeometry.nX = static_cast<int>(aContentRect.origin.x);
+    maGeometry.nY = static_cast<int>(aContentRect.origin.y);
 
-    maGeometry.nLeftDecoration = aContentRect.origin.x - aFrameRect.origin.x;
-    maGeometry.nRightDecoration = (aFrameRect.origin.x + aFrameRect.size.width) -
-                                  (aContentRect.origin.x + aContentRect.size.width);
+    maGeometry.nLeftDecoration = static_cast<unsigned int>(aContentRect.origin.x - aFrameRect.origin.x);
+    maGeometry.nRightDecoration = static_cast<unsigned int>((aFrameRect.origin.x + aFrameRect.size.width) -
+                                  (aContentRect.origin.x + aContentRect.size.width));
 
-    maGeometry.nTopDecoration = aContentRect.origin.y - aFrameRect.origin.y;
-    maGeometry.nBottomDecoration = (aFrameRect.origin.y + aFrameRect.size.height) -
-                                   (aContentRect.origin.y + aContentRect.size.height);
+    maGeometry.nTopDecoration = static_cast<unsigned int>(aContentRect.origin.y - aFrameRect.origin.y);
+    maGeometry.nBottomDecoration = static_cast<unsigned int>((aFrameRect.origin.y + aFrameRect.size.height) -
+                                   (aContentRect.origin.y + aContentRect.size.height));
 
-    maGeometry.nWidth = aContentRect.size.width;
-    maGeometry.nHeight = aContentRect.size.height;
+    maGeometry.nWidth = static_cast<unsigned int>(aContentRect.size.width);
+    maGeometry.nHeight = static_cast<unsigned int>(aContentRect.size.height);
 
     //DbgPrintFrameGeometry(fullWindowRect, contentRect, titleBarRect, maGeometry);
 }
@@ -1479,736 +1353,57 @@ void AquaSalFrame::CaptureMouse( BOOL bCapture )
 
 void AquaSalFrame::ResetClipRegion()
 {
-    /* FIXME: implement */
+    // release old path and indicate no clipping
+    CGPathRelease( mrClippingPath );
+    mrClippingPath = NULL;
+
+    if( mpView )
+        [mpView setNeedsDisplay: YES];
+    if( mpWindow )
+    {
+        [mpWindow setOpaque: YES];
+        [mpWindow invalidateShadow];
+    }
 }
 
 void AquaSalFrame::BeginSetClipRegion( ULONG nRects )
 {
-    /* FIXME: implement */
+    // release old path
+    if( mrClippingPath )
+    {
+        CGPathRelease( mrClippingPath );
+        mrClippingPath = NULL;
+    }
+
+    if( maClippingRects.size() > SAL_CLIPRECT_COUNT && nRects < maClippingRects.size() )
+    {
+        std::vector<CGRect> aEmptyVec;
+        maClippingRects.swap( aEmptyVec );
+    }
+    maClippingRects.clear();
+    maClippingRects.reserve( nRects );
 }
 
 void AquaSalFrame::UnionClipRegion( long nX, long nY, long nWidth, long nHeight )
 {
-    /* FIXME: implement */
+    if( nWidth && nHeight )
+        maClippingRects.push_back( CGRectMake(nX, nY, nWidth, nHeight) );
 }
 
 void AquaSalFrame::EndSetClipRegion()
 {
-    /* FIXME: implement */
-}
-
-static USHORT ImplGetModifierMask( unsigned int nMask, bool bKeyEvent )
-{
-    USHORT nRet = 0;
-    if( (nMask & NSShiftKeyMask) != 0 )
-        nRet |= KEY_SHIFT;
-    if( (nMask & NSControlKeyMask) != 0 )
-        nRet |= KEY_MOD1;
-    if( (nMask & NSAlternateKeyMask) != 0 )
-        nRet |= bKeyEvent ? KEY_MOD5 : KEY_MOD2;
-    if( (nMask & NSCommandKeyMask) != 0 )
-        nRet |= KEY_MOD5;
-    return nRet;
-}
-
-static USHORT ImplMapCharCode( sal_Unicode aCode )
-{
-    static USHORT aKeyCodeMap[ 128 ] =
+    if( ! maClippingRects.empty() )
     {
-        0, 0, 0, 0, 0, 0, 0, 0,
-        KEY_BACKSPACE, KEY_TAB, KEY_RETURN, 0, 0, KEY_RETURN, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, KEY_ESCAPE, 0, 0, 0, 0,
-        KEY_SPACE, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, KEY_MULTIPLY, KEY_ADD, KEY_COMMA, KEY_SUBTRACT, KEY_POINT, KEY_DIVIDE,
-        KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7,
-        KEY_8, KEY_9, 0, 0, KEY_LESS, KEY_EQUAL, KEY_GREATER, 0,
-        0, KEY_A, KEY_B, KEY_C, KEY_D, KEY_E, KEY_F, KEY_G,
-        KEY_H, KEY_I, KEY_J, KEY_K, KEY_L, KEY_M, KEY_N, KEY_O,
-        KEY_P, KEY_Q, KEY_R, KEY_S, KEY_T, KEY_U, KEY_V, KEY_W,
-        KEY_X, KEY_Y, KEY_Z, 0, 0, 0, 0, 0,
-        KEY_QUOTELEFT, KEY_A, KEY_B, KEY_C, KEY_D, KEY_E, KEY_F, KEY_G,
-        KEY_H, KEY_I, KEY_J, KEY_K, KEY_L, KEY_M, KEY_N, KEY_O,
-        KEY_P, KEY_Q, KEY_R, KEY_S, KEY_T, KEY_U, KEY_V, KEY_W,
-        KEY_X, KEY_Y, KEY_Z, 0, 0, 0, KEY_TILDE, KEY_DELETE
-    };
-
-    static USHORT aFunctionKeyCodeMap[ 128 ] =
+        mrClippingPath = CGPathCreateMutable();
+        CGPathAddRects( mrClippingPath, NULL, &maClippingRects[0], maClippingRects.size() );
+    }
+    if( mpView )
+        [mpView setNeedsDisplay: YES];
+    if( mpWindow )
     {
-        KEY_UP, KEY_DOWN, KEY_LEFT, KEY_RIGHT, KEY_F1, KEY_F2, KEY_F3, KEY_F4,
-        KEY_F5, KEY_F6, KEY_F7, KEY_F8, KEY_F9, KEY_F10, KEY_F11, KEY_F12,
-        KEY_F13, KEY_F14, KEY_F15, KEY_F16, KEY_F17, KEY_F18, KEY_F19, KEY_F20,
-        KEY_F21, KEY_F22, KEY_F23, KEY_F24, KEY_F25, KEY_F26, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, KEY_INSERT,
-        KEY_DELETE, KEY_HOME, 0, KEY_END, KEY_PAGEUP, KEY_PAGEDOWN, 0, 0,
-        0, 0, 0, 0, 0, KEY_MENU, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, KEY_UNDO, KEY_REPEAT, KEY_FIND, KEY_HELP, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0
-    };
-
-    USHORT nKeyCode = 0;
-    if( aCode < sizeof( aKeyCodeMap) / sizeof( aKeyCodeMap[0] ) )
-        nKeyCode = aKeyCodeMap[ aCode ];
-    else if( aCode >= 0xf700 && aCode < 0xf780 )
-        nKeyCode = aFunctionKeyCodeMap[ aCode - 0xf700 ];
-    return nKeyCode;
-}
-
-@implementation SalFrameWindow
--(id)initWithSalFrame: (AquaSalFrame*)pFrame
-{
-    mpFrame = pFrame;
-    NSRect aRect = { { pFrame->maGeometry.nX, pFrame->maGeometry.nY },
-                     { pFrame->maGeometry.nWidth, pFrame->maGeometry.nHeight } };
-    pFrame->VCLToCocoa( aRect );
-    return [super initWithContentRect: aRect styleMask: mpFrame->getStyleMask() backing: NSBackingStoreBuffered defer: NO ];
-}
-
--(AquaSalFrame*)getSalFrame
-{
-    return mpFrame;
-}
-
--(void)windowDidBecomeKey: (NSNotification*)pNotification
-{
-    YIELD_GUARD;
-
-    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-    {
-        if( mpFrame->mpMenu )
-            mpFrame->mpMenu->setMainMenu();
-        #if 0
-        // FIXME: we should disable menus while in modal mode
-        // however from down here there is currently no reliable way to
-        // find out when to do this
-        if( (mpFrame->mpParent && mpFrame->mpParent->GetWindow()->IsInModalMode()) )
-            AquaSalMenu::enableMainMenu( false );
-        #endif
-        mpFrame->CallCallback( SALEVENT_GETFOCUS, 0 );
+        [mpWindow setOpaque: (mrClippingPath != NULL) ? NO : YES];
+        [mpWindow setBackgroundColor: [NSColor clearColor]];
+        // shadow is invalidated when view gets drawn again
     }
 }
-
--(void)windowDidResignKey: (NSNotification*)pNotification
-{
-    YIELD_GUARD;
-
-    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-        mpFrame->CallCallback(SALEVENT_LOSEFOCUS, 0);
-}
-
--(void)windowDidChangeScreen: (NSNotification*)pNotification
-{
-    // FIXME: multiscreen
-}
-
--(void)windowDidMove: (NSNotification*)pNotification
-{
-    YIELD_GUARD;
-
-    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-    {
-        mpFrame->UpdateFrameGeometry();
-        mpFrame->CallCallback( SALEVENT_MOVE, 0 );
-    }
-}
-
--(void)windowDidResize: (NSNotification*)pNotification
-{
-    YIELD_GUARD;
-
-    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-    {
-        mpFrame->UpdateFrameGeometry();
-        mpFrame->CallCallback( SALEVENT_RESIZE, 0 );
-    }
-}
-
--(void)windowDidMiniaturize: (NSNotification*)pNotification
-{
-    YIELD_GUARD;
-
-    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-    {
-        mpFrame->mbShown = false;
-        mpFrame->UpdateFrameGeometry();
-        mpFrame->CallCallback( SALEVENT_RESIZE, 0 );
-    }
-}
-
--(void)windowDidDeminiaturize: (NSNotification*)pNotification
-{
-    YIELD_GUARD;
-
-    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-    {
-        mpFrame->mbShown = true;
-        mpFrame->UpdateFrameGeometry();
-        mpFrame->CallCallback( SALEVENT_RESIZE, 0 );
-    }
-}
-
--(MacOSBOOL)windowShouldClose: (NSNotification*)pNotification
-{
-    YIELD_GUARD;
-
-    MacOSBOOL bRet = YES;
-    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-    {
-        mpFrame->CallCallback( SALEVENT_CLOSE, 0 );
-        bRet = NO; // application will close the window or not, AppKit shouldn't
-    }
-    return bRet;
-}
-
--(void)dockMenuItemTriggered: (id)sender
-{
-    YIELD_GUARD;
-
-    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-        mpFrame->ToTop( SAL_FRAME_TOTOP_RESTOREWHENMIN | SAL_FRAME_TOTOP_GRABFOCUS );
-}
-
-@end
-
-@implementation SalFrameView
--(id)initWithSalFrame: (AquaSalFrame*)pFrame
-{
-    mpFrame = pFrame;
-    if ((self = [super initWithFrame: [NSWindow contentRectForFrameRect: [mpFrame->getWindow() frame] styleMask: mpFrame->mnStyleMask]]) != nil)
-    {
-        mMarkedRange = NSMakeRange(NSNotFound, 0);
-        mSelectedRange = NSMakeRange(NSNotFound, 0);
-    }
-
-    return self;
-}
-
--(void)resetCursorRects
-{
-    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-    {
-        // FIXME: does this leak the returned NSCursor of getCurrentCursor ?
-        NSRect aRect = { { 0, 0 }, { mpFrame->maGeometry.nWidth, mpFrame->maGeometry.nHeight } };
-        [self addCursorRect: aRect cursor: mpFrame->getCurrentCursor()];
-    }
-}
-
--(MacOSBOOL)acceptsFirstResponder
-{
-    return YES;
-}
-
--(MacOSBOOL)acceptsFirstMouse: (NSEvent*)pEvent
-{
-    return YES;
-}
-
--(MacOSBOOL)isOpaque
-{
-    return YES;
-}
-
--(void)drawRect: (NSRect)aRect
-{
-    AquaLog( "drawRect\n" );
-
-    YIELD_GUARD;
-
-    if( mpFrame && AquaSalFrame::isAlive( mpFrame ) )
-    {
-        // FIXME: optimize UpdateWindow wrt to aRect
-        if( mpFrame->mpGraphics )
-            mpFrame->mpGraphics->UpdateWindow( [NSGraphicsContext currentContext] );
-    }
-}
-
--(void)sendMouseEventToFrame: (NSEvent*)pEvent button:(USHORT)nButton eventtype:(USHORT)nEvent
-{
-    YIELD_GUARD;
-
-    AquaSalFrame* pDispatchFrame = AquaSalFrame::GetCaptureFrame();
-    if( pDispatchFrame )
-    {
-        if( nEvent == SALEVENT_MOUSELEAVE ) // no leave events if mouse is captured
-            nEvent = SALEVENT_MOUSEMOVE;
-    }
-    else
-        pDispatchFrame = mpFrame;
-
-
-    if( pDispatchFrame && AquaSalFrame::isAlive( pDispatchFrame ) )
-    {
-        pDispatchFrame->mnLastEventTime = static_cast<ULONG>( [pEvent timestamp] * 1000.0 );
-        pDispatchFrame->mnLastModifierFlags = [pEvent modifierFlags];
-
-        NSPoint aPt = [NSEvent mouseLocation];
-        pDispatchFrame->CocoaToVCL( aPt );
-
-        SalMouseEvent aEvent;
-        aEvent.mnTime   = pDispatchFrame->mnLastEventTime;
-        aEvent.mnX      = static_cast<long>(aPt.x) - pDispatchFrame->maGeometry.nX;
-        aEvent.mnY      = static_cast<long>(aPt.y) - pDispatchFrame->maGeometry.nY;
-        aEvent.mnButton = nButton;
-        aEvent.mnCode   =  aEvent.mnButton | ImplGetModifierMask( [pEvent modifierFlags], false );
-
-        pDispatchFrame->CallCallback( nEvent, &aEvent );
-    }
-}
-
--(void)mouseDown: (NSEvent*)pEvent
-{
-    [self sendMouseEventToFrame:pEvent button:MOUSE_LEFT eventtype:SALEVENT_MOUSEBUTTONDOWN];
-}
-
--(void)mouseDragged: (NSEvent*)pEvent
-{
-    [self sendMouseEventToFrame:pEvent button:MOUSE_LEFT eventtype:SALEVENT_MOUSEMOVE];
-}
-
--(void)mouseUp: (NSEvent*)pEvent
-{
-    [self sendMouseEventToFrame:pEvent button:MOUSE_LEFT eventtype:SALEVENT_MOUSEBUTTONUP];
-}
-
--(void)mouseMoved: (NSEvent*)pEvent
-{
-    [self sendMouseEventToFrame:pEvent button:0 eventtype:SALEVENT_MOUSEMOVE];
-}
-
--(void)mouseEntered: (NSEvent*)pEvent
-{
-    [self sendMouseEventToFrame:pEvent button:0 eventtype:SALEVENT_MOUSEMOVE];
-}
-
--(void)mouseExited: (NSEvent*)pEvent
-{
-    [self sendMouseEventToFrame:pEvent button:0 eventtype:SALEVENT_MOUSELEAVE];
-}
-
--(void)rightMouseDown: (NSEvent*)pEvent
-{
-    [self sendMouseEventToFrame:pEvent button:MOUSE_RIGHT eventtype:SALEVENT_MOUSEBUTTONDOWN];
-}
-
--(void)rightMouseDragged: (NSEvent*)pEvent
-{
-    [self sendMouseEventToFrame:pEvent button:MOUSE_RIGHT eventtype:SALEVENT_MOUSEMOVE];
-}
-
--(void)rightMouseUp: (NSEvent*)pEvent
-{
-    [self sendMouseEventToFrame:pEvent button:MOUSE_RIGHT eventtype:SALEVENT_MOUSEBUTTONUP];
-}
-
--(void)otherMouseDown: (NSEvent*)pEvent
-{
-    if( [pEvent buttonNumber] == 2 )
-        [self sendMouseEventToFrame:pEvent button:MOUSE_MIDDLE eventtype:SALEVENT_MOUSEBUTTONDOWN];
-}
-
--(void)otherMouseDragged: (NSEvent*)pEvent
-{
-    if( [pEvent buttonNumber] == 2 )
-        [self sendMouseEventToFrame:pEvent button:MOUSE_MIDDLE eventtype:SALEVENT_MOUSEMOVE];
-}
-
--(void)otherMouseUp: (NSEvent*)pEvent
-{
-    if( [pEvent buttonNumber] == 2 )
-        [self sendMouseEventToFrame:pEvent button:MOUSE_MIDDLE eventtype:SALEVENT_MOUSEBUTTONUP];
-}
-
--(void)scrollWheel: (NSEvent*)pEvent
-{
-    YIELD_GUARD;
-
-    if( AquaSalFrame::isAlive( mpFrame ) )
-    {
-        mpFrame->mnLastEventTime = static_cast<ULONG>( [pEvent timestamp] * 1000.0 );
-        mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
-
-        NSPoint aPt = [NSEvent mouseLocation];
-        mpFrame->CocoaToVCL( aPt );
-
-        SalWheelMouseEvent aEvent;
-        aEvent.mnTime   = mpFrame->mnLastEventTime;
-        aEvent.mnX      = static_cast<long>(aPt.x) - mpFrame->maGeometry.nX;
-        aEvent.mnY      = static_cast<long>(aPt.y) - mpFrame->maGeometry.nY;
-        aEvent.mnCode   = ImplGetModifierMask( mpFrame->mnLastModifierFlags, false ); // FIXME: button code
-
-        float dX = [pEvent deltaX];
-        float dY = [pEvent deltaY];
-        if( dX != 0.0 )
-        {
-            aEvent.mnDelta = dX;
-            aEvent.mnNotchDelta = dX;
-            aEvent.mnScrollLines = dX < 0.0 ? -1 : 1;
-            aEvent.mbHorz = TRUE;
-            mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
-        }
-        if( dY != 0.0 && AquaSalFrame::isAlive( mpFrame ) )
-        {
-            aEvent.mnDelta = dY;
-            aEvent.mnNotchDelta = dY;
-            aEvent.mnScrollLines = dY < 0.0 ? -1 : 1;
-            aEvent.mbHorz = FALSE;
-            mpFrame->CallCallback( SALEVENT_WHEELMOUSE, &aEvent );
-        }
-    }
-}
-
--(void)keyDown: (NSEvent*)pEvent
-{
-    YIELD_GUARD;
-
-    if( AquaSalFrame::isAlive( mpFrame ) )
-    {
-        mpLastEvent = pEvent;
-        mbInKeyInput = true;
-        mbNeedSpecialKeyHandle = false;
-        mbKeyHandled = false;
-
-        mpFrame->mnLastEventTime = static_cast<ULONG>( [pEvent timestamp] * 1000.0 );
-        mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
-
-        bool bHandleCommandKey = mpFrame->mpMenu ? false : true;
-        if( (mpFrame->mnLastModifierFlags & NSControlKeyMask) ||
-            ( (mpFrame->mnLastModifierFlags & NSCommandKeyMask) && bHandleCommandKey )
-            )
-        {
-            // note: checkSpecialCharacters sets mbInKeyInput to false as a side effect
-            //       if the event is consumed
-            if ( [self checkSpecialCharacters:pEvent] )
-                return;
-        }
-
-        NSArray* pArray = [NSArray arrayWithObject: pEvent];
-        [self interpretKeyEvents: pArray];
-
-        mbInKeyInput = false;
-    }
-}
-
--(void)flagsChanged: (NSEvent*)pEvent
-{
-    YIELD_GUARD;
-
-    if( AquaSalFrame::isAlive( mpFrame ) )
-    {
-        mpFrame->mnLastEventTime = static_cast<ULONG>( [pEvent timestamp] * 1000.0 );
-        mpFrame->mnLastModifierFlags = [pEvent modifierFlags];
-    }
-}
-
--(void)insertText:(id)aString
-{
-    YIELD_GUARD;
-
-    if( AquaSalFrame::isAlive( mpFrame ) )
-    {
-        NSString* pInsert = nil;
-        if( [aString isMemberOfClass: [NSAttributedString class]] )
-            pInsert = [aString string];
-        else
-            pInsert = aString;
-
-        int nLen = 0;
-        if( pInsert && ( nLen = [pInsert length] ) > 0 )
-        {
-            OUString aInsertString( GetOUString( pInsert ) );
-            USHORT nKeyCode = 0;
-             // aCharCode initializer is safe since aInsertString will at least contain '\0'
-            sal_Unicode aCharCode = *aInsertString.getStr();
-            // FIXME: will probably break somehow in less than trivial text input mode
-            if( nLen == 1 &&
-                aCharCode < 0x80 &&
-                aCharCode > 0x31 &&
-                ( nKeyCode = ImplMapCharCode( aCharCode ) ) != 0
-                )
-            {
-                [self sendKeyInputAndReleaseToFrame: nKeyCode character: aCharCode];
-            }
-            else
-            {
-                SalExtTextInputEvent aEvent;
-                aEvent.mnTime           = mpFrame->mnLastEventTime;
-                aEvent.maText           = aInsertString;
-                aEvent.mpTextAttr       = NULL;
-                aEvent.mnCursorPos      = aInsertString.getLength();
-                aEvent.mnDeltaStart     = 0;
-                aEvent.mnCursorFlags    = 0;
-                aEvent.mbOnlyCursor     = FALSE;
-                mpFrame->CallCallback( SALEVENT_EXTTEXTINPUT, &aEvent );
-                if( AquaSalFrame::isAlive( mpFrame ) )
-                    mpFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, 0 );
-            }
-        }
-        else
-        {
-            SalExtTextInputEvent aEvent;
-            aEvent.mnTime           = mpFrame->mnLastEventTime;
-            aEvent.maText           = String();
-            aEvent.mpTextAttr       = NULL;
-            aEvent.mnCursorPos      = 0;
-            aEvent.mnDeltaStart     = 0;
-            aEvent.mnCursorFlags    = 0;
-            aEvent.mbOnlyCursor     = FALSE;
-            mpFrame->CallCallback( SALEVENT_EXTTEXTINPUT, &aEvent );
-            if( AquaSalFrame::isAlive( mpFrame ) )
-                mpFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, 0 );
-
-        }
-        mbKeyHandled = true;
-    }
-}
-
--(void)insertTab: (id)aSender
-{
-    [self sendKeyInputAndReleaseToFrame: KEY_TAB character: '\t'];
-}
-
--(void)moveLeft: (id)aSender
-{
-    [self sendKeyInputAndReleaseToFrame: KEY_LEFT character: 0];
-}
-
--(void)moveRight: (id)aSender
-{
-    [self sendKeyInputAndReleaseToFrame: KEY_RIGHT character: 0];
-}
-
--(void)moveUp: (id)aSender
-{
-    [self sendKeyInputAndReleaseToFrame: KEY_UP character: 0];
-}
-
--(void)moveDown: (id)aSender
-{
-    [self sendKeyInputAndReleaseToFrame: KEY_DOWN character: 0];
-}
-
--(void)insertNewline: (id)aSender
-{
-    [self sendKeyInputAndReleaseToFrame: KEY_RETURN character: '\n'];
-}
-
--(void)deleteBackward: (id)aSender
-{
-    [self sendKeyInputAndReleaseToFrame: KEY_BACKSPACE character: '\b'];
-}
-
--(void)deleteForward: (id)aSender
-{
-    [self sendKeyInputAndReleaseToFrame: KEY_DELETE character: 0x7f];
-}
-
--(void)cancelOperation: (id)aSender
-{
-    [self sendKeyInputAndReleaseToFrame: KEY_ESCAPE character: 0x1b];
-}
-
--(void)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode  character: (sal_Unicode)aChar
-{
-    YIELD_GUARD;
-
-    if( AquaSalFrame::isAlive( mpFrame ) )
-    {
-        SalKeyEvent aEvent;
-        aEvent.mnTime           = mpFrame->mnLastEventTime;
-        aEvent.mnCode           = nKeyCode | ImplGetModifierMask( mpFrame->mnLastModifierFlags, true );
-        aEvent.mnCharCode       = aChar;
-        aEvent.mnRepeat         = FALSE;
-        mpFrame->CallCallback( SALEVENT_KEYINPUT, &aEvent );
-        if( AquaSalFrame::isAlive( mpFrame ) )
-            mpFrame->CallCallback( SALEVENT_KEYUP, &aEvent );
-    }
-}
-
-
--(MacOSBOOL)checkSpecialCharacters: (NSEvent *)pEvent
-{
-    // check for special characters
-    NSString* pUnmodifiedString = [pEvent charactersIgnoringModifiers];
-
-    if( pUnmodifiedString && [pUnmodifiedString length] == 1 )
-    {
-        unichar keyChar = [pUnmodifiedString characterAtIndex: 0];
-        USHORT nKeyCode = ImplMapCharCode( keyChar );
-        bool bUseKeyInput = false;
-        if( nKeyCode != 0 )
-        {
-            // handle function keys, let unmodified cursor keys through to input manager
-            if( keyChar >= 0xf704 && keyChar < 0xf900 )
-                bUseKeyInput = true;
-            else if( keyChar >= 0xf700 && keyChar < 0xf704 &&
-                    mpFrame->mnLastModifierFlags != 0 )
-                bUseKeyInput = true;
-            else if( ((mpFrame->mnLastModifierFlags & ~(NSControlKeyMask | NSAlternateKeyMask | NSShiftKeyMask)) &  NSDeviceIndependentModifierFlagsMask) == 0 &&
-                    (mpFrame->mnLastModifierFlags & (NSControlKeyMask | NSAlternateKeyMask)) != 0 )
-                bUseKeyInput = true;
-            else if( (mpFrame->mnLastModifierFlags & NSCommandKeyMask) && mpFrame->mpMenu == NULL )
-                bUseKeyInput = true;
-        }
-        if( bUseKeyInput )
-        {
-            [self sendKeyInputAndReleaseToFrame: nKeyCode character: 0];
-            mbInKeyInput = false;
-
-            return TRUE;
-        }
-    }
-    return FALSE;
-}
-
-
-// NSTextInput protocol
-- (NSArray *)validAttributesForMarkedText
-{
-    // FIXME
-    return [NSArray array];
-}
-
-- (MacOSBOOL)hasMarkedText
-{
-    MacOSBOOL bHasMarkedText;
-
-    bHasMarkedText = ( mMarkedRange.location != NSNotFound ) &&
-                     ( mMarkedRange.length != 0 );
-    // hack to check keys like "Control-j"
-    if( mbInKeyInput )
-    {
-        mbNeedSpecialKeyHandle = true;
-    }
-    return bHasMarkedText;
-}
-
-- (NSRange)markedRange
-{
-    return [self hasMarkedText] ? mMarkedRange : NSMakeRange( NSNotFound, 0 );
-}
-
-- (NSRange)selectedRange
-{
-    return mSelectedRange;
-}
-
-- (void)setMarkedText:(id)aString selectedRange:(NSRange)selRange
-{
-    AquaLog( ">*>_> %s\n",__func__ );
-    AquaLog( "location: %d, length: %d\n", selRange.location, selRange.length );
-    AquaLog( "aString = '%@'\n", aString );
-    AquaLog( "length %d\n", [aString length] );
-
-    if( ![aString isKindOfClass:[NSAttributedString class]] )
-        aString = [[[NSAttributedString alloc] initWithString:aString] autorelease];
-    NSRange rangeToReplace = [self hasMarkedText] ? [self markedRange] : [self selectedRange];
-    mMarkedRange = NSMakeRange( rangeToReplace.location, [aString length] );
-    mSelectedRange = NSMakeRange( rangeToReplace.location + selRange.location, selRange.length );
-
-    int len = [aString length];
-    SalExtTextInputEvent aInputEvent;
-    aInputEvent.mnTime = mpFrame->mnLastEventTime;
-    aInputEvent.mnDeltaStart = 0;
-    aInputEvent.mbOnlyCursor = FALSE;
-    if( len > 0 ) {
-        NSString *pString = [aString string];
-        OUString aInsertString( GetOUString( pString ) );
-        std::vector<USHORT> aInputFlags = std::vector<USHORT>( std::max( 1, len ), 0 );
-        for ( int i = 0; i < len; i++ )
-        {
-            // FIXME
-            aInputFlags[i] = SAL_EXTTEXTINPUT_ATTR_UNDERLINE;
-        }
-
-        aInputEvent.maText = aInsertString;
-        aInputEvent.mnCursorPos = selRange.location;
-        aInputEvent.mpTextAttr = &aInputFlags[0];
-        mpFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void *)&aInputEvent );
-    } else {
-        aInputEvent.maText = String();
-        aInputEvent.mnCursorPos = 0;
-        aInputEvent.mnCursorFlags = 0;
-        aInputEvent.mpTextAttr = 0;
-        mpFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void *)&aInputEvent );
-        mpFrame->CallCallback( SALEVENT_ENDEXTTEXTINPUT, 0 );
-    }
-    mbKeyHandled= true;
-}
-
-- (void)unmarkText
-{
-    AquaLog( ">*>_> %s\n", __func__ );
-
-    mSelectedRange = mMarkedRange = NSMakeRange(NSNotFound, 0);
-}
-
-- (NSAttributedString *)attributedSubstringFromRange:(NSRange)theRange
-{
-    AquaLog( ">*>_> %s\n", __func__ );
-    AquaLog( "theRange = %d, %d\n", theRange.location, theRange.length);
-
-    // FIXME
-    return nil;
-}
-
-- (unsigned int)characterIndexForPoint:(NSPoint)thePoint
-{
-    AquaLog( ">*>_> %s\n",__func__ );
-
-    // FIXME
-    return 0;
-}
-
-- (long)conversationIdentifier
-{
-    return (long)self;
-}
-
-- (void)doCommandBySelector:(SEL)aSelector
-{
-    AquaLog( ">*>_> %s\n",__func__ );
-    AquaLog( "aSelector %s", aSelector );
-
-    // check for special characters with OOo way
-    if ( [self checkSpecialCharacters:mpLastEvent] )
-    {
-        mbKeyHandled = true;
-        return;
-    }
-
-    // Cocoa way
-    (void)[self performSelector: aSelector];
-    mbKeyHandled = true;
-}
-
-- (NSRect)firstRectForCharacterRange:(NSRange)theRange
-{
-    AquaLog( ">*>_> %s\n",__func__ );
-    AquaLog( "mSelectedRange = %d, %d", mSelectedRange.location, mSelectedRange.length );
-    AquaLog( " theRange = %d, %d\n", theRange.location, theRange.length );
-
-    SalExtTextInputPosEvent aPosEvent;
-    mpFrame->CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void *)&aPosEvent );
-
-    NSRect rect;
-
-    rect.origin.x = aPosEvent.mnX + mpFrame->maGeometry.nX;
-    rect.origin.y = aPosEvent.mnY + mpFrame->maGeometry.nY;
-    rect.size.width = aPosEvent.mnWidth;
-    rect.size.height = aPosEvent.mnHeight;
-
-    // FIXME how to convert the geometry??
-    //rect = [self convertRect:rect toView:nil];
-    //rect.origin = [[self window] convertBaseToScreen:rect.origin];
-    return rect;
-}
-
-@end
 
