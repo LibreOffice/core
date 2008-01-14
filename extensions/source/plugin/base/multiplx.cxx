@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multiplx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:08:00 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:50:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,9 @@ MRCListenerMultiplexerHelper::MRCListenerMultiplexerHelper
       const Reference< ::com::sun::star::awt::XWindow >  & rControl
     , const Reference< ::com::sun::star::awt::XWindow >  & rPeer
 )
-    : aListenerHolder( aMutex )
-    , xPeer( rPeer )
+    : xPeer( rPeer )
     , xControl( Reference< ::com::sun::star::awt::XControl >( rControl, UNO_QUERY ) )
+    , aListenerHolder( aMutex )
 {
 }
 
