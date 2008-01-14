@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XStatusbarController.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:26:20 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:16:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,19 +140,22 @@ interface XStatusbarController : ::com::sun::star::uno::XInterface
                   [in] any aData );
 
     //=============================================================================
-    /** is called by a status bar if a command event is available for a controller.
+    /** is called by a status bar if the controller has to update the visual
+        representation.
 
-        @param aPos
-            the current mouse position in pixel.
+        @param xGraphics
+            a reference to a <type scope="com::sun::star::awt">XGraphics</type>
+            which has to be used to update the visual representation.
 
         @param nCommand
-            describes which command has been invoked.
+            a <type scope="com::sun::star::awt">Rectangle</type> which
+            determine the output rectangle for all drawing operations
 
-        @param bMouseEvent
-            <TRUE/> if the command is based on a mouse event, otherwise <FALSE/>.
+        @param nItemID
+            the unique ID of the control within the status bar.
 
-        @param aData
-            for future use only.
+        @param nStyle
+            reserved for future use.
     */
     void paint( [in] ::com::sun::star::awt::XGraphics xGraphics,
                 [in] ::com::sun::star::awt::Rectangle rOutputRectangle,
