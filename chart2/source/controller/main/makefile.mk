@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 18:10:36 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 13:58:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@ SLOFILES =  \
             $(SLO)$/ChartController_Position.obj \
             $(SLO)$/ChartController_Tools.obj \
             $(SLO)$/ChartFrameloader.obj \
+            $(SLO)$/ChartRenderer.obj \
             $(SLO)$/CommandDispatchContainer.obj \
             $(SLO)$/CommandDispatch.obj \
             $(SLO)$/ControllerCommandDispatch.obj \
