@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeselectionpage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 18:02:02 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:34:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,9 +70,9 @@ namespace abp
         ,m_aTypeSep         (this,  ModuleRes(FL_TYPE))
         ,m_aMORK            (this,  ModuleRes(RB_MORK))
         ,m_aThunderbird     (this,  ModuleRes(RB_THUNDERBIRD))
-        ,m_aEvolution       (this,  ModuleRes(RB_EVOLUTION))
         ,m_aEvolutionGroupwise (this,   ModuleRes(RB_EVOLUTION_GROUPWISE))
         ,m_aEvolutionLdap      (this,   ModuleRes(RB_EVOLUTION_LDAP))
+        ,m_aEvolution       (this,  ModuleRes(RB_EVOLUTION))
         ,m_aKab             (this,  ModuleRes(RB_KAB))
         ,m_aMacab           (this,  ModuleRes(RB_MACAB))
         ,m_aLDAP            (this,  ModuleRes(RB_LDAP))
@@ -239,7 +239,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( TypeSelectionPage, OnTypeSelected, void*, NOTINTERESTEDIN )
+    IMPL_LINK( TypeSelectionPage, OnTypeSelected, void*, /*NOTINTERESTEDIN*/ )
     {
         getDialog()->typeSelectionChanged( getSelectedType() );
         implCheckNextButton();
