@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2007-08-03 10:11:35 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 15:29:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,35 +36,37 @@
 PRJ=..$/..
 
 PRJNAME=jfreereport
-TARGET=jfreereport
+TARGET=pentaho-reporting-flow-engine
+VERSION=-0.9.2
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :	settings.mk
 
 # override buildfile
-ANT_BUILDFILE=ant$/build.xml
+ANT_BUILDFILE=build.xml
 
 .INCLUDE : antsettings.mk
 
 .IF "$(SOLAR_JAVA)" != ""
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=$(TARGET)
+TARFILE_NAME=core
 
-TARFILE_ROOTDIR=$(TARGET)
+TARFILE_ROOTDIR=core
 
-PATCH_FILE_NAME=patches/$(TARGET).patch
+PATCH_FILE_NAME=patches$/$(TARGET).patch
 
-CONVERTFILES=ant$/build.xml\
-                ant$/build.properties
+CONVERTFILES=build.xml\
+             build.properties
+OUT2CLASS=$(TARGET)$(VERSION).jar
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) all
+BUILD_ACTION=$(ANT) -Dlibdir="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) compile
 .ELSE
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) all
+BUILD_ACTION=$(ANT) -Dlibdir="../../../class" -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) compile
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
@@ -77,4 +79,3 @@ BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) all
 .IF "$(SOLAR_JAVA)" != ""
 .INCLUDE : tg_ext.mk
 .ENDIF
-
