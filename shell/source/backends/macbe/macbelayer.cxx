@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macbelayer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 10:14:02 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:56:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,15 @@
 // For MAXHOSTNAMELEN constant
 #include <sys/param.h>
 
-#include <Carbon/Carbon.h>
+#include <premac.h>
 #include <SystemConfiguration/SystemConfiguration.h>
+#include <Foundation/NSPathUtilities.h>
+#include <postmac.h>
 
-#ifndef _MACBELAYER_HXX_
 #include "macbelayer.hxx"
-#endif
+
+#include "rtl/ustrbuf.hxx"
+#include "osl/file.h"
 
 #define SPACE      ' '
 #define SEMI_COLON ';'
@@ -74,9 +77,9 @@ namespace // private
  * and a port number.
  */
 
-Boolean GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *port)
+bool GetProxySetting(ServiceType sType, char *host, size_t hostSize, UInt16 *port)
 {
-    Boolean             result;
+    bool                result;
     CFDictionaryRef     proxyDict;
     CFNumberRef         enableNum;
     int                 enable;
@@ -239,7 +242,8 @@ void SAL_CALL MacOSXLayer::readData(
             CFRelease(rProxyDict);
 
         // override default for ProxyType, which is "0" meaning "No proxies".
-        uno::Sequence<backend::PropertyInfo> aPropInfoList(6);
+        // CAUTION: if you add properties, please increase the sequence size here !
+        uno::Sequence<backend::PropertyInfo> aPropInfoList(8);
         sal_Int32 nProperties = 1;
 
         aPropInfoList[0].Name = rtl::OUString(
@@ -266,7 +270,7 @@ void SAL_CALL MacOSXLayer::readData(
 
         char host[MAXHOSTNAMELEN];
         UInt16 port;
-        Boolean retVal;
+        bool retVal;
 
         retVal = GetProxySetting(sHTTP, host, 100, &port);
 
@@ -381,3 +385,64 @@ rtl::OUString SAL_CALL MacOSXLayer::getTimestamp(void)
 }
 
 //------------------------------------------------------------------------------
+
+rtl::OUString GetOUString( NSString* pStr )
+{
+    if( ! pStr )
+        return rtl::OUString();
+    int nLen = [pStr length];
+    if( nLen == 0 )
+        return rtl::OUString();
+
+    rtl::OUStringBuffer aBuf( nLen+1 );
+    aBuf.setLength( nLen );
+    [pStr getCharacters: const_cast<sal_Unicode*>(aBuf.getStr())];
+    return aBuf.makeStringAndClear();
+}
+
+void SAL_CALL MacOSXPathLayer::readData(
+    const uno::Reference<backend::XLayerHandler>& i_xHandler)
+    throw ( backend::MalformedDataException,
+            lang::NullPointerException,
+            lang::WrappedTargetException,
+            uno::RuntimeException)
+{
+    if (m_xLayerContentDescriber.is())
+    {
+        rtl::OUString aDocDir;
+        NSArray* pPaths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, true );
+        if( pPaths && [pPaths count] > 0 )
+        {
+            aDocDir = GetOUString( [pPaths objectAtIndex: 0] );
+
+            rtl::OUString aDocURL;
+            if( aDocDir.getLength() > 0 &&
+                osl_getFileURLFromSystemPath( aDocDir.pData, &aDocURL.pData ) == osl_File_E_None )
+            {
+                uno::Sequence<backend::PropertyInfo> aPropInfoList(1);
+
+                aPropInfoList[0].Name = rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Office.Paths/Variables/Work" ) );
+                aPropInfoList[0].Type = rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM( "string" ) );
+                aPropInfoList[0].Protected = sal_False;
+                aPropInfoList[0].Value <<= aDocURL;
+
+                m_xLayerContentDescriber->describeLayer(i_xHandler, aPropInfoList);
+            }
+            else
+            {
+                OSL_TRACE( "user documents list contains empty file path or conversion failed" );
+            }
+        }
+        else
+        {
+            OSL_TRACE( "Got nil or empty list of user document directories" );
+        }
+    }
+    else
+    {
+        OSL_TRACE("Could not create com.sun.star.configuration.backend.LayerContentDescriber Service");
+    }
+}
+
