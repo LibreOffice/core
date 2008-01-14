@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramHelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:15:14 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:03:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,35 +47,17 @@
 #include "CommonConverters.hxx"
 #include "servicenames_charttypes.hxx"
 
-#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
 #include <com/sun/star/chart2/XTitled.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPECONTAINER_HPP_
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPETEMPLATE_HPP_
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEMCONTAINER_HPP_
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDATASERIESCONTAINER_HPP_
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_INTERPRETEDDATA_HPP_
 #include <com/sun/star/chart2/InterpretedData.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_AXISTYPE_HPP_
 #include <com/sun/star/chart2/AxisType.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
+#include <com/sun/star/chart2/DataPointGeometry3D.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#endif
 
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::chart2;
@@ -1362,6 +1344,69 @@ bool DiagramHelper::isPieOrDonutChart( const ::com::sun::star::uno::Reference<
             return true;
     }
     return false;
+}
+
+// static
+sal_Int32 DiagramHelper::getGeometry3D(
+    const uno::Reference< chart2::XDiagram > & xDiagram,
+    bool& rbFound, bool& rbAmbiguous )
+{
+    sal_Int32 nCommonGeom( DataPointGeometry3D::CUBOID );
+    rbFound = false;
+    rbAmbiguous = false;
+
+    ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+        DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+
+    if( aSeriesVec.empty())
+        rbAmbiguous = true;
+
+    for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
+             aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
+    {
+        try
+        {
+            sal_Int32 nGeom = 0;
+            Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY_THROW );
+            if( xProp->getPropertyValue( C2U( "Geometry3D" )) >>= nGeom )
+            {
+                if( ! rbFound )
+                {
+                    // first series
+                    nCommonGeom = nGeom;
+                    rbFound = true;
+                }
+                // further series: compare for uniqueness
+                else if( nCommonGeom != nGeom )
+                {
+                    rbAmbiguous = true;
+                    break;
+                }
+            }
+        }
+        catch( uno::Exception & ex )
+        {
+            ASSERT_EXCEPTION( ex );
+        }
+    }
+
+    return nCommonGeom;
+}
+
+// static
+void DiagramHelper::setGeometry3D(
+    const Reference< chart2::XDiagram > & xDiagram,
+    sal_Int32 nNewGeometry )
+{
+    ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
+        DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
+
+    for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
+             aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
+    {
+        DataSeriesHelper::setPropertyAlsoToAllAttributedDataPoints(
+            *aIt, C2U( "Geometry3D" ), uno::makeAny( nNewGeometry ));
+    }
 }
 
 } //  namespace chart
