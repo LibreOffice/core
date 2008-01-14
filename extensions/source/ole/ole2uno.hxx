@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ole2uno.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:07:00 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,11 @@
 //#define _ATL_DEBUG_INTERFACES
 #endif
 
+#pragma warning (push,1)
+#pragma warning (disable:4917)
+#pragma warning (disable:4005)
+#pragma warning (disable:4548)
+
 #include <tools/prewin.h>
 #include <tchar.h>
 #if (_MSC_VER >= 1200) || defined(__MINGW32__)
@@ -61,6 +66,8 @@
 #include <tools/presys.h>
 #include <list>
 #include <tools/postsys.h>
+
+#pragma warning (pop)
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
