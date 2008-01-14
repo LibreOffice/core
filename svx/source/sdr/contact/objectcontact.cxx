@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectcontact.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 16:37:26 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:52:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,9 +106,17 @@ namespace sdr
             ClearDrawHierarchy();
 
             // get rid of all registered contacts
-            while(maVOCList.Count())
+
+            // #i84257# to not force another ::find in this list when the other ::PrepareDeletes()
+            // do their work, copy the list and empty the local one
+            ViewObjectContactList aTemporaryForDelete;
+            aTemporaryForDelete.FlatCopyFrom( maVOCList );
+            ViewObjectContactList aEmpty;
+            maVOCList.FlatCopyFrom( aEmpty );
+
+            while(aTemporaryForDelete.Count())
             {
-                ViewObjectContact* pCandidate = maVOCList.GetLastObjectAndRemove();
+                ViewObjectContact* pCandidate = aTemporaryForDelete.GetLastObjectAndRemove();
                 DBG_ASSERT(pCandidate, "Corrupted ViewObjectContactList (!)");
 
                 // ViewObjectContacts only make sense with View and Object contacts.
