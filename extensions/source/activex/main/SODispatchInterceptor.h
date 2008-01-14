@@ -38,7 +38,7 @@ class SODispatchInterceptor :
     CRITICAL_SECTION    mMutex;
 public:
     SODispatchInterceptor() : m_xParentControl( NULL ) { InitializeCriticalSection(&mMutex); }
-    ~SODispatchInterceptor() { ATLASSERT( !m_xParentControl ); DeleteCriticalSection(&mMutex); }
+    virtual ~SODispatchInterceptor() { ATLASSERT( !m_xParentControl ); DeleteCriticalSection(&mMutex); }
 
 BEGIN_COM_MAP(SODispatchInterceptor)
     COM_INTERFACE_ENTRY(IDispatch)
