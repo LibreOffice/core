@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:08:42 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:43:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1551,7 +1551,7 @@ sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
         for (nKeyValue = m_CurrentRowCount+1; nKeyValue  <= nMaxCardNumber; nKeyValue ++)
         {
             nKeyPos = m_pKeySet->size();
-            m_pKeySet->insert( m_pKeySet->end() );
+            m_pKeySet->insert( m_pKeySet->end(), sal_Int32() );
             (*m_pKeySet)[nKeyPos] = nKeyValue;
         }
         m_CurrentRowCount = nMaxCardNumber;
