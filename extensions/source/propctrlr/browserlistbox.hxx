@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserlistbox.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:55:49 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:56:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,6 +211,7 @@ namespace pcr
         // IButtonClickListener
         void    buttonClicked( OBrowserLine* _pLine, sal_Bool _bPrimary );
 
+        using Window::SetHelpText;
     private:
         DECL_LINK( ScrollHdl, ScrollBar* );
 
