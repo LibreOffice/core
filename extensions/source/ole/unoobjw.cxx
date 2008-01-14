@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:09:03 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:48:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,20 +238,20 @@ STDMETHODIMP  InterfaceOleWrapper_Impl::getOriginalUnoStruct( Any * pStruct)
     return ret;
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::GetTypeInfoCount( unsigned int * pctinfo )
+STDMETHODIMP InterfaceOleWrapper_Impl::GetTypeInfoCount( unsigned int * /*pctinfo*/ )
 {
     return E_NOTIMPL ;
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::GetTypeInfo(unsigned int itinfo, LCID lcid, ITypeInfo ** pptinfo)
+STDMETHODIMP InterfaceOleWrapper_Impl::GetTypeInfo(unsigned int /*itinfo*/, LCID /*lcid*/, ITypeInfo ** /*pptinfo*/)
 {
     return E_NOTIMPL;
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
+STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID /*riid*/,
                                                      OLECHAR ** rgszNames,
                                                      unsigned int cNames,
-                                                     LCID lcid,
+                                                     LCID /*lcid*/,
                                                      DISPID * rgdispid )
 {
     HRESULT ret = DISP_E_UNKNOWNNAME;
@@ -390,7 +390,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
 // VARIANT contains an VT_DISPATCH that is no JScriptValue than the type information
 // is used to find out about the reqired type.
 void InterfaceOleWrapper_Impl::convertDispparamsArgs(DISPID id,
-    unsigned short wFlags, DISPPARAMS* pdispparams, Sequence<Any>& rSeq)
+    unsigned short /*wFlags*/, DISPPARAMS* pdispparams, Sequence<Any>& rSeq)
 {
     HRESULT hr= S_OK;
     sal_Int32 countArgs= pdispparams->cArgs;
@@ -532,7 +532,7 @@ sal_Bool  InterfaceOleWrapper_Impl::getInvocationInfoForCall( DISPID id, Invocat
 // can bridged to IDispatch ( if destModelType == OLE). The IDispatch is
 // implemented by this class.
 Any SAL_CALL InterfaceOleWrapper_Impl::createBridge(const Any& modelDepObject,
-                                const Sequence<sal_Int8>& ProcessId,
+                                const Sequence<sal_Int8>& /*ProcessId*/,
                                 sal_Int16 sourceModelType,
                                 sal_Int16 destModelType)
             throw (IllegalArgumentException, RuntimeException)
@@ -854,8 +854,8 @@ static sal_Bool writeBackOutParameter(VARIANTARG* pDest, VARIANT* pSource)
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
-                                              REFIID riid,
-                                              LCID lcid,
+                                              REFIID /*riid*/,
+                                              LCID /*lcid*/,
                                               unsigned short wFlags,
                                                DISPPARAMS * pdispparams,
                                               VARIANT * pvarResult,
@@ -872,7 +872,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::Invoke(DISPID dispidMember,
         if( bHandled)
             return ret;
 
-        if ((dispidMember > 0) && (dispidMember <= m_MemberInfos.size()) && m_xInvocation.is())
+        if ((dispidMember > 0) && ((size_t)dispidMember <= m_MemberInfos.size()) && m_xInvocation.is())
         {
             MemberInfo d = m_MemberInfos[dispidMember - 1];
             DWORD flags = wFlags & d.flags;
@@ -969,7 +969,7 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
             const INT16* pOutIndex = outIndex.getConstArray();
             const Any* pOutParams = outParams.getConstArray();
 
-            for (UINT32 i = 0; i < outIndex.getLength(); i++)
+            for (sal_Int32 i = 0; i < outIndex.getLength(); i++)
             {
                 CComVariant variant;
                 // Currently a Sequence is converted to an SafeArray of VARIANTs.
@@ -1034,7 +1034,7 @@ HRESULT InterfaceOleWrapper_Impl::doInvoke( DISPPARAMS * pdispparams, VARIANT * 
     return ret;
 }
 
-HRESULT InterfaceOleWrapper_Impl::doGetProperty( DISPPARAMS * pdispparams, VARIANT * pvarResult,
+HRESULT InterfaceOleWrapper_Impl::doGetProperty( DISPPARAMS * /*pdispparams*/, VARIANT * pvarResult,
                                                 EXCEPINFO * pexcepinfo, OUString& name)
 {
     HRESULT ret= S_OK;
@@ -1073,7 +1073,7 @@ HRESULT InterfaceOleWrapper_Impl::doGetProperty( DISPPARAMS * pdispparams, VARIA
     return  ret;
 }
 
-HRESULT InterfaceOleWrapper_Impl::doSetProperty( DISPPARAMS * pdispparams, VARIANT * pvarResult,
+HRESULT InterfaceOleWrapper_Impl::doSetProperty( DISPPARAMS * /*pdispparams*/, VARIANT * /*pvarResult*/,
                                         EXCEPINFO * pexcepinfo, unsigned int * puArgErr, OUString& name, Sequence<Any> params)
 {
     HRESULT ret= S_OK;
@@ -1112,7 +1112,7 @@ HRESULT InterfaceOleWrapper_Impl::doSetProperty( DISPPARAMS * pdispparams, VARIA
 
 HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned short wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
-                         unsigned int * puArgErr, sal_Bool& bHandled)
+                         unsigned int * /*puArgErr*/, sal_Bool& bHandled)
 {
     HRESULT ret= S_OK;
     try
@@ -1241,7 +1241,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
 
 
 
-STDMETHODIMP InterfaceOleWrapper_Impl::GetDispID(BSTR bstrName, DWORD grfdex, DISPID __RPC_FAR *pid)
+STDMETHODIMP InterfaceOleWrapper_Impl::GetDispID(BSTR /*bstrName*/, DWORD /*grfdex*/, DISPID __RPC_FAR* /*pid*/)
 {
     HRESULT ret = ResultFromScode(E_NOTIMPL);
 
@@ -1249,13 +1249,13 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetDispID(BSTR bstrName, DWORD grfdex, DI
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::InvokeEx(
-    /* [in] */ DISPID id,
-    /* [in] */ LCID lcid,
-    /* [in] */ WORD wFlags,
-    /* [in] */ DISPPARAMS __RPC_FAR *pdp,
-    /* [out] */ VARIANT __RPC_FAR *pvarRes,
-    /* [out] */ EXCEPINFO __RPC_FAR *pei,
-    /* [unique][in] */ IServiceProvider __RPC_FAR *pspCaller)
+    /* [in] */ DISPID /*id*/,
+    /* [in] */ LCID /*lcid*/,
+    /* [in] */ WORD /*wFlags*/,
+    /* [in] */ DISPPARAMS __RPC_FAR* /*pdp*/,
+    /* [out] */ VARIANT __RPC_FAR* /*pvarRes*/,
+    /* [out] */ EXCEPINFO __RPC_FAR* /*pei*/,
+    /* [unique][in] */ IServiceProvider __RPC_FAR* /*pspCaller*/)
 {
     HRESULT ret = ResultFromScode(E_NOTIMPL);
 
@@ -1264,15 +1264,15 @@ STDMETHODIMP InterfaceOleWrapper_Impl::InvokeEx(
 
 
 STDMETHODIMP InterfaceOleWrapper_Impl::DeleteMemberByName(
-    /* [in] */ BSTR bstr,
-    /* [in] */ DWORD grfdex)
+    /* [in] */ BSTR /*bstr*/,
+    /* [in] */ DWORD /*grfdex*/)
 {
     HRESULT ret = ResultFromScode(E_NOTIMPL);
 
     return ret;
 }
 
-STDMETHODIMP InterfaceOleWrapper_Impl::DeleteMemberByDispID(DISPID id)
+STDMETHODIMP InterfaceOleWrapper_Impl::DeleteMemberByDispID(DISPID /*id*/)
 {
     HRESULT ret = ResultFromScode(E_NOTIMPL);
 
@@ -1280,9 +1280,9 @@ STDMETHODIMP InterfaceOleWrapper_Impl::DeleteMemberByDispID(DISPID id)
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::GetMemberProperties(
-    /* [in] */ DISPID id,
-    /* [in] */ DWORD grfdexFetch,
-    /* [out] */ DWORD __RPC_FAR *pgrfdex)
+    /* [in] */ DISPID /*id*/,
+    /* [in] */ DWORD /*grfdexFetch*/,
+    /* [out] */ DWORD __RPC_FAR* /*pgrfdex*/)
 {
     HRESULT ret = ResultFromScode(E_NOTIMPL);
 
@@ -1290,8 +1290,8 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetMemberProperties(
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::GetMemberName(
-    /* [in] */ DISPID id,
-    /* [out] */ BSTR __RPC_FAR *pbstrName)
+    /* [in] */ DISPID /*id*/,
+    /* [out] */ BSTR __RPC_FAR* /*pbstrName*/)
 {
     HRESULT ret = ResultFromScode(E_NOTIMPL);
 
@@ -1299,9 +1299,9 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetMemberName(
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::GetNextDispID(
-    /* [in] */ DWORD grfdex,
-    /* [in] */ DISPID id,
-    /* [out] */ DISPID __RPC_FAR *pid)
+    /* [in] */ DWORD /*grfdex*/,
+    /* [in] */ DISPID /*id*/,
+    /* [out] */ DISPID __RPC_FAR* /*pid*/)
 {
     HRESULT ret = ResultFromScode(E_NOTIMPL);
 
@@ -1309,7 +1309,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetNextDispID(
 }
 
 STDMETHODIMP InterfaceOleWrapper_Impl::GetNameSpaceParent(
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppunk)
+    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR* /*ppunk*/)
 {
     HRESULT ret = ResultFromScode(E_NOTIMPL);
 
@@ -1341,8 +1341,8 @@ Reference< XInterface > UnoObjectWrapperRemoteOpt::createUnoWrapperInstance()
     return Reference<XInterface>( xWeak, UNO_QUERY);
 }
 
-STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID riid, OLECHAR ** rgszNames, unsigned int cNames,
-                                LCID lcid, DISPID * rgdispid )
+STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID /*riid*/, OLECHAR ** rgszNames, unsigned int cNames,
+                                LCID /*lcid*/, DISPID * rgdispid )
 {
     MutexGuard guard( getBridgeMutex());
 
@@ -1389,7 +1389,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID riid, OLECHAR **
     return ret;
 }
 
-STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID riid, LCID lcid, unsigned short wFlags,
+STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID /*riid*/, LCID /*lcid*/, unsigned short wFlags,
                          DISPPARAMS * pdispparams, VARIANT * pvarResult, EXCEPINFO * pexcepinfo,
                          unsigned int * puArgErr )
 {
@@ -1640,8 +1640,8 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::Invoke ( DISPID dispidMember, REFIID ri
     return ret;
 }
 
-HRESULT UnoObjectWrapperRemoteOpt::methodInvoke( DISPID dispidMember, DISPPARAMS * pdispparams, VARIANT * pvarResult,
-                              EXCEPINFO * pexcepinfo, unsigned int * puArgErr, Sequence<Any> params)
+HRESULT UnoObjectWrapperRemoteOpt::methodInvoke( DISPID /*dispidMember*/, DISPPARAMS * /*pdispparams*/, VARIANT * /*pvarResult*/,
+                              EXCEPINFO * /*pexcepinfo*/, unsigned int * /*puArgErr*/, Sequence<Any> params)
 {
     return S_OK;
 }
