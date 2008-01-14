@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasourcehandling.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 18:01:30 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,9 +84,6 @@
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
 #endif
-#ifndef _RTL_REF_HXX_
-#include <rtl/ref.hxx>
-#endif
 #ifndef _VCL_STDTEXT_HXX
 #include <vcl/stdtext.hxx>
 #endif
@@ -102,6 +99,10 @@
 #ifndef _UNOTOOLS_CONFIGNODE_HXX_
 #include <unotools/confignode.hxx>
 #endif
+#ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
+#include <unotools/sharedunocomponent.hxx>
+#endif
+
 //.........................................................................
 namespace abp
 {
@@ -162,6 +163,7 @@ namespace abp
         Reference< XNameAccess > xContext = lcl_getDataSourceContext( _rxORB );
 
         DBG_ASSERT( !xContext->hasByName( _rName ), "lcl_implCreateAndInsert: name already used!" );
+        (void)_rName;
 
         //.............................................................
         // create a new data source
@@ -379,79 +381,6 @@ namespace abp
     }
 
     //=====================================================================
-    //= OSharedConnection
-    //=====================================================================
-    class OSharedConnection : ::rtl::IReference
-    {
-    protected:
-        Reference< XConnection >        m_xConnection;
-        oslInterlockedCount             m_refCount;
-
-    protected:
-        ~OSharedConnection();
-        OSharedConnection( const OSharedConnection& );      // never implemented
-        OSharedConnection& operator=( OSharedConnection& ); // never implemented
-
-    public:
-        OSharedConnection();
-        OSharedConnection( const Reference< XConnection >& _rxConn );
-
-        // IReference
-        virtual oslInterlockedCount SAL_CALL acquire();
-        virtual oslInterlockedCount SAL_CALL release();
-
-        // access to the real connection
-        const Reference< XConnection >& getConnection() const { return m_xConnection; }
-
-        sal_Bool is() const { return m_xConnection.is() ; }
-    };
-
-    //---------------------------------------------------------------------
-    OSharedConnection::OSharedConnection()
-        :m_refCount(0)
-    {
-    }
-
-    //---------------------------------------------------------------------
-    OSharedConnection::OSharedConnection( const Reference< XConnection >& _rxConn )
-        :m_xConnection(_rxConn)
-        ,m_refCount(0)
-    {
-    }
-
-    //---------------------------------------------------------------------
-    OSharedConnection::~OSharedConnection()
-    {
-        try
-        {
-            Reference< XComponent > xConnComp( m_xConnection, UNO_QUERY );
-            if (xConnComp.is())
-                xConnComp->dispose();
-        }
-        catch(const Exception&)
-        {
-            DBG_ERROR("OSharedConnection::~OSharedConnection: could not dispose the connection!");
-        }
-    }
-
-    //---------------------------------------------------------------------
-    oslInterlockedCount SAL_CALL OSharedConnection::acquire()
-    {
-        return osl_incrementInterlockedCount( &m_refCount );
-    }
-
-    //---------------------------------------------------------------------
-    oslInterlockedCount SAL_CALL OSharedConnection::release()
-    {
-        if ( 0 == osl_decrementInterlockedCount( &m_refCount ) )
-        {
-            delete this;
-            return 0;
-        }
-        return m_refCount;
-    }
-
-    //=====================================================================
     //= ODataSourceImpl
     //=====================================================================
     struct ODataSourceImpl
@@ -459,14 +388,14 @@ namespace abp
     public:
         Reference< XMultiServiceFactory >       xORB;               /// the service factory
         Reference< XPropertySet >               xDataSource;        /// the UNO data source
-        ::rtl::Reference< OSharedConnection >   xConnection;        /// the connection
+        ::utl::SharedUNOComponent< XConnection >
+                                                xConnection;
         StringBag                               aTables;            // the cached table names
         ::rtl::OUString                         sName;
         sal_Bool                                bTablesUpToDate;    // table name cache up-to-date?
 
         ODataSourceImpl( const Reference< XMultiServiceFactory >& _rxORB )
             :xORB( _rxORB )
-            ,xConnection( new OSharedConnection )
             ,bTablesUpToDate( sal_False )
         {
         }
@@ -638,7 +567,7 @@ namespace abp
             try
             {
                 // get the tables container from the connection
-                Reference< XTablesSupplier > xSuppTables( m_pImpl->xConnection->getConnection(), UNO_QUERY );
+                Reference< XTablesSupplier > xSuppTables( m_pImpl->xConnection.getTyped(), UNO_QUERY );
                 Reference< XNameAccess > xTables;
                 if ( xSuppTables.is( ) )
                     xTables = xSuppTables->getTables();
@@ -750,7 +679,7 @@ namespace abp
 
         // ................................................................
         // success
-        m_pImpl->xConnection = new OSharedConnection( xConnection );
+        m_pImpl->xConnection.reset( xConnection );
         m_pImpl->aTables.clear();
         m_pImpl->bTablesUpToDate = sal_False;
 
@@ -760,7 +689,7 @@ namespace abp
     //---------------------------------------------------------------------
     void ODataSource::disconnect( ) SAL_THROW (( ))
     {
-        m_pImpl->xConnection = NULL;
+        m_pImpl->xConnection.clear();
         m_pImpl->aTables.clear();
         m_pImpl->bTablesUpToDate = sal_False;
     }
@@ -768,7 +697,7 @@ namespace abp
     //---------------------------------------------------------------------
     sal_Bool ODataSource::isConnected( ) const SAL_THROW (( ))
     {
-        return m_pImpl->xConnection.is() && m_pImpl->xConnection->is();
+        return m_pImpl->xConnection.is();
     }
 
     //---------------------------------------------------------------------
