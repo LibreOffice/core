@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PieChart.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:10:17 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:05:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -392,7 +392,7 @@ void PieChart::createShapes()
         //iterate through all points to get the sum
         sal_Int32 nPointIndex=0;
         sal_Int32 nPointCount=pSeries->getTotalPointCount();
-        for( nPointIndex = 0; nPointIndex <= nPointCount; nPointIndex++ )
+        for( nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
         {
             double fY = pSeries->getY( nPointIndex );
             if(fY<0.0)
@@ -407,7 +407,7 @@ void PieChart::createShapes()
             continue;
         double fLogicYForNextPoint = 0.0;
         //iterate through all points to create shapes
-        for( nPointIndex = 0; nPointIndex <= nPointCount; nPointIndex++ )
+        for( nPointIndex = 0; nPointIndex < nPointCount; nPointIndex++ )
         {
             double fLogicInnerRadius, fLogicOuterRadius;
             bool bIsVisible = m_pPosHelper->getInnerAndOuterRadius( fSlotX+1.0, fLogicInnerRadius, fLogicOuterRadius, m_bUseRings, getMaxOffset() );
