@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:23:41 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:58:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,8 @@ namespace pcr
         virtual void SAL_CALL getFastPropertyValue(
                 ::com::sun::star::uno::Any& rValue, sal_Int32 nHandle
             ) const;
+    private:
+        using FormController_PropertyBase1::getFastPropertyValue;
     };
 
     //====================================================================
