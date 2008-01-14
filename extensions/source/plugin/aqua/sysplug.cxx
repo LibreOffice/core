@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysplug.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:52:36 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:49:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,9 +104,11 @@ MacPluginComm::~MacPluginComm()
     if( m_nCommPID != -1 && m_nCommPID != 0 )
     {
         int status = 16777216;
-        pid_t nExit = waitpid( m_nCommPID, &status, WUNTRACED );
 #if OSL_DEBUG_LEVEL > 1
-        fprintf( stderr, "child %d (plugin app child %d) exited with status %d\n", nExit, m_nCommPID, WEXITSTATUS(status) );
+    pid_t nExit = waitpid( m_nCommPID, &status, WUNTRACED );
+    fprintf( stderr, "child %d (plugin app child %d) exited with status %d\n", nExit, m_nCommPID, WEXITSTATUS(status) );
+#else
+    waitpid( m_nCommPID, &status, WUNTRACED );
 #endif
     }
 }
