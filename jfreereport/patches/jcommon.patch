@@ -1,0 +1,50 @@
+*** misc/jcommon-1.0.10/ant/build.properties	Mon Dec 11 13:40:27 2006
+--- misc/build/jcommon-1.0.10/ant/build.properties	Fri Jul 27 09:04:38 2007
+***************
+*** 14,21 ****
+  
+  ##
+  # Make sure that JDK 1.2 compatible class files are generated
+! build.target=1.2
+! build.source=1.2
+  
+  #
+  # All path settings are relative to the project root directory
+--- 14,21 ----
+  
+  ##
+  # Make sure that JDK 1.2 compatible class files are generated
+! build.target=1.3
+! build.source=1.3
+  
+  #
+  # All path settings are relative to the project root directory
+*** misc/jcommon-1.0.10/ant/build.xml	Mon May 21 19:25:06 2007
+--- misc/build/jcommon-1.0.10/ant/build.xml	Thu Oct 18 11:58:48 2007
+***************
+*** 329,338 ****
+      <delete dir="distribution"/>
+    </target>
+  
+  
+    <!-- ALL -->
+    <target name="all"
+!     depends="compile,compile-xml,compile-junit-tests,javadoc,zip,targz,maven-bundle"
+      description="Compiles JCommon, builds the jar files, generates the Javadoc HTML pages and creates distribution files (.zip and .tar.gz).">
+    </target>
+  
+--- 329,342 ----
+      <delete dir="distribution"/>
+    </target>
+  
++   <!-- Copy jar file into environment -->
++   <target name="copyjar" depends="compile">
++     <copy file="${jcommon-jar-file}" tofile="../../../class/${jcommon-jar-file}"/>
++   </target>
+  
+    <!-- ALL -->
+    <target name="all"
+!     depends="compile,compile-xml,compile-junit-tests,javadoc,zip,targz,maven-bundle,copyjar"
+      description="Compiles JCommon, builds the jar files, generates the Javadoc HTML pages and creates distribution files (.zip and .tar.gz).">
+    </target>
+  
