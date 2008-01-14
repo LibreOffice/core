@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupboxwiz.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:06:45 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:43:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -335,14 +335,14 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( ORadioSelectionPage, OnEntrySelected, ListBox*, _pList )
+    IMPL_LINK( ORadioSelectionPage, OnEntrySelected, ListBox*, /*_pList*/ )
     {
         implCheckMoveButtons();
         return 0L;
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( ORadioSelectionPage, OnNameModified, Edit*, _pList )
+    IMPL_LINK( ORadioSelectionPage, OnNameModified, Edit*, /*_pList*/ )
     {
         implCheckMoveButtons();
         return 0L;
@@ -387,8 +387,8 @@ namespace dbp
         ,m_aFrame                   (this, ModuleRes(FL_DEFAULTSELECTION))
         ,m_aDefaultSelectionLabel   (this, ModuleRes(FT_DEFAULTSELECTION))
         ,m_aDefSelYes               (this, ModuleRes(RB_DEFSELECTION_YES))
-        ,m_aDefSelection            (this, ModuleRes(LB_DEFSELECTIONFIELD))
         ,m_aDefSelNo                (this, ModuleRes(RB_DEFSELECTION_NO))
+        ,m_aDefSelection            (this, ModuleRes(LB_DEFSELECTIONFIELD))
     {
         FreeResource();
 
@@ -447,7 +447,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( OOptionValuesPage, OnOptionSelected, ListBox*, NOTINTERESTEDIN )
+    IMPL_LINK( OOptionValuesPage, OnOptionSelected, ListBox*, /*NOTINTERESTEDIN*/ )
     {
         implTraveledOptions();
         return 0L;
@@ -466,12 +466,12 @@ namespace dbp
         if ((WizardState)-1 != m_nLastSelection)
         {
             // save the value for the last option
-            DBG_ASSERT(m_nLastSelection < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid previous selection index!");
+            DBG_ASSERT((size_t)m_nLastSelection < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid previous selection index!");
             m_aUncommittedValues[m_nLastSelection] = m_aValue.GetText();
         }
 
         m_nLastSelection = m_aOptions.GetSelectEntryPos();
-        DBG_ASSERT(m_nLastSelection < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid new selection index!");
+        DBG_ASSERT((size_t)m_nLastSelection < m_aUncommittedValues.size(), "OOptionValuesPage::implTraveledOptions: invalid new selection index!");
         m_aValue.SetText(m_aUncommittedValues[m_nLastSelection]);
     }
 
