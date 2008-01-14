@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fixed.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:06:03 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:05:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,25 +400,41 @@ void FixedText::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-Size FixedText::CalcMinimumSize( long nMaxWidth ) const
+Size FixedText::CalcMinimumTextSize( Control const *pControl, long nMaxWidth )
 {
-    USHORT nStyle = ImplGetTextStyle( GetStyle() );
-    if ( !( GetStyle() & WB_NOLABEL ) )
+    USHORT nStyle = ImplGetTextStyle( pControl->GetStyle() );
+    if ( !( pControl->GetStyle() & WB_NOLABEL ) )
         nStyle |= TEXT_DRAW_MNEMONIC;
 
-    Size aSize = GetTextRect( Rectangle( Point(), Size( (nMaxWidth ? nMaxWidth : 0x7fffffff), 0x7fffffff ) ),
-                              GetText(), nStyle ).GetSize();
+    Size aSize = pControl->GetTextRect( Rectangle( Point(), Size( (nMaxWidth ? nMaxWidth : 0x7fffffff), 0x7fffffff ) ),
+                                       pControl->GetText(), nStyle ).GetSize();
 
-    if ( GetStyle() & WB_EXTRAOFFSET )
+    if ( pControl->GetStyle() & WB_EXTRAOFFSET )
         aSize.Width() += 2;
 
     // GetTextRect verkraftet keinen leeren String:
     if ( aSize.Width() < 0 )
         aSize.Width() = 0;
     if ( aSize.Height() <= 0 )
-        aSize.Height() = GetTextHeight();
+        aSize.Height() = pControl->GetTextHeight();
 
-    return CalcWindowSize( aSize );
+    return aSize;
+}
+
+Size FixedText::CalcMinimumSize( long nMaxWidth ) const
+{
+    return CalcWindowSize( CalcMinimumTextSize ( this, nMaxWidth ) );
+}
+// -----------------------------------------------------------------------
+
+Size FixedText::GetOptimalSize(WindowSizeType eType) const
+{
+    switch (eType) {
+    case WINDOWSIZE_MINIMUM:
+        return CalcMinimumSize();
+    default:
+        return Control::GetOptimalSize( eType );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -675,6 +691,18 @@ void FixedLine::DataChanged( const DataChangedEvent& rDCEvt )
     {
         ImplInitSettings( TRUE, TRUE, TRUE );
         Invalidate();
+    }
+}
+
+// -----------------------------------------------------------------------
+
+Size FixedLine::GetOptimalSize(WindowSizeType eType) const
+{
+    switch (eType) {
+    case WINDOWSIZE_MINIMUM:
+        return CalcWindowSize( FixedText::CalcMinimumTextSize ( this ) );
+    default:
+        return Control::GetOptimalSize( eType );
     }
 }
 
