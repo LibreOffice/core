@@ -5,9 +5,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:09:03 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:12:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,10 @@
 #include "vcl/sv.h"
 #include "vcl/svdata.hxx"
 #include "vcl/salwtype.hxx"
+#include "vcl/ptrstyle.hxx"
 
 #include <list>
+#include <vector>
 #include <hash_set>
 
 #include <cstdio>
@@ -76,6 +78,8 @@ struct FrameHash : public std::hash<sal_IntPtr>
     { return std::hash<sal_IntPtr>::operator()( reinterpret_cast<const sal_IntPtr>(frame) ); }
 };
 
+#define INVALID_CURSOR_PTR (NSCursor*)0xdeadbeef
+
 struct SalData
 {
 
@@ -91,26 +95,20 @@ struct SalData
     CGColorSpaceRef                               mxRGBSpace;
     CGColorSpaceRef                               mxGraySpace;
 
+    std::vector< NSCursor* >                      maCursors;
+
+    static oslThreadKey                           s_aAutoReleaseKey;
     static FILE                                  *s_pLog;
 
     bool              mbIsScrollbarDoubleMax;   // TODO: support DoubleMin and DoubleBoth too
 
-    SalData() :
-        mpTimerProc( NULL ),
-        mpFirstInstance( NULL ),
-        mpFirstObject( NULL ),
-        mpFirstVD( NULL ),
-        mpFirstPrinter( NULL ),
-        mpFontList( NULL ),
-        mxRGBSpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB) ),
-        mxGraySpace( CGColorSpaceCreateWithName(kCGColorSpaceGenericGray) )
-    {}
+    SalData();
+    ~SalData();
 
-    ~SalData()
-    {
-        CFRelease( mxRGBSpace );
-        CFRelease( mxGraySpace );
-    }
+    NSCursor* getCursor( PointerStyle i_eStyle );
+
+    static void ensureThreadAutoreleasePool();
+    static void drainThreadAutoreleasePool();
 };
 
 void AquaLog( const char* pFormat, ... );
