@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VSeriesPlotter.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:11:52 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:06:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,6 +305,7 @@ public:
     void setPageReferenceSize( const ::com::sun::star::awt::Size & rPageRefSize );
     //better performance for big data
     void setCoordinateSystemResolution( const ::com::sun::star::uno::Sequence< sal_Int32 >& rCoordinateSystemResolution );
+    bool PointsWereSkipped() const;
 
     //return the depth for a logic 1
     double  getTransformedDepth() const;
@@ -455,6 +456,7 @@ protected: //member
 
     //better performance for big data
     ::com::sun::star::uno::Sequence< sal_Int32 >    m_aCoordinateSystemResolution;
+    bool m_bPointsWereSkipped;
 
 private: //member
     typedef std::map< sal_Int32 , ::com::sun::star::chart2::ExplicitScaleData > tSecondaryValueScales;
