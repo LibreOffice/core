@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:52:27 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:21:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -608,8 +608,17 @@ Rectangle TabControl::ImplGetTabRect( USHORT nItemPos, long nWidth, long nHeight
                             break;
 
                         nIDX = 0;
-                        nDX = (nWidth-nOffsetX-nLineWidthAry[n]) / (nLinePosAry[n+1]-i);
-                        nModDX = (nWidth-nOffsetX-nLineWidthAry[n]) % (nLinePosAry[n+1]-i);
+                        if( nLinePosAry[n+1]-i > 0 )
+                        {
+                            nDX = (nWidth-nOffsetX-nLineWidthAry[n]) / (nLinePosAry[n+1]-i);
+                            nModDX = (nWidth-nOffsetX-nLineWidthAry[n]) % (nLinePosAry[n+1]-i);
+                        }
+                        else
+                        {
+                            // FIXME: this is a bad case of tabctrl way too small
+                            nDX = 0;
+                            nModDX = 0;
+                        }
                         n++;
                     }
 
