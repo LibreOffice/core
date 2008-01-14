@@ -1,23 +1,23 @@
 -o sch.ChXChartDocument
-# -o sch.AccArea
-# -o sch.AccAxis
-# -o sch.AccDataPoint
-# -o sch.AccDataSeries
-# -o sch.AccDiagram
-# -o sch.AccFloor
-# -o sch.AccGrid
-# -o sch.AccLegend
-# -o sch.AccLegendEntry
-# -o sch.AccStatisticsObject
-# -o sch.AccTitle
-# -o sch.AccWall
-# -o sch.AccessibleDocumentView
+#i79073 -o sch.AccArea
+#i79073 -o sch.AccAxis
+#i79073 -o sch.AccDataPoint
+#i79073 -o sch.AccDataSeries
+#i79073 -o sch.AccDiagram
+#i79073 -o sch.AccFloor
+#i79073 -o sch.AccGrid
+#i79073 -o sch.AccLegend
+#i79073 -o sch.AccLegendEntry
+#i79073 -o sch.AccStatisticsObject
+#i79073 -o sch.AccTitle
+#i79073 -o sch.AccWall
+#i79073 -o sch.AccessibleDocumentView
 -o sch.ChXChartAxis
 -o sch.ChXChartData
 -o sch.ChXChartDataArray
 -o sch.ChXChartView
-#-o sch.ChXDataPoint
-#-o sch.ChXDataRow
+#i83867 -o sch.ChXDataPoint 
+#i83868 -o sch.ChXDataRow
 -o sch.ChXDiagram
 -o sch.ChartArea
 -o sch.ChartGrid
