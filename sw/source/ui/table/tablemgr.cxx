@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablemgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:34:22 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,7 +264,11 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
 
         uno::Reference< embed::XComponentSupplier > xCompSupp( xObj, uno::UNO_QUERY );
         if( xCompSupp.is())
+        {
             xChartModel.set( xCompSupp->getComponent(), uno::UNO_QUERY );
+            if( xChartModel.is() )
+                xChartModel->lockControllers(); //#i79578# don't request a new replacement image for charts to often - block change notifications
+        }
 
         // set the table name at the OLE-node
         if (aName.Len())
@@ -339,6 +343,8 @@ uno::Reference< frame::XModel > SwTableFUNC::InsertChart(
 
     pSh->EndUndo( UNDO_UI_INSERT_CHART );
 
+    if( xChartModel.is() )
+        xChartModel->unlockControllers(); //#i79578# don't request a new replacement image for charts to often
     return xChartModel;
 }
 
