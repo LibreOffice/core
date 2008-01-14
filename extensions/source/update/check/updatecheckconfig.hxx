@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckconfig.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:48:41 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:05:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,7 +249,7 @@ T getValue( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Name
         // Unfortunatly gcc-3.3 does not like Any.get<T>();
         if( rNamedValues[n].Name.equalsAscii( pszName ) )
         {
-            T value;
+            T value = T();
             if( ! (rNamedValues[n].Value >>= value) )
                 throw ::com::sun::star::uno::RuntimeException(
                     ::rtl::OUString(
