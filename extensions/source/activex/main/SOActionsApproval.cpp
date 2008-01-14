@@ -1,6 +1,7 @@
 // SOActionsApproval.cpp : Implementation of CHelpApp and DLL registration.
 
 #include "stdafx2.h"
+
 #include "so_activex.h"
 #include "SOActionsApproval.h"
 
