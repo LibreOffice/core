@@ -4,9 +4,9 @@
 *
 *   $RCSfile: OOoSpotlightImporter.m,v $
 *
-*   $Revision: 1.2 $
+*   $Revision: 1.3 $
 *
-*   last change: $Author: kz $ $Date: 2007-10-09 15:05:20 $
+*   last change: $Author: ihi $ $Date: 2008-01-14 14:44:15 $
 *
 *   The Contents of this file are made available subject to
 *   the terms of GNU Lesser General Public License Version 2.1.
@@ -111,9 +111,11 @@ static NSDictionary *uti2kind;
     [metaData retain];
     
     OOoMetaDataParser *parser = [OOoMetaDataParser new];
-    //parse and extract the data
-    [parser parseXML:metaData into:attributes];
-    
+    if (parser != nil) {
+	//parse and extract the data
+	[parser parseXML:metaData intoDictionary:attributes];
+    }
+
     [metaData release];
     [parser release];
     
@@ -127,9 +129,11 @@ static NSDictionary *uti2kind;
     [contentData retain];
     
     OOoContentDataParser *parser2 = [OOoContentDataParser new];
-    //parse and extract the data
-    [parser2 parseXML:contentData into:attributes];
-    
+    if (parser2 != nil) {
+	//parse and extract the data
+	[parser2 parseXML:contentData intoDictionary:attributes];
+    }
+
     [contentData release];
     [parser2 release];
 
