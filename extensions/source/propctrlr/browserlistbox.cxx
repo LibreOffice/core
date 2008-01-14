@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserlistbox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:52:45 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:55:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,11 +403,11 @@ namespace pcr
             ,m_pHelpWindow( new InspectorHelpWindow( this ) )
             ,m_pLineListener(NULL)
             ,m_pControlObserver( NULL )
-            ,m_bUpdate(sal_True)
-            ,m_bIsActive(sal_False)
             ,m_nYOffset(0)
             ,m_nCurrentPreferredHelpHeight(0)
             ,m_nTheNameSize(0)
+            ,m_bIsActive(sal_False)
+            ,m_bUpdate(sal_True)
             ,m_pControlContextImpl( new PropertyControlContext_Impl( *this ) )
     {
         DBG_CTOR(OBrowserListBox,NULL);
@@ -907,6 +907,7 @@ namespace pcr
     IMPL_LINK(OBrowserListBox, ScrollHdl, ScrollBar*, _pScrollBar )
     {
         DBG_ASSERT(_pScrollBar == &m_aVScroll, "OBrowserListBox::ScrollHdl: where does this come from?");
+        (void)_pScrollBar;
 
         // disable painting to prevent flicker
         m_aLinesPlayground.EnablePaint(sal_False);
@@ -960,7 +961,7 @@ namespace pcr
             }
             else
             {
-    #if DBG_UTIL
+    #ifdef DBG_UTIL
                 if ( !_rLine.xHandler.is() )
                 {
                     ::rtl::OString sMessage( "OBrowserListBox::impl_setControlAsPropertyValue: no handler -> no conversion (property: '" );
@@ -978,16 +979,9 @@ namespace pcr
                 }
             }
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-        #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "OBrowserListBox::impl_setControlAsPropertyValue: caught an exception!\n" );
-            sMessage += "message:\n";
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-            OSL_ENSURE( false, sMessage );
-        #else
-            e; // make compiler happy
-        #endif
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -998,7 +992,7 @@ namespace pcr
         Any aPropertyValue;
         try
         {
-        #if DBG_UTIL
+        #ifdef DBG_UTIL
             if ( !_rLine.xHandler.is() )
             {
                 ::rtl::OString sMessage( "OBrowserListBox::impl_getControlAsPropertyValue: no handler -> no conversion (property: '" );
@@ -1013,16 +1007,9 @@ namespace pcr
             else
                 aPropertyValue = xControl->getValue();
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-        #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "OBrowserListBox::impl_getControlAsPropertyValue: caught an exception!\n" );
-            sMessage += "message:\n";
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-            OSL_ENSURE( false, sMessage );
-        #else
-            e; // make compiler happy
-        #endif
+            DBG_UNHANDLED_EXCEPTION();
         }
         return aPropertyValue;
     }
@@ -1116,16 +1103,9 @@ namespace pcr
                 if ( xControlComponent.is() )
                     xControlComponent->dispose();
             }
-            catch( const Exception& e )
+            catch( const Exception& )
             {
-            #if OSL_DEBUG_LEVEL > 0
-                ::rtl::OString sMessage( "lcl_implDisposeControl_nothrow: caught an exception while cleaning up a control!\n" );
-                sMessage += "message:\n";
-                sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-                OSL_ENSURE( false, sMessage );
-            #else
-                e; // make compiler happy
-            #endif
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
     }
