@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:10:38 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:04:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,11 @@
 #include <vcl/sysdata.hxx>
 #include <vcl/salbtype.hxx>
 #include "scanner.hxx"
+
+#pragma warning (push,1)
+#pragma warning (disable:4668)
 #include "twain/twain.h"
+#pragma warning (pop)
 
 using namespace ::com::sun::star;
 
@@ -584,7 +588,7 @@ IMPL_LINK( ImpTwain, ImplFallbackHdl, void*, pData )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( ImpTwain, ImplDestroyHdl, void*, p )
+IMPL_LINK( ImpTwain, ImplDestroyHdl, void*, /*p*/ )
 {
     if( hTwainWnd )
         DestroyWindow( hTwainWnd );
@@ -727,7 +731,7 @@ void ImpTwain::ImplDeregisterCloseListener()
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ImpTwain::queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
+void SAL_CALL ImpTwain::queryClosing( const lang::EventObject& /*Source*/, sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
 {
     // shall we re-send the close query later on?
     mbCloseFrameOnExit = GetsOwnership;
@@ -738,7 +742,7 @@ void SAL_CALL ImpTwain::queryClosing( const lang::EventObject& Source, sal_Bool 
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ImpTwain::notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException)
+void SAL_CALL ImpTwain::notifyClosing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
 {
     // should not happen
     DBG_ERROR("ImpTwain::notifyClosing called, but we vetoed the closing before!");
@@ -746,7 +750,7 @@ void SAL_CALL ImpTwain::notifyClosing( const lang::EventObject& Source ) throw (
 
 // -----------------------------------------------------------------------------
 
-void SAL_CALL ImpTwain::disposing( const lang::EventObject& Source ) throw (uno::RuntimeException)
+void SAL_CALL ImpTwain::disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
 {
     // we're not holding any references to the frame, thus noop
 }
@@ -967,7 +971,6 @@ SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
     {
         HGLOBAL             hDIB = (HGLOBAL)(long) mpData;
         const sal_uInt32    nDIBSize = GlobalSize( hDIB );
-        sal_uInt32          nSize = sizeof( BITMAPFILEHEADER) + nDIBSize;
         BITMAPINFOHEADER*   pBIH = (BITMAPINFOHEADER*) GlobalLock( hDIB );
 
         if( pBIH )
@@ -1080,7 +1083,7 @@ ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
 
 // -----------------------------------------------------------------------------
 
-uno::Reference< awt::XBitmap > SAL_CALL ScannerManager::getBitmap( const ScannerContext& rContext )
+uno::Reference< awt::XBitmap > SAL_CALL ScannerManager::getBitmap( const ScannerContext& /*rContext*/ )
     throw( ScannerException )
 {
     vos::OGuard aGuard( maProtector );
