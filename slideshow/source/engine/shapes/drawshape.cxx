@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawshape.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:52:04 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:53:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
+#include <vcl/wrkwin.hxx>
 
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/range/rangeexpander.hxx>
@@ -57,6 +58,13 @@
 #include <rtl/math.hxx>
 
 #include <com/sun/star/drawing/TextAnimationKind.hpp>
+
+#include <vcl/svapp.hxx>
+#include <vcl/window.hxx>
+#include <tools/stream.hxx>
+#include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 
 #include <comphelper/scopeguard.hxx>
 #include <canvas/canvastools.hxx>
@@ -87,6 +95,129 @@ namespace slideshow
 {
     namespace internal
     {
+        //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
+        //metafiles are resolution dependent when bitmaps are contained with is the case for 3D scenes for example
+        //in addition a chart has resolution dependent content as it might skip points that are not visible for a given resolution (this is done for performance reasons)
+        bool local_getMetafileForChart( const uno::Reference< lang::XComponent >&     xSource,
+                  const uno::Reference< drawing::XDrawPage >&     xContainingPage,
+                  GDIMetaFile&                                    rMtf )
+        {
+            //get the chart model
+            uno::Reference< beans::XPropertySet > xPropSet( xSource, uno::UNO_QUERY );
+            uno::Reference< frame::XModel > xChartModel;
+            getPropertyValue( xChartModel, xPropSet, OUSTR("XModel"));
+            uno::Reference< lang::XMultiServiceFactory > xFact( xChartModel, uno::UNO_QUERY );
+            OSL_ENSURE( xFact.is(), "Chart cannot be painted pretty!\n" );
+            if(!xFact.is())
+                return false;
+
+            //get the chart view
+            uno::Reference< datatransfer::XTransferable > xChartViewTransferable(
+                xFact->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.chart2.ChartView" ) ) ), uno::UNO_QUERY );
+            uno::Reference< beans::XPropertySet > xChartViewProp( xChartViewTransferable, uno::UNO_QUERY );
+            OSL_ENSURE( xChartViewProp.is(), "Chart cannot be painted pretty!\n" );
+            if( !xChartViewProp.is() )
+                return false;
+
+            //estimate zoom and resolution (this is only a workaround, correct would be to know and use the exact zoom and resoltion during slideshow display)
+            sal_Int32 nScaleXNumerator = 100;//zoom factor -> exact values are important for the quality of the created bitmap especially for 3D charts
+            sal_Int32 nScaleYNumerator = 100;
+            sal_Int32 nScaleXDenominator = 100;
+            sal_Int32 nScaleYDenominator = 100;
+            awt::Size aPixelPerChart( 1000, 1000 );//when data points happen to be on the same pixel as their predecessor no shape is created to safe performance
+
+            Window* pActiveTopWindow( Application::GetActiveTopWindow() );
+            WorkWindow* pWorkWindow( dynamic_cast<WorkWindow*>(pActiveTopWindow));
+            if( pWorkWindow && pWorkWindow->IsPresentationMode() )
+            {
+                Size aPixScreenSize( pActiveTopWindow->GetOutputSizePixel() );
+                aPixelPerChart = awt::Size( aPixScreenSize.getWidth(), aPixScreenSize.getHeight() );//this is still to much (but costs only seldom performance), correct would be pixel per chart object
+
+                uno::Reference< beans::XPropertySet > xPageProp( xContainingPage, uno::UNO_QUERY );
+                sal_Int32 nLogicPageWidth=1;
+                sal_Int32 nLogicPageHeight=1;
+                if( getPropertyValue( nLogicPageWidth, xPageProp, OUSTR("Width")) &&
+                    getPropertyValue( nLogicPageHeight, xPageProp, OUSTR("Height")) )
+                {
+                    Size aLogicScreenSize( pActiveTopWindow->PixelToLogic( aPixScreenSize, MAP_100TH_MM ) );
+                    nScaleXNumerator = aLogicScreenSize.getWidth();
+                    nScaleYNumerator = aLogicScreenSize.getHeight();
+                    nScaleXDenominator = nLogicPageWidth;
+                    nScaleYDenominator = nLogicPageHeight;
+                }
+            }
+            else
+            {
+                long nMaxPixWidth = 0;
+                long nMaxPixHeight = 0;
+                unsigned int nScreenCount( Application::GetScreenCount() );
+                for( unsigned int nScreen=0; nScreen<nScreenCount; nScreen++ )
+                {
+                    Rectangle aCurScreenRect( Application::GetScreenPosSizePixel( nScreen ) );
+                    if( aCurScreenRect.GetWidth() > nMaxPixWidth )
+                        nMaxPixWidth = aCurScreenRect.GetWidth();
+                    if( aCurScreenRect.GetHeight() > nMaxPixHeight )
+                        nMaxPixHeight = aCurScreenRect.GetHeight();
+                }
+                if(nMaxPixWidth>1 && nMaxPixHeight>1)
+                    aPixelPerChart = awt::Size( nMaxPixWidth, nMaxPixHeight );//this is still to much (but costs only seldom performance), correct would be pixel per chart object
+            }
+
+            try
+            {
+                uno::Sequence< beans::PropertyValue > aZoomFactors(4);
+                aZoomFactors[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleXNumerator") );
+                aZoomFactors[0].Value = uno::makeAny( nScaleXNumerator );
+                aZoomFactors[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleXDenominator") );
+                aZoomFactors[1].Value = uno::makeAny( nScaleXDenominator );
+                aZoomFactors[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleYNumerator") );
+                aZoomFactors[2].Value = uno::makeAny( nScaleYNumerator );
+                aZoomFactors[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ScaleYDenominator") );
+                aZoomFactors[3].Value = uno::makeAny( nScaleYDenominator );
+
+                xChartViewProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ZoomFactors") ), uno::makeAny( aZoomFactors ));
+                xChartViewProp->setPropertyValue( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Resolution") ), uno::makeAny( aPixelPerChart ));
+            }
+            catch (uno::Exception &)
+            {
+                OSL_ENSURE( false, rtl::OUStringToOString(
+                                comphelper::anyToString(
+                                    cppu::getCaughtException() ),
+                                RTL_TEXTENCODING_UTF8 ).getStr() );
+            }
+
+            //get a metafile from the prepared chart view
+            datatransfer::DataFlavor aDataFlavor(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"") ),
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "GDIMetaFile" ) ),
+                    ::getCppuType( (const uno::Sequence< sal_Int8 >*) 0 ) );
+            uno::Any aData( xChartViewTransferable->getTransferData( aDataFlavor ) );
+            uno::Sequence< sal_Int8 > aSeq;
+            if( aData >>= aSeq )
+            {
+                ::std::auto_ptr< SvMemoryStream > pSrcStm( new SvMemoryStream( (char*) aSeq.getConstArray(), aSeq.getLength(), STREAM_WRITE | STREAM_TRUNC ) );
+                *(pSrcStm.get() ) >> rMtf;
+                return true;
+            }
+            return false;
+        }
+
+        //same as getMetafile with an exception for charts
+        //for charts a metafile with a higher resolution is created, because charts have resolution dependent content
+        bool local_getMetaFile_WithSpecialChartHandling( const uno::Reference< lang::XComponent >&    xSource,
+                  const uno::Reference< drawing::XDrawPage >&     xContainingPage,
+                  GDIMetaFile&                                    rMtf,
+                  int                                             mtfLoadFlags,
+                  const uno::Reference< uno::XComponentContext >& rxContext )
+        {
+            uno::Reference<beans::XPropertySet> xProp( xSource, uno::UNO_QUERY );
+            sal_Bool bIsChart = sal_False;
+            getPropertyValue( bIsChart, xProp, OUSTR("IsChart"));
+            if( bIsChart && local_getMetafileForChart( xSource, xContainingPage, rMtf ) )
+                return true;
+            return getMetaFile( xSource, xContainingPage, rMtf, mtfLoadFlags, rxContext );
+        }
+
 
         //////////////////////////////////////////////////////////////////////
         //
@@ -101,7 +232,7 @@ namespace slideshow
                 // reload with added flags:
                 mpCurrMtf.reset( new GDIMetaFile );
                 mnCurrMtfLoadFlags |= MTF_LOAD_SCROLL_TEXT_MTF;
-                getMetaFile(
+                local_getMetaFile_WithSpecialChartHandling(
                     uno::Reference<lang::XComponent>(mxShape, uno::UNO_QUERY),
                     mxPage, *mpCurrMtf, mnCurrMtfLoadFlags,
                     mxComponentContext );
@@ -169,7 +300,7 @@ namespace slideshow
                 // subsetting information!
                 mpCurrMtf.reset( new GDIMetaFile );
                 mnCurrMtfLoadFlags |= MTF_LOAD_VERBOSE_COMMENTS;
-                getMetaFile(
+                local_getMetaFile_WithSpecialChartHandling(
                     uno::Reference<lang::XComponent>(mxShape, uno::UNO_QUERY),
                     mxPage, *mpCurrMtf, mnCurrMtfLoadFlags,
                     mxComponentContext );
@@ -444,7 +575,7 @@ namespace slideshow
             // must NOT be called from within initializer list, uses
             // state from mnCurrMtfLoadFlags!
             mpCurrMtf.reset( new GDIMetaFile );
-            getMetaFile(
+            local_getMetaFile_WithSpecialChartHandling(
                 uno::Reference<lang::XComponent>(xShape, uno::UNO_QUERY),
                 xContainingPage, *mpCurrMtf, mnCurrMtfLoadFlags,
                 mxComponentContext );
