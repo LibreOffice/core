@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bibload.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:55:04 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:38:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -262,7 +265,7 @@ BibliographyLoader::~BibliographyLoader()
 }
 
 
-Reference< XInterface >  SAL_CALL BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory >  & rSMgr ) throw( Exception )
+Reference< XInterface >  SAL_CALL BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory >  & /*rSMgr*/ ) throw( Exception )
 {
     return *(new BibliographyLoader);
 }
@@ -306,7 +309,7 @@ Sequence< rtl::OUString > BibliographyLoader::getSupportedServiceNames_Static(vo
 extern "C"
 {
     void SAL_CALL component_getImplementationEnvironment(
-        const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+        const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
     {
         *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
     }
@@ -395,8 +398,8 @@ void BibliographyLoader::load(const Reference< XFrame > & rFrame, const rtl::OUS
 }
 
 // -----------------------------------------------------------------------
-void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl::OUString& rURL,
-        const Sequence< PropertyValue >& rArgs,
+void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const rtl::OUString& /*rURL*/,
+        const Sequence< PropertyValue >& /*rArgs*/,
         const Reference< XLoadEventListener > & rListener)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
@@ -545,22 +548,13 @@ Reference< XNameAccess >  BibliographyLoader::GetDataColumns() const
             xRowSet->execute();
             bSuccess = sal_True;
         }
-        catch(SQLException& e)
+        catch(const SQLException&)
         {
-#ifdef DBG_UTIL
-            // TODO : show a real error message
-            String sMsg(String::CreateFromAscii("BibliographyLoader::GetDataCursor : could not execute the result set (catched an SQL-exception"));
-            sMsg += String(e.Message);
-            sMsg.AppendAscii(") !");
-            DBG_ERROR( ByteString(sMsg, RTL_TEXTENCODING_ASCII_US ).GetBuffer());
-#endif
+            DBG_UNHANDLED_EXCEPTION();
         }
-        catch(Exception& rEx)
+        catch(const Exception& )
         {
-#ifndef GCC
-            rEx;    // make compiler happy
-#endif
-            DBG_ERROR("BibliographyLoader::GetDataCursor : could not execute the result set !");
+            DBG_UNHANDLED_EXCEPTION();
             bSuccess = sal_False;
         }
 
@@ -687,12 +681,9 @@ Any BibliographyLoader::getByName(const rtl::OUString& rName) throw
             while(xCursor->next());
         }
     }
-    catch(Exception& rEx)
+    catch(const Exception&)
     {
-#ifndef GCC
-        rEx;    // make compiler happy
-#endif
-        DBG_ERROR("Exception in BibliographyLoader::getByName")
+        DBG_UNHANDLED_EXCEPTION();
     }
     return aRet;
 }
@@ -725,12 +716,9 @@ Sequence< rtl::OUString > BibliographyLoader::getElementNames(void) throw ( Runt
             while (xCursor->next());
         }
     }
-    catch(Exception& rEx)
+    catch(const Exception&)
     {
-#ifndef GCC
-        rEx;    // make compiler happy
-#endif
-        DBG_ERROR("Exception in BibliographyLoader::getElementNames")
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     aRet.realloc(nRealNameCount);
@@ -761,12 +749,9 @@ sal_Bool BibliographyLoader::hasByName(const rtl::OUString& rName) throw ( Runti
             while(xCursor->next());
         }
     }
-    catch(Exception& rEx)
+    catch(const Exception&)
     {
-#ifndef GCC
-        rEx;    // make compiler happy
-#endif
-        DBG_ERROR("Exception in BibliographyLoader::getElementNames")
+        DBG_UNHANDLED_EXCEPTION();
     }
     return bRet;
 }
@@ -796,7 +781,7 @@ Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo(void) thro
     static SfxItemPropertyMap aBibProps_Impl[] =
     {
         { MAP_CHAR_LEN("BibliographyDataFieldNames"), 0, &::getCppuType((Sequence<PropertyValue>*)0), PropertyAttribute::READONLY, 0},
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     static Reference< XPropertySetInfo >  xRet =
         SfxItemPropertySet(aBibProps_Impl).getPropertySetInfo();
@@ -805,8 +790,8 @@ Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo(void) thro
 /*-- 07.12.99 14:28:39---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void BibliographyLoader::setPropertyValue(const rtl::OUString& PropertyName,
-                                        const Any& aValue)
+void BibliographyLoader::setPropertyValue(const rtl::OUString& /*PropertyName*/,
+                                        const Any& /*aValue*/)
     throw( UnknownPropertyException, PropertyVetoException,
         IllegalArgumentException, WrappedTargetException, RuntimeException)
 {
@@ -874,7 +859,7 @@ Any BibliographyLoader::getPropertyValue(const rtl::OUString& rPropertyName)
 
   -----------------------------------------------------------------------*/
 void BibliographyLoader::addPropertyChangeListener(
-        const rtl::OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener)
+        const rtl::OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
         throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     //no bound properties
@@ -883,7 +868,7 @@ void BibliographyLoader::addPropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void BibliographyLoader::removePropertyChangeListener(
-        const rtl::OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener)
+        const rtl::OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
         throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     //no bound properties
@@ -892,7 +877,7 @@ void BibliographyLoader::removePropertyChangeListener(
 
   -----------------------------------------------------------------------*/
 void BibliographyLoader::addVetoableChangeListener(
-    const rtl::OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener)
+    const rtl::OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     //no vetoable properties
@@ -901,7 +886,7 @@ void BibliographyLoader::addVetoableChangeListener(
 
   -----------------------------------------------------------------------*/
 void BibliographyLoader::removeVetoableChangeListener(
-    const rtl::OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener)
+    const rtl::OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
     throw( UnknownPropertyException, WrappedTargetException, RuntimeException )
 {
     //no vetoable properties
