@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:12:21 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:06:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,6 +217,7 @@ ChartView::ChartView(
     , m_bViewUpdatePending(false)
     , m_bRefreshAddIn(true)
     , m_aPageResolution(1000,1000)
+    , m_bPointsWereSkipped(false)
     , m_nScaleXNumerator(1)
     , m_nScaleXDenominator(1)
     , m_nScaleYNumerator(1)
@@ -289,23 +290,6 @@ const rtl::OUString lcl_aGDIMetaFileMIMEType(
     RTL_CONSTASCII_USTRINGPARAM("application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\""));
 const rtl::OUString lcl_aGDIMetaFileMIMETypeHighContrast(
     RTL_CONSTASCII_USTRINGPARAM("application/x-openoffice-highcontrast-gdimetafile;windows_formatname=\"GDIMetaFile\""));
-
-bool lcl_IgnoreCurrentZoom( uno::Reference< frame::XModel > xModel )
-{
-    bool bIgnoreCurrentZoom = false;
-    uno::Reference< container::XChild > xChild( xModel, uno::UNO_QUERY );
-    if( xChild.is() )
-    {
-        uno::Reference< lang::XServiceInfo > xParentInfo( xChild->getParent(), uno::UNO_QUERY );
-        if( xParentInfo.is() )
-        {
-            if( xParentInfo->supportsService( C2U("com.sun.star.presentation.PresentationDocument") ) )
-                bIgnoreCurrentZoom = true;//optimize for presentation mode
-        }
-    }
-    return bIgnoreCurrentZoom;
-}
-
 } // anonymous namespace
 
 void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStream
@@ -347,7 +331,6 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
     aFilterData[3].Value <<= uno::Reference< uno::XInterface >( m_xDrawPage, uno::UNO_QUERY );
 
     //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
-    if( !lcl_IgnoreCurrentZoom( m_xChartModel ) )
     {
         aFilterData.realloc( aFilterData.getLength()+4 );
         aFilterData[4].Name = C2U("ScaleXNumerator");
@@ -1225,6 +1208,7 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
     }
 
     // - create data series for all charttypes
+    m_bPointsWereSkipped = false;
     ::std::vector< VSeriesPlotter* >::const_iterator       aPlotterIter = rSeriesPlotterList.begin();
     const ::std::vector< VSeriesPlotter* >::const_iterator aPlotterEnd  = rSeriesPlotterList.end();
     for( aPlotterIter = rSeriesPlotterList.begin(); aPlotterIter != aPlotterEnd; aPlotterIter++ )
@@ -1247,11 +1231,14 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
         }
         //
         pSeriesPlotter->createShapes();
+        m_bPointsWereSkipped = m_bPointsWereSkipped || pSeriesPlotter->PointsWereSkipped();
     }
 
     //recreate with corrected sizes if requested
     if( lcl_resizeAfterCompleteCreation(xDiagram) )
     {
+        m_bPointsWereSkipped = false;
+
         uno::Reference< drawing::XShape > xBoundingShape( xDiagramPlusAxes_Shapes, uno::UNO_QUERY );
         ::basegfx::B2IRectangle aConsumedOuterRect( ShapeFactory::getRectangleOfShape(xBoundingShape) );
 
@@ -1284,6 +1271,7 @@ void ChartView::impl_createDiagramAndContent( SeriesPlotterContainer& rSeriesPlo
             if(2==nDimensionCount)
                 pSeriesPlotter->setTransformationSceneToScreen( pVCooSys->getTransformationSceneToScreen() );
             pSeriesPlotter->createShapes();
+            m_bPointsWereSkipped = m_bPointsWereSkipped || pSeriesPlotter->PointsWereSkipped();
         }
 
         /*
@@ -2420,8 +2408,8 @@ void SAL_CALL ChartView::setPropertyValue( const ::rtl::OUString& rPropertyName
 
         if( m_aPageResolution.Width!=aNewResolution.Width || m_aPageResolution.Height!=aNewResolution.Height )
         {
-            //set modified only when the new resolution is higher
-            bool bSetModified = m_aPageResolution.Width<aNewResolution.Width || m_aPageResolution.Height<aNewResolution.Height;
+            //set modified only when the new resolution is higher and points were skipped before
+            bool bSetModified = m_bPointsWereSkipped && (m_aPageResolution.Width<aNewResolution.Width || m_aPageResolution.Height<aNewResolution.Height);
 
             m_aPageResolution = aNewResolution;
 
