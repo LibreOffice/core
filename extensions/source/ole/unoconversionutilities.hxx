@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:08:51 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:48:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,8 @@ public:
     UnoConversionUtilities( const Reference<XMultiServiceFactory> & xFactory, sal_uInt8 unoWrapperClass, sal_uInt8 comWrapperClass )
         : m_smgr( xFactory), m_nComWrapperClass( comWrapperClass), m_nUnoWrapperClass( unoWrapperClass)
     {}
+
+    virtual ~UnoConversionUtilities() {}
     /** converts only into oleautomation types, that is there is no VT_I1, VT_UI2, VT_UI4
         a sal_Unicode character is converted into a BSTR.
         @exception com.sun.star.lang.IllegalArgumentException
@@ -386,7 +388,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
                 {
                     if ((var.vt & VT_ARRAY) != 0)
                     {
-                        VARTYPE oleType = var.vt ^ VT_ARRAY;
+                        VARTYPE oleType = ::sal::static_int_cast< VARTYPE, int >( var.vt ^ VT_ARRAY );
                         Sequence<Any> unoSeq = createOleArrayWrapper( var.parray, oleType, ptype);
                         Reference<XTypeConverter> conv = getTypeConverter();
                         if (conv.is())
@@ -639,7 +641,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny,
             if( ar)
             {
                 VariantClear( pVariant);
-                pVariant->vt= VT_ARRAY | type;
+                pVariant->vt= ::sal::static_int_cast< VARTYPE, int >( VT_ARRAY | type );
                 pVariant->byref= ar;
             }
         }
@@ -707,7 +709,6 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny,
 template<class T>
 void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
 {
-    bool bCannotConvert = false;
     bool bIllegal = false;
     try
     {
@@ -1067,7 +1068,6 @@ SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq,
         // set up the SAFEARRAY
         scoped_array<SAFEARRAYBOUND> sarSafeArrayBound(new SAFEARRAYBOUND[dims]);
         SAFEARRAYBOUND* prgsabound= sarSafeArrayBound.get();
-        sal_Int32 elementCount=0; //the number of all elements in the SAFEARRAY
         for( sal_Int32 i=0; i < dims; i++)
         {
             //prgsabound[0] is the right most dimension
@@ -1501,7 +1501,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
         {
             if ((var.vt & VT_ARRAY) > 0)
             {
-                VARTYPE oleTypeFlags = var.vt ^ VT_ARRAY;
+                VARTYPE oleTypeFlags = ::sal::static_int_cast< VARTYPE, int >( var.vt ^ VT_ARRAY );
 
                 Sequence<Any> unoSeq = createOleArrayWrapper(var.parray, oleTypeFlags);
                 rAny.setValue( &unoSeq, getCppuType( &unoSeq));
@@ -2101,7 +2101,6 @@ void UnoConversionUtilities<T>::dispatchExObject2Sequence( const VARIANTARG* pva
             }
         } // else
         result.Clear();
-        uno_Sequence **pps= &p_uno_Seq;
         anySeq.setValue( &p_uno_Seq, pDesc);
         uno_destructData( &p_uno_Seq, pDesc, cpp_release);
         typelib_typedescription_release( pDesc);
