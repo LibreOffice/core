@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BarChartTypeTemplate.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:59:57 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:02:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,42 +198,10 @@ sal_Bool SAL_CALL BarChartTypeTemplate::matchesTemplate(
         ::std::vector< Reference< chart2::XDataSeries > > aSeriesVec(
             DiagramHelper::getDataSeriesFromDiagram( xDiagram ));
 
-        sal_Int32 aCommonGeom( 0 );
-        bool bGeomFound = false, bAdaptGeom = false;
-        for( ::std::vector< Reference< chart2::XDataSeries > >::const_iterator aIt =
-                 aSeriesVec.begin(); aIt != aSeriesVec.end(); ++aIt )
-        {
-            try
-            {
-                sal_Int32 aGeom = 0;
-                Reference< beans::XPropertySet > xProp( *aIt, uno::UNO_QUERY_THROW );
-                if( xProp->getPropertyValue( C2U( "Geometry3D" )) >>= aGeom )
-                {
-                    if( ! bGeomFound )
-                    {
-                        // first series
-                        aCommonGeom = aGeom;
-                        bGeomFound = true;
-                        bAdaptGeom = true;
-                    }
-                    else
-                    {
-                        // further series: compare for uniqueness
-                        if( aCommonGeom != aGeom )
-                        {
-                            bAdaptGeom = false;
-                            break;
-                        }
-                    }
-                }
-            }
-            catch( uno::Exception & ex )
-            {
-                ASSERT_EXCEPTION( ex );
-            }
-        }
+        bool bGeomFound = false, bGeomAmbiguous = false;
+        sal_Int32 aCommonGeom = DiagramHelper::getGeometry3D( xDiagram, bGeomFound, bGeomAmbiguous );
 
-        if( bAdaptGeom )
+        if( !bGeomAmbiguous )
         {
             setFastPropertyValue_NoBroadcast(
                 PROP_BAR_TEMPLATE_GEOMETRY3D, uno::makeAny( aCommonGeom ));
