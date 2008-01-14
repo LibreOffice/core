@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 14:09:23 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:17:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,20 +42,16 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
-import java.text.FieldPosition;
-import java.util.Locale;
-
 import java.lang.Thread;
+import java.util.StringTokenizer;
 
 class ShareConnection
 {
-    private static Connection m_aConnection = null;
+    private Connection m_aConnection = null;
     public ShareConnection()
         {}
 
-    public static Connection getConnection()
+    public Connection getConnection()
         {
             if (m_aConnection == null)
             {
@@ -65,7 +61,7 @@ class ShareConnection
                 }
                 catch(java.sql.SQLException e)
                 {
-                    GlobalLogWriter.get().println("ERROR: can't connect to DB.");
+                    GlobalLogWriter.get().println("DB: ERROR: can't connect to DB.");
                     m_aConnection = null;
                 }
             }
@@ -88,7 +84,7 @@ class ShareConnection
                 Statement oStmt = null;
                 if (m_aCon == null)
                 {
-                    GlobalLogWriter.get().println("ERROR: in ExecSQL, connection not established.");
+                    GlobalLogWriter.get().println("DB: ERROR: in ExecSQL, connection not established.");
                     return;
                 }
 
@@ -98,12 +94,14 @@ class ShareConnection
                     // oCon = getMySQLConnection();
                     oStmt = m_aCon.createStatement();
 
-                    GlobalLogWriter.get().println(m_sSQL);
-                    ResultSet oResult = oStmt.executeQuery(m_sSQL);
+                    GlobalLogWriter.get().println("DB: " + m_sSQL);
+                    /* ResultSet oResult = */
+                    oStmt.executeUpdate(m_sSQL);
                 }
                 catch(Exception e)
                 {
-                    GlobalLogWriter.get().println("Couldn't execute sql string " + m_sSQL);
+                    GlobalLogWriter.get().println("DB: Couldn't execute sql string '" + m_sSQL + "'");
+                    GlobalLogWriter.get().println("DB: Reason: " + e.getMessage());
                 }
             }
     }
@@ -116,32 +114,75 @@ public class DBHelper
      * @param values a set of comma separated values to be inserted
      */
 
-    public static void SQLinsertValues(Connection _aCon, String _sTableName, String value_names, String values)
+    public void SQLinsertValues(Connection _aCon, String _sTableName, String value_names, String values)
         {
             if (_aCon == null)
             {
-                GlobalLogWriter.get().println("ERROR: in SQLinsertValues, connection not established.");
+                GlobalLogWriter.get().println("DB: ERROR: in SQLinsertValues, connection not established.");
                 return;
             }
 
-            String aInsertStr = "";
+            // String aInsertStr = "";
+            //
+            // aInsertStr = "INSERT INTO " + _sTableName + " (" + value_names + " ) VALUES (" + values + ")";
+            // ExecSQL(_aCon, aInsertStr);
+            StringBuffer aInsertStr = new StringBuffer();
 
-            aInsertStr = "INSERT INTO " + _sTableName + " (" + value_names + " ) VALUES (" + values + ")";
-            ExecSQL(_aCon, aInsertStr);
+            aInsertStr.append( "INSERT INTO " ) . append( _sTableName );
+            aInsertStr.append( " (").append( value_names ).append ( ")" );
+            aInsertStr.append(" VALUES (" ).append( values ).append( ")" );
+            ExecSQL(_aCon, aInsertStr.toString() );
         }
 
-    public static void SQLupdateValue(Connection _aCon, String _sTableName, String _sSet, String _sWhere)
+    public void SQLupdateValue(Connection _aCon, String _sTableName, String _sSet, String _sWhere)
         {
             if (_aCon == null)
             {
-                GlobalLogWriter.get().println("ERROR: in SQLinsertValues, connection not established.");
+                GlobalLogWriter.get().println("DB: ERROR: in SQLinsertValues, connection not established.");
                 return;
             }
 
-            String aUpdateStr = "";
+            // String aUpdateStr = "";
+            //
+            // aUpdateStr = "UPDATE " + _sTableName + " SET " + _sSet + " WHERE " + _sWhere;
+            // ExecSQL( _aCon, aUpdateStr );
+            StringBuffer aUpdateStr = new StringBuffer();
 
-            aUpdateStr = "UPDATE " + _sTableName + " SET " + _sSet + " WHERE " + _sWhere;
-            ExecSQL( _aCon, aUpdateStr );
+            aUpdateStr.append( "UPDATE " ).append( _sTableName )
+                .append( " SET " ).append( _sSet )
+                .append( " WHERE " ).append( _sWhere );
+            ExecSQL( _aCon, aUpdateStr.toString() );
+        }
+
+    private static String m_sDBServerName;
+    private static String m_sDBName;
+    private static String m_sDBUser;
+    private static String m_sDBPasswd;
+
+    protected synchronized void fillDBConnection(String _sInfo)
+        {
+            StringTokenizer aTokenizer = new StringTokenizer(_sInfo,",",false);
+            while (aTokenizer.hasMoreTokens())
+            {
+                String sPart = aTokenizer.nextToken();
+                if (sPart.startsWith("db:"))
+                {
+                    m_sDBName = sPart.substring(3);
+                    // GlobalLogWriter.get().println("DB: source version: " + m_sSourceVersion);
+                }
+                else if (sPart.startsWith("user:"))
+                {
+                    m_sDBUser = sPart.substring(5);
+                }
+                else if (sPart.startsWith("passwd:"))
+                {
+                    m_sDBPasswd = sPart.substring(7);
+                }
+                else if (sPart.startsWith("server:"))
+                {
+                    m_sDBServerName = sPart.substring(7);
+                }
+            }
         }
 
     /**
@@ -154,14 +195,16 @@ public class DBHelper
             try
             {
                 Class.forName("org.gjt.mm.mysql.Driver");
-                Connection mysql = DriverManager.getConnection(
-                    "jdbc:mysql://jakobus:3306/convwatch","admin","admin");
+                String sConnection = "jdbc:mysql://" + m_sDBServerName + ":3306/" + m_sDBName;
+                // Connection mysql = DriverManager.getConnection(
+                //    "jdbc:mysql://jakobus:3306/jobs_convwatch","admin","admin");
+                Connection mysql = DriverManager.getConnection(sConnection, m_sDBUser, m_sDBPasswd);
                 return mysql;
             }
             catch (ClassNotFoundException e)
             {
-                GlobalLogWriter.get().println("Class not found exception caught: " + e.getMessage());
-                GlobalLogWriter.get().println("Maybe mysql.jar is not added to the classpath.");
+                GlobalLogWriter.get().println("DB: Class not found exception caught: " + e.getMessage());
+                GlobalLogWriter.get().println("DB: Maybe mysql.jar is not added to the classpath.");
             }
             return null;
         }
@@ -186,7 +229,7 @@ public class DBHelper
     // LLA:         // ExecSQL(_aCon, sSQL);
     // LLA:     }
 
-    public static synchronized void ExecSQL(Connection _aCon, String _sSQL)
+    protected synchronized void ExecSQL(Connection _aCon, String _sSQL)
             {
                 MySQLThread aSQLThread = new MySQLThread(_aCon, _sSQL);
                 aSQLThread.start();
@@ -214,7 +257,7 @@ public class DBHelper
     //         return nValue;
     //     }
 
-    public static int QueryIntFromSQL(Connection _aCon, String _sSQL, String _sColumnName)
+    public int QueryIntFromSQL(Connection _aCon, String _sSQL, String _sColumnName)
         throws ValueNotFoundException
         {
             Statement oStmt = null;
@@ -244,19 +287,19 @@ public class DBHelper
                 catch (SQLException e)
                 {
                     String sError = e.getMessage();
-                    GlobalLogWriter.get().println("Original SQL error: " + sError);
+                    GlobalLogWriter.get().println("DB: Original SQL error: " + sError);
                     throw new ValueNotFoundException("Cant execute SQL: " + _sSQL);
                 }
             }
             catch(SQLException e)
             {
                 String sError = e.getMessage();
-                GlobalLogWriter.get().println("Couldn't execute sql string " + _sSQL + "\n" + sError);
+                GlobalLogWriter.get().println("DB: Couldn't execute sql string " + _sSQL + "\n" + sError);
             }
             return nValue;
         }
 
-    public static String Quote(String _sToQuote)
+    public String Quote(String _sToQuote)
         {
             String ts = "'";
             String ds = "\"";
@@ -271,19 +314,7 @@ public class DBHelper
 /* default date format in the MySQL DB yyyy-MM-dd */
     public static String today()
         {
-            return getDateString("yyyy-MM-dd");
-        }
-
-    private static String getDateString(String _sFormat)
-        {
-            GregorianCalendar aCalendar = new GregorianCalendar();
-            StringBuffer aBuf = new StringBuffer();
-
-            Locale aLocale = new Locale("en","US");
-            SimpleDateFormat aFormat = new SimpleDateFormat(_sFormat, aLocale);
-            aBuf = aFormat.format(aCalendar.getTime(), aBuf, new FieldPosition(0) );
-            // DebugHelper.writeInfo("Date: " + aBuf.toString());
-            return aBuf.toString();
+            return DateHelper.getDateString("yyyy-MM-dd");
         }
 
     public static final String sComma = ",";
