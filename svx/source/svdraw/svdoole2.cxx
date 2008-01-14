@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:19:36 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:53:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,7 @@
 #include <svx/svdview.hxx>
 #include "unomlstr.hxx"
 #include "impgrf.hxx"
+#include <svx/chartprettypainter.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -1237,6 +1238,12 @@ sal_Bool SdrOle2Obj::DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& r
 {
     sal_Bool bOk(sal_True);
 
+    //charts must be painted resolution dependent!! #i82893#, #i75867#
+    if( ChartPrettyPainter::IsChart(xObjRef) && ChartPrettyPainter::ShouldPrettyPaintChartOnThisDevice( rOut.GetOutDev() ) )
+        if( !rOut.GetOffset().nA && !rOut.GetOffset().nB )//offset!=0 is the scenario 'copy -> past special gdi metafile' which does not work with direct painting so far
+            if( ChartPrettyPainter::DoPrettyPaintChart( this->getXModel(), rOut.GetOutDev(), aRect ) )
+                return bOk;
+
     if( !GetGraphic() )
         ( (SdrOle2Obj*) this)->GetObjRef_Impl();    // try to create embedded object
 
@@ -1587,7 +1594,12 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                     pClient->SetObjArea(aRect);
 
                 // we need a new replacement image as the object has resized itself
-                xObjRef.UpdateReplacement();
+
+                //#i79578# don't request a new replacement image for charts to often
+                //a chart sends a modified call to the framework if it was changed
+                //thus the replacement update is already handled there
+                if( !IsChart() )
+                    xObjRef.UpdateReplacement();
             }
             else
             {
@@ -1608,6 +1620,23 @@ void SdrOle2Obj::ImpSetVisAreaSize()
                         mpImpl->pLightClient->SetSizeScale( aScaleWidth, aScaleHeight );
                     }
                 }
+            }
+        }
+        else if( (nMiscStatus & embed::EmbedMisc::MS_EMBED_RECOMPOSEONRESIZE) &&
+            svt::EmbeddedObjectRef::TryRunningState( xObjRef.GetObject() ) )
+        {
+            //also handle not sfx based ole objects e.g. charts
+            //#i83860# resizing charts in impress distorts fonts
+            uno::Reference< embed::XVisualObject > xVisualObject( this->getXModel(), uno::UNO_QUERY );
+            if( xVisualObject.is() )
+            {
+                MapUnit aMapUnit = VCLUnoHelper::UnoEmbed2VCLMapUnit( xObjRef->getMapUnit( GetAspect() ) );
+                Point aTL( aRect.TopLeft() );
+                Point aBR( aRect.BottomRight() );
+                Point aTL2( OutputDevice::LogicToLogic( aTL, pModel->GetScaleUnit(), aMapUnit) );
+                Point aBR2( OutputDevice::LogicToLogic( aBR, pModel->GetScaleUnit(), aMapUnit) );
+                Rectangle aNewRect( aTL2, aBR2 );
+                xVisualObject->setVisualAreaSize( GetAspect(), awt::Size( aNewRect.GetWidth(), aNewRect.GetHeight() ) );
             }
         }
     }
