@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotypewrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:09:15 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:48:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,24 +86,24 @@ UnoTypeWrapper::~UnoTypeWrapper()
 
 
 // UnoTypeWrapper, IDispatch --------------------------------------------
-STDMETHODIMP UnoTypeWrapper::GetTypeInfoCount(UINT *pctinfo)
+STDMETHODIMP UnoTypeWrapper::GetTypeInfoCount(UINT* /*pctinfo*/)
 {
     return E_NOTIMPL;
 }
 
 // UnoTypeWrapper, IDispatch --------------------------------------------
-STDMETHODIMP UnoTypeWrapper::GetTypeInfo( UINT iTInfo,
-                                          LCID lcid,
-                                          ITypeInfo **ppTInfo)
+STDMETHODIMP UnoTypeWrapper::GetTypeInfo( UINT /*iTInfo*/,
+                                          LCID /*lcid*/,
+                                          ITypeInfo** /*ppTInfo*/)
 {
     return E_NOTIMPL;
 }
 
 // UnoTypeWrapper, IDispatch --------------------------------------------
-STDMETHODIMP UnoTypeWrapper::GetIDsOfNames( REFIID riid,
+STDMETHODIMP UnoTypeWrapper::GetIDsOfNames( REFIID /*riid*/,
                                             LPOLESTR *rgszNames,
-                                            UINT cNames,
-                                            LCID lcid,
+                                            UINT /*cNames*/,
+                                            LCID /*lcid*/,
                                             DISPID *rgDispId)
 {
     if( !rgDispId)
@@ -123,13 +123,13 @@ STDMETHODIMP UnoTypeWrapper::GetIDsOfNames( REFIID riid,
 
 // UnoTypeWrapper, IDispatch --------------------------------------------
 STDMETHODIMP UnoTypeWrapper::Invoke( DISPID dispIdMember,
-                         REFIID riid,
-                         LCID lcid,
+                         REFIID /*riid*/,
+                         LCID /*lcid*/,
                          WORD wFlags,
                          DISPPARAMS *pDispParams,
                          VARIANT *pVarResult,
-                         EXCEPINFO *pExcepInfo,
-                         UINT *puArgErr)
+                         EXCEPINFO* /*pExcepInfo*/,
+                         UINT* /*puArgErr*/)
 {
     if (pDispParams == NULL)
         return DISP_E_EXCEPTION;
