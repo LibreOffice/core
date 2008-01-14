@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inspectormodelbase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:48:36 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:59:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,9 @@ namespace pcr
 
     protected:
         void enableHelpSectionProperties( sal_Int32 _nMinHelpTextLines, sal_Int32 _nMaxHelpTextLines );
+
+    private:
+        using ImplInspectorModel_PBase::getFastPropertyValue;
     };
 
 //........................................................................
