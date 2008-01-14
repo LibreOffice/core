@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxcontainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:13:10 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:56:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,12 @@
 //  ----------------------------------------------------
 //  class VCLXContainer
 //  ----------------------------------------------------
+
+void VCLXContainer::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    VCLXWindow::ImplGetPropertyIds( rIds );
+}
+
 VCLXContainer::VCLXContainer()
 {
 }
