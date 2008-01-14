@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salatsuifontutils.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:14:21 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:17:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,8 +145,12 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
     rDFA.meItalic     = ITALIC_NONE;
     rDFA.mbSymbolFlag = false;
 
-    // TODO: how to find out WITHOUT opening the font???
-    rDFA.mbSubsettable  = true;
+    // get the embeddable + subsettable status
+    // TODO: remove test after PS-OpenType subsetting is implemented
+    ATSFontRef rATSFontRef = FMGetATSFontRefFromFont( nFontID );
+    ByteCount nGlyfLen  = 0;
+    OSStatus rc = ATSFontGetTable( rATSFontRef, 0x676c7966/*glyf*/, 0, 0, NULL, &nGlyfLen);
+    rDFA.mbSubsettable  = ((rc == noErr) && (nGlyfLen > 0));
     rDFA.mbEmbeddable   = false;
     // TODO: these members are needed only for our X11 platform targets
     rDFA.meAntiAlias    = ANTIALIAS_DONTKNOW;
@@ -154,7 +158,7 @@ static bool GetDevFontAttributes( ATSUFontID nFontID, ImplDevFontAttributes& rDF
 
     // prepare iterating over all name strings of the font
     ItemCount nFontNameCount = 0;
-    OSStatus rc = ATSUCountFontNames( nFontID, &nFontNameCount );
+    rc = ATSUCountFontNames( nFontID, &nFontNameCount );
     if( rc != noErr )
         return false;
     int nBestNameValue = 0;
