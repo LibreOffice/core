@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:46:53 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:27:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -921,6 +921,29 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #endif
             }
         }
+        // --> PB 2007-12-09 #i83757#
+        else
+        {
+            // transform parameter "OptionsPageURL" of slot "OptionsTreeDialog"
+            String sSlotName( DEFINE_CONST_UNICODE( "OptionsTreeDialog" ) );
+            String sPropName( DEFINE_CONST_UNICODE( "OptionsPageURL" ) );
+            if ( sSlotName.EqualsAscii( pSlot->pUnoName ) )
+            {
+                for ( sal_uInt16 n = 0; n < nCount; ++n )
+                {
+                    const PropertyValue& rProp = pPropsVal[n];
+                    String sName( rProp.Name );
+                    if ( sName == sPropName )
+                    {
+                        ::rtl::OUString sURL;
+                        if ( rProp.Value >>= sURL )
+                            rSet.Put( SfxStringItem( SID_OPTIONS_PAGEURL, sURL ) );
+                        break;
+                    }
+                }
+            }
+        }
+        // <--
 #ifdef DB_UTIL
         if ( nFoundArgs == nCount )
         {
