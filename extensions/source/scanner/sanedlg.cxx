@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sanedlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:09:39 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:03:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,42 +61,42 @@ ResId SaneResId( sal_uInt32 nID )
 SaneDlg::SaneDlg( Window* pParent, Sane& rSane ) :
         ModalDialog( pParent, SaneResId( RID_SANE_DIALOG ) ),
         mrSane( rSane ),
-        mpRange( 0 ),
-        maMapMode( MAP_APPFONT ),
         mbIsDragging( FALSE ),
         mbDragDrawn( FALSE ),
+        maMapMode( MAP_APPFONT ),
         maOKButton( this, SaneResId( RID_SCAN_OK ) ),
         maCancelButton( this, SaneResId( RID_SCAN_CANCEL ) ),
-        maPreviewButton( this, SaneResId( RID_PREVIEW_BTN ) ),
         maDeviceInfoButton( this, SaneResId( RID_DEVICEINFO_BTN ) ),
-        maPreviewBox( this, SaneResId( RID_PREVIEW_BOX ) ),
-        maAreaBox( this, SaneResId( RID_SCANAREA_BOX ) ),
-        maDeviceBoxTxt( this, SaneResId( RID_DEVICE_BOX_TXT ) ),
-        maScanLeftTxt( this, SaneResId( RID_SCAN_LEFT_TXT ) ),
-        maScanTopTxt( this, SaneResId( RID_SCAN_TOP_TXT ) ),
-        maRightTxt( this, SaneResId( RID_SCAN_RIGHT_TXT ) ),
-        maBottomTxt( this, SaneResId( RID_SCAN_BOTTOM_TXT ) ),
-        maReslTxt( this, SaneResId( RID_SCAN_RESOLUTION_TXT ) ),
-        maOptionTitle( this, SaneResId( RID_SCAN_OPTIONTITLE_TXT ) ),
+        maPreviewButton( this, SaneResId( RID_PREVIEW_BTN ) ),
+        maButtonOption( this, SaneResId( RID_SCAN_BUTTON_OPTION_BTN ) ),
         maOptionsTxt( this, SaneResId( RID_SCAN_OPTION_TXT ) ),
+        maOptionTitle( this, SaneResId( RID_SCAN_OPTIONTITLE_TXT ) ),
         maOptionDescTxt( this, SaneResId( RID_SCAN_OPTION_DESC_TXT ) ),
         maVectorTxt( this, SaneResId( RID_SCAN_NUMERIC_VECTOR_TXT ) ),
+        maScanLeftTxt( this, SaneResId( RID_SCAN_LEFT_TXT ) ),
         maLeftField( this, SaneResId( RID_SCAN_LEFT_BOX ) ),
+        maScanTopTxt( this, SaneResId( RID_SCAN_TOP_TXT ) ),
         maTopField( this, SaneResId( RID_SCAN_TOP_BOX ) ),
+        maRightTxt( this, SaneResId( RID_SCAN_RIGHT_TXT ) ),
         maRightField( this, SaneResId( RID_SCAN_RIGHT_BOX ) ),
+        maBottomTxt( this, SaneResId( RID_SCAN_BOTTOM_TXT ) ),
         maBottomField( this, SaneResId( RID_SCAN_BOTTOM_BOX ) ),
+        maDeviceBoxTxt( this, SaneResId( RID_DEVICE_BOX_TXT ) ),
         maDeviceBox( this, SaneResId( RID_DEVICE_BOX ) ),
-        maOptionBox( this, SaneResId( RID_SCAN_OPTION_BOX ) ),
+        maReslTxt( this, SaneResId( RID_SCAN_RESOLUTION_TXT ) ),
         maReslBox( this, SaneResId( RID_SCAN_RESOLUTION_BOX ) ),
-        maBoolCheckBox( this, SaneResId( RID_SCAN_BOOL_OPTION_BOX ) ),
-        maStringEdit( this, SaneResId( RID_SCAN_STRING_OPTION_EDT ) ),
+        maAdvancedTxt( this, SaneResId( RID_SCAN_ADVANCED_TXT ) ),
+        maAdvancedBox( this, SaneResId( RID_SCAN_ADVANCED_BOX ) ),
+        maVectorBox( this, SaneResId( RID_SCAN_NUMERIC_VECTOR_BOX ) ),
         maQuantumRangeBox( this, SaneResId( RID_SCAN_QUANTUM_RANGE_BOX ) ),
         maStringRangeBox( this, SaneResId( RID_SCAN_STRING_RANGE_BOX ) ),
+        maPreviewBox( this, SaneResId( RID_PREVIEW_BOX ) ),
+        maAreaBox( this, SaneResId( RID_SCANAREA_BOX ) ),
+        maBoolCheckBox( this, SaneResId( RID_SCAN_BOOL_OPTION_BOX ) ),
+        maStringEdit( this, SaneResId( RID_SCAN_STRING_OPTION_EDT ) ),
         maNumericEdit( this, SaneResId( RID_SCAN_NUMERIC_OPTION_EDT ) ),
-        maButtonOption( this, SaneResId( RID_SCAN_BUTTON_OPTION_BTN ) ),
-        maVectorBox( this, SaneResId( RID_SCAN_NUMERIC_VECTOR_BOX ) ),
-        maAdvancedBox( this, SaneResId( RID_SCAN_ADVANCED_BOX ) ),
-        maAdvancedTxt( this, SaneResId( RID_SCAN_ADVANCED_TXT ) )
+        maOptionBox( this, SaneResId( RID_SCAN_OPTION_BOX ) ),
+        mpRange( 0 )
 {
     if( Sane::IsSane() )
     {
@@ -181,10 +181,10 @@ void SaneDlg::InitFields()
     if( ! Sane::IsSane() )
         return;
 
-    int nOption, i, n, nValue;
+    int nOption, i, nValue;
     double fValue;
     BOOL bSuccess = FALSE;
-    char *ppSpecialOptions[] = {
+    const char *ppSpecialOptions[] = {
         "resolution",
         "tl-x",
         "tl-y",
@@ -247,8 +247,8 @@ void SaneDlg::InitFields()
     // set scan area
     for( i = 0; i < 4; i++ )
     {
-        char *pOptionName;
-        MetricField* pField;
+        char const *pOptionName = NULL;
+        MetricField* pField = NULL;
         switch( i )
         {
             case 0:
@@ -267,7 +267,7 @@ void SaneDlg::InitFields()
                 pOptionName = "br-y";
                 pField = &maBottomField;
         }
-        nOption = mrSane.GetOptionByName( pOptionName );
+        nOption = pOptionName ? mrSane.GetOptionByName( pOptionName ) : -1;
         bSuccess = FALSE;
         if( nOption != -1 )
         {
@@ -391,7 +391,7 @@ void SaneDlg::InitFields()
                  bInsertAdvanced && ! bGroupRejected )
         {
             BOOL bIsSpecial = FALSE;
-            for( n = 0; !bIsSpecial &&
+            for( size_t n = 0; !bIsSpecial &&
                      n < sizeof(ppSpecialOptions)/sizeof(ppSpecialOptions[0]); n++ )
             {
                 if( aOption.EqualsAscii( ppSpecialOptions[n] ) )
@@ -460,6 +460,10 @@ IMPL_LINK( SaneDlg, ClickBtnHdl, Button*, pButton )
                     delete [] y;
                 }
                 break;
+                case SANE_TYPE_BOOL:
+                case SANE_TYPE_STRING:
+                case SANE_TYPE_GROUP:
+                    break;
             }
         }
         else if( pButton == &maAdvancedBox )
@@ -679,7 +683,7 @@ IMPL_LINK( SaneDlg, ModifyHdl, Edit*, pEdit )
     return 0;
 }
 
-IMPL_LINK( SaneDlg, ReloadSaneOptionsHdl, Sane*, pSane )
+IMPL_LINK( SaneDlg, ReloadSaneOptionsHdl, Sane*, /*pSane*/ )
 {
      mnCurrentOption = -1;
      mnCurrentElement = 0;
@@ -1300,14 +1304,14 @@ void SaneDlg::SaveState()
         }
      }
 #else
-    static char* pSaveOptions[] = {
+    static char const* pSaveOptions[] = {
         "resolution",
         "tl-x",
         "tl-y",
         "br-x",
         "br-y"
     };
-    for( int i = 0;
+    for( size_t i = 0;
          i < (sizeof(pSaveOptions)/sizeof(pSaveOptions[0]));
          i++ )
     {
