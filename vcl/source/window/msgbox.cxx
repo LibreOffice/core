@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgbox.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:21:07 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:06:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -679,4 +679,15 @@ Image QueryBox::GetStandardImage()
 {
     ImplInitMsgBoxImageList();
     return ImplGetSVData()->maWinData.mpMsgBoxImgList->GetImage( 2 );
+}
+
+Size MessBox::GetOptimalSize(WindowSizeType eType) const
+{
+    switch( eType ) {
+    case WINDOWSIZE_MINIMUM:
+        // FIXME: base me on the font size ?
+        return Size( 250, 100 );
+    default:
+        return Window::GetOptimalSize( eType );
+    }
 }
