@@ -4,9 +4,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:52:38 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:00:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -736,8 +736,8 @@ namespace pcr
         // initialize the color listbox
         XColorTable* pColorTable = NULL;
         SfxObjectShell* pDocSh = SfxObjectShell::Current();
-        const SfxPoolItem* pItem = NULL;
-        if ( pDocSh && ( pItem = pDocSh->GetItem( SID_COLOR_TABLE ) ) )
+        const SfxPoolItem* pItem = pDocSh ? pDocSh->GetItem( SID_COLOR_TABLE ) : NULL;
+        if ( pItem )
         {
             DBG_ASSERT(pItem->ISA(SvxColorTableItem), "OColorControl::OColorControl: invalid color item!");
             pColorTable = ( (SvxColorTableItem*)pItem )->GetColorTable();
@@ -1083,8 +1083,9 @@ namespace pcr
     DropDownEditControl::DropDownEditControl( Window* _pParent, WinBits _nStyle )
         :DropDownEditControl_Base( _pParent, _nStyle )
         ,m_pFloatingEdit( NULL )
-        ,m_pDropdownButton( NULL )
         ,m_pImplEdit( NULL )
+        ,m_pDropdownButton( NULL )
+        ,m_nOperationMode( eStringList )
         ,m_bDropdown( sal_False )
     {
         SetCompoundControl( TRUE );
