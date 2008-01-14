@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:04:56 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:04:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -469,4 +469,20 @@ ControlLayoutData::~ControlLayoutData()
 {
     if( m_pParent )
         m_pParent->ImplClearLayoutData();
+}
+
+// -----------------------------------------------------------------
+
+Size Control::GetOptimalSize(WindowSizeType eType) const
+{
+    switch (eType) {
+    case WINDOWSIZE_MINIMUM:
+        return Size( GetTextWidth( GetText() ) + 2 * 12,
+                     GetTextHeight() + 2 * 6 );
+    case WINDOWSIZE_PREFERRED:
+        return GetOptimalSize( WINDOWSIZE_MINIMUM );
+    case WINDOWSIZE_MAXIMUM:
+    default:
+        return Size( LONG_MAX, LONG_MAX );
+    }
 }
