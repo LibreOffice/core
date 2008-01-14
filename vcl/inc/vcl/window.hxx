@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:11:48 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:04:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,6 +361,12 @@ typedef USHORT StateChangedType;
 #define DLGWINDOW_NEXT                  1
 #define DLGWINDOW_FIRST                 2
 //#endif
+
+enum WindowSizeType {
+    WINDOWSIZE_MINIMUM,
+    WINDOWSIZE_PREFERRED,
+    WINDOWSIZE_MAXIMUM
+};
 
 // ----------
 // - Window -
@@ -1059,6 +1065,9 @@ public:
     // Clipboard/Selection interfaces
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetClipboard();
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard > GetPrimarySelection();
+
+    // Advisory Sizing - what is a good size for this widget ?
+    virtual Size GetOptimalSize(WindowSizeType eType) const;
 
     //-------------------------------------
     //  Native Widget Rendering functions
