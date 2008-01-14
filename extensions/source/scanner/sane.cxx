@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sane.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:51:04 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:03:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_extensions.hxx"
 #include <cstdarg>
 #include <math.h>
+#include <osl/file.h>
 #include <tools/stream.hxx>
 #include <sane.hxx>
 #include <dlfcn.h>
@@ -52,13 +53,15 @@
 #else
 #define dump_state( a, b, c, d ) ;
 #endif
-inline void dbg_msg( char* pString, ... )
+inline void dbg_msg( const char* pString, ... )
 {
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
     va_list ap;
     va_start( ap, pString );
     vfprintf( stderr, pString, ap );
     va_end( ap );
+#else
+    (void)pString;
 #endif
 }
 
@@ -95,7 +98,7 @@ inline void dbg_msg( char* pString, ... )
     else
 
 int             Sane::nRefCount = 0;
-void*           Sane::pSaneLib = 0;
+oslModule       Sane::pSaneLib = 0;
 SANE_Int        Sane::nVersion = 0;
 SANE_Device**   Sane::ppDevices = 0;
 int             Sane::nDevices = 0;
@@ -124,16 +127,16 @@ const SANE_String_Const (*Sane::p_strstatus)( SANE_Status ) = 0;
 
 static BOOL bSaneSymbolLoadFailed = FALSE;
 
-inline void* Sane::LoadSymbol( char* pSymbolname )
+inline oslGenericFunction Sane::LoadSymbol( const char* pSymbolname )
 {
-    void *pRet = dlsym( pSaneLib, pSymbolname );
-    if( ! pRet )
+    oslGenericFunction pFunction = osl_getAsciiFunctionSymbol( pSaneLib, pSymbolname );
+    if( ! pFunction )
     {
-        fprintf( stderr, "Could not load symbol %s: %s\n",
-                 pSymbolname, dlerror() );
+        fprintf( stderr, "Could not load symbol %s\n",
+                 pSymbolname );
         bSaneSymbolLoadFailed = TRUE;
     }
-    return pRet;
+    return pFunction;
 }
 
 SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
@@ -170,10 +173,10 @@ SANE_Status Sane::ControlOption( int nOption, SANE_Action nAction,
 }
 
 Sane::Sane() :
-        maHandle( 0 ),
         mppOptions( 0 ),
         mnOptions( 0 ),
-        mnDevice( -1 )
+        mnDevice( -1 ),
+        maHandle( 0 )
 {
     if( ! nRefCount || ! pSaneLib )
         Init();
@@ -191,12 +194,21 @@ Sane::~Sane()
 
 void Sane::Init()
 {
-    pSaneLib = dlopen( "libsane" SAL_DLLEXTENSION, RTLD_LAZY );
+    ::rtl::OUString sSaneLibName( ::rtl::OUString::createFromAscii( "libsane" SAL_DLLEXTENSION ) );
+    pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
     if( ! pSaneLib )
-        pSaneLib = dlopen( "libsane" SAL_DLLEXTENSION ".1", RTLD_LAZY );
+    {
+        sSaneLibName = ::rtl::OUString::createFromAscii( "libsane" SAL_DLLEXTENSION ".1" );
+        pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
+    }
     // try reasonable places that might not be in the library search path
     if( ! pSaneLib )
-        pSaneLib = dlopen( "/usr/local/lib/libsane" SAL_DLLEXTENSION, RTLD_LAZY );
+    {
+        ::rtl::OUString sSaneLibSystemPath( ::rtl::OUString::createFromAscii( "/usr/local/lib/libsane" SAL_DLLEXTENSION ) );
+        osl_getFileURLFromSystemPath( sSaneLibSystemPath.pData, &sSaneLibName.pData );
+        pSaneLib = osl_loadModule( sSaneLibName.pData, SAL_LOADMODULE_LAZY );
+    }
+
     if( pSaneLib )
     {
         bSaneSymbolLoadFailed = FALSE;
@@ -256,7 +268,7 @@ void Sane::DeInit()
     if( pSaneLib )
     {
         p_exit();
-        dlclose( pSaneLib );
+        osl_unloadModule( pSaneLib );
         pSaneLib = 0;
     }
 }
@@ -283,7 +295,7 @@ void Sane::ReloadOptions()
         fprintf( stderr, "Error: sane driver returned %s while reading number of options !\n", p_strstatus( nStatus ) );
 
     mnOptions = pOptions[ 0 ];
-    if( pZero->size > sizeof( SANE_Word ) )
+    if( (size_t)pZero->size > sizeof( SANE_Word ) )
         fprintf( stderr, "driver returned numer of options with larger size tha SANE_Word !!!\n" );
     if( mppOptions )
         delete [] mppOptions;
@@ -431,7 +443,7 @@ BOOL Sane::GetOptionValue( int n, double* pSet )
         delete [] pFixedSet;
         return FALSE;
     }
-    for( int i = 0; i <mppOptions[n]->size/sizeof(SANE_Word); i++ )
+    for( size_t i = 0; i <mppOptions[n]->size/sizeof(SANE_Word); i++ )
     {
         if( mppOptions[n]->type == SANE_TYPE_FIXED )
             pSet[i] = SANE_UNFIX( pFixedSet[i] );
@@ -504,7 +516,7 @@ BOOL Sane::SetOptionValue( int n, double* pSet )
                           mppOptions[n]->type != SANE_TYPE_FIXED ) )
         return FALSE;
     SANE_Word* pFixedSet = new SANE_Word[mppOptions[n]->size/sizeof(SANE_Word)];
-    for( int i = 0; i < mppOptions[n]->size/sizeof(SANE_Word); i++ )
+    for( size_t i = 0; i < mppOptions[n]->size/sizeof(SANE_Word); i++ )
     {
         if( mppOptions[n]->type == SANE_TYPE_FIXED )
             pFixedSet[i] = SANE_FIX( pSet[i] );
@@ -649,7 +661,7 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
             DUMP_STATE( nStatus, "sane_get_parameters" );
             CheckConsistency( "sane_get_parameters" );
 #if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
-            char* ppFormats[] = { "SANE_FRAME_GRAY", "SANE_FRAME_RGB",
+            const char* ppFormats[] = { "SANE_FRAME_GRAY", "SANE_FRAME_RGB",
                                   "SANE_FRAME_RED", "SANE_FRAME_GREEN",
                                   "SANE_FRAME_BLUE", "Unknown !!!" };
             fprintf( stderr, "Parameters for frame %d:\n", nStream );
@@ -863,6 +875,9 @@ BOOL Sane::Start( BitmapTransporter& rBitmap )
                                 aConverter << nValue;
                                 aConverter.SeekRel( 2 );
                                 break;
+                            case SANE_FRAME_GRAY:
+                            case SANE_FRAME_RGB:
+                                break;
                         }
                     }
                 }
@@ -969,11 +984,9 @@ int Sane::GetRange( int n, double*& rpDouble )
                  rpDouble[ 0 ], rpDouble[ nItems-1 ] );
         return nItems;
     }
-
-    return -1;
 }
 
-static char *ppUnits[] = {
+static const char *ppUnits[] = {
     "",
     "[Pixel]",
     "[Bit]",
@@ -987,7 +1000,8 @@ String Sane::GetOptionUnitName( int n )
 {
     String aText;
     SANE_Unit nUnit = mppOptions[n]->unit;
-    if( nUnit < 0 || nUnit > sizeof( ppUnits )/sizeof( ppUnits[0] ) )
+    size_t nUnitAsSize = (size_t)nUnit;
+    if( nUnitAsSize > sizeof( ppUnits )/sizeof( ppUnits[0] ) )
         aText = String::CreateFromAscii( "[unknown units]" );
     else
         aText = String( ppUnits[ nUnit ], gsl_getSystemTextEncoding() );
