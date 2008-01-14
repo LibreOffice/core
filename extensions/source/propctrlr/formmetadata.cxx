@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 11:51:55 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:58:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 #endif
 
 #include <algorithm>
+#include <functional>
 
 //............................................................................
 namespace pcr
@@ -104,17 +105,13 @@ namespace pcr
 
     //------------------------------------------------------------------------
     // Vergleichen von PropertyInfo
-    static int
-    #if defined( WNT )
-     __cdecl
-    #endif
-    #if defined( ICC ) && defined( OS2 )
-    _Optlink
-    #endif
-        PropertyInfoCompare(const void* pFirst, const void* pSecond)
+    struct PropertyInfoLessByName : public ::std::binary_function< OPropertyInfoImpl, OPropertyInfoImpl, bool >
     {
-        return reinterpret_cast<const OPropertyInfoImpl*>(pFirst)->sName.CompareTo(reinterpret_cast<const OPropertyInfoImpl*>(pSecond)->sName);
-    }
+        bool operator()( const OPropertyInfoImpl& _rLHS, const OPropertyInfoImpl& _rRHS )
+        {
+            return _rLHS.sName.CompareTo( _rRHS.sName ) == COMPARE_LESS;
+        }
+    };
 
     //========================================================================
     //= OPropertyInfoService
@@ -151,7 +148,7 @@ namespace pcr
 
         sal_uInt16 nPos = 1;
 
-        static OPropertyInfoImpl __READONLY_DATA aPropertyInfos[] =
+        static OPropertyInfoImpl aPropertyInfos[] =
         {
         /*
         DEF_INFO_?( propname and id,   resoure id,         help id,           flags ),
@@ -378,14 +375,11 @@ namespace pcr
         DEF_INFO_2( NOLABEL,        NOLABEL,         NOLABEL,        DIALOG_VISIBLE, COMPOSEABLE )
         };
 
-        s_pPropertyInfos = const_cast<OPropertyInfoImpl*>(aPropertyInfos);
+        s_pPropertyInfos = aPropertyInfos;
         s_nCount = sizeof(aPropertyInfos) / sizeof(OPropertyInfoImpl);
 
         // sort
-        qsort((void*) aPropertyInfos,
-                s_nCount,
-                sizeof(OPropertyInfoImpl),
-                &PropertyInfoCompare);
+        ::std::sort( s_pPropertyInfos, s_pPropertyInfos + s_nCount, PropertyInfoLessByName() );
 
 #if OSL_DEBUG_LEVEL > 0
         for ( const OPropertyInfoImpl* pCheck = s_pPropertyInfos; pCheck != s_pPropertyInfos + s_nCount - 1; ++pCheck )
@@ -566,13 +560,16 @@ namespace pcr
             getPropertyInfo();
         OPropertyInfoImpl  aSearch(_rName, 0L, String(), 0, 0, 0);
 
-        const OPropertyInfoImpl* pPropInfo = (OPropertyInfoImpl*) bsearch(&aSearch,
-                                        static_cast<void*>(s_pPropertyInfos),
-                                         s_nCount,
-                                         sizeof(OPropertyInfoImpl),
-                                         &PropertyInfoCompare);
+        const OPropertyInfoImpl* pInfo = ::std::lower_bound(
+            s_pPropertyInfos, s_pPropertyInfos + s_nCount, aSearch, PropertyInfoLessByName() );
 
-        return pPropInfo;
+        if ( pInfo == s_pPropertyInfos + s_nCount )
+            return NULL;
+
+        if ( pInfo->sName != _rName )
+            return NULL;
+
+        return pInfo;
     }
 
 
@@ -598,8 +595,8 @@ namespace pcr
     //--------------------------------------------------------------------
     DefaultEnumRepresentation::DefaultEnumRepresentation( const IPropertyInfoService& _rInfo, const Type& _rType, sal_Int32 _nPropertyId )
         :m_refCount( 0 )
-        ,m_aType( _rType )
         ,m_rMetaData( _rInfo )
+        ,m_aType( _rType )
         ,m_nPropertyId( _nPropertyId )
     {
         DBG_CTOR( DefaultEnumRepresentation, NULL );
