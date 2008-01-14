@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bibview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:55:31 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:38:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ namespace bib
         if ( xResUpd.is() )
         {
             Any aModified = xProps->getPropertyValue( C2U( "IsModified" ) );
-            sal_Bool bFlag;
+            sal_Bool bFlag = sal_False;
             if ( ( aModified >>= bFlag ) && bFlag )
             {
 
@@ -140,7 +140,7 @@ namespace bib
                 }
                 catch( const uno::Exception& rEx)
                 {
-                    rEx;
+                   (void) rEx;
                 }
             }
         }
