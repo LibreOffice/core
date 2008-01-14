@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartTypeDialogController.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:29:58 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:56:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ ChartTypeParameter::ChartTypeParameter()
                     , eCurveStyle( CurveStyle_LINES )
                     , nCurveResolution(20)
                     , nSplineOrder(3)
-                    , nGeometry3D(1)
+                    , nGeometry3D(DataPointGeometry3D::CUBOID)
                     , eThreeDLookScheme(ThreeDLookScheme_Realistic)
                     , bSortByXValues(sal_False)
 {
@@ -115,7 +115,7 @@ ChartTypeParameter::ChartTypeParameter( sal_Int32 SubTypeIndex, bool HasXAxisWit
                     , eCurveStyle( nCurveStyle )
                     , nCurveResolution(20)
                     , nSplineOrder(3)
-                    , nGeometry3D(1)
+                    , nGeometry3D(DataPointGeometry3D::CUBOID)
                     , eThreeDLookScheme(ThreeDLookScheme_Realistic)
                     , bSortByXValues(sal_False)
 {
