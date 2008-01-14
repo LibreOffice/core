@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utils.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-17 13:32:00 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:22:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XModel;
 import com.sun.star.lang.XComponent;
-import com.sun.star.uno.XInterface;
 import java.lang.System;
 import java.util.StringTokenizer;
 import java.io.*;
@@ -49,10 +48,8 @@ import java.io.RandomAccessFile;
 import java.net.Socket;
 import java.net.ServerSocket;
 
-import com.sun.star.container.XNameAccess;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.Property;
-import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.ucb.XSimpleFileAccess;
@@ -61,13 +58,15 @@ import com.sun.star.lang.XServiceInfo;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
 
-import com.sun.star.uno.Any;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.util.XMacroExpander;
+import java.text.DecimalFormat;
+import java.util.Calendar;
 
 import java.util.Collections;
+import java.util.GregorianCalendar;
 
 public class utils {
 
@@ -922,5 +921,22 @@ public class utils {
         }
     }
 
+    /** returns a String which contains the current date and time<br>
+     *  format: DD.MM.YYYY - HH:MM:SS
+     *
+     ** @return a String which contains the current date and time
+     */
+    public static String getDateTime(){
 
+        Calendar cal = new GregorianCalendar();
+        DecimalFormat dfmt = new DecimalFormat("00");
+        String dateTime =   dfmt.format(cal.get(Calendar.DAY_OF_MONTH)) + "." +
+                            dfmt.format(cal.get(Calendar.MONTH)) + "." +
+                            dfmt.format(cal.get(Calendar.YEAR)) + " - " +
+                            dfmt.format(cal.get(Calendar.HOUR_OF_DAY)) + ":" +
+                            dfmt.format(cal.get(Calendar.MINUTE)) + ":" +
+                            dfmt.format(cal.get(Calendar.SECOND));
+
+        return dateTime;
+    }
 }
