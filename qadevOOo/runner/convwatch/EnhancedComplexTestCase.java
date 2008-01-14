@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedComplexTestCase.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:41:24 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:17:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
             // Process testshl = Runtime.getRuntime().exec(scriptFile);
             ProcessHandler aHandler = new ProcessHandler(_sScriptFile);
             bBackValue = aHandler.executeSynchronously();
-            OfficePrint.waitInSeconds(1, "unknown.");
+            TimeHelper.waitInSeconds(1, "wait after ProcessHandler.executeSynchronously()");
 
             StringBuffer aBuffer = new StringBuffer();
             aBuffer.append(aHandler.getErrorText()).append(aHandler.getOutputText());
@@ -89,17 +89,37 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
             // this function will not return if packages are not installed,
             // it will call System.exit(1)!
 
-            for (int i=0;i<_aList.length;i++)
+            if (needCheckForInstalledSoftware())
             {
-                String sCommand = (String)_aList[i];
-// TODO: nice to have, a pair object
-                checkExistance(sCommand, sCommand);
+                for (int i=0;i<_aList.length;i++)
+                {
+                    String sCommand = (String)_aList[i];
+                    // TODO: nice to have, a pair object
+                    checkExistance(sCommand, sCommand);
+                }
             }
         }
 
     // -----------------------------------------------------------------------------
 
     protected abstract Object[] mustInstalledSoftware();
+    public boolean needCheckForInstalledSoftware()
+        {
+            String sNEEDCHECK = (String)param.get( PropertyName.CHECK_NEED_TOOLS );
+// TODO: I need to get the boolean value with get("name") because, if it is not given getBool() returns
+//       with a default of 'false' which is not very helpful if the default should be 'true'
+//       maybe a getBoolean("name", true) could be a better choise.
+            if (sNEEDCHECK == null)
+            {
+                sNEEDCHECK = "false";
+            }
+            if (sNEEDCHECK.toLowerCase().equals("yes") ||
+                sNEEDCHECK.toLowerCase().equals("true"))
+            {
+                return true;
+            }
+            return false;
+        }
 
     // -----------------------------------------------------------------------------
 
@@ -116,6 +136,4 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
             }
             return aGTA;
         }
-
-
 }
