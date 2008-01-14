@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.136 $
+ *  $Revision: 1.137 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:47:16 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:28:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UI_DIALOGS_XCONTROLINFORMATION_HPP_
+#include <com/sun/star/ui/dialogs/XControlInformation.hpp>
 #endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKERCONTROLACCESS_HPP_
 #include <com/sun/star/ui/dialogs/XFilePickerControlAccess.hpp>
@@ -657,14 +660,30 @@ void FileDialogHelper_Impl::updateSelectionBox()
     if ( !mbExport )
         return;
 
-    const SfxFilter* pFilter = getCurentSfxFilter();
+    // Does the selection box exist?
+    bool bSelectionBoxFound = false;
+    uno::Reference< XControlInformation > xCtrlInfo( mxFileDlg, UNO_QUERY );
+    if ( xCtrlInfo.is() )
+    {
+        Sequence< ::rtl::OUString > aCtrlList = xCtrlInfo->getSupportedControls();
+        sal_uInt32 nCount = aCtrlList.getLength();
+        for ( sal_uInt32 nCtrl = 0; nCtrl < nCount; ++nCtrl )
+            if ( aCtrlList[ nCtrl ].equalsAscii("SelectionBox") )
+            {
+                bSelectionBoxFound = true;
+                break;
+            }
+    }
 
-    updateExtendedControl(
-        ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
-        ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_SUPPORTSSELECTION ) != 0 ) );
-
-    uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
-    xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, makeAny( (sal_Bool)mbSelection ) );
+    if ( bSelectionBoxFound )
+    {
+        const SfxFilter* pFilter = getCurentSfxFilter();
+        updateExtendedControl(
+            ExtendedFilePickerElementIds::CHECKBOX_SELECTION,
+            ( mbSelectionEnabled && pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_SUPPORTSSELECTION ) != 0 ) );
+        uno::Reference< XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
+        xCtrlAccess->setValue( ExtendedFilePickerElementIds::CHECKBOX_SELECTION, 0, makeAny( (sal_Bool)mbSelection ) );
+    }
 }
 
 // ------------------------------------------------------------------------
