@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdlineargs.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-26 11:56:03 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:26:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ class CommandLineArgs
             CMD_BOOLPARAM_HEADLESS,
             CMD_BOOLPARAM_QUICKSTART,
             CMD_BOOLPARAM_TERMINATEAFTERINIT,
-                        CMD_BOOLPARAM_NOFIRSTSTARTWIZARD,
+            CMD_BOOLPARAM_NOFIRSTSTARTWIZARD,
             CMD_BOOLPARAM_NOLOGO,
             CMD_BOOLPARAM_NOLOCKCHECK,
             CMD_BOOLPARAM_NODEFAULT,
@@ -84,6 +84,7 @@ class CommandLineArgs
             CMD_BOOLPARAM_HELPMATH,
             CMD_BOOLPARAM_HELPIMPRESS,
             CMD_BOOLPARAM_HELPBASE,
+            CMD_BOOLPARAM_PSN,
             CMD_BOOLPARAM_COUNT             // must be last element!
         };
 
