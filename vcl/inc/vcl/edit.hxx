@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 15:05:23 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:03:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,6 +256,7 @@ public:
     AutocompleteAction  GetAutocompleteAction() const { return meAutocompleteAction; }
 
     virtual Size        CalcMinimumSize() const;
+    virtual Size        GetOptimalSize(WindowSizeType eType) const;
     virtual Size        CalcSize( USHORT nChars ) const;
     virtual xub_StrLen  GetMaxVisChars() const;
 
