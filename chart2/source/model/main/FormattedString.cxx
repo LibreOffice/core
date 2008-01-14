@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedString.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:50:12 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:01:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,14 +98,14 @@ namespace chart
 FormattedString::FormattedString( const ::rtl::OUString & rString ) :
         ::property::OPropertySet( m_aMutex ),
     m_aString( rString ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 FormattedString::FormattedString(
         uno::Reference< uno::XComponentContext > const & /* xContext */ ) :
         ::property::OPropertySet( m_aMutex ),
     m_aString(),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 FormattedString::FormattedString( const FormattedString & rOther ) :
@@ -113,7 +113,7 @@ FormattedString::FormattedString( const FormattedString & rOther ) :
         impl::FormattedString_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_aString( rOther.m_aString ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 FormattedString::~FormattedString()
