@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spinfld.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:11:38 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:03:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ public:
     const Link&     GetLastHdl() const { return maLastHdlLink; }
 
     virtual Size    CalcMinimumSize() const;
+    virtual Size    GetOptimalSize(WindowSizeType eType) const;
     virtual Size    CalcSize( USHORT nChars ) const;
 };
 

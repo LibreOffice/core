@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:50:12 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:02:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,6 +174,8 @@ public:
     const Link&     GetLoseFocusHdl() const { return maLoseFocusHdl; }
 
     void            SetLayoutDataParent( const Control* pParent ) const;
+
+    virtual Size    GetOptimalSize(WindowSizeType eType) const;
 };
 
 #endif  // _SV_CTRL_HXX
