@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svguno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:29:28 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:04:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ static REF( NMSP_UNO::XInterface ) SAL_CALL create_SVGPrinter( const REF( NMSP_L
 // - component_getImplementationEnvironment -
 // ------------------------------------------
 
-extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char ** ppEnvTypeName, uno_Environment ** /*ppEnv*/ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
@@ -72,7 +72,7 @@ extern "C" void SAL_CALL component_getImplementationEnvironment( const sal_Char 
 // - component_writeInfo -
 // -----------------------
 
-extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* pRegistryKey )
+extern "C" sal_Bool SAL_CALL component_writeInfo( void* /*pServiceManager*/, void* pRegistryKey )
 {
     sal_Bool bRet = sal_False;
 
@@ -102,7 +102,7 @@ extern "C" sal_Bool SAL_CALL component_writeInfo( void* pServiceManager, void* p
 // - component_getFactory -
 // ------------------------
 
-extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* pRegistryKey )
+extern "C" void* SAL_CALL component_getFactory( const sal_Char* pImplName, void* pServiceManager, void* /*pRegistryKey*/ )
 {
     REF( NMSP_LANG::XSingleServiceFactory ) xFactory;
     void*                                   pRet = 0;

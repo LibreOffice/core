@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanner.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:27:48 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:03:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 // - ScannerManager -
 // ------------------
 
-REF( XInterface ) SAL_CALL ScannerManager_CreateInstance( const REF( com::sun::star::lang::XMultiServiceFactory )& rxFactory ) throw ( Exception )
+REF( XInterface ) SAL_CALL ScannerManager_CreateInstance( const REF( com::sun::star::lang::XMultiServiceFactory )& /*rxFactory*/ ) throw ( Exception )
 {
     return *( new ScannerManager() );
 }
