@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilterHelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 10:58:30 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:42:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+#include <functional>
+#include <algorithm>
 
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
