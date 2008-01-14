@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-10 09:46:08 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:56:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -873,7 +873,8 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
             break;
             case WINDOW_METRICFIELD:
                 pNewWindow = new MetricField( pParent, nWinBits );
-                *ppNewComp = new VCLXSpinField;
+                *ppNewComp = new VCLXMetricField;
+                ((VCLXFormattedSpinField*)*ppNewComp)->SetFormatter( (FormatterBase*)(MetricField*)pNewWindow );
             break;
             case WINDOW_DIALOG:
             case WINDOW_MODALDIALOG:
