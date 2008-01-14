@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysplug.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:11:29 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:54:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,20 +38,21 @@
 
 #include <plugin/impl.hxx>
 
-#ifdef WNT
-#include <tools/prewin.h>
-#endif
+#pragma warning (push,1)
+#pragma warning (disable:4005)
 
-#include <windows.h>
-#include <string.h>
-#include <tchar.h>
-#include <winreg.h>
-#include <winbase.h>
-#include <objbase.h>
+    #include <tools/prewin.h>
 
-#ifdef WNT
-#include <tools/postwin.h>
-#endif
+    #include <windows.h>
+    #include <string.h>
+    #include <tchar.h>
+    #include <winreg.h>
+    #include <winbase.h>
+    #include <objbase.h>
+
+    #include <tools/postwin.h>
+
+#pragma warning (pop)
 
 #include <list>
 #include <map>
@@ -74,7 +75,7 @@ void TRACEN( char const * s, long n );
 
 
 //--------------------------------------------------------------------------------------------------
-PluginComm_Impl::PluginComm_Impl( const OUString& rMIME, const OUString& rName, HWND hWnd )
+PluginComm_Impl::PluginComm_Impl( const OUString& /*rMIME*/, const OUString& rName, HWND /*hWnd*/ )
     : PluginComm( OUStringToOString( rName, RTL_TEXTENCODING_MS_1252 ) )
 {
     // initialize plugin function table
@@ -113,11 +114,11 @@ PluginComm_Impl::~PluginComm_Impl()
         NPError (WINAPI * pShutdown)();
         if (retrieveFunction( _T("NP_Shutdown"), (void**)&pShutdown ))
         {
-            NPError nErr = (*pShutdown)();
+            NPError nErr = (*pShutdown)(); (void)nErr;
             DBG_ASSERT( nErr == NPERR_NO_ERROR, "### NP_Shutdown() failed!" );
         }
 
-        BOOL bRet = ::FreeLibrary( _plDLL );
+        BOOL bRet = (BOOL)::FreeLibrary( _plDLL ); (void)bRet;
         DBG_ASSERT( bRet, "### unloading plugin dll failed!" );
         _plDLL = NULL;
     }
@@ -172,7 +173,7 @@ long PluginComm_Impl::doIt()
                  ? (*_NPPfuncs.destroystream)(
                      (NPP)m_aArgs[0],
                      (NPStream*)m_aArgs[1],
-                     (NPError)m_aArgs[2] )
+                     (NPError)(sal_IntPtr)m_aArgs[2] )
                  : NPERR_GENERIC_ERROR);
         break;
     case eNPP_New:
@@ -181,8 +182,8 @@ long PluginComm_Impl::doIt()
                 ? (*_NPPfuncs.newp)(
                     (NPMIMEType)m_aArgs[0],
                     (NPP)m_aArgs[1],
-                    (uint16)m_aArgs[2],
-                    (int16)m_aArgs[3],
+                    (uint16)(sal_IntPtr)m_aArgs[2],
+                    (int16)(sal_IntPtr)m_aArgs[3],
                     (char**)m_aArgs[4],
                     (char**)m_aArgs[5],
                     (NPSavedData*)m_aArgs[6] )
@@ -195,7 +196,7 @@ long PluginComm_Impl::doIt()
                     (NPP)m_aArgs[0],
                     (NPMIMEType)m_aArgs[1],
                     (NPStream*)m_aArgs[2],
-                    (NPBool)m_aArgs[3],
+                    (NPBool)(sal_IntPtr)m_aArgs[3],
                     (uint16*)m_aArgs[4] )
                 : NPERR_GENERIC_ERROR);
         break;
@@ -230,7 +231,7 @@ long PluginComm_Impl::doIt()
             (*_NPPfuncs.urlnotify)(
                 (NPP)m_aArgs[0],
                 (char*)m_aArgs[1],
-                (NPReason)m_aArgs[2],
+                (NPReason)(sal_IntPtr)m_aArgs[2],
                 m_aArgs[3] );
         break;
     case eNPP_Write:
@@ -278,7 +279,14 @@ long PluginComm_Impl::doIt()
             (*pFunc)();
     }
     break;
-
+    case eNPP_Initialize:
+        TRACE( "eNPP_Initialize" );
+        OSL_ENSURE( false, "NPP_Initialize: not implemented!" );
+        break;
+    case eNPP_GetJavaClass:
+        TRACE( "eNPP_GetJavaClass" );
+        OSL_ENSURE( false, "NPP_GetJavaClass: not implemented!" );
+        break;
     }
     return nRet;
 }
