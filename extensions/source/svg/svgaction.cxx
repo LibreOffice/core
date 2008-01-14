@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgaction.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:36:46 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:04:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,10 +100,10 @@ static const sal_Unicode pBase64[] =
 // --------------
 
 FastString::FastString( sal_uInt32 nInitLen, sal_uInt32 nIncrement ) :
+    mpBuffer( new sal_Unicode[ nInitLen * sizeof( sal_Unicode ) ] ),
     mnBufLen( nInitLen ),
     mnCurLen( 0 ),
     mnBufInc( nIncrement ),
-    mpBuffer( new sal_Unicode[ nInitLen * sizeof( sal_Unicode ) ] ),
     mnPartPos( 0 )
 {
     DBG_ASSERT( nInitLen, "invalid initial length" );
@@ -129,7 +129,7 @@ FastString::FastString( sal_Char* pBufferForBase64Encoding, sal_uInt32 nBufLen )
         sal_Char*       pTmpSrc = pBufferForBase64Encoding;
         sal_Unicode*    pTmpDst = mpBuffer;
 
-        for( sal_uInt32 i = 0, nCharCount = 0; i < nQuadCount; i++ )
+        for( sal_uInt32 i = 0; i < nQuadCount; i++ )
         {
             const sal_Int32 nA = *pTmpSrc++;
             const sal_Int32 nB = *pTmpSrc++;
@@ -434,8 +434,8 @@ SVGActionWriter::SVGActionWriter( SvXMLExport& rExport, const GDIMetaFile& rMtf,
     mrExport( rExport ),
     mrMtf( rMtf ),
     mpContext( NULL ),
-    mbClipAttrChanged( sal_False ),
     mnCurClipId( 1 ),
+    mbClipAttrChanged( sal_False ),
     mbDoublePoints( bWriteDoublePoints )
 {
     if( pParentVDev )
@@ -764,7 +764,7 @@ void SVGActionWriter::ImplWriteGradientEx( const PolyPolygon& rPolyPoly, const G
 
         {
             GDIMetaFile         aTmpMtf;
-            SvXMLElementExport  aElemG( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
+            SvXMLElementExport  aElemG2( mrExport, XML_NAMESPACE_NONE, aXMLElemG, TRUE, TRUE );
 
             mpVDev->AddGradientActions( rPolyPoly.GetBoundRect(), rGradient, aTmpMtf );
             ImplWriteActions( aTmpMtf, pStyle );
@@ -932,7 +932,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 #ifndef _SVG_USE_NATIVE_TEXTDECORATION
 
         // write strikeout if neccessary
-        if( rFont.GetStrikeout() || rFont.GetUnderline() )
+        if( ( rFont.GetStrikeout() != STRIKEOUT_NONE ) || ( rFont.GetUnderline() != UNDERLINE_NONE ) )
         {
             Polygon     aPoly( 4 );
             const long  nLineHeight = Max( (long) FRound( aMetric.GetLineHeight() * 0.05 ), (long) 1 );
@@ -974,7 +974,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
 void SVGActionWriter::ImplWriteBmp( const BitmapEx& rBmpEx,
                                     const Point& rPt, const Size& rSz,
                                     const Point& rSrcPt, const Size& rSrcSz,
-                                    const NMSP_RTL::OUString* pStyle )
+                                    const NMSP_RTL::OUString* /*pStyle*/ )
 {
     if( !!rBmpEx )
     {
@@ -1261,9 +1261,9 @@ void SVGActionWriter::ImplWriteActions( const GDIMetaFile& rMtf, const NMSP_RTL:
                 const GDIMetaFile       aGDIMetaFile( pA->GetSubstitute() );
                 sal_Bool                bFound = sal_False;
 
-                for( ULONG i = 0, nCount = aGDIMetaFile.GetActionCount(); ( i < nCount ) && !bFound; i++ )
+                for( ULONG j = 0, nCount2 = aGDIMetaFile.GetActionCount(); ( j < nCount2 ) && !bFound; j++ )
                 {
-                    const MetaAction* pSubstAct = aGDIMetaFile.GetAction( i );
+                    const MetaAction* pSubstAct = aGDIMetaFile.GetAction( j );
 
                     if( pSubstAct->GetType() == META_BMPSCALE_ACTION )
                     {
