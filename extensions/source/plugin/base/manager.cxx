@@ -4,9 +4,9 @@
  *
  *  $RCSfile: manager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:07:39 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:50:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,9 +104,9 @@ const Sequence< ::rtl::OUString >& PluginManager::getAdditionalSearchPaths()
         String aPluginPath( aOptions.GetPluginPath() );
         if( aPluginPath.Len() )
         {
-            int nPaths = aPluginPath.GetTokenCount( ';' );
+            USHORT nPaths = aPluginPath.GetTokenCount( ';' );
             aPaths.realloc( nPaths );
-            for( int i = 0; i < nPaths; i++ )
+            for( USHORT i = 0; i < nPaths; i++ )
                 aPaths.getArray()[i] = aPluginPath.GetToken( i, ';' );
         }
     }
