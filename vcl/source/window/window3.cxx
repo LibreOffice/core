@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window3.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:23:32 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:06:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,4 +316,19 @@ WaitObject::~WaitObject()
 {
     if ( mpWindow )
         mpWindow->LeaveWait();
+}
+
+// -----------------------------------------------------------------------
+
+Size Window::GetOptimalSize(WindowSizeType eType) const
+{
+    switch (eType) {
+    case WINDOWSIZE_MINIMUM:
+        return Size();
+    case WINDOWSIZE_PREFERRED:
+        return GetOptimalSize( WINDOWSIZE_MINIMUM );
+    case WINDOWSIZE_MAXIMUM:
+    default:
+        return Size( LONG_MAX, LONG_MAX );
+    }
 }
