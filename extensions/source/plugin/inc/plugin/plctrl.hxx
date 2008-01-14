@@ -4,9 +4,9 @@
  *
  *  $RCSfile: plctrl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:43:47 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ public:
     virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
 
     // ::com::sun::star::awt::XView
-    virtual sal_Bool SAL_CALL setGraphics( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > & aDevice ) throw( ::com::sun::star::uno::RuntimeException )
+    virtual sal_Bool SAL_CALL setGraphics( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > & /*aDevice*/ ) throw( ::com::sun::star::uno::RuntimeException )
     { return sal_False; }
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > SAL_CALL getGraphics(void) throw( ::com::sun::star::uno::RuntimeException )
     { return ::com::sun::star::uno::Reference< ::com::sun::star::awt::XGraphics > (); }
