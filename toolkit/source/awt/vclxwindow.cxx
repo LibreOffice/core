@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 12:57:14 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:09:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1798,9 +1798,26 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                             break;
                         }
 
+                        case WINDOW_FIXEDTEXT:
+                        case WINDOW_CHECKBOX:
+                        case WINDOW_RADIOBUTTON:
+                        case WINDOW_GROUPBOX:
+                        case WINDOW_FIXEDLINE:
+                        {
+                            // support transparency only for special controls
+                            pWindow->SetBackground();
+                            pWindow->SetControlBackground();
+                            break;
+                        }
+
                         default:
                         {
-                            pWindow->SetBackground();
+                            // default code which enables transparency for
+                            // compound controls. It's not real transparency
+                            // as most of these controls repaint their client
+                            // area completely new.
+                            if ( pWindow->IsCompoundControl() )
+                                pWindow->SetBackground();
                             pWindow->SetControlBackground();
                             break;
                         }
