@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdiutils.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:15:12 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:17:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,9 +143,10 @@ void AquaSalGraphics::SetState()
                 */
                 maXORClipMask.reset();
                 CGRect aBounds( maClippingRects.front() );
-                basegfx::B2IRange aRect( aBounds.origin.x, aBounds.origin.y,
-                                         aBounds.origin.x+aBounds.size.width,
-                                         aBounds.origin.y+aBounds.size.height );
+                basegfx::B2IRange aRect( static_cast<sal_Int32>(aBounds.origin.x),
+                      static_cast<sal_Int32>(aBounds.origin.y),
+                                         static_cast<sal_Int32>(aBounds.origin.x+aBounds.size.width),
+                                         static_cast<sal_Int32>(aBounds.origin.y+aBounds.size.height) );
                 maXORDevice = basebmp::subsetBitmapDevice( maXORDevice, aRect );
             }
         }
@@ -294,11 +295,23 @@ CGPoint* AquaSalGraphics::makeCGptArray(ULONG nPoints, const SalPoint*  pPtAry)
 
 // -----------------------------------------------------------------------
 
-void AquaSalGraphics::UpdateWindow( NSGraphicsContext* pContext )
+void AquaSalGraphics::UpdateWindow( NSRect& rRect )
 {
+    // FIXME: optimize UpdateWindow wrt to aRect
+    NSGraphicsContext* pContext = [NSGraphicsContext currentContext];
     if( mrContext != NULL && mpFrame != NULL && pContext != nil )
     {
         CGContextRef rCGContext = reinterpret_cast<CGContextRef>([pContext graphicsPort]);
+
+        CGMutablePathRef rClip = mpFrame->getClipPath();
+        if( rClip )
+        {
+            CGContextSaveGState( rCGContext );
+            CGContextBeginPath( rCGContext );
+            CGContextAddPath( rCGContext, rClip );
+            CGContextClip( rCGContext );
+        }
+
         CGRect aBitmapRect = {
             { 0, 0 },
             { CGBitmapContextGetWidth(mrContext), CGBitmapContextGetHeight(mrContext) }
@@ -308,6 +321,8 @@ void AquaSalGraphics::UpdateWindow( NSGraphicsContext* pContext )
         CGContextDrawImage( rCGContext, aBitmapRect, xImage );
         CGImageRelease( xImage );
         CGContextFlush( rCGContext );
+        if( rClip ) // cleanup clipping
+            CGContextRestoreGState( rCGContext );
     }
 }
 
