@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobjw.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:46:09 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
 
-#define INVOCATION_SERVICE  L"com.sun.star.script.Invocation"
+//#define INVOCATION_SERVICE    L"com.sun.star.script.Invocation"
 #define JSCRIPT_VALUE_FUNC  L"_GetValueObject"
 #define GET_STRUCT_FUNC     L"_GetStruct"
 #define BRIDGE_VALUE_FUNC L"Bridge_GetValueObject"
