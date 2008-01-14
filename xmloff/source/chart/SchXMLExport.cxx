@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:35:53 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,7 +616,12 @@ lcl_TableData lcl_getDataForLocalTable(
     SchXMLExportHelper::tDataSequenceCont::const_iterator aIt( aBegin );
 
     if( bHasCategoryLabels )
-        --nNumSequences;
+    {
+        if( nNumSequences>=1 ) //#i83537#
+            --nNumSequences;
+        else
+            bHasCategoryLabels=false;
+    }
     size_t nMaxSequenceLength( lcl_getMaxSequenceLength( aSequencesToExport ));
     size_t nNumColumns( bSwap ? nMaxSequenceLength : nNumSequences );
     size_t nNumRows( bSwap ? nNumSequences : nMaxSequenceLength );
