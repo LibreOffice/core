@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bibconfig.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:12:54 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:37:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,14 +108,14 @@ class BibConfig : public utl::ConfigItem
 
     rtl::OUString   sQueryField;
     rtl::OUString   sQueryText;
+    MappingArray*               pMappingsArr;
     long            nBeamerSize;
     long            nViewSize;
     sal_Bool        bShowColumnAssignmentWarning;
 
-    MappingArray*               pMappingsArr;
     rtl::OUString               aColumnDefaults[COLUMN_COUNT];
 
-    com::sun::star::uno::Sequence<rtl::OUString>& GetPropertyNames();
+    com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
 public:
     BibConfig();
     ~BibConfig();
