@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olethread.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:36:33 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:47:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ void o2u_attachCurrentThread()
 {
     static OThreadData oleThreadData;
 
-    if ((sal_Bool)oleThreadData.getData() != sal_True)
+    if ((sal_Bool)(sal_IntPtr)oleThreadData.getData() != sal_True)
     {
         HINSTANCE inst= LoadLibrary( _T("ole32.dll"));
         if( inst )
