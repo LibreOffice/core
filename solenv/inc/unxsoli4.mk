@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 13:22:19 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 14:31:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,6 @@ CFLAGSWERRCXX=-xwe
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    extensions \
     soldep
 
 STDOBJVCL=$(L)$/salmain.o
