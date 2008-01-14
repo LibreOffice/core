@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FileTools.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:43:18 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:20:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,23 +34,11 @@
  ************************************************************************/
 package helper;
 
-import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.XPropertySet;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.UnoRuntime;
-
-// access the implementations via names
-import com.sun.star.uno.XInterface;
-import com.sun.star.util.XChangesBatch;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import lib.TestParameters;
-
-import util.DesktopTools;
 
 
 /**
