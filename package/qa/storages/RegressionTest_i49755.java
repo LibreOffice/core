@@ -234,7 +234,7 @@ public class RegressionTest_i49755 implements StorageTest {
             if ( !m_aTestHelper.checkStorageProperties( xResultSubSubStorage, "MediaType3", false, ElementModes.READ ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xResultSubSubStorage, "SubStream1", "MediaType4", pBytes ) )
+            if ( !m_aTestHelper.checkStream( xResultSubSubStorage, "SubStream1", "MediaType4", true, pBytes ) )
                 return false;
 
 
@@ -251,7 +251,7 @@ public class RegressionTest_i49755 implements StorageTest {
             if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage1, "MediaType5", false, ElementModes.READ ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xResultSubStorage1, "SubStream2", "MediaType4", pBytes ) )
+            if ( !m_aTestHelper.checkStream( xResultSubStorage1, "SubStream2", "MediaType4", false, pBytes ) )
                 return false;
 
 

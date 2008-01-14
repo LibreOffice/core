@@ -221,9 +221,9 @@ public class RegressionTest_i59886 implements StorageTest {
             }
 
             // check the streams
-            if ( !m_aTestHelper.checkStream( xTargetStorage, "SubStream1", "MediaType1", pBytes ) )
+            if ( !m_aTestHelper.checkStream( xTargetStorage, "SubStream1", "MediaType1", true, pBytes ) )
                 return false;
-            if ( !m_aTestHelper.checkStream( xTargetSubStorage, "SubStream2", "MediaType2", pBytes ) )
+            if ( !m_aTestHelper.checkStream( xTargetSubStorage, "SubStream2", "MediaType2", true, pBytes ) )
                 return false;
 
 
