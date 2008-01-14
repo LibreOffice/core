@@ -4,9 +4,9 @@
  *
  *  $RCSfile: handlerhelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:49:40 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:59:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,9 @@
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
@@ -321,16 +324,9 @@ namespace pcr
             Reference< XModifiable > xDocumentModifiable( _rContext.getContextValueByAsciiName( "ContextDocument" ), UNO_QUERY_THROW );
             xDocumentModifiable->setModified( sal_True );
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-        #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "PropertyHandlerHelper::setContextDocumentModified: caught an exception!\n" );
-            sMessage += "message:\n";
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-            OSL_ENSURE( false, sMessage );
-        #else
-            e; // make compiler happy
-        #endif
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -343,16 +339,9 @@ namespace pcr
             Reference< XWindow > xInspectorWindow( _rContext.getContextValueByAsciiName( "DialogParentWindow" ), UNO_QUERY_THROW );
             pInspectorWindow = VCLUnoHelper::GetWindow( xInspectorWindow );
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-        #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "PropertyHandlerHelper::getDialogParentWindow: caught an exception!\n" );
-            sMessage += "message:\n";
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-            OSL_ENSURE( false, sMessage );
-        #else
-            e; // make compiler happy
-        #endif
+            DBG_UNHANDLED_EXCEPTION();
         }
         return pInspectorWindow;
     }
