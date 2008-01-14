@@ -124,7 +124,7 @@ STDMETHODIMP SODispatchInterceptor::queryDispatches( SAFEARRAY FAR* aDescripts, 
 }
 
 
-STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR* aArgs)
+STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR* /*aArgs*/)
 {
     // get url from aURL
     OLECHAR* pUrlName = L"Complete";
@@ -145,13 +145,13 @@ STDMETHODIMP SODispatchInterceptor::dispatch( IDispatch FAR* aURL, SAFEARRAY FAR
     return S_OK;
 }
 
-STDMETHODIMP SODispatchInterceptor::addStatusListener( IDispatch FAR* xControl, IDispatch FAR* aURL)
+STDMETHODIMP SODispatchInterceptor::addStatusListener( IDispatch FAR* /*xControl*/, IDispatch FAR* /*aURL*/)
 {
     // not implemented
     return S_OK;
 }
 
-STDMETHODIMP SODispatchInterceptor::removeStatusListener( IDispatch FAR* xControl, IDispatch FAR* aURL)
+STDMETHODIMP SODispatchInterceptor::removeStatusListener( IDispatch FAR* /*xControl*/, IDispatch FAR* /*aURL*/)
 {
     // not implemented
     return S_OK;
