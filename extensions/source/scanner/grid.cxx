@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grid.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:43:44 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:02:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,13 +202,13 @@ Point GridWindow::transform( double x, double y )
 {
     Point aRet;
 
-    aRet.X() = ( x - m_fMinX ) *
+    aRet.X() = (long)( ( x - m_fMinX ) *
         (double)m_aGridArea.GetWidth() / ( m_fMaxX - m_fMinX )
-        + m_aGridArea.Left();
-    aRet.Y() =
+        + m_aGridArea.Left() );
+    aRet.Y() = (long)(
         m_aGridArea.Bottom() -
         ( y - m_fMinY ) *
-        (double)m_aGridArea.GetHeight() / ( m_fMaxY - m_fMinY );
+        (double)m_aGridArea.GetHeight() / ( m_fMaxY - m_fMinY ) );
     return aRet;
 }
 
@@ -356,7 +356,6 @@ void GridWindow::drawGrid()
 {
     char pBuf[256];
     SetLineColor( Color( COL_BLACK ) );
-    TextAlign aAlign = GetTextAlign();
     // draw vertical lines
     for( double fX = m_fMinChunkX; fX < m_fMaxX; fX += m_fChunkX )
     {
