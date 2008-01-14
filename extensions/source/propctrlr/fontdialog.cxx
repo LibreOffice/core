@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontdialog.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:07:44 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:57:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,8 +466,8 @@ namespace pcr
                 sal_Int32 nColor = rUnderlineItem.GetColor().GetColor();
 
                 Any aUnoColor;
-                if (COL_AUTO != nColor)
-                    aUnoColor <<= (sal_Int32)nColor;
+                if (COL_AUTO != (UINT32)nColor)
+                    aUnoColor <<= nColor;
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTLINECOLOR, aUnoColor );
             }
@@ -511,8 +511,8 @@ namespace pcr
                 sal_Int32 nColor = rColorItem.GetValue().GetColor();
 
                 Any aUnoColor;
-                if (COL_AUTO != nColor)
-                    aUnoColor <<= (sal_Int32)nColor;
+                if (COL_AUTO != (UINT32)nColor)
+                    aUnoColor <<= nColor;
 
                 lcl_pushBackPropertyValue( _out_properties, PROPERTY_TEXTCOLOR, aUnoColor );
             }
