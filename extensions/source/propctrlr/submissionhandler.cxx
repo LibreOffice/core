@@ -4,9 +4,9 @@
  *
  *  $RCSfile: submissionhandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:59:00 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:01:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -438,6 +438,7 @@ namespace pcr
 
         OSL_ENSURE( _rControlValueType.getTypeClass() == TypeClass_STRING,
             "SubmissionPropertyHandler::convertToControlValue: all our controls should use strings for value exchange!" );
+        (void)_rControlValueType;
 
         PropertyId nPropId( m_pInfoService->getPropertyId( _rPropertyName ) );
         switch ( nPropId )
