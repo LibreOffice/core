@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 13:15:29 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 15:24:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -233,18 +233,18 @@ TXTFILES:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registration$/license_$i.txt)
 LICLINES:=$(foreach,i,$(TXTFILES)  <license-text xlink:href="registration/$(i:f)" lang="$(subst,.txt, $(subst,license_, $(i:f)))" license-id="$(subst,.txt, $(subst,license_, $(i:f)))" />)
 .ENDIF  # "$(GUI)"!="WNT"
 
-REPORTJARFILES := \
-    $(ZIP1DIR)$/jcommon-1.0.10.jar										\
-    $(ZIP1DIR)$/sac.jar													\
-    $(ZIP1DIR)$/libxml-0.9.5.jar										\
+REPRORTJARFILES := \
     $(ZIP1DIR)$/flute-1.3-jfree-20061107.jar							\
-    $(ZIP1DIR)$/jfreereport-0.9.0-05.jar								\
-    $(ZIP1DIR)$/liblayout-0.2.6.jar										\
-    $(ZIP1DIR)$/libloader-0.3.4.jar										\
-    $(ZIP1DIR)$/libformula-0.1.8.jar									\
-    $(ZIP1DIR)$/librepository-0.1.1.jar									\
-    $(ZIP1DIR)$/libfonts-0.2.6.jar										\
-    $(ZIP1DIR)$/jcommon-serializer-0.1.0.jar								\
+    $(ZIP1DIR)$/jcommon-1.0.10.jar										\
+    $(ZIP1DIR)$/jcommon-serializer-0.2.0.jar							\
+    $(ZIP1DIR)$/libfonts-0.3.3.jar										\
+    $(ZIP1DIR)$/libformula-0.1.14.jar									\
+    $(ZIP1DIR)$/liblayout-0.2.8.jar										\
+    $(ZIP1DIR)$/libloader-0.3.6.jar										\
+    $(ZIP1DIR)$/librepository-0.1.4.jar									\
+    $(ZIP1DIR)$/libxml-0.9.9.jar										\
+    $(ZIP1DIR)$/pentaho-reporting-flow-engine-0.9.2.jar					\
+    $(ZIP1DIR)$/sac.jar													\
     $(ZIP1DIR)$/sun-report-builder.jar
 
 # --- Targets ----------------------------------
