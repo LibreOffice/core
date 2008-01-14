@@ -2,7 +2,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.10 2006-09-16 13:09:58 obo Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/npnapi.cxx,v 1.11 2008-01-14 14:53:25 ihi Exp $
 
 *************************************************************************/
 
@@ -12,6 +12,8 @@
 
 #include <unistd.h>
 #include <dlfcn.h>
+
+#include <osl/module.h>
 
 extern PluginConnector* pConnector;
 extern XtAppContext app_context;
@@ -37,7 +39,7 @@ static void l_NPN_MemFree( void* pMem )
     delete [] (char*)pMem;
 }
 
-static uint32 l_NPN_MemFlush( uint32 nSize )
+static uint32 l_NPN_MemFlush( uint32 /*nSize*/ )
 {
     return 0;
 }
@@ -77,7 +79,7 @@ static JRIEnv* l_NPN_GetJavaEnv()
     return NULL;
 }
 
-static jref l_NPN_GetJavaPeer( NPP instance )
+static jref l_NPN_GetJavaPeer( NPP /*instance*/ )
 {
     medDebug( 1, "SNI: NPN_GetJavaPeer\n" );
     return NULL;
@@ -301,6 +303,7 @@ static const char* l_NPN_UserAgent( NPP instance )
     return pAgent;
 }
 
+#if 0
 static void l_NPN_Version( int* major, int* minor, int* net_major, int* net_minor )
 {
     MediatorMessage* pMes = pConnector->
@@ -319,6 +322,7 @@ static void l_NPN_Version( int* major, int* minor, int* net_major, int* net_mino
 
     delete pMes;
 }
+#endif
 
 static int32 l_NPN_Write( NPP instance, NPStream* stream, int32 len, void* buffer )
 {
@@ -344,12 +348,12 @@ static int32 l_NPN_Write( NPP instance, NPStream* stream, int32 len, void* buffe
     return nRet;
 }
 
-static void l_NPN_ReloadPlugins( NPBool reloadPages )
+static void l_NPN_ReloadPlugins( NPBool /*reloadPages*/ )
 {
     medDebug( 1, "NPN_ReloadPlugins: SNI\n" );
 }
 
-static NPError l_NPN_GetValue( NPP instance, NPNVariable variable, void* value )
+static NPError l_NPN_GetValue( NPP /*instance*/, NPNVariable variable, void* value )
 {
     switch( variable )
     {
@@ -383,23 +387,23 @@ static NPError l_NPN_GetValue( NPP instance, NPNVariable variable, void* value )
     return NPERR_NO_ERROR;
 }
 
-static NPError l_NPN_SetValue(NPP instance, NPPVariable variable, void *value)
+static NPError l_NPN_SetValue(NPP /*instance*/, NPPVariable variable, void *value)
 {
     medDebug( 1, "NPN_SetValue %d=%p\n", variable, value );
     return 0;
 }
 
-static void l_NPN_InvalidateRect(NPP instance, NPRect *invalidRect)
+static void l_NPN_InvalidateRect(NPP /*instance*/, NPRect* /*invalidRect*/)
 {
     medDebug( 1, "NPN_InvalidateRect\n" );
 }
 
-static void l_NPN_InvalidateRegion(NPP instance, NPRegion invalidRegion)
+static void l_NPN_InvalidateRegion(NPP /*instance*/, NPRegion /*invalidRegion*/)
 {
     medDebug( 1, "NPN_InvalidateRegion\n" );
 }
 
-static void l_NPN_ForceRedraw(NPP instance)
+static void l_NPN_ForceRedraw(NPP /*instance*/)
 {
     medDebug( 1, "NPN_ForceRedraw\n" );
 }
@@ -459,7 +463,7 @@ static NPPluginFuncs aPluginFuncs =
 };
 
 
-void* pPluginLib = NULL;
+oslModule pPluginLib = NULL;
 char*(*pNPP_GetMIMEDescription)()                               = NULL;
 NPError (*pNP_Initialize)(NPNetscapeFuncs*,NPPluginFuncs*)      = NULL;
 NPError (*pNP_Shutdown)()                                       = NULL;
@@ -476,11 +480,11 @@ PluginConnector::~PluginConnector()
 {
 }
 
-IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
+IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, /*pMediator*/ )
 {
     MediatorMessage* pMessage;
     CommandAtoms nCommand;
-    while( pMessage = GetNextMessage( FALSE ) )
+    while( (pMessage = GetNextMessage( FALSE )) )
     {
         nCommand = (CommandAtoms)pMessage->GetUINT32();
         medDebug( 1, "pluginapp: %s\n", GetCommandName( nCommand ) );
@@ -536,7 +540,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                              (char*)&aRet, sizeof( aRet ),
                              pSave->buf, pSave->len,
                              NULL );
-                    delete [] pSave->buf;
+                    delete [] (char*)pSave->buf;
                 }
                 else
                     Respond( pMessage->m_nID,
@@ -599,7 +603,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 aRet = aPluginFuncs.newp( pInst->pMimeType, instance, *pMode, *pArgc,
                                           pInst->nArg ? pInst->argn : NULL,
                                           pInst->nArg ? pInst->argv : NULL,
-                                          ( nSaveBytes == 4 && *(UINT32*)pSavedData == '0000' ) ?
+                                          ( nSaveBytes == 4 && *(UINT32*)pSavedData == 0 ) ?
                                           &(pInst->aData) : NULL );
                 medDebug( 1, "pluginapp: NPP_New( %s, %p, %d, %d, %p, %p, %p ) returns %d\n",
                           pInst->pMimeType,
@@ -741,7 +745,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
             {
                 if( ! pNPP_GetMIMEDescription )
                     pNPP_GetMIMEDescription = (char*(*)())
-                        dlsym( pPluginLib, "NPP_GetMIMEDescription" );
+                        osl_getAsciiFunctionSymbol( pPluginLib, "NPP_GetMIMEDescription" );
                 char* pMIME = pNPP_GetMIMEDescription();
                 Respond( pMessage->m_nID,
                          POST_STRING( pMIME ),
@@ -753,10 +757,10 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
 
                 pNP_Initialize =
                     (NPError(*)(NPNetscapeFuncs*, NPPluginFuncs*))
-                    dlsym( pPluginLib, "NP_Initialize" );
+                    osl_getAsciiFunctionSymbol( pPluginLib, "NP_Initialize" );
                 medDebug( !pNP_Initialize, "no NP_Initialize, %s\n", dlerror() );
                 pNP_Shutdown = (NPError(*)())
-                    dlsym( pPluginLib, "NP_Shutdown" );
+                    osl_getAsciiFunctionSymbol( pPluginLib, "NP_Shutdown" );
                 medDebug( !pNP_Initialize, "no NP_Shutdown, %s\n", dlerror() );
 
                 medDebug( 1, "entering NP_Initialize\n" );
@@ -779,12 +783,11 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
     return 0;
 }
 
-void LoadAdditionalLibs( const char* pPluginLib )
+void LoadAdditionalLibs( const char* _pPluginLib )
 {
-    void *pLib;
-    medDebug( 1, "LoadAdditionalLibs %s\n", pPluginLib );
+    medDebug( 1, "LoadAdditionalLibs %s\n", _pPluginLib );
 
-    if( ! strncmp( pPluginLib, "libflashplayer.so", 17 ) )
+    if( ! strncmp( _pPluginLib, "libflashplayer.so", 17 ) )
     {
         /*  #b4951312# flash 7 implicitly assumes a gtk application
          *  if the API version is greater or equal to 12 (probably
