@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionCurveModel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:07:50 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:04:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ RegressionCurveModel::RegressionCurveModel(
         ::property::OPropertySet( m_aMutex ),
     m_xContext( xContext ),
     m_eRegressionCurveType( eCurveType ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex )),
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
         m_xEquationProperties( new RegressionEquation( xContext ))
 {
     // set 0 line width (default) hard, so that it is always written to XML,
@@ -140,7 +140,7 @@ RegressionCurveModel::RegressionCurveModel( const RegressionCurveModel & rOther 
         ::property::OPropertySet( rOther, m_aMutex ),
     m_xContext( rOther.m_xContext ),
     m_eRegressionCurveType( rOther.m_eRegressionCurveType ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     m_xEquationProperties.set( CloneHelper::CreateRefClone< uno::Reference< beans::XPropertySet > >()( rOther.m_xEquationProperties ));
     ModifyListenerHelper::addListener( m_xEquationProperties, m_xModifyEventForwarder );
