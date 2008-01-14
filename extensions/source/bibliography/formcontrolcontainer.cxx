@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcontrolcontainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:49:17 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:39:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,7 @@ namespace bib
         }
         catch( const Exception& e)
         {
-            e;  // make compiler happy
+            (void) e;   // make compiler happy
             DBG_ERROR( "FormControlContainer::implSetDesignMode: caught an exception!" );
         }
     }
@@ -156,34 +156,34 @@ namespace bib
 
     //---------------------------------------------------------------------
     //--- 18.10.01 16:45:33 -----------------------------------------------
-    void FormControlContainer::_loaded( const ::com::sun::star::lang::EventObject& _rEvent )
+    void FormControlContainer::_loaded( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
     {
         implSetDesignMode( sal_False );
     }
 
     //---------------------------------------------------------------------
     //--- 18.10.01 16:45:35 -----------------------------------------------
-    void FormControlContainer::_unloading( const ::com::sun::star::lang::EventObject& _rEvent )
+    void FormControlContainer::_unloading( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
     {
         implSetDesignMode( sal_True );
     }
 
     //---------------------------------------------------------------------
     //--- 18.10.01 16:45:36 -----------------------------------------------
-    void FormControlContainer::_unloaded( const ::com::sun::star::lang::EventObject& _rEvent )
+    void FormControlContainer::_unloaded( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
     {
     }
 
     //---------------------------------------------------------------------
     //--- 18.10.01 16:45:36 -----------------------------------------------
-    void FormControlContainer::_reloading( const ::com::sun::star::lang::EventObject& _rEvent )
+    void FormControlContainer::_reloading( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
     {
         implSetDesignMode( sal_True );
     }
 
     //---------------------------------------------------------------------
     //--- 18.10.01 16:45:37 -----------------------------------------------
-    void FormControlContainer::_reloaded( const ::com::sun::star::lang::EventObject& _rEvent )
+    void FormControlContainer::_reloaded( const ::com::sun::star::lang::EventObject& /*_rEvent*/ )
     {
         implSetDesignMode( sal_False );
     }
