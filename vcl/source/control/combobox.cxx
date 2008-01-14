@@ -4,9 +4,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:51:43 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:04:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1091,6 +1091,18 @@ BOOL ComboBox::IsMultiSelectionEnabled() const
 long ComboBox::CalcWindowSizePixel( USHORT nLines ) const
 {
     return mpImplLB->GetEntryHeight() * nLines;
+}
+
+// -----------------------------------------------------------------------
+
+Size ComboBox::GetOptimalSize(WindowSizeType eType) const
+{
+    switch (eType) {
+    case WINDOWSIZE_MINIMUM:
+        return CalcMinimumSize();
+    default:
+        return Edit::GetOptimalSize( eType );
+    }
 }
 
 // -----------------------------------------------------------------------
