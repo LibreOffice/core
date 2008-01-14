@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:37:35 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:20:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1136,29 +1136,26 @@ VclAbstractDialog* AbstractDialogFactory_Impl::CreateSfxDialog( Window* /*pParen
 }
 
 VclAbstractDialog* AbstractDialogFactory_Impl::CreateFrameDialog(
-    Window* pParent, const css::uno::Reference< css::frame::XFrame >& _xFrame, sal_uInt32 nResId )
+    Window* pParent, const css::uno::Reference< css::frame::XFrame >& rxFrame,
+    sal_uInt32 nResId, const String& rParameter )
 {
-    Dialog* pDlg=NULL;
-    switch ( nResId )
+    Dialog* pDlg = NULL;
+    if ( SID_OPTIONS_TREEDIALOG == nResId || SID_OPTIONS_DATABASES == nResId )
     {
-        case SID_OPTIONS_TREEDIALOG :
-        case SID_OPTIONS_DATABASES:
-        {
-            OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent, _xFrame );
-            if(nResId == SID_OPTIONS_DATABASES)
-            {
-                pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
-            }
-            pDlg = pOptDlg;
-        }
-        break;
-        default:
-            break;
+        // only activate last page if we dont want to activate a special page
+        bool bActivateLastSelection = ( nResId != SID_OPTIONS_DATABASES && rParameter.Len() == 0 );
+        OfaTreeOptionsDialog* pOptDlg = new OfaTreeOptionsDialog( pParent, rxFrame, bActivateLastSelection );
+        if ( nResId == SID_OPTIONS_DATABASES )
+            pOptDlg->ActivatePage(SID_SB_DBREGISTEROPTIONS);
+        else if ( rParameter.Len() > 0 )
+            pOptDlg->ActivatePage( rParameter );
+        pDlg = pOptDlg;
     }
 
     if ( pDlg )
         return new VclAbstractDialog_Impl( pDlg );
-    return 0;
+    else
+        return NULL;
 }
 
 // TabDialog outside the drawing layer
