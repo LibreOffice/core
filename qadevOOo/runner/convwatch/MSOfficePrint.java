@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MSOfficePrint.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-17 13:28:59 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:18:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -250,7 +250,7 @@ public class MSOfficePrint
             }
             _aGTA.getPerformance().readWordValuesFromFile(sUserDir + "msofficeloadtimes.txt");
             OfficePrint.createInfoFile(_sPrintFilename, _aGTA, "msoffice");
-            OfficePrint.waitInSeconds(2, "Give Microsoft Office some time to print.");
+            TimeHelper.waitInSeconds(2, "Give Microsoft Office some time to print.");
         }
 
     public void realStartCommand(ArrayList _aStartCommand) throws ConvWatchCancelException
