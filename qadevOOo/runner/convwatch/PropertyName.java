@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyName.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-02-20 14:21:45 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,4 +67,9 @@ public interface PropertyName
 
     // set this variable to "true" or "yes" and loadComponentFromURL works with property Hidden=false
     final public static String OFFICE_VIEWABLE =                           "OFFICE_VIEWABLE";
+
+    final public static String DB_CONNECTION_STRING =                      "DB_CONNECTION_STRING";
+    final public static String CHECK_NEED_TOOLS =                          "CHECK_NEED_TOOLS";
+    final public static String CREATE_DEFAULT =                            "CREATE_DEFAULT_REFERENCE";
+
 }
