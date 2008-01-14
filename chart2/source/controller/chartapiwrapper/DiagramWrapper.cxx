@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DiagramWrapper.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:42:30 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:56:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,21 +70,12 @@
 #include <comphelper/InlineContainer.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
 #include <com/sun/star/chart2/XTitled.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART_CHARTDATAROWSOURCE_HPP_
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_RELATIVESIZE_HPP_
 #include <com/sun/star/chart2/RelativeSize.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_RELATIVEPOSITION_HPP_
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#endif
+#include <com/sun/star/chart/ChartSolidType.hpp>
 
 #include "LineProperties.hxx"
 #include "FillProperties.hxx"
@@ -132,6 +123,7 @@ enum
     PROP_DIAGRAM_PERCENT_STACKED,
     PROP_DIAGRAM_STACKED,
     PROP_DIAGRAM_THREE_D,
+    PROP_DIAGRAM_SOLIDTYPE,
     PROP_DIAGRAM_DEEP,
     PROP_DIAGRAM_VERTICAL,
     PROP_DIAGRAM_NUMBER_OF_LINES,
@@ -197,6 +189,14 @@ void lcl_AddPropertiesToVector(
         Property( C2U( "Dim3D" ),
                   PROP_DIAGRAM_THREE_D,
                   ::getBooleanCppuType(),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEDEFAULT ));
+
+    // see com.sun.star.chart.Chart3DBarProperties
+    rOutProperties.push_back(
+        Property( C2U( "SolidType" ),
+                  PROP_DIAGRAM_SOLIDTYPE,
+                  ::getCppuType( reinterpret_cast< sal_Int32 * >(0)),
                   beans::PropertyAttribute::BOUND
                   | beans::PropertyAttribute::MAYBEDEFAULT ));
 
@@ -1406,7 +1406,7 @@ void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Re
 {
     sal_Bool bNewVertical = false;
     if( ! (rOuterValue >>= bNewVertical) )
-        throw lang::IllegalArgumentException( C2U("Property Dim3D requires boolean value"), 0, 0 );
+        throw lang::IllegalArgumentException( C2U("Property Vertical requires boolean value"), 0, 0 );
 
     m_aOuterValue = rOuterValue;
 
@@ -1724,6 +1724,88 @@ Any WrappedAttributedDataPointsProperty::getPropertyDefault( const Reference< be
     return aRet;
 }
 
+//-----------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------
+
+//PROP_DIAGRAM_SOLIDTYPE
+class WrappedSolidTypeProperty : public WrappedProperty
+{
+public:
+    WrappedSolidTypeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact );
+    virtual ~WrappedSolidTypeProperty();
+
+    virtual void setPropertyValue( const ::com::sun::star::uno::Any& rOuterValue, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any getPropertyValue( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xInnerPropertySet ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Any getPropertyDefault( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyState >& xInnerPropertyState ) const
+                        throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+
+private: //member
+    ::boost::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
+    mutable Any                                 m_aOuterValue;
+};
+
+WrappedSolidTypeProperty::WrappedSolidTypeProperty( ::boost::shared_ptr< Chart2ModelContact > spChart2ModelContact )
+            : WrappedProperty( C2U( "SolidType" ), OUString() )
+            , m_spChart2ModelContact( spChart2ModelContact )
+            , m_aOuterValue()
+{
+    m_aOuterValue = WrappedSolidTypeProperty::getPropertyDefault( 0 );
+}
+
+WrappedSolidTypeProperty::~WrappedSolidTypeProperty()
+{
+}
+
+void WrappedSolidTypeProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
+                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    sal_Int32 nNewSolidType = ::com::sun::star::chart::ChartSolidType::RECTANGULAR_SOLID;
+    if( ! (rOuterValue >>= nNewSolidType) )
+        throw lang::IllegalArgumentException( C2U("Property SolidType requires integer value"), 0, 0 );
+
+    m_aOuterValue = rOuterValue;
+
+    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    if( !xDiagram.is() )
+        return;
+
+    bool bFound = false;
+    bool bAmbiguous = false;
+    sal_Int32 nOldSolidType = DiagramHelper::getGeometry3D( xDiagram, bFound, bAmbiguous );
+    if( bFound && ( nOldSolidType != nNewSolidType || bAmbiguous ) )
+        DiagramHelper::setGeometry3D( xDiagram, nNewSolidType );
+}
+
+Any WrappedSolidTypeProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    bool bFound = false;
+    bool bAmbiguous = false;
+    Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
+    if( xDiagram.is() )
+    {
+        sal_Int32 nGeometry = DiagramHelper::getGeometry3D( xDiagram, bFound, bAmbiguous );
+        if( bFound )
+            m_aOuterValue <<= nGeometry;
+    }
+    return m_aOuterValue;
+}
+
+Any WrappedSolidTypeProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
+                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    return uno::makeAny( ::com::sun::star::chart::ChartSolidType::RECTANGULAR_SOLID );
+}
+
+//-----------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------
+//-----------------------------------------------------------------------------------------------------------------
+
 // ____ XDiagramProvider ____
 Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()
     throw (uno::RuntimeException)
@@ -1777,7 +1859,7 @@ const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
     aWrappedProperties.push_back( new WrappedNumberOfLinesProperty( m_spChart2ModelContact ) );
     aWrappedProperties.push_back( new WrappedAttributedDataPointsProperty( m_spChart2ModelContact ) );
     aWrappedProperties.push_back( new WrappedProperty( C2U( "StackedBarsConnected" ), C2U( "ConnectBars" ) ) );
-
+    aWrappedProperties.push_back( new WrappedSolidTypeProperty( m_spChart2ModelContact ) );
     return aWrappedProperties;
 }
 
