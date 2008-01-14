@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:34:31 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:52:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,23 +85,6 @@
 #include <sfx2/request.hxx> //add CHINA001
 #include "ofaitem.hxx" //add CHINA001
 //#58425# Symbole auf einer Linie (z.B. StarChart) Includes:
-
-
-#if OSL_DEBUG_LEVEL > 1
-#define SVX_TRACE(b,a)                                               \
-    {                                                                \
-        ByteString _aStr( RTL_CONSTASCII_STRINGPARAM( "SvxTrace" ) );\
-        _aStr.Append( ByteString::CreateFromInt32( b ) );            \
-        _aStr.Append( "->" );                                        \
-        _aStr.Append( ByteString::CreateFromInt64( (sal_IntPtr) this ) );    \
-        _aStr.Append( '@' );                                         \
-        _aStr.Append( a );                                           \
-        DBG_TRACE( _aStr.GetBuffer() );                      \
-    }
-#else
-#define SVX_TRACE(b,a)
-#endif
-
 
 #ifndef _SVDOBJ_HXX //autogen
 #include <svx/svdobj.hxx>
@@ -988,13 +971,6 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     {
         aSymbolGraphic=aAutoSymbolGraphic;
         aSymbolSize=aSymbolLastSize=aAutoSymbolGraphic.GetPrefSize();
-#if OSL_DEBUG_LEVEL > 1
-        ByteString aStr( "SVX_SYMBOLTYPE_AUTO AutoSymbolSize is " );
-        aStr.Append( ByteString::CreateFromInt32( aSymbolSize.Width() ) );
-        aStr.Append( ' ' );
-        aStr.Append( ByteString::CreateFromInt32( aSymbolSize.Height() ) );
-        SVX_TRACE( 213, aStr );
-#endif
         bPrevSym=TRUE;
     }
     else if(nSymType == SVX_SYMBOLTYPE_NONE)
@@ -1002,15 +978,9 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
         bEnable=FALSE;
         bIgnoreGraphic=TRUE;
         bIgnoreSize=TRUE;
-        SVX_TRACE(213, ByteString( "SVX_SYMBOLTYPE_NONE" ) );
     }
     else if(nSymType >= 0)
     {
-#if OSL_DEBUG_LEVEL > 1
-        ByteString aStr( "SVX_SYMBOLTYPE = " );
-        aStr.Append( ByteString::CreateFromInt32( nSymType ) );
-        SVX_TRACE(213, aStr );
-#endif
         VirtualDevice aVDev;
         aVDev.SetMapMode(MapMode(MAP_100TH_MM));
 
@@ -1065,27 +1035,18 @@ void SvxLineTabPage::Reset( const SfxItemSet& rAttrs )
     }
     if(rAttrs.GetItemState(rAttrs.GetPool()->GetWhich(SID_ATTR_BRUSH),TRUE,&pPoolItem) == SFX_ITEM_SET)
     {
-        SVX_TRACE(213, ByteString( "SVX_SYMBOLTYPE_BRUSH Item for Brush found" ) );
         const Graphic* pGraphic = ((const SvxBrushItem *)pPoolItem)->GetGraphic();
         if( pGraphic )
         {
             if(!bIgnoreGraphic)
             {
-                SVX_TRACE(213, ByteString( "SVX_SYMBOLTYPE_BRUSH Item setting Graphic" ) );
                 aSymbolGraphic=*pGraphic;
             }
             if(!bIgnoreSize)
             {
-                SVX_TRACE(213, ByteString( "SVX_SYMBOLTYPE_BRUSH Item setting Size" ) );
                 aSymbolSize=OutputDevice::LogicToLogic( pGraphic->GetPrefSize(),
                                                         pGraphic->GetPrefMapMode(),
                                                         MAP_100TH_MM );
-    #if OSL_DEBUG_LEVEL > 1
-                ByteString aStr( "SVX_SYMBOLTYPE_BRUSH Item setting Size: " );
-                aStr.Append( ByteString::CreateFromInt32( aSymbolSize.Width() ) );
-                aStr.Append( ByteString::CreateFromInt32( aSymbolSize.Height() ) );
-                SVX_TRACE( 213, aStr );
-    #endif
             }
             bPrevSym=TRUE;
         }
@@ -1807,24 +1768,20 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
     const Graphic* pGraphic = 0;
     Graphic aGraphic;
     String aGrfName;
-    BOOL bDontSetSize=FALSE;
+    BOOL bResetSize = FALSE;
     BOOL bEnable=TRUE;
+    long nPreviousSymbolType = nSymbolType;
 
     if(nItemId >= MN_GALLERY_ENTRY)
     {
         if( (nItemId-MN_GALLERY_ENTRY) >= nNumMenuGalleryItems)
         {
             nSymbolType=nItemId-MN_GALLERY_ENTRY-nNumMenuGalleryItems; //Index der Liste
-#if OSL_DEBUG_LEVEL > 1
-            ByteString aStr( "SVX_SYMBOLTYPE = " );
-            aStr.Append( ByteString::CreateFromInt32( nSymbolType ) );
-            SVX_TRACE(213, aStr);
-#endif
         }
         else
         {
-            SVX_TRACE(213,ByteString( "SVX_SYMBOLTYPE_BRUSHITEM") );
             nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
+            bResetSize = TRUE;
         }
         SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)aGrfBrushItems.GetObject(nItemId - MN_GALLERY_ENTRY);
         pGraphic = pInfo->pBrushItem->GetGraphic();
@@ -1834,23 +1791,13 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
         case MN_SYMBOLS_AUTO:
         {
             pGraphic=&aAutoSymbolGraphic;
-            aSymbolSize=aAutoSymbolGraphic.GetPrefSize();
-#if OSL_DEBUG_LEVEL > 1
-            ByteString aStr( "AutoSymbolSize is ");
-            aStr.Append( ByteString::CreateFromInt32( aSymbolSize.Width() ) );
-            aStr.Append( ' ' );
-            aStr.Append( ByteString::CreateFromInt32( aSymbolSize.Height() ) );
-            SVX_TRACE(213, aStr );
-#endif
-            bDontSetSize=TRUE;
-            bNewSize=false; //fr�here �nderungen gelten nicht in diesem Fall!
+            aAutoSymbolGraphic.SetPrefSize( Size(253,253) );
             nSymbolType=SVX_SYMBOLTYPE_AUTO;
         }
         break;
 
         case MN_SYMBOLS_NONE:
         {
-            SVX_TRACE(213,ByteString( "SVX_SYMBOLTYPE_NONE" ) );
             nSymbolType=SVX_SYMBOLTYPE_NONE;
             pGraphic=NULL;
             bEnable=FALSE;
@@ -1858,8 +1805,6 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
         break;
         default:
         {
-            SVX_TRACE(213,ByteString( "SVX_SYMBOLTYPE_ Brush lesen, wird aus Datei generiert" ) );
-            nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;//wie Gallery, Graphic ist im Item enthalten
             SvxOpenGraphicDialog aGrfDlg(SVX_RES(RID_STR_EDIT_GRAPHIC));
             aGrfDlg.EnableLink(sal_False);
             aGrfDlg.AsLink(sal_False);
@@ -1868,8 +1813,14 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
                 // ausgewaehlten Filter merken
                 aGrfName = aGrfDlg.GetPath();
                 if( !aGrfDlg.GetGraphic(aGraphic) )
+                {
+                    nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
                     pGraphic = &aGraphic;
+                    bResetSize = TRUE;
+                }
             }
+            if( !pGraphic )
+                return 0;
         }
         break;
     }
@@ -1879,28 +1830,24 @@ IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
         Size aSize = SvxNumberFormat::GetGraphicSizeMM100(pGraphic);
         aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)ePoolUnit);
         aSymbolGraphic=*pGraphic;
-        if(!bDontSetSize)
+        if( bResetSize )
         {
             aSymbolSize=aSize;
-#if OSL_DEBUG_LEVEL > 1
-            ByteString aStr( "SymbolSize changed to " );
-            aStr.Append( ByteString::CreateFromInt32( aSize.Width() ) );
-            aStr.Append( ' ' );
-            aStr.Append( ByteString::CreateFromInt32( aSize.Height() ) );
-            SVX_TRACE(213, aStr );
-#endif
+        }
+        else if( nPreviousSymbolType == SVX_SYMBOLTYPE_BRUSHITEM )
+        {   //#i31097# Data Point Symbol size changes when a different symbol is choosen(maoyg)
+            if( aSymbolSize.Width() != aSymbolSize.Height() )
+            {
+                aSize.setWidth( (long)( aSymbolSize.Width() + aSymbolSize.Height() )/2 );
+                aSize.setHeight( (long)( aSymbolSize.Width() + aSymbolSize.Height() )/2 );
+                aSymbolSize = aSize;
+            }
         }
         aCtlPreview.SetSymbol(&aSymbolGraphic,aSymbolSize);
     }
     else
     {
         aSymbolGraphic=Graphic();
-        SVX_TRACE(213, ByteString( "setting empty graphic" ) );
-        if(!bDontSetSize)
-        {
-            SVX_TRACE(213, ByteString( "Size set to 0,0" ) );
-            aSymbolSize=Size(0,0);
-        }
         aCtlPreview.SetSymbol(NULL,aSymbolSize);
         bEnable=FALSE;
     }
