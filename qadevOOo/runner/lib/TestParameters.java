@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TestParameters.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:43:53 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,6 +313,9 @@ public class TestParameters extends Hashtable {
             } else {
                 operatingSystem = PropertyName.UNXSOLS;
             }
+        } else {
+            System.out.println("ERROR: not supported platform: " + osname);
+            System.exit(1);
         }
         return operatingSystem;
     }
