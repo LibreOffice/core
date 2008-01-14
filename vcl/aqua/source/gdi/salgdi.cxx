@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:14:59 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:17:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -281,6 +281,7 @@ AquaSalGraphics::AquaSalGraphics()
     , mpMacFontData( NULL )
     , mnATSUIRotation( 0 )
     , mfFontScale( 1.0 )
+    , mfFontStretch( 1.0 )
     , mbNonAntialiasedText( false )
     , mbPrinter( false )
     , mbVirDev( false )
@@ -352,6 +353,13 @@ static void GetDisplayResolution( long& rDPIX, long& rDPIY )
     }
 }
 
+void AquaSalGraphics::updateResolution()
+{
+    DBG_ASSERT( mbWindow, "updateResolution on inappropriate graphics" );
+    GetDisplayResolution( mnRealDPIX, mnRealDPIY );
+    mfFakeDPIScale = 1.0;
+}
+
 void AquaSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 {
     if( !mnRealDPIY )
@@ -369,6 +377,17 @@ void AquaSalGraphics::GetResolution( long& rDPIX, long& rDPIY )
 void AquaSalGraphics::GetScreenFontResolution( long& rDPIX, long& rDPIY )
 {
     GetResolution( rDPIX, rDPIY );
+
+    // the screen font resolution should equal the real resolution
+    // but to satisfy the quite insane heuristics in Window::ImplUpdateGlobalSettings()
+    // it needs to be tweaked
+    // TODO: remove the tweaking below if it becomes possible
+    if( (rDPIX < 72) || (rDPIY < 72) )
+    {
+        const long nMinDPI = (rDPIX <= rDPIY) ? rDPIX : rDPIY;
+        rDPIX = (72 * rDPIX + (nMinDPI/2)) / nMinDPI;
+        rDPIY = (72 * rDPIY + (nMinDPI/2)) / nMinDPI;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1335,9 +1354,9 @@ bool AquaSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
 void AquaSalGraphics::SetTextColor( SalColor nSalColor )
 {
     RGBColor color;
-    color.red     = (unsigned short) SALCOLOR_RED(nSalColor)   * 65535.0 / 255.0;
-    color.green   = (unsigned short) SALCOLOR_GREEN(nSalColor) * 65535.0 / 255.0;
-    color.blue    = (unsigned short) SALCOLOR_BLUE(nSalColor)  * 65535.0 / 255.0;
+    color.red     = (unsigned short) ( SALCOLOR_RED(nSalColor)   * 65535.0 / 255.0 );
+    color.green   = (unsigned short) ( SALCOLOR_GREEN(nSalColor) * 65535.0 / 255.0 );
+    color.blue    = (unsigned short) ( SALCOLOR_BLUE(nSalColor)  * 65535.0 / 255.0 );
 
     ATSUAttributeTag aTag = kATSUColorTag;
     ByteCount aValueSize = sizeof( color );
@@ -1382,15 +1401,15 @@ void AquaSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     // convert quartz units to pixel units
     // please see the comment in AquaSalGraphics::SetFont() for details
     const double fPixelSize = (mfFontScale * mfFakeDPIScale * fPointSize);
-    pMetric->mnAscent       = +(aMetrics.ascent  * fPixelSize + 0.5);
-    pMetric->mnDescent      = -(aMetrics.descent * fPixelSize + 0.5);
-    pMetric->mnExtLeading   = +(aMetrics.leading * fPixelSize + 0.5);
+    pMetric->mnAscent       = + static_cast<long>(aMetrics.ascent  * fPixelSize + 0.5);
+    pMetric->mnDescent      = - static_cast<long>(aMetrics.descent * fPixelSize + 0.5);
+    pMetric->mnExtLeading   = + static_cast<long>(aMetrics.leading * fPixelSize + 0.5);
     pMetric->mnIntLeading   = 0;
     // ATSFontMetrics.avgAdvanceWidth is obsolete, so it is usually set to zero
     // since ImplFontMetricData::mnWidth is only used for stretching/squeezing fonts
     // setting this width to the pixel height of the fontsize is good enough
     // it also makes the calculation of the stretch factor simple
-    pMetric->mnWidth        = fPixelSize + 0.5;
+    pMetric->mnWidth        = static_cast<long>(mfFontStretch * fPixelSize + 0.5);
 
     // apply the "CJK needs extra leading" heuristic if needed
     if( mpMacFontData->HasCJKSupport() )
@@ -1648,12 +1667,15 @@ USHORT AquaSalGraphics::SetFont( ImplFontSelectData* pReqFont, int nFallbackLeve
     // prepare font stretching
     const ATSUAttributeTag aMatrixTag = kATSUFontMatrixTag;
     if( (pReqFont->mnWidth == 0) || (pReqFont->mnWidth == pReqFont->mnHeight) )
+    {
+        mfFontStretch = 1.0;
         ATSUClearAttributes( maATSUStyle, 1, &aMatrixTag );
+    }
     else
     {
-        const float fStretch = (float)pReqFont->mnWidth / pReqFont->mnHeight;
-        AquaLog("font stretching by %d/%d => %f\n", pReqFont->mnWidth, pReqFont->mnHeight, fStretch);
-        CGAffineTransform aMatrix = CGAffineTransformMakeScale( fStretch, 1.0F );
+        mfFontStretch = (float)pReqFont->mnWidth / pReqFont->mnHeight;
+        AquaLog("font stretching by %d/%d => %f\n", pReqFont->mnWidth, pReqFont->mnHeight, mfFontStretch);
+        CGAffineTransform aMatrix = CGAffineTransformMakeScale( mfFontStretch, 1.0F );
         const ATSUAttributeValuePtr aAttr = &aMatrix;
         const ByteCount aMatrixBytes = sizeof(aMatrix);
         eStatus = ATSUSetAttributes( maATSUStyle, 1, &aMatrixTag, &aMatrixBytes, &aAttr );
