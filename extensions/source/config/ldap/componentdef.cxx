@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentdef.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:57:11 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,13 +70,13 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
         NULL,
         0
     },
-    { NULL }
+    { NULL, NULL, NULL, NULL, NULL, 0 }
 } ;
 //------------------------------------------------------------------------------
 
 extern "C" void SAL_CALL component_getImplementationEnvironment(
                                             const sal_Char **aEnvTypeName,
-                                            uno_Environment **aEnvironment) {
+                                            uno_Environment** /*aEnvironment*/) {
     *aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME ;
 }
 //------------------------------------------------------------------------------
