@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 15:02:02 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 14:31:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -150,8 +150,7 @@ CFLAGSWERRCC=-Werror
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    autodoc \
-    extensions
+    autodoc
 
 # Currently, there is no nas support for OS X...
 CDEFS+= -DNO_AUDIO
