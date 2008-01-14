@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertysethelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:58:28 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:42:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,7 @@ sal_Bool SAL_CALL PropertySetHelper::convertFastPropertyValue(
 
 //..........................................................................
 void SAL_CALL ReadOnlyPropertySetHelper::setFastPropertyValue_NoBroadcast(
-    sal_Int32 nHandle, const uno::Any& rValue )
+    sal_Int32 /*nHandle*/, const uno::Any& /*rValue*/ )
         throw (uno::Exception)
 {
     OSL_ENSURE(false, "Attempt to set value in read-only property set");
@@ -146,7 +146,7 @@ void SAL_CALL ReadOnlyPropertySetHelper::setFastPropertyValue_NoBroadcast(
 
 //..........................................................................
 sal_Bool SAL_CALL ReadOnlyPropertySetHelper::convertFastPropertyValue(
-    uno::Any & rConvertedValue, uno::Any & rOldValue, sal_Int32 nHandle, const uno::Any& rValue )
+    uno::Any & /*rConvertedValue*/, uno::Any & /*rOldValue*/, sal_Int32 /*nHandle*/, const uno::Any& /*rValue*/ )
         throw (lang::IllegalArgumentException)
 {
     OSL_ENSURE(false, "Attempt to convert value in read-only property set");

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nsp_windows.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:02:23 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:44:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,10 +35,13 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
-#ifdef WNT
-#include <windows.h>
-#endif
 
+#ifdef WNT
+    #pragma warning (push,1)
+    #pragma warning (disable:4668)
+    #include <windows.h>
+    #pragma warning (pop)
+#endif
 
 int NSP_ResetWinStyl(long hParent)
 {
