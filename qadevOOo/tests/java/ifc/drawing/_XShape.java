@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XShape.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:41:58 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:22:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,7 @@ public class _XShape extends MultiMethodTest {
             return;
         }
         // get the current thread's holder
-        sNew = new Size(sOld.Height + 10, sOld.Width + 10) ;
+        sNew = new Size(sOld.Width + 10,sOld.Height + 10) ;
 
         //set new size
         log.println("change the size");
@@ -151,7 +151,12 @@ public class _XShape extends MultiMethodTest {
 
         //result &= util.ValueComparer.equalValue(sNew, gSize) ;
         //errors in calculation from points/twips less then 1 are acceptable
-        result &= (sNew.Height-gSize.Height < 2) && (sNew.Width-gSize.Width < 2);
+        result &= (sNew.Height-gSize.Height <= 2) && (sNew.Width-gSize.Width <= 2);
+
+        if (result && ((sNew.Height-gSize.Height != 0) || (sNew.Width-gSize.Width != 0))){
+            log.println("NOTE: there is a difference between the expected and the getted value. " +
+                    "This might be ok because of problems in calculation from points <-> twips");
+        }
         tRes.tested("setSize()", result);
     }
 
@@ -182,6 +187,11 @@ public class _XShape extends MultiMethodTest {
         oObj.setPosition(pNew);
 
         Point gPos = oObj.getPosition() ;
+
+        log.println("Previously: "+pOld.X+";"+pOld.Y);
+        log.println("Expected: "+pNew.X+";"+pNew.Y);
+        log.println("Getting: "+gPos.X+";"+gPos.Y);
+
         result = !util.ValueComparer.equalValue(pOld, gPos) ;
 
         tRes.tested("setPosition()", result);
