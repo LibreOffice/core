@@ -4,9 +4,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:09:42 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:35:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -949,13 +949,23 @@ uno::Sequence< beans::PropertyValue > OWriteStream_Impl::ReadPackageStreamProper
         nPropNum = 4;
     uno::Sequence< beans::PropertyValue > aResult( nPropNum );
 
-    aResult[0].Name = ::rtl::OUString::createFromAscii("Compressed");
-    aResult[1].Name = ::rtl::OUString::createFromAscii("Size");
+    // The "Compressed" property must be set after "MediaType" property,
+    // since the setting of the last one can change the value of the first one
+
     if ( m_nStorageType == OFOPXML_STORAGE || m_nStorageType == PACKAGE_STORAGE )
     {
-        aResult[2].Name = ::rtl::OUString::createFromAscii("MediaType");
+        aResult[0].Name = ::rtl::OUString::createFromAscii("MediaType");
+        aResult[1].Name = ::rtl::OUString::createFromAscii("Compressed");
+        aResult[2].Name = ::rtl::OUString::createFromAscii("Size");
+
         if ( m_nStorageType == PACKAGE_STORAGE )
             aResult[3].Name = ::rtl::OUString::createFromAscii("Encrypted");
+    }
+    else
+    {
+        aResult[0].Name = ::rtl::OUString::createFromAscii("Compressed");
+        aResult[1].Name = ::rtl::OUString::createFromAscii("Size");
+
     }
 
     // TODO: may be also raw stream should be marked
@@ -1733,6 +1743,7 @@ void OWriteStream::CopyToStreamInternally_Impl( const uno::Reference< io::XStrea
         throw eThrown;
 
     // now the properties can be copied
+    // the order of the properties setting is not important for StorageStream API
     ::rtl::OUString aPropName = ::rtl::OUString::createFromAscii( "Compressed" );
     xDestProps->setPropertyValue( aPropName, getPropertyValue( aPropName ) );
     if ( m_pData->m_nStorageType == PACKAGE_STORAGE || m_pData->m_nStorageType == OFOPXML_STORAGE )
