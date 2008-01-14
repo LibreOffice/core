@@ -4,9 +4,9 @@
  *
  *  $RCSfile: VSeriesPlotter.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:10:42 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:05:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,6 @@
 #include <com/sun/star/util/XCloneable.hpp>
 #endif
 
-#include <algorithm>
 #include <functional>
 
 //.............................................................................
@@ -188,6 +187,7 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
         , m_bCategoryXAxis(bCategoryXAxis)
         , m_xColorScheme()
         , m_xExplicitCategoriesProvider()
+        , m_bPointsWereSkipped(false)
 {
     DBG_ASSERT(m_xChartTypeModel.is(),"no XChartType available in view, fallback to default values may be wrong");
 }
@@ -685,11 +685,16 @@ double lcl_getErrorBarLogicLength(
                                              ? C2U("PositiveError")
                                              : C2U("NegativeError")) >>= fPercent )
                 {
-                    double fMaxValue = *(::std::max_element(
-                                             rData.getConstArray(),
-                                             rData.getConstArray() + rData.getLength()));
-                    if( ! ::rtl::math::isNan( fMaxValue ) &&
-                        ! ::rtl::math::isNan( fPercent ))
+                    double fMaxValue;
+                    ::rtl::math::setInf(&fMaxValue, true);
+                    const double* pValues = rData.getConstArray();
+                    for(sal_Int32 i=0; i<rData.getLength(); ++i, ++pValues)
+                    {
+                        if(fMaxValue<*pValues)
+                            fMaxValue=*pValues;
+                    }
+                    if( ::rtl::math::isFinite( fMaxValue ) &&
+                        ::rtl::math::isFinite( fPercent ))
                     {
                         fResult = fMaxValue * fPercent / 100.0;
                     }
@@ -826,44 +831,59 @@ void VSeriesPlotter::createErrorBar(
         if( bShowPositive )
         {
             double fLength = lcl_getErrorBarLogicLength( rData, xErrorBarProperties, eErrorBarStyle, nIndex, true );
-            double fLocalX = fX;
-            double fLocalY = fY;
-            if( bYError )
-                fLocalY+=fLength;
+            if( ::rtl::math::isFinite( fLength ) )
+            {
+                double fLocalX = fX;
+                double fLocalY = fY;
+                if( bYError )
+                    fLocalY+=fLength;
+                else
+                    fLocalX+=fLength;
+                bCreatePositiveBorder = m_pPosHelper->isLogicVisible(fLocalX, fLocalY, fZ);
+                aPositive = m_pPosHelper->transformLogicToScene( fLocalX, fLocalY, fZ, true );
+            }
             else
-                fLocalX+=fLength;
-            bCreatePositiveBorder = m_pPosHelper->isLogicVisible(fLocalX, fLocalY, fZ);
-            aPositive = m_pPosHelper->transformLogicToScene( fLocalX, fLocalY, fZ, true );
+                bShowPositive = false;
         }
 
         if( bShowNegative )
         {
             double fLength = lcl_getErrorBarLogicLength( rData, xErrorBarProperties, eErrorBarStyle, nIndex, false );
-            double fLocalX = fX;
-            double fLocalY = fY;
-            if( bYError )
-                fLocalY-=fLength;
-            else
-                fLocalX-=fLength;
+            if( ::rtl::math::isFinite( fLength ) )
+            {
+                double fLocalX = fX;
+                double fLocalY = fY;
+                if( bYError )
+                    fLocalY-=fLength;
+                else
+                    fLocalX-=fLength;
 
-            bCreateNegativeBorder = m_pPosHelper->isLogicVisible( fLocalX, fLocalY, fZ);
-            aNegative = m_pPosHelper->transformLogicToScene( fLocalX, fLocalY, fZ, true );
+                bCreateNegativeBorder = m_pPosHelper->isLogicVisible( fLocalX, fLocalY, fZ);
+                aNegative = m_pPosHelper->transformLogicToScene( fLocalX, fLocalY, fZ, true );
+            }
+            else
+                bShowNegative = false;
         }
+
+        if(!bShowPositive && !bShowNegative)
+            return;
 
         drawing::PolyPolygonShape3D aPoly;
 
         sal_Int32 nSequenceIndex=0;
-        AddPointToPoly( aPoly, aNegative, nSequenceIndex );
+        if( bShowNegative )
+            AddPointToPoly( aPoly, aNegative, nSequenceIndex );
         AddPointToPoly( aPoly, aMiddle, nSequenceIndex );
-        AddPointToPoly( aPoly, aPositive, nSequenceIndex );
+        if( bShowPositive )
+            AddPointToPoly( aPoly, aPositive, nSequenceIndex );
 
-        if(bCreateNegativeBorder)
+        if( bShowNegative && bCreateNegativeBorder )
         {
             ::basegfx::B2DVector aMainDirection = lcl_getErrorBarMainDirection( aMiddle, aNegative, m_pPosHelper, rUnscaledLogicPosition, bYError );
             nSequenceIndex++;
             lcl_AddErrorBottomLine( aNegative, aMainDirection, aPoly, nSequenceIndex );
         }
-        if(bCreatePositiveBorder)
+        if( bShowPositive && bCreatePositiveBorder )
         {
             ::basegfx::B2DVector aMainDirection = lcl_getErrorBarMainDirection( aMiddle, aPositive, m_pPosHelper, rUnscaledLogicPosition, bYError );
             nSequenceIndex++;
@@ -1729,6 +1749,11 @@ void VSeriesPlotter::setPageReferenceSize( const ::com::sun::star::awt::Size & r
 void VSeriesPlotter::setCoordinateSystemResolution( const Sequence< sal_Int32 >& rCoordinateSystemResolution )
 {
     m_aCoordinateSystemResolution = rCoordinateSystemResolution;
+}
+
+bool VSeriesPlotter::PointsWereSkipped() const
+{
+    return m_bPointsWereSkipped;
 }
 
 Sequence< ViewLegendEntry > SAL_CALL VSeriesPlotter::createLegendEntries(
