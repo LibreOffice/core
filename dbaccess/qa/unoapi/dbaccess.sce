@@ -1,15 +1,15 @@
-#-o dbaccess.ConnectionLineAccessibility
+#i84113 -o dbaccess.ConnectionLineAccessibility 
 -o dbaccess.DBContentLoader
-#-o dbaccess.JoinViewAccessibility
+#i84114 -o dbaccess.JoinViewAccessibility
 -o dbaccess.OCommandDefinition
 -o dbaccess.ODatabaseContext
 -o dbaccess.ODatabaseSource
 -o dbaccess.ODatasourceAdministrationDialog
 -o dbaccess.ODatasourceBrowser
 -o dbaccess.OInteractionHandler
-#-o dbaccess.OQueryDesign
+#i84116 -o dbaccess.OQueryDesign
 -o dbaccess.ORowSet
 -o dbaccess.OSQLMessageDialog
 -o dbaccess.OSingleSelectQueryComposer
-#-o dbaccess.SbaXGridControl
-#-o dbaccess.TableWindowAccessibility
+#i84127 -o dbaccess.SbaXGridControl
+#i84128 -o dbaccess.TableWindowAccessibility
