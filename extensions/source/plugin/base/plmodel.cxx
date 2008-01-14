@@ -4,9 +4,9 @@
  *
  *  $RCSfile: plmodel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:08:57 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:51:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,10 +154,10 @@ sal_Bool PluginModel::convertFastPropertyValue( Any & rConvertedValue,
 {
     if( nHandle == 1 || nHandle == 2 )
     {
-        if( rValue.getValueTypeClass() == typelib_TypeClass_STRING )
+        if( rValue.getValueTypeClass() == TypeClass_STRING )
         {
             rConvertedValue = rValue;
-            if( nHandle = 2 )
+            if( nHandle == 2 )
                 rOldValue <<= m_aCreationURL;
             else if( nHandle == 1 )
                 rOldValue <<= m_aMimeType;
@@ -169,9 +169,9 @@ sal_Bool PluginModel::convertFastPropertyValue( Any & rConvertedValue,
 
 void PluginModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,
                                                     const Any& rValue )
-    throw()
+    throw(::com::sun::star::uno::Exception)
 {
-    if( rValue.getValueTypeClass() == typelib_TypeClass_STRING ) // FIXME wrong type!
+    if( rValue.getValueTypeClass() == TypeClass_STRING ) // FIXME wrong type!
 
     {
         if( nHandle == 2 )
