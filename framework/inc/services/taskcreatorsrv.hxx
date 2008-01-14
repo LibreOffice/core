@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskcreatorsrv.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:33:13 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:23:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,6 +194,8 @@ class TaskCreatorService : public  css::lang::XTypeProvider
         css::uno::Reference< css::awt::XWindow > implts_createContainerWindow( const css::uno::Reference< css::awt::XWindow >& xParentWindow ,
                                                                                const css::awt::Rectangle&                      aPosSize      ,
                                                                                      sal_Bool                                  bTopWindow    );
+
+        void implts_applyDocStyleToWindow(const css::uno::Reference< css::awt::XWindow >& xWindow) const;
 
         css::uno::Reference< css::frame::XFrame > implts_createFrame( const css::uno::Reference< css::frame::XFrame >& xParentFrame     ,
                                                                       const css::uno::Reference< css::awt::XWindow >&  xContainerWindow ,
