@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ControllerCommandDispatch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:54:58 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:58:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,46 +412,135 @@ void ControllerCommandDispatch::initialize()
         if( m_apControllerState.get() && xModel.is())
             m_apControllerState->update( m_xController, xModel );
 
+        updateCommandAvailability();
     }
 }
 
-void ControllerCommandDispatch::conditionalFireStatusEventForURL(
-        const OUString & rCompareURL,
-        const OUString & rURL,
-        const uno::Any & rState,
-        bool bEnabled,
-        const Reference< frame::XStatusListener > & xSingleListener )
-{
-    if( rCompareURL.getLength() == 0 ||
-        rURL.equals( rCompareURL ))
-    {
-        fireStatusEventForURL( rURL, rState, bEnabled, xSingleListener );
-    }
-}
-
-void ControllerCommandDispatch::fireStatusEvent(
+void ControllerCommandDispatch::fireStatusEventForURLImpl(
     const OUString & rURL,
-    const Reference< frame::XStatusListener > & xSingleListener /* = 0 */ )
+    const Reference< frame::XStatusListener > & xSingleListener )
 {
-    uno::Any aEmptyArg;
+    ::std::map< OUString, uno::Any >::const_iterator aArgIt( m_aCommandArguments.find( rURL ));
+    if( aArgIt != m_aCommandArguments.end())
+        fireStatusEventForURL( rURL, aArgIt->second, commandAvailable( rURL ), xSingleListener );
+    else
+        fireStatusEventForURL( rURL, uno::Any(), commandAvailable( rURL ), xSingleListener );
+}
 
+void ControllerCommandDispatch::updateCommandAvailability()
+{
     bool bModelStateIsValid = ( m_apModelState.get() != 0 );
     bool bControllerStateIsValid = ( m_apControllerState.get() != 0 );
-
     // Model and controller states exist.
     OSL_ASSERT( bModelStateIsValid );
     OSL_ASSERT( bControllerStateIsValid );
 
     // read-only
     bool bIsWritable = bModelStateIsValid && (! m_apModelState->bIsReadOnly);
-
     // paste is available
     // @todo: determine correctly
     bool bHasSuitableClipboardContent = true;
 
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:Cut"), aEmptyArg, bIsWritable && bControllerStateIsValid && m_apControllerState->bIsDeleteableObjectSelected, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:Copy"), aEmptyArg, bControllerStateIsValid && m_apControllerState->bHasSelectedObject, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:Paste"), aEmptyArg, bIsWritable && bHasSuitableClipboardContent, xSingleListener );
+    // edit commands
+    m_aCommandAvailability[ C2U(".uno:Cut")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsDeleteableObjectSelected;
+    m_aCommandAvailability[ C2U(".uno:Copy")] = bControllerStateIsValid && m_apControllerState->bHasSelectedObject;
+    m_aCommandAvailability[ C2U(".uno:Paste")] = bIsWritable && bHasSuitableClipboardContent;
+
+    // toolbar commands
+    m_aCommandAvailability[ C2U(".uno:ToggleGridHorizontal")] = bIsWritable;
+    m_aCommandArguments[ C2U(".uno:ToggleGridHorizontal")] = uno::makeAny( m_apModelState->bHasMainYGrid );
+
+    m_aCommandAvailability[ C2U(".uno:ToggleLegend")] = bIsWritable;
+    m_aCommandArguments[ C2U(".uno:ToggleLegend")] = uno::makeAny( m_apModelState->bHasLegend );
+
+    m_aCommandAvailability[ C2U(".uno:NewArrangement")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:Update")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:DefaultColors")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:BarWidth")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:NumberOfLines")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:ArrangeRow")] = bIsWritable;
+
+    // insert objects
+    m_aCommandAvailability[ C2U(".uno:InsertTitle")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:InsertLegend")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:InsertDescription")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:InsertAxis")] = bIsWritable && m_apModelState->bSupportsAxes;
+    m_aCommandAvailability[ C2U(".uno:InsertGrids")] = bIsWritable && m_apModelState->bSupportsAxes;
+    m_aCommandAvailability[ C2U(".uno:InsertStatistics")] = bIsWritable && m_apModelState->bSupportsStatistics;
+    m_aCommandAvailability[ C2U(".uno:InsertSymbol")] = bIsWritable && m_apControllerState->bIsTextObject;
+
+    // format objects
+    m_aCommandAvailability[ C2U(".uno:DiagramObjects")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bIsFormateableObjectSelected;
+    m_aCommandAvailability[ C2U(".uno:DiagramType")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:Legend")] = bIsWritable && m_apModelState->bHasLegend;
+    m_aCommandAvailability[ C2U(".uno:DiagramWall")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasWall;
+    m_aCommandAvailability[ C2U(".uno:DiagramArea")] = bIsWritable;
+    m_aCommandAvailability[ C2U(".uno:TransformDialog")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bHasSelectedObject && m_apControllerState->bIsDraggableObject;
+
+    // 3d commands
+    m_aCommandAvailability[ C2U(".uno:View3D")] = bIsWritable && bModelStateIsValid && m_apModelState->bIsThreeD;
+    m_aCommandAvailability[ C2U(".uno:DiagramFloor")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasFloor;
+
+    // depending on own data
+    m_aCommandAvailability[ C2U(".uno:DataRanges")] = bIsWritable && bModelStateIsValid && (! m_apModelState->bHasOwnData);
+    m_aCommandAvailability[ C2U(".uno:DiagramData")] = bIsWritable && bModelStateIsValid &&  m_apModelState->bHasOwnData;
+
+    // titles
+    m_aCommandAvailability[ C2U(".uno:MainTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasMainTitle;
+    m_aCommandAvailability[ C2U(".uno:SubTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasSubTitle;
+    m_aCommandAvailability[ C2U(".uno:XTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasXAxisTitle;
+    m_aCommandAvailability[ C2U(".uno:YTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasYAxisTitle;
+    m_aCommandAvailability[ C2U(".uno:ZTitle")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasZAxisTitle;
+    m_aCommandAvailability[ C2U(".uno:AllTitles")] = bIsWritable && bModelStateIsValid && m_apModelState->HasAnyTitle();
+
+    // text
+    m_aCommandAvailability[ C2U(".uno:ScaleText")] = bIsWritable && bModelStateIsValid ;
+
+    // axes
+    m_aCommandAvailability[ C2U(".uno:DiagramAxisX")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasXAxis;
+    m_aCommandAvailability[ C2U(".uno:DiagramAxisY")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasYAxis;
+    m_aCommandAvailability[ C2U(".uno:DiagramAxisZ")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasZAxis;
+    m_aCommandAvailability[ C2U(".uno:DiagramAxisA")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasAAxis;
+    m_aCommandAvailability[ C2U(".uno:DiagramAxisB")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasBAxis;
+    m_aCommandAvailability[ C2U(".uno:DiagramAxisAll")] = bIsWritable && bModelStateIsValid && m_apModelState->HasAnyAxis();
+
+    // grids
+    // note: x and y are swapped in the commands!
+    m_aCommandAvailability[ C2U(".uno:DiagramGridYMain")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasMainXGrid;
+    m_aCommandAvailability[ C2U(".uno:DiagramGridXMain")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasMainYGrid;
+    m_aCommandAvailability[ C2U(".uno:DiagramGridZMain")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasMainZGrid;
+    m_aCommandAvailability[ C2U(".uno:DiagramGridYHelp")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasHelpXGrid;
+    m_aCommandAvailability[ C2U(".uno:DiagramGridXHelp")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasHelpYGrid;
+    m_aCommandAvailability[ C2U(".uno:DiagramGridZHelp")] = bIsWritable && bModelStateIsValid && m_apModelState->bHasHelpZGrid;
+    m_aCommandAvailability[ C2U(".uno:DiagramGridAll")] = bIsWritable && bModelStateIsValid && m_apModelState->HasAnyGrid();
+
+    // series arrangement
+    m_aCommandAvailability[ C2U(".uno:Forward")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesForward;
+    m_aCommandAvailability[ C2U(".uno:Backward")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayMoveSeriesBackward;
+
+    m_aCommandAvailability[ C2U(".uno:InsertTrendline")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendline;
+    m_aCommandAvailability[ C2U(".uno:InsertTrendlineEquation")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendlineEquation;
+}
+
+bool ControllerCommandDispatch::commandAvailable( const OUString & rCommand )
+{
+    ::std::map< OUString, bool >::const_iterator aIt( m_aCommandAvailability.find( rCommand ));
+    if( aIt != m_aCommandAvailability.end())
+        return aIt->second;
+    OSL_ENSURE( false, "commandAvailable: command not in availability map" );
+    return false;
+}
+
+void ControllerCommandDispatch::fireStatusEvent(
+    const OUString & rURL,
+    const Reference< frame::XStatusListener > & xSingleListener /* = 0 */ )
+{
+    if( rURL.getLength() == 0 )
+        for( ::std::map< OUString, bool >::const_iterator aIt( m_aCommandAvailability.begin());
+             aIt != m_aCommandAvailability.end(); ++aIt )
+            fireStatusEventForURLImpl( aIt->first, xSingleListener );
+    else
+        fireStatusEventForURLImpl( rURL, xSingleListener );
 
     // statusbar. Should be handled by base implementation
     // @todo: remove if Issue 68864 is fixed
@@ -461,81 +550,6 @@ void ControllerCommandDispatch::fireStatusEvent(
         bool bIsStatusBarVisible( lcl_isStatusBarVisible( m_xController ));
         fireStatusEventForURL( C2U(".uno:StatusBarVisible"), uno::makeAny( bIsStatusBarVisible ), true, xSingleListener );
     }
-
-    // toolbar commands
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:ToggleGridHorizontal"), uno::makeAny( m_apModelState->bHasMainYGrid ), bIsWritable, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:ToggleLegend"), uno::makeAny( m_apModelState->bHasLegend ), bIsWritable, xSingleListener );
-
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:NewArrangement"), aEmptyArg, bIsWritable, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:Update"), aEmptyArg, bIsWritable, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DefaultColors"), aEmptyArg, bIsWritable, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:BarWidth"), aEmptyArg, bIsWritable, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:NumberOfLines"), aEmptyArg, bIsWritable, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:ArrangeRow"), aEmptyArg, bIsWritable, xSingleListener );
-
-    // insert objects
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:InsertTitle"), aEmptyArg, bIsWritable, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:InsertLegend"), aEmptyArg, bIsWritable, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:InsertDescription"), aEmptyArg, bIsWritable, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:InsertAxis"), aEmptyArg, bIsWritable && m_apModelState->bSupportsAxes, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:InsertGrids"), aEmptyArg, bIsWritable && m_apModelState->bSupportsAxes, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:InsertStatistics"), aEmptyArg, bIsWritable && m_apModelState->bSupportsStatistics, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:InsertSymbol"), aEmptyArg, bIsWritable && m_apControllerState->bIsTextObject, xSingleListener );
-
-    // format objects
-//MENUCHANGE    conditionalFireStatusEventForURL( rURL, C2U(".uno:SelectSourceRanges"), aEmptyArg, bIsWritable, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramObjects"), aEmptyArg, bIsWritable && bControllerStateIsValid && m_apControllerState->bIsFormateableObjectSelected, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramType"), aEmptyArg, bIsWritable, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:Legend"), aEmptyArg, bIsWritable && m_apModelState->bHasLegend, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramWall"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasWall, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramArea"), aEmptyArg, bIsWritable, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:TransformDialog"), aEmptyArg, bIsWritable && bControllerStateIsValid && m_apControllerState->bHasSelectedObject && m_apControllerState->bIsDraggableObject, xSingleListener );
-
-    // 3d commands
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:View3D"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bIsThreeD, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramFloor"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasFloor, xSingleListener );
-
-    // depending on own data
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DataRanges"), aEmptyArg, bIsWritable && bModelStateIsValid && (! m_apModelState->bHasOwnData), xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramData"), aEmptyArg, bIsWritable && bModelStateIsValid &&  m_apModelState->bHasOwnData, xSingleListener );
-
-    // titles
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:MainTitle"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasMainTitle, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:SubTitle"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasSubTitle, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:XTitle"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasXAxisTitle, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:YTitle"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasYAxisTitle, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:ZTitle"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasZAxisTitle, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:AllTitles"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->HasAnyTitle(), xSingleListener );
-
-    // text
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:ScaleText"), uno::makeAny( m_apModelState->bHasAutoScaledText ), bIsWritable && bModelStateIsValid , xSingleListener );
-
-    // axes
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramAxisX"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasXAxis, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramAxisY"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasYAxis, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramAxisZ"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasZAxis, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramAxisA"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasAAxis, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramAxisB"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasBAxis, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramAxisAll"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->HasAnyAxis(), xSingleListener );
-
-    // grids
-    // note: x and y are swapped in the commands!
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramGridYMain"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasMainXGrid, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramGridXMain"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasMainYGrid, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramGridZMain"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasMainZGrid, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramGridYHelp"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasHelpXGrid, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramGridXHelp"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasHelpYGrid, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramGridZHelp"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->bHasHelpZGrid, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:DiagramGridAll"), aEmptyArg, bIsWritable && bModelStateIsValid && m_apModelState->HasAnyGrid(), xSingleListener );
-
-    // series arrangement
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:Forward"), aEmptyArg, bIsWritable && bControllerStateIsValid &&
-                                      m_apControllerState->bMayMoveSeriesForward, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:Backward"), aEmptyArg, bIsWritable && bControllerStateIsValid &&
-                                      m_apControllerState->bMayMoveSeriesBackward, xSingleListener );
-
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:InsertTrendline"), aEmptyArg, bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendline, xSingleListener );
-    conditionalFireStatusEventForURL( rURL, C2U(".uno:InsertTrendlineEquation"), aEmptyArg, bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddTrendlineEquation, xSingleListener );
 }
 
 // ____ XDispatch ____
@@ -544,7 +558,8 @@ void SAL_CALL ControllerCommandDispatch::dispatch(
     const Sequence< beans::PropertyValue >& Arguments )
     throw (uno::RuntimeException)
 {
-    m_xDispatch->dispatch( URL, Arguments );
+    if( commandAvailable( URL.Complete ))
+        m_xDispatch->dispatch( URL, Arguments );
 }
 
 // ____ WeakComponentImplHelperBase ____
@@ -569,13 +584,24 @@ void SAL_CALL ControllerCommandDispatch::disposing( const lang::EventObject& /* 
 void SAL_CALL ControllerCommandDispatch::modified( const lang::EventObject& aEvent )
     throw (uno::RuntimeException)
 {
+    bool bUpdateCommandAvailability = false;
+
     // Update the "ModelState" Struct.
     if( m_apModelState.get() && m_xController.is())
+    {
         m_apModelState->update( m_xController->getModel());
+        bUpdateCommandAvailability = true;
+    }
 
     // Update the "ControllerState" Struct.
     if( m_apControllerState.get() && m_xController.is())
+    {
         m_apControllerState->update( m_xController, m_xController->getModel());
+        bUpdateCommandAvailability = true;
+    }
+
+    if( bUpdateCommandAvailability )
+        updateCommandAvailability();
 
     CommandDispatch::modified( aEvent );
 }
@@ -587,7 +613,10 @@ void SAL_CALL ControllerCommandDispatch::selectionChanged( const lang::EventObje
 {
     // Update the "ControllerState" Struct.
     if( m_apControllerState.get() && m_xController.is())
+    {
         m_apControllerState->update( m_xController, m_xController->getModel());
+        updateCommandAvailability();
+    }
 
     CommandDispatch::modified( aEvent );
 }
