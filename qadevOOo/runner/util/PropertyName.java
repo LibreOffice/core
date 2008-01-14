@@ -2,13 +2,13 @@
  *
  *  $RCSfile: PropertyName.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change:$Date: 2005-11-03 14:23:04 $
+ *  last change:$Date: 2008-01-14 13:22:08 $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-03 14:23:04 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:22:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ public interface PropertyName {
     final public static String OUT_PRODUCER = "OutProducer";
     final public static String SHORT_WAIT= "ShortWait";
     final public static String OFFICE_PROVIDER = "OfficeProvider";
+    final public static String OFFICE_WATCHER = "Watcher";
     final public static String LOG_WRITER = "LogWriter";
     final public static String TIME_OUT = "TimeOut";
     final public static String THREAD_TIME_OUT = "ThreadTimeOut";
@@ -55,7 +56,27 @@ public interface PropertyName {
     final public static String AUTO_RESTART = "AutoRestart";
     final public static String NEW_OFFICE_INSTANCE = "NewOfficeInstance";
     final public static String KEEP_DOCUMENT = "KeepDocument";
+    /**
+     * path to the configuration file to create an build environment
+     */
+    final public static String OOO_ENVSET = "OOO_EnvSet";
+    /**
+     * path to the source root of OpenOffice.org
+     */
+    final public static String SRC_ROOT = "SRC_ROOT";
 
+    final public static String VERSION = "Version";
+    /**
+     * like unxsols4, unxsoli4, unxlngi5, wntmsci10
+     */
+    final public static String COMP_ENV = "COMP_ENV";
+
+    /**
+     * Path to a shel
+     * This shell is used to run some commands outside of Java
+     * example: /bin/tcsh c:\\myShell\\myShell.exe
+     */
+    final public static String SHELL = "Shell";
 
     final public static String WNTMSCI = "wntmsci";
     final public static String UNXLNGI = "unxlngi";
