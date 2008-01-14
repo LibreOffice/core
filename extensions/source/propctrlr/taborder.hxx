@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taborder.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:31:03 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:01:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,8 @@ namespace pcr
         virtual ~TabOrderListBox();
 
         void            MoveSelection( long nRelPos );
+    private:
+        using SvTreeListBox::MoveSelection;
     };
 
 
