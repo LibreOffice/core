@@ -4,9 +4,9 @@
  *
  *  $RCSfile: loadlisteneradapter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:19:22 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:40:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,11 +68,10 @@ namespace bib
     private:
         OComponentAdapterBase*  m_pAdapter;
         ::osl::Mutex&           m_rMutex;
-
     protected:
         OComponentListener( ::osl::Mutex& _rMutex )
-            :m_rMutex( _rMutex )
-            ,m_pAdapter( NULL )
+            :m_pAdapter( NULL )
+            ,m_rMutex( _rMutex )
         {
         }
 
