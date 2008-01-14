@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:32:08 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,21 +129,21 @@ void SAL_CALL SfxEvents_Impl::replaceByName( const OUSTRING & aName, const ANY &
                     // pConfig becomes the owner of the new SvxMacro
                     if ( mpObjShell && !mpObjShell->IsLoading() )
                         mpObjShell->SetModified( TRUE );
-                    maEventData[i] = aValue;
 
                     SEQUENCE < PROPERTYVALUE > aProperties;
                     if ( aValue >>= aProperties )
                     {
-                        long nPropCount = aProperties.getLength();
-                        for ( long nIndex = 0; nIndex < nPropCount; nIndex++ )
+                        ::rtl::OUString aType;
+                        if (( aProperties[0].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 ) &&
+                            ( aProperties[0].Value >>= aType ) &&
+                              aType.getLength() == 0 )
                         {
-                            if ( aProperties[ nIndex ].Name.compareToAscii( PROP_EVENT_TYPE ) == 0 )
-                            {
-                                ::rtl::OUString aType;
-                                aProperties[ nIndex ].Value >>= aType;
-                                break;
-                            }
+                            // An empty event type means no binding. Therefore reset data
+                            // to reflect that state.
+                            maEventData[i] = ANY();
                         }
+                        else
+                            maEventData[i] = aValue;
                     }
                 }
             }
@@ -261,7 +261,7 @@ static void Execute( ANY& aEventData, SfxObjectShell* pDoc )
             SfxMacroLoader::loadMacro( aScript, aAny, pDoc );
         }
         else if ( aType.compareToAscii( "Service" ) == 0 ||
-                            aType.compareToAscii( "Script" ) == 0 )
+                  aType.compareToAscii( "Script" ) == 0 )
         {
             if ( aScript.getLength() )
             {
@@ -312,6 +312,10 @@ static void Execute( ANY& aEventData, SfxObjectShell* pDoc )
                     xDisp->dispatch( aURL, ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue >() );
                 }
             }
+        }
+        else if ( aType.getLength() == 0 )
+        {
+            // Empty type means no active binding for the event. Just ignore do nothing.
         }
         else
         {
