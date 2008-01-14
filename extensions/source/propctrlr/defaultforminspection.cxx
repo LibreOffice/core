@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultforminspection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:48:00 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:56:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,9 +208,9 @@ namespace pcr
 
         struct
         {
-            sal_Char*   programmaticName;
-            USHORT      uiNameResId;
-            sal_uInt32  helpId;
+            const sal_Char* programmaticName;
+            USHORT          uiNameResId;
+            sal_uInt32      helpId;
         } aCategories[] = {
             { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_FM_PROPDLG_TAB_GENERAL },
             { "Data",       RID_STR_PROPPAGE_DATA,      HID_FM_PROPDLG_TAB_DATA },
