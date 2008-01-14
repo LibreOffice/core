@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Scale.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:48:39 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:57:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,50 +163,50 @@ TabPage TP_SCALE_Y
     CheckBox CBX_LOGARITHM
     {
         Pos = MAP_APPFONT ( 11 , 97  ) ;
-        Size = MAP_APPFONT ( 78 , 10 ) ;
+        Size = MAP_APPFONT ( 244 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Logarithmic scale" ;
     };
     CheckBox CBX_REVERSE
     {
-        Pos = MAP_APPFONT ( 103 , 97  ) ;
-        Size = MAP_APPFONT ( 78 , 10 ) ;
+        Pos = MAP_APPFONT ( 11 , 112  ) ;
+        Size = MAP_APPFONT ( 244 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Reverse ~direction" ;
     };
     FixedLine FL_TICKS
     {
-        Pos = MAP_APPFONT ( 6 , 116  ) ;
+        Pos = MAP_APPFONT ( 6 , 129  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text[ en-US ] = "Major interval marks";
     };
     CheckBox CBX_TICKS_INNER
     {
-        Pos = MAP_APPFONT ( 11 , 127  ) ;
+        Pos = MAP_APPFONT ( 11 , 140  ) ;
         Size = MAP_APPFONT ( 78 , 10 ) ;
         Text [ en-US ] = "I~nner";
     };
     CheckBox CBX_TICKS_OUTER
     {
-        Pos = MAP_APPFONT ( 103 , 127  ) ;
+        Pos = MAP_APPFONT ( 103 , 140  ) ;
         Size = MAP_APPFONT ( 78 , 10 ) ;
         Text [ en-US ] = "~Outer";
     };
     FixedLine FL_HELPTICKS
     {
-        Pos = MAP_APPFONT ( 6 , 149  ) ;
+        Pos = MAP_APPFONT ( 6 , 155  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Text[ en-US ] = "Minor interval marks";
     };
     CheckBox CBX_HELPTICKS_INNER
     {
-        Pos = MAP_APPFONT ( 11 , 160  );
+        Pos = MAP_APPFONT ( 11 , 166  );
         Size = MAP_APPFONT ( 78 , 10 ) ;
         Text [ en-US ] = "Inne~r";
     };
     CheckBox CBX_HELPTICKS_OUTER
     {
-        Pos = MAP_APPFONT ( 103 , 160  ) ;
+        Pos = MAP_APPFONT ( 103 , 166  ) ;
         Size = MAP_APPFONT ( 78 , 10 ) ;
         Text [ en-US ] = "Out~er";
     };
