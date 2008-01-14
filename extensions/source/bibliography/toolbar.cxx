@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:56:57 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:40:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,9 +95,9 @@ using namespace ::com::sun::star::beans;
 
 
 BibToolBarListener::BibToolBarListener(BibToolBar *pTB,rtl::OUString aStr,sal_uInt16 nId):
-        pToolBar(pTB),
         nIndex(nId),
-        aCommand(aStr)
+        aCommand(aStr),
+        pToolBar(pTB)
 {
 }
 
@@ -251,16 +251,16 @@ SV_IMPL_PTRARR( BibToolBarListenerArr, BibToolBarListenerPtr);
 
 BibToolBar::BibToolBar(Window* pParent, Link aLink, WinBits nStyle):
     ToolBox(pParent,BibResId(RID_BIB_TOOLBAR)),
-    aFtSource(this,WB_VCENTER),
-    aLBSource(this,WB_DROPDOWN),
-    aFtQuery(this,WB_VCENTER),
-    aEdQuery(this),
     aImgLst(BibResId(  RID_TOOLBAR_IMGLIST     )),
     aImgLstHC(BibResId(RID_TOOLBAR_IMGLIST_HC  )),
     aBigImgLst(BibResId( RID_TOOLBAR_BIGIMGLIST )),
     aBigImgLstHC(BibResId( RID_TOOLBAR_BIGIMGLIST_HC )),
-    nSelMenuItem(0),
+    aFtSource(this,WB_VCENTER),
+    aLBSource(this,WB_DROPDOWN),
+    aFtQuery(this,WB_VCENTER),
+    aEdQuery(this),
     nMenuId(0),
+    nSelMenuItem(0),
     aLayoutManager( aLink ),
     nSymbolsSize( SFX_SYMBOLS_SIZE_SMALL ),
     nOutStyle( 0 )
@@ -534,13 +534,13 @@ long BibToolBar::PreNotify( NotifyEvent& rNEvt )
     return nResult;
 }
 
-IMPL_LINK( BibToolBar, SelHdl, ListBox*, pLb )
+IMPL_LINK( BibToolBar, SelHdl, ListBox*, /*pLb*/ )
 {
     aTimer.Start();
     return 0;
 }
 
-IMPL_LINK( BibToolBar, SendSelHdl, Timer*,pT)
+IMPL_LINK( BibToolBar, SendSelHdl, Timer*,/*pT*/)
 {
     Sequence<PropertyValue> aPropVal(1);
     PropertyValue* pPropertyVal = (PropertyValue*)aPropVal.getConstArray();
@@ -553,7 +553,7 @@ IMPL_LINK( BibToolBar, SendSelHdl, Timer*,pT)
     return 0;
 }
 //-----------------------------------------------------------------------------
-IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, pToolbox)//Timer*,pT)
+IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, /*pToolbox*/)
 {
     sal_uInt16  nId=GetCurItemId();
     if(nId==TBC_BT_AUTOFILTER)
@@ -561,7 +561,7 @@ IMPL_LINK( BibToolBar, MenuHdl, ToolBox*, pToolbox)//Timer*,pT)
         EndSelection();     // vor SetDropMode (SetDropMode ruft SetItemImage)
 
         SetItemDown(TBC_BT_AUTOFILTER,sal_True);
-        sal_uInt16 nId = aPopupMenu.Execute(this, GetItemRect(TBC_BT_AUTOFILTER));
+        nId = aPopupMenu.Execute(this, GetItemRect(TBC_BT_AUTOFILTER));
 
 
         if(nId>0)
@@ -612,7 +612,7 @@ void BibToolBar::DataChanged( const DataChangedEvent& rDCEvt )
 /* -----------------------------07.05.2002 15:09------------------------------
  ---------------------------------------------------------------------------*/
 
-IMPL_LINK( BibToolBar, OptionsChanged_Impl, void*, pVoid )
+IMPL_LINK( BibToolBar, OptionsChanged_Impl, void*, /*pVoid*/ )
 {
     sal_Bool bRebuildToolBar = sal_False;
     sal_Int16 eSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
@@ -636,7 +636,7 @@ IMPL_LINK( BibToolBar, OptionsChanged_Impl, void*, pVoid )
 
 //-----------------------------------------------------------------------------
 
-IMPL_LINK( BibToolBar, SettingsChanged_Impl, void*, pVoid )
+IMPL_LINK( BibToolBar, SettingsChanged_Impl, void*, /*pVoid*/ )
 {
     // Check if toolbar button size have changed and we have to use system settings
     sal_Int16 eSymbolsSize = SvtMiscOptions().GetCurrentSymbolsSize();
