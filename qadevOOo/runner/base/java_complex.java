@@ -4,9 +4,9 @@
  *
  *  $RCSfile: java_complex.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:40:23 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:15:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,13 +35,6 @@
 
 package base;
 
-import java.lang.reflect.Constructor;
-import java.io.InputStream;
-import java.io.File;
-import java.util.Properties;
-import java.util.StringTokenizer;
-import java.util.Vector;
-import java.util.Enumeration;
 import complexlib.ComplexTestCase;
 import util.DynamicClassLoader;
 import share.DescGetter;
@@ -52,8 +45,6 @@ import helper.CfgParser;
 import share.DescEntry;
 import share.LogWriter;
 import stats.Summarizer;
-import base.TestBase;
-import lib.Status;
 import lib.TestParameters;
 import util.PropertyName;
 
@@ -64,11 +55,13 @@ import util.PropertyName;
 public class java_complex implements TestBase{
 
     /**
-     * Execute a test.
-     * @param param The test parameters.
-     * @return True, if the test was executed.
+     * This function executes the complex tests given as parameter "-o" or "TestJob". It querys for the correspond class
+     * and crates the JobDescription.
+     * @param param
+     * @return true of all tests run successfuly, esle false
      */
     public boolean executeTest(TestParameters param) {
+
         // is there an ini file for the complex tests defined?
         String complexIniFileName = ((String)param.get("ComplexIni"));
         if (complexIniFileName != null) {
@@ -82,7 +75,24 @@ public class java_complex implements TestBase{
         DescGetter descGetter = new ComplexDescGetter();
         // get the test jobs
         DescEntry[] entries = descGetter.getDescriptionFor(testJob,null,true);
-        if (entries == null) return false;
+        return executeTest(param, entries);
+
+    }
+
+
+    /**
+     * This function run the given DescEntry[] as ComplexTest
+     * @param param
+     * @param entries
+     * @return true of all tests run successfuly, esle false
+     */
+    public boolean executeTest(TestParameters param, DescEntry[] entries) {
+        // is there an ini file for the complex tests defined?
+        String complexIniFileName = ((String)param.get("ComplexIni"));
+        if (complexIniFileName != null) {
+            CfgParser ini = new CfgParser(complexIniFileName);
+            ini.getIniParameters(param);
+        }
 
         DynamicClassLoader dcl = new DynamicClassLoader();
         ComplexTestCase testClass = null;
@@ -152,8 +162,5 @@ public class java_complex implements TestBase{
         }
         return returnVal;
     }
-
-
-//    private void getParamsForComplexTest(String fileName, TestParameters param) {
 
 }
