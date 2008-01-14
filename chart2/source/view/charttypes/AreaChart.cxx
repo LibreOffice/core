@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AreaChart.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:09:20 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:05:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,6 +265,84 @@ void AreaChart::addSeries( VDataSeries* pSeries, sal_Int32 zSlot, sal_Int32 xSlo
     VSeriesPlotter::addSeries( pSeries, zSlot, xSlot, ySlot );
 }
 
+void lcl_removeDuplicatePoints( drawing::PolyPolygonShape3D& rPolyPoly, PlottingPositionHelper& rPosHelper )
+{
+    sal_Int32 nPolyCount = rPolyPoly.SequenceX.getLength();
+    if(!nPolyCount)
+        return;
+
+    drawing::PolyPolygonShape3D aTmp;
+    aTmp.SequenceX.realloc(nPolyCount);
+    aTmp.SequenceY.realloc(nPolyCount);
+    aTmp.SequenceZ.realloc(nPolyCount);
+
+    for( sal_Int32 nPolygonIndex = 0; nPolygonIndex<nPolyCount; nPolygonIndex++ )
+    {
+        drawing::DoubleSequence* pOuterSourceX = &rPolyPoly.SequenceX.getArray()[nPolygonIndex];
+        drawing::DoubleSequence* pOuterSourceY = &rPolyPoly.SequenceY.getArray()[nPolygonIndex];
+        drawing::DoubleSequence* pOuterSourceZ = &rPolyPoly.SequenceZ.getArray()[nPolygonIndex];
+
+        drawing::DoubleSequence* pOuterTargetX = &aTmp.SequenceX.getArray()[nPolygonIndex];
+        drawing::DoubleSequence* pOuterTargetY = &aTmp.SequenceY.getArray()[nPolygonIndex];
+        drawing::DoubleSequence* pOuterTargetZ = &aTmp.SequenceZ.getArray()[nPolygonIndex];
+
+        sal_Int32 nPointCount = pOuterSourceX->getLength();
+        if( !nPointCount )
+            continue;
+
+        pOuterTargetX->realloc(nPointCount);
+        pOuterTargetY->realloc(nPointCount);
+        pOuterTargetZ->realloc(nPointCount);
+
+        double* pSourceX = pOuterSourceX->getArray();
+        double* pSourceY = pOuterSourceY->getArray();
+        double* pSourceZ = pOuterSourceZ->getArray();
+
+        double* pTargetX = pOuterTargetX->getArray();
+        double* pTargetY = pOuterTargetY->getArray();
+        double* pTargetZ = pOuterTargetZ->getArray();
+
+        //copy first point
+        *pTargetX=*pSourceX++;
+        *pTargetY=*pSourceY++;
+        *pTargetZ=*pSourceZ++;
+        sal_Int32 nTargetPointCount=1;
+
+        for( sal_Int32 nSource=1; nSource<nPointCount; nSource++ )
+        {
+            if( !rPosHelper.isSameForGivenResolution( *pTargetX, *pTargetY, *pTargetZ
+                                                   , *pSourceX, *pSourceY, *pSourceZ ) )
+            {
+                pTargetX++; pTargetY++; pTargetZ++;
+                *pTargetX=*pSourceX;
+                *pTargetY=*pSourceY;
+                *pTargetZ=*pSourceZ;
+                nTargetPointCount++;
+            }
+            pSourceX++; pSourceY++; pSourceZ++;
+        }
+
+        //free unused space
+        if( nTargetPointCount<nPointCount )
+        {
+            pOuterTargetX->realloc(nTargetPointCount);
+            pOuterTargetY->realloc(nTargetPointCount);
+            pOuterTargetZ->realloc(nTargetPointCount);
+        }
+
+        pOuterSourceX->realloc(0);
+        pOuterSourceY->realloc(0);
+        pOuterSourceZ->realloc(0);
+    }
+
+    //free space
+    rPolyPoly.SequenceX.realloc(nPolyCount);
+    rPolyPoly.SequenceY.realloc(nPolyCount);
+    rPolyPoly.SequenceZ.realloc(nPolyCount);
+
+    rPolyPoly=aTmp;
+}
+
 bool AreaChart::impl_createLine( VDataSeries* pSeries
                 , drawing::PolyPolygonShape3D* pSeriesPoly
                 , PlottingPositionHelper* pPosHelper )
@@ -277,12 +355,14 @@ bool AreaChart::impl_createLine( VDataSeries* pSeries
     {
         drawing::PolyPolygonShape3D aSplinePoly;
         SplineCalculater::CalculateCubicSplines( *pSeriesPoly, aSplinePoly, m_nCurveResolution );
+        lcl_removeDuplicatePoints( aSplinePoly, *pPosHelper );
         Clipping::clipPolygonAtRectangle( aSplinePoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
     else if(CurveStyle_B_SPLINES==m_eCurveStyle)
     {
         drawing::PolyPolygonShape3D aSplinePoly;
         SplineCalculater::CalculateBSplines( *pSeriesPoly, aSplinePoly, m_nCurveResolution, m_nSplineOrder );
+        lcl_removeDuplicatePoints( aSplinePoly, *pPosHelper );
         Clipping::clipPolygonAtRectangle( aSplinePoly, pPosHelper->getScaledLogicClipDoubleRect(), aPoly );
     }
     else
@@ -576,6 +656,7 @@ void AreaChart::createShapes()
 
     //better performance for big data
     std::map< VDataSeries*, FormerPoint > aSeriesFormerPointMap;
+    m_bPointsWereSkipped = false;
     sal_Int32 nSkippedPoints = 0;
     sal_Int32 nCreatedPoints = 0;
     //
@@ -734,6 +815,7 @@ void AreaChart::createShapes()
                                                             , aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ ) )
                     {
                         nSkippedPoints++;
+                        m_bPointsWereSkipped = true;
                         continue;
                     }
                     aSeriesFormerPointMap[pSeries] = FormerPoint(aScaledLogicPosition.PositionX, aScaledLogicPosition.PositionY, aScaledLogicPosition.PositionZ);
