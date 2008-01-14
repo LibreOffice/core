@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StatusbarController.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:05:07 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:16:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,9 @@
     interface to users within a status bar.
 
     <p>
-    A generic status bar function is represented as a text field which has
+    A generic status bar function is represented as a text field which
     provides status information to the user. A status bar controller can be
-    added to a status bar and provide information or functions with a more
+    added to a status bar and provides information or functions with a more
     sophisticated user interface.<br/>
     A typical example for a status bar controller is the zoom level chooser
     within the statusbar. It provides an option to change the zoom level of
@@ -82,7 +82,7 @@ service StatusbarController
         changed.
 
         <p>
-        The toolbar controller implementation should register itself as a
+        The status bar controller implementation should register itself as a
         listener when its <member scope="com::sun::star::util">XUpdatable</member>
         interface has been called.
         </p>
@@ -91,17 +91,26 @@ service StatusbarController
 
     /** used to initialize a component with required arguments.
 
-        <b>A toolbar controller needs at least three additional arguments
+        <b>A status bar controller needs at least three additional arguments
         provided as <type scope="com::sun::star::beans">PropertyValue</type>:
         <ul>
             <li><b>Frame</b><br>a
                    <type scope="com::sun::star::frame">XFrame</type> instance
-                   to which the toolbar controller belongs.</li>
-            <li><b>CommandURL</b><br>a string which specifies the command a
-                   statusbar controller is bound.</li>
+                   to which the status bar controller belongs.</li>
+            <li><b>CommandURL</b><br>a string which specifies the command
+                   associated with the statusbar controller. The command is
+                   used to identify the status bar controller
+                   implementation.</li>
             <li><b>ServiceManager</b><br>a <type scope="com::sun::star::lang">
                    XMultiServiceFactory</type> instance which can be used to
                    create additional UNO services.</li>
+            <li><b>Parent</b><br>a <type scope="com::sun::star::awt">Window</type>
+                   instance which represents the parent window (status bar
+                   window).</li>
+            <li><b>Identifier</b><br>an integer value which is the unique id
+                   used by the status bar implementation to identify a status
+                   bar entry. This value is currently only used by internal
+                   OpenOffice.org status bar controller implementations.</li>
         </ul>
     */
     interface com::sun::star::lang::XInitialization;
