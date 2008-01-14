@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 15:06:07 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:05:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2734,9 +2734,20 @@ void Edit::SetSubEdit( Edit* pEdit )
 
 Size Edit::CalcMinimumSize() const
 {
-    Size aSz( GetTextWidth( GetText() ), GetTextHeight() );
-    aSz = CalcWindowSize( aSz );
-    return aSz;
+    Size aSize ( GetTextWidth( GetText() ), GetTextHeight() );
+    return CalcWindowSize( aSize );
+}
+
+// -----------------------------------------------------------------------
+
+Size Edit::GetOptimalSize(WindowSizeType eType) const
+{
+    switch (eType) {
+    case WINDOWSIZE_MINIMUM:
+        return CalcMinimumSize();
+    default:
+        return Control::GetOptimalSize( eType );
+    }
 }
 
 // -----------------------------------------------------------------------
