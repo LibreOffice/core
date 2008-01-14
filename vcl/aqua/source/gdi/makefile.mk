@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-05 08:24:00 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 16:16:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@ SLOFILES=   $(SLO)$/salmathutils.obj      \
             $(SLO)$/salgdi.obj            \
             $(SLO)$/salvd.obj             \
             $(SLO)$/salprn.obj            \
+            $(SLO)$/aquaprintview.obj     \
             $(SLO)$/salbmp.obj            \
             $(SLO)$/salogl.obj
 
