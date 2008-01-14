@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:17:58 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:20:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,23 @@ typedef sal_uInt32      ControlPart;
 #define PART_MENU_ITEM              250
 #define PART_MENU_ITEM_CHECK_MARK   251
 #define PART_MENU_ITEM_RADIO_MARK   252
+
+/*  #i77549#
+    HACK: for scrollbars in case of thumb rect, page up and page down rect we
+    abuse the HitTestNativeControl interface. All theming engines but aqua
+    are actually able to draw the thumb according to our internal representation.
+    However aqua draws a little outside. The canonical way would be to enhance the
+    HitTestNativeControl passing a ScrollbarValue additionally so all necessary
+    information is available in the call.
+    .
+    However since there is only this one small exception we will deviate a little and
+    instead pass the respective rect as control region to allow for a small correction.
+
+    So all places using HitTestNativeControl on PART_THUMB_HORZ, PART_THUMB_VERT,
+    PART_TRACK_HORZ_LEFT, PART_TRACK_HORZ_RIGHT, PART_TRACK_VERT_UPPER, PART_TRACK_VERT_LOWER
+    do not use the control rectangle as region but the actuall part rectangle, making
+    only small deviations feasible.
+*/
 
 /** The edit field part of a control, e.g. of the combo box.
 
