@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 11:44:54 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:57:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -524,6 +524,15 @@ void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId )
         ImplRegisterProperty( BASEPROPERTY_TEXTLINECOLOR );
         ImplRegisterProperty( BASEPROPERTY_FONTRELIEF );
         ImplRegisterProperty( BASEPROPERTY_FONTEMPHASISMARK );
+    }
+}
+
+void UnoControlModel::ImplRegisterProperties( const std::list< sal_uInt16 > &rIds )
+{
+    std::list< sal_uInt16 >::const_iterator iter;
+    for( iter = rIds.begin(); iter != rIds.end(); iter++) {
+        if( !ImplHasProperty( *iter ) )
+            ImplRegisterProperty( *iter, ImplGetDefaultValue( *iter ) );
     }
 }
 
