@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 13:19:44 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 14:31:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,6 @@ CFLAGSWERRCC=-Werror
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    extensions \
     soldep
 
 # switches for dynamic and static linking
