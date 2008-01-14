@@ -172,7 +172,7 @@ public class RegressionTest_i46848 implements StorageTest {
                 return false;
 
             // the MediaType and the contents must be up to date
-            if ( !m_aTestHelper.checkStream( xTempSubStorage, "SubStream1", "MediaType1", pBytes1 ) )
+            if ( !m_aTestHelper.checkStream( xTempSubStorage, "SubStream1", "MediaType1", true, pBytes1 ) )
                 return false;
 
             // dispose used storage to free resources
