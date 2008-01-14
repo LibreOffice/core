@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbar.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-27 09:51:38 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:40:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ public:
 
     // ::com::sun::star::lang::XEventListener
     // we do not hold References to dispatches, so there is nothing to do on disposal
-    virtual void    SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source)
+    virtual void    SAL_CALL disposing(const ::com::sun::star::lang::EventObject& /*Source*/)
                                             throw( ::com::sun::star::uno::RuntimeException ){};
 
     // ::com::sun::star::frame::XStatusListener
@@ -146,7 +146,7 @@ public:
 
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener>* BibToolBarListenerPtr;
-SV_DECL_PTRARR_DEL( BibToolBarListenerArr, BibToolBarListenerPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( BibToolBarListenerArr, BibToolBarListenerPtr, 4, 4 )
 
 class BibToolBar:   public ToolBox
 {
