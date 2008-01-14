@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2007-08-03 12:46:45 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 15:28:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJ=..$/..
 
 PRJNAME=jfreereport
 TARGET=flute
+VERSION=-1.3-jfree-20061107
 
 # --- Settings -----------------------------------------------------
 
@@ -54,17 +55,19 @@ TARFILE_NAME=$(TARGET)
 
 TARFILE_ROOTDIR=$(TARGET)
 
-PATCH_FILE_NAME=patches/$(TARGET).patch
+PATCH_FILE_NAME=patches$/$(TARGET).patch
 
 CONVERTFILES=ant$/build.xml\
-                ant$/build.properties
+             ant$/build.properties
+             
+OUT2CLASS=$(TARGET)$(VERSION).jar
 
 .IF "$(JAVACISGCJ)"=="yes"
 JAVA_HOME=
 .EXPORT : JAVA_HOME
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) all
+BUILD_ACTION=$(ANT) -Dlibdir="../../../class" -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) compile
 .ELSE
-BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) all
+BUILD_ACTION=$(ANT) -Dlibdir="../../../class" -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) compile
 .ENDIF
 
 .ENDIF # $(SOLAR_JAVA)!= ""
