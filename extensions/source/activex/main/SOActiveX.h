@@ -4,6 +4,13 @@
 #define __SOACTIVEX_H_
 
 #include "resource.h"       // main symbols
+
+#pragma warning (disable:4505)
+    // permanently suppress "unreferenced local function has been removed" warning
+
+#pragma warning (push,1)
+#pragma warning (disable:4265)
+
 #include <ExDispID.h>
 #include <ExDisp.h>
 #include <shlguid.h>
@@ -14,6 +21,8 @@
 #include <atlctl.h>
 
 #include "so_activex.h"
+
+#pragma warning (pop)
 
 class SODispatchInterceptor;
 
