@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrbar.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:52:11 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:21:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,24 @@
 
 
 using namespace rtl;
+
+/*  #i77549#
+    HACK: for scrollbars in case of thumb rect, page up and page down rect we
+    abuse the HitTestNativeControl interface. All theming engines but aqua
+    are actually able to draw the thumb according to our internal representation.
+    However aqua draws a little outside. The canonical way would be to enhance the
+    HitTestNativeControl passing a ScrollbarValue additionally so all necessary
+    information is available in the call.
+    .
+    However since there is only this one small exception we will deviate a little and
+    instead pass the respective rect as control region to allow for a small correction.
+
+    So all places using HitTestNativeControl on PART_THUMB_HORZ, PART_THUMB_VERT,
+    PART_TRACK_HORZ_LEFT, PART_TRACK_HORZ_RIGHT, PART_TRACK_VERT_UPPER, PART_TRACK_VERT_LOWER
+    do not use the control rectangle as region but the actuall part rectangle, making
+    only small deviations feasible.
+*/
+
 
 // =======================================================================
 
@@ -955,7 +973,11 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, BOOL bCallAction )
             break;
 
         case SCROLL_PAGEUP:
-            if ( maPage1Rect.IsInside( rMousePos ) )
+            // HitTestNativeControl, see remark at top of file
+            if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_LEFT: PART_TRACK_VERT_UPPER,
+                                       Region( maPage1Rect ), rMousePos, bIsInside )?
+                    bIsInside:
+                    maPage1Rect.IsInside( rMousePos ) )
             {
                 bAction = bCallAction;
                 mnStateFlags |= SCRBAR_STATE_PAGE1_DOWN;
@@ -965,7 +987,11 @@ void ScrollBar::ImplDoMouseAction( const Point& rMousePos, BOOL bCallAction )
             break;
 
         case SCROLL_PAGEDOWN:
-            if ( maPage2Rect.IsInside( rMousePos ) )
+            // HitTestNativeControl, see remark at top of file
+            if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_RIGHT: PART_TRACK_VERT_LOWER,
+                                       Region( maPage2Rect ), rMousePos, bIsInside )?
+                    bIsInside:
+                    maPage2Rect.IsInside( rMousePos ) )
             {
                 bAction = bCallAction;
                 mnStateFlags |= SCRBAR_STATE_PAGE2_DOWN;
@@ -1056,7 +1082,12 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             else
                 Sound::Beep( SOUND_DISABLE, this );
         }
-        else if ( maThumbRect.IsInside( rMousePos ) || rMEvt.IsMiddle() )
+        // HitTestNativeControl, see remark at top of file
+        else if( rMEvt.IsMiddle() ||
+                 ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_THUMB_HORZ : PART_THUMB_VERT,
+                                         Region( maThumbRect ), rMousePos, bIsInside ) ?
+                   bIsInside:
+                   maThumbRect.IsInside( rMousePos ) ) )
         {
             if( mpData )
             {
@@ -1094,11 +1125,17 @@ void ScrollBar::MouseButtonDown( const MouseEvent& rMEvt )
             else
                 Sound::Beep( SOUND_DISABLE, this );
         }
-        else
+        else if( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_AREA : PART_TRACK_VERT_AREA,
+                                       aControlRegion, rMousePos, bIsInside )?
+            bIsInside : TRUE )
         {
             nTrackFlags = STARTTRACK_BUTTONREPEAT;
 
-            if ( maPage1Rect.IsInside( rMousePos ) )
+            // HitTestNativeControl, see remark at top of file
+            if ( HitTestNativeControl( CTRL_SCROLLBAR, bHorizontal? PART_TRACK_HORZ_LEFT : PART_TRACK_VERT_UPPER,
+                                       Region( maPage1Rect ), rMousePos, bIsInside )?
+                bIsInside:
+                maPage1Rect.IsInside( rMousePos ) )
             {
                 meScrollType    = SCROLL_PAGEUP;
                 mnDragDraw      = SCRBAR_DRAW_PAGE1;
@@ -1382,11 +1419,23 @@ Rectangle* ScrollBar::ImplFindPartRect( const Point& rPt )
             bIsInside:
             maBtn2Rect.IsInside( rPt ) )
         return &maBtn2Rect;
-    else if( maPage1Rect.IsInside( rPt ) )
+    // HitTestNativeControl, see remark at top of file
+    else if( HitTestNativeControl( CTRL_SCROLLBAR,  bHorizontal ? PART_TRACK_HORZ_LEFT : PART_TRACK_VERT_UPPER,
+                Region( maPage1Rect ), rPt, bIsInside)?
+            bIsInside:
+            maPage1Rect.IsInside( rPt ) )
         return &maPage1Rect;
-    else if( maPage2Rect.IsInside( rPt ) )
+    // HitTestNativeControl, see remark at top of file
+    else if( HitTestNativeControl( CTRL_SCROLLBAR,  bHorizontal ? PART_TRACK_HORZ_RIGHT : PART_TRACK_VERT_LOWER,
+                Region( maPage2Rect ), rPt, bIsInside)?
+            bIsInside:
+            maPage2Rect.IsInside( rPt ) )
         return &maPage2Rect;
-    else if( maThumbRect.IsInside( rPt ) )
+    // HitTestNativeControl, see remark at top of file
+    else if( HitTestNativeControl( CTRL_SCROLLBAR,  bHorizontal ? PART_THUMB_HORZ : PART_THUMB_VERT,
+                Region( maThumbRect ), rPt, bIsInside)?
+             bIsInside:
+             maThumbRect.IsInside( rPt ) )
         return &maThumbRect;
     else
         return NULL;
