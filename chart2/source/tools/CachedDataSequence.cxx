@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CachedDataSequence.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:55:17 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:03:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ CachedDataSequence::CachedDataSequence()
           CachedDataSequence_Base( GetMutex()),
           m_bIsHidden( true ),
           m_eCurrentDataType( NUMERICAL ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( GetMutex() ))
+          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     registerProperties();
 }
@@ -103,7 +103,7 @@ CachedDataSequence::CachedDataSequence( const ::std::vector< double > & rVector 
           CachedDataSequence_Base( GetMutex()),
           m_bIsHidden( true ),
           m_eCurrentDataType( NUMERICAL ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( GetMutex() ))
+          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     m_aNumericalSequence = ContainerToSequence( rVector );
     registerProperties();
@@ -114,7 +114,7 @@ CachedDataSequence::CachedDataSequence( const ::std::vector< OUString > & rVecto
           CachedDataSequence_Base( GetMutex()),
           m_bIsHidden( true ),
           m_eCurrentDataType( TEXTUAL ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( GetMutex() ))
+          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     m_aTextualSequence = ContainerToSequence( rVector );
     registerProperties();
@@ -125,7 +125,7 @@ CachedDataSequence::CachedDataSequence( const OUString & rSingleText )
           CachedDataSequence_Base( GetMutex()),
           m_bIsHidden( true ),
           m_eCurrentDataType( TEXTUAL ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( GetMutex() ))
+          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     m_aTextualSequence.realloc(1);
     m_aTextualSequence[0] = rSingleText;
@@ -137,7 +137,7 @@ CachedDataSequence::CachedDataSequence( const ::std::vector< Any > & rVector )
           CachedDataSequence_Base( GetMutex()),
           m_bIsHidden( true ),
           m_eCurrentDataType( MIXED ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( GetMutex() ))
+          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     m_aMixedSequence = ContainerToSequence( rVector );
     registerProperties();
@@ -153,7 +153,7 @@ CachedDataSequence::CachedDataSequence( const CachedDataSequence & rSource )
           m_bIsHidden( rSource.m_bIsHidden ),
           m_aHiddenValues( rSource.m_aHiddenValues ),
           m_eCurrentDataType( rSource.m_eCurrentDataType ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( GetMutex() ))
+          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     switch( m_eCurrentDataType )
     {

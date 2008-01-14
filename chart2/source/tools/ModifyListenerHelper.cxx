@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModifyListenerHelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:58:36 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:04:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,12 +111,11 @@ namespace chart
 namespace ModifyListenerHelper
 {
 
-ModifyEventForwarder::ModifyEventForwarder( ::osl::Mutex & rMutex ) :
+ModifyEventForwarder::ModifyEventForwarder() :
         ::cppu::WeakComponentImplHelper2<
-            ::com::sun::star::util::XModifyBroadcaster,
-            ::com::sun::star::util::XModifyListener >( rMutex ),
-        m_rMutex( rMutex ),
-        m_aModifyListeners( rMutex )
+        ::com::sun::star::util::XModifyBroadcaster,
+        ::com::sun::star::util::XModifyListener >( m_aMutex ),
+        m_aModifyListeners( m_aMutex )
 {
 }
 
