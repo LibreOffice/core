@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macbackend.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 11:52:18 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:56:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #include <uno/current_context.hxx>
 #endif
 
+#define MACBE_INET_COMPONENT    "org.openoffice.Inet"
+#define MACBE_PATHS_COMPONENT   "org.openoffice.Office.Paths"
+
 MacOSXBackend::MacOSXBackend(const uno::Reference<uno::XComponentContext>& xContext)
         throw (backend::BackendAccessException) :
         ::cppu::WeakImplHelper2 < backend::XSingleLayerStratum, lang::XServiceInfo > (),
@@ -72,12 +75,18 @@ MacOSXBackend* MacOSXBackend::createInstance(const uno::Reference<uno::XComponen
 uno::Reference<backend::XLayer> SAL_CALL MacOSXBackend::getLayer(const rtl::OUString& aComponent, const rtl::OUString& /*aTimestamp*/)
     throw (backend::BackendAccessException, lang::IllegalArgumentException)
 {
-    if( aComponent.equals( getSupportedComponents()[0]) )
+    if( aComponent.equalsAscii( MACBE_INET_COMPONENT ) )
     {
         if( ! m_xSystemLayer.is() )
-            m_xSystemLayer = new MacOSXLayer(m_xContext);
+            m_xSystemLayer = new MacOSXLayer( m_xContext );
 
         return m_xSystemLayer;
+    }
+    else if( aComponent.equalsAscii( MACBE_PATHS_COMPONENT ) )
+    {
+        if( ! m_xPathLayer.is() )
+            m_xPathLayer = new MacOSXPathLayer( m_xContext );
+        return m_xPathLayer;
     }
 
     return uno::Reference<backend::XLayer>();
@@ -150,8 +159,9 @@ uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getSupportedServiceNames(vo
 
 uno::Sequence<rtl::OUString> SAL_CALL MacOSXBackend::getSupportedComponents(void)
 {
-    uno::Sequence<rtl::OUString> aSupportedComponentList(1);
-    aSupportedComponentList[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet" ));
+    uno::Sequence<rtl::OUString> aSupportedComponentList(2);
+    aSupportedComponentList[0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( MACBE_INET_COMPONENT ) );
+    aSupportedComponentList[1] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( MACBE_PATHS_COMPONENT ) );
 
     return aSupportedComponentList;
 }

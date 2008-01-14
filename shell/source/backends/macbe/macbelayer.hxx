@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macbelayer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 11:54:02 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ public:
     MacOSXLayer(const uno::Reference<uno::XComponentContext>& xContext);
 
     /** Destructor */
-    ~MacOSXLayer(void) {}
+    virtual ~MacOSXLayer(void) {}
 
     // XLayer
     virtual void SAL_CALL readData(const uno::Reference<backend::XLayerHandler>& xHandler)
@@ -103,12 +103,27 @@ public:
     virtual rtl::OUString SAL_CALL getTimestamp(void)
         throw (uno::RuntimeException);
 
-private:
+protected:
 
     rtl::OUString m_aComponent;
 
     uno::Reference<backend::XLayerContentDescriber> m_xLayerContentDescriber;
 
+};
+
+class MacOSXPathLayer : public MacOSXLayer
+{
+    public:
+    MacOSXPathLayer(const uno::Reference<uno::XComponentContext>& i_xContext) :
+        MacOSXLayer( i_xContext ) {}
+    virtual ~MacOSXPathLayer() {}
+
+    // XLayer
+    virtual void SAL_CALL readData(const uno::Reference<backend::XLayerHandler>& i_xHandler)
+        throw ( backend::MalformedDataException,
+                lang::NullPointerException,
+                lang::WrappedTargetException,
+                uno::RuntimeException);
 };
 
 #endif // _MACBELAYER_HXX_

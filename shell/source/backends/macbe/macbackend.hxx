@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macbackend.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 11:52:45 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:56:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,7 @@ private:
 
     uno::Reference<uno::XComponentContext> m_xContext;
     uno::Reference<backend::XLayer> m_xSystemLayer;
+    uno::Reference<backend::XLayer> m_xPathLayer;
 
 };
 

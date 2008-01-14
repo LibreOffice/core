@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: ihi $ $Date: 2007-04-16 11:54:20 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 15:57:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,9 @@ dummy:
 
 .ELSE
 
+OBJCXXFLAGS=-x objective-c++ -fobjc-exceptions
+CFLAGSCXX+=$(OBJCXXFLAGS)
+
 SLOFILES= \
     $(SLO)$/macbecdef.obj \
     $(SLO)$/macbackend.obj \
@@ -72,7 +75,7 @@ SHL1STDLIBS= \
         $(CPPUHELPERLIB) \
         $(CPPULIB) \
         $(SALLIB) \
-    -framework Carbon -framework SystemConfiguration
+    -framework Cocoa -framework SystemConfiguration
 
 SHL1VERSIONMAP=exports.map
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
