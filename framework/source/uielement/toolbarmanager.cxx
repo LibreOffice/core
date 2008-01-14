@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 16:23:17 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:24:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1406,6 +1406,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                                                           m_pToolBar,
                                                           aRefPoint.nPos,
                                                           nItemId,
+                                                          m_aCommandMap,
                                                           m_aModuleIdentifier,
                                                           rInstruction.aMergeCommand,
                                                           rInstruction.aMergeCommandParameter,
@@ -1417,6 +1418,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                                                          m_pToolBar,
                                                          aRefPoint.nPos,
                                                          nItemId,
+                                                         m_aCommandMap,
                                                          m_aModuleIdentifier,
                                                          rInstruction.aMergeCommand,
                                                          rInstruction.aMergeFallback,
@@ -1489,6 +1491,8 @@ void ToolBarManager::RequestImages()
     pIter = m_aCommandMap.begin();
     while ( pIter != m_aCommandMap.end() )
     {
+        rtl::OUString aCommandURL = aCmdURLSeq[i];
+
         Image aImage;
         if ( aDocGraphicSeq.getLength() > 0 )
             aImage = Image( aDocGraphicSeq[i] );
