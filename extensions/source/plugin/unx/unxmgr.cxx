@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unxmgr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:11:14 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rD
         char buf[256];
         while( fgets( buf, sizeof( buf ), pResult ) )
         {
-            for( int i = 0; i < sizeof(buf) && buf[i]; ++i )
+            for( size_t i = 0; i < sizeof(buf) && buf[i]; ++i )
             {
                 if( buf[i] == '\n' )
                     buf[i] = ';';
