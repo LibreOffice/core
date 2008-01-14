@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-14 14:31:13 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 15:49:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,12 +84,17 @@ ARCH_FLAGS*=
 # CC = C++ compiler to use
 # cc = C compiler to use
 # objc = Objective C compiler to use
+# objcpp = Objective C++ compiler to use
 CXX*=g++
 CC*=gcc
-objc=cc
+objc*=gcc
+objcpp*=g++
 
 CFLAGS=-fsigned-char -fmessage-length=0 -malign-natural -c $(EXTRA_CFLAGS)
 
+.IF "$(DISABLE_DEPRECATION_WARNING)" == "TRUE"
+CFLAGS+=-Wno-deprecated-declarations
+.ENDIF
 # ---------------------------------
 #  Compilation flags
 # ---------------------------------
