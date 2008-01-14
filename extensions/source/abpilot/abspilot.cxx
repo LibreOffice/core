@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 18:00:53 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:33:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ namespace abp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( OAddessBookSourcePilot, OnCancelClicked, void*, NOTINTERESTEDIN )
+    IMPL_LINK( OAddessBookSourcePilot, OnCancelClicked, void*, /*NOTINTERESTEDIN*/ )
     {
         // do cleanups
         implCleanup();
@@ -369,6 +369,9 @@ namespace abp
             case AST_MORK       :
             case AST_THUNDERBIRD: pGuess = "Personal Address Book"; break;
             case AST_LDAP       : pGuess = "LDAP Directory"; break;
+            default:
+                DBG_ERROR( "OAddessBookSourcePilot::implDefaultTableName: unhandled case!" );
+                return;
         }
         const ::rtl::OUString sGuess = ::rtl::OUString::createFromAscii( pGuess );
         if ( rTableNames.end() != rTableNames.find( sGuess ) )
@@ -444,6 +447,10 @@ namespace abp
             case AST_OTHER:
                 m_aNewDataSource = aContext.createNewDBase( m_aSettings.sDataSourceName );
                 break;
+
+            case AST_INVALID:
+                DBG_ERROR( "OAddessBookSourcePilot::implCreateDataSource: illegal data source type!" );
+                break;
         }
         m_eNewDataSourceType = m_aSettings.eType;
     }
@@ -496,7 +503,7 @@ namespace abp
 #endif
 
     //---------------------------------------------------------------------
-    void OAddessBookSourcePilot::typeSelectionChanged( AddressSourceType _eType )
+    void OAddessBookSourcePilot::typeSelectionChanged( AddressSourceType /*_eType*/ )
     {
 #if defined( ABP_USE_ROADMAP )
         implUpdateTypeDependentStates( _eType );
