@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:49:16 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,6 +273,26 @@ Any SAL_CALL SvxOle2Shape::getPropertyValue( const OUString& PropertyName ) thro
         }
 
         return makeAny( aLinkURL );
+    }
+    else if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "IsChart" ) ) )
+    {
+        //property for use in slide show
+        //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
+        sal_Bool bIsChart = sal_False;
+        SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
+        if( pOle )
+            bIsChart = pOle->IsChart();
+        return makeAny( bIsChart );
+    }
+    else if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "XModel" ) ) )
+    {
+        //property for use in slide show
+        //#i75867# poor quality of ole's alternative view with 3D scenes and zoomfactors besides 100%
+        uno::Reference< frame::XModel > xModel;
+        SdrOle2Obj* pOle = dynamic_cast< SdrOle2Obj* >( mpObj.get() );
+        if( pOle )
+            xModel = pOle->getXModel();
+        return makeAny( xModel );
     }
 
     return SvxShape::getPropertyValue( PropertyName );
