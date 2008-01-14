@@ -66,6 +66,7 @@ no    1252  1044
 nr       0  1580   # Ndebele South
 ns       0  1132   # Northern Sotho (Sepedi)
 or       0  1096   # Oriya
+oc    1252  1154   # Occitan-lengadocian
 or-IN    0  1096
 pa-IN    0  1094   # Punjabi
 pl    1250  1045
