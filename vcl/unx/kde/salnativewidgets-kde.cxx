@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-kde.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:45:15 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:24:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1309,6 +1309,10 @@ BOOL KDESalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart,
 
         rIsInside = qRectAddLine.contains( aPos.getX(), aPos.getY() );
         break;
+
+        // cases PART_TRACK_HORZ_AREA and PART_TRACK_VERT_AREA
+        default:
+        return FALSE;
     }
 
     return TRUE;
