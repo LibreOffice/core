@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:06:57 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:43:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -282,6 +282,7 @@ namespace dbp
     {
         Reference< XConnection > xConn = getFormConnection();
         DBG_ASSERT(!_bNeedIt || xConn.is(), "OLCPage::getTables: should have an active connection when reaching this page!");
+        (void)_bNeedIt;
 
         Reference< XTablesSupplier > xSuppTables(xConn, UNO_QUERY);
         Reference< XNameAccess > xTables;
@@ -359,7 +360,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( OContentTableSelection, OnTableSelected, ListBox*, _pListBox )
+    IMPL_LINK( OContentTableSelection, OnTableSelected, ListBox*, /*_pListBox*/ )
     {
         implCheckNextButton();
         return 0L;
@@ -459,7 +460,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( OContentFieldSelection, OnTableDoubleClicked, ListBox*, NOTINTERESTEDIN )
+    IMPL_LINK( OContentFieldSelection, OnTableDoubleClicked, ListBox*, /*NOTINTERESTEDIN*/ )
     {
         if (m_aSelectTableField.GetSelectEntryCount())
             getDialog()->travelNext();
@@ -467,7 +468,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( OContentFieldSelection, OnFieldSelected, ListBox*, NOTINTERESTEDIN )
+    IMPL_LINK( OContentFieldSelection, OnFieldSelected, ListBox*, /*NOTINTERESTEDIN*/ )
     {
         implCheckNextButton();
         m_aDisplayedField.SetText(m_aSelectTableField.GetSelectEntry());
