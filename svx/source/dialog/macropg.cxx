@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:17:51 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:20:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -396,14 +396,7 @@ void _SvxMacroTabPage::Reset()
 
     try
     {
-            Sequence< beans::PropertyValue > emptyProps(2);
             ::rtl::OUString sEmpty;
-            emptyProps[0].Name = ::rtl::OUString::createFromAscii("EventType");
-            emptyProps[0].Value <<= ::rtl::OUString::createFromAscii("Script");
-            emptyProps[1].Name = ::rtl::OUString::createFromAscii("Script");
-            emptyProps[1].Value <<= sEmpty;
-            Any aEmptyProps;
-            aEmptyProps <<= emptyProps;
             if( m_xAppEvents.is() )
             {
                 EventsHash::iterator h_itEnd =  m_appEventsHash.end();
