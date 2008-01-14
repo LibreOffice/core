@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 09:05:19 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:35:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,6 +403,7 @@ void ZipPackage::parseManifest()
                                                 pStream->setDigest ( aSequence );
                                             }
 
+                                            pStream->SetToBeCompressed ( sal_True );
                                             pStream->SetToBeEncrypted ( sal_True );
                                             pStream->SetIsEncrypted ( sal_True );
                                             if ( !bHasEncryptedEntries && pStream->getName().compareToAscii ( "content.xml" ) == 0 )
