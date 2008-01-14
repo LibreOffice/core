@@ -4,9 +4,9 @@
  *
  *  $RCSfile: APIDescGetter.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 14:11:13 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:19:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -467,9 +467,9 @@ public class APIDescGetter extends DescGetter {
 
                     String entry = e.nextElement().toString();
 
-                    if (debug) {
-                        System.out.println("### Read from connetion: " + entry);
-                    }
+//                    if (debug) {
+//                        System.out.println("### Read from connetion: " + entry);
+//                    }
 
                     if ((entry.lastIndexOf("/" + module + "/") != -1) &&
                         entry.endsWith("." + shortName.trim() + ".csv")) {
