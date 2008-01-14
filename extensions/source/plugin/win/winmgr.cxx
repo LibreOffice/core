@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 12:45:44 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:54:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,20 +46,21 @@
 
 #include <plugin/impl.hxx>
 
-#ifdef WNT
-#include <tools/prewin.h>
-#endif
+#pragma warning (push,1)
+#pragma warning (disable:4005)
 
-#include <windows.h>
-#include <string.h>
-#include <tchar.h>
-#include <winreg.h>
-#include <winbase.h>
-#include <objbase.h>
+    #include <tools/prewin.h>
 
-#ifdef WNT
-#include <tools/postwin.h>
-#endif
+    #include <windows.h>
+    #include <string.h>
+    #include <tchar.h>
+    #include <winreg.h>
+    #include <winbase.h>
+    #include <objbase.h>
+
+    #include <tools/postwin.h>
+
+#pragma warning (pop)
 
 #include <list>
 #include <map>
@@ -148,9 +149,10 @@ static void addPluginsFromPath( const OUString & rPath, PluginLocationMap & rPlu
 {
     TCHAR arPluginsPath[MAX_PATH];
     DWORD dwPluginsPathSize = sizeof(arPluginsPath);
+    arPluginsPath[dwPluginsPathSize-1] = 0;
 
     OString aStr( OUStringToOString( rPath, RTL_TEXTENCODING_MS_1252 ) );
-    ::strcpy( arPluginsPath, aStr.getStr() );
+    ::strncpy( arPluginsPath, aStr.getStr(), dwPluginsPathSize );
 
     addPluginsFromPath( arPluginsPath, rPlugins );
 }
@@ -302,9 +304,11 @@ Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) t
             ::strcpy( arFileName, aStr.getStr() );
             dwSize = ::GetFileVersionInfoSize( arFileName, &dwDummy );
 
-            char * pVersionData = NULL;
-            if (dwSize && (pVersionData = new char[dwSize]) &&
-                ::GetFileVersionInfo( arFileName, 0, dwSize, pVersionData ))
+            if ( !dwSize )
+                continue;
+
+            char * pVersionData = new char[dwSize];
+            if (pVersionData && ::GetFileVersionInfo( arFileName, 0, dwSize, pVersionData ))
             {
                 // optional comment
                 OUString aComment;
@@ -369,7 +373,7 @@ Sequence< PluginDescription > XPluginManager_Impl::getPluginDescriptions(void) t
                         rDescr.PluginName = aName;
                         rDescr.Description = aComment;
 
-                        USHORT nPos = 0, nLen = aExtToken.getLength();
+                        sal_Int32 nPos = 0, nLen = aExtToken.getLength();
                         OUString aExtensions( OUString::createFromAscii( nLen ? "*." : "*.*" ) );
 
                         for ( ; nPos < nLen; ++nPos )
