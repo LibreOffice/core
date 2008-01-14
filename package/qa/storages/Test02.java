@@ -136,7 +136,7 @@ public class Test02 implements StorageTest {
             if ( !m_aTestHelper.checkStorageProperties( xResultSubStorage, "MediaType3", false, ElementModes.READ ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream1", "MediaType1", pBytes1 ) )
+            if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream1", "MediaType1", true, pBytes1 ) )
                 return false;
 
             return true;

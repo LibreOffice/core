@@ -117,7 +117,7 @@ public class Test10 implements StorageTest {
             // the new stream was opened, written and closed, that means flashed
             // so the clone must contain all the information
             XStream xClonedSubStream = m_aTestHelper.cloneSubStream( xTempStorage, "SubStream1" );
-            if ( !m_aTestHelper.InternalCheckStream( xClonedSubStream, "SubStream1", "MediaType1", pBytes1 ) )
+            if ( !m_aTestHelper.InternalCheckStream( xClonedSubStream, "SubStream1", "MediaType1", true, pBytes1, true ) )
                 return false;
 
             if ( !m_aTestHelper.disposeStream( xClonedSubStream, "SubStream1" ) )
@@ -140,7 +140,7 @@ public class Test10 implements StorageTest {
             if ( !m_aTestHelper.checkStorageProperties( xClonedSubStorage, "MediaType4", true, ElementModes.WRITE ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xClonedSubStorage, "SubStream2", "MediaType2", pBytes2 ) )
+            if ( !m_aTestHelper.checkStream( xClonedSubStorage, "SubStream2", "MediaType2", true, pBytes2 ) )
                 return false;
 
             XStorage xCloneOfRoot = m_aTestHelper.cloneStorage( m_xStorageFactory, xTempStorage );
@@ -192,7 +192,7 @@ public class Test10 implements StorageTest {
             if ( !m_aTestHelper.checkStorageProperties( xSubStorageOfClone, "MediaType4", false, ElementModes.READ ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xSubStorageOfClone, "SubStream2", "MediaType2", pBytes2 ) )
+            if ( !m_aTestHelper.checkStream( xSubStorageOfClone, "SubStream2", "MediaType2", true, pBytes2 ) )
                 return false;
 
             return true;

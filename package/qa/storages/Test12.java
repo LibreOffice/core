@@ -134,7 +134,7 @@ public class Test12 implements StorageTest {
             if ( !m_aTestHelper.checkStorageProperties( xResWSubStorage, "MediaType3", false, ElementModes.WRITE ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xResWSubStorage, "SubStream1", "MediaType1", pBytes1 ) )
+            if ( !m_aTestHelper.checkStream( xResWSubStorage, "SubStream1", "MediaType1", true, pBytes1 ) )
                 return false;
 
             // dispose used storage to free resources
@@ -205,10 +205,10 @@ public class Test12 implements StorageTest {
         if ( !m_aTestHelper.checkStorageProperties( xReadSubStorage2, "MediaType3", false, ElementModes.READ ) )
             return false;
 
-        if ( !m_aTestHelper.checkStream( xReadSubStorage1, "SubStream1", "MediaType1", pBytes1 ) )
+        if ( !m_aTestHelper.checkStream( xReadSubStorage1, "SubStream1", "MediaType1", true, pBytes1 ) )
             return false;
 
-        if ( !m_aTestHelper.checkStream( xReadSubStorage2, "SubStream1", "MediaType1", pBytes1 ) )
+        if ( !m_aTestHelper.checkStream( xReadSubStorage2, "SubStream1", "MediaType1", true, pBytes1 ) )
             return false;
 
         if ( !m_aTestHelper.disposeStorage( xReadSubStorage1 ) )

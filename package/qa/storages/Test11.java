@@ -119,7 +119,7 @@ public class Test11 implements StorageTest {
             // the new stream was opened, written and closed, that means flashed
             // so the clone must contain all the information
             XStream xClonedSubStream = m_aTestHelper.cloneEncrSubStream( xTempStorage, "SubStream1", sPass1 );
-            if ( !m_aTestHelper.InternalCheckStream( xClonedSubStream, "SubStream1", "MediaType1", pBytes1 ) )
+            if ( !m_aTestHelper.InternalCheckStream( xClonedSubStream, "SubStream1", "MediaType1", true, pBytes1, true ) )
                 return false;
 
             if ( !m_aTestHelper.disposeStream( xClonedSubStream, "SubStream1" ) )
