@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModifyListenerHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:19:28 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:59:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,8 @@
 #include <cppuhelper/weakref.hxx>
 #endif
 
+#include "MutexContainer.hxx"
+
 #include <list>
 #include <algorithm>
 #include <functional>
@@ -87,13 +89,14 @@ namespace ModifyListenerHelper
     life time of the listeners is independent of the broadcaster's lifetime in
     this case.</p>
  */
-class ModifyEventForwarder : public
-    ::cppu::WeakComponentImplHelper2<
-        ::com::sun::star::util::XModifyBroadcaster,
-        ::com::sun::star::util::XModifyListener >
+class ModifyEventForwarder :
+        public MutexContainer,
+        public ::cppu::WeakComponentImplHelper2<
+            ::com::sun::star::util::XModifyBroadcaster,
+            ::com::sun::star::util::XModifyListener >
 {
 public:
-    explicit ModifyEventForwarder( ::osl::Mutex & rMutex );
+    ModifyEventForwarder();
 
     void FireEvent( const ::com::sun::star::uno::Reference<
                         ::com::sun::star::uno::XWeak > & xSource );
@@ -131,7 +134,7 @@ private:
     void DisposeAndClear( const ::com::sun::star::uno::Reference<
                               ::com::sun::star::uno::XWeak > & xSource );
 
-    ::osl::Mutex & m_rMutex;
+//     ::osl::Mutex & m_rMutex;
     ::cppu::OBroadcastHelper  m_aModifyListeners;
 
     typedef ::std::list<
