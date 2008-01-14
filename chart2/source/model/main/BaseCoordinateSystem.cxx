@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BaseCoordinateSystem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 14:59:38 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:00:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
     sal_Bool bSwapXAndYAxis /* = sal_False */ ) :
         ::property::OPropertySet( m_aMutex ),
         m_xContext( xContext ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex )),
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
         m_nDimensionCount( nDimensionCount )
  {
     m_aAllAxis.resize( m_nDimensionCount );
@@ -165,7 +165,7 @@ BaseCoordinateSystem::BaseCoordinateSystem(
         MutexContainer(),
         ::property::OPropertySet( rSource, m_aMutex ),
     m_xContext( rSource.m_xContext ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex )),
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
     m_nDimensionCount( rSource.m_nDimensionCount ),
     m_aOrigin( rSource.m_aOrigin )
 {
