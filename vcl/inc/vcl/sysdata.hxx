@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysdata.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:50:12 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:20:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,7 @@ struct SystemEnvData
     HWND                hWnd;           // the window hwnd
 #elif defined( QUARTZ )
     NSView*             pView;          // the cocoa view ptr implementing this object
-#endif
-
-#if defined( UNX )
+#elif defined( UNX )
     void*               pDisplay;       // the relevant display connection
     long                aWindow;        // the window of the object
     void*               pSalFrame;      // contains a salframe, if object has one
