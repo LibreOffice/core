@@ -4,9 +4,9 @@
  *
  *  $RCSfile: genericpropertyhandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:49:25 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:58:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,8 +139,8 @@ namespace pcr
 
     //--------------------------------------------------------------------
     EnumRepresentation::EnumRepresentation( const Reference< XComponentContext >& _rxContext, const Type& _rEnumType )
-        :m_aEnumType( _rEnumType )
-        ,m_refCount( 0 )
+        :m_refCount( 0 )
+        ,m_aEnumType( _rEnumType )
     {
         try
         {
@@ -347,8 +347,8 @@ namespace pcr
     GenericPropertyHandler::GenericPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :GenericPropertyHandler_Base( m_aMutex )
         ,m_aContext( _rxContext )
-        ,m_bPropertyMapInitialized( false )
         ,m_aPropertyListeners( m_aMutex )
+        ,m_bPropertyMapInitialized( false )
     {
         DBG_CTOR( GenericPropertyHandler, NULL );
 
