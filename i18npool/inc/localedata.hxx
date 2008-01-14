@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-25 09:35:16 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/ustring.hxx>
 #include <vector>
+#include <memory>
 #include <osl/module.hxx>
 
 //
@@ -86,6 +87,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
+struct LocaleDataLookupTableItem;
+
 namespace com { namespace sun { namespace star { namespace i18n {
 
 inline sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2) {
@@ -99,9 +102,7 @@ class LocaleData : public cppu::WeakImplHelper2
 >
 {
 public:
-    LocaleData(){
-        cachedItem = NULL;
-    }
+    LocaleData();
     ~LocaleData();
 
     virtual LanguageCountryInfo SAL_CALL getLanguageCountryInfo( const com::sun::star::lang::Locale& rLocale ) throw(com::sun::star::uno::RuntimeException);
@@ -140,18 +141,7 @@ public:
 private :
     friend sal_Bool operator ==(const com::sun::star::lang::Locale& l1, const com::sun::star::lang::Locale& l2);
 
-    struct lookupTableItem {
-        lookupTableItem(const sal_Char *name, osl::Module* m) : dllName(name), module(m) {}
-        const sal_Char* dllName;
-        const sal_Char* localeName;
-        com::sun::star::lang::Locale aLocale;
-        osl::Module *module;
-        sal_Bool equals(const com::sun::star::lang::Locale& rLocale) {
-        return (rLocale == aLocale);
-        }
-    };
-    std::vector<lookupTableItem*> lookupTable;
-    lookupTableItem *cachedItem;
+    ::std::auto_ptr< LocaleDataLookupTableItem > cachedItem;
 
     oslGenericFunction SAL_CALL getFunctionSymbol( const com::sun::star::lang::Locale& rLocale, const sal_Char* pFunction ) throw( com::sun::star::uno::RuntimeException );
     oslGenericFunction SAL_CALL getFunctionSymbolByName( const rtl::OUString& localeName, const sal_Char* pFunction );
