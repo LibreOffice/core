@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 09:49:09 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,6 +310,23 @@ uno::Reference< XContentProviderManager > InitializeUCB( void )
     return xUcb;
 }
 
+static void ReplaceStringHookProc( UniString& rStr )
+{
+    static String aTestToolName( RTL_CONSTASCII_USTRINGPARAM( "VCLTestTool" ) ); // HACK, should be read from ressources
+
+    if ( rStr.SearchAscii( "%PRODUCT" ) != STRING_NOTFOUND )
+    {
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", aTestToolName );
+        /*
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", rVersion );
+        rStr.SearchAndReplaceAllAscii( "%ABOUTBOXPRODUCTVERSION", rAboutBoxVersion );
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", rExtension );
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATNAME", rXMLFileFormatName );
+        rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATVERSION", rXMLFileFormatVersion );
+        */
+    }
+}
+
 void BasicApp::Main( )
 {
 #ifdef DBG_UTIL
@@ -321,6 +338,8 @@ void BasicApp::Main( )
     if ( osl_setDebugMessageFunc( osl_TestToolDebugMessageFilter ) )
         DBG_ERROR("osl_setDebugMessageFunc returns non NULL pointer");
 #endif
+
+    ResMgr::SetReadStringHook( ReplaceStringHookProc );
 
     try
     {
@@ -757,6 +776,35 @@ BasicFrame::~BasicFrame()
 //  delete pExecutionStatus;
 //  delete pBasic;
     pBasic.Clear();     // Da jetzt REF
+}
+
+void BasicFrame::Command( const CommandEvent& rCEvt )
+{
+    switch( rCEvt.GetCommand() ) {
+        case COMMAND_SHOWDIALOG:
+            {
+                const CommandDialogData* pData = rCEvt.GetDialogData();
+                if ( pData)
+                {
+                    const int nCommand = pData->GetDialogId();
+
+                    switch (nCommand)
+                    {
+                        case SHOWDIALOG_ID_PREFERENCES :
+                                Command( RID_OPTIONS );
+                                break;
+
+                        case SHOWDIALOG_ID_ABOUT :
+                                Command( RID_HELPABOUT );
+                                break;
+
+                        default :
+                                ;
+                    }
+                }
+            }
+            break;
+    }
 }
 
 void BasicFrame::UpdateTitle()
