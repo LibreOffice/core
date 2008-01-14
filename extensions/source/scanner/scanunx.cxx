@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanunx.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:28:01 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:03:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ struct SaneHolder
     bool                m_bBusy;
 };
 
-DECLARE_LIST( SaneHolderList, SaneHolder* );
+DECLARE_LIST( SaneHolderList, SaneHolder* )
 
 static SaneHolderList   allSanes;
 static vos::OMutex      aSaneProtector;
@@ -259,7 +259,7 @@ BOOL ScannerManager::configureScanner( ScannerContext& scanner_context ) throw( 
     fprintf( stderr, "ScannerManager::configureScanner\n" );
 #endif
 
-    if( scanner_context.InternalData < 0 || scanner_context.InternalData >= allSanes.Count() )
+    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= allSanes.Count() )
         throw ScannerException(
             ::rtl::OUString::createFromAscii( "Scanner does not exist" ),
             REF( XScannerManager )( this ),
@@ -293,7 +293,7 @@ void ScannerManager::startScan( const ScannerContext& scanner_context,
     fprintf( stderr, "ScannerManager::startScan\n" );
 #endif
 
-    if( scanner_context.InternalData < 0 || scanner_context.InternalData >= allSanes.Count() )
+    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= allSanes.Count() )
         throw ScannerException(
             ::rtl::OUString::createFromAscii( "Scanner does not exist" ),
             REF( XScannerManager )( this ),
@@ -318,7 +318,7 @@ ScanError ScannerManager::getError( const ScannerContext& scanner_context ) thro
 {
     vos::OGuard aGuard( aSaneProtector );
 
-    if( scanner_context.InternalData < 0 || scanner_context.InternalData >= allSanes.Count() )
+    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= allSanes.Count() )
         throw ScannerException(
             ::rtl::OUString::createFromAscii( "Scanner does not exist" ),
             REF( XScannerManager )( this ),
@@ -336,7 +336,7 @@ REF( AWT::XBitmap ) ScannerManager::getBitmap( const ScannerContext& scanner_con
 {
     vos::OGuard aGuard( aSaneProtector );
 
-    if( scanner_context.InternalData < 0 || scanner_context.InternalData >= allSanes.Count() )
+    if( scanner_context.InternalData < 0 || (ULONG)scanner_context.InternalData >= allSanes.Count() )
         throw ScannerException(
             ::rtl::OUString::createFromAscii( "Scanner does not exist" ),
             REF( XScannerManager )( this ),
