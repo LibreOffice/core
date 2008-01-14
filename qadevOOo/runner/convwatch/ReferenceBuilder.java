@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReferenceBuilder.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-04 13:30:37 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:19:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,6 +161,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
     public void buildreference()
         {
             GlobalLogWriter.set(log);
+            String sDBConnection = (String)param.get( PropertyName.DB_CONNECTION_STRING );
 
             // check if all need software is installed and accessable
             checkEnvironment(mustInstalledSoftware());
@@ -179,7 +180,7 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
             }
 
             initMember();
-
+            DB.init(aGTA.getDBInfoString() + "," + sDBConnection);
             File aInputPath = new File(m_sInputPath);
             if (aInputPath.isDirectory())
             {
@@ -191,12 +192,12 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
 
                 Object[] aList = DirectoryHelper.traverse(m_sInputPath, aGTA.getFileFilter(), aGTA.includeSubDirectories());
                 // fill into DB
-                DB.filesRemove(aGTA.getDBInfoString());
-                for (int j=0;j<aList.length;j++)
-                {
-                    String sEntry = (String)aList[j];
-                    DB.fileInsert(aGTA.getDBInfoString(), sEntry, sRemovePath);
-                }
+                // DB.filesRemove(aGTA.getDBInfoString());
+                // for (int j=0;j<aList.length;j++)
+                // {
+                //     String sEntry = (String)aList[j];
+                //     DB.fileInsert(aGTA.getDBInfoString(), sEntry, sRemovePath);
+                // }
 
                 // normal run.
                 for (int i=0;i<aList.length;i++)
@@ -220,6 +221,9 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
             }
             else
             {
+                // String sRemovePath = aInputPath.getAbsolutePath();
+                // DB.fileInsert(aGTA.getDBInfoString(), m_sInputPath, sRemovePath);
+                // DB.updatestate_status(aGTA.getDBInfoString(), "started: " + m_sInputPath);
                 if (aGTA.checkIfUsableDocumentType(m_sInputPath))
                 {
                     runGDC(m_sInputPath, m_sReferencePath);
@@ -236,13 +240,13 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
             {
             // start a fresh Office
                 OfficeProvider aProvider = null;
-                SimpleFileSemaphore aSemaphore = new SimpleFileSemaphore();
+                // SimpleFileSemaphore aSemaphore = new SimpleFileSemaphore();
                 if (aGTA.shouldOfficeStart())
                 {
-                    if (OSHelper.isWindows())
-                    {
-                        aSemaphore.P(aSemaphore.getSemaphoreFile());
-                    }
+                    // if (OSHelper.isWindows())
+                    // {
+                    //     aSemaphore.P(aSemaphore.getSemaphoreFile());
+                    // }
                     aGTA.getPerformance().startTime(PerformanceContainer.OfficeStart);
                     aProvider = new OfficeProvider();
                     XMultiServiceFactory xMSF = (XMultiServiceFactory) aProvider.getManager(param);
@@ -265,24 +269,24 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                 try
                 {
                     log.println("Reference type is " + aGTA.getReferenceType());
-                    DB.startFile(aGTA.getDBInfoString(), _sInputPath);
+                    DB.source_start();
                     GraphicalDifferenceCheck.createOneReferenceFile(_sInputPath, _sReferencePath, aGTA);
-                    DB.ref_finishedFile(aGTA.getDBInfoString(), _sInputPath);
+                    DB.source_finished();
                 }
                 catch(ConvWatchCancelException e)
                 {
                     assure(e.getMessage(), false);
-                    DB.ref_failedFile(aGTA.getDBInfoString(), _sInputPath);
+                    DB.source_failed(e.getMessage());
                 }
                 catch(ConvWatchException e)
                 {
                     assure(e.getMessage(), false);
-                    DB.ref_failedFile(aGTA.getDBInfoString(), _sInputPath);
+                    DB.source_failed(e.getMessage());
                 }
                 catch(com.sun.star.lang.DisposedException e)
                 {
                     assure(e.getMessage(), false, true);
-                    DB.ref_failedFile(aGTA.getDBInfoString(), _sInputPath);
+                    DB.source_failed(e.getMessage());
                 }
 
                 // Office shutdown
@@ -291,19 +295,19 @@ public class ReferenceBuilder extends EnhancedComplexTestCase
                     boolean bClosed = aProvider.closeExistingOffice(param, true);
                     // Hope I can check that the close of the office fails
                     assure("Office closed", bClosed, true);
-                    if (OSHelper.isWindows())
-                    {
-                        aSemaphore.V(aSemaphore.getSemaphoreFile());
-                        aSemaphore.sleep(6);
-                        // wait some time maybe an other process will take the semaphore
-                        // I know, this is absolutly dirty, but the whole convwatch is dirty and need a big cleanup.
-                    }
+                    // if (OSHelper.isWindows())
+                    // {
+                    //     aSemaphore.V(aSemaphore.getSemaphoreFile());
+                    //     aSemaphore.sleep(2);
+                    //     // wait some time maybe an other process will take the semaphore
+                    //     // I know, this is absolutly dirty, but the whole convwatch is dirty and need a big cleanup.
+                    // }
                 }
             }
             else
             {
                 // Reference already exist, do nothing, but DB change
-                DB.ref_finishedFile(aGTA.getDBInfoString(), _sInputPath);
+                DB.source_finished();
             }
         }
 }
