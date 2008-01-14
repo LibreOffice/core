@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:26:33 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:57:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,8 @@
 #ifndef TOOLKIT_INC_TOOLKIT_HELPER_SOLARRELEASE_HXX
 #include <toolkit/helper/solarrelease.hxx>
 #endif
+
+#include <toolkit/helper/unopropertyarrayhelper.hxx>
 
 using namespace ::com::sun::star;
 
@@ -611,7 +613,7 @@ void ImplInitMouseEvent( awt::MouseEvent& rEvent, const MouseEvent& rEvt )
 
 DBG_NAME(VCLXWindow);
 
-VCLXWindow::VCLXWindow()
+VCLXWindow::VCLXWindow( bool bWithDefaultProps )
     : maEventListeners( *this ),
       maFocusListeners( *this ),
       maWindowListeners( *this ),
@@ -623,6 +625,11 @@ VCLXWindow::VCLXWindow()
       maTopWindowListeners( *this ),
       mnListenerLockLevel( 0 ),
       mpImpl( NULL ),
+      mpPropHelper( NULL ),
+      mbDisposing( false ),
+      mbDesignMode( false ),
+      mbSynthesizingVCLEvent( false ),
+      mbWithDefaultProps( !!bWithDefaultProps ),
       mbDrawingOntoParent( false )
 {
     DBG_CTOR( VCLXWindow, 0 );
@@ -638,6 +645,8 @@ VCLXWindow::VCLXWindow()
 VCLXWindow::~VCLXWindow()
 {
     DBG_DTOR( VCLXWindow, 0 );
+
+    delete mpPropHelper;
 
     if ( GetWindow() )
     {
@@ -1137,6 +1146,7 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XView*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::accessibility::XAccessible*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::lang::XEventListener*, this ),
+                                        SAL_STATIC_CAST( ::com::sun::star::beans::XPropertySetInfo*, this ),
                                         SAL_STATIC_CAST( ::com::sun::star::awt::XWindow2*, this ),
                                            SAL_STATIC_CAST( ::com::sun::star::awt::XDockableWindow*, this ) );
     return (aRet.hasValue() ? aRet : VCLXDevice::queryInterface( rType ));
@@ -1155,6 +1165,7 @@ IMPL_XTYPEPROVIDER_START( VCLXWindow )
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XLayoutConstrains>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener>* ) NULL ),
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XView>* ) NULL ),
     getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XDockableWindow>* ) NULL ),
     VCLXDevice::getTypes()
@@ -1565,6 +1576,58 @@ namespace toolkit
 
         aSettings.SetStyleSettings( aStyleSettings );
         _pWindow->SetSettings( aSettings, TRUE );
+    }
+}
+
+// Terminated by BASEPROPERTY_NOTFOUND (or 0)
+void VCLXWindow::PushPropertyIds( std::list< sal_uInt16 > &rIds,
+                                  int nFirstId, ...)
+{
+    va_list pVarArgs;
+    va_start( pVarArgs, nFirstId );
+
+    for ( int nId = nFirstId; nId != BASEPROPERTY_NOTFOUND;
+          nId = va_arg( pVarArgs, int ) )
+        rIds.push_back( nId );
+
+    va_end( pVarArgs );
+}
+
+void VCLXWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds, bool bWithDefaults )
+{
+    // These are common across ~all VCLXWindow derived classes
+    if( bWithDefaults )
+        PushPropertyIds( rIds,
+                         BASEPROPERTY_ALIGN,
+                         BASEPROPERTY_BACKGROUNDCOLOR,
+                         BASEPROPERTY_BORDER,
+                         BASEPROPERTY_BORDERCOLOR,
+                         BASEPROPERTY_DEFAULTCONTROL,
+                         BASEPROPERTY_ENABLED,
+                         BASEPROPERTY_FONTDESCRIPTOR,
+                         BASEPROPERTY_HELPTEXT,
+                         BASEPROPERTY_HELPURL,
+                         BASEPROPERTY_TEXT,
+                         BASEPROPERTY_PRINTABLE,
+                         BASEPROPERTY_TABSTOP,
+                         0);
+
+    // lovely hack from:
+    // void UnoControlModel::ImplRegisterProperty( sal_uInt16 nPropId )
+    std::list< sal_uInt16 >::const_iterator iter;
+    for( iter = rIds.begin(); iter != rIds.end(); iter++) {
+        if( *iter == BASEPROPERTY_FONTDESCRIPTOR )
+        {
+            // some properties are not included in the FontDescriptor, but everytime
+            // when we have a FontDescriptor we want to have these properties too.
+            // => Easier to register the here, istead everywhere where I register the FontDescriptor...
+
+            rIds.push_back( BASEPROPERTY_TEXTCOLOR );
+            rIds.push_back( BASEPROPERTY_TEXTLINECOLOR );
+            rIds.push_back( BASEPROPERTY_FONTRELIEF );
+            rIds.push_back( BASEPROPERTY_FONTEMPHASISMARK );
+            break;
+        }
     }
 }
 
@@ -2015,6 +2078,12 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case BASEPROPERTY_BORDERCOLOR:
                 ::toolkit::setColorSettings( pWindow, Value, &StyleSettings::SetMonoColor, &StyleSettings::GetMonoColor);
                 break;
+            case BASEPROPERTY_DEFAULTCONTROL:
+            {
+                rtl::OUString aName;
+                Value >>= aName;
+                break;
+            }
         }
     }
 }
@@ -2265,7 +2334,8 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                 aSz = Size( n, n );
             }
             break;
-            default:    DBG_ERROR( "getMinimumSize: Unknown Type" );
+            default:
+                aSz = GetWindow()->GetOptimalSize( WINDOWSIZE_MINIMUM );
         }
     }
 
@@ -2645,3 +2715,34 @@ sal_Bool SAL_CALL VCLXWindow::hasFocus(  ) throw (::com::sun::star::uno::Runtime
         return FALSE;
 }
 
+// ::com::sun::star::beans::XPropertySetInfo
+
+UnoPropertyArrayHelper *
+VCLXWindow::GetPropHelper()
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    if (mpPropHelper == NULL)
+    {
+        std::list< sal_uInt16 > aIDs;
+        GetPropertyIds( aIDs );
+        mpPropHelper = new UnoPropertyArrayHelper( aIDs );
+    }
+    return mpPropHelper;
+}
+
+::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL
+VCLXWindow::getProperties() throw (::com::sun::star::uno::RuntimeException)
+{
+    return GetPropHelper()->getProperties();
+}
+::com::sun::star::beans::Property SAL_CALL
+VCLXWindow::getPropertyByName( const ::rtl::OUString& rName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException)
+{
+    return GetPropHelper()->getPropertyByName( rName );
+}
+
+::sal_Bool SAL_CALL
+VCLXWindow::hasPropertyByName( const ::rtl::OUString& rName ) throw (::com::sun::star::uno::RuntimeException)
+{
+    return GetPropHelper()->hasPropertyByName( rName );
+}
