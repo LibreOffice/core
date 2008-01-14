@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:09:28 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:13:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,8 @@ public:
     int                     mnMaxWidth;             // max. client width in pixels
     int                     mnMaxHeight;            // max. client height in pixels
     NSRect                  maFullScreenRect;       // old window size when in FullScreen
-    BOOL                    mbGraphics;             // is Graphics used?
-    BOOL                    mbFullScreen;           // is Window in FullScreen?
+    bool                    mbGraphics;             // is Graphics used?
+    bool                    mbFullScreen;           // is Window in FullScreen?
     bool                    mbShown;
     bool                    mbInitShow;
     bool                    mbPositioned;
@@ -95,6 +95,9 @@ public:
     PointerStyle            mePointerStyle;         // currently active pointer style
 
     NSTrackingRectTag       mnTrackingRectTag;      // used to get enter/leave messages
+
+    CGMutablePathRef        mrClippingPath;         // used for "shaping"
+    std::vector< CGRect >   maClippingRects;
 public:
     /** Constructor
 
@@ -185,6 +188,11 @@ public:
 
     NSCursor* getCurrentCursor() const;
 
+    CGMutablePathRef getClipPath() const { return mrClippingPath; }
+
+    // called by VCL_NSApplication to indicate screen settings have changed
+    void screenParametersChanged();
+
  private: // methods
     /** do things on initial show (like centering on parent or on screen)
     */
@@ -199,74 +207,5 @@ public:
     AquaSalFrame( const AquaSalFrame& );
     AquaSalFrame& operator=(const AquaSalFrame&);
 };
-
-@interface SalFrameWindow : NSWindow
-{
-    AquaSalFrame*       mpFrame;
-}
--(id)initWithSalFrame: (AquaSalFrame*)pFrame;
--(void)windowDidBecomeKey: (NSNotification*)pNotification;
--(void)windowDidResignKey: (NSNotification*)pNotification;
--(void)windowDidChangeScreen: (NSNotification*)pNotification;
--(void)windowDidMove: (NSNotification*)pNotification;
--(void)windowDidResize: (NSNotification*)pNotification;
--(void)windowDidMiniaturize: (NSNotification*)pNotification;
--(void)windowDidDeminiaturize: (NSNotification*)pNotification;
--(MacOSBOOL)windowShouldClose: (NSNotification*)pNotification;
--(void)dockMenuItemTriggered: (id)sender;
--(AquaSalFrame*)getSalFrame;
-@end
-
-@interface SalFrameView : NSView <NSTextInput>
-{
-    AquaSalFrame*       mpFrame;
-
-    // for NSTextInput
-    id mpLastEvent;
-    BOOL mbNeedSpecialKeyHandle;
-    BOOL mbInKeyInput;
-    BOOL mbKeyHandled;
-    NSRange mMarkedRange;
-    NSRange mSelectedRange;
-}
--(id)initWithSalFrame: (AquaSalFrame*)pFrame;
--(MacOSBOOL)acceptsFirstResponder;
--(MacOSBOOL)acceptsFirstMouse: (NSEvent *)pEvent;
--(MacOSBOOL)isOpaque;
--(void)drawRect: (NSRect)aRect;
--(void)mouseDown: (NSEvent*)pEvent;
--(void)mouseDragged: (NSEvent*)pEvent;
--(void)mouseUp: (NSEvent*)pEvent;
--(void)mouseMoved: (NSEvent*)pEvent;
--(void)mouseEntered: (NSEvent*)pEvent;
--(void)mouseExited: (NSEvent*)pEvent;
--(void)rightMouseDown: (NSEvent*)pEvent;
--(void)rightMouseDragged: (NSEvent*)pEvent;
--(void)rightMouseUp: (NSEvent*)pEvent;
--(void)otherMouseDown: (NSEvent*)pEvent;
--(void)otherMouseDragged: (NSEvent*)pEvent;
--(void)otherMouseUp: (NSEvent*)pEvent;
--(void)scrollWheel: (NSEvent*)pEvent;
--(void)keyDown: (NSEvent*)pEvent;
--(void)flagsChanged: (NSEvent*)pEvent;
--(void)sendMouseEventToFrame:(NSEvent*)pEvent button:(USHORT)nButton eventtype:(USHORT)nEvent;
--(void)sendKeyInputAndReleaseToFrame: (USHORT)nKeyCode character: (sal_Unicode)aChar;
--(MacOSBOOL)checkSpecialCharacters:(NSEvent*)pEvent;
-/*
-    text action methods
-*/
--(void)insertText:(id)aString;
--(void)insertTab: (id)aSender;
--(void)moveLeft: (id)aSender;
--(void)moveRight: (id)aSender;
--(void)moveUp: (id)aSender;
--(void)moveDown: (id)aSender;
--(void)insertNewline: (id)aSender;
--(void)deleteBackward: (id)aSender;
--(void)deleteForward: (id)aSender;
--(void)cancelOperation: (id)aSender;
-/* set the correct pointer for our view */
--(void)resetCursorRects;
-@end
 
 #endif // _SV_SALFRAME_H
