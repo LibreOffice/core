@@ -4,9 +4,9 @@
  *
  *  $RCSfile: npshell.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 14:27:32 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:44:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,9 @@
 
 #define _WINDOWS
 
+#pragma warning (push,1)
+#pragma warning (disable:4668)
+
 #include <windows.h>
 #include <direct.h>
 #include <stdlib.h>
@@ -67,6 +70,7 @@
 #include <sys/types.h>
 #include <fcntl.h>
 
+#pragma warning (pop)
 
 #endif //end of WNT
 
@@ -104,6 +108,7 @@ long int NSP_WriteToPipe(NSP_PIPE_FD fp, void* buf, unsigned long int len)
 
     len_unix = NSP_Write_Pipe(fp, buf, len, &len_wnt);
 #ifdef UNIX
+    (void)len_wnt;
     return  len_unix;
 #endif //end of UNIX
 #ifdef WNT
@@ -157,6 +162,7 @@ int do_init_pipe()
                       CREATE_NO_WINDOW, NULL, NULL, &NSP_StarInfo, &NSP_ProcessInfo))
         {
             DWORD Err = GetLastError();
+            (void)Err;
         }
 #endif //end of WNT
     }
@@ -164,10 +170,10 @@ int do_init_pipe()
     return NPERR_NO_ERROR;
 }
 
-int sendMsg( PLUGIN_MSG* pMsg, unsigned int len, int iEnsure)
+bool sendMsg( PLUGIN_MSG* pMsg, size_t len, int iEnsure)
 {
     NSP_Lock_Mute_Obj(send_lock);
-    long int len_w = 0;
+    size_t len_w = 0;
 
     debug_fprintf(NSP_LOG_APPEND, "try to send message type:%d; len: %d\n", pMsg->msg_id, len);
     /*
@@ -196,17 +202,17 @@ int sendMsg( PLUGIN_MSG* pMsg, unsigned int len, int iEnsure)
         else  // else return error
         {
             debug_fprintf(NSP_LOG_APPEND, "send message error :%s.\n", strerror(errno));
-            len_w = -1;
+            len_w = 0;
         }
     }
     NSP_Unlock_Mute_Obj(send_lock);
     debug_fprintf(NSP_LOG_APPEND, "send message success!\n");
-    return len_w;
+    return len_w == len;
 }
 
 extern "C"
 {
-char* pMimeTypes = "application/vnd.stardivision.calc:sdc:StarCalc 3.0 - 5.0;"
+char* pMimeTypes = const_cast< char* >( "application/vnd.stardivision.calc:sdc:StarCalc 3.0 - 5.0;"
 "application/vnd.stardivision.chart:sds:StarChart 3.0 - 5.0;"
 "application/vnd.stardivision.draw:sda:StarDraw 3.0 - 5.0;"
 "application/vnd.stardivision.impress:sdd:StarImpress 3.0 - 5.0;"
@@ -235,7 +241,7 @@ MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_ASCII ":odg:OpenDocument Drawing;"
 MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII ":otg:OpenDocument Drawing Template;"
 MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII ":odp:OpenDocument Presentation;"
 MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII ":otp:OpenDocument Presentation Template;"
-MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ":odf:OpenDocument Formula;";
+MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ":odf:OpenDocument Formula;" );
 
 char*
 NPP_GetMIMEDescription(void)
@@ -248,7 +254,7 @@ NPP_GetMIMEDescription(void)
 NPError
 // I am not actually sure wrt this, it ast least compiles with external
 // npapi.h now...
-NPP_GetValue(NPP instance, NPPVariable variable, void *value)
+NPP_GetValue(NPP /*instance*/, NPPVariable variable, void *value)
 {
     NPError err = NPERR_NO_ERROR;
 
@@ -284,7 +290,7 @@ NPError
 NPP_Initialize(void)
 {
     debug_fprintf(NSP_LOG_NEW, "NS Plugin begin initialize.\n");
-    return do_init_pipe();
+    return (NPError)do_init_pipe();
 }
 
 #ifdef OJI
@@ -315,10 +321,10 @@ NPError
 NPP_New(NPMIMEType pluginType,
     NPP instance,
     uint16 mode,
-    int16 argc,
-    char* argn[],
-    char* argv[],
-    NPSavedData* saved)
+    int16 /*argc*/,
+    char* /*argn*/[],
+    char* /*argv*/[],
+    NPSavedData* /*saved*/)
 {
     PluginInstance* This;
 
@@ -347,6 +353,7 @@ NPP_New(NPMIMEType pluginType,
     This->exists = FALSE;
 #endif //end of UNIX
 #ifdef WNT
+    (void)pluginType;
     This->fWindow = (NPWindow*)NPN_MemAlloc(sizeof(NPWindow));
     memset(This->fWindow, 0, sizeof (NPWindow));
     This->fMode = mode;
@@ -355,7 +362,7 @@ NPP_New(NPMIMEType pluginType,
     memset((char*)&msg, 0, sizeof(PLUGIN_MSG));
     msg.msg_id = SO_NEW_INSTANCE;
     msg.instance_id = (plugin_Int32)instance;
-    if (sizeof(PLUGIN_MSG) != sendMsg(&msg, sizeof(PLUGIN_MSG), 1))
+    if (!sendMsg(&msg, sizeof(PLUGIN_MSG), 1))
         return NPERR_GENERIC_ERROR;
 
     NPN_Status(instance, "......");
@@ -363,7 +370,7 @@ NPP_New(NPMIMEType pluginType,
 }
 
 NPError
-NPP_Destroy(NPP instance, NPSavedData** save)
+NPP_Destroy(NPP instance, NPSavedData** /*save*/)
 {
     debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, enter NPP_Destroy.\n");
     PluginInstance* This;
@@ -491,7 +498,7 @@ NPP_SetWindow(NPP instance, NPWindow* window)
         msg.wnd_h = 0;
     }
 
-    if((sizeof(PLUGIN_MSG) != sendMsg(&msg, sizeof(PLUGIN_MSG), 1)))
+    if(!sendMsg(&msg, sizeof(PLUGIN_MSG), 1))
     {
         debug_fprintf(NSP_LOG_APPEND, "NPP_SetWindow return failure \n");
         return NPERR_GENERIC_ERROR;
@@ -503,9 +510,9 @@ NPP_SetWindow(NPP instance, NPWindow* window)
 
 NPError
 NPP_NewStream(NPP instance,
-          NPMIMEType type,
-          NPStream *stream,
-          NPBool seekable,
+          NPMIMEType /*type*/,
+          NPStream* /*stream*/,
+          NPBool /*seekable*/,
           uint16 *stype)
 {
     if (instance == NULL)
@@ -524,21 +531,21 @@ int32 STREAMBUFSIZE = 0X0FFFFFFF;
  * write call (since we ignore it) */
 
 int32
-NPP_WriteReady(NPP instance, NPStream *stream)
+NPP_WriteReady(NPP /*instance*/, NPStream* /*stream*/)
 {
     return STREAMBUFSIZE;
 }
 
 
 int32
-NPP_Write(NPP instance, NPStream *stream, int32 offset, int32 len, void *buffer)
+NPP_Write(NPP /*instance*/, NPStream* /*stream*/, int32 /*offset*/, int32 len, void* /*buffer*/)
 {
     return len;     /* The number of bytes accepted */
 }
 
 
 NPError
-NPP_DestroyStream(NPP instance, NPStream *stream, NPError reason)
+NPP_DestroyStream(NPP instance, NPStream* /*stream*/, NPError /*reason*/)
 {
     if (instance == NULL)
         return NPERR_INVALID_INSTANCE_ERROR;
@@ -663,7 +670,7 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
     sprintf(msg.url, "file:///%s", localPathNew);
     DosToUnixPath(msg.url);
 #endif //endof WNT
-    if((sizeof(PLUGIN_MSG) != sendMsg(&msg, sizeof(PLUGIN_MSG), 1)))
+    if(!sendMsg(&msg, sizeof(PLUGIN_MSG), 1))
         debug_fprintf(NSP_LOG_APPEND, "NPP_StreamAsFile send SO_SET_URL return failure \n");
 
     // send SO_SET_WINDOW message
@@ -683,13 +690,13 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
     msg.wnd_w = This->fWindow->width;
     msg.wnd_h = This->fWindow->height;
 #endif //endof WNT
-    if((sizeof(PLUGIN_MSG) != sendMsg(&msg, sizeof(PLUGIN_MSG), 1)))
+    if(!sendMsg(&msg, sizeof(PLUGIN_MSG), 1))
         debug_fprintf(NSP_LOG_APPEND, "NPP_StreamAsFile send SO_SET_WINDOW return failure \n");
 }
 
 void
-NPP_URLNotify(NPP instance, const char* url,
-                NPReason reason, void* notifyData)
+NPP_URLNotify(NPP /*instance*/, const char* /*url*/,
+                NPReason /*reason*/, void* /*notifyData*/)
 {
 }
 
@@ -703,11 +710,12 @@ NPP_Print(NPP instance, NPPrint* printInfo)
     if (instance != NULL) {
     /***** Insert NPP_Print code here *****/
         PluginInstance* This = (PluginInstance*) instance->pdata;
+        (void)This;
         PLUGIN_MSG msg;
         memset((char*)&msg, 0, sizeof(PLUGIN_MSG));
         msg.msg_id = SO_PRINT;
         msg.instance_id = (plugin_Int32)instance;
-        if((sizeof(PLUGIN_MSG) != sendMsg(&msg, sizeof(PLUGIN_MSG), 1)))
+        if(!sendMsg(&msg, sizeof(PLUGIN_MSG), 1))
             debug_fprintf(NSP_LOG_APPEND, "NPP_StreamAsFile send SO_SET_WINDOW return failure \n");
        printInfo->mode = TRUE;
     /**************************************/
