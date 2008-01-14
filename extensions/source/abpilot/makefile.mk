@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-28 10:39:09 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 14:34:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,14 +56,14 @@ EXCEPTIONSFILES=	\
         $(SLO)$/admininvokationimpl.obj	\
         $(SLO)$/unodialogabp.obj	\
         $(SLO)$/moduleabp.obj	\
-        $(SLO)$/abpservices.obj
+        $(SLO)$/abpservices.obj \
+        $(SLO)$/typeselectionpage.obj	\
 
 SLOFILES=	\
         $(SLO)$/fieldmappingpage.obj	\
         $(SLO)$/abpfinalpage.obj	\
         $(SLO)$/tableselectionpage.obj	\
         $(SLO)$/admininvokationpage.obj	\
-        $(SLO)$/typeselectionpage.obj	\
         $(SLO)$/abspage.obj	\
         $(SLO)$/abspilot.obj \
         $(EXCEPTIONSFILES)
