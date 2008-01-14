@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:22:17 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:58:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -482,6 +482,10 @@ namespace pcr
         FormComponentPropertyHandler();                                                 // never implemented
         FormComponentPropertyHandler( const FormComponentPropertyHandler& );            // never implemented
         FormComponentPropertyHandler& operator=( const FormComponentPropertyHandler& ); // never implemented
+
+    private:
+        using ::comphelper::OPropertyContainer::addPropertyChangeListener;
+        using ::comphelper::OPropertyContainer::removePropertyChangeListener;
     };
 
     //====================================================================
