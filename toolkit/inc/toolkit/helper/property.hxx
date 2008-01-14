@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 13:01:43 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:56:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,8 @@ namespace rtl {
 #define BASEPROPERTY_AUTOHSCROLL           121  // sal_Bool
 #define BASEPROPERTY_AUTOVSCROLL           122  // sal_Bool
 #define BASEPROPERTY_DESKTOP_AS_PARENT     123  // sal_Bool
+#define BASEPROPERTY_UNIT                  124  // ::awt::FieldUnit
+#define BASEPROPERTY_CUSTOMUNITTEXT        125  // ::rtl::OUString
 
 //#define BASEPROPERTY_RESOURCERESOLVER      124  // css.resource.XStringResourceResolver
 
