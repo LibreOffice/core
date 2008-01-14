@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.h,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:09:54 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:13:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@
 #include <list>
 
 class AquaSalFrame;
+class ApplicationEvent;
 
 // -----------------
 // - SalYieldMutex -
@@ -97,10 +98,13 @@ public:
     SalYieldMutex*                          mpSalYieldMutex;        // Sal-Yield-Mutex
     rtl::OUString                           maDefaultPrinter;
     vos::OThread::TThreadIdentifier         maMainThread;
-    int                                     mnMainThreadLevel;
-    NSAutoreleasePool*                      mpAutoreleasePool;
+    bool                                    mbWaitingYield;
     std::list< SalUserEvent >               maUserEvents;
     oslMutex                                maUserEventListMutex;
+
+    typedef std::list<const ApplicationEvent*> AppEventList;
+    static AppEventList aAppEventList;
+
 public:
     AquaSalInstance();
     virtual ~AquaSalInstance();
@@ -147,6 +151,8 @@ public:
     virtual void            SetErrorEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) );
 
     static void handleAppDefinedEvent( NSEvent* pEvent );
+
+    void wakeupYield();
 
  public:
     friend class AquaSalFrame;
