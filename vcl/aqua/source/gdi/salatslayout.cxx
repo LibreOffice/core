@@ -4,9 +4,9 @@
 *
 *  $RCSfile: salatslayout.cxx,v $
 *
-*  $Revision: 1.5 $
+*  $Revision: 1.6 $
 *
-*  last change: $Author: kz $ $Date: 2007-10-09 15:14:08 $
+*  last change: $Author: ihi $ $Date: 2008-01-14 16:17:11 $
 *
 *  The Contents of this file are made available subject to
 *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,7 +400,7 @@ int ATSLayout::GetNextGlyphs( int nLen, long* pGlyphIDs, Point& rPos, int& nStar
         nYOffset = mpDeltaY[ nStart ];
 
     // calculate absolute position in pixel units
-    const Point aRelativePos( Fix2Long(nXOffset*mfFontScale), Fix2Long(nYOffset*mfFontScale) );
+    const Point aRelativePos( Fix2Long(static_cast<long>(nXOffset*mfFontScale)), Fix2Long(static_cast<long>(nYOffset*mfFontScale)) );
     rPos = GetDrawPosition( aRelativePos );
 
     // update return values {nGlyphIndex,nCharPos,nGlyphAdvance}
@@ -502,7 +502,7 @@ long ATSLayout::GetTextWidth() const
 /**
  * ATSLayout::FillDXArray : Get Char widths
  *
- * @param pDXArray: returned array of DX
+ * @param pDXArray: array to be filled with x-advances
  *
  * Fill the pDXArray with horizontal deltas : CharWidths
  *
@@ -523,14 +523,23 @@ long ATSLayout::FillDXArray( long* pDXArray ) const
         mnCachedWidth = nWidth;
     }
 
+    const long nScaledWidth = static_cast<long>(mfFontScale * FixedToFloat(mnCachedWidth) + 0.5);
+
     // distribute the widths among the string elements
     if( pDXArray != NULL )
     {
+        long nDXSum = 0;
+        Fixed nCWSum = 0;
         for( int i = 0; i < mnCharCount; ++i )
-            pDXArray[ i ] = static_cast<long>(mfFontScale * FixedToFloat(mpCharWidths[i]));
+        {
+            // convert and adjust for accumulated rounding errors
+            nCWSum += mpCharWidths[i];
+            const long nPrevDXSum = nDXSum;
+            nDXSum = static_cast<long>(mfFontScale * FixedToFloat(nCWSum) + 0.5);
+            pDXArray[i] = nDXSum - nPrevDXSum;
+        }
     }
 
-    const long nScaledWidth = static_cast<long>(mfFontScale * FixedToFloat(mnCachedWidth));
     return nScaledWidth;
 }
 
