@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bibbeam.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:54:22 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:37:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,10 +362,10 @@ namespace bib
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( BibBeamer, RecalcLayout_Impl, void*, pVoid )
+    IMPL_LINK( BibBeamer, RecalcLayout_Impl, void*, /*pVoid*/ )
     {
         long nHeight = pToolBar->GetSizePixel().Height();
-        SetItemSize( ID_TOOLBAR, pToolBar->GetSizePixel().Height() );
+        SetItemSize( ID_TOOLBAR, nHeight );
         return 0L;
     }
 
