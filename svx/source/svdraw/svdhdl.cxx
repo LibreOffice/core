@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:56:21 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -898,9 +898,9 @@ Pointer SdrHdl::GetPointer() const
         } else {
             switch (eKind) {
                 case HDL_UPLFT: ePtr=POINTER_NWSIZE;  break;
-                case HDL_UPPER: ePtr=POINTER_SSIZE;     break;
+                case HDL_UPPER: ePtr=POINTER_NSIZE;     break;
                 case HDL_UPRGT: ePtr=POINTER_NESIZE;  break;
-                case HDL_LEFT : ePtr=POINTER_ESIZE;     break;
+                case HDL_LEFT : ePtr=POINTER_WSIZE;     break;
                 case HDL_RIGHT: ePtr=POINTER_ESIZE;     break;
                 case HDL_LWLFT: ePtr=POINTER_SWSIZE;  break;
                 case HDL_LOWER: ePtr=POINTER_SSIZE;     break;
