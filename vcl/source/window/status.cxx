@@ -4,9 +4,9 @@
  *
  *  $RCSfile: status.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:53:10 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:22:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1584,7 +1584,9 @@ void StatusBar::SetProgressValue( USHORT nNewPercent )
     DBG_ASSERT( mbProgressMode, "StatusBar::SetProgressValue(): no progrss mode" );
     DBG_ASSERTWARNING( nNewPercent <= 100, "StatusBar::SetProgressValue(): nPercent > 100" );
 
-    if ( mbProgressMode && IsReallyVisible() )
+    if ( mbProgressMode
+    &&   IsReallyVisible()
+    &&   (!mnPercent || (mnPercent != nNewPercent)) )
     {
         Update();
         SetLineColor();
