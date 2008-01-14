@@ -4,9 +4,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:05:45 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,8 +160,8 @@ public:
 
     //XPositioningListener
     virtual void SAL_CALL cursorMoved(const lang::EventObject& event) throw( uno::RuntimeException );
-    virtual void SAL_CALL rowChanged(const lang::EventObject& event) throw( uno::RuntimeException ){ /* not interested in */ }
-    virtual void SAL_CALL rowSetChanged(const lang::EventObject& event) throw( uno::RuntimeException ){ /* not interested in */ }
+    virtual void SAL_CALL rowChanged(const lang::EventObject& /*event*/) throw( uno::RuntimeException ){ /* not interested in */ }
+    virtual void SAL_CALL rowSetChanged(const lang::EventObject& /*event*/) throw( uno::RuntimeException ){ /* not interested in */ }
 
     //XEventListener
     virtual void SAL_CALL disposing(const lang::EventObject& Source) throw( uno::RuntimeException );
@@ -245,14 +245,14 @@ void BibPosListener::cursorMoved(const lang::EventObject& /*aEvent*/) throw( uno
     }
     catch(Exception& rEx)
     {
-        rEx;
+        (void) rEx; // make compiler happy
         DBG_ERROR("BibPosListener::positioned: something went wrong !");
     }
 }
 /* -----------------------------04.01.00 11:28--------------------------------
 
  ---------------------------------------------------------------------------*/
-void BibPosListener::disposing(const lang::EventObject& Source) throw( uno::RuntimeException )
+void BibPosListener::disposing(const lang::EventObject& /*Source*/) throw( uno::RuntimeException )
 {
 }
 
@@ -261,47 +261,45 @@ void BibPosListener::disposing(const lang::EventObject& Source) throw( uno::Runt
  --------------------------------------------------*/
 BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     BibTabPage(pParent,BibResId(RID_TP_GENERAL)),
-    pDatMan(pMan),
     aControlParentWin(this, WB_DIALOGCONTROL),
     aIdentifierFT(&aControlParentWin,   BibResId(FT_IDENTIFIER  )),
     aAuthTypeFT(&aControlParentWin,     BibResId(FT_AUTHTYPE        )),
-    aAuthorFT(&aControlParentWin,       BibResId(FT_AUTHOR      )),
-    aMonthFT(&aControlParentWin,        BibResId(FT_MONTH           )),
     aYearFT(&aControlParentWin,         BibResId(FT_YEAR            )),
-
-    aPublisherFT(&aControlParentWin,    BibResId(FT_PUBLISHER       )),
-    aISBNFT(&aControlParentWin,         BibResId(FT_ISBN            )),
-
-    aAddressFT(&aControlParentWin,      BibResId(FT_ADDRESS     )),
-    aAnnoteFT(&aControlParentWin,       BibResId(FT_ANNOTE      )),
-    aBooktitleFT(&aControlParentWin,    BibResId(FT_BOOKTITLE       )),
-    aChapterFT(&aControlParentWin,      BibResId(FT_CHAPTER     )),
-    aEditionFT(&aControlParentWin,      BibResId(FT_EDITION     )),
-    aEditorFT(&aControlParentWin,       BibResId(FT_EDITOR      )),
-    aHowpublishedFT(&aControlParentWin, BibResId(FT_HOWPUBLISHED    )),
-    aInstitutionFT(&aControlParentWin,  BibResId(FT_INSTITUTION )),
-    aJournalFT(&aControlParentWin,      BibResId(FT_JOURNAL     )),
-    aNoteFT(&aControlParentWin,         BibResId(FT_NOTE            )),
-    aNumberFT(&aControlParentWin,       BibResId(FT_NUMBER      )),
-    aOrganizationsFT(&aControlParentWin,BibResId(FT_ORGANIZATION    )),
-    aPagesFT(&aControlParentWin,        BibResId(FT_PAGE            )),
-    aSchoolFT(&aControlParentWin,       BibResId(FT_SCHOOL      )),
-    aSeriesFT(&aControlParentWin,       BibResId(FT_SERIES      )),
+    aAuthorFT(&aControlParentWin,       BibResId(FT_AUTHOR      )),
     aTitleFT(&aControlParentWin,        BibResId(FT_TITLE           )),
-    aReportTypeFT(&aControlParentWin,   BibResId(FT_REPORT      )),
+    aPublisherFT(&aControlParentWin,    BibResId(FT_PUBLISHER       )),
+    aAddressFT(&aControlParentWin,      BibResId(FT_ADDRESS     )),
+    aISBNFT(&aControlParentWin,         BibResId(FT_ISBN            )),
+    aChapterFT(&aControlParentWin,      BibResId(FT_CHAPTER     )),
+    aPagesFT(&aControlParentWin,        BibResId(FT_PAGE            )),
+    aFirstFL(&aControlParentWin,        BibResId(FL_1        )),
+    aEditorFT(&aControlParentWin,       BibResId(FT_EDITOR      )),
+    aEditionFT(&aControlParentWin,      BibResId(FT_EDITION     )),
+    aBooktitleFT(&aControlParentWin,    BibResId(FT_BOOKTITLE       )),
     aVolumeFT(&aControlParentWin,       BibResId(FT_VOLUME      )),
+    aHowpublishedFT(&aControlParentWin, BibResId(FT_HOWPUBLISHED    )),
+    aOrganizationsFT(&aControlParentWin,BibResId(FT_ORGANIZATION    )),
+    aInstitutionFT(&aControlParentWin,  BibResId(FT_INSTITUTION )),
+    aSchoolFT(&aControlParentWin,       BibResId(FT_SCHOOL      )),
+    aReportTypeFT(&aControlParentWin,   BibResId(FT_REPORT      )),
+    aMonthFT(&aControlParentWin,        BibResId(FT_MONTH           )),
+    aSecondFL(&aControlParentWin,       BibResId(FL_2        )),
+    aJournalFT(&aControlParentWin,      BibResId(FT_JOURNAL     )),
+    aNumberFT(&aControlParentWin,       BibResId(FT_NUMBER      )),
+    aSeriesFT(&aControlParentWin,       BibResId(FT_SERIES      )),
+    aAnnoteFT(&aControlParentWin,       BibResId(FT_ANNOTE      )),
+    aNoteFT(&aControlParentWin,         BibResId(FT_NOTE            )),
     aURLFT(&aControlParentWin,          BibResId(FT_URL         )),
+    aThirdFL(&aControlParentWin,        BibResId(FL_3        )),
     aCustom1FT(&aControlParentWin,      BibResId(FT_CUSTOM1     )),
     aCustom2FT(&aControlParentWin,      BibResId(FT_CUSTOM2     )),
     aCustom3FT(&aControlParentWin,      BibResId(FT_CUSTOM3     )),
     aCustom4FT(&aControlParentWin,      BibResId(FT_CUSTOM4     )),
     aCustom5FT(&aControlParentWin,      BibResId(FT_CUSTOM5     )),
-    aFirstFL(&aControlParentWin,        BibResId(FL_1        )),
-    aSecondFL(&aControlParentWin,       BibResId(FL_2        )),
-    aThirdFL(&aControlParentWin,        BibResId(FL_3        )),
     aHoriScroll(this, WB_HORZ),
     aVertScroll(this, WB_VERT),
-    sErrorPrefix(BibResId(ST_ERROR_PREFIX))
+    sErrorPrefix(BibResId(ST_ERROR_PREFIX)),
+    pDatMan(pMan)
 {
     aControlParentWin.Show();
     aControlParentWin.SetHelpId(HID_BIB_CONTROL_PARENT);
@@ -578,7 +576,6 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
                 if(bTypeListBox)
                 {
                     //uno::Reference< beans::XPropertySet >  xPropSet(xControl, UNO_QUERY);
-                    uno::Any aAny;
                     aAny <<= (sal_Int16)1;
                     xPropSet->setPropertyValue(C2U("BoundColumn"), aAny);
                     ListSourceType eSet = ListSourceType_VALUELIST;
@@ -644,7 +641,7 @@ uno::Reference< awt::XControlModel >  BibGeneralPage::AddXControl(
     }
     catch(Exception& rEx)
     {
-        rEx;
+        (void) rEx; // make compiler happy
         DBG_ERROR("BibGeneralPage::AddXControl: something went wrong !");
     }
     return xCtrModel;
@@ -865,7 +862,7 @@ void BibGeneralPage::focusLost(const awt::FocusEvent& ) throw( uno::RuntimeExcep
     CommitActiveControl();
 }
 
-void BibGeneralPage::disposing(const lang::EventObject& Source) throw( uno::RuntimeException )
+void BibGeneralPage::disposing(const lang::EventObject& /*Source*/) throw( uno::RuntimeException )
 {
 }
 
