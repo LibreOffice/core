@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyhandler.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:53:26 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:00:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,10 +89,10 @@ namespace pcr
     //--------------------------------------------------------------------
     PropertyHandler::PropertyHandler( const Reference< XComponentContext >& _rxContext )
         :PropertyHandler_Base( m_aMutex )
-        ,m_aContext( _rxContext )
-        ,m_pInfoService  ( new OPropertyInfoService )
         ,m_bSupportedPropertiesAreKnown( false )
         ,m_aPropertyListeners( m_aMutex )
+        ,m_aContext( _rxContext )
+        ,m_pInfoService  ( new OPropertyInfoService )
     {
         DBG_CTOR( PropertyHandler, NULL );
 
@@ -105,10 +105,10 @@ namespace pcr
     //--------------------------------------------------------------------
     PropertyHandler::PropertyHandler( const Reference< XMultiServiceFactory >& _rxLegacyFactory )
         :PropertyHandler_Base( m_aMutex )
-        ,m_aContext( _rxLegacyFactory )
-        ,m_pInfoService  ( new OPropertyInfoService )
         ,m_bSupportedPropertiesAreKnown( false )
         ,m_aPropertyListeners( m_aMutex )
+        ,m_aContext( _rxLegacyFactory )
+        ,m_pInfoService  ( new OPropertyInfoService )
     {
         DBG_CTOR( PropertyHandler, NULL );
 
