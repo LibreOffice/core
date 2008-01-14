@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficePrint.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-17 13:29:19 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:18:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,9 @@
 package convwatch;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.io.FileWriter;
+
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.uno.XComponentContext;
@@ -45,6 +47,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.document.XTypeDetection;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.frame.XDesktop;
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.lang.XComponent;
@@ -52,8 +55,10 @@ import com.sun.star.frame.XStorable;
 import com.sun.star.view.XPrintable;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.frame.XModel;
+import com.sun.star.uno.AnyConverter;
 
 import helper.URLHelper;
+import helper.PropertyHelper;
 import convwatch.FileHelper;
 import convwatch.MSOfficePrint;
 import convwatch.GraphicalTestArguments;
@@ -102,17 +107,19 @@ public class OfficePrint {
 //         }
 
 
-    /*
-      wait a second the caller don't need to handle the interruptexception
-      @param _nSeconds how long should we wait
-      @param _sReason  give a good reason, why we have to wait
-     */
-    static void waitInSeconds(int _nSeconds, String _sReason)
+    private static void showProperty(PropertyValue _aValue)
         {
-            GlobalLogWriter.get().println("Wait " + String.valueOf(_nSeconds) + " sec. Reason: " + _sReason);
-            try {
-                java.lang.Thread.sleep(_nSeconds * 1000);
-            } catch (java.lang.InterruptedException e2) {}
+            String sName = _aValue.Name;
+            String sValue;
+            try
+            {
+                sValue = AnyConverter.toString(_aValue.Value);
+                GlobalLogWriter.get().println("Property " + sName + ":=" + sValue);
+            }
+            catch (com.sun.star.lang.IllegalArgumentException e)
+            {
+                GlobalLogWriter.get().println("showProperty: can't convert a object to string.");
+            }
         }
 
     /**
@@ -173,22 +180,22 @@ public class OfficePrint {
 
                     // set here the loadComponentFromURL() properties
                     // at the moment only 'Hidden' is set, so no window is opened at work
-                    PropertyValue [] aProps;
-                    int nPropertyCount = 0;
+
+                    ArrayList aPropertyList = new ArrayList();
 
                     // check which properties should set and count it.
-                    if (_aGTA.isHidden())
-                    {
-                        nPropertyCount ++;
-                    }
-                    if (_aGTA.getImportFilterName() != null && _aGTA.getImportFilterName().length() > 0)
-                    {
-                        nPropertyCount ++;
-                    }
+                    // if (_aGTA.isHidden())
+                    // {
+                    //     nPropertyCount ++;
+                    // }
+                    // if (_aGTA.getImportFilterName() != null && _aGTA.getImportFilterName().length() > 0)
+                    // {
+                    //     nPropertyCount ++;
+                    // }
 
                     // initialize the propertyvalue
-                    int nPropertyIndex = 0;
-                    aProps = new PropertyValue[ nPropertyCount ];
+                    // int nPropertyIndex = 0;
+                    // aProps = new PropertyValue[ nPropertyCount ];
 
                     // set all property values
                     if (_aGTA.isHidden())
@@ -196,17 +203,19 @@ public class OfficePrint {
                         PropertyValue Arg = new PropertyValue();
                         Arg.Name = "Hidden";
                         Arg.Value = Boolean.TRUE;
-                        aProps[ nPropertyIndex ++ ] = Arg;
+                        aPropertyList.add(Arg);
+                        showProperty(Arg);
                     }
                     if (_aGTA.getImportFilterName() != null && _aGTA.getImportFilterName().length() > 0)
                     {
                         PropertyValue Arg = new PropertyValue();
                         Arg.Name = "FilterName";
                         Arg.Value = _aGTA.getImportFilterName();
-                        aProps[ nPropertyIndex ++ ] = Arg;
+                        aPropertyList.add(Arg);
+                        showProperty(Arg);
                     }
 
-                    GlobalLogWriter.get().println("Load document");
+                    GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Load document");
                     // GlobalLogWriter.get().flush();
 
                     XComponentLoader aCompLoader = (XComponentLoader) UnoRuntime.queryInterface( XComponentLoader.class, aDesktop);
@@ -214,17 +223,17 @@ public class OfficePrint {
                     // XComponent aDoc = null;
 
                     _aGTA.getPerformance().startTime(PerformanceContainer.Load);
-                    aDoc = aCompLoader.loadComponentFromURL(_sInputURL, "_blank", 0, aProps );
+                    aDoc = aCompLoader.loadComponentFromURL(_sInputURL, "_blank", 0, PropertyHelper.createPropertyValueArrayFormArrayList(aPropertyList) );
                     _aGTA.getPerformance().stopTime(PerformanceContainer.Load);
                     if (aDoc != null)
                     {
-                        GlobalLogWriter.get().println(" done.");
+                        GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Load document done.");
                         showDocumentType(aDoc);
                         _aGTA.setDocumentType(getDocumentType(aDoc));
                     }
                     else
                     {
-                        GlobalLogWriter.get().println(" failed.");
+                        GlobalLogWriter.get().println(" Load document failed.");
                         if (_aGTA.getImportFilterName() != null && _aGTA.getImportFilterName().length() > 0)
                         {
                             GlobalLogWriter.get().println(" Please check FilterName := '" + _aGTA.getImportFilterName() + "'");
@@ -240,6 +249,8 @@ public class OfficePrint {
             catch ( com.sun.star.uno.Exception e )
             {
                 // Some exception occures.FAILED
+                GlobalLogWriter.get().println("UNO Exception caught.");
+                GlobalLogWriter.get().println("Message: " + e.getMessage());
                 e.printStackTrace();
                 aDoc = null;
             }
@@ -253,11 +264,12 @@ public class OfficePrint {
                     XServiceInfo.class, _xComponent
                     );
 
-            PropertyValue[] PDFArgs = new com.sun.star.beans.PropertyValue[1];
-            PDFArgs[0] = new com.sun.star.beans.PropertyValue();
-            PDFArgs[0].Name = "FilterName";
-            PDFArgs[0].Value = getFilterName_forPDF(xServiceInfo);
-
+            ArrayList aPropertyList = new ArrayList();
+            PropertyValue aFiltername = new PropertyValue();
+            aFiltername.Name = "FilterName";
+            aFiltername.Value = getFilterName_forPDF(xServiceInfo);
+            aPropertyList.add(aFiltername);
+            showProperty(aFiltername);
             boolean bWorked = true;
 
             try
@@ -266,10 +278,12 @@ public class OfficePrint {
                     (XStorable) UnoRuntime.queryInterface(
                         XStorable.class, _xComponent
                         );
-                store.storeToURL(_sDestinationName, PDFArgs);
+                store.storeToURL(_sDestinationName, PropertyHelper.createPropertyValueArrayFormArrayList(aPropertyList));
             }
             catch (com.sun.star.io.IOException e)
             {
+                GlobalLogWriter.get().println("IO Exception caught.");
+                GlobalLogWriter.get().println("Message: " + e.getMessage());
                 bWorked = false;
             }
 
@@ -336,7 +350,7 @@ public class OfficePrint {
             bBack = storeAsPDF(_aGTA, aDoc, _sOutputURL);
             createInfoFile(_sOutputURL, _aGTA, "as pdf");
 
-            GlobalLogWriter.get().println("close document.");
+            GlobalLogWriter.get().println("Close document.");
             aDoc.dispose();
             return bBack;
         }
@@ -389,9 +403,9 @@ public class OfficePrint {
                     GlobalLogWriter.get().println("Warning: Inputpath and Outputpath are equal. Document will not stored again.");
                     _aGTA.disallowStore();
                 }
-                    bBack = printToFileWithOOo(_aGTA, aDoc, _sOutputURL, _sPrintFileURL);
+                bBack = impl_printToFileWithOOo(_aGTA, aDoc, _sOutputURL, _sPrintFileURL);
 
-                GlobalLogWriter.get().println("close document.");
+                GlobalLogWriter.get().println("Close document.");
                 aDoc.dispose();
             }
             else
@@ -410,7 +424,7 @@ public class OfficePrint {
     public static void createInfoFile(String _sFile, GraphicalTestArguments _aGTA, String _sSpecial)
         {
             String sFilename;
-            if (_sFile.startsWith("file:///"))
+            if (_sFile.startsWith("file://"))
             {
                 sFilename = FileHelper.getSystemPathFromFileURL(_sFile);
                 GlobalLogWriter.get().println("CreateInfoFile: '" + sFilename + "'" );
@@ -495,8 +509,7 @@ public class OfficePrint {
                 sExtension = sExtension.substring(1);
             }
 
-            DB.writeToDB(_aGTA.getDBInfoString(),
-                         _aGTA.getInputFile(),
+            DB.writeToDB(_aGTA.getInputFile(),
                          sNameNoSuffix,
                          sExtension,
                          sBuildID,
@@ -508,10 +521,10 @@ public class OfficePrint {
 
 
     // -----------------------------------------------------------------------------
-    public static boolean printToFileWithOOo(GraphicalTestArguments _aGTA,
-                                             XComponent _aDoc,
-                                             String _sOutputURL,
-                                             String _sPrintFileURL)
+    private static boolean impl_printToFileWithOOo(GraphicalTestArguments _aGTA,
+                                                   XComponent _aDoc,
+                                                   String _sOutputURL,
+                                                   String _sPrintFileURL)
         {
             boolean bBack = false;
             boolean bFailed = true;              // always be a pessimist,
@@ -521,12 +534,52 @@ public class OfficePrint {
                 return bBack;
             }
 
-            try {
+            try
+            {
+                if (_sOutputURL != null)
+                {
+                    if (_aGTA.isStoreAllowed())
+                    {
+                        // store the document in an other directory
+                        XStorable aStorable = (XStorable) UnoRuntime.queryInterface( XStorable.class, _aDoc);
+                        if (aStorable != null)
+                        {
+                            PropertyValue [] szEmptyArgs = new PropertyValue [0];
+
+                            GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Store document.");
+                            _aGTA.getPerformance().startTime(PerformanceContainer.Store);
+                            aStorable.storeAsURL(_sOutputURL, szEmptyArgs);
+                            _aGTA.getPerformance().stopTime(PerformanceContainer.Store);
+
+                            GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Store document done.");
+                            TimeHelper.waitInSeconds(2, "After store as URL to:" + _sOutputURL);
+                            GlobalLogWriter.get().println("Reload stored file test.");
+                            XComponent aDoc = loadFromURL(_aGTA, _sOutputURL);
+                            if (aDoc == null)
+                            {
+                                GlobalLogWriter.get().println("Reload stored file test failed, can't reload file: " + _sOutputURL);
+                            }
+                        }
+                    }
+                }
+            }
+            catch ( com.sun.star.uno.Exception e )
+            {
+                // Some exception occures.FAILED
+                GlobalLogWriter.get().println("UNO Exception caught.");
+                GlobalLogWriter.get().println("Message: " + e.getMessage());
+
+                e.printStackTrace();
+                bBack = false;
+            }
+
+            try
+            {
 
                 // System.out.println("Document loaded.");
                 // Change Pagesettings to DIN A4
 
-                GlobalLogWriter.get().println("Document print.");
+                GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Print document.");
                 XPrintable aPrintable = (XPrintable) UnoRuntime.queryInterface( XPrintable.class, _aDoc);
                 if (aPrintable != null)
                 {
@@ -551,33 +604,52 @@ public class OfficePrint {
                     {
                         if (_aGTA.getPrinterName() != null)
                         {
-                            PropertyValue [] aPrintProps = new PropertyValue[1];
+                            ArrayList aPropertyList = new ArrayList();
+                            // PropertyValue [] aPrintProps = new PropertyValue[1];
                             PropertyValue Arg = new PropertyValue();
                             Arg.Name = "Name";
                             Arg.Value = _aGTA.getPrinterName();
-                            aPrintProps[0] = Arg;
-
-                            GlobalLogWriter.get().println("Printername is not null, so set to " + _aGTA.getPrinterName());
-                            aPrintable.setPrinter(aPrintProps);
+                            aPropertyList.add(Arg);
+                            showProperty(Arg);
+                            // GlobalLogWriter.get().println("Printername is not null, so set to " + _aGTA.getPrinterName());
+                            aPrintable.setPrinter(PropertyHelper.createPropertyValueArrayFormArrayList(aPropertyList));
                         }
                     }
 
                     // set property values for XPrintable.print()
                     // more can be found at "http://api.openoffice.org/docs/common/ref/com/sun/star/view/PrintOptions.html"
 
-                    int nProperties = 1;                    // default for 'FileName' property
-                    if (_aGTA.printAllPages() == false)
-                    {
-                        // we don't want to print all pages, build Pages string by ourself
-                        nProperties ++;
-                    }
-                    int nPropsCount = 0;
+                    // int nProperties = 1;                    // default for 'FileName' property
+                    // if (_aGTA.printAllPages() == false)
+                    // {
+                    //     // we don't want to print all pages, build Pages string by ourself
+                    //     nProperties ++;
+                    // }
+                    // int nPropsCount = 0;
 
-                    PropertyValue [] aPrintProps = new PropertyValue[nProperties];
+                    // If we are a SpreadSheet (calc), we need to set PrintAllSheets property to 'true'
+                    XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface( XServiceInfo.class, _aDoc );
+                    if ( xServiceInfo.supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
+                    {
+                        XMultiServiceFactory xMSF = _aGTA.getMultiServiceFactory();
+                        Object aSettings = xMSF.createInstance( "com.sun.star.sheet.GlobalSheetSettings" );
+                        if (aSettings != null)
+                        {
+                            XPropertySet xPropSet = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, aSettings );
+                            xPropSet.setPropertyValue( "PrintAllSheets", new Boolean( true ) );
+                        }
+                    }
+
+                    ArrayList aPrintProps = new ArrayList();
+                    GlobalLogWriter.get().println("Property FileName:=" + _sPrintFileURL);
+
+                    // PropertyValue [] aPrintProps = new PropertyValue[nProperties];
                     PropertyValue Arg = new PropertyValue();
                     Arg.Name = "FileName";
                     Arg.Value = _sPrintFileURL;
-                    aPrintProps[nPropsCount ++] = Arg;
+                    // aPrintProps[nPropsCount ++] = Arg;
+                    aPrintProps.add(Arg);
+                    // showProperty(Arg);
 
                     if (_aGTA.printAllPages() == false)
                     {
@@ -598,36 +670,19 @@ public class OfficePrint {
                         Arg = new PropertyValue();
                         Arg.Name = "Pages";
                         Arg.Value = sPages;
-                        aPrintProps[nPropsCount ++] = Arg;
+                        aPrintProps.add(Arg);
                     }
+                    showProperty(Arg);
 
-                    if (_sOutputURL != null)
-                    {
-                        if (_aGTA.isStoreAllowed())
-                        {
-                            // store the document in an other directory
-                            XStorable aStorable = (XStorable) UnoRuntime.queryInterface( XStorable.class, _aDoc);
-                            if (aStorable != null)
-                            {
-                                PropertyValue [] szEmptyArgs = new PropertyValue [0];
-
-                                GlobalLogWriter.get().println("Document stored.");
-                                _aGTA.getPerformance().startTime(PerformanceContainer.Store);
-                                aStorable.storeAsURL(_sOutputURL, szEmptyArgs);
-                                _aGTA.getPerformance().stopTime(PerformanceContainer.Store);
-                            }
-                        }
-                    }
-
-
-                    GlobalLogWriter.get().println("start printing.");
+                    // GlobalLogWriter.get().println("Start printing.");
 
                     _aGTA.getPerformance().startTime(PerformanceContainer.Print);
-                    aPrintable.print(aPrintProps);
-                    waitInSeconds(1, "unknown.");
+                    aPrintable.print(PropertyHelper.createPropertyValueArrayFormArrayList(aPrintProps));
+                    TimeHelper.waitInSeconds(1, "Start waiting for print ready.");
 
                     GlobalLogWriter.get().println("Wait until document is printed.");
                     boolean isBusy = true;
+                    int nPrintCount = 0;
                     while (isBusy)
                     {
                         PropertyValue[] aPrinterProps = aPrintable.getPrinter();
@@ -638,16 +693,24 @@ public class OfficePrint {
                             nPropIndex++;
                         }
                         isBusy = (aPrinterProps[nPropIndex].Value == Boolean.TRUE) ? true : false;
-                        waitInSeconds(1, "is print ready?");
+                        TimeHelper.waitInSeconds(1, "is print ready?");
+                        nPrintCount++;
+                        if (nPrintCount > 3600)
+                        {
+                            // we will never wait >1h until print is ready!
+                            GlobalLogWriter.get().println("ERROR: Cancel print due to too long wait.");
+                            throw new com.sun.star.uno.Exception("Convwatch exception, wait too long for printing.");
+                        }
                     }
                     _aGTA.getPerformance().stopTime(PerformanceContainer.Print);
+                    GlobalLogWriter.get().println(DateHelper.getDateTimeForHumanreadableLog() + " Print document done.");
 
                     // Create a .info file near the printed '.ps' or '.prn' file.
                     createInfoFile(_sPrintFileURL, _aGTA);
                 }
                 else
                 {
-                    GlobalLogWriter.get().println("Can't get XPrintable.");
+                    GlobalLogWriter.get().println("Can't get XPrintable interface.");
                 }
                 bFailed = false;
                 bBack = true;
@@ -655,6 +718,9 @@ public class OfficePrint {
             catch ( com.sun.star.uno.Exception e )
             {
                 // Some exception occures.FAILED
+                GlobalLogWriter.get().println("UNO Exception caught.");
+                GlobalLogWriter.get().println("Message: " + e.getMessage());
+
                 e.printStackTrace();
                 bBack = false;
             }
@@ -1182,7 +1248,7 @@ public class OfficePrint {
                 return;
             }
 //  TODO: Do we need to wait?
-            waitInSeconds(1, "wait after loadFromURL.");
+            TimeHelper.waitInSeconds(1, "wait after loadFromURL.");
 
             XServiceInfo xServiceInfo = (XServiceInfo) UnoRuntime.queryInterface( XServiceInfo.class, aDoc );
             // String sFilter = getFilterName_forExcel(xServiceInfo);
@@ -1200,14 +1266,15 @@ public class OfficePrint {
 
             // check how many Properties should initialize
             int nPropertyCount = 0;
-            if (sFilterName != null && sFilterName.length() > 0)
-            {
-                nPropertyCount ++;
-            }
+            // if (sFilterName != null && sFilterName.length() > 0)
+            // {
+            //     nPropertyCount ++;
+            // }
 
             // initialize PropertyArray
-            PropertyValue [] aStoreProps = new PropertyValue[ nPropertyCount ];
-            int nPropertyIndex = 0;
+            // PropertyValue [] aStoreProps = new PropertyValue[ nPropertyCount ];
+            // int nPropertyIndex = 0;
+            ArrayList aPropertyList = new ArrayList();
 
             String sExtension = "";
 
@@ -1249,7 +1316,9 @@ public class OfficePrint {
                 PropertyValue Arg = new PropertyValue();
                 Arg.Name = "FilterName";
                 Arg.Value = sFilterName;
-                aStoreProps[nPropertyIndex ++] = Arg;
+                // aStoreProps[nPropertyIndex ++] = Arg;
+                aPropertyList.add(Arg);
+                showProperty(Arg);
                 GlobalLogWriter.get().println("FilterName is set to: " + sFilterName);
             }
 
@@ -1285,7 +1354,7 @@ public class OfficePrint {
                 sOutputURL = URLHelper.getFileURLFromSystemPath(sOutputFile);
 
                 GlobalLogWriter.get().println("Store document as '" + sOutputURL + "'");
-                xStorable.storeAsURL(sOutputURL, aStoreProps);
+                xStorable.storeAsURL(sOutputURL, PropertyHelper.createPropertyValueArrayFormArrayList(aPropertyList));
                 GlobalLogWriter.get().println("Document stored.");
             }
             catch (com.sun.star.io.IOException e)
@@ -1293,7 +1362,7 @@ public class OfficePrint {
                 GlobalLogWriter.get().println("Can't store document '" + sOutputURL + "'. Message is :'" + e.getMessage() + "'");
             }
 //  TODO: Do we need to wait?
-            waitInSeconds(1, "unknown.");
+            TimeHelper.waitInSeconds(1, "unknown in OfficePrint.convertDocument()");
 
         }
 
