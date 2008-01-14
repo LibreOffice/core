@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopropertyarrayhelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:59:45 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:56:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@
 
 #include <tools/table.hxx>
 
+#include <list>
+
 //  ----------------------------------------------------
 //  class UnoPropertyArrayHelper
 //  ----------------------------------------------------
@@ -53,6 +55,7 @@ protected:
 
 public:
                 UnoPropertyArrayHelper( const ::com::sun::star::uno::Sequence<sal_Int32>& rIDs );
+                UnoPropertyArrayHelper( const std::list< sal_uInt16 > &rIDs );
 
     // ::cppu::IPropertyArrayHelper
     sal_Bool SAL_CALL fillPropertyMembersByHandle( ::rtl::OUString * pPropName, sal_Int16 * pAttributes, sal_Int32 nHandle );
