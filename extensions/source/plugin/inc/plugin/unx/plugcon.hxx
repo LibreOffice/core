@@ -4,9 +4,9 @@
  *
  *  $RCSfile: plugcon.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:09:49 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:52:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,9 @@
 #define Boolean     XLIB_Boolean
 #define XPointer    XLIB_XPointer
 #include <X11/Xlib.h>
+extern "C" {
 #include <X11/Intrinsic.h>
+}
 #include <X11/Shell.h>
 #include <X11/IntrinsicP.h>     /* Intrinsics Definitions*/
 #include <X11/StringDefs.h>    /* Standard Name-String definitions*/
@@ -84,14 +86,15 @@
 #  define OJI
 #endif
 #define MOZ_X11
-#include <npupp.h>
-#include <npapi.h>
-#else
+#endif
+
 #ifndef _NPAPI_H_
-#include <npupp.h>
+extern "C" {
+#include <npsdk/npupp.h>
+}
 #include <npapi.h>
 #endif
-#endif
+
 #undef Window
 #undef Font
 #undef KeyCode
@@ -129,9 +132,9 @@ public:
 
 class PluginConnector;
 
-DECLARE_LIST( NPStreamList, NPStream* );
-DECLARE_LIST( InstanceList, ConnectorInstance* );
-DECLARE_LIST( PluginConnectorList, PluginConnector* );
+DECLARE_LIST( NPStreamList, NPStream* )
+DECLARE_LIST( InstanceList, ConnectorInstance* )
+DECLARE_LIST( PluginConnectorList, PluginConnector* )
 
 class PluginConnector : public Mediator
 {
@@ -146,13 +149,13 @@ protected:
     NPStreamList    m_aNPWrapStreams;
     InstanceList    m_aInstances;
 
-    ULONG   FillBuffer( char*&, char*, ULONG, va_list );
+    ULONG   FillBuffer( char*&, const char*, ULONG, va_list );
 public:
     PluginConnector( int nSocket );
     ~PluginConnector();
 
     virtual MediatorMessage* WaitForAnswer( ULONG nMessageID );
-    MediatorMessage*    Transact( char*, ULONG, ... );
+    MediatorMessage*    Transact( const char*, ULONG, ... );
     MediatorMessage*    Transact( UINT32, ... );
     void                Respond( ULONG nID, char*, ULONG, ... );
     ULONG               Send( UINT32, ... );
@@ -211,7 +214,7 @@ enum CommandAtoms
         eMaxCommand
 };
 
-char* GetCommandName( CommandAtoms );
+const char* GetCommandName( CommandAtoms );
 
 #define POST_STRING( x ) x ? x : const_cast<char*>(""), x ? strlen(x) : 1
 
