@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:11:43 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:49:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,6 +180,7 @@ public:
     DECL_LINK( WinInfo, WinInfoRec * );
     BOOL LoadFile( String aFilename );
     long Command( short,BOOL=FALSE );// Kommando-Handler
+    virtual void Command( const CommandEvent& rCEvt );      // Kommando-Handler
     BOOL SaveAll();                 // Alle Fenster speichern
     BOOL QueryFileName( String& rName, FileType nFileType, BOOL bSave );// Dateinamen ermitteln
     DECL_LINK( ModuleWinExists, String* );
