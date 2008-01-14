@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 16:19:40 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:21:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XMACROEXPANDER_HPP_
+#include <com/sun/star/util/XMacroExpander.hpp>
 #endif
 
 #ifndef _OSL_MODULE_HXX_
@@ -259,6 +262,10 @@
 #include <drawitem.hxx>
 #endif
 
+#ifndef _RTL_URI_HXX_
+#include <rtl/uri.hxx>
+#endif
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
@@ -278,6 +285,7 @@ using namespace ::com::sun::star::util;
 #define SELECT_FIRST_TIMEOUT    0
 #define SELECT_TIMEOUT          300
 #define COLORPAGE_UNKNOWN       ((sal_uInt16)0xFFFF)
+#define EXPAND_PROTOCOL         "vnd.sun.star.expand:"
 
 LastPageSaver* OfaTreeOptionsDialog::pLastPageSaver = NULL;
 
@@ -1028,9 +1036,8 @@ void OfaTreeOptionsDialog::InitTreeAndHandler()
  * --------------------------------------------------*/
 void OfaTreeOptionsDialog::ActivatePage( sal_uInt16 nResId )
 {
-
     bIsForSetDocumentLanguage = false;
-    if (nResId == OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE)
+    if ( nResId == OFA_TP_LANGUAGES_FOR_SET_DOCUMENT_LANGUAGE )
     {
         bIsForSetDocumentLanguage = true;
         nResId = OFA_TP_LANGUAGES;
@@ -1046,47 +1053,91 @@ void OfaTreeOptionsDialog::ActivatePage( sal_uInt16 nResId )
     pLastPageSaver->m_nLastPageId = nTemp;
 }
 
+void OfaTreeOptionsDialog::ActivatePage( const String& rPageURL )
+{
+    DBG_ASSERT( !bIsFromExtensionManager, "OfaTreeOptionsDialog::ActivatePage(): call from extension manager" );
+    if ( !pLastPageSaver )
+        pLastPageSaver = new LastPageSaver;
+    bForgetSelection = sal_True;
+    pLastPageSaver->m_nLastPageId = 0;
+    pLastPageSaver->m_sLastPageURL_Tools = rPageURL;
+    ActivateLastSelection();
+}
+
 /* -----------------16.02.99 13:17-------------------
  *
  * --------------------------------------------------*/
 void OfaTreeOptionsDialog::ActivateLastSelection()
 {
     SvLBoxEntry* pEntry = NULL;
-    if ( !pLastPageSaver )
+    if ( pLastPageSaver )
     {
-        pEntry = aTreeLB.First();
-        pEntry = aTreeLB.Next(pEntry);
-    }
-    else
-    {
+        String sExpand( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL ) );
+        String sLastURL = bIsFromExtensionManager ? pLastPageSaver->m_sLastPageURL_ExtMgr
+                                                  : pLastPageSaver->m_sLastPageURL_Tools;
+        if ( sLastURL.Len() == 0 )
+        {
+            sLastURL = !bIsFromExtensionManager ? pLastPageSaver->m_sLastPageURL_ExtMgr
+                                                : pLastPageSaver->m_sLastPageURL_Tools;
+        }
+
+        // MacroExpander to convert "expand"-URL to "file"-URL
+        Reference< XMacroExpander > m_xMacroExpander;
+        bool bMustExpand = ( INetURLObject( sLastURL ).GetProtocol() == INET_PROT_FILE );
+
+        if ( bMustExpand )
+        {
+            Reference< XComponentContext > xContext;
+            Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY );
+            xProps->getPropertyValue(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ) ) ) >>= xContext;
+            if ( xContext.is() )
+                m_xMacroExpander = Reference< com::sun::star::util::XMacroExpander >(
+                    xContext->getValueByName( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "/singletons/com.sun.star.util.theMacroExpander" ) ) ), UNO_QUERY );
+        }
+
         SvLBoxEntry* pTemp = aTreeLB.First();
         while( !pEntry && pTemp )
         {
             // restore only selection of a leaf
-            if ( aTreeLB.GetParent( pTemp ) )
+            if ( aTreeLB.GetParent( pTemp ) && pTemp->GetUserData() )
             {
                 OptionsPageInfo* pPageInfo = (OptionsPageInfo*)pTemp->GetUserData();
+                String sPageURL = pPageInfo->m_sPageURL;
+                if ( bMustExpand
+                    && sPageURL.Len() > 0
+                    && sExpand.Match( sPageURL ) == STRING_MATCH )
+                {
+                    // cut protocol
+                    ::rtl::OUString sTemp( sPageURL.Copy( sizeof( EXPAND_PROTOCOL ) -1 ) );
+                    // decode uri class chars
+                    sTemp = ::rtl::Uri::decode(
+                        sTemp, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+                    // expand string
+                    sPageURL = m_xMacroExpander->expandMacros( sTemp );
+                }
+
                 if ( ( !bIsFromExtensionManager
                         && pPageInfo->m_nPageId && pPageInfo->m_nPageId == pLastPageSaver->m_nLastPageId )
-                    || ( !pPageInfo->m_nPageId
-                        && ( ( bIsFromExtensionManager
-                                && pPageInfo->m_sPageURL == pLastPageSaver->m_sLastPageURL_ExtMgr )
-                            || ( !bIsFromExtensionManager
-                                && pPageInfo->m_sPageURL == pLastPageSaver->m_sLastPageURL_Tools ) ) ) )
+                            || ( !pPageInfo->m_nPageId && sLastURL == sPageURL ) )
                     pEntry = pTemp;
             }
             pTemp = aTreeLB.Next(pTemp);
         }
     }
 
-    if ( pEntry )
+    if ( !pEntry )
     {
-        SvLBoxEntry* pParent = aTreeLB.GetParent(pEntry);
-        aTreeLB.Expand(pParent);
-        aTreeLB.MakeVisible(pParent);
-        aTreeLB.MakeVisible(pEntry);
-        aTreeLB.Select(pEntry);
+        pEntry = aTreeLB.First();
+        pEntry = aTreeLB.Next(pEntry);
     }
+
+    SvLBoxEntry* pParent = aTreeLB.GetParent(pEntry);
+    aTreeLB.Expand(pParent);
+    aTreeLB.MakeVisible(pParent);
+    aTreeLB.MakeVisible(pEntry);
+    aTreeLB.Select(pEntry);
     aTreeLB.GrabFocus();
 }
 
