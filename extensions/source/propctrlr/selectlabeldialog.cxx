@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selectlabeldialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:08:29 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,6 +284,7 @@ namespace pcr
     IMPL_LINK(OSelectLabelDialog, OnEntrySelected, SvTreeListBox*, pLB)
     {
         DBG_ASSERT(pLB == &m_aControlTree, "OSelectLabelDialog::OnEntrySelected : where did this come from ?");
+        (void)pLB;
         SvLBoxEntry* pSelected = m_aControlTree.FirstSelected();
         void* pData = pSelected ? pSelected->GetUserData() : NULL;
 
@@ -301,6 +302,7 @@ namespace pcr
     IMPL_LINK(OSelectLabelDialog, OnNoAssignmentClicked, Button*, pButton)
     {
         DBG_ASSERT(pButton == &m_aNoAssignment, "OSelectLabelDialog::OnNoAssignmentClicked : where did this come from ?");
+        (void)pButton;
 
         if (m_aNoAssignment.IsChecked())
             m_pLastSelected = m_aControlTree.FirstSelected();
