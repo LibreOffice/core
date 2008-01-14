@@ -4,9 +4,9 @@
  *
  *  $RCSfile: plctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:08:43 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,14 +62,14 @@
 //--------------------------------------------------------------------------------------------------
 PluginControl_Impl::PluginControl_Impl() :
     _pMultiplexer( NULL )
-    , _bVisible( sal_False )
-    , _bInDesignMode( sal_False )
-    , _bEnable( sal_True )
     , _nX( 0 )
     , _nY( 0 )
     , _nWidth( 100 )
     , _nHeight( 100 )
     , _nFlags( WINDOW_POSSIZE_ALL )
+    , _bVisible( sal_False )
+    , _bInDesignMode( sal_False )
+    , _bEnable( sal_True )
 {
 }
 
@@ -176,7 +176,7 @@ void PluginControl_Impl::releasePeer()
 }
 
 //---- ::com::sun::star::awt::XControl ------------------------------------------------------------------------------------
-void PluginControl_Impl::createPeer( const Reference< ::com::sun::star::awt::XToolkit > & xToolkit, const Reference< ::com::sun::star::awt::XWindowPeer >  & xParentPeer )
+void PluginControl_Impl::createPeer( const Reference< ::com::sun::star::awt::XToolkit > & /*xToolkit*/, const Reference< ::com::sun::star::awt::XWindowPeer >  & xParentPeer )
     throw( RuntimeException )
 {
     if (_xPeer.is())
@@ -310,33 +310,33 @@ void PluginControl_Impl::removeMouseMotionListener( const Reference< ::com::sun:
 
 
 //---- ::com::sun::star::awt::XView ---------------------------------------------------------------------------------------
-void PluginControl_Impl::draw( sal_Int32 x, sal_Int32 y )
+void PluginControl_Impl::draw( sal_Int32 /*x*/, sal_Int32 /*y*/ )
     throw( RuntimeException )
 {
     // has to be done by further implementation of control
 }
 
 //---- ::com::sun::star::awt::XView ---------------------------------------------------------------------------------------
-void PluginControl_Impl::setZoom( float ZoomX, float ZoomY )
+void PluginControl_Impl::setZoom( float /*ZoomX*/, float /*ZoomY*/ )
     throw( RuntimeException )
 {
     // has to be done by further implementation of control
 }
 
 //---- ::com::sun::star::lang::XEventListener ------------------------------------------------------------------------------
-void PluginControl_Impl::disposing( const ::com::sun::star::lang::EventObject & rSource )
+void PluginControl_Impl::disposing( const ::com::sun::star::lang::EventObject & /*rSource*/ )
     throw( RuntimeException )
 {
 }
 //---- ::com::sun::star::awt::XFocusListener ------------------------------------------------------------------------------
-void PluginControl_Impl::focusGained( const ::com::sun::star::awt::FocusEvent & rEvt )
+void PluginControl_Impl::focusGained( const ::com::sun::star::awt::FocusEvent & /*rEvt*/ )
     throw( RuntimeException )
 {
     if (_xPeerWindow.is())
         _xPeerWindow->setFocus();
 }
 //---- ::com::sun::star::awt::XFocusListener ------------------------------------------------------------------------------
-void PluginControl_Impl::focusLost( const ::com::sun::star::awt::FocusEvent & rEvt )
+void PluginControl_Impl::focusLost( const ::com::sun::star::awt::FocusEvent & /*rEvt*/ )
     throw( RuntimeException )
 {
 }
