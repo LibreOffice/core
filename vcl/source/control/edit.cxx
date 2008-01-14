@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:05:13 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:20:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -429,8 +429,7 @@ BOOL Edit::IsCharInput( const KeyEvent& rKeyEvent )
 {
     // In the future we must use new Unicode functions for this
     xub_Unicode cCharCode = rKeyEvent.GetCharCode();
-    return ((cCharCode >= 32) && (cCharCode != 127) &&
-            !rKeyEvent.GetKeyCode().IsControlMod());
+    return ((cCharCode >= 32) && (cCharCode != 127));
 }
 
 // -----------------------------------------------------------------------
@@ -524,7 +523,12 @@ XubString Edit::ImplGetText() const
 void Edit::ImplInvalidateOrRepaint( xub_StrLen nStart, xub_StrLen nEnd )
 {
     if( IsPaintTransparent() )
+    {
         Invalidate();
+        // FIXME: this is currently only on aqua
+        if( ImplGetSVData()->maNWFData.mbNoFocusRects )
+            Update();
+    }
     else
         ImplRepaint( nStart, nEnd );
 }
