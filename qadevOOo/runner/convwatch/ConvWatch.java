@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConvWatch.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-05-17 13:27:35 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:16:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,9 +126,19 @@ public class ConvWatch
                 }
             }
 
+
+            boolean bAbsoluteReferenceFile = true;
             if (! FileHelper.exists(_sAbsoluteReferenceFile))
             {
-                throw new ConvWatchCancelException("createPostscriptStartCheck: Given reference file: " + _sAbsoluteReferenceFile + " does not exist.");
+                if (_aGTA.createDefaultReference())
+                {
+                    GlobalLogWriter.get().println("Reference File doesn't exist, will create a default");
+                    bAbsoluteReferenceFile = false;
+                }
+                else
+                {
+                    throw new ConvWatchCancelException("createPostscriptStartCheck: Given reference file: " + _sAbsoluteReferenceFile + " does not exist.");
+                }
             }
 
             FileHelper.makeDirectories("", _sOutputPath);
@@ -167,6 +177,19 @@ public class ConvWatch
             if (! FileHelper.exists(sAbsolutePrintFile))
             {
                 throw new ConvWatchCancelException("createPostscriptStartCheck: Printed file " + sAbsolutePrintFile + " does not exist.");
+            }
+
+            if (bAbsoluteReferenceFile == false)
+            {
+                // copy AbsolutePrintFile to AbsoluteReferenceFile
+                String sDestinationFile = sAbsolutePrintFile; // URLHelper.getSystemPathFromFileURL(...)
+                String sSourceFile = _sAbsoluteReferenceFile;
+                FileHelper.copy(sDestinationFile, sSourceFile);
+                // now the fix reference of the AbsoluteReferenceFile should exist.
+                if (! FileHelper.exists(_sAbsoluteReferenceFile))
+                {
+                    throw new ConvWatchCancelException("createPostscriptStartCheck: Given reference file: " + _sAbsoluteReferenceFile + " does not exist, after try to copy.");
+                }
             }
 
             PRNCompare a = new PRNCompare();
@@ -327,12 +350,18 @@ public class ConvWatch
         {
             ConvWatch a = new ConvWatch();
             StatusHelper[] aList = a.createPostscriptStartCheck(_aGTA, _sOutputPath, _sAbsoluteInputFile, _sAbsoluteReferenceFile);
+            DB.writeNumberOfPages(aList.length);
 
             boolean bResultIsOk = createINIStatus(aList, "", _sOutputPath, _sAbsoluteInputFile, _aGTA.getBuildID(), _aGTA.getRefBuildID());
 
             if (! bResultIsOk)
             {
-                throw new ConvWatchException("Graphical compare failed with file '" + _sAbsoluteInputFile + "'");
+                // it could be that this will store in a DB, there are problems with '\'
+                String sErrorMessage = "Graphical compare failed with file ";
+                String sErrorFile = _sAbsoluteInputFile.replace('\\', '/');
+                sErrorMessage = sErrorMessage + "'" + sErrorFile + "'";
+                DB.writeErrorFile(sErrorFile);
+                throw new ConvWatchException(sErrorMessage);
             }
             return bResultIsOk;
         }
