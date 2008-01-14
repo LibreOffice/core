@@ -1,0 +1,112 @@
+*** misc/core/build.properties	Wed Jun 13 14:30:51 2007
+--- misc/build/core/build.properties	Fri Jul 27 09:04:55 2007
+***************
+*** 17,24 ****
+  
+  #
+  # Make sure that JDK 1.2 compatible class files are generated
+! build.target=1.2
+! build.source=1.2
+  build.retro.jdk=/opt/jdk1.2.2
+  
+  #
+--- 17,24 ----
+  
+  #
+  # Make sure that JDK 1.2 compatible class files are generated
+! build.target=1.3
+! build.source=1.3
+  build.retro.jdk=/opt/jdk1.2.2
+  
+  #
+***************
+*** 40,54 ****
+
+  # Used by: core libraries
+  jcommon-jar-file=jcommon-1.0.10.jar
+! jcommon-serializer-jar-file=jcommon-serializer-0.1.0.jar
+! libfonts-jar-file=libfonts-0.3.2.jar
+  libfonts-core-jar-file=libfonts-0.3.2.jar
+  libfonts-itext-jar-file=libfonts-0.3.2.jar
+  liblayout-jar-file=liblayout-0.2.8.jar
+! libloader-jar-file=libloader-0.3.5.jar
+! libxml-jar-file=libxml-0.9.8.jar
+! libformula-jar-file=libformula-0.1.13.jar
+! librepository-jar-file=librepository-0.1.3.jar
+  flute-jar-file=flute-1.3-jfree-20061107.jar
+
+  #
+--- 40,54 ----
+
+  # Used by: core libraries
+  jcommon-jar-file=jcommon-1.0.10.jar
+! jcommon-serializer-jar-file=jcommon-serializer-0.2.0.jar
+! libfonts-jar-file=libfonts-0.3.3.jar
+  libfonts-core-jar-file=libfonts-0.3.2.jar
+  libfonts-itext-jar-file=libfonts-0.3.2.jar
+  liblayout-jar-file=liblayout-0.2.8.jar
+! libloader-jar-file=libloader-0.3.6.jar
+! libxml-jar-file=libxml-0.9.9.jar
+! libformula-jar-file=libformula-0.1.14.jar
+! librepository-jar-file=librepository-0.1.4.jar
+  flute-jar-file=flute-1.3-jfree-20061107.jar
+
+  #
+*** misc/core/build.xml Thu Oct 18 08:20:01 2007
+--- misc/build/core/build.xml   Mon Oct 22 13:05:33 2007
+***************
+*** 54,66 ****
+      <isClassAvailableEx class-name="org.jfree.xmlns.LibXmlInfo"
+                        property-name="lib.xmlns.present">
+        <test-classpath>
+-         <pathelement location="${libdir}/${jaxp-jar-file}"/>
+          <pathelement location="${libdir}/${libxml-jar-file}"/>
+          <pathelement location="${libdir}/${jcommon-jar-file}"/>
+          <pathelement location="${libdir}/${libloader-jar-file}"/>
+        </test-classpath>
+        <additional-tests>
+-         <available file="${libdir}/${jaxp-jar-file}"/>
+          <available file="${libdir}/${libxml-jar-file}"/>
+          <available file="${libdir}/${jcommon-jar-file}"/>
+        </additional-tests>
+--- 54,64 ----
+***************
+*** 136,141 ****
+--- 134,140 ----
+                 source-dir="source">
+        <all-sources>
+          <exclude name="org/jfree/report/modules/gui/pdf/**" unless="lib.itext.present"/>
++               <exclude name="org/jfree/report/modules/gui/swing/pdf/**" unless="lib.itext.present"/>
+        </all-sources>
+        <all-classpath>
+          <pathelement location="${libdir}/${jcommon-jar-file}"/>
+***************
+*** 168,173 ****
+--- 167,173 ----
+          <include name="*.jpg"/>
+          <include name="**/*.jpg"/>
+          <exclude name="org/jfree/report/modules/gui/pdf/**" unless="lib.itext.present"/>
++               <exclude name="org/jfree/report/modules/gui/swing/pdf/**" unless="lib.itext.present"/>
+        </all-resources>
+      </build-all>
+    </target>
+***************
+*** 179,184 ****
+--- 179,185 ----
+                   jdk-dir="${build.retro.jdk}">
+        <all-sources>
+          <exclude name="org/jfree/report/modules/gui/pdf/**" unless="lib.itext.present"/>
++               <exclude name="org/jfree/report/modules/gui/swing/pdf/**" unless="lib.itext.present"/>
+        </all-sources>
+        <all-classpath>
+          <pathelement location="${libdir}/${jcommon-jar-file}"/>
+***************
+*** 211,216 ****
+--- 212,218 ----
+          <include name="*.jpg"/>
+          <include name="**/*.jpg"/>
+          <exclude name="org/jfree/report/modules/gui/pdf/**" unless="lib.itext.present"/>
++               <exclude name="org/jfree/report/modules/gui/swing/pdf/**" unless="lib.itext.present"/>
+        </all-resources>
+      </build-retro>
+    </target>
