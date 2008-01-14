@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UncachedDataSequence.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:10:40 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:04:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ UncachedDataSequence::UncachedDataSequence(
           m_bIsHidden( true ),
           m_xDataProvider( xIntDataProv ),
           m_aSourceRepresentation( rRangeRepresentation ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( GetMutex() ))
+          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     registerProperties();
 }
@@ -106,7 +106,7 @@ UncachedDataSequence::UncachedDataSequence(
           m_bIsHidden( true ),
           m_xDataProvider( xIntDataProv ),
           m_aSourceRepresentation( rRangeRepresentation ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( GetMutex() ))
+          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     registerProperties();
     setFastPropertyValue_NoBroadcast( PROP_PROPOSED_ROLE, uno::makeAny( rRole ));
@@ -123,7 +123,7 @@ UncachedDataSequence::UncachedDataSequence( const UncachedDataSequence & rSource
           m_aHiddenValues( rSource.m_aHiddenValues ),
           m_xDataProvider( rSource.m_xDataProvider ),
           m_aSourceRepresentation( rSource.m_aSourceRepresentation ),
-          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( GetMutex() ))
+          m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     registerProperties();
 }
