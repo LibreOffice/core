@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fieldmappingimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:52:53 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:33:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,7 +304,7 @@ namespace abp
             const ::rtl::OUString sProgrammaticNodeName = ::rtl::OUString::createFromAscii( "ProgrammaticFieldName" );
             const ::rtl::OUString sAssignedNodeName = ::rtl::OUString::createFromAscii( "AssignedFieldName" );
 
-            for (pExistentFields; pExistentFields != pExistentFieldsEnd; ++pExistentFields)
+            for ( ; pExistentFields != pExistentFieldsEnd; ++pExistentFields )
             {
 #ifdef DBG_UTIL
                 ::rtl::OUString sRedundantProgrammaticName;
