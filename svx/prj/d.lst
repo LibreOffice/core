@@ -245,6 +245,7 @@ mkdir: %_DEST%\inc%_EXT%\svx
 ..\inc\svx\svdomeas.hxx %_DEST%\inc%_EXT%\svx\svdomeas.hxx
 ..\inc\svx\svdomedia.hxx %_DEST%\inc%_EXT%\svx\svdomedia.hxx
 ..\inc\svx\svdoole2.hxx %_DEST%\inc%_EXT%\svx\svdoole2.hxx
+..\inc\svx\chartprettypainter.hxx %_DEST%\inc%_EXT%\svx\chartprettypainter.hxx
 ..\inc\svx\svdopage.hxx %_DEST%\inc%_EXT%\svx\svdopage.hxx
 ..\inc\svx\svdopath.hxx %_DEST%\inc%_EXT%\svx\svdopath.hxx
 ..\inc\svx\svdorect.hxx %_DEST%\inc%_EXT%\svx\svdorect.hxx
