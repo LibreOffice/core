@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldapaccess.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:57:24 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:40:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ void LdapConnection::disconnect()
 
 static void checkLdapReturnCode(const sal_Char *aOperation,
                                 LdapErrCode aRetCode,
-                                LDAP * aConnection)
+                                LDAP * /*aConnection*/)
 {
     if (aRetCode == LDAP_SUCCESS) { return ; }
 
