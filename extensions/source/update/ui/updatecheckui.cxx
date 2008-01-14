@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckui.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:50:42 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:05:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -503,7 +503,7 @@ void UpdateCheckUI::setPropertyValue(const rtl::OUString& rPropertyName,
             throw lang::IllegalArgumentException();
     }
     else if (rPropertyName.compareToAscii( PROPERTY_SHOW_MENUICON ) == 0) {
-        bool bShowMenuIcon;
+        bool bShowMenuIcon = sal_False;
         rValue >>= bShowMenuIcon;
         if ( bShowMenuIcon != mbShowMenuIcon )
         {
@@ -806,10 +806,10 @@ BubbleWindow::BubbleWindow( Window* pParent, const XubString& rTitle,
                                | WB_OWNERDRAWDECORATION
                                | WB_NOBORDER
                     )
-    , maMaxTextSize( TEXT_MAX_WIDTH, TEXT_MAX_HEIGHT )
     , maBubbleTitle( rTitle )
     , maBubbleText( rText )
     , maBubbleImage( rImage )
+    , maMaxTextSize( TEXT_MAX_WIDTH, TEXT_MAX_HEIGHT )
     , mnTipOffset( 0 )
 {
     SetBackground( Wallpaper( GetSettings().GetStyleSettings().GetHelpColor() ) );
