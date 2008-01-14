@@ -4,9 +4,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:06:28 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:21:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -839,8 +839,7 @@ NumericField::~NumericField()
 
 long NumericField::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
-         !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
+    if ( (rNEvt.GetType() == EVENT_KEYINPUT) )
     {
         if ( ImplNumericProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return 1;
@@ -959,8 +958,7 @@ NumericBox::~NumericBox()
 
 long NumericBox::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
-         !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
+    if ( (rNEvt.GetType() == EVENT_KEYINPUT) )
     {
         if ( ImplNumericProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return 1;
@@ -1777,8 +1775,7 @@ sal_Int64 MetricField::GetLast( FieldUnit eOutUnit ) const
 
 long MetricField::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
-         !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
+    if ( (rNEvt.GetType() == EVENT_KEYINPUT) )
     {
         if ( ImplMetricProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return 1;
@@ -1904,8 +1901,7 @@ MetricBox::~MetricBox()
 
 long MetricBox::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
-         !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
+    if ( (rNEvt.GetType() == EVENT_KEYINPUT) )
     {
         if ( ImplMetricProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return 1;
@@ -2246,8 +2242,7 @@ CurrencyField::~CurrencyField()
 
 long CurrencyField::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
-         !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
+    if ( (rNEvt.GetType() == EVENT_KEYINPUT) )
     {
         if ( ImplCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return 1;
@@ -2366,8 +2361,7 @@ CurrencyBox::~CurrencyBox()
 
 long CurrencyBox::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) &&
-         !rNEvt.GetKeyEvent()->GetKeyCode().IsControlMod() )
+    if ( (rNEvt.GetType() == EVENT_KEYINPUT) )
     {
         if ( ImplCurrencyProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsUseThousandSep(), ImplGetLocaleDataWrapper() ) )
             return 1;
