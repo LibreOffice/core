@@ -1,18 +1,11 @@
-### 107961 ###
-fwk.Desktop::com::sun::star::frame::XComponentLoader
-
 ### 112552 ###
 fwk.JobHandler::com::sun::star::frame::XDispatchProvider
 fwk.JobHandler::com::sun::star::lang::XInitialization
 
-### i22896 ###
-fwk.Desktop::com::sun::star::document::XEventBroadcaster
-
-### i49862 ###
+### i8242 ###
 fwk.Desktop::com::sun::star::lang::XComponent
 
 ### i30570 ###
-fwl.FilterFactory::com::sun::star::container::XNameReplace
 fwl.TypeDetection::com::sun::star::container::XNameReplace
 
 ### i50165 ###
@@ -20,12 +13,6 @@ fwk.UIConfigurationManager::com::sun::star::ui::XUIConfigurationStorage
 fwk.UIConfigurationManager::com::sun::star::ui::XUIConfigurationPersistence
 fwk.UIConfigurationManager::com::sun::star::ui::XUIConfiguration
 fwk.UIConfigurationManager::com::sun::star::ui::XUIConfigurationManager
-
-### i51717 ###
-fwk.Frame::com::sun::star::frame::XFrame
-
-### i48550 ###
-fwk.Frame::com::sun::star::task::XStatusIndicatorFactory
 
 ### i50578 ###
 fwk.StatusBarControllerFactory::com::sun::star::lang::XMultiComponentFactory
@@ -36,9 +23,13 @@ fwl.PathSettings::com::sun::star::beans::XMultiPropertySet
 ### i74020 ###
 fwl.FilterFactory::com::sun::star::lang::XMultiServiceFactory
 
-### failures wirhout issue ###
-# fwl.PathSettings -> disabled in framework.sce
+### i84321 ###  -> disabled in framework.sce
+fwk.PopupMenuControllerFactory
+
+### i84346 ###
+# fwl.PathSettings::com::sun::star::beans::XMultiPropertySet -> disabled in framework.sce
+
+### i84423 ###
 #-o fwk.JobExecutor -> disabled in framework.sce
 #-o fwk.JobHandler -> disabled in framework.sce
-fwk.Desktop::com::sun::star::frame::XFramesSupplier
 
