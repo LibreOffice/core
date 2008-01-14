@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsdvalidationhelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:25:37 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:02:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,9 @@
 
 #ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
 #include <svtools/syslocale.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 
 //........................................................................
@@ -308,14 +311,9 @@ namespace pcr
                 firePropertyChange( PROPERTY_XSD_DATA_TYPE, makeAny( sOldDataTypeName ), makeAny( sNewDataTypeName ) );
             }
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-#if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "XSDValidationHelper::setValidatingDataTypeByName: caught an exception!" );
-            sMessage += "\nexception message:\n\n";
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
-            OSL_ENSURE( sal_False, sMessage.getStr() );
-#endif
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
