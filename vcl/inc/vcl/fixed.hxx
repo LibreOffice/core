@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fixed.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:53:32 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:03:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,9 @@ public:
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
+    static Size     CalcMinimumTextSize( Control const* pControl, long nMaxWidth = 0 );
     Size            CalcMinimumSize( long nMaxWidth = 0 ) const;
+    virtual Size    GetOptimalSize(WindowSizeType eType) const;
 };
 
 // -------------
@@ -113,6 +115,8 @@ public:
     virtual void    Resize();
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
+
+    virtual Size    GetOptimalSize(WindowSizeType eType) const;
 };
 
 // ---------------
