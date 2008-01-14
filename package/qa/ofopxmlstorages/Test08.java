@@ -36,10 +36,10 @@ public class Test08 implements StorageTest {
             { { new StringPair( "Id", "Num1" ) },
               { new StringPair( "Target", "TargetURLValue1" ), new StringPair( "Id", "Num6" ) },
               { new StringPair( "Target", "" ), new StringPair( "Id", "Num7" ) },
-              { new StringPair( "Id", "Num2" ), new StringPair( "TargetType", "Internal1" ), new StringPair( "Type", "unknown1" ), new StringPair( "Target", "URL value 1" ) },
-              { new StringPair( "Id", "Num3" ), new StringPair( "TargetType", "Internal1" ), new StringPair( "Type", "unknown1" ), new StringPair( "Target", "URL value 1" ) },
-              { new StringPair( "Id", "Num4" ), new StringPair( "TargetType", "Internal1" ), new StringPair( "Type", "unknown1" ), new StringPair( "Target", "URL value 1" ) },
-              { new StringPair( "Id", "Num5" ), new StringPair( "TargetType", "" ), new StringPair( "Type", "unknown1" ), new StringPair( "Target", "URL value1" ) }
+              { new StringPair( "Id", "Num2" ), new StringPair( "TargetMode", "Internal1" ), new StringPair( "Type", "unknown1" ), new StringPair( "Target", "URL value 1" ) },
+              { new StringPair( "Id", "Num3" ), new StringPair( "TargetMode", "Internal1" ), new StringPair( "Type", "unknown1" ), new StringPair( "Target", "URL value 1" ) },
+              { new StringPair( "Id", "Num4" ), new StringPair( "TargetMode", "Internal1" ), new StringPair( "Type", "unknown1" ), new StringPair( "Target", "URL value 1" ) },
+              { new StringPair( "Id", "Num5" ), new StringPair( "TargetMode", "" ), new StringPair( "Type", "unknown1" ), new StringPair( "Target", "URL value1" ) }
             };
 
         try

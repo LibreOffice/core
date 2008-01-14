@@ -117,10 +117,10 @@ public class Test13 implements StorageTest {
             if ( !m_aTestHelper.checkStorageProperties( xTempFileStorage, "MediaType3", true, ElementModes.WRITE ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStreamH( xTempFileStorage, aSubStream1Path, "MediaType1", pBytes1 ) )
+            if ( !m_aTestHelper.checkStreamH( xTempFileStorage, aSubStream1Path, "MediaType1", true, pBytes1 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStreamH( xTempFileStorage, aSubStream2Path, "MediaType2", pBytes2 ) )
+            if ( !m_aTestHelper.checkStreamH( xTempFileStorage, aSubStream2Path, "MediaType2", false, pBytes2 ) )
                 return false;
 
             if ( !m_aTestHelper.cantOpenStreamH( xTempFileStorage, aSubStream3Path, ElementModes.READ ) )
@@ -162,11 +162,11 @@ public class Test13 implements StorageTest {
             if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType3", true, ElementModes.READ ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStreamH( xResultStorage, aSubStream1Path, "MediaType3", pBytes2 ) )
+            if ( !m_aTestHelper.checkStreamH( xResultStorage, aSubStream1Path, "MediaType3", true, pBytes2 ) )
                 return false;
 
             // the following stream was not commited last time, so the last change must be lost
-            if ( !m_aTestHelper.checkStreamH( xResultStorage, aSubStream2Path, "MediaType2", pBytes2 ) )
+            if ( !m_aTestHelper.checkStreamH( xResultStorage, aSubStream2Path, "MediaType2", false, pBytes2 ) )
                 return false;
 
             // dispose used storages to free resources

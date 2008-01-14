@@ -169,10 +169,10 @@ public class Test15 implements StorageTest {
             if ( !m_aTestHelper.checkEncrStreamH( xTempFileStorage, aSubStream1Path, "MediaType1", pBytes1, sPass1 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStreamH( xTempFileStorage, aSubStream2Path, "MediaType2", pBytes2 ) )
+            if ( !m_aTestHelper.checkStreamH( xTempFileStorage, aSubStream2Path, "MediaType2", true, pBytes2 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStreamH( xTempFileStorage, aSubStream3Path, "MediaType3", pBytes2 ) )
+            if ( !m_aTestHelper.checkStreamH( xTempFileStorage, aSubStream3Path, "MediaType3", true, pBytes2 ) )
                 return false;
 
             if ( !m_aTestHelper.cantOpenEncrStreamH( xTempFileStorage, aSubStream4Path, ElementModes.READ, sPass1 ) )
@@ -242,10 +242,10 @@ public class Test15 implements StorageTest {
             if ( !m_aTestHelper.checkStorageProperties( xResultStorage, "MediaType3", true, ElementModes.READ ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStreamH( xResultStorage, aSubStream1Path, "MediaType4", pBytes2 ) )
+            if ( !m_aTestHelper.checkStreamH( xResultStorage, aSubStream1Path, "MediaType4", true, pBytes2 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStreamH( xResultStorage, aSubStream2Path, "MediaType5", pBytes1 ) )
+            if ( !m_aTestHelper.checkStreamH( xResultStorage, aSubStream2Path, "MediaType5", true, pBytes1 ) )
                 return false;
 
             if ( !m_aTestHelper.checkEncrStreamH( xResultStorage, aSubStream3Path, "MediaType3", pBytes2, sPass2 ) )
