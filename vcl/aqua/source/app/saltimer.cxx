@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:13:56 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:16:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,64 +37,47 @@
 #include "precompiled_vcl.hxx"
 
 #include "saltimer.h"
+#include "salnstimer.h"
 #include "saldata.hxx"
 #include "salframe.h"
 #include "salinst.h"
 
 // =======================================================================
 
-static NSTimer* pRunningTimer = nil;
-static bool bDispatchTimer = false;
-static bool bTimerInDispatch = false;
+NSTimer* AquaSalTimer::pRunningTimer = nil;
+bool AquaSalTimer::bDispatchTimer = false;
+bool AquaSalTimer::bTimerInDispatch = false;
 
-@interface TimerCallbackCaller : NSObject
-{
-}
--(void)timerElapsed:(NSTimer*)pTimer;
-@end
-
-@implementation TimerCallbackCaller
--(void)timerElapsed:(NSTimer*)pTimer
-{
-    if( bDispatchTimer && ! bTimerInDispatch )
-    {
-        ImplSVData* pSVData = ImplGetSVData();
-        if( pSVData->mpSalTimer )
-        {
-            YIELD_GUARD;
-            bTimerInDispatch = true;
-            pSVData->mpSalTimer->CallCallback();
-            bTimerInDispatch = false;
-        }
-    }
-}
-@end
 
 void ImplSalStartTimer( ULONG nMS )
 {
     SalData* pSalData = GetSalData();
     if( pSalData->mpFirstInstance->isNSAppThread() )
     {
-        bDispatchTimer = true;
+        AquaSalTimer::bDispatchTimer = true;
         NSTimeInterval aTI = double(nMS)/1000.0;
-        if( pRunningTimer != nil )
+        if( AquaSalTimer::pRunningTimer != nil )
         {
-            if( [pRunningTimer timeInterval] == aTI )
+            if( [AquaSalTimer::pRunningTimer timeInterval] == aTI )
                 // set new fire date
-                [pRunningTimer setFireDate: [NSDate dateWithTimeIntervalSinceNow: aTI]];
+                [AquaSalTimer::pRunningTimer setFireDate: [NSDate dateWithTimeIntervalSinceNow: aTI]];
             else
             {
-                [pRunningTimer invalidate];
-                pRunningTimer = nil;
+                [AquaSalTimer::pRunningTimer invalidate];
+                AquaSalTimer::pRunningTimer = nil;
             }
         }
-        if( pRunningTimer == nil )
+        if( AquaSalTimer::pRunningTimer == nil )
         {
-            pRunningTimer = [NSTimer scheduledTimerWithTimeInterval: aTI
-                                     target: [[[TimerCallbackCaller alloc] init] autorelease]
-                                     selector: @selector(timerElapsed:)
-                                     userInfo: nil
-                                     repeats: YES];
+            AquaSalTimer::pRunningTimer = [NSTimer scheduledTimerWithTimeInterval: aTI
+                                                   target: [[[TimerCallbackCaller alloc] init] autorelease]
+                                                   selector: @selector(timerElapsed:)
+                                                   userInfo: nil
+                                                   repeats: YES];
+            /* #i84055# add timer to tracking run loop mode,
+               so they also elapse while e.g. life resize
+            */
+            [[NSRunLoop currentRunLoop] addTimer: AquaSalTimer::pRunningTimer forMode: NSEventTrackingRunLoopMode];
         }
     }
     else
@@ -117,7 +100,7 @@ void ImplSalStartTimer( ULONG nMS )
 
 void ImplSalStopTimer()
 {
-    bDispatchTimer = false;
+    AquaSalTimer::bDispatchTimer = false;
 }
 
 void AquaSalTimer::handleStartTimerEvent( NSEvent* pEvent )
