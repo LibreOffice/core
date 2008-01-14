@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcomponenthandler.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:21:57 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:57:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3320,16 +3320,9 @@ namespace pcr
             if ( xDocument.is() )
                 sURL = xDocument->getURL();
         }
-        catch( const Exception& e )
+        catch( const Exception& )
         {
-        #if OSL_DEBUG_LEVEL > 0
-            ::rtl::OString sMessage( "FormComponentPropertyHandler::: caught an exception!\n" );
-            sMessage += "message:\n";
-            sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-            OSL_ENSURE( false, sMessage );
-        #else
-            (void)e; // make compiler happy
-        #endif
+            DBG_UNHANDLED_EXCEPTION();
         }
         return sURL;
     }
