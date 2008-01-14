@@ -395,24 +395,24 @@ public class RegressionTest_i30400 implements StorageTest {
 
         // sub sub level
 
-        if ( !m_aTestHelper.checkStream( xTempSubSubStorage2_inRenamed, "SubSubStream1", "MediaType5", pBytes1 ) )
+        if ( !m_aTestHelper.checkStream( xTempSubSubStorage2_inRenamed, "SubSubStream1", "MediaType5", true, pBytes1 ) )
             return false;
 
-        if ( !m_aTestHelper.checkStream( xTempSubSubStorage2_renamed, "SubSubStream1", "MediaType5", pBytes1 ) )
+        if ( !m_aTestHelper.checkStream( xTempSubSubStorage2_renamed, "SubSubStream1", "MediaType5", true, pBytes1 ) )
             return false;
 
-        if ( !m_aTestHelper.checkStream( xTempSubSubStorage2_target, "SubSubStream1_renamed", "MediaType5", pBytes1 ) )
+        if ( !m_aTestHelper.checkStream( xTempSubSubStorage2_target, "SubSubStream1_renamed", "MediaType5", true, pBytes1 ) )
             return false;
 
         // sub level
 
-        if ( !m_aTestHelper.checkStream( xTempSubStorage2_renamed, "SubStream1", "MediaType3", pBytes1 ) )
+        if ( !m_aTestHelper.checkStream( xTempSubStorage2_renamed, "SubStream1", "MediaType3", true, pBytes1 ) )
             return false;
 
         if ( !m_aTestHelper.checkEncrStream( xTempSubStorage2_renamed, "SubEncrStream1", "MediaType4", pBytes1, pPass1 ) )
             return false;
 
-        if ( !m_aTestHelper.checkStream( xTempSubStorage2_target, "SubStream1_renamed", "MediaType3", pBytes1 ) )
+        if ( !m_aTestHelper.checkStream( xTempSubStorage2_target, "SubStream1_renamed", "MediaType3", true, pBytes1 ) )
             return false;
 
         if ( !m_aTestHelper.checkEncrStream( xTempSubStorage2_target, "SubEncrStream1_renamed", "MediaType4", pBytes1, pPass1 ) )
@@ -420,7 +420,7 @@ public class RegressionTest_i30400 implements StorageTest {
 
         // root storage level
 
-        if ( !m_aTestHelper.checkStream( xTempStorage2, "Stream1_renamed", "MediaType1", pBytes1 ) )
+        if ( !m_aTestHelper.checkStream( xTempStorage2, "Stream1_renamed", "MediaType1", true, pBytes1 ) )
             return false;
 
         if ( !m_aTestHelper.checkEncrStream( xTempStorage2, "EncrStream1_renamed", "MediaType2", pBytes1, pPass1 ) )

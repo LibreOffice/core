@@ -146,13 +146,13 @@ public class RegressionTest_i29321 implements StorageTest {
             if ( !m_aTestHelper.checkStorageProperties( xTempStorage, "MediaType4", true, ElementModes.WRITE ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xTempSubSubStorage, "SubSubStream1", "MediaType3", pBytes1 ) )
+            if ( !m_aTestHelper.checkStream( xTempSubSubStorage, "SubSubStream1", "MediaType3", true, pBytes1 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xTempSubStorage, "SubStream1", "MediaType2", pBytes1 ) )
+            if ( !m_aTestHelper.checkStream( xTempSubStorage, "SubStream1", "MediaType2", true, pBytes1 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xTempStorage, "Stream1", "MediaType1", pBytes1 ) )
+            if ( !m_aTestHelper.checkStream( xTempStorage, "Stream1", "MediaType1", true, pBytes1 ) )
                 return false;
 
             // the root storage is based on the temporary stream so it can be left undisposed, since it does not lock
