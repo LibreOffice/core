@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-17 13:30:56 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 13:21:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,10 +61,11 @@ JAVAFILES =	APIDescGetter.java      \
             OfficeProvider.java		\
             ComplexDescGetter.java  \
             InetTools.java          \
-            ProcessHandler.java	\			
+            ProcessHandler.java	\
             ContextMenuInterceptor.java	\
             UnoProvider.java\
-                        FileTools.java
+            PropertyHelper.java\
+            FileTools.java
 
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
