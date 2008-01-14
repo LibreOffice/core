@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-13 14:33:45 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:54:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,7 @@
 #endif
 #include <string.h>
 #include <stdio.h>
+#include "rtl/instance.hxx"
 
 #if OSL_DEBUG_LEVEL == 0
 #  ifndef NDEBUG
@@ -257,14 +258,27 @@ static const sal_Unicode under = sal_Unicode('_');
 
 static const sal_Int16 nbOfLocales = sizeof(aLibTable) / sizeof(aLibTable[0]);
 
+struct LocaleDataLookupTableItem
+{
+        LocaleDataLookupTableItem(const sal_Char *name, osl::Module* m, const sal_Char* lname) : dllName(name), module(m), localeName(lname)
+        {
+        }
+        const sal_Char* dllName;
+        osl::Module *module;
+        const sal_Char* localeName;
+
+        com::sun::star::lang::Locale aLocale;
+        sal_Bool equals(const com::sun::star::lang::Locale& rLocale)
+        {
+            return (rLocale == aLocale);
+        }
+};
+
+LocaleData::LocaleData()
+{
+}
 LocaleData::~LocaleData()
 {
-        for (size_t l = 0; l < lookupTable.size(); l++) {
-            cachedItem = lookupTable[l];
-            delete cachedItem->module;
-            delete cachedItem;
-        }
-        lookupTable.clear();
 }
 
 
@@ -306,6 +320,137 @@ LocaleData::getLocaleItem( const Locale& rLocale ) throw(RuntimeException)
             return item1;
         }
 }
+
+extern "C" { static void SAL_CALL thisModule() {} }
+
+namespace
+{
+
+// implement the lookup table as a safe static object
+class lcl_LookupTableHelper
+{
+public:
+    lcl_LookupTableHelper();
+    ~lcl_LookupTableHelper();
+
+    oslGenericFunction SAL_CALL getFunctionSymbolByName(
+        const OUString& localeName, const sal_Char* pFunction,
+        LocaleDataLookupTableItem** pOutCachedItem );
+
+private:
+    ::osl::Mutex maMutex;
+    ::std::vector< LocaleDataLookupTableItem* >  maLookupTable;
+};
+
+// from instance.hxx: Helper base class for a late-initialized
+// (default-constructed) static variable, implementing the double-checked
+// locking pattern correctly.
+// usage:  lcl_LookupTableHelper & rLookupTable = lcl_LookupTableStatic::get();
+// retrieves the singleton lookup table instance
+struct lcl_LookupTableStatic : public ::rtl::Static< lcl_LookupTableHelper, lcl_LookupTableStatic >
+{};
+
+lcl_LookupTableHelper::lcl_LookupTableHelper()
+{
+}
+
+lcl_LookupTableHelper::~lcl_LookupTableHelper()
+{
+    LocaleDataLookupTableItem* pItem = 0;
+
+    std::vector<LocaleDataLookupTableItem*>::const_iterator aEnd(maLookupTable.end());
+    std::vector<LocaleDataLookupTableItem*>::iterator aIter(maLookupTable.begin());
+
+    for ( ; aIter != aEnd; ++aIter ) {
+        pItem = *aIter;
+        delete pItem->module;
+        delete pItem;
+    }
+    maLookupTable.clear();
+}
+
+oslGenericFunction SAL_CALL lcl_LookupTableHelper::getFunctionSymbolByName(
+    const OUString& localeName, const sal_Char* pFunction,
+    LocaleDataLookupTableItem** pOutCachedItem )
+{
+    OUString aFallback;
+    bool bFallback = (localeName.indexOf( under) < 0);
+    if (bFallback)
+    {
+        Locale aLocale;
+        aLocale.Language = localeName;
+        Locale aFbLocale = MsLangId::getFallbackLocale( aLocale);
+        if (aFbLocale == aLocale)
+            bFallback = false;  // may be a "language-only-locale" like Interlingua (ia)
+        else if (aFbLocale.Country.getLength()) {
+            OUStringBuffer aBuf(5);
+            aFallback = aBuf.append(aFbLocale.Language).append( under).append(aFbLocale.Country).makeStringAndClear();
+        }
+        else
+            aFallback = aFbLocale.Language;
+    }
+
+    for ( sal_Int16 i = 0; i < nbOfLocales; i++)
+    {
+        if (localeName.equalsAscii(aLibTable[i].pLocale) ||
+                (bFallback && localeName == aFallback))
+        {
+            LocaleDataLookupTableItem* pCurrent = 0;
+            OUStringBuffer aBuf(strlen(aLibTable[i].pLocale) + 1 + strlen(pFunction));
+            {
+                ::osl::MutexGuard aGuard( maMutex );
+                for (size_t l = 0; l < maLookupTable.size(); l++)
+                {
+                    pCurrent = maLookupTable[l];
+                    if (pCurrent->dllName == aLibTable[i].pLib)
+                    {
+                        OSL_ASSERT( pOutCachedItem );
+                        if( pOutCachedItem )
+                        {
+                            (*pOutCachedItem) = new LocaleDataLookupTableItem( *pCurrent );
+                            (*pOutCachedItem)->localeName = aLibTable[i].pLocale;
+                            return (*pOutCachedItem)->module->getFunctionSymbol(
+                                aBuf.appendAscii( pFunction).append( under).
+                                appendAscii( (*pOutCachedItem)->localeName).makeStringAndClear());
+                        }
+                        else
+                            return NULL;
+                    }
+                }
+            }
+            // Library not loaded, load it and add it to the list.
+#ifdef SAL_DLLPREFIX
+            aBuf.ensureCapacity(strlen(aLibTable[i].pLib) + 6);    // mostly "lib*.so"
+            aBuf.appendAscii( SAL_DLLPREFIX ).appendAscii(aLibTable[i].pLib).appendAscii( SAL_DLLEXTENSION );
+#else
+            aBuf.ensureCapacity(strlen(aLibTable[i].pLib) + 4);    // mostly "*.dll"
+            aBuf.appendAscii(aLibTable[i].pLib).appendAscii( SAL_DLLEXTENSION );
+#endif
+            osl::Module *module = new osl::Module();
+            if ( module->loadRelative(&thisModule, aBuf.makeStringAndClear()) )
+            {
+                ::osl::MutexGuard aGuard( maMutex );
+                LocaleDataLookupTableItem* pNewItem = 0;
+                maLookupTable.push_back(pNewItem = new LocaleDataLookupTableItem(aLibTable[i].pLib, module, aLibTable[i].pLocale ));
+                OSL_ASSERT( pOutCachedItem );
+                if( pOutCachedItem )
+                {
+                    (*pOutCachedItem) = new LocaleDataLookupTableItem( *pNewItem );
+                    return module->getFunctionSymbol(
+                        aBuf.appendAscii(pFunction).append(under).
+                        appendAscii((*pOutCachedItem)->localeName).makeStringAndClear());
+                }
+                else
+                    return NULL;
+            }
+            else
+                delete module;
+        }
+    }
+    return NULL;
+}
+
+} // anonymous namespace
 
 #define REF_DAYS 0
 #define REF_MONTHS 1
@@ -1113,8 +1258,10 @@ LocaleData::getOutlineNumberingLevels( const lang::Locale& rLocale ) throw(Runti
 oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale, const sal_Char* pFunction )
         throw(RuntimeException)
 {
+        lcl_LookupTableHelper & rLookupTable = lcl_LookupTableStatic::get();
+
         OUStringBuffer aBuf(1);
-        if (cachedItem && cachedItem->equals(rLocale)) {
+        if (cachedItem.get() && cachedItem->equals(rLocale)) {
             aBuf.ensureCapacity(strlen(pFunction) + 1 + strlen(cachedItem->localeName));
             return cachedItem->module->getFunctionSymbol(aBuf.appendAscii(pFunction).append(under).
                                         appendAscii(cachedItem->localeName).makeStringAndClear());
@@ -1129,91 +1276,35 @@ oslGenericFunction SAL_CALL LocaleData::getFunctionSymbol( const Locale& rLocale
         sal_Int32 v = rLocale.Variant.getLength();
         aBuf.ensureCapacity(l+c+v+3);
 
+        LocaleDataLookupTableItem *pCachedItem = 0;
+
         if ((l > 0 && c > 0 && v > 0 &&
                 // load function with name <func>_<lang>_<country>_<varian>
-                (pSymbol = getFunctionSymbolByName(aBuf.append(rLocale.Language).append(under).append(
-                        rLocale.Country).append(under).append(rLocale.Variant).makeStringAndClear(), pFunction)) != 0) ||
+                (pSymbol = rLookupTable.getFunctionSymbolByName(aBuf.append(rLocale.Language).append(under).append(
+                        rLocale.Country).append(under).append(rLocale.Variant).makeStringAndClear(), pFunction, &pCachedItem)) != 0) ||
             (l > 0 && c > 0 &&
                 // load function with name <ase>_<lang>_<country>
-                (pSymbol = getFunctionSymbolByName(aBuf.append(rLocale.Language).append(under).append(
-                        rLocale.Country).makeStringAndClear(), pFunction)) != 0) ||
+                (pSymbol = rLookupTable.getFunctionSymbolByName(aBuf.append(rLocale.Language).append(under).append(
+                        rLocale.Country).makeStringAndClear(), pFunction, &pCachedItem)) != 0) ||
             (l > 0 && c > 0 && rLocale.Language.equalsAscii("zh") &&
                                 (rLocale.Country.equalsAscii("HK") ||
                                 rLocale.Country.equalsAscii("MO")) &&
                 // if the country code is HK or MO, one more step to try TW.
-                (pSymbol = getFunctionSymbolByName(aBuf.append(rLocale.Language).append(under).append(tw).makeStringAndClear(),
-                        pFunction)) != 0) ||
+                (pSymbol = rLookupTable.getFunctionSymbolByName(aBuf.append(rLocale.Language).append(under).append(tw).makeStringAndClear(),
+                        pFunction, &pCachedItem)) != 0) ||
             (l > 0 &&
                 // load function with name <func>_<lang>
-                (pSymbol = getFunctionSymbolByName(rLocale.Language, pFunction)) != 0) ||
+                (pSymbol = rLookupTable.getFunctionSymbolByName(rLocale.Language, pFunction, &pCachedItem)) != 0) ||
                 // load default function with name <func>_en_US
-                (pSymbol = getFunctionSymbolByName(en_US, pFunction)) != 0) {
-            cachedItem->aLocale = rLocale;
+                (pSymbol = rLookupTable.getFunctionSymbolByName(en_US, pFunction, &pCachedItem)) != 0)
+        {
+            if( pCachedItem )
+                cachedItem.reset( pCachedItem );
+            if( cachedItem.get())
+                cachedItem->aLocale = rLocale;
             return pSymbol;
         }
         throw RuntimeException();
-}
-
-extern "C" { static void SAL_CALL thisModule() {} }
-
-oslGenericFunction SAL_CALL LocaleData::getFunctionSymbolByName( const OUString& localeName, const sal_Char* pFunction )
-{
-    OUString aFallback;
-    bool bFallback = (localeName.indexOf( under) < 0);
-    if (bFallback)
-    {
-        Locale aLocale;
-        aLocale.Language = localeName;
-        Locale aFbLocale = MsLangId::getFallbackLocale( aLocale);
-        if (aFbLocale == aLocale)
-            bFallback = false;  // may be a "language-only-locale" like Interlingua (ia)
-        else if (aFbLocale.Country.getLength()) {
-            OUStringBuffer aBuf(5);
-            aFallback = aBuf.append(aFbLocale.Language).append( under).append(aFbLocale.Country).makeStringAndClear();
-        }
-        else
-            aFallback = aFbLocale.Language;
-    }
-
-    for ( sal_Int16 i = 0; i < nbOfLocales; i++)
-    {
-        if (localeName.equalsAscii(aLibTable[i].pLocale) ||
-                (bFallback && localeName == aFallback))
-        {
-            OUStringBuffer aBuf(strlen(aLibTable[i].pLocale) + 1 + strlen(pFunction));
-            for (size_t l = 0; l < lookupTable.size(); l++)
-            {
-                cachedItem = lookupTable[l];
-                if (cachedItem->dllName == aLibTable[i].pLib)
-                {
-                    cachedItem->localeName = aLibTable[i].pLocale;
-                    return cachedItem->module->getFunctionSymbol(
-                            aBuf.appendAscii( pFunction).append( under).
-                            appendAscii( cachedItem->localeName).makeStringAndClear());
-                }
-            }
-            // Library not loaded, load it and add it to the list.
-#ifdef SAL_DLLPREFIX
-            aBuf.ensureCapacity(strlen(aLibTable[i].pLib) + 6);    // mostly "lib*.so"
-            aBuf.appendAscii( SAL_DLLPREFIX ).appendAscii(aLibTable[i].pLib).appendAscii( SAL_DLLEXTENSION );
-#else
-            aBuf.ensureCapacity(strlen(aLibTable[i].pLib) + 4);    // mostly "*.dll"
-            aBuf.appendAscii(aLibTable[i].pLib).appendAscii( SAL_DLLEXTENSION );
-#endif
-            osl::Module *module = new osl::Module();
-            if ( module->loadRelative(&thisModule, aBuf.makeStringAndClear()) )
-            {
-                lookupTable.push_back(cachedItem = new lookupTableItem(aLibTable[i].pLib, module));
-                cachedItem->localeName = aLibTable[i].pLocale;
-                return module->getFunctionSymbol(
-                        aBuf.appendAscii(pFunction).append(under).
-                        appendAscii(cachedItem->localeName).makeStringAndClear());
-            }
-            else
-                delete module;
-        }
-    }
-    return NULL;
 }
 
 Sequence< Locale > SAL_CALL
@@ -1228,7 +1319,10 @@ LocaleData::getAllInstalledLocaleNames() throw(RuntimeException)
 
             // Check if the locale is really available and not just in the table,
             // don't allow fall backs.
-            if (getFunctionSymbolByName( name, "getLocaleItem" )) {
+            LocaleDataLookupTableItem *pCachedItem = 0;
+            if (lcl_LookupTableStatic::get().getFunctionSymbolByName( name, "getLocaleItem", &pCachedItem )) {
+                if( pCachedItem )
+                    cachedItem.reset( pCachedItem );
                 sal_Int32 index = 0;
                 lang::Locale tmpLocale(name.getToken(0, under, index), empStr, empStr);
                 if (index >= 0) {
