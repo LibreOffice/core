@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImplChartModel.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:50:37 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:01:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
 #include <com/sun/star/awt/Gradient.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_PROJECTIONMODE_HPP_
+#include <com/sun/star/drawing/ProjectionMode.hpp>
 #endif
 
 #include <vector>
@@ -517,6 +520,7 @@ void ImplChartModel::CreateDefaultChart()
             if( xDiagramProperties.is() )
             {
                 xDiagramProperties->setPropertyValue( C2U("RightAngledAxes"), uno::makeAny( sal_True ));
+                xDiagramProperties->setPropertyValue( C2U("D3DScenePerspective"), uno::makeAny( drawing::ProjectionMode_PARALLEL ));
                 ThreeDHelper::setScheme( xDiagram, ThreeDLookScheme_Simple );
             }
 
