@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.93 $
+#   $Revision: 1.94 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-10 13:02:50 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 15:49:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -408,11 +408,11 @@ $(OBJ)$/%.obj : %.mm
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
 .IF "$(TEST)"!=""
-    $(objc) $(CFLAGS) $(CFLAGSCC) $(OBJCXXFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) -E $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $*.mm
+    $(objcpp) $(CFLAGS) $(INCLUDE) $(CFLAGSCC) $(OBJCXXFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) -E $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $*.mm
 .ELSE
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(objc) $(CFLAGS) $(CFLAGSCC) $(OBJCXXFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $*.mm
-    +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
+    $(objcpp) $(CFLAGS) $(INCLUDE) $(CFLAGSCC) $(OBJCXXFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $*.mm
+     $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ENDIF
 .ELSE		"$(OS)"=="MACOSX"
     @echo "No recipe for compiling Objective-C++ files is available for this platform"
@@ -424,8 +424,8 @@ $(OBJ)$/%.obj : $(MISC)$/%.mm
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(objc) $(CFLAGS) $(CFLAGSCC) $(OBJCXXFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(MISC)$/$*.mm
-    +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
+    $(objcpp) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(OBJCXXFLAGS) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(OBJ)$/$*.o $(MISC)$/$*.mm
+     $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ELSE		"$(OS)"=="MACOSX"
     @echo "No recipe for compiling Objective-C++ files is available for this platform"
 .ENDIF		"$(OS)"=="MACOSX"
@@ -436,8 +436,8 @@ $(SLO)$/%.obj : $(MISC)$/%.mm
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(objc) $(CFLAGS) $(CFLAGSCC) $(OBJCXXFLAGS) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(MISC)$/$*.mm
-    +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
+    $(objcpp) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(OBJCXXFLAGS) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $(MISC)$/$*.mm
+     $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ELSE		"$(OS)"=="MACOSX"
     @echo "No recipe for compiling Objective-C++ files is available for this platform"
 .ENDIF		"$(OS)"=="MACOSX"
@@ -448,8 +448,8 @@ $(SLO)$/%.obj : %.mm
     @echo Making: $@
 .IF "$(OS)"=="MACOSX"
     @$(RM) $@ $(@:s/.obj/.o/)
-    $(objc) $(CFLAGS) $(CFLAGSCC) $(OBJCXXFLAGS) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $*.mm
-    +if ( -e $(@:s/.obj/.o/)) $(TOUCH) $@
+    $(objcpp) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(OBJCXXFLAGS) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ) $(SLO)$/$*.o $*.mm
+     $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ELSE		"$(OS)"=="MACOSX"
     @echo "No recipe for compiling Objective-C++ files is available for this platform"
 .ENDIF		"$(OS)"=="MACOSX"
