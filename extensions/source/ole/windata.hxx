@@ -4,9 +4,9 @@
  *
  *  $RCSfile: windata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:47:13 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:49:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,13 @@
 #ifndef AUTOMATION_BRIDGE_WINDATA_HXX
 #define AUTOMATION_BRIDGE_WINDATA_HXX
 
+#pragma warning (push,1)
+#pragma warning (disable:4668)
+#pragma warning (disable:4548)
 #include "oleidl.h"
+
 #include <atlbase.h>
+#pragma warning (pop)
 #include "osl/diagnose.h"
 
 namespace ole_adapter

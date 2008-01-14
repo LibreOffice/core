@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotypewrapper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:46:41 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:49:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,10 @@
  ************************************************************************/
 #ifndef UNO_TYPE_WRAPPER_HXX
 #define UNO_TYPE_WRAPPER_HXX
+
+#pragma warning (push,1)
+#pragma warning (disable:4548)
+
 #include <tools/presys.h>
 //#include "stdafx.h"
 #define STRICT
@@ -46,6 +50,10 @@
 extern CComModule _Module;
 #include <atlcom.h>
 #include <tools/postsys.h>
+
+#pragma warning (pop)
+#pragma warning (disable:4505)
+    // disable "unreferenced local function has been removed" globally
 
 #include "comifaces.hxx"
 
