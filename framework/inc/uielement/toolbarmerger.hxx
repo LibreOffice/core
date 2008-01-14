@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmerger.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:08:51 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:24:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@
 #include <uielement/spinfieldtoolbarcontroller.hxx>
 #include <uielement/edittoolbarcontroller.hxx>
 #include <uielement/dropdownboxtoolbarcontroller.hxx>
+#include <uielement/commandinfo.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
 
@@ -105,6 +106,7 @@ class ToolBarMerger
                                                  ToolBox*                         pToolbar,
                                                  sal_uInt16                       nPos,
                                                  sal_uInt16&                      rItemId,
+                                                 CommandToInfoMap&                rCommandMap,
                                                  const ::rtl::OUString&           rModuleIdentifier,
                                                  const ::rtl::OUString&           rMergeCommand,
                                                  const ::rtl::OUString&           rMergeCommandParameter,
@@ -114,6 +116,7 @@ class ToolBarMerger
                                                 ToolBox*                         pToolbar,
                                                 sal_uInt16                       nPos,
                                                 sal_uInt16&                      rItemId,
+                                                CommandToInfoMap&                rCommandMap,
                                                 const ::rtl::OUString&           rModuleIdentifier,
                                                 const ::rtl::OUString&           rMergeCommand,
                                                 const ::rtl::OUString&           rMergeFallback,
@@ -124,6 +127,7 @@ class ToolBarMerger
                                       sal_uInt16                nPos,
                                       sal_uInt16                nModIndex,
                                       sal_uInt16&               rItemId,
+                                      CommandToInfoMap&         rCommandMap,
                                       const ::rtl::OUString&    rModuleIdentifier,
                                       const AddonToolbarItemContainer& rAddonToolbarItems );
 
@@ -131,6 +135,7 @@ class ToolBarMerger
                                        ToolBox*                  pToolbar,
                                        sal_uInt16                nPos,
                                        sal_uInt16&               rItemId,
+                                       CommandToInfoMap&         rCommandMap,
                                        const ::rtl::OUString&    rModuleIdentifier,
                                        const AddonToolbarItemContainer& rAddonToolbarItems );
 
