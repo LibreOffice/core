@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProcessHandler.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:43:42 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,7 @@ public class ProcessHandler {
      * including parameters as an array.
      * Debug info and output
      * of external command is printed to stdout.
+     * @param cmdLines
      */
     public ProcessHandler(String[] cmdLines)
         {
@@ -156,6 +157,8 @@ public class ProcessHandler {
      * variables.
      * Debug info and output
      * of external command is printed to stdout.
+     * @param cmdLines
+     * @param envVars
      * @see java.lang.Runtime exec(String[], String[])
      */
     public ProcessHandler(String[] cmdLines, String[] envVars)
@@ -165,9 +168,38 @@ public class ProcessHandler {
         }
 
     /**
+     * Creates instance with specified external command
+     * including parameters as an array, with environment
+     * variables. The command will be started in workDir.
+     * Debug info and output
+     * of external command is printed to stdout.
+     * @param cmdLines
+     * @param workDir
+     */
+    public ProcessHandler(String[] cmdLines, File workDir) {
+            this(null, null, workDir, null, 0);
+            cmdLineArray = cmdLines;
+
+    }
+
+    /**
      * Creates instance with specified external command and
-     * log stream where debug info is printed and output
-     * of external command.
+     * log stream where debug info and output
+     * of external command is printed out.  The command will be started in workDir.
+     * @param cmdLines
+     * @param log
+     * @param workDir
+     */
+    public ProcessHandler(String[] cmdLines, PrintWriter log, File workDir) {
+            this(null, log, workDir, null, 0);
+            cmdLineArray = cmdLines;
+    }
+
+
+    /**
+     * Creates instance with specified external command and
+     * log stream where debug info and output
+     * of external command is printed out.
      */
     public ProcessHandler(String cmdLine, PrintWriter log) {
         this(cmdLine, log, null, null, 0);
@@ -185,11 +217,24 @@ public class ProcessHandler {
 
     /**
      * Creates instance with specified external command which
+     * will be executed in the some work directory.
+     * Debug info and output printed in log stream.
+     */
+    public ProcessHandler(String cmdLine, PrintWriter log, File workDir) {
+        this(cmdLine, log, workDir, null, 0);
+    }
+
+    /**
+     * Creates instance with specified external command which
      * will be executed in the some work directory  and
      * log stream where debug info and output
      * of external command is printed .
      * The specified environment variables are set for the new process.
      * If log stream is null, logging is printed to stdout.
+     * @param cmdLine
+     * @param log
+     * @param workDir
+     * @param envVars
      */
     public ProcessHandler(String cmdLine, PrintWriter log,
                                             File workDir, String[] envVars) {
@@ -200,6 +245,7 @@ public class ProcessHandler {
      * Creates instance with specified external command which
      * will be executed in the some work directory  and
      *
+     * @param cmdLine       the command to be executed
      * @param log           log stream where debug info and output
      *                      of external command is printed .
      * @param workDir       The working directory of the new process
@@ -322,6 +368,7 @@ public class ProcessHandler {
             {
                 log.println("Starting command: " + cmdLine) ;
                 if (workDir != null) {
+                    log.println("Starting command: " + cmdLine + " " + workDir.getAbsolutePath()) ;
                     proc = runtime.exec(cmdLine, envVars, workDir) ;
                 } else {
                     proc = runtime.exec(cmdLine, envVars) ;
