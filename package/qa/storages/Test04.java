@@ -209,16 +209,16 @@ public class Test04 implements StorageTest {
 
             // check all the result streams
 
-            if ( !m_aTestHelper.checkStream( xResStorage, "SubStream1", "MediaType1", pBytes1 ) )
+            if ( !m_aTestHelper.checkStream( xResStorage, "SubStream1", "MediaType1", true, pBytes1 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xResStorage, "SubStream1_copy", "MediaType1", pBytes1 ) )
+            if ( !m_aTestHelper.checkStream( xResStorage, "SubStream1_copy", "MediaType1", true, pBytes1 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xResSubStorage1, "SubStream1", "MediaType1", pBytes1 ) )
+            if ( !m_aTestHelper.checkStream( xResSubStorage1, "SubStream1", "MediaType1", true, pBytes1 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xResSubStorage2, "SubStream2", "MediaType2", pBytes2 ) )
+            if ( !m_aTestHelper.checkStream( xResSubStorage2, "SubStream2", "MediaType2", false, pBytes2 ) )
                 return false;
 
             // the storage must be disposed before removing

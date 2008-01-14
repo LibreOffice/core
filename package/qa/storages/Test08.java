@@ -191,11 +191,11 @@ public class Test08 implements StorageTest {
             if ( !m_aTestHelper.checkEncrStream( xResultSubStorage, "SubStream1", "MediaType1", pBytes1, sPass1 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream2", "MediaType2", pBytes2 ) )
+            if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream2", "MediaType2", false, pBytes2 ) )
                 return false;
 
             // the common root storage password should allow to open this stream
-            if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream3", "MediaType3", pBytes3 ) )
+            if ( !m_aTestHelper.checkStream( xResultSubStorage, "SubStream3", "MediaType3", true, pBytes3 ) )
                 return false;
 
             // dispose used storages to free resources

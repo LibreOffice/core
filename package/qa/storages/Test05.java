@@ -246,10 +246,10 @@ public class Test05 implements StorageTest {
                 return false;
 
             // check substreams
-            if ( !m_aTestHelper.checkStream( xResSubSubStorage, "SubStream1", "MediaType1", pBytes1 ) )
+            if ( !m_aTestHelper.checkStream( xResSubSubStorage, "SubStream1", "MediaType1", true, pBytes1 ) )
                 return false;
 
-            if ( !m_aTestHelper.checkStream( xResSubSubStorage, "SubStream2", "MediaType2", pBytes2 ) )
+            if ( !m_aTestHelper.checkStream( xResSubSubStorage, "SubStream2", "MediaType2", false, pBytes2 ) )
                 return false;
 
             // dispose used storages to free resources
