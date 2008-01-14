@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventhandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 13:59:29 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:57:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,9 +85,9 @@ namespace pcr
         EventId         nId;
 
         EventDescription()
-            :nId( 0 )
-            ,nHelpId( 0 )
+            :nHelpId( 0 )
             ,nUniqueBrowseId( 0 )
+            ,nId( 0 )
             {
             }
 
@@ -163,7 +163,7 @@ namespace pcr
         virtual sal_Bool                                            SAL_CALL suspend( sal_Bool _bSuspend ) throw (::com::sun::star::uno::RuntimeException);
 
         // XComponent
-        DECLARE_XCOMPONENT();
+        DECLARE_XCOMPONENT()
         virtual void                                                SAL_CALL disposing();
 
         // XServiceInfo
