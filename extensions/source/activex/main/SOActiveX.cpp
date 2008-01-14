@@ -1,5 +1,11 @@
 // SOActiveX.cpp : Implementation of CSOActiveX
 
+#pragma warning (disable:4505)
+    // permanently suppress "unreferenced local function has been removed" warning
+
+#pragma warning (push,1)
+#pragma warning (disable:4265)
+
 #include "stdafx2.h"
 #include "so_activex.h"
 #include "SOActiveX.h"
@@ -7,12 +13,14 @@
 #include "SODispatchInterceptor.h"
 #include "SOActionsApproval.h"
 
+#pragma warning (pop)
+
 #define STAROFFICE_WINDOWCLASS "SOParentWindow"
 
 
 /////////////////////////////////////////////////////////////////////////////
 
-void OutputError_Impl( HWND hw, DWORD ErrorCode )
+void OutputError_Impl( HWND hw, HRESULT ErrorCode )
 {
     void* sMessage;
     FormatMessageA(
@@ -190,9 +198,10 @@ HRESULT CSOActiveX::Cleanup()
         BOOL bCloserActivated = FALSE;
 
         CComPtr<IDispatch> pDispDocumentCloser;
+        CComVariant aDocCloser( L"com.sun.star.embed.DocumentCloser" );
         HRESULT hr = GetIDispByFunc( mpDispFactory,
                                      L"createInstance",
-                                     &CComVariant( L"com.sun.star.embed.DocumentCloser" ),
+                                     &aDocCloser,
                                      1,
                                      pDispDocumentCloser );
         if ( SUCCEEDED( hr ) && pDispDocumentCloser )
@@ -237,7 +246,7 @@ STDMETHODIMP CSOActiveX::InitNew ()
     return S_OK;
 }
 
-STDMETHODIMP CSOActiveX::Load ( LPSTREAM pStm )
+STDMETHODIMP CSOActiveX::Load ( LPSTREAM /*pStm*/ )
 {
     mnVersion = GetVersionConnected();
     mbLoad = TRUE;
@@ -248,7 +257,7 @@ STDMETHODIMP CSOActiveX::Load ( LPSTREAM pStm )
     return S_OK;
 }
 
-STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog )
+STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG /*pErrorLog*/ )
 {
     mnVersion = GetVersionConnected();
 
@@ -344,7 +353,8 @@ STDMETHODIMP CSOActiveX::Load( LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog )
 
 HRESULT CSOActiveX::GetUnoStruct( OLECHAR* sStructName, CComPtr<IDispatch>& pdispResult )
 {
-    return GetIDispByFunc( mpDispFactory, L"Bridge_GetStruct", &CComVariant( sStructName ), 1, pdispResult );
+    CComVariant aComStruct( sStructName );
+    return GetIDispByFunc( mpDispFactory, L"Bridge_GetStruct", &aComStruct, 1, pdispResult );
 }
 
 HRESULT CSOActiveX::GetUrlStruct( OLECHAR* sUrl, CComPtr<IDispatch>& pdispUrl )
@@ -356,13 +366,15 @@ HRESULT CSOActiveX::GetUrlStruct( OLECHAR* sUrl, CComPtr<IDispatch>& pdispUrl )
     DISPID nURLID;
     hr = pdispUrl->GetIDsOfNames( IID_NULL, &sURLMemberName, 1, LOCALE_USER_DEFAULT, &nURLID );
     if( !SUCCEEDED( hr ) ) return hr;
-    hr = CComDispatchDriver::PutProperty( pdispUrl, nURLID, &CComVariant( sUrl ) );
+    CComVariant aComUrl( sUrl );
+    hr = CComDispatchDriver::PutProperty( pdispUrl, nURLID, &aComUrl );
     if( !SUCCEEDED( hr ) ) return hr;
 
     CComPtr<IDispatch> pdispTransformer;
+    CComVariant aServiceName( L"com.sun.star.util.URLTransformer" );
     hr = GetIDispByFunc( mpDispFactory,
                          L"createInstance",
-                         &CComVariant( L"com.sun.star.util.URLTransformer" ),
+                         &aServiceName,
                          1,
                          pdispTransformer );
     if( !SUCCEEDED( hr ) ) return hr;
@@ -453,26 +465,31 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
 
     // create XToolkit instance
     CComPtr<IDispatch> pdispToolkit;
-    hr = GetIDispByFunc( mpDispFactory, L"createInstance", &CComVariant( L"com.sun.star.awt.Toolkit" ), 1, pdispToolkit );
+    CComVariant aServiceName( L"com.sun.star.awt.Toolkit" );
+    hr = GetIDispByFunc( mpDispFactory, L"createInstance", &aServiceName, 1, pdispToolkit );
     if( !SUCCEEDED( hr ) ) return hr;
 
     // create window with toolkit
-    hr = GetIDispByFunc( pdispToolkit, L"createWindow", &CComVariant( pdispWinDescr ), 1, mpDispWin );
+    CComVariant aWinDescr( pdispWinDescr );
+    hr = GetIDispByFunc( pdispToolkit, L"createWindow", &aWinDescr, 1, mpDispWin );
     if( !SUCCEEDED( hr ) ) return hr;
 
     // create frame
-    hr = GetIDispByFunc( mpDispFactory, L"createInstance", &CComVariant( L"com.sun.star.frame.Task" ), 1, mpDispFrame );
+    aServiceName = CComVariant( L"com.sun.star.frame.Task" );
+    hr = GetIDispByFunc( mpDispFactory, L"createInstance", &aServiceName, 1, mpDispFrame );
     if( !SUCCEEDED( hr ) || !mpDispFrame )
     {
         // the interface com.sun.star.frame.Task is removed in 6.1
         // but the interface com.sun.star.frame.Frame has some bugs in 6.0
-        hr = GetIDispByFunc( mpDispFactory, L"createInstance", &CComVariant( L"com.sun.star.frame.Frame" ), 1, mpDispFrame );
+        aServiceName = CComVariant( L"com.sun.star.frame.Frame" );
+        hr = GetIDispByFunc( mpDispFactory, L"createInstance", &aServiceName, 1, mpDispFrame );
         if( !SUCCEEDED( hr ) ) return hr;
     }
 
     // initialize frame
     CComVariant dummyResult;
-    hr = ExecuteFunc( mpDispFrame, L"initialize", &CComVariant( mpDispWin ), 1, &dummyResult );
+    CComVariant aDispWin( mpDispWin );
+    hr = ExecuteFunc( mpDispFrame, L"initialize", &aDispWin, 1, &dummyResult );
     if( !SUCCEEDED( hr ) ) return hr;
 
     // set some properties to the layout manager, ignore errors for now
@@ -480,7 +497,8 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
 
     // create desktop
     CComPtr<IDispatch> pdispDesktop;
-    hr = GetIDispByFunc( mpDispFactory, L"createInstance", &CComVariant( L"com.sun.star.frame.Desktop" ), 1, pdispDesktop );
+    aServiceName = CComVariant( L"com.sun.star.frame.Desktop" );
+    hr = GetIDispByFunc( mpDispFactory, L"createInstance", &aServiceName, 1, pdispDesktop );
     if( !SUCCEEDED( hr ) ) return hr;
 
     // create tree of frames
@@ -489,14 +507,17 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
     if( !SUCCEEDED( hr ) ) return hr;
 
     // insert new frame into desctop hierarchy
-    hr = ExecuteFunc( pdispChildren, L"append", &CComVariant( mpDispFrame ), 1, &dummyResult );
+    CComVariant aDispFrame( mpDispFrame );
+    hr = ExecuteFunc( pdispChildren, L"append", &aDispFrame, 1, &dummyResult );
     if( !SUCCEEDED( hr ) ) return hr;
 
     // initialize window
-    hr = ExecuteFunc( mpDispWin, L"setBackground", &CComVariant( (long)0xFFFFFFFF ), 1, &dummyResult );
+    CComVariant aTransparent( (long)0xFFFFFFFF );
+    hr = ExecuteFunc( mpDispWin, L"setBackground", &aTransparent, 1, &dummyResult );
     if( !SUCCEEDED( hr ) ) return hr;
 
-    hr = ExecuteFunc( mpDispWin, L"setVisible", &CComVariant( TRUE ), 1, &dummyResult );
+    CComVariant aTrue( TRUE );
+    hr = ExecuteFunc( mpDispWin, L"setVisible", &aTrue, 1, &dummyResult );
     if( !SUCCEEDED( hr ) ) return hr;
 
     CComVariant aPosArgs[5];
@@ -509,7 +530,8 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
     if( !SUCCEEDED( hr ) ) return hr;
 
     // create frame locker if there is such service
-    hr = GetIDispByFunc( mpDispFactory, L"createInstance", &CComVariant( L"com.sun.star.embed.InstanceLocker" ), 1, mpInstanceLocker );
+    aServiceName = CComVariant( L"com.sun.star.embed.InstanceLocker" );
+    hr = GetIDispByFunc( mpDispFactory, L"createInstance", &aServiceName, 1, mpInstanceLocker );
     if( SUCCEEDED( hr ) && mpInstanceLocker )
     {
         SAFEARRAY FAR* pInitVals = SafeArrayCreateVector( VT_VARIANT, 0, 3 );
@@ -538,7 +560,8 @@ HRESULT CSOActiveX::CreateFrameOldWay( HWND hwnd, int width, int height )
         hr = ExecuteFunc( pdispValueObj, L"Set", aValueArgs, 2, &dummyResult );
         if( !SUCCEEDED( hr ) ) return hr;
 
-        SafeArrayPutElement( pInitVals, &nInitInd, &CComVariant( pdispValueObj ) );
+        CComVariant aValueObj( pdispValueObj );
+        SafeArrayPutElement( pInitVals, &nInitInd, &aValueObj );
 
         // execute initialize()
         CComVariant aVarInitVals;
@@ -631,7 +654,7 @@ HRESULT CSOActiveX::CallDispatchMethod( OLECHAR* sUrl,
     return S_OK;
 }
 
-void CSOActiveX::CallbackCreateXInputStream( CBindStatusCallback<CSOActiveX>* pbsc, BYTE* pBytes, DWORD dwSize )
+void CSOActiveX::CallbackCreateXInputStream( CBindStatusCallback<CSOActiveX>* /*pbsc*/, BYTE* pBytes, DWORD dwSize )
 {
     if ( mbReadyForActivation )
         return;
@@ -651,9 +674,10 @@ void CSOActiveX::CallbackCreateXInputStream( CBindStatusCallback<CSOActiveX>* pb
 
         if ( !mpDispTempFile )
         {
+            CComVariant aServiceName( L"com.sun.star.io.TempFile" );
             hr = GetIDispByFunc( mpDispFactory,
                                  L"createInstance",
-                                 &CComVariant( L"com.sun.star.io.TempFile" ),
+                                 &aServiceName,
                                  1,
                                  mpDispTempFile );
         }
@@ -756,9 +780,10 @@ SOVersion CSOActiveX::GetVersionConnected()
     {
         // create ConfigurationProvider instance
         CComPtr<IDispatch> pdispConfProv;
+        CComVariant aServiceName( L"com.sun.star.configuration.ConfigurationProvider" );
         HRESULT hr = GetIDispByFunc( mpDispFactory,
                              L"createInstance",
-                             &CComVariant( L"com.sun.star.configuration.ConfigurationProvider" ),
+                             &aServiceName,
                              1,
                              pdispConfProv );
 
@@ -788,9 +813,10 @@ SOVersion CSOActiveX::GetVersionConnected()
                 {
                     CComVariant aOfficeName;
 
+                    CComVariant aProductName( L"Product/ooName" );
                     hr = ExecuteFunc( pdispConfAccess,
                                         L"getByHierarchicalName",
-                                        &CComVariant( L"Product/ooName" ),
+                                        &aProductName,
                                         1,
                                         &aOfficeName );
 
@@ -798,9 +824,10 @@ SOVersion CSOActiveX::GetVersionConnected()
                     {
                         CComVariant aOfficeVersion;
 
+                        CComVariant aProductVersion( L"Product/ooSetupVersion" );
                         hr = ExecuteFunc( pdispConfAccess,
                                             L"getByHierarchicalName",
-                                            &CComVariant( L"Product/ooSetupVersion" ),
+                                            &aProductVersion,
                                             1,
                                             &aOfficeVersion );
 
@@ -876,6 +903,7 @@ HRESULT CSOActiveX::OnDrawAdvanced( ATL_DRAWINFO& di )
                 CComVariant aPropVar;
                 aPropVar.vt = VT_BOOL; aPropVar.boolVal = VARIANT_FALSE;
                 HRESULT hr = ExecuteFunc( mpDispFrame, L"close", &aPropVar, 1, &dummyResult );
+                (void)hr;
                 mpDispFrame = CComPtr<IDispatch>();
             }
 
@@ -1041,11 +1069,14 @@ STDMETHODIMP CSOActiveX::Invoke(DISPID dispidMember,
 HRESULT CSOActiveX::GetURL( const OLECHAR* url,
                               const OLECHAR* target )
 {
-    return mWebBrowser2->Navigate2( &CComVariant( url ),
-                                  &CComVariant(),
-                                  &CComVariant( target ),
-                                  &CComVariant(),
-                                  &CComVariant() );
+    CComVariant aEmpty1, aEmpty2, aEmpty3;
+    CComVariant aTarget( target );
+    CComVariant aUrl( url );
+    return mWebBrowser2->Navigate2( &aUrl,
+                                  &aEmpty1,
+                                  &aTarget,
+                                  &aEmpty2,
+                                  &aEmpty3 );
 }
 
 
