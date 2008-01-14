@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonpagesdbp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:05:56 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:42:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( OTableSelectionPage, OnSearchClicked, PushButton*, _pButton )
+    IMPL_LINK( OTableSelectionPage, OnSearchClicked, PushButton*, /*_pButton*/ )
     {
         ::sfx2::FileDialogHelper aFileDlg(WB_3DLOOK);
         aFileDlg.SetDisplayDirectory( SvtPathOptions().GetWorkPath() );
@@ -466,7 +466,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK( OMaybeListSelectionPage, OnRadioSelected, RadioButton*, NOTINTERESTEDIN )
+    IMPL_LINK( OMaybeListSelectionPage, OnRadioSelected, RadioButton*, /*NOTINTERESTEDIN*/ )
     {
         implEnableWindows();
         return 0L;
