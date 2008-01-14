@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:13:43 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:16:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,54 +38,26 @@
 
 #include "vcl/salsys.hxx"
 #include "salsys.h"
-#include "premac.h"
-#include <ApplicationServices/ApplicationServices.h>
-#include "postmac.h"
 #include "saldata.hxx"
 
+#include "rtl/ustrbuf.hxx"
+
+using namespace rtl;
+
 // =======================================================================
-
-//AquaSalSystem::AquaSalSystem()
-//{
-//}
-
-// -----------------------------------------------------------------------
 
 AquaSalSystem::~AquaSalSystem()
 {
 }
 
-// -----------------------------------------------------------------------
-
-//bool AquaSalSystem::StartProcess( SalFrame* pFrame,
-//                            const XubString& rFileName,
-//                            const XubString& rParam,
-//                            const XubString& rWorkDir )
-//{
-//  return FALSE;
-//}
-
-// -----------------------------------------------------------------------
-
-//BOOL AquaSalSystem::AddRecentDoc( SalFrame*, const XubString& rFileName )
-//{
-//  return FALSE;
-//}
-
 unsigned int AquaSalSystem::GetDisplayScreenCount()
 {
-/*
-    CGDirectDisplayID displays[64]; // 64 displays are enough for everyone
-    CGDisplayCount displayCount;
-    if( noErr == CGGetActiveDisplayList( 64, displays, &displayCount ) )
-        return displayCount;
-*/
-    return 1;
+    NSArray* pScreens = [NSScreen screens];
+    return pScreens ? [pScreens count] : 1;
 }
 
 bool AquaSalSystem::IsMultiDisplay()
 {
-    /* FIXME: add support for multiple displays. */
     return false;
 }
 
@@ -96,21 +68,57 @@ unsigned int AquaSalSystem::GetDefaultDisplayNumber()
 
 Rectangle AquaSalSystem::GetDisplayScreenPosSizePixel( unsigned int nScreen )
 {
-    CGRect aRect( CGDisplayBounds ( CGMainDisplayID() ) );
-    Rectangle aRet( aRect.origin.x, aRect.origin.y, aRect.origin.x + aRect.size.width, aRect.origin.y + aRect.size.height );
-    AquaLog("AquaSalSystem::GetDisplayScreenPosSizePixel(%d) (%ld,%ld,%ld,%ld)\n", nScreen, aRet.nLeft, aRet.nTop, aRet.nRight, aRet.nBottom );
+    NSArray* pScreens = [NSScreen screens];
+    Rectangle aRet;
+    NSScreen* pScreen = nil;
+    if( pScreens && nScreen < [pScreens count] )
+        pScreen = [pScreens objectAtIndex: nScreen];
+    else
+        pScreen = [NSScreen mainScreen];
+
+    if( pScreen )
+    {
+        NSRect aFrame = [pScreen frame];
+        aRet = Rectangle( Point( aFrame.origin.x, aFrame.origin.y ),
+                          Size( aFrame.size.width, aFrame.size.height ) );
+    }
     return aRet;
 }
 
 Rectangle AquaSalSystem::GetDisplayWorkAreaPosSizePixel( unsigned int nScreen )
 {
-    return Rectangle();
+    NSArray* pScreens = [NSScreen screens];
+    Rectangle aRet;
+    NSScreen* pScreen = nil;
+    if( pScreens && nScreen < [pScreens count] )
+        pScreen = [pScreens objectAtIndex: nScreen];
+    else
+        pScreen = [NSScreen mainScreen];
+
+    if( pScreen )
+    {
+        NSRect aFrame = [pScreen visibleFrame];
+        aRet = Rectangle( Point( aFrame.origin.x, aFrame.origin.y ),
+                          Size( aFrame.size.width, aFrame.size.height ) );
+    }
+    return aRet;
 }
 
 rtl::OUString AquaSalSystem::GetScreenName( unsigned int nScreen )
 {
-    // FIXME
-    return rtl::OUString();
+   NSArray* pScreens = [NSScreen screens];
+   OUString aRet;
+   if( nScreen < [pScreens count] )
+   {
+       OUStringBuffer aBuf( 32 );
+       // screens don't seem to have names on Aqua
+       // FIXME: Screen should be localized,
+       // need to wait for 3.0 line for that
+       aBuf.appendAscii( "Screen " );
+       aBuf.append( sal_Int32(nScreen) );
+       aRet = aBuf.makeStringAndClear();
+   }
+   return aRet;
 }
 
 int AquaSalSystem::ShowNativeDialog( const String& rTitle,
