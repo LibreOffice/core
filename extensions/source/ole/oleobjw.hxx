@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleobjw.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:45:08 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:47:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 #define __OLEOBJW_HXX
 #include "ole2uno.hxx"
 
+#pragma warning (push,1)
+#pragma warning (disable:4548)
+
 #include <tools/presys.h>
 #define _WIN32_WINNT 0x0400
 
@@ -47,6 +50,8 @@
 #include <vector>
 #include <hash_map>
 #include <tools/postsys.h>
+
+#pragma warning (pop)
 
 #ifndef _CPPUHELPER_IMPLBASE3_HXX_
 #include <cppuhelper/implbase3.hxx>
