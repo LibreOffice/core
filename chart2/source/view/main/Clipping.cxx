@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Clipping.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:23:18 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:07:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,8 @@
 #include "CommonConverters.hxx"
 #include "BaseGFXHelper.hxx"
 
-#ifndef _COM_SUN_STAR_DRAWING_POSITION3D_HPP_
 #include <com/sun/star/drawing/Position3D.hpp>
-#endif
+#include <com/sun/star/drawing/DoubleSequence.hpp>
 
 //.............................................................................
 namespace chart
@@ -165,6 +164,57 @@ bool lcl_clip2d_(drawing::Position3D& rPoint0, drawing::Position3D& rPoint1, con
     return bRet;
 }
 
+void lcl_addPointToPoly( drawing::PolyPolygonShape3D& rPoly
+        , const drawing::Position3D& rPos
+        , sal_Int32 nPolygonIndex
+        , std::vector< sal_Int32 >& rResultPointCount
+        , sal_Int32 nReservePointCount )
+{
+    if(nPolygonIndex<0)
+    {
+        OSL_ENSURE( false, "The polygon index needs to be > 0");
+        nPolygonIndex=0;
+    }
+
+    //make sure that we have enough polygons
+    if(nPolygonIndex >= rPoly.SequenceX.getLength() )
+    {
+        rPoly.SequenceX.realloc(nPolygonIndex+1);
+        rPoly.SequenceY.realloc(nPolygonIndex+1);
+        rPoly.SequenceZ.realloc(nPolygonIndex+1);
+        rResultPointCount.push_back(0);
+    }
+
+    drawing::DoubleSequence* pOuterSequenceX = &rPoly.SequenceX.getArray()[nPolygonIndex];
+    drawing::DoubleSequence* pOuterSequenceY = &rPoly.SequenceY.getArray()[nPolygonIndex];
+    drawing::DoubleSequence* pOuterSequenceZ = &rPoly.SequenceZ.getArray()[nPolygonIndex];
+
+    sal_Int32 nNewResultPointCount = rResultPointCount[nPolygonIndex]+1;
+    sal_Int32 nSeqLength = pOuterSequenceX->getLength();
+
+    if( nSeqLength <= nNewResultPointCount )
+    {
+        sal_Int32 nReallocLength = nReservePointCount;
+        if( nNewResultPointCount > nReallocLength )
+        {
+            nReallocLength = nNewResultPointCount;
+            DBG_ERROR("this should not be the case to avoid performance problems");
+        }
+        pOuterSequenceX->realloc(nReallocLength);
+        pOuterSequenceY->realloc(nReallocLength);
+        pOuterSequenceZ->realloc(nReallocLength);
+    }
+
+    double* pInnerSequenceX = pOuterSequenceX->getArray();
+    double* pInnerSequenceY = pOuterSequenceY->getArray();
+    double* pInnerSequenceZ = pOuterSequenceZ->getArray();
+
+    pInnerSequenceX[nNewResultPointCount-1] = rPos.PositionX;
+    pInnerSequenceY[nNewResultPointCount-1] = rPos.PositionY;
+    pInnerSequenceZ[nNewResultPointCount-1] = rPos.PositionZ;
+    rResultPointCount[nPolygonIndex]=nNewResultPointCount;
+}
+
 }//end anonymous namespace
 
 void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolygon
@@ -196,6 +246,9 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
         }
     }
 
+    //
+    std::vector< sal_Int32 > aResultPointCount;//per polygon index
+
     //apply clipping:
     drawing::Position3D aFrom;
     drawing::Position3D aTo;
@@ -220,23 +273,37 @@ void Clipping::clipPolygonAtRectangle( const drawing::PolyPolygonShape3D& rPolyg
                 if(aFrom == aLast)
                 {
                     if( !(aTo==aFrom) )
-                        AddPointToPoly( aResult, aTo, nNewPolyIndex );
+                    {
+                        lcl_addPointToPoly( aResult, aTo, nNewPolyIndex, aResultPointCount, nOldPointCount );
+                    }
                 }
                 else
                 {
                     if( bSplitPiecesToDifferentPolygons && nOldPoint!=1 )
                     {
                         if( nNewPolyIndex < aResult.SequenceX.getLength()
-                                && aResult.SequenceX[nNewPolyIndex].getLength() )
+                                && aResultPointCount[nNewPolyIndex]>0 )
                             nNewPolyIndex++;
                     }
-                    AddPointToPoly( aResult, aFrom, nNewPolyIndex );
+                    lcl_addPointToPoly( aResult, aFrom, nNewPolyIndex, aResultPointCount, nOldPointCount );
                     if( !(aTo==aFrom) )
-                        AddPointToPoly( aResult, aTo, nNewPolyIndex );
+                        lcl_addPointToPoly( aResult, aTo, nNewPolyIndex, aResultPointCount, nOldPointCount );
                 }
                 aLast = aTo;
             }
         }
+    }
+    //free unused space
+    for( sal_Int32 nPolygonIndex = aResultPointCount.size(); nPolygonIndex--; )
+    {
+        drawing::DoubleSequence* pOuterSequenceX = &aResult.SequenceX.getArray()[nPolygonIndex];
+        drawing::DoubleSequence* pOuterSequenceY = &aResult.SequenceY.getArray()[nPolygonIndex];
+        drawing::DoubleSequence* pOuterSequenceZ = &aResult.SequenceZ.getArray()[nPolygonIndex];
+
+        sal_Int32 nUsedPointCount = aResultPointCount[nPolygonIndex];
+        pOuterSequenceX->realloc(nUsedPointCount);
+        pOuterSequenceY->realloc(nUsedPointCount);
+        pOuterSequenceZ->realloc(nUsedPointCount);
     }
 }
 
