@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:09:28 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:02:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,7 +269,7 @@ Any SAL_CALL ResourceService::invoke
         OGuard aGuard( Application::GetSolarMutex() );
         for( sal_Int32 n = 0; n < nElements; n++ )
         {
-            sal_Int32 nId;
+            sal_Int32 nId = 0;
             if( !(pIn[n] >>= nId) )
             {
                 if( xC.is() )
@@ -322,7 +322,7 @@ Any SAL_CALL ResourceService::invoke
         Reference< XTypeConverter > xC = getTypeConverter();
         OGuard aGuard( Application::GetSolarMutex() );
 
-        sal_Int32 nId;
+        sal_Int32 nId = 0;
         if( !(Params.getConstArray()[0] >>= nId) )
         {
             if( xC.is() )
@@ -423,15 +423,12 @@ Any SAL_CALL ResourceService::getValue(const OUString& PropertyName)
     OGuard aGuard( Application::GetSolarMutex() );
     if( PropertyName.equalsAscii("FileName" ))
         return makeAny( aFileName );
-    else
-    {
-        Reference< XInvocation > xI = getDefaultInvocation();
-        if( xI.is() )
-            return xI->getValue( PropertyName );
-        else
-            throw UnknownPropertyException();
-    }
-    return Any();
+
+    Reference< XInvocation > xI = getDefaultInvocation();
+    if( xI.is() )
+        return xI->getValue( PropertyName );
+
+    throw UnknownPropertyException();
 }
 
 // XInvokation
