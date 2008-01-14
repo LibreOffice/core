@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicalTestArguments.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-02-20 14:21:32 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:17:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,8 @@ public class GraphicalTestArguments
     String m_sLeaveOutNames = null;
 
     String m_sDistinct = null;
+
+    boolean m_bCreateDefaultReference = false;
 
     // CONSTRUCTOR
     private GraphicalTestArguments(){}
@@ -299,6 +301,21 @@ public class GraphicalTestArguments
                     setHidden();
                 }
             }
+            // CREATE_DEFAULT
+            String sCreateDefault = (String)param.get(PropertyName.CREATE_DEFAULT);
+            if (sCreateDefault != null)
+            {
+                if (sCreateDefault.toLowerCase().equals("yes") ||
+                    sCreateDefault.toLowerCase().equals("true"))
+                {
+                    m_bCreateDefaultReference = true;
+                }
+                else
+                {
+                    m_bCreateDefaultReference = false;
+                }
+            }
+
         }
 
     public boolean checkIfUsableDocumentType(String _sName)
@@ -607,6 +624,10 @@ public class GraphicalTestArguments
     public boolean isStoreAllowed()
         {
             return m_bStoreFile;
+        }
+    public boolean createDefaultReference()
+        {
+            return m_bCreateDefaultReference;
         }
 
 
