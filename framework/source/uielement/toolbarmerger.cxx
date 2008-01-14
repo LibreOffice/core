@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmerger.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:13:42 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:25:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -358,17 +358,18 @@ bool ToolBarMerger::ProcessMergeOperation(
     ToolBox*                               pToolbar,
     sal_uInt16                             nPos,
     sal_uInt16&                            rItemId,
+    CommandToInfoMap&                      rCommandMap,
     const ::rtl::OUString&                 rModuleIdentifier,
     const ::rtl::OUString&                 rMergeCommand,
     const ::rtl::OUString&                 rMergeCommandParameter,
     const AddonToolbarItemContainer&       rItems )
 {
     if ( rMergeCommand.equalsAsciiL( MERGECOMMAND_ADDAFTER, MERGECOMMAND_ADDAFTER_LEN ))
-        return MergeItems( xFrame, pToolbar, nPos, 1, rItemId, rModuleIdentifier, rItems );
+        return MergeItems( xFrame, pToolbar, nPos, 1, rItemId, rCommandMap, rModuleIdentifier, rItems );
     else if ( rMergeCommand.equalsAsciiL( MERGECOMMAND_ADDBEFORE, MERGECOMMAND_ADDBEFORE_LEN ))
-        return MergeItems( xFrame, pToolbar, nPos, 0, rItemId, rModuleIdentifier, rItems );
+        return MergeItems( xFrame, pToolbar, nPos, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
     else if ( rMergeCommand.equalsAsciiL( MERGECOMMAND_REPLACE, MERGECOMMAND_REPLACE_LEN ))
-        return ReplaceItem( xFrame, pToolbar, nPos, rItemId, rModuleIdentifier, rItems );
+        return ReplaceItem( xFrame, pToolbar, nPos, rItemId, rCommandMap, rModuleIdentifier, rItems );
     else if ( rMergeCommand.equalsAsciiL( MERGECOMMAND_REMOVE, MERGECOMMAND_REMOVE_LEN ))
         return RemoveItems( pToolbar, nPos, rMergeCommandParameter );
 
@@ -426,6 +427,7 @@ bool ToolBarMerger::ProcessMergeFallback(
     ToolBox*                         pToolbar,
     sal_uInt16                       /*nPos*/,
     sal_uInt16&                      rItemId,
+    CommandToInfoMap&                rCommandMap,
     const ::rtl::OUString&           rModuleIdentifier,
     const ::rtl::OUString&           rMergeCommand,
     const ::rtl::OUString&           rMergeFallback,
@@ -441,9 +443,9 @@ bool ToolBarMerger::ProcessMergeFallback(
              ( rMergeCommand.equalsAsciiL( MERGECOMMAND_ADDAFTER, MERGECOMMAND_ADDAFTER_LEN   )) )
     {
         if ( rMergeFallback.equalsAsciiL( MERGEFALLBACK_ADDFIRST, MERGEFALLBACK_ADDFIRST_LEN ))
-            return MergeItems( xFrame, pToolbar, 0, 0, rItemId, rModuleIdentifier, rItems );
+            return MergeItems( xFrame, pToolbar, 0, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
         else if ( rMergeFallback.equalsAsciiL( MERGEFALLBACK_ADDLAST, MERGEFALLBACK_ADDLAST_LEN ))
-            return MergeItems( xFrame, pToolbar, TOOLBOX_APPEND, 0, rItemId, rModuleIdentifier, rItems );
+            return MergeItems( xFrame, pToolbar, TOOLBOX_APPEND, 0, rItemId, rCommandMap, rModuleIdentifier, rItems );
     }
 
     return false;
@@ -496,13 +498,12 @@ bool ToolBarMerger::MergeItems(
     sal_uInt16                             nPos,
     sal_uInt16                             nModIndex,
     sal_uInt16&                            rItemId,
+    CommandToInfoMap&                      rCommandMap,
     const ::rtl::OUString&                 rModuleIdentifier,
     const AddonToolbarItemContainer&       rAddonToolbarItems )
 {
     const sal_Int32 nSize( rAddonToolbarItems.size() );
 
-    sal_Bool bBigImages( SvtMiscOptions().AreCurrentSymbolsLarge() );
-    sal_Bool bIsHiContrast( pToolbar->GetSettings().GetStyleSettings().GetFaceColor().IsDark() );
     uno::Reference< frame::XFrame > xFrame( rFrame );
 
     sal_uInt16 nIndex( 0 );
@@ -520,7 +521,17 @@ bool ToolBarMerger::MergeItems(
             else
             {
                 ToolBarMerger::CreateToolbarItem( pToolbar, sal_uInt16( nInsPos ), rItemId, rItem );
-                pToolbar->SetItemImage( rItemId, GetImageFromURL( xFrame, rItem.aCommandURL, bBigImages, bIsHiContrast ));
+                CommandToInfoMap::iterator pIter = rCommandMap.find( rItem.aCommandURL );
+                if ( pIter == rCommandMap.end())
+                {
+                    CommandInfo aCmdInfo;
+                    aCmdInfo.nId = rItemId;
+                    rCommandMap.insert( CommandToInfoMap::value_type( rItem.aCommandURL, aCmdInfo ));
+                }
+                else
+                {
+                    pIter->second.aIds.push_back( rItemId );
+                }
             }
 
             ++nIndex;
@@ -578,11 +589,12 @@ bool ToolBarMerger::ReplaceItem(
     ToolBox*                               pToolbar,
     sal_uInt16                             nPos,
     sal_uInt16&                            rItemId,
+    CommandToInfoMap&                      rCommandMap,
     const ::rtl::OUString&                 rModuleIdentifier,
     const AddonToolbarItemContainer&       rAddonToolbarItems )
 {
     pToolbar->RemoveItem( nPos );
-    return MergeItems( xFrame, pToolbar, nPos, 0, rItemId, rModuleIdentifier, rAddonToolbarItems );
+    return MergeItems( xFrame, pToolbar, nPos, 0, rItemId, rCommandMap, rModuleIdentifier, rAddonToolbarItems );
 }
 
 /**
