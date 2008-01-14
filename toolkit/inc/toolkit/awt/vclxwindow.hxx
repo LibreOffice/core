@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 13:54:17 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:55:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
 #include <com/sun/star/beans/XPropertyChangeListener.hpp>
 #endif
+#include <com/sun/star/beans/XPropertySetInfo.hpp>
 #ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
@@ -91,6 +92,9 @@
 #include <tools/link.hxx>
 #endif
 
+#include <stdarg.h>
+#include <list>
+
 class Window;
 class VclSimpleEvent;
 class VclWindowEvent;
@@ -107,6 +111,7 @@ namespace toolkit
 //  class VCLXWINDOW
 //  ----------------------------------------------------
 
+class UnoPropertyArrayHelper;
 class VCLXWindowImpl;
 class TOOLKIT_DLLPUBLIC VCLXWindow :    public ::com::sun::star::awt::XWindow2,
                     public ::com::sun::star::awt::XVclWindowPeer,
@@ -115,6 +120,7 @@ class TOOLKIT_DLLPUBLIC VCLXWindow :    public ::com::sun::star::awt::XWindow2,
                     public ::com::sun::star::awt::XDockableWindow,
                     public ::com::sun::star::accessibility::XAccessible,
                     public ::com::sun::star::lang::XEventListener,
+                    public ::com::sun::star::beans::XPropertySetInfo,
                     public VCLXDevice
 {
 private:
@@ -137,13 +143,16 @@ private:
     ULONG                           mnListenerLockLevel;
     ULONG                           nDummy2;
     VCLXWindowImpl*                 mpImpl;
-    void*                           pDummy2;
+    UnoPropertyArrayHelper         *mpPropHelper;
 
-    sal_Bool                        mbDisposing;
-    sal_Bool                        mbDesignMode;
-    sal_Bool                        mbSynthesizingVCLEvent;
+
+    sal_Bool                        mbDisposing : 1;
+    sal_Bool                        mbDesignMode : 1;
+    sal_Bool                        mbSynthesizingVCLEvent : 1;
+    sal_Bool                        mbWithDefaultProps : 1;
     sal_Bool                        mbDrawingOntoParent;
 
+    UnoPropertyArrayHelper *GetPropHelper();
 
 protected:
     Size            ImplCalcWindowSize( const Size& rOutSz ) const;
@@ -159,8 +168,16 @@ protected:
 
     ::toolkit::IAccessibleFactory&  getAccessibleFactory();
 
+    // helper ...
+    static void     PushPropertyIds( std::list< sal_uInt16 > &aIds, int nFirstId, ...);
+    // for use in controls/
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds,
+                                        bool bWithDefaults = false );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds )
+        { return ImplGetPropertyIds( aIds, mbWithDefaultProps ); }
+
 public:
-    VCLXWindow();
+    VCLXWindow( bool bWithDefaultProps = false );
     ~VCLXWindow();
 
     virtual void    SetWindow( Window* pWindow );
@@ -275,6 +292,10 @@ public:
     sal_Bool SAL_CALL isEnabled(  ) throw (::com::sun::star::uno::RuntimeException);
     sal_Bool SAL_CALL hasFocus(  ) throw (::com::sun::star::uno::RuntimeException);
 
+    // ::com::sun::star::beans::XPropertySetInfo
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property > SAL_CALL getProperties(  ) throw (::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::beans::Property SAL_CALL getPropertyByName( const ::rtl::OUString& aName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
+    ::sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& Name ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif // _TOOLKIT_AWT_VCLXWINDOW_HXX_
