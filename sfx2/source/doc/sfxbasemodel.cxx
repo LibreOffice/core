@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.131 $
+ *  $Revision: 1.132 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:49:53 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:28:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3396,9 +3396,12 @@ void SAL_CALL SfxBaseModel::storeToStorage( const uno::Reference< XSTORAGE >& xS
         }
     }
 
+    sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
+    m_pData->m_pObjectShell->ResetError();
+
+    // the warnings are currently not transported
     if ( !bSuccess )
     {
-        sal_uInt32 nError = m_pData->m_pObjectShell->GetErrorCode();
         throw task::ErrorCodeIOException( ::rtl::OUString(),
                                             uno::Reference< uno::XInterface >(),
                                             nError ? nError : ERRCODE_IO_GENERAL );
