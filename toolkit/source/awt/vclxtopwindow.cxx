@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtopwindow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:40:01 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,11 @@
 //  ----------------------------------------------------
 //  class VCLXTopWindow
 //  ----------------------------------------------------
+
+void VCLXTopWindow::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    VCLXContainer::ImplGetPropertyIds( rIds );
+}
 
 VCLXTopWindow::VCLXTopWindow(bool bWHWND)
     : m_bWHWND(bWHWND)
