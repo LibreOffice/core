@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ldapuserprofilelayer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:58:13 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:41:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,3 +260,4 @@ void SAL_CALL LdapUserProfileLayer::readData(
 //------------------------------------------------------------------------------
 }}}
 //------------------------------------------------------------------------------
+
