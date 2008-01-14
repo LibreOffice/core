@@ -4,9 +4,9 @@
  *
  *  $RCSfile: npwrap.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:19:13 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:53:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,13 +43,16 @@
 
 #include <plugin/unx/plugcon.hxx>
 
+#include <osl/file.h>
+#include <osl/module.h>
+
 PluginConnector* pConnector = NULL;
 
 int         nAppArguments = 0;
 char**      pAppArguments = NULL;
 Display*    pAppDisplay = NULL;
 
-extern void* pPluginLib;
+extern oslModule pPluginLib;
 extern NPError (*pNP_Shutdown)();
 
 void LoadAdditionalLibs(const char*);
@@ -59,7 +62,7 @@ Widget topLevel = NULL, topBox = NULL;
 int wakeup_fd[2] = { 0, 0 };
 static bool bPluginAppQuit = false;
 
-static long GlobalConnectionLostHdl( void* pInst, void* pArg )
+static long GlobalConnectionLostHdl( void* /*pInst*/, void* /*pArg*/ )
 {
     medDebug( 1, "pluginapp exiting due to connection lost\n" );
 
@@ -74,7 +77,7 @@ extern "C"
         return 0;
     }
 
-    static void ThreadEventHandler( XtPointer client_data, int* source, XtInputId* id )
+    static void ThreadEventHandler( XtPointer /*client_data*/, int* /*source*/, XtInputId* id )
     {
         char buf[256];
         // clear pipe
@@ -104,7 +107,7 @@ extern "C"
 }
 
 
-IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, pMediator )
+IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, /*pMediator*/ )
 {
     medDebug( 1, "new message handler\n" );
     write( wakeup_fd[1], "cccc", 4 );
@@ -112,7 +115,7 @@ IMPL_LINK( PluginConnector, NewMessageHdl, Mediator*, pMediator )
 
 }
 
-Widget createSubWidget( char* pPluginText, Widget shell, XLIB_Window aParentWindow )
+Widget createSubWidget( char* /*pPluginText*/, Widget shell, XLIB_Window aParentWindow )
 {
     Widget newWidget = XtVaCreateManagedWidget(
 #if defined USE_MOTIF
@@ -168,26 +171,33 @@ void* CreateNewShell( void** pShellReturn, XLIB_Window aParentWindow )
     return newWidget;
 }
 
+static oslModule LoadModule( const char* pPath )
+{
+    ::rtl::OUString sSystemPath( ::rtl::OUString::createFromAscii( pPath ) );
+    ::rtl::OUString sFileURL;
+    osl_getFileURLFromSystemPath( sSystemPath.pData, &sFileURL.pData );
+
+    oslModule pLib = osl_loadModule( sFileURL.pData, SAL_LOADMODULE_LAZY );
+    if( ! pLib )
+    {
+        medDebug( 1, "could not open %s\n", pPath );
+    }
+    return pLib;
+}
+
 // Unix specific implementation
 static void CheckPlugin( const char* pPath )
 {
-    rtl_TextEncoding aEncoding = osl_getThreadTextEncoding();
-
-    void *pLib = dlopen( pPath, RTLD_LAZY );
-    if( ! pLib )
-    {
-        medDebug( 1, "could not dlopen( %s ) (%s)\n", pPath, dlerror() );
-        return;
-    }
+    oslModule pLib = LoadModule( pPath );
 
     char*(*pNP_GetMIMEDescription)() = (char*(*)())
-        dlsym( pLib, "NP_GetMIMEDescription" );
+        osl_getAsciiFunctionSymbol( pLib, "NP_GetMIMEDescription" );
     if( pNP_GetMIMEDescription )
         printf( "%s\n", pNP_GetMIMEDescription() );
     else
-        medDebug( 1, "could not dlsym NP_GetMIMEDescription (%s)\n", dlerror() );
+        medDebug( 1, "could not symbol NP_GetMIMEDescription\n" );
 
-    dlclose( pLib );
+    osl_unloadModule( pLib );
 }
 
 #if OSL_DEBUG_LEVEL > 1 && defined LINUX
@@ -278,11 +288,9 @@ int main( int argc, char **argv)
         fcntl (wakeup_fd[1], F_SETFL, flags);
     }
 
-    pPluginLib = dlopen( argv[2], RTLD_LAZY );
+    pPluginLib = LoadModule( argv[2] );
     if( ! pPluginLib )
     {
-        medDebug( 1, "dlopen on %s failed because of:\n\t%s\n",
-                  argv[2], dlerror() );
         exit(255);
     }
     int nSocket = atol( argv[1] );
@@ -311,7 +319,7 @@ int main( int argc, char **argv)
     /*
      *  Create windows for widgets and map them.
      */
-    INT32 nWindow;
+    int nWindow;
     sscanf( argv[3], "%d", &nWindow );
     char pText[1024];
     sprintf( pText, "starting plugin %s ...", pAppArguments[2] );
@@ -355,7 +363,7 @@ int main( int argc, char **argv)
 
     pNP_Shutdown();
     medDebug( 1, "NP_Shutdown done\n" );
-    dlclose( pPluginLib );
+    osl_unloadModule( pPluginLib );
     medDebug( 1, "plugin close\n" );
 
     close( wakeup_fd[0] );
