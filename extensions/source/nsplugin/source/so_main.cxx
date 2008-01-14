@@ -4,9 +4,9 @@
  *
  *  $RCSfile: so_main.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:37:33 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:45:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,8 @@
 #ifdef _MSC_VER
 #pragma once
 #endif
+#pragma warning (push,1)
+#pragma warning (disable:4668)
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <winsock2.h>
@@ -54,6 +56,7 @@
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
+#pragma warning (pop)
 #endif //end of WNT
 
 #include <unistd.h>
@@ -80,6 +83,7 @@ long int NSP_ReadFromPipe(NSP_PIPE_FD fp, void* buf, unsigned long int len)
 
     len_unix = NSP_Read_Pipe(fp, buf, len, &len_wnt);
 #ifdef UNIX
+    (void)len_wnt;
     return  len_unix;
 #endif //end of UNIX
 #ifdef WNT
@@ -228,7 +232,6 @@ int dispatchMsg(PLUGIN_MSG* pMsg)
             return 0;
         default:
             return -1;
-            break;
     }
 }
 
@@ -294,7 +297,7 @@ sal_Bool start_office(NSP_PIPE_FD read_fd)
             memset((void*)&NSP_ProcessInfo, 0, sizeof(PROCESS_INFORMATION));
             sprintf(para, " -nologo -nodefault -accept=socket,host=0,port=%d;urp", SO_SERVER_PORT);
             //sprintf(para, " -accept=socket,host=0,port=%d;urp\n", SO_SERVER_PORT);
-            SECURITY_ATTRIBUTES  NSP_access = { sizeof(SECURITY_ATTRIBUTES), NULL, FALSE};
+            SECURITY_ATTRIBUTES  NSP_access = { sizeof(SECURITY_ATTRIBUTES), NULL, FALSE}; (void)NSP_access;
             sprintf(sCommand, "\"%s\" %s", findSofficeExecutable(), para);
             debug_fprintf(NSP_LOG_APPEND,"StarOffice will be started by command: %s",sCommand);
             BOOL ret = false;
@@ -337,7 +340,6 @@ int main(int argc, char** argv)
    // Sleep(20*1000);
     debug_fprintf(NSP_LOG_APPEND, "start of main\n");
     memset(lpInstance, 0, sizeof(lpInstance));
-    char readbuf[NPP_BUFFER_SIZE];
 
     NSP_PIPE_FD fd_pipe[2];
     int iPipe[2];
@@ -351,6 +353,7 @@ int main(int argc, char** argv)
     iPipe[1] = atoi(argv[2]);
 #endif  //end of UNIX
 #ifdef WNT
+    (void)argc;
     //sscanf( GetCommandLine(), "%d %d", &iPipe[0],  &iPipe[1] );
     iPipe[0] = atoi(argv[0]);
     iPipe[1] = atoi(argv[1]);
