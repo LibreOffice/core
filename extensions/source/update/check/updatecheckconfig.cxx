@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckconfig.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:48:28 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:05:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,7 @@ UpdateCheckConfig::get(
 bool
 UpdateCheckConfig::isAutoCheckEnabled() const
 {
-    sal_Bool nValue;
+    sal_Bool nValue = sal_False;
     const_cast < UpdateCheckConfig *> (this)->getByName( UNISTRING( AUTOCHECK_ENABLED ) ) >>= nValue;
     return nValue;
 }
@@ -329,7 +329,7 @@ UpdateCheckConfig::isAutoCheckEnabled() const
 bool
 UpdateCheckConfig::isAutoDownloadEnabled() const
 {
-    sal_Bool nValue;
+    sal_Bool nValue = sal_False;
     const_cast < UpdateCheckConfig *> (this)->getByName( UNISTRING( AUTODOWNLOAD_ENABLED ) ) >>= nValue;
     return nValue;
 }
@@ -352,7 +352,7 @@ UpdateCheckConfig::getUpdateEntryVersion() const
 sal_Int64
 UpdateCheckConfig::getLastChecked() const
 {
-    sal_Int64 nValue;
+    sal_Int64 nValue = 0;
 
     // getByName is defined as non const in XNameAccess
     const_cast < UpdateCheckConfig *> (this)->getByName( UNISTRING( LAST_CHECK ) ) >>= nValue;
@@ -365,7 +365,7 @@ UpdateCheckConfig::getLastChecked() const
 sal_Int64
 UpdateCheckConfig::getCheckInterval() const
 {
-    sal_Int64 nValue;
+    sal_Int64 nValue = 0;
 
     // getByName is defined as non const in XNameAccess
     const_cast < UpdateCheckConfig *> (this)->getByName( UNISTRING( CHECK_INTERVAL ) ) >>= nValue;
@@ -631,7 +631,7 @@ UpdateCheckConfig::commitChanges()
                 // FIXME: use non IgnoreAsciiCase version as soon as it becomes available
                 if( aString.endsWithIgnoreAsciiCaseAsciiL(AUTOCHECK_ENABLED "']", sizeof(AUTOCHECK_ENABLED)+1) )
                 {
-                    sal_Bool bEnabled;
+                    sal_Bool bEnabled = sal_False;
                     aChangesSet[i].Element >>= bEnabled;
                     m_rListener->autoCheckStatusChanged(sal_True == bEnabled);
                 }
