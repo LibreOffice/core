@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svgwriter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:29:42 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 15:05:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,11 +53,11 @@ private:
 protected:
 
     virtual void            _ExportMeta() {}
-    virtual void            _ExportStyles( BOOL bUsed ) {}
+    virtual void            _ExportStyles( BOOL /*bUsed*/ ) {}
     virtual void            _ExportAutoStyles() {}
     virtual void            _ExportContent() {}
     virtual void            _ExportMasterStyles() {}
-    virtual sal_uInt32      exportDoc( enum ::xmloff::token::XMLTokenEnum eClass ) { return 0; }
+    virtual sal_uInt32      exportDoc( enum ::xmloff::token::XMLTokenEnum /*eClass*/ ) { return 0; }
 
 public:
 
