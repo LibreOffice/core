@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xplugin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:53:02 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:51:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,18 +120,18 @@ Any XPlugin_Impl::queryAggregation( const Type& type ) throw( RuntimeException )
 
 
 XPlugin_Impl::XPlugin_Impl( const uno::Reference< com::sun::star::lang::XMultiServiceFactory >  & rSMgr) :
-        m_xSMgr( rSMgr ),
         PluginControl_Impl(),
+        m_xSMgr( rSMgr ),
         m_pPluginComm( NULL ),
-        m_pArgn( NULL ),
+        m_aEncoding( gsl_getSystemTextEncoding() ),
         m_pArgv( NULL ),
+        m_pArgn( NULL ),
         m_nArgs( 0 ),
         m_aPluginMode( NP_FULL ),
         m_nProvidingState( PROVIDING_NONE ),
         m_nCalledFromPlugin( 0 ),
         m_pDisposer( NULL ),
-        m_bIsDisposed( sal_False ),
-        m_aEncoding( gsl_getSystemTextEncoding() )
+        m_bIsDisposed( sal_False )
 {
     memset( &m_aInstance, 0, sizeof( m_aInstance ) );
     memset( &m_aNPWindow, 0, sizeof( m_aNPWindow ) );
@@ -196,7 +196,7 @@ void XPlugin_Impl::checkListeners( const char* normalizedURL )
     }
 }
 
-IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, pThis )
+IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, /*pThis*/ )
 {
     Guard< Mutex > aGuard( m_aMutex );
 
@@ -206,7 +206,7 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, pThis )
     std::list<XPlugin_Impl*>::iterator iter;
 
     {
-        Guard< Mutex > aGuard( PluginManager::get().getPluginMutex() );
+        Guard< Mutex > aPluginGuard( PluginManager::get().getPluginMutex() );
         for( iter = rList.begin(); iter != rList.end(); ++iter )
         {
             if( *iter == this )
@@ -226,7 +226,7 @@ IMPL_LINK( XPlugin_Impl, secondLevelDispose, XPlugin_Impl*, pThis )
     uno::Reference< com::sun::star::beans::XPropertySet >  xPS( m_xModel, UNO_QUERY );
     xPS->removePropertyChangeListener( OUString(), this );
     {
-        Guard< Mutex > aGuard( PluginManager::get().getPluginMutex() );
+        Guard< Mutex > aPluginGuard( PluginManager::get().getPluginMutex() );
         rList.remove( this );
     }
     m_aNPWindow.window = NULL;
@@ -570,7 +570,7 @@ void XPlugin_Impl::loadPlugin()
                                                   m_aEncoding).getStr(),
                  getNPPInstance(),
                  m_aPluginMode == PluginMode::FULL ? NP_FULL : NP_EMBED,
-                 m_nArgs,
+                 ::sal::static_int_cast< int16, int >( m_nArgs ),
                  (char**)(m_nArgs ? m_pArgn : NULL),
                  (char**)(m_nArgs ? m_pArgv : NULL),
                  NULL );
@@ -609,8 +609,8 @@ void XPlugin_Impl::loadPlugin()
 
     m_aNPWindow.clipRect.top        = 0;
     m_aNPWindow.clipRect.left       = 0;
-    m_aNPWindow.clipRect.bottom     = aPosSize.Height;
-    m_aNPWindow.clipRect.right      = aPosSize.Width;
+    m_aNPWindow.clipRect.bottom     = ::sal::static_int_cast< uint16, sal_Int32 >( aPosSize.Height );
+    m_aNPWindow.clipRect.right      = ::sal::static_int_cast< uint16, sal_Int32 >( aPosSize.Width );
     m_aNPWindow.type = NPWindowTypeWindow;
 
     m_aNPWindow.x       = 0;
@@ -859,7 +859,7 @@ sal_Bool XPlugin_Impl::provideNewStream(const OUString& mimetype,
     return bRet;
 }
 
-void XPlugin_Impl::disposing( const com::sun::star::lang::EventObject& rSource ) throw()
+void XPlugin_Impl::disposing( const com::sun::star::lang::EventObject& /*rSource*/ ) throw()
 {
 }
 
@@ -905,8 +905,8 @@ void XPlugin_Impl::setPosSize( sal_Int32 nX_, sal_Int32 nY_, sal_Int32 nWidth_, 
     m_aNPWindow.height              = nHeight_;
     m_aNPWindow.clipRect.top        = 0;
     m_aNPWindow.clipRect.left       = 0;
-    m_aNPWindow.clipRect.right      = nWidth_;
-    m_aNPWindow.clipRect.bottom     = nHeight_;
+    m_aNPWindow.clipRect.right      = ::sal::static_int_cast< uint16, sal_Int32 >( nWidth_ );
+    m_aNPWindow.clipRect.bottom     = ::sal::static_int_cast< uint16, sal_Int32 >( nHeight_ );
 
     if(getPluginComm())
         getPluginComm()->NPP_SetWindow( getNPPInstance(), &m_aNPWindow );
@@ -936,8 +936,6 @@ PluginDescription XPlugin_Impl::fitDescription( const OUString& rURL )
             }
         }
     }
-
-    int nDescr = -1;
 
     int nPos = rURL.lastIndexOf( (sal_Unicode)'.' );
     OUString aExt = rURL.copy( nPos ).toAsciiLowerCase();
@@ -1060,7 +1058,7 @@ void PluginInputStream::load()
     aUrl.SetSmartProtocol( INET_PROT_FILE );
     aUrl.SetSmartURL(
         String( getStream()->url,
-                strlen( getStream()->url ),
+                ::sal::static_int_cast< USHORT, size_t >( strlen( getStream()->url ) ),
                 RTL_TEXTENCODING_MS_1252
             ) );
     try
