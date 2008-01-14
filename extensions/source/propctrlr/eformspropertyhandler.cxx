@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eformspropertyhandler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:56:35 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:56:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -518,7 +518,7 @@ namespace pcr
             return InteractiveSelectionResult_Cancelled;
 
         PropertyId nPropId( impl_getPropertyId_throw( _rPropertyName ) );
-
+        (void)nPropId;
         OSL_ENSURE( ( PROPERTY_ID_BINDING_NAME == nPropId )
                  || ( PROPERTY_ID_BIND_EXPRESSION == nPropId )
                  || ( PROPERTY_ID_XSD_REQUIRED == nPropId )
