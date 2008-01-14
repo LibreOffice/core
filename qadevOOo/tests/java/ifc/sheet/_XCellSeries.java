@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _XCellSeries.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:44:37 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 package ifc.sheet;
 
+import helper.LoggingThread;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
@@ -41,6 +42,7 @@ import lib.StatusException;
 import com.sun.star.sheet.XCellSeries;
 import com.sun.star.sheet.XSpreadsheet;
 import com.sun.star.uno.UnoRuntime;
+import share.LogWriter;
 
 
 public class _XCellSeries extends MultiMethodTest {
@@ -161,6 +163,9 @@ public class _XCellSeries extends MultiMethodTest {
 
             res &= locres;
 
+            LoggingThread logger = new LoggingThread((LogWriter)log, tParam);
+            logger.start();
+
             log.println(
                     "calling oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_RIGHT, com.sun.star.sheet.FillMode.GROWTH, com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, 2, 16)");
             oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_RIGHT,
@@ -171,6 +176,8 @@ public class _XCellSeries extends MultiMethodTest {
             getting = oSheet.getCellByPosition(0, 4).getValue();
             locres = (getting == 30);
 
+            logger.finish();
+
             if (!locres) {
                 log.println("Operation failed");
             } else {
@@ -178,6 +185,9 @@ public class _XCellSeries extends MultiMethodTest {
             }
 
             res &= locres;
+
+            logger = new LoggingThread((LogWriter)log, tParam);
+            logger.start();
 
             log.println(
                     "calling oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_BOTTOM, com.sun.star.sheet.FillMode.LINEAR, com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, 2, 8)");
@@ -188,6 +198,8 @@ public class _XCellSeries extends MultiMethodTest {
             getting = oSheet.getCellByPosition(4, 0).getValue();
             locres = (getting == 20);
 
+            logger.finish();
+
             if (!locres) {
                 log.println("Operation failed");
             } else {
@@ -195,6 +207,9 @@ public class _XCellSeries extends MultiMethodTest {
             }
 
             res &= locres;
+
+            logger = new LoggingThread((LogWriter)log, tParam);
+            logger.start();
 
             log.println(
                     "calling oObj.fillSeries(com.sun.star.sheet.FillDirection.TO_BOTTOM, com.sun.star.sheet.FillMode.GROWTH, com.sun.star.sheet.FillDateMode.FILL_DATE_DAY, 2, 16)");
@@ -205,6 +220,8 @@ public class _XCellSeries extends MultiMethodTest {
             oSheet.getCellByPosition(4, 0).setFormula("=sum(A1:A4)");
             getting = oSheet.getCellByPosition(4, 0).getValue();
             locres = (getting == 30);
+
+            logger.finish();
 
             if (!locres) {
                 log.println("Operation failed");
@@ -224,7 +241,7 @@ public class _XCellSeries extends MultiMethodTest {
     /**
     * Forces environment recreation.
     */
-    protected void after() {
+    public void after() {
         disposeEnvironment();
     }
 }
