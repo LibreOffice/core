@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AxisWrapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:41:57 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:55:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -557,7 +557,16 @@ void SAL_CALL AxisWrapper::setPropertyValue( const OUString& rPropertyName, cons
     uno::Any aHelpStep;
     if( rPropertyName.equals( C2U( "StepHelp" ) ) )
     {
-        m_aTemporaryHelpStepValue = rValue;
+        bool bLogarithmic = false;
+        Reference< chart2::XAxis > xAxis( this->getAxis() );
+        if( xAxis.is() )
+        {
+            chart2::ScaleData aScaleData( xAxis->getScaleData() );
+            bLogarithmic = AxisHelper::isLogarithmic(aScaleData.Scaling);
+        }
+
+        if( !bLogarithmic )
+            m_aTemporaryHelpStepValue = rValue;
     }
     else if( rPropertyName.equals( C2U( "AutoStepHelp" ) ) )
     {
@@ -571,16 +580,19 @@ void SAL_CALL AxisWrapper::setPropertyValue( const OUString& rPropertyName, cons
         if( xAxis.is() )
         {
             chart2::ScaleData aScaleData( xAxis->getScaleData() );
-            if( aScaleData.IncrementData.SubIncrements.getLength()
-                && aScaleData.IncrementData.SubIncrements[ 0 ].IntervalCount.hasValue() )
+            if( !AxisHelper::isLogarithmic(aScaleData.Scaling) )
             {
-                aHelpStep = this->getPropertyValue( C2U( "StepHelp" ) );
-                bSetFixedHelpStepAfterwards = true;
-            }
-            else if( m_aTemporaryHelpStepValue.hasValue() )
-            {
-                aHelpStep = m_aTemporaryHelpStepValue;
-                bSetFixedHelpStepAfterwards = true;
+                if( aScaleData.IncrementData.SubIncrements.getLength()
+                    && aScaleData.IncrementData.SubIncrements[ 0 ].IntervalCount.hasValue() )
+                {
+                    aHelpStep = this->getPropertyValue( C2U( "StepHelp" ) );
+                    bSetFixedHelpStepAfterwards = true;
+                }
+                else if( m_aTemporaryHelpStepValue.hasValue() )
+                {
+                    aHelpStep = m_aTemporaryHelpStepValue;
+                    bSetFixedHelpStepAfterwards = true;
+                }
             }
         }
     }
