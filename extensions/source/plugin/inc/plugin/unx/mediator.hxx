@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediator.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:54:22 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:52:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ struct MediatorMessage
     void    Rewind() { m_pRun = NULL; }
 };
 
-DECLARE_LIST( MediatorMessageList, MediatorMessage* );
+DECLARE_LIST( MediatorMessageList, MediatorMessage* )
 
 class MediatorListener;
 
@@ -198,6 +198,9 @@ inline void medDebug( int condition, const char* pFormat, ... )
         vfprintf( stderr, pFormat, ap );
         va_end( ap );
     }
+#else
+    (void)condition;
+    (void)pFormat;
 #endif
 }
 
