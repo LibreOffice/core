@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:16:20 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,63 +38,13 @@
 
 #include "salinst.h"
 #include "salprn.h"
+#include "aquaprintview.h"
 #include "salgdi.h"
 #include "saldata.hxx"
 #include "vcl/jobset.h"
 #include "vcl/salptype.hxx"
 #include "vcl/impprn.hxx"
 #include <boost/bind.hpp>
-
-@interface AquaPrintView : NSView
-{
-    ImplQPrinter*       mpQPrinter;
-    AquaSalInfoPrinter* mpInfoPrinter;
-}
--(id)initWithQPrinter: (ImplQPrinter*)pPrinter withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter;
--(MacOSBOOL)knowsPageRange: (NSRangePointer)range;
--(NSRect)rectForPage: (int)page;
--(NSPoint)locationOfPrintRect: (NSRect)aRect;
--(void)drawRect: (NSRect)rect;
-@end
-
-@implementation AquaPrintView
--(id)initWithQPrinter: (ImplQPrinter*)pPrinter withInfoPrinter: (AquaSalInfoPrinter*)pInfoPrinter
-{
-    NSRect aRect = { { 0, 0 }, [pInfoPrinter->getPrintInfo() paperSize] };
-    if( (self = [super initWithFrame: aRect]) != nil )
-    {
-        mpQPrinter = pPrinter;
-        mpInfoPrinter = pInfoPrinter;
-    }
-    return self;
-}
-
--(MacOSBOOL)knowsPageRange: (NSRangePointer)range
-{
-    range->location = 1;
-    range->length = mpQPrinter->GetPrintPageCount();
-    return YES;
-}
-
--(NSRect)rectForPage: (int)page
-{
-    NSRect aRect = { { 0, 0 }, [mpInfoPrinter->getPrintInfo() paperSize] };
-    return aRect;
-}
-
--(NSPoint)locationOfPrintRect: (NSRect)aRect
-{
-    NSPoint aPoint = { 0, 0 };
-    return aPoint;
-}
-
--(void)drawRect: (NSRect)rect
-{
-    NSPoint aPoint = [self locationOfPrintRect: rect];
-    mpQPrinter->PrintNextPage();
-}
-@end
-
 
 // =======================================================================
 
@@ -413,12 +363,12 @@ void AquaSalInfoPrinter::GetPageInfo( const ImplJobSetup*,
                      fYScaling = static_cast<double>(nDPIY)/72.0;
 
         NSSize aPaperSize = [mpPrintInfo paperSize];
-        o_rPageWidth  = double(aPaperSize.width) * fXScaling;
-        o_rPageHeight = double(aPaperSize.height) * fYScaling;
-        o_rPageOffX   = [mpPrintInfo leftMargin] * fXScaling;
-        o_rPageOffY   = [mpPrintInfo topMargin] * fYScaling;
-        o_rOutWidth   = o_rPageWidth - double([mpPrintInfo leftMargin] + [mpPrintInfo rightMargin]) * fXScaling;
-        o_rOutHeight  = o_rPageHeight - double([mpPrintInfo topMargin] + [mpPrintInfo bottomMargin]) * fYScaling;
+        o_rPageWidth  = static_cast<long>( double(aPaperSize.width) * fXScaling );
+        o_rPageHeight = static_cast<long>( double(aPaperSize.height) * fYScaling );
+        o_rPageOffX   = static_cast<long>( [mpPrintInfo leftMargin] * fXScaling );
+        o_rPageOffY   = static_cast<long>( [mpPrintInfo topMargin] * fYScaling );
+        o_rOutWidth   = static_cast<long>( o_rPageWidth - double([mpPrintInfo leftMargin] + [mpPrintInfo rightMargin]) * fXScaling );
+        o_rOutHeight  = static_cast<long>( o_rPageHeight - double([mpPrintInfo topMargin] + [mpPrintInfo bottomMargin]) * fYScaling );
     }
 }
 
