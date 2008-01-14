@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:15:40 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:18:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,54 @@ static bool AquaGetScrollRect( /* TODO: int nScreen, */  ControlPart nPart,
             else
                 rResultRect.Top() += BUTTON_HEIGHT + 1;
             break;
-
+        case PART_THUMB_HORZ:
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+            {
+                rResultRect.Left() += 8;
+                rResultRect.Right() += 6;
+            }
+            else
+            {
+                rResultRect.Left() += 4;
+                rResultRect.Right() += 4;
+            }
+            break;
+        case PART_THUMB_VERT:
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+            {
+                rResultRect.Top() += 8;
+                rResultRect.Bottom() += 8;
+            }
+            else
+            {
+                rResultRect.Top() += 4;
+                rResultRect.Bottom() += 4;
+            }
+            break;
+        case PART_TRACK_HORZ_LEFT:
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+                rResultRect.Right() += 8;
+            else
+                rResultRect.Right() += 4;
+            break;
+        case PART_TRACK_HORZ_RIGHT:
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+                rResultRect.Left() += 6;
+            else
+                rResultRect.Left() += 4;
+            break;
+        case PART_TRACK_VERT_UPPER:
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+                rResultRect.Bottom() += 8;
+            else
+                rResultRect.Bottom() += 4;
+            break;
+        case PART_TRACK_VERT_LOWER:
+            if( GetSalData()->mbIsScrollbarDoubleMax )
+                rResultRect.Top() += 8;
+            else
+                rResultRect.Top() += 4;
+            break;
         default:
             bRetVal = false;
     }
@@ -401,8 +448,27 @@ BOOL AquaSalGraphics::hitTestNativeControl( ControlType nType, ControlPart nPart
         Rectangle aRect;
         bool bValid = AquaGetScrollRect( /* TODO: m_nScreen */ nPart, rControlRegion.GetBoundRect(), aRect );
         rIsInside = bValid ? aRect.IsInside( rPos ) : FALSE;
-
-        return TRUE;
+        if( GetSalData()->mbIsScrollbarDoubleMax )
+        {
+            // in double max mode the actual trough is a little smaller than the track
+            // there is some visual filler that is not sensitive
+            if( bValid && rIsInside )
+            {
+                if( nPart == PART_TRACK_HORZ_AREA )
+                {
+                    // the left 4 pixels are not hit sensitive
+                    if( rPos.X() - aRect.Left() < 4 )
+                        rIsInside = FALSE;
+                }
+                else if( nPart == PART_TRACK_VERT_AREA )
+                {
+                    // the top 4 pixels are not hit sensitive
+                    if( rPos.Y() - aRect.Top() < 4 )
+                        rIsInside = FALSE;
+                }
+            }
+        }
+        return bValid;
     }  //  CTRL_SCROLLBAR
 
     return FALSE;
@@ -638,7 +704,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                     {
                         // translate the origin of the button from the half of the offset
                         // translation value must be an integrer
-                        int delta_y = floor((rc.size.height - max_height) / 2.0);
+                        int delta_y = static_cast<int>(floor((rc.size.height - max_height) / 2.0));
                         rc.origin.y += delta_y + 1;
 
                         // button height must be limited ( height value collected from OSXHIGuidelines )
@@ -737,7 +803,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
             aTrackInfo.kind                 = (rc.size.height > 10) ? kThemeProgressBarLarge : kThemeProgressBarMedium;
             aTrackInfo.bounds               = rc;
             aTrackInfo.min                  = 0;
-            aTrackInfo.max                  = rc.size.width;
+            aTrackInfo.max                  = static_cast<SInt32>(rc.size.width);
             aTrackInfo.value                = nProgressWidth;
             aTrackInfo.reserved             = 0;
             aTrackInfo.bounds.origin.y     -= 2; // FIXME: magic for shadow
@@ -747,7 +813,7 @@ BOOL AquaSalGraphics::drawNativeControl(ControlType nType,
                 aTrackInfo.attributes      |= kThemeTrackRightToLeft;
             aTrackInfo.enableState          = (nState & CTRL_STATE_ENABLED) ? kThemeTrackActive : kThemeTrackInactive;
             aTrackInfo.filler1              = 0;
-            aTrackInfo.trackInfo.progress.phase   = CFAbsoluteTimeGetCurrent()*10.0;
+            aTrackInfo.trackInfo.progress.phase   = static_cast<UInt8>(CFAbsoluteTimeGetCurrent()*10.0);
 
             HIThemeDrawTrack( &aTrackInfo, NULL, mrContext, kHIThemeOrientationNormal );
             bOK = true;
