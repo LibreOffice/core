@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:09:41 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:13:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,8 @@ protected:
     Fixed                                   mnATSUIRotation;
     /// workaround to prevent ATSU overflows for huge font sizes
     float                                   mfFontScale;
+    /// <1.0: font is squeezed, >1.0 font is stretched, else 1.0
+    float                                   mfFontStretch;
     /// allows text to be rendered without antialiasing
     bool                                    mbNonAntialiasedText;
 
@@ -152,6 +154,8 @@ public:
     void                SetPrinterGraphics( CGContextRef, long nRealDPIX, long nRealDPIY, double fFakeScale );
     void                SetVirDevGraphics( CGContextRef xContext, bool bSCreenCompatible );
 
+    void                updateResolution();
+
     bool                IsWindowGraphics()      const   { return mbWindow; }
     bool                IsPrinterGraphics()     const   { return mbPrinter; }
     bool                IsVirDevGraphics()      const   { return mbVirDev; }
@@ -159,7 +163,7 @@ public:
     void                ImplDrawPixel( long nX, long nY, float pColor[] ); // helper to draw single pixels
 
     bool                CheckContext();
-    void                UpdateWindow( NSGraphicsContext* pContext );
+    void                UpdateWindow( NSRect& rRect ); // delivered in NSView coordinates
     void                RefreshRect(float lX, float lY, float lWidth, float lHeight);
 
     void                SetState();
