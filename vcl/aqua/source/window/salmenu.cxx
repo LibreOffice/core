@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salmenu.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:17:04 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:19:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include "saldata.hxx"
 #include "salinst.h"
 #include "salmenu.h"
+#include "salnsmenu.h"
 #include "salframe.h"
 #include "vcl/svids.hrc"
 #include "vcl/cmdevt.hxx"
@@ -554,64 +555,4 @@ AquaSalMenuItem::~AquaSalMenuItem()
 }
 
 // -------------------------------------------------------------------
-
-@implementation SalNSMenu
--(id)initWithMenu: (AquaSalMenu*)pMenu
-{
-    mpMenu = pMenu;
-    return [super initWithTitle: [NSString string]];
-}
-
--(void)menuNeedsUpdate: (NSMenu*)pMenu
-{
-    YIELD_GUARD;
-
-    if( mpMenu )
-    {
-        const AquaSalFrame* pFrame = mpMenu->getFrame();
-        if( pFrame && AquaSalFrame::isAlive( pFrame ) )
-        {
-            SalMenuEvent aMenuEvt;
-            aMenuEvt.mnId   = 0;
-            aMenuEvt.mpMenu = mpMenu->mpVCLMenu;
-            if( aMenuEvt.mpMenu )
-            {
-                pFrame->CallCallback(SALEVENT_MENUACTIVATE, &aMenuEvt);
-                pFrame->CallCallback(SALEVENT_MENUDEACTIVATE, &aMenuEvt);
-            }
-            else
-                DBG_ERROR( "unconnected menu" );
-        }
-    }
-}
-
--(void)setSalMenu: (AquaSalMenu*)pMenu
-{
-    mpMenu = pMenu;
-}
-@end
-
-@implementation SalNSMenuItem
--(id)initWithMenuItem: (AquaSalMenuItem*)pMenuItem
-{
-    mpMenuItem = pMenuItem;
-    id ret = [super initWithTitle: [NSString string] action: nil keyEquivalent: [NSString string]];
-    [ret setAction:@selector(menuItemTriggered:)];
-    [ret setTarget: self];
-    return ret;
-}
--(void)menuItemTriggered: (id)aSender
-{
-    YIELD_GUARD;
-
-    const AquaSalFrame* pFrame = mpMenuItem->mpParentMenu ? mpMenuItem->mpParentMenu->getFrame() : NULL;
-    if( pFrame && AquaSalFrame::isAlive( pFrame ) && ! pFrame->GetWindow()->IsInModalMode() )
-    {
-        SalMenuEvent aMenuEvt;
-        aMenuEvt.mnId   = mpMenuItem->mnId;
-        aMenuEvt.mpMenu = mpMenuItem->mpVCLMenu;
-        pFrame->CallCallback(SALEVENT_MENUCOMMAND, &aMenuEvt);
-    }
-}
-@end
 
