@@ -1,5 +1,5 @@
-*** misc/jcommon-serializer/ant/build.properties	Mon Dec 11 13:40:27 2006
---- misc/build/jcommon-serializer/ant/build.properties	Fri Jul 27 09:04:38 2007
+*** misc/jcommon-serializer/build.properties	Mon Dec 11 13:40:27 2006
+--- misc/build/jcommon-serializer/build.properties	Fri Jul 27 09:04:38 2007
 ***************
 *** 13,20 ****
   
