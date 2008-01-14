@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sysplug.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:53:14 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:52:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,6 @@
 #include <postmac.h>
 #undef uint32
 #include <npsdk/npapi.h>
-
-#define GENERATINGCFM 0
 #include <npsdk/npupp.h>
 
 #include <plugin/plcom.hxx>
