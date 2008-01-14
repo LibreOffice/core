@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msoleexp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:35:44 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:21:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,22 +260,30 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
 
     if( pExpFilter )                        // use this filter for the export
     {
-        if ( rObj->getCurrentState() == embed::EmbedStates::LOADED )
-            rObj->changeState( embed::EmbedStates::RUNNING );
-        //TODO/LATER: is stream instead of outputstream a better choice?!
-        //TODO/LATER: a "StoreTo" method at embedded object would be nice
-        uno::Sequence < beans::PropertyValue > aSeq(2);
-        SvStream* pStream = new SvMemoryStream;
-        aSeq[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
-        ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *pStream );
-        aSeq[0].Value <<= xOut;
-        aSeq[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
-        aSeq[1].Value <<= ::rtl::OUString( pExpFilter->GetName() );
-        uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
-        xStor->storeToURL( ::rtl::OUString::createFromAscii( "private:stream" ), aSeq );
-        SotStorageRef xOLEStor = new SotStorage( pStream, TRUE );
-        xOLEStor->CopyTo( &rDestStg );
-        rDestStg.Commit();
+        try
+        {
+            if ( rObj->getCurrentState() == embed::EmbedStates::LOADED )
+                rObj->changeState( embed::EmbedStates::RUNNING );
+            //TODO/LATER: is stream instead of outputstream a better choice?!
+            //TODO/LATER: a "StoreTo" method at embedded object would be nice
+            uno::Sequence < beans::PropertyValue > aSeq(2);
+            SvStream* pStream = new SvMemoryStream;
+            aSeq[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+            ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *pStream );
+            aSeq[0].Value <<= xOut;
+            aSeq[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+            aSeq[1].Value <<= ::rtl::OUString( pExpFilter->GetName() );
+            uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
+            xStor->storeToURL( ::rtl::OUString::createFromAscii( "private:stream" ), aSeq );
+            SotStorageRef xOLEStor = new SotStorage( pStream, TRUE );
+            xOLEStor->CopyTo( &rDestStg );
+            rDestStg.Commit();
+        }
+        catch( uno::Exception& )
+        {
+            // TODO/LATER: Error handling
+            DBG_ERROR( "The object could not be exported!" );
+        }
     }
     else if( aOwnGlobalName != SvGlobalName() )
     {
@@ -353,16 +361,24 @@ void SvxMSExportOLEObjects::ExportOLEObject( svt::EmbeddedObjectRef& rObj, SvSto
                                                 STREAM_STD_READWRITE );
                 if( !xEmbStm->GetError() )
                 {
-                    if ( rObj->getCurrentState() == embed::EmbedStates::LOADED )
-                        rObj->changeState( embed::EmbedStates::RUNNING );
-                    //TODO/LATER: is stream instead of outputstream a better choice?!
-                    //TODO/LATER: a "StoreTo" method at embedded object would be nice
-                    uno::Sequence < beans::PropertyValue > aSeq(1);
-                    aSeq[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
-                    ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *xEmbStm );
-                    aSeq[0].Value <<= xOut;
-                    uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
-                    xStor->storeToURL( ::rtl::OUString::createFromAscii( "private:stream" ), aSeq );
+                    try
+                    {
+                        if ( rObj->getCurrentState() == embed::EmbedStates::LOADED )
+                            rObj->changeState( embed::EmbedStates::RUNNING );
+                        //TODO/LATER: is stream instead of outputstream a better choice?!
+                        //TODO/LATER: a "StoreTo" method at embedded object would be nice
+                        uno::Sequence < beans::PropertyValue > aSeq(1);
+                        aSeq[0].Name = ::rtl::OUString::createFromAscii( "OutputStream" );
+                        ::uno::Reference < io::XOutputStream > xOut = new ::utl::OOutputStreamWrapper( *xEmbStm );
+                        aSeq[0].Value <<= xOut;
+                        uno::Reference < frame::XStorable > xStor( rObj->getComponent(), uno::UNO_QUERY );
+                        xStor->storeToURL( ::rtl::OUString::createFromAscii( "private:stream" ), aSeq );
+                    }
+                    catch( uno::Exception& )
+                    {
+                        // TODO/LATER: Error handling
+                        DBG_ERROR( "The object could not be exported!" );
+                    }
                 }
             }
         }
