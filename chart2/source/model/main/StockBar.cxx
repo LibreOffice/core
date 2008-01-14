@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StockBar.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-18 15:03:01 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:02:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ namespace chart
 StockBar::StockBar( bool bRisingCourse ) :
         ::property::OPropertySet( m_aMutex ),
     m_bRisingCourse( bRisingCourse ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {
     if( ! m_bRisingCourse )
     {
@@ -143,7 +143,7 @@ StockBar::StockBar( const StockBar & rOther ) :
         impl::StockBar_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
     m_bRisingCourse( rOther.m_bRisingCourse ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 StockBar::~StockBar()
