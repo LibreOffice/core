@@ -4,9 +4,9 @@
  *
  *  $RCSfile: browserline.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:52:21 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:55:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,12 +89,12 @@ namespace pcr
             ,m_pControlWindow( NULL )
             ,m_pBrowseButton(NULL)
             ,m_pAdditionalBrowseButton( NULL )
+            ,m_pClickListener( NULL )
+            ,m_pTheParent(pParent)
+            ,m_nNameWidth(0)
+            ,m_nEnableFlags( 0xFFFF )
             ,m_bIndentTitle( false )
             ,m_bReadOnly( false )
-            ,m_nNameWidth(0)
-            ,m_pTheParent(pParent)
-            ,m_pClickListener( NULL )
-            ,m_nEnableFlags( 0xFFFF )
     {
         DBG_CTOR(OBrowserLine,NULL);
         m_aFtTitle.Show();
@@ -593,16 +593,9 @@ namespace pcr
                 Reference< XPropertyControlContext > xContext( m_xControl->getControlContext(), UNO_QUERY_THROW );
                 xContext->focusGained( m_xControl );
             }
-            catch( const Exception& e )
+            catch( const Exception& )
             {
-            #if OSL_DEBUG_LEVEL > 0
-                ::rtl::OString sMessage( "OBrowserLine, OnButtonFocus: caught an exception!\n" );
-                sMessage += "message:\n";
-                sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), osl_getThreadTextEncoding() );
-                OSL_ENSURE( false, sMessage );
-            #else
-                e; // make compiler happy
-            #endif
+                DBG_UNHANDLED_EXCEPTION();
             }
         }
         return 0;
