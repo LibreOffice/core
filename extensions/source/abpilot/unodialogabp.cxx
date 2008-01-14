@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodialogabp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:54:08 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:34:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ namespace abp
     }
 
     //--------------------------------------------------------------------------
-    Any SAL_CALL OABSPilotUno::execute( const Sequence< NamedValue >& lArgs ) throw (IllegalArgumentException, Exception, RuntimeException)
+    Any SAL_CALL OABSPilotUno::execute( const Sequence< NamedValue >& /*lArgs*/ ) throw (IllegalArgumentException, Exception, RuntimeException)
     {
         // not interested in the context, not interested in the args
         // -> call the execute method of the XExecutableDialog
