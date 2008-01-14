@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:51:57 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:05:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1291,6 +1291,18 @@ Size ListBox::CalcMinimumSize() const
 
     aSz = CalcWindowSize( aSz );
     return aSz;
+}
+
+// -----------------------------------------------------------------------
+
+Size ListBox::GetOptimalSize(WindowSizeType eType) const
+{
+    switch (eType) {
+    case WINDOWSIZE_MINIMUM:
+        return CalcMinimumSize();
+    default:
+        return Control::GetOptimalSize( eType );
+    }
 }
 
 // -----------------------------------------------------------------------
