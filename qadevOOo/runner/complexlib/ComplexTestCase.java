@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComplexTestCase.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:08:20 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:15:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 
 package complexlib;
 
-import java.lang.Class;
 import java.lang.reflect.Method;
 import share.DescEntry;
 import lib.TestParameters;
@@ -49,16 +48,21 @@ import java.io.PrintWriter;
  * Base class for all complex tests.
  */
 public abstract class ComplexTestCase implements ComplexTest {
+
     /** The test parameters **/
-    static protected TestParameters param = null;
+    protected static TestParameters param = null;
     /** Log writer **/
-    static protected LogWriter log = null;
+    protected static LogWriter log = null;
     /** Description entry **/
     protected DescEntry subEntry = null;
     /** State of the current test method **/
     protected boolean state = true;
     /** The message if the test did fail **/
     protected String message = null;
+    /**
+     * The method name which will be written into f.e. the data base
+     **/
+    protected String mTestMethodName = null;
     /** Maximal time one method is allowed to execute
      * Can be set with parameter 'ThreadTimeOut'
      **/
@@ -72,7 +76,7 @@ public abstract class ComplexTestCase implements ComplexTest {
      * Call test. It is expected, that an environment is
      * given to this test.
      *
-     * @param method The name of the test method that should be called.
+     * @param entry The name of the test method that should be called.
      * @param environment The environment for the test.
      */
     public void executeMethods(DescEntry entry, TestParameters environment) {
@@ -82,43 +86,39 @@ public abstract class ComplexTestCase implements ComplexTest {
         log = entry.Logger;
 
         mThreadTimeOut = param.getInt("ThreadTimeOut");
-        if (mThreadTimeOut == 0) mThreadTimeOut = 300000;
-
+        if (mThreadTimeOut == 0) {
+            mThreadTimeOut = 300000;
+        }
         // start with the before() method
         boolean beforeWorked = true;
         try {
-            Method before = this.getClass().getMethod("before",new Class[]{});
+            Method before = this.getClass().getMethod("before", new Class[]{});
             before.invoke(this, new Object[]{});
-        }
-        catch(java.lang.NoSuchMethodException e) {
+        } catch (java.lang.NoSuchMethodException e) {
             // simply ignore
-        }
-        catch(java.lang.IllegalAccessException e) {
-            log.println("Cannot access the 'before()' method, although it" +
-                                            " is there. Is this ok?");
-        }
-        catch(java.lang.reflect.InvocationTargetException e) {
+        } catch (java.lang.IllegalAccessException e) {
+            log.println("Cannot access the 'before()' method, although it" + " is there. Is this ok?");
+        } catch (java.lang.reflect.InvocationTargetException e) {
             beforeWorked = false;
             Throwable t = e.getTargetException();
             if (!(t instanceof RuntimeException) || state) {
                 log.println(t.toString());
-                if ( message == null ) {
+                if (message == null) {
                     message = "Exception in before() method.\n\r" + t.getMessage();
                 }
                 state = false;
-                t.printStackTrace((PrintWriter)log);
+                t.printStackTrace((PrintWriter) log);
             }
         }
 
 
         //executeMethodTests
-        for (int i=0; i<entry.SubEntries.length; i++) {
+        for (int i = 0; i < entry.SubEntries.length; i++) {
             subEntry = entry.SubEntries[i];
             if (beforeWorked) {
                 state = true;
                 message = "";
-            }
-            else  {
+            } else {
                 // set all test methods on failed, if 'before()' did not work.
                 subEntry.State = message;
                 subEntry.hasErrorMsg = true;
@@ -127,82 +127,79 @@ public abstract class ComplexTestCase implements ComplexTest {
             }
             Method testMethod = null;
             try {
-                 testMethod = this.getClass().getMethod(
-                                        subEntry.entryName, new Class[]{});
-                 MethodThread th = new MethodThread(testMethod, this,
-                                                    (java.io.PrintWriter)log);
-                 log.println("Starting " + testMethod.getName());
-                 th.start();
+                String entryName = subEntry.entryName;
+                Object[] parameter = null;
 
-                 try {
-                     // some tests are very dynamic in its exceution time so that
-                     // a threadTimeOut fials. In this cases the logging mechanisim
-                     // is a usefull way to detect that a office respective a test
-                     // is running and not death.
-                     // But way ThreadTimeOut?
-                     // There exeitsts a complex test which uses no office. Therefore
-                     // a logging mechanisim to detect a stalled test.
+                if (entryName.indexOf("(") != -1) {
+                    String sParameter = (entryName.substring(entryName.indexOf("(") +1 , entryName.indexOf(")")));
+                    mTestMethodName = entryName;
+                    parameter = new String[] {sParameter};
+                    entryName = entryName.substring(0, entryName.indexOf("("));
+                    testMethod = this.getClass().getMethod(entryName, new Class[]{String.class });
+                } else {
+                    testMethod = this.getClass().getMethod(entryName, new Class[]{});
+                }
 
-                     int lastPing = -1;
-                     int newPing = 0;
+                MethodThread th = new MethodThread(testMethod, this, parameter, (java.io.PrintWriter) log);
+                log.println("Starting " + mTestMethodName);
+                th.start();
 
-                     int sleepingStep = 1000;
-                     int factor = 0;
+                try {
+                    // some tests are very dynamic in its exceution time so that
+                    // a threadTimeOut fials. In this cases the logging mechanisim
+                    // is a usefull way to detect that a office respective a test
+                    // is running and not death.
+                    // But way ThreadTimeOut?
+                    // There exeitsts a complex test which uses no office. Therefore
+                    // a logging mechanisim to detect a stalled test.
+                    int lastPing = -1;
+                    int newPing = 0;
 
-                     while(
-                                th.isAlive() &&
-                                (
-                                    lastPing != newPing ||
-                                    factor*sleepingStep<mThreadTimeOut
-                                )
-                           )
-                     {
+                    int sleepingStep = 1000;
+                    int factor = 0;
+
+                    while (th.isAlive() && (lastPing != newPing || factor * sleepingStep < mThreadTimeOut)) {
                         Thread.sleep(sleepingStep);
                         factor++;
                         // if a test starts the office itself it the watcher is a
                         // new one.
-                        share.Watcher ow = (share.Watcher)
-                                                param.get("Watcher");
+                        share.Watcher ow = (share.Watcher) param.get("Watcher");
                         if (ow != null) {
                             lastPing = newPing;
                             newPing = ow.getPing();
                             //System.out.println("lastPing: '" + lastPing + "' newPing '" + newPing + "'");
                             factor = 0;
                         }
-                     }
-
-                 }
-                 catch(InterruptedException e) {}
-                 if (th.isAlive()) {
-                    log.println("Destroy " + testMethod.getName());
+                    }
+                } catch (InterruptedException e) {
+                }
+                if (th.isAlive()) {
+                    log.println("Destroy " + mTestMethodName);
                     th.destroy();
-                    subEntry.State="Test did sleep for " +
-                                        (mThreadTimeOut / 1000) +
-                                        " seconds and has been killed!";
+                    subEntry.State = "Test did sleep for " + (mThreadTimeOut / 1000) + " seconds and has been killed!";
                     subEntry.hasErrorMsg = true;
                     subEntry.ErrorMsg = subEntry.State;
                     continue;
-                 } else {
-                     log.println("Finished " + testMethod.getName());
-                     if (th.hasErrorMessage()) {
-                        subEntry.State=th.getErrorMessage();
+                } else {
+                    log.println("Finished " + mTestMethodName);
+                    if (th.hasErrorMessage()) {
+                        subEntry.State = th.getErrorMessage();
                         subEntry.hasErrorMsg = true;
                         subEntry.ErrorMsg = subEntry.State;
                         continue;
-                     }
-                 }
-            }
-            catch(java.lang.Exception e) {
+                    }
+                }
+            } catch (java.lang.Exception e) {
                 log.println(e.getClass().getName());
                 String msg = e.getMessage();
                 log.println("Message: " + msg);
-                e.printStackTrace((PrintWriter)log);
-                subEntry.State="SKIPPED.FAILED";
+                e.printStackTrace((PrintWriter) log);
+                subEntry.State = "SKIPPED.FAILED";
                 subEntry.hasErrorMsg = true;
-                subEntry.ErrorMsg = (msg == null?"":msg);
+                subEntry.ErrorMsg = (msg == null ? "" : msg);
                 continue;
             }
-            subEntry.State = (state?"PASSED.OK":message);
+            subEntry.State = (state ? "PASSED.OK" : message);
             subEntry.hasErrorMsg = !state;
             subEntry.ErrorMsg = message;
         }
@@ -212,25 +209,21 @@ public abstract class ComplexTestCase implements ComplexTest {
             try {
                 Method after = this.getClass().getMethod("after", new Class[]{});
                 after.invoke(this, new Object[]{});
-            }
-            catch(java.lang.NoSuchMethodException e) {
+            } catch (java.lang.NoSuchMethodException e) {
                 // simply ignore
-            }
-            catch(java.lang.IllegalAccessException e) {
+            } catch (java.lang.IllegalAccessException e) {
                 // simply ignore
-            }
-            catch(java.lang.reflect.InvocationTargetException e) {
+            } catch (java.lang.reflect.InvocationTargetException e) {
                 Throwable t = e.getTargetException();
                 if (!(t instanceof StatusException)) {
                     log.println(t.toString());
-                    if ( message == null ) {
+                    if (message == null) {
                         message = "Exception in after() method.\n\r" + t.getMessage();
-                    }
-                    else  {
-                        message += "Exception in 'after()' method.\n\r" + t.getMessage();
+                    } else {
+                        message += "Exception in \'after()\' method.\n\r" + t.getMessage();
                     }
                     log.println("Message: " + message);
-                    t.printStackTrace((PrintWriter)log);
+                    t.printStackTrace((PrintWriter) log);
                 }
             }
         }
@@ -333,13 +326,10 @@ public abstract class ComplexTestCase implements ComplexTest {
         log.println(msg);
     }
 
-
     public class AssureException extends RuntimeException {
+
         public AssureException(String msg) {
             super(msg);
         }
-
     }
 }
-
-
