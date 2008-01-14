@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 13:14:44 $
+#   last change: $Author: ihi $ $Date: 2008-01-14 15:23:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,12 +43,11 @@ nodep=true
 .INCLUDE: settings.mk
 
 #----- compile .java files -----------------------------------------
-
 JARFILES        = ridl.jar unoil.jar jurt.jar juh.jar jut.jar java_uno.jar
 .IF "$(SYSTEM_JFREEREPORT)" == "YES"
-XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(JCOMMON_JAR)$(PATH_SEPERATOR)$(LIBXML_JAR)$(PATH_SEPERATOR)$(JFREEREPORT_JAR)$(PATH_SEPERATOR)$(LIBLOADER_JAR)$(PATH_SEPERATOR)$(SAC_JAR)$(PATH_SEPERATOR)$(LIBLAYOUT_JAR)$(PATH_SEPERATOR)$(JCOMMON_SERIALIZER_JAR)$(PATH_SEPERATOR)$(LIBFONTS_JAR)$(PATH_SEPERATOR)$(LIBFORMULA_JAR)
+XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(JCOMMON_JAR)$(PATH_SEPERATOR)$(LIBXML_JAR)$(PATH_SEPERATOR)$(JFREEREPORT_JAR)$(PATH_SEPERATOR)$(LIBLOADER_JAR)$(PATH_SEPERATOR)$(SAC_JAR)$(PATH_SEPERATOR)$(LIBLAYOUT_JAR)$(PATH_SEPERATOR)$(JCOMMON_SERIALIZER_JAR)$(PATH_SEPERATOR)$(LIBFONTS_JAR)$(PATH_SEPERATOR)$(LIBFORMULA_JAR)$(PATH_SEPERATOR)librepository-0.1.4.jar
 .ELSE
-JARFILES += jcommon-1.0.10.jar libxml-0.9.5.jar jfreereport-0.9.0-05.jar libloader-0.3.4.jar sac.jar liblayout-0.2.6.jar jcommon-serializer-0.1.0.jar libfonts-0.2.6.jar libformula-0.1.8.jar
+JARFILES += flute-1.3-jfree-20061107.jar jcommon-1.0.10.jar	jcommon-serializer-0.2.0.jar libfonts-0.3.3.jar libformula-0.1.14.jar liblayout-0.2.8.jar libloader-0.3.6.jar librepository-0.1.4.jar libxml-0.9.9.jar pentaho-reporting-flow-engine-0.9.2.jar sac.jar
 .ENDIF
 
 JAVAFILES       := $(shell @$(FIND) . -name "*.java")
