@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jscriptclasses.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:03:39 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:46:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,24 +50,24 @@ JScriptValue::~JScriptValue()
 
 
 // JScriptValue, IDispatch --------------------------------------------
-STDMETHODIMP JScriptValue::GetTypeInfoCount(UINT *pctinfo)
+STDMETHODIMP JScriptValue::GetTypeInfoCount(UINT* /*pctinfo*/)
 {
     return E_NOTIMPL;
 }
 
 // JScriptValue, IDispatch --------------------------------------------
-STDMETHODIMP JScriptValue::GetTypeInfo( UINT iTInfo,
-                                           LCID lcid,
-                                           ITypeInfo **ppTInfo)
+STDMETHODIMP JScriptValue::GetTypeInfo( UINT /*iTInfo*/,
+                                           LCID /*lcid*/,
+                                           ITypeInfo** /*ppTInfo*/)
 {
     return E_NOTIMPL;
 }
 
 // JScriptValue, IDispatch --------------------------------------------
-STDMETHODIMP JScriptValue::GetIDsOfNames( REFIID riid,
+STDMETHODIMP JScriptValue::GetIDsOfNames( REFIID /*riid*/,
                                              LPOLESTR *rgszNames,
-                                             UINT cNames,
-                                             LCID lcid,
+                                             UINT /*cNames*/,
+                                             LCID /*lcid*/,
                                              DISPID *rgDispId)
 {
     if( !rgDispId)
@@ -94,13 +94,13 @@ STDMETHODIMP JScriptValue::GetIDsOfNames( REFIID riid,
 
 // JScriptValue, IDispatch --------------------------------------------
 STDMETHODIMP JScriptValue::Invoke( DISPID dispIdMember,
-                         REFIID riid,
-                         LCID lcid,
+                         REFIID /*riid*/,
+                         LCID /*lcid*/,
                          WORD wFlags,
                          DISPPARAMS *pDispParams,
                          VARIANT *pVarResult,
-                         EXCEPINFO *pExcepInfo,
-                         UINT *puArgErr)
+                         EXCEPINFO* /*pExcepInfo*/,
+                         UINT* /*puArgErr*/)
 {
     if( pDispParams->cNamedArgs)
         return DISP_E_NONAMEDARGS;
@@ -240,24 +240,24 @@ JScriptOutParam::~JScriptOutParam()
 
 
 // JScriptOutParam, IDispatch --------------------------------------------
-STDMETHODIMP JScriptOutParam::GetTypeInfoCount(UINT *pctinfo)
+STDMETHODIMP JScriptOutParam::GetTypeInfoCount(UINT* /*pctinfo*/)
 {
     return E_NOTIMPL;
 }
 
 // JScriptOutParam, IDispatch --------------------------------------------
-STDMETHODIMP JScriptOutParam::GetTypeInfo( UINT iTInfo,
-                                           LCID lcid,
-                                           ITypeInfo **ppTInfo)
+STDMETHODIMP JScriptOutParam::GetTypeInfo( UINT /*iTInfo*/,
+                                           LCID /*lcid*/,
+                                           ITypeInfo** /*ppTInfo*/)
 {
     return E_NOTIMPL;
 }
 
 // JScriptOutParam, IDispatch --------------------------------------------
-STDMETHODIMP JScriptOutParam::GetIDsOfNames( REFIID riid,
+STDMETHODIMP JScriptOutParam::GetIDsOfNames( REFIID /*riid*/,
                                              LPOLESTR *rgszNames,
-                                             UINT cNames,
-                                             LCID lcid,
+                                             UINT /*cNames*/,
+                                             LCID /*lcid*/,
                                              DISPID *rgDispId)
 {
     if( !rgDispId)
@@ -278,13 +278,13 @@ STDMETHODIMP JScriptOutParam::GetIDsOfNames( REFIID riid,
 
 // JScriptOutParam, IDispatch --------------------------------------------
 STDMETHODIMP JScriptOutParam::Invoke( DISPID dispIdMember,
-                         REFIID riid,
-                         LCID lcid,
+                         REFIID /*riid*/,
+                         LCID /*lcid*/,
                          WORD wFlags,
                          DISPPARAMS *pDispParams,
                          VARIANT *pVarResult,
-                         EXCEPINFO *pExcepInfo,
-                         UINT *puArgErr)
+                         EXCEPINFO* /*pExcepInfo*/,
+                         UINT* /*puArgErr*/)
 {
     HRESULT ret= S_OK;
     switch( dispIdMember)
