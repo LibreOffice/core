@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:49:10 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 16:15:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #include "salprn.h"
 #include "salogl.h"
 #include "saltimer.h"
+#include "vclnsapp.h"
 
 #include "premac.h"
 #include <ApplicationServices/ApplicationServices.h>
@@ -75,8 +76,7 @@ static bool bLeftMain = false;
 
 // the AppEventList must be available before any SalData/SalInst/etc. objects are ready
 typedef std::list<const ApplicationEvent*> AppEventList;
-static AppEventList aAppEventList;
-
+AppEventList AquaSalInstance::aAppEventList;
 
 NSMenu* AquaSalInstance::GetDynamicDockMenu()
 {
@@ -85,153 +85,30 @@ NSMenu* AquaSalInstance::GetDynamicDockMenu()
     return pDockMenu;
 }
 
-@interface CocoaThreadEnabler : NSObject
-{
-}
--(void)enableCocoaThreads:(id)param;
-@end
-
-@implementation CocoaThreadEnabler
--(void)enableCocoaThreads:(id)param
-{
-    // do nothing, this is just to start an NSThread and therefore put
-    // Cocoa into multithread mode
-}
-@end
-
-// our very own application
-@interface VCL_NSApplication : NSApplication
-{
-}
--(void)sendEvent:(NSEvent*)pEvent;
--(NSMenu*)applicationDockMenu:(NSApplication *)sender;
--(MacOSBOOL)application: (NSApplication*) app openFile: (NSString*)file;
--(void)application: (NSApplication*) app openFiles: (NSArray*)files;
--(MacOSBOOL)application: (NSApplication*) app printFile: (NSString*)file;
--(NSApplicationPrintReply)application: (NSApplication *) app printFiles:(NSArray *)files withSettings: (NSDictionary *)printSettings showPrintPanels:(BOOL)bShowPrintPanels;
--(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app;
-@end
-
-@implementation VCL_NSApplication
--(void)sendEvent:(NSEvent*)pEvent
-{
-    NSEventType eType = [pEvent type];
-    if( eType == NSApplicationDefined )
-        GetSalData()->mpFirstInstance->handleAppDefinedEvent( pEvent );
-    else if( eType == NSKeyDown && ([pEvent modifierFlags] & NSCommandKeyMask) != 0 )
-    {
-        NSWindow* pKeyWin = [NSApp keyWindow];
-        if( pKeyWin && [pKeyWin isKindOfClass: [SalFrameWindow class]] )
-        {
-            AquaSalFrame* pFrame = [(SalFrameWindow*)pKeyWin getSalFrame];
-            if( pFrame->mpParent && pFrame->mpParent->GetWindow()->IsInModalMode() )
-            {
-                // dispatch to view directly to avoid the key event being consumed by the menubar
-                [[pKeyWin contentView] keyDown: pEvent];
-                return;
-            }
-        }
-
-    }
-    [super sendEvent: pEvent];
-}
-
--(NSMenu*)applicationDockMenu:(NSApplication *)sender
-{
-    return AquaSalInstance::GetDynamicDockMenu();
-}
--(MacOSBOOL)application: (NSApplication*)app openFile: (NSString*)pFile
-{
-    const rtl::OUString aFile( GetOUString( pFile ) );
-    const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
-                                                APPEVENT_OPEN_STRING, aFile );
-    aAppEventList.push_back( pAppEvent );
-    return YES;
-}
-
--(void)application: (NSApplication*) app openFiles: (NSArray*)files
-{
-    rtl::OUStringBuffer aFileList( 256 );
-
-    NSEnumerator* it = [files objectEnumerator];
-    NSString* pFile = nil;
-
-    while( (pFile = [it nextObject]) != nil )
-    {
-        if( aFileList.getLength() > 0 )
-            aFileList.append( sal_Unicode( APPEVENT_PARAM_DELIMITER ) );
-        aFileList.append( GetOUString( pFile ) );
-    }
-    // we have no back channel here, we have to assume success, in which case
-    // replyToOpenOrPrint does not need to be called according to documentation
-    // [app replyToOpenOrPrint: NSApplicationDelegateReplySuccess];
-    const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
-                                                APPEVENT_OPEN_STRING, aFileList.makeStringAndClear() );
-    aAppEventList.push_back( pAppEvent );
-}
-
--(MacOSBOOL)application: (NSApplication*)app printFile: (NSString*)pFile
-{
-    const rtl::OUString aFile( GetOUString( pFile ) );
-    const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
-                                                APPEVENT_PRINT_STRING, aFile );
-    aAppEventList.push_back( pAppEvent );
-    return YES;
-}
--(NSApplicationPrintReply)application: (NSApplication *) app printFiles:(NSArray *)files withSettings: (NSDictionary *)printSettings showPrintPanels:(BOOL)bShowPrintPanels
-{
-    // currently ignores print settings an bShowPrintPanels
-    rtl::OUStringBuffer aFileList( 256 );
-
-    NSEnumerator* it = [files objectEnumerator];
-    NSString* pFile = nil;
-
-    while( (pFile = [it nextObject]) != nil )
-    {
-        if( aFileList.getLength() > 0 )
-            aFileList.append( sal_Unicode( APPEVENT_PARAM_DELIMITER ) );
-        aFileList.append( GetOUString( pFile ) );
-    }
-    const ApplicationEvent* pAppEvent = new ApplicationEvent( String(), ApplicationAddress(),
-                                                APPEVENT_PRINT_STRING, aFileList.makeStringAndClear() );
-    aAppEventList.push_back( pAppEvent );
-    // we have no back channel here, we have to assume success
-    // correct handling would be NSPrintingReplyLater and then send [app replyToOpenOrPrint]
-    return NSPrintingSuccess;
-}
-
--(NSApplicationTerminateReply)applicationShouldTerminate: (NSApplication *) app
-{
-    const SalData* pSalData = GetSalData();
-    if( !pSalData->maFrames.empty() )
-    {
-        // we forward the signal; alas we have no answer
-        // we cancel the request; OOo will decide whether is shuts down or not
-        pSalData->maFrames.front()->CallCallback( SALEVENT_SHUTDOWN, NULL );
-        return NSTerminateCancel;
-    }
-    else
-        // no frame left to talk to -> we really should terminate
-        return NSTerminateNow;
-}
-@end
 
 // initialize the cocoa VCL_NSApplication object
 // returns an NSAutoreleasePool that must be released when the event loop begins
-static NSAutoreleasePool* initNSApp()
+static void initNSApp()
 {
     // create our cocoa NSApplication
     [VCL_NSApplication sharedApplication];
 
+    SalData::ensureThreadAutoreleasePool();
+
     // put cocoa into multithreaded mode
     [NSThread detachNewThreadSelector:@selector(enableCocoaThreads:) toTarget:[[CocoaThreadEnabler alloc] init] withObject:nil];
-
-    NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
     // activate our delegate methods
     [NSApp setDelegate: NSApp];
 
-    return pool;
+    [[NSNotificationCenter defaultCenter] addObserver: NSApp
+                                          selector: @selector(systemColorsChanged:)
+                                          name: NSSystemColorsDidChangeNotification
+                                          object: nil ];
+    [[NSNotificationCenter defaultCenter] addObserver: NSApp
+                                          selector: @selector(screenParametersChanged:)
+                                          name: NSApplicationDidChangeScreenParametersNotification
+                                          object: nil ];
 }
 
 BOOL ImplSVMainHook( BOOL * pbInit )
@@ -239,7 +116,7 @@ BOOL ImplSVMainHook( BOOL * pbInit )
     gpbInit = pbInit;
 
     bNoSVMain = false;
-    NSAutoreleasePool* pool = initNSApp();
+    initNSApp();
 
     NSPoint aPt = { 0, 0 };
     NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
@@ -254,7 +131,6 @@ BOOL ImplSVMainHook( BOOL * pbInit )
     if( pEvent )
     {
         [NSApp postEvent: pEvent atStart: NO];
-        [pool release];
 
         rtl::OUString aExeURL, aExe;
         osl_getExecutableFile( &aExeURL.pData );
@@ -266,7 +142,6 @@ BOOL ImplSVMainHook( BOOL * pbInit )
     }
     else
     {
-        [pool release];
         DBG_ERROR( "NSApplication initialization could not be done" );
     }
 
@@ -477,10 +352,7 @@ SalInstance* CreateSalInstance()
     // this is the case for not using SVMain
     // not so good
     if( bNoSVMain )
-    {
-        NSAutoreleasePool* pool = initNSApp();
-        [pool release];
-    }
+        initNSApp();
 
     SalData* pSalData = GetSalData();
     DBG_ASSERT( pSalData->mpFirstInstance == NULL, "more than one instance created" );
@@ -489,7 +361,7 @@ SalInstance* CreateSalInstance()
     // init instance (only one instance in this version !!!)
     pSalData->mpFirstInstance = pInst;
     // this one is for outside AquaSalInstance::Yield
-    pInst->mpAutoreleasePool = [[NSAutoreleasePool alloc] init];
+    SalData::ensureThreadAutoreleasePool();
     // no focus rects on NWF aqua
     ImplGetSVData()->maNWFData.mbNoFocusRects = true;
     ImplGetSVData()->maNWFData.mbNoBoldTabFocus = true;
@@ -517,8 +389,7 @@ AquaSalInstance::AquaSalInstance()
     mpSalYieldMutex = new SalYieldMutex;
     mpSalYieldMutex->acquire();
     maMainThread = vos::OThread::getCurrentIdentifier();
-    mnMainThreadLevel = 0;
-    mpAutoreleasePool = nil;
+    mbWaitingYield = false;
     maUserEventListMutex = osl_createMutex();
 }
 
@@ -533,25 +404,37 @@ AquaSalInstance::~AquaSalInstance()
 
 // -----------------------------------------------------------------------
 
+void AquaSalInstance::wakeupYield()
+{
+    // wakeup :Yield
+    if( mbWaitingYield )
+    {
+        SalData::ensureThreadAutoreleasePool();
+        NSPoint aPt = { 0, 0 };
+        NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
+                                   location: aPt
+                                   modifierFlags: 0
+                                   timestamp: 0
+                                   windowNumber: 0
+                                   context: nil
+                                   subtype: AquaSalInstance::YieldWakeupEvent
+                                   data1: 0
+                                   data2: 0 ];
+        if( pEvent )
+            [NSApp postEvent: pEvent atStart: NO];
+    }
+}
+
+// -----------------------------------------------------------------------
+
 void AquaSalInstance::PostUserEvent( AquaSalFrame* pFrame, USHORT nType, void* pData )
 {
     osl_acquireMutex( maUserEventListMutex );
     maUserEvents.push_back( SalUserEvent( pFrame, pData, nType ) );
     osl_releaseMutex( maUserEventListMutex );
-    // wakeup :Yield
-    NSPoint aPt = { 0, 0 };
-    NSEvent* pEvent = [NSEvent otherEventWithType: NSApplicationDefined
-                               location: aPt
-                               modifierFlags: 0
-                               timestamp: 0
-                               windowNumber: 0
-                               context: nil
-                               subtype: AquaSalInstance::YieldWakeupEvent
-                               data1: 0
-                               data2: 0 ];
-    if( pEvent )
-        [NSApp postEvent: pEvent atStart: NO];
 
+    // notify main loop that an event has arrived
+    wakeupYield();
 }
 
 // -----------------------------------------------------------------------
@@ -639,8 +522,24 @@ void AquaSalInstance::handleAppDefinedEvent( NSEvent* pEvent )
 
 // -----------------------------------------------------------------------
 
+class ReleasePoolHolder
+{
+    NSAutoreleasePool* mpPool;
+    public:
+    ReleasePoolHolder() : mpPool( [[NSAutoreleasePool alloc] init] ) {}
+    ~ReleasePoolHolder() { [mpPool release]; }
+};
+
 void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
+    // ensure that the per thread autorelease pool is top level and
+    // will therefore not be destroyed by cocoa implicitly
+    SalData::ensureThreadAutoreleasePool();
+
+    // NSAutoreleasePool documentation suggests we should have
+    // an own pool for each yield level
+    ReleasePoolHolder aReleasePool;
+
     // Release all locks so that we don't deadlock when we pull pending
     // events from the event queue
     bool bDispatchUser = true;
@@ -650,7 +549,7 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
 
         // get one user event
         osl_acquireMutex( maUserEventListMutex );
-        SalUserEvent aEvent( NULL, 0, NULL );
+        SalUserEvent aEvent( NULL, NULL, 0 );
         if( ! maUserEvents.empty() )
         {
             aEvent = maUserEvents.front();
@@ -676,8 +575,6 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
     // cocoa events mye be only handled in the thread the NSApp was created
     if( isNSAppThread() )
     {
-        mnMainThreadLevel++;
-
         // handle available events
         NSEvent* pEvent = nil;
         bool bHadEvent = false;
@@ -700,6 +597,8 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
         // if we had no event yet, wait for one if requested
         if( bWait && ! bHadEvent )
         {
+            bool bOldWaitingYield = mbWaitingYield;
+            mbWaitingYield = true;
             ULONG nCount = ReleaseYieldMutex();
 
             pEvent = [NSApp nextEventMatchingMask: NSAnyEventMask untilDate: [NSDate distantFuture]
@@ -709,15 +608,7 @@ void AquaSalInstance::Yield( bool bWait, bool bHandleAllCurrentEvents )
             [NSApp updateWindows];
 
             AcquireYieldMutex( nCount );
-        }
-
-        mnMainThreadLevel--;
-
-        if( mnMainThreadLevel == 0 )
-        {
-            // flush the autorelease pool
-            [mpAutoreleasePool release];
-            mpAutoreleasePool = [[NSAutoreleasePool alloc] init];
+            mbWaitingYield = bOldWaitingYield;
         }
     }
 
@@ -764,9 +655,9 @@ SalFrame* AquaSalInstance::CreateChildFrame( SystemParentData* pSystemParentData
 
 SalFrame* AquaSalInstance::CreateFrame( SalFrame* pParent, ULONG nSalFrameStyle )
 {
-    SalFrame* pFrame = NULL;
+    SalData::ensureThreadAutoreleasePool();
 
-    pFrame = new AquaSalFrame( pParent, nSalFrameStyle );
+    SalFrame* pFrame = new AquaSalFrame( pParent, nSalFrameStyle );
     return pFrame;
 }
 
