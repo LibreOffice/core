@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ControllerCommandDispatch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 18:07:07 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:58:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,20 +120,12 @@ protected:
         throw (::com::sun::star::uno::RuntimeException);
 
 private:
-    /** Simplification for doing a string compare between a given URL
-        (rCompareURL) with a fixed string (rURL), and only in case of equality
-        call the fireStatusEvent method at the base class.
-
-        @param xSingleListener
-            Same behaviour that in base class CommandDispatch: If set, the event
-            is only sent to this listener rather than to all registered ones.
-     */
-    void conditionalFireStatusEventForURL(
-        const ::rtl::OUString & rCompareURL,
+    void fireStatusEventForURLImpl(
         const ::rtl::OUString & rURL,
-        const ::com::sun::star::uno::Any & rState,
-        bool bEnabled,
         const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XStatusListener > & xSingleListener );
+
+    bool commandAvailable( const ::rtl::OUString & rCommand );
+    void updateCommandAvailability();
 
     ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XController > m_xController;
@@ -144,6 +136,9 @@ private:
 
     ::std::auto_ptr< impl::ModelState > m_apModelState;
     ::std::auto_ptr< impl::ControllerState > m_apControllerState;
+
+    mutable ::std::map< ::rtl::OUString, bool > m_aCommandAvailability;
+    mutable ::std::map< ::rtl::OUString, ::com::sun::star::uno::Any > m_aCommandArguments;
 };
 
 } //  namespace chart
