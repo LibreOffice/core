@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:19:36 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:04:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1981,11 +1981,13 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
         aSize = Size( 12, 12 );
     else if ( IsImage() && ! (ImplGetButtonState() & BUTTON_DRAW_NOIMAGE) )
         aSize = GetModeImage().GetSizePixel();
-    else if ( PushButton::GetText().Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
+    if ( PushButton::GetText().Len() && ! (ImplGetButtonState() & BUTTON_DRAW_NOTEXT) )
     {
         ULONG nDrawFlags = 0;
-        aSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
-                             PushButton::GetText(), ImplGetTextStyle( nDrawFlags ) ).GetSize();
+        Size textSize = GetTextRect( Rectangle( Point(), Size( nMaxWidth ? nMaxWidth : 0x7fffffff, 0x7fffffff ) ),
+                                     PushButton::GetText(), ImplGetTextStyle( nDrawFlags ) ).GetSize();
+       aSize.Width() += int( textSize.Width () * 1.15 );
+       aSize.Height() = std::max( aSize.Height(), long( textSize.Height() * 1.15 ) );
     }
 
     // cf. ImplDrawPushButton ...
@@ -1993,6 +1995,17 @@ Size PushButton::CalcMinimumSize( long nMaxWidth ) const
     aSize.Height() += 8;
 
     return CalcWindowSize( aSize );
+}
+
+Size PushButton::GetOptimalSize(WindowSizeType eType) const
+{
+    switch (eType) {
+    case WINDOWSIZE_MINIMUM: {
+        return CalcMinimumSize();
+    }
+    default:
+        return Button::GetOptimalSize( eType );
+    }
 }
 
 // =======================================================================
@@ -3255,6 +3268,18 @@ Size RadioButton::CalcMinimumSize( long nMaxWidth ) const
     return CalcWindowSize( aSize );
 }
 
+// -----------------------------------------------------------------------
+
+Size RadioButton::GetOptimalSize(WindowSizeType eType) const
+{
+    switch (eType) {
+    case WINDOWSIZE_MINIMUM:
+        return CalcMinimumSize();
+    default:
+        return Button::GetOptimalSize( eType );
+    }
+}
+
 // =======================================================================
 
 void CheckBox::ImplInitCheckBoxData()
@@ -4083,6 +4108,18 @@ Size CheckBox::CalcMinimumSize( long nMaxWidth ) const
     }
 
     return CalcWindowSize( aSize );
+}
+
+// -----------------------------------------------------------------------
+
+Size CheckBox::GetOptimalSize(WindowSizeType eType) const
+{
+    switch (eType) {
+    case WINDOWSIZE_MINIMUM:
+        return CalcMinimumSize();
+    default:
+        return Button::GetOptimalSize( eType );
+    }
 }
 
 // =======================================================================
