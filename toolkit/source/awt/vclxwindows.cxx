@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:33:10 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 12:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,6 +245,12 @@ namespace toolkit
 //  ----------------------------------------------------
 //  class VCLXImageConsumer
 //  ----------------------------------------------------
+
+void VCLXImageConsumer::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    VCLXWindow::ImplGetPropertyIds( rIds );
+}
+
 void VCLXImageConsumer::ImplSetNewImage()
 {
     OSL_PRECOND( GetWindow(), "VCLXImageConsumer::ImplSetNewImage: window is required to be not-NULL!" );
@@ -417,6 +423,37 @@ void VCLXImageConsumer::setProperty( const ::rtl::OUString& PropertyName, const 
 //--------------------------------------------------------------------
 //  class VCLXButton
 //  ----------------------------------------------------
+
+void VCLXButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_DEFAULTBUTTON,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_GRAPHIC,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_IMAGEALIGN,
+                     BASEPROPERTY_IMAGEPOSITION,
+                     BASEPROPERTY_IMAGEURL,
+                     BASEPROPERTY_LABEL,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_PUSHBUTTONTYPE,
+                     BASEPROPERTY_REPEAT,
+                     BASEPROPERTY_REPEAT_DELAY,
+                     BASEPROPERTY_STATE,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_TOGGLE,
+                     BASEPROPERTY_FOCUSONCLICK,
+                     BASEPROPERTY_MULTILINE,
+                     BASEPROPERTY_ALIGN,
+                     BASEPROPERTY_VERTICALALIGN,
+                     0);
+    VCLXImageConsumer::ImplGetPropertyIds( rIds );
+}
+
 VCLXButton::VCLXButton()
     :maActionListeners( *this )
     ,maItemListeners( *this )
@@ -658,6 +695,26 @@ void VCLXButton::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 //  ----------------------------------------------------
 //  class VCLXImageControl
 //  ----------------------------------------------------
+
+void VCLXImageControl::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_BORDER,
+                     BASEPROPERTY_BORDERCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_GRAPHIC,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_IMAGEURL,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_SCALEIMAGE,
+                     BASEPROPERTY_TABSTOP,
+                     0);
+    VCLXImageConsumer::ImplGetPropertyIds( rIds );
+}
+
 VCLXImageControl::VCLXImageControl()
 {
 }
@@ -750,6 +807,33 @@ void VCLXImageControl::setProperty( const ::rtl::OUString& PropertyName, const :
 //  ----------------------------------------------------
 //  class VCLXCheckBox
 //  ----------------------------------------------------
+
+
+void VCLXCheckBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_GRAPHIC,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_IMAGEPOSITION,
+                     BASEPROPERTY_IMAGEURL,
+                     BASEPROPERTY_LABEL,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_STATE,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_TRISTATE,
+                     BASEPROPERTY_VISUALEFFECT,
+                     BASEPROPERTY_MULTILINE,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_ALIGN,
+                     BASEPROPERTY_VERTICALALIGN,
+                     0);
+    VCLXImageConsumer::ImplGetPropertyIds( rIds );
+}
+
 VCLXCheckBox::VCLXCheckBox() :  maActionListeners( *this ), maItemListeners( *this )
 {
 }
@@ -1022,6 +1106,31 @@ void VCLXCheckBox::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 //  ----------------------------------------------------
 //  class VCLXRadioButton
 //  ----------------------------------------------------
+void VCLXRadioButton::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_GRAPHIC,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_IMAGEPOSITION,
+                     BASEPROPERTY_IMAGEURL,
+                     BASEPROPERTY_LABEL,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_STATE,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_VISUALEFFECT,
+                     BASEPROPERTY_MULTILINE,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_ALIGN,
+                     BASEPROPERTY_VERTICALALIGN,
+                     0);
+    VCLXImageConsumer::ImplGetPropertyIds( rIds );
+}
+
+
 VCLXRadioButton::VCLXRadioButton() : maItemListeners( *this ), maActionListeners( *this )
 {
 }
@@ -1276,6 +1385,11 @@ void VCLXRadioButton::ImplClickedOrToggled( BOOL bToggled )
 //  ----------------------------------------------------
 //  class VCLXSpinField
 //  ----------------------------------------------------
+void VCLXSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    VCLXEdit::ImplGetPropertyIds( rIds );
+}
+
 VCLXSpinField::VCLXSpinField() : maSpinListeners( *this )
 {
 }
@@ -1403,6 +1517,31 @@ void VCLXSpinField::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 //  ----------------------------------------------------
 //  class VCLXListBox
 //  ----------------------------------------------------
+void VCLXListBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_BORDER,
+                     BASEPROPERTY_BORDERCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_DROPDOWN,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_LINECOUNT,
+                     BASEPROPERTY_MULTISELECTION,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_SELECTEDITEMS,
+                     BASEPROPERTY_STRINGITEMLIST,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_READONLY,
+                     BASEPROPERTY_ALIGN,
+                     0);
+    VCLXWindow::ImplGetPropertyIds( rIds );
+}
+
+
 VCLXListBox::VCLXListBox()
     : maActionListeners( *this ),
       maItemListeners( *this )
@@ -1959,6 +2098,12 @@ void VCLXListBox::ImplCallItemListeners()
 //  ----------------------------------------------------
 //  class VCLXMessageBox
 //  ----------------------------------------------------
+
+void VCLXMessageBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    VCLXTopWindow::ImplGetPropertyIds( rIds );
+}
+
 VCLXMessageBox::VCLXMessageBox()
 {
 }
@@ -2034,6 +2179,11 @@ sal_Int16 VCLXMessageBox::execute() throw(::com::sun::star::uno::RuntimeExceptio
 //  ----------------------------------------------------
 //  class VCLXDialog
 //  ----------------------------------------------------
+void VCLXDialog::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    VCLXTopWindow::ImplGetPropertyIds( rIds );
+}
+
 VCLXDialog::VCLXDialog()
 {
 }
@@ -2285,6 +2435,28 @@ throw(::com::sun::star::uno::RuntimeException)
 //  ----------------------------------------------------
 //  class VCLXFixedText
 //  ----------------------------------------------------
+void VCLXFixedText::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_ALIGN,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_BORDER,
+                     BASEPROPERTY_BORDERCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_LABEL,
+                     BASEPROPERTY_MULTILINE,
+                     BASEPROPERTY_NOLABEL,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_VERTICALALIGN,
+                     0);
+    VCLXWindow::ImplGetPropertyIds( rIds );
+}
+
 VCLXFixedText::VCLXFixedText()
 {
 }
@@ -2403,6 +2575,32 @@ short VCLXFixedText::getAlignment() throw(::com::sun::star::uno::RuntimeExceptio
 //  ----------------------------------------------------
 //  class VCLXScrollBar
 //  ----------------------------------------------------
+void VCLXScrollBar::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_BLOCKINCREMENT,
+                     BASEPROPERTY_BORDER,
+                     BASEPROPERTY_BORDERCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_LINEINCREMENT,
+                     BASEPROPERTY_LIVE_SCROLL,
+                     BASEPROPERTY_ORIENTATION,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_REPEAT_DELAY,
+                     BASEPROPERTY_SCROLLVALUE,
+                     BASEPROPERTY_SCROLLVALUE_MAX,
+                     BASEPROPERTY_SCROLLVALUE_MIN,
+                     BASEPROPERTY_SYMBOL_COLOR,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_VISIBLESIZE,
+                     0);
+    VCLXWindow::ImplGetPropertyIds( rIds );
+}
+
 VCLXScrollBar::VCLXScrollBar() : maAdjustmentListeners( *this )
 {
 }
@@ -2840,6 +3038,37 @@ void VCLXScrollBar::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 //  class VCLXEdit
 //  ----------------------------------------------------
 
+void VCLXEdit::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_ALIGN,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_BORDER,
+                     BASEPROPERTY_BORDERCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ECHOCHAR,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_HARDLINEBREAKS,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_HSCROLL,
+                     BASEPROPERTY_LINE_END_FORMAT,
+                     BASEPROPERTY_MAXTEXTLEN,
+                     BASEPROPERTY_MULTILINE,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_READONLY,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_TEXT,
+                     BASEPROPERTY_VSCROLL,
+                     BASEPROPERTY_HIDEINACTIVESELECTION,
+                     BASEPROPERTY_PAINTTRANSPARENT,
+                     BASEPROPERTY_AUTOHSCROLL,
+                     BASEPROPERTY_AUTOVSCROLL,
+                     0);
+    VCLXWindow::ImplGetPropertyIds( rIds );
+}
+
 VCLXEdit::VCLXEdit() : maTextListeners( *this )
 {
 }
@@ -3182,6 +3411,33 @@ void VCLXEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 //  ----------------------------------------------------
 //  class VCLXComboBox
 //  ----------------------------------------------------
+
+void VCLXComboBox::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_AUTOCOMPLETE,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_BORDER,
+                     BASEPROPERTY_BORDERCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_DROPDOWN,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_LINECOUNT,
+                     BASEPROPERTY_MAXTEXTLEN,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_READONLY,
+                     BASEPROPERTY_STRINGITEMLIST,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_TEXT,
+                     BASEPROPERTY_HIDEINACTIVESELECTION,
+                     BASEPROPERTY_ALIGN,
+                     0);
+    VCLXEdit::ImplGetPropertyIds( rIds );
+}
+
 VCLXComboBox::VCLXComboBox()
     : maActionListeners( *this ), maItemListeners( *this )
 {
@@ -3550,6 +3806,14 @@ void VCLXComboBox::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) thr
 //  ----------------------------------------------------
 //  class VCLXFormattedSpinField
 //  ----------------------------------------------------
+void VCLXFormattedSpinField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    // Interestingly in the UnoControl API this is
+    // - not derived from XEdit ultimately, (correct ?) - so cut this here ...
+//    VCLXSpinField::ImplGetPropertyIds( rIds );
+    VCLXWindow::ImplGetPropertyIds( rIds );
+}
+
 VCLXFormattedSpinField::VCLXFormattedSpinField()
 {
 }
@@ -3647,6 +3911,38 @@ void VCLXFormattedSpinField::setProperty( const ::rtl::OUString& PropertyName, c
 //  ----------------------------------------------------
 //  class VCLXDateField
 //  ----------------------------------------------------
+
+void VCLXDateField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_BORDER,
+                     BASEPROPERTY_BORDERCOLOR,
+                     BASEPROPERTY_DATE,
+                     BASEPROPERTY_DATEMAX,
+                     BASEPROPERTY_DATEMIN,
+                     BASEPROPERTY_DATESHOWCENTURY,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_DROPDOWN,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_EXTDATEFORMAT,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_READONLY,
+                     BASEPROPERTY_REPEAT,
+                     BASEPROPERTY_REPEAT_DELAY,
+                     BASEPROPERTY_SPIN,
+                     BASEPROPERTY_STRICTFORMAT,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_ENFORCE_FORMAT,
+                     BASEPROPERTY_TEXT,
+                     BASEPROPERTY_HIDEINACTIVESELECTION,
+                     0);
+    VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
+}
+
 VCLXDateField::VCLXDateField()
 {
 }
@@ -3953,6 +4249,36 @@ sal_Bool VCLXDateField::isStrictFormat() throw(::com::sun::star::uno::RuntimeExc
 //  ----------------------------------------------------
 //  class VCLXTimeField
 //  ----------------------------------------------------
+
+void VCLXTimeField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_BORDER,
+                     BASEPROPERTY_BORDERCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_EXTTIMEFORMAT,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_READONLY,
+                     BASEPROPERTY_REPEAT,
+                     BASEPROPERTY_REPEAT_DELAY,
+                     BASEPROPERTY_SPIN,
+                     BASEPROPERTY_STRICTFORMAT,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_TIME,
+                     BASEPROPERTY_TIMEMAX,
+                     BASEPROPERTY_TIMEMIN,
+                     BASEPROPERTY_ENFORCE_FORMAT,
+                     BASEPROPERTY_TEXT,
+                     BASEPROPERTY_HIDEINACTIVESELECTION,
+                     0);
+    VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
+}
+
 VCLXTimeField::VCLXTimeField()
 {
 }
@@ -4220,6 +4546,37 @@ void VCLXTimeField::setProperty( const ::rtl::OUString& PropertyName, const ::co
 //  ----------------------------------------------------
 //  class VCLXNumericField
 //  ----------------------------------------------------
+
+void VCLXNumericField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_BORDER,
+                     BASEPROPERTY_BORDERCOLOR,
+                     BASEPROPERTY_DECIMALACCURACY,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_NUMSHOWTHOUSANDSEP,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_READONLY,
+                     BASEPROPERTY_REPEAT,
+                     BASEPROPERTY_REPEAT_DELAY,
+                     BASEPROPERTY_SPIN,
+                     BASEPROPERTY_STRICTFORMAT,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_VALUEMAX_DOUBLE,
+                     BASEPROPERTY_VALUEMIN_DOUBLE,
+                     BASEPROPERTY_VALUESTEP_DOUBLE,
+                     BASEPROPERTY_VALUE_DOUBLE,
+                     BASEPROPERTY_ENFORCE_FORMAT,
+                     BASEPROPERTY_HIDEINACTIVESELECTION,
+                     0);
+    VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
+}
+
 VCLXNumericField::VCLXNumericField()
 {
 }
@@ -4523,9 +4880,287 @@ void VCLXNumericField::setProperty( const ::rtl::OUString& PropertyName, const :
 }
 
 
+//    ----------------------------------------------------
+//    class VCLXMetricField
+//    ----------------------------------------------------
+
+void VCLXMetricField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_BORDER,
+                     BASEPROPERTY_BORDERCOLOR,
+                     BASEPROPERTY_DECIMALACCURACY,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_NUMSHOWTHOUSANDSEP,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_READONLY,
+                     BASEPROPERTY_REPEAT,
+                     BASEPROPERTY_REPEAT_DELAY,
+                     BASEPROPERTY_SPIN,
+                     BASEPROPERTY_STRICTFORMAT,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_ENFORCE_FORMAT,
+                     BASEPROPERTY_HIDEINACTIVESELECTION,
+                     BASEPROPERTY_UNIT,
+                     BASEPROPERTY_CUSTOMUNITTEXT,
+                     0);
+    VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
+}
+
+VCLXMetricField::VCLXMetricField()
+{
+}
+
+VCLXMetricField::~VCLXMetricField()
+{
+}
+
+MetricFormatter *VCLXMetricField::GetMetricFormatter() throw(::com::sun::star::uno::RuntimeException)
+{
+    MetricFormatter *pFormatter = (MetricFormatter *) GetFormatter();
+    if (!pFormatter)
+        throw ::com::sun::star::uno::RuntimeException();
+    return pFormatter;
+}
+
+MetricField *VCLXMetricField::GetMetricField() throw(::com::sun::star::uno::RuntimeException)
+{
+    MetricField *pField = (MetricField *) GetWindow();
+    if (!pField)
+        throw ::com::sun::star::uno::RuntimeException();
+    return pField;
+}
+
+// ::com::sun::star::uno::XInterface
+::com::sun::star::uno::Any VCLXMetricField::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
+                                                              SAL_STATIC_CAST( ::com::sun::star::awt::XMetricField*, this ) );
+    return (aRet.hasValue() ? aRet : VCLXFormattedSpinField::queryInterface( rType ));
+}
+
+// ::com::sun::star::lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( VCLXMetricField )
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMetricField>* ) NULL ),
+    VCLXFormattedSpinField::getTypes()
+IMPL_XTYPEPROVIDER_END
+
+// FIXME: later ...
+#define MetricUnitUnoToVcl(a) ((FieldUnit)(a))
+
+#define METRIC_MAP_PAIR(method,parent) \
+    sal_Int64 VCLXMetricField::get##method( sal_Int16 nUnit ) throw (::com::sun::star::uno::RuntimeException) \
+    { \
+        ::vos::OGuard aGuard( GetMutex() ); \
+        return GetMetric##parent()->Get##method( MetricUnitUnoToVcl( nUnit ) ); \
+    } \
+    void VCLXMetricField::set##method( sal_Int64 nValue, sal_Int16 nUnit ) throw (::com::sun::star::uno::RuntimeException) \
+    { \
+        ::vos::OGuard aGuard( GetMutex() ); \
+        GetMetric##parent()->Set##method( nValue, MetricUnitUnoToVcl( nUnit ) ); \
+    }
+
+METRIC_MAP_PAIR(Min, Formatter)
+METRIC_MAP_PAIR(Max, Formatter)
+METRIC_MAP_PAIR(First, Field)
+METRIC_MAP_PAIR(Last,  Field)
+
+#undef METRIC_MAP_PAIR
+
+::sal_Int64 VCLXMetricField::getValue( ::sal_Int16 nUnit ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return GetMetricFormatter()->GetValue( MetricUnitUnoToVcl( nUnit ) );
+}
+
+::sal_Int64 VCLXMetricField::getCorrectedValue( ::sal_Int16 nUnit ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return GetMetricFormatter()->GetCorrectedValue( MetricUnitUnoToVcl( nUnit ) );
+}
+
+// FIXME: acute cut/paste evilness - move this to the parent Edit class ?
+void VCLXMetricField::CallListeners()
+{
+    // #107218# Call same listeners like VCL would do after user interaction
+    Edit* pEdit = (Edit*)GetWindow();
+    if ( pEdit )
+    {
+        SetSynthesizingVCLEvent( sal_True );
+        pEdit->SetModifyFlag();
+        pEdit->Modify();
+        SetSynthesizingVCLEvent( sal_False );
+    }
+}
+
+void VCLXMetricField::setValue( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    GetMetricFormatter()->SetValue( Value, MetricUnitUnoToVcl( Unit ) );
+    CallListeners();
+}
+
+void VCLXMetricField::setUserValue( ::sal_Int64 Value, ::sal_Int16 Unit ) throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    GetMetricFormatter()->SetUserValue( Value, MetricUnitUnoToVcl( Unit ) );
+    CallListeners();
+}
+
+void VCLXMetricField::setStrictFormat( sal_Bool bStrict ) throw(::com::sun::star::uno::RuntimeException)
+{
+    VCLXFormattedSpinField::setStrictFormat( bStrict );
+}
+
+sal_Bool VCLXMetricField::isStrictFormat() throw(::com::sun::star::uno::RuntimeException)
+{
+    return VCLXFormattedSpinField::isStrictFormat();
+}
+
+void VCLXMetricField::setSpinSize( sal_Int64 Value ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    GetMetricField()->SetSpinSize( Value );
+}
+
+sal_Int64 VCLXMetricField::getSpinSize() throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    return GetMetricField()->GetSpinSize();
+}
+
+void VCLXMetricField::setDecimalDigits( sal_Int16 Value ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+    GetMetricFormatter()->SetDecimalDigits( Value );
+}
+
+sal_Int16 VCLXMetricField::getDecimalDigits() throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    NumericFormatter* pNumericFormatter = (NumericFormatter*) GetFormatter();
+    return pNumericFormatter ? pNumericFormatter->GetDecimalDigits() : 0;
+}
+
+void VCLXMetricField::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    if ( GetWindow() )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_DECIMALACCURACY:
+            {
+                sal_Int16 n = 0;
+                if ( Value >>= n )
+                     setDecimalDigits( n );
+                break;
+            }
+            case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
+            {
+                sal_Bool b = sal_False;
+                if ( Value >>= b )
+                     ((NumericField*)GetWindow())->SetUseThousandSep( b );
+            }
+            break;
+            case BASEPROPERTY_UNIT:
+            {
+                sal_uInt16 nVal = 0;
+                if ( Value >>= nVal )
+                    ((MetricField*)GetWindow())->SetUnit( (FieldUnit) nVal );
+                break;
+            }
+            case BASEPROPERTY_CUSTOMUNITTEXT:
+            {
+                rtl::OUString aStr;
+                if ( Value >>= aStr )
+                    ((MetricField*)GetWindow())->SetCustomUnitText( aStr );
+                break;
+            }
+            default:
+            {
+                VCLXFormattedSpinField::setProperty( PropertyName, Value );
+                break;
+            }
+        }
+    }
+}
+
+::com::sun::star::uno::Any VCLXMetricField::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::com::sun::star::uno::Any aProp;
+    FormatterBase* pFormatter = GetFormatter();
+    if ( pFormatter )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_NUMSHOWTHOUSANDSEP:
+                aProp <<= (sal_Bool) ((NumericField*)GetWindow())->IsUseThousandSep();
+                break;
+            case BASEPROPERTY_UNIT:
+                aProp <<= (sal_uInt16) ((MetricField*)GetWindow())->GetUnit();
+                break;
+            case BASEPROPERTY_CUSTOMUNITTEXT:
+                aProp <<= rtl::OUString (((MetricField*)GetWindow())->GetCustomUnitText());
+                break;
+            default:
+            {
+                aProp <<= VCLXFormattedSpinField::getProperty( PropertyName );
+                break;
+            }
+        }
+    }
+    return aProp;
+}
+
+
 //  ----------------------------------------------------
 //  class VCLXCurrencyField
 //  ----------------------------------------------------
+
+void VCLXCurrencyField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_BORDER,
+                     BASEPROPERTY_BORDERCOLOR,
+                     BASEPROPERTY_CURRENCYSYMBOL,
+                     BASEPROPERTY_CURSYM_POSITION,
+                     BASEPROPERTY_DECIMALACCURACY,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_NUMSHOWTHOUSANDSEP,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_READONLY,
+                     BASEPROPERTY_REPEAT,
+                     BASEPROPERTY_REPEAT_DELAY,
+                     BASEPROPERTY_SPIN,
+                     BASEPROPERTY_STRICTFORMAT,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_VALUEMAX_DOUBLE,
+                     BASEPROPERTY_VALUEMIN_DOUBLE,
+                     BASEPROPERTY_VALUESTEP_DOUBLE,
+                     BASEPROPERTY_VALUE_DOUBLE,
+                     BASEPROPERTY_ENFORCE_FORMAT,
+                     BASEPROPERTY_HIDEINACTIVESELECTION,
+                     0);
+    VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
+}
+
 VCLXCurrencyField::VCLXCurrencyField()
 {
 }
@@ -4843,6 +5478,31 @@ void VCLXCurrencyField::setProperty( const ::rtl::OUString& PropertyName, const 
 //  ----------------------------------------------------
 //  class VCLXPatternField
 //  ----------------------------------------------------
+
+void VCLXPatternField::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_BORDER,
+                     BASEPROPERTY_BORDERCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_EDITMASK,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_LITERALMASK,
+                     BASEPROPERTY_MAXTEXTLEN,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_READONLY,
+                     BASEPROPERTY_STRICTFORMAT,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_TEXT,
+                     BASEPROPERTY_HIDEINACTIVESELECTION,
+                     0);
+    VCLXFormattedSpinField::ImplGetPropertyIds( rIds );
+}
+
 VCLXPatternField::VCLXPatternField()
 {
 }
