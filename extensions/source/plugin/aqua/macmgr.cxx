@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macmgr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-05 08:48:59 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:49:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rD
         char buf[256];
         while( fgets( buf, sizeof( buf ), pResult ) )
         {
-            for( int i = 0; i < sizeof(buf) && buf[i]; ++i )
+            for( size_t i = 0; i < sizeof(buf) && buf[i]; ++i )
             {
                 if( buf[i] == '\n' )
                     buf[i] = ';';
