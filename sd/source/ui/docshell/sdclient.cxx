@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:11:07 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,6 +201,17 @@ void Client::ViewChanged()
         ::sd::View* pView = mpViewShell->GetView();
         if (pView)
         {
+            Rectangle aLogicRect( pSdrOle2Obj->GetLogicRect() );
+            Size aLogicSize( aLogicRect.GetWidth(), aLogicRect.GetHeight() );
+
+            if( pSdrOle2Obj->IsChart() )
+            {
+                //charts never should be stretched see #i84323# for example
+                pSdrOle2Obj->SetLogicRect( Rectangle( aLogicRect.TopLeft(), aLogicSize ) );
+                pSdrOle2Obj->BroadcastObjectChange();
+                return;
+            }
+
             // TODO/LEAN: maybe we can do this without requesting the VisualArea?
             // working with the visual area might need running state, so the object may switch itself to this state
             MapMode             aMap100( MAP_100TH_MM );
@@ -208,7 +219,6 @@ void Client::ViewChanged()
             Size aSize = pSdrOle2Obj->GetOrigObjSize( &aMap100 );
 
             aVisArea.SetSize( aSize );
-            Rectangle           aLogicRect( pSdrOle2Obj->GetLogicRect() );
             Size                aScaledSize( static_cast< long >( GetScaleWidth() * Fraction( aVisArea.GetWidth() ) ),
                                                 static_cast< long >( GetScaleHeight() * Fraction( aVisArea.GetHeight() ) ) );
 
