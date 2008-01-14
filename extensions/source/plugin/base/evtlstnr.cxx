@@ -4,9 +4,9 @@
  *
  *  $RCSfile: evtlstnr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:07:25 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:50:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ PluginEventListener::~PluginEventListener()
         free( m_pNormalizedUrl );
 }
 
-void PluginEventListener::disposing( const ::com::sun::star::lang::EventObject& rEvt ) throw()
+void PluginEventListener::disposing( const ::com::sun::star::lang::EventObject& /*rEvt*/ ) throw()
 {
     m_pPlugin->getPluginComm()->
         NPP_URLNotify( m_pPlugin->getNPPInstance(),
