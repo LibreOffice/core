@@ -21,6 +21,8 @@ public class MethodThread extends Thread {
     /** Did an Exception happen? **/
     private boolean mExceptionHappened = false;
 
+    private Object[] mParameter = null;
+
     /**
      * Constructor.
      * @param testMethod The method that will be invoked.
@@ -33,12 +35,19 @@ public class MethodThread extends Thread {
         mLog = log;
     }
 
+    public MethodThread(Method testMethod, Object invokeClass, Object[] parameter, PrintWriter log) {
+        mTestMethod = testMethod;
+        mInvokeClass = invokeClass;
+        mParameter = parameter;
+        mLog = log;
+    }
+
     /**
      * Invoke the method.
      */
     public void run() {
         try {
-            mTestMethod.invoke(mInvokeClass, new Object[]{});
+            mTestMethod.invoke(mInvokeClass, mParameter);
         }
         catch(IllegalAccessException e) {
             e.printStackTrace(mLog);
