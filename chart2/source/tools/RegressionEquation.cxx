@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RegressionEquation.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 12:08:20 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,7 @@ namespace chart
 
 RegressionEquation::RegressionEquation( const Reference< uno::XComponentContext > & xContext ) :
         ::property::OPropertySet( m_aMutex ),
-        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex )),
+        m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder()),
         m_xContext( xContext )
 {}
 
@@ -196,7 +196,7 @@ RegressionEquation::RegressionEquation( const RegressionEquation & rOther ) :
         MutexContainer(),
         impl::RegressionEquation_Base(),
         ::property::OPropertySet( rOther, m_aMutex ),
-    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder( m_aMutex ))
+    m_xModifyEventForwarder( new ModifyListenerHelper::ModifyEventForwarder())
 {}
 
 RegressionEquation::~RegressionEquation()
