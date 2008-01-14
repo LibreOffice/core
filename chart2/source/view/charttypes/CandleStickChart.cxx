@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CandleStickChart.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 09:04:43 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:05:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,27 +349,33 @@ void CandleStickChart::createShapes()
                     }
                     else
                     {
-                        uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                                "com.sun.star.drawing.PolyLineShape" ) ) ), uno::UNO_QUERY );
-                        xPointGroupShape_Shapes->add(xShape);
-                        uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
-                        if(xProp.is())
-                        {
-                            drawing::PolyPolygonShape3D aPoly;
+                        drawing::PolyPolygonShape3D aPoly;
 
-                            sal_Int32 nLineIndex = 0;
-                            if( bShowFirst && isValidPosition(aPosLeftFirst) && isValidPosition(aPosMiddleFirst) )
+                        sal_Int32 nLineIndex = 0;
+                        if( bShowFirst &&  pPosHelper->isLogicVisible( fLogicX, fY_First ,0 )
+                            && isValidPosition(aPosLeftFirst) && isValidPosition(aPosMiddleFirst) )
+                        {
+                            AddPointToPoly( aPoly, aPosLeftFirst, nLineIndex );
+                            AddPointToPoly( aPoly, aPosMiddleFirst, nLineIndex++ );
+                        }
+                        if( pPosHelper->isLogicVisible( fLogicX, fY_Last ,0 )
+                            && isValidPosition(aPosMiddleLast) && isValidPosition(aPosRightLast) )
+                        {
+                            AddPointToPoly( aPoly, aPosMiddleLast, nLineIndex );
+                            AddPointToPoly( aPoly, aPosRightLast, nLineIndex );
+                        }
+
+                        if( aPoly.SequenceX.getLength() )
+                        {
+                            uno::Reference< drawing::XShape > xShape( m_xShapeFactory->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.drawing.PolyLineShape" ) ) ), uno::UNO_QUERY );
+                            xPointGroupShape_Shapes->add(xShape);
+                            uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+                            if(xProp.is())
                             {
-                                AddPointToPoly( aPoly, aPosLeftFirst, nLineIndex );
-                                AddPointToPoly( aPoly, aPosMiddleFirst, nLineIndex++ );
+                                xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON ), uno::makeAny( PolyToPointSequence(aPoly) ) );
+                                this->setMappedProperties( xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                             }
-                            if( isValidPosition(aPosMiddleLast) && isValidPosition(aPosRightLast) )
-                            {
-                                AddPointToPoly( aPoly, aPosMiddleLast, nLineIndex );
-                                AddPointToPoly( aPoly, aPosRightLast, nLineIndex );
-                            }
-                            xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON ), uno::makeAny( PolyToPointSequence(aPoly) ) );
-                            this->setMappedProperties( xShape, xPointProp, PropertyMapper::getPropertyNameMapForLineSeriesProperties() );
                         }
                     }
 
