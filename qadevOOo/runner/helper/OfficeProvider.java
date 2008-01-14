@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeProvider.java,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 17:43:31 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 13:20:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,29 +36,22 @@ package helper;
 
 //import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XUnoUrlResolver;
-import com.sun.star.connection.XConnection;
-import com.sun.star.connection.XConnector;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.frame.XDesktop;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import com.sun.star.uno.XInterface;
-import com.sun.star.uno.XNamingService;
 import com.sun.star.util.XCloseable;
 import com.sun.star.util.XStringSubstitution;
-import convwatch.PropertyName;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileFilter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.util.Iterator;
+import java.util.StringTokenizer;
 
 import lib.TestParameters;
 
@@ -240,15 +233,12 @@ public class OfficeProvider implements AppProvider {
                         userLayer = getDirSys(userLayer);
                         param.put("userLayer", userLayer);
 
-                        //System.out.println("UserLayer: "+userLayer);
-                        String copyLayer = util.utils.getUsersTempDir() +
-                        System.getProperty("file.separator") +
-                        "user_backup" +
-                        System.currentTimeMillis();
+                        String copyLayer = util.utils.getUsersTempDir() + System.getProperty("file.separator") +
+                        "user_backup" + System.getProperty("user.name");
                         param.put("copyLayer", copyLayer);
 
 
-                        //System.out.println("CopyLayer: "+copyLayer);
+                        if (debug) System.out.println("copy '" + userLayer +"' ->" + copyLayer +"'");
                         FileTools.copyDirectory(new File(userLayer), new File(copyLayer), new String[]{"temp"});
                     } catch (com.sun.star.container.NoSuchElementException e) {
                         System.out.println("User Variable '$(user)' not defined.");
@@ -312,24 +302,26 @@ public class OfficeProvider implements AppProvider {
      * @param closeIfPossible If true, close even if
      * it was running before the test
      */
-    public boolean closeExistingOffice(lib.TestParameters param,
-    boolean closeIfPossible) {
+    public boolean closeExistingOffice(lib.TestParameters param, boolean closeIfPossible) {
         debug = param.getBool("DebugIsActive");
 
         XMultiServiceFactory msf = (XMultiServiceFactory) param.getMSF();
         boolean alreadyConnected = (msf != null);
 
         if (alreadyConnected) {
+            if (debug) System.out.println("DEBUG: try to get ProcessHandler");
             ProcessHandler ph = (ProcessHandler) param.get("AppProvider");
 
             if (ph != null) {
+                if (debug) System.out.println("DEBUG: ProcessHandler != null");
                 disposeOffice(msf, param);
 
                 // dispose watcher in case it's still running.
-                //System.out.println("INFO: disposing the office and terminate the watcher process.");
+                if (debug) System.out.println("DEBUG: try to get OfficeWatcher");
                 OfficeWatcher ow = (OfficeWatcher) param.get("Watcher");
 
                 if ((ow != null) && ow.isAlive()) {
+                    if (debug) System.out.println("DEBUG: OfficeWatcher finished");
                     ow.finish = true;
                 }
 
@@ -342,6 +334,7 @@ public class OfficeProvider implements AppProvider {
         } else {
             String cncstr = "uno:" + param.get("ConnectionString") +
             ";urp;StarOffice.ServiceManager";
+            if (debug) System.out.println("DEBUG: try to connect office");
             msf = connectOffice(cncstr);
 
             if (closeIfPossible) {
@@ -424,6 +417,32 @@ public class OfficeProvider implements AppProvider {
             }
         }
 
+        String AppKillCommand = (String) param.get ("AppKillCommand");
+        if (AppKillCommand != null)
+        {
+            StringTokenizer aKillCommandToken = new StringTokenizer( AppKillCommand,";" );
+            while (aKillCommandToken.hasMoreTokens())
+            {
+                String sKillCommand = aKillCommandToken.nextToken();
+                if (debug){
+                    System.out.println("User defined an application to destroy the started process.");
+                    System.out.println("Trying to execute: "+sKillCommand);
+                }
+
+                try
+                {
+
+                    Process myprc = Runtime.getRuntime().exec(sKillCommand);
+                    myprc.waitFor();
+
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                } catch (java.io.IOException e) {
+                    e.printStackTrace ();
+                }
+            }
+        }
+
         ProcessHandler ph = (ProcessHandler) param.get("AppProvider");
 
         if (ph != null) {
@@ -446,8 +465,13 @@ public class OfficeProvider implements AppProvider {
             String copyLayer = (String) param.get("copyLayer");
             if (userLayer != null && copyLayer != null) {
                 File copyFile = new File(copyLayer);
+                if (debug) System.out.println("copy '" + copyFile + "' ->" + userLayer + "'");
                 FileTools.copyDirectory(copyFile, new File(userLayer), new String[]{"temp"});
-                FileTools.deleteDir(copyFile);
+
+                // remove all user_backup folder in temp dir
+                // this is for the case the runner was killed and some old backup folder still stay in temp dir
+
+
             }
             else
                 System.out.println("Cannot copy layer: " + copyLayer + " back to user layer: " + userLayer);
