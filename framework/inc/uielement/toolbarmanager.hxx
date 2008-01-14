@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbarmanager.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 13:44:36 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 17:23:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@
 #ifndef __FRAMEWORK_STDTYPES_H_
 #include <stdtypes.h>
 #endif
+#include <uielement/commandinfo.hxx>
 
 //_________________________________________________________________________________________________________________
 //  interface includes
@@ -235,22 +236,8 @@ class ToolBarManager : public ::com::sun::star::frame::XFrameActionListener     
         Image QueryAddonsImage( const ::rtl::OUString& aCommandURL, bool bBigImages, bool bHiContrast );
 
     protected:
-        struct CommandInfo
-        {
-            CommandInfo() : nId( 0 ),
-                            nImageInfo( 0 ),
-                            bMirrored( false ),
-                            bRotated( false ) {}
-            USHORT                  nId;
-            std::vector<USHORT>     aIds;
-            sal_Int16               nImageInfo;
-            sal_Bool                bMirrored : 1,
-                                    bRotated  : 1;
-        };
-
         typedef ::std::hash_map< sal_uInt16, ::com::sun::star::uno::Reference< com::sun::star::frame::XStatusListener > > ToolBarControllerMap;
         typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::frame::XSubToolbarController > > SubToolBarControllerVector;
-        typedef BaseHash< CommandInfo >                                                                             CommandToInfoMap;
         typedef BaseHash< SubToolBarControllerVector >                                                              SubToolBarToSubToolBarControllerMap;
 
         sal_Bool                                                                               m_bDisposed : 1,
