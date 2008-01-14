@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oledll.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:07:13 $
+ *  last change: $Author: ihi $ $Date: 2008-01-14 14:46:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #define _WIN32_WINNT 0x0400
 #define _WIN32_DCOM
 
+#pragma warning (push,1)
+#pragma warning (disable:4548)
+
 #if defined(_MSC_VER) && (_MSC_VER >= 1300) && !defined(_STLP_DEBUG)
 #undef _DEBUG
 #endif
@@ -49,6 +52,8 @@
 #include <atlbase.h>
 CComModule _Module;
 #include <atlcom.h>
+
+#pragma warning (pop)
 
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
