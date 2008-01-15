@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: vg $ $Date: 2007-12-06 17:17:22 $
+#   last change: $Author: ihi $ $Date: 2008-01-15 14:53:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -260,7 +260,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.27 $ ';
+$id_str = ' $Revision: 1.28 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -524,7 +524,7 @@ sub doInstall {
                 }
                 else {
                     if ($is_admin_installation) {
-                        $Command = "msiexec.exe /a $convertinstallset -qn TARGETDIR=$convertdestdir";
+                        $Command = "msiexec.exe /a $convertinstallset -qn TARGETDIR=$convertdestdir ALLUSERS=2";
                     }
                     else {
                         $Command = "msiexec.exe -i $convertinstallset -qn INSTALLLOCATION=$convertdestdir";
@@ -539,7 +539,7 @@ sub doInstall {
                 else {
                     if ($is_admin_installation)
                     {
-                        $Command = "msiexec.exe /a $installsetpath$file -qn TARGETDIR=$dest_installdir";
+                        $Command = "msiexec.exe /a $installsetpath$file -qn TARGETDIR=$dest_installdir ALLUSERS=2";
                     }
                     else {
                         $Command = "msiexec.exe -i $installsetpath$file -qn INSTALLLOCATION=$dest_installdir";
