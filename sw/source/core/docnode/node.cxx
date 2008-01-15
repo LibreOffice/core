@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:20:28 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:49:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -585,7 +585,8 @@ BOOL SwNode::IsProtect() const
 
         const SwTableBox* pBox = pSttNd->FindTableNode()->GetTable().
                                         GetTblBox( pSttNd->GetIndex() );
-        if( pBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
+        //Robust #149568
+        if( pBox && pBox->GetFrmFmt()->GetProtect().IsCntntProtected() )
             return TRUE;
     }
 
@@ -2142,7 +2143,7 @@ BOOL SwCntntNode::IsAnyCondition( SwCollCondition& rTmp ) const
                         const SwTableNode* pTblNd = pSttNd->FindTableNode();
                         const SwTableBox* pBox;
                         if( pTblNd && 0 != ( pBox = pTblNd->GetTable().
-                            GetTblBox( pSttNd->GetIndex() ) ) &&
+                            GetTblBox( pSttNd->GetIndex() ) ) && pBox &&
                             pBox->IsInHeadline( &pTblNd->GetTable() ) )
                             nCond = PARA_IN_TABLEHEAD;
                     }
