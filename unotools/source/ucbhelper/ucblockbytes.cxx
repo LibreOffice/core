@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 09:00:06 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 14:22:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1539,7 +1539,7 @@ ErrCode UcbLockBytes::ReadAt ( ULONG nPos, void *pBuffer, ULONG nCount, ULONG *p
     {
         if ( !m_bTerminated && !IsSynchronMode() )
         {
-            sal_Int64 nLen = xSeekable->getLength();
+            sal_uInt64 nLen = xSeekable->getLength();
             if ( nPos + nCount > nLen )
                 return ERRCODE_IO_PENDING;
         }
