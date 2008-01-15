@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lbnames.h,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:28:44 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:26:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,10 @@
 #elif (_MSC_VER < 1100) // MSVC 4.x
 #pragma warning( disable: 4290 )
 #define TMP_CPPU_ENV msci
-#elif (_MSC_VER < 1500) // MSVC 5-8
+#elif (_MSC_VER < 1600) // MSVC 5-9
 #define TMP_CPPU_ENV msci
 #else
-#error "ms visual c++ version must be between 4.2 and 7.x"
+#error "ms visual c++ version must be between 4.2 and 9.x"
 #endif /* (_MSC_VER < 1000) */
 /* sunpro cc */
 #elif defined (__SUNPRO_CC)
