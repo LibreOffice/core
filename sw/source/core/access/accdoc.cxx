@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:19:24 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:48:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,12 @@ void SwAccessibleDocumentBase::SetVisArea()
     if( aOldVisArea != rNewVisArea )
     {
         SwAccessibleFrame::SetVisArea( GetMap()->GetVisArea() );
-        ChildrenScrolled( GetFrm(), aOldVisArea );
+        // --> OD 2007-12-07 #i58139#
+        // showing state of document view needs also be updated.
+        // Thus, call method <Scrolled(..)> instead of <ChildrenScrolled(..)>
+//        ChildrenScrolled( GetFrm(), aOldVisArea );
+        Scrolled( aOldVisArea );
+        // <--
     }
 }
 
