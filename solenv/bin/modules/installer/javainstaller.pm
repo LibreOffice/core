@@ -4,9 +4,9 @@
 #
 #   $RCSfile: javainstaller.pm,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:57:12 $
+#   last change: $Author: ihi $ $Date: 2008-01-15 12:23:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -614,6 +614,9 @@ sub remove_package
             my $line = ${$xmlfile}[$startline];
             if (($line =~ /^\s*\Q$namestring\E\s*\=/) && ($line =~ /\-\Q$searchstring\E/)) { $do_delete = 1; }
 
+            # but not deleting fonts package in language packs
+            if ( $line =~ /-ONELANGUAGE-/ ) { $do_delete = 0; }
+
             my $endcounter = 0;
 
             while ((!( $line =~ /\/\>/ )) && ( $startline <= $#{$xmlfile} ))
@@ -628,6 +631,8 @@ sub remove_package
 
             if ( $do_delete )
             {
+                my $infoline = "\tReally removing package $packagename from xml file.\n";
+                push( @installer::globals::logfileinfo, $infoline);
                 splice(@{$xmlfile},$i, $linecounter);   # removing $linecounter lines, beginning in line $i
                 $removed_packge = 1;
                 last;
@@ -807,6 +812,7 @@ sub duplicate_languagepack_in_xmlfile
 
     my $unit = remove_component($xmlfile, "languagepack_ONELANGUAGE");
     my $startline = find_component_line($xmlfile, "module_languagepacks");
+    my $infoline = "";
     $startline = $startline + 1;
 
     for ( my $i = 0; $i <= $#{$languagesarrayref}; $i++ )
@@ -850,7 +856,7 @@ sub remove_empty_packages_in_xmlfile
     for ( my $i = 0; $i <= $#installer::globals::emptypackages; $i++ )
     {
         my $packagename = $installer::globals::emptypackages[$i];
-        my $infoline = "Removing package $packagename from xml file.\n";
+        my $infoline = "Try to remove package $packagename from xml file.\n";
         push( @installer::globals::logfileinfo, $infoline);
         remove_package($xmlfile, $packagename);
     }
