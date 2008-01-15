@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:21:39 $
+#   last change: $Author: ihi $ $Date: 2008-01-15 13:33:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -239,9 +239,11 @@ APP7OBJS = \
 STDLIB7=$(ADVAPI32LIB) $(SHLWAPILIB)
 
 # Until every DLL is linked against $(DELAYLOADOBJ) just as on wntmsci10:
-.IF "$(OS)$(COM)$(CPU)$(COMEX)" == "WNTMSCI11"
+.IF "$(OS)$(COM)$(CPU)" == "WNTMSCI"
+.IF "$(CCNUMVER)" > "001399999999"
 APP6OBJS+=$(L)$/delayload.obj
 APP7OBJS+=$(L)$/delayload.obj
+.ENDIF # "$(CCNUMVER)" > "001399999999"
 .ENDIF
 .ENDIF # WNT
 
