@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untblk.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:25:54 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:50:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,8 @@ SwUndoInserts::~SwUndoInserts()
         {
             SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
             ASSERT( pTxtNd, "kein TextNode, aus dem geloescht werden soll" );
-            pTxtNd->Erase( pPos->nContent );
+            if( pTxtNd ) // Robust
+                pTxtNd->Erase( pPos->nContent );
             pPos->nNode++;
         }
         pPos->nContent.Assign( 0, 0 );
