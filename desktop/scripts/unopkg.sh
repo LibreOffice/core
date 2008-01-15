@@ -5,9 +5,9 @@
 #
 #   $RCSfile: unopkg.sh,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-07 09:56:38 $
+#   last change: $Author: rt $ $Date: 2008-01-15 10:35:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -144,6 +144,10 @@ unset XENVIRONMENT
 PATH="$sd_prog":$PATH
 export PATH
 
+# assume gui mode if passed a single oxt file as argument
+GUI=""
+[ $# -eq 1 -a "oxt" = "`echo $1 | cut -d . -f 2'`" -a -n "$DISPLAY" ] && GUI="gui"
+
 # execute binary
-exec "$sd_prog/$sd_binary" "$@"
+exec "$sd_prog/$sd_binary" $GUI "$@"
 
