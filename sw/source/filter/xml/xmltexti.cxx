@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:14:39 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:51:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,8 +432,11 @@ uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
 
         // the correct aspect will be set later
         // TODO/LATER: Actually it should be set here
-        pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(), aName, embed::Aspects::MSOLE_CONTENT, &aItemSet, NULL, NULL );
-        pOLENd = lcl_GetOLENode( pFrmFmt );
+        if( pTxtCrsr )
+        {
+            pFrmFmt = pDoc->InsertOLE( *pTxtCrsr->GetPaM(), aName, embed::Aspects::MSOLE_CONTENT, &aItemSet, NULL, NULL );
+            pOLENd = lcl_GetOLENode( pFrmFmt );
+        }
         aObjName = aName;
     }
 
