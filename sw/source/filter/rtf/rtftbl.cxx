@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:54:59 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:50:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,6 +371,8 @@ void SwRTFParser::ReadTable( int nToken )
                     pBoxFmt = pDoc->MakeTableBoxFmt();
                 }
 
+                if( !nSize )
+                    ++nSize;
                 pFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nSize, 0 ));
                 nTblSz = nTokenValue;
                 aMergeBoxes.Insert( (BOOL)FALSE, ++nBoxCnt );
