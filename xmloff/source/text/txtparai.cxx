@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-28 12:25:34 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:46:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1674,7 +1674,10 @@ XMLParaContext::~XMLParaContext()
 {
     UniReference < XMLTextImportHelper > xTxtImport(
         GetImport().GetTextImport());
-    Reference < XTextRange > xEnd(xTxtImport->GetCursorAsRange()->getStart());
+    Reference < XTextRange > xCrsrRange( xTxtImport->GetCursorAsRange() );
+    if( !xCrsrRange.is() )
+        return; // Robust (defect file)
+    Reference < XTextRange > xEnd(xCrsrRange->getStart());
 
     // if we have an id set for this paragraph, get a cursor for this
     // paragraph and register it with the given identifier
@@ -1695,6 +1698,8 @@ XMLParaContext::~XMLParaContext()
     // create a cursor that select the whole last paragraph
     Reference < XTextCursor > xAttrCursor(
         xTxtImport->GetText()->createTextCursorByRange( xStart ));
+    if( !xAttrCursor.is() )
+        return; // Robust (defect file)
     xAttrCursor->gotoRange( xEnd, sal_True );
 
     OUString sCellParaStyleName = xTxtImport->sCellParaStyleDefault;
