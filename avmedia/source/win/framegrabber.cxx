@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framegrabber.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:46:05 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,11 @@
 #include <objbase.h>
 #include <strmif.h>
 #include <Amvideo.h>
+#if defined(_MSC_VER) && (_MSC_VER < 1500)
 #include <Qedit.h>
+#else
+#include "interface.hxx"
+#endif
 #include <uuids.h>
 #if defined _MSC_VER
 #pragma warning(pop)
