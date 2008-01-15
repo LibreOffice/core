@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:25:47 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:25:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,11 @@
 
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+
+// Warning in SDK header
+#if defined(_MSC_VER) && (_MSC_VER > 1400)
+#pragma warning( disable: 4242 4244 )
 #endif
 
 #ifndef _SV_WINCOMP_HXX
@@ -6233,3 +6238,4 @@ BOOL ImplWriteLastError( DWORD lastError, const char *szApiCall )
 }
 
 // -----------------------------------------------------------------------
+
