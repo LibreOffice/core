@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:48:20 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:46:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -731,20 +731,19 @@ void XMLTextParagraphExport::exportListChange(
             ( !rNextInfo.HasSameNumRules( rPrevInfo ) ||
               rNextInfo.IsRestart() ) ?  0 : rNextInfo.GetLevel();
 
-        DBG_ASSERT( pListElements &&
-                pListElements->Count() >= 2*(nNextLevel-nPrevLevel),
-                "SwXMLExport::ExportListChange: list elements missing" );
-
-        for( sal_Int16 i=nPrevLevel; i > nNextLevel; i-- )
+        if( pListElements && pListElements->Count() >= 2*(nNextLevel-nPrevLevel) )
         {
-            for( sal_uInt16 j=0; j<2; j++ )
+            for( sal_Int16 i=nPrevLevel; i > nNextLevel; i-- )
             {
-                OUString *pElem = (*pListElements)[pListElements->Count()-1];
-                pListElements->Remove( pListElements->Count()-1 );
+                for( sal_uInt16 j=0; j<2; j++ )
+                {
+                    OUString *pElem = (*pListElements)[pListElements->Count()-1];
+                    pListElements->Remove( pListElements->Count()-1 );
 
-                GetExport().EndElement( *pElem, sal_True );
+                    GetExport().EndElement( *pElem, sal_True );
 
-                delete pElem;
+                    delete pElem;
+                }
             }
         }
     }
