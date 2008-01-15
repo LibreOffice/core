@@ -5,9 +5,9 @@
  *
  *  $RCSfile: VCL.xcu,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-08 15:43:43 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 12:15:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,25 +60,25 @@
   <node oor:name="DefaultFonts">
     <node oor:name="en" oor:op="replace">
       <prop oor:name="LATIN_DISPLAY" oor:type="xs:string" oor:op="replace">
-        <value>Albany AMT;Albany;Arial;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Arial;Albany;Albany AMT;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="CJK_DISPLAY" oor:type="xs:string" oor:op="replace">
         <value>Andale Sans UI;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;AR PL ShanHeiSun Uni;MS PGothic;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_HEADING" oor:type="xs:string" oor:op="replace">
-        <value>Albany AMT;Albany;Arial;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Arial;Albany;Albany AMT;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;DejaVu Sans Mono;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>Courier New;Cumberland;Cumberland AMT;Liberation Mono;Nimbus Mono L;DejaVu Sans Mono;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="LATIN_PRESENTATION" oor:type="xs:string" oor:op="replace">
-        <value>Albany AMT;Albany;Arial;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Arial;Albany;Albany AMT;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_SPREADSHEET" oor:type="xs:string" oor:op="replace">
-        <value>Albany AMT;Albany;Arial;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Arial;Albany;Albany AMT;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="LATIN_TEXT" oor:type="xs:string" oor:op="replace">
-        <value>Thorndale AMT;Thorndale;Times New Roman;Nimbus Roman No9 L;DejaVu Serif;Bitstream Vera Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+        <value>Times New Roman;Liberation Serif;Thorndale;Thorndale AMT;Nimbus Roman No9 L;DejaVu Serif;Bitstream Vera Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
       </prop>
       <prop oor:name="CJK_HEADING" oor:type="xs:string" oor:op="replace">
         <value>HG Mincho Light J;MS Mincho;HG Mincho J;HG Mincho L;HG Mincho;Mincho;MS PMincho;HG Mincho Light J;MS Gothic;HG Gothic J;HG Gothic B;HG Gothic;Gothic;MS PGothic;AR PL ShanHeiSun Uni;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
@@ -105,22 +105,22 @@
         <value>Tahoma;Lucidasans;Lucida Sans;Arial Unicode MS</value>
       </prop>
       <prop oor:name="SANS" oor:type="xs:string" oor:op="replace">
-        <value>Albany AMT;Albany;Arial;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
+        <value>Arial;Albany;Albany AMT;Liberation Sans;Nimbus Sans L;DejaVu Sans;Bitstream Vera Sans;Helvetica;Lucida;Geneva;Helmet;SansSerif;Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma</value>
       </prop>
       <prop oor:name="SANS_UNICODE" oor:type="xs:string" oor:op="replace">
-        <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;Albany AMT;Albany;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;SansSerif</value>
+        <value>Andale Sans UI;Arial Unicode MS;DejaVu Sans;Lucida Sans Unicode;Tahoma;Albany AMT;Albany AMT;Arial;Nimbus Sans L;Helvetica;Lucida;Geneva;Helmet;SansSerif</value>
       </prop>
       <prop oor:name="SERIF" oor:type="xs:string" oor:op="replace">
-        <value>Thorndale AMT;Thorndale;DejaVu Serif;Times New Roman;Nimbus Roman No9 L;Bitstream Vera Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
+        <value>Times New Roman;Thorndale;Thorndale AMT;Liberation Serif;DejaVu Serif;Nimbus Roman No9 L;Bitstream Vera Serif;Times;Lucida Serif;Lucida Bright;Timmons;New York;Serif</value>
       </prop>
       <prop oor:name="SYMBOL" oor:type="xs:string" oor:op="replace">
         <value>StarSymbol;OpenSymbol;Andale Sans UI;Arial Unicode MS;StarBats;Zapf Dingbats;WingDings;Symbol</value>
       </prop>
       <prop oor:name="UI_FIXED" oor:type="xs:string" oor:op="replace">
-        <value>Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>Cumberland;Cumberland AMT;Courier New;Liberation Mono;Nimbus Mono L;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="FIXED" oor:type="xs:string" oor:op="replace">
-        <value>Cumberland AMT;Cumberland;Courier New;Nimbus Mono L;DejaVu Sans Mono;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
+        <value>Cumberland;Cumberland AMT;Courier New;Liberation Mono;Nimbus Mono L;DejaVu Sans Mono;Bitstream Vera Sans Mono;Courier;Lucida Sans Typewriter;Lucida Typewriter;Monaco;Monospaced</value>
       </prop>
       <prop oor:name="UI_SANS" oor:type="xs:string" oor:op="replace">
         <value>Andale Sans UI;Arial Unicode MS;Lucida Sans Unicode;Tahoma;DejaVu Sans;Albany AMT;Albany;Arial;Nimbus Sans L;Bitstream Vera Sans;Interface User;WarpSans;Geneva;Tahoma;MS Sans Serif;Helv;Dialog;Lucida;Helvetica;Charcoal;Chicago;Helmet;Interface System;Sans Serif</value>
@@ -1219,7 +1219,7 @@
       </node>
       <node oor:name="arial" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>albanyamt;albany;liberationsans;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>liberationsans;albany;albanyamt;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS"><value></value></prop>
         <prop oor:name="SubstFontsPS"><value>Helvetica</value></prop>
@@ -1791,7 +1791,7 @@
       </node>
       <node oor:name="cgtimes" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino</value>
+          <value>thorndale;thorndaleamt;timesnewroman;liberationserif;nimbusromanno9l;times;timesroman;newyork;timmons;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -2159,7 +2159,7 @@
       </node>
       <node oor:name="courier" oor:op="replace">
     <prop oor:name="SubstFonts">
-          <value>cumberlandamt;cumberland;couriernew;liberationmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
+          <value>cumberland;cumberlandamt;liberationmono;couriernew;nimbusmonol;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
         </prop>
     <prop oor:name="SubstFontsMS"><value>Courier New</value></prop>
     <prop oor:name="SubstFontsPS"><value></value></prop>
@@ -2170,7 +2170,7 @@
       </node>
       <node oor:name="couriernew" oor:op="replace">
     <prop oor:name="SubstFonts">
-      <value>cumberlandamt;cumberland;couriernew;nimbusmonol;liberationmono;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
+      <value>cumberland;cumberlandamt;liberationmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
         </prop>
     <prop oor:name="SubstFontsMS"><value></value></prop>
     <prop oor:name="SubstFontsPS"><value>Courier</value></prop>
@@ -2849,7 +2849,7 @@
       </node>
       <node oor:name="fujiyama" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans</value>
+          <value>arialnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -3291,7 +3291,7 @@
       </node>
       <node oor:name="helmetcondensed" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>arialnarrow;helveticanarrow;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -3314,7 +3314,7 @@
       </node>
       <node oor:name="helv" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>albanyamt;albany;arial;nimbussansl;helvetica;liberationsans;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>albany;albanyamt;arial;liberationsans;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Arial</value>
@@ -3337,7 +3337,7 @@
       </node>
       <node oor:name="helvetica" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>albanyamt;albany;arial;liberationssans;nimbussansl;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>albany;albanyamt;liberationsans;arial;nimbussansl;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Arial</value>
@@ -3360,7 +3360,7 @@
       </node>
       <node oor:name="helveticanarrow" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans</value>
+          <value>arialnarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -4486,7 +4486,7 @@
       </node>
       <node oor:name="liberationsans" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>arial;albanyamt;albany;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>albany;albanyamt;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Arial</value>
@@ -4509,7 +4509,7 @@
       </node>
       <node oor:name="liberationserif" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>timesnewroman;thorndaleamt;thorndale;times;timesroman;nimbusromanno9l;newyork;timmons;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino</value>
+          <value>thorndale;thorndaleamt;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Times New Roman</value>
@@ -4532,7 +4532,7 @@
       </node>
       <node oor:name="liberationmono" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>couriernew;cumberlandamt;cumberland;courier;nimbusmonol;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
+          <value>cumberland;cumberlandamt;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Courier New</value>
@@ -4601,7 +4601,7 @@
       </node>
       <node oor:name="losangeles" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>onyx;arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>onyx;arialnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -5641,7 +5641,7 @@
     </node>
     <node oor:name="nimbusmonol" oor:op="replace">
     <prop oor:name="SubstFonts">
-      <value>cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono</value>
+      <value>cumberland;cumberlandamt;couriernew;liberationmono;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono</value>
         </prop>
     <prop oor:name="SubstFontsMS"><value>Courier New</value></prop>
     <prop oor:name="SubstFontsPS"><value>courier</value></prop>
@@ -5722,7 +5722,7 @@
       </node>
       <node oor:name="onyx" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>losangeles;arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>losangeles;arialnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -5745,7 +5745,7 @@
       </node>
       <node oor:name="opensymbol" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>starsymbol;andalesansui;arialunicodems;lucidaunicode;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl</value>
+          <value>starsymbol;andalesansui;arialunicodems;lucidaunicode;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Arial Unicode MS;Andale Sans UI</value>
@@ -6239,7 +6239,7 @@
       </node>
       <node oor:name="sanscondensed" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>arialnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -6262,7 +6262,7 @@
       </node>
       <node oor:name="sansl" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>albany;albanyamt;arial;liberationsans;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value>Verdana</value>
@@ -6285,7 +6285,7 @@
       </node>
       <node oor:name="sanslcondensed" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;dejavusanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -6308,10 +6308,10 @@
       </node>
       <node oor:name="sansserif" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>albanyamt;albany;arial;liberationsans;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
-          <value></value>
+          <value>Arial</value>
         </prop>
         <prop oor:name="SubstFontsPS">
           <value></value>
@@ -6860,7 +6860,7 @@
       </node>
       <node oor:name="swissnarrow" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans</value>
+          <value>dejavuserifcondensed;arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -6883,7 +6883,7 @@
       </node>
       <node oor:name="symbol" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>starsymbol;symbol;standardsymbols;standardsymbolsl;mtsymbol;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>starsymbol;opensymbol;standardsymbols;standardsymbolsl;mtsymbol;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
@@ -6975,7 +6975,7 @@
       </node>
       <node oor:name="times" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>thorndaleamt;thorndale;timesnewroman;liberationserif;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
+          <value>thorndale;thorndaleamt;timesnewroman;liberationserif;timesroman;newyork;timmons;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino</value>
         </prop>
         <prop oor:name="SubstFontsMS"><value>Times New Roman</value></prop>
         <prop oor:name="SubstFontsPS"><value></value></prop>
@@ -6986,7 +6986,7 @@
       </node>
       <node oor:name="timesnewroman" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>thorndaleamt;thorndale;liberationserif;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino</value>
+          <value>thorndale;thorndaleamt;liberationserif;nimbusromanno9l;times;timesroman;newyork;timmons;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino</value>
         </prop>
         <prop oor:name="SubstFontsMS"><value></value></prop>
         <prop oor:name="SubstFontsPS"><value>Times</value></prop>
@@ -6997,7 +6997,7 @@
       </node>
       <node oor:name="timesroman" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>thorndaleamt;thorndale;liberationserif;timesnewroman;nimbusromanno9l;times;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino</value>
+          <value>thorndale;thorndaleamt;timesnewroman;liberationserif;nimbusromanno9l;times;newyork;timmons;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino</value>
         </prop>
         <prop oor:name="SubstFontsMS"><value>Times New Roman</value></prop>
         <prop oor:name="SubstFontsPS"><value></value></prop>
@@ -7088,7 +7088,7 @@
       </node>
       <node oor:name="universcondensed" oor:op="replace">
         <prop oor:name="SubstFonts">
-          <value>arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode</value>
+          <value>arialnarrow;helveticanarrow;dejavucondensed;helmetcondensed;nimbussanslcondensed;nimbussanscondensed</value>
         </prop>
         <prop oor:name="SubstFontsMS">
           <value></value>
