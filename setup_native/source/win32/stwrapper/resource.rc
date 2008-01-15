@@ -16,7 +16,12 @@
 
 
 // Header
+#if defined(_MSC_VER) && (_MSC_VER < 1500)
 #include "winres.h"
+#else
+#define WINVER 0x0500
+#include "winresrc.h"
+#endif
 #include "verinfo.hrc"
 
 #define VER_FIRSTYEAR	07
@@ -117,3 +122,4 @@ VS_VERSION_INFO rcdata
 // Manifest section
 //
 1 24 stwrapper.manifest
+
