@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 14:00:32 $
+#   last change: $Author: ihi $ $Date: 2008-01-15 13:27:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ SHL1STDLIBS=\
     $(URLMONLIB) \
     $(SHLWAPILIB)
 
-.IF "$(COMEX)"=="11" || "$(COMEX)"=="10"
+.IF "$(CCNUMVER)" > "001300000000"
 .IF "$(USE_STLP_DEBUG)" != ""
     SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
 .ELSE
