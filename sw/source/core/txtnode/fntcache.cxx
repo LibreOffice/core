@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:24:37 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:49:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -784,7 +784,7 @@ void SwFntObj::GuessLeading( const ViewShell&
                 if( nDiff > 0 )
                 {
                     ASSERT( nPrtAscent < USHRT_MAX, "GuessLeading: PrtAscent-Fault" );
-                    if ( USHRT_MAX < nPrtAscent )
+                    if ( nPrtAscent < USHRT_MAX )
                         nPrtAscent = nPrtAscent + (USHORT)(( 2 * nDiff ) / 5);
                 }
             }
