@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undel.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 12:19:11 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:50:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -746,8 +746,8 @@ void SwUndoDelete::Undo( SwUndoIter& rUndoIter )
                     lcl_ReAnchorAtCntntFlyFrames( *pDoc->GetSpzFrmFmts(), aPos, nOldIdx );
                 pTxtNd = aPos.nNode.GetNode().GetTxtNode();
             }
-
-            pTxtNd->Insert( *pEndStr, aPos.nContent, INS_NOHINTEXPAND );
+            if( pTxtNd ) // Robust
+                pTxtNd->Insert( *pEndStr, aPos.nContent, INS_NOHINTEXPAND );
         }
         else if( pSttStr && bNodeMove )
         {
