@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rcheader.txt,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 14:59:59 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:21:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,16 @@
 
 // Header
 #include "resource.h"
+#if defined(_MSC_VER) && (_MSC_VER < 1500)
 #include "winres.h"
+#else
+#define WINVER 0x0500
+#include <winresrc.h>
+#define LB_ADDSTRING	(WM_USER+1)
+#define CB_ADDSTRING	(WM_USER+3)
+#define IDC_STATIC		(-1)
+#endif
+
 #include "verinfo.hrc"
 
 #define VER_FIRSTYEAR	03
