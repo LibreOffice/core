@@ -5,9 +5,9 @@
 #
 #   $RCSfile: unopkg.sh,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-15 10:35:27 $
+#   last change: $Author: rt $ $Date: 2008-01-15 10:40:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ export PATH
 
 # assume gui mode if passed a single oxt file as argument
 GUI=""
-[ $# -eq 1 -a "oxt" = "`echo $1 | cut -d . -f 2'`" -a -n "$DISPLAY" ] && GUI="gui"
+[ $# -eq 1 -a "oxt" = "`echo $1 | cut -d . -f 2`" -a -n "$DISPLAY" ] && GUI="gui"
 
 # execute binary
 exec "$sd_prog/$sd_binary" $GUI "$@"
