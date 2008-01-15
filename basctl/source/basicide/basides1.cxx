@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:21:36 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 15:42:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1146,7 +1146,8 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, BOOL bUpdateTabBar, BO
         if ( pCurWin )
         {
             SetWindow( pCurWin );
-            SfxObjectShell::SetWorkingDocument( pCurWin->GetDocument().getDocumentOrNull() );
+            if ( pCurWin->GetDocument().isDocument() )
+                SfxObjectShell::SetWorkingDocument( pCurWin->GetDocument().getDocument() );
         }
         else
         {
@@ -1365,8 +1366,8 @@ void __EXPORT BasicIDEShell::Activate( BOOL bMDI )
 {
     if ( bMDI )
     {
-        if ( pCurWin )
-            SfxObjectShell::SetWorkingDocument( pCurWin->GetDocument().getDocumentOrNull() );
+        if ( pCurWin && pCurWin->GetDocument().isDocument() )
+            SfxObjectShell::SetWorkingDocument( pCurWin->GetDocument().getDocument() );
 
         if( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) )
             ((DialogWindow*)pCurWin)->UpdateBrowser();
@@ -1418,10 +1419,6 @@ void __EXPORT BasicIDEShell::Deactivate( BOOL bMDI )
 */
 
         ShowObjectDialog( FALSE, FALSE );
-
-        Reference< XModel > xWorkingDoc( SfxObjectShell::GetWorkingDocument() );
-        if ( pCurWin && xWorkingDoc.is() && pCurWin->IsDocument( ScriptDocument( xWorkingDoc ) ) )
-            SfxObjectShell::SetWorkingDocument( NULL );
     }
 }
 
