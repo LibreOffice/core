@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:47:17 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:45:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -720,7 +720,7 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
         pContext = (*mpContexts)[nCount - 1]->CreateChildContext( nPrefix,
                                                                  aLocalName,
                                                                  xAttrList );
-        DBG_ASSERT( pContext->GetPrefix() == nPrefix,
+        DBG_ASSERT( pContext && pContext->GetPrefix() == nPrefix,
                 "SvXMLImport::startElement: created context has wrong prefix" );
     }
     else
