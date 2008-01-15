@@ -1,5 +1,5 @@
 *** misc/spirit-1.6.1/boost/spirit/core/composite/actions.hpp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/core/composite/actions.hpp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/core/composite/actions.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 11,16 ****
 --- 11,21 ----
@@ -15,18 +15,19 @@
   #include <algorithm>
   
 ***************
-*** 346,349 ****
---- 351,358 ----
+*** 345,349 ****
+--- 350,358 ----
+      }
   
   }} // namespace boost::spirit
-  
++ 
 + #if defined _MSC_VER
 + #pragma warning(pop)
 + #endif
-+ 
+  
   #endif
 *** misc/spirit-1.6.1/boost/spirit/core/composite/composite.hpp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/core/composite/composite.hpp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/core/composite/composite.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 65,75 ****
           unary(BaseT const& base)
@@ -53,7 +54,7 @@
           return_t
           subject() const
 *** misc/spirit-1.6.1/boost/spirit/core/composite/epsilon.hpp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/core/composite/epsilon.hpp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/core/composite/epsilon.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 12,17 ****
 --- 12,22 ----
@@ -86,18 +87,19 @@
   inline condition_parser<CondT, false>
   operator~(condition_parser<CondT, true> const& p)
 ***************
-*** 288,291 ****
---- 293,300 ----
+*** 287,291 ****
+--- 292,300 ----
+  
   ///////////////////////////////////////////////////////////////////////////////
   }} // namespace boost::spirit
-  
++ 
 + #if defined _MSC_VER
 + #pragma warning(pop)
 + #endif
-+ 
+  
   #endif
 *** misc/spirit-1.6.1/boost/spirit/core/composite/impl/composite.ipp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/core/composite/impl/composite.ipp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/core/composite/impl/composite.ipp	Wed Dec  5 10:08:58 2007
 ***************
 *** 112,120 ****
               typedef typename base_t::return_t                   return_t;
@@ -162,7 +164,7 @@
               return_t
               right() const { return base_t::get(); }
 *** misc/spirit-1.6.1/boost/spirit/core/composite/impl/operators.ipp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/core/composite/impl/operators.ipp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/core/composite/impl/operators.ipp	Wed Dec  5 10:08:58 2007
 ***************
 *** 12,17 ****
 --- 12,21 ----
@@ -177,18 +179,19 @@
   namespace boost { namespace spirit {
   
 ***************
-*** 665,668 ****
---- 669,676 ----
+*** 664,668 ****
+--- 668,676 ----
+  
   ///////////////////////////////////////////////////////////////////////////////
   }} // namespace boost::spirit
-  
++ 
 + #if defined __SUNPRO_CC
 + #pragma enable_warn
 + #endif
-+ 
+  
   #endif
 *** misc/spirit-1.6.1/boost/spirit/core/impl/match.ipp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/core/impl/match.ipp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/core/impl/match.ipp	Wed Dec  5 10:08:58 2007
 ***************
 *** 154,167 ****
               { return nil_t(); }
@@ -221,7 +224,7 @@
       #else
       #define BOOST_SPIRIT_SAFE_BOOL(cond)  (cond)
 *** misc/spirit-1.6.1/boost/spirit/core/impl/parser.ipp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/core/impl/parser.ipp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/core/impl/parser.ipp	Wed Dec  5 10:08:58 2007
 ***************
 *** 11,16 ****
 --- 11,20 ----
@@ -236,19 +239,20 @@
   namespace boost { namespace spirit {
   
 ***************
-*** 52,56 ****
---- 56,64 ----
+*** 51,56 ****
+--- 55,64 ----
+      }
   
   }} // namespace boost::spirit
-  
++ 
 + #if defined __SUNPRO_CC
 + #pragma enable_warn
 + #endif
-+ 
+  
   #endif
   
 *** misc/spirit-1.6.1/boost/spirit/core/match.hpp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/core/match.hpp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/core/match.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 60,70 ****
           : len(-1), val(impl::match_attr<T>::get_default()) {}
@@ -300,7 +304,7 @@
           operator impl::safe_bool() const
           { return BOOST_SPIRIT_SAFE_BOOL(len >= 0); }
 *** misc/spirit-1.6.1/boost/spirit/core/meta/impl/fundamental.ipp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/core/meta/impl/fundamental.ipp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/core/meta/impl/fundamental.ipp	Wed Dec  5 10:08:58 2007
 ***************
 *** 11,16 ****
 --- 11,20 ----
@@ -315,18 +319,19 @@
   namespace boost { namespace spirit {
   
 ***************
-*** 303,306 ****
---- 307,314 ----
+*** 302,306 ****
+--- 306,314 ----
+  
   ///////////////////////////////////////////////////////////////////////////////
   }} // namespace boost::spirit
-  
++ 
 + #if defined __SUNPRO_CC
 + #pragma enable_warn
 + #endif
-+ 
+  
   #endif // !defined(BOOST_SPIRIT_FUNDAMENTAL_IPP)
 *** misc/spirit-1.6.1/boost/spirit/core/non_terminal/impl/grammar.ipp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/core/non_terminal/impl/grammar.ipp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/core/non_terminal/impl/grammar.ipp	Wed Dec  5 10:08:58 2007
 ***************
 *** 243,249 ****
       //////////////////////////////////
@@ -351,7 +356,7 @@
   #if !defined(BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE)
           typedef impl::grammar_helper_base<GrammarT> helper_base_t;
 *** misc/spirit-1.6.1/boost/spirit/core/non_terminal/subrule.hpp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/core/non_terminal/subrule.hpp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/core/non_terminal/subrule.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 228,234 ****
               subrule_list<
@@ -410,7 +415,7 @@
   
           template <typename ScannerT>
 *** misc/spirit-1.6.1/boost/spirit/core/scanner/impl/skipper.ipp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/core/scanner/impl/skipper.ipp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/core/scanner/impl/skipper.ipp	Wed Dec  5 10:08:58 2007
 ***************
 *** 11,16 ****
 --- 11,20 ----
@@ -425,19 +430,20 @@
   namespace boost { namespace spirit {
   
 ***************
-*** 176,180 ****
---- 180,188 ----
+*** 175,180 ****
+--- 179,188 ----
+  
   ///////////////////////////////////////////////////////////////////////////////
   }} // namespace boost::spirit
-  
++ 
 + #if defined __SUNPRO_CC
 + #pragma enable_warn
 + #endif
-+ 
+  
   #endif
   
 *** misc/spirit-1.6.1/boost/spirit/core/scanner/scanner.hpp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/core/scanner/scanner.hpp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/core/scanner/scanner.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 18,23 ****
 --- 18,26 ----
@@ -518,7 +524,7 @@
       }
   
 *** misc/spirit-1.6.1/boost/spirit/error_handling/exceptions.hpp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/error_handling/exceptions.hpp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/error_handling/exceptions.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 38,44 ****
   
@@ -577,7 +583,7 @@
           result_t    result;
           int         length;
 *** misc/spirit-1.6.1/boost/spirit/iterator/impl/file_iterator.ipp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/iterator/impl/file_iterator.ipp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/iterator/impl/file_iterator.ipp	Wed Dec  5 10:08:58 2007
 ***************
 *** 24,29 ****
 --- 24,33 ----
@@ -592,18 +598,19 @@
   #include <cassert>
   #include <fcntl.h>
 ***************
-*** 490,493 ****
---- 494,501 ----
+*** 489,493 ****
+--- 493,501 ----
+  
   ///////////////////////////////////////////////////////////////////////////////
   }} // namespace boost::spirit
-  
++ 
 + #if defined __SUNPRO_CC
 + #pragma enable_warn
 + #endif
-+ 
+  
   #endif // #if !defined FILE_ITERATOR_IPP
 *** misc/spirit-1.6.1/boost/spirit/iterator/multi_pass.hpp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/iterator/multi_pass.hpp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/iterator/multi_pass.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 11,16 ****
 --- 11,21 ----
@@ -632,7 +639,7 @@
   #endif  // BOOST_SPIRIT_ITERATOR_MULTI_PASS_HPP
   
 *** misc/spirit-1.6.1/boost/spirit/utility/chset.hpp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/utility/chset.hpp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/utility/chset.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 12,17 ****
 --- 12,22 ----
@@ -648,20 +655,20 @@
   #include <boost/shared_ptr.hpp>
   #include <boost/spirit/core/primitives/primitives.hpp>
 ***************
-*** 230,235 ****
---- 235,244 ----
+*** 229,234 ****
+--- 234,243 ----
+  
   ///////////////////////////////////////////////////////////////////////////////
   }} // namespace boost::spirit
-  
++ 
 + #if defined _MSC_VER
 + #pragma warning(pop)
 + #endif
-+ 
+  
   #endif
   
-  #include <boost/spirit/utility/impl/chset.ipp>
 *** misc/spirit-1.6.1/boost/spirit/utility/chset_operators.hpp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/utility/chset_operators.hpp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/utility/chset_operators.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 12,17 ****
 --- 12,22 ----
@@ -677,7 +684,7 @@
   #include <boost/spirit/utility/chset.hpp>
   
 *** misc/spirit-1.6.1/boost/spirit/utility/confix.hpp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/utility/confix.hpp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/utility/confix.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 389,395 ****
               as_parser<OpenT>::convert(open),
@@ -696,7 +703,7 @@
   ///////////////////////////////////////////////////////////////////////////////
   }} // namespace boost::spirit
 *** misc/spirit-1.6.1/boost/spirit/utility/functor_parser.hpp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/utility/functor_parser.hpp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/utility/functor_parser.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 54,66 ****
               typedef typename ScannerT::iterator_t   iterator_t;
@@ -727,7 +734,7 @@
       };
   
 *** misc/spirit-1.6.1/boost/spirit/utility/impl/chset.ipp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/utility/impl/chset.ipp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/utility/impl/chset.ipp	Wed Dec  5 10:08:58 2007
 ***************
 *** 12,17 ****
 --- 12,22 ----
@@ -743,19 +750,20 @@
   #include <boost/limits.hpp>
   #include <boost/spirit/utility/chset.hpp>
 ***************
-*** 360,364 ****
---- 365,373 ----
+*** 359,364 ****
+--- 364,373 ----
+  
   ///////////////////////////////////////////////////////////////////////////////
   }} // namespace boost::spirit
-  
++ 
 + #if defined _MSC_VER
 + #pragma warning(pop)
 + #endif
-+ 
+  
   #endif
   
 *** misc/spirit-1.6.1/boost/spirit/utility/impl/chset_operators.ipp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/utility/impl/chset_operators.ipp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/utility/impl/chset_operators.ipp	Wed Dec  5 10:08:58 2007
 ***************
 *** 11,16 ****
 --- 11,21 ----
@@ -771,19 +779,20 @@
   #include <boost/limits.hpp>
   
 ***************
-*** 660,664 ****
---- 665,673 ----
+*** 659,664 ****
+--- 664,673 ----
+  
   ///////////////////////////////////////////////////////////////////////////////
   }} // namespace boost::spirit
-  
++ 
 + #if defined _MSC_VER
 + #pragma warning(pop)
 + #endif
-+ 
+  
   #endif
   
 *** misc/spirit-1.6.1/boost/spirit/utility/loops.hpp	Tue Jul  8 04:19:06 2003
---- misc/build/spirit-1.6.1/boost/spirit/utility/loops.hpp	Wed Jun  6 20:04:00 2007
+--- misc/build/spirit-1.6.1/boost/spirit/utility/loops.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 47,54 ****
           typedef fixed_loop<ParserT, ExactT>     self_t;
@@ -803,774 +812,8 @@
   
           template <typename ScannerT>
           typename parser_result <self_t, ScannerT>::type
-*** misc/spirit-1.6.1/miniboost/boost/config/compiler/gcc.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/gcc.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 59,65 ****
-  #endif
-  //
-  // last known and checked version is 3.2:
-! #if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 2))
-  #  if defined(BOOST_ASSERT_CONFIG)
-  #     error "Unknown compiler version - please run the configure tests and report the results"
-  #  else
---- 59,66 ----
-  #endif
-  //
-  // last known and checked version is 3.2:
-! // although 3.4+x & 4.x are unchecked, we will give it a try
-! #if (__GNUC__ > 4)
-  #  if defined(BOOST_ASSERT_CONFIG)
-  #     error "Unknown compiler version - please run the configure tests and report the results"
-  #  else
-*** misc/spirit-1.6.1/miniboost/boost/config/compiler/sunpro_cc.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/sunpro_cc.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 45,52 ****
-  #      define BOOST_NO_INTEGRAL_INT64_T
-  #    endif
-  
-! #    if (__SUNPRO_CC <= 0x540) || !defined(BOOST_STRICT_CONFIG)
-  #      define BOOST_NO_TEMPLATE_TEMPLATES
-  #    endif
-  
-  #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)
---- 45,57 ----
-  #      define BOOST_NO_INTEGRAL_INT64_T
-  #    endif
-  
-! #    if (__SUNPRO_CC <= 0x550) || !defined(BOOST_STRICT_CONFIG)
-  #      define BOOST_NO_TEMPLATE_TEMPLATES
-+        // see http://lists.boost.org/MailArchives/boost/msg47184.php
-+        // and http://lists.boost.org/MailArchives/boost/msg47220.php
-+ #      define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-+ #      define BOOST_NO_SFINAE
-+ #      define BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS
-  #    endif
-  
-  #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)
-*** misc/spirit-1.6.1/miniboost/boost/config/compiler/visualc.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/visualc.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 65,75 ****
-  #  define BOOST_NO_INTRINSIC_WCHAR_T
-  #endif
-  
-! //   
-! // check for exception handling support:   
-! #ifndef _CPPUNWIND   
-! #  define BOOST_NO_EXCEPTIONS   
-! #endif 
-  
-  //
-  // __int64 support:
---- 65,75 ----
-  #  define BOOST_NO_INTRINSIC_WCHAR_T
-  #endif
-  
-! //
-! // check for exception handling support:
-! #ifndef _CPPUNWIND
-! #  define BOOST_NO_EXCEPTIONS
-! #endif
-  
-  //
-  // __int64 support:
-***************
-*** 94,99 ****
---- 94,101 ----
-  #   define BOOST_COMPILER_VERSION 7.0
-  # elif _MSC_VER == 1310
-  #   define BOOST_COMPILER_VERSION 7.1
-+ # elif _MSC_VER == 1400
-+ #   define BOOST_COMPILER_VERSION 8.0
-  # else
-  #   define BOOST_COMPILER_VERSION _MSC_VER
-  # endif
-***************
-*** 108,114 ****
-  #endif
-  //
-  // last known and checked version is 1310:
-! #if (_MSC_VER > 1310)
-  #  if defined(BOOST_ASSERT_CONFIG)
-  #     error "Unknown compiler version - please run the configure tests and report the results"
-  #  else
---- 110,116 ----
-  #endif
-  //
-  // last known and checked version is 1310:
-! #if (_MSC_VER > 1410)
-  #  if defined(BOOST_ASSERT_CONFIG)
-  #     error "Unknown compiler version - please run the configure tests and report the results"
-  #  else
-***************
-*** 120,123 ****
-  
-  
-  
-- 
---- 122,124 ----
-*** misc/spirit-1.6.1/miniboost/boost/config/platform/macos.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/config/platform/macos.hpp	Wed Jun  6 20:05:13 2007
-***************
-*** 19,27 ****
-  #    define BOOST_HAS_UNISTD_H
-  #  endif
-  // boilerplate code:
-! #  ifndef TARGET_CARBON
-  #     include <boost/config/posix_features.hpp>
-! #  endif
-  #  ifndef BOOST_HAS_STDINT_H
-  #     define BOOST_HAS_STDINT_H
-  #  endif
---- 19,28 ----
-  #    define BOOST_HAS_UNISTD_H
-  #  endif
-  // boilerplate code:
-! // See issue #i72248# 
-! //#  ifndef TARGET_CARBON
-  #     include <boost/config/posix_features.hpp>
-! //#  endif
-  #  ifndef BOOST_HAS_STDINT_H
-  #     define BOOST_HAS_STDINT_H
-  #  endif
-*** misc/spirit-1.6.1/miniboost/boost/config/platform/win32.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/config/platform/win32.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 40,45 ****
---- 40,46 ----
-  #  define NOMINMAX
-  #endif
-  
-+ #if (_MSC_VER < 1400)
-  #ifdef BOOST_MSVC
-  namespace std{
-    // Apparently, something in the Microsoft libraries requires the "long"
-***************
-*** 65,67 ****
---- 66,69 ----
-  using std::min;
-  using std::max;
-  #     endif
-+ #endif
-*** misc/spirit-1.6.1/miniboost/boost/config/user.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/config/user.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 66,68 ****
---- 66,74 ----
-  // #define BOOST_DISABLE_WIN32
-  
-  
-+ // Switch off exception statements if file is compiled without
-+ // exception support:
-+ #if defined(EXCEPTIONS_OFF) && !defined(BOOST_NO_EXCEPTIONS)
-+ #define BOOST_NO_EXCEPTIONS
-+ #endif
-+ 
-*** misc/spirit-1.6.1/miniboost/boost/iterator_adaptors.hpp	Tue Jul  8 04:19:09 2003
---- misc/build/spirit-1.6.1/miniboost/boost/iterator_adaptors.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 119,124 ****
---- 119,129 ----
-  #ifndef BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_
-  # define BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_
-  
-+ # if defined _MSC_VER
-+ # pragma warning(push)
-+ # pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ # endif
-+ 
-  # include <boost/iterator.hpp>
-  # include <boost/utility.hpp>
-  # include <boost/compressed_pair.hpp>
-***************
-*** 873,879 ****
-           return policies().dereference(*this);
-      }
-  
-! #if BOOST_WORKAROUND(BOOST_MSVC, > 0)
-  # pragma warning(push)
-  # pragma warning( disable : 4284 )
-  #endif
---- 878,884 ----
-           return policies().dereference(*this);
-      }
-  
-! #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-  # pragma warning(push)
-  # pragma warning( disable : 4284 )
-  #endif
-***************
-*** 882,888 ****
-      operator->() const
-          { return detail::operator_arrow(*this, iterator_category()); }
-  
-! #if BOOST_WORKAROUND(BOOST_MSVC, > 0)
-  # pragma warning(pop)
-  #endif
-  
---- 887,893 ----
-      operator->() const
-          { return detail::operator_arrow(*this, iterator_category()); }
-  
-! #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-  # pragma warning(pop)
-  #endif
-  
-***************
-*** 1430,1435 ****
---- 1435,1443 ----
-  } // namespace boost
-  # undef BOOST_ARG_DEPENDENT_TYPENAME
-  
-+ # if defined _MSC_VER
-+ # pragma warning(pop)
-+ # endif
-  
-  #endif
-  
-*** misc/spirit-1.6.1/miniboost/boost/mpl/aux_/ice_cast.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/mpl/aux_/ice_cast.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 17,22 ****
---- 17,27 ----
-  #ifndef BOOST_MPL_AUX_ICE_CAST_HPP_INCLUDED
-  #define BOOST_MPL_AUX_ICE_CAST_HPP_INCLUDED
-  
-+ #if defined _MSC_VER
-+ #pragma warning(push)
-+ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ #endif
-+ 
-  #include "boost/mpl/aux_/config/workaround.hpp"
-  
-  #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
-***************
-*** 28,31 ****
---- 33,40 ----
-  #   define BOOST_MPL_AUX_ICE_CAST(T, expr) static_cast<T>(expr)
-  #endif
-  
-+ #if defined _MSC_VER
-+ #pragma warning(pop)
-+ #endif
-+ 
-  #endif // BOOST_MPL_AUX_ICE_CAST_HPP_INCLUDED
-*** misc/spirit-1.6.1/miniboost/boost/mpl/aux_/integral_wrapper.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/mpl/aux_/integral_wrapper.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 17,22 ****
---- 17,27 ----
-  
-  // no include guards, the header is intended for multiple inclusion!
-  
-+ #if defined _MSC_VER
-+ #pragma warning(push)
-+ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ #endif
-+ 
-  #include "boost/mpl/aux_/ice_cast.hpp"
-  #include "boost/mpl/aux_/config/nttp.hpp"
-  #include "boost/mpl/aux_/config/static_constant.hpp"
-***************
-*** 84,86 ****
---- 89,95 ----
-  #undef AUX_WRAPPER_PARAMS
-  #undef AUX_WRAPPER_INST
-  #undef AUX_WRAPPER_VALUE_TYPE
-+ 
-+ #if defined _MSC_VER
-+ #pragma warning(pop)
-+ #endif
-*** misc/spirit-1.6.1/miniboost/boost/mpl/aux_/lambda_support.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/mpl/aux_/lambda_support.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 17,22 ****
---- 17,27 ----
-  #ifndef BOOST_MPL_AUX_LAMBDA_SUPPORT_HPP_INCLUDED
-  #define BOOST_MPL_AUX_LAMBDA_SUPPORT_HPP_INCLUDED
-  
-+ #if defined _MSC_VER
-+ #pragma warning(push)
-+ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ #endif
-+ 
-  #include "boost/mpl/aux_/config/lambda.hpp"
-  
-  #if !defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
-***************
-*** 133,136 ****
---- 138,145 ----
-  
-  #endif // BOOST_MPL_NO_FULL_LAMBDA_SUPPORT
-  
-+ #if defined _MSC_VER
-+ #pragma warning(pop)
-+ #endif
-+ 
-  #endif // BOOST_MPL_AUX_LAMBDA_SUPPORT_HPP_INCLUDED
-*** misc/spirit-1.6.1/miniboost/boost/mpl/aux_/logical_op.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/mpl/aux_/logical_op.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 17,22 ****
---- 17,27 ----
-  
-  // no include guards, the header is intended for multiple inclusion!
-  
-+ #if defined _MSC_VER
-+ #pragma warning(push)
-+ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ #endif
-+ 
-  #if !defined(BOOST_MPL_PREPROCESSING_MODE)
-  #   include "boost/mpl/bool.hpp"
-  #   include "boost/mpl/aux_/nested_type_wknd.hpp"
-***************
-*** 167,169 ****
---- 172,178 ----
-  #undef AUX_LOGICAL_OP_NAME
-  #undef AUX_LOGICAL_OP_VALUE1
-  #undef AUX_LOGICAL_OP_VALUE2
-+ 
-+ #if defined _MSC_VER
-+ #pragma warning(pop)
-+ #endif
-*** misc/spirit-1.6.1/miniboost/boost/mpl/if.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/mpl/if.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 17,22 ****
---- 17,27 ----
-  //
-  // See http://www.boost.org/libs/mpl for documentation.
-  
-+ #if defined _MSC_VER
-+ #pragma warning(push)
-+ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ #endif
-+ 
-  #include "boost/mpl/aux_/value_wknd.hpp"
-  #include "boost/mpl/aux_/ice_cast.hpp"
-  #include "boost/mpl/aux_/void_spec.hpp"
-***************
-*** 174,177 ****
---- 179,186 ----
-  } // namespace mpl
-  } // namespace boost
-  
-+ #if defined _MSC_VER
-+ #pragma warning(pop)
-+ #endif
-+ 
-  #endif // BOOST_MPL_IF_HPP_INCLUDED
-*** misc/spirit-1.6.1/miniboost/boost/mpl/integral_c.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/mpl/integral_c.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 18,23 ****
---- 18,28 ----
-  //
-  // See http://www.boost.org/libs/mpl for documentation.
-  
-+ #if defined _MSC_VER
-+ #pragma warning(push)
-+ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ #endif
-+ 
-  #include "boost/mpl/integral_c_fwd.hpp"
-  #include "boost/mpl/aux_/ice_cast.hpp"
-  #include "boost/mpl/aux_/config/ctps.hpp"
-***************
-*** 50,53 ****
---- 55,62 ----
-  }}
-  #endif
-  
-+ #if defined _MSC_VER
-+ #pragma warning(pop)
-+ #endif
-+ 
-  #endif // BOOST_MPL_INTEGRAL_C_HPP_INCLUDED
-*** misc/spirit-1.6.1/miniboost/boost/mpl/integral_c_fwd.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/mpl/integral_c_fwd.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 18,23 ****
---- 18,28 ----
-  //
-  // See http://www.boost.org/libs/mpl for documentation.
-  
-+ #if defined _MSC_VER
-+ #pragma warning(push)
-+ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ #endif
-+ 
-  #include "boost/mpl/aux_/config/workaround.hpp"
-  
-  namespace boost { namespace mpl {
-***************
-*** 29,32 ****
---- 34,41 ----
-  #endif
-  }}
-  
-+ #if defined _MSC_VER
-+ #pragma warning(pop)
-+ #endif
-+ 
-  #endif // BOOST_MPL_INTEGRAL_C_FWD_HPP_INCLUDED
-*** misc/spirit-1.6.1/miniboost/boost/mpl/is_sequence.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/mpl/is_sequence.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 17,22 ****
---- 17,27 ----
-  #ifndef BOOST_MPL_IS_SEQUENCE_HPP_INCLUDED
-  #define BOOST_MPL_IS_SEQUENCE_HPP_INCLUDED
-  
-+ #if defined _MSC_VER
-+ #pragma warning(push)
-+ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ #endif
-+ 
-  #include "boost/mpl/not.hpp"
-  #include "boost/mpl/or.hpp"
-  #include "boost/mpl/begin_end.hpp"
-***************
-*** 98,101 ****
---- 103,110 ----
-  
-  }} // namespace boost::mpl
-  
-+ #if defined _MSC_VER
-+ #pragma warning(pop)
-+ #endif
-+ 
-  #endif // BOOST_MPL_IS_SEQUENCE_HPP_INCLUDED
-*** misc/spirit-1.6.1/miniboost/boost/mpl/sequence_tag.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/mpl/sequence_tag.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 17,22 ****
---- 17,27 ----
-  #ifndef BOOST_MPL_SEQUENCE_TAG_HPP_INCLUDED
-  #define BOOST_MPL_SEQUENCE_TAG_HPP_INCLUDED
-  
-+ #if defined _MSC_VER
-+ #pragma warning(push)
-+ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ #endif
-+ 
-  #include "boost/mpl/sequence_tag_fwd.hpp"
-  #include "boost/mpl/aux_/has_tag.hpp"
-  #include "boost/mpl/aux_/has_begin.hpp"
-***************
-*** 130,133 ****
---- 135,142 ----
-  
-  }} // namespace boost::mpl
-  
-+ #if defined _MSC_VER
-+ #pragma warning(pop)
-+ #endif
-+ 
-  #endif // BOOST_MPL_SEQUENCE_TAG_HPP_INCLUDED
-*** misc/spirit-1.6.1/miniboost/boost/optional.hpp	Tue Jul  8 04:19:09 2003
---- misc/build/spirit-1.6.1/miniboost/boost/optional.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 17,22 ****
---- 17,27 ----
-  #ifndef BOOST_OPTIONAL_FLC_19NOV2002_HPP
-  #define BOOST_OPTIONAL_FLC_19NOV2002_HPP
-  
-+ #if defined _MSC_VER
-+ #pragma warning(push)
-+ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ #endif
-+ 
-  #include<new>
-  #include<algorithm>
-  
-***************
-*** 194,200 ****
---- 199,209 ----
-  
-      // implicit conversion to "bool"
-      // No-throw
-+ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
-+     operator bool() const { return m_initialized; }
-+ #else
-      operator unspecified_bool_type() const { return m_initialized ? &this_type::destroy : 0 ; }
-+ #endif // defined(__SUNPRO_CC)
-  
-         // This is provided for those compilers which don't like the conversion to bool
-         // on some contexts.
-***************
-*** 313,317 ****
---- 322,330 ----
-  
-  } // namespace boost
-  
-+ #if defined _MSC_VER
-+ #pragma warning(pop)
-+ #endif
-+ 
-  #endif
-  
-*** misc/spirit-1.6.1/miniboost/boost/scoped_array.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/scoped_array.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 83,94 ****
---- 83,98 ----
-  
-      // implicit conversion to "bool"
-  
-+ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
-+     operator bool() const { return ptr != 0; }
-+ #else
-      typedef T * (this_type::*unspecified_bool_type)() const;
-  
-      operator unspecified_bool_type() const // never throws
-      {
-          return ptr == 0? 0: &this_type::get;
-      }
-+ #endif // defined(__SUNPRO_CC)
-  
-      bool operator! () const // never throws
-      {
-*** misc/spirit-1.6.1/miniboost/boost/scoped_ptr.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/scoped_ptr.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 102,113 ****
---- 102,117 ----
-  
-      // implicit conversion to "bool"
-  
-+ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
-+     operator bool() const { return ptr != 0; }
-+ #else
-      typedef T * (this_type::*unspecified_bool_type)() const;
-  
-      operator unspecified_bool_type() const // never throws
-      {
-          return ptr == 0? 0: &this_type::get;
-      }
-+ #endif // defined(__SUNPRO_CC)
-  
-      bool operator! () const // never throws
-      {
-*** misc/spirit-1.6.1/miniboost/boost/shared_array.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/shared_array.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 94,105 ****
---- 94,109 ----
-  
-      // implicit conversion to "bool"
-  
-+ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
-+     operator bool() const { return px != 0; }
-+ #else
-      typedef T * (this_type::*unspecified_bool_type)() const;
-  
-      operator unspecified_bool_type() const // never throws
-      {
-          return px == 0? 0: &this_type::get;
-      }
-+ #endif // defined(__SUNPRO_CC)
-  
-      bool operator! () const // never throws
-      {
-*** misc/spirit-1.6.1/miniboost/boost/shared_ptr.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/shared_ptr.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 35,41 ****
-  
-  #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
-  # pragma warning(push)
-! # pragma warning(disable:4284) // odd return type for operator->
-  #endif
-  
-  namespace boost
---- 35,41 ----
-  
-  #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
-  # pragma warning(push)
-! # pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-  #endif
-  
-  namespace boost
-***************
-*** 246,257 ****
---- 246,261 ----
-  
-      // implicit conversion to "bool"
-  
-+ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
-+     operator bool() const { return px != 0; }
-+ #else
-      typedef T * (this_type::*unspecified_bool_type)() const;
-  
-      operator unspecified_bool_type() const // never throws
-      {
-          return px == 0? 0: &this_type::get;
-      }
-+ #endif // defined(__SUNPRO_CC)
-  
-      // operator! is redundant, but some compilers need it
-  
-*** misc/spirit-1.6.1/miniboost/boost/throw_exception.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/throw_exception.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 29,35 ****
-  
-  #ifdef BOOST_NO_EXCEPTIONS
-  
-! void throw_exception(std::exception const & e); // user defined
-  
-  #else
-  
---- 29,36 ----
-  
-  #ifdef BOOST_NO_EXCEPTIONS
-  
-! // void throw_exception(std::exception const & e); // user defined
-! inline void throw_exception(std::exception const &) {}
-  
-  #else
-  
-*** misc/spirit-1.6.1/miniboost/boost/type_traits/add_reference.hpp	Tue Jul  8 04:19:09 2003
---- misc/build/spirit-1.6.1/miniboost/boost/type_traits/add_reference.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 10,15 ****
---- 10,20 ----
-  #ifndef BOOST_TT_ADD_REFERENCE_HPP_INCLUDED
-  #define BOOST_TT_ADD_REFERENCE_HPP_INCLUDED
-  
-+ #if defined _MSC_VER
-+ #pragma warning(push)
-+ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ #endif
-+ 
-  #include "boost/type_traits/is_reference.hpp"
-  #include "boost/detail/workaround.hpp"
-  #include "boost/config.hpp"
-***************
-*** 87,90 ****
---- 92,99 ----
-  
-  #include "boost/type_traits/detail/type_trait_undef.hpp"
-  
-+ #if defined _MSC_VER
-+ #pragma warning(pop)
-+ #endif
-+ 
-  #endif // BOOST_TT_ADD_REFERENCE_HPP_INCLUDED
-*** misc/spirit-1.6.1/miniboost/boost/type_traits/is_base_and_derived.hpp	Tue Jul  8 04:19:09 2003
---- misc/build/spirit-1.6.1/miniboost/boost/type_traits/is_base_and_derived.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 10,15 ****
---- 10,20 ----
-  #ifndef BOOST_TT_IS_BASE_AND_DERIVED_HPP_INCLUDED
-  #define BOOST_TT_IS_BASE_AND_DERIVED_HPP_INCLUDED
-  
-+ #if defined _MSC_VER
-+ #pragma warning(push)
-+ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ #endif
-+ 
-  #include "boost/type_traits/is_class.hpp"
-  #include "boost/type_traits/is_same.hpp"
-  #include "boost/type_traits/is_convertible.hpp"
-***************
-*** 204,207 ****
---- 209,216 ----
-  
-  #include "boost/type_traits/detail/bool_trait_undef.hpp"
-  
-+ #if defined _MSC_VER
-+ #pragma warning(pop)
-+ #endif
-+ 
-  #endif // BOOST_TT_IS_BASE_AND_DERIVED_HPP_INCLUDED
-*** misc/spirit-1.6.1/miniboost/boost/type_traits/is_polymorphic.hpp	Tue Jul  8 04:19:09 2003
---- misc/build/spirit-1.6.1/miniboost/boost/type_traits/is_polymorphic.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 6,11 ****
---- 6,16 ----
-  #ifndef BOOST_TT_IS_POLYMORPHIC_HPP
-  #define BOOST_TT_IS_POLYMORPHIC_HPP
-  
-+ #if defined _MSC_VER
-+ #pragma warning(push)
-+ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ #endif
-+ 
-  #include <boost/type_traits/is_class.hpp>
-  #include <boost/type_traits/remove_cv.hpp>
-  // should be the last #include
-***************
-*** 87,90 ****
---- 92,99 ----
-  
-  #include "boost/type_traits/detail/bool_trait_undef.hpp"
-  
-+ #if defined _MSC_VER
-+ #pragma warning(pop)
-+ #endif
-+ 
-  #endif
-*** misc/spirit-1.6.1/miniboost/boost/utility/addressof.hpp	Tue Jul  8 04:19:09 2003
---- misc/build/spirit-1.6.1/miniboost/boost/utility/addressof.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 16,21 ****
---- 16,26 ----
-  #ifndef BOOST_UTILITY_ADDRESSOF_HPP
-  # define BOOST_UTILITY_ADDRESSOF_HPP
-  
-+ #if defined _MSC_VER
-+ #pragma warning(push)
-+ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
-+ #endif
-+ 
-  # include <boost/config.hpp>
-  # include <boost/detail/workaround.hpp>
-  # if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-***************
-*** 40,43 ****
---- 45,52 ----
-  
-  }
-  
-+ #if defined _MSC_VER
-+ #pragma warning(pop)
-+ #endif
-+ 
-  #endif // BOOST_UTILITY_ADDRESSOF_HPP
-*** misc/spirit-1.6.1/miniboost/boost/weak_ptr.hpp	Tue Jul  8 04:19:08 2003
---- misc/build/spirit-1.6.1/miniboost/boost/weak_ptr.hpp	Wed Jun  6 20:04:00 2007
-***************
-*** 16,26 ****
-  
-  #include <boost/shared_ptr.hpp>
-  
-- #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
-- # pragma warning(push)
-- # pragma warning(disable:4284) // odd return type for operator->
-- #endif
-- 
-  namespace boost
-  {
-  
---- 16,21 ----
-***************
-*** 186,193 ****
-  
-  } // namespace boost
-  
-- #ifdef BOOST_MSVC
-- # pragma warning(pop)
-- #endif    
-- 
-  #endif  // #ifndef BOOST_WEAK_PTR_HPP_INCLUDED
---- 181,184 ----
-*** misc/spirit-1.6.1/miniboost/boost/concept_check.hpp	2007-05-20 07:38:14.000000000 -0400
---- misc/build/spirit-1.6.1/miniboost/boost/concept_check.hpp	2007-05-20 07:52:59.000000000 -0400
+*** misc/spirit-1.6.1/miniboost/boost/concept_check.hpp	Tue Jul  8 04:19:09 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/concept_check.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 708,719 ****
         function_requires< AssignableConcept<Container> >();
@@ -1680,8 +923,739 @@
       }
       typedef typename AssociativeContainer::iterator iterator;
       typedef typename AssociativeContainer::const_iterator const_iterator;
-*** misc/spirit-1.6.1/miniboost/boost/type_traits/type_with_alignment.hpp	Wed May 23 19:45:34 2007
---- misc/build/spirit-1.6.1/miniboost/boost/type_traits/type_with_alignment.hpp	Wed May 23 19:47:00 2007
+*** misc/spirit-1.6.1/miniboost/boost/config/compiler/gcc.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/gcc.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 59,65 ****
+  #endif
+  //
+  // last known and checked version is 3.2:
+! #if (__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ > 2))
+  #  if defined(BOOST_ASSERT_CONFIG)
+  #     error "Unknown compiler version - please run the configure tests and report the results"
+  #  else
+--- 59,66 ----
+  #endif
+  //
+  // last known and checked version is 3.2:
+! // although 3.4+x & 4.x are unchecked, we will give it a try
+! #if (__GNUC__ > 4)
+  #  if defined(BOOST_ASSERT_CONFIG)
+  #     error "Unknown compiler version - please run the configure tests and report the results"
+  #  else
+*** misc/spirit-1.6.1/miniboost/boost/config/compiler/sunpro_cc.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/sunpro_cc.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 45,52 ****
+  #      define BOOST_NO_INTEGRAL_INT64_T
+  #    endif
+  
+! #    if (__SUNPRO_CC <= 0x540) || !defined(BOOST_STRICT_CONFIG)
+  #      define BOOST_NO_TEMPLATE_TEMPLATES
+  #    endif
+  
+  #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)
+--- 45,57 ----
+  #      define BOOST_NO_INTEGRAL_INT64_T
+  #    endif
+  
+! #    if (__SUNPRO_CC <= 0x550) || !defined(BOOST_STRICT_CONFIG)
+  #      define BOOST_NO_TEMPLATE_TEMPLATES
++        // see http://lists.boost.org/MailArchives/boost/msg47184.php
++        // and http://lists.boost.org/MailArchives/boost/msg47220.php
++ #      define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
++ #      define BOOST_NO_SFINAE
++ #      define BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS
+  #    endif
+  
+  #define BOOST_COMPILER "Sun compiler version " BOOST_STRINGIZE(__SUNPRO_CC)
+*** misc/spirit-1.6.1/miniboost/boost/config/compiler/visualc.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/config/compiler/visualc.hpp	Wed Dec  5 10:12:34 2007
+***************
+*** 65,75 ****
+  #  define BOOST_NO_INTRINSIC_WCHAR_T
+  #endif
+  
+! //   
+! // check for exception handling support:   
+! #ifndef _CPPUNWIND   
+! #  define BOOST_NO_EXCEPTIONS   
+! #endif 
+  
+  //
+  // __int64 support:
+--- 65,75 ----
+  #  define BOOST_NO_INTRINSIC_WCHAR_T
+  #endif
+  
+! //
+! // check for exception handling support:
+! #ifndef _CPPUNWIND
+! #  define BOOST_NO_EXCEPTIONS
+! #endif
+  
+  //
+  // __int64 support:
+***************
+*** 94,99 ****
+--- 94,101 ----
+  #   define BOOST_COMPILER_VERSION 7.0
+  # elif _MSC_VER == 1310
+  #   define BOOST_COMPILER_VERSION 7.1
++ # elif _MSC_VER == 1400
++ #   define BOOST_COMPILER_VERSION 8.0
+  # else
+  #   define BOOST_COMPILER_VERSION _MSC_VER
+  # endif
+***************
+*** 108,121 ****
+  #endif
+  //
+  // last known and checked version is 1310:
+! #if (_MSC_VER > 1310)
+  #  if defined(BOOST_ASSERT_CONFIG)
+  #     error "Unknown compiler version - please run the configure tests and report the results"
+  #  else
+  #     pragma message("Unknown compiler version - please run the configure tests and report the results")
+  #  endif
+  #endif
+- 
+  
+  
+  
+--- 110,122 ----
+  #endif
+  //
+  // last known and checked version is 1310:
+! #if (_MSC_VER > 1500)
+  #  if defined(BOOST_ASSERT_CONFIG)
+  #     error "Unknown compiler version - please run the configure tests and report the results"
+  #  else
+  #     pragma message("Unknown compiler version - please run the configure tests and report the results")
+  #  endif
+  #endif
+  
+  
+  
+*** misc/spirit-1.6.1/miniboost/boost/config/platform/macos.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/config/platform/macos.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 19,27 ****
+  #    define BOOST_HAS_UNISTD_H
+  #  endif
+  // boilerplate code:
+! #  ifndef TARGET_CARBON
+  #     include <boost/config/posix_features.hpp>
+! #  endif
+  #  ifndef BOOST_HAS_STDINT_H
+  #     define BOOST_HAS_STDINT_H
+  #  endif
+--- 19,28 ----
+  #    define BOOST_HAS_UNISTD_H
+  #  endif
+  // boilerplate code:
+! // See issue #i72248# 
+! //#  ifndef TARGET_CARBON
+  #     include <boost/config/posix_features.hpp>
+! //#  endif
+  #  ifndef BOOST_HAS_STDINT_H
+  #     define BOOST_HAS_STDINT_H
+  #  endif
+*** misc/spirit-1.6.1/miniboost/boost/config/platform/win32.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/config/platform/win32.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 40,45 ****
+--- 40,46 ----
+  #  define NOMINMAX
+  #endif
+  
++ #if (_MSC_VER < 1400)
+  #ifdef BOOST_MSVC
+  namespace std{
+    // Apparently, something in the Microsoft libraries requires the "long"
+***************
+*** 65,67 ****
+--- 66,69 ----
+  using std::min;
+  using std::max;
+  #     endif
++ #endif
+*** misc/spirit-1.6.1/miniboost/boost/config/user.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/config/user.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 66,68 ****
+--- 66,74 ----
+  // #define BOOST_DISABLE_WIN32
+  
+  
++ // Switch off exception statements if file is compiled without
++ // exception support:
++ #if defined(EXCEPTIONS_OFF) && !defined(BOOST_NO_EXCEPTIONS)
++ #define BOOST_NO_EXCEPTIONS
++ #endif
++ 
+*** misc/spirit-1.6.1/miniboost/boost/iterator_adaptors.hpp	Tue Jul  8 04:19:09 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/iterator_adaptors.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 119,124 ****
+--- 119,129 ----
+  #ifndef BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_
+  # define BOOST_ITERATOR_ADAPTOR_DWA053000_HPP_
+  
++ # if defined _MSC_VER
++ # pragma warning(push)
++ # pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ # endif
++ 
+  # include <boost/iterator.hpp>
+  # include <boost/utility.hpp>
+  # include <boost/compressed_pair.hpp>
+***************
+*** 873,879 ****
+           return policies().dereference(*this);
+      }
+  
+! #if BOOST_WORKAROUND(BOOST_MSVC, > 0)
+  # pragma warning(push)
+  # pragma warning( disable : 4284 )
+  #endif
+--- 878,884 ----
+           return policies().dereference(*this);
+      }
+  
+! #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+  # pragma warning(push)
+  # pragma warning( disable : 4284 )
+  #endif
+***************
+*** 882,888 ****
+      operator->() const
+          { return detail::operator_arrow(*this, iterator_category()); }
+  
+! #if BOOST_WORKAROUND(BOOST_MSVC, > 0)
+  # pragma warning(pop)
+  #endif
+  
+--- 887,893 ----
+      operator->() const
+          { return detail::operator_arrow(*this, iterator_category()); }
+  
+! #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+  # pragma warning(pop)
+  #endif
+  
+***************
+*** 1430,1435 ****
+--- 1435,1443 ----
+  } // namespace boost
+  # undef BOOST_ARG_DEPENDENT_TYPENAME
+  
++ # if defined _MSC_VER
++ # pragma warning(pop)
++ # endif
+  
+  #endif
+  
+*** misc/spirit-1.6.1/miniboost/boost/mpl/aux_/ice_cast.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/mpl/aux_/ice_cast.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 17,22 ****
+--- 17,27 ----
+  #ifndef BOOST_MPL_AUX_ICE_CAST_HPP_INCLUDED
+  #define BOOST_MPL_AUX_ICE_CAST_HPP_INCLUDED
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/aux_/config/workaround.hpp"
+  
+  #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
+***************
+*** 26,31 ****
+--- 31,40 ----
+  #   define BOOST_MPL_AUX_ICE_CAST(T, expr) (T)(expr)
+  #else
+  #   define BOOST_MPL_AUX_ICE_CAST(T, expr) static_cast<T>(expr)
++ #endif
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
+  #endif
+  
+  #endif // BOOST_MPL_AUX_ICE_CAST_HPP_INCLUDED
+*** misc/spirit-1.6.1/miniboost/boost/mpl/aux_/integral_wrapper.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/mpl/aux_/integral_wrapper.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 17,22 ****
+--- 17,27 ----
+  
+  // no include guards, the header is intended for multiple inclusion!
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/aux_/ice_cast.hpp"
+  #include "boost/mpl/aux_/config/nttp.hpp"
+  #include "boost/mpl/aux_/config/static_constant.hpp"
+***************
+*** 84,86 ****
+--- 89,95 ----
+  #undef AUX_WRAPPER_PARAMS
+  #undef AUX_WRAPPER_INST
+  #undef AUX_WRAPPER_VALUE_TYPE
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+*** misc/spirit-1.6.1/miniboost/boost/mpl/aux_/lambda_support.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/mpl/aux_/lambda_support.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 17,22 ****
+--- 17,27 ----
+  #ifndef BOOST_MPL_AUX_LAMBDA_SUPPORT_HPP_INCLUDED
+  #define BOOST_MPL_AUX_LAMBDA_SUPPORT_HPP_INCLUDED
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/aux_/config/lambda.hpp"
+  
+  #if !defined(BOOST_MPL_NO_FULL_LAMBDA_SUPPORT)
+***************
+*** 132,136 ****
+--- 137,145 ----
+  #endif // __EDG_VERSION__
+  
+  #endif // BOOST_MPL_NO_FULL_LAMBDA_SUPPORT
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+  
+  #endif // BOOST_MPL_AUX_LAMBDA_SUPPORT_HPP_INCLUDED
+*** misc/spirit-1.6.1/miniboost/boost/mpl/aux_/logical_op.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/mpl/aux_/logical_op.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 17,22 ****
+--- 17,27 ----
+  
+  // no include guards, the header is intended for multiple inclusion!
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #if !defined(BOOST_MPL_PREPROCESSING_MODE)
+  #   include "boost/mpl/bool.hpp"
+  #   include "boost/mpl/aux_/nested_type_wknd.hpp"
+***************
+*** 167,169 ****
+--- 172,178 ----
+  #undef AUX_LOGICAL_OP_NAME
+  #undef AUX_LOGICAL_OP_VALUE1
+  #undef AUX_LOGICAL_OP_VALUE2
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+*** misc/spirit-1.6.1/miniboost/boost/mpl/if.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/mpl/if.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 17,22 ****
+--- 17,27 ----
+  //
+  // See http://www.boost.org/libs/mpl for documentation.
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/aux_/value_wknd.hpp"
+  #include "boost/mpl/aux_/ice_cast.hpp"
+  #include "boost/mpl/aux_/void_spec.hpp"
+***************
+*** 173,177 ****
+--- 178,186 ----
+  
+  } // namespace mpl
+  } // namespace boost
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+  
+  #endif // BOOST_MPL_IF_HPP_INCLUDED
+*** misc/spirit-1.6.1/miniboost/boost/mpl/integral_c.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/mpl/integral_c.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 18,23 ****
+--- 18,28 ----
+  //
+  // See http://www.boost.org/libs/mpl for documentation.
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/integral_c_fwd.hpp"
+  #include "boost/mpl/aux_/ice_cast.hpp"
+  #include "boost/mpl/aux_/config/ctps.hpp"
+***************
+*** 48,53 ****
+--- 53,62 ----
+      operator bool() const { return this->value; }
+  };
+  }}
++ #endif
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
+  #endif
+  
+  #endif // BOOST_MPL_INTEGRAL_C_HPP_INCLUDED
+*** misc/spirit-1.6.1/miniboost/boost/mpl/integral_c_fwd.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/mpl/integral_c_fwd.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 18,23 ****
+--- 18,28 ----
+  //
+  // See http://www.boost.org/libs/mpl for documentation.
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/aux_/config/workaround.hpp"
+  
+  namespace boost { namespace mpl {
+***************
+*** 28,32 ****
+--- 33,41 ----
+  template< typename T, T N > struct integral_c;
+  #endif
+  }}
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+  
+  #endif // BOOST_MPL_INTEGRAL_C_FWD_HPP_INCLUDED
+*** misc/spirit-1.6.1/miniboost/boost/mpl/is_sequence.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/mpl/is_sequence.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 17,22 ****
+--- 17,27 ----
+  #ifndef BOOST_MPL_IS_SEQUENCE_HPP_INCLUDED
+  #define BOOST_MPL_IS_SEQUENCE_HPP_INCLUDED
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/not.hpp"
+  #include "boost/mpl/or.hpp"
+  #include "boost/mpl/begin_end.hpp"
+***************
+*** 97,101 ****
+--- 102,110 ----
+  BOOST_MPL_AUX_VOID_SPEC(1, is_sequence)
+  
+  }} // namespace boost::mpl
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+  
+  #endif // BOOST_MPL_IS_SEQUENCE_HPP_INCLUDED
+*** misc/spirit-1.6.1/miniboost/boost/mpl/sequence_tag.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/mpl/sequence_tag.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 17,22 ****
+--- 17,27 ----
+  #ifndef BOOST_MPL_SEQUENCE_TAG_HPP_INCLUDED
+  #define BOOST_MPL_SEQUENCE_TAG_HPP_INCLUDED
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/mpl/sequence_tag_fwd.hpp"
+  #include "boost/mpl/aux_/has_tag.hpp"
+  #include "boost/mpl/aux_/has_begin.hpp"
+***************
+*** 129,133 ****
+--- 134,142 ----
+  BOOST_MPL_AUX_VOID_SPEC(1, sequence_tag)
+  
+  }} // namespace boost::mpl
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+  
+  #endif // BOOST_MPL_SEQUENCE_TAG_HPP_INCLUDED
+*** misc/spirit-1.6.1/miniboost/boost/optional.hpp	Tue Jul  8 04:19:09 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/optional.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 17,22 ****
+--- 17,27 ----
+  #ifndef BOOST_OPTIONAL_FLC_19NOV2002_HPP
+  #define BOOST_OPTIONAL_FLC_19NOV2002_HPP
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include<new>
+  #include<algorithm>
+  
+***************
+*** 194,200 ****
+--- 199,209 ----
+  
+      // implicit conversion to "bool"
+      // No-throw
++ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
++     operator bool() const { return m_initialized; }
++ #else
+      operator unspecified_bool_type() const { return m_initialized ? &this_type::destroy : 0 ; }
++ #endif // defined(__SUNPRO_CC)
+  
+         // This is provided for those compilers which don't like the conversion to bool
+         // on some contexts.
+***************
+*** 312,317 ****
+--- 321,330 ----
+  
+  
+  } // namespace boost
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+  
+  #endif
+  
+*** misc/spirit-1.6.1/miniboost/boost/scoped_array.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/scoped_array.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 83,94 ****
+--- 83,98 ----
+  
+      // implicit conversion to "bool"
+  
++ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
++     operator bool() const { return ptr != 0; }
++ #else
+      typedef T * (this_type::*unspecified_bool_type)() const;
+  
+      operator unspecified_bool_type() const // never throws
+      {
+          return ptr == 0? 0: &this_type::get;
+      }
++ #endif // defined(__SUNPRO_CC)
+  
+      bool operator! () const // never throws
+      {
+*** misc/spirit-1.6.1/miniboost/boost/scoped_ptr.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/scoped_ptr.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 102,113 ****
+--- 102,117 ----
+  
+      // implicit conversion to "bool"
+  
++ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
++     operator bool() const { return ptr != 0; }
++ #else
+      typedef T * (this_type::*unspecified_bool_type)() const;
+  
+      operator unspecified_bool_type() const // never throws
+      {
+          return ptr == 0? 0: &this_type::get;
+      }
++ #endif // defined(__SUNPRO_CC)
+  
+      bool operator! () const // never throws
+      {
+*** misc/spirit-1.6.1/miniboost/boost/shared_array.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/shared_array.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 94,105 ****
+--- 94,109 ----
+  
+      // implicit conversion to "bool"
+  
++ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
++     operator bool() const { return px != 0; }
++ #else
+      typedef T * (this_type::*unspecified_bool_type)() const;
+  
+      operator unspecified_bool_type() const // never throws
+      {
+          return px == 0? 0: &this_type::get;
+      }
++ #endif // defined(__SUNPRO_CC)
+  
+      bool operator! () const // never throws
+      {
+*** misc/spirit-1.6.1/miniboost/boost/shared_ptr.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/shared_ptr.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 35,41 ****
+  
+  #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
+  # pragma warning(push)
+! # pragma warning(disable:4284) // odd return type for operator->
+  #endif
+  
+  namespace boost
+--- 35,41 ----
+  
+  #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
+  # pragma warning(push)
+! # pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
+  #endif
+  
+  namespace boost
+***************
+*** 246,257 ****
+--- 246,261 ----
+  
+      // implicit conversion to "bool"
+  
++ #if defined(__SUNPRO_CC) // workaround opt bug when compiling with -xO3
++     operator bool() const { return px != 0; }
++ #else
+      typedef T * (this_type::*unspecified_bool_type)() const;
+  
+      operator unspecified_bool_type() const // never throws
+      {
+          return px == 0? 0: &this_type::get;
+      }
++ #endif // defined(__SUNPRO_CC)
+  
+      // operator! is redundant, but some compilers need it
+  
+*** misc/spirit-1.6.1/miniboost/boost/throw_exception.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/throw_exception.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 29,35 ****
+  
+  #ifdef BOOST_NO_EXCEPTIONS
+  
+! void throw_exception(std::exception const & e); // user defined
+  
+  #else
+  
+--- 29,36 ----
+  
+  #ifdef BOOST_NO_EXCEPTIONS
+  
+! // void throw_exception(std::exception const & e); // user defined
+! inline void throw_exception(std::exception const &) {}
+  
+  #else
+  
+*** misc/spirit-1.6.1/miniboost/boost/type_traits/add_reference.hpp	Tue Jul  8 04:19:09 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/type_traits/add_reference.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 10,15 ****
+--- 10,20 ----
+  #ifndef BOOST_TT_ADD_REFERENCE_HPP_INCLUDED
+  #define BOOST_TT_ADD_REFERENCE_HPP_INCLUDED
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/type_traits/is_reference.hpp"
+  #include "boost/detail/workaround.hpp"
+  #include "boost/config.hpp"
+***************
+*** 86,90 ****
+--- 91,99 ----
+  } // namespace boost
+  
+  #include "boost/type_traits/detail/type_trait_undef.hpp"
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+  
+  #endif // BOOST_TT_ADD_REFERENCE_HPP_INCLUDED
+*** misc/spirit-1.6.1/miniboost/boost/type_traits/is_base_and_derived.hpp	Tue Jul  8 04:19:09 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/type_traits/is_base_and_derived.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 10,15 ****
+--- 10,20 ----
+  #ifndef BOOST_TT_IS_BASE_AND_DERIVED_HPP_INCLUDED
+  #define BOOST_TT_IS_BASE_AND_DERIVED_HPP_INCLUDED
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include "boost/type_traits/is_class.hpp"
+  #include "boost/type_traits/is_same.hpp"
+  #include "boost/type_traits/is_convertible.hpp"
+***************
+*** 203,207 ****
+--- 208,216 ----
+  } // namespace boost
+  
+  #include "boost/type_traits/detail/bool_trait_undef.hpp"
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+  
+  #endif // BOOST_TT_IS_BASE_AND_DERIVED_HPP_INCLUDED
+*** misc/spirit-1.6.1/miniboost/boost/type_traits/is_polymorphic.hpp	Tue Jul  8 04:19:09 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/type_traits/is_polymorphic.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 6,11 ****
+--- 6,16 ----
+  #ifndef BOOST_TT_IS_POLYMORPHIC_HPP
+  #define BOOST_TT_IS_POLYMORPHIC_HPP
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  #include <boost/type_traits/is_class.hpp>
+  #include <boost/type_traits/remove_cv.hpp>
+  // should be the last #include
+***************
+*** 86,90 ****
+--- 91,99 ----
+  } // namespace boost
+  
+  #include "boost/type_traits/detail/bool_trait_undef.hpp"
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+  
+  #endif
+*** misc/spirit-1.6.1/miniboost/boost/type_traits/type_with_alignment.hpp	Tue Jul  8 04:19:09 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/type_traits/type_with_alignment.hpp	Wed Dec  5 10:08:58 2007
 ***************
 *** 72,78 ****
   #undef BOOST_TT_CHOOSE_MIN_ALIGNMENT
@@ -1716,3 +1690,59 @@
   class type_with_alignment
   {
       typedef detail::lower_alignment<Align> t1;
+*** misc/spirit-1.6.1/miniboost/boost/utility/addressof.hpp	Tue Jul  8 04:19:09 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/utility/addressof.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 16,21 ****
+--- 16,26 ----
+  #ifndef BOOST_UTILITY_ADDRESSOF_HPP
+  # define BOOST_UTILITY_ADDRESSOF_HPP
+  
++ #if defined _MSC_VER
++ #pragma warning(push)
++ #pragma warning(disable: 4668) // "id is not defined as a preprocessor macro"
++ #endif
++ 
+  # include <boost/config.hpp>
+  # include <boost/detail/workaround.hpp>
+  # if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+***************
+*** 39,43 ****
+--- 44,52 ----
+  }
+  
+  }
++ 
++ #if defined _MSC_VER
++ #pragma warning(pop)
++ #endif
+  
+  #endif // BOOST_UTILITY_ADDRESSOF_HPP
+*** misc/spirit-1.6.1/miniboost/boost/weak_ptr.hpp	Tue Jul  8 04:19:08 2003
+--- misc/build/spirit-1.6.1/miniboost/boost/weak_ptr.hpp	Wed Dec  5 10:08:58 2007
+***************
+*** 16,26 ****
+  
+  #include <boost/shared_ptr.hpp>
+  
+- #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash
+- # pragma warning(push)
+- # pragma warning(disable:4284) // odd return type for operator->
+- #endif
+- 
+  namespace boost
+  {
+  
+--- 16,21 ----
+***************
+*** 185,193 ****
+  }
+  
+  } // namespace boost
+- 
+- #ifdef BOOST_MSVC
+- # pragma warning(pop)
+- #endif    
+  
+  #endif  // #ifndef BOOST_WEAK_PTR_HPP_INCLUDED
+--- 180,184 ----
