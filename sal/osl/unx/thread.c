@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.c,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:24:36 $
+ *  last change: $Author: rt $ $Date: 2008-01-15 08:44:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -991,6 +991,15 @@ static void osl_thread_textencoding_init_Impl (void)
         defaultEncoding = osl_getTextEncodingFromLocale(NULL);
 
     OSL_ASSERT(defaultEncoding != RTL_TEXTENCODING_DONTKNOW);
+
+    /*
+    Tools string functions call abort() on an unknown encoding so ASCII
+    is a meaningfull fallback regardless wether the assertion makes sense.
+    */
+
+    if ( RTL_TEXTENCODING_DONTKNOW == defaultEncoding )
+        defaultEncoding = RTL_TEXTENCODING_ASCII_US;
+
     g_thread.m_textencoding.m_default = defaultEncoding;
 }
 
