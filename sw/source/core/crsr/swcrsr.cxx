@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:19:43 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:48:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,9 +241,12 @@ void SwCursor::SaveState()
 
 void SwCursor::RestoreState()
 {
-    _SwCursor_SavePos* pDel = pSavePos;
-    pSavePos = pSavePos->pNext;
-    delete pDel;
+    if( pSavePos ) // Robust
+    {
+        _SwCursor_SavePos* pDel = pSavePos;
+        pSavePos = pSavePos->pNext;
+        delete pDel;
+    }
 }
 
 _SwCursor_SavePos* SwCursor::CreateNewSavePos() const
@@ -585,8 +588,8 @@ BOOL SwCursor::IsInProtectTable( BOOL bMove, BOOL bChgCrsr )
     bool bInCoveredCell = false;
     const SwStartNode* pTmpSttNode = pCNd->FindTableBoxStartNode();
     ASSERT( pTmpSttNode, "In table, therefore I expect to get a SwTableBoxStartNode" )
-    const SwTableBox* pBox = pTableNode->GetTable().GetTblBox( pTmpSttNode->GetIndex() );
-    if ( pBox->getRowSpan() < 1 )
+    const SwTableBox* pBox = pTmpSttNode ? pTableNode->GetTable().GetTblBox( pTmpSttNode->GetIndex() ) : 0; //Robust #151355
+    if ( pBox && pBox->getRowSpan() < 1 ) // Robust #151270
         bInCoveredCell = true;
 
     // Positions of covered cells are not acceptable:
@@ -2189,6 +2192,8 @@ JP 20.07.98: der alte Code geht mit dem UNO-TableCrsr nicht
             pSttNd = aTmp[ nPos ]->GetSttNd();
 
             SwNodeIndex aIdx( *pSttNd, 1 );
+            if( &aIdx.GetNodes() != &rNds )
+                break;
             const SwNode* pNd = &aIdx.GetNode();
             if( !pNd->IsCntntNode() )
                 pNd = rNds.GoNextSection( &aIdx, TRUE, FALSE );
