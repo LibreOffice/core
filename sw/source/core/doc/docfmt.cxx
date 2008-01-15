@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:22:49 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2575,12 +2575,17 @@ namespace docfunc
                 if ( !pParentTxtFmtColl )
                     continue;
 
-                const SwNumRuleItem& rDirectItem = pParentTxtFmtColl->GetNumRule();
-                if ( rDirectItem.GetValue().Len() != 0 )
+                // --> OD 2007-12-07 #i77708#
+                // consider that explicitly no list style is set - empty string
+                // at numrule item.
+//                const SwNumRuleItem& rDirectItem = pParentTxtFmtColl->GetNumRule();
+//                if ( rDirectItem.GetValue().Len() != 0 )
+                if ( SFX_ITEM_SET == pParentTxtFmtColl->GetItemState( RES_PARATR_NUMRULE ) )
                 {
                     bRet = true;
                     break;
                 }
+                // <--
 
             }
 
