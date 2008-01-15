@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:19:57 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:48:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2417,13 +2417,22 @@ bool SwDoc::DelFullPara( SwPaM& rPam )
 
         SwCntntNode *pTmpNode = rPam.GetPoint()->nNode.GetNode().GetCntntNode();
         rPam.GetPoint()->nContent.Assign( pTmpNode, 0 );
+        bool bGoNext = (0 == pTmpNode);
         pTmpNode = rPam.GetMark()->nNode.GetNode().GetCntntNode();
         rPam.GetMark()->nContent.Assign( pTmpNode, 0 );
 
         ClearRedo();
 
         SwPaM aDelPam( *rPam.GetMark(), *rPam.GetPoint() );
-        ::PaMCorrAbs( aDelPam, *aDelPam.GetPoint() );
+        {
+            SwPosition aTmpPos( *aDelPam.GetPoint() );
+            if( bGoNext )
+            {
+                pTmpNode = GetNodes().GoNext( &aTmpPos.nNode );
+                aTmpPos.nContent.Assign( pTmpNode, 0 );
+            }
+            ::PaMCorrAbs( aDelPam, aTmpPos );
+        }
 
         SwUndoDelete* pUndo = new SwUndoDelete( aDelPam, sal_True );
 
