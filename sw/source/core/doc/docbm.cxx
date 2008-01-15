@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:33:02 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:48:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -487,8 +487,10 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
                 String sNm( pBkmk->GetName() ), sShortNm( pBkmk->GetShortName() );
                 KeyCode aKCode( pBkmk->GetKeyCode() );
 
+                bool bMake = !pBkmk->IsUNOMark();
                 pDoc->deleteBookmark( nCnt-- );
-                pDoc->makeBookmark( aPam, aKCode, sNm, sShortNm, IDocumentBookmarkAccess::BOOKMARK );
+                if( bMake )
+                    pDoc->makeBookmark( aPam, aKCode, sNm, sShortNm, IDocumentBookmarkAccess::BOOKMARK );
             }
         }
     }
