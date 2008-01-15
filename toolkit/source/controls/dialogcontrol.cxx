@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:27:22 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 14:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2110,6 +2110,8 @@ throw (RuntimeException)
 
 ::rtl::OUString getPhysicalLocation( const ::com::sun::star::uno::Any& rbase, const ::com::sun::star::uno::Any& rUrl )
 {
+
+
     ::rtl::OUString ret;
 
     ::rtl::OUString baseLocation;
@@ -2118,10 +2120,13 @@ throw (RuntimeException)
     rbase  >>= baseLocation;
     rUrl  >>= url;
 
-    INetURLObject urlObj(baseLocation);
-    urlObj.removeSegment();
-    baseLocation = urlObj.GetMainURL( INetURLObject::NO_DECODE );
-    ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, ret );
+    if ( url.getLength() > 0 )
+    {
+        INetURLObject urlObj(baseLocation);
+        urlObj.removeSegment();
+        baseLocation = urlObj.GetMainURL( INetURLObject::NO_DECODE );
+        ::osl::FileBase::getAbsoluteFileURL( baseLocation, url, ret );
+    }
 
     return ret;
 }
