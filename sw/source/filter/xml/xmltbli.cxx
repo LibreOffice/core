@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:23:54 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:53:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2494,7 +2494,7 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             //
             nWidth = nRelWidth > USHRT_MAX ? USHRT_MAX : nRelWidth;
         }
-        if( nRelWidth != nWidth )
+        if( nRelWidth != nWidth && nRelWidth && nCols )
         {
             double n = (double)nWidth / (double)nRelWidth;
             nRelWidth = 0L;
@@ -2591,41 +2591,44 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             }
         }
 
-        if( nAbsWidth && nAbsWidth < nWidth )
+        if( nCols && nAbsWidth )
         {
-            // If the table's width is larger than the absolute column widths,
-            // every column get some extra width.
-            sal_Int32 nExtraAbs = nWidth - nAbsWidth;
-            sal_Int32 nAbsLastCol =
-                    aColumnWidths[(sal_uInt16)nCols-1U] + nExtraAbs;
-            for( i=0UL; i < nCols-1UL; i++ )
+            if( nAbsWidth < nWidth )
             {
-                sal_Int32 nAbsCol = aColumnWidths[(sal_uInt16)i];
-                sal_Int32 nExtraAbsCol = (nAbsCol * nExtraAbs) /
-                                         nAbsWidth;
-                nAbsCol += nExtraAbsCol;
-                aColumnWidths.Replace( (sal_uInt16)nAbsCol, (sal_uInt16)i );
-                nAbsLastCol -= nExtraAbsCol;
+                // If the table's width is larger than the absolute column widths,
+                // every column get some extra width.
+                sal_Int32 nExtraAbs = nWidth - nAbsWidth;
+                sal_Int32 nAbsLastCol =
+                        aColumnWidths[(sal_uInt16)nCols-1U] + nExtraAbs;
+                for( i=0UL; i < nCols-1UL; i++ )
+                {
+                    sal_Int32 nAbsCol = aColumnWidths[(sal_uInt16)i];
+                    sal_Int32 nExtraAbsCol = (nAbsCol * nExtraAbs) /
+                                             nAbsWidth;
+                    nAbsCol += nExtraAbsCol;
+                    aColumnWidths.Replace( (sal_uInt16)nAbsCol, (sal_uInt16)i );
+                    nAbsLastCol -= nExtraAbsCol;
+                }
+                aColumnWidths.Replace( (sal_uInt16)nAbsLastCol, (sal_uInt16)nCols-1U );
             }
-            aColumnWidths.Replace( (sal_uInt16)nAbsLastCol, (sal_uInt16)nCols-1U );
-        }
-        else if( nAbsWidth > nWidth )
-        {
-            // If the table's width is smaller than the absolute column
-            // widths, every column gets the minimum width plus some extra
-            // width.
-            sal_Int32 nExtraAbs = nWidth - (nCols * MINLAY);
-            sal_Int32 nAbsLastCol = MINLAY + nExtraAbs;
-            for( i=0UL; i < nCols-1UL; i++ )
+            else if( nAbsWidth > nWidth )
             {
-                sal_Int32 nAbsCol = aColumnWidths[(sal_uInt16)i];
-                sal_Int32 nExtraAbsCol = (nAbsCol * nExtraAbs) /
-                                         nAbsWidth;
-                nAbsCol = MINLAY + nExtraAbsCol;
-                aColumnWidths.Replace( (sal_uInt16)nAbsCol, (sal_uInt16)i );
-                nAbsLastCol -= nExtraAbsCol;
+                // If the table's width is smaller than the absolute column
+                // widths, every column gets the minimum width plus some extra
+                // width.
+                sal_Int32 nExtraAbs = nWidth - (nCols * MINLAY);
+                sal_Int32 nAbsLastCol = MINLAY + nExtraAbs;
+                for( i=0UL; i < nCols-1UL; i++ )
+                {
+                    sal_Int32 nAbsCol = aColumnWidths[(sal_uInt16)i];
+                    sal_Int32 nExtraAbsCol = (nAbsCol * nExtraAbs) /
+                                             nAbsWidth;
+                    nAbsCol = MINLAY + nExtraAbsCol;
+                    aColumnWidths.Replace( (sal_uInt16)nAbsCol, (sal_uInt16)i );
+                    nAbsLastCol -= nExtraAbsCol;
+                }
+                aColumnWidths.Replace( (sal_uInt16)nAbsLastCol, (sal_uInt16)nCols-1U );
             }
-            aColumnWidths.Replace( (sal_uInt16)nAbsLastCol, (sal_uInt16)nCols-1U );
         }
     }
 
