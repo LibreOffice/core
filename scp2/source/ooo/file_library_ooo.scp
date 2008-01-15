@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.271 $
+ *  $Revision: 1.272 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:26:07 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:32:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1481,7 +1481,6 @@ End
 #endif
 
 #ifdef WNT
-
 #if defined(_gcc3)
 
 File GID_FILE_LIB_MINGWM10
@@ -1492,39 +1491,10 @@ File GID_FILE_LIB_MINGWM10
 End
 
 #endif
-
-#if defined(M1300)
-
-File gid_File_Lib_Msvcp70
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-    Name = "msvcp70.dll";
-End
-
-#endif
-
 #endif
 
 #ifdef WNT
-
-#if defined(M1300)
-
-File gid_File_Lib_Msvcr70
-    BIN_FILE_BODY;
-    Styles = (PACKED);
-    Dir = gid_Dir_Program;
-    Name = "msvcr70.dll";
-End
-
-#endif
-
-#endif
-
-#ifdef WNT
-
-#if defined(M1310) || (defined(M1400) && (!defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA)))
-
+#if defined(M1310) || ( (defined(M1400) || defined(M1500) ) && ( !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) ))
 File gid_File_Lib_Msvcr71
     BIN_FILE_BODY;
     Styles = (PACKED);
@@ -1535,15 +1505,11 @@ File gid_File_Lib_Msvcr71
     Name = "msvcr71d.dll";
 #endif
 End
-
 #endif
-
 #endif
 
 #if defined(WNT)
-
-#if defined(M1310) || (defined(M1400) && (!defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA)))
-
+#if defined(M1310) || ( (defined(M1400) || defined(M1500) ) && ( !defined(SYSTEM_MOZILLA) && !defined(WITHOUT_MOZILLA) ))
 File gid_File_Lib_Msvcp71
     BIN_FILE_BODY;
     Styles = (PACKED);
@@ -1554,9 +1520,7 @@ File gid_File_Lib_Msvcp71
     Name = "msvcp71d.dll";
 #endif
 End
-
 #endif
-
 #endif
 
 #if defined(WNT)
@@ -1624,6 +1588,66 @@ File gid_File_Msvcm80crt_Manifest
 #endif
 End
 #endif
+#endif
+#endif
+
+#if defined(WNT)
+#if defined(M1500)
+File gid_File_Lib_Msvcr90
+    BIN_FILE_BODY;
+    Styles = (PACKED, PATCH);
+    Dir = gid_Dir_Program;
+#ifndef _STLP_DEBUG
+    Name = "msvcr90.dll";
+#else
+    Name = "msvcr90d.dll";
+#endif
+End
+#endif
+#endif
+
+#if defined(WNT)
+#if defined(M1500)
+File gid_File_Lib_Msvcp90
+    BIN_FILE_BODY;
+    Styles = (PACKED, PATCH);
+    Dir = gid_Dir_Program;
+#ifndef _STLP_DEBUG
+    Name = "msvcp90.dll";
+#else
+    Name = "msvcp90d.dll";
+#endif
+End
+#endif
+#endif
+
+#if defined(WNT)
+#if defined(M1500)
+File gid_File_Lib_Msvcm90
+    BIN_FILE_BODY;
+    Styles = (PACKED, PATCH);
+    Dir = gid_Dir_Program;
+#ifndef _STLP_DEBUG
+    Name = "msvcm90.dll";
+#else
+    Name = "msvcm90d.dll";
+#endif
+End
+#endif
+#endif
+
+#if defined(WNT)
+#if defined(M1500)
+File gid_File_Msvcm90crt_Manifest
+    BIN_FILE_BODY;
+    Styles = (PACKED, PATCH);
+    Dir = gid_Dir_Program;
+#ifndef _STLP_DEBUG
+    Name = "Microsoft.VC90.CRT.manifest";
+#else
+    Name = "Microsoft.VC90.DebugCRT.manifest";
+#endif
+End
 #endif
 #endif
 
@@ -2095,7 +2119,7 @@ File gid_File_Lib_Stlport
   #else
   #ifdef M1310
     Name = STRING(CONCAT3(stlport_,vc71_stldebug45,.dll));
-  #elif defined(M1400)
+  #elif defined(M1400) || defined(M1500)
     Name = STRING(CONCAT3(stlport_,vc8_stldebug45,.dll));
   #else
     Name = STRING(CONCAT3(stlport_,vc7_stldebug,.dll));
@@ -2119,7 +2143,7 @@ File gid_File_Lib_Stlport
   #else
   #ifdef M1310
     Name = STRING(CONCAT3(stlport_,vc7145,.dll));
-  #elif defined(M1400)
+  #elif defined(M1400) || defined(M1500)
     Name = STRING(CONCAT3(stlport_,vc845,.dll));
   #else
    #if defined(_gcc3)
