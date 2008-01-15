@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: ihi $ $Date: 2007-04-17 10:30:07 $
+#   last change: $Author: ihi $ $Date: 2008-01-15 14:52:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,11 @@ NO_BSYMBOLIC = TRUE
 ENABLE_EXCEPTIONS = TRUE
 LIBTARGET = NO
 USE_DEFFILE = TRUE
+
+# disable caching to avoid stale objects
+# on version changes
+CCACHE_DISABLE=TRUE
+.EXPORT : CCACHE_DISABLE
 
 .INCLUDE : settings.mk
 .INCLUDE : $(PRJ)$/util$/makefile.pmk
