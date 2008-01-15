@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:22:02 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 15:43:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,8 @@ __EXPORT BasicIDEShell::~BasicIDEShell()
     SetWindow( 0 );
     SetCurWindow( 0 );
     SfxObjectShell* pCurrentShell( SfxObjectShell::Current() );
-    SfxObjectShell::SetWorkingDocument( pCurrentShell ? pCurrentShell->GetModel() : Reference< frame::XModel >() );
+    if ( pCurrentShell )
+        SfxObjectShell::SetWorkingDocument( pCurrentShell->GetModel() );
 
     // Alle Fenster zerstoeren:
     IDEBaseWindow* pWin = aIDEWindowTable.First();
