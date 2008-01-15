@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_font_ooo.scp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 15:34:27 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 12:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,42 +37,172 @@
 
 STD_FONT_FILE( gid_File_Fnt_Opensymb, opens___.ttf, OpenSymbol)
 
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE( gid_File_Fnt_Vera, Vera.ttf, Vera Sans)
+// DejaVu fonts
+
+// DejaVuSans Proportional
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSans, DejaVuSans.ttf, DejaVu Sans) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSans_Bold, DejaVuSansBold.ttf, DejaVu Sans Bold) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSans_Oblique, DejaVuSansOblique.ttf, DejaVu Sans Oblique) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSans_BoldOblique, DejaVuSansBoldOblique.ttf, DejaVu Sans Bold Oblique) 
+#endif 
+
+// DejaVuSans ExtraLight
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSansExtraLight, DejaVuSansExtraLight.ttf, DejaVu Sans ExtraLight) 
 #endif
 
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE( gid_File_Fnt_Verabd, VeraBd.ttf, Vera Sans Bold)
+// DejaVuSans Condensed
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSansCondensed, DejaVuCondensedSans.ttf, DejaVu Sans Condensed) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSansCondensed_Bold, DejaVuCondensedSansBold.ttf, DejaVu Sans Condensed Bold) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSansCondensed_Oblique, DejaVuCondensedSansOblique.ttf, DejaVu Sans Condensed Oblique) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSansCondensed_BoldOblique, DejaVuCondensedSansBoldOblique.ttf, DejaVu Sans Condensed Bold Oblique) 
+#endif 
+
+// DejaVuSans Mono
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSansMono, DejaVuMonoSans.ttf, DejaVu Sans Mono) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSansMono_Bold, DejaVuMonoSansBold.ttf, DejaVu Sans Mono Bold) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSansMono_Oblique, DejaVuMonoSansOblique.ttf, DejaVu Sans Mono Oblique) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSansMono_BoldOblique, DejaVuMonoSansBoldOblique.ttf, DejaVu Sans Mono Bold Oblique) 
 #endif
 
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE_DUO( gid_File_Fnt_Verabi, VeraBI.ttf, Vera Sans Bold Oblique, Vera Sans Bold Italic)
+// DejaVuSerif Proportional
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSerif, DejaVuSerif.ttf, DejaVu Serif) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSerif_Bold, DejaVuSerifBold.ttf, DejaVu Serif Bold) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSerif_Italic, DejaVuSerifItalic.ttf, DejaVu Serif Italic) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSerif_BoldItalic, DejaVuSerifBoldItalic.ttf, DejaVu Serif Bold Italic) 
+#endif 
+
+// DejaVuSerif Condensed
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed, DejaVuCondensedSerif.ttf, DejaVu Serif Condensed) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_Bold, DejaVuCondensedSerifBold.ttf, DejaVu Serif Condensed Bold) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_Italic, DejaVuCondensedSerifItalic.ttf, DejaVu Serif Condensed Italic) 
+#endif 
+
+#ifndef WITHOUT_FONTS 
+STD_FONT_FILE( gid_File_Fnt_DejaVuSerifCondensed_BoldItalic, DejaVuCondensedSerifBoldItalic.ttf, DejaVu Serif Condensed Bold Italic) 
+#endif 
+
+
+// Liberation fonts
+
+// Liberation Mono
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_LiberationMono_Regular, LiberationMono-Regular.ttf, Liberation Mono Regular) 
+#endif
 #endif
 
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE_DUO( gid_File_Fnt_Verait, VeraIt.ttf, Vera Sans Oblique, Vera Sans Italic)
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_LiberationMono_Bold, LiberationMono-Bold.ttf, Liberation Mono Bold) 
+#endif
 #endif
 
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE( gid_File_Fnt_Veramobd, VeraMoBd.ttf, Vera Sans Mono Bold)
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_LiberationMono_Italic, LiberationMono-Italic.ttf, Liberation Mono Italic) 
+#endif
 #endif
 
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE_DUO( gid_File_Fnt_Veramobi, VeraMoBI.ttf, Vera Sans Mono Bold Oblique, Vera Sans Mono Bold Italic)
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_LiberationMono_BoldItalic, LiberationMono-BoldItalic.ttf, Liberation Mono Bold Italic) 
+#endif
 #endif
 
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE_DUO( gid_File_Fnt_Veramoit, VeraMoIt.ttf, Vera Sans Mono Oblique, Vera Sans Mono Italic)
+// Liberation Sans
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_LiberationSans_Regular, LiberationSans-Regular.ttf, Liberation Sans Regular) 
+#endif
 #endif
 
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE( gid_File_Fnt_Veramono, VeraMono.ttf, Vera Sans Mono)
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_LiberationSans_Italic, LiberationSans-Italic.ttf, Liberation Sans Italic) 
+#endif
 #endif
 
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE( gid_File_Fnt_Verase, VeraSe.ttf, Vera Serif)
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_LiberationSans_Bold, LiberationSans-Bold.ttf, Liberation Serif Bold) 
+#endif
 #endif
 
-#ifndef WITHOUT_FONTS
-STD_FONT_FILE( gid_File_Fnt_Verasebd, VeraSeBd.ttf, Vera Serif Bold)
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_LiberationSans_BoldItalic, LiberationSans-BoldItalic.ttf, Liberation Sans Bold Italic) 
+#endif
+#endif
+
+// Liberation Serif
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Regular, LiberationSerif-Regular.ttf, Liberation Serif Regular) 
+#endif
+#endif
+
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Bold, LiberationSerif-Bold.ttf, Liberation Serif Bold) 
+#endif
+#endif
+
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_LiberationSerif_Italic, LiberationSerif-Italic.ttf, Liberation Serif Italic) 
+#endif
+#endif
+
+#ifndef WITHOUT_FONTS 
+#ifndef WNT 
+STD_FONT_FILE( gid_File_Fnt_LiberationSerif_BoldItalic, LiberationSerif-BoldItalic.ttf, Liberation Serif Bold Italic) 
+#endif
 #endif
