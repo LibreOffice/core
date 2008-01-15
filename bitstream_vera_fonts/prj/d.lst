@@ -1,3 +1,7 @@
-mkdir: %_DEST%\pck%_EXT%
-..\%__SRC%\misc\build\ttf-bitstream-vera-1.10\*.ttf             %_DEST%\pck%_EXT%\*.ttf
+mkdir: %COMMON_DEST%\pck%_EXT%
+#..\%__SRC%\misc\build\ttf-bitstream-vera-1.10\*.ttf     %COMMON_DEST%\pck%_EXT%\*.ttf
+..\%__SRC%\misc\build\dejavu-ttf-2.21\*.ttf             %COMMON_DEST%\pck%_EXT%\*.ttf
+..\%__SRC%\misc\build\dejavu-ttf-2.21\LICENSE           %COMMON_DEST%\pck%_EXT%\LICENSE_dejavu
+..\%__SRC%\misc\build\liberation-fonts\*.ttf            %COMMON_DEST%\pck%_EXT%\*.ttf
+..\%__SRC%\misc\build\liberation-fonts\License          %COMMON_DEST%\pck%_EXT%\LICENSE_liberation
 
