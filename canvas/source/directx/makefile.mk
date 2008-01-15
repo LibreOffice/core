@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:14:35 $
+#   last change: $Author: ihi $ $Date: 2008-01-15 13:20:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,11 @@ CDEFS+= -DVERBOSE
 CDEFS+= -DDX_DEBUG_IMAGES
 .ENDIF
 
+.IF "$(CCNUMVER)" <= "001499999999"
 CDEFS += -DDIRECTX_VERSION=0x0500
+.ELSE
+CDEFS += -DDIRECTX_VERSION=0x0900
+.ENDIF
 
 # --- This is Windows only! { ----------------------------------------------------------------
 
@@ -90,6 +94,7 @@ SLOFILES = \
     $(SLO)$/dx_vcltools.obj					\
     $(SLO)$/dx_textlayout_drawhelper.obj    \
 
+.IF "$(CCNUMVER)" <= "001499999999"
 ########################################################
 # DX5
 ########################################################
@@ -136,7 +141,7 @@ SHL1STDLIBS += dxguid.lib    # directx 9
 .IF "$(dx_debug_images)"!="" || "$(DX_DEBUG_IMAGES)"!=""
 SHL1STDLIBS += imdebug.lib
 .ENDIF
-
+.ENDIF
 ########################################################
 # DX9
 ########################################################
@@ -187,3 +192,4 @@ SHL1STDLIBS += imdebug.lib
 # ==========================================================================
 
 .INCLUDE :	target.mk
+
