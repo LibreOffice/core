@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.226 $
+ *  $Revision: 1.227 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:16:07 $
+ *  last change: $Author: rt $ $Date: 2008-01-15 10:34:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3374,7 +3374,12 @@ File gid_File_Config_Javasettingsunopkginstall
     USER_FILE_BODY;
     Dir = gid_Dir_Config;
     Name = "javasettingsunopkginstall.xml";
+  #ifdef SOLARIS
+    Styles = (PACKED,PATCH,CONFIGFILE);
+  #else
     Styles = (PACKED,PATCH);
+  #endif
+    SolarisGroup = "other";
 End
 
 #if defined( BUILD_SPECIAL )
