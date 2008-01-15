@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.74 $
+#   $Revision: 1.75 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 15:32:50 $
+#   last change: $Author: rt $ $Date: 2008-01-15 10:33:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -157,12 +157,6 @@ sub put_directories_into_epmfile
 sub put_files_into_epmfile
 {
     my ($filesinproductarrayref, $epmfileref) = @_;
-    my $group = "bin";
-
-    if ( $installer::globals::islinuxbuild )
-    {
-        $group = "root";
-    }
 
     for ( my $i = 0; $i <= $#{$filesinproductarrayref}; $i++ )
     {
@@ -176,9 +170,14 @@ sub put_files_into_epmfile
         my $styles = "";
         if ( $onefile->{'Styles'} ) { $styles = $onefile->{'Styles'}; }
         if ( $styles =~ /\bCONFIGFILE\b/ ) { $filetype = "c"; }
+
+        my $group = "bin";
+        if ( $installer::globals::islinuxbuild ) { $group = "root"; }
+        if (( $installer::globals::issolarisbuild ) && ( $onefile->{'SolarisGroup'} )) { $group = $onefile->{'SolarisGroup'}; }
+
         my $line = "$filetype $unixrights root $group $destination $sourcepath\n";
 
-        push(@{$epmfileref}, $line)
+        push(@{$epmfileref}, $line);
     }
 }
 
