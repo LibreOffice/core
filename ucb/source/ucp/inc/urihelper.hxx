@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urihelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 07:48:38 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 14:20:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,14 +87,14 @@ namespace ucb_impl { namespace urihelper {
             aFragment =
                 rtl::Uri::encode( aFragment,
                                   rtl_UriCharClassUric,
-                                  rtl_UriEncodeCheckEscapes,
+                                  rtl_UriEncodeKeepEscapes, /* #i81690# */
                                   RTL_TEXTENCODING_UTF8 );
 
         if ( aParams.getLength() > 1 )
             aParams =
                 rtl::Uri::encode( aParams,
                                   rtl_UriCharClassUric,
-                                  rtl_UriEncodeCheckEscapes,
+                                  rtl_UriEncodeKeepEscapes, /* #i81690# */
                                   RTL_TEXTENCODING_UTF8 );
 
         rtl::OUStringBuffer aResult;
@@ -104,7 +104,7 @@ namespace ucb_impl { namespace urihelper {
             aResult.append(
                 rtl::Uri::encode( aURI.getToken( 0, '/', nIndex ),
                                   rtl_UriCharClassPchar,
-                                  rtl_UriEncodeCheckEscapes,
+                                  rtl_UriEncodeKeepEscapes, /* #i81690# */
                                   RTL_TEXTENCODING_UTF8 ) );
             if ( nIndex >= 0 )
                 aResult.append( sal_Unicode( '/' ) );
