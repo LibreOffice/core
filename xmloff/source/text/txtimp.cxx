@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 08:48:07 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:45:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1446,6 +1446,11 @@ sal_Bool lcl_HasListStyle( OUString sStyleName,
     }
     else
     {
+        // --> OD 2007-12-07 #i77708#
+        sal_Int32 nUPD( 0 );
+        sal_Int32 nBuild( 0 );
+        rImport.getBuildIds( nUPD, nBuild );
+        // <--
         // search list style at parent
         Reference<XStyle> xStyle( xPropState, UNO_QUERY );
         while ( xStyle.is() )
@@ -1488,6 +1493,15 @@ sal_Bool lcl_HasListStyle( OUString sStyleName,
                         {
                             bRet = sal_False;
                         }
+                        // --> OD 2007-12-07 #i77708#
+                        // special handling for text documents from OOo version prior OOo 2.3.1
+                        else if ( sListStyle.getLength() == 0 &&
+                                  ( ( nUPD < 680 ) ||  // prior OOo 2.0
+                                    ( nUPD == 680 && nBuild <= 9238 ) ) ) // OOo 2.0 - OOo 2.3.1
+                        {
+                            bRet = sal_False;
+                        }
+                        // <--
                     }
                     // <--
                     break;
