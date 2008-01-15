@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:41:55 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:49:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1373,7 +1373,7 @@ void lcl_CalcSubColValues( SvUShorts &rToFill, const SwTabCols &rCols,
             nWidth = nCellRight - nColLeft;
         else if ( nColLeft >= nCellLeft && nColRight <= nCellRight )
             nWidth = nColRight - nColLeft;
-        if ( nWidth )
+        if ( nWidth && pCell->Frm().Width() )
         {
             long nTmp = nWidth * nWish / pCell->Frm().Width();
             if ( USHORT(nTmp) > rToFill[i] )
@@ -1474,8 +1474,9 @@ void lcl_CalcColValues( SvUShorts &rToFill, const SwTabCols &rCols,
                 if ( bNotInCols )
                     ::lcl_CalcSubColValues( rToFill, rCols, pCell, pTab, bWishValues );
             }
-            pCell = pCell->GetNextLayoutLeaf();
-
+            do {
+                pCell = pCell->GetNextLayoutLeaf();
+            }while( pCell && pCell->Frm().Width() == 0 );
         } while ( pCell && pTab->IsAnLower( pCell ) );
     }
 }
