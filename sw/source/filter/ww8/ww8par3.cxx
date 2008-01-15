@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:05:30 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -758,7 +758,7 @@ bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
                 aOfsNumsXCH[nLevelB] = 0;
         }
     }
-#if defined(_MSC_VER) && (_MSC_VER > 1310)
+#if defined(_MSC_VER) && (_MSC_VER > 1310) && (_MSC_VER < 1500)
     myIter aIter = remove(aOfsNumsXCH.begin(), aOfsNumsXCH.end(), 0);
 #else
     myIter aIter = std::remove(aOfsNumsXCH.begin(), aOfsNumsXCH.end(), 0);
