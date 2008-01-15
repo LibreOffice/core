@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directxcanvas.scp,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:12:41 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 13:31:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,11 @@
 #include "macros.inc"
 
 #ifdef WNT
-
+#if defined(M1300) || defined(M1400) || defined(_gcc3)
 SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(gid_File_Lib_DirectXCanvas, directxcanvas.uno)
-SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(gid_File_Lib_DirectX9Canvas, directx9canvas.uno)
+#endif
+#endif
 
+#ifdef WNT
+SPECIAL_UNO_COMPONENT_LIB_FILE_PATCH(gid_File_Lib_DirectX9Canvas, directx9canvas.uno)
 #endif
