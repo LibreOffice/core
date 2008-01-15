@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 12:57:57 $
+ *  last change: $Author: ihi $ $Date: 2008-01-15 14:21:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_FONTSLANT_HPP_
 #include <com/sun/star/awt/FontSlant.hpp>
+#endif
+#ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHICPROVIDER_HPP_
+#include <com/sun/star/graphic/XGraphicProvider.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_IO_XMARKABLESTREAM_HPP_
@@ -326,6 +329,8 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
     {
         switch ( nPropId )
         {
+            case BASEPROPERTY_GRAPHIC:              aDefault <<= ::com::sun::star::uno::makeAny(
+                                                                    ::com::sun::star::uno::Reference< graphic::XGraphic >() ); break;
             case BASEPROPERTY_VERTICALALIGN:
             case BASEPROPERTY_BORDERCOLOR:
             case BASEPROPERTY_SYMBOL_COLOR:
@@ -413,6 +418,7 @@ void UnoControlModel::ImplPropertyChanged( sal_uInt16 )
             case BASEPROPERTY_HELPTEXT:
             case BASEPROPERTY_HELPURL:
             case BASEPROPERTY_IMAGEURL:
+            case BASEPROPERTY_DIALOGSOURCEURL:
             case BASEPROPERTY_EDITMASK:
             case BASEPROPERTY_LITERALMASK:
             case BASEPROPERTY_LABEL:
