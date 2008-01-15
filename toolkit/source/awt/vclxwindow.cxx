@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:09:42 $
+ *  last change: $Author: rt $ $Date: 2008-01-15 13:15:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1588,7 +1588,7 @@ void VCLXWindow::PushPropertyIds( std::list< sal_uInt16 > &rIds,
 
     for ( int nId = nFirstId; nId != BASEPROPERTY_NOTFOUND;
           nId = va_arg( pVarArgs, int ) )
-        rIds.push_back( nId );
+        rIds.push_back( (sal_uInt16) nId );
 
     va_end( pVarArgs );
 }
