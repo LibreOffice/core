@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:16:43 $
+#   last change: $Author: ihi $ $Date: 2008-01-15 13:28:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,14 @@
 
 # --- Compiler ---
 
-.IF "$(OS)$(COM)$(CPU)$(COMEX)" == "WNTMSCI10"
+.IF "$(OS)$(COM)$(CPU)" == "WNTMSCI"
+.IF "$(COMEX)" == "10"
 .INCLUDE : wntmsci10.mk
-.ENDIF
-
-.IF "$(OS)$(COM)$(CPU)$(COMEX)" == "WNTMSCI11"
+.ELSE
+# for wntmsci11 (.Net 2005) and wntmsci12 (.Net 2008)
 .INCLUDE : wntmsci11.mk
-.ENDIF
+.ENDIF # "$(COMEX)" == "10"
+.ENDIF # "$(OS)$(COM)$(CPU)" == "WNTMSCI"
 
 .IF "$(COM)$(CVER)$(OS)$(CPU)" == "GCCC341WNTI"
 .INCLUDE : wntgcci6.mk
@@ -79,3 +80,4 @@ JAVA_RUNTIME=javai.lib
 JAVA_RUNTIME=javai_g.lib
 .ENDIF
 .ENDIF
+
