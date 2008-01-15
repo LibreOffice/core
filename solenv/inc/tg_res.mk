@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_res.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:09:37 $
+#   last change: $Author: ihi $ $Date: 2008-01-15 13:28:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@ $(RCTARGET): $(RCFILES) 		\
              $(RCDEPN)
     @echo ------------------------------
     @echo Making: $@
-.IF "$(COMEX)"=="8" || "$(COMEX)"=="10" || "$(COMEX)"=="11"
+.IF "$(CCNUMVER)" > "001300000000"
 .IF "$(MFC_INCLUDE)"!=""
     $(RC) $(INCLUDE) -I$(SOLARRESDIR) -I$(ATL_INCLUDE) -I$(MFC_INCLUDE) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
 .ELSE
