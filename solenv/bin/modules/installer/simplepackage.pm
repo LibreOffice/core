@@ -4,9 +4,9 @@
 #
 #   $RCSfile: simplepackage.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-07 12:20:22 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 12:53:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,11 @@ sub check_simple_packager_project
 
     if (( $installer::globals::packageformat eq "installed" ) ||
         ( $installer::globals::packageformat eq "archive" ))
+    {
+        $installer::globals::is_simple_packager_project = 1;
+        $installer::globals::patch_user_dir = 1;
+    }
+    elsif( $installer::globals::packageformat eq "dmg" )
     {
         $installer::globals::is_simple_packager_project = 1;
     }
@@ -243,7 +248,8 @@ sub create_simple_package
     # Setting package name (similar to the download name)
     my $packagename = "";
 
-    if ( $installer::globals::packageformat eq "archive" )
+    if ( $installer::globals::packageformat eq "archive"  ||
+        $installer::globals::packageformat eq "dmg" )
     {
         $installer::globals::csp_languagestring = $$languagestringref;
 
@@ -363,14 +369,13 @@ sub create_simple_package
     register_extensions($subfolderdir);
 
     # Creating archive file
-
-    if ( $installer::globals::packageformat eq "archive" )
+    if (( $installer::globals::packageformat eq "archive" ) || ( $installer::globals::packageformat eq "dmg" ))
     {
         # creating a package
         # -> zip for Windows
         # -> tar.gz for all other platforms
-        installer::logger::print_message( "... creating archive file ...\n" );
-        installer::logger::include_header_into_logfile("Creating archive file:");
+        installer::logger::print_message( "... creating $installer::globals::packageformat file ...\n" );
+        installer::logger::include_header_into_logfile("Creating $installer::globals::packageformat file:");
         create_package($installdir, $packagename, $allvariables, $includepatharrayref);
     }
 
