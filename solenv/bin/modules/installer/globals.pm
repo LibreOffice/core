@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.82 $
+#   $Revision: 1.83 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:56:59 $
+#   last change: $Author: rt $ $Date: 2008-01-16 07:55:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,9 @@ BEGIN
     $startmenufolder = "StartMenuFolder";
     $desktopfolder = "DesktopFolder";
     $programfilesfolder = "ProgramFilesFolder";
+    $commonfilesfolder = "CommonFilesFolder";
+    $commonappdatafolder = "CommonAppDataFolder";
+    $localappdatafolder = "LocalAppDataFolder";
     $templatefolder = "TemplateFolder";
     $templatefoldername = "Templates";
     $programmenufolder = "ProgramMenuFolder";
