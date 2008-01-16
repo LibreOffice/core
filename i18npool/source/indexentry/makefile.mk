@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-19 18:04:27 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:32:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,12 @@ SLOFILES=   \
             $(SLO)$/indexentrysupplier_default.obj \
             $(SLO)$/indexentrysupplier_common.obj
 
+OBJFILES   = $(OBJ)$/genindex_data.obj
+
 APP1TARGET = genindex_data
 
-APP1OBJS   = $(OBJ)$/genindex_data.obj
+DEPOBJFILES   = $(OBJ)$/genindex_data.obj
+APP1OBJS   = $(DEPOBJFILES)
 
 APP1STDLIBS = $(SALLIB) \
         $(ICUINLIB) \
