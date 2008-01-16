@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.100 $
+#   $Revision: 1.101 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-07 12:31:24 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 12:48:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -929,7 +929,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         installer::scriptitems::replace_setup_variables($profileitemsinproductlanguageresolvedarrayref, $languagestringref, $allvariableshashref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "profileitems4.log", $profileitemsinproductlanguageresolvedarrayref); }
 
-        if ( $installer::globals::is_simple_packager_project )
+        if ( $installer::globals::patch_user_dir )
         {
             installer::scriptitems::replace_userdir_variable($profileitemsinproductlanguageresolvedarrayref);
             if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "profileitems4a.log", $profileitemsinproductlanguageresolvedarrayref); }
