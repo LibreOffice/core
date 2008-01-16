@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-01-14 15:34:27 $
+dnl * Date: $Date: 2008-01-16 12:50:09 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.239 $ )
+AC_REVISION( $Revision: 1.240 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2836,7 +2836,7 @@ if test "$_os" != "WINNT" -a \( "z$enable_epm" = "z" -o "$enable_epm" != "no" \)
 		PKGFORMAT=native
 		;;
 	Darwin)
-		PKGFORMAT=archive
+		PKGFORMAT=dmg
 		;;
 	SunOS)
 		PKGFORMAT=pkg
