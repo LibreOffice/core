@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:22:08 $
+ *  last change: $Author: ihi $ $Date: 2008-01-16 14:30:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@
 #include "scmatrix.hxx"
 #include "globstr.hrc"
 #include "cellkeytranslator.hxx"
+#include "osversiondef.hxx"
 
 const double fInvEpsilon = 1.0E-7;
 
