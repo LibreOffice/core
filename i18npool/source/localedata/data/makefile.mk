@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-13 14:35:25 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:33:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -473,6 +473,12 @@ SHL4OBJS= \
 
 LIB4TARGET=	$(SLB)$/$(SHL4TARGET).lib
 LIB4OBJFILES=$(SHL4OBJS)
+
+DEPOBJFILES= \
+    $(SHL1OBJS) \
+    $(SHL2OBJS) \
+    $(SHL3OBJS) \
+    $(SHL4OBJS)
 
 # --- Targets ------------------------------------------------------
 
