@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_dep.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:05:50 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:27:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,13 +45,20 @@ ALLDEP .PHONY:
     @@-$(RM) $(MISC)$/$(TARGET).dpj
     @@-$(RM) $(MISC)$/$(TARGET).dpz
     @@-$(RM) $(MISC)$/$(COMP1TYPELIST).mk $(MISC)$/$(COMP2TYPELIST).mk $(MISC)$/$(COMP3TYPELIST).mk $(MISC)$/$(COMP4TYPELIST).mk $(MISC)$/$(COMP5TYPELIST).mk $(MISC)$/$(COMP6TYPELIST).mk $(MISC)$/$(COMP7TYPELIST).mk $(MISC)$/$(COMP8TYPELIST).mk $(MISC)$/$(COMP9TYPELIST).mk
+.IF "$(nodep)"==""
 .IF "$(DEPFILE_SLO)"!=""	
     @@-$(RM) $(DEPFILE_SLO)
+    $(foreach,i,$(all_local_slo) $(shell @$(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) > $(MISC)$/s_$(i:b).dpcc ))
+    $(foreach,i,$(all_misc_slo) $(shell @$(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) > $(MISC)$/s_$(i:b).dpcc ))
 .ENDIF			# "$(DEPFILE_SLO)"!=""	
 .IF "$(DEPFILE_OBJ)"!=""	
     @@-$(RM) $(DEPFILE_OBJ)
+    $(foreach,i,$(all_local_obj) $(shell @$(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $i ) > $(MISC)$/o_$(i:b).dpcc ))
+    $(foreach,i,$(all_misc_obj) $(shell @$(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $i ) > $(MISC)$/o_$(i:b).dpcc ))
 .ENDIF			# "$(DEPFILE_OBJ)"!=""	
+.ENDIF			# "$(nodep)"==""
 .IF "$(DEPFILES)" != ""
+    echo xxx$(DEPFILES)xxx
 #to keep win9x happy
 .IF "$(GROUPSHELL:b:l)"=="4dos"
     @@-echo $(foreach,i,$(DEPFILES) $(shell @@$(4nt_force_shell)-del $i))
@@ -64,14 +71,12 @@ ALLDEP .PHONY:
 .ENDIF			# "$(GROUPSHELL:b)"=="4dos"
 .ENDIF			# "$(DEPFILES)" != ""
     @echo ---
-    @echo      Old dependency files removed
+    @echo      $(PWD) - Old dependency files removed or updated
     @echo ---
 
 
 ALLDPC: \
         $(DEPFILES) \
-        $(CFILES) \
-        $(CXXFILES) \
         $(RCFILES) \
         $(IDLFILES) \
         $(HDBDEPNTARGET)
