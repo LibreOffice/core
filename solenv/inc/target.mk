@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.202 $
+#   $Revision: 1.203 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:45:17 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:27:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,10 @@ SUBDIRSDEPS=$(RC_SUBDIRSDEPS)
 .IF "$(nodep)"==""
 
 .IF "$(L10N_framework)"==""
-DEPFILESx+:=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(DEPOBJFILES:s/.obj/.dpcc/)))
+.IF "$(DEPOBJFILES)"!=""
+DEPCOLLECT_SLO+:=$(foreach,i,$(DEPOBJFILES) $(eq,$i,$(subst,$(SLO),ttt $i) $(NULL) $(subst,$(SLO)$/,not_existing$/s_ $(i:s/.obj/.dpcc/))))
+DEPCOLLECT_OBJ+:=$(foreach,i,$(DEPOBJFILES) $(eq,$i,$(subst,$(OBJ),ttt $i) $(NULL) $(subst,$(OBJ)$/,not_existing$/o_ $(i:s/.obj/.dpcc/))))
+.ENDIF			# "$(DEPOBJFILES)"!=""
 # point to not existing directory as there is no creation intended anyway and
 # stat call looks faster
 DEPCOLLECT_SLO+:=$(subst,$(SLO)$/,not_existing$/s_ $(SLOFILES:s/.obj/.dpcc/))
@@ -101,11 +104,11 @@ DEPFILESx+:=$(MISC)$/$(TARGET).dprc
 .ENDIF			# "$(RCFILES)"!=""
 .ENDIF          # "$(L10N_framework)"==""
 DEPFILES:=$(uniq $(DEPFILESx))
-DEPCOLLECT_SLO!:=$(uniq $(DEPCOLLECT_SLO))
+DEPCOLLECT_SLO!:=$(strip $(uniq $(DEPCOLLECT_SLO)))
 .IF "$(DEPCOLLECT_SLO)"!=""
 DEPFILE_SLO+:=$(MISC)$/all_$(TARGET).dpslo
 .ENDIF			# "$(DEPCOLLECT_SLO)"!=""
-DEPCOLLECT_OBJ!:=$(uniq $(DEPCOLLECT_OBJ))
+DEPCOLLECT_OBJ!:=$(strip $(uniq $(DEPCOLLECT_OBJ)))
 .IF "$(DEPCOLLECT_OBJ)"!=""
 DEPFILE_OBJ+:=$(MISC)$/all_$(TARGET).dpobj
 .ENDIF			# "$(DEPCOLLECT_OBJ)"!=""
@@ -1134,7 +1137,7 @@ ALLTAR: \
         $(YACCTARGET)	\
         $(UNOUCRTARGET)	\
         $(UNOIDLDEPTARGETS) \
-        $(DEPFILES) $(DEPFILE_SLO) $(DEPFILE_OBJ) \
+        $(DEPFILES) \
         $(DPRTARGET) \
         $(DPZTARGET) \
         $(ZIPALL) \
@@ -1646,8 +1649,9 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 # - INCLUDE DEPEND -
 # ------------------
 
+# same block as in depend build
 .IF "$(MAKEFILERC)"==""
-.IF "$(CXXFILES)$(CFILES)$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
+.IF "$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
 .IF "$(DEPFILES)" != ""
 .INCLUDE : $(DEPFILES)
 .ENDIF			# "$(DEPFILES)" != ""
@@ -1663,7 +1667,7 @@ $(COMMONPRJHIDOTHERTARGET) : $(PRJHIDOTHERTARGET)
 .INCLUDE : $(DEPFILE_OBJ)
 .ENDIF			# "$(DEPCOLLECT_OBJ)" != ""
 .ENDIF			# "$(nodep)"==""
-.ENDIF			# "$(CXXFILES)$(CFILES)$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
+.ENDIF			# "$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
 .ELSE		# MAKEFILERC
 .ENDIF		# MAKEFILERC
 
@@ -1688,11 +1692,7 @@ ZIPDEPPHONY=.PHONY
 .ENDIF
 .ENDIF
 
-.IF "$(LAZY_DEPS)"!=""
-LAZY_DEPS_WARNING=warn_lazy_deps
-.ENDIF			# "$(LAZY_DEPS)"!=""
-
-last_target: $(LAZY_DEPS_WARNING)
+last_target:
     @echo -------------
 
 $(MISC)$/$(TARGET)genjava.mk: 	$(IDLFILES)
@@ -1749,26 +1749,20 @@ $(EXCEPTIONSNOOPTFILES):
 .ENDIF
 .ENDIF
 
+.IF "$(nodep)"==""
+# recreate dependency files that were removed manually or vanished otherwise...
+forcedeps: $(DEPFILE_SLO) $(DEPFILE_OBJ)
+    @$(null,$(DEPS_MISSING) noop $(eq,$(sort $(DEPS_MISSING)),$(sort $(DEPS_MADE)) noop dmake depend=t $(MFLAGS) $(MAKEMACROS) ALLDEP))
+    @noop $(foreach,i,$($(TARGET)_known_dpcc) $(assign DEPS_MADE:=$(subst,$i, $(DEPS_MADE))))
+    @$(null,$(DEPS_MADE) noop $(null,$(DEPFILE_SLO) noop $(RM) $(DEPFILE_SLO)))
+    @$(null,$(DEPS_MADE) noop $(null,$(DEPFILE_OBJ) noop $(RM) $(DEPFILE_OBJ)))
 
-.IF "$(LAZY_DEPS)"!=""
-warn_lazy_deps:
-    @echo -
-    @echo -----------------------------------------------
-    @echo -
-    @echo - You have used LAZY_DEPS. Your dependencies
-    @echo - will not be updated anymore!
-    @echo -
-    @echo -----------------------------------------------
-.ENDIF			# "$(LAZY_DEPS)"!=""
+ALLTAR : forcedeps
 
-# ----------------------------------
-# - OTHER - alles wofuer rules da sind -
-# ----------------------------------
-
-OTHERTARGET : $(OTHER)
+.ENDIF			# "$(nodep)"==""
 
 # -------------------------
-# - diverse kill commands -
+# - several kill targets -
 # -------------------------
 
 "$(TMP)$/makedt.don":
@@ -2041,6 +2035,28 @@ testt:
 
 ALLTAR : ALLDEP \
         $(SUBDIRS)
+
+# same block as in regular build
+.IF "$(MAKEFILERC)"==""
+.IF "$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
+.IF "$(DEPFILES)" != ""
+.INCLUDE : $(DEPFILES)
+.ENDIF			# "$(DEPFILES)" != ""
+.IF "$(nodep)"==""
+.IF "$(DEPCOLLECT_SLO)" != ""
+.PHONY : $(DEPCOLLECT_SLO)
+.INCLUDE .IGNORE : $(DEPCOLLECT_SLO)
+.INCLUDE : $(DEPFILE_SLO)
+.ENDIF			# "$(DEPCOLLECT_SLO)" != ""
+.IF "$(DEPCOLLECT_OBJ)" != ""
+.PHONY : $(DEPCOLLECT_OBJ)
+.INCLUDE .IGNORE : $(DEPCOLLECT_OBJ)
+.INCLUDE : $(DEPFILE_OBJ)
+.ENDIF			# "$(DEPCOLLECT_OBJ)" != ""
+.ENDIF			# "$(nodep)"==""
+.ENDIF			# "$(RCFILES)$(SLOFILES)$(OBJFILES)$(DEPOBJFILES)$(PARFILES)" != ""
+.ELSE		# MAKEFILERC
+.ENDIF		# MAKEFILERC
 
 .INCLUDE : tg_dep.mk
 
