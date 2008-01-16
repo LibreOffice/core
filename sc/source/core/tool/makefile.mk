@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-10 13:13:52 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:30:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,13 +50,6 @@ AUTOSEG=true
 .INCLUDE :  settings.mk
 .INCLUDE :  sc.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-# Settings for the INFO() function
-.IF "$(GUI)"=="WNT" && "$(USE_SHELL)"=="4nt"
-CDEFS += -DSC_INFO_OSVERSION=\"$(OS)\"
-.ELSE
-CDEFS += -DSC_INFO_OSVERSION=$(EMQ)"$(OS)$(EMQ)"
-.ENDIF
 
 # --- Files --------------------------------------------------------
 
@@ -159,4 +152,11 @@ NOOPTFILES= \
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+# avoid quotung problems
+$(INCCOM)$/osversiondef.hxx :
+    @@-$(RM) $@
+    @$(TYPE) $(mktmp #define SC_INFO_OSVERSION "$(OS)") > $@
+
+$(SLO)$/interpr5.obj : $(INCCOM)$/osversiondef.hxx
 
