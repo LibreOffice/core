@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:50:21 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:31:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,15 +66,16 @@ SLOFILES=   \
         $(SLO)$/xdictionary.obj \
         $(subst,$(MISC)$/,$(SLO)$/ $(MY_MISC_CXXFILES:s/.c/.obj/))
 
+OBJFILES   = $(OBJ)$/gendict.obj
+
 APP1TARGET = gendict
 
-APP1OBJS   = $(OBJ)$/gendict.obj
+DEPOBJFILES   = $(OBJ)$/gendict.obj 
+APP1OBJS   = $(DEPOBJFILES)
 
 APP1STDLIBS = $(SALLIB)
 
 # --- Targets ------------------------------------------------------
-
-.INCLUDE :	target.mk
 
 .IF "$(SYSTEM_ICU)" == "YES"
 GENCMN:=$(SYSTEM_GENCMN)
@@ -86,20 +87,22 @@ GENBRK:=$(SOLARBINDIR)$/genbrk
 GENCCODE:=$(SOLARBINDIR)$/genccode
 .ENDIF
 
+$(MISC)$/%.brk : data/%.txt
+    $(WRAPCMD) $(GENBRK) -r $< -o $(MISC)$/$*.brk
+
+$(MISC)$/%_brk.c : $(MISC)$/%.brk
+    $(WRAPCMD) $(GENCCODE) -n OpenOffice -d $(MISC)$ $(MISC)$/$*.brk
+
 # 'gencmn', 'genbrk' and 'genccode' are tools generated and delivered by icu project to process icu breakiterator rules.
 # The output of gencmn generates warnings under Windows. We want to minimize the patches to external tools,
 # so the output (OpenOffice_icu_dat.c) is changed here to include a pragma to disable the warnings.
 # Output of gencmn is redirected to OpenOffice_icu_tmp.c with the -t switch.
-$(MISC)$/OpenOffice_dat.c :  $(MY_BRK_BRKFILES) makefile.mk
+$(MISC)$/OpenOffice_%.c : 
     $(WRAPCMD) $(GENCMN) -n OpenOffice -t tmp -S -d $(MISC) O $(mktmp $(subst,$(MISC)$/, $(MY_BRK_BRKFILES:t"\n")))
     echo $(USQ)#ifdef _MSC_VER$(USQ) > $@
     echo $(USQ)#pragma warning( disable : 4229 4668 )$(USQ) >> $@
     echo $(USQ)#endif$(USQ) >> $@
     $(TYPE) $(@:s/_dat/_tmp/) >> $@
 
-$(MISC)$/%.brk : data/%.txt
-    $(WRAPCMD) $(GENBRK) -r $< -o $(MISC)$/$*.brk
-
-$(MISC)$/%_brk.c : $(MISC)$/%.brk
-    $(WRAPCMD) $(GENCCODE) -n OpenOffice -d $(MISC)$ $(MISC)$/$*.brk
+.INCLUDE :	target.mk
 
