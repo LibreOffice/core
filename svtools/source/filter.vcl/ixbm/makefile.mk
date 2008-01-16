@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 15:42:26 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:25:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,8 +44,6 @@ TARGET=ixbm
 .INCLUDE :  $(PRJ)$/util$/svt.pmk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES= xbmread.cxx
 
 SLOFILES= $(SLO)$/xbmread.obj
 
