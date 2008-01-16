@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:50:57 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:32:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,17 +46,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-tempvar:=$(shell @cd data && ls *.txt)
-LOCAL_RULE_LANGS:=$(uniq $(foreach,i,$(tempvar) $(i:s/-/_/:s/_/ /:1)))
-rules_dependencies:=$(foreach,i,$(tempvar) data$/$i)
-
-.IF "$(GUI)"=="WNT"
-CFLAGSCXX+=-DLOCAL_RULE_LANGS="\"$(LOCAL_RULE_LANGS)\""
-.ELIF "$(GUI)"=="OS2"
-#CFLAGSCXX+=-DLOCAL_RULE_LANGS="$(LOCAL_RULE_LANGS)"
-.ELSE
-CFLAGSCXX+=-DLOCAL_RULE_LANGS='"$(LOCAL_RULE_LANGS)"'
-.ENDIF
+txtlist:=$(shell @cd data && ls *.txt)
+LOCAL_RULE_LANGS:=$(uniq $(foreach,i,$(txtlist) $(i:s/-/_/:s/_/ /:1)))
+rules_dependencies:=$(foreach,i,$(txtlist) data$/$i) $(INCCOM)$/lrl_include.hxx
 
 rules_obj = $(SLO)$/collator_unicode.obj
 
@@ -80,3 +72,8 @@ APP1STDLIBS = $(SALLIB) \
 .INCLUDE :	target.mk
 
 $(rules_obj) : $(rules_dependencies)
+
+$(INCCOM)$/lrl_include.hxx: $(foreach,i,$(txtlist) data$/$i)
+    @@$(RM) $@
+    @echo $(EMQ)#define LOCAL_RULE_LANGS $(EMQ)"$(LOCAL_RULE_LANGS)$(EMQ)" >& $@
+
