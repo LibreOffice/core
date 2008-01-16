@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:05:40 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:33:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,18 +66,24 @@ CDEFS+=-D__STD_LIMITS
 
 SLOFILES=   $(SLO)$/localedata.obj
 
-APP1TARGET = saxparser
-
-APP1OBJS   = \
+OBJFILES   = \
         $(OBJ)$/saxparser.obj \
         $(OBJ)$/LocaleNode.obj \
         $(OBJ)$/filewriter.obj
 
+APP1TARGET = saxparser
+
+APP1OBJS   = $(OBJFILES)
 
 APP1STDLIBS = \
         $(SALLIB) \
         $(CPPULIB) \
         $(CPPUHELPERLIB)
+
+DEPOBJFILES = \
+        $(OBJ)$/saxparser.obj \
+        $(OBJ)$/LocaleNode.obj \
+        $(OBJ)$/filewriter.obj
 
 # --- Targets ------------------------------------------------------
 
