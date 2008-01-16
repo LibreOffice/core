@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:21:00 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:31:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,6 @@
 #*************************************************************************
 
 PRJ=..
-
-$(PRJPCH)=
 
 PRJNAME=sal
 TARGET=sal
