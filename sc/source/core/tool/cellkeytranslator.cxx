@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellkeytranslator.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:21:26 $
+ *  last change: $Author: ihi $ $Date: 2008-01-16 14:29:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,9 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_sc.hxx"
 
 #include "cellkeytranslator.hxx"
 #include "comphelper/processfactory.hxx"
