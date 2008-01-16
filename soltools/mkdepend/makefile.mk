@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: hr $ $Date: 2007-11-02 12:42:04 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:22:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@ TARGET=make_makedepend
 PRJ=..
 TARGETTYPE=CUI
 LIBTARGET=NO
+# noadjust here to have dependencies over there
+noadjust=TRUE
 nodep=true
 
 # "mkdepend" is written in K&R style C. Modern compilers will generate
