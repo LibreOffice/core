@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:36:30 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:22:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@ LIBTARGET := NO
 ENABLE_EXCEPTIONS := TRUE
 
 CAPTURE_COMMAND = echo
-CAPTURE_OUTPUT = > $(MISC)$/testhxx.output
+CAPTURE_OUTPUT = > $(MISC)$/testhxx.output && $(TOUCH) $(SLO)$/testhxx.obj
 
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 .INCLUDE: settings.mk
@@ -58,9 +58,10 @@ MY_EXECUTABLE := chmod +x
 
 ALLTAR: $(BIN)$/$(TARGET)$(MY_SCRIPT_EXT)
 
-$(BIN)$/$(TARGET)$(MY_SCRIPT_EXT) .ERRREMOVE: $(MISC)$/testhxx.output create.pl
+$(BIN)$/$(TARGET)$(MY_SCRIPT_EXT) .ERRREMOVE : $(MISC)$/testhxx.output create.pl
     $(PERL) -w create.pl < $(MISC)$/testhxx.output > $@
     $(MY_EXECUTABLE) $@
 
 $(MISC)$/testhxx.output: $(SLO)$/testhxx.obj
     $(TOUCH) $<
+    $(TOUCH) $@
