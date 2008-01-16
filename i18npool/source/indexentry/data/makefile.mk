@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:51:34 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:32:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,5 +71,5 @@ $(MISC)$/%.cxx : %.txt
     $(BIN)$/genindex_data $< $@ $*
 
 # ugly - is this dependency really required here?
-$(foreach,i,$(shell @$(FIND) . -name "*.txt") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/genindex_data
+$(foreach,i,$(shell @$(FIND) . -name "*.txt") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/genindex_data$(EXECPOST)
 

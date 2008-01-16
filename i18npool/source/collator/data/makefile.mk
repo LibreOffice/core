@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:51:12 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:32:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@ PRJ=..$/..$/..
 
 PRJNAME=i18npool
 TARGET=collator_data
-LIBTARGET=NO
 
 # --- Settings -----------------------------------------------------
 .INCLUDE :  settings.mk
@@ -59,10 +58,8 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 DATA_TXTFILES:=$(shell @ls ./*.txt)
-SHL1OBJS=$(subst,./,$(SLO)$/collator_ $(DATA_TXTFILES:s/.txt/.obj/))
-
-LIB1TARGET=	$(SLB)$/$(SHL1TARGET).lib
-LIB1OBJFILES=$(SHL1OBJS)
+SLOFILES=$(subst,./,$(SLO)$/collator_ $(DATA_TXTFILES:s/.txt/.obj/))
+SHL1OBJS=$(SLOFILES)
 
 # --- Targets ------------------------------------------------------
 .INCLUDE :  target.mk
@@ -71,5 +68,5 @@ $(MISC)$/collator_%.cxx : %.txt
     $(BIN)$/gencoll_rule $< $@ $*
 
 # ugly - is this dependency really required here?
-$(foreach,i,$(shell @$(FIND) . -name "*.txt") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/gencoll_rule
+$(foreach,i,$(shell @$(FIND) . -name "*.txt") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/gencoll_rule$(EXECPOST)
 
