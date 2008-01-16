@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:51:51 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:33:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,5 +72,5 @@ $(MISC)$/%.cxx : %.dic
     $(BIN)$/genconv_dict $* $< $@
 
 # ugly - is this dependency really required here?
-$(foreach,i,$(shell @$(FIND) . -name "*.dic") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/genconv_dict
+$(foreach,i,$(shell @$(FIND) . -name "*.dic") $(MISC)$/dict_$(i:b).cxx) : $(BIN)$/genconv_dict$(EXECPOST)
 
