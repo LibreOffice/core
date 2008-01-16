@@ -2,9 +2,9 @@
 #
 #   $RCSfile: odk_rules.pmk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:58:22 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:23:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -144,8 +144,11 @@ $(DESTDIRDLL)$/%$(MY_DLLPOSTFIX) : $(DLLOUT)$/%$(MY_DLLPOSTFIX)
     $(GNUCOPY) $(DLLOUT)$/$(@:f) $@
 
 $(DESTDIRJAR)$/com$/sun$/star$/lib$/loader$/%.class : $(CLASSDIR)$/com$/sun$/star$/lib$/loader$/%.class
-    @@-$(RM) $(@:db)*.class
-    $(COPY) $(<:db)*.class $(@:d)
+    @@-$(RM) $(@:db).class
+    $(COPY) $(<:db).class $(@:d)
+# deal with subclasses
+    @@-$(RM) $(@:db)$(EMQ)$$*.class
+    -$(COPY) $(<:db)$(EMQ)$$*.class $(@:d)
 
 $(DESTDIRIDL)$/% : $(IDLOUT)$/%
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $< $(MY_TEXTCOPY_TARGETPRE) $@
