@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:47:22 $
+#   last change: $Author: ihi $ $Date: 2008-01-16 14:21:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,4 +71,4 @@ $(MISC)$/%.cxx:	%.l
 $(INCCOM)$/sqlbison.hxx : $(YACCTARGET)
 $(EXCEPTIONSFILES) : $(INCCOM)$/sqlbison.hxx
 $(SLO)$/wrap_sqlbison.obj : $(YACCTARGET)
-$(SLO)$/wrap_sqlflex.obj : $(MISC)$/sqlflex.cxx
+$(SLO)$/wrap_sqlflex.obj : $(MISC)$/sqlflex.cxx $(INCCOM)$/sqlbison.hxx
