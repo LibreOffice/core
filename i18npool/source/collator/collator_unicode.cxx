@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collator_unicode.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:37:12 $
+ *  last change: $Author: ihi $ $Date: 2008-01-16 14:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,8 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_i18npool.hxx"
 
-#ifdef OS2
-//YD FIXME makefile problem here because of spaces
-#define LOCAL_RULE_LANGS "dz hu ja km ko ku ln ne vi zh"
-#endif
+// generated list of languages
+#include "lrl_include.hxx"
 
 #include <rtl/ustrbuf.hxx>
 #include <collator_unicode.hxx>
