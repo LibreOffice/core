@@ -4,9 +4,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-26 16:18:55 $
+#   last change: $Author: rt $ $Date: 2008-01-16 07:56:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,20 @@ use installer::pathanalyzer;
 use installer::windows::idtglobal;
 
 ##############################################################
+# Overwriting global programfilesfolder, if required
+##############################################################
+
+sub overwrite_programfilesfolder
+{
+    my ( $allvariables ) = @_;
+
+    if ( $allvariables->{'PROGRAMFILESFOLDERNAME'} )
+    {
+        $installer::globals::programfilesfolder = $allvariables->{'PROGRAMFILESFOLDERNAME'};
+    }
+}
+
+##############################################################
 # Adding unique directory names to the directory collection
 ##############################################################
 
@@ -73,6 +87,9 @@ sub create_unique_directorynames
         }
 
         if ( $styles =~ /\bPROGRAMFILESFOLDER\b/ ) { $uniqueparentname = $installer::globals::programfilesfolder; }
+        if ( $styles =~ /\bCOMMONFILESFOLDER\b/ ) { $uniqueparentname = $installer::globals::commonfilesfolder; }
+        if ( $styles =~ /\bCOMMONAPPDATAFOLDER\b/ ) { $uniqueparentname = $installer::globals::commonappdatafolder; }
+        if ( $styles =~ /\bLOCALAPPDATAFOLDER\b/ ) { $uniqueparentname = $installer::globals::localappdatafolder; }
 
 
         $uniquename =~ s/\-/\_/g;           # making "-" to "_"
@@ -271,6 +288,15 @@ sub add_root_directories
         $oneline = "$installer::globals::startmenufolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
 
+        $oneline = "$installer::globals::commonfilesfolder\tTARGETDIR\t.\n";
+        push(@{$directorytableref}, $oneline);
+
+        $oneline = "$installer::globals::commonappdatafolder\tTARGETDIR\t.\n";
+        push(@{$directorytableref}, $oneline);
+
+        $oneline = "$installer::globals::localappdatafolder\tTARGETDIR\t.\n";
+        push(@{$directorytableref}, $oneline);
+
         my $localtemplatefoldername = $installer::globals::templatefoldername;
         my $directorytableentry = $localtemplatefoldername;
         my $shorttemplatefoldername = installer::windows::idtglobal::make_eight_three_conform($localtemplatefoldername, "dir");
@@ -317,6 +343,7 @@ sub create_directory_table
     my @directorytable = ();
     my $infoline;
 
+    overwrite_programfilesfolder($allvariableshashref);
     create_unique_directorynames($directoryref);
     create_defaultdir_directorynames($directoryref);    # only destdir!
     installer::windows::idtglobal::write_idt_header(\@directorytable, "directory");
