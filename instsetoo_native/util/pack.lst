@@ -7,7 +7,7 @@
 
 # Product       List_of_platforms                                                   List_of_languages   Target
 
-OpenOffice      unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro,wntmsci11.pro,unxlngi6,unxmacxi,unxsoli4,unxsols4,wntmsci11  en-US   openoffice
+OpenOffice      unxlngi6.pro,unxmacxi.pro,unxsoli4.pro,unxsols4.pro,wntmsci10.pro,wntmsci11.pro,wntmsci12.pro,unxlngi6,unxmacxi,unxsoli4,unxsols4,wntmsci11  en-US   openoffice
 BrOffice                                                                                          pt-BR   broffice
 OpenOffice_wJRE unxlngi6.pro,unxsoli4.pro,unxsols4.pro,wntmsci11.pro,wntmsci11                    en-US   openofficewithjre
 BrOffice_wJRE                                                                                     pt-BR   brofficewithjre
