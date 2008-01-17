@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Analyzer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:15:46 $
+ *  last change: $Author: vg $ $Date: 2008-01-17 14:28:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,7 +323,7 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                         ("byte")))
                     {
-                        sal_Int8 nValue;
+                        sal_Int8 nValue = 0;
                         aAny >>= nValue;
 
                         snprintf(buffer, sizeof(buffer), "%d", nValue);
@@ -333,7 +333,7 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                         ("short")))
                     {
-                        sal_Int16 nValue;
+                        sal_Int16 nValue = 0;
                         aAny >>= nValue;
 
                         snprintf(buffer, sizeof(buffer), "%d", nValue);
@@ -343,7 +343,7 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
                              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                              ("long")))
                     {
-                        sal_Int32 nValue;
+                        sal_Int32 nValue = 0;
                         aAny >>= nValue;
 
                         snprintf(buffer, sizeof(buffer), "%ld", nValue);
@@ -353,7 +353,7 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
                              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                              ("float")))
                     {
-                        float nValue;
+                        float nValue = 0;
                         aAny >>= nValue;
 
                         snprintf(buffer, sizeof(buffer), "%f", nValue);
@@ -363,7 +363,7 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
                              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                              ("double")))
                     {
-                        double nValue;
+                        double nValue = 0;
                         aAny >>= nValue;
 
                         snprintf(buffer, sizeof(buffer), "%lf", nValue);
@@ -373,7 +373,7 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
                              ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM
                                              ("boolean")))
                     {
-                        sal_Bool nValue;
+                        sal_Bool nValue = sal_Bool();
                         aAny >>= nValue;
 
                         if (nValue)
