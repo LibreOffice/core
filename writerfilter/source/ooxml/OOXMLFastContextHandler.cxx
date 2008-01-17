@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLFastContextHandler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:57:35 $
+ *  last change: $Author: vg $ $Date: 2008-01-17 15:01:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,7 @@ void OOXMLFastContextHandler::dumpOpenContexts()
     }
 
     char buffer[256];
-    snprintf(buffer, sizeof(buffer), "%d", aSetContexts.size());
+    snprintf(buffer, sizeof(buffer), "%ld", aSetContexts.size());
     logger("DEBUG", string("<count>") + buffer + "</count>");
     logger("DEBUG", "</open-contexts>");
 }
