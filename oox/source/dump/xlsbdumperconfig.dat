@@ -1,0 +1,655 @@
+﻿
+# dumper settings ============================================================
+
+# Path to base configuration data, relative to this file.
+include-config-file=dumperconfig.dat
+
+# XLSB record settings -------------------------------------------------------
+
+# Show total stream position of the record (default=on).
+#   0=off, 1=on
+show-record-pos=0
+
+# Show total record size in bytes (default=on).
+#   0=off, 1=on
+show-record-size=1
+
+# Show record identifier (default=on).
+#   0=off, 1=on
+show-record-id=1
+
+# Show record name, if known (default=on).
+#   0=off, 1=on
+show-record-name=1
+
+# Show record contents (default=on).
+#   0=off, 1=on
+show-record-body=1
+
+# common ---------------------------------------------------------------------
+
+unitconverter=CONV-TINT,/327.67,%
+unitconverter=CONV-COLWIDTH,/256,chars
+
+constlist=ERRORCODES
+  0x00=#NULL!
+  0x07=#DIV/0!
+  0x0F=#VALUE!
+  0x17=#REF!
+  0x1D=#NAME?
+  0x24=#NUM!
+  0x2A=#N/A
+end
+
+flagslist=STRING-FLAGS
+  0x01=rich-string
+  0x02=phonetic-text
+end
+
+flagslist=CELL-FLAGS
+  0x0100=show-phonetic
+end
+
+combilist=PHONETIC-FLAGS
+  ignore=0x0030
+  0x0003=uint8,dec,type,PHONETICPR-TYPE
+  0x000C=uint8,dec,alignment,PHONETICPR-ALIGNMENT
+end
+
+shortlist=COLOR-TYPE,0,none,auto,,indexed,,rgb,,theme
+
+multilist=PALETTE-COLORS
+  default=
+  0=ega-black,ega-white,ega-red,ega-green,ega-blue,ega-yellow,ega-magenta,ega-cyan
+  64=sys-window-text
+  65=sys-window-bg
+  67=sys-button-face
+  77=sys-window-text-chart
+  78=sys-window-bg-chart
+  79=auto-border-chart
+  80=sys-tooltip-bg
+  81=sys-tooltip-text
+end
+
+constlist=TEXTROTATION
+  default=
+  255=stacked
+end
+
+multilist=BORDERSTYLES
+  0=none,thin,medium,dash,dot
+  5=thick,double,hair,medium-dash,thin-dash-dot
+  10=medium-dash-dot,thin-dash-dot-dot,medium-dash-dot-dot,slant-dash-dot
+end
+
+multilist=FILLPATTERNS
+  0=no-fill,solid-fill,50%-grey,75%-grey,25%-grey
+  5=hor-stripe,ver-stripe,rev-diag-stripe,diag-stripe,diag-crosshatch
+  10=thick-diag-crosshatch,thin-hor-stripe,thin-ver-stripe,thin-rev-diag-stripe,thin-diag-stripe
+  15=thin-hor-crosshatch,thin-diag-crosshatch,12.5%-grey,6.25%-grey
+  40=gradient
+end
+
+# formulas -------------------------------------------------------------------
+
+flagslist=FORMULA-FLAGS
+  0x0002=recalc-always
+end
+
+multilist=BASETOKENS
+  0x00=,tExp,tTbl,tAdd,tSub,tMul,tDiv,tPower
+  0x08=tConcat,tLT,tLE,tEQ,tGE,tGT,tNE,tIsect
+  0x10=tList,tRange,tUplus,tUminus,tPercent,tParen,tMissArg,tStr
+  0x18=tTable,tAttr,,,tErr,tBool,tInt,tNum
+end
+
+constlist=TOKENCLASSES
+  0x20=R
+  0x40=V
+  0x60=A
+end
+
+multilist=CLASSTOKENS
+  0x00=tArray,tFunc,tFuncVar,tName,tRef,tArea,tMemArea,tMemErr
+  0x08=tMemNoMem,tMemFunc,tRefErr,tAreaErr,tRefN,tAreaN,tMemAreaN,tMemNoMemN
+  0x18=,tNameX,tRef3d,tArea3d,tRefErr3d,tAreaErr3d
+end
+
+combilist=FUNCID
+  0x7FFF=uint16,dec,func-id
+  0x8000=command
+end
+
+combilist=PARAMCOUNT-CMD
+  0x7F=uint8,dec,count
+  0x80=prompt
+end
+
+combilist=REFRELFLAGS
+  0x3FFF=uint16,dec,value
+  0x4000=col-rel
+  0x8000=row-rel
+end
+
+flagslist=TABLEFLAGS
+  0x0001=single-column
+  0x0002=column-range
+  0x0004=#all
+  0x0008=#headers
+  0x0010=#data
+  0x0020=#totals
+  0x0040=#this-row
+  0x0080=bracket-spaces
+  0x0100=sep-spaces
+  0x0200=single-row
+  0x0400=single-cell
+end
+
+flagslist=ATTRTYPES
+  0x01=volatile
+  0x02=if
+  0x04=choose
+  0x08=skip
+  0x10=sum
+  0x20=assign
+  0x40=space
+  0x80=iferror
+end
+
+shortlist=ATTRSPACETYPES,0,space-before-token,cr-before-token,space-before-open,cr-before-open,space-before-close,cr-before-close,leading-space
+
+shortlist=ARRAYVALUE-TYPE,0,number,string,boolean,,error
+
+# record names ---------------------------------------------------------------
+
+multilist=RECORD-NAMES
+  0x0000=ROW,CELL_BLANK,CELL_RK,CELL_ERROR,CELL_BOOL,CELL_DOUBLE,CELL_STRING,CELL_SI
+  0x0008=FORMULA_STRING,FORMULA_DOUBLE,FORMULA_BOOL,FORMULA_ERROR,,,,
+  0x0010=,,,SI,,,,
+
+  0x0020=,,,,,,,DEFINEDNAME
+  0x0028=,,,FONT,NUMFMT,FILL,BORDER,XF
+  0x0030=CELLSTYLE,,,,,,,
+  0x0038=,,,,COL,,CELL_RSTRING,CALCCHAINCELL
+  0x0040=DATAVALIDATION,,,,,,,
+
+  0x0080=FILEVERSION,WORKSHEET,WORKSHEET_END,WORKBOOK,WORKBOOK_END,SHEETVIEWS,SHEETVIEWS_END,BOOKVIEWS
+  0x0088=BOOKVIEWS_END,SHEETVIEW,SHEETVIEW_END,,,,,SHEETS
+  0x0090=SHEETS_END,SHEETDATA,SHEETDATA_END,SHEETPR,DIMENSION,,,PANE
+  0x0098=SELECTION,WORKBOOKPR,,,SHEET,CALCPR,WORKBOOKVIEW,SST
+  0x00A0=SST_END,AUTOFILTER,AUTOFILTER_END,FILTERCOLUMN,FILTERCOLUMN_END,,,
+
+  0x00B0=,MERGECELLS,MERGECELLS_END,,,,,
+
+  0x0110=,,,,,,STYLESHEET,STYLESHEET_END
+
+  0x0150=,,,,,,,TABLE
+  0x0158=TABLE_END,TABLECOLUMNS,TABLECOLUMNS_END,TABLECOLUMN,TABLECOLUMN_END,,,CALCEDCOLUMNFMLA
+  0x0160=,EXTERNALREFS,EXTERNALREFS_END,EXTERNALREF,,EXTERNALSELF,EXTERNALSAME,EXTSHEETNAMES
+  0x0168=EXTERNALBOOK,,EXTERNALSHEETS,EXTSHEETDATA,EXTSHEETDATA_END,,EXTROW,
+  0x0170=EXTCELL_DOUBLE,EXTCELL_BOOL,EXTCELL_ERROR,EXTCELL_STRING,,,,
+
+  0x0180=,,,,,,COLS,COLS_END
+  0x0188=ROWBREAKS,ROWBREAKS_END,COLBREAKS,COLBREAKS_END,BRK,,,
+
+  0x01A8=,,ARRAY,SHAREDFMLA,DATATABLE,,,
+
+  0x01C8=,,,,,CONDFORMATTING,CONDFORMATTING_END,CFRULE
+  0x01D0=CFRULE_END,ICONSET,ICONSET_END,DATABAR,DATABAR_END,COLORSCALE,COLORSCALE_END,CFVO
+  0x01D8=,COLORS,COLORS_END,RGBCOLOR,PAGEMARGINS,PRINTOPTIONS,PAGESETUP,HEADERFOOTER
+  0x01E0=HEADERFOOTER_END,,,,,SHEETFORMATPR,,
+  0x01E8=,,,,,,HYPERLINK,
+
+  0x01F8=,DXFS,DXFS_END,DXF,TABLESTYLES,TABLESTYLES_END,,
+  0x0200=,TABLESTYLEINFO,VOLTYPES,VOLTYPES_END,VOLTYPE,VOLTYPE_END,VOLTYPEMAIN,VOLTYPEMAIN_END
+  0x0208=VOLTYPETP,VOLTYPETP_END,VOLTYPESTP,VOLTYPETR,,VOLTYPE_ERROR,,
+  0x0210=CALCCHAIN,CALCCHAIN_END,,,,,,SHEETPROTECTION
+  0x0218=,PHONETICPR,,,,,,
+  0x0220=,,,,,,DRAWING,LEGACYDRAWING
+
+  0x0230=,,,,CFCOLOR,INDEXEDCOLORS,INDEXEDCOLORS_END,
+  0x0238=,MRUCOLORS,MRUCOLORS_END,,COLOR,DATAVALIDATIONS,DATAVALIDATIONS_END,
+  0x0240=,EXTERNALNAME,DDEITEMVALUES,DDEITEMVALUES_END,DDEITEM_DOUBLE,DDEITEM_ERROR,DDEITEM_STRING,DDEITEM_EMPTY
+  0x0248=DDEITEM_BOOL,EXTERNALNAMEREF,EXTERNALNAMEFLAGS,SHEETDATASET|EXTERNALNAME_END,SHEETDATASET_END,,,
+
+  0x0258=,,,FILLS,FILLS_END,,,
+  0x0260=,,,FONTS,FONTS_END,BORDERS,BORDERS_END,NUMFMTS
+  0x0268=NUMFMTS_END,CELLXFS,CELLXFS_END,CELLSTYLES,CELLSTYLES_END,,,
+  0x0270=,,CELLSTYLEXFS,CELLSTYLEXFS_END
+  0x0278=,,,,,,,OLEOBJECT
+
+  0x0290=,,,,TABLEPARTS,TABLEPART,TABLEPARTS_END,
+end
+
+# simple records -------------------------------------------------------------
+
+constlist=SIMPLE-RECORDS
+  0x0159=int32,dec,count
+  0x01DD=uint16,hex,flags,PRINTOPTIONS-FLAGS
+  0x01F9=int32,dec,count
+  0x0204=int32,dec,type,VOLTYPE-TYPE
+  0x020D=uint8,dec,error-code,ERRORCODES
+  0x0244=double,dec,value
+  0x0245=uint8,dec,error-code,ERRORCODES
+  0x0248=uint8,dec,value,BOOLEAN
+  0x025B=int32,dec,count
+  0x0263=int32,dec,count
+  0x0265=int32,dec,count
+  0x0267=int32,dec,count
+  0x0269=int32,dec,count
+  0x026B=int32,dec,count
+  0x0272=int32,dec,count
+  0x0294=int32,dec,count
+end
+
+# ARRAY ----------------------------------------------------------------------
+
+flagslist=ARRAY-FLAGS
+  0x01=recalc-always
+end
+
+# BORDER ---------------------------------------------------------------------
+
+flagslist=BORDER-FLAGS
+  0x01=diag-tl-to-br
+  0x02=diag-bl-to-tr
+end
+
+# BRK ------------------------------------------------------------------------
+
+flagslist=BRK-FLAGS
+  0x00000001=manual
+end
+
+# CALCPR ---------------------------------------------------------------------
+
+shortlist=CALCPR-CALCMODE,0,manual,auto,auto-no-tables
+
+flagslist=CALCPR-FLAGS
+  0x0002=a1
+  0x0004=iterate
+  0x0008=full-precision
+  0x0010=calc-complete
+  0x0020=calc-on-save
+  0x0040=concurrent
+  0x0080=manual-processors
+  0x0100=force-full-calc
+end
+
+# CELLSTYLE ------------------------------------------------------------------
+
+flagslist=CELLSTYLE-FLAGS
+  0x0001=builtin
+  0x0002=hidden
+  0x0004=custom
+end
+
+multilist=CELLSTYLE-BUILTIN
+  0=normal,rowlevel,collevel,comma,currency,percent,comma-0,currency-0,hyperlink,followed-hyperlink
+  10=note,warning-text,,,,title,heading-1,heading-2,heading-3,heading-4
+  20=input,output,calculation,check-cell,linked-cell,total,good,bad,neutral,accent1
+  30=20%-accent1,40%-accent1,60%-accent1,accent2,20%-accent2,40%-accent2,60%-accent2,accent3,20%-accent3,40%-accent3
+  40=60%-accent3,accent4,20%-accent4,40%-accent4,60%-accent4,accent5,20%-accent5,40%-accent5,60%-accent5,accent6
+  50=20%-accent6,40%-accent6,60%-accent6,explanatory-text
+end
+
+# CFRULE ---------------------------------------------------------------------
+
+shortlist=CFRULE-TYPE,1,cell-is,expression,color-scale,data-bar,top-ten,icon-set
+
+multilist=CFRULE-SUBTYPE
+  0=cell-is,expression,color-scale,data-bar,icon-set,top-ten,,unique-values,contains-text,contains-blanks
+  10=not-contains-blanks,contains-errors,not-contains-errors,,,today,tomorrow,yesterday,last-7-days,last-month
+  20=next-month,this-week,next-week,last-week,this-month,above-average,below-average,duplicate-values,,equal-above-average
+  30=equal-below-average
+end
+
+shortlist=CFRULE-CELL-OPERATOR,1,between,not-between,equal,not-equal,greater-than,less-than,greater-equal,less-equal
+shortlist=CFRULE-TEXT-OPERATOR,0,contains,not-contains,begins-with,ends-with
+shortlist=CFRULE-TIME-OPERATOR,0,today,yesterday,last-7-days,this-week,last-week,last-month,tomorrow,next-week,next-month,this-month
+shortlist=CFRULE-OTHER-OPERATOR,0,none
+
+flagslist=CFRULE-FLAGS
+  0x0002=stop-if-true
+  0x0004=avove-average
+  0x0008=bottom
+  0x0010=percent
+end
+
+# COL ------------------------------------------------------------------------
+
+combilist=COL-FLAGS
+  0x0001=hidden
+  0x0002=custom-width
+  0x0004=best-fit
+  0x0700=uint8,dec,outline-level
+  0x1000=outline-collapsed
+end
+
+# DATATABLE ------------------------------------------------------------------
+
+flagslist=DATATABLE-FLAGS
+  0x01=row-table
+  0x02=table-2d
+  0x04=ref1-deleted
+  0x08=ref2-deleted
+end
+
+# DATAVALIDATION -------------------------------------------------------------
+
+combilist=DATAVALIDATION-FLAGS
+  0x0000000F=uint8,dec,type,DATAVALIDATION-TYPE
+  0x00000070=uint8,dec,error-style,DATAVALIDATION-ERRORSTYLE
+  0x00000080=string-list
+  0x00000100=ignore-empty
+  0x00000200=no-dropdown
+  0x00040000=show-input-box
+  0x00080000=show-error-box
+  0x00F00000=uint8,dec,operator,DATAVALIDATION-OPERATOR
+end
+
+shortlist=DATAVALIDATION-TYPE,0,any,whole,decimal,list,date,time,text-length,custom
+shortlist=DATAVALIDATION-OPERATOR,0,between,not-between,equal,not-equal,greater-than,less-than,greater-equal,less-equal
+shortlist=DATAVALIDATION-ERRORSTYLE,0,error,warning,info
+
+# DEFINEDNAME ----------------------------------------------------------------
+
+combilist=DEFINEDNAME-FLAGS
+  0x0001=hidden
+  0x0002=function
+  0x0004=command
+  0x0008=macro
+  0x0020=built-in
+  0x0FC0=uint16,dec,func-group,DEFINEDNAME-FUNCGROUP
+end
+
+shortlist=DEFINEDNAME-FUNCGROUP,0,none,financial,date-time,math-trig,statistical,lookup-ref,database,text,logical,information,commands,customizing,macro-control,dde-external,user-definded
+
+constlist=DEFINEDNAME-SHEETID
+  default=
+  -1=global
+end
+
+# DXF ------------------------------------------------------------------------
+
+flagslist=DXF-FLAGS
+  0x00008000=border-outline
+end
+
+multilist=DXF-SUBREC
+  0=FILL-PATTERN,FILL-FGCOLOR,FILL-BGCOLOR,FILL-GRADIENT,FILL-STOP
+  5=FONT-COLOR,BORDER-TOP,BORDER-BOTTOM,BORDER-LEFT,BORDER-RIGHT
+  10=BORDER-DIAGONAL,BORDER-VERTICAL,BORDER-HORIZONTAL,BORDER-DIAGUP,BORDER-DIAGDOWN
+  15=ALIGN-HORIZONTAL,ALIGN-VERTICAL,ALIGN-ROTATION,ALIGN-INDENT,ALIGN-READINGORDER
+  20=ALIGN-WRAPTEXT,ALIGN-JUSTLASTLINE,ALIGN-SHRINKTOFIT,,FONT-NAME
+  25=FONT-WEIGHT,FONT-UNDERLINE,FONT-ESCAPEMENT,FONT-ITALIC,FONT-STRIKE
+  30=FONT-OUTLINE,FONT-SHADOW,FONT-CONDENSE,FONT-EXTEND,
+  35=,FONT-HEIGHT,FONT-SCHEME,NUMFMT-CODE,
+  40=,NUMFMT-ID,ALIGN-RELINDENT,PROT-LOCKED,PROT-HIDDEN
+end
+
+# EXTERNALBOOK ---------------------------------------------------------------
+
+shortlist=EXTERNALBOOK-TYPE,0,book,dde-link,ole-link
+
+# EXTERNALNAMEFLAGS ----------------------------------------------------------
+
+flagslist=EXTERNALNAMEFLAGS-FLAGS
+  0x0002=automatic
+  0x0004=pic-link
+  0x0008=dde-stddocumentname
+  0x0010=ole-link
+  0x0020=iconified
+end
+
+# EXTERNALSHEETS -------------------------------------------------------------
+
+constlist=EXTERNALSHEETS-ID
+  default=
+  -1=deleted
+  -2=special
+end
+
+# EXTSHEETDATA ---------------------------------------------------------------
+
+flagslist=EXTSHEETDATA-FLAGS
+  0x01=refresh-error
+end
+
+# FILL -----------------------------------------------------------------------
+
+shortlist=FILL-GRADIENTTYPE,0,linear,path
+
+# FONT -----------------------------------------------------------------------
+
+flagslist=FONT-FLAGS
+  0x0001=bold
+  0x0002=italic
+  0x0008=strikeout
+  0x0010=outline
+  0x0020=shadow
+  0x0040=condense
+  0x0080=extend
+end
+
+constlist=FONT-WEIGHT
+  400=normal
+  700=bold
+end
+
+multilist=FONT-UNDERLINE
+  0x00=none,single,double
+  0x21=single-acc,double-acc
+end
+
+shortlist=FONT-SCHEME,0,none,major,minor
+shortlist=FONT-ESCAPEMENT,0,none,superscript,subscript
+shortlist=FONT-FAMILY,0,none,roman,swiss,modern,script,decorative
+
+# HEADERFOOTER ---------------------------------------------------------------
+
+flagslist=HEADERFOOTER-FLAGS
+  0x0001=diff-odd-even
+  0x0002=diff-dirst
+  0x0004=scale-with-doc
+  0x0008=align-with-margins
+end
+
+# PAGESETUP ------------------------------------------------------------------
+
+multilist=PAGESETUP-PAPERSIZE
+  0=undefined,letter,letter-small,tabloid,ledger,legal,statement,executive,a3,a4
+  10=a4-small,a5,b4,b5,folio,quarto,10x14,11x17,note,envelope-9
+  20=envelope-10,envelope-11,envelope-12,envelope-14,c,d,e,envelope-dl,envelope-c5,envelope-c3
+  30=envelope-c4,envelope-c6,envelope-c65,envelope-b4,envelope-b5,envelope-b6,envelope-italy,envelope-monarch,envelope-6-3/4,us-standard-fanfold
+  40=german-standard-fanfold,german-legal-fanfold,b4,japanese-dbl-postcaed,9x11,10x11,15x11,,
+  50=envelope-invite,letter-extra,legal-extra,tabloid-extra,a4-extra,letter-transverse,a4-transverse,letter-extra-transverse,super-a-a4,super-b-a3,letter-plus
+  60=a4-plus,a5-transverse,jis-b5-transverse,a3-extra,a5-extra,b5-extra,a2,a3-transverse,a3-extra-transverse
+end
+
+constlist=PAGESETUP-SCALETOPAGES
+  default=
+  0=automatic
+end
+
+combilist=PAGESETUP-FLAGS
+  0x0001=print-in-rows
+  0x0002=landscape
+  0x0004=uninitialized
+  0x0008=black-and-white
+  0x0010=draft-quality
+  0x0020=print-notes
+  0x0040=default-orientation
+  0x0080=use-first-page
+  0x0100=print-notes-at-end
+  0x0600=uint8,dec,print-errors,PAGESETUP-PRINTERRORS
+end
+
+shortlist=PAGESETUP-PRINTERRORS,0,displayed,none,as-dashes,as-na
+
+unitconverter=PAGESETUP-DPI,1,dpi
+
+# PANE -----------------------------------------------------------------------
+
+shortlist=PANE-ID,0,bottom-right,top-right,bottom-left,top-left
+
+flagslist=PANE-FLAGS
+  0x01=frozen
+  0x02=remove-split-with-freeze
+end
+
+# PHONETICPR -----------------------------------------------------------------
+
+shortlist=PHONETICPR-TYPE,0,halfwidth-katakana,fullwidth-katakana,hiragana,no-conversion
+shortlist=PHONETICPR-ALIGNMENT,0,no-control,left,center,distributed
+
+# PRINTOPTIONS ---------------------------------------------------------------
+
+flagslist=PRINTOPTIONS-FLAGS
+  0x0001=horizontal-centered
+  0x0002=vertical-centered
+  0x0004=print-headings
+  0x0008=print-gridlines
+  0x0010=gridlines-set
+end
+
+# ROW ------------------------------------------------------------------------
+
+combilist=ROW-FLAGS
+  0x0001=thick-top
+  0x0002=thick-bottom
+  0x0700=uint8,dec,outline-level
+  0x0800=outline-collapsed
+  0x1000=hidden
+  0x2000=custom-height
+  0x4000=custom-format
+end
+
+# SHEET ----------------------------------------------------------------------
+
+shortlist=SHEET-STATE,0,visible,hidden,very-hidden
+
+# SHEETFORMATPR --------------------------------------------------------------
+
+flagslist=SHEETFORMATPR-FLAGS
+  0x0001=custom-row-height
+  0x0002=rows-hidden
+end
+
+# SHEETPR --------------------------------------------------------------------
+
+flagslist=SHEETPR-FLAGS
+  0x0001=show-autopagebreaks
+  0x0020=outline-auto-style
+  0x0040=row-symbols-below
+  0x0080=column-symbols-right
+  0x0100=fit-to-pages
+  0x0400=show-outline-symbols
+end
+
+# SHEETVIEW ------------------------------------------------------------------
+
+flagslist=SHEETVIEW-FLAGS
+  0x0001=window-protected
+  0x0002=show-formulas
+  0x0004=show-gridlines
+  0x0008=show-headings
+  0x0010=show-zeros
+  0x0020=right-to-left
+  0x0040=selected
+  0x0080=show-ruler
+  0x0100=show-outline-symbols
+  0x0200=default-gridcolor
+  0x0400=show-whitespace
+end
+
+shortlist=SHEETVIEW-TYPE,0,normal,pagebreak-preview,page-layout
+
+# TABLE ----------------------------------------------------------------------
+
+shortlist=TABLE-TYPE,0,worksheet,,,query-table
+
+flagslist=TABLE-FLAGS
+  0x00000001=totals-row-shown
+  0x00000002=published
+  0x00000004=insert-row
+  0x00000008=insert-row-shift
+end
+
+# TABLESTYLEINFO -------------------------------------------------------------
+
+flagslist=TABLESTYLEINFO-FLAGS
+  0x0001=show-first-column
+  0x0002=show-last-column
+  0x0004=show-row-stripes
+  0x0008=show-column-stripes
+end
+
+# VOLTYPE --------------------------------------------------------------------
+
+shortlist=VOLTYPE-TYPE,0,realtime-data,olap-functions
+
+# WORKBBOKPR -----------------------------------------------------------------
+
+combilist=WORKBBOKPR-FLAGS
+  0x00000001=date-1904
+  0x00000004=hide-border-unsel-tables
+  0x00000008=filter-privacy
+  0x00000010=prompted-solutions
+  0x00000020=show-ink-annotation
+  0x00000040=backup-file
+  0x00000080=strip-extlink-values
+  0x00000300=uint8,dec,update-links,WORKBBOKPR-UPDATELINKS
+  0x00000400=hide-pivot-fieldlist
+  0x00000800=publish-items
+  0x00001000=check-compatibility
+  0x00006000=uint8,dec,show-objects,WORKBBOKPR-SHOWOBJECTS
+  0x00008000=show-pivotchart-filter
+  0x00010000=autocompress-pic
+end
+
+shortlist=WORKBBOKPR-UPDATELINKS,0,ask-user,never,always
+shortlist=WORKBBOKPR-SHOWOBJECTS,0,show,placeholder,hide
+
+# WORKBOOKVIEW ---------------------------------------------------------------
+
+flagslist=WORKBOOKVIEW-FLAGS
+  0x01=hidden
+  0x02=minimized
+  0x08=show-horizontal-scroll
+  0x10=show-vertical-scroll
+  0x20=show-tabbar
+  0x40=autofilter-date-grouping
+end
+
+# XF -------------------------------------------------------------------------
+
+shortlist=XF-HORALIGN,0,general,left,center,right,fill,block,center-across-sel,distribute
+shortlist=XF-VERALIGN,0,top,center,bottom,justify,distribute
+shortlist=XF-TEXTDIRECTION,0,context,left-to-right,right-to-left
+
+combilist=XF-ALIGNMENT
+  0x000000FF=uint8,dec,rotation,TEXTROTATION
+  0x0000FF00=uint8,dec,indent
+  0x00070000=uint8,dec,hor-align,XF-HORALIGN
+  0x00380000=uint8,dec,ver-align,XF-VERALIGN
+  0x00400000=text-wrap
+  0x00800000=justify-lastline
+  0x01000000=shrink-to-fit
+  0x0C000000=uint8,dec,text-dir,XF-TEXTDIRECTION
+  0x10000000=locked
+  0x20000000=formula-hidden
+  0x80000000=quote-prefix
+end
+
+flagslist=XF-USEDFLAGS
+  0x0001=format
+  0x0002=font
+  0x0004=alignment
+  0x0008=border
+  0x0010=fill
+  0x0020=protection
+end
+
+# ============================================================================
+

@@ -1,0 +1,16 @@
+mkdir: %_DEST%\inc%_EXT%\oox
+
+..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
+..\%__SRC%\lib\ixo.lib %_DEST%\lib%_EXT%\ixo.lib
+..\%__SRC%\lib\xol.lib %_DEST%\lib%_EXT%\xol.lib
+..\%__SRC%\lib\libxol.a %_DEST%\lib%_EXT%\libxol.a
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%\lib*.so
+
+..\inc\oox\dllapi.h %_DEST%\inc%_EXT%\oox\dllapi.h
+
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
+
+..\xml\components.xml %_DEST%\xml%_EXT%\components.xml

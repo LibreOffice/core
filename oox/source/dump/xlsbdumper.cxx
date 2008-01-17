@@ -1,0 +1,1920 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: xlsbdumper.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-01-17 08:05:59 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "oox/dump/xlsbdumper.hxx"
+#include <com/sun/star/io/XTextInputStream.hpp>
+#include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
+#include "oox/core/filterbase.hxx"
+#include "oox/xls/formulabase.hxx"
+#include "oox/xls/ooxtokens.hxx"
+#include "oox/xls/richstring.hxx"
+
+#if OOX_INCLUDE_DUMPER
+
+using ::rtl::OUString;
+using ::rtl::OUStringBuffer;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::UNO_QUERY;
+using ::com::sun::star::sheet::XSpreadsheetDocument;
+using ::oox::core::FilterBase;
+
+using namespace ::oox::xls;
+
+namespace oox {
+namespace dump {
+namespace xlsb {
+
+// ============================================================================
+
+namespace {
+
+const sal_uInt8 OOBIN_STRINGFLAG_FONTS          = 0x01;
+const sal_uInt8 OOBIN_STRINGFLAG_PHONETICS      = 0x02;
+
+const sal_uInt8 OOBIN_TOK_ARRAY_DOUBLE          = 0;
+const sal_uInt8 OOBIN_TOK_ARRAY_STRING          = 1;
+const sal_uInt8 OOBIN_TOK_ARRAY_BOOL            = 2;
+const sal_uInt8 OOBIN_TOK_ARRAY_ERROR           = 4;
+
+} // namespace
+
+// ============================================================================
+
+RecordStreamInput::RecordStreamInput() :
+    mxStrm( new RecordInputStream( RecordDataSequence() ) )
+{
+}
+
+RecordStreamInput::~RecordStreamInput()
+{
+}
+
+bool RecordStreamInput::implIsValid() const
+{
+    return mxStrm.get() && Input::implIsValid();
+}
+
+void RecordStreamInput::createStream( const RecordDataSequence& rData )
+{
+    mxStrm.reset( new RecordInputStream( rData ) );
+}
+
+sal_Int64 RecordStreamInput::getSize() const
+{
+    return mxStrm->getRecSize();
+}
+
+sal_Int64 RecordStreamInput::tell() const
+{
+    return mxStrm->getRecPos();
+}
+
+void RecordStreamInput::seek( sal_Int64 nPos )
+{
+    mxStrm->seek( static_cast< sal_Int32 >( nPos ) );
+}
+
+void RecordStreamInput::skip( sal_Int32 nBytes )
+{
+    mxStrm->skip( nBytes );
+}
+
+sal_Int32 RecordStreamInput::read( void* pBuffer, sal_Int32 nSize )
+{
+    return mxStrm->read( pBuffer, nSize );
+}
+
+RecordStreamInput& RecordStreamInput::operator>>( sal_Int8& rnData )   { *mxStrm >> rnData; return *this; }
+RecordStreamInput& RecordStreamInput::operator>>( sal_uInt8& rnData )  { *mxStrm >> rnData; return *this; }
+RecordStreamInput& RecordStreamInput::operator>>( sal_Int16& rnData )  { *mxStrm >> rnData; return *this; }
+RecordStreamInput& RecordStreamInput::operator>>( sal_uInt16& rnData ) { *mxStrm >> rnData; return *this; }
+RecordStreamInput& RecordStreamInput::operator>>( sal_Int32& rnData )  { *mxStrm >> rnData; return *this; }
+RecordStreamInput& RecordStreamInput::operator>>( sal_uInt32& rnData ) { *mxStrm >> rnData; return *this; }
+RecordStreamInput& RecordStreamInput::operator>>( float& rfData )      { *mxStrm >> rfData; return *this; }
+RecordStreamInput& RecordStreamInput::operator>>( double& rfData )     { *mxStrm >> rfData; return *this; }
+
+// ============================================================================
+
+RecordObjectBase::RecordObjectBase()
+{
+}
+
+RecordObjectBase::~RecordObjectBase()
+{
+}
+
+void RecordObjectBase::construct( const OutputObjectBase& rParent )
+{
+    mxStrmIn.reset( new RecordStreamInput );
+    InputObjectBase::construct( rParent, mxStrmIn );
+    constructRecObjBase();
+}
+
+void RecordObjectBase::construct( const RecordObjectBase& rParent )
+{
+    *this = rParent;
+}
+
+bool RecordObjectBase::implIsValid() const
+{
+    return isValid( mxStrmIn ) && InputObjectBase::implIsValid();
+}
+
+void RecordObjectBase::createRecordStream( const RecordDataSequence& rData )
+{
+    mxStrmIn->createStream( rData );
+}
+
+OUString RecordObjectBase::getErrorName( sal_uInt8 nErrCode ) const
+{
+    return cfg().getName( mxErrCodes, nErrCode );
+}
+
+// ------------------------------------------------------------------------
+
+void RecordObjectBase::readAddress( Address& orAddress )
+{
+    in() >> orAddress.mnRow >> orAddress.mnCol;
+}
+
+void RecordObjectBase::readRange( Range& orRange )
+{
+    in() >> orRange.maFirst.mnRow >> orRange.maLast.mnRow >> orRange.maFirst.mnCol >> orRange.maLast.mnCol;
+}
+
+void RecordObjectBase::readRangeList( RangeList& orRanges )
+{
+    sal_Int32 nCount;
+    in() >> nCount;
+    if( nCount >= 0 )
+    {
+        orRanges.resize( getLimitedValue< size_t, sal_Int32 >( nCount, 0, SAL_MAX_UINT16 ) );
+        for( RangeList::iterator aIt = orRanges.begin(), aEnd = orRanges.end(); in().isValidPos() && (aIt != aEnd); ++aIt )
+            readRange( *aIt );
+    }
+    else
+        orRanges.clear();
+}
+
+// ----------------------------------------------------------------------------
+
+void RecordObjectBase::writeBooleanItem( const sal_Char* pcName, sal_uInt8 nBool )
+{
+    writeDecItem( pcName, nBool, "BOOLEAN" );
+}
+
+void RecordObjectBase::writeErrorCodeItem( const sal_Char* pcName, sal_uInt8 nErrCode )
+{
+    writeHexItem( pcName, nErrCode, mxErrCodes );
+}
+
+void RecordObjectBase::writeFontPortions( const BinFontPortionList& rPortions )
+{
+    if( !rPortions.empty() )
+    {
+        writeDecItem( "font-count", static_cast< sal_uInt32 >( rPortions.size() ) );
+        IndentGuard aIndGuard( out() );
+        TableGuard aTabGuard( out(), 14 );
+        for( BinFontPortionList::const_iterator aIt = rPortions.begin(), aEnd = rPortions.end(); aIt != aEnd; ++aIt )
+        {
+            MultiItemsGuard aMultiGuard( out() );
+            writeDecItem( "char-pos", aIt->mnPos );
+            writeDecItem( "font-id", aIt->mnFontId, "FONTNAMES" );
+        }
+    }
+}
+
+void RecordObjectBase::writePhoneticPortions( const BinPhoneticPortionList& rPortions )
+{
+    if( !rPortions.empty() )
+    {
+        writeDecItem( "portion-count", static_cast< sal_uInt32 >( rPortions.size() ) );
+        IndentGuard aIndGuard( out() );
+        TableGuard aTabGuard( out(), 14, 21 );
+        for( BinPhoneticPortionList::const_iterator aIt = rPortions.begin(), aEnd = rPortions.end(); aIt != aEnd; ++aIt )
+        {
+            MultiItemsGuard aMultiGuard( out() );
+            writeDecItem( "char-pos", aIt->mnPos );
+            writeDecItem( "base-text-start", aIt->mnBasePos );
+            writeDecItem( "base-text-length", aIt->mnBaseLen );
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
+
+sal_uInt8 RecordObjectBase::dumpBoolean( const sal_Char* pcName )
+{
+    sal_uInt8 nBool;
+    in() >> nBool;
+    writeBooleanItem( pcName ? pcName : "boolean", nBool );
+    return nBool;
+}
+
+sal_uInt8 RecordObjectBase::dumpErrorCode( const sal_Char* pcName )
+{
+    sal_uInt8 nErrCode;
+    in() >> nErrCode;
+    writeErrorCodeItem( pcName ? pcName : "errorcode", nErrCode );
+    return nErrCode;
+}
+
+OUString RecordObjectBase::dumpString( const sal_Char* pcName, bool bRich, bool b32BitLen )
+{
+    sal_uInt8 nFlags = bRich ? dumpHex< sal_uInt8 >( "flags", "STRING-FLAGS" ) : 0;
+
+    OUString aString = getRecordStream().readString( b32BitLen );
+    writeStringItem( pcName ? pcName : "text", aString );
+
+    // --- formatting ---
+    if( getFlag( nFlags, OOBIN_STRINGFLAG_FONTS ) )
+    {
+        IndentGuard aIndGuard( out() );
+        BinFontPortionList aPortions;
+        aPortions.importPortions( getRecordStream() );
+        writeFontPortions( aPortions );
+    }
+
+    // --- phonetic text ---
+    if( getFlag( nFlags, OOBIN_STRINGFLAG_PHONETICS ) )
+    {
+        IndentGuard aIndGuard( out() );
+        dumpString( "phonetic-text" );
+        BinPhoneticPortionList aPortions;
+        aPortions.importPortions( getRecordStream() );
+        writePhoneticPortions( aPortions );
+        dumpDec< sal_uInt16 >( "font-id", "FONTNAMES" );
+        dumpHex< sal_uInt16 >( "flags", "PHONETIC-FLAGS" );
+    }
+
+    return aString;
+}
+
+void RecordObjectBase::dumpColor( const sal_Char* pcName )
+{
+    MultiItemsGuard aMultiGuard( out() );
+    writeEmptyItem( pcName ? pcName : "color" );
+    switch( dumpDec< sal_uInt8 >( "type", "COLOR-TYPE" ) )
+    {
+        case 0:
+        case 1:
+        case 3:     dumpDec< sal_uInt8 >( "index", "PALETTE-COLORS" );  break;
+        case 5:     dumpUnused( 1 );                                    break;
+        case 7:     dumpDec< sal_uInt8 >( "theme-id" );                 break;
+        default:    dumpUnknown( 1 );
+    }
+    dumpDec< sal_Int16 >( "tint", "CONV-TINT" );
+    sal_uInt8 nR, nG, nB, nA;
+    in() >> nR >> nG >> nB >> nA;
+    writeColorItem( "rgb", (((((static_cast< sal_Int32 >( nA ) << 8) | nR) << 8) | nG) << 8) | nB );
+}
+
+sal_Int32 RecordObjectBase::dumpColIndex( const sal_Char* pcName )
+{
+    sal_Int32 nCol;
+    in() >> nCol;
+    writeColIndexItem( pcName ? pcName : "col-idx", nCol );
+    return nCol;
+}
+
+sal_Int32 RecordObjectBase::dumpRowIndex( const sal_Char* pcName )
+{
+    sal_Int32 nRow;
+    in() >> nRow;
+    writeRowIndexItem( pcName ? pcName : "row-idx", nRow );
+    return nRow;
+}
+
+sal_Int32 RecordObjectBase::dumpColRange( const sal_Char* pcName )
+{
+    sal_Int32 nCol1, nCol2;
+    in() >> nCol1 >> nCol2;
+    writeColRangeItem( pcName ? pcName : "col-range", nCol1, nCol2 );
+    return nCol2 - nCol1 + 1;
+}
+
+sal_Int32 RecordObjectBase::dumpRowRange( const sal_Char* pcName )
+{
+    sal_Int32 nRow1, nRow2;
+    in() >> nRow1 >> nRow2;
+    writeRowRangeItem( pcName ? pcName : "row-range", nRow1, nRow2 );
+    return nRow2 - nRow1 + 1;
+}
+
+Address RecordObjectBase::dumpAddress( const sal_Char* pcName )
+{
+    Address aPos;
+    readAddress( aPos );
+    writeAddressItem( pcName ? pcName : "addr", aPos );
+    return aPos;
+}
+
+Range RecordObjectBase::dumpRange( const sal_Char* pcName )
+{
+    Range aRange;
+    readRange( aRange );
+    writeRangeItem( pcName ? pcName : "range", aRange );
+    return aRange;
+}
+
+void RecordObjectBase::dumpRangeList( const sal_Char* pcName )
+{
+    RangeList aRanges;
+    readRangeList( aRanges );
+    writeRangeListItem( pcName ? pcName : "range-list", aRanges );
+}
+
+// ----------------------------------------------------------------------------
+
+void RecordObjectBase::constructRecObjBase()
+{
+    if( RecordObjectBase::implIsValid() )
+        mxErrCodes = cfg().getNameList( "ERRORCODES" );
+}
+
+// ============================================================================
+
+FormulaObject::FormulaObject( const RecordObjectBase& rParent ) :
+    mpcName( 0 ),
+    mnSize( 0 )
+{
+    RecordObjectBase::construct( rParent );
+    constructFmlaObj();
+}
+
+FormulaObject::~FormulaObject()
+{
+}
+
+void FormulaObject::dumpCellFormula( const sal_Char* pcName )
+{
+    dumpFormula( pcName, false );
+}
+
+void FormulaObject::dumpNameFormula( const sal_Char* pcName )
+{
+    dumpFormula( pcName, true );
+}
+
+void FormulaObject::implDump()
+{
+    {
+        MultiItemsGuard aMultiGuard( out() );
+        writeEmptyItem( mpcName );
+        writeDecItem( "formula-size", mnSize );
+    }
+    if( mnSize < 0 ) return;
+
+    Input& rIn = in();
+    sal_Int64 nStartPos = rIn.tell();
+    sal_Int64 nEndPos = ::std::min< sal_Int64 >( nStartPos + mnSize, rIn.getSize() );
+
+    bool bValid = mxTokens.get();
+    mxStack.reset( new FormulaStack );
+    maAddData.clear();
+    IndentGuard aIndGuard( out() );
+    {
+        TableGuard aTabGuard( out(), 8, 18 );
+        while( bValid && (rIn.tell() < nEndPos) )
+        {
+            MultiItemsGuard aMultiGuard( out() );
+            writeHexItem( 0, static_cast< sal_uInt16 >( rIn.tell() - nStartPos ) );
+            sal_uInt8 nTokenId = dumpHex< sal_uInt8 >( 0, mxTokens );
+            bValid = mxTokens->hasName( nTokenId );
+            if( bValid )
+            {
+                sal_uInt8 nTokClass = nTokenId & BIFF_TOKCLASS_MASK;
+                sal_uInt8 nBaseId = nTokenId & BIFF_TOKID_MASK;
+                if( nTokClass == BIFF_TOKCLASS_NONE )
+                {
+                    switch( nBaseId )
+                    {
+                        case BIFF_TOKID_EXP:        dumpExpToken( "EXP" );          break;
+                        case BIFF_TOKID_ADD:        dumpBinaryOpToken( "+" );       break;
+                        case BIFF_TOKID_SUB:        dumpBinaryOpToken( "-" );       break;
+                        case BIFF_TOKID_MUL:        dumpBinaryOpToken( "*" );       break;
+                        case BIFF_TOKID_DIV:        dumpBinaryOpToken( "/" );       break;
+                        case BIFF_TOKID_POWER:      dumpBinaryOpToken( "^" );       break;
+                        case BIFF_TOKID_CONCAT:     dumpBinaryOpToken( "&" );       break;
+                        case BIFF_TOKID_LT:         dumpBinaryOpToken( "<" );       break;
+                        case BIFF_TOKID_LE:         dumpBinaryOpToken( "<=" );      break;
+                        case BIFF_TOKID_EQ:         dumpBinaryOpToken( "=" );       break;
+                        case BIFF_TOKID_GE:         dumpBinaryOpToken( ">=" );      break;
+                        case BIFF_TOKID_GT:         dumpBinaryOpToken( "<" );       break;
+                        case BIFF_TOKID_NE:         dumpBinaryOpToken( "<>" );      break;
+                        case BIFF_TOKID_ISECT:      dumpBinaryOpToken( " " );       break;
+                        case BIFF_TOKID_LIST:       dumpBinaryOpToken( "," );       break;
+                        case BIFF_TOKID_RANGE:      dumpBinaryOpToken( ":" );       break;
+                        case BIFF_TOKID_UPLUS:      dumpUnaryOpToken( "+", "" );    break;
+                        case BIFF_TOKID_UMINUS:     dumpUnaryOpToken( "-", "" );    break;
+                        case BIFF_TOKID_PERCENT:    dumpUnaryOpToken( "", "%" );    break;
+                        case BIFF_TOKID_PAREN:      dumpUnaryOpToken( "(", ")" );   break;
+                        case BIFF_TOKID_MISSARG:    dumpMissArgToken();             break;
+                        case BIFF_TOKID_STR:        dumpStringToken();              break;
+                        case BIFF_TOKID_NLR:        bValid = dumpTableToken();      break;
+                        case BIFF_TOKID_ATTR:       bValid = dumpAttrToken();       break;
+                        case BIFF_TOKID_ERR:        dumpErrorToken();               break;
+                        case BIFF_TOKID_BOOL:       dumpBoolToken();                break;
+                        case BIFF_TOKID_INT:        dumpIntToken();                 break;
+                        case BIFF_TOKID_NUM:        dumpDoubleToken();              break;
+                        default:                    bValid = false;
+                    }
+                }
+                else
+                {
+                    OUString aTokClass = cfg().getName( mxClasses, nTokClass );
+                    switch( nBaseId )
+                    {
+                        case BIFF_TOKID_ARRAY:      dumpArrayToken( aTokClass );                break;
+                        case BIFF_TOKID_FUNC:       dumpFuncToken( aTokClass );                 break;
+                        case BIFF_TOKID_FUNCVAR:    dumpFuncVarToken( aTokClass );              break;
+                        case BIFF_TOKID_NAME:       dumpNameToken( aTokClass );                 break;
+                        case BIFF_TOKID_REF:        dumpRefToken( aTokClass, false );           break;
+                        case BIFF_TOKID_AREA:       dumpAreaToken( aTokClass, false );          break;
+                        case BIFF_TOKID_MEMAREA:    dumpMemAreaToken( aTokClass, true );        break;
+                        case BIFF_TOKID_MEMERR:     dumpMemAreaToken( aTokClass, false );       break;
+                        case BIFF_TOKID_MEMNOMEM:   dumpMemAreaToken( aTokClass, false );       break;
+                        case BIFF_TOKID_MEMFUNC:    dumpMemFuncToken( aTokClass );              break;
+                        case BIFF_TOKID_REFERR:     dumpRefErrToken( aTokClass, false );        break;
+                        case BIFF_TOKID_AREAERR:    dumpRefErrToken( aTokClass, true );         break;
+                        case BIFF_TOKID_REFN:       dumpRefToken( aTokClass, true );            break;
+                        case BIFF_TOKID_AREAN:      dumpAreaToken( aTokClass, true );           break;
+                        case BIFF_TOKID_MEMAREAN:   dumpMemFuncToken( aTokClass );              break;
+                        case BIFF_TOKID_MEMNOMEMN:  dumpMemFuncToken( aTokClass );              break;
+                        case BIFF_TOKID_NAMEX:      dumpNameXToken( aTokClass );                break;
+                        case BIFF_TOKID_REF3D:      dumpRef3dToken( aTokClass, mbNameMode );    break;
+                        case BIFF_TOKID_AREA3D:     dumpArea3dToken( aTokClass, mbNameMode );   break;
+                        case BIFF_TOKID_REFERR3D:   dumpRefErr3dToken( aTokClass, false );      break;
+                        case BIFF_TOKID_AREAERR3D:  dumpRefErr3dToken( aTokClass, true );       break;
+                        default:                    bValid = false;
+                    }
+                }
+            }
+        }
+    }
+
+    if( nEndPos == rIn.tell() )
+    {
+        dumpAddTokenData();
+        if( mnSize > 0 )
+        {
+            writeInfoItem( "formula", mxStack->getFormulaString() );
+            writeInfoItem( "classes", mxStack->getClassesString() );
+        }
+    }
+    else
+    {
+        dumpBinary( OOX_DUMP_ERRASCII( "formula-error" ), static_cast< sal_Int32 >( nEndPos - rIn.tell() ), false );
+        sal_Int32 nAddDataSize = dumpDec< sal_Int32 >( "add-data-size" );
+        dumpBinary( "add-data", nAddDataSize, false );
+    }
+
+    mpcName = 0;
+    mnSize = 0;
+}
+
+void FormulaObject::dumpFormula( const sal_Char* pcName, bool bNameMode )
+{
+    mpcName = pcName ? pcName : "formula";
+    in() >> mnSize;
+    mbNameMode = bNameMode;
+    dump();
+}
+
+// private --------------------------------------------------------------------
+
+void FormulaObject::constructFmlaObj()
+{
+    if( RecordObjectBase::implIsValid() )
+    {
+        Reference< XSpreadsheetDocument > xDocument( getFilter().getModel(), UNO_QUERY );
+        mxFuncProv.reset( new FunctionProvider( xDocument, true ) );
+
+        Config& rCfg = cfg();
+        mxClasses   = rCfg.getNameList( "TOKENCLASSES" );
+        mxRelFlags  = rCfg.getNameList( "REFRELFLAGS" );
+        mxAttrTypes = rCfg.getNameList( "ATTRTYPES" );
+        mxSpTypes   = rCfg.getNameList( "ATTRSPACETYPES" );
+
+        // create classified token names
+        mxTokens = rCfg.createNameList< ConstList >( "TOKENS" );
+        mxTokens->includeList( rCfg.getNameList( "BASETOKENS" ) );
+
+        NameListRef xClassTokens = rCfg.getNameList( "CLASSTOKENS" );
+        if( mxClasses.get() && xClassTokens.get() )
+            for( NameListBase::const_iterator aCIt = mxClasses->begin(), aCEnd = mxClasses->end(); aCIt != aCEnd; ++aCIt )
+                for( NameListBase::const_iterator aTIt = xClassTokens->begin(), aTEnd = xClassTokens->end(); aTIt != aTEnd; ++aTIt )
+                    mxTokens->setName( aCIt->first | aTIt->first, aTIt->second + aCIt->second );
+
+        mnColCount = 16384;
+        mnRowCount = 1024 * 1024;
+    }
+}
+
+// ----------------------------------------------------------------------------
+
+namespace {
+
+OUString lclCreateName( const OUString& rRef, sal_Int32 nNameId )
+{
+    OUStringBuffer aName( rRef );
+    StringHelper::appendIndexedText( aName, CREATE_OUSTRING( "NAME" ), nNameId );
+    return aName.makeStringAndClear();
+}
+
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+TokenAddress FormulaObject::createTokenAddress( sal_Int32 nCol, sal_Int32 nRow, bool bRelC, bool bRelR, bool bNameMode ) const
+{
+    TokenAddress aPos;
+    aPos.mnCol = nCol;
+    if( bRelC && bNameMode && (nCol >= mnColCount / 2) ) aPos.mnCol -= mnColCount;
+    aPos.mbRelCol = bRelC;
+    aPos.mnRow = nRow;
+    if( bRelR && bNameMode && (nRow >= mnRowCount / 2) ) aPos.mnRow -= mnRowCount;
+    aPos.mbRelRow = bRelR;
+    return aPos;
+}
+
+OUString FormulaObject::createRef( const OUString& rData ) const
+{
+    return maRefPrefix + rData;
+}
+
+OUString FormulaObject::createName( sal_Int32 nNameId ) const
+{
+    return lclCreateName( maRefPrefix, nNameId );
+}
+
+OUString FormulaObject::createPlaceHolder( size_t nIdx ) const
+{
+    OUStringBuffer aStr;
+    StringHelper::appendDec( aStr, static_cast< sal_uInt32 >( nIdx ) );
+    StringHelper::enclose( aStr, OOX_DUMP_PLACEHOLDER );
+    return aStr.makeStringAndClear();
+}
+
+OUString FormulaObject::createPlaceHolder() const
+{
+    return createPlaceHolder( maAddData.size() );
+}
+
+OUString FormulaObject::writeFuncIdItem( sal_uInt16 nFuncId, const FunctionInfo** oppFuncInfo )
+{
+    ItemGuard aItemGuard( out(), "func-id" );
+    writeHexItem( 0, nFuncId, "FUNCID" );
+    OUStringBuffer aBuffer;
+    const FunctionInfo* pFuncInfo = mxFuncProv->getFuncInfoFromOobFuncId( nFuncId );
+    if( pFuncInfo )
+        aBuffer.append( pFuncInfo->maOoxFuncName );
+    else
+    {
+        bool bCmd = getFlag( nFuncId, BIFF_TOK_FUNCVAR_CMD );
+        aBuffer.appendAscii( bCmd ? "CMD" : "FUNC" );
+        StringHelper::appendIndex( aBuffer, nFuncId & BIFF_TOK_FUNCVAR_FUNCIDMASK );
+    }
+    OUString aFuncName = aBuffer.makeStringAndClear();
+    aItemGuard.cont();
+    out().writeString( aFuncName );
+    if( oppFuncInfo ) *oppFuncInfo = pFuncInfo;
+    return aFuncName;
+}
+
+sal_Int32 FormulaObject::dumpTokenCol( const sal_Char* pcName, bool& rbRelC, bool& rbRelR )
+{
+    sal_uInt16 nCol = dumpHex< sal_uInt16 >( pcName, mxRelFlags );
+    rbRelC = getFlag( nCol, OOBIN_TOK_REF_COLREL );
+    rbRelR = getFlag( nCol, OOBIN_TOK_REF_ROWREL );
+    nCol &= OOBIN_TOK_REF_COLMASK;
+    return nCol;
+}
+
+sal_Int32 FormulaObject::dumpTokenRow( const sal_Char* pcName )
+{
+    return dumpDec< sal_Int32 >( pcName );
+}
+
+TokenAddress FormulaObject::dumpTokenAddress( bool bNameMode )
+{
+    bool bRelC = false;
+    bool bRelR = false;
+    sal_Int32 nRow = dumpTokenRow( "row" );
+    sal_Int32 nCol = dumpTokenCol( "col", bRelC, bRelR );
+    return createTokenAddress( nCol, nRow, bRelC, bRelR, bNameMode );
+}
+
+TokenRange FormulaObject::dumpTokenRange( bool bNameMode )
+{
+    bool bRelC1 = false;
+    bool bRelR1 = false;
+    bool bRelC2 = false;
+    bool bRelR2 = false;
+    sal_Int32 nRow1 = dumpTokenRow( "row1" );
+    sal_Int32 nRow2 = dumpTokenRow( "row2" );
+    sal_Int32 nCol1 = dumpTokenCol( "col1", bRelC1, bRelR1 );
+    sal_Int32 nCol2 = dumpTokenCol( "col2", bRelC2, bRelR2 );
+    TokenRange aRange;
+    aRange.maFirst = createTokenAddress( nCol1, nRow1, bRelC1, bRelR1, bNameMode );
+    aRange.maLast  = createTokenAddress( nCol2, nRow2, bRelC2, bRelR2, bNameMode );
+    return aRange;
+}
+
+sal_Int16 FormulaObject::readTokenRefId()
+{
+    return dumpDec< sal_Int16 >( "ref-id" );
+}
+
+OUString FormulaObject::dumpTokenRefId()
+{
+    OUStringBuffer aRef( CREATE_OUSTRING( "REF" ) );
+    StringHelper::appendIndex( aRef, readTokenRefId() );
+    aRef.append( OOX_DUMP_TABSEP );
+    return aRef.makeStringAndClear();
+}
+
+void FormulaObject::dumpIntToken()
+{
+    dumpDec< sal_uInt16 >( "value" );
+    mxStack->pushOperand( out().getLastItemValue() );
+}
+
+void FormulaObject::dumpDoubleToken()
+{
+    dumpDec< double >( "value" );
+    mxStack->pushOperand( out().getLastItemValue() );
+}
+
+void FormulaObject::dumpStringToken()
+{
+    OUStringBuffer aBuffer( dumpString( "value", false, false ) );
+    StringHelper::enclose( aBuffer, OOX_DUMP_FMLASTRQUOTE );
+    mxStack->pushOperand( aBuffer.makeStringAndClear() );
+}
+
+void FormulaObject::dumpBoolToken()
+{
+    dumpBoolean( "value" );
+    mxStack->pushOperand( out().getLastItemValue() );
+}
+
+void FormulaObject::dumpErrorToken()
+{
+    dumpErrorCode( "value" );
+    mxStack->pushOperand( out().getLastItemValue() );
+}
+
+void FormulaObject::dumpMissArgToken()
+{
+    mxStack->pushOperand( OUString( OOX_DUMP_EMPTYVALUE ) );
+}
+
+void FormulaObject::dumpArrayToken( const OUString& rTokClass )
+{
+    dumpUnused( 14 );
+    mxStack->pushOperand( createPlaceHolder(), rTokClass );
+    maAddData.push_back( ADDDATA_ARRAY );
+}
+
+void FormulaObject::dumpNameToken( const OUString& rTokClass )
+{
+    sal_Int32 nNameId = dumpDec< sal_Int32 >( "name-id" );
+    mxStack->pushOperand( createName( nNameId ), rTokClass );
+}
+
+void FormulaObject::dumpNameXToken( const OUString& rTokClass )
+{
+    OUString aRef = dumpTokenRefId();
+    sal_Int32 nNameId = dumpDec< sal_Int32 >( "name-id" );
+    mxStack->pushOperand( lclCreateName( aRef, nNameId ), rTokClass );
+}
+
+void FormulaObject::dumpRefToken( const OUString& rTokClass, bool bNameMode )
+{
+    TokenAddress aPos = dumpTokenAddress( bNameMode );
+    writeTokenAddressItem( "addr", aPos, bNameMode );
+    mxStack->pushOperand( createRef( out().getLastItemValue() ), rTokClass );
+}
+
+void FormulaObject::dumpAreaToken( const OUString& rTokClass, bool bNameMode )
+{
+    TokenRange aRange = dumpTokenRange( bNameMode );
+    writeTokenRangeItem( "range", aRange, bNameMode );
+    mxStack->pushOperand( createRef( out().getLastItemValue() ), rTokClass );
+}
+
+void FormulaObject::dumpRefErrToken( const OUString& rTokClass, bool bArea )
+{
+    dumpUnused( 4 * (bArea ? 2 : 1) );
+    mxStack->pushOperand( createRef( getErrorName( BIFF_ERR_REF ) ), rTokClass );
+}
+
+void FormulaObject::dumpRef3dToken( const OUString& rTokClass, bool bNameMode )
+{
+    OUString aRef = dumpTokenRefId();
+    TokenAddress aPos = dumpTokenAddress( bNameMode );
+    writeTokenAddress3dItem( "addr", aRef, aPos, bNameMode );
+    mxStack->pushOperand( out().getLastItemValue(), rTokClass );
+}
+
+void FormulaObject::dumpArea3dToken( const OUString& rTokClass, bool bNameMode )
+{
+    OUString aRef = dumpTokenRefId();
+    TokenRange aRange = dumpTokenRange( bNameMode );
+    writeTokenRange3dItem( "range", aRef, aRange, bNameMode );
+    mxStack->pushOperand( out().getLastItemValue(), rTokClass );
+}
+
+void FormulaObject::dumpRefErr3dToken( const OUString& rTokClass, bool bArea )
+{
+    OUString aRef = dumpTokenRefId();
+    dumpUnused( 4 * (bArea ? 2 : 1) );
+    mxStack->pushOperand( aRef + getErrorName( BIFF_ERR_REF ), rTokClass );
+}
+
+void FormulaObject::dumpMemFuncToken( const OUString& /*rTokClass*/ )
+{
+    dumpDec< sal_uInt16 >( "size" );
+}
+
+void FormulaObject::dumpMemAreaToken( const OUString& rTokClass, bool bAddData )
+{
+    dumpUnused( 4 );
+    dumpMemFuncToken( rTokClass );
+    if( bAddData )
+        maAddData.push_back( ADDDATA_MEMAREA );
+}
+
+void FormulaObject::dumpExpToken( const StringWrapper& rName )
+{
+    Address aPos;
+    dumpRowIndex( "base-row" );
+    OUStringBuffer aOp( rName.getString() );
+    StringHelper::appendIndex( aOp, createPlaceHolder() + out().getLastItemValue() );
+    mxStack->pushOperand( aOp.makeStringAndClear() );
+    maAddData.push_back( ADDDATA_EXP );
+}
+
+void FormulaObject::dumpUnaryOpToken( const StringWrapper& rLOp, const StringWrapper& rROp )
+{
+    mxStack->pushUnaryOp( rLOp, rROp );
+}
+
+void FormulaObject::dumpBinaryOpToken( const StringWrapper& rOp )
+{
+    mxStack->pushBinaryOp( rOp );
+}
+
+void FormulaObject::dumpFuncToken( const OUString& rTokClass )
+{
+    sal_uInt16 nFuncId;
+    in() >> nFuncId;
+    const FunctionInfo* pFuncInfo = 0;
+    OUString aFuncName = writeFuncIdItem( nFuncId, &pFuncInfo );
+    if( pFuncInfo && (pFuncInfo->mnMinParamCount == pFuncInfo->mnMaxParamCount) )
+        mxStack->pushFuncOp( aFuncName, rTokClass, pFuncInfo->mnMinParamCount );
+    else
+        mxStack->setError();
+}
+
+void FormulaObject::dumpFuncVarToken( const OUString& rTokClass )
+{
+    sal_uInt8 nParamCount;
+    sal_uInt16 nFuncId;
+    in() >> nParamCount >> nFuncId;
+    bool bCmd = getFlag( nFuncId, BIFF_TOK_FUNCVAR_CMD );
+    if( bCmd )
+        writeHexItem( "param-count", nParamCount, "PARAMCOUNT-CMD" );
+    else
+        writeDecItem( "param-count", nParamCount );
+    OUString aFuncName = writeFuncIdItem( nFuncId );
+    if( bCmd && getFlag( nParamCount, BIFF_TOK_FUNCVAR_CMDPROMPT ) )
+    {
+        aFuncName += OUString( OOX_DUMP_CMDPROMPT );
+        nParamCount &= BIFF_TOK_FUNCVAR_COUNTMASK;
+    }
+    mxStack->pushFuncOp( aFuncName, rTokClass, nParamCount );
+}
+
+bool FormulaObject::dumpTableToken()
+{
+    Output& rOut = out();
+    dumpUnused( 3 );
+    sal_uInt16 nFlags = dumpHex< sal_uInt16 >( "flags", "TABLEFLAGS" );
+    sal_uInt16 nTabId = dumpDec< sal_uInt16 >( "table-id" );
+    dumpUnused( 2 );
+    {
+        sal_uInt16 nCol1, nCol2;
+        in() >> nCol1 >> nCol2;
+        ItemGuard aItem( rOut, "cols" );
+        rOut.writeDec( nCol1 );
+        if( nCol1 != nCol2 )
+        {
+            rOut.writeChar( OOX_DUMP_RANGESEP );
+            rOut.writeDec( nCol2 );
+        }
+    }
+    OUStringBuffer aColRange;
+    StringHelper::appendIndex( aColRange, rOut.getLastItemValue() );
+    OUStringBuffer aParams;
+    size_t nParams = 0;
+    if( getFlag( nFlags, OOBIN_TOK_TABLE_ALL ) && ++nParams )
+        StringHelper::appendToken( aParams, CREATE_OUSTRING( "[#All]" ) );
+    if( getFlag( nFlags, OOBIN_TOK_TABLE_HEADERS ) && ++nParams )
+        StringHelper::appendToken( aParams, CREATE_OUSTRING( "[#Headers]" ) );
+    if( getFlag( nFlags, OOBIN_TOK_TABLE_DATA ) && ++nParams )
+        StringHelper::appendToken( aParams, CREATE_OUSTRING( "[#Data]" ) );
+    if( getFlag( nFlags, OOBIN_TOK_TABLE_TOTALS ) && ++nParams )
+        StringHelper::appendToken( aParams, CREATE_OUSTRING( "[#Totals]" ) );
+    if( getFlag( nFlags, OOBIN_TOK_TABLE_THISROW ) && ++nParams )
+        StringHelper::appendToken( aParams, CREATE_OUSTRING( "[#This Row]" ) );
+    if( (getFlag( nFlags, OOBIN_TOK_TABLE_COLUMN ) || getFlag( nFlags, OOBIN_TOK_TABLE_COLRANGE )) && ++nParams )
+        StringHelper::appendToken( aParams, aColRange.makeStringAndClear() );
+    OUStringBuffer aOp;
+    StringHelper::appendIndexedText( aOp, CREATE_OUSTRING( "TABLE" ), nTabId );
+    if( nParams > 1 )
+        StringHelper::appendIndex( aOp, aParams.makeStringAndClear() );
+    else if( nParams == 1 )
+        aOp.append( aParams.makeStringAndClear() );
+    mxStack->pushOperand( aOp.makeStringAndClear() );
+    return true;
+}
+
+bool FormulaObject::dumpAttrToken()
+{
+    bool bValid = true;
+    sal_uInt8 nType = dumpHex< sal_uInt8 >( "type", mxAttrTypes );
+    switch( nType )
+    {
+        case OOBIN_TOK_ATTR_VOLATILE:
+            dumpUnused( 2 );
+        break;
+        case OOBIN_TOK_ATTR_IF:
+            dumpDec< sal_uInt16 >( "skip" );
+        break;
+        case OOBIN_TOK_ATTR_CHOOSE:
+        {
+            sal_uInt16 nCount = dumpDec< sal_uInt16 >( "choices" );
+            out().resetItemIndex();
+            for( sal_uInt16 nIdx = 0; nIdx < nCount; ++nIdx )
+                dumpDec< sal_uInt16 >( "#skip" );
+            dumpDec< sal_uInt16 >( "skip-err" );
+        }
+        break;
+        case OOBIN_TOK_ATTR_SKIP:
+            dumpDec< sal_uInt16 >( "skip" );
+        break;
+        case OOBIN_TOK_ATTR_SUM:
+            dumpUnused( 2 );
+            mxStack->pushFuncOp( CREATE_OUSTRING( "SUM" ), OUString( OOX_DUMP_BASECLASS ), 1 );
+        break;
+        case OOBIN_TOK_ATTR_ASSIGN:
+            dumpUnused( 2 );
+        break;
+        case OOBIN_TOK_ATTR_SPACE:
+        case OOBIN_TOK_ATTR_SPACE | BIFF_TOK_ATTR_VOLATILE:
+            dumpDec< sal_uInt8 >( "char-type", mxSpTypes );
+            dumpDec< sal_uInt8 >( "char-count" );
+        break;
+        case OOBIN_TOK_ATTR_IFERROR:
+            dumpDec< sal_uInt16 >( "skip" );
+        break;
+        default:
+            bValid = false;
+    }
+    return bValid;
+}
+
+void FormulaObject::dumpAddTokenData()
+{
+    Output& rOut = out();
+    rOut.resetItemIndex();
+    Input& rIn = in();
+    sal_Int32 nAddDataSize = (in().getSize() - in().tell() >= 4) ? dumpDec< sal_Int32 >( "add-data-size" ) : 0;
+    sal_Int64 nEndPos = ::std::min< sal_Int64 >( rIn.tell() + nAddDataSize, rIn.getSize() );
+    for( AddDataTypeVec::const_iterator aIt = maAddData.begin(), aEnd = maAddData.end(); (aIt != aEnd) && rIn.isValidPos() && (rIn.tell() < nEndPos); ++aIt )
+    {
+        AddDataType eType = *aIt;
+
+        {
+            ItemGuard aItem( rOut, "#add-data" );
+            switch( eType )
+            {
+                case ADDDATA_EXP:       rOut.writeAscii( "tExp" );      break;
+                case ADDDATA_ARRAY:     rOut.writeAscii( "tArray" );    break;
+                case ADDDATA_MEMAREA:   rOut.writeAscii( "tMemArea" );  break;
+            }
+        }
+
+        size_t nIdx = aIt - maAddData.begin();
+        IndentGuard aIndGuard( rOut );
+        switch( eType )
+        {
+            case ADDDATA_EXP:       dumpAddDataExp( nIdx );     break;
+            case ADDDATA_ARRAY:     dumpAddDataArray( nIdx );   break;
+            case ADDDATA_MEMAREA:   dumpAddDataMemArea( nIdx ); break;
+            default:;
+        }
+    }
+}
+
+void FormulaObject::dumpAddDataExp( size_t nIdx )
+{
+    dumpColIndex( "base-col" );
+    mxStack->replaceOnTop( createPlaceHolder( nIdx ), out().getLastItemValue() );
+}
+
+void FormulaObject::dumpAddDataArray( size_t nIdx )
+{
+    sal_Int32 nCols, nRows;
+    dumpaddDataArrayHeader( nCols, nRows );
+
+    OUStringBuffer aOp;
+    TableGuard aTabGuard( out(), 17 );
+    for( sal_Int32 nRow = 0; nRow < nRows; ++nRow )
+    {
+        OUStringBuffer aArrayLine;
+        for( sal_Int32 nCol = 0; nCol < nCols; ++nCol )
+            StringHelper::appendToken( aArrayLine, dumpaddDataArrayValue(), OOX_DUMP_LISTSEP );
+        StringHelper::appendToken( aOp, aArrayLine.makeStringAndClear(), OOX_DUMP_ARRAYSEP );
+    }
+    StringHelper::enclose( aOp, '{', '}' );
+    mxStack->replaceOnTop( createPlaceHolder( nIdx ), aOp.makeStringAndClear() );
+}
+
+void FormulaObject::dumpAddDataMemArea( size_t /*nIdx*/ )
+{
+    dumpRangeList();
+}
+
+void FormulaObject::dumpaddDataArrayHeader( sal_Int32& rnCols, sal_Int32& rnRows )
+{
+    Output& rOut = out();
+    MultiItemsGuard aMultiGuard( rOut );
+    rnRows = dumpDec< sal_Int32 >( "height" );
+    rnCols = dumpDec< sal_Int32 >( "width" );
+    ItemGuard aItem( rOut, "size" );
+    rOut.writeDec( rnCols );
+    rOut.writeChar( 'x' );
+    rOut.writeDec( rnRows );
+    aItem.cont();
+    rOut.writeDec( rnCols * rnRows );
+}
+
+OUString FormulaObject::dumpaddDataArrayValue()
+{
+    Output& rOut = out();
+    MultiItemsGuard aMultiGuard( rOut );
+    OUStringBuffer aValue;
+    switch( dumpDec< sal_uInt8 >( "type", "ARRAYVALUE-TYPE" ) )
+    {
+        case OOBIN_TOK_ARRAY_DOUBLE:
+            dumpDec< double >( "value" );
+            aValue.append( rOut.getLastItemValue() );
+        break;
+        case OOBIN_TOK_ARRAY_STRING:
+            aValue.append( dumpString( "value", false, false ) );
+            StringHelper::enclose( aValue, OOX_DUMP_STRQUOTE );
+        break;
+        case OOBIN_TOK_ARRAY_BOOL:
+            dumpBoolean( "value" );
+            aValue.append( rOut.getLastItemValue() );
+        break;
+        case OOBIN_TOK_ARRAY_ERROR:
+            dumpErrorCode( "value" );
+            aValue.append( rOut.getLastItemValue() );
+            dumpUnused( 3 );
+        break;
+    }
+    return aValue.makeStringAndClear();
+}
+
+// ============================================================================
+
+RecordObject::RecordObject( OutputObjectBase& rParent )
+{
+    RecordObjectBase::construct( rParent );
+    if( RecordObjectBase::implIsValid() )
+    {
+        mxFmlaObj.reset( new FormulaObject( *this ) );
+        mxSimpleRecs = cfg().getNameList( "SIMPLE-RECORDS" );
+    }
+}
+
+void RecordObject::dumpRecord( const RecordDataSequence& rData, sal_Int32 nRecId )
+{
+    createRecordStream( rData );
+    mnRecId = nRecId;
+    dump();
+}
+
+bool RecordObject::implIsValid() const
+{
+    return isValid( mxFmlaObj ) && RecordObjectBase::implIsValid();
+}
+
+void RecordObject::implDump()
+{
+    if( cfg().hasName( mxSimpleRecs, mnRecId ) )
+        dumpSimpleRecord( cfg().getName( mxSimpleRecs, mnRecId ) );
+    else
+        dumpRecordBody();
+
+    // remaining undumped data
+    RecordInputStream& rStrm = getRecordStream();
+    if( rStrm.getRecPos() == 0 )
+        dumpRawBinary( rStrm.getRecSize(), false );
+    else
+        dumpRemaining( rStrm.getRecLeft() );
+    if( !rStrm.isValid() )
+        writeInfoItem( "stream-state", OOX_DUMP_ERR_STREAM );
+}
+
+void RecordObject::dumpCellHeader()
+{
+    dumpColIndex();
+    dumpDec< sal_uInt16 >( "xf-id" );
+    dumpHex< sal_uInt16 >( "flags", "CELL-FLAGS" );
+}
+
+void RecordObject::dumpSimpleRecord( const OUString& rRecData )
+{
+    ItemFormat aItemFmt;
+    aItemFmt.parse( rRecData );
+    dumpItem( aItemFmt );
+}
+
+void RecordObject::dumpRecordBody()
+{
+    switch( mnRecId )
+    {
+        case OOBIN_ID_ARRAY:
+            dumpRange( "array-range" );
+            dumpHex< sal_uInt8 >( "flags", "ARRAY-FLAGS" );
+            mxFmlaObj->dumpCellFormula();
+        break;
+
+        case OOBIN_ID_BORDER:
+            dumpHex< sal_uInt8 >( "flags", "BORDER-FLAGS" );
+            dumpDec< sal_uInt16 >( "top-style", "BORDERSTYLES" );
+            dumpColor( "top-color" );
+            dumpDec< sal_uInt16 >( "bottom-style", "BORDERSTYLES" );
+            dumpColor( "bottom-color" );
+            dumpDec< sal_uInt16 >( "left-style", "BORDERSTYLES" );
+            dumpColor( "left-color" );
+            dumpDec< sal_uInt16 >( "right-style", "BORDERSTYLES" );
+            dumpColor( "right-color" );
+            dumpDec< sal_uInt16 >( "diag-style", "BORDERSTYLES" );
+            dumpColor( "diag-color" );
+        break;
+
+        case OOBIN_ID_BRK:
+            dumpDec< sal_Int32 >( "id" );
+            dumpDec< sal_Int32 >( "min" );
+            dumpDec< sal_Int32 >( "max" );
+            dumpHex< sal_uInt32 >( "flags", "BRK-FLAGS" );
+        break;
+
+        case OOBIN_ID_CALCPR:
+            dumpDec< sal_Int32 >( "calc-id" );
+            dumpDec< sal_Int32 >( "calc-mode", "CALCPR-CALCMODE" );
+            dumpDec< sal_Int32 >( "iteration-count" );
+            dumpDec< double >( "iteration-delta" );
+            dumpDec< sal_Int32 >( "processor-count" );
+            dumpHex< sal_uInt16 >( "flags", "CALCPR-FLAGS" );
+        break;
+
+        case OOBIN_ID_CELL_BLANK:
+            dumpCellHeader();
+        break;
+
+        case OOBIN_ID_CELL_BOOL:
+            dumpCellHeader();
+            dumpBoolean();
+        break;
+
+        case OOBIN_ID_CELL_DOUBLE:
+            dumpCellHeader();
+            dumpDec< double >( "value" );
+        break;
+
+        case OOBIN_ID_CELL_ERROR:
+            dumpCellHeader();
+            dumpErrorCode();
+        break;
+
+        case OOBIN_ID_CELL_RK:
+            dumpCellHeader();
+            dumpRk( "value" );
+        break;
+
+        case OOBIN_ID_CELL_RSTRING:
+            dumpCellHeader();
+            dumpString( "value", true );
+        break;
+
+        case OOBIN_ID_CELL_SI:
+            dumpCellHeader();
+            dumpDec< sal_Int32 >( "string-id" );
+        break;
+
+        case OOBIN_ID_CELL_STRING:
+            dumpCellHeader();
+            dumpString( "value" );
+        break;
+
+        case OOBIN_ID_CELLSTYLE:
+            dumpDec< sal_Int32 >( "xf-id" );
+            dumpHex< sal_uInt16 >( "flags", "CELLSTYLE-FLAGS" );
+            dumpDec< sal_uInt8 >( "builtin-id", "CELLSTYLE-BUILTIN" );
+            dumpDec< sal_uInt8 >( "outline-level" );
+            dumpString( "name" );
+        break;
+
+        case OOBIN_ID_CFCOLOR:
+            dumpColor();
+        break;
+
+        case OOBIN_ID_CFRULE:
+        {
+            // type/subtype/operator is a mess...
+            dumpDec< sal_Int32 >( "type", "CFRULE-TYPE" );
+            sal_Int32 nSubType = dumpDec< sal_Int32 >( "sub-type", "CFRULE-SUBTYPE" );
+            dumpDec< sal_Int32 >( "dxf-id" );
+            dumpDec< sal_Int32 >( "priority" );
+            switch( nSubType )
+            {
+                case 0:     dumpDec< sal_Int32 >( "operator", "CFRULE-CELL-OPERATOR" ); break;
+                case 5:     dumpDec< sal_Int32 >( "rank" );                             break;
+                case 8:     dumpDec< sal_Int32 >( "operator", "CFRULE-TEXT-OPERATOR" ); break;
+                case 15:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
+                case 16:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
+                case 17:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
+                case 18:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
+                case 19:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
+                case 20:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
+                case 21:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
+                case 22:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
+                case 23:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
+                case 24:    dumpDec< sal_Int32 >( "operator", "CFRULE-TIME-OPERATOR" ); break;
+                case 25:    dumpDec< sal_Int32 >( "std-dev" );                          break;
+                case 26:    dumpDec< sal_Int32 >( "std-dev" );                          break;
+                case 29:    dumpDec< sal_Int32 >( "std-dev" );                          break;
+                case 30:    dumpDec< sal_Int32 >( "std-dev" );                          break;
+                default:    dumpDec< sal_Int32 >( "operator", "CFRULE-OTHER-OPERATOR" );
+            }
+            dumpUnknown( 8 );
+            dumpHex< sal_uInt16 >( "flags", "CFRULE-FLAGS" );
+            // for no obvious reason the formula sizes occur twice
+            dumpDec< sal_Int32 >( "formula1-size" );
+            dumpDec< sal_Int32 >( "formula2-size" );
+            dumpDec< sal_Int32 >( "formula3-size" );
+            dumpString( "text" );
+            if( in().getSize() - in().tell() >= 8 )
+                mxFmlaObj->dumpNameFormula( "formula1" );
+            if( in().getSize() - in().tell() >= 8 )
+                mxFmlaObj->dumpNameFormula( "formula2" );
+            if( in().getSize() - in().tell() >= 8 )
+                mxFmlaObj->dumpNameFormula( "formula3" );
+        }
+        break;
+
+        case OOBIN_ID_COL:
+            dumpColRange();
+            dumpDec< sal_uInt16 >( "col-width", "CONV-COLWIDTH" );
+            dumpUnknown( 2 );
+            dumpDec< sal_Int32 >( "custom-xf-id" );
+            dumpHex< sal_uInt16 >( "flags", "COL-FLAGS" );
+        break;
+
+        case OOBIN_ID_COLBREAKS:
+            dumpDec< sal_Int32 >( "count" );
+            dumpDec< sal_Int32 >( "manual-count" );
+        break;
+
+        case OOBIN_ID_COLOR:
+            dumpColor();
+        break;
+
+        case OOBIN_ID_CONDFORMATTING:
+            dumpDec< sal_Int32 >( "cfrule-count" );
+            dumpUnknown( 4 );
+            dumpRangeList();
+        break;
+
+        case OOBIN_ID_DATATABLE:
+            dumpRange( "table-range" );
+            dumpAddress( "ref1" );
+            dumpAddress( "ref2" );
+            dumpHex< sal_uInt8 >( "flags", "DATATABLE-FLAGS" );
+        break;
+
+        case OOBIN_ID_DATAVALIDATION:
+            dumpHex< sal_uInt32 >( "flags", "DATAVALIDATION-FLAGS" );
+            dumpRangeList();
+            dumpString( "error-title" );
+            dumpString( "error-message" );
+            dumpString( "input-title" );
+            dumpString( "input-message" );
+            mxFmlaObj->dumpNameFormula( "formula1" );
+            mxFmlaObj->dumpNameFormula( "formula2" );
+        break;
+
+        case OOBIN_ID_DATAVALIDATIONS:
+            dumpUnknown( 14 );  // flags, xWindow, yWindow
+            dumpDec< sal_Int32 >( "count" );
+        break;
+
+        case OOBIN_ID_DDEITEMVALUES:
+            dumpDec< sal_Int32 >( "rows" );
+            dumpDec< sal_Int32 >( "columns" );
+        break;
+
+        case OOBIN_ID_DDEITEM_STRING:
+            dumpString( "value" );
+        break;
+
+        case OOBIN_ID_DEFINEDNAME:
+            dumpHex< sal_uInt16 >( "flags", "DEFINEDNAME-FLAGS" );
+            dumpUnknown( 2 );
+            dumpHex< sal_uInt8 >( "keyboard-shortcut" );
+            dumpDec< sal_Int32 >( "sheet-id", "DEFINEDNAME-SHEETID" );
+            dumpString( "name" );
+            mxFmlaObj->dumpNameFormula();
+            dumpString( "comment" );
+            if( in().getSize() - in().tell() >= 4 ) dumpString( "menu-text" );
+            if( in().getSize() - in().tell() >= 4 ) dumpString( "description-text" );
+            if( in().getSize() - in().tell() >= 4 ) dumpString( "help-text" );
+            if( in().getSize() - in().tell() >= 4 ) dumpString( "statusbar-text" );
+        break;
+
+        case OOBIN_ID_DIMENSION:
+            dumpRange( "used-range" );
+        break;
+
+        case OOBIN_ID_DRAWING:
+            dumpString( "rel-id" );
+        break;
+
+        case OOBIN_ID_DXF:
+            dumpHex< sal_uInt32 >( "flags", "DXF-FLAGS" );
+            for( sal_uInt16 nIndex = 0, nCount = dumpDec< sal_uInt16 >( "subrec-count" ); in().isValidPos() && (nIndex < nCount); ++nIndex )
+            {
+                out().startMultiItems();
+                sal_Int64 nStartPos = in().tell();
+                writeEmptyItem( "SUBREC" );
+                sal_uInt16 nSubRecId = dumpDec< sal_uInt16 >( "id", "DXF-SUBREC" );
+                sal_uInt16 nSubRecSize = dumpDec< sal_uInt16 >( "size" );
+                sal_Int64 nEndPos = nStartPos + nSubRecSize;
+                out().endMultiItems();
+                IndentGuard aIndGuard( out() );
+                switch( nSubRecId )
+                {
+                    case 0:
+                        dumpDec< sal_uInt8 >( "pattern", "FILLPATTERNS" );
+                    break;
+                    case 1:
+                    case 2:
+                        dumpColor();
+                    break;
+                    case 3:
+                        dumpDec< sal_Int32 >( "gradient-type", "FILL-GRADIENTTYPE" );
+                        dumpDec< double >( "linear-angle" );
+                        dumpDec< double >( "pos-left" );
+                        dumpDec< double >( "pos-right" );
+                        dumpDec< double >( "pos-top" );
+                        dumpDec< double >( "pos-bottom" );
+                    break;
+                    case 4:
+                        dumpDec< sal_uInt16 >( "index" );
+                        dumpDec< double >( "stop-position" );
+                        dumpColor( "stop-color" );
+                    break;
+                    case 5:
+                        dumpColor();
+                    break;
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                    case 11:
+                    case 12:
+                        dumpColor( "color" );
+                        dumpDec< sal_uInt16 >( "style", "BORDERSTYLES" );
+                    break;
+                    case 13:
+                    case 14:
+                        dumpBoolean( "value" );
+                    break;
+                    case 15:
+                        dumpDec< sal_uInt8 >( "alignment", "XF-HORALIGN" );
+                    break;
+                    case 16:
+                        dumpDec< sal_uInt8 >( "alignment", "XF-VERALIGN" );
+                    break;
+                    case 17:
+                        dumpDec< sal_uInt8 >( "rotation", "TEXTROTATION" );
+                    break;
+                    case 18:
+                        dumpDec< sal_uInt16 >( "indent" );
+                    break;
+                    case 19:
+                        dumpDec< sal_uInt8 >( "text-dir", "XF-TEXTDIRECTION" );
+                    break;
+                    case 20:
+                    case 21:
+                    case 22:
+                        dumpBoolean( "value" );
+                    break;
+                    case 24:
+                        dumpString( "name", false, false );
+                    break;
+                    case 25:
+                        dumpDec< sal_uInt16 >( "weight", "FONT-WEIGHT" );
+                    break;
+                    case 26:
+                        dumpDec< sal_uInt16 >( "underline", "FONT-UNDERLINE" );
+                    break;
+                    case 27:
+                        dumpDec< sal_uInt16 >( "escapement", "FONT-ESCAPEMENT" );
+                    break;
+                    case 28:
+                    case 29:
+                    case 30:
+                    case 31:
+                    case 32:
+                    case 33:
+                        dumpBoolean( "value" );
+                    break;
+                    case 36:
+                        dumpDec< sal_Int32 >( "height", "CONV-TWIP-TO-PT" );
+                    break;
+                    case 37:
+                        dumpDec< sal_uInt8 >( "scheme", "FONT-SCHEME" );
+                    break;
+                    case 38:
+                        dumpString( "numfmt", false, false );
+                    break;
+                    case 41:
+                        dumpDec< sal_uInt16 >( "numfmt-id" );
+                    break;
+                    case 42:
+                        dumpDec< sal_uInt16 >( "relative-indent" );
+                    break;
+                    case 43:
+                    case 44:
+                        dumpBoolean( "value" );
+                    break;
+                }
+                if( in().tell() < nEndPos )
+                    dumpRemaining( static_cast< sal_Int32 >( nEndPos - in().tell() ) );
+                in().seek( nEndPos );
+            }
+        break;
+
+        case OOBIN_ID_EXTCELL_BOOL:
+            dumpColIndex();
+            dumpBoolean();
+        break;
+
+        case OOBIN_ID_EXTCELL_DOUBLE:
+            dumpColIndex();
+            dumpDec< double >( "value" );
+        break;
+
+        case OOBIN_ID_EXTCELL_ERROR:
+            dumpColIndex();
+            dumpErrorCode();
+        break;
+
+        case OOBIN_ID_EXTCELL_STRING:
+            dumpColIndex();
+            dumpString( "value" );
+        break;
+
+        case OOBIN_ID_EXTERNALBOOK:
+            switch( dumpDec< sal_uInt16 >( "type", "EXTERNALBOOK-TYPE" ) )
+            {
+                case 0:
+                    dumpString( "rel-id" );
+                    dumpDec< sal_Int32 >( "unused" );
+                break;
+                case 1:
+                    dumpString( "dde-service" );
+                    dumpString( "dde-topic" );
+                break;
+                case 2:
+                    dumpString( "rel-id" );
+                    dumpString( "prog-id" );
+                break;
+            }
+        break;
+
+        case OOBIN_ID_EXTERNALNAME:
+            dumpString( "name" );
+        break;
+
+        case OOBIN_ID_EXTERNALNAMEFLAGS:
+            dumpHex< sal_uInt16 >( "flags", "EXTERNALNAMEFLAGS-FLAGS" );
+            dumpDec< sal_Int32 >( "sheet-id" );
+            dumpUnknown( 1 );
+        break;
+
+        case OOBIN_ID_EXTERNALREF:
+            dumpString( "rel-id" );
+        break;
+
+        case OOBIN_ID_EXTERNALSHEETS:
+        {
+            sal_Int32 nCount = dumpDec< sal_Int32 >( "ref-count" );
+            TableGuard aTabGuard( out(), 13, 17, 24 );
+            out().resetItemIndex();
+            for( sal_Int32 nRefId = 0; in().isValidPos() && (nRefId < nCount); ++nRefId )
+            {
+                MultiItemsGuard aMultiGuard( out() );
+                writeEmptyItem( "#ref" );
+                dumpDec< sal_Int32 >( "extref-id" );
+                dumpDec< sal_Int32 >( "first-sheet", "EXTERNALSHEETS-ID" );
+                dumpDec< sal_Int32 >( "last-sheet", "EXTERNALSHEETS-ID" );
+            }
+        }
+        break;
+
+        case OOBIN_ID_EXTROW:
+            dumpRowIndex();
+        break;
+
+        case OOBIN_ID_EXTSHEETDATA:
+            dumpDec< sal_Int32 >( "sheet-id" );
+            dumpHex< sal_uInt8 >( "flags", "EXTSHEETDATA-FLAGS" );
+        break;
+
+        case OOBIN_ID_EXTSHEETNAMES:
+            out().resetItemIndex();
+            for( sal_Int32 nSheet = 0, nCount = dumpDec< sal_Int32 >( "sheet-count" ); in().isValidPos() && (nSheet < nCount); ++nSheet )
+                dumpString( "#sheet-name" );
+        break;
+
+        case OOBIN_ID_FILL:
+            dumpDec< sal_Int32 >( "fill-pattern", "FILLPATTERNS" );
+            dumpColor( "fg-color" );
+            dumpColor( "bg-color" );
+            dumpDec< sal_Int32 >( "gradient-type", "FILL-GRADIENTTYPE" );
+            dumpDec< double >( "linear-angle" );
+            dumpDec< double >( "pos-left" );
+            dumpDec< double >( "pos-right" );
+            dumpDec< double >( "pos-top" );
+            dumpDec< double >( "pos-bottom" );
+            out().resetItemIndex();
+            for( sal_Int32 nStop = 0, nStopCount = dumpDec< sal_Int32 >( "stop-count" ); (nStop < nStopCount) && in().isValidPos(); ++nStop )
+            {
+                writeEmptyItem( "#stop" );
+                IndentGuard aIndGuard( out() );
+                dumpColor( "stop-color" );
+                dumpDec< double >( "stop-position" );
+            }
+        break;
+
+        case OOBIN_ID_FILEVERSION:
+            dumpGuid( "codename" );
+            dumpString( "app-name" );
+            dumpString( "last-edited" );
+            dumpString( "lowest-edited" );
+            dumpString( "build-version" );
+        break;
+
+        case OOBIN_ID_FONT:
+            dumpDec< sal_uInt16 >( "height", "CONV-TWIP-TO-PT" );
+            dumpHex< sal_uInt16 >( "flags", "FONT-FLAGS" );
+            dumpDec< sal_uInt16 >( "weight", "FONT-WEIGHT" );
+            dumpDec< sal_uInt16 >( "escapement", "FONT-ESCAPEMENT" );
+            dumpDec< sal_uInt8 >( "underline", "FONT-UNDERLINE" );
+            dumpDec< sal_uInt8 >( "family", "FONT-FAMILY" );
+            dumpDec< sal_uInt8 >( "charset", "CHARSET" );
+            dumpUnknown( 1 );
+            dumpColor();
+            dumpDec< sal_uInt8 >( "scheme", "FONT-SCHEME" );
+            dumpString( "name" );
+        break;
+
+        case OOBIN_ID_FORMULA_BOOL:
+            dumpCellHeader();
+            dumpBoolean();
+            dumpHex< sal_uInt16 >( "flags", "FORMULA-FLAGS" );
+            mxFmlaObj->dumpCellFormula();
+        break;
+
+        case OOBIN_ID_FORMULA_DOUBLE:
+            dumpCellHeader();
+            dumpDec< double >( "value" );
+            dumpHex< sal_uInt16 >( "flags", "FORMULA-FLAGS" );
+            mxFmlaObj->dumpCellFormula();
+        break;
+
+        case OOBIN_ID_FORMULA_ERROR:
+            dumpCellHeader();
+            dumpErrorCode();
+            dumpHex< sal_uInt16 >( "flags", "FORMULA-FLAGS" );
+            mxFmlaObj->dumpCellFormula();
+        break;
+
+        case OOBIN_ID_FORMULA_STRING:
+            dumpCellHeader();
+            dumpString( "value" );
+            dumpHex< sal_uInt16 >( "flags", "FORMULA-FLAGS" );
+            mxFmlaObj->dumpCellFormula();
+        break;
+
+        case OOBIN_ID_HEADERFOOTER:
+            dumpHex< sal_uInt16 >( "flags", "HEADERFOOTER-FLAGS" );
+            dumpString( "odd-header" );
+            dumpString( "odd-footer" );
+            dumpString( "even-header" );
+            dumpString( "even-footer" );
+            dumpString( "first-header" );
+            dumpString( "first-footer" );
+        break;
+
+        case OOBIN_ID_HYPERLINK:
+            dumpRange();
+            dumpString( "rel-id" );
+            dumpString( "location" );
+            dumpString( "tooltip" );
+            dumpString( "display" );
+        break;
+
+        case OOBIN_ID_MERGECELL:
+            dumpRange();
+        break;
+
+        case OOBIN_ID_NUMFMT:
+            dumpDec< sal_uInt16 >( "numfmt-id" );
+            dumpString( "format" );
+        break;
+
+        case OOBIN_ID_PAGEMARGINS:
+            dumpDec< double >( "left-margin" );
+            dumpDec< double >( "right-margin" );
+            dumpDec< double >( "top-margin" );
+            dumpDec< double >( "bottom-margin" );
+            dumpDec< double >( "header-margin" );
+            dumpDec< double >( "footer-margin" );
+        break;
+
+        case OOBIN_ID_PAGESETUP:
+            dumpDec< sal_Int32 >( "paper-size", "PAGESETUP-PAPERSIZE" );
+            dumpDec< sal_Int32 >( "scaling", "CONV-PERCENT" );
+            dumpDec< sal_Int32 >( "horizontal-res", "PAGESETUP-DPI" );
+            dumpDec< sal_Int32 >( "vertical-res", "PAGESETUP-DPI" );
+            dumpDec< sal_Int32 >( "copies" );
+            dumpDec< sal_Int32 >( "first-page" );
+            dumpDec< sal_Int32 >( "scale-to-width", "PAGESETUP-SCALETOPAGES" );
+            dumpDec< sal_Int32 >( "scale-to-height", "PAGESETUP-SCALETOPAGES" );
+            dumpHex< sal_uInt16 >( "flags", "PAGESETUP-FLAGS" );
+            dumpString( "printer-settings-rel-id" );
+        break;
+
+        case OOBIN_ID_PANE:
+            dumpDec< double >( "x-split-pos" );
+            dumpDec< double >( "y-split-pos" );
+            dumpAddress( "second-top-left" );
+            dumpDec< sal_Int32 >( "active-pane", "PANE-ID" );
+            dumpHex< sal_uInt8 >( "flags", "PANE-FLAGS" );
+        break;
+
+        case OOBIN_ID_PHONETICPR:
+            dumpDec< sal_uInt16 >( "font-id", "FONTNAMES" );
+            dumpDec< sal_Int32 >( "type", "PHONETICPR-TYPE" );
+            dumpDec< sal_Int32 >( "alignment", "PHONETICPR-ALIGNMENT" );
+        break;
+
+        case OOBIN_ID_ROW:
+            dumpRowIndex();
+            dumpDec< sal_Int32 >( "custom-xf-id" );
+            dumpDec< sal_uInt16 >( "height", "CONV-TWIP-TO-PT" );
+            dumpHex< sal_uInt16 >( "flags", "ROW-FLAGS" );
+            dumpUnknown( 5 );
+            if( getRecordStream().getRecLeft() >= 8 )
+                dumpRowRange( "row-spans" );
+        break;
+
+        case OOBIN_ID_ROWBREAKS:
+            dumpDec< sal_Int32 >( "count" );
+            dumpDec< sal_Int32 >( "manual-count" );
+        break;
+
+        case OOBIN_ID_SELECTION:
+            dumpDec< sal_Int32 >( "pane", "PANE-ID" );
+            dumpAddress( "active-cell" );
+            dumpDec< sal_Int32 >( "active-cell-id" );
+            dumpRangeList( "selection" );
+        break;
+
+        case OOBIN_ID_SHAREDFMLA:
+            dumpRange( "formula-range" );
+            mxFmlaObj->dumpCellFormula();
+        break;
+
+        case OOBIN_ID_SHEET:
+            dumpDec< sal_Int32 >( "sheet-state", "SHEET-STATE" );
+            dumpDec< sal_Int32 >( "sheet-id" );
+            dumpString( "rel-id" );
+            dumpString( "sheet-name" );
+        break;
+
+        case OOBIN_ID_SHEETFORMATPR:
+            dumpDec< sal_Int32 >( "default-col-width", "CONV-COLWIDTH" );
+            dumpDec< sal_uInt16 >( "base-col-width" );
+            dumpDec< sal_uInt16 >( "default-row-height", "CONV-TWIP-TO-PT" );
+            dumpHex< sal_uInt16 >( "flags", "SHEETFORMATPR-FLAGS" );
+            dumpDec< sal_uInt8 >( "max-row-outline" );
+            dumpDec< sal_uInt8 >( "max-col-outline" );
+        break;
+
+        case OOBIN_ID_SHEETPR:
+            dumpHex< sal_uInt16 >( "flags", "SHEETPR-FLAGS" );
+            dumpUnknown( 1 );
+            dumpColor( "tab-color" );
+            dumpUnknown( 8 );
+            dumpString( "codename" );
+        break;
+
+        case OOBIN_ID_SHEETPROTECTION:
+            dumpHex< sal_uInt16 >( "password-hash" );
+            // no flags field for all these boolean flags?!?
+            dumpDec< sal_Int32 >( "sheet-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "objects-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "scenarios-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "format-cells-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "format-columns-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "format-rows-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "insert-columns-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "insert-rows-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "insert-hyperlinks-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "delete-columns-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "delete-rows-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "select-locked-cells-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "sort-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "autofilter-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "pivot-tables-locked", "BOOLEAN" );
+            dumpDec< sal_Int32 >( "select-unlocked-cells-locked", "BOOLEAN" );
+        break;
+
+        case OOBIN_ID_SHEETVIEW:
+            dumpHex< sal_uInt16 >( "flags", "SHEETVIEW-FLAGS" );
+            dumpDec< sal_Int32 >( "view-type", "SHEETVIEW-TYPE" );
+            dumpAddress( "top-left" );
+            dumpDec< sal_Int32 >( "gridcolor-id", "PALETTE-COLORS" );
+            dumpDec< sal_uInt16 >( "zoom-scale", "CONV-PERCENT" );
+            dumpDec< sal_uInt16 >( "zoom-scale-normal", "CONV-PERCENT" );
+            dumpDec< sal_uInt16 >( "zoom-scale-sheet-layout", "CONV-PERCENT" );
+            dumpDec< sal_uInt16 >( "zoom-scale-page-layout", "CONV-PERCENT" );
+            dumpDec< sal_Int32 >( "workbookview-id" );
+        break;
+
+        case OOBIN_ID_SI:
+            dumpString( "string", true );
+        break;
+
+        case OOBIN_ID_SST:
+            dumpDec< sal_Int32 >( "string-cell-count" );
+            dumpDec< sal_Int32 >( "sst-size" );
+        break;
+
+        case OOBIN_ID_TABLE:
+            dumpRange();
+            dumpDec< sal_Int32 >( "type", "TABLE-TYPE" );
+            dumpDec< sal_Int32 >( "id" );
+            dumpDec< sal_Int32 >( "header-rows" );
+            dumpDec< sal_Int32 >( "totals-rows" );
+            dumpHex< sal_uInt32 >( "flags", "TABLE-FLAGS" );
+            dumpDec< sal_Int32 >( "headerrow-dxf-id" );
+            dumpDec< sal_Int32 >( "data-dxf-id" );
+            dumpDec< sal_Int32 >( "totalsrow-dxf-id" );
+            dumpDec< sal_Int32 >( "table-border-dxf-id" );
+            dumpDec< sal_Int32 >( "headerrow-border-dxf-id" );
+            dumpDec< sal_Int32 >( "totalsrow-border-dxf-id" );
+            dumpDec< sal_Int32 >( "connection-id" );
+            dumpString( "name" );
+            dumpString( "display-name" );
+            dumpString( "comment" );
+            dumpString( "headerrow-cell-style" );
+            dumpString( "data-cell-style" );
+            dumpString( "totalsrow-cell-style" );
+        break;
+
+        case OOBIN_ID_TABLEPART:
+            dumpString( "rel-id" );
+        break;
+
+        case OOBIN_ID_TABLESTYLEINFO:
+            dumpHex< sal_uInt16 >( "flags" );
+            dumpString( "style-name" );
+        break;
+
+        case OOBIN_ID_VOLTYPEMAIN:
+            dumpString( "first" );
+        break;
+
+        case OOBIN_ID_VOLTYPESTP:
+            dumpString( "topic-value" );
+        break;
+
+        case OOBIN_ID_VOLTYPETR:
+            dumpAddress( "ref" );
+            dumpDec< sal_Int32 >( "sheet-id" );
+        break;
+
+        case OOBIN_ID_WORKBOOKPR:
+            dumpHex< sal_uInt32 >( "flags", "WORKBBOKPR-FLAGS" );
+            dumpDec< sal_Int32 >( "default-theme-version" );
+            dumpString( "codename" );
+        break;
+
+        case OOBIN_ID_WORKBOOKVIEW:
+            dumpDec< sal_Int32 >( "x-window" );
+            dumpDec< sal_Int32 >( "y-window" );
+            dumpDec< sal_Int32 >( "win-width" );
+            dumpDec< sal_Int32 >( "win-height" );
+            dumpDec< sal_Int32 >( "tabbar-ratio" );
+            dumpDec< sal_Int32 >( "first-sheet" );
+            dumpDec< sal_Int32 >( "active-sheet" );
+            dumpHex< sal_uInt8 >( "flags", "WORKBOOKVIEW-FLAGS" );
+        break;
+
+        case OOBIN_ID_XF:
+            dumpDec< sal_uInt16 >( "parent-xf-id" );
+            dumpDec< sal_uInt16 >( "numfmt-id" );
+            dumpDec< sal_uInt16 >( "font-id", "FONTNAMES" );
+            dumpDec< sal_uInt16 >( "fill-id" );
+            dumpDec< sal_uInt16 >( "border-id" );
+            dumpHex< sal_uInt32 >( "alignment", "XF-ALIGNMENT" );
+            dumpHex< sal_uInt16 >( "used-flags", "XF-USEDFLAGS" );
+        break;
+    }
+}
+
+// ============================================================================
+
+RecordHeaderObject::RecordHeaderObject( const InputObjectBase& rParent )
+{
+    static const RecordHeaderConfigInfo saHeaderCfgInfo =
+    {
+        "REC",
+        "RECORD-NAMES",
+        "show-record-pos",
+        "show-record-size",
+        "show-record-id",
+        "show-record-name",
+        "show-record-body",
+    };
+    RecordHeaderBase< sal_Int32, sal_Int32 >::construct( rParent, saHeaderCfgInfo );
+}
+
+RecordHeaderObject::~RecordHeaderObject()
+{
+}
+
+bool RecordHeaderObject::implReadHeader( sal_Int64& ornRecPos, sal_Int32& ornRecId, sal_Int32& ornRecSize )
+{
+    bool bValidRec = readCompressedInt( ornRecPos, ornRecId ) && (ornRecId >= 0) && readCompressedInt( ornRecPos, ornRecSize ) && (ornRecSize >= 0);
+    if( bValidRec )
+    {
+        maData.realloc( ornRecSize );
+        bValidRec = (ornRecSize == 0) || (in().read( maData.getArray(), ornRecSize ) == ornRecSize);
+        ornRecPos += ornRecSize;
+    }
+    return bValidRec;
+}
+
+bool RecordHeaderObject::readByte( sal_Int64& ornRecPos, sal_uInt8& ornByte )
+{
+    ++ornRecPos;
+    return in().read( &ornByte, 1 ) == 1;
+}
+
+bool RecordHeaderObject::readCompressedInt( sal_Int64& ornRecPos, sal_Int32& ornValue )
+{
+    ornValue = 0;
+    sal_uInt8 nByte;
+    if( !readByte( ornRecPos, nByte ) ) return false;
+    ornValue = nByte & 0x7F;
+    if( (nByte & 0x80) == 0 ) return true;
+    if( !readByte( ornRecPos, nByte ) ) return false;
+    ornValue |= sal_Int32( nByte & 0x7F ) << 7;
+    if( (nByte & 0x80) == 0 ) return true;
+    if( !readByte( ornRecPos, nByte ) ) return false;
+    ornValue |= sal_Int32( nByte & 0x7F ) << 14;
+    if( (nByte & 0x80) == 0 ) return true;
+    if( !readByte( ornRecPos, nByte ) ) return false;
+    ornValue |= sal_Int32( nByte & 0x7F ) << 21;
+    return true;
+}
+
+// ============================================================================
+
+RecordStreamObject::RecordStreamObject( const ObjectBase& rParent, const OUString& rOutFileName, BinaryInputStreamRef xStrm )
+{
+    InputStreamObject::construct( rParent, rOutFileName, xStrm );
+    if( InputStreamObject::implIsValid() )
+    {
+        mxHdrObj.reset( new RecordHeaderObject( *this ) );
+        mxRecObj.reset( new RecordObject( *this ) );
+    }
+}
+
+bool RecordStreamObject::implIsValid() const
+{
+    return isValid( mxHdrObj ) && isValid( mxRecObj ) && InputStreamObject::implIsValid();
+}
+
+void RecordStreamObject::implDump()
+{
+    while( mxHdrObj->startNextRecord() )
+    {
+        if( mxHdrObj->isShowRecBody() )
+        {
+            IndentGuard aIndGuard( out() );
+            mxRecObj->dumpRecord( mxHdrObj->getRecordData(), mxHdrObj->getRecId() );
+        }
+        out().emptyLine();
+    }
+}
+
+// ============================================================================
+
+RootStorageObject::RootStorageObject( const DumperBase& rParent )
+{
+    RootStorageObjectBase::construct( rParent );
+}
+
+void RootStorageObject::implDumpStream( BinaryInputStreamRef xStrm, const OUString& rStrgPath, const OUString& rStrmName, const OUString& rSystemFileName )
+{
+    if( (rStrgPath == CREATE_OUSTRING( "xl" )) ||
+        (rStrgPath == CREATE_OUSTRING( "xl/externalLinks" )) ||
+        (rStrgPath == CREATE_OUSTRING( "xl/macrosheets" )) ||
+        (rStrgPath == CREATE_OUSTRING( "xl/tables" )) ||
+        (rStrgPath == CREATE_OUSTRING( "xl/worksheets" )) )
+    {
+        const OUString aBinSuffix = CREATE_OUSTRING( ".bin" );
+        sal_Int32 nBinSuffixPos = rStrmName.getLength() - aBinSuffix.getLength();
+        if( (nBinSuffixPos >= 0) && rStrmName.match( aBinSuffix, nBinSuffixPos ) )
+            RecordStreamObject( *this, rSystemFileName, xStrm ).dump();
+    }
+}
+
+// ============================================================================
+
+Dumper::Dumper( const FilterBase& rFilter )
+{
+    ConfigRef xCfg( new Config( "OOO_XLSBDUMPER" ) );
+    DumperBase::construct( rFilter, xCfg );
+}
+
+void Dumper::implDump()
+{
+    RootStorageObject( *this ).dump();
+}
+
+// ============================================================================
+
+} // namespace xlsb
+} // namespace dump
+} // namespace oox
+
+#endif
+
