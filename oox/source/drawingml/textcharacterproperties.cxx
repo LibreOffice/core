@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textcharacterproperties.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:52 $
+ *  last change: $Author: vg $ $Date: 2008-01-17 14:23:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ void TextCharacterProperties::pushToUrlFieldPropSet( const Reference < XProperty
 float TextCharacterProperties::getCharacterSize( float fDefault ) const
 {
     const rtl::OUString sCharHeight( CREATE_OUSTRING( "CharHeight" ) );
-    float fCharHeight;
+    float fCharHeight = 0;
     const Any* pAny = maTextCharacterPropertyMap.getPropertyValue( sCharHeight );
     if ( pAny && ( *pAny >>= fCharHeight ) )
         return fCharHeight;
