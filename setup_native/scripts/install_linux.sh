@@ -226,7 +226,7 @@ fi
 # populate the private rpm database with the dependencies needed
 FAKEDBRPM=/tmp/fake-db-1.0-$$.noarch.rpm
 linenum=???
-tail +$linenum $0 > $FAKEDBRPM
+tail -n +$linenum $0 > $FAKEDBRPM
 
 rpm --upgrade --ignoresize --dbpath $RPM_DB_PATH $FAKEDBRPM
 
