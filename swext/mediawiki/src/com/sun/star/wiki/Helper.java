@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-14 13:03:53 $
+ *  last change: $Author: mav $ $Date: 2008-01-21 12:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,76 @@ import org.apache.commons.httpclient.methods.PostMethod;
 
 public class Helper
 {
+    public final static int GENERALSEND_ERROR = 0;
+    public final static int NOWIKIFILTER_ERROR = 1;
+    public final static int NOURLCONNECTION_ERROR = 2;
+    public final static int WRONGLOGIN_ERROR = 3;
+    public final static int INVALIDURL_ERROR = 4;
+    public final static int NOURL_ERROR = 5;
+
+    public final static int DLG_SENDTITLE = 6;
+    public final static int DLG_CANCEL = 7;
+    public final static int DLG_NO = 8;
+    public final static int DLG_OK = 9;
+    public final static int DLG_YES = 10;
+    public final static int DLG_HELP = 11;
+    public final static int DLG_ADDBUTTON = 12;
+    public final static int DLG_EDITBUTTON = 13;
+    public final static int DLG_SENDBUTTON = 14;
+    public final static int DLG_REMOVEBUTTON = 15;
+
+    public final static int DLG_EDITSETTING_URLLABEL = 16;
+    public final static int DLG_EDITSETTING_USERNAMELABEL = 17;
+    public final static int DLG_EDITSETTING_PASSWORDLABEL = 18;
+    public final static int DLG_NEWWIKIPAGE_LABEL1 = 19;
+    public final static int DLG_SENDTOMEDIAWIKI_LABEL1 = 20;
+    public final static int DLG_SENDTOMEDIAWIKI_LABEL2 = 21;
+    public final static int DLG_SENDTOMEDIAWIKI_LABEL3 = 22;
+    public final static int DLG_SENDTOMEDIAWIKI_MINORCHECK = 23;
+    public final static int DLG_SENDTOMEDIAWIKI_BROWSERCHECK = 24;
+    public final static int DLG_UNKNOWNCERTDIALOG_LABEL1 = 25;
+    public final static int DLG_MEDIAWIKI_TITLE = 26;
+    public final static int DLG_EDITSETTING_ACCOUNTLINE = 27;
+    public final static int DLG_EDITSETTING_WIKILINE = 28;
+    public final static int DLG_EDITSETTING_SAVEBOX = 29;
+
+    public final static int CANCELSENDING_ERROR = 30;
+
+    public final static int STRINGS_NUM = 31;
+
+    private final static String[] m_pEntryNames = { "GeneralSendError",
+                                                    "NoWikiFilter",
+                                                    "NoConnectionToURL",
+                                                    "WrongLogin",
+                                                    "InvalidURL",
+                                                    "NoURL",
+                                                    "Dlg_SendTitle",
+                                                    "Dlg_Cancel",
+                                                    "Dlg_No",
+                                                    "Dlg_OK",
+                                                    "Dlg_Yes",
+                                                    "Dlg_Help",
+                                                    "Dlg_AddButton",
+                                                    "Dlg_EditButton",
+                                                    "Dlg_SendButton",
+                                                    "Dlg_RemoveButton",
+                                                    "Dlg_EditSetting_UrlLabel",
+                                                    "Dlg_EditSetting_UsernameLabel",
+                                                    "Dlg_EditSetting_PasswordLabel",
+                                                    "Dlg_NewWikiPage_Label1",
+                                                    "Dlg_SendToMediaWiki_Label1",
+                                                    "Dlg_SendToMediaWiki_Label2",
+                                                    "Dlg_SendToMediaWiki_Label3",
+                                                    "Dlg_SendToMediaWiki_MinorCheck",
+                                                    "Dlg_SendToMediaWiki_BrowserCheck",
+                                                    "Dlg_UnknownCertDialog_Label1",
+                                                    "Dlg_MediaWiki_Title",
+                                                    "Dlg_EditSetting_AccountLine",
+                                                    "Dlg_EditSetting_WikiLine",
+                                                    "Dlg_EditSetting_SaveBox",
+                                                    "CancelSending" };
+
+    private static String[] m_pConfigStrings;
 
     private static final String sHTMLHeader = "<HTML><HEAD><meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" /><TITLE></TITLE></HEAD><BODY>";
     private static final String sHTMLFooter = "</BODY></HTML>";
@@ -97,6 +167,38 @@ public class Helper
 
     private static XPasswordContainer m_xPasswordContainer;
     private static XInteractionHandler m_xInteractionHandler;
+
+    synchronized protected static String GetLocalizedString( XComponentContext xContext, int nID )
+        throws com.sun.star.uno.Exception
+    {
+        if ( nID >= STRINGS_NUM )
+            throw new com.sun.star.uno.RuntimeException();
+
+        if ( m_pConfigStrings == null )
+        {
+            PropertyValue aVal = new PropertyValue();
+            aVal.Name = "nodepath";
+            aVal.Value = "org.openoffice.Office.Custom.WikiExtension/Strings";
+            Object[] aArgs = new Object[1];
+            aArgs[0] = aVal;
+
+            Object oSettings = GetConfigurationProvider( xContext ).createInstanceWithArguments(
+                                        "com.sun.star.configuration.ConfigurationAccess",
+                                        aArgs );
+            XNameAccess xNameAccess = ( XNameAccess ) UnoRuntime.queryInterface( XNameAccess.class, oSettings );
+
+            if ( xNameAccess == null )
+                throw new com.sun.star.uno.RuntimeException();
+
+            String[] pStrings = new String[STRINGS_NUM];
+            for ( int nInd = 0; nInd < STRINGS_NUM; nInd++ )
+                pStrings[nInd] = AnyConverter.toString( xNameAccess.getByName( m_pEntryNames[nInd] ) );
+
+            m_pConfigStrings = pStrings;
+        }
+
+        return m_pConfigStrings[nID];
+    }
 
     synchronized protected static HttpClient GetHttpClient()
         throws WikiCancelException
@@ -550,7 +652,15 @@ public class Helper
                     if ( aURI.getScheme().equals( "https" ) )
                     {
                         // the complete secure connection seems to be impossible
-                        XDialog xAskDialog = WikiDialog.CreateSimpleDialog( xContext, "vnd.sun.star.script:WikiEditor.UnknownCertDialog?location=application" );
+                        String[] pControls = { "Label1", "CommandButton1", "CommandButton2" };
+                        int[] pStringIDs = { DLG_UNKNOWNCERTDIALOG_LABEL1, DLG_YES, DLG_NO };
+                        XDialog xAskDialog = WikiDialog.CreateSimpleDialog(
+                                                    xContext,
+                                                    "vnd.sun.star.script:WikiEditor.UnknownCertDialog?location=application",
+                                                    DLG_MEDIAWIKI_TITLE,
+                                                    pControls,
+                                                    pStringIDs );
+
                         if ( xAskDialog != null && MainThreadDialogExecutor.Execute( xContext, xAskDialog ) )
                         {
                             if ( m_aAcceptedUnknownCerts == null )
@@ -728,20 +838,36 @@ public class Helper
         return bResult;
     }
 
-    protected static void ShowError( XComponentContext xContext, XDialog xDialog, String sError )
+    protected static void ShowError( XComponentContext xContext, XDialog xDialog, int nErrorID, String sArg )
     {
         XWindowPeer xPeer = null;
         XControl xControl = (XControl)UnoRuntime.queryInterface( XControl.class, xDialog );
         if ( xControl != null )
             xPeer = xControl.getPeer();
-        ShowError( xContext, xPeer, sError );
+        ShowError( xContext, xPeer, nErrorID, sArg );
     }
 
-    protected static void ShowError( XComponentContext xContext, XWindowPeer xParentPeer, String sError )
+    protected static void ShowError( XComponentContext xContext, XWindowPeer xParentPeer, int nErrorID, String sArg )
     {
-        if ( xContext != null && sError != null )
+        if ( xContext != null && nErrorID >= 0 && nErrorID < STRINGS_NUM )
         {
             boolean bShown = false;
+
+            String sError = null;
+
+            try
+            {
+                sError = GetLocalizedString( xContext, nErrorID );
+                if ( sError != null && sArg != null )
+                    sError.replaceAll( "\\$ARG1", sArg );
+            }
+            catch( Exception e )
+            {
+                e.printStackTrace();
+            }
+
+            if ( sError == null )
+                sError = "Error: " + nErrorID;
 
             if ( xParentPeer != null )
             {

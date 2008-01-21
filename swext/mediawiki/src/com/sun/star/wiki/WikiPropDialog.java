@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-14 13:03:54 $
+ *  last change: $Author: mav $ $Date: 2008-01-21 12:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@ import com.sun.star.uno.XComponentContext;
 
 public class WikiPropDialog extends WikiDialog{
 
-    private static final String m_sCancelSending = "The transfer has been interrupted. Please check the integrity of the wiki article.";
     WikiEditorImpl m_aWikiEditor;
 
     private final String sSendMethod = "Send";
@@ -62,7 +61,7 @@ public class WikiPropDialog extends WikiDialog{
     private final String sArticleTextMethod = "ArticleTextChange";
     private final String sAddWikiMethod = "AddWiki";
 
-    String[] Methods = {sSendMethod, sCancelMethod, sHelpMethod, sLoadMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
+    String[] m_pMethods = {sSendMethod, sCancelMethod, sHelpMethod, sLoadMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
 
     protected String m_sWikiEngineURL = "";
     protected String m_sWikiTitle = "";
@@ -73,18 +72,40 @@ public class WikiPropDialog extends WikiDialog{
     private Thread m_aSendingThread;
 
     /** Creates a new instance of WikiPropDialog */
-    public WikiPropDialog(XComponentContext c, String DialogURL, WikiEditorImpl aWikiEditorForThrobber )
+    public WikiPropDialog(XComponentContext xContext, String DialogURL, WikiEditorImpl aWikiEditorForThrobber )
     {
-        super(c, DialogURL);
-        super.setMethods(Methods);
+        super(xContext, DialogURL);
+        super.setMethods(m_pMethods);
 
         if ( aWikiEditorForThrobber != null )
         {
             InsertThrobber();
             m_aWikiEditor = aWikiEditorForThrobber;
         }
+
+        InitStrings( xContext );
     }
 
+    private void InitStrings( XComponentContext xContext )
+    {
+        try
+        {
+            SetTitle( Helper.GetLocalizedString( xContext, Helper.DLG_SENDTITLE ) );
+            GetPropSet( "Label1" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDTOMEDIAWIKI_LABEL1 ) );
+            GetPropSet( "Label2" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDTOMEDIAWIKI_LABEL2 ) );
+            GetPropSet( "Label3" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDTOMEDIAWIKI_LABEL3 ) );
+            GetPropSet( "MinorCheck" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDTOMEDIAWIKI_MINORCHECK ) );
+            GetPropSet( "BrowserCheck" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDTOMEDIAWIKI_BROWSERCHECK ) );
+            GetPropSet( "HelpButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_HELP ) );
+            GetPropSet( "CancelButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_CANCEL ) );
+            GetPropSet( "AddButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_ADDBUTTON ) );
+            GetPropSet( "SendButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDBUTTON ) );
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
+    }
 
     public void fillWikiList()
     {
@@ -92,7 +113,7 @@ public class WikiPropDialog extends WikiDialog{
 
         try
         {
-            XPropertySet xPS = getPropSet("WikiList");
+            XPropertySet xPS = GetPropSet("WikiList");
             xPS.setPropertyValue("StringItemList", WikiList);
             // short [] nSel = new short[1];
             // nSel[0] = (short) m_aSettings.getLastUsedWikiServer();
@@ -106,10 +127,10 @@ public class WikiPropDialog extends WikiDialog{
 
     public void fillDocList()
     {
-        XPropertySet xPS = getPropSet("ArticleText");
+        XPropertySet xPS = GetPropSet("ArticleText");
         try
         {
-            short [] sel = (short[]) getPropSet("WikiList").getPropertyValue("SelectedItems");
+            short [] sel = (short[]) GetPropSet("WikiList").getPropertyValue("SelectedItems");
             xPS.setPropertyValue("StringItemList", m_aSettings.getWikiDocList(sel[0], 5));
         }
         catch (Exception ex)
@@ -124,7 +145,7 @@ public class WikiPropDialog extends WikiDialog{
         this.m_sWikiTitle = sArticle;
         try
         {
-            XPropertySet xPS = getPropSet("ArticleText");
+            XPropertySet xPS = GetPropSet("ArticleText");
             xPS.setPropertyValue("Text", sArticle);
         }
         catch (Exception ex)
@@ -136,16 +157,16 @@ public class WikiPropDialog extends WikiDialog{
 
     public void switchSendButtonIfNecessary()
     {
-        XPropertySet xSendButton = getPropSet( "SendButton" );
+        XPropertySet xSendButton = GetPropSet( "SendButton" );
         if ( xSendButton != null )
         {
-            XPropertySet xWikiListProps = getPropSet( "WikiList" );
-            XPropertySet xArticleProps = getPropSet( "ArticleText" );
+            XPropertySet xWikiListProps = GetPropSet( "WikiList" );
+            XPropertySet xArticleProps = GetPropSet( "ArticleText" );
             if ( xWikiListProps != null && xArticleProps != null )
             {
                 try
                 {
-                    short [] pSel = (short[]) getPropSet("WikiList").getPropertyValue("SelectedItems");
+                    short [] pSel = (short[]) GetPropSet("WikiList").getPropertyValue("SelectedItems");
                     String sArticle = (String)xArticleProps.getPropertyValue( "Text" );
                     if ( pSel != null && pSel.length > 0 && sArticle != null && sArticle.length() != 0 )
                         xSendButton.setPropertyValue( "Enabled", Boolean.TRUE );
@@ -167,14 +188,14 @@ public class WikiPropDialog extends WikiDialog{
         {
             try
             {
-                XPropertySet aWikiListProps = getPropSet( "WikiList" );
-                XPropertySet aArticleTextProps = getPropSet( "ArticleText" );
-                XPropertySet aCommentTextProps = getPropSet( "CommentText" );
-                XPropertySet aMinorCheckProps = getPropSet( "MinorCheck" );
-                XPropertySet aBrowserCheckProps = getPropSet( "BrowserCheck" );
-                XPropertySet aHelpButtonProps = getPropSet( "HelpButton" );
-                XPropertySet aSendButtonProps = getPropSet( "SendButton" );
-                XPropertySet aAddButtonProps = getPropSet( "AddButton" );
+                XPropertySet aWikiListProps = GetPropSet( "WikiList" );
+                XPropertySet aArticleTextProps = GetPropSet( "ArticleText" );
+                XPropertySet aCommentTextProps = GetPropSet( "CommentText" );
+                XPropertySet aMinorCheckProps = GetPropSet( "MinorCheck" );
+                XPropertySet aBrowserCheckProps = GetPropSet( "BrowserCheck" );
+                XPropertySet aHelpButtonProps = GetPropSet( "HelpButton" );
+                XPropertySet aSendButtonProps = GetPropSet( "SendButton" );
+                XPropertySet aAddButtonProps = GetPropSet( "AddButton" );
 
                 short [] sel = (short[]) aWikiListProps.getPropertyValue("SelectedItems");
                 String [] items = (String []) aWikiListProps.getPropertyValue("StringItemList");
@@ -277,11 +298,11 @@ public class WikiPropDialog extends WikiDialog{
         {
             try
             {
-                short [] sel = (short[]) getPropSet("WikiList").getPropertyValue("SelectedItems");
-                String [] items = (String []) getPropSet("WikiList").getPropertyValue("StringItemList");
+                short [] sel = (short[]) GetPropSet("WikiList").getPropertyValue("SelectedItems");
+                String [] items = (String []) GetPropSet("WikiList").getPropertyValue("StringItemList");
                 m_sWikiEngineURL = items[sel[0]];
                 m_aSettings.setLastUsedWikiServer(sel[0]);
-                m_sWikiTitle = (String) getPropSet("ArticleText").getPropertyValue("Text");
+                m_sWikiTitle = (String) GetPropSet("ArticleText").getPropertyValue("Text");
             }
             catch (UnknownPropertyException ex)
             {
@@ -309,7 +330,8 @@ public class WikiPropDialog extends WikiDialog{
             {
                 Helper.ShowError( m_xContext,
                                   m_xDialog,
-                                  m_sCancelSending );
+                                  Helper.CANCELSENDING_ERROR,
+                                  null );
             }
 
             return true;

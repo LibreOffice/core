@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditorImpl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-14 09:40:43 $
+ *  last change: $Author: mav $ $Date: 2008-01-21 12:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,6 @@ public final class WikiEditorImpl extends WeakBase
     private final XComponentContext m_xContext;
     private static final String m_implementationName = WikiEditorImpl.class.getName();
     private static final String[] m_serviceNames = {"com.sun.star.wiki.WikiEditor" };
-    private static final String m_sGeneralSendError = "The operation 'Send to MediaWiki' could not be completed successfully.";
-    private static final String m_sNoWikiFilter = "The MediaWiki export filter cannot be found. Choose 'Tools-XML Filter Settings' to install the filter, or use the setup to install the component.";
 
     // information needed for component registration
     public static final String[] supportedServiceNames = {"com.sun.star.frame.ProtocolHandler"};
@@ -404,7 +402,8 @@ public final class WikiEditorImpl extends WeakBase
                     {
                         Helper.ShowError( m_xContext,
                                           (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xFrame.getContainerWindow() ),
-                                          m_sNoWikiFilter );
+                                          Helper.NOWIKIFILTER_ERROR,
+                                          null );
                         throw new com.sun.star.uno.RuntimeException();
                     }
 
@@ -442,7 +441,15 @@ public final class WikiEditorImpl extends WeakBase
                 if ( aArticle.NotExist() )
                 {
                     // ask whether creation of a new page is allowed
-                    XDialog xDialog = WikiDialog.CreateSimpleDialog( m_xContext, "vnd.sun.star.script:WikiEditor.NewWikiPage?location=application" );
+                    String[] pControls = { "Label1", "CommandButton1", "CommandButton2" };
+                    int[] pStringIDs = { Helper.DLG_NEWWIKIPAGE_LABEL1, Helper.DLG_YES, Helper.DLG_NO };
+                    XDialog xDialog = WikiDialog.CreateSimpleDialog(
+                                            m_xContext,
+                                            "vnd.sun.star.script:WikiEditor.NewWikiPage?location=application",
+                                            Helper.DLG_SENDTITLE,
+                                            pControls,
+                                            pStringIDs );
+
                     if ( xDialog != null )
                     {
                         Helper.SetControlPropInDialog( xDialog, "Label1", "Label", "A wiki article with the title " + aSendDialog.m_sWikiTitle + " does not exist yet. Do you want to create a new article with that name?" );
@@ -494,7 +501,8 @@ public final class WikiEditorImpl extends WeakBase
                     {
                         Helper.ShowError( m_xContext,
                                           (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xFrame.getContainerWindow() ),
-                                          m_sGeneralSendError );
+                                          Helper.GENERALSEND_ERROR,
+                                          null );
                     }
                 }
             }
@@ -509,7 +517,8 @@ public final class WikiEditorImpl extends WeakBase
                     // report the error only if sending was not cancelled
                     Helper.ShowError( m_xContext,
                                       (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xFrame.getContainerWindow() ),
-                                      m_sGeneralSendError );
+                                      Helper.GENERALSEND_ERROR,
+                                      null );
                 }
                 e.printStackTrace();
             }

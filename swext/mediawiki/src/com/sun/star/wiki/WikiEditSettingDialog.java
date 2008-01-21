@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-14 13:03:54 $
+ *  last change: $Author: mav $ $Date: 2008-01-21 12:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,8 @@ public class WikiEditSettingDialog extends WikiDialog
         super.setMethods( Methods );
         setting = new Hashtable();
         addMode = true;
-        ;
 
+        InitStrings( xContext );
         InitSaveCheckbox( xContext );
     }
 
@@ -81,9 +81,9 @@ public class WikiEditSettingDialog extends WikiDialog
         setting = ht;
         try
         {
-            getPropSet( "UrlField" ).setPropertyValue( "Text", ht.get( "Url" ));
-            getPropSet( "UsernameField" ).setPropertyValue( "Text", ht.get( "Username" ));
-            getPropSet( "PasswordField" ).setPropertyValue( "Text", ht.get( "Password" ));
+            GetPropSet( "UrlField" ).setPropertyValue( "Text", ht.get( "Url" ));
+            GetPropSet( "UsernameField" ).setPropertyValue( "Text", ht.get( "Username" ));
+            GetPropSet( "PasswordField" ).setPropertyValue( "Text", ht.get( "Password" ));
         }
         catch ( Exception ex )
         {
@@ -91,12 +91,34 @@ public class WikiEditSettingDialog extends WikiDialog
         }
         addMode = false;
 
+        InitStrings( xContext );
         InitSaveCheckbox( xContext );
+    }
+
+    private void InitStrings( XComponentContext xContext )
+    {
+        try
+        {
+            SetTitle( Helper.GetLocalizedString( xContext, Helper.DLG_MEDIAWIKI_TITLE ) );
+            GetPropSet( "UrlLabel" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_EDITSETTING_URLLABEL ) );
+            GetPropSet( "UsernameLabel" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_EDITSETTING_USERNAMELABEL ) );
+            GetPropSet( "PasswordLabel" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_EDITSETTING_PASSWORDLABEL ) );
+            GetPropSet( "AccountLine" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_EDITSETTING_ACCOUNTLINE ) );
+            GetPropSet( "WikiLine" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_EDITSETTING_WIKILINE ) );
+            GetPropSet( "SaveBox" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_EDITSETTING_SAVEBOX ) );
+            GetPropSet( "OkButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_OK ) );
+            GetPropSet( "HelpButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_HELP ) );
+            GetPropSet( "CancelButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_CANCEL ) );
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
     }
 
     private void InitSaveCheckbox( XComponentContext xContext )
     {
-        XPropertySet xSaveCheck = getPropSet( "SaveBox" );
+        XPropertySet xSaveCheck = GetPropSet( "SaveBox" );
         try
         {
             xSaveCheck.setPropertyValue( "State", new Short( (short)0 ) );
@@ -116,9 +138,9 @@ public class WikiEditSettingDialog extends WikiDialog
             String sURL = "";
             try
             {
-                sURL = ( String ) getPropSet( "UrlField" ).getPropertyValue( "Text" );
-                String sUserName = ( String ) getPropSet( "UsernameField" ).getPropertyValue( "Text" );
-                String sPassword = ( String ) getPropSet( "PasswordField" ).getPropertyValue( "Text" );
+                sURL = ( String ) GetPropSet( "UrlField" ).getPropertyValue( "Text" );
+                String sUserName = ( String ) GetPropSet( "UsernameField" ).getPropertyValue( "Text" );
+                String sPassword = ( String ) GetPropSet( "PasswordField" ).getPropertyValue( "Text" );
 
                 HostConfiguration aHostConfig = new HostConfiguration();
                 boolean bInitHost = true;
@@ -164,7 +186,8 @@ public class WikiEditSettingDialog extends WikiDialog
                                     // show error
                                     Helper.ShowError( m_xContext,
                                                       m_xDialog,
-                                                      m_sNoConnectionToURL1 + sURL + m_sNoConnectionToURL2 );
+                                                      Helper.NOURLCONNECTION_ERROR,
+                                                      sURL );
                                 }
                             }
                             else
@@ -176,7 +199,8 @@ public class WikiEditSettingDialog extends WikiDialog
                                     // show error
                                     Helper.ShowError( m_xContext,
                                                       m_xDialog,
-                                                      m_sWrongLogin );
+                                                      Helper.WRONGLOGIN_ERROR,
+                                                      null );
                                 }
                                 else
                                 {
@@ -187,7 +211,7 @@ public class WikiEditSettingDialog extends WikiDialog
                                         Settings.getSettings( m_xContext ).addWikiCon( setting );
 
                                     if ( Helper.PasswordStoringIsAllowed( m_xContext )
-                                      && ( (Short)( getPropSet( "SaveBox" ).getPropertyValue("State") ) ).shortValue() != (short)0 )
+                                      && ( (Short)( GetPropSet( "SaveBox" ).getPropertyValue("State") ) ).shortValue() != (short)0 )
                                     {
                                         String[] pPasswords = { sPassword };
                                         try
@@ -211,7 +235,8 @@ public class WikiEditSettingDialog extends WikiDialog
                             // show error
                             Helper.ShowError( m_xContext,
                                               m_xDialog,
-                                              m_sInvalidURL );
+                                              Helper.INVALIDURL_ERROR,
+                                              null );
                         }
                     }
                     else
@@ -220,7 +245,8 @@ public class WikiEditSettingDialog extends WikiDialog
                         // show error
                         Helper.ShowError( m_xContext,
                                           m_xDialog,
-                                          m_sNoURL );
+                                          Helper.NOURL_ERROR,
+                                          null );
                     }
                 } while ( sRedirectURL.length() > 0 );
             }
@@ -228,7 +254,8 @@ public class WikiEditSettingDialog extends WikiDialog
             {
                 Helper.ShowError( m_xContext,
                                   m_xDialog,
-                                  m_sNoConnectionToURL1 + sURL + m_sNoConnectionToURL2 );
+                                  Helper.NOURLCONNECTION_ERROR,
+                                  sURL );
                 ex.printStackTrace();
             }
             return true;

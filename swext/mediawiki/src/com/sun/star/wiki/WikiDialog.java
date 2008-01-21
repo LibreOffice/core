@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiDialog.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-13 10:34:07 $
+ *  last change: $Author: mav $ $Date: 2008-01-21 12:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,8 @@ import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
-public class WikiDialog implements XDialogEventHandler{
+public class WikiDialog implements XDialogEventHandler
+{
 
     XComponentContext m_xContext;
     XControlContainer m_xControlContainer;
@@ -56,54 +57,94 @@ public class WikiDialog implements XDialogEventHandler{
 
 
     /** Creates a new instance of WikiDialog */
-    public WikiDialog(XComponentContext c, String DialogURL) {
+    public WikiDialog(XComponentContext c, String DialogURL)
+    {
         this.m_xContext = c;
         XMultiComponentFactory xMCF = m_xContext.getServiceManager();
         m_aSettings = Settings.getSettings(m_xContext);
-        try {
+        try
+        {
             Object obj;
             obj = xMCF.createInstanceWithContext("com.sun.star.awt.DialogProvider2", m_xContext );
             XDialogProvider2 xDialogProvider = (XDialogProvider2) UnoRuntime.queryInterface( XDialogProvider2.class, obj );
 
             m_xDialog = xDialogProvider.createDialogWithHandler( DialogURL, this );
             m_xControlContainer = (XControlContainer)UnoRuntime.queryInterface(XControlContainer.class, m_xDialog );
-        } catch (com.sun.star.uno.Exception ex) {
+        }
+        catch (com.sun.star.uno.Exception ex)
+        {
             ex.printStackTrace();
         }
     }
 
 
-    protected void setMethods (String [] Methods) {
+    protected void setMethods (String [] Methods)
+    {
         this.m_aMethods = Methods;
     }
 
 
-    public boolean show( ) {
+    public boolean show( )
+    {
         if( m_xDialog != null ) m_xDialog.execute();
         return m_bAction;
     }
 
 
-    public String[] getSupportedMethodNames() {
+    public String[] getSupportedMethodNames()
+    {
         return m_aMethods;
     }
 
 
-    public boolean callHandlerMethod( XDialog xDialog, Object EventObject, String MethodName ) {
+    public boolean callHandlerMethod( XDialog xDialog, Object EventObject, String MethodName )
+    {
         return true;
     }
 
+    public void SetTitle( String sTitle )
+        throws Exception
+    {
+        SetTitle( m_xDialog, sTitle );
+    }
 
-    protected XPropertySet getPropSet(String sControl) {
-        XControl xControl = m_xControlContainer.getControl(sControl);
-        XPropertySet xPS = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xControl.getModel() );
+    public static void SetTitle( XDialog xDialog, String sTitle )
+        throws Exception
+    {
+        if ( xDialog != null && sTitle != null )
+        {
+            XControl xDialogControl = (XControl)UnoRuntime.queryInterface( XControl.class, xDialog );
+            if ( xDialogControl != null )
+            {
+                XPropertySet xPropSet = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, xDialogControl.getModel() );
+                if ( xPropSet != null )
+                    xPropSet.setPropertyValue( "Title", sTitle );
+            }
+        }
+    }
+
+    protected XPropertySet GetPropSet(String sControl)
+    {
+        return GetPropSet( m_xControlContainer, sControl );
+    }
+
+    protected static XPropertySet GetPropSet( XControlContainer xControlContainer, String sControl )
+    {
+        XPropertySet xPS = null;
+
+        if ( xControlContainer != null && sControl != null )
+        {
+            XControl xControl = xControlContainer.getControl(sControl);
+            xPS = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class, xControl.getModel() );
+        }
+
         if ( xPS == null )
             throw new com.sun.star.uno.RuntimeException();
 
         return xPS;
     }
 
-    public static XDialog CreateSimpleDialog( XComponentContext xContext, String sURL )
+    public static XDialog CreateSimpleDialog( XComponentContext xContext, String sURL, int nTitleID, String[] pControls, int[] pStringIDs )
     {
         XDialog xResult = null;
 
@@ -116,8 +157,19 @@ public class WikiDialog implements XDialogEventHandler{
 
                 if ( xDialogProvider != null )
                     xResult = xDialogProvider.createDialog( sURL );
+
+                if ( xResult != null )
+                {
+                    SetTitle( xResult, Helper.GetLocalizedString( xContext, nTitleID ) );
+                    if ( pControls != null && pStringIDs != null && pControls.length == pStringIDs.length )
+                    {
+                        XControlContainer xControlContainer = (XControlContainer)UnoRuntime.queryInterface( XControlContainer.class, xResult );
+                        for ( int nInd = 0; nInd < pControls.length; nInd++ )
+                            GetPropSet( xControlContainer, pControls[nInd] ).setPropertyValue( "Label", new Integer( pStringIDs[nInd] ) );
+                    }
+                }
             }
-            catch (com.sun.star.uno.Exception ex)
+            catch (Exception ex)
             {
                 ex.printStackTrace();
             }
@@ -125,5 +177,4 @@ public class WikiDialog implements XDialogEventHandler{
 
         return xResult;
     }
-
 }

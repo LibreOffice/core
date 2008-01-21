@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiOptionsEventHandlerImpl.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2007-11-28 11:15:20 $
+ *  last change: $Author: mav $ $Date: 2008-01-21 12:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,6 +186,20 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
         }
     }
 
+    private void InitStrings()
+    {
+        try
+        {
+            GetPropSet( "AddButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( m_xContext, Helper.DLG_ADDBUTTON ) );
+            GetPropSet( "EditButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( m_xContext, Helper.DLG_SENDBUTTON ) );
+            GetPropSet( "RemoveButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( m_xContext, Helper.DLG_REMOVEBUTTON ) );
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
+    }
+
     // com.sun.star.lang.XServiceInfo:
     public String getImplementationName()
     {
@@ -233,6 +247,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
                             m_xControlContainer = (XControlContainer)UnoRuntime.queryInterface(
                                                             XControlContainer.class, m_xDialog );
                             m_aSettings = Settings.getSettings( m_xContext );
+                            InitStrings();
                         }
                         else if ( m_aSettings != null )
                             m_aSettings.loadConfiguration(); // throw away all the changes
