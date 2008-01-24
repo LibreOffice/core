@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.7 $
+#  $Revision: 1.8 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:43:14 $
+#  last change: $Author: vg $ $Date: 2008-01-24 16:04:56 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,14 +50,10 @@ SLOFILES=$(SLO)$/component.obj
 SHL1TARGET=$(TARGET)
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
-ODIAPILIB=-lodiapi
-RTFTOKLIB=-lrtftok
 DOCTOKLIB=-ldoctok
 OOXMLLIB=-looxml
 RESOURCEMODELLIB=-lresourcemodel
 .ELIF "$(GUI)"=="WNT"
-ODIAPILIB=$(LB)$/iodiapi.lib
-RTFTOKLIB=$(LB)$/irtftok.lib
 DOCTOKLIB=$(LB)$/idoctok.lib
 OOXMLLIB=$(LB)$/iooxml.lib
 RESOURCEMODELLIB=$(LB)$/iresourcemodel.lib
@@ -68,17 +64,11 @@ SHL1STDLIBS=$(SALLIB)\
     $(COMPHELPERLIB)\
     $(CPPUHELPERLIB)\
     $(UCBHELPERLIB)\
-    $(ODIAPILIB) \
-    $(RTFTOKLIB) \
     $(DOCTOKLIB) \
     $(OOXMLLIB) \
     $(RESOURCEMODELLIB)
 
 SHL1LIBS=\
-    $(SLB)$/debugservices_xxml.lib \
-    $(SLB)$/debugservices_rtftok.lib \
-    $(SLB)$/debugservices_odsl.lib \
-    $(SLB)$/debugservices_rtfsl.lib \
     $(SLB)$/debugservices_doctok.lib \
     $(SLB)$/debugservices_ooxml.lib
 
