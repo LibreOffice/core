@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SubSequence.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:33:04 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 15:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ public:
             char sBuffer[256];
 
             snprintf(sBuffer, sizeof(sBuffer),
-                     "<sequence id='%p' offset='%lx' count='%lx'>",
+                     "<sequence id='%p' offset='%" SAL_PRIxUINT32 "' count='%" SAL_PRIxUINT32 "'>",
                      mpSequence.get(), mnOffset, mnCount);
             o.addItem(sBuffer);
         }
@@ -251,7 +251,7 @@ public:
         {
             char sBuffer[256];
 
-            snprintf(sBuffer, 255, "<line>%08lx: ", n);
+            snprintf(sBuffer, 255, "<line>%08" SAL_PRIxUINT32 ": ", n);
 
             sResult += sBuffer;
 
@@ -309,7 +309,7 @@ void dumpLine(OutputWithDepth<string> & o, SubSequence<T> & rSeq,
 
     string tmpStr = "<line>";
 
-    snprintf(sBuffer, 255, "%08lx: ", nOffset);
+    snprintf(sBuffer, 255, "%08" SAL_PRIxUINT32 ": ", nOffset);
 
     tmpStr += sBuffer;
 
