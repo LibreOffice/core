@@ -4,9 +4,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:18:23 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 16:04:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,30 +49,6 @@
 #include <cppuhelper/implementationentry.hxx>
 #endif
 
-#ifndef INCLUDED_RTFTOK_SCANNERTESTSERVICE_HXX
-#include <debugservices/rtftok/ScannerTestService.hxx>
-#endif
-
-#ifndef INCLUDED_RTFTOK_XMLSCANNER_HXX
-#include <debugservices/rtftok/XMLScanner.hxx>
-#endif
-
-#ifndef INCLUDED_XXML_FILEXXMLREADER_HXX
-#include <debugservices/xxml/FileXXmlReader.hxx>
-#endif
-
-#ifndef INCLUDED_XXML_STORAGEXXMLREADER_HXX
-#include <debugservices/xxml/StorageXXmlReader.hxx>
-#endif
-
-#ifndef INCLUDED_ODSL_ODSLREADER_HXX
-#include <debugservices/odsl/ODSLParser.hxx>
-#endif
-
-#ifndef INCLUDED_RTFSL_PARSER_HXX
-#include <debugservices/rtfsl/RTFSLParser.hxx>
-#endif
-
 #ifndef INCLUDED_DOCTOK_SCANNERTESTSERVICE_HXX
 #include <debugservices/doctok/DocTokTestService.hxx>
 #endif
@@ -99,12 +75,6 @@ extern "C"
 /* shared lib exports implemented with helpers */
 static struct ::cppu::ImplementationEntry s_component_entries [] =
 {//uno -l writerfilter.uno.dll -c debugservices.rtftok.ScannerTestService -- a b c
-    RTFTOK_SCANNERTESTSERVICE_COMPONENT_ENTRY, /* debugservices.rtftok.ScannerTestService */
-    RTFTOK_XMLSCANNER_COMPONENT_ENTRY, /* debugservices.rtftok.XMLScanner */
-    XXML_FILEXXMLREADER_COMPONENT_ENTRY, /* debugservices.xxml.FileXXmlReader */
-    XXML_STORAGEXXMLREADER_COMPONENT_ENTRY, /* debugservices.xxml.StorageXXmlReader */
-    ODSL_ODSLREADER_COMPONENT_ENTRY, /* debugservices.odsl.ODSLReader */
-    RTFSL_PARSER_COMPONENT_ENTRY, /* debugservices.rtfsl.RTFSLParser */
     DOCTOK_SCANNERTESTSERVICE_COMPONENT_ENTRY, /* debugservices.doctok.ScannerTestService */
     DOCTOK_ANALYZESERVICE_COMPONENT_ENTRY, /* debugservices.doctok.AnalyzeService */
     OOXML_SCANNERTESTSERVICE_COMPONENT_ENTRY, /* debugservices.ooxml.ScannerTestService */
