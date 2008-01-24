@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLScanner.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2007-06-19 05:39:13 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 16:06:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,7 +235,7 @@ public:
                 else
                 {
                     char buf1[100];
-                    sprintf(buf1, "Converted %Li KB", bytesRead/1024);
+                    sprintf(buf1, "Converted %" SAL_PRIdINT64 " KB", bytesRead/1024);
                     xStatusIndicator->start(::rtl::OUString::createFromAscii(buf1), 0);
                 }
             }
