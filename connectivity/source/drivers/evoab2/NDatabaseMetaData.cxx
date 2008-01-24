@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:29:13 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 18:17:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -285,7 +285,7 @@ namespace connectivity
 
 
 OEvoabDatabaseMetaData::OEvoabDatabaseMetaData(OEvoabConnection* _pCon)
-    : ::connectivity::ODatabaseMetaDataBase(_pCon)
+    : ::connectivity::ODatabaseMetaDataBase(_pCon, _pCon->getConnectionInfo())
     ,m_pConnection(_pCon)
 {
     OSL_ENSURE(m_pConnection,"OEvoabDatabaseMetaData::OEvoabDatabaseMetaData: No connection set!");
@@ -369,56 +369,47 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL OEvoabDatabaseMetaData::getColumnRow
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxRowSize(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxCatalogNameLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxCursorNameLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxConnections(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxStatementLength(  ) throw(SQLException, RuntimeException)
@@ -429,8 +420,7 @@ sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxStatementLength(  ) throw(SQLEx
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxTableNameLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLException, RuntimeException)
@@ -487,8 +477,7 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsAlterTableWithDropColumn(  ) t
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxIndexLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLException, RuntimeException)
@@ -631,22 +620,19 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsOuterJoins(  ) throw(SQLExcept
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxStatements(  ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxStatementLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxProcedureNameLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxSchemaNameLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsTransactions(  ) throw(SQLException, RuntimeException)
@@ -971,26 +957,22 @@ sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsLimitedOuterJoins(  ) throw(SQ
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInGroupBy(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInOrderBy(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInSelect(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxUserNameLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OEvoabDatabaseMetaData::supportsResultSetType( sal_Int32 /*setType*/ ) throw(SQLException, RuntimeException)
@@ -1082,10 +1064,8 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTableTypes(  ) throw
         // ::rtl::OUString::createFromAscii("ALIAS"),
         // ::rtl::OUString::createFromAscii("SYNONYM")
     };
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
-    // this call initialies the resultset metadata with the corresponding information
-    pResult->setTableTypes();
 
     // here we fill the rows which should be visible when ask for data from the resultset returned here
     sal_Int32  nSize = sizeof(sTableTypes) / sizeof(::rtl::OUString);
@@ -1111,9 +1091,9 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTypeInfo(  ) throw(S
      * Return the proper type information required by evo driver
      */
 
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
+
     Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setTypeInfoMap();
     static ODatabaseMetaDataResultSet::ORows aRows;
 
     if(aRows.empty())
@@ -1197,9 +1177,8 @@ Reference< XResultSet > SAL_CALL OEvoabDatabaseMetaData::getTables(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
-    pResult->setTablesMap();
 
     // check if any type is given
     // when no types are given then we have to return all tables e.g. TABLE

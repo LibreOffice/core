@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recoveryui.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:20:22 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 18:20:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,14 +221,14 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL RecoveryUI::st_createInstan
 static OUString GetCrashConfigDir()
 {
 
-#if defined(WNT) || !defined(OS2)
+#if defined(WNT) || defined(OS2)
     OUString    ustrValue = OUString::createFromAscii("${$SYSBINDIR/bootstrap.ini:UserInstallation}");
 #else
     OUString    ustrValue = OUString::createFromAscii("$SYSUSERCONFIG");
 #endif
     Bootstrap::expandMacros( ustrValue );
 
-#if defined(WNT) || !defined(OS2)
+#if defined(WNT) || defined(OS2)
     ustrValue += OUString::createFromAscii("/user/crashdata");
 #endif
     return ustrValue;
@@ -236,7 +236,7 @@ static OUString GetCrashConfigDir()
 
 //===============================================
 
-#if defined(WNT) || !defined(OS2)
+#if defined(WNT) || defined(OS2)
 #define LCKFILE "crashdat.lck"
 #else
 #define LCKFILE ".crash_report_unsent"
