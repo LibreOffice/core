@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dff.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:43:07 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 15:57:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -343,7 +343,7 @@ string DffRecord::toString() const
     char sBuffer[1024];
 
     snprintf(sBuffer, sizeof(sBuffer),
-             "<dffrecord type=\"%lx\" instance=\"%lx\" version=\"%lx\">\n",
+             "<dffrecord type=\"%" SAL_PRIuUINT32 "\" instance=\"%" SAL_PRIuUINT32 "\" version=\"%" SAL_PRIuUINT32 "\">\n",
              getRecordType(), getInstance(), getVersion());
     string aResult = sBuffer;
 
