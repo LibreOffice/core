@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLFastContextHandler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-17 15:37:58 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 16:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,11 +171,7 @@ void OOXMLFastContextHandler::dumpOpenContexts()
     }
 
     char buffer[256];
-#ifdef MACOSX
-    snprintf(buffer, sizeof(buffer), "%ld", aSetContexts.size());
-#else
-    snprintf(buffer, sizeof(buffer), "%d", aSetContexts.size());
-#endif
+    snprintf(buffer, sizeof(buffer), "%" SAL_PRI_SIZET "u", aSetContexts.size());
 
     logger("DEBUG", string("<count>") + buffer + "</count>");
     logger("DEBUG", "</open-contexts>");
@@ -393,7 +389,7 @@ string OOXMLFastContextHandler::toString() const
     string sResult = "(";
 
     char sBuffer[128];
-    snprintf(sBuffer, sizeof(sBuffer), "%p(%ld, %ld)", this, mnInstanceNumber,
+    snprintf(sBuffer, sizeof(sBuffer), "%p(%" SAL_PRIuUINT32 ", %" SAL_PRIuUINT32 ")", this, mnInstanceNumber,
              mnRefCount);
     sResult += sBuffer;
     snprintf(sBuffer, sizeof(sBuffer), ", p:%p, ", mpParent);
@@ -971,7 +967,7 @@ string OOXMLFastContextHandlerStream::toString() const
 {
     string sResult = "(";
     char sBuffer[128];
-    snprintf(sBuffer, sizeof(sBuffer), "%p(%ld, %ld)", this, mnInstanceNumber,
+    snprintf(sBuffer, sizeof(sBuffer), "%p(%" SAL_PRIuUINT32 ", %" SAL_PRIuUINT32 ")", this, mnInstanceNumber,
              mnRefCount);
     sResult += sBuffer;
     snprintf(sBuffer, sizeof(sBuffer), ", p:%p, ", mpParent);
@@ -1047,7 +1043,7 @@ string OOXMLFastContextHandlerProperties::toString() const
 {
     string sResult = "(";
     char sBuffer[128];
-    snprintf(sBuffer, sizeof(sBuffer), "%p(%ld, %ld)", this, mnInstanceNumber,
+    snprintf(sBuffer, sizeof(sBuffer), "%p(%" SAL_PRIuUINT32 ", %" SAL_PRIuUINT32 ")", this, mnInstanceNumber,
              mnRefCount);
     sResult += sBuffer;
     snprintf(sBuffer, sizeof(sBuffer), ", p:%p, ", mpParent);
