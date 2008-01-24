@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:49:20 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 15:58:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ void WW8TableManager::endParagraphGroup()
 {
     string tmpStr = "<tabledepth depth=\"";
     char sBuffer[256];
-    snprintf(sBuffer, sizeof(sBuffer), "%ld", getTableDepthNew());
+    snprintf(sBuffer, sizeof(sBuffer), "%" SAL_PRIdINT32, getTableDepthNew());
     tmpStr += sBuffer;
     tmpStr += "\"/>";
     output.addItem(tmpStr);
