@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resourcemodel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:17:28 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 16:03:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ void dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
 void dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n)
 {
     char sBuffer[256];
-    snprintf(sBuffer, sizeof(sBuffer), "%ld", n);
+    snprintf(sBuffer, sizeof(sBuffer), "%" SAL_PRIuUINT32, n);
     string tmpStr = name;
     tmpStr += "=";
     tmpStr += sBuffer;
@@ -205,7 +205,7 @@ void WW8TableManager::endParagraphGroup()
 {
     string tmpStr = "<tabledepth depth=\"";
     char sBuffer[256];
-    snprintf(sBuffer, sizeof(sBuffer), "%ld", getTableDepthNew());
+    snprintf(sBuffer, sizeof(sBuffer), "%" SAL_PRIuUINT32, getTableDepthNew());
     tmpStr += sBuffer;
     tmpStr += "\"/>";
     output.addItem(tmpStr);
@@ -484,7 +484,7 @@ void WW8PropertiesHandler::sprm(Sprm & sprm_)
 {
     string tmpStr = "<sprm id=\"";
     char buffer[256];
-    snprintf(buffer, sizeof(buffer), "0x%lx", sprm_.getId());
+    snprintf(buffer, sizeof(buffer), "0x%" SAL_PRIxUINT32, sprm_.getId());
     tmpStr += buffer;
     tmpStr += "\" name=\"";
     tmpStr += sprm_.getName();
