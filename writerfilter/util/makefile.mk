@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:43:56 $
+#  last change: $Author: vg $ $Date: 2008-01-24 16:08:32 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,11 +34,8 @@
 
 PRJ=..
 PRJNAME=writerfilter
-TARGET=odiapi
-TARGET2=writerfilter
-#LIBTARGET=NO
+TARGET=writerfilter
 ENABLE_EXCEPTIONS=TRUE
-#USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
 
@@ -48,40 +45,19 @@ CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION
 
 # --- Files --------------------------------------------------------
 
-#SLOFILES=$(SLO)$/PropertiesImpl.obj	
-
-LIB1TARGET=$(SLB)$/godiapi.lib
-LIB1FILES=	\
-    $(SLB)$/xxml.lib	\
-    $(SLB)$/sl.lib	\
-    $(SLB)$/props.lib	\
-    $(SLB)$/qname.lib#\
-#	$(SLB)$/core.lib
-
-
-SHL1TARGET=$(TARGET)
-SHL1LIBS=$(SLB)$/godiapi.lib
-SHL1STDLIBS=$(SALLIB) ${LIBXML2LIB} $(CPPULIB) $(COMPHELPERLIB) $(CPPUHELPERLIB) $(UCBHELPERLIB)
-SHL1IMPLIB=i$(SHL1TARGET)
-SHL1USE_EXPORTS=ordinal
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-DEF1NAME=$(SHL1TARGET)
-DEFLIB1NAME=godiapi
-
-LIB2TARGET=$(SLB)$/$(TARGET2).lib
-LIB2FILES=  \
+LIB1TARGET=$(SLB)$/$(TARGET).lib
+LIB1FILES=  \
     $(SLB)$/ooxml.lib \
     $(SLB)$/doctok.lib \
-    $(SLB)$/rtftok.lib \
     $(SLB)$/resourcemodel.lib \
     $(SLB)$/dmapper.lib \
     $(SLB)$/filter.lib
 
-SHL2LIBS=$(SLB)$/$(TARGET2).lib
+SHL1LIBS=$(SLB)$/$(TARGET).lib
 
 
-SHL2TARGET=$(TARGET2)$(UPD)$(DLLPOSTFIX)
-SHL2STDLIBS=\
+SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
+SHL1STDLIBS=\
     $(I18NISOLANGLIB) \
     $(SOTLIB) \
     $(TOOLSLIB) \
@@ -93,13 +69,12 @@ SHL2STDLIBS=\
     $(SALLIB)
 
 
-SHL2DEPN=
-SHL2IMPLIB= i$(SHL2TARGET)
-#SHL2LIBS=   $(SLB)$/$(TARGET2).lib
-SHL2DEF=    $(MISC)$/$(SHL2TARGET).def
-SHL2VERSIONMAP=exports.map
+SHL1DEPN=
+SHL1IMPLIB= i$(SHL1TARGET)
+SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
+SHL1VERSIONMAP=exports.map
 
-DEF2NAME=$(SHL2TARGET)
+DEF1NAME=$(SHL1TARGET)
 
 
 # --- Targets ------------------------------------------------------
