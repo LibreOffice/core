@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RTFScanner.lex,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-08 16:02:50 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 16:03:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,10 +32,6 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-
-/**
-  Copyright 2005 Sun Microsystems, Inc.
-*/
 
 /* compile with flex++ -8 -f -+ -Sflex.skl -ortfparser.cxx rtfparser.lex */
 %option yylineno
@@ -88,30 +84,30 @@ oslFileHandle yy_osl_in=NULL;
 */
 
 //extern RtfTokenizer* this;
-void yyFlexLexer::split_ctrl(char *yytext, char* token, char *value)
+void yyFlexLexer::split_ctrl(char *_yytext, char* token, char *value)
    {
      int i=0; // skip first '\'
-     while(yytext[i]!=0 && (yytext[i]=='\r' || yytext[i]=='\n')) i++;
-     while(yytext[i]!=0 && (yytext[i]<'A' || (yytext[i]>'Z' && yytext[i]<'a') || yytext[i]>'z')) i++; 
-     while(yytext[i]!=0 && yytext[i]>='A') *(token++)=yytext[i++];
+     while(_yytext[i]!=0 && (_yytext[i]=='\r' || _yytext[i]=='\n')) i++;
+     while(_yytext[i]!=0 && (_yytext[i]<'A' || (_yytext[i]>'Z' && _yytext[i]<'a') || _yytext[i]>'z')) i++; 
+     while(_yytext[i]!=0 && _yytext[i]>='A') *(token++)=_yytext[i++];
      *token=0;
-     while(yytext[i]!=0 && yytext[i]>' ') *(value++)=yytext[i++];
+     while(_yytext[i]!=0 && _yytext[i]>' ') *(value++)=_yytext[i++];
      *value=0;
    }
 
- void yyFlexLexer::raise_ctrl(char* yytext)
+ void yyFlexLexer::raise_ctrl(char* _yytext)
    {
      char token[50];
      char value[50];
-     split_ctrl(yytext, token, value);
+     split_ctrl(_yytext, token, value);
      eventHandler.ctrl(token, value);
    }
 
- void yyFlexLexer::raise_dest(char* yytext)
+ void yyFlexLexer::raise_dest(char* _yytext)
    {
      char token[50];
      char value[50];
-     split_ctrl(yytext, token, value);
+     split_ctrl(_yytext, token, value);
      eventHandler.dest(token, value);
    }
  
@@ -256,11 +252,11 @@ static const char* _destctrls[] = {
 "xe"
 };
 
- void yyFlexLexer::raise_destOrCtrl(char* yytext)
+ void yyFlexLexer::raise_destOrCtrl(char* _yytext)
    {
      char token[50];
      char value[50];
-     split_ctrl(yytext, token, value);
+     split_ctrl(_yytext, token, value);
      char* result=(char*)bsearch(token, _destctrls, _num_of_destctrls, 20, (int (*)(const void*, const void*))stricmp);
      if (result)
        {
