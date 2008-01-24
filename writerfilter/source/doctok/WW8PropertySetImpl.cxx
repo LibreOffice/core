@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8PropertySetImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:48:58 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 15:57:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ string WW8PropertyImpl::toString() const
     aResult += "<sprmcommon";
 
     char sBuffer[256];
-    snprintf(sBuffer, sizeof(sBuffer), " id=\"%lx\"", getId());
+    snprintf(sBuffer, sizeof(sBuffer), " id=\"%" SAL_PRIuUINT32 "\"", getId());
     aResult += sBuffer;
     aResult += " name=\"";
     aResult += (*SprmIdToString::Instance())(getId());
@@ -206,9 +206,9 @@ string WW8PropertyImpl::toString() const
     aResult += sBuffer;
     snprintf(sBuffer, sizeof(sBuffer), " spra=\"%x\"", get_spra());
     aResult += sBuffer;
-    snprintf(sBuffer, sizeof(sBuffer), " size=\"%lx\"", getByteLength());
+    snprintf(sBuffer, sizeof(sBuffer), " size=\"%" SAL_PRIxUINT32 "\"", getByteLength());
     aResult += sBuffer;
-    snprintf(sBuffer, sizeof(sBuffer), " param=\"%lx\"", getParam());
+    snprintf(sBuffer, sizeof(sBuffer), " param=\"%" SAL_PRIxUINT32 "\"", getParam());
     aResult += sBuffer;
     aResult += ">\n";
 
@@ -402,7 +402,7 @@ string WW8PropertySetIteratorImpl::toString() const
 
     char sBuffer[256];
 
-    snprintf(sBuffer, sizeof(sBuffer), "(%ld)", mnOffset);
+    snprintf(sBuffer, sizeof(sBuffer), "(%" SAL_PRIuUINT32 ")", mnOffset);
     sResult += sBuffer;
 
     return sResult;
