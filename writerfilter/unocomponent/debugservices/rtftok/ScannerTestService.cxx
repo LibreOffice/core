@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScannerTestService.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-10-29 14:04:50 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 16:06:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,7 +345,7 @@ public:
                 else
                 {
                     char buf1[100];
-                    sprintf(buf1, "Converted %Li KB", bytesRead/1024);
+                    sprintf(buf1, "Converted %" SAL_PRIdINT64 " KB", bytesRead/1024);
                     xStatusIndicator->start(::rtl::OUString::createFromAscii(buf1), 0);
                 }
             }
@@ -425,7 +425,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
             delete rtfScanner;
 
         TimeValue t2; osl_getSystemTime(&t2);
-        printf("time=%lis\n", t2.Seconds-t1.Seconds);
+        printf("time=%" SAL_PRIuUINT32 "s\n", t2.Seconds-t1.Seconds);
 
 //          eventHandler.dump();
             uno::Reference<embed::XTransactedObject> xTransact(xStorage, uno::UNO_QUERY);
