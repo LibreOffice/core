@@ -4,9 +4,17 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.23 $
+<<<<<<< dbtools2.cxx
+ *  $Revision: 1.24 $
+=======
+ *  $Revision: 1.24 $
+>>>>>>> 1.23.82.2
  *
- *  last change: $Author: obo $ $Date: 2007-06-12 05:27:13 $
+<<<<<<< dbtools2.cxx
+ *  last change: $Author: vg $ $Date: 2008-01-24 18:09:37 $
+=======
+ *  last change: $Author: vg $ $Date: 2008-01-24 18:09:37 $
+>>>>>>> 1.23.82.2
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -922,6 +930,59 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const ::rtl::OUString&
 
    return nLen;
 }
+<<<<<<< dbtools2.cxx
+=======
+::rtl::OUString lcl_getReportEngines()
+{
+    static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/ReportEngines"));
+    return s_sNodeName;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString lcl_getDefaultReportEngine()
+{
+    static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("DefaultReportEngine"));
+    return s_sNodeName;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString lcl_getReportEngineNames()
+{
+    static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("ReportEngineNames"));
+    return s_sNodeName;
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString getDefaultReportEngineServiceName(const Reference< XMultiServiceFactory >& _rxORB)
+{
+    ::utl::OConfigurationTreeRoot aReportEngines = ::utl::OConfigurationTreeRoot::createWithServiceFactory(
+        _rxORB, lcl_getReportEngines(), -1, ::utl::OConfigurationTreeRoot::CM_READONLY);
+
+    if ( aReportEngines.isValid() )
+    {
+        ::rtl::OUString sDefaultReportEngineName;
+        aReportEngines.getNodeValue(lcl_getDefaultReportEngine()) >>= sDefaultReportEngineName;
+        if ( sDefaultReportEngineName.getLength() )
+        {
+            ::utl::OConfigurationNode aReportEngineNames = aReportEngines.openNode(lcl_getReportEngineNames());
+            if ( aReportEngineNames.isValid() )
+            {
+                ::utl::OConfigurationNode aReportEngine = aReportEngineNames.openNode(sDefaultReportEngineName);
+                if ( aReportEngine.isValid() )
+                {
+                    ::rtl::OUString sRet;
+                    const static ::rtl::OUString s_sService(RTL_CONSTASCII_USTRINGPARAM("ServiceName"));
+                    aReportEngine.getNodeValue(s_sService) >>= sRet;
+                    return sRet;
+                }
+            }
+        }
+        else
+            return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOReportJobFactory"));
+    }
+    else
+        return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOReportJobFactory"));
+    return ::rtl::OUString();
+}
+// -----------------------------------------------------------------------------
+>>>>>>> 1.23.82.2
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
