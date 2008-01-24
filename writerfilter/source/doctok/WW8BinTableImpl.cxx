@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8BinTableImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:44:47 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 15:57:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,10 +100,10 @@ string WW8BinTableImpl::toString() const
         if (n > 0)
             aResult += ", ";
 
-        snprintf(sBuffer, 255, "%lx", getFc(n).get());
+        snprintf(sBuffer, 255, "%" SAL_PRIxUINT32, getFc(n).get());
         aResult += sBuffer;
         aResult += "->";
-        snprintf(sBuffer, 255, "%lx", getPageNumber(n));
+        snprintf(sBuffer, 255, "%" SAL_PRIxUINT32, getPageNumber(n));
         aResult += sBuffer;
     }
 
