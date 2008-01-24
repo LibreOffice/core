@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8CpAndFc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:45:39 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 15:57:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ string Cp::toString() const
 {
     char sBuffer[256];
 
-    snprintf(sBuffer, 255, "%lx", get());
+    snprintf(sBuffer, 255, "%" SAL_PRIxUINT32 "", get());
 
     return string(sBuffer);
 }
@@ -83,7 +83,7 @@ string Fc::toString() const
 {
     char sBuffer[256];
 
-    snprintf(sBuffer, 255, "(%lx, %s)", static_cast<sal_uInt32>(get()),
+    snprintf(sBuffer, 255, "(%" SAL_PRIxUINT32 ", %s)", static_cast<sal_uInt32>(get()),
              isComplex() ? "true" : "false");
 
     return string(sBuffer);
@@ -124,7 +124,7 @@ ostream & operator << (ostream & o, const CpAndFcs & rCpAndFcs)
 
     char sBuffer[256];
 
-    snprintf(sBuffer, 255, "%d", rCpAndFcs.size());
+    snprintf(sBuffer, 255, "%" SAL_PRI_SIZET "u", rCpAndFcs.size());
     o << sBuffer;
 
     return o;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8FKPImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:46:44 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 15:57:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ void WW8CHPFKPImpl::dump(OutputWithDepth<string> & o) const
         char sBuffer[256];
 
         snprintf(sBuffer, sizeof(sBuffer),
-                 "<fkpentry fc='%lx' offsetInFkp='%x'/>",
+                 "<fkpentry fc='%" SAL_PRIxUINT32 "' offsetInFkp='%x'/>",
                  getFc(n).get(), 2 * getU8(getRgb() + n));
 
         o.addItem(sBuffer);
@@ -177,7 +177,7 @@ void WW8PAPFKPImpl::dump(OutputWithDepth<string> & o) const
         char sBuffer[256];
 
         snprintf(sBuffer, sizeof(sBuffer),
-                 "<fkpentry fc='%lx' offsetInFKP='%x'/>",
+                 "<fkpentry fc='%" SAL_PRIxUINT32 "' offsetInFKP='%x'/>",
                  getFc(n).get(), 2 * getU8(getRgb() + n * 13));
 
         o.addItem(sBuffer);
