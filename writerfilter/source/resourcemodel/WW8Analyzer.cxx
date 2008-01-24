@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Analyzer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-17 14:28:52 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 16:02:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -346,7 +346,7 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
                         sal_Int32 nValue = 0;
                         aAny >>= nValue;
 
-                        snprintf(buffer, sizeof(buffer), "%ld", nValue);
+                        snprintf(buffer, sizeof(buffer), "%" SAL_PRIdINT32, nValue);
                         sResult += buffer;
                     }
                     else if (sPropType ==
@@ -431,7 +431,7 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
                         awt::Point aPoint;
                         aAny >>= aPoint;
 
-                        snprintf(buffer, sizeof(buffer), "(%ld, %ld)", aPoint.X,
+                        snprintf(buffer, sizeof(buffer), "(%" SAL_PRIdINT32 ", %" SAL_PRIdINT32 ")", aPoint.X,
                                  aPoint.Y);
 
                         sResult += buffer;
@@ -444,7 +444,7 @@ string propertysetToString(uno::Reference<beans::XPropertySet> const & xPropSet)
                         awt::Rectangle aRect;
                         aAny >>= aRect;
 
-                        snprintf(buffer, sizeof(buffer), "(%ld, %ld, %ld, %ld)",
+                        snprintf(buffer, sizeof(buffer), "(%" SAL_PRIdINT32 ", %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 ", %" SAL_PRIdINT32 ")",
                                  aRect.X, aRect.Y, aRect.Width, aRect.Height);
                         sResult += buffer;
                     }
