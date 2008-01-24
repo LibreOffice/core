@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:59:15 $
+ *  last change: $Author: vg $ $Date: 2008-01-24 16:02:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -565,7 +565,7 @@ OOXMLValue * OOXMLIntegerValue::clone() const
 string OOXMLIntegerValue::toString() const
 {
     char buffer[256];
-    snprintf(buffer, sizeof(buffer), "%ld", mnValue);
+    snprintf(buffer, sizeof(buffer), "%" SAL_PRIdINT32, mnValue);
 
     return buffer;
 }
@@ -601,7 +601,7 @@ OOXMLValue * OOXMLHexValue::clone() const
 string OOXMLHexValue::toString() const
 {
     char buffer[256];
-    snprintf(buffer, sizeof(buffer), "0x%lx", mnValue);
+    snprintf(buffer, sizeof(buffer), "0x%" SAL_PRIxUINT32, mnValue);
 
     return buffer;
 }
