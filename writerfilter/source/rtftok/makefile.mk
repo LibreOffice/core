@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:30:31 $
+#  last change: $Author: vg $ $Date: 2008-01-24 16:04:25 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,18 @@ DEFLIB1NAME=$(TARGET)
 
 .INCLUDE :	target.mk
 
-RTFScanner.cxx: RTFScanner.lex RTFScanner.skl FlexLexer.h
-    flex -+ -SRTFScanner.skl -oRTFScanner.cxx RTFScanner.lex
+RTFSCANNERCXX=$(MISC)/RTFScanner.cxx
 
+GENERATEDFILES=$(RTFSCANNERCXX)
+
+$(RTFSCANNERCXX): RTFScanner.lex RTFScanner.skl FlexLexer.h
+    flex -+ -SRTFScanner.skl -o$@ RTFScanner.lex
+
+$(SLO)/RTFScanner.obj: $(RTFSCANNERCXX)
+
+.PHONY: genmake genclean
+
+genmake: $(GENERATEDFILES)
+
+genclean:
+    rm $(GENERATEDFILES)
