@@ -4,17 +4,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
-<<<<<<< dbtools2.cxx
- *  $Revision: 1.24 $
-=======
- *  $Revision: 1.24 $
->>>>>>> 1.23.82.2
+ *  $Revision: 1.25 $
  *
-<<<<<<< dbtools2.cxx
- *  last change: $Author: vg $ $Date: 2008-01-24 18:09:37 $
-=======
- *  last change: $Author: vg $ $Date: 2008-01-24 18:09:37 $
->>>>>>> 1.23.82.2
+ *  last change: $Author: vg $ $Date: 2008-01-24 18:14:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -930,8 +922,6 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const ::rtl::OUString&
 
    return nLen;
 }
-<<<<<<< dbtools2.cxx
-=======
 ::rtl::OUString lcl_getReportEngines()
 {
     static ::rtl::OUString s_sNodeName(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.DataAccess/ReportEngines"));
@@ -982,7 +972,6 @@ sal_Int32 DBTypeConversion::convertUnicodeStringToLength( const ::rtl::OUString&
     return ::rtl::OUString();
 }
 // -----------------------------------------------------------------------------
->>>>>>> 1.23.82.2
 //.........................................................................
 }   // namespace dbtools
 //.........................................................................
