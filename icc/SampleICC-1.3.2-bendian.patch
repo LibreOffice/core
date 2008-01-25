@@ -1,5 +1,5 @@
 *** misc/SampleICC-1.3.2/configure	Mon Aug 20 22:10:59 2007
---- misc/build/SampleICC-1.3.2/configure	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/configure	Fri Jan 25 14:23:09 2008
 ***************
 *** 19991,19997 ****
   
@@ -60,7 +60,7 @@
     *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
   echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
 *** misc/SampleICC-1.3.2/Contrib/Makefile.in	Mon Aug 20 22:10:37 2007
---- misc/build/SampleICC-1.3.2/Contrib/Makefile.in	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/Contrib/Makefile.in	Fri Jan 25 14:23:09 2008
 ***************
 *** 103,120 ****
   
@@ -95,7 +95,7 @@
   subdir = Contrib
   mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 *** misc/SampleICC-1.3.2/Contrib/CmdLine/Makefile.in	Mon Aug 20 22:10:34 2007
---- misc/build/SampleICC-1.3.2/Contrib/CmdLine/Makefile.in	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/Contrib/CmdLine/Makefile.in	Fri Jan 25 14:23:09 2008
 ***************
 *** 102,116 ****
   install_sh = @install_sh@
@@ -126,7 +126,7 @@
   subdir = Contrib/CmdLine
   mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 *** misc/SampleICC-1.3.2/Contrib/ICC_utils/Makefile.in	Mon Aug 20 22:10:35 2007
---- misc/build/SampleICC-1.3.2/Contrib/ICC_utils/Makefile.in	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/Contrib/ICC_utils/Makefile.in	Fri Jan 25 14:23:09 2008
 ***************
 *** 133,139 ****
   CONFIG_CLEAN_FILES =
@@ -145,7 +145,7 @@
   	ICC_tool_exception.lo Vetters.lo
   libICC_utils_la_OBJECTS = $(am_libICC_utils_la_OBJECTS)
 *** misc/SampleICC-1.3.2/Contrib/ICC_utils/Stubs.h	Mon Aug 20 22:04:53 2007
---- misc/build/SampleICC-1.3.2/Contrib/ICC_utils/Stubs.h	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/Contrib/ICC_utils/Stubs.h	Fri Jan 25 14:23:09 2008
 ***************
 *** 130,136 ****
   
@@ -164,7 +164,7 @@
       return (r_ != p.r_) ? (r_ < p.r_) : ((g_ != p.g_) ? (g_ < p.g_) : (b_ < p.b_));
     }
 *** misc/SampleICC-1.3.2/Contrib/ICC_utils/Vetters.cpp	Mon Aug 20 22:04:54 2007
---- misc/build/SampleICC-1.3.2/Contrib/ICC_utils/Vetters.cpp	Fri Jan 25 12:54:14 2008
+--- misc/build/SampleICC-1.3.2/Contrib/ICC_utils/Vetters.cpp	Fri Jan 25 14:57:06 2008
 ***************
 *** 1,322 ****
 ! /*
@@ -489,7 +489,7 @@
 !       }
 !   }
 ! }
---- 1,325 ----
+--- 1,329 ----
 ! /*
 !  File:       Vetters.cpp
 !  
@@ -574,11 +574,18 @@
 ! #include <sstream>
 ! using namespace std;
 ! 
-! #if !defined(WIN32) && !defined(PLATFORM_SUNOS5)
+! #ifndef WIN32
+! #ifdef sun
+! #include <errno.h>
+! #else
 ! #include <sys/errno.h>
+! #endif
 ! #else
 ! #include <string.h>
-! #include <errno.h>
+! #define stat _stat
+! #endif
+! 
+! #if defined WIN32 || defined sun
 ! int strerror_r(int errnum, char *str, int strsize)
 ! {
 !   const char *errstr = strerror(errnum);
@@ -590,9 +597,6 @@
 ! 
 !   return -1;
 ! }
-! #endif
-! #if defined(WIN32)
-! #define stat _stat
 ! #endif
 ! 
 ! #include "ICC_tool_exception.h"
@@ -815,8 +819,39 @@
 !       }
 !   }
 ! }
+*** misc/SampleICC-1.3.2/IccProfLib/IccIO.cpp	Mon Aug 20 22:05:00 2007
+--- misc/build/SampleICC-1.3.2/IccProfLib/IccIO.cpp	Fri Jan 25 14:23:09 2008
+***************
+*** 78,84 ****
+  #include "IccIO.h"
+  #include "IccUtil.h"
+  #include <stdlib.h>
+! #include <memory.h>
+  #include <string.h>
+  
+  #ifndef __max
+--- 78,84 ----
+  #include "IccIO.h"
+  #include "IccUtil.h"
+  #include <stdlib.h>
+! #include <memory>
+  #include <string.h>
+  
+  #ifndef __max
+*** misc/SampleICC-1.3.2/IccProfLib/IccIO.h	Mon Aug 20 22:05:00 2007
+--- misc/build/SampleICC-1.3.2/IccProfLib/IccIO.h	Fri Jan 25 14:23:09 2008
+***************
+*** 79,84 ****
+--- 79,85 ----
+  #define _ICCIO_H
+  
+  #include "IccDefs.h"
++ #include "memory"
+  #include "stdio.h"
+  
+  #ifdef USESAMPLEICCNAMESPACE
 *** misc/SampleICC-1.3.2/IccProfLib/IccMpeACS.cpp	Mon Aug 20 22:05:00 2007
---- misc/build/SampleICC-1.3.2/IccProfLib/IccMpeACS.cpp	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/IccProfLib/IccMpeACS.cpp	Fri Jan 25 14:23:09 2008
 ***************
 *** 136,152 ****
     icChar sigBuf[30];
@@ -855,7 +890,7 @@
       icMemDump(sDescription, m_pData, m_nDataSize);
     }
 *** misc/SampleICC-1.3.2/IccProfLib/IccMpeBasic.cpp	Mon Aug 20 22:05:00 2007
---- misc/build/SampleICC-1.3.2/IccProfLib/IccMpeBasic.cpp	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/IccProfLib/IccMpeBasic.cpp	Fri Jan 25 14:23:09 2008
 ***************
 *** 218,249 ****
     sprintf(buf, "%.8f", m_endPoint);
@@ -1340,7 +1375,7 @@
     }
   
 *** misc/SampleICC-1.3.2/IccProfLib/IccProfLibConf.h	Mon Aug 20 22:05:00 2007
---- misc/build/SampleICC-1.3.2/IccProfLib/IccProfLibConf.h	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/IccProfLib/IccProfLibConf.h	Fri Jan 25 14:23:09 2008
 ***************
 *** 112,126 ****
     #define ICUINT64TYPE unsigned long long
@@ -1375,7 +1410,7 @@
     #define ICCPROFLIB_API
     #define ICCPROFLIB_EXTERN
 *** misc/SampleICC-1.3.2/IccProfLib/IccProfile.cpp	Mon Aug 20 22:05:00 2007
---- misc/build/SampleICC-1.3.2/IccProfLib/IccProfile.cpp	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/IccProfLib/IccProfile.cpp	Fri Jan 25 14:23:09 2008
 ***************
 *** 567,573 ****
   
@@ -2001,7 +2036,7 @@
       return NULL;
     }
 *** misc/SampleICC-1.3.2/IccProfLib/IccTagBasic.cpp	Mon Aug 20 22:05:00 2007
---- misc/build/SampleICC-1.3.2/IccProfLib/IccTagBasic.cpp	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/IccProfLib/IccTagBasic.cpp	Fri Jan 25 14:23:09 2008
 ***************
 *** 166,172 ****
       CIccInfo Info;
@@ -3323,7 +3358,7 @@
     }
     else {
 *** misc/SampleICC-1.3.2/IccProfLib/IccTagLut.cpp	Mon Aug 20 22:05:00 2007
---- misc/build/SampleICC-1.3.2/IccProfLib/IccTagLut.cpp	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/IccProfLib/IccTagLut.cpp	Fri Jan 25 14:23:09 2008
 ***************
 *** 323,345 ****
     icChar buf[128], *ptr;
@@ -4455,7 +4490,7 @@
             }
           }
 *** misc/SampleICC-1.3.2/IccProfLib/IccTagMPE.cpp	Mon Aug 20 22:05:00 2007
---- misc/build/SampleICC-1.3.2/IccProfLib/IccTagMPE.cpp	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/IccProfLib/IccTagMPE.cpp	Fri Jan 25 14:23:09 2008
 ***************
 *** 218,224 ****
             icGetSig(sigbuf, m_sig), m_nSize);
@@ -4627,7 +4662,7 @@
     }
   
 *** misc/SampleICC-1.3.2/IccProfLib/IccTagProfSeqId.cpp	Mon Aug 20 22:05:00 2007
---- misc/build/SampleICC-1.3.2/IccProfLib/IccTagProfSeqId.cpp	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/IccProfLib/IccTagProfSeqId.cpp	Fri Jan 25 14:23:09 2008
 ***************
 *** 234,240 ****
   {
@@ -4718,7 +4753,7 @@
   
   
 *** misc/SampleICC-1.3.2/IccProfLib/IccTagProfSeqId.h	Mon Aug 20 22:05:00 2007
---- misc/build/SampleICC-1.3.2/IccProfLib/IccTagProfSeqId.h	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/IccProfLib/IccTagProfSeqId.h	Fri Jan 25 14:23:09 2008
 ***************
 *** 161,164 ****
   }
@@ -4731,7 +4766,24 @@
   
 ! #endif //_ICCTAGPROFSEQID_H
 *** misc/SampleICC-1.3.2/IccProfLib/IccUtil.cpp	Mon Aug 20 22:05:00 2007
---- misc/build/SampleICC-1.3.2/IccProfLib/IccUtil.cpp	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/IccProfLib/IccUtil.cpp	Fri Jan 25 14:23:09 2008
+***************
+*** 79,85 ****
+  #include "IccUtil.h"
+  #include "IccTagFactory.h"
+  #include <stdlib.h>
+! #include <memory.h>
+  #include <ctype.h>
+  #include <math.h>
+  #include <string.h>
+--- 79,85 ----
+  #include "IccUtil.h"
+  #include "IccTagFactory.h"
+  #include <stdlib.h>
+! #include <memory>
+  #include <ctype.h>
+  #include <math.h>
+  #include <string.h>
 ***************
 *** 678,688 ****
   {
@@ -4745,7 +4797,7 @@
     sDump += buf;
   }
   
---- 678,688 ----
+--- 679,689 ----
   {
     icChar buf[128];
   
@@ -4778,7 +4830,7 @@
       rv = icMaxStatus(rv, icValidateNonCompliant);
     }
   
---- 1516,1534 ----
+--- 1517,1535 ----
   
     if (XYZ.X < 0) {
       sReport += icValidateNonCompliantMsg;
@@ -4807,7 +4859,7 @@
       sReport += buf;
       rv = icValidateWarning;
     }
---- 1548,1554 ----
+--- 1549,1555 ----
     icChar buf[128];
     if (dateTime.year<1992) {
       sReport += icValidateWarningMsg;
@@ -4824,7 +4876,7 @@
         sReport += buf;
         rv = icMaxStatus(rv, icValidateWarning);
       }
---- 1557,1563 ----
+--- 1558,1564 ----
     if (newtime->tm_mon==11 && newtime->tm_mday==31) {
       if (dateTime.year>(year+1)) {
         sReport += icValidateWarningMsg;
@@ -4841,7 +4893,7 @@
         sReport += buf;
         rv = icMaxStatus(rv, icValidateWarning);
       }
---- 1565,1571 ----
+--- 1566,1572 ----
     else {
       if (dateTime.year>year) {
         sReport += icValidateWarningMsg;
@@ -4858,7 +4910,7 @@
       sReport += buf;
       rv = icMaxStatus(rv, icValidateWarning);
     }
---- 1573,1579 ----
+--- 1574,1580 ----
   
     if (dateTime.month<1 || dateTime.month>12) {
       sReport += icValidateWarningMsg;
@@ -4875,7 +4927,7 @@
       sReport += buf;
       rv = icMaxStatus(rv, icValidateWarning);
     }
---- 1580,1586 ----
+--- 1581,1587 ----
   
     if (dateTime.day<1 || dateTime.day>31) {
       sReport += icValidateWarningMsg;
@@ -4892,7 +4944,7 @@
         sReport += buf;
         rv = icMaxStatus(rv, icValidateWarning);
       }
---- 1588,1594 ----
+--- 1589,1595 ----
     if (dateTime.month==2) {
       if (dateTime.day>29) {
         sReport += icValidateWarningMsg;
@@ -4909,7 +4961,7 @@
           sReport += buf;
           rv = icMaxStatus(rv, icValidateWarning);
         }
---- 1596,1602 ----
+--- 1597,1603 ----
       if (dateTime.day==29) {
         if ((dateTime.year%4)!=0) {
           sReport += icValidateWarningMsg;
@@ -4926,7 +4978,7 @@
       sReport += buf;
       rv = icMaxStatus(rv, icValidateWarning);
     }
---- 1605,1611 ----
+--- 1606,1612 ----
   
     if (dateTime.hours>23) {
       sReport += icValidateWarningMsg;
@@ -4943,7 +4995,7 @@
       sReport += buf;
       rv = icMaxStatus(rv, icValidateWarning);
     }
---- 1612,1618 ----
+--- 1613,1619 ----
   
     if (dateTime.minutes>59) {
       sReport += icValidateWarningMsg;
@@ -4960,7 +5012,7 @@
       sReport += buf;
       rv = icMaxStatus(rv, icValidateWarning);
     }
---- 1619,1625 ----
+--- 1620,1626 ----
   
     if (dateTime.seconds>59) {
       sReport += icValidateWarningMsg;
@@ -4969,7 +5021,7 @@
       rv = icMaxStatus(rv, icValidateWarning);
     }
 *** misc/SampleICC-1.3.2/IccProfLib/icProfileHeader.h	Mon Aug 20 22:05:00 2007
---- misc/build/SampleICC-1.3.2/IccProfLib/icProfileHeader.h	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/IccProfLib/icProfileHeader.h	Fri Jan 25 14:23:09 2008
 ***************
 *** 659,668 ****
   typedef enum {
@@ -4995,7 +5047,7 @@
   
   
 *** misc/SampleICC-1.3.2/Tools/CmdLine/Makefile.in	Mon Aug 20 22:10:42 2007
---- misc/build/SampleICC-1.3.2/Tools/CmdLine/Makefile.in	Thu Jan 24 19:47:25 2008
+--- misc/build/SampleICC-1.3.2/Tools/CmdLine/Makefile.in	Fri Jan 25 14:23:09 2008
 ***************
 *** 101,117 ****
   am__quote = @am__quote@
