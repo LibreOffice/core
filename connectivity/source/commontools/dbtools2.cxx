@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-24 18:14:17 $
+ *  last change: $Author: vg $ $Date: 2008-01-25 10:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #ifndef _DBHELPER_DBCHARSET_HXX_
 #include "connectivity/dbcharset.hxx"
 #endif
-
+#include <unotools/confignode.hxx>
 #ifndef CONNECTIVITY_SHAREDRESOURCES_HXX
 #include "resource/sharedresources.hxx"
 #endif
@@ -105,6 +105,7 @@
 
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
+#include <comphelper/configurationhelper.hxx>
 
 //.........................................................................
 namespace dbtools

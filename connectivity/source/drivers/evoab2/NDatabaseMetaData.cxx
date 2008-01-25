@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-24 18:17:38 $
+ *  last change: $Author: vg $ $Date: 2008-01-25 10:31:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,12 +412,6 @@ sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLExc
     return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxStatementLength(  ) throw(SQLException, RuntimeException)
-{
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
-}
-// -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxTableNameLength(  ) throw(SQLException, RuntimeException)
 {
     return 0;// 0 means no limit
@@ -425,8 +419,7 @@ sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxTableNameLength(  ) throw(SQLEx
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OEvoabDatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 1; // We only support a single table
-    return nValue;
+    return 1; // We only support a single table
 }
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
