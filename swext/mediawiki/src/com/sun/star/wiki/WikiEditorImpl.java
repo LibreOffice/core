@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditorImpl.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-21 12:57:53 $
+ *  last change: $Author: mav $ $Date: 2008-01-25 10:29:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,7 +323,7 @@ public final class WikiEditorImpl extends WeakBase
             {
                 Hashtable wikiSettings = m_settings.getSettingByUrl( aPropDialog.m_sWikiEngineURL );
 
-                WikiArticle aArticle = new WikiArticle( m_xContext, aPropDialog.m_sWikiTitle, wikiSettings, false, null );
+                WikiArticle aArticle = new WikiArticle( m_xContext, aPropDialog.GetWikiTitle(), wikiSettings, false, null );
 
                 if ( aArticle.m_sHTMLCode == null )
                 {
@@ -410,7 +410,7 @@ public final class WikiEditorImpl extends WeakBase
                     // show the send dialog
                     WikiPropDialog aSendDialog = new WikiPropDialog( m_xContext, "vnd.sun.star.script:WikiEditor.SendToMediaWiki?location=application", this );
                     aSendDialog.fillWikiList();
-                    aSendDialog.m_sWikiTitle = Helper.GetDocTitle( m_xModel );
+                    aSendDialog.SetWikiTitle( Helper.GetDocTitle( m_xModel ) );
                     aSendDialog.show(); // triggers the sending
                 }
             }
@@ -435,7 +435,7 @@ public final class WikiEditorImpl extends WeakBase
                 Hashtable wikiSettings = m_settings.getSettingByUrl( aSendDialog.m_sWikiEngineURL );
 
                 // TODO: stop progress spinning
-                WikiArticle aArticle = new WikiArticle( m_xContext, aSendDialog.m_sWikiTitle, wikiSettings, true, aSendDialog );
+                WikiArticle aArticle = new WikiArticle( m_xContext, aSendDialog.GetWikiTitle(), wikiSettings, true, aSendDialog );
 
                 boolean bAllowSending = true;
                 if ( aArticle.NotExist() )
@@ -452,8 +452,6 @@ public final class WikiEditorImpl extends WeakBase
 
                     if ( xDialog != null )
                     {
-                        Helper.SetControlPropInDialog( xDialog, "Label1", "Label", "A wiki article with the title " + aSendDialog.m_sWikiTitle + " does not exist yet. Do you want to create a new article with that name?" );
-
                         aSendDialog.SetThrobberActive( false );
                         bAllowSending = MainThreadDialogExecutor.Execute( m_xContext, xDialog );
                         aSendDialog.SetThrobberActive( true );

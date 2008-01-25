@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-21 12:57:53 $
+ *  last change: $Author: mav $ $Date: 2008-01-25 10:29:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,8 @@ public class WikiPropDialog extends WikiDialog{
 
     String[] m_pMethods = {sSendMethod, sCancelMethod, sHelpMethod, sLoadMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
 
+    private String m_sWikiTitle = "";
     protected String m_sWikiEngineURL = "";
-    protected String m_sWikiTitle = "";
     protected String m_sWikiComment = "";
     protected boolean m_bWikiMinorEdit = false;
     protected boolean m_bWikiShowBrowser = false;
@@ -140,9 +140,14 @@ public class WikiPropDialog extends WikiDialog{
     }
 
 
-    public void setm_sWikiTitle(String sArticle)
+    public String GetWikiTitle()
     {
-        this.m_sWikiTitle = sArticle;
+        return m_sWikiTitle;
+    }
+
+    public void SetWikiTitle(String sArticle)
+    {
+        m_sWikiTitle = sArticle;
         try
         {
             XPropertySet xPS = GetPropSet("ArticleText");
