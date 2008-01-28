@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.165 $
+ *  $Revision: 1.166 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:49:30 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 16:38:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4609,7 +4609,7 @@ uno::Reference< drawing::XShape > GetXShapeForSdrObject( SdrObject* pObj ) throw
 /** returns the SdrObject from the given StarOffice API wrapper */
 SdrObject* GetSdrObjectFromXShape( uno::Reference< drawing::XShape > xShape ) throw()
 {
-    SvxShape* pShape = dynamic_cast< SvxShape* >( xShape.get() );
+     SvxShape* pShape = SvxShape::getImplementation( xShape );
     return pShape ? pShape->GetSdrObject() : 0;
 }
 
@@ -4617,6 +4617,6 @@ SdrObject* GetSdrObjectFromXShape( uno::Reference< drawing::XShape > xShape ) th
 
 SdrObject* SdrObject::getSdrObjectFromXShape( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xInt )
 {
-    SvxShape* pSvxShape = dynamic_cast< SvxShape* >( xInt.get() );
+     SvxShape* pSvxShape = SvxShape::getImplementation( xInt );
     return pSvxShape ? pSvxShape->GetSdrObject() : 0;
 }
