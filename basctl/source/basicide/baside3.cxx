@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:57:52 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:03:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,6 +252,10 @@ void DialogWindow::KeyInput( const KeyEvent& rKEvt )
     }
     else
     {
+        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+        if( pBindings && rKEvt.GetKeyCode() == KEY_TAB )
+            pBindings->Invalidate( SID_SHOW_PROPERTYBROWSER );
+
         if( !pEditor->KeyInput( rKEvt ) )
         {
             if( !SfxViewShell::Current()->KeyInput( rKEvt ) )
