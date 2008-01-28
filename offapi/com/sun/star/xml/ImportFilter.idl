@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImportFilter.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:35:07 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 16:12:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,6 @@
 #include <com/sun/star/xml/XImportFilter.idl>
 #endif
 
-//#include "XImportFilter.idl"
-#include <com/sun/star/uno/XInterface.idl>
 
 module com { module sun { module star { module xml {
 
@@ -55,4 +53,5 @@ published service ImportFilter
 };
 
 }; }; }; };
+
 #endif
