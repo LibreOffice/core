@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:23:22 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:54:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
 
                                         EE_PARA_START,                  EE_CHAR_END,
 
-                                        SDRATTR_XMLATTRIBUTES,          SDRATTR_XMLATTRIBUTES,
+                                        SDRATTR_XMLATTRIBUTES,          SDRATTR_TEXT_USEFIXEDCELLHEIGHT,
 
                                         SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
                                         0, 0 };
@@ -260,7 +260,7 @@ SfxItemSet& SdStyleSheet::GetItemSet()
 
                                              EE_PARA_START,                 EE_CHAR_END,
 
-                                            SDRATTR_XMLATTRIBUTES,          SDRATTR_XMLATTRIBUTES,
+                                            SDRATTR_XMLATTRIBUTES,          SDRATTR_TEXT_USEFIXEDCELLHEIGHT,
 
                                             SDRATTR_3D_FIRST, SDRATTR_3D_LAST,
                                              0, 0 };
