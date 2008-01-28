@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:57:03 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 16:34:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2173,7 +2173,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                     }
                     else
                     {
-                      y0 = nBasis;                    // z.B. 2/9   2/8
+                        y0 = nBasis;                    // z.B. 2/9   2/8
                         x1 = x0;
                         y1 = nBasis - 1;
                         double fUg = (double) x0 / (double) y0;
@@ -2181,13 +2181,17 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                         ULONG nGgt = ImpGGT(y0, x0);       // x0/y0 kuerzen
                         x0 /= nGgt;
                         y0 /= nGgt;                     // Einschachteln:
-                        double fTest;
                         ULONG x2 = 0;
                         ULONG y2 = 0;
                         BOOL bStop = FALSE;
                         while (!bStop)
                         {
-                            fTest = (double)x1/(double)y1;
+#ifdef GCC
+                            // #i21648# GCC over-optimizes something resulting
+                            // in wrong fTest values throughout the loops.
+                            volatile
+#endif
+                                double fTest = (double)x1/(double)y1;
                             while (!bStop)
                             {
                                 while (fTest > fOg)
@@ -2196,7 +2200,7 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
                                     fTest = (double)x1/(double)y1;
                                 }
                                 while (fTest < fUg && y1 > 1)
-                               {
+                                {
                                     y1--;
                                     fTest = (double)x1/(double)y1;
                                 }
