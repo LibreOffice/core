@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 13:28:42 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:31:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -854,8 +854,11 @@ UpdateCheck::initialize(const uno::Sequence< beans::NamedValue >& rValues,
                 if( osl::DirectoryItem::E_None == aDirectoryItem.getFileStatus(aFileStatus) )
                 {
                     // Calculate initial percent value.
-                    sal_Int32 nPercent = (sal_Int32) (100 * aFileStatus.getFileSize() / aModel.getDownloadSize());
-                    getUpdateHandler()->setProgress(nPercent);
+                    if( aModel.getDownloadSize() > 0 )
+                    {
+                        sal_Int32 nPercent = (sal_Int32) (100 * aFileStatus.getFileSize() / aModel.getDownloadSize());
+                        getUpdateHandler()->setProgress(nPercent);
+                    }
                 }
             }
         }
@@ -984,13 +987,12 @@ UpdateCheck::install()
                 osl::FileBase::getSystemPathFromFileURL(aParameter, aParameter);
 
             aParameter += UNISTRING(" &");
-            OSL_TRACE(" Length: %d", aParameter.getLength());
 #endif
             xShellExecute->execute(aInstallImage, aParameter, nFlags);
             ShutdownThread *pShutdownThread = new ShutdownThread( m_xContext );
             (void) pShutdownThread;
         }
-    } catch(c3s::SystemShellExecuteException&) {
+    } catch(uno::Exception&) {
         m_aUpdateHandler->setErrorMessage( m_aUpdateHandler->getDefaultInstErrMsg() );
     }
 }
@@ -1114,6 +1116,7 @@ UpdateCheck::downloadTargetExists(const rtl::OUString& rFileName)
     osl::ClearableMutexGuard aGuard(m_aMutex);
 
     rtl::Reference< UpdateHandler > aUpdateHandler(getUpdateHandler());
+    UpdateState eUIState = UPDATESTATE_DOWNLOADING;
 
     bool cont = false;
 
@@ -1129,17 +1132,21 @@ UpdateCheck::downloadTargetExists(const rtl::OUString& rFileName)
             }
         }
         else
-        {
-            UpdateState eUIState = getUIState(m_aUpdateInfo);
-            aGuard.clear();
-            setUIState(eUIState);
-        }
+            eUIState = getUIState(m_aUpdateInfo);
+    }
+    else
+    {
+        m_aImageName = getImageFromFileName(rFileName);
+        eUIState = UPDATESTATE_DOWNLOAD_AVAIL;
     }
 
     if( !cont )
     {
         shutdownThread(false);
         enableDownload(false);
+
+        aGuard.clear();
+        setUIState(eUIState);
     }
 
     return cont;
@@ -1168,6 +1175,7 @@ UpdateCheck::downloadProgressAt(sal_Int8 nPercent)
     aGuard.clear();
 
     aUpdateHandler->setProgress(nPercent);
+    setUIState(UPDATESTATE_DOWNLOADING);
 }
 
 //------------------------------------------------------------------------------
@@ -1449,10 +1457,11 @@ void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
 
     handleMenuBarUI( aUpdateHandler, eState, suppressBubble );
 
-    if( UPDATESTATE_UPDATE_AVAIL == eState )
+    if( (UPDATESTATE_UPDATE_AVAIL == eState)
+     || (UPDATESTATE_DOWNLOAD_PAUSED == eState)
+     || (UPDATESTATE_DOWNLOADING == eState) )
     {
         uno::Reference< uno::XComponentContext > xContext(m_xContext);
-        aUpdateHandler->setNextVersion(aUpdateInfo.Version);
 
         rtl::OUString aDownloadDestination =
             UpdateCheckConfig::get(xContext, this)->getDownloadDestination();
@@ -1466,11 +1475,8 @@ void UpdateCheck::setUIState(UpdateState eState, bool suppressBubble)
         aUpdateHandler->setDownloadFile(aImageName);
     }
 
-    if( (UPDATESTATE_UPDATE_AVAIL == eState) || (UPDATESTATE_UPDATE_NO_DOWNLOAD == eState) )
-    {
-        aUpdateHandler->setDescription(aUpdateInfo.Description);
-    }
-
+    aUpdateHandler->setDescription(aUpdateInfo.Description);
+    aUpdateHandler->setNextVersion(aUpdateInfo.Version);
     aUpdateHandler->setState(eState);
 }
 
