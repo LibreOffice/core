@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:32:32 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:00:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6324,18 +6324,13 @@ void PPTParagraphObj::ApplyTo( SfxItemSet& rSet, SdrPowerPointImport& rManager, 
             pPortion->GetAttrib( PPT_CharAttr_FontHeight, nFontHeight, nDestinationInstance );
             nVal2 = -(sal_Int16)( ( nFontHeight * nVal * 8 ) / 100 );
         }
+        rSet.Put( SdrTextFixedCellHeightItem( TRUE ), SDRATTR_TEXT_USEFIXEDCELLHEIGHT );
         SvxLineSpacingItem aItem( 200, EE_PARA_SBL );
         if ( nVal2 <= 0 )
             aItem.SetLineHeight( (UINT16)( rManager.ScalePoint( -nVal2 ) / 8 ) );
         else
         {
             sal_uInt8 nPropLineSpace = (BYTE)nVal2;
-            if ( pPortion )
-            {
-                PptFontEntityAtom* pAtom = rManager.GetFontEnityAtom( nFont );
-                if ( pAtom )
-                    nPropLineSpace = (sal_uInt8)nVal2;
-            }
             aItem.SetPropLineSpace( nPropLineSpace );
             aItem.GetLineSpaceRule() = SVX_LINE_SPACE_AUTO;
         }
