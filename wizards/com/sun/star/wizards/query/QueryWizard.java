@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryWizard.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:31:08 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,6 +218,7 @@ public class QueryWizard extends WizardDialog {
 //            curDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
 
             CurDBCommandFieldSelection = new CommandFieldSelection(this, CurDBMetaData, 120, reslblFields, reslblSelFields, reslblTables, true, 40850);
+            CurDBCommandFieldSelection.setAppendMode(true);
             CurDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
             CurSortingComponent = new SortingComponent(this, SOSORTINGPAGE, 95, 27, 210, 40865);
             CurFilterComponent = new FilterComponent(this, xMSF, SOFILTERPAGE, 97, 27, 209, 3, CurDBMetaData, 40878);
@@ -369,9 +370,9 @@ public class QueryWizard extends WizardDialog {
 
         public void shiftFromLeftToRight(String[] SelItems, String[] NewItems) {
             if (ID == 1) {
-                CurDBMetaData.addSeveralFieldColumns(SelItems, CurDBCommandFieldSelection.getSelectedCommandName());
+        CurDBMetaData.addSeveralFieldColumns(SelItems, CurDBCommandFieldSelection.getSelectedCommandName());
                 enableWizardSteps(NewItems);
-                CurDBCommandFieldSelection.changeSelectedFieldNames(CurDBMetaData.getDisplayFieldNames());
+        CurDBCommandFieldSelection.changeSelectedFieldNames(CurDBMetaData.getDisplayFieldNames());
                 CurDBCommandFieldSelection.toggleCommandListBox(NewItems);
             } else {
                 boolean bEnabled = (CurGroupFieldSelection.getSelectedFieldNames().length > 0);
@@ -383,9 +384,9 @@ public class QueryWizard extends WizardDialog {
             // TODO When the ListFieldbox is refilled only fields of the current Command may be merged into the Listbox
             if (ID == 1) {
                 enableWizardSteps(NewItems);
-                CurDBMetaData.removeSeveralFieldColumnsByDisplayFieldName(SelItems);
-//              String[] sSelfieldNames = CurDBMetaData.getFieldNames(SelItems);
-                CurDBCommandFieldSelection.fillUpFieldsListbox();
+                String[] sSelfieldNames = CurDBMetaData.getFieldNames(SelItems, CurDBCommandFieldSelection.getSelectedCommandName());
+                CurDBCommandFieldSelection.addItemsToFieldsListbox(sSelfieldNames);
+        CurDBMetaData.removeSeveralFieldColumnsByDisplayFieldName(SelItems);
                 CurDBCommandFieldSelection.toggleCommandListBox(NewItems);
 
             } else {
