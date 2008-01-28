@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.169 $
-# Date:        $Date: 2008-01-10 13:05:20 $
+# Version:     $Revision: 1.170 $
+# Date:        $Date: 2008-01-28 13:38:24 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -53,14 +53,14 @@ my ( $outfile, $outfile_sh, $outfile_bat, $bootfile, $newline, $comment,
 my @DICTIONARIES = ("DADK", "DEDE", "ENGB", "ENUS", "HUHU", "ITIT", "RURU", "THTH", "SWTZ" );
 my ( $CALL_CDECL, $COMMON_OUTDIR, $BMP_WRITES_FLAG, 
      $common_build, $NO_REC_RES, $SO3, $SOLAR_JAVA, 
-     $SOLAR_PLUGIN, $TF_PACKAGES, $TF_SDBAPI, $TF_FILEURL, $UPDATER, $BUILD_DELIVER, $VCL, 
-     $TF_CFGDATA, $TF_SVDATA, $CC, $CXX,
+     $SOLAR_PLUGIN, $UPDATER, $BUILD_DELIVER, $VCL, 
+     $CC, $CXX,
      $BUILD_SOSL, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC, 
      $BUILD_SOSL_RELEASE, $RSC_ONCE );
 #
 # Platform dependent constant values.
 my ( $BIG_SVX, $COM, $ARCH, $CPU, $CPUNAME, $CVER, $GLIBC, $GUI, $GUIBASE, $GUIENV,
-      $GVER, $GVERDIR, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR, $XPVERSION,
+      $GVER, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR,
       $DYNAMIC_CRT, $SET_EXCEPTIONS, $use_shl_versions, $CDPATHx, $JRELIBDIR,
       $JREEXTRALIBDIR, $JRETOOLKITDIR, $JRETHREADDIR, $EXCEPTIONS, $WRAPCMD,
       $FLIPCMD );
@@ -78,10 +78,10 @@ my ( $USR, $ETC, $BIN, $LIB, $LIB64, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV
 
 # Environment variables.
 my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $SHELL,
-     $UPD, $SOLARUPD, $WORK_STAMP, $TF_UCB, 
+     $UPD, $SOLARUPD, $WORK_STAMP, 
      $SOLARSRC, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
      $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
-     $STAR_REGISTRY, $STAR_RESOURCEPATH, $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
+     $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
      $LD_LIBRARY_PATH, $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $PERL, 
@@ -198,12 +198,6 @@ $NO_HIDS              = "TRUE";
 $SO3                  = "TRUE";
 $SOLAR_JAVA           = "@SOLAR_JAVA@";
 $SOLAR_PLUGIN         = "TRUE";
-$TF_PACKAGES          = "TRUE";
-$TF_FILEURL           = "TRUE";
-$TF_CFGDATA           = "TRUE";
-$TF_SVDATA            = "TRUE";
-$TF_SDBAPI            = "ist_da";
-$TF_UCB               = "ist_da";
 $UPDATER              = "YES";
 $BUILD_DELIVER        = "true";
 $VCL                  = "TRUE";
@@ -267,7 +261,6 @@ if ( $platform =~ m/solaris/ )
    $GUIENV         = "sal";
    $GVER           = "VCL";
    $INPATH         = $OUTPATH.$PROEXT;
-   $GVERDIR        = $INPATH;
    $OS             = "SOLARIS";
    $PATH_SEPERATOR = $ps;
 }
@@ -320,10 +313,8 @@ elsif ( $platform =~ m/netbsd/ )
       $GUIENV         = "sal";
       $GVER           = "VCL";
       $INPATH         = $OUTPATH.$PROEXT;
-      $GVERDIR        = $INPATH;
       $OS             = "NETBSD";
       $PATH_SEPERATOR = $ps;
-      $XPVERSION      = "3"; 
 }
 elsif ( $platform =~ m/freebsd/ ) 
 {     $BIG_SVX        = "TRUE";
@@ -336,7 +327,6 @@ elsif ( $platform =~ m/freebsd/ )
       $GVER           = "VCL";
       $OS             = "FREEBSD";
       $PATH_SEPERATOR = $ps;
-      $XPVERSION      = "3";
       $OSVERSION      = '@OSVERSION@';
    if ($platform =~ m/^amd64/)
    {  my ( $JAVA_OS );
@@ -379,7 +369,6 @@ elsif ( $platform =~ m/freebsd/ )
       $CVER        = "C341";
    }
       $INPATH         = $OUTPATH.$PROEXT;
-      $GVERDIR        = $INPATH;
 } 
 elsif ( $platform =~ m/linux-gnu/ ) 
 {
@@ -395,7 +384,6 @@ elsif ( $platform =~ m/linux-gnu/ )
       $GVER           = "VCL";
       $OS             = "LINUX";
       $PATH_SEPERATOR = $ps;
-      $XPVERSION      = "3"; 
 
 #Set platform specific values: 
    if ($platform =~ m/^i[3456]86/)
@@ -568,7 +556,6 @@ elsif ( $platform =~ m/linux-gnu/ )
 
 
    $INPATH         = $OUTPATH.$PROEXT;
-   $GVERDIR        = $INPATH;
 }
 elsif ( $platform =~ m/osf1/ ) 
 {     print "Setting Tru64 specific values... ";
@@ -585,10 +572,8 @@ elsif ( $platform =~ m/osf1/ )
       $GVER           = "VCL";
       $OUTPATH        = "unxt64";
       $INPATH         = $OUTPATH.$PROEXT;
-      $GVERDIR        = $INPATH;
       $OS             = "TRU64";
       $PATH_SEPERATOR = $ps;
-      $XPVERSION      = "3";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
@@ -615,10 +600,8 @@ elsif ( $platform =~ m/irix/ )
       $GUIENV         = "sal";
       $GVER           = "VCL";
       $INPATH         = $OUTPATH.$PROEXT;
-      $GVERDIR        = $INPATH;
       $OS             = "IRIX";
       $PATH_SEPERATOR = $ps;
-      $XPVERSION      = "3";
       $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips";
       $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips".$ds."client";
       $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips".$ds."native_threads";
@@ -668,7 +651,6 @@ elsif ( $platform =~ m/cygwin/ )
       $CVER           = "C341";
       $OUTPATH        = "wntgcci";
       $INPATH         = $OUTPATH.$PROEXT;
-      $GVERDIR        = $INPATH;
       $ATL_INCLUDE = '$SOLARVER'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$PSDK_HOME'.$ds."include".$ds."atl";
   }
   else # The MSVC section starts here
@@ -678,7 +660,6 @@ elsif ( $platform =~ m/cygwin/ )
       $COMPATH        =~ s/\/bin$//i;
       $OUTPATH        = "wntmsci@COMEX@";
       $INPATH         = $OUTPATH.$PROEXT;
-      $GVERDIR        = $INPATH;
       $COMEX          = '@COMEX@';
       if ( "@COMEX@" eq "10" ) { # .NET 2003 needs M1310
           $CVER        = "M1310";
@@ -752,7 +733,6 @@ elsif ( $platform =~ m/os2/ )
       $CVER           = "C300";
       $OUTPATH        = "os2gcci";
       $INPATH         = $OUTPATH.$PROEXT;
-      $GVERDIR        = $INPATH;
       $COMEX          = '@COMEX@';
 
   {   print "Setting OS/2 with 4OS2 specific values... ";
@@ -794,7 +774,6 @@ elsif ( $platform =~ m/darwin/ )
       $GUIENV         = "sal";
       $GVER           = "VCL";
       $INPATH         = $OUTPATH.$PROEXT;
-      $GVERDIR        = $INPATH;
       $OS             = "MACOSX";
       $PATH_SEPERATOR = $ps;
       # GUIBASE is set below; may be "aqua" or "unx".
@@ -823,10 +802,8 @@ elsif ( $platform =~ m/aix/ )
    $GUIENV         = "sal";
    $GVER           = "VCL";
    $INPATH         = $OUTPATH.$PROEXT;
-   $GVERDIR        = $INPATH;
    $OS             = "AIX";
    $PATH_SEPERATOR = $ps;
-   $XPVERSION      = "3"; 
 }
 else {
 	print "\nset_soenv:  Cannot figure out what platform you are running\n";
@@ -1069,10 +1046,6 @@ $STAR_STANDLST        = '$SOLARENV'.$CONFIG.$ds."stand.lst";
 $STAR_SSCOMMON        = '$SOLARENV'.$CONFIG.$ds."ssolar.cmn";
 # Location of 
 $STAR_SSOLARINI       = '$SOLARENV'.$CONFIG.$ds."ssolar.ini";
-# Path to the OpenOffice.org recourses.
-$STAR_RESOURCEPATH    = '$SOLARVER'.$ds.'$INPATH'.$BIN;
-# Location of the registry file.
-$STAR_REGISTRY        = '$STAR_RESOURCEPATH'.$ds."applicat.rdb";
 # Location of dmake resource. 
 $DMAKEROOT            = '$SOLARENVINC'.$ds."startup";
 # Location of JDK classes .zip file.
@@ -1660,12 +1633,6 @@ ToFile( "NO_REC_RES",        $NO_REC_RES,        "e" );
 ToFile( "NO_HIDS",           $NO_HIDS,           "e" );
 ToFile( "SO3",               $SO3,               "e" );
 ToFile( "SOLAR_PLUGIN",      $SOLAR_PLUGIN,      "e" );
-ToFile( "TF_PACKAGES",       $TF_PACKAGES,       "e" );
-ToFile( "TF_FILEURL",        $TF_FILEURL,        "e" );
-ToFile( "TF_CFGDATA",        $TF_CFGDATA,        "e" );
-ToFile( "TF_SVDATA",         $TF_SVDATA,         "e" );
-ToFile( "TF_SDBAPI",         $TF_SDBAPI,         "e" );
-ToFile( "TF_UCB",            $TF_UCB,            "e" );
 ToFile( "UPDATER",           $UPDATER,           "e" );
 ToFile( "build_deliver",     $BUILD_DELIVER,     "e" );
 ToFile( "VCL",               $VCL,               "e" );
@@ -1815,9 +1782,7 @@ ToFile( "PTHREAD_CFLAGS",    "@PTHREAD_CFLAGS@", "e" );
 ToFile( "PTHREAD_LIBS",      "@PTHREAD_LIBS@",   "e" );
 ToFile( "OUTPATH",           $OUTPATH,           "e" );
 ToFile( "INPATH",            $INPATH,            "e" );
-ToFile( "GVERDIR",           $GVERDIR,           "e" );
 ToFile( "PATH_SEPERATOR",    $PATH_SEPERATOR,    "e" );
-ToFile( "XPVERSION",         $XPVERSION,         "e" );
 ToFile( "COMEX",             $COMEX,             "e" );
 ToFile( "CDPATHx",           $CDPATHx,           "e" );
 ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
@@ -1869,8 +1834,6 @@ ToFile( "STAR_INIROOTOLD",   $STAR_INIROOTOLD,   "e" );
 ToFile( "STAR_STANDLST",     $STAR_STANDLST,     "e" );
 ToFile( "STAR_SSCOMMON",     $STAR_SSCOMMON,     "e" );
 ToFile( "STAR_SSOLARINI",    $STAR_SSOLARINI,    "e" );
-ToFile( "STAR_RESOURCEPATH", $STAR_RESOURCEPATH, "e" );
-ToFile( "STAR_REGISTRY",     $STAR_REGISTRY,     "e" );
 ToFile( "DMAKEROOT",         $DMAKEROOT,         "e" );
 if ( $JDK ne "gcj" ) {
    ToFile( "CLASSPATH",         $CLASSPATH,         "e" );
