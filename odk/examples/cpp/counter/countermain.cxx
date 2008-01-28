@@ -2,9 +2,9 @@
  *
  *  $RCSfile: countermain.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 15:07:28 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 16:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -56,6 +56,7 @@
 
 // generated c++ interfaces
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <com/sun/star/registry/XImplementationRegistration.hpp>
 #include <foo/XCountable.hpp>
 
