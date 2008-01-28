@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditorImpl.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-25 10:29:55 $
+ *  last change: $Author: mav $ $Date: 2008-01-28 13:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import javax.net.ssl.SSLException;
 
 
 public final class WikiEditorImpl extends WeakBase
@@ -402,8 +403,10 @@ public final class WikiEditorImpl extends WeakBase
                     {
                         Helper.ShowError( m_xContext,
                                           (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xFrame.getContainerWindow() ),
+                                          Helper.DLG_SENDTITLE,
                                           Helper.NOWIKIFILTER_ERROR,
-                                          null );
+                                          null,
+                                          false );
                         throw new com.sun.star.uno.RuntimeException();
                     }
 
@@ -441,23 +444,15 @@ public final class WikiEditorImpl extends WeakBase
                 if ( aArticle.NotExist() )
                 {
                     // ask whether creation of a new page is allowed
-                    String[] pControls = { "Label1", "CommandButton1", "CommandButton2" };
-                    int[] pStringIDs = { Helper.DLG_NEWWIKIPAGE_LABEL1, Helper.DLG_YES, Helper.DLG_NO };
-                    XDialog xDialog = WikiDialog.CreateSimpleDialog(
-                                            m_xContext,
-                                            "vnd.sun.star.script:WikiEditor.NewWikiPage?location=application",
-                                            Helper.DLG_SENDTITLE,
-                                            pControls,
-                                            pStringIDs );
-
-                    if ( xDialog != null )
-                    {
-                        aSendDialog.SetThrobberActive( false );
-                        bAllowSending = MainThreadDialogExecutor.Execute( m_xContext, xDialog );
-                        aSendDialog.SetThrobberActive( true );
-                    }
-                    else
-                        throw new WikiCancelException();
+                    aSendDialog.SetThrobberActive( false );
+                    bAllowSending = Helper.ShowError(
+                                      m_xContext,
+                                      (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xFrame.getContainerWindow() ),
+                                      Helper.DLG_SENDTITLE,
+                                      Helper.DLG_NEWWIKIPAGE_LABEL1,
+                                      aSendDialog.GetWikiTitle(),
+                                      true );
+                    aSendDialog.SetThrobberActive( true );
                 }
 
                 if ( bAllowSending )
@@ -492,21 +487,36 @@ public final class WikiEditorImpl extends WeakBase
                         m_settings.addWikiDoc( aDocInfo );
                         m_settings.storeConfiguration();
 
-                        if ( aSendDialog.m_bWikiShowBrowser )
+                        if ( Helper.GetShowInBrowserByDefault( m_xContext ) )
                            Helper.ShowURLInBrowser( m_xContext, aArticle.GetViewURL() );
                     }
                     else
                     {
                         Helper.ShowError( m_xContext,
                                           (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xFrame.getContainerWindow() ),
+                                          Helper.DLG_SENDTITLE,
                                           Helper.GENERALSEND_ERROR,
-                                          null );
+                                          null,
+                                          false );
                     }
                 }
             }
             catch( WikiCancelException ec )
             {
                 // nothing to do, the sending was cancelled
+            }
+            catch( SSLException essl )
+            {
+                if ( Helper.IsConnectionAllowed() )
+                {
+                    // report the error only if sending was not cancelled
+                    Helper.ShowError( m_xContext,
+                                      (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xFrame.getContainerWindow() ),
+                                      Helper.DLG_SENDTITLE,
+                                      Helper.UNKNOWNCERT_ERROR,
+                                      null,
+                                      false );
+                }
             }
             catch( Exception e )
             {
@@ -515,8 +525,10 @@ public final class WikiEditorImpl extends WeakBase
                     // report the error only if sending was not cancelled
                     Helper.ShowError( m_xContext,
                                       (XWindowPeer)UnoRuntime.queryInterface( XWindowPeer.class, m_xFrame.getContainerWindow() ),
+                                      Helper.DLG_SENDTITLE,
                                       Helper.GENERALSEND_ERROR,
-                                      null );
+                                      null,
+                                      false );
                 }
                 e.printStackTrace();
             }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-21 12:57:53 $
+ *  last change: $Author: mav $ $Date: 2008-01-28 13:47:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XContainerQuery;
 import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.container.XNameContainer;
 import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XModuleManager;
@@ -112,7 +113,7 @@ public class Helper
     public final static int DLG_SENDTOMEDIAWIKI_LABEL3 = 22;
     public final static int DLG_SENDTOMEDIAWIKI_MINORCHECK = 23;
     public final static int DLG_SENDTOMEDIAWIKI_BROWSERCHECK = 24;
-    public final static int DLG_UNKNOWNCERTDIALOG_LABEL1 = 25;
+    public final static int UNKNOWNCERT_ERROR = 25;
     public final static int DLG_MEDIAWIKI_TITLE = 26;
     public final static int DLG_EDITSETTING_ACCOUNTLINE = 27;
     public final static int DLG_EDITSETTING_WIKILINE = 28;
@@ -147,7 +148,7 @@ public class Helper
                                                     "Dlg_SendToMediaWiki_Label3",
                                                     "Dlg_SendToMediaWiki_MinorCheck",
                                                     "Dlg_SendToMediaWiki_BrowserCheck",
-                                                    "Dlg_UnknownCertDialog_Label1",
+                                                    "UnknownCert",
                                                     "Dlg_MediaWiki_Title",
                                                     "Dlg_EditSetting_AccountLine",
                                                     "Dlg_EditSetting_WikiLine",
@@ -165,6 +166,8 @@ public class Helper
     private static boolean m_bAllowConnection = true;
     private static Hashtable m_aAcceptedUnknownCerts;
 
+    private static Boolean m_bShowInBrowser = null;
+
     private static XPasswordContainer m_xPasswordContainer;
     private static XInteractionHandler m_xInteractionHandler;
 
@@ -176,19 +179,7 @@ public class Helper
 
         if ( m_pConfigStrings == null )
         {
-            PropertyValue aVal = new PropertyValue();
-            aVal.Name = "nodepath";
-            aVal.Value = "org.openoffice.Office.Custom.WikiExtension/Strings";
-            Object[] aArgs = new Object[1];
-            aArgs[0] = aVal;
-
-            Object oSettings = GetConfigurationProvider( xContext ).createInstanceWithArguments(
-                                        "com.sun.star.configuration.ConfigurationAccess",
-                                        aArgs );
-            XNameAccess xNameAccess = ( XNameAccess ) UnoRuntime.queryInterface( XNameAccess.class, oSettings );
-
-            if ( xNameAccess == null )
-                throw new com.sun.star.uno.RuntimeException();
+            XNameAccess xNameAccess = GetConfigNameAccess( xContext, "org.openoffice.Office.Custom.WikiExtension/Strings" );
 
             String[] pStrings = new String[STRINGS_NUM];
             for ( int nInd = 0; nInd < STRINGS_NUM; nInd++ )
@@ -234,6 +225,44 @@ public class Helper
     synchronized protected static boolean IsConnectionAllowed()
     {
         return m_bAllowConnection;
+    }
+
+    synchronized protected static boolean GetShowInBrowserByDefault( XComponentContext xContext )
+    {
+        if ( m_bShowInBrowser == null )
+        {
+            try
+            {
+                XNameAccess xAccess = Helper.GetConfigNameAccess( xContext, "org.openoffice.Office.Custom.WikiExtension/Settings" );
+                m_bShowInBrowser = new Boolean( AnyConverter.toBoolean( xAccess.getByName( "PreselectShowBrowser" ) ) );
+            }
+            catch( com.sun.star.uno.Exception e )
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return ( m_bShowInBrowser != Boolean.FALSE );
+    }
+
+    synchronized protected static void SetShowInBrowserByDefault( XComponentContext xContext, boolean bValue )
+    {
+        try
+        {
+            Boolean bShowInBrowser = new Boolean( bValue );
+
+            XNameContainer xContainer = Helper.GetConfigNameContainer( xContext, "org.openoffice.Office.Custom.WikiExtension/Settings" );
+            if ( xContainer.hasByName( "PreselectShowBrowser" ) )
+                xContainer.replaceByName( "PreselectShowBrowser", bShowInBrowser );
+            else
+                xContainer.insertByName( "PreselectShowBrowser", bShowInBrowser );
+
+            m_bShowInBrowser = bShowInBrowser;
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
     }
 
     synchronized protected static XPasswordContainer GetPasswordContainer( XComponentContext xContext )
@@ -561,6 +590,50 @@ public class Helper
         return xConfigurationProvider;
     }
 
+    protected static XNameContainer GetConfigNameContainer( XComponentContext xContext, String sNodepath )
+        throws com.sun.star.uno.Exception
+    {
+        if ( xContext == null || sNodepath == null )
+            throw new com.sun.star.uno.RuntimeException();
+
+        PropertyValue aVal = new PropertyValue();
+        aVal.Name = "nodepath";
+        aVal.Value = sNodepath;
+        Object[] aArgs = new Object[1];
+        aArgs[0] = aVal;
+
+        Object oSettings = GetConfigurationProvider( xContext ).createInstanceWithArguments(
+                                    "com.sun.star.configuration.ConfigurationUpdateAccess",
+                                    aArgs );
+        XNameContainer xContainer = ( XNameContainer ) UnoRuntime.queryInterface( XNameContainer.class, oSettings );
+        if ( xContainer == null )
+            throw new com.sun.star.uno.RuntimeException();
+
+        return xContainer;
+    }
+
+    protected static XNameAccess GetConfigNameAccess( XComponentContext xContext, String sNodepath )
+        throws com.sun.star.uno.Exception
+    {
+        if ( xContext == null || sNodepath == null )
+            throw new com.sun.star.uno.RuntimeException();
+
+        PropertyValue aVal = new PropertyValue();
+        aVal.Name = "nodepath";
+        aVal.Value = sNodepath;
+        Object[] aArgs = new Object[1];
+        aArgs[0] = aVal;
+
+        Object oSettings = GetConfigurationProvider( xContext ).createInstanceWithArguments(
+                                    "com.sun.star.configuration.ConfigurationAccess",
+                                    aArgs );
+        XNameAccess xNameAccess = ( XNameAccess ) UnoRuntime.queryInterface( XNameAccess.class, oSettings );
+        if ( xNameAccess == null )
+            throw new com.sun.star.uno.RuntimeException();
+
+        return xNameAccess;
+    }
+
     protected static void SetConfigurationProxy( HostConfiguration aHostConfig, XComponentContext xContext )
     {
         if ( aHostConfig == null || xContext == null )
@@ -568,19 +641,7 @@ public class Helper
 
         try
         {
-            PropertyValue aVal = new PropertyValue();
-            aVal.Name = "nodepath";
-            aVal.Value = "org.openoffice.Inet/Settings";
-            Object[] aArgs = new Object[1];
-            aArgs[0] = aVal;
-
-            Object oSettings = Helper.GetConfigurationProvider( xContext ).createInstanceWithArguments(
-                                        "com.sun.star.configuration.ConfigurationAccess",
-                                        aArgs );
-            XNameAccess xNameAccess = ( XNameAccess ) UnoRuntime.queryInterface( XNameAccess.class, oSettings );
-
-            if ( xNameAccess == null )
-                return;
+            XNameAccess xNameAccess = GetConfigNameAccess( xContext, "org.openoffice.Inet/Settings" );
 
             int nProxyType = AnyConverter.toInt( xNameAccess.getByName( "ooInetProxyType" ) );
             String aNoProxyList = AnyConverter.toString( xNameAccess.getByName( "ooInetNoProxy" ) );
@@ -624,7 +685,7 @@ public class Helper
     }
 
     protected static void ExecuteMethod( HttpMethodBase aMethod, HostConfiguration aHostConfig, URI aURI, XComponentContext xContext, boolean bSetHost )
-        throws WikiCancelException, IOException
+        throws WikiCancelException, IOException, SSLException
     {
         if ( aMethod != null && aHostConfig != null && aURI != null && xContext != null )
         {
@@ -643,36 +704,9 @@ public class Helper
 
             if ( !bNoUnknownCertNotification )
             {
-                try
-                {
-                    Helper.GetHttpClient().executeMethod( aHostConfig, aMethod );
-                }
-                catch ( SSLException e )
-                {
-                    if ( aURI.getScheme().equals( "https" ) )
-                    {
-                        // the complete secure connection seems to be impossible
-                        String[] pControls = { "Label1", "CommandButton1", "CommandButton2" };
-                        int[] pStringIDs = { DLG_UNKNOWNCERTDIALOG_LABEL1, DLG_YES, DLG_NO };
-                        XDialog xAskDialog = WikiDialog.CreateSimpleDialog(
-                                                    xContext,
-                                                    "vnd.sun.star.script:WikiEditor.UnknownCertDialog?location=application",
-                                                    DLG_MEDIAWIKI_TITLE,
-                                                    pControls,
-                                                    pStringIDs );
-
-                        if ( xAskDialog != null && MainThreadDialogExecutor.Execute( xContext, xAskDialog ) )
-                        {
-                            if ( m_aAcceptedUnknownCerts == null )
-                                m_aAcceptedUnknownCerts = new Hashtable();
-                            m_aAcceptedUnknownCerts.put( aURI.getHost(), Boolean.TRUE );
-                            bNoUnknownCertNotification = true;
-                        }
-                    }
-                }
+                Helper.GetHttpClient().executeMethod( aHostConfig, aMethod );
             }
-
-            if ( bNoUnknownCertNotification )
+            else
             {
                 {
                     {
@@ -838,28 +872,33 @@ public class Helper
         return bResult;
     }
 
-    protected static void ShowError( XComponentContext xContext, XDialog xDialog, int nErrorID, String sArg )
+    protected static void ShowError( XComponentContext xContext, XDialog xDialog, int nTitleID, int nErrorID, String sArg, boolean bQuery )
     {
         XWindowPeer xPeer = null;
         XControl xControl = (XControl)UnoRuntime.queryInterface( XControl.class, xDialog );
         if ( xControl != null )
             xPeer = xControl.getPeer();
-        ShowError( xContext, xPeer, nErrorID, sArg );
+        ShowError( xContext, xPeer, nTitleID, nErrorID, sArg, bQuery );
     }
 
-    protected static void ShowError( XComponentContext xContext, XWindowPeer xParentPeer, int nErrorID, String sArg )
+    protected static boolean ShowError( XComponentContext xContext, XWindowPeer xParentPeer, int nTitleID, int nErrorID, String sArg, boolean bQuery )
     {
+        boolean bResult = false;
+
         if ( xContext != null && nErrorID >= 0 && nErrorID < STRINGS_NUM )
         {
             boolean bShown = false;
 
             String sError = null;
+            String sTitle = "";
 
             try
             {
                 sError = GetLocalizedString( xContext, nErrorID );
                 if ( sError != null && sArg != null )
                     sError.replaceAll( "\\$ARG1", sArg );
+
+                sTitle = GetLocalizedString( xContext, nTitleID );
             }
             catch( Exception e )
             {
@@ -882,15 +921,30 @@ public class Helper
 
                     if ( xMBFactory != null )
                     {
-                        XMessageBox xMB = xMBFactory.createMessageBox( xParentPeer,
+                        XMessageBox xMB = null;
+                        if ( bQuery )
+                        {
+                            xMB = xMBFactory.createMessageBox(
+                                                     xParentPeer,
+                                                     new com.sun.star.awt.Rectangle(),
+                                                     "querybox",
+                                                     MessageBoxButtons.BUTTONS_YES_NO | MessageBoxButtons.DEFAULT_BUTTON_NO,
+                                                     sTitle,
+                                                     sError );
+                        }
+                        else
+                        {
+                            xMB = xMBFactory.createMessageBox(
+                                                     xParentPeer,
                                                      new com.sun.star.awt.Rectangle(),
                                                      "errorbox",
                                                      MessageBoxButtons.BUTTONS_OK,
-                                                     "Error",
+                                                     sTitle,
                                                      sError );
+                        }
                         if ( xMB != null )
                         {
-                            MainThreadDialogExecutor.Execute( xContext, xMB );
+                            bResult = MainThreadDialogExecutor.Execute( xContext, xMB );
                             bShown = true;
                         }
                     }
@@ -914,6 +968,8 @@ public class Helper
                 }
             }
         }
+
+        return bResult;
     }
 }
 

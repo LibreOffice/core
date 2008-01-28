@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-21 12:57:53 $
+ *  last change: $Author: mav $ $Date: 2008-01-28 13:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import java.util.Hashtable;
+import javax.net.ssl.SSLException;
 
 import org.apache.commons.httpclient.*;
 import org.apache.commons.httpclient.methods.*;
@@ -186,8 +187,10 @@ public class WikiEditSettingDialog extends WikiDialog
                                     // show error
                                     Helper.ShowError( m_xContext,
                                                       m_xDialog,
+                                                      Helper.DLG_MEDIAWIKI_TITLE,
                                                       Helper.NOURLCONNECTION_ERROR,
-                                                      sURL );
+                                                      sURL,
+                                                      false );
                                 }
                             }
                             else
@@ -199,8 +202,10 @@ public class WikiEditSettingDialog extends WikiDialog
                                     // show error
                                     Helper.ShowError( m_xContext,
                                                       m_xDialog,
+                                                      Helper.DLG_MEDIAWIKI_TITLE,
                                                       Helper.WRONGLOGIN_ERROR,
-                                                      null );
+                                                      null,
+                                                      false );
                                 }
                                 else
                                 {
@@ -235,8 +240,10 @@ public class WikiEditSettingDialog extends WikiDialog
                             // show error
                             Helper.ShowError( m_xContext,
                                               m_xDialog,
+                                              Helper.DLG_MEDIAWIKI_TITLE,
                                               Helper.INVALIDURL_ERROR,
-                                              null );
+                                              null,
+                                              false );
                         }
                     }
                     else
@@ -245,17 +252,31 @@ public class WikiEditSettingDialog extends WikiDialog
                         // show error
                         Helper.ShowError( m_xContext,
                                           m_xDialog,
+                                          Helper.DLG_MEDIAWIKI_TITLE,
                                           Helper.NOURL_ERROR,
-                                          null );
+                                          null,
+                                          false );
                     }
                 } while ( sRedirectURL.length() > 0 );
+            }
+            catch ( SSLException essl )
+            {
+                Helper.ShowError( m_xContext,
+                                  m_xDialog,
+                                  Helper.DLG_MEDIAWIKI_TITLE,
+                                  Helper.UNKNOWNCERT_ERROR,
+                                  null,
+                                  false );
+                essl.printStackTrace();
             }
             catch ( Exception ex )
             {
                 Helper.ShowError( m_xContext,
                                   m_xDialog,
+                                  Helper.DLG_MEDIAWIKI_TITLE,
                                   Helper.NOURLCONNECTION_ERROR,
-                                  sURL );
+                                  sURL,
+                                  false );
                 ex.printStackTrace();
             }
             return true;

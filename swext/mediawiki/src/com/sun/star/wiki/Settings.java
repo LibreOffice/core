@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Settings.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2007-11-28 11:14:11 $
+ *  last change: $Author: mav $ $Date: 2008-01-28 13:47:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ import java.util.Vector;
 public class Settings
 {
 
-    private XComponentContext m_context;
+    private XComponentContext m_xContext;
     private int lastUsedWikiServer = 0;
 
 
@@ -66,7 +66,7 @@ public class Settings
 
     private Settings( XComponentContext ctx )
     {
-        m_context=ctx;
+        m_xContext=ctx;
         loadConfiguration();
     }
 
@@ -217,15 +217,12 @@ public class Settings
     {
         try
         {
-            Object oList = getConfigurationUpdateAccess( "org.openoffice.Office.Custom.WikiExtension/ConnectionList" );
-
             // remove stored connection information
-            XNameAccess xList = ( XNameAccess ) UnoRuntime.queryInterface( XNameAccess.class, oList );
-            String[] names = xList.getElementNames();
-            XNameContainer xContainer = ( XNameContainer ) UnoRuntime.queryInterface( XNameContainer.class, xList );
-            for( int i=0; i<names.length; i++ )
+            XNameContainer xContainer = Helper.GetConfigNameContainer( m_xContext, "org.openoffice.Office.Custom.WikiExtension/ConnectionList" );
+            String[] pNames = xContainer.getElementNames();
+            for( int i=0; i<pNames.length; i++ )
             {
-                xContainer.removeByName( names[i] );
+                xContainer.removeByName( pNames[i] );
             }
 
             // store all connections
@@ -237,17 +234,15 @@ public class Settings
                 xContainer.insertByName( (String)ht.get( "Url" ), oNewConnection );
             }
             // commit changes
-            XChangesBatch batch = ( XChangesBatch ) UnoRuntime.queryInterface( XChangesBatch.class, oList );
-            batch.commitChanges();
+            XChangesBatch xBatch = ( XChangesBatch ) UnoRuntime.queryInterface( XChangesBatch.class, xContainer );
+            xBatch.commitChanges();
 
-            Object oDocs = getConfigurationUpdateAccess( "org.openoffice.Office.Custom.WikiExtension/RecentDocs" );
             // remove stored connection information
-            XNameAccess xDocs = ( XNameAccess ) UnoRuntime.queryInterface( XNameAccess.class, oDocs );
-            String[] names2 = xDocs.getElementNames();
-            XNameContainer xContainer2 = ( XNameContainer ) UnoRuntime.queryInterface( XNameContainer.class, xDocs );
-            for( int i=0; i<names2.length; i++ )
+            XNameContainer xContainer2 = Helper.GetConfigNameContainer( m_xContext, "org.openoffice.Office.Custom.WikiExtension/RecentDocs" );
+            String[] pNames2 = xContainer2.getElementNames();
+            for( int i=0; i<pNames2.length; i++ )
             {
-                xContainer2.removeByName( names2[i] );
+                xContainer2.removeByName( pNames2[i] );
             }
             // store all Docs
             XSingleServiceFactory xDocListFactory = ( XSingleServiceFactory ) UnoRuntime.queryInterface( XSingleServiceFactory.class, xContainer2 );
@@ -268,8 +263,8 @@ public class Settings
                 xContainer2.insertByName( "d" + i, xNewDoc );
             }
             // commit changes
-            XChangesBatch batch2 = ( XChangesBatch ) UnoRuntime.queryInterface( XChangesBatch.class, oDocs );
-            batch2.commitChanges();
+            XChangesBatch xBatch2 = ( XChangesBatch ) UnoRuntime.queryInterface( XChangesBatch.class, xContainer2 );
+            xBatch2.commitChanges();
 
         }
         catch ( Exception ex )
@@ -278,7 +273,6 @@ public class Settings
         }
     }
 
-
     public void loadConfiguration()
     {
         m_WikiConnections.clear();
@@ -286,9 +280,7 @@ public class Settings
         {
             // get configuration service
             // connect to configmanager
-            Object oAccess = getConfigurationAccess( "org.openoffice.Office.Custom.WikiExtension" );
-
-            XNameAccess xAccess = ( XNameAccess ) UnoRuntime.queryInterface( XNameAccess.class, oAccess );
+            XNameAccess xAccess = Helper.GetConfigNameAccess( m_xContext, "org.openoffice.Office.Custom.WikiExtension" );
 
             if ( xAccess != null )
             {
@@ -324,76 +316,4 @@ public class Settings
             ex.printStackTrace();
         }
     }
-
-
-    public String getPropertyString( String path, String name )
-    {
-        String result = null;
-        try
-        {
-            Object obj = getConfigurationAccess( path );
-            XNameAccess xna = ( XNameAccess ) UnoRuntime.queryInterface(
-                    XNameAccess.class, obj );
-            result = xna.getByName( name ).toString();
-        }
-        catch ( com.sun.star.uno.Exception e )
-        {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-
-    private Object getConfigurationAccess( String path )
-    {
-        return getConfigurationAccess( path, false );
-    }
-
-
-    private Object getConfigurationUpdateAccess( String path )
-    {
-        return getConfigurationAccess( path, true );
-    }
-
-
-    private Object getConfigurationAccess( String path, boolean update )
-    {
-        Object oAccess = null;
-        try
-        {
-            String access = "com.sun.star.configuration.ConfigurationAccess";
-            if ( update )
-            {
-                access = "com.sun.star.configuration.ConfigurationUpdateAccess";
-            }
-            XMultiServiceFactory cfg = getConfigurationProvider();
-            oAccess = cfg.createInstanceWithArguments( access, new Object[]
-            {new NamedValue( "nodepath", path )}
-);
-        }
-        catch ( com.sun.star.uno.Exception e )
-        {
-            //Exception trying to get configuration access
-        }
-        return oAccess;
-    }
-
-
-    private XMultiServiceFactory getConfigurationProvider()
-    {
-        XMultiServiceFactory cfg = null;
-        try
-        {
-            cfg = ( XMultiServiceFactory ) UnoRuntime.queryInterface(
-                    XMultiServiceFactory.class, m_context.getServiceManager().createInstanceWithContext(
-                    "com.sun.star.configuration.DefaultProvider", m_context ) );
-
-        }
-        catch ( com.sun.star.uno.Exception e )
-        {
-            e.printStackTrace();
-        }
-        return cfg;
-    }
-
 }

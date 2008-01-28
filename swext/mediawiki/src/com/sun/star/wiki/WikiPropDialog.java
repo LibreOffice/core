@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-25 10:29:55 $
+ *  last change: $Author: mav $ $Date: 2008-01-28 13:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,6 @@ public class WikiPropDialog extends WikiDialog{
     protected String m_sWikiEngineURL = "";
     protected String m_sWikiComment = "";
     protected boolean m_bWikiMinorEdit = false;
-    protected boolean m_bWikiShowBrowser = false;
 
     private Thread m_aSendingThread;
 
@@ -84,6 +83,7 @@ public class WikiPropDialog extends WikiDialog{
         }
 
         InitStrings( xContext );
+        InitShowBrowser( xContext );
     }
 
     private void InitStrings( XComponentContext xContext )
@@ -100,6 +100,18 @@ public class WikiPropDialog extends WikiDialog{
             GetPropSet( "CancelButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_CANCEL ) );
             GetPropSet( "AddButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_ADDBUTTON ) );
             GetPropSet( "SendButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDBUTTON ) );
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
+    }
+
+    private void InitShowBrowser( XComponentContext xContext )
+    {
+        try
+        {
+            GetPropSet( "BrowserCheck" ).setPropertyValue( "State", new Short( Helper.GetShowInBrowserByDefault( m_xContext ) ? (short)1 : (short)0 ) );
         }
         catch( Exception e )
         {
@@ -216,10 +228,7 @@ public class WikiPropDialog extends WikiDialog{
                     m_bWikiMinorEdit = false;
 
                 short nBrowserState = ((Short) aBrowserCheckProps.getPropertyValue("State")).shortValue();
-                if ( nBrowserState != 0 )
-                    m_bWikiShowBrowser = true;
-                else
-                    m_bWikiShowBrowser = false;
+                Helper.SetShowInBrowserByDefault( m_xContext, nBrowserState != 0 );
 
                 XPropertySet[] aToDisable = { aWikiListProps, aArticleTextProps, aCommentTextProps, aMinorCheckProps, aBrowserCheckProps, aHelpButtonProps, aSendButtonProps, aAddButtonProps };
                 for ( int nInd = 0; nInd < aToDisable.length; nInd++ )
