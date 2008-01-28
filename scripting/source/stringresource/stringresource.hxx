@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringresource.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:26:34 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 13:58:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,6 +191,10 @@ protected:
     // This method compares the locales exactly, no closest match search is performed
     LocaleItem* getItemForLocale( const ::com::sun::star::lang::Locale& locale, sal_Bool bException )
         throw (::com::sun::star::lang::IllegalArgumentException);
+
+    // Returns the LocalItem for a given locale, if it exists, otherwise NULL
+    // This method performes a closest match search, at least the language must match
+    LocaleItem* getClosestMatchItemForLocale( const ::com::sun::star::lang::Locale& locale );
 
     void implModified( void );
     void implNotifyListeners( void );
