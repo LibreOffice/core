@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expr.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 08:48:52 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:00:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,6 +155,7 @@ protected:
     BOOL          bBased;           // TRUE: einfacher DIM-Teil (+BASE)
     BOOL          bError;           // TRUE: Fehler
     BOOL          bByVal;           // TRUE: ByVal-Parameter
+    BOOL          mbNested;
     SbiExprNode* Term();
     SbiExprNode* ObjTerm( SbiSymDef& );
     SbiExprNode* Operand();
@@ -169,11 +170,11 @@ protected:
     SbiExprNode* Comp();
     SbiExprNode* Boolean();
 public:
-    SbiExpression( SbiParser*, SbiExprType = SbSTDEXPR ); // Parsender Ctor
-    SbiExpression( SbiParser*, const String& );
-    SbiExpression( SbiParser*, double, SbxDataType = SbxDOUBLE );
-    SbiExpression( SbiParser*, const SbiSymDef&, SbiExprList* = NULL );
-    SbiExpression( SbiParser*, SbiToken );        // Spezial-Expr mit Spezial-Tokens
+    SbiExpression( SbiParser*, SbiExprType = SbSTDEXPR, BOOL bNested = FALSE ); // Parsender Ctor
+    SbiExpression( SbiParser*, const String& , BOOL bNested = FALSE);
+    SbiExpression( SbiParser*, double, SbxDataType = SbxDOUBLE , BOOL bNested = FALSE);
+    SbiExpression( SbiParser*, const SbiSymDef&, SbiExprList* = NULL , BOOL bNested = FALSE);
+    SbiExpression( SbiParser*, SbiToken , BOOL bNested = FALSE);        // Spezial-Expr mit Spezial-Tokens
    ~SbiExpression();
     String& GetName()               { return aArgName;            }
     void SetBased()                 { bBased = TRUE;              }
@@ -232,7 +233,7 @@ public:
 
 class SbiParameters : public SbiExprList {
 public:
-    SbiParameters( SbiParser*, BOOL bConst = FALSE, BOOL bPar = TRUE);// parsender Ctor
+    SbiParameters( SbiParser*, BOOL bConst = FALSE, BOOL bPar = TRUE, BOOL bNested = FALSE );// parsender Ctor
 };
 
 class SbiDimList : public SbiExprList {
