@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsc.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:40:24 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:57:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #include "precompiled_sd.hxx"
 
 #include "DrawViewShell.hxx"
-
+#include "ViewShellImplementation.hxx"
 #ifndef _SV_WAITOBJ_HXX
 #include <vcl/waitobj.hxx>
 #endif
@@ -643,7 +643,8 @@ void DrawViewShell::FuTemp03(SfxRequest& rReq)
             GetViewFrame()->ToggleChildWindow( nId );
             GetViewFrame()->GetBindings().Invalidate( SID_IMAP );
 
-            if ( GetViewFrame()->HasChildWindow( nId ) && ( ( pDlg = SVXIMAPDLG() ) != NULL ) )
+            if ( GetViewFrame()->HasChildWindow( nId )
+                && ( ( pDlg = ViewShell::Implementation::GetImageMapDialog() ) != NULL ) )
             {
                 const SdrMarkList&  rMarkList = mpDrawView->GetMarkedObjectList();
 
