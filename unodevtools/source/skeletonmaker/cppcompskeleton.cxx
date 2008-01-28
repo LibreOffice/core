@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cppcompskeleton.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 12:43:05 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:48:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -684,7 +684,8 @@ OString generateClassDefinition(std::ostream& o,
 
     o << "\n{\npublic:\n"
       << "    explicit " << classname << "("
-      << "css::uno::Reference< css::uno::XComponentContext > const & context);\n\n";
+      << "css::uno::Reference< css::uno::XComponentContext > const & context);\n"
+      << "    virtual ~" << classname << "() {}\n\n";
 
     // generate component/service helper functions
 //     o << "    // component and service helper functions:\n"
@@ -734,7 +735,8 @@ OString generateClassDefinition(std::ostream& o,
         it++;
     }
 
-    o << "private:\n";
+    o << "private:\n    " << classname << "(const " << classname << " &); // not defined\n"
+      << "    " << classname << "& operator=(const " << classname << " &); // not defined\n\n";
 
     if (options.componenttype == 2) {
         o << "    typedef std::hash_map< ::sal_Int32, rtl::OUString, "
@@ -745,10 +747,6 @@ OString generateClassDefinition(std::ostream& o,
             "funcName, const ::rtl::OUString & paramName, const char * propName) "
             "throw (css::uno::RuntimeException);\n\n";
     }
-
-    o << "    " << classname << "(" << classname << " &); // not defined\n"
-      << "    void operator =(" << classname << " &); // not defined\n\n"
-      << "    virtual ~" << classname << "() {}\n\n";
 
     if (supportxcomponent) {
         o << "    // overload WeakComponentImplHelperBase::disposing()\n"
