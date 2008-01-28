@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclevent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:16:16 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:16:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,6 +176,9 @@ class Menu;
 #define VCLEVENT_MENU_ITEMCHECKED           1213
 #define VCLEVENT_MENU_ITEMUNCHECKED         1214
 #define VCLEVENT_MENU_ACCESSIBLENAMECHANGED 1215
+
+#define VCLEVENT_MENU_SHOW                  1250
+#define VCLEVENT_MENU_HIDE                  1251
 
 #define VCLEVENT_TOOLBOX_ITEMWINDOWCHANGED  1216
 
