@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxscan.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-13 15:23:45 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:01:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,10 @@
 #include <svtools/svtools.hrc>
 
 #include "basrid.hxx"
+
+#include <svtools/zforlist.hxx>
+#include <comphelper/processfactory.hxx>
+
 
 void ImpGetIntntlSep( sal_Unicode& rcDecimalSep, sal_Unicode& rcThousandSep )
 {
@@ -640,7 +644,7 @@ ResMgr* implGetResMgr( void )
     if( !pResMgr )
     {
         ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-        pResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(stt), aLocale );
+        pResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(sb), aLocale );
     }
     return pResMgr;
 }
@@ -658,6 +662,38 @@ void SbxValue::Format( XubString& rRes, const XubString* pFmt ) const
 {
     short nComma = 0;
     double d = 0;
+
+    // Check for date format
+    if( pFmt && !SbxBasicFormater::isBasicFormat( *pFmt ) )
+    {
+        LanguageType eLangType = GetpApp()->GetSettings().GetLanguage();
+        com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
+            xFactory = comphelper::getProcessServiceFactory();
+        SvNumberFormatter aFormatter( xFactory, eLangType );
+
+        sal_uInt32 nIndex;
+        xub_StrLen nCheckPos = 0;
+        short nType;
+
+        String aFmtStr = *pFmt;
+        aFormatter.PutandConvertEntry( aFmtStr,
+            nCheckPos,
+            nType,
+            nIndex,
+            LANGUAGE_ENGLISH,
+            eLangType );
+
+        if( nType == NUMBERFORMAT_DATE ||
+            nType == NUMBERFORMAT_TIME ||
+            nType == NUMBERFORMAT_DATETIME )
+        {
+            double dt = GetDate();
+            Color* pColor;
+            aFormatter.GetOutputString( dt, nIndex, rRes, &pColor );
+            return;
+        }
+    }
+
     SbxDataType eType = GetType();
     switch( eType )
     {
