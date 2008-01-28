@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneFocusManager.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:33:20 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:56:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,11 @@ private:
 
     FocusManager (void);
     ~FocusManager (void);
+
+    /** Clear the list of focus transfer links.  This removes all window
+        listeners.
+    */
+    void Clear (void);
 
     /** Remove all links from or to the given window.
     */
