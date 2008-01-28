@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringresource.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:26:23 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 13:58:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,23 +394,12 @@ void StringResourceImpl::setCurrentLocale( const Locale& locale, sal_Bool FindCl
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
-    (void)locale;
-    (void)FindClosestMatch;
+    LocaleItem* pLocaleItem = NULL;
+    if( FindClosestMatch )
+        pLocaleItem = getClosestMatchItemForLocale( locale );
+    else
+        pLocaleItem = getItemForLocale( locale, true );
 
-    LocaleItem* pLocaleItem = getItemForLocale( locale, !FindClosestMatch );
-    if( pLocaleItem == NULL && FindClosestMatch )
-    {
-        Locale aTestLocale( locale );
-        aTestLocale.Variant = ::rtl::OUString();
-        pLocaleItem = getItemForLocale( locale, false );
-        if( pLocaleItem == NULL )
-        {
-            aTestLocale.Country = ::rtl::OUString();
-            pLocaleItem = getItemForLocale( locale, false );
-            if( pLocaleItem == NULL && m_pDefaultLocaleItem != NULL )
-                pLocaleItem = m_pDefaultLocaleItem;
-        }
-    }
     if( pLocaleItem != NULL )
     {
         loadLocale( pLocaleItem );
@@ -721,6 +710,37 @@ LocaleItem* StringResourceImpl::getItemForLocale
         ::rtl::OUString errorMsg = ::rtl::OUString::createFromAscii( "StringResourceImpl: Invalid locale" );
         throw IllegalArgumentException( errorMsg, Reference< XInterface >(), 0 );
     }
+    return pRetItem;
+}
+
+// Returns the LocalItem for a given locale, if it exists, otherwise NULL
+// This method performes a closest match search, at least the language must match
+LocaleItem* StringResourceImpl::getClosestMatchItemForLocale( const Locale& locale )
+{
+    LocaleItem* pRetItem = NULL;
+
+    // Search for locale
+    for( sal_Int32 iPass = 0 ; iPass <= 2 ; ++iPass )
+    {
+        for( LocaleItemVectorConstIt it = m_aLocaleItemVector.begin(); it != m_aLocaleItemVector.end(); it++ )
+        {
+            LocaleItem* pLocaleItem = *it;
+            if( pLocaleItem )
+            {
+                Locale& cmp_locale = pLocaleItem->m_locale;
+                if( cmp_locale.Language == locale.Language &&
+                    (iPass > 1 || cmp_locale.Country  == locale.Country) &&
+                    (iPass > 0 || cmp_locale.Variant  == locale.Variant) )
+                {
+                    pRetItem = pLocaleItem;
+                    break;
+                }
+            }
+        }
+        if( pRetItem )
+            break;
+    }
+
     return pRetItem;
 }
 
