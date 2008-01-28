@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<helpdocument version="1.0">
+<meta>
+<topic id="comfoocorpfooextsubfolder/anotherpage" indexer="include" status="PUBLISH">
+<title id="tit" xml-lang="de">DE Extension foo subfolder/anotherpage DE</title>
+<filename>/com.foocorp.foo-ext/subfolder/anotherpage.xhp</filename>
+</topic>
+</meta>
+<body>
+<bookmark xml-lang="de" branch="index" id="bm_id0001">
+<bookmark_value>Foo Alle Seiten;subfolder/anotherpage</bookmark_value>
+</bookmark>
+<paragraph role="heading" id="hd_id0001" xml-lang="de" level="1">DE Extension foo subfolder/anotherpage DE</paragraph>
+<paragraph role="paragraph" id="par_id0001" xml-lang="de">Dies ist subfolder/anotherpage der Extension foo Hilfe.
+<comment>Comment at end of paragraph</comment></paragraph>
+<bookmark xml-lang="de" branch="hid/vnd.sun.star.script:DialogWithHelp.Module1.main?language=Basic&amp;location=application" id="bm_id0002" localize="false"/>
+<paragraph role="paragraph" id="hd_id0002" xml-lang="de"><ahelp hid="hid/vnd.sun.star.script:DialogWithHelp.Module1.main?language=Basic&amp;location=application" visibility="hidden">
+Hier klicken, um den eindrucksvollen Foo Dialog zu oeffnen</ahelp></paragraph>
+<bookmark xml-lang="de" branch="hid/com.foocorp.foo-ext:FooDialog" id="bm_id0003" localize="false"/>
+<paragraph role="heading" id="hd_id0002" xml-lang="de" level="2">Hilfe fuer den Foo Dialog</paragraph>
+<paragraph role="paragraph" id="hd_id0003" xml-lang="de">Der Foo Dialog ist ein sehr wichtiger Dialog, der...</paragraph>
+<bookmark xml-lang="de" branch="hid/com.foocorp.foo-ext:FooDialogButton" id="bm_id0004" localize="false"/>
+<paragraph role="paragraph" id="hd_id0004" xml-lang="de">
+<ahelp hid="hid/com.foocorp.foo-ext:FooDialogButton" visibility="hidden">
+Dieser Knopf bringt es!</ahelp></paragraph>
+<paragraph role="heading" id="hd_id0003" xml-lang="de" level="2">Hilfe fuer den "Do It !" Knopf</paragraph>
+<paragraph role="paragraph" id="hd_id0005" xml-lang="de">Der "Do It !" Knopf tut es!</paragraph>
+<paragraph role="heading" id="hd_id0004" xml-lang="de" level="2">Etwas fuelltext</paragraph>
+<paragraph role="paragraph" id="par_id0006" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0007" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0008" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0009" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0010" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0011" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0012" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0013" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0014" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0015" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0016" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0017" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0018" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0019" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0020" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0021" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0022" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0023" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0024" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0025" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0026" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0027" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0028" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0029" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0030" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0031" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0032" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0033" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0034" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0035" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0036" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0037" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0038" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0039" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0040" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0041" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0042" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0043" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0044" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0045" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0046" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0047" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0048" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0049" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0050" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0051" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0052" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0053" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0054" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0055" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0056" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0057" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0058" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0059" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0060" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0061" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0062" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0063" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0064" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0065" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0066" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0067" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0068" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="paragraph" id="par_id0069" xml-lang="de">Dieser Text fuellt die Seite.</paragraph>
+<paragraph role="heading" id="hd_id0005" xml-lang="de" level="2">Variable, die einen Link definiert</paragraph>
+<paragraph role="paragraph" id="par_id0070" xml-lang="de">
+<variable id="linkvar">
+<link href="com.foocorp.foo-ext/page2.xhp" name="linkvar page2">Link zu page2, definert als variable in subfolder/anotherpage.xhp</link>
+</variable>
+</paragraph>
+</body>
+</helpdocument>
