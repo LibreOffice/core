@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:47:05 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/aeitem.hxx>
+#include <svx/imapdlg.hxx>
 #include <vcl/msgbox.hxx>
 #include <basic/sbstar.hxx>
 #include "undo/undoobjects.hxx"
@@ -392,6 +393,18 @@ sal_uInt16 ViewShell::Implementation::GetViewId (void)
     }
 }
 
+
+
+
+SvxIMapDlg* ViewShell::Implementation::GetImageMapDialog (void)
+{
+    SvxIMapDlg* pDialog = NULL;
+    SfxChildWindow* pChildWindow = SfxViewFrame::Current()->GetChildWindow(
+        SvxIMapDlgChildWindow::GetChildWindowId());
+    if (pChildWindow != NULL)
+        pDialog = dynamic_cast<SvxIMapDlg*>(pChildWindow->GetWindow());
+    return pDialog;
+}
 
 
 
