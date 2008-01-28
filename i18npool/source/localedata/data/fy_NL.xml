@@ -308,7 +308,7 @@
         </Era>
       </Eras>
       <StartDayOfWeek>
-        <DayID>sun</DayID>
+        <DayID>mon</DayID>
       </StartDayOfWeek>
       <MinimalDaysInFirstWeek>1</MinimalDaysInFirstWeek>
     </Calendar>
