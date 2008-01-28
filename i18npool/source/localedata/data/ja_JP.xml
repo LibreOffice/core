@@ -474,6 +474,10 @@
     <Transliteration unoid="FULLWIDTH_HALFWIDTH"/>
     <Transliteration unoid="KATAKANA_HIRAGANA"/>
     <Transliteration unoid="HIRAGANA_KATAKANA"/>
+    <Transliteration unoid="FULLWIDTHKATAKANA_HALFWIDTHKATAKANA"/>
+    <Transliteration unoid="HALFWIDTHKATAKANA_FULLWIDTHKATAKANA"/>
+    <Transliteration unoid="FULLWIDTH_HALFWIDTH_LIKE_ASC"/>
+    <Transliteration unoid="HALFWIDTH_FULLWIDTH_LIKE_JIS"/>
     <Transliteration unoid="smallToLarge_ja_JP"/>
     <Transliteration unoid="largeToSmall_ja_JP"/>
     <Transliteration unoid="IGNORE_WIDTH"/>
