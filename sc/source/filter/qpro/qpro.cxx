@@ -4,9 +4,9 @@
  *
  *  $RCSfile: qpro.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:40:29 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:13:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 
 FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle )
 {
+    FltError eRet = eERR_OK;
     sal_uInt8  nCol, nDummy;
     sal_uInt16 nRow;
     sal_uInt16 nStyle;
@@ -65,7 +66,7 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
     fprintf( stderr, "Read sheet (%d)\n", nTab );
 #endif
 
-    while( !bEndOfSheet && nextRecord() )
+    while( eERR_OK == eRet && !bEndOfSheet && nextRecord() )
     {
         switch( getId() )
         {
@@ -116,17 +117,21 @@ FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pSt
                 ScAddress aAddr( nCol, nRow, nTab );
                 const ScTokenArray *pArray;
                 QProToSc aConv( *mpStream, aAddr );
-                aConv.Convert( pArray, nLen );
-                ScFormulaCell *pFormula = new ScFormulaCell( pDoc, aAddr, pArray );
-                nStyle = nStyle >> 3;
-                pFormula->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
-                pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
-                pDoc->PutCell( nCol, nRow, nTab, pFormula, ( BOOL ) TRUE );
+                if (ConvOK != aConv.Convert( pArray, nLen ))
+                    eRet = eERR_FORMAT;
+                else
+                {
+                    ScFormulaCell *pFormula = new ScFormulaCell( pDoc, aAddr, pArray );
+                    nStyle = nStyle >> 3;
+                    pFormula->AddRecalcMode( RECALCMODE_ONLOAD_ONCE );
+                    pStyle->SetFormat( pDoc, nCol, nRow, nTab, nStyle );
+                    pDoc->PutCell( nCol, nRow, nTab, pFormula, ( BOOL ) TRUE );
+                }
                 }
                 break;
         }
     }
-    return eERR_OK;
+    return eRet;
 }
 
 FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc )
