@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:44:10 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:56:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <memory>
+
+
+class SvxIMapDlg;
 
 namespace sd {
 
@@ -155,6 +158,13 @@ public:
         type as mrViewShell.
     */
     sal_uInt16 GetViewId (void);
+
+    /** Return a pointer to the image map dialog that is displayed in some
+        child window.
+        @return
+            Returns <NULL/> when the image map dialog is not available.
+    */
+    static SvxIMapDlg* GetImageMapDialog (void);
 
 private:
     ViewShell& mrViewShell;
