@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommandMetaData.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:29:23 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:30:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,6 +322,20 @@ public class CommandMetaData extends DBMetaData {
             return new String[] {
             };
         }
+    }
+
+    public String[] getFieldNames(String[] _sDisplayFieldNames, String _sCommandName){
+        Vector sFieldNamesVector = new java.util.Vector();
+        for (int i = 0; i < FieldColumns.length; i++) {
+            if (_sCommandName.equals(FieldColumns[i].CommandName)) {
+                if (JavaTools.FieldInList(_sDisplayFieldNames, FieldColumns[i].DisplayFieldName) > -1) {
+                    sFieldNamesVector.addElement(FieldColumns[i].FieldName);
+                }
+            }
+        }
+        String[] sFieldNames = new String[sFieldNamesVector.size()];
+        sFieldNamesVector.toArray(sFieldNames);
+        return sFieldNames;
     }
 
     public String[] getFieldNames(){
