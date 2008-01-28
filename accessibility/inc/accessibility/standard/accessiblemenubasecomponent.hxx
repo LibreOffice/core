@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblemenubasecomponent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:23:25 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:13:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ protected:
 
     sal_Bool                m_bEnabled;
     sal_Bool                m_bFocused;
-    sal_Bool                m_bShowing;
+    sal_Bool                m_bVisible;
     sal_Bool                m_bSelected;
     sal_Bool                m_bChecked;
 
@@ -105,19 +105,19 @@ protected:
 
     virtual sal_Bool        IsEnabled();
     virtual sal_Bool        IsFocused();
-    virtual sal_Bool        IsShowing();
+    virtual sal_Bool        IsVisible();
     virtual sal_Bool        IsSelected();
     virtual sal_Bool        IsChecked();
 
     void                    SetEnabled( sal_Bool bEnabled );
     void                    SetFocused( sal_Bool bFocused );
-    void                    SetShowing( sal_Bool bShowing );
+    void                    SetVisible( sal_Bool bVisible );
     void                    SetSelected( sal_Bool bSelected );
     void                    SetChecked( sal_Bool bChecked );
 
     void                    UpdateEnabled( sal_Int32 i, sal_Bool bEnabled );
     void                    UpdateFocused( sal_Int32 i, sal_Bool bFocused );
-    void                    UpdateShowing();
+    void                    UpdateVisible();
     void                    UpdateSelected( sal_Int32 i, sal_Bool bSelected );
     void                    UpdateChecked( sal_Int32 i, sal_Bool bChecked );
     void                    UpdateAccessibleName( sal_Int32 i );
