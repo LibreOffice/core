@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.271 $
+ *  $Revision: 1.272 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:23:26 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:03:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -8051,13 +8051,28 @@ const XubString& Window::GetHelpText() const
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 
-    if ( !mpWindowImpl->maHelpText.Len() && mpWindowImpl->mnHelpId )
+    SmartId aSmartId = GetSmartHelpId();
+
+    ULONG nNumHelpId = 0;
+    String aStrHelpId;
+    if( aSmartId.HasString() )
+        aStrHelpId = aSmartId.GetStr();
+    if( aSmartId.HasNumeric() )
+        nNumHelpId = aSmartId.GetNum();
+    bool bStrHelpId = (aStrHelpId.Len() > 0);
+
+    if ( !mpWindowImpl->maHelpText.Len() && (nNumHelpId || bStrHelpId) )
     {
         if ( !IsDialog() && (mpWindowImpl->mnType != WINDOW_TABPAGE) && (mpWindowImpl->mnType != WINDOW_FLOATINGWINDOW) )
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
-                ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( GetHelpId(), this );
+            {
+                if( bStrHelpId )
+                    ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( aStrHelpId, this );
+                else
+                    ((Window*)this)->mpWindowImpl->maHelpText = pHelp->GetHelpText( nNumHelpId, this );
+            }
         }
     }
 
