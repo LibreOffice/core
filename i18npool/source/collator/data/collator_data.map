@@ -13,12 +13,10 @@ global:
     get_ja_phonetic_alphanumeric_first;
     get_ja_phonetic_alphanumeric_last;
     get_ko_charset;
-    get_km_charset;
     get_ne_charset;
     get_dz_charset;
     get_ku_alphanumeric;
     get_hu_charset;
-    get_vi_charset;
     get_ln_charset;
 
 local:
