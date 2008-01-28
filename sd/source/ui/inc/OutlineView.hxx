@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlineView.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:43:26 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:55:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@
 
 
 class SdPage;
-class DrawDocShell;
 class SdrPage;
 class EditStatus;
 class Paragraph;
@@ -58,6 +57,7 @@ namespace sd {
 
 class OutlineViewShell;
 class OutlineViewModelChangeGuard;
+class DrawDocShell;
 
 static const int MAX_OUTLINERVIEWS = 4;
 
