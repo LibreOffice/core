@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxmenu.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:31:10 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:12:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,6 +165,8 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclSimpleEvent*, pEvent )
                 case VCLEVENT_MENU_ITEMTEXTCHANGED:
                 case VCLEVENT_MENU_ITEMCHECKED:
                 case VCLEVENT_MENU_ITEMUNCHECKED:
+                case VCLEVENT_MENU_SHOW:
+                case VCLEVENT_MENU_HIDE:
                 break;
 
                 default:    DBG_ERROR( "MenuEventListener - Unknown event!" );
