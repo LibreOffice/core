@@ -4,9 +4,9 @@
  *
  *  $RCSfile: qprostyle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:51:04 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:13:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,8 +64,7 @@
 #include "document.hxx"
 #include "cell.hxx"
 
-ScQProStyle::ScQProStyle() :
-    maFontLimit(0), maAlignLimit(0)
+ScQProStyle::ScQProStyle()
 {
     rtl_fillMemory (maAlign, sizeof (maAlign), 0);
     rtl_fillMemory (maFont, sizeof (maFont), 0);
@@ -75,6 +74,9 @@ ScQProStyle::ScQProStyle() :
 
 void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, SCTAB nTab, sal_uInt16 nStyle )
 {
+    if (nStyle >= maxsize)
+        return;
+
     ScPatternAttr aPattern(pDoc->GetPool());
     SfxItemSet& rItemSet = aPattern.GetItemSet();
 
