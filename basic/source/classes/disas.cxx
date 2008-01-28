@@ -4,9 +4,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:54:50 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 13:59:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,24 +347,14 @@ void SbiDisas::Disas( String& r )
     aText.ConvertLineEnd();
 }
 
-#ifdef HP9000
-const char* SbiDisas_DisasLine_pMask[] = {
-        "%04X                ",
-        "%04X %02X           ",
-        "%04X %02X %04X      ",
-        "%04X %02X %04X %04X " };
-#define pMask SbiDisas_DisasLine_pMask
-#endif
 BOOL SbiDisas::DisasLine( String& rText )
 {
     char cBuf[ 30 ];
-#ifndef HP9000
     const char* pMask[] = {
-        "%04X                ",
-        "%04X %02X           ",
-        "%04X %02X %04X      ",
-        "%04X %02X %04X %04X " };
-#endif
+        "%08" SAL_PRIXUINT32 "                ",
+        "%08" SAL_PRIXUINT32 " %02X           ",
+        "%08" SAL_PRIXUINT32 " %02X %04X      ",
+        "%08" SAL_PRIXUINT32 " %02X %04X %04X " };
     rText.Erase();
     if( !Fetch() )
         return FALSE;
@@ -430,8 +420,7 @@ BOOL SbiDisas::DisasLine( String& rText )
         else
         {
             // fix warning (now error) for "Lbl%04lX" format
-            // nPC is now a sal_Int32
-            snprintf( cBuf, sizeof(cBuf), "Lbl%08lX", nPC );
+              snprintf( cBuf, sizeof(cBuf), "Lbl%08" SAL_PRIXUINT32, nPC );
             rText.AppendAscii( cBuf );
         }
         rText += ':';
@@ -454,9 +443,6 @@ BOOL SbiDisas::DisasLine( String& rText )
     }
     return TRUE;
 }
-#ifdef HP9000
-#undef pMask
-#endif
 
 
 // Auslesen aus StringPool
