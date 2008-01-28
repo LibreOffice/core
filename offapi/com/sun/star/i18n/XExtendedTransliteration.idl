@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XExtendedTransliteration.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:56:22 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 16:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,5 +109,5 @@ published interface XExtendedTransliteration : ::com::sun::star::i18n::XTranslit
 
 //=============================================================================
 }; }; }; };
-//=============================================================================
+
 #endif
