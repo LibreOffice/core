@@ -317,7 +317,20 @@
 
 <!ELEMENT LC_COLLATION (Collator*, CollationOptions?)>
 <!ATTLIST LC_COLLATION %RefLocale;>
-<!ELEMENT Collator EMPTY>
+<!--
+	Optional ICU tailoring.
+
+	See Collation Customization in ICU User Guide for syntax,
+	http://www.icu-project.org/userguide/Collate_Customization.html
+
+	There are two ways to add language specific tailoring in OpenOffice.org.
+	For small tailoring, you can directly add it in locale data here. For 
+	large tailoring, it is suggested to put the data under collator/data, so
+	it will be compiled to a binary format in build time and improve performance
+	in run time.
+
+-->
+<!ELEMENT Collator (#PCDATA)>
 <!ATTLIST Collator  %UNOModule;>
 <!ATTLIST Collator  default (true|false) #REQUIRED >
 <!ELEMENT CollationOptions (TransliterationModules+)>
