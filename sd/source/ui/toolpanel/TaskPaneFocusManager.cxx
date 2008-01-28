@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneFocusManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:42:25 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:56:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ namespace {
 class WindowHash
 {
 public:
-    size_t operator()(::Window* argument) const
+    size_t operator()(const ::Window* argument) const
     { return reinterpret_cast<unsigned long>(argument); }
 };
 
@@ -77,7 +77,8 @@ namespace sd { namespace toolpanel {
 
 
 
-class FocusManager::LinkMap : public ::std::hash_multimap< ::Window*, EventDescriptor, WindowHash>
+class FocusManager::LinkMap
+    : public ::std::hash_multimap< ::Window*, EventDescriptor, WindowHash>
 {
 };
 
@@ -110,6 +111,29 @@ FocusManager::FocusManager (void)
 
 FocusManager::~FocusManager (void)
 {
+    Clear();
+}
+
+
+
+
+void FocusManager::Clear (void)
+{
+    if (mpLinks.get() != NULL)
+    {
+        while ( ! mpLinks->empty())
+        {
+            ::Window* pWindow = mpLinks->begin()->first;
+            if (pWindow == NULL)
+            {
+                mpLinks->erase(mpLinks->begin());
+            }
+            else
+            {
+                RemoveLinks(pWindow);
+            }
+        }
+    }
 }
 
 
@@ -136,6 +160,12 @@ void FocusManager::RegisterLink (
     ::Window* pTarget,
     const KeyCode& rKey)
 {
+    OSL_ASSERT(pSource!=NULL);
+    OSL_ASSERT(pTarget!=NULL);
+
+    if (pSource==NULL || pTarget==NULL)
+        return;
+
     // Register this focus manager as event listener at the source window.
     if (mpLinks->equal_range(pSource).first == mpLinks->end())
         pSource->AddEventListener (LINK (this, FocusManager, WindowEventListener));
@@ -149,6 +179,18 @@ void FocusManager::RemoveLinks (
     ::Window* pSourceWindow,
     ::Window* pTargetWindow)
 {
+    OSL_ASSERT(pSourceWindow!=NULL);
+    OSL_ASSERT(pTargetWindow!=NULL);
+
+    if (pSourceWindow==NULL || pTargetWindow==NULL)
+    {
+        // This method was called with invalid arguments.  To avoid
+        // referencing windows that will soon be deleted we clear *all*
+        // links as an emergency fallback.
+        Clear();
+        return;
+    }
+
     ::std::pair<LinkMap::iterator,LinkMap::iterator> aCandidates;
     LinkMap::iterator iCandidate;
     bool bLoop (mpLinks->size() > 0);
@@ -185,10 +227,23 @@ void FocusManager::RemoveLinks (
 
 void FocusManager::RemoveLinks (::Window* pWindow)
 {
+    OSL_ASSERT(pWindow!=NULL);
+
+    if (pWindow == NULL)
+    {
+        // This method was called with invalid arguments.  To avoid
+        // referencing windows that will soon be deleted we clear *all*
+        // links as an emergency fallback.
+        Clear();
+        return;
+    }
+
+    // Make sure that we are not called back for the window.
+    pWindow->RemoveEventListener (LINK (this, FocusManager, WindowEventListener));
+
     // Remove the links from the given window.
     ::std::pair<LinkMap::iterator,LinkMap::iterator> aCandidates(mpLinks->equal_range(pWindow));
     mpLinks->erase(aCandidates.first, aCandidates.second);
-    pWindow->RemoveEventListener (LINK (this, FocusManager, WindowEventListener));
 
     // Remove links to the given window.
     bool bLinkRemoved;
@@ -200,8 +255,8 @@ void FocusManager::RemoveLinks (::Window* pWindow)
         {
             if (iLink->second.mpTargetWindow == pWindow)
             {
-                mpLinks->erase(iLink);
                 RemoveUnusedEventListener(iLink->first);
+                mpLinks->erase(iLink);
                 bLinkRemoved = true;
                 break;
             }
@@ -215,6 +270,11 @@ void FocusManager::RemoveLinks (::Window* pWindow)
 
 void FocusManager::RemoveUnusedEventListener (::Window* pWindow)
 {
+    OSL_ASSERT(pWindow!=NULL);
+
+    if (pWindow == NULL)
+        return;
+
     // When there are no more links from the window to another window
     // then remove the event listener from the window.
     if (mpLinks->find(pWindow) == mpLinks->end())
@@ -230,12 +290,17 @@ bool FocusManager::TransferFocus (
 {
     bool bSuccess (false);
 
+    OSL_ASSERT(pSourceWindow!=NULL);
+    if (pSourceWindow == NULL)
+        return bSuccess;
+
     ::std::pair<LinkMap::iterator,LinkMap::iterator> aCandidates (
         mpLinks->equal_range(pSourceWindow));
     LinkMap::const_iterator iCandidate;
     for (iCandidate=aCandidates.first; iCandidate!=aCandidates.second; ++iCandidate)
         if (iCandidate->second.maKeyCode == rKeyCode)
         {
+            OSL_ASSERT(iCandidate->second.mpTargetWindow != NULL);
             iCandidate->second.mpTargetWindow->GrabFocus();
             bSuccess = true;
             break;
@@ -256,7 +321,7 @@ IMPL_LINK(FocusManager, WindowEventListener, VclSimpleEvent*, pEvent)
         {
             case VCLEVENT_WINDOW_KEYINPUT:
             {
-                Window* pSource = pWindowEvent->GetWindow();
+                ::Window* pSource = pWindowEvent->GetWindow();
                 KeyEvent* pKeyEvent = static_cast<KeyEvent*>(pWindowEvent->GetData());
                 TransferFocus(pSource, pKeyEvent->GetKeyCode());
             }
