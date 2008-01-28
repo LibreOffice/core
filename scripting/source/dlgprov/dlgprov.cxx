@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgprov.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:28:43 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 13:57:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -684,6 +684,11 @@ namespace dlgprov
     // XDialogProvider
     // -----------------------------------------------------------------------------
 
+    static ::rtl::OUString aDecorationPropName =
+        ::rtl::OUString::createFromAscii( "Decoration" );
+    static ::rtl::OUString aTitlePropName =
+        ::rtl::OUString::createFromAscii( "Title" );
+
     Reference < XControl > DialogProviderImpl::createDialogImpl(
         const ::rtl::OUString& URL, const Reference< XInterface >& xHandler,
         const Reference< XWindowPeer >& xParent, bool bDialogProviderMode )
@@ -702,6 +707,28 @@ namespace dlgprov
         Reference< XControlModel > xCtrlMod( createDialogModel( URL ) );
         if ( xCtrlMod.is() )
         {
+            // i83963 Force decoration
+            if( bDialogProviderMode )
+            {
+                uno::Reference< beans::XPropertySet > xDlgModPropSet( xCtrlMod, uno::UNO_QUERY );
+                if( xDlgModPropSet.is() )
+                {
+                    bool bDecoration = true;
+                    try
+                    {
+                        Any aDecorationAny = xDlgModPropSet->getPropertyValue( aDecorationPropName );
+                        aDecorationAny >>= bDecoration;
+                        if( !bDecoration )
+                        {
+                            xDlgModPropSet->setPropertyValue( aDecorationPropName, makeAny( true ) );
+                            xDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( ::rtl::OUString() ) );
+                        }
+                    }
+                    catch( UnknownPropertyException& )
+                    {}
+                }
+            }
+
             xCtrl = Reference< XControl >( createDialogControl( xCtrlMod, xParent ) );
             if ( xCtrl.is() )
             {
@@ -752,7 +779,7 @@ namespace dlgprov
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogProviderImpl::createContainerWindow: Invalid xParent!" ) ),
                 Reference< XInterface >(), 1 );
         }
-        Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xHandler, xParent, true );
+        Reference < XControl > xControl = DialogProviderImpl::createDialogImpl( URL, xHandler, xParent, false );
         Reference< XWindow> xWindow( xControl, UNO_QUERY );
         return xWindow;
     }
