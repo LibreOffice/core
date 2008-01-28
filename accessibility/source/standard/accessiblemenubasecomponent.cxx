@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblemenubasecomponent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:36:06 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:14:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ OAccessibleMenuBaseComponent::OAccessibleMenuBaseComponent( Menu* pMenu )
     ,m_pMenu( pMenu )
     ,m_bEnabled( sal_False )
     ,m_bFocused( sal_False )
-    ,m_bShowing( sal_False )
+    ,m_bVisible( sal_False )
     ,m_bSelected( sal_False )
     ,m_bChecked( sal_False )
 {
@@ -143,7 +143,7 @@ sal_Bool OAccessibleMenuBaseComponent::IsFocused()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool OAccessibleMenuBaseComponent::IsShowing()
+sal_Bool OAccessibleMenuBaseComponent::IsVisible()
 {
     return sal_False;
 }
@@ -168,7 +168,7 @@ void OAccessibleMenuBaseComponent::SetStates()
 {
     m_bEnabled = IsEnabled();
     m_bFocused = IsFocused();
-    m_bShowing = IsShowing();
+    m_bVisible = IsVisible();
     m_bSelected = IsSelected();
     m_bChecked = IsChecked();
 }
@@ -214,16 +214,16 @@ void OAccessibleMenuBaseComponent::SetFocused( sal_Bool bFocused )
 
 // -----------------------------------------------------------------------------
 
-void OAccessibleMenuBaseComponent::SetShowing( sal_Bool bShowing )
+void OAccessibleMenuBaseComponent::SetVisible( sal_Bool bVisible )
 {
-    if ( m_bShowing != bShowing )
+    if ( m_bVisible != bVisible )
     {
         Any aOldValue, aNewValue;
-        if ( m_bShowing )
-            aOldValue <<= AccessibleStateType::SHOWING;
+        if ( m_bVisible )
+            aOldValue <<= AccessibleStateType::VISIBLE;
         else
-            aNewValue <<= AccessibleStateType::SHOWING;
-        m_bShowing = bShowing;
+            aNewValue <<= AccessibleStateType::VISIBLE;
+        m_bVisible = bVisible;
         NotifyAccessibleEvent( AccessibleEventId::STATE_CHANGED, aOldValue, aNewValue );
     }
 }
@@ -294,8 +294,9 @@ void OAccessibleMenuBaseComponent::UpdateFocused( sal_Int32 i, sal_Bool bFocused
 
 // -----------------------------------------------------------------------------
 
-void OAccessibleMenuBaseComponent::UpdateShowing()
+void OAccessibleMenuBaseComponent::UpdateVisible()
 {
+    SetVisible( IsVisible() );
     for ( sal_uInt32 i = 0; i < m_aAccessibleChildren.size(); ++i )
     {
         Reference< XAccessible > xChild( m_aAccessibleChildren[i] );
@@ -303,7 +304,7 @@ void OAccessibleMenuBaseComponent::UpdateShowing()
         {
             OAccessibleMenuBaseComponent* pComp = static_cast< OAccessibleMenuBaseComponent* >( xChild.get() );
             if ( pComp )
-                pComp->SetShowing( pComp->IsShowing() );
+                pComp->SetVisible( pComp->IsVisible() );
         }
     }
 }
@@ -633,10 +634,10 @@ void OAccessibleMenuBaseComponent::ProcessMenuEvent( const VclMenuEvent& rVclMen
 
     switch ( rVclMenuEvent.GetId() )
     {
-        case VCLEVENT_MENU_ACTIVATE:
-        case VCLEVENT_MENU_DEACTIVATE:
+        case VCLEVENT_MENU_SHOW:
+        case VCLEVENT_MENU_HIDE:
         {
-            UpdateShowing();
+            UpdateVisible();
         }
         break;
         case VCLEVENT_MENU_HIGHLIGHT:
