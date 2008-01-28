@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XModuleUIConfigurationManagerSupplier.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:29:09 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 16:11:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define __com_sun_star_ui_XModuleUIConfigurationManagerSupplier_idl__
 
 #ifndef __com_sun_star_ui_XUIConfigurationManager_idl__
-#include <com//sun/star/ui/XUIConfigurationManager.idl>
+#include <com/sun/star/ui/XUIConfigurationManager.idl>
 #endif
 
 #ifndef __com_sun_star_container_NoSuchElementException_idl__

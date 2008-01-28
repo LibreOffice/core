@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UIConfigurationManager.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:24:32 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 16:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,19 +40,19 @@
 #endif
 
 #ifndef __com_sun_star_ui_XUIConfiguration_idl__
-#include <com//sun/star/ui/XUIConfiguration.idl>
+#include <com/sun/star/ui/XUIConfiguration.idl>
 #endif
 
 #ifndef __com_sun_star_ui_XUIConfigurationManager_idl__
-#include <com//sun/star/ui/XUIConfigurationManager.idl>
+#include <com/sun/star/ui/XUIConfigurationManager.idl>
 #endif
 
 #ifndef __com_sun_star_ui_XUIConfigurationPersistence_idl__
-#include <com//sun/star/ui/XUIConfigurationPersistence.idl>
+#include <com/sun/star/ui/XUIConfigurationPersistence.idl>
 #endif
 
 #ifndef __com_sun_star_ui_XUIConfigurationStorage_idl__
-#include <com//sun/star/ui/XUIConfigurationStorage.idl>
+#include <com/sun/star/ui/XUIConfigurationStorage.idl>
 #endif
 
 module com { module sun { module star { module ui {
