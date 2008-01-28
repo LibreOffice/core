@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textwindowaccessibility.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-19 07:24:23 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:14:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,23 +117,16 @@ ParagraphImpl::ParagraphImpl(::rtl::Reference< Document > const & rDocument,
     m_nNumber(nNumber),
     m_nClientId(0)
 {
-    calculateFirstSentence();
     m_aParagraphText = m_xDocument->retrieveParagraphText(this);
 }
 
 void
 ParagraphImpl::numberChanged(bool bIncremented)
 {
-    Paragraphs::size_type nOld = m_nNumber;
     if (bIncremented)
         ++m_nNumber;
     else
         --m_nNumber;
-
-    notifyEvent(::css::accessibility::AccessibleEventId::
-                NAME_CHANGED,
-                ::css::uno::makeAny(calculateName(nOld)),
-                ::css::uno::makeAny(calculateName(m_nNumber)));
 }
 
 void ParagraphImpl::textChanged()
@@ -147,15 +140,6 @@ void ParagraphImpl::textChanged()
                     TEXT_CHANGED,
                     aOldValue, aNewValue);
     }
-
-    ::rtl::OUString aOld(m_aFirstSentence);
-    calculateFirstSentence();
-    if (m_aFirstSentence != aOld)
-        notifyEvent(::css::accessibility::AccessibleEventId::
-                    DESCRIPTION_CHANGED,
-                    ::css::uno::makeAny(calculateDescription(aOld)),
-                    ::css::uno::makeAny(calculateDescription(
-                                            m_aFirstSentence)));
 }
 
 void ParagraphImpl::notifyEvent(::sal_Int16 nEventId,
@@ -229,7 +213,7 @@ ParagraphImpl::getAccessibleParent()
     throw (::css::uno::RuntimeException)
 {
     checkDisposed();
-    return calculateDescription(m_aFirstSentence);
+    return ::rtl::OUString();
 }
 
 // virtual
@@ -237,7 +221,7 @@ ParagraphImpl::getAccessibleParent()
     throw (::css::uno::RuntimeException)
 {
     checkDisposed();
-    return calculateName(m_xDocument->retrieveParagraphNumber(this));
+    return ::rtl::OUString();
 }
 
 // virtual
@@ -763,34 +747,6 @@ void ParagraphImpl::checkDisposed()
         ::rtl::OUString(), static_cast< ::css::uno::XWeak * >(this));
 }
 
-void ParagraphImpl::calculateFirstSentence()
-{
-    try
-    {
-        m_aFirstSentence = OCommonAccessibleText::getTextAtIndex(
-            0, ::css::accessibility::AccessibleTextType::SENTENCE).SegmentText;
-    }
-    catch (::css::lang::IndexOutOfBoundsException &)
-    {
-        m_aFirstSentence = ::rtl::OUString();
-    }
-}
-
-::rtl::OUString
-ParagraphImpl::calculateDescription(::rtl::OUString const & rFirstSentence)
-{
-    // FIXME  Localize description (e.g., "Paragraph: XXX")?  OBR to clarify.
-    return rFirstSentence;
-}
-
-::rtl::OUString ParagraphImpl::calculateName(Paragraphs::size_type)
-{
-    // FIXME  Localize name (e.g., "Paragraph NNN")?  OBR to clarify.
-    return ::rtl::OUString::valueOf(
-        static_cast< ::sal_Int64 >(m_xDocument->retrieveParagraphNumber(this))
-        + 1); // XXX  numeric overflow
-}
-
 Document::Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
                    ::TextView & rView, bool bCompoundControlChild):
     VCLXAccessibleComponent(pVclXWindow),
@@ -806,13 +762,6 @@ Document::Document(::VCLXWindow * pVclXWindow, ::TextEngine & rEngine,
 {
     ::osl::Guard< ::comphelper::IMutex > aExternalGuard(getExternalLock());
     return m_rEngine.GetLocale();
-}
-
-Paragraphs::size_type
-Document::retrieveParagraphNumber(ParagraphImpl const * pParagraph)
-{
-    ::osl::MutexGuard aInternalGuard(GetMutex());
-    return pParagraph->getNumber();
 }
 
 ::sal_Int32 Document::retrieveParagraphIndex(ParagraphImpl const * pParagraph)
