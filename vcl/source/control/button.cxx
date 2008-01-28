@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:04:30 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:16:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2562,6 +2562,35 @@ void RadioButton::ImplDrawRadioButton( bool bLayout )
 
         ImplDrawRadioButtonState();
     }
+}
+
+// -----------------------------------------------------------------------
+
+void RadioButton::GetRadioButtonGroup( std::vector< RadioButton* >& io_rGroup, bool bIncludeThis ) const
+{
+    // empty the list
+    io_rGroup.clear();
+
+    // go back to first in group;
+    Window* pFirst = const_cast<RadioButton*>(this);
+    while( ( pFirst->GetStyle() & WB_GROUP ) == 0 )
+    {
+        Window* pWindow = pFirst->GetWindow( WINDOW_PREV );
+        if( pWindow )
+            pFirst = pWindow;
+        else
+            break;
+    }
+    // insert radiobuttons up to next group
+    do
+    {
+        if( pFirst->GetType() == WINDOW_RADIOBUTTON )
+        {
+            if( pFirst != this || bIncludeThis )
+                io_rGroup.push_back( static_cast<RadioButton*>(pFirst) );
+        }
+        pFirst = pFirst->GetWindow( WINDOW_NEXT );
+    } while( pFirst && ( ( pFirst->GetStyle() & WB_GROUP ) == 0 ) );
 }
 
 // -----------------------------------------------------------------------
