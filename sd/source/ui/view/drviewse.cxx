@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-10 15:32:44 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:57:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -763,9 +763,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
     {
         case SID_CLEAR_UNDO_STACK:
         {
-            sd::UndoManager* pUndoManager = GetDoc()->GetUndoManager();
-            if ( pUndoManager )
-                pUndoManager->Clear();
+            GetDocSh()->ClearUndoBuffer();
             rReq.Ignore ();
         }
         break;
