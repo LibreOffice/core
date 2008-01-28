@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 21:56:34 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 16:34:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -539,27 +539,22 @@ inline BOOL ImpSvNumberInputScan::GetThousandSep(
 //---------------------------------------------------------------------------
 //      GetLogical
 //
-// Umwandlung Text in logischen Wert
+// Conversion of text to logial value
 // "TRUE" =>  1:
 // "FALSE"=> -1:
-// sonst  =>  0:
+// else   =>  0:
 
 short ImpSvNumberInputScan::GetLogical( const String& rString )
 {
     short res;
 
-    if (rString.Len() < 4)              // kein Platz fuer mind 4 Buch.
-        res = 0;
+    const ImpSvNumberformatScan* pFS = pFormatter->GetFormatScanner();
+    if ( rString == pFS->GetTrueString() )
+        res = 1;
+    else if ( rString == pFS->GetFalseString() )
+        res = -1;
     else
-    {
-        const ImpSvNumberformatScan* pFS = pFormatter->GetFormatScanner();
-        if ( rString == pFS->GetTrueString() )
-            res = 1;
-        else if ( rString == pFS->GetFalseString() )
-            res = -1;
-        else
-            res = 0;
-    }
+        res = 0;
 
     return res;
 }
