@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module.c,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:46:52 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -400,7 +400,10 @@ typedef BOOL (WINAPI *GetModuleInformation_PROC)(
 static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT( void *pv, rtl_uString **pustrURL )
 {
     sal_Bool    bSuccess    = sal_False;    /* Assume failure */
-    HMODULE     hModPsapi = LoadLibrary( "PSAPI.DLL" );
+    static HMODULE      hModPsapi = NULL;
+
+    if ( !hModPsapi )
+        hModPsapi = LoadLibrary( "PSAPI.DLL" );
 
     if ( hModPsapi )
     {
@@ -442,7 +445,6 @@ static sal_Bool SAL_CALL _osl_addressGetModuleURL_NT( void *pv, rtl_uString **pu
             }
         }
 
-        FreeLibrary( hModPsapi );
     }
 
     return bSuccess;
