@@ -4,9 +4,9 @@
  *
  *  $RCSfile: timer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-06-02 12:45:24 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:02:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,7 +262,7 @@ TTimeValue OTimer::getRemainingTime() const
         if (secs > 0)
         {
             secs  -= 1;
-            nsecs += 1000000000L;
+            nsecs += 1000000000;
         }
         else
             return TTimeValue(0, 0);
