@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:38:30 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:54:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2419,9 +2419,16 @@ void PPTExParaSheet::SetStyleSheet( const ::com::sun::star::uno::Reference< ::co
         sal_Int16 nLineSpacing = aParagraphObj.mnLineSpacing;
         if ( nLineSpacing > 0 ) // if nLinespacing is < 0 the linespacing is an absolute spacing
         {
-            const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );
-            if ( pDesc )
-                 nLineSpacing = (sal_Int16)( (double)nLineSpacing * pDesc->Scaling + 0.5 );
+            sal_Bool bFixedLineSpacing = sal_False;
+            uno::Any aAny = rXPropSet->getPropertyValue( ::rtl::OUString(
+                                                             RTL_CONSTASCII_USTRINGPARAM(
+                                                                 "FontIndependentLineSpacing" ) ) );
+            if( !(aAny >>= bFixedLineSpacing) || !bFixedLineSpacing )
+            {
+                const FontCollectionEntry* pDesc = rFontCollection.GetById( rCharLevel.mnFont );
+                if ( pDesc )
+                    nLineSpacing = (sal_Int16)( (double)nLineSpacing * pDesc->Scaling + 0.5 );
+            }
         }
         else
         {
