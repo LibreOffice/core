@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+<meta>
+<topic id="comfoocorpfooextpage1" indexer="include" status="PUBLISH">
+<title id="tit" xml-lang="de">DE Extension foo page1 DE</title>
+<filename>/com.foocorp.foo-ext/page1.xhp</filename>
+</topic>
+</meta>
+<body>
+<bookmark xml-lang="de" branch="index" id="bm_id0001">
+<bookmark_value>Foo Einzel-Eintrag fuer page1</bookmark_value>
+<bookmark_value>Foo Alle Seiten;page1</bookmark_value>
+</bookmark>
+<bookmark xml-lang="de" branch="index" id="bm_id0002_swriter_sdraw">
+<bookmark_value>Foo Einzel-Eintrag page1, nur swriter/sdraw</bookmark_value>
+</bookmark>
+<paragraph role="heading" id="hd_id0001" xml-lang="de" level="1">DE Extension foo page1 DE</paragraph>
+<paragraph role="paragraph" id="par_id0001" xml-lang="de">Dies ist "page1" der Extension foo Hilfe.
+<comment>Kommentar am Ende des Paragraphen</comment></paragraph>
+<comment>Einige Links...</comment>
+<paragraph role="heading" id="hd_id0002" xml-lang="de" level="2">Einige Links...</paragraph>
+<paragraph role="paragraph" id="par_id0002" xml-lang="de">
+<link href="com.foocorp.foo-ext/page2.xhp">Dies</link> ist ein Link zu "page2" der Extension foo Hilfe.</paragraph>
+<paragraph role="paragraph" id="par_id0003" xml-lang="de">
+<link href="com.foocorp.foo-ext/page1.xhp#target">Dies</link> ist ein Link zu einer Section innerhalb einer Hilfe-Datei (unten in dieser Datei, kann aber auch in einer anderen Datei sein).</paragraph>
+<paragraph role="paragraph" id="par_id0004" xml-lang="de">
+<link href="text/shared/guide/main.xhp">Dies</link> ist ein Link zu einer Hilfe-Seite in der installierten Hilfe.</paragraph>
+<paragraph role="heading" id="hd_id0003" xml-lang="de" level="2">Etwas Fuell-Text</paragraph>
+<paragraph role="paragraph" id="par_id0005" xml-lang="de">Ich mag Fuell-Text. Ich mag Fuell-Text. Ich mag Fuell-Text.</paragraph>
+<paragraph role="paragraph" id="par_id0006" xml-lang="de">Ich mag Fuell-Text. Ich mag Fuell-Text. Ich mag Fuell-Text.</paragraph>
+<paragraph role="paragraph" id="par_id0007" xml-lang="de">Ich mag Fuell-Text. Ich mag Fuell-Text. Ich mag Fuell-Text.</paragraph>
+<paragraph role="paragraph" id="par_id0008" xml-lang="de">Ich mag Fuell-Text. Ich mag Fuell-Text. Ich mag Fuell-Text.</paragraph>
+<paragraph role="paragraph" id="par_id0009" xml-lang="de">Ich mag Fuell-Text. Ich mag Fuell-Text. Ich mag Fuell-Text.</paragraph>
+<paragraph role="paragraph" id="par_id0010" xml-lang="de">Ich mag Fuell-Text. Ich mag Fuell-Text. Ich mag Fuell-Text.</paragraph>
+<section id="target">
+<paragraph role="heading" id="hd_id0004" xml-lang="de" level="2">Section "target"</paragraph>
+<paragraph role="paragraph" id="par_id0011" xml-lang="de">
+This is a section within the file page1.xhp. The section has the name "target".
+</paragraph>
+</section>
+<paragraph role="heading" id="hd_id0005" xml-lang="de" level="2">Noch mehr Fuell-Text</paragraph>
+<paragraph role="paragraph" id="par_id0012" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0013" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0014" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0015" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0016" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0017" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0018" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0019" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0020" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0021" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0022" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0023" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0024" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0025" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0026" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0027" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0028" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0029" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0030" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0031" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0032" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0033" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0034" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0035" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<paragraph role="paragraph" id="par_id0036" xml-lang="de" >Dieser Text fuellt die Seite um die Section "target" oben anzeigen zu koennen.</paragraph>
+<section id="relatedtopics">
+<paragraph role="paragraph" id="par_id0037" xml-lang="de">
+Diese Section zeigt einen Link der durch Einfuegen der "linkvar" Variable aus subfolder/anotherpage.xhp erzeugt wurde.</paragraph>
+<embed href="com.foocorp.foo-ext/subfolder/anotherpage.xhp#linkvar"/>
+</section>
+</body>
+</helpdocument>
