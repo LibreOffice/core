@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 14:32:18 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 13:53:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -862,7 +862,16 @@ uno::Any SAL_CALL Content::execute(
 //      {
         try
         {
-            m_xResAccess->DESTROY( Environment );
+            std::auto_ptr< DAVResourceAccess > xResAccess;
+            {
+                osl::Guard< osl::Mutex > aGuard( m_aMutex );
+                xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
+            }
+            xResAccess->DESTROY( Environment );
+            {
+                osl::Guard< osl::Mutex > aGuard( m_aMutex );
+                m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+            }
         }
         catch ( DAVException const & e )
         {
@@ -1008,7 +1017,16 @@ void SAL_CALL Content::addProperty( const rtl::OUString& Name,
     try
     {
         // Set property value at server.
-        m_xResAccess->PROPPATCH( aProppatchValues, xEnv );
+        std::auto_ptr< DAVResourceAccess > xResAccess;
+        {
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
+        }
+        xResAccess->PROPPATCH( aProppatchValues, xEnv );
+        {
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+        }
 
         // Notify propertyset info change listeners.
         beans::PropertySetInfoChangeEvent evt(
@@ -1117,7 +1135,16 @@ void SAL_CALL Content::removeProperty( const rtl::OUString& Name )
         aProppatchValues.push_back( aValue );
 
         // Remove property value from server.
-        m_xResAccess->PROPPATCH( aProppatchValues, xEnv );
+        std::auto_ptr< DAVResourceAccess > xResAccess;
+        {
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            xResAccess.reset( new DAVResourceAccess( *m_xResAccess.get() ) );
+        }
+        xResAccess->PROPPATCH( aProppatchValues, xEnv );
+        {
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            m_xResAccess.reset( new DAVResourceAccess( *xResAccess.get() ) );
+        }
 
         // Notify propertyset info change listeners.
         beans::PropertySetInfoChangeEvent evt(
@@ -2185,26 +2212,35 @@ uno::Any Content::open(
                 // PULL: wait for client read
                 try
                 {
+                    std::auto_ptr< DAVResourceAccess > xResAccess;
                     {
                         osl::MutexGuard aGuard( m_aMutex );
 
                         // throw away previously cached headers.
                         m_xCachedProps.reset();
+
+                        xResAccess.reset(
+                            new DAVResourceAccess( *m_xResAccess.get() ) );
                     }
+
                     // fill inputsream sync; return if all data present
                     DAVResource aResource;
                     std::vector< rtl::OUString > aHeaders;
 //                        // Obtain list containing all HTTP headers that can
 //                        // be mapped to UCB properties.
 //                        ContentProperties::getMappableHTTPHeaders( aHeaders );
+
                     uno::Reference< io::XInputStream > xIn
-                        = m_xResAccess->GET( aHeaders, aResource, xEnv );
+                        = xResAccess->GET( aHeaders, aResource, xEnv );
 
                     {
                         osl::MutexGuard aGuard( m_aMutex );
-
                         m_xCachedProps.reset(
                             new ContentProperties( aResource ) );
+
+                        m_xResAccess.reset(
+                            new DAVResourceAccess( *xResAccess.get() ) );
+
                     }
 
                     xDataSink->setInputStream( xIn );
@@ -2246,11 +2282,25 @@ void Content::post(
     {
         try
         {
+            std::auto_ptr< DAVResourceAccess > xResAccess;
+            {
+                osl::MutexGuard aGuard( m_aMutex );
+                xResAccess.reset(
+                    new DAVResourceAccess( *m_xResAccess.get() ) );
+            }
+
             uno::Reference< io::XInputStream > xResult
-                = m_xResAccess->POST( rArg.MediaType,
-                                      rArg.Referer,
-                                      rArg.Source,
-                                      xEnv );
+                = xResAccess->POST( rArg.MediaType,
+                                    rArg.Referer,
+                                    rArg.Source,
+                                    xEnv );
+
+            {
+                 osl::MutexGuard aGuard( m_aMutex );
+                 m_xResAccess.reset(
+                     new DAVResourceAccess( *xResAccess.get() ) );
+            }
+
             xSink->setInputStream( xResult );
         }
         catch ( DAVException const & e )
@@ -2266,11 +2316,24 @@ void Content::post(
         {
             try
             {
-                m_xResAccess->POST( rArg.MediaType,
-                                    rArg.Referer,
-                                    rArg.Source,
-                                    xResult,
-                                    xEnv );
+                std::auto_ptr< DAVResourceAccess > xResAccess;
+                {
+                    osl::MutexGuard aGuard( m_aMutex );
+                    xResAccess.reset(
+                        new DAVResourceAccess( *m_xResAccess.get() ) );
+                }
+
+                xResAccess->POST( rArg.MediaType,
+                                  rArg.Referer,
+                                  rArg.Source,
+                                  xResult,
+                                  xEnv );
+
+                {
+                    osl::MutexGuard aGuard( m_aMutex );
+                    m_xResAccess.reset(
+                        new DAVResourceAccess( *xResAccess.get() ) );
+                }
             }
             catch ( DAVException const & e )
             {
