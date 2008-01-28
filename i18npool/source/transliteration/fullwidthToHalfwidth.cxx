@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fullwidthToHalfwidth.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:24:57 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:37:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,8 @@
 
 #include <i18nutil/widthfolding.hxx>
 #define TRANSLITERATION_fullwidthToHalfwidth
+#define TRANSLITERATION_fullwidthKatakanaToHalfwidthKatakana
+#define TRANSLITERATION_fullwidthToHalfwidthLikeASC
 #include <transliteration_OneToOne.hxx>
 
 using namespace com::sun::star::uno;
@@ -78,6 +80,77 @@ fullwidthToHalfwidth::transliterate( const OUString& inStr, sal_Int32 startPos, 
 
 sal_Unicode SAL_CALL
 fullwidthToHalfwidth::transliterateChar2Char( sal_Unicode inChar)
+  throw(RuntimeException, MultipleCharsOutputException)
+{
+    sal_Unicode newChar = widthfolding::decompose_ja_voiced_sound_marksChar2Char (inChar);
+    if (newChar == 0xFFFF)
+        throw MultipleCharsOutputException();
+    return transliteration_OneToOne::transliterateChar2Char(inChar);
+}
+
+fullwidthKatakanaToHalfwidthKatakana::fullwidthKatakanaToHalfwidthKatakana()
+{
+    func = (TransFunc) 0;
+    table = &widthfolding::getfullKana2halfKanaTable();
+    transliterationName = "fullwidthKatakanaToHalfwidthKatakana";
+    implementationName = "com.sun.star.i18n.Transliteration.FULLWIDTHKATAKANA_HALFWIDTHKATAKANA";
+}
+
+/**
+ * Transliterate fullwidth katakana to halfwidth katakana.
+ */
+OUString SAL_CALL
+fullwidthKatakanaToHalfwidthKatakana::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
+  throw(RuntimeException)
+{
+    // Decomposition: GA --> KA + voice-mark
+    const OUString& newStr = widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
+
+    // One to One mapping
+    useOffset = sal_False;
+    const OUString &tmp = transliteration_OneToOne::transliterate( newStr, 0, newStr.getLength(), offset);
+    useOffset = sal_True;
+    return tmp;
+}
+
+sal_Unicode SAL_CALL
+fullwidthKatakanaToHalfwidthKatakana::transliterateChar2Char( sal_Unicode inChar )
+  throw(RuntimeException, MultipleCharsOutputException)
+{
+    sal_Unicode newChar = widthfolding::decompose_ja_voiced_sound_marksChar2Char (inChar);
+    if (newChar == 0xFFFF)
+        throw MultipleCharsOutputException();
+    return transliteration_OneToOne::transliterateChar2Char(inChar);
+}
+
+fullwidthToHalfwidthLikeASC::fullwidthToHalfwidthLikeASC()
+{
+    func = (TransFunc) 0;
+    table = &widthfolding::getfull2halfTableForASC();
+    transliterationName = "fullwidthToHalfwidthLikeASC";
+    implementationName = "com.sun.star.i18n.Transliteration.FULLWIDTH_HALFWIDTH_LIKE_ASC";
+}
+
+/**
+ * Transliterate fullwidth to halfwidth like Excel's ASC function.
+ */
+OUString SAL_CALL
+fullwidthToHalfwidthLikeASC::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
+  throw(RuntimeException)
+{
+    // Decomposition: GA --> KA + voice-mark
+    const OUString& newStr = widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
+
+    // One to One mapping
+    useOffset = sal_False;
+    const OUString &tmp = transliteration_OneToOne::transliterate( newStr, 0, newStr.getLength(), offset);
+    useOffset = sal_True;
+
+    return tmp;
+}
+
+sal_Unicode SAL_CALL
+fullwidthToHalfwidthLikeASC::transliterateChar2Char( sal_Unicode inChar )
   throw(RuntimeException, MultipleCharsOutputException)
 {
     sal_Unicode newChar = widthfolding::decompose_ja_voiced_sound_marksChar2Char (inChar);
