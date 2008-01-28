@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transliteration_OneToOne.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 18:01:56 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:33:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,18 @@ TRANSLITERATION_ONETOONE( fullwidthToHalfwidth )
 #endif
 #if defined( TRANSLITERATION_halfwidthToFullwidth ) || defined( TRANSLITERATION_ALL )
 TRANSLITERATION_ONETOONE(halfwidthToFullwidth)
+#endif
+#if defined( TRANSLITERATION_fullwidthKatakanaToHalfwidthKatakana ) || defined( TRANSLITERATION_ALL )
+TRANSLITERATION_ONETOONE( fullwidthKatakanaToHalfwidthKatakana )
+#endif
+#if defined( TRANSLITERATION_halfwidthKatakanaToFullwidthKatakana ) || defined( TRANSLITERATION_ALL )
+TRANSLITERATION_ONETOONE(halfwidthKatakanaToFullwidthKatakana)
+#endif
+#if defined( TRANSLITERATION_fullwidthToHalfwidthLikeASC ) || defined( TRANSLITERATION_ALL )
+TRANSLITERATION_ONETOONE( fullwidthToHalfwidthLikeASC )
+#endif
+#if defined( TRANSLITERATION_halfwidthToFullwidthLikeJIS ) || defined( TRANSLITERATION_ALL )
+TRANSLITERATION_ONETOONE( halfwidthToFullwidthLikeJIS )
 #endif
 #undef TRANSLITERATION_ONETOONE
 
