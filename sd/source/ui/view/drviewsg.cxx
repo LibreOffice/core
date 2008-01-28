@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:37:22 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:57:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_sd.hxx"
 
 #include "DrawViewShell.hxx"
+#include "ViewShellImplementation.hxx"
 
 #ifndef _SVXIDS_HRC
 #include <svx/svxids.hrc>
@@ -98,7 +99,7 @@ void DrawViewShell::ExecIMap( SfxRequest& rReq )
         if ( pMark )
         {
             SdrObject*  pSdrObj = pMark->GetMarkedSdrObj();
-            SvxIMapDlg* pDlg = SVXIMAPDLG();
+            SvxIMapDlg* pDlg = ViewShell::Implementation::GetImageMapDialog();
 
             if ( pDlg->GetEditingObject() == (void*) pSdrObj )
             {
@@ -137,8 +138,10 @@ void DrawViewShell::GetIMapState( SfxItemSet& rSet )
         {
             pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
 
-            if ( ( pObj->ISA( SdrGrafObj ) /*|| pObj->ISA( SdrOle2Obj )*/ ) &&
-                 ( SVXIMAPDLG()->GetEditingObject() == (void*) pObj ) )
+            SvxIMapDlg* pImageMapDialog = ViewShell::Implementation::GetImageMapDialog();
+            if ( ( pObj->ISA( SdrGrafObj ) /*|| pObj->ISA( SdrOle2Obj )*/ )
+                && pImageMapDialog!=NULL
+                && ( pImageMapDialog->GetEditingObject() == (void*) pObj ) )
             {
                 bDisable = FALSE;
             }
