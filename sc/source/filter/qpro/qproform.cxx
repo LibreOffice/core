@@ -4,9 +4,9 @@
  *
  *  $RCSfile: qproform.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:39:23 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:13:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,6 +212,13 @@ void QProToSc::NegToken( TokenId &rParam )
     rParam = aPool.Store();
 }
 
+#define SAFEDEC_OR_RET(nRef, amt, ret) \
+do { \
+    if (nRef < amt)\
+        return ret; \
+    nRef-=amt; \
+} while(0)
+
 ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, const FORMULA_TYPE /*eFT*/ )
 {
     sal_uInt8 nFmla[ nBufSize ], i, nArg, nArgArray[ nBufSize ];
@@ -242,7 +249,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
             {
                 maIn >> nInt;
                 nIntArray[ nIntCount ] = nInt;
-                nRef-=2;
+        SAFEDEC_OR_RET(nRef, 2, ConvErrCount);
                 nIntCount++;
             }
 
@@ -250,7 +257,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
             {
                 maIn >> nFloat;
                 nFloatArray[ nFloatCount ] = nFloat;
-                nRef-=8;
+        SAFEDEC_OR_RET(nRef, 8, ConvErrCount);
                 nFloatCount++;
             }
 
@@ -259,7 +266,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
                 maIn >> nArg >> nDummy >> nDLLId;
                 nArgArray[ nArgCount ] = nArg;
                 nDLLArray[ nDLLCount ] = nDLLId;
-                nRef-=5;
+        SAFEDEC_OR_RET(nRef, 5, ConvErrCount);
                 nDLLCount++;
                 nArgCount++;
             }
@@ -268,7 +275,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, con
                 String aTmp( ScfTools::ReadCString( maIn ), maIn.GetStreamCharSet() );
                 sStringArray[ nStringCount ] = aTmp;
                 nStringCount++;
-                nRef-=aTmp.Len() + 1;
+        SAFEDEC_OR_RET(nRef, aTmp.Len() + 1, ConvErrCount);
             }
         }
     }
