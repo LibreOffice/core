@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XLayoutManager.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:22:40 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,15 +57,15 @@
 #endif
 
 #ifndef __com_sun_star_ui_XUIElement_idl__
-#include <com//sun/star/ui/XUIElement.idl>
+#include <com/sun/star/ui/XUIElement.idl>
 #endif
 
 #ifndef __com_sun_star_ui_DockingArea_idl__
-#include <com//sun/star/ui/DockingArea.idl>
+#include <com/sun/star/ui/DockingArea.idl>
 #endif
 
 #ifndef __com_sun_star_ui_XDockingAreaAcceptor_idl__
-#include <com//sun/star/ui/XDockingAreaAcceptor.idl>
+#include <com/sun/star/ui/XDockingAreaAcceptor.idl>
 #endif
 
 //=============================================================================
