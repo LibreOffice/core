@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XAcceleratorConfiguration.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:26:57 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 16:10:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,15 @@
 #define __com_sun_star_ui_XAcceleratorConfiguration_idl__
 
 #ifndef __com_sun_star_ui_XUIConfiguration_idl__
-#include <com//sun/star/ui/XUIConfiguration.idl>
+#include <com/sun/star/ui/XUIConfiguration.idl>
 #endif
 
 #ifndef __com_sun_star_ui_XUIConfigurationPersistence_idl__
-#include <com//sun/star/ui/XUIConfigurationPersistence.idl>
+#include <com/sun/star/ui/XUIConfigurationPersistence.idl>
 #endif
 
 #ifndef __com_sun_star_ui_XUIConfigurationStorage_idl__
-#include <com//sun/star/ui/XUIConfigurationStorage.idl>
+#include <com/sun/star/ui/XUIConfigurationStorage.idl>
 #endif
 
 #ifndef __com_sun_star_awt_KeyEvent_idl__
@@ -308,4 +308,5 @@ interface XAcceleratorConfiguration
 }; // interface XAcceleratorConfiguration
 
 }; }; }; }; // com.sun.star
+
 #endif
