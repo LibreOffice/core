@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawDocShell.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:32:52 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:55:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,6 +230,8 @@ public:
 
                             // #91457# ExecuteSpellPopup now handled by DrawDocShell
                             DECL_LINK( OnlineSpellCallback, SpellCallbackInfo* );
+
+    void                    ClearUndoBuffer();
 
 public:
     SdFormatClipboard*      mpFormatClipboard;
