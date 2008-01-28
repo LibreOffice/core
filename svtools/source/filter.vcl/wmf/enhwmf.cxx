@@ -4,9 +4,9 @@
  *
  *  $RCSfile: enhwmf.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 11:50:55 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:12:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -834,11 +834,12 @@ BOOL EnhWMFReader::ReadEnhWMF()
                 cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
                 cyDest = abs( (int)cyDest );        // and also 122889
 
-                if ( offBmiSrc )
+                if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
+                    bStatus = FALSE;
+                else
                 {
-                    UINT32  nSize = cbBmiSrc + cbBitsSrc + 14;
-                    char*   pBuf = new char[ nSize ];
-
+                    UINT32 nSize = cbBmiSrc + cbBitsSrc + 14;
+                    char* pBuf = new char[ nSize ];
                     SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
                     aTmp.ObjectOwnsMemory( TRUE );
                     aTmp << (BYTE)'B'
@@ -863,8 +864,8 @@ BOOL EnhWMFReader::ReadEnhWMF()
                         Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
                         aBitmap.Crop( aCropRect );
                     }
+                     aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
                 }
-                aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
             }
             break;
 
@@ -884,34 +885,38 @@ BOOL EnhWMFReader::ReadEnhWMF()
                 cxDest = abs( (int)cxDest );        // sj: i37894, size can be negative
                 cyDest = abs( (int)cyDest );        // and also 122889
 
-                UINT32 nSize = cbBmiSrc + cbBitsSrc + 14;
-                char* pBuf = new char[ nSize ];
-                SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
-                aTmp.ObjectOwnsMemory( TRUE );
-                aTmp << (BYTE)'B'
-                     << (BYTE)'M'
-                     << (UINT32)cbBitsSrc
-                     << (UINT16)0
-                     << (UINT16)0
-                     << (UINT32)cbBmiSrc + 14;
-                pWMF->Seek( nStart + offBmiSrc );
-                pWMF->Read( pBuf + 14, cbBmiSrc );
-                pWMF->Seek( nStart + offBitsSrc );
-                pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
-                aTmp.Seek( 0 );
-                aBitmap.Read( aTmp, TRUE );
-
-                // test if it is sensible to crop
-                if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
-                    ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
-                        ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
-                            ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
+                if ( (cbBitsSrc > (SAL_MAX_UINT32 - 14)) || ((SAL_MAX_UINT32 - 14) - cbBitsSrc < cbBmiSrc) )
+                    bStatus = FALSE;
+                else
                 {
-                    Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
-                    aBitmap.Crop( aCropRect );
-                }
+                    UINT32 nSize = cbBmiSrc + cbBitsSrc + 14;
+                    char* pBuf = new char[ nSize ];
+                    SvMemoryStream aTmp( pBuf, nSize, STREAM_READ | STREAM_WRITE );
+                    aTmp.ObjectOwnsMemory( TRUE );
+                    aTmp << (BYTE)'B'
+                        << (BYTE)'M'
+                        << (UINT32)cbBitsSrc
+                        << (UINT16)0
+                        << (UINT16)0
+                        << (UINT32)cbBmiSrc + 14;
+                    pWMF->Seek( nStart + offBmiSrc );
+                    pWMF->Read( pBuf + 14, cbBmiSrc );
+                    pWMF->Seek( nStart + offBitsSrc );
+                    pWMF->Read( pBuf + 14 + cbBmiSrc, cbBitsSrc );
+                    aTmp.Seek( 0 );
+                    aBitmap.Read( aTmp, TRUE );
 
-                aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
+                    // test if it is sensible to crop
+                    if ( ( cxSrc > 0 ) && ( cySrc > 0 ) &&
+                        ( xSrc >= 0 ) && ( ySrc >= 0 ) &&
+                            ( xSrc + cxSrc <= aBitmap.GetSizePixel().Width() ) &&
+                                ( ySrc + cySrc <= aBitmap.GetSizePixel().Height() ) )
+                    {
+                        Rectangle aCropRect( Point( xSrc, ySrc ), Size( cxSrc, cySrc ) );
+                        aBitmap.Crop( aCropRect );
+                    }
+                    aBmpSaveList.Insert( new BSaveStruct( aBitmap, aRect, dwRop ), LIST_APPEND );
+                }
             }
             break;
 
