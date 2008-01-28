@@ -4,9 +4,9 @@
  *
  *  $RCSfile: download.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:37:50 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:30:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,49 @@ struct OutData
     OutData(osl::Condition& rCondition) : FileHandle(NULL), Offset(0), StopCondition(rCondition), curl(NULL) {};
 };
 
+//------------------------------------------------------------------------------
+
+static void openFile( OutData& out )
+{
+    char * effective_url;
+    curl_easy_getinfo(out.curl, CURLINFO_EFFECTIVE_URL, &effective_url);
+
+    double fDownloadSize;
+    curl_easy_getinfo(out.curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &fDownloadSize);
+
+    rtl::OString aURL(effective_url);
+
+    // ensure no trailing '/'
+    sal_Int32 nLen = aURL.getLength();
+    while( (nLen > 0) && ('/' == aURL[nLen-1]) )
+        aURL = aURL.copy(0, --nLen);
+
+    // extract file name last '/'
+    sal_Int32 nIndex = aURL.lastIndexOf('/');
+    if( nIndex > 0 )
+    {
+        out.File = out.DestinationDir + rtl::OStringToOUString(aURL.copy(nIndex), RTL_TEXTENCODING_UTF8);
+
+        oslFileError rc;
+
+        // Give the user an overwrite warning if the target file exists
+        const sal_Int32 openFlags = osl_File_OpenFlag_Write | osl_File_OpenFlag_Create;
+        do
+        {
+            rc = osl_openFile(out.File.pData, &out.FileHandle, openFlags);
+
+            if( osl_File_E_EXIST == rc && ! out.Handler->downloadTargetExists(out.File) )
+            {
+                out.StopCondition.set();
+                break;
+            }
+
+        } while( osl_File_E_EXIST == rc );
+
+        if( osl_File_E_None == rc )
+            out.Handler->downloadStarted(out.File, (sal_Int64) fDownloadSize);
+    }
+}
 
 //------------------------------------------------------------------------------
 
@@ -119,46 +162,7 @@ write_function( void *ptr, size_t size, size_t nmemb, void *stream )
     OutData *out = reinterpret_cast < OutData * > (stream);
 
     if( NULL == out->FileHandle )
-    {
-        char * effective_url;
-        curl_easy_getinfo(out->curl, CURLINFO_EFFECTIVE_URL, &effective_url);
-
-        double fDownloadSize;
-        curl_easy_getinfo(out->curl, CURLINFO_CONTENT_LENGTH_DOWNLOAD, &fDownloadSize);
-
-        rtl::OString aURL(effective_url);
-
-        // ensure no trailing '/'
-        sal_Int32 nLen = aURL.getLength();
-        while( (nLen > 0) && ('/' == aURL[nLen-1]) )
-            aURL = aURL.copy(0, --nLen);
-
-        // extract file name last '/'
-        sal_Int32 nIndex = aURL.lastIndexOf('/');
-        if( nIndex > 0 )
-        {
-            out->File = out->DestinationDir + rtl::OStringToOUString(aURL.copy(nIndex), RTL_TEXTENCODING_UTF8);
-
-            oslFileError rc;
-
-            // Give the user an overwrite warning if the target file exists
-            const sal_Int32 openFlags = osl_File_OpenFlag_Write | osl_File_OpenFlag_Create;
-            do
-            {
-                rc = osl_openFile(out->File.pData, &out->FileHandle, openFlags);
-
-                if( osl_File_E_EXIST == rc && ! out->Handler->downloadTargetExists(out->File) )
-                {
-                    out->StopCondition.set();
-                    break;
-                }
-
-            } while( osl_File_E_EXIST == rc );
-
-            if( osl_File_E_None == rc )
-                out->Handler->downloadStarted(out->File, (sal_Int64) fDownloadSize);
-        }
-    }
+        openFile(*out);
 
     sal_uInt64 nBytesWritten = 0;
 
@@ -189,7 +193,7 @@ progress_callback( void *clientp, double dltotal, double dlnow, double ultotal, 
         // Do not report progress for redirection replies
         long nCode;
         curl_easy_getinfo(out->curl, CURLINFO_RESPONSE_CODE, &nCode);
-        if( (nCode != 302) && (nCode != 303) )
+        if( (nCode != 302) && (nCode != 303) && (dltotal > 0) )
             out->Handler->downloadProgressAt((sal_Int8)fPercent);
 
         return 0;
@@ -243,6 +247,11 @@ Download::getProxyForURL(const rtl::OUString& rURL, rtl::OString& rHost, sal_Int
             rHost = getStringValue(xNameAccess, UNISTRING("ooInetHTTPProxyName"));
             rPort = getInt32Value(xNameAccess, UNISTRING("ooInetHTTPProxyPort"));
         }
+        else if( rURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("https:")) )
+        {
+            rHost = getStringValue(xNameAccess, UNISTRING("ooInetHTTPSProxyName"));
+            rPort = getInt32Value(xNameAccess, UNISTRING("ooInetHTTPSProxyPort"));
+        }
         else if( rURL.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("ftp:")) )
         {
             rHost = getStringValue(xNameAccess, UNISTRING("ooInetFTPProxyName"));
@@ -288,8 +297,6 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
         if( -1 != nProxyPort )
             curl_easy_setopt(pCURL, CURLOPT_PROXYPORT, nProxyPort);
 
-        // ToDo: SSL support
-
         if( out.Offset > 0 )
         {
             // curl_off_t offset = nOffset; libcurl seems to be compiled with large
@@ -299,6 +306,10 @@ bool curl_run(const rtl::OUString& rURL, OutData& out, const rtl::OString& aProx
         }
 
         CURLcode cc = curl_easy_perform(pCURL);
+
+        // treat zero byte downloads as errors
+        if( NULL == out.FileHandle )
+            openFile(out);
 
         if( CURLE_OK == cc )
         {
