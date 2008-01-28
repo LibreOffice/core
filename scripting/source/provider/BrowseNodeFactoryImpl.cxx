@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BrowseNodeFactoryImpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:27:46 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 13:58:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -462,7 +462,10 @@ public:
                 m_xWrappedBrowseNode->getChildNodes();
             for ( sal_Int32 i=0; i<nodes.getLength(); i++ )
             {
-                m_vNodes.push_back( new DefaultBrowseNode( m_xCtx, nodes[ i ] ) );
+                Reference< browse::XBrowseNode > xBrowseNode = nodes[ i ];
+                OSL_ENSURE( xBrowseNode.is(), "DefaultBrowseNode::getChildNodes(): Invalid BrowseNode" );
+                if( xBrowseNode.is() )
+                    m_vNodes.push_back( new DefaultBrowseNode( m_xCtx, xBrowseNode ) );
             }
 
             ::std::sort( m_vNodes.begin(), m_vNodes.end(), alphaSortForBNodes() );
