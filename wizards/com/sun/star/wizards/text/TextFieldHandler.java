@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextFieldHandler.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:55:39 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:31:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,6 +228,7 @@ public class TextFieldHandler {
 
                 if (xSI.supportsService("com.sun.star.text.TextField.DateTime")) {
                     XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oTextField);
+                    xPSet.setPropertyValue("IsFixed", Boolean.FALSE);
                     xPSet.setPropertyValue("DateTimeValue", dt);
                 }
             }
@@ -236,6 +237,20 @@ public class TextFieldHandler {
         }
     }
 
+    public void fixDateFields(boolean _bSetFixed) {
+    try {
+        XEnumeration xEnum = xTextFieldsSupplier.getTextFields().createEnumeration();
+        while (xEnum.hasMoreElements()) {
+            Object oTextField = xEnum.nextElement();
+            XServiceInfo xSI = (XServiceInfo) UnoRuntime.queryInterface(XServiceInfo.class, oTextField);
+            if (xSI.supportsService("com.sun.star.text.TextField.DateTime")) {
+                XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oTextField);
+                xPSet.setPropertyValue("IsFixed", new Boolean(_bSetFixed));
+            }
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }}
 
     public void removeUserFieldByContent(String _FieldContent) {
     try {
