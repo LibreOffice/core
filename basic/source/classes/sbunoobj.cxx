@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-13 15:21:05 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:00:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #endif
 
 #include <cppuhelper/implbase1.hxx>
+#include <cppuhelper/exc_hlp.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/extract.hxx>
 
@@ -131,8 +132,6 @@ static String ID_DBG_SUPPORTEDINTERFACES( RTL_CONSTASCII_USTRINGPARAM("Dbg_Suppo
 static String ID_DBG_PROPERTIES( RTL_CONSTASCII_USTRINGPARAM("Dbg_Properties") );
 static String ID_DBG_METHODS( RTL_CONSTASCII_USTRINGPARAM("Dbg_Methods") );
 
-static String aIllegalArgumentExceptionName
-    ( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.lang.IllegalArgumentException" ) );
 static OUString aSeqLevelStr( RTL_CONSTASCII_USTRINGPARAM("[]") );
 static OUString defaultNameSpace( RTL_CONSTASCII_USTRINGPARAM("org.openoffice") );
 
@@ -325,7 +324,49 @@ SbUnoObject* createOLEObject_Impl( const String& aType )
 }
 
 
-String implGetExceptionMsg( Exception& e, const String& aExceptionType_ );
+namespace
+{
+    void lcl_indent( ::rtl::OUStringBuffer& _inout_rBuffer, sal_Int32 _nLevel )
+    {
+        while ( _nLevel-- > 0 )
+            _inout_rBuffer.appendAscii( "  " );
+    }
+}
+
+void implAppendExceptionMsg( ::rtl::OUStringBuffer& _inout_rBuffer, const Exception& _e, const ::rtl::OUString& _rExceptionType, sal_Int32 _nLevel )
+{
+    _inout_rBuffer.appendAscii( "\n" );
+    lcl_indent( _inout_rBuffer, _nLevel );
+    _inout_rBuffer.appendAscii( "Type: " );
+
+    if ( _rExceptionType.getLength() == 0 )
+        _inout_rBuffer.appendAscii( "Unknown" );
+    else
+        _inout_rBuffer.append( _rExceptionType );
+
+    _inout_rBuffer.appendAscii( "\n" );
+    lcl_indent( _inout_rBuffer, _nLevel );
+    _inout_rBuffer.appendAscii( "Message: " );
+    _inout_rBuffer.append( _e.Message );
+
+}
+
+// Fehlermeldungs-Message bei Exception zusammenbauen
+::rtl::OUString implGetExceptionMsg( const Exception& e, const ::rtl::OUString& aExceptionType_ )
+{
+    ::rtl::OUStringBuffer aMessageBuf;
+    implAppendExceptionMsg( aMessageBuf, e, aExceptionType_, 0 );
+    return aMessageBuf.makeStringAndClear();
+}
+
+String implGetExceptionMsg( const Any& _rCaughtException )
+{
+    OSL_PRECOND( _rCaughtException.getValueTypeClass() == TypeClass_EXCEPTION, "implGetExceptionMsg: illegal argument!" );
+    if ( _rCaughtException.getValueTypeClass() != TypeClass_EXCEPTION )
+        return String();
+
+    return implGetExceptionMsg( *static_cast< const Exception* >( _rCaughtException.getValue() ), _rCaughtException.getValueTypeName() );
+}
 
 Any convertAny( const Any& rVal, const Type& aDestType )
 {
@@ -335,10 +376,10 @@ Any convertAny( const Any& rVal, const Type& aDestType )
     {
         aConvertedVal = xConverter->convertTo( rVal, aDestType );
     }
-    catch( IllegalArgumentException& e1 )
+    catch( const IllegalArgumentException& )
     {
         StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
-            implGetExceptionMsg( e1, aIllegalArgumentExceptionName ) );
+            implGetExceptionMsg( ::cppu::getCaughtException() ) );
         return aConvertedVal;
     }
     catch( CannotConvertException& e2 )
@@ -374,33 +415,15 @@ Reference<XIdlClass> TypeToIdlClass( const Type& rType )
     return xRetClass;
 }
 
-// Fehlermeldungs-Message bei Exception zusammenbauen
-String implGetExceptionMsg( Exception& e, const String& aExceptionType_ )
-{
-    String aExceptionType = aExceptionType_;
-    if( aExceptionType.Len() == 0 )
-        aExceptionType = String( RTL_CONSTASCII_USTRINGPARAM("Unknown" ) );
-
-    String aTypeLine( RTL_CONSTASCII_USTRINGPARAM("\nType: " ) );
-    aTypeLine += aExceptionType;
-
-    String aMessageLine( RTL_CONSTASCII_USTRINGPARAM("\nMessage: " ) );
-    aMessageLine += String( e.Message );
-
-    String aMsg = aTypeLine;
-    aMsg += aMessageLine;
-    return aMsg;
-}
-
 // Exception type unknown
-String implGetExceptionMsg( Exception& e )
+template< class EXCEPTION >
+String implGetExceptionMsg( const EXCEPTION& e )
 {
-    String aMsg = implGetExceptionMsg( e, String() );
-    return aMsg;
+    return implGetExceptionMsg( e, ::getCppuType( &e ).getTypeName() );
 }
 
 // Error-Message fuer WrappedTargetExceptions
-String implGetWrappedMsg( WrappedTargetException& e )
+String implGetWrappedMsg( const WrappedTargetException& e )
 {
     String aMsg;
     Any aWrappedAny = e.TargetException;
@@ -409,7 +432,7 @@ String implGetWrappedMsg( WrappedTargetException& e )
     // Really an Exception?
     if( aExceptionType.getTypeClass() == TypeClass_EXCEPTION )
     {
-        RuntimeException& e_ = *( (RuntimeException*)aWrappedAny.getValue() );
+        Exception& e_ = *( (Exception*)aWrappedAny.getValue() );
         aMsg = implGetExceptionMsg( e_, String( aExceptionType.getTypeName() ) );
     }
     // Otherwise use WrappedTargetException itself
@@ -427,23 +450,72 @@ void implHandleBasicErrorException( BasicErrorException& e )
     StarBASIC::Error( nError, e.ErrorMessageArgument );
 }
 
-void implHandleWrappedTargetException( WrappedTargetException& e )
+void implHandleWrappedTargetException( const Any& _rWrappedTargetException )
 {
-    SbError nError;
-    String aMessage;
-    Any aWrappedAny = e.TargetException;
-    if ( aWrappedAny.getValueType() == ::getCppuType( (BasicErrorException*)NULL ) )
+    Any aExamine( _rWrappedTargetException );
+
+    // completely strip the first InvocationTargetException, its error message isn't of any
+    // interest to the user, it just says something like "invoking the UNO method went wrong.".
+    InvocationTargetException aInvocationError;
+    if ( aExamine >>= aInvocationError )
+        aExamine = aInvocationError.TargetException;
+
+    BasicErrorException aBasicError;
+
+    SbError nError( ERRCODE_BASIC_EXCEPTION );
+    ::rtl::OUStringBuffer aMessageBuf;
+
+    // strip any other WrappedTargetException instances, but this time preserve the error messages.
+    WrappedTargetException aWrapped;
+    sal_Int32 nLevel = 0;
+    while ( aExamine >>= aWrapped )
     {
-        BasicErrorException& be = *( (BasicErrorException*)aWrappedAny.getValue() );
-        nError = StarBASIC::GetSfxFromVBError( (USHORT)be.ErrorCode );
-        aMessage = be.ErrorMessageArgument;
+        // special handling for BasicErrorException errors
+        if ( aWrapped.TargetException >>= aBasicError )
+        {
+            nError = StarBASIC::GetSfxFromVBError( (USHORT)aBasicError.ErrorCode );
+            aMessageBuf.append( aBasicError.ErrorMessageArgument );
+            aExamine.clear();
+            break;
+        }
+
+        // append this round's message
+        implAppendExceptionMsg( aMessageBuf, aWrapped, aExamine.getValueTypeName(), nLevel );
+        if ( aWrapped.TargetException.getValueTypeClass() == TypeClass_EXCEPTION )
+            // there is a next chain element
+            aMessageBuf.appendAscii( "\nTargetException:" );
+
+        // next round
+        aExamine = aWrapped.TargetException;
+        ++nLevel;
+    }
+
+    if ( aExamine.getValueTypeClass() == TypeClass_EXCEPTION )
+    {
+        // the last element in the chain is still an exception, but no WrappedTargetException
+        implAppendExceptionMsg( aMessageBuf, *static_cast< const Exception* >( aExamine.getValue() ), aExamine.getValueTypeName(), nLevel );
+    }
+
+    StarBASIC::Error( nError, aMessageBuf.makeStringAndClear() );
+}
+
+static void implHandleAnyException( const Any& _rCaughtException )
+{
+    BasicErrorException aBasicError;
+    WrappedTargetException aWrappedError;
+
+    if ( _rCaughtException >>= aBasicError )
+    {
+        implHandleBasicErrorException( aBasicError );
+    }
+    else if ( _rCaughtException >>= aWrappedError )
+    {
+        implHandleWrappedTargetException( _rCaughtException );
     }
     else
     {
-        nError = ERRCODE_BASIC_EXCEPTION;
-        aMessage = implGetWrappedMsg( e );
+        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( _rCaughtException ) );
     }
-    StarBASIC::Error( nError, aMessage );
 }
 
 // Von Uno nach Sbx wandeln
@@ -1128,10 +1200,10 @@ static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
             // In die Sequence uebernehmen
             xArray->set( aRetVal, i, aElementVal );
         }
-        catch( IllegalArgumentException& e1 )
+        catch( const IllegalArgumentException& )
         {
             StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
-                implGetExceptionMsg( e1, aIllegalArgumentExceptionName ) );
+                implGetExceptionMsg( ::cppu::getCaughtException() ) );
         }
         catch (IndexOutOfBoundsException&)
         {
@@ -1297,10 +1369,10 @@ Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, Property* pUnoProperty 
                             // In die Sequence uebernehmen
                             xArray->set( aRetVal, i, aAnyValue );
                         }
-                        catch( IllegalArgumentException& e1 )
+                        catch( const IllegalArgumentException& )
                         {
                             StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
-                                implGetExceptionMsg( e1, aIllegalArgumentExceptionName ) );
+                                implGetExceptionMsg( ::cppu::getCaughtException() ) );
                         }
                         catch (IndexOutOfBoundsException&)
                         {
@@ -1901,21 +1973,9 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         // Wert von Uno nach Sbx uebernehmen
                         unoToSbxValue( pVar, aRetAny );
                     }
-                    catch( BasicErrorException& e0 )
+                    catch( const Exception& )
                     {
-                        implHandleBasicErrorException( e0 );
-                    }
-                    catch( WrappedTargetException& e1 )
-                    {
-                        implHandleWrappedTargetException( e1 );
-                    }
-                    catch( RuntimeException& e2 )
-                    {
-                        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e2 ) );
-                    }
-                    catch( Exception& e3 )
-                    {
-                        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e3 ) );
+                        implHandleAnyException( ::cppu::getCaughtException() );
                     }
                 }
                 else if( bInvocation && mxInvocation.is() )
@@ -1928,21 +1988,9 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         // Wert von Uno nach Sbx uebernehmen
                         unoToSbxValue( pVar, aRetAny );
                     }
-                    catch( BasicErrorException& e0 )
+                    catch( const Exception& )
                     {
-                        implHandleBasicErrorException( e0 );
-                    }
-                    catch( WrappedTargetException& e1 )
-                    {
-                        implHandleWrappedTargetException( e1 );
-                    }
-                    catch( RuntimeException& e2 )
-                    {
-                        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e2 ) );
-                    }
-                    catch( Exception& e3 )
-                    {
-                        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e3 ) );
+                        implHandleAnyException( ::cppu::getCaughtException() );
                     }
                 }
             }
@@ -1967,26 +2015,9 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         // nicht optimal, aber die Umstellung auf XInvocation steht ja ohnehin an
                         // Ansonsten kann auch FastPropertySet genutzt werden
                     }
-                    catch( BasicErrorException& e0 )
+                    catch( const Exception& )
                     {
-                        implHandleBasicErrorException( e0 );
-                    }
-                    catch( WrappedTargetException& e1 )
-                    {
-                        implHandleWrappedTargetException( e1 );
-                    }
-                    catch( IllegalArgumentException& e2 )
-                    {
-                        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
-                            implGetExceptionMsg( e2, aIllegalArgumentExceptionName ) );
-                    }
-                    catch( RuntimeException& e3 )
-                    {
-                        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e3 ) );
-                    }
-                    catch( Exception& e4 )
-                    {
-                        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e4 ) );
+                        implHandleAnyException( ::cppu::getCaughtException() );
                     }
                 }
                 else if( bInvocation && mxInvocation.is() )
@@ -1998,21 +2029,9 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                         // Wert setzen
                         mxInvocation->setValue( pProp->GetName(), aAnyValue );
                     }
-                    catch( BasicErrorException& e0 )
+                    catch( const Exception& )
                     {
-                        implHandleBasicErrorException( e0 );
-                    }
-                    catch( WrappedTargetException& e1 )
-                    {
-                        implHandleWrappedTargetException( e1 );
-                    }
-                    catch( RuntimeException& e2 )
-                    {
-                        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e2 ) );
-                    }
-                    catch( Exception& e3 )
-                    {
-                        StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e3 ) );
+                        implHandleAnyException( ::cppu::getCaughtException() );
                     }
                 }
             }
@@ -2199,35 +2218,10 @@ void SbUnoObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                     if( pParams )
                         pVar->SetParameters( NULL );
                 }
-                catch( BasicErrorException& e0 )
+                catch( const Exception& )
                 {
-                    implHandleBasicErrorException( e0 );
+                    implHandleAnyException( ::cppu::getCaughtException() );
                 }
-                catch( WrappedTargetException& e1 )
-                {
-                    implHandleWrappedTargetException( e1 );
-                }
-                catch( RuntimeException& e2 )
-                {
-                    StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e2 ) );
-                }
-                catch( IllegalArgumentException& e3)
-                {
-                    StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
-                        implGetExceptionMsg( e3, aIllegalArgumentExceptionName ) );
-                }
-                catch( Exception& e4 )
-                {
-                    StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e4 ) );
-                }
-                /*
-                catch( NullPointerException& e1 )
-                {
-                }
-                catch( InvocationTargetException& e2 )
-                {
-                }
-                */
                 GetSbData()->bBlockCompilerError = FALSE;  // #106433 Unblock compiler errors
             }
         }
@@ -2628,29 +2622,13 @@ SbxVariable* SbUnoObject::Find( const XubString& rName, SbxClassType t )
                 {
                     StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e ) );
                 }
-                catch( BasicErrorException& e0 )
+                catch( const Exception& )
                 {
                     // Anlegen, damit der Exception-Fehler nicht ueberschrieben wird
                     if( !pRes )
                         pRes = new SbxVariable( SbxVARIANT );
 
-                    implHandleBasicErrorException( e0 );
-                }
-                catch( WrappedTargetException& e1 )
-                {
-                    // Anlegen, damit der Exception-Fehler nicht ueberschrieben wird
-                    if( !pRes )
-                        pRes = new SbxVariable( SbxVARIANT );
-
-                    implHandleWrappedTargetException( e1 );
-                }
-                catch( RuntimeException& e2 )
-                {
-                    // Anlegen, damit der Exception-Fehler nicht ueberschrieben wird
-                    if( !pRes )
-                        pRes = new SbxVariable( SbxVARIANT );
-
-                    StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e2 ) );
+                    implHandleAnyException( ::cppu::getCaughtException() );
                 }
             }
         }
@@ -2820,7 +2798,7 @@ SbUnoObject* Impl_CreateUnoStruct( const String& aClassName )
 
     // Ist es ueberhaupt ein struct?
     TypeClass eType = xClass->getTypeClass();
-    if( eType != TypeClass_STRUCT )
+    if ( ( eType != TypeClass_STRUCT ) && ( eType != TypeClass_EXCEPTION ) )
         return NULL;
 
     // Instanz erzeugen
@@ -2916,21 +2894,9 @@ void RTL_Impl_CreateUnoService( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
         {
             xInterface = xFactory->createInstance( aServiceName );
         }
-        catch( BasicErrorException& e0 )
+        catch( const Exception& )
         {
-            implHandleBasicErrorException( e0 );
-        }
-        catch( WrappedTargetException& e1 )
-        {
-            implHandleWrappedTargetException( e1 );
-        }
-        catch( RuntimeException& e2 )
-        {
-            StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e2 ) );
-        }
-        catch( Exception& e3 )
-        {
-            StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e3 ) );
+            implHandleAnyException( ::cppu::getCaughtException() );
         }
     }
 
@@ -3244,22 +3210,9 @@ SbxVariable* SbUnoClass::Find( const XubString& rName, SbxClassType t )
                     pRes->SetName( rName );
                     unoToSbxValue( pRes, aAny );
                 }
-                catch( BasicErrorException& e0 )
+                catch( const Exception& )
                 {
-                    implHandleBasicErrorException( e0 );
-                }
-                catch( WrappedTargetException& e1 )
-                {
-                    implHandleWrappedTargetException( e1 );
-                }
-                catch( RuntimeException& e2 )
-                {
-                    StarBASIC::Error( ERRCODE_BASIC_EXCEPTION, implGetExceptionMsg( e2 ) );
-                }
-                catch( IllegalArgumentException& e3 )
-                {
-                    StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
-                        implGetExceptionMsg( e3, aIllegalArgumentExceptionName ) );
+                    implHandleAnyException( ::cppu::getCaughtException() );
                 }
             }
         }
@@ -3761,7 +3714,7 @@ void RTL_Impl_CreateUnoValue( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     catch( IllegalArgumentException& e1 )
     {
         StarBASIC::Error( ERRCODE_BASIC_EXCEPTION,
-            implGetExceptionMsg( e1, aIllegalArgumentExceptionName ) );
+            implGetExceptionMsg( ::cppu::getCaughtException() ) );
         return;
     }
     catch( CannotConvertException& e2 )
