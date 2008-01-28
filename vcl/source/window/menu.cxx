@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.158 $
+ *  $Revision: 1.159 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:22:40 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:16:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -564,6 +564,7 @@ private:
                     DECL_LINK( HighlightChanged, Timer* );
                     DECL_LINK( SubmenuClose, Timer* );
                     DECL_LINK( AutoScroll, Timer* );
+                    DECL_LINK( ShowHideListener, VclWindowEvent* );
 
     void            StateChanged( StateChangedType nType );
     void            DataChanged( const DataChangedEvent& rDCEvt );
@@ -786,6 +787,7 @@ private:
                     DECL_LINK( FloatHdl, PushButton* );
                     DECL_LINK( HideHdl, PushButton* );
                     DECL_LINK( ToolboxEventHdl, VclWindowEvent* );
+                    DECL_LINK( ShowHideListener, VclWindowEvent* );
 
     void            StateChanged( StateChangedType nType );
     void            DataChanged( const DataChangedEvent& rDCEvt );
@@ -3812,6 +3814,8 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, Window* pParent, WinBits nSt
     aSubmenuCloseTimer.SetTimeout( GetSettings().GetMouseSettings().GetMenuDelay() );
     aSubmenuCloseTimer.SetTimeoutHdl( LINK( this, MenuFloatingWindow, SubmenuClose ) );
     aScrollTimer.SetTimeoutHdl( LINK( this, MenuFloatingWindow, AutoScroll ) );
+
+    AddEventListener( LINK( this, MenuFloatingWindow, ShowHideListener ) );
 }
 
 void MenuFloatingWindow::doShutdown()
@@ -3855,6 +3859,7 @@ void MenuFloatingWindow::doShutdown()
             GetParent()->Invalidate( aInvRect );
         }
         pMenu = NULL;
+        RemoveEventListener( LINK( this, MenuFloatingWindow, ShowHideListener ) );
     }
 }
 
@@ -4115,6 +4120,18 @@ IMPL_LINK( MenuFloatingWindow, SubmenuClose, Timer*, EMPTYARG )
         if( pWin )
             pWin->KillActivePopup();
     }
+    return 0;
+}
+
+IMPL_LINK( MenuFloatingWindow, ShowHideListener, VclWindowEvent*, pEvent )
+{
+    if( ! pMenu )
+        return 0;
+
+    if( pEvent->GetId() == VCLEVENT_WINDOW_SHOW )
+        pMenu->ImplCallEventListeners( VCLEVENT_MENU_SHOW, ITEMPOS_INVALID );
+    else if( pEvent->GetId() == VCLEVENT_WINDOW_HIDE )
+        pMenu->ImplCallEventListeners( VCLEVENT_MENU_HIDE, ITEMPOS_INVALID );
     return 0;
 }
 
@@ -5043,11 +5060,14 @@ MenuBarWindow::MenuBarWindow( Window* pParent ) :
     }
 
     ImplInitStyleSettings();
+
+    AddEventListener( LINK( this, MenuBarWindow, ShowHideListener ) );
 }
 
 MenuBarWindow::~MenuBarWindow()
 {
     aCloser.RemoveEventListener( LINK( this, MenuBarWindow, ToolboxEventHdl ) );
+    RemoveEventListener( LINK( this, MenuBarWindow, ShowHideListener ) );
 }
 
 void MenuBarWindow::SetMenu( MenuBar* pMen )
@@ -5129,6 +5149,18 @@ IMPL_LINK( MenuBarWindow, ToolboxEventHdl, VclWindowEvent*, pEvent )
     {
         it->second.m_aHighlightLink.Call( &aArg );
     }
+    return 0;
+}
+
+IMPL_LINK( MenuBarWindow, ShowHideListener, VclWindowEvent*, pEvent )
+{
+    if( ! pMenu )
+        return 0;
+
+    if( pEvent->GetId() == VCLEVENT_WINDOW_SHOW )
+        pMenu->ImplCallEventListeners( VCLEVENT_MENU_SHOW, ITEMPOS_INVALID );
+    else if( pEvent->GetId() == VCLEVENT_WINDOW_HIDE )
+        pMenu->ImplCallEventListeners( VCLEVENT_MENU_HIDE, ITEMPOS_INVALID );
     return 0;
 }
 
