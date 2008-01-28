@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.85 $
+#   $Revision: 1.86 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 16:00:18 $
+#   last change: $Author: vg $ $Date: 2008-01-28 16:30:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,35 +48,35 @@ DESTINCLUDELIST+=$(DESTDIRINC)$/udkversion.mk
 
 DESTINCDIRLIST={$(subst,$(INCOUT),$(DESTDIRINC) $(INCLUDEDIRLIST))}
 
-COMPONENTLIST = \
-    acceptor	\
-    bridgefac	\
-    connector	\
-    reflection		\
-    shlibloader		\
-    nestedreg		\
-    dynamicloader	\
-    implreg		\
-    introspection		\
-    invocation		\
-    invocadapt		\
-    javavm		\
-    namingservice	\
-    proxyfac	\
-    regtypeprov		\
-    remotebridge	\
-    simplereg		\
-    servicemgr		\
-    streams		\
-    typeconverter		\
-    typemgr		\
-    uuresolver \
-    javaloader \
-    security
+#COMPONENTLIST = \
+#	acceptor	\
+#	bridgefac	\
+#	connector	\
+#	reflection		\
+#	shlibloader		\
+#	nestedreg		\
+#	dynamicloader	\
+#	implreg		\
+#	introspection		\
+#	invocation		\
+#	invocadapt		\
+#	javavm		\
+#	namingservice	\
+#	proxyfac	\
+#	regtypeprov		\
+#	remotebridge	\
+#	simplereg		\
+#	servicemgr		\
+#	streams		\
+#	typeconverter		\
+#	typemgr		\
+#	uuresolver \
+#	javaloader \
+#	security
 
-XMLLIST= \
-    $(foreach,c,$(COMPONENTLIST) $(DESTDIRXML)$/$c.uno.xml) \
-    $(DESTDIRXML)$/module-description.dtd
+#XMLLIST= \
+#	$(foreach,c,$(COMPONENTLIST) $(DESTDIRXML)$/$c.uno.xml) \
+#	$(DESTDIRXML)$/module-description.dtd
 
 EXELIST = \
     $(DESTDIRBIN)$/cppumaker$(EXEPOSTFIX) 	\
@@ -158,7 +158,6 @@ DOCUHTMLFILES+= \
     $(DESTDIR2)$/index.html \
     $(DESTDIRDOCU2)$/tools.html \
     $(DESTDIRDOCU2)$/notsupported.html \
-    $(DESTDIRDOCU2)$/DevelopersGuide_intro.html \
     $(DESTDIRDOCU2)$/install.html \
     $(DESTDIREXAMPLES2)$/examples.html \
     $(DESTDIREXAMPLES2)$/DevelopersGuide$/examples.html
@@ -206,7 +205,6 @@ INSTALLSCRIPT= \
 
 DIR_FILE_LIST=\
     $(EXELIST) \
-    $(XMLLIST) \
     $(LIBLIST) \
     $(SETTINGSLIST) \
     $(DOCUFILES) \
@@ -214,6 +212,8 @@ DIR_FILE_LIST=\
     $(DESTIDLLIST)  \
     $(DESTINCLUDELIST) \
     $(DESTCLASSESLIST)
+
+#    $(XMLLIST) \
 
 .IF "$(SOLAR_JAVA)" != ""
 DIR_FILE_LIST += $(DESTDIRJAR)$/win$/unowinreg.dll
