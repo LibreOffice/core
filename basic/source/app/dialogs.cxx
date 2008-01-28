@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:14:14 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 13:59:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -856,6 +856,7 @@ void GenericOptions::LoadData()
         }
         delete pGroup;
     }
+    delete pGroups;
     aCbArea.SetText( aCbArea.GetEntry( 0 ) );
     CheckButtons( aCbArea, aPbNewArea, aPbDelArea );
 
