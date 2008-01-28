@@ -134,6 +134,7 @@ case $sd_platform in
     pltfrm=sunpro
     soext=so
     exampleout=SOLARISexample.out
+    stldebug=_debug
     LD_LIBRARY_PATH=$OO_SDK_HOME/$directoryname/lib:$OO_EXAMPLE_OUT/$exampleout/lib:${OO_SDK_URE_LIB_DIR}:.:$LD_LIBRARY_PATH
     export LD_LIBRARY_PATH
     ;;
@@ -151,6 +152,7 @@ case $sd_platform in
     soext=dylib
     exampleout=MACOSXexample.out
     platform=MacOSX
+    stldebug=_stldebug
     DYLD_LIBRARY_PATH=$OO_SDK_HOME/$directoryname/lib:$OO_EXAMPLE_OUT/$exampleout/lib:${OO_SDK_URE_LIB_DIR}:.:$DYLD_LIBRARY_PATH
     export DYLD_LIBRARY_PATH
     ;;
@@ -168,6 +170,7 @@ case $sd_platform in
     soext=so
     exampleout=LINUXexample.out
     platform=Linux
+    stldebug=_stldebug
     LD_LIBRARY_PATH=$OO_SDK_HOME/$directoryname/lib:$OO_EXAMPLE_OUT/$exampleout/lib:${OO_SDK_URE_LIB_DIR}:.:$LD_LIBRARY_PATH
     export LD_LIBRARY_PATH
     ;;
@@ -185,6 +188,7 @@ case $sd_platform in
     soext=so
     exampleout=FREEBSDexample.out
     platform=FreeBSD
+    stldebug=_stldebug
     LD_LIBRARY_PATH=$OO_SDK_HOME/$directoryname/lib:$OO_EXAMPLE_OUT/$exampleout/lib:${OO_SDK_URE_LIB_DIR}:.:$LD_LIBRARY_PATH
     export LD_LIBRARY_PATH
 
@@ -266,12 +270,24 @@ fi
 
 export PATH
 
+if [ -r "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${stldebug}.${soext}" ]
+then
+    STLDEBUG=${stldebug}
+    export STLDEBUG
+fi
+
 # For URE, prepare symbolic links for libraries:
 rm -f "${OO_SDK_HOME}/${directoryname}/lib/libuno_cppu.${soext}" \
     "${OO_SDK_HOME}/${directoryname}/lib/libuno_cppuhelper${comid}.${soext}" \
     "${OO_SDK_HOME}/${directoryname}/lib/libuno_sal.${soext}" \
-    "${OO_SDK_HOME}/${directoryname}/lib/libuno_salhelper${comid}.${soext}" \
-    "${OO_SDK_HOME}/${directoryname}/lib/libstlport_${pltfrm}.${soext}"
+    "${OO_SDK_HOME}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
+
+if [ -w "${OO_SDK_HOME}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}" ]
+then
+    rm -rf "${OO_SDK_HOME}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}"
+fi
+
+
 if [ "${OO_SDK_URE_HOME}" ]
 then
     mkdir -p "${OO_SDK_HOME}/${directoryname}/lib"
@@ -283,8 +299,13 @@ then
         "${OO_SDK_HOME}/${directoryname}/lib/libuno_sal.${soext}"
     ln -s "${OO_SDK_URE_LIB_DIR}/libuno_salhelper${comid}.${soext}.3" \
         "${OO_SDK_HOME}/${directoryname}/lib/libuno_salhelper${comid}.${soext}"
-    ln -s "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}.${soext}" \
-        "${OO_SDK_HOME}/${directoryname}/lib/libstlport_${pltfrm}.${soext}"
+
+    if [ -r "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${STLDEBUG}.${soext}" ]
+    then
+	ln -s "${OO_SDK_URE_LIB_DIR}/libstlport_${pltfrm}${STLDEBUG}.${soext}" \
+	    "${OO_SDK_HOME}/${directoryname}/lib/libstlport_${pltfrm}${STLDEBUG}.${soext}"
+    fi
+
 fi
 
 # Prepare shell with all necessary environment variables.
