@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 13:03:12 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 13:59:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -783,6 +783,11 @@ Any implFindDialogLibForDialog( const Any& rDlgAny, SbxObject* pBasic )
     return aRetDlgLibAny;
 }
 
+static ::rtl::OUString aDecorationPropName =
+    ::rtl::OUString::createFromAscii( "Decoration" );
+static ::rtl::OUString aTitlePropName =
+    ::rtl::OUString::createFromAscii( "Title" );
+
 void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 {
     static OUString aResourceResolverPropName = OUString::createFromAscii( "ResourceResolver" );
@@ -838,6 +843,25 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     // Import the DialogModel
     Reference< XInputStream > xInput( xISP->createInputStream() );
     xmlscript::importDialogModel( xInput, xDialogModel, xContext );
+
+    // i83963 Force decoration
+    uno::Reference< beans::XPropertySet > xDlgModPropSet( xDialogModel, uno::UNO_QUERY );
+    if( xDlgModPropSet.is() )
+    {
+        bool bDecoration = true;
+        try
+        {
+            Any aDecorationAny = xDlgModPropSet->getPropertyValue( aDecorationPropName );
+            aDecorationAny >>= bDecoration;
+            if( !bDecoration )
+            {
+                xDlgModPropSet->setPropertyValue( aDecorationPropName, makeAny( true ) );
+                xDlgModPropSet->setPropertyValue( aTitlePropName, makeAny( ::rtl::OUString() ) );
+            }
+        }
+        catch( UnknownPropertyException& )
+        {}
+    }
 
     // Find dialog library for dialog, direct access is not possible here
     StarBASIC* pStartedBasic = pINST->GetBasic();
