@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:55:04 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:00:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -943,7 +943,7 @@ RTLFUNC(Hex)
         if ( pArg->IsInteger() )
             snprintf( aBuffer, sizeof(aBuffer), "%X", pArg->GetInteger() );
         else
-            snprintf( aBuffer, sizeof(aBuffer), "%lX", pArg->GetLong() );
+            snprintf( aBuffer, sizeof(aBuffer), "%lX", static_cast<long unsigned int>(pArg->GetLong()) );
         rPar.Get(0)->PutString( String::CreateFromAscii( aBuffer ) );
     }
 }
@@ -1347,7 +1347,7 @@ RTLFUNC(Oct)
         if ( pArg->IsInteger() )
             snprintf( aBuffer, sizeof(aBuffer), "%o", pArg->GetInteger() );
         else
-            snprintf( aBuffer, sizeof(aBuffer), "%lo", pArg->GetLong() );
+            snprintf( aBuffer, sizeof(aBuffer), "%lo", static_cast<long unsigned int>(pArg->GetLong()) );
         rPar.Get(0)->PutString( String::CreateFromAscii( aBuffer ) );
     }
 }
