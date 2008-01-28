@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collator_unicode.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:12:21 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:33:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ public:
 protected:
     const sal_Char *implementationName;
 private:
-    RuleBasedCollator *collator;
+    RuleBasedCollator *uca_base, *collator;
     oslModule hModule;
 };
 
