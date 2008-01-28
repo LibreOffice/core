@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblelistbox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:20:00 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:12:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@ namespace accessibility
 
         // VCLXAccessibleComponent
         virtual void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+        virtual void    ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent );
         virtual void    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
         SvTreeListBox*  getListBox() const;
