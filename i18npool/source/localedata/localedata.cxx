@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localedata.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:54:41 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:35:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -705,6 +705,21 @@ LocaleData::getAllFormats( const Locale& rLocale ) throw(RuntimeException)
     }
     return seq;
 }
+
+OUString SAL_CALL
+LocaleData::getCollatorRuleByAlgorithm( const Locale& rLocale, const OUString& algorithm ) throw(RuntimeException)
+{
+        MyFunc_Type func = (MyFunc_Type) getFunctionSymbol( rLocale, "getCollatorImplementation" );
+        if ( func ) {
+            sal_Int16 collatorCount = 0;
+            sal_Unicode **collatorArray = func(collatorCount);
+            for(sal_Int16 i = 0; i < collatorCount; i++)
+                if (algorithm.equals(collatorArray[i*3]))
+                    return OUString(collatorArray[i*3 + 2]);
+        }
+        return OUString();
+}
+
 
 Sequence< Implementation > SAL_CALL
 LocaleData::getCollatorImplementations( const Locale& rLocale ) throw(RuntimeException)
