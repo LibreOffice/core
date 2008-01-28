@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oneToOneMapping.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:41:13 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:32:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,76 +37,133 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
-oneToOneMapping::oneToOneMapping(OneToOneMappingTable_t *_table, const size_t _bytes)
+oneToOneMapping::oneToOneMapping( OneToOneMappingTable_t *rpTable, const size_t rnBytes, const size_t rnUnitSize )
+    : mpTable( rpTable ),
+      mnSize( rnBytes / rnUnitSize )
 {
-    table = _table;
-    max_size = _bytes / sizeof(std::pair< sal_Unicode, sal_Unicode >);
-    hasIndex = sal_False;
 }
 
 oneToOneMapping::~oneToOneMapping()
 {
-    if( hasIndex )
-        for (int i = 0; i < 256; i++)
-        if (index[i])
-            delete [] index[i];
 }
 
-sal_Unicode oneToOneMapping::find(const sal_Unicode key) const
+sal_Unicode oneToOneMapping::find(const sal_Unicode nKey) const
 {
-    if (hasIndex) {
-        // index search
-        int high, low;
-        high = (key >> 8) & 0xFF;
-        low = key & 0xFF;
-        if (index[high] != (int*)0 && index[high][low] != 0) {
-          return table[index[high][low] - 1].second;
-        }
-        else {
-          return sal_Unicode(key);
-        }
-    } else {
+    if( mpTable )
+    {
+        // binary search
         int bottom = 0;
-        int top = max_size - 1;
+        int top = mnSize - 1;
         int current;
 
         for (;;) {
-        current = (top + bottom) / 2;
-        if (key < table[current].first) {
-            top = current - 1;
-        }
-        else if (key > table[current].first) {
-            bottom = current + 1;
-        } else {
-            return table[current].second;
-        }
-        if (bottom > top) {
-            return sal_Unicode(key);
-        }
+            current = (top + bottom) / 2;
+            if( nKey < mpTable[current].first )
+                top = current - 1;
+            else if( nKey > mpTable[current].first )
+                bottom = current + 1;
+            else
+                return mpTable[current].second;
+
+            if( bottom > top )
+                return sal_Unicode( nKey );
         }
     }
+    else
+        return sal_Unicode( nKey );
 }
 
-void oneToOneMapping::makeIndex()
+oneToOneMappingWithFlag::oneToOneMappingWithFlag( UnicodePairWithFlag *rpTableWF, const size_t rnSize, const UnicodePairFlag rnFlag )
+    : oneToOneMapping( NULL, rnSize, sizeof(UnicodePairWithFlag) ),
+      mpTableWF ( rpTableWF ),
+      mnFlag    ( rnFlag ),
+      mbHasIndex( sal_False )
 {
-    if (!hasIndex) {
-        int i, j, high, low, current = -1;
-        hasIndex = sal_True;
-        for (i = 0; i < 256; i++)
-        index[i] = (int*)0;
+}
 
-        for (size_t k = 0; k < max_size; k++) {
-        high = (table[k].first >> 8) & 0xFF;
-        low = (table[k].first) & 0xFF;
-        if (high != current) {
-            current = high;
-            index[high] = new int[256];
-            for (j = 0; j < 256; j++)
-            index[high][j] = 0;
+oneToOneMappingWithFlag::~oneToOneMappingWithFlag()
+{
+    if( mbHasIndex )
+        for( int i = 0; i < 256; i++ )
+            if( mpIndex[i] )
+                delete [] mpIndex[i];
+}
+
+
+void oneToOneMappingWithFlag::makeIndex()
+{
+    if( !mbHasIndex && mpTableWF )
+    {
+        int i, j, high, low, current = -1;
+
+        for( i = 0; i < 256; i++ )
+            mpIndex[i] = NULL;
+
+        for( size_t k = 0; k < mnSize; k++ )
+        {
+            high = (mpTableWF[k].first >> 8) & 0xFF;
+            low  = (mpTableWF[k].first)      & 0xFF;
+            if( high != current )
+            {
+                current = high;
+                mpIndex[high] = new UnicodePairWithFlag*[256];
+
+                for( j = 0; j < 256; j++ )
+                    mpIndex[high][j] = NULL;
+            }
+            mpIndex[high][low] = &mpTableWF[k];
         }
-        index[high][low] = k + 1;
-        }
+
+        mbHasIndex = sal_True;
     }
 }
+
+sal_Unicode oneToOneMappingWithFlag::find( const sal_Unicode nKey ) const
+{
+    if( mpTableWF )
+    {
+        if( mbHasIndex )
+        {
+            // index search
+            int high, low;
+            high = (nKey >> 8) & 0xFF;
+            low = nKey & 0xFF;
+            if( mpIndex[high] != NULL &&
+                mpIndex[high][low] != NULL &&
+                mpIndex[high][low]->flag & mnFlag )
+                return mpIndex[high][low]->second;
+            else
+                return sal_Unicode( nKey );
+        }
+        else
+        {
+            // binary search
+            int bottom = 0;
+            int top = mnSize - 1;
+            int current;
+
+            for (;;) {
+                current = (top + bottom) / 2;
+                if( nKey < mpTableWF[current].first )
+                    top = current - 1;
+                else if( nKey > mpTableWF[current].first )
+                    bottom = current + 1;
+                else
+                {
+                    if( mpTableWF[current].flag & mnFlag )
+                        return mpTableWF[current].second;
+                    else
+                        return sal_Unicode( nKey );
+                }
+
+                if( bottom > top )
+                    return sal_Unicode( nKey );
+            }
+        }
+    }
+    else
+        return sal_Unicode( nKey );
+}
+
 
 } } } }
