@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:23:51 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:55:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -751,14 +751,12 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
 
                             // clear document info
                             SfxDocumentInfo& rInfo = pDocShell->GetDocInfo();
-                            rInfo.ResetUserData( SvtUserOptions().GetFullName() );
+                            rInfo.SetTemplateName( rInfo.GetTitle() );
+                            rInfo.SetTemplateFileName( pPilotDlg->GetDocPath() );
                             pDocShell->SetUseUserData(TRUE);
 
                             // #94652# clear UNDO stack after autopilot
-                            SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
-                            DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
-                            if(pUndoManager && pUndoManager->GetUndoActionCount())
-                                pUndoManager->Clear();
+                            pDocShell->ClearUndoBuffer();
 
                             bMakeLayoutVisible = true;
                         }
@@ -1081,10 +1079,8 @@ void OutlineToImpressFinalizer::operator() (bool)
     // #97231# Undo-Stack needs to be cleared, else the user may remove the
     // only drawpage and this is a state we cannot handle ATM.
     ::sd::DrawDocShell* pDocShell = mrDocument.GetDocSh();
-    SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
-    DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
-    if(pUndoManager->GetUndoActionCount())
-        pUndoManager->Clear();
+    if( pDocShell )
+        pDocShell->ClearUndoBuffer();
 }
 
 
