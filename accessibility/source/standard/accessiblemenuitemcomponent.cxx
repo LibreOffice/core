@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblemenuitemcomponent.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:36:30 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:15:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,14 +145,14 @@ sal_Bool OAccessibleMenuItemComponent::IsEnabled()
 
 // -----------------------------------------------------------------------------
 
-sal_Bool OAccessibleMenuItemComponent::IsShowing()
+sal_Bool OAccessibleMenuItemComponent::IsVisible()
 {
-    sal_Bool bShowing = sal_False;
+    sal_Bool bVisible = sal_False;
 
     if ( m_pParent )
-        bShowing = m_pParent->IsItemPosVisible( m_nItemPos );
+        bVisible = m_pParent->IsItemPosVisible( m_nItemPos );
 
-    return bShowing;
+    return bVisible;
 }
 
 // -----------------------------------------------------------------------------
@@ -300,10 +300,11 @@ void OAccessibleMenuItemComponent::FillAccessibleStateSet( utl::AccessibleStateS
         rStateSet.AddState( AccessibleStateType::SENSITIVE );
     }
 
-    rStateSet.AddState( AccessibleStateType::VISIBLE );
-
-    if ( IsShowing() )
+    if ( IsVisible() )
+    {
+        rStateSet.AddState( AccessibleStateType::VISIBLE );
         rStateSet.AddState( AccessibleStateType::SHOWING );
+    }
 
     rStateSet.AddState( AccessibleStateType::OPAQUE );
 }
