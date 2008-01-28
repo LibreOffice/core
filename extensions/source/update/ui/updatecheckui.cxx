@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckui.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 15:05:57 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:31:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,7 @@ private:
     BubbleWindow*   GetBubbleWindow();
     void            RemoveBubbleWindow( bool bRemoveIcon );
     Image           GetMenuBarIcon( MenuBar* pMBar );
-    void            AddMenuBarIcon( SystemWindow* pSysWin );
+    void            AddMenuBarIcon( SystemWindow* pSysWin, bool bAddEventHdl );
     Image           GetBubbleImage( ::rtl::OUString &rURL );
 
     uno::Reference< document::XEventBroadcaster > getGlobalEventBroadcaster() const
@@ -393,7 +393,7 @@ Image UpdateCheckUI::GetBubbleImage( ::rtl::OUString &rURL )
 }
 
 //------------------------------------------------------------------------------
-void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin )
+void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
 {
     if ( ! mbShowMenuIcon )
         return;
@@ -403,6 +403,9 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin )
     MenuBar *pActiveMBar = pSysWin->GetMenuBar();
     if ( ( pSysWin != mpIconSysWin ) || ( pActiveMBar != mpIconMBar ) )
     {
+        if ( bAddEventHdl && mpIconSysWin )
+            mpIconSysWin->RemoveEventListener( maWindowEventHdl );
+
         RemoveBubbleWindow( true );
 
         if ( pActiveMBar )
@@ -415,7 +418,8 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin )
         }
         mpIconMBar = pActiveMBar;
         mpIconSysWin = pSysWin;
-        mpIconSysWin->AddEventListener( maWindowEventHdl );
+        if ( bAddEventHdl && mpIconSysWin )
+            mpIconSysWin->AddEventListener( maWindowEventHdl );
     }
 
     if ( mbShowBubble && pActiveMBar )
@@ -627,15 +631,21 @@ void UpdateCheckUI::RemoveBubbleWindow( bool bRemoveIcon )
 
     if ( bRemoveIcon )
     {
-        if ( mpIconSysWin && mpIconMBar &&
-             ( mpIconSysWin->GetMenuBar() == mpIconMBar ) )
-        {
-            mpIconMBar->RemoveMenuBarButton( mnIconID );
-
-            mpIconSysWin = NULL;
+        try {
+            if ( mpIconSysWin && mpIconMBar &&
+                 ( mpIconSysWin->GetMenuBar() == mpIconMBar ) )
+            {
+                mpIconMBar->RemoveMenuBarButton( mnIconID );
+                mpIconMBar = NULL;
+                mnIconID = 0;
+            }
+        }
+        catch ( ... ) {
             mpIconMBar = NULL;
             mnIconID = 0;
         }
+
+        mpIconSysWin = NULL;
     }
 }
 
@@ -715,7 +725,7 @@ IMPL_LINK( UpdateCheckUI, UserEventHdl, UpdateCheckUI*, EMPTYARG )
     }
 
     if ( pActiveSysWin )
-        AddMenuBarIcon( pActiveSysWin );
+        AddMenuBarIcon( pActiveSysWin, true );
 
     return 0;
 }
@@ -729,7 +739,10 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
     {
         vos::OGuard aGuard( Application::GetSolarMutex() );
         if ( mpIconSysWin == pEvent->GetWindow() )
+        {
+            mpIconSysWin->RemoveEventListener( maWindowEventHdl );
             RemoveBubbleWindow( true );
+        }
     }
     else if ( VCLEVENT_WINDOW_MENUBARADDED == nEventID )
     {
@@ -740,9 +753,16 @@ IMPL_LINK( UpdateCheckUI, WindowEventHdl, VclWindowEvent*, pEvent )
             SystemWindow *pSysWin = pWindow->GetSystemWindow();
             if ( pSysWin )
             {
-                AddMenuBarIcon( pSysWin );
+                AddMenuBarIcon( pSysWin, false );
             }
         }
+    }
+    else if ( VCLEVENT_WINDOW_MENUBARREMOVED == nEventID )
+    {
+        vos::OGuard aGuard( Application::GetSolarMutex() );
+        MenuBar *pMBar = (MenuBar*) pEvent->GetData();
+        if ( pMBar && ( pMBar == mpIconMBar ) )
+            RemoveBubbleWindow( true );
     }
     else if ( ( nEventID == VCLEVENT_WINDOW_MOVE ) ||
               ( nEventID == VCLEVENT_WINDOW_RESIZE ) )
@@ -779,7 +799,7 @@ IMPL_LINK( UpdateCheckUI, ApplicationEventHdl, VclSimpleEvent *, pEvent)
                 MenuBar      *pMBar   = pSysWin->GetMenuBar();
                 if ( pSysWin && pMBar )
                 {
-                    AddMenuBarIcon( pSysWin );
+                    AddMenuBarIcon( pSysWin, true );
                 }
             }
             break;
