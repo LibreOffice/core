@@ -4,9 +4,9 @@
  *
  *  $RCSfile: button.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:02:22 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:15:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,8 @@
 #ifndef _SV_NATIVEWIDGETS_HXX
 #include <vcl/salnativewidgets.hxx>
 #endif
+
+#include <vector>
 
 class UserDrawEvent;
 class ImplCommonButtonData;
@@ -398,6 +400,21 @@ public:
 
     void            SetToggleHdl( const Link& rLink ) { maToggleHdl = rLink; }
     const Link&     GetToggleHdl() const { return maToggleHdl; }
+
+    /** GetRadioButtonGroup returns a list of pointers to <code>RadioButton</code>s in the same group.
+
+    The pointers in the returned list are valid at the time call returns. However rescheduling
+    or giving up the SolarMutex may mean events get executed that lead to the pointers getting
+    invalid.
+
+    @param io_rGroup
+    gets cleared on entering the function. on return contains the <code>RadioButton</code>s
+    in the same group as this <code>RadioButton</code>.
+
+    @param bIncludeThis
+    defines whether <code>this</code> is contained in the returned list
+    */
+    void            GetRadioButtonGroup( std::vector<RadioButton*>& io_rGroup, bool bIncludeThis ) const;
 };
 
 // ------------
