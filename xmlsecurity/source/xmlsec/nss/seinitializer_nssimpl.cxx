@@ -4,9 +4,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 10:07:25 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 13:54:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,8 +108,8 @@ bool nsscrypto_initialize( const char* token ) {
                     char * error = NULL;
 
                     PR_GetErrorText(error);
-
-                    printf("%s",error);
+                    if (error)
+                        printf("%s",error);
                     return false ;
                 }
         initialized = 1 ;
