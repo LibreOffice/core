@@ -44,7 +44,7 @@ file != FILENAME {
         crlf = 1
         exit(1)
     }
-    if ( $1 ~ /^<LC_FORMAT$/ )
+    if ( $1 ~ /^<LC_FORMAT(>|$)/ )
     {
         if ( $0 ~ /replaceFrom="\[CURRENCY\]"/ )
         {
@@ -64,7 +64,7 @@ file != FILENAME {
             }
         }
     }
-    else if ( $1 ~ /^<FormatElement$/ )
+    else if ( $1 ~ /^<FormatElement(>|$)/ )
     {
         if ( $0 ~ /usage="CURRENCY"/ )
         {
@@ -92,7 +92,7 @@ file != FILENAME {
         }
         bFormatAuto = 0
     }
-    else if ( $1 ~ /^<LC_CURRENCY$/ )
+    else if ( $1 ~ /^<LC_CURRENCY(>|$)/ )
     {
         for ( j=2; j<=NF; ++j )
         {
@@ -136,7 +136,7 @@ END {
 
 
 function getCurrencyParams() {
-    if ( $1 ~ /^<Currency$/ )
+    if ( $1 ~ /^<Currency(>|$)/ )
     {
         if ( $0 ~ /default="true"/ )
             bSymbolDefault = 1
