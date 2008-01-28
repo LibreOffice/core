@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-01-28 09:49:02 $
+dnl * Date: $Date: 2008-01-28 09:53:36 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.244 $ )
+AC_REVISION( $Revision: 1.245 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -3019,7 +3019,7 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
          Or use prebuilt one from http://tools.openoffice.org/unowinreg_prebuild/680/ and
          put it into external/unowinreg])
       fi
-      if echo "$WITH_MINGWIN" | $GREP -q "/"; then
+      if echo "$WITH_MINGWIN" | $EGREP -q "/"; then
          if ! test -x "$WITH_MINGWIN"; then MINGWCXX=false; else MINGWCXX=`basename $WITH_MINGWIN`; fi
       else
          AC_CHECK_TOOL(MINGWCXX, $WITH_MINGWIN, false)
@@ -3033,7 +3033,7 @@ if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
       else
          AC_MSG_RESULT(yes)
       fi
-      if echo "$WITH_MINGWIN" | $GREP -q "/"; then
+      if echo "$WITH_MINGWIN" | $EGREP -q "/"; then
          if ! test -x "`echo $WITH_MINGWIN | $SED -e s/g++/strip/`"; then MINGSTRIP=false; else MINGWSTRIP=$(basename $(echo $WITH_MINGWIN | $SED -e s/g++/strip/)); fi
       else
          AC_CHECK_TOOL(MINGWSTRIP, `echo $WITH_MINGWIN | $SED -e s/g++/strip/`, false)
@@ -4333,7 +4333,7 @@ else
 	 if $PKG_CONFIG --modversion libagg | grep -q 2.3 || \
 	 	$PKG_CONFIG --modversion libagg | grep -q 2.4; then
             # 2.4's libagg.pc.in still contains 2.3 :/
-            if $GREP -q "Version 2.4" `echo $AGG_INCDIR`/agg_basics.h; then
+            if $EGREP -q "Version 2.4" `echo $AGG_INCDIR`/agg_basics.h; then
                AC_MSG_RESULT([2.4])
                AGG_VERSION=2400
             else
