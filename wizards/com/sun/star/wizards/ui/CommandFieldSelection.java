@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommandFieldSelection.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:21:48 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:31:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,13 +37,15 @@ import com.sun.star.wizards.db.*;
 import com.sun.star.awt.XWindow;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.sdb.CommandType;
-import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.awt.*;
 import com.sun.star.beans.PropertyValue;
+import java.text.Collator;
+import java.util.Comparator;
+import java.util.Locale;
 
-public class CommandFieldSelection extends FieldSelection {
+public class CommandFieldSelection extends FieldSelection implements Comparator{
     CommandMetaData CurDBMetaData;
     XListBox xTableListBox;
     XFixedText xlblTable;
@@ -56,8 +58,8 @@ public class CommandFieldSelection extends FieldSelection {
     short iOldSelPos = -1;
     boolean bpreselectCommand = true;
     boolean bgetQueries;
-    boolean AppendMode;
     WizardDialog oWizardDialog;
+    private Collator aCollator = null;
 
     class ItemListenerImpl implements com.sun.star.awt.XItemListener {
 
@@ -243,6 +245,7 @@ public class CommandFieldSelection extends FieldSelection {
         System.arraycopy(CurDBMetaData.TableNames, 0, ContentList, 0, CurDBMetaData.TableNames.length);
         if (bgetQueries)
             ContentList = setPrefixinArray(ContentList, sTablePrefix, 0, CurDBMetaData.TableNames.length);
+        java.util.Arrays.sort(ContentList, this);
         Helper.setUnoPropertyValue(UnoDialog.getModel(xTableListBox), "StringItemList", ContentList);
         short iSelPos = getselectedItemPos();
         if (bpreselectCommand) {
@@ -259,6 +262,21 @@ public class CommandFieldSelection extends FieldSelection {
         if (bgetFields)
             fillUpFieldsListbox();
         return iSelPos;
+    }
+
+    private Collator getCollator() {
+        if (this.aCollator == null) {
+            com.sun.star.lang.Locale aOfficeLocale = Configuration.getOfficeLocale(this.CurDBMetaData.xMSF);
+            java.util.Locale aJavaLocale = new java.util.Locale(aOfficeLocale.Language, aOfficeLocale.Country, aOfficeLocale.Variant);
+            //Get the Collator for US English and set its strength to PRIMARY
+            this.aCollator = Collator.getInstance(aJavaLocale);
+            aCollator.setStrength(Collator.TERTIARY);
+        }
+        return aCollator;
+    }
+
+    public int compare(Object _oObject1, Object _oObject2){
+        return this.getCollator().compare(_oObject1, _oObject2);
     }
 
     private String[] setPrefixinArray(String[] _ContentList, String _sprefix, int _startindex, int _nlen) {
