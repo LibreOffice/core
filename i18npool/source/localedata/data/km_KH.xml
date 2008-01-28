@@ -201,7 +201,7 @@
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>
-    <Collator default="true" unoid="charset" />
+    <Collator default="true" unoid="charset">&amp;ោ&lt;ៅ&lt;ុំ&lt;ំ&lt;ាំ&lt;ះ&lt;ាះ&lt;ិះ&lt;ីះ&lt;ឹះ&lt;ឺះ&lt;ុះ&lt;ូះ&lt;ួះ&lt;ើះ&lt;ឿះ&lt;ៀះ&lt;េះ&lt;ែះ&lt;ៃះ&lt;ោះ&lt;ៅះ</Collator>
     <CollationOptions>
       <TransliterationModules>IGNORE_CASE</TransliterationModules>
     </CollationOptions>
