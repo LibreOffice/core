@@ -179,9 +179,10 @@
   <LC_COLLATION ref="en_US" />
   <LC_SEARCH ref="en_US"/>
   <LC_INDEX>
-    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-Z Š Ž Õ Ä Ö Ü</IndexKey>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-S Š Z Ž T U V W Õ Ä Ö Ü X Y</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
+    <UnicodeScript>2</UnicodeScript>
     <FollowPageWord>p.</FollowPageWord>
     <FollowPageWord>pp.</FollowPageWord>
   </LC_INDEX>
