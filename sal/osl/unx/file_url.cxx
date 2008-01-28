@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_url.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:46:24 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 13:55:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,10 +194,11 @@ static sal_Bool findWrongUsage( const sal_Unicode *path, sal_Int32 len )
 
 oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rtl_uString **pustrSystemPath )
 {
-    sal_Int32 nIndex = 0;
+    sal_Int32 nIndex;
     rtl_uString * pTmp = NULL;
 
     sal_Unicode encodedSlash[3] = { '%', '2', 'F' };
+    sal_Unicode protocolDelimiter[3] = { ':', '/', '/' };
 
     /* temporary hack: if already system path, return ustrFileURL */
     /*
@@ -215,7 +216,18 @@ oslFileError SAL_CALL osl_getSystemPathFromFileURL( rtl_uString *ustrFileURL, rt
         return osl_File_E_INVAL;
     }
 
+    /* Check for non file:// protocols */
+
+    nIndex = rtl_ustr_indexOfStr_WithLength( ustrFileURL->buffer, ustrFileURL->length, protocolDelimiter, 3 );
+    if ( -1 != nIndex && (4 != nIndex || 0 != rtl_ustr_ascii_shortenedCompare_WithLength( ustrFileURL->buffer, ustrFileURL->length,"file", 4 ) ) )
+    {
+        return osl_File_E_INVAL;
+    }
+
     /* search for encoded slashes (%2F) and decode every single token if we find one */
+
+    nIndex = 0;
+
     if( -1 != rtl_ustr_indexOfStr_WithLength( ustrFileURL->buffer, ustrFileURL->length, encodedSlash, 3 ) )
     {
         rtl_uString * ustrPathToken = NULL;
