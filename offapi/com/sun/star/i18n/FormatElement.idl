@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormatElement.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:44:40 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:56:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,5 +81,5 @@ published struct FormatElement
 
 //============================================================================
 }; }; }; };
-//============================================================================
+
 #endif
