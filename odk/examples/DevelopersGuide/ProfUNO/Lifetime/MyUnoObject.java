@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MyUnoObject.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:44:50 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 16:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -41,7 +41,11 @@
 class MyUnoObject implements com.sun.star.uno.XInterface
 {
     public MyUnoObject() {}
-    void finialize() { System.out.println( "finalizer called" ); }
+
+    protected void finalize() throws Throwable {
+        super.finalize();
+        System.out.println( "finalizer called" );
+    }
 
     public static void main( String args[] ) throws java.lang.InterruptedException
     {
