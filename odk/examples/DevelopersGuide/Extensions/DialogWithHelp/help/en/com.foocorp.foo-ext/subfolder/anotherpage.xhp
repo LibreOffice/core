@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<helpdocument version="1.0">
+<meta>
+<topic id="comfoocorpfooextsubfolder/anotherpage" indexer="include" status="PUBLISH">
+<title id="tit" xml-lang="en-US">Extension foo subfolder/anotherpage</title>
+<filename>/com.foocorp.foo-ext/subfolder/anotherpage.xhp</filename>
+</topic>
+</meta>
+<body>
+<bookmark xml-lang="en-US" branch="index" id="bm_id0001">
+<bookmark_value>Foo All Pages;subfolder/anotherpage</bookmark_value>
+</bookmark>
+<paragraph role="heading" id="hd_id0001" xml-lang="en-US" level="1">Extension foo subfolder/anotherpage</paragraph>
+<paragraph role="paragraph" id="par_id0001" xml-lang="en-US">This is subfolder/anotherpage of extension foo help.
+<comment>Comment at end of paragraph</comment></paragraph>
+<bookmark xml-lang="en-US" branch="hid/vnd.sun.star.script:DialogWithHelp.Module1.main?language=Basic&amp;location=application" id="bm_id0002" localize="false"/>
+<paragraph role="paragraph" id="hd_id0002" xml-lang="en-US"><ahelp hid="hid/vnd.sun.star.script:DialogWithHelp.Module1.main?language=Basic&amp;location=application" visibility="hidden">
+Click here to open the impressing Foo Dialog</ahelp></paragraph>
+<bookmark xml-lang="en-US" branch="hid/com.foocorp.foo-ext:FooDialog" id="bm_id0003" localize="false"/>
+<paragraph role="heading" id="hd_id0002" xml-lang="en-US" level="2">Help for the Foo Dialog</paragraph>
+<paragraph role="paragraph" id="hd_id0003" xml-lang="en-US">The Foo Dialog is a very important dialog that...</paragraph>
+<bookmark xml-lang="en-US" branch="hid/com.foocorp.foo-ext:FooDialogButton" id="bm_id0004" localize="false"/>
+<paragraph role="paragraph" id="hd_id0004" xml-lang="en-US">
+<ahelp hid="hid/com.foocorp.foo-ext:FooDialogButton" visibility="hidden">
+This button really does it!!</ahelp></paragraph>
+<paragraph role="heading" id="hd_id0003" xml-lang="en-US" level="2">Help for the "Do It !" button</paragraph>
+<paragraph role="paragraph" id="hd_id0005" xml-lang="en-US">The "Do It !" button does it!</paragraph>
+<paragraph role="heading" id="hd_id0004" xml-lang="en-US" level="2">Some fill text</paragraph>
+<paragraph role="paragraph" id="par_id0006" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0007" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0008" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0009" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0010" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0011" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0012" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0013" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0014" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0015" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0016" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0017" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0018" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0019" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0020" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0021" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0022" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0023" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0024" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0025" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0026" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0027" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0028" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0029" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0030" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0031" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0032" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0033" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0034" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0035" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0036" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0037" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0038" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0039" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0040" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0041" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0042" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0043" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0044" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0045" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0046" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0047" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0048" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0049" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0050" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0051" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0052" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0053" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0054" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0055" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0056" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0057" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0058" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0059" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0060" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0061" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0062" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0063" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0064" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0065" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0066" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0067" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0068" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="paragraph" id="par_id0069" xml-lang="en-US">This text fills the page.</paragraph>
+<paragraph role="heading" id="hd_id0005" xml-lang="en-US" level="2">Variable defining a link</paragraph>
+<paragraph role="paragraph" id="par_id0070" xml-lang="en-US">
+<variable id="linkvar">
+<link href="com.foocorp.foo-ext/page2.xhp" name="linkvar page2">Link to page2 defined as variable in subfolder/anotherpage.xhp</link>
+</variable>
+</paragraph>
+</body>
+</helpdocument>
