@@ -177,7 +177,7 @@
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>
-    <Collator unoid="charset" default="true"/>
+    <Collator unoid="charset" default="true">&amp;̀&lt;&lt;̉&lt;&lt;̃&lt;&lt;́&lt;&lt;̣ &amp;a&lt;ă&lt;&lt;&lt;Ă&lt;â&lt;&lt;&lt;Â &amp;d&lt;đ&lt;&lt;&lt;Đ &amp;e&lt;ê&lt;&lt;&lt;Ê &amp;o&lt;ô&lt;&lt;&lt;Ô&lt;ơ&lt;&lt;&lt;Ơ &amp;u&lt;ư&lt;&lt;&lt;Ư</Collator>
     <CollationOptions>
       <TransliterationModules>IGNORE_CASE</TransliterationModules>
     </CollationOptions>
