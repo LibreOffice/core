@@ -279,7 +279,7 @@ $OPcm $SP* $CANT_CM;
 $OPcm $SP+ $CM+ $AL_FOLLOW?;    # by rule 10, stand-alone CM behaves as AL
 
 # LB 15
-$QUcm $SP* $OPcm;
+# $QUcm $SP* $OPcm;
 
 # LB 16
 $CLcm $SP* $NScm;
@@ -337,6 +337,7 @@ $NUcm  $ALcm;
 # LB 24
 #
 $PRcm $IDcm;
+$ALcm $PRcm;
 $PRcm $ALcm;
 $POcm $ALcm;
 
@@ -363,7 +364,7 @@ $ALcm $ALcm;
 $CM+ $ALcm;      # The $CM+ is from rule 10, and unattached CM is treated as AL
 
 # LB 29
-$IScm $ALcm;
+$IScm ($ALcm | $NUcm);
 
 #
 # Rule 30   Do not break between letters, numbers or ordinary symbols
@@ -509,7 +510,7 @@ $SY $CM $SP+ $OP;   # TODO:  Experiment.  Remove.
 
 
 # LB 15
-$CM* $OP $SP* $CM* $QU;
+# $CM* $OP $SP* $CM* $QU;
 
 # LB 16
 $CM* $NS $SP* $CM* $CL;
@@ -557,6 +558,7 @@ $CM* $ALPlus $CM* $NU;
 
 # LB 24
 $CM* $ID $CM* $PR;
+$CM* $PR $CM* $ALPlus;
 $CM* $ALPlus $CM* $PR;
 $CM* $ALPlus $CM* $PO;
 
@@ -580,7 +582,7 @@ $CM* $ALPlus $CM* $ALPlus;
 
 
 # LB 29
-$CM* $ALPlus $CM* $IS+ [^$SP];
+$CM* ($NU | $ALPlus) $CM* $IS+ [^$SP];
 
 # LB 30
 $CM* $OP $CM* ($NU | $ALPlus);
