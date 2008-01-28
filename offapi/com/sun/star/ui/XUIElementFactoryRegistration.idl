@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XUIElementFactoryRegistration.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 08:32:11 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 16:12:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef __com_sun_star_ui_XUIElementFactory_idl__
-#include <com//sun/star/ui/XUIElementFactory.idl>
+#include <com/sun/star/ui/XUIElementFactory.idl>
 #endif
 
 #ifndef __com_sun_star_container_ElementExistException_idl__
