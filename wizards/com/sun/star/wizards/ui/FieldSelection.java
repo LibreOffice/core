@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldSelection.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:49:43 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:32:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,7 +439,6 @@ public class FieldSelection {
             }
             else
                 xSelFieldsListBox.addItems(SelFieldItems, xSelFieldsListBox.getItemCount());
-
         } else {
             SelFieldItems = xFieldsListBox.getSelectedItems();
             int MaxSourceSelected = SelFieldItems.length;
@@ -493,6 +492,15 @@ public class FieldSelection {
         String[] NewSelFieldItems = xSelFieldsListBox.getItems();
         if (xFieldSelection != null)
             xFieldSelection.shiftFromRightToLeft(OldSelFieldItems, NewSelFieldItems);
+    }
+
+    public void addItemsToFieldsListbox(String[] _sItems) {
+        String[] sOldList = xFieldsListBox.getItems();
+        for (int i = 0; i < _sItems.length; i++) {
+            if (JavaTools.FieldInList(sOldList, _sItems[i]) < 0) {
+                xFieldsListBox.addItem(_sItems[i], xFieldsListBox.getItemCount());
+            }
+        }
     }
 
     public String[] getSelectedFieldNames() {
