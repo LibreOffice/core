@@ -4,9 +4,9 @@
  *
  *  $RCSfile: qprostyle.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:35:22 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:13:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,25 +52,29 @@
 
 class ScQProStyle
 {
-    sal_uInt8  maAlign[ 256 ];
-    sal_uInt8  maFont[ 256 ];
-    sal_uInt16 maFontRecord[ 256 ];
-    sal_uInt16 maFontHeight[ 256 ];
-    String     maFontType[ 256 ];
-    sal_uInt16 maFontLimit, maAlignLimit;
+    enum limits { maxsize = 256 };
+    sal_uInt8  maAlign[ maxsize ];
+    sal_uInt8  maFont[ maxsize ];
+    sal_uInt16 maFontRecord[ maxsize ];
+    sal_uInt16 maFontHeight[ maxsize ];
+    String     maFontType[ maxsize ];
 
     public:
     ScQProStyle();
     void SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, SCTAB nTab, sal_uInt16 nStyle );
-    void setFontRecord( sal_uInt16 nIndex, sal_uInt16 nData, sal_uInt16 nPtSize )
+    void setFontRecord(sal_uInt16 nIndex, sal_uInt16 nData, sal_uInt16 nPtSize)
     {
-        maFontRecord[ nIndex ] = nData;
-        maFontHeight[ nIndex ] = nPtSize;
+        if (nIndex < maxsize)
+        {
+            maFontRecord[ nIndex ] = nData;
+            maFontHeight[ nIndex ] = nPtSize;
+        }
     }
-    void setFontType( sal_uInt16 nIndex, String &aLabel ){ maFontType[ nIndex ] = aLabel; }
-    void setAlign( sal_uInt16 nIndex, sal_uInt8 nData ) { maAlign[ nIndex ] = nData; }
-    void setFont( sal_uInt16 nIndex, sal_uInt8 nData ) { maFont[ nIndex ] = nData; }
-    void setFontLimit( sal_uInt16 nValue ) { maFontLimit = nValue; }
-    void setAlignLimit( sal_uInt16 nValue ) { maAlignLimit = nValue; }
+    void setFontType( sal_uInt16 nIndex, String &aLabel )
+        { if (nIndex < maxsize) maFontType[ nIndex ] = aLabel; }
+    void setAlign( sal_uInt16 nIndex, sal_uInt8 nData )
+        { if (nIndex < maxsize) maAlign[ nIndex ] = nData; }
+    void setFont( sal_uInt16 nIndex, sal_uInt8 nData )
+        { if (nIndex < maxsize) maFont[ nIndex ] = nData; }
 };
 #endif
