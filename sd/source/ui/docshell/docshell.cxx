@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshell.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 15:53:42 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:55:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,8 @@
 #include <svtools/visitem.hxx>
 #endif
 
+#include <svx/svdoutl.hxx>
+
 #include <sfx2/fcontnr.hxx>
 
 #include "app.hrc"
@@ -152,6 +154,8 @@
 #include "formatclipboard.hxx"
 #include "undo/undomanager.hxx"
 #include "undo/undofactory.hxx"
+#include "OutlineView.hxx"
+#include "ViewShellBase.hxx"
 
 using namespace sd;
 #define DrawDocShell
@@ -618,7 +622,6 @@ void DrawDocShell::SetModified( BOOL bSet /* = TRUE */ )
 
 // #91457# ExecuteSpellPopup now handled by DrawDocShell. This is necessary
 // to get hands on the outliner and the text object.
-#ifndef SVX_LIGHT
 IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
 {
     SdrObject* pObj = NULL;
@@ -633,6 +636,39 @@ IMPL_LINK(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo*, pInfo)
     mpDoc->ImpOnlineSpellCallback(pInfo, pObj, pOutl);
     return(0);
 }
-#endif // !SVX_LIGHT
+
+void DrawDocShell::ClearUndoBuffer()
+{
+    // clear possible undo buffers of outliners
+    SfxViewFrame* pSfxViewFrame = SfxViewFrame::GetFirst(this, 0, false);
+    while(pSfxViewFrame)
+    {
+        ViewShellBase* pViewShellBase = dynamic_cast< ViewShellBase* >( pSfxViewFrame->GetViewShell() );
+        if( pViewShellBase )
+        {
+            ::boost::shared_ptr<ViewShell> pViewSh( pViewShellBase->GetMainViewShell() );
+            if( pViewSh.get() )
+            {
+                ::sd::View* pView = pViewSh->GetView();
+                if( pView )
+                {
+                    pView->SdrEndTextEdit();
+                    sd::OutlineView* pOutlView = dynamic_cast< sd::OutlineView* >( pView );
+                    if( pOutlView )
+                    {
+                        SdrOutliner* pOutliner = pOutlView->GetOutliner();
+                        if( pOutliner )
+                            pOutliner->GetUndoManager().Clear();
+                    }
+                }
+            }
+        }
+        pSfxViewFrame = SfxViewFrame::GetNext(*pSfxViewFrame, this, 0, false);
+    }
+
+    SfxUndoManager* pUndoManager = GetUndoManager();
+    if(pUndoManager && pUndoManager->GetUndoActionCount())
+        pUndoManager->Clear();
+}
 
 } // end of namespace sd
