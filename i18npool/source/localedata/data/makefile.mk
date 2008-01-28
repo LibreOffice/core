@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-16 14:33:21 $
+#   last change: $Author: vg $ $Date: 2008-01-28 16:36:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -301,7 +301,8 @@ SHL2OBJS= \
     $(SLO)$/localedata_es_PY.obj \
     $(SLO)$/localedata_es_SV.obj \
     $(SLO)$/localedata_es_UY.obj \
-    $(SLO)$/localedata_es_VE.obj
+    $(SLO)$/localedata_es_VE.obj \
+    $(SLO)$/localedata_gl_ES.obj
 
 LIB2TARGET=	$(SLB)$/$(SHL2TARGET).lib
 LIB2OBJFILES=$(SHL2OBJS)
@@ -317,7 +318,7 @@ SHL3VERSIONMAP=localedata_euro.map
 SHL3DEF=$(MISC)$/$(SHL3TARGET).def
 DEF3NAME=$(SHL3TARGET)
 
-SHL3STDLIBS=	$(LINK_LOCALEDATA_EN_LIB) $(LINK_LOCALEDATA_ES_LIB)
+SHL3STDLIBS=	$(LINK_LOCALEDATA_EN_LIB)
 SHL3DEPN=$(SHL1TARGETN) $(SHL2TARGETN)
 SHL3OBJS=	\
     $(SLO)$/localedata_be_BY.obj	\
@@ -348,7 +349,6 @@ SHL3OBJS=	\
     $(SLO)$/localedata_fur_IT.obj	\
     $(SLO)$/localedata_fy_NL.obj	\
     $(SLO)$/localedata_ga_IE.obj	\
-    $(SLO)$/localedata_gl_ES.obj	\
     $(SLO)$/localedata_gsc_FR.obj	\
     $(SLO)$/localedata_hr_HR.obj	\
     $(SLO)$/localedata_is_IS.obj	\
