@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblelistbox.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:32:46 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:14:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,6 +173,23 @@ namespace accessibility
                 default:
                     VCLXAccessibleComponent::ProcessWindowEvent (rVclWindowEvent);
             }
+        }
+    }
+    // -----------------------------------------------------------------------------
+    void AccessibleListBox::ProcessWindowChildEvent( const VclWindowEvent& rVclWindowEvent )
+    {
+        switch ( rVclWindowEvent.GetId() )
+        {
+            case VCLEVENT_WINDOW_SHOW:
+            case VCLEVENT_WINDOW_HIDE:
+            {
+            }
+            break;
+            default:
+            {
+                VCLXAccessibleComponent::ProcessWindowChildEvent( rVclWindowEvent );
+            }
+            break;
         }
     }
 
