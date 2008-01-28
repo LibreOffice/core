@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxaccessibleradiobutton.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:40:15 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:15:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,9 @@
 #ifndef _SV_WINDOW_HXX
 #include <vcl/window.hxx>
 #endif
+#ifndef _SV_BUTTON_HXX
+#include <vcl/button.hxx>
+#endif
 
 
 using namespace ::com::sun::star;
@@ -139,14 +142,20 @@ void VCLXAccessibleRadioButton::FillAccessibleRelationSet( utl::AccessibleRelati
 {
     VCLXAccessibleTextComponent::FillAccessibleRelationSet( rRelationSet );
 
-    Window* pWindow = GetWindow();
-    if ( pWindow )
+    RadioButton* pRadioButton = dynamic_cast< RadioButton* >( GetWindow() );
+    if ( pRadioButton )
     {
-        Window *pLabeledBy = pWindow->GetLabeledBy();
-        if ( pLabeledBy && pLabeledBy != pWindow )
+        ::std::vector< RadioButton* > aGroup;
+        pRadioButton->GetRadioButtonGroup( aGroup, true );
+        if ( !aGroup.empty() )
         {
-            Sequence< Reference< XInterface > > aSequence(1);
-            aSequence[0] = pLabeledBy->GetAccessible();
+            sal_Int32 i = 0;
+            Sequence< Reference< XInterface > > aSequence( static_cast< sal_Int32 >( aGroup.size() ) );
+            ::std::vector< RadioButton* >::const_iterator aEndItr = aGroup.end();
+            for ( ::std::vector< RadioButton* >::const_iterator aItr = aGroup.begin(); aItr < aEndItr; ++aItr )
+            {
+                aSequence[i++] = (*aItr)->GetAccessible();
+            }
             rRelationSet.AddRelation( AccessibleRelation( AccessibleRelationType::MEMBER_OF, aSequence ) );
         }
     }
