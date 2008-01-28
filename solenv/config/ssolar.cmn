@@ -19,7 +19,6 @@ common
 		*mkout
 		*deliver
         *dmake
-		cvsmodules
         *copyprj
 		__mgrdir
         rsc_once
@@ -48,7 +47,6 @@ common
 		COMMON_OUTDIR
 		COPYALL
         COPY_PACKED
-		CPPRTST
         CVS_HEAD
 		CVSROOT
         CWS_WORK_STAMP
@@ -115,7 +113,7 @@ common
 		JDK_PATH
         L10N-framework
         L10N_framework
-        LFS_CFLAFS
+        LFS_CFLAGS
 		LOCALINI
 		MK_UNROLL
 		MKDIR
@@ -135,7 +133,6 @@ common
 		ODBCPATH
 		ODBCVER
 		OLD_CHAOS
-		OLD_CHAOS
 		PACKMS
 		PCLEAN_PATH
         PKGCONFIG_ROOT
@@ -148,7 +145,6 @@ common
 		PROF_EDITION
 		PROFILE
 		profile
-        product
         PROSWITCH
 		REMOTE_BUILD_FLAG
 		RES_ARAB
@@ -201,9 +197,7 @@ common
 		TF_FILTER
 		TF_FILEURL
 		TF_NEWEX
-		TF_PACKAGES_NO_S2U
 		TF_SDBAPI
-		TF_SERVER
 		TF_UCB
 		TF_SVDATA
 		TFDEF
