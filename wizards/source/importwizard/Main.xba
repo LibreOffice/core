@@ -278,7 +278,7 @@ Function GetImportWizardPaths() as Boolean
 	If SOBitmapPath &lt;&gt; &quot;&quot; Then
 		SOWorkPath = GetPathSettings(&quot;Work&quot;, False)
 		If SOWorkPath &lt;&gt; &quot;&quot; Then
-			SOTemplatePath = GetPathSettings(&quot;Template&quot;,False,1)
+			SOTemplatePath = GetPathSettings(&quot;Template_writable&quot;,False,0)
 			If SOTemplatePath &lt;&gt; &quot;&quot; Then
 				GetImportWizardPaths() = True
 				Exit Function
