@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lex.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:51:23 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:47:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,7 +203,8 @@ struct fsm
 
     /* // comment */
     { COM4, {C_XX}, COM4 },
-    { COM4, {'\n'}, S_NL },
+    { COM4, {'\n'}, S_COMMENT },
+    /* { COM4, {'\n'}, S_NL }, */
     { COM4, {EOFC}, S_EOFCOM },
 
     /* saw white space, eat it up */
