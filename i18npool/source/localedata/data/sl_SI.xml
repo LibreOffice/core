@@ -177,7 +177,7 @@
     </FormatElement>
   </LC_FORMAT>
   <LC_COLLATION>
-    <Collator default="true" unoid="alphanumeric" />
+    <Collator default="true" unoid="alphanumeric">&amp;C&lt;č&lt;&lt;&lt;Č&lt;ć&lt;&lt;&lt;Ć&amp;D&lt;đ&lt;&lt;&lt;Đ&amp;S&lt;š&lt;&lt;&lt;Š&amp;Z&lt;ž&lt;&lt;&lt;Ž</Collator>
     <CollationOptions>
       <TransliterationModules>IGNORE_CASE</TransliterationModules>
     </CollationOptions>
@@ -188,7 +188,7 @@
     </SearchOptions>
   </LC_SEARCH>
   <LC_INDEX>
-    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-C Č D-S Š T-Z Ž</IndexKey>
+    <IndexKey phonetic="false" default="true" unoid="alphanumeric">A-C Č Ć D Đ E-S Š T-Z Ž</IndexKey>
     <UnicodeScript>0</UnicodeScript>
     <UnicodeScript>1</UnicodeScript>
     <UnicodeScript>2</UnicodeScript>
