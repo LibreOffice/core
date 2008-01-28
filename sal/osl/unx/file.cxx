@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:18:01 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 13:55:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1749,7 +1749,7 @@ static oslFileError osl_psz_removeFile( const sal_Char* pszPath )
     int nRet=0;
     struct stat aStat;
 
-    nRet = stat(pszPath,&aStat);
+    nRet = lstat(pszPath,&aStat);
     if ( nRet < 0 )
     {
         nRet=errno;
