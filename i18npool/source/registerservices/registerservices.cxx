@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:05:42 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:36:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,6 +296,11 @@ IMPL_CREATEINSTANCE( NumToTextHangulCircledSyllable_ko )
 IMPL_CREATEINSTANCE( NumToTextTianGan_zh )
 IMPL_CREATEINSTANCE( NumToTextDiZi_zh )
 
+IMPL_CREATEINSTANCE( fullwidthKatakanaToHalfwidthKatakana )
+IMPL_CREATEINSTANCE( halfwidthKatakanaToFullwidthKatakana )
+IMPL_CREATEINSTANCE( fullwidthToHalfwidthLikeASC )
+IMPL_CREATEINSTANCE( halfwidthToFullwidthLikeJIS )
+
 IMPL_CREATEINSTANCE_MSF( OrdinalSuffix )
 
 static const struct InstancesArray {
@@ -557,6 +562,18 @@ static const struct InstancesArray {
         "com.sun.star.i18n.OrdinalSuffix",
         & OrdinalSuffix_CreateInstance },
 
+    {   TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "FULLWIDTHKATAKANA_HALFWIDTHKATAKANA",
+        &fullwidthKatakanaToHalfwidthKatakana_CreateInstance },
+    {   TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "HALFWIDTHKATAKANA_FULLWIDTHKATAKANA",
+        &halfwidthKatakanaToFullwidthKatakana_CreateInstance },
+    {   TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "FULLWIDTH_HALFWIDTH_LIKE_ASC",
+        &fullwidthToHalfwidthLikeASC_CreateInstance },
+    {   TRLT_SERVICELNAME_L10N,
+        TRLT_IMPLNAME_PREFIX  "HALFWIDTH_FULLWIDTH_LIKE_JIS",
+        &halfwidthToFullwidthLikeJIS_CreateInstance },
 // add here new services !!
     { 0, 0, 0 }
 };
