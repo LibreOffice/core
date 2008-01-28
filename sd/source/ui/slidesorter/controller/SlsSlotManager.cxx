@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:27:39 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:56:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -418,7 +418,7 @@ void SlotManager::ExecCtrl (SfxRequest& rRequest)
         case SID_RELOAD:
         {
             // Undo-Manager leeren
-            mrController.GetModel().GetDocument()->GetDocSh()->GetUndoManager()->Clear();
+            mrController.GetModel().GetDocument()->GetDocSh()->ClearUndoBuffer();
 
             // Normale Weiterleitung an ViewFrame zur Ausfuehrung
             rShell.GetViewFrame()->ExecuteSlot(rRequest);
