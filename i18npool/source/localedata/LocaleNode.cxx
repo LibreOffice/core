@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LocaleNode.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 14:05:01 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:35:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,6 +838,8 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
             ::rtl::OUString str;
             str = currNode->getAttr() -> getValueByName("unoid");
             of.writeParameter("CollatorID", str, j);
+            str = currNode->getValue();
+            of.writeParameter("CollatorRule", str, j);
             str = currNode -> getAttr() -> getValueByName("default");
             of.writeDefaultParameter("Collator", str, j);
             of.writeAsciiString("\n");
@@ -869,6 +871,10 @@ void LCCollationNode::generateCode (const OFileWriter &of) const
         of.writeAsciiString(",\n");
 
         of.writeAsciiString("\tdefaultCollator");
+        of.writeInt(j);
+        of.writeAsciiString(",\n");
+
+        of.writeAsciiString("\tCollatorRule");
         of.writeInt(j);
         of.writeAsciiString(",\n");
     }
