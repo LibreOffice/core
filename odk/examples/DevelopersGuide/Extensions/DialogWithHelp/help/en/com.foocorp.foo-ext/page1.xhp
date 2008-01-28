@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<helpdocument version="1.0">
+<meta>
+<topic id="comfoocorpfooextpage1" indexer="include" status="PUBLISH">
+<title id="tit" xml-lang="en-US">Extension foo page1</title>
+<filename>/com.foocorp.foo-ext/page1.xhp</filename>
+</topic>
+</meta>
+<body>
+<bookmark xml-lang="en-US" branch="index" id="bm_id0001">
+<bookmark_value>Foo Single level entry page1</bookmark_value>
+<bookmark_value>Foo All Pages;page1</bookmark_value>
+</bookmark>
+<bookmark xml-lang="en-US" branch="index" id="bm_id0002_swriter_sdraw">
+<bookmark_value>Foo Single level entry page1, swriter/sdraw only</bookmark_value>
+</bookmark>
+<paragraph role="heading" id="hd_id0001" xml-lang="en-US" level="1">Extension foo page1</paragraph>
+<paragraph role="paragraph" id="par_id0001" xml-lang="en-US">This is "page1" of extension foo help.
+<comment>Comment at end of paragraph</comment></paragraph>
+<comment>Some links...</comment>
+<paragraph role="heading" id="hd_id0002" xml-lang="en-US" level="2">Some links...</paragraph>
+<paragraph role="paragraph" id="par_id0002" xml-lang="en-US">
+<link href="com.foocorp.foo-ext/page2.xhp">This</link> is a link to "page2" of extension foo help.</paragraph>
+<paragraph role="paragraph" id="par_id0003" xml-lang="en-US">
+<link href="com.foocorp.foo-ext/page1.xhp#target">This</link> is a link to a section within a help file (down in this file, but can be in another file as well).</paragraph>
+<paragraph role="paragraph" id="par_id0004" xml-lang="en-US">
+<link href="text/shared/guide/main.xhp">This</link> is a link to a help page in the installed help.</paragraph>
+<paragraph role="heading" id="hd_id0003" xml-lang="en-US" level="2">Some fill text</paragraph>
+<paragraph role="paragraph" id="par_id0005" xml-lang="en-US">I like fill text. I like fill text. I like fill text.</paragraph>
+<paragraph role="paragraph" id="par_id0006" xml-lang="en-US">I like fill text. I like fill text. I like fill text.</paragraph>
+<paragraph role="paragraph" id="par_id0007" xml-lang="en-US">I like fill text. I like fill text. I like fill text.</paragraph>
+<paragraph role="paragraph" id="par_id0008" xml-lang="en-US">I like fill text. I like fill text. I like fill text.</paragraph>
+<paragraph role="paragraph" id="par_id0009" xml-lang="en-US">I like fill text. I like fill text. I like fill text.</paragraph>
+<paragraph role="paragraph" id="par_id0010" xml-lang="en-US">I like fill text. I like fill text. I like fill text.</paragraph>
+<section id="target">
+<paragraph role="heading" id="hd_id0004" xml-lang="en-US" level="2">Section "target"</paragraph>
+<paragraph role="paragraph" id="par_id0011" xml-lang="en-US">
+This is a section within the file page1.xhp. The section has the name "target".
+</paragraph>
+</section>
+<paragraph role="heading" id="hd_id0005" xml-lang="en-US" level="2">Some more fill text</paragraph>
+<paragraph role="paragraph" id="par_id0012" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0013" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0014" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0015" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0016" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0017" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0018" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0019" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0020" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0021" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0022" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0023" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0024" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0025" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0026" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0027" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0028" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0029" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0030" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0031" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0032" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0033" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0034" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0035" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<paragraph role="paragraph" id="par_id0036" xml-lang="en-US">This text fills the page allowing to show section "target" at the top.</paragraph>
+<section id="relatedtopics">
+<paragraph role="paragraph" id="par_id0037" xml-lang="en-US">
+This section shows a link created by embedding the "linkvar" variable defined in subfolder/anotherpage.xhp.</paragraph>
+<embed href="com.foocorp.foo-ext/subfolder/anotherpage.xhp#linkvar"/>
+</section>
+</body>
+</helpdocument>
