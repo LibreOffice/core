@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxform.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:30:36 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:01:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1149,5 +1149,28 @@ String SbxBasicFormater::BasicFormat( double dNumber, String sFormatStrg )
         }
     }
     return sReturnStrg;
+}
+
+BOOL SbxBasicFormater::isBasicFormat( String sFormatStrg )
+{
+    if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_GENERALNUMBER ) )
+        return TRUE;
+    if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_CURRENCY ) )
+        return TRUE;
+    if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_FIXED ) )
+        return TRUE;
+    if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_STANDARD ) )
+        return TRUE;
+    if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_PERCENT ) )
+        return TRUE;
+    if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_SCIENTIFIC ) )
+        return TRUE;
+    if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_YESNO ) )
+        return TRUE;
+    if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_TRUEFALSE ) )
+        return TRUE;
+    if( sFormatStrg.EqualsIgnoreCaseAscii( BASICFORMAT_ONOFF ) )
+        return TRUE;
+    return FALSE;
 }
 
