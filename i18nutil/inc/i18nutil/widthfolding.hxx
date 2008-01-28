@@ -4,9 +4,9 @@
  *
  *  $RCSfile: widthfolding.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:39:49 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:31:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,14 +41,23 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
+#define WIDTHFOLDNIG_DONT_USE_COMBINED_VU 0x01
+
 class widthfolding
 {
 public:
     static oneToOneMapping& getfull2halfTable();
     static oneToOneMapping& gethalf2fullTable();
+
+    static oneToOneMapping& getfull2halfTableForASC();
+    static oneToOneMapping& gethalf2fullTableForJIS();
+
+    static oneToOneMapping& getfullKana2halfKanaTable();
+    static oneToOneMapping& gethalfKana2fullKanaTable();
+
     static rtl::OUString decompose_ja_voiced_sound_marks(const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset, sal_Bool useOffset);
     static sal_Unicode decompose_ja_voiced_sound_marksChar2Char (sal_Unicode inChar);
-    static rtl::OUString compose_ja_voiced_sound_marks(const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset, sal_Bool useOffset);
+    static rtl::OUString compose_ja_voiced_sound_marks(const rtl::OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, com::sun::star::uno::Sequence< sal_Int32 >& offset, sal_Bool useOffset, sal_Int32 nFlags = 0 );
     static sal_Unicode getCompositionChar(sal_Unicode c1, sal_Unicode c2);
 };
 

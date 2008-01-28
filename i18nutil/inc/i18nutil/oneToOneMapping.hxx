@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oneToOneMapping.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 17:39:08 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:31:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,29 +40,67 @@
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
+class widthfolding;
+
 typedef std::pair< sal_Unicode, sal_Unicode > OneToOneMappingTable_t;
 
 #define MAKE_PAIR(item1,item2) std::make_pair< sal_Unicode, sal_Unicode >((sal_Unicode)item1,(sal_Unicode)item2)
 
+typedef sal_Int8 UnicodePairFlag;
+typedef struct _UnicodePairWithFlag
+{
+    sal_Unicode     first;
+    sal_Unicode     second;
+    UnicodePairFlag flag;
+} UnicodePairWithFlag;
+
 class oneToOneMapping
 {
+private:
+    // no copy, no substitution
+    oneToOneMapping( const oneToOneMapping& );
+    oneToOneMapping& operator=( const oneToOneMapping& );
 public:
-        oneToOneMapping(OneToOneMappingTable_t *_table, const size_t _bytes);
-        ~oneToOneMapping();
+    oneToOneMapping( OneToOneMappingTable_t *rpTable, const size_t rnSize, const size_t rnUnitSize = sizeof(OneToOneMappingTable_t) );
+    virtual ~oneToOneMapping();
 
-        // make index for fast search
-        void makeIndex();
-        // binary search / idex search
-        sal_Unicode find(const sal_Unicode key) const;
+    // make index for fast search
+    // bluedawrf: not used
+//        void makeIndex();
 
-        // translator
-        sal_Unicode operator[] (const sal_Unicode key) const { return find (key); };
+    // binary search
+    virtual sal_Unicode find( const sal_Unicode nKey ) const;
+
+    // translator
+    sal_Unicode operator[] ( const sal_Unicode nKey ) const { return find( nKey ); };
 
 protected:
-        OneToOneMappingTable_t *table;
-        size_t max_size;
-        int *index[256];
-        sal_Bool hasIndex;
+    OneToOneMappingTable_t *mpTable;
+    size_t                  mnSize;
+};
+
+class oneToOneMappingWithFlag : public oneToOneMapping
+{
+    friend class widthfolding;
+
+private:
+    // no copy, no substitution
+    oneToOneMappingWithFlag( const oneToOneMappingWithFlag& );
+    oneToOneMappingWithFlag& operator=( const oneToOneMappingWithFlag& );
+public:
+    oneToOneMappingWithFlag( UnicodePairWithFlag *rpTableWF, const size_t rnSize, const UnicodePairFlag rnFlag );
+    virtual ~oneToOneMappingWithFlag();
+
+    // make index for fast search
+    void makeIndex();
+
+    // index search
+    virtual sal_Unicode find( const sal_Unicode nKey ) const;
+protected:
+    UnicodePairWithFlag  *mpTableWF;
+    UnicodePairFlag       mnFlag;
+    UnicodePairWithFlag **mpIndex[256];
+    sal_Bool              mbHasIndex;
 };
 
 } } } }
