@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-09 15:04:10 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 16:34:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1103,7 +1103,8 @@ void SvImpLBox::DrawNet()
     //so that SvImpLBox::DrawNet() doesn't draw anything too
      if(pView->IsNativeControlSupported( CTRL_LISTNET, PART_ENTIRE_CONTROL)) {
         ImplControlValue    aControlValue;
-        Region            aCtrlRegion( Rectangle(Point( 0, 0 ), Size( 0, 0 )) );
+        Point aTemp(0,0);   // temporary needed for g++ 3.3.5
+        Region            aCtrlRegion( Rectangle(aTemp, Size( 0, 0 )) );
         ControlState        nState = CTRL_STATE_ENABLED;
             if( pView->DrawNativeControl( CTRL_LISTNET, PART_ENTIRE_CONTROL,
                     aCtrlRegion, nState, aControlValue, rtl::OUString() ) )
