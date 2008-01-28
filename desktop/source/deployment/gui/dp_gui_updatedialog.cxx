@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 16:07:25 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 13:55:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,7 +288,7 @@ private:
             packageManager,
         css::uno::Reference< css::xml::dom::XNode > const & updateInfo) const;
 
-    css::uno::Reference< css::uno::XComponentContext > const & m_context;
+    css::uno::Reference< css::uno::XComponentContext > m_context;
     UpdateDialog & m_dialog;
     rtl::Reference< dp_gui::SelectedPackageIterator > m_selectedPackages;
     css::uno::Sequence< css::uno::Reference<
