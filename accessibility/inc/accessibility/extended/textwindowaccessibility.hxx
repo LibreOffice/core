@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textwindowaccessibility.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-28 16:31:27 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:12:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,13 +432,6 @@ private:
     // Throws ::css::lang::DisposedException:
     void checkDisposed();
 
-    void calculateFirstSentence();
-
-    ::rtl::OUString
-    calculateDescription(::rtl::OUString const & rFirstSentence);
-
-    ::rtl::OUString calculateName(Paragraphs::size_type nNumber);
-
     ::rtl::Reference< Document > m_xDocument;
     Paragraphs::size_type m_nNumber;
 
@@ -446,7 +439,6 @@ private:
     /// client id in the AccessibleEventNotifier queue
     sal_uInt32 m_nClientId;
 
-    ::rtl::OUString m_aFirstSentence;
     ::rtl::OUString m_aParagraphText;
 };
 
@@ -467,14 +459,6 @@ public:
 
     // Must be called only after init has been called.
     ::css::lang::Locale retrieveLocale();
-
-    // Must be called only after init has been called.
-    // To make it possible for this method to be (indirectly) called from
-    // within Paragraph's constructor (i.e., when the Paragraph's ref count is
-    // still zero), pass a "ParagraphImpl const *" instead of a
-    // "::rtl::Reference< ParagraphImpl > const &".
-    Paragraphs::size_type
-    retrieveParagraphNumber(ParagraphImpl const * pParagraph);
 
     // Must be called only after init has been called.
     // To make it possible for this method to be (indirectly) called from
