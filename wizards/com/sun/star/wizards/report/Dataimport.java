@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:52:49 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:30:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,19 +249,6 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
                 int nCommandType = com.sun.star.sdb.CommandType.COMMAND;
                 boolean bexecute = false;
                 if (bgetConnection){
-                    if ((CurReportDocument.CurDBMetaData.getCommandType() == CommandType.QUERY) && (CurReportDocument.CurDBMetaData.Command.equals(""))){
-                        CurReportDocument.CurDBMetaData.oSQLQueryComposer = new SQLQueryComposer(CurReportDocument.CurDBMetaData);
-                        DBMetaData.CommandObject oCommand = CurReportDocument.CurDBMetaData.getQueryByName(sQueryName);
-                        if (CurReportDocument.CurDBMetaData.hasEscapeProcessing(oCommand.xPropertySet)){
-                            CurReportDocument.CurDBMetaData.Command = (String) oCommand.xPropertySet.getPropertyValue("Command");
-                            CurReportDocument.CurDBMetaData.oSQLQueryComposer.xQueryAnalyzer.setQuery(CurReportDocument.CurDBMetaData.Command);
-                            CurReportDocument.CurDBMetaData.oSQLQueryComposer.prependSortingCriteria();
-                        }
-                        else{
-                            nCommandType = com.sun.star.sdb.CommandType.QUERY;
-                            CurReportDocument.CurDBMetaData.Command = sQueryName;
-                        }
-                    }
                     bexecute = CurReportDocument.CurDBMetaData.executeCommand(nCommandType); //sMsgQueryCreationImpossible + (char) 13 + sMsgEndAutopilot, sFieldNameList, true);
                     if (bexecute){
                         bexecute = CurReportDocument.CurDBMetaData.getFields(sFieldNameList, true);
@@ -296,6 +283,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             RecordParser CurDBMetaData = CurReportDocument.CurDBMetaData;
             com.sun.star.style.BreakType CorrBreakValue = null;
             String CorrPageDescName = "";
+            CurReportDocument.oTextFieldHandler.fixDateFields(true);
             CurReportDocument.removeAllVisibleTextSections();
             CurReportDocument.removeNonLayoutTextTables();
             addTextSectionCopies();
