@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:53:41 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:31:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,8 +202,8 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                 String sQueryName = CurDBCommandFieldSelection.getSelectedCommandName();
                 DBMetaData.CommandObject oCommand = CurDBMetaData.getQueryByName(sQueryName);
                 bHasEscapeProcessing = CurDBMetaData.hasEscapeProcessing(oCommand.xPropertySet);
+                String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
                 if (bHasEscapeProcessing){
-                    String sCommand = (String) oCommand.xPropertySet.getPropertyValue("Command");
                     bQueryCreated = (!sCommand.equals(""));
                     CurDBMetaData.oSQLQueryComposer.xQueryAnalyzer.setQuery(sCommand);
                     CurDBMetaData.oSQLQueryComposer.prependSortingCriteria();
@@ -211,7 +211,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
                     bQueryCreated = true;
                 }
                 else{
-                    CurDBMetaData.Command = sQueryName;
+                    CurDBMetaData.Command = sCommand;
                     bQueryCreated = true;
                 }
             } catch (Exception e) {
@@ -474,8 +474,14 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
 
 
     private void toggleSortingPage(){
-        int nCommandType = this.CurDBCommandFieldSelection.getSelectedCommandType();
-        super.setStepEnabled(SOSORTPAGE, (nCommandType == CommandType.TABLE));
+        int nlCommandType = this.CurDBCommandFieldSelection.getSelectedCommandType();
+        boolean bdoenable = (nlCommandType == CommandType.TABLE);
+        if (!bdoenable) {
+            String sQueryName = CurDBCommandFieldSelection.getSelectedCommandName();
+            DBMetaData.CommandObject oCommand = CurDBMetaData.getQueryByName(sQueryName);
+            bdoenable = CurDBMetaData.hasEscapeProcessing(oCommand.xPropertySet);
+        }
+        super.setStepEnabled(SOSORTPAGE, bdoenable);
     }
 
 
