@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutManager.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:02:29 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:50:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 #define __com_sun_star_frame_LayoutManager_idl__
 
 #ifndef __com_sun_star_frame_XLayoutManager_idl__
-#include <com//sun/star/frame/XLayoutManager.idl>
+#include <com/sun/star/frame/XLayoutManager.idl>
 #endif
 
 #ifndef __com_sun_star_frame_XFrameActionListener_idl__
@@ -45,11 +45,11 @@
 #endif
 
 #ifndef __com_sun_star_ui_XUIConfigurationListener_idl__
-#include <com//sun/star/ui/XUIConfigurationListener.idl>
+#include <com/sun/star/ui/XUIConfigurationListener.idl>
 #endif
 
 #ifndef __com_sun_star_frame_XInplaceLayout_idl__
-#include <com//sun/star/frame/XInplaceLayout.idl>
+#include <com/sun/star/frame/XInplaceLayout.idl>
 #endif
 
 #ifndef __com_sun_star_beans_XPropertySet_idl__
@@ -57,7 +57,7 @@
 #endif
 
 #ifndef __com_sun_star_frame_XMenuBarMergingAcceptor_idl__
-#include <com//sun/star/frame/XMenuBarMergingAcceptor.idl>
+#include <com/sun/star/frame/XMenuBarMergingAcceptor.idl>
 #endif
 
 #ifndef __com_sun_star_frame_XLayoutManagerEventBroadcaster_idl__
