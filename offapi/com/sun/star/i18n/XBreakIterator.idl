@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XBreakIterator.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:54:50 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 16:04:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -378,5 +378,5 @@ published interface XBreakIterator: com::sun::star::uno::XInterface
 
 //============================================================================
 }; }; }; };
-//============================================================================
+
 #endif
