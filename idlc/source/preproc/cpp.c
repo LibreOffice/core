@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:01:57 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 15:47:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ int ifdepth;
 int ifsatisfied[NIF];
 int skipping;
 
-char rcsid[] = "$Version 1.2 $ $Revision: 1.7 $ $Date: 2007-09-20 15:01:57 $";
+char rcsid[] = "$Version 1.2 $ $Revision: 1.8 $ $Date: 2008-01-28 15:47:39 $";
 
 int realargc;
 char* realargv[512];
@@ -156,7 +156,7 @@ int main(int argc, char **argv)
     maketokenrow(3, &tr);
     expandlex();
     setup(realargc, realargv);
-    fixlex();
+    /* fixlex(); */
     if (!Pflag)
         genline();
     process(&tr);
