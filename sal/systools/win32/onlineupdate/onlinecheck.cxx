@@ -4,9 +4,9 @@
  *
  *  $RCSfile: onlinecheck.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-26 11:29:27 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 13:55:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@ extern "C" sal_Bool SAL_CALL hasInternetConnection()
     DWORD   dwFlags;
     TCHAR   szConnectionName[1024];
 
+    __try {
     BOOL fIsConnected = InternetGetConnectedStateEx(
         &dwFlags,
         szConnectionName,
@@ -65,4 +66,8 @@ extern "C" sal_Bool SAL_CALL hasInternetConnection()
         0 );
 
     return fIsConnected ? sal_True : sal_False;
+
+    } __except( EXCEPTION_EXECUTE_HANDLER ) {
+        return sal_False;
+    }
 }
