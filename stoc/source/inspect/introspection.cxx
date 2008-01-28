@@ -4,9 +4,9 @@
  *
  *  $RCSfile: introspection.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:29:49 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 14:01:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -337,17 +337,17 @@ IntrospectionAccessStatic_Impl::IntrospectionAccessStatic_Impl( Reference< XIdlR
     mbFastPropSet = sal_False;
     mpOrgPropertyHandleArray = NULL;
 
-    mnPropCount = 0L;
-    //mnDangerousPropCount = 0L;
-    mnPropertySetPropCount = 0L;
-    mnAttributePropCount = 0L;
-    mnMethodPropCount = 0L;
+    mnPropCount = 0;
+    //mnDangerousPropCount = 0;
+    mnPropertySetPropCount = 0;
+    mnAttributePropCount = 0;
+    mnMethodPropCount = 0;
 
     // Method-Daten
-    mnMethCount = 0L;
+    mnMethCount = 0;
 
     // Eigenens RefCounting
-    nRefCount = 0L;
+    nRefCount = 0;
 }
 
 // Von Hand refcounten !!!
@@ -2356,8 +2356,8 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
         //if( xClassProvider.is() )
         {
             // Indizes in die Export-Tabellen
-            sal_Int32 iAllExportedMethod = 0L;
-            sal_Int32 iAllSupportedListener = 0L;
+            sal_Int32 iAllExportedMethod = 0;
+            sal_Int32 iAllSupportedListener = 0;
 
             // Hashtable fuer Pruefung auf mehrfache Beruecksichtigung von Interfaces
             CheckedInterfacesMap aCheckedInterfacesMap;
@@ -2476,7 +2476,7 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                         // 3. Methoden
 
                         // Zaehler fuer die gefundenen Listener
-                        sal_Int32 nListenerCount = 0L;
+                        sal_Int32 nListenerCount = 0;
 
                         // Alle Methoden holen und merken
                         Sequence< Reference<XIdlMethod> > methods = rxIfaceClass->getMethods();
@@ -2852,8 +2852,8 @@ IntrospectionAccessStatic_Impl* ImplIntrospection::implInspect(const Any& aToIns
                         // 4. Methoden in die Gesamt-Sequence uebernehmen
 
                         // Wieviele Methoden muessen in die Method-Sequence?
-                        sal_Int32 nExportedMethodCount = 0L;
-                        sal_Int32 nSupportedListenerCount = 0L;
+                        sal_Int32 nExportedMethodCount = 0;
+                        sal_Int32 nSupportedListenerCount = 0;
                         for( i = 0 ; i < nSourceMethodCount ; i++ )
                         {
                             if( pMethodTypes[ i ] != INVALID_METHOD )
