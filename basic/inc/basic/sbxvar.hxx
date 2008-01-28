@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxvar.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 12:55:39 $
+ *  last change: $Author: vg $ $Date: 2008-01-28 13:59:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,11 +89,11 @@ struct SbxINT64
         if( n >= 0 )
         {
             nHigh = (INT32)(n / (double)4294967296.0);
-            nLow  = (UINT32)(n - ((double)nHigh * (double)4294967296.0));
+            nLow  = (UINT32)(n - ((double)nHigh * (double)4294967296.0) + 0.5);
         }
         else {
             nHigh = (INT32)(-n / (double)4294967296.0);
-            nLow  = (UINT32)(-n - ((double)nHigh * (double)4294967296.0));
+            nLow  = (UINT32)(-n - ((double)nHigh * (double)4294967296.0) + 0.5);
             CHS();
         }
     }
