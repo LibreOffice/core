@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 16:20:58 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:22:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -411,22 +411,23 @@ namespace framework
                                m_nStyle( BUTTON_SYMBOL ) {}
 
                 bool operator< ( const UIElement& aUIElement ) const;
+                UIElement& operator=( const UIElement& rUIElement );
 
                 rtl::OUString                                                            m_aType;
                 rtl::OUString                                                            m_aName;
                 rtl::OUString                                                            m_aUIName;
                 com::sun::star::uno::Reference< ::com::sun::star::ui::XUIElement >       m_xUIElement;
-                sal_Bool                                                                 m_bFloating : 1,
-                                                                                         m_bVisible : 1,
-                                                                                         m_bUserActive : 1,
-                                                                                         m_bCreateNewRowCol0 : 1,
-                                                                                         m_bDeactiveHide : 1,
-                                                                                         m_bMasterHide : 1,
-                                                                                         m_bContextSensitive : 1,
-                                                                                         m_bContextActive : 1;
-                sal_Bool                                                                 m_bNoClose : 1,
-                                                                                         m_bSoftClose : 1,
-                                                                                         m_bStateRead : 1;
+                sal_Bool                                                                 m_bFloating,
+                                                                                         m_bVisible,
+                                                                                         m_bUserActive,
+                                                                                         m_bCreateNewRowCol0,
+                                                                                         m_bDeactiveHide,
+                                                                                         m_bMasterHide,
+                                                                                         m_bContextSensitive,
+                                                                                         m_bContextActive;
+                sal_Bool                                                                 m_bNoClose,
+                                                                                         m_bSoftClose,
+                                                                                         m_bStateRead;
                 sal_Int16                                                                m_nStyle;
                 DockedData                                                               m_aDockedData;
                 FloatingData                                                             m_aFloatingData;
@@ -454,6 +455,7 @@ namespace framework
             sal_Bool implts_findElement( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xUIElement, UIElement& aElementData );
             sal_Bool implts_findElement( const rtl::OUString& aName, UIElement& aElementData );
             UIElement& impl_findElement( const rtl::OUString& aName );
+            sal_Bool implts_insertUIElement( const UIElement& rUIElement );
 
             void implts_refreshContextToolbarsVisibility();
             void implts_writeNewStateData( const rtl::OUString aName, const ::com::sun::star::uno::Reference< com::sun::star::awt::XWindow >& xWindow );
@@ -542,6 +544,8 @@ namespace framework
             sal_Bool impl_parseResourceURL( const rtl::OUString aResourceURL, rtl::OUString& aElementType, rtl::OUString& aElementName );
 
             void    implts_notifyListeners( short nEvent, ::com::sun::star::uno::Any aInfoParam );
+
+            void    implts_checkElementContainer();
 
             DECL_LINK( OptionsChanged, void* );
             DECL_LINK( SettingsChanged, void* );
