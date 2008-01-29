@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textaction.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 11:51:50 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:05:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1444,11 +1444,12 @@ namespace cppcanvas
                 RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::EffectTextArrayAction::render( subset )" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::EffectTextArrayAction: 0x%X", this );
 
-                rendering::RenderState                      aLocalState( maState );
-                uno::Reference< rendering::XTextLayout >    xTextLayout( mxTextLayout );
+                rendering::RenderState                   aLocalState( maState );
+                uno::Reference< rendering::XTextLayout > xTextLayout( mxTextLayout );
+                const geometry::RealRectangle2D          aTextBounds( mxTextLayout->queryTextBounds() );
 
                 double nMinPos(0.0);
-                double nMaxPos(0.0);
+                double nMaxPos(aTextBounds.X2 - aTextBounds.X1);
 
                 createSubsetLayout( xTextLayout,
                                     aLocalState,
@@ -1514,11 +1515,12 @@ namespace cppcanvas
                 RTL_LOGFILE_CONTEXT( aLog, "::cppcanvas::internal::EffectTextArrayAction::getBounds( subset )" );
                 RTL_LOGFILE_CONTEXT_TRACE1( aLog, "::cppcanvas::internal::EffectTextArrayAction: 0x%X", this );
 
-                rendering::RenderState                      aLocalState( maState );
-                uno::Reference< rendering::XTextLayout >    xTextLayout( mxTextLayout );
+                rendering::RenderState                   aLocalState( maState );
+                uno::Reference< rendering::XTextLayout > xTextLayout( mxTextLayout );
+                const geometry::RealRectangle2D          aTextBounds( mxTextLayout->queryTextBounds() );
 
                 double nMinPos(0.0);
-                double nMaxPos(0.0);
+                double nMaxPos(aTextBounds.X2 - aTextBounds.X1);
 
                 createSubsetLayout( xTextLayout,
                                     aLocalState,
