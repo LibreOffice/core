@@ -79,11 +79,11 @@ ru    1251  1049
 rw       0  1569   # Kinyarwanda
 sa       0  1103   # Sanskrit
 sb       0  1070   # Sorbian
-sh-YU    0  2074   # Serbian Latin
+sh       0  2074   # Serbian Latin
 sk    1250  1051   # Slovak
 sl    1250  1060   # Slovenian
 sq    1250  1052   # Albanian
-sr-CS    0  3098   # Serbian Cyrillic
+sr       0  3098   # Serbian Cyrillic
 sr-SP 1251  3098   # Serbian Cyrillic
 ss       0  1579   # Swazi
 st       0  1072   # Southern Sotho, Sutu
