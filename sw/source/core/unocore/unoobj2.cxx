@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobj2.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:39:01 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:24:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -392,68 +392,14 @@ void CollectFrameAtNode( SwClient& rClnt, const SwNodeIndex& rIdx,
 
   -----------------------------------------------------------------------*/
 void SwXTextCursor::insertDocumentFromURL(const OUString& rURL,
-    const uno::Sequence< beans::PropertyValue >& aOptions)
+    const uno::Sequence< beans::PropertyValue >& rOptions)
     throw( lang::IllegalArgumentException, io::IOException, uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
     {
-        String sFilterName;
-        String sFilterOption;
-        String sPassword;
-        OUString uFilterName(C2U(SW_PROP_NAME_STR(UNO_NAME_FILTER_NAME)));
-        OUString uFilterOption(C2U(SW_PROP_NAME_STR(UNO_NAME_FILTER_OPTION)));
-        OUString uPassword(C2U(SW_PROP_NAME_STR(UNO_NAME_PASSWORD)));
-        sal_Bool bIllegalArgument = sal_False;
-
-        for ( int n = 0; n < aOptions.getLength(); ++n )
-        {
-            // get Property-Value from options
-            const beans::PropertyValue &rProp = aOptions.getConstArray()[n];
-            uno::Any aValue( rProp.Value );
-
-            // FilterName-Property?
-            if ( rProp.Name == uFilterName )
-            {
-                if ( rProp.Value.getValueType() == ::getCppuType((const OUString*)0))
-                {
-                    OUString uTmp;
-                    rProp.Value >>= uTmp;
-                    sFilterName = uTmp;
-                }
-                else if ( rProp.Value.getValueType() != ::getVoidCppuType() )
-                    bIllegalArgument = sal_True;
-            }
-            else if( rProp.Name == uFilterOption )
-            {
-                if ( rProp.Value.getValueType() == ::getCppuType((const OUString*)0))
-                {
-                    OUString uTmp;
-                    rProp.Value >>= uTmp;
-                    sFilterOption = uTmp;
-                }
-                else if ( rProp.Value.getValueType() != ::getVoidCppuType() )
-
-                    bIllegalArgument = sal_True;
-            }
-            else if( rProp.Name == uPassword )
-            {
-                if ( rProp.Value.getValueType() == ::getCppuType((const OUString*)0))
-                {
-                    OUString uTmp;
-                    rProp.Value >>= uTmp;
-                    sPassword = uTmp;
-                }
-                else if ( rProp.Value.getValueType() != ::getVoidCppuType() )
-                    bIllegalArgument = sal_True;
-            }
-            else if(rProp.Value.getValueType() != ::getVoidCppuType())
-                bIllegalArgument = sal_True;
-        }
-        if(bIllegalArgument)
-            throw lang::IllegalArgumentException();
-        SwUnoCursorHelper::InsertFile(pUnoCrsr, rURL, sFilterName, sFilterOption, sPassword);
+        SwUnoCursorHelper::InsertFile(pUnoCrsr, rURL, rOptions);
     }
     else
         throw uno::RuntimeException();
