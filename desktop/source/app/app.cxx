@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.211 $
+ *  $Revision: 1.212 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:11:13 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:29:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1493,19 +1493,19 @@ void Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} tools::InitTestToolLib" );
 
         // First Start Wizard
+        if ( IsFirstStartWizardNeeded() && !pCmdLineArgs->IsNoFirstStartWizard() )
         {
-            sal_Bool bWidthUI = sal_True;
-            if (pCmdLineArgs->IsNoFirstStartWizard())
-              bWidthUI = sal_False;
-
             Reference< XJob > xFirstStartJob( xSMgr->createInstance(
                 DEFINE_CONST_UNICODE( "com.sun.star.comp.desktop.FirstStart" ) ), UNO_QUERY );
             if (xFirstStartJob.is())
             {
                 sal_Bool bDone = sal_False;
-                Sequence< NamedValue > lArgs(1);
-                lArgs[0].Name    = ::rtl::OUString::createFromAscii("WidthUI");
-                lArgs[0].Value <<= bWidthUI;
+                Sequence< NamedValue > lArgs(2);
+                lArgs[0].Name    = ::rtl::OUString::createFromAscii("LicenseNeedsAcceptance");
+                lArgs[0].Value <<= LicenseNeedsAcceptance();
+                lArgs[1].Name    = ::rtl::OUString::createFromAscii("LicensePath");
+                lArgs[1].Value <<= GetLicensePath();
+
                 xFirstStartJob->execute(lArgs) >>= bDone;
                 if (!bDone) {
                     return;
@@ -2214,8 +2214,8 @@ void Desktop::PreloadConfigurationData()
         }
     }
 
-    OUString sConfigSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationProvider");
-    OUString sAccessSrvc = OUString::createFromAscii("com.sun.star.configuration.ConfigurationAccess");
+    static const OUString sConfigSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) );
+    static const OUString sAccessSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ) );
 
     // get configuration provider
     Reference< XMultiServiceFactory > xConfigProvider;
