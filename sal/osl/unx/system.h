@@ -4,9 +4,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 15:24:40 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:50:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,9 +81,6 @@
 
 #if GLIBC >= 2
 #   include <shadow.h>
-#   if ! (defined(SPARC) || defined(X86_64) || defined(MIPS))
-#       include <asm/sigcontext.h>
-#   endif
 #   include <pthread.h>
 #   include <sys/file.h>
 #   include <sys/ioctl.h>
