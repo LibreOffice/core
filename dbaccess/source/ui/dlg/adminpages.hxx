@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adminpages.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:08:44 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:12:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,14 +92,14 @@ namespace dbaui
         virtual bool Disable() { m_pSaveValue->Disable(); return true;} // bool return value only for stl
     };
 
-    struct TSaveValueWrapperFunctor : public unary_function< ISaveValueWrapper, bool>
+    struct TSaveValueWrapperFunctor : public ::std::unary_function< ISaveValueWrapper, bool>
     {
         bool operator() (ISaveValueWrapper* lhs)
         {
             return lhs->SaveValue();
         }
     };
-    struct TDisableWrapperFunctor : public unary_function< ISaveValueWrapper, bool>
+    struct TDisableWrapperFunctor : public ::std::unary_function< ISaveValueWrapper, bool>
     {
         bool operator() (ISaveValueWrapper* lhs)
         {
@@ -107,7 +107,7 @@ namespace dbaui
         }
     };
 
-    struct TDeleteWrapperFunctor : public unary_function< ISaveValueWrapper, bool>
+    struct TDeleteWrapperFunctor : public ::std::unary_function< ISaveValueWrapper, bool>
     {
         bool operator() (ISaveValueWrapper* lhs)
         {
