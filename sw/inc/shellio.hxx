@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 15:06:48 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:22:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -697,7 +697,7 @@ public:
     static BOOL IsValidStgFilter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >& rStg, const SfxFilter& rFilter);
 
         static bool IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
-        CharSet *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0);
+            CharSet *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0, bool bEncodedFilter = false);
 //    static bool IsDetectableW4W(const String& rFileName, const String& rUserData);
 
     static const SfxFilter* GetTextFilter(const sal_Char* pBuf, ULONG nLen);
