@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:10:32 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:22:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,10 @@ public:
         // an arbitrary id as structure attribute here. In this
         // case the arbitrary id has to be passed again when the
         // actual link annotation is created via SetLinkPropertyID
-        LinkAnnotation
+        LinkAnnotation,
+        // Language currently sets a LanguageType (see i18npool/lang.h)
+        // which will be internally changed to a corresponding locale
+        Language
     };
 
     enum StructAttributeValue
@@ -577,6 +580,8 @@ The following structure describes the permissions used in PDF security
         rtl::OUString                   OwnerPassword; // owner password for PDF, in clear text
         rtl::OUString                   UserPassword; // user password for PDF, in clear text
 
+        com::sun::star::lang::Locale    DocumentLocale; // defines the document default language
+
         PDFWriterContext() :
                 RelFsys( false ), //i56629, i49415?, i64585?
                 DefaultLinkAction( PDFWriter::URIAction ),
@@ -642,6 +647,11 @@ The following structure describes the permissions used in PDF security
      *  get currently set document info
      */
     const PDFDocInfo& GetDocInfo() const;
+
+    /* sets the document locale originally passed with the context to a new value
+     * only affects the output if used before calling <code>Emit/code>.
+     */
+    void SetDocumentLocale( const com::sun::star::lang::Locale& rDocLocale );
 
     /* finishes the file */
     bool Emit();
@@ -1058,10 +1068,14 @@ The following structure describes the permissions used in PDF security
     @param eType
     denotes what kind of element to begin (e.g. a heading or paragraph)
 
+    @param rAlias
+    the specified alias will be used as structure tag. Also an entry in the PDF's
+    role map will be created mapping alias to regular structure type.
+
     @returns
     the new structure element's id for use in <code>SetCurrentStructureElement</code>
      */
-    sal_Int32 BeginStructureElement( enum StructElement eType );
+     sal_Int32 BeginStructureElement( enum StructElement eType, const rtl::OUString& rAlias = rtl::OUString() );
     /** end the current logical structure element
 
     <p>
@@ -1252,7 +1266,7 @@ The following structure describes the permissions used in PDF security
     a transformation to be imposed on the drawing operations that make up the pattern
 
     @returns
-    the ne pattern's id
+    the new pattern's id
     */
     sal_Int32 EndPattern( const SvtGraphicFill::Transform& rTransformation );
     /** draw a polypolygon filled with a pattern
