@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-05 16:41:46 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:03:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #ifndef _COM_SUN_STAR_UTIL_XTEXTSEARCH_HPP_
 #include <com/sun/star/util/XTextSearch.hpp>
 #endif
+#include <com/sun/star/util/SearchOptions.hpp>
 
 // Forward-Deklaration
 class CharClass;
@@ -63,7 +64,6 @@ namespace com {
         namespace star {
             namespace util {
                 struct SearchResult;
-                struct SearchOptions;
             }
         }
     }
@@ -148,6 +148,18 @@ public:
 
 class UNOTOOLS_DLLPUBLIC TextSearch
 {
+    struct CachedTextSearch
+    {
+        ::osl::Mutex mutex;
+        ::com::sun::star::util::SearchOptions Options;
+        ::com::sun::star::uno::Reference< ::com::sun::star::util::XTextSearch > xTextSearch;
+    };
+
+    static CachedTextSearch maCache;
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::util::XTextSearch >
+        getXTextSearch( const ::com::sun::star::util::SearchOptions& rPara );
+
     com::sun::star::uno::Reference < com::sun::star::util::XTextSearch >
             xTextSearch;
 
