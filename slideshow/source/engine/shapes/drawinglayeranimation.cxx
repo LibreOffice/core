@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawinglayeranimation.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:51:41 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:02:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,10 @@ public:
 double ScrollTextAnimNode::GetStateAtRelativeTime(
     sal_uInt32 nRelativeTime) const
 {
+    // #151174# Avoid division by zero.
+    if( mnDuration == 0 )
+        return mfStop;
+
     if(mnRepeat)
     {
         // ending
