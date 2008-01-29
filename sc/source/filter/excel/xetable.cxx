@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xetable.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:48:53 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:26:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -683,7 +683,7 @@ XclExpLabelCell::XclExpLabelCell(
 
 bool XclExpLabelCell::IsMultiLineText() const
 {
-    return mxText->IsWrapped();
+    return mbLineBreak || mxText->IsWrapped();
 }
 
 void XclExpLabelCell::Init( const XclExpRoot& rRoot,
@@ -701,6 +701,10 @@ void XclExpLabelCell::Init( const XclExpRoot& rRoot,
         bool bForceLineBreak = mxText->IsWrapped();
         SetXFId( rRoot.GetXFBuffer().InsertWithFont( pPattern, ApiScriptType::WEAK, nXclFont, bForceLineBreak ) );
     }
+
+    // get auto-wrap attribute from cell format
+    const XclExpXF* pXF = rRoot.GetXFBuffer().GetXFById( GetXFId() );
+    mbLineBreak = pXF && pXF->GetAlignmentData().mbLineBreak;
 
     // initialize the record contents
     switch( rRoot.GetBiff() )
@@ -1579,11 +1583,11 @@ XclExpRow::XclExpRow( const XclExpRoot& rRoot, sal_uInt16 nXclRow,
     rProgress.Progress();
 }
 
-void XclExpRow::AppendCell( XclExpCellRef xCell )
+void XclExpRow::AppendCell( XclExpCellRef xCell, bool bIsMergedBase )
 {
     DBG_ASSERT( !mbAlwaysEmpty, "XclExpRow::AppendCell - row is marked to be always empty" );
     // try to merge with last existing cell
-    InsertCell( xCell, maCellList.GetSize() );
+    InsertCell( xCell, maCellList.GetSize(), bIsMergedBase );
 }
 
 void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes )
@@ -1629,7 +1633,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes )
                 aXFId.mnCount = nNextUsedXclCol - nFirstFreeXclCol;
                 XclExpCellRef xNewCell( new XclExpBlankCell( XclAddress( nFirstFreeXclCol, mnXclRow ), aXFId ) );
                 // insert the cell, InsertCell() may merge it with existing BLANK records
-                InsertCell( xNewCell, nPos );
+                InsertCell( xNewCell, nPos, false );
                 // insert default XF indexes into aXFIndexes
                 ::std::fill( aXFIndexes.begin() + nFirstFreeXclCol,
                     aXFIndexes.begin() + nNextUsedXclCol, aXFId.mnXFIndex );
@@ -1760,14 +1764,14 @@ void XclExpRow::Save( XclExpStream& rStrm )
         XclExpRecord::Save( rStrm );
 }
 
-void XclExpRow::InsertCell( XclExpCellRef xCell, size_t nPos )
+void XclExpRow::InsertCell( XclExpCellRef xCell, size_t nPos, bool bIsMergedBase )
 {
     DBG_ASSERT( xCell.is(), "XclExpRow::InsertCell - missing cell" );
 
     /*  #109751# If we have a multi-line text in a merged cell, and the resulting
         row height has not been confirmed, we need to force the EXC_ROW_UNSYNCED
         flag to be true to ensure Excel works correctly. */
-    if( xCell->IsMultiLineText() )
+    if( bIsMergedBase && xCell->IsMultiLineText() )
         ::set_flag( mnFlags, EXC_ROW_UNSYNCED );
 
     // try to merge with previous cell, insert the new cell if not successful
@@ -1806,10 +1810,10 @@ XclExpRowBuffer::XclExpRowBuffer( const XclExpRoot& rRoot ) :
 {
 }
 
-void XclExpRowBuffer::AppendCell( XclExpCellRef xCell )
+void XclExpRowBuffer::AppendCell( XclExpCellRef xCell, bool bIsMergedBase )
 {
     DBG_ASSERT( xCell.is(), "XclExpRowBuffer::AppendCell - missing cell" );
-    GetOrCreateRow( xCell->GetXclRow(), false ).AppendCell( xCell );
+    GetOrCreateRow( xCell->GetXclRow(), false ).AppendCell( xCell, bIsMergedBase );
 }
 
 void XclExpRowBuffer::CreateRows( SCROW nFirstFreeScRow )
@@ -2057,11 +2061,16 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
 
         // handle overlapped merged cells before creating the cell record
         sal_uInt32 nMergeBaseXFId = EXC_XFID_NOTFOUND;
+        bool bIsMergedBase = false;
         if( pPattern )
         {
-            // overlapped cell in a merged range
-            const ScMergeFlagAttr& rMergeFlagItem = GETITEM( pPattern->GetItemSet(), ScMergeFlagAttr, ATTR_MERGE_FLAG );
-            // in Excel all merged cells must contain same XF index, for correct border
+            const SfxItemSet& rItemSet = pPattern->GetItemSet();
+            // base cell in a merged range
+            const ScMergeAttr& rMergeItem = GETITEM( rItemSet, ScMergeAttr, ATTR_MERGE );
+            bIsMergedBase = rMergeItem.IsMerged();
+            /*  overlapped cell in a merged range; in Excel all merged cells
+                must contain same XF index, for correct border */
+            const ScMergeFlagAttr& rMergeFlagItem = GETITEM( rItemSet, ScMergeFlagAttr, ATTR_MERGE_FLAG );
             if( rMergeFlagItem.IsOverlapped() )
                 nMergeBaseXFId = mxMergedcells->GetBaseXFId( aScPos );
         }
@@ -2144,11 +2153,11 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
 
         // insert the cell into the current row
         if( xCell.is() )
-            maRowBfr.AppendCell( xCell );
+            maRowBfr.AppendCell( xCell, bIsMergedBase );
 
         // notes
         const ScPostIt* pScNote = pScCell ? pScCell->GetNotePtr() : 0;
-        if( pScNote || aAddNoteText.Len() )
+        if( pScNote || (aAddNoteText.Len() > 0) )
             mxNoteList->AppendNewRecord( new XclExpNote( GetRoot(), aScPos, pScNote, aAddNoteText ) );
 
         // other sheet contents
@@ -2157,9 +2166,9 @@ XclExpCellTable::XclExpCellTable( const XclExpRoot& rRoot ) :
             const SfxItemSet& rItemSet = pPattern->GetItemSet();
 
             // base cell in a merged range
-            const ScMergeAttr& rMergeItem = GETITEM( rItemSet, ScMergeAttr, ATTR_MERGE );
-            if( rMergeItem.IsMerged() )
+            if( bIsMergedBase )
             {
+                const ScMergeAttr& rMergeItem = GETITEM( rItemSet, ScMergeAttr, ATTR_MERGE );
                 ScRange aScRange( aScPos );
                 aScRange.aEnd.IncCol( rMergeItem.GetColMerge() - 1 );
                 aScRange.aEnd.IncRow( rMergeItem.GetRowMerge() - 1 );
