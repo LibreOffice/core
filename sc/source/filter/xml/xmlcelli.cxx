@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:49:18 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:36:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "xmlcelli.hxx"
@@ -49,56 +47,30 @@
 #include "document.hxx"
 #include "cellsuno.hxx"
 #include "docuno.hxx"
-#ifndef _SC_XMLTABLESHAPEIMPORTHELPER_HXX
-#include "XMLTableShapeImportHelper.hxx"
-#endif
-#ifndef _SC_XMLTEXTPCONTEXT_HXX
-#include "XMLTextPContext.hxx"
-#endif
-#ifndef _SC_XMLSTYLESIMPORTHELPER_HXX
-#include "XMLStylesImportHelper.hxx"
-#endif
-
-#ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
-#endif
-// core implementation
-#ifndef SC_AREALINK_HXX
+#include "postit.hxx"
+
+#include "XMLTableShapeImportHelper.hxx"
+#include "XMLTextPContext.hxx"
+#include "XMLStylesImportHelper.hxx"
+
 #include "arealink.hxx"
-#endif
-// core implementation
-#ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
-#endif
-#ifndef SC_CONVUNO_HXX
 #include "convuno.hxx"
-#endif
-#ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
-#endif
-#ifndef _SCERRORS_HXX
 #include "scerrors.hxx"
-#endif
 #include "editutil.hxx"
 #include "cell.hxx"
 
 #include <xmloff/xmltkmap.hxx>
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/families.hxx>
-#ifndef XMLOFF_NUMEHELP_HXX
 #include <xmloff/numehelp.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
-#endif
 #include <svtools/zforlist.hxx>
-#ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
-#endif
 #include <svtools/languageoptions.hxx>
 
 #include <com/sun/star/frame/XModel.hpp>
@@ -107,48 +79,21 @@
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
 
-#ifndef _COM_SUN_STAR_UTIL_XMERGEABLE_HPP_
 #include <com/sun/star/util/XMergeable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETCONDITION_HPP_
 #include <com/sun/star/sheet/XSheetCondition.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_XCELLRANGE_HPP_
 #include <com/sun/star/table/XCellRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_CELLADDRESS_HPP_
 #include <com/sun/star/table/CellAddress.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATSSUPPLIER_HPP_
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATE_HPP_
 #include <com/sun/star/util/Date.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
-#endif
-#ifndef _COM_SUN_STAR_text_CONTROLCHARACTER_HPP_
 #include <com/sun/star/text/ControlCharacter.hpp>
-#endif
-#ifndef _RTL_USTRBUF_HXX_
+
 #include <rtl/ustrbuf.hxx>
-#endif
-#ifndef _DATE_HXX
 #include <tools/date.hxx>
-#endif
-#ifndef INCLUDED_I18NPOOL_LANG_H
 #include <i18npool/lang.h>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
 
 #define SC_CURRENCYSYMBOL   "CurrencySymbol"
 
@@ -478,7 +423,9 @@ void ScXMLTableRowCellContext::SetCursorOnTextImport(const rtl::OUString& rOUTem
         }
     }
     else
+    {
         DBG_ERRORFILE("this method should only be called for a existing cell");
+    }
 }
 
 SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix,
