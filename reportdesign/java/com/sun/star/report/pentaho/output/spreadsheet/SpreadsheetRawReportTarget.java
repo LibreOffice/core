@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpreadsheetRawReportTarget.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:51:10 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:34:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ import com.sun.star.report.pentaho.model.OfficeStyles;
 import com.sun.star.report.pentaho.model.OfficeStylesCollection;
 import com.sun.star.report.pentaho.model.OfficeMasterPage;
 import com.sun.star.report.pentaho.model.OfficeMasterStyles;
+import com.sun.star.report.pentaho.model.PageSection;
 import com.sun.star.report.pentaho.output.OfficeDocumentReportTarget;
 import com.sun.star.report.pentaho.output.StyleUtilities;
 import com.sun.star.report.pentaho.output.text.MasterPageFactory;
@@ -82,6 +83,70 @@ import org.jfree.xmlns.writer.XmlWriterSupport;
  */
 public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
 {
+
+  /**
+   * This class represents a column boundary, not in width, but it's actual boundary location. One of the motivations
+   * for creating this class was to be able to record the boundaries for each incoming table while consuming as few
+   * objects/memory as possible.
+   */
+  private static class ColumnBoundary implements Comparable
+  {
+    private HashSet tableIndices;
+
+    private float boundary;
+
+    private ColumnBoundary(final float boundary)
+    {
+      this.tableIndices = new HashSet();
+      this.boundary = boundary;
+    }
+
+    public void addTableIndex(final int table)
+    {
+      tableIndices.add(IntegerCache.getInteger(table));
+    }
+
+    public float getBoundary()
+    {
+      return boundary;
+    }
+
+    public boolean isContainedByTable(final int table)
+    {
+      final Integer index = IntegerCache.getInteger(table);
+      return tableIndices.contains(index);
+    }
+
+    public int compareTo(final Object arg0)
+    {
+      if (arg0.equals(this))
+      {
+        return 0;
+      }
+      if (arg0 instanceof ColumnBoundary)
+      {
+        if (boundary > ((ColumnBoundary) arg0).boundary)
+        {
+          return 1;
+        }
+        else
+        {
+          return -1;
+        }
+      }
+      return 1;
+    }
+
+    public boolean equals(final Object obj)
+    {
+      if (obj instanceof ColumnBoundary)
+      {
+        return ((ColumnBoundary) obj).boundary == boundary;
+      }
+      return false;
+    }
+  }
+
   private String tableBackgroundColor; // null means transparent ...
 
   private static final ColumnBoundary[] EMPTY_COLBOUNDS = new ColumnBoundary[0];
@@ -145,6 +210,33 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
         throw new ReportProcessingException("Failed", e);
       }
     }
+  }
+
+  protected void startReportSection(final AttributeMap attrs, final int role) throws IOException, DataSourceException, ReportProcessingException
+  {
+    if ((role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER ||
+         role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER) &&
+        (PageSection.isPrintWithReportHeader(attrs) == false ||
+         PageSection.isPrintWithReportFooter(attrs) == false))
+    {
+      startBuffering(new OfficeStylesCollection(), true);
+      return;
+    }
+    super.startReportSection(attrs, role);
+  }
+
+  protected void endReportSection(final AttributeMap attrs, final int role) throws IOException, DataSourceException, ReportProcessingException
+  {
+    if ((role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER ||
+         role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER) &&
+        (PageSection.isPrintWithReportHeader(attrs) == false ||
+         PageSection.isPrintWithReportFooter(attrs) == false))
+    {
+      finishBuffering();
+      return;
+    }
+
+    super.endReportSection(attrs, role);
   }
 
   private void processElement(final AttributeMap attrs, final String namespace, final String elementType)
@@ -691,66 +783,4 @@ public class SpreadsheetRawReportTarget extends OfficeDocumentReportTarget
     return "application/vnd.oasis.opendocument.spreadsheet";
   }
 
-  /**
-   * This class represents a column boundary, not in width, but it's actual boundary location. One of the motivations
-   * for creating this class was to be able to record the boundaries for each incoming table while consuming as few
-   * objects/memory as possible.
-   */
-  private static class ColumnBoundary implements Comparable
-  {
-    private HashSet tableIndices;
-
-    private float boundary;
-
-    private ColumnBoundary(final float boundary)
-    {
-      this.tableIndices = new HashSet();
-      this.boundary = boundary;
-    }
-
-    public void addTableIndex(final int table)
-    {
-      tableIndices.add(IntegerCache.getInteger(table));
-    }
-
-    public float getBoundary()
-    {
-      return boundary;
-    }
-
-    public boolean isContainedByTable(final int table)
-    {
-      final Integer index = IntegerCache.getInteger(table);
-      return tableIndices.contains(index);
-    }
-
-    public int compareTo(final Object arg0)
-    {
-      if (arg0.equals(this))
-      {
-        return 0;
-      }
-      if (arg0 instanceof ColumnBoundary)
-      {
-        if (boundary > ((ColumnBoundary) arg0).boundary)
-        {
-          return 1;
-        }
-        else
-        {
-          return -1;
-        }
-      }
-      return 1;
-    }
-
-    public boolean equals(final Object obj)
-    {
-      if (obj instanceof ColumnBoundary)
-      {
-        return ((ColumnBoundary) obj).boundary == boundary;
-      }
-      return false;
-    }
-  }
 }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeDocumentReportTarget.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:50:45 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:34:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,8 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
   public static final int ROLE_DETAIL = 9;
   public static final int ROLE_VARIABLES = 10;
   public static final int ROLE_TEMPLATE = 11;
+  public static final int ROLE_SPREADSHEET_PAGE_HEADER = 12;
+  public static final int ROLE_SPREADSHEET_PAGE_FOOTER = 13;
 
   public static final int STATE_IN_DOCUMENT = 0;
   public static final int STATE_IN_BODY = 1;
@@ -495,7 +497,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     // todo
     if (DEBUG_ELEMENTS)
     {
-      Log.debug("Starting " + getCurrentState() + "/" + states.size() + " " +
+      Log.debug("Starting " + getCurrentState() + '/' + states.size() + ' ' +
           ReportTargetUtil.getNamespaceFromAttribute(attrs) + " -> " +
           ReportTargetUtil.getElemenTypeFromAttribute(attrs));
     }
@@ -554,11 +556,25 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
             }
             else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "page-header", attrs))
             {
-              currentRole = OfficeDocumentReportTarget.ROLE_PAGE_HEADER;
+              if ("spreadsheet-section".equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "role")))
+              {
+                currentRole = OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER;
+              }
+              else
+              {
+                currentRole = OfficeDocumentReportTarget.ROLE_PAGE_HEADER;
+              }
             }
             else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "page-footer", attrs))
             {
-              currentRole = OfficeDocumentReportTarget.ROLE_PAGE_FOOTER;
+              if ("spreadsheet-section".equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "role")))
+              {
+                currentRole = OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER;
+              }
+              else
+              {
+                currentRole = OfficeDocumentReportTarget.ROLE_PAGE_FOOTER;
+              }
             }
             else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "report-header", attrs))
             {
@@ -629,7 +645,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
               currentRole = OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER;
             }
             else if (ReportTargetUtil.isElementOfType(OfficeNamespaces.OOREPORT_NS, "group-footer", attrs) &&
-                     "true".equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "repeated-section")))
+                "true".equals(attrs.getAttribute(OfficeNamespaces.INTERNAL_NS, "repeated-section")))
             {
               currentRole = OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER;
             }
@@ -1213,7 +1229,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
     return CSSValueFactory.createLengthValue(cssValue);
   }
 
-  public boolean isRepeatingSection()
+  protected boolean isRepeatingSection()
   {
     return (currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_FOOTER ||
         currentRole == OfficeDocumentReportTarget.ROLE_REPEATING_GROUP_HEADER ||
@@ -1268,7 +1284,7 @@ public abstract class OfficeDocumentReportTarget extends AbstractReportTarget
 
         if (imageAreaWidthVal == null || imageAreaHeightVal == null)
         {
-          Log.debug ("Image data returned from context is invalid. Maybe this is not an image?");
+          Log.debug("Image data returned from context is invalid. Maybe this is not an image?");
           return;
         }
         else

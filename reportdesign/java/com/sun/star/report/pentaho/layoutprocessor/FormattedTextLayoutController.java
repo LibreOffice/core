@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedTextLayoutController.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:49:15 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:33:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@ package com.sun.star.report.pentaho.layoutprocessor;
 
 import com.sun.star.report.pentaho.OfficeNamespaces;
 import com.sun.star.report.pentaho.model.FormattedTextElement;
+import com.sun.star.report.pentaho.model.OfficeDocument;
+import com.sun.star.report.pentaho.model.OfficeStyle;
 import org.jfree.formula.Formula;
 import org.jfree.formula.lvalues.LValue;
 import org.jfree.formula.parser.ParseException;
@@ -101,7 +103,7 @@ public class FormattedTextLayoutController
     }
     catch (final ParseException e)
     {
-      Log.debug ("Parse Exception" , e);
+      Log.debug("Parse Exception", e);
       return false;
     }
   }
@@ -122,6 +124,13 @@ public class FormattedTextLayoutController
           Element.NAMESPACE_ATTRIBUTE, OfficeNamespaces.TEXT_NS);
       variablesGet.setAttribute(OfficeNamespaces.TEXT_NS, "name", name);
       //variablesGet.setAttribute(OfficeNamespaces.TEXT_NS, "display", "value");
+
+      final String dataStyleName = computeValueStyle();
+      if (dataStyleName != null)
+      {
+        variablesGet.setAttribute(OfficeNamespaces.STYLE_NS, "data-style-name", dataStyleName);
+      }
+
       final String valueType = computeValueType();
       variablesGet.setAttribute(OfficeNamespaces.OFFICE_NS, "value-type", valueType);
       target.startElement(variablesGet);
@@ -141,6 +150,22 @@ public class FormattedTextLayoutController
     return join(getFlowController());
   }
 
+
+  private OfficeDocument getDocument()
+  {
+    LayoutController parent = getParent();
+    while (parent != null)
+    {
+      final Object node = parent.getNode();
+      if (node instanceof OfficeDocument)
+      {
+        return (OfficeDocument) node;
+      }
+      parent = parent.getParent();
+    }
+    return null;
+  }
+
   private Element getParentTableCell()
   {
     LayoutController parent = getParent();
@@ -156,7 +181,30 @@ public class FormattedTextLayoutController
     return null;
   }
 
-  private String computeValueType ()
+  private String computeValueStyle()
+  {
+    final Element tce = getParentTableCell();
+    if (tce == null)
+    {
+      return null;
+    }
+
+    final String cellStyleName = (String) tce.getAttribute(OfficeNamespaces.TABLE_NS, "style-name");
+    if (cellStyleName == null)
+    {
+      return null;
+    }
+    final OfficeDocument document = getDocument();
+    if (document == null)
+    {
+      return null;
+    }
+
+    final OfficeStyle style = document.getStylesCollection().getStyle("table-cell", cellStyleName);
+    return (String) style.getAttribute(OfficeNamespaces.STYLE_NS, "data-style-name");
+  }
+
+  private String computeValueType()
   {
     final Element tce = getParentTableCell();
     if (tce == null)
@@ -168,7 +216,7 @@ public class FormattedTextLayoutController
     final String type = (String) tce.getAttribute(OfficeNamespaces.OFFICE_NS, "value-type");
     if (type == null)
     {
-      Log.error ("The Table-Cell does not have a office:value attribute defined. Your content will be messed up.");
+      Log.error("The Table-Cell does not have a office:value attribute defined. Your content will be messed up.");
       return "string";
     }
     return type;
