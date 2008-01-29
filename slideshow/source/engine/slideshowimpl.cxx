@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 10:16:38 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:34:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1448,10 +1448,16 @@ sal_Bool SlideShowImpl::update( double & nNextTimeout )
         // hold timer, while processing the queues (ensures
         // same time for all activities and events)
         {
-            comphelper::ScopeGuard const scopeGuard(
+            comphelper::ScopeGuard scopeGuard(
                 boost::bind( &canvas::tools::ElapsedTime::releaseTimer,
                              boost::cref(mpPresTimer) ) );
-            mpPresTimer->holdTimer();
+
+            // no need to hold timer for only one active animation -
+            // it's only meant to keep multiple ones in sync
+            if( maActivitiesQueue.size() > 1 )
+                mpPresTimer->holdTimer();
+            else
+                scopeGuard.dismiss(); // we're not holding the timer
 
             // process queues
             maEventQueue.process();
