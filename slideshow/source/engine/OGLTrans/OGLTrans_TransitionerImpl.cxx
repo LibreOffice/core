@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OGLTrans_TransitionerImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:26:16 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:35:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,9 +236,7 @@ void OGLTransitionerImpl::initWindowFromSlideShowView( const uno::Reference< pre
             SystemWindowData winData;
             winData.nSize = sizeof(winData);
             winData.pVisual = (void*)(vi->visual);
-            pWindow=new SystemChildWindow(pPWindow,
-                                          0,
-                                          &winData);
+            pWindow=new SystemChildWindow(pPWindow, 0, &winData, FALSE);
             pChildSysData = pWindow->GetSystemData();
             if( pChildSysData )
             {
@@ -275,10 +273,9 @@ void OGLTransitionerImpl::initWindowFromSlideShowView( const uno::Reference< pre
                                  GL_TRUE);
 
     glXMakeCurrent( GLWin.dpy, GLWin.win, GLWin.ctx );
-
-    OSL_ENSURE( glXIsDirect(GLWin.dpy, GLWin.ctx) , "Can't Directly Render to the Screen, perhaps 3D transitions aren't for you." );
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
+    glClearColor (0, 0, 0, 0);
     glClear(GL_COLOR_BUFFER_BIT);
     unx::glXSwapBuffers(GLWin.dpy, GLWin.win);
 
@@ -290,8 +287,11 @@ void OGLTransitionerImpl::initWindowFromSlideShowView( const uno::Reference< pre
     glEnable(GL_LIGHT0);
     glEnable(GL_NORMALIZE);
 
-    if( EnteringBytes.hasElements() && EnteringBytes.hasElements())
+    if( LeavingBytes.hasElements() && EnteringBytes.hasElements())
        GLInitSlides();//we already have uninitialized slides, let's initialize
+
+    if (pTransition)
+        pTransition->prepare ();
 }
 
 void OGLTransitionerImpl::setSlides( const uno::Reference< rendering::XBitmap >& xLeavingSlide,
@@ -333,20 +333,22 @@ void OGLTransitionerImpl::GLInitSlides()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     double EyePos(10.0);
-    double RealF(-1.0);
-    double RealN(1.0);
+    double RealF(1.0);
+    double RealN(-1.0);
     double RealL(-1.0);
     double RealR(1.0);
     double RealB(-1.0);
     double RealT(1.0);
-    double ClipN(EyePos+2.0*RealN);
-    double ClipF(EyePos+2.0*RealF);
+    double ClipN(EyePos+5.0*RealN);
+    double ClipF(EyePos+15.0*RealF);
     double ClipL(RealL*8.0);
     double ClipR(RealR*8.0);
     double ClipB(RealB*8.0);
     double ClipT(RealT*8.0);
     //This scaling is to take the plane with BottomLeftCorner(-1,-1,0) and TopRightCorner(1,1,0) and map it to the screen after the perspective division.
-    glScaled( 1.0 / ( ( ( RealR * 2.0 * ClipN ) / ( EyePos * ( ClipR - ClipL ) ) ) - ( ( ClipR + ClipL ) / ( ClipR - ClipL ) ) ), 1 / ( ( ( RealT * 2.0 * ClipN ) / ( EyePos * ( ClipT - ClipB ) ) ) - ( ( ClipT + ClipB ) / ( ClipT - ClipB ) ) ) , 1.0 );
+    glScaled( 1.0 / ( ( ( RealR * 2.0 * ClipN ) / ( EyePos * ( ClipR - ClipL ) ) ) - ( ( ClipR + ClipL ) / ( ClipR - ClipL ) ) ),
+              1.0 / ( ( ( RealT * 2.0 * ClipN ) / ( EyePos * ( ClipT - ClipB ) ) ) - ( ( ClipT + ClipB ) / ( ClipT - ClipB ) ) ),
+              1.0 );
     glFrustum(ClipL,ClipR,ClipB,ClipT,ClipN,ClipF);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -449,11 +451,12 @@ void SAL_CALL OGLTransitionerImpl::update( double nTime ) throw (uno::RuntimeExc
 
     glEnable(GL_DEPTH_TEST);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //glLoadIdentity();
+
     if(pTransition)
         pTransition->display( nTime , GLleavingSlide , GLenteringSlide ,
-                              SlideSize.Width/static_cast<double>(GLWin.Width),
-                              SlideSize.Height/static_cast<double>(GLWin.Height) );
+                              SlideSize.Width, SlideSize.Height,
+                              static_cast<double>(GLWin.Width),
+                              static_cast<double>(GLWin.Height) );
     unx::glXSwapBuffers(GLWin.dpy, GLWin.win);
     if( pWindow )
         pWindow->Show();
@@ -465,6 +468,10 @@ void OGLTransitionerImpl::disposing()
     osl::MutexGuard const guard( m_aMutex );
     glDeleteTextures(1,&GLleavingSlide);
     glDeleteTextures(1,&GLenteringSlide);
+
+    if (pTransition)
+        pTransition->finish();
+
     if(GLWin.ctx)
     {
         OSL_ENSURE( glXMakeCurrent(GLWin.dpy, None, NULL) , "Error releasing glX context" );
@@ -512,6 +519,11 @@ public:
             case animations::TransitionSubType::CIRCLE:
             case animations::TransitionSubType::FANOUTHORIZONTAL:
             case animations::TransitionSubType::CORNERSIN:
+            case animations::TransitionSubType::LEFTTORIGHT:
+            case animations::TransitionSubType::TOPTOBOTTOM:
+            case animations::TransitionSubType::TOPRIGHT:
+            case animations::TransitionSubType::TOPLEFT:
+            case animations::TransitionSubType::BOTTOMRIGHT:
                 return sal_True;
 
             default:
@@ -545,8 +557,23 @@ public:
             case animations::TransitionSubType::FANOUTHORIZONTAL:
                 pTransition->makeHelix(20);
                 break;
-            case animations::TransitionSubType::CORNERSIN :
+            case animations::TransitionSubType::CORNERSIN:
                 pTransition->makeInsideCubeFaceToLeft();
+                break;
+            case animations::TransitionSubType::LEFTTORIGHT:
+                pTransition->makeFallLeaving();
+                break;
+            case animations::TransitionSubType::TOPTOBOTTOM:
+                pTransition->makeTurnAround();
+                break;
+            case animations::TransitionSubType::TOPRIGHT:
+                pTransition->makeTurnDown();
+                break;
+            case animations::TransitionSubType::TOPLEFT:
+                pTransition->makeIris();
+                break;
+            case animations::TransitionSubType::BOTTOMRIGHT:
+                pTransition->makeRochade();
                 break;
             default:
                 return uno::Reference< presentation::XTransition >();
