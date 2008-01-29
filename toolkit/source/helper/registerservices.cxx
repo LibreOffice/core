@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 11:45:35 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:07:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,6 +217,7 @@ IMPL_CREATEINSTANCE( UnoControlCurrencyFieldModel )
 IMPL_CREATEINSTANCE( UnoControlDateFieldModel )
 IMPL_CREATEINSTANCE( UnoControlEditModel )
 IMPL_CREATEINSTANCE( UnoControlFileControlModel )
+IMPL_CREATEINSTANCE( UnoControlFixedHyperlinkModel )
 IMPL_CREATEINSTANCE( UnoControlFixedTextModel )
 IMPL_CREATEINSTANCE( UnoControlFormattedFieldModel )
 IMPL_CREATEINSTANCE( UnoControlGroupBoxModel )
@@ -235,6 +236,7 @@ IMPL_CREATEINSTANCE( UnoDateFieldControl )
 IMPL_CREATEINSTANCE( UnoDialogControl )
 IMPL_CREATEINSTANCE( UnoEditControl )
 IMPL_CREATEINSTANCE( UnoFileControl )
+IMPL_CREATEINSTANCE( UnoFixedHyperlinkControl )
 IMPL_CREATEINSTANCE( UnoFixedTextControl )
 IMPL_CREATEINSTANCE( UnoFormattedFieldControl )
 IMPL_CREATEINSTANCE( UnoGroupBoxControl )
@@ -329,9 +331,9 @@ TOOLKIT_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager,
         registerServices( xRegistryKey, "UnoControlProgressBarModel", szServiceName_UnoControlProgressBarModel, szServiceName2_UnoControlProgressBarModel );
         registerServices( xRegistryKey, "UnoScrollBarControl", szServiceName_UnoControlScrollBar, szServiceName2_UnoControlScrollBar );
         registerServices( xRegistryKey, "UnoControlScrollBarModel", szServiceName_UnoControlScrollBarModel, szServiceName2_UnoControlScrollBarModel );
-            registerServices( xRegistryKey, "UnoSpinButtonModel", szServiceName_UnoSpinButtonModel );
+        registerServices( xRegistryKey, "UnoSpinButtonModel", szServiceName_UnoSpinButtonModel );
         registerServices( xRegistryKey, "UnoSpinButtonControl", szServiceName_UnoSpinButtonControl );
-            registerServices( xRegistryKey, "UnoFixedLineControl", szServiceName_UnoControlFixedLine, szServiceName2_UnoControlFixedLine );
+        registerServices( xRegistryKey, "UnoFixedLineControl", szServiceName_UnoControlFixedLine, szServiceName2_UnoControlFixedLine );
         registerServices( xRegistryKey, "UnoControlFixedLineModel", szServiceName_UnoControlFixedLineModel, szServiceName2_UnoControlFixedLineModel );
         registerServices( xRegistryKey, "VCLXPrinterServer", szServiceName_PrinterServer, szServiceName2_PrinterServer );
         registerServices( xRegistryKey, "UnoRoadmapControl", szServiceName_UnoControlRoadmap, szServiceName2_UnoControlRoadmap );
@@ -343,6 +345,8 @@ TOOLKIT_DLLPUBLIC sal_Bool SAL_CALL component_writeInfo( void* _pServiceManager,
         registerServices( xRegistryKey, "UnoSimpleAnimationControl", szServiceName_UnoSimpleAnimationControl );
         registerServices( xRegistryKey, "UnoThrobberControlModel", szServiceName_UnoThrobberControlModel );
         registerServices( xRegistryKey, "UnoThrobberControl", szServiceName_UnoThrobberControl );
+        registerServices( xRegistryKey, "UnoFixedHyperlinkControl", szServiceName_UnoControlFixedHyperlink );
+        registerServices( xRegistryKey, "UnoControlFixedHyperlinkModel", szServiceName_UnoControlFixedHyperlinkModel );
         comp_AsyncCallback_component_writeInfo( _pServiceManager, _pRegistryKey );
 
         return sal_True;
@@ -421,6 +425,8 @@ TOOLKIT_DLLPUBLIC void* SAL_CALL component_getFactory( const sal_Char* sImplemen
         CHECKANDCREATEFACTORY( UnoSimpleAnimationControl, szServiceName_UnoSimpleAnimationControl, NULL )
         CHECKANDCREATEFACTORY( UnoThrobberControlModel, szServiceName_UnoThrobberControlModel, NULL )
         CHECKANDCREATEFACTORY( UnoThrobberControl, szServiceName_UnoThrobberControl, NULL )
+        CHECKANDCREATEFACTORY( UnoFixedHyperlinkControl, szServiceName_UnoControlFixedHyperlink, NULL )
+        CHECKANDCREATEFACTORY( UnoControlFixedHyperlinkModel, szServiceName_UnoControlFixedHyperlinkModel, NULL )
 
         if ( rtl_str_compare( sImplementationName, "com.sun.star.awt.comp.AsyncCallback" ) == 0 )
             return comp_AsyncCallback_component_getFactory( sImplementationName, _pServiceManager, _pRegistryKey );
