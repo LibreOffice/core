@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CallFormWizard.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:41:10 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:41:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,8 +86,9 @@ public class CallFormWizard {
     public static class FormWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.lang.XTypeProvider, com.sun.star.task.XJobExecutor {
 
         PropertyValue[] databaseproperties;
-        public XComponent DocumentDefinition = null;
         public XComponent Document = null;
+        public XComponent DocumentDefinition = null;
+
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param xmultiservicefactoryInitialization A special service factory
          * could be introduced while initializing.
@@ -101,7 +102,6 @@ public class CallFormWizard {
 
         public void trigger(String sEvent) {
             try {
-                com.sun.star.frame.XComponentLoader xcomponentloader = (com.sun.star.frame.XComponentLoader) com.sun.star.uno.UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop"));
                 if (sEvent.compareTo("start") == 0) {
                     FormWizard CurFormWizard = new FormWizard(xmultiservicefactory);
                     XComponent[] obj = CurFormWizard.startFormWizard(xmultiservicefactory, databaseproperties);
@@ -110,9 +110,15 @@ public class CallFormWizard {
                         Document = obj[1];
                     }
                 }
+                else if (sEvent.compareTo("end") == 0) {
+                    DocumentDefinition = null;
+                    Document = null;
+                    databaseproperties = null;
+                }
             } catch (Exception exception) {
                 System.err.println(exception);
             }
+            System.gc();
         }
 
         /** The service name, that must be used to get an instance of this service.
