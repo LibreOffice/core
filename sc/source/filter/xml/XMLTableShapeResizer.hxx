@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:00:02 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,7 @@
 #ifndef _COM_SUN_STAR_SHEET_XSPREADSHEET_HPP_
 #include <com/sun/star/sheet/XSpreadsheet.hpp>
 #endif
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
 
 class ScXMLImport;
 class ScChartListenerCollection;
