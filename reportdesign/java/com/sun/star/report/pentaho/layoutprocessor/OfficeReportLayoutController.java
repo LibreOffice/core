@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeReportLayoutController.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:34:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,13 +63,15 @@ public class OfficeReportLayoutController extends ElementLayoutController
   private static final int STATE_TEMPLATES = 1;
   private static final int STATE_PAGE_HEADER_DONE = 2;
   private static final int STATE_PAGE_FOOTER_DONE = 3;
-  private static final int STATE_COLUMN_HEADER_DONE = 4;
-  private static final int STATE_COLUMN_FOOTER_DONE = 5;
-  private static final int STATE_INITIAL_VARIABLES_DONE = 6;
-  private static final int STATE_REPORT_HEADER_DONE = 7;
-  private static final int STATE_REPORT_BODY_DONE = 8;
-  private static final int STATE_REPORT_FOOTER_VARIABLES = 9;
-  private static final int STATE_REPORT_FOOTER_DONE = 10;
+  private static final int STATE_SPREADSHEET_PAGE_HEADER_DONE = 4;
+  private static final int STATE_SPREADSHEET_PAGE_FOOTER_DONE = 5;
+  private static final int STATE_COLUMN_HEADER_DONE = 6;
+  private static final int STATE_COLUMN_FOOTER_DONE = 7;
+  private static final int STATE_INITIAL_VARIABLES_DONE = 8;
+  private static final int STATE_REPORT_HEADER_DONE = 9;
+  private static final int STATE_REPORT_BODY_DONE = 10;
+  private static final int STATE_REPORT_FOOTER_VARIABLES = 11;
+  private static final int STATE_REPORT_FOOTER_DONE = 12;
 
   private int state;
   private VariablesCollection variablesCollection;
@@ -133,7 +135,7 @@ public class OfficeReportLayoutController extends ElementLayoutController
     {
       case OfficeReportLayoutController.STATE_NOT_STARTED:
       {
-        return delegateToTemplace(OfficeReportLayoutController.STATE_TEMPLATES);
+        return delegateToTemplates(OfficeReportLayoutController.STATE_TEMPLATES);
       }
       case OfficeReportLayoutController.STATE_TEMPLATES:
       {
@@ -141,6 +143,11 @@ public class OfficeReportLayoutController extends ElementLayoutController
             OfficeReportLayoutController.STATE_PAGE_HEADER_DONE);
       }
       case OfficeReportLayoutController.STATE_PAGE_HEADER_DONE:
+      {
+        return delegateSpreadsheetSection(or.getPageHeader(),
+            OfficeReportLayoutController.STATE_SPREADSHEET_PAGE_HEADER_DONE);
+      }
+      case OfficeReportLayoutController.STATE_SPREADSHEET_PAGE_HEADER_DONE:
       {
         return delegateSection(or.getPageFooter(),
             OfficeReportLayoutController.STATE_PAGE_FOOTER_DONE);
@@ -182,18 +189,39 @@ public class OfficeReportLayoutController extends ElementLayoutController
       }
       case OfficeReportLayoutController.STATE_REPORT_FOOTER_DONE:
       {
+        return delegateSpreadsheetSection(or.getPageFooter(),
+            OfficeReportLayoutController.STATE_SPREADSHEET_PAGE_FOOTER_DONE);
+      }
+      case OfficeReportLayoutController.STATE_SPREADSHEET_PAGE_FOOTER_DONE:
+      {
         final OfficeReportLayoutController olc = (OfficeReportLayoutController) clone();
         olc.setProcessingState(ElementLayoutController.FINISHING);
         return olc;
       }
       default:
       {
-        throw new IllegalStateException();
+        throw new IllegalStateException("Invalid processing state encountered.");
       }
     }
   }
 
-  private LayoutController delegateToTemplace(final int nextState)
+  private LayoutController delegateSpreadsheetSection(final Node node, final int nextState)
+      throws DataSourceException, ReportProcessingException, ReportDataFactoryException
+  {
+    final OfficeReportLayoutController olc = (OfficeReportLayoutController) clone();
+    olc.state = nextState;
+
+    if (node == null)
+    {
+      return olc;
+    }
+
+    final OfficePageSectionLayoutController templateLc = new OfficePageSectionLayoutController();
+    templateLc.initialize(node, getFlowController(), olc);
+    return templateLc;
+  }
+
+  private LayoutController delegateToTemplates(final int nextState)
       throws ReportProcessingException, ReportDataFactoryException,
       DataSourceException
   {

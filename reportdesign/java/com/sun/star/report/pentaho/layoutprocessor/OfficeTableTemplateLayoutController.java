@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeTableTemplateLayoutController.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:06 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:34:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,6 +91,10 @@ public class OfficeTableTemplateLayoutController extends SectionLayoutController
 
     final OfficeReport report = (OfficeReport) node;
     final ArrayList tables = new ArrayList();
+    if (report.getPageHeader() != null)
+    {
+      addFromSection(tables, (Section) report.getPageHeader());
+    }
     if (report.getReportHeader() != null)
     {
       addFromSection(tables, (Section) report.getReportHeader());
@@ -99,6 +103,10 @@ public class OfficeTableTemplateLayoutController extends SectionLayoutController
     if (report.getReportFooter() != null)
     {
       addFromSection(tables, (Section) report.getReportFooter());
+    }
+    if (report.getPageFooter() != null)
+    {
+      addFromSection(tables, (Section) report.getPageFooter());
     }
 
     this.nodes = (Node[]) tables.toArray(new Node[tables.size()]);
