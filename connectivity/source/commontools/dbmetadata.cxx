@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmetadata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 14:58:59 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:37:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,6 +255,15 @@ namespace dbtools
         bool doGenerate( true );
         Any setting;
         if ( lcl_getConnectionSetting( "GenerateASBeforeCorrelationName", *m_pImpl, setting ) )
+            OSL_VERIFY( setting >>= doGenerate );
+        return doGenerate;
+    }
+    //--------------------------------------------------------------------
+    bool DatabaseMetaData::shouldEscapeDateTime() const
+    {
+        bool doGenerate( true );
+        Any setting;
+        if ( lcl_getConnectionSetting( "EscapeDateTime", *m_pImpl, setting ) )
             OSL_VERIFY( setting >>= doGenerate );
         return doGenerate;
     }
