@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:08:49 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:50:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,6 +323,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(const Reference< XMultiServiceFactory >& 
             ,m_aStorages()
             ,m_aMacroMode( *this )
             ,m_xServiceFactory(_rxFactory)
+            ,m_bHasAnyObjectWithMacros( false )
             ,m_nLoginTimeout(0)
             ,m_bReadOnly(sal_False) // we're created as service and have to allow the setting of properties
             ,m_bPasswordRequired(sal_False)
@@ -358,6 +359,7 @@ ODatabaseModelImpl::ODatabaseModelImpl(
             ,m_aStorages()
             ,m_aMacroMode( *this )
             ,m_xServiceFactory(_rxFactory)
+            ,m_bHasAnyObjectWithMacros( false )
             ,m_sName(_rRegistrationName)
             ,m_nLoginTimeout(0)
             ,m_bReadOnly(sal_False)
@@ -452,6 +454,40 @@ namespace
     }
 
     // .........................................................................
+    bool lcl_hasObjectWithMacros_throw( const ODefinitionContainer_Impl& _rObjectDefinitions, const ::utl::SharedUNOComponent< XStorage >& _rxContainerStorage )
+    {
+        bool bSomeDocHasMacros = false;
+
+        for (   ODefinitionContainer_Impl::const_iterator object = _rObjectDefinitions.begin();
+                ( object != _rObjectDefinitions.end() ) && !bSomeDocHasMacros;
+                ++object
+            )
+        {
+#if OSL_DEBUG_LEVEL > 0
+            const ::rtl::OUString& rName( object->first ); (void)rName;
+#endif
+
+            const TContentPtr& rDefinition( object->second );
+            const ::rtl::OUString& rPersistentName( rDefinition->m_aProps.sPersistentName );
+
+            if ( !rPersistentName.getLength() )
+            {   // it's a logical sub folder used to organize the real objects
+                const ODefinitionContainer_Impl& rSubFoldersObjectDefinitions( dynamic_cast< const ODefinitionContainer_Impl& >( *rDefinition.get() ) );
+                bSomeDocHasMacros = lcl_hasObjectWithMacros_throw( rSubFoldersObjectDefinitions, _rxContainerStorage );
+                continue;
+            }
+
+            ::utl::SharedUNOComponent< XStorage > xObjectStor( _rxContainerStorage->openStorageElement(
+                rPersistentName, ElementModes::READ ) );
+
+            // TODO: opening the storage is too expensive, find some hasByHierarchicalName or so
+
+            bSomeDocHasMacros = ::sfx2::DocumentMacroMode::storageHasMacros( xObjectStor );
+        }
+        return bSomeDocHasMacros;
+    }
+
+    // .........................................................................
     bool lcl_hasObjectsWithMacros_nothrow( ODatabaseModelImpl& _rModel, const ODatabaseModelImpl::ObjectType _eType )
     {
         bool bSomeDocHasMacros = false;
@@ -463,21 +499,9 @@ namespace
         {
             ::utl::SharedUNOComponent< XStorage > xContainerStorage( _rModel.getStorage(
                 _rModel.getObjectContainerStorageName( _eType ), ElementModes::READ ) );
-            if ( !xContainerStorage.is() )
-                return false;
 
-            for (   ODefinitionContainer_Impl::const_iterator object = rObjectDefinitions.begin();
-                    ( object != rObjectDefinitions.end() ) && !bSomeDocHasMacros;
-                    ++object
-                )
-            {
-                ::utl::SharedUNOComponent< XStorage > xObjectStor( xContainerStorage->openStorageElement(
-                    object->second->m_aProps.sPersistentName, ElementModes::READ ) );
-
-                // TODO: opening the storage is too expensive, find some hasByHierarchicalName or so
-
-                bSomeDocHasMacros = ::sfx2::DocumentMacroMode::storageHasMacros( xObjectStor );
-            }
+            if ( xContainerStorage.is() )
+                bSomeDocHasMacros = lcl_hasObjectWithMacros_throw( rObjectDefinitions, xContainerStorage );
         }
         catch( const Exception& )
         {
@@ -996,6 +1020,7 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "EnableOuterJoinEscape",      makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( "PreferDosLikeLineEnds",      makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( "FormsCheckRequiredFields",   makeAny( (sal_Bool)sal_True ) ),
+        AsciiPropertyValue( "EscapeDateTime",             makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( "IgnoreCurrency",             makeAny( (sal_Bool)sal_False ) ),
         AsciiPropertyValue( NULL, Any() )
     };
@@ -1097,13 +1122,14 @@ bool ODatabaseModelImpl::documentStorageHasMacros() const
     if ( ::sfx2::DocumentMacroMode::storageHasMacros( m_xStorage ) )
         return true;
 
-    // do we have forms with macros?
-    if ( lcl_hasObjectsWithMacros_nothrow( const_cast< ODatabaseModelImpl& >( *this ), E_FORM ) )
+    // do we have forms or reports with macros?
+    if  (   lcl_hasObjectsWithMacros_nothrow( const_cast< ODatabaseModelImpl& >( *this ), E_FORM )
+        ||  lcl_hasObjectsWithMacros_nothrow( const_cast< ODatabaseModelImpl& >( *this ), E_REPORT )
+        )
+    {
+        const_cast< ODatabaseModelImpl* >( this )->m_bHasAnyObjectWithMacros = true;
         return true;
-
-    // do we have report with macros?
-    if ( lcl_hasObjectsWithMacros_nothrow( const_cast< ODatabaseModelImpl& >( *this ), E_REPORT ) )
-        return true;
+    }
 
     return false;
 }
