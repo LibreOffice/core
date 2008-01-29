@@ -896,6 +896,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
         String [] allLocales = lc.getIDs();
         Object [] nameList = {"",""};
                 String [] nameList1 = {"",""};
+                String [] nameList1b = {"",""};
                 String [] nameList2 = {"",""};
                 Vector allPaths = new Vector();
         String sLetterSubPath = "/wizard/letter/";
@@ -908,6 +909,7 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             for (int i=0; i<(PathParts.length -1); i++) {
                 nuString = nuString + PathParts[i] + "/";
             }
+            String sLocLetterPath;
             sMainPath = nuString;
             sMainPath = FileAccess.deleteLastSlashfromUrl(sMainPath);
 
@@ -917,25 +919,36 @@ public class LetterWizardDialogImpl extends LetterWizardDialog {
             XInterface xInterface = (XInterface) xMSF.createInstance("com.sun.star.ucb.SimpleFileAccess");
             com.sun.star.ucb.XSimpleFileAccess xSimpleFileAccess = (com.sun.star.ucb.XSimpleFileAccess) UnoRuntime.queryInterface(com.sun.star.ucb.XSimpleFileAccess.class, xInterface);
             nameList1 = xSimpleFileAccess.getFolderContents(sMainPath, true);
-                        nameList2 = xSimpleFileAccess.getFolderContents(sLetterPath, true);
-                        for (int i=0;i<nameList1.length;i++) {
-                            String theFileName = FileAccess.getFilename(nameList1[i]);
-                            if (!theFileName.equalsIgnoreCase("wizard")) {
-                                allPaths.add(nameList1[i]+ sLetterSubPath + theFileName);
-                            }
+            nameList2 = xSimpleFileAccess.getFolderContents(sLetterPath, true);
+            for (int i=0;i<nameList1.length;i++) {
+              String theFileName = FileAccess.getFilename(nameList1[i]);
+                if (!theFileName.equalsIgnoreCase("wizard")) {
+                    sLocLetterPath = FileAccess.deleteLastSlashfromUrl(nameList1[i] + sLetterSubPath);
+                    try{
+                        nameList1b = xSimpleFileAccess.getFolderContents(sLocLetterPath, true);
+                        for (int j=0;j<nameList1b.length;j++) {
+                            String theFileNameb = FileAccess.getFilename(nameList1b[j]);
+                            allPaths.add(nameList1[i]+ sLetterSubPath + theFileNameb);
                         }
-                        for (int i=0;i<nameList2.length;i++) {
-                        boolean found = false;
-                            for (int t=0;t<nameList1.length;t++) {
-                                if (FileAccess.getFilename(nameList2[i]).equalsIgnoreCase(FileAccess.getFilename(nameList1[t])) ) {
-                                    found = true;
-                                }
-                            }
-                            if (!found) {
-                                allPaths.add(nameList2[i]);
-                            }
-                        }
-                        nameList = allPaths.toArray();
+                    }
+                    catch(Exception e)
+                    {
+                        //if the path is invalid an exception is thrown - try the fallback below then
+                    }
+                }
+            }
+            for (int i=0;i<nameList2.length;i++) {
+                boolean found = false;
+                for (int t=0;t<nameList1.length;t++) {
+                    if (FileAccess.getFilename(nameList2[i]).equalsIgnoreCase(FileAccess.getFilename(nameList1[t])) ) {
+                        found = true;
+                    }
+                }
+                if (!found) {
+                    allPaths.add(nameList2[i]);
+                }
+            }
+            nameList = allPaths.toArray();
 
 
         } catch (CommandAbortedException e) {
