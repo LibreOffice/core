@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:32:31 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:29:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,7 @@ public:
                                     const String& rName );
 
     inline bool                 IsActive() const    { return bActive; }
+    inline bool                 IsFiltered() const  { return bAutoOrAdvanced; }
     inline SCTAB                Tab() const         { return aParam.nTab; }
     inline SCCOL                StartCol() const    { return aParam.nCol1; }
     inline SCROW                StartRow() const    { return aParam.nRow1; }
