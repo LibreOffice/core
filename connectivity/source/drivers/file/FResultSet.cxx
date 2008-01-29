@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:29:00 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:54:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1522,7 +1522,7 @@ BOOL OResultSet::OpenImpl()
                         {
                             m_aOrderbyColumnNumber.clear();
                             m_aOrderbyAscending.clear();
-                            sort(m_pFileSet->begin(),m_pFileSet->end());
+                            ::std::sort(m_pFileSet->begin(),m_pFileSet->end());
                         }
                     }
                     //  SetRowCount(m_pFileSet->count());
