@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsrhelper.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:22:39 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:23:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,6 +158,10 @@
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+#include <comphelper/storagehelper.hxx>
+#include <comphelper/mediadescriptor.hxx>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -750,22 +754,69 @@ void resetCrsrPropertyValue(const SfxItemPropertyMap* pMap, SwPaM& rPam)
  *
  * --------------------------------------------------*/
 void InsertFile(SwUnoCrsr* pUnoCrsr,
-    const String& rFileName,
-    const String& rFilterName,
-    const String& rFilterOption,
-    const String& rPassword)
+    const String& rURL,
+    const uno::Sequence< beans::PropertyValue >& rOptions
+    ) throw( lang::IllegalArgumentException, io::IOException, uno::RuntimeException )
 {
     SfxMedium* pMed = 0;
     SwDoc* pDoc = pUnoCrsr->GetDoc();
     SwDocShell* pDocSh = pDoc->GetDocShell();
-    if(!pDocSh || !rFileName.Len())
+    comphelper::MediaDescriptor aMediaDescriptor( rOptions );
+    ::rtl::OUString sFileName = rURL;
+    ::rtl::OUString sFilterName, sFilterOptions, sPassword, sBaseURL;
+    uno::Reference < io::XStream > xStream;
+    uno::Reference < io::XInputStream > xInputStream;
+
+    if( !sFileName.getLength() )
+        aMediaDescriptor[comphelper::MediaDescriptor::PROP_URL()] >>= sFileName;
+    if( !sFileName.getLength() )
+        aMediaDescriptor[comphelper::MediaDescriptor::PROP_FILENAME()] >>= sFileName;
+    aMediaDescriptor[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
+    aMediaDescriptor[comphelper::MediaDescriptor::PROP_STREAM()] >>= xStream;
+    aMediaDescriptor[comphelper::MediaDescriptor::PROP_INPUTSTREAM()] >>= xInputStream;
+    aMediaDescriptor[comphelper::MediaDescriptor::PROP_FILTERNAME()] >>= sFilterName;
+    aMediaDescriptor[comphelper::MediaDescriptor::PROP_FILTEROPTIONS()] >>= sFilterOptions;
+    aMediaDescriptor[comphelper::MediaDescriptor::PROP_PASSWORD()] >>= sPassword;
+    aMediaDescriptor[comphelper::MediaDescriptor::PROP_DOCUMENTBASEURL() ] >>= sBaseURL;
+    if ( !xInputStream.is() && xStream.is() )
+        xInputStream = xStream->getInputStream();
+
+    if(!pDocSh || (!sFileName.getLength() && !xInputStream.is()))
         return;
 
     SfxObjectFactory& rFact = pDocSh->GetFactory();
-    const SfxFilter* pFilter = rFact.GetFilterContainer()->GetFilter4FilterName( rFilterName );
+    const SfxFilter* pFilter = rFact.GetFilterContainer()->GetFilter4FilterName( sFilterName );
+    uno::Reference < embed::XStorage > xReadStorage;
+    if( xInputStream.is() )
+    {
+        uno::Sequence< uno::Any > aArgs( 2 );
+        aArgs[0] <<= xInputStream;
+        aArgs[1] <<= embed::ElementModes::READ;
+        try
+        {
+            xReadStorage = uno::Reference< embed::XStorage >(
+                            ::comphelper::OStorageHelper::GetStorageFactory()->createInstanceWithArguments( aArgs ),
+                            uno::UNO_QUERY );
+        }
+        catch( const io::IOException& rEx)
+        {
+            (void)rEx;
+        }
+    }
     if ( !pFilter )
     {
-        pMed = new SfxMedium(rFileName, STREAM_READ, sal_True, 0, 0 );
+        if( xInputStream.is() && !xReadStorage.is())
+        {
+            pMed = new SfxMedium;
+            pMed->setStreamToLoadFrom(xInputStream, sal_True );
+        }
+        else
+            pMed = xReadStorage.is() ?
+                new SfxMedium(xReadStorage, sBaseURL, 0 ) :
+                new SfxMedium(sFileName, STREAM_READ, sal_True, 0, 0 );
+        if( sBaseURL.getLength() )
+            pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, sBaseURL ) );
+
         SfxFilterMatcher aMatcher( rFact.GetFilterContainer()->GetName() );
         ErrCode nErr = aMatcher.GuessFilter( *pMed, &pFilter, sal_False );
         if ( nErr || !pFilter)
@@ -775,14 +826,29 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
     }
     else
     {
-        pMed = new SfxMedium(rFileName, STREAM_READ, sal_True,
-            pFilter, 0);
-        if(rFilterOption.Len())
+        if(!pMed)
         {
-            SfxItemSet* pSet =  pMed->GetItemSet();
-            SfxStringItem aOptionItem(SID_FILE_FILTEROPTIONS, rFilterOption);
-            pSet->Put(aOptionItem);
+            if( xInputStream.is() && !xReadStorage.is())
+            {
+                pMed = new SfxMedium;
+                pMed->setStreamToLoadFrom(xInputStream, sal_True );
+                pMed->SetFilter( pFilter );
+            }
+            else
+            {
+                if( xReadStorage.is() )
+                {
+                    pMed = new SfxMedium(xReadStorage, sBaseURL, 0 );
+                    pMed->SetFilter( pFilter );
+                }
+                else
+                    pMed = new SfxMedium(sFileName, STREAM_READ, sal_True, pFilter, 0);
+            }
         }
+        if(sFilterOptions.getLength())
+            pMed->GetItemSet()->Put( SfxStringItem( SID_FILE_FILTEROPTIONS, sFilterOptions ) );
+        if( sBaseURL.getLength())
+            pMed->GetItemSet()->Put( SfxStringItem( SID_DOC_BASEURL, sBaseURL ) );
     }
 
     if( !pMed )
@@ -797,8 +863,8 @@ void InsertFile(SwUnoCrsr* pUnoCrsr,
         SwReader* pRdr;
         SfxItemSet* pSet =  pMed->GetItemSet();
         pSet->Put(SfxBoolItem(FN_API_CALL, sal_True));
-        if(rPassword.Len())
-            pSet->Put(SfxStringItem(SID_PASSWORD, rPassword));
+        if(sPassword.getLength())
+            pSet->Put(SfxStringItem(SID_PASSWORD, sPassword));
         Reader *pRead = pDocSh->StartConvertFrom( *pMed, &pRdr, 0, pUnoCrsr);
         if( pRead )
         {
