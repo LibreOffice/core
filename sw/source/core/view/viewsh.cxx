@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:31:29 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:40:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1461,7 +1461,8 @@ BOOL ViewShell::SmoothScroll( long lXDiff, long lYDiff, const Rectangle *pRect )
                     const bool bMapModeWasEnabledVDev(pVout->IsMapModeEnabled());
                     pVout->EnableMapMode(false);
                     const Bitmap aBitmap(pVout->GetBitmap(Point(), pVout->GetOutputSizePixel()));
-                    SvFileStream aNew(String(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8), STREAM_WRITE|STREAM_TRUNC);
+                    const String aTmpString(ByteString( "c:\\test.bmp" ), RTL_TEXTENCODING_UTF8);
+                    SvFileStream aNew(aTmpString, STREAM_WRITE|STREAM_TRUNC);
                     aNew << aBitmap;
                     pVout->EnableMapMode(bMapModeWasEnabledVDev);
                 }
