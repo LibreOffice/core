@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table4.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:18:51 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:20:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1135,7 +1135,9 @@ String ScTable::GetAutoFillPreview( const ScRange& rSource, SCCOL nEndX, SCROW n
             }
         }
         else
+        {
             DBG_ERROR("GetAutoFillPreview: falscher Modus");
+        }
     }
 
     return aValue;
