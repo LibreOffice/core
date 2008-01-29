@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intercept.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:40:38 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:06:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,30 +158,37 @@ OInterceptor::dispatch(
         }
         else if( _URL.Complete == m_aInterceptedURL[DISPATCH_SAVEAS] )
         {
-            Sequence< PropertyValue > aNewArgs = Arguments;
-            sal_Int32 nInd = 0;
-
-            while( nInd < aNewArgs.getLength() )
+            if ( m_pContentHolder->isNewReport() )
             {
-                if ( aNewArgs[nInd].Name.equalsAscii( "SaveTo" ) )
+                m_pContentHolder->saveAs();
+            }
+            else
+            {
+                Sequence< PropertyValue > aNewArgs = Arguments;
+                sal_Int32 nInd = 0;
+
+                while( nInd < aNewArgs.getLength() )
                 {
-                    aNewArgs[nInd].Value <<= sal_True;
-                    break;
+                    if ( aNewArgs[nInd].Name.equalsAscii( "SaveTo" ) )
+                    {
+                        aNewArgs[nInd].Value <<= sal_True;
+                        break;
+                    }
+                    nInd++;
                 }
-                nInd++;
-            }
 
-            if ( nInd == aNewArgs.getLength() )
-            {
-                aNewArgs.realloc( nInd + 1 );
-                aNewArgs[nInd].Name = ::rtl::OUString::createFromAscii( "SaveTo" );
-                aNewArgs[nInd].Value <<= sal_True;
-            }
+                if ( nInd == aNewArgs.getLength() )
+                {
+                    aNewArgs.realloc( nInd + 1 );
+                    aNewArgs[nInd].Name = ::rtl::OUString::createFromAscii( "SaveTo" );
+                    aNewArgs[nInd].Value <<= sal_True;
+                }
 
-            Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
-                _URL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
-            if ( xDispatch.is() )
-                xDispatch->dispatch( _URL, aNewArgs );
+                Reference< XDispatch > xDispatch = m_xSlaveDispatchProvider->queryDispatch(
+                    _URL, ::rtl::OUString::createFromAscii( "_self" ), 0 );
+                if ( xDispatch.is() )
+                    xDispatch->dispatch( _URL, aNewArgs );
+            }
         }
         else if (  _URL.Complete == m_aInterceptedURL[DISPATCH_CLOSEDOC]
                 || _URL.Complete == m_aInterceptedURL[DISPATCH_CLOSEWIN]
@@ -219,13 +226,17 @@ OInterceptor::addStatusListener(
 
     if ( m_pContentHolder && _URL.Complete == m_aInterceptedURL[DISPATCH_SAVEAS] )
     {   // SaveAs
-        FeatureStateEvent aStateEvent;
-        aStateEvent.FeatureURL.Complete = m_aInterceptedURL[DISPATCH_SAVEAS];
-        aStateEvent.FeatureDescriptor = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveCopyTo"));
-        aStateEvent.IsEnabled = sal_True;
-        aStateEvent.Requery = sal_False;
-        aStateEvent.State <<= (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("($3)")));
-        Control->statusChanged(aStateEvent);
+
+        if ( !m_pContentHolder->isNewReport() )
+        {
+            FeatureStateEvent aStateEvent;
+            aStateEvent.FeatureURL.Complete = m_aInterceptedURL[DISPATCH_SAVEAS];
+            aStateEvent.FeatureDescriptor = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SaveCopyTo"));
+            aStateEvent.IsEnabled = sal_True;
+            aStateEvent.Requery = sal_False;
+            aStateEvent.State <<= (rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("($3)")));
+            Control->statusChanged(aStateEvent);
+        }
 
         {
             osl::MutexGuard aGuard(m_aMutex);
