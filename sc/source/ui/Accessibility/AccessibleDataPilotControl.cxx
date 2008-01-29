@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDataPilotControl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:54:58 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:38:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -243,7 +243,9 @@ void ScAccessibleDataPilotControl::AddField(sal_Int32 nNewIndex)
         bAdded = sal_True;
     }
     else
+    {
         DBG_ERRORFILE("did not recognize a child count change");
+    }
 
     if (bAdded)
     {
@@ -282,7 +284,9 @@ void ScAccessibleDataPilotControl::RemoveField(sal_Int32 nOldIndex)
         bRemoved = sal_True;
     }
     else
+    {
         DBG_ERRORFILE("did not recognize a child count change");
+    }
 
     if (bRemoved)
     {
