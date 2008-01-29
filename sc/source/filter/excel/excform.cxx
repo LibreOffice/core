@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:36:34 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:23:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -477,20 +477,18 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, XclImpStream& aIn, s
             case 0x40:
             case 0x60:
             case 0x20: // Array Constant                        [317 268]
+                aIn >> nByte >> nUINT16;
+                aIn.Ignore( (meBiff == EXC_BIFF2) ? 3 : 4 );
                 if( bAllowArrays )
                 {
-                    aIn >> nByte >> nUINT16;
-                    aIn.Ignore( 4 );
-
-                    SCSIZE nC = nByte + 1;
-                    SCSIZE nR = nUINT16 + 1;
+                    SCSIZE nC = nByte ? nByte : 256;
+                    SCSIZE nR = nUINT16;
 
                     aStack << aPool.StoreMatrix( nC, nR );
                     aExtensions.push_back( EXTENSION_ARRAY );
                 }
                 else
                 {
-                    aIn.Ignore( (meBiff == EXC_BIFF2) ? 6 : 7 );
                     aPool << ocBad;
                     aPool >> aStack;
                 }
@@ -2015,7 +2013,7 @@ void ExcelToSc::ReadExtensionNlr( XclImpStream& aIn )
     aIn >> nFlags;
 
     sal_uInt32 nCount = nFlags & EXC_TOK_NLR_ADDMASK;
-    aIn.Ignore( nCount * (4 + 2) ); // Drop the cell positions
+    aIn.Ignore( nCount * 4 ); // Drop the cell positions
 }
 
 void ExcelToSc::ReadExtensionMemArea( XclImpStream& aIn )
@@ -2025,7 +2023,7 @@ void ExcelToSc::ReadExtensionMemArea( XclImpStream& aIn )
     sal_uInt16 nCount;
     aIn >> nCount;
 
-    aIn.Ignore( nCount * (4 + 4 + 2 + 2) ); // drop the ranges
+    aIn.Ignore( nCount * ((GetBiff() == EXC_BIFF8) ? 8 : 6) ); // drop the ranges
 }
 
 void ExcelToSc::ReadExtensions( const ExtensionTypeVec& rExtensions,
