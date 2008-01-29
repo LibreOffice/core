@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:21:35 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:36:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -960,7 +960,6 @@ public:
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
 
-    void MoveBoxCntnt( SwPaM& rPam, SwPosition& rPos, const _SaveFlyArr& );
     void MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& rPos );
 
     void SetSelBoxes( const SwSelBoxes& rBoxes );
