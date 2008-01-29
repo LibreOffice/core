@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:03:15 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:40:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -488,11 +488,15 @@ void ScFilterDlg::UpdateHdrInValueList( USHORT nList )
                         }
                     }
                     else
+                    {
                         DBG_ERROR("Eintag in Liste nicht gefunden");
+                    }
                 }
             }
             else
+            {
                 DBG_ERROR("Spalte noch nicht initialisiert");
+            }
         }
     }
 }
