@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:03:20 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:29:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,11 @@ class Desktop : public Application
         DECL_STATIC_LINK( Desktop, AsyncTerminate, void*);
         static sal_Bool         CheckOEM();
         static sal_Bool         isCrashReporterEnabled();
+
+        // first-start (ever) & license relate methods
+        static rtl::OUString    GetLicensePath();
+        static sal_Bool         LicenseNeedsAcceptance();
+        static sal_Bool         IsFirstStartWizardNeeded();
 
     private:
         // Bootstrap methods
