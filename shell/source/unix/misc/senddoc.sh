@@ -1,6 +1,9 @@
 #!/bin/sh
 URI_ENCODE="`dirname $0`/uri-encode"
 
+echo "$@" > /tmp/log.obr.$$
+echo "$#" >> /tmp/log.obr.$$
+
 # tries to locate the executable specified
 # as first parameter in the user's path.
 which() {
@@ -119,7 +122,7 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --attach)
-                    ATTACH=${ATTACH:-}${ATTACH:+,}`echo file://$2 | ${URI_ENCODE}`
+                    ATTACH=${ATTACH:-}${ATTACH:+,}`echo "file://$2" | ${URI_ENCODE}`
                     shift
                     ;;
                 *)
@@ -253,23 +256,23 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                     shift
                     ;;
                 --cc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}cc=`echo $2| ${URI_ENCODE}`"
+                    MAILTO="${MAILTO:-}${MAILTO:+&}cc="`echo "$2" | ${URI_ENCODE}`
                     shift
                     ;;
                 --bcc)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc=`echo $2| ${URI_ENCODE}`"
+                    MAILTO="${MAILTO:-}${MAILTO:+&}bcc="`echo "$2" | ${URI_ENCODE}`
                     shift
                     ;;
                 --subject)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}subject=`echo $2 | ${URI_ENCODE}`"
+                    MAILTO="${MAILTO:-}${MAILTO:+&}subject"=`echo "$2" | ${URI_ENCODE}`
                     shift
                     ;;
                 --body)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}body=`echo $2 | ${URI_ENCODE}`"
+                    MAILTO="${MAILTO:-}${MAILTO:+&}body="`echo "$2" | ${URI_ENCODE}`
                     shift
                     ;;
                 --attach)
-                    MAILTO="${MAILTO:-}${MAILTO:+&}attach=`echo file://$2 | ${URI_ENCODE}`"
+                    MAILTO="${MAILTO:-}${MAILTO:+&}attach="`echo "file://$2" | ${URI_ENCODE}`
                     shift
                     ;;
                 *)
@@ -356,23 +359,23 @@ case `basename "$MAILER" | sed 's/-.*$//'` in
                         shift
                         ;;
                     --cc)
-                        MAILTO="${MAILTO:-}${MAILTO:+&}cc=`echo $2| ${URI_ENCODE}`"
+                        MAILTO="${MAILTO:-}${MAILTO:+&}cc="`echo "$2" | ${URI_ENCODE}`
                         shift
                         ;;
                     --bcc)
-                        MAILTO="${MAILTO:-}${MAILTO:+&}bcc=`echo $2| ${URI_ENCODE}`"
+                        MAILTO="${MAILTO:-}${MAILTO:+&}bcc="`echo "$2" | ${URI_ENCODE}`
                         shift
                         ;;
                     --subject)
-                        MAILTO="${MAILTO:-}${MAILTO:+&}subject=`echo $2 | ${URI_ENCODE}`"
+                        MAILTO="${MAILTO:-}${MAILTO:+&}subject="`echo "$2" | ${URI_ENCODE}`
                         shift
                         ;;
                     --body)
-                        MAILTO="${MAILTO:-}${MAILTO:+&}body=`echo $2 | ${URI_ENCODE}`"
+                        MAILTO="${MAILTO:-}${MAILTO:+&}body="`echo "$2" | ${URI_ENCODE}`
                         shift
                         ;;
                     --attach)
-                        MAILTO="${MAILTO:-}${MAILTO:+&}attachment=`echo $2 | ${URI_ENCODE}`"
+                        MAILTO="${MAILTO:-}${MAILTO:+&}attachment="`echo "$2" | ${URI_ENCODE}`
                         shift
                         ;;
                     *)
