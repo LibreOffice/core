@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:42:17 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:32:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,12 +61,10 @@
 #include <svx/ulspitem.hxx>
 #include <svx/wghtitem.hxx>
 #include <svtools/zforlist.hxx>
+#include <svtools/PasswordHelper.hxx>
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
-#ifndef _SVTOOLS_PASSWORDHELPER_HXX
-#include <svtools/PasswordHelper.hxx>
-#endif
 
 #include "global.hxx"
 #include "sc.hrc"
@@ -85,13 +83,11 @@
 #include "scfobj.hxx"
 #include "docoptio.hxx"
 #include "viewopti.hxx"
+#include "postit.hxx"
 #include "globstr.hrc"
 #include "ftools.hxx"
 
-#ifndef SC_FPROGRESSBAR_HXX
 #include "fprogressbar.hxx"
-#endif
-
 
 using namespace com::sun::star;
 
