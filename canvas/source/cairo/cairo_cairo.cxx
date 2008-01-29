@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_cairo.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:19:36 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:01:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,13 @@ namespace cairo
 
 #include <cairo-xlib.h>
 #include <cairo-xlib-xrender.h>
+
+    bool HasXRender( const void* pSysData )
+    {
+            Display *pDisplay = (Display*) cairoHelperGetDisplay( pSysData );
+            int nDummy;
+            return XQueryExtension( pDisplay, "RENDER", &nDummy, &nDummy, &nDummy );
+    }
 
   /**
    * Surface::Surface:   Create Canvas surface with existing data
