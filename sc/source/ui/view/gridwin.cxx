@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:20:19 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:49:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1232,7 +1232,9 @@ void ScGridWindow::ExecFilter( ULONG nSel,
         }
     }
     else
+    {
         DBG_ERROR("Wo ist der Datenbankbereich?");
+    }
 }
 
 void ScGridWindow::SetPointer( const Pointer& rPointer )
