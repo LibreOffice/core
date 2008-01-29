@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:24:20 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,10 +456,8 @@ void FmFormView::GrabFirstControlFocus( sal_Bool _bForceSync )
 
 //------------------------------------------------------------------------
 SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage)
-//SdrPageView* FmFormView::ShowSdrPage(SdrPage* pPage, const Point& rOffs)
 {
     SdrPageView* pPV = E3dView::ShowSdrPage(pPage);
-//  SdrPageView* pPV = E3dView::ShowSdrPage(pPage, rOffs);
 
     if (pPage)
     {
@@ -547,6 +545,10 @@ void FmFormView::DeactivateControls(SdrPageView* pPageView)
 //------------------------------------------------------------------------
 void FmFormView::ObjectCreated(FmFormObj* pObj)
 {
+    // it is valid that the form shell's forms collection is not initialized, yet
+    if ( pFormShell && pFormShell->GetImpl() )
+        pFormShell->GetImpl()->UpdateForms( sal_True );
+
     Reference< XPropertySet > xSet( pObj->GetUnoControlModel(), UNO_QUERY );
     if ( !xSet.is() )
         return;
