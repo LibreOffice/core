@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ODriver.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:22:01 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:38:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,6 +214,14 @@ Sequence< DriverPropertyInfo > SAL_CALL ODBCDriver::getPropertyInfo( const ::rtl
                 ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) )
                 ,aBooleanValues)
                 );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EscapeDateTime"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Escape date time format."))
+                ,sal_False
+                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) )
+                ,aBooleanValues)
+                );
+
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
     }
     ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Invalid URL!")) ,*this);
