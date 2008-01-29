@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.202 $
+ *  $Revision: 1.203 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:30:21 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:24:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1263,6 +1263,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_MODEL), FN_UNO_MODEL, CPPU_E2T(CPPUTYPE_REFMODEL), PropertyAttribute::READONLY|PropertyAttribute::MAYBEVOID, 0},
                     { SW_PROP_NMID(UNO_NAME_GRAPHIC_URL), FN_UNO_REPLACEMENT_GRAPHIC_URL, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID, 0 },
                     { SW_PROP_NMID(UNO_NAME_COMPONENT),FN_UNO_COMPONENT, CPPU_E2T(CPPUTYPE_REFCOMPONENT), PropertyAttribute::READONLY, 0},
+                    { SW_PROP_NMID(UNO_NAME_ALTERNATIVE_TEXT), FN_UNO_ALTERNATIVE_TEXT,CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE , 0   },
                     {0,0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aEmbeddedPropertyMap_Impl;
