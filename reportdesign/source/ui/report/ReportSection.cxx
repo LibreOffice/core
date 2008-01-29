@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportSection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:12:21 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,6 +272,9 @@ void OReportSection::fill()
     const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_RIGHTMARGIN);
     m_pPage->SetLftBorder(nLeftMargin);
     m_pPage->SetRgtBorder(nRightMargin);
+
+// LLA: TODO
+//  m_pPage->SetUppBorder(-10000);
 
     m_pView->SetDesignMode( TRUE );
 
@@ -583,16 +586,70 @@ void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
         }
         else
         {
+            uno::Reference<report::XReportDefinition> xReportDefinition = m_xSection->getReportDefinition();
             if ( _rEvent.PropertyName == PROPERTY_LEFTMARGIN )
             {
-                const sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_LEFTMARGIN);
+                const sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
                 m_pPage->SetLftBorder(nLeftMargin);
-                //m_pView->GetSdrPageView()->SetPageOrigin(Point(nLeftMargin,0));
             }
             else if ( _rEvent.PropertyName == PROPERTY_RIGHTMARGIN )
             {
-                const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(m_xSection->getReportDefinition(),PROPERTY_RIGHTMARGIN);
+                const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
                 m_pPage->SetRgtBorder(nRightMargin);
+            }
+
+            try
+            {
+                const sal_Int32 nLeftMargin  = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
+                const sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
+                const sal_Int32 nPaperWidth  = getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width;
+                ::boost::shared_ptr<OReportSection> aSection = m_pParent->getReportSection(m_xSection);
+                const sal_Int32 nCount = m_xSection->getCount();
+                for (sal_Int32 i = 0; i < nCount; ++i)
+                {
+                    bool bChanged = false;
+                    uno::Reference< report::XReportComponent> xReportComponent(m_xSection->getByIndex(i),uno::UNO_QUERY_THROW);
+                    awt::Point aPos = xReportComponent->getPosition();
+                    awt::Size aSize = xReportComponent->getSize();
+                    SvxShape* pShape = SvxShape::getImplementation( xReportComponent );
+                    SdrObject* pObject = pShape ? pShape->GetSdrObject() : NULL;
+                    if ( pObject )
+                    {
+                        OObjectBase* pBase = dynamic_cast<OObjectBase*>(pObject);
+                        pBase->EndListening(sal_False);
+                        if ( aPos.X < nLeftMargin )
+                        {
+                            aPos.X  = nLeftMargin;
+                            bChanged = true;
+                        }
+                        if ( (aPos.X + aSize.Width) > (nPaperWidth - nRightMargin) )
+                        {
+                            aPos.X = nPaperWidth - nRightMargin - aSize.Width;
+                            if ( aPos.X < nLeftMargin )
+                            {
+                                aSize.Width += aPos.X - nLeftMargin;
+                                aPos.X = nLeftMargin;
+                                // add listener around
+                                pBase->StartListening();
+                                xReportComponent->setSize(aSize);
+                                pBase->EndListening(sal_False);
+                            }
+                            bChanged = true;
+                        }
+                        if ( aPos.Y < 0 )
+                            aPos.Y = 0;
+                        if ( bChanged )
+                        {
+                            xReportComponent->setPosition(aPos);
+                            correctOverlapping(pObject,aSection,false);
+                        }
+                        pBase->StartListening();
+                    }
+                }
+            }
+            catch(uno::Exception)
+            {
+                OSL_ENSURE(0,"Exception caught: OReportSection::_propertyChanged(");
             }
 
             Resize();
