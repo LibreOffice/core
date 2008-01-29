@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:46:36 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:05:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,7 @@ namespace sdr
 
                             if(rView.IsBordVisible())
                             {
-                                DrawBorder(rDisplayInfo, GetSdrPage());
+                                DrawBorder(rView.IsBordVisibleOnlyLeftRight(),rDisplayInfo, GetSdrPage());
                             }
 
                             // #i71130# find out if OC is preview renderer
@@ -458,7 +458,7 @@ namespace sdr
         }
 
         // #i37869#
-        void ViewContactOfSdrPage::DrawBorder(DisplayInfo& rDisplayInfo, const SdrPage& rPage)
+        void ViewContactOfSdrPage::DrawBorder(BOOL _bDrawOnlyLeftRightBorder,DisplayInfo& rDisplayInfo, const SdrPage& rPage)
         {
             // #i42714#
             if(!rDisplayInfo.OutputToPrinter())
@@ -489,7 +489,14 @@ namespace sdr
                     aRect.Right() -= rPage.GetRgtBorder();
                     aRect.Bottom() -= rPage.GetLwrBorder();
 
-                    pOut->DrawRect(aRect);
+                    if ( _bDrawOnlyLeftRightBorder )
+                    {
+                        // oj: draw only left right border for the Sun Report Builder
+                        pOut->DrawLine(aRect.TopLeft(),aRect.BottomLeft());
+                        pOut->DrawLine(aRect.TopRight(),aRect.BottomRight());
+                    }
+                    else
+                        pOut->DrawRect(aRect);
                 }
             }
         }
