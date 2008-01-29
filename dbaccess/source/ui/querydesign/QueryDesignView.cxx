@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:31:21 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:13:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1174,7 +1174,7 @@ namespace
     //------------------------------------------------------------------------------
     void searchAndAppendName(const Reference< XConnection>& _xConnection,
                              const OQueryTableWindow* _pTableWindow,
-                             map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess>& _rTableNames,
+                             ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess>& _rTableNames,
                              ::rtl::OUString& _rsTableListStr
                              )
     {
@@ -1196,7 +1196,7 @@ namespace
 
         ::rtl::OUString aTableListStr;
         // wird gebraucht um sicher zustelllen das eine Tabelle nicht doppelt vorkommt
-        map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aTableNames;
+        ::std::map< ::rtl::OUString,sal_Bool,::comphelper::UStringMixLess> aTableNames;
 
         // generate outer join clause in from
         if(!pConnList->empty())
