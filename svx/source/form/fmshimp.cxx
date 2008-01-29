@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:23:26 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:49:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2540,6 +2540,20 @@ void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(::com::sun::s
 }
 
 //------------------------------------------------------------------------------
+void FmXFormShell::UpdateForms( sal_Bool _bInvalidate )
+{
+    FmFormPage* pPage = m_pShell->GetCurPage();
+    if ( pPage )
+    {
+        Reference< XIndexAccess > xForms;
+        if ( m_pShell->m_bDesignMode )
+            xForms = xForms.query( pPage->GetForms( false ) );
+
+        ResetForms( xForms, _bInvalidate );
+    }
+}
+
+//------------------------------------------------------------------------------
 void FmXFormShell::ResetForms(const Reference< XIndexAccess>& _xForms, sal_Bool bInvalidate)
 {
     OSL_ENSURE(!FmXFormShell_BASE::rBHelper.bDisposed,"FmXFormShell: Object already disposed!");
@@ -2747,17 +2761,9 @@ void FmXFormShell::SetDesignMode(sal_Bool bDesign)
     FmDesignModeChangedHint aChangedHint( bDesign );
     m_pShell->Broadcast(aChangedHint);
 
-    FmFormPage* pPage = m_pShell->GetCurPage();
-    if (pPage)
-    {
-        Reference< XIndexAccess > xForms;
-        if ( bDesign )
-            xForms = xForms.query( pPage->GetForms( true ) );
-
-        ResetForms( xForms, sal_False );
-    }
-
     m_pShell->m_bDesignMode = bDesign;
+    UpdateForms( sal_False );
+
     m_pTextShell->designModeChanged( m_pShell->m_bDesignMode );
 
     if (bDesign)
