@@ -4,9 +4,9 @@
  *
  *  $RCSfile: op.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:39:08 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:32:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 //------------------------------------------------------------------------
 
 #include <tools/solar.h>
@@ -61,6 +59,7 @@
 #include "cell.hxx"
 #include "rangenam.hxx"
 #include "document.hxx"
+#include "postit.hxx"
 
 #include "op.h"
 #include "optab.h"
@@ -72,9 +71,10 @@
 
 #include "root.hxx"
 
-#ifndef SC_FTOOLS_HXX
 #include "ftools.hxx"
-#endif
+
+#include <vector>
+#include <map>
 
 extern sal_Char*    pAnsi;          // -> memory.cxx, Puffer zum Umwandeln von OEM->ANSI
 extern sal_Char*    pErgebnis;      // -> memory.cxx, Ergebnispuffer
@@ -85,6 +85,7 @@ extern sal_Char*    pPuffer1;
 extern BYTE         nDefaultFormat; // -> tool.cxx, Default-Zellenformat
 extern ScDocument*  pDoc;           // -> filter.cxx, Aufhaenger zum Dokumentzugriff
 extern BYTE*        pFormelBuffer;  // -> memory.cxx, fuer
+extern CharSet      eCharVon;       // -> filter.cxx, character set specified
 
 static UINT16       nDefWidth = ( UINT16 ) ( TWIPS_PER_CHAR * 10 );
 
@@ -573,6 +574,38 @@ void OP_CreatePattern123( SvStream& r, UINT16 n)
         n = n - 20;
     }
     r.SeekRel(n);
+}
+
+void OP_SheetName123( SvStream& rStream, USHORT nLength )
+{
+    if (nLength <= 4)
+    {
+        rStream.SeekRel(nLength);
+        return;
+    }
+
+    // B0 36 [sheet number (2 bytes?)] [sheet name (null terminated char array)]
+
+    sal_uInt16 nDummy;
+    rStream >> nDummy; // ignore the first 2 bytes (B0 36).
+    rStream >> nDummy;
+    SCTAB nSheetNum = static_cast<SCTAB>(nDummy);
+    pDoc->MakeTable(nSheetNum);
+
+    ::std::vector<sal_Char> sSheetName;
+    sSheetName.reserve(nLength-4);
+    for (USHORT i = 4; i < nLength; ++i)
+    {
+        sal_Char c;
+        rStream >> c;
+        sSheetName.push_back(c);
+    }
+
+    if (!sSheetName.empty())
+    {
+        String aName(&sSheetName[0], eCharVon);
+        pDoc->RenameTab(nSheetNum, aName);
+    }
 }
 
 void OP_ApplyPatternArea123( SvStream& rStream )
