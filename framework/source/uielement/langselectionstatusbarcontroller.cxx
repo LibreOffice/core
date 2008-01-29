@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langselectionstatusbarcontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:47:20 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:09:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,10 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 #include <toolkit/unohlp.hxx>
 #include <tools/gen.hxx>
 #include <com/sun/star/awt/Command.hpp>
@@ -137,8 +141,20 @@ DEFINE_INIT_SERVICE                     (   LangSelectionStatusbarController, {}
 
 LangSelectionStatusbarController::LangSelectionStatusbarController( const uno::Reference< lang::XMultiServiceFactory >& xServiceManager ) :
     svt::StatusbarController( xServiceManager, uno::Reference< frame::XFrame >(), rtl::OUString(), 0 ),
+    m_bShowMenu( sal_True ),
     m_nScriptType( 7 )
 {
+    if (!m_xLanguageGuesser.is())
+    {
+        uno::Reference< lang::XMultiServiceFactory > xMgr ( comphelper::getProcessServiceFactory() );
+        if (xMgr.is())
+        {
+            m_xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
+                    xMgr->createInstance(
+                        rtl::OUString::createFromAscii( "com.sun.star.linguistic2.LanguageGuessing" ) ),
+                        uno::UNO_QUERY );
+        }
+    }
 }
 
 // XInterface
@@ -220,6 +236,9 @@ bool checkScriptType( sal_Int16 nScriptType, LanguageType nLang )
 
 void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::RuntimeException)
 {
+    if (!m_bShowMenu)
+        return;
+
     //add context menu
     Reference< awt::XPopupMenu > xPopupMenu( m_xServiceManager->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.awt.PopupMenu" ) ), UNO_QUERY );
     //sub menu that contains all items except the last two items: Separator + Set Language for Paragraph
@@ -231,7 +250,8 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
     USHORT nItemId=1;
 
     //1--add current language
-    if( m_aCurLang != OUString::createFromAscii( "" ))
+    if( m_aCurLang != OUString::createFromAscii( "" ) &&
+        LANGUAGE_DONTKNOW != aLanguageTable.GetType( m_aCurLang ))
         LangItems.insert( m_aCurLang );
 
     //2--System
@@ -253,12 +273,12 @@ void LangSelectionStatusbarController::LangMenu()throw (::com::sun::star::uno::R
     }
 
     //4--guessed language
-    uno::Reference< linguistic2::XLanguageGuessing > xLangGuess;
-    if ( xLangGuess.is() && m_aGuessedText!=OUString::createFromAscii( "" ))
+    if ( m_xLanguageGuesser.is() && m_aGuessedText.getLength() > 0)
     {
-        ::com::sun::star::lang::Locale aLocale(xLangGuess->guessPrimaryLanguage( m_aGuessedText, 0, m_aGuessedText.getLength()) );
+        ::com::sun::star::lang::Locale aLocale(m_xLanguageGuesser->guessPrimaryLanguage( m_aGuessedText, 0, m_aGuessedText.getLength()) );
         LanguageType nLang = MsLangId::convertLocaleToLanguageWithFallback( aLocale );
-        if (( nLang != LANGUAGE_DONTKNOW ) && ( checkScriptType( m_nScriptType, nLang )))
+        if (( nLang != LANGUAGE_DONTKNOW ) && ( nLang != LANGUAGE_NONE ) && (nLang != LANGUAGE_SYSTEM)
+            && ( checkScriptType( m_nScriptType, nLang )))
             LangItems.insert( aLangTable.GetString( nLang ));
     }
 
@@ -468,6 +488,8 @@ throw ( RuntimeException )
     if ( m_bDisposed )
         return;
 
+    m_bShowMenu = sal_True;
+
     m_nScriptType=7;//set the default value
     Window* pWindow = VCLUnoHelper::GetWindow( m_xParentWindow );
     if ( pWindow && pWindow->GetType() == WINDOW_STATUSBAR && m_nID != 0 )
@@ -502,6 +524,7 @@ throw ( RuntimeException )
         else if ( !Event.State.hasValue() )
         {
             pStatusBar->SetItemText( m_nID, String() );
+            m_bShowMenu = sal_False;    // no language -> no menu
         }
     }
 }

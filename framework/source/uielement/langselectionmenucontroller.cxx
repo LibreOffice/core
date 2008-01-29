@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langselectionmenucontroller.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:47:08 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:09:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,10 @@
 #include <com/sun/star/awt/XMenuExtended.hpp>
 #endif
 
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
@@ -148,8 +152,20 @@ DEFINE_XSERVICEINFO_MULTISERVICE        (   LanguageSelectionMenuController     
 DEFINE_INIT_SERVICE                     (   LanguageSelectionMenuController, {} )
 
 LanguageSelectionMenuController::LanguageSelectionMenuController( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) :
-    PopupMenuControllerBase( xServiceManager )
+    PopupMenuControllerBase( xServiceManager ),
+    m_bShowMenu( sal_True )
 {
+    if (!m_xLanguageGuesser.is())
+    {
+        uno::Reference< lang::XMultiServiceFactory > xMgr ( comphelper::getProcessServiceFactory() );
+        if (xMgr.is())
+        {
+            m_xLanguageGuesser = uno::Reference< linguistic2::XLanguageGuessing >(
+                    xMgr->createInstance(
+                        rtl::OUString::createFromAscii( "com.sun.star.linguistic2.LanguageGuessing" ) ),
+                        uno::UNO_QUERY );
+        }
+    }
 }
 
 LanguageSelectionMenuController::~LanguageSelectionMenuController()
@@ -180,7 +196,8 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
     if ( m_bDisposed )
         return;
 
-    nScriptType=7;//set the default value
+    m_bShowMenu = sal_True;
+    m_nScriptType=7;//set the default value
 
     rtl::OUString               aStrValue;
     Sequence< ::rtl::OUString > aSeq;
@@ -195,15 +212,15 @@ void SAL_CALL LanguageSelectionMenuController::statusChanged( const FeatureState
         {
             // Retrieve all other values from the sequence and
             // store it members!
-            curLang=aSeq[0];
-            nScriptType= static_cast< sal_Int16 >(aSeq[1].toInt32());
-            keyboardLang=aSeq[2];
-            guessedText=aSeq[3];
+            m_aCurLang=aSeq[0];
+            m_nScriptType= static_cast< sal_Int16 >(aSeq[1].toInt32());
+            m_aKeyboardLang=aSeq[2];
+            m_aGuessedText=aSeq[3];
         }
     }
     else if ( !Event.State.hasValue() )
     {
-
+        m_bShowMenu = sal_False;    // no language -> no sub-menu entries -> disable menu
     }
 }
 
@@ -345,6 +362,9 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     vos::OGuard aSolarMutexGuard( Application::GetSolarMutex() );
 
     resetPopupMenu( rPopupMenu );
+    if (!m_bShowMenu)
+        return;
+
     if ( pVCLPopupMenu )
         pPopupMenu = (PopupMenu *)pVCLPopupMenu->GetMenu();
 
@@ -374,9 +394,9 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     USHORT nItemId = 1;
 
     //1--add current language
-    if(curLang!=OUString::createFromAscii(""))
+    if(m_aCurLang!=OUString::createFromAscii(""))
     {
-        LangItems[curLang]=curLang;
+        LangItems[m_aCurLang]=m_aCurLang;
     }
 
     SvtLanguageTable aLangTable;
@@ -385,7 +405,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     LanguageType rSystemLanguage = rAllSettings.GetLanguage();
     if(rSystemLanguage!=LANGUAGE_DONTKNOW)
     {
-        if (lcl_checkScriptType(nScriptType,rSystemLanguage ))
+        if (lcl_checkScriptType(m_nScriptType,rSystemLanguage ))
             LangItems[OUString(aLangTable.GetString(rSystemLanguage))]=OUString(aLangTable.GetString(rSystemLanguage));
     }
 
@@ -393,25 +413,25 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     LanguageType rUILanguage = rAllSettings.GetUILanguage();
     if(rUILanguage!=LANGUAGE_DONTKNOW)
     {
-        if (lcl_checkScriptType(nScriptType, rUILanguage ))
+        if (lcl_checkScriptType(m_nScriptType, rUILanguage ))
             LangItems[OUString(aLangTable.GetString(rUILanguage))]=OUString(aLangTable.GetString(rUILanguage));
     }
 
     //4--guessed language
-    uno::Reference< linguistic2::XLanguageGuessing > xLangGuess;
-    if (xLangGuess.is() && guessedText!=OUString::createFromAscii(""))
+    if (m_xLanguageGuesser.is() && m_aGuessedText.getLength() > 0)
     {
-        ::com::sun::star::lang::Locale aLocale(xLangGuess->guessPrimaryLanguage( guessedText, 0, guessedText.getLength()) );
+        ::com::sun::star::lang::Locale aLocale(m_xLanguageGuesser->guessPrimaryLanguage( m_aGuessedText, 0, m_aGuessedText.getLength()) );
         LanguageType nLang = MsLangId::convertLocaleToLanguageWithFallback( aLocale );
-        if((nLang!=LANGUAGE_DONTKNOW) && (lcl_checkScriptType(nScriptType, nLang )))
-            LangItems[keyboardLang]=aLangTable.GetString(nLang);
+        if ((nLang != LANGUAGE_DONTKNOW) && (nLang != LANGUAGE_NONE) && (nLang != LANGUAGE_SYSTEM)
+            && (lcl_checkScriptType( m_nScriptType, nLang )))
+            LangItems[aLangTable.GetString(nLang)]=aLangTable.GetString(nLang);
     }
 
     //5--keyboard language
-    if(keyboardLang!=OUString::createFromAscii(""))
+    if(m_aKeyboardLang!=OUString::createFromAscii(""))
     {
-        if (lcl_checkScriptType(nScriptType, aLanguageTable.GetType(keyboardLang)))
-            LangItems[keyboardLang]=keyboardLang;
+        if (lcl_checkScriptType(m_nScriptType, aLanguageTable.GetType(m_aKeyboardLang)))
+            LangItems[m_aKeyboardLang] = m_aKeyboardLang;
     }
 
     //6--all languages used in current document
@@ -423,7 +443,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
            xModel = xController->getModel();
     }
     Reference< document::XDocumentLanguages > xDocumentLanguages( xModel, UNO_QUERY );
-    /*the description of nScriptType
+    /*the description of m_nScriptType
       LATIN : 1
       ASIAN : 2
       COMPLEX:4
@@ -436,7 +456,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
     sal_Int16 nCount=7;
     if(xDocumentLanguages.is())
     {
-        Sequence< Locale > rLocales(xDocumentLanguages->getDocumentLanguages(nScriptType,nCount));
+        Sequence< Locale > rLocales(xDocumentLanguages->getDocumentLanguages(m_nScriptType,nCount));
         if(rLocales.getLength()>0)
         {
             for(USHORT i = 0; i<rLocales.getLength();++i)
@@ -444,7 +464,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
                 if (LangItems.size()==7)
                     break;
                 const Locale& rLocale=rLocales[i];
-                if(lcl_checkScriptType(nScriptType, aLanguageTable.GetType(rLocale.Language)))
+                if(lcl_checkScriptType(m_nScriptType, aLanguageTable.GetType(rLocale.Language)))
                     LangItems[OUString(rLocale.Language)]=OUString(rLocale.Language);
             }
         }
@@ -460,7 +480,7 @@ void LanguageSelectionMenuController::fillPopupMenu( Reference< css::awt::XPopup
             ++nItemId;
             pPopupMenu->InsertItem( nItemId,it->first);
             LangTable[nItemId] = it->first;
-            if(it->first == curLang && eMode == MODE_SetLanguageSelectionMenu )
+            if(it->first == m_aCurLang && eMode == MODE_SetLanguageSelectionMenu )
             {
                 //make a sign for the current language
                 pPopupMenu->CheckItem(nItemId,TRUE);
