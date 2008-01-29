@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OResultSetMetaData.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:07:27 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:54:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,21 +95,30 @@ OResultSetMetaData::~OResultSetMetaData()
     return  sValue;
 }
 // -------------------------------------------------------------------------
+SWORD OResultSetMetaData::getNumColAttrib(OConnection* _pConnection
+                                              ,SQLHANDLE _aStatementHandle
+                                              ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface
+                                              ,sal_Int32 _column
+                                              ,sal_Int32 _ident) throw(SQLException, RuntimeException)
+{
+    SWORD nValue=0;
+    OTools::ThrowException(_pConnection,(*(T3SQLColAttribute)_pConnection->getOdbcFunction(ODBC3SQLColAttribute))(_aStatementHandle,
+                                         (SQLUSMALLINT)_column,
+                                         (SQLUSMALLINT)_ident,
+                                         NULL,
+                                         0,
+                                         NULL,
+                                         &nValue),_aStatementHandle,SQL_HANDLE_STMT,_xInterface);
+    return nValue;
+}
+// -------------------------------------------------------------------------
 sal_Int32 OResultSetMetaData::getNumColAttrib(sal_Int32 _column,sal_Int32 ident) throw(SQLException, RuntimeException)
 {
     sal_Int32 column = _column;
     if(_column < (sal_Int32)m_vMapping.size()) // use mapping
         column = m_vMapping[_column];
 
-    sal_Int32 nValue=0;
-    OTools::ThrowException(m_pConnection,N3SQLColAttribute(m_aStatementHandle,
-                                         (SQLUSMALLINT)column,
-                                         (SQLUSMALLINT)ident,
-                                         NULL,
-                                         0,
-                                         NULL,
-                                         &nValue),m_aStatementHandle,SQL_HANDLE_STMT,*this);
-    return nValue;
+    return getNumColAttrib(m_pConnection,m_aStatementHandle,*this,column,ident);
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException)
@@ -117,7 +126,26 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) 
     return getNumColAttrib(column,SQL_DESC_DISPLAY_SIZE);
 }
 // -------------------------------------------------------------------------
-
+SWORD OResultSetMetaData::getColumnODBCType(OConnection* _pConnection
+                                              ,SQLHANDLE _aStatementHandle
+                                              ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface
+                                              ,sal_Int32 column)
+                                               throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+{
+    SWORD nType = 0;
+    try
+    {
+        nType = getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE);
+        if(nType == SQL_UNKNOWN_TYPE)
+            nType = getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column, SQL_DESC_TYPE);
+    }
+    catch(SQLException& ) // in this case we have an odbc 2.0 driver
+    {
+        nType = getNumColAttrib(_pConnection,_aStatementHandle,_xInterface,column,SQL_DESC_CONCISE_TYPE );
+    }
+    return nType;
+}
+// -----------------------------------------------------------------------------
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException)
 {
     sal_Int32 nType = 0;
