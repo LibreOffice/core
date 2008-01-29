@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:04:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:46:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -433,7 +433,7 @@ ORptFilter::ORptFilter( const uno::Reference< XMultiServiceFactory >& _rxMSF,sal
                         XML_NAMESPACE_REPORT );
 
     m_xPropHdlFactory = new OXMLRptPropHdlFactory;
-    m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylePropertyMap();
+    m_xCellStylesPropertySetMapper = OXMLHelper::GetCellStylePropertyMap(true);
     m_xColumnStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetColumnStyleProps(), m_xPropHdlFactory);
     m_xRowStylesPropertySetMapper = new XMLPropertySetMapper(OXMLHelper::GetRowStyleProps(), m_xPropHdlFactory);
     m_xTableStylesPropertySetMapper = new XMLTextPropertySetMapper( TEXT_PROP_MAP_TABLE_DEFAULTS );
