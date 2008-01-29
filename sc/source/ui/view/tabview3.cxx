@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:21:47 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2112,8 +2112,9 @@ void ScTabView::PaintArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCRO
     // with a wrong MapMode if editing in a cell (reference input).
     // #i80499# Overlays need updates in a lot of cases, e.g. changing row/column size,
     // or showing/hiding outlines. TODO: selections in inactive windows are vanishing.
-    if( eMode != SC_UPDATE_MARKS )
-        UpdateAllOverlays();
+    // #i84689# With relative conditional formats, PaintArea may be called often (for each changed cell),
+    // so UpdateAllOverlays was moved to ScTabViewShell::Notify and is called only if PAINT_LEFT/PAINT_TOP
+    // is set (width or height changed).
 }
 
 void ScTabView::PaintRangeFinder( long nNumber )
