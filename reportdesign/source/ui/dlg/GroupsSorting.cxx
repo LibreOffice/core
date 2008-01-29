@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GroupsSorting.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:07:49 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:47:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -411,7 +411,7 @@ void OFieldExpressionControl::lateInit()
 
         m_pComboCell = new ComboBoxControl( &GetDataWindow() );
         m_pComboCell->SetSelectHdl(LINK(this,OFieldExpressionControl,CBChangeHdl));
-        m_pComboCell->SetHelpId(HID_FIELDEXPRESSION);
+        m_pComboCell->SetHelpId(HID_RPT_FIELDEXPRESSION);
 
         Control* pControls[] = {m_pComboCell};
         for (size_t i = 0; i < sizeof(pControls)/sizeof(pControls[0]); ++i)
