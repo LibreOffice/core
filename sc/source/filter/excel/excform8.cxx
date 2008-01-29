@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:36:47 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:24:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,11 +372,10 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
             case 0x40:
             case 0x60:
             case 0x20: // Array Constant                        [317 268]
+                aIn >> nByte >> nUINT16;
+                aIn.Ignore( 4 );
                 if( bAllowArrays )
                 {
-                    aIn >> nByte >> nUINT16;
-                    aIn.Ignore( 4 );
-
                     SCSIZE nC = nByte + 1;
                     SCSIZE nR = nUINT16 + 1;
 
@@ -385,7 +384,6 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 }
                 else
                 {
-                    aIn.Ignore( 7 );
                     aPool << ocBad;
                     aPool >> aStack;
                 }
