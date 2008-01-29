@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docmacromode.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:46:49 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:28:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,15 +91,13 @@ namespace sfx2
     struct DocumentMacroMode_Data
     {
         IMacroDocumentAccess&   rDocumentAccess;
-        sal_Int16               nMacroExecutionMode;
-        bool                    bMacroDisabledMessageShown;
-        bool                    bDocMacroDisabledMessageShown;
+        sal_Bool                    bMacroDisabledMessageShown;
+        sal_Bool                    bDocMacroDisabledMessageShown;
 
         DocumentMacroMode_Data( IMacroDocumentAccess& _rDocumentAccess )
             :rDocumentAccess( _rDocumentAccess )
-            ,nMacroExecutionMode( -1 )  // "not initialized"
-            ,bMacroDisabledMessageShown( false )
-            ,bDocMacroDisabledMessageShown( false )
+            ,bMacroDisabledMessageShown( sal_False )
+            ,bDocMacroDisabledMessageShown( sal_False )
         {
         }
     };
@@ -117,10 +115,10 @@ namespace sfx2
                 <TRUE/> if and only if the given handler handled the the request, and the "Approve"
                 continuation was selected.
         */
-        bool lcl_callInterActionHandler( const Reference< XInteractionHandler >& _rxHandler, const Any& _rRequest )
+        sal_Bool lcl_callInterActionHandler( const Reference< XInteractionHandler >& _rxHandler, const Any& _rRequest )
         {
             if ( !_rxHandler.is() )
-                return false;
+                return sal_False;
 
             try
             {
@@ -136,17 +134,17 @@ namespace sfx2
                 _rxHandler->handle( xRequest );
 
                 if ( pApprove->isSelected() )
-                    return true;
+                    return sal_True;
             }
             catch( const Exception& )
             {
                 DBG_UNHANDLED_EXCEPTION();
             }
-            return false;
+            return sal_False;
         }
 
         //................................................................
-        void lcl_showGeneralSfxErrorOnce( const Reference< XInteractionHandler >& _rxHandler, const sal_Int32 _nSfxErrorCode, bool& _rbAlreadyShown )
+        void lcl_showGeneralSfxErrorOnce( const Reference< XInteractionHandler >& _rxHandler, const sal_Int32 _nSfxErrorCode, sal_Bool& _rbAlreadyShown )
         {
             if ( _rbAlreadyShown )
                 return;
@@ -158,19 +156,19 @@ namespace sfx2
         }
 
         //................................................................
-        void lcl_showMacrosDisabledError( const Reference< XInteractionHandler >& _rxHandler, bool& _rbAlreadyShown )
+        void lcl_showMacrosDisabledError( const Reference< XInteractionHandler >& _rxHandler, sal_Bool& _rbAlreadyShown )
         {
             lcl_showGeneralSfxErrorOnce( _rxHandler, ERRCODE_SFX_MACROS_SUPPORT_DISABLED, _rbAlreadyShown );
         }
 
         //................................................................
-        void lcl_showDocumentMacrosDisabledError( const Reference< XInteractionHandler >& _rxHandler, bool& _rbAlreadyShown )
+        void lcl_showDocumentMacrosDisabledError( const Reference< XInteractionHandler >& _rxHandler, sal_Bool& _rbAlreadyShown )
         {
             lcl_showGeneralSfxErrorOnce( _rxHandler, ERRCODE_SFX_DOCUMENT_MACRO_DISABLED, _rbAlreadyShown );
         }
 
         //................................................................
-        bool lcl_showMacroWarning( const Reference< XInteractionHandler >& _rxHandler,
+        sal_Bool lcl_showMacroWarning( const Reference< XInteractionHandler >& _rxHandler,
             const ::rtl::OUString& _rDocumentLocation )
         {
             DocumentMacroConfirmationRequest aRequest;
@@ -179,7 +177,7 @@ namespace sfx2
         }
 
         //................................................................
-        bool lcl_showMacroWarning( const Reference< XInteractionHandler >& _rxHandler,
+        sal_Bool lcl_showMacroWarning( const Reference< XInteractionHandler >& _rxHandler,
             const ::rtl::OUString& _rDocumentLocation, const Reference< XStorage >& _rxDocStor,
             const Sequence< DocumentSignatureInformation >& _rDocSigInfo )
         {
@@ -207,24 +205,23 @@ namespace sfx2
     }
 
     //--------------------------------------------------------------------
-    bool DocumentMacroMode::allowMacroExecution()
+    sal_Bool DocumentMacroMode::allowMacroExecution()
     {
-        m_pData->nMacroExecutionMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-        return true;
+        m_pData->rDocumentAccess.setImposedMacroExecMode( MacroExecMode::ALWAYS_EXECUTE_NO_WARN );
+        return sal_True;
     }
 
     //--------------------------------------------------------------------
-    bool DocumentMacroMode::disallowMacroExecution()
+    sal_Bool DocumentMacroMode::disallowMacroExecution()
     {
-        m_pData->nMacroExecutionMode = MacroExecMode::NEVER_EXECUTE;
-        return false;
+        m_pData->rDocumentAccess.setImposedMacroExecMode( MacroExecMode::NEVER_EXECUTE );
+        return sal_False;
     }
 
     //--------------------------------------------------------------------
-    bool DocumentMacroMode::adjustMacroMode( const Reference< XInteractionHandler >& _rxInteraction )
+    sal_Bool DocumentMacroMode::adjustMacroMode( const Reference< XInteractionHandler >& _rxInteraction )
     {
-        if ( m_pData->nMacroExecutionMode < 0 )  // "not initialized"
-            m_pData->nMacroExecutionMode = m_pData->rDocumentAccess.getImposedMacroExecMode();
+        sal_uInt16 nMacroExecutionMode = m_pData->rDocumentAccess.getImposedMacroExecMode();
 
         if ( SvtSecurityOptions().IsMacroDisabled() )
         {
@@ -242,42 +239,42 @@ namespace sfx2
         };
         AutoConfirmation eAutoConfirm( eNoAutoConfirm );
 
-        if  (   ( m_pData->nMacroExecutionMode == MacroExecMode::USE_CONFIG )
-            ||  ( m_pData->nMacroExecutionMode == MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION )
-            ||  ( m_pData->nMacroExecutionMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION )
+        if  (   ( nMacroExecutionMode == MacroExecMode::USE_CONFIG )
+            ||  ( nMacroExecutionMode == MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION )
+            ||  ( nMacroExecutionMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION )
             )
         {
             SvtSecurityOptions aOpt;
             switch ( aOpt.GetMacroSecurityLevel() )
             {
                 case 3:
-                    m_pData->nMacroExecutionMode = MacroExecMode::FROM_LIST_NO_WARN;
+                    nMacroExecutionMode = MacroExecMode::FROM_LIST_NO_WARN;
                     break;
                 case 2:
-                    m_pData->nMacroExecutionMode = MacroExecMode::FROM_LIST_AND_SIGNED_WARN;
+                    nMacroExecutionMode = MacroExecMode::FROM_LIST_AND_SIGNED_WARN;
                     break;
                 case 1:
-                    m_pData->nMacroExecutionMode = MacroExecMode::ALWAYS_EXECUTE;
+                    nMacroExecutionMode = MacroExecMode::ALWAYS_EXECUTE;
                     break;
                 case 0:
-                    m_pData->nMacroExecutionMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+                    nMacroExecutionMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
                     break;
                 default:
-                    OSL_ENSURE( false, "DocumentMacroMode::adjustMacroMode: unexpected macro security level!" );
-                    m_pData->nMacroExecutionMode = MacroExecMode::NEVER_EXECUTE;
+                    OSL_ENSURE( sal_False, "DocumentMacroMode::adjustMacroMode: unexpected macro security level!" );
+                    nMacroExecutionMode = MacroExecMode::NEVER_EXECUTE;
             }
 
-            if ( m_pData->nMacroExecutionMode == MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION )
+            if ( nMacroExecutionMode == MacroExecMode::USE_CONFIG_REJECT_CONFIRMATION )
                 eAutoConfirm = eAutoConfirmReject;
-            else if ( m_pData->nMacroExecutionMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION )
+            else if ( nMacroExecutionMode == MacroExecMode::USE_CONFIG_APPROVE_CONFIRMATION )
                 eAutoConfirm = eAutoConfirmApprove;
         }
 
-        if ( m_pData->nMacroExecutionMode == MacroExecMode::NEVER_EXECUTE )
-            return false;
+        if ( nMacroExecutionMode == MacroExecMode::NEVER_EXECUTE )
+            return sal_False;
 
-        if ( m_pData->nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE_NO_WARN )
-            return true;
+        if ( nMacroExecutionMode == MacroExecMode::ALWAYS_EXECUTE_NO_WARN )
+            return sal_True;
 
         try
         {
@@ -301,14 +298,14 @@ namespace sfx2
             }
 
             // at this point it is clear that the document is not in the secure location
-            if ( m_pData->nMacroExecutionMode == MacroExecMode::FROM_LIST_NO_WARN )
+            if ( nMacroExecutionMode == MacroExecMode::FROM_LIST_NO_WARN )
             {
                 lcl_showDocumentMacrosDisabledError( _rxInteraction, m_pData->bDocMacroDisabledMessageShown );
                 return disallowMacroExecution();
             }
 
             // check whether the document is signed with trusted certificate
-            if ( xSignatures.is() && m_pData->nMacroExecutionMode != MacroExecMode::FROM_LIST )
+            if ( xSignatures.is() && nMacroExecutionMode != MacroExecMode::FROM_LIST )
             {
                 Sequence< DocumentSignatureInformation > aScriptingSignatureInformations;
                 Reference < XStorage > xStore( m_pData->rDocumentAccess.getLastCommitDocumentStorage() );
@@ -316,7 +313,7 @@ namespace sfx2
                 sal_uInt16 nSignatureState = m_pData->rDocumentAccess.getScriptingSignatureState();
                 if ( nSignatureState == SIGNATURESTATE_SIGNATURES_BROKEN )
                 {
-                    if ( m_pData->nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
+                    if ( nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
                     {
                         m_pData->rDocumentAccess.showBrokenSignatureWarning( _rxInteraction );
                         return disallowMacroExecution();
@@ -352,9 +349,9 @@ namespace sfx2
                             return allowMacroExecution();
                         }
 
-                    if ( m_pData->nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
+                    if ( nMacroExecutionMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
                     {
-                        bool bApproved = lcl_showMacroWarning( _rxInteraction,
+                        sal_Bool bApproved = lcl_showMacroWarning( _rxInteraction,
                             sReferrer, xStore, aScriptingSignatureInformations );
                         return ( bApproved ? allowMacroExecution() : disallowMacroExecution() );
                     }
@@ -362,11 +359,11 @@ namespace sfx2
             }
 
             // at this point it is clear that the document is neither in secure location nor signed with trusted certificate
-            if  (   ( m_pData->nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
-                ||  ( m_pData->nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
+            if  (   ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
+                ||  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
                 )
             {
-                if  ( m_pData->nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
+                if  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
                 {
                     lcl_showDocumentMacrosDisabledError( _rxInteraction, m_pData->bDocMacroDisabledMessageShown );
                 }
@@ -375,9 +372,9 @@ namespace sfx2
         }
         catch ( Exception& )
         {
-            if  (   ( m_pData->nMacroExecutionMode == MacroExecMode::FROM_LIST_NO_WARN )
-                ||  ( m_pData->nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
-                ||  ( m_pData->nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
+            if  (   ( nMacroExecutionMode == MacroExecMode::FROM_LIST_NO_WARN )
+                ||  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
+                ||  ( nMacroExecutionMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
                 )
             {
                 return disallowMacroExecution();
@@ -385,7 +382,7 @@ namespace sfx2
         }
 
         // conformation is required
-        bool bSecure = sal_False;
+        sal_Bool bSecure = sal_False;
 
         if ( eAutoConfirm == eNoAutoConfirm )
         {
@@ -404,15 +401,15 @@ namespace sfx2
     }
 
     //--------------------------------------------------------------------
-    bool DocumentMacroMode::isMacroExecutionDisallowed() const
+    sal_Bool DocumentMacroMode::isMacroExecutionDisallowed() const
     {
-        return m_pData->nMacroExecutionMode == MacroExecMode::NEVER_EXECUTE;
+        return m_pData->rDocumentAccess.getImposedMacroExecMode() == MacroExecMode::NEVER_EXECUTE;
     }
 
     //--------------------------------------------------------------------
-    bool DocumentMacroMode::hasMacroLibrary() const
+    sal_Bool DocumentMacroMode::hasMacroLibrary() const
     {
-        bool bHasMacroLib = false;
+        sal_Bool bHasMacroLib = sal_False;
         try
         {
             Reference< XEmbeddedScripts > xScripts( m_pData->rDocumentAccess.getEmbeddedDocumentScripts() );
@@ -427,7 +424,7 @@ namespace sfx2
                 // if there are libraries except the "Standard" library
                 // we assume that they are not empty (because they have been created by the user)
                 if ( !xContainer->hasElements() )
-                    bHasMacroLib = false;
+                    bHasMacroLib = sal_False;
                 else
                 {
                     ::rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
@@ -435,7 +432,7 @@ namespace sfx2
                     if ( aElements.getLength() )
                     {
                         if ( aElements.getLength() > 1 || !aElements[0].equals( aStdLibName ) )
-                            bHasMacroLib = true;
+                            bHasMacroLib = sal_True;
                         else
                         {
                             // usually a "Standard" library is always present (design)
@@ -465,9 +462,9 @@ namespace sfx2
     }
 
     //--------------------------------------------------------------------
-    bool DocumentMacroMode::storageHasMacros( const Reference< XStorage >& _rxStorage )
+    sal_Bool DocumentMacroMode::storageHasMacros( const Reference< XStorage >& _rxStorage )
     {
-        bool bHasMacros = false;
+        sal_Bool bHasMacros = sal_False;
         if ( _rxStorage.is() )
         {
             try
