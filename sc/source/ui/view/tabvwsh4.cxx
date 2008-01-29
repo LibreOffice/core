@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:21:00 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:51:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1173,7 +1173,9 @@ void ScTabViewShell::SetDrawTextUndo( SfxUndoManager* pNewUndoMgr )
         }
     }
     else
+    {
         DBG_ERROR("SetDrawTextUndo ohne DrawTextShell");
+    }
 }
 
 //------------------------------------------------------------------
