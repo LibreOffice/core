@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpwin.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 09:59:01 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:16:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ public:
 void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
         const String& rHelpText, const String& rStatusText,
         const Point& rScreenPos, const Rectangle* pHelpArea = NULL );
-void ImplDestroyHelpWindow();
+void ImplDestroyHelpWindow( bool bUpdateHideTime );
 void ImplSetHelpWindowPos( Window* pHelpWindow, USHORT nHelpWinStyle, USHORT nStyle,
                             const Point& rPos, const Rectangle* pHelpArea );
 
