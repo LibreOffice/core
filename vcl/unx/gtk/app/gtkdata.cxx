@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkdata.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-29 11:41:39 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:20:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ GtkSalDisplay::GtkSalDisplay( GdkDisplay* pDisplay )
 {
     for(int i = 0; i < POINTER_COUNT; i++)
         m_aCursors[ i ] = NULL;
-    Init ( false );
+    Init ();
 }
 
 GtkSalDisplay::~GtkSalDisplay()
