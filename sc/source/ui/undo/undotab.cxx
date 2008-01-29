@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undotab.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:39:54 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:45:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1051,9 +1051,11 @@ ScUndoRemoveLink::ScUndoRemoveLink( ScDocShell* pShell, const String& rDoc ) :
                     nRefreshDelay = pDoc->GetLinkRefreshDelay(i);
                 }
                 else
+                {
                     DBG_ASSERT(aFltName == pDoc->GetLinkFlt(i) &&
                                aOptions == pDoc->GetLinkOpt(i),
                                     "verschiedene Filter fuer ein Dokument?");
+                }
                 pTabs[nCount] = i;
                 pModes[nCount] = nMode;
                 pTabNames[nCount] = pDoc->GetLinkTab(i);
