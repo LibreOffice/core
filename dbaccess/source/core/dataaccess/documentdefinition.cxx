@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:39:30 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:51:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -848,18 +848,14 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
     Reference< XConnection > xConnection;
     sal_Int32 nOpenMode = OpenMode::DOCUMENT;
 
-    // our own macro execution mode
-    // Note that we don't pass an interaction handler here. If the user has not been asked/notified
-    // by now (i.e. during loading the whole DB document), then this won't happen anymore.
-    bool bExecuteOwnMacros = m_pImpl->m_pDataSource->adjustMacroMode_AutoReject();
-    sal_Int16 nDocumentMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
-
     ::comphelper::NamedValueCollection aDocumentArgs;
 
     // for the document, default to the interaction handler as used for loading the DB doc
     // This might be overwritten below, when examining _rOpenArgument.
     ::comphelper::NamedValueCollection aDBDocArgs( m_pImpl->m_pDataSource->m_aArgs );
     aDocumentArgs.put( "InteractionHandler", aDBDocArgs.getOrDefault( "InteractionHandler", Reference< XInteractionHandler >() ) );
+
+    ::boost::optional< sal_Int16 > aDocumentMacroMode;
 
     if ( !lcl_extractOpenMode( _rOpenArgument, nOpenMode ) )
     {
@@ -881,7 +877,9 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
 
                 if ( pIter->Name.equalsAscii( "MacroExecutionMode" ) )
                 {
-                    OSL_VERIFY( pIter->Value >>= nDocumentMacroMode );
+                    sal_Int16 nMacroExecMode( *aDocumentMacroMode );
+                    OSL_VERIFY( pIter->Value >>= nMacroExecMode );
+                    aDocumentMacroMode.reset( nMacroExecMode );
                     continue;
                 }
 
@@ -891,20 +889,54 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
         }
     }
 
+    // our database document's macro execution mode
+    // Note that we don't pass an interaction handler here. If the user has not been asked/notified
+    // by now (i.e. during loading the whole DB document), then this won't happen anymore.
+    bool bExecuteDBDocMacros = m_pImpl->m_pDataSource->adjustMacroMode_AutoReject();
+
     // allow the command arguments to downgrade the macro execution mode, but not to upgrade
     // it
-    if ( !bExecuteOwnMacros )
+    if  (   ( m_pImpl->m_pDataSource->getImposedMacroExecMode() == MacroExecMode::USE_CONFIG )
+        &&  bExecuteDBDocMacros
+        )
     {
-        // no macros per DB doc -> no macros in the embedded doc
-        nDocumentMacroMode = MacroExecMode::NEVER_EXECUTE;
+        // while loading the whole database document, USE_CONFIG, or *no* macro exec mode was passed.
+        // Additionally, *by now* executing macros from the DB doc is allowed (this is what bExecuteDBDocMacros
+        // indicates). This means either one of:
+        // 1. The DB doc or one of the sub docs contained macros and
+        // 1a. the user explicitly allowed executing them
+        // 1b. the configuration allows executing them without asking the user
+        // 2. Neither the DB doc nor the sub docs contained macros, thus macro
+        //    execution was silently enabled, assuming that any macro will be a
+        //    user-created macro
+        //
+        // The problem with this: If the to-be-opened sub document has macros embedded in
+        // the content.xml (which is valid ODF, but normally not produced by OOo itself),
+        // then this has not been detecte while loading the database document - it would
+        // be too expensive, as it effectively would require loading all forms/reports.
+        //
+        // So, in such a case, and with 2. above, we would silently execute those macros,
+        // regardless of the global security settings - which would be a security issue, of
+        // course.
+        if ( !m_pImpl->m_pDataSource->hasAnyObjectWithMacros() )
+        {
+            // this is case 2. from above (not *exactly*, but sufficiently)
+            // So, pass a USE_CONFIG to the to-be-loaded document. This means that
+            // the user will be prompted with a security message upon opening this
+            // sub document, in case the settings require this, *and* the document
+            // contains scripts in the content.xml. But this is better than the security
+            // issue we had before ...
+            aDocumentMacroMode.reset( MacroExecMode::USE_CONFIG );
+        }
     }
-    else
+
+    if ( !aDocumentMacroMode )
     {
-        // DB doc allows macros -> allow macros in the embedded doc, unless explicitly prohibited
-        if ( nDocumentMacroMode != MacroExecMode::NEVER_EXECUTE )
-            nDocumentMacroMode = MacroExecMode::ALWAYS_EXECUTE_NO_WARN;
+        // nobody so far felt responsible for setting it
+        // => use the DBDoc-wide macro exec mode for the document, too
+        aDocumentMacroMode.reset( bExecuteDBDocMacros ? MacroExecMode::ALWAYS_EXECUTE_NO_WARN : MacroExecMode::NEVER_EXECUTE );
     }
-    aDocumentArgs.put( "MacroExecutionMode", nDocumentMacroMode );
+    aDocumentArgs.put( "MacroExecutionMode", *aDocumentMacroMode );
 
 
     if ( xConnection.is() )
@@ -1386,7 +1418,7 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
                     sDocumentService = GetDocumentServiceFromMediaType( xStorage, m_pImpl->m_aProps.sPersistentName, m_aContext.getLegacyServiceFactory(), aClassID );
                     // check if we are not a form and
                     // the com.sun.star.report.pentaho.SOReportJobFactory is not present.
-                    if (m_bForm == 0 /* MAGIC! */ && !sDocumentService.equalsAscii("com.sun.star.text.TextDocument"))
+                    if ( !m_bForm && !sDocumentService.equalsAscii("com.sun.star.text.TextDocument"))
                     {
                         // we seems to be a new report, check if report extension is present.
                         Reference< XContentEnumerationAccess > xEnumAccess( m_aContext.getLegacyServiceFactory(), UNO_QUERY );
