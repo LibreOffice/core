@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:13:12 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:05:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2028,9 +2028,11 @@ BOOL ScCompiler::IsOpCode( const String& rName )
     OpCode eOp;
     if (bFound && ((eOp = pRawToken->GetOpCode()) == ocSub || eOp == ocNegSub))
     {
-        bool bShouldBeNegSub = (eLastOp == ocOpen || eLastOp == ocArrayOpen ||
-                eLastOp == ocSep || eLastOp == ocNegSub ||
-                (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_END_BIN_OP));
+        bool bShouldBeNegSub =
+            (eLastOp == ocOpen || eLastOp == ocSep || eLastOp == ocNegSub ||
+             (SC_OPCODE_START_BIN_OP <= eLastOp && eLastOp < SC_OPCODE_END_BIN_OP) ||
+             eLastOp == ocArrayOpen ||
+             eLastOp == ocArrayColSep || eLastOp == ocArrayRowSep);
         if (bShouldBeNegSub && eOp == ocSub)
             pRawToken->NewOpCode( ocNegSub );
             //! if ocNegSub had ForceArray we'd have to set it here
