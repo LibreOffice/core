@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CondFormat.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:06:41 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:46:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 Control WIN_CONDITION
 {
     Size = MAP_APPFONT ( CONDITION_WIDTH , CONDITION_HEIGHT ) ;
-    HelpId = HID_COND_DLG;
+    HelpId = HID_RPT_COND_DLG;
     DialogControl = TRUE;
     Hide = TRUE;
 
@@ -137,7 +137,7 @@ Control WIN_CONDITION
         Pos = MAP_APPFONT ( UNRELATED_CONTROLS + RELATED_CONTROLS, ROW_2_POS ) ;
         ButtonType = BUTTON_SYMBOL;
         Align = BOXALIGN_TOP;
-        HelpId = HID_CONDFORMAT_TB;
+        HelpId = HID_RPT_CONDFORMAT_TB;
         Customize = FALSE;
         ItemList =
         {
@@ -183,7 +183,7 @@ Control WIN_CONDITION
         Pos = MAP_APPFONT ( 2*UNRELATED_CONTROLS, ROW_2_POS ) ;
         Size = MAP_APPFONT ( CONDITION_WIDTH - UNRELATED_CONTROLS, ROW_2_HEIGHT ) ;
         Border = TRUE ;
-        HelpId = HID_CRTL_FORMAT_PREVIEW;
+        HelpId = HID_RPT_CRTL_FORMAT_PREVIEW;
         Text [ en-US ] = "Example";
     };
 
@@ -218,7 +218,7 @@ ModalDialog RID_CONDFORMAT
     SVLook = TRUE ;
     Size = MAP_APPFONT ( COND_DLG_WIDTH, COND_DLG_HEIGHT ) ;
     Text [ en-US ] = "Conditional Formatting" ;
-    HelpId = HID_CONDFORMAT_DLG;
+    HelpId = HID_RPT_CONDFORMAT_DLG;
     Moveable = TRUE ;
     Closeable = TRUE ;
 

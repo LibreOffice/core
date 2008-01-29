@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GroupsSorting.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:08:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ FloatingWindow RID_GROUPS_SORTING
     SVLook = TRUE ;
     Size = MAP_APPFONT ( PAGE_WIDTH , PAGE_HEIGHT ) ;
     Text [ en-US ] = "Sorting and Grouping" ;
-    HelpId = HID_GROUPSSORTING_DLG;
+    HelpId = HID_RPT_GROUPSSORTING_DLG;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Sizeable = TRUE;
@@ -65,7 +65,7 @@ FloatingWindow RID_GROUPS_SORTING
     {
         Pos = MAP_APPFONT( UNRELATED_CONTROLS, 2*UNRELATED_CONTROLS );
         Size = MAP_APPFONT( PAGE_WIDTH - 2*UNRELATED_CONTROLS, BROWSER_HEIGHT );
-        HelpId = HID_GROUPSBRW ;
+        HelpId = HID_RPT_GROUPSBRW ;
         Border = TRUE;
         TabStop = TRUE;
     };
