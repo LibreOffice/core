@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fixedhyper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:24:08 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:24:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,7 @@
 #include "svtools/svtdllapi.h"
 #endif
 
-#ifndef _SV_FIXED_HXX
-#include <vcl/fixed.hxx>
-#endif
+#include <toolkit/helper/fixedhyperbase.hxx>
 
 //.........................................................................
 namespace svt
@@ -51,7 +49,7 @@ namespace svt
     //=====================================================================
     //= FixedHyperlink
     //=====================================================================
-    class SVT_DLLPUBLIC FixedHyperlink : public FixedText
+    class SVT_DLLPUBLIC FixedHyperlink : public ::toolkit::FixedHyperlinkBase
     {
     private:
         long                m_nTextLen;
@@ -128,18 +126,20 @@ namespace svt
         */
         inline const Link&  GetClickHdl() const { return m_aClickHdl; }
 
+        // ::toolkit::FixedHyperbaseLink
+
         /** sets the URL of the hyperlink and uses it as tooltip. */
-        void         SetURL( const String& rNewURL );
+        virtual void        SetURL( const String& rNewURL );
 
         /** returns the URL of the hyperlink.
 
             @return
                 <member>m_sURL</member>
         */
-        inline String       GetURL() const { return m_sURL; }
+        virtual String      GetURL() const;
 
         /** sets new text and recalculates the text length. */
-        void                SetDescription( const String& rNewDescription );
+        virtual void        SetDescription( const String& rNewDescription );
     };
 
 //.........................................................................
