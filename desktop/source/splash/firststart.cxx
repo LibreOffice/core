@@ -4,9 +4,9 @@
  *
  *  $RCSfile: firststart.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:37:58 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:31:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,30 +135,16 @@ throw ( RuntimeException )
 Any SAL_CALL FirstStart::execute(const Sequence<NamedValue>& args)
 throw ( RuntimeException )
 {
-    static const ::rtl::OUString ARG_OVERRIDE = ::rtl::OUString::createFromAscii("Override");
-    static const ::rtl::OUString ARG_WIDTHUI  = ::rtl::OUString::createFromAscii("WidthUI");
+    static const ::rtl::OUString ARG_LICENSENEEDED( RTL_CONSTASCII_USTRINGPARAM( "LicenseNeedsAcceptance" ) );
+    static const ::rtl::OUString ARG_LICENSEPATH(   RTL_CONSTASCII_USTRINGPARAM( "LicensePath" ) );
 
     ::comphelper::SequenceAsHashMap lArgs(args);
 
-    sal_Bool bOverride      = lArgs.getUnpackedValueOrDefault(ARG_OVERRIDE, (sal_Bool)sal_False);
-    sal_Bool bWidthUI       = lArgs.getUnpackedValueOrDefault(ARG_WIDTHUI , (sal_Bool)sal_True );
-    sal_Bool bSomethingTodo = (  bOverride                          ||
-                                 FirstStartWizard::isWizardNeeded() );
+    sal_Bool bLicenseNeeded    = lArgs.getUnpackedValueOrDefault( ARG_LICENSENEEDED, (sal_Bool)sal_True );
+    rtl::OUString aLicensePath = lArgs.getUnpackedValueOrDefault( ARG_LICENSEPATH, rtl::OUString() );
 
-    if(bSomethingTodo)
-    {
-        if (bWidthUI)
-        {
-          FirstStartWizard fsw(NULL);
-          return makeAny((sal_Bool)fsw.Execute());
-        }
-        else
-        {
-          return makeAny(sal_True);
-        }
-    }
-    else
-        return makeAny(sal_True);
+    FirstStartWizard fsw( NULL, bLicenseNeeded && ( aLicensePath.getLength() > 0 ), aLicensePath );
+    return makeAny( (sal_Bool)fsw.Execute() );
 }
 
 // XJobExecutor
