@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoftn.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:37:02 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:23:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -423,19 +423,20 @@ uno::Reference< text::XTextCursor >  SwXFootnote::createTextCursorByRange(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     const SwFmtFtn*  pFmt = FindFmt();
+    if( !pFmt )
+        throw uno::RuntimeException();
     uno::Reference< text::XTextCursor >  aRef;
     SwUnoInternalPaM aPam(*GetDoc());
-    if(pFmt && SwXTextRange::XTextRangeToSwPaM(aPam, aTextPosition))
+    if(SwXTextRange::XTextRangeToSwPaM(aPam, aTextPosition))
     {
         const SwTxtFtn* pTxtFtn = pFmt->GetTxtFtn();
+        const SwNode* pFtnStartNode = &pTxtFtn->GetStartNode()->GetNode();
 
-        // skip section nodes to find 'true' start node
         const SwNode* pStart = aPam.GetNode()->FindFootnoteStartNode();
-        while( pStart->IsSectionNode() )
-            pStart = pStart->StartOfSectionNode();
+        if( pStart != pFtnStartNode )
+            throw uno::RuntimeException();
 
-        if( pStart == &pTxtFtn->GetStartNode()->GetNode())
-            aRef =  (text::XWordCursor*)new SwXTextCursor(this , *aPam.GetPoint(), CURSOR_FOOTNOTE, GetDoc(), aPam.GetMark());
+        aRef = (text::XWordCursor*)new SwXTextCursor(this , *aPam.GetPoint(), CURSOR_FOOTNOTE, GetDoc(), aPam.GetMark());
     }
     else
         throw uno::RuntimeException();
