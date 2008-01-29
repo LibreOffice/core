@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 15:09:42 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,8 @@
 #include <tools/debug.hxx>
 #include <tools/zcodec.hxx>
 #include <tools/stream.hxx>
-
 #include <tools/urlobj.hxx> //for relative url
-
+#include <i18npool/mslangid.hxx>
 #include <vcl/virdev.hxx>
 #include <vcl/bmpacc.hxx>
 #include <vcl/bitmapex.hxx>
@@ -71,9 +70,7 @@
 
 #include "implncvt.hxx"
 
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
-#endif
+#include "cppuhelper/implbase1.hxx"
 
 #ifndef INCLUDED_ICC_SRGB_IEC61966_2_1_H
 #include <vcl/sRGB-IEC61966-2.1.hxx>
@@ -2362,37 +2359,40 @@ const sal_Char* PDFWriterImpl::getAttributeValueTag( PDFWriter::StructAttributeV
     return it != aValueStrings.end() ? it->second : "";
 }
 
-static void appendStructureAttributeLine( PDFWriter::StructAttribute eAttr, const PDFWriterImpl::PDFStructureAttribute& rVal, OStringBuffer& rLine )
+static void appendStructureAttributeLine( PDFWriter::StructAttribute i_eAttr, const PDFWriterImpl::PDFStructureAttribute& i_rVal, OStringBuffer& o_rLine, bool i_bIsFixedInt )
 {
-    rLine.append( "/" );
-    rLine.append( PDFWriterImpl::getAttributeTag( eAttr ) );
+    o_rLine.append( "/" );
+    o_rLine.append( PDFWriterImpl::getAttributeTag( i_eAttr ) );
 
-    if( rVal.eValue != PDFWriter::Invalid )
+    if( i_rVal.eValue != PDFWriter::Invalid )
     {
-        rLine.append( "/" );
-        rLine.append( PDFWriterImpl::getAttributeValueTag( rVal.eValue ) );
+        o_rLine.append( "/" );
+        o_rLine.append( PDFWriterImpl::getAttributeValueTag( i_rVal.eValue ) );
     }
     else
     {
         // numerical value
-        rLine.append( " " );
-        appendFixedInt( rVal.nValue, rLine );
+        o_rLine.append( " " );
+        if( i_bIsFixedInt )
+            appendFixedInt( i_rVal.nValue, o_rLine );
+        else
+            o_rLine.append( i_rVal.nValue );
     }
-    rLine.append( "\n" );
+    o_rLine.append( "\n" );
 }
 
-OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& rEle )
+OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& i_rEle )
 {
     // create layout, list and table attribute sets
     OStringBuffer aLayout(256), aList(64), aTable(64);
-    for( PDFStructAttributes::const_iterator it = rEle.m_aAttributes.begin();
-         it != rEle.m_aAttributes.end(); ++it )
+    for( PDFStructAttributes::const_iterator it = i_rEle.m_aAttributes.begin();
+         it != i_rEle.m_aAttributes.end(); ++it )
     {
         if( it->first == PDFWriter::ListNumbering )
-            appendStructureAttributeLine( it->first, it->second, aList );
+            appendStructureAttributeLine( it->first, it->second, aList, true );
         else if( it->first == PDFWriter::RowSpan ||
                  it->first == PDFWriter::ColSpan )
-            appendStructureAttributeLine( it->first, it->second, aTable );
+            appendStructureAttributeLine( it->first, it->second, aTable, false );
         else if( it->first == PDFWriter::LinkAnnotation )
         {
             sal_Int32 nLink = it->second.nValue;
@@ -2404,7 +2404,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& rEle )
             {
                 // update struct parent of link
                 OStringBuffer aStructParentEntry( 32 );
-                aStructParentEntry.append( rEle.m_nObject );
+                aStructParentEntry.append( i_rEle.m_nObject );
                 aStructParentEntry.append( " 0 R" );
                 m_aStructParentTree.push_back( aStructParentEntry.makeStringAndClear() );
                 m_aLinks[ nLink ].m_nStructParent = m_aStructParentTree.size()-1;
@@ -2421,7 +2421,7 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& rEle )
                 updateObject( nRefObject );
                 writeBuffer( aRef.getStr(), aRef.getLength() );
 
-                rEle.m_aKids.push_back( PDFStructureElementKid( nRefObject ) );
+                i_rEle.m_aKids.push_back( PDFStructureElementKid( nRefObject ) );
             }
             else
             {
@@ -2438,18 +2438,18 @@ OString PDFWriterImpl::emitStructureAttributes( PDFStructureElement& rEle )
             }
         }
         else
-            appendStructureAttributeLine( it->first, it->second, aLayout );
+            appendStructureAttributeLine( it->first, it->second, aLayout, true );
     }
-    if( ! rEle.m_aBBox.IsEmpty() )
+    if( ! i_rEle.m_aBBox.IsEmpty() )
     {
         aLayout.append( "/BBox[" );
-        appendFixedInt( rEle.m_aBBox.Left(), aLayout );
+        appendFixedInt( i_rEle.m_aBBox.Left(), aLayout );
         aLayout.append( " " );
-        appendFixedInt( rEle.m_aBBox.Top(), aLayout );
+        appendFixedInt( i_rEle.m_aBBox.Top(), aLayout );
         aLayout.append( " " );
-        appendFixedInt( rEle.m_aBBox.Right(), aLayout );
+        appendFixedInt( i_rEle.m_aBBox.Right(), aLayout );
         aLayout.append( " " );
-        appendFixedInt( rEle.m_aBBox.Bottom(), aLayout );
+        appendFixedInt( i_rEle.m_aBBox.Bottom(), aLayout );
         aLayout.append( "]\n" );
     }
 
@@ -2555,12 +2555,29 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
         aLine.append( "/ParentTree " );
         aLine.append( nParentTree );
         aLine.append( " 0 R\n" );
+        if( ! m_aRoleMap.empty() )
+        {
+            aLine.append( "/RoleMap<<" );
+            for( std::hash_map<OString,OString,OStringHash>::const_iterator
+                 it = m_aRoleMap.begin(); it != m_aRoleMap.end(); ++it )
+            {
+                aLine.append( '/' );
+                aLine.append(it->first);
+                aLine.append( '/' );
+                aLine.append( it->second );
+                aLine.append( '\n' );
+            }
+            aLine.append( ">>\n" );
+        }
     }
     else
     {
         aLine.append( "/StructElem\n"
                       "/S/" );
-        aLine.append( getStructureTag( rEle.m_eType ) );
+        if( rEle.m_aAlias.getLength() > 0 )
+            aLine.append( rEle.m_aAlias );
+        else
+            aLine.append( getStructureTag( rEle.m_eType ) );
         aLine.append( "\n"
                       "/P " );
         aLine.append( m_aStructure[ rEle.m_nParentElement ].m_nObject );
@@ -2590,6 +2607,19 @@ sal_Int32 PDFWriterImpl::emitStructure( PDFStructureElement& rEle )
             aLine.append( aAttribs );
             aLine.append( "\n" );
         }
+    }
+    if( rEle.m_aLocale.Language.getLength() > 0 )
+    {
+        OUStringBuffer aLocBuf( 16 );
+        aLocBuf.append( rEle.m_aLocale.Language.toAsciiLowerCase() );
+        if( rEle.m_aLocale.Country.getLength() > 0 )
+        {
+            aLocBuf.append( sal_Unicode('-') );
+            aLocBuf.append( rEle.m_aLocale.Country );
+        }
+        aLine.append( "/Lang" );
+        appendLiteralStringEncrypt( aLocBuf.makeStringAndClear(), rEle.m_nObject, aLine );
+        aLine.append( "\n" );
     }
     if( ! rEle.m_aKids.empty() )
     {
@@ -5369,6 +5399,19 @@ bool PDFWriterImpl::emitCatalog()
         aLine.append( "/StructTreeRoot " );
         aLine.append( nStructureDict );
         aLine.append( " 0 R\n" );
+    }
+    if( m_aContext.DocumentLocale.Language.getLength() > 0 )
+    {
+        OUStringBuffer aLocBuf( 16 );
+        aLocBuf.append( m_aContext.DocumentLocale.Language.toAsciiLowerCase() );
+        if( m_aContext.DocumentLocale.Country.getLength() > 0 )
+        {
+            aLocBuf.append( sal_Unicode('-') );
+            aLocBuf.append( m_aContext.DocumentLocale.Country );
+        }
+        aLine.append( "/Lang" );
+        appendLiteralStringEncrypt( aLocBuf.makeStringAndClear(), m_nCatalogObject, aLine );
+        aLine.append( "\n" );
     }
     if( m_aContext.Tagged && m_aContext.Version > PDFWriter::PDF_1_3 )
     {
@@ -10203,7 +10246,10 @@ void PDFWriterImpl::beginStructureElementMCSeq()
         OStringBuffer aLine( 128 );
         sal_Int32 nMCID = m_aPages[ m_nCurrentPage ].m_aMCIDParents.size();
         aLine.append( "/" );
-        aLine.append( getStructureTag( rEle.m_eType ) );
+        if( rEle.m_aAlias.getLength() > 0 )
+            aLine.append( rEle.m_aAlias );
+        else
+            aLine.append( getStructureTag( rEle.m_eType ) );
         aLine.append( "<</MCID " );
         aLine.append( nMCID );
         aLine.append( ">>BDC\n" );
@@ -10222,12 +10268,25 @@ void PDFWriterImpl::beginStructureElementMCSeq()
         // mark element MC sequence as open
         rEle.m_bOpenMCSeq = true;
     }
+    // handle artifacts
+    else if( ! m_bEmitStructure && m_aContext.Tagged &&
+               m_nCurrentStructElement > 0 &&
+               m_aStructure[ m_nCurrentStructElement ].m_eType == PDFWriter::NonStructElement &&
+             ! m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq // already opened sequence
+             )
+    {
+        OStringBuffer aLine( 128 );
+        aLine.append( "/Artifact BMC\n" );
+        writeBuffer( aLine.getStr(), aLine.getLength() );
+        // mark element MC sequence as open
+        m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq = true;
+    }
 }
 
 void PDFWriterImpl::endStructureElementMCSeq()
 {
-    if( m_bEmitStructure &&
-        m_nCurrentStructElement > 0 && // StructTreeRoot
+    if( m_nCurrentStructElement > 0 && // StructTreeRoot
+        ( m_bEmitStructure || m_aStructure[ m_nCurrentStructElement ].m_eType == PDFWriter::NonStructElement ) &&
         m_aStructure[ m_nCurrentStructElement ].m_bOpenMCSeq // must have an opened MC sequence
         )
     {
@@ -10256,7 +10315,7 @@ bool PDFWriterImpl::checkEmitStructure()
     return bEmit;
 }
 
-sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType )
+sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType, const rtl::OUString& rAlias )
 {
     if( m_nCurrentPage < 0 )
         return -1;
@@ -10296,17 +10355,6 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType )
             DBG_ERROR( "PDF document structure MUST be contained in a Document element" );
     }
 
-#if OSL_DEBUG_LEVEL > 1
-    if( m_bEmitStructure )
-    {
-        OStringBuffer aLine( "beginStructureElement " );
-        aLine.append( sal_Int32(m_aStructure.size() ) );
-        aLine.append( ": " );
-        aLine.append( getStructureTag( eType ) );
-        emitComment( aLine.getStr() );
-    }
-#endif
-
     sal_Int32 nNewId = sal_Int32(m_aStructure.size());
     m_aStructure.push_back( PDFStructureElement() );
     PDFStructureElement& rEle = m_aStructure.back();
@@ -10316,6 +10364,30 @@ sal_Int32 PDFWriterImpl::beginStructureElement( PDFWriter::StructElement eType )
     rEle.m_nFirstPageObject = m_aPages[ m_nCurrentPage ].m_nPageObject;
     m_aStructure[ m_nCurrentStructElement ].m_aChildren.push_back( nNewId );
     m_nCurrentStructElement = nNewId;
+
+    // handle alias names
+    if( rAlias.getLength() && eType != PDFWriter::NonStructElement )
+    {
+        OStringBuffer aNameBuf( rAlias.getLength() );
+        appendName( rAlias, aNameBuf );
+        OString aAliasName( aNameBuf.makeStringAndClear() );
+        rEle.m_aAlias = aAliasName;
+        m_aRoleMap[ aAliasName ] = getStructureTag( eType );
+    }
+
+#if OSL_DEBUG_LEVEL > 1
+    OStringBuffer aLine( "beginStructureElement " );
+    aLine.append( m_nCurrentStructElement );
+    aLine.append( ": " );
+    aLine.append( getStructureTag( eType ) );
+    if( rEle.m_aAlias.getLength() )
+    {
+        aLine.append( " aliased as \"" );
+        aLine.append( rEle.m_aAlias );
+        aLine.append( '\"' );
+    }
+    emitComment( aLine.getStr() );
+#endif
 
     // check whether to emit structure henceforth
     m_bEmitStructure = checkEmitStructure();
@@ -10352,6 +10424,12 @@ void PDFWriterImpl::endStructureElement()
     aLine.append( m_nCurrentStructElement );
     aLine.append( ": " );
     aLine.append( getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType ) );
+    if( m_aStructure[ m_nCurrentStructElement ].m_aAlias.getLength() )
+    {
+        aLine.append( " aliased as \"" );
+        aLine.append( m_aStructure[ m_nCurrentStructElement ].m_aAlias );
+        aLine.append( '\"' );
+    }
 #endif
 
     // "end" the structure element, the parent becomes current element
@@ -10382,6 +10460,12 @@ bool PDFWriterImpl::setCurrentStructureElement( sal_Int32 nEle )
         aLine.append( m_nCurrentStructElement );
         aLine.append( ": " );
         aLine.append( getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType ) );
+        if( m_aStructure[ m_nCurrentStructElement ].m_aAlias.getLength() )
+        {
+            aLine.append( " aliased as \"" );
+            aLine.append( m_aStructure[ m_nCurrentStructElement ].m_aAlias );
+            aLine.append( '\"' );
+        }
         if( ! m_bEmitStructure )
             aLine.append( " (inside NonStruct)" );
         emitComment( aLine.getStr() );
@@ -10582,10 +10666,12 @@ bool PDFWriterImpl::setStructureAttribute( enum PDFWriter::StructAttribute eAttr
         m_aStructure[ m_nCurrentStructElement ].m_aAttributes[ eAttr ] = PDFStructureAttribute( eVal );
 #if OSL_DEBUG_LEVEL > 1
     else if( m_nCurrentStructElement > 0 && m_bEmitStructure )
-        fprintf( stderr, "rejecting setStructureAttribute( %s, %s ) on %s element\n",
+        fprintf( stderr, "rejecting setStructureAttribute( %s, %s ) on %s (%s) element\n",
                  getAttributeTag( eAttr ),
                  getAttributeValueTag( eVal ),
-                 getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType ) );
+                 getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType ),
+                 m_aStructure[ m_nCurrentStructElement ].m_aAlias.getStr()
+                 );
 #endif
 
     return bInsert;
@@ -10599,6 +10685,12 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
     bool bInsert = false;
     if( m_nCurrentStructElement > 0 && m_bEmitStructure )
     {
+        if( eAttr == PDFWriter::Language )
+        {
+            m_aStructure[ m_nCurrentStructElement ].m_aLocale = MsLangId::convertLanguageToLocale( (LanguageType)nValue );
+            return true;
+        }
+
         PDFWriter::StructElement eType = m_aStructure[ m_nCurrentStructElement ].m_eType;
         switch( eAttr )
         {
@@ -10708,10 +10800,11 @@ bool PDFWriterImpl::setStructureAttributeNumerical( enum PDFWriter::StructAttrib
         m_aStructure[ m_nCurrentStructElement ].m_aAttributes[ eAttr ] = PDFStructureAttribute( nValue );
 #if OSL_DEBUG_LEVEL > 1
     else if( m_nCurrentStructElement > 0 && m_bEmitStructure )
-        fprintf( stderr, "rejecting setStructureAttributeNumerical( %s, %d ) on %s element\n",
+        fprintf( stderr, "rejecting setStructureAttributeNumerical( %s, %d ) on %s (%s) element\n",
                  getAttributeTag( eAttr ),
                  (int)nValue,
-                 getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType ) );
+                 getStructureTag( m_aStructure[ m_nCurrentStructElement ].m_eType ),
+                 m_aStructure[ m_nCurrentStructElement ].m_aAlias.getStr() );
 #endif
 
     return bInsert;
