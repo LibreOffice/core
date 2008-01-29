@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:21:17 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:48:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
-#ifndef _COM_SUN_STAR_EMBED_EMBEDSTATES_HXX_
 #include <com/sun/star/embed/EmbedStates.hpp>
-#endif
 
 #include <svx/svditer.hxx>
 #include <svx/svdograf.hxx>
@@ -55,9 +51,8 @@
 #include <svx/svdocapt.hxx>
 #include <svx/outlobj.hxx>
 #include <svx/xoutx.hxx>
-#ifndef _SVX_WRITINGMODEITEM_HXX
 #include <svx/writingmodeitem.hxx>
-#endif
+#include <svx/sdrpaintwindow.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -75,12 +70,9 @@
 #include "docsh.hxx"
 #include "viewuno.hxx"
 #include "userdat.hxx"
+#include "postit.hxx"
 
 #include "sc.hrc"
-
-#ifndef _SDRPAINTWINDOW_HXX
-#include <svx/sdrpaintwindow.hxx>
-#endif
 
 using namespace com::sun::star;
 
@@ -353,7 +345,9 @@ void ScDrawView::UpdateWorkArea()
         SetWorkArea( aNewArea );
     }
     else
+    {
         DBG_ERROR("Page nicht gefunden");
+    }
 }
 
 void ScDrawView::DoCut()
