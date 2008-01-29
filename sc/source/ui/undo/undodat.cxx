@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undodat.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:10:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:44:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2063,7 +2063,9 @@ void __EXPORT ScUndoConsolidate::Undo()
                     *pDocData = *pUndoData;
             }
             else
+            {
                 DBG_ERROR("alte DB-Daten nicht gefunden");
+            }
         }
     }
 
