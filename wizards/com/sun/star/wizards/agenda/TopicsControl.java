@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TopicsControl.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:29:42 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:40:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,17 +173,17 @@ public class TopicsControl extends ControlScroller implements XFocusListener
             Object lastTime = ((ControlRow)ControlGroupVector.get(nblockincrement -1 )).timebox;
 
             MethodInvocation mi = new MethodInvocation("lastControlKeyPressed", this, KeyEvent.class);
-            dialog.guiEventListener.add( TIME + ( nblockincrement - 1), EventNames.EVENT_KEY_PRESSED, mi);
+            dialog.getGuiEventListener().add( TIME + ( nblockincrement - 1), EventNames.EVENT_KEY_PRESSED, mi);
 
-            addKeyListener(lastTime, (XKeyListener) dialog.guiEventListener);
+            addKeyListener(lastTime, (XKeyListener) dialog.getGuiEventListener());
 
             //prepare scroll up on tab press...
             firstTopic = ((ControlRow)ControlGroupVector.get(0)).textbox;
 
             mi = new MethodInvocation("firstControlKeyPressed", this, KeyEvent.class);
-            dialog.guiEventListener.add( TOPIC + 0 , EventNames.EVENT_KEY_PRESSED, mi);
+            dialog.getGuiEventListener().add( TOPIC + 0 , EventNames.EVENT_KEY_PRESSED, mi);
 
-            addKeyListener(firstTopic, (XKeyListener) dialog.guiEventListener);
+            addKeyListener(firstTopic, (XKeyListener) dialog.getGuiEventListener());
 
         }
         catch (NoSuchMethodException ex) {
