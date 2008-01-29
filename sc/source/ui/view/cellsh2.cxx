@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 16:52:35 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -816,7 +816,9 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         rReq.Done();
                     }
                     else
+                    {
                         DBG_ERROR("NULL");
+                    }
                 }
                 else
                 {
