@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transliterationImpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:31:51 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:04:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,8 @@ static struct TMlist {
 //  TmItem2 (NumToCharThai),            // () (70)
   {(TransliterationModules)0, (TransliterationModulesNew)0,  NULL}
 };
+
+TransliterationImpl::TransBody TransliterationImpl::lastTransBody;
 
 // Constructor/Destructor
 TransliterationImpl::TransliterationImpl(const Reference <XMultiServiceFactory>& xMSF) : xSMgr(xMSF)
@@ -596,9 +598,18 @@ TransliterationImpl::clear()
     caseignoreOnly = sal_True;
 }
 
-static void SAL_CALL loadBody( Reference<XMultiServiceFactory>& xSMgr, OUString &implName,
-                        Reference<XExtendedTransliteration>& body) throw(RuntimeException)
+void TransliterationImpl::loadBody( OUString &implName, Reference<XExtendedTransliteration>& body )
+    throw (RuntimeException)
 {
+    ::osl::MutexGuard guard(lastTransBody.mutex);
+
+    if (implName.equals(lastTransBody.Name))
+    {
+        // Use the cached body instead of going through the expensive looping again.
+        body = lastTransBody.Body;
+        return;
+    }
+
     Reference< XContentEnumerationAccess > xEnumAccess( xSMgr, UNO_QUERY );
     Reference< XEnumeration > xEnum(xEnumAccess->createContentEnumeration(
                                     OUString::createFromAscii(TRLT_SERVICELNAME_L10N)));
@@ -615,6 +626,8 @@ static void SAL_CALL loadBody( Reference<XMultiServiceFactory>& xSMgr, OUString 
                             a = xI->queryInterface(::getCppuType((
                                         const Reference<XExtendedTransliteration>*)0));
                             a >>= body;
+                            lastTransBody.Name = implName;
+                            lastTransBody.Body = body;
                             return;
                         }
                     }
@@ -630,7 +643,7 @@ TransliterationImpl::loadModuleByName( const OUString& implName,
         Reference<XExtendedTransliteration>& body, const Locale& rLocale) throw(RuntimeException)
 {
     OUString cname = OUString::createFromAscii(TRLT_IMPLNAME_PREFIX) + implName;
-    loadBody(xSMgr, cname, body);
+    loadBody(cname, body);
     if (body.is()) {
         body->loadModule((TransliterationModules)0, rLocale); // toUpper/toLoad need rLocale
 
@@ -642,7 +655,7 @@ TransliterationImpl::loadModuleByName( const OUString& implName,
                 if (! caseignore.is()) {
                     OUString bname = OUString::createFromAscii(TRLT_IMPLNAME_PREFIX) +
                                 OUString::createFromAscii(TMlist[0].implName);
-                    loadBody(xSMgr, bname, caseignore);
+                    loadBody(bname, caseignore);
                 }
                 if (caseignore.is())
                     caseignore->loadModule(TMlist[i].tm, rLocale);
