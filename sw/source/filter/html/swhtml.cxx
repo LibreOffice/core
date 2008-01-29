@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 13:03:50 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:25:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -491,12 +491,15 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
 
     bKeepUnknown = pHtmlOptions->IsImportUnknown();
 
-    SvxFontHeightItem aFontHeight(aFontHeights[2], 100, RES_CHRATR_FONTSIZE);
-    pDoc->SetDefault( aFontHeight );
-    aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
-    pDoc->SetDefault( aFontHeight );
-    aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
-    pDoc->SetDefault( aFontHeight );
+    if(bReadNewDoc)
+    {
+        SvxFontHeightItem aFontHeight(aFontHeights[2], 100, RES_CHRATR_FONTSIZE);
+        pDoc->SetDefault( aFontHeight );
+        aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
+        pDoc->SetDefault( aFontHeight );
+        aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
+        pDoc->SetDefault( aFontHeight );
+    }
 
     // Waehrend des Imports in den HTML-Modus schalten, damit die
     // richrigen Vorlagen angelegt werden
