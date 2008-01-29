@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:46:50 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:07:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -356,14 +356,36 @@ void SAL_CALL OApplicationController::propertyChange( const PropertyChangeEvent&
 {
     ::vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_bNeedToReconnect = sal_True;
     if ( evt.PropertyName == PROPERTY_USER )
+    {
+        m_bNeedToReconnect = sal_True;
         InvalidateFeature(SID_DB_APP_STATUS_USERNAME);
+    }
     else if ( evt.PropertyName == PROPERTY_URL )
     {
+        m_bNeedToReconnect = sal_True;
         InvalidateFeature(SID_DB_APP_STATUS_DBNAME);
         InvalidateFeature(SID_DB_APP_STATUS_TYPE);
         InvalidateFeature(SID_DB_APP_STATUS_HOSTNAME);
+    }
+    else if ( PROPERTY_NAME == evt.PropertyName )
+    {
+        const ElementType eType = getContainer()->getElementType();
+        if ( eType == E_FORM || eType == E_REPORT )
+        {
+            ::rtl::OUString sOldName,sNewName;
+            evt.OldValue >>= sOldName;
+            evt.NewValue >>= sNewName;
+            Reference<XChild> xChild(evt.Source,UNO_QUERY);
+            if ( xChild.is() )
+            {
+                Reference<XContent> xContent(xChild->getParent(),UNO_QUERY);
+                if ( xContent.is() )
+                    sOldName = xContent->getIdentifier()->getContentIdentifier() + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + sOldName;
+            }
+
+            getContainer()->elementReplaced( eType , sOldName, sNewName );
+        }
     }
 
     EventObject aEvt;
@@ -656,8 +678,17 @@ void OApplicationController::addDocumentListener(const Reference< XComponent >& 
 {
     if ( _xDocument.is() )
     {
-        m_aDocuments[_xDocument] = _xDefintion;
-        _xDocument->addEventListener(static_cast<XFrameActionListener*>(this));
+        try
+        {
+            Reference<XPropertySet> xProp(_xDefintion,UNO_QUERY_THROW);
+            if ( xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_NAME) )
+                xProp->addPropertyChangeListener(PROPERTY_NAME,static_cast<XPropertyChangeListener*>(this));
+            m_aDocuments[_xDocument] = _xDefintion;
+            _xDocument->addEventListener(static_cast<XFrameActionListener*>(this));
+        }
+        catch(Exception&)
+        {
+        }
     }
 }
 // -----------------------------------------------------------------------------
