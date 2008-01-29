@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.208 $
+ *  $Revision: 1.209 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:20:01 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:36:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,251 +36,93 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
 // INCLUDE ---------------------------------------------------------------
 
 #include <svx/eeitem.hxx>
 
-
-#ifndef SC_XMLEXPRT_HXX
 #include "xmlexprt.hxx"
-#endif
-
-#ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
-#endif
-#ifndef _SC_XMLSTYLE_HXX
 #include "xmlstyle.hxx"
-#endif
-#ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
-#endif
-#ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
-#endif
-#ifndef SC_OUTLINETAB_HXX
 #include "olinetab.hxx"
-#endif
-#ifndef SC_CELLSUNO_HXX
 #include "cellsuno.hxx"
-#endif
-#ifndef SC_CELL_HXX
 #include "cell.hxx"
-#endif
-#ifndef SC_RANGENAM_HXX
 #include "rangenam.hxx"
-#endif
-#ifndef _SC_XMLTABLEMASTERPAGEEXPORT_HXX
 #include "XMLTableMasterPageExport.hxx"
-#endif
-#ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
-#endif
-#ifndef _SC_XMLEXPORTDATAPILOT_HXX
 #include "XMLExportDataPilot.hxx"
-#endif
-#ifndef SC_XMLEXPORTDATABASERANGES_HXX
 #include "XMLExportDatabaseRanges.hxx"
-#endif
-#ifndef _SC_XMLEXPORTDDELINKS_HXX
 #include "XMLExportDDELinks.hxx"
-#endif
-#ifndef _SC_XMLEXPORTITERATOR_HXX
 #include "XMLExportIterator.hxx"
-#endif
-#ifndef _SC_XMLCOLUMNROWGROUPEXPORT_HXX
 #include "XMLColumnRowGroupExport.hxx"
-#endif
-#ifndef _SC_XMLSTYLESEXPORTHELPER_HXX
 #include "XMLStylesExportHelper.hxx"
-#endif
-#ifndef _SC_XMLCHANGETRACKINGEXPORTHELPER_HXX
 #include "XMLChangeTrackingExportHelper.hxx"
-#endif
-#ifndef SC_DOCOPTIO_HXX
 #include "docoptio.hxx"
-#endif
-#ifndef SC_XMLEXPORTSHAREDDATA_HXX
 #include "XMLExportSharedData.hxx"
-#endif
-#ifndef SC_CHGVISET_HXX
 #include "chgviset.hxx"
-#endif
-#ifndef SC_DOCUNO_HXX
 #include "docuno.hxx"
-#endif
-#ifndef SC_CHARTLIS_HXX
 #include "chartlis.hxx"
-#endif
-#ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
-#endif
-#ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
-#endif
-#ifndef SC_SCDOCPOL_HXX
 #include "docpool.hxx"
-#endif
-#ifndef SC_USERDAT_HXX
 #include "userdat.hxx"
-#endif
-#ifndef SC_DOCITER_HXX
 #include "dociter.hxx"
-#endif
-#ifndef SC_CHGTRACK_HXX
 #include "chgtrack.hxx"
-#endif
-#ifndef SC_RANGEUTL_HXX
 #include "rangeutl.hxx"
-#endif
-#ifndef SC_CONVUNO_HXX
 #include "convuno.hxx"
-#endif
+#include "postit.hxx"
 
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-#ifndef _XMLOFF_XMLNMSPE_HXX
 #include <xmloff/xmlnmspe.hxx>
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-#ifndef _XMLOFF_NMSPMAP_HXX
 #include <xmloff/nmspmap.hxx>
-#endif
-#ifndef _XMLOFF_FAMILIES_HXX_
 #include <xmloff/families.hxx>
-#endif
-#ifndef XMLOFF_NUMEHELP_HXX
 #include <xmloff/numehelp.hxx>
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-#ifndef _XMLOFF_TXTPARAE_HXX
 #include <xmloff/txtparae.hxx>
-#endif
-#ifndef _XMLOFF_XMLCNITM_HXX
 #include <xmloff/xmlcnitm.hxx>
-#endif
 
-#ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
-#endif
 
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
-#ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
-#endif
-#ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
-#endif
-#ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
-#endif
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVDCAPT_HXX
 #include <svx/svdocapt.hxx>
-#endif
-#ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
-#endif
-#ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
-#endif
 
-#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XUSEDAREACURSOR_HPP_
 #include <com/sun/star/sheet/XUsedAreaCursor.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEADDRESSABLE_HPP_
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XAREALINKS_HPP_
 #include <com/sun/star/sheet/XAreaLinks.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XAREALINK_HPP_
 #include <com/sun/star/sheet/XAreaLink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XDRAWPAGESUPPLIER_HPP_
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TABLE_XCOLUMNROWRANGE_HPP_
 #include <com/sun/star/table/XColumnRowRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XPRINTAREAS_HPP_
 #include <com/sun/star/sheet/XPrintAreas.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XPROTECTABLE_HPP_
 #include <com/sun/star/util/XProtectable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XUNIQUECELLFORMATRANGESSUPPLIER_HPP_
 #include <com/sun/star/sheet/XUniqueCellFormatRangesSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGESQUERY_HPP_
 #include <com/sun/star/sheet/XCellRangesQuery.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_CELLFLAGS_HPP_
 #include <com/sun/star/sheet/CellFlags.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMERGEABLE_HPP_
 #include <com/sun/star/util/XMergeable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XARRAYFORMULARANGE_HPP_
 #include <com/sun/star/sheet/XArrayFormulaRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XLABELRANGES_HPP_
 #include <com/sun/star/sheet/XLabelRanges.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XLABELRANGE_HPP_
 #include <com/sun/star/sheet/XLabelRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGES_HPP_
 #include <com/sun/star/sheet/XNamedRanges.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGE_HPP_
 #include <com/sun/star/sheet/XNamedRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEREFERRER_HPP_
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_NAMEDRANGEFLAG_HPP_
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETLINKABLE_HPP_
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_XFORMSUPPLIER2_HPP_
 #include <com/sun/star/form/XFormsSupplier2.hpp>
-#endif
 
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/data/XRangeXMLConversion.hpp>
