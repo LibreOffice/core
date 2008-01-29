@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportWindow.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:12:36 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:51:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ OReportWindow::OReportWindow(OScrollWindowHelper* _pParent,ODesignView* _pView)
 ,m_pParent(_pParent)
 {
     DBG_CTOR( rpt_OReportWindow,NULL);
-    SetHelpId(UID_REPORTWINDOW);
+    SetHelpId(UID_RPT_REPORTWINDOW);
     SetMapMode( MapMode( MAP_100TH_MM ) );
 
     m_pSections = new OSectionsWindow(this,this);
@@ -297,7 +297,11 @@ Point OReportWindow::getScrollOffset() const
 //------------------------------------------------------------------------------
 void OReportWindow::ImplInitSettings()
 {
+//#if OSL_DEBUG_LEVEL > 0
+//    SetBackground( Wallpaper( COL_YELLOW ));
+//#else
     SetBackground( );
+//#endif
 }
 //-----------------------------------------------------------------------------
 void OReportWindow::DataChanged( const DataChangedEvent& rDCEvt )
