@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EndMarker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:50:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ OEndMarker::OEndMarker(Window* _pParent ,const ::rtl::OUString& _sColorEntry)
 : OColorListener(_pParent,_sColorEntry)
 {
     DBG_CTOR( rpt_OEndMarker,NULL);
-    SetUniqueId(HID_ENDMARKER);
+    SetUniqueId(HID_RPT_ENDMARKER);
     ImplInitSettings();
 }
 // -----------------------------------------------------------------------------
@@ -102,7 +102,8 @@ void OEndMarker::Paint( const Rectangle& /*rRect*/ )
 void OEndMarker::ImplInitSettings()
 {
     //SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
-    SetBackground( );
+    /*SetBackground( );*/
+    SetBackground( Wallpaper( m_aColorConfig.GetColorValue(::svtools::APPBACKGROUND).nColor ) );
     SetFillColor( Application::GetSettings().GetStyleSettings().GetShadowColor() );
     //SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDarkShadowColor() );
 }
