@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 13:56:16 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:21:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,9 +413,6 @@ protected:
     std::list<SalFrame*> m_aFrames;
     std::list<SalObject*> m_aSalObjects;
 
-    struct SnDisplay           *m_pSnDisplay;
-    struct SnLauncheeContext   *m_pSnLauncheeContext;
-
     void            DestroyFontCache();
     virtual long    Dispatch( XEvent *pEvent ) = 0;
     void            InitXinerama();
@@ -439,7 +436,7 @@ public:
     bool                    getHaveSystemChildFrame() const
     { return pXLib_->getHaveSystemChildFrame(); }
 
-    void            Init( bool bHandleStartupNotification = true );
+    void            Init();
 
     void            SendInternalEvent( SalFrame* pFrame, void* pData, USHORT nEvent = SALEVENT_USEREVENT );
     void            CancelInternalEvent( SalFrame* pFrame, void* pData, USHORT nEvent );
@@ -557,7 +554,7 @@ inline  Display *SalColormap::GetXDisplay() const
 class VCL_DLLPUBLIC SalX11Display : public SalDisplay
 {
 public:
-             SalX11Display( Display* pDisp, bool bHandleStartupNotification = true );
+             SalX11Display( Display* pDisp );
     virtual ~SalX11Display();
 
     virtual long        Dispatch( XEvent *pEvent );
