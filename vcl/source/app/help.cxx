@@ -4,9 +4,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:03:51 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:16:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,35 +36,15 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#ifndef _SV_SVDATA_HXX
-#include <vcl/svdata.hxx>
-#endif
-#ifndef _SV_WINDOW_HXX
-#include <vcl/window.hxx>
-#endif
-#ifndef _SV_EVENT_HXX
-#include <vcl/event.hxx>
-#endif
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_WRKWIN_HXX
-#include <vcl/wrkwin.hxx>
-#endif
-#ifndef _SV_HELP_HXX
-#include <vcl/help.hxx>
-#endif
-#ifndef _SV_HELPWIN_HXX
-#include <vcl/helpwin.hxx>
-#endif
-#ifndef _DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-
-#include <stdio.h>
-
-
-
+#include "vcl/svdata.hxx"
+#include "vcl/window.hxx"
+#include "vcl/event.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/wrkwin.hxx"
+#include "vcl/help.hxx"
+#include "vcl/helpwin.hxx"
+#include "tools/debug.hxx"
+#include "tools/time.hxx"
 
 // =======================================================================
 
@@ -330,6 +310,7 @@ void Help::HideTip( ULONG nId )
     // wir den Hintergrund nicht sichern
     pFrameWindow->ImplUpdateAll();
     delete pHelpWin;
+    ImplGetSVData()->maHelpData.mnLastHelpHideTime = Time::GetSystemTicks();
 }
 
 // =======================================================================
@@ -552,7 +533,7 @@ IMPL_LINK( HelpTextWindow, TimerHdl, Timer*, pTimer)
     else
     {
         DBG_ASSERT( pTimer == &maHideTimer, "HelpTextWindow::TimerHdl with bad Timer" );
-          ImplDestroyHelpWindow();
+          ImplDestroyHelpWindow( true );
     }
 
     return 1;
@@ -627,10 +608,11 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
         {
             // remove help window if no HelpText or other HelpText or
             // other help mode. but keep it if we are scrolling, ie not requesting help
-            if ( pHelpWin->IsVisible() )
-                nDelayMode = HELPDELAY_SHORT; // display it quickly if we were already in quick help mode
+            bool bWasVisible = pHelpWin->IsVisible();
+            if ( bWasVisible )
+                nDelayMode = HELPDELAY_NONE; // display it quickly if we were already in quick help mode
             pHelpWin = NULL;
-            ImplDestroyHelpWindow();
+            ImplDestroyHelpWindow( bWasVisible );
         }
         else
         {
@@ -653,6 +635,10 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
 
     if ( !pHelpWin && rHelpText.Len() )
     {
+        ULONG nCurTime = Time::GetSystemTicks();
+        if( (nCurTime - pSVData->maHelpData.mnLastHelpHideTime) < pParent->GetSettings().GetHelpSettings().GetTipDelay() )
+            nDelayMode = HELPDELAY_NONE;
+
         DBG_ASSERT( !pHelpWin, "Noch ein HelpWin ?!" );
         pHelpWin = new HelpTextWindow( pParent, rHelpText, nHelpWinStyle, nStyle );
         pSVData->maHelpData.mpHelpWin = pHelpWin;
@@ -673,7 +659,7 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
 
 // -----------------------------------------------------------------------
 
-void ImplDestroyHelpWindow()
+void ImplDestroyHelpWindow( bool bUpdateHideTime )
 {
     ImplSVData* pSVData = ImplGetSVData();
     HelpTextWindow* pHelpWin = pSVData->maHelpData.mpHelpWin;
@@ -688,6 +674,8 @@ void ImplDestroyHelpWindow()
         pSVData->maHelpData.mbKeyboardHelp = FALSE;
         pHelpWin->Hide();
         delete pHelpWin;
+        if( bUpdateHideTime )
+            pSVData->maHelpData.mnLastHelpHideTime = Time::GetSystemTicks();
     }
 }
 
