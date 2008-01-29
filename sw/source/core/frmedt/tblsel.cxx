@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:52:14 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:38:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1514,62 +1514,23 @@ void GetMergeSel( const SwPaM& rPam, SwSelBoxes& rBoxes,
             aPam.GetPoint()->nContent.Assign( pCNd, nL );
 
             SwNodeIndex aSttNdIdx( *rPt.pSelBox->GetSttNd(), 1 );
+            // ein Node muss in der Box erhalten bleiben (sonst wird beim
+            // Move die gesamte Section geloescht)
+            if( pUndo )
+                pDoc->DoUndo( FALSE );
+            pDoc->AppendTxtNode( *aPam.GetPoint() );
+            if( pUndo )
+                pDoc->DoUndo( TRUE );
+            SwNodeRange aRg( aSttNdIdx, aPam.GetPoint()->nNode );
+            rInsPosNd++;
+            if( pUndo )
+                pUndo->MoveBoxCntnt( pDoc, aRg, rInsPosNd );
+            else
+                pDoc->Move( aRg, rInsPosNd, IDocumentContentOperations::DOC_MOVEDEFAULT );
+            // wo steht jetzt aInsPos ??
 
-            const bool bSameLevel = n && ( bVert ?
-                                           aPosArr[n-1].Y() == rPt.Y() :
-                                           aPosArr[n-1].X() == rPt.X() );
-
-            if( bSameLevel && pTxtNd && aSttNdIdx.GetNode().IsTxtNode() )
-            {
-                pTxtNd->Insert( '\x20', aInsPos.nContent );
-                aPam.SetMark();
-                aPam.GetPoint()->nNode = aSttNdIdx;
-                aPam.GetPoint()->nContent.Assign(
-                                aSttNdIdx.GetNode().GetCntntNode(), 0 );
-
-                // alle absatzgebundenen Flys mitnehmen!
-                _SaveFlyArr aSaveFlyArr;
-                SwNodeIndex aIdx( rInsPosNd, -1 );
-                {
-                    SwNodeRange aRg( aPam.GetPoint()->nNode.GetNode(), 0,
-                                *rPt.pSelBox->GetSttNd()->EndOfSectionNode() );
-                    _SaveFlyInRange( aRg, aSaveFlyArr );
-                }
-
-                if( pUndo )
-                    pUndo->MoveBoxCntnt( aPam, aInsPos, aSaveFlyArr );
-                else
-                    pDoc->Move( aPam, aInsPos, IDocumentContentOperations::DOC_MOVEREDLINES );
-                aPam.DeleteMark();
-                if( bCalcWidth )
-                    nWidth += rPt.pSelBox->GetFrmFmt()->GetFrmSize().GetWidth();
-
-                if( aSaveFlyArr.Count() )
-                {
-                    aIdx++;
-                    _RestFlyInRange( aSaveFlyArr, aIdx, NULL );
-                }
-            }
-            else                                // Nodes moven
-            {
-                // ein Node muss in der Box erhalten bleiben (sonst wird beim
-                // Move die gesamte Section geloescht)
-                if( pUndo )
-                    pDoc->DoUndo( FALSE );
-                pDoc->AppendTxtNode( *aPam.GetPoint() );
-                if( pUndo )
-                    pDoc->DoUndo( TRUE );
-                SwNodeRange aRg( aSttNdIdx, aPam.GetPoint()->nNode );
-                rInsPosNd++;
-                if( pUndo )
-                    pUndo->MoveBoxCntnt( pDoc, aRg, rInsPosNd );
-                else
-                    pDoc->Move( aRg, rInsPosNd, IDocumentContentOperations::DOC_MOVEDEFAULT );
-                // wo steht jetzt aInsPos ??
-
-                if( bCalcWidth )
-                    bCalcWidth = FALSE;     // eine Zeile fertig
-            }
+            if( bCalcWidth )
+                bCalcWidth = FALSE;     // eine Zeile fertig
 
             // den initialen TextNode ueberspringen
             rInsPosNd.Assign( pDoc->GetNodes(),
