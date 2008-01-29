@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 16:33:43 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:36:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1877,7 +1877,9 @@ SvXMLImportContext *ScXMLDeletionContext::CreateChildContext( USHORT nPrefix,
         else if (IsXMLToken(rLocalName, XML_CUT_OFFS) || rLocalName.equalsAsciiL("cut_offs", 8))
             pContext = new ScXMLCutOffsContext(GetScImport(), nPrefix, rLocalName, xAttrList, pChangeTrackingImportHelper);
         else
+        {
             DBG_ERROR("don't know this");
+        }
     }
 
     if( !pContext )
