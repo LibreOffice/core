@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:50:10 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:29:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,9 +177,10 @@ struct SfxObjectShell_Impl : public ::sfx2::IMacroDocumentAccess
 
     // IMacroDocumentAccess overridables
     virtual sal_Int16 getImposedMacroExecMode() const;
+    virtual sal_Bool setImposedMacroExecMode( sal_uInt16 nMacroMode );
     virtual ::rtl::OUString getDocumentLocation() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getLastCommitDocumentStorage();
-    virtual bool documentStorageHasMacros() const;
+    virtual sal_Bool documentStorageHasMacros() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const;
     virtual sal_Int16 getScriptingSignatureState() const;
     virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const;
