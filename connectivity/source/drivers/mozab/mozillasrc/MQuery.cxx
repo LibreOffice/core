@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:10:49 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:55:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,7 +273,7 @@ static sal_Int32 generateExpression( MQuery* _aQuery, MQueryExpression*  _aExpr,
             rtl::OUString attrName;
             ::std::map< ::rtl::OUString, ::rtl::OUString>::const_iterator aIterMap;
             attrName = _aQuery->getColumnAlias().getProgrammaticNameOrFallbackToAlias( evStr->getName() );
-            string aMiName = MTypeConverter::ouStringToStlString(attrName);
+            ::std::string aMiName = MTypeConverter::ouStringToStlString(attrName);
             boolString->SetName(strdup(aMiName.c_str()));
             OSL_TRACE("Name = %s ;", aMiName.c_str() );
             // Set the 'matchType' property of the boolString. Check for equal length.
