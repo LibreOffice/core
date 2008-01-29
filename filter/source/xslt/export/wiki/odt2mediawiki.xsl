@@ -172,13 +172,13 @@
 	<template match="text:list">
 		<!-- 
 			Check, whether this list is used to implement the outline numbering 
-			for headings. Such list must not be exported since within the wiki, 
-			autimatic outline numbering is performed. An outline list has a single 
+			for headings. Such list must not be exported, because within the wiki, 
+			automatic outline numbering is performed. An outline list has a single 
 			text:h element as its single leaf grandchild. 
 			
 			This method of section numbering seems not to be used when creating new
 			documents with OpenOffice.org 2.2, but the document containing the 
-			OpenDocument specification version 1.1 uses such numbering by nested 
+			OpenDocument specification version 1.1 uses such numbering through nested 
 			lists.
 			-->
 		<choose>
@@ -205,6 +205,7 @@
 		<text> </text>
 		<apply-templates/>
 		<if test="position() = last() and not(boolean(ancestor::text:list-item))">
+			<!-- End of (potentially nested) list is marked with a double newline. -->
 			<value-of select="$NL"/>
 			<value-of select="$NL"/>
 		</if>
@@ -257,8 +258,15 @@
 			<apply-templates/>
 			<text> </text>
 			<value-of select="$token"/>
-			<text>&#10;</text>
+			<value-of select="$NL"/>
 		</if>
+	</template>
+
+	<template match="text:index-title">
+		<text>== </text>
+		<apply-templates/>
+		<text> ==</text>
+		<value-of select="$NL"/>
 	</template>
 
 	<!-- 
@@ -455,9 +463,10 @@
 		</choose>
 
 		<variable name="paragraph-right" 
-			select="./following-sibling::text:p[1]"/>
+ 			select="./following-sibling::*[1]/self::text:p"/>
 
-		<if test="boolean($paragraph-right)">
+ 		<choose>
+ 		<when test="boolean($paragraph-right)">
 			<!-- 
 				Insert end of line only if not within a list. Within wiki lists, 
 				a line break leaves the current list item. 
@@ -501,10 +510,20 @@
 					<value-of select="$NL"/>
 				</otherwise>
 			</choose>
-		</if>
+ 		</when>
+ 		<when test="boolean(./following-sibling::*[1]/self::text:h) or boolean(./following-sibling::*[1]/self::table:table) or boolean(./following-sibling::*[1]/self::text:bibliography)">
+ 			<!-- Newline before following heading or table. -->
+ 			<value-of select="$NL"/>
+ 			<value-of select="$NL"/>
+ 		</when>
+ 		<when test="./following-sibling::*[1]/self::text:list and not(ancestor::text:list-item)">
+ 			<value-of select="$NL"/>
+ 			<value-of select="$NL"/>
+ 		</when>
+ 		</choose>
 	</template>
 
-	<template match="text:p[string-length(.) = 0 and string-length(preceding-sibling::text:p[1]) &gt; 0]">
+ 	<template match="text:p[string-length(.) = 0 and string-length(preceding-sibling::*[1]/self::text:p) &gt; 0]">
 		<value-of select="$NL"/>
 	</template>
 
@@ -717,8 +736,8 @@
 	<!-- 
 		== Plain text == 
 	-->
-	
-	<template match="text:p/text() | text:h/text() | text:span/text() | text:sequence/text() | text:sequence-ref/text() | text:a/text() | text:bookmark-ref/text() | text:reference-mark/text()">
+
+	<template match="text:p/text() | text:h/text() | text:span/text() | text:sequence/text() | text:sequence-ref/text() | text:a/text() | text:bookmark-ref/text() | text:reference-mark/text() | text:date/text() | text:time/text() | text:page-number/text() | text:sender-firstname/text() | text:sender-lastname/text() | text:sender-initials/text() | text:sender-title/text() | text:sender-position/text() | text:sender-email/text() | text:sender-phone-private/text() | text:sender-fax/text() | text:sender-company/text() | text:sender-phone-work/text() | text:sender-street/text() | text:sender-city/text() | text:sender-postal-code/text() | text:sender-country/text() | text:sender-state-or-province/text() | text:author-name/text() | text:author-initials/text() | text:chapter/text() | text:file-name/text() | text:template-name/text() | text:sheet-name/text() | text:variable-get/text() | text:variable-input/text() | text:user-field-get/text() | text:user-field-input/text() | text:expression/text() | text:text-input/text() | text:initial-creator/text() | text:creation-date/text() | text:creation-time/text() | text:description/text() | text:user-defined/text() | text:print-date/text() | text:printed-by/text() | text:title/text() | text:subject/text() | text:keywords/text() | text:editing-cycles/text() | text:editing-duration/text() | text:modification-date/text() | text:creator/text() | text:modification-time/text() | text:page-count/text() | text:paragraph-count/text() | text:word-count/text() | text:character-count/text() | text:table-count/text() | text:image-count/text() | text:object-count/text() | text:database-display/text() | text:database-row-number/text() | text:database-name/text() | text:page-variable-get/text() | text:placeholder/text() | text:conditional-text/text() | text:hidden-text/text() | text:execute-macro/text() | text:dde-connection/text() | text:measure/text() | text:table-formula/text()">
 		<choose>
 			<when test="boolean(./ancestor::table:table-header-rows | ./ancestor::text:h)">
 				<!-- 
