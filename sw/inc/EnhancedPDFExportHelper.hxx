@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:02:03 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,12 +39,19 @@
 #ifndef _VCL_PDFEXTOUTDEVDATA_HXX
 #include <vcl/pdfextoutdevdata.hxx>
 #endif
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
+#endif
 #ifndef _SWRECT_HXX
 #include <swrect.hxx>
+#endif
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
 #endif
 
 #include <map>
 #include <vector>
+#include <set>
 
 class vcl::PDFExtOutDevData;
 class OutputDevice;
@@ -55,46 +62,67 @@ class SwEditShell;
 class rtl::OUString;
 class MultiSelection;
 class SwTxtNode;
+class SwNumRule;
+class SwTable;
+class SwNumberTreeNode;
+class String;
+class SvxLanguageItem;
 
 
 /*
  * Mapping of OOo elements to tagged pdf elements:
  *
- * OOo element                      tagged pdf element
- * -----------                      ------------------
+ * OOo element                              tagged pdf element
+ * -----------                              ------------------
  *
  * Grouping elements:
  *
- * SwRootFrm                        Document
- * SwSection                        Sect
- * SwSection (TOC)                  TOC
- * SwSection (Index)                Index
- * SwTxtNode in TOC                 TOCI
+ * SwRootFrm                                Document
+ *                                          Part
+ *                                          Art
+ * SwSection                                Sect
+ * SwFtnContFrm and SwFlyFrm                Div
+ * SwFmt "Quotations"                       BlockQuote
+ * SwFmt "Caption"                          Caption
+ * SwSection (TOC)                          TOC
+ * SwTxtNode in TOC                         TOCI
+ * SwSection (Index)                        Index
  *
  * Block-Level Structure Elements:
  *
- * SwTxtNode                        P
- * SwTxtNode with Outline           H1 - H6
- * SwTxtNode with NumRule           L, LI, LBody
- * SwTable                          Table
- * SwRowFrm                         TR
- * SwCellFrm in Headline row        TH
- * SwCellFrm                        TD
- *
- * Illustration elements:
- *
- * SwFlyFrame                       Division
- * SwFlyFrm with Math OLE Object    Formula
- * SwFlyFrm with SwNoTxtFrm         Figure
+ * SwTxtNode                                P
+ * SwFmt "Heading"                          H
+ * SwTxtNode with Outline                   H1 - H6
+ * SwTxtNode with NumRule                   L, LI, LBody
+ * SwTable                                  Table
+ * SwRowFrm                                 TR
+ * SwCellFrm in Headline row or
+ * SwFtm "Table Heading"                    TH
+ * SwCellFrm                                TD
  *
  * Inline-Level Structure Elements:
  *
- * SwTxtPortion                     Span
- * SwFtnPortion                     Link
- * SwFldPortion (RefField)          Link
- * SwFldPortion (AuthorityField)    BibEntry
+ * SwTxtPortion                             Span
+ * SwFmt "Quotation"                        Quote
+ * SwFtnFrm                                 Note
+ *                                          Form
+ *                                          Reference
+ * SwFldPortion (AuthorityField)            BibEntry
+ * SwFmt "Source Text"                      Code
+ * SwFtnPortion, SwFldPortion (RefField)    Link
+ *
+ * Illustration elements:
+ *
+ * SwFlyFrm with SwNoTxtFrm                 Figure
+ * SwFlyFrm with Math OLE Object            Formula
  *
  */
+
+struct Num_Info
+{
+    const SwFrm& mrFrm;
+    Num_Info( const SwFrm& rFrm ) : mrFrm( rFrm ) {};
+};
 
 struct Frm_Info
 {
@@ -110,6 +138,13 @@ struct Por_Info
             : mrPor( rPor ), mrTxtPainter( rTxtPainer ) {};
 };
 
+struct lt_TableColumn
+{
+    bool operator()( long nVal1, long nVal2 ) const
+    {
+        return nVal1 + ( MINLAY - 1 ) < nVal2;
+    }
+};
 
 /*************************************************************************
  *                class SwTaggedPDFHelper
@@ -130,15 +165,18 @@ class SwTaggedPDFHelper
     sal_Int32 nRestoreCurrentTag;
 
     vcl::PDFExtOutDevData* mpPDFExtOutDevData;
+
+    const Num_Info* mpNumInfo;
     const Frm_Info* mpFrmInfo;
     const Por_Info* mpPorInfo;
 
-    void BeginTag( vcl::PDFWriter::StructElement );
+    void BeginTag( vcl::PDFWriter::StructElement, const String* pUserDefined = 0 );
     void EndTag();
 
     void SetAttributes( vcl::PDFWriter::StructElement eType );
 
     // These functions are called by the c'tor, d'tor
+    void BeginNumberedListStructureElements();
     void BeginBlockStructureElements();
     void BeginInlineStructureElements();
     void EndStructureElements();
@@ -151,7 +189,7 @@ class SwTaggedPDFHelper
     // pFrmInfo != 0 => BeginBlockStructureElement
     // pPorInfo != 0 => BeginInlineStructureElement
     // pFrmInfo, pPorInfo = 0 => BeginNonStructureElement
-    SwTaggedPDFHelper( const Frm_Info* pFrmInfo, const Por_Info* pPorInfo,
+    SwTaggedPDFHelper( const Num_Info* pNumInfo, const Frm_Info* pFrmInfo, const Por_Info* pPorInfo,
                        OutputDevice& rOut );
     ~SwTaggedPDFHelper();
 
@@ -171,9 +209,13 @@ class SwTaggedPDFHelper
  * the bookmarks from the EditEngine have to be processed.
  *************************************************************************/
 
+typedef std::set< long, lt_TableColumn > TableColumnsMapEntry;
 typedef std::pair< SwRect, sal_Int32 > IdMapEntry;
 typedef std::vector< IdMapEntry > LinkIdMap;
-typedef std::map< void*, sal_Int32 > FrmTagIdMap;
+typedef std::map< const SwTable*, TableColumnsMapEntry > TableColumnsMap;
+typedef std::map< const SwNumberTreeNode*, sal_Int32 > NumListIdMap;
+typedef std::map< const SwNumberTreeNode*, sal_Int32 > NumListBodyIdMap;
+typedef std::map< const void*, sal_Int32 > FrmTagIdMap;
 
 class SwEnhancedPDFExportHelper
 {
@@ -187,8 +229,13 @@ class SwEnhancedPDFExportHelper
     bool mbSkipEmptyPages;
     bool mbEditEngineOnly;
 
+    static TableColumnsMap aTableColumnsMap;
     static LinkIdMap aLinkIdMap;
+    static NumListIdMap aNumListIdMap;
+    static NumListBodyIdMap aNumListBodyIdMap;
     static FrmTagIdMap aFrmTagIdMap;
+
+    static LanguageType eLanguageDefault;
 
     void EnhancedPDFExport();
     sal_Int32 CalcOutputPageNum( const SwRect& rRect ) const;
@@ -207,8 +254,13 @@ class SwEnhancedPDFExportHelper
 
     ~SwEnhancedPDFExportHelper();
 
+    static TableColumnsMap& GetTableColumnsMap() {return aTableColumnsMap; }
     static LinkIdMap& GetLinkIdMap() { return aLinkIdMap; }
+    static NumListIdMap& GetNumListIdMap() {return aNumListIdMap; }
+    static NumListBodyIdMap& GetNumListBodyIdMap() {return aNumListBodyIdMap; }
     static FrmTagIdMap& GetFrmTagIdMap() { return aFrmTagIdMap; }
+
+    static const LanguageType GetDefaultLanguage() {return eLanguageDefault; }
 };
 
 #endif
