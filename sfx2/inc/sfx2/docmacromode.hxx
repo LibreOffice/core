@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docmacromode.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:44:53 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:28:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,25 +61,32 @@ namespace sfx2
     class SAL_NO_VTABLE IMacroDocumentAccess
     {
     public:
-        /** retrieves the MacroExecutionMode as used when the document was loaded
-            or created, or attached to another resource
+        /** retrieves the MacroExecutionMode from the MediaDescriptor of the document
 
             If there was no such externally imposed macro execution mode, implementations
-            should return MacroExecMode::USE_CONFIG
+            could return MacroExecMode::USE_CONFIG or MacroExecMode::NEVER_EXECUTE
 
             @see ::com::sun::star::document::MediaDescriptor::MacroExecutionMode
             @see ::com::sun::star::frame::XComponentLoader::loadComponentFromURL
             @see ::com::sun::star::frame::XModel::attachResource
 
             @todo
-                Effectively, this is the MacroExecutionMode of the arguments which
-                were used to load the document (or in its last attachResource call).
-                Thus, this setting could be obtained from the XModel directly. We should
-                introduce a getDocumentModel method here, which can be used for this and
-                other purposes.
+                Effectively, this is the MacroExecutionMode of the MediaDescriptor of
+                the document. Thus, this setting could be obtained from the XModel
+                directly. We should introduce a getDocumentModel method here, which
+                can be used for this and other purposes.
         */
         virtual sal_Int16
                     getImposedMacroExecMode() const = 0;
+
+        /** sets the MacroExecutionMode to the document MediaDescriptor
+
+            @see ::com::sun::star::document::MediaDescriptor::MacroExecutionMode
+            @see ::com::sun::star::frame::XComponentLoader::loadComponentFromURL
+            @see ::com::sun::star::frame::XModel::attachResource
+        */
+        virtual sal_Bool
+                    setImposedMacroExecMode( sal_uInt16 ) = 0;
 
         /** returns the origin of the document
 
@@ -118,7 +125,7 @@ namespace sfx2
             isn't sufficient (e.g. database documents which contain sub documents which can also
             contain macro/script storages).
         */
-        virtual bool
+        virtual sal_Bool
                     documentStorageHasMacros() const = 0;
 
         /** provides access to the XEmbeddedScripts interface of the document
@@ -193,7 +200,7 @@ namespace sfx2
             @return
                 <TRUE/>, always
         */
-        bool    allowMacroExecution();
+        sal_Bool    allowMacroExecution();
 
         /** disallows macro execution in the document
 
@@ -202,7 +209,7 @@ namespace sfx2
             @return
                 <TRUE/>, always
         */
-        bool    disallowMacroExecution();
+        sal_Bool    disallowMacroExecution();
 
         /** checks whether the document allows executing contained macros.
 
@@ -224,7 +231,7 @@ namespace sfx2
             @return
                 <TRUE/> if and only if macro execution in this document is allowed.
         */
-        bool    adjustMacroMode(
+        sal_Bool    adjustMacroMode(
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction
                 );
 
@@ -246,7 +253,7 @@ namespace sfx2
             denying macro execution, in which ->adjustMacroMode will return <FALSE/>,
             and the next call to isMacroExecutionDisallowed will return <TRUE/>.
         */
-        bool    isMacroExecutionDisallowed() const;
+        sal_Bool    isMacroExecutionDisallowed() const;
 
         /** determines whether the document actually has a macros library
 
@@ -254,7 +261,7 @@ namespace sfx2
             IMacroDocumentAccess::getEmbeddedDocumentScripts().getBasicLibraries) for
             content.
         */
-        bool    hasMacroLibrary() const;
+        sal_Bool    hasMacroLibrary() const;
 
         /** determines whether the given document storage has sub storages containing scripts
             or macros.
@@ -263,7 +270,7 @@ namespace sfx2
             BeanShell-/JavaScript-/Python-Scripts are stored, and a sub storage named "Basic" (where
             Basic scripts are stored).
         */
-        static bool
+        static sal_Bool
                 storageHasMacros( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage );
 
         /** checks the macro execution mode while loading the document.
