@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:25:45 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:31:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,26 +41,13 @@
 #include <set>
 #include <list>
 
-#ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
-#endif
 
-#ifndef SC_RANGELST_HXX
 #include "rangelst.hxx"
-#endif
-
-#ifndef SC_XLCHART_HXX
 #include "xlchart.hxx"
-#endif
-#ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
-#endif
-#ifndef SC_XISTRING_HXX
 #include "xistring.hxx"
-#endif
-#ifndef SC_XIROOT_HXX
 #include "xiroot.hxx"
-#endif
 
 namespace com { namespace sun { namespace star {
     namespace frame
@@ -220,7 +207,7 @@ public:
     /** Returns true, if the line style is set to something visible. */
     inline bool         HasLine() const { return IsAuto() || (maData.mnPattern != EXC_CHLINEFORMAT_NONE); }
     /** Returns the line width of this line format (returns 'single', if the line is invisible). */
-    inline sal_uInt16   GetWeight() const { return (IsAuto() || !HasLine()) ? EXC_CHLINEFORMAT_SINGLE : maData.mnWeight; }
+    inline sal_Int16    GetWeight() const { return (IsAuto() || !HasLine()) ? EXC_CHLINEFORMAT_SINGLE : maData.mnWeight; }
     /** Returns true, if the "show axis" flag is set. */
     inline bool         IsShowAxis() const { return ::get_flag( maData.mnFlags, EXC_CHLINEFORMAT_SHOWAXIS ); }
 
@@ -316,8 +303,8 @@ public:
     inline bool         IsAutoLine() const { return !mxLineFmt || mxLineFmt->IsAuto(); }
     /** Returns true, if the line style is set to something visible. */
     inline bool         HasLine() const { return IsAutoLine() || mxLineFmt->HasLine(); }
-    /** Returns true, if the line style is set to something visible. */
-    inline sal_uInt16   GetLineWeight() const { return mxLineFmt.is() ? mxLineFmt->GetWeight() : EXC_CHLINEFORMAT_SINGLE; }
+    /** Returns the line weight used for this frame. */
+    inline sal_Int16    GetLineWeight() const { return mxLineFmt.is() ? mxLineFmt->GetWeight() : EXC_CHLINEFORMAT_SINGLE; }
 
     /** Returns true, if the area format is set to automatic. */
     inline bool         IsAutoArea() const { return !mxEscherFmt && (!mxAreaFmt || mxAreaFmt->IsAuto()); }
@@ -400,6 +387,9 @@ public:
     inline const String& GetString() const { return mxString.is() ? mxString->GetText() : String::EmptyString(); }
     /** Returns the number of data points of this source link. */
     inline sal_uInt16   GetCellCount() const { return limit_cast< sal_uInt16 >( maScRanges.GetCellCount() ); }
+
+    /** Converts and writes the contained number format to the passed property set. */
+    void                ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) const;
 
     /** Creates a data sequence containing the link into the Calc document. */
     XDataSequenceRef    CreateDataSequence( const ::rtl::OUString& rRole ) const;
@@ -502,6 +492,8 @@ public:
     void                ConvertFont( ScfPropertySet& rPropSet ) const;
     /** Converts and writes the contained frame data to the passed property set. */
     void                ConvertFrame( ScfPropertySet& rPropSet ) const;
+    /** Converts and writes the contained number format to the passed property set. */
+    void                ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) const;
     /** Converts and writes all contained data to the passed data point label property set. */
     void                ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo ) const;
     /** Creates a title text object. */
@@ -535,7 +527,7 @@ public:
 
     /** Converts and writes the contained data to the passed property set. */
     void                Convert( const XclImpChRoot& rRoot, ScfPropertySet& rPropSet,
-                            sal_uInt16 nFormatIdx, sal_uInt16 nLineWeight ) const;
+                            sal_uInt16 nFormatIdx, sal_Int16 nLineWeight ) const;
     /** Sets the marker fill color as main color to the passed property set. */
     void                ConvertColor( const XclImpChRoot& rRoot,
                             ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx ) const;
@@ -636,7 +628,7 @@ public:
     virtual void        ReadSubRecord( XclImpStream& rStrm );
 
     /** Sets this object to the specified data point position. */
-    void                SetPointPos( sal_uInt16 nSeriesIdx, sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx );
+    void                SetPointPos( const XclChDataPointPos& rPointPos, sal_uInt16 nFormatIdx );
     /** Sets type and text formatting for a data point label (CHTEXT group). */
     inline void         SetDataLabel( XclImpChTextRef xLabel ) { mxLabel = xLabel; }
 
@@ -646,6 +638,8 @@ public:
     void                UpdateSeriesFormat( const XclChExtTypeInfo& rTypeInfo, const XclImpChDataFormat* pGroupFmt );
     /** Updates missing data point settings from the passed series format. */
     void                UpdatePointFormat( const XclChExtTypeInfo& rTypeInfo, const XclImpChDataFormat* pSeriesFmt );
+    /** Updates default data format for trend lines. */
+    void                UpdateTrendLineFormat();
 
     /** Returns the position of the data point described by this group. */
     inline const XclChDataPointPos& GetPointPos() const { return maData.maPointPos; }
@@ -696,7 +690,7 @@ public:
 
     /** Reads the CHSERTRENDLINE record. */
     void                ReadChSerTrendLine( XclImpStream& rStrm );
-    /** Sets formatting information for the error bars. */
+    /** Sets formatting information for the trend line. */
     inline void         SetDataFormat( XclImpChDataFormatRef xDataFmt ) { mxDataFmt = xDataFmt; }
 
     /** Creates an API object representing this trend line. */
@@ -780,6 +774,8 @@ public:
     inline sal_uInt16   GetFormatIdx() const { return mxSeriesFmt.is() ? mxSeriesFmt->GetFormatIdx() : EXC_CHDATAFORMAT_DEFAULT; }
     /** Returns true, if the series is child of another series (e.g. trend line). */
     inline bool         HasParentSeries() const { return mnParentIdx != EXC_CHSERIES_INVALID; }
+    /** Returns true, if the series contains child series (e.g. trend lines). */
+    inline bool         HasChildSeries() const { return !maTrendLines.empty() || !maErrorBars.empty(); }
     /** Returns series title or an empty string, if the series does not contain a title. */
     inline const String& GetTitle() const { return mxTitleLink.is() ? mxTitleLink->GetString() : String::EmptyString(); }
 
@@ -961,8 +957,9 @@ typedef ScfRef< XclImpChDropBar > XclImpChDropBarRef;
 
     The CHTYPEGROUP group consists of: CHTYPEGROUP, CHBEGIN, a chart type
     record (e.g. CHBAR, CHLINE, CHAREA, CHPIE, ...), CHCHART3D, CHLEGEND group,
-    CHDROPBAR groups, CHCHARTLINE groups (CHCHARTLINE with CHLINEFORMAT),
-    CHDATAFORMAT group, CHEND.
+    CHDEFAULTTEXT groups (CHDEFAULTTEXT with CHTEXT groups), CHDROPBAR groups,
+    CHCHARTLINE groups (CHCHARTLINE with CHLINEFORMAT), CHDATAFORMAT group,
+    CHEND.
  */
 class XclImpChTypeGroup : public XclImpChGroupBase, protected XclImpChRoot
 {
@@ -1309,6 +1306,8 @@ public:
     virtual void        ReadHeaderRecord( XclImpStream& rStrm );
     /** Reads a record from the CHCHART group (called by base class). */
     virtual void        ReadSubRecord( XclImpStream& rStrm );
+    /** Reads a CHDEFAULTTEXT group (default text formats). */
+    void                ReadChDefaultText( XclImpStream& rStrm );
     /** Reads a CHDATAFORMAT group describing a series format or a data point format. */
     void                ReadChDataFormat( XclImpStream& rStrm );
 
@@ -1318,7 +1317,7 @@ public:
     /** Returns the specified chart type group. */
     XclImpChTypeGroupRef GetTypeGroup( sal_uInt16 nGroupIdx ) const;
     /** Returns the specified default text. */
-    XclImpChTextRef     GetDefaultText( sal_uInt16 nTextId ) const;
+    XclImpChTextRef     GetDefaultText( XclChTextType eTextType ) const;
     /** Returns the number of units on the progress bar needed for the chart. */
     inline sal_Size     GetProgressSize() const { return 2 * EXC_CHART_PROGRESS_SIZE; }
 
@@ -1328,8 +1327,6 @@ public:
 private:
     /** Reads a CHSERIES group (data series source and formatting). */
     void                ReadChSeries( XclImpStream& rStrm );
-    /** Reads a CHDEFAULTTEXT group (default text formats). */
-    void                ReadChDefaultText( XclImpStream& rStrm );
     /** Reads a CHAXESSET group (primary/secondary axes set). */
     void                ReadChAxesSet( XclImpStream& rStrm );
     /** Reads a CHTEXT group (chart title and series/point captions). */
