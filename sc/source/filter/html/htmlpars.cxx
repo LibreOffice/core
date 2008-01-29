@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:50:00 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:29:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2380,7 +2380,9 @@ bool ScHTMLTable::PushEntry( ScHTMLEntryPtr& rpEntry )
         else if( mpParentTable )
             bPushed = mpParentTable->PushEntry( rpEntry );
         else
+        {
             DBG_ERRORFILE( "ScHTMLTable::PushEntry - cannot push entry, no parent found" );
+        }
     }
     return bPushed;
 }
