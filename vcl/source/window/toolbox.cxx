@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:22:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:17:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2911,6 +2911,7 @@ IMPL_LINK( ToolBox, ImplDropdownLongClickHdl, ToolBox*, EMPTYARG )
         (mpData->m_aItems[ mnCurPos ].mnBits & TIB_DROPDOWN)
         )
     {
+        mpData->mbDropDownByKeyboard = FALSE;
         GetDropdownClickHdl().Call( this );
 
         // do not reset data if the dropdown handler opened a floating window
@@ -3910,12 +3911,14 @@ void ToolBox::ImplFloatControl( BOOL bStart, FloatingWindow* pFloatWindow )
 
         // if focus is still in this toolbox, then the floater was opened by keyboard
         // draw current item with highlight and keep old state
+        BOOL bWasKeyboardActivate = mpData->mbDropDownByKeyboard;
+
 
         if ( mnCurPos != TOOLBOX_ITEM_NOTFOUND )
-            ImplDrawItem( mnCurPos, HasFocus() ? 2 : 0 );
+            ImplDrawItem( mnCurPos, bWasKeyboardActivate ? 2 : 0 );
         Deactivate();
 
-        if( !HasFocus() )
+        if( !bWasKeyboardActivate )
         {
             mnCurPos = TOOLBOX_ITEM_NOTFOUND;
             mnCurItemId = 0;
@@ -4313,7 +4316,6 @@ void ToolBox::MouseMove( const MouseEvent& rMEvt )
         }
     }
 
-
     if ( bDrawHotSpot && ( ((eStyle == POINTER_ARROW) && (mnOutStyle & TOOLBOX_STYLE_HANDPOINTER)) ||
          (mnOutStyle & TOOLBOX_STYLE_FLAT) || !mnOutStyle ) )
     {
@@ -4517,6 +4519,7 @@ void ToolBox::MouseButtonDown( const MouseEvent& rMEvt )
                         // dropdownonly always triggers the dropdown handler, over the whole button area
 
                         // the drop down arrow should not trigger the item action
+                        mpData->mbDropDownByKeyboard = FALSE;
                         GetDropdownClickHdl().Call( this );
 
                         // do not reset data if the dropdown handler opened a floating window
@@ -5686,6 +5689,7 @@ BOOL ToolBox::ImplOpenItem( KeyCode aKeyCode )
         mbIsKeyEvent = TRUE;
         Activate();
 
+        mpData->mbDropDownByKeyboard = TRUE;
         GetDropdownClickHdl().Call( this );
 
         mbIsKeyEvent = FALSE;
