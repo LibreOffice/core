@@ -4,9 +4,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.93 $
+ *  $Revision: 1.94 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 12:22:26 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:28:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -883,7 +883,7 @@ sal_Bool SfxTopFrame::InsertDocument( SfxObjectShell* pDoc )
     // aus den Dokument geladen werden, z.B. weil InsertDocument seinerseits
     // aus LoadWindows_Impl aufgerufen wurde!
     if ( !pJumpItem && !pPluginMode && pDoc && !pAreaItem && !pViewIdItem && !pModeItem &&
-            !pImp->bHidden && pDoc->LoadWindows_Impl( this ) )
+            pDoc->LoadWindows_Impl( this ) )
     {
         if ( GetCurrentDocument() != pDoc )
             // something went wrong during insertion
