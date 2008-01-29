@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.103 $
+#   $Revision: 1.104 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-12 13:22:06 $
+#   last change: $Author: rt $ $Date: 2008-01-29 16:23:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -322,10 +322,6 @@ SHL2STDLIBS += -ldl -lnsl -lsocket
 .ENDIF
 
 .IF "$(GUIBASE)"=="unx"
-
-.IF "$(WITH_LIBSN)"=="YES"
-SHL2STDLIBS+=$(LIBSN_LIBS)
-.ENDIF
 
 SHL2STDLIBS += -lXext -lSM -lICE -lX11
 .IF "$(OS)"!="MACOSX" && "$(OS)"!="FREEBSD"
