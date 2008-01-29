@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SOImageService.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 11:23:46 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:43:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ public class SOImageService implements ImageService
         {
           final Size imageSize = (Size) xImage.getPropertyValue("SizePixel");
           final int dpi = java.awt.Toolkit.getDefaultToolkit().getScreenResolution();
-          final double fac = 25400 / dpi;
+          final double fac = 2540 / dpi;
           dim.setSize(imageSize.Width * fac, imageSize.Height * fac);
         }
       }
