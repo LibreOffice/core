@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormWizard.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:52:35 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:41:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,8 @@ package com.sun.star.wizards.form;
 
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.sdb.CommandType;
-import com.sun.star.uno.AnyConverter;
 import com.sun.star.lang.XComponent;
 import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.db.DBMetaData;
 import com.sun.star.wizards.db.RelationController;
 import com.sun.star.wizards.document.OfficeDocument;
 import com.sun.star.wizards.ui.*;
@@ -285,7 +282,7 @@ public class FormWizard extends WizardDialog{
         XComponent[] ret = null;
         try{
             curFormDocument =  new FormDocument(xMSF, oResource);
-            if (curFormDocument.oMainFormDBMetaData.getConnection(CurPropertyValue)){
+            if (curFormDocument.oMainFormDBMetaData.getConnection(CurPropertyValue) ){
                 curFormDocument.oSubFormDBMetaData.getConnection(new PropertyValue[]{Properties.createProperty("ActiveConnection", curFormDocument.oMainFormDBMetaData.DBConnection)});
                 curFormDocument.xProgressBar.setValue(20);
                 buildSteps();
