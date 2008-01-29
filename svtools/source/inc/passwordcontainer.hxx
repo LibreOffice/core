@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwordcontainer.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:44:41 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:25:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,31 +98,146 @@
 #include <rtl/ref.hxx>
 #include <osl/mutex.hxx>
 
-#define EMPTY_RECORD        0
-#define SINGLE_RECORD       1
-#define PERSISTENT_RECORD   2
+#define MEMORY_RECORD         0
+#define PERSISTENT_RECORD     1
 
 //----------------------------------------------------------------------------------
 
-struct NamePassRecord
+class NamePassRecord
 {
-    ::rtl::OUString                                     mName;
-    ::std::vector< ::rtl::OUString >                    mPass;
-    char                                                mStatus;
+    ::rtl::OUString                                     m_aName;
 
-    NamePassRecord( const ::rtl::OUString& name, const ::std::vector< ::rtl::OUString >& passList, const char stat ):
-        mName( name ),
-        mPass( passList ),
-        mStatus( stat )
-    {}
+    // there are two lists of passwords, memory passwords and persistent passwords
+    sal_Bool                                              m_bHasMemPass;
+    ::std::vector< ::rtl::OUString >                      m_aMemPass;
 
-    NamePassRecord( const NamePassRecord& rec ) :
-        mName( rec.mName ),
-        mPass( rec.mPass ),
-        mStatus( rec.mStatus )
-    {}
+    // persistent passwords are encrypted in one string
+    sal_Bool                                              m_bHasPersPass;
+    ::rtl::OUString                                       m_aPersPass;
 
-    NamePassRecord() : mStatus( EMPTY_RECORD ) {}
+    void InitArrays( sal_Bool bHasMemoryList, const ::std::vector< ::rtl::OUString >& aMemoryList,
+                     sal_Bool bHasPersistentList, const ::rtl::OUString& aPersistentList )
+    {
+        m_bHasMemPass = bHasMemoryList;
+        if ( bHasMemoryList )
+            m_aMemPass = aMemoryList;
+
+        m_bHasPersPass = bHasPersistentList;
+        if ( bHasPersistentList )
+            m_aPersPass = aPersistentList;
+    }
+
+public:
+
+    NamePassRecord( const ::rtl::OUString& aName )
+        : m_aName( aName )
+        , m_bHasMemPass( sal_False )
+        , m_bHasPersPass( sal_False )
+    {
+    }
+
+    NamePassRecord( const ::rtl::OUString& aName, const ::std::vector< ::rtl::OUString >& aMemoryList )
+        : m_aName( aName )
+        , m_bHasMemPass( sal_True )
+        , m_aMemPass( aMemoryList )
+        , m_bHasPersPass( sal_False )
+    {
+    }
+
+    NamePassRecord( const ::rtl::OUString& aName, const ::rtl::OUString& aPersistentList )
+        : m_aName( aName )
+        , m_bHasMemPass( sal_False )
+        , m_bHasPersPass( sal_True )
+        , m_aPersPass( aPersistentList )
+    {
+    }
+
+    NamePassRecord( const ::rtl::OUString& aName,
+                    sal_Bool bHasMemoryList, const ::std::vector< ::rtl::OUString >& aMemoryList,
+                    sal_Bool bHasPersistentList, const ::rtl::OUString aPersistentList )
+        : m_aName( aName )
+        , m_bHasMemPass( bHasMemoryList )
+        , m_bHasPersPass( bHasPersistentList )
+    {
+        InitArrays( bHasMemoryList, aMemoryList, bHasPersistentList, aPersistentList );
+    }
+
+    NamePassRecord( const NamePassRecord& aRecord )
+        : m_aName( aRecord.m_aName )
+        , m_bHasMemPass( sal_False )
+        , m_bHasPersPass( sal_False )
+    {
+        InitArrays( aRecord.m_bHasMemPass, aRecord.m_aMemPass, aRecord.m_bHasPersPass, aRecord.m_aPersPass );
+    }
+
+    NamePassRecord& operator=( const NamePassRecord& aRecord )
+    {
+        m_aName = aRecord.m_aName;
+
+        m_aMemPass.clear();
+        m_aPersPass = ::rtl::OUString();
+        InitArrays( aRecord.m_bHasMemPass, aRecord.m_aMemPass, aRecord.m_bHasPersPass, aRecord.m_aPersPass );
+
+        return *this;
+    }
+
+    ::rtl::OUString GetUserName() const
+    {
+        return m_aName;
+    }
+
+    sal_Bool HasPasswords( sal_Int8 nStatus ) const
+    {
+        if ( nStatus == MEMORY_RECORD )
+            return m_bHasMemPass;
+        if ( nStatus == PERSISTENT_RECORD )
+            return m_bHasPersPass;
+
+        return sal_False;
+    }
+
+    ::std::vector< ::rtl::OUString > GetMemPasswords() const
+    {
+        if ( m_bHasMemPass )
+            return m_aMemPass;
+
+        return ::std::vector< ::rtl::OUString >();
+    }
+
+    ::rtl::OUString GetPersPasswords() const
+    {
+        if ( m_bHasPersPass )
+            return m_aPersPass;
+
+        return ::rtl::OUString();
+    }
+
+    void SetMemPasswords( const ::std::vector< ::rtl::OUString >& aMemList )
+    {
+        m_aMemPass = aMemList;
+        m_bHasMemPass = sal_True;
+    }
+
+    void SetPersPasswords( const ::rtl::OUString& aPersList )
+    {
+        m_aPersPass = aPersList;
+        m_bHasPersPass = sal_True;
+    }
+
+    void RemovePasswords( sal_Int8 nStatus )
+    {
+        if ( nStatus == MEMORY_RECORD )
+        {
+            m_bHasMemPass = sal_False;
+            m_aMemPass.clear();
+        }
+        else if ( nStatus == PERSISTENT_RECORD )
+        {
+            m_bHasPersPass = sal_False;
+            m_aPersPass = ::rtl::OUString();
+        }
+    }
+
 };
 
 //----------------------------------------------------------------------------------
@@ -137,7 +252,7 @@ class PasswordContainer;
 class StorageItem : public ::utl::ConfigItem {
     PasswordContainer*  mainCont;
     sal_Bool            hasEncoded;
-    ::rtl::OUString     mEncoded;
+    ::rtl::OUString        mEncoded;
 public:
     StorageItem( PasswordContainer* point, const ::rtl::OUString& path ) :
         ConfigItem( path, CONFIG_MODE_IMMEDIATE_UPDATE ),
@@ -179,7 +294,7 @@ class PasswordContainer : public ::cppu::WeakImplHelper4<
         ::com::sun::star::lang::XEventListener >
 {
 private:
-    PassMap  container;
+    PassMap      m_aContainer;
     StorageItem* m_pStorageFile;
     ::osl::Mutex mMutex;
     ::rtl::OUString m_aMasterPasswd; // master password is set when the string is not empty
@@ -189,6 +304,11 @@ private:
                                         const ::std::list< NamePassRecord >& original,
                                         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
+
+    ::com::sun::star::task::UserRecord CopyToUserRecord(
+                                        const NamePassRecord& aRecord,
+                                        sal_Bool& io_bTryToDecode,
+                                        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& aHandler );
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::task::UserRecord > FindUsr(
                                         const ::std::list< NamePassRecord >& userlist,
@@ -203,8 +323,7 @@ private:
     ::rtl::OUString GetMasterPassword( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
-    void UpdateVector( const ::rtl::OUString& url, ::std::list< NamePassRecord >& toUpdate, NamePassRecord& rec, sal_Bool writeFile,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler )
+    void UpdateVector( const ::rtl::OUString& url, ::std::list< NamePassRecord >& toUpdate, NamePassRecord& rec, sal_Bool writeFile )
                                                         throw(::com::sun::star::uno::RuntimeException);
 
     void PrivateAdd( const ::rtl::OUString& aUrl,
@@ -262,7 +381,7 @@ public:
 
 
     // provide factory
-    static ::rtl::OUString SAL_CALL     impl_getStaticImplementationName( ) throw(::com::sun::star::uno::RuntimeException);
+    static ::rtl::OUString SAL_CALL        impl_getStaticImplementationName( ) throw(::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
                     impl_getStaticSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
     static ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > SAL_CALL
@@ -271,14 +390,14 @@ public:
                     impl_createInstance( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceManager ) throw( ::com::sun::star::uno::RuntimeException );
 
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL    getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual sal_Bool SAL_CALL           supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString    SAL_CALL    getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL            supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
                                         getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XEventListener
-    virtual void SAL_CALL       disposing( const ::com::sun::star::lang::EventObject& Source )
+    virtual void SAL_CALL        disposing( const ::com::sun::star::lang::EventObject& Source )
                                     throw(::com::sun::star::uno::RuntimeException);
 
     // XMasterPasswordHandling
