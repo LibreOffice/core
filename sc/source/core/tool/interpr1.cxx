@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:02:08 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:22:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,7 +318,9 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
         if ( aCode.HasStacked() )
             aCode.Pop();    // pop what Jump() pushed
         else
+        {
             DBG_ERRORFILE( "ScInterpreter::JumpMatrix: pop goes the weasel" );
+        }
 
         if ( !pResMat )
         {
@@ -1233,7 +1235,7 @@ void ScInterpreter::ScPi()
 
 void ScInterpreter::ScRandom()
 {
-    PushDouble((double)rand() / RAND_MAX);
+    PushDouble((double)rand() / ((double)RAND_MAX+1.0));
 }
 
 
