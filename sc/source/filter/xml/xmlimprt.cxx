@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:40:45 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:37:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#ifndef _ZFORLIST_HXX
 #include <svtools/zforlist.hxx>
-#endif
 
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/xmlnmspe.hxx>
@@ -49,30 +47,14 @@
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlmetai.hxx>
 #include <sfx2/objsh.hxx>
-#ifndef _XMLOFF_XMLNUMFI_HXX
 #include <xmloff/xmlnumfi.hxx>
-#endif
-#ifndef _XMLOFF_XMLSCRIPTI_HXX
 #include <xmloff/xmlscripti.hxx>
-#endif
-#ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX_
 #include <xmloff/XMLFontStylesContext.hxx>
-#endif
-#ifndef _XMLOFF_DOCUMENTSETTINGSCONTEXT_HXX
 #include <xmloff/DocumentSettingsContext.hxx>
-#endif
-#ifndef _XMLOFF_XMLUCONV_HXX
 #include <xmloff/xmluconv.hxx>
-#endif
-#ifndef XMLOFF_NUMEHELP_HXX
 #include <xmloff/numehelp.hxx>
-#endif
-#ifndef _XMLOFF_XMLTOKEN_HXX
 #include <xmloff/xmltoken.hxx>
-#endif
-#ifndef _XMLOFF_XMLERROR_HXX
 #include <xmloff/xmlerror.hxx>
-#endif
 
 #include <svtools/zforlist.hxx>
 #include <svtools/zformat.hxx>
@@ -83,88 +65,37 @@
 #include "docuno.hxx"
 #include "xmlbodyi.hxx"
 #include "xmlstyli.hxx"
-#ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
-#endif
-#ifndef _SC_VIEWSETTINGSSEQUENCEDEFINES_HXX
 #include "ViewSettingsSequenceDefines.hxx"
-#endif
 
 #include "patattr.hxx"
 
-#ifndef _SC_XMLCONVERTER_HXX
 #include "XMLConverter.hxx"
-#endif
-#ifndef _SC_XMLTABLESHAPEIMPORTHELPER_HXX
 #include "XMLTableShapeImportHelper.hxx"
-#endif
-#ifndef _SC_XMLCHANGETRACKINGIMPORTHELPER_HXX
 #include "XMLChangeTrackingImportHelper.hxx"
-#endif
-#ifndef SC_CHGVISET_HXX
 #include "chgviset.hxx"
-#endif
-#ifndef _SC_XMLSTYLESIMPORTHELPER_HXX
 #include "XMLStylesImportHelper.hxx"
-#endif
-#ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
-#endif
-#ifndef SC_RANGEUTL_HXX
 #include "rangeutl.hxx"
-#endif
-#ifndef _COMPHELPER_EXTRACT_HXX_
+#include "postit.hxx"
 #include <comphelper/extract.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSHEETCELLRANGE_HPP_
 #include <com/sun/star/sheet/XSheetCellRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEADDRESSABLE_HPP_
 #include <com/sun/star/sheet/XCellRangeAddressable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XSPREADSHEETDOCUMENT_HPP_
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XMERGEABLE_HPP_
 #include <com/sun/star/util/XMergeable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_CELLINSERTMODE_HPP_
 #include <com/sun/star/sheet/CellInsertMode.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XCELLRANGEMOVEMENT_HPP_
 #include <com/sun/star/sheet/XCellRangeMovement.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DOCUMENT_XACTIONLOCKABLE_HPP_
 #include <com/sun/star/document/XActionLockable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_NUMBERFORMAT_HPP_
 #include <com/sun/star/util/NumberFormat.hpp>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XNUMBERFORMATTYPES_HPP_
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
-#endif
-#ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGES_HPP_
 #include <com/sun/star/sheet/XNamedRanges.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGEFLAG_HPP_
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XNAMEDRANGE_HPP_
 #include <com/sun/star/sheet/XNamedRange.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_XLABELRANGES_HPP_
 #include <com/sun/star/sheet/XLabelRanges.hpp>
-#endif
 
 #define SC_LOCALE           "Locale"
 #define SC_STANDARDFORMAT   "StandardFormat"
