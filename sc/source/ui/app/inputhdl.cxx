@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-02 15:21:52 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 //------------------------------------------------------------------
 
 #include "scitems.hxx"
@@ -66,23 +64,14 @@
 #include <sfx2/printer.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/sound.hxx>
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
-#endif
-
-#ifndef _SV_HELP_HXX //autogen
 #include <vcl/help.hxx>
-#endif
-
-#ifndef _SV_CURSOR_HXX //autogen
 #include <vcl/cursor.hxx>
-#endif
-
+#include <tools/urlobj.hxx>
 
 #include "inputwin.hxx"
 #include "tabvwsh.hxx"
 #include "docsh.hxx"
-//#include "appmain.hxx"
 #include "scmod.hxx"
 #include "uiitems.hxx"
 #include "global.hxx"
@@ -287,7 +276,9 @@ void ScInputHandler::UpdateRange( USHORT nIndex, const ScRange& rNew )
         }
     }
     else
+    {
         DBG_ERROR("UpdateRange: da fehlt was");
+    }
 }
 
 void ScInputHandler::DeleteRangeFinder()
@@ -1867,7 +1858,9 @@ void ScInputHandler::ShowRefFrame()
             //  pLastState wird im NotifyChange aus dem Activate richtig gesetzt
         }
         else
+        {
             DBG_ERROR("ViewFrame fuer Referenzeingabe ist nicht mehr da");
+        }
     }
 }
 
@@ -2491,7 +2484,9 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
         rRef.Format( aTmp, SCA_VALID|SCA_TAB_3D, pDoc, aAddrDetails );      // immer 3d
 
         SfxObjectShell* pObjSh = pDoc->GetDocumentShell();
-        String aFileName = pObjSh->GetMedium()->GetName();
+        // #i75893# convert escaped URL of the document to something user friendly
+//       String aFileName = pObjSh->GetMedium()->GetName();
+        String aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
 
         aRefStr = '\'';
         aRefStr += aFileName;
