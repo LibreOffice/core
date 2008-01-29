@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OResultSet.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 03:07:12 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:54:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -517,15 +517,21 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes( sal_Int32 columnIndex ) thro
         return nRet;
     }
 
-    sal_Int32 nType = getMetaData()->getColumnType(columnIndex);
+    SWORD nType = OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex);
     switch(nType)
     {
-        case DataType::VARCHAR:
-        case DataType::LONGVARCHAR:
+        case SQL_WVARCHAR:
+        case SQL_WCHAR:
+        case SQL_WLONGVARCHAR:
+        case SQL_VARCHAR:
+        case SQL_CHAR:
+        case SQL_LONGVARCHAR:
         {
-            ::rtl::OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,(SWORD)nType,m_bWasNull,**this,m_nTextEncoding);
+            ::rtl::OUString aRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,nType,m_bWasNull,**this,m_nTextEncoding);
             return Sequence<sal_Int8>(reinterpret_cast<const sal_Int8*>(aRet.getStr()),sizeof(sal_Unicode)*aRet.getLength());
         }
+        default:
+            ;
     }
     return OTools::getBytesValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,SQL_C_BINARY,m_bWasNull,**this);
 }
@@ -664,7 +670,9 @@ sal_Int16 SAL_CALL OResultSet::getShort( sal_Int32 columnIndex ) throw(SQLExcept
     if(m_bFetchData)
         nRet = getValue(columnIndex,0,NULL,0);
     else
-        nRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,(SWORD)getMetaData()->getColumnType(columnIndex),m_bWasNull,**this,m_nTextEncoding);
+    {
+        nRet = OTools::getStringValue(m_pStatement->getOwnConnection(),m_aStatementHandle,columnIndex,OResultSetMetaData::getColumnODBCType(m_pStatement->getOwnConnection(),m_aStatementHandle,*this,columnIndex),m_bWasNull,**this,m_nTextEncoding);
+    }
     return nRet;
 }
 // -------------------------------------------------------------------------
