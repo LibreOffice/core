@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Condition.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:35:50 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:46:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -583,6 +583,7 @@ void Condition::impl_setCondition( const ::rtl::OUString& _rConditionFormula )
             sExpression = aFormula.getExpression();
         // as fallback, if the below matching does not succeed, assume
         // the whole expression is the LHS
+        eType = eExpression;
         sLHS = sExpression;
 
         // the data field (or expression) to which our control is bound
