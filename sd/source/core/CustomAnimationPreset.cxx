@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPreset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:29:29 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:33:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
 #include <com/sun/star/util/XCloneable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XMACROEXPANDER_HPP_
+#include <com/sun/star/util/XMacroExpander.hpp>
+#endif
 #ifndef _COM_SUN_STAR_ANIMATIONS_XANIMATIONNODESUPPLIER_HPP_
 #include <com/sun/star/animations/XAnimationNodeSupplier.hpp>
 #endif
@@ -56,6 +59,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_PRESENTATION_EFFECTPRESETCLASS_HPP_
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
@@ -85,6 +91,7 @@
 #endif
 
 #include <tools/debug.hxx>
+#include <rtl/uri.hxx>
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -375,6 +382,8 @@ Reference< XAnimationNode > implImportEffects( const Reference< XMultiServiceFac
     return xRootNode;
 }
 
+#define EXPAND_PROTOCOL "vnd.sun.star.expand:"
+
 void CustomAnimationPresets::importEffects()
 {
     try
@@ -385,37 +394,76 @@ void CustomAnimationPresets::importEffects()
         if( !xServiceFactory.is() )
             return;
 
-        INetURLObject   aURL( SvtPathOptions().GetConfigPath() );
-        aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM("soffice.cfg") ) );
-        aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM("simpress" ) ) );
-        aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM("effects.xml" ) ) );
-        const OUString aPath( aURL.GetMainURL( INetURLObject::NO_DECODE ) );
-        mxRootNode = implImportEffects( xServiceFactory, aPath );
+        uno::Reference< beans::XPropertySet > xProps( xServiceFactory, UNO_QUERY );
+        uno::Reference< uno::XComponentContext > xContext;
+        xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))) >>= xContext;
 
-        if( mxRootNode.is() )
+        uno::Reference< util::XMacroExpander > xMacroExpander;
+        if( xContext.is() )
+            xMacroExpander.set( xContext->getValueByName(
+                                    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/singletons/com.sun.star.util.theMacroExpander"))),
+                                UNO_QUERY );
+
+        Reference< XMultiServiceFactory > xConfigProvider(
+            xServiceFactory->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ))),
+            UNO_QUERY_THROW );
+
+        // read path to transition effects files from config
+        Any propValue = uno::makeAny(
+            beans::PropertyValue(
+                OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" )), -1,
+                uno::makeAny( OUString( RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Office.Impress/Misc") )),
+                beans::PropertyState_DIRECT_VALUE ) );
+
+        Reference<container::XNameAccess> xNameAccess(
+            xConfigProvider->createInstanceWithArguments(
+                OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationAccess")),
+                Sequence<Any>( &propValue, 1 ) ), UNO_QUERY_THROW );
+        uno::Sequence< rtl::OUString > aFiles;
+        xNameAccess->getByName(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("EffectFiles"))) >>= aFiles;
+
+        for( sal_Int32 i=0; i<aFiles.getLength(); ++i )
         {
-            Reference< XTimeContainer > xRootContainer( mxRootNode, UNO_QUERY_THROW );
-            EffectSequenceHelper aSequence( xRootContainer );
-
-            EffectSequence::iterator aIter( aSequence.getBegin() );
-            const EffectSequence::iterator aEnd( aSequence.getEnd() );
-
-            while( aIter != aEnd )
+            rtl::OUString aURL = aFiles[i];
+            if( aURL.compareToAscii( RTL_CONSTASCII_STRINGPARAM( EXPAND_PROTOCOL )) == 0 )
             {
-                CustomAnimationEffectPtr pEffect = (*aIter);
+                // cut protocol
+                rtl::OUString aMacro( aURL.copy( sizeof ( EXPAND_PROTOCOL ) -1 ) );
+                // decode uric class chars
+                aMacro = rtl::Uri::decode( aMacro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
+                // expand macro string
+                aURL = xMacroExpander->expandMacros( aMacro );
+            }
 
-                const OUString aPresetId( pEffect->getPresetId() );
-                CustomAnimationPresetPtr pDescriptor = getEffectDescriptor( aPresetId );
-                if( pDescriptor.get() )
-                    pDescriptor->add( pEffect );
-                else
+            mxRootNode = implImportEffects( xServiceFactory, aURL );
+
+            if( mxRootNode.is() )
+            {
+                Reference< XTimeContainer > xRootContainer( mxRootNode, UNO_QUERY_THROW );
+                EffectSequenceHelper aSequence( xRootContainer );
+
+                EffectSequence::iterator aIter( aSequence.getBegin() );
+                const EffectSequence::iterator aEnd( aSequence.getEnd() );
+
+                while( aIter != aEnd )
                 {
-                    pDescriptor.reset( new CustomAnimationPreset( pEffect ) );
-                    pDescriptor->maLabel = getUINameForPresetId( pEffect->getPresetId() );
-                    maEffectDiscriptorMap[aPresetId] = pDescriptor;
-                }
+                    CustomAnimationEffectPtr pEffect = (*aIter);
 
-                aIter++;
+                    const OUString aPresetId( pEffect->getPresetId() );
+                    CustomAnimationPresetPtr pDescriptor = getEffectDescriptor( aPresetId );
+                    if( pDescriptor.get() )
+                        pDescriptor->add( pEffect );
+                    else
+                    {
+                        pDescriptor.reset( new CustomAnimationPreset( pEffect ) );
+                        pDescriptor->maLabel = getUINameForPresetId( pEffect->getPresetId() );
+                        maEffectDiscriptorMap[aPresetId] = pDescriptor;
+                    }
+
+                    aIter++;
+                }
             }
         }
     }
