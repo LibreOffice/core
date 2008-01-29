@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:23:23 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:40:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2203,7 +2203,7 @@ sal_Int16 HTMLTable::GetInheritedVertOri() const
 void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
                             sal_uInt16 nRowSpan, sal_uInt16 nColSpan,
                             sal_uInt16 nCellWidth, sal_Bool bRelWidth, sal_uInt16 nCellHeight,
-                            sal_Int16 /*eVertOrient*/, SvxBrushItem *pBGBrushItem,
+                            sal_Int16 eVertOrient, SvxBrushItem *pBGBrushItem,
                             sal_Bool bHasNumFmt, sal_uInt32 nNumFmt,
                             sal_Bool bHasValue, double nValue, sal_Bool bNoWrap )
 {
@@ -2282,7 +2282,7 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
         {
             const bool bCovered = i != nColSpan || j != nRowSpan;
             GetCell( nRowsReq-j, nColsReq-i )
-                ->Set( pCnts, j, i, eVertOri, pBGBrushItem,
+                ->Set( pCnts, j, i, eVertOrient, pBGBrushItem,
                        bHasNumFmt, nNumFmt, bHasValue, nValue, bNoWrap, bCovered );
         }
     }
