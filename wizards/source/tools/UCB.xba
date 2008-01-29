@@ -40,7 +40,7 @@ Dim sFileArray(StartUbound,1) as String
 	DirIndex = 0
 	sDirArray(iDirIndex) = AnchorDir
 	iDirCount = 1
-	oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
+	oDocInfo = CreateUnoService(&quot;com.sun.star.document.StandaloneDocumentInfo&quot;)
 	oUcbObject = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	If oUcbObject.Exists(AnchorDir) Then
 		Do
@@ -146,7 +146,7 @@ End Sub
 Function RetrieveDocTitle(oDocInfo as Object, sFileName as String) As String
 Dim sDocTitle as String
 	On Local Error Goto NOFILE
-	oDocInfo.Read(sFileName)
+	oDocInfo.loadFromUrl(sFileName)
 	sDocTitle = oDocInfo.Title
 	NOFILE:
 	If Err &lt;&gt; 0 Then
@@ -165,7 +165,7 @@ End Function
 &apos; from the Header of the document
 Function GetRealFileContent(oDocInfo as Object, FileName as String) As String
 	On Local Error Goto NOFILE
-	oDocInfo.Read(FileName)
+	oDocInfo.loadFromUrl(FileName)
 	GetRealFileContent = oDocInfo.MIMEType
 	NOFILE:
 	If Err &lt;&gt; 0 Then
