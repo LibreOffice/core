@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXDocumentSettings.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:33:46 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:25:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,7 +405,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             OUString sPrinterName;
             if( rValue >>= sPrinterName  )
             {
-                if( !mpPrinter && sPrinterName.getLength() > 0 )
+                if( !mpPrinter && sPrinterName.getLength() > 0 && mpDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
                     SfxPrinter* pPrinter = mpDoc->getPrinter( true );
                     if ( OUString ( pPrinter->GetName()) != sPrinterName )
