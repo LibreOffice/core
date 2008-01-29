@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 13:57:00 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:21:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -384,7 +384,6 @@ public:
     virtual void                    EndSetClipRegion();
 
     static GtkSalFrame         *getFromWindow( GtkWindow *pWindow );
-    ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible > getAccessible( bool bCreate = true );
 
     static AtkRole              GetAtkRole( GtkWindow* window );
 };
