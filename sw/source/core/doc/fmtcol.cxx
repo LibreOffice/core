@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtcol.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 15:56:28 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,10 @@ void SwTxtFmtColl::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
         pNewChgSet->GetChgSet()->GetItemState( RES_CHRATR_CTL_FONTSIZE,
                         FALSE, (const SfxPoolItem**)&(aFontSizeArr[2]) );
         // --> OD 2006-10-17 #i70223#
-        if ( bAssignedToListLevelOfOutlineStyle )
+        // --> OD 2007-12-19 #i84745#
+        // check, if attribute set is applied to this paragraph style
+        if ( bAssignedToListLevelOfOutlineStyle &&
+             pNewChgSet->GetTheChgdSet() == &GetAttrSet() )
         {
             pNewChgSet->GetChgSet()->GetItemState( RES_PARATR_NUMRULE, FALSE,
                                                    (const SfxPoolItem**)&pNewNumRuleItem );
