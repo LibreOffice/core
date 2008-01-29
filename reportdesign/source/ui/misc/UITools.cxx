@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:50:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,8 @@
 #include <svx/charscaleitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/svdpagv.hxx>
+#include <toolkit/helper/convert.hxx>
+#include "SectionView.hxx"
 #ifndef RPTUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
@@ -865,7 +867,30 @@ uno::Sequence< ::rtl::OUString > getParameterNames( const uno::Reference< sdbc::
 
     return aNames;
 }
-
+// -----------------------------------------------------------------------------
+// check overlapping
+void correctOverlapping(SdrObject* pControl,::boost::shared_ptr<OReportSection> _pReportSection,bool _bInsert)
+{
+    OSectionView* pSectionView = _pReportSection->getView();
+    uno::Reference< report::XReportComponent> xComponent(pControl->getUnoShape(),uno::UNO_QUERY);
+    Rectangle aRet(VCLPoint(xComponent->getPosition()),VCLSize(xComponent->getSize()));
+    aRet.setHeight(aRet.getHeight() + 1);
+    aRet.setWidth(aRet.getWidth() + 1);
+    bool bOverlapping = true;
+    while ( bOverlapping )
+    {
+        SdrObject* pOverlappedObj = isOver(aRet,*_pReportSection->getPage(),*pSectionView,true,pControl);
+        bOverlapping = pOverlappedObj != NULL;
+        if ( bOverlapping )
+        {
+            const Rectangle& aLogicRect = pOverlappedObj->GetLogicRect();
+            aRet.Move(0,aLogicRect.Top() + aLogicRect.getHeight() - aRet.Top());
+            xComponent->setPositionY(aRet.Top());
+        }
+    }
+    if ( !bOverlapping && _bInsert ) // now insert objects
+        pSectionView->InsertObjectAtView(pControl,*pSectionView->GetSdrPageView(),SDRINSERT_ADDMARK);
+}
 // -----------------------------------------------------------------------------
 } // namespace rptui
 // -----------------------------------------------------------------------------
