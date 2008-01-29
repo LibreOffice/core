@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:57:18 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:45:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,23 +175,48 @@ const XMLPropertyHandler* OPropertyHandlerFactory::GetPropertyHandler(sal_Int32 
 #define MAP_CONST_C( name, prefix, token, type, context )  { name, name.length,         XML_NAMESPACE_##prefix, XML_##token, type|XML_TYPE_PROP_TABLE_CELL, context }
 #define MAP_END()   { NULL, 0, 0, XML_TOKEN_INVALID, 0 ,0}
 // -----------------------------------------------------------------------------
-UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap()
+UniReference < XMLPropertySetMapper > OXMLHelper::GetCellStylePropertyMap(bool _bOldFormat)
 {
-    static const XMLPropertyMapEntry s_aXMLCellStylesProperties[] =
+    if ( _bOldFormat )
     {
-        MAP_CONST_C(      PROPERTY_FORMATKEY,      STYLE,     DATA_STYLE_NAME,        XML_TYPE_NUMBER | MID_FLAG_SPECIAL_ITEM, CTF_RPT_NUMBERFORMAT ),
+        static const XMLPropertyMapEntry s_aXMLCellStylesProperties[] =
+        {
+            MAP_CONST_C(      PROPERTY_FORMATKEY,      STYLE,     DATA_STYLE_NAME,        XML_TYPE_NUMBER | MID_FLAG_SPECIAL_ITEM, CTF_RPT_NUMBERFORMAT ),
 
-        MAP_CONST_P(      PROPERTY_CONTROLBACKGROUND,
-                                              FO,     BACKGROUND_COLOR,     XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
-        MAP_CONST_P(      PROPERTY_CONTROLBACKGROUNDTRANSPARENT,
-                                              FO,     BACKGROUND_COLOR,     XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
-        MAP_CONST_C_ASCII(      "BorderLeft",       FO,     BORDER_LEFT,           XML_TYPE_BORDER, 0 ),
-        MAP_CONST_C_ASCII(      "BorderRight",      FO,     BORDER_RIGHT,          XML_TYPE_BORDER, 0 ),
-        MAP_CONST_C_ASCII(      "BorderTop",        FO,     BORDER_TOP,            XML_TYPE_BORDER, 0 ),
-        MAP_CONST_C_ASCII(      "BorderBottom",     FO,     BORDER_BOTTOM,         XML_TYPE_BORDER, 0 ),
-        MAP_END()
-    };
-    return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aXMLCellStylesProperties,new OPropertyHandlerFactory());
+            MAP_CONST_C(      PROPERTY_CONTROLBACKGROUND,
+                                                FO,   BACKGROUND_COLOR,     XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+            MAP_CONST_C(      PROPERTY_CONTROLBACKGROUNDTRANSPARENT,
+                                                FO,   BACKGROUND_COLOR,     XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+            MAP_CONST_P(      PROPERTY_CONTROLBACKGROUND,
+                                                FO,   BACKGROUND_COLOR,     XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+            MAP_CONST_P(      PROPERTY_CONTROLBACKGROUNDTRANSPARENT,
+                                                FO,   BACKGROUND_COLOR,     XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+            MAP_CONST_C_ASCII(      "BorderLeft",       FO,     BORDER_LEFT,           XML_TYPE_BORDER, 0 ),
+            MAP_CONST_C_ASCII(      "BorderRight",      FO,     BORDER_RIGHT,          XML_TYPE_BORDER, 0 ),
+            MAP_CONST_C_ASCII(      "BorderTop",        FO,     BORDER_TOP,            XML_TYPE_BORDER, 0 ),
+            MAP_CONST_C_ASCII(      "BorderBottom",     FO,     BORDER_BOTTOM,         XML_TYPE_BORDER, 0 ),
+            MAP_END()
+        };
+        return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aXMLCellStylesProperties,new OPropertyHandlerFactory());
+    }
+    else
+    {
+        static const XMLPropertyMapEntry s_aXMLCellStylesProperties[] =
+        {
+            MAP_CONST_C(      PROPERTY_FORMATKEY,      STYLE,     DATA_STYLE_NAME,        XML_TYPE_NUMBER | MID_FLAG_SPECIAL_ITEM, CTF_RPT_NUMBERFORMAT ),
+
+            MAP_CONST_C(      PROPERTY_CONTROLBACKGROUND,
+                                                FO,   BACKGROUND_COLOR,     XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY, 0 ),
+            MAP_CONST_C(      PROPERTY_CONTROLBACKGROUNDTRANSPARENT,
+                                                FO,   BACKGROUND_COLOR,     XML_TYPE_ISTRANSPARENT|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+            MAP_CONST_C_ASCII(      "BorderLeft",       FO,     BORDER_LEFT,           XML_TYPE_BORDER, 0 ),
+            MAP_CONST_C_ASCII(      "BorderRight",      FO,     BORDER_RIGHT,          XML_TYPE_BORDER, 0 ),
+            MAP_CONST_C_ASCII(      "BorderTop",        FO,     BORDER_TOP,            XML_TYPE_BORDER, 0 ),
+            MAP_CONST_C_ASCII(      "BorderBottom",     FO,     BORDER_BOTTOM,         XML_TYPE_BORDER, 0 ),
+            MAP_END()
+        };
+        return new XMLPropertySetMapper((XMLPropertyMapEntry*)s_aXMLCellStylesProperties,new OPropertyHandlerFactory());
+    }
 }
 // -----------------------------------------------------------------------------
 const XMLPropertyMapEntry* OXMLHelper::GetTableStyleProps()
