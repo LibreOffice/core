@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:23:43 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:24:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,9 +141,7 @@ UINT16  nShrCnt;
 size_t ShrfmlaBuffer::ScAddressHashFunc::operator() (const ScAddress &addr) const
 {
     // Use something simple, it is just a hash.
-    return (static_cast <UINT16> (addr.Row()) << 0) |
-           (static_cast <UINT8> (addr.Col()) << 16) |
-           (static_cast <UINT8> (addr.Tab()) << 24);
+    return static_cast< UINT16 >( addr.Row() ) | (static_cast< UINT8 >( addr.Col() ) << 16);
 }
 
 const size_t nBase = 16384; // Range~ und Shared~ Dingens mit jeweils der Haelfte Ids
@@ -158,6 +156,13 @@ ShrfmlaBuffer::ShrfmlaBuffer( RootData* pRD ) :
 
 ShrfmlaBuffer::~ShrfmlaBuffer()
 {
+}
+
+void ShrfmlaBuffer::Clear()
+{
+    index_hash.clear();
+    // do not clear index_list, index calculation depends on complete list size...
+    // do not change mnCurrIdx
 }
 
 void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
