@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fixedhyper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:24:25 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:24:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,14 +46,14 @@ namespace svt
 // class FixedHyperlink --------------------------------------------------
 
 FixedHyperlink::FixedHyperlink( Window* pParent, const ResId& rResId ) :
-    FixedText( pParent, rResId ),
+    ::toolkit::FixedHyperlinkBase( pParent, rResId ),
     m_nTextLen(0)
 {
     Initialize();
 }
 
 FixedHyperlink::FixedHyperlink( Window* pParent, WinBits nWinStyle  ) :
-    FixedText( pParent, nWinStyle ),
+    ::toolkit::FixedHyperlinkBase( pParent, nWinStyle ),
     m_nTextLen(0)
 {
     Initialize();
@@ -91,7 +91,7 @@ void FixedHyperlink::MouseButtonUp( const MouseEvent& )
 {
     // calls the link if the control is enabled and the mouse is over the text.
     if ( IsEnabled() && GetPointerPosPixel().X() < m_nTextLen )
-        m_aClickHdl.Call( this );
+        ImplCallEventListenersAndHandler( VCLEVENT_BUTTON_CLICK, m_aClickHdl, this );
 }
 
 void FixedHyperlink::RequestHelp( const HelpEvent& rHEvt )
@@ -132,6 +132,11 @@ void FixedHyperlink::SetURL( const String& rNewURL )
 {
     m_sURL = rNewURL;
     SetQuickHelpText( m_sURL );
+}
+
+String  FixedHyperlink::GetURL() const
+{
+    return m_sURL;
 }
 
 void FixedHyperlink::SetDescription( const String& rNewDescription )
