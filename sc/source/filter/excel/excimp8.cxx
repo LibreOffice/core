@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 10:41:47 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:24:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,7 +330,7 @@ void ImportExcel8::EndSheet( void )
 
 void ImportExcel8::PostDocLoad( void )
 {
-    // filtered ranges before outlines and hidden rows
+    // #i11776# filtered ranges before outlines and hidden rows
     if( pExcRoot->pAutoFilterBuffer )
         pExcRoot->pAutoFilterBuffer->Apply();
 
