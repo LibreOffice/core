@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 07:56:58 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:40:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -554,7 +554,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
 
 Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) throw( SecurityException , RuntimeException )
 {
-    X509Certificate_NssImpl* xcert ;
+    X509Certificate_NssImpl* xcert = NULL;
 
     if( m_pHandler != NULL ) {
         CERTIssuerAndSN issuerAndSN ;
