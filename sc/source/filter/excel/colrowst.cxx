@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:21:13 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:23:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ void XclImpColRowSettings::SetHeight( SCROW nScRow, sal_uInt16 nHeight )
         maHeights[ nScRow ] = nRawHeight;
         sal_uInt8& rnFlags = maRowFlags[ nScRow ];
         ::set_flag( rnFlags, EXC_COLROW_USED );
-        if( nRawHeight == 0 )
+        if( !bDefHeight && (nRawHeight == 0) )
             ::set_flag( rnFlags, EXC_COLROW_HIDDEN );
         ::set_flag( rnFlags, EXC_COLROW_DEFAULT, bDefHeight );
         if( nScRow > mnLastScRow )
@@ -304,7 +304,8 @@ void XclImpColRowSettings::ConvertHiddenFlags( SCTAB nScTab )
     if( GetBiff() == EXC_BIFF8 )
     {
         const XclImpAutoFilterData* pFilter = GetFilterManager().GetByTab( nScTab );
-        if( pFilter && pFilter->IsActive() )
+        // #i70026# use IsFiltered() to set the CR_FILTERED flag for active filters only
+        if( pFilter && pFilter->IsActive() && pFilter->IsFiltered() )
         {
             nFirstFilterScRow = pFilter->StartRow();
             nLastFilterScRow = pFilter->EndRow();
