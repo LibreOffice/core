@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:56:50 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:05:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,6 +323,7 @@ void SdrPaintView::ImpClearVars()
     bPageVisible=TRUE;
     bPageBorderVisible=TRUE;
     bBordVisible=TRUE;
+    bBordVisibleOnlyLeftRight=FALSE;
     bGridVisible=TRUE;
     bGridFront  =FALSE;
     bHlplVisible=TRUE;
