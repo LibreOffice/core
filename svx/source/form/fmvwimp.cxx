@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:24:39 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:10:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,7 +317,7 @@ FmXPageViewWinRec::~FmXPageViewWinRec()
 //------------------------------------------------------------------
 void FmXPageViewWinRec::dispose()
 {
-    for (vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
+    for (::std::vector< Reference< XFormController > >::const_iterator i = m_aControllerList.begin();
             i != m_aControllerList.end(); i++)
     {
         // detaching the events
@@ -754,7 +754,7 @@ IMPL_LINK(FmXFormView, OnActivate, void*, /*EMPTYTAG*/)
 
         if (pFmRec)
         {
-            for (vector< Reference< XFormController > >::const_iterator i = pFmRec->GetList().begin();
+            for (::std::vector< Reference< XFormController > >::const_iterator i = pFmRec->GetList().begin();
                 i != pFmRec->GetList().end(); i++)
             {
                 const Reference< XFormController > & xController = *i;
