@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtvfldi.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:56:03 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:32:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -638,8 +638,8 @@ XMLUserFieldInputImportContext::XMLUserFieldInputImportContext(
                                  nPrfx, rLocalName,
                                  // name, description, style
                                  sal_True, sal_False, sal_False,
-                                 sal_False, sal_False,
                                  sal_True, sal_False, sal_False,
+                                 sal_False, sal_False,
                                  sal_False /*???*/, sal_True, sal_False,
                                  sal_False)
 {
