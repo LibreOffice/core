@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:10:57 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:17:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,187 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#define _BIGINT_HXX
-#define _SFXMULTISEL_HXX
-//#define _STACK_HXX
-//#define _QUEUE_HXX
-#define _DYNARR_HXX
-#define _TREELIST_HXX
-#define _CACHESTR_HXX
-#define _NEW_HXX
-//#define _SHL_HXX ***
-//#define _LINK_HXX ***
-//#define _ERRCODE_HXX ***
-//#define _GEN_HXX ***
-//#define _FRACT_HXX ***
-//#define _STRING_HXX ***
-//#define _MTF_HXX ***
-//#define _CONTNR_HXX ***
-//#define _LIST_HXX ***
-//#define _TABLE_HXX ***
-#define _DYNARY_HXX
-//#define _UNQIDX_HXX ***
-//#define _SVMEMPOOL_HXX ***
-//#define _UNQID_HXX ***
-//#define _DEBUG_HXX ***
-//#define _DATE_HXX ***
-//#define _TIME_HXX ***
-//#define _DATETIME_HXX ***
-//#define _INTN_HXX ***
-//#define _WLDCRD_HXX ***
-//#define _FSYS_HXX ***
-//#define _STREAM_HXX ***
-#define _CACHESTR_HXX
-#define _SV_MULTISEL_HXX
-
-
-
-#define _SV_NOXSOUND
-
-#define _BASDLG_HXX
-#define _CACHESTR_HXX
-#define _CTRLTOOL_HXX
-#define _DLGCFG_HXX
-#define _EXTATTR_HXX
-#define _FILDLG_HXX
-#define _FRM3D_HXX
-#define _INTRO_HXX
-#define _ISETBWR_HXX
-#define _NO_SVRTF_PARSER_HXX
-#define _MACRODLG_HXX
-#define _MODALDLG_HXX
-#define _MOREBUTTON_HXX
-#define _OUTLINER_HXX
-#define _PASSWD_HXX
-//#define _QUEUE_HXX
-#define _RULER_HXX
-#define _SCRWIN_HXX
-#define _SETBRW_HXX
-#define _STATUS_HXX
-#define _STDMENU_HXX
-#define _TABBAR_HXX
-#define _RULER_HXX
-#define _SCRWIN_HXX
-#define _SELENG_HXX
-#define _SETBRW_HXX
-#define _SOUND_HXX
-#define _STATUS_HXX
-#define _STDMENU_HXX
-
-
-//#define _PRNDLG_HXX ***
-//#define _POLY_HXX **
-// TOOLS
-#define _BIGINT_HXX
-#define _SFXMULTISEL_HXX
-//#define _STACK_HXX
-//#define _QUEUE_HXX
-#define _DYNARR_HXX
-#define _TREELIST_HXX
-#define _CACHESTR_HXX
-
-//SV
-//#define _CLIP_HXX
-#define _CONFIG_HXX
-#define _CURSOR_HXX
-#define _FONTDLG_HXX
-#define _PRVWIN_HXX
-
-#ifndef OS2
-#define _MENUBTN_HXX
-#endif
-
-//#define _SOBASE_HXX
-//#define _SOSTOR_HXX
-//#define _SOCORE_HXX
-//#define _SOINPL_HXX
-
-#define _SFX_DOCFILE_HXX
-#define _SFX_DOCFILT_HXX
-#define _SFX_DOCINF_HXX
-#define _SFX_DOCSH_HXX
-#define _SFX_INTERNO_HXX
-#define _SFX_PRNMON_HXX
-#define _SFX_RESMGR_HXX
-#define _SFX_TEMPLDLG_HXX
-#define _SFXAPPWIN_HXX
-#define _SFXBASIC_HXX
-#define _SFXCTRLITEM
-#define _SFXDLGCFG_HXX
-#define _SFXDISPATCH_HXX
-#define _SFXDOCFILE_HXX
-#define _SFXDOCMAN_HXX
-#define _SFXDOCMGR_HXX
-#define _SFXDOCTDLG_HXX
-#define _SFXFILEDLG_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXIPFRM_HXX
-#define _SFX_MACRO_HXX
-#define _SFXMNUITEM_HXX
-#define _SFXMNUMGR_HXX
-#define _SFXMULTISEL_HXX
-//#define _SFXMSG_HXX
-#define _SFXMSGDESCR_HXX
-#define _SFXMSGPOOL_HXX
-#define _SFX_MINFITEM_HXX
-#define _SFXOBJFACE_HXX
-#define _SFXOBJFAC_HXX
-#define _SFX_SAVEOPT_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXSTBMGR_HXX
-#define _SFXTBXCTRL_HXX
-#define _SFXTBXMGR_HXX
-
-//#define _SI_HXX
-//#define SI_NODRW
-#define _SI_DLL_HXX
-#define _SIDLL_HXX
-#define _SI_NOITEMS
-#define _SI_NOOTHERFORMS
-#define _SI_NOSBXCONTROLS
-#define _SINOSBXCONTROLS
-#define _SI_NODRW         //
-#define _SI_NOCONTROL
-#define _VCBRW_HXX
-#define _VCTRLS_HXX
-//#define _VCSBX_HXX
-#define _VCONT_HXX
-#define _VDRWOBJ_HXX
-#define _VCATTR_HXX
-
-
-#define _SVBOXITM_HXX
-#define _SVCONTNR_HXX
-#define _SVDIALDLL_HXX
-//#define _SVDATTR_HXX
-#define _SVDRAG_HXX
-#define _SVDXOUT_HXX
-#define _SVDEC_HXX
-#define _SVDIO_HXX
-//#define _SVDLAYER_HXX
-#define _SVINCVW_HXX
-#define _SV_MULTISEL_HXX
-#define _SVRTV_HXX
-#define _SVTABBX_HXX
-#define _SVTREEBOX_HXX
-#define _SVTREELIST_HXX
-
-#define _SVX_DAILDLL_HXX
-#define _SVX_HYPHEN_HXX
-#define _SVX_IMPGRF_HXX
-#define _SVX_OPTITEMS_HXX
-#define _SVX_OPTGERL_HXX
-#define _SVX_OPTSAVE_HXX
-#define _SVX_OPTSPELL_HXX
-#define _SVX_OPTPATH_HXX
-#define _SVX_OPTLINGU_HXX
-#define _SVX_RULER_HXX
-#define _SVX_RULRITEM_HXX
-#define _SVX_SPLWRAP_HXX
-#define _SVX_SPLDLG_HXX
-#define _SVX_THESDLG_HXX
-
-
 // INCLUDE ---------------------------------------------------------------
 
 #define _ZFORLIST_DECLARE_TABLE
@@ -226,9 +45,8 @@
 #include <svx/editeng.hxx>
 #include <svx/forbiddencharacterstable.hxx>
 #include <svx/linkmgr.hxx>
-#ifndef _SVDPOOL_HXX
 #include <svx/svdpool.hxx>
-#endif
+#include <svx/svdobj.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/printer.hxx>
@@ -726,7 +544,9 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, const ScMarkData* pMarks )
                 }
     }
     else
+    {
         DBG_ERROR("ResetClip");
+    }
 }
 
 void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
@@ -742,7 +562,9 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
         nMaxTableNumber = nTab+1;
     }
     else
+    {
         DBG_ERROR("ResetClip");
+    }
 }
 
 void lcl_RefreshPivotData( ScPivotCollection* pColl )
