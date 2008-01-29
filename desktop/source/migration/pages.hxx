@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:13:22 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ private:
     FixedText m_ftHead;
     FixedText m_ftBody;
     svt::OWizardMachine *m_pParent;
+    sal_Bool m_bLicenseNeedsAcceptance;
     enum OEMType
     {
         OEM_NONE, OEM_NORMAL, OEM_EXTENDED
@@ -65,7 +66,7 @@ private:
 
 
 public:
-    WelcomePage( svt::OWizardMachine* parent, const ResId& resid);
+    WelcomePage( svt::OWizardMachine* parent, const ResId& resid, sal_Bool bLicenseNeedsAcceptance );
 protected:
     virtual void ActivatePage();
 };
@@ -111,7 +112,7 @@ private:
     PushButton m_pbDown;
     sal_Bool m_bLicenseRead;
 public:
-    LicensePage( svt::OWizardMachine* parent, const ResId& resid);
+    LicensePage( svt::OWizardMachine* parent, const ResId& resid, const rtl::OUString &rLicensePath );
 private:
     DECL_LINK(PageDownHdl, PushButton*);
     DECL_LINK(EndReachedHdl, LicenseView*);
