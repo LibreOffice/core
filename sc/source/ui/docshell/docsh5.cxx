@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:07:51 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -706,7 +706,9 @@ void ScDocShell::UseScenario( SCTAB nTab, const String& rName, BOOL bRecord )
         }
     }
     else
+    {
         DBG_ERROR( "UseScenario auf Szenario-Blatt" );
+    }
 }
 
 void ScDocShell::ModifyScenario( SCTAB nTab, const String& rName, const String& rComment,
