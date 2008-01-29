@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formula.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:14:42 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:42:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,8 @@
 #include <vcl/svapp.hxx>
 #include <vcl/mnemonic.hxx>
 #include <unotools/charclass.hxx>
-
-#ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
-#endif
+#include <tools/urlobj.hxx>
 
 #include "formula.hxx"
 #include "formdlgs.hrc"
@@ -1513,7 +1511,10 @@ void ScFormulaDlg::SetReference( const ScRange& rRef, ScDocument* pRefDoc )
             rRef.Format( aTmp, SCA_VALID|SCA_TAB_3D, pRefDoc );     // immer 3d
 
             SfxObjectShell* pObjSh = pRefDoc->GetDocumentShell();
-            String aFileName = pObjSh->GetMedium()->GetName();
+
+            // #i75893# convert escaped URL of the document to something user friendly
+//           String aFileName = pObjSh->GetMedium()->GetName();
+            String aFileName = pObjSh->GetMedium()->GetURLObject().GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
 
             aRefStr = '\'';
             aRefStr += aFileName;
