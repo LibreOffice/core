@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:42:21 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:41:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,7 +340,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     GetUndoManager()->LeaveListAction();
             }
             else
+            {
                 DBG_ERROR( "arguments expected" );
+            }
         }
         break;
 
@@ -475,11 +477,15 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     }
                 }
                 else
+                {
                     DBG_ERROR("UpdateChartArea: keine ViewShell oder falsche Daten");
+                }
                 rReq.Done();
             }
             else
+            {
                 DBG_ERROR("SID_CHART_SOURCE ohne Argumente");
+            }
             break;
 
         case FID_AUTO_CALC:
