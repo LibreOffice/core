@@ -46,9 +46,9 @@
  *
  *  $RCSfile: parseAFM.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 11:54:43 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:08:31 $
  *
  ************************************************************************/
 
@@ -285,7 +285,7 @@ static char *token( FileInputStream* stream, int& rLen )
         ;
 
     idx = 0;
-    while( ch != -1 && ! is_delimiter_Array[ ch & 255 ] )
+    while( ch != -1 && ! is_delimiter_Array[ ch & 255 ] && idx < MAX_NAME-1 )
     {
         ident[idx++] = ch;
         ch = stream->getChar();
@@ -317,7 +317,7 @@ static char *linetoken( FileInputStream* stream )
     while ((ch = stream->getChar()) == ' ' || ch == '\t' );
 
     idx = 0;
-    while (ch != -1 && ch != lineterm && ch != '\r')
+    while (ch != -1 && ch != lineterm && ch != '\r' && idx < MAX_NAME-1 )
     {
         ident[idx++] = ch;
         ch = stream->getChar();
