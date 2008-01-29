@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rolbck.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:29:49 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:39:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,7 +372,8 @@ void SwSetTxtHint::SetInDoc( SwDoc* pDoc, BOOL )
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
 
-    pTxtNd->InsertItem( *pAttr, nStart, nEnd,
+    if( pTxtNd )
+        pTxtNd->InsertItem( *pAttr, nStart, nEnd,
                         nsSetAttrMode::SETATTR_NOTXTATRCHR | nsSetAttrMode::SETATTR_NOHINTADJUST );
 }
 
@@ -428,7 +429,8 @@ void SwSetTxtFldHint::SetInDoc( SwDoc* pDoc, BOOL )
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
 
-    pTxtNd->InsertItem( *pFld, nPos, nPos, nsSetAttrMode::SETATTR_NOTXTATRCHR );
+    if( pTxtNd )
+        pTxtNd->InsertItem( *pFld, nPos, nPos, nsSetAttrMode::SETATTR_NOTXTATRCHR );
 }
 
 
@@ -447,6 +449,8 @@ void SwSetRefMarkHint::SetInDoc( SwDoc* pDoc, BOOL )
 {
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
+    if( !pTxtNd )
+        return;
 
     SwFmtRefMark aRefMark( aRefName );
 
@@ -474,6 +478,8 @@ void SwSetTOXMarkHint::SetInDoc( SwDoc* pDoc, BOOL )
 {
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
+    if( !pTxtNd )
+        return;
 
     // suche den entsprechenden Verzeichnistyp
     USHORT nCnt = pDoc->GetTOXTypeCount( eTOXTypes );
@@ -521,8 +527,8 @@ void SwResetTxtHint::SetInDoc( SwDoc* pDoc, BOOL )
 {
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
-
-    pTxtNd->Delete( nAttr, nStart, nEnd );
+    if( pTxtNd )
+        pTxtNd->Delete( nAttr, nStart, nEnd );
 }
 
 
@@ -577,6 +583,8 @@ void SwSetFtnHint::SetInDoc( SwDoc* pDoc, BOOL )
 {
     SwTxtNode * pTxtNd = pDoc->GetNodes()[ nNode ]->GetTxtNode();
     ASSERT( pTxtNd, "Undo-TxtAttr: kein TextNode" );
+    if( !pTxtNd )
+        return;
 
     if ( pUndo )
     {
