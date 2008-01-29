@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:52:24 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:40:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -847,8 +847,6 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
 void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
 {
     sal_Bool bSaveWriteAll = bWriteAll;     // sichern
-    sal_uInt16 nSaveBkmkTabPos =  nBkmkTabPos;
-
 
     // suche die naechste text::Bookmark-Position aus der text::Bookmark-Tabelle
     nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : USHRT_MAX;
@@ -881,10 +879,12 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
             else if( pNd->IsTableNode() )
             {
                 OutHTML_SwTblNode( *this, *pNd->GetTableNode(), 0 );
+                nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : USHRT_MAX;
             }
             else if( pNd->IsSectionNode() )
             {
                 OutHTML_Section( *this, *pNd->GetSectionNode() );
+                nBkmkTabPos = bWriteAll ? FindPos_Bkmk( *pCurPam->GetPoint() ) : USHRT_MAX;
             }
             else if( pNd == &pDoc->GetNodes().GetEndOfContent() )
                 break;
@@ -913,7 +913,6 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
     } while( CopyNextPam( &pPam ) );        // bis alle PaM's bearbeitet
 
     bWriteAll = bSaveWriteAll;          // wieder auf alten Wert zurueck
-    nBkmkTabPos = nSaveBkmkTabPos;
 }
 
 
@@ -1503,6 +1502,7 @@ HTMLSaveData::~HTMLSaveData()
     rWrt.pCurPam = pOldPam;
     rWrt.SetEndPaM( pOldEnd );
     rWrt.bWriteAll = bOldWriteAll;
+    rWrt.nBkmkTabPos = bOldWriteAll ? rWrt.FindPos_Bkmk( *pOldPam->GetPoint() ) : USHRT_MAX;
     rWrt.nLastParaToken = 0;
     rWrt.nDefListLvl = nOldDefListLvl;
     rWrt.nDirection = nOldDirection;
