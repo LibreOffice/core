@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:42:03 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:18:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -637,7 +637,9 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
                                 nZoom = 0;
                         }
                         else
+                        {
                             DBG_ERROR( "Missing StyleSheet :-/" );
+                        }
                     }
 
                     if ( nZoom > 0 )
