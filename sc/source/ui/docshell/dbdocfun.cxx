@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:55:01 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -593,7 +593,9 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
             pNewData->SetByRow( aLocalParam.bByRow );
         }
         else
+        {
             DBG_ERROR("Zielbereich nicht da");
+        }
     }
 
     ScRange aDirtyRange( aLocalParam.nCol1, aLocalParam.nRow1, nTab,
@@ -914,7 +916,9 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
             //  und Verwechslung mit dem Query-Param am Quellbereich (#37187#)
         }
         else
+        {
             DBG_ERROR("Zielbereich nicht da");
+        }
     }
 
     if (!bCopy)
