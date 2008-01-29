@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChangeTrackingExportHelper.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 16:33:30 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:33:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -798,7 +798,9 @@ void ScChangeTrackingExportHelper::WorkWithChangeAction(ScChangeAction* pAction)
     else if (pAction->GetType() == SC_CAT_REJECT)
         WriteRejection(pAction);
     else
+    {
         DBG_ERROR("not a writeable type");
+    }
     rExport.CheckAttrList();
 }
 
