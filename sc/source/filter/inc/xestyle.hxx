@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:56:46 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:30:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -474,6 +474,15 @@ public:
                             const XclExpRoot& rRoot,
                             const SfxStyleSheetBase& rStyleSheet );
 
+    /** Returns the cell protection settings of this XF. */
+    const XclExpCellProt& GetProtectionData() const { return maProtection; }
+    /** Returns the alignment settings of this XF. */
+    const XclExpCellAlign& GetAlignmentData() const { return maAlignment; }
+    /** Returns the cell border settings of this XF. */
+    const XclExpCellBorder& GetBorderData() const { return maBorder; }
+    /** Returns the cell fill settings of this XF. */
+    const XclExpCellArea& GetAreaData() const { return maArea; }
+
     /** Returns true, if this XF record represents the passed cell formatting.
         @descr  Searches for cell XFs only. */
     bool                Equals(
@@ -642,6 +651,9 @@ public:
     static sal_uInt32   GetXFIdFromIndex( sal_uInt16 nXFIndex );
     /** Returns the XF identifier representing the default cell XF. */
     static sal_uInt32   GetDefCellXFId();
+
+    /** Returns an XF record by its unique identifier. */
+    const XclExpXF*     GetXFById( sal_uInt32 nXFId ) const;
 
     /** Reduces the XF record list to the maximum allowed number of records. */
     void                Finalize();
