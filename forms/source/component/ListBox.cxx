@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 14:39:37 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -775,7 +775,7 @@ namespace frm
         }
 
         // Anzeige- und Werteliste fuellen
-        vector< ::rtl::OUString >   aValueList, aStringList;
+        ::std::vector< ::rtl::OUString >   aValueList, aStringList;
         aValueList.reserve(16);
         aStringList.reserve(16);
         sal_Bool bUseNULL = hasField() && !isRequired();
@@ -1139,7 +1139,7 @@ namespace frm
                         ::std::copy(
                             aThisEntryIndexes.getConstArray(),
                             aThisEntryIndexes.getConstArray() + aThisEntryIndexes.getLength(),
-                            insert_iterator< ::std::set< sal_Int16 > >( aSelectionSet, aSelectionSet.begin() )
+                            ::std::insert_iterator< ::std::set< sal_Int16 > >( aSelectionSet, aSelectionSet.begin() )
                             );
                     }
 
