@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryMetaData.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:30:02 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:41:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@ package com.sun.star.wizards.db;
 
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.container.XNameAccess;
 
 import java.util.*;
 import com.sun.star.lang.Locale;
@@ -46,7 +45,7 @@ public class QueryMetaData extends CommandMetaData {
 
     FieldColumn CurFieldColumn;
     public String Command;
-    Vector CommandNames;
+    Vector CommandNamesV;
     public PropertyValue[][] FilterConditions = new PropertyValue[][] {};
     public PropertyValue[][] GroupByFilterConditions = new PropertyValue[][] {};
     public String[] UniqueAggregateFieldNames = new String[]{};
@@ -115,7 +114,6 @@ public class QueryMetaData extends CommandMetaData {
 
 
     public void reorderFieldColumns(String[] _sDisplayFieldNames){
-        Vector numericfieldsvector = new java.util.Vector();
         FieldColumn[] LocFieldColumns = new FieldColumn[FieldColumns.length];
         for (int i = 0; i < _sDisplayFieldNames.length; i++){
             FieldColumn LocFieldColumn = this.getFieldColumnByDisplayName(_sDisplayFieldNames[i]);
@@ -140,43 +138,40 @@ public class QueryMetaData extends CommandMetaData {
 
 
     public void removeFieldColumn(String _sFieldName, String _sCommandName){
-        FieldColumn oFieldColumn = getFieldColumn(_sFieldName, _sCommandName);
-        int a = 0;
-        if (oFieldColumn != null){
-            FieldColumn[] LocFieldColumns = new FieldColumn[FieldColumns.length -1];
-            for (int i = 0; i < FieldColumns.length;i++){
-                if (!FieldColumns[i].FieldName.equals(_sFieldName))
-                    if (!FieldColumns[i].CommandName.equals(_sCommandName)){
-                        LocFieldColumns[a] = FieldColumns[i];
-                        a++;
+            FieldColumn oFieldColumn = getFieldColumn(_sFieldName, _sCommandName);
+            int a = 0;
+            if (oFieldColumn != null){
+                FieldColumn[] LocFieldColumns = new FieldColumn[FieldColumns.length -1];
+                for (int i = 0; i < FieldColumns.length;i++){
+                    if (!FieldColumns[i].FieldName.equals(_sFieldName))
+                        if (!FieldColumns[i].CommandName.equals(_sCommandName)){
+                                LocFieldColumns[a] = FieldColumns[i];
+                                a++;
+                        }
                 }
+                FieldColumns = LocFieldColumns;
             }
-            FieldColumns = LocFieldColumns;
         }
-    }
 
 
     public String[] getIncludedCommandNames() {
         FieldColumn CurQueryField;
-        CommandNames = new Vector(1);
+        CommandNamesV = new Vector(1);
         String CurCommandName;
-        int SearchIndex;
         for (int i = 0; i < FieldColumns.length; i++) {
             CurQueryField = FieldColumns[i];
             CurCommandName = CurQueryField.getCommandName();
-            if (!CommandNames.contains(CurCommandName))
-                CommandNames.addElement(CurCommandName);
+            if (!CommandNamesV.contains(CurCommandName))
+                CommandNamesV.addElement(CurCommandName);
         }
-        String[] sIncludedCommandNames = new String[CommandNames.size()];
-        CommandNames.toArray(sIncludedCommandNames);
+        String[] sIncludedCommandNames = new String[CommandNamesV.size()];
+        CommandNamesV.toArray(sIncludedCommandNames);
         return sIncludedCommandNames;
     }
 
 
     public static String[] getIncludedCommandNames(String[] _FieldNames) {
-        FieldColumn CurQueryField;
         Vector CommandNames = new Vector(1);
-        int SearchIndex;
         for (int i = 0; i < _FieldNames.length; i++) {
             String CurCommandName = "";
             String[] MetaList = JavaTools.ArrayoutofString(_FieldNames[i], ".");
@@ -200,11 +195,11 @@ public class QueryMetaData extends CommandMetaData {
 
     public void initializeFieldTitleSet(boolean _bAppendMode) {
         try {
-            this.getIncludedCommandNames();
+            this.getIncludedCommandNames(); // fills the var CommandNamesV indirectly :-(
             if (FieldTitleSet == null)
                 FieldTitleSet = new HashMap();
-            for (int i = 0; i < CommandNames.size(); i++) {
-                CommandObject oTable = getTableByName((String) CommandNames.elementAt(i));
+            for (int i = 0; i < CommandNamesV.size(); i++) {
+                CommandObject oTable = getTableByName((String) CommandNamesV.elementAt(i));
                 String sTableName = oTable.Name;
                 String[] LocFieldNames = oTable.xColumns.getElementNames();
                 for (int a = 0; a < LocFieldNames.length; a++) {
