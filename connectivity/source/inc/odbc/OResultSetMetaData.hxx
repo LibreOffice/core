@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:06:30 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:55:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,18 @@ namespace connectivity
             {}
             virtual ~OResultSetMetaData();
 
+
+            static  SWORD getNumColAttrib(OConnection* _pConnection
+                                              ,SQLHANDLE _aStatementHandle
+                                              ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface
+                                              ,sal_Int32 _column
+                                              ,sal_Int32 ident) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+            static SWORD getColumnODBCType(OConnection* _pConnection
+                                              ,SQLHANDLE _aStatementHandle
+                                              ,const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xInterface
+                                              ,sal_Int32 column)
+                                               throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             inline oslGenericFunction getOdbcFunction(sal_Int32 _nIndex)  const
             {
