@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeimporter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:54:35 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:02:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -301,7 +301,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                                   mnAscendingPrio,
                                   ::rtl::OUString(
                                       RTL_CONSTASCII_USTRINGPARAM(
-                                          "    com.sun.star.comp.sfx2.PluginObject" )),
+                                          "com.sun.star.comp.sfx2.PluginObject" )),
                                   aPropertyValues,
                                   sizeof(aPropertyValues)/sizeof(*aPropertyValues),
                                   mrContext );
@@ -324,7 +324,7 @@ ShapeSharedPtr ShapeImporter::createShape(
                                   mnAscendingPrio,
                                   ::rtl::OUString(
                                       RTL_CONSTASCII_USTRINGPARAM(
-                                          "com.su    n.star.comp.sfx2.AppletObject" )),
+                                          "com.sun.star.comp.sfx2.AppletObject" )),
                                   aPropertyValues,
                                   sizeof(aPropertyValues)/sizeof(*aPropertyValues),
                                   mrContext );
