@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:52:48 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:34:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,9 +51,7 @@
 #include "detdata.hxx"
 #endif
 
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
 
 class ScXMLImport;
 
