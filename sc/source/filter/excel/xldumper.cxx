@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 13:31:26 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -567,7 +567,12 @@ sal_uInt8 RootObjectBase::DumpErrorCode( const sal_Char* pcName )
 
 Color RootObjectBase::DumpRgbColor( const sal_Char* pcName )
 {
-    Color aColor( mxStrm->ReaduInt32() );
+    sal_uInt32 nRgb = mxStrm->ReaduInt32();
+    Color aColor;
+    aColor.SetRed( static_cast< sal_uInt8 >( nRgb & 0xFF ) );
+    aColor.SetGreen( static_cast< sal_uInt8 >( (nRgb >> 8) & 0xFF ) );
+    aColor.SetBlue( static_cast< sal_uInt8 >( (nRgb >> 16) & 0xFF ) );
+    aColor.SetTransparency( static_cast< sal_uInt8 >( (nRgb >> 24) & 0xFF ) );
     WriteColorItem( pcName ? pcName : "color-rgb", aColor );
     return aColor;
 }
@@ -2037,7 +2042,7 @@ void WorkbookStreamObject::ImplDumpRecord()
             DumpRect< sal_Int32 >( "position", (eBiff <= EXC_BIFF4) ? "CONV-TWIP-TO-CM" : "" );
             DumpHex< sal_uInt16 >( "flags", "CHTEXT-FLAGS" );
             if( eBiff == EXC_BIFF8 ) DumpColorIdx< sal_uInt16 >();
-            if( eBiff == EXC_BIFF8 ) DumpDec< sal_uInt16 >( "placement", "CHTEXT-PLACEMENT" );
+            if( eBiff == EXC_BIFF8 ) DumpHex< sal_uInt16 >( "flags2", "CHTEXT-FLAGS2-BIFF8" );
             if( eBiff == EXC_BIFF8 ) DumpDec< sal_uInt16 >( "rotation", "TEXTROTATION" );
         break;
 
@@ -2187,16 +2192,16 @@ void WorkbookStreamObject::ImplDumpRecord()
                 sal_uInt8 nDescrLen = DumpDec< sal_uInt8 >( "description-text-len" );
                 sal_uInt8 nHelpLen = DumpDec< sal_uInt8 >( "help-text-len" );
                 sal_uInt8 nStatusLen = DumpDec< sal_uInt8 >( "statusbar-text-len" );
-                WriteStringItem( "name", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nNameLen ) : rStrm.ReadByteString( nNameLen ) );
+                WriteStringItem( "name", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nNameLen ) : rStrm.ReadRawByteString( nNameLen ) );
                 GetFormulaDumper().DumpNameFormula( 0, nFmlaSize );
-                if( nMenuLen > 0 ) WriteStringItem( "menu-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nMenuLen ) : rStrm.ReadByteString( nMenuLen ) );
-                if( nDescrLen > 0 ) WriteStringItem( "description-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nDescrLen ) : rStrm.ReadByteString( nDescrLen ) );
-                if( nHelpLen > 0 ) WriteStringItem( "help-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nHelpLen ) : rStrm.ReadByteString( nHelpLen ) );
-                if( nStatusLen > 0 ) WriteStringItem( "statusbar-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nStatusLen ) : rStrm.ReadByteString( nStatusLen ) );
+                if( nMenuLen > 0 ) WriteStringItem( "menu-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nMenuLen ) : rStrm.ReadRawByteString( nMenuLen ) );
+                if( nDescrLen > 0 ) WriteStringItem( "description-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nDescrLen ) : rStrm.ReadRawByteString( nDescrLen ) );
+                if( nHelpLen > 0 ) WriteStringItem( "help-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nHelpLen ) : rStrm.ReadRawByteString( nHelpLen ) );
+                if( nStatusLen > 0 ) WriteStringItem( "statusbar-text", (eBiff == EXC_BIFF8) ? rStrm.ReadUniString( nStatusLen ) : rStrm.ReadRawByteString( nStatusLen ) );
             }
             else
             {
-                WriteStringItem( "name", rStrm.ReadByteString( nNameLen ) );
+                WriteStringItem( "name", rStrm.ReadRawByteString( nNameLen ) );
                 GetFormulaDumper().DumpNameFormula( 0, nFmlaSize );
                 if( eBiff == EXC_BIFF2 ) GetFormulaDumper().DumpFormulaSize();
             }
