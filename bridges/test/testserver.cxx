@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testserver.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:03:57 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:41:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,11 +95,11 @@ public:
               sal_Bool bLatency ) :
         m_rAcceptor( r ),
         m_rBridgeFactory ( rFactory ),
+        m_rSMgr( rSMgr ),
         m_sConnectionDescription( sConnectionDescription ),
         m_sProtocol( sProtocol ),
         m_bReverse( bReverse ),
-        m_bLatency( bLatency ),
-        m_rSMgr( rSMgr )
+        m_bLatency( bLatency )
         {}
     virtual void SAL_CALL run();
 
