@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkwindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:10:33 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:20:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,19 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_vcl.hxx"
 
-#include "atkwindow.hxx"
-
 #include <plugins/gtk/gtkframe.hxx>
+#include <vcl/window.hxx>
+
+#include "atkwindow.hxx"
+#include "atkregistry.hxx"
+
+using namespace ::com::sun::star::accessibility;
+using namespace ::com::sun::star::uno;
 
 extern "C" {
 
 static void (* window_real_initialize) (AtkObject *obj, gpointer data) = NULL;
+static void (* window_real_finalize) (GObject *obj) = NULL;
 static G_CONST_RETURN gchar* (* window_real_get_name) (AtkObject *accessible) = NULL;
 
 static gint
@@ -67,6 +73,18 @@ static void
 ooo_window_wrapper_real_initialize(AtkObject *obj, gpointer data)
 {
     window_real_initialize(obj, data);
+
+    GtkSalFrame *pFrame = GtkSalFrame::getFromWindow( GTK_WINDOW( data ) );
+    if( pFrame )
+    {
+        Window *pWindow = pFrame->GetWindow();
+        if( pWindow )
+        {
+            Reference< XAccessible > xAccessible( pWindow->GetAccessible(true) );
+            ooo_wrapper_registry_add( xAccessible, obj );
+            g_object_set_data( G_OBJECT(obj), "ooo:registry-key", xAccessible.get() );
+        }
+    }
 
     /* GetAtkRole returns ATK_ROLE_INVALID for all non VCL windows, i.e.
      * native Gtk+ file picker etc.
@@ -115,9 +133,19 @@ ooo_window_wrapper_real_get_name(AtkObject *accessible)
 /*****************************************************************************/
 
 static void
+ooo_window_wrapper_real_finalize (GObject *obj)
+{
+    ooo_wrapper_registry_remove( (XAccessible *) g_object_get_data( obj, "ooo:registry-key" ));
+    window_real_finalize( obj );
+}
+
+/*****************************************************************************/
+
+static void
 ooo_window_wrapper_class_init (AtkObjectClass *klass, gpointer)
 {
     AtkObjectClass *atk_class;
+    GObjectClass *gobject_class;
     gpointer data;
 
     /*
@@ -133,6 +161,11 @@ ooo_window_wrapper_class_init (AtkObjectClass *klass, gpointer)
 
     window_real_get_name = atk_class->get_name;
     atk_class->get_name = ooo_window_wrapper_real_get_name;
+
+    gobject_class = G_OBJECT_CLASS (data);
+
+    window_real_finalize = gobject_class->finalize;
+    gobject_class->finalize = ooo_window_wrapper_real_finalize;
 }
 
 } // extern "C"
