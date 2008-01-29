@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfextoutdevdata.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:10:16 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:21:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,16 +79,17 @@ class VCL_DLLPUBLIC PDFExtOutDevData : public ExtOutDevData
 
     const OutputDevice& mrOutDev;
 
-    sal_Bool                    mbTaggedPDF;
-    sal_Bool                    mbExportNotes;
-    sal_Bool                    mbTransitionEffects;
-    sal_Bool                    mbUseLosslessCompression;
-    sal_Bool                    mbReduceImageResolution;
-    sal_Bool                    mbExportFormFields;
-    sal_Bool                    mbExportBookmarks;
-    sal_Bool                    mbExportNDests; //i56629
-    sal_Int32                   mnFormsFormat;
-    sal_Int32                   mnPage;
+    sal_Bool                        mbTaggedPDF;
+    sal_Bool                        mbExportNotes;
+    sal_Bool                        mbTransitionEffects;
+    sal_Bool                        mbUseLosslessCompression;
+    sal_Bool                        mbReduceImageResolution;
+    sal_Bool                        mbExportFormFields;
+    sal_Bool                        mbExportBookmarks;
+    sal_Bool                        mbExportNDests; //i56629
+    sal_Int32                       mnFormsFormat;
+    sal_Int32                       mnPage;
+    com::sun::star::lang::Locale    maDocLocale;
 
     PageSyncData*               mpPageSyncData;
     GlobalSyncData*             mpGlobalSyncData;
@@ -138,6 +139,9 @@ public :
 
     sal_Bool    GetIsReduceImageResolution() const;
     void        SetIsReduceImageResolution( const sal_Bool bReduceImageResolution );
+
+    const com::sun::star::lang::Locale& GetDocumentLocale() const;
+    void        SetDocumentLocale( const com::sun::star::lang::Locale& rLoc );
 
     std::vector< PDFExtOutDevBookmarkEntry >& GetBookmarks();
 
@@ -372,10 +376,14 @@ public :
     @param eType
     denotes what kind of element to begin (e.g. a heading or paragraph)
 
+    @param rAlias
+    the specified alias will be used as structure tag. Also an entry in the PDF's
+    role map will be created mapping alias to regular structure type.
+
     @returns
     the id of the newly created structural element
      */
-    sal_Int32 BeginStructureElement( PDFWriter::StructElement eType );
+     sal_Int32 BeginStructureElement( PDFWriter::StructElement eType, const rtl::OUString& rAlias = rtl::OUString() );
     /** end a logical structure element
 
     @see BeginStructureElement
