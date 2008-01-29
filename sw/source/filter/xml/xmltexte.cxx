@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:29:37 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -520,6 +520,8 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
         aAny = rPropSet->getPropertyValue( sFrameStyleName );
         aAny >>= sStyle;
     }
+    // svg:desc
+    exportAlternativeText( rPropSet, rPropSetInfo );
 
     const XMLPropertyState *aStates[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
     switch( nType )
