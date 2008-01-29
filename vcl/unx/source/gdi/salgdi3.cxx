@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.149 $
+ *  $Revision: 1.150 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:21:50 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:23:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1321,7 +1321,9 @@ void X11SalGraphics::GetDevFontList( ImplDevFontList *pList )
 
     // register platform specific font substitutions if available
     if( rMgr.hasFontconfig() )
-    RegisterFontSubstitutors( pList );
+        RegisterFontSubstitutors( pList );
+
+    ImplGetSVData()->maGDIData.mbNativeFontConfig = rMgr.hasFontconfig();
 }
 
 // ----------------------------------------------------------------------------
