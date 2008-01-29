@@ -4,9 +4,9 @@
 #
 #   $RCSfile: Eis.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2006-01-10 13:10:13 $
+#   last change: $Author: vg $ $Date: 2008-01-29 07:57:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -191,15 +191,23 @@ sub create_eis_connector
     # Since older versions do not support the ns() method we
     # either force everyone to upgrade now, or make the following
     # dependent on the SOAP::Lite version.
-    if ( $SOAP::Lite::VERSION >= 0.66 ) {
-        $sl = SOAP::Lite
+    my ($vmaj, $vmin) = (0, 0);
+    if( $SOAP::Lite::VERSION =~ m/([0-9]*)\.([0-9]*)/ ) {
+        $vmaj = $1;
+        $vmin = $2;
+        if ( $vmaj > 0 || ( $vmaj == 0 && $vmin >= 66 ) ) {
+            $sl = SOAP::Lite
             -> ns($uri)
             -> proxy($proxy);
-    }
-    else {
-        $sl = SOAP::Lite
+        }
+        else {
+            $sl = SOAP::Lite
             -> uri($uri)
             -> proxy($proxy);
+        }
+    }
+    else {
+        carp("ERROR: Can't determine SOAP::Lite version.");
     }
 
     return $sl;
