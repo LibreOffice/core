@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 14:21:58 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:52:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,7 +260,9 @@ ErrCode __EXPORT ScTabViewShell::DoVerb(long nVerb)
         ActivateObject( pOle2Obj, nVerb );
     }
     else
+    {
         DBG_ERROR("kein Objekt fuer Verb gefunden");
+    }
 
     return nErr;
 }
