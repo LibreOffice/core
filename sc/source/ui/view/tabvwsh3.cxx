@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:12:15 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:03:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,28 @@
 #define RECALC_PAGE(pDocSh) ScPrintFunc( pDocSh, GetPrinter(), nCurTab ).UpdatePages()
 
 //------------------------------------------------------------------
+
+/** Try to parse the given range using Calc-style syntax first, then
+    Excel-style if that fails. */
+USHORT lcl_ParseRange(ScRange& rScRange, const String& aAddress, ScDocument* pDoc, USHORT nSlot)
+{
+    USHORT nResult = rScRange.Parse(aAddress, pDoc);
+    if ( (nResult & SCA_VALID) )
+        return nResult;
+
+    return rScRange.Parse(aAddress, pDoc, ScAddress::Details(ScAddress::CONV_XL_A1, 0, 0));
+}
+
+/** Try to parse the given address using Calc-style syntax first, then
+    Excel-style if that fails. */
+USHORT lcl_ParseAddress(ScAddress& rScAddress, const String& aAddress, ScDocument* pDoc, USHORT nSlot)
+{
+    USHORT nResult = rScAddress.Parse(aAddress, pDoc);
+    if ( (nResult & SCA_VALID) )
+        return nResult;
+
+    return rScAddress.Parse(aAddress, pDoc, ScAddress::Details(ScAddress::CONV_XL_A1, 0, 0));
+}
 
 void ScTabViewShell::Execute( SfxRequest& rReq )
 {
@@ -259,11 +281,11 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScMarkData& rMark     = pViewData->GetMarkData();
                 ScRange     aScRange;
                 ScAddress   aScAddress;
-                USHORT      nResult = aScRange.Parse( aAddress, pDoc );
+                USHORT      nResult = lcl_ParseRange(aScRange, aAddress, pDoc, nSlot);
                 SCTAB       nTab = pViewData->GetTabNo();
                 BOOL        bMark = TRUE;
 
-                // Ist es ein Bereich ?
+                // Is this a range ?
                 if( nResult & SCA_VALID )
                 {
                     if ( nResult & SCA_TAB_3D )
@@ -277,8 +299,8 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                         aScRange.aEnd.SetTab( nTab );
                     }
                 }
-                // Ist es eine Zelle ?
-                else if( (nResult=aScAddress.Parse( aAddress, pDoc )) & SCA_VALID )
+                // Is this a cell ?
+                else if ( (nResult = lcl_ParseAddress(aScAddress, aAddress, pDoc, nSlot)) & SCA_VALID )
                 {
                     if ( nResult & SCA_TAB_3D )
                     {
