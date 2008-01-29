@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basedlgs.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:16:29 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:27:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,9 @@ public:
     virtual long            Notify( NotifyEvent& rNEvt );
     SfxBindings&            GetBindings()
                             { return *pBindings; }
+
+    DECL_LINK( TimerHdl, Timer* );
+
 };
 
 // class SfxFloatingWindow --------------------------------------------------
@@ -171,6 +174,9 @@ protected:
 public:
     virtual void            FillInfo(SfxChildWinInfo&) const;
     void                    Initialize (SfxChildWinInfo* pInfo);
+
+    DECL_LINK( TimerHdl, Timer* );
+
 };
 
 // class SfxSingleTabDialog --------------------------------------------------
