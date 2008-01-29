@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlFixedContent.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:45:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,11 @@ namespace rptxml
     class OXMLCell;
     class OXMLFixedContent : public OXMLReportElementBase
     {
-        ::rtl::OUString m_sLabel;
-        OXMLCell&       m_rCell;
-        bool            m_bInP;
+        ::rtl::OUString     m_sPageText; // page count and page number
+        ::rtl::OUString     m_sLabel;
+        OXMLCell&           m_rCell;
+        OXMLFixedContent*   m_pInP; // if set than we are in text-p element
+        bool                m_bFormattedField;
 
     protected:
         virtual SvXMLImportContext* _CreateChildContext( sal_uInt16 nPrefix,
@@ -65,7 +67,7 @@ namespace rptxml
                     const ::rtl::OUString& rLName
                     ,OXMLCell& _rCell
                     ,OXMLTable* _pContainer
-                    ,bool _bInP = false);
+                    ,OXMLFixedContent* _pInP = NULL);
         virtual ~OXMLFixedContent();
 
         // This method is called for all characters that are contained in the

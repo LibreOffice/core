@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlHelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:17 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:46:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ namespace rptxml
     class OXMLHelper
     {
     public:
-        static UniReference < XMLPropertySetMapper > GetCellStylePropertyMap();
+        static UniReference < XMLPropertySetMapper > GetCellStylePropertyMap(bool _bOldFormat = false);
 
         static const SvXMLEnumMapEntry* GetReportPrintOptions();
         static const SvXMLEnumMapEntry* GetForceNewPageOptions();
