@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoDialog.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 13:26:42 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:44:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,10 @@ public class UnoDialog implements EventNames {
     protected PeerConfig oPeerConfig;
 
     protected AbstractListener guiEventListener;
+
+    public AbstractListener getGuiEventListener() {
+        return guiEventListener;
+    }
 
     public UnoDialog(XMultiServiceFactory xMSF, String[] PropertyNames, Object[] PropertyValues) {
         try {
