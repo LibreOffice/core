@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:51:17 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:29:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1300,6 +1300,112 @@ sal_Bool ODocumentDefinition::save(sal_Bool _bApprove)
     }
     return sal_True;
 }
+// -----------------------------------------------------------------------------
+sal_Bool ODocumentDefinition::saveAs()
+{
+    // default handling: instantiate an interaction handler and let it handle the parameter request
+    if ( !m_bOpenInDesign )
+        return sal_False;
+    try
+    {
+        {
+            ::vos::OGuard aSolarGuard(Application::GetSolarMutex());
+
+            // the request
+            Reference<XNameAccess> xName(m_xParentContainer,UNO_QUERY);
+            DocumentSaveRequest aRequest;
+            aRequest.Name = m_pImpl->m_aProps.aTitle;
+            if ( !aRequest.Name.getLength() )
+            {
+                if ( m_bForm )
+                    aRequest.Name = DBACORE_RESSTRING( RID_STR_FORM );
+                else
+                    aRequest.Name = DBACORE_RESSTRING( RID_STR_REPORT );
+                aRequest.Name = ::dbtools::createUniqueName(xName,aRequest.Name);
+            }
+
+            aRequest.Content.set(m_xParentContainer,UNO_QUERY);
+            OInteractionRequest* pRequest = new OInteractionRequest(makeAny(aRequest));
+            Reference< XInteractionRequest > xRequest(pRequest);
+            // some knittings
+            // two continuations allowed: OK and Cancel
+            ODocumentSaveContinuation* pDocuSave = new ODocumentSaveContinuation;
+            pRequest->addContinuation(pDocuSave);
+            OInteraction< XInteractionDisapprove >* pDisApprove = new OInteraction< XInteractionDisapprove >;
+            pRequest->addContinuation(pDisApprove);
+            OInteractionAbort* pAbort = new OInteractionAbort;
+            pRequest->addContinuation(pAbort);
+
+            // create the handler, let it handle the request
+            Reference< XInteractionHandler > xHandler(m_aContext.createComponent(::rtl::OUString(SERVICE_SDB_INTERACTION_HANDLER)), UNO_QUERY);
+            if ( xHandler.is() )
+                xHandler->handle(xRequest);
+
+            if ( pAbort->wasSelected() )
+                return sal_False;
+            if  ( pDisApprove->wasSelected() )
+                return sal_True;
+            if ( pDocuSave->wasSelected() )
+            {
+                ::osl::MutexGuard aGuard(m_aMutex);
+                Reference<XNameContainer> xNC(pDocuSave->getContent(),UNO_QUERY);
+                if ( xNC.is() )
+                {
+                    try
+                    {
+                        Reference< XStorage> xStorage = getStorage();
+                        const static ::rtl::OUString sBaseName(RTL_CONSTASCII_USTRINGPARAM("Obj"));
+                        // -----------------------------------------------------------------------------
+                        Reference<XNameAccess> xElements(xStorage,UNO_QUERY_THROW);
+                        ::rtl::OUString sPersistentName = ::dbtools::createUniqueName(xElements,sBaseName);
+                        xStorage->copyElementTo(m_pImpl->m_aProps.sPersistentName,xStorage,sPersistentName);
+
+                        ::rtl::OUString sOldName = m_pImpl->m_aProps.aTitle;
+                        rename(pDocuSave->getName());
+                        updateDocumentTitle();
+
+                        Sequence< Any > aArguments(3);
+                        PropertyValue aValue;
+                        // set as folder
+                        aValue.Name = PROPERTY_NAME;
+                        aValue.Value <<= sOldName;
+                        aArguments[0] <<= aValue;
+
+                        aValue.Name = PROPERTY_PERSISTENT_NAME;
+                        aValue.Value <<= sPersistentName;
+                        aArguments[1] <<= aValue;
+
+                        aValue.Name = PROPERTY_AS_TEMPLATE;
+                        aValue.Value <<= m_pImpl->m_aProps.bAsTemplate;
+                        aArguments[2] <<= aValue;
+
+                        Reference< XMultiServiceFactory > xORB( m_xParentContainer, UNO_QUERY_THROW );
+                        Reference< XInterface > xComponent( xORB->createInstanceWithArguments( SERVICE_SDB_DOCUMENTDEFINITION, aArguments ) );
+                        Reference< XNameContainer > xNameContainer( m_xParentContainer, UNO_QUERY_THROW );
+                        xNameContainer->insertByName( sOldName, makeAny( xComponent ) );
+                    }
+                    catch(Exception&)
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
+                }
+            }
+        }
+
+        ::osl::MutexGuard aGuard(m_aMutex);
+        Reference<XEmbedPersist> xPersist(m_xEmbeddedObject,UNO_QUERY);
+        if ( xPersist.is() )
+        {
+            xPersist->storeOwn();
+            notifyDataSourceModified();
+        }
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(0,"ODocumentDefinition::save: caught an Exception (tried to let the InteractionHandler handle it)!");
+    }
+    return sal_True;
+}
 
 namespace
 {
@@ -1422,8 +1528,8 @@ void ODocumentDefinition::loadEmbeddedObject( const Reference< XConnection >& _x
                     {
                         // we seems to be a new report, check if report extension is present.
                         Reference< XContentEnumerationAccess > xEnumAccess( m_aContext.getLegacyServiceFactory(), UNO_QUERY );
-                        static ::rtl::OUString s_sReportDesign(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOReportJobFactory"));
-                        Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(s_sReportDesign);
+                        const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_aContext.getLegacyServiceFactory());
+                        Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(sReportEngineServiceName);
                         if ( !xEnumDrivers.is() || !xEnumDrivers->hasMoreElements() )
                         {
                             com::sun::star::io::WrongFormatException aWFE;
