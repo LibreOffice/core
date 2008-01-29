@@ -4,9 +4,9 @@
  *
  *  $RCSfile: activitiesqueue.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 15:01:06 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:35:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,13 @@ namespace slideshow
              */
             ::boost::shared_ptr< ::canvas::tools::ElapsedTime > const &
             getTimer() const { return mpTimer; }
+
+            /** returns number of all activities, waiting, reinserted and dequeued
+             */
+            std::size_t size() const
+            {
+                return maCurrentActivitiesWaiting.size() + maCurrentActivitiesReinsert.size() + maDequeuedActivities.size();
+            }
 
         private:
             ::boost::shared_ptr< ::canvas::tools::ElapsedTime > mpTimer;
