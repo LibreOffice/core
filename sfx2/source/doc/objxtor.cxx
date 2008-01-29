@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:48:27 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:28:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1095,7 +1095,7 @@ SfxObjectShell* SfxObjectShell::CreateObjectByFactoryName( const String& rFact, 
 }
 
 
-SfxObjectShell* SfxObjectShell::CreateObject( const String& rServiceName, SfxObjectCreateMode /*eMode*/ )
+SfxObjectShell* SfxObjectShell::CreateObject( const String& rServiceName, SfxObjectCreateMode eCreateMode )
 {
     if ( rServiceName.Len() )
     {
@@ -1107,7 +1107,11 @@ SfxObjectShell* SfxObjectShell::CreateObject( const String& rServiceName, SfxObj
             ::com::sun::star::uno::Sequence < sal_Int8 > aSeq( SvGlobalName( SFX_GLOBAL_CLASSID ).GetByteSequence() );
             sal_Int64 nHandle = xObj->getSomething( aSeq );
             if ( nHandle )
-                return reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
+            {
+                SfxObjectShell* pRet = reinterpret_cast< SfxObjectShell* >( sal::static_int_cast< sal_IntPtr >( nHandle ));
+                pRet->SetCreateMode_Impl( eCreateMode );
+                return pRet;
+            }
         }
     }
 
