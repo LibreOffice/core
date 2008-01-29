@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 17:20:19 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:16:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
+
+#include <stdlib.h>
+#include <time.h>
 
 #ifndef _HELP_HXX //autogen
 #include <vcl/help.hxx>
@@ -362,14 +365,21 @@ generateCustomName(
     return name;
 }
 
+sal_uInt32 generateRandomValue()
+{
+    srand( unsigned( time( NULL ) ));
+    return sal_uInt32( rand() );
+}
+
 OUString
 generateCustomURL(
-    SvxEntries* entries,
-    sal_Int32 suffix = 1 )
+    SvxEntries* entries )
 {
     OUString url = OUString::createFromAscii( ITEM_TOOLBAR_URL );
     url += OUString::createFromAscii( CUSTOM_TOOLBAR_STR );
-    url += OUString::valueOf( suffix );
+
+    // use a random number to minimize possible clash with existing custom toolbars
+    url += OUString::valueOf( sal_Int64( generateRandomValue() ), 16 );
 
     // now check is there is an already existing entry with this url
     SvxEntries::const_iterator iter = entries->begin();
@@ -389,7 +399,7 @@ generateCustomURL(
     if ( iter != entries->end() )
     {
         // url already exists so try the next number up
-        return generateCustomURL( entries, ++suffix );
+        return generateCustomURL( entries );
     }
 
     return url;
@@ -4686,6 +4696,12 @@ void ToolbarSaveInData::RemoveToolbar( SvxConfigEntry* pToolbar )
         delete pToolbar;
 
         PersistChanges( GetConfigManager() );
+
+        // remove the persistent window state data
+        css::uno::Reference< css::container::XNameContainer > xNameContainer(
+            m_xPersistentWindowState, css::uno::UNO_QUERY_THROW );
+
+        xNameContainer->removeByName( url );
     }
     catch ( uno::Exception& )
     {
@@ -5091,6 +5107,12 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
         ToolbarSaveInData* pData = (ToolbarSaveInData*)
             pNameDialog->aSaveInListBox.GetEntryData( nInsertPos );
 
+        if ( GetSaveInData() != pData )
+        {
+            aSaveInListBox.SelectEntryPos( nInsertPos, TRUE );
+            aSaveInListBox.GetSelectHdl().Call(this);
+        }
+
         SvxConfigEntry* pToolbar =
             new SvxConfigEntry( aNewName, aNewURL, TRUE );
 
@@ -5098,12 +5120,6 @@ IMPL_LINK( SvxToolbarConfigPage, NewToolbarHdl, Button *, pButton )
         pToolbar->SetMain( TRUE );
 
         pData->CreateToolbar( pToolbar );
-
-        if ( GetSaveInData() != pData )
-        {
-            aSaveInListBox.SelectEntryPos( nInsertPos, TRUE );
-            aSaveInListBox.GetSelectHdl().Call(this);
-        }
 
         nInsertPos = aTopLevelListBox.InsertEntry( pToolbar->GetName() );
         aTopLevelListBox.SetEntryData( nInsertPos, pToolbar );
