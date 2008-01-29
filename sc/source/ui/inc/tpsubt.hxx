@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpsubt.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:59:57 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:43:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,8 @@
 
 //------------------------------------------------------------------------
 
-#define SC_MAXFIELDS    200
+// +1 because one field is reserved for the "- none -" entry
+#define SC_MAXFIELDS    MAXCOLCOUNT+1
 
 class ScViewData;
 class ScDocument;
