@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortparam.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 10:41:33 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,6 +266,8 @@ void ScSortParam::MoveToDest()
         bInplace = TRUE;
     }
     else
+    {
         DBG_ERROR("MoveToDest, bInplace == TRUE");
+    }
 }
 
