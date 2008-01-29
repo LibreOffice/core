@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextRawReportTarget.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:51:21 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:35:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1031,7 +1031,9 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
       // repeating sections have other ways of defining columns ..
       return;
     }
-    if (getCurrentRole() == ROLE_TEMPLATE)
+    if (getCurrentRole() == ROLE_TEMPLATE ||
+        getCurrentRole() == ROLE_SPREADSHEET_PAGE_HEADER ||
+        getCurrentRole() == ROLE_SPREADSHEET_PAGE_FOOTER)
     {
       // the template section would break the multi-column stuff and we dont open up sections there
       // anyway ..
@@ -1059,7 +1061,9 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
       throws IOException, DataSourceException, ReportProcessingException
   {
     sectionHeight = new LengthCalculator();
-    if (role == OfficeDocumentReportTarget.ROLE_TEMPLATE)
+    if (role == OfficeDocumentReportTarget.ROLE_TEMPLATE ||
+        role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER ||
+        role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER)
     {
       // Start buffering with an dummy styles-collection, so that the global styles dont get polluted ..
       startBuffering(new OfficeStylesCollection(), true);
@@ -1199,7 +1203,9 @@ public class TextRawReportTarget extends OfficeDocumentReportTarget
   protected void endReportSection(final AttributeMap attrs, final int role)
       throws IOException, DataSourceException, ReportProcessingException
   {
-    if (role == ROLE_TEMPLATE)
+    if (role == OfficeDocumentReportTarget.ROLE_TEMPLATE ||
+        role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_HEADER ||
+        role == OfficeDocumentReportTarget.ROLE_SPREADSHEET_PAGE_FOOTER)
     {
       finishBuffering();
       return;
