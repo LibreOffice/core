@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:55:55 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:48:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-
 
 //------------------------------------------------------------------
 
@@ -72,6 +70,7 @@
 #include "drwtrans.hxx"
 #include "scabstdlg.hxx"
 #include "dociter.hxx"
+#include "postit.hxx"
 
 //------------------------------------------------------------------
 
