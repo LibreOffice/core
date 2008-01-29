@@ -222,31 +222,41 @@ endif
 ifeq "$(PLATFORM)" "linux-gnu"
 # Settings for Linux using gcc compiler
 
-PROCTYPE := $(shell $(PRJ)/config.guess | cut -d "-" -f1)
-
-# Default is linux on a intel machine    
+PROCTYPE := $(shell $(PRJ)/config.guess | cut -d "-" -f1 | sed -e 's/^i.86$$/i386/')
 PLATFORM=linux
+
+PACKAGE_LIB_DIR=linux_$(PROCTYPE).plt
+UNOPKG_PLATFORM=Linux_$(PROCTYPE)
+JAVA_PROC_TYPE=$(PROCTYPE)
+STLPORT=no
+
+ifeq "$(PROCTYPE)" "i386"
 PACKAGE_LIB_DIR=linux_x86.plt
 UNOPKG_PLATFORM=Linux_x86
 JAVA_PROC_TYPE=i386
-
-ifeq "$(PROCTYPE)" "x86_64"
-PACKAGE_LIB_DIR=linux_x86_64.plt
-UNOPKG_PLATFORM=Linux_x86_64
-# needs deeper investigation for intel 64 bit
-JAVA_PROC_TYPE=amd64
+STLPORT=yes
 endif
 
 ifeq "$(PROCTYPE)" "powerpc"
 PACKAGE_LIB_DIR=linux_powerpc.plt
 UNOPKG_PLATFORM=Linux_PowerPC
 JAVA_PROC_TYPE=ppc
+STLPORT=yes
 endif
 
 ifeq "$(PROCTYPE)" "sparc"
 PACKAGE_LIB_DIR=linux_sparc.plt
 UNOPKG_PLATFORM=Linux_SPARC
 JAVA_PROC_TYPE=sparc
+STLPORT=yes
+endif
+
+ifeq "$(PROCTYPE)" "x86_64"
+JAVA_PROC_TYPE=amd64
+endif
+
+ifeq "$(PROCTYPE)" "powerpc64"
+JAVA_PROC_TYPE=ppc64
 endif
 
 OS=LINUX
@@ -289,10 +299,14 @@ CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 SALHELPERLIB=-luno_salhelper$(COMID)
 REGLIB=-lreg
 STORELIB=-lstore
+ifeq "$(STLPORT)" "yes"
 ifeq "$(STLPORT_VER)" "500"
 STLPORTLIB=-lstlport
 else
 STLPORTLIB=-lstlport_gcc$(STLDEBUG)
+endif
+else
+STLPORTLIB=
 endif
 
 EMPTYSTRING=
