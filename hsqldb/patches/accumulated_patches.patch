@@ -1,0 +1,57 @@
+*** misc/hsqldb/src/org/hsqldb/persist/DataFileCache.java	Sat Oct  6 13:09:49 2007
+--- misc/build/hsqldb/src/org/hsqldb/persist/DataFileCache.java	Tue Dec  4 10:16:41 2007
+***************
+*** 244,255 ****
+              } else {
+                  fileFreePosition = INITIAL_FREE_POS;
+  
+!                 dataFile.seek(LONG_FREE_POS_POS);
+!                 dataFile.writeLong(INITIAL_FREE_POS);
+  
+!                 // set unsaved flag;
+!                 dataFile.seek(FLAGS_POS);
+!                 dataFile.writeInt(0);
+              }
+  
+              initBuffers();
+--- 244,258 ----
+              } else {
+                  fileFreePosition = INITIAL_FREE_POS;
+  
+! 				if ( !readonly ) {
+  
+! 	                dataFile.seek(LONG_FREE_POS_POS);
+!     	            dataFile.writeLong(INITIAL_FREE_POS);
+! 
+!         	        // set unsaved flag;
+!             	    dataFile.seek(FLAGS_POS);
+!                 	dataFile.writeInt(0);
+! 				}
+              }
+  
+              initBuffers();
+*** misc/hsqldb/src/org/hsqldb/View.java	2007-07-22 16:34:18.000000000 +0200
+--- misc/build/hsqldb/src/org/hsqldb/View.java	2008-01-08 07:57:29.375000000 +0100
+***************
+*** 218,226 ****
+                  continue;
+              }
+  
+!             expandedStatement.replace(pos,
+!                                       expandedStatement.indexOf("*", pos) + 1,
+!                                       colList);
+          }
+  
+          statement = expandedStatement.toString();
+--- 218,228 ----
+                  continue;
+              }
+  
+!             int foundPos = expandedStatement.indexOf("*", pos);
+!             if ( foundPos != -1 )
+!                 expandedStatement.replace(pos,
+!                                           foundPos + 1,
+!                                           colList);
+          }
+  
+          statement = expandedStatement.toString();
