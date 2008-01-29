@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 12:58:14 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1492,11 +1492,210 @@ awt::Size UnoCheckBoxControl::calcAdjustedSize( const awt::Size& rNewSize ) thro
 }
 
 //  ----------------------------------------------------
+//  class UnoControlFixedHyperlinkModel
+//  ----------------------------------------------------
+UnoControlFixedHyperlinkModel::UnoControlFixedHyperlinkModel()
+{
+    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXFixedHyperlink );
+}
+
+::rtl::OUString UnoControlFixedHyperlinkModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedHyperlinkModel );
+}
+
+uno::Any UnoControlFixedHyperlinkModel::ImplGetDefaultValue( sal_uInt16 nPropId ) const
+{
+    if ( nPropId == BASEPROPERTY_DEFAULTCONTROL )
+    {
+        uno::Any aAny;
+        aAny <<= ::rtl::OUString::createFromAscii( szServiceName_UnoControlFixedHyperlink );
+        return aAny;
+    }
+    else if ( nPropId == BASEPROPERTY_BORDER )
+    {
+        uno::Any aAny;
+        aAny <<= (sal_Int16)0;
+        return aAny;
+    }
+    else if ( nPropId == BASEPROPERTY_URL )
+    {
+        uno::Any aAny;
+        aAny <<= ::rtl::OUString();
+        return aAny;
+    }
+
+    return UnoControlModel::ImplGetDefaultValue( nPropId );
+}
+
+::cppu::IPropertyArrayHelper& UnoControlFixedHyperlinkModel::getInfoHelper()
+{
+    static UnoPropertyArrayHelper* pHelper = NULL;
+    if ( !pHelper )
+    {
+        uno::Sequence<sal_Int32>    aIDs = ImplGetPropertyIds();
+        pHelper = new UnoPropertyArrayHelper( aIDs );
+    }
+    return *pHelper;
+}
+
+// beans::XMultiPropertySet
+uno::Reference< beans::XPropertySetInfo > UnoControlFixedHyperlinkModel::getPropertySetInfo(  ) throw(uno::RuntimeException)
+{
+    static uno::Reference< beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
+    return xInfo;
+}
+
+//  ----------------------------------------------------
+//  class UnoFixedHyperlinkControl
+//  ----------------------------------------------------
+UnoFixedHyperlinkControl::UnoFixedHyperlinkControl()
+    : maActionListeners( *this )
+{
+    maComponentInfos.nWidth = 100;
+    maComponentInfos.nHeight = 12;
+}
+
+::rtl::OUString UnoFixedHyperlinkControl::GetComponentServiceName()
+{
+    return ::rtl::OUString::createFromAscii( "fixedhyperlink" );
+}
+
+// uno::XInterface
+uno::Any UnoFixedHyperlinkControl::queryAggregation( const uno::Type & rType ) throw(uno::RuntimeException)
+{
+    uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( awt::XFixedHyperlink*, this ),
+                                        SAL_STATIC_CAST( awt::XLayoutConstrains*, this ) );
+    return (aRet.hasValue() ? aRet : UnoControlBase::queryAggregation( rType ));
+}
+
+// lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( UnoFixedHyperlinkControl )
+    getCppuType( ( uno::Reference< awt::XFixedHyperlink>* ) NULL ),
+    getCppuType( ( uno::Reference< awt::XLayoutConstrains>* ) NULL ),
+    UnoControlBase::getTypes()
+IMPL_XTYPEPROVIDER_END
+
+sal_Bool UnoFixedHyperlinkControl::isTransparent() throw(uno::RuntimeException)
+{
+    return sal_True;
+}
+
+void UnoFixedHyperlinkControl::setText( const ::rtl::OUString& Text ) throw(uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= Text;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_LABEL ), aAny, sal_True );
+}
+
+::rtl::OUString UnoFixedHyperlinkControl::getText() throw(uno::RuntimeException)
+{
+    return ImplGetPropertyValue_UString( BASEPROPERTY_LABEL );
+}
+
+void UnoFixedHyperlinkControl::setURL( const ::rtl::OUString& URL ) throw(::com::sun::star::uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= URL;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_URL ), aAny, sal_True );
+}
+
+::rtl::OUString UnoFixedHyperlinkControl::getURL(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ImplGetPropertyValue_UString( BASEPROPERTY_URL );
+}
+
+void UnoFixedHyperlinkControl::setAlignment( short nAlign ) throw(uno::RuntimeException)
+{
+    uno::Any aAny;
+    aAny <<= (sal_Int16)nAlign;
+    ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ), aAny, sal_True );
+}
+
+short UnoFixedHyperlinkControl::getAlignment() throw(uno::RuntimeException)
+{
+    short nAlign = 0;
+    if ( mxModel.is() )
+    {
+        uno::Any aVal = ImplGetPropertyValue( GetPropertyName( BASEPROPERTY_ALIGN ) );
+        aVal >>= nAlign;
+    }
+    return nAlign;
+}
+
+awt::Size UnoFixedHyperlinkControl::getMinimumSize(  ) throw(uno::RuntimeException)
+{
+    return Impl_getMinimumSize();
+}
+
+awt::Size UnoFixedHyperlinkControl::getPreferredSize(  ) throw(uno::RuntimeException)
+{
+    return Impl_getPreferredSize();
+}
+
+awt::Size UnoFixedHyperlinkControl::calcAdjustedSize( const awt::Size& rNewSize ) throw(uno::RuntimeException)
+{
+    return Impl_calcAdjustedSize( rNewSize );
+}
+
+void UnoFixedHyperlinkControl::dispose() throw(uno::RuntimeException)
+{
+    lang::EventObject aEvt;
+    aEvt.Source = (::cppu::OWeakObject*)this;
+    maActionListeners.disposeAndClear( aEvt );
+    UnoControlBase::dispose();
+}
+
+void UnoFixedHyperlinkControl::createPeer( const uno::Reference< awt::XToolkit > & rxToolkit, const uno::Reference< awt::XWindowPeer >  & rParentPeer ) throw(uno::RuntimeException)
+{
+    UnoControlBase::createPeer( rxToolkit, rParentPeer );
+
+    uno::Reference < awt::XFixedHyperlink > xFixedHyperlink( getPeer(), uno::UNO_QUERY );
+    if ( maActionListeners.getLength() )
+        xFixedHyperlink->addActionListener( &maActionListeners );
+}
+
+void UnoFixedHyperlinkControl::addActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
+{
+    maActionListeners.addInterface( l );
+    if( getPeer().is() && maActionListeners.getLength() == 1 )
+    {
+        uno::Reference < awt::XFixedHyperlink >  xFixedHyperlink( getPeer(), uno::UNO_QUERY );
+        xFixedHyperlink->addActionListener( &maActionListeners );
+    }
+}
+
+void UnoFixedHyperlinkControl::removeActionListener(const uno::Reference< awt::XActionListener > & l) throw(uno::RuntimeException)
+{
+    if( getPeer().is() && maActionListeners.getLength() == 1 )
+    {
+        uno::Reference < awt::XFixedHyperlink >  xFixedHyperlink( getPeer(), uno::UNO_QUERY );
+        xFixedHyperlink->removeActionListener( &maActionListeners );
+    }
+    maActionListeners.removeInterface( l );
+}
+
+//  ----------------------------------------------------
 //  class UnoControlFixedTextModel
 //  ----------------------------------------------------
 UnoControlFixedTextModel::UnoControlFixedTextModel()
 {
-    UNO_CONTROL_MODEL_REGISTER_PROPERTIES( VCLXFixedText );
+    ImplRegisterProperty( BASEPROPERTY_ALIGN );
+    ImplRegisterProperty( BASEPROPERTY_BACKGROUNDCOLOR );
+    ImplRegisterProperty( BASEPROPERTY_BORDER );
+    ImplRegisterProperty( BASEPROPERTY_BORDERCOLOR );
+    ImplRegisterProperty( BASEPROPERTY_DEFAULTCONTROL );
+    ImplRegisterProperty( BASEPROPERTY_ENABLED );
+    ImplRegisterProperty( BASEPROPERTY_FONTDESCRIPTOR );
+    ImplRegisterProperty( BASEPROPERTY_HELPTEXT );
+    ImplRegisterProperty( BASEPROPERTY_HELPURL );
+    ImplRegisterProperty( BASEPROPERTY_LABEL );
+    ImplRegisterProperty( BASEPROPERTY_MULTILINE );
+    ImplRegisterProperty( BASEPROPERTY_PRINTABLE );
+    ImplRegisterProperty( BASEPROPERTY_TABSTOP );
+    ImplRegisterProperty( BASEPROPERTY_VERTICALALIGN );
+    ImplRegisterProperty( BASEPROPERTY_NOLABEL );
 }
 
 ::rtl::OUString UnoControlFixedTextModel::getServiceName() throw(::com::sun::star::uno::RuntimeException)
