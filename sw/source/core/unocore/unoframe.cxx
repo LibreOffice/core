@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-05 07:39:59 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:23:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1204,21 +1204,14 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                         pCur->nWID < RES_GRFATR_END)||
                             pCur->nWID == FN_PARAM_COUNTOUR_PP ||
                             pCur->nWID == FN_UNO_IS_AUTOMATIC_CONTOUR ||
-                            pCur->nWID == FN_UNO_IS_PIXEL_CONTOUR ||
-                            FN_UNO_ALTERNATIVE_TEXT == pCur->nWID)
+                            pCur->nWID == FN_UNO_IS_PIXEL_CONTOUR )
         {
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if(pIdx)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
                 SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-                if(FN_UNO_ALTERNATIVE_TEXT == pCur->nWID )
-                {
-                    OUString uTemp;
-                    aValue >>= uTemp;
-                    pNoTxt->SetAlternateText(uTemp);
-                }
-                else if(pCur->nWID == FN_PARAM_COUNTOUR_PP)
+                if(pCur->nWID == FN_PARAM_COUNTOUR_PP)
                 {
                     drawing::PointSequenceSequence aParam;
                     if(!aValue.hasValue())
@@ -1268,6 +1261,18 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                     aPropSet.setPropertyValue(*pCur, aValue, aSet);
                     pNoTxt->SetAttr(aSet);
                 }
+            }
+        }
+        else if(FN_UNO_ALTERNATIVE_TEXT == pCur->nWID && eType != FLYCNTTYPE_FRM)
+        {
+            const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
+            if(pIdx)
+            {
+                SwNodeIndex aIdx(*pIdx, 1);
+                SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
+                OUString uTemp;
+                aValue >>= uTemp;
+                pNoTxt->SetAlternateText(uTemp);
             }
         }
         else if(FN_UNO_FRAME_STYLE_NAME == pCur->nWID)
@@ -1721,7 +1726,7 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
         {
             aAny <<= OUString(SwStyleNameMapper::GetProgName(pFmt->DerivedFrom()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_FRMFMT ) );
         }
-        else if(eType == FLYCNTTYPE_GRF &&
+        else if(eType != FLYCNTTYPE_FRM &&
                 (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ACTUAL_SIZE)) ||
                     FN_UNO_ALTERNATIVE_TEXT == pCur->nWID))
         {
@@ -1965,23 +1970,29 @@ void SwXFrame::setPropertyToDefault( const OUString& rPropertyName )
             pCur->nWID != FN_PARAM_LINK_DISPLAY_NAME)
         {
             if( eType == FLYCNTTYPE_GRF &&
-                        (FN_UNO_ALTERNATIVE_TEXT == pCur->nWID||
                         (pCur->nWID >= RES_GRFATR_BEGIN &&
-                            pCur->nWID < RES_GRFATR_END)))
+                            pCur->nWID < RES_GRFATR_END))
             {
                 const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
                 if(pIdx)
                 {
                     SwNodeIndex aIdx(*pIdx, 1);
                     SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-                    if(FN_UNO_ALTERNATIVE_TEXT == pCur->nWID)
-                        pNoTxt->SetAlternateText(aEmptyStr);
-                    else
                     {
                         SfxItemSet aSet(pNoTxt->GetSwAttrSet());
                         aSet.ClearItem(pCur->nWID);
                         pNoTxt->SetAttr(aSet);
                     }
+                }
+            }
+            else if( eType != FLYCNTTYPE_FRM && FN_UNO_ALTERNATIVE_TEXT == pCur->nWID )
+            {
+                const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
+                if(pIdx)
+                {
+                    SwNodeIndex aIdx(*pIdx, 1);
+                    SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
+                    pNoTxt->SetAlternateText(aEmptyStr);
                 }
             }
             else
