@@ -41,7 +41,7 @@ Dim NewContentList() as String
 Dim XMLTemplateContentString as String
 Dim ApplIndex as Integer
 Dim bAssignFileName as Boolean
-	oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
+	oDocInfo = CreateUnoService(&quot;com.sun.star.document.StandaloneDocumentInfo&quot;)
 	bInterruptSearch = False
 	For i = 0 To MaxCollectIndex
 		SearchDir = PathCollection(i,0)
