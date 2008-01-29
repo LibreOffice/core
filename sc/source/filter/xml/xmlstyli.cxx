@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:52:58 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:37:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -616,7 +616,9 @@ void XMLTableStyleContext::FillPropertySet(
                         pStyle = (SvXMLNumFormatContext *)pMyStyles->
                             FindStyleChildContext(XML_STYLE_FAMILY_DATA_STYLE, sDataStyleName, sal_True);
                     else
+                    {
                         DBG_ERROR("not possible to get style");
+                    }
                 }
                 if (pStyle)
                 {
