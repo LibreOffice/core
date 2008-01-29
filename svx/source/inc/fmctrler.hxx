@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:27:07 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:10:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,7 @@
 #include "formcontrolling.hxx"
 #endif
 
-struct FmXTextComponentLess : public binary_function< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent> , sal_Bool>
+struct FmXTextComponentLess : public ::std::binary_function< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent> , sal_Bool>
 {
     sal_Bool operator() (const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >& x, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >& y) const
     {
@@ -246,10 +246,10 @@ struct FmXTextComponentLess : public binary_function< ::com::sun::star::uno::Ref
     }
 };
 
-typedef map< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, FmXTextComponentLess> FmFilterControls;
-typedef map< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::rtl::OUString, FmXTextComponentLess> FmFilterRow;
-typedef vector< FmFilterRow > FmFilterRows;
-typedef vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > > FmFormControllers;
+typedef ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >, FmXTextComponentLess> FmFilterControls;
+typedef ::std::map< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XTextComponent >, ::rtl::OUString, FmXTextComponentLess> FmFilterRow;
+typedef ::std::vector< FmFilterRow > FmFilterRows;
+typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > > FmFormControllers;
 
 struct FmFieldInfo;
 class FmFormView;
@@ -616,7 +616,7 @@ protected:
 
     void startFiltering();
     void stopFiltering();
-    void setFilter(vector<FmFieldInfo>&);
+    void setFilter(::std::vector<FmFieldInfo>&);
     void startListening();
     void stopListening();
 
