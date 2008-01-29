@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:44:36 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:41:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,9 @@ void ScDBDocFunc::ShowInBeamer( const ScImportParam& rParam, SfxViewFrame* pFram
             xControllerSelection->select(uno::makeAny(aSelection.createPropertyValueSequence()));
         }
         else
+        {
             DBG_ERROR("no selection supplier in the beamer!");
+        }
     }
 }
 
