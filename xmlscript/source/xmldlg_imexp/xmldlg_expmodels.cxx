@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_expmodels.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-29 14:16:30 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:12:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -474,6 +474,48 @@ void ElementDescriptor::readFixedTextModel( StyleBag * all_styles )
     readDefaults();
     readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
+    readAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
+                   OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
+    readVerticalAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("VerticalAlign") ),
+                           OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":valign") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":multiline") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":tabstop") ) );
+    readBoolAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("NoLabel") ),
+                  OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":nolabel") ) );
+    readEvents();
+}
+//__________________________________________________________________________________________________
+void ElementDescriptor::readFixedHyperLinkModel( StyleBag * all_styles )
+    SAL_THROW( (Exception) )
+{
+    // collect styles
+    Style aStyle( 0x1 | 0x2 | 0x4 | 0x8 | 0x20 );
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= aStyle._backgroundColor)
+        aStyle._set |= 0x1;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextColor") ) ) >>= aStyle._textColor)
+        aStyle._set |= 0x2;
+    if (readProp( OUString( RTL_CONSTASCII_USTRINGPARAM("TextLineColor") ) ) >>= aStyle._textLineColor)
+        aStyle._set |= 0x20;
+    if (readBorderProps( this, aStyle ))
+        aStyle._set |= 0x4;
+    if (readFontProps( this, aStyle ))
+        aStyle._set |= 0x8;
+    if (aStyle._set)
+    {
+        addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":style-id") ),
+                      all_styles->getStyleId( aStyle ) );
+    }
+
+    // collect elements
+    readDefaults();
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":value") ) );
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("URL") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":url") ) );
+    readStringAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Description") ),
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":description") ) );
     readAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":align") ) );
     readVerticalAlignAttr( OUString( RTL_CONSTASCII_USTRINGPARAM("VerticalAlign") ),
