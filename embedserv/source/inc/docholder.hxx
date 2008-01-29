@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:49:50 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:26:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,7 @@ private:
 
     ::com::sun::star::uno::Reference<
     ::com::sun::star::frame::XModel > m_xDocument;
+    sal_Int16                    m_nMacroExecMode;
 
     ::com::sun::star::uno::Reference<
     ::com::sun::star::frame::XLayoutManager> m_xLayoutManager;
@@ -138,6 +139,7 @@ private:
 
     void ClearInterceptorInternally();
 
+    void LoadDocInFrame( sal_Bool bPluginMode );
 public:
 
 
