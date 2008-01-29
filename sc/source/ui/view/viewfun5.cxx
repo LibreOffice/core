@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:21:28 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:53:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,9 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     bRet = TRUE;
                 }
                 else
+                {
                     DBG_ERROR("Error in CreateAndLoad");
+                }
             }
         }
         else
@@ -306,7 +308,9 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     bRet = TRUE;
                 }
                 else
+                {
                     DBG_ERROR("Error creating external OLE object");
+                }
             }
             //TODO/LATER: if format is not available, create picture
         }
@@ -335,18 +339,8 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 bRet = aObj.ImportStream( *xStream, String(), nFormatId );
             else if (nFormatId == FORMAT_STRING && aDataHelper.GetString( nFormatId, aStr ))
             {
-                // Do CSV dialog if more than one line or a usual delimiter
-                // [,;\t ] is contained within.
-                sal_Int32 nDelim;
-                nDelim = aStr.indexOf('\n');
-                if (nDelim < 0)
-                    nDelim = aStr.indexOf(',');
-                if (nDelim < 0)
-                    nDelim = aStr.indexOf(';');
-                if (nDelim < 0)
-                    nDelim = aStr.indexOf('\t');
-                if (nDelim < 0)
-                    nDelim = aStr.indexOf(' ');
+                // Do CSV dialog if more than one line.
+                sal_Int32 nDelim = aStr.indexOf('\n');
 #if 0
                 ::rtl::OString tmpStr = OUStringToOString( aStr,
                         RTL_TEXTENCODING_UTF8 );
