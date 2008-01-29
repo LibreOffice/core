@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:14:27 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:02:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 
 #include <tools/debug.hxx>
 #include <string.h>
+#include <memory>
 #include <unotools/collatorwrapper.hxx>
 #ifndef _UNOTOOLS_TRANSLITERATIONWRAPPER_HXX
 #include <unotools/transliterationwrapper.hxx>
@@ -482,6 +483,22 @@ BOOL ScRangeData::IsReference( ScRange& rRange ) const
     if ( eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS ) )
         if ( pCode )
             return pCode->IsReference( rRange );
+
+    return FALSE;
+}
+
+BOOL ScRangeData::IsReference( ScRange& rRange, const ScAddress& rPos ) const
+{
+    if ( eType & ( RT_ABSAREA | RT_REFAREA | RT_ABSPOS ) )
+        if ( pCode )
+        {
+            ::std::auto_ptr<ScTokenArray> pTemp( pCode->Clone() );
+            ScCompiler aComp( pDoc, rPos, *pTemp );
+            aComp.SetCompileEnglish( false );
+            aComp.SetCompileXML( false );
+            aComp.MoveRelWrap();
+            return pTemp->IsReference( rRange );
+        }
 
     return FALSE;
 }
