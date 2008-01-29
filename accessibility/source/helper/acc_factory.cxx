@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acc_factory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-04 16:24:24 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:26:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,9 @@
 #endif
 #ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEEDIT_HXX
 #include <accessibility/standard/vclxaccessibleedit.hxx>
+#endif
+#ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEFIXEDHYPERLINK_HXX
+#include <accessibility/standard/vclxaccessiblefixedhyperlink.hxx>
 #endif
 #ifndef ACCESSIBILITY_STANDARD_VCLXACCESSIBLEFIXEDTEXT_HXX
 #include <accessibility/standard/vclxaccessiblefixedtext.hxx>
@@ -180,6 +183,8 @@ namespace accessibility
             createAccessibleContext( VCLXListBox* _pXWindow );
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXFixedText* _pXWindow );
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+            createAccessibleContext( VCLXFixedHyperlink* _pXWindow );
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXScrollBar* _pXWindow );
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
@@ -357,6 +362,12 @@ namespace accessibility
     Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXFixedText* _pXWindow )
     {
         return new VCLXAccessibleFixedText( _pXWindow );
+    }
+
+    //--------------------------------------------------------------------
+    Reference< XAccessibleContext > AccessibleFactory::createAccessibleContext( VCLXFixedHyperlink* _pXWindow )
+    {
+        return new VCLXAccessibleFixedHyperlink( _pXWindow );
     }
 
     //--------------------------------------------------------------------
