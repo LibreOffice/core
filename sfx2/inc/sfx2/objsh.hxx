@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objsh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:45:10 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:28:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -488,6 +488,7 @@ public:
     void                        RegisterTransfer( SfxMedium& rMedium );
     sal_Bool                    IsReloading() const;
     void                        FinishedLoading( sal_uInt16 nWhich = SFX_LOADED_ALL );
+    void                        TemplateDisconnectionAfterLoad();
     sal_Bool                    IsLoading() const;
     sal_Bool                    IsLoadingFinished() const;
     void                        SetAutoLoad( const INetURLObject&, sal_uInt32 nTime, sal_Bool bReload = sal_True );
