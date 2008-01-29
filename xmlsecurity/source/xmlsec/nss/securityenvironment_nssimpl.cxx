@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 10:07:10 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 07:56:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -798,19 +798,24 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
         //arena = PORT_NewArena( DER_DEFAULT_CHUNKSIZE );
         //log = PORT_ArenaZNew( arena, CERTVerifyLog );
         //log->arena = arena;
-        validity = 0;
+        validity = csss::CertificateValidity::INVALID;
+
+        CERTCertificateList * certList;
+
+        certList = CERT_CertChainFromCert( (CERTCertificateStr *) cert, (SECCertUsage) 0, 0);
+
 
         if( m_pHandler != NULL )
         {
             status = CERT_VerifyCertificate(
-                m_pHandler, ( CERTCertificate* )cert, PR_FALSE,
-                (SECCertificateUsage)0, timeboundary , NULL, log, &usage);
+                m_pHandler, ( CERTCertificate* )cert, PR_TRUE,
+                (SECCertificateUsage)certificateUsageSSLClient | certificateUsageSSLServer, timeboundary , NULL, log, &usage);
         }
         else
         {
             status = CERT_VerifyCertificate(
                 CERT_GetDefaultCertDB(), ( CERTCertificate* )cert,
-                PR_TRUE, (SECCertificateUsage)0, timeboundary ,NULL, log, &usage);
+                PR_TRUE, (SECCertificateUsage)certificateUsageSSLClient | certificateUsageSSLServer, timeboundary ,NULL, log, &usage);
         }
 
         if( status == SECSuccess )
@@ -825,59 +830,59 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
 
 
             // (TKR) use for backward compatibility (digital signatures)
+
+
+            // JL & TKR : certificateUsageUserCertImport,
+            // certificateUsageVerifyCA and certificateUsageAnyCA dont check the chain
+
             if (usage & certificateUsageEmailSigner
                 || usage & certificateUsageEmailRecipient
                 || usage & certificateUsageSSLCA
                 || usage & certificateUsageSSLServer
-                || usage & certificateUsageSSLClient
-                || usage & certificateUsageUserCertImport
-                || usage & certificateUsageVerifyCA
-                || usage & certificateUsageStatusResponder
-                || usage & certificateUsageAnyCA )
+                // || usage & certificateUsageSSLClient
+                // || usage & certificateUsageUserCertImport
+                // || usage & certificateUsageVerifyCA
+                || usage & certificateUsageStatusResponder )
+                // || usage & certificateUsageAnyCA )
                 validity = csss::CertificateValidity::VALID;
             else
                 validity = csss::CertificateValidity::INVALID;
 
             //---
-        } else
-        {
         }
+        // always check what kind of error occured, even SECStatus says Success
+        CERTVerifyLogNode *logNode = 0;
 
-            // always check what kind of error occured, even SECStatus says Success
-            CERTVerifyLogNode *logNode = 0;
+        logNode = log->head;
+        while ( logNode != NULL )
+        {
+            sal_Int32 errorCode = 0;
+            errorCode = logNode->error;
 
-            logNode = log->head;
-            while ( logNode != NULL )
+            switch ( errorCode )
             {
-                sal_Int32 errorCode = 0;
-                errorCode = logNode->error;
-
-                switch ( errorCode )
-                {
-                    case ( SEC_ERROR_REVOKED_CERTIFICATE ):
-                        validity |= csss::CertificateValidity::REVOKED;
-                    break;
-                    case ( SEC_ERROR_EXPIRED_CERTIFICATE ):
-                        validity |= csss::CertificateValidity::TIME_INVALID;
-                    break;
-                    case ( SEC_ERROR_CERT_USAGES_INVALID):
-                        validity |= csss::CertificateValidity::INVALID;
-                    break;
-                    case ( SEC_ERROR_UNTRUSTED_ISSUER ):
-                    case ( SEC_ERROR_UNTRUSTED_CERT ):
-                        validity |= csss::CertificateValidity::UNTRUSTED;
-                    break;
-                    default:
-                        validity |= 0;
-                    break;
-                }
-
-
-                logNode = logNode->next;
-
+                // JL & TKR: Any error are treated as invalid because we cannot say that we get all occurred errors from NSS
+/*
+                case ( SEC_ERROR_REVOKED_CERTIFICATE ):
+                    validity |= csss::CertificateValidity::REVOKED;
+                break;
+                case ( SEC_ERROR_EXPIRED_CERTIFICATE ):
+                    validity |= csss::CertificateValidity::TIME_INVALID;
+                break;
+                case ( SEC_ERROR_CERT_USAGES_INVALID):
+                    validity |= csss::CertificateValidity::INVALID;
+                break;
+                case ( SEC_ERROR_UNTRUSTED_ISSUER ):
+                case ( SEC_ERROR_UNTRUSTED_CERT ):
+                    validity |= csss::CertificateValidity::UNTRUSTED;
+                break;
+ */
+                default:
+                    validity |= csss::CertificateValidity::INVALID;
+                break;
             }
-
-
+            logNode = logNode->next;
+        }
     }
     else
     {
