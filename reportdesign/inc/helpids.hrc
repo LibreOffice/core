@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpids.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 18:55:47 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,47 +36,47 @@
 #define RTPUI_REPORTDESIGN_HELPID_HRC
 
 #ifndef _SOLAR_HRC
-#include <svtools/solar.hrc>    // HID_DBACCESS_START
+#include <svtools/solar.hrc>    // HID_RPT_DBACCESS_START
 #endif
 
-#define UID_RPT_APP_VIEW        (HID_RPT_START +  0)
-#define UID_SCROLLWINDOW        (HID_RPT_START +  1)
-#define UID_REPORTWINDOW        (HID_RPT_START +  2)
-#define HID_HORZ_RULER          (HID_RPT_START +  3)
-#define UID_SECTIONSWINDOW      (HID_RPT_START +  4)
-#define UID_VIEWSWINDOW         (HID_RPT_START +  5)
-#define HID_ENDMARKER           (HID_RPT_START +  6)
-#define HID_SPLITTER            (HID_RPT_START +  7)
+#define UID_RPT_RPT_APP_VIEW        (HID_RPT_START +  0)
+#define UID_RPT_SCROLLWINDOW        (HID_RPT_START +  1)
+#define UID_RPT_REPORTWINDOW        (HID_RPT_START +  2)
+#define HID_RPT_HORZ_RULER          (HID_RPT_START +  3)
+#define UID_RPT_SECTIONSWINDOW      (HID_RPT_START +  4)
+#define UID_RPT_VIEWSWINDOW         (HID_RPT_START +  5)
+#define HID_RPT_ENDMARKER           (HID_RPT_START +  6)
+#define HID_RPT_SPLITTER            (HID_RPT_START +  7)
 #define HID_REPORTSECTION       (HID_RPT_START +  8)
-#define HID_HORZ_SCROLLBAR      (HID_RPT_START +  9)
-#define HID_VERT_SCROLLBAR      (HID_RPT_START +  10)
-#define HID_STARTMARKER         (HID_RPT_START +  11)
-#define HID_FIELDEXPRESSION     (HID_RPT_START +  12)
-#define HID_SORTORDER           (HID_RPT_START +  13)
-#define HID_GROUPSBRW           (HID_RPT_START +  14)
-#define HID_GROUPSSORTING_DLG   (HID_RPT_START +  15)
-#define HID_PAGENUMBERS_DLG     (HID_RPT_START +  16)
-#define HID_DATETIME_DLG        (HID_RPT_START +  17)
-#define HID_CONDFORMAT_DLG      (HID_RPT_START +  18)
-#define HID_CONDFORMAT_TB       (HID_RPT_START +  19)
-#define HID_CRTL_FORMAT_PREVIEW (HID_RPT_START +  20)
-#define HID_COND_DLG            (HID_RPT_START +  21)
+#define HID_RPT_HORZ_SCROLLBAR      (HID_RPT_START +  9)
+#define HID_RPT_VERT_SCROLLBAR      (HID_RPT_START +  10)
+#define HID_RPT_STARTMARKER         (HID_RPT_START +  11)
+#define HID_RPT_FIELDEXPRESSION     (HID_RPT_START +  12)
+#define HID_RPT_SORTORDER           (HID_RPT_START +  13)
+#define HID_RPT_GROUPSBRW           (HID_RPT_START +  14)
+#define HID_RPT_GROUPSSORTING_DLG   (HID_RPT_START +  15)
+#define HID_RPT_PAGENUMBERS_DLG     (HID_RPT_START +  16)
+#define HID_RPT_DATETIME_DLG        (HID_RPT_START +  17)
+#define HID_RPT_CONDFORMAT_DLG      (HID_RPT_START +  18)
+#define HID_RPT_CONDFORMAT_TB       (HID_RPT_START +  19)
+#define HID_RPT_CRTL_FORMAT_PREVIEW (HID_RPT_START +  20)
+#define HID_RPT_COND_DLG            (HID_RPT_START +  21)
 #define HID_RPT_POPUP_COLOR_CTRL    (HID_RPT_START +  22)
 #define HID_RPT_POPUP_COLOR         (HID_RPT_START +  23)
-#define HID_FIELD_SEL           (HID_RPT_START +  24)
-#define HID_FIELD_SEL_WIN       (HID_RPT_START +  25)
-#define HID_PROPDLG_TAB_GENERAL (HID_RPT_START +  26)
-#define HID_PROPDLG_TAB_DATA    (HID_RPT_START +  27)
+#define HID_RPT_FIELD_SEL           (HID_RPT_START +  24)
+#define HID_RPT_FIELD_SEL_WIN       (HID_RPT_START +  25)
+#define HID_RPT_PROPDLG_TAB_GENERAL (HID_RPT_START +  26)
+#define HID_RPT_PROPDLG_TAB_DATA    (HID_RPT_START +  27)
 
-#define HID_PROP_FORCENEWPAGE               (HID_RPT_START + 28)
-#define HID_PROP_NEWROWORCOL                (HID_RPT_START + 29)
-#define HID_PROP_KEEPTOGETHER               (HID_RPT_START + 30)
-#define HID_PROP_CANGROW                    (HID_RPT_START + 31)
-#define HID_PROP_CANSHRINK                  (HID_RPT_START + 32)
-#define HID_PROP_REPEATSECTION              (HID_RPT_START + 33)
-#define HID_PROP_FORMULALIST                (HID_RPT_START + 34)
-#define HID_PROP_SCOPE                      (HID_RPT_START + 35)
-#define HID_PROP_TYPE                       (HID_RPT_START + 36)
+#define HID_RPT_PROP_FORCENEWPAGE               (HID_RPT_START + 28)
+#define HID_RPT_PROP_NEWROWORCOL                (HID_RPT_START + 29)
+#define HID_RPT_PROP_KEEPTOGETHER               (HID_RPT_START + 30)
+#define HID_RPT_PROP_CANGROW                    (HID_RPT_START + 31)
+#define HID_RPT_PROP_CANSHRINK                  (HID_RPT_START + 32)
+#define HID_RPT_PROP_REPEATSECTION              (HID_RPT_START + 33)
+#define HID_RPT_PROP_FORMULALIST                (HID_RPT_START + 34)
+#define HID_RPT_PROP_SCOPE                      (HID_RPT_START + 35)
+#define HID_RPT_PROP_TYPE                       (HID_RPT_START + 36)
 // free
 // free
 // free
@@ -84,45 +84,45 @@
 // free
 // free
 // free
-#define HID_PROP_PRINTREPEATEDVALUES        (HID_RPT_START + 44)
-#define HID_PROP_CONDITIONALPRINTEXPRESSION (HID_RPT_START + 45)
+#define HID_RPT_PROP_PRINTREPEATEDVALUES        (HID_RPT_START + 44)
+#define HID_RPT_PROP_CONDITIONALPRINTEXPRESSION (HID_RPT_START + 45)
 // free
-#define HID_PROP_STARTNEWCOLUMN             (HID_RPT_START + 47)
-#define HID_PROP_STARTNEWPAGE               (HID_RPT_START + 48)
-#define HID_PROP_RESETPAGENUMBER            (HID_RPT_START + 49)
+#define HID_RPT_PROP_STARTNEWCOLUMN             (HID_RPT_START + 47)
+#define HID_RPT_PROP_STARTNEWPAGE               (HID_RPT_START + 48)
+#define HID_RPT_PROP_RESETPAGENUMBER            (HID_RPT_START + 49)
 // free
-#define HID_PROP_MINHEIGHTNEWPAGE           (HID_RPT_START + 51)
-#define HID_PROP_PRINTWHENGROUPCHANGE       (HID_RPT_START + 52)
+#define HID_RPT_PROP_MINHEIGHTNEWPAGE           (HID_RPT_START + 51)
+#define HID_RPT_PROP_PRINTWHENGROUPCHANGE       (HID_RPT_START + 52)
 // free
 // free
-#define HID_PROP_VISIBLE                    (HID_RPT_START + 55)
-#define HID_PROP_GROUPKEEPTOGETHER          (HID_RPT_START + 56)
-#define HID_PROP_PAGEHEADEROPTION           (HID_RPT_START + 57)
-#define HID_PROP_PAGEFOOTEROPTION           (HID_RPT_START + 58)
-#define UID_PROP_DLG_LINE_STYLE             (HID_RPT_START + 59)
+#define HID_RPT_PROP_VISIBLE                    (HID_RPT_START + 55)
+#define HID_RPT_PROP_GROUPKEEPTOGETHER          (HID_RPT_START + 56)
+#define HID_RPT_PROP_PAGEHEADEROPTION           (HID_RPT_START + 57)
+#define HID_RPT_PROP_PAGEFOOTEROPTION           (HID_RPT_START + 58)
+#define UID_RPT_PROP_DLG_LINE_STYLE             (HID_RPT_START + 59)
 // free
-#define HID_PROP_DATAFIELD                  (HID_RPT_START + 61)
-#define HID_PROP_BACKCOLOR                  (HID_RPT_START + 62)
-#define HID_PROP_RPT_POSITIONX              (HID_RPT_START + 63)
-#define HID_PROP_RPT_POSITIONY              (HID_RPT_START + 64)
-#define HID_PROP_RPT_WIDTH                  (HID_RPT_START + 65)
-#define HID_PROP_RPT_HEIGHT                 (HID_RPT_START + 66)
-#define HID_START_TITLE                     (HID_RPT_START + 67)
-#define HID_START_IMAGE                     (HID_RPT_START + 68)
-#define HID_PROP_DEEPTRAVERSING             (HID_RPT_START + 69)
-#define HID_PROP_PREEVALUATED               (HID_RPT_START + 70)
-#define HID_NAVIGATOR_DLG                   (HID_RPT_START + 71)
-#define HID_REPORT_NAVIGATOR_TREE           (HID_RPT_START + 72)
-#define HID_PROP_FORMULA                    (HID_RPT_START + 73)
-#define HID_PROP_INITIALFORMULA             (HID_RPT_START + 74)
-#define HID_PROP_RPT_FONT                   (HID_RPT_START + 75)
-#define UID_RPT_PROP_DLG_FONT_TYPE          (HID_RPT_START + 76)
-#define HID_PROP_PRESERVEIRI                (HID_RPT_START + 77)
-#define HID_PROP_BACKTRANSPARENT            (HID_RPT_START + 78)
-#define HID_PROP_CONTROLBACKGROUNDTRANSPARENT (HID_RPT_START + 79)
+#define HID_RPT_PROP_DATAFIELD                  (HID_RPT_START + 61)
+#define HID_RPT_PROP_BACKCOLOR                  (HID_RPT_START + 62)
+#define HID_RPT_PROP_RPT_POSITIONX              (HID_RPT_START + 63)
+#define HID_RPT_PROP_RPT_POSITIONY              (HID_RPT_START + 64)
+#define HID_RPT_PROP_RPT_WIDTH                  (HID_RPT_START + 65)
+#define HID_RPT_PROP_RPT_HEIGHT                 (HID_RPT_START + 66)
+#define HID_RPT_START_TITLE                     (HID_RPT_START + 67)
+#define HID_RPT_START_IMAGE                     (HID_RPT_START + 68)
+#define HID_RPT_PROP_DEEPTRAVERSING             (HID_RPT_START + 69)
+#define HID_RPT_PROP_PREEVALUATED               (HID_RPT_START + 70)
+#define HID_RPT_NAVIGATOR_DLG                   (HID_RPT_START + 71)
+#define HID_REPORT_NAVIGATOR_TREE               (HID_RPT_START + 72)
+#define HID_RPT_PROP_FORMULA                    (HID_RPT_START + 73)
+#define HID_RPT_PROP_INITIALFORMULA             (HID_RPT_START + 74)
+#define HID_RPT_PROP_RPT_FONT                   (HID_RPT_START + 75)
+#define UID_RPT_RPT_PROP_DLG_FONT_TYPE          (HID_RPT_START + 76)
+#define HID_RPT_PROP_PRESERVEIRI                (HID_RPT_START + 77)
+#define HID_RPT_PROP_BACKTRANSPARENT            (HID_RPT_START + 78)
+#define HID_RPT_PROP_CONTROLBACKGROUNDTRANSPARENT (HID_RPT_START + 79)
 
 
-#if HID_PROP_CONTROLBACKGROUNDTRANSPARENT > HID_RPT_END
+#if HID_RPT_PROP_CONTROLBACKGROUNDTRANSPARENT > HID_RPT_END
 #error Help-Id Ueberlauf in #file, #line
 #endif
 // don't forget to update the file util/hidother.src
