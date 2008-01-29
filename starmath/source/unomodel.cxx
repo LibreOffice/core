@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 17:48:43 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:07:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -607,23 +607,27 @@ void SmModel::_setPropertyValues(const PropertyMapEntry** ppEntries, const Any* 
             break;
             case HANDLE_PRINTER_NAME:
             {
-                SfxPrinter *pPrinter = pDocSh->GetPrinter ( );
-                if (pPrinter)
+                // embedded documents just ignore this property for now
+                if ( pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                 {
-                    OUString sPrinterName;
-                    if (*pValues >>= sPrinterName )
+                    SfxPrinter *pPrinter = pDocSh->GetPrinter ( );
+                    if (pPrinter)
                     {
-                        if ( sPrinterName.getLength() )
+                        OUString sPrinterName;
+                        if (*pValues >>= sPrinterName )
                         {
-                            SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
-                            if (pNewPrinter->IsKnown())
-                                pDocSh->SetPrinter ( pNewPrinter );
-                            else
-                                delete pNewPrinter;
+                            if ( sPrinterName.getLength() )
+                            {
+                                SfxPrinter *pNewPrinter = new SfxPrinter ( pPrinter->GetOptions().Clone(), sPrinterName );
+                                if (pNewPrinter->IsKnown())
+                                    pDocSh->SetPrinter ( pNewPrinter );
+                                else
+                                    delete pNewPrinter;
+                            }
                         }
+                        else
+                            throw IllegalArgumentException();
                     }
-                    else
-                        throw IllegalArgumentException();
                 }
             }
             break;
