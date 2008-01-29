@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 13:57:12 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:22:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,6 +507,10 @@ NetWMAdaptor::NetWMAdaptor( SalDisplay* pSalDisplay ) :
 #endif
                 for( unsigned int i = 0; i < nItems; i++ )
                 {
+                    // #i80971# protect against invalid atoms
+                    if( pAtomNames[i] == NULL )
+                        continue;
+
                     int nProtocol = -1;
                     WMAdaptorProtocol aSearch;
                     aSearch.pProtocol = pAtomNames[i];
@@ -759,6 +763,10 @@ GnomeWMAdaptor::GnomeWMAdaptor( SalDisplay* pSalDisplay ) :
 #endif
                 for( unsigned int i = 0; i < nItems; i++ )
                 {
+                    // #i80971# protect against invalid atoms
+                    if( pAtomNames[i] == NULL )
+                        continue;
+
                     int nProtocol = -1;
                     WMAdaptorProtocol aSearch;
                     aSearch.pProtocol = pAtomNames[i];
