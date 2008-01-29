@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportController.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 11:58:48 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:50:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -341,30 +341,6 @@ uno::Reference< report::XReportControlFormat> lcl_getReportControlFormat(const S
         _xWindow = VCLUnoHelper::GetInterface(_pView);
     return xReportControlFormat;
 }
-// -----------------------------------------------------------------------------
-// check overlapping
-void lcl_correctOverlapping(SdrObject* pControl,::boost::shared_ptr<OReportSection> _pReportSection,bool _bAppend = true)
-{
-    OSectionView* pSectionView = _pReportSection->getView();
-    uno::Reference< report::XReportComponent> xComponent(pControl->getUnoShape(),uno::UNO_QUERY);
-    Rectangle aRet(VCLPoint(xComponent->getPosition()),VCLSize(xComponent->getSize()));
-    aRet.setHeight(aRet.getHeight() + 1);
-    aRet.setWidth(aRet.getWidth() + 1);
-    bool bOverlapping = true;
-    while ( bOverlapping )
-    {
-        const SdrObject* pOverlappedObj = isOver(aRet,*_pReportSection->getPage(),*pSectionView,true,pControl);
-        bOverlapping = pOverlappedObj != NULL;
-        if ( bOverlapping )
-        {
-            const Rectangle& aLogicRect = pOverlappedObj->GetLogicRect();
-            aRet.Move(0,aLogicRect.Top() + aLogicRect.getHeight() - aRet.Top());
-            xComponent->setPositionY(aRet.Top());
-        }
-    }
-    if ( !bOverlapping && _bAppend ) // now insert objects
-        pSectionView->InsertObjectAtView(pControl,*pSectionView->GetSdrPageView(),SDRINSERT_ADDMARK);
-}
 //------------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OReportController::getImplementationName() throw( RuntimeException )
 {
@@ -635,6 +611,16 @@ FeatureState OReportController::GetState(sal_uInt16 _nId) const
         case SID_EXECUTE_REPORT:
             aReturn.bEnabled = isConnected() && isEditable() && m_xReportDefinition.is()
                                              && m_xReportDefinition->getCommand().getLength();
+            if ( aReturn.bEnabled )
+            {
+                aReturn.bEnabled = sal_False;
+                const sal_uInt16 nCount = m_aReportModel->GetPageCount();
+                for (sal_uInt16 i = 0; i < nCount && !aReturn.bEnabled ; ++i)
+                {
+                    const SdrPage* pPage = m_aReportModel->GetPage(i);
+                    aReturn.bEnabled = pPage->GetObjCount() != 0;
+                }
+            }
             break;
         case SID_DELETE:
             aReturn.bEnabled = isEditable() && m_pMyOwnView->HasSelection() && !m_pMyOwnView->isHandleEvent(_nId);
@@ -1689,12 +1675,6 @@ void OReportController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >
             {
             }
             break;
-        case SID_SAVEASDOC:
-            //getView()->PostUserEvent(LINK(this, OReportController,OnSaveAs));
-            break;
-        case SID_SAVEDOC:
-            getView()->PostUserEvent(LINK(this, OReportController,OnSave));
-            break;
         case SID_EDITDOC:
             if(isEditable())
             { // the state should be changed to not editable
@@ -2435,89 +2415,6 @@ IMPL_LINK(OReportController, OnInvalidateClipboard, void*, EMPTYARG)
     return 0L;
 }
 // -----------------------------------------------------------------------------
-sal_Bool OReportController::doSaveDoc(sal_Bool _bSaveAs)
-{
-    WaitObject aWO(getView());
-
-    sal_Bool bRet = sal_False;
-    if ( m_xReportDefinition.is() )
-        try
-        {
-            if ( !_bSaveAs )
-            {
-                uno::Reference< embed::XStorage > xStorage = m_xReportDefinition->getDocumentStorage();
-                OSL_ENSURE(xStorage.is(),"No Storage available!");
-                if ( xStorage.is() )
-                {
-                    m_xReportDefinition->storeToStorage(xStorage,m_xReportDefinition->getArgs());
-                }
-            }
-
-
-            uno::Reference< sdb::XDocumentDataSource> xDocumentDataSource(getDataSource(),UNO_QUERY);
-            if ( xDocumentDataSource.is() )
-            {
-                uno::Reference< sdb::XReportDocumentsSupplier> xSup(xDocumentDataSource->getDatabaseDocument(),UNO_QUERY);
-                if ( xSup.is() )
-                {
-                    uno::Reference< container::XNameContainer> xNames(xSup->getReportDocuments(),uno::UNO_QUERY);
-                    OSL_ENSURE(xNames.is(),"Who blows my XNameAccess up! -> GPF");
-                    sal_Bool bNew = (0 == m_sName.getLength());
-                    bNew = bNew || _bSaveAs || (xNames.is() && !xNames->hasByName(m_sName));
-                    // first we need a name for our query so ask the user
-                    if ( bNew )
-                    {
-                        ::rtl::OUString sDefault;
-                        if (_bSaveAs && !bNew)
-                            sDefault = m_sName;
-                        else
-                        {
-                            String aName = String(ModuleRes(STR_RPT_TITLE));
-                            aName = aName.GetToken(0,' ');
-                            sDefault = String(::dbtools::createUniqueName(xNames.get(),aName));
-                        }
-
-                        String aGcc3WorkaroundTemporary( ModuleRes(STR_RPT_LABEL));
-                        const ::rtl::OUString sLabel(aGcc3WorkaroundTemporary);
-                        Sequence< Any > aArgs(4);
-                        Reference< awt::XWindow> xWindow = getTopMostContainerWindow();
-                        if ( !xWindow.is() )
-                        {
-                            xWindow = VCLUnoHelper::GetInterface(getView()->Window::GetParent());
-                        }
-                        // the parent window
-                        aArgs[0] <<= beans::NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentWindow")),makeAny(xWindow));
-                        aArgs[1] <<= beans::NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultValue")),makeAny(sDefault));
-                        aArgs[2] <<= beans::NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Label")),makeAny(sLabel));
-                        aArgs[3] <<= beans::NamedValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HierarchicalNameAccess")),makeAny(uno::Reference< container::XHierarchicalNameAccess>(xNames,uno::UNO_QUERY)));
-
-                        Reference< XExecutableDialog > xDialog(getORB()->createInstanceWithArguments(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.SaveAsDialog")),aArgs), UNO_QUERY);
-
-                        // execute it
-                        if (xDialog.is() && xDialog->execute() == RET_OK )
-                        {
-                            uno::Reference<beans::XPropertySet> xProp(xDialog,uno::UNO_QUERY_THROW);
-                            xProp->getPropertyValue(PROPERTY_NAME) >>= m_sName;
-                            m_xReportDefinition->setName(m_sName);
-                            xNames->insertByName(m_sName,uno::makeAny(m_xReportDefinition));
-                        }
-                        else
-                            return sal_False;
-                    } // if(bNew)
-                    //else
-                    //  xNames->replaceByName(m_sName,uno::makeAny(m_xReportDefinition));
-
-                } // if ( xSup.is() )
-            }
-            setModified(sal_False);
-        }
-        catch(Exception&)
-        {
-            DBG_UNHANDLED_EXCEPTION();
-            bRet = sal_False;
-        }
-    return bRet;
-}
 namespace
 {
 // -----------------------------------------------------------------------------
@@ -3241,20 +3138,6 @@ IMPL_LINK( OReportController, OnExecuteReport, void* ,/*_pMemfun*/)
     return 0L;
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( OReportController, OnSave, void* ,/*_pMemfun*/)
-{
-    //m_nExecuteReportEvent = 0;
-    doSaveDoc(sal_False);
-    return 0L;
-}
-// -----------------------------------------------------------------------------
-IMPL_LINK( OReportController, OnSaveAs, void* ,/*_pMemfun*/)
-{
-    //m_nExecuteReportEvent = 0;
-    doSaveDoc(sal_True);
-    return 0L;
-}
-// -----------------------------------------------------------------------------
 void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,const uno::Reference< report::XSection>& _xSection,const ::rtl::OUString& _sFunction,sal_uInt16 _nObjectId)
 {
     SequenceAsHashMap aMap(_aArgs);
@@ -3346,7 +3229,7 @@ void OReportController::createControl(const Sequence< PropertyValue >& _aArgs,co
         aPos.X = nPaperWidth - nShapeWidth;
     xShapeProp->setPosition(aPos);
 
-    lcl_correctOverlapping(pNewControl,pReportSection);
+    correctOverlapping(pNewControl,pReportSection);
 }
 // -----------------------------------------------------------------------------
 void OReportController::createDateTime(const Sequence< PropertyValue >& _aArgs)
@@ -3653,7 +3536,8 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                     xShapeProp->setName(xShapeProp->getName() + sDefaultName );
 
                     for(i = 0; i < sizeof(pControl)/sizeof(pControl[0]);++i)
-                        lcl_correctOverlapping(pControl[i],pReportSection[1-i]);
+                        correctOverlapping(pControl[i],pReportSection[1-i]);
+
                     if (!bLabelAboveTextField )
                     {
                         uno::Reference< report::XReportComponent> xComponent(pControl[1]->getUnoShape(),uno::UNO_QUERY_THROW);
@@ -3669,7 +3553,7 @@ void OReportController::addPairControls(const Sequence< PropertyValue >& aArgs)
                             }
                             else
                                 xShapeProp->setPositionY(nY2);
-                            lcl_correctOverlapping(pControl[nWhich],pReportSection[1 - nWhich],false);
+                            correctOverlapping(pControl[nWhich],pReportSection[1 - nWhich],false);
 
                             nY1 = xShapeProp->getPositionY();
                             nY2 = xComponent->getPositionY();
