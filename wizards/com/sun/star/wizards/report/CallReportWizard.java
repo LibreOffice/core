@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CallReportWizard.java,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:50:10 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:42:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,6 @@ public class CallReportWizard {
 
         public void trigger(String sEvent){
         try{
-            com.sun.star.frame.XComponentLoader xcomponentloader = (com.sun.star.frame.XComponentLoader) com.sun.star.uno.UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop"));
             if (sEvent.compareTo("start") == 0) {
                 if (bWizardstartedalready != true){
                     ReportWizard CurReportWizard = new ReportWizard(xmultiservicefactory);
@@ -130,6 +129,11 @@ public class CallReportWizard {
                     }
                 }
                 bWizardstartedalready = false;
+            }
+            else if (sEvent.compareTo("end") == 0) {
+                DocumentDefinition = null;
+                Document = null;
+                databaseproperties = null;
             }
             else if (sEvent.compareTo("fill") == 0){
                 Dataimport CurDataimport = new Dataimport(xmultiservicefactory);
@@ -149,7 +153,9 @@ public class CallReportWizard {
         }
         catch( Exception exception ){
             System.err.println( exception );
-        }}
+        }
+        System.gc();
+        }
 
 
         /** The service name, that must be used to get an instance of this service.
