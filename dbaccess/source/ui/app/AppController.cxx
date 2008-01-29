@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:57:49 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:51:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -421,6 +421,14 @@ void SAL_CALL OApplicationController::disposing()
         if ( m_xDataSource.is() )
         {
             m_xDataSource->removePropertyChangeListener(::rtl::OUString(), this);
+            m_xDataSource->removePropertyChangeListener(PROPERTY_INFO, this);
+            m_xDataSource->removePropertyChangeListener(PROPERTY_URL, this);
+            m_xDataSource->removePropertyChangeListener(PROPERTY_ISPASSWORDREQUIRED, this);
+            m_xDataSource->removePropertyChangeListener(PROPERTY_LAYOUTINFORMATION, this);
+            m_xDataSource->removePropertyChangeListener(PROPERTY_SUPPRESSVERSIONCL, this);
+            m_xDataSource->removePropertyChangeListener(PROPERTY_TABLEFILTER, this);
+            m_xDataSource->removePropertyChangeListener(PROPERTY_TABLETYPEFILTER, this);
+            m_xDataSource->removePropertyChangeListener(PROPERTY_USER, this);
             // otherwise we may delete our datasource twice
             Reference<XPropertySet> xProp = m_xDataSource;
             m_xDataSource = NULL;
@@ -458,7 +466,7 @@ void SAL_CALL OApplicationController::disposing()
     }
 
     m_pView = NULL;
-    OApplicationController_CBASE::disposing();
+    OApplicationController_CBASE::disposing(); // here the m_refCount must be equal 5
 }
 
 //--------------------------------------------------------------------
@@ -1695,6 +1703,9 @@ sal_Bool OApplicationController::onContainerSelect(ElementType _eType)
         }
 
         InvalidateAll();
+        EventObject aEvent(*this);
+        m_aSelectionListeners.forEach<XSelectionChangeListener>(
+            ::boost::bind(&XSelectionChangeListener::selectionChanged,_1,boost::cref(aEvent)));
     }
     m_eOldType = _eType;
 
@@ -1868,10 +1879,12 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
              ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
             if ( aHelper->isConnected() )
             {
+                Reference< XComponent > xComponent,xDefinition;
                  if ( E_QUERY == _eType )
-                     aHelper->newQueryWithPilot( );
+                     xComponent = aHelper->newQueryWithPilot( );
                  else
-                     aHelper->newTableWithPilot( );
+                     xComponent = aHelper->newTableWithPilot( );
+                addDocumentListener(xComponent,xDefinition);
              }
          }
          break;
