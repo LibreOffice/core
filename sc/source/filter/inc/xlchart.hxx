@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlchart.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:37:03 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,11 @@
 
 // disable/enable support for varied point colors property
 #define EXC_CHART2_VARYCOLORSBY_PROP 0
+// disable/enable restriction to hair lines in 3D bar charts (#i83151#)
+#define EXC_CHART2_3DBAR_HAIRLINES_ONLY 1
 
 #include <map>
-
-#ifndef SC_FAPIHELPER_HXX
 #include "fapihelper.hxx"
-#endif
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -86,6 +85,7 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_COLOR                    CREATE_OUSTRING( "Color" )
 #define EXC_CHPROP_CONNECTBARS              CREATE_OUSTRING( "ConnectBars" )
 #define EXC_CHPROP_CURVESTYLE               CREATE_OUSTRING( "CurveStyle" )
+#define EXC_CHPROP_D3DSCENEAMBIENTCOLOR     CREATE_OUSTRING( "D3DSceneAmbientColor" )
 #define EXC_CHPROP_D3DSCENELIGHTON1         CREATE_OUSTRING( "D3DSceneLightOn1" )
 #define EXC_CHPROP_D3DSCENELIGHTCOLOR2      CREATE_OUSTRING( "D3DSceneLightColor2" )
 #define EXC_CHPROP_D3DSCENELIGHTDIR2        CREATE_OUSTRING( "D3DSceneLightDirection2" )
@@ -101,17 +101,21 @@ namespace com { namespace sun { namespace star {
 #define EXC_CHPROP_GEOMETRY3D               CREATE_OUSTRING( "Geometry3D" )
 #define EXC_CHPROP_JAPANESE                 CREATE_OUSTRING( "Japanese" )
 #define EXC_CHPROP_LABEL                    CREATE_OUSTRING( "Label" )
+#define EXC_CHPROP_LABELPLACEMENT           CREATE_OUSTRING( "LabelPlacement" )
 #define EXC_CHPROP_MAJORTICKS               CREATE_OUSTRING( "MajorTickmarks" )
 #define EXC_CHPROP_MINORTICKS               CREATE_OUSTRING( "MinorTickmarks" )
 #define EXC_CHPROP_NEGATIVEERROR            CREATE_OUSTRING( "NegativeError" )
 #define EXC_CHPROP_NUMBERFORMAT             CREATE_OUSTRING( "NumberFormat" )
 #define EXC_CHPROP_OFFSET                   CREATE_OUSTRING( "Offset" )
 #define EXC_CHPROP_OVERLAPSEQ               CREATE_OUSTRING( "OverlapSequence" )
+#define EXC_CHPROP_PERCENTAGENUMFMT         CREATE_OUSTRING( "PercentageNumberFormat" )
 #define EXC_CHPROP_PERCENTDIAGONAL          CREATE_OUSTRING( "PercentDiagonal" )
 #define EXC_CHPROP_POSITIVEERROR            CREATE_OUSTRING( "PositiveError" )
 #define EXC_CHPROP_RIGHTANGLEDAXES          CREATE_OUSTRING( "RightAngledAxes" )
 #define EXC_CHPROP_ROLE                     CREATE_OUSTRING( "Role" )
 #define EXC_CHPROP_SHOW                     CREATE_OUSTRING( "Show" )
+#define EXC_CHPROP_SHOWCORRELATION          CREATE_OUSTRING( "ShowCorrelationCoefficient" )
+#define EXC_CHPROP_SHOWEQUATION             CREATE_OUSTRING( "ShowEquation" )
 #define EXC_CHPROP_SHOWFIRST                CREATE_OUSTRING( "ShowFirst" )
 #define EXC_CHPROP_SHOWHIGHLOW              CREATE_OUSTRING( "ShowHighLow" )
 #define EXC_CHPROP_SHOWNEGATIVEERROR        CREATE_OUSTRING( "ShowNegativeError" )
@@ -392,10 +396,8 @@ const sal_uInt16 EXC_ID_CHDEFAULTTEXT           = 0x1024;
 
 const sal_uInt16 EXC_CHDEFTEXT_TEXTLABEL        = 0;        /// Default for text data labels (not used?).
 const sal_uInt16 EXC_CHDEFTEXT_NUMLABEL         = 1;        /// Default for numeric data labels (not used?).
-const sal_uInt16 EXC_CHDEFTEXT_TITLE            = 2;        /// Default text for chart title.
-const sal_uInt16 EXC_CHDEFTEXT_LEGEND           = 2;        /// Default text for legend.
-const sal_uInt16 EXC_CHDEFTEXT_AXIS             = 3;        /// Default text for axis title and labels.
-const sal_uInt16 EXC_CHDEFTEXT_LABEL            = 3;        /// Default text for data point labels.
+const sal_uInt16 EXC_CHDEFTEXT_GLOBAL           = 2;        /// Default text for all chart objects.
+const sal_uInt16 EXC_CHDEFTEXT_AXESSET          = 3;        /// Default text for axes and data points (BIFF8 only).
 const sal_uInt16 EXC_CHDEFTEXT_NONE             = 0xFFFF;   /// No default text available.
 
 // (0x1025) CHTEXT ------------------------------------------------------------
@@ -682,7 +684,9 @@ struct XclChDataPointPos
     sal_uInt16          mnSeriesIdx;        /// Series index of series or a data point.
     sal_uInt16          mnPointIdx;         /// Index of a data point inside a series.
 
-    explicit            XclChDataPointPos();
+    explicit            XclChDataPointPos(
+                            sal_uInt16 nSeriesIdx = EXC_CHSERIES_INVALID,
+                            sal_uInt16 nPointIdx = EXC_CHDATAFORMAT_ALLPOINTS );
 };
 
 bool operator<( const XclChDataPointPos& rL, const XclChDataPointPos& rR );
@@ -1064,6 +1068,16 @@ enum XclChFrameType
      EXC_CHFRAMETYPE_INVISIBLE      /// Missing frame represents invisible formatting.
 };
 
+/** Enumerates different text box types for default text formatting. */
+enum XclChTextType
+{
+    EXC_CHTEXTTYPE_TITLE,           /// Chart title.
+    EXC_CHTEXTTYPE_LEGEND,          /// Chart legend.
+    EXC_CHTEXTTYPE_AXISTITLE,       /// Chart axis titles.
+    EXC_CHTEXTTYPE_AXISLABEL,       /// Chart axis labels.
+    EXC_CHTEXTTYPE_DATALABEL        /// Data point labels.
+};
+
 /** Contains information about auto formatting of a specific chart object type. */
 struct XclChFormatInfo
 {
@@ -1142,6 +1156,7 @@ struct XclChTypeInfo
     sal_uInt16          mnRecId;                /// Record identifier written to the file.
     const sal_Char*     mpcServiceName;         /// Service name of the type.
     XclChVarPointMode   meVarPointMode;         /// Mode for varying point colors.
+    sal_Int32           mnDefaultLabelPos;      /// Default data label position (API constant).
     bool                mbCombinable2d;         /// true = Types can be combined in one axes set.
     bool                mbSupports3d;           /// true = 3d type allowed, false = Only 2d type.
     bool                mb3dWalls;              /// true = 3d type includes wall and floor format.
@@ -1235,8 +1250,9 @@ public:
                             XclChObjectTable& rDashTable,
                             const ScfPropertySet& rPropSet,
                             XclChPropertyMode ePropMode );
-    /** Reads solid area properties from the passed property set. */
-    void                ReadAreaProperties(
+    /** Reads solid area properties from the passed property set.
+        @return  true = object contains complex fill properties. */
+    bool                ReadAreaProperties(
                             XclChAreaFormat& rAreaFmt,
                             const ScfPropertySet& rPropSet,
                             XclChPropertyMode ePropMode );
