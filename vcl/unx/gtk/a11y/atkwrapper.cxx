@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkwrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 15:28:11 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@
 #include <cppuhelper/queryinterface.hxx>
 
 #include "atkwrapper.hxx"
+#include "atkregistry.hxx"
 #include "atklistener.hxx"
 
 #ifdef ENABLE_TRACING
@@ -86,7 +87,6 @@
 using namespace ::com::sun::star;
 
 static GObjectClass *parent_class = NULL;
-static GHashTable   *uno_to_gobject = NULL;
 
 static G_CONST_RETURN gchar *
 getAsConst( rtl::OUString rString )
@@ -520,7 +520,7 @@ atk_object_wrapper_finalize (GObject *obj)
 
     if( pWrap->mpAccessible )
     {
-        g_hash_table_remove( uno_to_gobject, pWrap->mpAccessible );
+        ooo_wrapper_registry_remove( pWrap->mpAccessible );
         pWrap->mpAccessible->release();
         pWrap->mpAccessible = NULL;
     }
@@ -719,13 +719,11 @@ atk_object_wrapper_ref( const uno::Reference< accessibility::XAccessible > &rxAc
 {
     g_return_val_if_fail( rxAccessible.get() != NULL, NULL );
 
-    if( uno_to_gobject )
+    AtkObject *obj = ooo_wrapper_registry_get(rxAccessible);
+    if( obj )
     {
-        gpointer cached =
-            g_hash_table_lookup(uno_to_gobject, (gpointer) rxAccessible.get());
-
-        if( cached )
-            return ATK_OBJECT( g_object_ref( cached ) );
+        g_object_ref( obj );
+        return obj;
     }
 
     if( create )
@@ -751,39 +749,35 @@ atk_object_wrapper_new( const ::com::sun::star::uno::Reference< ::com::sun::star
         GType nType = ensureTypeFor( xContext.get() );
         gpointer obj = g_object_new( nType, NULL);
 
-        if( !uno_to_gobject )
-            uno_to_gobject = g_hash_table_new (NULL, NULL);
-
-        // We assume direct pointer comparison is sufficient...
-        g_hash_table_insert( uno_to_gobject, (gpointer) rxAccessible.get(), obj );
-        rxAccessible->acquire();
-
         pWrap = ATK_OBJECT_WRAPPER( obj );
         pWrap->mpAccessible = rxAccessible.get();
+        rxAccessible->acquire();
 
         xContext->acquire();
         pWrap->mpContext = xContext.get();
 
         AtkObject* atk_obj = ATK_OBJECT(pWrap);
         atk_obj->role = mapToAtkRole( xContext->getAccessibleRole() );
+        atk_obj->accessible_parent = parent;
+
+        ooo_wrapper_registry_add( rxAccessible, atk_obj );
 
         if( parent )
-        {
-            atk_obj->accessible_parent = parent;
             g_object_ref( atk_obj->accessible_parent );
-        }
         else
         {
-            uno::Reference< accessibility::XAccessible > xParent(xContext->getAccessibleParent());
+            /* gail_focus_tracker remembers the focused object at the first
+             * parent in the hierachy that is a Gtk+ widget, but at the time the
+             * event gets processed (at idle), it may be too late to create the
+             * hierachy, so doing it now ..
+             */
+            uno::Reference< accessibility::XAccessible > xParent( xContext->getAccessibleParent() );
+
+            /* The top-level objects should never be of this class */
+            OSL_ASSERT( xParent.is() );
+
             if( xParent.is() )
-            {
                 atk_obj->accessible_parent = atk_object_wrapper_ref( xParent );
-            }
-            else
-            {
-                atk_object_set_parent( atk_obj, atk_get_root() );
-                g_object_ref( atk_obj->accessible_parent );
-            }
         }
 
         // Attach a listener to the UNO object if it's not TRANSIENT
