@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:36:52 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:30:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version .1.
@@ -102,11 +102,12 @@ static void _setBold(FixedText& ft)
     ft.SetControlFont(f);
 }
 
-WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid)
+WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid, sal_Bool bLicenseNeedsAcceptance )
     : OWizardPage(parent, resid)
     , m_ftHead(this, WizardResId(FT_WELCOME_HEADER))
     , m_ftBody(this, WizardResId(FT_WELCOME_BODY))
     , m_pParent(parent)
+    , m_bLicenseNeedsAcceptance( bLicenseNeedsAcceptance )
     , bIsEvalVersion(false)
     , bNoEvalText(false)
 {
@@ -137,7 +138,7 @@ WelcomePage::WelcomePage( svt::OWizardMachine* parent, const ResId& resid)
             m_ftBody.SetText( aText );
         }
         else
-        if ( ! FirstStartWizard::needsLicenseAcceptence())
+        if ( ! m_bLicenseNeedsAcceptance )
         {
             String aText(WizardResId(STR_WELCOME_WITHOUT_LICENSE));
             m_ftBody.SetText( aText );
@@ -182,7 +183,7 @@ void WelcomePage::ActivatePage()
     // GrabFocus();
 }
 
-LicensePage::LicensePage( svt::OWizardMachine* parent, const ResId& resid)
+LicensePage::LicensePage( svt::OWizardMachine* parent, const ResId& resid, const rtl::OUString &rLicensePath )
     : OWizardPage(parent, resid)
     , m_pParent(parent)
     , m_ftHead(this, WizardResId(FT_LICENSE_HEADER))
@@ -214,13 +215,12 @@ LicensePage::LicensePage( svt::OWizardMachine* parent, const ResId& resid)
 
     m_ftBody1Txt.SetText( aText );
 
-    OUString aLicensePath = FirstStartWizard::getLicensePath();
     // load license text
-    File aLicenseFile(aLicensePath);
+    File aLicenseFile(rLicensePath);
     if ( aLicenseFile.open(OpenFlag_Read) == FileBase::E_None)
     {
         DirectoryItem d;
-        DirectoryItem::get(aLicensePath, d);
+        DirectoryItem::get(rLicensePath, d);
         FileStatus fs(FileStatusMask_FileSize);
         d.getFileStatus(fs);
         sal_uInt64 nBytesRead = 0;
