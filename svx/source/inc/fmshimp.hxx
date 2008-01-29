@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 13:58:47 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:49:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -448,6 +448,11 @@ public:
     void ResetForms(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xForms = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>(), sal_Bool bInvalidate = sal_False);
     void AddElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
     void RemoveElement(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& Element);
+
+    /** updates m_xForms, to be either <NULL/>, if we're in alive mode, or our current page's forms collection,
+        if in design mode
+    */
+    void UpdateForms( sal_Bool _bInvalidate );
 
     void ExecuteSearch();               // execute SID_FM_SEARCH
     void CreateExternalView();          // execute SID_FM_VIEW_AS_GRID
