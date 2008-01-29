@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:32:38 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:16:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #include "progress.hxx"
 #include "editutil.hxx"
 #include "recursionhelper.hxx"
+#include "postit.hxx"
 #ifndef _EDITOBJ_HXX
 #include <svx/editobj.hxx>
 #endif
@@ -102,6 +103,27 @@ static const sal_Char __FAR_DATA msgDbgInfinity[] =
 #endif
 
 // -----------------------------------------------------------------------
+
+ScBaseCell::ScBaseCell( CellType eNewType ) :
+    pNote( NULL ),
+    pBroadcaster( NULL ),
+    nTextWidth( TEXTWIDTH_DIRTY ),
+    eCellType( sal::static_int_cast<BYTE>(eNewType) ),
+    nScriptType( SC_SCRIPTTYPE_UNKNOWN )
+{
+}
+
+ScBaseCell::ScBaseCell( const ScBaseCell& rBaseCell, ScDocument* pDoc ) :
+    pBroadcaster( NULL ),
+    nTextWidth( rBaseCell.nTextWidth ),
+    eCellType( rBaseCell.eCellType ),
+    nScriptType( SC_SCRIPTTYPE_UNKNOWN )
+{
+    if (rBaseCell.pNote)
+        pNote = new ScPostIt( *rBaseCell.pNote, pDoc );
+    else
+        pNote = NULL;
+}
 
 ScBaseCell* ScBaseCell::Clone(ScDocument* pDoc) const
 {
@@ -178,6 +200,11 @@ BOOL ScBaseCell::GetNote( ScPostIt& rNote ) const
         rNote.Clear();
 
     return ( pNote != NULL );
+}
+
+void ScBaseCell::DeleteNote()
+{
+    DELETEZ( pNote );
 }
 
 ScBaseCell* ScBaseCell::CreateTextCell( const String& rString, ScDocument* pDoc )
