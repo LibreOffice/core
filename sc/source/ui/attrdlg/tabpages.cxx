@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabpages.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:00:23 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:40:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,9 @@ IMPL_LINK( ScTabPageProtection, ButtonClickHdl, TriStateBox*, pBox )
         else if ( pBox == &aBtnHidePrint )
             bHidePrint = bOn;
         else
+        {
             DBG_ERRORFILE("falscher Button");
+        }
     }
 
     UpdateButtons();        // TriState und Enable-Logik
