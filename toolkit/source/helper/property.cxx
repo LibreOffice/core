@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 12:58:28 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:07:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -316,7 +316,8 @@ ImplPropertyInfo* ImplGetPropertyInfos( sal_uInt16& rElementCount )
             DECL_PROP_2     ( "ShowsRootHandles",       TREE_SHOWSROOTHANDLES,  sal_Bool,           BOUND, MAYBEDEFAULT ),
             DECL_PROP_3     ( "RowHeight",              TREE_ROWHEIGHT,         sal_Int32,          BOUND, MAYBEDEFAULT, MAYBEVOID ),
             DECL_PROP_2     ( "InvokesStopNodeEditing", TREE_INVOKESSTOPNODEEDITING, sal_Bool,      BOUND, MAYBEDEFAULT ),
-            DECL_PROP_2     ( "DialogSourceURL",        DIALOGSOURCEURL, ::rtl::OUString,       BOUND, MAYBEDEFAULT )
+            DECL_PROP_2     ( "DialogSourceURL",        DIALOGSOURCEURL,        ::rtl::OUString,    BOUND, MAYBEDEFAULT ),
+            DECL_PROP_2     ( "URL",                    URL,                    ::rtl::OUString,    BOUND, MAYBEDEFAULT )
             };
             pPropertyInfos = aImplPropertyInfos;
             nElements = sizeof( aImplPropertyInfos ) / sizeof( ImplPropertyInfo );
