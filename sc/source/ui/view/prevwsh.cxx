@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:43:15 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:50:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,7 +267,9 @@ Size __EXPORT ScPreviewShell::GetOptimalSizePixel() const
         }
     }
     else
+    {
         DBG_ERROR( "TabViewShell not found :-/" );
+    }
 
     return aOptSize;
 }
@@ -1009,7 +1011,9 @@ void ScPreviewShell::RemoveAccessibilityObject( SfxListener& rObject )
     if (pAccessibilityBroadcaster)
         rObject.EndListening( *pAccessibilityBroadcaster );
     else
+    {
         DBG_ERROR("kein Accessibility-Broadcaster?");
+    }
 }
 
 void ScPreviewShell::BroadcastAccessibility( const SfxHint &rHint )
