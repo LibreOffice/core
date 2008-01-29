@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hr $ $Date: 2007-07-31 13:01:37 $
+#   last change: $Author: rt $ $Date: 2008-01-29 16:22:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -101,11 +101,6 @@ CFLAGS+=$(SNDFILE_CFLAGS)
 .IF "$(SYSTEM_PORTAUDIO)" == "YES"
 CDEFS+=-DSYSTEM_PORTAUDIO
 .ENDIF
-.ENDIF
-
-.IF "$(WITH_LIBSN)"=="YES"
-CDEFS+=-DHAVE_LIBSN
-CFLAGS+=$(LIBSN_CFLAGS)
 .ENDIF
 
 .IF "$(USE_XINERAMA)" != "NO"
