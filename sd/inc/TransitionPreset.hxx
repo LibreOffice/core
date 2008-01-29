@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TransitionPreset.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:52:23 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:33:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #endif
 
 #include <list>
+#include <hash_map>
 
 namespace com { namespace sun { namespace star {
     namespace animations { class XAnimationNode; }
@@ -56,12 +57,14 @@ namespace com { namespace sun { namespace star {
 } } }
 
 class SdPage;
+class String;
 
 namespace sd {
 
 class TransitionPreset;
 typedef boost::shared_ptr< TransitionPreset > TransitionPresetPtr;
 typedef std::list< TransitionPresetPtr > TransitionPresetList;
+typedef std::hash_map< rtl::OUString, rtl::OUString, comphelper::UStringHash, comphelper::UStringEqual > UStringMap;
 
 class TransitionPreset
 {
@@ -90,6 +93,11 @@ private:
     rtl::OUString maUIName;
 
     static sd::TransitionPresetList* mpTransitionPresetList;
+
+    static bool importTransitionsFile( TransitionPresetList& rList,
+                                       ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
+                                       UStringMap& rTransitionNameMape,
+                                       String aFilaname );
 };
 
 }
