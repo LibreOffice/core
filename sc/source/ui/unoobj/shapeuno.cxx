@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:46:13 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:46:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -563,7 +563,9 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                                         pDocSh->SetModified();
                                     }
                                     else
+                                    {
                                         DBG_ERROR("unknown anchor type");
+                                    }
                                 }
                             }
                         }
@@ -630,7 +632,9 @@ void SAL_CALL ScShapeObj::setPropertyValue(
                                         pDocSh->SetModified();
                                     }
                                     else
+                                    {
                                         DBG_ERROR("unknown anchor type");
+                                    }
                                 }
                             }
                         }
