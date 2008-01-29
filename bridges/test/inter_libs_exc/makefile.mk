@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:49:22 $
+#   last change: $Author: rt $ $Date: 2008-01-29 14:41:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
 
-EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
