@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:57:04 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:12:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -718,7 +718,27 @@ public:
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {}
 };
+//==============================================================================
+class FixedHyperLinkElement
+    : public ControlElement
+{
+public:
+    virtual css::uno::Reference< css::xml::input::XElement >
+    SAL_CALL startChildElement(
+        sal_Int32 nUid, ::rtl::OUString const & rLocalName,
+        css::uno::Reference<css::xml::input::XAttributes> const & xAttributes )
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException);
+    virtual void SAL_CALL endElement()
+        throw (css::xml::sax::SAXException, css::uno::RuntimeException);
 
+    inline FixedHyperLinkElement(
+        ::rtl::OUString const & rLocalName,
+        css::uno::Reference< css::xml::input::XAttributes > const & xAttributes,
+        ElementBase * pParent, DialogImport * pImport )
+        SAL_THROW( () )
+        : ControlElement( rLocalName, xAttributes, pParent, pImport )
+        {}
+};
 //==============================================================================
 class TextFieldElement
     : public ControlElement
