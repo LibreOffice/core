@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.272 $
+ *  $Revision: 1.273 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:32:04 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:55:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2736,6 +2736,7 @@ File gid_File_Lib_Openssl
 End
 #endif
 
+#ifdef OPENSSL
 File gid_File_Lib_Crypto
     TXT_FILE_BODY;
     Styles = (PACKED,PATCH);
@@ -2745,3 +2746,4 @@ File gid_File_Lib_Crypto
 	  Name = "libeay32.dll";
 	#endif
 End
+#endif
