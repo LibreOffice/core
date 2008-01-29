@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:23:07 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:24:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@
 #include "cppuhelper/implbase1.hxx"
 
 #ifndef INCLUDED_ICC_SRGB_IEC61966_2_1_H
-#include <vcl/sRGB-IEC61966-2.1.hxx>
+#include <icc/sRGB-IEC61966-2.1.hxx>
 #endif
 
 using namespace vcl;
