@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtnav.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:12:48 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:10:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ public:
 class FmParentData : public FmFilterData
 {
 protected:
-    vector<FmFilterData*> m_aChilds;
+    ::std::vector<FmFilterData*> m_aChilds;
 
 
 public:
@@ -161,7 +161,7 @@ public:
     {}
     virtual ~FmParentData();
 
-    vector<FmFilterData*>& GetChilds() {return m_aChilds;}
+    ::std::vector<FmFilterData*>& GetChilds() {return m_aChilds;}
 };
 
 //========================================================================
@@ -256,8 +256,8 @@ public:
     void CheckIntegrity(FmParentData* pItem);
 
 protected:
-    void Insert(const vector<FmFilterData*>::iterator& rPos, FmFilterData* pFilterItem);
-    void Remove(const vector<FmFilterData*>::iterator& rPos, FmFilterData* pFilterItem);
+    void Insert(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pFilterItem);
+    void Remove(const ::std::vector<FmFilterData*>::iterator& rPos, FmFilterData* pFilterItem);
     FmFormItem* Find(const ::std::vector<FmFilterData*>& rItems, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController > & xController) const;
     FmFormItem* Find(const ::std::vector<FmFilterData*>& rItems, const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >& xForm) const;
     void Update(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > & xControllers, FmParentData* pParent);
@@ -267,7 +267,7 @@ protected:
 //========================================================================
 class OFilterItemExchange : public OLocalExchange
 {
-    vector<FmFilterItem*>   m_aDraggedEntries;
+    ::std::vector<FmFilterItem*>    m_aDraggedEntries;
     FmFormItem*             m_pFormItem;        // ensure that we drop on the same form
 
 public:
@@ -276,8 +276,8 @@ public:
     static sal_uInt32       getFormatId( );
     inline static sal_Bool  hasFormat( const DataFlavorExVector& _rFormats );
 
-    const vector<FmFilterItem*>& getDraggedEntries() const { return m_aDraggedEntries; }
-    void setDraggedEntries(const vector<FmFilterItem*>& _rList) { m_aDraggedEntries = _rList; }
+    const ::std::vector<FmFilterItem*>& getDraggedEntries() const { return m_aDraggedEntries; }
+    void setDraggedEntries(const ::std::vector<FmFilterItem*>& _rList) { m_aDraggedEntries = _rList; }
     FmFormItem* getFormItem() const { return m_pFormItem; }
 
     void setFormItem( FmFormItem* _pItem ) { m_pFormItem = _pItem; }
