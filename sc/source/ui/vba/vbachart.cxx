@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbachart.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-14 12:41:47 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:02:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -993,7 +993,8 @@ ScVbaChart::getStockUpDownValue(sal_Int32 _nUpDown, sal_Int32 _nNotUpDown) throw
     }
     catch (uno::Exception& )
     {
-        script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
+        rtl::OUString aTemp;    // temporary needed for g++ 3.3.5
+        script::BasicErrorException( aTemp, uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
     return _nNotUpDown;
 }
@@ -1010,7 +1011,8 @@ ScVbaChart::hasMarkers() throw ( script::BasicErrorException )
     }
     catch ( uno::Exception& )
     {
-        script::BasicErrorException( rtl::OUString(), uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
+        rtl::OUString aTemp;    // temporary needed for g++ 3.3.5
+        script::BasicErrorException( aTemp, uno::Reference< uno::XInterface >(), SbERR_METHOD_FAILED, rtl::OUString() );
     }
     return bHasMarkers;
 }

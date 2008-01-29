@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbawindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:05:13 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:02:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,7 +294,8 @@ ScVbaWindow::getCaption() throw (uno::RuntimeException)
         if ( ( nCrudLen + nCrudIndex ) == sTitle.getLength() )
         {
             sTitle = sTitle.copy( 0, nCrudIndex );
-            ScVbaWorkbook workbook( uno::Reference< vba::XHelperInterface >( ScVbaGlobals::getGlobalsImpl( mxContext )->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
+            uno::Reference< oo::vba::XGlobals > xTemp( ScVbaGlobals::getGlobalsImpl( mxContext )); // temporary needed for g++ 3.3.5
+            ScVbaWorkbook workbook( uno::Reference< vba::XHelperInterface >( xTemp->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
             rtl::OUString sName = workbook.getName();
             // rather bizare hack to make sure the name behavior
             // is like XL
@@ -431,7 +432,8 @@ ScVbaWindow::setWindowState( const uno::Any& _windowstate ) throw (uno::RuntimeE
 void
 ScVbaWindow::Activate() throw (css::uno::RuntimeException)
 {
-    ScVbaWorkbook workbook( uno::Reference< vba::XHelperInterface >( ScVbaGlobals::getGlobalsImpl( mxContext )->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
+    uno::Reference< oo::vba::XGlobals > xTemp( ScVbaGlobals::getGlobalsImpl( mxContext )); // temporary needed for g++ 3.3.5
+    ScVbaWorkbook workbook( uno::Reference< vba::XHelperInterface >( xTemp->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
 
     workbook.Activate();
 }
@@ -439,7 +441,8 @@ ScVbaWindow::Activate() throw (css::uno::RuntimeException)
 void
 ScVbaWindow::Close( const uno::Any& SaveChanges, const uno::Any& FileName, const uno::Any& RouteWorkBook ) throw (uno::RuntimeException)
 {
-    ScVbaWorkbook workbook( uno::Reference< vba::XHelperInterface >( ScVbaGlobals::getGlobalsImpl( mxContext )->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
+    uno::Reference< oo::vba::XGlobals > xTemp( ScVbaGlobals::getGlobalsImpl( mxContext )); // temporary needed for g++ 3.3.5
+    ScVbaWorkbook workbook( uno::Reference< vba::XHelperInterface >( xTemp->getApplication(), uno::UNO_QUERY_THROW ), mxContext, m_xModel );
     workbook.Close(SaveChanges, FileName, RouteWorkBook );
 }
 

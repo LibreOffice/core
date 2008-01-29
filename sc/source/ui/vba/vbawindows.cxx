@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbawindows.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:05:39 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:03:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,7 +142,8 @@ public:
             {
                 m_windows.push_back( xNext );
                 uno::Reference< frame::XModel > xModel( xNext, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
-                ScVbaWindow window( uno::Reference< vba::XHelperInterface >(),  m_xContext, xModel );
+                uno::Reference< vba::XHelperInterface > xTemp;  // temporary needed for g++ 3.3.5
+                ScVbaWindow window( xTemp,  m_xContext, xModel );
                 rtl::OUString sCaption;
                 window.getCaption() >>= sCaption;
                 namesToIndices[ sCaption ] = nIndex++;
