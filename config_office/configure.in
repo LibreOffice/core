@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2008-01-28 09:53:36 $
+dnl * Date: $Date: 2008-01-29 13:12:38 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.245 $ )
+AC_REVISION( $Revision: 1.246 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -479,9 +479,10 @@ AC_ARG_WITH(stlport,
 
                           Usage: --with-stlport=<absolute path to stlport home>
 
-                          Warning!!, --without-stlport is possible with
-                          gcc >= 3.3.3, but will break ABI compatability
-], WITH_STLPORT=$withval , WITH_STLPORT=yes)
+                          Warning!!, disabling using --without-stlport or 
+                          enabling using --with-stlport on a platform that
+                          defaults to the opposite will break ABI compatability
+], WITH_STLPORT=$withval , WITH_STLPORT=auto)
 AC_ARG_WITH(jdk-home,
 [  --with-jdk-home         if you have installed JDK 1.3 or later on your system
                           please supply the path here.
@@ -2156,16 +2157,48 @@ if test -n "$enable_sgistl" && "$enable_sgistl" != "no"; then
 else
 
 dnl ===================================================================
+dnl Checks for what the default STL should be
+dnl ===================================================================
+   AC_MSG_CHECKING([what the default STL should be])
+   DEFAULT_TO_STLPORT="yes"
+   if test "$_os" = "Linux"; then
+     case "$build_cpu" in
+       i?86|powerpc|sparc)
+         DEFAULT_TO_STLPORT="yes"
+         ;;
+       *)
+         DEFAULT_TO_STLPORT="no"
+         ;;
+     esac
+   fi
+   if test "$DEFAULT_TO_STLPORT" = "yes"; then
+      AC_MSG_RESULT([stlport])
+   else
+      AC_MSG_RESULT([gcc])
+   fi
+   if test "$WITH_STLPORT" = "auto"; then
+      WITH_STLPORT=$DEFAULT_TO_STLPORT
+   fi
+
+dnl ===================================================================
 dnl Checks for STLPORT
 dnl ===================================================================
-   AC_MSG_CHECKING([for STLport headers])
+   AC_MSG_CHECKING([for STL providing headers])
    STLPORT4=""
    USE_SYSTEM_STL=""
    if test "$WITH_STLPORT" = "yes"; then
       AC_MSG_RESULT([using internal stlport.])
+      if test "$DEFAULT_TO_STLPORT" != "yes"; then
+         AC_MSG_WARN([using stlport. Warning, breaks your ABI compatability!])
+         echo "using stlport. Warning, breaks your ABI compatability!" >>warn
+      fi
    elif test "$WITH_STLPORT" = "no"; then
-      AC_MSG_RESULT([use system STL instead, Warning breaks your ABI compatability!])
+      AC_MSG_RESULT([using system STL])
       USE_SYSTEM_STL="YES"
+      if test "$DEFAULT_TO_STLPORT" != "no"; then
+         AC_MSG_WARN([using system STL. Warning, breaks your ABI compatability!])
+         echo "using system STL. Warning, breaks your ABI compatability!" >>warn
+      fi
    else
       STLPORT4=$WITH_STLPORT
       if test "$_os" != "WINNT" -o "$WITH_MINGWIN" = "yes"; then
@@ -2222,6 +2255,10 @@ dnl ===================================================================
 			   fi
 		   fi
 	   fi
+      if test "$DEFAULT_TO_STLPORT" != "yes"; then
+         AC_MSG_WARN([using stlport. Warning, breaks your ABI compatability!])
+         echo "using stlport. Warning, breaks your ABI compatability!" >>warn
+      fi
    fi
 fi
 
@@ -2234,6 +2271,53 @@ fi
 AC_SUBST(STLPORT4)
 AC_SUBST(STLPORT_VER)
 AC_SUBST(USE_SYSTEM_STL)
+
+dnl ===================================================================
+dnl system stl sanity tests
+dnl ===================================================================
+if test "$USE_SYSTEM_STL" = "YES"; then
+   AC_MSG_CHECKING([if hash_map will be in __gnu_cxx namespace])
+   AC_LANG_PUSH([C++])
+
+   AC_TRY_COMPILE([#include <ext/hash_map>
+using namespace __gnu_cxx;
+],[hash_map<int, int> t; return 0;],
+  ac_cv_cxx_have_ext_hash_map=yes, ac_cv_cxx_have_ext_hash_map=no)
+
+   if test "$ac_cv_cxx_have_ext_hash_map" = "no"; then
+      AC_MSG_ERROR([Can't find hash_map. Try with --with-stlport])
+   else
+      AC_MSG_RESULT([$ac_cv_cxx_have_ext_hash_map])
+   fi
+
+   if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
+      AC_MSG_CHECKING([if STL headers are visibility safe])
+      AC_EGREP_HEADER(visibility push, string, stlvisok=yes, stlvisok=no)
+      AC_MSG_RESULT([$stlvisok])
+      if test "$stlvisok" = "no"; then
+         AC_MSG_ERROR([Your gcc STL headers are not visibility safe. Try with --with-stlport])
+      fi
+
+      sharedlink_ldflags_save=$LDFLAGS
+      LDFLAGS="$LDFLAGS -fvisibility-inlines-hidden -fpic -shared"
+
+      AC_MSG_CHECKING([if gcc is -fvisibility-inlines-hidden safe with STL headers])
+      AC_TRY_LINK([#include <sstream>
+using namespace std;
+],[istringstream strm( "test" ); return 0;],
+     gccvisok=yes, gccvisok=no)
+
+      LDFLAGS=$sharedlink_ldflags_save
+
+      AC_MSG_RESULT([$gccvisok])
+      if test "$gccvisok" = "no"; then
+         AC_MSG_ERROR([Your gcc is not -fvisibility-inlines-hidden safe. Try with --with-stlport])
+      fi
+
+   fi
+
+   AC_LANG_POP([C++])
+fi
 
 dnl ===================================================================
 dnl allocator
@@ -2257,24 +2341,6 @@ if test "$with_alloc" = "internal" -o -z "$with_alloc"; then
    AC_MSG_RESULT([internal])
 fi
 AC_SUBST(ALLOC)
-
-dnl ===================================================================
-dnl hash_map hackery
-dnl ===================================================================
-if test "$USE_SYSTEM_STL" = "YES"; then
-   AC_MSG_CHECKING([if hash_map will be in __gnu_cxx namespace])
-   AC_LANG_PUSH([C++])
-   AC_TRY_COMPILE([#include <ext/hash_map>
-using namespace __gnu_cxx;
-],[hash_map<int, int> t; return 0;],
-  ac_cv_cxx_have_ext_hash_map=yes, ac_cv_cxx_have_ext_hash_map=no)
-   AC_LANG_POP([C++])
-   if test "$ac_cv_cxx_have_ext_hash_map" = "no"; then
-      AC_MSG_ERROR([Can't find hash_map. Try with stlport enabled])
-   else
-      AC_MSG_RESULT([$ac_cv_cxx_have_ext_hash_map])
-   fi
-fi
 
 dnl ===================================================================
 dnl Custom build version
