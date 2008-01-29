@@ -3,6 +3,8 @@
 
 namespace cairo {
 
+        bool HasXRender( const void* pSysData );
+
 #include <cairo.h>
 
     typedef cairo_t Cairo;
