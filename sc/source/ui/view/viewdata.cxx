@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:21:14 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:52:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1562,6 +1562,15 @@ Point ScViewData::GetScrPos( SCCOL nWhereX, SCROW nWhereY, ScSplitPos eWhich,
                     long nSizeYPix = ToPixel( nTSize, nPPTY );
                     nScrPosY += nSizeYPix;
                 }
+                else if ( nY < MAXROW )
+                {
+                    // skip multiple hidden rows (forward only for now)
+                    SCROW nNext = pDoc->FastGetFirstNonHiddenRow( nY + 1, nTabNo );
+                    if ( nNext > MAXROW )
+                        nY = MAXROW;
+                    else
+                        nY = nNext - 1;     // +=nDir advances to next visible row
+                }
             }
         }
     else if (bAllowNeg)
@@ -1664,6 +1673,19 @@ SCROW ScViewData::CellsAtY( SCsROW nPosY, SCsROW nDir, ScVSplitPos eWhichY, USHO
             {
                 long nSizeYPix = ToPixel( nTSize, nPPTY );
                 nScrPosY = sal::static_int_cast<USHORT>( nScrPosY + (USHORT) nSizeYPix );
+            }
+            else if ( nDir == 1 && nRowNo < MAXROW )
+            {
+                // skip multiple hidden rows (forward only for now)
+                SCROW nNext = pDoc->FastGetFirstNonHiddenRow( nRowNo + 1, nTabNo );
+                if ( nNext > MAXROW )
+                {
+                    // same behavior as without the optimization: set bOut with nY=MAXROW+1
+                    nY = MAXROW+1;
+                    bOut = TRUE;
+                }
+                else
+                    nY = nNext - 1;     // +=nDir advances to next visible row
             }
         }
     }
