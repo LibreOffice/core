@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:15:39 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:41:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,7 +225,9 @@ void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
         *pShortTypeName = String( ScResId( SCSTR_SHORT_SCDOC_NAME ) );
     }
     else
+    {
         DBG_ERROR("wat fuer ne Version?");
+    }
 }
 
 //------------------------------------------------------------------
@@ -623,7 +625,9 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
         pModificator = NULL;
     }
     else
+    {
         DBG_ERROR("The Modificator should exist");
+    }
 
     aDocument.DisableIdle( FALSE );
 }
@@ -979,7 +983,9 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     bOverflow = aImpEx.IsOverflow();
                 }
                 else
+                {
                     DBG_ERROR( "No Stream" );
+                }
             }
 
             if (eError != eERR_OK)
@@ -1092,7 +1098,9 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     aDocument.SetDirty();
                 }
                 else
+                {
                     DBG_ERROR( "No Stream" );
+                }
             }
 
             if ( eError != eERR_OK && !GetError() )
@@ -1147,7 +1155,9 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     bSetRowHeights = TRUE;
                 }
                 else
+                {
                     DBG_ERROR( "No Stream" );
+                }
             }
 
             if ( eError != eERR_OK && !GetError() )
@@ -1182,7 +1192,9 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
                     aDocument.SetDirty();
                 }
                 else
+                {
                     DBG_ERROR( "No Stream" );
+                }
             }
 
             if ( eError != eERR_OK && !GetError() )
@@ -1198,7 +1210,9 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             aDocument.SetInsertingFromOtherDoc( FALSE );
     }
     else
+    {
         DBG_ERROR("Kein Filter bei ConvertFrom");
+    }
 
     InitItems();
     CalcOutputFactor();
