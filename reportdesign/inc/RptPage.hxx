@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RptPage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:02 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:42:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,13 @@ class REPORTDESIGN_DLLPUBLIC OReportPage : public SdrPage
                     m_xSection;
 
     OReportPage(const OReportPage&);
+
+    bool m_bSpecialInsertMode;
+    std::vector<SdrObject*> m_aTemporaryObjectList;
+    // methode to remove temporary objects, created by 'special mode'
+    // (BegDragObj)
+    void removeTempObject(SdrObject *_pToRemoveObj);
+
 protected:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > createUnoPage();
 public:
@@ -88,6 +95,11 @@ public:
         @param  _xObject    the report component
     */
     void removeSdrObject(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XReportComponent >& _xObject);
+
+    void setSpecialMode() {m_bSpecialInsertMode = true;}
+    bool getSpecialMode() {return m_bSpecialInsertMode;}
+    // all temporary objects will remove and destroy
+    void resetSpecialMode();
 
     /** insert a new SdrObject which belongs to the report component.
         @param  _xObject    the report component
