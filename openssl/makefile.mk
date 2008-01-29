@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 16:18:15 $
+#   last change: $Author: rt $ $Date: 2008-01-29 11:40:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ TARGET=openssl
     @echo "openssl disabled...."
 .ENDIF
 
-OPENSSL_NAME=openssl-0.9.8e
+OPENSSL_NAME=openssl-0.9.8g
 
 TARFILE_NAME=$(OPENSSL_NAME)
 
@@ -70,21 +70,38 @@ OUT2LIB += libcrypto.*
 OUT2INC += include/openssl/*
 
 .IF "$(OS)" == "LINUX"
-
-PATCH_FILE_NAME=openssllnx.patch
-ADDITIONAL_FILES:= \
-    libcrypto_OOo_0_9_8e.map \
-    libssl_OOo_0_9_8e.map
-# if you build openssl as shared library you have to patch the Makefile.Shared "LD_LIBRARY_PATH=$$LD_LIBRARY_PATH \"
-#BUILD_ACTION=make 'SHARED_LDFLAGS=-Wl,--version-script=./lib$$(SHLIBDIRS)_OOo_0_9_8e.map'
+    PATCH_FILE_NAME=openssllnx.patch
+    ADDITIONAL_FILES:= \
+        libcrypto_OOo_0_9_8e.map \
+        libssl_OOo_0_9_8e.map
+    # if you build openssl as shared library you have to patch the Makefile.Shared "LD_LIBRARY_PATH=$$LD_LIBRARY_PATH \"
+    #BUILD_ACTION=make 'SHARED_LDFLAGS=-Wl,--version-script=./lib$$(SHLIBDIRS)_OOo_0_9_8e.map'
 .ENDIF
 
 .IF "$(OS)" == "SOLARIS"
-PATCH_FILE_NAME=opensslsol.patch
-ADDITIONAL_FILES:= \
-    libcrypto_OOo_0_9_8e.map \
-    libssl_OOo_0_9_8e.map
-#BUILD_ACTION=make 'SHARED_LDFLAGS=-G -dy -z text -M./lib$$$$$$$$(SHLIBDIRS)_OOo_0_9_8e.map'
+    PATCH_FILE_NAME=opensslsol.patch
+    ADDITIONAL_FILES:= \
+        libcrypto_OOo_0_9_8e.map \
+        libssl_OOo_0_9_8e.map
+    #BUILD_ACTION=make 'SHARED_LDFLAGS=-G -dy -z text -M./lib$$$$$$$$(SHLIBDIRS)_OOo_0_9_8e.map'
+
+    # We need a 64 BIT switch (currently I disable 64 Bit by default). 
+    # Please replace this with a global switch if available
+    #USE_64 = 1
+
+    # Solaris INTEL
+    .IF "$(CPUNAME)" == "INTEL" 
+        .IF "$(USE_64)" == "1"
+           CONFIGURE_ACTION=Configure solaris64-x86_64-cc
+        .ELSE
+           CONFIGURE_ACTION=Configure solaris-x86-cc
+        .ENDIF
+    .ELSE
+    # Solaris SPARC
+        .IF "$(USE_64)" == "1"
+           CONFIGURE_ACTION=Configure solaris64-sparcv9-cc
+        .ENDIF
+.ENDIF
 .ENDIF
 
 .IF "$(OS)" == "WNT"
@@ -113,31 +130,31 @@ OUT2BIN += out/libeay32.dll
 .ENDIF
 .ELSE
 
-PATCH_FILE_NAME=openssl.patch
-.IF "$(MAKETARGETS)" == ""
-# The env. vars CC and PERL are used by nmake, and nmake insists on '\'s
-# If WRAPCMD is set it is prepended before the compiler, don't touch that.
-.IF "$(WRAPCMD)"==""
-CC!:=$(subst,/,\ $(normpath,1 $(CC)))
-.EXPORT : CC
-.ENDIF
-PERL_bak:=$(PERL)
-PERL!:=$(subst,/,\ $(normpath,1 $(PERL)))
-.EXPORT : PERL
-PERL!:=$(PERL_bak)
-.ENDIF
+        PATCH_FILE_NAME=openssl.patch
+        .IF "$(MAKETARGETS)" == ""
+            # The env. vars CC and PERL are used by nmake, and nmake insists on '\'s
+            # If WRAPCMD is set it is prepended before the compiler, don't touch that.
+            .IF "$(WRAPCMD)"==""
+                CC!:=$(subst,/,\ $(normpath,1 $(CC)))
+                .EXPORT : CC
+            .ENDIF
+            PERL_bak:=$(PERL)
+            PERL!:=$(subst,/,\ $(normpath,1 $(PERL)))
+            .EXPORT : PERL
+            PERL!:=$(PERL_bak)
+        .ENDIF
 
-#CONFIGURE_ACTION=cmd /c $(PERL:s!\!/!) configure
-CONFIGURE_ACTION=$(PERL) configure
-CONFIGURE_FLAGS=VC-WIN32
-BUILD_ACTION=cmd /c "ms$(EMQ)\do_ms.bat $(subst,/,\ $(normpath,1 $(PERL)))" && nmake -f ms/ntdll.mak
+        #CONFIGURE_ACTION=cmd /c $(PERL:s!\!/!) configure
+        CONFIGURE_ACTION=$(PERL) configure
+        CONFIGURE_FLAGS=VC-WIN32
+        BUILD_ACTION=cmd /c "ms$(EMQ)\do_ms.bat $(subst,/,\ $(normpath,1 $(PERL)))" && nmake -f ms/ntdll.mak
 
-OUT2LIB = out32dll$/ssleay32.lib
-OUT2LIB += out32dll$/libeay32.lib
-OUT2BIN = out32dll$/ssleay32.dll
-OUT2BIN += out32dll$/libeay32.dll
-OUT2INC = inc32$/openssl$/*
-.ENDIF
+        OUT2LIB = out32dll$/ssleay32.lib
+        OUT2LIB += out32dll$/libeay32.lib
+        OUT2BIN = out32dll$/ssleay32.dll
+        OUT2BIN += out32dll$/libeay32.dll
+        OUT2INC = inc32$/openssl$/*
+    .ENDIF
 .ENDIF
 
 #set INCLUDE=D:\sol_temp\n\msvc7net3\PlatformSDK\include;D:\sol_temp\n\msvc7net3\include\ && set path=%path%;D:\sol_temp\r\btw\SRC680\perl\bin &&
