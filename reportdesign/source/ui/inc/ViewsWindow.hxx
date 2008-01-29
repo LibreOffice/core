@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ViewsWindow.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:01:53 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:49:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,8 +320,16 @@ namespace rptui
         */
         void BrkAction();
         void BegMarkObj(const Point& _aPnt,const OSectionView* _pSection);
+    private:
+        void BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _aRect, const OSectionView* _pSection);
+        void EndDragObj_removeInvisibleObjects();
+        Point m_aDragDelta;
+        ::std::vector<SdrObject*> m_aBegDragTempList;
+        bool isObjectInMyTempList(SdrObject *);
+    public:
         void BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionView* _pSection);
         void EndDragObj(BOOL _bDragIntoNewSection,const OSectionView* _pSection,const Point& _aPnt);
+
         void EndAction();
         void ForceMarkedToAnotherPage();
         BOOL IsAction() const;
@@ -337,7 +345,8 @@ namespace rptui
         */
         OSectionView* getSectionRelativeToPosition(const OSectionView* _pSection,Point& _rPnt);
 
-        void MovAction(const Point& rPnt,const OSectionView* _pSection,bool _bMove = true);
+        void MovAction(const Point& rPnt,const OSectionView* _pSection,bool _bMove /*= true */, bool _bControlKeySet);
+        // void MovAction2(const Point& rPnt,const OSectionView* _pSection);
         void setPoint(const Point& _aPnt);
         inline Point getPoint() const { return m_aPoint; }
 
