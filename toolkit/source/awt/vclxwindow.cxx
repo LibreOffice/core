@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-15 13:15:08 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:05:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1686,23 +1686,24 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case BASEPROPERTY_LABEL:
             case BASEPROPERTY_TITLE:
             {
-              ::rtl::OUString aText;
-              if ( Value >>= aText )
-              {
-                switch (eWinType)
+                ::rtl::OUString aText;
+                if ( Value >>= aText )
                 {
-                case WINDOW_OKBUTTON:
-                case WINDOW_CANCELBUTTON:
-                case WINDOW_HELPBUTTON:
-                  // Standard Button: overwrite only if not empty.
-                  if (aText.getLength())
-                pWindow->SetText( aText );
-                  break;
-                default:
-                  pWindow->SetText( aText );
-                  break;
+                    switch (eWinType)
+                    {
+                        case WINDOW_OKBUTTON:
+                        case WINDOW_CANCELBUTTON:
+                        case WINDOW_HELPBUTTON:
+                            // Standard Button: overwrite only if not empty.
+                            if (aText.getLength())
+                                pWindow->SetText( aText );
+                            break;
+
+                        default:
+                            pWindow->SetText( aText );
+                            break;
+                    }
                 }
-              }
             }
             break;
             case BASEPROPERTY_ACCESSIBLENAME:
@@ -1777,10 +1778,6 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             case BASEPROPERTY_BACKGROUNDCOLOR:
                 if ( bVoid )
                 {
-//                    if ( pWindow->IsCompoundControl() )
-//                        pWindow->SetBackground();
-//                    pWindow->SetControlBackground();
-
                     switch ( eWinType )
                     {
                         // set dialog color for default
@@ -1807,6 +1804,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                             // support transparency only for special controls
                             pWindow->SetBackground();
                             pWindow->SetControlBackground();
+                            pWindow->SetPaintTransparent( TRUE );
                             break;
                         }
 
@@ -1831,6 +1829,17 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
                         Color aColor( nColor );
                         pWindow->SetControlBackground( aColor );
                         pWindow->SetBackground( aColor );
+                        switch ( eWinType )
+                        {
+                            // reset paint transparent mode
+                            case WINDOW_FIXEDTEXT:
+                            case WINDOW_CHECKBOX:
+                            case WINDOW_RADIOBUTTON:
+                            case WINDOW_GROUPBOX:
+                            case WINDOW_FIXEDLINE:
+                                pWindow->SetPaintTransparent( FALSE );
+                            default: ;
+                        }
                         pWindow->Invalidate();  // Falls das Control nicht drauf reagiert
                     }
                 }
