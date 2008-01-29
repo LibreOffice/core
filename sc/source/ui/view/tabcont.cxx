@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabcont.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:57:13 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -485,16 +485,25 @@ sal_Int8 ScTabControl::ExecuteDrop( const ExecuteDropEvent& rEvt )
         // moving of tables within the document
         SCTAB nPos = GetPrivatDropPos( rEvt.maPosPixel );
         HideDropPos();
-        if ( !pDoc->GetChangeTrack() && pDoc->IsDocEditable() )
-        {
-            //! use table selection from the tab control where dragging was started?
-            pViewData->GetView()->MoveTable( lcl_DocShellNr(pDoc), nPos, rEvt.mnAction != DND_ACTION_MOVE );
 
-            rData.pCellTransfer->SetDragWasInternal();          // don't delete
-            return TRUE;
+        if ( nPos == rData.pCellTransfer->GetVisibleTab() && rEvt.mnAction == DND_ACTION_MOVE )
+        {
+            // #i83005# do nothing - don't move to the same position
+            // (too easily triggered unintentionally, and might take a long time in large documents)
         }
         else
-            Sound::Beep();
+        {
+            if ( !pDoc->GetChangeTrack() && pDoc->IsDocEditable() )
+            {
+                //! use table selection from the tab control where dragging was started?
+                pViewData->GetView()->MoveTable( lcl_DocShellNr(pDoc), nPos, rEvt.mnAction != DND_ACTION_MOVE );
+
+                rData.pCellTransfer->SetDragWasInternal();          // don't delete
+                return TRUE;
+            }
+            else
+                Sound::Beep();
+        }
     }
 
     return 0;
