@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InternalDataProvider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-25 08:46:44 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:14:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,8 +233,8 @@ private:
     typedef ::std::multimap< ::rtl::OUString,
             ::com::sun::star::uno::WeakReference< ::com::sun::star::chart2::data::XDataSequence > >
         tSequenceMap;
-    typedef pair< tSequenceMap::iterator, tSequenceMap::iterator > tSequenceMapRange;
-    typedef pair< tSequenceMap::const_iterator, tSequenceMap::const_iterator > tConstSequenceMapRange;
+    typedef ::std::pair< tSequenceMap::iterator, tSequenceMap::iterator > tSequenceMapRange;
+    typedef ::std::pair< tSequenceMap::const_iterator, tSequenceMap::const_iterator > tConstSequenceMapRange;
 
     /** cache for all sequences that have been returned.
 
