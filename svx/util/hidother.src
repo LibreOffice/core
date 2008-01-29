@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:46:23 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:50:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,7 +218,6 @@ hidspecial HID_GRID_TRAVEL_ABSOLUTE         { HelpID = HID_GRID_TRAVEL_ABSOLUTE 
 hidspecial HID_GRID_NUMBEROFRECORDS         { HelpID = HID_GRID_NUMBEROFRECORDS ;};
 
 hidspecial UID_SEARCH_RECORDSTATUS          { HelpID = UID_SEARCH_RECORDSTATUS ;};
-hidspecial UID_SQLERROR_BUTTONMORE          { HelpID = UID_SQLERROR_BUTTONMORE ;};
 
 hidspecial HID_ICCDIALOG_RESET_BTN          { HelpID = HID_ICCDIALOG_RESET_BTN ;};
 hidspecial HID_ICCDIALOG_OK_BTN             { HelpID = HID_ICCDIALOG_OK_BTN ;};
