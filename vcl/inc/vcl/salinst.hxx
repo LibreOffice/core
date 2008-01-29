@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:07:19 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:37:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ public:
     virtual void                DestroyFrame( SalFrame* pFrame ) = 0;
 
     // Object (System Child Window)
-    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData ) = 0;
+    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow = TRUE ) = 0;
     virtual void                DestroyObject( SalObject* pObject ) = 0;
 
     // VirtualDevice
