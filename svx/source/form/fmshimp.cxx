@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:49:28 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:09:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -854,7 +854,7 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
         aSlotIds.reserve( _rFeatures.size() );
         ::std::copy( _rFeatures.begin(),
             _rFeatures.end(),
-            insert_iterator< ::std::vector< sal_uInt16 > >( aSlotIds, aSlotIds.begin() )
+            ::std::insert_iterator< ::std::vector< sal_uInt16 > >( aSlotIds, aSlotIds.begin() )
         );
 
         // furthermore, SFX wants a terminating 0
