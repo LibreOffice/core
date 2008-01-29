@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewsWindow.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:13:07 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ OViewsWindow::OViewsWindow( Window* _pParent,OReportWindow* _pReportWindow)
 ,m_bInUnmark(sal_False)
 {
     DBG_CTOR( rpt_OViewsWindow,NULL);
-    SetUniqueId(UID_VIEWSWINDOW);
+    SetUniqueId(UID_RPT_VIEWSWINDOW);
     SetMapMode( MapMode( MAP_100TH_MM ) );
     StartListening(m_aColorConfig);
     ImplInitSettings();
@@ -265,15 +265,8 @@ void OViewsWindow::Resize()
 
     aStartPoint -= m_pParent->getScrollOffset();
     Point aSplitterStartPoint(aStartPoint.X(),0);
-
-    uno::Reference<report::XReportDefinition> xReportDefinition = getView()->getReportView()->getController()->getReportDefinition();
-    if ( !xReportDefinition.is() )
-        return;
-    //sal_Int32 nLeftMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_LEFTMARGIN);
-    sal_Int32 nRightMargin = getStyleProperty<sal_Int32>(xReportDefinition,PROPERTY_RIGHTMARGIN);
-    const sal_Int32 nPaperWidth = getStyleProperty<awt::Size>(xReportDefinition,PROPERTY_PAPERSIZE).Width;
-    const Size aOrignalSize = LogicToPixel(Size(nPaperWidth,0),MAP_100TH_MM);
-    nRightMargin = LogicToPixel(Size(nRightMargin,0),MAP_100TH_MM).Width();
+    Size aOutputSize = GetOutputSizePixel();
+    aOutputSize.Width() -= (REPORT_ENDMARKER_WIDTH + REPORT_STARTMARKER_WIDTH);
 
     TSectionsMap::iterator aIter = m_aSections.begin();
     TSectionsMap::iterator aEnd = m_aSections.end();
@@ -281,7 +274,8 @@ void OViewsWindow::Resize()
     {
         ::boost::shared_ptr<OReportSection> pReportSection = (*aIter).first.first;
         uno::Reference< report::XSection> xSection = pReportSection->getSection();
-        Size aSectionSize = LogicToPixel( Size( nPaperWidth,xSection->getHeight() ),MAP_100TH_MM );
+        Size aSectionSize = LogicToPixel( Size( 0,xSection->getHeight() ),MAP_100TH_MM );
+        aSectionSize.Width() = aOutputSize.Width();
 
         ::boost::shared_ptr<Splitter>       pSplitter       = (*aIter).second.second;
         ::boost::shared_ptr<OEndMarker>     pEndMarker      = (*aIter).second.first;
@@ -292,24 +286,24 @@ void OViewsWindow::Resize()
             pReportSection->SetPosSizePixel(aStartPoint,aSectionSize);
             if ( !m_bInSplitHandler )
             {
-                pSplitter->SetPosSizePixel(Point(aSplitterStartPoint.X(),aStartPoint.Y() + aSectionSize.Height()),Size(aOrignalSize.Width(),pSplitter->GetSizePixel().Height()));
-                pSplitter->SetDragRectPixel( Rectangle(Point(aSplitterStartPoint.X(),aStartPoint.Y() - 1),Size(aOrignalSize.Width(),m_pParent->GetOutputSizePixel().Height())) );
+                pSplitter->SetPosSizePixel(Point(aSplitterStartPoint.X(),aStartPoint.Y() + aSectionSize.Height()),Size(aOutputSize.Width(),pSplitter->GetSizePixel().Height()));
+                pSplitter->SetDragRectPixel( Rectangle(Point(aSplitterStartPoint.X(),aStartPoint.Y()/*- 1*/),aOutputSize));
             }
 
             if ( nMinHeight > aSectionSize.Height() )
             {
-                pEndMarker->SetPosSizePixel(Point(aSplitterStartPoint.X() + aOrignalSize.Width(),aStartPoint.Y()),Size(REPORT_ENDMARKER_WIDTH,nMinHeight));
+                pEndMarker->SetPosSizePixel(Point(aSplitterStartPoint.X() + aOutputSize.Width(),aStartPoint.Y()),Size(REPORT_ENDMARKER_WIDTH,nMinHeight));
                 aSectionSize.Height() = nMinHeight;
             }
             else
             {
-                pEndMarker->SetPosSizePixel(Point(aSplitterStartPoint.X() + aOrignalSize.Width(),aStartPoint.Y()),Size(REPORT_ENDMARKER_WIDTH,aSectionSize.Height()));
+                pEndMarker->SetPosSizePixel(Point(aSplitterStartPoint.X() + aOutputSize.Width(),aStartPoint.Y()),Size(REPORT_ENDMARKER_WIDTH,aSectionSize.Height()));
             }
         }
         else
         {
             aSectionSize.Height() = nMinHeight;
-            pEndMarker->SetPosSizePixel(Point(aSplitterStartPoint.X(),aStartPoint.Y()),Size(aOrignalSize.Width() + REPORT_ENDMARKER_WIDTH,aSectionSize.Height()));
+            pEndMarker->SetPosSizePixel(Point(aSplitterStartPoint.X(),aStartPoint.Y()),Size(aOutputSize.Width() + REPORT_ENDMARKER_WIDTH,aSectionSize.Height()));
         }
         aStartPoint.Y() += aSectionSize.Height() + pSplitter->GetSizePixel().Height();
     } // for (;aIter != aEnd ; ++aIter)
@@ -317,7 +311,11 @@ void OViewsWindow::Resize()
 //------------------------------------------------------------------------------
 void OViewsWindow::ImplInitSettings()
 {
+//#if OSL_DEBUG_LEVEL > 0
+//    SetBackground( Wallpaper( COL_GREEN ));
+//#else
     SetBackground( Wallpaper( m_aColorConfig.GetColorValue(::svtools::APPBACKGROUND).nColor ) );
+//#endif
     SetFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetDialogColor() );
 }
@@ -346,6 +344,9 @@ void OViewsWindow::addSection(const uno::Reference< report::XSection >& _xSectio
     pSplitter->SetStartSplitHdl(LINK(this, OViewsWindow,StartSplitHdl));
     pSplitter->SetSplitHdl(LINK(this, OViewsWindow,SplitHdl));
     pSplitter->SetEndSplitHdl(LINK(this, OViewsWindow,EndSplitHdl));
+    pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
+    pSplitter->SetSplitPosPixel(LogicToPixel(Size(0,getTotalHeight() + _xSection->getHeight()),MAP_100TH_MM).Height());
+    //pSplitter->SetSizePixel(Size(pSplitter->GetSizePixel().Width(),1));
     pSplitter->Show();
 
     ::rtl::Reference< comphelper::OPropertyChangeMultiplexer> pMulti = new OPropertyChangeMultiplexer(this,_xSection.get());
@@ -445,7 +446,7 @@ IMPL_LINK( OViewsWindow, SplitHdl, Splitter*, _pSplitter )
     //m_bInSplitHandler = sal_True;
     sal_Int32 nSplitPos = _pSplitter->GetSplitPosPixel();
     const Point aPos = _pSplitter->GetPosPixel();
-    _pSplitter->SetPosPixel( Point( aPos.X(),nSplitPos ));
+    _pSplitter->SetPosPixel( Point( 0,nSplitPos ));
     TSectionsMap::iterator aIter = m_aSections.begin();
     TSectionsMap::iterator aEnd = m_aSections.end();
     for (;aIter != aEnd ; ++aIter)
@@ -751,6 +752,13 @@ void OViewsWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 (*aIter).first.first->MouseButtonUp(rMEvt);
                 break;
             }
+        }
+
+        // remove special insert mode
+        for (aIter = m_aSections.begin();aIter != aEnd ; ++aIter)
+        {
+            ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+            pReportSection->getPage()->resetSpecialMode();
         }
     }
 }
@@ -1166,7 +1174,7 @@ namespace
         eForceToAnotherPage,
         eBreakAction
     };
-    struct ApplySectionViewAction : public ::std::unary_function< OViewsWindow::TSectionsMap::value_type, void >
+    class ApplySectionViewAction : public ::std::unary_function< OViewsWindow::TSectionsMap::value_type, void >
     {
     private:
         SectionViewAction   m_eAction;
@@ -1183,16 +1191,28 @@ namespace
             OSectionView& rView( *_rhs.first.first->getView() );
             switch ( m_eAction )
             {
-            case eEndDragObj:   rView.EndDragObj( m_bCopy  ); break;
-            case eEndAction:    if ( rView.IsAction() )
-                                    rView.EndAction (      );
-                                break;
-            case eMoveAction:   rView.MovAction ( m_aPoint ); break;
-            case eMarkAction:   rView.BegMarkObj ( m_aPoint ); break;
-            case eForceToAnotherPage: rView.ForceMarkedToAnotherPage(); break;
-            case eBreakAction:  if ( rView.IsAction() )
-                                    rView.BrkAction (      );
-                                break;
+            case eEndDragObj:
+                rView.EndDragObj( m_bCopy  );
+                break;
+            case eEndAction:
+                if ( rView.IsAction() )
+                    rView.EndAction (      );
+                break;
+            case eMoveAction:
+                rView.MovAction ( m_aPoint );
+                break;
+            case eMarkAction:
+                rView.BegMarkObj ( m_aPoint );
+                break;
+            case eForceToAnotherPage:
+                rView.ForceMarkedToAnotherPage();
+                break;
+            case eBreakAction:
+                if ( rView.IsAction() )
+                    rView.BrkAction (      );
+                break;
+                // default:
+
             }
         }
     };
@@ -1200,28 +1220,169 @@ namespace
 // -----------------------------------------------------------------------------
 void OViewsWindow::BrkAction()
 {
+    EndDragObj_removeInvisibleObjects();
     ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction(eBreakAction) );
 }
 // -----------------------------------------------------------------------------
-void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionView* _pSection)
+void OViewsWindow::BegDragObj_createInvisibleObjectAtPosition(const Rectangle& _aRect, const OSectionView* _pSection)
 {
-    const short nDrgLog = static_cast<short>(PixelToLogic(Size(3,0)).Width());
-    Point aNewPos = _aPnt;
-    /*if ( _pHdl )
-        aNewPos = _pHdl->GetPos();*/
     TSectionsMap::iterator aIter = m_aSections.begin();
     TSectionsMap::iterator aEnd = m_aSections.end();
-    /*for (; aIter != aEnd; ++aIter)
+    Point aNewPos(0,0);
+
+    for (; aIter != aEnd; ++aIter)
     {
         ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
-        if ( pReportSection->getView() == _pSection )
-            break;
-        aNewPos.Y() += pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
-    }*/
+        pReportSection->getPage()->setSpecialMode();
+        OSectionView* pView = pReportSection->getView();
 
+        if ( pView != _pSection )
+        {
+//            SdrRectObj *pNewObj = new SdrRectObj(OBJ_RECT, _aRect);
+//          SdrObject *pNewObj = new SdrUnoObj(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Temp Label")));
+            SdrObject *pNewObj = new SdrUnoObj(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.FixedText")));
+            if (pNewObj)
+            {
+                pNewObj->SetLogicRect(_aRect);
+                // pNewObj->SetSize(_aRect.GetSize());
+                // pNewObj->Move(Size(_aRect.Left(), _aRect.Top()));
+
+                pNewObj->Move(Size(0, aNewPos.Y()));
+                pReportSection->getPage()->InsertObject(pNewObj);
+                m_aBegDragTempList.push_back(pNewObj);
+                Rectangle aRect = pNewObj->GetLogicRect();
+
+                // pNewObj->SetText(String::CreateFromAscii("Drag helper"));
+                pView->MarkObj( pNewObj, pView->GetSdrPageView() );
+            }
+        }
+        const long nSectionHeight = pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+        aNewPos.Y() -= nSectionHeight;
+//        aNewPos.Y() -= PixelToLogic(aIter->second.second->GetSizePixel()).Height();
+    }
+}
+// -----------------------------------------------------------------------------
+bool OViewsWindow::isObjectInMyTempList(SdrObject *_pObj)
+{
+    ::std::vector<SdrObject*>::iterator aIter = m_aBegDragTempList.begin();
+    ::std::vector<SdrObject*>::iterator aEnd = m_aBegDragTempList.end();
+    for (; aIter != aEnd; ++aIter)
+    {
+        if (*aIter == _pObj)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+// -----------------------------------------------------------------------------
+void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionView* _pSection)
+{
+    OSL_TRACE("BegDragObj Clickpoint X:%d Y:%d\n", _aPnt.X(), _aPnt.Y() );
+
+    m_aBegDragTempList.clear();
+
+    // Calculate the absolute clickpoint in the views
+    Point aAbsolutePnt = _aPnt;
+    TSectionsMap::iterator aIter = m_aSections.begin();
+    TSectionsMap::iterator aEnd = m_aSections.end();
+    for (; aIter != aEnd; ++aIter)
+    {
+        ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+        OSectionView* pView = pReportSection->getView();
+        if (pView == _pSection)
+            break;
+        const long nSectionHeight = pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+        aAbsolutePnt.Y() +=  nSectionHeight;
+    }
+    m_aDragDelta = Point(SAL_MAX_INT32, SAL_MAX_INT32);
+    OSL_TRACE("BegDragObj Absolute X:%d Y:%d\n", aAbsolutePnt.X(), aAbsolutePnt.Y() );
+
+    // Create drag lines over all viewable Views
+    // Therefore we need to identify the marked objects
+    // and create temporary objects on all other views at the same position
+    // relative to its occurance.
+
+    OSL_TRACE("BegDragObj createInvisible Objects\n" );
+    int nViewCount = 0;
+    Point aNewObjPos(0,0);
     for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
     {
         ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+
+        OSectionView* pView = pReportSection->getView();
+
+        if ( pView->AreObjectsMarked() )
+        {
+            const sal_uInt32 nCount = pView->GetMarkedObjectCount();
+            for (sal_uInt32 i=0; i < nCount; ++i)
+            {
+                const SdrMark* pM = pView->GetSdrMarkByIndex(i);
+                SdrObject* pObj = pM->GetMarkedSdrObj();
+                if (!isObjectInMyTempList(pObj))
+                {
+                    Rectangle aRect( pObj->GetCurrentBoundRect() );
+                    aRect.Move(0, aNewObjPos.Y());
+                    OSL_TRACE("BegDragObj createInvisible X:%d Y:%d on View #%d\n", aRect.Left(), aRect.Top(), nViewCount );
+
+                    BegDragObj_createInvisibleObjectAtPosition(aRect, pView);
+
+                    // calculate the clickpoint
+                    sal_Int32 nDeltaX = abs(aRect.Left() - aAbsolutePnt.X());
+                    sal_Int32 nDeltaY = abs(aRect.Top() - aAbsolutePnt.Y());
+                    if (m_aDragDelta.X() > nDeltaX)
+                        m_aDragDelta.X() = nDeltaX;
+                    if (m_aDragDelta.Y() > nDeltaY)
+                        m_aDragDelta.Y() = nDeltaY;
+                }
+            }
+        }
+        ++nViewCount;
+        Rectangle aClipRect = pView->GetWorkArea();
+        aClipRect.Top() = -aNewObjPos.Y();
+        pView->SetWorkArea( aClipRect );
+
+        const long nSectionHeight = pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+        aNewObjPos.Y() += nSectionHeight;
+
+        // don't subtract the height of the lines between the views
+        // aNewObjPos.Y() -= PixelToLogic(aIter->second.second->GetSizePixel()).Height();
+    }
+
+    Point aNewPos = aAbsolutePnt;
+    // for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
+    // {
+    //     ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+    //     if ( pReportSection->getView() == _pSection )
+    //         break;
+    //     aNewPos.Y() += pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+    // }
+
+    const short nDrgLog = static_cast<short>(PixelToLogic(Size(3,0)).Width());
+    // long nLastSectionHeight = 0;
+    // bool bAdd = true;
+    nViewCount = 0;
+    for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
+    {
+        ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+
+        // if ( pReportSection->getView() == _pSection )
+        // {
+        //     bAdd = false;
+        //     aNewPos = _aPnt;
+        // }
+        // else if ( bAdd )
+        // {
+        //     const long nSectionHeight = pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+        //     aNewPos.Y() += nSectionHeight;
+        // }
+        // else
+        // {
+        //     aNewPos.Y() -= nLastSectionHeight;
+        // }
+
+        //?
         SdrHdl* pHdl = _pHdl;
         if ( pHdl )
         {
@@ -1231,8 +1392,13 @@ void OViewsWindow::BegDragObj(const Point& _aPnt, SdrHdl* _pHdl,const OSectionVi
                 pHdl = rHdlList.GetHdl(_pHdl->GetKind());
             }
         }
-        pReportSection->getView()->BegDragObj(aNewPos, (OutputDevice*)NULL, pHdl, nDrgLog,NULL);
-        //aNewPos.Y() -= pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+        OSL_TRACE("BegDragObj X:%d Y:%d on View#%d\n", aNewPos.X(), aNewPos.Y(), nViewCount++ );
+        pReportSection->getView()->BegDragObj(aNewPos, (OutputDevice*)NULL, pHdl, nDrgLog, NULL);
+
+        const long nSectionHeight = pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+        aNewPos.Y() -= nSectionHeight;
+        // subtract the height between the views, because they are visible but not from interest here.
+        aNewPos.Y() -= PixelToLogic(aIter->second.second->GetSizePixel()).Height();
     }
 }
 
@@ -1245,28 +1411,32 @@ void OViewsWindow::ForceMarkedToAnotherPage()
 void OViewsWindow::BegMarkObj(const Point& _aPnt,const OSectionView* _pSection)
 {
     bool bAdd = true;
-
     Point aNewPos = _aPnt;
+
     TSectionsMap::iterator aIter = m_aSections.begin();
     TSectionsMap::iterator aEnd = m_aSections.end();
+    long nLastSectionHeight = 0;
     for (; aIter != aEnd; ++aIter)
     {
         ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
-        const long nSectionHeight = pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
         if ( pReportSection->getView() == _pSection )
         {
             bAdd = false;
-            aNewPos = _aPnt;
+            aNewPos = _aPnt; // 2,2
         }
         else if ( bAdd )
         {
+            const long nSectionHeight = pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
             aNewPos.Y() += nSectionHeight;
         }
         else
         {
-            aNewPos.Y() -= nSectionHeight;
+            aNewPos.Y() -= nLastSectionHeight;
         }
         pReportSection->getView()->BegMarkObj ( aNewPos );
+        nLastSectionHeight = pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+
+        aNewPos.Y() -= PixelToLogic(aIter->second.second->GetSizePixel()).Height();
     }
     //::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction( _aPnt , eMarkAction) );
 }
@@ -1318,14 +1488,35 @@ OSectionView* OViewsWindow::getSectionRelativeToPosition(const OSectionView* _pS
     return pSection;
 }
 // -----------------------------------------------------------------------------
-void OViewsWindow::EndDragObj(BOOL _bDragIntoNewSection,const OSectionView* _pSection,const Point& _aPnt)
+void OViewsWindow::EndDragObj_removeInvisibleObjects()
+{
+    TSectionsMap::iterator aIter = m_aSections.begin();
+    TSectionsMap::iterator aEnd = m_aSections.end();
+
+    for (; aIter != aEnd; ++aIter)
+    {
+        ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+        pReportSection->getPage()->resetSpecialMode();
+    }
+}
+// -----------------------------------------------------------------------------
+void OViewsWindow::EndDragObj(BOOL _bControlKeyPressed, const OSectionView* _pSection,const Point& _aPnt)
 {
     const String sUndoAction = String((ModuleRes(RID_STR_UNDO_CHANGEPOSITION)));
     UndoManagerListAction aListAction(*getView()->getReportView()->getController()->getUndoMgr(),sUndoAction);
-    if ( _bDragIntoNewSection )
+
+    Point aNewPos = _aPnt;
+    OSectionView* pInSection = getSectionRelativeToPosition(_pSection, aNewPos);
+    if (!_bControlKeyPressed && _pSection != pInSection)
     {
-        Point aNewPos = _aPnt;
-        OSectionView* pInSection = getSectionRelativeToPosition(_pSection,aNewPos);
+        EndDragObj_removeInvisibleObjects();
+
+        // we need to manipulate the current clickpoint, we substract the old delta from BeginDrag
+        // OSectionView* pInSection = getSectionRelativeToPosition(_pSection, aPnt);
+        // aNewPos.X() -= m_aDragDelta.X();
+        // aNewPos.Y() -= m_aDragDelta.Y();
+        aNewPos -= m_aDragDelta;
+
         uno::Sequence< beans::NamedValue > aAllreadyCopiedObjects;
         TSectionsMap::iterator aIter = m_aSections.begin();
         const TSectionsMap::iterator aEnd = m_aSections.end();
@@ -1362,6 +1553,7 @@ void OViewsWindow::EndDragObj(BOOL _bDragIntoNewSection,const OSectionView* _pSe
                     {
                         uno::Reference< report::XReportComponent> xRC(*pColIter,uno::UNO_QUERY);
                         aPrevious = VCLPoint(xRC->getPosition());
+
                         awt::Size aSize = xRC->getSize();
                         if ( aNewPos.X() < nLeftMargin )
                             aNewPos.X() = nLeftMargin;
@@ -1369,14 +1561,20 @@ void OViewsWindow::EndDragObj(BOOL _bDragIntoNewSection,const OSectionView* _pSe
                             aNewPos.X() = nPaperWidth - nRightMargin - aSize.Width;
                         if ( aNewPos.Y() < 0 )
                             aNewPos.Y() = 0;
+                        if ( aNewPos.X() < 0 )
+                        {
+                            aSize.Width += aNewPos.X();
+                            aNewPos.X()= 0;
+                            xRC->setSize(aSize);
+                        }
                         xRC->setPosition(AWTPoint(aNewPos));
                         if ( (pColIter+1) != pColEnd )
                         {
-                            uno::Reference< report::XReportComponent> xRCNext(*pColIter,uno::UNO_QUERY);
-                            aNewPos += (VCLPoint(xRCNext->getPosition()) - aPrevious);
+                            uno::Reference< report::XReportComponent> xRCNext(*(pColIter + 1),uno::UNO_QUERY);
+                            Point aNextPosition = VCLPoint(xRCNext->getPosition());
+                            aNewPos += (aNextPosition - aPrevious);
                         }
                     }
-
                 }
             }
             catch(uno::Exception&)
@@ -1387,7 +1585,10 @@ void OViewsWindow::EndDragObj(BOOL _bDragIntoNewSection,const OSectionView* _pSe
         getView()->getReportView()->getController()->getUndoMgr()->LeaveListAction();
     }
     else
+    {
         ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction( FALSE ) );
+        EndDragObj_removeInvisibleObjects();
+    }
 }
 // -----------------------------------------------------------------------------
 void OViewsWindow::EndAction()
@@ -1395,27 +1596,65 @@ void OViewsWindow::EndAction()
     ::std::for_each( m_aSections.begin(), m_aSections.end(), ApplySectionViewAction() );
 }
 // -----------------------------------------------------------------------------
-void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection,bool _bMove)
+void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection,bool _bMove, bool _bControlKeySet)
 {
-    Point aNewPos = _aPnt;
+    (void)_bMove;
+
+    Point aRealMousePos = _aPnt;
+    Point aCurrentSectionPos;
+    OSL_TRACE("MovAction X:%d Y:%d\n", aRealMousePos.X(), aRealMousePos.Y() );
+
     Point aHdlPos;
     SdrHdl* pHdl = _pSection->GetDragHdl();
     if ( pHdl )
     {
         aHdlPos = pHdl->GetPos();
     }
-    TSectionsMap::iterator aIter = m_aSections.begin();
+    TSectionsMap::iterator aIter/*  = m_aSections.begin() */;
     TSectionsMap::iterator aEnd = m_aSections.end();
-    if ( _bMove )
+
+    //if ( _bMove )
+    //{
+    for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
     {
-        for (; aIter != aEnd; ++aIter)
-        {
-            ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
-            if ( pReportSection->getView() == _pSection )
-                break;
-            aNewPos.Y() += pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
-        }
+        ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+        if ( pReportSection->getView() == _pSection )
+            break;
+        const long nSectionHeight = pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+        aCurrentSectionPos.Y() += nSectionHeight;
+        const long nSectionSeparator = PixelToLogic(aIter->second.second->GetSizePixel()).Height();
+        aCurrentSectionPos.Y() += nSectionSeparator;
     }
+    //}
+    aRealMousePos += aCurrentSectionPos;
+
+    // If control key is pressed the work area is limited to the section with the current selection.
+    Point aPosForWorkArea(0,0);
+    for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
+    {
+        ::boost::shared_ptr<OReportSection> pReportSection = aIter->first.first;
+        OSectionView* pView = pReportSection->getView();
+        const long nSectionHeight = pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+        const long nSeparatorHeight = PixelToLogic(aIter->second.second->GetSizePixel()).Height();
+
+        if (_bControlKeySet)
+        {
+            Rectangle aClipRect = pView->GetWorkArea();
+            aClipRect.Top() = aCurrentSectionPos.Y() - aPosForWorkArea.Y() - nSeparatorHeight;
+            // if (aClipRect.Top() < 0) aClipRect.Top() = 0;
+            aClipRect.Bottom() = aClipRect.Top() + nSectionHeight;
+            pView->SetWorkArea( aClipRect );
+        }
+        else
+        {
+            Rectangle aClipRect = pView->GetWorkArea();
+            aClipRect.Top() = -aPosForWorkArea.Y();
+            pView->SetWorkArea( aClipRect );
+        }
+        aPosForWorkArea.Y() += nSectionHeight;
+        // aNewPos.Y() += PixelToLogic(aIter->second.second->GetSizePixel()).Height();
+    }
+
 
     for (aIter = m_aSections.begin(); aIter != aEnd; ++aIter)
     {
@@ -1423,11 +1662,15 @@ void OViewsWindow::MovAction(const Point& _aPnt,const OSectionView* _pSection,bo
         SdrHdl* pCurrentHdl = pReportSection->getView()->GetDragHdl();
         if ( pCurrentHdl )
         {
-            aNewPos = _aPnt + pCurrentHdl->GetPos() - aHdlPos;
+            aRealMousePos = _aPnt + pCurrentHdl->GetPos() - aHdlPos;
         }
-        pReportSection->getView()->MovAction ( aNewPos );
-        if ( _bMove )
-            aNewPos.Y() -= pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+        pReportSection->getView()->MovAction ( aRealMousePos );
+        // if ( _bMove )
+        // {
+        const long nSectionHeight = pReportSection->PixelToLogic(pReportSection->GetOutputSizePixel()).Height();
+        aRealMousePos.Y() -= nSectionHeight;
+        aRealMousePos.Y() -= PixelToLogic(aIter->second.second->GetSizePixel()).Height();
+        // }
     }
 }
 // -----------------------------------------------------------------------------
