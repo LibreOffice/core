@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:00:38 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:16:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #include "subtotal.hxx"
 #include "markdata.hxx"
 #include "detfunc.hxx"          // fuer Notizen bei DeleteRange
+#include "postit.hxx"
 
 // Err527 Workaround
 extern const ScFormulaCell* pLastFormulaTreeTop;    // in cellform.cxx
@@ -778,6 +779,8 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
                         {
                             Rectangle aRect = aCellNote.DefaultRectangle(ScAddress(nCol,nDestRow,nTab));
                             aCellNote.SetRectangle(aRect);
+                            // #i84412# pasted note is not visible, FIXME: make it visible
+                            aCellNote.SetShown(FALSE);
                             pNew->SetNote(aCellNote);
                         }
                     }
