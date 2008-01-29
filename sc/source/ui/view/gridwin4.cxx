@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:46:27 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:49:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1455,7 +1455,9 @@ BOOL ScGridWindow::IsAutoFilterActive( SCCOL nCol, SCROW nRow, SCTAB nTab )
     if ( pDBData )
         pDBData->GetQueryParam( aQueryParam );
     else
+    {
         DBG_ERROR("Auto-Filter-Button ohne DBData");
+    }
 
     BOOL    bSimpleQuery = TRUE;
     BOOL    bColumnFound = FALSE;
