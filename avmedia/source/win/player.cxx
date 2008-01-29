@@ -4,9 +4,9 @@
  *
  *  $RCSfile: player.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:46:39 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:02:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,19 @@
 using namespace ::com::sun::star;
 
 namespace avmedia { namespace win {
+
+bool isWindowsVistaOrHigher()
+{
+    // POST: return true if we are at least on Windows Vista
+    OSVERSIONINFO osvi;
+    ZeroMemory(&osvi, sizeof(osvi));
+    osvi.dwOSVersionInfoSize = sizeof(osvi);
+    GetVersionEx(&osvi);
+    if ( osvi.dwMajorVersion >= 6 )
+        return true;
+
+    return false;
+}
 
 // ----------------
 // - Player -
@@ -129,13 +142,18 @@ bool Player::create( const ::rtl::OUString& rURL )
 
     if( SUCCEEDED( hR = CoCreateInstance( CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER, IID_IGraphBuilder, (void**) &mpGB ) ) )
     {
-        // use overlays, if possible
-        if( SUCCEEDED( CoCreateInstance( CLSID_OverlayMixer, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**) &mpOMF ) ) )
+        // Don't use the overlay mixer on Windows Vista
+        // It disables the desktop composition as soon as RenderFile is called
+        // also causes some other problems: video rendering is not reliable
+        if( !isWindowsVistaOrHigher() )
         {
-            mpGB->AddFilter( mpOMF, L"com_sun_star_media_OverlayMixerFilter" );
+            if( SUCCEEDED( CoCreateInstance( CLSID_OverlayMixer, NULL, CLSCTX_INPROC_SERVER, IID_IBaseFilter, (void**) &mpOMF ) ) )
+            {
+                mpGB->AddFilter( mpOMF, L"com_sun_star_media_OverlayMixerFilter" );
 
-            if( !SUCCEEDED( mpOMF->QueryInterface( IID_IDDrawExclModeVideo, (void**) &mpEV ) ) )
-                mpEV = NULL;
+                if( !SUCCEEDED( mpOMF->QueryInterface( IID_IDDrawExclModeVideo, (void**) &mpEV ) ) )
+                    mpEV = NULL;
+            }
         }
 
         if( SUCCEEDED( hR = mpGB->RenderFile( reinterpret_cast<LPCWSTR>(rURL.getStr()), NULL ) ) &&
