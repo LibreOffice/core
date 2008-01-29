@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: hr $ $Date: 2007-07-31 17:32:16 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:58:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3722,7 +3722,7 @@ Color SvxMSDffManager::MSO_CLR_ToColor( sal_uInt32 nColorCode, sal_uInt16 nConte
         nColorCode &= 0x00ffffff;
 
     sal_uInt8 nUpper = (sal_uInt8)( nColorCode >> 24 );
-    if( nUpper & 0x1b )     // if( nUpper & 0x1f )
+    if( nUpper & 0x19 )      // if( nUpper & 0x1f )
     {
         if( ( nUpper & 0x08 ) || ( ( nUpper & 0x10 ) == 0 ) )
         {
