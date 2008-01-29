@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:16:04 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:41:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,7 +277,9 @@ void ScDocShell::UnlockPaint_Impl(BOOL bDoc)
         }
     }
     else
+    {
         DBG_ERROR("UnlockPaint ohne LockPaint");
+    }
 }
 
 void ScDocShell::LockDocument_Impl(USHORT nNew)
@@ -348,7 +350,9 @@ void ScDocShell::UnlockDocument()
         UnlockDocument_Impl(nDocumentLock - 1);
     }
     else
+    {
         DBG_ERROR("UnlockDocument without LockDocument");
+    }
 }
 
 //------------------------------------------------------------------
