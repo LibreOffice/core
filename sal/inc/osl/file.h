@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.h,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:27:23 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:14:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,7 @@ typedef enum {
     osl_File_E_NOTREADY,
     osl_File_E_invalidError,        /* unmapped error: always last entry in enum! */
     osl_File_E_TIMEDOUT,
+    osl_File_E_NETWORK,
     osl_File_E_FORCE_EQUAL_SIZE = SAL_MAX_ENUM
 } oslFileError;
 
