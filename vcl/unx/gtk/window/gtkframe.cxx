@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:24:00 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:21:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -747,30 +747,6 @@ GtkSalFrame::GetAtkRole( GtkWindow* window )
     }
 
     return role;
-}
-
-
-// FIXME: rename as appropriate
-uno::Reference< accessibility::XAccessible >
-GtkSalFrame::getAccessible( bool bCreate )
-{
-    // Yes - this is a hack - but: this abstraction seems totally useless to me
-    Window *pWindow = GetWindow();
-
-    g_return_val_if_fail( pWindow != NULL, NULL );
-
-    // skip the border window accessible
-    if( pWindow->GetType() == WINDOW_BORDERWINDOW )
-    {
-        pWindow = pWindow->GetAccessibleChildWindow( 0 );
-        g_return_val_if_fail( pWindow != NULL, NULL );
-    }
-    // replace the top-level role Dialog with something more appropriate ..
-    else if( pWindow->GetAccessibleRole() == accessibility::AccessibleRole::ALERT ||
-             pWindow->GetAccessibleRole() == accessibility::AccessibleRole::DIALOG )
-        pWindow->SetAccessibleRole(accessibility::AccessibleRole::OPTION_PANE);
-
-    return pWindow->GetAccessible( bCreate );
 }
 
 void GtkSalFrame::Init( SalFrame* pParent, ULONG nStyle )
@@ -1956,7 +1932,10 @@ void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
         gdk_window_set_cursor( GTK_WIDGET(m_pWindow)->window, pCursor );
         m_pCurrentCursor = pCursor;
 
-        if( getDisplay()->MouseCaptured( this ) || m_nFloats > 0 )
+        // #i80791# use grabPointer the same way as CaptureMouse, respective float grab
+        if( getDisplay()->MouseCaptured( this ) )
+            grabPointer( TRUE, FALSE );
+        else if( m_nFloats > 0 )
             grabPointer( TRUE, TRUE );
     }
 }
