@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:42:52 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:20:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,10 +199,10 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             else if ( aPropertyName.compareToAscii( SC_UNO_PRINTERNAME ) == 0 )
             {
                 rtl::OUString sPrinterName;
-                if (aValue >>= sPrinterName)
+                if ( aValue >>= sPrinterName )
                 {
                     // #i75610# if the name is empty, do nothing (don't create any printer)
-                    if ( sPrinterName.getLength() != 0 )
+                    if ( sPrinterName.getLength() != 0 && pDocShell->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                     {
                         SfxPrinter* pPrinter = pDocShell->GetPrinter();
                         if (pPrinter)
