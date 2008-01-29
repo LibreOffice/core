@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-22 16:36:47 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:26:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,118 +36,46 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#ifndef SC_XICHART_HXX
 #include "xichart.hxx"
-#endif
 
 #include <algorithm>
 
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_DIRECTION3D_HPP_
 #include <com/sun/star/drawing/Direction3D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_SHADEMODE_HPP_
 #include <com/sun/star/drawing/ShadeMode.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CHART2_XCHARTDOCUMENT_HPP_
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDIAGRAM_HPP_
 #include <com/sun/star/chart2/XDiagram.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCOORDINATESYSTEMCONTAINER_HPP_
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XCHARTTYPECONTAINER_HPP_
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XDATASERIESCONTAINER_HPP_
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XREGRESSIONCURVECONTAINER_HPP_
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_XTITLED_HPP_
 #include <com/sun/star/chart2/XTitled.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATAPROVIDER_HPP_
 #include <com/sun/star/chart2/data/XDataProvider.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATARECEIVER_HPP_
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATA_XDATASINK_HPP_
 #include <com/sun/star/chart2/data/XDataSink.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CHART2_AXISPOSITION_HPP_
 #include <com/sun/star/chart2/AxisPosition.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_AXISTYPE_HPP_
 #include <com/sun/star/chart2/AxisType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_CURVESTYLE_HPP_
 #include <com/sun/star/chart2/CurveStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATAPOINTGEOMETRY3D_HPP_
 #include <com/sun/star/chart2/DataPointGeometry3D.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_DATAPOINTLABEL_HPP_
 #include <com/sun/star/chart2/DataPointLabel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_ERRORBARSTYLE_HPP_
 #include <com/sun/star/chart2/ErrorBarStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_STACKINGDIRECTION_HPP_
 #include <com/sun/star/chart2/StackingDirection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_TICKMARKSTYLE_HPP_
 #include <com/sun/star/chart2/TickmarkStyle.hpp>
-#endif
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
 
-#ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
-#endif
-#ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
-#endif
-#ifndef SC_RANGEUTL_HXX
 #include "rangeutl.hxx"
-#endif
-
-#ifndef SC_FPROGRESSBAR_HXX
 #include "fprogressbar.hxx"
-#endif
-#ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
-#endif
-#ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
-#endif
-#ifndef SC_XIFORMULA_HXX
 #include "xiformula.hxx"
-#endif
-#ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
-#endif
-#ifndef SC_XIPAGE_HXX
 #include "xipage.hxx"
-#endif
-#ifndef SC_XIVIEW_HXX
 #include "xiview.hxx"
-#endif
-#ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -670,6 +598,22 @@ void XclImpChSourceLink::SetTextFormats( const XclFormatRunVec& rFormats )
         mxString->SetFormats( rFormats );
 }
 
+void XclImpChSourceLink::ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) const
+{
+    if( ::get_flag( maData.mnFlags, EXC_CHSRCLINK_NUMFMT ) )
+    {
+        sal_uInt32 nScNumFmt = GetNumFmtBuffer().GetScFormat( maData.mnNumFmtIdx );
+        if( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )
+        {
+            sal_Int32 nApiNumFmt = static_cast< sal_Int32 >( nScNumFmt );
+            if( bPercent )
+                rPropSet.SetProperty( EXC_CHPROP_PERCENTAGENUMFMT, nApiNumFmt );
+            else
+                rPropSet.SetProperty( EXC_CHPROP_NUMBERFORMAT, nApiNumFmt );
+        }
+    }
+}
+
 Reference< XDataSequence > XclImpChSourceLink::CreateDataSequence( const OUString& rRole ) const
 {
     Reference< XDataSequence > xDataSeq;
@@ -780,6 +724,8 @@ void XclImpChText::ReadHeaderRecord( XclImpStream& rStrm )
         maData.maTextColor = GetPalette().GetColor( rStrm.ReaduInt16() );
         // placement and rotation
         rStrm >> maData.mnPlacement >> maData.mnRotation;
+        // lower 4 bits used for placement, other bits contain garbage
+        maData.mnPlacement &= 0x000F;
     }
     else
     {
@@ -879,6 +825,12 @@ void XclImpChText::ConvertFrame( ScfPropertySet& rPropSet ) const
         mxFrame->Convert( rPropSet );
 }
 
+void XclImpChText::ConvertNumFmt( ScfPropertySet& rPropSet, bool bPercent ) const
+{
+    if( mxSrcLink.is() )
+        mxSrcLink->ConvertNumFmt( rPropSet, bPercent );
+}
+
 void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeInfo& rTypeInfo ) const
 {
     const sal_uInt16 EXC_CHTEXT_SHOWANYCATEG   = EXC_CHTEXT_SHOWCATEGPERC | EXC_CHTEXT_SHOWCATEG;
@@ -895,13 +847,34 @@ void XclImpChText::ConvertDataLabel( ScfPropertySet& rPropSet, const XclChTypeIn
 
     // type of attached label
     namespace cssc = ::com::sun::star::chart2;
-    //! TODO: make value and percent independent
-    cssc::DataPointLabel aPointLabel( bShowValue || bShowPercent, bShowPercent, bShowCateg, bShowSymbol );
+    cssc::DataPointLabel aPointLabel( bShowValue, bShowPercent, bShowCateg, bShowSymbol );
     rPropSet.SetProperty( EXC_CHPROP_LABEL, aPointLabel );
 
     // text properties of attached label
     if( bShowAny )
+    {
         ConvertFont( rPropSet );
+        // label placement
+        using namespace ::com::sun::star::chart::DataLabelPlacement;
+        sal_Int32 nPlacement = rTypeInfo.mnDefaultLabelPos;
+        switch( maData.mnPlacement )
+        {
+            case EXC_CHTEXT_POS_DEFAULT:    nPlacement = rTypeInfo.mnDefaultLabelPos;   break;
+            case EXC_CHTEXT_POS_OUTSIDE:    nPlacement = OUTSIDE;                       break;
+            case EXC_CHTEXT_POS_INSIDE:     nPlacement = INSIDE;                        break;
+            case EXC_CHTEXT_POS_CENTER:     nPlacement = CENTER;                        break;
+            case EXC_CHTEXT_POS_AXIS:       nPlacement = NEAR_ORIGIN;                   break;
+            case EXC_CHTEXT_POS_ABOVE:      nPlacement = TOP;                           break;
+            case EXC_CHTEXT_POS_BELOW:      nPlacement = BOTTOM;                        break;
+            case EXC_CHTEXT_POS_LEFT:       nPlacement = LEFT;                          break;
+            case EXC_CHTEXT_POS_RIGHT:      nPlacement = RIGHT;                         break;
+            case EXC_CHTEXT_POS_AUTO:       nPlacement = AVOID_OVERLAP;                 break;
+        }
+        rPropSet.SetProperty( EXC_CHPROP_LABELPLACEMENT, nPlacement );
+        // label number format (percentage format wins over value format)
+        if( bShowPercent || bShowValue )
+            ConvertNumFmt( rPropSet, bShowPercent );
+    }
 }
 
 Reference< XTitle > XclImpChText::CreateTitle() const
@@ -974,7 +947,7 @@ void XclImpChMarkerFormat::ReadChMarkerFormat( XclImpStream& rStrm )
 }
 
 void XclImpChMarkerFormat::Convert( const XclImpChRoot& rRoot,
-        ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx, sal_uInt16 nLineWeight ) const
+        ScfPropertySet& rPropSet, sal_uInt16 nFormatIdx, sal_Int16 nLineWeight ) const
 {
     if( IsAuto() )
     {
@@ -1123,10 +1096,9 @@ void XclImpChDataFormat::ReadSubRecord( XclImpStream& rStrm )
     }
 }
 
-void XclImpChDataFormat::SetPointPos( sal_uInt16 nSeriesIdx, sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx )
+void XclImpChDataFormat::SetPointPos( const XclChDataPointPos& rPointPos, sal_uInt16 nFormatIdx )
 {
-    maData.maPointPos.mnSeriesIdx = nSeriesIdx;
-    maData.maPointPos.mnPointIdx = nPointIdx;
+    maData.maPointPos = rPointPos;
     maData.mnFormatIdx = nFormatIdx;
 }
 
@@ -1201,10 +1173,30 @@ void XclImpChDataFormat::UpdatePointFormat( const XclChExtTypeInfo& rTypeInfo, c
     UpdateDataLabel( pSeriesFmt );
 }
 
+void XclImpChDataFormat::UpdateTrendLineFormat()
+{
+    if( !mxLineFmt )
+        mxLineFmt.reset( new XclImpChLineFormat );
+    mxAreaFmt.reset();
+    mxEscherFmt.reset();
+    mxMarkerFmt.reset();
+    mxPieFmt.reset();
+    mxSeriesFmt.reset();
+    mx3dDataFmt.reset();
+    mxAttLabel.reset();
+    // update data label
+    UpdateDataLabel( 0 );
+}
+
 void XclImpChDataFormat::Convert( ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo ) const
 {
     // line and area format
     ConvertFrameBase( GetChRoot(), rPropSet, rTypeInfo.GetSeriesObjectType(), maData.mnFormatIdx );
+#if EXC_CHART2_3DBAR_HAIRLINES_ONLY
+    // #i83151# only hair lines in 3D charts with filled data points
+    if( rTypeInfo.mb3dChart && rTypeInfo.IsSeriesFrameFormat() && mxLineFmt.is() && mxLineFmt->HasLine() )
+        rPropSet.SetProperty< sal_Int32 >( CREATE_OUSTRING( "BorderWidth" ), 0 );
+#endif
 
     // other formatting
     if( mxMarkerFmt.is() )
@@ -1262,7 +1254,7 @@ void XclImpChDataFormat::UpdateDataLabel( const XclImpChDataFormat* pParentFmt )
     if( pParentFmt )
         xDefText = pParentFmt->GetDataLabel();
     if( !xDefText )
-        xDefText = GetChartData().GetDefaultText( EXC_CHDEFTEXT_LABEL );
+        xDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_DATALABEL );
     if( mxLabel.is() )
         mxLabel->UpdateText( xDefText.get() );
     else if( mxAttLabel.is() )
@@ -1317,13 +1309,25 @@ Reference< XRegressionCurve > XclImpChSerTrendLine::CreateRegressionCurve() cons
     {
         ScfPropertySet aPropSet( xRegCurve );
         mxDataFmt->ConvertLine( aPropSet, EXC_CHOBJTYPE_TRENDLINE );
+
+        // #i83100# show equation and correlation coefficient
+        ScfPropertySet aLabelProp( xRegCurve->getEquationProperties() );
+        aLabelProp.SetBoolProperty( EXC_CHPROP_SHOWEQUATION, maData.mnShowEquation != 0 );
+        aLabelProp.SetBoolProperty( EXC_CHPROP_SHOWCORRELATION, maData.mnShowRSquared != 0 );
+
+        // #i83100# formatting of the equation text box
+        if( const XclImpChText* pLabel = mxDataFmt->GetDataLabel().get() )
+        {
+            pLabel->ConvertFont( aLabelProp );
+            pLabel->ConvertFrame( aLabelProp );
+            pLabel->ConvertNumFmt( aLabelProp, false );
+        }
     }
 
     // missing features
     // #i20819# polynomial trend lines
     // #i66819# moving average trend lines
     // #i5085# manual trend line size
-    // #i7998# show equation, show R^2
     // #i34093# manual crossing point
 
     return xRegCurve;
@@ -1470,16 +1474,23 @@ void XclImpChSeries::FinalizeDataFormats()
     {
         // *** series is a child series, e.g. trend line or error bar ***
 
-        // copy series formatting to child objects
+        // create missing series format
+        if( !mxSeriesFmt )
+            mxSeriesFmt = CreateDataFormat( EXC_CHDATAFORMAT_ALLPOINTS, 0 );
+
         if( mxSeriesFmt.is() )
         {
-            // trend lines
-            for( XclImpChSerTrendLineList::iterator aLIt = maTrendLines.begin(), aLEnd = maTrendLines.end(); aLIt != aLEnd; ++aLIt )
-                (*aLIt)->SetDataFormat( mxSeriesFmt );
-            // error bars
-            for( XclImpChSerErrorBarMap::iterator aMIt = maErrorBars.begin(), aMEnd = maErrorBars.end(); aMIt != aMEnd; ++aMIt )
-                aMIt->second->SetDataFormat( mxSeriesFmt );
+            // #i83100# set text label format, e.g. for trend line equations
+            mxSeriesFmt->SetDataLabel( maLabels.get( EXC_CHDATAFORMAT_ALLPOINTS ) );
+            // create missing automatic formats
+            mxSeriesFmt->UpdateTrendLineFormat();
         }
+
+        // copy series formatting to child objects
+        for( XclImpChSerTrendLineList::iterator aLIt = maTrendLines.begin(), aLEnd = maTrendLines.end(); aLIt != aLEnd; ++aLIt )
+            (*aLIt)->SetDataFormat( mxSeriesFmt );
+        for( XclImpChSerErrorBarMap::iterator aMIt = maErrorBars.begin(), aMEnd = maErrorBars.end(); aMIt != aMEnd; ++aMIt )
+            aMIt->second->SetDataFormat( mxSeriesFmt );
     }
     else if( XclImpChTypeGroup* pTypeGroup = GetChartData().GetTypeGroup( mnGroupIdx ).get() )
     {
@@ -1694,7 +1705,7 @@ void XclImpChSeries::ReadChSerErrorBar( XclImpStream& rStrm )
 XclImpChDataFormatRef XclImpChSeries::CreateDataFormat( sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx )
 {
     XclImpChDataFormatRef xDataFmt( new XclImpChDataFormat( GetChRoot() ) );
-    xDataFmt->SetPointPos( mnSeriesIdx, nPointIdx, nFormatIdx );
+    xDataFmt->SetPointPos( XclChDataPointPos( mnSeriesIdx, nPointIdx ), nFormatIdx );
     return xDataFmt;
 }
 
@@ -1963,10 +1974,11 @@ void XclImpChChart3d::Convert( ScfPropertySet& rPropSet, const XclChTypeInfo& rT
     // do not set right-angled axes for pie charts
     bool bRightAngled = rTypeInfo.mb3dWalls && !::get_flag( maData.mnFlags, EXC_CHCHART3D_REAL3D );
     rPropSet.SetBoolProperty( EXC_CHPROP_RIGHTANGLEDAXES, bRightAngled );
+    rPropSet.SetColorProperty( EXC_CHPROP_D3DSCENEAMBIENTCOLOR, Color( RGB_COLORDATA( 204, 204, 204 ) ) );
     rPropSet.SetBoolProperty( EXC_CHPROP_D3DSCENELIGHTON1, false );
     rPropSet.SetBoolProperty( EXC_CHPROP_D3DSCENELIGHTON2, true );
-    rPropSet.SetColorProperty( EXC_CHPROP_D3DSCENELIGHTCOLOR2, Color( RGB_COLORDATA( 204, 204, 204 ) ) );
-    rPropSet.SetProperty( EXC_CHPROP_D3DSCENELIGHTDIR2, Direction3D( 0.0, 0.2, 1.0 ) );
+    rPropSet.SetColorProperty( EXC_CHPROP_D3DSCENELIGHTCOLOR2, Color( RGB_COLORDATA( 102, 102, 102 ) ) );
+    rPropSet.SetProperty( EXC_CHPROP_D3DSCENELIGHTDIR2, Direction3D( 0.2, 0.4, 1.0 ) );
     rPropSet.SetProperty( EXC_CHPROP_D3DSCENESHADEMODE, ::com::sun::star::drawing::ShadeMode_FLAT );
 }
 
@@ -2012,7 +2024,7 @@ void XclImpChLegend::Finalize()
     if( !mxFrame )
         mxFrame.reset( new XclImpChFrame( GetChRoot(), EXC_CHOBJTYPE_LEGEND ) );
     // Update text formatting. If mxText is empty, the passed default text is used.
-    lclUpdateText( mxText, GetChartData().GetDefaultText( EXC_CHDEFTEXT_LEGEND ) );
+    lclUpdateText( mxText, GetChartData().GetDefaultText( EXC_CHTEXTTYPE_LEGEND ) );
 }
 
 Reference< XLegend > XclImpChLegend::CreateLegend() const
@@ -2086,6 +2098,9 @@ void XclImpChTypeGroup::ReadSubRecord( XclImpStream& rStrm )
         case EXC_ID_CHLEGEND:
             mxLegend.reset( new XclImpChLegend( GetChRoot() ) );
             mxLegend->ReadRecordGroup( rStrm );
+        break;
+        case EXC_ID_CHDEFAULTTEXT:
+            GetChartData().ReadChDefaultText( rStrm );
         break;
         case EXC_ID_CHDROPBAR:
             ReadChDropBar( rStrm );
@@ -2163,8 +2178,9 @@ bool XclImpChTypeGroup::HasConnectorLines() const
 
 const String& XclImpChTypeGroup::GetSingleSeriesTitle() const
 {
+    // no automatic title for series with trendlines or error bars
     // pie charts always show an automatic title, even if more series exist
-    return (mxFirstSeries.is() && (maTypeInfo.mbSingleSeriesVis || (maSeries.size() == 1))) ?
+    return (mxFirstSeries.is() && !mxFirstSeries->HasChildSeries() && (maTypeInfo.mbSingleSeriesVis || (maSeries.size() == 1))) ?
         mxFirstSeries->GetTitle() : String::EmptyString();
 }
 
@@ -2568,6 +2584,14 @@ void XclImpChAxis::Finalize()
     // default tick settings different in OOChart and Excel
     if( !mxTick )
         mxTick.reset( new XclImpChTick( GetChRoot() ) );
+    // #i4140# different default axis line color
+    if( !mxAxisLine )
+    {
+        XclChLineFormat aLineFmt;
+        // set "show axis" flag, default if line format record is missing
+        ::set_flag( aLineFmt.mnFlags, EXC_CHLINEFORMAT_SHOWAXIS );
+        mxAxisLine.reset( new XclImpChLineFormat( aLineFmt ) );
+    }
     // add wall/floor frame for 3d charts
     if( !mxWallFrame )
         CreateWallFrame();
@@ -2616,12 +2640,12 @@ Reference< XAxis > XclImpChAxis::CreateAxis( const XclImpChTypeGroup& rTypeGroup
             // font settings from CHFONT record or from default text
             if( mxFont.is() )
                 ConvertFontBase( GetChRoot(), aAxisProp );
-            else if( const XclImpChText* pDefText = GetChartData().GetDefaultText( EXC_CHDEFTEXT_AXIS ).get() )
+            else if( const XclImpChText* pDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_AXISLABEL ).get() )
                 pDefText->ConvertFont( aAxisProp );
             // label text rotation
             ConvertRotationBase( GetChRoot(), aAxisProp );
             // number format
-            ULONG nScNumFmt = GetNumFmtBuffer().GetScFormat( mnNumFmtIdx );
+            sal_uInt32 nScNumFmt = GetNumFmtBuffer().GetScFormat( mnNumFmtIdx );
             if( nScNumFmt != NUMBERFORMAT_ENTRY_NOT_FOUND )
                 aAxisProp.SetProperty( EXC_CHPROP_NUMBERFORMAT, static_cast< sal_Int32 >( nScNumFmt ) );
         }
@@ -2822,7 +2846,7 @@ void XclImpChAxesSet::Finalize()
         if( mxZAxis.is() ) mxZAxis->Finalize();
 
         // finalize axis titles
-        XclImpChTextRef xDefText = GetChartData().GetDefaultText( EXC_CHDEFTEXT_AXIS );
+        XclImpChTextRef xDefText = GetChartData().GetDefaultText( EXC_CHTEXTTYPE_AXISTITLE );
         lclFinalizeTitle( mxXAxisTitle, xDefText );
         lclFinalizeTitle( mxYAxisTitle, xDefText );
         lclFinalizeTitle( mxZAxisTitle, xDefText );
@@ -3102,6 +3126,17 @@ void XclImpChChart::ReadSubRecord( XclImpStream& rStrm )
     }
 }
 
+void XclImpChChart::ReadChDefaultText( XclImpStream& rStrm )
+{
+    sal_uInt16 nTextId = rStrm.ReaduInt16();
+    if( (rStrm.GetNextRecId() == EXC_ID_CHTEXT) && rStrm.StartNextRecord() )
+    {
+        XclImpChTextRef xText( new XclImpChText( GetChRoot() ) );
+        xText->ReadRecordGroup( rStrm );
+        maDefTexts[ nTextId ] = xText;
+    }
+}
+
 void XclImpChChart::ReadChDataFormat( XclImpStream& rStrm )
 {
     XclImpChDataFormatRef xDataFmt( new XclImpChDataFormat( GetChRoot() ) );
@@ -3129,9 +3164,19 @@ XclImpChTypeGroupRef XclImpChChart::GetTypeGroup( sal_uInt16 nGroupIdx ) const
     return xTypeGroup;
 }
 
-XclImpChTextRef XclImpChChart::GetDefaultText( sal_uInt16 nTextId ) const
+XclImpChTextRef XclImpChChart::GetDefaultText( XclChTextType eTextType ) const
 {
-    return maDefTexts.get( nTextId );
+    sal_uInt16 nDefTextId = EXC_CHDEFTEXT_GLOBAL;
+    bool bBiff8 = GetBiff() == EXC_BIFF8;
+    switch( eTextType )
+    {
+        case EXC_CHTEXTTYPE_TITLE:      nDefTextId = EXC_CHDEFTEXT_GLOBAL;                                  break;
+        case EXC_CHTEXTTYPE_LEGEND:     nDefTextId = EXC_CHDEFTEXT_GLOBAL;                                  break;
+        case EXC_CHTEXTTYPE_AXISTITLE:  nDefTextId = bBiff8 ? EXC_CHDEFTEXT_AXESSET : EXC_CHDEFTEXT_GLOBAL; break;
+        case EXC_CHTEXTTYPE_AXISLABEL:  nDefTextId = bBiff8 ? EXC_CHDEFTEXT_AXESSET : EXC_CHDEFTEXT_GLOBAL; break;
+        case EXC_CHTEXTTYPE_DATALABEL:  nDefTextId = bBiff8 ? EXC_CHDEFTEXT_AXESSET : EXC_CHDEFTEXT_GLOBAL; break;
+    }
+    return maDefTexts.get( nDefTextId );
 }
 
 void XclImpChChart::Convert( Reference< XChartDocument > xChartDoc, ScfProgressBar& rProgress ) const
@@ -3176,17 +3221,6 @@ void XclImpChChart::ReadChSeries( XclImpStream& rStrm )
     XclImpChSeriesRef xSeries( new XclImpChSeries( GetChRoot(), nNewSeriesIdx ) );
     xSeries->ReadRecordGroup( rStrm );
     maSeries.push_back( xSeries );
-}
-
-void XclImpChChart::ReadChDefaultText( XclImpStream& rStrm )
-{
-    sal_uInt16 nTextId = rStrm.ReaduInt16();
-    if( (rStrm.GetNextRecId() == EXC_ID_CHTEXT) && rStrm.StartNextRecord() )
-    {
-        XclImpChTextRef xText( new XclImpChText( GetChRoot() ) );
-        xText->ReadRecordGroup( rStrm );
-        maDefTexts[ nTextId ] = xText;
-    }
 }
 
 void XclImpChChart::ReadChAxesSet( XclImpStream& rStrm )
@@ -3302,7 +3336,7 @@ void XclImpChChart::FinalizeTitle()
     }
 
     // will reset mxTitle, if it does not contain a string
-    lclFinalizeTitle( mxTitle, GetDefaultText( EXC_CHDEFTEXT_TITLE ) );
+    lclFinalizeTitle( mxTitle, GetDefaultText( EXC_CHTEXTTYPE_TITLE ) );
 }
 
 // ----------------------------------------------------------------------------
