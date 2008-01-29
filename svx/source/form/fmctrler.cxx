@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:22:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:09:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2516,7 +2516,7 @@ void SAL_CALL FmXFormController::removeActivateListener(const Reference< XFormCo
 }
 
 //------------------------------------------------------------------------------
-void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
+void FmXFormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
 {
     OSL_ENSURE(!FmXFormController_BASE1::rBHelper.bDisposed,"FmXFormController: Object already disposed!");
     // create the composer
@@ -2556,7 +2556,7 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
         Reference< XNameAccess> xQueryColumns = Reference< XColumnsSupplier >
                                             (m_xComposer, UNO_QUERY)->getColumns();
 
-        for (vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
+        for (::std::vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
             iter != rFieldInfos.end(); iter++)
         {
             if ( xQueryColumns->hasByName((*iter).aFieldName) )
@@ -2633,7 +2633,7 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
                 }
 
                 // find the text component
-                for (vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
+                for (::std::vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
                     iter != rFieldInfos.end(); iter++)
                 {
                     // we found the field so insert a new entry to the filter row
@@ -2681,7 +2681,7 @@ void FmXFormController::setFilter(vector<FmFieldInfo>& rFieldInfos)
     }
 
     // now set the filter controls
-    for (vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
+    for (::std::vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
          iter != rFieldInfos.end(); iter++)
     {
         m_aFilterControls[(*iter).xText] = (*iter).xField;
@@ -2726,7 +2726,7 @@ void FmXFormController::startFiltering()
     xFormatter->attachNumberFormatsSupplier(xFormatSupplier);
 
     // structure for storing the field info
-    vector<FmFieldInfo> aFieldInfos;
+    ::std::vector<FmFieldInfo> aFieldInfos;
 
     for (sal_Int32 i = nControlCount; i > 0;)
     {
