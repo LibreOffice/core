@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:28:41 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:29:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,7 @@
 #include <rtl/logfile.hxx>
 #include <framework/configimporter.hxx>
 #include <framework/interaction.hxx>
+#include <unotools/ucbstreamhelper.hxx>
 
 //________________________________________________________________________________________________________
 //  includes of my own project
@@ -116,7 +117,6 @@
 #include <sfx2/fcontnr.hxx>
 #include "commitlistener.hxx"
 #include "stormodifylistener.hxx"
-#include "openflag.hxx"                 // SFX_STREAM_READWRITE
 #include "brokenpackageint.hxx"
 #include "graphhelp.hxx"
 #include <sfx2/docinf.hxx>
@@ -1652,9 +1652,6 @@ void SAL_CALL SfxBaseModel::initNew()
 //________________________________________________________________________________________________________
 // XLoadable
 //________________________________________________________________________________________________________
-extern void SetTemplate_Impl( const String&, const String&, SfxObjectShell* );
-
-#include <unotools/ucbstreamhelper.hxx>
 
 void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >& seqArguments )
         throw (::com::sun::star::frame::DoubleInitializationException,
@@ -1699,12 +1696,12 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
         //  pMedium->SetLoadTargetFrame( pFrame );
         //}
 
-        SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
-        sal_Bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
-
         SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
         sal_Bool bSalvage = pSalvageItem ? sal_True : sal_False;
 
+        // SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
+        // sal_Bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
+        //
         // does already happen in DoLoad call
         //m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
 
@@ -1759,86 +1756,6 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
 
         if ( !nError )
         {
-            if( bTemplate )
-            {
-                //TODO/LATER: make sure that templates always are XML docs!
-                // document is created from a template
-                String aName( pMedium->GetName() );
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplNamItem, SfxStringItem, SID_TEMPLATE_NAME, sal_False);
-                String aTemplateName;
-                if ( pTemplNamItem )
-                    aTemplateName = pTemplNamItem->GetValue();
-                else
-                {
-                    // !TODO/LATER: what's this?!
-                    // Interaktiv ( DClick, Contextmenu ) kommt kein Langname mit
-                    aTemplateName = m_pData->m_pObjectShell->GetDocInfo().GetTitle();
-                    if ( !aTemplateName.Len() )
-                    {
-                        INetURLObject aURL( aName );
-                        aURL.CutExtension();
-                        aTemplateName = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
-                    }
-                }
-
-                // set medium to noname
-                pMedium->SetName( String(), sal_True );
-                pMedium->Init_Impl();
-
-                // drop resource
-                m_pData->m_pObjectShell->SetNoName();
-                m_pData->m_pObjectShell->InvalidateName();
-
-                if( m_pData->m_pObjectShell->IsPackageStorageFormat_Impl( *pMedium ) )
-                {
-                    // untitled document must be based on temporary storage
-                    // the medium should not dispose the storage in this case
-                    uno::Reference < embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
-                    m_pData->m_pObjectShell->GetStorage()->copyToStorage( xTmpStor );
-
-                    // the medium should disconnect from the original location
-                    // the storage should not be disposed since the document is still
-                    // based on it, but in DoSaveCompleted it will be disposed
-                    pMedium->CanDisposeStorage_Impl( sal_False );
-                    pMedium->Close();
-
-                    // setting the new storage the medium will be based on
-                    pMedium->SetStorage_Impl( xTmpStor );
-
-                    m_pData->m_pObjectShell->ForgetMedium();
-                    if( !m_pData->m_pObjectShell->DoSaveCompleted( pMedium ) )
-                        nError = ERRCODE_IO_GENERAL;
-                    else
-                    {
-                        if ( !bSalvage )
-                        {
-                            // some further initializations for templates
-                            SetTemplate_Impl( aName, aTemplateName, m_pData->m_pObjectShell );
-                        }
-
-                        // the medium should not dispose the storage, DoSaveCompleted() has let it to do so
-                        pMedium->CanDisposeStorage_Impl( sal_False );
-                    }
-                }
-                else
-                {
-                    // some further initializations for templates
-                    SetTemplate_Impl( aName, aTemplateName, m_pData->m_pObjectShell );
-                    pMedium->CreateTempFile();
-                }
-
-                // templates are never readonly
-                pMedium->GetItemSet()->ClearItem( SID_DOC_READONLY );
-                pMedium->SetOpenMode( SFX_STREAM_READWRITE, sal_True, sal_True );
-
-                // notifications about possible changes in readonly state and document info
-                m_pData->m_pObjectShell->Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
-                m_pData->m_pObjectShell->Broadcast( SfxDocumentInfoHint( &m_pData->m_pObjectShell->GetDocInfo() ) );
-
-                // created untitled document can't be modified
-                m_pData->m_pObjectShell->SetModified( sal_False );
-            }
-
             if( bSalvage )
             {
                 // file recovery: restore original filter
@@ -2324,7 +2241,7 @@ uno::Reference< script::XStorageBasedLibraryContainer > SAL_CALL SfxBaseModel::g
         throw lang::DisposedException();
 
     if ( m_pData->m_pObjectShell )
-        return m_pData->m_pObjectShell->AdjustMacroMode( String(), true );
+        return m_pData->m_pObjectShell->AdjustMacroMode( String(), false );
     return sal_False;
 }
 
@@ -3327,7 +3244,6 @@ void SAL_CALL SfxBaseModel::loadFromStorage( const uno::Reference< XSTORAGE >& x
         // allow to use an interactionhandler (if there is one)
         pMedium->UseInteractionHandler( TRUE );
 
-        // TODO/LATER: in case of template storage, the temporary copy must be created
         SFX_ITEMSET_ARG( &aSet, pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
         BOOL bTemplate = pTemplateItem && pTemplateItem->GetValue();
         m_pData->m_pObjectShell->SetActivateEvent_Impl( bTemplate ? SFX_EVENT_CREATEDOC : SFX_EVENT_OPENDOC );
