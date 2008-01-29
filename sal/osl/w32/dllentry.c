@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:49:17 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:50:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,10 +248,34 @@ void do_cleanup( void )
             osl_destroyMutex( g_CurrentDirectoryMutex );
 
 #ifndef __MINGW32__
-            /* finalize memory management */
-            rtl_memory_fini();
-            rtl_cache_fini();
-            rtl_arena_fini();
+
+            /*
+
+            On a product build memory management finalization might
+            cause a crash without assertion (assertions off) if heap is
+            corrupted. But a crash report won't help here because at
+            this point all other threads have been terminated and only
+            ntdll is on the stack. No chance to find the reason for the
+            corrupted heap if so.
+
+            So annoying the user with a crash report is completly useless.
+
+            */
+
+#ifdef PRODUCT
+            __try
+#endif
+            {
+                /* finalize memory management */
+                rtl_memory_fini();
+                rtl_cache_fini();
+                rtl_arena_fini();
+            }
+#ifdef PRODUCT
+            __except( EXCEPTION_EXECUTE_HANDLER )
+            {
+            }
+#endif
             break;
     }
 
