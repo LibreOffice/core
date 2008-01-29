@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpntv.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:49:38 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:04:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,6 +261,7 @@ protected:
 
     // is this a preview renderer?
     unsigned                    mbPreviewRenderer : 1;
+    unsigned                    bBordVisibleOnlyLeftRight : 1;
 
 public:
     // #114898#
@@ -451,6 +452,7 @@ public:
     BOOL IsPageVisible() const { return bPageVisible; }             // Seite (weisse Flaeche) malen oder nicht
     BOOL IsPageBorderVisible() const { return bPageBorderVisible; } // Seite (weisse Flaeche) malen oder nicht
     BOOL IsBordVisible() const { return bBordVisible; }             // Seitenrandlinie malen oder nicht
+    BOOL IsBordVisibleOnlyLeftRight() const { return bBordVisibleOnlyLeftRight; } // draw only left and right border
     BOOL IsGridVisible() const { return bGridVisible; }             // Rastergitter malen oder nicht
     BOOL IsGridFront() const { return bGridFront  ; }               // Rastergitter ueber die Objekte druebermalen oder dahinter
     BOOL IsHlplVisible() const { return bHlplVisible; }             // Hilfslinien der Seiten malen oder nicht
@@ -460,6 +462,7 @@ public:
     void SetPageVisible(bool bOn = true) { bPageVisible=bOn; InvalidateAllWin(); }
     void SetPageBorderVisible(bool bOn = true) { bPageBorderVisible=bOn; InvalidateAllWin(); }
     void SetBordVisible(bool bOn = true) { bBordVisible=bOn; InvalidateAllWin(); }
+    void SetBordVisibleOnlyLeftRight(bool bOn = true) { bBordVisibleOnlyLeftRight=bOn; InvalidateAllWin(); }
     void SetGridVisible(bool bOn = true) { bGridVisible=bOn; InvalidateAllWin(); }
     void SetGridFront(bool bOn = true) { bGridFront  =bOn; InvalidateAllWin(); }
     void SetHlplVisible(bool bOn = true) { bHlplVisible=bOn; InvalidateAllWin(); }
