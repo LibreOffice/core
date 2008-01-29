@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:41:54 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:24:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-#include "paramisc.hxx"
-#ifndef _IMP_OP_HXX
 #include "imp_op.hxx"
-#endif
 
-#ifndef INCLUDED_SVX_COUNTRYID_HXX
 #include <svx/countryid.hxx>
-#endif
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
@@ -88,38 +82,19 @@
 #include "filtopt.hxx"
 #include "scerrors.hxx"
 #include "unonames.hxx"
+#include "paramisc.hxx"
+#include "postit.hxx"
 
-#ifndef SC_FAPIHELPER_HXX
 #include "fapihelper.hxx"
-#endif
-
-#ifndef SC_XLTOOLS_HXX
 #include "xltools.hxx"
-#endif
-#ifndef SC_XLTABLE_HXX
 #include "xltable.hxx"
-#endif
-#ifndef SC_XLVIEW_HXX
 #include "xlview.hxx"
-#endif
-#ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
-#endif
-#ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
-#endif
-#ifndef SC_XIPAGE_HXX
 #include "xipage.hxx"
-#endif
-#ifndef SC_XIVIEW_HXX
 #include "xiview.hxx"
-#endif
-#ifndef SC_XILINK_HXX
 #include "xilink.hxx"
-#endif
-#ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
-#endif
 
 #include "excimp8.hxx"
 #include "excform.hxx"
@@ -1175,6 +1150,8 @@ void ImportExcel::NeueTabelle( void )
     if( nTab > 0 && !pD->HasTable( nTab ) )
         pD->MakeTable( nTab );
 
+    pExcRoot->pShrfmlaBuff->Clear();
+
     InitializeTable( nTab );
 
     pOutlineListBuffer->Append( new XclImpOutlineDataBuffer( GetRoot(), nTab ) );
@@ -1211,7 +1188,7 @@ void ImportExcel::PostDocLoad( void )
     if( SfxStyleSheetBase* pStyleSheet = GetStyleSheetPool().Find( ScGlobal::GetRscString( STR_STYLENAME_STANDARD ), SFX_STYLE_FAMILY_PAGE ) )
         pStyleSheet->GetItemSet().Put( SfxUInt16Item( ATTR_PAGE_FIRSTPAGENO, 0 ) );
 
-    // outlines for all sheets, sets hidden rows and columns (after filtered ranges)
+    // outlines for all sheets, sets hidden rows and columns (#i11776# after filtered ranges)
     for( XclImpOutlineDataBuffer* pBuffer = pOutlineListBuffer->First(); pBuffer; pBuffer = pOutlineListBuffer->Next() )
         pBuffer->Convert();
 
