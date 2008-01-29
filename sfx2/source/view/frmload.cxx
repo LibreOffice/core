@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:33:26 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:29:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,6 +367,11 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const css::uno::Sequence< css::bean
             if ( xModel == pDoc->GetModel() )
             {
                 pFrame->SetItemSet_Impl( &aSet );
+                ::comphelper::SequenceAsHashMap lUpdateDescr( lDescriptor );
+                lUpdateDescr.erase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Model" ) ) );
+                lUpdateDescr.erase( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "URL" ) ) );
+
+                xModel->attachResource( rURL, lUpdateDescr.getAsConstPropertyValueList() );
                 return pFrame->InsertDocument( pDoc );
             }
         }
