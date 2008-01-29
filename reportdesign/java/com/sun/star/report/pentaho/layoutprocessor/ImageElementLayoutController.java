@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageElementLayoutController.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 11:24:30 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:43:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,6 +264,11 @@ public class ImageElementLayoutController
         continue;
       }
       final Element child = (Element) node;
+/*
+      if (! "covered-table-cell".equals(child.getType()) &&
+              (ObjectUtilities.equal(child.getNamespace(), namespace) == false ||
+                ObjectUtilities.equal(child.getType(), type) == false))
+*/
       if (ObjectUtilities.equal(child.getNamespace(), namespace) == false ||
           (ObjectUtilities.equal(child.getType(), type) == false
               && (secondType == null || ObjectUtilities.equal(child.getType(), secondType) == false)) )
