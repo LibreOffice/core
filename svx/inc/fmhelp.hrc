@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmhelp.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:12:22 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:49:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,6 @@
 #define HID_GRID_NUMBEROFRECORDS                (HID_FORM_DLG_START +  34)
 
 #define UID_SEARCH_RECORDSTATUS                 (HID_FORM_DLG_START +  35)
-#define UID_SQLERROR_BUTTONMORE                 (HID_FORM_DLG_START +  36)
 
 #define UID_FORMPROPBROWSER_FRAME               (HID_FORM_DLG_START +  37)
 #define UID_ABSOLUTE_RECORD_WINDOW              (HID_FORM_DLG_START +  38)
