@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-23 14:43:40 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:19:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,11 +66,7 @@
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 #endif
 
-
-
-
 // INCLUDE ---------------------------------------------------------------
-
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
@@ -115,6 +111,7 @@
 #include "globstr.hrc"
 #include "scmod.hxx"
 #include "chartarr.hxx"
+#include "postit.hxx"
 
 #define DET_ARROW_OFFSET    1000
 
@@ -1436,7 +1433,9 @@ void ScDrawLayer::DeleteObjectsInSelection( const ScMarkData& rMark )
                 }
             }
             else
+            {
                 DBG_ERROR("pPage?");
+            }
         }
 }
 
