@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:11:36 $
+#   last change: $Author: rt $ $Date: 2008-01-29 16:30:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@ ENABLE_EXCEPTIONS=TRUE
 OBJFILES = \
         $(OBJ)$/main.obj					\
         $(OBJ)$/app.obj						\
+        $(OBJ)$/appfirststart.obj			\
         $(OBJ)$/copyright_ascii_sun.obj		\
         $(OBJ)$/copyright_ascii_ooo.obj		\
         $(OBJ)$/lockfile.obj				\
