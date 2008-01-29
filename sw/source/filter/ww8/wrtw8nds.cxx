@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:01:41 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:41:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1432,7 +1432,8 @@ SvxBrushItem SwWW8Writer::TrueFrameBgBrush(const SwFrmFmt &rFlyFmt) const
     if (!pRet)
         pRet = GetCurrentPageBgBrush();
 
-    SvxBrushItem aRet( Color(COL_WHITE), RES_BACKGROUND );
+    const Color aTmpColor( COL_WHITE );
+    SvxBrushItem aRet( aTmpColor, RES_BACKGROUND );
     if (pRet && (pRet->GetGraphic() ||( pRet->GetColor() != COL_TRANSPARENT)))
         aRet = *pRet;
 
