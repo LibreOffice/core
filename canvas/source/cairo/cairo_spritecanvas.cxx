@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_spritecanvas.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 11:32:11 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:01:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@
 #include <basegfx/numeric/ftools.hxx>
 
 #include "cairo_spritecanvas.hxx"
-
+#include "cairo_devicehelper.hxx"
 
 using namespace ::cairo;
 using namespace ::com::sun::star;
@@ -99,6 +99,10 @@ namespace cairocanvas
 
         CHECK_AND_THROW( pOutputWindow != NULL,
                          "SpriteCanvas::SpriteCanvas: invalid Window pointer" );
+
+        bool bHasXRender = HasXRender( cairocanvas::GetSysData(pOutputWindow) );
+        CHECK_AND_THROW( bHasXRender == true,
+                         "SpriteCanvas::SpriteCanvas: No RENDER extension" );
 
         Size aPixelSize( pOutputWindow->GetOutputSizePixel() );
         const ::basegfx::B2ISize aSize( aPixelSize.Width(),
