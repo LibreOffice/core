@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 14:57:15 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,6 +359,8 @@ namespace dbtools
     sal_Bool isDataSourcePropertyEnabled(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>& _xProp
                                         ,const ::rtl::OUString& _sProperty,
                                         sal_Bool _bDefault = sal_False);
+
+    ::rtl::OUString getDefaultReportEngineServiceName(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
 
     /** quote the given name with the given quote string.
     */
