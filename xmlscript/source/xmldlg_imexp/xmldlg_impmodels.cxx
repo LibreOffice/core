@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_impmodels.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-29 14:16:50 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:12:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1087,6 +1087,78 @@ void TextElement::endElement()
 }
 
 //##################################################################################################
+// FixedHyperLink
+//__________________________________________________________________________________________________
+Reference< xml::input::XElement > FixedHyperLinkElement::startChildElement(
+    sal_Int32 nUid, OUString const & rLocalName,
+    Reference< xml::input::XAttributes > const & xAttributes )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    // event
+    if (_pImport->isEventElement( nUid, rLocalName ))
+    {
+        return new EventElement( nUid, rLocalName, xAttributes, this, _pImport );
+    }
+    else
+    {
+        throw xml::sax::SAXException(
+            OUString( RTL_CONSTASCII_USTRINGPARAM("expected event element!") ),
+            Reference< XInterface >(), Any() );
+    }
+}
+//__________________________________________________________________________________________________
+void FixedHyperLinkElement::endElement()
+    throw (xml::sax::SAXException, RuntimeException)
+{
+    ControlImportContext ctx(
+        _pImport, getControlId( _xAttributes ),
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedHyperlinkModel") ) );
+
+    Reference< xml::input::XElement > xStyle( getStyle( _xAttributes ) );
+    if (xStyle.is())
+    {
+        StyleElement * pStyle = static_cast< StyleElement * >( xStyle.get () );
+        Reference< beans::XPropertySet > xControlModel( ctx.getControlModel() );
+        pStyle->importBackgroundColorStyle( xControlModel );
+        pStyle->importTextColorStyle( xControlModel );
+        pStyle->importTextLineColorStyle( xControlModel );
+        pStyle->importBorderStyle( xControlModel );
+        pStyle->importFontStyle( xControlModel );
+    }
+
+    ctx.importDefaults( _nBasePosX, _nBasePosY, _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Label") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("value") ),
+                              _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("URL") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("url") ),
+                              _xAttributes );
+    ctx.importStringProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Description") ),
+                              OUString( RTL_CONSTASCII_USTRINGPARAM("description") ),
+                              _xAttributes );
+
+    ctx.importAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Align") ),
+                             OUString( RTL_CONSTASCII_USTRINGPARAM("align") ),
+                             _xAttributes );
+    ctx.importVerticalAlignProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("VerticalAlign") ),
+                                     OUString( RTL_CONSTASCII_USTRINGPARAM("valign") ),
+                                     _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("MultiLine") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("multiline") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("Tabstop") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("tabstop") ),
+                               _xAttributes );
+    ctx.importBooleanProperty( OUString( RTL_CONSTASCII_USTRINGPARAM("NoLabel") ),
+                               OUString( RTL_CONSTASCII_USTRINGPARAM("nolabel") ),
+                               _xAttributes );
+    ctx.importEvents( _events );
+    // avoid ring-reference:
+    // vector< event elements > holding event elements holding this (via _pParent)
+    _events.clear();
+}
+
+//##################################################################################################
 
 // edit
 //__________________________________________________________________________________________________
@@ -1964,6 +2036,10 @@ Reference< xml::input::XElement > BulletinBoardElement::startChildElement(
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("text") ))
     {
         return new TextElement( rLocalName, xAttributes, this, _pImport );
+    }
+    else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("linklabel") ))
+    {
+        return new FixedHyperLinkElement( rLocalName, xAttributes, this, _pImport );
     }
     // textfield
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("textfield") ))
