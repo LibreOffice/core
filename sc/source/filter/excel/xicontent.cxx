@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 13:31:10 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:26:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,7 +377,9 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
                 lclGetAbsPath( *xLongName, 0, pDocShell );
         }
         else
+        {
             DBG_ERRORFILE( "XclImpHyperlink::ReadEmbeddedData - unknown content GUID" );
+        }
     }
 
     // text mark
@@ -410,8 +412,54 @@ String XclImpHyperlink::ReadEmbeddedData( XclImpStream& rStrm )
     return String::EmptyString();
 }
 
+void XclImpHyperlink::ConvertToValidTabName(String& rUrl)
+{
+    xub_StrLen n = rUrl.Len();
+    if (n < 4)
+        // Needs at least 4 characters.
+        return;
+
+    sal_Unicode c = rUrl.GetChar(0);
+    if (c != sal_Unicode('#'))
+        // the 1st character must be '#'.
+        return;
+
+    String aNewUrl(sal_Unicode('#')), aTabName;
+
+    bool bInQuote = false;
+    for (xub_StrLen i = 1; i < n; ++i)
+    {
+        c = rUrl.GetChar(i);
+        if (c == sal_Unicode('\''))
+        {
+            bInQuote = !bInQuote;
+            if (!bInQuote && aTabName.Len() > 0)
+            {
+                // Sheet name exists.  Convert it to valid name the same way the
+                // sheet names are converted.
+                ScDocument::ConvertToValidTabName(aTabName, sal_Unicode('_'));
+                aNewUrl.Append(aTabName);
+            }
+        }
+        else if (bInQuote)
+            aTabName.Append(c);
+        else
+            aNewUrl.Append(c);
+    }
+
+    if (bInQuote)
+        // It should be outside the quotes!
+        return;
+
+    // All is good.  Pass the new URL.
+    rUrl = aNewUrl;
+}
+
 void XclImpHyperlink::InsertUrl( const XclImpRoot& rRoot, const XclRange& rXclRange, const String& rUrl )
 {
+    String aUrl(rUrl);
+    ConvertToValidTabName(aUrl);
+
     SCTAB nScTab = rRoot.GetCurrScTab();
     ScRange aScRange( ScAddress::UNINITIALIZED );
     if( rRoot.GetAddressConverter().ConvertRange( aScRange, rXclRange, nScTab, nScTab, true ) )
@@ -421,7 +469,7 @@ void XclImpHyperlink::InsertUrl( const XclImpRoot& rRoot, const XclRange& rXclRa
         aScRange.GetVars( nScCol1, nScRow1, nScTab, nScCol2, nScRow2, nScTab );
         for( SCCOL nScCol = nScCol1; nScCol <= nScCol2; ++nScCol )
             for( SCROW nScRow = nScRow1; nScRow <= nScRow2; ++nScRow )
-                lclInsertUrl( rRoot, rUrl, nScCol, nScRow, nScTab );
+                lclInsertUrl( rRoot, aUrl, nScCol, nScRow, nScTab );
     }
 }
 
@@ -866,15 +914,21 @@ XclImpWebQuery::XclImpWebQuery( const ScRange& rDestRange ) :
 
 void XclImpWebQuery::ReadParamqry( XclImpStream& rStrm )
 {
-    if( ::get_flag( rStrm.ReaduInt16(), EXC_PQRY_TABLES ) )
+    sal_uInt16 nFlags = rStrm.ReaduInt16();
+    sal_uInt16 nType = 0;
+    ::extract_value( nType, nFlags, 0, 3 );
+    if( (nType == EXC_PQRYTYPE_WEBQUERY) && ::get_flag( nFlags, EXC_PQRY_WEBQUERY ) )
     {
-        meMode = xlWQAllTables;
-        maTables = ScfTools::GetHTMLTablesName();
-    }
-    else
-    {
-        meMode = xlWQDocument;
-        maTables = ScfTools::GetHTMLDocName();
+        if( ::get_flag( nFlags, EXC_PQRY_TABLES ) )
+        {
+            meMode = xlWQAllTables;
+            maTables = ScfTools::GetHTMLTablesName();
+        }
+        else
+        {
+            meMode = xlWQDocument;
+            maTables = ScfTools::GetHTMLDocName();
+        }
     }
 }
 
@@ -964,7 +1018,9 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
         }
     }
     else
+    {
         DBG_ERROR_BIFF();
+    }
 }
 
 void XclImpWebQueryBuffer::ReadParamqry( XclImpStream& rStrm )
