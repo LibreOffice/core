@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:43:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:42:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,12 +57,9 @@
 #include "drwlayer.hxx"
 #include "scresid.hxx"
 #include "userdat.hxx"
-#include "globstr.hrc"
-
-// #97016#
-#ifndef SC_DOCSHELL_HXX
 #include "docsh.hxx"
-#endif
+#include "postit.hxx"
+#include "globstr.hrc"
 
 /*************************************************************************
 |*
