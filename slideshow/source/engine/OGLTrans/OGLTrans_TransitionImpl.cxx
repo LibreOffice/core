@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OGLTrans_TransitionImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 10:17:00 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:35:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@ void OGLTransitionImpl::clear()
     OverallOperations.clear();
     maLeavingSlidePrimitives.clear();
     maEnteringSlidePrimitives.clear();
+    for(unsigned int i(0); i < maSceneObjects.size(); ++i)
+        delete maSceneObjects[i];
+    maSceneObjects.clear();
 }
 
 OGLTransitionImpl::~OGLTransitionImpl()
@@ -49,8 +52,28 @@ OGLTransitionImpl::~OGLTransitionImpl()
     clear();
 }
 
-void OGLTransitionImpl::display( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex , double SlideWidthScale, double SlideHeightScale)
+void OGLTransitionImpl::prepare()
 {
+    for(unsigned int i(0); i < maSceneObjects.size(); ++i) {
+        maSceneObjects[i]->prepare();
+    }
+}
+
+void OGLTransitionImpl::finish()
+{
+    for(unsigned int i(0); i < maSceneObjects.size(); ++i) {
+        maSceneObjects[i]->finish();
+    }
+}
+
+void OGLTransitionImpl::display( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex,
+                                 double SlideWidth, double SlideHeight, double DispWidth, double DispHeight )
+{
+    double SlideWidthScale, SlideHeightScale;
+
+    SlideWidthScale = SlideWidth/DispWidth;
+    SlideHeightScale = SlideHeight/DispHeight;
+
     glPushMatrix();
     glEnable(GL_TEXTURE_2D);
     //TODO change to foreach
@@ -62,16 +85,20 @@ void OGLTransitionImpl::display( double nTime, ::sal_Int32 glLeavingSlideTex, ::
     glBindTexture(GL_TEXTURE_2D, glEnteringSlideTex);
     for(unsigned int i(0); i < maEnteringSlidePrimitives.size(); ++i)
         maEnteringSlidePrimitives[i].display(nTime,SlideWidthScale,SlideHeightScale);
+
+    for(unsigned int i(0); i < maSceneObjects.size(); ++i)
+        maSceneObjects[i]->display(nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
+
+
     glPopMatrix();
 }
 
-void Primitive::display(double nTime, double SlideWidthScale, double SlideHeightScale)
+void Primitive::display(double nTime, double WidthScale, double HeightScale)
 {
     glPushMatrix();
-    glEnable(GL_TEXTURE_2D);
     for(unsigned int i(0); i < Operations.size(); ++i)
-        Operations[i]->interpolate( nTime ,SlideWidthScale,SlideHeightScale);
-    glScaled(SlideWidthScale,SlideHeightScale,1);
+        Operations[i]->interpolate( nTime ,WidthScale,HeightScale);
+    glScaled(WidthScale,HeightScale,1);
 
     glEnableClientState( GL_VERTEX_ARRAY );
     if(!Normals.empty())
@@ -80,9 +107,9 @@ void Primitive::display(double nTime, double SlideWidthScale, double SlideHeight
         glEnableClientState( GL_NORMAL_ARRAY );
     }
     glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-    glTexCoordPointer( 2 , GL_DOUBLE , 0 , &TexCoords[0] );
-    glVertexPointer( 3 , GL_DOUBLE , 0 , &Vertices[0] );
-    glDrawArrays( GL_TRIANGLES , 0 , Vertices.size() );
+    glTexCoordPointer( 2, GL_DOUBLE, 0, &TexCoords[0] );
+    glVertexPointer( 3, GL_DOUBLE, 0, &Vertices[0] );
+    glDrawArrays( GL_TRIANGLES, 0, Vertices.size() );
     glPopMatrix();
 }
 
@@ -90,6 +117,60 @@ Primitive::~Primitive()
 {
     for(unsigned int i( 0 ); i < Operations.size(); ++i)
         delete Operations[i];
+}
+
+void SceneObject::display(double nTime, double /* SlideWidth */, double /* SlideHeight */, double DispWidth, double DispHeight )
+{
+    for(unsigned int i(0); i < maPrimitives.size(); ++i) {
+        // fixme: allow various model spaces, now we make it so that
+        // it is regular -1,-1 to 1,1, where the whole display fits in
+        glPushMatrix();
+        if (DispHeight > DispWidth)
+            glScaled(DispHeight/DispWidth, 1, 1);
+        else
+            glScaled(1, DispWidth/DispHeight, 1);
+        maPrimitives[i].display(nTime, 1, 1);
+        glPopMatrix();
+    }
+}
+
+void SceneObject::pushPrimitive(const Primitive &p)
+{
+    maPrimitives.push_back(p);
+}
+
+SceneObject::SceneObject()
+    : maPrimitives()
+{
+}
+
+Iris::Iris()
+    : SceneObject ()
+{
+}
+
+void Iris::display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight )
+{
+    glBindTexture(GL_TEXTURE_2D, maTexture);
+    SceneObject::display(nTime, SlideWidth, SlideHeight, DispWidth, DispHeight);
+}
+
+void Iris::prepare()
+{
+    static GLubyte img[3] = { 80, 80, 80 };
+
+    glGenTextures(1, &maTexture);
+    glBindTexture(GL_TEXTURE_2D, maTexture);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, 1, 1, 0, GL_RGB, GL_UNSIGNED_BYTE, img);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+}
+
+void Iris::finish()
+{
+    glDeleteTextures(1, &maTexture);
 }
 
 void OGLTransitionImpl::makeOutsideCubeFaceToLeft()
@@ -102,11 +183,11 @@ void OGLTransitionImpl::makeOutsideCubeFaceToLeft()
 
     maLeavingSlidePrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,-1),-90,false,0.0,1.0));
+    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,-1),90,false,0.0,1.0));
 
     maEnteringSlidePrimitives.push_back(Slide);
 
-    OverallOperations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,-1),90,true,0.0,1.0));
+    OverallOperations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,-1),-90,true,0.0,1.0));
 }
 
 void OGLTransitionImpl::makeInsideCubeFaceToLeft()
@@ -119,11 +200,150 @@ void OGLTransitionImpl::makeInsideCubeFaceToLeft()
 
     maLeavingSlidePrimitives.push_back(Slide);
 
-    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,1),90,false,0.0,1.0));
+    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,1),-90,false,0.0,1.0));
 
     maEnteringSlidePrimitives.push_back(Slide);
 
-    OverallOperations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,1),-90,true,0.0,1.0));
+    OverallOperations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,1),90,true,0.0,1.0));
+}
+
+void OGLTransitionImpl::makeFallLeaving()
+{
+    clear();
+    Primitive Slide;
+
+    Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
+    Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
+    maEnteringSlidePrimitives.push_back(Slide);
+
+    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(1,0,0),basegfx::B3DVector(0,-1,0), 90,true,0.0,1.0));
+    maLeavingSlidePrimitives.push_back(Slide);
+}
+
+void OGLTransitionImpl::makeTurnAround()
+{
+    clear();
+    Primitive Slide;
+
+    Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
+    Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
+    maLeavingSlidePrimitives.push_back(Slide);
+
+    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0),-180,false,0.0,1.0));
+    maEnteringSlidePrimitives.push_back(Slide);
+
+    OverallOperations.push_back(new STranslate(basegfx::B3DVector(0, 0, -1.5),true, 0, 0.5));
+    OverallOperations.push_back(new STranslate(basegfx::B3DVector(0, 0, 1.5), true, 0.5, 1));
+    OverallOperations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0, 1, 0),basegfx::B3DVector(0, 0, 0), -180, true, 0.0, 1.0));
+}
+
+void OGLTransitionImpl::makeTurnDown()
+{
+    clear();
+    Primitive Slide;
+
+    Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
+    Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
+    maLeavingSlidePrimitives.push_back(Slide);
+
+    Slide.Operations.push_back(new STranslate(basegfx::B3DVector(0, 0, 0.0001), false, -1.0, 0.0));
+    Slide.Operations.push_back(new SRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(-1, 1, 0), -90, true, 0.0, 1.0));
+    Slide.Operations.push_back(new SRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(-1, 1, 0), 90, false, -1.0, 0.0));
+    maEnteringSlidePrimitives.push_back(Slide);
+}
+
+void OGLTransitionImpl::makeIris()
+{
+    clear();
+    Primitive Slide;
+
+    Slide.pushTriangle (basegfx::B2DVector (0,0), basegfx::B2DVector (1,0), basegfx::B2DVector (0,1));
+    Slide.pushTriangle (basegfx::B2DVector (1,0), basegfx::B2DVector (0,1), basegfx::B2DVector (1,1));
+    maEnteringSlidePrimitives.push_back (Slide);
+
+    Slide.Operations.push_back (new STranslate (basegfx::B3DVector (0, 0, 0.0001), false, -1, 0));
+    Slide.Operations.push_back (new STranslate (basegfx::B3DVector (0, 0, -0.0002), false, 0.5, 1));
+    maLeavingSlidePrimitives.push_back (Slide);
+
+
+    Primitive irisPart, part;
+    int i, nSteps = 24, nParts = 7;
+    double lt = 0, t = 1.0/nSteps, cx, cy, lcx, lcy, lx = 1, ly = 0, x, y, cxo, cyo, lcxo, lcyo, of=2.2, f=1.42;
+
+    for (i=1; i<=nSteps; i++) {
+        x = cos ((3*2*M_PI*t)/nParts);
+        y = -sin ((3*2*M_PI*t)/nParts);
+        cx = (f*x + 1)/2;
+        cy = (f*y + 1)/2;
+        lcx = (f*lx + 1)/2;
+        lcy = (f*ly + 1)/2;
+        cxo = (of*x + 1)/2;
+        cyo = (of*y + 1)/2;
+        lcxo = (of*lx + 1)/2;
+        lcyo = (of*ly + 1)/2;
+        irisPart.pushTriangle (basegfx::B2DVector (lcx, lcy),
+                               basegfx::B2DVector (lcxo, lcyo),
+                               basegfx::B2DVector (cx, cy));
+        irisPart.pushTriangle (basegfx::B2DVector (cx, cy),
+                               basegfx::B2DVector (lcxo, lcyo),
+                               basegfx::B2DVector (cxo, cyo));
+        lx = x;
+        ly = y;
+        lt = t;
+        t += 1.0/nSteps;
+    }
+
+    Iris* pIris = new Iris();
+    double angle = 87;
+
+    for (i = 0; i < nParts; i++) {
+        irisPart.Operations.clear ();
+        double rx, ry;
+
+        rx = cos ((2*M_PI*i)/nParts);
+        ry = sin ((2*M_PI*i)/nParts);
+        irisPart.Operations.push_back (new SRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(rx, ry, 0),  angle, true, 0.0, 0.5));
+        irisPart.Operations.push_back (new SRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(rx, ry, 0), -angle, true, 0.5, 1));
+        if (i > 0) {
+            irisPart.Operations.push_back (new STranslate (basegfx::B3DVector(rx, ry, 0),  false, -1, 0));
+            irisPart.Operations.push_back (new SRotate (basegfx::B3DVector(0, 0, 1), basegfx::B3DVector(0, 0, 0), i*360.0/nParts, false, -1, 0));
+            irisPart.Operations.push_back (new STranslate (basegfx::B3DVector(-1, 0, 0),  false, -1, 0));
+        }
+        irisPart.Operations.push_back(new STranslate(basegfx::B3DVector(0, 0, 1), false, -2, 0.0));
+        irisPart.Operations.push_back (new SRotate (basegfx::B3DVector(1, .5, 0), basegfx::B3DVector(1, 0, 0), -30, false, -1, 0));
+        pIris->pushPrimitive (irisPart);
+    }
+
+    maSceneObjects.push_back (pIris);
+}
+
+void OGLTransitionImpl::makeRochade()
+{
+    clear();
+    Primitive Slide;
+
+    double w, h;
+
+    w = 2.2;
+    h = 5;
+
+    Slide.pushTriangle(basegfx::B2DVector(0,0),basegfx::B2DVector(1,0),basegfx::B2DVector(0,1));
+    Slide.pushTriangle(basegfx::B2DVector(1,0),basegfx::B2DVector(0,1),basegfx::B2DVector(1,1));
+
+    Slide.Operations.push_back(new SEllipseTranslate(w, h, 0.25, -0.25, true, 0, 1));
+    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0), -45, true, 0, 1));
+    maLeavingSlidePrimitives.push_back(Slide);
+
+    Slide.Operations.clear();
+    Slide.Operations.push_back(new SEllipseTranslate(w, h, 0.75, 0.25, true, 0, 1));
+    Slide.Operations.push_back(new STranslate(basegfx::B3DVector(0, 0, -h), false, -1, 0));
+    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0), -45, true, 0, 1));
+    Slide.Operations.push_back(new RotateAndScaleDepthByWidth(basegfx::B3DVector(0,1,0),basegfx::B3DVector(0,0,0), 45, false, -1, 0));
+    maEnteringSlidePrimitives.push_back(Slide);
+
+    //     OverallOperations.push_back(new SEllipseTranslate(0.5, 2, 0, 1, true, 0, 1));
+//      push_back(new STranslate(basegfx::B3DVector(0, 0, -2), true, 0, 0.5));
+//      OverallOperations.push_back(new STranslate(basegfx::B3DVector(0, 0, 2), true, 0.5, 1));
 }
 
 // TODO(Q3): extract to basegfx
@@ -237,7 +457,7 @@ void OGLTransitionImpl::makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt
         NextRadius += dRadius;
     }
     {
-        Radius = sqrt(2);
+        Radius = sqrt(2.0);
         Primitive LeavingSlide;
         Primitive EnteringSlide;
         for(int Side(0); Side < nPointsOnCircles - 1; ++Side)
@@ -408,6 +628,34 @@ void RotateAndScaleDepthByWidth::interpolate(double t,double SlideWidthScale,dou
     glTranslated(-SlideWidthScale*origin.getX(),-SlideHeightScale*origin.getY(),-SlideWidthScale*origin.getZ());
 }
 
+SEllipseTranslate::SEllipseTranslate(double dWidth, double dHeight, double dStartPosition, double dEndPosition, bool bInter, double T0, double T1)
+{
+    nT0 = T0;
+    nT1 = T1;
+    bInterpolate = bInter;
+    width = dWidth;
+    height = dHeight;
+    startPosition = dStartPosition;
+    endPosition = dEndPosition;
+}
+
+void SEllipseTranslate::interpolate(double t,double /* SlideWidthScale */,double /* SlideHeightScale */)
+{
+    if(t <= nT0)
+        return;
+    if(!bInterpolate || t > nT1)
+        t = nT1;
+    t = intervalInter(t,nT0,nT1);
+
+    double a1, a2, x, y;
+    a1 = startPosition*2*M_PI;
+    a2 = (startPosition + t*(endPosition - startPosition))*2*M_PI;
+    x = width*(cos (a2) - cos (a1))/2;
+    y = height*(sin (a2) - sin (a1))/2;
+
+    glTranslated(x, 0, y);
+}
+
 STranslate* STranslate::clone()
 {
     return new STranslate(*this);
@@ -420,6 +668,11 @@ SRotate* SRotate::clone()
 SScale* SScale::clone()
 {
     return new SScale(*this);
+}
+
+SEllipseTranslate* SEllipseTranslate::clone()
+{
+    return new SEllipseTranslate(*this);
 }
 
 RotateAndScaleDepthByWidth* RotateAndScaleDepthByWidth::clone()
@@ -464,7 +717,7 @@ void Primitive::pushTriangle(const basegfx::B2DVector& SlideLocation0,const base
     Verts.push_back(basegfx::B3DVector( 2*SlideLocation2.getX() - 1, -2*SlideLocation2.getY() + 1 , 0.0 ));
 
     //figure out if they're facing the correct way, and make them face the correct way.
-    basegfx::B3DVector Normal( cross( Verts[0] - Verts[1] , Verts[1] - Verts[2] ) );
+    basegfx::B3DVector Normal( basegfx::cross( Verts[0] - Verts[1] , Verts[1] - Verts[2] ) );
     if(Normal.getZ() >= 0.0)//if the normal is facing us
     {
         Texs.push_back(SlideLocation0);
@@ -494,4 +747,3 @@ void Primitive::pushTriangle(const basegfx::B2DVector& SlideLocation0,const base
     Normals.push_back(basegfx::B3DVector(0,0,1));//all normals always face the screen when untransformed.
     Normals.push_back(basegfx::B3DVector(0,0,1));//all normals always face the screen when untransformed.
 }
-
