@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:45:50 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:32:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1275,9 +1275,11 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
 
             sal_Int32 nUPD( 0 );
             sal_Int32 nBuild( 0 );
-            rImport.getBuildIds( nUPD, nBuild );
+            // --> OD 2007-12-19 #152540#
+            const bool bBuildIdFound = rImport.getBuildIds( nUPD, nBuild );
             // --> OD 2007-07-25 #i73509#
-            if ( nUPD < 680 )
+            if ( rImport.IsTextDocInOOoFileFormat() ||
+                 ( bBuildIdFound && nUPD < 680 ) )
             {
                 bOutlineStyleCandidate = true;
             }
@@ -1525,9 +1527,25 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
          xChapterNumbering.is() &&
          !( IsInsertMode() || IsStylesOnlyMode() ) )
     {
-        sal_Int32 nUPD( 0 );
-        sal_Int32 nBuild( 0 );
-        GetXMLImport().getBuildIds( nUPD, nBuild );
+        // --> OD 2007-12-19 #152540#
+        bool bChooseLastOne( false );
+        {
+            if ( GetXMLImport().IsTextDocInOOoFileFormat() )
+            {
+                bChooseLastOne = true;
+            }
+            else
+            {
+                sal_Int32 nUPD( 0 );
+                sal_Int32 nBuild( 0 );
+                if ( GetXMLImport().getBuildIds( nUPD, nBuild ) )
+                {
+                    bChooseLastOne = nUPD < 680 ||
+                                     ( nUPD == 680 && nBuild <= 9073 ) /* BuildId of OOo 2.0.4/SO8 PU4 */;
+                }
+            }
+        }
+        // <--
 
         OUString sOutlineStyleName;
         {
@@ -1550,8 +1568,9 @@ void XMLTextImportHelper::SetOutlineStyles( sal_Bool bSetEmptyLevels )
                 if ( mpOutlineStylesCandidates &&
                      mpOutlineStylesCandidates[i].size() > 0 )
                 {
-                    if ( nUPD < 680 ||
-                         ( nUPD == 680 && nBuild <= 9073 /* BuildId of OOo 2.0.4/SO8 PU4 */ ) )
+                    // --> OD 2007-12-19 #152540#
+                    if ( bChooseLastOne )
+                    // <--
                     {
                         // --> OD 2006-11-06 #i71249# - take last added one
                         sChoosenStyle = mpOutlineStylesCandidates[i].back();
