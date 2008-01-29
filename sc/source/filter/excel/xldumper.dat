@@ -953,10 +953,12 @@ begin
   0x4000=show-categ
 end
 
-multilist=CHTEXT-PLACEMENT
+shortlist=CHTEXT-PLACEMENT-BIFF8,0,default,outside,inside,center,axis,above,below,left,right,auto,manual
+
+combilist=CHTEXT-FLAGS2-BIFF8
 begin
-  default=''
-  0=context,outside,inside,center,axis,above,below,left,right,auto,manual
+  ignore=0xFFF0
+  0x000F=uint8,dec,placement,CHTEXT-PLACEMENT-BIFF8
 end
 
 # CHTICK ---------------------------------------------------------------------
