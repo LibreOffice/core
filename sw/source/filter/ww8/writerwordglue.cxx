@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerwordglue.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:01:10 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:41:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -979,9 +979,89 @@ namespace sw
 
                     // Deal with language differences in date format expression.
                     // Should be made with i18n framework.
+                    // The list of the mappings and of those "special" locales is to be found at:
+                    // http://l10n.openoffice.org/i18n_framework/LocaleData.html
                     switch ( rLang )
                     {
+                    case LANGUAGE_FINNISH:
+                        {
+                            if (nChar == 'y' || nChar == 'Y')
+                                rParams.SetChar (nI, 'V');
+                            else if (nChar == 'm' || nChar == 'M')
+                                rParams.SetChar (nI, 'K');
+                            else if (nChar == 'd' || nChar == 'D')
+                                rParams.SetChar (nI, 'P');
+                            else if (nChar == 'h' || nChar == 'H')
+                                rParams.SetChar (nI, 'T');
+                        }
+                        break;
+                    case LANGUAGE_DANISH:
+                    case LANGUAGE_NORWEGIAN:
+                    case LANGUAGE_NORWEGIAN_BOKMAL:
+                    case LANGUAGE_NORWEGIAN_NYNORSK:
+                    case LANGUAGE_SWEDISH:
+                    case LANGUAGE_SWEDISH_FINLAND:
+                        {
+                            if (nChar == 'h' || nChar == 'H')
+                                rParams.SetChar (nI, 'T');
+                        }
+                        break;
+                    case LANGUAGE_PORTUGUESE:
+                    case LANGUAGE_PORTUGUESE_BRAZILIAN:
+                    case LANGUAGE_SPANISH:
+                    case LANGUAGE_SPANISH_MEXICAN:
+                    case LANGUAGE_SPANISH_MODERN:
+                    case LANGUAGE_SPANISH_GUATEMALA:
+                    case LANGUAGE_SPANISH_COSTARICA:
+                    case LANGUAGE_SPANISH_PANAMA:
+                    case LANGUAGE_SPANISH_DOMINICAN_REPUBLIC:
+                    case LANGUAGE_SPANISH_VENEZUELA:
+                    case LANGUAGE_SPANISH_COLOMBIA:
+                    case LANGUAGE_SPANISH_PERU:
+                    case LANGUAGE_SPANISH_ARGENTINA:
+                    case LANGUAGE_SPANISH_ECUADOR:
+                    case LANGUAGE_SPANISH_CHILE:
+                    case LANGUAGE_SPANISH_URUGUAY:
+                    case LANGUAGE_SPANISH_PARAGUAY:
+                    case LANGUAGE_SPANISH_BOLIVIA:
+                    case LANGUAGE_SPANISH_EL_SALVADOR:
+                    case LANGUAGE_SPANISH_HONDURAS:
+                    case LANGUAGE_SPANISH_NICARAGUA:
+                    case LANGUAGE_SPANISH_PUERTO_RICO:
+                        {
+                            if (nChar == 'a' || nChar == 'A')
+                                rParams.SetChar (nI, 'O');
+                            else if (nChar == 'y' || nChar == 'Y')
+                                rParams.SetChar (nI, 'A');
+                        }
+                        break;
+                    case LANGUAGE_DUTCH:
+                    case LANGUAGE_DUTCH_BELGIAN:
+                        {
+                            if (nChar == 'y' || nChar == 'Y')
+                                rParams.SetChar (nI, 'J');
+                            else if (nChar == 'u' || nChar == 'U')
+                                rParams.SetChar (nI, 'H');
+                        }
+                        break;
+                    case LANGUAGE_ITALIAN:
+                    case LANGUAGE_ITALIAN_SWISS:
+                        {
+                            if (nChar == 'a' || nChar == 'A')
+                                rParams.SetChar (nI, 'O');
+                            else if (nChar == 'g' || nChar == 'G')
+                                rParams.SetChar (nI, 'X');
+                            else if (nChar == 'y' || nChar == 'Y')
+                                rParams.SetChar(nI, 'A');
+                            else if (nChar == 'd' || nChar == 'D')
+                                rParams.SetChar (nI, 'G');
+                        }
+                        break;
                     case LANGUAGE_GERMAN:
+                    case LANGUAGE_GERMAN_SWISS:
+                    case LANGUAGE_GERMAN_AUSTRIAN:
+                    case LANGUAGE_GERMAN_LUXEMBOURG:
+                    case LANGUAGE_GERMAN_LIECHTENSTEIN:
                         {
                             if (nChar == 'y' || nChar == 'Y')
                                 rParams.SetChar (nI, 'J');
@@ -996,7 +1076,9 @@ namespace sw
                     case LANGUAGE_FRENCH_LUXEMBOURG:
                     case LANGUAGE_FRENCH_MONACO:
                         {
-                            if (nChar == 'y' || nChar == 'Y')
+                            if (nChar == 'a' || nChar == 'A')
+                                rParams.SetChar (nI, 'O');
+                            else if (nChar == 'y' || nChar == 'Y')
                                 rParams.SetChar (nI, 'A');
                             else if (nChar == 'd' || nChar == 'D')
                                 rParams.SetChar (nI, 'J');
