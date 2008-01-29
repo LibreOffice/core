@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:12:46 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:20:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -396,7 +396,7 @@ void SwTxtFrm::PaintExtraData( const SwRect &rRect ) const
         aLayoutModeModifier.Modify( sal_False );
 
         // --> FME 2004-06-24 #i16816# tagged pdf support
-        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pSh->GetOut() );
+        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
         // <--
 
         SwExtraPainter aExtra( this, pSh, rLineInf, rRect, eHor, bLineNum );
@@ -669,8 +669,12 @@ void SwTxtFrm::Paint( const SwRect &rRect ) const
 
     // --> FME 2004-06-24 #i16816# tagged pdf support
     ViewShell *pSh = GetShell();
+
+    Num_Info aNumInfo( *this );
+    SwTaggedPDFHelper aTaggedPDFHelperNumbering( &aNumInfo, 0, 0, *pSh->GetOut() );
+
     Frm_Info aFrmInfo( *this );
-    SwTaggedPDFHelper aTaggedPDFHelper( &aFrmInfo, 0, *pSh->GetOut() );
+    SwTaggedPDFHelper aTaggedPDFHelperParagraph( 0, &aFrmInfo, 0, *pSh->GetOut() );
     // <--
 
     DBG_LOOP_RESET;
