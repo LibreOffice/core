@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:52:58 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:39:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1595,6 +1595,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
     long nMaxRight = nWidth + aEntryPos.X() - 1;
 
     Color aBackupTextColor( GetTextColor() );
+    Font aBackupFont( GetFont() );
     Color aBackupColor = GetFillColor();
 
     bool bCurFontIsSel = false;
@@ -1605,7 +1606,9 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
     BOOL bHideSelection = ((nWindowStyle & WB_HIDESELECTION) && !HasFocus())!=0;
     const StyleSettings& rSettings = GetSettings().GetStyleSettings();
 
-    Color aHighlightTextColor( rSettings.GetHighlightTextColor() );
+    Font aHighlightFont( GetFont() );
+    const Color aHighlightTextColor( rSettings.GetHighlightTextColor() );
+    aHighlightFont.SetColor( aHighlightTextColor );
 
     Size aRectSize( 0, nTempEntryHeight );
 
@@ -1681,6 +1684,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
                     if ( !bCurFontIsSel )
                     {
                         SetTextColor( aHighlightTextColor );
+                        SetFont( aHighlightFont );
                         bCurFontIsSel = true;
                     }
                 }
@@ -1694,6 +1698,7 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
                 {
                     bCurFontIsSel = false;
                     SetTextColor( aBackupTextColor );
+                    SetFont( aBackupFont );
                 }
             }
 
@@ -1772,7 +1777,10 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
     }
 
     if( bCurFontIsSel )
+    {
         SetTextColor( aBackupTextColor );
+        SetFont( aBackupFont );
+    }
 
     USHORT nFirstDynTabPos;
     SvLBoxTab* pFirstDynamicTab = GetFirstDynamicTab( nFirstDynTabPos );
