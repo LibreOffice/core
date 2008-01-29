@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-14 15:24:12 $
+#   last change: $Author: rt $ $Date: 2008-01-29 14:16:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -233,7 +233,7 @@ TXTFILES:=$(foreach,i,$(alllangiso) $(ZIP1DIR)$/registration$/license_$i.txt)
 LICLINES:=$(foreach,i,$(TXTFILES)  <license-text xlink:href="registration/$(i:f)" lang="$(subst,.txt, $(subst,license_, $(i:f)))" license-id="$(subst,.txt, $(subst,license_, $(i:f)))" />)
 .ENDIF  # "$(GUI)"!="WNT"
 
-REPRORTJARFILES := \
+REPORTJARFILES := \
     $(ZIP1DIR)$/flute-1.3-jfree-20061107.jar							\
     $(ZIP1DIR)$/jcommon-1.0.10.jar										\
     $(ZIP1DIR)$/jcommon-serializer-0.2.0.jar							\
