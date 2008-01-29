@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:06:31 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:19:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,7 +405,9 @@ void ScQueryParam::DeleteQuery( SCSIZE nPos )
         pEntries[nEntryCount-1].Clear();
     }
     else
+    {
         DBG_ERROR("Falscher Parameter bei ScQueryParam::DeleteQuery");
+    }
 }
 
 //------------------------------------------------------------------------
@@ -450,7 +452,9 @@ void ScQueryParam::MoveToDest()
         bInplace = TRUE;
     }
     else
+    {
         DBG_ERROR("MoveToDest, bInplace == TRUE");
+    }
 }
 
 //------------------------------------------------------------------------
