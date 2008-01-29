@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontconfig.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:16:47 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:07:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ typedef void FcConfig;
 typedef void FcObjectSet;
 typedef void FcPattern;
 typedef void FcFontSet;
+typedef void FcCharSet;
 typedef int FcResult;
 typedef int FcBool;
 typedef int FcMatchKind;
@@ -70,6 +71,7 @@ typedef char FcChar8;
 typedef int FcChar32;
 typedef unsigned int FT_UInt;
 typedef void* FT_Face;
+typedef int FcSetName;
 #endif
 
 #include <cstdio>
@@ -400,6 +402,7 @@ FontCfgWrapper::FontCfgWrapper()
 
 void FontCfgWrapper::addFontSet( FcSetName eSetName )
 {
+    #ifdef ENABLE_FONTCONFIG
     /*
       add only acceptable outlined fonts to our config,
       for future fontconfig use
@@ -419,10 +422,14 @@ void FontCfgWrapper::addFontSet( FcSetName eSetName )
         FcPatternReference(pOutlinePattern);
         FcFontSetAdd(m_pOutlineSet, pOutlinePattern);
     }
+    #else
+    (void)eSetName;
+    #endif
 }
 
 FcFontSet* FontCfgWrapper::getFontSet()
 {
+    #ifdef ENABLE_FONTCONFIG
     if( !m_pOutlineSet )
     {
         m_pOutlineSet = FcFontSetCreate();
@@ -431,6 +438,7 @@ FcFontSet* FontCfgWrapper::getFontSet()
         if( nVersion > 20400 )
             addFontSet( FcSetApplication );
     }
+    #endif
 
     return m_pOutlineSet;
 }
@@ -461,6 +469,7 @@ void FontCfgWrapper::release()
     }
 }
 
+#ifdef ENABLE_FONTCONFIG
 namespace
 {
     typedef std::pair<FcChar8*, FcChar8*> lang_and_family;
@@ -506,7 +515,7 @@ namespace
     FcResult lcl_FamilyFromPattern(FontCfgWrapper& rWrapper, FcPattern* pPattern, FcChar8 **family,
         std::hash_map< rtl::OString, rtl::OString, rtl::OStringHash > &aFontconfigNameToLocalized)
     {
-    FcChar8 *origfamily;
+        FcChar8 *origfamily;
         FcResult eFamilyRes = rWrapper.FcPatternGetString( pPattern, FC_FAMILY, 0, &origfamily );
         *family = origfamily;
 
@@ -534,13 +543,13 @@ namespace
                 localizedsorter aSorter(pLoc);
                 *family = aSorter.bestname(lang_and_families);
 
-         std::vector<lang_and_family>::const_iterator aEnd = lang_and_families.end();
-         for (std::vector<lang_and_family>::const_iterator aIter = lang_and_families.begin(); aIter != aEnd; ++aIter)
-         {
-             const char *candidate = (const char*)(aIter->second);
-             if (rtl_str_compare(candidate, (const char*)(*family)) != 0)
-                 aFontconfigNameToLocalized[OString(candidate)] = OString((const char*)(*family));
-         }
+                std::vector<lang_and_family>::const_iterator aEnd = lang_and_families.end();
+                for (std::vector<lang_and_family>::const_iterator aIter = lang_and_families.begin(); aIter != aEnd; ++aIter)
+                {
+                    const char *candidate = (const char*)(aIter->second);
+                    if (rtl_str_compare(candidate, (const char*)(*family)) != 0)
+                        aFontconfigNameToLocalized[OString(candidate)] = OString((const char*)(*family));
+                }
             }
         }
 
@@ -552,7 +561,6 @@ namespace
 /*
  * PrintFontManager::initFontconfig
  */
-#ifdef ENABLE_FONTCONFIG
 bool PrintFontManager::initFontconfig()
 {
     FontCfgWrapper& rWrapper = FontCfgWrapper::get();
@@ -1067,6 +1075,11 @@ bool PrintFontManager::addFontconfigDir( const rtl::OString& )
 bool PrintFontManager::matchFont( FastPrintFontInfo&, const com::sun::star::lang::Locale& )
 {
     return false;
+}
+
+int PrintFontManager::FreeTypeCharIndex( void*, sal_uInt32 )
+{
+    return 0;
 }
 
 rtl::OUString PrintFontManager::Substitute( const rtl::OUString&,
