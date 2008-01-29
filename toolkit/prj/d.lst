@@ -43,6 +43,8 @@ mkdir: %_DEST%\inc%_EXT%\toolkit\controls
 ..\inc\toolkit\helper\unowrapper.hxx %_DEST%\inc%_EXT%\toolkit\helper\unowrapper.hxx
 ..\inc\toolkit\helper\externallock.hxx %_DEST%\inc%_EXT%\toolkit\helper\externallock.hxx
 ..\inc\toolkit\helper\accessiblefactory.hxx %_DEST%\inc%_EXT%\toolkit\helper\accessiblefactory.hxx
+..\inc\toolkit\helper\fixedhyperbase.hxx %_DEST%\inc%_EXT%\toolkit\helper\fixedhyperbase.hxx
 
 ..\inc\toolkit\helper\vclunohelper.hxx %_DEST%\inc%_EXT%\toolkit\unohlp.hxx
 ..\inc\toolkit\dllapi.h %_DEST%\inc%_EXT%\toolkit\dllapi.h
+
