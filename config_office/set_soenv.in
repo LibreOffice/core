@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.170 $
-# Date:        $Date: 2008-01-28 13:38:24 $
+# Version:     $Revision: 1.171 $
+# Date:        $Date: 2008-01-29 16:09:46 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1894,9 +1894,6 @@ ToFile( "VC_STANDARD",       "@VC_STANDARD@",      "e" );
 ToFile( "WITH_GPC",          "@WITH_GPC@",         "e" );
 ToFile( "WITH_MYSPELL_DICTS","@WITH_MYSPELL_DICTS@","e");
 ToFile( "ENABLE_LOCKDOWN",   "@ENABLE_LOCKDOWN@",  "e" );
-ToFile( "WITH_LIBSN",        "@WITH_LIBSN@",       "e" );
-ToFile( "LIBSN_CFLAGS",      "@LIBSN_CFLAGS@",     "e" );
-ToFile( "LIBSN_LIBS",        "@LIBSN_LIBS@",       "e" );
 ToFile( "WITH_LDAP",         "@WITH_LDAP@",        "e" );
 ToFile( "WITH_OPENLDAP",     "@WITH_OPENLDAP@",    "e" );
 ToFile( "WITH_MOZILLA",      "@WITH_MOZILLA@",     "e" );
