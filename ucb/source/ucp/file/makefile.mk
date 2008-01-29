@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: ihi $ $Date: 2007-06-05 17:57:07 $
+#   last change: $Author: rt $ $Date: 2008-01-29 14:14:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,8 @@ SLOFILES=\
     $(SLO)$/filstr.obj    \
     $(SLO)$/filcmd.obj    \
     $(SLO)$/filglob.obj   \
-    $(SLO)$/filinsreq.obj
+    $(SLO)$/filinsreq.obj \
+    $(SLO)$/filrec.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)
