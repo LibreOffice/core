@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 14:21:34 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:06:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,7 +466,9 @@ Reference< XInterface > UnoControlDialogModel::createInstance( const ::rtl::OUSt
         pNewModel = new OGeometryControlModel< UnoControlRadioButtonModel >;
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlCheckBoxModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoControlCheckBoxModel >;
-    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFixedTextModel ) == 0 )
+    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoControlFixedHyperlinkModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoControlFixedHyperlinkModel >;
+    else if ( aServiceSpecifier.compareToAscii( szServiceName_UnoControlFixedTextModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoControlFixedTextModel >;
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlGroupBoxModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoControlGroupBoxModel >;
@@ -1809,10 +1811,11 @@ throw (::com::sun::star::uno::RuntimeException)
         mbSizeModified = true;
         Sequence< rtl::OUString > aProps( 2 );
         Sequence< Any > aValues( 2 );
-        aProps[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width"  ));
-        aProps[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ));
-        aValues[0] <<= aTmp.Width();
-        aValues[1] <<= aTmp.Height();
+        // Properties in a sequence must be sorted!
+        aProps[0] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Height" ));
+        aProps[1] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Width"  ));
+        aValues[0] <<= aTmp.Height();
+        aValues[1] <<= aTmp.Width();
 
         ImplSetPropertyValues( aProps, aValues, true );
         mbSizeModified = false;
