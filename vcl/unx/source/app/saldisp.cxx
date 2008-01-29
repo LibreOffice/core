@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:25:15 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:22:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,11 +84,6 @@ Status XineramaGetInfo(Display*, int, XRectangle*, unsigned char*, int*);
 #else
 #error USE_XINERAMA but no xinerama version
 #endif
-#endif
-
-#ifdef HAVE_LIBSN
-#  define SN_API_NOT_YET_FROZEN
-#  include <libsn/sn.h>
 #endif
 
 #include <postx.h>
@@ -560,38 +555,12 @@ BOOL SalDisplay::BestVisual( Display     *pDisplay,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-#ifdef HAVE_LIBSN
-extern "C" {
-    static void
-    SnErrorTrapPush( SnDisplay *display,
-             Display   *xdisplay )
-    {
-        SalXLib *pXLib = GetX11SalData()->GetLib();
-        if (pXLib)
-            pXLib->PushXErrorLevel( true );
-    }
-
-    static void
-    SnErrorTrapPop( SnDisplay *display,
-            Display   *xdisplay )
-    {
-        SalXLib *pXLib = GetX11SalData()->GetLib();
-        XSync( xdisplay, False ); // flush error queue
-
-        if (pXLib)
-            pXLib->PopXErrorLevel();
-    }
-}
-#endif /* HAVE_LIBSN */
-
 SalDisplay::SalDisplay( Display *display ) :
         mpInputMethod( NULL ),
         mpFallbackFactory ( NULL ),
         pDisp_( display ),
         m_pWMAdaptor( NULL ),
-        m_pDtIntegrator( NULL ),
-        m_pSnDisplay( NULL ),
-        m_pSnLauncheeContext( NULL )
+        m_pDtIntegrator( NULL )
 {
 #if OSL_DEBUG_LEVEL > 1
     fprintf( stderr, "SalDisplay::SalDisplay()\n" );
@@ -633,16 +602,6 @@ void SalDisplay::doDestruct()
     X11SalBitmap::ImplDestroyCache();
     X11SalGraphics::releaseGlyphPeer();
     DestroyFontCache();
-
-#ifdef HAVE_LIBSN
-    if( m_pSnLauncheeContext )
-    {
-        sn_launchee_context_complete( m_pSnLauncheeContext );
-        sn_launchee_context_unref( m_pSnLauncheeContext );
-    }
-    if ( m_pSnDisplay )
-        sn_display_unref( m_pSnDisplay );
-#endif /* HAVE_LIBSN */
 
     if( IsDisplay() )
     {
@@ -733,10 +692,10 @@ fd
   return TRUE;
 }
 
-SalX11Display::SalX11Display( Display *display, bool bHandleStartupNotification )
+SalX11Display::SalX11Display( Display *display )
         : SalDisplay( display )
 {
-    Init( bHandleStartupNotification );
+    Init();
 
     pXLib_->Insert( ConnectionNumber( pDisp_ ),
                     this,
@@ -888,11 +847,7 @@ void SalDisplay::initScreen( int nScreen ) const
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalDisplay::Init( bool
-#ifdef HAVE_LIBSN
-bHandleStartupNotification
-#endif
-)
+void SalDisplay::Init()
 {
     for( size_t i = 0; i < POINTER_COUNT; i++ )
         aPointerCache_[i] = None;
@@ -1104,19 +1059,6 @@ bHandleStartupNotification
 
     // initialize system settings update
     m_pDtIntegrator = DtIntegrator::CreateDtIntegrator();
-
-#ifdef HAVE_LIBSN
-    if ( bHandleStartupNotification )
-    {
-        m_pSnDisplay = sn_display_new( pDisp_, SnErrorTrapPush, SnErrorTrapPop );
-        m_pSnLauncheeContext = sn_launchee_context_new_from_environment( m_pSnDisplay, m_nDefaultScreen );
-#  ifdef DBG_UTIL
-        if( !m_pSnLauncheeContext )
-            fprintf( stderr, "Failed to get launch feedback info from "
-                    "DESKTOP_LAUNCH_ID/DESKTOP_LAUNCH_WINDOW\n" );
-#  endif /* DBG_UTIL */
-    }
-#endif /* HAVE_LIBSN */
 
 #ifdef DBG_UTIL
     PrintInfo();
@@ -2364,18 +2306,6 @@ void SalX11Display::Yield()
                 "will crash soon since solar mutex not locked in SalDisplay::Yield" );
 
     XNextEvent( pDisp_, &aEvent );
-
-#ifdef HAVE_LIBSN
-    if( m_pSnLauncheeContext )
-    {
-        sn_launchee_context_complete( m_pSnLauncheeContext );
-        sn_launchee_context_unref( m_pSnLauncheeContext );
-        m_pSnLauncheeContext = NULL;
-    }
-
-    if( m_pSnDisplay && sn_display_process_event( m_pSnDisplay, &aEvent ) )
-        return;
-#endif /* HAVE_LIBSN */
 
     Dispatch( &aEvent );
 
