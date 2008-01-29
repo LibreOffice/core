@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctxm.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:37:21 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1178,7 +1178,8 @@ sNm.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "_Head" ));
             else
                 aEndIdx = *pFirstEmptyNd;
             SwCntntNode* pCNd = pDoc->GetNodes().GoNext( &aEndIdx );
-            pCNd->SetAttr( *pFirstEmptyNd->GetpSwAttrSet() );
+            if( pCNd ) // Robust against defect documents, e.g. i60336
+                pCNd->SetAttr( *pFirstEmptyNd->GetpSwAttrSet() );
         }
     }
 
