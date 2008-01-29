@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 14:00:11 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:52:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,7 +259,9 @@ void ScTabViewShell::RemoveAccessibilityObject( SfxListener& rObject )
             pDoc->RemoveUnoObject(rObject);
     }
     else
+    {
         DBG_ERROR("kein Accessibility-Broadcaster?");
+    }
 }
 
 void ScTabViewShell::BroadcastAccessibility( const SfxHint &rHint )
