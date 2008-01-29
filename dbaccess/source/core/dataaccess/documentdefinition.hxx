@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:39:47 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:06:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,9 +146,11 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage> getStorage() const;
 
     sal_Bool save(sal_Bool _bApprove);
+    sal_Bool saveAs();
     void closeObject();
     sal_Bool isModified();
     void fillReportData();
+    inline sal_Bool isNewReport() const { return !m_bForm && !m_pImpl->m_aProps.bAsTemplate; }
 
     /** prepares closing the document component
 
