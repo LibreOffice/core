@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-21 16:18:08 $
+#   last change: $Author: vg $ $Date: 2008-01-29 08:53:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ TARFILE_ROOTDIR=hsqldb
 
 #CONVERTFILES=build$/build.xml
 
-#PATCH_FILE_NAME=hsqldb_1_8_0
+PATCH_FILE_NAME=patches$/accumulated_patches.patch
 
 # ADDITIONAL_FILES=   src$/org$/hsqldb$/Collation.java \
 #                     src$/org$/hsqldb$/TxManager.java \
