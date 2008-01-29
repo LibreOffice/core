@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScrollHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:45:48 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,6 +248,24 @@ void OScrollWindowHelper::impl_scrollContent( long nDeltaX, long nDeltaY )
 void OScrollWindowHelper::Resize()
 {
     OScrollWindowHelper_BASE::Resize();
+ //   Size aSize = GetOutputSizePixel();
+ //   const Size aMinSize(getMaxMarkerWidth(sal_False),0);
+ //   bool bResize = false;
+    //if( aSize.Width() < aMinSize.Width() )
+    //{
+    //  aSize.setWidth( aMinSize.Width() );
+    //  bResize = true;
+    //}
+    //if( aSize.Height() < aMinSize.Height() )
+    //{
+    //  aSize.setHeight( aMinSize.Height() );
+    //  bResize = true;
+    //}
+    //if( bResize )
+ //   {
+ //       //static_cast<SplitWindow*>(GetParent())->SetItemSize(2,aSize.getWidth());
+    //  SetOutputSizePixel( aSize );
+ //   }
     const Size aTotalOutputSize = ResizeScrollBars();
 
     OSL_ENSURE(m_pChild,"ReportWindow is NULL");
@@ -422,7 +440,15 @@ void OScrollWindowHelper::alignMarkedObjects(sal_Int32 _nControlModification,boo
 //------------------------------------------------------------------------------
 void OScrollWindowHelper::ImplInitSettings()
 {
-    SetBackground( );
+//#if OSL_DEBUG_LEVEL > 0
+//    SetBackground( Wallpaper( COL_BLUE ));
+//#else
+    //SetBackground( );
+    SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
+//#endif
+    SetFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
+    SetTextFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
+//#endif
 }
 //-----------------------------------------------------------------------------
 void OScrollWindowHelper::DataChanged( const DataChangedEvent& rDCEvt )
