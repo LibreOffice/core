@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.272 $
+ *  $Revision: 1.273 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:03:10 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:18:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,6 @@
 #endif
 
 #include <vcl/pdfextoutdevdata.hxx>
-#include <psprint/fontmanager.hxx>
 #include "vcl/lazydelete.hxx"
 
 using namespace rtl;
@@ -372,13 +371,8 @@ void Window::ImplInitAppFontData( Window* pWindow )
 
 bool Window::ImplCheckUIFont( const Font& rFont )
 {
-#ifdef UNX // TODO: use more generic solution
-#ifndef QUARTZ
-    const psp::PrintFontManager& rMgr = psp::PrintFontManager::get();
-    if (rMgr.hasFontconfig())
+    if( ImplGetSVData()->maGDIData.mbNativeFontConfig )
         return true;
-#endif
-#endif
 
     String aTestText;
     aTestText.Append( Button::GetStandardText( BUTTON_OK ) );
@@ -4456,7 +4450,7 @@ Window::~Window()
     ImplSVData* pSVData = ImplGetSVData();
 
     if ( pSVData->maHelpData.mpHelpWin && (pSVData->maHelpData.mpHelpWin->GetParent() == this) )
-        ImplDestroyHelpWindow();
+        ImplDestroyHelpWindow( true );
 
     DBG_ASSERT( pSVData->maWinData.mpTrackWin != this,
                 "Window::~Window(): Window is in TrackingMode" );
