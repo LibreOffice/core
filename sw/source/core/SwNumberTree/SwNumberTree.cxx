@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-10-15 17:32:39 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:19:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,19 @@ SwNumberTreeNode * SwNumberTreeNode::GetRoot() const
 
     return pResult;
 }
+
+SwNumberTreeNode * SwNumberTreeNode::GetFirstChild() const
+{
+    SwNumberTreeNode * pResult = 0;
+
+    tSwNumberTreeChildren::iterator aIt = mChildren.begin();
+
+    if (aIt != mChildren.end() )
+        pResult = *aIt;
+
+    return pResult;
+}
+
 
 void SwNumberTreeNode::ClearObsoletePhantoms()
 {
