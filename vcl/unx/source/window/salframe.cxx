@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.220 $
+ *  $Revision: 1.221 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:25:31 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:23:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #include <X11/keysym.h>
 #include <FWS.hxx>
 #include <X11/extensions/shape.h>
+#include <X11/extensions/dpms.h>
 #include <postx.h>
 
 #include <salunx.h>
@@ -2261,7 +2262,18 @@ void X11SalFrame::StartPresentation( BOOL bStart )
     if( ! bStart && hPresentationWindow != None )
         doReparentPresentationDialogues( GetDisplay() );
     hPresentationWindow = (bStart && IsOverrideRedirect() ) ? GetWindow() : None;
-    if( bStart || nScreenSaversTimeout_ )
+
+
+    // needs static here to save DPMS settings
+    int dummy;
+    static XLIB_BOOL DPMSEnabled = false;
+    static bool DPMSExtensionAvailable = (DPMSQueryExtension(GetXDisplay(), &dummy, &dummy) != 0);
+    static CARD16 dpms_standby_timeout=0;
+    static CARD16 dpms_suspend_timeout=0;
+    static CARD16 dpms_off_timeout=0;
+
+
+    if( bStart || nScreenSaversTimeout_ || DPMSEnabled)
     {
         if( hPresentationWindow )
         {
@@ -2277,24 +2289,60 @@ void X11SalFrame::StartPresentation( BOOL bStart )
                          &interval,
                          &prefer_blanking,
                          &allow_exposures );
-        if( !bStart )
+
+
+        // get the DPMS state right before the start
+        if (DPMSExtensionAvailable)
         {
-            XSetScreenSaver( GetXDisplay(),
+            CARD16 state; // card16 is defined in Xdm.h
+            DPMSInfo(   GetXDisplay(),
+                        &state,
+                        &DPMSEnabled);
+        }
+        if( bStart ) // start show
+        {
+            if ( timeout )
+            {
+                nScreenSaversTimeout_ = timeout;
+                XResetScreenSaver( GetXDisplay() );
+                XSetScreenSaver( GetXDisplay(),
+                                 0,
+                                 interval,
+                                 prefer_blanking,
+                                 allow_exposures );
+            }
+            if( DPMSEnabled )
+            {
+                if ( DPMSExtensionAvailable )
+                {
+                    DPMSGetTimeouts(    GetXDisplay(),
+                                        &dpms_standby_timeout,
+                                        &dpms_suspend_timeout,
+                                        &dpms_off_timeout);
+                    DPMSSetTimeouts(GetXDisplay(), 0,0,0);
+                }
+            }
+        }
+        else // if( !bStart ) // end of show
+        {
+            if( nScreenSaversTimeout_ )
+            {
+                XSetScreenSaver( GetXDisplay(),
                              nScreenSaversTimeout_,
                              interval,
                              prefer_blanking,
                              allow_exposures );
-            nScreenSaversTimeout_ = 0;
-        }
-        else if( timeout )
-        {
-            nScreenSaversTimeout_ = timeout;
-            XResetScreenSaver( GetXDisplay() );
-            XSetScreenSaver( GetXDisplay(),
-                             0,
-                             interval,
-                             prefer_blanking,
-                             allow_exposures );
+                nScreenSaversTimeout_ = 0;
+            }
+            if ( DPMSEnabled )
+            {
+                if ( DPMSExtensionAvailable )
+                {
+                // restore timeouts
+                    DPMSSetTimeouts(GetXDisplay(), dpms_standby_timeout,
+                        dpms_suspend_timeout, dpms_off_timeout);
+                }
+            }
         }
     }
 }
@@ -3718,27 +3766,33 @@ long X11SalFrame::HandleReparentEvent( XReparentEvent *pEvent )
         maGeometry.nHeight = h;
     }
 
+
     // limit width and height if we are too large: #47757
     // olwm and fvwm need this, it doesnt harm the rest
 
-    Size aScreenSize = GetDisplay()->GetScreenSize( m_nScreen );
-    int nScreenWidth  = aScreenSize.Width();
-    int nScreenHeight = aScreenSize.Height();
-    int nFrameWidth   = maGeometry.nWidth + maGeometry.nLeftDecoration + maGeometry.nRightDecoration;
-    int nFrameHeight  = maGeometry.nHeight + maGeometry.nTopDecoration  + maGeometry.nBottomDecoration;
-
-    if ((nFrameWidth > nScreenWidth) || (nFrameHeight > nScreenHeight))
+    // #i81311# do this only for sizable frames
+    if( (nStyle_ & SAL_FRAME_STYLE_SIZEABLE) != 0 )
     {
-        Size aSize(maGeometry.nWidth, maGeometry.nHeight);
+        Size aScreenSize = GetDisplay()->GetScreenSize( m_nScreen );
+        int nScreenWidth  = aScreenSize.Width();
+        int nScreenHeight = aScreenSize.Height();
+        int nFrameWidth   = maGeometry.nWidth + maGeometry.nLeftDecoration + maGeometry.nRightDecoration;
+        int nFrameHeight  = maGeometry.nHeight + maGeometry.nTopDecoration  + maGeometry.nBottomDecoration;
 
-        if (nFrameWidth  > nScreenWidth)
-            aSize.Width()  = nScreenWidth  - maGeometry.nRightDecoration - maGeometry.nLeftDecoration;
-        if (nFrameHeight > nScreenHeight)
-            aSize.Height() = nScreenHeight - maGeometry.nBottomDecoration - maGeometry.nTopDecoration;
+        if ((nFrameWidth > nScreenWidth) || (nFrameHeight > nScreenHeight))
+        {
+            Size aSize(maGeometry.nWidth, maGeometry.nHeight);
 
-        SetSize (aSize);
+            if (nFrameWidth  > nScreenWidth)
+                aSize.Width()  = nScreenWidth  - maGeometry.nRightDecoration - maGeometry.nLeftDecoration;
+            if (nFrameHeight > nScreenHeight)
+                aSize.Height() = nScreenHeight - maGeometry.nBottomDecoration - maGeometry.nTopDecoration;
+
+            SetSize( aSize );
+            bResized = false;
+        }
     }
-    else if( bResized )
+    if( bResized )
         CallCallback( SALEVENT_RESIZE, NULL );
 
     GetDisplay()->GetXLib()->PopXErrorLevel();
