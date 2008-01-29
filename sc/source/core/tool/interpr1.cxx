@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 16:23:17 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:02:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@
 #include "jumpmatrix.hxx"
 #include "cellkeytranslator.hxx"
 #include "lookupcache.hxx"
+#include "rangenam.hxx"
 
 #define SC_DOUBLE_MAXVALUE  1.7e307
 
@@ -5686,7 +5687,7 @@ void ScInterpreter::ScIndirectXL()
         conv = ScAddress::CONV_XL_R1C1;
 
     if ( MustHaveParamCount( nParamCount, 1, 2 )  )
-        {
+    {
         ScAddress::Details const details( conv, aPos );
         SCTAB nTab = aPos.Tab();
         String sRefStr( GetString() );
@@ -5697,7 +5698,40 @@ void ScInterpreter::ScIndirectXL()
         else if ( ConvertSingleRef ( pDok, sRefStr, nTab, aRefAd, details ) )
             PushSingleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab() );
         else
+        {
+            do
+            {
+                ScRangeName* pNames = pDok->GetRangeName();
+                if (!pNames)
+                    break;
+
+                USHORT nPos = 0;
+                if (!pNames->SearchName(sRefStr, nPos))
+                    break;
+
+                ScRangeData* rData = (*pNames)[nPos];
+                if (!rData)
+                    break;
+
+                rData->ValidateTabRefs();
+
+                ScRange aRange;
+                if (!rData->IsReference(aRange, ScAddress(aPos.Tab(), 0, 0)))
+                    break;
+
+                if ( aRange.aStart == aRange.aEnd )
+                    PushSingleRef(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab());
+                else
+                    PushDoubleRef(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab(),
+                                  aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab());
+
+                // success!
+                return;
+            }
+            while (false);
+
             SetIllegalArgument();
+        }
     }
 }
 
@@ -5719,7 +5753,41 @@ void ScInterpreter::ScIndirect()
         else if ( ConvertSingleRef( pDok, sRefStr, nTab, aRefAd ) )
             PushSingleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab() );
         else
+        {
+            do
+            {
+                ScRangeName* pNames = pDok->GetRangeName();
+                if (!pNames)
+                    break;
+
+                USHORT nPos = 0;
+                if (!pNames->SearchName(sRefStr, nPos))
+                    break;
+
+                ScRangeData* rData = (*pNames)[nPos];
+                if (!rData)
+                    break;
+
+                // we need this in order to obtain good range
+                rData->ValidateTabRefs();
+
+                ScRange aRange;
+                if (!rData->IsReference(aRange, aPos))
+                    break;
+
+                if ( aRange.aStart == aRange.aEnd )
+                    PushSingleRef(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab());
+                else
+                    PushDoubleRef(aRange.aStart.Col(), aRange.aStart.Row(), aRange.aStart.Tab(),
+                                  aRange.aEnd.Col(), aRange.aEnd.Row(), aRange.aEnd.Tab());
+
+                // success!
+                return;
+            }
+            while (false);
+
             SetIllegalArgument();
+        }
     }
 }
 
