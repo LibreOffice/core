@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:11:16 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:22:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,11 @@ void PDFWriter::SetDocInfo( const PDFDocInfo& rInfo )
 const PDFDocInfo& PDFWriter::GetDocInfo() const
 {
     return ((PDFWriterImpl*)pImplementation)->getDocInfo();
+}
+
+void PDFWriter::SetDocumentLocale( const com::sun::star::lang::Locale& rLoc )
+{
+    ((PDFWriterImpl*)pImplementation)->setDocumentLocale( rLoc );
 }
 
 void PDFWriter::SetFont( const Font& rFont )
@@ -470,9 +475,9 @@ void PDFWriter::CreateNote( const Rectangle& rRect, const PDFNote& rNote, sal_In
     ((PDFWriterImpl*)pImplementation)->createNote( rRect, rNote, nPageNr );
 }
 
-sal_Int32 PDFWriter::BeginStructureElement( PDFWriter::StructElement eType )
+sal_Int32 PDFWriter::BeginStructureElement( PDFWriter::StructElement eType, const rtl::OUString& rAlias )
 {
-    return ((PDFWriterImpl*)pImplementation)->beginStructureElement( eType );
+    return ((PDFWriterImpl*)pImplementation)->beginStructureElement( eType, rAlias );
 }
 
 void PDFWriter::EndStructureElement()
