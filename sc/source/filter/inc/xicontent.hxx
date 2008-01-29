@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:38:28 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:31:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,10 @@ public:
 
     /** Inserts the URL into a range of cells. Does not modify value or formula cells. */
     static void         InsertUrl( const XclImpRoot& rRoot, const XclRange& rXclRange, const String& rUrl );
+
+    /** Convert the sheet name with invalid character(s) in URL when the URL is
+        to a location within the same document (e.g. #'Sheet&Name'.A1). */
+    static void         ConvertToValidTabName(String& rName);
 };
 
 // Label ranges ===============================================================
