@@ -4,9 +4,9 @@
  *
  *  $RCSfile: op.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:23:16 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:30:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@ void OP_Formula123( SvStream &aStream, USHORT nLaenge );
 void OP_IEEENumber123(SvStream& r, UINT16 n);
 void OP_Note123(SvStream &aStream, USHORT nLaenge);
 void OP_CreatePattern123(SvStream &aStream, USHORT nLaenge);
+void OP_SheetName123( SvStream &rStream, USHORT nLength );
 void OP_HorAlign123(BYTE nAlignPattern, SfxItemSet& rPattern /*  const ScPatternAttr& rPattern*/  );
 void OP_VerAlign123(BYTE nAlignPattern, SfxItemSet& rPattern /*  const ScPatternAttr& rPattern*/  );
 void OP_ApplyPatternArea123(SvStream& r);
