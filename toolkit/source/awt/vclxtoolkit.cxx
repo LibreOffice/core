@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxtoolkit.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 12:56:48 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:05:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1103,7 +1103,7 @@ Window* VCLXToolkit::ImplCreateWindow( VCLXWindow** ppNewComp,
                     *ppNewComp = new ::toolkit::XThrobber;
                 }
             break;
-            default:    DBG_ERROR( "UNO3!" );
+            default:    DBG_ERRORFILE( "UNO3!" );
         }
     }
 
@@ -1346,6 +1346,8 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     WinBits nAddWinBits( 0 );
     if (( aButtons & 0x0000ffffL ) == css::awt::MessageBoxButtons::BUTTONS_ABORT_IGNORE_RETRY )
         nAddWinBits |= WB_ABORT_RETRY_IGNORE;
+    if ( sal_Int32( aButtons & 0xffff0000L ) == css::awt::MessageBoxButtons::DEFAULT_BUTTON_IGNORE )
+        nAddWinBits |= WB_DEF_IGNORE;
 
     aDescriptor.Type              = css::awt::WindowClass_MODALTOP;
     aDescriptor.WindowServiceName = aType;
