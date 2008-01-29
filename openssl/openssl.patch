@@ -1,5 +1,5 @@
-*** misc/openssl-0.9.8e/ms/do_ms.bat	Tue May 17 02:07:13 2005
---- misc/build/openssl-0.9.8e/ms/do_ms.bat	Fri Nov 30 16:18:49 2007
+*** misc/openssl-0.9.8g/ms/do_ms.bat	Tue May 17 02:07:13 2005
+--- misc/build/openssl-0.9.8g/ms/do_ms.bat	Fri Nov 30 16:18:49 2007
 ***************
 *** 1,9 ****
 ! 
@@ -20,8 +20,8 @@
 ! 
 ! %1 util\mkdef.pl 32 libeay > ms\libeay32.def
 ! %1 util\mkdef.pl 32 ssleay > ms\ssleay32.def
-*** misc/openssl-0.9.8e/util/mk1mf.pl	Thu Nov 30 14:04:43 2006
---- misc/build/openssl-0.9.8e/util/mk1mf.pl	Fri Nov 30 16:19:19 2007
+*** misc/openssl-0.9.8g/util/mk1mf.pl	Thu Nov 30 14:04:43 2006
+--- misc/build/openssl-0.9.8g/util/mk1mf.pl	Fri Nov 30 16:19:19 2007
 ***************
 *** 115,121 ****
   $inc_def="outinc";
@@ -56,8 +56,8 @@
     #define PLATFORM "$platform"
   EOF
   printf OUT "  #define DATE \"%s\"\n", scalar gmtime();
-*** misc/openssl-0.9.8e/util/pl/VC-32.pl	Sun Jan 15 14:46:20 2006
---- misc/build/openssl-0.9.8e/util/pl/VC-32.pl	Fri Nov 30 16:18:49 2007
+*** misc/openssl-0.9.8g/util/pl/VC-32.pl	Sun Jan 15 14:46:20 2006
+--- misc/build/openssl-0.9.8g/util/pl/VC-32.pl	Fri Nov 30 16:18:49 2007
 ***************
 *** 14,20 ****
   $zlib_lib="zlib1.lib";
