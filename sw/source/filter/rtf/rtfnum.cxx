@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:54:39 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:40:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -686,37 +686,60 @@ void SwRTFParser::ReadListOverrideTable()
         if( !bStyleTabValid )
             MakeStyleTab();
 
-        const SfxPoolItem* pItem;
-        const SwTxtFmtColl* pColl;
-        SvxRTFStyleType* pStyle = GetStyleTbl().First();
-        USHORT nRulePos;
+        const SfxPoolItem* pItem( 0 );
+        const SwTxtFmtColl* pColl( 0 );
+        USHORT nRulePos( USHRT_MAX );
         const SwNumRule *pNumRule = 0;
+        SvxRTFStyleType* pStyle = GetStyleTbl().First();
         do {
-            if( MAXLEVEL > pStyle->nOutlineNo &&
-                0 != ( pColl = aTxtCollTbl.Get( (USHORT)GetStyleTbl().
-                                                        GetCurKey() )) &&
-                SFX_ITEM_SET == pColl->GetItemState( RES_PARATR_NUMRULE,
-                                                    FALSE, &pItem ) &&
-                USHRT_MAX != (nRulePos = pDoc->FindNumRule(
-                                ((SwNumRuleItem*)pItem)->GetValue() )) &&
-                (pNumRule = pDoc->GetNumRuleTbl()[ nRulePos ])->IsAutoRule() )
+            // --> OD 2007-12-17 #151213#
+            // suppress deletion of outline list style.
+            // refactoring of code: no assignments in if-condition
+//            if( MAXLEVEL > pStyle->nOutlineNo &&
+//                0 != ( pColl = aTxtCollTbl.Get( (USHORT)GetStyleTbl().
+//                                                        GetCurKey() )) &&
+//                SFX_ITEM_SET == pColl->GetItemState( RES_PARATR_NUMRULE,
+//                                                    FALSE, &pItem ) &&
+//                USHRT_MAX != (nRulePos = pDoc->FindNumRule(
+//                                ((SwNumRuleItem*)pItem)->GetValue() )) &&
+//                (pNumRule = pDoc->GetNumRuleTbl()[ nRulePos ])->IsAutoRule() )
+            if ( MAXLEVEL > pStyle->nOutlineNo )
             {
-                pDoc->SetOutlineNumRule( *pNumRule );
-                pDoc->DelNumRule( pNumRule->GetName() );
-                // now pNumRule pointer is invalid !!!
-
-                // now decrement all position in the listtable, which will
-                // behind the doc-rule position
-                for( USHORT n = aListArr.Count(); n; )
+                pColl = aTxtCollTbl.Get( (USHORT)GetStyleTbl().GetCurKey() );
+                if ( pColl )
                 {
-                    SwListEntry& rEntry = aListArr[ --n ];
-                    if( rEntry.nListDocPos == nRulePos )
-                        aListArr.Remove( n );
-                    else if( rEntry.nListDocPos > nRulePos )
-                        --rEntry.nListDocPos;
+                    const SfxItemState eItemState =
+                        pColl->GetItemState( RES_PARATR_NUMRULE, FALSE, &pItem );
+                    if ( eItemState == SFX_ITEM_SET )
+                    {
+                        nRulePos = pDoc->FindNumRule( ((SwNumRuleItem*)pItem)->GetValue() );
+                        if ( nRulePos != USHRT_MAX )
+                        {
+                            pNumRule = pDoc->GetNumRuleTbl()[ nRulePos ];
+                            if ( pNumRule->IsAutoRule() &&
+                                 pNumRule != pDoc->GetOutlineNumRule() )
+                            {
+                                pDoc->SetOutlineNumRule( *pNumRule );
+                                pDoc->DelNumRule( pNumRule->GetName() );
+                                // now pNumRule pointer is invalid !!!
+
+                                // now decrement all position in the listtable, which will
+                                // behind the doc-rule position
+                                for( USHORT n = aListArr.Count(); n; )
+                                {
+                                    SwListEntry& rEntry = aListArr[ --n ];
+                                    if( rEntry.nListDocPos == nRulePos )
+                                        aListArr.Remove( n );
+                                    else if( rEntry.nListDocPos > nRulePos )
+                                        --rEntry.nListDocPos;
+                                }
+                                break;
+                            }
+                        }
+                    }
                 }
-                break;
             }
+            // <--
 
             pStyle->aAttrSet.ClearItem( FN_PARAM_NUM_LEVEL );
 
