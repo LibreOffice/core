@@ -4,9 +4,9 @@
  *
  *  $RCSfile: metadata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:11:29 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:50:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ namespace rptui
     //========================================================================
 #define DEF_INFO( ident, uinameres, helpid, flags )   \
     OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
-            String( ModuleRes( RID_STR_##uinameres ) ), nPos++, HID_PROP_##helpid, flags )
+            String( ModuleRes( RID_STR_##uinameres ) ), nPos++, HID_RPT_PROP_##helpid, flags )
 
 #define DEF_INFO_1( ident, uinameres, helpid, flag1 ) \
     DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 )
