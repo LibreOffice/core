@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:23:54 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:52:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -200,6 +200,7 @@ namespace dbaui
     DBG_NAME(OLinkedDocumentsAccess)
     //------------------------------------------------------------------
     OLinkedDocumentsAccess::OLinkedDocumentsAccess(Window* _pDialogParent
+                                                    , const Reference< XFrame >& _rxParentFrame
                                                     , const Reference< XMultiServiceFactory >& _rxORB
                                                     , const Reference< XNameAccess >& _rxContainer
                                                     , const Reference< XConnection>& _xConnection
@@ -208,6 +209,7 @@ namespace dbaui
         :m_xORB(_rxORB)
         ,m_xDocumentContainer(_rxContainer)
         ,m_xConnection(_xConnection)
+        ,m_xParentFrame(_rxParentFrame)
         ,m_pDialogParent(_pDialogParent)
         ,m_sDataSourceName(_sDataSourceName)
     {
@@ -284,12 +286,14 @@ namespace dbaui
                 aDesc[::svx::daCommand] <<= _rObjectName;
             if ( m_xConnection.is() )
                 aDesc[::svx::daConnection] <<= m_xConnection;
+
             Sequence<Any> aSeq = aDesc.createAnySequence();
-            sal_Int32 nPos = aSeq.getLength();
-            aSeq.realloc(nPos+1);
-            PropertyValue aProp;
-            aProp.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentDefinition"));
-            aSeq[nPos] <<= aProp;
+            const sal_Int32 nLength = aSeq.getLength();
+            aSeq.realloc(nLength + 1 );
+            PropertyValue aVal;
+            aVal.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParentFrame"));
+            aVal.Value <<= m_xParentFrame;
+            aSeq[nLength] <<= aVal;
 
             Reference< XJobExecutor > xFormWizard;
             {
@@ -309,6 +313,8 @@ namespace dbaui
                         xRet.set(xProp->getPropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Document"))),UNO_QUERY);
                     }
                 }
+                xFormWizard->trigger(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("end")));
+                ::comphelper::disposeComponent(xFormWizard);
             }
         }
         catch(const Exception&)
@@ -329,16 +335,16 @@ namespace dbaui
         return newWithPilot("com.sun.star.wizards.report.CallReportWizard",_xDefinition,_nCommandType,_rObjectName);
     }
     //------------------------------------------------------------------
-    void OLinkedDocumentsAccess::newTableWithPilot()
+    Reference< XComponent> OLinkedDocumentsAccess::newTableWithPilot()
     {
         Reference< XComponent > xDefinition;
-        newWithPilot("com.sun.star.wizards.table.CallTableWizard",xDefinition);
+        return newWithPilot("com.sun.star.wizards.table.CallTableWizard",xDefinition);
     }
     //------------------------------------------------------------------
-    void OLinkedDocumentsAccess::newQueryWithPilot(const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName)
+    Reference< XComponent> OLinkedDocumentsAccess::newQueryWithPilot(const sal_Int32 _nCommandType,const ::rtl::OUString& _rObjectName)
     {
         Reference< XComponent > xDefinition;
-        newWithPilot("com.sun.star.wizards.query.CallQueryWizard",xDefinition,_nCommandType,_rObjectName);
+        return newWithPilot("com.sun.star.wizards.query.CallQueryWizard",xDefinition,_nCommandType,_rObjectName);
     }
     //------------------------------------------------------------------
     Reference< XComponent > OLinkedDocumentsAccess::newDocument(sal_Int32 _nNewFormId,Reference< XComponent >& _xDefinition,const sal_Int32 _nCommandType,const ::rtl::OUString& _sObjectName)
