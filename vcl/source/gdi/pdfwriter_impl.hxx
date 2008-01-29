@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 10:44:53 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:23:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU
@@ -36,52 +36,22 @@
 #ifndef _VCL_PDFWRITER_IMPL_HXX
 #define _VCL_PDFWRITER_IMPL_HXX
 
-#ifndef _VCL_PDFWRITER_HXX
-#include <vcl/pdfwriter.hxx>
-#endif
-
-#ifndef _RTL_USTRING_HXX
-#include <rtl/ustring.hxx>
-#endif
-#ifndef _OSL_FILE_H
-#include <osl/file.h>
-#endif
-#ifndef _GEN_HXX
-#include <tools/gen.hxx>
-#endif
-#ifndef _STREAM_HXX
-#include <tools/stream.hxx>
-#endif
-#ifndef _SV_OUTDEV_HXX
-#include <vcl/outdev.hxx>
-#endif
-#ifndef _SV_BITMAPEX_HXX
-#include <vcl/bitmapex.hxx>
-#endif
-#ifndef _SV_GRADIENT_HXX
-#include <vcl/gradient.hxx>
-#endif
-#ifndef _SV_HATCH_HXX
-#include <vcl/hatch.hxx>
-#endif
-#ifndef _SV_WALL_HXX
-#include <vcl/wall.hxx>
-#endif
-#ifndef _SV_OUTDATA_HXX
-#include <vcl/outdata.hxx>
-#endif
-#ifndef _RTL_STRBUF_HXX
-#include <rtl/strbuf.hxx>
-#endif
-#ifndef _RTL_CIPHER_H_
-#include <rtl/cipher.h>
-#endif
-#ifndef _RTL_DIGEST_H_
-#include <rtl/digest.h>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
-#include <com/sun/star/util/XURLTransformer.hpp>
-#endif
+#include "vcl/pdfwriter.hxx"
+#include "rtl/ustring.hxx"
+#include "osl/file.h"
+#include "tools/gen.hxx"
+#include "tools/stream.hxx"
+#include "vcl/outdev.hxx"
+#include "vcl/bitmapex.hxx"
+#include "vcl/gradient.hxx"
+#include "vcl/hatch.hxx"
+#include "vcl/wall.hxx"
+#include "vcl/outdata.hxx"
+#include "rtl/strbuf.hxx"
+#include "rtl/cipher.h"
+#include "rtl/digest.h"
+#include "com/sun/star/util/XURLTransformer.hpp"
+#include "com/sun/star/lang/Locale.hpp"
 
 #include "pdffontcache.hxx"
 
@@ -510,6 +480,7 @@ public:
     {
         sal_Int32                                           m_nObject;
         PDFWriter::StructElement                            m_eType;
+        rtl::OString                                        m_aAlias;
         sal_Int32                                           m_nOwnElement; // index into structure vector
         sal_Int32                                           m_nParentElement; // index into structure vector
         sal_Int32                                           m_nFirstPageObject;
@@ -520,6 +491,7 @@ public:
         Rectangle                                           m_aBBox;
         rtl::OUString                                       m_aActualText;
         rtl::OUString                                       m_aAltText;
+        com::sun::star::lang::Locale                        m_aLocale;
 
         // m_aContents contains the element's marked content sequence
         // as pairs of (page nr, MCID)
@@ -630,6 +602,9 @@ private:
      */
     bool                                m_bEmitStructure;
     bool                                m_bNewMCID;
+    /* role map of struct tree root */
+    std::hash_map< rtl::OString, rtl::OString, rtl::OStringHash >
+                                        m_aRoleMap;
 
     /* contains all widgets used in the PDF
      */
@@ -1099,6 +1074,9 @@ public:
     void setDocInfo( const PDFDocInfo& rInfo );
     const PDFDocInfo& getDocInfo() const { return m_aDocInfo; }
 
+    void setDocumentLocale( const com::sun::star::lang::Locale& rLoc )
+    { m_aContext.DocumentLocale = rLoc; }
+
 
     /* graphics state */
     void push( sal_uInt16 nFlags );
@@ -1263,7 +1241,7 @@ public:
     // notes
     void createNote( const Rectangle& rRect, const PDFNote& rNote, sal_Int32 nPageNr = -1 );
     // structure elements
-    sal_Int32 beginStructureElement( PDFWriter::StructElement eType );
+    sal_Int32 beginStructureElement( PDFWriter::StructElement eType, const rtl::OUString& rAlias );
     void endStructureElement();
     bool setCurrentStructureElement( sal_Int32 nElement );
     sal_Int32 getCurrentStructureElement();
