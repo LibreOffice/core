@@ -15,7 +15,7 @@
   #
   # Make sure that JDK 1.2 compatible class files are generated
   build.target=1.4
-! build.source=1.2
+! build.source=1.3
   build.retro.target=1.2
   build.retro.jdk=/opt/jdk1.2.2
   
