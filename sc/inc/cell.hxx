@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:45:51 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:14:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,6 @@
 #ifndef SC_TOKENARRAY_HXX
 #include "tokenarray.hxx"
 #endif
-#ifndef SC_POSTIT_HXX
-#include "postit.hxx"
-#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -76,6 +73,7 @@ class SvtBroadcaster;
 class ScCodeArray;
 class ScTokenArray;
 class ScProgress;
+class ScPostIt;
 
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
@@ -100,8 +98,8 @@ protected:
                     ~ScBaseCell();  // nicht virtuell -> darf nicht direkt aufgerufen werden
 
 public:
-    inline          ScBaseCell( CellType eNewType );
-    inline          ScBaseCell( const ScBaseCell& rBaseCell, ScDocument* pDoc );
+    explicit        ScBaseCell( CellType eNewType );
+                    ScBaseCell( const ScBaseCell& rBaseCell, ScDocument* pDoc );
 
     ScBaseCell*     Clone(ScDocument* pDoc) const;
     void            Delete();                       // simulierter virtueller Destructor
@@ -109,8 +107,8 @@ public:
 
     void            SetNote( const ScPostIt& rNote );
     BOOL            GetNote( ScPostIt& rNote ) const;
-    const ScPostIt* GetNotePtr() const;
-    inline void     DeleteNote();
+    inline const ScPostIt* GetNotePtr() const { return pNote; }
+    void            DeleteNote();
 
     inline SvtBroadcaster*  GetBroadcaster() const;
     void            SetBroadcaster(SvtBroadcaster* pNew);
@@ -469,42 +467,9 @@ public:
 
 //      ScBaseCell
 
-inline ScBaseCell::ScBaseCell( CellType eNewType ) :
-    pNote( NULL ),
-    pBroadcaster( NULL ),
-    nTextWidth( TEXTWIDTH_DIRTY ),
-    eCellType( sal::static_int_cast<BYTE>(eNewType) ),
-    nScriptType( SC_SCRIPTTYPE_UNKNOWN )
-{
-}
-
-inline ScBaseCell::ScBaseCell( const ScBaseCell& rBaseCell, ScDocument* pDoc ) :
-    pBroadcaster( NULL ),
-    nTextWidth( rBaseCell.nTextWidth ),
-    eCellType( rBaseCell.eCellType ),
-    nScriptType( SC_SCRIPTTYPE_UNKNOWN )
-{
-    if (rBaseCell.pNote)
-        pNote = new ScPostIt( *rBaseCell.pNote, pDoc );
-    else
-        pNote = NULL;
-}
-
-
 inline CellType ScBaseCell::GetCellType() const
 {
     return (CellType)eCellType;
-}
-
-inline const ScPostIt* ScBaseCell::GetNotePtr() const
-{
-    return pNote;
-}
-
-inline void ScBaseCell::DeleteNote()
-{
-    delete pNote;
-    pNote = NULL;
 }
 
 inline SvtBroadcaster* ScBaseCell::GetBroadcaster() const
