@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:02:31 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:16:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,8 @@ struct ImplToolBoxPrivateData
             mbMenubuttonSelected:1, // menu button is highlighted
             mbPageScroll:1,         // determines if we scroll a page at a time
             mbNativeButtons:1,      // system supports native toolbar buttons
-            mbWillUsePopupMode:1;   // this toolbox will be opened in popup mode
+            mbWillUsePopupMode:1,   // this toolbox will be opened in popup mode
+            mbDropDownByKeyboard:1; // tells whether a dropdown was started by key input
 };
 
 
