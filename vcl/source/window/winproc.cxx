@@ -227,7 +227,7 @@ static BOOL ImplHandleMouseFloatMode( Window* pChild, const Point& rMousePos,
             if ( !pFloat || (nHitTest & IMPL_FLOATWIN_HITTEST_RECT) )
             {
                 if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp )
-                    ImplDestroyHelpWindow();
+                    ImplDestroyHelpWindow( true );
                 pChild->ImplGetFrame()->SetPointer( POINTER_ARROW );
                 return TRUE;
             }
@@ -332,7 +332,7 @@ static void ImplHandleMouseHelpRequest( Window* pChild, const Point& rMousePos )
             // #104172# do not kill keyboard activated tooltips
             else if ( pSVData->maHelpData.mpHelpWin && !pSVData->maHelpData.mbKeyboardHelp)
             {
-                ImplDestroyHelpWindow();
+                ImplDestroyHelpWindow( true );
             }
         }
     }
@@ -442,11 +442,11 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
         {
             if( pWindow->ImplGetWindow() == pSVData->maHelpData.mpHelpWin )
             {
-                ImplDestroyHelpWindow();
+                ImplDestroyHelpWindow( false );
                 return 1; // pWindow is dead now - avoid crash!
             }
             else
-                ImplDestroyHelpWindow();
+                ImplDestroyHelpWindow( true );
         }
 
         if ( (pWinFrameData->mnLastMouseX != nX) ||
@@ -470,7 +470,7 @@ long ImplHandleMouseEvent( Window* pWindow, USHORT nSVEvent, BOOL bMouseLeave,
         {
             ImplDelData aDelData( pWindow );
 
-            ImplDestroyHelpWindow();
+            ImplDestroyHelpWindow( true );
 
             if ( aDelData.IsDelete() )
                 return 1; // pWindow is dead now - avoid crash! (#122045#)
@@ -1097,7 +1097,7 @@ static long ImplHandleKey( Window* pWindow, USHORT nSVEvent,
                 return 1;
         }
         if ( pSVData->maHelpData.mpHelpWin )
-            ImplDestroyHelpWindow();
+            ImplDestroyHelpWindow( false );
 
         // AutoScrollMode
         if ( pSVData->maWinData.mpAutoScrollWin )
@@ -1538,7 +1538,7 @@ static long ImplHandleWheelEvent( Window* pWindow, const SalWheelMouseEvent& rEv
     if ( pSVData->maWinData.mpAutoScrollWin )
         pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
     if ( pSVData->maHelpData.mpHelpWin )
-        ImplDestroyHelpWindow();
+        ImplDestroyHelpWindow( true );
     if( aDogTag.IsDelete() )
         return 0;
 
@@ -1657,7 +1657,7 @@ void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
     {
         KillOwnPopups( pWindow );
         if( pWindow->ImplGetWindow() != ImplGetSVData()->maHelpData.mpHelpWin )
-            ImplDestroyHelpWindow();
+            ImplDestroyHelpWindow( true );
     }
 
     if ( (nNewWidth > 0) && (nNewHeight > 0) ||
@@ -1724,7 +1724,7 @@ static void ImplHandleMove( Window* pWindow )
     {
         KillOwnPopups( pWindow );
         if( pWindow->ImplGetWindow() != ImplGetSVData()->maHelpData.mpHelpWin )
-            ImplDestroyHelpWindow();
+            ImplDestroyHelpWindow( true );
     }
 
     if ( pWindow->IsVisible() )
@@ -1982,7 +1982,7 @@ void ImplHandleClose( Window* pWindow )
     if ( pSVData->maHelpData.mbExtHelpMode )
         Help::EndExtHelp();
     if ( pSVData->maHelpData.mpHelpWin )
-        ImplDestroyHelpWindow();
+        ImplDestroyHelpWindow( false );
     // AutoScrollMode
     if ( pSVData->maWinData.mpAutoScrollWin )
         pSVData->maWinData.mpAutoScrollWin->EndAutoScroll();
