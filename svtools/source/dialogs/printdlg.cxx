@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 14:54:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:11:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,8 +129,8 @@ PrintDialog::PrintDialog( Window* pWindow, bool bWithSheetsAndCells ) :
     maFlPrintRange      ( this, SvtResId( FL_PRINTRANGE ) ),
     maRbtAll            ( this, SvtResId( RBT_ALL ) ),
     maRbtPages          ( this, SvtResId( RBT_PAGES ) ),
-    maEdtPages          ( this, SvtResId( EDT_PAGES ) ),
     maRbtSelection      ( this, SvtResId( RBT_SELECTION ) ),
+    maEdtPages          ( this, SvtResId( EDT_PAGES ) ),
     maFlSepCopiesRange  ( this, SvtResId( FL_SEPCOPIESRANGE ) ),
     maFlCopies          ( this, SvtResId( FL_COPIES ) ),
     maFtCopies          ( this, SvtResId( FT_COPIES ) ),
