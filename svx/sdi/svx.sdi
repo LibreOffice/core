@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svx.sdi,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 17:05:05 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:22:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -10453,7 +10453,7 @@ SfxBoolItem Text SID_ATTR_CHAR
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
@@ -11036,7 +11036,7 @@ SfxBoolItem VerticalText SID_DRAW_TEXT_VERTICAL
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
