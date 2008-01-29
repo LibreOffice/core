@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 17:01:43 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:50:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2482,7 +2482,9 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                         }
                                     }
                                     else
+                                    {
                                         DBG_ERROR("pData == 0");
+                                    }
                                 }
                                 else
                                 {
@@ -2508,7 +2510,9 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     lcl_SetEditColor( *pEngine, COL_AUTO );     //! or have a flag at EditEngine
                             }
                             else
+                            {
                                 DBG_ERROR("pCell == NULL");
+                            }
 
                             pEngine->SetVertical( bAsianVertical );
                             pEngine->SetUpdateMode( TRUE );     // after SetText, before CalcTextWidth/GetTextHeight
@@ -3259,7 +3263,9 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                     if (pData)
                                         pEngine->SetText(*pData);
                                     else
+                                    {
                                         DBG_ERROR("pData == 0");
+                                    }
                                 }
                                 else
                                 {
@@ -3285,7 +3291,9 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                     lcl_SetEditColor( *pEngine, COL_AUTO );     //! or have a flag at EditEngine
                             }
                             else
+                            {
                                 DBG_ERROR("pCell == NULL");
+                            }
 
                             pEngine->SetUpdateMode( TRUE );     // after SetText, before CalcTextWidth/GetTextHeight
 
