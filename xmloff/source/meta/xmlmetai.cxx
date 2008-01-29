@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 16:12:52 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:14:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -879,11 +879,16 @@ SvXMLImportContext* SfxXMLMetaContext::CreateChildContext( sal_uInt16 nPrefix,
 
 void SfxXMLMetaContext::EndElement()
 {
-    if ( sKeywords.getLength() && xInfoProp.is() )
+    if ( xInfoProp.is() )
     {
-        uno::Any aAny;
-        aAny <<= rtl::OUString(sKeywords);
-        xInfoProp->setPropertyValue( ::rtl::OUString::createFromAscii(PROP_KEYWORDS), aAny );
+        if ( sKeywords.getLength() )
+        {
+            uno::Any aAny;
+            aAny <<= rtl::OUString(sKeywords);
+            xInfoProp->setPropertyValue( ::rtl::OUString::createFromAscii(PROP_KEYWORDS), aAny );
+        }
+
+        xInfoProp->setPropertyValue(::rtl::OUString::createFromAscii("ODFVersion"), uno::makeAny(GetImport().GetODFVersion()) );
     }
 }
 
