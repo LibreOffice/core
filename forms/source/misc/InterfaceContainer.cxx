@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InterfaceContainer.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:55:25 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:06:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -594,13 +594,13 @@ throw (::com::sun::star::uno::RuntimeException) {
     if (evt.PropertyName == PROPERTY_NAME)
     {
         ::osl::MutexGuard aGuard( m_rMutex );
-        OInterfaceMap::iterator i = find(m_aMap.begin(), m_aMap.end(),
-            pair<const ::rtl::OUString, InterfaceRef >(::comphelper::getString(evt.OldValue),evt.Source));
+        OInterfaceMap::iterator i = ::std::find(m_aMap.begin(), m_aMap.end(),
+            ::std::pair<const ::rtl::OUString, InterfaceRef >(::comphelper::getString(evt.OldValue),evt.Source));
         if (i != m_aMap.end())
         {
             InterfaceRef  xCorrectType((*i).second);
             m_aMap.erase(i);
-            m_aMap.insert(pair<const ::rtl::OUString, InterfaceRef >(::comphelper::getString(evt.NewValue),xCorrectType));
+            m_aMap.insert(::std::pair<const ::rtl::OUString, InterfaceRef >(::comphelper::getString(evt.NewValue),xCorrectType));
         }
     }
 }
@@ -630,7 +630,7 @@ Reference<XEnumeration> SAL_CALL OInterfaceContainer::createEnumeration() throw(
 //------------------------------------------------------------------------------
 Any SAL_CALL OInterfaceContainer::getByName( const ::rtl::OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException)
 {
-    pair <OInterfaceMap::iterator,
+    ::std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(_rName);
 
     if (aPair.first == aPair.second)
@@ -655,7 +655,7 @@ StringSequence SAL_CALL OInterfaceContainer::getElementNames() throw(RuntimeExce
 //------------------------------------------------------------------------------
 sal_Bool SAL_CALL OInterfaceContainer::hasByName( const ::rtl::OUString& _rName ) throw(RuntimeException)
 {
-    pair <OInterfaceMap::iterator,
+    ::std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(_rName);
     return aPair.first != aPair.second;
 }
@@ -762,7 +762,7 @@ void OInterfaceContainer::implInsert(sal_Int32 _nIndex, const Reference< XProper
     else
         m_aItems.insert( m_aItems.begin() + _nIndex, pElementMetaData->xInterface );
 
-    m_aMap.insert( pair< const ::rtl::OUString, InterfaceRef >( sName, pElementMetaData->xInterface ) );
+    m_aMap.insert( ::std::pair< const ::rtl::OUString, InterfaceRef >( sName, pElementMetaData->xInterface ) );
 
     // announce ourself as parent to the new element
     {
@@ -877,7 +877,7 @@ void OInterfaceContainer::implReplaceByIndex( const sal_Int32 _nIndex, const Any
     aElementMetaData.get()->xPropertySet->addPropertyChangeListener(PROPERTY_NAME, this);
 
     // insert the new one
-    m_aMap.insert( pair<const ::rtl::OUString, InterfaceRef  >( sName, aElementMetaData.get()->xInterface ) );
+    m_aMap.insert( ::std::pair<const ::rtl::OUString, InterfaceRef  >( sName, aElementMetaData.get()->xInterface ) );
     m_aItems[ _nIndex ] = aElementMetaData.get()->xInterface;
 
     aElementMetaData.get()->xChild->setParent(static_cast<XContainer*>(this));
@@ -1012,7 +1012,7 @@ void SAL_CALL OInterfaceContainer::insertByName(const ::rtl::OUString& _rName, c
 void SAL_CALL OInterfaceContainer::replaceByName(const ::rtl::OUString& Name, const Any& Element) throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException )
 {
     ::osl::ClearableMutexGuard aGuard( m_rMutex );
-    pair <OInterfaceMap::iterator,
+    ::std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(Name);
     if (aPair.first == aPair.second)
         throw NoSuchElementException();
@@ -1031,7 +1031,7 @@ void SAL_CALL OInterfaceContainer::replaceByName(const ::rtl::OUString& Name, co
     }
 
     // determine the element pos
-    sal_Int32 nPos = find(m_aItems.begin(), m_aItems.end(), (*aPair.first).second) - m_aItems.begin();
+    sal_Int32 nPos = ::std::find(m_aItems.begin(), m_aItems.end(), (*aPair.first).second) - m_aItems.begin();
 
     implReplaceByIndex( nPos, Element, aGuard );
 }
@@ -1040,12 +1040,12 @@ void SAL_CALL OInterfaceContainer::replaceByName(const ::rtl::OUString& Name, co
 void SAL_CALL OInterfaceContainer::removeByName(const ::rtl::OUString& Name) throw( NoSuchElementException, WrappedTargetException, RuntimeException )
 {
     ::osl::MutexGuard aGuard( m_rMutex );
-    pair <OInterfaceMap::iterator,
+    ::std::pair <OInterfaceMap::iterator,
           OInterfaceMap::iterator> aPair = m_aMap.equal_range(Name);
     if (aPair.first == aPair.second)
         throw NoSuchElementException();
 
-    sal_Int32 nPos = find(m_aItems.begin(), m_aItems.end(), (*aPair.first).second) - m_aItems.begin();
+    sal_Int32 nPos = ::std::find(m_aItems.begin(), m_aItems.end(), (*aPair.first).second) - m_aItems.begin();
     removeByIndex(nPos);
 }
 
