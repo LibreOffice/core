@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parasc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:44:08 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:24:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -341,8 +341,7 @@ ULONG SwASCIIParser::ReadChars()
         ULONG nLen, nOrig;
         nOrig = nLen = rInput.Read(pArr, ASC_BUFFLEN);
         CharSet eCharSet;
-        bool bRet = SwIoSystem::IsDetectableText(pArr, nLen, &eCharSet,
-            &bSwapUnicode);
+        bool bRet = SwIoSystem::IsDetectableText(pArr, nLen, &eCharSet, &bSwapUnicode);
         ASSERT(bRet, "Autodetect of text import without nag dialog must "
             "have failed");
         if (bRet && eCharSet != RTL_TEXTENCODING_DONTKNOW)
