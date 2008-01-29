@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:38:48 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:03:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -960,7 +960,7 @@ struct SetRelation
 utl::AccessibleRelationSetHelper* ScChildrenShapes::GetRelationSet(const ScAddress* pAddress) const
 {
     SetRelation aSetRelation(this, pAddress);
-    for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), aSetRelation);
+    ::std::for_each(maZOrderedShapes.begin(), maZOrderedShapes.end(), aSetRelation);
     return aSetRelation.mpRelationSet;
 }
 
