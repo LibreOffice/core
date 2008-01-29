@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servicenames.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:23:39 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:07:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,3 +110,6 @@ const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControlModel[] = "com.
 const sal_Char __FAR_DATA szServiceName_UnoSimpleAnimationControl[] = "com.sun.star.awt.UnoSimpleAnimationControl";
 const sal_Char __FAR_DATA szServiceName_UnoThrobberControlModel[] = "com.sun.star.awt.UnoThrobberControlModel";
 const sal_Char __FAR_DATA szServiceName_UnoThrobberControl[] = "com.sun.star.awt.UnoThrobberControl";
+const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlink[] = "com.sun.star.awt.UnoControlFixedHyperlink";
+const sal_Char __FAR_DATA szServiceName_UnoControlFixedHyperlinkModel[] = "com.sun.star.awt.UnoControlFixedHyperlinkModel";
+
