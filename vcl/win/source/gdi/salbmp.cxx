@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:57:18 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:04:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -497,7 +497,7 @@ BitmapBuffer* WinSalBitmap::AcquireBuffer( bool /*bReadOnly*/ )
                                                           *(UINT32*) &pBI->bmiColors[ 1 ],
                                                           *(UINT32*) &pBI->bmiColors[ 2 ] );
                     }
-                    else if( pBIH->biCompression == 16 )
+                    else if( pBIH->biBitCount == 16 )
                         pBuffer->maColorMask = ColorMask( 0x00007c00UL, 0x000003e0UL, 0x0000001fUL );
                     else
                         pBuffer->maColorMask = ColorMask( 0x00ff0000UL, 0x0000ff00UL, 0x000000ffUL );
