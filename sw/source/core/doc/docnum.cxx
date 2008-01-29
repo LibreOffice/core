@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2008-01-04 13:20:14 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:37:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1169,6 +1169,16 @@ void SwDoc::SetNodeNumStart( const SwPosition& rPos, USHORT nStt )
 BOOL SwDoc::DelNumRule( const String& rName, BOOL bBroadcast )
 {
     USHORT nPos = FindNumRule( rName );
+
+    // --> OD 2007-12-17 #151213#
+    if ( (*pNumRuleTbl)[ nPos ] == GetOutlineNumRule() )
+    {
+        ASSERT( false,
+                "<SwDoc::DelNumRule(..)> - No deletion of outline list style. This is serious defect - please inform OD" );
+        return FALSE;
+    }
+    // <--
+
     if( USHRT_MAX != nPos && !IsUsed( *(*pNumRuleTbl)[ nPos ] ))
     {
         if (DoesUndo())
