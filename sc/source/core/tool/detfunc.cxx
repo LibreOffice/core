@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:15:09 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:22:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
@@ -65,33 +63,15 @@
 #include <svx/xlnstwit.hxx>
 #include <svx/xlnwtit.hxx>
 #include <svx/xtable.hxx>
-#ifndef _OUTLINER_HXX
 #include <svx/outliner.hxx>
-#endif
-#ifndef _EDITOBJ_HXX
 #include <svx/editobj.hxx>
-#endif
-#ifndef _SXCECITM_HXX
 #include <svx/sxcecitm.hxx>
-#endif
-#ifndef _SFX_WHITER_HXX
 #include <svtools/whiter.hxx>
-#endif
-#ifndef _SVX_WRITINGMODEITEM_HXX
 #include <svx/writingmodeitem.hxx>
-#endif
 
-#ifndef _BGFX_POINT_B2DPOINT_HXX
 #include <basegfx/point/b2dpoint.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
 #include <basegfx/polygon/b2dpolygon.hxx>
-#endif
 
 #include "detfunc.hxx"
 #include "document.hxx"
@@ -104,6 +84,7 @@
 #include "patattr.hxx"
 #include "attrib.hxx"
 #include "scmod.hxx"
+#include "postit.hxx"
 
 //------------------------------------------------------------------------
 
@@ -1587,7 +1568,9 @@ BOOL ScDetectiveFunc::DeleteAll( ScDetectiveDelete eWhat )
                     else if ( eWhat == SC_DET_ARROWS )      // DetectiveRefresh
                         bDoThis = !bCaption && !bCircle;    // don't include circles
                     else
+                    {
                         DBG_ERROR("wat?");
+                    }
                 }
                 if ( bDoThis )
                     ppObj[nDelCount++] = pObject;
