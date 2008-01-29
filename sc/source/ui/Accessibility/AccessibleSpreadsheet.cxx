@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:41:00 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:39:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,22 +277,30 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                     CommitChange(aEvent);
                 }
 
-                if ((aNewCell != maActiveCell) && (aNewCell.Tab() == maActiveCell.Tab()) && IsFocused())
+                // active descendant changed event (new cell selected)
+                bool bFireActiveDescChanged = (aNewCell != maActiveCell) &&
+                    (aNewCell.Tab() == maActiveCell.Tab()) && IsFocused();
+
+                /*  Remember old active cell and set new active cell.
+                    #i82409# always update the class members mpAccCell and
+                    maActiveCell, even if the sheet is not focused, e.g. when
+                    using the name box in the toolbar. */
+                uno::Reference< XAccessible > xOld = mpAccCell;
+                mpAccCell->release();
+                mpAccCell = GetAccessibleCellAt(aNewCell.Row(), aNewCell.Col());
+                mpAccCell->acquire();
+                mpAccCell->Init();
+                uno::Reference< XAccessible > xNew = mpAccCell;
+                maActiveCell = aNewCell;
+
+                // #i14108# fire event only if sheet is focused
+                if( bFireActiveDescChanged )
                 {
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::ACTIVE_DESCENDANT_CHANGED;
                     aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                    uno::Reference< XAccessible > xOld = mpAccCell;
-                    mpAccCell->release();
                     aEvent.OldValue <<= xOld;
-                    mpAccCell = GetAccessibleCellAt(aNewCell.Row(), aNewCell.Col());
-                    mpAccCell->acquire();
-                    mpAccCell->Init();
-                    uno::Reference< XAccessible > xNew = mpAccCell;
                     aEvent.NewValue <<= xNew;
-
-                    maActiveCell = aNewCell;
-
                     CommitChange(aEvent);
                 }
             }
@@ -382,7 +390,9 @@ void ScAccessibleSpreadsheet::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
                         nX = aRange.aEnd.Col() - aRange.aStart.Col();
                 }
                 else
+                {
                     DBG_ERROR("is it a deletion or a insertion?");
+                }
 
                 CommitTableModelChange(rRef.GetRange().aStart.Row(),
                     rRef.GetRange().aStart.Col(),
@@ -827,12 +837,16 @@ void ScAccessibleSpreadsheet::CreateSortedMarkedCells()
                 AddMarkedRange(aRange);
             }
             else
+            {
                 DBG_ERROR("Range of wrong table");
+            }
         }
         else if(pRange->aStart.Tab() == maActiveCell.Tab())
             AddMarkedRange(*pRange);
         else
+        {
             DBG_ERROR("Range of wrong table");
+        }
         pRange = mpMarkedRanges->Next();
     }
     std::sort(mpSortedMarkedCells->begin(), mpSortedMarkedCells->end());
