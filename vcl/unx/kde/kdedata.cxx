@@ -4,9 +4,9 @@
  *
  *  $RCSfile: kdedata.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:37:42 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:21:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ void VCLKDEApplication::commitData(QSessionManager&)
  ***************************************************************************/
 
 SalKDEDisplay::SalKDEDisplay( Display* pDisp )
-    : SalX11Display( pDisp, false )
+    : SalX11Display( pDisp )
 {
 }
 
