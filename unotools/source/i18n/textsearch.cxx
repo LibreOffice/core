@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 16:38:12 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:03:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,46 @@ SearchParam::SearchParam( const SearchParam& rParam )
 //  ( Die Unterscheidung der Gross/Klein-Schreibung kann mit einen Flag
 //  unterdrueckt werden )
 
+TextSearch::CachedTextSearch TextSearch::maCache;
+
+static bool lcl_Equals( const SearchOptions& rSO1, const SearchOptions& rSO2 )
+{
+    return rSO1.algorithmType == rSO2.algorithmType &&
+        rSO1.searchFlag == rSO2.searchFlag &&
+        rSO1.searchString.equals(rSO2.searchString) &&
+        rSO1.replaceString.equals(rSO2.replaceString) &&
+        rSO1.changedChars == rSO2.changedChars &&
+        rSO1.deletedChars == rSO2.deletedChars &&
+        rSO1.insertedChars == rSO2.insertedChars &&
+        rSO1.Locale.Language == rSO2.Locale.Language &&
+        rSO1.Locale.Country == rSO2.Locale.Country &&
+        rSO1.Locale.Variant == rSO2.Locale.Variant &&
+        rSO1.transliterateFlags == rSO2.transliterateFlags;
+}
+
+Reference<XTextSearch> TextSearch::getXTextSearch( const SearchOptions& rPara )
+{
+    osl::MutexGuard aGuard(maCache.mutex);
+
+    if ( lcl_Equals(maCache.Options, rPara) )
+        return maCache.xTextSearch;
+
+    try
+    {
+        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
+        maCache.xTextSearch.set( xMSF->createInstance(
+            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.util.TextSearch" ) ) ), UNO_QUERY_THROW );
+        maCache.xTextSearch->setOptions( rPara );
+        maCache.Options = rPara;
+    }
+    catch ( Exception& )
+    {
+        DBG_ERRORFILE( "TextSearch ctor: Exception caught!" );
+    }
+    return maCache.xTextSearch;
+}
+
 TextSearch::TextSearch(const SearchParam & rParam, LanguageType eLang )
 {
     if( LANGUAGE_NONE == eLang )
@@ -136,18 +176,7 @@ TextSearch::TextSearch(const SearchParam & rParam, const CharClass& rCClass )
 
 TextSearch::TextSearch( const SearchOptions& rPara )
 {
-    try
-    {
-        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        xTextSearch = Reference< XTextSearch > ( xMSF->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.util.TextSearch" ) ) ), UNO_QUERY_THROW );
-        xTextSearch->setOptions( rPara );
-    }
-    catch ( Exception& )
-    {
-        DBG_ERRORFILE( "TextSearch ctor: Exception caught!" );
-    }
+    xTextSearch = getXTextSearch( rPara );
 }
 
 void TextSearch::Init( const SearchParam & rParam,
@@ -191,18 +220,7 @@ void TextSearch::Init( const SearchParam & rParam,
         aSOpt.transliterateFlags |= ::com::sun::star::i18n::TransliterationModules_IGNORE_CASE;
     }
 
-    try
-    {
-        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        xTextSearch = Reference< XTextSearch > ( xMSF->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.util.TextSearch" ) ) ), UNO_QUERY_THROW );
-        xTextSearch->setOptions( aSOpt );
-    }
-    catch ( Exception& )
-    {
-        DBG_ERRORFILE( "TextSearch ctor: Exception caught!" );
-    }
+    xTextSearch = getXTextSearch( aSOpt );
 }
 
 void TextSearch::SetLocale( const ::com::sun::star::util::SearchOptions& rOptions,
@@ -212,18 +230,7 @@ void TextSearch::SetLocale( const ::com::sun::star::util::SearchOptions& rOption
     SearchOptions aSOpt( rOptions );
     aSOpt.Locale = rLocale;
 
-    try
-    {
-        Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-        xTextSearch = Reference< XTextSearch > ( xMSF->createInstance(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.util.TextSearch" ) ) ), UNO_QUERY_THROW );
-        xTextSearch->setOptions( aSOpt );
-    }
-    catch ( Exception& )
-    {
-        DBG_ERRORFILE( "TextSearch ctor: Exception caught!" );
-    }
+    xTextSearch = getXTextSearch( aSOpt );
 }
 
 
