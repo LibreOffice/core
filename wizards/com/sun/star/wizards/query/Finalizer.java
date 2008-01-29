@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Finalizer.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 16:05:08 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:42:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,13 @@ import com.sun.star.wizards.common.*;
 import com.sun.star.awt.XRadioButton;
 import com.sun.star.wizards.db.*;
 import com.sun.star.lang.IllegalArgumentException;
+import com.sun.star.lang.XComponent;
 import com.sun.star.sdb.CommandType;
 import com.sun.star.uno.*;
 import com.sun.star.wizards.ui.*;
 
 public class Finalizer {
-    UnoDialog2 CurUnoDialog;
+    QueryWizard CurUnoDialog;
     String resQuery;
     Object txtSummary;
     Object txtTitle;
@@ -52,7 +53,7 @@ public class Finalizer {
 
     QuerySummary CurDBMetaData;
 
-    public Finalizer(UnoDialog2 _CurUnoDialog, QuerySummary _CurDBMetaData) {
+    public Finalizer(QueryWizard _CurUnoDialog, QuerySummary _CurDBMetaData) {
         short curtabindex = (short) (100 * QueryWizard.SOSUMMARYPAGE);
         String reslblQueryTitle;
         String resoptDisplayQuery;
@@ -116,25 +117,29 @@ public class Finalizer {
         return (String) Helper.getUnoPropertyValue(UnoDialog.getModel(txtTitle), "Text");
     }
 
-    public void finish() {
+    public XComponent[] finish() {
+        XComponent[] ret = null;
         try {
             CurDBMetaData.oSQLQueryComposer = new SQLQueryComposer(CurDBMetaData);
             String queryname = getTitle();
             boolean bsuccess = CurDBMetaData.oSQLQueryComposer.setQueryCommand(queryname, CurUnoDialog.xWindow, true, true);
             if (bsuccess) {
                 bsuccess = CurDBMetaData.createQuery(CurDBMetaData.oSQLQueryComposer, queryname);
-                if ( !bsuccess )
-                    return;
-
-                short igoon = AnyConverter.toShort(Helper.getUnoPropertyValue(UnoDialog.getModel(xRadioDisplayQuery), "State"));
-                if (igoon == (short) 1)
-                    CurDBMetaData.switchtoDataViewmode(queryname, CommandType.QUERY);
-                else
-                    CurDBMetaData.switchtoDesignmode(queryname, CommandType.QUERY);
-                CurUnoDialog.xDialog.endExecute();
+                if ( bsuccess ){
+                    short igoon = AnyConverter.toShort(Helper.getUnoPropertyValue(UnoDialog.getModel(xRadioDisplayQuery), "State"));
+                    if (igoon == (short) 1)
+                        ret = CurDBMetaData.switchtoDataViewmode(queryname, CommandType.QUERY,CurUnoDialog.getCurFrame());
+                    else
+                        ret = CurDBMetaData.switchtoDesignmode(queryname, CommandType.QUERY,CurUnoDialog.getCurFrame());
+                    CurUnoDialog.xDialog.endExecute();
+                }
             }
+            CurDBMetaData.oSQLQueryComposer = null;
+            CurDBMetaData = null;
+            CurUnoDialog = null;
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
         }
+        return ret;
     }
 }
