@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2007-09-06 13:41:02 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 07:56:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -992,8 +992,48 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( const ::com::sun
     {
         chainStatus = pChainContext->TrustStatus.dwErrorStatus ;
 
+        // JL & TKR: Until we have a test suite to test all error types we just say that the cert is
+        // valid or invalid with no further separation.
+        // Error CERT_TRUST_IS_OFFLINE_REVOCATION and CERT_TRUST_REVOCATION_STATUS_UNKNOWN are treated separate
+        // because they are ignored ( Bad! ) in the currently situation
+
         if( chainStatus == CERT_TRUST_NO_ERROR )
+        {
             validity = ::com::sun::star::security::CertificateValidity::VALID ;
+        }
+
+        if ( ( chainStatus & CERT_TRUST_IS_OFFLINE_REVOCATION ) == CERT_TRUST_IS_OFFLINE_REVOCATION ) {
+            validity |= ::com::sun::star::security::CertificateValidity::UNKNOWN_REVOKATION ;
+        }
+
+        if ( ( chainStatus & CERT_TRUST_REVOCATION_STATUS_UNKNOWN ) == CERT_TRUST_REVOCATION_STATUS_UNKNOWN ) {
+            validity |= ::com::sun::star::security::CertificateValidity::UNKNOWN_REVOKATION ;
+        }
+
+        if (chainStatus & CERT_TRUST_IS_NOT_VALID_FOR_USAGE
+            || chainStatus & CERT_TRUST_IS_CYCLIC
+            || chainStatus & CERT_TRUST_INVALID_POLICY_CONSTRAINTS
+            || chainStatus & CERT_TRUST_INVALID_BASIC_CONSTRAINTS
+            || chainStatus & CERT_TRUST_INVALID_NAME_CONSTRAINTS
+            || chainStatus & CERT_TRUST_HAS_NOT_SUPPORTED_NAME_CONSTRAINT
+            || chainStatus & CERT_TRUST_HAS_NOT_DEFINED_NAME_CONSTRAINT
+            || chainStatus & CERT_TRUST_HAS_NOT_PERMITTED_NAME_CONSTRAINT
+            || chainStatus & CERT_TRUST_HAS_EXCLUDED_NAME_CONSTRAINT
+            || chainStatus & CERT_TRUST_NO_ISSUANCE_CHAIN_POLICY
+            || chainStatus & CERT_TRUST_CTL_IS_NOT_TIME_VALID
+            || chainStatus & CERT_TRUST_CTL_IS_NOT_SIGNATURE_VALID
+            || chainStatus & CERT_TRUST_CTL_IS_NOT_VALID_FOR_USAGE
+            || chainStatus & CERT_TRUST_IS_NOT_TIME_VALID
+            || chainStatus & CERT_TRUST_IS_NOT_TIME_NESTED
+            || chainStatus & CERT_TRUST_IS_REVOKED
+            || chainStatus & CERT_TRUST_IS_NOT_SIGNATURE_VALID
+            || chainStatus & CERT_TRUST_IS_UNTRUSTED_ROOT
+            || chainStatus & CERT_TRUST_INVALID_EXTENSION
+            || chainStatus & CERT_TRUST_IS_PARTIAL_CHAIN )
+        {
+            validity = ::com::sun::star::security::CertificateValidity::INVALID;
+        }
+/*
 
         if( ( chainStatus & CERT_TRUST_IS_NOT_TIME_VALID ) == CERT_TRUST_IS_NOT_TIME_VALID ) {
             validity |= ::com::sun::star::security::CertificateValidity::TIME_INVALID ;
@@ -1050,6 +1090,7 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( const ::com::sun
         {
             validity = ::com::sun::star::security::CertificateValidity::INVALID;
         }
+*/
     } else {
         validity = ::com::sun::star::security::CertificateValidity::INVALID ;
     }
