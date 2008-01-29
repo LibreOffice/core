@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olinetab.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:07:18 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:19:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,9 @@ void ScOutlineEntry::SetSize( SCSIZE nNewSize )
     if (nNewSize>0)
         nSize = nNewSize;
     else
+    {
         DBG_ERROR("ScOutlineEntry Size == 0");
+    }
 }
 
 void ScOutlineEntry::SetPosSize( SCCOLROW nNewPos, SCSIZE nNewSize )
