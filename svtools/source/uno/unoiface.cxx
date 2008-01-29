@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoiface.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-10 09:20:36 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:25:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@
 #include "filedlg.hxx"
 #include "filectrl.hxx"
 #include "roadmap.hxx"
+#include <svtools/fixedhyper.hxx>
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -190,6 +191,19 @@ SAL_DLLPUBLIC_EXPORT Window* CreateWindow( VCLXWindow** ppNewComp, const ::com::
         TreeControlPeer* pPeer = new TreeControlPeer;
         *ppNewComp = pPeer;
         pWindow = pPeer->createVclControl( pParent, nWinBits );
+    }
+    else if ( aServiceName.EqualsIgnoreCaseAscii( "FixedHyperlink" ) )
+    {
+        if ( pParent )
+        {
+            pWindow = new ::svt::FixedHyperlink( pParent, nWinBits );
+            *ppNewComp = new VCLXFixedHyperlink;
+        }
+        else
+        {
+            *ppNewComp = NULL;
+            return NULL;
+        }
     }
     return pWindow;
 }
