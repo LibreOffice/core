@@ -5,9 +5,9 @@
  *
  *  $RCSfile: dialog.xlb,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2007-11-28 10:47:53 $
+ *  last change: $Author: mav $ $Date: 2008-01-29 11:07:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,6 @@
 <!DOCTYPE library:library PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "library.dtd">
 <library:library xmlns:library="http://openoffice.org/2000/library" library:name="WikiEditor" library:readonly="false" library:passwordprotected="false">
  <library:element library:name="SendToMediaWiki"/>
- <library:element library:name="NewWikiPage"/>
- <library:element library:name="UnknownCertDialog"/>
- <library:element library:name="Load"/>
  <library:element library:name="Settings"/>
  <library:element library:name="EditSetting"/>
  <library:element library:name="Error"/>
