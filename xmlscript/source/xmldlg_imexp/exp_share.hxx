@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exp_share.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:56:50 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:11:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,6 +218,8 @@ public:
     void readProgressBarModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
     void readScrollBarModel( StyleBag * all_styles )
+        SAL_THROW( (css::uno::Exception) );
+    void readFixedHyperLinkModel( StyleBag * all_styles )
         SAL_THROW( (css::uno::Exception) );
 };
 
