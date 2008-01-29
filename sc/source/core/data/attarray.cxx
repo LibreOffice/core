@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:59:23 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:15:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1290,7 +1290,10 @@ BOOL ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
         {
             const SfxInt32Item* pRotate =
                     (const SfxInt32Item*) &pPattern->GetItem( ATTR_ROTATE_VALUE );
-            if ( pRotate->GetValue() != 0 )
+            // 90 or 270 degrees is former SvxOrientationItem - only look for other values
+            // (see ScPatternAttr::GetCellOrientation)
+            INT32 nAngle = pRotate->GetValue();
+            if ( nAngle != 0 && nAngle != 9000 && nAngle != 27000 )
                 bFound = TRUE;
         }
         if ( nMask & HASATTR_NEEDHEIGHT )
