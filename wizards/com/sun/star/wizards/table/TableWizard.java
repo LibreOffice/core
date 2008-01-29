@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableWizard.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:43:42 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,14 +34,15 @@
  ************************************************************************/
 package com.sun.star.wizards.table;
 
-import java.util.Calendar;
 import java.util.Hashtable;
 
 import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XTextListener;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.lang.EventObject;
+import com.sun.star.beans.XPropertySet;
+import com.sun.star.frame.XFrame;
+import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.CommandType;
@@ -75,6 +76,8 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
     public static final int SOPRIMARYKEYPAGE = 3;
     public static final int SOFINALPAGE = 4;
     private String sMsgColumnAlreadyExists = "";
+    XComponent[] components = null;
+    XFrame CurFrame;
 
     String WizardHeaderText[] = new String[8];
 
@@ -101,7 +104,7 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
             case SOFIELDSFORMATPAGE:
                 curFieldFormatter.updateColumnofColumnDescriptor();
                 String[] sfieldnames = curFieldFormatter.getFieldNames();
-                super.setStepEnabled(this.SOFIELDSFORMATPAGE, sfieldnames.length > 0);
+                super.setStepEnabled(SOFIELDSFORMATPAGE, sfieldnames.length > 0);
                 curScenarioSelector.setSelectedFieldNames(sfieldnames);
                 break;
             case SOPRIMARYKEYPAGE:
@@ -260,9 +263,9 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
                 wizardmode = curFinalizer.finish();
                 if (createTable()){
                     if (wizardmode == Finalizer.MODIFYTABLEMODE)
-                        curTableDescriptor.switchtoDesignmode(curTableDescriptor.getComposedTableName(), com.sun.star.sdb.CommandType.TABLE);
+                        components = curTableDescriptor.switchtoDesignmode(curTableDescriptor.getComposedTableName(), com.sun.star.sdb.CommandType.TABLE,CurFrame);
                     else if (wizardmode == Finalizer.WORKWITHTABLEMODE)
-                        curTableDescriptor.switchtoDataViewmode(curTableDescriptor.getComposedTableName(), com.sun.star.sdb.CommandType.TABLE);
+                        components = curTableDescriptor.switchtoDataViewmode(curTableDescriptor.getComposedTableName(), com.sun.star.sdb.CommandType.TABLE,CurFrame);
                     super.xDialog.endExecute();
                 }
             }
@@ -287,6 +290,9 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
         xInitialization.initialize(aProperties);
         XJobExecutor xJobExecutor = (XJobExecutor) UnoRuntime.queryInterface(XJobExecutor.class, oFormWizard);
         xJobExecutor.trigger("start");
+        XPropertySet prop = (XPropertySet)UnoRuntime.queryInterface(XPropertySet.class,xJobExecutor);
+        components[0] = (XComponent)prop.getPropertyValue("Document");
+        components[1] = (XComponent)prop.getPropertyValue("DocumentDefinition");
     } catch (Exception e) {
         e.printStackTrace(System.out);
     }}
@@ -311,32 +317,37 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
     }
 
 
-    public void startTableWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue){
-    try{
-        curTableDescriptor = new TableDescriptor(xMSF, super.xWindow, this.sMsgColumnAlreadyExists);
-        if (curTableDescriptor.getConnection(CurPropertyValue)){
-            buildSteps();
-            createWindowPeer();
-            curTableDescriptor.setWindowPeer(this.xControl.getPeer());
-    //      setAutoMnemonic("lblDialogHeader", false);
-            insertFormRelatedSteps();
-            short RetValue = executeDialog();
-            boolean bdisposeDialog = true;
-            xComponent.dispose();
-            switch (RetValue){
-                case 0:                         // via Cancelbutton or via sourceCode with "endExecute"
-                    if (wizardmode == Finalizer.STARTFORMWIZARDMODE)
-                        callFormWizard();
-                    break;
-                case 1:
+    public XComponent[] startTableWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue){
+        try{
+            curTableDescriptor = new TableDescriptor(xMSF, super.xWindow, this.sMsgColumnAlreadyExists);
+            if (curTableDescriptor.getConnection(CurPropertyValue)){
+                if (Properties.hasPropertyValue(CurPropertyValue, "ParentFrame"))
+                    CurFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class,Properties.getPropertyValue(CurPropertyValue, "ParentFrame"));
+                else
+                    CurFrame = Desktop.getActiveFrame(xMSF);
+                buildSteps();
+                createWindowPeer();
+                curTableDescriptor.setWindowPeer(this.xControl.getPeer());
+        //      setAutoMnemonic("lblDialogHeader", false);
+                insertFormRelatedSteps();
+                short RetValue = executeDialog();
+                xComponent.dispose();
+                switch (RetValue){
+                    case 0:                         // via Cancelbutton or via sourceCode with "endExecute"
+                        if (wizardmode == Finalizer.STARTFORMWIZARDMODE)
+                            callFormWizard();
+                        break;
+                    case 1:
 
-                    break;
+                        break;
+                }
             }
         }
+        catch(java.lang.Exception jexception ){
+            jexception.printStackTrace(System.out);
+        }
+        return components;
     }
-    catch(java.lang.Exception jexception ){
-        jexception.printStackTrace(System.out);
-    }}
 
 
     public boolean getTableResources(){
@@ -348,16 +359,6 @@ public class TableWizard extends WizardDialog implements XTextListener, XComplet
         sMsgColumnAlreadyExists = oResource.getResText(UIConsts.RID_TABLE + 51);
         return true;
     }
-
-
-    private void toggleWizardSteps(int _startStep, boolean _benable){
-        super.setStepEnabled(SOFIELDSFORMATPAGE, _benable);
-        super.setStepEnabled(SOPRIMARYKEYPAGE, _benable);
-        super.setStepEnabled(SOFINALPAGE, _benable);
-        setControlProperty("btnWizardNext", "Enabled", new Boolean(_benable));
-        setControlProperty("btnWizardFinish", "Enabled", new Boolean(_benable));
-    }
-
 
     public boolean verifyfieldcount( int _icount ){
     try{
