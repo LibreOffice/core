@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:42:53 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:42:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,12 +60,8 @@
 #include <svx/xdef.hxx>
 #include <svx/xftsfit.hxx>
 #include <vcl/msgbox.hxx>
-#ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
-#endif
-#ifndef _SVX_FONTWORK_BAR_HXX
 #include <svx/fontworkbar.hxx>
-#endif
 #include <sfx2/docfile.hxx>
 
 #include <com/sun/star/form/FormButtonType.hpp>
@@ -83,6 +79,7 @@
 #include "undotab.hxx"
 #include "drwlayer.hxx"
 #include "userdat.hxx"
+#include "postit.hxx"
 
 #include "sc.hrc"
 
