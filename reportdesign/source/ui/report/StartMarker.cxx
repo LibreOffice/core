@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StartMarker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:12:53 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:52:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,12 +99,12 @@ OStartMarker::OStartMarker(OSectionsWindow* _pParent,const ::rtl::OUString& _sCo
 ,m_bShowRuler(sal_True)
 {
     DBG_CTOR( rpt_OStartMarker,NULL);
-    SetUniqueId(HID_STARTMARKER);
+    SetUniqueId(HID_RPT_STARTMARKER);
     osl_incrementInterlockedCount(&s_nImageRefCount);
     initDefaultNodeImages();
     ImplInitSettings();
-    m_aText.SetHelpId(HID_START_TITLE);
-    m_aImage.SetHelpId(HID_START_IMAGE);
+    m_aText.SetHelpId(HID_RPT_START_TITLE);
+    m_aImage.SetHelpId(HID_RPT_START_IMAGE);
     m_aText.Show();
     m_aImage.Show();
     m_aVRuler.Show();
