@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 11:36:46 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:36:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -505,6 +505,8 @@ void SchXMLPlotAreaContext::StartElement( const uno::Reference< xml::sax::XAttri
         // provider to internal. Clone is not necessary, as we don't have any
         // data yet.
         mxNewDoc->createInternalDataProvider( false /* bCloneExistingData */ );
+        if( xProp.is() && mrDataRowSource!=chart::ChartDataRowSource_COLUMNS )
+            xProp->setPropertyValue( rtl::OUString::createFromAscii( "DataRowSource" ), uno::makeAny(mrDataRowSource) );
     }
 }
 
