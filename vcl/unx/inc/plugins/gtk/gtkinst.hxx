@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkinst.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-11 17:47:36 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:39:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ public:
 
     virtual SalFrame*           CreateFrame( SalFrame* pParent, ULONG nStyle );
     virtual SalFrame*           CreateChildFrame( SystemParentData* pParent, ULONG nStyle );
-    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData );
+    virtual SalObject*          CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow = TRUE );
     virtual SalSystem*          CreateSalSystem();
 };
 
