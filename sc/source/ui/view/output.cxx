@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:21:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:50:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
-#ifndef _COM_SUN_STAR_EMBED_EMBEDMISC_HPP_
-#include <com/sun/star/embed/EmbedMisc.hpp>
-#endif
-
 // INCLUDE ---------------------------------------------------------------
+
+#include <com/sun/star/embed/EmbedMisc.hpp>
 
 #include "scitems.hxx"
 #include <svx/boxitem.hxx>
@@ -57,10 +53,7 @@
 #include <vcl/svapp.hxx>
 #include <vcl/pdfextoutdevdata.hxx>
 #include <svtools/accessibilityoptions.hxx>
-
-#ifndef SVX_FRAMELINKARRAY_HXX
 #include <svx/framelinkarray.hxx>
-#endif
 
 #include <math.h>
 
@@ -79,9 +72,9 @@
 #include "gridmerg.hxx"
 #include "invmerge.hxx"
 #include "fillinfo.hxx"
-
 #include "scmod.hxx"
 #include "appoptio.hxx"
+#include "postit.hxx"
 
 using namespace com::sun::star;
 
