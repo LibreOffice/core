@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:17:54 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:45:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1018,7 +1018,9 @@ void SAL_CALL ScModelObj::calculate() throw(uno::RuntimeException)
     if (pDocShell)
         pDocShell->DoRecalc(TRUE);
     else
+    {
         DBG_ERROR("keine DocShell");        //! Exception oder so?
+    }
 }
 
 void SAL_CALL ScModelObj::calculateAll() throw(uno::RuntimeException)
@@ -1027,7 +1029,9 @@ void SAL_CALL ScModelObj::calculateAll() throw(uno::RuntimeException)
     if (pDocShell)
         pDocShell->DoHardRecalc(TRUE);
     else
+    {
         DBG_ERROR("keine DocShell");        //! Exception oder so?
+    }
 }
 
 sal_Bool SAL_CALL ScModelObj::isAutomaticCalculationEnabled() throw(uno::RuntimeException)
@@ -1054,7 +1058,9 @@ void SAL_CALL ScModelObj::enableAutomaticCalculation( sal_Bool bEnabled )
         }
     }
     else
+    {
         DBG_ERROR("keine DocShell");        //! Exception oder so?
+    }
 }
 
 // XProtectable
