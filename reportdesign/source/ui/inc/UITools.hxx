@@ -6,9 +6,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:30 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:48:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-
+#include "ReportSection.hxx"
 #include <rtl/ref.hxx>
 #include <vcl/taskpanelist.hxx>
 #include <comphelper/stl_types.hxx>
@@ -152,6 +152,14 @@ namespace rptui
     */
     ::com::sun::star::uno::Sequence< ::rtl::OUString >
         getParameterNames( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet );
+
+    /** ensures that no control overlaps the given one.
+    *
+    * \param pControl           the control which should place in the section without overlapping
+    * \param _pReportSection    the section
+    * \param _bInsert           TRUE whe the control should be inserted, otherwise not.
+    */
+    void correctOverlapping(SdrObject* pControl,::boost::shared_ptr<OReportSection> _pReportSection,bool _bInsert = true);
 }
 #endif //RPTUI_UITOOLS_HXX
 
