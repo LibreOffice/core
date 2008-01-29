@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 16:41:45 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:16:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -482,7 +482,7 @@ TabPage RID_SVXPAGE_INET_SECURITY
         Pos = MAP_APPFONT( COL_1, ROW_4 );
         Size = MAP_APPFONT( COL_2-COL_1, 4*RSC_CD_FIXEDLINE_HEIGHT );
         Wordbreak = TRUE;
-        Text [ en-US ] = "Passwords are protected by a master password. You will be asked to enter it once per session, if OpenOffice.org retrieves a password from the protected password list.";
+        Text [ en-US ] = "Passwords are protected by a master password. You will be asked to enter it once per session, if %PRODUCTNAME retrieves a password from the protected password list.";
     };
     PushButton PB_SEC_SHOWPASSWORDS
     {
