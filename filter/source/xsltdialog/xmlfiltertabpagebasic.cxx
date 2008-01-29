@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertabpagebasic.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:13:12 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:21:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,9 +154,9 @@ void XMLFilterTabPageBasic::SetInfo(const filter_info_impl* pInfo)
             maCBApplication.SetText( getApplicationUIName( pInfo->maDocumentService ) );
         */
         if( pInfo->maExportService.getLength() )
-            maCBApplication.SetText( getApplicationUIName( pInfo->maImportService ) );
-        else
             maCBApplication.SetText( getApplicationUIName( pInfo->maExportService ) );
+        else
+            maCBApplication.SetText( getApplicationUIName( pInfo->maImportService ) );
         maEDInterfaceName.SetText( string_decode(pInfo->maInterfaceName) );
         maEDExtension.SetText( pInfo->maExtension );
         maEDDescription.SetText( string_decode( pInfo->maComment ) );
