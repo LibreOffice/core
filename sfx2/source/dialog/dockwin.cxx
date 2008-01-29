@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-10 15:22:37 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:27:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,14 +117,8 @@ void SfxDockingWindow::Resize()
     {
         if ( IsFloatingMode() )
         {
-            if( !GetFloatingWindow()->IsRollUp() )
-                SetFloatingSize( GetOutputSizePixel() );
-            pImp->aWinState = GetFloatingWindow()->GetWindowState();
-            SfxWorkWindow *pWorkWin = pBindings->GetWorkWindow_Impl();
-            SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
-            if ( pImp->bSplitable )
-                eIdent = SFX_CHILDWIN_SPLITWINDOW;
-            pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
+            // start timer for saving window status information
+            pImp->aMoveTimer.Start();
         }
         else
         {
@@ -512,7 +506,6 @@ void SfxDockingWindow::EndDocking( const Rectangle& rRect, BOOL bFloatMode )
     }
 
     SetAlignment( IsFloatingMode() ? SFX_ALIGN_NOALIGNMENT : pImp->GetDockAlignment() );
-    pWorkWin->ConfigChild_Impl( eIdent, SFX_ALIGNDOCKINGWINDOW, pMgr->GetType() );
 }
 
 //-------------------------------------------------------------------------
@@ -1610,6 +1603,9 @@ IMPL_LINK( SfxDockingWindow, TimerHdl, Timer*, EMPTYARG)
     pImp->aMoveTimer.Stop();
     if ( IsReallyVisible() && IsFloatingMode() )
     {
+        if( !GetFloatingWindow()->IsRollUp() )
+            SetFloatingSize( GetOutputSizePixel() );
+        pImp->aWinState = GetFloatingWindow()->GetWindowState();
         SfxChildIdentifier eIdent = SFX_CHILDWIN_DOCKINGWINDOW;
         if ( pImp->bSplitable )
             eIdent = SFX_CHILDWIN_SPLITWINDOW;
