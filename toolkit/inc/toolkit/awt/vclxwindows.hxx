@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 12:55:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XIMAGEBUTTON_HPP_
 #include <com/sun/star/awt/XImageButton.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XFIXEDHYPERLINK_HPP_
+#include <com/sun/star/awt/XFixedHyperlink.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XFIXEDTEXT_HPP_
 #include <com/sun/star/awt/XFixedText.hpp>
@@ -560,6 +563,61 @@ public:
     // ::com::sun::star::awt::XVclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
 
+};
+
+//  ----------------------------------------------------
+//  class VCLXFixedHyperlink
+//  ----------------------------------------------------
+class TOOLKIT_DLLPUBLIC VCLXFixedHyperlink :
+    public ::com::sun::star::awt::XFixedHyperlink,
+    public VCLXWindow
+{
+private:
+    ActionListenerMultiplexer   maActionListeners;
+
+protected:
+    void                        ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+                                CreateAccessibleContext();
+
+public:
+    VCLXFixedHyperlink();
+    ~VCLXFixedHyperlink();
+
+    // ::com::sun::star::uno::XInterface
+    ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
+    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
+
+    // ::com::sun::star::lang::XComponent
+    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::lang::XTypeProvider
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XFixedHyperlink
+    void SAL_CALL setText( const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException);
+    ::rtl::OUString SAL_CALL getText(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setURL( const ::rtl::OUString& URL ) throw(::com::sun::star::uno::RuntimeException);
+    ::rtl::OUString SAL_CALL getURL(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setAlignment( sal_Int16 nAlign ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Int16 SAL_CALL getAlignment(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XLayoutConstrains
+    ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::VclWindowPeer
+    void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+
+    static void     ImplGetPropertyIds( std::list< sal_uInt16 > &aIds );
+    virtual void    GetPropertyIds( std::list< sal_uInt16 > &aIds ) { return ImplGetPropertyIds( aIds ); }
 };
 
 //  ----------------------------------------------------
