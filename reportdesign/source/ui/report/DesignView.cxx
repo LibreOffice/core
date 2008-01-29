@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DesignView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:39:56 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:50:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,82 @@ using namespace beans;
 using namespace container;
 
 #define LINE_SIZE           50
+#define START_SIZE_TASKPANE 30
+#define COLSET_ID           1
+#define REPORT_ID           2
+#define TASKPANE_ID         3
+
+class OTaskWindow : public Window
+{
+    PropBrw* m_pPropWin;
+public:
+    OTaskWindow(Window* _pParent) : Window(_pParent),m_pPropWin(NULL){}
+
+    inline void setPropertyBrowser(PropBrw* _pPropWin)
+    {
+        m_pPropWin = _pPropWin;
+    }
+
+    virtual void Resize()
+    {
+        const Size aSize = GetOutputSizePixel();
+        if ( m_pPropWin && aSize.Height() && aSize.Width() )
+            m_pPropWin->SetSizePixel(aSize);
+    }
+    long getMinimumWidth() const
+    {
+        long nRet = 0;
+        if ( m_pPropWin )
+            nRet = m_pPropWin->getMinimumSize().Width();
+        return nRet;
+    }
+};
+class OwnSplitWindow : public SplitWindow
+{
+public:
+    OwnSplitWindow(Window* pParent) : SplitWindow(pParent,WB_DIALOGCONTROL){SetBackground( );}
+
+    virtual void        Split()
+    {
+        SplitWindow::Split();
+        setItemSizes();
+    }
+    void setItemSizes()
+    {
+        const long nOutWidth = GetOutputSizePixel().Width();
+        long    nTaskPaneMinSplitSize = static_cast<OTaskWindow*>(GetItemWindow(TASKPANE_ID))->getMinimumWidth();
+        nTaskPaneMinSplitSize = static_cast<long>(nTaskPaneMinSplitSize*100/nOutWidth);
+        if ( !nTaskPaneMinSplitSize )
+            nTaskPaneMinSplitSize = START_SIZE_TASKPANE;
+
+        const long nReportMinSplitSize = static_cast<long>(12000/nOutWidth);
+
+        long nReportSize = GetItemSize( REPORT_ID );
+        long nTaskPaneSize = GetItemSize( TASKPANE_ID );
+
+        BOOL        bMod = FALSE;
+        if( nReportSize < nReportMinSplitSize )
+        {
+            nReportSize = nReportMinSplitSize;
+            nTaskPaneSize = 99 - nReportMinSplitSize;
+
+            bMod = TRUE;
+        }
+        else if( nTaskPaneSize < nTaskPaneMinSplitSize )
+        {
+            nTaskPaneSize = nTaskPaneMinSplitSize;
+            nReportSize = 99 - nTaskPaneMinSplitSize;
+
+            bMod = TRUE;
+        }
+
+        if( bMod )
+        {
+            SetItemSize( REPORT_ID, nReportSize );
+            SetItemSize( TASKPANE_ID, nTaskPaneSize );
+        }
+    }
+};
 //==================================================================
 // class ODesignView
 //==================================================================
@@ -106,7 +182,7 @@ ODesignView::ODesignView(   Window* pParent,
                             const Reference< XMultiServiceFactory >& _rxOrb,
                             OReportController* _pController) :
     ODataView( pParent,_pController,_rxOrb,WB_DIALOGCONTROL )
-    ,m_aSplitter(this,WB_HSCROLL)
+    //,m_aSplitter(this,WB_HSCROLL)
     ,m_pReportController( _pController )
     ,m_pPropWin(NULL)
     ,m_pAddField(NULL)
@@ -122,21 +198,30 @@ ODesignView::ODesignView(   Window* pParent,
     ,m_bInSplitHandler( FALSE )
 {
     DBG_CTOR( rpt_ODesignView,NULL);
-    SetHelpId(UID_RPT_APP_VIEW);
+    SetHelpId(UID_RPT_RPT_APP_VIEW);
     ImplInitSettings();
+
+    m_pSplitWin = new OwnSplitWindow( this );
 
     SetMapMode( MapMode( MAP_100TH_MM ) );
 
     m_pScrollWindow = new OScrollWindowHelper(this);
-    m_pScrollWindow->Show();
+    //m_pScrollWindow->Show();
 
     // now create the task pane on the right side :-)
-    m_pTaskPane = new Window(this);
-    m_pTaskPane->Show();
+    m_pTaskPane = new OTaskWindow(this);
+    //m_pTaskPane->Show();
+
+    m_pSplitWin->InsertItem( COLSET_ID,100,SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE | SWIB_COLSET );
+    m_pSplitWin->InsertItem( REPORT_ID, m_pScrollWindow, 100/*m_pScrollWindow->getMaxMarkerWidth(sal_False)*/, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE  /*SWIB_COLSET*/);
+    //m_pSplitWin->InsertItem( TASKPANE_ID, m_pTaskPane, 50, SPLITWINDOW_APPEND, 0, SWIB_PERCENTSIZE );
 
     // Splitter einrichten
-    m_aSplitter.SetSplitHdl(LINK(this, ODesignView,SplitHdl));
-    //m_aSplitter.Show();
+    //m_aSplitter.SetSplitHdl(LINK(this, ODesignView,SplitHdl));
+    m_pSplitWin->SetSplitHdl(LINK(this, ODesignView,SplitHdl));
+    m_pSplitWin->ShowAutoHideButton();
+    m_pSplitWin->SetAlign(WINDOWALIGN_LEFT);
+    m_pSplitWin->Show();
 
     m_aMarkTimer.SetTimeout( 100 );
     m_aMarkTimer.SetTimeoutHdl( LINK( this, ODesignView, MarkTimeout ) );
@@ -173,6 +258,11 @@ ODesignView::~ODesignView()
         ::std::auto_ptr<Window> aTemp2(m_pTaskPane);
         m_pTaskPane = NULL;
     }
+    {
+        ::std::auto_ptr<Window> aTemp2(m_pSplitWin);
+        m_pSplitWin = NULL;
+    }
+
 }
 // -----------------------------------------------------------------------------
 void ODesignView::initialize()
@@ -245,44 +335,32 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
         } // if ( 0 != _rPlaygroundSize.Width() )
 
         Size aReportWindowSize(aPlaygroundSize);
-        if ( m_aSplitter.IsVisible() )
+        if ( m_pSplitWin->IsItemValid(TASKPANE_ID) )
         {
             // normalize the split pos
-            Size    aSplitSize( m_aSplitter.GetSizePixel().Width(),_rPlayground.GetHeight());
-
-            Point aTaskPanePos(nSplitPos + aSplitSize.Width(), _rPlayground.Top());
-            //long nTest = m_pPropWin->GetMinOutputSizePixel().Width();
+            const long nSplitterWidth = GetSettings().GetStyleSettings().GetSplitSize();
+            Point aTaskPanePos(nSplitPos + nSplitterWidth, _rPlayground.Top());
             if ( m_pTaskPane && m_pTaskPane->IsVisible() )
             {
                 aTaskPanePos.X() = aPlaygroundSize.Width() - m_pTaskPane->GetSizePixel().Width();
-                sal_Int32 nMinWidth = m_pPropWin->GetMinOutputSizePixel().Width();
+                sal_Int32 nMinWidth = m_pPropWin->getMinimumSize().Width();
                 if ( nMinWidth > (aPlaygroundSize.Width() - aTaskPanePos.X()) )
                 {
                     aTaskPanePos.X() = aPlaygroundSize.Width() - nMinWidth;
                 }
-                nSplitPos = aTaskPanePos.X() - aSplitSize.Width();
+                nSplitPos = aTaskPanePos.X() - nSplitterWidth;
                 getController()->setSplitPos(nSplitPos);
+
+                const long nTaskPaneSize = static_cast<long>((aPlaygroundSize.Width() - aTaskPanePos.X())*100/aPlaygroundSize.Width());
+                if ( m_pSplitWin->GetItemSize( TASKPANE_ID ) != nTaskPaneSize )
+                {
+                    m_pSplitWin->SetItemSize( REPORT_ID, 99 - nTaskPaneSize );
+                    m_pSplitWin->SetItemSize( TASKPANE_ID, nTaskPaneSize );
+                }
             }
-            Point   aSplitPos( nSplitPos,_rPlayground.Top() );
-            // set the size of the splitter
-            m_aSplitter.SetPosSizePixel( aSplitPos, aSplitSize );
-            m_aSplitter.SetDragRectPixel( _rPlayground );
-
-            aReportWindowSize = Size(aSplitPos.X() - _rPlayground.Left() - aSplitSize.Width(),_rPlayground.GetHeight());
-            Size aTaskPaneSize(aPlaygroundSize.Width() - aTaskPanePos.X(),aPlaygroundSize.Height() );
-
-            // set the size of the task pane
-
-            m_pTaskPane->SetPosSizePixel(aTaskPanePos,aTaskPaneSize);
-            if ( m_pPropWin )
-                m_pPropWin->SetSizePixel(aTaskPaneSize);
         }
-
         // set the size of the report window
-        m_pScrollWindow->SetPosSizePixel(
-            _rPlayground.TopLeft()
-            ,aReportWindowSize
-            );
+        m_pSplitWin->SetPosSizePixel( _rPlayground.TopLeft(),aPlaygroundSize );
     }
         // just for completeness: there is no space left, we occupied it all ...
     _rPlayground.SetPos( _rPlayground.BottomRight() );
@@ -302,7 +380,10 @@ IMPL_LINK( ODesignView, MarkTimeout, Timer *, EMPTYARG )
         m_pPropWin->Update(m_pCurrentView);
         uno::Reference<beans::XPropertySet> xProp(m_xReportComponent,uno::UNO_QUERY);
         if ( xProp.is() )
+        {
             m_pPropWin->Update(xProp);
+            static_cast<OTaskWindow*>(m_pTaskPane)->Resize();
+        }
         Resize();
     }
 
@@ -442,7 +523,11 @@ void ODesignView::GetFocus()
 // -----------------------------------------------------------------------------
 void ODesignView::ImplInitSettings()
 {
+//#if OSL_DEBUG_LEVEL > 0
+//    SetBackground( Wallpaper( COL_RED ));
+//#else
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor() ));
+//#endif
     SetFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
     SetTextFillColor( Application::GetSettings().GetStyleSettings().GetFaceColor() );
 }
@@ -450,25 +535,21 @@ void ODesignView::ImplInitSettings()
 IMPL_LINK( ODesignView, SplitHdl, void*,  )
 {
     m_bInSplitHandler = sal_True;
-    const long nTest = m_aSplitter.GetSplitPosPixel();
+    //const long nTest = m_aSplitter.GetSplitPosPixel();
+
     const Size aOutputSize = GetOutputSizePixel();
+    const long nTest = aOutputSize.Width() * m_pSplitWin->GetItemSize(TASKPANE_ID) / 100;
     long nMinWidth = static_cast<long>(0.1*aOutputSize.Width());
     if ( m_pPropWin && m_pPropWin->IsVisible() )
         nMinWidth = m_pPropWin->GetMinOutputSizePixel().Width();
 
     if ( (aOutputSize.Width() - nTest) >= nMinWidth && nTest > m_pScrollWindow->getMaxMarkerWidth(sal_False) )
     {
-        m_aSplitter.SetPosPixel( Point( nTest,m_aSplitter.GetPosPixel().Y() ) );
+        long nOldSplitPos = getController()->getSplitPos();
         getController()->setSplitPos(nTest);
-        if ( m_pTaskPane && m_pTaskPane->IsVisible() )
+        if ( nOldSplitPos != -1 && nOldSplitPos <= nTest )
         {
-            Point aTaskPanePos(nTest + m_aSplitter.GetSizePixel().Width(), 0);
-            Size aTaskPaneSize(aOutputSize.Width() - aTaskPanePos.X(),aOutputSize.Height() );
-            m_pTaskPane->SetPosSizePixel(aTaskPanePos,aTaskPaneSize);
-            if ( m_pPropWin )
-                m_pPropWin->SetSizePixel(aTaskPaneSize);
-            // set the size of the report window
-            m_pScrollWindow->SetSizePixel(Size(nTest,aOutputSize.Height()));
+            Invalidate(INVALIDATE_NOCHILDREN);
         }
     }
 
@@ -494,6 +575,8 @@ void ODesignView::togglePropertyBrowser(sal_Bool _bToogleOn)
     if ( !m_pPropWin && _bToogleOn )
     {
         m_pPropWin = new PropBrw(getController()->getORB(),m_pTaskPane,this);
+        m_pPropWin->Invalidate();
+        static_cast<OTaskWindow*>(m_pTaskPane)->setPropertyBrowser(m_pPropWin);
         notifySystemWindow(this,m_pPropWin,::comphelper::mem_fun(&TaskPaneList::AddWindow));
     }
     if ( m_pPropWin && _bToogleOn != m_pPropWin->IsVisible() )
@@ -503,10 +586,15 @@ void ODesignView::togglePropertyBrowser(sal_Bool _bToogleOn)
 
         const sal_Bool bWillBeVisible = _bToogleOn;
         m_pPropWin->Show(bWillBeVisible);
-        m_aSplitter.Show(bWillBeVisible);
         m_pTaskPane->Show(bWillBeVisible);
-        Resize();
-        Invalidate(INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE);
+        m_pTaskPane->Invalidate();
+
+        if ( bWillBeVisible )
+            m_pSplitWin->InsertItem( TASKPANE_ID, m_pTaskPane,START_SIZE_TASKPANE, SPLITWINDOW_APPEND, COLSET_ID, SWIB_PERCENTSIZE/*|SWIB_COLSET */);
+        else
+            m_pSplitWin->RemoveItem(TASKPANE_ID);
+
+        Invalidate(/*INVALIDATE_NOCHILDREN|INVALIDATE_NOERASE*/);
         if ( bWillBeVisible )
             m_aMarkTimer.Start();
     }
