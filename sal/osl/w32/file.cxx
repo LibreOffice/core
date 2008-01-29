@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-25 10:57:39 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:15:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,7 +296,8 @@ namespace /* private */
         {  ERROR_FILENAME_EXCED_RANGE,   osl_File_E_NOENT    },  /* 206 */
         {  ERROR_NESTING_NOT_ALLOWED,    osl_File_E_AGAIN    },  /* 215 */
         {  ERROR_DIRECTORY,              osl_File_E_NOENT    },  /* 267 */
-        {  ERROR_NOT_ENOUGH_QUOTA,       osl_File_E_NOMEM    }    /* 1816 */
+        {  ERROR_NOT_ENOUGH_QUOTA,       osl_File_E_NOMEM    },  /* 1816 */
+        {  ERROR_UNEXP_NET_ERR,          osl_File_E_NETWORK  }   /* 59 */
     };
 
     /* The following two constants must be the minimum and maximum
