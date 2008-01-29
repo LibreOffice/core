@@ -4,9 +4,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:21:03 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:16:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,28 +38,21 @@
 
 #ifndef _BIGINT_HXX
 #define _TOOLS_BIGINT
-#include <tools/bigint.hxx>
+#include "tools/bigint.hxx"
 #endif
 
-#ifndef _DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
+#include "tools/debug.hxx"
 
-#ifndef _SV_RC_H
-#include <tools/rc.h>
-#endif
-#ifndef _TOOLS_RESARY_HXX
-#include <tools/resary.hxx>
-#endif
-#ifndef _SV_SVIDS_HRC
-#include <vcl/svids.hrc>
-#endif
-#include <vcl/field.hxx>
-#include <vcl/event.hxx>
-#include <vcl/svapp.hxx>
-#include <vcl/svdata.hxx>
-#include <vcl/unohelp.hxx>
+#include "tools/rc.h"
+#include "tools/resary.hxx"
+#include "vcl/svids.hrc"
+#include "vcl/field.hxx"
+#include "vcl/event.hxx"
+#include "vcl/svapp.hxx"
+#include "vcl/svdata.hxx"
+#include "vcl/unohelp.hxx"
 
+#include "rtl/math.hxx"
 
 
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
@@ -1224,12 +1217,21 @@ static FieldUnit ImplMap2FieldUnit( MapUnit meUnit, long& nDecDigits )
 
 // -----------------------------------------------------------------------
 
+static double nonValueDoubleToValueDouble( double nValue )
+{
+    return rtl::math::isFinite( nValue ) ? nValue : 0.0;
+}
+
 sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, USHORT nDecDigits,
                                      FieldUnit eInUnit, FieldUnit eOutUnit )
 {
     // caution: precision loss in double cast
-    return static_cast<sal_Int64>(ConvertDoubleValue( (double)nValue, mnBaseValue, nDecDigits,
-                                                      eInUnit, eOutUnit ) );
+    return static_cast<sal_Int64>(
+        // #150733# cast double to sal_Int64 can throw a
+        // EXCEPTION_FLT_INVALID_OPERATION on Windows
+        nonValueDoubleToValueDouble(
+            ConvertDoubleValue( (double)nValue, mnBaseValue, nDecDigits,
+                                eInUnit, eOutUnit ) ) );
 }
 
 // -----------------------------------------------------------------------
@@ -1237,7 +1239,11 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, sal_Int64 mnBaseValue, US
 sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, USHORT nDigits,
                                      MapUnit eInUnit, FieldUnit eOutUnit )
 {
-    return static_cast<sal_Int64>(ConvertDoubleValue( nValue, nDigits, eInUnit, eOutUnit ));
+    return static_cast<sal_Int64>(
+        // #150733# cast double to sal_Int64 can throw a
+        // EXCEPTION_FLT_INVALID_OPERATION on Windows
+        nonValueDoubleToValueDouble(
+            ConvertDoubleValue( nValue, nDigits, eInUnit, eOutUnit ) ) );
 }
 
 // -----------------------------------------------------------------------
@@ -1245,7 +1251,11 @@ sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, USHORT nDigits,
 sal_Int64 MetricField::ConvertValue( sal_Int64 nValue, USHORT nDigits,
                                      FieldUnit eInUnit, MapUnit eOutUnit )
 {
-    return static_cast<sal_Int64>(ConvertDoubleValue( nValue, nDigits, eInUnit, eOutUnit ));
+    return static_cast<sal_Int64>(
+        // #150733# cast double to sal_Int64 can throw a
+        // EXCEPTION_FLT_INVALID_OPERATION on Windows
+        nonValueDoubleToValueDouble(
+            ConvertDoubleValue( nValue, nDigits, eInUnit, eOutUnit ) ) );
 }
 
 // -----------------------------------------------------------------------
@@ -1255,7 +1265,7 @@ double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, US
 {
     if ( eInUnit != eOutUnit )
     {
-        sal_Int64 nMult, nDiv;
+        sal_Int64 nMult = 1, nDiv = 1;
 
         if ( eInUnit == FUNIT_PERCENT )
         {
@@ -1287,9 +1297,9 @@ double MetricField::ConvertDoubleValue( double nValue, sal_Int64 mnBaseValue, US
             DBG_ASSERT( nDiv  > 0, "illegal /" );
         }
 
-        if ( nMult != 1 )
+        if ( nMult != 1 && nMult > 0 )
             nValue *= nMult;
-        if ( nDiv != 1 )
+        if ( nDiv != 1 && nDiv > 0 )
         {
             nValue += ( nValue < 0 ) ? (-nDiv/2) : (nDiv/2);
             nValue /= nDiv;
@@ -1342,9 +1352,12 @@ double MetricField::ConvertDoubleValue( double nValue, USHORT nDigits,
         sal_Int64 nDiv  = aImplFactor[eFieldUnit][eOutUnit];
         sal_Int64 nMult = aImplFactor[eOutUnit][eFieldUnit];
 
-        if ( nMult != 1 )
+        DBG_ASSERT( nMult > 0, "illegal *" );
+        DBG_ASSERT( nDiv  > 0, "illegal /" );
+
+        if ( nMult != 1 && nMult > 0)
             nValue *= nMult;
-        if ( nDiv != 1 )
+        if ( nDiv != 1 && nDiv > 0 )
         {
             nValue += (nValue < 0) ? (-nDiv/2) : (nDiv/2);
             nValue /= nDiv;
@@ -1396,9 +1409,12 @@ double MetricField::ConvertDoubleValue( double nValue, USHORT nDigits,
         sal_Int64 nDiv  = aImplFactor[eInUnit][eFieldUnit];
         sal_Int64 nMult = aImplFactor[eFieldUnit][eInUnit];
 
-        if( nMult != 1 )
+        DBG_ASSERT( nMult > 0, "illegal *" );
+        DBG_ASSERT( nDiv  > 0, "illegal /" );
+
+        if( nMult != 1 && nMult > 0 )
             nValue *= nMult;
-        if( nDiv != 1 )
+        if( nDiv != 1 && nDiv > 0 )
         {
             nValue += (nValue < 0) ? (-nDiv/2) : (nDiv/2);
             nValue /= nDiv;
