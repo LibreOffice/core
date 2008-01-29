@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:14:45 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:07:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1515,7 +1515,7 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
             }
             if( bHaveStack )
             {
-                ResId aId( rId.GetId(), *pFallbackResMgr );
+                ResId aId( rId.GetId(), *pFallback );
                 aId.SetRT( rId.GetRT() );
                 if( !pFallback->GetResource( aId, pResource ) )
                     bHaveStack = false;
