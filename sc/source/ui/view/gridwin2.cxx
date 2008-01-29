@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:57:06 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:49:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,7 +253,9 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
             Sound::Beep();
     }
     else
+    {
         DBG_ERROR("Da is ja garnix");
+    }
 }
 
 void ScGridWindow::DoPivotDrop( BOOL bDelete, BOOL bToCols, SCSIZE nDestPos )
@@ -345,7 +347,9 @@ void ScGridWindow::DoPivotDrop( BOOL bDelete, BOOL bToCols, SCSIZE nDestPos )
         pDragPivot = NULL;
     }
     else
+    {
         DBG_ASSERT(0,"Pivot-Eintrag nicht gefunden");
+    }
 
     delete[] pColArr;
     delete[] pRowArr;
