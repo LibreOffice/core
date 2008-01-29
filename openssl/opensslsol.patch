@@ -1,5 +1,5 @@
-*** misc/openssl-0.9.8e/Makefile.shared	Sat May 20 10:51:09 2006
---- misc/build/openssl-0.9.8e/Makefile.shared	Thu Nov 22 19:53:56 2007
+*** misc/openssl-0.9.8g/Makefile.shared	Sat May 20 10:51:09 2006
+--- misc/build/openssl-0.9.8g/Makefile.shared	Thu Nov 22 19:53:56 2007
 ***************
 *** 93,99 ****
       LDCMD="$${LDCMD:-$(CC)}"; LDFLAGS="$${LDFLAGS:-$(CFLAGS)}"; \
@@ -34,8 +34,8 @@
       $${SHAREDCMD} $${SHAREDFLAGS} \
   	-o $$SHLIB$$SHLIB_SOVER$$SHLIB_SUFFIX \
   	$$ALLSYMSFLAGS $$SHOBJECTS $$NOALLSYMSFLAGS $$LIBDEPS \
-*** misc/openssl-0.9.8e/config	Thu Feb 22 03:00:39 2007
---- misc/build/openssl-0.9.8e/config	Thu Nov 22 20:07:53 2007
+*** misc/openssl-0.9.8g/config	Thu Feb 22 03:00:39 2007
+--- misc/build/openssl-0.9.8g/config	Thu Nov 22 20:07:53 2007
 ***************
 *** 401,419 ****
   
@@ -98,8 +98,8 @@
   	if [ "$ISA64" != "" ]; then
   	    OUT="solaris64-x86_64-$CC"
   	else
-*** misc/openssl-0.9.8e/libcrypto_OOo_0_9_8e.map	Thu Nov 22 19:52:04 2007
---- misc/build/openssl-0.9.8e/libcrypto_OOo_0_9_8e.map	Thu Nov 22 19:53:56 2007
+*** misc/openssl-0.9.8g/libcrypto_OOo_0_9_8e.map	Thu Nov 22 19:52:04 2007
+--- misc/build/openssl-0.9.8g/libcrypto_OOo_0_9_8e.map	Thu Nov 22 19:53:56 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3399,8 +3399,8 @@
 ! 	local:
 ! 		*;
 ! };
-*** misc/openssl-0.9.8e/libssl_OOo_0_9_8e.map	Thu Nov 22 19:52:04 2007
---- misc/build/openssl-0.9.8e/libssl_OOo_0_9_8e.map	Thu Nov 22 19:53:56 2007
+*** misc/openssl-0.9.8g/libssl_OOo_0_9_8e.map	Thu Nov 22 19:52:04 2007
+--- misc/build/openssl-0.9.8g/libssl_OOo_0_9_8e.map	Thu Nov 22 19:53:56 2007
 ***************
 *** 1 ****
 ! dummy
