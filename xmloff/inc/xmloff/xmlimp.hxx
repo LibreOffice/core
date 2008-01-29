@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:31:51 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:13:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,7 +405,7 @@ public:
     sal_Unicode ConvStarBatsCharToStarSymbol( sal_Unicode c );
     sal_Unicode ConvStarMathCharToStarSymbol( sal_Unicode c );
 
-
+    ::rtl::OUString GetODFVersion() const;
     /**
      * Record an error condition that occured during import. The
      * behavior of SetError can be modified using the error flag
