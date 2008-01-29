@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:22:19 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:05:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2723,7 +2723,7 @@ void SwAccPreviewData::AdjustMapMode( MapMode& rMapMode,
     // find proper rectangle
     Rectangles::const_iterator aBegin = maLogicRects.begin();
     Rectangles::const_iterator aEnd = maLogicRects.end();
-    Rectangles::const_iterator aFound = find_if( aBegin, aEnd,
+    Rectangles::const_iterator aFound = ::std::find_if( aBegin, aEnd,
                                                  ContainsPredicate( rPoint ) );
 
     if( aFound != aEnd )
