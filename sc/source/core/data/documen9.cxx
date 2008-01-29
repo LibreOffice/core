@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-23 14:43:23 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:18:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,18 +35,9 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
-#include <com/sun/star/uno/Reference.hxx>
-#endif
 
-#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XCLASSIFIEDOBJECT_HPP_
 #include <com/sun/star/embed/XClassifiedObject.hpp>
-#endif
-
-
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -85,7 +76,7 @@
 #include "chartarr.hxx"
 #include "detfunc.hxx"      // for UpdateAllComments
 #include "editutil.hxx"
-
+#include "postit.hxx"
 
 using namespace ::com::sun::star;
 
@@ -234,7 +225,9 @@ void ScDocument::ClearDrawPage(SCTAB nTab)
         if (pPage)
             pPage->Clear();
         else
+        {
             DBG_ERROR("ScDocument::DeleteDrawObjects: pPage ???");
+        }
     }
 }
 
@@ -395,7 +388,9 @@ void ScDocument::DeleteObjects( SCTAB nTab )
     if ( ValidTab(nTab) && pTab[nTab] )
         pDrawLayer->DeleteObjects( nTab );
     else
+    {
         DBG_ERROR("DeleteObjects: falsche Tabelle");
+    }
 }
 
 void ScDocument::DeleteObjectsInSelection( const ScMarkData& rMark )
