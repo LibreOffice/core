@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-20 13:26:00 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:37:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <tools/time.hxx>
 #include <com/sun/star/util/DateTime.hpp>
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 #include "xmlsubti.hxx"
 #include "global.hxx"
 #ifndef _XMLSTYLE_HXX
