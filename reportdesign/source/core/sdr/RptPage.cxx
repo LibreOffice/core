@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RptPage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 09:55:28 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:44:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@ OReportPage::OReportPage( OReportModel& _rModel
     :SdrPage( _rModel, bMasterPage )
     ,rModel(_rModel)
     ,m_xSection(_xSection)
+     ,m_bSpecialInsertMode(false)
 {
     DBG_CTOR( rpt_OReportPage,NULL);
 }
@@ -134,6 +135,11 @@ void OReportPage::removeSdrObject(const uno::Reference< report::XReportComponent
 SdrObject* OReportPage::RemoveObject(ULONG nObjNum)
 {
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
+    if (getSpecialMode())
+    {
+        return pObj;
+    }
+
     // this code is evil, but what else shall I do
     reportdesign::OSection* pSection = reportdesign::OSection::getImplementation(m_xSection);
     uno::Reference< drawing::XShape> xShape(pObj->getUnoShape(),uno::UNO_QUERY);
@@ -190,11 +196,47 @@ uno::Reference< uno::XInterface > OReportPage::createUnoPage()
     return static_cast<cppu::OWeakObject*>( new reportdesign::OReportDrawPage(this,m_xSection) );
 }
 // -----------------------------------------------------------------------------
+void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
+{
+    if (_pToRemoveObj)
+    {
+        for (ULONG i=0;i<GetObjCount();i++)
+        {
+            SdrObject *aObj = GetObj(i);
+            if (aObj && aObj == _pToRemoveObj)
+            {
+                SdrObject* pObject = RemoveObject(i);
+                (void)pObject;
+                // delete pObject;
+            }
+        }
+    }
+}
+
+void OReportPage::resetSpecialMode()
+{
+    vector<SdrObject*>::iterator aIter = m_aTemporaryObjectList.begin();
+    vector<SdrObject*>::iterator aEnd = m_aTemporaryObjectList.end();
+
+    for (; aIter != aEnd; ++aIter)
+    {
+         removeTempObject(*aIter);
+    }
+
+    m_bSpecialInsertMode = false;
+}
+// -----------------------------------------------------------------------------
 void OReportPage::NbcInsertObject(SdrObject* pObj, ULONG nPos, const SdrInsertReason* pReason)
 {
     SdrPage::NbcInsertObject(pObj, nPos, pReason);
 
     OUnoObject* pUnoObj = dynamic_cast< OUnoObject* >( pObj );
+    if (getSpecialMode())
+    {
+        m_aTemporaryObjectList.push_back(pObj);
+        return;
+    }
+
     if ( pUnoObj )
     {
         pUnoObj->CreateMediator();
