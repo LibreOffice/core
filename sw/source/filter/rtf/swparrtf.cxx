@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:26:51 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:41:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3445,7 +3445,8 @@ void SwRTFParser::ReadPageDescTbl()
                         pFFmt->SetAttr(aHLR);
                         pFFmt->SetAttr(aHSz);
                     }
-                    pDoc->ChgPageDesc(nPos++, *pPg);
+                    if( nPos < pDoc->GetPageDescCnt() )
+                        pDoc->ChgPageDesc(nPos++, *pPg);
                 }
             }
             break;
