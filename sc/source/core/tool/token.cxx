@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2007-10-02 15:21:37 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:23:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1472,6 +1472,7 @@ ScToken* ScTokenArray::MergeArray( )
     int i, nPrevRowSep = -1, nStart = 0;
     bool bPrevWasSep = false; // top of stack is ocArrayClose
     ScToken* t;
+    bool bNumeric = false;  // numeric value encountered in current element
 
     // (1) Iterate from the end to the start to find matrix dims
     // and do basic validation.
@@ -1491,6 +1492,7 @@ ScToken* ScTokenArray::MergeArray( )
                 {
                     return NULL;
                 }
+                bNumeric = (t->GetType() == svDouble);
             break;
 
             case ocMissing :
@@ -1500,6 +1502,7 @@ ScToken* ScTokenArray::MergeArray( )
                 {
                     return NULL;
                 }
+                bNumeric = false;
             break;
 
             case ocArrayColSep :
@@ -1508,6 +1511,7 @@ ScToken* ScTokenArray::MergeArray( )
                 {
                     return NULL;
                 }
+                bNumeric = false;
             break;
 
             case ocArrayClose :
@@ -1524,6 +1528,7 @@ ScToken* ScTokenArray::MergeArray( )
                 }
 
                 nPrevRowSep = i;
+                bNumeric = false;
             break;
 
             case ocArrayOpen :
@@ -1553,6 +1558,23 @@ ScToken* ScTokenArray::MergeArray( )
 
                 nPrevRowSep = i;
                 nRow++;
+                bNumeric = false;
+            break;
+
+            case ocNegSub :
+            case ocAdd :
+                // negation or unary plus must precede numeric value
+                if( !bNumeric )
+                {
+                    return NULL;
+                }
+                --nPrevRowSep;      // shorten this row by 1
+                bNumeric = false;   // one level only, no --42
+            break;
+
+            case ocSpaces :
+                // ignore spaces
+                --nPrevRowSep;      // shorten this row by 1
             break;
 
             default :
@@ -1565,6 +1587,7 @@ ScToken* ScTokenArray::MergeArray( )
 
     // fprintf (stderr, "Array (cols = %d, rows = %d)\n", nCol, nRow );
 
+    int nSign = 1;
     ScMatrix* pArray = new ScMatrix( nCol, nRow );
     for ( i = nStart, nCol = 0, nRow = 0 ; i < nLen ; i++ )
     {
@@ -1575,7 +1598,8 @@ ScToken* ScTokenArray::MergeArray( )
             case ocPush :
                 if ( t->GetType() == svDouble )
                 {
-                    pArray->PutDouble( t->GetDouble(), nCol, nRow );
+                    pArray->PutDouble( t->GetDouble() * nSign, nCol, nRow );
+                    nSign = 1;
                 }
                 else if ( t->GetType() == svString )
                 {
@@ -1602,6 +1626,10 @@ ScToken* ScTokenArray::MergeArray( )
 
             case ocArrayRowSep :
                 nRow++; nCol = 0;
+            break;
+
+            case ocNegSub :
+                nSign = -nSign;
             break;
 
             default :
