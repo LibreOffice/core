@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CommandMetaData.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 15:30:00 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:40:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@ import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.embed.EntryInitModes;
 import com.sun.star.frame.*;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XSingleServiceFactory;
 
 public class CommandMetaData extends DBMetaData {
     public Map FieldTitleSet = new HashMap();
@@ -447,23 +449,24 @@ public class CommandMetaData extends DBMetaData {
     }
 
 
-    public void switchtoDesignmode(String _commandname, int _commandtype) {
-        PropertyValue[] rDispatchArguments = new PropertyValue[5];
+    public XComponent[] switchtoDesignmode(String _commandname, int _commandtype,XFrame parentFrame) {
+        XComponent[] ret = null;
+        PropertyValue[] rDispatchArguments = new PropertyValue[_commandtype == com.sun.star.sdb.CommandType.QUERY ? 5 : 3];
         rDispatchArguments[0] = Properties.createProperty("DataSourceName", this.DataSourceName);
-        rDispatchArguments[1] = Properties.createProperty("QueryDesignView", Boolean.TRUE);
-        rDispatchArguments[2] = Properties.createProperty("CreateView", Boolean.FALSE);
-        rDispatchArguments[3] = Properties.createProperty("ActiveConnection", this.DBConnection);
+        rDispatchArguments[1] = Properties.createProperty("ActiveConnection", this.DBConnection);
         if (_commandtype == com.sun.star.sdb.CommandType.QUERY) {
-            rDispatchArguments[4] = Properties.createProperty("CurrentQuery", _commandname);
-            showCommandView(".component:DB/QueryDesign", rDispatchArguments);
+            rDispatchArguments[2] = Properties.createProperty("GraphicalDesign", Boolean.TRUE);
+            rDispatchArguments[3] = Properties.createProperty("Command", _commandname);
+            rDispatchArguments[4] = Properties.createProperty("CommandType", new Integer(_commandtype));
+            ret = showCommandView(".component:DB/QueryDesign", rDispatchArguments,parentFrame);
         } else {
-            rDispatchArguments[4] = Properties.createProperty("CurrentTable", _commandname);
-            showCommandView(".component:DB/TableDesign", rDispatchArguments);
+            rDispatchArguments[2] = Properties.createProperty("CurrentTable", _commandname);
+            ret = showCommandView(".component:DB/TableDesign", rDispatchArguments,parentFrame);
         }
-
+        return ret;
     }
 
-    public void switchtoDataViewmode(String _commandname, int _commandtype) {
+    public XComponent[] switchtoDataViewmode(String _commandname, int _commandtype,XFrame parentFrame) {
         PropertyValue[] rDispatchArguments = new PropertyValue[7];
         rDispatchArguments[0] = Properties.createProperty("DataSourceName", this.DataSourceName);
         rDispatchArguments[1] = Properties.createProperty("ActiveConnection", this.DBConnection);
@@ -472,18 +475,26 @@ public class CommandMetaData extends DBMetaData {
         rDispatchArguments[4] = Properties.createProperty("ShowTreeView", Boolean.FALSE);
         rDispatchArguments[5] = Properties.createProperty("ShowTreeViewButton", Boolean.FALSE);
         rDispatchArguments[6] = Properties.createProperty("ShowMenu", Boolean.TRUE);
-        showCommandView(".component:DB/DataSourceBrowser", rDispatchArguments);
+        return showCommandView(".component:DB/DataSourceBrowser", rDispatchArguments,parentFrame);
     }
 
     //
-    public void showCommandView(String surl, PropertyValue[] _rArgs) {
+    public XComponent[] showCommandView(String surl, PropertyValue[] _rArgs,XFrame parentFrame) {
+        XComponent[] ret = new XComponent[2];
         try {
-            XDesktop xDesktop = Desktop.getDesktop(xMSF);
-            XComponentLoader xLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
-            xLoader.loadComponentFromURL(surl, "_default", FrameSearchFlag.TASKS | FrameSearchFlag.CREATE, _rArgs);
+            XSingleServiceFactory xFac = (XSingleServiceFactory) UnoRuntime.queryInterface(XSingleServiceFactory.class,xMSF.createInstance("com.sun.star.frame.TaskCreator"));
+            Object[] args = new Object[2];
+            args[0] = Properties.createProperty("ParentFrame",parentFrame);
+            args[1] = Properties.createProperty("TopWindow",Boolean.TRUE);
+
+            XComponentLoader xLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class,xFac.createInstanceWithArguments(args));
+            ret[0] = xLoader.loadComponentFromURL(surl, "_self", 0, _rArgs);
+            if ( ret[0] != null)
+                ret[0] = (XComponent)UnoRuntime.queryInterface(XComponent.class,xLoader);
         } catch (Exception exception) {
             exception.printStackTrace(System.out);
         }
+        return ret;
     }
 
     /**@deprecated use 'RelationController' class instead
@@ -570,7 +581,6 @@ public class CommandMetaData extends DBMetaData {
 
     public void setCommandComposingAttributes(){
     try {
-        boolean bCatalogAtStart = xDBMetaData.isCatalogAtStart();
         sCatalogSep = xDBMetaData.getCatalogSeparator();
         sIdentifierQuote = xDBMetaData.getIdentifierQuoteString();
         bCommandComposerAttributesalreadyRetrieved = true;
