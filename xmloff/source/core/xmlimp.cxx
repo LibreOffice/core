@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.101 $
+ *  $Revision: 1.102 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:45:35 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:32:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,13 +253,19 @@ public:
     // for the OpenOffice.org file format.
     sal_Bool mbShapePositionInHoriL2R;
     // <--
+    // --> OD 2007-12-19 #152540#
+    sal_Bool mbTextDocInOOoFileFormat;
+    // <--
 
     SvXMLImport_Impl() :
         hBatsFontConv( 0 ), hMathFontConv( 0 ),
         mbOwnGraphicResolver( false ),
         mbOwnEmbeddedResolver( false ),
         // --> OD 2004-08-11 #i28749#
-        mbShapePositionInHoriL2R( sal_False )
+        mbShapePositionInHoriL2R( sal_False ),
+        // <--
+        // --> OD 2007-12-19 #152540#
+        mbTextDocInOOoFileFormat( sal_False )
         // <--
     {}
     ~SvXMLImport_Impl()
@@ -992,6 +998,14 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
                 {
                     uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
                     aAny >>= (mpImpl->mbShapePositionInHoriL2R);
+                }
+                // <--
+                // --> OD 2007-12-19 #152540#
+                sPropName = OUString( RTL_CONSTASCII_USTRINGPARAM("TextDocInOOoFileFormat" ) );
+                if( xPropertySetInfo->hasPropertyByName(sPropName) )
+                {
+                    uno::Any aAny = mxImportInfo->getPropertyValue(sPropName);
+                    aAny >>= (mpImpl->mbTextDocInOOoFileFormat);
                 }
                 // <--
             }
@@ -1800,6 +1814,14 @@ sal_Bool SvXMLImport::IsShapePositionInHoriL2R() const
 {
     return mpImpl->mbShapePositionInHoriL2R;
 }
+// <--
+
+// --> OD 2007-12-19 #152540#
+sal_Bool SvXMLImport::IsTextDocInOOoFileFormat() const
+{
+    return mpImpl->mbTextDocInOOoFileFormat;
+}
+
 // <--
 
 void SvXMLImport::initXForms()
