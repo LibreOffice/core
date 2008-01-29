@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLRedlineImportHelper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-07 12:20:56 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:42:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -717,7 +717,14 @@ void XMLRedlineImportHelper::InsertIntoDocument(RedlineInfo* pRedlineInfo)
         // set content node (if necessary)
         if (NULL != pRedlineInfo->pContentIndex)
         {
-            pRedline->SetContentIdx(pRedlineInfo->pContentIndex);
+            ULONG nPoint = aPaM.GetPoint()->nNode.GetIndex();
+            if( nPoint < pRedlineInfo->pContentIndex->GetIndex() ||
+                nPoint > pRedlineInfo->pContentIndex->GetNode().EndOfSectionIndex() )
+                pRedline->SetContentIdx(pRedlineInfo->pContentIndex);
+#ifndef PRODUCT
+            else
+                ASSERT( false, "Recursive change tracking" );
+#endif
         }
 
         // set redline mode (without doing the associated book-keeping)
