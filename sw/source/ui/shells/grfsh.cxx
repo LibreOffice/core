@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:28:24 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:25:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,18 +241,18 @@ void SwGrfShell::Execute(SfxRequest &rReq)
             aSet.SetParent( aMgr.GetAttrSet().GetParent() );
 
             // Bei %-Werten Groesse initialisieren
-            SwFmtFrmSize& rSize = (SwFmtFrmSize&)aSet.Get(RES_FRM_SIZE);
-            if (rSize.GetWidthPercent() && rSize.GetWidthPercent() != 0xff)
-                rSize.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
-            if (rSize.GetHeightPercent() && rSize.GetHeightPercent() != 0xff)
-                rSize.SetHeight(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height());
+            SwFmtFrmSize aSizeCopy = (const SwFmtFrmSize&)aSet.Get(RES_FRM_SIZE);
+            if (aSizeCopy.GetWidthPercent() && aSizeCopy.GetWidthPercent() != 0xff)
+                aSizeCopy.SetWidth(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Width());
+            if (aSizeCopy.GetHeightPercent() && aSizeCopy.GetHeightPercent() != 0xff)
+                aSizeCopy.SetHeight(rSh.GetAnyCurRect(RECT_FLY_EMBEDDED).Height());
 
             // and now set the size for "external" tabpages
             {
-                SvxSizeItem aSzItm( SID_ATTR_GRAF_FRMSIZE, rSize.GetSize() );
+                SvxSizeItem aSzItm( SID_ATTR_GRAF_FRMSIZE, aSizeCopy.GetSize() );
                 aSet.Put( aSzItm );
 
-                Size aSz( rSize.GetWidthPercent(), rSize.GetHeightPercent() );
+                Size aSz( aSizeCopy.GetWidthPercent(), aSizeCopy.GetHeightPercent() );
                 if( 0xff == aSz.Width() )   aSz.Width() = 0;
                 if( 0xff == aSz.Height() )  aSz.Height() = 0;
 
