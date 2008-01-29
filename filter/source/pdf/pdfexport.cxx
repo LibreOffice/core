@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 15:08:55 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:16:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -906,6 +906,11 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 }
                 if ( mxStatusIndicator.is() )
                     mxStatusIndicator->end();
+
+                // if during the export the doc locale was set copy it to PDF writer
+                const com::sun::star::lang::Locale& rLoc( pPDFExtOutDevData->GetDocumentLocale() );
+                if( rLoc.Language.getLength() )
+                    pPDFWriter->SetDocumentLocale( rLoc );
 
                 if( bRet )
                 {
