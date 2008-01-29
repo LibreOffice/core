@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:47:53 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:26:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,13 @@
 #ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
 #include <com/sun/star/embed/XVisualObject.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_MACROEXECMODE_HPP_
+#include <com/sun/star/document/MacroExecMode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
 #endif
@@ -158,6 +165,7 @@ DocumentHolder::DocumentHolder(
     m_nMenuHandle(NULL),
     m_nMenuShared(NULL),
     m_nOLEMenu(NULL),
+    m_nMacroExecMode( document::MacroExecMode::USE_CONFIG ),
     m_bLink( sal_False )
 {
     static const ::rtl::OUString aServiceName (
@@ -177,6 +185,95 @@ DocumentHolder::~DocumentHolder()
     ClearInterceptorInternally();
 }
 
+
+void DocumentHolder::LoadDocInFrame( sal_Bool bPluginMode )
+{
+    uno::Reference<frame::XComponentLoader> xComponentLoader(
+        m_xFrame,uno::UNO_QUERY);
+    if( xComponentLoader.is() && m_xDocument.is() )
+    {
+        uno::Reference< task::XInteractionHandler > xHandler(
+            m_xFactory->createInstance(
+                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.task.InteractionHandler" ) ) ),
+            uno::UNO_QUERY );
+
+        uno::Any aAny;
+        sal_Int32 nLen = 3;
+        uno::Sequence<beans::PropertyValue> aSeq( nLen );
+
+        aAny <<= uno::Reference<uno::XInterface>(
+            m_xDocument, uno::UNO_QUERY);
+        aSeq[0] = beans::PropertyValue(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("Model")),
+            -1,
+            aAny,
+            beans::PropertyState_DIRECT_VALUE);
+
+        aAny <<= sal_False;
+        aSeq[1] = beans::PropertyValue(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("ReadOnly")),
+            -1,
+            aAny,
+            beans::PropertyState_DIRECT_VALUE);
+
+        aAny <<= (sal_Bool) sal_True;
+        aSeq[2] = beans::PropertyValue(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("NoAutoSave")),
+            -1,
+            aAny,
+            beans::PropertyState_DIRECT_VALUE);
+
+        if ( bPluginMode )
+        {
+            aSeq.realloc( ++nLen );
+            aAny <<= (sal_Int16) 3;
+            aSeq[nLen-1] = beans::PropertyValue(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("PluginMode")),
+                -1,
+                aAny,
+                beans::PropertyState_DIRECT_VALUE);
+        }
+
+        if ( xHandler.is() )
+        {
+            aSeq.realloc( nLen+=2 );
+            aAny <<= xHandler;
+            aSeq[nLen-2] = beans::PropertyValue(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("InteractionHandler")),
+                -1,
+                aAny,
+                beans::PropertyState_DIRECT_VALUE);
+
+            aAny <<= m_nMacroExecMode;
+            aSeq[nLen-1] = beans::PropertyValue(
+                rtl::OUString(
+                    RTL_CONSTASCII_USTRINGPARAM("MacroExecutionMode")),
+                -1,
+                aAny,
+                beans::PropertyState_DIRECT_VALUE);
+        }
+
+        xComponentLoader->loadComponentFromURL(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("private:object")),
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
+            0,
+            aSeq);
+
+        uno::Sequence< beans::PropertyValue > aResArgs = m_xDocument->getArgs();
+        for ( int nInd = 0; nInd < aResArgs.getLength(); nInd++ )
+            if ( aResArgs[nInd].Name.equals( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "MacroExecutionMode" ) ) ) )
+            {
+                aResArgs[nInd].Value >>= m_nMacroExecMode;
+                break;
+            }
+    }
+}
 
 void DocumentHolder::OnPosRectChanged(LPRECT lpRect) const
 {
@@ -226,6 +323,9 @@ HRESULT DocumentHolder::InPlaceActivate(
         return NOERROR;
     }
 
+    if ( !m_xDocument.is() )
+        return ERROR;
+
     //1.  Initialization, obtaining interfaces, OnInPlaceActivate.
     hr=pActiveSite->QueryInterface(
         IID_IOleInPlaceSite,
@@ -259,220 +359,181 @@ HRESULT DocumentHolder::InPlaceActivate(
     uno::Sequence<sal_Int8> aProcessIdent(16);
     rtl_getGlobalProcessId((sal_uInt8*)aProcessIdent.getArray());
 
-    if(!m_xEditWindow.is())
-    {   // determine XWindow and window handle of parent
-        HWND                          hWndxWinParent(0);
-        uno::Reference<awt::XWindow>  xWin;
-
-        static const ::rtl::OUString aToolkitServiceName(
-            RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.awt.Toolkit" ) );
-        uno::Reference<awt::XSystemChildFactory> xToolkit(
-            m_xFactory->createInstance(aToolkitServiceName ),uno::UNO_QUERY);
-
-        if(xToolkit.is()) {
-            // create system window wrapper for hwnd
-            if( !m_pCHatchWin )
-                m_pCHatchWin = new winwrap::CHatchWin(
-                    m_hInstance,this);
-
-            if(m_pCHatchWin->Init(hWndSite,/*ID_HATCHWINDOW*/2000, NULL)) {
-                m_pCHatchWin->RectsSet(&rcPos,&rcClip); //set visible area
-                hWndxWinParent = m_pCHatchWin->Window();
-                ShowWindow(hWndxWinParent,SW_SHOW);  //Make visible.
-            }
-            else {
-                // no success initializing hatch window
-                delete m_pCHatchWin, m_pCHatchWin = 0;
-                hWndxWinParent = hWndSite;
-            }
-
-            aAny <<= sal_Int32(hWndxWinParent);
-            xWin = uno::Reference<awt::XWindow>(
-                xToolkit->createSystemChild(
-                    aAny,
-                    aProcessIdent,
-                    lang::SystemDependent::SYSTEM_WIN32),
-                uno::UNO_QUERY);
-        }
-
-        if(xWin.is()) {
-            xWin->setPosSize(
-                m_pCHatchWin ? HATCHWIN_BORDERWIDTHDEFAULT : 0,
-                m_pCHatchWin ? HATCHWIN_BORDERWIDTHDEFAULT : 0,
-                rcPos.right-rcPos.left,
-                rcPos.bottom - rcPos.top,
-                awt::PosSize::POSSIZE);
-            xWin->setVisible(sal_True);
-
-            m_xEditWindow = xWin;
-            m_hWndxWinParent = hWndxWinParent;
-        }
-        else
-            return ERROR;
-    }
-    else {
-        if(m_hWndxWinParent) {
-            SetParent(m_hWndxWinParent,hWndSite);
-            ShowWindow(m_hWndxWinParent,SW_SHOW);  //Make visible.
-        }
-
-        if ( !m_xFrame.is() )
-            // initially set size to "empty", this guarantees that the final resize
-            // is always executed (will be done by "SetObjectRects" after getting internal border)
-            m_xEditWindow->setPosSize(
-                0,
-                0,
-                0,
-                0,
-                awt::PosSize::POSSIZE);
-        m_xEditWindow->setVisible(sal_True);
-    }
-
-    if(m_xContainerWindow.is()) {
-        if(m_hWndxWinCont) {
-            if(m_pIOleIPFrame) {
-                HWND  hWndCont;
-                m_pIOleIPFrame->GetWindow(&hWndCont);
-                SetParent(m_hWndxWinCont,hWndCont);
-                ShowWindow(m_hWndxWinCont,SW_SHOW);
-            }
-        }
-        m_xContainerWindow->setVisible(true);
-    }
-
-    if(m_xFrame.is())
-        m_xFrame->activate();
-    else {
-        // create frame and initialize it with with the created window
-        static const ::rtl::OUString aFrameServiceName(
-            RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Frame" ) );
-        m_xFrame = uno::Reference<frame::XFrame>(
-            m_xFactory->createInstance(aFrameServiceName),
-            uno::UNO_QUERY);
-
-        if(!m_xFrame.is())
-            return ERROR;
-
-        m_xFrame->initialize(m_xEditWindow);
-
-        uno::Reference<frame::XDispatchProviderInterception>
-            xDPI(m_xFrame,uno::UNO_QUERY);
-        if(xDPI.is())
-            xDPI->registerDispatchProviderInterceptor( CreateNewInterceptor() );
-
-        uno::Reference<beans::XPropertySet> xPS(m_xFrame,uno::UNO_QUERY);
-        if( xPS.is() )
-        {
-            aAny = xPS->getPropertyValue(
-                rtl::OUString::createFromAscii("LayoutManager"));
-            aAny >>= m_xLayoutManager;
-        }
-
-        if(m_xLayoutManager.is())
-            m_xLayoutManager->setDockingAreaAcceptor(this);
-
-        // load the model into the frame
-        uno::Reference<frame::XComponentLoader> xComponentLoader(
-            m_xFrame,uno::UNO_QUERY);
-        if(xComponentLoader.is())
-        {
-            uno::Any aAny;
-            uno::Sequence<beans::PropertyValue> aSeq(4);
-
-            aAny <<= uno::Reference<uno::XInterface>(
-                GetDocument(),uno::UNO_QUERY);
-            aSeq[0] = beans::PropertyValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("Model")),
-                -1,
-                aAny,
-                beans::PropertyState_DIRECT_VALUE);
-
-            aAny <<= sal_False;
-            aSeq[1] = beans::PropertyValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("ReadOnly")),
-                -1,
-                aAny,
-                beans::PropertyState_DIRECT_VALUE);
-
-            aAny <<= (sal_Int16) 3;
-            aSeq[2] = beans::PropertyValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("PluginMode")),
-                -1,
-                aAny,
-                beans::PropertyState_DIRECT_VALUE);
-
-            aAny <<= (sal_Bool) sal_True;
-            aSeq[3] = beans::PropertyValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("NoAutoSave")),
-                -1,
-                aAny,
-                beans::PropertyState_DIRECT_VALUE);
-
-            xComponentLoader->loadComponentFromURL(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("private:object")),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
-                0,
-                aSeq);
-        }
-
-        static const ::rtl::OUString aDesktopServiceName (
-            RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
-        uno::Reference< frame::XFramesSupplier > xDesktop(
-            m_xFactory->createInstance( aDesktopServiceName ),
-            uno::UNO_QUERY );
-        if(xDesktop.is())
-            xDesktop->getFrames()->append(m_xFrame);
-
-        // determine the menuhandle to get menutitems.
-        if(m_xLayoutManager.is()) {
-            uno::Reference< ::com::sun::star::ui::XUIElement > xUIEl(
-                m_xLayoutManager->getElement(
-                    rtl::OUString::createFromAscii(
-                        "private:resource/menubar/menubar")));
-            OSL_ENSURE(xUIEl.is(),"no menubar");
-            uno::Reference<awt::XSystemDependentMenuPeer> xSDMP(
-                xUIEl->getRealInterface(),
-                uno::UNO_QUERY);
-            aAny = xSDMP->getMenuHandle(
-                aProcessIdent,lang::SystemDependent::SYSTEM_WIN32);
-            sal_Int32 tmp;
-            if( aAny >>= tmp )
-                m_nMenuHandle = HMENU(tmp);
-            m_xLayoutManager->hideElement(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM(
-                        "private:resource/menubar/menubar" )));
-        }
-    }
-
-    // TODO/cd: Workaround for status indicator bug. It always makes the
-    // document window visible, when someone tries to use the status
-    // indicator. As we save our document when we get the deactivation
-    // from OLE this conflict to hide floating windows.
-    if(m_xLayoutManager.is())
-        m_xLayoutManager->setVisible(true);
-
-    // get document border and resize rects according to border
-    GetDocumentBorder( &m_aBorder );
-    SetObjectRects( &rcPos, &rcClip );
-
-    if ( m_xOleAccess.is() )
+    try
     {
-        LockedEmbedDocument_Impl aDocLock = m_xOleAccess->GetEmbedDocument();
-        if ( aDocLock.m_pEmbedDocument )
-            aDocLock.m_pEmbedDocument->ShowObject();
+        if(!m_xEditWindow.is())
+        {   // determine XWindow and window handle of parent
+            HWND                          hWndxWinParent(0);
+            uno::Reference<awt::XWindow>  xWin;
+
+            static const ::rtl::OUString aToolkitServiceName(
+                RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.awt.Toolkit" ) );
+            uno::Reference<awt::XSystemChildFactory> xToolkit(
+                m_xFactory->createInstance(aToolkitServiceName ),uno::UNO_QUERY);
+
+            if(xToolkit.is()) {
+                // create system window wrapper for hwnd
+                if( !m_pCHatchWin )
+                    m_pCHatchWin = new winwrap::CHatchWin(
+                        m_hInstance,this);
+
+                if(m_pCHatchWin->Init(hWndSite,/*ID_HATCHWINDOW*/2000, NULL)) {
+                    m_pCHatchWin->RectsSet(&rcPos,&rcClip); //set visible area
+                    hWndxWinParent = m_pCHatchWin->Window();
+                    ShowWindow(hWndxWinParent,SW_SHOW);  //Make visible.
+                }
+                else {
+                    // no success initializing hatch window
+                    delete m_pCHatchWin, m_pCHatchWin = 0;
+                    hWndxWinParent = hWndSite;
+                }
+
+                aAny <<= sal_Int32(hWndxWinParent);
+                xWin = uno::Reference<awt::XWindow>(
+                    xToolkit->createSystemChild(
+                        aAny,
+                        aProcessIdent,
+                        lang::SystemDependent::SYSTEM_WIN32),
+                    uno::UNO_QUERY);
+            }
+
+            if(xWin.is()) {
+                xWin->setPosSize(
+                    m_pCHatchWin ? HATCHWIN_BORDERWIDTHDEFAULT : 0,
+                    m_pCHatchWin ? HATCHWIN_BORDERWIDTHDEFAULT : 0,
+                    rcPos.right-rcPos.left,
+                    rcPos.bottom - rcPos.top,
+                    awt::PosSize::POSSIZE);
+                xWin->setVisible(sal_True);
+
+                m_xEditWindow = xWin;
+                m_hWndxWinParent = hWndxWinParent;
+            }
+            else
+                return ERROR;
+        }
+        else {
+            if(m_hWndxWinParent) {
+                SetParent(m_hWndxWinParent,hWndSite);
+                ShowWindow(m_hWndxWinParent,SW_SHOW);  //Make visible.
+            }
+
+            if ( !m_xFrame.is() )
+                // initially set size to "empty", this guarantees that the final resize
+                // is always executed (will be done by "SetObjectRects" after getting internal border)
+                m_xEditWindow->setPosSize(
+                    0,
+                    0,
+                    0,
+                    0,
+                    awt::PosSize::POSSIZE);
+            m_xEditWindow->setVisible(sal_True);
+        }
+
+        if(m_xContainerWindow.is()) {
+            if(m_hWndxWinCont) {
+                if(m_pIOleIPFrame) {
+                    HWND  hWndCont;
+                    m_pIOleIPFrame->GetWindow(&hWndCont);
+                    SetParent(m_hWndxWinCont,hWndCont);
+                    ShowWindow(m_hWndxWinCont,SW_SHOW);
+                }
+            }
+            m_xContainerWindow->setVisible(true);
+        }
+
+        if(m_xFrame.is())
+            m_xFrame->activate();
+        else {
+            // create frame and initialize it with with the created window
+            static const ::rtl::OUString aFrameServiceName(
+                RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Frame" ) );
+            m_xFrame = uno::Reference<frame::XFrame>(
+                m_xFactory->createInstance(aFrameServiceName),
+                uno::UNO_QUERY);
+
+            if(!m_xFrame.is())
+                return ERROR;
+
+            m_xFrame->initialize(m_xEditWindow);
+
+            uno::Reference<frame::XDispatchProviderInterception>
+                xDPI(m_xFrame,uno::UNO_QUERY);
+            if(xDPI.is())
+                xDPI->registerDispatchProviderInterceptor( CreateNewInterceptor() );
+
+            uno::Reference<beans::XPropertySet> xPS(m_xFrame,uno::UNO_QUERY);
+            if( xPS.is() )
+            {
+                aAny = xPS->getPropertyValue(
+                    rtl::OUString::createFromAscii("LayoutManager"));
+                aAny >>= m_xLayoutManager;
+            }
+
+            if(m_xLayoutManager.is())
+                m_xLayoutManager->setDockingAreaAcceptor(this);
+
+            // load the model into the frame
+            LoadDocInFrame( sal_True );
+
+            static const ::rtl::OUString aDesktopServiceName (
+                RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
+            uno::Reference< frame::XFramesSupplier > xDesktop(
+                m_xFactory->createInstance( aDesktopServiceName ),
+                uno::UNO_QUERY );
+            if(xDesktop.is())
+                xDesktop->getFrames()->append(m_xFrame);
+
+            // determine the menuhandle to get menutitems.
+            if(m_xLayoutManager.is()) {
+                uno::Reference< ::com::sun::star::ui::XUIElement > xUIEl(
+                    m_xLayoutManager->getElement(
+                        rtl::OUString::createFromAscii(
+                            "private:resource/menubar/menubar")));
+                OSL_ENSURE(xUIEl.is(),"no menubar");
+                uno::Reference<awt::XSystemDependentMenuPeer> xSDMP(
+                    xUIEl->getRealInterface(),
+                    uno::UNO_QUERY);
+                aAny = xSDMP->getMenuHandle(
+                    aProcessIdent,lang::SystemDependent::SYSTEM_WIN32);
+                sal_Int32 tmp;
+                if( aAny >>= tmp )
+                    m_nMenuHandle = HMENU(tmp);
+                m_xLayoutManager->hideElement(
+                    rtl::OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "private:resource/menubar/menubar" )));
+            }
+        }
+
+        // TODO/cd: Workaround for status indicator bug. It always makes the
+        // document window visible, when someone tries to use the status
+        // indicator. As we save our document when we get the deactivation
+        // from OLE this conflict to hide floating windows.
+        if(m_xLayoutManager.is())
+            m_xLayoutManager->setVisible(true);
+
+        // get document border and resize rects according to border
+        GetDocumentBorder( &m_aBorder );
+        SetObjectRects( &rcPos, &rcClip );
+
+        if ( m_xOleAccess.is() )
+        {
+            LockedEmbedDocument_Impl aDocLock = m_xOleAccess->GetEmbedDocument();
+            if ( aDocLock.m_pEmbedDocument )
+                aDocLock.m_pEmbedDocument->ShowObject();
+        }
+
+        // setTitle(m_aDocumentNamePart);
+        if (fIncludeUI)
+            hr=UIActivate();
+
+        m_pIOleIPSite->DiscardUndoState();
     }
-
-    // setTitle(m_aDocumentNamePart);
-    if (fIncludeUI)
-        hr=UIActivate();
-
-    m_pIOleIPSite->DiscardUndoState();
+    catch( uno::Exception& )
+    {
+        hr = ERROR;
+    }
     return hr;
 }
 
@@ -900,76 +961,33 @@ void DocumentHolder::ClearInterceptor()
 
 void DocumentHolder::show()
 {
-    if(m_xFrame.is()) {
-        m_xFrame->activate();
-        uno::Reference<awt::XTopWindow> xTopWindow(
-            m_xFrame->getContainerWindow(),uno::UNO_QUERY);
-        if(xTopWindow.is())
-            xTopWindow->toFront();
-    }
-    else {
-        uno::Reference<frame::XComponentLoader> xComponentLoader(
-            DocumentFrame(),uno::UNO_QUERY);
-
-        if(xComponentLoader.is())
+    try
+    {
+        if(m_xFrame.is())
         {
-            uno::Sequence<beans::PropertyValue> aSeq(3);
+            m_xFrame->activate();
+            uno::Reference<awt::XTopWindow> xTopWindow(
+                m_xFrame->getContainerWindow(),uno::UNO_QUERY);
+            if(xTopWindow.is())
+                xTopWindow->toFront();
+        }
+        else if( DocumentFrame().is() )
+        {
+            LoadDocInFrame( sal_False );
 
-            uno::Any aAny;
-            aAny <<= uno::Reference<uno::XInterface>(
-                GetDocument(),uno::UNO_QUERY);
-            aSeq[0] = beans::PropertyValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("Model")),
-                -1,
-                aAny,
-                beans::PropertyState_DIRECT_VALUE);
-
-            aAny <<= sal_False;
-            aSeq[1] = beans::PropertyValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("ReadOnly")),
-                -1,
-                aAny,
-                beans::PropertyState_DIRECT_VALUE);
-
-            aAny <<= (sal_Bool) sal_True;
-            aSeq[2] = beans::PropertyValue(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("NoAutoSave")),
-                -1,
-                aAny,
-                beans::PropertyState_DIRECT_VALUE);
-
-
-            xComponentLoader->loadComponentFromURL(
-                rtl::OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("private:object")),
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
-                0,
-                aSeq);
-
-            try
+            // get rid of second closer if it is there
+            uno::Reference< beans::XPropertySet > xProps( m_xFrame, uno::UNO_QUERY );
+            if ( xProps.is() )
             {
-                // get rid of second closer if it is there
-                uno::Reference< beans::XPropertySet > xProps( m_xFrame, uno::UNO_QUERY );
-                if ( xProps.is() )
+                uno::Reference< frame::XLayoutManager > xLayoutManager;
+                xProps->getPropertyValue( rtl::OUString::createFromAscii( "LayoutManager" ) ) >>= xLayoutManager;
+                uno::Reference< beans::XPropertySet > xLMProps( xLayoutManager, uno::UNO_QUERY );
+                if ( xLMProps.is() )
                 {
-                    uno::Reference< frame::XLayoutManager > xLayoutManager;
-                    xProps->getPropertyValue( rtl::OUString::createFromAscii( "LayoutManager" ) ) >>= xLayoutManager;
-                    uno::Reference< beans::XPropertySet > xLMProps( xLayoutManager, uno::UNO_QUERY );
-                    if ( xLMProps.is() )
-                    {
-                        xLMProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MenuBarCloser" ),
-                                                    uno::makeAny( uno::Reference< frame::XStatusListener >() ) );
-                    }
+                    xLMProps->setPropertyValue( ::rtl::OUString::createFromAscii( "MenuBarCloser" ),
+                                                uno::makeAny( uno::Reference< frame::XStatusListener >() ) );
                 }
             }
-            catch( uno::Exception& )
-            {
-                OSL_ENSURE( sal_False, "Can not adjust the frame!\n" );
-            }
-
 
             if ( !m_bLink )
             {
@@ -981,11 +999,16 @@ void DocumentHolder::show()
                 catch( uno::Exception& )
                 {}
             }
-        }
 
-        if ( !m_bLink )
-            setTitle(m_aDocumentNamePart);
+            if ( !m_bLink )
+                setTitle(m_aDocumentNamePart);
+        }
     }
+    catch( uno::Exception& )
+    {
+        OSL_ENSURE( sal_False, "Can not show the frame!\n" );
+    }
+
 }
 
 void DocumentHolder::resizeWin( const SIZEL& rNewSize )
