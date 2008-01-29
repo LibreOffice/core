@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:38:19 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:11:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,8 +121,8 @@ private:
     FixedLine           maFlPrintRange;
     RadioButton         maRbtAll;
     RadioButton         maRbtPages;
-    Edit                maEdtPages;
     RadioButton         maRbtSelection;
+    Edit                maEdtPages;
 
     FixedLine           maFlSepCopiesRange;
 
