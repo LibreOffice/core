@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:02:48 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:15:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,6 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
-#endif
-#ifndef SC_POSTIT_HXX
-#include "postit.hxx"
 #endif
 
 #ifndef SC_COMPRESSEDARRAY_HXX
@@ -83,6 +80,7 @@ class ScStyleSheet;
 class SvtBroadcaster;
 class TypedStrCollection;
 class ScProgress;
+class ScPostIt;
 struct ScFunctionData;
 struct ScLineFlags;
 struct ScMergePatternState;
