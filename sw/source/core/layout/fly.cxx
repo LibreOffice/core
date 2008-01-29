@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:02:12 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:01:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1190,6 +1190,21 @@ void SwFlyFrm::_Invalidate( SwPageFrm *pPage )
              pFrm->Lower() && pFrm->Lower()->IsColumnFrm() )
             pFrm->InvalidateSize();
     }
+
+    // --> OD 2008-01-21 #i85216#
+    // if vertical position is oriented at a layout frame inside a ghost section,
+    // assure that the position is invalidated and that the information about
+    // the vertical position oriented frame is cleared
+    if ( GetVertPosOrientFrm() && GetVertPosOrientFrm()->IsLayoutFrm() )
+    {
+        const SwSectionFrm* pSectFrm( GetVertPosOrientFrm()->FindSctFrm() );
+        if ( pSectFrm && pSectFrm->GetSection() == 0 )
+        {
+            InvalidatePos();
+            ClearVertPosOrientFrm();
+        }
+    }
+    // <--
 }
 
 /*************************************************************************
