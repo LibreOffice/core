@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:55:26 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,6 +201,9 @@ private:
     @precond we don't actually have an external list source
     */
     void        implRefreshListFromDbBinding( );
+
+    StringSequence
+                impl_getValues() const { return m_aValueSeq.getLength() ? m_aValueSeq : getStringItemList(); }
 };
 
 //==================================================================
