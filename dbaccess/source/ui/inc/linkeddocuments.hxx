@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkeddocuments.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:23:35 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:51:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
+#include <com/sun/star/frame/XFrame.hpp>
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #endif
@@ -82,6 +83,8 @@ namespace dbaui
                     m_xDocumentContainer;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>
                     m_xConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+                    m_xParentFrame;
         Window*     m_pDialogParent;
         String      m_sCurrentlyEditing;
         ::rtl::OUString
@@ -90,6 +93,7 @@ namespace dbaui
     public:
         OLinkedDocumentsAccess(
             Window* _pDialogParent
+            ,const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rxContainer
             ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
@@ -132,12 +136,12 @@ namespace dbaui
                             ,const sal_Int32 _nCommandType = -1
                             ,const ::rtl::OUString& _rObjectName = ::rtl::OUString()
                         );
-        void    newQueryWithPilot(
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newQueryWithPilot(
                             const sal_Int32 _nCommandType = -1
                             ,const ::rtl::OUString& _rObjectName = ::rtl::OUString()
                         );
 
-        void    newTableWithPilot();
+        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>       newTableWithPilot();
 
         enum RESULT
         {
