@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryWizard.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 15:30:16 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:42:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,17 +31,17 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.query;
+ ************************************************************************/
+package com.sun.star.wizards.query;
 
 import com.sun.star.frame.XFrame;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.awt.VclWindowPeerAttribute;
 import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.lang.XComponent;
 import com.sun.star.wizards.common.*;
 import com.sun.star.wizards.db.*;
-import com.sun.star.wizards.document.OfficeDocument;
-import com.sun.star.wizards.form.FormWizard.FieldSelectionListener;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.uno.*;
 import com.sun.star.wizards.ui.*;
@@ -50,8 +50,12 @@ import com.sun.star.uno.UnoRuntime;
 
 public class QueryWizard extends WizardDialog {
 
-    public XFrame CurFrame;
-    public XWindowPeer xWindowPeer;
+    private XFrame CurFrame;
+
+    public XFrame getCurFrame() {
+        return CurFrame;
+    }
+
     public static final String SFILLUPFIELDSLISTBOX = "fillUpFieldsListbox";
 
     public static final int SOFIELDSELECTIONPAGE = 1;
@@ -73,7 +77,6 @@ public class QueryWizard extends WizardDialog {
     Finalizer CurFinalizer;
     WizardDialog CurWizardDialog;
     QuerySummary CurDBMetaData;
-    Object[] CurPropertyValue;
     String[][] UIRepresentation;
     String reslblFieldHeader;
     String reslblAliasHeader;
@@ -84,6 +87,8 @@ public class QueryWizard extends WizardDialog {
     String resQueryWizard;
     String reslblGroupBy;
     String resmsgNonNumericAsGroupBy;
+
+    XComponent[] components = null;
 
     //Resources Object
     short CurTabIndex = 0;
@@ -114,38 +119,55 @@ public class QueryWizard extends WizardDialog {
     }
 
 
-    public void startQueryWizard(XMultiServiceFactory xMSF, PropertyValue[] CurPropertyValues) {
-    try {
-        if (CurDBMetaData.getConnection(CurPropertyValues)){
-            reslblFields = oResource.getResText(UIConsts.RID_QUERY + 4);
-            reslblFieldHeader = oResource.getResText(UIConsts.RID_QUERY + 19); //Fielnames in  AliasComponent
-            reslblAliasHeader = oResource.getResText(UIConsts.RID_QUERY + 20); //Fieldtitles header in  AliasComponent
-            reslblSelFields = oResource.getResText(UIConsts.RID_QUERY + 50);
-            reslblTables = oResource.getResText(UIConsts.RID_QUERY + 3);
-            reslblGroupBy =  oResource.getResText(UIConsts.RID_QUERY + 18);
-            resQueryWizard = oResource.getResText(UIConsts.RID_QUERY + 2);
-            resmsgNonNumericAsGroupBy = oResource.getResText(UIConsts.RID_QUERY + 88);
-            Helper.setUnoPropertyValues(xDialogModel, new String[] { "Height", "Moveable", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Title", "Width" },
-                                                    new Object[] { new Integer(210), Boolean.TRUE, "DialogQuery", new Integer(102), new Integer(41), new Integer(1), new Short((short) 0), resQueryWizard, new Integer(310)});
-            drawNaviBar();
-            setRightPaneHeaders(oResource, UIConsts.RID_QUERY + 70, 8);
-            this.setMaxStep(8);
-            buildSteps();
-            this.CurDBCommandFieldSelection.preselectCommand(CurPropertyValues, false);
-            CurFrame = Desktop.getActiveFrame(xMSF);
-//          CurFrame = OfficeDocument.createNewFrame(xMSF, this);
-//          desktopFrame = Desktop.findAFrame(xMSF, CurFrame, desktopFrame);
+    public XComponent[] startQueryWizard(XMultiServiceFactory xMSF, PropertyValue[] CurPropertyValues) {
+        try {
+            if (CurDBMetaData.getConnection(CurPropertyValues)){
+                reslblFields = oResource.getResText(UIConsts.RID_QUERY + 4);
+                reslblFieldHeader = oResource.getResText(UIConsts.RID_QUERY + 19); //Fielnames in  AliasComponent
+                reslblAliasHeader = oResource.getResText(UIConsts.RID_QUERY + 20); //Fieldtitles header in  AliasComponent
+                reslblSelFields = oResource.getResText(UIConsts.RID_QUERY + 50);
+                reslblTables = oResource.getResText(UIConsts.RID_QUERY + 3);
+                reslblGroupBy =  oResource.getResText(UIConsts.RID_QUERY + 18);
+                resQueryWizard = oResource.getResText(UIConsts.RID_QUERY + 2);
+                resmsgNonNumericAsGroupBy = oResource.getResText(UIConsts.RID_QUERY + 88);
+                Helper.setUnoPropertyValues(xDialogModel, new String[] { "Height", "Moveable", "Name", "PositionX", "PositionY", "Step", "TabIndex", "Title", "Width" },
+                                                        new Object[] { new Integer(210), Boolean.TRUE, "DialogQuery", new Integer(102), new Integer(41), new Integer(1), new Short((short) 0), resQueryWizard, new Integer(310)});
+                drawNaviBar();
+                setRightPaneHeaders(oResource, UIConsts.RID_QUERY + 70, 8);
+                this.setMaxStep(8);
+                buildSteps();
+                this.CurDBCommandFieldSelection.preselectCommand(CurPropertyValues, false);
+                if (Properties.hasPropertyValue(CurPropertyValues, "ParentFrame"))
+                    CurFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class,Properties.getPropertyValue(CurPropertyValues, "ParentFrame"));
+                else
+                    CurFrame = Desktop.getActiveFrame(xMSF);
+    //          CurFrame = OfficeDocument.createNewFrame(xMSF, this);
+    //          desktopFrame = Desktop.findAFrame(xMSF, CurFrame, desktopFrame);
 
-            xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, CurFrame.getContainerWindow());
-            this.xMSF = xMSF;
-            createWindowPeer(xWindowPeer);
-            CurDBMetaData.setWindowPeer(this.xControl.getPeer());
-            insertQueryRelatedSteps();
-            short RetValue = executeDialog(CurFrame.getContainerWindow().getPosSize());
+                XWindowPeer windowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, CurFrame.getContainerWindow());
+                this.xMSF = xMSF;
+                createWindowPeer(windowPeer);
+                CurDBMetaData.setWindowPeer(this.xControl.getPeer());
+                insertQueryRelatedSteps();
+                executeDialog(CurFrame.getContainerWindow().getPosSize());
+            }
+        } catch (java.lang.Exception jexception) {
+            jexception.printStackTrace(System.out);
         }
-    } catch (java.lang.Exception jexception) {
-        jexception.printStackTrace(System.out);
-    }}
+        CurGroupFilterComponent = null;
+        CurTitlesComponent = null;
+        CurAggregateComponent = null;
+        CurDBCommandFieldSelection = null;
+        xWindowPeer = null;
+        CurFrame = null;
+        CurFinalizer = null;
+        CurDBMetaData.finish();
+        CurDBMetaData = null;
+        XComponent[] ret = components;
+        components = null;
+        System.gc();
+        return ret;
+    }
 
 
     public void enableRoadmapItems(String[] _FieldNames, boolean _bEnabled) {
@@ -187,7 +209,6 @@ public class QueryWizard extends WizardDialog {
 
     public void insertQueryRelatedSteps() {
         try {
-            String[] sRMItemLabels = getRMItemLabels();
             setRMItemLabels(oResource, UIConsts.RID_QUERY + 80);
             addRoadmap();
             int i = 0;
@@ -213,7 +234,6 @@ public class QueryWizard extends WizardDialog {
 
     public void buildSteps() {
         try {
-            boolean bEnabled;
 //            curDBCommandFieldSelection = new CommandFieldSelection(this, curFormDocument.oMainFormDBMetaData, 92, slblFields, slblSelFields,  slblTables, true, 34411);
 //            curDBCommandFieldSelection.addFieldSelectionListener(new FieldSelectionListener());
 
@@ -223,7 +243,7 @@ public class QueryWizard extends WizardDialog {
             CurSortingComponent = new SortingComponent(this, SOSORTINGPAGE, 95, 27, 210, 40865);
             CurFilterComponent = new FilterComponent(this, xMSF, SOFILTERPAGE, 97, 27, 209, 3, CurDBMetaData, 40878);
             CurFilterComponent.addNumberFormats();
-            int i = CurDBMetaData.xDBMetaData.getMaxTablesInSelect();
+
             if (CurDBMetaData.xDBMetaData.supportsCoreSQLGrammar())
                 CurAggregateComponent = new AggregateComponent(this, CurDBMetaData, SOAGGREGATEPAGE, 97, 69, 209, 5, 40895);
             if (CurDBMetaData.xDBMetaData.supportsGroupBy()) {
@@ -243,7 +263,7 @@ public class QueryWizard extends WizardDialog {
     public void finishWizard() {
         int ncurStep = getCurrentStep();
         if ((switchToStep(ncurStep, SOSUMMARYPAGE)) || (ncurStep == SOSUMMARYPAGE))
-            CurFinalizer.finish();
+            components = CurFinalizer.finish();
     }
 
 
@@ -335,7 +355,6 @@ public class QueryWizard extends WizardDialog {
     }
 
     private void searchForOutdatedFields() {
-        String[] GroupCompNames;
         String[] sFieldNames = CurDBMetaData.getFieldNames();
         CurDBMetaData.SortFieldNames = JavaTools.removeOutdatedFields(CurDBMetaData.SortFieldNames, sFieldNames);
         CurDBMetaData.FilterConditions = JavaTools.removeOutdatedFields(CurDBMetaData.FilterConditions, sFieldNames);
