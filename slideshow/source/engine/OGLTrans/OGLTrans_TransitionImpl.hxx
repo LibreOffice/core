@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OGLTrans_TransitionImpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 10:17:11 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:35:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,16 +32,18 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
-#ifndef INCLUDED_SLIDESHOW_TRANSITION_HXX_
-#define INCLUDED_SLIDESHOW_TRANSITION_HXX_
+#ifndef INCLUDED_OGLTRANS_TRANSITIONIMPL_HXX_
+#define INCLUDED_OGLTRANS_TRANSITIONIMPL_HXX_
 
 #include <basegfx/vector/b2dvector.hxx>
 #include <basegfx/vector/b3dvector.hxx>
 
 #include <vector>
+#include <GL/gl.h>
 
 class Primitive;
 class Operation;
+class SceneObject;
 
 /** OpenGL 3D Transition class. It implicitly is constructed from XOGLTransition
 
@@ -52,17 +54,26 @@ class OGLTransitionImpl
 public:
     OGLTransitionImpl() :
         maLeavingSlidePrimitives(),
-        maEnteringSlidePrimitives()
+        maEnteringSlidePrimitives(),
+        maSceneObjects()
     {}
 
     ~OGLTransitionImpl();
 
-    void display( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex , double SlideWidthScale, double SlideHeightScale);
+    void prepare();
+    void display( double nTime, ::sal_Int32 glLeavingSlideTex, ::sal_Int32 glEnteringSlideTex, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight);
+    void finish();
+
     void makeOutsideCubeFaceToLeft();
     void makeInsideCubeFaceToLeft();
     void makeNByMTileFlip( ::sal_uInt16 n, ::sal_uInt16 m );
     void makeRevolvingCircles( ::sal_uInt16 nCircles , ::sal_uInt16 nPointsOnCircles );
     void makeHelix( ::sal_uInt16 nRows );
+    void makeFallLeaving();
+    void makeTurnAround();
+    void makeTurnDown();
+    void makeIris();
+    void makeRochade();
 
 private:
     /** clears all the primitives and operations
@@ -77,9 +88,44 @@ private:
     */
     std::vector<Primitive> maEnteringSlidePrimitives;
 
+    /** All the surrounding scene objects
+    */
+    std::vector<SceneObject*> maSceneObjects;
+
     /** All the operations that should be applied to both leaving and entering slide primitives. These operations will be called in the order they were pushed back in. In OpenGL this effectively uses the operations in the opposite order they were pushed back.
     */
     std::vector<Operation*> OverallOperations;
+};
+
+class SceneObject
+{
+public:
+    SceneObject();
+
+    virtual void prepare() {};
+    virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight);
+    virtual void finish() {};
+
+    void pushPrimitive (const Primitive &p);
+
+protected:
+    /** All the surrounding scene primitives
+    */
+    std::vector<Primitive> maPrimitives;
+};
+
+class Iris : public SceneObject
+{
+public:
+    Iris ();
+
+    virtual void prepare();
+    virtual void display(double nTime, double SlideWidth, double SlideHeight, double DispWidth, double DispHeight);
+    virtual void finish();
+
+private:
+
+    GLuint maTexture;
 };
 
 /** This class is a list of Triangles that will share Operations, and could possibly share
@@ -88,7 +134,8 @@ class Primitive
 {
 public:
     Primitive() {}
-    explicit Primitive(const Primitive& rvalue);
+    // making copy constructor explicit makes the class un-suitable for use with stl containers
+    Primitive(const Primitive& rvalue);
     ~Primitive();
 
     void display(double nTime, double SlideWidthScale, double SlideHeightScale);
@@ -299,6 +346,42 @@ private:
     /** vector to translate by
     */
     basegfx::B3DVector vector;
+};
+
+/** translation transformation
+*/
+class SEllipseTranslate: public Operation
+{
+public:
+    void interpolate(double t,double SlideWidthScale,double SlideHeightScale);
+    SEllipseTranslate* clone();
+
+    /** Constructor
+
+        @param Vector
+        vector to translate
+
+        @param bInter
+        see Operation
+
+        @param T0
+        transformation starting time
+
+        @param T1
+        transformation ending time
+
+    */
+    SEllipseTranslate(double dWidth, double dHeight, double dStartPosition, double dEndPosition, bool bInter, double T0, double T1);
+    ~SEllipseTranslate(){}
+private:
+    /** width and length of the ellipse
+     */
+    double width, height;
+
+    /** start and end position on the ellipse <0,1>
+     */
+    double startPosition;
+    double endPosition;
 };
 
 /** Same as SRotate, except the depth is scaled by the width of the slide divided by the width of the window.
