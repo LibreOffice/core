@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:51:25 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:28:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -689,8 +689,9 @@ void XclImpCellAlign::FillToItemSet( SfxItemSet& rItemSet, const XclImpFont* pFo
     // horizontal alignment
     ScfTools::PutItem( rItemSet, SvxHorJustifyItem( GetScHorAlign(), ATTR_HOR_JUSTIFY ), bSkipPoolDefs );
 
-    // text wrap
-    ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_LINEBREAK, mbLineBreak ), bSkipPoolDefs );
+    // text wrap (#i74508# always if vertical alignment is justified or distributed)
+    bool bLineBreak = mbLineBreak || (mnVerAlign == EXC_XF_VER_JUSTIFY) || (mnVerAlign == EXC_XF_VER_DISTRIB);
+    ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_LINEBREAK, bLineBreak ), bSkipPoolDefs );
 
     // vertical alignment
     ScfTools::PutItem( rItemSet, SvxVerJustifyItem( GetScVerAlign(), ATTR_VER_JUSTIFY ), bSkipPoolDefs );
