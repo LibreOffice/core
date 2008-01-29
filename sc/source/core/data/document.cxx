@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:11:37 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:18:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -96,15 +94,11 @@
 #include "indexmap.hxx"
 #include "detfunc.hxx"      // for UpdateAllComments
 #include "scmod.hxx"
-#ifndef SC_DOCITER_HXX
 #include "dociter.hxx"
-#endif
 #include "progress.hxx"
-#ifndef __SGI_STL_SET
-#include <set>
-#endif
 #include "autonamecache.hxx"
 #include "bcaslot.hxx"
+#include "postit.hxx"
 
 struct ScDefaultAttr
 {
@@ -635,7 +629,9 @@ void ScDocument::LimitChartIfAll( ScRangeListRef& rRangeList )
         }
     }
     else
+    {
         DBG_ERROR("LimitChartIfAll: Ref==0");
+    }
     rRangeList = aNew;
 }
 
@@ -1154,7 +1150,9 @@ void ScDocument::InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSe
             }
     }
     else
+        {
         DBG_ERROR("InitUndo");
+        }
 }
 
 
@@ -1174,7 +1172,9 @@ void ScDocument::InitUndo( ScDocument* pSrcDoc, SCTAB nTab1, SCTAB nTab2,
         nMaxTableNumber = nTab2 + 1;
     }
     else
+    {
         DBG_ERROR("InitUndo");
+    }
 }
 
 
@@ -1191,7 +1191,9 @@ void ScDocument::AddUndoTab( SCTAB nTab1, SCTAB nTab2, BOOL bColInfo, BOOL bRowI
             nMaxTableNumber = nTab2 + 1;
     }
     else
+    {
         DBG_ERROR("InitUndo");
+    }
 }
 
 
@@ -1470,7 +1472,9 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
                                     aClipRange.aEnd.Tab() );
     }
     else
+    {
         DBG_ERROR("TransposeClip: zu gross");
+    }
 
         //  Dies passiert erst beim Einfuegen...
 
@@ -1506,6 +1510,7 @@ void ScDocument::BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
 {
     if (nInsFlag & IDF_CONTENTS)
     {
+        ScBulkBroadcast aBulkBroadcast( GetBASM());
         for (SCTAB i = 0; i <= MAXTAB; i++)
             if (pTab[i])
                 if (rMark.GetTableSelect(i))
@@ -1881,7 +1886,9 @@ void ScDocument::SetClipArea( const ScRange& rArea, BOOL bCut )
         bCutMode = bCut;
     }
     else
+    {
         DBG_ERROR("SetClipArea: kein Clip");
+    }
 }
 
 
@@ -1912,7 +1919,9 @@ void ScDocument::GetClipArea(SCCOL& nClipX, SCROW& nClipY, BOOL bIncludeFiltered
         }
     }
     else
+    {
         DBG_ERROR("GetClipArea: kein Clip");
+    }
 }
 
 
@@ -1924,7 +1933,9 @@ void ScDocument::GetClipStart(SCCOL& nClipX, SCROW& nClipY)
         nClipY = aClipRange.aStart.Row();
     }
     else
+    {
         DBG_ERROR("GetClipStart: kein Clip");
+    }
 }
 
 
@@ -2005,7 +2016,9 @@ void ScDocument::FillTab( const ScRange& rSrcArea, const ScMarkData& rMark,
         SetAutoCalc( bOldAutoCalc );
     }
     else
+    {
         DBG_ERROR("falsche Tabelle");
+    }
 }
 
 
@@ -2062,7 +2075,9 @@ void ScDocument::FillTabMarked( SCTAB nSrcTab, const ScMarkData& rMark,
         SetAutoCalc( bOldAutoCalc );
     }
     else
+    {
         DBG_ERROR("falsche Tabelle");
+    }
 }
 
 
@@ -2937,7 +2952,9 @@ const SfxPoolItem* ScDocument::GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, USHO
         if (pTemp)
             return pTemp;
         else
+        {
             DBG_ERROR( "Attribut Null" );
+        }
     }
     return &xPoolHelper->GetDocPool()->GetDefaultItem( nWhich );
 }
@@ -3341,11 +3358,20 @@ BOOL ScDocument::HasAttrib( SCCOL nCol1, SCROW nRow1, SCTAB nTab1,
         BOOL bAnyItem = FALSE;
         USHORT nRotCount = pPool->GetItemCount( ATTR_ROTATE_VALUE );
         for (USHORT nItem=0; nItem<nRotCount; nItem++)
-            if (pPool->GetItem( ATTR_ROTATE_VALUE, nItem ))
+        {
+            const SfxPoolItem* pItem = pPool->GetItem( ATTR_ROTATE_VALUE, nItem );
+            if ( pItem )
             {
-                bAnyItem = TRUE;
-                break;
+                // 90 or 270 degrees is former SvxOrientationItem - only look for other values
+                // (see ScPatternAttr::GetCellOrientation)
+                INT32 nAngle = static_cast<const SfxInt32Item*>(pItem)->GetValue();
+                if ( nAngle != 0 && nAngle != 9000 && nAngle != 27000 )
+                {
+                    bAnyItem = TRUE;
+                    break;
+                }
             }
+        }
         if (!bAnyItem)
             nMask &= ~HASATTR_ROTATE;
     }
@@ -3414,7 +3440,9 @@ void ScDocument::FindMaxRotCol( SCTAB nTab, RowInfo* pRowInfo, SCSIZE nArrCount,
     if ( ValidTab(nTab)  && pTab[nTab] )
         pTab[nTab]->FindMaxRotCol( pRowInfo, nArrCount, nX1, nX2 );
     else
+    {
         DBG_ERRORFILE("FindMaxRotCol: falsche Tabelle");
+    }
 }
 
 BOOL ScDocument::HasLines( const ScRange& rRange, Rectangle& rSizes ) const
@@ -3503,7 +3531,9 @@ void ScDocument::LockTable(SCTAB nTab)
     if ( ValidTab(nTab)  && pTab[nTab] )
         pTab[nTab]->LockTable();
     else
+    {
         DBG_ERROR("Falsche Tabellennummer");
+    }
 }
 
 
@@ -3512,7 +3542,9 @@ void ScDocument::UnlockTable(SCTAB nTab)
     if ( ValidTab(nTab)  && pTab[nTab] )
         pTab[nTab]->UnlockTable();
     else
+    {
         DBG_ERROR("Falsche Tabellennummer");
+    }
 }
 
 
@@ -3777,7 +3809,9 @@ BOOL ScDocument::ExtendOverlapped( SCCOL& rStartCol, SCROW& rStartRow,
         }
     }
     else
+    {
         DBG_ERROR("ExtendOverlapped: falscher Bereich");
+    }
 
     return bFound;
 }
@@ -3824,7 +3858,9 @@ BOOL ScDocument::ExtendMerge( SCCOL nStartCol, SCROW nStartRow,
             RefreshAutoFilter( nStartCol, nStartRow, rEndCol, rEndRow, nTab );
     }
     else
+    {
         DBG_ERROR("ExtendMerge: falscher Bereich");
+    }
 
     return bFound;
 }
@@ -4111,7 +4147,9 @@ void ScDocument::DeleteSelectionTab( SCTAB nTab, USHORT nDelFlag, const ScMarkDa
     if (ValidTab(nTab)  && pTab[nTab])
         pTab[nTab]->DeleteSelection( nDelFlag, rMark );
     else
+    {
         DBG_ERROR("Falsche Tabelle");
+    }
 }
 
 
@@ -4345,7 +4383,9 @@ BOOL ScDocument::LoadPool( SvStream& rStream, BOOL /* bLoadRefCounts */ )
         bRet = TRUE;
     }
     else
+    {
         DBG_ERROR("LoadPool: SCID_POOLS nicht gefunden");
+    }
 
     if (!bStylesFound)
         xPoolHelper->GetStylePool()->CreateStandardStyles();
