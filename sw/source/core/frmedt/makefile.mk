@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2007-12-14 09:38:41 $
+#   last change: $Author: vg $ $Date: 2008-01-29 08:38:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,8 @@ SLOFILES =  $(EXCEPTIONSFILES) \
         $(SLO)$/tblsel.obj
         
 EXCEPTIONSFILES=\
-        $(SLO)$/fefly1.obj \
         $(SLO)$/fecopy.obj \
+        $(SLO)$/fefly1.obj \
         $(SLO)$/fews.obj
         
 
