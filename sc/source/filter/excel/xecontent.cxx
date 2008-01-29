@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:46:39 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:25:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1194,7 +1194,10 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
     rStrm.EndRecord();
 
     // PARAMQRY record
-    nFlags = EXC_PQRY_DEFAULTFLAGS | (mbEntireDoc ? EXC_PQRY_DOC : EXC_PQRY_TABLES);
+    nFlags = 0;
+    ::insert_value( nFlags, EXC_PQRYTYPE_WEBQUERY, 0, 3 );
+    ::set_flag( nFlags, EXC_PQRY_WEBQUERY );
+    ::set_flag( nFlags, EXC_PQRY_TABLES, !mbEntireDoc );
     rStrm.StartRecord( EXC_ID_PQRY, 12 );
     rStrm   << nFlags
             << sal_uInt16( 0x0000 )
