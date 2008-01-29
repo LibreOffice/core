@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlchart.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:51:09 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:28:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,83 +36,35 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#ifndef SC_XLCHART_HXX
 #include "xlchart.hxx"
-#endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
 #include <com/sun/star/awt/Size.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_GRADIENT_HPP_
 #include <com/sun/star/awt/Gradient.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DRAWING_LINEDASH_HPP_
 #include <com/sun/star/drawing/LineDash.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_BITMAPMODE_HPP_
 #include <com/sun/star/drawing/BitmapMode.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_CHART2_RELATIVEPOSITION_HPP_
 #include <com/sun/star/chart2/RelativePosition.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_LEGENDPOSITION_HPP_
 #include <com/sun/star/chart2/LegendPosition.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_LEGENDEXPANSION_HPP_
 #include <com/sun/star/chart2/LegendExpansion.hpp>
-#endif
-#ifndef _COM_SUN_STAR_CHART2_SYMBOL_HPP_
 #include <com/sun/star/chart2/Symbol.hpp>
-#endif
+#include <com/sun/star/chart/DataLabelPlacement.hpp>
 
-#ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
-#endif
-
-#ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
-#endif
-#ifndef SVX_XFILLIT0_HXX
 #include <svx/xfillit0.hxx>
-#endif
-#ifndef _SVX_XFLGRIT_HXX
+#include <svx/xflclit.hxx>
+#include <svx/xfltrit.hxx>
 #include <svx/xflgrit.hxx>
-#endif
-#ifndef _SVX_XBTMPIT_HXX
 #include <svx/xbtmpit.hxx>
-#endif
-#ifndef _SVX_UNOMID_HXX
 #include <svx/unomid.hxx>
-#endif
-#ifndef _SVX_ESCHEREX_HXX
 #include <svx/escherex.hxx>
-#endif
 
-#ifndef SC_SCGLOB_HXX
 #include "global.hxx"
-#endif
-
-#ifndef SC_XLCONST_HXX
 #include "xlconst.hxx"
-#endif
-#ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
-#endif
-#ifndef SC_XLTOOLS_HXX
 #include "xltools.hxx"
-#endif
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::Any;
@@ -134,9 +86,9 @@ XclChRectangle::XclChRectangle() :
 
 // ----------------------------------------------------------------------------
 
-XclChDataPointPos::XclChDataPointPos() :
-    mnSeriesIdx( EXC_CHSERIES_INVALID ),
-    mnPointIdx( EXC_CHDATAFORMAT_ALLPOINTS )
+XclChDataPointPos::XclChDataPointPos( sal_uInt16 nSeriesIdx, sal_uInt16 nPointIdx ) :
+    mnSeriesIdx( nSeriesIdx ),
+    mnPointIdx( nPointIdx )
 {
 }
 
@@ -535,23 +487,25 @@ const sal_Char SERVICE_CHART2_PIE[]     = "com.sun.star.chart2.PieChartType";
 const sal_Char SERVICE_CHART2_SCATTER[] = "com.sun.star.chart2.ScatterChartType";
 const sal_Char SERVICE_CHART2_SURFACE[] = "com.sun.star.chart2.ColumnChartType";    // Todo
 
+namespace csscd = ::com::sun::star::chart::DataLabelPlacement;
+
 static const XclChTypeInfo spTypeInfos[] =
 {
-    // chart type             chart type category      record id           service                 varied point color     combi  3d     3dwall polar  area2d area3d 1stvis xcateg swap   stack  revers betw
-    { EXC_CHTYPEID_BAR,       EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, true,  true,  true,  false, true,  true,  false, true,  false, true,  false, true  },
-    { EXC_CHTYPEID_HORBAR,    EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, false, true,  true,  false, true,  true,  false, true,  true,  true,  false, true  },
-    { EXC_CHTYPEID_LINE,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_LINE,    EXC_CHVARPOINT_SINGLE, true,  true,  true,  false, false, true,  false, true,  false, true,  false, true  },
-    { EXC_CHTYPEID_AREA,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHAREA,      SERVICE_CHART2_AREA,    EXC_CHVARPOINT_NONE,   true,  true,  true,  false, true,  true,  false, true,  false, true,  true,  false },
-    { EXC_CHTYPEID_STOCK,     EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_CANDLE,  EXC_CHVARPOINT_NONE,   true,  false, false, false, false, false, false, true,  false, true,  false, true  },
-    { EXC_CHTYPEID_RADARLINE, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARLINE, SERVICE_CHART2_NET,     EXC_CHVARPOINT_SINGLE, false, false, false, true,  false, true,  false, true,  false, false, false, false },
-    { EXC_CHTYPEID_RADARAREA, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARAREA, SERVICE_CHART2_NET,     EXC_CHVARPOINT_NONE,   false, false, false, true,  true,  true,  false, true,  false, false, false, false },
-    { EXC_CHTYPEID_PIE,       EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  false, true,  false, true,  true,  true,  true,  true,  false, false, false, false },
-    { EXC_CHTYPEID_DONUT,     EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  false, true,  false, true,  true,  true,  false, true,  false, false, true,  false },
-    { EXC_CHTYPEID_PIEEXT,    EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIEEXT,    SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  false, false, false, true,  true,  true,  true,  true,  false, false, false, false },
-    { EXC_CHTYPEID_SCATTER,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER, EXC_CHVARPOINT_SINGLE, true,  false, false, false, false, true,  false, false, false, false, false, false },
-    { EXC_CHTYPEID_BUBBLES,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER, EXC_CHVARPOINT_SINGLE, false, false, false, false, true,  true,  false, false, false, false, false, false },
-    { EXC_CHTYPEID_SURFACE,   EXC_CHTYPECATEG_SURFACE, EXC_ID_CHSURFACE,   SERVICE_CHART2_SURFACE, EXC_CHVARPOINT_NONE,   false, true,  true,  false, true,  true,  false, true,  false, false, false, false },
-    { EXC_CHTYPEID_UNKNOWN,   EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, true,  true,  true,  false, true,  true,  false, true,  false, true,  false, true  }
+    // chart type             chart type category      record id           service                 varied point color     def label combi       3d     3dwall polar  area2d area3d 1stvis xcateg swap   stack  revers betw
+    { EXC_CHTYPEID_BAR,       EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  true,  false, true,  true,  false, true,  false, true,  false, true  },
+    { EXC_CHTYPEID_HORBAR,    EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       false, true,  true,  false, true,  true,  false, true,  true,  true,  false, true  },
+    { EXC_CHTYPEID_LINE,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_LINE,    EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  true,  true,  false, false, true,  false, true,  false, true,  false, true  },
+    { EXC_CHTYPEID_AREA,      EXC_CHTYPECATEG_LINE,    EXC_ID_CHAREA,      SERVICE_CHART2_AREA,    EXC_CHVARPOINT_NONE,   csscd::CENTER,        true,  true,  true,  false, true,  true,  false, true,  false, true,  true,  false },
+    { EXC_CHTYPEID_STOCK,     EXC_CHTYPECATEG_LINE,    EXC_ID_CHLINE,      SERVICE_CHART2_CANDLE,  EXC_CHVARPOINT_NONE,   csscd::RIGHT,         true,  false, false, false, false, false, false, true,  false, true,  false, true  },
+    { EXC_CHTYPEID_RADARLINE, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARLINE, SERVICE_CHART2_NET,     EXC_CHVARPOINT_SINGLE, csscd::TOP,           false, false, false, true,  false, true,  false, true,  false, false, false, false },
+    { EXC_CHTYPEID_RADARAREA, EXC_CHTYPECATEG_RADAR,   EXC_ID_CHRADARAREA, SERVICE_CHART2_NET,     EXC_CHVARPOINT_NONE,   csscd::TOP,           false, false, false, true,  true,  true,  false, true,  false, false, false, false },
+    { EXC_CHTYPEID_PIE,       EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  false, true,  true,  true,  true,  true,  false, false, false, false },
+    { EXC_CHTYPEID_DONUT,     EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIE,       SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, true,  false, true,  true,  true,  false, true,  false, false, true,  false },
+    { EXC_CHTYPEID_PIEEXT,    EXC_CHTYPECATEG_PIE,     EXC_ID_CHPIEEXT,    SERVICE_CHART2_PIE,     EXC_CHVARPOINT_MULTI,  csscd::AVOID_OVERLAP, false, false, false, true,  true,  true,  true,  true,  false, false, false, false },
+    { EXC_CHTYPEID_SCATTER,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER, EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         true,  false, false, false, false, true,  false, false, false, false, false, false },
+    { EXC_CHTYPEID_BUBBLES,   EXC_CHTYPECATEG_SCATTER, EXC_ID_CHSCATTER,   SERVICE_CHART2_SCATTER, EXC_CHVARPOINT_SINGLE, csscd::RIGHT,         false, false, false, false, true,  true,  false, false, false, false, false, false },
+    { EXC_CHTYPEID_SURFACE,   EXC_CHTYPECATEG_SURFACE, EXC_ID_CHSURFACE,   SERVICE_CHART2_SURFACE, EXC_CHVARPOINT_NONE,   csscd::RIGHT,         false, true,  true,  false, true,  true,  false, true,  false, false, false, false },
+    { EXC_CHTYPEID_UNKNOWN,   EXC_CHTYPECATEG_BAR,     EXC_ID_CHBAR,       SERVICE_CHART2_COLUMN,  EXC_CHVARPOINT_SINGLE, csscd::OUTSIDE,       true,  true,  true,  false, true,  true,  false, true,  false, true,  false, true  }
 };
 
 } // namespace
@@ -687,9 +641,9 @@ const sal_Char* const sppcLineNamesFilled[] =
     { "BorderStyle", "BorderWidth", "BorderColor", "BorderTransparency", "BorderDashName", 0 };
 
 /** Property names for solid area style in common objects. */
-const sal_Char* const sppcAreaNamesCommon[] = { "FillStyle", "FillColor", 0 };
+const sal_Char* const sppcAreaNamesCommon[] = { "FillStyle", "FillColor", "FillTransparence", 0 };
 /** Property names for solid area style in filled series objects. */
-const sal_Char* const sppcAreaNamesFilled[] = { "FillStyle", "Color", 0 };
+const sal_Char* const sppcAreaNamesFilled[] = { "FillStyle", "Color", "Transparency", 0 };
 /** Property names for gradient area style in common objects. */
 const sal_Char* const sppcGradNamesCommon[] = {  "FillStyle", "FillGradientName", 0 };
 /** Property names for gradient area style in filled series objects. */
@@ -798,23 +752,27 @@ void XclChPropSetHelper::ReadLineProperties(
     }
 }
 
-void XclChPropSetHelper::ReadAreaProperties( XclChAreaFormat& rAreaFmt,
+bool XclChPropSetHelper::ReadAreaProperties( XclChAreaFormat& rAreaFmt,
         const ScfPropertySet& rPropSet, XclChPropertyMode ePropMode )
 {
     namespace cssd = ::com::sun::star::drawing;
 
     // read properties from property set
     cssd::FillStyle eApiStyle = cssd::FillStyle_NONE;
+    sal_Int16 nTransparency = 0;
 
     ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
     rAreaHlp.ReadFromPropertySet( rPropSet );
-    rAreaHlp >> eApiStyle >> rAreaFmt.maPattColor;
+    rAreaHlp >> eApiStyle >> rAreaFmt.maPattColor >> nTransparency;
 
     // clear automatic flag
     ::set_flag( rAreaFmt.mnFlags, EXC_CHAREAFORMAT_AUTO, false );
 
     // set fill style transparent or solid (set solid for anything but transparent)
     rAreaFmt.mnPattern = (eApiStyle == cssd::FillStyle_NONE) ? EXC_PATT_NONE : EXC_PATT_SOLID;
+
+    // return true to indicate complex fill (gradient, bitmap, solid transparency)
+    return (eApiStyle != cssd::FillStyle_NONE) && ((eApiStyle != cssd::FillStyle_SOLID) || (nTransparency > 0));
 }
 
 void XclChPropSetHelper::ReadEscherProperties(
@@ -825,48 +783,75 @@ void XclChPropSetHelper::ReadEscherProperties(
     namespace cssd = ::com::sun::star::drawing;
     namespace cssa = ::com::sun::star::awt;
 
+    // read style and transparency properties from property set
     cssd::FillStyle eApiStyle = cssd::FillStyle_NONE;
-    if( rPropSet.GetProperty( eApiStyle, EXC_CHPROP_FILLSTYLE ) )
+    Color aColor;
+    sal_Int16 nTransparency = 0;
+
+    ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
+    rAreaHlp.ReadFromPropertySet( rPropSet );
+    rAreaHlp >> eApiStyle >> aColor >> nTransparency;
+
+    switch( eApiStyle )
     {
-        switch( eApiStyle )
+        case cssd::FillStyle_SOLID:
         {
-            case cssd::FillStyle_GRADIENT:
+            DBG_ASSERT( nTransparency > 0, "XclChPropSetHelper::ReadEscherProperties - unexpected solid area without transparency" );
+            if( (0 < nTransparency) && (nTransparency <= 100) )
             {
-                // extract gradient from global gradient table
-                OUString aGradientName;
-                ScfPropSetHelper& rGradHlp = GetGradientHelper( ePropMode );
-                rGradHlp.ReadFromPropertySet( rPropSet );
-                rGradHlp >> eApiStyle >> aGradientName;
-                cssa::Gradient aGradient;
-                if( rGradientTable.GetObject( aGradientName ) >>= aGradient )
-                {
-                    // convert to Escher properties
-                    rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
-                    rEscherFmt.mxEscherSet->CreateGradientProperties( aGradient );
-                }
+                // convert to Escher properties
+                sal_uInt32 nEscherColor = 0x02000000;
+                ::insert_value( nEscherColor, aColor.GetBlue(), 16, 8 );
+                ::insert_value( nEscherColor, aColor.GetGreen(), 8, 8 );
+                ::insert_value( nEscherColor, aColor.GetRed(), 0, 8 );
+                sal_uInt32 nEscherOpacity = static_cast< sal_uInt32 >( (100 - nTransparency) * 655.36 );
+                rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
+                rEscherFmt.mxEscherSet->AddOpt( ESCHER_Prop_fillType, ESCHER_FillSolid );
+                rEscherFmt.mxEscherSet->AddOpt( ESCHER_Prop_fillColor, nEscherColor );
+                rEscherFmt.mxEscherSet->AddOpt( ESCHER_Prop_fillOpacity, nEscherOpacity );
+                rEscherFmt.mxEscherSet->AddOpt( ESCHER_Prop_fillBackColor, 0x02FFFFFF );
+                rEscherFmt.mxEscherSet->AddOpt( ESCHER_Prop_fillBackOpacity, 0x00010000 );
+                rEscherFmt.mxEscherSet->AddOpt( ESCHER_Prop_fNoFillHitTest, 0x001F001C );
             }
-            break;
-            case cssd::FillStyle_HATCH:
-            case cssd::FillStyle_BITMAP:
-            {
-                // extract bitmap URL from global bitmap table
-                OUString aBitmapName;
-                cssd::BitmapMode eApiBmpMode;
-                maBitmapHlp.ReadFromPropertySet( rPropSet );
-                maBitmapHlp >> eApiStyle >> aBitmapName >> eApiBmpMode;
-                OUString aBitmapUrl;
-                if( rBitmapTable.GetObject( aBitmapName ) >>= aBitmapUrl )
-                {
-                    // convert to Escher properties
-                    rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
-                    rEscherFmt.mxEscherSet->CreateEmbeddedBitmapProperties( aBitmapUrl, eApiBmpMode );
-                    rPicFmt.mnBmpMode = (eApiBmpMode == cssd::BitmapMode_REPEAT) ?
-                        EXC_CHPICFORMAT_STACK : EXC_CHPICFORMAT_STRETCH;
-                }
-            }
-            break;
-            default:;
         }
+        break;
+        case cssd::FillStyle_GRADIENT:
+        {
+            // extract gradient from global gradient table
+            OUString aGradientName;
+            ScfPropSetHelper& rGradHlp = GetGradientHelper( ePropMode );
+            rGradHlp.ReadFromPropertySet( rPropSet );
+            rGradHlp >> eApiStyle >> aGradientName;
+            cssa::Gradient aGradient;
+            if( rGradientTable.GetObject( aGradientName ) >>= aGradient )
+            {
+                // convert to Escher properties
+                rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
+                rEscherFmt.mxEscherSet->CreateGradientProperties( aGradient );
+            }
+        }
+        break;
+        case cssd::FillStyle_HATCH:
+        case cssd::FillStyle_BITMAP:
+        {
+            // extract bitmap URL from global bitmap table
+            OUString aBitmapName;
+            cssd::BitmapMode eApiBmpMode;
+            maBitmapHlp.ReadFromPropertySet( rPropSet );
+            maBitmapHlp >> eApiStyle >> aBitmapName >> eApiBmpMode;
+            OUString aBitmapUrl;
+            if( rBitmapTable.GetObject( aBitmapName ) >>= aBitmapUrl )
+            {
+                // convert to Escher properties
+                rEscherFmt.mxEscherSet.reset( new EscherPropertyContainer );
+                rEscherFmt.mxEscherSet->CreateEmbeddedBitmapProperties( aBitmapUrl, eApiBmpMode );
+                rPicFmt.mnBmpMode = (eApiBmpMode == cssd::BitmapMode_REPEAT) ?
+                    EXC_CHPICFORMAT_STACK : EXC_CHPICFORMAT_STRETCH;
+            }
+        }
+        break;
+        default:
+            DBG_ERRORFILE( "XclChPropSetHelper::ReadEscherProperties - unknown fill style" );
     }
 }
 
@@ -1042,21 +1027,22 @@ void XclChPropSetHelper::WriteAreaProperties( ScfPropertySet& rPropSet,
         const XclChAreaFormat& rAreaFmt, XclChPropertyMode ePropMode )
 {
     namespace cssd = ::com::sun::star::drawing;
-    if( rAreaFmt.mnPattern == EXC_PATT_NONE )
-    {
-        rPropSet.SetProperty( EXC_CHPROP_FILLSTYLE, cssd::FillStyle_NONE );
-    }
-    else
-    {
-        // fill color
-        Color aColor = XclTools::GetPatternColor( rAreaFmt.maPattColor, rAreaFmt.maBackColor, rAreaFmt.mnPattern );
+    cssd::FillStyle eFillStyle = cssd::FillStyle_NONE;
+    Color aColor;
+    sal_Int16 nTransparency = 0;
 
-        // write the properties
-        ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
-        rAreaHlp.InitializeWrite();
-        rAreaHlp << cssd::FillStyle_SOLID << aColor;
-        rAreaHlp.WriteToPropertySet( rPropSet );
+    // fill color
+    if( rAreaFmt.mnPattern != EXC_PATT_NONE )
+    {
+        eFillStyle = cssd::FillStyle_SOLID;
+        aColor = XclTools::GetPatternColor( rAreaFmt.maPattColor, rAreaFmt.maBackColor, rAreaFmt.mnPattern );
     }
+
+    // write the properties
+    ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
+    rAreaHlp.InitializeWrite();
+    rAreaHlp << eFillStyle << aColor << nTransparency;
+    rAreaHlp.WriteToPropertySet( rPropSet );
 }
 
 void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
@@ -1070,6 +1056,20 @@ void XclChPropSetHelper::WriteEscherProperties( ScfPropertySet& rPropSet,
         {
             switch( pStyleItem->GetValue() )
             {
+                case XFILL_SOLID:
+                    // #i84812# Excel 2007 writes Escher properties for solid fill
+                    if( const XFillColorItem* pColorItem = static_cast< const XFillColorItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLCOLOR, FALSE ) ) )
+                    {
+                        namespace cssd = ::com::sun::star::drawing;
+                        // get solid transparence too
+                        const XFillTransparenceItem* pTranspItem = static_cast< const XFillTransparenceItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLTRANSPARENCE, FALSE ) );
+                        sal_uInt16 nTransp = pTranspItem ? pTranspItem->GetValue() : 0;
+                        ScfPropSetHelper& rAreaHlp = GetAreaHelper( ePropMode );
+                        rAreaHlp.InitializeWrite();
+                        rAreaHlp << cssd::FillStyle_SOLID << pColorItem->GetColorValue() << static_cast< sal_Int16 >( nTransp );
+                        rAreaHlp.WriteToPropertySet( rPropSet );
+                    }
+                break;
                 case XFILL_GRADIENT:
                     if( const XFillGradientItem* pGradItem = static_cast< const XFillGradientItem* >( rEscherFmt.mxItemSet->GetItem( XATTR_FILLGRADIENT, FALSE ) ) )
                     {
