@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.44 $
+#   $Revision: 1.45 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-14 13:01:21 $
+#   last change: $Author: rt $ $Date: 2008-01-29 15:11:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,8 @@ IDLFILES=\
     UnoControlEditModel.idl\
     UnoControlFileControl.idl\
     UnoControlFileControlModel.idl\
+    UnoControlFixedHyperlink.idl\
+    UnoControlFixedHyperlinkModel.idl\
     UnoControlFixedLine.idl\
     UnoControlFixedLineModel.idl\
     UnoControlFixedText.idl\
@@ -241,6 +243,7 @@ IDLFILES=\
     XEventHandler.idl\
     XExtendedToolkit.idl\
     XFileDialog.idl\
+    XFixedHyperlink.idl\
     XFixedText.idl\
     XFocusListener.idl\
     XFont.idl\
