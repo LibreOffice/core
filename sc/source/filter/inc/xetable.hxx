@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xetable.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:56:57 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -485,6 +485,7 @@ private:
 private:
     XclExpStringRef     mxText;         /// The cell text.
     sal_uInt32          mnSstIndex;     /// Index into Shared String Table (only used for BIFF8).
+    bool                mbLineBreak;    /// True = cell has automatic linebreaks enabled.
 };
 
 // ----------------------------------------------------------------------------
@@ -924,7 +925,7 @@ public:
     inline bool         IsEnabled() const { return mbEnabled; }
 
     /** Appends the passed cell object to this row. */
-    void                AppendCell( XclExpCellRef xCell );
+    void                AppendCell( XclExpCellRef xCell, bool bIsMergedBase );
 
     /** Converts all XF identifiers into the Excel XF indexes. */
     void                Finalize( const ScfUInt16Vec& rColXFIndexes );
@@ -956,7 +957,7 @@ private:
     /** Initializes the record data. Called from constructors. */
     void                Init( sal_uInt16 nXclRow, XclExpRowOutlineBuffer* pOutlineBfr );
     /** Inserts a cell at the specified list position, tries to merge with neighbors. */
-    void                InsertCell( XclExpCellRef xCell, size_t nPos );
+    void                InsertCell( XclExpCellRef xCell, size_t nPos, bool bIsMergedBase );
 
     /** Writes the contents of the ROW record. */
     virtual void        WriteBody( XclExpStream& rStrm );
@@ -988,7 +989,7 @@ public:
     explicit            XclExpRowBuffer( const XclExpRoot& rRoot );
 
     /** Appends the passed cell object to the row that the cell specifies. */
-    void                AppendCell( XclExpCellRef xCell );
+    void                AppendCell( XclExpCellRef xCell, bool bIsMergedBase );
     /** Forces insertion of all ROW records before the passed row. */
     void                CreateRows( SCROW nFirstFreeScRow );
 
