@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:53:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:20:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -69,6 +67,7 @@
 #include "chartlis.hxx"
 #include "fillinfo.hxx"
 #include "bcaslot.hxx"
+#include "postit.hxx"
 #include "globstr.hrc"
 
 // STATIC DATA -----------------------------------------------------------
@@ -1601,7 +1600,9 @@ void ScTable::UnlockTable()
     if (nLockCount)
         --nLockCount;
     else
+    {
         DBG_ERROR("UnlockTable ohne LockTable");
+    }
 }
 
 
@@ -1916,7 +1917,9 @@ void ScTable::SetColWidth( SCCOL nCol, USHORT nNewWidth )
         }
     }
     else
+    {
         DBG_ERROR("Falsche Spaltennummer oder keine Breiten");
+    }
 }
 
 
@@ -1943,7 +1946,9 @@ void ScTable::SetRowHeight( SCROW nRow, USHORT nNewHeight )
         }
     }
     else
+    {
         DBG_ERROR("Falsche Zeilennummer oder keine Hoehen");
+    }
 }
 
 
@@ -2023,7 +2028,9 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
             SetDrawPageSize();
     }
     else
+    {
         DBG_ERROR("Falsche Zeilennummer oder keine Hoehen");
+    }
 
     return bChanged;
 }
@@ -2039,7 +2046,9 @@ void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, BOOL bManual )
             pRowFlags->AndValue( nStartRow, nEndRow, sal::static_int_cast<BYTE>(~CR_MANUALSIZE));
     }
     else
+    {
         DBG_ERROR("Falsche Zeilennummer oder keine Zeilenflags");
+    }
 }
 
 
@@ -2222,7 +2231,9 @@ void ScTable::ShowCol(SCCOL nCol, BOOL bShow)
         }
     }
     else
+    {
         DBG_ERROR("Falsche Spaltennummer oder keine Flags");
+    }
 }
 
 
@@ -2257,7 +2268,9 @@ void ScTable::ShowRow(SCROW nRow, BOOL bShow)
         }
     }
     else
+    {
         DBG_ERROR("Falsche Zeilennummer oder keine Flags");
+    }
 }
 
 
@@ -2299,7 +2312,9 @@ void ScTable::DBShowRow(SCROW nRow, BOOL bShow)
         }
     }
     else
+    {
         DBG_ERROR("Falsche Zeilennummer oder keine Flags");
+    }
 }
 
 
@@ -2415,7 +2430,9 @@ void ScTable::SetColFlags( SCCOL nCol, BYTE nNewFlags )
     if (VALIDCOL(nCol) && pColFlags)
         pColFlags[nCol] = nNewFlags;
     else
+    {
         DBG_ERROR("Falsche Spaltennummer oder keine Flags");
+    }
 }
 
 
@@ -2424,7 +2441,9 @@ void ScTable::SetRowFlags( SCROW nRow, BYTE nNewFlags )
     if (VALIDROW(nRow) && pRowFlags)
         pRowFlags->SetValue( nRow, nNewFlags);
     else
+    {
         DBG_ERROR("Falsche Zeilennummer oder keine Flags");
+    }
 }
 
 
@@ -2433,7 +2452,9 @@ void ScTable::SetRowFlags( SCROW nStartRow, SCROW nEndRow, BYTE nNewFlags )
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && pRowFlags)
         pRowFlags->SetValue( nStartRow, nEndRow, nNewFlags);
     else
+    {
         DBG_ERROR("Falsche Zeilennummer(n) oder keine Flags");
+    }
 }
 
 
@@ -3263,7 +3284,9 @@ ULONG ScTable::GetRowOffset( SCROW nRow ) const
 #endif
     }
     else
+    {
         DBG_ERROR("GetRowOffset: Daten fehlen");
+    }
     return n;
 }
 
@@ -3281,7 +3304,9 @@ ULONG ScTable::GetColOffset( SCCOL nCol ) const
                 n += *pWidth;
     }
     else
+    {
         DBG_ERROR("GetColumnOffset: Daten fehlen");
+    }
     return n;
 }
 
