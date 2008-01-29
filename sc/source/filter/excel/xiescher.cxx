@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:37:20 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:27:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,188 +38,73 @@
 
 #include <stdio.h>
 
-#ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
-#endif
 
-#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
 #include <com/sun/star/beans/NamedValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_ASPECTS_HPP_
 #include <com/sun/star/embed/Aspects.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XEMBEDDEDOBJECT_HPP_
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
-#endif
-#ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
 #include <com/sun/star/embed/XEmbedPersist.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
 #include <com/sun/star/awt/VisualEffect.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
 #include <com/sun/star/style/VerticalAlignment.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
 #include <com/sun/star/form/binding/XBindableValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XVALUEBINDING_HPP_
 #include <com/sun/star/form/binding/XValueBinding.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSINK_HPP_
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSOURCE_HPP_
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
-#endif
 
-#ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
-#endif
-#ifndef _SFX_OBJSH_HXX
 #include <sfx2/objsh.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
-#endif
-#ifndef _SVT_FLTRCFG_HXX
 #include <svtools/fltrcfg.hxx>
-#endif
-#ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
-#endif
-#ifndef _COMPHELPER_CLASSIDS_HXX
 #include <comphelper/classids.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
 #include <toolkit/helper/vclunohelper.hxx>
-#endif
 
-#ifndef _SB_SBSTAR_HXX
 #include <basic/sbstar.hxx>
-#endif
-#ifndef _SB_SBMOD_HXX
 #include <basic/sbmod.hxx>
-#endif
-#ifndef _SB_SBMETH_HXX
 #include <basic/sbmeth.hxx>
-#endif
 
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVDOGRP_HXX
 #include <svx/svdogrp.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
-#endif
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-#ifndef _EDITOBJ_HXX
 #include <svx/editobj.hxx>
-#endif
-#ifndef _OUTLINER_HXX
 #include <svx/outliner.hxx>
-#endif
-#ifndef _OUTLOBJ_HXX
 #include <svx/outlobj.hxx>
-#endif
-#ifndef _SVDOUNO_HXX
 #include <svx/svdouno.hxx>
-#endif
-#ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
-#endif
-#ifndef _SVDITER_HXX
 #include <svx/svditer.hxx>
-#endif
-#ifndef _SVX_WRITINGMODEITEM_HXX
 #include <svx/writingmodeitem.hxx>
-#endif
-#ifndef _SVDOEDGE_HXX
 #include <svx/svdoedge.hxx>
-#endif
 
-#ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
-#endif
 #include <svx/eeitem.hxx>
-#ifndef _SVX_COLRITEM_HXX
 #include <svx/colritem.hxx>
-#endif
-#ifndef _SVX_XFLCLIT_HXX
 #include <svx/xflclit.hxx>
-#endif
-#ifndef _SVX_ADJITEM_HX
 #include <svx/adjitem.hxx>
-#endif
 
-#ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
-#endif
-#ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
-#endif
-#ifndef SC_USERDAT_HXX
 #include "userdat.hxx"
-#endif
-#ifndef SC_CHARTARR_HXX
 #include "chartarr.hxx"
-#endif
-#ifndef SC_DETFUNC_HXX
 #include "detfunc.hxx"
-#endif
-#ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
-#endif
-#ifndef SC_CONVUNO_HXX
 #include "convuno.hxx"
-#endif
-#ifndef __GLOBSTR_HRC_
+#include "postit.hxx"
 #include "globstr.hrc"
-#endif
 
-#ifndef SC_FPROGRESSBAR_HXX
 #include "fprogressbar.hxx"
-#endif
-#ifndef SC_XLOCX_HXX
 #include "xlocx.hxx"
-#endif
-#ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
-#endif
-#ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
-#endif
-#ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
-#endif
-#ifndef SC_XIFORMULA_HXX
 #include "xiformula.hxx"
-#endif
-#ifndef SC_XILINK_HXX
 #include "xilink.hxx"
-#endif
-#ifndef SC_XISTYLE_HXX
 #include "xistyle.hxx"
-#endif
-#ifndef SC_XIPAGE_HXX
 #include "xipage.hxx"
-#endif
-#ifndef SC_XICHART_HXX
 #include "xichart.hxx"
-#endif
-#ifndef SC_XICONTENT_HXX
 #include "xicontent.hxx"
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
@@ -1581,7 +1466,9 @@ void XclImpDffManager::ProcessDrawingGroup( SvStream& rEscherStrm )
     if( aHeader.nRecType == DFF_msofbtDggContainer )
         ProcessDggContainer( rEscherStrm, aHeader );
     else
+    {
         DBG_ERRORFILE( "XclImpDffManager::ProcessDrawingGroup - unexpected record" );
+    }
 }
 
 void XclImpDffManager::ProcessDrawing( SvStream& rEscherStrm, sal_Size nStrmPos )
@@ -1592,7 +1479,9 @@ void XclImpDffManager::ProcessDrawing( SvStream& rEscherStrm, sal_Size nStrmPos 
     if( aHeader.nRecType == DFF_msofbtDgContainer )
         ProcessDgContainer( rEscherStrm, aHeader );
     else
+    {
         DBG_ERRORFILE( "XclImpDffManager::ProcessDrawing - unexpected record" );
+    }
 }
 
 void XclImpDffManager::ProcessTabChart( const XclImpChartObj& rChartObj )
