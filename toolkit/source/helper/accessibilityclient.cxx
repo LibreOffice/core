@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibilityclient.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 11:51:33 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:06:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,6 +126,11 @@ namespace toolkit
         }
         ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
                 createAccessibleContext( VCLXListBox* /*_pXWindow*/ )
+        {
+            return NULL;
+        }
+        ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+                createAccessibleContext( VCLXFixedHyperlink* /*_pXWindow*/ )
         {
             return NULL;
         }
