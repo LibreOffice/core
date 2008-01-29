@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkinst.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-08-30 13:55:37 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:37:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,14 +216,14 @@ SalFrame* GtkInstance::CreateChildFrame( SystemParentData* pParentData, ULONG )
     return pFrame;
 }
 
-SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData )
+SalObject* GtkInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow )
 {
     // there is no method to set a visual for a GtkWidget
     // so we need the X11SalObject in that case
     if( pWindowData )
-        return X11SalObject::CreateObject( pParent, pWindowData );
+        return X11SalObject::CreateObject( pParent, pWindowData, bShow );
 
-    return new GtkSalObject( static_cast<GtkSalFrame*>(pParent) );
+    return new GtkSalObject( static_cast<GtkSalFrame*>(pParent), bShow );
 }
 
 GtkYieldMutex::GtkYieldMutex()
