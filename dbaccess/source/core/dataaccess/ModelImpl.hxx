@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:51:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:18:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,9 +388,10 @@ public:
 public:
     // IMacroDocumentAccess overridables
     virtual sal_Int16 getImposedMacroExecMode() const;
+    virtual sal_Bool setImposedMacroExecMode( sal_uInt16 );
     virtual ::rtl::OUString getDocumentLocation() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > getLastCommitDocumentStorage();
-    virtual bool documentStorageHasMacros() const;
+    virtual sal_Bool documentStorageHasMacros() const;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XEmbeddedScripts > getEmbeddedDocumentScripts() const;
     virtual sal_Int16 getScriptingSignatureState() const;
     virtual void showBrokenSignatureWarning( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction ) const;
