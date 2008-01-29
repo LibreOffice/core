@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:20:20 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:16:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,6 +226,7 @@ struct ImplSVGDIData
     vcl::DefaultFontConfiguration* mpDefaultFontConfiguration;
     vcl::FontSubstConfiguration* mpFontSubstConfiguration;
     bool                    mbPrinterPullModel; // true: use pull model instead of normal push model when printing
+    bool                    mbNativeFontConfig; // true: do not override UI font
 };
 
 
@@ -300,6 +301,7 @@ struct ImplSVHelpData
     BOOL                    mbAutoHelpId        : 1;    // generate HelpIds
     BOOL                    mbRequestingHelp    : 1;    // In Window::RequestHelp
     HelpTextWindow*         mpHelpWin;                  // HelpWindow
+    ULONG                   mnLastHelpHideTime;         // ticks of last show
 };
 
 struct ImplSVNWFData
