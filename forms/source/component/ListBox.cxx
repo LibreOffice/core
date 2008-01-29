@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 17:16:39 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:39:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -318,7 +318,6 @@ namespace frm
                 // listbox is already connected to a database, and no external list source
                 // data source changed -> refresh
                 loadData();
-
             break;
 
         case PROPERTY_ID_VALUE_SEQ :
@@ -613,31 +612,29 @@ namespace frm
         m_nNULLPos = -1;
         m_bBoundComponent = sal_False;
 
-        // Connection holen
-        Reference<XRowSet> xForm(m_xCursor, UNO_QUERY);
-        if (!xForm.is())
-            return;
-        Reference<XConnection> xConnection = getConnection(xForm);
-        if (!xConnection.is())
-            return;
+        // pre-requisites:
+        // PRE1: connection
+        Reference< XConnection > xConnection;
+        // is the active connection of our form
+        Reference< XPropertySet > xFormProps( m_xCursor, UNO_QUERY );
+        if ( xFormProps.is() )
+            xFormProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConnection;
 
-        // we need a com::sun::star::sdb::Connection for some of the code below ...
-        Reference<XServiceInfo> xServiceInfo(xConnection, UNO_QUERY);
-        if (!xServiceInfo.is() || !xServiceInfo->supportsService(SRV_SDB_CONNECTION))
+        // PRE2: list source
+        ::rtl::OUString sListSource;
+        // if our list source type is no value list, we need to concatenete
+        // the single list source elements
+        const ::rtl::OUString* pListSourceItem = m_aListSourceSeq.getConstArray();
+        sal_Int32 i(0);
+        for ( i=0; i<m_aListSourceSeq.getLength(); ++i, ++pListSourceItem )
+            sListSource = sListSource + *pListSourceItem;
+
+        // outta here if we don't have all pre-requisites
+        if ( !xConnection.is() || !sListSource.getLength() )
         {
-            DBG_ERROR("OListBoxModel::loadData : invalid connection !");
+            m_aValueSeq = StringSequence();
             return;
         }
-
-        // Wenn der ListSourceType keine Werteliste ist,
-        // muss die String-Seq zu einem String zusammengefasst werden
-        ::rtl::OUString sListSource;
-        const ::rtl::OUString* pustrListSouceStrings = m_aListSourceSeq.getConstArray();
-        sal_Int32 i;
-        for (i=0; i<m_aListSourceSeq.getLength(); ++i)
-            sListSource = sListSource + pustrListSouceStrings[i];
-        if (!sListSource.getLength())
-            return;
 
         sal_Int16 nBoundColumn = 0;
         if (m_aBoundColumn.getValueType().getTypeClass() == TypeClass_SHORT)
@@ -691,10 +688,9 @@ namespace frm
                             Reference<XSQLQueryComposer> xComposer = xFactory->createQueryComposer();
                             try
                             {
-                                Reference<XPropertySet> xFormAsSet(xForm, UNO_QUERY);
                                 ::rtl::OUString aStatement;
-                                xFormAsSet->getPropertyValue(PROPERTY_ACTIVECOMMAND) >>= aStatement;
-                                xComposer->setQuery(aStatement);
+                                xFormProps->getPropertyValue( PROPERTY_ACTIVECOMMAND ) >>= aStatement;
+                                xComposer->setQuery( aStatement );
                             }
                             catch(Exception&)
                             {
@@ -814,7 +810,7 @@ namespace frm
                     if ( !xDataField.is() )
                         return;
 
-                    ::dbtools::FormattedColumnValue aValueFormatter( getContext(), xForm, xDataField );
+                    ::dbtools::FormattedColumnValue aValueFormatter( getContext(), m_xCursor, xDataField );
 
                     // Feld der BoundColumn des ResultSets holen
                     Reference<XColumn> xBoundField;
@@ -890,15 +886,15 @@ namespace frm
         }
 
         m_aValueSeq.realloc(aValueList.size());
-        ::rtl::OUString* pustrValues = m_aValueSeq.getArray();
-        for (i = 0; i < (sal_Int32)aValueList.size(); ++i)
-            pustrValues[i] = aValueList[i];
+        ::rtl::OUString* pValues = m_aValueSeq.getArray();
+        for ( i = 0; i < (sal_Int32)aValueList.size(); ++i, ++pValues)
+            *pValues = aValueList[i];
 
         // String-Sequence fuer ListBox erzeugen
         StringSequence aStringSeq(aStringList.size());
-        ::rtl::OUString* pustrStrings = aStringSeq.getArray();
-        for (i = 0; i < (sal_Int32)aStringList.size(); ++i)
-            pustrStrings[i] = aStringList[i];
+        ::rtl::OUString* pStrings = aStringSeq.getArray();
+        for ( i = 0; i < (sal_Int32)aStringList.size(); ++i, ++pStrings )
+            *pStrings = aStringList[i];
 
         setFastPropertyValue(PROPERTY_ID_STRINGITEMLIST, makeAny(aStringSeq));
     }
@@ -910,9 +906,6 @@ namespace frm
 
         if ( m_eListSourceType != ListSourceType_VALUELIST )
         {
-            if ( hasField() )
-                m_aValueSeq = StringSequence();
-
             if ( m_xCursor.is() )
                 loadData();
         }
@@ -966,15 +959,7 @@ namespace frm
 
         if (nSelCount)
         {
-            StringSequence  aValues;
-            if ( m_aValueSeq.getLength() )
-            {
-                aValues = m_aValueSeq;
-            }
-            else
-            {
-                aValues = getStringItemList();
-            }
+            StringSequence aValues( impl_getValues() );
 
             const ::rtl::OUString *pVals    = aValues.getConstArray();
             sal_Int32 nValCnt               = aValues.getLength();
@@ -1061,15 +1046,7 @@ namespace frm
         {
             m_aSaveValue <<= sValue;
 
-            // In der Werteliste nur einzelne Werte suchen, wenn das Control mit einem Datenbankfeld verbunden ist
-            if ( m_aValueSeq.getLength() )  // value list
-            {
-                aSelSeq = findValue( m_aValueSeq, sValue, m_bBoundComponent );
-            }
-            else
-            {
-                aSelSeq = findValue( getStringItemList(), sValue, m_bBoundComponent );
-            }
+            aSelSeq = findValue( impl_getValues(), sValue, m_bBoundComponent );
         }
         return makeAny( aSelSeq );
     }
