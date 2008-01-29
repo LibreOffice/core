@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salobj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 10:20:46 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:39:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,12 +74,12 @@
 // =======================================================================
 // SalInstance member to create and destroy a SalObject
 
-SalObject* X11SalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData )
+SalObject* X11SalInstance::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow )
 {
-    return X11SalObject::CreateObject( pParent, pWindowData );
+    return X11SalObject::CreateObject( pParent, pWindowData, bShow );
 }
 
-X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData )
+X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* pWindowData, BOOL bShow )
 {
     int error_base, event_base;
     X11SalObject*       pObject  = new X11SalObject();
@@ -183,8 +183,10 @@ X11SalObject* X11SalObject::CreateObject( SalFrame* pParent, SystemWindowData* p
     }
 
     pSalDisp->GetXLib()->PushXErrorLevel( true );
-    XMapWindow( pDisp, pObject->maPrimary );
-    XMapWindow( pDisp, pObject->maSecondary );
+    if( bShow ) {
+        XMapWindow( pDisp, pObject->maSecondary );
+        XMapWindow( pDisp, pObject->maPrimary );
+    }
 
     pObjData->pDisplay      = pDisp;
     pObjData->aWindow       = pObject->maSecondary;
@@ -421,13 +423,17 @@ X11SalObject::Show( BOOL bVisible )
     if  ( ! maSystemChildData.aWindow )
         return;
 
-    if ( bVisible )
+    if ( bVisible ) {
+        XMapWindow( (Display*)maSystemChildData.pDisplay,
+                    maSecondary );
         XMapWindow( (Display*)maSystemChildData.pDisplay,
                     maPrimary );
-    else
+    } else {
         XUnmapWindow( (Display*)maSystemChildData.pDisplay,
-                    maPrimary );
-
+                      maPrimary );
+        XUnmapWindow( (Display*)maSystemChildData.pDisplay,
+                      maSecondary );
+    }
     mbVisible = bVisible;
 }
 
