@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atklistener.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 13:02:12 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:19:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,7 @@ void AtkListener::handleChildAdded(
 
     if( pChild )
     {
+        atk_object_set_parent( pChild, mpAccessible );
         updateChildList(rxParent.get());
         g_signal_emit_by_name( mpAccessible, "children_changed::add",
             atk_object_get_index_in_parent( pChild ), pChild, NULL );
@@ -181,6 +182,7 @@ void AtkListener::handleChildRemoved(
         AtkObject * pChild = atk_object_wrapper_ref( rxChild, false );
         if( pChild )
         {
+            atk_object_set_parent( pChild, atk_get_root() );
             g_signal_emit_by_name( mpAccessible, "children_changed::remove", nIndex, pChild, NULL );
             g_object_unref( pChild );
         }
@@ -201,6 +203,7 @@ void AtkListener::handleInvalidateChildren(
             AtkObject * pChild = atk_object_wrapper_ref( m_aChildList[n], false );
             if( pChild )
             {
+                atk_object_set_parent( pChild, atk_get_root() );
                 g_signal_emit_by_name( mpAccessible, "children_changed::remove", n, pChild, NULL );
                 g_object_unref( pChild );
             }
@@ -219,6 +222,7 @@ void AtkListener::handleInvalidateChildren(
 
             if( pChild )
             {
+                atk_object_set_parent( pChild, mpAccessible );
                 g_signal_emit_by_name( mpAccessible, "children_changed::add", n, pChild, NULL );
                 g_object_unref( pChild );
             }
