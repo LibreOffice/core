@@ -1,13 +1,13 @@
-﻿<?xml version='1.0' encoding='utf-8'?>
+<?xml version='1.0' encoding='utf-8'?>
 <!--***********************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: BasicIDEWindowState.xcu,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-26 16:40:43 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:12:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,9 @@
                     <value>true</value>
                 </prop>
                 <prop oor:name="NoClose" oor:type="xs:boolean">
+                    <value>true</value>
+                </prop>
+                <prop oor:name="ContextSensitive" oor:type="xs:boolean">
                     <value>true</value>
                 </prop>
             </node>
