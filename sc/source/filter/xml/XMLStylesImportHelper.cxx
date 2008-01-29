@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:46:58 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:35:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,7 +374,9 @@ ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const rtl::OUString*
     if (pStyleNameP)
         aStyle.sStyleName = *pStyleNameP;
     else
+    {
         DBG_ERROR("here is no stylename given");
+    }
     ScMyStylesSet::iterator aItr(aCellStyles.find(aStyle));
     if (aItr == aCellStyles.end())
     {
@@ -427,10 +429,14 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
                 AddSingleRange(aRange);
             }
             else
+            {
                 DBG_ERRORFILE("no column default style");
+            }
         }
         else
+        {
             DBG_ERRORFILE("to much columns");
+        }
     }
     else
     {
