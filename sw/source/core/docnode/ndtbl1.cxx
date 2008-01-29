@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:49:23 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:38:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,8 +158,15 @@ void lcl_GetStartEndCell( const SwCursor& rCrsr,
         aMkPos = pShCrsr->GetMkPos();
     }
 
-    prStart = rCrsr.GetCntntNode()->GetFrm( &aPtPos )->GetUpper();
-    prEnd   = rCrsr.GetCntntNode(FALSE)->GetFrm( &aMkPos )->GetUpper();
+    // robust:
+    SwCntntNode* pPointNd = rCrsr.GetCntntNode();
+    SwCntntNode* pMarkNd  = rCrsr.GetCntntNode(FALSE);
+
+    SwFrm* pPointFrm = pPointNd ? pPointNd->GetFrm( &aPtPos ) : 0;
+    SwFrm* pMarkFrm  = pMarkNd  ? pMarkNd->GetFrm( &aMkPos )  : 0;
+
+    prStart = pPointFrm ? pPointFrm->GetUpper() : 0;
+    prEnd   = pMarkFrm  ? pMarkFrm->GetUpper() : 0;
 }
 
 BOOL lcl_GetBoxSel( const SwCursor& rCursor, SwSelBoxes& rBoxes,
@@ -1495,8 +1502,11 @@ void SwDoc::AdjustCellWidth( const SwCursor& rCursor, BOOL bBalance )
 
     //TabCols besorgen, den ueber diese stellen wir die Tabelle neu ein.
     SwFrm* pBoxFrm = pStart;
-    while( !pBoxFrm->IsCellFrm() )
+    while( pBoxFrm && !pBoxFrm->IsCellFrm() )
         pBoxFrm = pBoxFrm->GetUpper();
+
+    if ( !pBoxFrm )
+        return; // robust
 
     SwTabCols aTabCols;
     GetTabCols( aTabCols, 0, (SwCellFrm*)pBoxFrm );
