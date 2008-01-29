@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:50:51 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:17:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1099,6 +1099,24 @@ sal_Int16 ODatabaseModelImpl::getImposedMacroExecMode() const
 }
 
 // -----------------------------------------------------------------------------
+sal_Bool ODatabaseModelImpl::setImposedMacroExecMode( sal_uInt16 nMacroMode )
+{
+    try
+    {
+        ::comphelper::NamedValueCollection aArgs( m_aArgs );
+        aArgs.put( "MacroExecutionMode", nMacroMode );
+        aArgs >>= m_aArgs;
+        return sal_True;
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
+
+    return sal_False;
+}
+
+// -----------------------------------------------------------------------------
 ::rtl::OUString ODatabaseModelImpl::getDocumentLocation() const
 {
     // don't return getURL() (or m_sRealFileURL, which is the same). In case we were recovered
@@ -1116,7 +1134,7 @@ Reference< XStorage > ODatabaseModelImpl::getLastCommitDocumentStorage()
 }
 
 // -----------------------------------------------------------------------------
-bool ODatabaseModelImpl::documentStorageHasMacros() const
+sal_Bool ODatabaseModelImpl::documentStorageHasMacros() const
 {
     // does our root storage contain macros?
     if ( ::sfx2::DocumentMacroMode::storageHasMacros( m_xStorage ) )
