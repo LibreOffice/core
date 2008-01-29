@@ -4,9 +4,9 @@
  *
  *  $RCSfile: syschild.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:22:04 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:37:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,9 +128,9 @@ long ImplSysChildProc( void* pInst, SalObject* /* pObject */,
 
 // =======================================================================
 
-void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData )
+void SystemChildWindow::ImplInitSysChild( Window* pParent, WinBits nStyle, SystemWindowData *pData, BOOL bShow )
 {
-    mpWindowImpl->mpSysObj = ImplGetSVData()->mpDefInst->CreateObject( pParent->ImplGetFrame(), pData );
+    mpWindowImpl->mpSysObj = ImplGetSVData()->mpDefInst->CreateObject( pParent->ImplGetFrame(), pData, bShow );
 
     Window::ImplInit( pParent, nStyle, NULL );
 
@@ -153,10 +153,10 @@ SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle ) :
 
 // -----------------------------------------------------------------------
 
-SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData ) :
+SystemChildWindow::SystemChildWindow( Window* pParent, WinBits nStyle, SystemWindowData *pData, BOOL bShow ) :
     Window( WINDOW_SYSTEMCHILDWINDOW )
 {
-    ImplInitSysChild( pParent, nStyle, pData );
+    ImplInitSysChild( pParent, nStyle, pData, bShow );
 }
 
 // -----------------------------------------------------------------------
