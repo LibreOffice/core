@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpsort.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:27:37 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:43:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,8 @@
 
 //------------------------------------------------------------------------
 
-#define SC_MAXFIELDS    200
+// +1 because one field is reserved for the "- undefined -" entry
+#define SC_MAXFIELDS    MAXCOLCOUNT+1
 
 class ScViewData;
 class ScSortDlg;
