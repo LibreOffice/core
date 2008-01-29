@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenContext.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:27:23 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:00:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,6 +164,6 @@ void TokenContext::Characters( const ::rtl::OUString& rCharacters )
     const sal_Unicode* pEnd = &( pBegin[ rCharacters.getLength() ] );
 
     // raise error if non-whitespace character is found
-    if( find_if( pBegin, pEnd, not1(ptr_fun(lcl_IsWhiteSpace)) ) != pEnd )
+    if( ::std::find_if( pBegin, pEnd, ::std::not1(::std::ptr_fun(lcl_IsWhiteSpace)) ) != pEnd )
         GetImport().SetError( XMLERROR_UNKNOWN_CHARACTERS, rCharacters );
 }
