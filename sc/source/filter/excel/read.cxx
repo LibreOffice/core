@@ -4,9 +4,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 13:45:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:25:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -771,12 +771,12 @@ FltError ImportExcel::Read( void )
 
     if( eLastErr == eERR_OK )
     {
-        pD->CalcAfterLoad();
-
         pProgress.reset();
 
         AdjustRowHeight();
         PostDocLoad();
+
+        pD->CalcAfterLoad();
 
         const XclImpAddressConverter& rAddrConv = GetAddressConverter();
         if( rAddrConv.IsTabTruncated() )
@@ -1197,12 +1197,12 @@ FltError ImportExcel8::Read( void )
         if( GetBiff() == EXC_BIFF8 )
             GetPivotTableManager().ConvertPivotTables();
 
-        pD->CalcAfterLoad();
-
         pProgress.reset();
 
         AdjustRowHeight();
         PostDocLoad();
+
+        pD->CalcAfterLoad();
 
         // import change tracking data
         XclImpChangeTrack aImpChTr( GetRoot(), maStrm );
