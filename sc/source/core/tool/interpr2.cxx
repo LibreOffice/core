@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:35:26 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:22:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
 #include <svx/linkmgr.hxx>
@@ -62,6 +60,7 @@
 #include "globstr.hrc"
 #include "hints.hxx"
 #include "dpobject.hxx"
+#include "postit.hxx"
 
 // STATIC DATA -----------------------------------------------------------
 
