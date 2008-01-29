@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:29:24 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:28:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1684,9 +1684,6 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
             delete pMedium;
             throw frame::IllegalArgumentIOException();
         }
-
-        // allow to use an interactionhandler (if there is one)
-        pMedium->UseInteractionHandler( TRUE );
 
         // !TODO: currently not working
         //SFX_ITEMSET_ARG( pParams, pFrameItem, SfxFrameItem, SID_DOCFRAME, FALSE );
