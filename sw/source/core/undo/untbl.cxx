@@ -4,9 +4,9 @@
  *
  *  $RCSfile: untbl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:25:41 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:39:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #ifndef _DOC_HXX
 #include <doc.hxx>
 #endif
+#include <editsh.hxx>
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
@@ -2227,73 +2228,17 @@ void SwUndoTblMerge::Redo( SwUndoIter& rUndoIter )
     rDoc.MergeTbl( *pPam );
 }
 
-
-void SwUndoTblMerge::MoveBoxCntnt( SwPaM& rPam, SwPosition& rPos,
-                                    const _SaveFlyArr& rArr )
-{
-    SwDoc* pDoc = rPam.GetDoc();
-    SwNodeIndex aIdx( rPam.GetPoint()->nNode );
-    SwNode* pNd = &aIdx.GetNode();
-
-    // alle verschobenen Flys in der History vom Move-Object merken.
-    // Hier erstmal zwischenspeichern, damit die alten NodeIdx richtig sind
-    SwHistory aHst;
-    for( USHORT n = 0; n < rArr.Count(); ++n )
-        aHst.Add( *rArr[ n ].pFrmFmt );
-
-    SwUndoMove* pUndoMove;
-
-    if( pDoc->Move( rPam, rPos, IDocumentContentOperations::DOC_MOVEREDLINES ) )
-        pUndoMove = (SwUndoMove*)pDoc->RemoveLastUndo( UNDO_MOVE );
-    else
-    {
-        // wir muessen das Undo Object haben!
-        pUndoMove = new SwUndoMove( rPam, rPos );
-        SwPaM aPam( rPos );
-        pUndoMove->SetDestRange( aPam, rPos, FALSE, FALSE );
-    }
-    ASSERT( pUndoMove, "falsches Undo-Object" );
-
-    // alle verschobenen Flys in der History vom Move-Object merken
-    if( aHst.Count() )
-        pUndoMove->AddTblMrgFlyHstry( aHst );
-
-    pMoves->Insert( pUndoMove, pMoves->Count() );
-
-    const SwStartNode* pBoxNd = pNd->FindTableBoxStartNode();
-    ULONG nDelNds = pBoxNd->EndOfSectionIndex() - pBoxNd->GetIndex();
-    if( 2 < nDelNds )
-    {
-        // es darf nur ein Textnode in der Box verbleiben!
-        rPam.DeleteMark();
-
-        // Indizies aus dem Bereich loeschen
-        {
-            pDoc->CorrAbs( SwNodeIndex( *pBoxNd ),
-                            SwNodeIndex( *pBoxNd->EndOfSectionNode() ),
-                            SwPosition( aIdx,
-                                SwIndex( pNd->GetCntntNode(), 0 )), TRUE );
-        }
-
-//      rPam.GetBound1().nNode = rPam.GetBound2().nNode = aIdx;
-        if( aIdx.GetIndex() - 1  != pBoxNd->GetIndex() )
-        {
-            SwNodeIndex aTmp( *pBoxNd, 1 );
-            pDoc->GetNodes().Delete( aTmp, aIdx.GetIndex() - aTmp.GetIndex() );
-        }
-        aIdx++;
-        pDoc->GetNodes().Delete( aIdx, pBoxNd->EndOfSectionIndex() - aIdx.GetIndex() );
-    }
-}
-
-
 void SwUndoTblMerge::MoveBoxCntnt( SwDoc* pDoc, SwNodeRange& rRg, SwNodeIndex& rPos )
 {
     SwNodeIndex aTmp( rRg.aStart, -1 ), aTmp2( rPos, -1 );
     SwUndoMove* pUndo = new SwUndoMove( pDoc, rRg, rPos );
+    sal_Bool bDoesUndo = pDoc->DoesUndo();
+    pDoc->DoUndo( sal_False );
     pDoc->Move( rRg, rPos, pSaveTbl->IsNewModel() ?
         IDocumentContentOperations::DOC_NO_DELFRMS :
         IDocumentContentOperations::DOC_MOVEDEFAULT );
+    if( bDoesUndo )
+        pDoc->DoUndo( sal_True );
     aTmp++;
     aTmp2++;
     pUndo->SetDestRange( aTmp2, rPos, aTmp );
