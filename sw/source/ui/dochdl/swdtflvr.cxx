@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 16:36:12 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1842,7 +1842,10 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
                 if( SOT_FORMAT_RTF == nFmt )
                     pRead = ReadRtf;
                 else if( !pRead )
+                {
                     pRead = ReadHTML;
+                    pRead->SetReadUTF8( TRUE );
+                }
             }
         }
         break;
