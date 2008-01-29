@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocrsrhelper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:15:22 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:22:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@ namespace com{ namespace sun{ namespace star{
     namespace uno{
         class Any;
     }
+    namespace beans{
+        struct PropertyValue;
+    }
 }}}
 /* -----------------------------14.12.00 15:06--------------------------------
 
@@ -73,10 +76,9 @@ namespace SwUnoCursorHelper
 
     void                        resetCrsrPropertyValue(const SfxItemPropertyMap* pMap, SwPaM& rPam);
     void                        InsertFile(SwUnoCrsr* pUnoCrsr,
-                                    const String& rFileName,
-                                    const String& rFilterName,
-                                    const String& rFilterOption,
-                                    const String& rPassword);
+                                    const String& rURL,
+                                    const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rOptions
+                                    ) throw( com::sun::star::lang::IllegalArgumentException, com::sun::star::io::IOException, com::sun::star::uno::RuntimeException );
 
     void                        getNumberingProperty(
                                     SwPaM& rPam,
