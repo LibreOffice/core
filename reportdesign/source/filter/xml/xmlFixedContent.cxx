@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlFixedContent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:01:24 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:45:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@
 #ifndef _COM_SUN_STAR_REPORT_XSHAPE_HPP_
 #include <com/sun/star/report/XShape.hpp>
 #endif
+#include <com/sun/star/report/XFormattedField.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #ifndef RPT_XMLTABLE_HXX
 #include "xmlTable.hxx"
@@ -158,10 +159,11 @@ OXMLFixedContent::OXMLFixedContent( ORptFilter& rImport,
                 sal_uInt16 nPrfx, const ::rtl::OUString& rLName
                 ,OXMLCell& _rCell
                 ,OXMLTable* _pContainer
-                ,bool _bInP) :
+                ,OXMLFixedContent* _pInP) :
     OXMLReportElementBase( rImport, nPrfx, rLName,NULL,_pContainer)
 ,m_rCell(_rCell)
-,m_bInP(_bInP)
+,m_pInP(_pInP)
+,m_bFormattedField(false)
 {
     DBG_CTOR( rpt_OXMLFixedContent,NULL);
 }
@@ -182,6 +184,8 @@ SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
     SvXMLImportContext *pContext = OXMLReportElementBase::_CreateChildContext(nPrefix,rLocalName,xAttrList);
     if ( pContext )
         return pContext;
+
+    static const ::rtl::OUString s_sStringConcat(RTL_CONSTASCII_USTRINGPARAM(" & "));
     const SvXMLTokenMap&    rTokenMap   = m_rImport.GetCellElemTokenMap();
     Reference<XMultiServiceFactory> xFactor = m_rImport.getServiceFactory();
 
@@ -190,7 +194,7 @@ SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
     switch( nToken )
     {
         case XML_TOK_P:
-            pContext = new OXMLFixedContent(m_rImport,nPrefix, rLocalName,m_rCell,m_pContainer,true);
+            pContext = new OXMLFixedContent(m_rImport,nPrefix, rLocalName,m_rCell,m_pContainer,this);
             break;
         case XML_TOK_TEXT_TAB_STOP:
             pContext = new OXMLCharContent( m_rImport, this,nPrefix,
@@ -209,21 +213,46 @@ SvXMLImportContext* OXMLFixedContent::_CreateChildContext(
                                                 rLocalName, xAttrList,
                                                 0x0020, sal_True );
             break;
+        case XML_TOK_PAGE_NUMBER:
+            m_sPageText += s_sStringConcat + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PageNumber()"));
+            m_bFormattedField = true;
+            break;
+        case XML_TOK_PAGE_COUNT:
+            m_sPageText += s_sStringConcat + ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" PageCount()"));
+            m_bFormattedField = true;
+            break;
+        default:
+            ;
     }
     return pContext;
 }
 // -----------------------------------------------------------------------------
 void OXMLFixedContent::EndElement()
 {
-    if ( m_bInP )
+    if ( m_pInP )
     {
         const Reference<XMultiServiceFactory> xFactor(m_rImport.GetModel(),uno::UNO_QUERY);
-        Reference< XFixedText > xControl(xFactor->createInstance(SERVICE_FIXEDTEXT),uno::UNO_QUERY);
-        OSL_ENSURE(xControl.is(),"Could not create FixedContent!");
-        m_xComponent = xControl.get();
+        if ( m_bFormattedField )
+        {
+            uno::Reference< uno::XInterface> xInt = xFactor->createInstance(SERVICE_FORMATTEDFIELD);
+            Reference< report::XFormattedField > xControl(xInt,uno::UNO_QUERY);
+            xControl->setDataField(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("rpt:")) + m_sPageText);
+             OSL_ENSURE(xControl.is(),"Could not create FormattedField!");
+            m_pInP->m_xComponent = xControl.get();
+            m_xComponent = xControl.get();
+        }
+        else
+        {
+            Reference< XFixedText > xControl(xFactor->createInstance(SERVICE_FIXEDTEXT),uno::UNO_QUERY);
+             OSL_ENSURE(xControl.is(),"Could not create FixedContent!");
+            m_pInP->m_xComponent = xControl.get();
+            m_xComponent = xControl.get();
+            xControl->setLabel(m_sLabel);
+        }
+
         m_pContainer->addCell(m_xComponent);
         m_rCell.setComponent(m_xComponent);
-        xControl->setLabel(m_sLabel);
+
         OXMLReportElementBase::EndElement();
     }
 }
@@ -231,6 +260,17 @@ void OXMLFixedContent::EndElement()
 void OXMLFixedContent::Characters( const ::rtl::OUString& rChars )
 {
     m_sLabel += rChars;
+    if ( rChars.getLength() )
+    {
+        static const ::rtl::OUString s_Quote(RTL_CONSTASCII_USTRINGPARAM("\""));
+        if ( m_sPageText.getLength() )
+        {
+            static const ::rtl::OUString s_sStringConcat(RTL_CONSTASCII_USTRINGPARAM(" & "));
+            m_sPageText += s_sStringConcat;
+        }
+
+        m_sPageText += s_Quote + rChars + s_Quote;
+    }
 }
 
 //----------------------------------------------------------------------------
