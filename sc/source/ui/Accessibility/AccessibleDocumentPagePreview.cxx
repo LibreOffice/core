@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:59:44 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:39:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,107 +36,45 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-#ifndef _SC_ACCESSIBLEDOCUMENTPAGEPREVIEW_HXX
 #include "AccessibleDocumentPagePreview.hxx"
-#endif
-#ifndef _SC_ACCESSIBLEPREVIEWTABLE_HXX
 #include "AccessiblePreviewTable.hxx"
-#endif
-#ifndef _SC_ACCESSIBLEPAGEHEADER_HXX
 #include "AccessiblePageHeader.hxx"
-#endif
-#ifndef SC_ACCESSIBILITYHINTS_HXX
 #include "AccessibilityHints.hxx"
-#endif
-#ifndef _SC_ACCESSIBLETEXT_HXX
 #include "AccessibleText.hxx"
-#endif
-#ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
-#endif
-#ifndef SC_PREVWSH_HXX
 #include "prevwsh.hxx"
-#endif
-#ifndef SC_PREVLOC_HXX
 #include "prevloc.hxx"
-#endif
-#ifndef SC_UNOGUARD_HXX
 #include "unoguard.hxx"
-#endif
-#ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
-#endif
-#ifndef SC_EDITSRC_HXX
 #include "editsrc.hxx"
-#endif
-#ifndef SC_SCRESID_HXX
 #include "scresid.hxx"
-#endif
-#ifndef SC_SC_HRC
 #include "sc.hrc"
-#endif
-#ifndef _SC_DRAWMODELBROADCASTER_HXX
 #include "DrawModelBroadcaster.hxx"
-#endif
-#ifndef SC_DOCSHELL_HXX
 #include "docsh.hxx"
-#endif
-#ifndef SC_DRAWVIEW_HXX
 #include "drawview.hxx"
-#endif
-#ifndef SC_PREVIEW_HXX
 #include "preview.hxx"
-#endif
+#include "postit.hxx"
 
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESTATETYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleStateType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLERELATIONTYPE_HPP_
 #include <com/sun/star/accessibility/AccessibleRelationType.hpp>
-#endif
 
-#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
-#endif
-#ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
-#endif
-#ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
-#endif
-#ifndef _SVDPAGE_HXX
 #include <svx/svdpage.hxx>
-#endif
-#ifndef _SVDOBJ_HXX
 #include <svx/svdobj.hxx>
-#endif
-#ifndef _SVX_ACCESSILE_TEXT_HELPER_HXX_
 #include <svx/AccessibleTextHelper.hxx>
-#endif
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_HXX
 #include <svx/AccessibleShape.hxx>
-#endif
-#ifndef _SVX_ACCESSIBILITY_SHAPE_TYPE_HANDLER_HXX
 #include <svx/ShapeTypeHandler.hxx>
-#endif
-#ifndef _TOOLKIT_HELPER_CONVERT_HXX_
 #include <toolkit/helper/convert.hxx>
-#endif
-#ifndef _SVX_UNOSHAPE_HXX
 #include <svx/unoshape.hxx>
-#endif
-#ifndef _UTL_ACCESSIBLERELATIONSETHELPER_HXX_
 #include <unotools/accessiblerelationsethelper.hxx>
-#endif
 
-#include<vector>
-#include<list>
-#include<algorithm>
-#include<memory>
+#include <vector>
+#include <list>
+#include <algorithm>
+#include <memory>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::accessibility;
@@ -323,7 +261,9 @@ uno::Reference<XAccessible> ScNotesChilds::GetChild(sal_Int32 nIndex) const
                 DBG_ASSERT((aItr->maNoteCell == maMarks[nIndex].maNoteCell) && (aItr->mbMarkNote == maMarks[nIndex].mbMarkNote), "wrong note found");
             }
             else
+            {
                 DBG_ERRORFILE("wrong note found");
+            }
             if (!aItr->mpTextHelper)
                 aItr->mpTextHelper = CreateTextHelper(maMarks[nIndex].maNoteText, maMarks[nIndex].maRect, maMarks[nIndex].maNoteCell, maMarks[nIndex].mbMarkNote, nIndex + mnOffset); // the marks are the first and every mark has only one paragraph
             xAccessible = aItr->mpTextHelper->GetChild(aParaFound.mnIndex + aItr->mpTextHelper->GetStartIndex());
