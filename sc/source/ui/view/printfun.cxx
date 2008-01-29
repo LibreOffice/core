@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:56:37 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:50:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,10 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
-
 
 #include "printfun.hxx"
 
@@ -65,13 +62,8 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/progress.hxx>
 #include <tools/multisel.hxx>
-#ifndef _SFXDOCFILE_HXX //autogen
 #include <sfx2/docfile.hxx>
-#endif
-#ifndef _URLOBJ_HXX //autogen
 #include <tools/urlobj.hxx>
-#endif
-
 #include <svx/xoutbmp.hxx>
 
 #include "editutil.hxx"
@@ -96,7 +88,7 @@
 #include "scmod.hxx"
 #include "drwlayer.hxx"
 #include "fillinfo.hxx"
-
+#include "postit.hxx"
 
 
 #define ZOOM_MIN    10
