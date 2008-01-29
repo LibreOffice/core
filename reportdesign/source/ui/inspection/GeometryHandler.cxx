@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GeometryHandler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:10:40 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:49:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -920,7 +920,7 @@ inspection::LineDescriptor SAL_CALL GeometryHandler::describePropertyLine(const 
             aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::ColorListBox, sal_False );
             break;
         case PROPERTY_ID_CHARFONTNAME:
-            aOut.PrimaryButtonId = UID_RPT_PROP_DLG_FONT_TYPE;
+            aOut.PrimaryButtonId = UID_RPT_RPT_PROP_DLG_FONT_TYPE;
             aOut.Control = _xControlFactory->createPropertyControl( inspection::PropertyControlType::TextField, sal_True );
             aOut.HasPrimaryButton = sal_True;
             break;
