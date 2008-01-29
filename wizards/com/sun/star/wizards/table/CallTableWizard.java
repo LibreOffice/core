@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CallTableWizard.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 12:53:13 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,9 @@
  ************************************************************************/
 package com.sun.star.wizards.table;
 
+import com.sun.star.beans.PropertyAttribute;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.lang.XComponent;
 import com.sun.star.uno.Type;
 import com.sun.star.wizards.common.Properties;
 
@@ -81,27 +83,41 @@ public class CallTableWizard {
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    public static class TableWizardImplementation implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.lang.XTypeProvider, com.sun.star.task.XJobExecutor {
+    public static class TableWizardImplementation extends com.sun.star.lib.uno.helper.PropertySet implements com.sun.star.lang.XInitialization, com.sun.star.lang.XServiceInfo, com.sun.star.lang.XTypeProvider, com.sun.star.task.XJobExecutor {
 
         PropertyValue[] databaseproperties;
+        public XComponent Document = null;
+        public XComponent DocumentDefinition = null;
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param xmultiservicefactoryInitialization A special service factory
          * could be introduced while initializing.
          */
         public TableWizardImplementation(com.sun.star.lang.XMultiServiceFactory xmultiservicefactoryInitialization) {
+            super();
             xmultiservicefactory = xmultiservicefactoryInitialization;
+            registerProperty("Document", (short)(PropertyAttribute.READONLY|PropertyAttribute.MAYBEVOID));
+            registerProperty("DocumentDefinition", (short)(PropertyAttribute.READONLY|PropertyAttribute.MAYBEVOID));
         }
 
         public void trigger(String sEvent) {
             try {
-                com.sun.star.frame.XComponentLoader xcomponentloader = (com.sun.star.frame.XComponentLoader) com.sun.star.uno.UnoRuntime.queryInterface(com.sun.star.frame.XComponentLoader.class, xmultiservicefactory.createInstance("com.sun.star.frame.Desktop"));
                 if (sEvent.compareTo("start") == 0) {
                     TableWizard CurTableWizard = new TableWizard(xmultiservicefactory);
-                    CurTableWizard.startTableWizard(xmultiservicefactory, databaseproperties);
+                    XComponent[] obj = CurTableWizard.startTableWizard(xmultiservicefactory, databaseproperties);
+                    if ( obj != null ){
+                        DocumentDefinition = obj[1];
+                        Document = obj[0];
+                    }
+                }
+                else if (sEvent.compareTo("end") == 0) {
+                    DocumentDefinition = null;
+                    Document = null;
+                    databaseproperties = null;
                 }
             } catch (Exception exception) {
                 System.err.println(exception);
             }
+            System.gc();
         }
 
         /** The service name, that must be used to get an instance of this service.
