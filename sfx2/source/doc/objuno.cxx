@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objuno.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 16:34:38 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:28:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,7 @@ SfxItemPropertyMap aDocInfoPropertyMap_Impl[] =
     { "MIMEType"        , 8 , WID_CONTENT_TYPE,   &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND | ::com::sun::star::beans::PropertyAttribute::READONLY, 0 },
     { "ModifiedBy"      , 10, MID_DOCINFO_MODIFICATIONAUTHOR, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "ModifyDate"      , 10, WID_DATE_MODIFIED,  &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
+    { "ODFVersion"      , 10, SID_VERSION,   &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "PrintDate"       , 9 , MID_DOCINFO_PRINTDATE, &::getCppuType((const ::com::sun::star::util::DateTime*)0),PROPERTY_MAYBEVOID, 0 },
     { "PrintedBy"       , 9 , MID_DOCINFO_PRINTEDBY, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
     { "Subject"         , 7 , MID_DOCINFO_SUBJECT, &::getCppuType((const ::rtl::OUString*)0), PROPERTY_UNBOUND, 0 },
@@ -396,6 +397,7 @@ struct SfxDocumentInfoObject_Impl
     ::rtl::OUString     aReloadURL;             // MID_DOCINFO_AUTOLOADURL
     ::rtl::OUString     aDefaultTarget;         // MID_DOCINFO_DEFAULTTARGET
     ::rtl::OUString     aGenerator;             // SID_APPLICATION
+    ::rtl::OUString     aODFVersion;
     sal_Int32           nEditTime;              // MID_DOCINFO_EDITTIME
     sal_Int32           nReloadSecs;            // MID_DOCINFO_AUTOLOADSECS
     sal_Int16           nRevision;              // MID_DOCINFO_REVISION
@@ -426,6 +428,8 @@ struct SfxDocumentInfoObject_Impl
             sTitle.SearchAndReplace( sVar, String::CreateFromInt32(i+1) );
             aUserKeys[i].First = sTitle;
         }
+
+        aODFVersion = ::rtl::OUString::createFromAscii("1.1");
     }
 
     void Reset();
@@ -938,6 +942,9 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
                     bModified = sal_True;
                 _pImp->aMediaType = sTemp;
                 break;
+            case SID_VERSION:
+                _pImp->aODFVersion = sTemp;
+                break;
             default:
                 bModified = sal_False;
                 break;
@@ -1205,6 +1212,9 @@ void SAL_CALL  SfxDocumentInfoObject::setFastPropertyValue(sal_Int32 nHandle, co
             break;
         case MID_DOCINFO_AUTOLOADURL:
             aValue <<= _pImp->aReloadURL;
+            break;
+        case SID_VERSION:
+            aValue <<= _pImp->aODFVersion;
             break;
         case MID_DOCINFO_AUTOLOADSECS:
             aValue <<= _pImp->nReloadSecs;
