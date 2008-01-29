@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WizardDialog.java,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:32:56 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:44:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,7 +31,8 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.ui;
+ ************************************************************************/
+package com.sun.star.wizards.ui;
 
 import java.beans.*;
 
@@ -72,7 +73,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     XItemEventBroadcaster xRoadmapBroadcaster;
     String[] sRMItemLabels;
     private Object oRoadmap;
-    private Object oRoadmapControl;
     private XSingleServiceFactory xSSFRoadmap;
     public XIndexContainer xIndexContRoadmap;
     private Resource oWizardResource;
@@ -208,10 +208,10 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             //    xPropRoadmapModel.addPropertyChangeListener("CurrentItemID", new WizardDialog.RoadmapItemListener(this.xDialogModel));
 
             MethodInvocation mi = new MethodInvocation("itemStateChanged", this, com.sun.star.awt.ItemEvent.class);
-            guiEventListener.add("rdmNavi", EventNames.EVENT_ITEM_CHANGED, mi);
+            getGuiEventListener().add("rdmNavi", EventNames.EVENT_ITEM_CHANGED, mi);
             xRoadmapControl = this.xDlgContainer.getControl("rdmNavi");
             xRoadmapBroadcaster = (XItemEventBroadcaster) UnoRuntime.queryInterface(XItemEventBroadcaster.class, xRoadmapControl);
-            xRoadmapBroadcaster.addItemListener((XItemListener) guiEventListener);
+            xRoadmapBroadcaster.addItemListener((XItemListener) getGuiEventListener());
 
             //     xRoadmapControl = this.xDlgContainer.getControl("rdmNavi");
             //     xRoadmapBroadcaster.addItemListener(new RoadmapItemListener());
@@ -388,9 +388,9 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             // if the user used "escape" key to
             // close the dialog.
             MethodInvocation windowHidden = new MethodInvocation("windowHidden", this);
-            xWindow.addWindowListener((CommonListener)guiEventListener);
+            xWindow.addWindowListener((CommonListener)getGuiEventListener());
             String dialogName = (String)Helper.getUnoPropertyValue( xDialogModel, "Name" );
-            guiEventListener.add( dialogName, EVENT_ACTION_PERFORMED , windowHidden);
+            getGuiEventListener().add( dialogName, EVENT_ACTION_PERFORMED , windowHidden);
 
         } catch (java.lang.Exception jexception) {
             jexception.printStackTrace(System.out);
@@ -559,7 +559,6 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
     }
 
-    private boolean wizardClosed = false;
     /**
      * called by the cancel button and
      * by the window hidden event.
