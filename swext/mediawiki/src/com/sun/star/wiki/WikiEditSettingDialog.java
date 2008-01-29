@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-28 13:48:00 $
+ *  last change: $Author: mav $ $Date: 2008-01-29 11:01:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,7 @@ public class WikiEditSettingDialog extends WikiDialog
                             else
                             {
                                 if ( ( sUserName.length() > 0 || sPassword.length() > 0 )
-                                  && Helper.Login( new URI( sMainURL ), sUserName, sPassword, "sun", m_xContext ) == null )
+                                  && Helper.Login( new URI( sMainURL ), sUserName, sPassword, m_xContext ) == null )
                                 {
                                     // a wrong login information is provided
                                     // show error

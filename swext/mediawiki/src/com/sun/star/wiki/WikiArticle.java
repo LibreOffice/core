@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiArticle.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-13 15:11:05 $
+ *  last change: $Author: mav $ $Date: 2008-01-29 11:01:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@ public class WikiArticle
 
     protected String m_sWikiUser;
     protected String m_sWikiPass;
-    protected String m_sWikiDomain = "sun";
 
     protected String m_sTitle = "";
 
@@ -268,7 +267,7 @@ public class WikiArticle
     protected boolean Login()
         throws com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
     {
-        m_aHostConfig = Helper.Login( m_aMainURI, m_sWikiUser, m_sWikiPass, m_sWikiDomain, m_xContext );
+        m_aHostConfig = Helper.Login( m_aMainURI, m_sWikiUser, m_sWikiPass, m_xContext );
         return ( m_aHostConfig != null );
     }
 

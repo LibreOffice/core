@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-28 13:47:59 $
+ *  last change: $Author: mav $ $Date: 2008-01-29 11:01:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -696,24 +696,19 @@ public class Helper
             }
 
             boolean bNoUnknownCertNotification = false;
-            if ( aHostConfig.getProtocol().getScheme().equals( "https" ) &&  m_aAcceptedUnknownCerts != null )
+            if ( aHostConfig.getProtocol().getScheme().equals( "https" ) && AllowUnknownCert( xContext, aURI.toString() ) )
             {
-                Boolean bAccepted = (Boolean)m_aAcceptedUnknownCerts.get( aHostConfig.getHost() );
-                bNoUnknownCertNotification = ( bAccepted != null && bAccepted.booleanValue() );
-            }
-
-            if ( !bNoUnknownCertNotification )
-            {
-                Helper.GetHttpClient().executeMethod( aHostConfig, aMethod );
-            }
-            else
-            {
+                // let unknown certificates be accepted
                 {
                     {
                         aHostConfig.setHost( aHostConfig.getHost(), ( aURI.getPort() < 0 ? 443 : aURI.getPort() ), Helper.GetOwnHttps( aURI.getPort() ) );
                         Helper.GetHttpClient().executeMethod( aHostConfig, aMethod );
                     }
                 }
+            }
+            else
+            {
+                Helper.GetHttpClient().executeMethod( aHostConfig, aMethod );
             }
         }
     }
@@ -755,12 +750,12 @@ public class Helper
         return bResult;
     }
 
-    static protected HostConfiguration Login( URI aMainURL, String sWikiUser, String sWikiPass, String sWikiDomain, XComponentContext xContext )
+    static protected HostConfiguration Login( URI aMainURL, String sWikiUser, String sWikiPass, XComponentContext xContext )
         throws com.sun.star.uno.Exception, java.io.IOException, WikiCancelException
     {
         HostConfiguration aHostConfig = null;
 
-        if ( sWikiUser != null && sWikiUser.length() > 0 && sWikiPass != null && sWikiDomain != null && xContext != null )
+        if ( sWikiUser != null && sWikiUser.length() > 0 && sWikiPass != null && xContext != null )
         {
             HostConfiguration aNewHostConfig = new HostConfiguration();
 
@@ -781,7 +776,11 @@ public class Helper
                 aPost.addParameter( "wpName", sWikiUser );
                 aPost.addParameter( "wpRemember", "1" );
                 aPost.addParameter( "wpPassword", sWikiPass );
-                aPost.addParameter( "wpDomain", sWikiDomain );
+                String[][] pArgs = GetSpecialArgs( xContext, aMainURL.toString() );
+                if ( pArgs != null )
+                    for ( int nArgInd = 0; nArgInd < pArgs.length; nArgInd++ )
+                        if ( pArgs[nArgInd].length == 2 && pArgs[nArgInd][0] != null && pArgs[nArgInd][1] != null )
+                            aPost.addParameter( pArgs[nArgInd][0], pArgs[nArgInd][1] );
 
                 ExecuteMethod( aPost, aNewHostConfig, aPostURI, xContext, false );
 
@@ -970,6 +969,63 @@ public class Helper
         }
 
         return bResult;
+    }
+
+    private static boolean AllowUnknownCert( XComponentContext xContext, String aURL )
+    {
+        try
+        {
+            XNameAccess xNameAccess = GetConfigNameAccess( xContext, "org.openoffice.Office.Custom.WikiExtension/SpecialData" );
+            if ( xNameAccess.hasByName( aURL ) )
+            {
+                XNameAccess xEntry = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class, xNameAccess.getByName( aURL ) );
+                if ( xEntry != null && xEntry.hasByName( "AllowUnknownCertificate" ) )
+                    return AnyConverter.toBoolean( xEntry.getByName( "AllowUnknownCertificate" ) );
+            }
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    private static String[][] GetSpecialArgs( XComponentContext xContext, String aURL )
+    {
+        try
+        {
+            XNameAccess xNameAccess = GetConfigNameAccess( xContext, "org.openoffice.Office.Custom.WikiExtension/SpecialData" );
+            if ( xNameAccess.hasByName( aURL ) )
+            {
+                XNameAccess xEntry = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class, xNameAccess.getByName( aURL ) );
+                if ( xEntry != null )
+                {
+                    XNameAccess xArgs = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class, xEntry.getByName( "AdditionalLoginArguments" ) );
+                    if ( xArgs != null )
+                    {
+                        String[] pNames = xArgs.getElementNames();
+                        if ( pNames != null && pNames.length > 0 )
+                        {
+                            String[][] pResult = new String[pNames.length][2];
+                            for ( int nInd = 0; nInd < pNames.length; nInd++ )
+                            {
+                                pResult[nInd][0] = pNames[nInd];
+                                pResult[nInd][1] = AnyConverter.toString( xArgs.getByName( pNames[nInd] ) );
+                            }
+
+                            return pResult;
+                        }
+                    }
+                }
+            }
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
 

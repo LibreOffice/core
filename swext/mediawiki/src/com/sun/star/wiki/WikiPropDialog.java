@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-28 13:48:00 $
+ *  last change: $Author: mav $ $Date: 2008-01-29 11:01:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,8 +344,10 @@ public class WikiPropDialog extends WikiDialog{
             {
                 Helper.ShowError( m_xContext,
                                   m_xDialog,
+                                  Helper.DLG_SENDTITLE,
                                   Helper.CANCELSENDING_ERROR,
-                                  null );
+                                  null,
+                                  false );
             }
 
             return true;
