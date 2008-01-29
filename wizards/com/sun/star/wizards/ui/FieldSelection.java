@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldSelection.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 15:32:08 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:43:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,7 +31,8 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.ui;
+ ************************************************************************/
+package com.sun.star.wizards.ui;
 import com.sun.star.awt.FontDescriptor;
 import com.sun.star.awt.XListBox;
 import com.sun.star.wizards.common.*;
