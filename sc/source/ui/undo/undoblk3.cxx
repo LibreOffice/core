@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:39:03 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:44:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-
-
-//----------------------------------------------------------------------------
 
 // INCLUDE -------------------------------------------------------------------
 
@@ -68,6 +65,7 @@
 #include "dociter.hxx"
 #include "cell.hxx"
 #include "paramisc.hxx"
+#include "postit.hxx"
 
 // STATIC DATA ---------------------------------------------------------------
 
@@ -1204,7 +1202,9 @@ void __EXPORT ScUndoReplace::Undo()
                           aCursorPos.Tab(), aNote);
         }
         else
+        {
             DBG_ERROR("ScUndoReplace: Hier ist keine Notizzelle");
+        }
         if (pViewShell)
             pViewShell->MoveCursorAbs( aCursorPos.Col(), aCursorPos.Row(),
                                        SC_FOLLOW_JUMP, FALSE, FALSE );
