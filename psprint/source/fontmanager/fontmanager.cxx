@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:17:02 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:08:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,6 +183,8 @@ static weight::type parseWeight( const ByteString& rWeight )
         else
             eWeight = weight::Bold;
     }
+    else if( rWeight.Search( "heavy" ) != STRING_NOTFOUND )
+        eWeight = weight::Bold;
     else if( rWeight.Search( "light" ) != STRING_NOTFOUND )
     {
         if( rWeight.Search( "emi" ) != STRING_NOTFOUND ) // semi, demi
@@ -1214,7 +1216,7 @@ PrintFontManager::PrintFontManager() :
         m_pAtoms( new MultiAtomProvider() ),
         m_nNextDirAtom( 1 ),
         m_pFontCache( NULL ),
-    m_bFontconfigSuccess(false)
+        m_bFontconfigSuccess( false )
 {
     for( unsigned int i = 0; i < sizeof( aAdobeCodes )/sizeof( aAdobeCodes[0] ); i++ )
     {
