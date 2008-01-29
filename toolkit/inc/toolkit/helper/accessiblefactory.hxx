@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblefactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 10:06:14 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:04:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ class VCLXButton;
 class VCLXCheckBox;
 class VCLXRadioButton;
 class VCLXListBox;
+class VCLXFixedHyperlink;
 class VCLXFixedText;
 class VCLXScrollBar;
 class VCLXEdit;
@@ -99,6 +100,11 @@ namespace toolkit
         */
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
             createAccessibleContext( VCLXListBox* _pXWindow ) = 0;
+
+        /** creates an accessible context for a fixed hyperlink window
+        */
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext >
+            createAccessibleContext( VCLXFixedHyperlink* _pXWindow ) = 0;
 
         /** creates an accessible context for a fixed text window
         */
