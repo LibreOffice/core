@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpusrlst.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:36:21 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:44:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,7 +350,9 @@ void ScTpUserLists::UpdateEntries( USHORT nList )
         aEdEntries.SetText( aEntryListStr );
     }
     else
+    {
         DBG_ERROR( "Invalid ListIndex :-/" );
+    }
 }
 
 // -----------------------------------------------------------------------
