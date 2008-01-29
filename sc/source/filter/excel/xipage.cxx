@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xipage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:51:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:27:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,7 +252,9 @@ void XclImpPageSettings::ReadBitmap( XclImpStream& rStrm )
             }
         }
         else
+        {
             DBG_ERRORFILE( "XclImpPageSettings::ReadBitmap - record size invalid" );
+        }
     }
 }
 
