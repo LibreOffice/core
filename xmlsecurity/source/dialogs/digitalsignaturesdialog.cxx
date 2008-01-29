@@ -4,9 +4,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:17:39 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:54:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -422,7 +422,17 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             //First we try to get the certificate which is embedded in the XML Signature
             if (rInfo.ouX509Certificate.getLength())
                 xCert = xSecEnv->createCertificateFromAscii(rInfo.ouX509Certificate);
+            else
+                //There must be an embedded certificate because we use it to get the
+                //issuer name. We cannot use /Signature/KeyInfo/X509Data/X509IssuerName
+                //because it could be modified by an attacker. The issuer is displayed
+                //in the digital signature dialog.
+                //Comparing the X509IssuerName with the one from the X509Certificate in order
+                //to find out if the X509IssuerName was modified does not work. See #i62684
+                DBG_ASSERT(sal_False, "Could not find embedded certificate!");
+
             //In case there is no embedded certificate we try to get it from a local store
+            //Todo: This probably could be removed, see above.
             if (!xCert.is())
                 xCert = xSecEnv->getCertificate( rInfo.ouX509IssuerName, numericStringToBigInteger( rInfo.ouX509SerialNumber ) );
 
@@ -458,7 +468,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
                 }
 
                 aSubject = XmlSec::GetContentPart( xCert->getSubjectName() );
-                aIssuer = XmlSec::GetContentPart( rInfo.ouX509IssuerName );
+                aIssuer = XmlSec::GetContentPart( xCert->getIssuerName() );
                 // --> PB 2004-10-12 #i20172# String with date and time information
                 aDateTimeStr = XmlSec::GetDateTimeString( rInfo.stDateTime );
             }
