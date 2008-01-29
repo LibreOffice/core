@@ -6,9 +6,9 @@
  *
  *  $RCSfile: propbrw.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:02:24 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:49:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,8 @@ public:
     inline OSectionView*    GetCurView() const { return m_pView; }
     ::rtl::OUString         getCurrentPage() const;
     inline void             setCurrentPage(const ::rtl::OUString& _sLastActivePage) { m_sLastActivePage = _sLastActivePage; }
+
+    ::Size getMinimumSize() const;
 private:
     using Window::Update;
 };

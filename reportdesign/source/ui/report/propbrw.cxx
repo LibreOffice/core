@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propbrw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 10:05:03 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:52:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -424,7 +424,7 @@ void PropBrw::implSetNewObject( const uno::Sequence< Reference<uno::XInterface> 
         m_xBrowserController->inspect(uno::Sequence< Reference<uno::XInterface> >());
         m_xBrowserController->inspect(_aObjects);
 
-        Resize();
+        //Resize();
     }
     SetText( GetHeadlineName(_aObjects) );
 }
@@ -520,6 +520,21 @@ uno::Reference< uno::XInterface> PropBrw::CreateComponentPair(const uno::Referen
 
     return xNameCont.get();
 }
+// -----------------------------------------------------------------------------
+::Size PropBrw::getMinimumSize() const
+{
+    ::Size aSize;
+    Reference< awt::XLayoutConstrains > xLayoutConstrains( m_xBrowserController, UNO_QUERY );
+    if( xLayoutConstrains.is() )
+    {
+        awt::Size aMinSize = xLayoutConstrains->getMinimumSize();
+        aMinSize.Height += 4;
+        aMinSize.Width += 4;
+        aSize.setHeight( aMinSize.Height );
+        aSize.setWidth( aMinSize.Width );
+    }
+    return aSize;
+}
 //----------------------------------------------------------------------------
 void PropBrw::Resize()
 {
@@ -528,23 +543,18 @@ void PropBrw::Resize()
     Reference< awt::XLayoutConstrains > xLayoutConstrains( m_xBrowserController, UNO_QUERY );
     if( xLayoutConstrains.is() )
     {
-        ::Size aSize;
-        awt::Size aMinSize = xLayoutConstrains->getMinimumSize();
-        aMinSize.Height += 4;
-        aMinSize.Width += 4;
-        aSize.setHeight( aMinSize.Height );
-        aSize.setWidth( aMinSize.Width );
-        SetMinOutputSizePixel( aSize );
-        aSize = GetOutputSizePixel();
+        ::Size aMinSize = getMinimumSize();
+        SetMinOutputSizePixel( aMinSize );
+        ::Size aSize = GetOutputSizePixel();
         sal_Bool bResize = sal_False;
-        if( aSize.Width() < aMinSize.Width )
+        if( aSize.Width() < aMinSize.Width() )
         {
-            aSize.setWidth( aMinSize.Width );
+            aSize.setWidth( aMinSize.Width() );
             bResize = sal_True;
         }
-        if( aSize.Height() < aMinSize.Height )
+        if( aSize.Height() < aMinSize.Height() )
         {
-            aSize.setHeight( aMinSize.Height );
+            aSize.setHeight( aMinSize.Height() );
             bResize = sal_True;
         }
         if( bResize )

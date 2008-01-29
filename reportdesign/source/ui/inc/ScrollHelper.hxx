@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ScrollHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:37:38 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@
 #include <rtl/ref.hxx>
 #endif
 #include <boost/shared_ptr.hpp>
-
+#include <vcl/dockwin.hxx>
 #include <MarkedSection.hxx>
 
 class SdrView;

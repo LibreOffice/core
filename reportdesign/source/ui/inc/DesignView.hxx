@@ -6,9 +6,9 @@
  *
  *  $RCSfile: DesignView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:36:51 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:48:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,7 @@
 #ifndef _SV_TABPAGE_HXX //autogen
 #include <vcl/tabpage.hxx>
 #endif
+#include <vcl/splitwin.hxx>
 #include <MarkedSection.hxx>
 
 class KeyEvent;
@@ -113,7 +114,8 @@ namespace rptui
     class ODesignView : public dbaui::ODataView, public SfxBroadcaster, public IMarkedSection
     {
     private:
-        Splitter                            m_aSplitter;
+        //Splitter                          m_aSplitter;
+        SplitWindow*                        m_pSplitWin;
 
         ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>        m_xReportComponent;
         OReportController*                  m_pReportController;
