@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 16:04:18 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:31:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -453,6 +453,10 @@ public:
 
     // --> OD 2004-08-10 #i28749#
     sal_Bool IsShapePositionInHoriL2R() const;
+    // <--
+
+    // --> OD 2007-12-19 #152540#
+    sal_Bool IsTextDocInOOoFileFormat() const;
     // <--
 
     String GetBaseURL() const;
