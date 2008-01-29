@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.234 $
+ *  $Revision: 1.235 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:20:52 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:17:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1180,7 +1180,10 @@ Font OutputDevice::GetDefaultFont( USHORT nType, LanguageType eLang,
 
                     // get the name of the first available font
                     ImplFontEntry* pEntry = pOutDev->mpFontCache->GetFontEntry( pOutDev->mpFontList, aFont, aSize, pOutDev->mpOutDevData ? &pOutDev->mpOutDevData->maDevFontSubst : NULL );
-                    aFont.SetName( pEntry->maFontSelData.maTargetName );
+                    if( pEntry->maFontSelData.mpFontData )
+                        aFont.SetName( pEntry->maFontSelData.mpFontData->maName );
+                    else
+                        aFont.SetName( pEntry->maFontSelData.maTargetName );
                 }
             }
             else
