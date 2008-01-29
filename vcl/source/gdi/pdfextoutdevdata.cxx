@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfextoutdevdata.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 17:11:03 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,8 +333,9 @@ sal_Bool PageSyncData::PlaySyncPageAct( PDFWriter& rWriter, sal_uInt32& rCurGDIM
         {
             case PDFExtOutDevDataSync::BeginStructureElement :
             {
-                sal_Int32 nNewEl = rWriter.BeginStructureElement( mParaStructElements.front() ) ;
+                sal_Int32 nNewEl = rWriter.BeginStructureElement( mParaStructElements.front(), mParaOUStrings.front() ) ;
                 mParaStructElements.pop_front();
+                mParaOUStrings.pop_front();
                 mpGlobalData->mStructIdMap.push_back( nNewEl );
             }
             break;
@@ -514,6 +515,14 @@ PDFExtOutDevData::~PDFExtOutDevData()
     delete mpGlobalSyncData;
 }
 
+const com::sun::star::lang::Locale& PDFExtOutDevData::GetDocumentLocale() const
+{
+    return maDocLocale;
+}
+void PDFExtOutDevData::SetDocumentLocale( const com::sun::star::lang::Locale& rLoc )
+{
+    maDocLocale = rLoc;
+}
 sal_Int32 PDFExtOutDevData::GetCurrentPageNumber() const
 {
     return mnPage;
@@ -710,10 +719,11 @@ void PDFExtOutDevData::SetPageTransition( PDFWriter::PageTransition eType, sal_u
 
 /* local (page), actions have to be played synchroniously to the actions of
    of the recorded metafile (created by each xRenderable->render()) */
-sal_Int32 PDFExtOutDevData::BeginStructureElement( PDFWriter::StructElement eType )
+   sal_Int32 PDFExtOutDevData::BeginStructureElement( PDFWriter::StructElement eType, const rtl::OUString& rAlias )
 {
     mpPageSyncData->PushAction( mrOutDev, PDFExtOutDevDataSync::BeginStructureElement );
     mpPageSyncData->mParaStructElements.push_back( eType );
+    mpPageSyncData->mParaOUStrings.push_back( rAlias );
     // need a global id
     sal_Int32 nNewId = mpGlobalSyncData->mStructParents.size();
     mpGlobalSyncData->mStructParents.push_back( mpGlobalSyncData->mCurrentStructElement );
