@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table6.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-05 16:41:26 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:20:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
 #include <com/sun/star/i18n/TransliterationModules.hpp>
 
 #include <unotools/textsearch.hxx>
+#include <svx/srchitem.hxx>
 
 #include "table.hxx"
 #include "collect.hxx"
@@ -51,14 +50,8 @@
 #include "stlpool.hxx"
 #include "markdata.hxx"
 #include "editutil.hxx"
-#ifndef SC_DETFUNC_HXX
 #include "detfunc.hxx"
-#endif
-
-
-#include <svx/srchitem.hxx>
-
-// STATIC DATA -----------------------------------------------------------
+#include "postit.hxx"
 
 //--------------------------------------------------------------------------
 
@@ -579,7 +572,9 @@ BOOL ScTable::ReplaceStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW&
         if (pReplaceStyle)
             ApplyStyle( rCol, rRow, *pReplaceStyle );
         else
+        {
             DBG_ERROR("pReplaceStyle==0");
+        }
     }
 
     return bRet;
@@ -641,7 +636,9 @@ BOOL ScTable::ReplaceAllStyle(const SvxSearchItem& rSearchItem, ScMarkData& rMar
             ApplySelectionStyle( *pReplaceStyle, rMark );
         }
         else
+        {
             DBG_ERROR("pReplaceStyle==0");
+        }
     }
 
     return bRet;
