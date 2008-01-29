@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:13:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:12:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -825,9 +825,13 @@ double SAL_CALL AnalysisAddIn::getSeriessum( double fX, double fN, double fM, co
 }
 
 
-double SAL_CALL AnalysisAddIn::getQuotient( double fNum, double fDenum ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getQuotient( double fNum, double fDenom ) THROWDEF_RTE_IAE
 {
-    double fRet = ::rtl::math::approxFloor( fNum / fDenum );
+    double fRet;
+    if( fNum < 0 != fDenom < 0)
+        fRet = ::rtl::math::approxCeil( fNum / fDenom );
+    else
+        fRet = ::rtl::math::approxFloor( fNum / fDenom );
     RETURN_FINITE( fRet );
 }
 
