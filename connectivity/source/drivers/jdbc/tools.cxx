@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:04:32 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:38:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,6 +168,7 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
             pBegin->Name.compareToAscii("CharSet") &&
             pBegin->Name.compareToAscii("AppendTableAlias") &&
             pBegin->Name.compareToAscii("GenerateASBeforeCorrelationName") &&
+            pBegin->Name.compareToAscii("EscapeDateTime") &&
             pBegin->Name.compareToAscii("ParameterNameSubstitution") &&
             pBegin->Name.compareToAscii("IsPasswordRequired") &&
             pBegin->Name.compareToAscii("IsAutoRetrievingEnabled") &&
