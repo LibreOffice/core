@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:38:16 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:32:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,6 @@
 //  Das geht:   Versionserkennung WKS, WK1 und WK3
 //              ...Rest steht in op.cpp
 
-
-
 //------------------------------------------------------------------------
 
 #include <tools/solar.h>
@@ -58,9 +56,7 @@
 #include "decl.h"
 #include "tool.h"
 
-#ifndef SC_FPROGRESSBAR_HXX
 #include "fprogressbar.hxx"
-#endif
 
 #include "op.h"
 
@@ -123,15 +119,16 @@ generate_Opcodes( SvStream& aStream, ScDocument& rDoc,
         case eWK_Error: return eERR_FORMAT;
         default:        return eERR_UNKN_WK;
      }
-    aStream.Seek( 0UL );
-    while( !bEOF && !aStream.IsEof() )
+
+    // #i76299# seems that SvStream::IsEof() does not work correctly
+    aStream.Seek( STREAM_SEEK_TO_END );
+    sal_Size nStrmSize = aStream.Tell();
+    aStream.Seek( STREAM_SEEK_TO_BEGIN );
+    while( !bEOF && !aStream.IsEof() && (aStream.Tell() < nStrmSize) )
     {
         UINT16 nOpcode, nLength;
 
         aStream >> nOpcode >> nLength;
-#ifdef DEBUG
-        fprintf( stderr, "nOpcode=%x nLength=%x\n", nOpcode, nLength);
-#endif
         aPrgrsBar.Progress();
         if( nOpcode == LOTUS_EOF )
         bEOF = TRUE;
