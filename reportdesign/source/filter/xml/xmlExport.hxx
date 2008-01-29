@@ -6,9 +6,9 @@
  *
  *  $RCSfile: xmlExport.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 11:25:24 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:45:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,7 +221,7 @@ private:
     void                    exportSectionAutoStyle(const Reference<XSection>& _xProp);
     void                    exportReportElement(const Reference<XReportControlModel>& _xReportElement);
     void                    exportFormatConditions(const Reference<XReportControlModel>& _xReportElement);
-    void                    exportAutoStyle(XPropertySet* _xProp);
+    void                    exportAutoStyle(XPropertySet* _xProp,const Reference<XFormattedField>& _xParentFormattedField = Reference<XFormattedField>());
     void                    exportAutoStyle(const Reference<XSection>& _xProp);
     void                    exportReportComponentAutoStyles(const Reference<XSection>& _xProp);
     void                    collectComponentStyles();
