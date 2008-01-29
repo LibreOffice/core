@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 12:57:30 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:05:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,26 @@
 #ifndef TOOLKIT_HELPER_ACCESSIBILITY_CLIENT_HXX
 #include <toolkit/helper/accessibilityclient.hxx>
 #endif
+#ifndef TOOLKIT_INC_TOOLKIT_HELPER_FIXEDHYPERBASE_HXX
+#include <toolkit/helper/fixedhyperbase.hxx>
+#endif
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
 #ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
 #include <com/sun/star/awt/VisualEffect.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SYSTEM_XSYSTEMSHELLEXECUTE_HPP_
+#include <com/sun/star/system/XSystemShellExecute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SYSTEM_SYSTEMSHELLEXECUTEFLAGS_HPP_
+#include <com/sun/star/system/SystemShellExecuteFlags.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
 #endif
 
 #ifndef _SV_BUTTON_HXX
@@ -108,14 +123,13 @@
 #include <tools/debug.hxx>
 #endif
 
-
 using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::makeAny;
-using com::sun::star::graphic::XGraphic;
+using ::com::sun::star::graphic::XGraphic;
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::awt::VisualEffect;
-
 
 static double ImplCalcLongValue( double nValue, sal_uInt16 nDigits )
 {
@@ -2433,6 +2447,295 @@ throw(::com::sun::star::uno::RuntimeException)
 }
 
 //  ----------------------------------------------------
+//  class VCLXFixedHyperlink
+//  ----------------------------------------------------
+VCLXFixedHyperlink::VCLXFixedHyperlink() :
+
+    maActionListeners( *this )
+
+{
+}
+
+VCLXFixedHyperlink::~VCLXFixedHyperlink()
+{
+}
+
+// ::com::sun::star::uno::XInterface
+::com::sun::star::uno::Any VCLXFixedHyperlink::queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Any aRet = ::cppu::queryInterface( rType,
+                                        SAL_STATIC_CAST( ::com::sun::star::awt::XFixedHyperlink*, this ) );
+    return (aRet.hasValue() ? aRet : VCLXWindow::queryInterface( rType ));
+}
+
+void VCLXFixedHyperlink::dispose() throw(::com::sun::star::uno::RuntimeException)
+{
+        ::vos::OGuard aGuard( GetMutex() );
+
+        ::com::sun::star::lang::EventObject aObj;
+        aObj.Source = (::cppu::OWeakObject*)this;
+        maActionListeners.disposeAndClear( aObj );
+        VCLXWindow::dispose();
+}
+
+// ::com::sun::star::lang::XTypeProvider
+IMPL_XTYPEPROVIDER_START( VCLXFixedHyperlink )
+    getCppuType( ( ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFixedHyperlink>* ) NULL ),
+    VCLXWindow::getTypes()
+IMPL_XTYPEPROVIDER_END
+
+void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
+{
+    switch ( rVclWindowEvent.GetId() )
+    {
+        case VCLEVENT_BUTTON_CLICK:
+        {
+            if ( maActionListeners.getLength() )
+            {
+                ::com::sun::star::awt::ActionEvent aEvent;
+                aEvent.Source = (::cppu::OWeakObject*)this;
+                maActionListeners.actionPerformed( aEvent );
+            }
+            else
+            {
+                // open the URL
+                ::rtl::OUString sURL;
+                ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
+                if ( pBase )
+                    sURL = pBase->GetURL();
+                Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute(
+                    ::comphelper::getProcessServiceFactory()->createInstance(
+                        ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" )), uno::UNO_QUERY );
+                if ( sURL.getLength() > 0 && xSystemShellExecute.is() )
+                {
+                    try
+                    {
+                        // start browser
+                        xSystemShellExecute->execute(
+                            sURL, ::rtl::OUString(), ::com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+                    }
+                    catch( uno::Exception& )
+                    {
+                    }
+                }
+            }
+        }
+
+        default:
+            VCLXWindow::ProcessWindowEvent( rVclWindowEvent );
+            break;
+    }
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessibleContext > VCLXFixedHyperlink::CreateAccessibleContext()
+{
+    return getAccessibleFactory().createAccessibleContext( this );
+}
+
+void VCLXFixedHyperlink::setText( const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
+    if ( pBase )
+        pBase->SetDescription( Text );
+}
+
+::rtl::OUString VCLXFixedHyperlink::getText() throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::rtl::OUString aText;
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+        aText = pWindow->GetText();
+    return aText;
+}
+
+void VCLXFixedHyperlink::setURL( const ::rtl::OUString& URL ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
+    if ( pBase )
+        pBase->SetURL( URL );
+}
+
+::rtl::OUString VCLXFixedHyperlink::getURL(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::rtl::OUString aText;
+    ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
+    if ( pBase )
+        aText = pBase->GetURL();
+    return aText;
+}
+
+void VCLXFixedHyperlink::setAlignment( short nAlign ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        WinBits nNewBits = 0;
+        if ( nAlign == ::com::sun::star::awt::TextAlign::LEFT )
+            nNewBits = WB_LEFT;
+        else if ( nAlign == ::com::sun::star::awt::TextAlign::CENTER )
+            nNewBits = WB_CENTER;
+        else
+            nNewBits = WB_RIGHT;
+
+        WinBits nStyle = pWindow->GetStyle();
+        nStyle &= ~(WB_LEFT|WB_CENTER|WB_RIGHT);
+        pWindow->SetStyle( nStyle | nNewBits );
+    }
+}
+
+short VCLXFixedHyperlink::getAlignment() throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    short nAlign = 0;
+    Window* pWindow = GetWindow();
+    if ( pWindow )
+    {
+        WinBits nStyle = pWindow->GetStyle();
+        if ( nStyle & WB_LEFT )
+            nAlign = ::com::sun::star::awt::TextAlign::LEFT;
+        else if ( nStyle & WB_CENTER )
+            nAlign = ::com::sun::star::awt::TextAlign::CENTER;
+        else
+            nAlign = ::com::sun::star::awt::TextAlign::RIGHT;
+    }
+    return nAlign;
+}
+
+void VCLXFixedHyperlink::addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l  )throw(::com::sun::star::uno::RuntimeException)
+{
+        ::vos::OGuard aGuard( GetMutex() );
+        maActionListeners.addInterface( l );
+}
+
+void VCLXFixedHyperlink::removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener > & l ) throw(::com::sun::star::uno::RuntimeException)
+{
+        ::vos::OGuard aGuard( GetMutex() );
+        maActionListeners.removeInterface( l );
+}
+
+::com::sun::star::awt::Size VCLXFixedHyperlink::getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    Size aSz;
+    FixedText* pFixedText = (FixedText*)GetWindow();
+    if ( pFixedText )
+        aSz = pFixedText->CalcMinimumSize();
+    return AWTSize(aSz);
+}
+
+::com::sun::star::awt::Size VCLXFixedHyperlink::getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return getMinimumSize();
+}
+
+::com::sun::star::awt::Size VCLXFixedHyperlink::calcAdjustedSize( const ::com::sun::star::awt::Size& rNewSize ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::com::sun::star::awt::Size aSz = rNewSize;
+    ::com::sun::star::awt::Size aMinSz = getMinimumSize();
+    if ( aSz.Height != aMinSz.Height )
+        aSz.Height = aMinSz.Height;
+
+    return aSz;
+}
+
+void VCLXFixedHyperlink::setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
+    if ( pBase )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_LABEL:
+            {
+                ::rtl::OUString sNewLabel;
+                if ( Value >>= sNewLabel )
+                    pBase->SetDescription( sNewLabel );
+                break;
+            }
+
+            case BASEPROPERTY_URL:
+            {
+                ::rtl::OUString sNewURL;
+                if ( Value >>= sNewURL )
+                    pBase->SetURL( sNewURL );
+                break;
+            }
+
+            default:
+            {
+                VCLXWindow::setProperty( PropertyName, Value );
+            }
+        }
+    }
+}
+
+::com::sun::star::uno::Any VCLXFixedHyperlink::getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( GetMutex() );
+
+    ::com::sun::star::uno::Any aProp;
+    ::toolkit::FixedHyperlinkBase* pBase = (::toolkit::FixedHyperlinkBase*)GetWindow();
+    if ( pBase )
+    {
+        sal_uInt16 nPropType = GetPropertyId( PropertyName );
+        switch ( nPropType )
+        {
+            case BASEPROPERTY_URL:
+            {
+                aProp = makeAny( ::rtl::OUString( pBase->GetURL() ) );
+                break;
+            }
+
+            default:
+            {
+                aProp <<= VCLXWindow::getProperty( PropertyName );
+            }
+        }
+    }
+    return aProp;
+}
+
+void VCLXFixedHyperlink::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
+{
+    PushPropertyIds( rIds,
+                     BASEPROPERTY_ALIGN,
+                     BASEPROPERTY_BACKGROUNDCOLOR,
+                     BASEPROPERTY_BORDER,
+                     BASEPROPERTY_BORDERCOLOR,
+                     BASEPROPERTY_DEFAULTCONTROL,
+                     BASEPROPERTY_ENABLED,
+                     BASEPROPERTY_FONTDESCRIPTOR,
+                     BASEPROPERTY_HELPTEXT,
+                     BASEPROPERTY_HELPURL,
+                     BASEPROPERTY_LABEL,
+                     BASEPROPERTY_MULTILINE,
+                     BASEPROPERTY_NOLABEL,
+                     BASEPROPERTY_PRINTABLE,
+                     BASEPROPERTY_TABSTOP,
+                     BASEPROPERTY_VERTICALALIGN,
+                     BASEPROPERTY_URL,
+                     0);
+    VCLXWindow::ImplGetPropertyIds( rIds );
+}
+
+//  ----------------------------------------------------
 //  class VCLXFixedText
 //  ----------------------------------------------------
 void VCLXFixedText::ImplGetPropertyIds( std::list< sal_uInt16 > &rIds )
@@ -2500,7 +2803,7 @@ void VCLXFixedText::setText( const ::rtl::OUString& Text ) throw(::com::sun::sta
     ::rtl::OUString aText;
     Window* pWindow = GetWindow();
     if ( pWindow )
-           aText = pWindow->GetText();
+        aText = pWindow->GetText();
     return aText;
 }
 
