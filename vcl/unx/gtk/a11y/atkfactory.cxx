@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkfactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:26:28 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:19:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,10 @@
 #include "precompiled_vcl.hxx"
 
 #include <plugins/gtk/gtkframe.hxx>
+#include <vcl/window.hxx>
 #include "atkwrapper.hxx"
 #include "atkfactory.hxx"
+#include "atkregistry.hxx"
 
 using namespace ::com::sun::star;
 
@@ -137,10 +139,31 @@ wrapper_factory_create_accessible( GObject *pObj )
     if( ! parent_accessible )
         parent_accessible = gtk_widget_get_accessible(parent_widget);
 
-    uno::Reference< accessibility::XAccessible > xAccessible(pFrame->getAccessible( true ));
+    Window* pFrameWindow = pFrame->GetWindow();
+    if( pFrameWindow )
+    {
+        /*  as we got the frame object from the gtk parent, the corresponding
+         *  accessible is always the (only) child of the window associated
+         *  with the frame.
+         */
 
-    if( xAccessible.is() )
-        return atk_object_wrapper_new( xAccessible, parent_accessible );
+        Window* pWindow = pFrameWindow->GetAccessibleChildWindow(0);
+        if( pWindow )
+        {
+            uno::Reference< accessibility::XAccessible > xAccessible(pWindow->GetAccessible(true));
+            if( xAccessible.is() )
+            {
+                AtkObject *accessible = ooo_wrapper_registry_get( xAccessible );
+
+                if( accessible )
+                    g_object_ref( G_OBJECT(accessible) );
+                else
+                    accessible = atk_object_wrapper_new( xAccessible, parent_accessible );
+
+                return accessible;
+            }
+        }
+    }
 
     return NULL;
 }
