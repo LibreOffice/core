@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:09:38 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:38:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1801,7 +1801,7 @@ void OSQLParseNode::append(OSQLParseNode* pNewNode)
 sal_Bool OSQLParseNode::addDateValue(::rtl::OUString& rString, const SQLParseNodeParameter& rParam) const
 {
     // special display for date/time values
-    if (rParam.bPredicate && SQL_ISRULE(this,set_fct_spec) && SQL_ISPUNCTUATION(m_aChilds[0],"{"))
+    if (SQL_ISRULE(this,set_fct_spec) && SQL_ISPUNCTUATION(m_aChilds[0],"{"))
     {
         const OSQLParseNode* pODBCNode = m_aChilds[1];
         const OSQLParseNode* pODBCNodeChild = pODBCNode->m_aChilds[0];
@@ -1811,17 +1811,48 @@ sal_Bool OSQLParseNode::addDateValue(::rtl::OUString& rString, const SQLParseNod
             SQL_ISTOKEN(pODBCNodeChild, T) ||
             SQL_ISTOKEN(pODBCNodeChild, TS) ))
         {
+            ::rtl::OUString suQuote(::rtl::OUString::createFromAscii("'"));
+            if (rParam.bPredicate)
+            {
+                 if (rParam.aMetaData.shouldEscapeDateTime())
+                 {
+                     suQuote = ::rtl::OUString::createFromAscii("#");
+                 }
+                 else
+                 {
+                     suQuote = ::rtl::OUString::createFromAscii("'");
+                 }
+            }
+            else
+            {
+                 if (rParam.aMetaData.shouldEscapeDateTime())
+                 {
+                     // suQuote = ::rtl::OUString::createFromAscii("'");
+                     return sal_False;
+                 }
+                 else
+                 {
+                     suQuote = ::rtl::OUString::createFromAscii("'");
+                 }
+            }
+
             if (rString.getLength())
                 rString += ::rtl::OUString::createFromAscii(" ");
-            rString += ::rtl::OUString::createFromAscii("#");
+            rString += suQuote;
+            const ::rtl::OUString sTokenValue = pODBCNode->m_aChilds[1]->getTokenValue();
             if (SQL_ISTOKEN(pODBCNodeChild, D))
-                rString += convertDateString(rParam, pODBCNode->m_aChilds[1]->getTokenValue());
+            {
+                rString += rParam.bPredicate ? convertDateString(rParam, sTokenValue) : sTokenValue;
+            }
             else if (SQL_ISTOKEN(pODBCNodeChild, T))
-                rString += convertTimeString(rParam, pODBCNode->m_aChilds[1]->getTokenValue());
+            {
+                rString += rParam.bPredicate ? convertTimeString(rParam, sTokenValue) : sTokenValue;
+            }
             else
-                rString += convertDateTimeString(rParam, pODBCNode->m_aChilds[1]->getTokenValue());
-
-            rString += ::rtl::OUString::createFromAscii("#");
+            {
+                rString += rParam.bPredicate ? convertDateTimeString(rParam, sTokenValue) : sTokenValue;
+            }
+            rString += suQuote;
             return sal_True;
         }
     }
