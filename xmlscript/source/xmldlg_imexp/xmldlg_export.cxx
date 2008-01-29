@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 12:57:34 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:12:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1424,6 +1424,15 @@ void SAL_CALL exportDialogModel(
                     OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":textfield") ) );
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readEditModel( &all_styles );
+            }
+            // FixedHyperLink
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedHyperlinkModel") ) ) )
+            {
+                pElem = new ElementDescriptor(
+                    xProps, xPropState,
+                    OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_DIALOGS_PREFIX ":linklabel") ) );
+                xElem = static_cast< xml::sax::XAttributeList * >( pElem );
+                pElem->readFixedHyperLinkModel( &all_styles );
             }
             else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlImageControlModel") ) ) )
             {
