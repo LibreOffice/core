@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:11:23 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:17:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,7 +367,9 @@ void ScDocument::DoColResize( SCTAB nTab, SCCOL nCol1, SCCOL nCol2, SCSIZE nAdd 
     if (ValidTab(nTab) && pTab[nTab])
         pTab[nTab]->DoColResize( nCol1, nCol2, nAdd );
     else
+    {
         DBG_ERROR("DoColResize: falsche Tabelle");
+    }
 }
 
 void ScDocument::InvalidateTableArea()
@@ -618,7 +620,9 @@ const ScConditionalFormat* ScDocument::GetCondFormat(
         if (pCondFormList)
             return pCondFormList->GetFormat( nIndex );
         else
+        {
             DBG_ERROR("pCondFormList ist 0");
+        }
     }
 
     return NULL;
