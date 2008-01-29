@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filstr.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:21:36 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:14:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,6 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-#ifndef _OSL_FILE_HXX_
-#include <osl/file.hxx>
-#endif
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
@@ -77,6 +74,8 @@
 #ifndef _COM_SUN_STAR_UCB_XCONTENTPROVIDER_HPP_
 #include <com/sun/star/ucb/XContentProvider.hpp>
 #endif
+
+#include "filrec.hxx"
 
 namespace fileaccess {
 
@@ -257,7 +256,8 @@ namespace fileaccess {
         shell*       m_pMyShell;
         com::sun::star::uno::Reference< com::sun::star::ucb::XContentProvider > m_xProvider;
         sal_Bool     m_nIsOpen;
-        osl::File    m_aFile;
+
+        ReconnectingFile    m_aFile;
 
         sal_Int32                                          m_nErrorCode;
         sal_Int32                                          m_nMinorErrorCode;
