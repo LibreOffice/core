@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 11:25:04 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:45:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,11 +788,11 @@ void ORptExport::exportSectionAutoStyle(const Reference<XSection>& _xProp)
 // -----------------------------------------------------------------------------
 void ORptExport::exportReportComponentAutoStyles(const Reference<XSection>& _xProp)
 {
-    sal_Int32 nCount = _xProp->getCount();
+    const sal_Int32 nCount = _xProp->getCount();
     for (sal_Int32 i = 0 ; i< nCount ; ++i)
     {
-        Reference<XReportComponent> xReportElement(_xProp->getByIndex(i),uno::UNO_QUERY);
-        Reference< report::XShape > xShape(xReportElement,uno::UNO_QUERY);
+        const Reference<XReportComponent> xReportElement(_xProp->getByIndex(i),uno::UNO_QUERY);
+        const Reference< report::XShape > xShape(xReportElement,uno::UNO_QUERY);
         if ( xShape.is() )
         {
             UniReference< XMLShapeExport > xShapeExport = GetShapeExport();
@@ -813,7 +813,7 @@ void ORptExport::exportReportComponentAutoStyles(const Reference<XSection>& _xPr
                     for (sal_Int32 j = 0; j < nFormatCount ; ++j)
                     {
                         uno::Reference< report::XFormatCondition > xCond(xFormattedField->getByIndex(j),uno::UNO_QUERY);
-                        exportAutoStyle(xCond.get());
+                        exportAutoStyle(xCond.get(),xFormattedField);
                     } // for (sal_Int32 j = 0; j < nCount ; ++j)
                 }
                 catch(uno::Exception&)
@@ -1034,54 +1034,12 @@ void ORptExport::exportContainer(const Reference< XSection>& _xSection)
                             {
                                 bPageSet = exportFormula(XML_FORMULA,xReportElement->getDataField());
                                 if ( bPageSet )
-                                {
-                                    ::rtl::OUString sFieldData = xReportElement->getDataField();
-                                    static const ::rtl::OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
-                                    static const ::rtl::OUString s_sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
-                                    static const ::rtl::OUString s_sReportPrefix(RTL_CONSTASCII_USTRINGPARAM("rpt:"));
-                                    static const ::rtl::OUString s_sConcatOperator(RTL_CONSTASCII_USTRINGPARAM("&"));
-                                    sFieldData = sFieldData.copy(s_sReportPrefix.getLength(),sFieldData.getLength() - s_sReportPrefix.getLength());
-                                    sal_Int32 nPageNumberIndex = sFieldData.indexOf(s_sPageNumber);
-                                    if ( nPageNumberIndex != -1 )
-                                    {
-                                        sal_Int32 nIndex = 0;
-                                        do
-                                        {
-                                            ::rtl::OUString sToken = sFieldData.getToken( 0, '&', nIndex );
-                                            sToken = sToken.trim();
-                                            if ( sToken.getLength() )
-                                            {
-                                                if ( sToken == s_sPageNumber )
-                                                {
-                                                    static const ::rtl::OUString s_sCurrent(RTL_CONSTASCII_USTRINGPARAM("current"));
-                                                    AddAttribute(XML_NAMESPACE_TEXT, XML_SELECT_PAGE, s_sCurrent );
-                                                    SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_NUMBER, sal_False, sal_False);
-                                                    Characters(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1")));
-                                                }
-                                                else if ( sToken == s_sPageCount )
-                                                {
-                                                    SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_COUNT, sal_False, sal_False);
-                                                    Characters(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1")));
-                                                }
-                                                else
-                                                {
-
-                                                    if ( sToken.indexOf('"') == 0 && sToken.lastIndexOf('"') == sToken.getLength()-1 )
-                                                        sToken = sToken.copy(1,sToken.getLength()-2);
-
-                                                    sal_Bool bPrevCharIsSpace = sal_False;
-                                                    GetTextParagraphExport()->exportText(sToken,bPrevCharIsSpace);
-                                                }
-                                            }
-                                        }
-                                        while ( nIndex >= 0 );
-                                    }
-                                }
+                                    eToken = XML_FIXED_CONTENT;
                                 else if ( eToken == XML_IMAGE )
                                     AddAttribute(XML_NAMESPACE_REPORT, XML_PRESERVE_IRI, xImage->getPreserveIRI() ? XML_TRUE : XML_FALSE );
                             }
 
-                            if ( !bPageSet )
+                            //if ( !bPageSet )
                             {
                                 // start <report:eToken>
                                 SvXMLElementExport aComponents(*this,XML_NAMESPACE_REPORT, eToken, sal_False, sal_False);
@@ -1298,14 +1256,14 @@ sal_Bool ORptExport::exportGroup(const Reference<XReportDefinition>& _xReportDef
     return bGroupExported;
 }
 // -----------------------------------------------------------------------------
-void ORptExport::exportAutoStyle(XPropertySet* _xProp)
+void ORptExport::exportAutoStyle(XPropertySet* _xProp,const Reference<XFormattedField>& _xParentFormattedField)
 {
-    uno::Reference<report::XReportControlFormat> xFormat(_xProp,uno::UNO_QUERY);
+    const uno::Reference<report::XReportControlFormat> xFormat(_xProp,uno::UNO_QUERY);
     if ( xFormat.is() )
     {
         try
         {
-            awt::FontDescriptor aFont = xFormat->getFontDescriptor();
+            const awt::FontDescriptor aFont = xFormat->getFontDescriptor();
             OSL_ENSURE(aFont.Name.getLength(),"No Font Name !");
             GetFontAutoStylePool()->Add(aFont.Name,aFont.StyleName,aFont.Family,aFont.Pitch,aFont.CharSet );
         }
@@ -1314,7 +1272,7 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp)
             // not interested in
         }
     }
-    uno::Reference< report::XShape> xShape(_xProp,uno::UNO_QUERY);
+    const uno::Reference< report::XShape> xShape(_xProp,uno::UNO_QUERY);
     if ( xShape.is() )
     {
         ::std::vector< XMLPropertyState > aPropertyStates( m_xParaPropMapper->Filter(_xProp) );
@@ -1414,10 +1372,14 @@ void ORptExport::exportAutoStyle(XPropertySet* _xProp)
                 }
             }
         }
-        Reference<XFormattedField> xFormattedField(_xProp,uno::UNO_QUERY);
-        if ( xFormattedField.is() && !aPropertyStates.empty() )
+        const Reference<XFormattedField> xFormattedField(_xProp,uno::UNO_QUERY);
+        if ( (_xParentFormattedField.is() || xFormattedField.is()) && !aPropertyStates.empty() )
         {
-            sal_Int32 nNumberFormat = xFormattedField->getFormatKey();
+            sal_Int32 nNumberFormat = 0;
+            if ( _xParentFormattedField.is() )
+                nNumberFormat = _xParentFormattedField->getFormatKey();
+            else
+                nNumberFormat = xFormattedField->getFormatKey();
             {
                 sal_Int32 nStyleMapIndex = m_xCellStylesExportPropertySetMapper->getPropertySetMapper()->FindEntryIndex( CTF_RPT_NUMBERFORMAT );
                 addDataStyle(nNumberFormat);
@@ -1663,6 +1625,50 @@ void ORptExport::exportParagraph(const Reference< XReportControlModel >& _xRepor
     OSL_PRECOND(_xReportElement.is(),"Element is null!");
     // start <text:p>
     SvXMLElementExport aParagraphContent(*this,XML_NAMESPACE_TEXT, XML_P, sal_False, sal_False);
+    if ( Reference<XFormattedField>(_xReportElement,uno::UNO_QUERY).is() )
+    {
+        ::rtl::OUString sFieldData = _xReportElement->getDataField();
+        static const ::rtl::OUString s_sPageNumber(RTL_CONSTASCII_USTRINGPARAM("PageNumber()"));
+        static const ::rtl::OUString s_sPageCount(RTL_CONSTASCII_USTRINGPARAM("PageCount()"));
+        static const ::rtl::OUString s_sReportPrefix(RTL_CONSTASCII_USTRINGPARAM("rpt:"));
+        static const ::rtl::OUString s_sConcatOperator(RTL_CONSTASCII_USTRINGPARAM("&"));
+        sFieldData = sFieldData.copy(s_sReportPrefix.getLength(),sFieldData.getLength() - s_sReportPrefix.getLength());
+        sal_Int32 nPageNumberIndex = sFieldData.indexOf(s_sPageNumber);
+        if ( nPageNumberIndex != -1 )
+        {
+            sal_Int32 nIndex = 0;
+            do
+            {
+                ::rtl::OUString sToken = sFieldData.getToken( 0, '&', nIndex );
+                sToken = sToken.trim();
+                if ( sToken.getLength() )
+                {
+                    if ( sToken == s_sPageNumber )
+                    {
+                        static const ::rtl::OUString s_sCurrent(RTL_CONSTASCII_USTRINGPARAM("current"));
+                        AddAttribute(XML_NAMESPACE_TEXT, XML_SELECT_PAGE, s_sCurrent );
+                        SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_NUMBER, sal_False, sal_False);
+                        Characters(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1")));
+                    }
+                    else if ( sToken == s_sPageCount )
+                    {
+                        SvXMLElementExport aPageNumber(*this,XML_NAMESPACE_TEXT, XML_PAGE_COUNT, sal_False, sal_False);
+                        Characters(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("1")));
+                    }
+                    else
+                    {
+
+                        if ( sToken.indexOf('"') == 0 && sToken.lastIndexOf('"') == sToken.getLength()-1 )
+                            sToken = sToken.copy(1,sToken.getLength()-2);
+
+                        sal_Bool bPrevCharIsSpace = sal_False;
+                        GetTextParagraphExport()->exportText(sToken,bPrevCharIsSpace);
+                    }
+                }
+            }
+            while ( nIndex >= 0 );
+        }
+    }
     Reference< XFixedText > xFT(_xReportElement,UNO_QUERY);
     if ( xFT.is() )
     {
@@ -1684,17 +1690,15 @@ void ORptExport::exportShapes(const Reference< XSection>& _xSection,bool _bAddPa
     xShapeExport->seekShapes(_xSection.get());
     const sal_Int32 nCount = _xSection->getCount();
     awt::Point aRefPoint;
+    ::std::auto_ptr<SvXMLElementExport> pParagraphContent;
+    if ( _bAddParagraph )
+        pParagraphContent.reset(new SvXMLElementExport(*this,XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False));
     aRefPoint.X = rptui::getStyleProperty<sal_Int32>(_xSection->getReportDefinition(),PROPERTY_LEFTMARGIN);
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
         uno::Reference< XShape > xShape(_xSection->getByIndex(i),uno::UNO_QUERY);
         if ( xShape.is() )
         {
-            ::std::auto_ptr<SvXMLElementExport> pParagraphContent;
-            if ( _bAddParagraph )
-            {
-                pParagraphContent.reset(new SvXMLElementExport(*this,XML_NAMESPACE_TEXT, XML_P, sal_True, sal_False));
-            }
             AddAttribute( XML_NAMESPACE_TEXT, XML_ANCHOR_TYPE, XML_PARAGRAPH );
             xShapeExport->exportShape(xShape.get(),SEF_DEFAULT|SEF_EXPORT_NO_WS,&aRefPoint);
         }
