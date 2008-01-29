@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormDocument.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:43:23 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:41:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -31,7 +31,8 @@
  *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
  *    MA  02111-1307  USA
  *
- ************************************************************************/package com.sun.star.wizards.form;
+ ************************************************************************/
+package com.sun.star.wizards.form;
 
 import java.util.Vector;
 
@@ -39,13 +40,9 @@ import com.sun.star.wizards.text.TextDocument;
 import com.sun.star.awt.Point;
 import com.sun.star.awt.Size;
 import com.sun.star.beans.PropertyValue;
-import com.sun.star.beans.PropertyVetoException;
-import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameContainer;
 import com.sun.star.frame.XModel;
-import com.sun.star.lang.IllegalArgumentException;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
