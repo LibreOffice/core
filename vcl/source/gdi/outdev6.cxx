@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 12:30:35 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:04:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,7 +290,9 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
                 // #i66849# Added fast path for exactly rectangular
                 // polygons
-                if( !pDisableNative && aPolyPoly.IsRect() )
+                // #i83087# Naturally, system alpha blending cannot
+                // work with separate alpha VDev
+                if( !mpAlphaVDev && !pDisableNative && aPolyPoly.IsRect() )
                 {
                     // setup Graphics only here (other cases delegate
                     // to basic OutDev methods)
