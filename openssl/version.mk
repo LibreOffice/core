@@ -4,9 +4,9 @@
 #
 #   $RCSfile: version.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tkr $ $Date: 2007-10-05 11:35:37 $
+#   last change: $Author: rt $ $Date: 2008-01-29 09:53:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,8 @@
 #*************************************************************************
 
 
-OPENSSL_VERSION=0.9.8e
+OPENSSL_VERSION=0.9.8g
 
 .IF "$(OS)" == "SOLARIS"
-OPENSSL_NAME=openssl-0.9.8a
+OPENSSL_NAME=openssl-0.9.8g
 .ENDIF
