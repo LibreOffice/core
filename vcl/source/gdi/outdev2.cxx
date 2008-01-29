@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:48:01 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:04:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2003,8 +2003,11 @@ void OutputDevice::ImplDrawAlpha( const Bitmap& rBmp, const AlphaMask& rAlpha,
     {
         bool bNativeAlpha = false;
         static const char* pDisableNative = getenv( "SAL_DISABLE_NATIVE_ALPHA");
-        if( !pDisableNative && !bHMirr && !bVMirr ) {
-        Point aRelPt = aOutPt + Point( mnOutOffX, mnOutOffY );
+        // #i83087# Naturally, system alpha blending cannot work with
+        // separate alpha VDev
+        if( !mpAlphaVDev && !pDisableNative && !bHMirr && !bVMirr )
+        {
+            Point aRelPt = aOutPt + Point( mnOutOffX, mnOutOffY );
             SalTwoRect aTR = {
                 rSrcPtPixel.X(), rSrcPtPixel.Y(),
                 rSrcSizePixel.Width(), rSrcSizePixel.Height(),
