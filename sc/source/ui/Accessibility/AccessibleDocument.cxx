@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:44:23 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:38:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -621,7 +621,9 @@ uno::Reference< XAccessible > ScChildrenShapes::GetAt(const awt::Point& rPoint) 
                     }
                 }
                 else
+                {
                     DBG_ERRORFILE("I should have an accessible shape now!");
+                }
             }
             else
                 bFound = sal_True; // this is the sheet and it lies before the rest of the shapes which are background shapes
@@ -1223,7 +1225,9 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, s
         }
     }
     else
+    {
         DBG_ERRORFILE("shape is always in the list");
+    }
 }
 
 void ScChildrenShapes::RemoveShape(const uno::Reference<drawing::XShape>& xShape) const
@@ -1252,7 +1256,9 @@ void ScChildrenShapes::RemoveShape(const uno::Reference<drawing::XShape>& xShape
         }
     }
     else
+    {
         DBG_ERRORFILE("shape was not in internal list");
+    }
 }
 
 sal_Bool ScChildrenShapes::FindShape(const uno::Reference<drawing::XShape>& xShape, ScChildrenShapes::SortedShapes::iterator& rItr) const
