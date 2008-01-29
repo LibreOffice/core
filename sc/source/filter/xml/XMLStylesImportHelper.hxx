@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:57:43 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,12 +51,8 @@
 #include <com/sun/star/table/CellAddress.hpp>
 #endif
 
-#ifndef __SGI_STL_SET
 #include <set>
-#endif
-#ifndef __SGI_STL_VECTOR
 #include <vector>
-#endif
 
 class ScXMLImport;
 
