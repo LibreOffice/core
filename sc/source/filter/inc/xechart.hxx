@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xechart.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 13:25:30 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:30:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,25 +36,12 @@
 #ifndef SC_XECHART_HXX
 #define SC_XECHART_HXX
 
-#ifndef SC_XLCHART_HXX
 #include "xlchart.hxx"
-#endif
-
-#ifndef SC_XLFORMULA_HXX
 #include "xlformula.hxx"
-#endif
-#ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
-#endif
-#ifndef SC_XEROOT_HXX
 #include "xeroot.hxx"
-#endif
-#ifndef SC_XERECORD_HXX
 #include "xerecord.hxx"
-#endif
-#ifndef SC_XESTRING_HXX
 #include "xestring.hxx"
-#endif
 
 class Size;
 
@@ -74,6 +61,7 @@ namespace com { namespace sun { namespace star {
         class XAxis;
         class XTitle;
         class XFormattedString;
+        class XRegressionCurve;
         namespace data
         {
             class XDataSequence;
@@ -124,8 +112,9 @@ public:
                             XclChLineFormat& rLineFmt,
                             const ScfPropertySet& rPropSet,
                             XclChPropertyMode ePropMode ) const;
-    /** Reads solid area properties from the passed property set. */
-    void                ConvertAreaFormat(
+    /** Reads solid area properties from the passed property set.
+        @return  true = object contains complex fill properties. */
+    bool                ConvertAreaFormat(
                             XclChAreaFormat& rAreaFmt,
                             const ScfPropertySet& rPropSet,
                             XclChPropertyMode ePropMode ) const;
@@ -210,8 +199,9 @@ class XclExpChAreaFormat : public XclExpRecord
 public:
     explicit            XclExpChAreaFormat( const XclExpChRoot& rRoot );
 
-    /** Converts area formatting properties from the passed property set. */
-    void                Convert( const XclExpChRoot& rRoot,
+    /** Converts area formatting properties from the passed property set.
+        @return  true = object contains complex fill properties. */
+    bool                Convert( const XclExpChRoot& rRoot,
                             const ScfPropertySet& rPropSet, XclChObjectType eObjType );
     /** Sets or clears the automatic flag. */
     inline void         SetAuto( bool bAuto ) { ::set_flag( maData.mnFlags, EXC_CHAREAFORMAT_AUTO, bAuto ); }
@@ -357,6 +347,8 @@ public:
     sal_uInt16          ConvertDataSequence( XDataSequenceRef xDataSeq, bool bSplitToColumns );
     /** Converts the passed sequence of formatted string objects, returns leading font index. */
     sal_uInt16          ConvertStringSequence( const XFormattedStringSeq& rStringSeq );
+    /** Converts the number format from the passed property set. */
+    void                ConvertNumFmt( const ScfPropertySet& rPropSet, bool bPercent );
 
     /** Returns true, if this source link contains explicit string data. */
     inline bool         HasString() const { return mxString.is() && !mxString->IsEmpty(); }
@@ -392,8 +384,7 @@ typedef ScfRef< XclExpChFont > XclExpChFontRef;
 class XclExpChObjectLink : public XclExpRecord
 {
 public:
-    explicit            XclExpChObjectLink( sal_uInt16 nLinkTarget,
-                            sal_uInt16 nSeriesIdx, sal_uInt16 nPointIdx );
+    explicit            XclExpChObjectLink( sal_uInt16 nLinkTarget, const XclChDataPointPos& rPointPos );
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm );
@@ -435,7 +426,8 @@ public:
 class XclExpChText : public XclExpChGroupBase, public XclExpChFontBase, protected XclExpChRoot
 {
 public:
-    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle > XTitleRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XTitle >            XTitleRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XRegressionCurve >  XRegressionCurveRef;
 
 public:
     explicit            XclExpChText( const XclExpChRoot& rRoot );
@@ -452,6 +444,8 @@ public:
     /** Converts all settings of the passed data point caption text object. */
     bool                ConvertDataLabel( const ScfPropertySet& rPropSet,
                             const XclChTypeInfo& rTypeInfo, const XclChDataPointPos& rPointPos );
+    /** Converts all settings of the passed trend line equation box. */
+    void                ConvertTrendLineEquation( const ScfPropertySet& rPropSet, const XclChDataPointPos& rPointPos );
 
     /** Returns true, if the string object does not contain any text data. */
     inline bool         HasString() const { return mxSrcLink.is() && mxSrcLink->HasString(); }
@@ -568,7 +562,7 @@ class XclExpChDataFormat : public XclExpChGroupBase, public XclExpChFrameBase, p
 {
 public:
     explicit            XclExpChDataFormat( const XclExpChRoot& rRoot,
-                            sal_uInt16 nSeriesIdx, sal_uInt16 nPointIdx, sal_uInt16 nFormatIdx );
+                            const XclChDataPointPos& rPointPos, sal_uInt16 nFormatIdx );
 
     /** Converts the passed data series or data point formatting. */
     void                ConvertDataSeries( const ScfPropertySet& rPropSet, const XclChExtTypeInfo& rTypeInfo );
@@ -603,16 +597,26 @@ typedef ScfRef< XclExpChDataFormat > XclExpChDataFormatRef;
 class XclExpChSerTrendLine : public XclExpRecord, protected XclExpChRoot
 {
 public:
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XRegressionCurve > XRegressionCurveRef;
+
+public:
     explicit            XclExpChSerTrendLine( const XclExpChRoot& rRoot );
 
     /** Converts the passed trend line, returns true if trend line type is supported. */
-    bool                Convert( const ScfPropertySet& rPropSet );
+    bool                Convert( XRegressionCurveRef xRegCurve, sal_uInt16 nSeriesIdx );
+
+    /** Returns formatting information of the trend line, created in Convert(). */
+    inline XclExpChDataFormatRef GetDataFormat() const { return mxDataFmt; }
+    /** Returns formatting of the equation text box, created in Convert(). */
+    inline XclExpChTextRef GetDataLabel() const { return mxLabel; }
 
 private:
     virtual void        WriteBody( XclExpStream& rStrm );
 
 private:
     XclChSerTrendLine   maData;             /// Contents of the CHSERTRENDLINE record.
+    XclExpChDataFormatRef mxDataFmt;        /// Formatting settings of the trend line.
+    XclExpChTextRef     mxLabel;            /// Formatting of the equation text box.
 };
 
 typedef ScfRef< XclExpChSerTrendLine > XclExpChSerTrendLineRef;
@@ -650,6 +654,7 @@ class XclExpChSeries : public XclExpChGroupBase, protected XclExpChRoot
 public:
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XDataSeries >                   XDataSeriesRef;
     typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence >    XLabeledDataSeqRef;
+    typedef ::com::sun::star::uno::Reference< ::com::sun::star::chart2::XRegressionCurve >              XRegressionCurveRef;
 
 public:
     explicit            XclExpChSeries( const XclExpChRoot& rRoot, sal_uInt16 nSeriesIdx );
@@ -663,7 +668,7 @@ public:
                             const ::rtl::OUString& rValueRole,
                             sal_uInt16 nGroupIdx, sal_uInt16 nFormatIdx, bool bCloseSymbol );
     /** Converts the passed error bar settings (called at trend line child series). */
-    bool                ConvertTrendLine( const ScfPropertySet& rPropSet, sal_uInt16 nParentIdx );
+    bool                ConvertTrendLine( XRegressionCurveRef xRegCurve, sal_uInt16 nParentIdx );
     /** Converts the passed error bar settings (called at error bar child series). */
     bool                ConvertErrorBar( const ScfPropertySet& rPropSet, sal_uInt16 nParentIdx, sal_uInt8 nBarId );
     /** Converts and inserts category ranges for all inserted series. */
