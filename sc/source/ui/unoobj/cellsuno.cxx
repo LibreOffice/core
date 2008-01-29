@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:17:22 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:45:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,9 +130,7 @@
 #include "errorcodes.hxx"
 #include "unoreflist.hxx"
 
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
 
 using namespace com::sun::star;
 
@@ -1893,7 +1891,9 @@ beans::PropertyState ScCellRangesBase::GetOnePropertyState( USHORT nItemWhich, c
             else if ( eState == SFX_ITEM_DONTCARE )
                 eRet = beans::PropertyState_AMBIGUOUS_VALUE;
             else
+            {
                 DBG_ERROR("unbekannter ItemState");
+            }
         }
     }
     else if ( pMap )
@@ -6501,7 +6501,9 @@ table::CellContentType SAL_CALL ScCellObj::getType() throw(uno::RuntimeException
         }
     }
     else
+    {
         DBG_ERROR("keine DocShell");        //! Exception oder so?
+    }
 
     return eRet;
 }
@@ -6534,7 +6536,9 @@ sal_Int32 SAL_CALL ScCellObj::getError() throw(uno::RuntimeException)
         // sonst bleibt's bei 0
     }
     else
+    {
         DBG_ERROR("keine DocShell");        //! Exception oder so?
+    }
 
     return nError;
 }
