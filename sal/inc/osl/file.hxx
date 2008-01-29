@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:52:08 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:15:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,8 @@ public:
         E_OVERFLOW     = osl_File_E_OVERFLOW,
         E_NOTREADY     = osl_File_E_NOTREADY,
         E_invalidError = osl_File_E_invalidError,   /* unmapped error: always last entry in enum! */
-        E_TIMEDOUT     = osl_File_E_TIMEDOUT
+        E_TIMEDOUT     = osl_File_E_TIMEDOUT,
+        E_NETWORK      = osl_File_E_NETWORK
     };
 
 
