@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 19:09:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:40:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1934,7 +1934,9 @@ void ScModule::SetReference( const ScRange& rRef, ScDocument* pDoc,
         if (pHdl)
             pHdl->SetReference( aNew, pDoc );
         else
+        {
             DBG_ERROR("SetReference ohne Empfaenger");
+        }
     }
 }
 
