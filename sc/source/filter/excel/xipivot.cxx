@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xipivot.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:27:43 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:27:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,67 +36,30 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#ifndef SC_XIPIVOT_HXX
 #include "xipivot.hxx"
-#endif
 
-#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDSORTINFO_HPP_
 #include <com/sun/star/sheet/DataPilotFieldSortInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDAUTOSHOWINFO_HPP_
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDLAYOUTINFO_HPP_
 #include <com/sun/star/sheet/DataPilotFieldLayoutInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SHEET_DATAPILOTFIELDREFERENCE_HPP_
 #include <com/sun/star/sheet/DataPilotFieldReference.hpp>
-#endif
 
-#ifndef _DATETIME_HXX
 #include <tools/datetime.hxx>
-#endif
-#ifndef _ZFORMAT_HXX
 #include <svtools/zformat.hxx>
-#endif
+#include <svtools/intitem.hxx>
 
-#ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
-#endif
-#ifndef SC_CELL_HXX
 #include "cell.hxx"
-#endif
-#ifndef SC_DPSAVE_HXX
 #include "dpsave.hxx"
-#endif
-#ifndef SC_DPDIMSAVE_HXX
 #include "dpdimsave.hxx"
-#endif
-#ifndef SC_DPOBJECT_HXX
 #include "dpobject.hxx"
-#endif
-#ifndef SC_DPSHTTAB_HXX
 #include "dpshttab.hxx"
-#endif
-#ifndef SC_ITEMS_HXX
 #include "scitems.hxx"
-#endif
 
-#ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
-#endif
-#ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
-#endif
-#ifndef SC_XIHELPER_HXX
 #include "xihelper.hxx"
-#endif
-#ifndef SC_XILINK_HXX
 #include "xilink.hxx"
-#endif
-#ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
-#endif
 
 //! TODO ExcelToSc usage
 #include "excform.hxx"
@@ -330,7 +293,7 @@ void XclImpPCField::ReadSxfield( XclImpStream& rStrm )
 
     if( nVisC > 0 )
     {
-        DBG_ASSERT( bItems != bPostp, "XclImpPCField::ReadSxfield - postponed field with inline items" );
+        DBG_ASSERT( !bItems || !bPostp, "XclImpPCField::ReadSxfield - postponed field with inline items" );
         if( bItems && !bPostp )
         {
             if( !bCalced )
