@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SchXMLTableContext.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:49:58 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,7 +315,7 @@ void lcl_applyXMLTableToInternalDataprovider(
     {
         if( rTable.bHasHeaderRow )
             lcl_ApplyColumnLabels( rTable.aData.front(), aColumnLabels, nColOffset );
-        ::for_each( rTable.aData.begin() + nRowOffset, rTable.aData.end(),
+        ::std::for_each( rTable.aData.begin() + nRowOffset, rTable.aData.end(),
                     lcl_ApplyRowsToData( aData, aRowLabels, nColOffset, rTable.bHasHeaderColumn ));
     }
 
