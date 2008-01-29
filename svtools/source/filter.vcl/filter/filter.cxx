@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-05 13:32:14 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:17:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1730,7 +1730,7 @@ USHORT GraphicFilter::ExportGraphic( const Graphic& rGraphic, const String& rPat
 
         for( USHORT i = 0; i < nFormatCount; i++ )
         {
-            if ( pConfig->GetExportFormatExtension( nFormat ).EqualsIgnoreCaseAscii( aExt ) )
+            if ( pConfig->GetExportFormatExtension( i ).EqualsIgnoreCaseAscii( aExt ) )
             {
                 nFormat=i;
                 break;
