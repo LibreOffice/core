@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chgtrack.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:13:23 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:21:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -960,7 +960,9 @@ BOOL ScChangeAction::LoadCellList( ScChangeAction* pOfAction,
             if ( pContent )
                 pOfAction->AddContent( pContent );
             else
+            {
                 DBG_ERROR( "ScChangeActionDel::LoadLinks: missing Content" );
+            }
         }
     }
     return TRUE;
@@ -992,7 +994,9 @@ ScChangeActionIns::ScChangeActionIns( const ScRange& rRange )
         aBigRange.aEnd.SetRow( nInt32Max );
     }
     else
+    {
         DBG_ERROR( "ScChangeActionIns: Block not supported!" );
+    }
 }
 
 
@@ -1117,7 +1121,9 @@ ScChangeActionDel::ScChangeActionDel( const ScRange& rRange,
         aBigRange.aEnd.SetRow( nInt32Max );
     }
     else
+    {
         DBG_ERROR( "ScChangeActionDel: Block not supported!" );
+    }
 }
 
 
@@ -3329,7 +3335,9 @@ void ScChangeTrack::AppendDeleteRange( const ScRange& rRange,
                 }
             }
             else
+            {
                 DBG_ERROR( "ScChangeTrack::AppendDeleteRange: Block not supported!" );
+            }
             SetInDeleteTop( FALSE );
         }
     }
@@ -4039,7 +4047,9 @@ void ScChangeTrack::Undo( ULONG nStartAction, ULONG nEndAction )
                                     Append( pCut, nCut );
                                 }
                                 else
+                                {
                                     DBG_ERROR( "ScChangeTrack::Undo: nCut not found" );
+                                }
                             }
                             EndBlockModify( nEnd );
                             ResetLastCut();
@@ -5147,7 +5157,9 @@ BOOL ScChangeTrack::Reject( ScChangeAction* pAct, ScChangeActionTable* pTable,
             delete pReject;
     }
     else
+    {
         DBG_ERROR( "ScChangeTrack::Reject: say what?" );
+    }
 
     return bRejected;
 }
