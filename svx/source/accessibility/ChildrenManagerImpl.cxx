@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 13:01:16 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:09:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -376,7 +376,7 @@ void ChildrenManagerImpl::MergeAccessibilityInformation (
     ChildDescriptorListType::iterator I, aEnd = raNewChildList.end();
     for (I=raNewChildList.begin(); I != aEnd; ++I)
     {
-        aOldChildDescriptor = find (maVisibleChildren.begin(), maVisibleChildren.end(), *I);
+        aOldChildDescriptor = ::std::find (maVisibleChildren.begin(), maVisibleChildren.end(), *I);
 
         // Copy accessible shape if that exists in the old descriptor.
         bool bRegistrationIsNecessary = true;
@@ -498,7 +498,7 @@ void ChildrenManagerImpl::RemoveShape (const Reference<drawing::XShape>& rxShape
 
         // Search shape in list of visible children.
         ChildDescriptorListType::iterator I (
-            find (maVisibleChildren.begin(), maVisibleChildren.end(),
+            ::std::find (maVisibleChildren.begin(), maVisibleChildren.end(),
                 ChildDescriptor (rxShape)));
         if (I != maVisibleChildren.end())
         {
@@ -664,7 +664,7 @@ void SAL_CALL
 
         // Find the descriptor for the given shape.
         ChildDescriptorListType::iterator I (
-            find (maVisibleChildren.begin(), maVisibleChildren.end(),
+            ::std::find (maVisibleChildren.begin(), maVisibleChildren.end(),
                 ChildDescriptor (xShape)));
         if (I != maVisibleChildren.end())
         {
