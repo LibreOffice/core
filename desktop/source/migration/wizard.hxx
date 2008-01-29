@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:37:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:31:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,12 +64,10 @@ public:
     static ResMgr* pResMgr;
     static ResMgr* GetResManager();
 
-    FirstStartWizard(Window* pParent);
+    FirstStartWizard( Window* pParent, sal_Bool bLicenseNeedsAcceptance, const rtl::OUString &rLicensePath );
 
     virtual short Execute();
     virtual long PreNotify( NotifyEvent& rNEvt );
-
-    static rtl::OUString getLicensePath();
 
     void overrideCheck(sal_Bool bOverride);
 
@@ -81,10 +79,12 @@ private:
     String m_sNext;
     String m_sCancel;
     sal_Bool m_bDone;
-    sal_Bool m_bLicenseNeedsAcceptence;
+    sal_Bool m_bLicenseNeedsAcceptance;
     sal_Bool m_bLicenseWasAccepted;
     sal_Bool m_bAutomaticUpdChk;
     Link m_lnkCancel;
+
+    rtl::OUString m_aLicensePath;
 
     void storeAcceptDate();
     void disableWizard();
@@ -95,14 +95,6 @@ private:
     void cleanOldOfficeRegKeys();
     sal_Bool showOnlineUpdatePage();
     ::svt::RoadmapWizardTypes::PathId defineWizardPagesDependingFromContext();
-
-public:
-    static sal_Bool isWizardNeeded();
-    static sal_Bool needsLicenseAcceptence();
-
-private:
-    static sal_Bool impl_isFirstStart();
-    static sal_Bool impl_isLicenseAccepted();
 
 protected:
     // from svt::WizardMachine
