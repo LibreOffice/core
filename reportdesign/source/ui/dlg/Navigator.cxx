@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Navigator.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-20 19:08:24 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:47:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -595,7 +595,7 @@ void NavigatorTree::traverseSection(const uno::Reference< report::XSection>& _xS
     const sal_Int32 nCount = _xSection->getCount();
     for (sal_Int32 i = 0; i < nCount; ++i)
     {
-        uno::Reference< report::XReportComponent> xElement(_xSection->getByIndex(i),uno::UNO_QUERY);
+        uno::Reference< report::XReportComponent> xElement(_xSection->getByIndex(i),uno::UNO_QUERY_THROW);
         OSL_ENSURE(xElement.is(),"Found report element which is NULL!");
         insertEntry(lcl_getName(xElement.get()),pSection,lcl_getImageId(xElement),LIST_APPEND,new UserData(this,xElement));
         uno::Reference< report::XReportDefinition> xSubReport(xElement,uno::UNO_QUERY);
