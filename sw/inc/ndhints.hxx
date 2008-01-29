@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndhints.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:55:37 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:36:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,7 @@ public:
     // != 0 ist, muessen alle Attributaenderungen "gemeldet" werden.
     void Register( SwRegHistory* pHist ) { pHistory = pHist; }
     void DeRegister() { Register(0); }
+    SwRegHistory* getHistory() const { return pHistory; }
 
     void Insert( SwTxtAttr*  pHt,      SwTxtNode &rNode, USHORT nMode = 0 );
 
