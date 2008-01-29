@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtnav.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:10:48 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:09:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,7 @@ TYPEINIT1(FmFilterItems, FmParentData);
 //------------------------------------------------------------------------
 FmFilterItem* FmFilterItems::Find(const Reference< ::com::sun::star::awt::XTextComponent > & _xText) const
 {
-    for (vector<FmFilterData*>::const_iterator i = m_aChilds.begin();
+    for (::std::vector<FmFilterData*>::const_iterator i = m_aChilds.begin();
          i != m_aChilds.end(); ++i)
     {
         FmFilterItem* pCond = PTR_CAST(FmFilterItem, *i);
@@ -448,7 +448,7 @@ void FmFilterAdapter::DeleteItemsByText(::std::vector<FmFilterData*>& _rItems,
             {
                 // remove the condition
                 ::std::vector<FmFilterData*>& rItems = pFilterItems->GetChilds();
-                ::std::vector<FmFilterData*>::iterator j = find(rItems.begin(), rItems.end(), pFilterItem);
+                ::std::vector<FmFilterData*>::iterator j = ::std::find(rItems.begin(), rItems.end(), pFilterItem);
                 if (j != rItems.end())
                     m_pModel->Remove(j, pFilterItem);
             }
@@ -846,7 +846,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
     ::std::vector<FmFilterData*>& rItems = pParent->GetChilds();
 
     // erase the item from the model
-    ::std::vector<FmFilterData*>::iterator i = find(rItems.begin(), rItems.end(), pData);
+    ::std::vector<FmFilterData*>::iterator i = ::std::find(rItems.begin(), rItems.end(), pData);
     DBG_ASSERT(i != rItems.end(), "FmFilterModel::Remove(): unknown Item");
     // position within the parent
     sal_Int32 nPos = i - rItems.begin();
@@ -940,7 +940,7 @@ void FmFilterModel::Remove(FmFilterData* pData)
         {
             // find the position of the father within his father
             ::std::vector<FmFilterData*>& rParentParentItems = pData->GetParent()->GetParent()->GetChilds();
-            ::std::vector<FmFilterData*>::iterator j = find(rParentParentItems.begin(), rParentParentItems.end(), pFilterItem->GetParent());
+            ::std::vector<FmFilterData*>::iterator j = ::std::find(rParentParentItems.begin(), rParentParentItems.end(), pFilterItem->GetParent());
             DBG_ASSERT(j != rParentParentItems.end(), "FmFilterModel::Remove(): unknown Item");
             sal_Int32 nParentPos = j - rParentParentItems.begin();
 
@@ -1004,7 +1004,7 @@ void FmFilterModel::Append(FmFilterItems* pItems, FmFilterItem* pFilterItem)
 void FmFilterModel::SetTextForItem(FmFilterItem* pItem, const ::rtl::OUString& rText)
 {
     ::std::vector<FmFilterData*>& rItems = pItem->GetParent()->GetParent()->GetChilds();
-    ::std::vector<FmFilterData*>::iterator i = find(rItems.begin(), rItems.end(), pItem->GetParent());
+    ::std::vector<FmFilterData*>::iterator i = ::std::find(rItems.begin(), rItems.end(), pItem->GetParent());
     sal_Int32 nParentPos = i - rItems.begin();
 
     m_pAdapter->setText(nParentPos, pItem, rText);
@@ -1031,7 +1031,7 @@ void FmFilterModel::SetCurrentItems(FmFilterItems* pCurrent)
     {
         FmFormItem* pFormItem = (FmFormItem*)pCurrent->GetParent();
         ::std::vector<FmFilterData*>& rItems = pFormItem->GetChilds();
-        ::std::vector<FmFilterData*>::const_iterator i = find(rItems.begin(), rItems.end(), pCurrent);
+        ::std::vector<FmFilterData*>::const_iterator i = ::std::find(rItems.begin(), rItems.end(), pCurrent);
 
         if (i != rItems.end())
         {
