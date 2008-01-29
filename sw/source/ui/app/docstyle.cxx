@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstyle.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:17:24 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:42:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1044,7 +1044,8 @@ BOOL   SwDocStyleSheet::SetFollow( const String& rStr)
                                             ? lcl_FindPageDesc(rDoc, rStr)
                                             : 0;
             USHORT nId;
-            if( rDoc.FindPageDescByName( pDesc->GetName(), &nId ))
+            if( pFollowDesc != pDesc->GetFollow() &&
+                rDoc.FindPageDescByName( pDesc->GetName(), &nId ) )
             {
                 SwPageDesc aDesc( *pDesc );
                 aDesc.SetFollow( pFollowDesc );
