@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLColumnRowGroupExport.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:50:43 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:33:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,7 @@
 #ifndef _SC_XMLCOLUMNROWGROUPEXPORT_HXX
 #define _SC_XMLCOLUMNROWGROUPEXPORT_HXX
 
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
