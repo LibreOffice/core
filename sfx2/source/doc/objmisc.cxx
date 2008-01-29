@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 09:04:23 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:29:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,7 @@ using namespace ::com::sun::star::script;
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
 #include <framework/interaction.hxx>
+#include <comphelper/storagehelper.hxx>
 
 #include <sfx2/signaturestate.hxx>
 #include <sfx2/app.hxx>
@@ -183,6 +184,7 @@ using namespace ::com::sun::star::script;
 #include "../appl/app.hrc"
 #include <sfx2/sfxdlg.hxx>
 #include "appbaslib.hxx"
+#include <openflag.hxx>                 // SFX_STREAM_READWRITE
 
 using namespace ::com::sun::star;
 
@@ -1151,12 +1153,23 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
 
         if ( (pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) && (pImp->nLoadedFlags & SFX_LOADED_IMAGES ) )
         {
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pTemplateItem, SfxBoolItem, SID_TEMPLATE, sal_False);
+            sal_Bool bTemplate = pTemplateItem && pTemplateItem->GetValue();
+
             // closing the streams on loading should be under control of SFX!
-            // if a readonly medium has storage then it's stream is already based on temporary file
             DBG_ASSERT( pMedium->IsOpen(), "Don't close the medium when loading documents!" );
-            if( !(pMedium->GetOpenMode() & STREAM_WRITE) && !pMedium->HasStorage_Impl() )
-                // don't lock file opened read only
-                pMedium->CloseInStream();
+
+            if ( bTemplate )
+            {
+                TemplateDisconnectionAfterLoad();
+            }
+            else
+            {
+                // if a readonly medium has storage then it's stream is already based on temporary file
+                if( !(pMedium->GetOpenMode() & STREAM_WRITE) && !pMedium->HasStorage_Impl() )
+                    // don't lock file opened read only
+                    pMedium->CloseInStream();
+            }
         }
 
         pImp->bInitialized = sal_True;
@@ -1166,6 +1179,97 @@ void SfxObjectShell::FinishedLoading( sal_uInt16 nFlags )
         Broadcast( SfxSimpleHint( SFX_HINT_TITLECHANGED ) );
         if ( pImp->nEventId )
             PostActivateEvent_Impl(SfxViewFrame::GetFirst(this));
+    }
+}
+
+//-------------------------------------------------------------------------
+extern void SetTemplate_Impl( const String&, const String&, SfxObjectShell* );
+
+void SfxObjectShell::TemplateDisconnectionAfterLoad()
+{
+    // document is created from a template
+    //TODO/LATER: should the templates always be XML docs!
+
+    SfxMedium* pTmpMedium = pMedium;
+    if ( pTmpMedium )
+    {
+        String aName( pTmpMedium->GetName() );
+        SFX_ITEMSET_ARG( pTmpMedium->GetItemSet(), pTemplNamItem, SfxStringItem, SID_TEMPLATE_NAME, sal_False);
+        String aTemplateName;
+        if ( pTemplNamItem )
+            aTemplateName = pTemplNamItem->GetValue();
+        else
+        {
+            // !TODO/LATER: what's this?!
+            // Interaktiv ( DClick, Contextmenu ) kommt kein Langname mit
+            aTemplateName = GetDocInfo().GetTitle();
+            if ( !aTemplateName.Len() )
+            {
+                INetURLObject aURL( aName );
+                aURL.CutExtension();
+                aTemplateName = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
+            }
+        }
+
+        // set medium to noname
+        pTmpMedium->SetName( String(), sal_True );
+        pTmpMedium->Init_Impl();
+
+        // drop resource
+        SetNoName();
+        InvalidateName();
+
+        if( IsPackageStorageFormat_Impl( *pTmpMedium ) )
+        {
+            // untitled document must be based on temporary storage
+            // the medium should not dispose the storage in this case
+            uno::Reference < embed::XStorage > xTmpStor = ::comphelper::OStorageHelper::GetTemporaryStorage();
+            GetStorage()->copyToStorage( xTmpStor );
+
+            // the medium should disconnect from the original location
+            // the storage should not be disposed since the document is still
+            // based on it, but in DoSaveCompleted it will be disposed
+            pTmpMedium->CanDisposeStorage_Impl( sal_False );
+            pTmpMedium->Close();
+
+            // setting the new storage the medium will be based on
+            pTmpMedium->SetStorage_Impl( xTmpStor );
+
+            ForgetMedium();
+            if( !DoSaveCompleted( pTmpMedium ) )
+                SetError( ERRCODE_IO_GENERAL );
+            else
+            {
+                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pSalvageItem, SfxStringItem, SID_DOC_SALVAGE, sal_False );
+                sal_Bool bSalvage = pSalvageItem ? sal_True : sal_False;
+
+                if ( !bSalvage )
+                {
+                    // some further initializations for templates
+                    SetTemplate_Impl( aName, aTemplateName, this );
+                }
+
+                // the medium should not dispose the storage, DoSaveCompleted() has let it to do so
+                pTmpMedium->CanDisposeStorage_Impl( sal_False );
+            }
+        }
+        else
+        {
+            // some further initializations for templates
+            SetTemplate_Impl( aName, aTemplateName, this );
+            pTmpMedium->CreateTempFile();
+        }
+
+        // templates are never readonly
+        pTmpMedium->GetItemSet()->ClearItem( SID_DOC_READONLY );
+        pTmpMedium->SetOpenMode( SFX_STREAM_READWRITE, sal_True, sal_True );
+
+        // notifications about possible changes in readonly state and document info
+        Broadcast( SfxSimpleHint(SFX_HINT_MODECHANGED) );
+        Broadcast( SfxDocumentInfoHint( &GetDocInfo() ) );
+
+        // created untitled document can't be modified
+        SetModified( sal_False );
     }
 }
 
@@ -1946,6 +2050,19 @@ sal_Int16 SfxObjectShell_Impl::getImposedMacroExecMode() const
     return nImposedExecMode;
 }
 
+sal_Bool SfxObjectShell_Impl::setImposedMacroExecMode( sal_uInt16 nMacroMode )
+{
+    const SfxMedium* pMedium( rDocShell.GetMedium() );
+    OSL_PRECOND( pMedium, "SfxObjectShell_Impl::getImposedMacroExecMode: no medium!" );
+    if ( pMedium )
+    {
+        pMedium->GetItemSet()->Put( SfxUInt16Item( SID_MACROEXECMODE, nMacroMode ) );
+        return sal_True;
+    }
+
+    return sal_False;
+}
+
 ::rtl::OUString SfxObjectShell_Impl::getDocumentLocation() const
 {
     ::rtl::OUString sLocation;
@@ -1977,7 +2094,7 @@ uno::Reference< embed::XStorage > SfxObjectShell_Impl::getLastCommitDocumentStor
     return xStore;
 }
 
-bool SfxObjectShell_Impl::documentStorageHasMacros() const
+sal_Bool SfxObjectShell_Impl::documentStorageHasMacros() const
 {
     return ::sfx2::DocumentMacroMode::storageHasMacros( m_xDocStorage );
 }
