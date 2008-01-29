@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 11:28:34 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:52:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
+#include <tools/diagnose_ex.h>
 #ifndef _SFXSIDS_HRC
 #include <sfx2/sfxsids.hrc>
 #endif
@@ -1560,8 +1561,16 @@ sal_Bool OTableController::isAddAllowed() const
     if(xColsSup.is())
         bAddAllowed = Reference<XAppend>(xColsSup->getColumns(),UNO_QUERY).is();
 
-    Reference< XDatabaseMetaData > xMetaData = getMetaData( );
-    bAddAllowed = bAddAllowed || ( xMetaData.is() && xMetaData->supportsAlterTableWithAddColumn());
+    try
+    {
+        Reference< XDatabaseMetaData > xMetaData = getMetaData( );
+        bAddAllowed = bAddAllowed || ( xMetaData.is() && xMetaData->supportsAlterTableWithAddColumn());
+    }
+    catch(Exception&)
+    {
+        DBG_UNHANDLED_EXCEPTION();
+        bAddAllowed = sal_False;
+    }
 
     return bAddAllowed;
 }
