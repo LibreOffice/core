@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtstyli.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 16:18:26 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -356,14 +356,23 @@ void XMLTextStyleContext::Finish( sal_Bool bOverwrite )
         bool bApplyListStyle( true );
         if ( nOutlineLevel > 0 )
         {
-            sal_Int32 nUPD( 0 );
-            sal_Int32 nBuild( 0 );
-            GetImport().getBuildIds( nUPD, nBuild );
-            if ( nUPD < 680 ||
-                 ( nUPD == 680 && nBuild <= 9073 /* BuildId of OOo 2.0.4/SO8 PU4 */ ) )
+            // --> OD 2007-12-19 #152540#
+            if ( GetImport().IsTextDocInOOoFileFormat() )
             {
                 bApplyListStyle = false;
             }
+            else
+            {
+                sal_Int32 nUPD( 0 );
+                sal_Int32 nBuild( 0 );
+                if ( GetImport().getBuildIds( nUPD, nBuild ) &&
+                     ( nUPD < 680 ||
+                       ( nUPD == 680 && nBuild <= 9073 /* BuildId of OOo 2.0.4/SO8 PU4 */ ) ) )
+                {
+                    bApplyListStyle = false;
+                }
+            }
+            // <--
         }
 
         if ( bApplyListStyle )
