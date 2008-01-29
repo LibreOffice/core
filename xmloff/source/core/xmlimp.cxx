@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:32:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:14:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,6 +248,9 @@ public:
     bool mbOwnEmbeddedResolver;
     INetURLObject aBaseURL;
     INetURLObject aDocBase;
+
+    ::rtl::OUString aODFVersion;
+
     // --> OD 2004-08-10 #i28749# - boolean, indicating that position attributes
     // of shapes are given in horizontal left-to-right layout. This is the case
     // for the OpenOffice.org file format.
@@ -681,7 +684,11 @@ void SAL_CALL SvXMLImport::startElement( const OUString& rName,
     for( INT16 i=0; i < nAttrCount; i++ )
     {
         const OUString& rAttrName = xAttrList->getNameByIndex( i );
-        if( ( rAttrName.getLength() >= 5 ) &&
+        if ( rAttrName.equalsAscii("office:version") )
+        {
+            mpImpl->aODFVersion = xAttrList->getValueByIndex( i );
+        }
+        else if( ( rAttrName.getLength() >= 5 ) &&
             ( rAttrName.compareToAscii( sXML_xmlns, 5 ) == 0 ) &&
             ( rAttrName.getLength() == 5 || ':' == rAttrName[5] ) )
         {
@@ -1863,3 +1870,7 @@ bool SvXMLImport::isGraphicLoadOnDemmandSupported() const
     return mbIsGraphicLoadOnDemmandSupported;
 }
 
+::rtl::OUString SvXMLImport::GetODFVersion() const
+{
+    return mpImpl->aODFVersion;
+}
