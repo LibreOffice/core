@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:33:26 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:12:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ class SvNumberFormatter;
 namespace dbaui
 {
     //------------------------------------------------------------------
-    struct SbaURLCompare : public binary_function< ::com::sun::star::util::URL, ::com::sun::star::util::URL, bool>
+    struct SbaURLCompare : public ::std::binary_function< ::com::sun::star::util::URL, ::com::sun::star::util::URL, bool>
     {
         bool operator() (const ::com::sun::star::util::URL& x, const ::com::sun::star::util::URL& y) const {return x.Complete == y.Complete ? true : false;}
     };
