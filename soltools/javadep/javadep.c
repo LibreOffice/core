@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javadep.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-02 12:41:47 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 07:57:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,6 @@ static char     cpathsep    = '/';
 #elif defined (WNT)
 static char     cpathsep    = '\\';
 #endif
-static int      bnl         = 0;
 static FILE     *pfsout     = NULL;
 static char     *pout_file  = NULL;
 
@@ -660,9 +659,6 @@ err_quit(const char* fmt, ...)
     va_list args;
     char buffer[PATH_MAX];
 
-    if ( bnl )
-        printf("\n");
-
     va_start(args, fmt);
 
     if ( pprogname )
@@ -691,8 +687,6 @@ silent_quit()
         fclose(pfsout);
         unlink(pout_file);
     }
-    if ( bnl )
-        printf("\n");
     exit(0);
 }
 
@@ -934,18 +928,9 @@ main(int argc, char *argv[])
             if ( pfsout != stdout ) {
                 if ( bv_flag )
                     printf("Processed %s ...\n", parg);
-                else {
-                    printf(".");
-                    fflush(stdout);
-                    if ( !bnl )
-                        bnl++;
-                }
             }
         }
     }
-    if ( bnl )
-        printf("\n");
-
 
     free_growable(pfilters);
     pfilters = NULL;
