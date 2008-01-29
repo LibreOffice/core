@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par5.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 15:31:34 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:42:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1021,7 +1021,9 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         pStrm->Seek( nOldPos );
 
         //#124725# field codes which contain '/' or '.' are not displayed in WinWord
-        if (aStr.Search('.') != STRING_NOTFOUND || aStr.Search('/') != STRING_NOTFOUND)
+        if (!aStr.EqualsAscii(" ADDIN", 0, 6) &&
+            (aStr.Search('.') != STRING_NOTFOUND ||
+             aStr.Search('/') != STRING_NOTFOUND))
             return aF.nLen;
         else
             return aF.nLen - aF.nLRes - 1;  // so viele ueberlesen, das Resultfeld
