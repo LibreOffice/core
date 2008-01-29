@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodetect.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 08:05:24 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:21:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ const USHORT MAXFILTER =
 #ifdef DEBUG_SH
         1 +
 #endif
-        10;
+        11;
 
 const sal_Char __FAR_DATA FILTER_BAS[]  = "BAS";
 const sal_Char __FAR_DATA FILTER_RTF[]  = "RTF";
@@ -173,7 +173,7 @@ SwIoDetect aReaderWriter[ MAXFILTER ] =
 /* 17*/ SwIoEntry(sWW5,             STRING_LEN, 0,                  FALSE),
 ///* 18*/ SwIoEntry(sSwg1,            4,          0,                 FALSE),
 /* 19*/ SwIoEntry(FILTER_XML,       4,          &::GetXMLWriter,    TRUE),
-///* opt*/ DEB_SH_SwIoEntry(sW4W_Int, STRING_LEN, 0,                  TRUE),
+/*20*/ SwIoEntry(FILTER_TEXT_DLG, 8,          &::GetASCWriter,    TRUE),
 /*last*/ SwIoEntry(FILTER_TEXT,     4,          &::GetASCWriter,    TRUE)
 };
 
@@ -221,6 +221,8 @@ const sal_Char* SwIoDetect::IsReader(const sal_Char* pHeader, ULONG nLen_,
     }
     else if (FILTER_TEXT == pName)
         bRet = SwIoSystem::IsDetectableText(pHeader, nLen_);
+    else if( FILTER_TEXT_DLG == pName)
+        bRet = SwIoSystem::IsDetectableText( pHeader, nLen_, 0, 0, 0, true);
     return bRet ? pName : 0;
 }
 
@@ -563,7 +565,7 @@ const SfxFilter* SwIoSystem::GetFileFilter(const String& rFileName,
 }
 
 bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
-    CharSet *pCharSet, bool *pSwap, LineEnd *pLineEnd)
+    CharSet *pCharSet, bool *pSwap, LineEnd *pLineEnd, bool bEncodedFilter)
 {
     bool bSwap = false;
     CharSet eCharSet = RTL_TEXTENCODING_DONTKNOW;
@@ -704,7 +706,7 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
     if (pLineEnd)
         *pLineEnd = eLineEnd;
 
-    return (!bIsBareUnicode && eSysLE == eLineEnd);
+    return bEncodedFilter || (!bIsBareUnicode && eSysLE == eLineEnd);
 }
 
 const SfxFilter* SwIoSystem::GetTextFilter( const sal_Char* pBuf, ULONG nLen)
