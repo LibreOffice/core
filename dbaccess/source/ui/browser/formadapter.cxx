@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formadapter.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:04:19 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:12:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1178,7 +1178,7 @@ void SAL_CALL SbaXFormAdapter::dispose() throw( RuntimeException )
     m_aContainerListeners.disposeAndClear(aEvt);
 
     // dispose all childs
-    for (   vector< Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = m_aChildren.begin();
+    for (   ::std::vector< Reference< ::com::sun::star::form::XFormComponent > >::iterator aIter = m_aChildren.begin();
             aIter != m_aChildren.end();
             ++aIter
         )
@@ -1547,7 +1547,7 @@ void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const ::
 // -------------------------------------------------------------------------
 sal_Int32 SbaXFormAdapter::implGetPos(const ::rtl::OUString& rName)
 {
-    vector< ::rtl::OUString>::iterator aIter = ::std::find_if(  m_aChildNames.begin(),
+    ::std::vector< ::rtl::OUString>::iterator aIter = ::std::find_if(   m_aChildNames.begin(),
                                                                 m_aChildNames.end(),
                                                                 ::std::bind2nd(::std::equal_to< rtl::OUString>(),rName));
 
