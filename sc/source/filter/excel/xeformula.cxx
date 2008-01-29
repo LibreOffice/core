@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-21 12:26:55 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:25:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ struct XclExpCompConfig
     bool                mbFromCell;     /// True = Any kind of cell formula (cell, array, shared).
     bool                mb3DRefOnly;    /// True = Only 3D references allowed (e.g. names).
     bool                mbStopAtSep;    /// True = Stop compilation at ocSep in root level.
-    bool                mbAllowArrays;  /// True = Allow inline arrays
+    bool                mbAllowArrays;  /// True = Allow inline arrays.
 };
 
 // ----------------------------------------------------------------------------
@@ -114,9 +114,9 @@ struct XclExpCompConfig
 /** Working data of the formula compiler. Used to push onto a stack for recursive calls. */
 struct XclExpCompData
 {
-    typedef ::std::list< const ScMatrix * > ScMatrixList;
-    typedef ScfRef< ScMatrixList > ScMatrixListRef;
-    typedef ScfRef< ScTokenArray > ScTokenArrayRef;
+    typedef ::std::list< const ScMatrix* >  ScMatrixList;
+    typedef ScfRef< ScMatrixList >          ScMatrixListRef;
+    typedef ScfRef< ScTokenArray >          ScTokenArrayRef;
 
     XclExpCompConfig    maCfg;          /// Configuration for current formula type.
     ScfUInt8Vec         maTokVec;       /// Byte vector containing token data.
@@ -124,7 +124,7 @@ struct XclExpCompData
     XclTokenArrayIterator maTokArrIt;   /// Iterator in Calc token array.
     XclExpLinkManager*  mpLinkMgr;      /// Link manager for current context (local/global).
     XclExpRefLog*       mpRefLog;       /// Log for external references.
-    ScMatrixListRef     maInlineArr;    /// List of inline arrays (in reverse order)
+    ScMatrixListRef     mxInlineArr;    /// List of inline arrays (in reverse order)
 
     const ScAddress*    mpScBasePos;    /// Current cell position of the formula.
 
@@ -350,7 +350,7 @@ private:
     XclExpRefLogEntry*  GetNewRefLogEntry();
     void                ProcessCellRef( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
     void                ProcessRangeRef( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
-    void                ProcessMatrix (const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
+    void                ProcessMatrix( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
     void                ProcessDefinedName( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
     void                ProcessDatabaseArea( const XclExpTokenData& rTokData, sal_uInt8 nExpClass );
 
@@ -362,7 +362,7 @@ private:
 
     void                AdjustTokenClass( sal_uInt8& rnTokenId, sal_uInt8 nExpClass );
     void                AdjustLastTokenClass( sal_uInt8 nExpClass );
-    void                AdjustLastTokenClassForEstereggOp();
+    void                AdjustLastTokenClassForEastereggOp();
 
     void                AppendOpTokenId( sal_uInt8 nTokenId, sal_uInt8 nExpClass, sal_uInt8 nSpaces = 0 );
     void                AppendFuncTokenId( sal_uInt16 nXclFuncIdx, sal_uInt8 nRetClass, sal_uInt8 nExpRetClass, sal_uInt8 nSpaces = 0 );
@@ -379,7 +379,6 @@ private:
 
     void                AppendAddress( const XclAddress& rXclPos );
     void                AppendRange( const XclRange& rXclRange );
-    void                AppendMatrixPlaceHolder( const ScMatrix* rMatrix );
 
     void                AppendSpaceToken( sal_uInt8 nType, sal_uInt8 nCount );
     void                AppendIntToken( sal_uInt16 nValue, sal_uInt8 nSpaces = 0 );
@@ -428,17 +427,17 @@ namespace {
 /** The table containing configuration data for all formula types. */
 static const XclExpCompConfig spConfigTable[] =
 {
-    // formula type         token class type      link manager type       inCell 3dOnly StopAtSep allowArray
-    { EXC_FMLATYPE_CELL,    EXC_CLASSTYPE_CELL,   EXC_LINKMGRTYPE_LOCAL,  true,  false, true,       true  },
-    { EXC_FMLATYPE_SHARED,  EXC_CLASSTYPE_CELL,   EXC_LINKMGRTYPE_LOCAL,  true,  false, true,       true  },
-    { EXC_FMLATYPE_MATRIX,  EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_LOCAL,  true,  false, true,       true  },
-    { EXC_FMLATYPE_CONDFMT, EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_NONE,   false, false, true,       false  },
-    { EXC_FMLATYPE_DATAVAL, EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_NONE,   false, false, true,       false  },
-    { EXC_FMLATYPE_NAME,    EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_GLOBAL, false, true,  false,      true },
-    { EXC_FMLATYPE_CHART,   EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, true,  false,      true },
-    { EXC_FMLATYPE_CONTROL, EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, false, true,       false  },
-    { EXC_FMLATYPE_WQUERY,  EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, true,  false,      false },
-    { EXC_FMLATYPE_LISTVAL, EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_NONE,   false, false, true,       false  }
+    // formula type         token class type      link manager type       inCell 3dOnly StopSp allowArray
+    { EXC_FMLATYPE_CELL,    EXC_CLASSTYPE_CELL,   EXC_LINKMGRTYPE_LOCAL,  true,  false, true,  true  },
+    { EXC_FMLATYPE_SHARED,  EXC_CLASSTYPE_CELL,   EXC_LINKMGRTYPE_LOCAL,  true,  false, true,  true  },
+    { EXC_FMLATYPE_MATRIX,  EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_LOCAL,  true,  false, true,  true  },
+    { EXC_FMLATYPE_CONDFMT, EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_NONE,   false, false, true,  false },
+    { EXC_FMLATYPE_DATAVAL, EXC_CLASSTYPE_ARRAY,  EXC_LINKMGRTYPE_NONE,   false, false, true,  false },
+    { EXC_FMLATYPE_NAME,    EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_GLOBAL, false, true,  false, true  },
+    { EXC_FMLATYPE_CHART,   EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, true,  false, true  },
+    { EXC_FMLATYPE_CONTROL, EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, false, true,  false },
+    { EXC_FMLATYPE_WQUERY,  EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_LOCAL,  false, true,  false, false },
+    { EXC_FMLATYPE_LISTVAL, EXC_CLASSTYPE_NAME,   EXC_LINKMGRTYPE_NONE,   false, false, true,  false }
 };
 
 } // namespace
@@ -576,8 +575,7 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType )
         maTokArrIt.Init();
         mpLinkMgr = 0;
         mpRefLog = 0;
-
-    maInlineArr.reset( NULL );
+        mxInlineArr.reset();
 
         mpScBasePos = 0;
 
@@ -644,31 +642,29 @@ void XclExpFmlaCompImpl::LeaveRecursive()
     }
 }
 
-void XclExpFmlaCompImpl::AppendInlineArrays( ScfUInt8Vec & rExtensionTokens )
+void XclExpFmlaCompImpl::AppendInlineArrays( ScfUInt8Vec& rExtensionTokens )
 {
     // The const_cast is needed, otherwise MS and Sun compilers can't promote
     // the non-const iterators obtained via ScMatrixList* to const iterators.
-    const ScMatrixList* pList = const_cast<const ScMatrixList*>(maInlineArr.get());
-    const ScMatrixList::const_reverse_iterator end = pList->rend();
-    ScMatrixList::const_reverse_iterator i = pList->rbegin();
-    for( ;  i != end ; i++ )
+    const ScMatrixList* pList = const_cast< const ScMatrixList* >( mxInlineArr.get() );
+    for( ScMatrixList::const_reverse_iterator aIt = pList->rbegin(), aEnd = pList->rend(); aIt != aEnd ; ++aIt )
     {
-        const ScMatrix *pMatrix = *i;
+        const ScMatrix* pMatrix = *aIt;
         SCSIZE nC, nMaxC, nR, nMaxR;
 
-        pMatrix->GetDimensions( nMaxC, nMaxR);
+        pMatrix->GetDimensions( nMaxC, nMaxR );
 
         if( meBiff == EXC_BIFF8 )
         {
-            rExtensionTokens.push_back( sal_uInt8(nMaxC - 1) );
+            rExtensionTokens.push_back( sal_uInt8( nMaxC - 1 ) );
             rExtensionTokens.resize( rExtensionTokens.size() + 2 );
-            ShortToSVBT16( USHORT(nMaxR - 1), &*(rExtensionTokens.end() - 2) );
+            ShortToSVBT16( static_cast< USHORT >( nMaxR - 1 ), &*(rExtensionTokens.end() - 2) );
         }
         else
         {
-            rExtensionTokens.push_back( nMaxC == 256 ? 0 : sal_uInt8(nMaxC) );
+            rExtensionTokens.push_back( static_cast< sal_uInt8 >( (nMaxC == 256) ? 0 : nMaxC ) );
             rExtensionTokens.resize( rExtensionTokens.size() + 2 );
-            ShortToSVBT16( sal::static_int_cast< USHORT >( nMaxR ), &*(rExtensionTokens.end() - 2) );
+            ShortToSVBT16( static_cast< USHORT >( nMaxR ), &*(rExtensionTokens.end() - 2) );
         }
 
         for( nR = 0 ; nR < nMaxR ; nR++)
@@ -758,10 +754,8 @@ void XclExpFmlaCompImpl::FinalizeFormula( ScfUInt8Vec & rExtensionTokens )
         mbOk = maTokVec.size() <= EXC_TOKARR_MAXLEN;
 
         // Store any inline arrays
-        if( mbOk && maInlineArr.is() )
-        {
+        if( mbOk && mxInlineArr.is() )
             AppendInlineArrays( rExtensionTokens );
-        }
     }
 
     if( !mbOk )
@@ -950,7 +944,7 @@ XclExpTokenData XclExpFmlaCompImpl::OrTerm( XclExpTokenData aTokData, sal_uInt8 
     sal_uInt8 nParamCount = 1;
     while( mbOk && (aTokData.GetOpCode() == ocOr) )
     {
-        AdjustLastTokenClassForEstereggOp();    // see comment in this function
+        AdjustLastTokenClassForEastereggOp();   // see comment in this function
         RemoveTrailingParen();
         aTokData = AndTerm( GetNextToken(), EXC_TOKCLASS_REF );
         RemoveTrailingParen();
@@ -968,7 +962,7 @@ XclExpTokenData XclExpFmlaCompImpl::AndTerm( XclExpTokenData aTokData, sal_uInt8
     sal_uInt8 nParamCount = 1;
     while( mbOk && (aTokData.GetOpCode() == ocAnd) )
     {
-        AdjustLastTokenClassForEstereggOp();    // see comment in this function
+        AdjustLastTokenClassForEastereggOp();   // see comment in this function
         RemoveTrailingParen();
         aTokData = CompareTerm( GetNextToken(), EXC_TOKCLASS_REF );
         RemoveTrailingParen();
@@ -1151,7 +1145,7 @@ XclExpTokenData XclExpFmlaCompImpl::Factor( XclExpTokenData aTokData, sal_uInt8 
         case svString:      ProcessString( aTokData );              break;
         case svSingleRef:   ProcessCellRef( aTokData, nExpClass );  break;
         case svDoubleRef:   ProcessRangeRef( aTokData, nExpClass ); break;
-        case svMatrix:      ProcessMatrix (aTokData, nExpClass );   break;
+        case svMatrix:      ProcessMatrix( aTokData, nExpClass );   break;
         case svExternal:    ProcessExternal( aTokData, nExpClass ); break;
 
         default:
@@ -2005,10 +1999,10 @@ void XclExpFmlaCompImpl::AdjustLastTokenClass( sal_uInt8 nExpClass )
     AdjustTokenClass( rnTokenId, nExpClass );
 }
 
-void XclExpFmlaCompImpl::AdjustLastTokenClassForEstereggOp()
+void XclExpFmlaCompImpl::AdjustLastTokenClassForEastereggOp()
 {
     /*  This very special function cares about the leading subexpression of the
-        Calc esteregg operators OR and AND.
+        Calc easteregg operators OR and AND.
         Example: The Calc formula =(A1:A2)OR(0) will be compiled to the Excel
         formula =OR(A1:A2,0). The Excel OR function expects REF parameters to
         be able to process all cells in a range reference. Since this compiler
@@ -2019,7 +2013,7 @@ void XclExpFmlaCompImpl::AdjustLastTokenClassForEstereggOp()
         So this function changes the last token back to its default class and
         adjusts it with expected REF class, which is what would happen, if a
         regular OR or AND function is processed. */
-    DBG_ASSERT( mnLastTokPos < GetSize(), "XclExpFmlaCompImpl::AdjustLastTokenClassForEstereggOp - invalid position" );
+    DBG_ASSERT( mnLastTokPos < GetSize(), "XclExpFmlaCompImpl::AdjustLastTokenClassForEastereggOp - invalid position" );
     sal_uInt8& rnTokenId = maTokVec[ mnLastTokPos ];
     if( GetTokenClass( rnTokenId ) != EXC_TOKCLASS_NONE )
     {
@@ -2125,20 +2119,6 @@ void XclExpFmlaCompImpl::AppendSpaceToken( sal_uInt8 nType, sal_uInt8 nCount )
         Append( nType );
         Append( nCount );
     }
-}
-
-void XclExpFmlaCompImpl::AppendMatrixPlaceHolder( const ScMatrix* pMatrix )
-{
-    SCSIZE cols, rows;
-
-    if( !maInlineArr )
-        maInlineArr.reset( new ScMatrixList );
-    maInlineArr->push_front( pMatrix ); // save it for later
-
-    pMatrix->GetDimensions( cols, rows);
-    Append( static_cast< sal_uInt8 >( cols-1 ) );
-    Append( static_cast< sal_uInt16 >( rows-1 ) );
-    Append( static_cast< sal_uInt32 >( 0 ) );   // undocumented
 }
 
 void XclExpFmlaCompImpl::AppendIntToken( sal_uInt16 nValue, sal_uInt8 nSpaces )
@@ -2387,13 +2367,23 @@ XclTokenArrayRef XclExpFormulaCompiler::CreateNameXFormula(
 {
     return mxImpl->CreateNameXFormula( nExtSheet, nExtName );
 }
-void XclExpFmlaCompImpl::ProcessMatrix ( const XclExpTokenData& rTokData, sal_uInt8 nExpClass )
+
+void XclExpFmlaCompImpl::ProcessMatrix( const XclExpTokenData& rTokData, sal_uInt8 nExpClass )
 {
-    if( maCfg.mbAllowArrays )
+    const ScMatrix* pMatrix = rTokData.mpScToken->GetMatrix();
+    if( maCfg.mbAllowArrays && pMatrix )
     {
-        AppendOpTokenId( GetTokenId( EXC_TOKID_ARRAY, EXC_TOKCLASS_ARR ),
-             nExpClass, rTokData.mnSpaces );
-        AppendMatrixPlaceHolder( rTokData.mpScToken->GetMatrix() );
+        SCSIZE nCols, nRows;
+        pMatrix->GetDimensions( nCols, nRows );
+
+        AppendOpTokenId( GetTokenId( EXC_TOKID_ARRAY, EXC_TOKCLASS_ARR ), nExpClass, rTokData.mnSpaces );
+        Append( static_cast< sal_uInt8 >( (meBiff == EXC_BIFF8) ? (nCols - 1) : nCols ) );
+        Append( static_cast< sal_uInt16 >( (meBiff == EXC_BIFF8) ? (nRows - 1) : nRows ) );
+        Append( static_cast< sal_uInt32 >( 0 ) );
+
+        if( !mxInlineArr )
+            mxInlineArr.reset( new ScMatrixList );
+        mxInlineArr->push_front( pMatrix ); // save it for later
     }
     else
     {
