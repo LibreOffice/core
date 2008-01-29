@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 13:58:14 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:20:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1193,7 +1193,7 @@ void SwTxtPaintInfo::_DrawBackBrush( const SwLinePortion &rPor ) const
         OutputDevice* pTmpOut = (OutputDevice*)GetOut();
 
         // --> FME 2004-06-24 #i16816# tagged pdf support
-        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pTmpOut );
+        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pTmpOut );
         // <--
 
         pTmpOut->Push( PUSH_LINECOLOR | PUSH_FILLCOLOR );
