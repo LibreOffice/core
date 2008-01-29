@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pivot.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-13 15:26:28 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:19:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1693,7 +1693,9 @@ void ScPivot::SetFuncLine(SCCOL nCol, SCROW nRow, SCTAB /* nTab */, USHORT nFunc
                     if (nIndex<nDataCount)
                         nThisFunc = aDataArr[nIndex].nFuncMask;
                     else
+                    {
                         DBG_ERROR("wat fuer'n Index ???");
+                    }
                 }
                 else
                     nThisFunc = aDataArr[nCIndex/nDataMult%nDataCount].nFuncMask;
@@ -1738,7 +1740,9 @@ void ScPivot::SetFuncLine(SCCOL nCol, SCROW nRow, SCTAB /* nTab */, USHORT nFunc
                     if (nEffIndex<nDataCount)
                         nThisFunc = aDataArr[nEffIndex].nFuncMask;
                     else
+                    {
                         DBG_ERROR("wat fuer'n Index ???");
+                    }
                 }
                 SetValue( sal::static_int_cast<SCCOL>(nCol+i), nRow, aTotal, nThisFunc );
                 //  Kategorie 23
@@ -1758,7 +1762,9 @@ void ScPivot::SetFuncLine(SCCOL nCol, SCROW nRow, SCTAB /* nTab */, USHORT nFunc
                 if (nIndex<nDataCount)
                     nThisFunc = aDataArr[nIndex].nFuncMask;
                 else
+                {
                     DBG_ERROR("wat fuer'n Index ???");
+                }
             }
             SetValue( nDestCol2, nRow, aGrandTotal[0], nThisFunc );
             //  Kategorie 24
