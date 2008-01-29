@@ -30,7 +30,7 @@ Dim oFactoryKey as Object
 	BasicLibraries.LoadLibrary(&quot;Tools&quot;)
 	BasicLibraries.LoadLibrary(&quot;ImportWizard&quot;)
 	If InitResources(&quot;Euro Converter&quot;, &quot;eur&quot;) Then
-		oDocInfo = CreateUnoService(&quot;com.sun.star.document.DocumentProperties&quot;)
+		oDocInfo = CreateUnoService(&quot;com.sun.star.document.StandaloneDocumentInfo&quot;)
 		oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 		oLocale = GetStarOfficeLocale()
 		InitializeConverter(oLocale, 2)
