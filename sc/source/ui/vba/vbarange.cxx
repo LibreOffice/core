@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbarange.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-14 12:41:04 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:03:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -519,7 +519,7 @@ sal_Int32 m_nArea;
 };
 
 typedef ::cppu::WeakImplHelper1< container::XEnumeration > CellsEnumeration_BASE;
-typedef vector< CellPos > vCellPos;
+typedef ::std::vector< CellPos > vCellPos;
 
 class CellsEnumeration : public CellsEnumeration_BASE
 {
