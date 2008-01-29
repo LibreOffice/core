@@ -4,9 +4,9 @@
  *
  *  $RCSfile: model.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:04:33 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 17:07:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,7 +299,7 @@ void Model::addMIP( void* pTag, const XNode_t& xNode, const MIP& rMIP )
     OSL_ENSURE( pTag != NULL, "empty tag?" );
     OSL_ENSURE( xNode.is(), "no node" );
 
-    MIPs_t::value_type aValue( xNode, pair<void*,MIP>( pTag, rMIP ) );
+    MIPs_t::value_type aValue( xNode, ::std::pair<void*,MIP>( pTag, rMIP ) );
     maMIPs.insert( aValue );
 }
 
