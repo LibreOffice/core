@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:28:24 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:31:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -433,7 +433,6 @@
 				</info>
 				<value>true</value>
 			</prop>
-
 			<prop oor:name="SlideshowRespectZOrder" oor:type="xs:boolean">
 				<!-- OldPath: -->
 				<!-- OldLocation: -->
@@ -445,7 +444,34 @@
 				</info>
 				<value>true</value>
 			</prop>
-
+			<prop oor:name="TransitionFiles" oor:type="oor:string-list">
+				<!-- OldPath: -->
+				<!-- OldLocation: -->
+				<!-- UIHints: List of files containing transition effects -->
+				<info>
+					<author>THB</author>
+					<desc>Contains a list of odf files, that define
+					slideshow transitions. Values are put through
+					macro expansion, so, vnd.sun.star.expand prefix
+					is allowed. </desc>
+					<label>List of files containing transition effects</label>
+				</info>
+                <value oor:separator=";">vnd.sun.star.expand:$ORIGIN/../share/config/soffice.cfg/simpress/transitions.xml</value>
+			</prop>
+			<prop oor:name="EffectFiles" oor:type="oor:string-list">
+				<!-- OldPath: -->
+				<!-- OldLocation: -->
+				<!-- UIHints: List of files containing object effects -->
+				<info>
+					<author>THB</author>
+					<desc>Contains a list of odf files, that define
+					slideshow shape effects. Values are put through
+					macro expansion, so, vnd.sun.star.expand prefix
+					is allowed.</desc>
+					<label>List of files containing object effects</label>
+				</info>
+                <value oor:separator=";">vnd.sun.star.expand:$ORIGIN/../share/config/soffice.cfg/simpress/effects.xml</value>
+			</prop>
 			<prop oor:name="PreviewNewEffects" oor:type="xs:boolean">
 				<!-- OldPath: -->
 				<!-- OldLocation: -->
