@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DefaultInspection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-09 11:56:31 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,8 +270,8 @@ namespace rptui
             USHORT          uiNameResId;
             sal_uInt32      helpId;
         } aCategories[] = {
-            { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_PROPDLG_TAB_GENERAL },
-            { "Data",       RID_STR_PROPPAGE_DATA,      HID_PROPDLG_TAB_DATA },
+            { "General",    RID_STR_PROPPAGE_DEFAULT,   HID_RPT_PROPDLG_TAB_GENERAL },
+            { "Data",       RID_STR_PROPPAGE_DATA,      HID_RPT_PROPDLG_TAB_DATA },
         };
 
         const size_t nCategories = sizeof( aCategories ) / sizeof( aCategories[0] );
