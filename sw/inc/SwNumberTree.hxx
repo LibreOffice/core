@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 08:50:45 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:19:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,6 +405,13 @@ public:
        @return the parent
     */
     SwNumberTreeNode * GetParent() const { return mpParent; }
+
+    /**
+       Returns the first child of this node.
+
+       @return the child
+    */
+    SwNumberTreeNode * GetFirstChild() const;
 
     /**
        Returns the root node of the tree this node is part of.
