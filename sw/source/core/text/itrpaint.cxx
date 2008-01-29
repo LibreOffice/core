@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:14:46 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:20:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -457,7 +457,7 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         {
             // --> FME 2004-06-24 #i16816# tagged pdf support
             Por_Info aPorInfo( *pPor, *this );
-            SwTaggedPDFHelper aTaggedPDFHelper( 0, &aPorInfo, *pOut );
+            SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, &aPorInfo, *pOut );
             // <--
 
             if( pPor->IsMultiPortion() )
