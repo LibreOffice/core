@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 16:43:22 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:16:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,7 @@
 #include "compiler.hxx"         // ScTokenArray GetCodeLen
 #include "dbcolect.hxx"
 #include "fillinfo.hxx"
+#include "postit.hxx"
 
 // -----------------------------------------------------------------------
 
