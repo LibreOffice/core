@@ -6,9 +6,9 @@
  *
  *  $RCSfile: ReportController.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 14:37:02 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:48:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,11 +202,6 @@ namespace rptui
         */
         void listen(const bool _bAdd);
 
-        /** saves the report definition
-            @param  _bSaveAs if <TRUE/> then the report will be saved as a new one.
-        */
-        sal_Bool doSaveDoc(sal_Bool _bSaveAs);
-
         /** opens the common page dialog
         */
         void openPageDialog(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection);
@@ -308,8 +303,6 @@ namespace rptui
         DECL_LINK( OnInvalidateClipboard, void* );
         DECL_LINK( OnClipboardChanged, void* );
         DECL_LINK( OnExecuteReport, void* );
-        DECL_LINK( OnSave, void* );
-        DECL_LINK( OnSaveAs, void* );
         DECL_LINK( OnOpenHelpAgent, void* );
         short saveModified();
         // all the features which should be handled by this class
