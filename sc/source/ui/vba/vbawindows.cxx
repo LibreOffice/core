@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbawindows.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:03:06 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:47:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,8 @@
  *
  ************************************************************************/
 #include "vbawindows.hxx"
+
+#include <hash_map>
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>

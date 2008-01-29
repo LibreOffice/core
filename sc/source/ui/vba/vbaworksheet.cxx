@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbaworksheet.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 11:06:55 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:47:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@
 #include <scitems.hxx>
 
 #include <svx/svdouno.hxx>
+#include <svx/svdpage.hxx>
 
 #include "cellsuno.hxx"
 #include "drwlayer.hxx"

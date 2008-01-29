@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vbahelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-07 10:53:38 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:47:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/app.hxx>
+#include <svtools/stritem.hxx>
 
 #include <docuno.hxx>
 
