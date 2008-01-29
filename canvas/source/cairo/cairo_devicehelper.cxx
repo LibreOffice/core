@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cairo_devicehelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:21:10 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:01:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,22 @@ using namespace ::com::sun::star;
 
 namespace cairocanvas
 {
+
+    const SystemEnvData* GetSysData(Window *pOutputWindow)
+    {
+        const SystemEnvData* pSysData = NULL;
+        // check whether we're a SysChild: have to fetch system data
+        // directly from SystemChildWindow, because the GetSystemData
+        // method is unfortunately not virtual
+        const SystemChildWindow* pSysChild = dynamic_cast< const SystemChildWindow* >( pOutputWindow );
+        if( pSysChild )
+            pSysData = pSysChild->GetSystemData();
+        else
+            pSysData = pOutputWindow->GetSystemData();
+        return pSysData;
+    }
+
+
     DeviceHelper::DeviceHelper() :
         mpSpriteCanvas( NULL ),
         maSize(),
@@ -90,14 +106,7 @@ namespace cairocanvas
         mpSpriteCanvas = &rSpriteCanvas;
         mbFullScreen = bFullscreen;
 
-        // check whether we're a SysChild: have to fetch system data
-        // directly from SystemChildWindow, because the GetSystemData
-        // method is unfortunately not virtual
-        const SystemChildWindow* pSysChild = dynamic_cast< const SystemChildWindow* >( mpOutputWindow );
-        if( pSysChild )
-            mpSysData = pSysChild->GetSystemData();
-        else
-            mpSysData = mpOutputWindow->GetSystemData();
+        mpSysData = GetSysData(mpOutputWindow);
 
         setSize( rSize );
     }
