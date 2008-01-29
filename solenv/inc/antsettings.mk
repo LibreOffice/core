@@ -4,9 +4,9 @@
 #
 #   $RCSfile: antsettings.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 10:56:53 $
+#   last change: $Author: vg $ $Date: 2008-01-29 08:10:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 .IF "$(SOLAR_JAVA)"!=""
 
 .IF "$(ANT_HOME)" == ""
-ANT_HOME*:=$(COMMON_BUILD_TOOLS)$/apache-ant-1.6.1
+ANT_HOME*:=$(COMMON_BUILD_TOOLS)$/apache-ant-1.7.0
 .EXPORT : ANT_HOME
 .ENDIF
 ANT_LIB*:=$(ANT_HOME)$/lib
