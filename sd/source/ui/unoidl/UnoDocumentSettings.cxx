@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoDocumentSettings.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 13:01:56 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:17:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -706,7 +706,7 @@ void DocumentSettings::_setPropertyValues( const PropertyMapEntry** ppEntries, c
                     if( *pValues >>= aPrinterName )
                     {
                         bOk = sal_True;
-                        if( aPrinterName.getLength() )
+                        if( aPrinterName.getLength() && pDocSh->GetCreateMode() != SFX_CREATE_MODE_EMBEDDED )
                         {
                             SfxPrinter *pTempPrinter = pDocSh->GetPrinter( sal_True );
                             if (pTempPrinter)
