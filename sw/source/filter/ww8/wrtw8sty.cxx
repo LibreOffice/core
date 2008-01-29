@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:02:16 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:41:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1063,7 +1063,11 @@ void WW8_WrPlcSepx::OutHeader( SwWW8Writer& rWrt, const SwFmt& rFmt,
         rCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
     }
     else if( rWrt.bWrtWW8 )
+    {
         pTxtPos->Append( rCpPos );
+        rWrt.WriteStringAsPara( aEmptyStr ); // CR ans Ende ( sonst mault WW )
+        rCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
+    }
 }
 void WW8_WrPlcSepx::OutFooter( SwWW8Writer& rWrt, const SwFmt& rFmt,
                                 ULONG& rCpPos, BYTE nHFFlags, BYTE nFlag )
@@ -1079,7 +1083,11 @@ void WW8_WrPlcSepx::OutFooter( SwWW8Writer& rWrt, const SwFmt& rFmt,
         rCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
     }
     else if( rWrt.bWrtWW8 )
+    {
         pTxtPos->Append( rCpPos );
+        rWrt.WriteStringAsPara( aEmptyStr ); // CR ans Ende ( sonst mault WW )
+        rCpPos = rWrt.Fc2Cp( rWrt.Strm().Tell() );
+    }
 }
 
 void WW8_WrPlcSepx::NeedsDocumentProtected(const WW8_SepInfo &rInfo)
