@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 15:39:28 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:12:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1028,7 +1028,7 @@ double Erfc( double x )
     }
 
     double fErfc = 0.0;
-    if ( x > 0.65 )
+    if ( x >= 0.65 )
     {
         if ( x < 6.0 )
             Erfc0600( x, fErfc );
