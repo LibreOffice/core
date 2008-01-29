@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:22:46 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:18:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,7 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() : m_pLayoutData( NULL )
     mbMenubuttonSelected = FALSE;
     mbPageScroll = FALSE;
     mbWillUsePopupMode = FALSE;
+    mbDropDownByKeyboard = FALSE;
 }
 
 ImplToolBoxPrivateData::~ImplToolBoxPrivateData()
