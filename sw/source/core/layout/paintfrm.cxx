@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:19:54 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:39:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3554,7 +3554,13 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
             // paint background
             {
                 SwRegionRects aRegion( aRect );
-                if ( bPaintMarginOnly )
+                // --> OD 2007-12-13 #i80822#
+                // suppress painting of background in printing area for
+                // non-transparent graphics.
+//                if ( bPaintMarginOnly )
+                if ( bPaintMarginOnly ||
+                     ( pNoTxt && !bIsGraphicTransparent ) )
+                // <--
                 {
                     //Was wir eigentlich Painten wollen ist der schmale Streifen
                     //zwischen PrtArea und aeusserer Umrandung.
@@ -3564,7 +3570,15 @@ void SwFlyFrm::Paint( const SwRect& rRect ) const
                 if ( bContour )
                 {
                     pOut->Push();
-                    if ( !pOut->GetConnectMetaFile() || pOut->GetOutDevType() == OUTDEV_PRINTER )
+                    // --> OD 2007-12-13 #i80822#
+                    // apply clip region under the same conditions, which are
+                    // used in <SwNoTxtFrm::Paint(..)> to set the clip region
+                    // for painting the graphic/OLE. Thus, the clip region is
+                    // also applied for the PDF export.
+//                    if ( !pOut->GetConnectMetaFile() || pOut->GetOutDevType() == OUTDEV_PRINTER )
+                    ViewShell *pSh = GetShell();
+                    if ( !pOut->GetConnectMetaFile() || !pSh->GetWin() )
+                    // <--
                     {
                         pOut->SetClipRegion( aPoly );
                     }
