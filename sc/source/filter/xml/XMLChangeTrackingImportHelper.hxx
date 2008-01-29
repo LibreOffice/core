@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:06:28 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:33:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,19 +36,9 @@
 #ifndef _SC_XMLCHANGETRACKINGIMPORTHELPER_HXX
 #define _SC_XMLCHANGETRACKINGIMPORTHELPER_HXX
 
-#ifndef SC_CHGTRACK_HXX
 #include "chgtrack.hxx"
-#endif
-
-#ifndef __SGI_STL_LIST
 #include <list>
-#endif
-#ifndef _SAL_TYPES_H_
-#include <sal/types.h>
-#endif
-#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
 #include <com/sun/star/util/DateTime.hpp>
-#endif
 
 class ScBaseCell;
 class ScDocument;
