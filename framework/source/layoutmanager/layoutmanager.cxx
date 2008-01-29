@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 16:22:38 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:23:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,7 +251,7 @@ struct UIElementVisibility
     bool          bVisible;
 };
 
-bool LayoutManager::UIElement::operator< ( const UIElement& aUIElement ) const
+bool LayoutManager::UIElement::operator< ( const LayoutManager::UIElement& aUIElement ) const
 {
     if ( !m_xUIElement.is() && aUIElement.m_xUIElement.is() )
         return false;
@@ -327,6 +327,29 @@ bool LayoutManager::UIElement::operator< ( const UIElement& aUIElement ) const
             }
         }
     }
+}
+
+LayoutManager::UIElement& LayoutManager::UIElement::operator= ( const LayoutManager::UIElement& rUIElement )
+{
+    m_aType             = rUIElement.m_aType;
+    m_aName             = rUIElement.m_aName;
+    m_aUIName           = rUIElement.m_aUIName;
+    m_xUIElement        = rUIElement.m_xUIElement;
+    m_bFloating         = rUIElement.m_bFloating;
+    m_bVisible          = rUIElement.m_bVisible;
+    m_bUserActive       = rUIElement.m_bUserActive;
+    m_bCreateNewRowCol0 = rUIElement.m_bCreateNewRowCol0;
+    m_bDeactiveHide     = rUIElement.m_bDeactiveHide;
+    m_bMasterHide       = rUIElement.m_bMasterHide;
+    m_bContextSensitive = rUIElement.m_bContextSensitive;
+    m_bContextActive    = rUIElement.m_bContextActive;
+    m_bNoClose          = rUIElement.m_bNoClose;
+    m_bSoftClose        = rUIElement.m_bSoftClose;
+    m_bStateRead        = rUIElement.m_bStateRead;
+    m_nStyle            = rUIElement.m_nStyle;
+    m_aDockedData       = rUIElement.m_aDockedData;
+    m_aFloatingData     = rUIElement.m_aFloatingData;
+    return *this;
 }
 
 static Reference< XModel > impl_getModelFromFrame( const Reference< XFrame >& rFrame )
@@ -1048,7 +1071,7 @@ void LayoutManager::implts_createAddonsToolBars()
                         aNewToolbar.m_aUIName = aGenericAddonTitle;
                         implts_writeWindowStateData( aNewToolbar.m_aName, aNewToolbar );
                     }
-                    m_aUIElements.push_back( aNewToolbar );
+                    implts_insertUIElement( aNewToolbar );
                 }
 
                 Reference< css::awt::XWindow > xWindow( xDockWindow, UNO_QUERY );
@@ -1121,14 +1144,16 @@ void LayoutManager::implts_createNonContextSensitiveToolBars()
                     if ( aElementType.equalsIgnoreAsciiCaseAscii( "toolbar" ) &&
                          aElementName.indexOf( m_aCustomTbxPrefix ) == -1 )
                     {
-                        UIElement aNewToolbar( aElementName, aElementType, xUIElement );
-                        aNewToolbar.m_aName = aName;
-                        implts_readWindowStateData( aName, aNewToolbar );
+                        UIElement aNewToolbar( aName, aElementType, xUIElement );
+                        bool bFound = implts_findElement( aName, aNewToolbar );
+                        if ( !bFound )
+                            implts_readWindowStateData( aName, aNewToolbar );
 
                         if ( aNewToolbar.m_bVisible &&
                              !aNewToolbar.m_bContextSensitive )
                         {
-                            m_aUIElements.push_back( aNewToolbar );
+                            if ( !bFound )
+                                implts_insertUIElement( aNewToolbar );
                             aMakeVisibleToolbars.push_back( aName );
                         }
                     }
@@ -1298,6 +1323,33 @@ LayoutManager::UIElement& LayoutManager::impl_findElement( const rtl::OUString& 
     }
 
     return aEmptyElement;
+}
+
+sal_Bool LayoutManager::implts_insertUIElement( const UIElement& rUIElement )
+{
+    UIElement aTempData;
+    bool bFound = implts_findElement( rUIElement.m_aName, aTempData );
+
+#ifdef DBG_UTIL
+    if ( bFound )
+    {
+        char aBuffer[256];
+        const sal_Int32 MAX_NAME_LENGTH = 128;
+        ::rtl::OString aName = ::rtl::OUStringToOString( rUIElement.m_aName, RTL_TEXTENCODING_ASCII_US );
+        aName = aName.copy( ::std::min( MAX_NAME_LENGTH, aName.getLength() ));
+        sprintf( aBuffer, "Try to insert an already existing user interface element (%s) into the list\n", aName.getStr() );
+        DBG_ASSERT( bFound, aBuffer );
+    }
+#endif
+
+    bool bResult( false );
+    if ( !bFound )
+    {
+        WriteGuard aWriteLock( m_aLock );
+        m_aUIElements.push_back( rUIElement );
+        bResult = true;
+    }
+    return bResult;
 }
 
 void LayoutManager::implts_writeNewStateData( const rtl::OUString aName, const Reference< css::awt::XWindow >& xWindow )
@@ -2000,6 +2052,9 @@ void LayoutManager::implts_sortUIElements()
             pIter->m_bUserActive = sal_False;
     }
 
+#ifdef DBG_UTIL
+    implts_checkElementContainer();
+#endif
     aWriteLock.unlock();
 }
 
@@ -4184,7 +4239,7 @@ throw (RuntimeException)
                         UIElement aNewToolbar( aName, aElementType, xUIElement );
                         implts_readWindowStateData( aName, aNewToolbar );
                         implts_setElementData( aNewToolbar, xDockWindow );
-                        m_aUIElements.push_back( aNewToolbar );
+                        implts_insertUIElement( aNewToolbar );
                         bVisible = aNewToolbar.m_bVisible;
                     }
 
@@ -4484,23 +4539,27 @@ throw (::com::sun::star::uno::RuntimeException)
         {
             if ( m_bVisible )
             {
-                bool bFound( sal_False );
+                bool bFound( false );
+                bool bShowElement( false );
+
                 for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
                 {
                     if ( pIter->m_aName == ResourceURL )
                     {
+                        bFound       = sal_True;
+                        bShowElement = ( pIter->m_bVisible && !pIter->m_bMasterHide && m_bParentWindowVisible );
+
+                        Reference< css::awt::XWindow2 > xContainerWindow( m_xContainerWindow, UNO_QUERY );
+                        if ( xContainerWindow.is() && pIter->m_bFloating )
+                            bShowElement = ( bShowElement && xContainerWindow->isActive() );
+
                         if ( pIter->m_xUIElement.is() )
                         {
                             Reference< css::awt::XWindow > xWindow( pIter->m_xUIElement->getRealInterface(), UNO_QUERY );
                             Reference< css::awt::XDockableWindow > xDockWindow( xWindow, UNO_QUERY );
-                            Reference< css::awt::XWindow2 > xContainerWindow( m_xContainerWindow, UNO_QUERY );
 
-                            sal_Bool bShowElement( pIter->m_bVisible &&
-                                                   !pIter->m_bMasterHide &&
-                                                   m_bParentWindowVisible );
-
-                            if ( xContainerWindow.is() && xDockWindow.is() && xDockWindow->isFloating() )
-                                bShowElement &= xContainerWindow->isActive();
+                            if ( xDockWindow.is() && xDockWindow->isFloating() )
+                                bShowElement = ( bShowElement && xContainerWindow->isActive() );
 
                             if ( xWindow.is() && xDockWindow.is() && bShowElement )
                             {
@@ -4525,9 +4584,6 @@ throw (::com::sun::star::uno::RuntimeException)
                                 break;
                             }
                         }
-
-                        bFound = sal_True;
-                        break;
                     }
                 }
 
@@ -4540,7 +4596,7 @@ throw (::com::sun::star::uno::RuntimeException)
                         UIElement aNewToolbar( aElementName, aElementType, xUIElement );
                         aNewToolbar.m_aName = ResourceURL;
                         implts_readWindowStateData( ResourceURL, aNewToolbar );
-                        m_aUIElements.push_back( aNewToolbar );
+                        implts_insertUIElement( aNewToolbar );
                         aWriteLock.unlock();
 
                         implts_sortUIElements();
@@ -4549,7 +4605,7 @@ throw (::com::sun::star::uno::RuntimeException)
                         bResult = sal_True;
                         bNotify = sal_True;
                     }
-                    else if ( pIter->m_bVisible )
+                    else if ( bShowElement )
                     {
                         aWriteLock.unlock();
 
@@ -7022,6 +7078,29 @@ IMPL_LINK( LayoutManager, AsyncLayoutHdl, Timer *, EMPTYARG )
     implts_doLayout( sal_True );
 
     return 0;
+}
+
+void LayoutManager::implts_checkElementContainer()
+{
+    /* SAFE AREA ----------------------------------------------------------------------------------------------- */
+    ReadGuard aReadLock( m_aLock );
+
+    BaseHash< sal_Int32 > aUIElementHash;
+
+    UIElementVector::iterator pIter;
+    for ( pIter = m_aUIElements.begin(); pIter != m_aUIElements.end(); pIter++ )
+        aUIElementHash[pIter->m_aName]++;
+
+
+    BaseHash< sal_Int32 >::const_iterator pCheckIter = aUIElementHash.begin();
+    for ( ; pCheckIter != aUIElementHash.end(); pCheckIter++ )
+    {
+        if ( pCheckIter->second > 1 )
+        {
+            ::rtl::OString aName = ::rtl::OUStringToOString( pCheckIter->first, RTL_TEXTENCODING_ASCII_US );
+            DBG_ASSERT( "More than one element (%s) with the same name found!", aName.getStr() );
+        }
+    }
 }
 
 //---------------------------------------------------------------------------------------------------------
