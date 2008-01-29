@@ -3881,7 +3881,7 @@ SfxBoolItem LineArrowEnd SID_LINE_ARROW_END
     FastCall = FALSE,
     HasCoreId = FALSE,
     HasDialog = FALSE,
-    ReadOnlyDoc = TRUE,
+    ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
     RecordAbsolute = FALSE,
