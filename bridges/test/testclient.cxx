@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testclient.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:03:04 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:40:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #include <string.h>
 
 #if OSL_DEBUG_LEVEL == 0
+#undef NDEBUG
 #define NDEBUG
 #endif
 #include <assert.h>
@@ -88,7 +89,7 @@ using namespace ::com::sun::star::test::performance;
 #include "testcomp.h"
 
 
-void doPerformanceTest( const Reference < XPerformanceTest > & xBench )
+void doPerformanceTest( const Reference < XPerformanceTest > & /* xBench */)
 {
     printf( "not implemented\n" );
 //      sal_Int32 i,nLoop = 2000;
@@ -113,7 +114,7 @@ void doPerformanceTest( const Reference < XPerformanceTest > & xBench )
 
 }
 
-void testLatency( const Reference < XConnection > &r , sal_Bool bReply )
+void testLatency( const Reference < XConnection > &r , sal_Bool /* bReply */)
 {
     sal_Int32 nLoop = 10000;
     TimeValue aStartTime, aEndTime;
@@ -137,7 +138,6 @@ void testLatency( const Reference < XConnection > &r , sal_Bool bReply )
 
 int main( int argc, char *argv[] )
 {
-    sal_Bool bUseNew = ( 3 == argc );
     if( argc < 2 )
     {
         printf(
