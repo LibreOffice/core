@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:36:22 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,6 +171,10 @@ public:
 
     /// the URL the document was loaded from
     ::rtl::OUString                                     m_sFileURL;
+
+    /// do we have any object (forms/reports) which contains macros?
+    bool                                                m_bHasAnyObjectWithMacros;
+
     /** the URL which the document should report as it's URL
 
         This might differ from ->m_sFileURL in case the document was loaded
@@ -353,6 +357,13 @@ public:
     static ::rtl::OUString
                     getObjectContainerStorageName( const ObjectType _eType );
 
+    /** determines whether the database document has any object (form/report) which contains macros
+
+        In such a case, *all* objects in the document keep the macro capability, and the database document
+        itself does *not* allow embedding macros.
+    */
+    bool    hasAnyObjectWithMacros() const { return m_bHasAnyObjectWithMacros; }
+
     /** checks our document's macro execution mode, using the interaction handler as supplied with our
         load arguments
     */
@@ -374,7 +385,7 @@ public:
     */
     void            resetMacroExecutionMode();
 
-private:
+public:
     // IMacroDocumentAccess overridables
     virtual sal_Int16 getImposedMacroExecMode() const;
     virtual ::rtl::OUString getDocumentLocation() const;
