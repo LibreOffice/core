@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 23:09:26 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:27:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,8 @@ public:
     SfxChildWindow* pMgr;
     BOOL            bConstructed;
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    Timer           aMoveTimer;
 };
 
 void SfxModelessDialog_Impl::Notify( SfxBroadcaster&, const SfxHint& rHint )
@@ -98,7 +100,9 @@ class SfxFloatingWindow_Impl : public SfxListener
 public:
     ByteString      aWinState;
     SfxChildWindow* pMgr;
-    BOOL                bConstructed;
+    BOOL            bConstructed;
+    Timer           aMoveTimer;
+
     void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 };
 
@@ -315,13 +319,8 @@ void SfxModelessDialog::Resize()
     ModelessDialog::Resize();
     if ( pImp->bConstructed && pImp->pMgr )
     {
-        if ( !IsRollUp() )
-            aSize = GetSizePixel();
-        ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
-        if ( GetStyle() & WB_SIZEABLE )
-            nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
-        pImp->aWinState = GetWindowState( nMask );
-        GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SFX_CHILDWIN_DOCKINGWINDOW, SFX_ALIGNDOCKINGWINDOW, pImp->pMgr->GetType() );
+        // start timer for saving window status information
+        pImp->aMoveTimer.Start();
     }
 }
 
@@ -330,12 +329,29 @@ void SfxModelessDialog::Move()
     ModelessDialog::Move();
     if ( pImp->bConstructed && pImp->pMgr && IsReallyVisible() )
     {
+        // start timer for saving window status information
+        pImp->aMoveTimer.Start();
+    }
+}
+
+/*
+    Implements a timer event that is triggered by a move or resize of the window
+    This will save config information to Views.xcu with a small delay
+*/
+IMPL_LINK( SfxModelessDialog, TimerHdl, Timer*, EMPTYARG)
+{
+    pImp->aMoveTimer.Stop();
+    if ( pImp->bConstructed && pImp->pMgr )
+    {
+        if ( !IsRollUp() )
+            aSize = GetSizePixel();
         ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
         if ( GetStyle() & WB_SIZEABLE )
             nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
         pImp->aWinState = GetWindowState( nMask );
         GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SFX_CHILDWIN_DOCKINGWINDOW, SFX_ALIGNDOCKINGWINDOW, pImp->pMgr->GetType() );
     }
+    return 0;
 }
 
 // -----------------------------------------------------------------------
@@ -354,6 +370,8 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
     SetUniqueId( nId );
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
+    pImp->aMoveTimer.SetTimeout(50);
+    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxModelessDialog,TimerHdl));
 }
 
 // -----------------------------------------------------------------------
@@ -372,6 +390,8 @@ SfxModelessDialog::SfxModelessDialog( SfxBindings *pBindinx,
     SetUniqueId( nId );
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
+    pImp->aMoveTimer.SetTimeout(50);
+    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxModelessDialog,TimerHdl));
 }
 
 // -----------------------------------------------------------------------
@@ -538,6 +558,8 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     SetUniqueId( nId );
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
+    pImp->aMoveTimer.SetTimeout(50);
+    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
 // -----------------------------------------------------------------------
@@ -557,6 +579,8 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     SetUniqueId( nId );
     if ( pBindinx )
         pImp->StartListening( *pBindinx );
+    pImp->aMoveTimer.SetTimeout(50);
+    pImp->aMoveTimer.SetTimeoutHdl(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
 //-------------------------------------------------------------------------
@@ -614,13 +638,8 @@ void SfxFloatingWindow::Resize()
     FloatingWindow::Resize();
     if ( pImp->bConstructed && pImp->pMgr )
     {
-        if ( !IsRollUp() )
-            aSize = GetSizePixel();
-        ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
-        if ( GetStyle() & WB_SIZEABLE )
-            nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
-        pImp->aWinState = GetWindowState( nMask );
-        GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SFX_CHILDWIN_DOCKINGWINDOW, SFX_ALIGNDOCKINGWINDOW, pImp->pMgr->GetType() );
+        // start timer for saving window status information
+        pImp->aMoveTimer.Start();
     }
 }
 
@@ -629,12 +648,29 @@ void SfxFloatingWindow::Move()
     FloatingWindow::Move();
     if ( pImp->bConstructed && pImp->pMgr )
     {
+        // start timer for saving window status information
+        pImp->aMoveTimer.Start();
+    }
+}
+
+/*
+    Implements a timer event that is triggered by a move or resize of the window
+    This will save config information to Views.xcu with a small delay
+*/
+IMPL_LINK( SfxFloatingWindow, TimerHdl, Timer*, EMPTYARG)
+{
+    pImp->aMoveTimer.Stop();
+    if ( pImp->bConstructed && pImp->pMgr )
+    {
+        if ( !IsRollUp() )
+            aSize = GetSizePixel();
         ULONG nMask = WINDOWSTATE_MASK_POS | WINDOWSTATE_MASK_STATE;
         if ( GetStyle() & WB_SIZEABLE )
             nMask |= ( WINDOWSTATE_MASK_WIDTH | WINDOWSTATE_MASK_HEIGHT );
         pImp->aWinState = GetWindowState( nMask );
         GetBindings().GetWorkWindow_Impl()->ConfigChild_Impl( SFX_CHILDWIN_DOCKINGWINDOW, SFX_ALIGNDOCKINGWINDOW, pImp->pMgr->GetType() );
     }
+    return 0;
 }
 
 //-------------------------------------------------------------------------
