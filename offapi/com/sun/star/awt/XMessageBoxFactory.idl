@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMessageBoxFactory.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:19:03 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:11:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,10 @@ published interface XMessageBoxFactory : com::sun::star::uno::XInterface
         a string which determines the message box type.
         The following strings are defined.
         <ul>
-            <li><b>infobox</b>A message box to inform the user about a certain event.</li>
+            <li><b>infobox</b>A message box to inform the user about a certain event.
+                <b>Attention:</b><br/>This type of message box ignores the argument
+                aButton because a info box always shows a OK button.
+            </li>
             <li><b>warningbox</b>A message to warn the user about a certain problem.</li>
             <li><b>errorbox</b>A message box to provide an error message to the user.</li>
             <li><b>querybox</b>A message box to query information from the user.</li>
