@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:02:08 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:38:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,6 +240,13 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
                 ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Ignore the currency field from the ResultsetMetaData."))
                 ,sal_False
                 ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "false" ) )
+                ,aBooleanValues)
+                );
+        aDriverInfo.push_back(DriverPropertyInfo(
+                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("EscapeDateTime"))
+                ,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Escape date time format."))
+                ,sal_False
+                ,::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "true" ) )
                 ,aBooleanValues)
                 );
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
