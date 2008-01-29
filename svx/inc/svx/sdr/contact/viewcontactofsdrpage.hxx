@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofsdrpage.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:00:26 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:04:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ namespace sdr
         public:
             // #i37869# global paint helper methods
             static void DrawPaperBorder(DisplayInfo& rDisplayInfo, const SdrPage& rPage);
-            static void DrawBorder(DisplayInfo& rDisplayInfo, const SdrPage& rPage);
+            static void DrawBorder(BOOL _bDrawOnlyLeftRightBorder,DisplayInfo& rDisplayInfo, const SdrPage& rPage);
             static void DrawHelplines(DisplayInfo& rDisplayInfo);
             static void DrawGrid(DisplayInfo& rDisplayInfo);
 
