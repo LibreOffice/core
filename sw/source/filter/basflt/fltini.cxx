@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 09:44:47 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:24:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -204,6 +204,7 @@ void _InitFilter()
     aReaderWriter[ 9-3 ].fnGetWriter = &::GetWW8Writer;
 #endif
 
+    _SetFltPtr( nCnt, ReadAscii, FILTER_TEXT_DLG );
     _SetFltPtr( nCnt, ReadAscii, FILTER_TEXT );
 
     ASSERT( MAXFILTER == nCnt, "Anzahl Filter ungleich der Definierten" );
