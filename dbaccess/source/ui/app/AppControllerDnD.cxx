@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerDnD.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:50:06 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:51:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -649,7 +649,7 @@ void OApplicationController::getSelectionElementNames(::std::vector< ::rtl::OUSt
 
     OSL_ENSURE(xNameAccess.is(),"Data source doesn't return a name access -> GPF");
     return ::std::auto_ptr<OLinkedDocumentsAccess>(
-        new OLinkedDocumentsAccess( getView(), getORB(), xNameAccess, xConnection, getDatabaseName() ) );
+        new OLinkedDocumentsAccess( getView(), m_xCurrentFrame,getORB(), xNameAccess, xConnection, getDatabaseName() ) );
 }
 // -----------------------------------------------------------------------------
 TransferableHelper* OApplicationController::copyObject()
