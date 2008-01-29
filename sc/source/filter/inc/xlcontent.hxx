@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlcontent.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:03:27 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:31:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,9 +169,11 @@ const sal_uInt16 EXC_ID_WQSTRING            = 0x00CD;
 
 // (0x00DC) PARAMQRY
 const sal_uInt16 EXC_ID_PQRY                = 0x00DC;
-const sal_uInt16 EXC_PQRY_DOC               = 0x0000;       /// Entire document.
+const sal_uInt16 EXC_PQRYTYPE_ODBC          = 1;            /// Source type: ODBC.
+const sal_uInt16 EXC_PQRYTYPE_WEBQUERY      = 4;            /// Source type: webquery.
+const sal_uInt16 EXC_PQRY_ODBC              = 0x0008;       /// ODBC connection.
+const sal_uInt16 EXC_PQRY_WEBQUERY          = 0x0040;       /// Web query.
 const sal_uInt16 EXC_PQRY_TABLES            = 0x0100;       /// All tables.
-const sal_uInt16 EXC_PQRY_DEFAULTFLAGS      = 0x0044;       /// Flags for export.
 
 // (0x01AD) QSI
 const sal_uInt16 EXC_ID_QSI                 = 0x01AD;
