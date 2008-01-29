@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-12 16:25:34 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 09:22:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1108,6 +1108,8 @@ sal_uInt16 SwFmtCol::CalcPrtColWidth( sal_uInt16 nCol, sal_uInt16 nAct ) const
 
 void SwFmtCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
 {
+    if(!GetNumCols())
+        return;
     //Erstmal die Spalten mit der Aktuellen Breite einstellen, dann die
     //Wunschbreite der Spalten anhand der Gesamtwunschbreite hochrechnen.
 
