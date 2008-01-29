@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layermanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 12:44:18 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:03:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -602,6 +602,7 @@ namespace slideshow
                 }
 
                 if( bIsCurrLayerUpdating &&
+                    !aIter->mpShape->isBackgroundDetached() &&
                     pCurrLayer->isInsideUpdateArea(aIter->mpShape) )
                 {
                     if( !aIter->mpShape->render() )
