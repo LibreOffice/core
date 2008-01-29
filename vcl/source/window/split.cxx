@@ -4,9 +4,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 10:21:35 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:08:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,7 @@ void Splitter::ImplDrawSplitter()
         aInvRect.Bottom()   = maDragPos.Y() + 1;
     }
 
-    mpRefWin->InvertTracking( aInvRect, SHOWTRACK_SPLIT );
+    mpRefWin->InvertTracking( mpRefWin->PixelToLogic(aInvRect), SHOWTRACK_SPLIT );
 }
 
 // -----------------------------------------------------------------------
