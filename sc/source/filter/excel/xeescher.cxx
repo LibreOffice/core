@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 13:30:41 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:25:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,76 +36,33 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-#ifndef SC_XEESCHER_HXX
 #include "xeescher.hxx"
-#endif
 
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
 #include <com/sun/star/awt/VisualEffect.hpp>
-#endif
-#ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
 #include <com/sun/star/form/binding/XBindableValue.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XVALUEBINDING_HPP_
 #include <com/sun/star/form/binding/XValueBinding.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSINK_HPP_
 #include <com/sun/star/form/binding/XListEntrySink.hpp>
-#endif
-#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSOURCE_HPP_
 #include <com/sun/star/form/binding/XListEntrySource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
-#endif
 
-#ifndef _SVX_UNOAPI_HXX_
 #include <svx/unoapi.hxx>
-#endif
-#ifndef _SVDOOLE2_HXX
 #include <svx/svdoole2.hxx>
-#endif
 
-#ifndef SC_EDITUTIL_HXX
 #include "editutil.hxx"
-#endif
-#ifndef SC_UNONAMES_HXX
 #include "unonames.hxx"
-#endif
-#ifndef SC_CONVUNO_HXX
 #include "convuno.hxx"
-#endif
+#include "postit.hxx"
 
-#ifndef SC_FAPIHELPER_HXX
 #include "fapihelper.hxx"
-#endif
-#ifndef SC_XECHART_HXX
 #include "xechart.hxx"
-#endif
-#ifndef SC_XEFORMULA_HXX
 #include "xeformula.hxx"
-#endif
-#ifndef SC_XELINK_HXX
 #include "xelink.hxx"
-#endif
-#ifndef SC_XENAME_HXX
 #include "xename.hxx"
-#endif
-#ifndef SC_XESTYLE_HXX
 #include "xestyle.hxx"
-#endif
 
 using ::rtl::OUString;
 using ::com::sun::star::uno::UNO_QUERY;
@@ -827,46 +784,56 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
 
         case EXC_BIFF8:
         {
-            ::std::auto_ptr <EditTextObject> pObj; ;
-            const EditTextObject* pEditObj;
+            ::std::auto_ptr< EditTextObject > xObj;
             Rectangle aRect;
-            ::std::auto_ptr <SdrCaptionObj> pCaption;
+            ::std::auto_ptr< SdrCaptionObj > xCaption;
             ScDocument& rDoc = rRoot.GetDoc();
 
-            // read strings from note object, if present
-            if( pScNote && ((pEditObj = pScNote->GetEditTextObject()) != 0))
+            // #i79416# create dummy note for cells without note but with content in rAddText
+            ::std::auto_ptr< ScPostIt > xDummyNote;
+            if( pScNote )
             {
-                pObj.reset(pEditObj->Clone());
-                // append additional text if any
-                if(rAddText.Len())
+                aRect = pScNote->GetRectangle();
+            }
+            else
+            {
+                xDummyNote.reset( new ScPostIt( rAddText, &rDoc ) );
+                xDummyNote->SetItemSet( xDummyNote->DefaultItemSet() );
+                aRect = xDummyNote->DefaultRectangle( rScPos );
+                pScNote = xDummyNote.get();
+            }
+
+            // read strings from note object, if present
+            if( const EditTextObject* pEditObj = pScNote->GetEditTextObject() )
+            {
+                xObj.reset( pEditObj->Clone() );
+                // append additional text to original note if any
+                if( pScNote->GetText() != aNoteText )
                 {
-                    ScGlobal::AddToken( aNoteText, rAddText, '\n', 2 );
                     EditEngine& rEE = rRoot.GetEditEngine();
-                    rEE.SetText( aNoteText);
-                    EditTextObject* pAddText = rEE.CreateTextObject();
-                    pObj->Insert(*pAddText, pEditObj->GetParagraphCount());
-                    delete pAddText;
+                    rEE.SetText( aNoteText );
+                    ::std::auto_ptr< EditTextObject > xNewTextObj( rEE.CreateTextObject() );
+                    xObj->Insert( *xNewTextObj, pEditObj->GetParagraphCount() );
                 }
                 maAuthor.Assign( pScNote->GetAuthor() );
-                aRect = pScNote->GetRectangle();
                 const SfxItemSet& rSet = pScNote->GetItemSet();
                 Point aDummyTailPos;
 
                 // In order to transform the SfxItemSet to an EscherPropertyContainer
                 // and export the properties, we need to recreate the drawing object and
                 // pass this to XclObjComment() for processing.
-                pCaption.reset(new SdrCaptionObj( aRect, aDummyTailPos ));
+                xCaption.reset( new SdrCaptionObj( aRect, aDummyTailPos ) );
 
-                pScNote->InsertObject(pCaption.get(), rDoc, rScPos.Tab(), sal_True);
-                (pCaption.get())->SetMergedItemSet(rSet);
+                pScNote->InsertObject( xCaption.get(), rDoc, rScPos.Tab(), sal_True );
+                xCaption->SetMergedItemSet( rSet );
             }
 
             // create the object record
-            if(pObj.get())
-                mnObjId = rRoot.GetOldRoot().pObjRecs->Add( new XclObjComment( rRoot, aRect, *pObj, pCaption.get(), mbVisible ) );
+            if( xObj.get() )
+                mnObjId = rRoot.GetOldRoot().pObjRecs->Add( new XclObjComment( rRoot, aRect, *xObj, xCaption.get(), mbVisible ) );
 
             if( pScNote )
-                pScNote->RemoveObject(pCaption.get(), rDoc, rScPos.Tab());
+                pScNote->RemoveObject( xCaption.get(), rDoc, rScPos.Tab() );
 
             SetRecSize( 9 + maAuthor.GetSize() );
         }
