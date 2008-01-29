@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:10:41 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:17:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1052,7 +1052,9 @@ String ScConditionEntry::GetExpression( const ScAddress& rCursor, USHORT nIndex,
             pDoc->GetFormatTable()->GetInputLineString(nVal2, nNumFmt, aRet);
     }
     else
+    {
         DBG_ERROR("GetExpression: falscher Index");
+    }
 
     return aRet;
 }
@@ -1089,7 +1091,9 @@ ScTokenArray* ScConditionEntry::CreateTokenArry( USHORT nIndex ) const
         }
     }
     else
+    {
         DBG_ERROR("GetExpression: falscher Index");
+    }
 
     return pRet;
 }
