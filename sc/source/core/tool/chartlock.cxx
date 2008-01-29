@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartlock.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-03 13:07:42 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,14 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 #include <vcl/svapp.hxx>
+#include <svx/svditer.hxx>
+#include <svx/svdoole2.hxx>
+#include <svx/svdpage.hxx>
 
 #include "chartlock.hxx"
 #include "document.hxx"
 #include "drwlayer.hxx"
-#include <svx/svditer.hxx>
-#include <svx/svdoole2.hxx>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
