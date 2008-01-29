@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrib.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 14:41:25 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:15:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,7 +319,9 @@ BOOL ScProtectionAttr::PutValue( const uno::Any& rVal, BYTE nMemberId )
                 bRet = TRUE;
             }
             else
+            {
                 DBG_ERROR("exception - wrong argument");
+            }
             break;
         }
         case MID_1 :
