@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:24:01 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:19:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -878,7 +878,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
     if ( Count() != nLastCount )
     {
         // --> FME 2004-06-24 #i16816# tagged pdf support
-        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pOut );
+        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
         // <--
 
         // OD 2004-04-23 #116347#
@@ -993,7 +993,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
     if ( Count() )
     {
         // --> FME 2004-06-24 #i16816# tagged pdf support
-        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pOut );
+        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
         // <--
 
         //Alle Hilfslinien, die sich fast decken entfernen (Tabellen)
@@ -2320,7 +2320,7 @@ void SwTabFrmPainter::HandleFrame( const SwLayoutFrm& rLayoutFrm )
 void SwTabFrmPainter::PaintLines( OutputDevice& rDev, const SwRect& rRect ) const
 {
     // --> FME 2004-06-24 #i16816# tagged pdf support
-    SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, rDev );
+    SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, rDev );
     // <--
 
     const SwFrm* pTmpFrm = &mrTabFrm;
@@ -3150,7 +3150,7 @@ void SwLayoutFrm::Paint( const SwRect& rRect ) const
 
     // --> FME 2004-06-24 #i16816# tagged pdf support
     Frm_Info aFrmInfo( *this );
-    SwTaggedPDFHelper aTaggedPDFHelper( &aFrmInfo, 0, *pSh->GetOut() );
+    SwTaggedPDFHelper aTaggedPDFHelper( 0, &aFrmInfo, 0, *pSh->GetOut() );
     // <--
 
     const SwFrm *pFrm = Lower();
@@ -5312,7 +5312,7 @@ void SwPageFrm::PaintBorderAndShadow( const SwRect& _rPageRect,
                                       ViewShell*    _pViewShell ) const
 {
     // --> FME 2004-06-24 #i16816# tagged pdf support
-    SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *_pViewShell->GetOut() );
+    SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *_pViewShell->GetOut() );
     // <--
 
     // get color for page border and shadow paint
@@ -5378,7 +5378,7 @@ void SwFrm::PaintBaBo( const SwRect& rRect, const SwPageFrm *pPage,
     OutputDevice *pOut = pGlobalShell->GetOut();
 
     // --> FME 2004-06-24 #i16816# tagged pdf support
-    SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pOut );
+    SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
     // <--
 
     // OD 2004-04-23 #116347#
@@ -5440,7 +5440,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     ViewShell *pSh = pGlobalShell;
 
     // --> FME 2004-06-24 #i16816# tagged pdf support
-    SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pSh->GetOut() );
+    SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
     // <--
 
     const SvxBrushItem* pItem;
@@ -6140,7 +6140,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         ViewShell *pSh = GetShell();
 
         // --> FME 2004-06-24 #i16816# tagged pdf support
-        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, *pSh->GetOut() );
+        SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pSh->GetOut() );
         // <--
 
         for ( USHORT i = 0; i < aRegion.Count(); ++i )
