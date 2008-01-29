@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langselectionmenucontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:46:07 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:08:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,10 @@
 #include <com/sun/star/frame/XPopupMenuController.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLANGUAGEGUESSING_HPP_
+#include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  includes of other projects
 //_________________________________________________________________________________________________________________
@@ -138,6 +142,8 @@ namespace framework
                 MODE_SetLanguageAllTextMenu
             };
 
+            sal_Bool                                                               m_bShowMenu;
+            ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
             ::rtl::OUString                                                        m_aLangStatusCommandURL;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xLanguageDispatch;
             ::rtl::OUString                                                        m_aMenuCommandURL_Lang;
@@ -146,11 +152,12 @@ namespace framework
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xMenuDispatch_Font;
             ::rtl::OUString                                                        m_aMenuCommandURL_CharDlgForParagraph;
             ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch > m_xMenuDispatch_CharDlgForParagraph;
-            ::rtl::OUString m_aCurrentLanguage;
-            ::rtl::OUString curLang;
-            sal_Int16 nScriptType;
-            ::rtl::OUString keyboardLang;
-            ::rtl::OUString guessedText;
+            ::rtl::OUString     m_aCurrentLanguage;
+            ::rtl::OUString     m_aCurLang;
+            sal_Int16           m_nScriptType;
+            ::rtl::OUString     m_aKeyboardLang;
+            ::rtl::OUString     m_aGuessedText;
+
             void fillPopupMenu( com::sun::star::uno::Reference< com::sun::star::awt::XPopupMenu >& rPopupMenu, const Mode rMode );
     };
 }

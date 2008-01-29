@@ -4,9 +4,9 @@
  *
  *  $RCSfile: langselectionstatusbarcontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-23 16:46:21 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:09:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,10 @@
 #endif
 #ifndef __FRAMEWORK_STDTYPES_H_
 #include <stdtypes.h>
+#endif
+
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XLANGUAGEGUESSING_HPP_
+#include <com/sun/star/linguistic2/XLanguageGuessing.hpp>
 #endif
 
 #ifndef _SVTOOLS_STATUSBARCONTROLLER_HXX
@@ -103,11 +107,13 @@ class LangSelectionStatusbarController : public svt::StatusbarController
         LangSelectionStatusbarController(LangSelectionStatusbarController &); // not defined
         void operator =(LangSelectionStatusbarController &); // not defined
 
-        sal_Int16       m_nScriptType;
-        ::rtl::OUString m_aCurrentLanguage;
-        ::rtl::OUString m_aCurLang;
-        ::rtl::OUString m_aKeyboardLang;
-        ::rtl::OUString m_aGuessedText;
+        sal_Bool            m_bShowMenu;
+        sal_Int16           m_nScriptType;
+        ::rtl::OUString     m_aCurrentLanguage;
+        ::rtl::OUString     m_aCurLang;
+        ::rtl::OUString     m_aKeyboardLang;
+        ::rtl::OUString     m_aGuessedText;
+        ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XLanguageGuessing >    m_xLanguageGuesser;
 
         void LangMenu() throw (::com::sun::star::uno::RuntimeException);
 };
