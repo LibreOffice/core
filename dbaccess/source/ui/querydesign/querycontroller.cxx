@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 17:12:55 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:52:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -749,7 +749,7 @@ void OQueryController::impl_initialize()
     }
 
     sal_Bool bCreateView( sal_False );
-    if ( rArguments.get_ensureType( "CreateView", bCreateView ) )
+    if ( rArguments.get_ensureType( "CreateView", bCreateView ) && bCreateView )
     {
         OSL_ENSURE( false, "OQueryController::impl_initialize: CurrentQuery is regognized for compatibility only!" );
         m_nCommandType = CommandType::TABLE;
