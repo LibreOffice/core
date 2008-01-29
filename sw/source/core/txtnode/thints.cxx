@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:24:49 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:39:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -993,7 +993,12 @@ BOOL SwTxtNode::Insert( SwTxtAttr *pAttr, USHORT nMode )
                 // wird eine neue Fussnote eingefuegt ??
                 BOOL bNewFtn = 0 == ((SwTxtFtn*)pAttr)->GetStartNode();
                 if( bNewFtn )
+                {
                     ((SwTxtFtn*)pAttr)->MakeNewTextSection( GetNodes() );
+                    SwRegHistory* pHist = GetpSwpHints() ? GetpSwpHints()->getHistory() : 0;
+                    if( pHist )
+                        pHist->ChangeNodeIndex( GetIndex() );
+                }
                 else if ( !GetpSwpHints() || !GetpSwpHints()->IsInSplitNode() )
                 {
                     // loesche alle Frames der Section, auf die der StartNode zeigt
@@ -1950,13 +1955,14 @@ void lcl_CheckSortNumber( const SwpHints& rHints, SwTxtCharFmt& rNewCharFmt )
         const SwTxtAttr* pOtherHt = rHints[i];
 
         const xub_StrLen nOtherStart = *pOtherHt->GetStart();
-        const xub_StrLen nOtherEnd = *pOtherHt->GetEnd();
 
         if ( nOtherStart > nHtStart )
             break;
 
         if ( RES_TXTATR_CHARFMT == pOtherHt->Which() )
         {
+            const xub_StrLen nOtherEnd = *pOtherHt->GetEnd();
+
             if ( nOtherStart == nHtStart && nOtherEnd == nHtEnd )
             {
                 const USHORT nOtherSortNum = static_cast<const SwTxtCharFmt*>(pOtherHt)->GetSortNumber();
