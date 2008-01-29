@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.76 $
+#   $Revision: 1.77 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-15 13:33:02 $
+#   last change: $Author: rt $ $Date: 2008-01-29 16:31:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@ VERINFONAME=verinfo
 TARGETOBJS=	\
             $(OBJ)$/main.obj				\
             $(OBJ)$/app.obj					\
+            $(OBJ)$/appfirststart.obj		\
             $(OBJ)$/lockfile.obj			\
             $(OBJ)$/lockfile2.obj			\
             $(OBJ)$/intro.obj				\
@@ -61,7 +62,7 @@ TARGETOBJS=	\
             $(OBJ)$/appsys.obj				\
             $(OBJ)$/desktopresid.obj		\
             $(OBJ)$/dispatchwatcher.obj		\
-            $(OBJ)$/configinit.obj				\
+            $(OBJ)$/configinit.obj			\
             $(OBJ)$/checkinstall.obj		\
             $(OBJ)$/cmdlinehelp.obj         \
             $(OBJ)$/langselect.obj          \
