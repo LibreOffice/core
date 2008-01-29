@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:53:12 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 13:39:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1097,7 +1097,10 @@ void SdrOle2Obj::SetModel(SdrModel* pNewModel)
     SdrRectObj::SetModel( pNewModel );
 
     // #i43086#
-    if( pModel && !pModel->isLocked() )
+    // #i85304 redo the change for charts for the above bugfix, as #i43086# does not ocur anymore
+    //so maybe the ImpSetVisAreaSize call can be removed here completely
+    //Nevertheless I leave it in for other objects as I am not sure about the side effects when removing now
+    if( pModel && !pModel->isLocked() && !IsChart() )
         ImpSetVisAreaSize();
 
     if( pDestPers && !IsEmptyPresObj() )
