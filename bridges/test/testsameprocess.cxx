@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testsameprocess.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:03:43 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:41:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_bridges.hxx"
 #if OSL_DEBUG_LEVEL == 0
+#undef NDEBUG
 #define NDEBUG
 #endif
 #include <assert.h>
@@ -202,8 +203,8 @@ int main( int argc, char *argv[] )
                     testRemote( rInitialObject );
                 }
                 printf( "Closing...\n" );
-                TimeValue value={2,0};
-                osl_waitThread( &value );
+                TimeValue timeValue={2,0};
+                osl_waitThread( &timeValue );
             }
 
             Reference < XBridge > rBridge = rFactory->getBridge(
