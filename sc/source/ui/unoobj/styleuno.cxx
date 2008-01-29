@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:19:28 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1314,7 +1314,9 @@ beans::PropertyState SAL_CALL ScStyleObj::getPropertyState( const rtl::OUString&
             else if ( eState == SFX_ITEM_DONTCARE )
                 eRet = beans::PropertyState_AMBIGUOUS_VALUE;    // kann eigentlich nicht sein...
             else
+            {
                 DBG_ERROR("unbekannter ItemState");
+            }
         }
     }
     return eRet;
