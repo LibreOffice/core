@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwSpellDialogChildWindow.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 11:36:02 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -456,7 +456,9 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
             {
                 LockFocusNotification( true );
                 String sInfo(SW_RES(STR_SPELLING_COMPLETED));
-                InfoBox(GetWindow(), sInfo ).Execute();
+                //#i84610#
+                Window* pTemp = GetWindow();    // temporary needed for g++ 3.3.5
+                InfoBox(pTemp, sInfo ).Execute();
                 LockFocusNotification( false );
                 //take care that the now valid selection is stored
                 LoseFocus();
