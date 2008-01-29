@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:51:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:07:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,13 +526,11 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
             "OApplicationController::disposing: the below code will ignore this call - why?" );
 
         if ( getContainer() && getContainer()->getElementType() == E_TABLE )
+            getContainer()->clearPages();
+        if ( m_xDataSourceConnection == xCon )
         {
-            if ( m_xDataSourceConnection == xCon )
-            {
-                getContainer()->clearPages();
-                m_xDataSourceConnection.clear();
-                m_xMetaData.clear();
-            }
+            m_xMetaData.clear();
+            m_xDataSourceConnection.clear();
         }
     }
     else if ( _rSource.Source == m_xModel )
@@ -687,9 +685,13 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                     aReturn.bEnabled = xEnumAccess.is();
                     if ( aReturn.bEnabled )
                     {
-                        static ::rtl::OUString s_sReportDesign(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.report.pentaho.SOReportJobFactory"));
-                        Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(s_sReportDesign);
-                        aReturn.bEnabled = xEnumDrivers.is() && xEnumDrivers->hasMoreElements();
+                        const ::rtl::OUString sReportEngineServiceName = ::dbtools::getDefaultReportEngineServiceName(m_xServiceFactory);
+                        aReturn.bEnabled = sReportEngineServiceName.getLength() != 0;
+                        if ( aReturn.bEnabled )
+                        {
+                            const Reference< XEnumeration > xEnumDrivers = xEnumAccess->createContentEnumeration(sReportEngineServiceName);
+                            aReturn.bEnabled = xEnumDrivers.is() && xEnumDrivers->hasMoreElements();
+                        }
                     }
                 }
                 break;
