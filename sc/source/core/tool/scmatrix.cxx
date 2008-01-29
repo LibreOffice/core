@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmatrix.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2007-06-13 09:08:20 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:22:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,7 +251,9 @@ void ScMatrix::PutDouble(double fVal, SCSIZE nC, SCSIZE nR)
     if (ValidColRow( nC, nR))
         PutDouble( fVal, CalcOffset( nC, nR) );
     else
+    {
         DBG_ERRORFILE("ScMatrix::PutDouble: dimension error");
+    }
 }
 
 void ScMatrix::PutDoubleAndResetString( double fVal, SCSIZE nC, SCSIZE nR )
@@ -259,7 +261,9 @@ void ScMatrix::PutDoubleAndResetString( double fVal, SCSIZE nC, SCSIZE nR )
     if (ValidColRow( nC, nR))
         PutDoubleAndResetString( fVal, CalcOffset( nC, nR) );
     else
+    {
         DBG_ERRORFILE("ScMatrix::PutDoubleAndResetString: dimension error");
+    }
 }
 
 void ScMatrix::PutDoubleAndResetString( double fVal, SCSIZE nIndex )
@@ -278,7 +282,9 @@ void ScMatrix::PutString(const String& rStr, SCSIZE nC, SCSIZE nR)
     if (ValidColRow( nC, nR))
         PutString( rStr, CalcOffset( nC, nR) );
     else
+    {
         DBG_ERRORFILE("ScMatrix::PutString: dimension error");
+    }
 }
 
 void ScMatrix::PutString(const String& rStr, SCSIZE nIndex)
@@ -330,7 +336,9 @@ void ScMatrix::PutEmpty(SCSIZE nC, SCSIZE nR)
     if (ValidColRow( nC, nR))
         PutEmpty( CalcOffset( nC, nR) );
     else
+    {
         DBG_ERRORFILE("ScMatrix::PutEmpty: dimension error");
+    }
 }
 
 void ScMatrix::PutEmpty(SCSIZE nIndex)
@@ -355,7 +363,9 @@ void ScMatrix::PutEmptyPath(SCSIZE nC, SCSIZE nR)
     if (ValidColRow( nC, nR))
         PutEmptyPath( CalcOffset( nC, nR) );
     else
+    {
         DBG_ERRORFILE("ScMatrix::PutEmptyPath: dimension error");
+    }
 }
 
 void ScMatrix::PutEmptyPath(SCSIZE nIndex)
@@ -380,7 +390,9 @@ void ScMatrix::PutBoolean(bool bVal, SCSIZE nC, SCSIZE nR)
     if (ValidColRow( nC, nR))
         PutBoolean( bVal, CalcOffset( nC, nR) );
     else
+    {
         DBG_ERRORFILE("ScMatrix::PutBoolean: dimension error");
+    }
 }
 
 void ScMatrix::PutBoolean( bool bVal, SCSIZE nIndex)
@@ -434,7 +446,9 @@ const String& ScMatrix::GetString(SCSIZE nC, SCSIZE nR) const
         }
     }
     else
+    {
         DBG_ERRORFILE("ScMatrix::GetString: dimension error");
+    }
     return ScGlobal::GetEmptyString();
 }
 
@@ -479,7 +493,9 @@ String ScMatrix::GetString( SvNumberFormatter& rFormatter, SCSIZE nC, SCSIZE nR)
         return GetString( rFormatter, nIndex);
     }
     else
+    {
         DBG_ERRORFILE("ScMatrix::GetString: dimension error");
+    }
     return String();
 }
 
@@ -496,7 +512,9 @@ const ScMatrixValue* ScMatrix::Get(SCSIZE nC, SCSIZE nR, ScMatValType& nType) co
         return &pMat[nIndex];
     }
     else
+    {
         DBG_ERRORFILE("ScMatrix::Get: dimension error");
+    }
     nType = SC_MATVAL_EMPTY;
     return NULL;
 }
@@ -645,7 +663,9 @@ void ScMatrix::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSI
         }
     }
     else
+    {
         DBG_ERRORFILE("ScMatrix::FillDouble: dimension error");
+    }
 }
 
 void ScMatrix::FillDoubleLowerLeft( double fVal, SCSIZE nC2 )
@@ -661,7 +681,9 @@ void ScMatrix::FillDoubleLowerLeft( double fVal, SCSIZE nC2 )
         }
     }
     else
+    {
         DBG_ERRORFILE("ScMatrix::FillDoubleLowerLeft: dimension error");
+    }
 }
 
 void ScMatrix::CompareEqual()
