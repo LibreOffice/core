@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmetadata.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 14:57:02 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:37:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,7 @@ namespace dbtools
             <code>SELECT * FROM table correlation_name</code> is generated.
         */
         bool generateASBeforeCorrelationName() const;
+        bool shouldEscapeDateTime() const;
 
         /** determines the syntax to use for boolean comparison predicates
 
