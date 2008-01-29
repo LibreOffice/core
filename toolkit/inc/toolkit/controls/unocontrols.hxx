@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 12:28:24 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:04:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,9 @@
 #endif
 #ifndef _COM_SUN_STAR_AWT_XCHECKBOX_HPP_
 #include <com/sun/star/awt/XCheckBox.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XFIXEDHYPERLINK_HPP_
+#include <com/sun/star/awt/XFixedHyperlink.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XFIXEDTEXT_HPP_
 #include <com/sun/star/awt/XFixedText.hpp>
@@ -629,6 +632,80 @@ public:
     // ::com::sun::star::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoCheckBoxControl, ImageConsumerControl, szServiceName2_UnoControlCheckBox )
 
+};
+
+//  ----------------------------------------------------
+//  class UnoControlFixedTextModel
+//  ----------------------------------------------------
+class UnoControlFixedHyperlinkModel : public UnoControlModel
+{
+protected:
+    ::com::sun::star::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const;
+    ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper();
+
+public:
+    UnoControlFixedHyperlinkModel();
+    UnoControlFixedHyperlinkModel( const UnoControlFixedHyperlinkModel& rModel ) : UnoControlModel( rModel ) {;}
+
+    UnoControlModel*    Clone() const { return new UnoControlFixedHyperlinkModel( *this ); }
+
+    // ::com::sun::star::io::XPersistObject
+    ::rtl::OUString SAL_CALL getServiceName() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::beans::XMultiPropertySet
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::lang::XServiceInfo
+    DECLIMPL_SERVICEINFO_DERIVED( UnoControlFixedHyperlinkModel, UnoControlModel, szServiceName_UnoControlFixedHyperlinkModel )
+};
+
+//  ----------------------------------------------------
+//  class UnoFixedHyperlinkControl
+//  ----------------------------------------------------
+class UnoFixedHyperlinkControl : public UnoControlBase,
+                                 public ::com::sun::star::awt::XFixedHyperlink,
+                                 public ::com::sun::star::awt::XLayoutConstrains
+{
+private:
+    ActionListenerMultiplexer   maActionListeners;
+
+public:
+    UnoFixedHyperlinkControl();
+
+    ::rtl::OUString     GetComponentServiceName();
+
+    ::com::sun::star::uno::Any  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException) { return UnoControlBase::queryInterface(rType); }
+    ::com::sun::star::uno::Any  SAL_CALL queryAggregation( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+    void                        SAL_CALL acquire() throw()  { OWeakAggObject::acquire(); }
+    void                        SAL_CALL release() throw()  { OWeakAggObject::release(); }
+
+    void SAL_CALL createPeer( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XToolkit >& Toolkit, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowPeer >& Parent ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL dispose(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::lang::XTypeProvider
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type >  SAL_CALL getTypes() throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XControl
+    sal_Bool SAL_CALL isTransparent(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XFixedHyperlink
+    void SAL_CALL setText( const ::rtl::OUString& Text ) throw(::com::sun::star::uno::RuntimeException);
+    ::rtl::OUString SAL_CALL getText(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setURL( const ::rtl::OUString& URL ) throw(::com::sun::star::uno::RuntimeException);
+    ::rtl::OUString SAL_CALL getURL(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setAlignment( sal_Int16 nAlign ) throw(::com::sun::star::uno::RuntimeException);
+    sal_Int16 SAL_CALL getAlignment(  ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL addActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL removeActionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XActionListener >& l ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::awt::XLayoutConstrains
+    ::com::sun::star::awt::Size SAL_CALL getMinimumSize(  ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::Size SAL_CALL getPreferredSize(  ) throw(::com::sun::star::uno::RuntimeException);
+    ::com::sun::star::awt::Size SAL_CALL calcAdjustedSize( const ::com::sun::star::awt::Size& aNewSize ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::lang::XServiceInfo
+    DECLIMPL_SERVICEINFO_DERIVED( UnoFixedHyperlinkControl, UnoControlBase, szServiceName_UnoControlFixedHyperlink )
 };
 
 //  ----------------------------------------------------
