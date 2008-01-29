@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2007-12-12 13:20:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:17:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -459,7 +459,9 @@ OutputDevice::OutputDevice() :
     mnEmphasisAscent    = 0;
     mnEmphasisDescent   = 0;
     mnDrawMode          = 0;
-    mnTextLayoutMode    = 0;
+    mnTextLayoutMode        = TEXT_LAYOUT_DEFAULT;
+    if( Application::GetSettings().GetLayoutRTL() ) //#i84553# tip BiDi preference to RTL
+        mnTextLayoutMode = TEXT_LAYOUT_BIDI_RTL | TEXT_LAYOUT_TEXTORIGIN_LEFT;
     meOutDevType        = OUTDEV_DONTKNOW;
     meOutDevViewType    = OUTDEV_VIEWTYPE_DONTKNOW;
     mbMap               = FALSE;
