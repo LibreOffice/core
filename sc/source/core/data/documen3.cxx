@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:11:11 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:17:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,62 +35,6 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
-// System - Includes -----------------------------------------------------
-
-
-
-#ifdef WIN
-// SFX
-#define _SFXAPPWIN_HXX
-#define _SFX_SAVEOPT_HXX
-//#define _SFX_CHILDWIN_HXX ***
-#define _SFXCTRLITEM_HXX
-#define _SFXPRNMON_HXX
-#define _INTRO_HXX
-#define _SFXMSGDESCR_HXX
-#define _SFXMSGPOOL_HXX
-#define _SFXFILEDLG_HXX
-#define _PASSWD_HXX
-#define _SFXTBXCTRL_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXMNUITEM_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXTBXMGR_HXX
-#define _SFXSTBMGR_HXX
-#define _SFX_MINFITEM_HXX
-#define _SFXEVENT_HXX
-
-//sfxdlg.hxx
-//#define _SFXTABDLG_HXX
-#define _BASEDLGS_HXX
-#define _SFX_DINFDLG_HXX
-#define _SFXDINFEDT_HXX
-#define _SFX_MGETEMPL_HXX
-#define _SFX_TPLPITEM_HXX
-#define _SFX_STYLEDLG_HXX
-#define _NEWSTYLE_HXX
-#define _SFXDOCTEMPL_HXX
-#define _SFXDOCTDLG_HXX
-#define _SFX_TEMPLDLG_HXX
-#define _SFXNEW_HXX
-#define _SFXDOCMAN_HXX
-//#define _SFXDOCKWIN_HXX ***
-
-//sfxdoc.hxx
-//#define _SFX_OBJSH_HXX
-//#define _SFX_CLIENTSH_HXX ***
-//#define _SFXDOCINF_HXX
-#define _SFX_OBJFAC_HXX
-#define _SFX_DOCFILT_HXX
-#define _SFXDOCFILE_HXX
-#define _VIEWFAC_HXX
-#define _SFXVIEWFRM_HXX
-//#define _SFXVIEWSH_HXX ***
-#define _MDIFRM_HXX
-#define _SFX_IPFRM_HXX
-#define _SFX_INTERNO_HXX
-
-#endif  //WIN
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -137,9 +81,8 @@
 #include "drwlayer.hxx"
 #include "unoreflist.hxx"
 #include "listenercalls.hxx"
-#ifndef SC_EDITUTIL_HXX
 #include "editutil.hxx"    // ScPostIt EditTextObject
-#endif
+#include "postit.hxx"
 
 using namespace com::sun::star;
 
@@ -791,7 +734,9 @@ void ScDocument::RemoveUnoObject( SfxListener& rObject )
         }
     }
     else
+    {
         DBG_ERROR("No Uno broadcaster");
+    }
 }
 
 void ScDocument::BroadcastUno( const SfxHint &rHint )
