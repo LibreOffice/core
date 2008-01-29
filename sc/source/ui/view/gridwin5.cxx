@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:46:43 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:49:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,23 +49,13 @@
 #include <vcl/cursor.hxx>
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
-#ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
-#endif
 
-#ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
-#endif
 
-#ifndef SC_VIEWUNO_HXX
 #include "viewuno.hxx"
-#endif
-#ifndef _SC_ACCESSIBLEDOCUMENT_HXX
 #include "AccessibleDocument.hxx"
-#endif
-#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
 #include <com/sun/star/accessibility/XAccessible.hpp>
-#endif
 
 #include "gridwin.hxx"
 #include "viewdata.hxx"
@@ -79,6 +69,7 @@
 #include "dbfunc.hxx"
 #include "tabvwsh.hxx"
 #include "userdat.hxx"
+#include "postit.hxx"
 
 // -----------------------------------------------------------------------
 
