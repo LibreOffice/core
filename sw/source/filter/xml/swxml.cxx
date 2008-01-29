@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 10:08:44 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:42:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -718,8 +718,19 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
         { "ShapePositionInHoriL2R", sizeof("ShapePositionInHoriL2R")-1, 0,
               &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
+        // <--
         { "BuildId", sizeof("BuildId")-1, 0,
               &::getCppuType( (OUString *)0 ),
+              beans::PropertyAttribute::MAYBEVOID, 0 },
+        // --> OD 2007-12-19 #152540#
+        // Add property, which indicates, if a text document in OpenOffice.org
+        // file format is read.
+        // Note: Text documents read via the binary filter are also finally
+        //       read using the OpenOffice.org file format. Thus, e.g. for text
+        //       documents in StarOffice 5.2 binary file format this property
+        //       will be TRUE.
+        { "TextDocInOOoFileFormat", sizeof("TextDocInOOoFileFormat")-1, 0,
+              &::getBooleanCppuType(),
               beans::PropertyAttribute::MAYBEVOID, 0 },
         // <--
         { NULL, 0, 0, NULL, 0, 0 }
@@ -913,13 +924,21 @@ ULONG XMLReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPaM, const S
     // force redline mode to "none"
     rDoc.SetRedlineMode_intern( nsRedlineMode_t::REDLINE_NONE );
 
-    sal_Bool bOASIS = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
+    const sal_Bool bOASIS = ( SotStorage::GetVersion( xStorage ) > SOFFICE_FILEFORMAT_60 );
     // --> OD 2004-08-10 #i28749# - set property <ShapePositionInHoriL2R>
     {
         const sal_Bool bShapePositionInHoriL2R = !bOASIS;
         xInfoSet->setPropertyValue(
                 OUString(RTL_CONSTASCII_USTRINGPARAM("ShapePositionInHoriL2R")),
                 makeAny( bShapePositionInHoriL2R ) );
+    }
+    // <--
+    // --> OD 2007-12-19 #152540#
+    {
+        const sal_Bool bTextDocInOOoFileFormat = !bOASIS;
+        xInfoSet->setPropertyValue(
+                OUString(RTL_CONSTASCII_USTRINGPARAM("TextDocInOOoFileFormat")),
+                makeAny( bTextDocInOOoFileFormat ) );
     }
     // <--
     sal_uInt32 nWarn = 0;
