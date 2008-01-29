@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:34:40 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:43:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
-
 // INCLUDE ---------------------------------------------------------------
 
 #include <svx/svditer.hxx>
@@ -51,6 +49,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <vcl/help.hxx>
 #include <vcl/sound.hxx>
+#include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <svtools/urlbmk.hxx>
 #include <stdlib.h>
@@ -65,7 +64,6 @@
 #include "tablink.hxx"          // fuer Loader
 #include "popmenu.hxx"
 #include "drwlayer.hxx"
-//#include "dataobj.hxx"
 #include "transobj.hxx"
 #include "drwtrans.hxx"
 #include "lnktrans.hxx"
@@ -76,14 +74,8 @@
 #include "navipi.hrc"
 #include "arealink.hxx"
 #include "navicfg.hxx"
-
-#ifndef SC_NAVSETT_HXX
 #include "navsett.hxx"
-#endif
-
-#ifndef _SV_SVAPP_HXX
-#include <vcl/svapp.hxx>
-#endif
+#include "postit.hxx"
 
 using namespace com::sun::star;
 
@@ -225,7 +217,9 @@ void ScContentTree::InsertContent( USHORT nType, const String& rValue )
     if (pParent)
         InsertEntry( rValue, pParent );
     else
+    {
         DBG_ERROR("InsertContent ohne Parent");
+    }
 }
 
 void ScContentTree::GetEntryIndexes( USHORT& rnRootIndex, ULONG& rnChildIndex, SvLBoxEntry* pEntry ) const
@@ -1479,7 +1473,9 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
             LoadFile(aHiddenName);
     }
     else
+    {
         DBG_ERROR("SelectDoc: nicht gefunden");
+    }
 }
 
 void ScContentTree::ApplySettings()
