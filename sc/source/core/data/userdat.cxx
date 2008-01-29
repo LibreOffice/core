@@ -4,9 +4,9 @@
  *
  *  $RCSfile: userdat.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:33:48 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:21:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,9 @@ IMPL_LINK_INLINE_START( ScDrawObjFactory, MakeUserData, SdrObjFactory *, pObjFac
         else if ( pObjFactory->nIdentifier == SC_UD_MACRODATA )
             pObjFactory->pNewData = new ScMacroInfo;
         else
+        {
             DBG_ERROR("MakeUserData: falsche ID");
+        }
     }
     return 0;
 }
