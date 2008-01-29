@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2007-07-24 10:33:09 $
+#   last change: $Author: rt $ $Date: 2008-01-29 16:24:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,13 +39,13 @@ PRJNAME=vcl
 TARGET=svp
 TARGETTYPE=CUI
 
-.IF "$(OS)" == "SOLARIS"
-LINKFLAGSRUNPATH=-R/usr/sfw/lib -R\''$$ORIGIN'\'
-.ENDIF
-
 # --- Settings -----------------------------------------------------------
 
 .INCLUDE :  settings.mk
+
+.IF "$(OS)" == "SOLARIS"
+LINKFLAGSRUNPATH_OOO := -R/usr/sfw/lib $(LINKFLAGSRUNPATH_OOO)
+.ENDIF
 
 .IF "$(GUIBASE)" == "unx"
 # headless plugin
