@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:12:45 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1485,12 +1485,16 @@ void ScUnoAddInCall::SetParam( long nPos, const uno::Any& rValue )
             if ( nVarPos < aVarArg.getLength() )
                 aVarArg.getArray()[nVarPos] = rValue;
             else
+            {
                 DBG_ERROR("wrong argument number");
+            }
         }
         else if ( nPos < aArgs.getLength() )
             aArgs.getArray()[nPos] = rValue;
         else
+        {
             DBG_ERROR("wrong argument number");
+        }
     }
 }
 
