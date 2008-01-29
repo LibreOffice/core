@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgelem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:09:48 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:25:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,8 +388,11 @@ BOOL StgEntry::Load( const void* pFrom )
     UINT16 n = nNameLen;
     if( n )
         n = ( n >> 1 ) - 1;
-    if( n > 31 )
+    if( n > 31 || nSize < 0 )
+    {
+        // TODO/LATER: actually the size should be an unsigned value, but in this case it would mean a stream of more than 2Gb
         return FALSE;
+    }
 
     aName = String( nName, n );
     // I don't know the locale, so en_US is hopefully fine
