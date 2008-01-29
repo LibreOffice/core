@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transliterationImpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 16:57:28 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:04:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,11 +133,24 @@ private:
     com::sun::star::uno::Reference< XLocaleData > localedata;
     com::sun::star::uno::Reference< com::sun::star::i18n::XExtendedTransliteration > caseignore;
 
+    /** structure to cache the last transliteration body used. */
+    struct TransBody
+    {
+        ::osl::Mutex mutex;
+        ::rtl::OUString Name;
+        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XExtendedTransliteration > Body;
+    };
+    static TransBody lastTransBody;
+
     virtual sal_Bool SAL_CALL loadModuleByName( const rtl::OUString& implName,
         com::sun::star::uno::Reference<com::sun::star::i18n::XExtendedTransliteration> & body, const com::sun::star::lang::Locale& rLocale)
         throw(com::sun::star::uno::RuntimeException);
 
     void clear();
+
+    void loadBody( ::rtl::OUString &implName,
+        ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XExtendedTransliteration >& body )
+        throw (::com::sun::star::uno::RuntimeException);
 
     com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL getRange(
         const com::sun::star::uno::Sequence< rtl::OUString > &inStrs,
