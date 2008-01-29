@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:48:56 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:37:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1507,15 +1507,21 @@ void lcl_GetJoinFlags( SwPaM& rPam, sal_Bool& rJoinTxt, sal_Bool& rJoinPrev )
         if( rJoinTxt && pStt == rPam.GetPoint())
         {
             SwTxtNode * pEndNd = pEnd->nNode.GetNode().GetTxtNode();
-
-            if (0 != pEndNd &&
-                (pEndNd->GetTxt().Len() == pEnd->nContent.GetIndex() ||
-                 0 != pSttNd->GetNumRule()) )
+            if (0 != pEndNd )
             {
-                rPam.Exchange();
-                rJoinPrev = sal_False;
-
-                bDone = true;
+                bool bExchange = pEndNd->GetTxt().Len() == pEnd->nContent.GetIndex();
+                if( !bExchange && 0 != pSttNd->GetNumRule() && pSttNd->GetTxtColl() )
+                {
+                    const String aDefault( String::CreateFromAscii("Default") );
+                    if( aDefault != pSttNd->GetTxtColl()->GetName() )
+                        bExchange = true;
+                }
+                if( bExchange )
+                {
+                    rPam.Exchange();
+                    rJoinPrev = sal_False;
+                    bDone = true;
+                }
             }
         }
 
