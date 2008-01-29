@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkobject.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:00:15 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:38:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #include <plugins/gtk/gtkdata.hxx>
 #include <plugins/gtk/gtkinst.hxx>
 
-GtkSalObject::GtkSalObject( GtkSalFrame* pParent )
+GtkSalObject::GtkSalObject( GtkSalFrame* pParent, BOOL bShow )
         : m_pSocket( NULL ),
           m_pRegion( NULL )
 {
@@ -49,6 +49,7 @@ GtkSalObject::GtkSalObject( GtkSalFrame* pParent )
     {
         // our plug window
         m_pSocket = gtk_drawing_area_new();
+        Show( bShow );
         // insert into container
         gtk_fixed_put( pParent->getFixedContainer(),
                        m_pSocket,
