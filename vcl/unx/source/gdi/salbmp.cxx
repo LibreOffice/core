@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salbmp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:49:34 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 16:23:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,11 +138,18 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBitCount, 
 {
     DBG_ASSERT( nBitCount == 1 || nBitCount == 4 || nBitCount == 8 || nBitCount == 16 || nBitCount == 24, "Unsupported BitCount!" );
 
-    BitmapBuffer* pDIB;
+    BitmapBuffer* pDIB = NULL;
 
     if( rSize.Width() && rSize.Height() )
     {
-        pDIB = new BitmapBuffer;
+        try
+        {
+            pDIB = new BitmapBuffer;
+        }
+        catch( std::bad_alloc& )
+        {
+            pDIB = NULL;
+        }
 
         if( pDIB )
         {
@@ -179,7 +186,15 @@ BitmapBuffer* X11SalBitmap::ImplCreateDIB( const Size& rSize, USHORT nBitCount, 
                 pDIB->maPalette.SetEntryCount( nColors );
             }
 
-            pDIB->mpBits = new BYTE[ pDIB->mnScanlineSize * pDIB->mnHeight ];
+            try
+            {
+                pDIB->mpBits = new BYTE[ pDIB->mnScanlineSize * pDIB->mnHeight ];
+            }
+            catch(std::bad_alloc&)
+            {
+                delete pDIB;
+                pDIB = NULL;
+            }
         }
     }
     else
@@ -708,7 +723,15 @@ bool X11SalBitmap::Create( const SalBitmap& rSSalBmp )
         // TODO: reference counting...
         mpDIB = new BitmapBuffer( *rSalBmp.mpDIB );
         // TODO: get rid of this when BitmapBuffer gets copy constructor
-        mpDIB->mpBits = new BYTE[ mpDIB->mnScanlineSize * mpDIB->mnHeight ];
+        try
+        {
+            mpDIB->mpBits = new BYTE[ mpDIB->mnScanlineSize * mpDIB->mnHeight ];
+        }
+        catch( std::bad_alloc& )
+        {
+            delete mpDIB;
+            mpDIB = NULL;
+        }
 
         if( mpDIB )
             memcpy( mpDIB->mpBits, rSalBmp.mpDIB->mpBits, mpDIB->mnScanlineSize * mpDIB->mnHeight );
