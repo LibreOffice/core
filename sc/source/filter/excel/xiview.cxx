@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiview.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:50:57 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 15:28:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,7 +155,7 @@ void XclImpTabViewSettings::ReadWindow2( XclImpStream& rStrm, bool bChart )
         maData.mbMirrored       = !bChart && ::get_flag( nFlags, EXC_WIN2_MIRRORED );
         maData.mbFrozenPanes    = !bChart && ::get_flag( nFlags, EXC_WIN2_FROZEN );
         maData.mbPageMode       = !bChart && ::get_flag( nFlags, EXC_WIN2_PAGEBREAKMODE );
-        maData.mbDefGridColor   = ::get_flag( nFlags, EXC_WIN2_DEFGRIDCOLOR );
+        maData.mbDefGridColor   = bChart || ::get_flag( nFlags, EXC_WIN2_DEFGRIDCOLOR );
         maData.mbShowFormulas   = ::get_flag( nFlags, EXC_WIN2_SHOWFORMULAS );
         maData.mbShowGrid       = ::get_flag( nFlags, EXC_WIN2_SHOWGRID );
         maData.mbShowHeadings   = ::get_flag( nFlags, EXC_WIN2_SHOWHEADINGS );
