@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:47:27 $
+ *  last change: $Author: rt $ $Date: 2008-01-29 14:07:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -754,8 +754,9 @@ const TaskPaneData& OApplicationDetailView::impl_getTaskPaneData( ElementType _e
     OSL_ENSURE( ( _eType >= 0 ) && ( _eType < E_ELEMENT_TYPE_COUNT ), "OApplicationDetailView::impl_getTaskPaneData: illegal element type!" );
     TaskPaneData& rData = m_aTaskPaneData[ _eType ];
 
-    if ( rData.aTasks.empty() )
-        impl_fillTaskPaneData( _eType, rData );
+//    if ( rData.aTasks.empty() )
+    //oj: do not check, otherwise extensions will only be visible after a reload.
+    impl_fillTaskPaneData( _eType, rData );
 
     return rData;
 }
