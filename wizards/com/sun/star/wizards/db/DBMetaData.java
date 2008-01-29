@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBMetaData.java,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:29:36 $
+ *  last change: $Author: vg $ $Date: 2008-01-29 08:41:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@ import com.sun.star.lang.XInitialization;
 import com.sun.star.ui.dialogs.XExecutableDialog;
 import java.util.*;
 
-import com.sun.star.io.IOException;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
@@ -52,7 +51,6 @@ import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XHierarchicalNameContainer;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.container.XNamed;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XStorable;
@@ -61,7 +59,6 @@ import com.sun.star.sdbc.DataType;
 import com.sun.star.sdb.XOfficeDatabaseDocument;
 import com.sun.star.sdb.XDocumentDataSource;
 import com.sun.star.sdb.tools.XConnectionTools;
-import com.sun.star.sdbcx.XAppend;
 import com.sun.star.sdbcx.XColumnsSupplier;
 
 import com.sun.star.ucb.XSimpleFileAccess;
@@ -73,12 +70,10 @@ import com.sun.star.util.XNumberFormatsSupplier;
 
 import com.sun.star.wizards.common.Properties;
 import com.sun.star.wizards.common.*;
-import com.sun.star.wizards.ui.UnoDialog;
 import com.sun.star.task.XInteractionHandler;
 import com.sun.star.sdb.XFormDocumentsSupplier;
 import com.sun.star.sdb.XQueryDefinitionsSupplier;
 import com.sun.star.sdb.XReportDocumentsSupplier;
-import com.sun.star.sdbc.ColumnValue;
 import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbc.XDatabaseMetaData;
 import com.sun.star.sdbc.XDataSource;
@@ -86,7 +81,6 @@ import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRow;
 import com.sun.star.sdb.XCompletedConnection;
 import com.sun.star.lang.Locale;
-import com.sun.star.util.XFlushable;
 import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.sdb.XQueriesSupplier;
 import com.sun.star.sdbcx.XTablesSupplier;
@@ -103,7 +97,6 @@ public class DBMetaData {
     public XOfficeDatabaseDocument xModel;
     private XCompletedConnection xCompleted;
     public XPropertySet xDataSourcePropertySet;
-    private int[] nDataTypes = null;
     private XWindowPeer xWindowPeer;
     public String[] DataSourceNames;
     public String[] CommandNames;
@@ -565,12 +558,12 @@ public class DBMetaData {
             bgetConnection = true;
         } else {
             XInterface xInteractionHandler = (XInterface) xMSF.createInstance("com.sun.star.sdb.InteractionHandler");
-            XInteractionHandler oInteractionHandler = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xInteractionHandler);
+            XInteractionHandler interactionHandler = (XInteractionHandler) UnoRuntime.queryInterface(XInteractionHandler.class, xInteractionHandler);
             boolean bExitLoop = true;
             do {
                 XCompletedConnection xCompleted = (XCompletedConnection) UnoRuntime.queryInterface(XCompletedConnection.class, xDataSource);
                 try {
-                    DBConnection = xCompleted.connectWithCompletion(oInteractionHandler);
+                    DBConnection = xCompleted.connectWithCompletion(interactionHandler);
                     bgetConnection = DBConnection != null;
                     if (bgetConnection == false)
                         bExitLoop = true;
@@ -649,10 +642,8 @@ public class DBMetaData {
             XSingleServiceFactory xSSFQueryDefs = (XSingleServiceFactory) UnoRuntime.queryInterface(XSingleServiceFactory.class, xQueryDefs);
             Object oQuery = xSSFQueryDefs.createInstance(); //"com.sun.star.sdb.QueryDefinition"
             XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oQuery);
-            String s = _oSQLQueryComposer.xQueryAnalyzer.getQuery();
             xPSet.setPropertyValue("Command", _oSQLQueryComposer.xQueryAnalyzer.getQuery());
             XNameContainer xNameCont = (XNameContainer) UnoRuntime.queryInterface(XNameContainer.class, xQueryDefs);
-            XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xQueryDefs);
             ConnectionTools.getObjectNames().checkNameForCreate(com.sun.star.sdb.CommandType.QUERY,_QueryName);
             xNameCont.insertByName(_QueryName, oQuery);
             return true;
@@ -884,4 +875,23 @@ public class DBMetaData {
     } catch (com.sun.star.uno.Exception ex) {
         ex.printStackTrace();
     }}
+    public void finish(){
+        xTableNames = null;
+        xQueryNames = null;
+        oInteractionHandler = null;
+        xNameAccess = null;
+        xDatabaseContext = null;
+        xDBMetaData = null;
+        xDataSource = null;
+        xModel = null;
+        xCompleted = null;
+        xDataSourcePropertySet = null;
+        xWindowPeer = null;
+        DBConnection = null;
+        ConnectionTools = null;
+        xMSF = null;
+        xConnectionComponent = null;
+        oSQLQueryComposer = null;
+        CommandObjects = null;
+    }
 }
