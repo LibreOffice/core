@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:57:19 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:58:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,7 @@ namespace connectivity
         ORows                           m_aRows;
         ORows::iterator                 m_aRowsIter;
         sal_Bool                        m_bBOF;
+        sal_Bool                        m_bEOF;
 
         virtual const ORowSetValue& getValue(sal_Int32 columnIndex);
 
@@ -172,7 +173,7 @@ namespace connectivity
             eTablePrivileges,
             /// describes a result set as expected by XDatabaseMetaData::getCrossReference
             eCrossReference,
-            /// describes a result set as expected by XDatabaseMetaData::getCatalogs
+            /// describes a result set as expected by XDatabaseMetaData::getTypeInfo
             eTypeInfo,
             /// describes a result set as expected by XDatabaseMetaData::getBestRowIdentifier
             eBestRowIdentifier,
@@ -186,6 +187,7 @@ namespace connectivity
 
         void setRows(const ORows& _rRows);
 
+    protected:
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing(void);
         // XInterface
@@ -263,7 +265,7 @@ namespace connectivity
         void setTypeInfoMap();
         void setBestRowIdentifierMap();
         void setVersionColumnsMap();
-
+    public:
         // some methods to get already defined ORowSetValues
         // this increase the reuse of ORowSetValues
         /// return an empty ORowSetValueDecorator
