@@ -1,0 +1,153 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XCopyTableWizard.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:16:53 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_application_XCopyTableWizard_idl__
+#define __com_sun_star_sdb_application_XCopyTableWizard_idl__
+
+#ifndef __com_sun_star_ui_dialogs_XExecutableDialog_idl__
+#include <com/sun/star/ui/dialogs/XExecutableDialog.idl>
+#endif
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+#ifndef __com_sun_star_beans_Optional_idl__
+#include <com/sun/star/beans/Optional.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module sdb { module application {
+
+interface XCopyTableListener;
+
+//=============================================================================
+
+/** describes a wizard which can be used to copy table like data from one
+    database to another.
+
+    <p>Copying table data between databases can be a complex task. Especially when
+    it comes to matching field types in the source and in the target database,
+    some heuristics, and sometimes support from the user doing the operation,
+    are required.</p>
+
+    <p>The <code>copy table wizard</code> described by this interfaces cares for those,
+    and other, settings.</p>
+
+    @since OOo 2.4
+ */
+interface XCopyTableWizard : ::com::sun::star::ui::dialogs::XExecutableDialog
+{
+    /** specifies the basic operation for the wizard to execute.
+
+        <p>This must be one of the <type>CopyTableOperation</type> constants.</p>
+
+        <p>At initialization time, you can use this attribute to control the
+        initial operation in the wizard.</p>
+
+        <p>After the wizard has finished, you can use this attribute to determine
+        what operation was actually executed.</p>
+
+        <p>Changing this attribute while the dialog is running is not supported, the
+        result of such an attempt is undefined.</p>
+
+        @throws IllegalArgumentException
+            if you attempt to set an invalid operation, or if the given operation is
+            not supported by the target database type, e.g. if you specified
+            <member>CopyTableOperation::CreateAsView</member> where the database
+            does not support views.
+    */
+    [attribute] short Operation
+    {
+        set raises ( ::com::sun::star::lang::IllegalArgumentException );
+    };
+
+    /** specfies the name of the table in the destination database.
+
+        <p>At initialization time, you can use this attribute to control the
+        initial table name as suggested to the user.</p>
+
+        <p>After the wizard has finished, you can use this attribute to determine
+        what table was actually created resp. to which existing table the source
+        table's data was appended.</p>
+
+        <p>Changing this attribute while the dialog is running is not supported, the
+        result of such an attempt is undefined.</p>
+    */
+    [attribute] string  DestinationTableName;
+
+    /** specifies that a new primary key is to be created in the target database
+
+        <p>At initialization time, you can specify the initial settings for the primary
+        key in the UI.</p>
+
+        <p>You cannot use this attribute to determine the primary key, possibly created
+        by the wizard, after it finished. The reason is that during the wizard run, the
+        user can define an arbitrarily complex primary key, e.g. including multiple columns,
+        which cannot be represented in this simple attribute anymore.</p>
+
+        <p>This attribute is ignored if <member>Operation</member> is
+        <member>CopyTableOperation::AppendData</member>.</p>
+
+        <p>Changing this attribute while the dialog is running is not supported, the
+        result of such an attempt is undefined.</p>
+
+        <p>When a primary key is to be created by the wizard, it will be be an auto-increment
+        column, if possible.</p>
+
+        @throws ::com::sun::star::lang::IllegalArgumentException
+            if the target database does not support primary keys
+    */
+    [attribute] ::com::sun::star::beans::Optional< string >
+                        CreatePrimaryKey
+    {
+        set raises ( ::com::sun::star::lang::IllegalArgumentException );
+    };
+
+    /** adds a listener which is to be notified of progress in the copy operation
+    */
+    void    addCopyTableListener( [in] XCopyTableListener Listener );
+
+    /** removes a listener
+    */
+    void    removeCopyTableListener( [in] XCopyTableListener Listener );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif
