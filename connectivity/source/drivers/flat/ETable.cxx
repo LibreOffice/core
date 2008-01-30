@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:29:25 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -683,7 +683,6 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
 {
     if ( !m_pFileStream )
         return sal_False;
-    OFlatConnection* pConnection = (OFlatConnection*)m_pConnection;
     // ----------------------------------------------------------
     // Positionierung vorbereiten:
 
@@ -707,13 +706,12 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
 
             m_aRowToFilePos.insert(::std::map<sal_Int32,sal_Int32>::value_type(m_nRowPos,m_nFilePos));
 
-            m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
-            if (m_pFileStream->IsEof())
+            if ( !readLine(nCurPos))
             {
                 m_nMaxRowCount = m_nRowPos;
                 return sal_False;
             }
-            nCurPos = m_pFileStream->Tell();
+
             break;
         case IResultSetHelper::PRIOR:
             --m_nRowPos;
@@ -723,10 +721,8 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                 m_pFileStream->Seek(m_nFilePos);
                 if (m_pFileStream->IsEof() || !checkHeaderLine())
                     return sal_False;
-                m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
-                if (m_pFileStream->IsEof())
+                if ( !readLine(nCurPos) )
                     return sal_False;
-                nCurPos = m_pFileStream->Tell();
             }
             else
                 m_nRowPos = 0;
@@ -740,10 +736,9 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                 m_pFileStream->Seek(m_nFilePos);
                 if (m_pFileStream->IsEof() || !checkHeaderLine())
                     return sal_False;
-                m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
-                if (m_pFileStream->IsEof())
+
+                if ( !readLine(nCurPos) )
                     return sal_False;
-                nCurPos = m_pFileStream->Tell();
             }
             else
             {
@@ -775,10 +770,8 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                     m_pFileStream->Seek(m_nFilePos);
                     if (m_pFileStream->IsEof() || !checkHeaderLine())
                         return sal_False;
-                    m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
-                    if (m_pFileStream->IsEof())
+                    if ( !readLine(nCurPos) )
                         return sal_False;
-                    nCurPos = m_pFileStream->Tell();
                 }
                 else if(m_nMaxRowCount && nOffset > m_nMaxRowCount) // offset is outside the table
                 {
@@ -803,10 +796,8 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                         m_pFileStream->Seek(m_nFilePos);
                         if (m_pFileStream->IsEof() || !checkHeaderLine())
                             return sal_False;
-                        m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
-                        if (m_pFileStream->IsEof())
+                        if ( !readLine(nCurPos) )
                             return sal_False;
-                        nCurPos = m_pFileStream->Tell();
                     }
                 }
             }
@@ -818,10 +809,9 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
                 return sal_False;
 
             m_nFilePos = m_pFileStream->Tell(); // Byte-Position in der Datei merken (am ZeilenANFANG)
-            m_pFileStream->ReadByteStringLine(m_aCurrentLine,pConnection->getTextEncoding());
-            if (m_pFileStream->IsEof())
+
+            if ( !readLine(nCurPos) )
                 return sal_False;
-            nCurPos  = m_pFileStream->Tell();
             break;
     }
 
@@ -829,3 +819,27 @@ sal_Bool OFlatTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int
     return sal_True;
 }
 // -----------------------------------------------------------------------------
+sal_Bool OFlatTable::readLine(sal_Int32& _rnCurrentPos)
+{
+    m_pFileStream->ReadByteStringLine(m_aCurrentLine,m_pConnection->getTextEncoding());
+    if (m_pFileStream->IsEof())
+        return sal_False;
+
+    OFlatConnection* pConnection = static_cast<OFlatConnection*>(m_pConnection);
+    QuotedTokenizedString sLine = m_aCurrentLine;
+    while( (sLine.GetTokenCount(pConnection->getStringDelimiter()) % 2) != 1 )
+    {
+        m_pFileStream->ReadByteStringLine(sLine,m_pConnection->getTextEncoding());
+        if ( !m_pFileStream->IsEof() )
+        {
+            m_aCurrentLine.Append('\n');
+            m_aCurrentLine += sLine;
+            sLine = m_aCurrentLine;
+        }
+        else
+            break;
+    }
+    _rnCurrentPos = m_pFileStream->Tell();
+    return sal_True;
+}
+
