@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:37:29 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -361,6 +361,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
             ,m_pTables(NULL)
             ,m_pViews(NULL)
             ,m_aWarnings( Reference< XWarningsSupplier >( _rxMaster, UNO_QUERY ) )
+            ,m_nInAppend(0)
             ,m_bSupportsViews(sal_False)
             ,m_bSupportsUsers(sal_False)
             ,m_bSupportsGroups(sal_False)
@@ -398,7 +399,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
         {
         }
         Reference< XNameContainer > xTableDefinitions(_rDB.getTables(),UNO_QUERY);
-        m_pTables = new OTableContainer( *this, m_aMutex, this, bCase, xTableDefinitions, this, &m_aWarnings );
+        m_pTables = new OTableContainer( *this, m_aMutex, this, bCase, xTableDefinitions, this, &m_aWarnings,m_nInAppend );
 
         // check if we supports types
         if ( xMeta.is() )
@@ -428,7 +429,7 @@ OConnection::OConnection(ODatabaseSource& _rDB
             }
             if(m_bSupportsViews)
             {
-                m_pViews = new OViewContainer(*this, m_aMutex, this, bCase,this,&m_aWarnings);
+                m_pViews = new OViewContainer(*this, m_aMutex, this, bCase,this,&m_aWarnings,m_nInAppend);
                 m_pViews->addContainerListener(m_pTables);
                 m_pTables->addContainerListener(m_pViews);
             }
