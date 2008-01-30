@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TConnection.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:38:56 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:59:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,12 +72,21 @@ namespace connectivity
                                                 ::com::sun::star::lang::XUnoTunnel
                                             > OMetaConnection_BASE;
 
+    typedef ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >  TConditions;
+
     class OMetaConnection : public OMetaConnection_BASE
     {
     protected:
-        ::osl::Mutex        m_aMutex;
-        ::rtl::OUString     m_sURL;
-        rtl_TextEncoding    m_nTextEncoding; // the encoding which is used for all text conversions
+        ::osl::Mutex                    m_aMutex;
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
+                                        m_aConnectionInfo;
+        connectivity::OWeakRefArray     m_aStatements;  //  vector containing a list
+                                                        //  of all the Statement objects
+                                                        //  for this Connection
+        ::rtl::OUString                 m_sURL;
+        rtl_TextEncoding                m_nTextEncoding; // the encoding which is used for all text conversions
+        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData >
+                                        m_xMetaData;
     public:
 
         static ::dbtools::OPropertyMap& getPropMap();
@@ -87,6 +96,13 @@ namespace connectivity
         inline rtl_TextEncoding getTextEncoding() const { return m_nTextEncoding; }
         inline ::rtl::OUString  getURL() const  { return m_sURL; }
         inline void             setURL(const ::rtl::OUString& _rsUrl) { m_sURL = _rsUrl; }
+
+        inline void setConnectionInfo(const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _aInfo) { m_aConnectionInfo = _aInfo; }
+        inline const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >&
+            getConnectionInfo() const { return m_aConnectionInfo; }
+
+        // OComponentHelper
+        virtual void SAL_CALL disposing(void);
 
         //XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);
