@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BDatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:42:39 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:00:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ namespace connectivity
 
         class OAdabasDatabaseMetaData : public OAdabasDatabaseMetaData_BASE
         {
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > impl_getTypeInfo_throw();
         public:
             OAdabasDatabaseMetaData(const SQLHANDLE _pHandle,odbc::OConnection* _pCon)
                 : ODatabaseMetaData(_pHandle,_pCon)
@@ -58,7 +59,6 @@ namespace connectivity
             // just to return our url
             virtual ::rtl::OUString SAL_CALL getURL(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL supportsIntegrityEnhancementFacility(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet > SAL_CALL getTypeInfo(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
     }
 }
