@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registrationhelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:14:14 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:38:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 #ifndef _REGISTRATIONHELPER_INCLUDED_INDIRECTLY_
-#error "don't include this file directly! use dba_reghelper.hxx or dbu_reghelper.hxx instead!"
+#error "don't include this file directly! use dbu_reghelper.hxx instead!"
 #endif
 
 typedef ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory > (SAL_CALL *FactoryInstantiation)
