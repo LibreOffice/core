@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:52:11 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:56:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -815,10 +815,8 @@ Reference< XConnection > SAL_CALL KabDatabaseMetaData::getConnection(  ) throw(S
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
 {
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
-
-    pResult->setTableTypes();
 
     static ODatabaseMetaDataResultSet::ORows aRows;
     static const ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
@@ -836,10 +834,8 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTableTypes(  ) throw(SQ
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
 {
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
     Reference< XResultSet > xRef = pResult;
-
-    pResult->setTypeInfoMap();
 
     static ODatabaseMetaDataResultSet::ORows aRows;
     if (aRows.empty())
@@ -896,10 +892,8 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getColumns(
     const ::rtl::OUString& tableNamePattern,
     const ::rtl::OUString& columnNamePattern) throw(SQLException, RuntimeException)
 {
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
     Reference< XResultSet > xRef = pResult;
-
-    pResult->setColumnsMap();
 
     ODatabaseMetaDataResultSet::ORows aRows;
 
@@ -968,10 +962,8 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getTables(
     const ::rtl::OUString&,
     const Sequence< ::rtl::OUString >& types) throw(SQLException, RuntimeException)
 {
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTables);
     Reference< XResultSet > xRef = pResult;
-
-    pResult->setTablesMap();
 
     // check whether we have tables in the requested types
     // for the moment, we answer only the "TABLE" table type
@@ -1032,10 +1024,9 @@ Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getProcedures(
 Reference< XResultSet > SAL_CALL KabDatabaseMetaData::getVersionColumns(
     const Any&, const ::rtl::OUString&, const ::rtl::OUString& table ) throw(SQLException, RuntimeException)
 {
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xRef = pResult;
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eVersionColumns);
 
-    pResult->setVersionColumnsMap();
+    Reference< XResultSet > xRef = pResult;
 
     ODatabaseMetaDataResultSet::ORows aRows;
 
