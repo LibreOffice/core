@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JConnection.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-28 11:55:25 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:54:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,8 @@
 #include "resource/jdbc_log.hrc"
 #include "com/sun/star/uno/XComponentContext.hpp"
 #include "jvmaccess/classpath.hxx"
-#include <comphelper/sequenceashashmap.hxx>
+#include <comphelper/namedvaluecollection.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <jni.h>
 
 #include <list>
@@ -300,7 +301,6 @@ jclass java_sql_Connection::theClass = 0;
 java_sql_Connection::java_sql_Connection( const java_sql_Driver& _rDriver )
     :java_lang_Object( _rDriver.getContext().getLegacyServiceFactory() )
     ,OSubComponent<java_sql_Connection, java_sql_Connection_BASE>((::cppu::OWeakObject*)(&_rDriver), this)
-    ,m_xMetaData(NULL)
     ,m_pDriver( &_rDriver )
     ,m_pDriverobject(NULL)
     ,m_pDriverClassLoader()
@@ -348,19 +348,6 @@ void java_sql_Connection::disposing()
     dispose_ChildImpl();
     java_sql_Connection_BASE::disposing();
 
-    for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
-    {
-        try
-        {
-            Reference< XComponent > xComp(i->get(), UNO_QUERY);
-            if (xComp.is())
-                xComp->dispose();
-        }
-        catch(Exception&){}
-    }
-    m_aStatements.clear();
-
-    m_xMetaData = WeakReference< XDatabaseMetaData>();
     if ( object )
     {
         SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -914,6 +901,28 @@ Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeExc
 
     return Any();
 }
+
+// -----------------------------------------------------------------------------
+namespace
+{
+    ::rtl::OUString lcl_getDriverLoadErrorMessage( const ::rtl::OUString& _rDriverClass, const ::rtl::OUString& _rDriverClassPath )
+    {
+        ::rtl::OUStringBuffer aMessageBuf;
+        // TODO: resource
+        aMessageBuf.appendAscii( "The driver class '" );
+        aMessageBuf.append( _rDriverClass );
+        aMessageBuf.appendAscii( "' could not be loaded" );
+        if ( _rDriverClassPath.getLength() )
+        {
+            aMessageBuf.appendAscii( " (additional driver class path: " );
+            aMessageBuf.append( _rDriverClassPath );
+            aMessageBuf.appendAscii( ")" );
+        }
+        aMessageBuf.appendAscii( "." );
+        return aMessageBuf.makeStringAndClear();
+    }
+}
+
 // -----------------------------------------------------------------------------
 namespace
 {
@@ -961,7 +970,8 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
-void java_sql_Connection::loadDriverFromProperties( const Sequence< PropertyValue >& info )
+void java_sql_Connection::loadDriverFromProperties( const ::rtl::OUString& _sDriverClass, const ::rtl::OUString& _sDriverClassPath,
+    const Sequence< NamedValue >& _rSystemProperties )
 {
     // contains the statement which should be used when query for automatically generated values
     ::rtl::OUString     sGeneratedValueStatement;
@@ -972,20 +982,9 @@ void java_sql_Connection::loadDriverFromProperties( const Sequence< PropertyValu
     SDBThreadAttach t;
     try
     {
-        ::comphelper::SequenceAsHashMap aMap( info );
-        ::rtl::OUString sDriverClassPath,sDriverClass;
-        sDriverClass = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass")),sDriverClass);
-        sDriverClassPath = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClassPath")),sDriverClassPath);
-        bAutoRetrievingEnabled = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled")),bAutoRetrievingEnabled);
-        sGeneratedValueStatement = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement")),sGeneratedValueStatement);
-        m_bParameterSubstitution = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParameterNameSubstitution")),m_bParameterSubstitution);
-        m_bIgnoreDriverPrivileges = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreDriverPrivileges")),m_bIgnoreDriverPrivileges);
-        m_bIgnoreCurrency = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IgnoreCurrency")),m_bIgnoreCurrency);
-        Sequence< NamedValue > aSystemProperties;
-        aSystemProperties = aMap.getUnpackedValueOrDefault(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SystemProperties")),aSystemProperties);
         if ( !object )
         {
-            if ( !lcl_setSystemProperties_nothrow( getLogger(), *t.pEnv, aSystemProperties ) )
+            if ( !lcl_setSystemProperties_nothrow( getLogger(), *t.pEnv, _rSystemProperties ) )
                 ThrowLoggedSQLException( getLogger(), t.pEnv, *this );
 
             m_pDriverClassLoader.reset();
@@ -994,30 +993,29 @@ void java_sql_Connection::loadDriverFromProperties( const Sequence< PropertyValu
             java_sql_SQLException_BASE::getMyClass();
             java_lang_Throwable::getMyClass();
 
-            if ( !sDriverClass.getLength() )
+            if ( !_sDriverClass.getLength() )
             {
                 m_aLogger.log( LogLevel::SEVERE, STR_LOG_NO_DRIVER_CLASS );
                 throw SQLException(::rtl::OUString::createFromAscii("The specified driver was empty!"),*this,::rtl::OUString(),1000,Any());
             }
             else
             {
-                m_aLogger.log( LogLevel::INFO, STR_LOG_LOADING_DRIVER, sDriverClass );
+                m_aLogger.log( LogLevel::INFO, STR_LOG_LOADING_DRIVER, _sDriverClass );
                 // the driver manager holds the class of the driver for later use
                 ::std::auto_ptr< java_lang_Class > pDrvClass;
-                if ( !sDriverClassPath.getLength() )
+                if ( !_sDriverClassPath.getLength() )
                 {
                     // if forName didn't find the class it will throw an exception
-                    pDrvClass = ::std::auto_ptr< java_lang_Class >(java_lang_Class::forName(sDriverClass));
+                    pDrvClass = ::std::auto_ptr< java_lang_Class >(java_lang_Class::forName(_sDriverClass));
                 }
                 else
                 {
-
                     LocalRef< jclass > driverClass(t.env());
                     LocalRef< jobject > driverClassLoader(t.env());
 
                     loadClass(
                         m_pDriver->getContext().getUNOContext(),
-                        t.env(), sDriverClassPath, sDriverClass, &driverClassLoader, &driverClass );
+                        t.env(), _sDriverClassPath, _sDriverClass, &driverClassLoader, &driverClass );
 
                     m_pDriverClassLoader.set( driverClassLoader );
                     pDrvClass.reset( new java_lang_Class( t.pEnv, driverClass.release() ) );
@@ -1047,20 +1045,22 @@ void java_sql_Connection::loadDriverFromProperties( const Sequence< PropertyValu
             }
         }
     }
-    catch(SQLException& e)
+    catch( const SQLException& e )
     {
         throw SQLException(
-            ::rtl::OUString::createFromAscii( "The specified driver could not be loaded." ),
-                // TODO: resource
+            lcl_getDriverLoadErrorMessage( _sDriverClass, _sDriverClassPath ),
             *this,
             ::rtl::OUString(),
             1000,
             makeAny(e)
         );
     }
-    catch(Exception&)
+    catch( Exception& )
     {
-        ::dbtools::throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("The specified driver could not be loaded!")) ,*this);
+        ::dbtools::throwGenericSQLException(
+            lcl_getDriverLoadErrorMessage( _sDriverClass, _sDriverClassPath ),
+            *this
+        );
     }
 
     enableAutoRetrievingEnabled( bAutoRetrievingEnabled );
@@ -1081,7 +1081,25 @@ sal_Bool java_sql_Connection::construct(const ::rtl::OUString& url,
     if ( !t.pEnv )
             throw SQLException(::rtl::OUString::createFromAscii("No Java installation could be found. Please check your installation!"),*this,::rtl::OUString::createFromAscii("S1000"),1000 ,Any());
 
-    loadDriverFromProperties( info );
+    ::rtl::OUString     sGeneratedValueStatement; // contains the statement which should be used when query for automatically generated values
+    sal_Bool            bAutoRetrievingEnabled = sal_False; // set to <TRUE/> when we should allow to query for generated values
+    ::rtl::OUString sDriverClassPath,sDriverClass;
+    Sequence< NamedValue > aSystemProperties;
+
+    ::comphelper::NamedValueCollection aSettings( info );
+    sDriverClass = aSettings.getOrDefault( "JavaDriverClass", sDriverClass );
+    sDriverClassPath = aSettings.getOrDefault( "JavaDriverClassPath", sDriverClassPath);
+    bAutoRetrievingEnabled = aSettings.getOrDefault( "IsAutoRetrievingEnabled", bAutoRetrievingEnabled );
+    sGeneratedValueStatement = aSettings.getOrDefault( "AutoRetrievingStatement", sGeneratedValueStatement );
+    m_bParameterSubstitution = aSettings.getOrDefault( "ParameterNameSubstitution", m_bParameterSubstitution );
+    m_bIgnoreDriverPrivileges = aSettings.getOrDefault( "IgnoreDriverPrivileges", m_bIgnoreDriverPrivileges );
+    m_bIgnoreCurrency = aSettings.getOrDefault( "IgnoreCurrency", m_bIgnoreCurrency );
+    aSystemProperties = aSettings.getOrDefault( "SystemProperties", aSystemProperties );
+
+    loadDriverFromProperties( sDriverClass, sDriverClassPath, aSystemProperties );
+
+    enableAutoRetrievingEnabled(bAutoRetrievingEnabled);
+    setAutoRetrievingStatement(sGeneratedValueStatement);
 
     if ( t.pEnv && m_Driver_theClass && m_pDriverobject )
     {
