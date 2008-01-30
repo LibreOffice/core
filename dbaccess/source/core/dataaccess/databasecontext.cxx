@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:39:22 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:33:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,24 +36,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBA_COREDATAACCESS_DATABASECONTEXT_HXX_
 #include "databasecontext.hxx"
-#endif
-#ifndef _DBA_COREDATAACCESS_DATASOURCE_HXX_
 #include "datasource.hxx"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HRC_
 #include "core_resource.hrc"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HXX_
 #include "core_resource.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
+#include "module_dba.hxx"
 
 #ifndef _COM_SUN_STAR_REGISTRY_INVALIDREGISTRYEXCEPTION_HPP_
 #include <com/sun/star/registry/InvalidRegistryException.hpp>
@@ -159,7 +148,7 @@ using ::com::sun::star::ucb::IOErrorCode_NOT_EXISTING_PATH;
 
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseContext()
 {
-    static ::dbaccess::OOneInstanceAutoRegistration< ::dbaccess::ODatabaseContext > aODatabaseContext_AutoRegistration;
+    static ::dba::OLegacySingletonRegistration< ::dbaccess::ODatabaseContext > aODatabaseContext_AutoRegistration;
 }
 
 //........................................................................
@@ -194,17 +183,10 @@ namespace dbaccess
 //= ODatabaseContext
 //==========================================================================
 //--------------------------------------------------------------------------
-Reference< XInterface >
-ODatabaseContext_CreateInstance(const Reference< XMultiServiceFactory >  & xServiceManager)
-{
-    return (*new ODatabaseContext(xServiceManager));
-}
-
-//--------------------------------------------------------------------------
-ODatabaseContext::ODatabaseContext(const Reference< XMultiServiceFactory >  & xServiceManager)
-                       :DatabaseAccessContext_Base(m_aMutex)
-                       ,m_xServiceManager(xServiceManager)
-                       ,m_aContainerListeners(m_aMutex)
+ODatabaseContext::ODatabaseContext( const Reference< XComponentContext >& _rxContext )
+    :DatabaseAccessContext_Base(m_aMutex)
+    ,m_aContext( _rxContext )
+    ,m_aContainerListeners(m_aMutex)
 {
 }
 
@@ -215,20 +197,20 @@ ODatabaseContext::~ODatabaseContext()
 
 // Helper
 //------------------------------------------------------------------------------
-rtl::OUString ODatabaseContext::getImplementationName_Static() throw( RuntimeException )
+rtl::OUString ODatabaseContext::getImplementationName_static() throw( RuntimeException )
 
 {
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.ODatabaseContext"));
 }
 
 //------------------------------------------------------------------------------
-Reference< XInterface > ODatabaseContext::Create(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > ODatabaseContext::Create(const Reference< XComponentContext >& _rxContext)
 {
-    return ODatabaseContext_CreateInstance(_rxFactory);
+    return *( new ODatabaseContext( _rxContext ) );
 }
 
 //------------------------------------------------------------------------------
-Sequence< rtl::OUString > ODatabaseContext::getSupportedServiceNames_Static(void) throw( RuntimeException )
+Sequence< rtl::OUString > ODatabaseContext::getSupportedServiceNames_static(void) throw( RuntimeException )
 {
     Sequence< ::rtl::OUString > aSNS( 1 );
     aSNS[0] = SERVICE_SDB_DATABASECONTEXT;
@@ -239,7 +221,7 @@ Sequence< rtl::OUString > ODatabaseContext::getSupportedServiceNames_Static(void
 //------------------------------------------------------------------------------
 rtl::OUString ODatabaseContext::getImplementationName(  ) throw(RuntimeException)
 {
-    return getImplementationName_Static();
+    return getImplementationName_static();
 }
 
 //------------------------------------------------------------------------------
@@ -251,13 +233,13 @@ sal_Bool ODatabaseContext::supportsService( const ::rtl::OUString& _rServiceName
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ODatabaseContext::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    return getSupportedServiceNames_Static();
+    return getSupportedServiceNames_static();
 }
 
 //--------------------------------------------------------------------------
 Reference< XInterface > SAL_CALL ODatabaseContext::createInstance(  ) throw (Exception, RuntimeException)
 {
-    ::rtl::Reference<ODatabaseModelImpl> pImpl(new ODatabaseModelImpl(m_xServiceManager));
+    ::rtl::Reference<ODatabaseModelImpl> pImpl( new ODatabaseModelImpl( m_aContext.getLegacyServiceFactory() ) );
     pImpl->m_pDBContext = this;
     Reference< XDataSource > xDataSource( pImpl->getDataSource() );
     return xDataSource.get();
@@ -313,7 +295,7 @@ bool ODatabaseContext::getURLForRegisteredObject( const ::rtl::OUString& _rRegis
 
     // the config node where all pooling relevant info are stored under
     OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-        m_xServiceManager, getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
+        m_aContext.getLegacyServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
     if ( aDbRegisteredNamesRoot.isValid() && aDbRegisteredNamesRoot.hasByName( _rRegisteredName ) )
     {
         OConfigurationNode aRegisterObj = aDbRegisteredNamesRoot.openNode( _rRegisteredName );
@@ -395,7 +377,7 @@ Reference< XInterface > ODatabaseContext::loadObjectFromURL(const ::rtl::OUStrin
     }
     if ( !xExistent.is() )
     {
-        ::rtl::Reference<ODatabaseModelImpl> pImpl(new ODatabaseModelImpl(_rName,m_xServiceManager,this));
+        ::rtl::Reference<ODatabaseModelImpl> pImpl( new ODatabaseModelImpl( _rName, m_aContext.getLegacyServiceFactory(), this ) );
         xExistent = pImpl->getDataSource().get();
 
         Sequence< PropertyValue > aArgs(1);
@@ -551,7 +533,7 @@ void ODatabaseContext::revokeObject(const rtl::OUString& _rName) throw( Exceptio
     Reference< XInterface > xExistent;
 
     OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-        m_xServiceManager, getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
+        m_aContext.getLegacyServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_UPDATABLE);
     if ( aDbRegisteredNamesRoot.isValid() && aDbRegisteredNamesRoot.hasByName(_rName) )
     {
         OConfigurationNode aThisDriverSettings = aDbRegisteredNamesRoot.openNode(_rName);
@@ -662,7 +644,7 @@ Sequence< rtl::OUString > ODatabaseContext::getElementNames(void) throw( Runtime
     TNameMap aRet;
 
     OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-        m_xServiceManager, getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
+        m_aContext.getLegacyServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
 
     Sequence< ::rtl::OUString> aSeq;
     if ( aDbRegisteredNamesRoot.isValid() )
@@ -680,7 +662,7 @@ sal_Bool ODatabaseContext::hasByName(const rtl::OUString& _rName) throw( Runtime
     ::connectivity::checkDisposed(DatabaseAccessContext_Base::rBHelper.bDisposed);
 
     OConfigurationTreeRoot aDbRegisteredNamesRoot = OConfigurationTreeRoot::createWithServiceFactory(
-        m_xServiceManager, getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
+        m_aContext.getLegacyServiceFactory(), getDbRegisteredNamesNodeName(), -1, OConfigurationTreeRoot::CM_READONLY);
 
     return aDbRegisteredNamesRoot.isValid() && aDbRegisteredNamesRoot.hasByName(_rName);
 }
