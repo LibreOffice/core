@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 13:01:35 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:31:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2992,6 +2992,8 @@ SvxNumPositionTabPage::SvxNumPositionTabPage(Window* pParent,
     pSaveNum(0),
     nActNumLvl( USHRT_MAX ),
     nNumItemId(SID_ATTR_NUMBERING_RULE),
+    bModified(false),
+    bPreset(false),
     bInInintControl(FALSE)
 {
     FreeResource();
