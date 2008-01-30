@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TConnection.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:59:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:47:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,12 +41,32 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
+#include <comphelper/types.hxx>
 
 using namespace connectivity;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::sdbc;
 using namespace::osl;
 
+//------------------------------------------------------------------------------
+void OMetaConnection::disposing()
+{
+    ::osl::MutexGuard aGuard(m_aMutex);
+    m_xMetaData = WeakReference< XDatabaseMetaData>();
+    for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
+    {
+        try
+        {
+            Reference< XInterface > xStatement( i->get() );
+            ::comphelper::disposeComponent( xStatement );
+        }
+        catch (DisposedException)
+        {
+        }
+    }
+    m_aStatements.clear();
+}
 //XUnoTunnel
 sal_Int64 SAL_CALL OMetaConnection::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
 {
