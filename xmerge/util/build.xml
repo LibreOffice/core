@@ -4,9 +4,9 @@
 
     $RCSfile: build.xml,v $
 
-    $Revision: 1.11 $
+    $Revision: 1.12 $
 
-    last change: $Author: hr $ $Date: 2006-04-19 15:11:30 $
+    last change: $Author: rt $ $Date: 2008-01-30 15:25:36 $
 
     The Contents of this file are made available subject to
     the terms of GNU Lesser General Public License Version 2.1.
@@ -59,18 +59,32 @@
     <!-- build javadoc -->
     <target name="javadoc" depends="init">
         <javadoc destdir="${javadoc.dir}"
-                 author="true"
-                 version="true"
-                 use="true"
-                 windowtitle="XMerge API"
-                 classpathref="classpath">
-
-            <fileset dir="../source/bridge" defaultexcludes="yes"/>
-            <fileset dir="../source/xmerge" defaultexcludes="yes"/>
-            <fileset dir="../source/aportisdoc" defaultexcludes="yes"/>
-            <fileset dir="../source/pexcel" defaultexcludes="yes"/>
-            <fileset dir="../source/pocketword" defaultexcludes="yes"/>
-
+             verbose="false"
+             author="false"
+             nodeprecated="true"
+             nodeprecatedlist="true"
+             use="true"
+             Doctitle="OpenOffice XMerge API"
+             windowtitle="OpenOffice XMerge API"
+             classpathref="classpath">
+            <fileset dir="../source/bridge" defaultexcludes="yes">
+               <include name="**/*.java"/>
+            </fileset>
+            <fileset dir="../source/xmerge" defaultexcludes="yes">
+               <include name="**/*.java"/>
+            </fileset>
+            <fileset dir="../source/aportisdoc" defaultexcludes="yes">
+               <include name="**/*.java"/>
+            </fileset>
+            <fileset dir="../source/pexcel" defaultexcludes="yes">
+               <include name="**/*.java"/>
+            </fileset>
+            <fileset dir="../source/pocketword" defaultexcludes="yes">
+               <include name="**/*.java"/>
+            </fileset>
+             <link offline="true" href="http://java.sun.com/j2se/1.3/docs/api" packagelistLoc="${solar.doc}/jdk13"/>
+            <bottom><![CDATA[<i>Copyright &#169 2002 OpenOffice.org</i>]]></bottom>
+            <header><![CDATA[<b>OpenOffice.org<br>XMerge API</b>]]></header>
         </javadoc>
     </target>
 
