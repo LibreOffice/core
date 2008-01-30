@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sharedunocomponent.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:42:39 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 09:32:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,6 +192,13 @@ namespace utl
             reset( _rxComponent, eMode );
         }
 
+#ifndef EXCEPTIONS_OFF
+        inline  SharedUNOComponent( const SharedUNOComponent& _rxComponent, ::com::sun::star::uno::UnoReference_SetThrow _setThrow )
+        {
+            set( _rxComponent, _setThrow );
+        }
+#endif
+
 //        SharedUNOComponent& operator=( const ::com::sun::star::uno::Reference< INTERFACE >& _rxComponent );
         // this operator is not implemented by intention. There is no canonic ownership after this operatoer
         // would hvae been applied: Should the SharedUNOComponent have the ownership of the component,
@@ -215,6 +222,7 @@ namespace utl
 
         inline void set( const INTERFACE* _pInterface, ::com::sun::star::uno::UnoReference_SetThrow _setThrow );
         inline void set( const ::com::sun::star::uno::Reference< INTERFACE >& _rRef, ::com::sun::star::uno::UnoReference_SetThrow _setThrow );
+        inline void set( const SharedUNOComponent& _rComp, ::com::sun::star::uno::UnoReference_SetThrow _setThrow );
 #endif
 
         INTERFACE* SAL_CALL operator->() const;
@@ -320,6 +328,15 @@ namespace utl
     void SharedUNOComponent< INTERFACE, COMPONENT >::set( const ::com::sun::star::uno::Reference< INTERFACE >& _rRef, ::com::sun::star::uno::UnoReference_SetThrow _setThrow )
     {
         reset( ::com::sun::star::uno::Reference< INTERFACE >( _rRef, _setThrow ), TakeOwnership );
+    }
+
+    //-------------------------------------------------------------------------
+    template < class INTERFACE, class COMPONENT >
+    void SharedUNOComponent< INTERFACE, COMPONENT >::set( const SharedUNOComponent& _rComp, ::com::sun::star::uno::UnoReference_SetThrow _setThrow )
+    {
+        *this = _rComp;
+        // provoke an exception in case the component is NULL
+        m_xTypedComponent.set( m_xTypedComponent, _setThrow );
     }
 #endif
 
