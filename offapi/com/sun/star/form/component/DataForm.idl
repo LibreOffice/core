@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataForm.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:34:20 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:11:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ published service DataForm
         <p>The insertion row is a virtual row which is used to insert new records. It is reached
         by calling <member scope="com::sun::star::sdbc">XResultSetUpdate::moveToInsertRow</member>.
         The <type scope="com::sun::star::sdb">RowSet</type> service specifies exactly which notifications
-        happen in which order when calling <type scope="com::sun::star::sdbc">XResultSetUpdate::moveToInsertRow</type>,
+        happen in which order when calling <member scope="com::sun::star::sdbc">XResultSetUpdate::moveToInsertRow</member>,
         and a <type>DataForm</type> implementation extends this with the following contract:
         <ul><li>After all notifications as defined in the <type scope="com::sun::star::sdb">RowSet</type>
                 service have been sent, the <type>DataForm</type> resets itself, if all
