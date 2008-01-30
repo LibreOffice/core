@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WTypeSelect.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:08:14 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:52:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef DBAUI_FIELDDESCRIPTIONS_HXX
 #include "FieldDescriptions.hxx"
@@ -167,13 +170,13 @@ void OWizTypeSelectControl::CellModified(long nRow, sal_uInt16 nColId )
                         ::rtl::OUString sEntry(aListBox.GetEntry(i));
                         bDoubleName = sNewName.equalsIgnoreAsciiCase(sEntry);
                     }
-                    if ( !bDoubleName && pWiz->isAutoincrementEnabled() )
+                    if ( !bDoubleName && pWiz->shouldCreatePrimaryKey() )
                         bDoubleName = sNewName.equalsIgnoreAsciiCase(pWiz->getPrimaryKeyName());
 
                 }
                 else
                     bDoubleName =  ((aListBox.GetEntryPos(String(sNewName)) != LISTBOX_ENTRY_NOTFOUND)
-                                    || ( pWiz->isAutoincrementEnabled()
+                                    || ( pWiz->shouldCreatePrimaryKey()
                                         &&  pWiz->getPrimaryKeyName() == sNewName) );
 
                 if ( bDoubleName )
@@ -240,12 +243,12 @@ const OTypeInfoMap* OWizTypeSelectControl::getTypeInfo() const
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> OWizTypeSelectControl::getMetaData()
 {
-    return ((OWizTypeSelect*)GetParent())->m_pParent->m_xConnection->getMetaData();
+    return ((OWizTypeSelect*)GetParent())->m_pParent->m_xDestConnection->getMetaData();
 }
 // -----------------------------------------------------------------------------
 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> OWizTypeSelectControl::getConnection()
 {
-    return ((OWizTypeSelect*)GetParent())->m_pParent->m_xConnection;
+    return ((OWizTypeSelect*)GetParent())->m_pParent->m_xDestConnection;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OWizTypeSelectControl::isAutoIncrementValueEnabled() const
@@ -263,7 +266,7 @@ sal_Bool OWizTypeSelectControl::isAutoIncrementValueEnabled() const
 DBG_NAME(OWizTypeSelect);
 #define IMG_PRIMARY_KEY 1
 //========================================================================
-OWizTypeSelect::OWizTypeSelect( Window* pParent,SvStream*   _pStream)
+OWizTypeSelect::OWizTypeSelect( Window* pParent, SvStream* _pStream )
                :OWizardPage( pParent, ModuleRes( TAB_WIZ_TYPE_SELECT ))
                ,m_lbColumnNames( this, ModuleRes( LB_NEW_COLUMN_NAMES ) )
                ,m_flColumns( this, ModuleRes( FL_COLUMN_NAME ) )
@@ -272,7 +275,7 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent,SvStream*   _pStream)
                ,m_ftAuto( this, ModuleRes( FT_AUTO ) )
                ,m_etAuto( this, ModuleRes( ET_AUTO ) )
                ,m_pbAuto( this, ModuleRes( PB_AUTO ) )
-               ,m_pParserStream(_pStream)
+               ,m_pParserStream( _pStream )
                ,m_nDisplayRow(0)
                ,m_bAutoIncrementEnabled(sal_False)
                ,m_bDuplicateName(sal_False)
@@ -293,15 +296,12 @@ OWizTypeSelect::OWizTypeSelect( Window* pParent,SvStream*   _pStream)
 
     try
     {
-        // Datenbank kann keine PrimKeys verarbeiten oder keine Zeilenselektion
-        Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
-        m_lbColumnNames.SetPKey(xMetaData->supportsCoreSQLGrammar());
-
-        ::dbaui::fillAutoIncrementValue(m_pParent->m_xConnection,m_bAutoIncrementEnabled,m_sAutoIncrementValue);
+        m_lbColumnNames.SetPKey( m_pParent->supportsPrimaryKey() );
+        ::dbaui::fillAutoIncrementValue( m_pParent->m_xDestConnection, m_bAutoIncrementEnabled, m_sAutoIncrementValue );
     }
     catch(const Exception&)
     {
-        OSL_ENSURE(0,"supportsCoreSQLGrammar OR fillAutoIncrementValue failed!");
+        DBG_UNHANDLED_EXCEPTION();
     }
 
     FreeResource();
