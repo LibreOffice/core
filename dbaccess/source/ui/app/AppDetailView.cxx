@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 14:07:23 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@
 #include <svtools/localresaccess.hxx>
 #endif
 #include <algorithm>
-
+#include "dbtreelistbox.hxx"
 
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
@@ -998,3 +998,8 @@ sal_Bool OApplicationDetailView::isSortUp() const
     return m_pControlHelper->isSortUp();
 }
 // -----------------------------------------------------------------------------
+Window* OApplicationDetailView::getTreeWindow() const
+{
+    return m_pControlHelper->getCurrentView();
+}
+
