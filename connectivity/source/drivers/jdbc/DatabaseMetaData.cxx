@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:01:38 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:53:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,13 +100,12 @@ jclass java_sql_DatabaseMetaData::getMyClass()
 }
 // -----------------------------------------------------------------------------
 java_sql_DatabaseMetaData::java_sql_DatabaseMetaData( JNIEnv * pEnv, jobject myObj, java_sql_Connection& _rConnection )
-    :ODatabaseMetaDataBase( &_rConnection )
+    :ODatabaseMetaDataBase( &_rConnection,_rConnection.getConnectionInfo() )
     ,java_lang_Object( pEnv, myObj )
     ,m_pConnection( &_rConnection )
     ,m_aLogger( _rConnection.getLogger() )
 {
     SDBThreadAttach::addRef();
-    setConnectionInfo( _rConnection.getConnectionInfo() );
 }
 
 // -------------------------------------------------------------------------
@@ -118,7 +117,7 @@ void java_sql_DatabaseMetaData::saveClassRef( jclass pClass )
     theClass = pClass;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
+Reference< XResultSet > java_sql_DatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     static jmethodID mID = NULL;
     return impl_callResultSetMethod( "getTypeInfo", mID );
@@ -130,7 +129,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getCatalogs(  ) thro
     return impl_callResultSetMethod( "getCatalogs", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
+::rtl::OUString java_sql_DatabaseMetaData::impl_getCatalogSeparator_throw(  )
 {
     static jmethodID mID = NULL;
     return impl_callStringMethod( "getCatalogSeparator", mID );
@@ -337,7 +336,7 @@ sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxTableNameLength(  ) throw(SQ
     return impl_callIntMethod( "getMaxTableNameLength", mID );
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLException, RuntimeException)
+sal_Int32 java_sql_DatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
 {
     static jmethodID mID = NULL;
     return impl_callIntMethod( "getMaxTablesInSelect", mID );
@@ -498,10 +497,9 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTablePrivileges(
 
                 }
                 // fill our own resultset
-                ODatabaseMetaDataResultSet* pNewPrivRes = new ODatabaseMetaDataResultSet();
+                ODatabaseMetaDataResultSet* pNewPrivRes = new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTablePrivileges );
                 Reference< XResultSet > xTemp = xReturn;
                 xReturn = pNewPrivRes;
-                pNewPrivRes->setTablePrivilegesMap();
                 ODatabaseMetaDataResultSet::ORows aRows;
                 Reference< XRow > xRow(xTemp,UNO_QUERY);
                 ::rtl::OUString sValue;
@@ -822,7 +820,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesLowerCaseIdentifiers(  ) thro
     return impl_callBooleanMethod( "storesLowerCaseIdentifiers", mID );
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+sal_Bool java_sql_DatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     static jmethodID mID = NULL;
     return impl_callBooleanMethod( "storesMixedCaseQuotedIdentifiers", mID );
@@ -846,13 +844,13 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::storesUpperCaseIdentifiers(  ) thro
     return impl_callBooleanMethod( "storesUpperCaseIdentifiers", mID );
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException)
+sal_Bool java_sql_DatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
 {
     static jmethodID mID = NULL;
     return impl_callBooleanMethod( "supportsAlterTableWithAddColumn", mID );
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException)
+sal_Bool java_sql_DatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 {
     static jmethodID mID = NULL;
     return impl_callBooleanMethod( "supportsAlterTableWithDropColumn", mID );
@@ -876,7 +874,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsNonNullableColumns(  ) thro
     return impl_callStringMethod( "getCatalogTerm", mID );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
+::rtl::OUString java_sql_DatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     static jmethodID mID = NULL;
     return impl_callStringMethod( "getIdentifierQuoteString", mID );
@@ -894,7 +892,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsDifferentTableCorrelationNa
     return impl_callBooleanMethod( "supportsDifferentTableCorrelationNames", mID );
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL java_sql_DatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, RuntimeException)
+sal_Bool java_sql_DatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
     static jmethodID mID = NULL;
     return impl_callBooleanMethod( "isCatalogAtStart", mID );
@@ -966,7 +964,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsTransactionIsolationLevel( 
     return impl_callBooleanMethodWithIntArg( "supportsTransactionIsolationLevel", mID, level );
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInDataManipulation(  ) throw(SQLException, RuntimeException)
+sal_Bool java_sql_DatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
 {
     static jmethodID mID = NULL;
     return impl_callBooleanMethod( "supportsSchemasInDataManipulation", mID );
@@ -996,13 +994,13 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInIndexDefinitions( 
     return impl_callBooleanMethod( "supportsSchemasInIndexDefinitions", mID );
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw(SQLException, RuntimeException)
+sal_Bool java_sql_DatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
 {
     static jmethodID mID = NULL;
     return impl_callBooleanMethod( "supportsSchemasInTableDefinitions", mID );
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInTableDefinitions(  ) throw(SQLException, RuntimeException)
+sal_Bool java_sql_DatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
 {
     static jmethodID mID = NULL;
     return impl_callBooleanMethod( "supportsCatalogsInTableDefinitions", mID );
@@ -1014,7 +1012,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInIndexDefinitions(
     return impl_callBooleanMethod( "supportsCatalogsInIndexDefinitions", mID );
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsCatalogsInDataManipulation(  ) throw(SQLException, RuntimeException)
+sal_Bool java_sql_DatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
 {
     static jmethodID mID = NULL;
     return impl_callBooleanMethod( "supportsCatalogsInDataManipulation", mID );
@@ -1032,7 +1030,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTableTypes(  ) th
     return impl_callResultSetMethod( "getTableTypes", mID );
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL java_sql_DatabaseMetaData::getMaxStatements(  ) throw(SQLException, RuntimeException)
+sal_Int32 java_sql_DatabaseMetaData::impl_getMaxStatements_throw(  )
 {
     static jmethodID mID = NULL;
     return impl_callIntMethod( "getMaxStatements", mID );
@@ -1214,7 +1212,7 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMixedCaseIdentifiers(  ) th
     return impl_callBooleanMethod( "supportsMixedCaseIdentifiers", mID );
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+sal_Bool java_sql_DatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
     static jmethodID mID = NULL;
     return impl_callBooleanMethod( "supportsMixedCaseQuotedIdentifiers", mID );
@@ -1599,9 +1597,3 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getUDTs(
     return out ? new java_sql_ResultSet( t.pEnv, out, m_aLogger,*m_pConnection ) : 0;
 }
 // -------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL java_sql_DatabaseMetaData::getConnection(  ) throw(SQLException, RuntimeException)
-{
-    return (Reference< XConnection >)m_pConnection;
-}
-// -------------------------------------------------------------------------
-
