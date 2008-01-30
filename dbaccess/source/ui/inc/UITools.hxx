@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:29:40 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:47:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,6 +427,14 @@ namespace dbaui
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> createView( const ::rtl::OUString& _sName
                                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
                                                     ,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xSourceObject);
+
+    /** creates a view with the given command
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> createView(
+        const ::rtl::OUString& _rName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
+        const ::rtl::OUString& _rCommand
+    );
 
     /** returns the stripped database name.
         @param  _xDataSource
