@@ -1,0 +1,80 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: CopyTableOperation.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:16:00 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_application_CopyTableOperation_idl__
+#define __com_sun_star_sdb_application_CopyTableOperation_idl__
+
+//=============================================================================
+
+module com { module sun { module star { module sdb { module application {
+
+//=============================================================================
+
+/** specifies the different basic operations a <type>CopyTableWizard</type>
+    can do.
+
+    @since OOo 2.4
+*/
+constants CopyTableOperation
+{
+    /** specifies that the wizard should copy the source table to the target database,
+        by creating a new table and copying all data.
+    */
+    const short CopyDefinitionAndData   = 0;
+
+    /** specifies that the wizard should copy the source table to the target database,
+        by only creating a new table with the same structure as the source table.
+    */
+    const short CopyDefinitionOnly      = 1;
+
+    /** specifies the wizard should create the source table as view
+
+        <p>This option is not available if the target database does not support views.</p>
+    */
+    const short CreateAsView            = 2;
+
+    /** specifies the wizard should append the source table's data to an existing
+        table in the target database.
+    */
+    const short AppendData              = 3;
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif
