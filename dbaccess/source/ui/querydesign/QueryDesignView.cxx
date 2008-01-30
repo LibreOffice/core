@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 17:13:13 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:54:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1434,16 +1434,39 @@ namespace
         {
             for (int i = 0; i < 3 && eErrorCode == eOk ; i+=2)
             {
-                if ( SQL_ISRULE(pCondition->getChild(i),search_condition) )
-                    eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(i),nLevel,bHaving,bAddOrOnOneLine);
+                const  ::connectivity::OSQLParseNode* pChild = pCondition->getChild(i);
+                if ( SQL_ISRULE(pChild,search_condition) )
+                    eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pChild,nLevel,bHaving,bAddOrOnOneLine);
                 else
-                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pCondition->getChild(i), bAddOrOnOneLine ? nLevel : nLevel++,bHaving,bAddOrOnOneLine);
+                    eErrorCode = GetANDCriteria(_pView,_pSelectionBrw,pChild, bAddOrOnOneLine ? nLevel : nLevel++,bHaving,bAddOrOnOneLine);
             }
         }
         else
             eErrorCode = GetANDCriteria( _pView,_pSelectionBrw,pCondition, nLevel, bHaving,bAddOrOnOneLine );
 
         return eErrorCode;
+    }
+    //--------------------------------------------------------------------------------------------------
+    bool CheckOrCriteria(const ::connectivity::OSQLParseNode* _pCondition,::connectivity::OSQLParseNode* _pFirstColumnRef)
+    {
+        bool bRet = true;
+        ::connectivity::OSQLParseNode* pFirstColumnRef = _pFirstColumnRef;
+        for (int i = 0; i < 3 && bRet; i+=2)
+        {
+            const  ::connectivity::OSQLParseNode* pChild = _pCondition->getChild(i);
+            if ( SQL_ISRULE(pChild,search_condition) )
+                bRet = CheckOrCriteria(pChild,pFirstColumnRef);
+            else
+            {
+                // this is a simple way to test columns are the same, may be we have to adjust this algo a little bit in future. :-)
+                ::connectivity::OSQLParseNode* pSecondColumnRef = pChild->getByRule(::connectivity::OSQLParseNode::column_ref);
+                if ( pFirstColumnRef && pSecondColumnRef )
+                    bRet = *pFirstColumnRef == *pSecondColumnRef;
+                else if ( !pFirstColumnRef )
+                    pFirstColumnRef = pSecondColumnRef;
+            }
+        }
+        return bRet;
     }
     //--------------------------------------------------------------------------------------------------
     SqlParseError GetANDCriteria(   OQueryDesignView* _pView,
@@ -1464,7 +1487,9 @@ namespace
         if (SQL_ISRULE(pCondition,boolean_primary))
         {
             sal_uInt16 nLevel2 = nLevel;
-            eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(1), nLevel2,bHaving,true );
+            // check if we have to put the or criteria on one line.
+            bool bMustAddOrOnOneLine = CheckOrCriteria(pCondition->getChild(1),NULL);
+            eErrorCode = GetORCriteria(_pView,_pSelectionBrw,pCondition->getChild(1), nLevel2,bHaving,bMustAddOrOnOneLine );
         }
         // Das erste Element ist (wieder) eine AND-Verknuepfung
         else if ( SQL_ISRULE(pCondition,boolean_term) && pCondition->count() == 3 )
@@ -2961,7 +2986,7 @@ sal_Bool OQueryDesignView::checkStatement()
     // ----------------- Tabellenliste aufbauen ----------------------
 
     const ::std::vector<OTableConnection*>* pConnList = m_pTableView->getTableConnections();
-    Reference< XConnection> xConnection = static_cast<OQueryController*>(getController())->getConnection();
+    Reference< XConnection> xConnection = pController->getConnection();
     ::rtl::OUString aTableListStr(GenerateFromClause(xConnection,pTabList,pConnList));
     DBG_ASSERT(aTableListStr.getLength(), "OQueryDesignView::getStatement() : unerwartet : habe Felder, aber keine Tabellen !");
     // wenn es Felder gibt, koennen die nur durch Einfuegen aus einer schon existenten Tabelle entstanden sein; wenn andererseits
@@ -3029,6 +3054,27 @@ sal_Bool OQueryDesignView::checkStatement()
         m_pController->showError(aError);
     }
 
+    if ( xConnection.is() )
+    {
+        ::connectivity::OSQLParser& rParser( pController->getParser() );
+        ::rtl::OUString sErrorMessage;
+        ::std::auto_ptr<OSQLParseNode> pParseNode( rParser.parseTree( sErrorMessage, aSqlCmd, sal_True ) );
+        if ( pParseNode.get() )
+        {
+            OSQLParseNode* pNode = pParseNode->getChild(3)->getChild(1);
+            if ( pNode->count() > 1 )
+            {
+                ::connectivity::OSQLParseNode * pCondition = pNode->getChild(1);
+                if ( pCondition ) // no where clause
+                {
+                    OSQLParseNode::compress(pCondition);
+                    ::rtl::OUString sTemp;
+                    pParseNode->parseNodeToStr(sTemp,xConnection);
+                    aSqlCmd = sTemp;
+                }
+            }
+        }
+    }
     return aSqlCmd;
 }
 // -----------------------------------------------------------------------------
