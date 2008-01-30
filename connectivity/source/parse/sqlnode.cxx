@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:38:43 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:04:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1938,7 +1938,7 @@ void OSQLParseNode::disjunctiveNormalForm(OSQLParseNode*& pSearchCondition)
         disjunctiveNormalForm(pRight);
 
         OSQLParseNode* pNewNode = NULL;
-        // '(' search_condition ')'
+        // '(' search_condition ')' on left side
         if(pLeft->count() == 3 && SQL_ISRULE(pLeft,boolean_primary) && SQL_ISRULE(pLeft->getChild(1),search_condition))
         {
             // and-or tree  on left side
@@ -1958,25 +1958,23 @@ void OSQLParseNode::disjunctiveNormalForm(OSQLParseNode*& pSearchCondition)
             disjunctiveNormalForm(pSearchCondition);
         }
         else if(pRight->count() == 3 && SQL_ISRULE(pRight,boolean_primary) && SQL_ISRULE(pRight->getChild(1),search_condition))
-        {
+        {   // '(' search_condition ')' on right side
             // and-or tree  on right side
-            if ( pRight->getChild(1)->getByRule(OSQLParseNode::boolean_term) )
-            {
-                OSQLParseNode* pOr = pRight->getChild(1);
-                OSQLParseNode* pNewLeft = NULL;
-                OSQLParseNode* pNewRight = NULL;
+            // a and (b or c)
+            OSQLParseNode* pOr = pRight->getChild(1);
+            OSQLParseNode* pNewLeft = NULL;
+            OSQLParseNode* pNewRight = NULL;
 
-                // cut left from parent
-                pSearchCondition->removeAt((sal_uInt32)0);
+            // cut left from parent
+            pSearchCondition->removeAt((sal_uInt32)0);
 
-                pNewRight   = MakeANDNode(pLeft,pOr->removeAt(2));
-                pNewLeft    = MakeANDNode(new OSQLParseNode(*pLeft),pOr->removeAt((sal_uInt32)0));
-                pNewNode    = MakeORNode(pNewLeft,pNewRight);
+            pNewRight   = MakeANDNode(pLeft,pOr->removeAt(2));
+            pNewLeft    = MakeANDNode(new OSQLParseNode(*pLeft),pOr->removeAt((sal_uInt32)0));
+            pNewNode    = MakeORNode(pNewLeft,pNewRight);
 
-                // and append new Node
-                replaceAndReset(pSearchCondition,pNewNode);
-                disjunctiveNormalForm(pSearchCondition);
-            }
+            // and append new Node
+            replaceAndReset(pSearchCondition,pNewNode);
+            disjunctiveNormalForm(pSearchCondition);
         }
         else if(SQL_ISRULE(pLeft,boolean_primary) && (!SQL_ISRULE(pLeft->getChild(1),search_condition) || !SQL_ISRULE(pLeft->getChild(1),boolean_term)))
             pSearchCondition->replace(pLeft, pLeft->removeAt(1));
