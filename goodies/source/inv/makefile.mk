@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2008-01-29 14:42:39 $
+#   last change: $Author: rt $ $Date: 2008-01-30 15:40:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,8 @@ PRJ=..$/..
 PRJNAME=goodies
 TARGET=invader
 TARGETTYPE=GUI
+
+EXTERNAL_WARNINGS_NOT_ERRORS := TRUE
 
 # --- Settings -----------------------------------------------------
 
