@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:33:37 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:29:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -901,7 +901,7 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
     if (SQL_ISRULE(pCondition,boolean_primary))
     {
         // this should not occur
-        DBG_ERROR("Primary condition in And-Criteria");
+        DBG_ERROR("boolean_primary in And-Criteria");
         return sal_False;
     }
     // Das erste Element ist (wieder) eine AND-Verknuepfung
@@ -955,12 +955,15 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
             }
             else if (SQL_ISRULE(pCondition,in_predicate))
             {
+                OSL_ENSURE( false, "OSingleSelectQueryComposer::setANDCriteria: in_predicate not implemented!" );
             }
             else if (SQL_ISRULE(pCondition,all_or_any_predicate))
             {
+                OSL_ENSURE( false, "OSingleSelectQueryComposer::setANDCriteria: all_or_any_predicate not implemented!" );
             }
             else if (SQL_ISRULE(pCondition,between_predicate))
             {
+                OSL_ENSURE( false, "OSingleSelectQueryComposer::setANDCriteria: between_predicate not implemented!" );
             }
 
             rFilter.push_back(aItem);
@@ -1603,15 +1606,31 @@ Sequence< Sequence< PropertyValue > > OSingleSelectQueryComposer::getStructuredC
             OSQLParseNode* pWhereNode = const_cast<OSQLParseNode*>(m_aAdditiveIterator.getWhereTree());
 
             OSQLParseNode* pCondition = pWhereNode->getChild(1);
+        #if OSL_DEBUG_LEVEL > 0
+            ::rtl::OUString sCondition;
+            pCondition->parseNodeToStr( sCondition, m_xConnection );
+        #endif
             OSQLParseNode::negateSearchCondition(pCondition);
 
             pCondition = pWhereNode->getChild(1);
+        #if OSL_DEBUG_LEVEL > 0
+            sCondition = ::rtl::OUString();
+            pCondition->parseNodeToStr( sCondition, m_xConnection );
+        #endif
             OSQLParseNode::disjunctiveNormalForm(pCondition);
 
             pCondition = pWhereNode->getChild(1);
+        #if OSL_DEBUG_LEVEL > 0
+            sCondition = ::rtl::OUString();
+            pCondition->parseNodeToStr( sCondition, m_xConnection );
+        #endif
             OSQLParseNode::absorptions(pCondition);
 
             pCondition = pWhereNode->getChild(1);
+        #if OSL_DEBUG_LEVEL > 0
+            sCondition = ::rtl::OUString();
+            pCondition->parseNodeToStr( sCondition, m_xConnection );
+        #endif
             if ( pCondition )
             {
                 ::std::vector< ::std::vector < PropertyValue > > aFilters;
