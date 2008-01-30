@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwctrlr.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:50:24 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:42:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -621,6 +621,7 @@ void SbaXDataBrowserController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:FormSlots/saveRecord",      ID_BROWSER_SAVERECORD,  CommandGroup::CONTROLS );
     implDescribeSupportedFeature( ".uno:FormController/saveRecord", ID_BROWSER_SAVERECORD,  CommandGroup::CONTROLS );
     implDescribeSupportedFeature( ".uno:RecSave",                   ID_BROWSER_SAVERECORD,  CommandGroup::CONTROLS );
+    implDescribeSupportedFeature( ".uno:Save",                      ID_BROWSER_SAVERECORD,  CommandGroup::DOCUMENT );
     implDescribeSupportedFeature( ".uno:RecSearch",                 SID_FM_SEARCH,          CommandGroup::CONTROLS );
     implDescribeSupportedFeature( ".uno:AutoFilter",                SID_FM_AUTOFILTER,      CommandGroup::CONTROLS );
     implDescribeSupportedFeature( ".uno:Refresh",                   SID_FM_REFRESH,         CommandGroup::CONTROLS );
@@ -1706,7 +1707,7 @@ void SbaXDataBrowserController::ExecuteFilterSortCrit(sal_Bool bFilter)
     try
     {
         Reference< ::com::sun::star::sdbcx::XColumnsSupplier> xSup = getColumnsSupplier();
-        Reference< XConnection> xCon(xFormSet->getPropertyValue(PROPERTY_ACTIVECONNECTION),UNO_QUERY);
+        Reference< XConnection> xCon(xFormSet->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
         if(bFilter)
         {
             DlgFilterCrit aDlg( getBrowserView(), getORB(), xCon, m_xParser, xSup->getColumns() );
