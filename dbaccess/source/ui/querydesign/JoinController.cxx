@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:27:20 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:54:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,7 +338,8 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId) const
             aReturn.bEnabled = ( getView() != NULL )
                             && const_cast< OJoinController* >( this )->getJoinView()->getTableView()->IsAddAllowed();
             aReturn.bChecked = aReturn.bEnabled && m_pAddTableDialog != NULL && m_pAddTableDialog->IsVisible() ;
-            aReturn.sTitle = OAddTableDlg::getDialogTitleForContext( impl_getDialogContext() );
+            if ( aReturn.bEnabled )
+                aReturn.sTitle = OAddTableDlg::getDialogTitleForContext( impl_getDialogContext() );
             break;
 
         default:
