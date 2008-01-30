@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreparedStatement.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 07:54:54 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 09:07:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -554,7 +554,6 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameter
                         ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
                         return;
                     }
-                    break;
                 default:
                     obj = convertwchar_tToJavaString(t.pEnv,::comphelper::getString(x));
                     break;
