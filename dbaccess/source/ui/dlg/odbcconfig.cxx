@@ -4,9 +4,9 @@
  *
  *  $RCSfile: odbcconfig.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 09:49:57 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:46:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,10 +313,11 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
     UCHAR szDescription[1024+1];
     SWORD pcbDescription;
     SQLRETURN nResult = SQL_SUCCESS;
+    rtl_TextEncoding nTextEncoding = osl_getThreadTextEncoding();
 
-    for (   nResult = NSQLDataSources(m_pImpl->hEnvironment, SQL_FETCH_FIRST, szDSN, sizeof(szDSN), &pcbDSN, szDescription, sizeof(szDescription), &pcbDescription);
+    for (   nResult = NSQLDataSources(m_pImpl->hEnvironment, SQL_FETCH_FIRST, szDSN, sizeof(szDSN), &pcbDSN, szDescription, sizeof(szDescription)-1, &pcbDescription);
             ;
-            nResult = NSQLDataSources(m_pImpl->hEnvironment, SQL_FETCH_NEXT, szDSN, sizeof(szDSN), &pcbDSN, szDescription, sizeof(szDescription), &pcbDescription)
+            nResult = NSQLDataSources(m_pImpl->hEnvironment, SQL_FETCH_NEXT, szDSN, sizeof(szDSN), &pcbDSN, szDescription, sizeof(szDescription)-1, &pcbDescription)
         )
     {
         if (nResult != SQL_SUCCESS)
@@ -324,8 +325,8 @@ void OOdbcEnumeration::getDatasourceNames(StringBag& _rNames)
             break;
         else
         {
-            ::rtl::OUStringBuffer aCurrentDsn; aCurrentDsn.appendAscii(reinterpret_cast<const char*>(szDSN));
-            _rNames.insert(aCurrentDsn.makeStringAndClear());
+            ::rtl::OUString aCurrentDsn(reinterpret_cast<const char*>(szDSN),pcbDSN, nTextEncoding);
+            _rNames.insert(aCurrentDsn);
         }
     }
 #endif
