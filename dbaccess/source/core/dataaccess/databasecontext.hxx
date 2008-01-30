@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasecontext.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:21:18 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:33:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@
 #ifndef _COMPHELPER_STLTYPES_HXX_
 #include <comphelper/stl_types.hxx>
 #endif
+#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
+#include <comphelper/componentcontext.hxx>
+#endif
 #ifndef _CPPUHELPER_INTERFACECONTAINER_HXX_
 #include <cppuhelper/interfacecontainer.hxx>
 #endif
@@ -74,9 +77,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
-#endif
-#ifndef _DBA_REGHELPER_HXX_
-#include "dba_reghelper.hxx"
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -139,8 +139,8 @@ private:
     void setTransientProperties(const ::rtl::OUString& _sURL, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _xObject);
 
 protected:
-    ::osl::Mutex    m_aMutex;
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >            m_xServiceManager;
+    ::osl::Mutex                    m_aMutex;
+    ::comphelper::ComponentContext  m_aContext;
 
     DECLARE_STL_USTRINGACCESS_MAP( ODatabaseModelImpl*, ObjectCache );
     ObjectCache     m_aDatabaseObjects;
@@ -156,7 +156,7 @@ protected:
     ::cppu::OInterfaceContainerHelper       m_aContainerListeners;
 
 public:
-    ODatabaseContext(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+    ODatabaseContext( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& );
     virtual ~ODatabaseContext();
 
 
@@ -173,10 +173,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XServiceInfo - static methods
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-    static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::rtl::OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-        SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
 // ::com::sun::star::container::XElementAccess
     virtual ::com::sun::star::uno::Type SAL_CALL getElementType(  ) throw(::com::sun::star::uno::RuntimeException);
