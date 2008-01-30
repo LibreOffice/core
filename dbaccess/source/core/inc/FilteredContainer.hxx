@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilteredContainer.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 13:33:13 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ namespace dbaccess
     protected:
         IWarningsContainer*     m_pWarningsContainer;
         IRefreshListener*       m_pRefreshListener;
+        oslInterlockedCount&    m_nInAppend;
 
         // holds the original container which where set in construct but they can be null
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterContainer;
@@ -83,6 +84,24 @@ namespace dbaccess
             After using this method the object may be reconstructed by calling one of the <code>constrcuct</code> methods.
         */
         virtual void SAL_CALL disposing();
+
+        class EnsureReset
+        {
+        public:
+            EnsureReset( oslInterlockedCount& _rValueLocation)
+                :m_rValue( _rValueLocation )
+            {
+                osl_incrementInterlockedCount(&m_rValue);
+            }
+
+            ~EnsureReset()
+            {
+                osl_decrementInterlockedCount(&m_rValue);
+            }
+
+        private:
+            oslInterlockedCount&   m_rValue;
+        };
     public:
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
             interface.<BR>
@@ -97,8 +116,9 @@ namespace dbaccess
                         ::osl::Mutex& _rMutex,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
                         sal_Bool _bCase,
-                        IRefreshListener*   _pRefreshListener = NULL,
-                        IWarningsContainer* _pWarningsContainer = NULL
+                        IRefreshListener*   _pRefreshListener,
+                        IWarningsContainer* _pWarningsContainer,
+                        oslInterlockedCount& _nInAppend
                         );
 
         inline void dispose() { disposing(); }
