@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MABDatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 07:28:29 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:03:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,8 +322,6 @@ namespace connectivity
             virtual sal_Bool SAL_CALL insertsAreDetected( sal_Int32 setType )
                 throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
             virtual sal_Bool SAL_CALL supportsBatchUpdates()
-                throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
-            virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection > SAL_CALL getConnection()
                 throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         };
     }
