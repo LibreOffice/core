@@ -4,9 +4,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:28:22 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:49:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include "connectivity/dbexception.hxx"
 #endif
-
+#include "connectivity/dbtools.hxx"
 
 #define CHECK_RETURN(x)                                                 \
     if(!x)                                                              \
@@ -436,9 +436,18 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Re
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 /*parameterIndex*/, const Any& /*x*/, sal_Int32 /*sqlType*/, sal_Int32 /*scale*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::setObjectWithInfo", *this );
+    switch(sqlType)
+    {
+        case DataType::DECIMAL:
+        case DataType::NUMERIC:
+            setString(parameterIndex,::comphelper::getString(x));
+            break;
+        default:
+            ::dbtools::setObjectWithInfo(this,parameterIndex,x,sqlType,scale);
+            break;
+    }
 }
 // -------------------------------------------------------------------------
 
