@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmexpl.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:27:09 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:32:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,7 +507,7 @@ namespace svxform
         SvLBoxEntry*        m_pRootEntry;
         SvLBoxEntry*        m_pEditEntry;
 
-        sal_uInt32          nEditEvent;
+        ULONG               nEditEvent;
 
         SELDATA_ITEMS       m_sdiState;
         Point               m_aTimerTriggered;      // die Position, an der der DropTimer angeschaltet wurde
