@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComponentDefinition.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:39:27 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:31:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
 #endif
+#include "module_dba.hxx"
 
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
@@ -65,6 +66,7 @@
 #include "definitioncolumn.hxx"
 #endif
 #include <cppuhelper/implbase1.hxx>
+#include <comphelper/componentcontext.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
@@ -78,7 +80,7 @@ using namespace ::cppu;
 
 extern "C" void SAL_CALL createRegistryInfo_OComponentDefinition()
 {
-    static ::dbaccess::OMultiInstanceAutoRegistration< ::dbaccess::OComponentDefinition > aAutoRegistration;
+    static ::dba::OAutoRegistration< ::dbaccess::OComponentDefinition > aAutoRegistration;
 }
 
 //........................................................................
@@ -182,7 +184,7 @@ IMPLEMENT_IMPLEMENTATION_ID(OComponentDefinition);
 IMPLEMENT_GETTYPES3(OComponentDefinition,ODataSettings,OContentHelper,OComponentDefinition_BASE);
 IMPLEMENT_FORWARD_XINTERFACE3( OComponentDefinition,OContentHelper,ODataSettings,OComponentDefinition_BASE)
 //--------------------------------------------------------------------------
-::rtl::OUString OComponentDefinition::getImplementationName_Static(  ) throw(RuntimeException)
+::rtl::OUString OComponentDefinition::getImplementationName_static(  ) throw(RuntimeException)
 {
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.dba.OComponentDefinition"));
 }
@@ -190,11 +192,11 @@ IMPLEMENT_FORWARD_XINTERFACE3( OComponentDefinition,OContentHelper,ODataSettings
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OComponentDefinition::getImplementationName(  ) throw(RuntimeException)
 {
-    return getImplementationName_Static();
+    return getImplementationName_static();
 }
 
 //--------------------------------------------------------------------------
-Sequence< ::rtl::OUString > OComponentDefinition::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+Sequence< ::rtl::OUString > OComponentDefinition::getSupportedServiceNames_static(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aServices(2);
     aServices.getArray()[0] = SERVICE_SDB_TABLEDEFINITION;
@@ -206,12 +208,13 @@ Sequence< ::rtl::OUString > OComponentDefinition::getSupportedServiceNames_Stati
 //--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OComponentDefinition::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    return getSupportedServiceNames_Static();
+    return getSupportedServiceNames_static();
 }
 //------------------------------------------------------------------------------
-Reference< XInterface > OComponentDefinition::Create(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > OComponentDefinition::Create( const Reference< XComponentContext >& _rxContext )
 {
-    return *(new OComponentDefinition(_rxFactory,NULL,TContentPtr(new OComponentDefinition_Impl)));
+    ::comphelper::ComponentContext aContext( _rxContext );
+    return *(new OComponentDefinition( aContext.getLegacyServiceFactory(), NULL, TContentPtr( new OComponentDefinition_Impl ) ) );
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OComponentDefinition::disposing()
