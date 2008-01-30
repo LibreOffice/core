@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FDatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:58:09 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:46:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet()
     ,m_aStatement(NULL)
     ,m_xMetaData(NULL)
     ,m_bBOF(sal_True)
+    ,m_bEOF(sal_True)
 {
     construct();
 }
@@ -117,6 +118,7 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet( MetaDataResultSetType _e
     ,m_aStatement(NULL)
     ,m_xMetaData(NULL)
     ,m_bBOF(sal_True)
+    ,m_bEOF(sal_True)
 {
     construct();
 
@@ -195,6 +197,8 @@ Sequence< Type > SAL_CALL ODatabaseMetaDataResultSet::getTypes(  ) throw(Runtime
 void ODatabaseMetaDataResultSet::setRows(const ORows& _rRows)
 {
     m_aRows = _rRows;
+    m_bBOF = sal_True;
+    m_bEOF = m_aRows.empty();
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString& columnName ) throw(SQLException, RuntimeException)
@@ -357,8 +361,7 @@ sal_Int16 SAL_CALL ODatabaseMetaDataResultSet::getShort( sal_Int32 columnIndex )
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isAfterLast(  ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFunctionSequenceException(*this);
-    return sal_False;
+    return m_bEOF;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isFirst(  ) throw(SQLException, RuntimeException)
@@ -453,8 +456,7 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::rowUpdated(  ) throw(SQLException,
 
 sal_Bool SAL_CALL ODatabaseMetaDataResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFunctionSequenceException(*this);
-    return sal_False;
+    return m_bBOF;
 }
 // -------------------------------------------------------------------------
 
@@ -463,18 +465,27 @@ sal_Bool SAL_CALL ODatabaseMetaDataResultSet::next(  ) throw(SQLException, Runti
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
 
-
-    if(m_bBOF)
+    if ( m_bBOF )
     {
        m_aRowsIter = m_aRows.begin();
        m_bBOF = sal_False;
-       return m_aRowsIter != m_aRows.end();
+    }
+    else
+    {
+        if ( m_bEOF )
+            throwFunctionSequenceException( *this );
+        else
+            if ( m_aRowsIter != m_aRows.end() )
+                ++m_aRowsIter;
     }
 
-    if(m_aRowsIter != m_aRows.end())
-        ++m_aRowsIter;
-
-    return m_aRowsIter != m_aRows.end();
+    bool bSuccess = m_aRowsIter != m_aRows.end();
+    if ( !bSuccess )
+    {
+        m_bEOF = sal_True;
+        m_bBOF = m_aRows.empty();
+    }
+    return bSuccess;
 }
 // -------------------------------------------------------------------------
 
@@ -656,6 +667,9 @@ const ORowSetValue& ODatabaseMetaDataResultSet::getValue(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed );
+
+    if ( isBeforeFirst() || isAfterLast() )
+        ::dbtools::throwFunctionSequenceException( *this );
 
     checkIndex(columnIndex );
     m_nColPos = columnIndex;
