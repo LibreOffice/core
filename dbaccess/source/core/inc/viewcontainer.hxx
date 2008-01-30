@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontainer.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:41:36 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:36:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,15 +92,6 @@ namespace dbaccess
     class OViewContainer :  public OFilteredContainer,
                             public OViewContainer_Base
     {
-    protected:
-        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > getTableTypeFilter(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter) const;
-        // ::connectivity::sdbcx::OCollection
-        virtual ::connectivity::sdbcx::ObjectType       createObject(const ::rtl::OUString& _rName);
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   createDescriptor();
-        virtual connectivity::sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
-        virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
-
-
     public:
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
             interface.<BR>
@@ -115,11 +106,14 @@ namespace dbaccess
                         ::osl::Mutex& _rMutex,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
                         sal_Bool _bCase,
-                        IRefreshListener*   _pRefreshListener = NULL,
-                        IWarningsContainer* _pWarningsContainer = NULL
+                        IRefreshListener*   _pRefreshListener,
+                        IWarningsContainer* _pWarningsContainer,
+                        oslInterlockedCount& _nInAppend
                         );
+
         virtual ~OViewContainer();
 
+    private:
         inline virtual void SAL_CALL acquire() throw(){ OFilteredContainer::acquire();}
         inline virtual void SAL_CALL release() throw(){ OFilteredContainer::release();}
     // ::com::sun::star::lang::XServiceInfo
@@ -132,11 +126,16 @@ namespace dbaccess
         virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
 
-    protected:
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > getTableTypeFilter(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTableTypeFilter) const;
+        // ::connectivity::sdbcx::OCollection
+        virtual ::connectivity::sdbcx::ObjectType       createObject(const ::rtl::OUString& _rName);
+        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   createDescriptor();
+        virtual connectivity::sdbcx::ObjectType appendObject( const ::rtl::OUString& _rForName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor );
+        virtual void dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName);
+
         using OFilteredContainer::disposing;
 
-    private:
-        ::rtl::OUString m_sAppendingCurrenly;
+        bool m_bInElementRemoved;
     };
 }
 #endif // _DBA_CORE_VIEWCONTAINER_HXX_
