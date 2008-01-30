@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreparedStatement.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:02:47 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:54:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 #ifndef _CONNECTIVITY_JAVA_SQL_TIMESTAMP_HXX_
 #include "java/sql/Timestamp.hxx"
 #endif
+#include "java/math/BigDecimal.hxx"
 #ifndef _CONNECTIVITY_JAVA_TOOLS_HXX_
 #include "java/tools.hxx"
 #endif
@@ -516,9 +517,54 @@ void SAL_CALL java_sql_PreparedStatement::setRef( sal_Int32 /*parameterIndex*/, 
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 /*parameterIndex*/, const ::com::sun::star::uno::Any& /*x*/, sal_Int32 /*targetSqlType*/, sal_Int32 /*scale*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const ::com::sun::star::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XParameters::setObjectWithInfo", *this );
+    m_aLogger.log( LogLevel::FINER, STR_LOG_OBJECT_NULL_PARAMETER, parameterIndex );
+
+    SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
+    if( t.pEnv ){
+        createStatement(t.pEnv);
+
+        // temporaere Variable initialisieren
+        static const char * cSignature = "(ILjava/lang/Object;II)V";
+        static const char * cMethodName = "setObject";
+        // Java-Call absetzen
+        static jmethodID mID = NULL;
+        if ( !mID  )
+            mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        if( mID ){
+            jobject obj = NULL;
+            double nTemp = 0.0;
+            switch(targetSqlType)
+            {
+                case DataType::DECIMAL:
+                case DataType::NUMERIC:
+                    {
+                        ::std::auto_ptr<java_math_BigDecimal> pBigDecimal;
+                        if ( x >>= nTemp)
+                        {
+                            pBigDecimal.reset(new java_math_BigDecimal(nTemp));
+                            //setDouble(parameterIndex,nTemp);
+                            //return;
+                        }
+                        else
+                            pBigDecimal.reset(new java_math_BigDecimal(::comphelper::getString(x)));
+                            //obj = convertwchar_tToJavaString(t.pEnv,::comphelper::getString(x));
+                        t.pEnv->CallVoidMethod( object, mID, parameterIndex,pBigDecimal->getJavaObject(),targetSqlType,scale);
+                        ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+                        return;
+                    }
+                    break;
+                default:
+                    obj = convertwchar_tToJavaString(t.pEnv,::comphelper::getString(x));
+                    break;
+            }
+            t.pEnv->CallVoidMethod( object, mID, parameterIndex,obj,targetSqlType,scale);
+            t.pEnv->DeleteLocalRef(obj);
+            ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+            // und aufraeumen
+        } //mID
+    } //t.pEnv
 }
 // -------------------------------------------------------------------------
 
@@ -639,7 +685,7 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
             // Java-Call absetzen
             jclass aClass = t.pEnv->FindClass("java/io/CharArrayInputStream");
             static jmethodID mID2 = NULL;
-            if ( mID2  )
+            if ( !mID2  )
                 mID2  = t.pEnv->GetMethodID( aClass, "<init>", cSignatureStream );
             jobject tempObj = NULL;
             if(mID2)
@@ -687,7 +733,7 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
             // Java-Call absetzen
             jclass aClass = t.pEnv->FindClass("java/io/ByteArrayInputStream");
             static jmethodID mID2 = NULL;
-            if ( mID2  )
+            if ( !mID2  )
                 mID2  = t.pEnv->GetMethodID( aClass, "<init>", cSignatureStream );
             jobject tempObj = NULL;
             if(mID2)
