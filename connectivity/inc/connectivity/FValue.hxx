@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FValue.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:59:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:45:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,6 +371,8 @@ namespace connectivity
         void fill(sal_Int32 _nPos,
                   sal_Int32 _nType,
                   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow>& _xRow);
+
+        void fill(const ::com::sun::star::uno::Any& _rValue);
     };
 
     /// ORowSetValueDecorator decorates a ORowSetValue so the value is "refcounted"
@@ -383,7 +385,7 @@ namespace connectivity
         ORowSetValueDecorator& operator=(const ORowSetValue& _aValue);
 
         inline operator const ORowSetValue&()   const               { return m_aValue; }
-        inline sal_Bool operator ==( const ORowSetValue & _rRH )    { return m_aValue == _rRH; }
+        inline bool operator ==( const ORowSetValue & _rRH )        { return m_aValue == _rRH; }
         inline const ORowSetValue& getValue()   const               { return m_aValue; }
         inline ORowSetValue& get()                                  { return m_aValue; }
         inline void setValue(const ORowSetValue& _aValue)           { m_aValue = _aValue; }
