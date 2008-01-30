@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 12:58:51 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:32:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,7 @@ protected:
     OTableContainer*            m_pTables;
     OViewContainer*             m_pViews;
     WarningsContainer           m_aWarnings;
+    oslInterlockedCount         m_nInAppend;
     sal_Bool                    m_bSupportsViews;       // true when the getTableTypes return "VIEW" as type
     sal_Bool                    m_bSupportsUsers;
     sal_Bool                    m_bSupportsGroups;
