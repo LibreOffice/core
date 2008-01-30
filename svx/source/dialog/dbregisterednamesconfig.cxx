@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbregisterednamesconfig.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:36:52 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:23:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,8 @@
 #include "dbregisterednamesconfig.hxx"
 
 
-#ifndef _SFXITEMSET_HXX
 #include <svtools/itemset.hxx>
-#endif
+#include <tools/diagnose_ex.h>
 
 #include <svx/svxids.hrc>
 
@@ -188,11 +187,11 @@ namespace svx
                     {
                         xNamingService->registerObject(sName,Reference< ::com::sun::star::uno::XInterface >(xDatabaseContext->getByName(aLoop->second),UNO_QUERY));
                     }
-                    catch(Exception&)
+                    catch( const Exception& )
                     {
-                        OSL_ENSURE(0,"Could not register new database!");
+                        DBG_UNHANDLED_EXCEPTION();
                     }
-                    }
+                }
             }
             if (bNeedCommit)
                 aDbRegisteredNamesRoot.commit();
@@ -204,7 +203,16 @@ namespace svx
             for (;pDriverKeys != pDriverKeysEnd; ++pDriverKeys)
             {
                 if ( rNewSettings.find(*pDriverKeys) == rNewSettings.end() )
-                    xNamingService->revokeObject(*pDriverKeys);
+                {
+                    try
+                    {
+                        xNamingService->revokeObject(*pDriverKeys);
+                    }
+                    catch( const Exception& )
+                    {
+                        DBG_UNHANDLED_EXCEPTION();
+                    }
+                }
             }
         }
     }
