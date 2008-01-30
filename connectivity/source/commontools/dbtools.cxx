@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 14:59:13 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:48:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1426,25 +1426,42 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
     }
     return nSearchFlag;
 }
+
 // -----------------------------------------------------------------------------
-::rtl::OUString createUniqueName(const Reference<XNameAccess>& _rxContainer,const ::rtl::OUString& _rBaseName,sal_Bool _bStartWithNumber)
+::rtl::OUString createUniqueName( const Sequence< ::rtl::OUString >& _rNames, const ::rtl::OUString& _rBaseName, sal_Bool _bStartWithNumber )
 {
-    ::rtl::OUString sName(_rBaseName);
+    ::std::set< ::rtl::OUString > aUsedNames;
+    ::std::copy(
+        _rNames.getConstArray(),
+        _rNames.getConstArray() + _rNames.getLength(),
+        ::std::insert_iterator< ::std::set< ::rtl::OUString > >( aUsedNames, aUsedNames.end() )
+    );
+
+    ::rtl::OUString sName( _rBaseName );
     sal_Int32 nPos = 1;
     if ( _bStartWithNumber )
-        sName += ::rtl::OUString::valueOf(nPos);
+        sName += ::rtl::OUString::valueOf( nPos );
 
-    OSL_ENSURE( _rxContainer.is() ,"No valid container!");
-    if ( _rxContainer.is() )
+    while ( aUsedNames.find( sName ) != aUsedNames.end() )
     {
-        while(_rxContainer->hasByName(sName))
-        {
-            sName = _rBaseName;
-            sName += ::rtl::OUString::valueOf(++nPos);
-        }
+        sName = _rBaseName;
+        sName += ::rtl::OUString::valueOf( ++nPos );
     }
     return sName;
 }
+
+// -----------------------------------------------------------------------------
+::rtl::OUString createUniqueName(const Reference<XNameAccess>& _rxContainer,const ::rtl::OUString& _rBaseName,sal_Bool _bStartWithNumber)
+{
+    Sequence< ::rtl::OUString > aElementNames;
+
+    OSL_ENSURE( _rxContainer.is(), "createUniqueName: invalid container!" );
+    if ( _rxContainer.is() )
+        aElementNames = _rxContainer->getElementNames();
+
+    return createUniqueName( aElementNames, _rBaseName, _bStartWithNumber );
+}
+
 // -----------------------------------------------------------------------------
 void showError(const SQLExceptionInfo& _rInfo,
                const Reference< XWindow>& _xParent,
@@ -1779,10 +1796,14 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
     {
         switch(sqlType)
         {
-            case DataType::CHAR:
-            case DataType::VARCHAR:
             case DataType::DECIMAL:
             case DataType::NUMERIC:
+                _xParams->setObjectWithInfo(parameterIndex,x,sqlType,0);
+                break;
+            case DataType::CHAR:
+            case DataType::VARCHAR:
+            //case DataType::DECIMAL:
+            //case DataType::NUMERIC:
             case DataType::LONGVARCHAR:
                 _xParams->setString(parameterIndex,::comphelper::getString(x));
                 break;
