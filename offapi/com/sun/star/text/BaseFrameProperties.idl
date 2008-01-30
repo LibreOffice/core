@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BaseFrameProperties.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 15:24:54 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:19:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -341,7 +341,7 @@ published service BaseFrameProperties
 
         <p>The value of this property is only evaluated for the positioning
         of the shape, if the text document setting ConsiderTextWrapOnObjPos
-        is <TRUE\>. Valid values are given by <member>WrapInfluenceOnPosition</member></p>
+        is <TRUE/>. Valid values are given by <member>WrapInfluenceOnPosition</member></p>
 
         @since OOo 2.0.0
      */
