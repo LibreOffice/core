@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Query.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:30:56 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:26:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,15 +35,11 @@
 package complex.dbaccess;
 
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.container.ElementExistException;
 import com.sun.star.container.XIndexAccess;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.container.XNamed;
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.sdb.XQueriesSupplier;
-import com.sun.star.sdb.XSingleSelectQueryComposer;
-import com.sun.star.sdbc.SQLException;
 import com.sun.star.sdbcx.XColumnsSupplier;
 import com.sun.star.uno.UnoRuntime;
 import connectivity.tools.*;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CRMDatabase.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:30:38 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:26:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,6 @@ import connectivity.tools.HsqlColumnDescriptor;
 import connectivity.tools.HsqlDatabase;
 import connectivity.tools.HsqlTableDescriptor;
 import connectivity.tools.QueryDefinition;
-
-import complexlib.ComplexTestCase.AssureException;
 
 /** implements a small Customer Relationship Management database
  *
