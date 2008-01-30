@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:32:12 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:29:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,7 @@ namespace dbaccess
         sal_Int32                   m_nTransactionIsolation;
         sal_Int32                   m_nPrivileges;
         sal_Int32                   m_nLastKnownRowCount;
+        oslInterlockedCount         m_nInAppend;
         sal_Bool                    m_bLastKnownRowCountFinal;
         sal_Bool                    m_bUseEscapeProcessing ;
         sal_Bool                    m_bApplyFilter ;
@@ -305,10 +306,10 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // ::com::sun::star::lang::XServiceInfo - static methods
-        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-        static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
+        static ::rtl::OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
         static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-                SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+                SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
     // OComponentHelper
         virtual void SAL_CALL disposing(void);
