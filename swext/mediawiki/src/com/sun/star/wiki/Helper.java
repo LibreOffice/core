@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-30 09:24:49 $
+ *  last change: $Author: mav $ $Date: 2008-01-30 09:45:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -899,7 +899,7 @@ public class Helper
             {
                 sError = GetLocalizedString( xContext, nErrorID );
                 if ( sError != null && sArg != null )
-                    sError.replaceAll( "$ARG1", sArg );
+                    sError = sError.replaceAll( "\\$ARG1", sArg );
 
                 sTitle = GetLocalizedString( xContext, nTitleID );
             }
