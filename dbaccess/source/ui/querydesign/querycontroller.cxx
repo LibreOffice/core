@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:52:22 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -658,10 +658,11 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                 if ( pNode )
                 {
                     Window* pView = getView();
-                    ModalDialog* pWindow = new ModalDialog(pView);
-                    pWindow->SetPosSizePixel(::Point(0,0),pView->GetSizePixel());
-                    SvTreeListBox* pTreeBox = new SvTreeListBox(pWindow);
-                    pTreeBox->SetPosSizePixel(::Point(0,0),pView->GetSizePixel());
+                    ModalDialog* pWindow = new ModalDialog( pView, WB_STDMODAL | WB_SIZEMOVE | WB_CENTER );
+                    pWindow->SetSizePixel( ::Size( pView->GetSizePixel().Width() / 2, pView->GetSizePixel().Height() / 2 ) );
+                    SvTreeListBox* pTreeBox = new SvTreeListBox( pWindow, WB_BORDER | WB_HASLINES | WB_HASBUTTONS | WB_HASBUTTONSATROOT | WB_HASLINESATROOT | WB_VSCROLL );
+                    pTreeBox->SetPosSizePixel( ::Point( 6, 6 ), ::Size( pWindow->GetSizePixel().Width() - 12, pWindow->GetSizePixel().Height() - 12 ));
+                    pTreeBox->SetNodeDefaultImages();
 
                     if ( _nId == ID_EDIT_QUERY_DESIGN )
                     {
@@ -710,7 +711,7 @@ void OQueryController::impl_initialize()
 
     // connection or data source name
     Reference< XConnection > xConnection;
-    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_ACTIVECONNECTION, xConnection );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, xConnection );
     if ( xConnection.is() )
         initializeConnection( xConnection );
     else
@@ -757,7 +758,7 @@ void OQueryController::impl_initialize()
 
     // non-legacy parameters which overwrite the legacy parameters
     rArguments.get_ensureType( (::rtl::OUString)PROPERTY_COMMAND, sCommand );
-    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_COMMANDTYPE, m_nCommandType );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_COMMAND_TYPE, m_nCommandType );
 
     // translate Command/Type into proper members
     // TODO/Later: all this (including those members) should be hidden behind some abstact interface,
@@ -1168,7 +1169,7 @@ void OQueryController::executeQuery()
                 aProps[0].Name = PROPERTY_DATASOURCENAME;
                 aProps[0].Value <<= sDataSourceName;
 
-                aProps[1].Name = PROPERTY_COMMANDTYPE;
+                aProps[1].Name = PROPERTY_COMMAND_TYPE;
                 aProps[1].Value <<= CommandType::COMMAND;
 
                 aProps[2].Name = PROPERTY_COMMAND;
@@ -1180,7 +1181,7 @@ void OQueryController::executeQuery()
                 aProps[4].Name = PROPERTY_SHOWTREEVIEWBUTTON;
                 aProps[4].Value = ::cppu::bool2any(sal_False);
 
-                aProps[5].Name = PROPERTY_ACTIVECONNECTION;
+                aProps[5].Name = PROPERTY_ACTIVE_CONNECTION;
                 aProps[5].Value <<= getConnection();
 
                 aProps[6].Name = PROPERTY_UPDATE_CATALOGNAME;
@@ -1705,7 +1706,7 @@ bool OQueryController::allowQueries() const
         return false;
 
     const NamedValueCollection& rArguments( getInitParams() );
-    sal_Int32 nCommandType = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_COMMANDTYPE, (sal_Int32)CommandType::QUERY );
+    sal_Int32 nCommandType = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_COMMAND_TYPE, (sal_Int32)CommandType::QUERY );
     sal_Bool bCreatingView = ( nCommandType == CommandType::TABLE );
     return !bCreatingView;
 }
