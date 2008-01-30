@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TEditControl.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:32:53 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:55:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,6 @@ namespace dbaui
 
         ::std::vector< ::boost::shared_ptr<OTableRow> > m_aUndoList;
         ::std::vector< ::boost::shared_ptr<OTableRow> >*    m_pRowList;
-
-        EEditMode                   eEditMode;
 
         OSQLNameEdit*               pNameCell;
         ::svt::ListBoxControl*      pTypeCell;
@@ -214,8 +212,6 @@ namespace dbaui
         String GenerateName( const String& rName );
         BOOL SetDataPtr( long nRow );
 
-        void SetEditMode( EEditMode eMode ){ eEditMode = eMode; }
-        EEditMode GetEditMode(){ return eEditMode; }
         BOOL SaveData(long nRow, USHORT nColumnId);
         /** AdjustFieldDescription set the needed values for the description
             @param  _pFieldDesc     the field description where to set the values
