@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:17:59 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,13 +393,14 @@ void ODatabaseModelImpl::impl_construct_nothrow()
     try
     {
         // the set of property value types in the bag is limited:
-        Sequence< Type > aAllowedTypes(5);
+        Sequence< Type > aAllowedTypes(6);
         Type* pAllowedType = aAllowedTypes.getArray();
         *pAllowedType++ = ::getCppuType( static_cast< sal_Bool* >( NULL ) );
         *pAllowedType++ = ::getCppuType( static_cast< double* >( NULL ) );
         *pAllowedType++ = ::getCppuType( static_cast< ::rtl::OUString* >( NULL ) );
         *pAllowedType++ = ::getCppuType( static_cast< sal_Int32* >( NULL ) );
         *pAllowedType++ = ::getCppuType( static_cast< sal_Int16* >( NULL ) );
+        *pAllowedType++ = ::getCppuType( static_cast< Sequence< Any >* >( NULL ) );
 
         Sequence< Any > aInitArgs( 2 );
         aInitArgs[0] <<= NamedValue(
@@ -1022,6 +1023,8 @@ const AsciiPropertyValue* ODatabaseModelImpl::getDefaultDataSourceSettings()
         AsciiPropertyValue( "FormsCheckRequiredFields",   makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( "EscapeDateTime",             makeAny( (sal_Bool)sal_True ) ),
         AsciiPropertyValue( "IgnoreCurrency",             makeAny( (sal_Bool)sal_False ) ),
+        AsciiPropertyValue( "TypeInfoSettings",           makeAny( Sequence< Any >()) ),
+
         AsciiPropertyValue( NULL, Any() )
     };
     return aKnownSettings;
