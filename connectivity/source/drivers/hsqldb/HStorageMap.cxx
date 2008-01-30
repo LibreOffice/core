@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HStorageMap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:40:55 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:53:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -300,14 +300,26 @@ namespace connectivity
                         {
                             try
                             {
-/*                              if ( _nMode == ElementModes::READ )
-                                    _nMode |= ElementModes::SEEKABLE;
-*/
                                 pHelper.reset(new StreamHelper(aStoragePair.first.first->openStreamElement(sName,_nMode)));
                             }
                             catch(Exception& )
                             {
                                 ::rtl::OUString sStrippedName = removeOldURLPrefix(sOrgName);
+
+                                if ( ((_nMode & ElementModes::WRITE) != ElementModes::WRITE ) )
+                                {
+                                    sal_Bool bIsStream = sal_True;
+                                    try
+                                    {
+                                       bIsStream = aStoragePair.first.first->isStreamElement(sStrippedName);
+                                    }
+                                    catch(Exception& )
+                                    {
+                                        bIsStream = sal_False;
+                                    }
+                                    if ( !bIsStream )
+                                        return pHelper; // readonly file without data stream
+                                }
                                 pHelper.reset( new StreamHelper(aStoragePair.first.first->openStreamElement( sStrippedName, _nMode ) ) );
                             }
                             aFind->second.second.insert(TStreamMap::value_type(sName,pHelper));
