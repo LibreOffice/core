@@ -5,9 +5,9 @@
  *
  *  $RCSfile: SendToMediaWiki.xdl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-21 12:57:52 $
+ *  last change: $Author: mav $ $Date: 2008-01-30 14:29:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
   <dlg:button dlg:id="CancelButton" dlg:tab-index="10" dlg:left="219" dlg:top="108" dlg:width="63" dlg:height="16" dlg:value="TOREPLACE">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Cancel" script:language="UNO"/>
   </dlg:button>
-  <dlg:button dlg:id="SendButton" dlg:tab-index="11" dlg:disabled="true" dlg:left="153" dlg:top="108" dlg:width="63" dlg:height="16" dlg:value="TOREPLACE">
+  <dlg:button dlg:id="SendButton" dlg:tab-index="11" dlg:disabled="true" dlg:left="153" dlg:top="108" dlg:width="63" dlg:height="16" dlg:value="TOREPLACE" dlg:default="true">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Send" script:language="UNO"/>
   </dlg:button>
   <dlg:button dlg:id="HelpButton" dlg:tab-index="12" dlg:left="6" dlg:top="108" dlg:width="63" dlg:height="16" dlg:value="TOREPLACE">
