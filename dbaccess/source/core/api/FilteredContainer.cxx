@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilteredContainer.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:31:19 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:28:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,10 +106,12 @@ namespace dbaccess
                                  const Reference< XConnection >& _xCon,
                                  sal_Bool _bCase,
                                  IRefreshListener*  _pRefreshListener,
-                                 IWarningsContainer* _pWarningsContainer)
+                                 IWarningsContainer* _pWarningsContainer
+                                 ,oslInterlockedCount& _nInAppend)
         :OCollection(_rParent,_bCase,_rMutex,::std::vector< ::rtl::OUString>())
         ,m_pWarningsContainer(_pWarningsContainer)
         ,m_pRefreshListener(_pRefreshListener)
+        ,m_nInAppend(_nInAppend)
         ,m_xConnection(_xCon)
         ,m_bConstructed(sal_False)
     {
