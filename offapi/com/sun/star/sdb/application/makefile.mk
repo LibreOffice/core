@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:13:23 $
+#   last change: $Author: rt $ $Date: 2008-01-30 08:17:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,13 @@ UNOIDLDEFS += -w
 
 # ------------------------------------------------------------------------
 IDLFILES=\
+    CopyTableContinuation.idl \
+    CopyTableOperation.idl \
+    CopyTableRowEvent.idl \
+    CopyTableWizard.idl \
     DatabaseObject.idl \
+    XCopyTableWizard.idl \
+    XCopyTableListener.idl \
     XDatabaseDocumentUI.idl \
     XTableUIProvider.idl
 
