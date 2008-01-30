@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commanddefinition.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:37:10 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:32:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,30 +36,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBA_COREDATAACESS_COMMANDDEFINITION_HXX_
 #include "commanddefinition.hxx"
-#endif
-#ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
+#include "module_dba.hxx"
 
-#ifndef _TOOLS_DEBUG_HXX
-#include <tools/debug.hxx>
-#endif
-#ifndef _COMPHELPER_SEQUENCE_HXX_
-#include <comphelper/sequence.hxx>
-#endif
-
-#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
-#endif
-#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
-#endif
 
+#include <tools/debug.hxx>
+#include <comphelper/sequence.hxx>
+#include <comphelper/componentcontext.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
@@ -80,7 +67,7 @@ namespace dbaccess
 //==========================================================================
 extern "C" void SAL_CALL createRegistryInfo_OCommandDefinition()
 {
-    static OMultiInstanceAutoRegistration< OCommandDefinition > aAutoRegistration;
+    static ::dba::OAutoRegistration< OCommandDefinition > aAutoRegistration;
 }
 
 //--------------------------------------------------------------------------
@@ -139,7 +126,7 @@ IMPLEMENT_GETTYPES2(OCommandDefinition,OCommandDefinition_Base,OComponentDefinit
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandDefinition,OComponentDefinition,OCommandDefinition_Base)
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2(OCommandDefinition,OCommandDefinition_PROP)
 //--------------------------------------------------------------------------
-::rtl::OUString OCommandDefinition::getImplementationName_Static(  ) throw(RuntimeException)
+::rtl::OUString OCommandDefinition::getImplementationName_static(  ) throw(RuntimeException)
 {
     return ::rtl::OUString::createFromAscii("com.sun.star.comp.dba.OCommandDefinition");
 }
@@ -147,11 +134,11 @@ IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2(OCommandDefinition,OCommandDefinition_PROP
 //--------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OCommandDefinition::getImplementationName(  ) throw(RuntimeException)
 {
-    return getImplementationName_Static();
+    return getImplementationName_static();
 }
 
 //--------------------------------------------------------------------------
-Sequence< ::rtl::OUString > OCommandDefinition::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+Sequence< ::rtl::OUString > OCommandDefinition::getSupportedServiceNames_static(  ) throw(RuntimeException)
 {
     Sequence< ::rtl::OUString > aServices(3);
     aServices.getArray()[0] = SERVICE_SDB_QUERYDEFINITION;
@@ -163,13 +150,14 @@ Sequence< ::rtl::OUString > OCommandDefinition::getSupportedServiceNames_Static(
 //--------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL OCommandDefinition::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    return getSupportedServiceNames_Static();
+    return getSupportedServiceNames_static();
 }
 
 //------------------------------------------------------------------------------
-Reference< XInterface > OCommandDefinition::Create(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > OCommandDefinition::Create(const Reference< XComponentContext >& _rxContext)
 {
-    return *(new OCommandDefinition(_rxFactory,NULL,TContentPtr(new OCommandDefinition_Impl)));
+    ::comphelper::ComponentContext aContext( _rxContext );
+    return *(new OCommandDefinition( aContext.getLegacyServiceFactory(), NULL, TContentPtr( new OCommandDefinition_Impl ) ) );
 }
 
 // -----------------------------------------------------------------------------
