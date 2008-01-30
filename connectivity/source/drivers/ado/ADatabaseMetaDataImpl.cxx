@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:12:10 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:49:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,6 @@
 #include <com/sun/star/sdbcx/KeyType.hpp>
 #endif
 
-using namespace connectivity;
 using namespace connectivity::ado;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
