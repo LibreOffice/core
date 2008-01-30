@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSingleSelectQueryComposer.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:50:47 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:15:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,17 +246,17 @@ interface XSingleSelectQueryComposer: XSingleSelectQueryAnalyzer
         <p>There are various use cases for this. For instance, you might want to use the
         statement represented by a <type>QueryDefinition</type>, and extend it with additional
         filters or sort orders, while not touching the respective parts already present
-        in <member>QueryDefinition::Command</type>. This can be achieved by setting the
-        <member>QueryDefinition::Command</type> as <member>ElementaryQuery</member> of a
+        in <member>QueryDefinition::Command</member>. This can be achieved by setting the
+        <member>QueryDefinition::Command</member> as <member>ElementaryQuery</member> of a
         <type>SingleSelectQueryComposer</type>.</p>
 
         <p>If, in such a scenario, you would be interested in the filter part of the
-        <member>QueryDefinition::Command</type>, you would set it via
+        <member>QueryDefinition::Command</member>, you would set it via
         <member>XSingleSelectQueryAnalyzer::setQuery</member>, and retrieve the filter
         part via <member>XSingleSelectQueryAnalyzer::getFilter</member>.</p>
 
         <p>If you'd be interested in the composed filter, you would set the
-        <member>QueryDefinition::Command</type> as <member>ElementaryQuery</member>, add your
+        <member>QueryDefinition::Command</member> as <member>ElementaryQuery</member>, add your
         filter, and propagate the resulting query (<member>XSingleSelectQueryAnalyzer::getQuery</member>)
         to an <type>SingleSelectQueryAnalyzer</type> instance via
         <member>XSingleSelectQueryAnalyzer::setQuery</member>.</p>
