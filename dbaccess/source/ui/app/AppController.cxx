@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 14:07:00 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:41:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -624,6 +624,11 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
     {
         switch (_nId)
         {
+            case SID_OPENURL:
+                aReturn.bEnabled = sal_True;
+                if ( m_xModel.is() )
+                    aReturn.sTitle = m_xModel->getURL();
+                break;
             case ID_BROWSER_COPY:
                 {
                     sal_Int32 nCount = getContainer()->getSelectionCount();
@@ -1015,37 +1020,28 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 break;
             case ID_BROWSER_PASTE:
                 {
-                    TransferableDataHelper aTransferData(TransferableDataHelper::CreateFromSystemClipboard(getView()));
+                    const TransferableDataHelper& rTransferData( getViewClipboard() );
                     ElementType eType = getContainer()->getElementType();
 
                     switch( eType )
                     {
                         case E_TABLE:
                             {
-                                //dyf add
-                                //for get the selected tablename
-                                ::std::vector< ::rtl::OUString> aList;
-                                getSelectionElementNames(aList);
-                                ::rtl::OUString sTableNameToInsertInto;
-
+                                // get the selected tablename
+                                ::std::vector< ::rtl::OUString > aList;
+                                getSelectionElementNames( aList );
                                 if ( !aList.empty() )
-                                {
-                                    sTableNameToInsertInto = *aList.begin();
-                                    m_aTableCopyHelper.SetDefaultTableName(sTableNameToInsertInto);
-                                    m_aTableCopyHelper.SetIsSelectCopytable(true);
-                                }
+                                    m_aTableCopyHelper.SetTableNameForAppend( *aList.begin() );
                                 else
-                                {
-                                    m_aTableCopyHelper.SetIsSelectCopytable(false);
-                                }
-                                //dyf add end
-                                m_aTableCopyHelper.pasteTable( aTransferData , getDatabaseName(), ensureConnection());
+                                    m_aTableCopyHelper.ResetTableNameForAppend();
+
+                                m_aTableCopyHelper.pasteTable( rTransferData , getDatabaseName(), ensureConnection() );
                             }
                             break;
 
                         case E_QUERY:
-                            if ( getViewClipboard().HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY) )
-                                paste( E_QUERY,ODataAccessObjectTransferable::extractObjectDescriptor(aTransferData) );
+                            if ( rTransferData.HasFormat(SOT_FORMATSTR_ID_DBACCESS_QUERY) )
+                                paste( E_QUERY, ODataAccessObjectTransferable::extractObjectDescriptor( rTransferData ) );
                             break;
                         default:
                             {
@@ -1062,7 +1058,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                                         )
                                         sFolderNameToInsertInto = *aList.begin();
                                 }
-                                paste( eType,OComponentTransferable::extractComponentDescriptor(aTransferData),sFolderNameToInsertInto );
+                                paste( eType, OComponentTransferable::extractComponentDescriptor( rTransferData ), sFolderNameToInsertInto );
                             }
                             break;
                     }
@@ -1482,6 +1478,8 @@ void OApplicationController::describeSupportedFeatures()
                                                                                         CommandGroup::VIEW );
     implDescribeSupportedFeature( ".uno:DBShowDocPreview",   SID_DB_APP_VIEW_DOC_PREVIEW,
                                                                                         CommandGroup::VIEW );
+
+    implDescribeSupportedFeature( ".uno:OpenUrl",            SID_OPENURL,               CommandGroup::APPLICATION );
 
     // this one should not appear under Tools->Customize->Keyboard
     implDescribeSupportedFeature( ".uno:DBDSImport",        SID_DB_APP_DSIMPORT, CommandGroup::INTERNAL);
@@ -2293,7 +2291,7 @@ sal_Bool OApplicationController::requestDrag( sal_Int8 /*_nAction*/, const Point
             if ( pTransfer && getContainer()->getDetailView() )
             {
                 ElementType eType = getContainer()->getElementType();
-                pTransfer->StartDrag( getContainer()->getDetailView(), ((eType == E_FORM || eType == E_REPORT) ? DND_ACTION_COPYMOVE : DND_ACTION_COPY) );
+                pTransfer->StartDrag( getContainer()->getDetailView()->getTreeWindow(), ((eType == E_FORM || eType == E_REPORT) ? DND_ACTION_COPYMOVE : DND_ACTION_COPY) );
             }
         }
         catch(const Exception& )
