@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SingleSelectQueryComposer.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:59:42 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:27:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,6 @@
  ************************************************************************/
 package complex.dbaccess;
 
-import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.beans.*;
 import com.sun.star.sdbcx.*;
@@ -42,14 +41,8 @@ import com.sun.star.sdbc.*;
 import com.sun.star.sdb.*;
 import com.sun.star.container.*;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.util.XRefreshable;
 
 import complexlib.ComplexTestCase;
-import connectivity.tools.DataSource;
-import connectivity.tools.HsqlColumnDescriptor;
-import connectivity.tools.HsqlDatabase;
-import connectivity.tools.HsqlTableDescriptor;
-import connectivity.tools.RowSet;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -71,7 +64,8 @@ public class SingleSelectQueryComposer extends ComplexTestCase
         return new String[] {
             "testAttributes",
             "testSubQueries",
-            "testParameters"
+            "testParameters",
+            "testDisjunctiveNormalForm"
         };
     }
 
@@ -131,7 +125,6 @@ public class SingleSelectQueryComposer extends ComplexTestCase
     private void checkAttributeAccess( String _attributeName, String _attributeValue )
     {
         log.println( "setting " + _attributeName + " to " + _attributeValue );
-        boolean success = false;
         String realValue = null;
         try
         {
@@ -248,9 +241,9 @@ public class SingleSelectQueryComposer extends ComplexTestCase
 
             for ( int i = 0; i < paramCount; ++i )
             {
-                XPropertySet param = (XPropertySet)UnoRuntime.queryInterface(
+                XPropertySet parameter = (XPropertySet)UnoRuntime.queryInterface(
                     XPropertySet.class, parameters.getByIndex(i) );
-                String paramName = (String)param.getPropertyValue( "Name" );
+                String paramName = (String)parameter.getPropertyValue( "Name" );
                 assure( "wrong parameter name at position " + ( i + 1 ) + " (expected: " + expectedParamNames[i] + ", found: " + paramName + ")",
                     paramName.equals( expectedParamNames[i] ) );
 
@@ -260,5 +253,88 @@ public class SingleSelectQueryComposer extends ComplexTestCase
         {
             assure( "caught an exception: " + e, false );
         }
+    }
+
+    private void impl_testDisjunctiveNormalForm( String _query, PropertyValue[][] _expectedDNF )
+    {
+        try { m_composer.setQuery( _query ); }
+        catch ( Exception e )
+        {
+            // this is an error: the query is expected to be parseable
+            assure( "caught an exception: " + e, false );
+        }
+
+        PropertyValue[][] disjunctiveNormalForm = m_composer.getStructuredFilter();
+
+        assureEquals( "DNF: wrong number of rows", _expectedDNF.length, disjunctiveNormalForm.length );
+        for ( int i=0; i<_expectedDNF.length; ++i )
+        {
+            assureEquals( "DNF: wrong number of columns in row " + i, _expectedDNF[i].length, disjunctiveNormalForm[i].length );
+            for ( int j=0; j<_expectedDNF[i].length; ++j )
+            {
+                assureEquals( "DNF: wrong content in column " + j + ", row " + i,
+                    _expectedDNF[i][j].Name, disjunctiveNormalForm[i][j].Name );
+            }
+        }
+    }
+
+    /** tests the disjunctive normal form functionality, aka the structured filter,
+     *  of the composer
+     */
+    public void testDisjunctiveNormalForm()
+    {
+        // a simple case: WHERE clause simply is a combination of predicates knitted with AND
+        String query =
+            "SELECT \"customers\".\"Name\", " +
+                   "\"customers\".\"Address\", " +
+                   "\"customers\".\"City\", " +
+                   "\"customers\".\"Postal\", " +
+                   "\"products\".\"Name\" " +
+            "FROM \"orders\", \"customers\", \"orders_details\", \"products\" " +
+            "WHERE (   \"orders\".\"CustomerID\" = \"customers\".\"ID\" " +
+                  "AND \"orders_details\".\"OrderID\" = \"orders\".\"ID\" " +
+                  "AND \"orders_details\".\"ProductID\" = \"products\".\"ID\" " +
+                  ") ";
+
+        impl_testDisjunctiveNormalForm( query, new PropertyValue[][] {
+            new PropertyValue[] {
+                new PropertyValue( "CustomerID", SQLFilterOperator.EQUAL, "\"customers\".\"ID\"", PropertyState.DIRECT_VALUE ),
+                new PropertyValue( "OrderID", SQLFilterOperator.EQUAL, "\"orders\".\"ID\"", PropertyState.DIRECT_VALUE ),
+                new PropertyValue( "ProductID", SQLFilterOperator.EQUAL, "\"products\".\"ID\"", PropertyState.DIRECT_VALUE )
+            } }
+        );
+
+        // somewhat more challenging: One of the conjunction terms is a disjunction itself
+        query =
+            "SELECT \"customers\".\"Name\", " +
+                   "\"customers\".\"Address\", " +
+                   "\"customers\".\"City\", " +
+                   "\"customers\".\"Postal\", " +
+                   "\"products\".\"Name\" " +
+            "FROM \"orders\", \"customers\", \"orders_details\", \"products\" " +
+            "WHERE (   \"orders\".\"CustomerID\" = \"customers\".\"ID\" " +
+                  "AND \"orders_details\".\"OrderID\" = \"orders\".\"ID\" " +
+                  "AND \"orders_details\".\"ProductID\" = \"products\".\"ID\" " +
+                  ") " +
+                  "AND " +
+                  "(  \"products\".\"Name\" = 'Apples' " +
+                  "OR \"products\".\"ID\" = 2 " +
+                  ")";
+
+        impl_testDisjunctiveNormalForm( query, new PropertyValue[][] {
+            new PropertyValue[] {
+                new PropertyValue( "CustomerID", SQLFilterOperator.EQUAL, "\"customers\".\"ID\"", PropertyState.DIRECT_VALUE ),
+                new PropertyValue( "OrderID", SQLFilterOperator.EQUAL, "\"orders\".\"ID\"", PropertyState.DIRECT_VALUE ),
+                new PropertyValue( "ProductID", SQLFilterOperator.EQUAL, "\"products\".\"ID\"", PropertyState.DIRECT_VALUE ),
+                new PropertyValue( "Name", SQLFilterOperator.EQUAL, "Apples", PropertyState.DIRECT_VALUE )
+            },
+            new PropertyValue[] {
+                new PropertyValue( "CustomerID", SQLFilterOperator.EQUAL, "\"customers\".\"ID\"", PropertyState.DIRECT_VALUE ),
+                new PropertyValue( "OrderID", SQLFilterOperator.EQUAL, "\"orders\".\"ID\"", PropertyState.DIRECT_VALUE ),
+                new PropertyValue( "ProductID", SQLFilterOperator.EQUAL, "\"products\".\"ID\"", PropertyState.DIRECT_VALUE ),
+                new PropertyValue( "ID", SQLFilterOperator.EQUAL, new Integer(2), PropertyState.DIRECT_VALUE )
+            } }
+        );
+
     }
 }
