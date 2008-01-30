@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JDBCConnectionProperties.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:16:25 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:17:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,22 @@ service JDBCConnectionProperties
         when asking an "INSERT" statement for the XGeneratedResultSet (future concept) interface.
     */
     [optional, property] string AutoRetrievingStatement;
+
+    /** specifies how the type info returned by <member scope="com::sun::star::sdbc">XDatabaseMetaData::getTypeInfo()</member> will be modified.
+        <p>The sequence contains an even amount of string values. Each pair describes
+        <li>what should be searched for and </li>
+        <li>what should be replaced if found.</li>
+        <br>
+        The syntax is:
+        <p>
+            <li>COLUMN(2) = -5</li>
+            <li>COLUMN(6) = PRECISION</li>
+        </p>
+        COLUMN(X) defines the column which will be compared and the column which will be replaced. In the example above column 2 will be compared
+        with the value -5. If this is true than column 6 will now return the value PRECISION.
+        </p>
+    */
+    [optional, property] sequence< any > TypeInfoSettings;
 };
 
 //=============================================================================
