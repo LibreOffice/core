@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WColumnSelect.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:38:47 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:48:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,9 @@
 #ifndef DBAUI_WIZ_COLUMNSELECT_HXX
 #define DBAUI_WIZ_COLUMNSELECT_HXX
 
-#ifndef DBAUI_WIZ_TABBPAGE_HXX
 #include "WTabPage.hxx"
-#endif
+#include "WCopyTable.hxx"
+
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
@@ -47,9 +47,12 @@
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
+#include <comphelper/stl_types.hxx>
 
 namespace dbaui
 {
+    class OFieldDescription;
+
     // ========================================================
     // Wizard Page: OWizColumnSelect
     // ========================================================
