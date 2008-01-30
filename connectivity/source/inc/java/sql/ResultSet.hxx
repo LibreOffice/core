@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSet.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:04:10 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:03:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,16 +88,16 @@ namespace connectivity
     /*
     **  java_sql_ResultSet
     */
-        typedef ::cppu::WeakComponentImplHelper10<      ::com::sun::star::sdbc::XResultSet,
-                                                        ::com::sun::star::sdbc::XRow,
-                                                        ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
-                                                        ::com::sun::star::util::XCancellable,
-                                                        ::com::sun::star::sdbc::XWarningsSupplier,
-                                                        ::com::sun::star::sdbc::XResultSetUpdate,
-                                                        ::com::sun::star::sdbc::XRowUpdate,
-                                                        ::com::sun::star::sdbc::XCloseable,
-                                                        ::com::sun::star::sdbc::XColumnLocate,
-                                                        ::com::sun::star::lang::XServiceInfo> java_sql_ResultSet_BASE;
+    typedef ::cppu::WeakComponentImplHelper10<      ::com::sun::star::sdbc::XResultSet,
+                                                    ::com::sun::star::sdbc::XRow,
+                                                    ::com::sun::star::sdbc::XResultSetMetaDataSupplier,
+                                                    ::com::sun::star::util::XCancellable,
+                                                    ::com::sun::star::sdbc::XWarningsSupplier,
+                                                    ::com::sun::star::sdbc::XResultSetUpdate,
+                                                    ::com::sun::star::sdbc::XRowUpdate,
+                                                    ::com::sun::star::sdbc::XCloseable,
+                                                    ::com::sun::star::sdbc::XColumnLocate,
+                                                    ::com::sun::star::lang::XServiceInfo> java_sql_ResultSet_BASE;
 
     class java_sql_Connection;
     class java_sql_ResultSet :  public comphelper::OBaseMutex,
