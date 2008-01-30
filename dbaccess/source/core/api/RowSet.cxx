@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.154 $
+ *  $Revision: 1.155 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:31:57 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:29:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,18 +36,12 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBACCESS_CORE_API_ROWSET_HXX
 #include "RowSet.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
-#ifndef DBACORE_SDBCORETOOLS_HXX
 #include "sdbcoretools.hxx"
-#endif
-#ifndef DBACCESS_CORE_API_SINGLESELECTQUERYCOMPOSER_HXX
 #include "SingleSelectQueryComposer.hxx"
-#endif
+#include "module_dba.hxx"
+
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
@@ -65,6 +59,9 @@
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
+#endif
+#ifndef COMPHELPER_COMPONENTCONTEXT_HXX
+#include <comphelper/componentcontext.hxx>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XCOMPLETEDCONNECTION_HPP_
 #include <com/sun/star/sdb/XCompletedConnection.hpp>
@@ -119,9 +116,6 @@
 #endif
 #ifndef DBACCESS_CORE_API_ROWSETCACHE_HXX
 #include "RowSetCache.hxx"
-#endif
-#ifndef _DBA_REGHELPER_HXX_
-#include "dba_reghelper.hxx"
 #endif
 #if OSL_DEBUG_LEVEL > 1
 #ifndef _COM_SUN_STAR_SDBC_XDRIVERMANAGER_HPP_
@@ -219,7 +213,7 @@ using namespace ::osl;
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_ORowSet()
 {
-    static OMultiInstanceAutoRegistration< ORowSet > aAutoRegistration;
+    static ::dba::OAutoRegistration< ORowSet > aAutoRegistration;
 }
 // -----------------------------------------------------------------------------
 
@@ -275,6 +269,7 @@ ORowSet::ORowSet( const Reference< ::com::sun::star::lang::XMultiServiceFactory 
     ,m_nCommandType(CommandType::COMMAND)
     ,m_nTransactionIsolation(0)
     ,m_nPrivileges(0)
+    ,m_nInAppend(0)
     ,m_bUseEscapeProcessing(sal_True)
     ,m_bApplyFilter(sal_False)
     ,m_bCommandFacetsDirty( sal_True )
@@ -297,10 +292,10 @@ ORowSet::ORowSet( const Reference< ::com::sun::star::lang::XMultiServiceFactory 
     m_aPrematureParamValues.resize( 0 );
 
     // sdb.RowSet Properties
-    registerMayBeVoidProperty(PROPERTY_ACTIVECONNECTION,PROPERTY_ID_ACTIVECONNECTION,   PropertyAttribute::MAYBEVOID|PropertyAttribute::TRANSIENT|PropertyAttribute::BOUND, &m_aActiveConnection,   ::getCppuType(reinterpret_cast< Reference< XConnection >* >(NULL)));
+    registerMayBeVoidProperty(PROPERTY_ACTIVE_CONNECTION,PROPERTY_ID_ACTIVE_CONNECTION, PropertyAttribute::MAYBEVOID|PropertyAttribute::TRANSIENT|PropertyAttribute::BOUND, &m_aActiveConnection,   ::getCppuType(reinterpret_cast< Reference< XConnection >* >(NULL)));
     registerProperty(PROPERTY_DATASOURCENAME,       PROPERTY_ID_DATASOURCENAME,         PropertyAttribute::BOUND,       &m_aDataSourceName,     ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_COMMAND,              PROPERTY_ID_COMMAND,                PropertyAttribute::BOUND,       &m_aCommand,            ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
-    registerProperty(PROPERTY_COMMANDTYPE,          PROPERTY_ID_COMMANDTYPE,            PropertyAttribute::BOUND,       &m_nCommandType,        ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
+    registerProperty(PROPERTY_COMMAND_TYPE,         PROPERTY_ID_COMMAND_TYPE,           PropertyAttribute::BOUND,       &m_nCommandType,        ::getCppuType(reinterpret_cast< sal_Int32*>(NULL)));
     registerProperty(PROPERTY_ACTIVECOMMAND,        PROPERTY_ID_ACTIVECOMMAND,          nRBT,                           &m_aActiveCommand,      ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
     registerProperty(PROPERTY_IGNORERESULT,         PROPERTY_ID_IGNORERESULT,           PropertyAttribute::BOUND,       &m_bIgnoreResult,       ::getBooleanCppuType());
     registerProperty(PROPERTY_FILTER,               PROPERTY_ID_FILTER,                 PropertyAttribute::BOUND,       &m_aFilter,             ::getCppuType(reinterpret_cast< ::rtl::OUString*>(NULL)));
@@ -352,7 +347,7 @@ void ORowSet::getPropertyDefaultByHandle( sal_Int32 _nHandle, Any& _rDefault ) c
 {
     switch( _nHandle )
     {
-        case PROPERTY_ID_COMMANDTYPE:
+        case PROPERTY_ID_COMMAND_TYPE:
             _rDefault <<= static_cast<sal_Int32>(CommandType::COMMAND);
             break;
         case PROPERTY_ID_IGNORERESULT:
@@ -404,10 +399,10 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
             OPropertyStateContainer::setFastPropertyValue_NoBroadcast(nHandle,rValue);
     }
 
-    if  (   ( nHandle == PROPERTY_ID_ACTIVECONNECTION )
+    if  (   ( nHandle == PROPERTY_ID_ACTIVE_CONNECTION )
         ||  ( nHandle == PROPERTY_ID_DATASOURCENAME )
         ||  ( nHandle == PROPERTY_ID_COMMAND )
-        ||  ( nHandle == PROPERTY_ID_COMMANDTYPE )
+        ||  ( nHandle == PROPERTY_ID_COMMAND_TYPE )
         ||  ( nHandle == PROPERTY_ID_IGNORERESULT )
         ||  ( nHandle == PROPERTY_ID_FILTER )
         ||  ( nHandle == PROPERTY_ID_HAVING_CLAUSE )
@@ -424,7 +419,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
 
     switch(nHandle)
     {
-        case PROPERTY_ID_ACTIVECONNECTION:
+        case PROPERTY_ID_ACTIVE_CONNECTION:
             // the new connection
             {
                 Reference< XConnection > xNewConnection(m_aActiveConnection,UNO_QUERY);
@@ -441,7 +436,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
                 Reference< XConnection >  xNewConn;
                 Any aNewConn;
                 aNewConn <<= xNewConn;
-                setFastPropertyValue(PROPERTY_ID_ACTIVECONNECTION, aNewConn);
+                setFastPropertyValue(PROPERTY_ID_ACTIVE_CONNECTION, aNewConn);
             }
             else
                 m_bRebuildConnOnExecute = sal_True;
@@ -466,7 +461,7 @@ void SAL_CALL ORowSet::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const 
                     Reference< XConnection >  xNewConn;
                     Any aNewConn;
                     aNewConn <<= xNewConn;
-                    setFastPropertyValue(PROPERTY_ID_ACTIVECONNECTION, aNewConn);
+                    setFastPropertyValue(PROPERTY_ID_ACTIVE_CONNECTION, aNewConn);
                 }
             }
             m_bOwnConnection = sal_True;
@@ -494,7 +489,7 @@ void SAL_CALL ORowSet::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
         case PROPERTY_ID_PRIVILEGES:
             rValue <<= m_pCache->m_nPrivileges;
             break;
-        case PROPERTY_ID_ACTIVECONNECTION:
+        case PROPERTY_ID_ACTIVE_CONNECTION:
             rValue <<= m_xActiveConnection;
             break;
         case PROPERTY_ID_TYPEMAP:
@@ -508,7 +503,7 @@ void SAL_CALL ORowSet::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
     {
         switch(nHandle)
         {
-            case PROPERTY_ID_ACTIVECONNECTION:
+            case PROPERTY_ID_ACTIVE_CONNECTION:
                 rValue <<= m_xActiveConnection;
                 break;
             case PROPERTY_ID_TYPEMAP:
@@ -581,7 +576,7 @@ Any SAL_CALL ORowSet::queryAggregation( const Type& rType ) throw(RuntimeExcepti
     return aRet;
 }
 //------------------------------------------------------------------------------
-rtl::OUString ORowSet::getImplementationName_Static(  ) throw(RuntimeException)
+rtl::OUString ORowSet::getImplementationName_static(  ) throw(RuntimeException)
 {
     return rtl::OUString::createFromAscii("com.sun.star.comp.dba.ORowSet");
 }
@@ -589,7 +584,7 @@ rtl::OUString ORowSet::getImplementationName_Static(  ) throw(RuntimeException)
 // ::com::sun::star::XServiceInfo
 ::rtl::OUString SAL_CALL ORowSet::getImplementationName(  ) throw(RuntimeException)
 {
-    return getImplementationName_Static();
+    return getImplementationName_static();
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSet::supportsService( const ::rtl::OUString& _rServiceName ) throw(RuntimeException)
@@ -597,7 +592,7 @@ sal_Bool SAL_CALL ORowSet::supportsService( const ::rtl::OUString& _rServiceName
     return ::comphelper::findValue(getSupportedServiceNames(), _rServiceName, sal_True).getLength() != 0;
 }
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > ORowSet::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+Sequence< ::rtl::OUString > ORowSet::getSupportedServiceNames_static(  ) throw (RuntimeException)
 {
     Sequence< rtl::OUString > aSNS( 5 );
     aSNS[0] = SERVICE_SDBC_RESULTSET;
@@ -610,12 +605,13 @@ Sequence< ::rtl::OUString > ORowSet::getSupportedServiceNames_Static(  ) throw (
 // -------------------------------------------------------------------------
 Sequence< ::rtl::OUString > SAL_CALL ORowSet::getSupportedServiceNames(  ) throw(RuntimeException)
 {
-    return getSupportedServiceNames_Static();
+    return getSupportedServiceNames_static();
 }
 //------------------------------------------------------------------------------
-Reference< XInterface > ORowSet::Create(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > ORowSet::Create(const Reference< XComponentContext >& _rxContext)
 {
-    return ORowSet_CreateInstance(_rxFactory);
+    ::comphelper::ComponentContext aContext( _rxContext );
+    return ORowSet_CreateInstance( aContext.getLegacyServiceFactory() );
 }
 // -------------------------------------------------------------------------
 // OComponentHelper
@@ -722,7 +718,7 @@ void ORowSet::setActiveConnection( Reference< XConnection >& _rxNewConn, sal_Boo
         m_xOldConnection = m_xActiveConnection;
 
     // for firing the PropertyChangeEvent
-    sal_Int32 nHandle = PROPERTY_ID_ACTIVECONNECTION;
+    sal_Int32 nHandle = PROPERTY_ID_ACTIVE_CONNECTION;
     Any aOldConnection; aOldConnection <<= m_xActiveConnection;
     Any aNewConnection; aNewConnection <<= _rxNewConn;
 
@@ -2237,7 +2233,7 @@ Reference< XNameAccess > ORowSet::impl_getTables_throw()
             DBG_UNHANDLED_EXCEPTION();
         }
 
-        m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,NULL,NULL);
+        m_pTables = new OTableContainer(*this,m_aMutex,m_xActiveConnection,bCase,NULL,NULL,NULL,m_nInAppend);
         xTables = m_pTables;
         Sequence< ::rtl::OUString> aTableFilter(1);
         aTableFilter[0] = ::rtl::OUString::createFromAscii("%");
