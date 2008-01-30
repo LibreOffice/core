@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsmeta.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-28 12:41:43 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:53:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,7 +125,7 @@ namespace dbaui
             s_aSupport[ DST_MSACCESS            ] = InitAdvanced( 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0 );
             s_aSupport[ DST_MYSQL_ODBC          ] = InitAdvanced( 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0 );
             s_aSupport[ DST_MYSQL_JDBC          ] = InitAdvanced( 0, 0, 1, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0 );
-            s_aSupport[ DST_ORACLE_JDBC         ] = InitAdvanced( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 );
+            s_aSupport[ DST_ORACLE_JDBC         ] = InitAdvanced( InitAdvanced::All );
             s_aSupport[ DST_ADABAS              ] = InitAdvanced( 0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0 );
             s_aSupport[ DST_CALC                ] = InitAdvanced( InitAdvanced::None );
             s_aSupport[ DST_DBASE               ] = InitAdvanced( 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0 );
@@ -154,6 +154,8 @@ namespace dbaui
             s_aSupport[ DST_USERDEFINE8         ] = InitAdvanced( InitAdvanced::All );
             s_aSupport[ DST_USERDEFINE9         ] = InitAdvanced( InitAdvanced::All );
             s_aSupport[ DST_USERDEFINE10        ] = InitAdvanced( InitAdvanced::All );
+
+            s_aSupport[ DST_ORACLE_JDBC         ].bIgnoreCurrency = true;
         }
         return s_aSupport[ _eType ];
     }
