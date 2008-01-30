@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:37:45 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:33:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,15 +35,12 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef _DBA_COREDATAACCESS_DATASOURCE_HXX_
+
 #include "datasource.hxx"
-#endif
-#ifndef _DBA_COREDATAACCESS_DATABASEDOCUMENT_HXX_
 #include "databasedocument.hxx"
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
 #include "dbastrings.hrc"
-#endif
+#include "module_dba.hxx"
+
 #include <comphelper/documentconstants.hxx>
 #include <comphelper/namedvaluecollection.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -151,28 +148,9 @@ DBG_NAME(ODatabaseDocument)
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument()
 {
-    static OMultiInstanceAutoRegistration< ODatabaseDocument > aAutoRegistration;
+    static ::dba::OAutoRegistration< ODatabaseDocument > aAutoRegistration;
 }
 
-//--------------------------------------------------------------------------
-Reference< XInterface > ODatabaseDocument_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
-{
-    ODatabaseContext* pContext = NULL;
-    try
-    {
-        Reference<XUnoTunnel> xUnoTunnel(_rxFactory->createInstance(SERVICE_SDB_DATABASECONTEXT),UNO_QUERY);
-        if ( xUnoTunnel.is() )
-            pContext = reinterpret_cast<ODatabaseContext*>(xUnoTunnel->getSomething(ODatabaseContext::getUnoTunnelImplementationId()));
-    }
-    catch(Exception)
-    {
-    }
-
-    ::rtl::Reference<ODatabaseModelImpl> pImpl(new ODatabaseModelImpl(_rxFactory));
-    pImpl->m_pDBContext = pContext;
-    Reference< XModel > xModel( pImpl->createNewModel_deliverOwnership() );
-    return xModel.get();
-}
 //--------------------------------------------------------------------------
 ODatabaseDocument::ODatabaseDocument(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl )
             :ModelDependentComponent( _pImpl )
@@ -1183,11 +1161,11 @@ void SAL_CALL ODatabaseDocument::removeEventListener( const Reference< css::lang
 //------------------------------------------------------------------------------
 rtl::OUString ODatabaseDocument::getImplementationName(  ) throw(RuntimeException)
 {
-    return getImplementationName_Static();
+    return getImplementationName_static();
 }
 
 //------------------------------------------------------------------------------
-rtl::OUString ODatabaseDocument::getImplementationName_Static(  ) throw(RuntimeException)
+rtl::OUString ODatabaseDocument::getImplementationName_static(  ) throw(RuntimeException)
 {
     return rtl::OUString::createFromAscii("com.sun.star.comp.dba.ODatabaseDocument");
 }
@@ -1195,17 +1173,24 @@ rtl::OUString ODatabaseDocument::getImplementationName_Static(  ) throw(RuntimeE
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ODatabaseDocument::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    return getSupportedServiceNames_Static();
+    return getSupportedServiceNames_static();
 }
 
 //------------------------------------------------------------------------------
-Reference< XInterface > ODatabaseDocument::Create(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > ODatabaseDocument::Create( const Reference< XComponentContext >& _rxContext )
 {
-    return ODatabaseDocument_CreateInstance(_rxFactory);
+    ::comphelper::ComponentContext aContext( _rxContext );
+    Reference< XUnoTunnel > xDBContextTunnel( aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT ), UNO_QUERY_THROW );
+    ODatabaseContext* pContext = reinterpret_cast< ODatabaseContext* >( xDBContextTunnel->getSomething( ODatabaseContext::getUnoTunnelImplementationId() ) );
+
+    ::rtl::Reference<ODatabaseModelImpl> pImpl( new ODatabaseModelImpl( aContext.getLegacyServiceFactory() ) );
+    pImpl->m_pDBContext = pContext;
+    Reference< XModel > xModel( pImpl->createNewModel_deliverOwnership() );
+    return xModel.get();
 }
 
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > ODatabaseDocument::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+Sequence< ::rtl::OUString > ODatabaseDocument::getSupportedServiceNames_static(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
     aSNS[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument"));
