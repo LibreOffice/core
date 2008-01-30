@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IController.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:48:07 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:25:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@ namespace dbaui
     // interface for controller depended calls like commands
     class DBACCESS_DLLPUBLIC IController : public IReference
     {
-    protected:
     public:
         /** executes the given command without checking if it is allowed
             @param  _rCommand   the URL of the command
