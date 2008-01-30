@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2007-05-10 10:13:59 $
+#   last change: $Author: rt $ $Date: 2008-01-30 08:36:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ SLOFILES=	\
         $(SLO)$/ContainerListener.obj   \
         $(SLO)$/objectnameapproval.obj  \
         $(SLO)$/warnings.obj            \
+        $(SLO)$/module_dba.obj          \
         $(SLO)$/veto.obj
 
 # --- Targets ----------------------------------
