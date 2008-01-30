@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MacabConnection.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 17:51:21 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:56:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,7 @@ using namespace com::sun::star::sdbcx;
 IMPLEMENT_SERVICE_INFO(MacabConnection, "com.sun.star.sdbc.drivers.MacabConnection", "com.sun.star.sdbc.Connection")
 //-----------------------------------------------------------------------------
 MacabConnection::MacabConnection(MacabDriver*   _pDriver)
-         : OMetaConnection_BASE(m_aMutex),
-         OSubComponent<MacabConnection, MacabConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
-         m_xMetaData(NULL),
+         : OSubComponent<MacabConnection, MacabConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
          m_pAddressBook(NULL),
          m_pDriver(_pDriver)
 {
