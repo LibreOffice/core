@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WExtendPages.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:15:02 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ SvParser* OWizHTMLExtend::createReader(sal_Int32 _nRows)
                             m_pParent->GetFactory(),
                             m_pParent->getDestVector(),
                             m_pParent->getTypeInfo(),
-                            m_pParent->isAutoincrementEnabled());
+                            m_pParent->shouldCreatePrimaryKey());
 }
 //========================================================================
 SvParser* OWizRTFExtend::createReader(sal_Int32 _nRows)
@@ -71,10 +71,10 @@ SvParser* OWizRTFExtend::createReader(sal_Int32 _nRows)
                             m_pParent->GetFactory(),
                             m_pParent->getDestVector(),
                             m_pParent->getTypeInfo(),
-                            m_pParent->isAutoincrementEnabled());
+                            m_pParent->shouldCreatePrimaryKey());
 }
 //========================================================================
-OWizNormalExtend::OWizNormalExtend(Window* pParent) : OWizTypeSelect( pParent)
+OWizNormalExtend::OWizNormalExtend(Window* pParent) : OWizTypeSelect( pParent )
 {
     EnableAuto(sal_False);
     Size aflSize( m_flColumns.GetSizePixel() );
