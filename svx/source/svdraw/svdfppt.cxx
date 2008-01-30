@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdfppt.cxx,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 15:00:03 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:52:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -970,29 +970,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                                 case PPT_PLACEHOLDER_MASTERDATE :           nHeaderFooterInstance++; break;
                             }
                             if ( ! ( nHeaderFooterInstance & 0xfffc ) )     // is this a valid instance ( 0->3 )
-                            {
-                                if ( !rPersistEntry.pHeaderFooterEntry )    // generate masterheaderfooter first
-                                {
-                                    rPersistEntry.pHeaderFooterEntry = new HeaderFooterEntry( NULL );
-                                    DffRecordHeader* pHd;
-                                    for ( pHd = ((SdrEscherImport*)this )->aDocRecManager.GetRecordHeader( PPT_PST_HeadersFooters, SEEK_FROM_BEGINNING );
-                                                        pHd; pHd = ((SdrEscherImport*)this )->aDocRecManager.GetRecordHeader( PPT_PST_HeadersFooters, SEEK_FROM_CURRENT ) )
-                                    {
-                                        if ( rPersistEntry.bNotesMaster )
-                                        {
-                                            if ( pHd->nRecInstance == 4 )
-                                                break;
-                                        }
-                                        else if ( rPersistEntry.bHandoutMaster )
-                                            continue;
-                                        else if ( pHd->nRecInstance == 3 )      // normal master page
-                                            break;
-                                    }
-                                    if ( pHd )
-                                        ((SdrEscherImport*)this )->ImportHeaderFooterContainer( *pHd, *rPersistEntry.pHeaderFooterEntry );
-                                }
                                 rPersistEntry.HeaderFooterOfs[ nHeaderFooterInstance ] = rObjData.rSpHd.GetRecBegFilePos();
-                            }
                         }
                     }
                     break;
@@ -1836,6 +1814,25 @@ SdrPowerPointImport::SdrPowerPointImport( PowerPointImportParam& rParam, const S
                             DBG_ERROR("SdrPowerPointImport::Ctor(): Persist-Eintrag fehlerhaft! (SJ)");
                         }
                     }
+                }
+            }
+            DffRecordHeader* pHeadersFootersHd = aDocRecManager.GetRecordHeader( PPT_PST_HeadersFooters, SEEK_FROM_BEGINNING );
+            if ( pHeadersFootersHd )
+            {
+                HeaderFooterEntry aNormalMaster, aNotesMaster;
+                for ( ; pHeadersFootersHd; pHeadersFootersHd = aDocRecManager.GetRecordHeader( PPT_PST_HeadersFooters, SEEK_FROM_CURRENT ) )
+                {
+                    if ( pHeadersFootersHd->nRecInstance == 3 )         // normal master
+                        ImportHeaderFooterContainer( *pHeadersFootersHd, aNormalMaster );
+                    else if ( pHeadersFootersHd->nRecInstance == 4 )    // notes master
+                        ImportHeaderFooterContainer( *pHeadersFootersHd, aNotesMaster );
+                }
+                for ( USHORT i = 0; i < pMasterPages->Count(); i++ )
+                {
+                    if ( (*pMasterPages)[ i ]->bNotesMaster )
+                        (*pMasterPages)[ i ]->pHeaderFooterEntry = new HeaderFooterEntry( aNotesMaster );
+                    else
+                        (*pMasterPages)[ i ]->pHeaderFooterEntry = new HeaderFooterEntry( aNormalMaster );
                 }
             }
         }
