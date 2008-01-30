@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:37:35 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:54:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -296,7 +296,7 @@ void ORelationController::impl_initialize()
     const NamedValueCollection& rArguments( getInitParams() );
 
     Reference< XConnection > xConnection;
-    xConnection = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_ACTIVECONNECTION, xConnection );
+    xConnection = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, xConnection );
     if ( xConnection.is() )
         initializeConnection( xConnection );
 
