@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnModel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:32:19 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:55:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,7 @@ OColumnControlModel::~OColumnControlModel()
 // -----------------------------------------------------------------------------
 void OColumnControlModel::registerProperties()
 {
-    registerProperty( PROPERTY_ACTIVECONNECTION, PROPERTY_ID_ACTIVECONNECTION, PropertyAttribute::TRANSIENT | PropertyAttribute::BOUND,
+    registerProperty( PROPERTY_ACTIVE_CONNECTION, PROPERTY_ID_ACTIVE_CONNECTION, PropertyAttribute::TRANSIENT | PropertyAttribute::BOUND,
         &m_xConnection, ::getCppuType( &m_xConnection ) );
     Any a;
     a <<= m_xColumn;
