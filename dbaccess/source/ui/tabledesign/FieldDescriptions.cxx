@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:42:26 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:55:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,12 +99,16 @@ OFieldDescription::OFieldDescription()
 OFieldDescription::OFieldDescription( const OFieldDescription& rDescr )
     :m_aDefaultValue(rDescr.m_aDefaultValue)
     ,m_aControlDefault(rDescr.m_aControlDefault)
+    ,m_aWidth(rDescr.m_aWidth)
+    ,m_aRelativePosition(rDescr.m_aRelativePosition)
     ,m_pType(rDescr.m_pType)
+    ,m_xDest(rDescr.m_xDest)
+    ,m_xDestInfo(rDescr.m_xDestInfo)
     ,m_sName(rDescr.m_sName)
     ,m_sTypeName(rDescr.m_sTypeName)
     ,m_sDescription(rDescr.m_sDescription)
     ,m_sAutoIncrementValue(rDescr.m_sAutoIncrementValue)
-    ,m_nType(DataType::VARCHAR)
+    ,m_nType(rDescr.m_nType)
     ,m_nPrecision(rDescr.m_nPrecision)
     ,m_nScale(rDescr.m_nScale)
     ,m_nIsNullable(rDescr.m_nIsNullable)
@@ -112,6 +116,7 @@ OFieldDescription::OFieldDescription( const OFieldDescription& rDescr )
     ,m_eHorJustify(rDescr.m_eHorJustify)
     ,m_bIsAutoIncrement(rDescr.m_bIsAutoIncrement)
     ,m_bIsPrimaryKey(rDescr.m_bIsPrimaryKey)
+    ,m_bIsCurrency(rDescr.m_bIsCurrency)
     ,m_bHidden(rDescr.m_bHidden)
 {
     DBG_CTOR(OFieldDescription,NULL);
@@ -164,6 +169,8 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
                     SetAutoIncrementValue(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_AUTOINCREMENTCREATION)));
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_TYPE))
                     SetTypeValue(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_TYPE)));
+                if (xPropSetInfo->hasPropertyByName(PROPERTY_TYPENAME))
+                    SetTypeName(::comphelper::getString(xAffectedCol->getPropertyValue(PROPERTY_TYPENAME)));
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_PRECISION))
                     SetPrecision(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_PRECISION)));
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_SCALE))
@@ -179,7 +186,7 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_HIDDEN))
                     xAffectedCol->getPropertyValue(PROPERTY_HIDDEN) >>= m_bHidden;
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_ALIGN))
-                    SetHorJustify( ::dbaui::mapTextJustify(::comphelper::getINT16(xAffectedCol->getPropertyValue(PROPERTY_ALIGN))));
+                    SetHorJustify( ::dbaui::mapTextJustify(::comphelper::getINT32(xAffectedCol->getPropertyValue(PROPERTY_ALIGN))));
                 if(xPropSetInfo->hasPropertyByName(PROPERTY_ISAUTOINCREMENT))
                     SetAutoIncrement(::cppu::any2bool(xAffectedCol->getPropertyValue(PROPERTY_ISAUTOINCREMENT)));
             }
