@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 14:29:14 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:34:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,9 +290,10 @@ namespace dbaccess
     class OEmbedObjectHolder :   public ::comphelper::OBaseMutex
                                 ,public TEmbedObjectHolder
     {
-        Reference< XEmbeddedObject > m_xBroadCaster;
-        ODocumentDefinition*                 m_pDefinition;
-        sal_Bool                             m_bInStateChange;
+        Reference< XEmbeddedObject >    m_xBroadCaster;
+        ODocumentDefinition*            m_pDefinition;
+        bool                            m_bInStateChange;
+        bool                            m_bInChangingState;
     protected:
         virtual void SAL_CALL disposing();
     public:
@@ -300,7 +301,8 @@ namespace dbaccess
             : TEmbedObjectHolder(m_aMutex)
             ,m_xBroadCaster(_xBroadCaster)
             ,m_pDefinition(_pDefinition)
-            ,m_bInStateChange(sal_False)
+            ,m_bInStateChange(false)
+            ,m_bInChangingState(false)
         {
             osl_incrementInterlockedCount( &m_refCount );
             {
@@ -323,22 +325,28 @@ namespace dbaccess
         m_pDefinition = NULL;
     }
     //------------------------------------------------------------------
-    void SAL_CALL OEmbedObjectHolder::changingState( const ::com::sun::star::lang::EventObject& /*aEvent*/, ::sal_Int32 /*nOldState*/, ::sal_Int32 /*nNewState*/ ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
+    void SAL_CALL OEmbedObjectHolder::changingState( const ::com::sun::star::lang::EventObject& /*aEvent*/, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::embed::WrongStateException, ::com::sun::star::uno::RuntimeException)
     {
+        if ( !m_bInChangingState && nNewState == EmbedStates::RUNNING && nOldState == EmbedStates::ACTIVE && m_pDefinition )
+        {
+            m_bInChangingState = true;
+            //m_pDefinition->save(sal_False);
+            m_bInChangingState = false;
+        }
     }
     //------------------------------------------------------------------
     void SAL_CALL OEmbedObjectHolder::stateChanged( const ::com::sun::star::lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (::com::sun::star::uno::RuntimeException)
     {
         if ( !m_bInStateChange && nNewState == EmbedStates::RUNNING && nOldState == EmbedStates::ACTIVE && m_pDefinition )
         {
-            m_bInStateChange = sal_True;
+            m_bInStateChange = true;
             Reference<XInterface> xInt(static_cast< ::cppu::OWeakObject* >(m_pDefinition),UNO_QUERY);
             {
                 Reference<XEmbeddedObject> xEmbeddedObject(aEvent.Source,UNO_QUERY);
                 if ( xEmbeddedObject.is() )
                     xEmbeddedObject->changeState(EmbedStates::LOADED);
             }
-            m_bInStateChange = sal_False;
+            m_bInStateChange = false;
         }
     }
     //------------------------------------------------------------------
@@ -866,7 +874,7 @@ void ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, con
             const PropertyValue* pEnd  = pIter + aArguments.getLength();
             for ( ;pIter != pEnd; ++pIter )
             {
-                if ( pIter->Name == PROPERTY_ACTIVECONNECTION )
+                if ( pIter->Name == PROPERTY_ACTIVE_CONNECTION )
                 {
                     xConnection.set( pIter->Value, UNO_QUERY );
                     continue;
@@ -1087,6 +1095,13 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
                 xStorage->removeElement(m_pImpl->m_aProps.sPersistentName);
 
             dispose();
+        }
+        else if ( aCommand.Name.compareToAscii( "shutdown" ) == 0 )
+        {
+            bool bClose = prepareClose();
+            if ( bClose && m_xEmbeddedObject.is() )
+                m_xEmbeddedObject->changeState(EmbedStates::LOADED);
+            aRet <<= bClose;
         }
         else
             aRet = OContentHelper::execute(aCommand,CommandId,Environment);
@@ -1786,13 +1801,22 @@ bool ODocumentDefinition::prepareClose()
             // controller vetoed the closing
             return false;
 
-        if ( isModified() && !save( sal_True ) )
+        if ( isModified() )
         {
-            if ( bCouldSuspend )
-                // revert suspension
-                xController->suspend( sal_False );
-            // saving failed or was cancelled
-            return false;
+            Reference< XFrame > xFrame( xController->getFrame() );
+            if ( xFrame.is() )
+            {
+                Reference< XTopWindow > xTopWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
+                xTopWindow->toFront();
+            }
+            if ( !save( sal_True ) )
+            {
+                if ( bCouldSuspend )
+                    // revert suspension
+                    xController->suspend( sal_False );
+                // saving failed or was cancelled
+                return false;
+            }
         }
     }
     catch( const Exception& )
