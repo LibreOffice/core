@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:51:22 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:51:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,8 +364,8 @@ void ODatabaseImportExport::initialize()
                 Reference<XPropertySet > xProp(m_xResultSet,UNO_QUERY);
                 if(xProp.is())
                 {
-                    xProp->setPropertyValue( PROPERTY_ACTIVECONNECTION, makeAny( m_xConnection.getTyped() ) );
-                    xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(m_nCommandType));
+                    xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( m_xConnection.getTyped() ) );
+                    xProp->setPropertyValue(PROPERTY_COMMAND_TYPE,makeAny(m_nCommandType));
                     xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(m_sName));
                     Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
                     xRowSet->execute();
