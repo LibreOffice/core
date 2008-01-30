@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:21:45 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:58:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::sdbc;
 
 ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon)
-                        : ::connectivity::ODatabaseMetaDataBase(_pCon)
+                        : ::connectivity::ODatabaseMetaDataBase(_pCon,_pCon->getConnectionInfo())
                         ,m_aConnectionHandle(_pHandle)
                         ,m_pConnection(_pCon)
                         ,m_bUseCatalog(sal_True)
@@ -92,14 +92,13 @@ ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon
         }
         osl_decrementInterlockedCount( &m_refCount );
     }
-    setConnectionInfo( _pCon->getConnectionInfo() );
 }
 // -------------------------------------------------------------------------
 ODatabaseMetaData::~ODatabaseMetaData()
 {
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
+Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     Reference< XResultSet > xRef;
     try
@@ -110,9 +109,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLExc
     }
     catch(SQLException&)
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setTypeInfoMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
     }
 
     return xRef;
@@ -123,9 +120,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLExc
     Reference< XResultSet > xRef;
     if(!m_bUseCatalog)
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setCatalogsMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eCatalogs);
     }
     else
     {
@@ -137,20 +132,17 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLExc
         }
         catch(SQLException&)
         {
-            ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-            xRef = pResult;
-            pResult->setCatalogsMap();
+            xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eCatalogs);
         }
     }
 
     return xRef;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
+::rtl::OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
 {
-
     ::rtl::OUString aVal;
-    if(m_bUseCatalog)
+    if ( m_bUseCatalog )
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_NAME_SEPARATOR,aVal,*this,m_pConnection->getTextEncoding());
 
     return aVal;
@@ -167,9 +159,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  ) throw(SQLExce
     }
     catch(SQLException&)
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setSchemasMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eSchemas);
     }
     return xRef;
 }
@@ -187,9 +177,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
     }
     catch(SQLException&)
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setColumnPrivilegesMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumnPrivileges);
     }
     return xRef;
 }
@@ -207,9 +195,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     }
     catch(SQLException&)
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setColumnsMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
     }
     return xRef;
 }
@@ -227,9 +213,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     }
     catch(SQLException&)
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setTablesMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTables);
     }
     return xRef;
 }
@@ -247,9 +231,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
     }
     catch(SQLException&)
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setProcedureColumnsMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eProcedureColumns);
     }
     return xRef;
 }
@@ -267,9 +249,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
     }
     catch(SQLException&)
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setProceduresMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eProcedures);
     }
     return xRef;
 }
@@ -295,9 +275,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
 
     if ( !bSuccess )
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setVersionColumnsMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eVersionColumns);
     }
 
     return xRef;
@@ -380,7 +358,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength(  ) throw(SQLExcepti
     return nValue;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLException, RuntimeException)
+sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_TABLES_IN_SELECT,nValue,*this);
@@ -399,9 +377,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
     }
     catch(SQLException&)
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setExportedKeysMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eExportedKeys);
     }
     return xRef;
 }
@@ -418,9 +394,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
     }
     catch(SQLException&)
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setImportedKeysMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eImportedKeys);
     }
     return xRef;
 }
@@ -437,9 +411,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
     }
     catch(SQLException&)
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setPrimaryKeysMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::ePrimaryKeys);
     }
     return xRef;
 }
@@ -457,9 +429,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
     }
     catch(SQLException&)
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setIndexInfoMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eIndexInfo);
     }
     return xRef;
 }
@@ -477,9 +447,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
     }
     catch(SQLException&)
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setBestRowIdentifierMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eBestRowIdentifier);
     }
     return xRef;
 }
@@ -512,9 +480,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
     }
     catch(SQLException&)
     {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        xRef = pResult;
-        pResult->setCrossReferenceMap();
+        xRef = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eCrossReference);
     }
     return xRef;
 }
@@ -540,7 +506,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLExc
     return nValue == SQL_IC_LOWER;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
@@ -568,14 +534,14 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLExc
     return nValue == SQL_IC_UPPER;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ALTER_TABLE,nValue,*this);
     return (nValue & SQL_AT_ADD_COLUMN) == SQL_AT_ADD_COLUMN;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_ALTER_TABLE,nValue,*this);
@@ -606,7 +572,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
     return aVal;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
+::rtl::OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     ::rtl::OUString aVal;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_IDENTIFIER_QUOTE_CHAR,aVal,*this,m_pConnection->getTextEncoding());
@@ -627,10 +593,10 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) 
     return nValue != SQL_CN_NONE;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, RuntimeException)
+sal_Bool        ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
     SQLUSMALLINT nValue=0;
-    if(m_bUseCatalog)
+    if ( m_bUseCatalog )
         OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_CATALOG_LOCATION,nValue,*this);
     return nValue == SQL_CL_START;
 }
@@ -712,7 +678,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int3
     return (nValue & static_cast<SQLUINTEGER>(level)) == static_cast<SQLUINTEGER>(level);
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInDataManipulation(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
@@ -747,14 +713,14 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw
     return (nValue & SQL_SU_INDEX_DEFINITION) == SQL_SU_INDEX_DEFINITION;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
 {
     SQLUINTEGER nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_SCHEMA_USAGE,nValue,*this);
     return (nValue & SQL_SU_TABLE_DEFINITION) == SQL_SU_TABLE_DEFINITION;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInTableDefinitions(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
 {
     SQLUINTEGER nValue=0;
     if(m_bUseCatalog)
@@ -770,7 +736,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) thro
     return (nValue & SQL_CU_INDEX_DEFINITION) == SQL_CU_INDEX_DEFINITION;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInDataManipulation(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
 {
     SQLUINTEGER nValue=0;
     if(m_bUseCatalog)
@@ -800,9 +766,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
         ::rtl::OUString::createFromAscii("SYNONYM")
     };
     sal_Int32  nSize = sizeof(sTableTypes) / sizeof(::rtl::OUString);
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
-    pResult->setTableTypes();
     SQLUINTEGER nValue = 0;
     try
     {
@@ -827,7 +792,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
      return xRef;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatements(  ) throw(SQLException, RuntimeException)
+sal_Int32 ODatabaseMetaData::impl_getMaxStatements_throw(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_MAX_CONCURRENT_ACTIVITIES,nValue,*this);
@@ -1167,7 +1132,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLE
     return nValue == SQL_IC_MIXED;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
     SQLUSMALLINT nValue;
     OTools::GetInfo(m_pConnection,m_aConnectionHandle,SQL_QUOTED_IDENTIFIER_CASE,nValue,*this);
@@ -1798,11 +1763,4 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalo
 {
     return NULL;
 }
-// -------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection(  ) throw(SQLException, RuntimeException)
-{
-    return (Reference< XConnection >)m_pConnection;//new OConnection(m_aConnectionHandle);
-}
-// -------------------------------------------------------------------------
-
-
+// -----------------------------------------------------------------------------
