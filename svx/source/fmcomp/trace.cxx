@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trace.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:02:15 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 17:06:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 
 //------------------------------------------------------------------------------
 ::vos::OMutex Tracer::s_aMapSafety;
-map< ::vos::OThread::TThreadIdentifier, INT32, ::std::less< ::vos::OThread::TThreadIdentifier > >
+::std::map< ::vos::OThread::TThreadIdentifier, INT32, ::std::less< ::vos::OThread::TThreadIdentifier > >
         Tracer::s_aThreadIndents;
 
 //------------------------------------------------------------------------------
