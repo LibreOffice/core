@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-29 11:01:28 $
+ *  last change: $Author: mav $ $Date: 2008-01-30 09:24:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,7 @@ import com.sun.star.task.XPasswordContainer;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import com.sun.star.util.XChangesBatch;
 import java.net.*;
 import java.io.*;
 import java.util.Hashtable;
@@ -242,22 +243,20 @@ public class Helper
             }
         }
 
-        return ( m_bShowInBrowser != Boolean.FALSE );
+        return m_bShowInBrowser.booleanValue();
     }
 
     synchronized protected static void SetShowInBrowserByDefault( XComponentContext xContext, boolean bValue )
     {
         try
         {
-            Boolean bShowInBrowser = new Boolean( bValue );
+            m_bShowInBrowser = new Boolean( bValue );
 
-            XNameContainer xContainer = Helper.GetConfigNameContainer( xContext, "org.openoffice.Office.Custom.WikiExtension/Settings" );
-            if ( xContainer.hasByName( "PreselectShowBrowser" ) )
-                xContainer.replaceByName( "PreselectShowBrowser", bShowInBrowser );
-            else
-                xContainer.insertByName( "PreselectShowBrowser", bShowInBrowser );
-
-            m_bShowInBrowser = bShowInBrowser;
+            XPropertySet xProps = Helper.GetConfigProps( xContext, "org.openoffice.Office.Custom.WikiExtension/Settings" );
+            xProps.setPropertyValue( "PreselectShowBrowser", new Boolean( bValue ) );
+            XChangesBatch xBatch = ( XChangesBatch ) UnoRuntime.queryInterface( XChangesBatch.class, xProps );
+            if ( xBatch != null )
+                xBatch.commitChanges();
         }
         catch( Exception e )
         {
@@ -590,7 +589,7 @@ public class Helper
         return xConfigurationProvider;
     }
 
-    protected static XNameContainer GetConfigNameContainer( XComponentContext xContext, String sNodepath )
+    protected static Object GetConfig( XComponentContext xContext, String sNodepath, boolean bWriteAccess )
         throws com.sun.star.uno.Exception
     {
         if ( xContext == null || sNodepath == null )
@@ -602,10 +601,27 @@ public class Helper
         Object[] aArgs = new Object[1];
         aArgs[0] = aVal;
 
-        Object oSettings = GetConfigurationProvider( xContext ).createInstanceWithArguments(
-                                    "com.sun.star.configuration.ConfigurationUpdateAccess",
+        return GetConfigurationProvider( xContext ).createInstanceWithArguments(
+                                    ( bWriteAccess ? "com.sun.star.configuration.ConfigurationUpdateAccess"
+                                                   : "com.sun.star.configuration.ConfigurationAccess" ),
                                     aArgs );
-        XNameContainer xContainer = ( XNameContainer ) UnoRuntime.queryInterface( XNameContainer.class, oSettings );
+    }
+
+    protected static XPropertySet GetConfigProps( XComponentContext xContext, String sNodepath )
+        throws com.sun.star.uno.Exception
+    {
+        XPropertySet xProps = ( XPropertySet ) UnoRuntime.queryInterface( XPropertySet.class, GetConfig( xContext, sNodepath, true ) );
+        if ( xProps == null )
+            throw new com.sun.star.uno.RuntimeException();
+
+        return xProps;
+    }
+
+
+    protected static XNameContainer GetConfigNameContainer( XComponentContext xContext, String sNodepath )
+        throws com.sun.star.uno.Exception
+    {
+        XNameContainer xContainer = ( XNameContainer ) UnoRuntime.queryInterface( XNameContainer.class, GetConfig( xContext, sNodepath, true ) );
         if ( xContainer == null )
             throw new com.sun.star.uno.RuntimeException();
 
@@ -615,19 +631,7 @@ public class Helper
     protected static XNameAccess GetConfigNameAccess( XComponentContext xContext, String sNodepath )
         throws com.sun.star.uno.Exception
     {
-        if ( xContext == null || sNodepath == null )
-            throw new com.sun.star.uno.RuntimeException();
-
-        PropertyValue aVal = new PropertyValue();
-        aVal.Name = "nodepath";
-        aVal.Value = sNodepath;
-        Object[] aArgs = new Object[1];
-        aArgs[0] = aVal;
-
-        Object oSettings = GetConfigurationProvider( xContext ).createInstanceWithArguments(
-                                    "com.sun.star.configuration.ConfigurationAccess",
-                                    aArgs );
-        XNameAccess xNameAccess = ( XNameAccess ) UnoRuntime.queryInterface( XNameAccess.class, oSettings );
+        XNameAccess xNameAccess = ( XNameAccess ) UnoRuntime.queryInterface( XNameAccess.class, GetConfig( xContext, sNodepath, false ) );
         if ( xNameAccess == null )
             throw new com.sun.star.uno.RuntimeException();
 
@@ -895,7 +899,7 @@ public class Helper
             {
                 sError = GetLocalizedString( xContext, nErrorID );
                 if ( sError != null && sArg != null )
-                    sError.replaceAll( "\\$ARG1", sArg );
+                    sError.replaceAll( "$ARG1", sArg );
 
                 sTitle = GetLocalizedString( xContext, nTitleID );
             }

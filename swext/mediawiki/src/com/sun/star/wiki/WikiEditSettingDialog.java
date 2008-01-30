@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-29 11:01:28 $
+ *  last change: $Author: mav $ $Date: 2008-01-30 09:24:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,10 @@ public class WikiEditSettingDialog extends WikiDialog
         setting = ht;
         try
         {
-            GetPropSet( "UrlField" ).setPropertyValue( "Text", ht.get( "Url" ));
+            XPropertySet xUrlField = GetPropSet( "UrlField" );
+
+            xUrlField.setPropertyValue( "Text", ht.get( "Url" ) );
+            xUrlField.setPropertyValue( "Enabled", Boolean.FALSE );
             GetPropSet( "UsernameField" ).setPropertyValue( "Text", ht.get( "Username" ));
             GetPropSet( "PasswordField" ).setPropertyValue( "Text", ht.get( "Password" ));
         }
