@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:59:31 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:46:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,11 +69,8 @@ namespace dbaui
     protected:
         virtual void        NextToken( int nToken ); // Basisklasse
         virtual sal_Bool    CreateTable(int nToken);
-
-        /** createPage creates the tabpage for this type
-            @param  _pParent    teh parent window
-        */
-        virtual OWizTypeSelect* createPage(Window* _pParent);
+        virtual TypeSelectionPageFactory
+                             getTypeSelectionPageFactory();
 
         void                TableDataOn(SvxCellHorJustify& eVal,int nToken);
         void                TableFontOn(::com::sun::star::awt::FontDescriptor& _rFont,sal_Int32 &_rTextColor);
