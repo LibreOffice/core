@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ETable.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:02:42 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:02:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,11 +73,10 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter > m_xNumberFormatter;
             sal_Int32                       m_nRowPos;
             sal_Int32                       m_nMaxRowCount; // will be set if stream is once eof
-        public:
-
         private:
             void fillColumns(const ::com::sun::star::lang::Locale& _aLocale);
             BOOL CreateFile(const INetURLObject& aFile, BOOL& bCreateMemo);
+            sal_Bool readLine(sal_Int32& _rnCurrentPos);
 
             sal_Bool checkHeaderLine();
         public:
