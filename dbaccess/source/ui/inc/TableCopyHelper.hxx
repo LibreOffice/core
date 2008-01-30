@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableCopyHelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:50:04 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:47:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,10 +94,10 @@ namespace dbaui
 
     class OTableCopyHelper
     {
-        OGenericUnoController* m_pController;
     private:
-        ::rtl::OUString     m_sDefaultTableName;
-        sal_Bool            m_bSelectCopyTable;
+        OGenericUnoController*  m_pController;
+        ::rtl::OUString         m_sTableNameForAppend;
+
     public:
         // is needed to describe the drop target
         struct DropDescriptor
@@ -143,44 +143,6 @@ namespace dbaui
                         ,const ::rtl::OUString& _sDestDataSourceName
                         ,const SharedConnection& _xConnection);
 
-        /** pastes a table into the data source
-            @param  _rPasteData
-                The data descriptor.
-            @param  _sDestDataSourceName
-                The name of the dest data source.
-        */
-        void pasteTable( ::svx::ODataAccessDescriptor& _rPasteData
-                        ,const ::rtl::OUString& _sDestDataSourceName
-                        ,const SharedConnection& _xDestConnection);
-
-        /** insert a table into the data source. The source can eihter be a table or a query
-            @param  _nCommandType
-                The command type.
-            @param  _xSrcConnection
-                The connection of the source.
-            @param  _xSrcRs
-                The ResultSet of the source.
-            @param  _aSelection
-                The selection of the rows to copy.
-            @param  _bBookmarkSelection
-                If <TRUE/> the selection is bookmark selection.
-            @param  _sCommand
-                The name of the query or table.
-            @param  _sSrcDataSourceName
-                The name of the source data source.
-            @param  _sDestDataSourceName
-                The name of the dest data source.
-        */
-        void insertTable( sal_Int32 _nCommandType
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xSrcConnection
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet>&   _xSrcRs         // the source resultset may be empty
-                        ,const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _aSelection
-                        ,sal_Bool _bBookmarkSelection
-                        ,const ::rtl::OUString& _sCommand
-                        ,const ::rtl::OUString& _sSrcDataSourceName
-                        ,const ::rtl::OUString& _sDestDataSourceName
-                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xDestConnection);
-
         /** copies a table which was constructed by tags like HTML or RTF
             @param  _rDesc
                 The Drop descriptor
@@ -220,13 +182,49 @@ namespace dbaui
         /// returns <TRUE/> if the clipboard supports a table format, otherwise <FALSE/>.
         sal_Bool isTableFormat(const TransferableDataHelper& _rClipboard) const;
 
-        //dyf add 20070601
-        inline void           SetDefaultTableName(const ::rtl::OUString &_sDefaultTableName){ m_sDefaultTableName = _sDefaultTableName ; }
-        inline ::rtl::OUString  GetDefaultTableName() const { return m_sDefaultTableName ;}
+        inline void                     SetTableNameForAppend( const ::rtl::OUString& _rDefaultTableName ) { m_sTableNameForAppend = _rDefaultTableName; }
+        inline void                     ResetTableNameForAppend() { SetTableNameForAppend( ::rtl::OUString() ); }
+        inline const ::rtl::OUString&   GetTableNameForAppend() const { return m_sTableNameForAppend ;}
 
-        inline void         SetIsSelectCopytable(sal_Bool isSelect){ m_bSelectCopyTable = isSelect;}
-        sal_Bool            GetIsSelectCopytable(){ return m_bSelectCopyTable; }
-        //dyf add end
+    private:
+        /** pastes a table into the data source
+            @param  _rPasteData
+                The data descriptor.
+            @param  _sDestDataSourceName
+                The name of the dest data source.
+        */
+        void pasteTable(
+            const ::svx::ODataAccessDescriptor& _rPasteData,
+            const ::rtl::OUString& _sDestDataSourceName,
+            const SharedConnection& _xDestConnection
+        );
+
+        /** insert a table into the data source. The source can eihter be a table or a query
+            @param  _nCommandType
+                The command type.
+            @param  _xSrcConnection
+                The connection of the source.
+            @param  _aSelection
+                The selection of the rows to copy.
+            @param  _bBookmarkSelection
+                If <TRUE/> the selection is bookmark selection.
+            @param  _sCommand
+                The name of the query or table.
+            @param  _sSrcDataSourceName
+                The name of the source data source.
+            @param  _sDestDataSourceName
+                The name of the dest data source.
+        */
+        void insertTable(
+            sal_Int32 _nCommandType,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xSrcConnection,
+            const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& _aSelection,
+            sal_Bool _bBookmarkSelection,
+            const ::rtl::OUString& _sCommand,
+            const ::rtl::OUString& _sSrcDataSourceName,
+            const ::rtl::OUString& _sDestDataSourceName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xDestConnection
+        );
 
     };
 //........................................................................
