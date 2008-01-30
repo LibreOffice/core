@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HConnection.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:00:58 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:53:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/graphic/GraphicColorMode.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
 /** === end UNO includes === **/
 
 #include <comphelper/componentcontext.hxx>
@@ -88,6 +89,7 @@ using ::com::sun::star::uno::Any;
 using ::com::sun::star::uno::makeAny;
 using ::com::sun::star::sdbc::XResultSet;
 using ::com::sun::star::sdbc::XDatabaseMetaData;
+using ::com::sun::star::sdbc::XDatabaseMetaData2;
 using ::com::sun::star::sdbc::XRow;
 using ::com::sun::star::sdb::application::XDatabaseDocumentUI;
 using ::com::sun::star::beans::PropertyValue;
@@ -136,6 +138,8 @@ namespace connectivity { namespace hsqldb
         ,m_aFlushListeners( m_aMutex )
         ,m_xDriver( _rxDriver )
         ,m_xORB( _xORB )
+        ,m_bIni(true)
+        ,m_bReadOnly(false)
     {
         setDelegation(_xConnection,_xORB,m_refCount);
     }
@@ -175,8 +179,24 @@ namespace connectivity { namespace hsqldb
         {
             if ( m_xConnection.is() )
             {
-                Reference< XStatement > xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
-                xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CHECKPOINT" ) ) );
+                if ( m_bIni )
+                {
+                    m_bIni = false;
+                    Reference< XDatabaseMetaData2 > xMeta2(m_xConnection->getMetaData(),UNO_QUERY_THROW);
+                    const Sequence< PropertyValue > aInfo = xMeta2->getConnectionInfo();
+                    const PropertyValue* pIter = aInfo.getConstArray();
+                    const PropertyValue* pEnd  = pIter + aInfo.getLength();
+                    for(;pIter != pEnd;++pIter)
+                    {
+                        if ( pIter->Name.compareToAscii("readonly") == 0 )
+                            m_bReadOnly = true;
+                    }
+                }
+                if ( !m_bReadOnly )
+                {
+                    Reference< XStatement > xStmt( m_xConnection->createStatement(), UNO_QUERY_THROW );
+                    xStmt->execute( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CHECKPOINT" ) ) );
+                }
             }
 
             EventObject aFlushedEvent( *this );
