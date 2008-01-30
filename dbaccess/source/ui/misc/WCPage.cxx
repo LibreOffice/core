@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:12:59 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:51:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef DBAUI_WIZARD_CPAGE_HXX
 #include "WCPage.hxx"
-#endif
+#include "WCopyTable.hxx"
+
 #ifndef DBACCESS_SOURCE_UI_MISC_DEFAULTOBJECTNAMECHECK_HXX
 #include "defaultobjectnamecheck.hxx"
 #endif
@@ -69,6 +69,9 @@
 #ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_APPLICATION_COPYTABLEOPERATION_HPP_
+#include <com/sun/star/sdb/application/CopyTableOperation.hpp>
+#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
@@ -97,78 +100,39 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
+
+namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
+
 //========================================================================
 // Klasse OCopyTable
 //========================================================================
 DBG_NAME(OCopyTable)
 //------------------------------------------------------------------------
-//--------dyf modify 2007/7/10
-OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView )//, OCopyTableWizard::Wizard_Create_Style nLastAction )
-//--------modify end
-    : OWizardPage( pParent, ModuleRes(TAB_WIZ_COPYTABLE) ),
-    m_ftTableName(          this, ModuleRes( FT_TABLENAME       ) ),
-    m_edTableName(          this, ModuleRes( ET_TABLENAME       ) ),
-    m_aFL_Options(          this, ModuleRes( FL_OPTIONS         ) ),
-    m_aRB_DefData(          this, ModuleRes( RB_DEFDATA         ) ),
-    m_aRB_Def(              this, ModuleRes( RB_DEF             ) ),
-    m_aRB_View(             this, ModuleRes( RB_VIEW            ) ),
-    m_aRB_AppendData(       this, ModuleRes( RB_APPENDDATA      ) ),
-    m_aCB_PrimaryColumn(    this, ModuleRes( CB_PRIMARY_COLUMN  ) ),
-    m_aFT_KeyName(          this, ModuleRes( FT_KEYNAME         ) ),
-    m_edKeyName(            this, ModuleRes( ET_KEYNAME         ) ),
-    m_pPage2(NULL),
-    m_pPage3(NULL),
-    m_bIsViewAllowed(bIsView)
+OCopyTable::OCopyTable( Window * pParent )
+    :OWizardPage( pParent, ModuleRes(TAB_WIZ_COPYTABLE) )
+    ,m_ftTableName(         this, ModuleRes( FT_TABLENAME       ) )
+    ,m_edTableName(         this, ModuleRes( ET_TABLENAME       ) )
+    ,m_aFL_Options(         this, ModuleRes( FL_OPTIONS         ) )
+    ,m_aRB_DefData(         this, ModuleRes( RB_DEFDATA         ) )
+    ,m_aRB_Def(             this, ModuleRes( RB_DEF             ) )
+    ,m_aRB_View(            this, ModuleRes( RB_VIEW            ) )
+    ,m_aRB_AppendData(      this, ModuleRes( RB_APPENDDATA      ) )
+    ,m_aCB_PrimaryColumn(   this, ModuleRes( CB_PRIMARY_COLUMN  ) )
+    ,m_aFT_KeyName(         this, ModuleRes( FT_KEYNAME         ) )
+    ,m_edKeyName(           this, ModuleRes( ET_KEYNAME         ) )
+    ,m_pPage2(NULL)
+    ,m_pPage3(NULL)
 {
     DBG_CTOR(OCopyTable,NULL);
 
     m_edTableName.SetMaxTextLen( EDIT_NOLIMIT );
 
-    if(m_pParent->m_xConnection.is())
+    if ( m_pParent->m_xDestConnection.is() )
     {
-        // first we have to determine if we support views
-        Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
-        Reference< XViewsSupplier > xViewSups(m_pParent->m_xConnection,UNO_QUERY);
-        m_bIsViewAllowed = xViewSups.is();
-        if(!m_bIsViewAllowed)
-        {
-            try
-            {
-                const static ::rtl::OUString sVIEW = ::rtl::OUString::createFromAscii("VIEW");
-                Reference<XResultSet> xRs = xMetaData->getTableTypes();
-                if ( xRs.is() )
-                {
-                    Reference<XRow> xRow(xRs,UNO_QUERY);
-                    while ( xRs->next() )
-                    {
-                        ::rtl::OUString sValue = xRow->getString(1);
-                        if ( !xRow->wasNull() && sValue.equalsIgnoreAsciiCase(sVIEW) )
-                        {
-                            m_bIsViewAllowed = sal_True;
-                            break;
-                        }
-                    }
-                }
-            }
-            catch(const SQLException&)
-            {
-                ::dbaui::showError( SQLExceptionInfo( ::cppu::getCaughtException() ), m_pParent, m_pParent->m_xFactory );
-            }
-        }
-
-        if ( !m_bIsViewAllowed || bIsView ) // if it is a view disable the view checkbox #100644# OJ
+        if ( !m_pParent->supportsViews() )
             m_aRB_View.Disable();
 
-        //////////////////////////////////////////////////////////////////////
-        // do we support pkeys
-        try
-        {
-            m_bPKeyAllowed = xMetaData->supportsCoreSQLGrammar();
-        }
-        catch(const SQLException&)
-        {
-            m_bPKeyAllowed = sal_False;
-        }
+        m_bPKeyAllowed = m_pParent->supportsPrimaryKey();
 
         m_aCB_PrimaryColumn.Enable(m_bPKeyAllowed);
 
@@ -192,15 +156,7 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView )
 
     FreeResource();
 
-    if (MOVE != atWhat)
-        SetText(String(ModuleRes(STR_COPYTABLE_TITLE_COPY)));
-    else
-    {
-        //! TODO OJ: HAS TO BE CHANGED
-        // SetText(String(ModuleRes(STR_COPYTABLE_TITLE_MOVE)));
-        m_aRB_Def.Disable();
-            // beim Verschieben ist der Punkt "nur Definition" nicht zulaessig
-    }
+    SetText(String(ModuleRes(STR_COPYTABLE_TITLE_COPY)));
 }
 
 //------------------------------------------------------------------------
@@ -223,7 +179,7 @@ void OCopyTable::SetAppendDataRadio()
     m_aFT_KeyName.Enable(sal_False);
     m_aCB_PrimaryColumn.Enable(sal_False);
     m_edKeyName.Enable(sal_False);
-    m_pParent->setCreateStyle(OCopyTableWizard::WIZARD_APPEND_DATA);
+    m_pParent->setOperation(CopyTableOperation::AppendData);
 }
 
 //--------add end
@@ -239,11 +195,11 @@ IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
 
     // set typ what to do
     if( IsOptionDefData() )
-        m_pParent->setCreateStyle(OCopyTableWizard::WIZARD_DEF_DATA);
+        m_pParent->setOperation( CopyTableOperation::CopyDefinitionAndData );
     else if( IsOptionDef() )
-        m_pParent->setCreateStyle(OCopyTableWizard::WIZARD_DEF);
+        m_pParent->setOperation( CopyTableOperation::CopyDefinitionOnly );
     else if( IsOptionView() )
-        m_pParent->setCreateStyle(OCopyTableWizard::WIZARD_DEF_VIEW);
+        m_pParent->setOperation( CopyTableOperation::CreateAsView );
 
     return 0;
 }
@@ -259,13 +215,13 @@ IMPL_LINK( OCopyTable, KeyClickHdl, Button*, /*pButton*/ )
 sal_Bool OCopyTable::LeavePage()
 {
     DBG_CHKTHIS(OCopyTable,NULL);
-    m_pParent->m_bCreatePrimaryColumn   = (m_bPKeyAllowed && m_aCB_PrimaryColumn.IsEnabled()) ? m_aCB_PrimaryColumn.IsChecked() : sal_False;
-    m_pParent->m_aKeyName               = m_pParent->m_bCreatePrimaryColumn ? m_edKeyName.GetText() : String();
+    m_pParent->m_bCreatePrimaryKeyColumn    = (m_bPKeyAllowed && m_aCB_PrimaryColumn.IsEnabled()) ? m_aCB_PrimaryColumn.IsChecked() : sal_False;
+    m_pParent->m_aKeyName               = m_pParent->m_bCreatePrimaryKeyColumn ? m_edKeyName.GetText() : String();
 
     // first check if the table already exists in the database
-    if( m_pParent->getCreateStyle() != OCopyTableWizard::WIZARD_APPEND_DATA )
+    if( m_pParent->getOperation() != CopyTableOperation::AppendData )
     {
-        DynamicTableOrQueryNameCheck aNameCheck( m_pParent->m_xConnection, CommandType::TABLE );
+        DynamicTableOrQueryNameCheck aNameCheck( m_pParent->m_xDestConnection, CommandType::TABLE );
         SQLExceptionInfo aErrorInfo;
         if ( !aNameCheck.isNameValid( m_edTableName.GetText(), aErrorInfo ) )
         {
@@ -275,7 +231,7 @@ sal_Bool OCopyTable::LeavePage()
         }
 
         // have to check the length of the table name
-        Reference<XDatabaseMetaData> xMeta = m_pParent->m_xConnection->getMetaData();
+        Reference< XDatabaseMetaData > xMeta = m_pParent->m_xDestConnection->getMetaData();
         ::rtl::OUString sCatalog;
         ::rtl::OUString sSchema;
         ::rtl::OUString sTable;
@@ -293,7 +249,7 @@ sal_Bool OCopyTable::LeavePage()
         }
 
         // now we have to check if the name of the primary key already exists
-        if (    m_pParent->m_bCreatePrimaryColumn
+        if (    m_pParent->m_bCreatePrimaryKeyColumn
             &&  m_pParent->m_aKeyName != m_pParent->createUniqueName(m_pParent->m_aKeyName) )
         {
             String aInfoString( ModuleRes(STR_WIZ_PKEY_ALREADY_DEFINED) );
@@ -307,21 +263,20 @@ sal_Bool OCopyTable::LeavePage()
 
     if ( !m_edTableName.GetSavedValue().Equals(m_edTableName.GetText()) )
     { // table exists and name has changed
-        if ( m_pParent->getCreateStyle() == OCopyTableWizard::WIZARD_APPEND_DATA )
+        if ( m_pParent->getOperation() == CopyTableOperation::AppendData )
         {
             if(!checkAppendData())
                 return sal_False;
         }
-        else if(m_eOldStyle == OCopyTableWizard::WIZARD_APPEND_DATA)
+        else if ( m_nOldOperation == CopyTableOperation::AppendData )
         {
-            m_pParent->m_xDestObject = NULL;
             m_edTableName.SaveValue();
             return LeavePage();
         }
     }
     else
     { // table exist and is not new or doesn't exist and so on
-        if ( OCopyTableWizard::WIZARD_APPEND_DATA == m_pParent->getCreateStyle() )
+        if ( CopyTableOperation::AppendData == m_pParent->getOperation() )
         {
             if( !checkAppendData() )
                 return sal_False;
@@ -343,7 +298,7 @@ void OCopyTable::ActivatePage()
 {
     DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->GetOKButton().Enable( TRUE );
-    m_eOldStyle = m_pParent->getCreateStyle();
+    m_nOldOperation = m_pParent->getOperation();
     m_edTableName.GrabFocus();
 }
 //------------------------------------------------------------------------
@@ -366,8 +321,8 @@ sal_Bool OCopyTable::checkAppendData()
 {
     DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->clearDestColumns();
-    m_pParent->m_xDestObject = NULL;
-    Reference<XTablesSupplier > xSup(m_pParent->m_xConnection,UNO_QUERY);
+    Reference< XPropertySet > xTable;
+    Reference< XTablesSupplier > xSup( m_pParent->m_xDestConnection, UNO_QUERY );
     Reference<XNameAccess> xTables;
     if(xSup.is())
         xTables = xSup->getTables();
@@ -375,12 +330,13 @@ sal_Bool OCopyTable::checkAppendData()
     {
         const ODatabaseExport::TColumnVector* pSrcColumns = m_pParent->getSrcVector();
         const sal_uInt32 nSrcSize = pSrcColumns->size();
-        m_pParent->m_vColumnPos.resize( nSrcSize ,ODatabaseExport::TPositions::value_type( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND ) );
+        m_pParent->m_vColumnPos.resize( nSrcSize, ODatabaseExport::TPositions::value_type( COLUMN_POSITION_NOT_FOUND, COLUMN_POSITION_NOT_FOUND ) );
         m_pParent->m_vColumnTypes.resize( nSrcSize , COLUMN_POSITION_NOT_FOUND );
 
         // set new destination
-        xTables->getByName(m_edTableName.GetText()) >>= m_pParent->m_xDestObject;
-        m_pParent->loadData(m_pParent->m_xDestObject,m_pParent->m_vDestColumns,m_pParent->m_aDestVec);
+        xTables->getByName( m_edTableName.GetText() ) >>= xTable;
+        ObjectCopySource aTableCopySource( m_pParent->m_xDestConnection, xTable );
+        m_pParent->loadData( aTableCopySource, m_pParent->m_vDestColumns, m_pParent->m_aDestVec );
         // #90027#
         const ODatabaseExport::TColumnVector* pDestColumns          = m_pParent->getDestVector();
         ODatabaseExport::TColumnVector::const_iterator aDestIter    = pDestColumns->begin();
@@ -405,34 +361,48 @@ sal_Bool OCopyTable::checkAppendData()
         }
 
     }
-    if ( !m_pParent->m_xDestObject.is() )
+
+    if ( !xTable.is() )
     {
-        ErrorBox(this, ModuleRes(ERROR_INVALID_TABLE_NAME)).Execute();
+        ErrorBox( this, ModuleRes( ERROR_INVALID_TABLE_NAME ) ).Execute();
+        // TODO: shouldn't this be some kind of showError? In case of the UNO service for this wizard,
+        // shouldn't this even be a usage of the service's interaction handler?
         return sal_False;
     }
     return sal_True;
 }
 // -----------------------------------------------------------------------------
+void OCopyTable::setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUString& _rSuggestedName )
+{
+    bool bCreatePK = m_bPKeyAllowed && _bDoCreate;
+    m_aCB_PrimaryColumn.Check( bCreatePK );
+    m_edKeyName.SetText( _rSuggestedName );
+
+    m_aFT_KeyName.Enable( bCreatePK );
+    m_edKeyName.Enable( bCreatePK );
+}
+
+// -----------------------------------------------------------------------------
 //---dyf add 2006/7/10
 void OCopyTable::setCreateStyleAction()
 {
     // reselect the last action before
-    switch(m_pParent->getCreateStyle())
+    switch(m_pParent->getOperation())
     {
-        case OCopyTableWizard::WIZARD_DEF_DATA:
+        case CopyTableOperation::CopyDefinitionAndData:
             m_aRB_DefData.Check(sal_True);
             RadioChangeHdl(&m_aRB_DefData);
             break;
-        case OCopyTableWizard::WIZARD_DEF:
+        case CopyTableOperation::CopyDefinitionOnly:
             m_aRB_Def.Check(sal_True);
             RadioChangeHdl(&m_aRB_Def);
             break;
-        case OCopyTableWizard::WIZARD_APPEND_DATA:
+        case CopyTableOperation::AppendData:
             m_aRB_AppendData.Check(sal_True);
             SetAppendDataRadio();
             break;
-        case OCopyTableWizard::WIZARD_DEF_VIEW:
-            if(m_bIsViewAllowed)
+        case CopyTableOperation::CreateAsView:
+            if ( m_aRB_View.IsEnabled() )
             {
                 m_aRB_View.Check(sal_True);
                 RadioChangeHdl(&m_aRB_View);
