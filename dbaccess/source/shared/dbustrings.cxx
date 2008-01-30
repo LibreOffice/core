@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbustrings.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:48:56 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:40:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,5 +75,4 @@ namespace dbaui
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TABSTOP, "TabStop");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DEFAULTCONTROL, "DefaultControl");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLED, "Enabled");
-    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_COLUMN, "Column");
 }
