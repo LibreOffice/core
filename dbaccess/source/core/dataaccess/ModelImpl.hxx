@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ModelImpl.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:18:19 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:31:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 #include "apitools.hxx"
 #include "bookmarkcontainer.hxx"
 #include "ContentHelper.hxx"
-#include "dba_reghelper.hxx"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>
