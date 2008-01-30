@@ -4,9 +4,9 @@
  *
  *  $RCSfile: composerdialogs.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:33:54 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:56:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ namespace dbaui
             {
                 Reference< XPropertySet > xRowsetProps( m_xRowSet, UNO_QUERY );
                 if ( xRowsetProps.is() )
-                    xRowsetProps->getPropertyValue( PROPERTY_ACTIVECONNECTION ) >>= xConnection;
+                    xRowsetProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConnection;
             }
 
             // fallback: if there is a connection and thus a row set, but no composer, create one
