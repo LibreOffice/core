@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPlayerWindow.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:01:17 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:12:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ interface XPlayerWindow : ::com::sun::star::awt::XWindow
     /** changes the pointer for the player window.
 
         @param SystemPointerType
-            a <type>com::sun::star::awt::SystemPointerType</type>
+            a <type scope="::com::sun::star::awt">SystemPointer</type>
      */
     void setPointerType( [in] long SystemPointerType );
 };
