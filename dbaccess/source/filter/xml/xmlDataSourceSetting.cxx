@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlDataSourceSetting.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-09 08:14:59 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:37:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,7 +168,7 @@ void OXMLDataSourceSetting::EndElement()
 {
     if ( m_aSetting.Name.getLength() )
     {
-        if ( m_bIsList && !m_aInfoSequence.getLength() )
+        if ( m_bIsList && m_aInfoSequence.getLength() )
             m_aSetting.Value <<= m_aInfoSequence;
 
         // if our property is of type string, but was empty, ensure that
