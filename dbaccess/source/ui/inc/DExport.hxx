@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:59:12 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:46:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,12 +69,16 @@
 #ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
 #endif
+#ifndef DBAUI_WIZ_TYPESELECT_HXX
+#include "WTypeSelect.hxx"
+#endif
 #ifndef _DBAUI_COMMON_TYPES_HXX_
 #include "commontypes.hxx"
 #endif
 #ifndef DBAUI_IUPDATEHELPER_HXX
 #include "IUpdateHelper.hxx"
 #endif
+#include "WTypeSelect.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace awt{
@@ -101,6 +105,7 @@ namespace dbaui
         DECLARE_STL_MAP(::rtl::OUString,OFieldDescription*,::comphelper::UStringMixLess,TColumns);
         typedef ::std::vector<TColumns::const_iterator>             TColumnVector;
         typedef ::std::vector< ::std::pair<sal_Int32,sal_Int32> >   TPositions;
+
     protected:
         TPositions                      m_vColumns;     // Welche Spalten "ubernommen werden sollen
         ::std::vector<sal_Int32>        m_vColumnTypes; // FeldTypen f"ur schnelleren Zugriff
@@ -122,6 +127,7 @@ namespace dbaui
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
 
         SvNumberFormatter*  m_pFormatter;
+        SvStream&           m_rInputStream;
         //dyf add 2006/06/01
         //for save the selected tablename
         ::rtl::OUString     m_sDefaultTableName;
@@ -147,10 +153,9 @@ namespace dbaui
 
 
         virtual sal_Bool        CreateTable(int nToken)         = 0;
+        virtual TypeSelectionPageFactory
+                                getTypeSelectionPageFactory()   = 0;
 
-        /** createPage is called when the wizards needs an additional page to show
-        */
-        virtual OWizTypeSelect* createPage(Window* _pParent)    = 0;
         void                    CreateDefaultColumn(const ::rtl::OUString& _rColumnName);
         sal_Int16               CheckString(const String& aToken, sal_Int16 _nOldNumberFormat);
         void                    adjustFormat();
@@ -173,19 +178,26 @@ namespace dbaui
 
         virtual ~ODatabaseExport();
     public:
-        ODatabaseExport(const SharedConnection& _rxConnection,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
-                        const TColumnVector* rList = 0,
-                        const OTypeInfoMap* _pInfoMap = 0);
+        ODatabaseExport(
+            const SharedConnection& _rxConnection,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+            const TColumnVector* rList,
+            const OTypeInfoMap* _pInfoMap,
+            SvStream& _rInputStream
+        );
+
         // wird f"ur auto. Typ-Erkennung gebraucht
-        ODatabaseExport(sal_Int32 nRows,
-                        const TPositions& _rColumnPositions,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
-                        const TColumnVector* rList,
-                        const OTypeInfoMap* _pInfoMap,
-                        sal_Bool _bAutoIncrementEnabled);
+        ODatabaseExport(
+            sal_Int32 nRows,
+            const TPositions& _rColumnPositions,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _rxNumberF,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
+            const TColumnVector* rList,
+            const OTypeInfoMap* _pInfoMap,
+            sal_Bool _bAutoIncrementEnabled,
+            SvStream& _rInputStream
+        );
 
         void    SetColumnTypes(const TColumnVector* rList,const OTypeInfoMap* _pInfoMap);
 
