@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:06:36 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:50:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,8 +138,8 @@ ORTFReader::ORTFReader( SvStream& rIn,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                         const TColumnVector* pList,
                         const OTypeInfoMap* _pInfoMap)
-    : SvRTFParser(rIn)
-    ,ODatabaseExport(_rxConnection,_rxNumberF,_rM,pList,_pInfoMap)
+    :SvRTFParser(rIn)
+    ,ODatabaseExport( _rxConnection, _rxNumberF, _rM, pList, _pInfoMap, rIn )
 {
     DBG_CTOR(ORTFReader,NULL);
     m_bAppendFirstLine = false;
@@ -154,7 +154,7 @@ ORTFReader::ORTFReader(SvStream& rIn,
                        const OTypeInfoMap* _pInfoMap,
                        sal_Bool _bAutoIncrementEnabled)
    :SvRTFParser(rIn)
-   ,ODatabaseExport(nRows,_rColumnPositions,_rxNumberF,_rM,pList,_pInfoMap,_bAutoIncrementEnabled)
+   ,ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rM, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
 {
     DBG_CTOR(ORTFReader,NULL);
     m_bAppendFirstLine = false;
@@ -420,11 +420,12 @@ void ORTFReader::release()
     DBG_CHKTHIS(ORTFReader,NULL);
     ReleaseRef();
 }
+
 // -----------------------------------------------------------------------------
-OWizTypeSelect* ORTFReader::createPage(Window* _pParent)
+TypeSelectionPageFactory ORTFReader::getTypeSelectionPageFactory()
 {
     DBG_CHKTHIS(ORTFReader,NULL);
-    return new OWizRTFExtend(_pParent,rInput);
+    return &OWizRTFExtend::Create;
 }
 // -----------------------------------------------------------------------------
 
