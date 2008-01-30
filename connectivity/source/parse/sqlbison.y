@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.60 2007-11-21 15:08:54 ihi Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.61 2008-01-30 08:04:26 rt Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: ihi $ $Date: 2007-11-21 15:08:54 $ $Revision: 1.60 $
+//	$Author: rt $ $Date: 2008-01-30 08:04:26 $ $Revision: 1.61 $
 //
 // Description:
 //
@@ -1037,6 +1037,7 @@ truth_value:
 		SQL_TOKEN_TRUE
 	  | SQL_TOKEN_FALSE
 	  | SQL_TOKEN_UNKNOWN
+	  | SQL_TOKEN_NULL
 	  ;
 boolean_primary:
 		predicate
@@ -1325,7 +1326,7 @@ opt_escape:
 	;
 
 test_for_null:
-		row_value_constructor SQL_TOKEN_IS sql_not SQL_TOKEN_NULL
+		row_value_constructor SQL_TOKEN_IS sql_not truth_value
 		{
 			$$ = SQL_NEW_RULE;
 			$$->append($1);
@@ -1333,7 +1334,7 @@ test_for_null:
 			$$->append($3);
 			$$->append($4);
 		}
-	|	SQL_TOKEN_IS sql_not SQL_TOKEN_NULL
+	|	SQL_TOKEN_IS sql_not truth_value
 		{
 			if (xxx_pGLOBAL_SQLPARSER->inPredicateCheck())
 			{
