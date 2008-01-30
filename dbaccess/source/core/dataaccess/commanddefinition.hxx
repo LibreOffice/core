@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commanddefinition.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:09:31 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:32:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,6 @@
 #endif
 #ifndef _COMPHELPER_PROPERTYCONTAINER_HXX_
 #include <comphelper/propertycontainer.hxx>
-#endif
-#ifndef _DBA_REGHELPER_HXX_
-#include "dba_reghelper.hxx"
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -130,10 +127,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XServiceInfo - static methods
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-    static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::rtl::OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL
-        Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
     // XRename
     virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
