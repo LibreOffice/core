@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-17 13:34:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:42:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -305,7 +305,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
                     xModel.set(getDataSourceOrModel(getDataSourceByName_displayError(xDatabaseContext,sDataSource,NULL,m_xServiceFactory,sal_False)),UNO_QUERY);
                     break;
                 }
-                else if ( 0 == pIter->Name.compareToAscii( PROPERTY_ACTIVECONNECTION ) )
+                else if ( 0 == pIter->Name.compareToAscii( PROPERTY_ACTIVE_CONNECTION ) )
                 {
                     Reference< XChild > xAsChild( pIter->Value, UNO_QUERY );
                     if ( xAsChild.is() )
