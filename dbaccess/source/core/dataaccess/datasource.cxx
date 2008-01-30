@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:37:59 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:33:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,16 +36,17 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _DBA_COREDATAACCESS_DATASOURCE_HXX_
 #include "datasource.hxx"
-#endif
-#ifndef _DBA_CORE_USERINFORMATION_HXX_
+#include "module_dba.hxx"
 #include "userinformation.hxx"
-#endif
-#ifndef _DBA_COREDATAACCESS_COMMANDCONTAINER_HXX_
 #include "commandcontainer.hxx"
-#endif
+#include "dbastrings.hrc"
+#include "core_resource.hxx"
+#include "core_resource.hrc"
+#include "connection.hxx"
+#include "SharedConnection.hxx"
 #include "databasedocument.hxx"
+
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
@@ -57,15 +58,6 @@
 #endif
 #ifndef _COMPHELPER_SEQSTREAM_HXX
 #include <comphelper/seqstream.hxx>
-#endif
-#ifndef DBACCESS_SHARED_DBASTRINGS_HRC
-#include "dbastrings.hrc"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HXX_
-#include "core_resource.hxx"
-#endif
-#ifndef _DBA_CORE_RESOURCE_HRC_
-#include "core_resource.hrc"
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -118,17 +110,11 @@
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
 #endif
-#ifndef _DBA_CORE_CONNECTION_HXX_
-#include "connection.hxx"
-#endif
 #ifndef _COMPHELPER_GUARDING_HXX_
 #include <comphelper/guarding.hxx>
 #endif
 #ifndef UNOTOOLS_INC_SHAREDUNOCOMPONENT_HXX
 #include <unotools/sharedunocomponent.hxx>
-#endif
-#ifndef DBA_CORE_SHARED_CONNECTION_HXX
-#include "SharedConnection.hxx"
 #endif
 #ifndef _RTL_DIGEST_H_
 #include <rtl/digest.h>
@@ -623,13 +609,7 @@ DBG_NAME(ODatabaseSource)
 //--------------------------------------------------------------------------
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource()
 {
-    static OMultiInstanceAutoRegistration< ODatabaseSource > aAutoRegistration;
-}
-//--------------------------------------------------------------------------
-Reference< XInterface > ODatabaseSource_CreateInstance(const Reference< XMultiServiceFactory >& _rxFactory)
-{
-    Reference< XSingleServiceFactory > xDb(_rxFactory->createInstance(SERVICE_SDB_DATABASECONTEXT),UNO_QUERY);
-    return xDb->createInstance(  );
+    static ::dba::OAutoRegistration< ODatabaseSource > aAutoRegistration;
 }
 
 //--------------------------------------------------------------------------
@@ -734,11 +714,11 @@ void SAL_CALL ODatabaseSource::disposing( const ::com::sun::star::lang::EventObj
 //------------------------------------------------------------------------------
 rtl::OUString ODatabaseSource::getImplementationName(  ) throw(RuntimeException)
 {
-    return getImplementationName_Static();
+    return getImplementationName_static();
 }
 
 //------------------------------------------------------------------------------
-rtl::OUString ODatabaseSource::getImplementationName_Static(  ) throw(RuntimeException)
+rtl::OUString ODatabaseSource::getImplementationName_static(  ) throw(RuntimeException)
 {
     return rtl::OUString::createFromAscii("com.sun.star.comp.dba.ODatabaseSource");
 }
@@ -746,17 +726,18 @@ rtl::OUString ODatabaseSource::getImplementationName_Static(  ) throw(RuntimeExc
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > ODatabaseSource::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    return getSupportedServiceNames_Static();
+    return getSupportedServiceNames_static();
 }
 //------------------------------------------------------------------------------
-Reference< XInterface > ODatabaseSource::Create(const Reference< XMultiServiceFactory >& _rxFactory)
+Reference< XInterface > ODatabaseSource::Create( const Reference< XComponentContext >& _rxContext )
 {
-    return ODatabaseSource_CreateInstance(_rxFactory);
+    ::comphelper::ComponentContext aContext( _rxContext );
+    Reference< XSingleServiceFactory > xDBContext( aContext.createComponent( (::rtl::OUString)SERVICE_SDB_DATABASECONTEXT ), UNO_QUERY_THROW );
+    return xDBContext->createInstance();
 }
 
-
 //------------------------------------------------------------------------------
-Sequence< ::rtl::OUString > ODatabaseSource::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+Sequence< ::rtl::OUString > ODatabaseSource::getSupportedServiceNames_static(  ) throw (RuntimeException)
 {
     Sequence< ::rtl::OUString > aSNS( 2 );
     aSNS[0] = SERVICE_SDB_DATASOURCE;
