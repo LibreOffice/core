@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DriverSettings.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:29:20 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:43:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,6 @@ void ODriversSettings::getSupportedIndirectSettings( DATASOURCE_TYPE _eType, ::s
          DSID_CATALOG,
          DSID_SCHEMA,
          DSID_INDEXAPPENDIX,
-         DSID_DOSLINEENDS,
          DSID_CHECK_REQUIRED_FIELDS,
          DSID_AUTORETRIEVEENABLED,
          DSID_AUTOINCREMENTVALUE,
@@ -126,6 +125,7 @@ void ODriversSettings::getSupportedIndirectSettings( DATASOURCE_TYPE _eType, ::s
         case DST_JDBC:
             _out_rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
             break;
+
         case DST_ORACLE_JDBC:
             _out_rDetailsIds.push_back(DSID_JDBCDRIVERCLASS);
             _out_rDetailsIds.push_back(DSID_IGNORECURRENCY);
