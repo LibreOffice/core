@@ -4,9 +4,9 @@
  *
  *  $RCSfile: advancedsettings.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:10:09 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:44:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,6 @@
 #define CB_DOSLINEENDS          11
 #define CB_AS_BEFORE_CORR_NAME  12
 #define CB_CHECK_REQUIRED       13
-#define CB_IGNORECURRENCY       14
 #define CB_IGNORECURRENCY       14
 
 #define ET_AUTOINCREMENTVALUE   1
