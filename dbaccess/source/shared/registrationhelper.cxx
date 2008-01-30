@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registrationhelper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:46:14 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:40:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,7 @@
 // be included in other cxx files
 
 #ifndef _REGISTRATIONHELPER_CXX_INCLUDED_INDIRECTLY_
-#error "don't build this file directly! use dba_reghelper.cxx or dbu_reghelper.cxx instead!"
+#error "don't build this file directly! use dbu_reghelper.cxx instead!"
 #endif
 
 using namespace ::com::sun::star;
