@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RtfReader.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-04 08:43:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:47:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,11 +58,8 @@ namespace dbaui
     protected:
         virtual sal_Bool        CreateTable(int nToken);
         virtual void            NextToken( int nToken ); // Basisklasse
-
-        /** createPage creates the tabpage for this type
-            @param  _pParent    teh parent window
-        */
-        virtual OWizTypeSelect* createPage(Window* _pParent);
+        virtual TypeSelectionPageFactory
+                                getTypeSelectionPageFactory();
 
         ~ORTFReader();
     public:
