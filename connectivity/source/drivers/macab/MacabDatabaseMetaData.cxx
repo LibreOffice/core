@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MacabDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 17:51:46 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:56:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -818,10 +818,8 @@ Reference< XConnection > SAL_CALL MacabDatabaseMetaData::getConnection(  ) throw
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTableTypes(  ) throw(SQLException, RuntimeException)
 {
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
-
-    pResult->setTableTypes();
 
     static ODatabaseMetaDataResultSet::ORows aRows;
     static const ::rtl::OUString aTable(::rtl::OUString::createFromAscii("TABLE"));
@@ -839,10 +837,8 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTableTypes(  ) throw(
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
 {
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
     Reference< XResultSet > xRef = pResult;
-
-    pResult->setTypeInfoMap();
 
     static ODatabaseMetaDataResultSet::ORows aRows;
     if (aRows.empty())
@@ -918,12 +914,10 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getColumns(
     const ::rtl::OUString& tableNamePattern,
     const ::rtl::OUString& columnNamePattern) throw(SQLException, RuntimeException)
 {
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
     Reference< XResultSet > xRef = pResult;
     MacabRecords *aRecords;
     ::rtl::OUString sTableName;
-
-    pResult->setColumnsMap();
 
     aRecords = m_xConnection->getAddressBook()->getMacabRecordsMatch(tableNamePattern);
 
@@ -1007,10 +1001,8 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getTables(
     const ::rtl::OUString&,
     const Sequence< ::rtl::OUString >& types) throw(SQLException, RuntimeException)
 {
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTables);
     Reference< XResultSet > xRef = pResult;
-
-    pResult->setTablesMap();
 
     // check whether we have tables in the requested types
     // for the moment, we answer only the "TABLE" table type
@@ -1084,10 +1076,8 @@ Reference< XResultSet > SAL_CALL MacabDatabaseMetaData::getVersionColumns(
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eVersionColumns );
 
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eVersionColumns);
     Reference< XResultSet > xRef = pResult;
-
-    pResult->setVersionColumnsMap();
 
     ODatabaseMetaDataResultSet::ORows aRows;
 
