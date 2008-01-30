@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-30 09:45:06 $
+ *  last change: $Author: mav $ $Date: 2008-01-30 14:27:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -700,7 +700,8 @@ public class Helper
             }
 
             boolean bNoUnknownCertNotification = false;
-            if ( aHostConfig.getProtocol().getScheme().equals( "https" ) && AllowUnknownCert( xContext, aURI.toString() ) )
+            if ( aHostConfig.getProtocol().getScheme().equals( "https" )
+              && AllowUnknownCert( xContext, aURI.getHost() ) )
             {
                 // let unknown certificates be accepted
                 {
@@ -780,7 +781,7 @@ public class Helper
                 aPost.addParameter( "wpName", sWikiUser );
                 aPost.addParameter( "wpRemember", "1" );
                 aPost.addParameter( "wpPassword", sWikiPass );
-                String[][] pArgs = GetSpecialArgs( xContext, aMainURL.toString() );
+                String[][] pArgs = GetSpecialArgs( xContext, aMainURL.getHost() );
                 if ( pArgs != null )
                     for ( int nArgInd = 0; nArgInd < pArgs.length; nArgInd++ )
                         if ( pArgs[nArgInd].length == 2 && pArgs[nArgInd][0] != null && pArgs[nArgInd][1] != null )
@@ -1014,8 +1015,12 @@ public class Helper
                             String[][] pResult = new String[pNames.length][2];
                             for ( int nInd = 0; nInd < pNames.length; nInd++ )
                             {
+                                XNameAccess xArgument = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class, xArgs.getByName( pNames[nInd] ) );
+                                if ( xArgument == null )
+                                    throw new com.sun.star.uno.RuntimeException();
+
                                 pResult[nInd][0] = pNames[nInd];
-                                pResult[nInd][1] = AnyConverter.toString( xArgs.getByName( pNames[nInd] ) );
+                                pResult[nInd][1] = AnyConverter.toString( xArgument.getByName( "Value" ) );
                             }
 
                             return pResult;
