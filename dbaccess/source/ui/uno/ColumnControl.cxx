@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnControl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:32:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:55:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,7 +114,7 @@ void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit
         Reference<XPropertySet> xProp(getModel(), UNO_QUERY);
         if ( xProp.is() )
         {
-            Reference<XConnection> xCon(xProp->getPropertyValue(PROPERTY_ACTIVECONNECTION),UNO_QUERY);
+            Reference<XConnection> xCon(xProp->getPropertyValue(PROPERTY_ACTIVE_CONNECTION),UNO_QUERY);
             pPeer->setConnection(xCon);
             Reference<XPropertySet> xColumn(xProp->getPropertyValue(PROPERTY_COLUMN),UNO_QUERY);
             pPeer->setColumn(xColumn);
