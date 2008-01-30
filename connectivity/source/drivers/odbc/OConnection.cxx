@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 11:50:49 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:58:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@ using namespace com::sun::star::sdbc;
 // --------------------------------------------------------------------------------
 OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
-                         ,m_xMetaData(NULL)
                          ,m_pDriver(_pDriver)
                          ,m_pDriverHandleCopy(_pDriverHandle)
                          ,m_nStatementCount(0)
@@ -215,7 +214,7 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
 {
     m_aConnectionHandle  = SQL_NULL_HANDLE;
     m_sURL  = url;
-    m_aInfo = info;
+    setConnectionInfo(info);
 
     // Connection allozieren
     N3SQLAllocHandle(SQL_HANDLE_DBC,m_pDriverHandleCopy,&m_aConnectionHandle);
@@ -301,7 +300,6 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
                 m_nTextEncoding = RTL_TEXTENCODING_DONTKNOW;
             if(m_nTextEncoding == RTL_TEXTENCODING_DONTKNOW)
                 m_nTextEncoding = osl_getThreadTextEncoding();
-
         }
     }
     m_sUser = aUID;
@@ -545,6 +543,7 @@ void OConnection::buildTypeInfo() throw( SQLException)
         ::connectivity::ORowSetValue aValue;
         ::std::vector<sal_Int32> aTypes;
         Reference<XResultSetMetaData> xResultSetMetaData = Reference<XResultSetMetaDataSupplier>(xRs,UNO_QUERY)->getMetaData();
+        sal_Int32 nCount = xResultSetMetaData->getColumnCount();
         // Loop on the result set until we reach end of file
         while (xRs->next ())
         {
@@ -552,7 +551,6 @@ void OConnection::buildTypeInfo() throw( SQLException)
             sal_Int32 nPos = 1;
             if ( aTypes.empty() )
             {
-                sal_Int32 nCount = xResultSetMetaData->getColumnCount();
                 if ( nCount < 1 )
                     nCount = 18;
                 aTypes.reserve(nCount+1);
@@ -605,9 +603,12 @@ void OConnection::buildTypeInfo() throw( SQLException)
             ++nPos;
             aValue.fill(nPos,aTypes[nPos],xRow);
             aInfo.nMaximumScale = aValue;
-            nPos = 18;
-            aValue.fill(nPos,aTypes[nPos],xRow);
-            aInfo.nNumPrecRadix = aValue;
+            if ( nCount >= 18 )
+            {
+                nPos = 18;
+                aValue.fill(nPos,aTypes[nPos],xRow);
+                aInfo.nNumPrecRadix = aValue;
+            }
 
             // check if values are less than zero like it happens in a oracle jdbc driver
             if( aInfo.nPrecision < 0)
@@ -638,15 +639,7 @@ void OConnection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-
-    //  m_aTables.disposing();
-    for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
-    {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
-        if (xComp.is())
-            xComp->dispose();
-    }
-    m_aStatements.clear();
+    OConnection_BASE::disposing();
 
     for (::std::map< SQLHANDLE,OConnection*>::iterator aConIter = m_aConnections.begin();aConIter != m_aConnections.end();++aConIter )
         aConIter->second->dispose();
@@ -656,10 +649,8 @@ void OConnection::disposing()
     if(!m_bClosed)
         N3SQLDisconnect(m_aConnectionHandle);
     m_bClosed   = sal_True;
-    m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
 
     dispose_ChildImpl();
-    OConnection_BASE::disposing();
 }
 // -----------------------------------------------------------------------------
 OConnection* OConnection::cloneConnection()
@@ -678,7 +669,7 @@ SQLHANDLE OConnection::createStatementHandle()
         {
             OConnection* pConnection = cloneConnection();
             pConnection->acquire();
-            pConnection->Construct(m_sURL,m_aInfo);
+            pConnection->Construct(m_sURL,getConnectionInfo());
             pConnectionTemp = pConnection;
             bNew = sal_True;
         }
