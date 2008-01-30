@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HConnection.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 12:45:59 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:02:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,8 @@ namespace connectivity
             ::cppu::OInterfaceContainerHelper                                                           m_aFlushListeners;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDriver >                         m_xDriver;
             ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >            m_xORB;
+            bool                                                                                        m_bIni;
+            bool                                                                                        m_bReadOnly;
 
         protected:
             virtual void SAL_CALL disposing(void);
