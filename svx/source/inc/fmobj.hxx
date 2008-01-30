@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmobj.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:22:36 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ class FmFormObj: public SdrUnoObj
                 // m_pEnvironmentHistory was created
 
     FmFormView*     m_pControlCreationView;
-    sal_uInt32      m_nControlCreationEvent;
+    ULONG       m_nControlCreationEvent;
 
     // Informationen fuer die Controlumgebung
     // werden nur vorgehalten, wenn ein Object sich nicht in einer Objectliste befindet
