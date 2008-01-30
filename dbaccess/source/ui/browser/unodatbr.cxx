@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.192 $
+ *  $Revision: 1.193 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:50:54 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:43:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -726,7 +726,7 @@ sal_Bool SbaTableQueryBrowser::InitializeGridModel(const Reference< ::com::sun::
 
             Reference<XConnection> xConnection;
             Reference<XPropertySet> xRowSetProps(getRowSet(),UNO_QUERY);
-            xRowSetProps->getPropertyValue( PROPERTY_ACTIVECONNECTION ) >>= xConnection;
+            xRowSetProps->getPropertyValue( PROPERTY_ACTIVE_CONNECTION ) >>= xConnection;
             OSL_ENSURE(xConnection.is(),"A ActiveConnection should normaly exists!");
 
             Reference<XChild> xChild(xConnection,UNO_QUERY);
@@ -1751,7 +1751,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
 
                     if (xDataSource.is())
                     {
-                        sal_Int32 nType = ::comphelper::getINT32(xDataSource->getPropertyValue(PROPERTY_COMMANDTYPE));
+                        sal_Int32 nType = ::comphelper::getINT32(xDataSource->getPropertyValue(PROPERTY_COMMAND_TYPE));
                         aReturn.bEnabled = aReturn.bEnabled && ((::comphelper::getBOOL(xDataSource->getPropertyValue(PROPERTY_ESCAPE_PROCESSING)) || (nType == ::com::sun::star::sdb::CommandType::QUERY)));
                     }
                 }
@@ -1770,7 +1770,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
                 {
                     Reference<XPropertySet> xProp(getRowSet(),UNO_QUERY);
                     sal_Int32 nCommandType = CommandType::TABLE;
-                    xProp->getPropertyValue(PROPERTY_COMMANDTYPE) >>= nCommandType;
+                    xProp->getPropertyValue(PROPERTY_COMMAND_TYPE) >>= nCommandType;
                     String sTitle;
                     switch (nCommandType)
                     {
@@ -1951,8 +1951,8 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue
 
                         aDescriptor.setDataSource(sDataSourceName);
                         aDescriptor[daCommand]      =   xProp->getPropertyValue(PROPERTY_COMMAND);
-                        aDescriptor[daCommandType]  =   xProp->getPropertyValue(PROPERTY_COMMANDTYPE);
-                        aDescriptor[daConnection]   =   xProp->getPropertyValue(PROPERTY_ACTIVECONNECTION);
+                        aDescriptor[daCommandType]  =   xProp->getPropertyValue(PROPERTY_COMMAND_TYPE);
+                        aDescriptor[daConnection]   =   xProp->getPropertyValue(PROPERTY_ACTIVE_CONNECTION);
                         aDescriptor[daCursor]       <<= xCursorClone;
                         if ( aSelection.getLength() )
                         {
@@ -2300,10 +2300,10 @@ sal_Bool SbaTableQueryBrowser::implLoadAnything(const ::rtl::OUString& _rDataSou
             // the values allowing the RowSet to re-execute
             xProp->setPropertyValue(PROPERTY_DATASOURCENAME, makeAny(_rDataSourceName));
             if(_rxConnection.is())
-                xProp->setPropertyValue( PROPERTY_ACTIVECONNECTION, makeAny( _rxConnection.getTyped() ) );
+                xProp->setPropertyValue( PROPERTY_ACTIVE_CONNECTION, makeAny( _rxConnection.getTyped() ) );
 
                 // set this _before_ setting the connection, else the rowset would rebuild it ...
-            xProp->setPropertyValue(PROPERTY_COMMANDTYPE, makeAny(_nCommandType));
+            xProp->setPropertyValue(PROPERTY_COMMAND_TYPE, makeAny(_nCommandType));
             xProp->setPropertyValue(PROPERTY_COMMAND, makeAny(_rCommand));
             xProp->setPropertyValue(PROPERTY_ESCAPE_PROCESSING, ::cppu::bool2any(_bEscapeProcessing));
             if ( m_bPreview )
@@ -2439,9 +2439,9 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
     ::rtl::OUString aOldName;
     xRowSetProps->getPropertyValue(PROPERTY_COMMAND) >>= aOldName;
     sal_Int32 nOldType = 0;
-    xRowSetProps->getPropertyValue(PROPERTY_COMMANDTYPE) >>= nOldType;
+    xRowSetProps->getPropertyValue(PROPERTY_COMMAND_TYPE) >>= nOldType;
     Reference<XConnection> xOldConnection;
-    ::cppu::extractInterface(xOldConnection,xRowSetProps->getPropertyValue(PROPERTY_ACTIVECONNECTION));
+    ::cppu::extractInterface(xOldConnection,xRowSetProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION));
     // the name of the table or query
     SvLBoxString* pString = (SvLBoxString*)_pEntry->GetFirstItem(SV_ITEM_ID_BOLDLBSTRING);
     OSL_ENSURE(pString,"There must be a string item!");
@@ -2574,7 +2574,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             showError(SQLExceptionInfo(e));
             // reset the values
             xRowSetProps->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
-            xRowSetProps->setPropertyValue(PROPERTY_ACTIVECONNECTION,Any());
+            xRowSetProps->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,Any());
         }
         catch(WrappedTargetException& e)
         {
@@ -2585,13 +2585,13 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
                 OSL_ENSURE(sal_False, "SbaTableQueryBrowser::OnSelectEntry: something strange happended!");
             // reset the values
             xRowSetProps->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
-            xRowSetProps->setPropertyValue(PROPERTY_ACTIVECONNECTION,Any());
+            xRowSetProps->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,Any());
         }
         catch(Exception&)
         {
             // reset the values
             xRowSetProps->setPropertyValue(PROPERTY_DATASOURCENAME,Any());
-            xRowSetProps->setPropertyValue(PROPERTY_ACTIVECONNECTION,Any());
+            xRowSetProps->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,Any());
         }
     }
     return 0L;
@@ -2962,11 +2962,11 @@ void SbaTableQueryBrowser::unloadAndCleanup( sal_Bool _bDisposeConnection )
         // get the active connection. We need to dispose it.
         Reference< XPropertySet > xRowSetProps(getRowSet(),UNO_QUERY);
         Reference< XConnection > xConn;
-        xRowSetProps->getPropertyValue(PROPERTY_ACTIVECONNECTION) >>= xConn;
+        xRowSetProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION) >>= xConn;
 #if OSL_DEBUG_LEVEL > 1
         {
             Reference< XComponent > xComp;
-            ::cppu::extractInterface(xComp, xRowSetProps->getPropertyValue(PROPERTY_ACTIVECONNECTION));
+            ::cppu::extractInterface(xComp, xRowSetProps->getPropertyValue(PROPERTY_ACTIVE_CONNECTION));
         }
 #endif
 
@@ -3026,9 +3026,9 @@ void SbaTableQueryBrowser::impl_initialize()
     const NamedValueCollection& rArguments( getInitParams() );
 
     rArguments.get_ensureType( (::rtl::OUString)PROPERTY_DATASOURCENAME, sInitialDataSourceName );
-    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_COMMANDTYPE, nInitialDisplayCommandType );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_COMMAND_TYPE, nInitialDisplayCommandType );
     rArguments.get_ensureType( (::rtl::OUString)PROPERTY_COMMAND, sInitialCommand );
-    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_ACTIVECONNECTION, xForeignConnection );
+    rArguments.get_ensureType( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, xForeignConnection );
     rArguments.get_ensureType( (::rtl::OUString)PROPERTY_UPDATE_CATALOGNAME, aCatalogName );
     rArguments.get_ensureType( (::rtl::OUString)PROPERTY_UPDATE_SCHEMANAME, aSchemaName );
     rArguments.get_ensureType( (::rtl::OUString)PROPERTY_UPDATE_TABLENAME, aTableName );
