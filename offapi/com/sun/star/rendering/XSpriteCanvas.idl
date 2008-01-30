@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XSpriteCanvas.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 13:25:21 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:13:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,13 +151,13 @@ interface XSpriteCanvas : XBitmapCanvas
         associated XSpriteCanvas instances.<p>
 
         @param bUpdateAll
-        When <TRUE>, update the whole screen. When <FALSE>,
+        When <TRUE/>, update the whole screen. When <FALSE/>,
         implementation is permitted to restrict update to areas the
         canvas itself changed (e.g. because of render operations, or
         changes on the sprites). The former is useful for updates
         after window expose events. the latter for animation display.
 
-        @return <TRUE>, if the screen update was successfully
+        @return <TRUE/>, if the screen update was successfully
         performed
      */
     boolean updateScreen( [in] boolean bUpdateAll );
