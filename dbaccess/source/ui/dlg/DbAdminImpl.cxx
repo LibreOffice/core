@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DbAdminImpl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:09:10 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:43:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,7 @@ namespace dbaui
 //.........................................................................
 using namespace ::dbtools;
 using namespace com::sun::star::uno;
+using namespace com::sun::star;
 using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdb;
 using namespace com::sun::star::lang;
@@ -764,7 +765,7 @@ void ODbDataSourceAdministrationHelper::translateProperties(const SfxItemSet& _r
 
 
 //-------------------------------------------------------------------------
-void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo)
+void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rSource, Sequence< ::com::sun::star::beans::PropertyValue >& _rInfo)
 {
     // within the current "Info" sequence, replace the ones we can examine from the item set
     // (we don't just fill a completely new sequence with our own items, but we preserve any properties unknown to
@@ -873,6 +874,25 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
             ::rtl::OUString sLookAtIt = pWhatsLeft->Name;
         }
 #endif
+    }
+
+    // here we have a special entry for types from oracle
+    if ( eType == DST_ORACLE_JDBC )
+    {
+        Sequence< Any > aTypeSettings;
+        static const ::rtl::OUString s_sCondition(RTL_CONSTASCII_USTRINGPARAM("Column(2) = "));
+        static const ::rtl::OUString s_sValue(RTL_CONSTASCII_USTRINGPARAM("Column(6) = PRECISION"));
+        static const sal_Int32 pTypes[] = { -5, -4, -3, -2, -1, 1, 2, 12};
+        aTypeSettings.realloc((sizeof(pTypes)/sizeof(pTypes[0])) * 2);
+        Any* pCondIter = aTypeSettings.getArray();
+        const Any* pCondEnd  = pCondIter + aTypeSettings.getLength();
+        for(const sal_Int32* pType = pTypes;pCondIter != pCondEnd;++pCondIter,++pType)
+        {
+            *pCondIter <<= (s_sCondition + ::rtl::OUString::valueOf(*pType));
+            ++pCondIter;
+            *pCondIter <<= s_sValue;
+        }
+        aRelevantSettings.insert(PropertyValue(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TypeInfoSettings")), 0, makeAny(aTypeSettings), PropertyState_DIRECT_VALUE));
     }
 
     // check which values are still left ('cause they were not present in the original sequence, but are to be set)
