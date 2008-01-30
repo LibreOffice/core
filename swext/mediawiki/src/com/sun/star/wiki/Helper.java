@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-30 14:27:32 $
+ *  last change: $Author: mav $ $Date: 2008-01-30 16:08:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -648,20 +648,36 @@ public class Helper
             XNameAccess xNameAccess = GetConfigNameAccess( xContext, "org.openoffice.Inet/Settings" );
 
             int nProxyType = AnyConverter.toInt( xNameAccess.getByName( "ooInetProxyType" ) );
-            String aNoProxyList = AnyConverter.toString( xNameAccess.getByName( "ooInetNoProxy" ) );
-            String aProxyName = AnyConverter.toString( xNameAccess.getByName( "ooInetHTTPProxyName" ) );
-
-            int nProxyPort = AnyConverter.toInt( xNameAccess.getByName( "ooInetHTTPProxyPort" ) );
-
-            if ( nProxyPort == -1 )
-                nProxyPort = 80;
-
             if ( nProxyType == 0 )
                 aHostConfig.setProxy( "", 0 );
             else
             {
-                // TODO: check whether the URL is in the NoProxy list
-                aHostConfig.setProxy( aProxyName, nProxyPort );
+                if ( nProxyType == 1 )
+                {
+                    // system proxy
+                }
+                else if ( nProxyType == 2 )
+                {
+                    String aProxyNameProp = "ooInetHTTPProxyName";
+                    String aProxyPortProp = "ooInetHTTPProxyPort";
+
+                    if ( aHostConfig.getProtocol().getScheme().equals( "https" ) )
+                    {
+                        aProxyNameProp = "ooInetHTTPSProxyName";
+                        aProxyPortProp = "ooInetHTTPSProxyPort";
+                    }
+
+                    String aNoProxyList = AnyConverter.toString( xNameAccess.getByName( "ooInetNoProxy" ) );
+                    String aProxyName = AnyConverter.toString( xNameAccess.getByName( aProxyNameProp ) );
+
+                    int nProxyPort = AnyConverter.toInt( xNameAccess.getByName( aProxyPortProp ) );
+
+                    if ( nProxyPort == -1 )
+                        nProxyPort = 80;
+
+                    // TODO: check whether the URL is in the NoProxy list
+                    aHostConfig.setProxy( aProxyName, nProxyPort );
+                }
             }
         }
         catch( java.lang.Exception e )
