@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 09:23:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:59:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1263,7 +1263,7 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
                 }
             }
         }
-        else if(FN_UNO_ALTERNATIVE_TEXT == pCur->nWID && eType != FLYCNTTYPE_FRM)
+        else if( FN_UNO_ALTERNATIVE_TEXT == pCur->nWID && eType != FLYCNTTYPE_FRM )
         {
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if(pIdx)
@@ -1727,24 +1727,29 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             aAny <<= OUString(SwStyleNameMapper::GetProgName(pFmt->DerivedFrom()->GetName(), nsSwGetPoolIdFromName::GET_POOLID_FRMFMT ) );
         }
         else if(eType != FLYCNTTYPE_FRM &&
-                (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ACTUAL_SIZE)) ||
-                    FN_UNO_ALTERNATIVE_TEXT == pCur->nWID))
+                FN_UNO_ALTERNATIVE_TEXT == pCur->nWID)
         {
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
             if(pIdx)
             {
                 SwNodeIndex aIdx(*pIdx, 1);
                 SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
-                if(FN_UNO_ALTERNATIVE_TEXT == pCur->nWID)
-                    aAny <<= OUString(pNoTxt->GetAlternateText());
-                else
-                {
-                     Size aActSize = ((SwGrfNode*)pNoTxt)->GetTwipSize();
-                    awt::Size aTmp;
-                    aTmp.Width = TWIP_TO_MM100(aActSize.Width());
-                    aTmp.Height = TWIP_TO_MM100(aActSize.Height());
-                    aAny.setValue(&aTmp, ::getCppuType(static_cast<const awt::Size*>(0)));
-                }
+                aAny <<= OUString(pNoTxt->GetAlternateText());
+            }
+        }
+        else if(eType == FLYCNTTYPE_GRF &&
+                (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_ACTUAL_SIZE))))
+        {
+            const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
+            if(pIdx)
+            {
+                SwNodeIndex aIdx(*pIdx, 1);
+                SwNoTxtNode* pNoTxt = aIdx.GetNode().GetNoTxtNode();
+                 Size aActSize = ((SwGrfNode*)pNoTxt)->GetTwipSize();
+                awt::Size aTmp;
+                aTmp.Width = TWIP_TO_MM100(aActSize.Width());
+                aTmp.Height = TWIP_TO_MM100(aActSize.Height());
+                aAny.setValue(&aTmp, ::getCppuType(static_cast<const awt::Size*>(0)));
             }
         }
         else if(FN_PARAM_LINK_DISPLAY_NAME == pCur->nWID)
