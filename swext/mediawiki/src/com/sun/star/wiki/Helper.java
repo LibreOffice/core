@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-30 16:08:26 $
+ *  last change: $Author: mav $ $Date: 2008-01-30 19:02:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1051,6 +1051,28 @@ public class Helper
         }
 
         return null;
+    }
+
+    protected static boolean AllowThreadUsage( XComponentContext xContext )
+    {
+        if ( xContext != null )
+        {
+            try
+            {
+                XMultiComponentFactory xFactory = xContext.getServiceManager();
+                if ( xFactory == null )
+                    throw new com.sun.star.uno.RuntimeException();
+
+                Object oCheckCallback = xFactory.createInstanceWithContext( "com.sun.star.awt.AsyncCallback", xContext );
+                return ( oCheckCallback != null );
+            }
+            catch( Exception e )
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
     }
 }
 

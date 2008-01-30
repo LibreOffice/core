@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiArticle.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-29 11:01:28 $
+ *  last change: $Author: mav $ $Date: 2008-01-30 19:02:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ public class WikiArticle
         while( bLogin && !bGotLogin && !Login() )
         {
             // TODO: be sure that this is no main thread
-            WikiEditSettingDialog wd = new WikiEditSettingDialog(m_xContext, "vnd.sun.star.script:WikiEditor.EditSetting?location=application", wikiSettings );
+            WikiEditSettingDialog wd = new WikiEditSettingDialog(m_xContext, "vnd.sun.star.script:WikiEditor.EditSetting?location=application", wikiSettings, false );
 
             if ( aPropDialog != null )
                 aPropDialog.SetThrobberActive( false );

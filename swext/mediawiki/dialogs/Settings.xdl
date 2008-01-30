@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Settings.xdl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-21 12:57:52 $
+ *  last change: $Author: mav $ $Date: 2008-01-30 19:02:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
   </dlg:button>
   <dlg:menulist dlg:id="WikiList" dlg:tab-index="0" dlg:left="6" dlg:top="6" dlg:width="188" dlg:height="150" dlg:help-url="HID:31681" dlg:multiselection="true">
    <script:event script:event-name="on-itemstatechange" script:macro-name="vnd.sun.star.UNO:ListStatus" script:language="UNO"/>
+   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:ListEdit" script:language="UNO"/>
   </dlg:menulist>
  </dlg:bulletinboard>
 </dlg:window>

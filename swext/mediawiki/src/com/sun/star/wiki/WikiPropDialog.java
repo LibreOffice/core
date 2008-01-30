@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-29 11:01:28 $
+ *  last change: $Author: mav $ $Date: 2008-01-30 19:02:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,25 +244,10 @@ public class WikiPropDialog extends WikiDialog{
             final WikiPropDialog aThisDialog = this;
             final XDialog xDialogToClose = xDialog;
 
-            boolean bAllowThreadUsage = false;
-            try
-            {
-                XMultiComponentFactory xFactory = m_xContext.getServiceManager();
-                if ( xFactory == null )
-                    throw new com.sun.star.uno.RuntimeException();
-
-                Object oCheckCallback = xFactory.createInstanceWithContext( "com.sun.star.awt.AsyncCallback", m_xContext );
-                bAllowThreadUsage = ( oCheckCallback != null );
-            }
-            catch( Exception e )
-            {
-                e.printStackTrace();
-            }
-
             // start spinning
             SetThrobberActive( true );
 
-            if ( bAllowThreadUsage )
+            if ( Helper.AllowThreadUsage( m_xContext ) )
             {
                 m_aSendingThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
                 {

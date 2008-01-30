@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-30 14:27:32 $
+ *  last change: $Author: mav $ $Date: 2008-01-30 19:02:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ public class WikiEditSettingDialog extends WikiDialog
     {sOKMethod, sCancelMethod, sHelpMethod};
     private Hashtable setting;
     private boolean addMode;
+    private boolean m_bAllowURLChange = true;
 
     public WikiEditSettingDialog( XComponentContext xContext, String DialogURL )
     {
@@ -75,7 +76,7 @@ public class WikiEditSettingDialog extends WikiDialog
         InitSaveCheckbox( xContext );
     }
 
-    public WikiEditSettingDialog( XComponentContext xContext, String DialogURL, Hashtable ht )
+    public WikiEditSettingDialog( XComponentContext xContext, String DialogURL, Hashtable ht, boolean bAllowURLChange )
     {
         super( xContext, DialogURL );
         super.setMethods( Methods );
@@ -85,7 +86,6 @@ public class WikiEditSettingDialog extends WikiDialog
             XPropertySet xUrlField = GetPropSet( "UrlField" );
 
             xUrlField.setPropertyValue( "Text", ht.get( "Url" ) );
-            xUrlField.setPropertyValue( "Enabled", Boolean.FALSE );
             GetPropSet( "UsernameField" ).setPropertyValue( "Text", ht.get( "Username" ));
             GetPropSet( "PasswordField" ).setPropertyValue( "Text", ht.get( "Password" ));
         }
@@ -93,10 +93,40 @@ public class WikiEditSettingDialog extends WikiDialog
         {
             ex.printStackTrace();
         }
+
         addMode = false;
+        m_bAllowURLChange = bAllowURLChange;
 
         InitStrings( xContext );
         InitSaveCheckbox( xContext );
+    }
+
+    public boolean show( )
+    {
+        EnableControls( true );
+        return super.show();
+    }
+
+    private void EnableControls( boolean bEnable )
+    {
+        try
+        {
+            GetPropSet( "UrlField" ).setPropertyValue( "Enabled", new Boolean( m_bAllowURLChange ) );
+            GetPropSet( "UsernameField" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
+            GetPropSet( "PasswordField" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
+            GetPropSet( "OkButton" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
+            GetPropSet( "HelpButton" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
+
+            if ( bEnable )
+                GetPropSet( "SaveBox" ).setPropertyValue( "Enabled", new Boolean( Helper.PasswordStoringIsAllowed( m_xContext ) ) );
+            else
+                GetPropSet( "SaveBox" ).setPropertyValue( "Enabled", Boolean.FALSE );
+
+        }
+        catch ( Exception ex )
+        {
+            ex.printStackTrace();
+        }
     }
 
     private void InitStrings( XComponentContext xContext )
@@ -134,161 +164,210 @@ public class WikiEditSettingDialog extends WikiDialog
         }
     }
 
-    public boolean callHandlerMethod( XDialog xDialog, Object EventObject, String MethodName )
+    public void DoLogin( XDialog xDialog )
     {
-        if ( MethodName.equals( sOKMethod ) )
+        String sRedirectURL = "";
+        String sURL = "";
+        try
         {
-            String sRedirectURL = "";
-            String sURL = "";
-            try
+            sURL = ( String ) GetPropSet( "UrlField" ).getPropertyValue( "Text" );
+            String sUserName = ( String ) GetPropSet( "UsernameField" ).getPropertyValue( "Text" );
+            String sPassword = ( String ) GetPropSet( "PasswordField" ).getPropertyValue( "Text" );
+
+            HostConfiguration aHostConfig = new HostConfiguration();
+            boolean bInitHost = true;
+
+            do
             {
-                sURL = ( String ) GetPropSet( "UrlField" ).getPropertyValue( "Text" );
-                String sUserName = ( String ) GetPropSet( "UsernameField" ).getPropertyValue( "Text" );
-                String sPassword = ( String ) GetPropSet( "PasswordField" ).getPropertyValue( "Text" );
-
-                HostConfiguration aHostConfig = new HostConfiguration();
-                boolean bInitHost = true;
-
-                do
+                if ( sRedirectURL.length() > 0 )
                 {
-                    if ( sRedirectURL.length() > 0 )
+                    sURL = sRedirectURL;
+                    sRedirectURL = "";
+                }
+
+                if ( sURL.length() > 0 )
+                {
+                    URI aURI = new URI( sURL );
+                    GetMethod aRequest = new GetMethod( aURI.getEscapedPathQuery() );
+                    aRequest.setFollowRedirects( false );
+                    Helper.ExecuteMethod( aRequest, aHostConfig, aURI, m_xContext, bInitHost );
+                    bInitHost = false;
+
+                    int nResultCode = aRequest.getStatusCode();
+                    String sWebPage = null;
+                    if ( nResultCode == 200 )
+                        sWebPage = aRequest.getResponseBodyAsString();
+                    else if ( nResultCode >= 301 && nResultCode <= 303 || nResultCode == 307 )
+                        sRedirectURL = aRequest.getResponseHeader( "Location" ).getValue();
+
+                    aRequest.releaseConnection();
+
+                    if ( sWebPage != null && sWebPage.length() > 0 )
                     {
-                        sURL = sRedirectURL;
-                        sRedirectURL = "";
-                    }
+                        //the URL is valid
+                        String sMainURL = Helper.GetMainURL( sWebPage, sURL );
 
-                    if ( sURL.length() > 0 )
-                    {
-                        URI aURI = new URI( sURL );
-                        GetMethod aRequest = new GetMethod( aURI.getEscapedPathQuery() );
-                        aRequest.setFollowRedirects( false );
-                        Helper.ExecuteMethod( aRequest, aHostConfig, aURI, m_xContext, bInitHost );
-                        bInitHost = false;
-
-                        int nResultCode = aRequest.getStatusCode();
-                        String sWebPage = null;
-                        if ( nResultCode == 200 )
-                            sWebPage = aRequest.getResponseBodyAsString();
-                        else if ( nResultCode >= 301 && nResultCode <= 303 || nResultCode == 307 )
-                            sRedirectURL = aRequest.getResponseHeader( "Location" ).getValue();
-
-                        aRequest.releaseConnection();
-
-                        if ( sWebPage != null && sWebPage.length() > 0 )
+                        if ( sMainURL.equals( "" ) )
                         {
-                            //the URL is valid
-                            String sMainURL = Helper.GetMainURL( sWebPage, sURL );
-
-                            if ( sMainURL.equals( "" ) )
+                            // TODO:
+                            // it's not a Wiki Page, check first whether a redirect is requested
+                            // happens usually in case of https
+                            sRedirectURL = Helper.GetRedirectURL( sWebPage, sURL );
+                            if ( sRedirectURL.equals( "" ) )
                             {
-                                // TODO:
-                                // it's not a Wiki Page, check first whether a redirect is requested
-                                // happens usually in case of https
-                                sRedirectURL = Helper.GetRedirectURL( sWebPage, sURL );
-                                if ( sRedirectURL.equals( "" ) )
-                                {
-                                    // show error
-                                    Helper.ShowError( m_xContext,
-                                                      m_xDialog,
-                                                      Helper.DLG_MEDIAWIKI_TITLE,
-                                                      Helper.NOURLCONNECTION_ERROR,
-                                                      sURL,
-                                                      false );
-                                }
+                                // show error
+                                Helper.ShowError( m_xContext,
+                                                  m_xDialog,
+                                                  Helper.DLG_MEDIAWIKI_TITLE,
+                                                  Helper.NOURLCONNECTION_ERROR,
+                                                  sURL,
+                                                  false );
+                            }
+                        }
+                        else
+                        {
+                            if ( ( sUserName.length() > 0 || sPassword.length() > 0 )
+                              && Helper.Login( new URI( sMainURL ), sUserName, sPassword, m_xContext ) == null )
+                            {
+                                // a wrong login information is provided
+                                // show error
+                                Helper.ShowError( m_xContext,
+                                                  m_xDialog,
+                                                  Helper.DLG_MEDIAWIKI_TITLE,
+                                                  Helper.WRONGLOGIN_ERROR,
+                                                  null,
+                                                  false );
                             }
                             else
                             {
-                                if ( ( sUserName.length() > 0 || sPassword.length() > 0 )
-                                  && Helper.Login( new URI( sMainURL ), sUserName, sPassword, m_xContext ) == null )
+                                setting.put( "Url",sMainURL );
+                                setting.put( "Username", sUserName );
+                                setting.put( "Password", sPassword );
+                                if ( addMode )
                                 {
-                                    // a wrong login information is provided
-                                    // show error
-                                    Helper.ShowError( m_xContext,
-                                                      m_xDialog,
-                                                      Helper.DLG_MEDIAWIKI_TITLE,
-                                                      Helper.WRONGLOGIN_ERROR,
-                                                      null,
-                                                      false );
+                                    Settings.getSettings( m_xContext ).addWikiCon( setting );
+                                    Settings.getSettings( m_xContext ).storeConfiguration();
                                 }
-                                else
+
+                                if ( Helper.PasswordStoringIsAllowed( m_xContext )
+                                  && ( (Short)( GetPropSet( "SaveBox" ).getPropertyValue("State") ) ).shortValue() != (short)0 )
                                 {
-                                    setting.put( "Url",sMainURL );
-                                    setting.put( "Username", sUserName );
-                                    setting.put( "Password", sPassword );
-                                    if ( addMode )
+                                    String[] pPasswords = { sPassword };
+                                    try
                                     {
-                                        Settings.getSettings( m_xContext ).addWikiCon( setting );
-                                        Settings.getSettings( m_xContext ).storeConfiguration();
+                                        Helper.GetPasswordContainer( m_xContext ).addPersistent( sMainURL, sUserName, pPasswords, Helper.GetInteractionHandler( m_xContext ) );
                                     }
-
-                                    if ( Helper.PasswordStoringIsAllowed( m_xContext )
-                                      && ( (Short)( GetPropSet( "SaveBox" ).getPropertyValue("State") ) ).shortValue() != (short)0 )
+                                    catch( Exception e )
                                     {
-                                        String[] pPasswords = { sPassword };
-                                        try
-                                        {
-                                            Helper.GetPasswordContainer( m_xContext ).addPersistent( sMainURL, sUserName, pPasswords, Helper.GetInteractionHandler( m_xContext ) );
-                                        }
-                                        catch( Exception e )
-                                        {
-                                            e.printStackTrace();
-                                        }
+                                        e.printStackTrace();
                                     }
-
-                                    m_bAction = true;
-                                    xDialog.endExecute();
                                 }
+
+                                m_bAction = true;
+                                xDialog.endExecute();
                             }
                         }
-                        else if ( sRedirectURL == null || sRedirectURL.length() == 0 )
-                        {
-                            // URL invalid
-                            // show error
-                            Helper.ShowError( m_xContext,
-                                              m_xDialog,
-                                              Helper.DLG_MEDIAWIKI_TITLE,
-                                              Helper.INVALIDURL_ERROR,
-                                              null,
-                                              false );
-                        }
                     }
-                    else
+                    else if ( sRedirectURL == null || sRedirectURL.length() == 0 )
                     {
-                        // URL field empty
+                        // URL invalid
                         // show error
                         Helper.ShowError( m_xContext,
                                           m_xDialog,
                                           Helper.DLG_MEDIAWIKI_TITLE,
-                                          Helper.NOURL_ERROR,
+                                          Helper.INVALIDURL_ERROR,
                                           null,
                                           false );
                     }
-                } while ( sRedirectURL.length() > 0 );
-            }
-            catch ( SSLException essl )
+                }
+                else
+                {
+                    // URL field empty
+                    // show error
+                    Helper.ShowError( m_xContext,
+                                      m_xDialog,
+                                      Helper.DLG_MEDIAWIKI_TITLE,
+                                      Helper.NOURL_ERROR,
+                                      null,
+                                      false );
+                }
+            } while ( sRedirectURL.length() > 0 );
+        }
+        catch ( SSLException essl )
+        {
+            Helper.ShowError( m_xContext,
+                              m_xDialog,
+                              Helper.DLG_MEDIAWIKI_TITLE,
+                              Helper.UNKNOWNCERT_ERROR,
+                              null,
+                              false );
+            essl.printStackTrace();
+        }
+        catch ( Exception ex )
+        {
+            Helper.ShowError( m_xContext,
+                              m_xDialog,
+                              Helper.DLG_MEDIAWIKI_TITLE,
+                              Helper.NOURLCONNECTION_ERROR,
+                              sURL,
+                              false );
+            ex.printStackTrace();
+        }
+
+    }
+
+    public boolean callHandlerMethod( XDialog xDialog, Object EventObject, String MethodName )
+    {
+        if ( MethodName.equals( sOKMethod ) )
+        {
+            EnableControls( false );
+
+            if ( Helper.AllowThreadUsage( m_xContext ) )
             {
-                Helper.ShowError( m_xContext,
-                                  m_xDialog,
-                                  Helper.DLG_MEDIAWIKI_TITLE,
-                                  Helper.UNKNOWNCERT_ERROR,
-                                  null,
-                                  false );
-                essl.printStackTrace();
+                final XDialog xDialogForThread = xDialog;
+
+                // the thread name is used to allow the error dialogs
+                Thread aLoginThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
+                {
+                    public void run()
+                    {
+                        try
+                        {
+                            Thread.yield();
+                            DoLogin( xDialogForThread );
+                            m_bAction = true;
+                        } catch( java.lang.Exception e )
+                        {}
+                        finally
+                        {
+                            xDialogForThread.endExecute();
+                            Helper.AllowConnection( true );
+                        }
+                    }
+                };
+
+                aLoginThread.start();
             }
-            catch ( Exception ex )
+            else
             {
-                Helper.ShowError( m_xContext,
-                                  m_xDialog,
-                                  Helper.DLG_MEDIAWIKI_TITLE,
-                                  Helper.NOURLCONNECTION_ERROR,
-                                  sURL,
-                                  false );
-                ex.printStackTrace();
+                try
+                {
+                    DoLogin( xDialog );
+                    m_bAction = true;
+                } catch( java.lang.Exception e )
+                {}
+                finally
+                {
+                    xDialog.endExecute();
+                    Helper.AllowConnection( true );
+                }
             }
+
             return true;
         }
         else if ( MethodName.equals( sCancelMethod ) )
         {
+            Helper.AllowConnection( false );
             xDialog.endExecute();
             return true;
         }

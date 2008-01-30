@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiOptionsEventHandlerImpl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-21 12:57:53 $
+ *  last change: $Author: mav $ $Date: 2008-01-30 19:02:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
     static final String sEdit = "Edit";
     static final String sRemove = "Remove";
     static final String sListStatus = "ListStatus";
+    static final String sListEdit = "ListEdit";
     static final String sInitialize = "initialize";
     static final String sOk = "ok";
     static final String sBack = "back";
@@ -158,7 +159,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
                 ex.printStackTrace();
             }
 
-            WikiEditSettingDialog aSettingDialog = new WikiEditSettingDialog(m_xContext, "vnd.sun.star.script:WikiEditor.EditSetting?location=application", ht);
+            WikiEditSettingDialog aSettingDialog = new WikiEditSettingDialog(m_xContext, "vnd.sun.star.script:WikiEditor.EditSetting?location=application", ht, true );
             if ( aSettingDialog.show() )
                 RefreshView();
         }
@@ -279,7 +280,7 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
             {
                 AddSetting();
             }
-            else if ( sMethod.equals( sEdit ) )
+            else if ( sMethod.equals( sEdit ) || sMethod.equals( sListEdit ) )
             {
                 EditSetting();
             }
