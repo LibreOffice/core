@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertycontainerhelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 11:03:37 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 09:35:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,8 @@ struct COMPHELPER_DLLPRIVATE PropertyDescription
 
     The property values are usually held in derived classes, but can also be given to the
     responsibility of this class here.
+
+    For more information, see http://wiki.services.openoffice.org/wiki/Development/Cpp/Helper/PropertyContainerHelper.
 */
 class COMPHELPER_DLLPUBLIC OPropertyContainerHelper
 {
@@ -102,10 +104,6 @@ class COMPHELPER_DLLPUBLIC OPropertyContainerHelper
     typedef PropertyContainer::const_iterator           ConstPropertyContainerIterator;
     PropertyContainer   m_aHoldProperties;
         // the properties which are hold by this class' instance, not the derived one's
-
-public:
-    // (the following struct needs to be public because of the SUNPRO5 compiler. Else it does not
-    // acceppt the typedef below, which is using this struct).
 
 private:
     typedef ::std::vector< PropertyDescription >    Properties;
