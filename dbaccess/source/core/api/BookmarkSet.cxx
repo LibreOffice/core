@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BookmarkSet.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:29:28 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:27:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,10 +197,14 @@ void OBookmarkSet::updateColumn(sal_Int32 nPos,Reference< XRowUpdate > _xParamet
 
             switch(_rValue.getTypeKind())
             {
-                case DataType::CHAR:
-                case DataType::VARCHAR:
                 case DataType::DECIMAL:
                 case DataType::NUMERIC:
+                    _xParameter->updateNumericObject(nPos,_rValue.makeAny(),m_xSetMetaData->getScale(nPos));
+                    break;
+                case DataType::CHAR:
+                case DataType::VARCHAR:
+                //case DataType::DECIMAL:
+                //case DataType::NUMERIC:
                     _xParameter->updateString(nPos,_rValue);
                     break;
                 case DataType::BIGINT:
