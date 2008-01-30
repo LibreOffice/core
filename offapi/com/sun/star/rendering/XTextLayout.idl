@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTextLayout.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:01:45 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:14:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -297,7 +297,7 @@ interface XTextLayout : ::com::sun::star::uno::XInterface
         in the range 0 up to the number of characters in the string.
 
         @param bExcludeLigatures
-        Set this to <TRUE>, to skip the positions inside ligatures as
+        Set this to <TRUE/>, to skip the positions inside ligatures as
         valid caret placements. That means, on cannot e.g. set the
         caret between the 'f' and the 'i' in a 'fi' ligature.
 

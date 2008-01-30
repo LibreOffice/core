@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataPilotFieldLayoutInfo.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:30:40 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:18:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@ published struct DataPilotFieldLayoutInfo
 
     //-------------------------------------------------------------------------
 
-    /** If <TRUE>, an empty row is inserted in the <type>DataPilotTable</type>
+    /** If <TRUE/>, an empty row is inserted in the <type>DataPilotTable</type>
         result table after the data
         (including the subtotals) for each item of the field.
         */

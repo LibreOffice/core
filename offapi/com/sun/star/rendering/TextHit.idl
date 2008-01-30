@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextHit.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:54:55 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:12:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ struct TextHit
         language (i.e. the leading edge of an Arabic glyph is the
         right half of it, whereas it is the left half of a Latin
         character). If the hit was on the leading edge, this member is
-        set to <TRUE>.
+        set to <TRUE/>.
      */
     boolean     IsLeadingEdge;
 };
