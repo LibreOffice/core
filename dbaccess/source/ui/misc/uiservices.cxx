@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uiservices.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:52:14 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:53:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@ extern "C" void SAL_CALL createRegistryInfo_OColumnControlModel();
 extern "C" void SAL_CALL createRegistryInfo_OColumnControl();
 extern "C" void SAL_CALL createRegistryInfo_OToolboxController();
 extern "C" void SAL_CALL createRegistryInfo_OStatusbarController();
+extern "C" void SAL_CALL createRegistryInfo_CopyTableWizard();
 
 //***************************************************************************************
 extern "C" void SAL_CALL createRegistryInfo_DBU()
@@ -107,12 +108,13 @@ extern "C" void SAL_CALL createRegistryInfo_DBU()
         createRegistryInfo_OAdvancedSettingsDialog();
         createRegistryInfo_ODBTypeWizDialog();
         createRegistryInfo_ODBTypeWizDialogSetup();
-            createRegistryInfo_OUserSettingsDialog();
+        createRegistryInfo_OUserSettingsDialog();
         createRegistryInfo_OAdabasSettingsDialog();
         createRegistryInfo_OColumnControlModel();
         createRegistryInfo_OColumnControl();
         createRegistryInfo_OToolboxController();
         createRegistryInfo_OStatusbarController();
+        createRegistryInfo_CopyTableWizard();
         bInit = sal_True;
     }
 }
