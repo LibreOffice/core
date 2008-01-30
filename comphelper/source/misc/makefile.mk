@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-23 13:20:44 $
+#   last change: $Author: rt $ $Date: 2008-01-30 09:35:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,8 @@ SLOFILES=	\
             $(SLO)$/namedvaluecollection.obj \
             $(SLO)$/logging.obj \
             $(SLO)$/documentinfo.obj \
-            $(SLO)$/string.obj
+            $(SLO)$/string.obj \
+            $(SLO)$/legacysingletonfactory.obj
 
 # --- Targets ----------------------------------
 
