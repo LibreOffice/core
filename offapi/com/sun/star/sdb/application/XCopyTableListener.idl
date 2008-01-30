@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XCopyTableListener.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:16:42 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sdb_application_XCopyTableListener_idl__
+#define __com_sun_star_sdb_application_XCopyTableListener_idl__
+
+#ifndef __com_sun_star_lang_XEventListener_idl__
+#include <com/sun/star/lang/XEventListener.idl>
+#endif
+#ifndef __com_sun_star_sdb_application_CopyTableRowEvent_idl__
+#include <com/sun/star/sdb/application/CopyTableRowEvent.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module sdb { module application {
+
+//=============================================================================
+
+/** specifies the interface required to listen for progress in copying
+    table rows via a <code>CopyTableWizard</code>.
+
+    @see CopyTableRowEvent
+    @see CopyTableWizard
+ */
+interface XCopyTableListener : ::com::sun::star::lang::XEventListener
+{
+    /** is called when a row is about to be copied.
+
+        <p>This method is called immediately before a row is copied. It might be used, for instance,
+        to update a progress indicator.</p>
+
+        @param Event
+            describes the current state of the copy operation.
+            <member>CopyTableRowEvent::SourceData</member> is positioned at the row
+            which is about to be copied.
+    */
+    void    copyingRow( [in] CopyTableRowEvent Event );
+
+    /** is called when a row was successfully copied.
+
+        <p>This method is called right after a row has been successfully copied. It might be used,
+        for instance, to update a progress indicator.</p>
+
+        @param Event
+            describes the current state of the copy operation.
+            <member>CopyTableRowEvent::SourceData</member> is positioned at the row
+            which was just copied to the target database.
+    */
+    void    copiedRow( [in] CopyTableRowEvent Event );
+
+    /** is called when copying a row failed.
+
+        @param Event
+            describes the current state of the copy operation.
+            <member>CopyTableRowEvent::SourceData</member> is positioned at the row
+            which was attempted to be copied to the target database.
+            <member>CopyTableRowEvent::Error</member> will contain the actual error which
+            happened.
+
+        @return
+            how to continue with copying. Must be one of the <type>CopyTableContinuation</type>
+            constants.
+    */
+    short   copyRowError( [in] CopyTableRowEvent Event );
+};
+
+//=============================================================================
+
+}; }; }; }; };
+
+//=============================================================================
+
+#endif
