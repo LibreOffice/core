@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FValue.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 14:58:30 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:46:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1860,4 +1860,96 @@ void ORowSetValue::fill(sal_Int32 _nPos,
         setNull();
     setTypeKind(_nType);
 }
+// -----------------------------------------------------------------------------
+void ORowSetValue::fill(const Any& _rValue)
+{
+    switch (_rValue.getValueType().getTypeClass())
+    {
+        case TypeClass_VOID:
+            setNull();
+            break;
+        case TypeClass_BOOLEAN:
+        {
+            sal_Bool bValue( sal_False );
+            _rValue >>= bValue;
+            (*this) = bValue;
+            break;
+        }
+        case TypeClass_CHAR:
+        {
+            sal_Unicode aDummy(0);
+            _rValue >>= aDummy;
+            (*this) = ::rtl::OUString(aDummy);
+            break;
+        }
+        case TypeClass_STRING:
+        {
+            ::rtl::OUString sDummy;
+            _rValue >>= sDummy;
+            (*this) = sDummy;
+            break;
+        }
+        case TypeClass_FLOAT:
+        {
+            float aDummy;
+            _rValue >>= aDummy;
+            (*this) = aDummy;
+            break;
+        }
+        case TypeClass_DOUBLE:
+        {
+            double aDummy;
+            _rValue >>= aDummy;
+            (*this) = aDummy;
+            break;
+        }
+        case TypeClass_BYTE:
+        {
+            sal_Int8 aDummy;
+            _rValue >>= aDummy;
+            (*this) = aDummy;
+            break;
+        }
+        case TypeClass_SHORT:
+        {
+            sal_Int16 aDummy;
+            _rValue >>= aDummy;
+            (*this) = aDummy;
+            break;
+        }
+        case TypeClass_LONG:
+        {
+            sal_Int32 aDummy;
+            _rValue >>= aDummy;
+            (*this) = aDummy;
+            break;
+        }
+        case TypeClass_UNSIGNED_SHORT:
+        {
+            sal_uInt16 nValue(0);
+            _rValue >>= nValue;
+            (*this) = static_cast<sal_Int32>(nValue);
+            setSigned(sal_False);
+            break;
+        }
+        case TypeClass_UNSIGNED_LONG:
+        {
+            sal_uInt32 nValue(0);
+            _rValue >>= nValue;
+            (*this) = static_cast<sal_Int64>(nValue);
+            setSigned(sal_False);
+            break;
+        }
+        case TypeClass_SEQUENCE:
+        {
+            Sequence<sal_Int8> aDummy;
+            if ( _rValue >>= aDummy )
+                (*this) = aDummy;
+            break;
+        }
 
+        default:
+            OSL_ENSURE(0,"Unknown type");
+            break;
+    }
+}
