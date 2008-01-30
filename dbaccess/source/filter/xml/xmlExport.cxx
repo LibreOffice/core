@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlExport.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:43:06 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:37:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -520,6 +520,14 @@ void ODBExport::exportDataSourceSettings()
             AddAttribute(XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_IS_LIST,bIsSequence ? XML_TRUE : XML_FALSE);
             AddAttribute(XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_NAME,aValue.Name);
             ::rtl::OUString sTypeName = lcl_implGetPropertyXMLType(aSimpleType);
+            if ( bIsSequence && aSimpleType.getTypeClass() == TypeClass_ANY )
+            {
+                Sequence<Any> aSeq;
+                aValue.Value >>= aSeq;
+                if ( aSeq.getLength() )
+                    sTypeName = lcl_implGetPropertyXMLType(aSeq[0].getValueType());
+            }
+
             AddAttribute(XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING_TYPE,sTypeName);
 
             SvXMLElementExport aDataSourceSetting(*this,XML_NAMESPACE_DB, XML_DATA_SOURCE_SETTING, sal_True, sal_True);
@@ -553,6 +561,9 @@ void ODBExport::exportDataSourceSettings()
                         break;
                     case TypeClass_LONG:
                         pSequenceIterator.reset(new OSequenceIterator< sal_Int32 >(aValue.Value));
+                        break;
+                    case TypeClass_ANY:
+                        pSequenceIterator.reset(new OSequenceIterator< Any >(aValue.Value));
                         break;
                     default:
                         OSL_ENSURE(sal_False, "unsupported sequence type !");
