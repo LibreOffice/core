@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 17:10:42 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:31:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,8 +353,8 @@ class SAL_DLLPRIVATE FmXFormController  :public ::comphelper::OBaseMutex
 
     ::rtl::OUString             m_aMode;
 
-    sal_uInt32                  m_nLoadEvent;
-    sal_uInt32                  m_nToggleEvent;
+    ULONG                       m_nLoadEvent;
+    ULONG                       m_nToggleEvent;
 
     sal_Int32                   m_nCurrentFilterPosition;   // current level for filtering (or-criteria)
 
