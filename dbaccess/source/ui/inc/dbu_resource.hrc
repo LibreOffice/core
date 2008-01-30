@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-13 14:08:58 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:49:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,8 @@
     // FREE
     // FREE
 #define PAGE_MOZILLA                    RID_PAGE_START + 32
+#define PAGE_DS_ORACLE_ADVANCED_SETTINGS RID_PAGE_START + 33
+
 
 #define PAGE_DBWIZARD_INTRO                     RID_PAGE_START + 40
 #define PAGE_DBWIZARD_DBASE                     RID_PAGE_START + 41
