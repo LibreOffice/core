@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:57:53 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:45:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,8 +225,7 @@ namespace dbaui
                 String sDisplayName = aTypeLoop.getDisplayName();
                 if ( m_pDatasourceType->GetEntryPos( sDisplayName ) == LISTBOX_ENTRY_NOTFOUND )
                 {
-                    sDisplayName = VerifyDisplayName(eType, sDisplayName);
-                    if ( sDisplayName.Len() > 0 )
+                    if ( approveDataSourceType( eType, sDisplayName ) )
                         aDisplayedTypes.push_back( DisplayedTypes::value_type( eType, sDisplayName ) );
                 }
             }
@@ -400,20 +399,20 @@ namespace dbaui
             implSetCurrentType( m_pCollection->getType(sConnectURL) );
             sDisplayName = m_pCollection->getTypeDisplayName(m_eCurrentSelection);
         }
-        sDisplayName = VerifyDisplayName(m_eCurrentSelection, sDisplayName);
+
         // select the correct datasource type
-        if (LISTBOX_ENTRY_NOTFOUND == m_pDatasourceType->GetEntryPos(sDisplayName))
-        {   // the type is not available on this platform (we omitted it in initializeTypeList)
-            if (sDisplayName.Len())
-            {   // this indicates it's really a type which is known in general, but not supported on the current platform
-                // show a message saying so
-                //  eSpecialMessage = smUnsupportedType;
-                insertDatasourceTypeEntryData(m_eCurrentSelection, sDisplayName);
-                // remember this type so we can show the special message again if the user selects this
-                // type again (without changing the data source)
-                m_eNotSupportedKnownType = m_eCurrentSelection;
-            }
+        if  (   approveDataSourceType( m_eCurrentSelection, sDisplayName )
+            &&  ( LISTBOX_ENTRY_NOTFOUND == m_pDatasourceType->GetEntryPos( sDisplayName ) )
+            )
+        {   // this indicates it's really a type which is known in general, but not supported on the current platform
+            // show a message saying so
+            //  eSpecialMessage = smUnsupportedType;
+            insertDatasourceTypeEntryData(m_eCurrentSelection, sDisplayName);
+            // remember this type so we can show the special message again if the user selects this
+            // type again (without changing the data source)
+            m_eNotSupportedKnownType = m_eCurrentSelection;
         }
+
         if (m_aRB_CreateDatabase.IsChecked() && m_DBWizardMode)
             sDisplayName = m_pCollection->getTypeDisplayName(DST_JDBC);
         m_pDatasourceType->SelectEntry(sDisplayName);
@@ -434,19 +433,22 @@ namespace dbaui
 
     // For the databaseWizard we only have one entry for the MySQL Database,
     // because we have a seperate tabpage to retrieve the respective datasource type
-    //(DST_MYSQL_ODBC || DST_MYSQL_JDBC) Therefor we use DST_MYSQL_JDBC as a temporary
+    // (DST_MYSQL_ODBC || DST_MYSQL_JDBC). Therefore we use DST_MYSQL_JDBC as a temporary
     // representative for all MySQl databases)
-    String OGeneralPage::VerifyDisplayName(DATASOURCE_TYPE eType, String _sDisplayName)
+    // Also, embedded databases (embedded HSQL, at the moment), are not to appear in the list of
+    // databases to connect to.
+    bool OGeneralPage::approveDataSourceType( DATASOURCE_TYPE eType, String& _inout_rDisplayName )
     {
-        String sLocDisplayName =  ::rtl::OUString::createFromAscii("");
-        if ((!m_DBWizardMode) || (eType != DST_MYSQL_ODBC))
-        {
-            if ((m_DBWizardMode) && (eType == DST_MYSQL_JDBC))
-                sLocDisplayName = m_sMySQLEntry;
-            else
-                sLocDisplayName = _sDisplayName;
-        }
-        return sLocDisplayName;
+        if ( m_DBWizardMode && ( eType == DST_MYSQL_JDBC ) )
+            _inout_rDisplayName = m_sMySQLEntry;
+
+        if ( m_DBWizardMode && ( eType == DST_MYSQL_ODBC ) )
+            _inout_rDisplayName = String();
+
+        if ( eType == DST_EMBEDDED_HSQLDB )
+            _inout_rDisplayName = String();
+
+        return _inout_rDisplayName.Len() > 0;
     }
 
 
