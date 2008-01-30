@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CacheSet.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:34:41 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:28:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,8 @@ namespace dbaccess
         void setParameter(sal_Int32 nPos
                             ,::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XParameters > _xParameter
                             ,const connectivity::ORowSetValue& _rValue
-                            ,sal_Int32 _nType = ::com::sun::star::sdbc::DataType::OTHER
+                            ,sal_Int32 _nType
+                            ,sal_Int32 _nScale
                             );
         void fillParameters( const ORowSetRow& _rRow
                             ,const connectivity::OSQLTable& _xTable
