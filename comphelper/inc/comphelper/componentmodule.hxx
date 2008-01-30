@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentmodule.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 14:53:24 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 09:34:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,8 @@
 #ifndef COMPHELPER_INC_COMPHELPER_COMPONENTMODULE_HXX
 #define COMPHELPER_INC_COMPHELPER_COMPONENTMODULE_HXX
 
-#ifndef INCLUDED_COMPHELPERDLLAPI_H
 #include <comphelper/comphelperdllapi.h>
-#endif
+#include <comphelper/legacysingletonfactory.hxx>
 
 /** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
@@ -298,6 +297,7 @@ namespace comphelper
     };
 
     template <class TYPE>
+    //--------------------------------------------------------------------------
     OSingletonRegistration<TYPE>::OSingletonRegistration( OModule& _rModule )
     {
         _rModule.registerImplementation( ComponentDescription(
@@ -306,6 +306,29 @@ namespace comphelper
             TYPE::getSingletonName_static(),
             &TYPE::Create,
             &::cppu::createSingleComponentFactory
+        ) );
+    }
+
+    //==========================================================================
+    //= OLegacySingletonRegistration
+    //==========================================================================
+    template <class TYPE>
+    class OLegacySingletonRegistration
+    {
+    public:
+        OLegacySingletonRegistration( OModule& _rModule );
+    };
+
+    //--------------------------------------------------------------------------
+    template <class TYPE>
+    OLegacySingletonRegistration<TYPE>::OLegacySingletonRegistration( OModule& _rModule )
+    {
+        _rModule.registerImplementation( ComponentDescription(
+            TYPE::getImplementationName_static(),
+            TYPE::getSupportedServiceNames_static(),
+            ::rtl::OUString(),
+            &TYPE::Create,
+            &::comphelper::createLegacySingletonFactory
         ) );
     }
 
@@ -363,6 +386,18 @@ namespace comphelper
     \
     public: \
         OSingletonRegistration() : BaseClass( ModuleClass::getInstance() ) \
+        { \
+        } \
+    }; \
+    /* -------------------------------------------------------------------- */ \
+    template < class TYPE > \
+    class OLegacySingletonRegistration : public ::comphelper::OLegacySingletonRegistration< TYPE > \
+    { \
+    private: \
+        typedef ::comphelper::OLegacySingletonRegistration< TYPE >  BaseClass; \
+    \
+    public: \
+        OLegacySingletonRegistration() : BaseClass( ModuleClass::getInstance() ) \
         { \
         } \
     }; \
