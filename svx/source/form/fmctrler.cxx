@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 17:09:42 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:23:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2524,22 +2524,22 @@ void FmXFormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
     Reference< XConnection > xConnection(OStaticDataAccessTools().getRowSetConnection(xForm));
     if (xForm.is())
     {
-        Reference< XSQLQueryComposerFactory >  xFactory(xConnection, UNO_QUERY);
-        if (xFactory.is())
+        try
         {
-            m_xComposer = xFactory->createQueryComposer();
-            try
-            {
-                Reference< XPropertySet >  xSet(xForm, UNO_QUERY);
-                ::rtl::OUString aStatement  = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_ACTIVECOMMAND));
-                ::rtl::OUString aFilter     = ::comphelper::getString(xSet->getPropertyValue(FM_PROP_FILTER));
-                m_xComposer->setQuery(aStatement);
-                m_xComposer->setFilter(aFilter);
-            }
-            catch(const Exception&)
-            {
-                DBG_ERROR("Exception occured!");
-            }
+            Reference< XMultiServiceFactory > xFactory( xConnection, UNO_QUERY_THROW );
+            m_xComposer.set(
+                xFactory->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sdb.SingleSelectQueryComposer" ) ) ),
+                UNO_QUERY_THROW );
+
+            Reference< XPropertySet > xSet( xForm, UNO_QUERY );
+            ::rtl::OUString sStatement  = ::comphelper::getString( xSet->getPropertyValue( FM_PROP_ACTIVECOMMAND ) );
+            ::rtl::OUString sFilter     = ::comphelper::getString( xSet->getPropertyValue( FM_PROP_FILTER ) );
+            m_xComposer->setElementaryQuery( sStatement );
+            m_xComposer->setFilter( sFilter );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
@@ -2553,8 +2553,8 @@ void FmXFormController::setFilter(::std::vector<FmFieldInfo>& rFieldInfos)
         // a aliasname or the fieldname itself
 
         // first adjust the field names if necessary
-        Reference< XNameAccess> xQueryColumns = Reference< XColumnsSupplier >
-                                            (m_xComposer, UNO_QUERY)->getColumns();
+        Reference< XNameAccess > xQueryColumns =
+            Reference< XColumnsSupplier >( m_xComposer, UNO_QUERY_THROW )->getColumns();
 
         for (::std::vector<FmFieldInfo>::iterator iter = rFieldInfos.begin();
             iter != rFieldInfos.end(); iter++)
