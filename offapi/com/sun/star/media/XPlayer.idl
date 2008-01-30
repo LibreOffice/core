@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XPlayer.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 12:00:58 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:12:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ interface XPlayer
     /** indicates whether the stream is played or not.
 
         @returns
-            <TRUE /> if the stream is played, <FALSE /> otherwise
+            <TRUE/> if the stream is played, <FALSE/> otherwise
      */
     boolean isPlaying();
 
