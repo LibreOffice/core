@@ -4,9 +4,9 @@
  *
  *  $RCSfile: KeySet.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:41:20 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:28:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,18 +61,22 @@ namespace dbaccess
     {
         sal_Int32       nPosition;
         sal_Int32       nType;
+        sal_Int32       nScale;
+
         ::rtl::OUString sDefaultValue;
 
         SelectColumnDescription()
             :nPosition( 0 )
             ,nType( 0 )
+            ,nScale( 0 )
             ,sDefaultValue()
         {
         }
 
-        SelectColumnDescription( sal_Int32 _nPosition, sal_Int32 _nType, const ::rtl::OUString& _rDefaultValue )
+        SelectColumnDescription( sal_Int32 _nPosition, sal_Int32 _nType, sal_Int32 _nScale, const ::rtl::OUString& _rDefaultValue )
             :nPosition( _nPosition )
             ,nType( _nType )
+            ,nScale( _nScale )
             ,sDefaultValue( _rDefaultValue )
         {
         }
