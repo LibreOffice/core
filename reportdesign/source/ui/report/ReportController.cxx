@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportController.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:50:57 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:58:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1866,7 +1866,7 @@ sal_Bool OReportController::Construct(Window* pParent)
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-sal_Bool SAL_CALL OReportController::suspend(sal_Bool _bSuspend) throw( RuntimeException )
+sal_Bool SAL_CALL OReportController::suspend(sal_Bool /*_bSuspend*/) throw( RuntimeException )
 {
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
         return sal_True;
@@ -1877,11 +1877,8 @@ sal_Bool SAL_CALL OReportController::suspend(sal_Bool _bSuspend) throw( RuntimeE
     if ( getView() && getView()->IsInModalMode() )
         return sal_False;
 
-    sal_Bool bCheck = sal_True;
-    (void)_bSuspend;
-
-    // this suspend will handle in the DBAccess interceptor implementation
-    return bCheck;
+    // this suspend will be handled in the DBAccess interceptor implementation
+    return sal_True;
 }
 // -----------------------------------------------------------------------------
 void OReportController::describeSupportedFeatures()
