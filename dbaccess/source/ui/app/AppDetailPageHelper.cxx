@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:47:02 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:42:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1386,3 +1386,5 @@ void OPreviewWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground, sal
         SetBackground( rStyleSettings.GetFieldColor() );
 }
 // -----------------------------------------------------------------------------
+// -----------------------------------------------------------------------------
+
