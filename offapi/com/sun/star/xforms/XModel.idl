@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XModel.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 09:33:04 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:20:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ interface XModel
 
         @throws com::sun::star::lang::WrappedTargetException
             when another error occured during the submission. The
-            <member scope="com::sun::star::lang">WrappedTargetException::TargetException</type> describes
+            <member scope="com::sun::star::lang">WrappedTargetException::TargetException</member> describes
             this error then.
     */
     void submit( [in] string id )
@@ -140,7 +140,7 @@ interface XModel
 
         @throws com::sun::star::lang::WrappedTargetException
             when another error occured during the submission. The
-            <member scope="com::sun::star::lang">WrappedTargetException::TargetException</type> describes
+            <member scope="com::sun::star::lang">WrappedTargetException::TargetException</member> describes
             this error then.
     */
     void submitWithInteraction( [in] string id, [in] com::sun::star::task::XInteractionHandler aHandler )
