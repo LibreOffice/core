@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rene $ $Date: 2008-01-30 21:13:12 $
+#   last change: $Author: rene $ $Date: 2008-01-30 21:14:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,5 @@ PRJ=..
 PRJNAME=swext
 TARGET=mediawiki
 
-.IF "$(ENABLE_MEDIAWIKI)" == "YES"
 .INCLUDE : ant.mk
 ALLTAR: ANTBUILD
-.ELSE
-@all:
-    @echo "MediaWiki Editor extension disabled."
-.ENDIF
-
