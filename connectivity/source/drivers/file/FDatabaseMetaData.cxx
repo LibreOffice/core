@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:22:34 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
 
 DBG_NAME( file_ODatabaseMetaData )
-ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon) : ::connectivity::ODatabaseMetaDataBase(_pCon)
+ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon) : ::connectivity::ODatabaseMetaDataBase(_pCon,_pCon->getConnectionInfo())
                         ,m_pConnection(_pCon)
 {
     DBG_CTOR( file_ODatabaseMetaData, NULL );
@@ -112,31 +112,14 @@ ODatabaseMetaData::~ODatabaseMetaData()
     DBG_DTOR( file_ODatabaseMetaData, NULL );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
+Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eTypeInfo );
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCatalogs );
-}
-// -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
+::rtl::OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
 {
     return ::rtl::OUString();
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eSchemas );
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
-        const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eColumnPrivileges );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
@@ -387,26 +370,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     return xRef;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
-        const ::rtl::OUString& /*procedureNamePattern*/, const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedureColumns );
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
-        const ::rtl::OUString& /*procedureNamePattern*/ ) throw(SQLException, RuntimeException)
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eProcedures );
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eVersionColumns );
-}
-// -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
 {
     return 0;
@@ -452,7 +415,7 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLExceptio
     return 0;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength(  ) throw(SQLException, RuntimeException)
+sal_Int32 ODatabaseMetaData::impl_getMaxStatements_throw(  )
 {
     return 0;
 }
@@ -462,41 +425,9 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength(  ) throw(SQLExcepti
     return 0;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLException, RuntimeException)
+sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
 {
     return 1;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eExportedKeys );
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eImportedKeys );
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::ePrimaryKeys );
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
-        sal_Bool /*unique*/, sal_Bool /*approximate*/ ) throw(SQLException, RuntimeException)
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eIndexInfo );
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/, sal_Int32 /*scope*/,
-        sal_Bool /*nullable*/ ) throw(SQLException, RuntimeException)
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eBestRowIdentifier );
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
@@ -568,14 +499,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     return xRef;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
-        const Any& /*primaryCatalog*/, const ::rtl::OUString& /*primarySchema*/,
-        const ::rtl::OUString& /*primaryTable*/, const Any& /*foreignCatalog*/,
-        const ::rtl::OUString& /*foreignSchema*/, const ::rtl::OUString& /*foreignTable*/ ) throw(SQLException, RuntimeException)
-{
-    return new ODatabaseMetaDataResultSet( ODatabaseMetaDataResultSet::eCrossReference );
-}
-// -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw(SQLException, RuntimeException)
 {
     return sal_True;
@@ -591,7 +514,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLExc
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     return sal_False;
 }
@@ -611,12 +534,12 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLExc
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 {
     return sal_False;
 }
@@ -636,7 +559,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
     return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
+::rtl::OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     static const ::rtl::OUString sQuote = ::rtl::OUString::createFromAscii("\"");
     return sQuote;
@@ -652,7 +575,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) 
     return sal_True;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
     return sal_True;
 }
@@ -712,7 +635,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int3
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInDataManipulation(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
 {
     return sal_False;
 }
@@ -737,12 +660,12 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInTableDefinitions(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
 {
     return sal_False;
 }
@@ -752,7 +675,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) thro
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInDataManipulation(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
 {
     return sal_False;
 }
@@ -780,7 +703,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     return xRef;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatements(  ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength(  ) throw(SQLException, RuntimeException)
 {
     return 0;
 }
@@ -915,7 +838,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLE
     return sal_True;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
     return sal_False;
 }
@@ -1201,11 +1124,5 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalo
 {
     return NULL;
 }
-// -------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection(  ) throw(SQLException, RuntimeException)
-{
-    return (Reference< XConnection >)m_pConnection;//new OConnection(m_aConnectionHandle);
-}
-// -------------------------------------------------------------------------
 
 
