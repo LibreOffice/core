@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-21 15:15:59 $
+#   last change: $Author: rt $ $Date: 2008-01-30 08:15:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,18 +51,20 @@ IDLFILES=\
     BooleanComparisonMode.idl \
     CallableStatement.idl \
     Column.idl \
+    ColumnDescriptorControl.idl \
+    ColumnDescriptorControlModel.idl \
     ColumnSettings.idl \
     CommandType.idl \
     Connection.idl \
     ContentLoader.idl \
     DataAccessDescriptor.idl \
+    DataAccessDescriptorFactory.idl \
     DatabaseAccess.idl \
     DatabaseAccessConnection.idl \
     DatabaseAccessContext.idl \
     DatabaseAccessDataSource.idl\
     DatabaseContext.idl \
     DatabaseDocument.idl \
-    OfficeDatabaseDocument.idl \
     DatabaseEnvironment.idl \
     DataColumn.idl \
     DataSettings.idl \
@@ -71,31 +73,39 @@ IDLFILES=\
     DataSourceBrowser.idl \
     DefinitionContainer.idl \
     Document.idl \
+    DocumentContainer.idl \
+    DocumentDataSource.idl \
     DocumentDefinition.idl \
     DocumentSaveRequest.idl \
     ErrorCondition.idl \
     ErrorMessageDialog.idl \
+    Forms.idl \
     InteractionHandler.idl \
+    OfficeDatabaseDocument.idl \
+    OrderColumn.idl \
     ParametersRequest.idl \
     PreparedStatement.idl \
     Query.idl \
     QueryDefinition.idl \
     QueryDescriptor.idl \
     QueryDesign.idl \
+    RelationDesign.idl \
+    Reports.idl \
     ResultColumn.idl \
     ResultSet.idl \
     RowChangeAction.idl \
     RowChangeEvent.idl \
     RowSet.idl \
     RowSetVetoException.idl \
+    SingleSelectQueryAnalyzer.idl \
+    SingleSelectQueryComposer.idl \
     SQLContext.idl \
     SQLErrorEvent.idl \
+    SQLFilterOperator.idl \
     SQLQueryComposer.idl \
     Table.idl \
-    TableDesign.idl \
-    QueryDesign.idl \
-    RelationDesign.idl \
     TableDescriptor.idl \
+    TableDesign.idl \
     XAlterQuery.idl \
     XBookmarksSupplier.idl \
     XColumn.idl \
@@ -103,12 +113,15 @@ IDLFILES=\
     XCommandPreparation.idl \
     XCompletedConnection.idl \
     XCompletedExecution.idl \
+    XDataAccessDescriptorFactory.idl \
     XDatabaseAccess.idl \
     XDatabaseAccessListener.idl \
     XDatabaseEnvironment.idl \
+    XDocumentDataSource.idl \
     XFormDocumentsSupplier.idl \
     XInteractionDocumentSave.idl \
     XInteractionSupplyParameters.idl \
+    XOfficeDatabaseDocument.idl \
     XParametersSupplier.idl \
     XQueriesSupplier.idl \
     XQueryDefinitionsSupplier.idl \
@@ -117,25 +130,12 @@ IDLFILES=\
     XRowSetApproveBroadcaster.idl \
     XRowSetApproveListener.idl \
     XRowSetSupplier.idl \
+    XSingleSelectQueryAnalyzer.idl \
+    XSingleSelectQueryComposer.idl \
     XSQLErrorBroadcaster.idl \
     XSQLErrorListener.idl \
     XSQLQueryComposer.idl \
-    XSingleSelectQueryComposer.idl \
-    OrderColumn.idl \
-    SingleSelectQueryAnalyzer.idl \
-    SingleSelectQueryComposer.idl \
-    SQLFilterOperator.idl \
-    XSingleSelectQueryAnalyzer.idl \
-    ColumnDescriptorControl.idl \
-    ColumnDescriptorControlModel.idl \
-    Forms.idl \
-    Reports.idl \
-    DocumentContainer.idl \
-    XSQLQueryComposerFactory.idl \
-    XDocumentDataSource.idl \
-    DocumentDataSource.idl \
-    XOfficeDatabaseDocument.idl \
-    OfficeDatabaseDocument.idl
+    XSQLQueryComposerFactory.idl
 
 # ------------------------------------------------------------------
 .INCLUDE :  target.mk
