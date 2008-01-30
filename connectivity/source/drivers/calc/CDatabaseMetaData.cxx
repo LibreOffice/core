@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:15:51 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:49:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,14 +118,12 @@ OCalcDatabaseMetaData::~OCalcDatabaseMetaData()
 }
 
 // -------------------------------------------------------------------------
-
-Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
+Reference< XResultSet > OCalcDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
     Reference< XResultSet > xRef = pResult;
-    pResult->setTypeInfoMap();
 
     static ODatabaseMetaDataResultSet::ORows aRows;
     if(aRows.empty())
@@ -195,20 +193,6 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTypeInfo(  ) throw(SQ
     }
 
     pResult->setRows(aRows);
-    return xRef;
-}
-
-// -------------------------------------------------------------------------
-
-Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumnPrivileges(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
-        const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xRef = pResult;
-    pResult->setColumnPrivilegesMap();
     return xRef;
 }
 
@@ -303,114 +287,10 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
         }
     }
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
     Reference< XResultSet > xRef = pResult;
-    pResult->setColumnsMap();
     pResult->setRows(aRows);
 
-    return xRef;
-}
-
-// -------------------------------------------------------------------------
-
-Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getVersionColumns(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xRef = pResult;
-    pResult->setVersionColumnsMap();
-    return xRef;
-}
-
-// -------------------------------------------------------------------------
-
-Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getExportedKeys(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setExportedKeysMap();
-    return xRef;
-}
-
-// -------------------------------------------------------------------------
-
-Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getImportedKeys(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setImportedKeysMap();
-    return xRef;
-}
-
-// -------------------------------------------------------------------------
-
-Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getPrimaryKeys(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setPrimaryKeysMap();
-    return xRef;
-}
-
-// -------------------------------------------------------------------------
-
-Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getIndexInfo(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
-        sal_Bool /*unique*/, sal_Bool /*approximate*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    Reference< XTablesSupplier > xTables = m_pConnection->createCatalog();
-    if(!xTables.is())
-        throw SQLException();
-
-    Reference< XNameAccess> xNames = xTables->getTables();
-    if(!xNames.is())
-        throw SQLException();
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xRef = pResult;
-    pResult->setIndexInfoMap();
-    return xRef;
-}
-
-// -------------------------------------------------------------------------
-
-Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getBestRowIdentifier(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/, sal_Int32 /*scope*/,
-        sal_Bool /*nullable*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setBestRowIdentifierMap();
-    return xRef;
-}
-
-// -------------------------------------------------------------------------
-
-Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getCrossReference(
-    const Any& /*primaryCatalog*/, const ::rtl::OUString& /*primarySchema*/,
-    const ::rtl::OUString& /*primaryTable*/, const Any& /*foreignCatalog*/,
-        const ::rtl::OUString& /*foreignSchema*/, const ::rtl::OUString& /*foreignTable*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setCrossReferenceMap();
     return xRef;
 }
 
@@ -555,9 +435,8 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet();
+    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
     Reference< XResultSet > xRef = pResult;
-    pResult->setTablesMap();
 
     // check if ORowSetValue type is given
     // when no types are given then we have to return all tables e.g. TABLE
