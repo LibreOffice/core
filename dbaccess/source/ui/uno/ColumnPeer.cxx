@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ColumnPeer.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:32:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:56:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,7 +150,7 @@ void OColumnPeer::setProperty( const ::rtl::OUString& _rPropertyName, const Any&
         Reference<XPropertySet> xProp(Value,UNO_QUERY);
         setColumn(xProp);
     }
-    else if ( 0 == _rPropertyName.compareToAscii( PROPERTY_ACTIVECONNECTION ) )
+    else if ( 0 == _rPropertyName.compareToAscii( PROPERTY_ACTIVE_CONNECTION ) )
     {
         Reference<XConnection> xCon(Value,UNO_QUERY);
         setConnection(xCon);
@@ -167,7 +167,7 @@ Any OColumnPeer::getProperty( const ::rtl::OUString& _rPropertyName ) throw( Run
     {
         aProp <<= m_xColumn;
     }
-    else if ( pFieldControl && 0 == _rPropertyName.compareToAscii( PROPERTY_ACTIVECONNECTION ) )
+    else if ( pFieldControl && 0 == _rPropertyName.compareToAscii( PROPERTY_ACTIVE_CONNECTION ) )
     {
         aProp <<= pFieldControl->getConnection();
     }
