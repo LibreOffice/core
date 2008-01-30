@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyBag.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:14:23 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,6 @@ package complex.dbaccess;
 import complexlib.ComplexTestCase;
 
 import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.Type;
-import com.sun.star.uno.Any;
 import com.sun.star.uno.XInterface;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.beans.*;
