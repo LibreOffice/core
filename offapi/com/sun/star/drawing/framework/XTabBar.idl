@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTabBar.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:46:44 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:10:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ module com { module sun { module star { module drawing { module framework {
     buttons with the same resource id.</p>
     </p>
     <p>A better place for this interface (in an extended version) would be
-    <type>com::sun::star::awt</type></p>
+    <code>com::sun::star::awt</code></p>
     @see TabBarButton
 */
 interface XTabBar
