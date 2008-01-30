@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComplexTestCase.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 13:15:53 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 09:38:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -264,6 +264,177 @@ public abstract class ComplexTestCase implements ComplexTest {
     }
 
     /**
+     * Assure that two boolean values are equal
+     * @param expected specifies the expected boolean value
+     * @param actual specifies the actual boolean value
+     */
+    protected void assureEquals( boolean expected, boolean actual ) {
+        assureEquals( "Equality test failed", new Boolean( expected ), new Boolean( actual ), false );
+    }
+
+    /**
+     * Assure that two boolean values are equal
+     * @param message the message to print when the equality test fails
+     * @param expected specifies the expected boolean value
+     * @param actual specifies the actual boolean value
+     */
+    protected void assureEquals( String message, boolean expected, boolean actual ) {
+        assureEquals( message, new Boolean( expected ), new Boolean( actual ), false );
+    }
+
+    /**
+     * Assure that two byte values are equal
+     * @param expected specifies the expected byte value
+     * @param actual specifies the actual byte value
+     */
+    protected void assureEquals( byte expected, byte actual ) {
+        assureEquals( "Equality test failed", new Byte( expected ), new Byte( actual ), false );
+    }
+
+    /**
+     * Assure that two byte values are equal
+     * @param message the message to print when the equality test fails
+     * @param expected specifies the expected byte value
+     * @param actual specifies the actual byte value
+     */
+    protected void assureEquals( String message, byte expected, byte actual ) {
+        assureEquals( message, new Byte( expected ), new Byte( actual ), false );
+    }
+
+    /**
+     * Assure that two double values are equal
+     * @param expected specifies the expected double value
+     * @param actual specifies the actual double value
+     */
+    protected void assureEquals( double expected, double actual ) {
+        assureEquals( "Equality test failed", new Double( expected ), new Double( actual ), false );
+    }
+
+    /**
+     * Assure that two double values are equal
+     * @param message the message to print when the equality test fails
+     * @param expected specifies the expected double value
+     * @param actual specifies the actual double value
+     */
+    protected void assureEquals( String message, double expected, double actual ) {
+        assureEquals( message, new Double( expected ), new Double( actual ), false );
+    }
+
+    /**
+     * Assure that two float values are equal
+     * @param expected specifies the expected float value
+     * @param actual specifies the actual float value
+     */
+    protected void assureEquals( float expected, float actual ) {
+        assureEquals( "Equality test failed", new Float( expected ), new Float( actual ), false );
+    }
+
+    /**
+     * Assure that two float values are equal
+     * @param message the message to print when the equality test fails
+     * @param expected specifies the expected float value
+     * @param actual specifies the actual float value
+     */
+    protected void assureEquals( String message, float expected, float actual ) {
+        assureEquals( message, new Float( expected ), new Float( actual ), false );
+    }
+
+    /**
+     * Assure that two short values are equal
+     * @param expected specifies the expected short value
+     * @param actual specifies the actual short value
+     */
+    protected void assureEquals( short expected, short actual ) {
+        assureEquals( "Equality test failed", new Short( expected ), new Short( actual ), false );
+    }
+
+    /**
+     * Assure that two short values are equal
+     * @param message the message to print when the equality test fails
+     * @param expected specifies the expected short value
+     * @param actual specifies the actual short value
+     */
+    protected void assureEquals( String message, short expected, short actual ) {
+        assureEquals( message, new Short( expected ), new Short( actual ), false );
+    }
+
+    /**
+     * Assure that two int values are equal
+     * @param expected specifies the expected int value
+     * @param actual specifies the actual int value
+     */
+    protected void assureEquals( int expected, int actual ) {
+        assureEquals( "Equality test failed", new Integer( expected ), new Integer( actual ), false );
+    }
+
+    /**
+     * Assure that two int values are equal
+     * @param message the message to print when the equality test fails
+     * @param expected specifies the expected int value
+     * @param actual specifies the actual int value
+     */
+    protected void assureEquals( String message, int expected, int actual ) {
+        assureEquals( message, new Integer( expected ), new Integer( actual ), false );
+    }
+
+    /**
+     * Assure that two long values are equal
+     * @param expected specifies the expected long value
+     * @param actual specifies the actual long value
+     */
+    protected void assureEquals( long expected, long actual ) {
+        assureEquals( "Equality test failed", new Long( expected ), new Long( actual ), false );
+    }
+
+    /**
+     * Assure that two long values are equal
+     * @param message the message to print when the equality test fails
+     * @param expected specifies the expected long value
+     * @param actual specifies the actual long value
+     */
+    protected void assureEquals( String message, long expected, long actual ) {
+        assureEquals( message, new Long( expected ), new Long( actual ), false );
+    }
+
+    /**
+     * Assure that two string values are equal
+     * @param expected specifies the expected string value
+     * @param actual specifies the actual string value
+     */
+    protected void assureEquals( String expected, String actual ) {
+        assureEquals( "Equality test failed", expected, actual, false );
+    }
+
+    /**
+     * Assure that two string values are equal
+     * @param message the message to print when the equality test fails
+     * @param expected specifies the expected string value
+     * @param actual specifies the actual string value
+     */
+    protected void assureEquals( String message, String expected, String actual ) {
+        assureEquals( message, expected, actual, false );
+    }
+
+    /**
+     * Assure that two object are equal
+     * @param expected specifies the expected object value
+     * @param actual specifies the actual object value
+     */
+    protected void assureEquals( Object expected, Object actual ) {
+        assureEquals( "Equality test failed", expected, actual, false );
+    }
+
+    /**
+     * Assure that two objects are equal
+     * @param message the message to print when the equality test fails
+     * @param expected specifies the expected object value
+     * @param actual specifies the actual object value
+     */
+    protected void assureEquals( String message, Object expected, Object actual ) {
+        assureEquals( message, expected, actual, false );
+    }
+
+    /**
      * Mark the currently executed method as failed.
      * This function generates "Test did fail." as standard message.
      */
@@ -300,6 +471,11 @@ public abstract class ComplexTestCase implements ComplexTest {
                 throw new AssureException(msg);
             }
         }
+    }
+
+    protected void assureEquals( String message, Object expected, Object actual, boolean cont ) {
+        assure( message + " (expected: " + expected.toString() + ", actual: " + actual.toString() + ")",
+            expected.equals( actual ), cont );
     }
 
     /**
