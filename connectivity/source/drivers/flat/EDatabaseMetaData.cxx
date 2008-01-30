@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:37:29 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:52:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,13 +98,13 @@ OFlatDatabaseMetaData::~OFlatDatabaseMetaData()
 {
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
+Reference< XResultSet > OFlatDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setTypeInfoMap();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
+    Reference< XResultSet > xRef = pResult;
+
     static ODatabaseMetaDataResultSet::ORows aRows;
     if(aRows.empty())
     {
@@ -196,19 +196,6 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getTypeInfo(  ) throw(SQ
     return xRef;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumnPrivileges(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
-        const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setColumnPrivilegesMap();
-    return xRef;
-}
-
-// -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& tableNamePattern,
         const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
@@ -291,92 +278,10 @@ Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getColumns(
         }
     }
 
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eColumns);
     Reference< XResultSet > xRef = pResult;
-    pResult->setColumnsMap();
     pResult->setRows(aRows);
 
-    return xRef;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getVersionColumns(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setVersionColumnsMap();
-    return xRef;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getExportedKeys(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setExportedKeysMap();
-    return xRef;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getImportedKeys(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setImportedKeysMap();
-    return xRef;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getPrimaryKeys(
-        const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setPrimaryKeysMap();
-    return xRef;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getIndexInfo(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
-        sal_Bool /*unique*/, sal_Bool /*approximate*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xRef = pResult;
-    pResult->setIndexInfoMap();
-    return xRef;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getBestRowIdentifier(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/, sal_Int32 /*scope*/,
-        sal_Bool /*nullable*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setBestRowIdentifierMap();
-    return xRef;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OFlatDatabaseMetaData::getCrossReference(
-    const Any& /*primaryCatalog*/, const ::rtl::OUString& /*primarySchema*/,
-    const ::rtl::OUString& /*primaryTable*/, const Any& /*foreignCatalog*/,
-        const ::rtl::OUString& /*foreignSchema*/, const ::rtl::OUString& /*foreignTable*/ ) throw(SQLException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = pResult;
-    pResult->setCrossReferenceMap();
     return xRef;
 }
 // -------------------------------------------------------------------------
