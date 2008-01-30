@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataAccessDescriptor.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:15:12 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:14:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,10 @@
 
 #ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
 #endif
 
 module com {  module sun {  module star {  module sdb {
@@ -98,6 +102,17 @@ published service DataAccessDescriptor
      */
     [optional, property] string ConnectionResource;
 
+    /** specifies additional info to use when creating a connection from a <code>ConnectionResource</code>
+
+        <p>This member is evaluated only when <code>ConnectionResource</code> is used: In this case,
+        <member scope="com::sun::star::sdbc">XDriverManager::getConnectionWithInfo</member> is used
+        to create a connection for the given connection resource, instead of
+        <member scope="com::sun::star::sdbc">XDriverManager::getConnection</member>.</p>
+
+        <p>If the sequence is empty, it is ignored.</p>
+    */
+    [optional, property] sequence< ::com::sun::star::beans::PropertyValue > ConnectionInfo;
+
     /** is a connection to use.
 
         <p>This object is guaranteed to be a <type scope="com::sun::star::sdbc">Connection</type>, but usually
@@ -136,7 +151,8 @@ published service DataAccessDescriptor
 
     /** specifies an addtional filter to optionally use.
 
-        <p>The Filter string has to form a SQL WHERE-clause, <em>without</em> the WHERE-string itself.</p>
+        <p>The Filter string has to form a <code>WHERE</code>-clause, <em>without</em> the
+        <code>WHERE</code>-string itself.</p>
 
         <p>If a <member>DataSourceName</member>, <member>Command</member> and <member>CommandType</member>
         are specified, a <type>RowSet</type> can be created with this information. If the results provided by the
@@ -149,6 +165,27 @@ published service DataAccessDescriptor
         @see ResultSet
     */
     [optional, property] string Filter;
+
+    /** specifies an additional <code>ORDER BY</code> clause which should be applied on top of
+        the given <member>Command</member>.
+
+        <p>The keyword <code>ORDER BY</code> itself is not part of this property.</p>
+     */
+    [optional, property] string Order;
+
+    /** specifies an additional <code>HAVING</code> clause which should be applied on top of
+        the given <member>Command</member>.
+
+        <p>The keyword <code>HAVING</code> itself is not part of this property.</p>
+     */
+    [optional, property] string HavingClause;
+
+    /** specifies an additional <code>GROUP BY</code> clause which should be applied on top of
+        the given <member>Command</member>.
+
+        <p>The keyword <code>GROUP BY</code> itself is not part of this property.</p>
+     */
+    [optional, property] string GroupBy;
 
     /** specifies if the <member>Command</member> should be analyzed on the client side before sending it
         to the database server.
