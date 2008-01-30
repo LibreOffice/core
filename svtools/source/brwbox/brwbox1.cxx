@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 10:02:43 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:59:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,9 +315,6 @@ ULONG BrowseBox::GetDefaultColumnWidth( const String& _rText ) const
 void BrowseBox::InsertHandleColumn( ULONG nWidth )
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
-
-    if ( !nWidth )
-        nWidth = GetDefaultColumnWidth( String() );
 
     pCols->Insert( new BrowserColumn( 0, Image(), String(), nWidth, GetZoom(), 0 ), (ULONG) 0 );
     FreezeColumn( 0 );
