@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:06:18 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,8 +183,8 @@ OHTMLReader::OHTMLReader(SvStream& rIn,const SharedConnection& _rxConnection,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                         const TColumnVector* pList,
                         const OTypeInfoMap* _pInfoMap)
-    : HTMLParser(rIn)
-    ,ODatabaseExport(_rxConnection,_rxNumberF,_rM,pList,_pInfoMap)
+    :HTMLParser(rIn)
+    ,ODatabaseExport( _rxConnection, _rxNumberF, _rM, pList, _pInfoMap, rIn )
     ,m_nTableCount(0)
     ,m_nColumnWidth(87)
     ,m_bMetaOptions(sal_False)
@@ -204,8 +204,8 @@ OHTMLReader::OHTMLReader(SvStream& rIn,
                          const TColumnVector* pList,
                          const OTypeInfoMap* _pInfoMap,
                          sal_Bool _bAutoIncrementEnabled)
-    : HTMLParser(rIn)
-    ,ODatabaseExport(nRows,_rColumnPositions,_rxNumberF,_rM,pList,_pInfoMap,_bAutoIncrementEnabled)
+    :HTMLParser(rIn)
+    ,ODatabaseExport( nRows, _rColumnPositions, _rxNumberF, _rM, pList, _pInfoMap, _bAutoIncrementEnabled, rIn )
     ,m_nTableCount(0)
     ,m_nColumnWidth(87)
     ,m_bMetaOptions(sal_False)
@@ -671,10 +671,10 @@ void OHTMLReader::release()
     ReleaseRef();
 }
 // -----------------------------------------------------------------------------
-OWizTypeSelect* OHTMLReader::createPage(Window* _pParent)
+TypeSelectionPageFactory OHTMLReader::getTypeSelectionPageFactory()
 {
     DBG_CHKTHIS(OHTMLReader,NULL);
-    return new OWizHTMLExtend(_pParent,rInput);
+    return &OWizHTMLExtend::Create;
 }
 // -----------------------------------------------------------------------------
 
