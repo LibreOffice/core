@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <version value="0.8.3"/>
+    <version value="0.9.1"/>
     <identifier value="com.sun.sun-mediawiki"/>
     <dependencies>
         <OpenOffice.org-minimal-version value="2.3" d:name="OpenOffice.org 2.3 or StarOffice 8 Update 8"/>
