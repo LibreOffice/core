@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:06:02 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:50:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,10 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
-#ifndef DBAUI_DATABASEEXPORT_HXX
+
 #include "DExport.hxx"
-#endif
+#include "moduledbu.hxx"
+
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #endif
@@ -123,12 +124,6 @@
 #ifndef DBAUI_WIZ_EXTENDPAGES_HXX
 #include "WExtendPages.hxx"
 #endif
-#ifndef DBAUI_WIZ_NAMEMATCHING_HXX
-#include "WNameMatch.hxx"
-#endif
-#ifndef DBAUI_WIZ_COLUMNSELECT_HXX
-#include "WColumnSelect.hxx"
-#endif
 #ifndef DBAUI_WIZARD_CPAGE_HXX
 #include "WCPage.hxx"
 #endif
@@ -147,6 +142,9 @@
 #ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
 #include <com/sun/star/sdb/SQLContext.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_APPLICATION_COPYTABLEOPERATION_HPP_
+#include <com/sun/star/sdb/application/CopyTableOperation.hpp>
+#endif
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
 #endif
@@ -155,6 +153,9 @@
 #endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
+#endif
+#ifndef _CPPUHELPER_EXC_HLP_HXX_
+#include <cppuhelper/exc_hlp.hxx>
 #endif
 
 
@@ -170,7 +171,8 @@ using namespace ::com::sun::star::sdb;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::awt;
 
-// ==========================================================================
+namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
+
 // ==========================================================================
 // ODatabaseExport
 // ==========================================================================
@@ -181,12 +183,14 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
                                  const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                                  const TColumnVector* pList,
                                  const OTypeInfoMap* _pInfoMap,
-                                 sal_Bool _bAutoIncrementEnabled)
+                                 sal_Bool _bAutoIncrementEnabled,
+                                 SvStream& _rInputStream)
     :m_vColumns(_rColumnPositions)
     ,m_aDestColumns(sal_True)
     ,m_xFormatter(_rxNumberF)
     ,m_xFactory(_rM)
     ,m_pFormatter(NULL)
+    ,m_rInputStream( _rInputStream )
     ,m_pTypeInfo()
     ,m_pColumnList(pList)
     ,m_pInfoMap(_pInfoMap)
@@ -235,12 +239,14 @@ ODatabaseExport::ODatabaseExport(const SharedConnection& _rxConnection,
                                  const Reference< XNumberFormatter >& _rxNumberF,
                                  const Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM,
                                  const TColumnVector* pList,
-                                 const OTypeInfoMap* _pInfoMap)
+                                 const OTypeInfoMap* _pInfoMap,
+                                 SvStream& _rInputStream)
     :m_aDestColumns(_rxConnection->getMetaData().is() && _rxConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers() == sal_True)
     ,m_xConnection(_rxConnection)
     ,m_xFormatter(_rxNumberF)
     ,m_xFactory(_rM)
     ,m_pFormatter(NULL)
+    ,m_rInputStream( _rInputStream )
     ,m_pTypeInfo()
     ,m_pColumnList(NULL)
     ,m_pInfoMap(NULL)
@@ -756,8 +762,8 @@ sal_Bool ODatabaseExport::createRowSet()
         ::rtl::OUString sDestName = ::dbtools::composeTableName(
             m_xConnection->getMetaData(), m_xTable, ::dbtools::eInDataManipulation, false, false, false );
 
-        xProp->setPropertyValue(PROPERTY_ACTIVECONNECTION,makeAny(m_xConnection.getTyped()));
-        xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(CommandType::TABLE));
+        xProp->setPropertyValue(PROPERTY_ACTIVE_CONNECTION,makeAny(m_xConnection.getTyped()));
+        xProp->setPropertyValue(PROPERTY_COMMAND_TYPE,makeAny(CommandType::TABLE));
         xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(sDestName));
         xProp->setPropertyValue(PROPERTY_IGNORERESULT,::cppu::bool2any(sal_True));
         Reference<XRowSet> xRowSet(xProp,UNO_QUERY);
@@ -781,45 +787,34 @@ sal_Bool ODatabaseExport::createRowSet()
     return m_pUpdateHelper.get() != NULL;
 }
 // -----------------------------------------------------------------------------
-sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _sTableName,const Any& _aTextColor,const FontDescriptor& _rFont)
+sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _rTableName,const Any& _aTextColor,const FontDescriptor& _rFont)
 {
     DBG_CHKTHIS(ODatabaseExport,NULL);
 
-    //--------dyf add 20070601
-    //if there is a table was selected,then create with m_sDefaultTableName,otherwise,with _sTableName
-    OCopyTableWizard aWizard(NULL,_sTableName,m_aDestColumns,m_vDestVector,m_xConnection,m_xFormatter,m_xFactory);
-    if (m_sDefaultTableName.getLength() != 0 )
-    {
-        aWizard.ResetsName(m_sDefaultTableName);
-        aWizard.setCreateStyle(OCopyTableWizard::WIZARD_APPEND_DATA);
-    }
+    bool bHaveDefaultTable = ( m_sDefaultTableName.getLength() != 0 );
+    ::rtl::OUString sTableName( bHaveDefaultTable ? m_sDefaultTableName : _rTableName );
+    OCopyTableWizard aWizard(
+        NULL,
+        sTableName,
+        bHaveDefaultTable ? CopyTableOperation::AppendData : CopyTableOperation::CopyDefinitionAndData,
+        m_aDestColumns,
+        m_vDestVector,
+        m_xConnection,
+        m_xFormatter,
+        getTypeSelectionPageFactory(),
+        m_rInputStream,
+        m_xFactory
+    );
+
     sal_Bool bError = sal_False;
     try
     {
-        aWizard.fillTypeInfo();
-
-        OCopyTable*         pPage1;
-        pPage1 = new OCopyTable(&aWizard,COPY, sal_False);
-        pPage1->setCreateStyleAction();
-    //---------dyf add end
-
-        OWizNameMatching*   pPage2 = new OWizNameMatching(&aWizard);
-        OWizColumnSelect*   pPage3 = new OWizColumnSelect(&aWizard);
-        OWizTypeSelect*     pPage4 = createPage(&aWizard);
-
-        aWizard.AddWizardPage(pPage1);
-        aWizard.AddWizardPage(pPage2);
-        aWizard.AddWizardPage(pPage3);
-        aWizard.AddWizardPage(pPage4);
-
-        aWizard.ActivatePage();
-
         if (aWizard.Execute())
         {
-            switch(aWizard.getCreateStyle())
+            switch(aWizard.getOperation())
             {
-                case OCopyTableWizard::WIZARD_DEF_DATA:
-                case OCopyTableWizard::WIZARD_APPEND_DATA:
+                case CopyTableOperation::CopyDefinitionAndData:
+                case CopyTableOperation::AppendData:
                     {
                         m_xTable = aWizard.createTable();
                         bError = !m_xTable.is();
@@ -829,7 +824,7 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _sTableName,const
                             if(_aTextColor.hasValue())
                                 m_xTable->setPropertyValue(PROPERTY_TEXTCOLOR,_aTextColor);
                         }
-                        m_bIsAutoIncrement  = aWizard.isAutoincrementEnabled();
+                        m_bIsAutoIncrement  = aWizard.shouldCreatePrimaryKey();
                         m_vColumns          = aWizard.GetColumnPositions();
                         m_vColumnTypes      = aWizard.GetColumnTypes();
                     }
@@ -844,22 +839,9 @@ sal_Bool ODatabaseExport::executeWizard(const ::rtl::OUString& _sTableName,const
         if(!bError)
             bError = !createRowSet();
     }
-    catch(SQLContext& e)
+    catch( const SQLException&)
     {
-        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),&aWizard,m_xFactory);
-        bError = sal_True;
-    }
-    catch(SQLWarning& e)
-    {
-
-        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),&aWizard,m_xFactory);
-        bError = sal_True;
-    }
-    catch(SQLException& e)
-    {
-
-
-        ::dbaui::showError(::dbtools::SQLExceptionInfo(e),&aWizard,m_xFactory);
+        ::dbaui::showError( ::dbtools::SQLExceptionInfo( ::cppu::getCaughtException() ), &aWizard, m_xFactory );
         bError = sal_True;
     }
     catch(Exception& )
@@ -876,7 +858,7 @@ void ODatabaseExport::showErrorDialog(const ::com::sun::star::sdbc::SQLException
     {
         String aMsg(e.Message);
         aMsg += '\n';
-        aMsg += String(ModuleRes(STR_QRY_CONTINUE));
+        aMsg += String( ModuleRes( STR_QRY_CONTINUE ) );
         OSQLMessageBox aBox(NULL, String(ModuleRes(STR_STAT_WARNING)),
             aMsg, WB_YES_NO | WB_DEF_NO, OSQLMessageBox::Warning);
 
