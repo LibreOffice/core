@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FConnection.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2007-06-05 14:22:23 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:51:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,6 @@ typedef connectivity::OMetaConnection OConnection_BASE;
 // --------------------------------------------------------------------------------
 OConnection::OConnection(OFileDriver*   _pDriver)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
-                         ,m_xMetaData(NULL)
                          ,m_pDriver(_pDriver)
                          ,m_bClosed(sal_False)
                          ,m_bShowDeleted(sal_False)
@@ -423,26 +422,14 @@ void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeExceptio
 void OConnection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-
-
-    //  m_aTables.disposing();
-    for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
-    {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
-        if (xComp.is())
-            xComp->dispose();
-    }
-    m_aStatements.clear();
+    OConnection_BASE::disposing();
 
     m_bClosed   = sal_True;
-    m_xMetaData = WeakReference< XDatabaseMetaData>();
     m_xDir      = NULL;
     m_xContent  = NULL;
-    //  ::comphelper::disposeComponent(m_xCatalog);
     m_xCatalog  = WeakReference< XTablesSupplier>();
 
     dispose_ChildImpl();
-    OConnection_BASE::disposing();
 }
 //------------------------------------------------------------------------------
 Reference< XTablesSupplier > OConnection::createCatalog()
