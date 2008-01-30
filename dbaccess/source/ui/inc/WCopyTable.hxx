@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCopyTable.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:02:18 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:48:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,6 +128,132 @@ namespace dbaui
                 ::std::bind2nd(m_aCase, _sColumnName)) != m_pVector->end();
         }
     };
+
+    // ========================================================
+    // ICopyTableSourceObject
+    // ========================================================
+    /** interface to an object to copy to another DB, using the OCopyTableWizard
+
+        when the wizard is used to copy an object to another DB, it usually requires
+        a sdbcx-level or sdb-level object (a css.sdbcx.Table or css.sdb.Query, that is).
+
+        However, to also support copying tables from sdbc-level connections, we allow to
+        work with the object name only. This implies some less features (like copying the
+        UI settings of a table is not done), but still allows to copy definition and data.
+    */
+    class ICopyTableSourceObject
+    {
+    public:
+        /// retrieves the fully qualified name of the object to copy
+        virtual ::rtl::OUString     getQualifiedObjectName() const = 0;
+        /// determines whether the object is a view
+        virtual bool                isView() const = 0;
+        /** copies the UI settings of the object to the given target object. Might be
+            ignored by implementations which do not have Ui settings.
+        */
+        virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const = 0;
+        /// retrieves the column names of the to-be-copied object
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                    getColumnNames() const = 0;
+        /// retrieves the names of the primary keys of the to-be-copied object
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                    getPrimaryKeyColumnNames() const = 0;
+        /// creates a OFieldDescription for the given column of the to-be-copied object
+        virtual OFieldDescription*  createFieldDescription( const ::rtl::OUString& _rColumnName ) const = 0;
+        /// returns the SELECT statement which can be used to retrieve the data of the to-be-copied object
+        virtual ::rtl::OUString     getSelectStatement() const = 0;
+
+        /** copies the filter and sorting
+        *
+        * \return
+        */
+        virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const = 0;
+
+        /** returns the prepared statement which can be used to retrieve the data of the to-be-copied object
+
+            The default implementation of this method will simply prepare a statement with the return value
+            of ->getSelectStatement.
+        */
+        virtual ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >
+                                    getPreparedSelectStatement() const = 0;
+
+        virtual ~ICopyTableSourceObject();
+    };
+
+    // ========================================================
+    // ObjectCopySource
+    // ========================================================
+    class ObjectCopySource : public ICopyTableSourceObject
+    {
+    private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xObject;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo >   m_xObjectPSI;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xObjectColumns;
+
+    public:
+        ObjectCopySource(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject
+        );
+
+        // ICopyTableSourceObject overridables
+        virtual ::rtl::OUString     getQualifiedObjectName() const;
+        virtual bool                isView() const;
+        virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
+        virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                    getColumnNames() const;
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                    getPrimaryKeyColumnNames() const;
+        virtual OFieldDescription*  createFieldDescription( const ::rtl::OUString& _rColumnName ) const;
+        virtual ::rtl::OUString     getSelectStatement() const;
+        virtual ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >
+                                    getPreparedSelectStatement() const;
+    };
+
+    // ========================================================
+    // NamedTableCopySource
+    // ========================================================
+    class NamedTableCopySource : public ICopyTableSourceObject
+    {
+    private:
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >   m_xMetaData;
+        ::rtl::OUString                                                                 m_sTableName;
+        ::rtl::OUString                                                                 m_sTableCatalog;
+        ::rtl::OUString                                                                 m_sTableSchema;
+        ::rtl::OUString                                                                 m_sTableBareName;
+        ::std::vector< OFieldDescription >                                              m_aColumnInfo;
+        ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >         m_xStatement;
+
+    public:
+        NamedTableCopySource(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection,
+            const ::rtl::OUString& _rTableName
+        );
+
+        // ICopyTableSourceObject overridables
+        virtual ::rtl::OUString     getQualifiedObjectName() const;
+        virtual bool                isView() const;
+        virtual void                copyUISettingsTo( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
+        virtual void                copyFilterAndSortingTo(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxObject ) const;
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                    getColumnNames() const;
+        virtual ::com::sun::star::uno::Sequence< ::rtl::OUString >
+                                    getPrimaryKeyColumnNames() const;
+        virtual OFieldDescription*  createFieldDescription( const ::rtl::OUString& _rColumnName ) const;
+        virtual ::rtl::OUString     getSelectStatement() const;
+        virtual ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >
+                                    getPreparedSelectStatement() const;
+
+    private:
+        void    impl_ensureColumnInfo_throw();
+        ::utl::SharedUNOComponent< ::com::sun::star::sdbc::XPreparedStatement >
+                impl_ensureStatement_throw();
+    };
+
     // ========================================================
     // Wizard Dialog
     // ========================================================
@@ -141,14 +267,6 @@ namespace dbaui
 
     public:
         DECLARE_STL_MAP(::rtl::OUString,::rtl::OUString,::comphelper::UStringMixLess,TNameMapping);
-
-        enum Wizard_Create_Style
-        {
-            WIZARD_APPEND_DATA = 0,
-            WIZARD_DEF_DATA,
-            WIZARD_DEF,
-            WIZARD_DEF_VIEW
-        };
 
         enum Wizard_Button_Style
         {
@@ -180,19 +298,17 @@ namespace dbaui
         ODatabaseExport::TPositions             m_vColumnPos;
         ::std::vector<sal_Int32>                m_vColumnTypes;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xDestObject; // can be a query or a table
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xConnection;  // dest conn
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xDestConnection;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       m_xSourceObject;
-        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >         m_xSourceConnection;    // source conn
+        const ICopyTableSourceObject&                                                   m_rSourceObject;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>     m_xSourceColumns;       // container
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >    m_xFormatter;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> m_xFactory;
 
         String                  m_sTypeNames;       // these type names are the ones out of the resource file
         sal_uInt32              m_nPageCount;
         sal_Bool                m_bDeleteSourceColumns;
+        bool                    m_bInterConnectionCopy;    // are we copying between different connections?
 
         ::com::sun::star::lang::Locale  m_aLocale;
         ::rtl::OUString                 m_sName;    // for a table the name is composed
@@ -200,9 +316,9 @@ namespace dbaui
         ::rtl::OUString                 m_aKeyName;
         TOTypeInfoSP                    m_pTypeInfo; // default type
         sal_Bool                        m_bAddPKFirstTime;
-        Wizard_Create_Style             m_eCreateStyle;
+        sal_Int16                       m_nOperation;
         Wizard_Button_Style             m_ePressed;
-        bool                            m_bCreatePrimaryColumn;
+        sal_Bool                        m_bCreatePrimaryKeyColumn;
 
     private:
         DECL_LINK( ImplPrevHdl  , PushButton* );
@@ -210,34 +326,43 @@ namespace dbaui
         DECL_LINK( ImplOKHdl    , OKButton* );
         DECL_LINK( ImplActivateHdl, WizardDialog* );
         sal_Bool CheckColumns(sal_Int32& _rnBreakPos);
-        void loadData(  const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xTable,
-                        ODatabaseExport::TColumns& _rColumns,
-                        ODatabaseExport::TColumnVector& _rColVector);
+        void loadData( const ICopyTableSourceObject& _rSourceObject,
+                       ODatabaseExport::TColumns& _rColumns,
+                       ODatabaseExport::TColumnVector& _rColVector );
         void construct();
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getKeyColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xTable) const;
         // need for table creation
-        void appendColumns(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup,const ODatabaseExport::TColumnVector* _pVec,sal_Bool _bKeyColumns=sal_False);
-        void appendKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup,const ODatabaseExport::TColumnVector* _pVec);
+        void appendColumns( ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XColumnsSupplier>& _rxColSup, const ODatabaseExport::TColumnVector* _pVec, sal_Bool _bKeyColumns = sal_False ) const;
+        void appendKey(::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XKeysSupplier>& _rxSup,const ODatabaseExport::TColumnVector* _pVec) const;
         // checks if the type is supported in the destination database
         sal_Bool supportsType(sal_Int32 _nDataType,sal_Int32& _rNewDataType);
 
+        void    impl_loadSourceData();
+
     public:
         // used for copy tables or queries
-        OCopyTableWizard(Window * pParent,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >&       _xSourceObject,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&         _xSourceConnection,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&         _xConnection,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >&    _xFormatter,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
+        OCopyTableWizard(
+            Window * pParent,
+            const ::rtl::OUString& _rDefaultName,
+            sal_Int16 _nOperation,
+            const ICopyTableSourceObject&                                                           _rSourceObject,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&          _xSourceConnection,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >&          _xConnection,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+        );
 
         // used for importing rtf/html sources
-        OCopyTableWizard(Window * pParent,
-                        const ::rtl::OUString& _rDefaultName,
-                        const ODatabaseExport::TColumns& _rDestColumns,
-                        const ODatabaseExport::TColumnVector& _rSourceColVec,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _xFormatter,
-                        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);
+        OCopyTableWizard(
+            Window* pParent,
+            const ::rtl::OUString& _rDefaultName,
+            sal_Int16 _nOperation,
+            const ODatabaseExport::TColumns& _rDestColumns,
+            const ODatabaseExport::TColumnVector& _rSourceColVec,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter >& _xFormatter,
+            TypeSelectionPageFactory _pTypeSelectionPageFactory,
+            SvStream& _rTypeSelectionPageArg,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM
+        );
 
         virtual ~OCopyTableWizard();
 
@@ -249,16 +374,10 @@ namespace dbaui
         void                RemoveWizardPage(OWizardPage* pPage); // Page goes again to user
         void                CheckButtons(); // checks which button can be disabled, enabled
 
-        void                fillTypeInfo();
-        /** has to be called after fillTypeInfo() and only when using the 1st ctor
-        */
-        void                loadData();
-
         // returns a vector where the position of a column and if the column is in the selection
         // when not the value is COLUMN_POSITION_NOT_FOUND == (sal_uInt32)-1
         ODatabaseExport::TPositions GetColumnPositions()    const { return m_vColumnPos; }
         ::std::vector<sal_Int32>    GetColumnTypes()        const { return m_vColumnTypes; }
-        const TNameMapping*         GetNameMapping()        const { return &m_mNameMapping; }
 
         void insertColumn(sal_Int32 _nPos,OFieldDescription* _pField);
 
@@ -272,16 +391,20 @@ namespace dbaui
         */
         void replaceColumn(sal_Int32 _nPos,OFieldDescription* _pField,const ::rtl::OUString& _sOldName);
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > getDestObject() const { return m_xDestObject; }
-        /**
-            @return
-                <TRUE/> if I need to set the autoincrement value by myself otherwise <FALSE/>
+        /** returns whether a primary key should be created in the target database
         */
-        bool isAutoincrementEnabled() const;
+        sal_Bool        shouldCreatePrimaryKey() const;
+        void            setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUString& _rSuggestedName );
+
+        static bool     supportsPrimaryKey( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
+        bool            supportsPrimaryKey() const { return supportsPrimaryKey( m_xDestConnection ); }
+
+        static bool     supportsViews( const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConnection );
+        bool            supportsViews() const { return supportsViews( m_xDestConnection ); }
 
         /** returns the name of the primary key
             @return
-                The name of teh primary key.
+                The name of the primary key.
         */
         ::rtl::OUString getPrimaryKeyName() const { return m_aKeyName; }
 
@@ -306,13 +429,11 @@ namespace dbaui
         void clearDestColumns();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createTable();
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createView();
-        // return true when the conenction supports primary keys
-        sal_Bool  supportsPrimaryKey() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > createView() const;
         sal_Int32 getMaxColumnNameLength() const;
 
-        void setCreateStyle(const Wizard_Create_Style& _eStyle);
-        Wizard_Create_Style getCreateStyle() const;
+        void setOperation( const sal_Int16 _nOperation );
+        sal_Int16 getOperation() const;
 
         ::rtl::OUString convertColumnName(  const TColumnFindFunctor&   _rCmpFunctor,
                                             const ::rtl::OUString&  _sColumnName,
@@ -327,12 +448,8 @@ namespace dbaui
 
         void removeColumnNameFromNameMap(const ::rtl::OUString& _sName);
 
-        //dyf add
-        void ResetsName(const ::rtl::OUString & _sName);
-        //dyf add end
+        void SetTableName( const ::rtl::OUString& _rName );
     };
 }
 
 #endif // DBAUI_WIZ_COPYTABLEDIALOG_HXX
-
-
