@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:49:47 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:41:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,7 +393,7 @@ namespace dbaui
             @return
                 <TRUE/> if the document could be suspended, otherwise <FALSE/>.
         */
-        sal_Bool suspendDocument(const TDocuments::key_type& _xComponent,sal_Bool _bSuspend);
+        sal_Bool suspendDocument(const TDocuments::value_type& _xComponent,sal_Bool _bSuspend);
 
         /** suspend all open documents.
             @return
