@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PresentationDocument.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:40:36 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:12:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,9 +83,9 @@ service PresentationDocument
             <li><type>SlideNumberShape</type></li>
             <li><type>DateTimeShape</type></li>
             <li><type>DocumentSettings</type></li>
-            <li><type>TextFields::Header</type></li>
-            <li><type>TextFields::Footer</type></li>
-            <li><type>TextFields::DateTime</type></li>
+            <li><type scope="textfield">Header</type></li>
+            <li><type scope="textfield">Footer</type></li>
+            <li><type scope="textfield">DateTime</type></li>
         </ul>
      */
     service com::sun::star::drawing::GenericDrawingDocument;
