@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TPrivilegesResultSet.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:00:54 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,8 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
                                            , const Any& catalog
                                            , const ::rtl::OUString& schemaPattern
                                            , const ::rtl::OUString& tableNamePattern)
-                                           : m_bResetValues(sal_True)
+                                           : ODatabaseMetaDataResultSet(eTablePrivileges)
+                                           , m_bResetValues(sal_True)
 {
     osl_incrementInterlockedCount( &m_refCount );
     {
@@ -77,7 +78,6 @@ OResultSetPrivileges::OResultSetPrivileges( const Reference< XDatabaseMetaData>&
         {
         }
 
-        setTablePrivilegesMap();
         ODatabaseMetaDataResultSet::ORows aRows;
         static ODatabaseMetaDataResultSet::ORow aRow(8);
         aRow[5] = new ORowSetValueDecorator(sUserWorkingFor);
@@ -157,7 +157,6 @@ sal_Bool SAL_CALL OResultSetPrivileges::next(  ) throw(SQLException, RuntimeExce
         if ( !bReturn )
         {
             m_bBOF = sal_False;
-            ODatabaseMetaDataResultSet::next();
             m_bResetValues = bReturn = m_xTables->next();
         }
     }
