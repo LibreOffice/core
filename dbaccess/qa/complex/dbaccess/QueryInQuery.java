@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QueryInQuery.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:31:18 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:26:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ import com.sun.star.sdbc.XResultSet;
 public class QueryInQuery extends complexlib.ComplexTestCase
 {
     private CRMDatabase                 m_database;
-    private XSingleSelectQueryComposer  m_composer;
 
     // --------------------------------------------------------------------------------------------------------
     public String[] getTestMethodNames()
@@ -86,11 +85,6 @@ public class QueryInQuery extends complexlib.ComplexTestCase
             m_database = new CRMDatabase( getORB() );
 
             m_database.getDatabase().getDataSource().createQuery( "query products", "SELECT * FROM \"products\"" );
-
-            XMultiServiceFactory connectionFactory = (XMultiServiceFactory)UnoRuntime.queryInterface(
-                XMultiServiceFactory.class, m_database.getConnection() );
-            m_composer = (XSingleSelectQueryComposer)UnoRuntime.queryInterface(
-                XSingleSelectQueryComposer.class, connectionFactory.createInstance( "com.sun.star.sdb.SingleSelectQueryComposer" ) );
         }
         catch ( Exception e )
         {
