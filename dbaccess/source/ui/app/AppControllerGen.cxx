@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppControllerGen.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 14:07:10 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:41:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,11 @@
 #ifndef DBAUI_APPCONTROLLER_HXX
 #include "AppController.hxx"
 #endif
+
+#include <com/sun/star/ucb/Command.hpp>
+#include <com/sun/star/ucb/XCommandProcessor.hpp>
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #endif
@@ -244,7 +249,7 @@ void OApplicationController::pasteFormat(sal_uInt32 _nFormatId)
                 m_aTableCopyHelper.pasteTable( _nFormatId, rClipboard, getDatabaseName(), ensureConnection() );
             }
             else
-                paste( eType,ODataAccessObjectTransferable::extractObjectDescriptor(rClipboard) );
+                paste( eType, ODataAccessObjectTransferable::extractObjectDescriptor( rClipboard ) );
 
         }
         catch(Exception& )
@@ -299,7 +304,7 @@ void OApplicationController::openDialog( const ::rtl::OUString& _sServiceName )
         if ( xConnection.is() )
         {
             aArgs[ nArgPos++ ] <<= PropertyValue(
-                PROPERTY_ACTIVECONNECTION, 0,
+                PROPERTY_ACTIVE_CONNECTION, 0,
                 makeAny( xConnection ), PropertyState_DIRECT_VALUE );
         }
         aArgs.realloc( nArgPos );
@@ -524,27 +529,39 @@ void OApplicationController::askToReconnect()
     }
 }
 // -----------------------------------------------------------------------------
-sal_Bool OApplicationController::suspendDocument(const TDocuments::key_type& _xComponent,sal_Bool _bSuspend)
+sal_Bool OApplicationController::suspendDocument(const TDocuments::value_type& _aComponent,sal_Bool _bSuspend)
 {
     sal_Bool bSuspended = sal_True;
     Reference<XController> xController;
-    Reference<XModel> xModel(_xComponent,UNO_QUERY);
+    Reference<XModel> xModel(_aComponent.first,UNO_QUERY);
     if ( xModel.is() )
         xController = xModel->getCurrentController();
     else
     {
-        xController.set(_xComponent,UNO_QUERY);
+        xController.set(_aComponent.first,UNO_QUERY);
         if ( !xController.is() )
         {
-            Reference<XFrame> xFrame(_xComponent,UNO_QUERY);
+            Reference<XFrame> xFrame(_aComponent.first,UNO_QUERY);
             if ( xFrame.is() )
                 xController = xFrame->getController();
         }
     }
 
-
     if ( xController.is() && xController != *this )
-        bSuspended = xController->suspend(_bSuspend);
+    {
+        Reference< XCommandProcessor > xContent(_aComponent.second,UNO_QUERY);
+        if ( xContent.is() )
+        {
+            if ( _bSuspend )
+            {
+                Command aCommand;
+                aCommand.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("shutdown"));
+                xContent->execute(aCommand,xContent->createCommandIdentifier(),Reference< XCommandEnvironment >()) >>= bSuspended;
+            }
+        }
+        else
+            bSuspended = xController->suspend(_bSuspend);
+    }
 
     return bSuspended;
 }
@@ -555,12 +572,14 @@ sal_Bool OApplicationController::suspendDocuments(sal_Bool bSuspend)
     sal_Bool bSubSuspended = sal_True;
     Reference<XModel> xModel;
     sal_Int32 nSuspendPos = 1;
+
     try
     {
-        TDocuments::iterator aIter = m_aDocuments.begin();
-        TDocuments::iterator aEnd = m_aDocuments.end();
+        TDocuments aCopy = m_aDocuments;
+        TDocuments::iterator aIter = aCopy.begin();
+        TDocuments::iterator aEnd = aCopy.end();
         for (; aIter != aEnd && bSubSuspended; ++aIter,++nSuspendPos)
-            bSubSuspended = suspendDocument(aIter->first,bSuspend);
+            bSubSuspended = suspendDocument(*aIter,bSuspend);
     }
     catch(Exception)
     {
@@ -576,6 +595,18 @@ sal_Bool OApplicationController::suspendDocuments(sal_Bool bSuspend)
                 Reference< XComponent > xDocument = document->first;
                 if ( xDocument.is() )
                     xDocument->removeEventListener(static_cast<XFrameActionListener*>(this));
+
+                Reference<XFrame> xFrame(document->first,UNO_QUERY);
+                if ( xFrame.is() )
+                {
+                    Reference<XController> xController = xFrame->getController();
+                    if ( xController.is() )
+                    {
+                        Reference< com::sun::star::util::XCloseable> xCloseable(xController->getFrame(),UNO_QUERY);
+                        if ( xCloseable.is() )
+                            xCloseable->close(sal_True);
+                    }
+                }
             }
             document = m_aDocuments.begin();
             // first of all we have to set the second to NULL
@@ -584,69 +615,11 @@ sal_Bool OApplicationController::suspendDocuments(sal_Bool bSuspend)
                 TDocuments::iterator aPos = document++;
                 aPos->second = NULL; // this may also dispose the document
             }
-            // work on copy
-            TDocuments  aDocuments = m_aDocuments;
-            document = aDocuments.begin();
-            documentEnd = aDocuments.end();
-            for (; document != documentEnd ; ++document )
-            {
-                Reference<XController> xController;
-                xModel.set(document->first,UNO_QUERY);
-                if ( xModel.is() )
-                    xController = xModel->getCurrentController();
-                else
-                {
-                    xController.set(document->first,UNO_QUERY);
-                    if ( !xController.is() )
-                    {
-                        Reference<XFrame> xFrame(document->first,UNO_QUERY);
-                        if ( xFrame.is() )
-                            xController = xFrame->getController();
-                    }
-                }
-
-                if ( xController.is() && xController != *this )
-                {
-                    // Reference< com::sun::star::util::XCloseable> xCloseable(xController->getFrame(),UNO_QUERY);
-                    // if ( xCloseable.is() )
-                    //  xCloseable->close(sal_True);
-                    ::com::sun::star::util::URL aUrl;// getURLForId(DISPATCH_CLOSEWIN);
-                    aUrl.Complete = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:CloseDoc"));
-                    if (m_xUrlTransformer.is())
-                        m_xUrlTransformer->parseStrict(aUrl);
-                    try
-                    {
-                        Reference<XDispatchProvider> xFrame(xController->getFrame(),UNO_QUERY);
-
-                        rtl::Reference< CloseChecker > xCloseChecker = new CloseChecker();
-                        Reference<XComponent> xComponent(xFrame, UNO_QUERY);
-                        if (xComponent.is())
-                        {
-                            xComponent->addEventListener( xCloseChecker.get() );
-                        }
-                        xFrame->queryDispatch(aUrl, rtl::OUString::createFromAscii("_self"), 0)->dispatch( aUrl, Sequence< PropertyValue >() );
-
-                        if (! xCloseChecker->isClosed())
-                        {
-                            bSubSuspended = sal_False;
-                        }
-                        if (xComponent.is())
-                        {
-                            xComponent->removeEventListener( xCloseChecker.get() );
-                        }
-                    }
-                    catch(Exception &e)
-                    {
-                       (void)e;
-                       // bCheck = sal_False;
-                    }
-                }
-            }
         }
         catch(Exception)
         {
         }
-        if (bSubSuspended == sal_True)
+        if ( bSubSuspended )
         {
             // remove the document only at save or discard, but not at cancel state.
             m_aDocuments.clear();
@@ -659,7 +632,7 @@ sal_Bool OApplicationController::suspendDocuments(sal_Bool bSuspend)
         try
         {
             for (; aIter != aEnd && nSuspendPos ; ++aIter,--nSuspendPos)
-                suspendDocument(aIter->first,!bSuspend);
+                suspendDocument(*aIter,!bSuspend);
         }
         catch(Exception)
         {
