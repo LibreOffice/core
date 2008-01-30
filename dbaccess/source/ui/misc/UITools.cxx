@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:07:06 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:51:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1697,11 +1697,10 @@ namespace
 }
 
 // -----------------------------------------------------------------------------
-Reference<XPropertySet> createView( const ::rtl::OUString& _sName
-                                   ,const Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
-                                   ,const Reference<XPropertySet>& _xSourceObject)
+Reference< XPropertySet > createView( const ::rtl::OUString& _rName, const Reference< XConnection >& _rxConnection,
+                                    const ::rtl::OUString& _rCommand )
 {
-    Reference<XViewsSupplier> xSup(_xConnection,UNO_QUERY);
+    Reference<XViewsSupplier> xSup(_rxConnection,UNO_QUERY);
     Reference< XNameAccess > xViews;
     if(xSup.is())
         xViews = xSup->getViews();
@@ -1715,8 +1714,8 @@ Reference<XPropertySet> createView( const ::rtl::OUString& _sName
         return NULL;
 
     ::rtl::OUString sCatalog,sSchema,sTable;
-    ::dbtools::qualifiedNameComponents(_xConnection->getMetaData(),
-                                        _sName,
+    ::dbtools::qualifiedNameComponents(_rxConnection->getMetaData(),
+                                        _rName,
                                         sCatalog,
                                         sSchema,
                                         sTable,
@@ -1726,22 +1725,7 @@ Reference<XPropertySet> createView( const ::rtl::OUString& _sName
     xView->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
     xView->setPropertyValue(PROPERTY_NAME,makeAny(sTable));
 
-    ::rtl::OUString sCommand;
-    if(_xSourceObject->getPropertySetInfo()->hasPropertyByName(PROPERTY_COMMAND))
-    {
-        _xSourceObject->getPropertyValue(PROPERTY_COMMAND) >>= sCommand;
-
-        sal_Bool bEscapeProcessing( sal_False );
-        OSL_VERIFY( _xSourceObject->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
-        if ( bEscapeProcessing )
-            sCommand = lcl_createSDBCLevelStatement( sCommand, _xConnection );
-    }
-    else
-    {
-        sCommand = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SELECT * FROM "));
-        sCommand += composeTableNameForSelect( _xConnection, _xSourceObject );
-    }
-    xView->setPropertyValue(PROPERTY_COMMAND,makeAny(sCommand));
+    xView->setPropertyValue( PROPERTY_COMMAND, makeAny( _rCommand ) );
 
     Reference<XAppend> xAppend(xViews,UNO_QUERY);
     if(xAppend.is())
@@ -1750,17 +1734,41 @@ Reference<XPropertySet> createView( const ::rtl::OUString& _sName
     xView = NULL;
     // we need to reget the view because after appending it it is no longer valid
     // but this time it isn't a view object it is a table object with type "VIEW"
-    Reference<XTablesSupplier> xTabSup(_xConnection,UNO_QUERY);
+    Reference<XTablesSupplier> xTabSup(_rxConnection,UNO_QUERY);
     Reference< XNameAccess > xTables;
     if ( xTabSup.is() )
     {
         xTables = xTabSup->getTables();
-        if ( xTables.is() && xTables->hasByName(_sName) )
-            xTables->getByName(_sName) >>= xView;
+        if ( xTables.is() && xTables->hasByName( _rName ) )
+            xTables->getByName( _rName ) >>= xView;
     }
 
     return xView;
 }
+
+// -----------------------------------------------------------------------------
+Reference<XPropertySet> createView( const ::rtl::OUString& _rName, const Reference< XConnection >& _rxConnection
+                                   ,const Reference<XPropertySet>& _rxSourceObject)
+{
+    ::rtl::OUString sCommand;
+    Reference< XPropertySetInfo > xPSI( _rxSourceObject->getPropertySetInfo(), UNO_SET_THROW );
+    if ( xPSI->hasPropertyByName( PROPERTY_COMMAND ) )
+    {
+        _rxSourceObject->getPropertyValue( PROPERTY_COMMAND ) >>= sCommand;
+
+        sal_Bool bEscapeProcessing( sal_False );
+        OSL_VERIFY( _rxSourceObject->getPropertyValue( PROPERTY_ESCAPE_PROCESSING ) >>= bEscapeProcessing );
+        if ( bEscapeProcessing )
+            sCommand = lcl_createSDBCLevelStatement( sCommand, _rxConnection );
+    }
+    else
+    {
+        sCommand = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "SELECT * FROM " ) );
+        sCommand += composeTableNameForSelect( _rxConnection, _rxSourceObject );
+    }
+    return createView( _rName, _rxConnection, sCommand );
+}
+
 // -----------------------------------------------------------------------------
 void fillTreeListNames( const Reference< XNameAccess >& _xContainer, DBTreeListBox& _rList,
         USHORT _nImageId, USHORT _nHighContrastImageId, SvLBoxEntry* _pParent, IContainerFoundListener* _pContainerFoundListener )
