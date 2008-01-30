@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:03:18 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 09:00:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@
 
 /** Try to parse the given range using Calc-style syntax first, then
     Excel-style if that fails. */
-USHORT lcl_ParseRange(ScRange& rScRange, const String& aAddress, ScDocument* pDoc, USHORT nSlot)
+USHORT lcl_ParseRange(ScRange& rScRange, const String& aAddress, ScDocument* pDoc, USHORT /* nSlot */)
 {
     USHORT nResult = rScRange.Parse(aAddress, pDoc);
     if ( (nResult & SCA_VALID) )
@@ -112,7 +112,7 @@ USHORT lcl_ParseRange(ScRange& rScRange, const String& aAddress, ScDocument* pDo
 
 /** Try to parse the given address using Calc-style syntax first, then
     Excel-style if that fails. */
-USHORT lcl_ParseAddress(ScAddress& rScAddress, const String& aAddress, ScDocument* pDoc, USHORT nSlot)
+USHORT lcl_ParseAddress(ScAddress& rScAddress, const String& aAddress, ScDocument* pDoc, USHORT /* nSlot */)
 {
     USHORT nResult = rScAddress.Parse(aAddress, pDoc);
     if ( (nResult & SCA_VALID) )
