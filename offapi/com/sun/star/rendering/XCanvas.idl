@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XCanvas.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-17 14:32:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:13:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ interface XTextLayout;
     that such caching is a lot more complicated, should the actual
     rendering a method yields depend on internal state (which is the
     case e.g. for the
-    <type>::com::sun::star::drawing::XGraphics</type> interface).<p>
+    <type scope="::com::sun::star::drawing">XGraphics</type> interface).<p>
 
     @since OOo 2.0.0
  */
@@ -511,10 +511,10 @@ interface XCanvas : ::com::sun::star::uno::XInterface
             0 completely disables kerning. Whether kerning is on or
             off by default is font-dependent.</il>
 
-            <il>IsEmphasisMarks: a <type>boolean</type>, where <TRUE>
+            <il>IsEmphasisMarks: a <type>boolean</type>, where <TRUE/>
             enables automatic placements of emphasis marks, e.g. for
             Hebrew. The default value, if this property is not
-            specified, is <FALSE>.</il>
+            specified, is <FALSE/>.</il>
 
             <il>ExpandedSpacing: a <type>double</type> value which is added
             between all cell distances for this font. The default value for
