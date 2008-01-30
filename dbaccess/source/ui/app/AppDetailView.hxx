@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailView.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:47:39 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:42:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -386,7 +386,7 @@ namespace dbaui
                 The command to be executed.
         */
         void onCreationClick( const ::rtl::OUString& _sCommand);
-
+        Window* getTreeWindow() const;
     private:
         void                impl_createPage(
                                 ElementType _eType,
