@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.221 $
+ *  $Revision: 1.222 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:23:42 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 09:12:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,9 @@
 #include <X11/keysym.h>
 #include <FWS.hxx>
 #include <X11/extensions/shape.h>
+#ifndef SOLARIS
 #include <X11/extensions/dpms.h>
+#endif
 #include <postx.h>
 
 #include <salunx.h>
@@ -2266,8 +2268,16 @@ void X11SalFrame::StartPresentation( BOOL bStart )
 
     // needs static here to save DPMS settings
     int dummy;
+    static bool DPMSExtensionAvailable =
+#ifndef SOLARIS
+        (DPMSQueryExtension(GetXDisplay(), &dummy, &dummy) != 0);
     static XLIB_BOOL DPMSEnabled = false;
-    static bool DPMSExtensionAvailable = (DPMSQueryExtension(GetXDisplay(), &dummy, &dummy) != 0);
+#else
+        false;
+    bool DPMSEnabled = false;
+    (void)dummy;
+#define CARD16 unsigned short
+#endif
     static CARD16 dpms_standby_timeout=0;
     static CARD16 dpms_suspend_timeout=0;
     static CARD16 dpms_off_timeout=0;
@@ -2294,10 +2304,12 @@ void X11SalFrame::StartPresentation( BOOL bStart )
         // get the DPMS state right before the start
         if (DPMSExtensionAvailable)
         {
+#ifndef SOLARIS
             CARD16 state; // card16 is defined in Xdm.h
             DPMSInfo(   GetXDisplay(),
                         &state,
                         &DPMSEnabled);
+#endif
         }
         if( bStart ) // start show
         {
@@ -2311,6 +2323,7 @@ void X11SalFrame::StartPresentation( BOOL bStart )
                                  prefer_blanking,
                                  allow_exposures );
             }
+#ifndef SOLARIS
             if( DPMSEnabled )
             {
                 if ( DPMSExtensionAvailable )
@@ -2322,6 +2335,7 @@ void X11SalFrame::StartPresentation( BOOL bStart )
                     DPMSSetTimeouts(GetXDisplay(), 0,0,0);
                 }
             }
+#endif
         }
         else // if( !bStart ) // end of show
         {
@@ -2334,6 +2348,7 @@ void X11SalFrame::StartPresentation( BOOL bStart )
                              allow_exposures );
                 nScreenSaversTimeout_ = 0;
             }
+#ifndef SOLARIS
             if ( DPMSEnabled )
             {
                 if ( DPMSExtensionAvailable )
@@ -2343,6 +2358,7 @@ void X11SalFrame::StartPresentation( BOOL bStart )
                         dpms_suspend_timeout, dpms_off_timeout);
                 }
             }
+#endif
         }
     }
 }
