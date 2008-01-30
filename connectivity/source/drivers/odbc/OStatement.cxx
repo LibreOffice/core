@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OStatement.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:05:08 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:58:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1115,7 +1115,7 @@ void OStatement_Base::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
             rValue <<= getFetchSize();
             break;
         case PROPERTY_ID_USEBOOKMARKS:
-            rValue = cppu::bool2any(isUsingBookmarks());
+            rValue <<= isUsingBookmarks();
             break;
         case PROPERTY_ID_ESCAPEPROCESSING:
             rValue <<= getEscapeProcessing();
