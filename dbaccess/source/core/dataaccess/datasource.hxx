@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datasource.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:45:03 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:34:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,6 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XDATASOURCE_HPP_
 #include <com/sun/star/sdbc/XDataSource.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERLISTENER_HPP_
 #include <com/sun/star/container/XContainerListener.hpp>
@@ -92,9 +89,6 @@
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
-#endif
-#ifndef _DBA_REGHELPER_HXX_
-#include "dba_reghelper.hxx"
 #endif
 #ifndef _DBA_CORE_BOOKMARKCONTAINER_HXX_
 #include "bookmarkcontainer.hxx"
@@ -156,9 +150,6 @@ class OChildCommitListen_Impl;
 //============================================================
 //= ODatabaseSource
 //============================================================
-::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-    ODatabaseSource_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
-
 typedef ::cppu::ImplHelper11    <   ::com::sun::star::lang::XServiceInfo
                                 ,   ::com::sun::star::sdbc::XDataSource
                                 ,   ::com::sun::star::sdb::XBookmarksSupplier
@@ -182,8 +173,6 @@ class ODatabaseSource   :public ModelDependentComponent // must be first
     friend class ODatabaseContext;
     friend class OConnection;
     friend class OSharedConnectionManager;
-    friend ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-        ODatabaseSource_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
 private:
 
@@ -196,7 +185,7 @@ private:
     virtual ~ODatabaseSource();
 
 public:
-    ODatabaseSource(const ::rtl::Reference<ODatabaseModelImpl>& _pImpl);
+    ODatabaseSource( const ::rtl::Reference< ODatabaseModelImpl >& _pImpl );
 
     // XContainerListener
     virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
@@ -220,10 +209,10 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::lang::XServiceInfo - static methods
-    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_Static(void) throw( ::com::sun::star::uno::RuntimeException );
-    static ::rtl::OUString getImplementationName_Static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static(void) throw( ::com::sun::star::uno::RuntimeException );
+    static ::rtl::OUString getImplementationName_static(void) throw( ::com::sun::star::uno::RuntimeException );
     static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
-        SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
+        SAL_CALL Create(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&);
 
 // OComponentHelper
     virtual void SAL_CALL disposing(void);
