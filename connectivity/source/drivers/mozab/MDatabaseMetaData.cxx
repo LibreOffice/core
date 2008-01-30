@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:08:28 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:57:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ namespace connectivity
 
 
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
-                        : ::connectivity::ODatabaseMetaDataBase(_pCon)
+                        : ::connectivity::ODatabaseMetaDataBase(_pCon,_pCon->getConnectionInfo())
                         ,m_pConnection(_pCon)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaData::ODatabaseMetaData: No connection set!");
@@ -189,10 +189,9 @@ ODatabaseMetaDataResultSet::ORows& SAL_CALL ODatabaseMetaData::getColumnRows(
     return( aRows );
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
+::rtl::OUString ODatabaseMetaData::impl_getCatalogSeparator_throw(  )
 {
-    ::rtl::OUString aVal;
-    return aVal;
+    return ::rtl::OUString();
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException)
@@ -249,10 +248,9 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLExceptio
     return nValue;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength(  ) throw(SQLException, RuntimeException)
+sal_Int32 ODatabaseMetaData::impl_getMaxStatements_throw(  )
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength(  ) throw(SQLException, RuntimeException)
@@ -261,10 +259,10 @@ sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTableNameLength(  ) throw(SQLExcepti
     return nValue;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxTablesInSelect(  ) throw(SQLException, RuntimeException)
+sal_Int32 ODatabaseMetaData::impl_getMaxTablesInSelect_throw(  )
 {
-    sal_Int32 nValue = 1; // We only support a single table
-    return nValue;
+    // We only support a single table
+    return 1;
 }
 // -------------------------------------------------------------------------
 // -------------------------------------------------------------------------
@@ -283,7 +281,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesLowerCaseIdentifiers(  ) throw(SQLExc
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::storesMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_storesMixedCaseQuotedIdentifiers_throw(  )
 {
     return sal_False;
 }
@@ -303,12 +301,12 @@ sal_Bool SAL_CALL ODatabaseMetaData::storesUpperCaseIdentifiers(  ) throw(SQLExc
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithAddColumn_throw(  )
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsAlterTableWithDropColumn_throw(  )
 {
     return sal_False;
 }
@@ -330,11 +328,10 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
     return aVal;
 }
 // -------------------------------------------------------------------------
-::rtl::OUString SAL_CALL ODatabaseMetaData::getIdentifierQuoteString(  ) throw(SQLException, RuntimeException)
+::rtl::OUString ODatabaseMetaData::impl_getIdentifierQuoteString_throw(  )
 {
     // normally this is "
-    ::rtl::OUString aVal = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("\""));
-    return aVal;
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("\""));
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getExtraNameCharacters(  ) throw(SQLException, RuntimeException)
@@ -348,10 +345,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) 
     return sal_True;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_isCatalogAtStart_throw(  )
 {
-    sal_Bool bValue = sal_True;
-    return bValue;
+    return sal_True;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw(SQLException, RuntimeException)
@@ -410,7 +406,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsTransactionIsolationLevel( sal_Int3
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInDataManipulation(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsSchemasInDataManipulation_throw(  )
 {
     return sal_False;
 }
@@ -435,12 +431,12 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsSchemasInTableDefinitions_throw(  )
 {
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInTableDefinitions(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsCatalogsInTableDefinitions_throw(  )
 {
     return sal_False;
 }
@@ -450,7 +446,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) thro
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInDataManipulation(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsCatalogsInDataManipulation_throw(  )
 {
     return sal_False;
 }
@@ -460,10 +456,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsOuterJoins(  ) throw(SQLException, 
     return sal_False;
 }
 // -------------------------------------------------------------------------
-sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatements(  ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL ODatabaseMetaData::getMaxStatementLength(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue = 0; // 0 means no limit
-    return nValue;
+    return 0;// 0 means no limit
 }
 // -------------------------------------------------------------------------
 sal_Int32 SAL_CALL ODatabaseMetaData::getMaxProcedureNameLength(  ) throw(SQLException, RuntimeException)
@@ -603,7 +598,7 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw(SQLE
     return sal_True;
 }
 // -------------------------------------------------------------------------
-sal_Bool SAL_CALL ODatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  ) throw(SQLException, RuntimeException)
+sal_Bool ODatabaseMetaData::impl_supportsMixedCaseQuotedIdentifiers_throw(  )
 {
     // Any case may be used
     return sal_True;
@@ -884,11 +879,6 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsBatchUpdates(  ) throw(SQLException
     return sal_False;
 }
 // -------------------------------------------------------------------------
-Reference< XConnection > SAL_CALL ODatabaseMetaData::getConnection(  ) throw(SQLException, RuntimeException)
-{
-    return (Reference< XConnection >)m_pConnection;//new OConnection(m_aConnectionHandle);
-}
-// -------------------------------------------------------------------------
 // here follow all methods which return a resultset
 // the first methods is an example implementation how to use this resultset
 // of course you could implement it on your and you should do this because
@@ -909,13 +899,11 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
         // ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ALIAS")),
         // ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("SYNONYM"))
     };
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTableTypes);
     Reference< XResultSet > xRef = pResult;
-    // this call initialies the resultset metadata with the corresponding information
-    pResult->setTableTypes();
 
     // here we fill the rows which should be visible when ask for data from the resultset returned here
-    sal_Int32  nSize = sizeof(sTableTypes) / sizeof(::rtl::OUString);
+    const sal_Int32  nSize = sizeof(sTableTypes) / sizeof(::rtl::OUString);
     ODatabaseMetaDataResultSet::ORows aRows;
     for(sal_Int32 i=0;i < nSize;++i)
     {
@@ -930,13 +918,12 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTableTypes(  ) throw(SQLE
     return xRef;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
+Reference< XResultSet > ODatabaseMetaData::impl_getTypeInfo_throw(  )
 {
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTypeInfo);
     Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setTypeInfoMap();
     static ODatabaseMetaDataResultSet::ORows aRows;
 
     if(aRows.empty())
@@ -971,47 +958,14 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLExc
     return xResultSet;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)
-{
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setCatalogsMap();
-    return xResultSet;
-}
-// -----------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getSchemas(  ) throw(SQLException, RuntimeException)
-{
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setSchemasMap();
-    return xResultSet;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
-    const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
-{
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setColumnPrivilegesMap();
-    return xResultSet;
-}
-// -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
     const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& tableNamePattern,
     const ::rtl::OUString& columnNamePattern ) throw(SQLException, RuntimeException)
 {
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eColumns);
     Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setColumnsMap();
     pResultSet->setRows( getColumnRows( tableNamePattern, columnNamePattern ));
     return xResultSet;
 }
@@ -1022,9 +976,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 {
     // this returns an empty resultset where the column-names are already set
     // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
+    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTables);
     Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setTablesMap();
 
     // ODatabaseMetaDataResultSet::ORows aRows;
     // aRows = m_pDbMetaDataHelper->getTables( m_pConnection, tableNamePattern );
@@ -1038,106 +991,13 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
     return xResultSet;
 }
 // -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
-    const ::rtl::OUString& /*procedureNamePattern*/, const ::rtl::OUString& /*columnNamePattern*/ ) throw(SQLException, RuntimeException)
-{
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setProcedureColumnsMap();
-    return xResultSet;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/,
-    const ::rtl::OUString& /*procedureNamePattern*/ ) throw(SQLException, RuntimeException)
-{
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setProceduresMap();
-    return xResultSet;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setVersionColumnsMap();
-    return xResultSet;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setExportedKeysMap();
-    return xResultSet;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setImportedKeysMap();
-    return xResultSet;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/ ) throw(SQLException, RuntimeException)
-{
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setPrimaryKeysMap();
-    return xResultSet;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/,
-    sal_Bool /*unique*/, sal_Bool /*approximate*/ ) throw(SQLException, RuntimeException)
-{
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setIndexInfoMap();
-    return xResultSet;
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
-    const Any& /*catalog*/, const ::rtl::OUString& /*schema*/, const ::rtl::OUString& /*table*/, sal_Int32 /*scope*/,
-    sal_Bool /*nullable*/ ) throw(SQLException, RuntimeException)
-{
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setBestRowIdentifierMap();
-    return xResultSet;
-}
-// -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& tableNamePattern ) throw(SQLException, RuntimeException)
 {
-        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
-        Reference< XResultSet > xRef = NULL;
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(ODatabaseMetaDataResultSet::eTablePrivileges);
+    Reference< XResultSet > xRef = NULL;
 
-        xRef = pResult;
-        pResult->setTablePrivilegesMap();
+    xRef = pResult;
 
     ::std::vector< ::rtl::OUString > tables;
     ::std::vector< ::rtl::OUString > types;
@@ -1185,19 +1045,6 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
     pResult->setRows(aRows);
     return xRef;
 
-}
-// -------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
-    const Any& /*primaryCatalog*/, const ::rtl::OUString& /*primarySchema*/,
-    const ::rtl::OUString& /*primaryTable*/, const Any& /*foreignCatalog*/,
-    const ::rtl::OUString& /*foreignSchema*/, const ::rtl::OUString& /*foreignTable*/ ) throw(SQLException, RuntimeException)
-{
-    // this returns an empty resultset where the column-names are already set
-    // in special the metadata of the resultset already returns the right columns
-    ODatabaseMetaDataResultSet* pResultSet = new ODatabaseMetaDataResultSet();
-    Reference< XResultSet > xResultSet = pResultSet;
-    pResultSet->setCrossReferenceMap();
-    return xResultSet;
 }
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getUDTs( const Any& /*catalog*/, const ::rtl::OUString& /*schemaPattern*/, const ::rtl::OUString& /*typeNamePattern*/, const Sequence< sal_Int32 >& /*types*/ ) throw(SQLException, RuntimeException)
