@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmctrler.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 07:31:58 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:24:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,11 +44,11 @@
 #ifndef _COM_SUN_STAR_SDB_XSQLERRORLISTENER_HPP_
 #include <com/sun/star/sdb/XSQLErrorListener.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSQLQUERYCOMPOSERFACTORY_HPP_
-#include <com/sun/star/sdb/XSQLQueryComposerFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDB_XROWSETAPPROVEBROADCASTER_HPP_
 #include <com/sun/star/sdb/XRowSetApproveBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
+#include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDB_XROWSETAPPROVELISTENER_HPP_
 #include <com/sun/star/sdb/XRowSetApproveListener.hpp>
@@ -323,8 +323,8 @@ class SAL_DLLPRIVATE FmXFormController  :public ::comphelper::OBaseMutex
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>                m_xParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
     // Composer used for checking filter conditions
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        m_xComposer;
-    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >     m_xInteractionHandler;
+    ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSingleSelectQueryComposer >   m_xComposer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >         m_xInteractionHandler;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl> >   m_aControls;
     ::cppu::OInterfaceContainerHelper
