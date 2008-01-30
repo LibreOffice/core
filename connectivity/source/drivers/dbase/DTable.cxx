@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:28:34 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:50:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,6 +399,8 @@ void ODbaseTable::construct()
         m_pFileStream->Seek(STREAM_SEEK_TO_END);
         UINT32 nFileSize = m_pFileStream->Tell();
         m_pFileStream->Seek(STREAM_SEEK_TO_BEGIN);
+        if ( m_aHeader.db_anz == 0 && ((nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng) > 0) // seems to be empty or someone wrote bullshit into the dbase file
+            m_aHeader.db_anz = ((nFileSize-m_aHeader.db_kopf)/m_aHeader.db_slng);
 
         // Buffersize abhaengig von der Filegroesse
         m_pFileStream->SetBufferSize(nFileSize > 1000000 ? 32768 :
@@ -2270,7 +2272,8 @@ void ODbaseTable::throwInvalidDbaseFormat()
 // -----------------------------------------------------------------------------
 void ODbaseTable::refreshHeader()
 {
-    readHeader();
+    if ( m_aHeader.db_anz == 0 )
+        readHeader();
 }
 //------------------------------------------------------------------
 sal_Bool ODbaseTable::seekRow(IResultSetHelper::Movement eCursorPosition, sal_Int32 nOffset, sal_Int32& nCurPos)
