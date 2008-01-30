@@ -508,6 +508,117 @@
           fi
   
 ***************
+*** 25808,25813 ****
+--- 25822,25929 ----
+       NSS_FOUND=no
+    fi
+  
++     echo "$as_me:$LINENO: result: $NSS_FOUND" >&5
++ echo "${ECHO_T}$NSS_FOUND" >&6
++     if test "z$NSS_FOUND" = "zno" ; then
++ 
++   succeeded=no
++ 
++   if test -z "$PKG_CONFIG"; then
++     # Extract the first word of "pkg-config", so it can be a program name with args.
++ set dummy pkg-config; ac_word=$2
++ echo "$as_me:$LINENO: checking for $ac_word" >&5
++ echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
++ if test "${ac_cv_path_PKG_CONFIG+set}" = set; then
++   echo $ECHO_N "(cached) $ECHO_C" >&6
++ else
++   case $PKG_CONFIG in
++   [\\/]* | ?:[\\/]*)
++   ac_cv_path_PKG_CONFIG="$PKG_CONFIG" # Let the user override the test with a path.
++   ;;
++   *)
++   as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++ for as_dir in $PATH
++ do
++   IFS=$as_save_IFS
++   test -z "$as_dir" && as_dir=.
++   for ac_exec_ext in '' $ac_executable_extensions; do
++   if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
++     ac_cv_path_PKG_CONFIG="$as_dir/$ac_word$ac_exec_ext"
++     echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
++     break 2
++   fi
++ done
++ done
++ 
++   test -z "$ac_cv_path_PKG_CONFIG" && ac_cv_path_PKG_CONFIG="no"
++   ;;
++ esac
++ fi
++ PKG_CONFIG=$ac_cv_path_PKG_CONFIG
++ 
++ if test -n "$PKG_CONFIG"; then
++   echo "$as_me:$LINENO: result: $PKG_CONFIG" >&5
++ echo "${ECHO_T}$PKG_CONFIG" >&6
++ else
++   echo "$as_me:$LINENO: result: no" >&5
++ echo "${ECHO_T}no" >&6
++ fi
++ 
++   fi
++ 
++   if test "$PKG_CONFIG" = "no" ; then
++      echo "*** The pkg-config script could not be found. Make sure it is"
++      echo "*** in your path, or set the PKG_CONFIG environment variable"
++      echo "*** to the full path to pkg-config."
++      echo "*** Or see http://www.freedesktop.org/software/pkgconfig to get pkg-config."
++   else
++      PKG_CONFIG_MIN_VERSION=0.9.0
++      if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
++         echo "$as_me:$LINENO: checking for nspr >= $NSPR_MIN_VERSION nss >= $NSS_MIN_VERSION" >&5
++ echo $ECHO_N "checking for nspr >= $NSPR_MIN_VERSION nss >= $NSS_MIN_VERSION... $ECHO_C" >&6
++ 
++         if $PKG_CONFIG --exists "nspr >= $NSPR_MIN_VERSION nss >= $NSS_MIN_VERSION" ; then
++             echo "$as_me:$LINENO: result: yes" >&5
++ echo "${ECHO_T}yes" >&6
++             succeeded=yes
++ 
++             echo "$as_me:$LINENO: checking NSS_CFLAGS" >&5
++ echo $ECHO_N "checking NSS_CFLAGS... $ECHO_C" >&6
++             NSS_CFLAGS=`$PKG_CONFIG --cflags "nspr >= $NSPR_MIN_VERSION nss >= $NSS_MIN_VERSION"`
++             echo "$as_me:$LINENO: result: $NSS_CFLAGS" >&5
++ echo "${ECHO_T}$NSS_CFLAGS" >&6
++ 
++             echo "$as_me:$LINENO: checking NSS_LIBS" >&5
++ echo $ECHO_N "checking NSS_LIBS... $ECHO_C" >&6
++             NSS_LIBS=`$PKG_CONFIG --libs "nspr >= $NSPR_MIN_VERSION nss >= $NSS_MIN_VERSION"`
++             echo "$as_me:$LINENO: result: $NSS_LIBS" >&5
++ echo "${ECHO_T}$NSS_LIBS" >&6
++         else
++             NSS_CFLAGS=""
++             NSS_LIBS=""
++             ## If we have a custom action on failure, don't print errors, but
++             ## do set a variable so people can do so.
++             NSS_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "nspr >= $NSPR_MIN_VERSION nss >= $NSS_MIN_VERSION"`
++ 
++         fi
++ 
++ 
++ 
++      else
++         echo "*** Your version of pkg-config is too old. You need version $PKG_CONFIG_MIN_VERSION or newer."
++         echo "*** See http://www.freedesktop.org/software/pkgconfig"
++      fi
++   fi
++ 
++   if test $succeeded = yes; then
++      NSS_FOUND=yes
++   else
++      NSS_FOUND=no
++   fi
++ 
++         echo "$as_me:$LINENO: result: $NSS_FOUND" >&5
++ echo "${ECHO_T}$NSS_FOUND" >&6
++     fi
+  fi
+  
+  if test "z$NSS_FOUND" = "zno" ; then
+***************
 *** 25817,25824 ****
           ac_mozilla_name=mozilla-$MOZILLA_MIN_VERSION
       fi
@@ -2603,7 +2714,7 @@
   NSS_FOUND="no"
   
 ***************
-*** 521,527 ****
+*** 521,529 ****
       AC_MSG_RESULT(no)
       NSS_FOUND="without"
   elif test "z$with_nss" = "z" -a "z$with_nspr" = "z" -a "z$with_mozilla_ver" = "z" -a "z$PKG_CONFIG_ENABLED" = "zyes" ; then
@@ -2611,14 +2722,25 @@
   	[NSS_FOUND=yes],
   	[NSS_FOUND=no])
   fi
---- 535,541 ----
+  
+  if test "z$NSS_FOUND" = "zno" ; then 
+--- 535,550 ----
       AC_MSG_RESULT(no)
       NSS_FOUND="without"
   elif test "z$with_nss" = "z" -a "z$with_nspr" = "z" -a "z$with_mozilla_ver" = "z" -a "z$PKG_CONFIG_ENABLED" = "zyes" ; then
 !     PKG_CHECK_MODULES(NSS, $MOZ_FLAVOUR-nspr >= $MOZILLA_MIN_VERSION $MOZ_FLAVOUR-nss >= $MOZILLA_MIN_VERSION,
   	[NSS_FOUND=yes],
   	[NSS_FOUND=no])
++     AC_MSG_RESULT($NSS_FOUND)
++     if test "z$NSS_FOUND" = "zno" ; then 
++         PKG_CHECK_MODULES(NSS, nspr >= $NSPR_MIN_VERSION nss >= $NSS_MIN_VERSION,
++ 	    [NSS_FOUND=yes],
++ 	    [NSS_FOUND=no])
++         AC_MSG_RESULT($NSS_FOUND)
++     fi
   fi
+  
+  if test "z$NSS_FOUND" = "zno" ; then 
 ***************
 *** 534,541 ****
           ac_mozilla_name=mozilla-$MOZILLA_MIN_VERSION
@@ -2629,7 +2751,7 @@
   
       AC_MSG_CHECKING(for nspr libraries >= $NSPR_MIN_VERSION)
       NSPR_INCLUDES_FOUND="no"
---- 548,555 ----
+--- 555,562 ----
           ac_mozilla_name=mozilla-$MOZILLA_MIN_VERSION
       fi
   
@@ -2647,7 +2769,7 @@
   		dnl do not add -L/usr/lib because compiler does it anyway
           	if test "z$dir" = "z/usr/lib" ; then
               	    NSPR_LIBS="$NSPR_LIBS_LIST"
---- 584,592 ----
+--- 591,599 ----
   	done
   	
   	for dir in $ac_nss_lib_dir ; do
@@ -2666,7 +2788,7 @@
   	done
       fi
   
---- 599,624 ----
+--- 606,631 ----
   		fi
   		NSPR_LIBS_FOUND="yes"
   		break
@@ -2702,7 +2824,7 @@
           	dnl do not add -L/usr/lib because compiler does it anyway
       		if test "z$dir" = "z/usr/lib" ; then
           	    NSS_LIBS="$NSS_LIBS_LIST"
---- 676,684 ----
+--- 683,691 ----
           done
          
           for dir in $ac_nss_lib_dir ; do
@@ -2721,7 +2843,7 @@
   	done
       fi
   
---- 691,716 ----
+--- 698,723 ----
   		fi
       		NSS_LIBS_FOUND="yes"
       		break
