@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XBufferController.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 14:54:59 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:13:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ interface XBufferController : ::com::sun::star::uno::XInterface
         with other things, e.g. sound playback.<p>
 
         @param bUpdateAll
-        When <TRUE>, update the whole screen. When <FALSE>,
+        When <TRUE/>, update the whole screen. When <FALSE/>,
         implementation is permitted to restrict update to areas the
         canvas itself changed (e.g. because of render operations, or
         changes on the sprites). The former is useful for updates
@@ -125,7 +125,7 @@ interface XBufferController : ::com::sun::star::uno::XInterface
         other things, e.g. sound playback.<p>
 
         @param bUpdateAll
-        When <TRUE>, update the whole screen. When <FALSE>,
+        When <TRUE/>, update the whole screen. When <FALSE/>,
         implementation is permitted to restrict update to areas the
         canvas itself changed (e.g. because of render operations, or
         changes on the sprites). The former is useful for updates
