@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofunocontrol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 18:47:02 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,43 +36,22 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svx.hxx"
 
-#ifndef SVX_SDR_CONTACT_VIEWCONTACTOFUNOCONTROL_HXX
 #include <svx/sdr/contact/viewcontactofunocontrol.hxx>
-#endif
-#ifndef SVX_SDR_CONTACT_VIEWOBJECTCONTACTOFUNOCONTROL_HXX
 #include <svx/sdr/contact/viewobjectcontactofunocontrol.hxx>
-#endif
-#ifndef _SDR_CONTACT_OBJECTCONTACTOFPAGEVIEW_HXX
 #include <svx/sdr/contact/objectcontactofpageview.hxx>
-#endif
+#include <svx/sdr/contact/displayinfo.hxx>
+#include <svx/svdouno.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdview.hxx>
+#include <svx/sdrpagewindow.hxx>
 
 /** === begin UNO includes === **/
+#include <com/sun/star/awt/XWindow2.hpp>
 /** === end UNO includes === **/
 
-#ifndef _SVDOUNO_HXX
-#include <svx/svdouno.hxx>
-#endif
-#ifndef _SVDPAGV_HXX
-#include <svx/svdpagv.hxx>
-#endif
-#ifndef _SVDVIEW_HXX
-#include <svx/svdview.hxx>
-#endif
-#ifndef _SDRPAGEWINDOW_HXX
-#include <svx/sdrpagewindow.hxx>
-#endif
-#ifndef _SDRPAINTWINDOW_HXX
 #include "sdrpaintwindow.hxx"
-#endif
-
-#ifndef _VCL_PDFEXTOUTDEVDATA_HXX
+#include <tools/diagnose_ex.h>
 #include <vcl/pdfextoutdevdata.hxx>
-#endif
-
-/*nnnnn*/
-#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
-#include <svx/sdr/contact/displayinfo.hxx>
-#endif
 
 //........................................................................
 namespace sdr { namespace contact {
@@ -82,7 +61,11 @@ namespace sdr { namespace contact {
     using ::com::sun::star::awt::XControl;
     using ::com::sun::star::uno::Reference;
     using ::com::sun::star::awt::XControlContainer;
+    using ::com::sun::star::awt::XWindow2;
+    using ::com::sun::star::uno::UNO_QUERY;
+    using ::com::sun::star::uno::Exception;
     /** === end UNO using === **/
+
     //====================================================================
     //= ViewContactOfUnoControl
     //====================================================================
@@ -211,14 +194,37 @@ namespace sdr { namespace contact {
         // since the VCL window is not moved to the proper position.
         // #i72694# / 2006-12-18 / frank.schoenheit@sun.com
 
+        const ViewObjectContactOfUnoControl& rVOC( dynamic_cast< const ViewObjectContactOfUnoControl& >( _rAssociatedVOC ) );
         // #i74769# to not resize and position at each DrawLayer() use FormControl flag
-        if(_rDisplayInfo.GetControlLayerPainting())
+        if ( _rDisplayInfo.GetControlLayerPainting() )
         {
-            const ViewObjectContactOfUnoControl& rVOC( dynamic_cast< const ViewObjectContactOfUnoControl& >( _rAssociatedVOC ) );
             rVOC.positionControlForPaint( _rDisplayInfo );
         }
 
-        return ViewContactOfSdrObj::ShouldPaintObject( _rDisplayInfo, _rAssociatedVOC );
+        // don't paint if the base class tells so
+        if ( !ViewContactOfSdrObj::ShouldPaintObject( _rDisplayInfo, _rAssociatedVOC ) )
+            return false;
+
+        // always paint in design mode
+        SdrPageView* pPageView = _rDisplayInfo.GetPageView();
+        bool bIsDesignMode = pPageView ? pPageView->GetView().IsDesignMode() : false;
+        if ( bIsDesignMode )
+            return true;
+
+        // in alive mode, don't paint if the control is not visible.
+        // #i82791#
+        bool bIsVisible = true;
+        try
+        {
+            Reference< XWindow2 > xControlWindow( rVOC.getExistentControl(), UNO_QUERY );
+            if ( xControlWindow.is() )
+                bIsVisible = xControlWindow->isVisible();
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return bIsVisible;
     }
 
 //........................................................................
