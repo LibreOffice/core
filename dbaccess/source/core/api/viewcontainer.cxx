@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontainer.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:35:25 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,13 +125,15 @@ using namespace ::connectivity::sdbcx;
 //==========================================================================
 DBG_NAME(OViewContainer)
 //------------------------------------------------------------------------------
-OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent,
-                                 ::osl::Mutex& _rMutex,
-                                 const Reference< XConnection >& _xCon,
-                                 sal_Bool _bCase,
-                                 IRefreshListener*  _pRefreshListener,
-                                 IWarningsContainer* _pWarningsContainer)
-    :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer)
+OViewContainer::OViewContainer(::cppu::OWeakObject& _rParent
+                                 ,::osl::Mutex& _rMutex
+                                 ,const Reference< XConnection >& _xCon
+                                 ,sal_Bool _bCase
+                                 ,IRefreshListener* _pRefreshListener
+                                 ,IWarningsContainer* _pWarningsContainer
+                                 ,oslInterlockedCount& _nInAppend)
+    :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer,_nInAppend)
+    ,m_bInElementRemoved(false)
 {
     DBG_CTOR(OViewContainer, NULL);
 }
@@ -190,31 +192,6 @@ Reference< XPropertySet > OViewContainer::createDescriptor()
     return xRet;
 }
 // -----------------------------------------------------------------------------
-namespace
-{
-    template <typename TYPE>
-    class EnsureReset
-    {
-    public:
-        EnsureReset( TYPE& _rValueLocation, const TYPE& _rResetValue )
-            :m_rValueLocation( _rValueLocation )
-            ,m_aResetValue( _rResetValue )
-        {
-        }
-
-        ~EnsureReset()
-        {
-            m_rValueLocation = m_aResetValue;
-        }
-
-    private:
-        TYPE&   m_rValueLocation;
-        TYPE    m_aResetValue;
-    };
-
-    typedef EnsureReset< ::rtl::OUString >  EnsureStringReset;
-}
-// -----------------------------------------------------------------------------
 // XAppend
 ObjectType OViewContainer::appendObject( const ::rtl::OUString& _rForName, const Reference< XPropertySet >& descriptor )
 {
@@ -225,8 +202,7 @@ ObjectType OViewContainer::appendObject( const ::rtl::OUString& _rForName, const
     Reference< XPropertySet > xProp = descriptor;
     if(xAppend.is())
     {
-        m_sAppendingCurrenly = aName;
-        EnsureStringReset aReset( m_sAppendingCurrenly, ::rtl::OUString() );
+        EnsureReset aReset(m_nInAppend);
 
         xAppend->appendByDescriptor(descriptor);
         if(m_xMasterContainer->hasByName(aName))
@@ -263,36 +239,39 @@ ObjectType OViewContainer::appendObject( const ::rtl::OUString& _rForName, const
 // XDrop
 void OViewContainer::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName)
 {
-    Reference< XDrop > xDrop(m_xMasterContainer,UNO_QUERY);
-    if(xDrop.is())
-        xDrop->dropByName(_sElementName);
-    else
+    if ( !m_bInElementRemoved )
     {
-        ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
-
-        Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
-        if ( xTable.is() )
+        Reference< XDrop > xDrop(m_xMasterContainer,UNO_QUERY);
+        if(xDrop.is())
+            xDrop->dropByName(_sElementName);
+        else
         {
-            xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-            xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-            xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
+            ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
 
-            sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
-        }
+            Reference<XPropertySet> xTable(getObject(_nPos),UNO_QUERY);
+            if ( xTable.is() )
+            {
+                xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
+                xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
+                xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
 
-        if(!sComposedName.getLength())
-            ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
+                sComposedName = ::dbtools::composeTableName( m_xMetaData, sCatalog, sSchema, sTable, sal_True, ::dbtools::eInTableDefinitions );
+            }
 
-        ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP VIEW ");
-        aSql += sComposedName;
-        Reference<XConnection> xCon = m_xConnection;
-        OSL_ENSURE(xCon.is(),"Connection is null!");
-        if ( xCon.is() )
-        {
-            Reference< XStatement > xStmt = xCon->createStatement(  );
-            if(xStmt.is())
-                xStmt->execute(aSql);
-            ::comphelper::disposeComponent(xStmt);
+            if(!sComposedName.getLength())
+                ::dbtools::throwFunctionSequenceException(static_cast<XTypeProvider*>(static_cast<OFilteredContainer*>(this)));
+
+            ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP VIEW ");
+            aSql += sComposedName;
+            Reference<XConnection> xCon = m_xConnection;
+            OSL_ENSURE(xCon.is(),"Connection is null!");
+            if ( xCon.is() )
+            {
+                Reference< XStatement > xStmt = xCon->createStatement(  );
+                if(xStmt.is())
+                    xStmt->execute(aSql);
+                ::comphelper::disposeComponent(xStmt);
+            }
         }
     }
 }
@@ -302,7 +281,7 @@ void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) thr
     ::osl::MutexGuard aGuard(m_rMutex);
     ::rtl::OUString sName;
     if  (   ( Event.Accessor >>= sName )
-        &&  ( m_sAppendingCurrenly != sName )
+        &&  ( !m_nInAppend )
         &&  ( !hasByName( sName ) )
         )
     {
@@ -314,8 +293,24 @@ void SAL_CALL OViewContainer::elementInserted( const ContainerEvent& Event ) thr
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OViewContainer::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException)
+void SAL_CALL OViewContainer::elementRemoved( const ContainerEvent& Event ) throw (RuntimeException)
 {
+    ::osl::MutexGuard aGuard(m_rMutex);
+    ::rtl::OUString sName;
+    if ( (Event.Accessor >>= sName) && hasByName(sName) )
+    {
+        m_bInElementRemoved = true;
+        try
+        {
+            dropByName(sName);
+        }
+        catch(Exception&)
+        {
+            m_bInElementRemoved = sal_False;
+            throw;
+        }
+        m_bInElementRemoved = false;
+    }
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OViewContainer::disposing( const ::com::sun::star::lang::EventObject& /*Source*/ ) throw (RuntimeException)
