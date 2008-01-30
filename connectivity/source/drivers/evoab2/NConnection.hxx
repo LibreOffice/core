@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NConnection.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 09:40:56 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:51:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,11 +96,7 @@ namespace connectivity
         protected:
 
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier>       m_xCatalog;
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
             rtl::OString  m_aPassword;
-            connectivity::OWeakRefArray             m_aStatements;  //  vector containing a list
-            //  of all the Statement objects
-            //  for this Connection
 
 
         public:
