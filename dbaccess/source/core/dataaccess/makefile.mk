@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 13:31:08 $
+#   last change: $Author: rt $ $Date: 2008-01-30 08:35:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@ SLOFILES=	\
         $(SLO)$/myucp_datasupplier.obj	\
         $(SLO)$/myucp_resultset.obj		\
         $(SLO)$/databasedocument.obj	\
+        $(SLO)$/dataaccessdescriptor.obj\
         $(SLO)$/ModelImpl.obj
 
 # --- Targets ----------------------------------
