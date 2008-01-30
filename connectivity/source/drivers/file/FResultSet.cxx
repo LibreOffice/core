@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:54:52 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:52:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1467,11 +1467,12 @@ BOOL OResultSet::OpenImpl()
                             if(!nWasAllwaysFound[j] && nPos) // nur falls noch nicht nach dieser Row gesucht wurde
                             {
                                 ExecuteRow(IResultSetHelper::BOOKMARK,nPos,FALSE);
+                                m_pSQLAnalyzer->setSelectionEvaluationResult(m_aSelectRow,m_aColMapping);
                                 { // copy row values
-                                    OValueRefVector::iterator copyFrom = m_aRow->begin();
+                                    OValueRefVector::iterator copyFrom = m_aSelectRow->begin();
                                     OValueVector::iterator copyTo = aSearchRow->begin();
                                     for (   ++copyFrom,++copyTo;    // the first column is the bookmark column
-                                            copyFrom != m_aRow->end();
+                                            copyFrom != m_aSelectRow->end();
                                             ++copyFrom,++copyTo)
                                                 *copyTo = *(*copyFrom);
                                     // *aSearchRow = *m_aRow;
@@ -1486,16 +1487,17 @@ BOOL OResultSet::OpenImpl()
                                     ExecuteRow(IResultSetHelper::BOOKMARK,nKey,FALSE);
                                     if(!nWasAllwaysFound[i])
                                     {
-                                        OValueRefVector::iterator loopInRow = m_aRow->begin();
+                                        m_pSQLAnalyzer->setSelectionEvaluationResult(m_aSelectRow,m_aColMapping);
+                                        OValueRefVector::iterator loopInRow = m_aSelectRow->begin();
                                         OValueVector::iterator existentInSearchRow = aSearchRow->begin();
                                         for (   ++loopInRow,++existentInSearchRow;  // the first column is the bookmark column
-                                                loopInRow != m_aRow->end();
+                                                loopInRow != m_aSelectRow->end();
                                                 ++loopInRow,++existentInSearchRow)
                                         {
                                             if ( (*loopInRow)->isBound() && !( *(*loopInRow) == *existentInSearchRow) )
                                                 break;
                                         }
-                                        if(loopInRow == m_aRow->end())
+                                        if(loopInRow == m_aSelectRow->end())
                                         {
                                             // gefunden
                                             // Key an der Stelle 0 setzen.
