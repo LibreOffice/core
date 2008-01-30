@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NConnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:16:50 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,6 @@ OEvoabConnection::OEvoabConnection(OEvoabDriver*    _pDriver)
     :OSubComponent<OEvoabConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
     ,m_pDriver(_pDriver)
     ,m_xCatalog(NULL)
-    ,m_xMetaData(NULL)
     ,m_aPassword()
 {
 }
@@ -277,24 +276,8 @@ void OEvoabConnection::disposing()
 {
     // we noticed that we should be destroyed in near future so we have to dispose our statements
     ::osl::MutexGuard aGuard(m_aMutex);
-    for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
-    {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
-        if (xComp.is()) {
-            try {
-                xComp->dispose();
-            }
-            catch (com::sun::star::lang::DisposedException e) {
-            xComp=NULL;
-            }
-        }
-    }
-    m_aStatements.clear();
-
-    m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
-
-    dispose_ChildImpl();
     OConnection_BASE::disposing();
+    dispose_ChildImpl();
 }
 
 // -------------------------------- stubbed methods ------------------------------------------------
