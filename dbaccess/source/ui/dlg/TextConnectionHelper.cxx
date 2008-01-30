@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextConnectionHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:12:32 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:44:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -449,8 +449,8 @@ DBG_NAME(OTextConnectionHelper)
         else
         {
             sExtension = m_aETOwnExtension.GetText();
-            if ( !sExtension.Len() )
-                sExtension = m_aFTExtensionExample.GetText();
+            if ( sExtension.GetToken(0,'.').Equals('*') )
+                sExtension.Erase(0,2);
         }
         return sExtension;
     }
