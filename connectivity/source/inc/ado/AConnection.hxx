@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AConnection.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:01:25 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:00:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,11 +90,6 @@ namespace connectivity
             OTypeInfoMap                m_aTypeInfo;    //  vector containing an entry
                                                                                 //  for each row returned by
                                                                                 //  DatabaseMetaData.getTypeInfo.
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData >       m_xMetaData;
-
-            connectivity::OWeakRefArray m_aStatements;  //  vector containing a list
-                                                                                //  of all the Statement objects
-                                                                                //  for this Connection
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbcx::XTablesSupplier>      m_xCatalog;
             ODriver*                    m_pDriver;
         private:
