@@ -4,9 +4,9 @@
  *
  *  $RCSfile: canvasprocessor.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-18 15:10:27 $
+ *  last change: $Author: aw $ $Date: 2008-01-30 12:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1310,7 +1310,7 @@ namespace drawinglayer
                 case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
                 {
                     // direct draw of PolyPolygon with color
-                    const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate = static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate);
+                        const primitive2d::PolyPolygonColorPrimitive2D& rPolygonCandidate = static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(rCandidate);
                     const basegfx::BColor aPolygonColor(maBColorModifierStack.getModifiedColor(rPolygonCandidate.getBColor()));
 
                     maRenderState.DeviceColor = aPolygonColor.colorToDoubleSequence(mxCanvas->getDevice());

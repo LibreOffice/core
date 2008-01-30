@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-28 11:03:56 $
+ *  last change: $Author: aw $ $Date: 2008-01-30 12:25:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,10 @@ namespace drawinglayer
 
         public:
             // public helpers
-            basegfx::B3DHomMatrix createProjection(const basegfx::B3DRange& r3DRange) const;
+            // Geometry extractor. Shadow and labels will be added as in createLocalDecomposition, but
+            // the 3D content is not converted to a bitmap visualisation but to projected 2D gemetry. This
+            // helper is useful for Contour extraction.
+            Primitive2DSequence getGeometry2D(const geometry::ViewInformation2D& rViewInformation) const;
 
             // constructor/destructor
             ScenePrimitive2D(

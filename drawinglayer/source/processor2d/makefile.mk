@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: aw $ $Date: 2007-12-18 15:10:27 $
+#   last change: $Author: aw $ $Date: 2008-01-30 12:25:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@ SLOFILES= \
         $(SLO)$/vclprocessor2d.obj				\
         $(SLO)$/vclpixelprocessor2d.obj			\
         $(SLO)$/vclmetafileprocessor2d.obj		\
+        $(SLO)$/contourextractor2d.obj			\
         $(SLO)$/canvasprocessor.obj
 
 # --- Targets ----------------------------------

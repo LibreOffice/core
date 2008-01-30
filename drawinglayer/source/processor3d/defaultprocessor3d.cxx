@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprocessor3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:35:55 $
+ *  last change: $Author: aw $ $Date: 2008-01-30 12:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1856,8 +1856,16 @@ namespace drawinglayer
         :   BaseProcessor3D(rViewInformation.getViewTime()),
             mrSdrSceneAttribute(rSdrSceneAttribute),
             mrSdrLightingAttribute(rSdrLightingAttribute),
-            mpGeoTexSvx(0L),
-            mpTransparenceGeoTexSvx(0L),
+            maDeviceToView(),
+            maWorldToEye(),
+            maWorldToView(),
+            maInvEyeToView(),
+            maInvWorldToView(),
+            maRasterRange(),
+            mpBZPixelRaster(0),
+            maBColorModifierStack(),
+            mpGeoTexSvx(0),
+            mpTransparenceGeoTexSvx(0),
             mbModulate(false),
             mbFilter(false),
             mbProcessTransparent(false),

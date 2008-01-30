@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2007-10-16 15:46:43 $
+ *  last change: $Author: aw $ $Date: 2008-01-30 12:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,10 @@
 
 #ifndef INCLUDED_SVTOOLS_OPTIONSDRAWINGLAYER_HXX
 #include <svtools/optionsdrawinglayer.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR3D_GEOMETRY2DEXTRACTOR_HXX
+#include <drawinglayer/processor3d/geometry2dextractor.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -238,6 +242,44 @@ namespace drawinglayer
                     // add extracted 2d labels (after 3d scene creations)
                     appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, maLabelPrimitives);
                 }
+            }
+
+            return aRetval;
+        }
+
+        Primitive2DSequence ScenePrimitive2D::getGeometry2D(const geometry::ViewInformation2D& rViewInformation) const
+        {
+            Primitive2DSequence aRetval;
+
+            // create 2D shadows from contained 3D primitives
+            if(impGetShadow3D(rViewInformation))
+            {
+                // add extracted 2d shadows (before 3d scene creations itself)
+                aRetval = maShadowPrimitives;
+            }
+
+            // create 2D projected geometry from 3D geometry
+            if(getChildren3D().hasElements())
+            {
+                // create 2D geometry extraction processor
+                processor3d::Geometry2DExtractingProcessor aGeometryProcessor(
+                    rViewInformation.getViewTime(),
+                    getObjectTransformation(),
+                    getTransformation3D().getWorldToView());
+
+                // process local primitives
+                aGeometryProcessor.process(getChildren3D());
+
+                // fetch result and append
+                Primitive2DSequence a2DExtractedPrimitives(aGeometryProcessor.getPrimitive2DSequence());
+                appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, a2DExtractedPrimitives);
+            }
+
+            // create 2D labels from contained 3D label primitives
+            if(impGetLabel3D(rViewInformation))
+            {
+                // add extracted 2d labels (after 3d scene creations)
+                appendPrimitive2DSequenceToPrimitive2DSequence(aRetval, maLabelPrimitives);
             }
 
             return aRetval;

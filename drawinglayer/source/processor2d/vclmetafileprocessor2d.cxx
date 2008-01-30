@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclmetafileprocessor2d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: aw $ $Date: 2007-12-20 13:13:15 $
+ *  last change: $Author: aw $ $Date: 2008-01-30 12:25:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,7 +366,6 @@ namespace drawinglayer
                     aStrokeColor = maBColorModifierStack.getModifiedColor(pLineAttribute->getColor());
                 }
 
-                // copied from ImpDrawLineGeometry. Ckecked.
                 // It IS needed to record the stroke color at all in the metafile,
                 // SvtGraphicStroke has NO entry for stroke color(!)
                 mpOutputDevice->SetLineColor(Color(aStrokeColor));
@@ -527,10 +526,10 @@ namespace drawinglayer
             Two producers, one is vcl/source/gdi/gdimtf.cxx, line 1273. There, it is transformed
             inside GDIMetaFile::Rotate, nothing to take care of here.
             The second producer is in graphics/svx/source/svdraw/impgrfll.cxx, line 374. This is used
-            with each incarnation of ImpGraphicFill when a metafile is recorded, fillstyle is not
+            with each incarnation of Imp_GraphicFill when a metafile is recorded, fillstyle is not
             XFILL_NONE and not completely transparent. It creates a SvtGraphicFill and streams it
             to the comment action. A closing end token is created in the destructor.
-            Usages of ImpGraphicFill are in DoPaintObject-methods of SdrCircObj, SdrPathObj and
+            Usages of Imp_GraphicFill are in Do_Paint_Object-methods of SdrCircObj, SdrPathObj and
             SdrRectObj.
             The token users pick various actions from SvtGraphicFill, so it may need to be added for all kind
             of filled objects, even simple colored polygons. It is added as extra information; the
@@ -551,7 +550,7 @@ namespace drawinglayer
             Similar to pathfill, but using SvtGraphicStroke instead. It also has two producers where one
             is also the GDIMetaFile::Rotate. Another user is MetaCommentAction::Move which modifies the
             contained path accordingly.
-            The other one is SdrObject::ImpDrawLineGeometry. It's done when MetaFile is set at OutDev and
+            The other one is SdrObject::Imp_DrawLineGeometry. It's done when MetaFile is set at OutDev and
             only when geometry is a single polygon (!). I see no reason for that; in the PS exporter this
             would hinder to make use of PolyPolygon strokes. I will need to add support at:
                 PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D
@@ -652,7 +651,7 @@ namespace drawinglayer
               Okay, URLs work. Checked, Done.
 
             - UnoControlPDFExportContact is only created when PDFExtOutDevData is used at the
-              target and uno control data is created in UnoControlPDFExportContact::doPaintObject.
+              target and uno control data is created in UnoControlPDFExportContact::do_PaintObject.
               This may be added in primitive MetaFile renderer.
               Adding support...
               OOps, the necessary helper stuff is in svx/source/form/formpdxexport.cxx in namespace
@@ -819,7 +818,7 @@ namespace drawinglayer
                             mpPDFExtOutDevData->CreateControl(*pPDFControl.get());
                             mpPDFExtOutDevData->EndStructureElement();
 
-                            // no normal paint needed (see original UnoControlPDFExportContact::doPaintObject);
+                            // no normal paint needed (see original UnoControlPDFExportContact::do_PaintObject);
                             // do not process recursively
                             bDoProcessRecursively = false;
                         }
@@ -828,8 +827,8 @@ namespace drawinglayer
                     // printer output preparation
                     if(bDoProcessRecursively && !bSuppressPrinterOutput)
                     {
-                        // this needs to do the same as UnoControlPrintOrPreviewContact::doPaintObject
-                        // does ATM. This means preparePrintOrPrintPreview and paintControl
+                        // this needs to do the same as UnoControlPrintOrPreviewContact::do_PaintObject
+                        // does ATM. This means prepare_PrintOrPrintPreview and paint_Control
                         bool bIsPrintableControl(false);
 
                         if(rControlPrimitive.getXControl().is())
