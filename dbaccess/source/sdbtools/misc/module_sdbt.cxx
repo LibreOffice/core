@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_sdbt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:50:28 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:39:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,13 +38,6 @@
 
 #ifndef DBACCESS_MODULE_SDBT_HXX
 #include "module_sdbt.hxx"
-#endif
-
-#ifndef INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
-#include <rtl/instance.hxx>
-#endif
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/getglobalmutex.hxx>
 #endif
 
 //........................................................................
