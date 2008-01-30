@@ -4,9 +4,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:58:12 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:45:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ namespace dbaui
         Link                m_aChooseDocumentHandler;       /// to be called when a recent document has been definately chosen
         sal_Bool            m_bDisplayingInvalid : 1;   // the currently displayed data source is deleted
         sal_Bool            m_bUserGrabFocus : 1;
-        String              VerifyDisplayName(DATASOURCE_TYPE eType, String _sDisplayName);
+        bool                approveDataSourceType( DATASOURCE_TYPE eType, String& _inout_rDisplayName );
         void                insertDatasourceTypeEntryData(DATASOURCE_TYPE eType, String sDisplayName);
 
     public:
