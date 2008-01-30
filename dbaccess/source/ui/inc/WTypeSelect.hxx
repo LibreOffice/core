@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WTypeSelect.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:02:37 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:49:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,27 +35,14 @@
 #ifndef DBAUI_WIZ_TYPESELECT_HXX
 #define DBAUI_WIZ_TYPESELECT_HXX
 
-#ifndef DBAUI_WIZ_TABBPAGE_HXX
-#include "WTabPage.hxx"
-#endif
-#ifndef _SV_LSTBOX_HXX
-#include <vcl/lstbox.hxx>
-#endif
-#ifndef _SV_FIELD_HXX
-#include <vcl/field.hxx>
-#endif
-#ifndef _SV_FIXED_HXX
-#include <vcl/fixed.hxx>
-#endif
-#ifndef DBAUI_FIELDDESCRIPTIONCONTROL_HXX
 #include "FieldDescControl.hxx"
-#endif
-#ifndef DBAUI_TYPEINFO_HXX
 #include "TypeInfo.hxx"
-#endif
-#ifndef _SV_BUTTON_HXX
+#include "WTabPage.hxx"
+
 #include <vcl/button.hxx>
-#endif
+#include <vcl/field.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/lstbox.hxx>
 
 class SvStream;
 class SvParser;
@@ -107,6 +94,7 @@ namespace dbaui
         OWizTypeSelectList( Window* pParent, const ResId& rResId ) : MultiListBox(pParent,rResId) {};
         void                    SetPKey(sal_Bool bPKey) { m_bPKey = bPKey; }
     };
+
     // ========================================================
     // Wizard Page: OWizTypeSelect
     // Dient als Basis Klasse fuer unterschiedliche Kopiereigenschaften
@@ -146,12 +134,15 @@ namespace dbaui
         virtual sal_Bool        LeavePage();
         virtual String          GetTitle() const;
 
-        OWizTypeSelect(Window* pParent,SvStream*    _pStream = NULL);
+        OWizTypeSelect(Window* pParent, SvStream* _pStream = NULL );
         virtual ~OWizTypeSelect();
 
         inline void setDisplayRow(sal_Int32 _nRow) { m_nDisplayRow = _nRow - 1; }
         inline void setDuplicateName(sal_Bool _bDuplicateName) { m_bDuplicateName = _bDuplicateName; }
     };
+
+    // ========================================================
+    typedef OWizTypeSelect* (*TypeSelectionPageFactory)( Window*, SvStream& );
 }
 #endif // DBAUI_WIZ_TYPESELECT_HXX
 
