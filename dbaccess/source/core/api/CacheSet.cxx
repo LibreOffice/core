@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CacheSet.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:31:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:27:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,7 @@ void SAL_CALL OCacheSet::insertRow( const ORowSetRow& _rInsertRow,const connecti
             if(aIter->isNull())
                 xParameter->setNull(i,aIter->getTypeKind());
             else
-                setParameter(i,xParameter,*aIter);
+                setParameter(i,xParameter,*aIter,m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
         }
 
         m_bInserted = xPrep->executeUpdate() > 0;
@@ -392,11 +392,14 @@ void SAL_CALL OCacheSet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetR
     for(ORowVector< ORowSetValue >::const_iterator aIter = _rInsertRow->begin()+1; aIter != _rInsertRow->end();++aIter)
     {
         if(aIter->isModified())
-            setParameter(i++,xParameter,*aIter);
+        {
+            setParameter(i,xParameter,*aIter,m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
+            ++i;
+        }
     }
     for(::std::list< sal_Int32>::const_iterator aOrgValue = aOrgValues.begin(); aOrgValue != aOrgValues.end();++aOrgValue,++i)
     {
-        setParameter(i,xParameter,(*_rOrginalRow)[*aOrgValue]);
+        setParameter(i,xParameter,(*_rOrginalRow)[*aOrgValue],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
     }
 
      m_bUpdated = xPrep->executeUpdate() > 0;
@@ -457,7 +460,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     {
         for(sal_Int32 j=0;j<xIndexes->getCount();++j)
         {
-            ::cppu::extractInterface(xIndexColsSup,xIndexes->getByIndex(j));
+            xIndexColsSup.set(xIndexes->getByIndex(j),UNO_QUERY);
             if( xIndexColsSup.is()
                 && comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISUNIQUE))
                 && !comphelper::getBOOL(xIndexColsSup->getPropertyValue(PROPERTY_ISPRIMARYKEYINDEX))
@@ -478,7 +481,7 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
     sal_Int32 i = 1;
     for(::std::list< sal_Int32>::const_iterator j = aOrgValues.begin(); j != aOrgValues.end();++j,++i)
     {
-        setParameter(i,xParameter,(*_rDeleteRow)[*j]);
+        setParameter(i,xParameter,(*_rDeleteRow)[*j],m_xSetMetaData->getColumnType(i),m_xSetMetaData->getScale(i));
     }
 
     m_bDeleted = xPrep->executeUpdate() > 0;
@@ -487,8 +490,8 @@ void SAL_CALL OCacheSet::deleteRow(const ORowSetRow& _rDeleteRow ,const connecti
 void OCacheSet::setParameter(sal_Int32 nPos
                              ,Reference< XParameters > _xParameter
                              ,const ORowSetValue& _rValue
-// OJ->OBO: must be removed                          ,sal_Bool _bSigned
-                             ,sal_Int32 _nType)
+                             ,sal_Int32 _nType
+                             ,sal_Int32 _nScale)
 {
     sal_Int32 nType = ( _nType != DataType::OTHER ) ? _nType : _rValue.getTypeKind();
     if(!_rValue.isNull())
@@ -496,10 +499,12 @@ void OCacheSet::setParameter(sal_Int32 nPos
 
         switch(nType)
         {
-            case DataType::CHAR:
-            case DataType::VARCHAR:
             case DataType::DECIMAL:
             case DataType::NUMERIC:
+                _xParameter->setObjectWithInfo(nPos,_rValue.makeAny(),nType,_nScale);
+                break;
+            case DataType::CHAR:
+            case DataType::VARCHAR:
             case DataType::LONGVARCHAR:
                 _xParameter->setString(nPos,_rValue);
                 break;
