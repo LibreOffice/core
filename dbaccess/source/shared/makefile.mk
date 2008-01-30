@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2006-07-10 15:21:49 $
+#   last change: $Author: rt $ $Date: 2008-01-30 08:40:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@ LIB5TARGET=$(SLB)$/sdbtshared.lib
 # --- Files -------------------------------------
 EXCEPTIONSFILES=	\
         $(SLO)$/apitools.obj	\
-        $(SLO)$/dba_reghelper.obj	\
         $(SLO)$/dbu_reghelper.obj	\
         $(SLO)$/cfg_reghelper.obj	\
         $(SLO)$/flt_reghelper.obj
@@ -69,7 +68,6 @@ SLOFILES=	\
 
 
 LIB1OBJFILES=	\
-        $(SLO)$/dba_reghelper.obj	\
         $(SLO)$/dbastrings.obj	\
         $(SLO)$/apitools.obj
         
