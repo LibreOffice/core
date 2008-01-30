@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QEnumTypes.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 15:16:18 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:47:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@ namespace dbaui
         ORDER_ASC,
         ORDER_DESC
     };
+
     enum EFunctionType
     {
         FKT_NONE        =0x00000000,
@@ -58,6 +59,7 @@ namespace dbaui
         JTCS_FROM=0,
         JTCS_TO
     };
+
     enum ETableFieldType
     {
         TAB_NORMAL_FIELD=0,
@@ -90,30 +92,6 @@ namespace dbaui
         tpType,
         tpAutoIncrementValue
     };
-
-    enum EScrollDir
-    {
-        scrollUp,
-        scrollDown,
-        scrollHome,
-        scrollEnd
-    };
-
-    enum EEditMode
-    {
-        ADD,
-        DROP,
-        KEY,
-        ADD_DROP
-    };
-
-    enum EImportMode
-    {
-        COPY,
-        MOVE
-    };
-
-
 }
 #endif // DBAUI_ENUMTYPES_HXX
 
