@@ -1,0 +1,515 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: RowFunctionParser.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:46:48 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+// MARKER(update_precomp.py): autogen include statement, do not remove
+#include "precompiled_connectivity.hxx"
+
+// Makes parser a static resource,
+// we're synchronized externally.
+// But watch out, the parser might have
+// state not visible to this code!
+#define BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
+#if defined(VERBOSE) && defined(DBG_UTIL)
+#include <typeinfo>
+#define BOOST_SPIRIT_DEBUG
+#endif
+#include <boost/spirit/core.hpp>
+
+#ifndef CONNECTIVITY_ROWFUNCTIONPARSER_HXX_INCLUDED
+#include "RowFunctionParser.hxx"
+#endif
+
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
+#ifndef _FRACT_HXX
+#include <tools/fract.hxx>
+#endif
+
+
+
+#if (OSL_DEBUG_LEVEL > 0)
+#include <iostream>
+#endif
+#include <functional>
+#include <algorithm>
+#include <stack>
+
+namespace connectivity
+{
+using namespace com::sun::star;
+
+namespace
+{
+//////////////////////
+//////////////////////
+// EXPRESSION NODES
+//////////////////////
+//////////////////////
+class ConstantValueExpression : public ExpressionNode
+{
+    ORowSetValueDecoratorRef maValue;
+
+public:
+
+    ConstantValueExpression( ORowSetValueDecoratorRef rValue ) :
+        maValue( rValue )
+    {
+    }
+    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const
+    {
+        return maValue;
+    }
+    virtual void fill(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const
+    {
+    }
+    virtual ExpressionFunct getType() const
+    {
+        return FUNC_CONST;
+    }
+    virtual ODatabaseMetaDataResultSet::ORow fillNode( std::vector< RowEquation >& /*rEquations*/, ExpressionNode* /* pOptionalArg */, sal_uInt32 /* nFlags */ )
+    {
+        ODatabaseMetaDataResultSet::ORow aRet;
+        return aRet;
+    }
+};
+
+
+/** ExpressionNode implementation for unary
+    function over two ExpressionNodes
+    */
+class BinaryFunctionExpression : public ExpressionNode
+{
+    const ExpressionFunct   meFunct;
+    ExpressionNodeSharedPtr mpFirstArg;
+    ExpressionNodeSharedPtr mpSecondArg;
+
+public:
+
+    BinaryFunctionExpression( const ExpressionFunct eFunct, const ExpressionNodeSharedPtr& rFirstArg, const ExpressionNodeSharedPtr& rSecondArg ) :
+        meFunct( eFunct ),
+        mpFirstArg( rFirstArg ),
+        mpSecondArg( rSecondArg )
+    {
+    }
+    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow ) const
+    {
+        ORowSetValueDecoratorRef aRet;
+        switch(meFunct)
+        {
+            case ENUM_FUNC_EQUATION:
+                aRet = new ORowSetValueDecorator(sal_Bool(mpFirstArg->evaluate(_aRow )->getValue() == mpSecondArg->evaluate(_aRow )->getValue()) );
+                break;
+            case ENUM_FUNC_AND:
+                aRet = new ORowSetValueDecorator( sal_Bool(mpFirstArg->evaluate(_aRow )->getValue().getBool() && mpSecondArg->evaluate(_aRow )->getValue().getBool()) );
+                break;
+            case ENUM_FUNC_OR:
+                aRet = new ORowSetValueDecorator( sal_Bool(mpFirstArg->evaluate(_aRow )->getValue().getBool() || mpSecondArg->evaluate(_aRow )->getValue().getBool()) );
+                break;
+            default:
+                break;
+        }
+        return aRet;
+    }
+    virtual void fill(const ODatabaseMetaDataResultSet::ORow& _aRow ) const
+    {
+        switch(meFunct)
+        {
+            case ENUM_FUNC_EQUATION:
+                (*mpFirstArg->evaluate(_aRow )) = mpSecondArg->evaluate(_aRow )->getValue();
+                break;
+            default:
+                break;
+        }
+    }
+    virtual ExpressionFunct getType() const
+    {
+        return meFunct;
+    }
+    virtual ODatabaseMetaDataResultSet::ORow fillNode( std::vector< RowEquation >& /*rEquations*/, ExpressionNode* /*pOptionalArg*/, sal_uInt32 /*nFlags*/ )
+    {
+        ODatabaseMetaDataResultSet::ORow aRet;
+        return aRet;
+    }
+};
+
+
+////////////////////////
+////////////////////////
+// FUNCTION PARSER
+////////////////////////
+////////////////////////
+
+typedef const sal_Char* StringIteratorT;
+
+struct ParserContext
+{
+    typedef ::std::stack< ExpressionNodeSharedPtr > OperandStack;
+
+    // stores a stack of not-yet-evaluated operands. This is used
+    // by the operators (i.e. '+', '*', 'sin' etc.) to pop their
+    // arguments from. If all arguments to an operator are constant,
+    // the operator pushes a precalculated result on the stack, and
+    // a composite ExpressionNode otherwise.
+    OperandStack                            maOperandStack;
+};
+
+typedef ::boost::shared_ptr< ParserContext > ParserContextSharedPtr;
+
+/** Generate apriori constant value
+    */
+
+class ConstantFunctor
+{
+    ParserContextSharedPtr          mpContext;
+
+public:
+
+    ConstantFunctor( const ParserContextSharedPtr& rContext ) :
+        mpContext( rContext )
+    {
+    }
+    void operator()( StringIteratorT rFirst,StringIteratorT rSecond) const
+    {
+        rtl::OUString sVal( rFirst, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
+        mpContext->maOperandStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( new ORowSetValueDecorator( sVal ) ) ) );
+    }
+};
+
+/** Generate parse-dependent-but-then-constant value
+    */
+class IntConstantFunctor
+{
+    ParserContextSharedPtr  mpContext;
+
+public:
+    IntConstantFunctor( const ParserContextSharedPtr& rContext ) :
+        mpContext( rContext )
+    {
+    }
+    void operator()( sal_Int32 n ) const
+    {
+        mpContext->maOperandStack.push( ExpressionNodeSharedPtr( new ConstantValueExpression( new ORowSetValueDecorator( n ) ) ) );
+    }
+    void operator()( StringIteratorT rFirst,StringIteratorT rSecond) const
+    {
+        rtl::OUString sVal( rFirst, rSecond - rFirst, RTL_TEXTENCODING_UTF8 );
+        (void)sVal;
+    }
+};
+
+/** Implements a binary function over two ExpressionNodes
+
+    @tpl Generator
+    Generator functor, to generate an ExpressionNode of
+    appropriate type
+
+    */
+class BinaryFunctionFunctor
+{
+    const ExpressionFunct   meFunct;
+    ParserContextSharedPtr  mpContext;
+
+public:
+
+    BinaryFunctionFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext ) :
+        meFunct( eFunct ),
+        mpContext( rContext )
+    {
+    }
+
+    void operator()( StringIteratorT, StringIteratorT ) const
+    {
+        ParserContext::OperandStack& rNodeStack( mpContext->maOperandStack );
+
+        if( rNodeStack.size() < 2 )
+            throw ParseError( "Not enough arguments for binary operator" );
+
+        // retrieve arguments
+        ExpressionNodeSharedPtr pSecondArg( rNodeStack.top() );
+        rNodeStack.pop();
+        ExpressionNodeSharedPtr pFirstArg( rNodeStack.top() );
+        rNodeStack.pop();
+
+        // create combined ExpressionNode
+        ExpressionNodeSharedPtr pNode = ExpressionNodeSharedPtr( new BinaryFunctionExpression( meFunct, pFirstArg, pSecondArg ) );
+        // check for constness
+        rNodeStack.push( pNode );
+    }
+};
+/** ExpressionNode implementation for unary
+    function over one ExpressionNode
+    */
+class UnaryFunctionExpression : public ExpressionNode
+{
+    const ExpressionFunct   meFunct;
+    ExpressionNodeSharedPtr mpArg;
+
+public:
+    UnaryFunctionExpression( const ExpressionFunct eFunct, const ExpressionNodeSharedPtr& rArg ) :
+        meFunct( eFunct ),
+        mpArg( rArg )
+    {
+    }
+    virtual ORowSetValueDecoratorRef evaluate(const ODatabaseMetaDataResultSet::ORow& _aRow ) const
+    {
+        return _aRow[mpArg->evaluate(_aRow )->getValue().getInt32()];
+    }
+    virtual void fill(const ODatabaseMetaDataResultSet::ORow& /*_aRow*/ ) const
+    {
+    }
+    virtual ExpressionFunct getType() const
+    {
+        return meFunct;
+    }
+    virtual ODatabaseMetaDataResultSet::ORow fillNode( std::vector< RowEquation >& /*rEquations*/, ExpressionNode* /* pOptionalArg */, sal_uInt32 /* nFlags */ )
+    {
+        ODatabaseMetaDataResultSet::ORow aRet;
+        return aRet;
+    }
+};
+
+class UnaryFunctionFunctor
+{
+    const ExpressionFunct   meFunct;
+    ParserContextSharedPtr  mpContext;
+
+public :
+
+    UnaryFunctionFunctor( const ExpressionFunct eFunct, const ParserContextSharedPtr& rContext ) :
+        meFunct( eFunct ),
+        mpContext( rContext )
+    {
+    }
+    void operator()( StringIteratorT, StringIteratorT ) const
+    {
+
+        ParserContext::OperandStack& rNodeStack( mpContext->maOperandStack );
+
+        if( rNodeStack.size() < 1 )
+            throw ParseError( "Not enough arguments for unary operator" );
+
+        // retrieve arguments
+        ExpressionNodeSharedPtr pArg( rNodeStack.top() );
+        rNodeStack.pop();
+
+        rNodeStack.push( ExpressionNodeSharedPtr( new UnaryFunctionExpression( meFunct, pArg ) ) );
+    }
+};
+
+/* This class implements the following grammar (more or
+    less literally written down below, only slightly
+    obfuscated by the parser actions):
+
+    basic_expression =
+                       number |
+                       '(' additive_expression ')'
+
+    unary_expression =
+                    basic_expression
+
+    multiplicative_expression =
+                       unary_expression ( ( '*' unary_expression )* |
+                                        ( '/' unary_expression )* )
+
+    additive_expression =
+                       multiplicative_expression ( ( '+' multiplicative_expression )* |
+                                                   ( '-' multiplicative_expression )* )
+
+    */
+class ExpressionGrammar : public ::boost::spirit::grammar< ExpressionGrammar >
+{
+public:
+    /** Create an arithmetic expression grammar
+
+        @param rParserContext
+        Contains context info for the parser
+        */
+    ExpressionGrammar( const ParserContextSharedPtr& rParserContext ) :
+        mpParserContext( rParserContext )
+    {
+    }
+
+    template< typename ScannerT > class definition
+    {
+    public:
+        // grammar definition
+        definition( const ExpressionGrammar& self )
+        {
+            using ::boost::spirit::str_p;
+            using ::boost::spirit::space_p;
+            using ::boost::spirit::range_p;
+            using ::boost::spirit::lexeme_d;
+            using ::boost::spirit::real_parser;
+            using ::boost::spirit::chseq_p;
+            using ::boost::spirit::ch_p;
+            using ::boost::spirit::int_p;
+            using ::boost::spirit::as_lower_d;
+            using ::boost::spirit::strlit;
+            using ::boost::spirit::inhibit_case;
+
+
+            typedef inhibit_case<strlit<> > token_t;
+            token_t COLUMN  = as_lower_d[ "column" ];
+            token_t OR_     = as_lower_d[ "or" ];
+            token_t AND_    = as_lower_d[ "and" ];
+
+            integer =
+                    int_p
+                                [IntConstantFunctor(self.getContext())];
+
+            argument =
+                    integer
+                |    lexeme_d[ +( range_p('a','z') | range_p('A','Z') | range_p('0','9') ) ]
+                                [ ConstantFunctor(self.getContext()) ]
+               ;
+
+            unaryFunction =
+                    (COLUMN >> '(' >> integer >> ')' )
+                                [ UnaryFunctionFunctor( UNARY_FUNC_COLUMN,  self.getContext()) ]
+                ;
+
+            assignment =
+                    unaryFunction >> ch_p('=') >> argument
+                                [ BinaryFunctionFunctor( ENUM_FUNC_EQUATION,  self.getContext()) ]
+               ;
+
+            andExpression =
+                    assignment
+                |   ( '(' >> orExpression >> ')' )
+                |   ( assignment >> AND_ >> assignment )  [ BinaryFunctionFunctor( ENUM_FUNC_AND,  self.getContext()) ]
+                ;
+
+            orExpression =
+                    andExpression
+                |   ( orExpression >> OR_ >> andExpression ) [ BinaryFunctionFunctor( ENUM_FUNC_OR,  self.getContext()) ]
+                ;
+
+            basicExpression =
+                    orExpression
+                ;
+
+            BOOST_SPIRIT_DEBUG_RULE(basicExpression);
+            BOOST_SPIRIT_DEBUG_RULE(unaryFunction);
+            BOOST_SPIRIT_DEBUG_RULE(assignment);
+            BOOST_SPIRIT_DEBUG_RULE(argument);
+            BOOST_SPIRIT_DEBUG_RULE(integer);
+            BOOST_SPIRIT_DEBUG_RULE(orExpression);
+            BOOST_SPIRIT_DEBUG_RULE(andExpression);
+        }
+
+        const ::boost::spirit::rule< ScannerT >& start() const
+        {
+            return basicExpression;
+        }
+
+    private:
+        // the constituents of the Spirit arithmetic expression grammar.
+        // For the sake of readability, without 'ma' prefix.
+        ::boost::spirit::rule< ScannerT >   basicExpression;
+        ::boost::spirit::rule< ScannerT >   unaryFunction;
+        ::boost::spirit::rule< ScannerT >   assignment;
+        ::boost::spirit::rule< ScannerT >   integer,argument;
+        ::boost::spirit::rule< ScannerT >   orExpression,andExpression;
+    };
+
+    const ParserContextSharedPtr& getContext() const
+    {
+        return mpParserContext;
+    }
+
+private:
+    ParserContextSharedPtr          mpParserContext; // might get modified during parsing
+};
+
+#ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
+const ParserContextSharedPtr& getParserContext()
+{
+    static ParserContextSharedPtr lcl_parserContext( new ParserContext() );
+
+    // clear node stack (since we reuse the static object, that's
+    // the whole point here)
+    while( !lcl_parserContext->maOperandStack.empty() )
+        lcl_parserContext->maOperandStack.pop();
+
+    return lcl_parserContext;
+}
+#endif
+}
+
+ExpressionNodeSharedPtr FunctionParser::parseFunction( const ::rtl::OUString& _sFunction)
+{
+    // TODO(Q1): Check if a combination of the RTL_UNICODETOTEXT_FLAGS_*
+    // gives better conversion robustness here (we might want to map space
+    // etc. to ASCII space here)
+    const ::rtl::OString& rAsciiFunction(
+        rtl::OUStringToOString( _sFunction, RTL_TEXTENCODING_ASCII_US ) );
+
+    StringIteratorT aStart( rAsciiFunction.getStr() );
+    StringIteratorT aEnd( rAsciiFunction.getStr()+rAsciiFunction.getLength() );
+
+    ParserContextSharedPtr pContext;
+
+#ifdef BOOST_SPIRIT_SINGLE_GRAMMAR_INSTANCE
+    // static parser context, because the actual
+    // Spirit parser is also a static object
+    pContext = getParserContext();
+#else
+    pContext.reset( new ParserContext() );
+#endif
+
+    ExpressionGrammar aExpressionGrammer( pContext );
+
+    const ::boost::spirit::parse_info<StringIteratorT> aParseInfo(
+            ::boost::spirit::parse( aStart,
+                                    aEnd,
+                                    aExpressionGrammer,
+                                    ::boost::spirit::space_p ) );
+
+    OSL_DEBUG_ONLY(::std::cout.flush()); // needed to keep stdout and cout in sync
+
+    // input fully congested by the parser?
+    if( !aParseInfo.full )
+        throw ParseError( "RowFunctionParser::parseFunction(): string not fully parseable" );
+
+    // parser's state stack now must contain exactly _one_ ExpressionNode,
+    // which represents our formula.
+    if( pContext->maOperandStack.size() != 1 )
+        throw ParseError( "RowFunctionParser::parseFunction(): incomplete or empty expression" );
+
+    return pContext->maOperandStack.top();
+}
+}
+
