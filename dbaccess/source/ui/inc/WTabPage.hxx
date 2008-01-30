@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WTabPage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-10 10:30:17 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:49:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,6 @@
 #ifndef _SV_TABPAGE_HXX
 #include <vcl/tabpage.hxx>
 #endif
-#ifndef DBAUI_DATABASEEXPORT_HXX
-#include "DExport.hxx"
-#endif
 
 namespace dbaui
 {
@@ -56,6 +53,7 @@ namespace dbaui
         sal_Bool                    m_bFirstTime;   // Page wird das erste mal gerufen ; should be set in the reset methode
 
         OWizardPage( Window* pParent, const ResId& rResId );// : TabPage(pParent,rResId),m_pParent((OCopyTableWizard*)pParent),m_bFirstTime(sal_True) {};
+
     public:
         virtual void        Reset ( )           = 0;
         virtual sal_Bool    LeavePage()         = 0;
