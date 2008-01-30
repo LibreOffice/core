@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RowSet.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 07:51:31 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:27:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -833,11 +833,11 @@ public class RowSet extends ComplexTestCase {
 
         for ( int i=0; i<expected; ++i )
         {
-            XPropertySet param = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
+            XPropertySet parameter = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
                 params.getByIndex(i) );
 
             String expectedName = _paramNames[i];
-            String foundName = (String)param.getPropertyValue( "Name" );
+            String foundName = (String)parameter.getPropertyValue( "Name" );
             assure( "wrong parameter name (expected: " + expectedName + ", found: " + foundName + ") in" + _context,
                 expectedName.equals( foundName ) );
         }
