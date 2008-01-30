@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtools.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:54:28 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:46:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -523,6 +523,14 @@ namespace dbtools
     ::rtl::OUString createUniqueName(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess>& _rxContainer,
                                      const ::rtl::OUString& _rBaseName,
                                      sal_Bool _bStartWithNumber = sal_True);
+
+    /** creates a unique name which is not already used in the given name array
+    */
+    ::rtl::OUString createUniqueName(
+        const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rNames,
+        const ::rtl::OUString& _rBaseName,
+        sal_Bool _bStartWithNumber = sal_True
+    );
 
     /** create a name which is a valid SQL 92 identifier name
         @param      _rName          the string which should be converted
