@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Connection.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:25:01 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,16 +53,17 @@
 #ifndef _CONNECTIVITY_AUTOKEYRETRIEVINGBASE_HXX_
 #include "AutoRetrievingBase.hxx"
 #endif
-
 #include "java/sql/ConnectionLog.hxx"
 #include "java/LocalRef.hxx"
 #include "java/GlobalRef.hxx"
+
+#include <com/sun/star/beans/NamedValue.hpp>
 
 namespace connectivity
 {
     class java_sql_Driver;
 
-    typedef OMetaConnection java_sql_Connection_BASE;
+    typedef OMetaConnection     java_sql_Connection_BASE;
 
     class java_sql_Connection : public java_sql_Connection_BASE,
                                 public java_lang_Object,
@@ -70,19 +71,12 @@ namespace connectivity
                                 public OAutoRetrievingBase
     {
         friend class OSubComponent<java_sql_Connection, java_sql_Connection_BASE>;
-
-        ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
-        OWeakRefArray       m_aStatements;  //  vector containing a list
-                                            //  of all the Statement objects
-                                            //  for this Connection
         const java_sql_Driver*  m_pDriver;
         jobject                 m_pDriverobject;
         jdbc::GlobalRef< jobject >
                                 m_pDriverClassLoader;
 
         jclass                  m_Driver_theClass;
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >
-                                m_aConnectionInfo;
         java::sql::ConnectionLog
                                 m_aLogger;
         sal_Bool                m_bParameterSubstitution;
@@ -96,10 +90,11 @@ namespace connectivity
                 The new statement witgh unnamed parameters.
         */
         ::rtl::OUString transFormPreparedStatement(const ::rtl::OUString& _sSQL);
-
         void loadDriverFromProperties(
-                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info
-             );
+                const ::rtl::OUString& _sDriverClass,
+                const ::rtl::OUString& _sDriverClassPath,
+                const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& _rSystemProperties
+            );
 
     protected:
     // statische Daten fuer die Klasse
