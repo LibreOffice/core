@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: ihi $ $Date: 2007-11-21 16:56:12 $
+#   last change: $Author: rt $ $Date: 2008-01-30 07:48:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,14 @@ ENVCFLAGS+=/FR$(SLO)$/
 .ENDIF
 
 .INCLUDE : settings.mk
+
+# Disable optimization for SunCC SPARC and MACOSX (funny loops
+# when parsing e.g. "x+width/2"),
+# also http://gcc.gnu.org/PR22392
+.IF ("$(OS)$(CPU)"=="SOLARISS" && "$(COM)"!="GCC") || "$(OS)"=="MACOSX" || ("$(OS)"=="LINUX" && "$(CPU)"=="P") 
+NOOPTFILES= $(SLO)$/RowFunctionParser.obj
+.ENDIF
+
 # --- Files --------------------------------------------------------
 EXCEPTIONSFILES=\
         $(SLO)$/predicateinput.obj						\
@@ -75,6 +83,7 @@ EXCEPTIONSFILES=\
         $(SLO)$/FValue.obj                              \
         $(SLO)$/paramwrapper.obj                        \
         $(SLO)$/statementcomposer.obj                   \
+        $(SLO)$/RowFunctionParser.obj                   \
         $(SLO)$/sqlerror.obj                            \
         $(SLO)$/formattedcolumnvalue.obj
 
