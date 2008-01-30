@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:29:10 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,10 +99,8 @@ namespace dbaccess
     class OTableContainer :  public OFilteredContainer,
                              public OTableContainer_Base
     {
-    protected:
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > m_xTableDefinitions;
         ::rtl::Reference< OContainerMediator >                                          m_pTableMediator;
-        sal_Bool                m_bInAppend;                // true when we are in append mode
         sal_Bool                m_bInDrop;                  // set when we are in the drop method
 
 
@@ -128,6 +126,18 @@ namespace dbaccess
         */
         void    getAllTableTypeFilter( ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* [out] */ _rFilter ) const;
 
+        inline virtual void SAL_CALL acquire() throw(){ OFilteredContainer::acquire();}
+        inline virtual void SAL_CALL release() throw(){ OFilteredContainer::release();}
+    // ::com::sun::star::lang::XServiceInfo
+        DECLARE_SERVICE_INFO();
+
+        // XEventListener
+        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
+        // XContainerListener
+        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
+
     public:
         /** ctor of the container. The parent has to support the <type scope="com::sun::star::sdbc">XConnection</type>
             interface.<BR>
@@ -143,24 +153,12 @@ namespace dbaccess
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
             sal_Bool _bCase,
             const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >&  _xTableDefinitions,
-            IRefreshListener*   _pRefreshListener = NULL,
-            IWarningsContainer* _pWarningsContainer = NULL
+            IRefreshListener*   _pRefreshListener,
+            IWarningsContainer* _pWarningsContainer,
+            oslInterlockedCount& _nInAppend
             );
 
         virtual ~OTableContainer();
-
-        inline virtual void SAL_CALL acquire() throw(){ OFilteredContainer::acquire();}
-        inline virtual void SAL_CALL release() throw(){ OFilteredContainer::release();}
-    // ::com::sun::star::lang::XServiceInfo
-        DECLARE_SERVICE_INFO();
-
-        // XEventListener
-        virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source ) throw (::com::sun::star::uno::RuntimeException);
-        // XContainerListener
-        virtual void SAL_CALL elementInserted( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementRemoved( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL elementReplaced( const ::com::sun::star::container::ContainerEvent& Event ) throw (::com::sun::star::uno::RuntimeException);
-
     };
 }
 #endif // _DBA_CORE_TABLECONTAINER_HXX_
