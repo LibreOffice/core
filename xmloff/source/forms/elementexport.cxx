@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 15:13:42 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:05:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,9 @@
 #endif
 #ifndef _TOOLS_TIME_HXX
 #include <tools/time.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
@@ -1648,7 +1651,8 @@ namespace xmloff
                     m_eType = RADIO;
                     m_nIncludeCommon |= CCA_CURRENT_SELECTED | CCA_SELECTED;
                 }
-                m_nIncludeSpecial |= SCA_IMAGE_POSITION;
+                if ( m_xPropertyInfo->hasPropertyByName( PROPERTY_IMAGE_POSITION ) )
+                    m_nIncludeSpecial |= SCA_IMAGE_POSITION;
                 m_nIncludeDatabase = DA_DATA_FIELD;
                 m_nIncludeEvents = EA_CONTROL_EVENTS | EA_ON_CHANGE;
                 break;
@@ -1893,7 +1897,7 @@ namespace xmloff
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "OControlExport::exportImagePositionAttributes: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
 
