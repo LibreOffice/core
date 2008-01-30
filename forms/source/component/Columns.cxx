@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:21:11 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:06:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -405,6 +405,8 @@ void OGridColumn::clearAggregateProperties( Sequence< Property >& _rProps, sal_B
     aForbiddenProperties.insert( PROPERTY_CONTROLLABEL );
     aForbiddenProperties.insert( PROPERTY_RICH_TEXT );
     aForbiddenProperties.insert( PROPERTY_VERTICALALIGN );
+    aForbiddenProperties.insert( PROPERTY_IMAGE_URL );
+    aForbiddenProperties.insert( PROPERTY_IMAGE_POSITION );
     if ( !bAllowDropDown )
         aForbiddenProperties.insert( PROPERTY_DROPDOWN );
 
