@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:38:17 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:55:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,6 +181,8 @@ java_util_Properties* connectivity::createStringPropertyArray(const Sequence< Pr
             pBegin->Name.compareToAscii("EnableSQL92Check") &&
             pBegin->Name.compareToAscii("EnableOuterJoinEscape") &&
             pBegin->Name.compareToAscii("BooleanComparisonMode") &&
+            pBegin->Name.compareToAscii("IgnoreCurrency") &&
+            pBegin->Name.compareToAscii("TypeInfoSettings") &&
             pBegin->Name.compareToAscii("IgnoreDriverPrivileges"))
         {
             ::rtl::OUString aStr;
