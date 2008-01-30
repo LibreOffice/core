@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:56:26 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:49:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,6 @@ IMPLEMENT_SERVICE_INFO(OConnection,"com.sun.star.sdbcx.AConnection","com.sun.sta
 OConnection::OConnection(ODriver*   _pDriver) throw(SQLException, RuntimeException)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
                          m_bClosed(sal_False),
-                         m_xMetaData(NULL),
                          m_xCatalog(NULL),
                          m_pDriver(_pDriver),
                          m_pAdoConnection(NULL),
@@ -148,6 +147,8 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 {
     osl_incrementInterlockedCount( &m_refCount );
 
+    setConnectionInfo(info);
+
     sal_Int32 nLen = url.indexOf(':');
     nLen = url.indexOf(':',nLen+1);
     ::rtl::OUString aDSN(url.copy(nLen+1)),aUID,aPWD;
@@ -156,18 +157,18 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 
     sal_Int32 nTimeout = 20;
     sal_Bool bSilent = sal_True;
-    const PropertyValue *pBegin = info.getConstArray();
-    const PropertyValue *pEnd   = pBegin + info.getLength();
-    for(;pBegin != pEnd;++pBegin)
+    const PropertyValue *pIter  = info.getConstArray();
+    const PropertyValue *pEnd   = pIter + info.getLength();
+    for(;pIter != pEnd;++pIter)
     {
-        if(!pBegin->Name.compareToAscii("Timeout"))
-            pBegin->Value >>= nTimeout;
-        else if(!pBegin->Name.compareToAscii("Silent"))
-            pBegin->Value >>= bSilent;
-        else if(!pBegin->Name.compareToAscii("user"))
-            pBegin->Value >>= aUID;
-        else if(!pBegin->Name.compareToAscii("password"))
-            pBegin->Value >>= aPWD;
+        if(!pIter->Name.compareToAscii("Timeout"))
+            pIter->Value >>= nTimeout;
+        else if(!pIter->Name.compareToAscii("Silent"))
+            pIter->Value >>= bSilent;
+        else if(!pIter->Name.compareToAscii("user"))
+            pIter->Value >>= aUID;
+        else if(!pIter->Name.compareToAscii("password"))
+            pIter->Value >>= aPWD;
     }
 
     if(m_pAdoConnection)
@@ -513,13 +514,7 @@ void OConnection::disposing()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
-    //  m_aTables.disposing();
-    for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
-    {
-        Reference< XInterface > xStatement( i->get() );
-        ::comphelper::disposeComponent( xStatement );
-    }
-    m_aStatements.clear();
+    OConnection_BASE::disposing();
 
     m_bClosed   = sal_True;
     m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
@@ -538,7 +533,6 @@ void OConnection::disposing()
     m_pAdoConnection = NULL;
 
     dispose_ChildImpl();
-    OConnection_BASE::disposing();
 }
 // -----------------------------------------------------------------------------
 sal_Int64 SAL_CALL OConnection::getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& rId ) throw (::com::sun::star::uno::RuntimeException)
