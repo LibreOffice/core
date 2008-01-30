@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XObjectNames.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:51:50 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:17:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ interface XObjectNames
         allowed by the SQL-92 standard, nor part of the special characters supported
         by the database, with an underscore character (_).</p>
 
-        @seealso com::sun::star::sdbc::XDatabaseMetaData::getExtraNameCharacters
+        @see com::sun::star::sdbc::XDatabaseMetaData::getExtraNameCharacters
     */
     string  convertToSQLName( [in] string Name );
 
@@ -157,7 +157,7 @@ interface XObjectNames
         <p>For queries, names are nearly arbitrary, except that usual quoting characters
         must not be part of the name.</p>
 
-        @seealso com::sun::star::sdbc::XDatabaseMetaData::getExtraNameCharacters
+        @see com::sun::star::sdbc::XDatabaseMetaData::getExtraNameCharacters
     */
     boolean isNameValid( [in] long CommandType, [in] string Name )
         raises ( com::sun::star::lang::IllegalArgumentException );
