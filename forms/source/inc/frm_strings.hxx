@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frm_strings.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-11-01 14:57:09 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:06:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,7 @@ namespace frm
     FORMS_CONSTASCII_STRING( PROPERTY_SUBMIT_METHOD,            "SubmitMethod" );
     FORMS_CONSTASCII_STRING( PROPERTY_SUBMIT_ENCODING,          "SubmitEncoding" );
     FORMS_CONSTASCII_STRING( PROPERTY_IMAGE_URL,                "ImageURL" );
+    FORMS_CONSTASCII_STRING( PROPERTY_IMAGE_POSITION,           "ImagePosition" );
     FORMS_CONSTASCII_STRING( PROPERTY_EMPTY_IS_NULL,            "ConvertEmptyToNull" );
     FORMS_CONSTASCII_STRING( PROPERTY_LISTSOURCETYPE,           "ListSourceType" );
     FORMS_CONSTASCII_STRING( PROPERTY_LISTSOURCE,               "ListSource" );
