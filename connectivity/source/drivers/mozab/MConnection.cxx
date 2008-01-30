@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:59:24 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:56:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,7 +145,6 @@ const sal_Char* getSchemeURI( MozillaScheme _eScheme )
 
 OConnection::OConnection(MozabDriver*   _pDriver)
     :OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this)
-    ,m_xMetaData(NULL)
     ,m_pDriver(_pDriver)
     ,m_pImplData( new ConnectionImplData )
     ,m_aColumnAlias( _pDriver->getMSFactory() )
@@ -552,23 +551,13 @@ void OConnection::disposing()
 
     m_pImplData->pResourceBundle.reset();
 
-    for (OWeakRefArray::iterator i = m_aStatements.begin(); m_aStatements.end() != i; ++i)
-    {
-        Reference< XComponent > xComp(i->get(), UNO_QUERY);
-        if (xComp.is())
-            xComp->dispose();
-    }
-    m_aStatements.clear();
-
-    m_xMetaData = ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData>();
-
+    OConnection_BASE::disposing();
     if ( m_aNameMapper ) {
         MQuery::FreeNameMapper( m_aNameMapper );
         m_aNameMapper = NULL;
     }
 
     dispose_ChildImpl();
-    OConnection_BASE::disposing();
 }
 // -----------------------------------------------------------------------------
 
