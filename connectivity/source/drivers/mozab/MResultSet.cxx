@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:43:24 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 09:50:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1544,16 +1544,11 @@ sal_Bool OResultSet::fillKeySet(sal_Int32 nMaxCardNumber)
     if (m_CurrentRowCount < nMaxCardNumber)
     {
         sal_Int32   nKeyValue;
-        sal_Int32   nKeyPos;
         if ( (sal_Int32)m_pKeySet->capacity() < nMaxCardNumber )
             m_pKeySet->reserve(nMaxCardNumber + 20 );
 
         for (nKeyValue = m_CurrentRowCount+1; nKeyValue  <= nMaxCardNumber; nKeyValue ++)
-        {
-            nKeyPos = m_pKeySet->size();
-            m_pKeySet->insert( m_pKeySet->end(), sal_Int32() );
-            (*m_pKeySet)[nKeyPos] = nKeyValue;
-        }
+            m_pKeySet->push_back( nKeyValue );
         m_CurrentRowCount = nMaxCardNumber;
     }
     return sal_True;
@@ -1862,9 +1857,10 @@ void SAL_CALL OResultSet::updateObject( sal_Int32 columnIndex, const Any& x ) th
  }
 // -------------------------------------------------------------------------
 
-void SAL_CALL OResultSet::updateNumericObject( sal_Int32 /*columnIndex*/, const Any& /*x*/, sal_Int32 /*scale*/ ) throw(SQLException, RuntimeException)
+void SAL_CALL OResultSet::updateNumericObject( sal_Int32 columnIndex, const Any& x, sal_Int32 /*scale*/ ) throw(SQLException, RuntimeException)
 {
-    ::dbtools::throwFeatureNotImplementedException( "XRowUpdate::updateNumericObject", *this );
+    if (!::dbtools::implUpdateObject(this, columnIndex, x))
+        ::dbtools::throwGenericSQLException(::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Error updating object")),*this);
 }
 
 // XResultSetUpdate
