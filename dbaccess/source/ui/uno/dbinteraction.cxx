@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinteraction.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:34:07 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:56:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -353,20 +353,28 @@ namespace dbaui
             // want to open a dialog ....
 
         sal_Int32 nApprovePos = getContinuation(APPROVE, _rContinuations);
+        sal_Int32 nDisapprovePos = getContinuation(DISAPPROVE, _rContinuations);
         sal_Int32 nAbortPos = getContinuation(ABORT, _rContinuations);
         sal_Int32 nRetryPos = getContinuation(RETRY, _rContinuations);
-#ifdef DBG_UTIL
-        sal_Int32 nDisapprovePos = getContinuation(DISAPPROVE, _rContinuations);
-        sal_Int32 nAuthentPos = getContinuation(SUPPLY_AUTHENTICATION, _rContinuations);
-        DBG_ASSERT((-1 == nDisapprovePos) && (-1 == nAuthentPos), "OInteractionHandler::implHandle(SQLExceptionInfo): unsupported continuation type!");
-            // "Retry" and "Authenticate" do not make sense if the request refered to an SQLException
-#endif
+
         // determine the style of the dialog, dependent on the present continuation types
-        WinBits nDialogStyle = WB_OK | WB_DEF_OK;
-        if (-1 != nAbortPos)
-            nDialogStyle = WB_OK_CANCEL;
-        if (-1 != nRetryPos)
-            nDialogStyle |= WB_RETRY_CANCEL | WB_DEF_RETRY;
+        WinBits nDialogStyle = 0;
+        bool bHaveCancel = nAbortPos != -1;
+        // "approve" means "Yes", "disapprove" means "No"
+        // VCL only supports having both (which makes sense ...)
+        if ( ( nApprovePos != -1 ) || ( nDisapprovePos != -1 ) )
+            nDialogStyle = ( bHaveCancel ? WB_YES_NO_CANCEL : WB_YES_NO ) | WB_DEF_YES;
+        else
+        {
+            // if there's no yes/no, then use a default OK button
+            nDialogStyle = ( bHaveCancel ? WB_OK_CANCEL : WB_OK ) | WB_DEF_OK;
+        }
+
+        // If there's a "Retry" continuation, have a "Retry" button
+        if ( nRetryPos != -1 )
+        {
+            nDialogStyle = WB_RETRY_CANCEL | WB_DEF_RETRY;
+        }
 
         // excute the dialog
         OSQLMessageBox aDialog(NULL, _rSqlInfo, nDialogStyle);
@@ -376,17 +384,34 @@ namespace dbaui
         {
             switch (nResult)
             {
+                case RET_YES:
                 case RET_OK:
-                    if (-1 != nApprovePos)
-                        _rContinuations[nApprovePos]->select();
+                    if ( nApprovePos != -1 )
+                        _rContinuations[ nApprovePos ]->select();
+                    else
+                        OSL_ENSURE( nResult != RET_YES, "OInteractionHandler::implHandle: no handler for YES!" );
                     break;
+
+                case RET_NO:
+                    if ( nDisapprovePos != -1 )
+                        _rContinuations[ nDisapprovePos ]->select();
+                    else
+                        OSL_ENSURE( false, "OInteractionHandler::implHandle: no handler for NO!" );
+                    break;
+
                 case RET_CANCEL:
-                    if (-1 != nAbortPos)
-                        _rContinuations[nAbortPos]->select();
+                    if ( nAbortPos != -1 )
+                        _rContinuations[ nAbortPos ]->select();
+                    else if ( nDisapprovePos != -1 )
+                        _rContinuations[ nDisapprovePos ]->select();
+                    else
+                        OSL_ENSURE( false, "OInteractionHandler::implHandle: no handler for CANCEL!" );
                     break;
                 case RET_RETRY:
-                    if (-1 != nRetryPos)
-                        _rContinuations[nRetryPos]->select();
+                    if ( nRetryPos != -1 )
+                        _rContinuations[ nRetryPos ]->select();
+                    else
+                        OSL_ENSURE( false, "OInteractionHandler::implHandle: where does the RETRY come from?" );
                     break;
             }
         }
