@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResultSet.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:03:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:55:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #ifndef _CONNECTIVITY_JAVA_SQL_RESULTSET_HXX_
 #include "java/sql/ResultSet.hxx"
 #endif
+#include "java/math/BigDecimal.hxx"
 #ifndef _CONNECTIVITY_JAVA_SQL_STATEMENT_HXX_
 #include "java/sql/JStatement.hxx"
 #endif
@@ -1580,10 +1581,43 @@ void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const ::c
 }
 // -------------------------------------------------------------------------
 
-void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 /*scale*/ ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, const ::com::sun::star::uno::Any& x, sal_Int32 scale ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     //  OSL_ENSURE(0,"java_sql_ResultSet::updateNumericObject: NYI");
-    updateObject( columnIndex,x);
+    try
+    {
+        SDBThreadAttach t;
+        if( t.pEnv )
+        {
+
+            // temporaere Variable initialisieren
+            static const char * cSignature = "(ILjava/lang/Object;I)V";
+            static const char * cMethodName = "updateObject";
+            // Java-Call absetzen
+            static jmethodID mID = NULL;
+            if ( !mID  )
+                mID  = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+            if( mID )
+            {
+                // Parameter konvertieren
+                double nTemp = 0.0;
+                ::std::auto_ptr<java_math_BigDecimal> pBigDecimal;
+                if ( x >>= nTemp)
+                {
+                    pBigDecimal.reset(new java_math_BigDecimal(nTemp));
+                }
+                else
+                    pBigDecimal.reset(new java_math_BigDecimal(::comphelper::getString(x)));
+                    //obj = convertwchar_tToJavaString(t.pEnv,::comphelper::getString(x));
+                t.pEnv->CallVoidMethod( object, mID, columnIndex,pBigDecimal->getJavaObject(),scale);
+                ThrowLoggedSQLException( m_aLogger, t.pEnv, *this );
+            }
+        }
+    }
+    catch(Exception)
+    {
+        updateObject( columnIndex,x);
+    }
 }
 //------------------------------------------------------------------------------
 sal_Int32 java_sql_ResultSet::getResultSetConcurrency() const throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
