@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:52:37 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:55:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -618,7 +618,7 @@ void OTableController::impl_initialize()
         const NamedValueCollection& rArguments( getInitParams() );
 
         Reference< XConnection > xConnection;
-        xConnection = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_ACTIVECONNECTION, xConnection );
+        xConnection = rArguments.getOrDefault( (::rtl::OUString)PROPERTY_ACTIVE_CONNECTION, xConnection );
         if ( xConnection.is() )
             initializeConnection( xConnection );
 
