@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EllipticalArc.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:34:54 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:11:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,14 +84,14 @@ struct EllipticalArc
 
     //-------------------------------------------------------------------------
 
-    /** If <TRUE>, and there's a choice, take the longer one of two arcs
+    /** If <TRUE/>, and there's a choice, take the longer one of two arcs
         connecting start and end point.
      */
     boolean IsLargeArc;
 
     //-------------------------------------------------------------------------
 
-    /** If <TRUE>, and there's a choice, take the arc that goes
+    /** If <TRUE/>, and there's a choice, take the arc that goes
         clock-wise from start to end point.
      */
     boolean IsClockwiseSweep;
