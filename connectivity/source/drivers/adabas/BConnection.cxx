@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-24 11:50:10 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
 
     m_aConnectionHandle  = SQL_NULL_HANDLE;
     setURL(url);
-    m_aInfo = info;
+    setConnectionInfo(info);
 
     // Connection allozieren
     N3SQLAllocHandle(SQL_HANDLE_DBC,m_pDriverHandleCopy,&m_aConnectionHandle);
