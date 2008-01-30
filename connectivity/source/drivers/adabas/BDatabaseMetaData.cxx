@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:05:51 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:48:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,10 @@ sal_Bool SAL_CALL OAdabasDatabaseMetaData::supportsIntegrityEnhancementFacility(
     return sal_True;
 }
 // -----------------------------------------------------------------------------
-Reference< XResultSet > SAL_CALL OAdabasDatabaseMetaData::getTypeInfo(  ) throw(SQLException, RuntimeException)
+Reference< XResultSet > OAdabasDatabaseMetaData::impl_getTypeInfo_throw(  )
 {
-    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+    ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet(::connectivity::ODatabaseMetaDataResultSet::eTypeInfo);
     Reference< XResultSet > xNewRes = pResult;
-    pResult->setTypeInfoMap();
     static ::connectivity::ODatabaseMetaDataResultSet::ORows aRows;
     if(aRows.empty())
     {
