@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 14:58:44 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -547,6 +547,7 @@ const sal_Char* getStandardSQLStateAscii( StandardSQLState _eState )
         case SQL_COLUMN_EXISTS:             pAsciiState = "42S21"; break;
         case SQL_COLUMN_NOT_FOUND:          pAsciiState = "42S22"; break;
         case SQL_GENERAL_ERROR:             pAsciiState = "HY000"; break;
+        case SQL_INVALID_SQL_DATA_TYPE:     pAsciiState = "HY004"; break;
         case SQL_OPERATION_CANCELED:        pAsciiState = "HY008"; break;
         case SQL_FUNCTION_SEQUENCE_ERROR:   pAsciiState = "HY010"; break;
         case SQL_INVALID_CURSOR_POSITION:   pAsciiState = "HY109"; break;
