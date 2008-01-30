@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XBitmapCanvas.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:57:05 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:13:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ interface XBitmapCanvas : XCanvas
         being applied. Thus, on screen, it does not necessarily
         resemble a rectangle any more. The rectangle must be
         non-empty, see
-        <type>::com::sun::star::geometry::RealRectangle2D</type>
+        <type scope="::com::sun::star::geometry">RealRectangle2D</type>
         for details.
 
         @param sourceViewState
@@ -112,7 +112,7 @@ interface XBitmapCanvas : XCanvas
         being applied. Thus, on screen, it does not necessarily
         resemble a rectangle any more. The rectangle must be
         non-empty, see
-        <type>::com::sun::star::geometry::RealRectangle2D</type>
+        <type scope="::com::sun::star::geometry">RealRectangle2D</type>
         for details.
 
         @param destViewState
