@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCPage.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:50:29 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:48:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,8 @@
 #ifndef DBAUI_WIZARD_CPAGE_HXX
 #define DBAUI_WIZARD_CPAGE_HXX
 
-#ifndef DBAUI_WIZ_TABBPAGE_HXX
 #include "WTabPage.hxx"
-#endif
-#ifndef DBAUI_WIZ_COPYTABLEDIALOG_HXX
-#include "WCopyTable.hxx"
-#endif
+
 #ifndef DBAUI_ENUMTYPES_HXX
 #include "QEnumTypes.hxx"
 #endif
@@ -78,12 +74,11 @@ namespace dbaui
         CheckBox                                m_aCB_PrimaryColumn;
         FixedText                               m_aFT_KeyName;
         Edit                                    m_edKeyName;
-        OCopyTableWizard::Wizard_Create_Style   m_eOldStyle;
+        sal_Int16                               m_nOldOperation;
 
         OWizColumnSelect*                       m_pPage2;
         OWizNormalExtend*                       m_pPage3;
 
-        BOOL                                    m_bIsViewAllowed;
         BOOL                                    m_bPKeyAllowed;
 
 
@@ -102,7 +97,7 @@ namespace dbaui
         virtual BOOL            LeavePage();
         virtual String          GetTitle() const ;
 
-        OCopyTable( Window * pParent, EImportMode atWhat, BOOL bIsView );//, OCopyTableWizard::Wizard_Create_Style nLastAction );
+        OCopyTable( Window * pParent );
         virtual ~OCopyTable();
 
         inline BOOL IsOptionDefData()       const { return m_aRB_DefData.IsChecked(); }
@@ -111,9 +106,13 @@ namespace dbaui
         inline BOOL IsOptionView()          const { return m_aRB_View.IsChecked(); }
         String      GetKeyName()            const { return m_edKeyName.GetText(); }
 
-        //--------dyf add 2007/7/10
-        void setCreateStyleAction();//const OCopyTableWizard::Wizard_Create_Style& _eStyle
-        //--------add end
+        void setCreateStyleAction();
+        void disallowViews()
+        {
+            m_aRB_View.Disable();
+        }
+
+        void setCreatePrimaryKey( bool _bDoCreate, const ::rtl::OUString& _rSuggestedName );
     };
 }
 #endif // DBAUI_WIZARD_CPAGE_HXX
