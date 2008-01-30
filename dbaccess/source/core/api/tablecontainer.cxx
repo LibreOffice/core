@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 15:35:07 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:30:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,11 +189,11 @@ OTableContainer::OTableContainer(::cppu::OWeakObject& _rParent,
                                  sal_Bool _bCase,
                                  const Reference< XNameContainer >& _xTableDefinitions,
                                  IRefreshListener*  _pRefreshListener,
-                                 IWarningsContainer* _pWarningsContainer)
-    :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer)
+                                 IWarningsContainer* _pWarningsContainer
+                                 ,oslInterlockedCount& _nInAppend)
+    :OFilteredContainer(_rParent,_rMutex,_xCon,_bCase,_pRefreshListener,_pWarningsContainer,_nInAppend)
     ,m_xTableDefinitions(_xTableDefinitions)
     ,m_pTableMediator( NULL )
-    ,m_bInAppend(sal_False)
     ,m_bInDrop(sal_False)
 {
     DBG_CTOR(OTableContainer, NULL);
@@ -392,9 +392,9 @@ ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, cons
     PContainerApprove pApprove( new ObjectNameApproval( xConnection, ObjectNameApproval::TypeTable ) );
     pApprove->approveElement( aName, descriptor );
 
-    m_bInAppend = sal_True;
     try
     {
+        EnsureReset aReset(m_nInAppend);
         Reference<XAppend> xAppend(m_xMasterContainer,UNO_QUERY);
         if(xAppend.is())
         {
@@ -417,10 +417,8 @@ ObjectType OTableContainer::appendObject( const ::rtl::OUString& _rForName, cons
     }
     catch(Exception&)
     {
-        m_bInAppend = sal_False;
         throw;
     }
-    m_bInAppend = sal_False;
 
     Reference<XPropertySet> xTableDefinition;
     Reference<XNameAccess> xColumnDefinitions;
@@ -539,7 +537,7 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
     ::osl::MutexGuard aGuard(m_rMutex);
     ::rtl::OUString sName;
     Event.Accessor >>= sName;
-    if ( !m_bInAppend && !hasByName(sName) )
+    if ( !m_nInAppend && !hasByName(sName) )
     {
         if(!m_xMasterContainer.is() || m_xMasterContainer->hasByName(sName))
         {
