@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbexception.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 14:56:48 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:45:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@ enum StandardSQLState
     SQL_COLUMN_EXISTS,              // 42S21
     SQL_COLUMN_NOT_FOUND,           // 42S22
     SQL_GENERAL_ERROR,              // HY000
+    SQL_INVALID_SQL_DATA_TYPE,      // HY004
     SQL_OPERATION_CANCELED,         // HY008
     SQL_FUNCTION_SEQUENCE_ERROR,    // HY010
     SQL_INVALID_CURSOR_POSITION,    // HY109
