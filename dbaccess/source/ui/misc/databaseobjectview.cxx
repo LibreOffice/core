@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databaseobjectview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:08:55 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:53:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,7 +225,7 @@ namespace dbaui
             _rDispatchArguments[nPos++].Value <<= xDataSource;
         }
 
-        _rDispatchArguments[nPos  ].Name = PROPERTY_ACTIVECONNECTION;
+        _rDispatchArguments[nPos  ].Name = PROPERTY_ACTIVE_CONNECTION;
         _rDispatchArguments[nPos++].Value <<= getConnection();
     }
 
@@ -256,7 +256,7 @@ namespace dbaui
         _rDispatchArguments[nPos  ].Name = PROPERTY_GRAPHICAL_DESIGN;
         _rDispatchArguments[nPos++].Value <<= ::cppu::bool2any( !m_bPreferSQLView );
 
-        _rDispatchArguments[nPos  ].Name = PROPERTY_COMMANDTYPE;
+        _rDispatchArguments[nPos  ].Name = PROPERTY_COMMAND_TYPE;
         _rDispatchArguments[nPos++].Value <<= m_nCommandType;
 
         if ( bIncludeQueryName )
@@ -362,7 +362,7 @@ namespace dbaui
         sal_Int32 nPos = _rDispatchArguments.getLength();
         _rDispatchArguments.realloc( _rDispatchArguments.getLength() + 4 + (m_bTable ? 3 : 0) );
 
-        _rDispatchArguments[nPos  ].Name = PROPERTY_COMMANDTYPE;
+        _rDispatchArguments[nPos  ].Name = PROPERTY_COMMAND_TYPE;
         _rDispatchArguments[nPos++].Value <<= (m_bTable ? CommandType::TABLE : CommandType::QUERY);
 
         _rDispatchArguments[nPos  ].Name = PROPERTY_COMMAND;
