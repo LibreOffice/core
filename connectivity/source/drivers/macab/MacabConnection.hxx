@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MacabConnection.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-09-13 17:51:38 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 07:56:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@
 #ifndef _CPPUHELPER_COMPBASE3_HXX_
 #include <cppuhelper/compbase3.hxx>
 #endif
+#include "TConnection.hxx"
 
 namespace connectivity
 {
@@ -81,11 +82,12 @@ namespace connectivity
         class MacabDatabaseMetaData;
         class MacabAddressBook;
 
-        typedef OMetaConnection_BASE                MacabConnection_BASE; // implements basics and text encoding
+        //typedef OMetaConnection_BASE              MacabConnection_BASE; // implements basics and text encoding
         typedef std::vector< ::com::sun::star::uno::WeakReferenceHelper > OWeakRefArray;
 
-        class MacabConnection : public comphelper::OBaseMutex,
-                            public MacabConnection_BASE,
+        typedef connectivity::OMetaConnection MacabConnection_BASE;
+
+        class MacabConnection : public MacabConnection_BASE,
                             public OSubComponent<MacabConnection, MacabConnection_BASE>
         {
             friend class OSubComponent<MacabConnection, MacabConnection_BASE>;
@@ -94,11 +96,6 @@ namespace connectivity
             //====================================================================
             // Data attributes
             //====================================================================
-            ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
-
-            OWeakRefArray                           m_aStatements;  // vector containing a list of all the Statement objects
-                                                                    // for this Connection
-
             MacabAddressBook*                   m_pAddressBook; // the address book
             MacabDriver*                                m_pDriver;      // pointer to the owning driver object
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbcx::XTablesSupplier>
