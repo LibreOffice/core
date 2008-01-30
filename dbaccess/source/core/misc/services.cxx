@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-26 14:41:24 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:37:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,15 +36,9 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_dbaccess.hxx"
 
-#ifndef _CPPUHELPER_FACTORY_HXX_
-#include <cppuhelper/factory.hxx>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
+#include "module_dba.hxx"
+
 #include <osl/diagnose.h>
-#endif
-#ifndef _DBA_REGHELPER_HXX_
-#include "dba_reghelper.hxx"
-#endif
 
 /********************************************************************************************/
 
@@ -62,6 +56,7 @@ extern "C" void SAL_CALL createRegistryInfo_ORowSet();
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseDocument();
 extern "C" void SAL_CALL createRegistryInfo_ODatabaseSource();
 extern "C" void SAL_CALL createRegistryInfo_OPropertyBag();
+extern "C" void SAL_CALL createRegistryInfo_DataAccessDescriptorFactory();
 
 //***************************************************************************************
 //
@@ -80,6 +75,7 @@ extern "C" void SAL_CALL createRegistryInfo_DBA()
         createRegistryInfo_ODatabaseDocument();
         createRegistryInfo_ODatabaseSource();
         createRegistryInfo_OPropertyBag();
+        createRegistryInfo_DataAccessDescriptorFactory();
         bInit = sal_True;
     }
 }
@@ -104,13 +100,13 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(
     if (pRegistryKey)
     try
     {
-        return ::dbaccess::OModuleRegistration::writeComponentInfos(
-            static_cast<XMultiServiceFactory*>(pServiceManager),
-            static_cast<XRegistryKey*>(pRegistryKey));
+        return ::dba::DbaModule::getInstance().writeComponentInfos(
+            static_cast< XMultiServiceFactory* >( pServiceManager ),
+            static_cast< XRegistryKey* >( pRegistryKey ) );
     }
     catch (InvalidRegistryException& )
     {
-        OSL_ENSURE(sal_False, "DBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !");
+        OSL_ENSURE( false, "DBA::component_writeInfo : could not create a registry key ! ## InvalidRegistryException !" );
     }
 
     return sal_False;
@@ -125,9 +121,9 @@ extern "C" void* SAL_CALL component_getFactory(
     Reference< XInterface > xRet;
     if (pServiceManager && pImplementationName)
     {
-        xRet = ::dbaccess::OModuleRegistration::getComponentFactory(
-            ::rtl::OUString::createFromAscii(pImplementationName),
-            static_cast< XMultiServiceFactory* >(pServiceManager));
+        xRet = ::dba::DbaModule::getInstance().getComponentFactory(
+            ::rtl::OUString::createFromAscii( pImplementationName ),
+            static_cast< XMultiServiceFactory* >( pServiceManager ) );
     }
 
     if (xRet.is())
