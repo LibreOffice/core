@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RptPage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 13:44:48 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 16:00:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,8 +215,8 @@ void OReportPage::removeTempObject(SdrObject *_pToRemoveObj)
 
 void OReportPage::resetSpecialMode()
 {
-    vector<SdrObject*>::iterator aIter = m_aTemporaryObjectList.begin();
-    vector<SdrObject*>::iterator aEnd = m_aTemporaryObjectList.end();
+    ::std::vector<SdrObject*>::iterator aIter = m_aTemporaryObjectList.begin();
+    ::std::vector<SdrObject*>::iterator aEnd = m_aTemporaryObjectList.end();
 
     for (; aIter != aEnd; ++aIter)
     {
