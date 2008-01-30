@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkeddocuments.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-29 08:52:08 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:53:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@ namespace dbaui
                 break;
         }
 
-        aArguments[1].Name = PROPERTY_ACTIVECONNECTION;
+        aArguments[1].Name = PROPERTY_ACTIVE_CONNECTION;
         aArguments[1].Value <<= m_xConnection;
         OSL_ENSURE(m_xDocumentContainer.is(), "OLinkedDocumentsAccess::OLinkedDocumentsAccess: invalid document container!");
         try
@@ -392,7 +392,7 @@ namespace dbaui
                 aValue.Value <<= aClassId;
                 aArguments[0] <<= aValue;
 
-                aValue.Name = PROPERTY_ACTIVECONNECTION;
+                aValue.Name = PROPERTY_ACTIVE_CONNECTION;
                 aValue.Value <<= m_xConnection;
                 aArguments[1] <<= aValue;
 
@@ -410,7 +410,7 @@ namespace dbaui
                     Reference<XPropertySet> xProp(xNewDocument,UNO_QUERY);
                     if ( xProp.is() && _sObjectName.getLength() )
                     {
-                        xProp->setPropertyValue(PROPERTY_COMMANDTYPE,makeAny(_nCommandType));
+                        xProp->setPropertyValue(PROPERTY_COMMAND_TYPE,makeAny(_nCommandType));
                         xProp->setPropertyValue(PROPERTY_COMMAND,makeAny(_sObjectName));
                     }
                 }
