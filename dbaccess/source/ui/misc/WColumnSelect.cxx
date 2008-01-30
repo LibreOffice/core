@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WColumnSelect.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 08:34:52 $
+ *  last change: $Author: rt $ $Date: 2008-01-30 08:51:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,9 @@
 #ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
 #include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDB_APPLICATION_COPYTABLEOPERATION_HPP_
+#include <com/sun/star/sdb/application/CopyTableOperation.hpp>
+#endif
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
@@ -77,10 +80,11 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
-//  using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace dbaui;
+
+namespace CopyTableOperation = ::com::sun::star::sdb::application::CopyTableOperation;
 
 // -----------------------------------------------------------------------
 String OWizColumnSelect::GetTitle() const { return String(ModuleRes(STR_WIZ_COLUMN_SELECT_TITEL)); }
@@ -173,8 +177,6 @@ void OWizColumnSelect::ActivatePage( )
 
     ODatabaseExport::TColumnVector::const_iterator aIter = pDestColumns->begin();
     ODatabaseExport::TColumnVector::const_iterator aEnd = pDestColumns->end();
-    /*if ( m_pParent->isAutoincrementEnabled() && pDestColumns->size() > 1 )
-        ++aIter;*/
     for(;aIter != aEnd;++aIter)
     {
         USHORT nPos = m_lbNewColumnNames.InsertEntry((*aIter)->first);
@@ -182,7 +184,7 @@ void OWizColumnSelect::ActivatePage( )
         m_lbOrgColumnNames.RemoveEntry((*aIter)->first);
     }
     m_pParent->GetOKButton().Enable(m_lbNewColumnNames.GetEntryCount() != 0);
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_lbNewColumnNames.GetEntryCount() && m_pParent->getCreateStyle() != OCopyTableWizard::WIZARD_APPEND_DATA);
+    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,m_lbNewColumnNames.GetEntryCount() && m_pParent->getOperation() != CopyTableOperation::AppendData);
     m_ibColumns_RH.GrabFocus();
 }
 // -----------------------------------------------------------------------
@@ -241,7 +243,7 @@ IMPL_LINK( OWizColumnSelect, ButtonClickHdl, Button *, pButton )
     }
     // else ????
 
-    Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
+    Reference< XDatabaseMetaData > xMetaData( m_pParent->m_xDestConnection->getMetaData() );
     ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
     sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
 
@@ -291,7 +293,7 @@ IMPL_LINK( OWizColumnSelect, ListDoubleClickHdl, MultiListBox *, pListBox )
 
     //////////////////////////////////////////////////////////////////////
     // Wenn Datenbank PrimaryKeys verarbeiten kann, PrimaryKey anlegen
-    Reference< XDatabaseMetaData >  xMetaData(m_pParent->m_xConnection->getMetaData());
+    Reference< XDatabaseMetaData >  xMetaData( m_pParent->m_xDestConnection->getMetaData() );
     ::rtl::OUString sExtraChars = xMetaData->getExtraNameCharacters();
     sal_Int32 nMaxNameLen       = m_pParent->getMaxColumnNameLength();
 
@@ -450,7 +452,7 @@ void OWizColumnSelect::enableButtons()
         m_pParent->m_mNameMapping.clear();
 
     m_pParent->GetOKButton().Enable(bEntries);
-    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,bEntries && m_pParent->getCreateStyle() != OCopyTableWizard::WIZARD_APPEND_DATA);
+    m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,bEntries && m_pParent->getOperation() != CopyTableOperation::AppendData);
 }
 // -----------------------------------------------------------------------------
 
