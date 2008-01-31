@@ -3660,7 +3660,7 @@
   
   default:
     int i;
-!   sprintf(buf, "Unknown Function with %d parameters:\n");
+!   sprintf(buf, "Unknown Function with %d parameters:\n", m_nNumParam);
     sDescription += buf;
   
     for (i=0; i<m_nNumParam; i++) {
