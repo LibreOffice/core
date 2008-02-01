@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditorImpl.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-28 13:48:00 $
+ *  last change: $Author: mav $ $Date: 2008-02-01 13:58:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ public final class WikiEditorImpl extends WeakBase
 
     private XFrame m_xFrame;
     private XModel m_xModel;
-    private Settings m_settings;
+    private Settings m_aSettings;
 
     private String m_aFilterName;
 
@@ -100,7 +100,7 @@ public final class WikiEditorImpl extends WeakBase
     {
         // Helper.trustAllSSL();
         m_xContext = xContext;
-        m_settings = Settings.getSettings( m_xContext );
+        m_aSettings = Settings.getSettings( m_xContext );
     };
 
     public static XSingleComponentFactory __getComponentFactory( String sImplementationName )
@@ -189,10 +189,6 @@ public final class WikiEditorImpl extends WeakBase
 
             try
             {
-                if ( myURL.Path.compareTo( "load" ) == 0 )
-                {
-                    loadArticle();
-                }
                 if ( myURL.Path.compareTo( "send" ) == 0 )
                 {
                     sendArticle();
@@ -312,74 +308,6 @@ public final class WikiEditorImpl extends WeakBase
 
     }
 
-
-    public void loadArticle()
-    {
-        try
-        {
-            WikiPropDialog aPropDialog = new WikiPropDialog( m_xContext, "vnd.sun.star.script:WikiEditor.Load?location=application", null );
-            aPropDialog.fillWikiList();
-            aPropDialog.fillDocList();
-            if ( aPropDialog.show() )
-            {
-                Hashtable wikiSettings = m_settings.getSettingByUrl( aPropDialog.m_sWikiEngineURL );
-
-                WikiArticle aArticle = new WikiArticle( m_xContext, aPropDialog.GetWikiTitle(), wikiSettings, false, null );
-
-                if ( aArticle.m_sHTMLCode == null )
-                {
-                    // the loading has failed
-                    // TODO: error handling
-                    return;
-                }
-
-                aArticle.cleanHTML();
-
-                XInputStream xInputStream = Helper.SaveHTMLTemp( m_xContext, aArticle.m_sHTMLCode );
-                if ( xInputStream == null )
-                    throw new com.sun.star.io.IOException();
-
-                Object oDesktop = m_xContext.getServiceManager().createInstanceWithContext( "com.sun.star.frame.Desktop",m_xContext );
-                XComponentLoader xCL = ( XComponentLoader ) UnoRuntime.queryInterface( XComponentLoader.class, oDesktop );
-                if ( xCL == null )
-                    throw new com.sun.star.uno.RuntimeException();
-
-                PropertyValue [] props = new PropertyValue[4];
-                props[0] = new PropertyValue();
-                props[0].Name = "FilterName";
-                props[0].Value = "HTML";
-                props[1] = new PropertyValue();
-                props[1].Name = "DocumentTitle";
-                props[1].Value = aArticle.GetTitle();
-                props[2] = new PropertyValue();
-                props[2].Name = "InputStream";
-                props[2].Value = xInputStream;
-                props[3] = new PropertyValue();
-                props[3].Name = "DocumentBaseURL";
-                props[3].Value = aArticle.GetMainURL() + aArticle.GetTitle();
-
-                // the following argument seems to let office crash
-                // props[4] = new PropertyValue();
-                // props[4].Name = "AsTemplate";
-                // props[4].Value = true;
-
-                xComp = xCL.loadComponentFromURL( "private:stream", "_blank", 0, props );
-
-                Hashtable htd = new Hashtable();
-
-                htd.put( "Doc", aArticle.GetTitle() );
-                htd.put( "Url", aArticle.GetMainURL() );
-                htd.put( "CompleteUrl", aArticle.GetMainURL() + aArticle.GetTitle() );
-                m_settings.addWikiDoc( htd );
-                m_settings.storeConfiguration();
-            }
-
-        } catch ( Exception e )
-        {
-            e.printStackTrace();
-        }
-    }
-
     public void sendArticle()
     {
         if ( m_xFrame != null )
@@ -410,6 +338,7 @@ public final class WikiEditorImpl extends WeakBase
                         throw new com.sun.star.uno.RuntimeException();
                     }
 
+                    m_aSettings.loadConfiguration(); // throw away all the noncommited changes
                     // show the send dialog
                     WikiPropDialog aSendDialog = new WikiPropDialog( m_xContext, "vnd.sun.star.script:WikiEditor.SendToMediaWiki?location=application", this );
                     aSendDialog.fillWikiList();
@@ -435,7 +364,7 @@ public final class WikiEditorImpl extends WeakBase
 
             try
             {
-                Hashtable wikiSettings = m_settings.getSettingByUrl( aSendDialog.m_sWikiEngineURL );
+                Hashtable wikiSettings = m_aSettings.getSettingByUrl( aSendDialog.m_sWikiEngineURL );
 
                 // TODO: stop progress spinning
                 WikiArticle aArticle = new WikiArticle( m_xContext, aSendDialog.GetWikiTitle(), wikiSettings, true, aSendDialog );
@@ -484,8 +413,8 @@ public final class WikiEditorImpl extends WeakBase
                         aDocInfo.put( "Doc", aArticle.GetTitle() );
                         aDocInfo.put( "Url", aArticle.GetMainURL() );
                         aDocInfo.put( "CompleteUrl", aArticle.GetMainURL() + aArticle.GetTitle() );
-                        m_settings.addWikiDoc( aDocInfo );
-                        m_settings.storeConfiguration();
+                        m_aSettings.addWikiDoc( aDocInfo );
+                        m_aSettings.storeConfiguration();
 
                         if ( Helper.GetShowInBrowserByDefault( m_xContext ) )
                            Helper.ShowURLInBrowser( m_xContext, aArticle.GetViewURL() );

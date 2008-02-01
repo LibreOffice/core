@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-01 13:25:31 $
+ *  last change: $Author: mav $ $Date: 2008-02-01 13:58:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,6 +239,7 @@ public class WikiEditSettingDialog extends WikiDialog
                                 setting.put( "Password", sPassword );
                                 if ( addMode )
                                 {
+                                    // no cleaning of the settings is necessary
                                     Settings.getSettings( m_xContext ).addWikiCon( setting );
                                     Settings.getSettings( m_xContext ).storeConfiguration();
                                 }

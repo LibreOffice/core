@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiOptionsEventHandlerImpl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-30 19:02:16 $
+ *  last change: $Author: mav $ $Date: 2008-02-01 13:58:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,10 +248,11 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
                             m_xControlContainer = (XControlContainer)UnoRuntime.queryInterface(
                                                             XControlContainer.class, m_xDialog );
                             m_aSettings = Settings.getSettings( m_xContext );
+                            m_aSettings.loadConfiguration(); // throw away all the noncommited changes
                             InitStrings();
                         }
                         else if ( m_aSettings != null )
-                            m_aSettings.loadConfiguration(); // throw away all the changes
+                            m_aSettings.loadConfiguration(); // throw away all the noncommited changes
 
                         RefreshView();
                         CheckButtonState();
