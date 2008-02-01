@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-30 19:02:16 $
+ *  last change: $Author: mav $ $Date: 2008-02-01 13:25:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,12 +52,6 @@ public class WikiEditSettingDialog extends WikiDialog
     private final String sOKMethod = "OK";
     private final String sCancelMethod = "Cancel";
     private final String sHelpMethod = "Help";
-
-    private static final String m_sNoConnectionToURL1 = "A connection to the MediaWiki system at '";
-    private static final String m_sNoConnectionToURL2 = "' could not be created.";
-    private static final String m_sWrongLogin = "User name or password is incorrect. Please try again, or leave the fields blank for an anonymous connection.";
-    private static final String m_sInvalidURL = "A connection could not be created, because the URL is invalid.";
-    private static final String m_sNoURL = "Specify a MediaWiki server by providing a URL.";
 
     String[] Methods =
     {sOKMethod, sCancelMethod, sHelpMethod};
@@ -295,22 +289,28 @@ public class WikiEditSettingDialog extends WikiDialog
         }
         catch ( SSLException essl )
         {
-            Helper.ShowError( m_xContext,
-                              m_xDialog,
-                              Helper.DLG_MEDIAWIKI_TITLE,
-                              Helper.UNKNOWNCERT_ERROR,
-                              null,
-                              false );
+            if ( Helper.IsConnectionAllowed() )
+            {
+                Helper.ShowError( m_xContext,
+                                  m_xDialog,
+                                  Helper.DLG_MEDIAWIKI_TITLE,
+                                  Helper.UNKNOWNCERT_ERROR,
+                                  null,
+                                  false );
+            }
             essl.printStackTrace();
         }
         catch ( Exception ex )
         {
-            Helper.ShowError( m_xContext,
-                              m_xDialog,
-                              Helper.DLG_MEDIAWIKI_TITLE,
-                              Helper.NOURLCONNECTION_ERROR,
-                              sURL,
-                              false );
+            if ( Helper.IsConnectionAllowed() )
+            {
+                Helper.ShowError( m_xContext,
+                                  m_xDialog,
+                                  Helper.DLG_MEDIAWIKI_TITLE,
+                                  Helper.NOURLCONNECTION_ERROR,
+                                  sURL,
+                                  false );
+            }
             ex.printStackTrace();
         }
 

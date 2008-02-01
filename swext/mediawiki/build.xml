@@ -5,9 +5,9 @@
  *
  *  $RCSfile: build.xml,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rene $ $Date: 2008-02-01 10:21:43 $
+ *  last change: $Author: mav $ $Date: 2008-02-01 13:25:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,6 @@
     <target name="jar" depends="compile, init">
         <jar basedir="${classes}" compress="true" jarfile="${dist}/${name}.jar">
             <manifest>
-        <!-- FIXME: Set Class-Path correctly for the system case !-->
                 <attribute name="Class-Path" value="commons-codec-1.3.jar commons-lang-2.3.jar commons-httpclient-3.0.1.jar commons-logging-1.1.jar"/>
                 <attribute name="RegistrationClassName" value="com.sun.star.wiki.WikiEditorImpl"/>
             </manifest>
@@ -106,11 +105,10 @@
             <fileset dir="src" includes="**/*.xcu,**/*.xcs,**/*.xml" excludes="uno-extension-manifest.xml" casesensitive="yes"/>
             <fileset dir="${dist}" includes="${name}.jar" casesensitive="yes"/>
             <fileset dir="." includes="images/**,templates/**" casesensitive="yes"/>
-        <file file="mediawiki.jar"/>
-        <file file="${commons-codec-jar}"/>
-        <file file="${commons-httpclient-jar}"/>
-        <file file="${commons-lang-jar}"/>
-        <file file="${commons-logging-jar}"/>
+            <file file="${commons-codec-jar}"/>
+            <file file="${commons-httpclient-jar}"/>
+            <file file="${commons-lang-jar}"/>
+            <file file="${commons-logging-jar}"/>
             <zipfileset dir="dialogs" includes="**/*.xdl,**/*.xba,**/*.xlb" casesensitive="yes" prefix="WikiEditor"/>
             <zipfileset dir="src" includes="uno-extension-manifest.xml" fullpath="META-INF/manifest.xml"/>
         </zip>
