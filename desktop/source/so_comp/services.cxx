@@ -4,9 +4,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:17:43 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:48:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 #include "oemjob.hxx"
 #include "evaluation.hxx"
 
+#include <string.h>
 
 using namespace rtl;
 using namespace ::com::sun::star::uno;
