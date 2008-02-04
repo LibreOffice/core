@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpLinker.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-26 18:04:22 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:55:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #include "HelpCompiler.hxx"
 
 #include <map>
+
+#include <string.h>
+#include <limits.h>
 
 #include <boost/shared_ptr.hpp>
 #include <boost/tokenizer.hpp>
