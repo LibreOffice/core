@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_res.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-15 13:28:36 $
+#   last change: $Author: ihi $ $Date: 2008-02-04 12:55:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,9 @@ $(RCTARGET): $(RCFILES) 		\
     @echo Making: $@
 .IF "$(CCNUMVER)" > "001300000000"
 .IF "$(MFC_INCLUDE)"!=""
-    $(RC) $(INCLUDE) -I$(SOLARRESDIR) -I$(ATL_INCLUDE) -I$(MFC_INCLUDE) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
+    $(RC) $(INCLUDE) -I$(SOLARRESDIR) $(foreach,i,$(ATL_INCLUDE) -I$(i)) -I$(MFC_INCLUDE) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
 .ELSE
-    $(RC) $(INCLUDE) -I$(SOLARRESDIR) -I$(ATL_INCLUDE) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
+    $(RC) $(INCLUDE) -I$(SOLARRESDIR) $(foreach,i,$(ATL_INCLUDE) -I$(i)) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
 .ENDIF
 .ELSE
     $(RC) $(INCLUDE) -I$(SOLARRESDIR) $(RCLANGFLAGS_$(@:d:d:b)) $(RCFLAGS)
