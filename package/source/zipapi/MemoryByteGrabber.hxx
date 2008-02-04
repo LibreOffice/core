@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MemoryByteGrabber.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 06:13:19 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:59:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #ifndef _COM_SUN_STAR_IO_XSEEKABLE_HPP_
 #include <com/sun/star/io/XSeekable.hpp>
 #endif
+#include <string.h>
 
 class MemoryByteGrabber
 {
