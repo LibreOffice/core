@@ -27,6 +27,7 @@
  * Corel Corporation or Corel Corporation Limited."
  */
 #include <math.h>
+#include <string.h>
 #include "FilterInternal.hxx"
 #include "TableStyle.hxx"
 #include "DocumentElement.hxx"
