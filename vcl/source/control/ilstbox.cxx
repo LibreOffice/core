@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:21:30 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 14:42:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1548,7 +1548,7 @@ BOOL ImplListBoxWindow::ProcessKeyInput( const KeyEvent& rKEvt )
         {
             xub_Unicode c = rKEvt.GetCharCode();
 
-            if ( !IsReadOnly() && (c >= 32) && (c != 127) )
+            if ( !IsReadOnly() && (c >= 32) && (c != 127) && !rKEvt.GetKeyCode().IsMod2() )
             {
                 maSearchStr += c;
                 XubString aTmpSearch( maSearchStr );
