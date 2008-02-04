@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultnumberingprovider.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-13 14:32:47 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:47:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 #include <localedata.hxx>
 #include <nativenumbersupplier.hxx>
 #include <stdio.h>
+#include <string.h>
 
 #if OSL_DEBUG_LEVEL == 0 && !defined(NDEBUG)
 #define NDEBUG
