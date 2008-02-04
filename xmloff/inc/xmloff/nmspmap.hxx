@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nmspmap.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 13:27:58 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:51:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,8 @@
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
 #endif
+
+#include <limits.h>
 
 const sal_uInt16 XML_NAMESPACE_XMLNS  = (USHRT_MAX-2);
 const sal_uInt16 XML_NAMESPACE_NONE  = (USHRT_MAX-1);
