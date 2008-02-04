@@ -4,9 +4,9 @@
  *
  *  $RCSfile: processinginstruction.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 11:01:25 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,7 @@
  ************************************************************************/
 
 #include "processinginstruction.hxx"
+#include <string.h>
 
 namespace DOM
 {
