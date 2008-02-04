@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: rene $ $Date: 2008-02-04 09:02:13 $
+#   last change: $Author: rene $ $Date: 2008-02-04 09:02:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,29 +33,37 @@
 #
 #*************************************************************************
 
-PRJ=..
-PRJNAME=swext
-TARGET=mediawiki
+PRJ=.
 
-.IF "$(ENABLE_MEDIAWIKI)" == "YES"
-.INCLUDE : ant.mk
-ALLTAR: ANTBUILD
+PRJNAME=tomacat
+TARGET=servlet
 
-.IF "$(SYSTEM_APACHE_COMMONS)" != "YES"
-COMMONS_CODEC_JAR=$(SOLARVER)$/$(INPATH)$/bin$/commons-codec-1.3.jar 
-COMMONS_LANG_JAR=$(SOLARVER)$/$(INPATH)$/bin$/commons-lang-2.3.jar
-COMMONS_HTTPCLIENT_JAR=$(SOLARVER)$/$(INPATH)$/bin$/commons-httpclient-3.1.jar
-COMMONS_LOGGING_JAR=$(SOLARVER)$/$(INPATH)$/bin$/commons-logging-1.1.1.jar
-.ENDIF
+.IF "$(SOLAR_JAVA)" != ""
+# --- Settings -----------------------------------------------------
 
-.IF "$(SYSTEM_XML_APIS)" != "YES"
-XML_APIS_JAR = $(SOLARVER)$/$(INPATH)$/lib/xml-apis.jar
-.ENDIF
+.INCLUDE :	settings.mk
 
-ANT_FLAGS+=-Dcommons-codec-jar=$(COMMONS_CODEC_JAR) -Dcommons-lang-jar=$(COMMONS_LANG_JAR) -Dcommons-httpclient-jar=$(COMMONS_HTTPCLIENT_JAR) -Dcommons-logging-jar=$(COMMONS_LOGGING_JAR) -Dxml-apis-jar=$(XML_APIS_JAR)
+# --- Files --------------------------------------------------------
+
+TARFILE_NAME=jakarta-tomcat-5.0.30-src
+
+TARFILE_ROOTDIR=jakarta-tomcat-5.0.30-src
+
+#CONVERTFILES=build$/build.xml
+
+PATCH_FILE_NAME=tomcat.patch
+
+BUILD_DIR=jakarta-servletapi-5
+BUILD_ACTION=$(ANT)
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE : set_ext.mk
+.INCLUDE : target.mk
+
+.INCLUDE : tg_ext.mk
 
 .ELSE
 @all:
-    @echo "MediaWiki Editor extension disabled."
+    @echo java disabled
 .ENDIF
-

@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: rene $ $Date: 2008-02-04 09:02:13 $
+#   last change: $Author: rene $ $Date: 2008-02-04 09:02:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,29 +33,49 @@
 #
 #*************************************************************************
 
-PRJ=..
-PRJNAME=swext
-TARGET=mediawiki
+PRJ=..$/..
 
-.IF "$(ENABLE_MEDIAWIKI)" == "YES"
-.INCLUDE : ant.mk
-ALLTAR: ANTBUILD
+PRJNAME=apache-commons
+TARGET=commons-lang
 
-.IF "$(SYSTEM_APACHE_COMMONS)" != "YES"
-COMMONS_CODEC_JAR=$(SOLARVER)$/$(INPATH)$/bin$/commons-codec-1.3.jar 
-COMMONS_LANG_JAR=$(SOLARVER)$/$(INPATH)$/bin$/commons-lang-2.3.jar
-COMMONS_HTTPCLIENT_JAR=$(SOLARVER)$/$(INPATH)$/bin$/commons-httpclient-3.1.jar
-COMMONS_LOGGING_JAR=$(SOLARVER)$/$(INPATH)$/bin$/commons-logging-1.1.1.jar
-.ENDIF
+# --- Settings -----------------------------------------------------
 
-.IF "$(SYSTEM_XML_APIS)" != "YES"
-XML_APIS_JAR = $(SOLARVER)$/$(INPATH)$/lib/xml-apis.jar
-.ENDIF
+.INCLUDE :	settings.mk
 
-ANT_FLAGS+=-Dcommons-codec-jar=$(COMMONS_CODEC_JAR) -Dcommons-lang-jar=$(COMMONS_LANG_JAR) -Dcommons-httpclient-jar=$(COMMONS_HTTPCLIENT_JAR) -Dcommons-logging-jar=$(COMMONS_LOGGING_JAR) -Dxml-apis-jar=$(XML_APIS_JAR)
+# override buildfile
+ANT_BUILDFILE=build.xml
 
+.INCLUDE : antsettings.mk
+
+.IF "$(SOLAR_JAVA)" != ""
+# --- Files --------------------------------------------------------
+
+TARFILE_NAME=commons-lang-2.3-src
+
+TARFILE_ROOTDIR=commons-lang-2.3-src
+
+#PATCH_FILE_NAME=patches$/logging.patch
+
+#CONVERTFILES=build.xml
+                
+OUT2CLASS=dist$/commons-lang-2.3.jar
+
+.IF "$(JAVACISGCJ)"=="yes"
+JAVA_HOME=
+.EXPORT : JAVA_HOME
+BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -Dbuild.compiler=gcj -f $(ANT_BUILDFILE) jar
 .ELSE
-@all:
-    @echo "MediaWiki Editor extension disabled."
+BUILD_ACTION=$(ANT) -Dbuild.label="build-$(RSCREVISION)" -f $(ANT_BUILDFILE) jar
+.ENDIF
+
+.ENDIF # $(SOLAR_JAVA)!= ""
+
+# --- Targets ------------------------------------------------------
+
+.INCLUDE : set_ext.mk
+.INCLUDE : target.mk
+
+.IF "$(SOLAR_JAVA)" != ""
+.INCLUDE : tg_ext.mk
 .ENDIF
 
