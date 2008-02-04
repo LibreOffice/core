@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:23:28 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 14:35:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1530,6 +1530,15 @@ public:
 
 static void RegisterFontSubstitutors( ImplDevFontList* pList )
 {
+    bool bDisableFC = false;
+#ifdef SOLARIS
+    bDisableFC = true;
+#endif
+    const char* pEnvStr = ::getenv( "SAL_DISABLE_FC_SUBST" );
+    if( pEnvStr )
+        bDisableFC = (*pEnvStr == '\0') || (*pEnvStr != '0');
+    if( bDisableFC )
+        return;
     static FcPreMatchSubstititution aSubstPreMatch;
     static FcGlyphFallbackSubstititution aSubstFallback;
     pList->SetPreMatchHook( &aSubstPreMatch );
