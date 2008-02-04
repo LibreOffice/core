@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-20 17:13:59 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:46:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,7 @@
 #include "libxml/xpathInternals.h"
 #include "rtl/bootstrap.hxx"
 #include "boost/optional.hpp"
+#include <string.h>
 // #define NS_JAVA_FRAMEWORK "http://openoffice.org/2004/java/framework/1.0"
 // #define NS_SCHEMA_INSTANCE "http://www.w3.org/2001/XMLSchema-instance"
 
