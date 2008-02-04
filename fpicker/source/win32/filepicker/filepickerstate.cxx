@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filepickerstate.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:26:57 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 14:18:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -417,10 +417,6 @@ void SAL_CALL CExecuteFilePickerState::setValue( sal_Int16 aControlId, sal_Int16
     if ( com::sun::star::ui::dialogs::ControlActions::SET_HELP_URL == aControlAction )
         return;
 
-    // #i78850# ignore requests for "AutoExtension" control
-    if ( com::sun::star::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION == aControlId )
-        return;
-
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
     // the filter listbox can be manipulated via this
@@ -463,10 +459,6 @@ Any SAL_CALL CExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 
     if ( com::sun::star::ui::dialogs::ControlActions::GET_HELP_URL == aControlAction )
         return Any( );
 
-    // #i78850# ignore requests for "AutoExtension" control
-    if ( com::sun::star::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION == aControlId )
-        return Any( );
-
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
     // the filter listbox can be manipulated via this
@@ -502,10 +494,6 @@ Any SAL_CALL CExecuteFilePickerState::getValue( sal_Int16 aControlId, sal_Int16 
 
 void SAL_CALL CExecuteFilePickerState::enableControl( sal_Int16 aControlId, sal_Bool bEnable )
 {
-    // #i78850# ignore requests for "AutoExtension" control
-    if ( com::sun::star::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION == aControlId )
-        return;
-
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
     OSL_ENSURE( IsWindow( hwndCtrl ), "invalid element id");
@@ -519,10 +507,6 @@ void SAL_CALL CExecuteFilePickerState::enableControl( sal_Int16 aControlId, sal_
 
 void SAL_CALL CExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUString& aLabel )
 {
-    // #i78850# ignore requests for "AutoExtension" control
-    if ( com::sun::star::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION == aControlId )
-        return;
-
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
     OSL_ENSURE( IsWindow( hwndCtrl ), "invalid element id");
@@ -543,10 +527,6 @@ void SAL_CALL CExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUS
 
 OUString SAL_CALL CExecuteFilePickerState::getLabel( sal_Int16 aControlId )
 {
-    // #i78850# ignore requests for "AutoExtension" control
-    if ( com::sun::star::ui::dialogs::ExtendedFilePickerElementIds::CHECKBOX_AUTOEXTENSION == aControlId )
-        return ::rtl::OUString( );
-
     HWND hwndCtrl = GetHwndDlgItem( aControlId );
 
     OSL_ENSURE( IsWindow( hwndCtrl ), "invalid element id");
