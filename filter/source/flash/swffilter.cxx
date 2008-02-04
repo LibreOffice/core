@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swffilter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:09:46 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:41:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,7 @@
 
 //#include <stdlib.h>
 //#include <windows.h>
+#include <string.h>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::frame;
