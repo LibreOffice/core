@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regoptions.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 10:09:53 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 15:46:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,16 +104,31 @@ namespace svt
 
         /** activates the reminder
 
-            <p>If this method is called, the reminder for the dialog will be activated. This meas that during the
-            next <arg>_nDaysFromNow</arg>-1 days, <method>getDialogPermission</method> will return dpRemindLater</p>,
-            at the <arg>_nDaysFromNow</arg>th day from today onwards it will return dpThisSession.</p>
+            <p>If this method is called, the reminder for the dialog will be activated.
+            This means that during the next <arg>_nDaysFromNow</arg>-1 days,
+            <method>getDialogPermission</method> will return dpRemindLater</p>,
+            at the <arg>_nDaysFromNow</arg>th day from today onwards it will
+            return dpThisSession.</p>
 
             <p>It is not allowed to call this method if the dialog is currently disabled.</p>
 
-            <p>If the current session has not been marked as done already (i.e., <method>markSessionDone</method> has
-            not been called, yet), this is done implicitly when you call <method>activateReminder</method>.</p>
+            <p>If the current session has not been marked as done already
+            (i.e., <method>markSessionDone</method> has not been called, yet), this is
+            done implicitly when you call <method>activateReminder</method>.</p>
         */
         void                activateReminder( sal_Int32 _nDaysFromNow );
+
+        /** removes the reminder
+
+            <p>If this method is called, the reminder for the dialog will be removed.
+        */
+        void                removeReminder();
+
+        /** checks if the reminder date has come
+
+            <p>Returns <true/> if the current date is greater or equal the reminder date.
+        */
+        bool                hasReminderDateCome() const;
     };
 
 //........................................................................
