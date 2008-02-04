@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idlcproduce.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:44:28 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:45:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,8 @@
 #include <sys/stat.h>
 #include <errno.h>
 #endif
+
+#include <string.h>
 
 using namespace ::rtl;
 using namespace ::osl;
