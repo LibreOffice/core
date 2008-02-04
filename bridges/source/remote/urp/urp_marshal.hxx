@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_marshal.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 22:47:30 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:44:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@
 #ifndef _URP_MARSHAL_DECL_HXX_
 #include "urp_marshal_decl.hxx"
 #endif
+
+#include <string.h>
 
 struct remote_Interface;
 
