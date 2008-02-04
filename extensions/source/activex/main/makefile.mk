@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-15 13:27:16 $
+#   last change: $Author: ihi $ $Date: 2008-02-04 12:58:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ VERSIONOBJ=
 LIBTARGET=NO
 USE_DEFFILE=YES
 
-INCPRE+=$(ATL_INCLUDE) \
+INCPRE+=$(foreach,i,$(ATL_INCLUDE) -I$(i)) \
     -I$(MISC) \
 
 # --- Files -------------------------------------
@@ -87,11 +87,13 @@ SHL1STDLIBS=\
     $(URLMONLIB) \
     $(SHLWAPILIB)
 
+.IF "$(COM)"!="GCC"
 .IF "$(CCNUMVER)" > "001300000000"
 .IF "$(USE_STLP_DEBUG)" != ""
     SHL1STDLIBS+= $(ATL_LIB)$/atlsd.lib
 .ELSE
     SHL1STDLIBS+= $(ATL_LIB)$/atls.lib
+.ENDIF
 .ENDIF
 .ENDIF
 
