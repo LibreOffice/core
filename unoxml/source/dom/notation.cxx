@@ -4,9 +4,9 @@
  *
  *  $RCSfile: notation.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:03:53 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:57:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,8 @@
  ************************************************************************/
 
 #include "notation.hxx"
+#include <string.h>
+
 namespace DOM
 {
     CNotation::CNotation(const xmlNotationPtr aNotationPtr)
