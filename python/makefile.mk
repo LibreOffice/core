@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: rt $ $Date: 2007-11-06 15:58:43 $
+#   last change: $Author: ihi $ $Date: 2008-02-04 12:57:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install ; c
 # ----------------------------------
 .IF "$(COM)"=="GCC"
 BUILD_DIR=
-MYCWD=$(shell @pwd)/$(INPATH)/misc/build
+MYCWD=$(shell cygpath -m $(shell @pwd))/$(INPATH)/misc/build
 CC:=$(CC:s/guw.exe //)
 CXX:=$(CXX:s/guw.exe //)
 LDFLAGS:=-mno-cygwin
