@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 10:57:59 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:55:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include "attr.hxx"
 #include "element.hxx"
 #include <com/sun/star/xml/dom/DOMException.hdl>
+#include <string.h>
 
 namespace DOM
 {
