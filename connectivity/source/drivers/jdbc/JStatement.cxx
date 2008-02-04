@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JStatement.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-27 12:02:27 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:29:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,7 @@
 #include "resource/jdbc_log.hrc"
 
 #include <algorithm>
+#include <string.h>
 
 using namespace ::comphelper;
 using namespace connectivity;
