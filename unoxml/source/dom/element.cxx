@@ -4,9 +4,9 @@
  *
  *  $RCSfile: element.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 10:59:52 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:56:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
 #include "elementlist.hxx"
 #include "attributesmap.hxx"
 #include "../events/mutationevent.hxx"
+
+#include <string.h>
 
 namespace DOM
 {
