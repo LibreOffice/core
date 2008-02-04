@@ -42,6 +42,7 @@
 #include <vector>
 #include <map>
 #include <stack>
+#include <string.h>
 
 class DocumentElement;
 class DocumentHandler;
