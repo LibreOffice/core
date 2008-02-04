@@ -4,9 +4,9 @@
  *
  *  $RCSfile: progressbar.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:09:34 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:40:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #endif
 
 #include <math.h>
+#include <limits.h>
 
 //____________________________________________________________________________________________________________
 //  includes of my project
