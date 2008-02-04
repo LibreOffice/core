@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-15 12:07:40 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:46:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 #endif
 
 #include <string>
+#include <string.h>
 #include "osl/mutex.hxx"
 #include "osl/module.hxx"
 #include "osl/thread.hxx"
