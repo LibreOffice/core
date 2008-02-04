@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:27:26 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 15:46:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@
 #endif
 #ifndef GCC
 #endif
+
+#include <vcl/fixed.hxx>
+#include <svtools/controldims.hrc>
 
 #include <sfx2/basedlgs.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -722,9 +725,9 @@ void SfxFloatingWindow::FillInfo(SfxChildWinInfo& rInfo) const
         rInfo.nFlags |= SFX_CHILDWIN_ZOOMIN;
 }
 
-// -----------------------------------------------------------------------
+// SfxSingleTabDialog ----------------------------------------------------
 
-IMPL_LINK( SfxSingleTabDialog, OKHdl_Impl, Button *, pButton )
+IMPL_LINK( SfxSingleTabDialog, OKHdl_Impl, Button *, EMPTYARG )
 
 /*      [Beschreibung]
 
@@ -732,7 +735,13 @@ IMPL_LINK( SfxSingleTabDialog, OKHdl_Impl, Button *, pButton )
 */
 
 {
-    (void)pButton; //unused
+    if ( !pOptions )
+    {
+        // TabPage without ItemSet
+        EndDialog( RET_OK );
+        return 1;
+    }
+
     if ( !pOutSet )
     {
         pOutSet = new SfxItemSet( *pOptions );
@@ -740,9 +749,9 @@ IMPL_LINK( SfxSingleTabDialog, OKHdl_Impl, Button *, pButton )
     }
     sal_Bool bModified = sal_False;
 
-    if ( pPage->HasExchangeSupport() )
+    if ( pImpl->m_pSfxPage->HasExchangeSupport() )
     {
-        int nRet = pPage->DeactivatePage( pOutSet );
+        int nRet = pImpl->m_pSfxPage->DeactivatePage( pOutSet );
 
         if ( nRet != SfxTabPage::LEAVE_PAGE )
             return 0;
@@ -750,13 +759,13 @@ IMPL_LINK( SfxSingleTabDialog, OKHdl_Impl, Button *, pButton )
             bModified = ( pOutSet->Count() > 0 );
     }
     else
-        bModified = pPage->FillItemSet( *pOutSet );
+        bModified = pImpl->m_pSfxPage->FillItemSet( *pOutSet );
 
     if ( bModified )
     {
         // auch noch schnell User-Daten im IniManager abspeichern
-        pPage->FillUserData();
-        String sData( pPage->GetUserData() );
+        pImpl->m_pSfxPage->FillUserData();
+        String sData( pImpl->m_pSfxPage->GetUserData() );
         SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( GetUniqId() ) );
         aPageOpt.SetUserItem( USERITEM_NAME, makeAny( OUString( sData ) ) );
         EndDialog( RET_OK );
@@ -786,7 +795,7 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pOKBtn          ( 0 ),
     pCancelBtn      ( 0 ),
     pHelpBtn        ( 0 ),
-    pPage           ( 0 ),
+    pImpl           ( new SingleTabDlgImpl ),
     pOptions        ( &rSet ),
     pOutSet         ( 0 )
 
@@ -815,7 +824,7 @@ SfxSingleTabDialog::SfxSingleTabDialog
     pOKBtn          ( 0 ),
     pCancelBtn      ( 0 ),
     pHelpBtn        ( 0 ),
-    pPage           ( 0 ),
+    pImpl           ( new SingleTabDlgImpl ),
     pOptions        ( pInSet ),
     pOutSet         ( 0 )
 
@@ -826,18 +835,65 @@ SfxSingleTabDialog::SfxSingleTabDialog
 // -----------------------------------------------------------------------
 
 SfxSingleTabDialog::~SfxSingleTabDialog()
-
-/*      [Beschreibung]
-
-    Dtor; l"oscht ggf. die TabPage.
- */
-
 {
     delete pOKBtn;
     delete pCancelBtn;
     delete pHelpBtn;
-    delete pPage;
+    delete pImpl->m_pTabPage;
+    delete pImpl->m_pSfxPage;
+    delete pImpl->m_pLine;
+    delete pImpl;
     delete pOutSet;
+}
+
+// -----------------------------------------------------------------------
+
+void SfxSingleTabDialog::SetPage( TabPage* pNewPage )
+{
+    if ( !pImpl->m_pLine )
+        pImpl->m_pLine = new FixedLine( this );
+
+    if ( !pOKBtn )
+    {
+        pOKBtn = new OKButton( this, WB_DEFBUTTON );
+        pOKBtn->SetClickHdl( LINK( this, SfxSingleTabDialog, OKHdl_Impl ) );
+    }
+
+    if ( pImpl->m_pTabPage )
+        delete pImpl->m_pTabPage;
+    if ( pImpl->m_pSfxPage )
+        delete pImpl->m_pSfxPage;
+    pImpl->m_pTabPage = pNewPage;
+
+    if ( pImpl->m_pTabPage )
+    {
+        // Gr"ossen und Positionen anpassen
+        pImpl->m_pTabPage->SetPosPixel( Point() );
+        Size aOutSz( pImpl->m_pTabPage->GetSizePixel() );
+        Size aOffSz = LogicToPixel( Size( RSC_SP_CTRL_X, RSC_SP_CTRL_Y ) );
+        Size aFLSz = LogicToPixel( Size( aOutSz.Width(), RSC_CD_FIXEDLINE_HEIGHT ) );
+        Size aBtnSz = LogicToPixel( Size( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT ), MAP_APPFONT );
+
+        Point aPnt( 0, aOutSz.Height() );
+        pImpl->m_pLine->SetPosSizePixel( aPnt, aFLSz );
+        aPnt.X() = aOutSz.Width() - aOffSz.Width() - aBtnSz.Width();
+        aPnt.Y() +=  aFLSz.Height() + ( aOffSz.Height() / 2 );
+        pOKBtn->SetPosSizePixel( aPnt, aBtnSz );
+
+        aOutSz.Height() += aFLSz.Height() + ( aOffSz.Height() / 2 ) + aBtnSz.Height() + aOffSz.Height();
+        SetOutputSizePixel( aOutSz );
+
+        pImpl->m_pLine->Show();
+        pOKBtn->Show();
+        pImpl->m_pTabPage->Show();
+
+        // Text der TabPage in den Dialog setzen
+        SetText( pImpl->m_pTabPage->GetText() );
+
+        // Dialog bekommt HelpId der TabPage
+        SetHelpId( pImpl->m_pTabPage->GetHelpId() );
+        SetUniqueId( pImpl->m_pTabPage->GetUniqueId() );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -863,12 +919,14 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
     if ( !pHelpBtn )
         pHelpBtn = new HelpButton( this );
 
-    if ( pPage )
-        delete pPage;
-    pPage = pTabPage;
+    if ( pImpl->m_pTabPage )
+        delete pImpl->m_pTabPage;
+    if ( pImpl->m_pSfxPage )
+        delete pImpl->m_pSfxPage;
+    pImpl->m_pSfxPage = pTabPage;
     fnGetRanges = pRangesFunc;
 
-    if ( pPage )
+    if ( pImpl->m_pSfxPage )
     {
         // erstmal die User-Daten besorgen, dann erst Reset()
         SvtViewOptions aPageOpt( E_TABPAGE, String::CreateFromInt32( GetUniqId() ) );
@@ -877,13 +935,13 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
         OUString aTemp;
         if ( aUserItem >>= aTemp )
             sUserData = String( aTemp );
-        pPage->SetUserData( sUserData );
-        pPage->Reset( *pOptions );
-        pPage->Show();
+        pImpl->m_pSfxPage->SetUserData( sUserData );
+        pImpl->m_pSfxPage->Reset( *pOptions );
+        pImpl->m_pSfxPage->Show();
 
         // Gr"ossen und Positionen anpassen
-        pPage->SetPosPixel( Point() );
-        Size aOutSz( pPage->GetSizePixel() );
+        pImpl->m_pSfxPage->SetPosPixel( Point() );
+        Size aOutSz( pImpl->m_pSfxPage->GetSizePixel() );
         Size aBtnSiz = LogicToPixel( Size( 50, 14 ), MAP_APPFONT );
         Point aPnt( aOutSz.Width(), LogicToPixel( Point( 0, 6 ), MAP_APPFONT ).Y() );
         aOutSz.Width() += aBtnSiz.Width() + LogicToPixel( Size( 6, 0 ), MAP_APPFONT ).Width();
@@ -900,11 +958,11 @@ void SfxSingleTabDialog::SetTabPage( SfxTabPage* pTabPage,
             pHelpBtn->Show();
 
         // Text der TabPage in den Dialog setzen
-        SetText( pPage->GetText() );
+        SetText( pImpl->m_pSfxPage->GetText() );
 
         // Dialog bekommt HelpId der TabPage
-        SetHelpId( pPage->GetHelpId() );
-        SetUniqueId( pPage->GetUniqueId() );
+        SetHelpId( pImpl->m_pSfxPage->GetHelpId() );
+        SetUniqueId( pImpl->m_pSfxPage->GetUniqueId() );
     }
 }
 
