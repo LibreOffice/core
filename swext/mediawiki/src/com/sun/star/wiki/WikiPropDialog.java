@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-30 19:02:16 $
+ *  last change: $Author: mav $ $Date: 2008-02-04 08:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.EventObject;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 
@@ -54,14 +55,13 @@ public class WikiPropDialog extends WikiDialog{
     WikiEditorImpl m_aWikiEditor;
 
     private final String sSendMethod = "Send";
-    private final String sCancelMethod = "Cancel";
     private final String sHelpMethod = "Help";
     private final String sLoadMethod = "Load";
     private final String sWikiListMethod = "WikiListChange";
     private final String sArticleTextMethod = "ArticleTextChange";
     private final String sAddWikiMethod = "AddWiki";
 
-    String[] m_pMethods = {sSendMethod, sCancelMethod, sHelpMethod, sLoadMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
+    String[] m_pMethods = {sSendMethod, sHelpMethod, sLoadMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
 
     private String m_sWikiTitle = "";
     protected String m_sWikiEngineURL = "";
@@ -97,7 +97,6 @@ public class WikiPropDialog extends WikiDialog{
             GetPropSet( "MinorCheck" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDTOMEDIAWIKI_MINORCHECK ) );
             GetPropSet( "BrowserCheck" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDTOMEDIAWIKI_BROWSERCHECK ) );
             GetPropSet( "HelpButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_HELP ) );
-            GetPropSet( "CancelButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_CANCEL ) );
             GetPropSet( "AddButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_ADDBUTTON ) );
             GetPropSet( "SendButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDBUTTON ) );
         }
@@ -315,28 +314,6 @@ public class WikiPropDialog extends WikiDialog{
             xDialog.endExecute();
             return true;
         }
-        else if ( MethodName.equals( sCancelMethod ) )
-        {
-            // disallow any connection till the dialog is closed
-            Helper.AllowConnection( false );
-
-            if ( m_aSendingThread == null )
-            {
-                m_bAction = false;
-                xDialog.endExecute();
-            }
-            else
-            {
-                Helper.ShowError( m_xContext,
-                                  m_xDialog,
-                                  Helper.DLG_SENDTITLE,
-                                  Helper.CANCELSENDING_ERROR,
-                                  null,
-                                  false );
-            }
-
-            return true;
-        }
         else if ( MethodName.equals( sHelpMethod ) )
         {
             m_bAction = false;
@@ -360,10 +337,36 @@ public class WikiPropDialog extends WikiDialog{
             if ( xAddDialog.show() )
                 fillWikiList();
 
+            xAddDialog.DisposeDialog();
+
             return true;
         }
 
         return false;
+    }
+
+    public void windowClosed( EventObject e )
+    {
+        if ( m_aSendingThread != null )
+        {
+            Helper.AllowConnection( false );
+            try {
+                m_aSendingThread.join();
+            } catch ( Exception ex )
+            {
+                ex.printStackTrace();
+            }
+
+            m_aSendingThread = null;
+            Helper.AllowConnection( true );
+
+            Helper.ShowError( m_xContext,
+                              m_xDialog,
+                              Helper.DLG_SENDTITLE,
+                              Helper.CANCELSENDING_ERROR,
+                              null,
+                              false );
+        }
     }
 
     private void InsertThrobber()

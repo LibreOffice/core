@@ -5,9 +5,9 @@
  *
  *  $RCSfile: EditSetting.xdl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-21 12:57:52 $
+ *  last change: $Author: mav $ $Date: 2008-02-04 08:52:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,7 @@
   <dlg:button dlg:id="OkButton" dlg:tab-index="12" dlg:left="77" dlg:top="139" dlg:width="50" dlg:height="14" dlg:help-url="HID:31700" dlg:default="true" dlg:value="TOREPLACE">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:OK" script:language="UNO"/>
   </dlg:button>
-  <dlg:button dlg:id="CancelButton" dlg:tab-index="13" dlg:left="130" dlg:top="139" dlg:width="50" dlg:height="14" dlg:help-url="HID:31701" dlg:value="TOREPLACE">
-   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Cancel" script:language="UNO"/>
+  <dlg:button dlg:id="CancelButton" dlg:tab-index="13" dlg:left="130" dlg:top="139" dlg:width="50" dlg:height="14" dlg:help-url="HID:31701" dlg:button-type="cancel">
   </dlg:button>
   <dlg:button dlg:id="HelpButton" dlg:tab-index="11" dlg:left="6" dlg:top="139" dlg:width="50" dlg:height="14" dlg:help-url="HID:31702" dlg:value="TOREPLACE">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Help" script:language="UNO"/>

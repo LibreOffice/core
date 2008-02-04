@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiDialog.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-21 12:57:53 $
+ *  last change: $Author: mav $ $Date: 2008-02-04 08:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,10 +44,12 @@ import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import com.sun.star.awt.XTopWindow;
+import com.sun.star.awt.XTopWindowListener;
+import com.sun.star.lang.EventObject;
 
-public class WikiDialog implements XDialogEventHandler
+public class WikiDialog implements XDialogEventHandler, XTopWindowListener
 {
-
     XComponentContext m_xContext;
     XControlContainer m_xControlContainer;
     XDialog m_xDialog;
@@ -69,14 +71,16 @@ public class WikiDialog implements XDialogEventHandler
             XDialogProvider2 xDialogProvider = (XDialogProvider2) UnoRuntime.queryInterface( XDialogProvider2.class, obj );
 
             m_xDialog = xDialogProvider.createDialogWithHandler( DialogURL, this );
-            m_xControlContainer = (XControlContainer)UnoRuntime.queryInterface(XControlContainer.class, m_xDialog );
+            m_xControlContainer = (XControlContainer)UnoRuntime.queryInterface( XControlContainer.class, m_xDialog );
+            XTopWindow xTopWindow = (XTopWindow)UnoRuntime.queryInterface( XTopWindow.class, m_xDialog );
+            if ( xTopWindow != null )
+                xTopWindow.addTopWindowListener( this );
         }
         catch (com.sun.star.uno.Exception ex)
         {
             ex.printStackTrace();
         }
     }
-
 
     protected void setMethods (String [] Methods)
     {
@@ -177,4 +181,34 @@ public class WikiDialog implements XDialogEventHandler
 
         return xResult;
     }
+
+    public void DisposeDialog()
+    {
+        Helper.Dispose( m_xDialog );
+    }
+
+    public void windowOpened( EventObject e )
+    {}
+
+    public void windowClosing( EventObject e )
+    {}
+
+    public void windowClosed( EventObject e )
+    {}
+
+    public void windowMinimized( EventObject e )
+    {}
+
+    public void windowNormalized( EventObject e )
+    {}
+
+    public void windowActivated( EventObject e )
+    {}
+
+    public void windowDeactivated( EventObject e )
+    {}
+
+    public void disposing( EventObject e )
+    {}
 }
+

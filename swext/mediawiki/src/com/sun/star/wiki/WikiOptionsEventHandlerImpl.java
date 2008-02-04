@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiOptionsEventHandlerImpl.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-01 13:58:15 $
+ *  last change: $Author: mav $ $Date: 2008-02-04 08:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,8 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
         WikiEditSettingDialog aSettingDialog = new WikiEditSettingDialog( m_xContext, "vnd.sun.star.script:WikiEditor.EditSetting?location=application" );
         if ( aSettingDialog.show() )
             RefreshView();
+
+        aSettingDialog.DisposeDialog();
     }
 
     private void EditSetting()
@@ -162,6 +164,8 @@ public final class WikiOptionsEventHandlerImpl extends WeakBase
             WikiEditSettingDialog aSettingDialog = new WikiEditSettingDialog(m_xContext, "vnd.sun.star.script:WikiEditor.EditSetting?location=application", ht, true );
             if ( aSettingDialog.show() )
                 RefreshView();
+
+            aSettingDialog.DisposeDialog();
         }
     }
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-01 13:58:15 $
+ *  last change: $Author: mav $ $Date: 2008-02-04 08:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@ import com.sun.star.awt.XWindowPeer;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+import com.sun.star.lang.EventObject;
 import java.util.Hashtable;
 import javax.net.ssl.SSLException;
 
@@ -50,14 +51,14 @@ public class WikiEditSettingDialog extends WikiDialog
 {
 
     private final String sOKMethod = "OK";
-    private final String sCancelMethod = "Cancel";
     private final String sHelpMethod = "Help";
 
     String[] Methods =
-    {sOKMethod, sCancelMethod, sHelpMethod};
+    {sOKMethod, sHelpMethod};
     private Hashtable setting;
     private boolean addMode;
     private boolean m_bAllowURLChange = true;
+    private Thread m_aLoginThread;
 
     public WikiEditSettingDialog( XComponentContext xContext, String DialogURL )
     {
@@ -136,7 +137,6 @@ public class WikiEditSettingDialog extends WikiDialog
             GetPropSet( "SaveBox" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_EDITSETTING_SAVEBOX ) );
             GetPropSet( "OkButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_OK ) );
             GetPropSet( "HelpButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_HELP ) );
-            GetPropSet( "CancelButton" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_CANCEL ) );
         }
         catch( Exception e )
         {
@@ -328,7 +328,7 @@ public class WikiEditSettingDialog extends WikiDialog
                 final XDialog xDialogForThread = xDialog;
 
                 // the thread name is used to allow the error dialogs
-                Thread aLoginThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
+                m_aLoginThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
                 {
                     public void run()
                     {
@@ -347,7 +347,7 @@ public class WikiEditSettingDialog extends WikiDialog
                     }
                 };
 
-                aLoginThread.start();
+                m_aLoginThread.start();
             }
             else
             {
@@ -366,12 +366,6 @@ public class WikiEditSettingDialog extends WikiDialog
 
             return true;
         }
-        else if ( MethodName.equals( sCancelMethod ) )
-        {
-            Helper.AllowConnection( false );
-            xDialog.endExecute();
-            return true;
-        }
         else if ( MethodName.equals( sHelpMethod ) )
         {
             return true;
@@ -380,5 +374,22 @@ public class WikiEditSettingDialog extends WikiDialog
         return false;
     }
 
+    public void windowClosed( EventObject e )
+    {
+        if ( m_aLoginThread != null )
+        {
+            Helper.AllowConnection( false );
+            try
+            {
+                m_aLoginThread.join();
+            }
+            catch( Exception ex )
+            {
+                ex.printStackTrace();
+            }
 
+            m_aLoginThread = null;
+            Helper.AllowConnection( true );
+        }
+    }
 }

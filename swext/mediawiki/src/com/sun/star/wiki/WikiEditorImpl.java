@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditorImpl.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-01 13:58:15 $
+ *  last change: $Author: mav $ $Date: 2008-02-04 08:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -312,6 +312,7 @@ public final class WikiEditorImpl extends WeakBase
     {
         if ( m_xFrame != null )
         {
+            WikiPropDialog aSendDialog = null;
             try
             {
                 if ( m_xModel == null )
@@ -340,7 +341,7 @@ public final class WikiEditorImpl extends WeakBase
 
                     m_aSettings.loadConfiguration(); // throw away all the noncommited changes
                     // show the send dialog
-                    WikiPropDialog aSendDialog = new WikiPropDialog( m_xContext, "vnd.sun.star.script:WikiEditor.SendToMediaWiki?location=application", this );
+                    aSendDialog = new WikiPropDialog( m_xContext, "vnd.sun.star.script:WikiEditor.SendToMediaWiki?location=application", this );
                     aSendDialog.fillWikiList();
                     aSendDialog.SetWikiTitle( Helper.GetDocTitle( m_xModel ) );
                     aSendDialog.show(); // triggers the sending
@@ -350,6 +351,11 @@ public final class WikiEditorImpl extends WeakBase
             {
                 // TODO: Error handling here
                 e.printStackTrace();
+            }
+            finally
+            {
+                if ( aSendDialog != null )
+                    aSendDialog.DisposeDialog();
             }
         }
     }

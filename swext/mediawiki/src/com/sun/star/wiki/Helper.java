@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-30 19:02:16 $
+ *  last change: $Author: mav $ $Date: 2008-02-04 08:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@ import com.sun.star.io.XSeekable;
 import com.sun.star.io.XStream;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.lang.XComponent;
 import com.sun.star.system.SystemShellExecuteFlags;
 import com.sun.star.system.XSystemShellExecute;
 import com.sun.star.task.UrlRecord;
@@ -95,7 +96,7 @@ public class Helper
     public final static int NOURL_ERROR = 5;
 
     public final static int DLG_SENDTITLE = 6;
-    public final static int DLG_CANCEL = 7;
+    // number 7 is RESERVED
     public final static int DLG_NO = 8;
     public final static int DLG_OK = 9;
     public final static int DLG_YES = 10;
@@ -131,7 +132,7 @@ public class Helper
                                                     "InvalidURL",
                                                     "NoURL",
                                                     "Dlg_SendTitle",
-                                                    "Dlg_Cancel",
+                                                    null, // reserved
                                                     "Dlg_No",
                                                     "Dlg_OK",
                                                     "Dlg_Yes",
@@ -184,7 +185,10 @@ public class Helper
 
             String[] pStrings = new String[STRINGS_NUM];
             for ( int nInd = 0; nInd < STRINGS_NUM; nInd++ )
-                pStrings[nInd] = AnyConverter.toString( xNameAccess.getByName( m_pEntryNames[nInd] ) );
+                if ( m_pEntryNames[nInd] != null )
+                    pStrings[nInd] = AnyConverter.toString( xNameAccess.getByName( m_pEntryNames[nInd] ) );
+                else
+                    pStrings[nInd] = "";
 
             m_pConfigStrings = pStrings;
         }
@@ -930,9 +934,10 @@ public class Helper
 
             if ( xParentPeer != null )
             {
+                XMessageBoxFactory xMBFactory = null;
+                XMessageBox xMB = null;
                 try
                 {
-                    XMessageBoxFactory xMBFactory = null;
                     XMultiComponentFactory xFactory = xContext.getServiceManager();
                     if ( xFactory != null )
                         xMBFactory = (XMessageBoxFactory)UnoRuntime.queryInterface(
@@ -941,7 +946,6 @@ public class Helper
 
                     if ( xMBFactory != null )
                     {
-                        XMessageBox xMB = null;
                         if ( bQuery )
                         {
                             xMB = xMBFactory.createMessageBox(
@@ -973,18 +977,10 @@ public class Helper
                 {
                     e.printStackTrace();
                 }
-            }
-
-            if ( !bShown )
-            {
-                try
+                finally
                 {
-                    ErrorDialog xDialog = new ErrorDialog( xContext, "vnd.sun.star.script:WikiEditor.Error?location=application", sError );
-                    MainThreadDialogExecutor.Show( xContext, xDialog );
-                }
-                catch( Exception e )
-                {
-                    e.printStackTrace();
+                    if ( xMB != null )
+                        Dispose( xMB );
                 }
             }
         }
@@ -1073,6 +1069,23 @@ public class Helper
         }
 
         return false;
+    }
+
+    public static void Dispose( Object oObject )
+    {
+        if ( oObject != null )
+        {
+            try
+            {
+                XComponent xComp = (XComponent)UnoRuntime.queryInterface( XComponent.class, oObject );
+                if ( xComp != null )
+                    xComp.dispose();
+            }
+            catch( Exception e )
+            {
+                e.printStackTrace();
+            }
+        }
     }
 }
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiArticle.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-30 19:02:16 $
+ *  last change: $Author: mav $ $Date: 2008-02-04 08:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,24 +102,32 @@ public class WikiArticle
 
         while( bLogin && !bGotLogin && !Login() )
         {
-            // TODO: be sure that this is no main thread
-            WikiEditSettingDialog wd = new WikiEditSettingDialog(m_xContext, "vnd.sun.star.script:WikiEditor.EditSetting?location=application", wikiSettings, false );
-
-            if ( aPropDialog != null )
-                aPropDialog.SetThrobberActive( false );
-
-            if ( MainThreadDialogExecutor.Show( xContext, wd ) )
+            WikiEditSettingDialog aDialog = null;
+            try
             {
-                m_sWikiUser = (String) wikiSettings.get("Username");
-                m_sWikiPass = (String) wikiSettings.get("Password");
+                aDialog = new WikiEditSettingDialog(m_xContext, "vnd.sun.star.script:WikiEditor.EditSetting?location=application", wikiSettings, false );
+
+                if ( aPropDialog != null )
+                    aPropDialog.SetThrobberActive( false );
+
+                if ( MainThreadDialogExecutor.Show( xContext, aDialog ) )
+                {
+                    m_sWikiUser = (String) wikiSettings.get("Username");
+                    m_sWikiPass = (String) wikiSettings.get("Password");
+                }
+                else
+                    throw new WikiCancelException();
+
+                if ( aPropDialog != null )
+                {
+                    aPropDialog.SetThrobberActive( true );
+                    Thread.yield();
+                }
             }
-            else
-                throw new WikiCancelException();
-
-            if ( aPropDialog != null )
+            finally
             {
-                aPropDialog.SetThrobberActive( true );
-                Thread.yield();
+                if ( aDialog != null )
+                    aDialog.DisposeDialog();
             }
         }
 

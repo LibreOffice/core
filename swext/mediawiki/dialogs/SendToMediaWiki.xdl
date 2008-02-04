@@ -5,9 +5,9 @@
  *
  *  $RCSfile: SendToMediaWiki.xdl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2008-01-30 14:29:25 $
+ *  last change: $Author: mav $ $Date: 2008-02-04 08:52:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,8 +52,7 @@
   <dlg:checkbox dlg:id="MinorCheck" dlg:tab-index="7" dlg:left="73" dlg:top="66" dlg:width="142" dlg:height="10" dlg:value="TOREPLACE" dlg:checked="false"/>
   <dlg:checkbox dlg:id="BrowserCheck" dlg:tab-index="8" dlg:left="73" dlg:top="79" dlg:width="142" dlg:height="10" dlg:value="TOREPLACE" dlg:checked="false"/>
   <dlg:fixedline dlg:id="FixedLine1" dlg:tab-index="9" dlg:left="-5" dlg:top="100" dlg:width="294" dlg:height="4"/>
-  <dlg:button dlg:id="CancelButton" dlg:tab-index="10" dlg:left="219" dlg:top="108" dlg:width="63" dlg:height="16" dlg:value="TOREPLACE">
-   <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Cancel" script:language="UNO"/>
+  <dlg:button dlg:id="CancelButton" dlg:tab-index="10" dlg:left="219" dlg:top="108" dlg:width="63" dlg:height="16" dlg:button-type="cancel">
   </dlg:button>
   <dlg:button dlg:id="SendButton" dlg:tab-index="11" dlg:disabled="true" dlg:left="153" dlg:top="108" dlg:width="63" dlg:height="16" dlg:value="TOREPLACE" dlg:default="true">
    <script:event script:event-name="on-performaction" script:macro-name="vnd.sun.star.UNO:Send" script:language="UNO"/>
