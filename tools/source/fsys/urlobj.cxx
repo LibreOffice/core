@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:12:02 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:54:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,8 @@
 #include <limits>
 #define INCLUDED_LIMITS
 #endif
+
+#include <string.h>
 
 namespace unnamed_tools_urlobj {} using namespace unnamed_tools_urlobj;
     // unnamed namespaces don't work well yet...
