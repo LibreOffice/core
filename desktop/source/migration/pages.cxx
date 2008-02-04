@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:30:38 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 15:47:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version .1.
@@ -48,6 +48,7 @@
 #include <unotools/bootstrap.hxx>
 #include <svtools/regoptions.hxx>
 #include <svtools/useroptions.hxx>
+#include <sfx2/basedlgs.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -480,8 +481,8 @@ void UpdateCheckPage::ActivatePage()
 }
 
 // -------------------------------------------------------------------
-RegistrationPage::RegistrationPage( svt::OWizardMachine* parent, const ResId& resid)
-    : OWizardPage(parent, resid)
+RegistrationPage::RegistrationPage( Window* pParent, const ResId& rResid )
+    : OWizardPage( pParent, rResid )
     , m_ftHeader(this, WizardResId(FT_REGISTRATION_HEADER))
     , m_ftBody(this, WizardResId(FT_REGISTRATION_BODY))
     , m_fiImage(this, WizardResId(IMG_REGISTRATION))
@@ -544,11 +545,11 @@ void RegistrationPage::updateButtonStates()
     }
 }
 
-sal_Bool RegistrationPage::commitPage(COMMIT_REASON _eReason)
+sal_Bool RegistrationPage::commitPage( COMMIT_REASON eReason )
 {
-    if ( _eReason == CR_FINISH )
+    if ( eReason == CR_FINISH )
     {
-        RegOptions aOptions;
+        ::svt::RegOptions aOptions;
         if ( m_rbNow.IsChecked())
         {
             sal_Bool bSuccess = sal_False;
@@ -558,8 +559,7 @@ sal_Bool RegistrationPage::commitPage(COMMIT_REASON _eReason)
                 Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
                 Reference< XSystemShellExecute > xSystemShell(
                     xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.system.SystemShellExecute" ) ),
-                    UNO_QUERY_THROW
-                );
+                    UNO_QUERY_THROW );
 
                 // access the configuration to retrieve the URL we shall use for registration
                 ::rtl::OUString sRegistrationURL( aOptions.getRegistrationURL( ) );
@@ -573,6 +573,7 @@ sal_Bool RegistrationPage::commitPage(COMMIT_REASON _eReason)
             catch( const Exception& )
             {
             }
+
             if ( !bSuccess )
             {
                 ErrorBox aRegistrationError( this, WizardResId( ERRBOX_REG_NOSYSBROWSER ) );
@@ -588,6 +589,52 @@ sal_Bool RegistrationPage::commitPage(COMMIT_REASON _eReason)
     }
     return sal_True;
 }
+
+RegistrationPage::RegistrationMode RegistrationPage::getRegistrationMode() const
+{
+    RegistrationPage::RegistrationMode eMode = rmNow;
+    if ( m_rbLater.IsChecked() )
+        eMode = rmLater;
+    else if ( m_rbNever.IsChecked() )
+        eMode = rmNever;
+    else if ( m_rbReg.IsChecked() )
+        eMode = rmAlready;
+    return eMode;
+}
+
+void RegistrationPage::prepareSingleMode()
+{
+    // remove wizard text (hide and cut)
+    m_flSeparator.Hide();
+    m_ftEnd.Hide();
+    Size aNewSize = GetSizePixel();
+    aNewSize.Height() -= ( aNewSize.Height() - m_flSeparator.GetPosPixel().Y() );
+    SetSizePixel( aNewSize );
+}
+
+bool RegistrationPage::hasReminderDateCome()
+{
+    return ::svt::RegOptions().hasReminderDateCome();
+}
+
+void RegistrationPage::executeSingleMode()
+{
+    // opens the page in a single tabdialog
+    SfxSingleTabDialog aSingleDlg( NULL, TP_REGISTRATION );
+    RegistrationPage* pPage = new RegistrationPage( &aSingleDlg, WizardResId( TP_REGISTRATION ) );
+    pPage->prepareSingleMode();
+    aSingleDlg.SetPage( pPage );
+    aSingleDlg.SetText( pPage->getSingleModeTitle() );
+    aSingleDlg.Execute();
+    // the registration modes "Now" and "Later" are handled by the page
+    RegistrationPage::RegistrationMode eMode = pPage->getRegistrationMode();
+    if ( eMode == RegistrationPage::rmNow || eMode == RegistrationPage::rmLater )
+        pPage->commitPage( IWizardPage::CR_FINISH );
+    if ( eMode != RegistrationPage::rmLater )
+        ::svt::RegOptions().removeReminder();
+}
+
+// -----------------------------------------------------------------------
 
 static char const OEM_PRELOAD_SECTION[] = "Bootstrap";
 static char const OEM_PRELOAD[]     = "Preload";
@@ -666,8 +713,5 @@ WelcomePage::OEMType WelcomePage::checkOEM()
   }
 }
 
-
-
 } // namespace desktop
-
 
