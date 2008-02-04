@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pages.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:30:51 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 15:47:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,27 +177,47 @@ protected:
 class RegistrationPage : public svt::OWizardPage
 {
 private:
-    FixedText m_ftHeader;
-    FixedText m_ftBody;
-    FixedImage m_fiImage;
+    FixedText   m_ftHeader;
+    FixedText   m_ftBody;
+    FixedImage  m_fiImage;
     RadioButton m_rbNow;
     RadioButton m_rbLater;
     RadioButton m_rbNever;
     RadioButton m_rbReg;
-    FixedLine m_flSeparator;
-    FixedText m_ftEnd;
+    FixedLine   m_flSeparator;
+    FixedText   m_ftEnd;
+
     sal_Bool    m_bNeverVisible;
 
     void updateButtonStates();
     void impl_retrieveConfigurationData();
 
-public:
-    RegistrationPage( svt::OWizardMachine* parent, const ResId& resid);
-    virtual sal_Bool commitPage(COMMIT_REASON _eReason);
 protected:
-    virtual sal_Bool determineNextButtonState();
-    virtual void ActivatePage();
+    virtual sal_Bool    determineNextButtonState();
+    virtual void        ActivatePage();
+
+public:
+    RegistrationPage( Window* pParent, const ResId& rResid );
+
+    virtual sal_Bool    commitPage( COMMIT_REASON eReason );
+
+    enum RegistrationMode
+    {
+        rmNow,      // register now
+        rmLater,    // register later
+        rmNever,    // register never
+        rmAlready   // already registered
+    };
+
+    RegistrationMode    getRegistrationMode() const;
+    void                prepareSingleMode();
+    inline String       getSingleModeTitle() const { return m_ftHeader.GetText(); }
+
+    static bool         hasReminderDateCome();
+    static void         executeSingleMode();
 };
 
-}
-#endif
+} // namespace desktop
+
+#endif // #ifndef _PAGES_HXX_
+
