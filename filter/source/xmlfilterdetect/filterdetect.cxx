@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filterdetect.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-10-23 11:40:42 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:41:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_filter.hxx"
-#include <iostream.h>
+#include <iostream>
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdio.h>
