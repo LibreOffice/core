@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.8 $
+#  $Revision: 1.9 $
 #
-#  last change: $Author: vg $ $Date: 2008-01-24 16:04:56 $
+#  last change: $Author: ihi $ $Date: 2008-02-04 13:00:17 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,9 +54,15 @@ DOCTOKLIB=-ldoctok
 OOXMLLIB=-looxml
 RESOURCEMODELLIB=-lresourcemodel
 .ELIF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+DOCTOKLIB=-ldoctok
+OOXMLLIB=-looxml
+RESOURCEMODELLIB=-lresourcemodel
+.ELSE
 DOCTOKLIB=$(LB)$/idoctok.lib
 OOXMLLIB=$(LB)$/iooxml.lib
 RESOURCEMODELLIB=$(LB)$/iresourcemodel.lib
+.ENDIF
 .ENDIF
 
 SHL1STDLIBS=$(SALLIB)\
