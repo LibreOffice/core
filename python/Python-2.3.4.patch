@@ -1,5 +1,5 @@
 *** misc/Python-2.3.4/Include/osdefs.h	Tue Feb 26 12:20:01 2002
---- misc/build/Python-2.3.4/Include/osdefs.h	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Include/osdefs.h	Tue Jan 15 12:11:51 2008
 ***************
 *** 16,22 ****
   
@@ -18,7 +18,7 @@
   #define MAXPATHLEN 260
   #define SEP '/'
 *** misc/Python-2.3.4/Include/pyport.h	Tue Sep 30 16:56:50 2003
---- misc/build/Python-2.3.4/Include/pyport.h	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Include/pyport.h	Tue Jan 15 12:11:51 2008
 ***************
 *** 2,7 ****
 --- 2,11 ----
@@ -47,7 +47,7 @@
   /* Unchecked */
 --- 349,354 ----
 *** misc/Python-2.3.4/Lib/distutils/command/build_ext.py	Tue Nov 19 14:12:28 2002
---- misc/build/Python-2.3.4/Lib/distutils/command/build_ext.py	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Lib/distutils/command/build_ext.py	Tue Jan 15 12:11:51 2008
 ***************
 *** 181,187 ****
           # for extensions under Cygwin and AtheOS Python's library directory must be
@@ -66,7 +66,7 @@
                   self.library_dirs.append(os.path.join(sys.prefix, "lib",
                                                         "python" + get_python_version(),
 *** misc/Python-2.3.4/Lib/distutils/spawn.py	Thu Nov 21 21:41:07 2002
---- misc/build/Python-2.3.4/Lib/distutils/spawn.py	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Lib/distutils/spawn.py	Tue Jan 15 12:11:51 2008
 ***************
 *** 179,185 ****
           path = os.environ['PATH']
@@ -85,7 +85,7 @@
       if not os.path.isfile(executable):
           for p in paths:
 *** misc/Python-2.3.4/Lib/distutils/sysconfig.py	Mon Feb 10 15:02:33 2003
---- misc/build/Python-2.3.4/Lib/distutils/sysconfig.py	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Lib/distutils/sysconfig.py	Tue Jan 15 12:11:51 2008
 ***************
 *** 468,473 ****
 --- 468,476 ----
@@ -99,7 +99,7 @@
               func()
           else:
 *** misc/Python-2.3.4/Lib/os.py	Sun Apr  4 09:17:05 2004
---- misc/build/Python-2.3.4/Lib/os.py	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Lib/os.py	Tue Jan 15 12:11:51 2008
 ***************
 *** 36,42 ****
       except AttributeError:
@@ -132,7 +132,7 @@
       linesep = '\n'
       from posix import *
 *** misc/Python-2.3.4/Mac/OSX/Makefile	Tue Nov  4 23:45:16 2003
---- misc/build/Python-2.3.4/Mac/OSX/Makefile	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Mac/OSX/Makefile	Tue Jan 15 12:11:51 2008
 ***************
 *** 26,33 ****
   INSTALLED_PYTHONW=$(APPINSTALLDIR)/Contents/MacOS/Python
@@ -153,7 +153,17 @@
   INSTALL_SYMLINK=ln -fsn
   INSTALL_PROGRAM=${INSTALL}
 *** misc/Python-2.3.4/Makefile.pre.in	Tue Nov 18 20:54:00 2003
---- misc/build/Python-2.3.4/Makefile.pre.in	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Makefile.pre.in	Tue Jan 15 12:11:51 2008
+***************
+*** 97,102 ****
+--- 97,103 ----
+  LDSHARED=	@LDSHARED@
+  BLDSHARED=	@BLDSHARED@
+  DESTSHARED=	$(BINLIBDEST)/lib-dynload
++ DESTSHAREDFORRULES=	@DESTSHAREDFORRULES@
+  
+  # Executable suffix (.exe on Windows and Mac OS X)
+  EXE=		@EXEEXT@
 ***************
 *** 114,123 ****
   RUNSHARED=       @RUNSHARED@
@@ -166,7 +176,7 @@
   
   # configure script arguments
   CONFIG_ARGS=	@CONFIG_ARGS@
---- 114,123 ----
+--- 115,124 ----
   RUNSHARED=       @RUNSHARED@
   
   # Modes for directories, executables and data files created by the
@@ -186,7 +196,7 @@
   		Modules/main.o \
   		Modules/gcmodule.o
   
---- 167,173 ----
+--- 168,174 ----
   # Modules
   MODULE_OBJS=	\
   		Modules/config.o \
@@ -210,7 +220,7 @@
   	esac
   
   # buildno should really depend on something like LIBRARY_SRC
---- 308,321 ----
+--- 309,322 ----
   			$(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
   
   platform: $(BUILDPYTHON)
@@ -239,7 +249,7 @@
   libpython$(VERSION).sl: $(LIBRARY_OBJS)
   	$(LDSHARED) -o $@ $(LIBRARY_OBJS) $(LIBC) $(LIBM)
   
---- 345,359 ----
+--- 346,360 ----
   
   libpython$(VERSION).so: $(LIBRARY_OBJS)
   	if test $(INSTSONAME) != $(LDLIBRARY); then \
@@ -257,7 +267,7 @@
   
 ***************
 *** 456,461 ****
---- 459,467 ----
+--- 460,468 ----
   Objects/unicodectype.o:	$(srcdir)/Objects/unicodectype.c \
   				$(srcdir)/Objects/unicodetype_db.h
   
@@ -276,7 +286,7 @@
   test:		all platform
   		-find $(srcdir)/Lib -name '*.py[co]' -print | xargs rm -f
   		-$(TESTPYTHON) $(TESTPROG) $(TESTOPTS)
---- 529,535 ----
+--- 530,536 ----
   
   TESTOPTS=	-l
   TESTPROG=	$(srcdir)/Lib/test/regrtest.py
@@ -285,8 +295,42 @@
   		-find $(srcdir)/Lib -name '*.py[co]' -print | xargs rm -f
   		-$(TESTPYTHON) $(TESTPROG) $(TESTOPTS)
 ***************
+*** 559,565 ****
+  # Install shared libraries enabled by Setup
+  DESTDIRS=	$(exec_prefix) $(LIBDIR) $(BINLIBDEST) $(DESTSHARED)
+  
+! oldsharedinstall: $(DESTSHARED) $(SHAREDMODS)
+  		@for i in X $(SHAREDMODS); do \
+  		  if test $$i != X; then \
+  		    echo $(INSTALL_SHARED) $$i $(DESTSHARED)/`basename $$i`; \
+--- 566,572 ----
+  # Install shared libraries enabled by Setup
+  DESTDIRS=	$(exec_prefix) $(LIBDIR) $(BINLIBDEST) $(DESTSHARED)
+  
+! oldsharedinstall: $(DESTSHAREDFORRULES) $(SHAREDMODS)
+  		@for i in X $(SHAREDMODS); do \
+  		  if test $$i != X; then \
+  		    echo $(INSTALL_SHARED) $$i $(DESTSHARED)/`basename $$i`; \
+***************
+*** 567,573 ****
+  		  fi; \
+  		done
+  
+! $(DESTSHARED):
+  		@for i in $(DESTDIRS); \
+  		do \
+  			if test ! -d $(DESTDIR)$$i; then \
+--- 574,580 ----
+  		  fi; \
+  		done
+  
+! $(DESTSHAREDFORRULES):
+  		@for i in $(DESTDIRS); \
+  		do \
+  			if test ! -d $(DESTDIR)$$i; then \
+***************
 *** 615,620 ****
---- 621,629 ----
+--- 622,630 ----
   		fi; \
   	else	true; \
   	fi
@@ -317,7 +361,7 @@
   		-d $(LIBDEST)/site-packages -f \
   		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
   
---- 714,732 ----
+--- 715,733 ----
   	done
   	$(INSTALL_DATA) $(srcdir)/LICENSE $(DESTDIR)$(LIBDEST)/LICENSE.txt
   	PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
@@ -346,7 +390,7 @@
   	   	--prefix=$(prefix) \
   		--install-scripts=$(BINDIR) \
   		--install-platlib=$(DESTSHARED) \
---- 821,827 ----
+--- 822,828 ----
   # Install the dynamically loadable modules
   # This goes into $(exec_prefix)
   sharedinstall:
@@ -355,7 +399,7 @@
   		--install-scripts=$(BINDIR) \
   		--install-platlib=$(DESTSHARED) \
 *** misc/Python-2.3.4/Misc/setuid-prog.c	Thu Sep 10 22:18:09 1998
---- misc/build/Python-2.3.4/Misc/setuid-prog.c	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Misc/setuid-prog.c	Tue Jan 15 12:11:51 2008
 ***************
 *** 70,75 ****
 --- 70,81 ----
@@ -372,7 +416,7 @@
   char def_IFS[] = "IFS= \t\n";
   /* you may want to change def_PATH, but you should really change it in */
 *** misc/Python-2.3.4/Modules/_hotshot.c	Mon Mar 17 20:46:07 2003
---- misc/build/Python-2.3.4/Modules/_hotshot.c	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Modules/_hotshot.c	Tue Jan 15 12:11:51 2008
 ***************
 *** 12,18 ****
    * Which timer to use should be made more configurable, but that should not
@@ -544,7 +588,7 @@
   #else
           result = Py_BuildValue("ii", timeofday_diff, rusage_diff);
 *** misc/Python-2.3.4/Modules/config.c.in	Sun Jul  7 05:59:34 2002
---- misc/build/Python-2.3.4/Modules/config.c.in	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Modules/config.c.in	Tue Jan 15 12:11:51 2008
 ***************
 *** 39,44 ****
 --- 39,47 ----
@@ -558,7 +602,7 @@
   	/* This lives in gcmodule.c */
   	{"gc", initgc},
 *** misc/Python-2.3.4/Modules/mmapmodule.c	Tue Jul 15 14:37:46 2003
---- misc/build/Python-2.3.4/Modules/mmapmodule.c	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Modules/mmapmodule.c	Tue Jan 15 12:11:51 2008
 ***************
 *** 20,30 ****
   
@@ -721,7 +765,7 @@
   new_mmap_object(PyObject *self, PyObject *args, PyObject *kwdict)
   {
 *** misc/Python-2.3.4/Modules/posixmodule.c	Tue May  4 10:07:49 2004
---- misc/build/Python-2.3.4/Modules/posixmodule.c	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Modules/posixmodule.c	Tue Jan 15 12:11:51 2008
 ***************
 *** 104,109 ****
 --- 104,118 ----
@@ -867,7 +911,7 @@
   	if (res != 0)
   		return posix_error();
 *** misc/Python-2.3.4/Modules/readline.c	Thu Nov 13 08:42:13 2003
---- misc/build/Python-2.3.4/Modules/readline.c	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Modules/readline.c	Tue Jan 15 12:11:51 2008
 ***************
 *** 93,99 ****
   	return Py_None;
@@ -945,7 +989,7 @@
   
   PyDoc_STRVAR(get_history_length_doc,
 *** misc/Python-2.3.4/Modules/selectmodule.c	Mon Mar 22 21:20:33 2004
---- misc/build/Python-2.3.4/Modules/selectmodule.c	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Modules/selectmodule.c	Tue Jan 15 12:11:51 2008
 ***************
 *** 14,20 ****
      Users who want even more than the boosted limit should #define
@@ -998,7 +1042,7 @@
   		PyErr_SetExcFromWindowsErr(SelectError, WSAGetLastError());
   	}
 *** misc/Python-2.3.4/Modules/socketmodule.c	Sun Apr 11 14:10:03 2004
---- misc/build/Python-2.3.4/Modules/socketmodule.c	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Modules/socketmodule.c	Tue Jan 15 12:11:51 2008
 ***************
 *** 136,142 ****
   #endif
@@ -1218,7 +1262,7 @@
   
   /* Additional initialization and cleanup for Windows */
 *** misc/Python-2.3.4/Modules/socketmodule.h	Sat May  3 11:14:53 2003
---- misc/build/Python-2.3.4/Modules/socketmodule.h	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Modules/socketmodule.h	Tue Jan 15 12:11:51 2008
 ***************
 *** 1,7 ****
   /* Socket module header file */
@@ -1268,7 +1312,7 @@
   #	ifdef MS_WIN64
   #		define SIZEOF_SOCKET_T 8
 *** misc/Python-2.3.4/Modules/timemodule.c	Tue Jul  1 07:16:08 2003
---- misc/build/Python-2.3.4/Modules/timemodule.c	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/Modules/timemodule.c	Tue Jan 15 12:11:51 2008
 ***************
 *** 19,25 ****
   
@@ -1372,7 +1416,7 @@
   		double millisecs = secs * 1000.0;
   		unsigned long ul_millis;
 *** misc/Python-2.3.4/PC/dl_nt.c	Thu Jul 26 15:41:05 2001
---- misc/build/Python-2.3.4/PC/dl_nt.c	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/PC/dl_nt.c	Tue Jan 15 12:11:51 2008
 ***************
 *** 7,16 ****
   forgotten) from the programmer.
@@ -1397,7 +1441,7 @@
   
   char dllVersionBuffer[16] = ""; // a private buffer
 *** misc/Python-2.3.4/PC/getpathp.c	Mon Aug 18 19:54:10 2003
---- misc/build/Python-2.3.4/PC/getpathp.c	Wed Oct 17 14:01:01 2007
+--- misc/build/Python-2.3.4/PC/getpathp.c	Tue Jan 15 12:11:51 2008
 ***************
 *** 57,63 ****
   #include "Python.h"
@@ -1534,8 +1578,8 @@
   	if (zip_path[0]) {
   		strcpy(buf, zip_path);
   		buf = strchr(buf, '\0');
-*** misc/Python-2.3.4/PCbuild/_bsddb.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/_bsddb.dep	Wed Oct 17 14:01:01 2007
+*** misc/Python-2.3.4/PCbuild/_bsddb.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/_bsddb.dep	Tue Jan 15 12:11:51 2008
 ***************
 *** 1 ****
 ! dummy
@@ -1588,8 +1632,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_bsddb.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/_bsddb.mak	Wed Oct 17 14:01:01 2007
+*** misc/Python-2.3.4/PCbuild/_bsddb.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/_bsddb.mak	Tue Jan 15 12:11:51 2008
 ***************
 *** 1 ****
 ! dummy
@@ -1832,8 +1876,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/_csv.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/_csv.dep	Wed Oct 17 14:01:01 2007
+*** misc/Python-2.3.4/PCbuild/_csv.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/_csv.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -1887,8 +1931,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_csv.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/_csv.mak	Wed Oct 17 14:01:01 2007
+*** misc/Python-2.3.4/PCbuild/_csv.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/_csv.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -2130,8 +2174,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/_socket.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/_socket.dep	Wed Oct 17 14:01:01 2007
+*** misc/Python-2.3.4/PCbuild/_socket.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/_socket.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -2189,8 +2233,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_socket.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/_socket.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/_socket.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/_socket.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -2432,8 +2476,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/_sre.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/_sre.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/_sre.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/_sre.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -2489,8 +2533,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_sre.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/_sre.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/_sre.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/_sre.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -2732,8 +2776,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/_symtable.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/_symtable.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/_symtable.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/_symtable.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -2788,8 +2832,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_symtable.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/_symtable.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/_symtable.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/_symtable.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -3030,8 +3074,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/_testcapi.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/_testcapi.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/_testcapi.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/_testcapi.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -3086,8 +3130,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_testcapi.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/_testcapi.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/_testcapi.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/_testcapi.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -3327,8 +3371,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/_tkinter.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/_tkinter.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/_tkinter.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/_tkinter.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -3382,8 +3426,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_tkinter.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/_tkinter.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/_tkinter.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/_tkinter.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -3635,8 +3679,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/bz2.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/bz2.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/bz2.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/bz2.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -3691,8 +3735,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/bz2.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/bz2.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/bz2.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/bz2.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -3884,8 +3928,8 @@
 ! 
 ! !ENDIF
 ! 
-*** misc/Python-2.3.4/PCbuild/datetime.dep	Wed Oct 17 13:58:37 2007
---- misc/build/Python-2.3.4/PCbuild/datetime.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/datetime.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/datetime.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -3940,8 +3984,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/datetime.mak	Wed Oct 17 13:58:37 2007
---- misc/build/Python-2.3.4/PCbuild/datetime.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/datetime.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/datetime.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -4185,8 +4229,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/make_versioninfo.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/make_versioninfo.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/make_versioninfo.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/make_versioninfo.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -4196,8 +4240,8 @@
 ! ..\PC\make_versioninfo.c : \
 ! 	"..\Include\patchlevel.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/make_versioninfo.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/make_versioninfo.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/make_versioninfo.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/make_versioninfo.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -4422,8 +4466,8 @@
 ! 
 ! !ENDIF
 ! 
-*** misc/Python-2.3.4/PCbuild/mmap.dep	Wed Oct 17 13:58:37 2007
---- misc/build/Python-2.3.4/PCbuild/mmap.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/mmap.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/mmap.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -4476,8 +4520,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/mmap.mak	Wed Oct 17 13:58:37 2007
---- misc/build/Python-2.3.4/PCbuild/mmap.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/mmap.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/mmap.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -4717,8 +4761,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/parser.dep	Wed Oct 17 13:58:37 2007
---- misc/build/Python-2.3.4/PCbuild/parser.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/parser.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/parser.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -4776,8 +4820,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/parser.mak	Wed Oct 17 13:58:37 2007
---- misc/build/Python-2.3.4/PCbuild/parser.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/parser.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/parser.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -5019,8 +5063,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/pyexpat.dep	Wed Oct 17 13:58:37 2007
---- misc/build/Python-2.3.4/PCbuild/pyexpat.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/pyexpat.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/pyexpat.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -5110,8 +5154,8 @@
 ! 	"..\Modules\expat\xmltok_impl.h"\
 ! 	"..\Modules\expat\xmltok_ns.c"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/pyexpat.mak	Wed Oct 17 13:58:37 2007
---- misc/build/Python-2.3.4/PCbuild/pyexpat.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/pyexpat.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/pyexpat.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -5384,8 +5428,8 @@
 ! 
 ! !ENDIF
 ! 
-*** misc/Python-2.3.4/PCbuild/python.dep	Wed Oct 17 13:58:37 2007
---- misc/build/Python-2.3.4/PCbuild/python.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/python.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/python.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -5442,8 +5486,8 @@
 ! ..\PC\python_exe.rc : \
 ! 	"..\PC\pycon.ico"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/python.mak	Wed Oct 17 13:58:37 2007
---- misc/build/Python-2.3.4/PCbuild/python.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/python.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/python.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -5719,8 +5763,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/pythoncore.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/pythoncore.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/pythoncore.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/pythoncore.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -11177,8 +11221,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/pythoncore.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/pythoncore.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/pythoncore.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/pythoncore.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -12618,8 +12662,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/pythonw.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/pythonw.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/pythonw.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/pythonw.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -12676,8 +12720,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/pythonw.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/pythonw.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/pythonw.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/pythonw.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -12937,8 +12981,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/select.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/select.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/select.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/select.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -12991,8 +13035,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/select.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/select.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/select.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/select.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -13235,8 +13279,8 @@
 ! 
 ! !ENDIF
 ! 
-*** misc/Python-2.3.4/PCbuild/unicodedata.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/unicodedata.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/unicodedata.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/unicodedata.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -13292,8 +13336,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/unicodedata.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/unicodedata.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/unicodedata.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/unicodedata.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -13533,16 +13577,16 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/w9xpopen.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/w9xpopen.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/w9xpopen.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/w9xpopen.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
 --- 1,2 ----
 ! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von w9xpopen.mak
 ! 
-*** misc/Python-2.3.4/PCbuild/w9xpopen.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/w9xpopen.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/w9xpopen.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/w9xpopen.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -13725,8 +13769,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/winreg.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/winreg.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/winreg.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/winreg.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -13780,8 +13824,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/winreg.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/winreg.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/winreg.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/winreg.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -14039,8 +14083,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/winsound.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/winsound.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/winsound.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/winsound.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -14093,8 +14137,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/winsound.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/winsound.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/winsound.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/winsound.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -14334,8 +14378,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/zlib.dep	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/zlib.dep	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/zlib.dep	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/zlib.dep	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -14389,8 +14433,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/zlib.mak	Wed Oct 17 13:58:38 2007
---- misc/build/Python-2.3.4/PCbuild/zlib.mak	Wed Oct 17 14:01:02 2007
+*** misc/Python-2.3.4/PCbuild/zlib.mak	Tue Jan 15 12:10:48 2008
+--- misc/build/Python-2.3.4/PCbuild/zlib.mak	Tue Jan 15 12:11:52 2008
 ***************
 *** 1 ****
 ! dummy
@@ -14641,7 +14685,7 @@
 ! 
 ! !ENDIF
 *** misc/Python-2.3.4/Python/dynload_win.c	Mon Aug 26 23:20:30 2002
---- misc/build/Python-2.3.4/Python/dynload_win.c	Wed Oct 17 14:01:02 2007
+--- misc/build/Python-2.3.4/Python/dynload_win.c	Tue Jan 15 12:11:52 2008
 ***************
 *** 23,29 ****
   /* Case insensitive string compare, to avoid any dependencies on particular
@@ -14660,7 +14704,7 @@
   	int first, second;
   
 *** misc/Python-2.3.4/Python/pythonrun.c	Mon Mar 22 21:41:47 2004
---- misc/build/Python-2.3.4/Python/pythonrun.c	Wed Oct 17 14:01:02 2007
+--- misc/build/Python-2.3.4/Python/pythonrun.c	Tue Jan 15 12:11:52 2008
 ***************
 *** 1674,1679 ****
 --- 1674,1697 ----
@@ -14688,744 +14732,8 @@
   	handler = signal(sig, SIG_IGN);
   	signal(sig, handler);
   	return handler;
-*** misc/Python-2.3.4/Lib/plat-freebsd6/IN.py	Tue Aug  9 06:26:23 2005
---- misc/build/Python-2.3.4/Lib/plat-freebsd6/IN.py	Tue Aug  9 06:20:25 2005
-***************
-*** 0 ****
---- 1,355 ----
-+ # Generated by h2py from /usr/include/netinet/in.h
-+ IPPROTO_IP = 0
-+ IPPROTO_HOPOPTS = 0
-+ IPPROTO_ICMP = 1
-+ IPPROTO_IGMP = 2
-+ IPPROTO_GGP = 3
-+ IPPROTO_IPV4 = 4
-+ IPPROTO_IPIP = IPPROTO_IPV4
-+ IPPROTO_TCP = 6
-+ IPPROTO_ST = 7
-+ IPPROTO_EGP = 8
-+ IPPROTO_PIGP = 9
-+ IPPROTO_RCCMON = 10
-+ IPPROTO_NVPII = 11
-+ IPPROTO_PUP = 12
-+ IPPROTO_ARGUS = 13
-+ IPPROTO_EMCON = 14
-+ IPPROTO_XNET = 15
-+ IPPROTO_CHAOS = 16
-+ IPPROTO_UDP = 17
-+ IPPROTO_MUX = 18
-+ IPPROTO_MEAS = 19
-+ IPPROTO_HMP = 20
-+ IPPROTO_PRM = 21
-+ IPPROTO_IDP = 22
-+ IPPROTO_TRUNK1 = 23
-+ IPPROTO_TRUNK2 = 24
-+ IPPROTO_LEAF1 = 25
-+ IPPROTO_LEAF2 = 26
-+ IPPROTO_RDP = 27
-+ IPPROTO_IRTP = 28
-+ IPPROTO_TP = 29
-+ IPPROTO_BLT = 30
-+ IPPROTO_NSP = 31
-+ IPPROTO_INP = 32
-+ IPPROTO_SEP = 33
-+ IPPROTO_3PC = 34
-+ IPPROTO_IDPR = 35
-+ IPPROTO_XTP = 36
-+ IPPROTO_DDP = 37
-+ IPPROTO_CMTP = 38
-+ IPPROTO_TPXX = 39
-+ IPPROTO_IL = 40
-+ IPPROTO_IPV6 = 41
-+ IPPROTO_SDRP = 42
-+ IPPROTO_ROUTING = 43
-+ IPPROTO_FRAGMENT = 44
-+ IPPROTO_IDRP = 45
-+ IPPROTO_RSVP = 46
-+ IPPROTO_GRE = 47
-+ IPPROTO_MHRP = 48
-+ IPPROTO_BHA = 49
-+ IPPROTO_ESP = 50
-+ IPPROTO_AH = 51
-+ IPPROTO_INLSP = 52
-+ IPPROTO_SWIPE = 53
-+ IPPROTO_NHRP = 54
-+ IPPROTO_ICMPV6 = 58
-+ IPPROTO_NONE = 59
-+ IPPROTO_DSTOPTS = 60
-+ IPPROTO_AHIP = 61
-+ IPPROTO_CFTP = 62
-+ IPPROTO_HELLO = 63
-+ IPPROTO_SATEXPAK = 64
-+ IPPROTO_KRYPTOLAN = 65
-+ IPPROTO_RVD = 66
-+ IPPROTO_IPPC = 67
-+ IPPROTO_ADFS = 68
-+ IPPROTO_SATMON = 69
-+ IPPROTO_VISA = 70
-+ IPPROTO_IPCV = 71
-+ IPPROTO_CPNX = 72
-+ IPPROTO_CPHB = 73
-+ IPPROTO_WSN = 74
-+ IPPROTO_PVP = 75
-+ IPPROTO_BRSATMON = 76
-+ IPPROTO_ND = 77
-+ IPPROTO_WBMON = 78
-+ IPPROTO_WBEXPAK = 79
-+ IPPROTO_EON = 80
-+ IPPROTO_VMTP = 81
-+ IPPROTO_SVMTP = 82
-+ IPPROTO_VINES = 83
-+ IPPROTO_TTP = 84
-+ IPPROTO_IGP = 85
-+ IPPROTO_DGP = 86
-+ IPPROTO_TCF = 87
-+ IPPROTO_IGRP = 88
-+ IPPROTO_OSPFIGP = 89
-+ IPPROTO_SRPC = 90
-+ IPPROTO_LARP = 91
-+ IPPROTO_MTP = 92
-+ IPPROTO_AX25 = 93
-+ IPPROTO_IPEIP = 94
-+ IPPROTO_MICP = 95
-+ IPPROTO_SCCSP = 96
-+ IPPROTO_ETHERIP = 97
-+ IPPROTO_ENCAP = 98
-+ IPPROTO_APES = 99
-+ IPPROTO_GMTP = 100
-+ IPPROTO_IPCOMP = 108
-+ IPPROTO_PIM = 103
-+ IPPROTO_PGM = 113
-+ IPPROTO_DIVERT = 254
-+ IPPROTO_RAW = 255
-+ IPPROTO_MAX = 256
-+ IPPROTO_DONE = 257
-+ IPPORT_RESERVED = 1024
-+ IPPORT_USERRESERVED = 5000
-+ IPPORT_HIFIRSTAUTO = 49152
-+ IPPORT_HILASTAUTO = 65535
-+ IPPORT_RESERVEDSTART = 600
-+ def IN_CLASSA(i): return (((u_int32_t)(i) & 0x80000000) == 0)
-+ 
-+ IN_CLASSA_NET = 0xff000000
-+ IN_CLASSA_NSHIFT = 24
-+ IN_CLASSA_HOST = 0x00ffffff
-+ IN_CLASSA_MAX = 128
-+ def IN_CLASSB(i): return (((u_int32_t)(i) & 0xc0000000) == 0x80000000)
-+ 
-+ IN_CLASSB_NET = 0xffff0000
-+ IN_CLASSB_NSHIFT = 16
-+ IN_CLASSB_HOST = 0x0000ffff
-+ IN_CLASSB_MAX = 65536
-+ def IN_CLASSC(i): return (((u_int32_t)(i) & 0xe0000000) == 0xc0000000)
-+ 
-+ IN_CLASSC_NET = 0xffffff00
-+ IN_CLASSC_NSHIFT = 8
-+ IN_CLASSC_HOST = 0x000000ff
-+ def IN_CLASSD(i): return (((u_int32_t)(i) & 0xf0000000) == 0xe0000000)
-+ 
-+ IN_CLASSD_NET = 0xf0000000
-+ IN_CLASSD_NSHIFT = 28
-+ IN_CLASSD_HOST = 0x0fffffff
-+ def IN_MULTICAST(i): return IN_CLASSD(i)
-+ 
-+ def IN_EXPERIMENTAL(i): return (((u_int32_t)(i) & 0xf0000000) == 0xf0000000)
-+ 
-+ def IN_BADCLASS(i): return (((u_int32_t)(i) & 0xf0000000) == 0xf0000000)
-+ 
-+ INADDR_NONE = 0xffffffff
-+ IN_LOOPBACKNET = 127
-+ INET_ADDRSTRLEN = 16
-+ IP_OPTIONS = 1
-+ IP_HDRINCL = 2
-+ IP_TOS = 3
-+ IP_TTL = 4
-+ IP_RECVOPTS = 5
-+ IP_RECVRETOPTS = 6
-+ IP_RECVDSTADDR = 7
-+ IP_RETOPTS = 8
-+ IP_MULTICAST_IF = 9
-+ IP_MULTICAST_TTL = 10
-+ IP_MULTICAST_LOOP = 11
-+ IP_ADD_MEMBERSHIP = 12
-+ IP_DROP_MEMBERSHIP = 13
-+ IP_MULTICAST_VIF = 14
-+ IP_RSVP_ON = 15
-+ IP_RSVP_OFF = 16
-+ IP_RSVP_VIF_ON = 17
-+ IP_RSVP_VIF_OFF = 18
-+ IP_PORTRANGE = 19
-+ IP_RECVIF = 20
-+ IP_IPSEC_POLICY = 21
-+ IP_FAITH = 22
-+ IP_FW_ADD = 50
-+ IP_FW_DEL = 51
-+ IP_FW_FLUSH = 52
-+ IP_FW_ZERO = 53
-+ IP_FW_GET = 54
-+ IP_FW_RESETLOG = 55
-+ IP_DUMMYNET_CONFIGURE = 60
-+ IP_DUMMYNET_DEL = 61
-+ IP_DUMMYNET_FLUSH = 62
-+ IP_DUMMYNET_GET = 64
-+ IP_DEFAULT_MULTICAST_TTL = 1
-+ IP_DEFAULT_MULTICAST_LOOP = 1
-+ IP_MAX_MEMBERSHIPS = 20
-+ IP_PORTRANGE_DEFAULT = 0
-+ IP_PORTRANGE_HIGH = 1
-+ IP_PORTRANGE_LOW = 2
-+ IPPROTO_MAXID = (IPPROTO_AH + 1)
-+ IPCTL_FORWARDING = 1
-+ IPCTL_SENDREDIRECTS = 2
-+ IPCTL_DEFTTL = 3
-+ IPCTL_DEFMTU = 4
-+ IPCTL_RTEXPIRE = 5
-+ IPCTL_RTMINEXPIRE = 6
-+ IPCTL_RTMAXCACHE = 7
-+ IPCTL_SOURCEROUTE = 8
-+ IPCTL_DIRECTEDBROADCAST = 9
-+ IPCTL_INTRQMAXLEN = 10
-+ IPCTL_INTRQDROPS = 11
-+ IPCTL_STATS = 12
-+ IPCTL_ACCEPTSOURCEROUTE = 13
-+ IPCTL_FASTFORWARDING = 14
-+ IPCTL_KEEPFAITH = 15
-+ IPCTL_GIF_TTL = 16
-+ IPCTL_MAXID = 17
-+ 
-+ # Included from netinet6/in6.h
-+ 
-+ # Included from sys/queue.h
-+ def SLIST_HEAD_INITIALIZER(head): return \
-+ 
-+ def SLIST_ENTRY(type): return \
-+ 
-+ def STAILQ_HEAD_INITIALIZER(head): return \
-+ 
-+ def STAILQ_ENTRY(type): return \
-+ 
-+ def LIST_HEAD_INITIALIZER(head): return \
-+ 
-+ def LIST_ENTRY(type): return \
-+ 
-+ def TAILQ_HEAD_INITIALIZER(head): return \
-+ 
-+ def TAILQ_ENTRY(type): return \
-+ 
-+ def CIRCLEQ_ENTRY(type): return \
-+ 
-+ __KAME_VERSION = "20000701/FreeBSD-current"
-+ IPV6PORT_RESERVED = 1024
-+ IPV6PORT_ANONMIN = 49152
-+ IPV6PORT_ANONMAX = 65535
-+ IPV6PORT_RESERVEDMIN = 600
-+ IPV6PORT_RESERVEDMAX = (IPV6PORT_RESERVED-1)
-+ INET6_ADDRSTRLEN = 46
-+ IPV6_ADDR_INT32_ONE = 1
-+ IPV6_ADDR_INT32_TWO = 2
-+ IPV6_ADDR_INT32_MNL = 0xff010000
-+ IPV6_ADDR_INT32_MLL = 0xff020000
-+ IPV6_ADDR_INT32_SMP = 0x0000ffff
-+ IPV6_ADDR_INT16_ULL = 0xfe80
-+ IPV6_ADDR_INT16_USL = 0xfec0
-+ IPV6_ADDR_INT16_MLL = 0xff02
-+ IPV6_ADDR_INT32_ONE = 0x01000000
-+ IPV6_ADDR_INT32_TWO = 0x02000000
-+ IPV6_ADDR_INT32_MNL = 0x000001ff
-+ IPV6_ADDR_INT32_MLL = 0x000002ff
-+ IPV6_ADDR_INT32_SMP = 0xffff0000
-+ IPV6_ADDR_INT16_ULL = 0x80fe
-+ IPV6_ADDR_INT16_USL = 0xc0fe
-+ IPV6_ADDR_INT16_MLL = 0x02ff
-+ def IN6_IS_ADDR_UNSPECIFIED(a): return \
-+ 
-+ def IN6_IS_ADDR_LOOPBACK(a): return \
-+ 
-+ def IN6_IS_ADDR_V4COMPAT(a): return \
-+ 
-+ def IN6_IS_ADDR_V4MAPPED(a): return \
-+ 
-+ IPV6_ADDR_SCOPE_NODELOCAL = 0x01
-+ IPV6_ADDR_SCOPE_LINKLOCAL = 0x02
-+ IPV6_ADDR_SCOPE_SITELOCAL = 0x05
-+ IPV6_ADDR_SCOPE_ORGLOCAL = 0x08
-+ IPV6_ADDR_SCOPE_GLOBAL = 0x0e
-+ __IPV6_ADDR_SCOPE_NODELOCAL = 0x01
-+ __IPV6_ADDR_SCOPE_LINKLOCAL = 0x02
-+ __IPV6_ADDR_SCOPE_SITELOCAL = 0x05
-+ __IPV6_ADDR_SCOPE_ORGLOCAL = 0x08
-+ __IPV6_ADDR_SCOPE_GLOBAL = 0x0e
-+ def IN6_IS_ADDR_LINKLOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_SITELOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_NODELOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_LINKLOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_SITELOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_ORGLOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_GLOBAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_NODELOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_LINKLOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_SITELOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_ORGLOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_GLOBAL(a): return \
-+ 
-+ def IN6_IS_SCOPE_LINKLOCAL(a): return \
-+ 
-+ IPV6_OPTIONS = 1
-+ IPV6_RECVOPTS = 5
-+ IPV6_RECVRETOPTS = 6
-+ IPV6_RECVDSTADDR = 7
-+ IPV6_RETOPTS = 8
-+ IPV6_SOCKOPT_RESERVED1 = 3
-+ IPV6_UNICAST_HOPS = 4
-+ IPV6_MULTICAST_IF = 9
-+ IPV6_MULTICAST_HOPS = 10
-+ IPV6_MULTICAST_LOOP = 11
-+ IPV6_JOIN_GROUP = 12
-+ IPV6_LEAVE_GROUP = 13
-+ IPV6_PORTRANGE = 14
-+ ICMP6_FILTER = 18
-+ IPV6_PKTINFO = 19
-+ IPV6_HOPLIMIT = 20
-+ IPV6_NEXTHOP = 21
-+ IPV6_HOPOPTS = 22
-+ IPV6_DSTOPTS = 23
-+ IPV6_RTHDR = 24
-+ IPV6_PKTOPTIONS = 25
-+ IPV6_CHECKSUM = 26
-+ IPV6_BINDV6ONLY = 27
-+ IPV6_IPSEC_POLICY = 28
-+ IPV6_FAITH = 29
-+ IPV6_FW_ADD = 30
-+ IPV6_FW_DEL = 31
-+ IPV6_FW_FLUSH = 32
-+ IPV6_FW_ZERO = 33
-+ IPV6_FW_GET = 34
-+ IPV6_RTHDR_LOOSE = 0
-+ IPV6_RTHDR_STRICT = 1
-+ IPV6_RTHDR_TYPE_0 = 0
-+ IPV6_DEFAULT_MULTICAST_HOPS = 1
-+ IPV6_DEFAULT_MULTICAST_LOOP = 1
-+ IPV6_PORTRANGE_DEFAULT = 0
-+ IPV6_PORTRANGE_HIGH = 1
-+ IPV6_PORTRANGE_LOW = 2
-+ IPV6PROTO_MAXID = (IPPROTO_PIM + 1)
-+ IPV6CTL_FORWARDING = 1
-+ IPV6CTL_SENDREDIRECTS = 2
-+ IPV6CTL_DEFHLIM = 3
-+ IPV6CTL_DEFMTU = 4
-+ IPV6CTL_FORWSRCRT = 5
-+ IPV6CTL_STATS = 6
-+ IPV6CTL_MRTSTATS = 7
-+ IPV6CTL_MRTPROTO = 8
-+ IPV6CTL_MAXFRAGPACKETS = 9
-+ IPV6CTL_SOURCECHECK = 10
-+ IPV6CTL_SOURCECHECK_LOGINT = 11
-+ IPV6CTL_ACCEPT_RTADV = 12
-+ IPV6CTL_KEEPFAITH = 13
-+ IPV6CTL_LOG_INTERVAL = 14
-+ IPV6CTL_HDRNESTLIMIT = 15
-+ IPV6CTL_DAD_COUNT = 16
-+ IPV6CTL_AUTO_FLOWLABEL = 17
-+ IPV6CTL_DEFMCASTHLIM = 18
-+ IPV6CTL_GIF_HLIM = 19
-+ IPV6CTL_KAME_VERSION = 20
-+ IPV6CTL_USE_DEPRECATED = 21
-+ IPV6CTL_RR_PRUNE = 22
-+ IPV6CTL_MAPPED_ADDR = 23
-+ IPV6CTL_BINDV6ONLY = 24
-+ IPV6CTL_RTEXPIRE = 25
-+ IPV6CTL_RTMINEXPIRE = 26
-+ IPV6CTL_RTMAXCACHE = 27
-+ IPV6CTL_MAXID = 28
-*** misc/Python-2.3.4/Lib/plat-freebsd6/regen	Tue Aug  9 06:26:27 2005
---- misc/build/Python-2.3.4/Lib/plat-freebsd6/regen	Tue Aug  9 06:19:02 2005
-***************
-*** 0 ****
---- 1,3 ----
-+ #! /bin/sh
-+ set -v
-+ python ../../Tools/scripts/h2py.py -i '(u_long)' /usr/include/netinet/in.h
-*** misc/Python-2.3.4/Lib/plat-freebsd7/IN.py	Tue Aug  9 06:26:23 2005
---- misc/build/Python-2.3.4/Lib/plat-freebsd7/IN.py	Tue Aug  9 06:20:25 2005
-***************
-*** 0 ****
---- 1,355 ----
-+ # Generated by h2py from /usr/include/netinet/in.h
-+ IPPROTO_IP = 0
-+ IPPROTO_HOPOPTS = 0
-+ IPPROTO_ICMP = 1
-+ IPPROTO_IGMP = 2
-+ IPPROTO_GGP = 3
-+ IPPROTO_IPV4 = 4
-+ IPPROTO_IPIP = IPPROTO_IPV4
-+ IPPROTO_TCP = 6
-+ IPPROTO_ST = 7
-+ IPPROTO_EGP = 8
-+ IPPROTO_PIGP = 9
-+ IPPROTO_RCCMON = 10
-+ IPPROTO_NVPII = 11
-+ IPPROTO_PUP = 12
-+ IPPROTO_ARGUS = 13
-+ IPPROTO_EMCON = 14
-+ IPPROTO_XNET = 15
-+ IPPROTO_CHAOS = 16
-+ IPPROTO_UDP = 17
-+ IPPROTO_MUX = 18
-+ IPPROTO_MEAS = 19
-+ IPPROTO_HMP = 20
-+ IPPROTO_PRM = 21
-+ IPPROTO_IDP = 22
-+ IPPROTO_TRUNK1 = 23
-+ IPPROTO_TRUNK2 = 24
-+ IPPROTO_LEAF1 = 25
-+ IPPROTO_LEAF2 = 26
-+ IPPROTO_RDP = 27
-+ IPPROTO_IRTP = 28
-+ IPPROTO_TP = 29
-+ IPPROTO_BLT = 30
-+ IPPROTO_NSP = 31
-+ IPPROTO_INP = 32
-+ IPPROTO_SEP = 33
-+ IPPROTO_3PC = 34
-+ IPPROTO_IDPR = 35
-+ IPPROTO_XTP = 36
-+ IPPROTO_DDP = 37
-+ IPPROTO_CMTP = 38
-+ IPPROTO_TPXX = 39
-+ IPPROTO_IL = 40
-+ IPPROTO_IPV6 = 41
-+ IPPROTO_SDRP = 42
-+ IPPROTO_ROUTING = 43
-+ IPPROTO_FRAGMENT = 44
-+ IPPROTO_IDRP = 45
-+ IPPROTO_RSVP = 46
-+ IPPROTO_GRE = 47
-+ IPPROTO_MHRP = 48
-+ IPPROTO_BHA = 49
-+ IPPROTO_ESP = 50
-+ IPPROTO_AH = 51
-+ IPPROTO_INLSP = 52
-+ IPPROTO_SWIPE = 53
-+ IPPROTO_NHRP = 54
-+ IPPROTO_ICMPV6 = 58
-+ IPPROTO_NONE = 59
-+ IPPROTO_DSTOPTS = 60
-+ IPPROTO_AHIP = 61
-+ IPPROTO_CFTP = 62
-+ IPPROTO_HELLO = 63
-+ IPPROTO_SATEXPAK = 64
-+ IPPROTO_KRYPTOLAN = 65
-+ IPPROTO_RVD = 66
-+ IPPROTO_IPPC = 67
-+ IPPROTO_ADFS = 68
-+ IPPROTO_SATMON = 69
-+ IPPROTO_VISA = 70
-+ IPPROTO_IPCV = 71
-+ IPPROTO_CPNX = 72
-+ IPPROTO_CPHB = 73
-+ IPPROTO_WSN = 74
-+ IPPROTO_PVP = 75
-+ IPPROTO_BRSATMON = 76
-+ IPPROTO_ND = 77
-+ IPPROTO_WBMON = 78
-+ IPPROTO_WBEXPAK = 79
-+ IPPROTO_EON = 80
-+ IPPROTO_VMTP = 81
-+ IPPROTO_SVMTP = 82
-+ IPPROTO_VINES = 83
-+ IPPROTO_TTP = 84
-+ IPPROTO_IGP = 85
-+ IPPROTO_DGP = 86
-+ IPPROTO_TCF = 87
-+ IPPROTO_IGRP = 88
-+ IPPROTO_OSPFIGP = 89
-+ IPPROTO_SRPC = 90
-+ IPPROTO_LARP = 91
-+ IPPROTO_MTP = 92
-+ IPPROTO_AX25 = 93
-+ IPPROTO_IPEIP = 94
-+ IPPROTO_MICP = 95
-+ IPPROTO_SCCSP = 96
-+ IPPROTO_ETHERIP = 97
-+ IPPROTO_ENCAP = 98
-+ IPPROTO_APES = 99
-+ IPPROTO_GMTP = 100
-+ IPPROTO_IPCOMP = 108
-+ IPPROTO_PIM = 103
-+ IPPROTO_PGM = 113
-+ IPPROTO_DIVERT = 254
-+ IPPROTO_RAW = 255
-+ IPPROTO_MAX = 256
-+ IPPROTO_DONE = 257
-+ IPPORT_RESERVED = 1024
-+ IPPORT_USERRESERVED = 5000
-+ IPPORT_HIFIRSTAUTO = 49152
-+ IPPORT_HILASTAUTO = 65535
-+ IPPORT_RESERVEDSTART = 600
-+ def IN_CLASSA(i): return (((u_int32_t)(i) & 0x80000000) == 0)
-+ 
-+ IN_CLASSA_NET = 0xff000000
-+ IN_CLASSA_NSHIFT = 24
-+ IN_CLASSA_HOST = 0x00ffffff
-+ IN_CLASSA_MAX = 128
-+ def IN_CLASSB(i): return (((u_int32_t)(i) & 0xc0000000) == 0x80000000)
-+ 
-+ IN_CLASSB_NET = 0xffff0000
-+ IN_CLASSB_NSHIFT = 16
-+ IN_CLASSB_HOST = 0x0000ffff
-+ IN_CLASSB_MAX = 65536
-+ def IN_CLASSC(i): return (((u_int32_t)(i) & 0xe0000000) == 0xc0000000)
-+ 
-+ IN_CLASSC_NET = 0xffffff00
-+ IN_CLASSC_NSHIFT = 8
-+ IN_CLASSC_HOST = 0x000000ff
-+ def IN_CLASSD(i): return (((u_int32_t)(i) & 0xf0000000) == 0xe0000000)
-+ 
-+ IN_CLASSD_NET = 0xf0000000
-+ IN_CLASSD_NSHIFT = 28
-+ IN_CLASSD_HOST = 0x0fffffff
-+ def IN_MULTICAST(i): return IN_CLASSD(i)
-+ 
-+ def IN_EXPERIMENTAL(i): return (((u_int32_t)(i) & 0xf0000000) == 0xf0000000)
-+ 
-+ def IN_BADCLASS(i): return (((u_int32_t)(i) & 0xf0000000) == 0xf0000000)
-+ 
-+ INADDR_NONE = 0xffffffff
-+ IN_LOOPBACKNET = 127
-+ INET_ADDRSTRLEN = 16
-+ IP_OPTIONS = 1
-+ IP_HDRINCL = 2
-+ IP_TOS = 3
-+ IP_TTL = 4
-+ IP_RECVOPTS = 5
-+ IP_RECVRETOPTS = 6
-+ IP_RECVDSTADDR = 7
-+ IP_RETOPTS = 8
-+ IP_MULTICAST_IF = 9
-+ IP_MULTICAST_TTL = 10
-+ IP_MULTICAST_LOOP = 11
-+ IP_ADD_MEMBERSHIP = 12
-+ IP_DROP_MEMBERSHIP = 13
-+ IP_MULTICAST_VIF = 14
-+ IP_RSVP_ON = 15
-+ IP_RSVP_OFF = 16
-+ IP_RSVP_VIF_ON = 17
-+ IP_RSVP_VIF_OFF = 18
-+ IP_PORTRANGE = 19
-+ IP_RECVIF = 20
-+ IP_IPSEC_POLICY = 21
-+ IP_FAITH = 22
-+ IP_FW_ADD = 50
-+ IP_FW_DEL = 51
-+ IP_FW_FLUSH = 52
-+ IP_FW_ZERO = 53
-+ IP_FW_GET = 54
-+ IP_FW_RESETLOG = 55
-+ IP_DUMMYNET_CONFIGURE = 60
-+ IP_DUMMYNET_DEL = 61
-+ IP_DUMMYNET_FLUSH = 62
-+ IP_DUMMYNET_GET = 64
-+ IP_DEFAULT_MULTICAST_TTL = 1
-+ IP_DEFAULT_MULTICAST_LOOP = 1
-+ IP_MAX_MEMBERSHIPS = 20
-+ IP_PORTRANGE_DEFAULT = 0
-+ IP_PORTRANGE_HIGH = 1
-+ IP_PORTRANGE_LOW = 2
-+ IPPROTO_MAXID = (IPPROTO_AH + 1)
-+ IPCTL_FORWARDING = 1
-+ IPCTL_SENDREDIRECTS = 2
-+ IPCTL_DEFTTL = 3
-+ IPCTL_DEFMTU = 4
-+ IPCTL_RTEXPIRE = 5
-+ IPCTL_RTMINEXPIRE = 6
-+ IPCTL_RTMAXCACHE = 7
-+ IPCTL_SOURCEROUTE = 8
-+ IPCTL_DIRECTEDBROADCAST = 9
-+ IPCTL_INTRQMAXLEN = 10
-+ IPCTL_INTRQDROPS = 11
-+ IPCTL_STATS = 12
-+ IPCTL_ACCEPTSOURCEROUTE = 13
-+ IPCTL_FASTFORWARDING = 14
-+ IPCTL_KEEPFAITH = 15
-+ IPCTL_GIF_TTL = 16
-+ IPCTL_MAXID = 17
-+ 
-+ # Included from netinet6/in6.h
-+ 
-+ # Included from sys/queue.h
-+ def SLIST_HEAD_INITIALIZER(head): return \
-+ 
-+ def SLIST_ENTRY(type): return \
-+ 
-+ def STAILQ_HEAD_INITIALIZER(head): return \
-+ 
-+ def STAILQ_ENTRY(type): return \
-+ 
-+ def LIST_HEAD_INITIALIZER(head): return \
-+ 
-+ def LIST_ENTRY(type): return \
-+ 
-+ def TAILQ_HEAD_INITIALIZER(head): return \
-+ 
-+ def TAILQ_ENTRY(type): return \
-+ 
-+ def CIRCLEQ_ENTRY(type): return \
-+ 
-+ __KAME_VERSION = "20000701/FreeBSD-current"
-+ IPV6PORT_RESERVED = 1024
-+ IPV6PORT_ANONMIN = 49152
-+ IPV6PORT_ANONMAX = 65535
-+ IPV6PORT_RESERVEDMIN = 600
-+ IPV6PORT_RESERVEDMAX = (IPV6PORT_RESERVED-1)
-+ INET6_ADDRSTRLEN = 46
-+ IPV6_ADDR_INT32_ONE = 1
-+ IPV6_ADDR_INT32_TWO = 2
-+ IPV6_ADDR_INT32_MNL = 0xff010000
-+ IPV6_ADDR_INT32_MLL = 0xff020000
-+ IPV6_ADDR_INT32_SMP = 0x0000ffff
-+ IPV6_ADDR_INT16_ULL = 0xfe80
-+ IPV6_ADDR_INT16_USL = 0xfec0
-+ IPV6_ADDR_INT16_MLL = 0xff02
-+ IPV6_ADDR_INT32_ONE = 0x01000000
-+ IPV6_ADDR_INT32_TWO = 0x02000000
-+ IPV6_ADDR_INT32_MNL = 0x000001ff
-+ IPV6_ADDR_INT32_MLL = 0x000002ff
-+ IPV6_ADDR_INT32_SMP = 0xffff0000
-+ IPV6_ADDR_INT16_ULL = 0x80fe
-+ IPV6_ADDR_INT16_USL = 0xc0fe
-+ IPV6_ADDR_INT16_MLL = 0x02ff
-+ def IN6_IS_ADDR_UNSPECIFIED(a): return \
-+ 
-+ def IN6_IS_ADDR_LOOPBACK(a): return \
-+ 
-+ def IN6_IS_ADDR_V4COMPAT(a): return \
-+ 
-+ def IN6_IS_ADDR_V4MAPPED(a): return \
-+ 
-+ IPV6_ADDR_SCOPE_NODELOCAL = 0x01
-+ IPV6_ADDR_SCOPE_LINKLOCAL = 0x02
-+ IPV6_ADDR_SCOPE_SITELOCAL = 0x05
-+ IPV6_ADDR_SCOPE_ORGLOCAL = 0x08
-+ IPV6_ADDR_SCOPE_GLOBAL = 0x0e
-+ __IPV6_ADDR_SCOPE_NODELOCAL = 0x01
-+ __IPV6_ADDR_SCOPE_LINKLOCAL = 0x02
-+ __IPV6_ADDR_SCOPE_SITELOCAL = 0x05
-+ __IPV6_ADDR_SCOPE_ORGLOCAL = 0x08
-+ __IPV6_ADDR_SCOPE_GLOBAL = 0x0e
-+ def IN6_IS_ADDR_LINKLOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_SITELOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_NODELOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_LINKLOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_SITELOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_ORGLOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_GLOBAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_NODELOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_LINKLOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_SITELOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_ORGLOCAL(a): return \
-+ 
-+ def IN6_IS_ADDR_MC_GLOBAL(a): return \
-+ 
-+ def IN6_IS_SCOPE_LINKLOCAL(a): return \
-+ 
-+ IPV6_OPTIONS = 1
-+ IPV6_RECVOPTS = 5
-+ IPV6_RECVRETOPTS = 6
-+ IPV6_RECVDSTADDR = 7
-+ IPV6_RETOPTS = 8
-+ IPV6_SOCKOPT_RESERVED1 = 3
-+ IPV6_UNICAST_HOPS = 4
-+ IPV6_MULTICAST_IF = 9
-+ IPV6_MULTICAST_HOPS = 10
-+ IPV6_MULTICAST_LOOP = 11
-+ IPV6_JOIN_GROUP = 12
-+ IPV6_LEAVE_GROUP = 13
-+ IPV6_PORTRANGE = 14
-+ ICMP6_FILTER = 18
-+ IPV6_PKTINFO = 19
-+ IPV6_HOPLIMIT = 20
-+ IPV6_NEXTHOP = 21
-+ IPV6_HOPOPTS = 22
-+ IPV6_DSTOPTS = 23
-+ IPV6_RTHDR = 24
-+ IPV6_PKTOPTIONS = 25
-+ IPV6_CHECKSUM = 26
-+ IPV6_BINDV6ONLY = 27
-+ IPV6_IPSEC_POLICY = 28
-+ IPV6_FAITH = 29
-+ IPV6_FW_ADD = 30
-+ IPV6_FW_DEL = 31
-+ IPV6_FW_FLUSH = 32
-+ IPV6_FW_ZERO = 33
-+ IPV6_FW_GET = 34
-+ IPV6_RTHDR_LOOSE = 0
-+ IPV6_RTHDR_STRICT = 1
-+ IPV6_RTHDR_TYPE_0 = 0
-+ IPV6_DEFAULT_MULTICAST_HOPS = 1
-+ IPV6_DEFAULT_MULTICAST_LOOP = 1
-+ IPV6_PORTRANGE_DEFAULT = 0
-+ IPV6_PORTRANGE_HIGH = 1
-+ IPV6_PORTRANGE_LOW = 2
-+ IPV6PROTO_MAXID = (IPPROTO_PIM + 1)
-+ IPV6CTL_FORWARDING = 1
-+ IPV6CTL_SENDREDIRECTS = 2
-+ IPV6CTL_DEFHLIM = 3
-+ IPV6CTL_DEFMTU = 4
-+ IPV6CTL_FORWSRCRT = 5
-+ IPV6CTL_STATS = 6
-+ IPV6CTL_MRTSTATS = 7
-+ IPV6CTL_MRTPROTO = 8
-+ IPV6CTL_MAXFRAGPACKETS = 9
-+ IPV6CTL_SOURCECHECK = 10
-+ IPV6CTL_SOURCECHECK_LOGINT = 11
-+ IPV6CTL_ACCEPT_RTADV = 12
-+ IPV6CTL_KEEPFAITH = 13
-+ IPV6CTL_LOG_INTERVAL = 14
-+ IPV6CTL_HDRNESTLIMIT = 15
-+ IPV6CTL_DAD_COUNT = 16
-+ IPV6CTL_AUTO_FLOWLABEL = 17
-+ IPV6CTL_DEFMCASTHLIM = 18
-+ IPV6CTL_GIF_HLIM = 19
-+ IPV6CTL_KAME_VERSION = 20
-+ IPV6CTL_USE_DEPRECATED = 21
-+ IPV6CTL_RR_PRUNE = 22
-+ IPV6CTL_MAPPED_ADDR = 23
-+ IPV6CTL_BINDV6ONLY = 24
-+ IPV6CTL_RTEXPIRE = 25
-+ IPV6CTL_RTMINEXPIRE = 26
-+ IPV6CTL_RTMAXCACHE = 27
-+ IPV6CTL_MAXID = 28
-*** misc/Python-2.3.4/Lib/plat-freebsd7/regen	Tue Aug  9 06:26:27 2005
---- misc/build/Python-2.3.4/Lib/plat-freebsd7/regen	Tue Aug  9 06:19:02 2005
-***************
-*** 0 ****
---- 1,3 ----
-+ #! /bin/sh
-+ set -v
-+ python ../../Tools/scripts/h2py.py -i '(u_long)' /usr/include/netinet/in.h
 *** misc/Python-2.3.4/configure	Fri May  7 21:13:40 2004
---- misc/build/Python-2.3.4/configure	Wed Oct 17 14:01:02 2007
+--- misc/build/Python-2.3.4/configure	Tue Jan 15 12:11:52 2008
 ***************
 *** 309,315 ****
   # include <unistd.h>
@@ -15439,7 +14747,7 @@
   # include <unistd.h>
   #endif"
   
-! ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS VERSION SOVERSION CONFIG_ARGS PYTHONFRAMEWORK PYTHONFRAMEWORKDIR PYTHONFRAMEWORKPREFIX PYTHONFRAMEWORKINSTALLDIR MACHDEP SGI_ABI EXTRAPLATDIR EXTRAMACHDEPPATH CXX MAINOBJ EXEEXT CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC OBJEXT CPP EGREP BUILDEXEEXT LIBRARY LDLIBRARY DLLLIBRARY BLDLIBRARY LDLIBRARYDIR INSTSONAME RUNSHARED LINKCC RANLIB ac_ct_RANLIB AR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN OPT BASECFLAGS LIBTOOL_CRUFT SO LDSHARED BLDSHARED CCSHARED LINKFORSHARED CFLAGSFORSHARED SHLIBS USE_SIGNAL_MODULE SIGNAL_OBJS USE_THREAD_MODULE LDLAST THREADOBJ DLINCLDIR DYNLOADFILE GETPATH_OBJS MACHDEP_OBJS TRUE LIBOBJS HAVE_GETHOSTBYNAME_R_6_ARG HAVE_GETHOSTBYNAME_R_5_ARG HAVE_GETHOSTBYNAME_R_3_ARG HAVE_GETHOSTBYNAME_R HAVE_GETHOSTBYNAME LIBM LIBC UNICODE_OBJS THREADHEADERS SRCDIRS LTLIBOBJS'
+! ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS VERSION SOVERSION CONFIG_ARGS PYTHONFRAMEWORK PYTHONFRAMEWORKDIR PYTHONFRAMEWORKPREFIX PYTHONFRAMEWORKINSTALLDIR MACHDEP SGI_ABI EXTRAPLATDIR EXTRAMACHDEPPATH CXX MAINOBJ EXEEXT CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC OBJEXT CPP EGREP BUILDEXEEXT LIBRARY LDLIBRARY DLLLIBRARY BLDLIBRARY LDLIBRARYDIR INSTSONAME RUNSHARED LINKCC RANLIB ac_ct_RANLIB AR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN OPT BASECFLAGS LIBTOOL_CRUFT SO LDSHARED BLDSHARED DESTSHAREDFORRULES CCSHARED LINKFORSHARED CFLAGSFORSHARED SHLIBS USE_SIGNAL_MODULE SIGNAL_OBJS USE_THREAD_MODULE LDLAST THREADOBJ DLINCLDIR DYNLOADFILE GETPATH_OBJS MACHDEP_OBJS TRUE LIBOBJS HAVE_GETHOSTBYNAME_R_6_ARG HAVE_GETHOSTBYNAME_R_5_ARG HAVE_GETHOSTBYNAME_R_3_ARG HAVE_GETHOSTBYNAME_R HAVE_GETHOSTBYNAME LIBM LIBC UNICODE_OBJS THREADHEADERS SRCDIRS LTLIBOBJS'
   ac_subst_files=''
   
   # Initialize some variables set by options.
@@ -15531,6 +14839,21 @@
   echo $ECHO_N "checking whether to enable large file support... $ECHO_C" >&6
   if test "$have_long_long" = yes -a \
 ***************
+*** 10021,10026 ****
+--- 10041,10052 ----
+  
+  
+  
++ DESTSHAREDFORRULES='$(DESTSHARED)'
++ case $ac_sys_system in
++ CYGWIN*)
++ 	DESTSHAREDFORRULES='$(shell cygpath -u $(DESTSHARED))';;
++ esac
++ 
+  
+  # SO is the extension of shared libraries `(including the dot!)
+  # -- usually .so, .sl on HP-UX, .dll on Cygwin
+***************
 *** 10069,10076 ****
   	SunOS/4*) LDSHARED="ld";;
   	SunOS/5*)
@@ -15540,7 +14863,7 @@
   		fi ;;
   	hp*|HP*) LDSHARED="ld -b";;
   	OSF*) LDSHARED="ld -shared -expect_unresolved \"*\"";;
---- 10089,10096 ----
+--- 10095,10102 ----
   	SunOS/4*) LDSHARED="ld";;
   	SunOS/5*)
   		if test "$GCC" = "yes"
@@ -15558,7 +14881,7 @@
   		fi ;;
   	Darwin/*)
   		LDSHARED='$(CC) $(LDFLAGS) -bundle'
---- 10102,10108 ----
+--- 10108,10114 ----
   			LDSHARED="$LDSHARED "'-framework $(PYTHONFRAMEWORK)'
   		else
   			# No framework. Ignore undefined symbols, assuming they come from Python
@@ -15578,7 +14901,7 @@
   	dgux*) LDSHARED="ld -G";;
   	BSD/OS*/4*) LDSHARED="gcc -shared";;
   	OpenBSD*|FreeBSD*)
---- 10111,10120 ----
+--- 10117,10126 ----
   			LDSHARED="$LDSHARED "'-framework $(PYTHONFRAMEWORK)'
   		else
   			# No framework, use the Python app as bundle-loader
@@ -15598,7 +14921,7 @@
   	atheos*) LDSHARED="gcc -shared";;
   	*)	LDSHARED="ld";;
   	esac
---- 10132,10138 ----
+--- 10138,10144 ----
   		fi;;
   	SCO_SV*) LDSHARED='$(CC) -Wl,-G,-Bexport';;
   	Monterey*) LDSHARED="cc -G -dy -Bdynamic -Bexport -L/usr/lib/ia64l64";;
@@ -15608,7 +14931,7 @@
   	esac
 ***************
 *** 10129,10134 ****
---- 10149,10155 ----
+--- 10155,10161 ----
   	case $ac_sys_system/$ac_sys_release in
   	SunOS*) if test "$GCC" = yes;
   	        then CCSHARED="-fPIC";
@@ -15618,7 +14941,7 @@
   		 then CCSHARED="-fPIC";
 ***************
 *** 10222,10227 ****
---- 10243,10252 ----
+--- 10249,10258 ----
   		CFLAGSFORSHARED='$(CCSHARED)'
   	esac
   fi
@@ -15631,7 +14954,7 @@
   
 ***************
 *** 10833,10838 ****
---- 10858,11009 ----
+--- 10864,11015 ----
   
   USE_THREAD_MODULE=""
   
@@ -15786,7 +15109,7 @@
   
 ***************
 *** 12208,12213 ****
---- 12379,12386 ----
+--- 12385,12392 ----
           esac
       fi
   fi
@@ -15805,7 +15128,7 @@
   	*)
   	# use dynload_shlib.c and dlopen() if we have it; otherwise stub
   	# out any dynamic loading
---- 13159,13167 ----
+--- 13165,13173 ----
   	;;
   	BeOS*) DYNLOADFILE="dynload_beos.o";;
   	hp*|HP*) DYNLOADFILE="dynload_hpux.o";;
@@ -15817,7 +15140,7 @@
   	# out any dynamic loading
 ***************
 *** 13009,13014 ****
---- 13183,13205 ----
+--- 13189,13211 ----
   
   fi
   
@@ -15851,7 +15174,7 @@
   
   # checks for library functions
   
---- 13211,13218 ----
+--- 13217,13224 ----
   else
   	MACHDEP_OBJS="$MACHDEP_OBJS $extra_machdep_objs"
   fi
@@ -15872,7 +15195,7 @@
    getpriority getpwent getwd \
    kill killpg lchown lstat mkfifo mknod mktime \
    mremap nice pathconf pause plock poll pthread_init \
---- 13285,13293 ----
+--- 13291,13299 ----
   
   
   
@@ -15884,7 +15207,7 @@
    mremap nice pathconf pause plock poll pthread_init \
 ***************
 *** 13191,13196 ****
---- 13381,13524 ----
+--- 13387,13530 ----
   fi
   done
   
@@ -16031,7 +15354,7 @@
   # we want to take their address.
 ***************
 *** 17800,17805 ****
---- 18128,18134 ----
+--- 18134,18140 ----
   
   
   
@@ -16050,7 +15373,7 @@
     then
       PY_UNICODE_TYPE="wchar_t"
   
---- 18139,18154 ----
+--- 18145,18160 ----
   
   cat >>confdefs.h <<\_ACEOF
   #define Py_USING_UNICODE 1
@@ -16069,7 +15392,7 @@
   
 ***************
 *** 18760,18765 ****
---- 19096,19105 ----
+--- 19102,19111 ----
   
   fi
   
@@ -16082,7 +15405,7 @@
   
 ***************
 *** 18793,18798 ****
---- 19133,19140 ----
+--- 19139,19146 ----
     echo "$as_me:$LINENO: result: no" >&5
   echo "${ECHO_T}no" >&6
   fi
@@ -16092,8 +15415,18 @@
   echo "$as_me:$LINENO: checking for socklen_t" >&5
   echo $ECHO_N "checking for socklen_t... $ECHO_C" >&6
 ***************
+*** 19537,19542 ****
+--- 19885,19891 ----
+  s,@SO@,$SO,;t t
+  s,@LDSHARED@,$LDSHARED,;t t
+  s,@BLDSHARED@,$BLDSHARED,;t t
++ s,@DESTSHARED@,$DESTSHARED,;t t
+  s,@CCSHARED@,$CCSHARED,;t t
+  s,@LINKFORSHARED@,$LINKFORSHARED,;t t
+  s,@CFLAGSFORSHARED@,$CFLAGSFORSHARED,;t t
+***************
 *** 19548,19553 ****
---- 19890,19896 ----
+--- 19897,19903 ----
   s,@THREADOBJ@,$THREADOBJ,;t t
   s,@DLINCLDIR@,$DLINCLDIR,;t t
   s,@DYNLOADFILE@,$DYNLOADFILE,;t t
@@ -16103,7 +15436,7 @@
   s,@LIBOBJS@,$LIBOBJS,;t t
 ***************
 *** 20024,20029 ****
---- 20367,20385 ----
+--- 20374,20392 ----
   if test ! -f Modules/Setup
   then
   	cp $srcdir/Modules/Setup.dist Modules/Setup
@@ -16124,7 +15457,7 @@
   
   echo "creating Setup.local"
 *** misc/Python-2.3.4/configure.in	Fri May  7 21:13:47 2004
---- misc/build/Python-2.3.4/configure.in	Wed Oct 17 14:01:02 2007
+--- misc/build/Python-2.3.4/configure.in	Tue Jan 15 12:11:53 2008
 ***************
 *** 174,182 ****
     # several APIs are not declared. Since this is also needed in some
@@ -16160,7 +15493,7 @@
   
   #
 *** misc/Python-2.3.4/pyconfig.h.in	Mon Mar 22 21:20:32 2004
---- misc/build/Python-2.3.4/pyconfig.h.in	Wed Oct 17 14:01:02 2007
+--- misc/build/Python-2.3.4/pyconfig.h.in	Tue Jan 15 12:11:53 2008
 ***************
 *** 841,846 ****
 --- 841,849 ----
