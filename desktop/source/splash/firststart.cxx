@@ -4,9 +4,9 @@
  *
  *  $RCSfile: firststart.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:31:32 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 15:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
