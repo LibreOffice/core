@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2007-06-27 14:00:46 $
+#   last change: $Author: ihi $ $Date: 2008-02-04 12:58:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@ USE_DEFFILE=YES
 
 USE_DEFFILE=TRUE
 
-INCPRE+= -I$(ATL_INCLUDE)
+INCPRE+= $(foreach,i,$(ATL_INCLUDE) -I$(i))
 
 # --- Settings -----------------------------------------------------
 
