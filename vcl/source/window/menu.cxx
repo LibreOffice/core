@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.159 $
+ *  $Revision: 1.160 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-28 14:16:55 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 14:42:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4877,7 +4877,7 @@ void MenuFloatingWindow::KeyInput( const KeyEvent& rKEvent )
             else
             {
                 // Bei ungueltigen Tasten Beepen, aber nicht bei HELP und F-Tasten
-                if ( ( nCode != KEY_HELP ) && ( rKEvent.GetKeyCode().GetGroup() != KEYGROUP_FKEYS ) )
+                if ( !rKEvent.GetKeyCode().IsMod2() && ( nCode != KEY_HELP ) && ( rKEvent.GetKeyCode().GetGroup() != KEYGROUP_FKEYS ) )
                     Sound::Beep();
                 FloatingWindow::KeyInput( rKEvent );
             }
@@ -5627,7 +5627,7 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
         }
     }
 
-    if ( !bDone && bFromMenu )
+    if ( !bDone && ( bFromMenu || rKEvent.GetKeyCode().IsMod2() ) )
     {
         xub_Unicode nCharCode = rKEvent.GetCharCode();
         if ( nCharCode )
