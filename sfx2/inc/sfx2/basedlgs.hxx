@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basedlgs.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:27:13 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 15:46:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 #include <vcl/dialog.hxx>
 #endif
 
+class TabPage;
 class SfxTabPage;
 class SfxBindings;
 class SfxChildWindow;
@@ -66,6 +67,7 @@ class OKButton;
 class CancelButton;
 class HelpButton;
 class Button;
+class FixedLine;
 
 // class SfxModalDefParentHelper -----------------------------------------
 
@@ -181,6 +183,15 @@ public:
 
 // class SfxSingleTabDialog --------------------------------------------------
 
+struct SingleTabDlgImpl
+{
+    TabPage*        m_pTabPage;
+    SfxTabPage*     m_pSfxPage;
+    FixedLine*      m_pLine;
+
+    SingleTabDlgImpl() : m_pTabPage( NULL ), m_pSfxPage( NULL ), m_pLine( NULL ) {}
+};
+
 typedef USHORT* (*GetTabPageRanges)(); // liefert internationale Which-Werte
 
 class SFX2_DLLPUBLIC SfxSingleTabDialog : public SfxModalDialog
@@ -191,11 +202,11 @@ public:
 
     virtual             ~SfxSingleTabDialog();
 
+    void                SetPage( TabPage* pNewPage );
     void                SetTabPage( SfxTabPage* pTabPage,
                                     GetTabPageRanges pRangesFunc = 0 );
-    SfxTabPage*         GetTabPage() const { return pPage; }
+    SfxTabPage*         GetTabPage() const { return pImpl->m_pSfxPage; }
 
-        // liefert ggf. per Map konvertierte lokale Slots
     const USHORT*       GetInputRanges( const SfxItemPool& rPool );
     void                SetInputSet( const SfxItemSet* pInSet )
                             { pOptions = pInSet; }
@@ -204,20 +215,18 @@ public:
     CancelButton*       GetCancelButton() const { return pCancelBtn; }
 
 private:
-    GetTabPageRanges    fnGetRanges;    // Pointer auf die Ranges-Funktion
+    GetTabPageRanges    fnGetRanges;
     USHORT*             pRanges;
 
     OKButton*           pOKBtn;
     CancelButton*       pCancelBtn;
     HelpButton*         pHelpBtn;
 
-    SfxTabPage*         pPage;
+    SingleTabDlgImpl*   pImpl;
     const SfxItemSet*   pOptions;
     SfxItemSet*         pOutSet;
 
-//#if 0 // _SOLAR__PRIVATE
     DECL_DLLPRIVATE_LINK( OKHdl_Impl, Button * );
-//#endif
 };
 
 #endif
