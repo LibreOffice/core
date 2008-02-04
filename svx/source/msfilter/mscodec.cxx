@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mscodec.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:58:20 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:38:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 
 #include <osl/diagnose.h>
 #include <algorithm>
+#include <string.h>
 #include <tools/solar.h>
 
 namespace svx {
