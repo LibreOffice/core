@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-05 16:45:18 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:47:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,6 +84,8 @@
 // for STL template usage, if .pdb files are to be created
 #pragma warning( disable: 4786 )
 #endif
+
+#include <string.h>
 
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
