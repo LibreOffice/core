@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 13:00:39 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:55:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,7 @@
 #endif
 #include "inputstream.hxx"
 #include <algorithm>
+#include <string.h>
 
 // Extensible help
 #include "com/sun/star/deployment/thePackageManagerFactory.hpp"
