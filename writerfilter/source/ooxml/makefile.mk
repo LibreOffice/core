@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.11 $
+#  $Revision: 1.12 $
 #
-#  last change: $Author: ihi $ $Date: 2008-02-04 12:54:54 $
+#  last change: $Author: ihi $ $Date: 2008-02-04 13:49:57 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,7 @@ $(OOXMLRESOURCEIDSHXX):  $(OOXMLHXXOUTDIRCREATED) $(OOXMLRESOURCEIDSXSL) $(MODEL
     $(XSLTPROC) $(OOXMLRESOURCEIDSXSL) $(MODELPROCESSED) > $@
 
 $(GPERFFASTTOKENHXX): $(OOXMLGPERFFASTTOKENXSL) $(MODELPROCESSED)
-    $(XSLTPROC) $(OOXMLGPERFFASTTOKENXSL) $(MODELPROCESSED) | tr -d '\r' | gperf -t -E -S1 -c -G -LC++ > $@
+    $(XSLTPROC) $(OOXMLGPERFFASTTOKENXSL) $(MODELPROCESSED) | tr -d '\r' | gperf -I -t -E -S1 -c -G -LC++ > $@
 
 $(SLOFASTNAMESPACES): $(OOXMLFASTRESOURCESCXX) $(OOXMLGENHEADERS)
 
