@@ -1,4 +1,4 @@
-// Microsoft Visual C++ generated resource script.
+//Microsoft Developer Studio generated resource script.
 //
 #include "resource.h"
 
@@ -27,18 +27,18 @@ LANGUAGE LANG_GERMAN, SUBLANG_GERMAN
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE 
+1 TEXTINCLUDE DISCARDABLE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE 
+2 TEXTINCLUDE DISCARDABLE 
 BEGIN
     "#include ""afxres.h""\r\n"
     "\0"
 END
 
-3 TEXTINCLUDE 
+3 TEXTINCLUDE DISCARDABLE 
 BEGIN
     "\r\n"
     "\0"
@@ -52,163 +52,201 @@ END
 // Dialog
 //
 
-1000 DIALOG  0, 0, 200, 37
-STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+1000 DIALOG DISCARDABLE  0, 0, 200, 37
+STYLE DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "Andale Sans UI"
-BEGIN
-    CONTROL         "Mit Schreibschutz öffnen",103,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,52,24,148,10
+BEGIN    
+    CONTROL         "Mit Schreibschutz öffnen",103,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+    52,24,148,10
     COMBOBOX        107,52,8,148,52,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Version:",207,0,10,52,11
     LTEXT           "",1119,0,0,200,8
 END
 
-1001 DIALOG  0, 0, 338, 67
-STYLE DS_SETFONT | DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+1001 DIALOG DISCARDABLE  0, 0, 338, 67
+STYLE DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "MS Shell Dlg"
-BEGIN
-    CONTROL         "Mit Schreibschutz öffnen",103,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,51,161,14
+BEGIN    
+    CONTROL         "Mit Schreibschutz öffnen",103,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+    130,51,161,14
     COMBOBOX        107,130,35,164,52,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Version:",207,68,37,56,11
     LTEXT           "",1119,0,0,336,35
 END
 
-2000 DIALOG  0, 0, 210, 53
-STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+2000 DIALOG DISCARDABLE  0, 0, 210, 53
+STYLE DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "Andale Sans UI"
 BEGIN
-    CONTROL         "Vorschau",105,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,52,40,157,10
-    CONTROL         "Als Link einfügen",104,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,52,28,157,10
+    CONTROL         "Vorschau",105,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+    52,40,157,10
+    CONTROL         "Als Link einfügen",104,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+    52,28,157,10    
     COMBOBOX        109,52,12,156,54,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Bildvorlage:",209,4,14,48,10
+    LTEXT           "Bildvorlage:",209,4,14,48,10    
     LTEXT           "",1119,0,0,210,12
 END
 
-2001 DIALOG  0, 0, 280, 72
-STYLE DS_SETFONT | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+2001 DIALOG DISCARDABLE  0, 0, 280, 72
+STYLE DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "MS Shell Dlg"
 BEGIN
-    CONTROL         "Vorschau",105,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,58,144,16
-    CONTROL         "Als Link einfügen",104,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,45,144,14
+    CONTROL         "Vorschau",105,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+    130,58,144,16    
+    CONTROL         "Als Link einfügen",104,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+    130,45,144,14
     COMBOBOX        109,130,28,164,62,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Bildvorlage:",209,67,30,47,11
+    LTEXT           "Bildvorlage:",209,67,30,47,11    
     LTEXT           "",1119,0,0,281,28
 END
 
-3000 DIALOG  0, 0, 208, 49
-STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+3000 DIALOG DISCARDABLE  0, 0, 208, 49
+STYLE DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "Andale Sans UI"
-BEGIN
-    CONTROL         "Automatische Dateinamenserweiterung",100,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,52,36,156,10
-    COMBOBOX        108,52,20,156,52,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Vorlagen:",208,4,22,47,11
+BEGIN    
+    CONTROL         "Automatische Dateinamenserweiterung",100,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,52,36,156,10
+    COMBOBOX        108,52,20,156,52,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Vorlagen:",208,4,22,47,11                    
     LTEXT           "",1119,0,0,208,20
 END
 
-3001 DIALOG  0, 0, 296, 72
-STYLE DS_SETFONT | DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+3001 DIALOG DISCARDABLE  0, 0, 296, 72
+STYLE DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "MS Shell Dlg"
-BEGIN
-    CONTROL         "Automatische Dateinamenserweiterung",100,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,58,157,14
-    COMBOBOX        108,130,41,164,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Vorlagen:",208,67,42,58,8
+BEGIN    
+    CONTROL         "Automatische Dateinamenserweiterung",100,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,130,58,157,14    
+    COMBOBOX        108,130,41,164,100,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Vorlagen:",208,67,42,58,8                    
     LTEXT           "",1119,0,0,293,41
 END
 
-4000 DIALOGEX 0, 0, 196, 41
-STYLE DS_SETFONT | DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
-FONT 8, "Andale Sans UI", 0, 0, 0x0
-BEGIN
-    CONTROL         "Mit Kennwort speichern",101,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,52,28,141,10
-    LTEXT           "",1119,0,0,195,16
-END
-
-4001 DIALOG  0, 0, 278, 54
-STYLE DS_SETFONT | DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
-FONT 8, "MS Shell Dlg"
-BEGIN
-    CONTROL         "Mit Kennwort speichern",101,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,38,144,16
-    LTEXT           "",1119,0,0,277,38
-END
-
-5000 DIALOG  0, 0, 192, 45
-STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+4000 DIALOG DISCARDABLE  0, 0, 196, 41
+STYLE DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "Andale Sans UI"
 BEGIN
-    CONTROL         "Filtereinstellungen bearbeiten",102,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,52,32,140,10
-    CONTROL         "Mit Kennwort speichern",101,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,52,20,140,10
-    LTEXT           "",1119,0,0,192,20
+    CONTROL         "Mit Kennwort speichern",101,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,52,28,141,10
+    CONTROL         "Automatische Dateinamenserweiterung",100,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,52,16,141,10        
+    LTEXT           "",1119,0,0,195,16                    
 END
 
-5001 DIALOGEX 0, 0, 278, 67
-STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
-FONT 8, "MS Shell Dlg", 0, 0, 0x0
+4001 DIALOG DISCARDABLE  0, 0, 278, 67
+STYLE DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+FONT 8, "MS Shell Dlg"
 BEGIN
-    CONTROL         "Filtereinstellungen bearbeiten",102,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,52,144,13
-    CONTROL         "Mit Kennwort speichern",101,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,40,144,13
-    LTEXT           "",1119,0,0,277,38
+    CONTROL         "Mit Kennwort speichern",101,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,130,51,144,16
+    CONTROL         "Automatische Dateinamenserweiterung",100,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,130,38,144,14        
+    LTEXT           "",1119,0,0,277,38                    
 END
 
-6000 DIALOG  0, 0, 212, 25
-STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+5000 DIALOG DISCARDABLE  0, 0, 192, 57
+STYLE DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+FONT 8, "Andale Sans UI"
+BEGIN
+    CONTROL         "Filtereinstellungen bearbeiten",102,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,52,44,140,10
+    CONTROL         "Mit Kennwort speichern",101,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,52,32,140,10                    
+    CONTROL         "Automatische Dateinamenserweiterung",100,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,52,20,140,10    
+    LTEXT           "",1119,0,0,192,20    
+END
+
+5001 DIALOG DISCARDABLE  0, 0, 278, 79
+STYLE DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+FONT 8, "MS Shell Dlg"
+BEGIN
+    CONTROL         "Filtereinstellungen bearbeiten",102,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,130,66,144,13    
+    CONTROL         "Mit Kennwort speichern",101,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,130,52,144,13
+    CONTROL         "Automatische Dateinamenserweiterung",100,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,130,38,144,14        
+    LTEXT           "",1119,0,0,277,38                    
+END
+
+6000 DIALOG DISCARDABLE  0, 0, 212, 25
+STYLE DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "Andale Sans UI"
 BEGIN
     LTEXT           "",1119,0,0,212,8,NOT WS_VISIBLE
     PUSHBUTTON      "Abspielen",106,156,8,50,15
 END
 
-6001 DIALOG  0, 0, 366, 40
-STYLE DS_SETFONT | DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+6001 DIALOG DISCARDABLE  0, 0, 366, 40
+STYLE DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "MS Shell Dlg"
 BEGIN
     LTEXT           "",1119,0,0,364,18,NOT WS_VISIBLE
     PUSHBUTTON      "Abspielen",106,316,18,50,14
 END
 
-7000 DIALOG  0, 0, 196, 33
-STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+7000 DIALOG DISCARDABLE  0, 0, 196, 45
+STYLE DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "Andale Sans UI"
 BEGIN
-    CONTROL         "Selektion",110,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,52,20,143,10
-    LTEXT           "",1119,0,0,195,20
+    CONTROL         "Selektion",110,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,52,
+                    32,143,10
+    CONTROL         "Automatische Dateinamenserweiterung",100,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,52,20,143,10
+    LTEXT           "",1119,0,0,195,20    
 END
 
-7001 DIALOG  0, 0, 278, 52
-STYLE DS_SETFONT | DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+7001 DIALOG DISCARDABLE  0, 0, 278, 65
+STYLE DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "MS Shell Dlg"
 BEGIN
-    CONTROL         "Selektion",110,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,38,144,16
-    LTEXT           "",1119,0,0,277,38
+    CONTROL         "Selektion",110,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    130,51,144,16
+    CONTROL         "Automatische Dateinamenserweiterung",100,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,130,38,144,14
+    LTEXT           "",1119,0,0,277,38    
 END
 
-8000 DIALOG  0, 0, 152, 41
-STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+8000 DIALOG DISCARDABLE  0, 0, 152, 41
+STYLE DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "Andale Sans UI"
 BEGIN
-    CONTROL         "Vorschau",105,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,28,150,10
-    CONTROL         "Als Link einfügen",104,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,16,152,10
+    CONTROL         "Vorschau",105,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,0,
+                    28,150,10
+    CONTROL         "Als Link einfügen",104,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,0,16,152,10    
     LTEXT           "",1119,0,0,149,16
 END
 
-8001 DIALOG  0, 0, 278, 65
-STYLE DS_SETFONT | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+8001 DIALOG DISCARDABLE  0, 0, 278, 65
+STYLE DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "MS Shell Dlg"
 BEGIN
-    CONTROL         "Vorschau",105,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,51,144,16
-    CONTROL         "Als Link einfügen",104,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,38,144,14
+    CONTROL         "Vorschau",105,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,130,
+                    51,144,16
+    CONTROL         "Als Link einfügen",104,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,130,38,144,14    
     LTEXT           "",1119,0,0,277,38
 END
 
-9000 DIALOG  0, 0, 196, 16
-STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+9000 DIALOG DISCARDABLE  0, 0, 196, 29
+STYLE DS_3DLOOK | DS_FIXEDSYS | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "Andale Sans UI"
 BEGIN
+    CONTROL         "Automatische Dateinamenserweiterung",100,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,0,16,196,10
     LTEXT           "",1119,0,0,196,16
 END
 
-9001 DIALOG  0, 0, 278, 38
-STYLE DS_SETFONT | DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
+9001 DIALOG DISCARDABLE  0, 0, 278, 54
+STYLE DS_3DLOOK | DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 FONT 8, "MS Shell Dlg"
 BEGIN
+    CONTROL         "Automatische Dateinamenserweiterung",100,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,130,38,144,14
     LTEXT           "",1119,0,0,277,38
 END
 
@@ -219,7 +257,7 @@ END
 //
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO 
+GUIDELINES DESIGNINFO DISCARDABLE 
 BEGIN
     1000, DIALOG
     BEGIN
