@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 16:24:41 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 14:18:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,13 +191,11 @@ ModalDialog DLG_SVT_EXPLORERFILE
         Size = MAP_APPFONT ( 100, 10 ) ;
         Text [ en-US ] = "Save with password" ;
     };
-    /*
     CheckBox CB_AUTO_EXTENSION
     {
         Size = MAP_APPFONT ( 160 , 10 ) ;
         Text [ en-US ] = "~Automatic file name extension" ;
     };
-    */
     CheckBox CB_OPTIONS
     {
         Size = MAP_APPFONT ( 120 , 10 ) ;
