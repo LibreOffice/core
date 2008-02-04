@@ -4,9 +4,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:21:17 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 14:42:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -681,7 +681,7 @@ static BOOL ImplPatternProcessKeyInput( Edit* pEdit, const KeyEvent& rKEvt,
         }
     }
 
-    if ( (cChar < 32) || (cChar == 127) )
+    if ( rKEvt.GetKeyCode().IsMod2() || (cChar < 32) || (cChar == 127) )
         return FALSE;
 
     Selection aSel = aOldSel;
@@ -992,7 +992,7 @@ PatternField::~PatternField()
 
 long PatternField::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) )
+    if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplPatternProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetEditMask(), GetLiteralMask(),
                                          IsStrictFormat(), GetFormatFlags(),
@@ -1070,7 +1070,7 @@ PatternBox::~PatternBox()
 
 long PatternBox::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) )
+    if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplPatternProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetEditMask(), GetLiteralMask(),
                                          IsStrictFormat(), GetFormatFlags(),
@@ -2157,7 +2157,8 @@ DateField::~DateField()
 long DateField::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && IsStrictFormat() &&
-         ( GetExtDateFormat() != XTDATEF_SYSTEM_LONG ) )
+         ( GetExtDateFormat() != XTDATEF_SYSTEM_LONG ) &&
+         !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetExtDateFormat( TRUE ), ImplGetLocaleDataWrapper() ) )
             return 1;
@@ -2301,7 +2302,8 @@ DateBox::~DateBox()
 long DateBox::PreNotify( NotifyEvent& rNEvt )
 {
     if ( (rNEvt.GetType() == EVENT_KEYINPUT) && IsStrictFormat() &&
-         ( GetExtDateFormat() != XTDATEF_SYSTEM_LONG ) )
+         ( GetExtDateFormat() != XTDATEF_SYSTEM_LONG ) &&
+         !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplDateProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), GetExtDateFormat( TRUE ), ImplGetLocaleDataWrapper() ) )
             return 1;
@@ -3204,7 +3206,7 @@ TimeField::~TimeField()
 
 long TimeField::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) )
+    if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), ImplGetLocaleDataWrapper() ) )
             return 1;
@@ -3387,7 +3389,7 @@ TimeBox::~TimeBox()
 
 long TimeBox::PreNotify( NotifyEvent& rNEvt )
 {
-    if ( (rNEvt.GetType() == EVENT_KEYINPUT) )
+    if ( (rNEvt.GetType() == EVENT_KEYINPUT) && !rNEvt.GetKeyEvent()->GetKeyCode().IsMod2() )
     {
         if ( ImplTimeProcessKeyInput( GetField(), *rNEvt.GetKeyEvent(), IsStrictFormat(), IsDuration(), GetFormat(), ImplGetLocaleDataWrapper() ) )
             return 1;
