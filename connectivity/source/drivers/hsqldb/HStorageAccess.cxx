@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HStorageAccess.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:40:38 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:29:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,7 @@
 #include "diagnose_ex.h"
 #endif
 
+#include <string.h>
 
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::uno;
