@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScannerTestService.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-24 16:06:45 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:50:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 
 #include "ScannerTestService.hxx"
 #include <stdio.h>
+#include <string.h>
 #include <wchar.h>
 #include <rtftok/RTFScanner.hxx>
 #include <rtftok/RTFScannerHandler.hxx>
