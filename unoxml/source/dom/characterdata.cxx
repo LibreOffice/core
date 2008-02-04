@@ -4,9 +4,9 @@
  *
  *  $RCSfile: characterdata.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 10:58:40 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:56:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include <com/sun/star/xml/dom/events/XDocumentEvent.hpp>
 #include "characterdata.hxx"
 #include "../events/mutationevent.hxx"
+#include <string.h>
 
 namespace DOM
 {
