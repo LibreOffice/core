@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:32:10 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:53:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_vcl.hxx"
 
 #include <stdio.h>
+#include <string.h>
 #ifdef LINUX
 #  ifndef __USE_XOPEN
 #    define __USE_XOPEN
