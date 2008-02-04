@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 16:20:49 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 14:41:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -429,7 +429,7 @@ BOOL Edit::IsCharInput( const KeyEvent& rKeyEvent )
 {
     // In the future we must use new Unicode functions for this
     xub_Unicode cCharCode = rKeyEvent.GetCharCode();
-    return ((cCharCode >= 32) && (cCharCode != 127));
+    return ((cCharCode >= 32) && (cCharCode != 127) && !rKeyEvent.GetKeyCode().IsMod2());
 }
 
 // -----------------------------------------------------------------------
