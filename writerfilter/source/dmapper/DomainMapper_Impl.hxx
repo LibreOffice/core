@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 11:38:22 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,8 @@
 #include <GraphicImport.hxx>
 #endif
 #include <map>
+
+#include <string.h>
 
 namespace com{ namespace sun{ namespace star{
         namespace lang{
