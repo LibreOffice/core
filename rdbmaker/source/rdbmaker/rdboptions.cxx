@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rdboptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:10:27 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:45:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/
 #include    <stdio.h>
+#include    <string.h>
 
 #include    "rdboptions.hxx"
 
