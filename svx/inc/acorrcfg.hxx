@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acorrcfg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:15:26 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 15:37:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,7 @@ class SVX_DLLPUBLIC SvxAutoCorrCfg
     sal_Bool    bAutoTextTip;
     sal_Bool    bAutoTextPreview;
     sal_Bool    bAutoFmtByInput;
+    sal_Bool    bSearchInAllCategories;
 
 public:
     void        SetModified()
@@ -132,6 +133,9 @@ public:
 
     sal_Bool IsAutoTextTip() const          { return bAutoTextTip; }
     void SetAutoTextTip(sal_Bool bSet )     { bAutoTextTip = bSet;aSwConfig.SetModified();}
+
+    sal_Bool IsSearchInAllCategories() const        { return bSearchInAllCategories;}
+    void SetSearchInAllCategories(sal_Bool bSet )   { bSearchInAllCategories = bSet; aSwConfig.SetModified(); }
 
     SvxAutoCorrCfg();
     virtual ~SvxAutoCorrCfg();
