@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sunjavaplugin.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-11-13 14:20:50 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:45:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 #if OSL_DEBUG_LEVEL > 0
 #include <stdio.h>
 #endif
+#include <string.h>
 
 #include "boost/scoped_array.hpp"
 #include "osl/diagnose.h"
