@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconflayer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:11:58 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:58:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,8 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
+
+#include <string.h>
 
 using namespace rtl;
 
