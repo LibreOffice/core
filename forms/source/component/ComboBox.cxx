@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 17:06:05 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:52:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,8 @@
 #include <tools/debug.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/sharedunocomponent.hxx>
+
+#include <limits.h>
 
 using namespace dbtools;
 
