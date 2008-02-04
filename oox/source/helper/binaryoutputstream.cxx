@@ -4,9 +4,9 @@
  *
  *  $RCSfile: binaryoutputstream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-17 08:05:59 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:36:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include <osl/diagnose.h>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include "oox/helper/binaryinputstream.hxx"
+#include <string.h>
 
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
