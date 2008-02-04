@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NDatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 09:44:24 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:28:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,7 @@
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 
 #include <vector>
+#include <string.h>
 
 #ifndef _CONNECTIVITY_EVOAB_EVOLUTION_API_HXX_
 #include "EApi.h"
