@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlnode.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 08:04:40 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:31:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,7 @@
 #ifndef TOOLS_DIAGNOSE_EX_H
 #include <tools/diagnose_ex.h>
 #endif
+#include <string.h>
 
 
 using namespace ::com::sun::star::sdbc;
