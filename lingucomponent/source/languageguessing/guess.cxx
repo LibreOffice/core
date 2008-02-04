@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-06-22 08:32:42 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:44:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_lingucomponent.hxx"
 
 #include <iostream>
+#include <string.h>
 
 #include <libtextcat/textcat.h>
 #include <altstrfunc.hxx>
