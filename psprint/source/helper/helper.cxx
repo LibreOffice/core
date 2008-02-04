@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:34:47 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:35:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 #include <cstring>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <limits.h>
 
 #include <psprint/helper.hxx>
 #include <tools/string.hxx>
