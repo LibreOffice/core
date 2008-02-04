@@ -4,9 +4,9 @@
  *
  *  $RCSfile: substitutepathvars.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:12:15 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:42:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,8 @@
 #endif
 
 #include <comphelper/configurationhelper.hxx>
+
+#include <string.h>
 
 //_________________________________________________________________________________________________________________
 //  Defines
