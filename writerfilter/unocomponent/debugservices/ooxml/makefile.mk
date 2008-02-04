@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  last change: $Author: obo $ $Date: 2008-01-10 12:19:36 $
+#  last change: $Author: ihi $ $Date: 2008-02-04 12:55:15 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,11 @@ ENABLE_EXCEPTIONS=TRUE
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 RESSOUREMODELLIB=-lresourcemodel
 .ELIF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+RESOURCEMODELLIB=-lresourcemodel
+.ELSE
 RESOURCEMODELLIB=$(LB)$/iresourcemodel.lib
+.ENDIF
 .ENDIF
 
 SHL1STDLIBS= \
