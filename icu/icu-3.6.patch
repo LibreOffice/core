@@ -1,5 +1,9 @@
 *** misc/icu/source/common/putil.c	Mon Jul 31 20:14:28 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/common/putil.c	Tue Nov 13 13:03:51 2007
+=======
+--- misc/build/icu/source/common/putil.c	Mon Jan 28 21:31:50 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 48,54 ****
   #endif
@@ -19,7 +23,11 @@
   #endif
   
 *** misc/icu/source/common/unicode/pwin32.h	Tue Aug 29 23:34:38 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/common/unicode/pwin32.h	Tue Nov 13 13:03:51 2007
+=======
+--- misc/build/icu/source/common/unicode/pwin32.h	Mon Jan 28 21:31:50 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 266,273 ****
 --- 266,278 ----
@@ -37,7 +45,11 @@
   /*===========================================================================*/
   /* Code alignment and C function inlining                                    */
 *** misc/icu/source/common/unicode/rbbi.h	Fri Aug 11 07:46:40 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/common/unicode/rbbi.h	Tue Nov 13 13:03:51 2007
+=======
+--- misc/build/icu/source/common/unicode/rbbi.h	Mon Jan 28 21:31:50 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 611,622 ****
 --- 611,624 ----
@@ -56,7 +68,11 @@
         * Common initialization function, used by constructors and bufferClone.
         *   (Also used by DictionaryBasedBreakIterator::createBufferClone().)
 *** misc/icu/source/common/unicode/umachine.h	Tue Feb  7 02:54:16 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/common/unicode/umachine.h	Tue Nov 13 13:03:51 2007
+=======
+--- misc/build/icu/source/common/unicode/umachine.h	Mon Jan 28 21:31:50 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 322,328 ****
    */
@@ -75,7 +91,11 @@
   #else
       typedef uint16_t UChar;
 *** misc/icu/source/common/unicode/unistr.h	Tue Aug 29 23:52:50 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/common/unicode/unistr.h	Tue Nov 13 13:03:51 2007
+=======
+--- misc/build/icu/source/common/unicode/unistr.h	Mon Jan 28 21:31:50 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 3280,3286 ****
   //========================================
@@ -179,7 +199,11 @@
   }
   
 *** misc/icu/source/common/unicode/ustring.h	Tue Aug 29 23:52:50 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/common/unicode/ustring.h	Tue Nov 13 13:03:51 2007
+=======
+--- misc/build/icu/source/common/unicode/ustring.h	Mon Jan 28 21:31:50 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 918,924 ****
    * </pre>
@@ -197,8 +221,184 @@
   #   define U_STRING_DECL(var, cs, length) static const wchar_t var[(length)+1]={ L ## cs }
       /**@stable ICU 2.0 */
   #   define U_STRING_INIT(var, cs, length)
+*** misc/icu/source/common/uvectr32.cpp	Wed Aug 27 03:01:30 2003
+--- misc/build/icu/source/common/uvectr32.cpp	Mon Jan 28 21:31:51 2008
+***************
+*** 1,6 ****
+  /*
+  ******************************************************************************
+! * Copyright (C) 1999-2003, International Business Machines Corporation and   *
+  * others. All Rights Reserved.                                               *
+  ******************************************************************************
+  *   Date        Name        Description
+--- 1,6 ----
+  /*
+  ******************************************************************************
+! * Copyright (C) 1999-2008, International Business Machines Corporation and   *
+  * others. All Rights Reserved.                                               *
+  ******************************************************************************
+  *   Date        Name        Description
+***************
+*** 26,31 ****
+--- 26,32 ----
+  UVector32::UVector32(UErrorCode &status) :
+      count(0),
+      capacity(0),
++     maxCapacity(0),
+      elements(NULL)
+  {
+      _init(DEFUALT_CAPACITY, status);
+***************
+*** 34,39 ****
+--- 35,41 ----
+  UVector32::UVector32(int32_t initialCapacity, UErrorCode &status) :
+      count(0),
+      capacity(0),
++     maxCapacity(0),
+      elements(0)
+  {
+      _init(initialCapacity, status);
+***************
+*** 46,51 ****
+--- 48,56 ----
+      if (initialCapacity < 1) {
+          initialCapacity = DEFUALT_CAPACITY;
+      }
++     if (maxCapacity>0 && maxCapacity<initialCapacity) {
++         initialCapacity = maxCapacity;
++     }
+      elements = (int32_t *)uprv_malloc(sizeof(int32_t)*initialCapacity);
+      if (elements == 0) {
+          status = U_MEMORY_ALLOCATION_ERROR;
+***************
+*** 189,209 ****
+  UBool UVector32::expandCapacity(int32_t minimumCapacity, UErrorCode &status) {
+      if (capacity >= minimumCapacity) {
+          return TRUE;
+!     } else {
+!         int32_t newCap = capacity * 2;
+!         if (newCap < minimumCapacity) {
+!             newCap = minimumCapacity;
+!         }
+!         int32_t* newElems = (int32_t *)uprv_malloc(sizeof(int32_t)*newCap);
+!         if (newElems == 0) {
+!             status = U_MEMORY_ALLOCATION_ERROR;
+!             return FALSE;
+!         }
+!         uprv_memcpy(newElems, elements, sizeof(elements[0]) * count);
+!         uprv_free(elements);
+!         elements = newElems;
+!         capacity = newCap;
+!         return TRUE;
+      }
+  }
+  
+--- 194,228 ----
+  UBool UVector32::expandCapacity(int32_t minimumCapacity, UErrorCode &status) {
+      if (capacity >= minimumCapacity) {
+          return TRUE;
+!     }
+!     if (maxCapacity>0 && minimumCapacity>maxCapacity) {
+!         status = U_BUFFER_OVERFLOW_ERROR;
+!         return FALSE;
+!     }
+!     int32_t newCap = capacity * 2;
+!     if (newCap < minimumCapacity) {
+!         newCap = minimumCapacity;
+!     }
+!     if (maxCapacity > 0 && newCap > maxCapacity) {
+!         newCap = maxCapacity;
+!     }
+!     int32_t* newElems = (int32_t *)uprv_malloc(sizeof(int32_t)*newCap);
+!     if (newElems == 0) {
+!         status = U_MEMORY_ALLOCATION_ERROR;
+!         return FALSE;
+!     }
+!     uprv_memcpy(newElems, elements, sizeof(elements[0]) * count);
+!     uprv_free(elements);
+!     elements = newElems;
+!     capacity = newCap;
+!     return TRUE;
+! }
+! 
+! void UVector32::setMaxCapacity(int32_t limit) {
+!     U_ASSERT(limit >= 0);
+!     maxCapacity = limit;
+!     if (maxCapacity < 0) {
+!         maxCapacity = 0;
+      }
+  }
+  
+*** misc/icu/source/common/uvectr32.h	Wed Jan 18 04:52:04 2006
+--- misc/build/icu/source/common/uvectr32.h	Mon Jan 28 21:31:51 2008
+***************
+*** 1,6 ****
+  /*
+  **********************************************************************
+! *   Copyright (C) 1999-2006, International Business Machines
+  *   Corporation and others.  All Rights Reserved.
+  **********************************************************************
+  */
+--- 1,6 ----
+  /*
+  **********************************************************************
+! *   Copyright (C) 1999-2008, International Business Machines
+  *   Corporation and others.  All Rights Reserved.
+  **********************************************************************
+  */
+***************
+*** 61,66 ****
+--- 61,68 ----
+      int32_t   count;
+  
+      int32_t   capacity;
++     
++     int32_t   maxCapacity;   // Limit beyond which capacity is not permitted to grow.
+  
+      int32_t*  elements;
+  
+***************
+*** 162,167 ****
+--- 164,177 ----
+      int32_t *getBuffer() const;
+  
+      /**
++      * Set the maximum allowed buffer capacity for this vector/stack.
++      * Default with no limit set is unlimited, go until malloc() fails.
++      * A Limit of zero means unlimited capacity.
++      * Units are vector elements (32 bits each), not bytes.
++      */
++     void setMaxCapacity(int32_t limit);
++ 
++     /**
+       * ICU "poor man's RTTI", returns a UClassID for this class.
+       */
+      static UClassID U_EXPORT2 getStaticClassID();
+***************
+*** 221,227 ****
+  }
+  
+  inline int32_t *UVector32::reserveBlock(int32_t size, UErrorCode &status) {
+!     ensureCapacity(count+size, status);
+      int32_t  *rp = elements+count;
+      count += size;
+      return rp;
+--- 231,239 ----
+  }
+  
+  inline int32_t *UVector32::reserveBlock(int32_t size, UErrorCode &status) {
+!     if (ensureCapacity(count+size, status) == FALSE) {
+!         return NULL;
+!     }
+      int32_t  *rp = elements+count;
+      count += size;
+      return rp;
 *** misc/icu/source/config/mh-darwin	Wed Feb  1 08:52:42 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/config/mh-darwin	Tue Nov 13 13:03:51 2007
+=======
+--- misc/build/icu/source/config/mh-darwin	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 25,31 ****
   SHLIB.cc=	$(CXX) -dynamiclib -dynamic $(CXXFLAGS) $(LDFLAGS)
@@ -217,7 +417,11 @@
   ## Compiler switch to embed a runtime search path
   LD_RPATH=
 *** misc/icu/source/config/mh-irix	Thu Mar 23 19:51:52 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/config/mh-irix	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/config/mh-irix	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 23,28 ****
 --- 23,31 ----
@@ -231,7 +435,11 @@
   THREADSCPPFLAGS = -D_REENTRANT -D_PTHREADS
   LIBCPPFLAGS =
 *** misc/icu/source/config/mh-linux	Thu Mar 23 19:51:52 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/config/mh-linux	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/config/mh-linux	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 20,25 ****
 --- 20,33 ----
@@ -250,7 +458,11 @@
   LDFLAGSICUDT=-nodefaultlibs -nostdlib
   
 *** misc/icu/source/config/mh-mingw	Tue Aug 15 10:24:14 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/config/mh-mingw	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/config/mh-mingw	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 54,59 ****
 --- 54,62 ----
@@ -284,9 +496,13 @@
   CURR_SRCCODE_FULL_DIR=$(subst /,\\\\,$(shell pwd -W))#M#
   
 *** misc/icu/source/config/mh-solaris	Fri Feb 24 20:31:14 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/config/mh-solaris	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/config/mh-solaris	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
-*** 18,33 ****
+*** 18,34 ****
   
   ## Commands to link
   ## For Sun Workshop, use CC to link to bring in C++ runtime
@@ -303,7 +519,8 @@
   
   #LIBRARY_PATH_PREFIX=/usr/lib/lwp:
   
---- 18,41 ----
+  ## Compiler switch to embed a library name
+--- 18,42 ----
   
   ## Commands to link
   ## For Sun Workshop, use CC to link to bring in C++ runtime
@@ -318,18 +535,23 @@
   ## Compiler switch to embed a runtime search path
   LD_RPATH=	-R
   LD_RPATH_PRE=	
-+ 
+  
 + ## Force RPATH=$ORIGIN to locate own dependencies w/o need for LD_LIBRARY_PATH
 + ENABLE_RPATH=YES
 + RPATHLDFLAGS=${LD_RPATH}'$$ORIGIN'
 + 
 + #SH#  ENABLE_RPATH=YES
 + #SH#  RPATHLDFLAGS="${LD_RPATH}'$$ORIGIN'"
-  
++ 
   #LIBRARY_PATH_PREFIX=/usr/lib/lwp:
   
+  ## Compiler switch to embed a library name
 *** misc/icu/source/data/Makefile.in	Sat Aug 12 00:22:24 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/data/Makefile.in	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/data/Makefile.in	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 344,350 ****
   ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
@@ -347,8 +569,190 @@
   else
   	@echo "$@" > $@
   endif
+*** misc/icu/source/i18n/regexcmp.cpp	Thu Feb  2 05:37:14 2006
+--- misc/build/icu/source/i18n/regexcmp.cpp	Mon Jan 28 21:31:51 2008
+***************
+*** 2,8 ****
+  //
+  //  file:  regexcmp.cpp
+  //
+! //  Copyright (C) 2002-2006 International Business Machines Corporation and others.
+  //  All Rights Reserved.
+  //
+  //  This file contains the ICU regular expression compiler, which is responsible
+--- 2,8 ----
+  //
+  //  file:  regexcmp.cpp
+  //
+! //  Copyright (C) 2002-2008 International Business Machines Corporation and others.
+  //  All Rights Reserved.
+  //
+  //  This file contains the ICU regular expression compiler, which is responsible
+***************
+*** 1187,1200 ****
+              // Because capture groups can be forward-referenced by back-references,
+              //  we fill the operand with the capture group number.  At the end
+              //  of compilation, it will be changed to the variable's location.
+!             U_ASSERT(groupNum > 0);
+!             int32_t  op;
+!             if (fModeFlags & UREGEX_CASE_INSENSITIVE) {
+!                 op = URX_BUILD(URX_BACKREF_I, groupNum);
+              } else {
+!                 op = URX_BUILD(URX_BACKREF, groupNum);
+              }
+-             fRXPat->fCompiledPat->addElement(op, *fStatus);
+          }
+          break;
+  
+--- 1187,1203 ----
+              // Because capture groups can be forward-referenced by back-references,
+              //  we fill the operand with the capture group number.  At the end
+              //  of compilation, it will be changed to the variable's location.
+!             if (groupNum < 1) { 
+!                 error(U_REGEX_INVALID_BACK_REF);
+              } else {
+!                 int32_t  op;
+!                 if (fModeFlags & UREGEX_CASE_INSENSITIVE) {
+!                     op = URX_BUILD(URX_BACKREF_I, groupNum);
+!                 } else {
+!                     op = URX_BUILD(URX_BACKREF, groupNum);
+!                 }
+!                 fRXPat->fCompiledPat->addElement(op, *fStatus);
+              }
+          }
+          break;
+  
+*** misc/icu/source/i18n/rematch.cpp	Thu Aug 25 20:02:20 2005
+--- misc/build/icu/source/i18n/rematch.cpp	Mon Jan 28 21:31:51 2008
+***************
+*** 6,12 ****
+  //
+  /*
+  **************************************************************************
+! *   Copyright (C) 2002-2005 International Business Machines Corporation  *
+  *   and others. All rights reserved.                                     *
+  **************************************************************************
+  */
+--- 6,12 ----
+  //
+  /*
+  **************************************************************************
+! *   Copyright (C) 2002-2008 International Business Machines Corporation  *
+  *   and others. All rights reserved.                                     *
+  **************************************************************************
+  */
+***************
+*** 30,35 ****
+--- 30,44 ----
+  
+  U_NAMESPACE_BEGIN
+  
++ // Limit the size of the back track stack, to avoid system failures caused
++ //   by heap exhaustion.  Units are in 32 bit words, not bytes.
++ // This value puts ICU's limits higher than most other regexp implementations,
++ //  which use recursion rather than the heap, and take more storage per
++ //  backtrack point.
++ // This constant is _temporary_.  Proper API to control the value will added.
++ //
++ static const int32_t BACKTRACK_STACK_CAPACITY = 8000000;
++ 
+  //-----------------------------------------------------------------------------
+  //
+  //   Constructor and Destructor
+***************
+*** 53,60 ****
+      }
+      if (fStack == NULL || fData == NULL) {
+          fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
+      }
+-         
+      reset(*RegexStaticSets::gStaticSets->fEmptyString);
+  }
+  
+--- 62,70 ----
+      }
+      if (fStack == NULL || fData == NULL) {
+          fDeferredStatus = U_MEMORY_ALLOCATION_ERROR;
++     } else {
++         fStack->setMaxCapacity(BACKTRACK_STACK_CAPACITY);
+      }
+      reset(*RegexStaticSets::gStaticSets->fEmptyString);
+  }
+  
+***************
+*** 78,83 ****
+--- 88,95 ----
+      }
+      if (fStack == NULL || fData == NULL) {
+          status = U_MEMORY_ALLOCATION_ERROR;
++     } else {
++         fStack->setMaxCapacity(BACKTRACK_STACK_CAPACITY);
+      }
+      reset(input);
+  }
+***************
+*** 102,107 ****
+--- 114,121 ----
+      }
+      if (fStack == NULL || fData == NULL) {
+          status = U_MEMORY_ALLOCATION_ERROR;
++     } else {
++         fStack->setMaxCapacity(BACKTRACK_STACK_CAPACITY);
+      }
+      reset(*RegexStaticSets::gStaticSets->fEmptyString);
+  }
+***************
+*** 1015,1020 ****
+--- 1029,1042 ----
+  inline REStackFrame *RegexMatcher::StateSave(REStackFrame *fp, int32_t savePatIdx, int32_t frameSize, UErrorCode &status) {
+      // push storage for a new frame. 
+      int32_t *newFP = fStack->reserveBlock(frameSize, status);
++     if (newFP == NULL) {
++         // Heap allocation error on attempted stack expansion.
++         // We need to return a writable stack frame, so just return the
++         //    previous frame.  The match operation will stop quickly
++         //    becuase of the error status, after which the frame will never
++         //    be looked at again.
++         return fp;
++     }
+      fp = (REStackFrame *)(newFP - frameSize);  // in case of realloc of stack.
+      
+      // New stack frame = copy of old top frame.
+***************
+*** 1030,1037 ****
+      fp->fPatIdx = savePatIdx;
+      return (REStackFrame *)newFP;
+  }
+!     
+!             
+  //--------------------------------------------------------------------------------
+  //
+  //   MatchAt      This is the actual matching engine.
+--- 1052,1059 ----
+      fp->fPatIdx = savePatIdx;
+      return (REStackFrame *)newFP;
+  }
+! 
+! 
+  //--------------------------------------------------------------------------------
+  //
+  //   MatchAt      This is the actual matching engine.
+***************
+*** 2262,2267 ****
+--- 2284,2290 ----
+          }
+  
+          if (U_FAILURE(status)) {
++             isMatch = FALSE;
+              break;
+          }
+      }
 *** misc/icu/source/i18n/windtfmt.cpp	Tue Aug 15 08:48:02 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/i18n/windtfmt.cpp	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/i18n/windtfmt.cpp	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 232,249 ****
       UChar stackBuffer[STACK_BUFFER_SIZE];
@@ -428,7 +832,11 @@
       if (buffer != stackBuffer) {
           DELETE_ARRAY(buffer);
 *** misc/icu/source/i18n/winnmfmt.cpp	Thu Aug 17 07:21:06 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/i18n/winnmfmt.cpp	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/i18n/winnmfmt.cpp	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 86,95 ****
       GetLocaleInfoA(lcid, LOCALE_SGROUPING, buf, 10);
@@ -566,7 +974,11 @@
       if (buffer != stackBuffer) {
           DELETE_ARRAY(buffer);
 *** misc/icu/source/layout/CoverageTables.cpp	Sat May  8 01:28:42 2004
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/layout/CoverageTables.cpp	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/layout/CoverageTables.cpp	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 44,49 ****
 --- 44,53 ----
@@ -581,7 +993,11 @@
       le_uint16 probe = power;
       le_uint16 index = 0;
 *** misc/icu/source/layout/DeviceTables.cpp	Fri Jan 14 18:25:12 2005
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/layout/DeviceTables.cpp	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/layout/DeviceTables.cpp	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 22,28 ****
       le_uint16 format = SWAPW(deltaFormat) - 1;
@@ -601,7 +1017,11 @@
           le_uint16 bits = fieldBits[format];
           le_uint16 count = 16 / bits;
 *** misc/icu/source/layout/GXLayoutEngine.cpp	Fri Sep  2 20:22:10 2005
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/layout/GXLayoutEngine.cpp	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/layout/GXLayoutEngine.cpp	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 39,45 ****
           return 0;
@@ -620,7 +1040,11 @@
       if (LE_FAILURE(success)) {
           return 0;
 *** misc/icu/source/layout/IndicClassTables.cpp	Wed Aug 23 02:12:40 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/layout/IndicClassTables.cpp	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/layout/IndicClassTables.cpp	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 94,100 ****
       _dr, _db, _db, _db, _db, _xx, _xx, _l1, _dl, _xx, _xx, _s1, _s2, _vr, _xx, _xx, // 09C0 - 09CF
@@ -754,7 +1178,11 @@
   //
   // IndicClassTable addresses
 *** misc/icu/source/layout/IndicReordering.cpp	Tue Apr 25 21:08:12 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/layout/IndicReordering.cpp	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/layout/IndicReordering.cpp	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 50,55 ****
 --- 50,63 ----
@@ -836,13 +1264,11 @@
       {-1, -1, -1, -1, -1, -1,  3,  2, -1, -1, -1, -1, -1, -1, -1}, //  7 - consonant virama ZWJ, consonant ZWJ virama
       {-1,  6,  1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,  4, -1}, //  8 - independent vowels that can take a virama
 ***************
-*** 627,632 ****
---- 649,668 ----
-              // write base consonant
-              for (i = baseConsonant; i < bcSpan; i += 1) {
+*** 629,634 ****
+--- 651,670 ----
                   output.writeChar(chars[i], i, tagArray4);
-+             }
-+ 
+              }
+  
 +             /* for the special conjuction of Cons+0x0d4d+0x0d31 or Cons+0x0d4d+0x0d30 of Malayalam */
 +             if ((baseConsonant - 2 >= 0) &&
 +                 (chars[baseConsonant - 1] == 0x0d4d) &&
@@ -855,11 +1281,17 @@
 + 
 + 		if (mpreFixups)
 + 			mpreFixups->reduce();
-              }
-  
++             }
++ 
               if ((classTable->scriptFlags & SF_MATRAS_AFTER_BASE) != 0) {
+                  output.writeMbelow();
+                  output.writeSMbelow(); // FIXME: there are no SMs in these scripts...
 *** misc/icu/source/layout/LESwaps.h	Thu Jun 23 00:39:36 2005
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/layout/LESwaps.h	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/layout/LESwaps.h	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 2,7 ****
 --- 2,8 ----
@@ -907,12 +1339,11 @@
       #if U_IS_BIG_ENDIAN
           #define SWAPW(value) (value)
 ***************
-*** 48,53 ****
---- 58,82 ----
-  #else
+*** 49,54 ****
+--- 59,83 ----
       #define SWAPL(value) (LESwaps::isBigEndian() ? (value) : LESwaps::swapLong(value))
   #endif
-+ 
+  
 + #else // ALLOW_UNALIGNED_HACK
 + 
 + #define SWAPW(rValue) loadBigEndianWord(reinterpret_cast<const le_uint16&>(rValue))
@@ -931,11 +1362,16 @@
 + }
 + 
 + #endif // ALLOW_UNALIGNED_HACK
-  
++ 
   /**
    * This class is used to access data which stored in big endian order
+   * regardless of the conventions of the platform. It has been designed
 *** misc/icu/source/layout/MPreFixups.cpp	Sat May  8 01:28:44 2004
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/layout/MPreFixups.cpp	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/layout/MPreFixups.cpp	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 40,45 ****
 --- 40,51 ----
@@ -952,7 +1388,11 @@
   {
       for (le_int32 fixup = 0; fixup < fFixupCount; fixup += 1) {
 *** misc/icu/source/layout/MPreFixups.h	Mon Apr 12 20:51:32 2004
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/layout/MPreFixups.h	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/layout/MPreFixups.h	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 31,36 ****
 --- 31,38 ----
@@ -965,7 +1405,11 @@
       FixupData *fFixupData;
       le_int32   fFixupCount;
 *** misc/icu/source/stubdata/Makefile.in	Fri Dec  2 11:21:34 2005
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/stubdata/Makefile.in	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/stubdata/Makefile.in	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 25,30 ****
 --- 25,36 ----
@@ -982,7 +1426,11 @@
   ifneq ($(ENABLE_STATIC),)
   TARGET = $(STUBDATA_LIBDIR)$(LIBSICU)$(TARGET_STUBNAME)$(ICULIBSUFFIX).$(A)
 *** misc/icu/source/test/intltest/loctest.cpp	Thu Jul  6 03:50:04 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/test/intltest/loctest.cpp	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/test/intltest/loctest.cpp	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -993,8 +1441,120 @@
   #include "loctest.h"
   #include "unicode/decimfmt.h"
   #include "unicode/ucurr.h"
+*** misc/icu/source/test/intltest/regextst.cpp	Tue Jul  5 20:39:00 2005
+--- misc/build/icu/source/test/intltest/regextst.cpp	Mon Jan 28 23:18:47 2008
+***************
+*** 1,6 ****
+  /********************************************************************
+   * COPYRIGHT:
+!  * Copyright (c) 2002-2005, International Business Machines Corporation and
+   * others. All Rights Reserved.
+   ********************************************************************/
+  
+--- 1,6 ----
+  /********************************************************************
+   * COPYRIGHT:
+!  * Copyright (c) 2002-2008, International Business Machines Corporation and
+   * others. All Rights Reserved.
+   ********************************************************************/
+  
+***************
+*** 66,71 ****
+--- 66,75 ----
+          case 6: name = "PerlTests";
+              if (exec) PerlTests();
+              break;
++         case 7: name = "Bug 6149";
++             if (exec) Bug6149();
++             break;
++             
+  
+  
+          default: name = "";
+***************
+*** 1639,1644 ****
+--- 1643,1661 ----
+  
+  }
+  
++     
++     // Invalid Back Reference \0
++     //    For ICU 3.8 and earlier
++     //    For ICU versions newer than 3.8, \0 introduces an octal escape.
++     //
++ #ifndef _MSC_VER
++ // erAck: 2008-01-28T23:16+0100 MSVC doesn't digest the escaped backslash and
++ // mumbles something about  
++ // error C2501: 'regex_err' : missing storage-class or type specifiers
++ // error C2078: too many initializers
++ // We're not interested in fixing that deficiency just for a testcase.
++     REGEX_ERR("(ab)\\0", 1, 6, U_REGEX_INVALID_BACK_REF);
++ #endif
+  
+  //-------------------------------------------------------------------------------
+  //
+***************
+*** 2119,2124 ****
+--- 2136,2161 ----
+  }
+  
+  
++ //--------------------------------------------------------------
++ //
++ //  Bug6149   Verify limits to heap expansion for backtrack stack.
++ //             Use this pattern,
++ //                 "(a?){1,}"
++ //             The zero-length match will repeat forever.
++ //                (That this goes into a loop is another bug)
++ //
++ //---------------------------------------------------------------
++ void RegexTest::Bug6149() {
++     UnicodeString pattern("(a?){1,}");
++     UnicodeString s("xyz");
++     uint32_t flags = 0;
++     UErrorCode status = U_ZERO_ERROR;
++     
++     RegexMatcher  matcher(pattern, s, flags, status);
++     UBool result = false;
++     REGEX_ASSERT_FAIL(result=matcher.matches(status), U_BUFFER_OVERFLOW_ERROR);
++     REGEX_ASSERT(result == FALSE);
++  }
+  
+  #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
+  
+*** misc/icu/source/test/intltest/regextst.h	Wed Dec  3 07:58:28 2003
+--- misc/build/icu/source/test/intltest/regextst.h	Mon Jan 28 21:31:51 2008
+***************
+*** 1,6 ****
+  /********************************************************************
+   * COPYRIGHT: 
+!  * Copyright (c) 2002-2003, International Business Machines Corporation and
+   * others. All Rights Reserved.
+   ********************************************************************/
+  
+--- 1,6 ----
+  /********************************************************************
+   * COPYRIGHT: 
+!  * Copyright (c) 2002-2008, International Business Machines Corporation and
+   * others. All Rights Reserved.
+   ********************************************************************/
+  
+***************
+*** 30,35 ****
+--- 30,36 ----
+      virtual void Extended();
+      virtual void Errors();
+      virtual void PerlTests();
++     virtual void Bug6149();
+  
+      // The following functions are internal to the regexp tests.
+      virtual UBool doRegexLMTest(const char *pat, const char *text, UBool looking, UBool match, int line);
 *** misc/icu/source/test/intltest/tsputil.cpp	Wed Jul 19 00:18:10 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/test/intltest/tsputil.cpp	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/test/intltest/tsputil.cpp	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -1006,7 +1566,11 @@
   
   #include <float.h> // DBL_MAX, DBL_MIN
 *** misc/icu/source/test/intltest/uobjtest.cpp	Thu Mar 23 01:54:12 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/test/intltest/uobjtest.cpp	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/test/intltest/uobjtest.cpp	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -1018,7 +1582,11 @@
   #include "cmemory.h" // UAlignedMemory
   #include <string.h>
 *** misc/icu/source/test/intltest/ustrtest.cpp	Tue Dec 28 22:13:54 2004
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/test/intltest/ustrtest.cpp	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/test/intltest/ustrtest.cpp	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 4,9 ****
 --- 4,10 ----
@@ -1030,7 +1598,11 @@
   #include "unicode/unistr.h"
   #include "unicode/uchar.h"
 *** misc/icu/source/tools/icupkg/icupkg.cpp	Fri Jul 21 23:17:52 2006
+<<<<<<< icu-3.6.patch
 --- misc/build/icu/source/tools/icupkg/icupkg.cpp	Tue Nov 13 13:03:52 2007
+=======
+--- misc/build/icu/source/tools/icupkg/icupkg.cpp	Mon Jan 28 21:31:51 2008
+>>>>>>> 1.10.12.2
 ***************
 *** 332,337 ****
 --- 332,341 ----
