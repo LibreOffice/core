@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regoptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:29:00 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 15:46:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,6 +203,8 @@ namespace svt
         RegOptions::DialogPermission    getDialogPermission( ) const;
         void                            markSessionDone( );
         void                            activateReminder( sal_Int32 _nDaysFromNow );
+        void                            removeReminder();
+        bool                            hasReminderDateCome() const;
     };
 
     //--------------------------------------------------------------------
@@ -375,6 +377,35 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
+    void RegOptionsImpl::removeReminder()
+    {
+        m_aRegistrationNode.setNodeValue(
+            lcl_getReminderDateName(),
+            makeAny( ::rtl::OUString() )
+        );
+    }
+
+    //--------------------------------------------------------------------
+    bool RegOptionsImpl::hasReminderDateCome() const
+    {
+        bool bRet = false;
+        sal_Int32 nDate = 0;
+        ::rtl::OUString sDate;
+        m_aRegistrationNode.getNodeValue( lcl_getReminderDateName() ) >>= sDate;
+        if ( sDate.getLength() )
+        {
+            nDate = lcl_convertString2Date( sDate );
+            if ( nDate > 0 )
+            {
+                Date aReminderDate;
+                aReminderDate.SetDate( nDate );
+                bRet = aReminderDate <= Date();
+            }
+        }
+        return bRet;
+    }
+
+    //--------------------------------------------------------------------
     void RegOptionsImpl::markSessionDone( )
     {
         OSL_ENSURE( !s_bThisSessionDone, "RegOptionsImpl::markSessionDone: already marked!" );
@@ -478,6 +509,20 @@ namespace svt
             bKnowMenuPermission = sal_True;
         }
         return bAllowMenu;
+    }
+
+    //--------------------------------------------------------------------
+    void RegOptions::removeReminder()
+    {
+        const_cast< RegOptions* >( this )->ensureImpl( );
+        m_pImpl->removeReminder();
+    }
+
+    //--------------------------------------------------------------------
+    bool RegOptions::hasReminderDateCome() const
+    {
+        const_cast< RegOptions* >( this )->ensureImpl( );
+        return m_pImpl->hasReminderDateCome();
     }
 
 //........................................................................
