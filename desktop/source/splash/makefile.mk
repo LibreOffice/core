@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2007-06-11 14:03:24 $
+#   last change: $Author: ihi $ $Date: 2008-02-04 15:48:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,7 @@ SHL1OBJS=   $(SLOFILES) \
             $(SLO)$/pages.obj \
             $(SLO)$/wizard.obj \
             $(SLO)$/migration.obj \
-            $(SLO)$/cfgfilter.obj 
+            $(SLO)$/cfgfilter.obj
 
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
@@ -76,7 +76,8 @@ SHL1STDLIBS= \
     $(VOSLIB)			\
     $(CPPUHELPERLIB)	\
     $(CPPULIB)			\
-    $(SALLIB)
+    $(SALLIB)           \
+    $(SFXLIB)
 
 # --- Targets ------------------------------------------------------
 
