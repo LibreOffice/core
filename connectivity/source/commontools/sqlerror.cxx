@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlerror.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 14:59:40 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:28:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@
 #include <comphelper/officeresourcebundle.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <rtl/ustrbuf.hxx>
+
+#include <string.h>
 
 //........................................................................
 namespace connectivity
