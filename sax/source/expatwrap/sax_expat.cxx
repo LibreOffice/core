@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sax_expat.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:07:26 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:40:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,6 +33,7 @@
  *
  ************************************************************************/
 #include <stdlib.h>
+#include <string.h>
 #include <sal/alloca.h>
 #include <vector>
 
