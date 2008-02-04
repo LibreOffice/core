@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 11:17:37 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:56:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@
 #include "../events/mutationevent.hxx"
 #include "../events/uievent.hxx"
 #include "../events/mouseevent.hxx"
+
+#include <string.h>
 
 namespace DOM
 {
