@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreparedStatement.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 09:07:57 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:30:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,8 @@
 #include "connectivity/dbexception.hxx"
 #endif
 #include "resource/jdbc_log.hrc"
+
+#include <string.h>
 
 using namespace connectivity;
 using namespace ::com::sun::star::uno;
