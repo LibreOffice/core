@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpCompiler.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 12:59:14 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "HelpCompiler.hxx"
 #include <limits.h>
 #include <stdlib.h>
+#include <string.h>
 #include <libxslt/xslt.h>
 #include <libxslt/xsltInternals.h>
 #include <libxslt/transform.h>
