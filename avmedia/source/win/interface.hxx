@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interface.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-15 13:29:33 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 12:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,10 @@ extern "C" const CLSID CLSID_MediaDet;
 extern "C" const IID IID_IMediaDet;
 struct ISampleGrabber;
 
-struct __declspec(uuid("65BD0710-24D2-4ff7-9324-ED2E5D3ABAFA")) __declspec(novtable)
+struct
+#ifndef __MINGW32__
+__declspec(uuid("65BD0710-24D2-4ff7-9324-ED2E5D3ABAFA")) __declspec(novtable)
+#endif
 IMediaDet : public IUnknown
 {
 public:
@@ -83,7 +86,10 @@ public:
 };
 
 extern "C" const IID IID_ISampleGrabberCB;
-struct __declspec(uuid("0579154A-2B53-4994-B0D0-E773148EFF85")) __declspec(novtable)
+struct
+#ifndef __MINGW32__
+__declspec(uuid("0579154A-2B53-4994-B0D0-E773148EFF85")) __declspec(novtable)
+#endif
 ISampleGrabberCB : public IUnknown
 {
 public:
@@ -97,7 +103,10 @@ public:
 };
 
 extern "C" const IID IID_ISampleGrabber;
-struct __declspec(uuid("6B652FFF-11FE-4fce-92AD-0266B5D7C78F")) __declspec(novtable)
+struct
+#ifndef __MINGW32__
+__declspec(uuid("6B652FFF-11FE-4fce-92AD-0266B5D7C78F")) __declspec(novtable)
+#endif
 ISampleGrabber : public IUnknown
 {
 public:
