@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsecparser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:41:05 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:43:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 #include <tools/debug.hxx>
 #endif
 #include "cppuhelper/exc_hlp.hxx"
+
+#include <string.h>
 
 namespace cssu = com::sun::star::uno;
 namespace cssxs = com::sun::star::xml::sax;
