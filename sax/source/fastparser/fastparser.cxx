@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fastparser.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 12:52:30 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@
 #else
 #include "expat/xmlparse.h"
 #endif
+#include <string.h>
 
 using ::rtl::OUString;
 using ::rtl::OString;
