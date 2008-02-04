@@ -4,9 +4,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-12-06 17:44:50 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:46:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@
 #pragma warning(pop)
 #endif
 #endif
+#include <string.h>
 
 #include "sunjre.hxx"
 #include "vendorlist.hxx"
