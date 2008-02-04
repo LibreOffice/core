@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gloshdl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:01:20 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 15:35:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,8 +65,7 @@ class SW_DLLPUBLIC SwGlossaryHdl
 
     SW_DLLPRIVATE BOOL  Expand( const String& rShortName,
                     SwGlossaries* pGlossaries,
-                    SwTextBlocks *pGlossary,
-                    BOOL bApi = FALSE );
+                    SwTextBlocks *pGlossary );
 
 public:
     BOOL    ConvertToNew(SwTextBlocks& rOld);
@@ -98,7 +97,7 @@ public:
     BOOL    DelGlossary(const String&);
     BOOL    CopyToClipboard(SwWrtShell& rSh, const String& rShortName);
 
-    BOOL    ExpandGlossary(BOOL bUseStandard = TRUE, BOOL bApi = FALSE);
+    BOOL    ExpandGlossary();
     BOOL    InsertGlossary(const String &rName);
 
     void    SetMacros(const String& rName,
