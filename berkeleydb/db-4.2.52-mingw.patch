@@ -1,5 +1,5 @@
 *** misc/db-4.2.52.NC/dist/configure	2003-12-04 06:10:02.000000000 +0900
---- misc/build/db-4.2.52.NC/dist/configure	Mon Oct  8 21:11:47 2007
+--- misc/build/db-4.2.52.NC/dist/configure	Thu Dec 20 23:08:25 2007
 ***************
 *** 8301,8307 ****
         export_symbols_cmds='$NM $libobjs $convenience | $global_symbol_pipe | $SED -e '\''/^[BCDGS] /s/.* \([^ ]*\)/\1 DATA/'\'' | $SED -e '\''/^[AITW] /s/.* //'\'' | sort | uniq > $export_symbols'
@@ -55,15 +55,15 @@
   
          if test "$pre_test_object_deps_done" = no; then
   	 if test -z "$predep_objects_CXX"; then
-! 	   predep_objects_CXX=`cygpath "$p"`
+! 	   predep_objects_CXX=`cygpath -m "$p"`
   	 else
-! 	   predep_objects_CXX="$predep_objects_CXX "`cygpath "$p"`
+! 	   predep_objects_CXX="$predep_objects_CXX "`cygpath -m "$p"`
   	 fi
          else
   	 if test -z "$postdep_objects_CXX"; then
-! 	   postdep_objects_CXX=`cygpath "$p"`
+! 	   postdep_objects_CXX=`cygpath -m "$p"`
   	 else
-! 	   postdep_objects_CXX="$postdep_objects_CXX "`cygpath "$p"`
+! 	   postdep_objects_CXX="$postdep_objects_CXX "`cygpath -m "$p"`
   	 fi
          fi
          ;;
