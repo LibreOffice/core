@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formula.cpp,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:52:46 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:59:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include "nodes.h"
 #include "mapping.h"
 #include "hwpeq.h"
-#include <iostream.h>
+#include <iostream>
 
 extern LinkedList<Node> nodelist;
 
