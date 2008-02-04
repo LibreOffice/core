@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Reader.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:48:02 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:30:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@
 #ifndef _INC_MEMORY
 //#include <memory.h>
 #endif
+#include <string.h>
 using namespace connectivity;
 //**************************************************************
 //************ Class: java.io.Reader

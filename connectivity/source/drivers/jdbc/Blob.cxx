@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Blob.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:44:18 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:29:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+
+#include <string.h>
 
 using namespace connectivity;
 //**************************************************************
