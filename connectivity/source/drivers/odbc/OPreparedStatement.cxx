@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OPreparedStatement.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-30 07:58:30 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:31:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_connectivity.hxx"
 
 #include <stdio.h>
+#include <string.h>
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
