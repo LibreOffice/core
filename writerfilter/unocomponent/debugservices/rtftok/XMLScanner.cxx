@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLScanner.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2008-01-24 16:06:59 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:50:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@
 
 #include "XMLScanner.hxx"
 #include <stdio.h>
+#include <string.h>
 #include <wchar.h>
 #include <rtftok/RTFScanner.hxx>
 #include <rtftok/RTFScannerHandler.hxx>
