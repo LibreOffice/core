@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:09:13 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 14:17:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -953,7 +953,7 @@ void SvtFileDialog::Init_Impl
             _pImp->_pLbImageTemplates->SetHelpId( HID_FILESAVE_TEMPLATE );
 
         if ( _pImp->_pCbPassword ) _pImp->_pCbPassword->SetHelpId( HID_FILESAVE_SAVEWITHPASSWORD );
-        //if ( _pImp->_pCbAutoExtension ) _pImp->_pCbAutoExtension->SetHelpId( HID_FILESAVE_AUTOEXTENSION );
+        if ( _pImp->_pCbAutoExtension ) _pImp->_pCbAutoExtension->SetHelpId( HID_FILESAVE_AUTOEXTENSION );
         if ( _pImp->_pCbOptions ) _pImp->_pCbOptions->SetHelpId( HID_FILESAVE_CUSTOMIZEFILTER );
         if ( _pCbSelection ) _pCbSelection->SetHelpId( HID_FILESAVE_SELECTION );
     }
@@ -1297,8 +1297,8 @@ IMPL_STATIC_LINK( SvtFileDialog, OpenHdl_Impl, void*, pVoid )
      }
 
     if  (   !bIsFolder                                      // no existent folder
-        //&&    pThis->_pImp->_pCbAutoExtension                 // auto extension is enabled in general
-        //&&    pThis->_pImp->_pCbAutoExtension->IsChecked()    // auto extension is really to be used
+        &&  pThis->_pImp->_pCbAutoExtension                 // auto extension is enabled in general
+        &&  pThis->_pImp->_pCbAutoExtension->IsChecked()    // auto extension is really to be used
         &&  pThis->GetDefaultExt().Len()                    // there is a default extension
         &&  pThis->GetDefaultExt() != '*'                   // the default extension is not "all"
         && !(   FILEDLG_MODE_SAVE == pThis->_pImp->_eMode       // we're saving a file
@@ -1818,14 +1818,13 @@ IMPL_LINK( SvtFileDialog, OpenDoneHdl_Impl, SvtFileView*, pView )
 
 IMPL_LINK( SvtFileDialog, AutoExtensionHdl_Impl, CheckBox*, EMPTYARG )
 {
-/*
     if ( _pFileNotifier )
         _pFileNotifier->notify( CTRL_STATE_CHANGED,
                                 CHECKBOX_AUTOEXTENSION );
 
     // update the extension of the current file if necessary
     lcl_autoUpdateFileExtension( this, _pImp->GetCurFilter()->GetExtension() );
-*/
+
     return 0;
 }
 
@@ -2694,7 +2693,7 @@ void SvtFileDialog::implArrangeControls()
         _pImp->_pFtTemplates, _pImp->_pLbTemplates,
         _pImp->_pFtImageTemplates, _pImp->_pLbImageTemplates,
         _pImp->_pFtFileType, _pImp->GetFilterListControl(),                 // edit fields/list boxes
-        _pImp->_pCbPassword, /*_pImp->_pCbAutoExtension,*/ _pImp->_pCbOptions,  // checkboxes
+        _pImp->_pCbPassword, _pImp->_pCbAutoExtension, _pImp->_pCbOptions,  // checkboxes
         _pCbReadOnly, _pCbLinkBox, _pCbPreviewBox, _pCbSelection, _pPbPlay, // check boxes (continued)
         _pImp->_pBtnFileOpen, _pImp->_pBtnCancel, _pImp->_pBtnHelp          // buttons
 
@@ -2883,7 +2882,7 @@ void SvtFileDialog::Resize()
             _pImp->_pFtFileName, _pImp->_pEdFileName, _pImp->_pFtFileVersion, _pImp->_pLbFileVersion,
             _pImp->_pFtTemplates, _pImp->_pLbTemplates, _pImp->_pFtImageTemplates, _pImp->_pLbImageTemplates,
             _pImp->_pFtFileType, _pImp->GetFilterListControl(), _pCbReadOnly, _pCbLinkBox, _pCbPreviewBox,
-            _pPbPlay, _pImp->_pCbPassword, /*_pImp->_pCbAutoExtension,*/ _pImp->_pCbOptions, _pCbSelection
+            _pPbPlay, _pImp->_pCbPassword, _pImp->_pCbAutoExtension, _pImp->_pCbOptions, _pCbSelection
         };
         Control** ppMoveControls = aMoveControlsVert;
         Control** ppMoveControlsEnd = ppMoveControls + sizeof( aMoveControlsVert ) / sizeof( aMoveControlsVert[0] );
@@ -2982,11 +2981,11 @@ Control* SvtFileDialog::getControl( sal_Int16 _nControlId, sal_Bool _bLabelContr
         case EDIT_FILEURL_LABEL:
             pReturn = static_cast< Control* >( _pImp->_pFtFileName );
             break;
-/*
+
         case CHECKBOX_AUTOEXTENSION:
             pReturn = _pImp->_pCbAutoExtension;
             break;
-*/
+
         case CHECKBOX_PASSWORD:
             pReturn = _pImp->_pCbPassword;
             break;
@@ -3145,14 +3144,12 @@ void SvtFileDialog::AddControls_Impl( )
 
     if ( _nExtraBits & SFX_EXTRA_AUTOEXTENSION )
     {
-        /*
         _pImp->_pCbAutoExtension = new CheckBox( this, SvtResId( CB_AUTO_EXTENSION ) );
         _pImp->_pCbAutoExtension->SetText( SvtResId( STR_SVT_FILEPICKER_AUTO_EXTENSION ) );
         _pImp->_pCbAutoExtension->Check( TRUE );
         AddControl( _pImp->_pCbAutoExtension );
         ReleaseOwnerShip( _pImp->_pCbAutoExtension );
         _pImp->_pCbAutoExtension->SetClickHdl( LINK( this, SvtFileDialog, AutoExtensionHdl_Impl ) );
-        */
     }
 
     if ( _nExtraBits & SFX_EXTRA_FILTEROPTIONS )
@@ -3315,8 +3312,7 @@ void SvtFileDialog::setCurrentFileText( const String& _rText, bool _bSelectAll )
 // -----------------------------------------------------------------------
 sal_Bool SvtFileDialog::isAutoExtensionEnabled()
 {
-    //return _pImp->_pCbAutoExtension && _pImp->_pCbAutoExtension->IsChecked();
-    return sal_True;
+    return _pImp->_pCbAutoExtension && _pImp->_pCbAutoExtension->IsChecked();
 }
 
 // -----------------------------------------------------------------------
