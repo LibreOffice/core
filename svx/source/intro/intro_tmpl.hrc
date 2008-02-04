@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intro_tmpl.hrc,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-07-18 15:02:55 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 16:40:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,9 +104,11 @@ ItemList = \
     < "Martin Baulig" ; > ; \
     < "Martin Bayer" ; > ; \
     < "Gwenole Beauchesne" ; > ; \
+    < "Youssef Beghi" ; > ; \
     < "Juraj Bednar" ; > ; \
     < "Brian Behlendorf" ; > ; \
     < "Thorsten Behrens" ; > ; \
+    < "Lars Behrmann" ; > ; \
     < "Kyle Begol" ; > ; \
     < "Beijing Co-Create Open Source Software Co. Ltd." ; > ; \
     < "Beijing Redflag Chinese 2000 Software Co. Ltd." ; > ; \
@@ -168,6 +170,7 @@ ItemList = \
     < "Scott Carr" ; > ; \
     < "Christina L. Carr" ; > ; \
     < "Daniel Carrera" ; > ; \
+    < "Mauro Catarzi" ; > ; \
     < "Centre for Development of Advanced Computing" ; > ; \
     < "Ales Cernosek" ; > ; \
     < "Goerkem Cetin" ; > ; \
@@ -219,10 +222,12 @@ ItemList = \
     < "Westley Alan Dent" ; > ; \
     < "Luiz Augusto Von Dentz" ; > ; \
     < "Helge Delfs" ; > ; \
+    < "Frederic Juan Diaz" ; > ; \
     < "Scott Dietrich" ; > ; \
     < "Frederik Dietz" ; > ; \
     < "Marcel Diki-Kidiri" ; > ; \
     < "Marian Diklic" ; > ; \
+    < "Sebastian Docktor" ; > ; \
     < "Vitor Domingos" ; > ; \
     < "Jean-Francois Donikian" ; > ; \
     < "Simford Dong" ; > ; \
@@ -242,6 +247,7 @@ ItemList = \
     < "Bernd Eilers" ; > ; \
     < "Terry Ellison" ; > ; \
     < "Rene Engelhard" ; > ; \
+    < "Mina Erickson" ; > ; \
     < "Peter Eriksen" ; > ; \
     < "Alberto Escudero-Pascual" ; > ; \
     < "Fabalabs Software GmbH" ; > ; \
@@ -263,6 +269,7 @@ ItemList = \
     < "Nicole M. Follet-Dunn" ; > ; \
     < "Kenneth Foskey" ; > ; \
     < "Tim Foster" ; > ; \
+    < "Peter Frandsen" ; > ; \
     < "Gary Frederick" ; > ; \
     < "Nils Fuhrmann" ; > ; \
     < "Jan Funken" ; > ; \
@@ -296,6 +303,7 @@ ItemList = \
     < "Ajey Y. Gore" ; > ; \
     < "Adam Gould" ; > ; \
     < "Brigitte Le Grand" ; > ; \
+    < "GravityZoo" ; > ; \
     < "Paul Gress" ; > ; \
     < "Gintautas Grigas" ; > ; \
     < "Dirk Grobler" ; > ; \
@@ -323,6 +331,7 @@ ItemList = \
     < "Jeff Hanson" ; > ; \
     < "Paul Eugene Hanson" ; > ; \
     < "Christian Hardy" ; > ; \
+    < "Alexey Harlamenkov" ; > ; \
     < "Taska Harnischfeger" ; > ; \
     < "Gregor Hartmann" ; > ; \
     < "Peter Hartmann" ; > ; \
@@ -333,6 +342,7 @@ ItemList = \
     < "Mike Hayes" ; > ; \
     < "John Heard" ; > ; \
     < "Florian Heckl" ; > ; \
+    < "Will Heid" ; > ; \
     < "Reimar Heider" ; > ; \
     < "Joerg Heilig" ; > ; \
     < "Lars Jorgen Helbo" ; > ; \
@@ -351,6 +361,7 @@ ItemList = \
     < "Kazunari Hirano" ; > ; \
     < "Samual W. Hiser" ; > ; \
         < "Ivo Hinkelmann" ; > ; \
+        < "Theresa Hinkelman" ; > ; \
     < "Eric Hoch" ; > ; \
     < "Lutz Hoeger" ; > ; \
     < "Michael Hoennig" ; > ; \
@@ -386,6 +397,8 @@ ItemList = \
     < "Thomas Hygum" ; > ; \
     < "Andreas Hyballa" ; > ; \
     < "Hasan Ilter" ; > ; \
+    < "Intel Corp." ; > ; \
+    < "International Business Machines" ; > ; \
     < "Intersol SRL" ; > ; \
     < "Michael Irion" ; > ; \
     < "Naoyuki Ishimura" ; > ; \
@@ -393,6 +406,7 @@ ItemList = \
     < "Fumihiko Iwabuchi" ; > ; \
     < "Issendis Alain Curt" ; > ; \
     < "Pavel Janik" ; > ; \
+    < "Sunil Amitkumar Janki" ; > ; \
     < "Sven Jacobi" ; > ; \
     < "Denis Jacquerye" ; > ; \
     < "Egle Jasutiene" ; > ; \
@@ -400,7 +414,9 @@ ItemList = \
     < "Christian Jansen" ; > ; \
     < "Ocke Janssen" ; > ; \
     < "Amer Javaid" ; > ; \
+    < "Andrew T. Jensen" ; > ; \
     < "Byrial Ole Jensen" ; > ; \
+    < "Ricky Hugh Jensen" ; > ; \
     < "Tatjiana Jevsikova" ; > ; \
     < "Jiao Jianhua" ; > ; \
     < "Henrik Jordt" ; > ; \
@@ -424,9 +440,11 @@ ItemList = \
     < "Lina Kemmel" ; > ; \
     < "Darren Kenny" ; > ; \
     < "Ilja Ketris" ; > ; \
+    < "Philipp Kewisch Ketris" ; > ; \
     < "Ossama Khayat" ; > ; \
     < "Ilja Ketris" ; > ; \
     < "Hermann Kienlein" ; > ; \
+    < "Artem Khvat" ; > ; \
     < "Aijin Kim" ; > ; \
     < "Jeongkyu Kim" ; > ; \
     < "Jung-uk Kim" ; > ; \
@@ -479,6 +497,7 @@ ItemList = \
     < "Sébastien Lanteigne" ; > ; \
     < "Finn Gruwier Larsen" ; > ; \
     < "Rune S. Larsen" ; > ; \
+    < "Pavel Lastovicka" ; > ; \
     < "Rimgaudus Laucius" ; > ; \
     < "Jesper Laugesen" ; > ; \
     < "David Laurent" ; > ; \
@@ -553,6 +572,7 @@ ItemList = \
     < "Jordi Mas" ; > ; \
     < "Nishida Masanori" ; > ; \
     < "Yoshiyuki Masutomi" ; > ; \
+    < "Ivan Masar" ; > ; \
     < "Nishida Masanori" ; > ; \
     < "Shane M. Mathews" ; > ; \
     < "Yoshiyuki Masutomi" ; > ; \
@@ -582,6 +602,7 @@ ItemList = \
     < "Michael Mi" ; > ; \
     < "Boris Michelsz" ; > ; \
     < "Bjoern Milcke" ; > ; \
+    < "Marcin Milkowski" ; > ; \
     < "Michelle Milledge" ; > ; \
     < "Aleksander Mikhailov-Erlich" ; > ; \
     < "Paul A. Miller" ; > ; \
@@ -611,6 +632,7 @@ ItemList = \
     < "Niklas Nebel" ; > ; \
     < "Ales Nehyba" ; > ; \
     < "Christoph Neumann" ; > ; \
+    < "Frank Neumann" ; > ; \
     < "Marc Neumann" ; > ; \
     < "Net Integration Technologies, Inc." ; > ; \
     < "Scott Ng" ; > ; \
@@ -629,6 +651,7 @@ ItemList = \
     < "Novell, Inc.," ; > ; \
     < "Rodrigo Parra Novo" ; > ; \
     < "Peter Novodvorsky" ; > ; \
+    < "O3Spaces (C.B Hoeflake)" ; > ; \
     < "Munzir Taha Obeid" ; > ; \
     < "Eivind Odegard" ; > ; \
     < "Maximilian Odendahl" ; > ; \
@@ -642,6 +665,7 @@ ItemList = \
     < "Dana Oliver" ; > ; \
     < "Shane Owenby" ; > ; \
     < "Marcin Orowski" ; > ; \
+    < "Takeshi Otsuki" ; > ; \
     < "Jan-Hendrick Palic" ; > ; \
     < "Assis Paniago" ; > ; \
     < "Carlos F.A. Paniago" ; > ; \
@@ -658,6 +682,7 @@ ItemList = \
     < "Damien Persohn" ; > ; \
     < "Andrea Pescetti" ; > ; \
     < "Edward Peterlin" ; > ; \
+    < "Allan Juhl Peterson" ; > ; \
     < "Frank Peters" ; > ; \
     < "Bryan Petty" ; > ; \
     < "John Pfersich" ; > ; \
@@ -716,6 +741,7 @@ ItemList = \
     < "Modestas Rimkus" ; > ; \
     < "Jose Ariel Rios" ; > ; \
     < "Jorge Rivas" ; > ; \
+    < "William Robinson" ; > ; \
     < "Donald Evan Rogers" ; > ; \
     < "Willy Sudiarto Rohorjo" ; > ; \
     < "Hennes Rohling" ; > ; \
@@ -810,6 +836,7 @@ ItemList = \
     < "Caio Tiago Oliveira de Sousa" ; > ; \
     < "Oliver Specht" ; > ; \
     < "Laure Spilker-Four" ; > ; \
+    < "Michael Stahl" ; > ; \
     < "Irina Stamatoiu" ; > ; \
     < "Joseph James John Stanford" ; > ; \
     < "Frank Stecher" ; > ; \
@@ -976,7 +1003,6 @@ ItemList = \
     < "FUNCTIONAL STAFF" ; 8 ; > ; \
     < "" ; > ; \
     < "Sabine Schroeder" ; > ; \
-    < "Volker Seubert" ; > ; \
     < "" ; > ; \
     < "OpenOffice.org COORDINATION" ; 8 ; > ; \
     < "" ; > ; \
@@ -1005,123 +1031,85 @@ ItemList = \
     < "Michael Brauer" ; > ; \
     < "Malte Timmermann" ; > ; \
     < "" ; > ; \
-    < "INTEGRATION" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Lars Oppermann" ; > ; \
-    < "Kai Sommerfeld" ; > ; \
-    < "" ; > ; \
-    < "MIGRATION TOOLS" ; 8 ; > ; \
+    < "ODF" ; 8 ; > ; \
     < "" ; > ; \
     < "Svante Schubert" ; > ; \
-    < "Dirk Voelzke" ; > ; \
-    < "Stephan Wunderlich" ; > ; \
+    < "Lars Behrmann" ; > ; \
     < "" ; > ; \
     < "DESIGN" ; 8 ; > ; \
     < "" ; > ; \
     < "Stella Schulze" ; > ; \
     < "" ; > ; \
-    < "%PRODUCTNAME WRITER & BASE" ; 8 ; > ; \
+    < "Migration" ; 8 ; > ; \
     < "" ; > ; \
-    < "Andreas Martens" ; > ; \
+    < "Michael Bohn" ; > ; \
+    < "" ; > ; \
+    < "%PRODUCTNAME WRITER & FRAMEWORK" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Mathias Bauer" ; > ; \
     < "" ; > ; \
     < "Henning Brinkmann" ; > ; \
-    < "Oliver-Rainer Wittmann" ; > ; \
-    < "Steffen Grund" ; > ; \
+    < "Hans-Peter Burow" ; > ; \
+    < "Carsten Driesner" ; > ; \
     < "Thomas Lange" ; > ; \
-    < "Lars Langhans" ; > ; \
-    < "Ocke Janssen" ; > ; \
+    < "Andreas Martens" ; > ; \
     < "Frank Meies" ; > ; \
-    < "Tino Rachui" ; > ; \
-    < "Florian Reuter" ; > ; \
-    < "Frank Schoenheit" ; > ; \
+    < "Andreas Schluens" ; > ; \
     < "Oliver Specht" ; > ; \
-    < "Gunnar Timm" ; > ; \
-    < "Daniel Vogelheim" ; > ; \
+    < "Michael Stahl" ; > ; \
+    < "Mikhail Voitenko" ; > ; \
+    < "Oliver-Rainer Wittmann" ; > ; \
     < "" ; > ; \
-    < "%PRODUCTNAME IMPRESS & GRAPHICS" ; 8 ; > ; \
+    < "%PRODUCTNAME IMPRESS, GRAPHICS & BASE" ; 8 ; > ; \
     < "" ; > ; \
     < "Kai Ahrens" ; > ; \
     < "" ; > ; \
     < "Volker Ahrendt" ; > ; \
     < "Thorsten Behrens" ; > ; \
-    < "Daniel Boelzle" ; > ; \
     < "Michael Buettner" ; > ; \
     < "Herbert Duerr" ; > ; \
     < "Andre Fischer" ; > ; \
     < "Ilko Hoepping" ; > ; \
     < "Sven Jacobi" ; > ; \
+    < "Ocke Janssen" ; > ; \
+    < "Artem Khvat" ; > ; \
+    < "Lars Langhans" ; > ; \
     < "Armin Le Grand" ; > ; \
     < "Christian Lippka" ; > ; \
     < "Philipp Lohmann" ; > ; \
+    < "Frank Schoenheit" ; > ; \
+    < "" ; > ; \
+    < "%PRODUCTNAME PROGRAMMABILITY & DEPLOYMENT" ; 8 ; > ; \
+    < "" ; > ; \
+    < "Kai Sommerfeld" ; > ; \
+    < "" ; > ; \
+    < "Stephan Bergmann" ; > ; \
+    < "Oliver Braun" ; > ; \
+    < "Andreas Bregas" ; > ; \
+    < "Steffen Grund" ; > ; \
+    < "Tobias Krause" ; > ; \
+    < "Joachim Lingner" ; > ; \
+    < "Christoph Neumann" ; > ; \
+    < "Hennes Rohling" ; > ; \
+    < "Juergen Schmidt" ; > ; \
+    < "Ingo Schmidt-Rosbiegal" ; > ; \
+    < "Dirk Voelzke" ; > ; \
+    < "" ; > ; \
+    < "" ; > ; \
+    < "%PRODUCTNAME PIM & CALC" ; 8 ; > ; \
+    < "" ; > ; \
     < "Stephan Schaefer" ; > ; \
     < "" ; > ; \
-    < "%PRODUCTNAME PROGRAMMABILITY" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Mathias Bauer" ; > ; \
-    < "" ; > ; \
     < "Thomas Benisch" ; > ; \
-    < "Stephan Bergmann" ; > ; \
-    < "Andreas Bille" ; > ; \
-    < "Andreas Bregas" ; > ; \
-    < "Hans-Peter Burow" ; > ; \
-    < "Carsten Driesner" ; > ; \
-    < "Christoph Neumann" ; > ; \
-    < "Michael Hoennig" ; > ; \
-    < "Joachim Lingner" ; > ; \
-    < "Andreas Schluens" ; > ; \
-    < "Juergen Schmidt" ; > ; \
-    < "Mikhail Voitenko" ; > ; \
-    < "" ; > ; \
-    < "" ; > ; \
-    < "%PRODUCTNAME CALC AND PLATFORM TECHNOLOGY" ; 8 ; > ; \
-    < "" ; > ; \
-    < "Christof Pintaske" ; > ; \
-    < "" ; > ; \
-    < "Sascha Ballach" ; > ; \
-    < "Michael Bohn" ; > ; \
-    < "Oliver Braun" ; > ; \
+    < "Daniel Boelzle" ; > ; \
     < "Berend Cornelius" ; > ; \
     < "Ingrid Halama" ; > ; \
+    < "Philipp Kewisch" ; > ; \
     < "Bjoern Milcke" ; > ; \
     < "Niklas Nebel" ; > ; \
+    < "Frank Neumann" ; > ; \
     < "Eike Rathke" ; > ; \
     < "Daniel Rentz" ; > ; \
-    < "Hennes Rohling" ; > ; \
-    < "Ingo Schmidt-Rosbiegal" ; > ; \
-    < "Thomas Verbeek" ; > ; \
-    < "" ; > ; \
-    < "%PRODUCTNAME IRELAND TEAM" ; 8 ; > ; \
-    < "" ; > ; \
-    < "James Cleere" ; > ; \
-    < "" ; > ; \
-    < "Duncan Foster" ; > ; \
-    < "Mike Hayes" ; > ; \
-    < "Gary Johnston" ; > ; \
-    < "Darren Kenny" ; > ; \
-    < "Martin Maher" ; > ; \
-    < "John Marmion" ; > ; \
-    < "Tomas O'Connor" ; > ; \
-    < "Noel Power" ; > ; \
-    < "" ; > ; \
-    < "%PRODUCTNAME CHINA TEAM" ; 8 ; > ; \
-    < "" ; > ; \
-    < "William Wan" ; > ; \
-    < "" ; > ; \
-    < "Robert Chen" ; > ; \
-    < "Andrew Fan" ; > ; \
-    < "Wind Li" ; > ; \
-    < "Gordon Lin" ; > ; \
-    < "Gavin Lu" ; > ; \
-    < "James Meng" ; > ; \
-    < "Michael Mi" ; > ; \
-    < "Minna Wu" ; > ; \
-    < "Gary Yang" ; > ; \
-    < "" ; > ; \
-    < "Hercule Li" ; > ; \
-    < "Mindy Liu" ; > ; \
-    < "" ; > ; \
-    < "Tom Chen" ; > ; \
-    < "Wilson Guo" ; > ; \
     < "" ; > ; \
     < "" ; > ; \
     < "%PRODUCTNAME CONFIGURATION MANAGER" ; 8 ; > ; \
@@ -1146,9 +1134,6 @@ ItemList = \
     < "Christian Jansen" ; > ; \
     < "Frank Loehmann" ; > ; \
     < "Elizabeth Matthis" ; > ; \
-    < "Matthias Mueller-Prove" ; > ; \
-    < "Colm Smyth" ; > ; \
-    < "Falko Tesch" ; > ; \
     < "" ; > ; \
     < "" ; > ; \
     < "QUALITY ASSURANCE & COORDINATION" ; 8 ; > ; \
@@ -1203,7 +1188,6 @@ ItemList = \
     < "QA %PRODUCTNAME CALC" ; 8 ; > ; \
     < "" ; > ; \
     < "Oliver Craemer" ; > ; \
-    < "Peter Junge" ; > ; \
     < "Thomas Klarhoefer" ; > ; \
     < "Frank Stecher" ; > ; \
     < "" ; > ; \
@@ -1222,21 +1206,19 @@ ItemList = \
     < "Thorsten Martens" ; > ; \
     < "Joerg W. Skottke" ; > ; \
     < "Andreas Treumann" ; > ; \
-    < "Ralf Unger" ; > ; \
     < "" ; > ; \
     < "INFORMATION TECHNOLOGY" ; 8 ; > ; \
     < "" ; > ; \
     < "Dirk Marquardt" ; > ; \
-    < "Volker Moneke" ; > ; \
+    < "Gerd Weiss" ; > ; \
     < "" ; > ; \
     < "" ; > ; \
     < "MANUALS & ONLINE HELP" ; 8 ; > ; \
     < "" ; > ; \
     < "Frank Peters" ; > ; \
     < "" ; > ; \
-    < "Derek Dreger" ; > ; \
+    < "Clayton Cornell" ; > ; \
     < "Uwe Fischer" ; > ; \
-    < "Yvonne Jacoby" ; > ; \
     < "Martina Waller" ; > ; \
     < "" ; > ; \
     < "" ; > ; \
