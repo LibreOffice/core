@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recently_used_file_handler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2007-06-19 16:12:29 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 13:58:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@
 #include <vector>
 #include <algorithm>
 #include <functional>
+#include <string.h>
 
 namespace /* private */ {
 
