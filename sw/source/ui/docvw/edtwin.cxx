@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.150 $
+ *  $Revision: 1.151 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 15:53:47 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 14:40:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1617,7 +1617,7 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #endif
 
-            if( '=' == aCh &&
+            if( !rKeyCode.IsMod2() && '=' == aCh &&
                 !rSh.IsTableMode() && rSh.GetTableFmt() &&
                 rSh.IsSttPara() /*&& rSh.IsEndPara()*/ &&
                 !rSh.HasReadonlySel() )
@@ -2214,6 +2214,7 @@ KEYINPUT_CHECKTABLE_INSDEL:
             {
                 eKeyState = KS_Ende;
                 bNormalChar =
+                    !rKeyCode.IsMod2() &&
                     rKeyCode.GetModifier() != (KEY_MOD1) &&
                     rKeyCode.GetModifier() != (KEY_MOD1|KEY_SHIFT) &&
                                 SW_ISPRINTABLE( aCh );
