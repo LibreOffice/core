@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.235 $
+ *  $Revision: 1.236 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:17:27 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 14:29:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1981,7 +1981,7 @@ void ImplDevFontList::InitGenericGlyphFallback( void ) const
                 pFallbackList = new ImplDevFontListData*[ MAX_FALLBACK ];
             pFallbackList[ nMaxLevel ] = pFallbackFont;
             if( !bHasEudc && !nMaxLevel )
-                bHasEudc = (0 == strncmp( *ppNames, "eudc", 5 ));
+                bHasEudc = !strncmp( *ppNames, "eudc", 5 );
         }
     }
 
@@ -2098,12 +2098,7 @@ ImplDevFontListData* ImplDevFontList::GetGlyphFallbackFont( ImplFontSelectData& 
             InitGenericGlyphFallback();
         // TODO: adjust nFallbackLevel by number of levels resolved by the fallback hook
         if( nFallbackLevel < mnFallbackCount )
-        {
-            // nFallbackLevel==0 => original font without device specific substitution
-            // nFallbackLevel>=1 => use a font from the glyph fallback font list
-            if( nFallbackLevel>=1 )
-                pFallbackData = mpFallbackList[ nFallbackLevel ];
-        }
+            pFallbackData = mpFallbackList[ nFallbackLevel ];
     }
 
     return pFallbackData;
@@ -3260,16 +3255,18 @@ ImplFontEntry* ImplFontCache::GetGlyphFallbackFont( ImplDevFontList* pFontList,
 {
     // get a candidate font for glyph fallback
     // unless the previously selected font got a device specific substitution
-    // e.g. PsPrint Arial->Helvetica with udiaresis, but Helvetica doesn't support it
+    // e.g. PsPrint Arial->Helvetica for udiaeresis when Helvetica doesn't support it
     if( nFallbackLevel >= 1)
     {
         ImplDevFontListData* pFallbackData = pFontList->GetGlyphFallbackFont(
             rFontSelData, rMissingCodes, nFallbackLevel-1 );
-
         // escape when there are no font candidates
         if( !pFallbackData  )
-        return NULL;
+            return NULL;
+        // override the font name
         rFontSelData.maName = pFallbackData->GetFamilyName();
+        // clear the cached normalized name
+        rFontSelData.maSearchName = String();
     }
 
     // get device font without doing device specific substitutions
@@ -6350,7 +6347,7 @@ SalLayout* OutputDevice::ImplGlyphFallbackLayout( SalLayout* pSalLayout, ImplLay
 
         mpFontCache->Release( pFallbackFont );
 
-    // break when this fallback was sufficient
+        // break when this fallback was sufficient
         if( !rLayoutArgs.PrepareFallback() )
             break;
     }
