@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textglos.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2007-09-27 12:30:17 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 15:35:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ void SwTextShell::ExecGlossary(SfxRequest &rReq)
         case FN_EXPAND_GLOSSARY:
         {
             BOOL bReturn;
-            bReturn = pGlosHdl->ExpandGlossary( TRUE );
+            bReturn = pGlosHdl->ExpandGlossary();
             rReq.SetReturnValue( SfxBoolItem( nSlot, bReturn ) );
             rReq.Done();
         }
