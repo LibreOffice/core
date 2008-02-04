@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.171 $
-# Date:        $Date: 2008-01-29 16:09:46 $
+# Version:     $Revision: 1.172 $
+# Date:        $Date: 2008-02-04 12:56:11 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -143,8 +143,12 @@ $SYSTEM_MOZILLA = '@SYSTEM_MOZILLA@';
 $JDK 		= '@JDK@';
 $MINGW          = '@WITH_MINGWIN@'; # use MinGW for Windows build
 $USE_MINGW      = '@USE_MINGW@';     # use MinGW in cygwin or pure-mingw
-$CC             = PathFormat('@CC@');           # C compiler
-$CXX            = PathFormat('@CXX@');          # C++ compiler
+if ( $MINGW eq "yes" )
+{ $CC             = '@CC@';           # C compiler
+  $CXX            = '@CXX@'; }        # C++ compiler
+else
+{ $CC             = PathFormat('@CC@');           # C compiler
+  $CXX            = PathFormat('@CXX@'); }        # C++ compiler
 $EXCEPTIONS     = '@EXCEPTIONS@';   # Exception handling type
 $MOZILLA_VERSION	= '@MOZILLA_VERSION@'; # mozilla version to use to build mozilla
 $MOZILLA_TOOLKIT	= '@MOZILLA_TOOLKIT@'; # GUI toolkit to use to build mozilla
@@ -1151,23 +1155,26 @@ if ($platform =~ m/cygwin|os2/)
               $USE_DIRECTX5 = "YES";
           }
       }
+      # ILIB needs to use '\' directory seperators;
+      $ILIB = WinPath( $ILIB, ";" );
    }
    elsif ( $COM eq "GCC" )
    {  $ILIB       .=    $wps.$SOLARVER.$ds.$INPATH.$LIB.
                         $wps.$SOLARVER.$ds.$INPATH.$BIN.
                         $wps.$JAVA_HOME.$LIB;
       if ( $USE_MINGW eq "cygwin" )
-      {  $ILIB    .= $wps.$COMPATH.$LIB.$ds."mingw".
-                     $wps.$COMPATH.$LIB.$ds."w32api";
+      {  $ILIB    .= $wps.PathFormat($USR.$LIB.$ds."mingw").
+                     $wps.PathFormat($USR.$LIB.$ds."w32api").
+                     $wps.PathFormat($USR.$LIB);
       }
-      $ILIB       .= $wps.$COMPATH.$LIB.
-                     $wps.$PSDK_HOME.$LIB;
+      else
+      {  $ILIB       .= $wps.$COMPATH.$LIB;
+      }
+      $ILIB       .= $wps.$PSDK_HOME.$LIB;
       if ( '@ENABLE_DIRETX@' )
-      {   $ILIB   .= $wps.'@DIRECTXSDK_LIB@';
+      {   $ILIB   .= $wps.PathFormat("@DIRECTXSDK_LIB@");
       }
    }
-   # ILIB needs to use '\' directory seperators;
-   $ILIB = WinPath( $ILIB, ";" );
 
    $JAVAHOME          = '$JAVA_HOME';
 
@@ -1228,7 +1235,9 @@ elsif ($platform =~ m/cygwin|os2/)
    }
 
    # Add path to compiler
-   $PATH .= $ps.CygFormat($COMPATH).$BIN;
+   $tmppath = CygFormat($COMPATH).$BIN;
+   $tmppath =~ s/^\/\//\//;
+   $PATH .= $ps.$tmppath;
 
    if ( $COM eq "MSC" ) {
        $tmppath = CygFormat($MSPDB_PATH);
@@ -1489,18 +1498,20 @@ elsif ($platform =~ m/cygwin/)
    elsif ( $COM eq "GCC" )
    {  $SOLARINC       .= $I.'$SOLARVER'.$ds.'$INPATH'.$INC.$ds."external".$ds."mingw".$ds."include";
      if ( $USE_MINGW eq "cygwin" )
-     {  $SOLARINC    .= $I.'$COMPATH'.$ds."include".$ds."mingw".$ds."include".
-                        $I.'$COMPATH'.$ds."include".$ds."w32api"; }
-        $SOLARINC    .= $I.'$COMPATH'.$ds."include";
+     {  $SOLARINC    .= $I.PathFormat($USR.$ds."include".$ds."mingw".$ds."include").
+                        $I.PathFormat($USR.$ds."include".$ds."w32api").
+                        $I.PathFormat($USR.$ds."include"); }
+     else
+     {  $SOLARINC    .= $I.'$COMPATH'.$ds."include"; }
      @mingw_lib_include_paths = split( / /, "@MINGW_LIB_INCLUDE_PATH@" );
      foreach $mingw_lib_include_path (@mingw_lib_include_paths)
        {   chomp $mingw_lib_include_path;
            if ( $mingw_lib_include_path ne $COMPATH.$ds."include" && $mingw_lib_include_path ne "" )
            {
-              $SOLARINC   .= $I.$mingw_lib_include_path;
+              $SOLARINC   .= $I.PathFormat($mingw_lib_include_path);
            }
        }
-     $SOLARINC .= $I."@GXX_INCLUDE_PATH@".$I."@GXX_INCLUDE_PATH@".$ds."mingw32".
+     $SOLARINC .= $I.PathFormat("@GXX_INCLUDE_PATH@").$I.PathFormat("@GXX_INCLUDE_PATH@".$ds."mingw32").
                   $I.'$PSDK_HOME'.$INCLUDE;
    }
    if ( '@ENABLE_DIRECTX@' ne "" ) {
@@ -2013,7 +2024,7 @@ ToFile( "NEW_SHADOW_API",    "@NEW_SHADOW_API@",   "e" );
 ToFile( "PAM_LINK",          "@PAM_LINK@",         "e" );
 ToFile( "CRYPT_LINK",        "@CRYPT_LINK@",       "e" );
 ToFile( "XAU_LIBS",          "@XAU_LIBS@",         "e" );
-ToFile( "GXX_INCLUDE_PATH",  "@GXX_INCLUDE_PATH@", "e" );
+ToFile( "GXX_INCLUDE_PATH",  PathFormat("@GXX_INCLUDE_PATH@"), "e" );
 ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,  "e" );
 if ($platform !~ m/cygwin|os2/)
 {  ToFile( "TEMP",              $TEMP,              "e" );
@@ -2022,16 +2033,11 @@ if ($platform !~ m/cygwin|os2/)
 ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
 if ( $platform =~ m/cygwin/ )
 {
+   ToFile( "ILIB",              $ILIB,              "e" );
    if ( $MINGW eq "yes" )
-   {  my ($tempstring);
-      $tempstring = $ILIB;
-      $tempstring =~ s/:/;/g;
-      ToFile( "ILIB",              $tempstring,              "e" );
-      ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
-      ToFile( "DIRECTXSDK_HOME",    "@DIRECTXSDK_HOME@",    "e" );
+   {  ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
+      ToFile( "DIRECTXSDK_HOME",    PathFormat("@DIRECTXSDK_HOME@"),    "e" );
       ToFile( "USE_MINGW",         $USE_MINGW,              "e" ); }
-   else
-   {  ToFile( "ILIB",              $ILIB,              "e" ); }
 
    ToFile( "GREP",              $WIN_GREP,          "e" );
    ToFile( "FIND",              $WIN_FIND,          "e" );
