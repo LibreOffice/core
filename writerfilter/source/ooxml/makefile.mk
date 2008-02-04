@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.10 $
+#  $Revision: 1.11 $
 #
-#  last change: $Author: vg $ $Date: 2008-01-24 16:02:30 $
+#  last change: $Author: ihi $ $Date: 2008-02-04 12:54:54 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,11 @@ SHL1TARGET=$(TARGET)
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 RESOURCEMODELLIB=-lresourcemodel
 .ELIF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+RESOURCEMODELLIB=-lresourcemodel
+.ELSE
 RESOURCEMODELLIB=$(LB)$/iresourcemodel.lib
+.ENDIF
 .ENDIF
 
 SHL1STDLIBS=$(SALLIB)\
