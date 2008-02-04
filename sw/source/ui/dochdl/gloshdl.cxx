@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gloshdl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-22 15:40:00 $
+ *  last change: $Author: ihi $ $Date: 2008-02-04 15:34:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -534,23 +534,18 @@ BOOL SwGlossaryHdl::DelGlossary(const String &rShortName)
 ------------------------------------------------------------------------*/
 
 
-BOOL SwGlossaryHdl::ExpandGlossary(BOOL bUseStandard, BOOL bApi)
+BOOL SwGlossaryHdl::ExpandGlossary()
 {
     ASSERT(pWrtShell->CanInsert(), illegal);
     SwTextBlocks *pGlossary;
-    if( bUseStandard )
-    {
-        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
-        DBG_ASSERT(pFact, "Dialogdiet fail!");
-        ::GlossaryGetCurrGroup fnGetCurrGroup = pFact->GetGlossaryCurrGroupFunc( DLG_RENAME_GLOS );
-        DBG_ASSERT(fnGetCurrGroup, "Dialogdiet fail!");
-        String sGroupName( (*fnGetCurrGroup)() );
-        if(STRING_NOTFOUND == sGroupName.Search(GLOS_DELIM))
-            FindGroupName(sGroupName);
-        pGlossary = rStatGlossaries.GetGroupDoc(sGroupName);
-    }
-    else
-        pGlossary = rStatGlossaries.GetGroupDoc(aCurGrp);
+    SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
+    DBG_ASSERT(pFact, "Dialogdiet fail!");
+    ::GlossaryGetCurrGroup fnGetCurrGroup = pFact->GetGlossaryCurrGroupFunc( DLG_RENAME_GLOS );
+    DBG_ASSERT(fnGetCurrGroup, "Dialogdiet fail!");
+    String sGroupName( (*fnGetCurrGroup)() );
+    if(STRING_NOTFOUND == sGroupName.Search(GLOS_DELIM))
+        FindGroupName(sGroupName);
+    pGlossary = rStatGlossaries.GetGroupDoc(sGroupName);
 
     String aShortName;
 
@@ -573,20 +568,21 @@ BOOL SwGlossaryHdl::ExpandGlossary(BOOL bUseStandard, BOOL bApi)
         if(pWrtShell->IsSelection())
             aShortName = pWrtShell->GetSelTxt();
     }
-    return pGlossary ? Expand( aShortName, &rStatGlossaries, pGlossary, bApi ) : FALSE;
+    return pGlossary ? Expand( aShortName, &rStatGlossaries, pGlossary ) : FALSE;
 }
 
 BOOL SwGlossaryHdl::Expand( const String& rShortName,
                             SwGlossaries *pGlossaries,
-                            SwTextBlocks *pGlossary,
-                            BOOL bApi  )
+                            SwTextBlocks *pGlossary  )
 {
     TextBlockInfoArr aFoundArr;
     String aShortName( rShortName );
     BOOL bCancel = FALSE;
-    // Textbaustein suchen
-    USHORT nFound = pGlossary->GetIndex( aShortName );
-    // Suchen in allen anderen Bereichen
+    // search for text block
+    //#b6633427# - don't prefer current group depending on configuration setting
+    const SvxAutoCorrCfg* pCfg = SvxAutoCorrCfg::Get();
+    USHORT nFound = !pCfg->IsSearchInAllCategories() ? pGlossary->GetIndex( aShortName ) : -1;
+    // if not found then search in all groups
     if( nFound == (USHORT) -1 )
     {
         const ::utl::TransliterationWrapper& rSCmp = GetAppCmpStrIgnore();
@@ -671,50 +667,47 @@ BOOL SwGlossaryHdl::Expand( const String& rShortName,
                 aShortName.Erase(nMaxLen);
                 aShortName.AppendAscii(" ...");
             }
-            if(!bApi)
+            if ( aShortName.EqualsAscii ( "StarWriterTeam", 0, 14 ) )
             {
-                if ( aShortName.EqualsAscii ( "StarWriterTeam", 0, 14 ) )
-                {
-                    String sGraphicName ( RTL_CONSTASCII_USTRINGPARAM ( "StarWriter team photo" ) );
-                    String sTeamCredits ( RTL_CONSTASCII_USTRINGPARAM ( "StarWriter team credits" ) );
-                    pWrtShell->StartUndo ( UNDO_INSGLOSSARY );
-                    pWrtShell->StartAllAction();
-                    if(pWrtShell->HasSelection())
-                        pWrtShell->DelLeft();
-                    Bitmap aBitmap ( SW_RES ( BMP_SW_TEAM_MUGSHOT ) );
-                    pWrtShell->Insert ( aEmptyStr, aEmptyStr, aBitmap);
-                    pWrtShell->SetFlyName ( sGraphicName );
-                    SwTxtFmtColl* pColl = pWrtShell->GetTxtCollFromPool ( RES_POOLCOLL_LABEL_ABB );
-                    const IDocumentFieldsAccess* pIDFA = pWrtShell->getIDocumentFieldsAccess();
-                    SwFieldType* pType = pIDFA->GetFldType( RES_SETEXPFLD, pColl->GetName(), false );
-                    sal_uInt16 nId = pIDFA->GetFldTypes()->GetPos( pType );
-                    pWrtShell->InsertLabel( LTYPE_OBJECT, aEmptyStr, aEmptyStr, aEmptyStr, FALSE, nId, aEmptyStr );
-                    pWrtShell->SwFEShell::SetFlyName( sTeamCredits );
-                    pWrtShell->SwFEShell::SelectObj ( Point ( ULONG_MAX, ULONG_MAX ) );
-                    pWrtShell->EnterStdMode();
-                    pWrtShell->EndPara ( TRUE );
-                    String aTmp ( SW_RES ( STR_SW_TEAM_NAMES ) );
-                    pWrtShell->Insert ( aTmp );
-                    SvxAdjustItem aAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST );
-                    pWrtShell->SetAttr( aAdjustItem );
-                    pWrtShell->SttPara ();
-                    pWrtShell->SplitNode();
-                    pWrtShell->Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
-                    SvxWeightItem aWeightItem ( WEIGHT_BOLD, RES_CHRATR_WEIGHT );
-                    pWrtShell->Insert ( String ( RTL_CONSTASCII_USTRINGPARAM ( "The StarWriter team!" ) ) );
-                    pWrtShell->SttPara ( TRUE );
-                    pWrtShell->SetAttr( aWeightItem);
-                    pWrtShell->GotoFly ( sTeamCredits);
-                    pWrtShell->EndAllAction();
-                    pWrtShell->EndUndo( UNDO_INSGLOSSARY );
-                }
-                else
-                {
-                    String aTmp( SW_RES(STR_NOGLOS1));
-                    aTmp += aShortName;
-                    aTmp += SW_RESSTR(STR_NOGLOS2);
-                    InfoBox( pWrtShell->GetView().GetWindow(), aTmp ).Execute();
-                }
+                String sGraphicName ( RTL_CONSTASCII_USTRINGPARAM ( "StarWriter team photo" ) );
+                String sTeamCredits ( RTL_CONSTASCII_USTRINGPARAM ( "StarWriter team credits" ) );
+                pWrtShell->StartUndo ( UNDO_INSGLOSSARY );
+                pWrtShell->StartAllAction();
+                if(pWrtShell->HasSelection())
+                    pWrtShell->DelLeft();
+                Bitmap aBitmap ( SW_RES ( BMP_SW_TEAM_MUGSHOT ) );
+                pWrtShell->Insert ( aEmptyStr, aEmptyStr, aBitmap);
+                pWrtShell->SetFlyName ( sGraphicName );
+                SwTxtFmtColl* pColl = pWrtShell->GetTxtCollFromPool ( RES_POOLCOLL_LABEL_ABB );
+                const IDocumentFieldsAccess* pIDFA = pWrtShell->getIDocumentFieldsAccess();
+                SwFieldType* pType = pIDFA->GetFldType( RES_SETEXPFLD, pColl->GetName(), false );
+                sal_uInt16 nId = pIDFA->GetFldTypes()->GetPos( pType );
+                pWrtShell->InsertLabel( LTYPE_OBJECT, aEmptyStr, aEmptyStr, aEmptyStr, FALSE, nId, aEmptyStr );
+                pWrtShell->SwFEShell::SetFlyName( sTeamCredits );
+                pWrtShell->SwFEShell::SelectObj ( Point ( ULONG_MAX, ULONG_MAX ) );
+                pWrtShell->EnterStdMode();
+                pWrtShell->EndPara ( TRUE );
+                String aTmp ( SW_RES ( STR_SW_TEAM_NAMES ) );
+                pWrtShell->Insert ( aTmp );
+                SvxAdjustItem aAdjustItem( SVX_ADJUST_CENTER, RES_PARATR_ADJUST );
+                pWrtShell->SetAttr( aAdjustItem );
+                pWrtShell->SttPara ();
+                pWrtShell->SplitNode();
+                pWrtShell->Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
+                SvxWeightItem aWeightItem ( WEIGHT_BOLD, RES_CHRATR_WEIGHT );
+                pWrtShell->Insert ( String ( RTL_CONSTASCII_USTRINGPARAM ( "The StarWriter team!" ) ) );
+                pWrtShell->SttPara ( TRUE );
+                pWrtShell->SetAttr( aWeightItem);
+                pWrtShell->GotoFly ( sTeamCredits);
+                pWrtShell->EndAllAction();
+                pWrtShell->EndUndo( UNDO_INSGLOSSARY );
+            }
+            else
+            {
+                String aTmp( SW_RES(STR_NOGLOS1));
+                aTmp += aShortName;
+                aTmp += SW_RESSTR(STR_NOGLOS2);
+                InfoBox( pWrtShell->GetView().GetWindow(), aTmp ).Execute();
             }
         }
 
