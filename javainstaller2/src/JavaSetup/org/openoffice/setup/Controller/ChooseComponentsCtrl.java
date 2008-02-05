@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChooseComponentsCtrl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 11:50:18 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 13:36:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,28 +111,74 @@ public class ChooseComponentsCtrl extends PanelController {
             ModuleCtrl.checkVisibleModulesInstall(packageData, data);
 
             if ( data.visibleModulesChecked() ) {
-                // Set module settings for hidden modules.
-                // Then it is possible to calculate the size of the installed product,
-                // to show a warning and to set the repeatDialog value to true
 
-                if ( data.logModuleStates() ) {
-                    Dumper.logModuleStates(packageData, "ChooseComponentsCtrl: Before setHiddenModuleSettingsInstall");
+                // Check, if at least one application module was selected for installation
+                // (not necessary, if an older product is updated or additional modules are
+                // added in maintenance mode).
+
+                boolean applicationSelected = false;
+                if ( data.olderVersionExists() || data.sameVersionExists() ) {
+                    applicationSelected = true;
+                } else {
+                    data.setApplicationModulesChecked(false);
+                    ModuleCtrl.checkApplicationSelection(packageData, data);
+                    applicationSelected = data.applicationModulesChecked();
                 }
 
-                ModuleCtrl.setHiddenModuleSettingsInstall(packageData);
-                // Dumper.dumpInstallPackages(packageData);
+                if ( applicationSelected ) {
 
-                if ( data.logModuleStates() ) {
-                    Dumper.logModuleStates(packageData, "ChooseComponentsCtrl: After setHiddenModuleSettingsInstall");
-                }
+                    // Check, if at least one language module was selected for installation
+                    // (not necessary, if an older product is updated or additional modules are
+                    // added in maintenance mode).
 
-                // Collecting packages to install
-                Vector installPackages = new Vector();
-                PackageCollector.collectInstallPackages(packageData, installPackages);
-                data.setInstallPackages(installPackages);
+                    boolean languageSelected = false;
+                    if ( data.olderVersionExists() || data.sameVersionExists() || ( ! data.isMultiLingual())) {
+                        languageSelected = true;
+                    } else {
+                        data.setLanguageModulesChecked(false);
+                        ModuleCtrl.checkLanguageSelection(packageData, data);
+                        languageSelected = data.languageModulesChecked();
+                    }
 
-                // Check disc space
-                if ( Calculator.notEnoughDiscSpace(data) ) {
+                    if ( languageSelected ) {
+
+                        // Set module settings for hidden modules.
+                        // Then it is possible to calculate the size of the installed product,
+                        // to show a warning and to set the repeatDialog value to true
+
+                        if ( data.logModuleStates() ) {
+                            Dumper.logModuleStates(packageData, "ChooseComponentsCtrl: Before setHiddenModuleSettingsInstall");
+                        }
+
+                        ModuleCtrl.setHiddenModuleSettingsInstall(packageData);
+                        // Dumper.dumpInstallPackages(packageData);
+
+                        if ( data.logModuleStates() ) {
+                            Dumper.logModuleStates(packageData, "ChooseComponentsCtrl: After setHiddenModuleSettingsInstall");
+                        }
+
+                        // Collecting packages to install
+                        Vector installPackages = new Vector();
+                        PackageCollector.collectInstallPackages(packageData, installPackages);
+                        data.setInstallPackages(installPackages);
+
+                        // Check disc space
+                        if ( Calculator.notEnoughDiscSpace(data) ) {
+                            repeatDialog = true;
+                            System.err.println("Not enough disc space");
+                        }
+                    } else {   // no language modules selected for installation
+                        String message = ResourceManager.getString("String_No_Language_Selected_1") + "\n" +
+                                         ResourceManager.getString("String_No_Language_Selected_2");
+                        String title = ResourceManager.getString("String_Change_Selection");
+                        Informer.showInfoMessage(message, title);
+                        repeatDialog = true;
+                    }
+                } else {
+                    String message = ResourceManager.getString("String_No_Application_Selected_1") + "\n" +
+                                     ResourceManager.getString("String_No_Application_Selected_2");
+                    String title = ResourceManager.getString("String_Change_Selection");
+                    Informer.showInfoMessage(message, title);
                     repeatDialog = true;
                 }
             } else {  // no modules selected for installation
