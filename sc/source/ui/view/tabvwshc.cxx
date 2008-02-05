@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:15:06 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:49:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 #include "pivot.hxx"
 #include "namedlg.hxx"
 #include "solvrdlg.hxx"
+#include "optsolver.hxx"
 #include "tabopdlg.hxx"
 #include "autoform.hxx"         // Core
 #include "autofmt.hxx"          // Dialog
@@ -252,6 +253,14 @@ SfxModelessDialog* ScTabViewShell::CreateRefDialog(
                                 pViewData->GetCurY(),
                                 pViewData->GetTabNo());
             pResult = new ScSolverDlg( pB, pCW, pParent, pViewData->GetDocument(), aCurPos );
+        }
+        break;
+
+        case SID_OPENDLG_OPTSOLVER:
+        {
+            ScViewData* pViewData = GetViewData();
+            ScAddress aCurPos( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
+            pResult = new ScOptSolverDlg( pB, pCW, pParent, pViewData->GetDocShell(), aCurPos );
         }
         break;
 
