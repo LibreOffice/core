@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpex.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 17:53:46 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:55:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,6 +222,7 @@ int _cdecl main( int argc, char *argv[] )
 #endif
 /*****************************************************************************/
 {
+
     if ( !ParseCommandLine( argc, argv )) {
         Help();
         return 1;
