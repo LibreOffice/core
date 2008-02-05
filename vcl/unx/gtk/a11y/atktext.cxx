@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atktext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 12:26:35 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:30:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,10 +241,11 @@ text_wrapper_get_text (AtkText *text,
         if( pText )
         {
             rtl::OUString aText;
+            sal_Int32 n = pText->getCharacterCount();
 
             if( -1 == end_offset )
                 aText = pText->getText();
-            else
+            else if( start_offset < n )
                 aText = pText->getTextRange(start_offset, end_offset);
 
             ret = g_strdup( rtl::OUStringToOString(aText, RTL_TEXTENCODING_UTF8 ).getStr() );
