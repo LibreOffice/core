@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffact.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:07:56 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:46:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@
 
 DECL_WRAPPER(ScNameDlgWrapper)
 DECL_WRAPPER(ScSolverDlgWrapper)
+DECL_WRAPPER(ScOptSolverDlgWrapper)
 DECL_WRAPPER(ScPivotLayoutWrapper)
 DECL_WRAPPER(ScTabOpDlgWrapper)
 DECL_WRAPPER(ScFilterDlgWrapper)
