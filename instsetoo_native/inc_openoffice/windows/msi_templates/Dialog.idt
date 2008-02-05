@@ -4,6 +4,7 @@ Dialog	Dialog
 AdminChangeFolder	50	50	374	266	3	[ProductName] - Installation Wizard	Tail	OK	Cancel
 AdminNetworkLocation	50	50	374	266	3	[ProductName] - Installation Wizard	InstallNow	InstallNow	Cancel
 AdminWelcome	50	50	374	266	3	[ProductName] - Installation Wizard	Next	Next	Cancel
+ApplicationInfo1	50	50	260	85	3	[ProductName]  - Installation Wizard	OK	OK	OK
 CancelSetup	50	50	260	85	3	[ProductName] [Setup]	No	No	No
 CustomerInformation	50	50	374	266	3	[ProductName] - Installation Wizard	NameEdit	Next	Cancel
 CustomSetup	50	50	374	266	35	[ProductName] - Installation Wizard	Tree	Next	Cancel
@@ -15,6 +16,7 @@ FilesInUse	50	50	374	266	19	[ProductName] - Installation Wizard	Retry	Retry	Exit
 FileTypeDialog	50	50	374	266	3	[ProductName] - Installation Wizard	CheckBox1	Next	Cancel
 InstallChangeFolder	50	50	374	266	3	[ProductName] - Installation Wizard	Tail	OK	Cancel
 InstallWelcome	50	50	374	266	3	[ProductName] - Installation Wizard	Next	Next	Cancel
+LanguageInfo1	50	50	260	85	3	[ProductName]  - Installation Wizard	OK	OK	OK
 LicenseAgreement	50	50	374	266	2	[ProductName] - Installation Wizard	Agree	Next	Cancel
 MaintenanceType	50	50	374	266	3	[ProductName] - Installation Wizard	RadioGroup	Next	Cancel
 MaintenanceWelcome	50	50	374	266	3	[ProductName] - Installation Wizard	Next	Next	Cancel
