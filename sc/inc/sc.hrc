@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:09:40 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:43:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,6 +352,14 @@
 // #i68101#
 #define HID_SC_TITLE_DESCRIPTION_OBJECT ( HID_SC_OTHER_START + 17 )
 
+#define HID_SC_SOLVEROPTIONS    ( HID_SC_OTHER_START + 18 )
+#define HID_SC_SOLVEROPTIONS_LB ( HID_SC_OTHER_START + 19 )
+#define HID_SC_SOLVER_INTEGER   ( HID_SC_OTHER_START + 20 )
+#define HID_SC_SOLVER_DOUBLE    ( HID_SC_OTHER_START + 21 )
+#define HID_SC_SOLVER_PROGRESS  ( HID_SC_OTHER_START + 22 )
+#define HID_SC_SOLVER_NOSOLUTION ( HID_SC_OTHER_START + 23 )
+#define HID_SC_SOLVER_SUCCESS   ( HID_SC_OTHER_START + 24 )
+
 // Analysis Addin Functions (max.120) ----------------------------------------
 #define HID_AAI_FUNC_WORKDAY        ( HID_SC_AAI_FUNCS_START )
 #define HID_AAI_FUNC_YEARFRAC       ( HID_SC_AAI_FUNCS_START + 1 )
@@ -652,6 +660,7 @@
 #define SID_OPENDLG_ARGUMENT        (SC_MESSAGE_START + 57)
 //#define SID_OPENDLG_MODCHART      (SC_MESSAGE_START + 58)
 #define SID_OPENDLG_CONDFRMT        (SC_MESSAGE_START + 59)
+#define SID_OPENDLG_OPTSOLVER       (SC_MESSAGE_START + 60)
 
 #define SC_HINT_NAVIGATOR_UPDATEALL  (SC_MESSAGE_START + 65)
 
@@ -1603,6 +1612,13 @@
 #define RID_SCDLG_DPNUMGROUP            (SC_DIALOGS_START + 135)
 #define RID_SCDLG_DPDATEGROUP           (SC_DIALOGS_START + 136)
 #define RID_SCDLG_DPSHOWDETAIL          (SC_DIALOGS_START + 137)
+#define RID_SCDLG_OPTSOLVER             (SC_DIALOGS_START + 138)
+#define RID_SCDLG_SOLVEROPTIONS         (SC_DIALOGS_START + 139)
+#define RID_SCDLG_SOLVER_INTEGER        (SC_DIALOGS_START + 140)
+#define RID_SCDLG_SOLVER_DOUBLE         (SC_DIALOGS_START + 141)
+#define RID_SCDLG_SOLVER_PROGRESS       (SC_DIALOGS_START + 142)
+#define RID_SCDLG_SOLVER_NOSOLUTION     (SC_DIALOGS_START + 143)
+#define RID_SCDLG_SOLVER_SUCCESS        (SC_DIALOGS_START + 144)
 
 #define SC_DIALOGS_END          (SC_DIALOGS_START + 150)
 
