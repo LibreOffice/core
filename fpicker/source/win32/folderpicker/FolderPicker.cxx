@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FolderPicker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:20:09 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,9 +88,8 @@ namespace
 {
     Sequence< OUString > SAL_CALL FolderPicker_getSupportedServiceNames()
     {
-        Sequence< OUString > aRet(2);
-        aRet[0] = OUString::createFromAscii("com.sun.star.ui.dialogs.FolderPicker");
-        aRet[1] = OUString::createFromAscii("com.sun.star.ui.dialogs.SystemFolderPicker");
+        Sequence< OUString > aRet(1);
+        aRet[0] = OUString::createFromAscii("com.sun.star.ui.dialogs.SystemFolderPicker");
         return aRet;
     }
 }
