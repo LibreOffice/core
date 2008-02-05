@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-04 08:52:18 $
+ *  last change: $Author: mav $ $Date: 2008-02-05 16:35:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ package com.sun.star.wiki;
 
 import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XWindowPeer;
+import com.sun.star.awt.XThrobber;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -59,6 +60,7 @@ public class WikiEditSettingDialog extends WikiDialog
     private boolean addMode;
     private boolean m_bAllowURLChange = true;
     private Thread m_aLoginThread;
+    private boolean m_bThreadFinished = false;
 
     public WikiEditSettingDialog( XComponentContext xContext, String DialogURL )
     {
@@ -67,6 +69,7 @@ public class WikiEditSettingDialog extends WikiDialog
         setting = new Hashtable();
         addMode = true;
 
+        InsertThrobber( 184, 24, 10, 10 );
         InitStrings( xContext );
         InitSaveCheckbox( xContext );
     }
@@ -92,12 +95,15 @@ public class WikiEditSettingDialog extends WikiDialog
         addMode = false;
         m_bAllowURLChange = bAllowURLChange;
 
+        InsertThrobber( 184, 24, 10, 10 );
         InitStrings( xContext );
         InitSaveCheckbox( xContext );
     }
 
     public boolean show( )
     {
+        SetThrobberVisible( false );
+        m_bThreadFinished = false;
         EnableControls( true );
         return super.show();
     }
@@ -259,7 +265,6 @@ public class WikiEditSettingDialog extends WikiDialog
                                 }
 
                                 m_bAction = true;
-                                xDialog.endExecute();
                             }
                         }
                     }
@@ -322,10 +327,14 @@ public class WikiEditSettingDialog extends WikiDialog
         if ( MethodName.equals( sOKMethod ) )
         {
             EnableControls( false );
+            SetThrobberVisible( true );
+            SetThrobberActive( true );
 
             if ( Helper.AllowThreadUsage( m_xContext ) )
             {
                 final XDialog xDialogForThread = xDialog;
+                final XComponentContext xContext = m_xContext;
+                final WikiEditSettingDialog aThis = this;
 
                 // the thread name is used to allow the error dialogs
                 m_aLoginThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
@@ -336,12 +345,12 @@ public class WikiEditSettingDialog extends WikiDialog
                         {
                             Thread.yield();
                             DoLogin( xDialogForThread );
-                            m_bAction = true;
+                            m_bThreadFinished = true;
                         } catch( java.lang.Exception e )
                         {}
                         finally
                         {
-                            xDialogForThread.endExecute();
+                            MainThreadDialogExecutor.Close( xContext, xDialogForThread );
                             Helper.AllowConnection( true );
                         }
                     }
@@ -354,7 +363,7 @@ public class WikiEditSettingDialog extends WikiDialog
                 try
                 {
                     DoLogin( xDialog );
-                    m_bAction = true;
+                    m_bThreadFinished = true;
                 } catch( java.lang.Exception e )
                 {}
                 finally
@@ -376,20 +385,23 @@ public class WikiEditSettingDialog extends WikiDialog
 
     public void windowClosed( EventObject e )
     {
-        if ( m_aLoginThread != null )
+        if ( m_aLoginThread != null && !m_bThreadFinished )
         {
-            Helper.AllowConnection( false );
             try
             {
+                Helper.AllowConnection( false );
                 m_aLoginThread.join();
             }
             catch( Exception ex )
             {
                 ex.printStackTrace();
             }
-
-            m_aLoginThread = null;
-            Helper.AllowConnection( true );
+            finally
+            {
+                m_aLoginThread = null;
+                Helper.AllowConnection( true );
+            }
         }
     }
 }
+

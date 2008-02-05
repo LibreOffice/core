@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Helper.java,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-04 08:52:18 $
+ *  last change: $Author: mav $ $Date: 2008-02-05 16:35:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ public class Helper
     public final static int NOURL_ERROR = 5;
 
     public final static int DLG_SENDTITLE = 6;
-    // number 7 is RESERVED
+    public final static int DLG_WIKIARTICLE = 7;
     public final static int DLG_NO = 8;
     public final static int DLG_OK = 9;
     public final static int DLG_YES = 10;
@@ -132,7 +132,7 @@ public class Helper
                                                     "InvalidURL",
                                                     "NoURL",
                                                     "Dlg_SendTitle",
-                                                    null, // reserved
+                                                    "Dlg_WikiArticle",
                                                     "Dlg_No",
                                                     "Dlg_OK",
                                                     "Dlg_Yes",

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MainThreadDialogExecutor.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2007-12-14 09:40:43 $
+ *  last change: $Author: mav $ $Date: 2008-02-05 16:35:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ public class MainThreadDialogExecutor implements XCallback
     private XMessageBox m_xMessageBox;
     private boolean    m_bResult = false;
     private boolean    m_bCalled = false;
+    private boolean    m_bClose = false;
 
     static public boolean Show( XComponentContext xContext, WikiDialog aWikiDialog )
     {
@@ -67,6 +68,12 @@ public class MainThreadDialogExecutor implements XCallback
     static public boolean Execute( XComponentContext xContext, XMessageBox xMessageBox )
     {
         MainThreadDialogExecutor aExecutor = new MainThreadDialogExecutor( xMessageBox );
+        return GetCallback( xContext, aExecutor );
+    }
+
+    static public boolean Close( XComponentContext xContext, XDialog xDialog )
+    {
+        MainThreadDialogExecutor aExecutor = new MainThreadDialogExecutor( xDialog, true );
         return GetCallback( xContext, aExecutor );
     }
 
@@ -126,6 +133,13 @@ public class MainThreadDialogExecutor implements XCallback
         m_xDialog = xDialog;
     }
 
+    private MainThreadDialogExecutor( XDialog xDialog, boolean bClose )
+    {
+        m_xDialog = xDialog;
+        m_bClose = true;
+        m_bCalled = true; // no yielding, asynchronous closing
+    }
+
     private MainThreadDialogExecutor( XMessageBox xMessageBox )
     {
         m_xMessageBox = xMessageBox;
@@ -141,7 +155,22 @@ public class MainThreadDialogExecutor implements XCallback
         if ( m_aWikiDialog != null )
             m_bResult = m_aWikiDialog.show();
         else if ( m_xDialog != null )
-            m_bResult = ( m_xDialog.execute() == 1 );
+        {
+            if ( !m_bClose )
+                m_bResult = ( m_xDialog.execute() == 1 );
+            else
+            {
+                try
+                {
+                    m_xDialog.endExecute();
+                }
+                catch( Exception e )
+                {
+                    e.printStackTrace();
+                }
+                m_bResult = true;
+            }
+        }
         else if ( m_xMessageBox != null )
             m_bResult = ( m_xMessageBox.execute() == 1 );
 

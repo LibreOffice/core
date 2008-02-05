@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiDialog.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-04 08:52:18 $
+ *  last change: $Author: mav $ $Date: 2008-02-05 16:35:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,21 @@ package com.sun.star.wiki;
 
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
+import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDialog;
 import com.sun.star.awt.XDialogEventHandler;
 import com.sun.star.awt.XDialogProvider2;
+import com.sun.star.awt.XThrobber;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.awt.XTopWindow;
 import com.sun.star.awt.XTopWindowListener;
+import com.sun.star.awt.XWindow;
+import com.sun.star.container.XNameContainer;
 import com.sun.star.lang.EventObject;
+import com.sun.star.lang.XMultiServiceFactory;
 
 public class WikiDialog implements XDialogEventHandler, XTopWindowListener
 {
@@ -180,6 +185,80 @@ public class WikiDialog implements XDialogEventHandler, XTopWindowListener
         }
 
         return xResult;
+    }
+
+    protected void InsertThrobber( int X, int Y, int Width, int Height )
+    {
+        try
+        {
+            XControl xDialogControl = ( XControl ) UnoRuntime.queryInterface( XControl.class, m_xDialog );
+            XControlModel xDialogModel = null;
+            if ( xDialogControl != null )
+                xDialogModel = xDialogControl.getModel();
+
+            XMultiServiceFactory xDialogFactory = ( XMultiServiceFactory ) UnoRuntime.queryInterface( XMultiServiceFactory.class, xDialogModel );
+            if ( xDialogFactory != null )
+            {
+                XControlModel xThrobberModel = (XControlModel)UnoRuntime.queryInterface( XControlModel.class, xDialogFactory.createInstance( "com.sun.star.awt.UnoThrobberControlModel" ) );
+                XPropertySet xThrobberProps = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, xThrobberModel );
+                if ( xThrobberProps != null )
+                {
+                    xThrobberProps.setPropertyValue( "Name", "WikiThrobber" );
+                    xThrobberProps.setPropertyValue( "PositionX", new Integer( X ) );
+                    xThrobberProps.setPropertyValue( "PositionY", new Integer( Y ) );
+                    xThrobberProps.setPropertyValue( "Height", new Integer( Width ) );
+                    xThrobberProps.setPropertyValue( "Width", new Integer( Height ) );
+
+                    XNameContainer xDialogContainer = (XNameContainer)UnoRuntime.queryInterface( XNameContainer.class, xDialogModel );
+                    xDialogContainer.insertByName( "WikiThrobber", xThrobberModel );
+                }
+            }
+        }
+        catch( Exception e )
+        {
+            e.printStackTrace();
+        }
+
+        SetThrobberVisible( false );
+    }
+
+    public void SetThrobberActive( boolean bActive )
+    {
+        if ( m_xControlContainer != null )
+        {
+            try
+            {
+                XThrobber xThrobber = (XThrobber)UnoRuntime.queryInterface( XThrobber.class, m_xControlContainer.getControl( "WikiThrobber" ) );
+                if ( xThrobber != null )
+                {
+                    if ( bActive )
+                        xThrobber.start();
+                    else
+                        xThrobber.stop();
+                }
+            }
+            catch( Exception e )
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void SetThrobberVisible( boolean bVisible )
+    {
+        if ( m_xControlContainer != null )
+        {
+            try
+            {
+                XWindow xWindow = (XWindow)UnoRuntime.queryInterface( XWindow.class, m_xControlContainer.getControl( "WikiThrobber" ) );
+                if ( xWindow != null )
+                    xWindow.setVisible( bVisible );
+            }
+            catch ( Exception e )
+            {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void DisposeDialog()

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-04 08:52:18 $
+ *  last change: $Author: mav $ $Date: 2008-02-05 16:35:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,12 +56,11 @@ public class WikiPropDialog extends WikiDialog{
 
     private final String sSendMethod = "Send";
     private final String sHelpMethod = "Help";
-    private final String sLoadMethod = "Load";
     private final String sWikiListMethod = "WikiListChange";
     private final String sArticleTextMethod = "ArticleTextChange";
     private final String sAddWikiMethod = "AddWiki";
 
-    String[] m_pMethods = {sSendMethod, sHelpMethod, sLoadMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
+    String[] m_pMethods = {sSendMethod, sHelpMethod, sWikiListMethod, sArticleTextMethod, sAddWikiMethod};
 
     private String m_sWikiTitle = "";
     protected String m_sWikiEngineURL = "";
@@ -78,7 +77,7 @@ public class WikiPropDialog extends WikiDialog{
 
         if ( aWikiEditorForThrobber != null )
         {
-            InsertThrobber();
+            InsertThrobber( 224, 122, 10, 10 );
             m_aWikiEditor = aWikiEditorForThrobber;
         }
 
@@ -92,6 +91,7 @@ public class WikiPropDialog extends WikiDialog{
         {
             SetTitle( Helper.GetLocalizedString( xContext, Helper.DLG_SENDTITLE ) );
             GetPropSet( "Label1" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDTOMEDIAWIKI_LABEL1 ) );
+            GetPropSet( "FixedLine2" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_WIKIARTICLE ) );
             GetPropSet( "Label2" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDTOMEDIAWIKI_LABEL2 ) );
             GetPropSet( "Label3" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDTOMEDIAWIKI_LABEL3 ) );
             GetPropSet( "MinorCheck" ).setPropertyValue( "Label", Helper.GetLocalizedString( xContext, Helper.DLG_SENDTOMEDIAWIKI_MINORCHECK ) );
@@ -238,12 +238,12 @@ public class WikiPropDialog extends WikiDialog{
                 ex.printStackTrace();
             }
 
-            // TODO: In future the result of storing will be interesting
-            // TODO: do not do it in OOo2.2
             final WikiPropDialog aThisDialog = this;
             final XDialog xDialogToClose = xDialog;
+            final XComponentContext xContext = m_xContext;
 
             // start spinning
+            SetThrobberVisible( true );
             SetThrobberActive( true );
 
             if ( Helper.AllowThreadUsage( m_xContext ) )
@@ -264,7 +264,7 @@ public class WikiPropDialog extends WikiDialog{
                         {}
                         finally
                         {
-                            xDialogToClose.endExecute();
+                            MainThreadDialogExecutor.Close( xContext, xDialogToClose );
                             Helper.AllowConnection( true );
                         }
                     }
@@ -292,32 +292,8 @@ public class WikiPropDialog extends WikiDialog{
 
             return true;
         }
-        else if ( MethodName.equals( sLoadMethod ) )
-        {
-            try
-            {
-                short [] sel = (short[]) GetPropSet("WikiList").getPropertyValue("SelectedItems");
-                String [] items = (String []) GetPropSet("WikiList").getPropertyValue("StringItemList");
-                m_sWikiEngineURL = items[sel[0]];
-                m_aSettings.setLastUsedWikiServer(sel[0]);
-                m_sWikiTitle = (String) GetPropSet("ArticleText").getPropertyValue("Text");
-            }
-            catch (UnknownPropertyException ex)
-            {
-                ex.printStackTrace();
-            }
-            catch (WrappedTargetException ex)
-            {
-                ex.printStackTrace();
-            }
-            m_bAction = true;
-            xDialog.endExecute();
-            return true;
-        }
         else if ( MethodName.equals( sHelpMethod ) )
         {
-            m_bAction = false;
-            //xDialog.endExecute();
             return true;
         }
         else if ( MethodName.equals( sWikiListMethod ) )
@@ -347,82 +323,30 @@ public class WikiPropDialog extends WikiDialog{
 
     public void windowClosed( EventObject e )
     {
-        if ( m_aSendingThread != null )
-        {
-            Helper.AllowConnection( false );
-            try {
-                m_aSendingThread.join();
-            } catch ( Exception ex )
-            {
-                ex.printStackTrace();
-            }
-
-            m_aSendingThread = null;
-            Helper.AllowConnection( true );
-
-            Helper.ShowError( m_xContext,
-                              m_xDialog,
-                              Helper.DLG_SENDTITLE,
-                              Helper.CANCELSENDING_ERROR,
-                              null,
-                              false );
-        }
-    }
-
-    private void InsertThrobber()
-    {
-        try
-        {
-            XControl xDialogControl = ( XControl ) UnoRuntime.queryInterface( XControl.class, m_xDialog );
-            XControlModel xDialogModel = null;
-            if ( xDialogControl != null )
-                xDialogModel = xDialogControl.getModel();
-
-            XMultiServiceFactory xDialogFactory = ( XMultiServiceFactory ) UnoRuntime.queryInterface( XMultiServiceFactory.class, xDialogModel );
-            if ( xDialogFactory != null )
-            {
-                XControlModel xThrobberModel = (XControlModel)UnoRuntime.queryInterface( XControlModel.class, xDialogFactory.createInstance( "com.sun.star.awt.UnoThrobberControlModel" ) );
-                XPropertySet xThrobberProps = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class, xThrobberModel );
-                if ( xThrobberProps != null )
-                {
-                    xThrobberProps.setPropertyValue( "Name", "WikiThrobber" );
-                    xThrobberProps.setPropertyValue( "PositionX", new Integer( 242 ) );
-                    xThrobberProps.setPropertyValue( "PositionY", new Integer( 42 ) );
-                    xThrobberProps.setPropertyValue( "Height", new Integer( 16 ) );
-                    xThrobberProps.setPropertyValue( "Width", new Integer( 16 ) );
-
-                    XNameContainer xDialogContainer = (XNameContainer)UnoRuntime.queryInterface( XNameContainer.class, xDialogModel );
-                    xDialogContainer.insertByName( "WikiThrobber", xThrobberModel );
-                }
-            }
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace();
-        }
-    }
-
-    public void SetThrobberActive( boolean bActive )
-    {
-        if ( m_xControlContainer != null )
+        if ( m_aSendingThread != null && !m_bAction )
         {
             try
             {
-                XThrobber xThrobber = (XThrobber)UnoRuntime.queryInterface( XThrobber.class, m_xControlContainer.getControl( "WikiThrobber" ) );
-                if ( xThrobber != null )
-                {
-                    if ( bActive )
-                        xThrobber.start();
-                    else
-                        xThrobber.stop();
-                }
+                Helper.AllowConnection( false );
+                m_aSendingThread.join();
             }
-            catch( Exception e )
+            catch ( Exception ex )
             {
-                e.printStackTrace();
+                ex.printStackTrace();
+            }
+            finally
+            {
+                m_aSendingThread = null;
+                Helper.AllowConnection( true );
+
+                Helper.ShowError( m_xContext,
+                                  m_xDialog,
+                                  Helper.DLG_SENDTITLE,
+                                  Helper.CANCELSENDING_ERROR,
+                                  null,
+                                  false );
             }
         }
     }
-
 }
 
