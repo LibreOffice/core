@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HelpCompiler.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 13:54:58 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:54:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,14 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
     if( bExtensionMode )
     {
         res = xmlParseFile(filePath.native_file_string().c_str());
+        if( !res ){
+#ifdef UNX
+            sleep( 3 );
+#else
+            _sleep( 3 );
+#endif
+            res = xmlParseFile(filePath.native_file_string().c_str());
+        }
     }
     else
     {
@@ -82,6 +90,18 @@ xmlDocPtr HelpCompiler::getSourceDocument(const fs::path &filePath)
             params[nbparams] = NULL;
         }
         xmlDocPtr doc = xmlParseFile(filePath.native_file_string().c_str());
+        if( !doc )
+        {
+#ifdef UNX
+            sleep( 3 );
+#else
+            _sleep( 3 );
+#endif
+            doc = xmlParseFile(filePath.native_file_string().c_str());
+        }
+
+        res = xmlParseFile(filePath.native_file_string().c_str());
+
         res = xsltApplyStylesheet(cur, doc, params);
         xmlFreeDoc(doc);
     }
@@ -397,9 +417,18 @@ bool HelpCompiler::compile( void ) throw( HelpProcessingException )
     // resolve the dom
     if (!docResolvedOrg)
     {
-        std::stringstream aStrStream;
-        aStrStream << "ERROR: file not existing: " << inputFile.native_file_string().c_str() << std::endl;
-        throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
+#ifdef UNX
+        sleep( 3 );
+#else
+        _sleep( 3 );
+#endif
+        docResolvedOrg = getSourceDocument(inputFile);
+        if( !docResolvedOrg )
+        {
+            std::stringstream aStrStream;
+            aStrStream << "ERROR: file not existing: " << inputFile.native_file_string().c_str() << std::endl;
+            throw HelpProcessingException( HELPPROCESSING_GENERAL_ERROR, aStrStream.str() );
+        }
     }
 
     // now find all applications for which one has to compile
