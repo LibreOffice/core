@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2007-12-17 15:01:05 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:55:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,28 +439,89 @@ bool HelpParser::MergeSingleFile( XMLFile* file , MergeDataFile& aMergeDataFile 
     // Init temp and target file
     ByteString sTempFile;
     ByteString sTargetFile( sPath );
+    ByteString sTempFileCopy;
 
     static const ByteString INPATH = Export::GetEnv( "INPATH" );
     Export::getRandomName( sPath , sTempFile , INPATH );
-
+      Export::getRandomName( sPath , sTempFileCopy , INPATH );
     // Write in the temp file
     bool hasNoError = file->Write ( sTempFile );
-    if( !hasNoError ) return false;
-
-    remove( sTargetFile.GetBuffer() );
-    if( rename( sTempFile.GetBuffer() , sTargetFile.GetBuffer() ) != 0 )
+    if( !hasNoError )
     {
-        cerr << "ERROR: helpex Can't rename file " << sTempFile.GetBuffer() << " to " << sTargetFile.GetBuffer() << "\n";
+        cerr << "ERROR: file->Write failed\n";
         return false;
     }
 
-    DirEntry aTarget( sTargetFile );
-    FileStat aFileStat( aTarget );
-    if( aFileStat.GetSize() < 1 )
+    DirEntry aTmp( sTempFile );
+    DirEntry aTmp2( sTempFileCopy );
+    DirEntry aTar( sTargetFile );
+
+    if( !Export::CopyFile( sTempFile , sTempFileCopy ) )
     {
-        cerr << "ERROR: - helpex - Filesize == 0 of file " << sTargetFile.GetBuffer() << "\n";
-        return false;
+#ifdef UNX
+        sleep( 3 );
+#else
+        _sleep( 3 );
+#endif
+        if( !Export::CopyFile( sTempFile , sTempFileCopy ) )
+        {
+            cerr << "ERROR: Can not copy file from " << sTempFile.GetBuffer() << " to " << sTempFileCopy.GetBuffer() << "\n";
+            return false;
+        }
     }
+    //remove( sTargetFile.GetBuffer() );
+
+    FileStat aFSTest( aTar );
+    if( aFSTest.GetSize() < 1 )
+    {
+        remove( sTargetFile.GetBuffer() );
+    }
+    int rc = rename( sTempFile.GetBuffer() , sTargetFile.GetBuffer() );
+    FileStat aFS( aTar );
+
+    //cout << "mv " << sTempFile.GetBuffer() << " " << sTargetFile.GetBuffer() << "\n";
+    //cout << "rc -> " << rc << " filesize -> " << aFS.GetSize() << "\n";
+// Windows rename returns -1 if the file already exits
+#ifdef WNT
+    if( aFS.GetSize() < 1 )
+#else
+    if( rc < 0 || aFS.GetSize() < 1 )
+#endif
+    {
+#ifdef UNX
+        sleep( 3 );
+#else
+        _sleep( 3 );
+#endif
+        aFSTest.Update( aTar );
+        if( aFSTest.GetSize() < 1 )
+        {
+            remove( sTargetFile.GetBuffer() );
+        }
+        rc = rename( sTempFileCopy.GetBuffer() , sTargetFile.GetBuffer() );
+        aFS.Update( aTar );
+
+        //cout << "mv2 " << sTempFileCopy.GetBuffer() << " " << sTargetFile.GetBuffer() << "\n";
+        //cout << "rc -> " << rc << " filesize -> " << aFS.GetSize() << "\n";
+
+// Windows rename returns -1 if the file already exits
+#ifdef WNT
+        if( aFS.GetSize() < 1 )
+#else
+        if( rc < 0 || aFS.GetSize() < 1 )
+#endif
+        {
+            cerr << "ERROR: helpex Can't rename file " << sTempFileCopy.GetBuffer() << " to " << sTargetFile.GetBuffer() << " rename rc=" << rc << " filesize=" << aFS.GetSize() << "\n";
+            aTmp.Kill();
+            aTmp2.Kill();
+            if( aFS.GetSize() < 1 )
+                aTar.Kill();
+            return false;
+        }
+    }
+    aTmp.Kill();
+    aTmp2.Kill();
+
     return true;
 }
 
