@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.84 $
+#   $Revision: 1.85 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-16 12:48:53 $
+#   last change: $Author: ihi $ $Date: 2008-02-05 13:35:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -238,6 +238,8 @@ BEGIN
     $downloadfileextension = "";
     $oooversionstring = "";
     $shellnewfilesadded = 0;
+    %multilingual_only_modules = ();
+    %application_modules = ();
 
     $is_copy_only_project = 0;
     $is_simple_packager_project = 0;
