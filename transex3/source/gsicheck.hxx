@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gsicheck.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2007-05-11 09:12:23 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:56:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ public:
 
 DECLARE_LIST( GSIBlock_Impl, GSILine * )
 
-class SvStream;
+class LazySvFileStream;
 
 class GSIBlock : public GSIBlock_Impl
 {
@@ -125,9 +125,9 @@ public:
     void SetReferenceLine( GSILine* pLine );
     BOOL CheckSyntax( ULONG nLine, BOOL bRequireSourceLine, BOOL bFixTags );
 
-    void WriteError( SvStream &aErrOut, BOOL bRequireSourceLine );
-    void WriteCorrect( SvStream &aOkOut, BOOL bRequireSourceLine );
-    void WriteFixed( SvStream &aFixOut, BOOL bRequireSourceLine );
+    void WriteError( LazySvFileStream &aErrOut, BOOL bRequireSourceLine );
+    void WriteCorrect( LazySvFileStream &aOkOut, BOOL bRequireSourceLine );
+    void WriteFixed( LazySvFileStream &aFixOut, BOOL bRequireSourceLine );
 };
 
 #endif
