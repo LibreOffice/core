@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2006-07-25 09:50:14 $
+#   last change: $Author: ihi $ $Date: 2008-02-05 15:45:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@ SLOFILES =  \
 
 
 EXCEPTIONSFILES= \
+        $(SLO)$/docsh.obj \
         $(SLO)$/docsh8.obj \
         $(SLO)$/dbdocimp.obj
 
