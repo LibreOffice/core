@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LinuxInstaller.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 11:54:15 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 13:37:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,8 @@ import org.openoffice.setup.Util.ExecuteProcess;
 import org.openoffice.setup.Util.Informer;
 import org.openoffice.setup.Util.LogManager;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Vector;
 
 public class LinuxInstaller extends Installer {
@@ -105,6 +107,7 @@ public class LinuxInstaller extends Installer {
             // not analyzed before (when going back in installation wizard)
             if ( ! databasePath.equals(oldDatabasePath) ) {
                 data.setDatabaseAnalyzed(false);
+                data.setDatabaseQueried(false);
             }
         }
     }
@@ -349,7 +352,7 @@ public class LinuxInstaller extends Installer {
         }
     }
 
-    public boolean isPackageInstalled(PackageDescription packageData, InstallData installData) {
+    public boolean isPackageInstalledClassic(PackageDescription packageData, InstallData installData) {
 
         boolean isInstalled = false;
         boolean doCheck = false;
@@ -366,6 +369,7 @@ public class LinuxInstaller extends Installer {
         }
 
         if (( rpmPackageName != null ) && ( doCheck )) {
+
             String databaseString = "";
             String databasePath = null;
             String packageName = packageData.getPkgRealName();
@@ -413,9 +417,101 @@ public class LinuxInstaller extends Installer {
                     String log = rpmCommand + "<br><b>Returns: " + returnValue + " Package is not installed" + "</b><br>";
                     LogManager.addCommandsLogfileComment(log);
                 }
+            }
+        }
 
+        return isInstalled;
+    }
+
+    private void queryAllDatabase(InstallData installData) {
+
+        String databaseString = "";
+        String databasePath = null;
+        HashMap map = new HashMap();;
+        boolean useLocalDatabase = false;
+
+        if (installData.isUserInstallation()) {
+            databasePath = installData.getDatabasePath();
+        }
+
+        if (( databasePath != null ) && (! databasePath.equals("null"))) {
+            databaseString = "--dbpath";
+            useLocalDatabase = true;
+        }
+
+        String rpmCommand;
+        String[] rpmCommandArray;
+
+        if (useLocalDatabase) {
+            rpmCommand = "rpm" + " " + databaseString + " " + databasePath + " --query" + " -a";
+            rpmCommandArray = new String[5];
+            rpmCommandArray[0] = "rpm";
+            rpmCommandArray[1] = databaseString;
+            rpmCommandArray[2] = databasePath;
+            rpmCommandArray[3] = "--query";
+            rpmCommandArray[4] = "-a";
+        } else {
+            rpmCommand = "rpm" + " --query" + " -a";
+            rpmCommandArray = new String[3];
+            rpmCommandArray[0] = "rpm";
+            rpmCommandArray[1] = "--query";
+            rpmCommandArray[2] = "-a";
+        }
+
+        Vector returnVector = new Vector();
+        Vector returnErrorVector = new Vector();
+        int returnValue = ExecuteProcess.executeProcessReturnVector(rpmCommandArray, returnVector, returnErrorVector);
+
+        String log = rpmCommand + "<br><b>Returns: " + returnValue + "</b><br>";
+        LogManager.addCommandsLogfileComment(log);
+        String value = "1";
+
+        if ( ! returnVector.isEmpty()) {
+            for (int i = 0; i < returnVector.size(); i++) {
+                String onePackage = (String)returnVector.get(i);
+                int pos1 = onePackage.lastIndexOf("-");
+                int pos2 = onePackage.substring(0, pos1).lastIndexOf("-");
+                map.put(onePackage.substring(0, pos2), value);
+            }
+        }
+
+        installData.setDatabaseQueried(true);
+        installData.setDatabaseMap(map);
+    }
+
+    public boolean isPackageInstalled(PackageDescription packageData, InstallData installData) {
+
+        boolean isInstalled = false;
+        boolean doCheck = false;
+
+        // only checking existing packages (and always at uninstallation)
+        if ( (packageData.pkgExists()) || (installData.isUninstallationMode()) ) {
+            doCheck = true;
+        }
+
+        String rpmPackageName = packageData.getPackageName();
+
+        if ( rpmPackageName.equals("") ) {
+            rpmPackageName = null;
+        }
+
+        if (( rpmPackageName != null ) && ( doCheck )) {
+            String packageName = packageData.getPkgRealName();
+
+            if (packageName != null) {
+
+                HashMap map = null;
+                if ( ! installData.databaseQueried() ) {
+                    queryAllDatabase(installData);
+                }
+
+                map = installData.getDatabaseMap();
+
+                if ( map.containsKey(packageName)) {
+                    isInstalled = true;
+                }
             } else {
-                System.err.println("Error: No packageName defined for package: " + rpmPackageName);
+                System.err.println("Error: No packageName defined for package: " + packageData.getPackageName());
             }
         }
 
