@@ -4,9 +4,9 @@
  *
  *  $RCSfile: intro_tmpl.hrc,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2008-02-04 16:40:31 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:52:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ ItemList = \
     < "Claus Agerskov" ; > ; \
     < "Tesfamicael Adhanom" ; > ; \
     < "Agile Interactions, Inc." ; > ; \
+    < "Volker Ahrendt" ; > ; \
     < "Christian Ahrenkiel" ; > ; \
     < "Kai Ahrens" ; > ; \
     < "Ralph Aichinger" ; > ; \
@@ -130,6 +131,7 @@ ItemList = \
     < "Peter Bodnar" ; > ; \
     < "Daniel Boelzle" ; > ; \
     < "Marco Boerries" ; > ; \
+    < "Michael Bohn" ; > ; \
     < "Myrzaliyer Bolat" ; > ; \
     < "Oliver Bolte" ; > ; \
     < "Berit Bonde" ; > ; \
@@ -169,8 +171,9 @@ ItemList = \
     < "Brian Cameron" ; > ; \
     < "Scott Carr" ; > ; \
     < "Christina L. Carr" ; > ; \
-    < "Daniel Carrera" ; > ; \
     < "Mauro Catarzi" ; > ; \
+    < "Daniel Carrera" ; > ; \
+    < "Giuseppe Castagno" ; > ; \
     < "Centre for Development of Advanced Computing" ; > ; \
     < "Ales Cernosek" ; > ; \
     < "Goerkem Cetin" ; > ; \
@@ -198,6 +201,7 @@ ItemList = \
     < "Danese Cooper" ; > ; \
     < "Lee Corbin" ; > ; \
     < "Dietmar Cordes" ; > ; \
+    < "Berend Cornelius" ; > ; \
      < "Jesus Corrius" ; > ; \
     < "Martin Coxall" ; > ; \
      < "Joszef Csongradi" ; > ; \
@@ -234,6 +238,7 @@ ItemList = \
     < "Thomas Doru" ; > ; \
     < "Willem van Dorp" ; > ; \
     < "Davide Dozza" ; > ; \
+    < "Derek Dreger" ; > ; \
     < "Carsten Driesner" ; > ; \
     < "Cristian Driga" ; > ; \
     < "Petr Dudacek" ; > ; \
@@ -264,12 +269,14 @@ ItemList = \
     < "Pierre de Filippis" ; > ; \
     < "Jan Firich" ; > ; \
     < "Andre Fischer" ; > ; \
-    < "Darin Fisher" ; > ; \
     < "Helga Fischer" ; > ; \
+    < "Uwe Fischer" ; > ; \
+    < "Darin Fisher" ; > ; \
     < "Nicole M. Follet-Dunn" ; > ; \
     < "Kenneth Foskey" ; > ; \
-    < "Tim Foster" ; > ; \
     < "Peter Frandsen" ; > ; \
+    < "Duncan Foster" ; > ; \
+    < "Tim Foster" ; > ; \
     < "Gary Frederick" ; > ; \
     < "Nils Fuhrmann" ; > ; \
     < "Jan Funken" ; > ; \
@@ -293,7 +300,7 @@ ItemList = \
     < "Marco Giorgetti" ; > ; \
     < "Thomas Girard" ; > ; \
     < "Serkan Girgin" ; > ; \
-    < "Vladimir Glazonouv" ; > ; \
+    < "Vladimir Glazounov" ; > ; \
     < "Laurent Godard" ; > ; \
     < "M. Godec" ; > ; \
     < "Angelika Goeszler" ; > ; \
@@ -319,6 +326,7 @@ ItemList = \
     < "Bettina Haberer" ; > ; \
     < "Thomas Hackert" ; > ; \
     < "David Hackler" ; > ; \
+    < "Fredrik Haegg" ; > ; \
     < "Ingrid Halama" ; > ; \
     < "William Neil Hall" ; > ; \
     < "Chris Halls" ; > ; \
@@ -360,11 +368,12 @@ ItemList = \
     < "Michelle Hills" ; > ; \
     < "Kazunari Hirano" ; > ; \
     < "Samual W. Hiser" ; > ; \
-        < "Ivo Hinkelmann" ; > ; \
-        < "Theresa Hinkelman" ; > ; \
+    < "Ivo Hinkelmann" ; > ; \
+    < "Theresa Hinkelman" ; > ; \
     < "Eric Hoch" ; > ; \
     < "Lutz Hoeger" ; > ; \
     < "Michael Hoennig" ; > ; \
+    < "Ilko Hoepping" ; > ; \
     < "Axel Hoernke" ; > ; \
     < "Ralf Hofmann" ; > ; \
     < "Jakob Hojgaard" ; > ; \
@@ -408,6 +417,7 @@ ItemList = \
     < "Pavel Janik" ; > ; \
     < "Sunil Amitkumar Janki" ; > ; \
     < "Sven Jacobi" ; > ; \
+    < "Yvonne Jacoby" ; > ; \
     < "Denis Jacquerye" ; > ; \
     < "Egle Jasutiene" ; > ; \
     < "Joerg Jahnke" ; > ; \
@@ -419,8 +429,9 @@ ItemList = \
     < "Ricky Hugh Jensen" ; > ; \
     < "Tatjiana Jevsikova" ; > ; \
     < "Jiao Jianhua" ; > ; \
-    < "Henrik Jordt" ; > ; \
+    < "Gary Johnston" ; > ; \
     < "Dewi Jones" ; > ; \
+    < "Henrik Jordt" ; > ; \
     < "Anders Colding Jorgesen" ; > ; \
     < "Peter Junge" ; > ; \
     < "Christian Junker" ; > ; \
@@ -453,12 +464,14 @@ ItemList = \
     < "Robert Kinsella" ; > ; \
     < "Lazsio Kishalmi" ; > ; \
     < "Andre Kitzing" ; > ; \
+    < "Thomas Klarhoefer" ; > ; \
     < "Sven Klawitter" ; > ; \
+    < "Branislav Klocok" ; > ; \
     < "Halfdan Holger Knudsen" ; > ; \
     < "Rune Tendal Kock" ; > ; \
-    < "Branislav Klocok" ; > ; \
     < "Magdy Samuel Abdel Koddous" ; > ; \
     < "Charles Peter Koerner" ; > ; \
+    < "Kay Koll" ; > ; \
     < "Masataka Kondo" ; > ; \
     < "Soren Kongstad" ; > ; \
     < "Dimitris Korbetis" ; > ; \
@@ -565,6 +578,7 @@ ItemList = \
     < "Christian Markgraf" ; > ; \
     < "John Marmion" ; > ; \
     < "Adam Marks" ; > ; \
+    < "Dirk Marquardt" ; > ; \
     < "Tam Marshall" ; > ; \
     < "Andreas Martens" ; > ; \
     < "Thorsten Martens" ; > ; \
@@ -611,6 +625,7 @@ ItemList = \
     < "Filip Molcan" ; > ; \
     < "Tadeusz Mollun" ; > ; \
     < "Carl De Monbrun" ; > ; \
+    < "Volker Moneke" ; > ; \
     < "Takayuki Morisawa" ; > ; \
     < "Jan Morgils" ; > ; \
     < "Tim Morley" ; > ; \
@@ -652,6 +667,7 @@ ItemList = \
     < "Rodrigo Parra Novo" ; > ; \
     < "Peter Novodvorsky" ; > ; \
     < "O3Spaces (C.B Hoeflake)" ; > ; \
+    < "Tomas O'Connor" ; > ; \
     < "Munzir Taha Obeid" ; > ; \
     < "Eivind Odegard" ; > ; \
     < "Maximilian Odendahl" ; > ; \
@@ -701,6 +717,7 @@ ItemList = \
     < "Pvabhas Pokhavel" ; > ; \
     < "Ravi Poluri" ; > ; \
     < "Rastislav Poruban" ; > ; \
+    < "Noel Power" ; > ; \
     < "Ashwanth Premchandran" ; > ; \
     < "Marco Pratesi" ; > ; \
     < "Nikolai Pretzell" ; > ; \
@@ -785,7 +802,7 @@ ItemList = \
     < "Harald Schilly" ; > ; \
     < "Tom Schindl" ; > ; \
     < "Andreas Schluens" ; > ; \
-    < "Ingo Schmidt" ; > ; \
+    < "Ingo Schmidt-Rosbiegal" ; > ; \
     < "Juergen Schmidt" ; > ; \
     < "Andre Schnabel" ; > ; \
     < "Frank Schoenheit" ; > ; \
@@ -928,6 +945,7 @@ ItemList = \
     < "Radek Vybiral" ; > ; \
     < "Robert Don Wadley" ; > ; \
     < "Robert Wagy" ; > ; \
+    < "Martina Waller" ; > ; \
     < "William Wan" ; > ; \
     < "Funda Wang" ; > ; \
     < "Polly Wang" ; > ; \
@@ -1049,6 +1067,7 @@ ItemList = \
     < "Mathias Bauer" ; > ; \
     < "" ; > ; \
     < "Henning Brinkmann" ; > ; \
+    < "Steffen Grund" ; > ; \
     < "Hans-Peter Burow" ; > ; \
     < "Carsten Driesner" ; > ; \
     < "Thomas Lange" ; > ; \
@@ -1056,9 +1075,11 @@ ItemList = \
     < "Frank Meies" ; > ; \
     < "Andreas Schluens" ; > ; \
     < "Oliver Specht" ; > ; \
+    < "Gunnar Timm" ; > ; \
+    < "Daniel Vogelheim" ; > ; \
+    < "Oliver-Rainer Wittmann" ; > ; \
     < "Michael Stahl" ; > ; \
     < "Mikhail Voitenko" ; > ; \
-    < "Oliver-Rainer Wittmann" ; > ; \
     < "" ; > ; \
     < "%PRODUCTNAME IMPRESS, GRAPHICS & BASE" ; 8 ; > ; \
     < "" ; > ; \
