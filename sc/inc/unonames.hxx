@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:10:29 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -604,6 +604,9 @@
 // Chart2
 #define SC_UNONAME_ISHIDDEN         "IsHidden"
 #define SC_UNONAME_ROLE             "Role"
+
+// Solver
+#define SC_UNONAME_TIMEOUT          "Timeout"
 
 #endif
 
