@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffact.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:13:33 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:48:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@
 
 SFX_IMPL_MODELESSDIALOG(ScNameDlgWrapper, FID_DEFINE_NAME )
 SFX_IMPL_MODELESSDIALOG(ScSolverDlgWrapper, SID_OPENDLG_SOLVE )
+SFX_IMPL_MODELESSDIALOG(ScOptSolverDlgWrapper, SID_OPENDLG_OPTSOLVER )
 SFX_IMPL_MODELESSDIALOG(ScPivotLayoutWrapper, SID_OPENDLG_PIVOTTABLE )
 SFX_IMPL_MODELESSDIALOG(ScTabOpDlgWrapper, SID_OPENDLG_TABOP )
 SFX_IMPL_MODELESSDIALOG(ScFilterDlgWrapper, SID_FILTER )
@@ -106,6 +107,12 @@ IMPL_CHILD_CTOR( ScNameDlgWrapper, FID_DEFINE_NAME )
 //-------------------------------------------------------------------------
 
 IMPL_CHILD_CTOR( ScSolverDlgWrapper, SID_OPENDLG_SOLVE )
+
+//-------------------------------------------------------------------------
+// ScOptSolverDlgWrapper
+//-------------------------------------------------------------------------
+
+IMPL_CHILD_CTOR( ScOptSolverDlgWrapper, SID_OPENDLG_OPTSOLVER )
 
 //-------------------------------------------------------------------------
 // ScPivotLayoutWrapper
