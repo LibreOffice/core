@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_langpack.scp,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 17:10:36 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 13:41:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@ Module gid_Module_Langpack_Languageroot
     XPDParentID = "root";
     Sortkey = "300";
     MOD_NAME_DESC(MODULE_ROOT_LANGPACK);
-    // Styles =(LANGUAGEMODULE);
+    Styles = (SHOW_MULTILINGUAL_ONLY);
 End
 
 #include "alllangmodules.inc"
