@@ -337,6 +337,11 @@
                     <value>1</value>
                 </prop>
             </node>
+            <node oor:name=".uno:SolverDialog" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="en-US">Sol~ver...</value>
+                </prop>
+            </node>
             <node oor:name=".uno:JumpToNextTable" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="en-US">To Next Sheet</value>
