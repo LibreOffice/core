@@ -1,0 +1,92 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XSolver.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:51:01 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_sheet_XSolver_idl__
+#define __com_sun_star_sheet_XSolver_idl__
+
+#ifndef __com_sun_star_sheet_XSpreadsheetDocument_idl__
+#include <com/sun/star/sheet/XSpreadsheetDocument.idl>
+#endif
+
+#ifndef __com_sun_star_sheet_SolverConstraint_idl__
+#include <com/sun/star/sheet/SolverConstraint.idl>
+#endif
+
+//=============================================================================
+
+module com {  module sun {  module star {  module sheet {
+
+//=============================================================================
+
+/** allows to call a solver for a model that is defined by spreadsheet cells.
+ */
+interface XSolver: com::sun::star::uno::XInterface
+{
+    /// The spreadsheet document that contains the cells.
+    [attribute] XSpreadsheetDocument Document;
+
+    /// The address of the cell that contains the objective value.
+    [attribute] com::sun::star::table::CellAddress Objective;
+
+    /// The addresses of the cells that contain the variables.
+    [attribute] sequence< com::sun::star::table::CellAddress > Variables;
+
+    /// The constraints of the model.
+    [attribute] sequence< SolverConstraint > Constraints;
+
+    /// selects if the objective value is maximized or minimized.
+    [attribute] boolean Maximize;
+
+    /// executes the calculation and tries to find a solution.
+    void solve();
+
+    /// contains <TRUE/> if a solution was found.
+    [attribute, readonly] boolean Success;
+
+    /// contains the objective value for the solution, if a solution was found.
+    [attribute, readonly] double ResultValue;
+
+    /** contains the solution's value for each of the variables,
+        if a solution was found.
+     */
+    [attribute, readonly] sequence< double > Solution;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
+
