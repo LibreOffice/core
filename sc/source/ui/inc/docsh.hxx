@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-10 13:16:55 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:45:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,7 @@ class ScChangeAction;
 class VirtualDevice;
 class ScImportOptions;
 class ScDocShellModificator;
+class ScOptSolverSave;
 
 namespace sfx2 { class FileDialogHelper; }
 struct DocShell_Impl;
@@ -146,6 +147,7 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
     ScAutoStyleList*    pAutoStyleList;
     ScPaintLockData*    pPaintLockData;
     ScJobSetup*         pOldJobSetup;
+    ScOptSolverSave*    pSolverSaveData;
 
     ScDocShellModificator* pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
 
@@ -420,6 +422,9 @@ public:
     void            AfterXMLLoading(sal_Bool bRet);
 
     virtual sal_uInt16 GetHiddenInformationState( sal_uInt16 nStates );
+
+    const ScOptSolverSave* GetSolverSaveData() const    { return pSolverSaveData; }     // may be null
+    void            SetSolverSaveData( const ScOptSolverSave& rData );
 };
 
 SO2_DECL_REF(ScDocShell)
