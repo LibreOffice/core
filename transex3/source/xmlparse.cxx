@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlparse.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:03:16 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:56:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -277,12 +277,17 @@ BOOL XMLFile::Write( ByteString &aFilename )
 
     if ( aFilename.Len()) {
         // retry harder if there is a NFS problem,
-        for( int x = 0 ; x < 200 ; x++ ){   // this looks strange...yes!
+        for( int x = 1 ; x < 3 ; x++ ){ // this looks strange...yes!
             ofstream aFStream( aFilename.GetBuffer() , ios::out | ios::trunc );
 
             if( !aFStream )     // From time to time the stream can not be opened the first time on NFS volumes,
             {                   // I wasn't able to track this down. I think this is an NFS issue .....
-                cerr << "ERROR: - helpex - Can't write to tempfile " << aFilename.GetBuffer() << " No#" << x << "\n";
+                //cerr << "ERROR: - helpex - Can't write to tempfile " << aFilename.GetBuffer() << " No#" << x << "\n";
+#ifdef UNX
+                sleep( 3 );
+#else
+                _sleep( 3 );
+#endif
             }
             else
             {
@@ -297,7 +302,7 @@ BOOL XMLFile::Write( ByteString &aFilename )
                 if( aFileStat.GetSize() < 1 )
                 {
                     //retry
-                    cerr << "WARNING: - helpex - Can't create file " << aFilename.GetBuffer() << " No#" << x << "\n";
+                    //cerr << "WARNING: - helpex - Can't create file " << aFilename.GetBuffer() << " No#" << x << "\n";
                     aTarget.Kill();
                 }
                 else
