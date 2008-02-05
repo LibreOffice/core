@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2007-05-22 20:09:23 $
+#   last change: $Author: ihi $ $Date: 2008-02-05 15:47:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,9 @@ SLOFILES =  \
     $(SLO)$/filldlg.obj			\
     $(SLO)$/autofmt.obj			\
     $(SLO)$/solvrdlg.obj		\
+    $(SLO)$/optsolver.obj       \
+    $(SLO)$/solveroptions.obj   \
+    $(SLO)$/solverutil.obj      \
     $(SLO)$/mvtabdlg.obj		\
     $(SLO)$/groupdlg.obj		\
     $(SLO)$/tabopdlg.obj		\
@@ -84,6 +87,11 @@ SLOFILES =  \
     $(SLO)$/warnbox.obj	\
     $(SLO)$/scuiautofmt.obj
 
+EXCEPTIONSFILES= \
+    $(SLO)$/optsolver.obj       \
+    $(SLO)$/solveroptions.obj   \
+    $(SLO)$/solverutil.obj
+
 SRS1NAME=$(TARGET)
 SRC1FILES = \
     instbdlg.src				\
@@ -96,6 +104,9 @@ LIB1TARGET = $(SLB)$/$(TARGET).lib
 LIB1OBJFILES =  \
     $(SLO)$/autofmt.obj			\
     $(SLO)$/solvrdlg.obj		\
+    $(SLO)$/optsolver.obj       \
+    $(SLO)$/solveroptions.obj   \
+    $(SLO)$/solverutil.obj      \
     $(SLO)$/tabopdlg.obj		\
     $(SLO)$/teamdlg.obj			\
     $(SLO)$/anyrefdg.obj		\
