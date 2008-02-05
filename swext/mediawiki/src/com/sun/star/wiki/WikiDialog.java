@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiDialog.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-05 16:35:54 $
+ *  last change: $Author: mav $ $Date: 2008-02-05 17:22:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,6 +253,23 @@ public class WikiDialog implements XDialogEventHandler, XTopWindowListener
                 XWindow xWindow = (XWindow)UnoRuntime.queryInterface( XWindow.class, m_xControlContainer.getControl( "WikiThrobber" ) );
                 if ( xWindow != null )
                     xWindow.setVisible( bVisible );
+            }
+            catch ( Exception e )
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void SetFocusTo( String aControl )
+    {
+        if ( m_xControlContainer != null )
+        {
+            try
+            {
+                XWindow xWindow = (XWindow)UnoRuntime.queryInterface( XWindow.class, m_xControlContainer.getControl( aControl ) );
+                if ( xWindow != null )
+                    xWindow.setFocus();
             }
             catch ( Exception e )
             {

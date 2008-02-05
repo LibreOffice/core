@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-05 16:35:54 $
+ *  last change: $Author: mav $ $Date: 2008-02-05 17:22:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,6 +229,8 @@ public class WikiPropDialog extends WikiDialog{
                 short nBrowserState = ((Short) aBrowserCheckProps.getPropertyValue("State")).shortValue();
                 Helper.SetShowInBrowserByDefault( m_xContext, nBrowserState != 0 );
 
+                // allow to disable other buttons
+                SetFocusTo( "CancelButton" );
                 XPropertySet[] aToDisable = { aWikiListProps, aArticleTextProps, aCommentTextProps, aMinorCheckProps, aBrowserCheckProps, aHelpButtonProps, aSendButtonProps, aAddButtonProps };
                 for ( int nInd = 0; nInd < aToDisable.length; nInd++ )
                     aToDisable[nInd].setPropertyValue( "Enabled", Boolean.FALSE );

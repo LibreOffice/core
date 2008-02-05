@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-05 16:35:54 $
+ *  last change: $Author: mav $ $Date: 2008-02-05 17:22:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,19 +110,26 @@ public class WikiEditSettingDialog extends WikiDialog
 
     private void EnableControls( boolean bEnable )
     {
+        if ( !bEnable )
+            SetFocusTo( "CancelButton" );
+
         try
         {
-            GetPropSet( "UrlField" ).setPropertyValue( "Enabled", new Boolean( m_bAllowURLChange ) );
             GetPropSet( "UsernameField" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
             GetPropSet( "PasswordField" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
             GetPropSet( "OkButton" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
             GetPropSet( "HelpButton" ).setPropertyValue( "Enabled", new Boolean( bEnable ) );
 
             if ( bEnable )
+            {
+                GetPropSet( "UrlField" ).setPropertyValue( "Enabled", new Boolean( m_bAllowURLChange ) );
                 GetPropSet( "SaveBox" ).setPropertyValue( "Enabled", new Boolean( Helper.PasswordStoringIsAllowed( m_xContext ) ) );
+            }
             else
+            {
+                GetPropSet( "UrlField" ).setPropertyValue( "Enabled", Boolean.FALSE );
                 GetPropSet( "SaveBox" ).setPropertyValue( "Enabled", Boolean.FALSE );
-
+            }
         }
         catch ( Exception ex )
         {
