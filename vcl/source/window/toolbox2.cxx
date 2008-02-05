@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:18:21 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:30:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1569,6 +1569,9 @@ void ToolBox::SetItemText( USHORT nItemId, const XubString& rText )
         else
             pItem->maText = ImplConvertMenuString( rText );
 
+        // Notify button changed event to prepare accessibility bridge
+        ImplCallEventListeners( VCLEVENT_TOOLBOX_BUTTONSTATECHANGED, reinterpret_cast< void* >( nPos ) );
+
         // Notify
         ImplCallEventListeners( VCLEVENT_TOOLBOX_ITEMTEXTCHANGED, reinterpret_cast< void* >( nPos ) );
     }
@@ -1766,6 +1769,10 @@ void ToolBox::SetItemState( USHORT nItemId, TriState eState )
 
             pItem->meState = eState;
             ImplUpdateItem( nPos );
+
+            // Notify button changed event to prepare accessibility bridge
+            ImplCallEventListeners( VCLEVENT_TOOLBOX_BUTTONSTATECHANGED, reinterpret_cast< void* >( nPos ) );
+
             // Notify
             ImplCallEventListeners( VCLEVENT_TOOLBOX_CLICK, reinterpret_cast< void* >( nPos ) );
         }
@@ -1807,6 +1814,9 @@ void ToolBox::EnableItem( USHORT nItemId, BOOL bEnable )
             ImplUpdateItem( nPos );
 
             ImplUpdateInputEnable();
+
+            // Notify button changed event to prepare accessibility bridge
+            ImplCallEventListeners( VCLEVENT_TOOLBOX_BUTTONSTATECHANGED, reinterpret_cast< void* >( nPos ) );
 
             ImplCallEventListeners( bEnable ? VCLEVENT_TOOLBOX_ITEMENABLED : VCLEVENT_TOOLBOX_ITEMDISABLED, reinterpret_cast< void* >( nPos ) );
         }
