@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.39 $
+#   $Revision: 1.40 $
 #
-#   last change: $Author: ihi $ $Date: 2008-02-04 14:23:06 $
+#   last change: $Author: ihi $ $Date: 2008-02-05 13:35:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1816,6 +1816,63 @@ sub setencoding
 
         installer::files::save_file($onefilename, $onefile);
     }
+}
+
+##################################################################
+# Setting the condition, that at least one module is selected.
+# All modules with flag SHOW_MULTILINGUAL_ONLY were already
+# collected. In table ControlE.idt, the string
+# LANGUAGECONDITIONINSTALL needs to be replaced.
+# Also for APPLICATIONCONDITIONINSTALL for the applications
+# with flag APPLICATIONMODULE.
+##################################################################
+
+sub set_multilanguageonly_condition
+{
+    my ( $languageidtdir ) = @_;
+
+    my $onefilename = $languageidtdir . $installer::globals::separator . "ControlE.idt";
+    my $onefile = installer::files::read_file($onefilename);
+
+    # Language modules
+
+    my $condition = "";
+
+    foreach my $module ( sort keys %installer::globals::multilingual_only_modules )
+    {
+        $condition = $condition . " &$module=3 Or";
+    }
+
+    $condition =~ s/^\s*//;
+    $condition =~ s/\s*Or\s*$//;    # removing the ending "Or"
+
+    if ( $condition eq "" ) { $condition = "1"; }
+
+    for ( my $j = 0; $j <= $#{$onefile}; $j++ )
+    {
+        ${$onefile}[$j] =~ s/LANGUAGECONDITIONINSTALL/$condition/;
+    }
+
+    # Application modules
+
+    $condition = "";
+
+    foreach my $module ( sort keys %installer::globals::application_modules )
+    {
+        $condition = $condition . " &$module=3 Or";
+    }
+
+    $condition =~ s/^\s*//;
+    $condition =~ s/\s*Or\s*$//;    # removing the ending "Or"
+
+    if ( $condition eq "" ) { $condition = "1"; }
+
+    for ( my $j = 0; $j <= $#{$onefile}; $j++ )
+    {
+        ${$onefile}[$j] =~ s/APPLICATIONCONDITIONINSTALL/$condition/;
+    }
+
+    installer::files::save_file($onefilename, $onefile);
 }
 
 #############################################
