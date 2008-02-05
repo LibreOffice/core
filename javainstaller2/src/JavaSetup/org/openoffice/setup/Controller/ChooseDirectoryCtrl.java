@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChooseDirectoryCtrl.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 12:32:11 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 13:36:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,6 +226,7 @@ public class ChooseDirectoryCtrl extends PanelController {
 
                     if (( oldDatabasePath == null ) || ( ! oldDatabasePath.equals(data.getDatabasePath()))) {
                         data.setDatabaseAnalyzed(false);
+                        data.setDatabaseQueried(false);
                     } else {
                         data.setDatabaseAnalyzed(true);
                     }
@@ -282,102 +283,7 @@ public class ChooseDirectoryCtrl extends PanelController {
                 if ( ! repeatDialog ) {
 
                     if ( ! data.databaseAnalyzed()) {
-
-                        PackageDescription packageData = SetupDataProvider.getPackageDescription();
-
-                        // restore default settings
-                        if ( data.startSelectionStateSaved() ) {
-                            // System.err.println("Restoring start selection states");
-                            ModuleCtrl.restoreStartSelectionStates(packageData);
-                        } else {
-                            ModuleCtrl.saveStartSelectionStates(packageData);
-                            data.setStartSelectionStateSaved(true);
-                        }
-
-                        // Special ToDos, if this is an update installation of an older product.
-                        // In this case, "chooseInstallationType" and "chooseComponents" are not called.
-                        // Is it necessary to call "analyzeDatabase" ?
-                        if ( data.olderVersionExists() ) {
-                            // Calculation of size is not necessary, because only
-                            // already installed packages will be updated.
-
-                            if ( data.logModuleStates() ) {
-                                Dumper.logModuleStates(packageData, "ChooseDirectory: Before setUpdateOlderProductSettings");
-                            }
-
-                            // Updating only those packages that are installed.
-                            ModuleCtrl.setUpdateOlderProductSettings(packageData, data, installer);
-
-                            if ( data.logModuleStates() ) {
-                                Dumper.logModuleStates(packageData, "ChooseDirectory: After setUpdateOlderProductSettings");
-                            }
-
-                            // Checking, if all packages are available
-                            ModuleCtrl.disableNonExistingPackages(packageData, data);
-
-                            if ( data.logModuleStates() ) {
-                                Dumper.logModuleStates(packageData, "ChooseDirectory: After disableNonExistingPackages");
-                            }
-
-                            // disable packages, that are not valid in user installation
-                            if ( data.isUserInstallation() ) {
-                                ModuleCtrl.setShowInUserInstallFlags(packageData);
-
-                                if ( data.logModuleStates() ) {
-                                    Dumper.logModuleStates(packageData, "ChooseDirectory: After setShowInUserInstallFlags");
-                                }
-                            }
-
-                            // Collecting packages to install
-                            // This has to be done here, because "ChooseInstallationType" and "ChooseComponents"
-                            // are not called.
-                            Vector installPackages = new Vector();
-                            PackageCollector.collectInstallPackages(packageData, installPackages);
-                            data.setInstallPackages(installPackages);
-
-                        } else {   // same version exists or no version exists
-
-                            // database changed -> ignore saved states
-                            data.setTypicalSelectionStateSaved(false);
-                            data.setCustomSelectionStateSaved(false);
-
-                            if ( data.logModuleStates() ) {
-                                Dumper.logModuleStates(packageData, "analyzeDatabase: Start");
-                            }
-
-                            // searching in the database for already installed packages
-                            LogManager.setCommandsHeaderLine("Analyzing system database");
-                            ModuleCtrl.setDatabaseSettings(packageData, data, installer);
-
-                            if ( data.logModuleStates() ) {
-                                Dumper.logModuleStates(packageData, "analyzeDatabase: After setDatabaseSettings");
-                            }
-
-                            // ModuleCtrl.analyzeDatabase();
-                            ModuleCtrl.disableNonExistingPackages(packageData, data);
-
-                            if ( data.logModuleStates() ) {
-                                Dumper.logModuleStates(packageData, "ChooseDirectory: After disableNonExistingPackages");
-                            }
-
-                           // disable packages, that are not valid in user installation
-                            if ( data.isUserInstallation() ) {
-                                ModuleCtrl.setShowInUserInstallFlags(packageData);
-
-                                if ( data.logModuleStates() ) {
-                                    Dumper.logModuleStates(packageData, "ChooseDirectory: After setShowInUserInstallFlags");
-                                }
-                            }
-
-                            // Problem: If all submodules have flag IGNORE, the parent can also get IGNORE
-                            // That is interesting for language packs with three submodules.
-                            ModuleCtrl.setParentDefaultModuleSettings(packageData);
-
-                            if ( data.logModuleStates() ) {
-                                Dumper.logModuleStates(packageData, "ChooseDirectory: After setParentDefaultModuleSettings");
-                            }
-                        }
-
+                        ModuleCtrl.defaultDatabaseAnalysis(data);
                         data.setDatabaseAnalyzed(true);
                     }
                 }
