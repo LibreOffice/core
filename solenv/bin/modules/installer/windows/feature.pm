@@ -4,9 +4,9 @@
 #
 #   $RCSfile: feature.pm,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-04 17:00:38 $
+#   last change: $Author: ihi $ $Date: 2008-02-05 13:35:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,9 @@ sub get_feature_display
     my $styles = "";
     if ( $onefeature->{'Styles'} ) { $styles = $onefeature->{'Styles'}; }
     if ( $styles =~ /\bHIDDEN_ROOT\b/ ) { $display = "0"; }
+
+    # Special handling for language modules. Only visible in multilingual installation set
+    if (( $styles =~ /\bSHOW_MULTILINGUAL_ONLY\b/ ) && ( ! $installer::globals::ismultilingual )) { $display = "0"; }
 
     # Special handling for c05office. No program module visible.
     if (( $onefeature->{'gid'} eq "gid_Module_Prg" ) && ( $installer::globals::product =~ /c05office/i )) { $display = "0"; }
@@ -420,6 +423,18 @@ sub create_feature_table
             if ( ! installer::existence::exists_in_array($feature{'feature'}, \@installer::globals::featurecollector) )
             {
                 push(@installer::globals::featurecollector, $feature{'feature'});
+            }
+
+            # collecting all language feature in feature collector for check of language selection
+            if (( $styles =~ /\bSHOW_MULTILINGUAL_ONLY\b/ ) && ( $onefeature->{'ParentID'} ne $installer::globals::rootmodulegid ))
+            {
+                $installer::globals::multilingual_only_modules{$feature{'feature'}} = 1;
+            }
+
+            # collecting all application feature in global feature collector for check of application selection
+            if ( $styles =~ /\bAPPLICATIONMODULE\b/ )
+            {
+                $installer::globals::application_modules{$feature{'feature'}} = 1;
             }
         }
 
