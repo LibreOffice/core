@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:28:32 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:32:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1751,31 +1751,28 @@ void SAL_CALL SfxBaseModel::load(   const uno::Sequence< beans::PropertyValue >&
         if( m_pData->m_pObjectShell->IsAbortingImport() )
             nError = ERRCODE_ABORT;
 
-        if ( !nError )
+        if( bSalvage )
         {
-            if( bSalvage )
-            {
-                // file recovery: restore original filter
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
-                SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
-                const SfxFilter* pSetFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
-                pMedium->SetFilter( pSetFilter );
-                m_pData->m_pObjectShell->SetModified(sal_True);
-            }
-
-            // TODO/LATER: may be the mode should be retrieved from outside and the preused filter should not be set
-            if ( m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
-            {
-                SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
-                if ( pFilterItem )
-                    m_pData->m_aPreusedFilterName = pFilterItem->GetValue();
-            }
+            // file recovery: restore original filter
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+            SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
+            const SfxFilter* pSetFilter = rMatcher.GetFilter4FilterName( pFilterItem->GetValue() );
+            pMedium->SetFilter( pSetFilter );
+            m_pData->m_pObjectShell->SetModified(sal_True);
         }
-        else
-            m_pData->m_pObjectShell->ResetError();
+
+        // TODO/LATER: may be the mode should be retrieved from outside and the preused filter should not be set
+        if ( m_pData->m_pObjectShell->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        {
+            SFX_ITEMSET_ARG( pMedium->GetItemSet(), pFilterItem, SfxStringItem, SID_FILTER_NAME, sal_False );
+            if ( pFilterItem )
+                m_pData->m_aPreusedFilterName = pFilterItem->GetValue();
+        }
 
         if ( !nError )
             nError = pMedium->GetError();
+
+        m_pData->m_pObjectShell->ResetError();
 
         if ( nError )
         {
