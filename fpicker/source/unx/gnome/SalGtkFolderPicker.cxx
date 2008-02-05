@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFolderPicker.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:52:23 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:21:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,10 +110,9 @@ namespace
     // controling event notifications
     uno::Sequence<rtl::OUString> SAL_CALL FolderPicker_getSupportedServiceNames()
     {
-        uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FolderPicker" );
-        aRet[1] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFolderPicker" );
-        aRet[2] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.GtkFolderPicker" );
+        uno::Sequence<rtl::OUString> aRet(2);
+        aRet[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFolderPicker" );
+        aRet[1] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.GtkFolderPicker" );
         return aRet;
     }
 }
