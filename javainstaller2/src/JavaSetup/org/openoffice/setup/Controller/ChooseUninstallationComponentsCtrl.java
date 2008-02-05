@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChooseUninstallationComponentsCtrl.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-03 11:50:57 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 13:36:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,37 @@ public class ChooseUninstallationComponentsCtrl extends PanelController {
                 // -> The responsible value is InstallData.isMaskedCompleteUninstallation
                 data.setMaskedCompleteUninstallation(true);
                 ModuleCtrl.checkMaskedCompleteUninstallation(packageData, data);
+
+                // If this is not a complete uninstallation, at least one language
+                // module or one application module has to be installed.
+
+                if ( ! data.isMaskedCompleteUninstallation() ) {
+
+                    data.setApplicationModulesChecked(false);
+                    ModuleCtrl.checkApplicationModulesUninstall(packageData, data);
+
+                    if ( ! data.applicationModulesChecked() ) {
+
+                        String message = ResourceManager.getString("String_All_Applicationcomponents_Selected_1") + "\n" +
+                                         ResourceManager.getString("String_All_Applicationcomponents_Selected_2");
+                        String title = ResourceManager.getString("String_Change_Selection");
+                        Informer.showInfoMessage(message, title);
+                        repeatDialog = true;
+                    } else {
+
+                        data.setLanguageModulesChecked(false);
+                        ModuleCtrl.checkLanguageModulesUninstall(packageData, data);
+
+                        if ( ! data.languageModulesChecked() ) {
+
+                            String message = ResourceManager.getString("String_All_Languagecomponents_Selected_1") + "\n" +
+                                             ResourceManager.getString("String_All_Languagecomponents_Selected_2");
+                            String title = ResourceManager.getString("String_Change_Selection");
+                            Informer.showInfoMessage(message, title);
+                            repeatDialog = true;
+                        }
+                    }
+                }
             }
         } else {  // the back button was pressed
             // Saving typical selection state values (always if back button is pressed!).
