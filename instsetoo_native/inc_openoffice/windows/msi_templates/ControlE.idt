@@ -15,6 +15,7 @@ AdminNetworkLocation	InstallNow	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	2
 AdminNetworkLocation	InstallNow	SetTargetPath	TARGETDIR	1	1
 AdminWelcome	Cancel	SpawnDialog	CancelSetup	1	0
 AdminWelcome	Next	NewDialog	AdminNetworkLocation	1	0
+ApplicationInfo1	OK	EndDialog	Return	1	0
 CancelSetup	No	EndDialog	Return	1	0
 CancelSetup	Yes	EndDialog	Exit	1	2
 CustomerInformation	Back	NewDialog	LicenseAgreement	1	1
@@ -31,7 +32,15 @@ CustomSetup	Details	SelectionBrowse	DiskSpaceRequirements	1	1
 CustomSetup	Help	SpawnDialog	CustomSetupTips	1	1
 CustomSetup	Next	[_IsSetupTypeMin]	Custom	1	0
 CustomSetup	Next	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	0
-CustomSetup	Next	NewDialog	FileTypeDialog	OutOfNoRbDiskSpace <> 1	0
+CustomSetup	Next	NewDialog	FileTypeDialog	OutOfNoRbDiskSpace <> 1 And (LANG_SELECTED = 1) And (APP_SELECTED = 1)	9
+CustomSetup	Next	DoAction	ResetLanguageSelected	1	1
+CustomSetup	Next	DoAction	SetLanguageSelected	(isMulti <> 1) Or Installed	3
+CustomSetup	Next	DoAction	SetLanguageSelected	(isMulti = 1) And Not Installed And (LANGUAGECONDITIONINSTALL)	4
+CustomSetup	Next	SpawnDialog	LanguageInfo1	(isMulti = 1) And (LANG_SELECTED <> 1)	7
+CustomSetup	Next	DoAction	ResetApplicationSelected	1	2
+CustomSetup	Next	DoAction	SetApplicationSelected	Not Installed And (APPLICATIONCONDITIONINSTALL)	5
+CustomSetup	Next	DoAction	SetApplicationSelected	Installed	5
+CustomSetup	Next	SpawnDialog	ApplicationInfo1	APP_SELECTED <> 1	6
 CustomSetupTips	OK	EndDialog	Return	1	1
 DatabaseFolder	Back	NewDialog	CustomerInformation	1	1
 DatabaseFolder	Cancel	SpawnDialog	CancelSetup	1	1
@@ -60,6 +69,7 @@ InstallChangeFolder	Up	DirectoryListUp	0	1	0
 InstallWelcome	Back	NewDialog	SplashBitmap	Display_IsBitmapDlg	1
 InstallWelcome	Cancel	SpawnDialog	CancelSetup	1	0
 InstallWelcome	Next	NewDialog	LicenseAgreement	1	0
+LanguageInfo1	OK	EndDialog	Return	1	0
 LicenseAgreement	Back	NewDialog	InstallWelcome	1	0
 LicenseAgreement	Cancel	SpawnDialog	CancelSetup	1	0
 LicenseAgreement	Next	NewDialog	CustomerInformation	AgreeToLicense = "Yes"	0
