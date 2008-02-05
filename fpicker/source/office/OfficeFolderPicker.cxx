@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFolderPicker.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:14:37 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:21:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,10 +269,8 @@ Sequence< ::rtl::OUString > SAL_CALL SvtFolderPicker::getSupportedServiceNames()
 /* Helper for XServiceInfo */
 Sequence< ::rtl::OUString > SvtFolderPicker::impl_getStaticSupportedServiceNames()
 {
-    Sequence< ::rtl::OUString > seqServiceNames( 2 );
-    ::rtl::OUString* pArray = seqServiceNames.getArray();
-    pArray[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FolderPicker" );
-    pArray[1] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.OfficeFolderPicker" );
+    Sequence< ::rtl::OUString > seqServiceNames(1);
+    seqServiceNames[0] = ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.OfficeFolderPicker" );
     return seqServiceNames ;
 }
 
@@ -289,3 +287,4 @@ Reference< XInterface > SAL_CALL SvtFolderPicker::impl_createInstance( const Ref
     Reference< XMultiServiceFactory > xServiceManager (rxContext->getServiceManager(), UNO_QUERY_THROW);
     return Reference< XInterface >( *new SvtFolderPicker( xServiceManager ) );
 }
+
