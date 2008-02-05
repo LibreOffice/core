@@ -1,0 +1,548 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: optsolver.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:48:01 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "optsolver.hrc"
+
+ModelessDialog RID_SCDLG_OPTSOLVER
+{
+    OutputSize = TRUE ;
+    HelpId = SID_OPENDLG_OPTSOLVER ;
+    Hide = TRUE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 230 , 210 ) ;
+    Text [ en-US ] = "Solver" ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+
+    FixedText FT_OBJECTIVECELL
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 59 , 8 ) ;
+        Text [ en-US ] = "Target cell" ;
+    };
+    Edit ED_OBJECTIVECELL
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 67 , 6 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton IB_OBJECTIVECELL
+    {
+        Pos = MAP_APPFONT ( 199 , 5 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+
+    FixedText FT_DIRECTION
+    {
+        Pos = MAP_APPFONT ( 6 , 24 ) ;
+        Size = MAP_APPFONT ( 59 , 8 ) ;
+        Text [ en-US ] = "Optimize result to" ;
+    };
+    RadioButton RB_MAX
+    {
+        Pos = MAP_APPFONT ( 67 , 24 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text [ en-US ] = "Maximum" ;
+        TabStop = TRUE ;
+    };
+    RadioButton RB_MIN
+    {
+        Pos = MAP_APPFONT ( 67 , 38 ) ;
+        Size = MAP_APPFONT ( 50 , 10 ) ;
+        Text [ en-US ] = "Minimum" ;
+        TabStop = TRUE ;
+    };
+    RadioButton RB_VALUE
+    {
+        Pos = MAP_APPFONT ( 67 , 52 ) ;
+        Size = MAP_APPFONT ( 59 , 10 ) ;
+        Text [ en-US ] = "Value of" ;
+        TabStop = TRUE ;
+    };
+    Edit ED_TARGET
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 128 , 50 ) ;
+        Size = MAP_APPFONT ( 69 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton IB_TARGET
+    {
+        Pos = MAP_APPFONT ( 199 , 49 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+
+    FixedText FT_VARIABLECELLS
+    {
+        Pos = MAP_APPFONT ( 6 , 68 ) ;
+        Size = MAP_APPFONT ( 59 , 8 ) ;
+        Text [ en-US ] = "By changing cells" ;
+    };
+    Edit ED_VARIABLECELLS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 67 , 66 ) ;
+        Size = MAP_APPFONT ( 130 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton IB_VARIABLECELLS
+    {
+        Pos = MAP_APPFONT ( 199 , 65 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+
+    FixedLine FL_CONDITIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 88 ) ;
+        Size = MAP_APPFONT ( 221 , 8 ) ;
+        Text [ en-US ] = "Limiting conditions" ;
+    };
+
+    FixedText FT_CELLREF
+    {
+        Pos = MAP_APPFONT ( 12 , 102 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text [ en-US ] = "Cell reference" ;
+    };
+    FixedText FT_OPERATOR
+    {
+        Pos = MAP_APPFONT ( 84 , 102 ) ;
+        Size = MAP_APPFONT ( 38 , 8 ) ;
+        Text [ en-US ] = "Operator" ;
+    };
+    FixedText FT_CONSTRAINT
+    {
+        Pos = MAP_APPFONT ( 128 , 102 ) ;
+        Size = MAP_APPFONT ( 70 , 8 ) ;
+        Text [ en-US ] = "Value" ;
+    };
+
+    Edit ED_LEFT1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 114 ) ;
+        Size = MAP_APPFONT ( 53 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton IB_LEFT1
+    {
+        Pos = MAP_APPFONT ( 67 , 113 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    ListBox LB_OP1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 84 , 114 ) ;
+        Size = MAP_APPFONT ( 38 , 56 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "<=" ; Default ; > ;
+            < "=" ; Default ; > ;
+            < ">=" ; Default ; > ;
+            < "Integer" ; Default ; > ;
+            < "Binary" ; Default ; > ;
+        };
+    };
+    Edit ED_RIGHT1
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 128 , 114 ) ;
+        Size = MAP_APPFONT ( 53 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton IB_RIGHT1
+    {
+        Pos = MAP_APPFONT ( 183 , 113 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    ImageButton IB_DELETE1
+    {
+        Pos = MAP_APPFONT ( 199 , 113 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Remove" ;
+        // image is set dynamically
+    };
+
+    Edit ED_LEFT2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 129 ) ;
+        Size = MAP_APPFONT ( 53 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton IB_LEFT2
+    {
+        Pos = MAP_APPFONT ( 67 , 128 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    ListBox LB_OP2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 84 , 129 ) ;
+        Size = MAP_APPFONT ( 38 , 56 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "<=" ; Default ; > ;
+            < "=" ; Default ; > ;
+            < ">=" ; Default ; > ;
+            < "Integer" ; Default ; > ;
+            < "Binary" ; Default ; > ;
+        };
+    };
+    Edit ED_RIGHT2
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 128 , 129 ) ;
+        Size = MAP_APPFONT ( 53 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton IB_RIGHT2
+    {
+        Pos = MAP_APPFONT ( 183 , 128 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    ImageButton IB_DELETE2
+    {
+        Pos = MAP_APPFONT ( 199 , 128 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Remove" ;
+        // image is set dynamically
+    };
+
+    Edit ED_LEFT3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 144 ) ;
+        Size = MAP_APPFONT ( 53 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton IB_LEFT3
+    {
+        Pos = MAP_APPFONT ( 67 , 143 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    ListBox LB_OP3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 84 , 144 ) ;
+        Size = MAP_APPFONT ( 38 , 56 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "<=" ; Default ; > ;
+            < "=" ; Default ; > ;
+            < ">=" ; Default ; > ;
+            < "Integer" ; Default ; > ;
+            < "Binary" ; Default ; > ;
+        };
+    };
+    Edit ED_RIGHT3
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 128 , 144 ) ;
+        Size = MAP_APPFONT ( 53 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton IB_RIGHT3
+    {
+        Pos = MAP_APPFONT ( 183 , 143 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    ImageButton IB_DELETE3
+    {
+        Pos = MAP_APPFONT ( 199 , 143 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Remove" ;
+        // image is set dynamically
+    };
+
+    Edit ED_LEFT4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 12 , 159 ) ;
+        Size = MAP_APPFONT ( 53 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton IB_LEFT4
+    {
+        Pos = MAP_APPFONT ( 67 , 158 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    ListBox LB_OP4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 84 , 159 ) ;
+        Size = MAP_APPFONT ( 38 , 56 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+        StringList [ en-US ] =
+        {
+            < "<=" ; Default ; > ;
+            < "=" ; Default ; > ;
+            < ">=" ; Default ; > ;
+            < "Integer" ; Default ; > ;
+            < "Binary" ; Default ; > ;
+        };
+    };
+    Edit ED_RIGHT4
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 128 , 159 ) ;
+        Size = MAP_APPFONT ( 53 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    ImageButton IB_RIGHT4
+    {
+        Pos = MAP_APPFONT ( 183 , 158 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = FALSE ;
+        QuickHelpText [ en-US ] = "Shrink" ;
+    };
+    ImageButton IB_DELETE4
+    {
+        Pos = MAP_APPFONT ( 199 , 158 ) ;
+        Size = MAP_APPFONT ( 13 , 15 ) ;
+        TabStop = TRUE ;
+        QuickHelpText [ en-US ] = "Remove" ;
+        // image is set dynamically
+    };
+
+    ScrollBar SB_SCROLL
+    {
+        Pos = MAP_APPFONT ( 216, 113 ) ;
+        Size = MAP_APPFONT ( 8 , 59 ) ;
+        VScroll = TRUE ;
+    };
+
+    FixedLine FL_BUTTONS
+    {
+        Pos = MAP_APPFONT ( 0 , 179 ) ;
+        Size = MAP_APPFONT ( 230 , 8 ) ;
+    };
+
+    PushButton BTN_OPTIONS
+    {
+        Pos = MAP_APPFONT ( 6 , 190 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Options..." ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 62 , 190 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    CancelButton BTN_CLOSE
+    {
+        Pos = MAP_APPFONT ( 118 , 190 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Close" ;
+    };
+    PushButton BTN_SOLVE
+    {
+        Pos = MAP_APPFONT ( 174 , 190 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Solve" ;
+        DefButton = TRUE ;
+    };
+
+    // IMG_DEL_H not used - image is set dynamically
+
+    String STR_INVALIDINPUT
+    {
+        Text [ en-US ] = "Invalid input." ;
+    };
+    String STR_INVALIDCONDITION
+    {
+        Text [ en-US ] = "Invalid condition." ;
+    };
+};
+
+
+ModelessDialog RID_SCDLG_SOLVER_PROGRESS
+{
+    OutputSize = TRUE ;
+    HelpId = HID_SC_SOLVER_PROGRESS ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 118 , 72 ) ;
+    Moveable = TRUE ;
+    Closeable = FALSE ;
+    FixedText FT_PROGRESS
+    {
+        Pos = MAP_APPFONT ( 6 , 11 ) ;
+        Size = MAP_APPFONT ( 106 , 8 ) ;
+        Center = TRUE ;
+        Text [ en-US ] = "Solving in progress..." ;
+    };
+    FixedText FT_TIMELIMIT
+    {
+        Pos = MAP_APPFONT ( 6 , 25 ) ;
+        Size = MAP_APPFONT ( 106 , 8 ) ;
+        Center = TRUE ;
+        Text [ en-US ] = "(time limit # seconds)" ;
+    };
+    FixedLine FL_BUTTONS
+    {
+        Pos = MAP_APPFONT ( 0 , 41 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 34 , 52 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    Text [ en-US ] = "Solving..." ;
+};
+
+
+ModalDialog RID_SCDLG_SOLVER_NOSOLUTION
+{
+    OutputSize = TRUE ;
+    HelpId = HID_SC_SOLVER_NOSOLUTION ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 118 , 72 ) ;
+    Moveable = TRUE ;
+    FixedText FT_NOSOLUTION
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 106 , 8 ) ;
+        Text [ en-US ] = "No solution was found." ;
+    };
+    FixedText FT_ERRORTEXT
+    {
+        Pos = MAP_APPFONT ( 6 , 22 ) ;
+        Size = MAP_APPFONT ( 106 , 16 ) ;
+        WordBreak = TRUE ;
+        // text is dynamic
+    };
+    FixedLine FL_BUTTONS
+    {
+        Pos = MAP_APPFONT ( 0 , 41 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 34 , 52 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    Text [ en-US ] = "No Solution" ;
+};
+
+
+ModalDialog RID_SCDLG_SOLVER_SUCCESS
+{
+    OutputSize = TRUE ;
+    HelpId = HID_SC_SOLVER_SUCCESS ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 138 , 89 ) ;
+    Moveable = TRUE ;
+    FixedText FT_SUCCESS
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 126 , 8 ) ;
+        Text [ en-US ] = "Solving successfully finished." ;
+    };
+    FixedText FT_RESULT
+    {
+        Pos = MAP_APPFONT ( 6 , 22 ) ;
+        Size = MAP_APPFONT ( 126 , 8 ) ;
+        Text [ en-US ] = "Result:" ;
+    };
+    FixedText FT_QUESTION
+    {
+        Pos = MAP_APPFONT ( 6 , 36 ) ;
+        Size = MAP_APPFONT ( 126 , 16 ) ;
+        WordBreak = TRUE ;
+        Text [ en-US ] = "Do you want to keep the result or do you want to restore previous values?" ;
+    };
+    FixedLine FL_BUTTONS
+    {
+        Pos = MAP_APPFONT ( 0 , 58 ) ;
+        Size = MAP_APPFONT ( 138 , 8 ) ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 6 , 69 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+        Text [ en-US ] = "Keep Result" ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 72 , 69 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Restore Previous" ;
+    };
+    Text [ en-US ] = "Solving Result" ;
+};
+
