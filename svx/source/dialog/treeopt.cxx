@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2008-01-14 17:21:12 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:27:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2035,6 +2035,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( !lcl_isOptionHidden( SID_GENERAL_OPTIONS, aOptionsDlgOpt ) )
     {
         ResStringArray& rGeneralArray = aDlgResource.GetGeneralArray();
+        setGroupName( C2U("ProductName"), rGeneralArray.GetString(0) );
         nGroup = AddGroup( rGeneralArray.GetString(0), 0, 0, SID_GENERAL_OPTIONS );
         sal_uInt16 nEnd = static_cast< sal_uInt16 >( rGeneralArray.Count() );
 
@@ -2064,6 +2065,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( !lcl_isOptionHidden( SID_FILTER_DLG, aOptionsDlgOpt ) )
     {
         ResStringArray& rFilterArray = aDlgResource.GetFilterArray();
+        setGroupName( C2U("LoadSave"), rFilterArray.GetString(0) );
         nGroup = AddGroup( rFilterArray.GetString(0), 0, 0, SID_FILTER_DLG );
         for ( i = 1; i < rFilterArray.Count(); ++i )
         {
@@ -2078,6 +2080,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( !lcl_isOptionHidden( SID_LANGUAGE_OPTIONS, aOptionsDlgOpt ) )
     {
         ResStringArray& rLangArray = aDlgResource.GetLangArray();
+        setGroupName( C2U("LanguageSettings"), rLangArray.GetString(0) );
         nGroup = AddGroup( rLangArray.GetString(0), 0, 0, SID_LANGUAGE_OPTIONS );
         for ( i = 1; i < rLangArray.Count(); ++i )
         {
@@ -2269,6 +2272,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( !lcl_isOptionHidden( SID_SCH_EDITOPTIONS, aOptionsDlgOpt ) )
     {
         ResStringArray& rChartArray = aDlgResource.GetChartArray();
+        setGroupName( C2U("Charts"), rChartArray.GetString(0) );
         nGroup = AddGroup( rChartArray.GetString(0), 0, 0, SID_SCH_EDITOPTIONS );
         for ( i = 1; i < rChartArray.Count(); ++i )
         {
@@ -2282,6 +2286,7 @@ void OfaTreeOptionsDialog::Initialize( const Reference< XFrame >& _xFrame )
     if ( !lcl_isOptionHidden( SID_INET_DLG, aOptionsDlgOpt ) )
     {
         ResStringArray& rInetArray = aDlgResource.GetInetArray();
+        setGroupName( C2U("Internet"), rInetArray.GetString(0) );
         nGroup = AddGroup(rInetArray.GetString(0), 0, 0, SID_INET_DLG );
 
         for ( i = 1; i < rInetArray.Count(); ++i )
