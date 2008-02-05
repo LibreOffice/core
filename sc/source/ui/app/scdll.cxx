@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-19 17:26:29 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,6 +313,7 @@ void ScDLL::Init()
     ScNavigatorDialogWrapper    ::RegisterChildWindowContext(
             sal::static_int_cast<sal_uInt16>(ScTabViewShell::GetInterfaceId()), pMod);
     ScSolverDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
+    ScOptSolverDlgWrapper       ::RegisterChildWindow(FALSE, pMod);
     ScNameDlgWrapper            ::RegisterChildWindow(FALSE, pMod);
     ScPivotLayoutWrapper        ::RegisterChildWindow(FALSE, pMod);
     ScTabOpDlgWrapper           ::RegisterChildWindow(FALSE, pMod);
