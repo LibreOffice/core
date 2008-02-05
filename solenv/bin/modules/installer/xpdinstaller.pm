@@ -4,9 +4,9 @@
 #
 #   $RCSfile: xpdinstaller.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-07 15:11:39 $
+#   last change: $Author: ihi $ $Date: 2008-02-05 13:35:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,9 @@ sub get_display_tag
     if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
     if ( $styles =~ /\bHIDDEN_ROOT\b/ ) { $type = "hidden"; }
     else { $type = "show"; }
+
+    # special handling for language modules. Only visible in multilingual installation set.
+    if (( $styles =~ /\bSHOW_MULTILINGUAL_ONLY\b/ ) && ( ! $installer::globals::ismultilingual )) { $type = "hidden"; }
 
     # special handling for the root module, which has no parent
     my $parentgid = "";
@@ -317,6 +320,42 @@ sub get_isupdatepackage_value
     my $styles = "";
     if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
     if ( $styles =~ /\bISUPDATEPACKAGE\b/ ) { $value = "true"; }
+
+    return $value;
+}
+
+###################################################
+# Asking module for showmultilingualonly entry
+# scp style: SHOW_MULTILINGUAL_ONLY
+###################################################
+
+sub get_showmultilingualonly_value
+{
+    my ( $module ) = @_;
+
+    my $value = "false";
+
+    my $styles = "";
+    if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
+    if ( $styles =~ /\bSHOW_MULTILINGUAL_ONLY\b/ ) { $value = "true"; }
+
+    return $value;
+}
+
+###################################################
+# Asking module for showmultilingualonly entry
+# scp style: SHOW_MULTILINGUAL_ONLY
+###################################################
+
+sub get_applicationmodule_value
+{
+    my ( $module ) = @_;
+
+    my $value = "false";
+
+    my $styles = "";
+    if ( $module->{'Styles'} ) { $styles = $module->{'Styles'}; }
+    if ( $styles =~ /\bAPPLICATIONMODULE\b/ ) { $value = "true"; }
 
     return $value;
 }
@@ -802,6 +841,22 @@ sub set_architecture_tag
 }
 
 ###################################################
+# Setting the multi language tag
+###################################################
+
+sub set_multilanguage_tag
+{
+    my ($indent) = @_;
+
+    my $value = "false";
+    if ( $installer::globals::ismultilingual == 1 ) { $value = "true"; }
+
+    my $tag = $indent . "<multilingual>" . $value . "</multilingual>" . "\n";
+
+    return $tag;
+}
+
+###################################################
 # Collecting content for product xpd file
 ###################################################
 
@@ -857,9 +912,11 @@ sub get_setup_file_content
     $tag = set_architecture_tag($singleindent);
     push(@xpdfile, $tag);
 
-    $tag = get_end_tag("product", $noindent);
+    $tag = set_multilanguage_tag($singleindent);
     push(@xpdfile, $tag);
 
+    $tag = get_end_tag("product", $noindent);
+    push(@xpdfile, $tag);
 
     return \@xpdfile;
 }
@@ -909,6 +966,14 @@ sub get_file_content
 
     $value = get_isupdatepackage_value($module);
     $line = get_tag_line($doubleindent, "isupdatepackage", $value);
+    push(@xpdfile, $line);
+
+    $value = get_showmultilingualonly_value($module);
+    $line = get_tag_line($doubleindent, "showmultilingualonly", $value);
+    push(@xpdfile, $line);
+
+    $value = get_applicationmodule_value($module);
+    $line = get_tag_line($doubleindent, "applicationmodule", $value);
     push(@xpdfile, $line);
 
     $value = get_isjavamodule_value($module);
