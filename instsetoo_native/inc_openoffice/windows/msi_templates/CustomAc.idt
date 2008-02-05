@@ -8,3 +8,7 @@ setUserProfileNT	51	USERPROFILE	[%USERPROFILE]
 SetARPInstallLocation	51	ARPINSTALLLOCATION	[INSTALLLOCATION]
 NewProductFound	19		OOO_CUSTOMACTION_1
 SameProductFound	19		OOO_CUSTOMACTION_2
+SetLanguageSelected	51	LANG_SELECTED	1
+ResetLanguageSelected	51	LANG_SELECTED	0
+SetApplicationSelected	51	APP_SELECTED	1
+ResetApplicationSelected	51	APP_SELECTED	0
