@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkutil.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 20:37:59 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -458,6 +458,30 @@ static void handle_toolbox_highlightoff(Window *pWindow)
         notify_toolbox_item_focus( pToolBoxParent );
 }
 
+static void handle_toolbox_buttonchange(VclWindowEvent const *pEvent)
+{
+    Window* pWindow = pEvent->GetWindow();
+    sal_Int32 index = (sal_Int32)(sal_IntPtr) pEvent->GetData();
+
+    if( pWindow && pWindow->IsReallyVisible() )
+    {
+        uno::Reference< accessibility::XAccessible > xAccessible(pWindow->GetAccessible());
+        if( xAccessible.is() )
+        {
+            uno::Reference< accessibility::XAccessibleContext > xContext(xAccessible->getAccessibleContext());
+            if( xContext.is() )
+            {
+                uno::Reference< accessibility::XAccessible > xChild(xContext->getAccessibleChild(index));
+                if( xChild.is() )
+                {
+                    // create the wrapper object - it will survive the unref unless it is a transient object
+                    g_object_unref( atk_object_wrapper_ref( xChild ) );
+                }
+            }
+       }
+    }
+}
+
 /*****************************************************************************/
 
 static std::set< Window * > g_aWindowList;
@@ -600,6 +624,10 @@ long WindowEventHandler(void *, ::VclSimpleEvent const * pEvent)
 
     case VCLEVENT_TOOLBOX_HIGHLIGHT:
         handle_toolbox_highlight(static_cast< ::VclWindowEvent const * >(pEvent)->GetWindow());
+        break;
+
+    case VCLEVENT_TOOLBOX_BUTTONSTATECHANGED:
+        handle_toolbox_buttonchange(static_cast< ::VclWindowEvent const * >(pEvent));
         break;
 
     case VCLEVENT_OBJECT_DYING:
