@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ProductDescription.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 12:33:13 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 13:37:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,6 +212,15 @@ public class ProductDescription {
                 String value = section.getValue();
                 if ((value != null) && (! value.equals(""))) {
                     installData.setArchitecture(value);
+                }
+            }
+
+           section = data.getElement("multilingual");
+            if (section != null) {
+                String value = section.getValue();
+                if ((value != null) && (! value.equals(""))) {
+                    boolean multilingualValue = Parser.parseBoolean(value);
+                    installData.setIsMultiLingual(multilingualValue);
                 }
             }
 
