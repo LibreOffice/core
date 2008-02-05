@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.124 $
+#   $Revision: 1.125 $
 #
-#   last change: $Author: obo $ $Date: 2008-01-10 13:02:36 $
+#   last change: $Author: ihi $ $Date: 2008-02-05 15:41:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.124 $$"
+LIBSMKREV!:="$$Revision: 1.125 $$"
 
 .IF "$(GUI)"=="UNX" || "$(COM)"=="GCC"
 
@@ -335,6 +335,7 @@ HUNSPELLLIB*=-lhunspell
 ULINGULIB=-lulingu
 MYTHESLIB=-lmythes
 PYUNOLIB=-lpyuno
+LPSOLVELIB=-llpsolve55
 
 .ELSE				# "$(GUI)"=="UNX"
 AWTLIB*=jawt.lib
@@ -490,5 +491,6 @@ HUNSPELLLIB*=hunspell.lib
 ULINGULIB=$(LIBPRE) libulingu.lib
 MYTHESLIB=libmythes.lib
 PYUNOLIB=ipyuno.lib
+LPSOLVELIB=lpsolve55.lib
 
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
