@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_calc.scp,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2007-08-02 17:14:20 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:51:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,13 @@
 
 #include "macros.inc"
 
+STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Solver, solver)
+
+File gid_File_Lib_Lpsolve
+    Name = SPECIAL_NAME(lpsolve55);
+    PACKED_LIB_FILE_BODY_PATCH;
+End
+
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Analysis, analysis)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Calc, calc)
@@ -61,6 +68,8 @@ STD_RES_FILE( gid_File_Res_Bf_Sc, bf_sc)
 //
 // end binfilter #110743#
 //
+
+STD_RES_FILE_PATCH( gid_File_Res_Solver, solver)
 
 STD_RES_FILE( gid_File_Res_Analysis, analysis)
 
