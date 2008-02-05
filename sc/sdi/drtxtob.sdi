@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob.sdi,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 19:41:05 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:44:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@ interface TableDrawText
     FID_DEFINE_NAME             [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_DEFINE_COLROWNAMERANGES [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_SOLVE           [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_OPTSOLVER       [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_PIVOTTABLE      [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_TABOP           [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_FILTER                  [ StateMethod = StateDisableItems; Export = FALSE; ]
