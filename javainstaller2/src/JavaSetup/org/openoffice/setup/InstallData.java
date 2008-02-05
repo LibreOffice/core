@@ -4,9 +4,9 @@
  *
  *  $RCSfile: InstallData.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 12:31:58 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 13:36:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,8 @@ public class InstallData
     static private boolean isErrorInstallation = false;
     static private boolean logModuleStates = false;  /* logging the current state of modules */
     static private boolean visibleModulesChecked = false; /* checking, if the user selected modules */
+    static private boolean languageModulesChecked = false; /* checking, if the user selected language modules */
+    static private boolean applicationModulesChecked = false; /* checking, if the user selected application modules */
     static private boolean isMaskedCompleteUninstallation = false; /* checking if all visible modules are uninstalled */
     static private boolean typicalSelectionStateSaved = false;
     static private boolean customSelectionStateSaved = false;
@@ -73,7 +75,9 @@ public class InstallData
     static private boolean olderVersionExists = false;
     static private boolean sameVersionExists = false;
     static private boolean newerVersionExists = false;
+    static private boolean isMultiLingual = false;
     static private boolean dontUpdate = false;
+    static private boolean databaseQueried = false;
     static private String installType;            /* custom or typical installation */
     static private String osType;                 /* Linux, SunOS, ...              */
     static private String installDir = null;
@@ -97,6 +101,7 @@ public class InstallData
     static private File resourceRoot;
     static private File infoRoot;
     static private HashMap shellEnvironment = null;   /* Solaris environment for user install */
+    static private HashMap databaseMap = null;
     static private PackageDescription updatePackage = null;
     static private Vector removeFiles = new Vector();  /* Files to remove, if installation is aborted */
     static private Vector installPackages = new Vector();
@@ -451,6 +456,14 @@ public class InstallData
         isErrorInstallation = errorInstallation;
     }
 
+    public boolean isMultiLingual() {
+        return isMultiLingual;
+    }
+
+    public void setIsMultiLingual(boolean multiLingual) {
+        isMultiLingual = multiLingual;
+    }
+
     public boolean logModuleStates() {
         return logModuleStates;
     }
@@ -465,6 +478,22 @@ public class InstallData
 
     public void setVisibleModulesChecked(boolean checked) {
         visibleModulesChecked = checked;
+    }
+
+    public boolean languageModulesChecked() {
+        return languageModulesChecked;
+    }
+
+    public void setLanguageModulesChecked(boolean checked) {
+        languageModulesChecked = checked;
+    }
+
+    public boolean applicationModulesChecked() {
+        return applicationModulesChecked;
+    }
+
+    public void setApplicationModulesChecked(boolean checked) {
+        applicationModulesChecked = checked;
     }
 
     public boolean isMaskedCompleteUninstallation() {
@@ -531,6 +560,14 @@ public class InstallData
         dontUpdate = value;
     }
 
+    public boolean databaseQueried() {
+        return databaseQueried;
+    }
+
+    public void setDatabaseQueried(boolean value) {
+        databaseQueried = value;
+    }
+
     public PackageDescription getUpdatePackage() {
         return updatePackage;
     }
@@ -541,6 +578,14 @@ public class InstallData
 
     public HashMap getShellEnvironment() {
         return shellEnvironment;
+    }
+
+    public HashMap getDatabaseMap() {
+        return databaseMap;
+    }
+
+    public void setDatabaseMap(HashMap map) {
+        databaseMap = map;
     }
 
     public Vector getRemoveFiles() {
