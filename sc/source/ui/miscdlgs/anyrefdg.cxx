@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-05-22 20:09:00 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:46:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@
 #include "cell.hxx"
 #include "global.hxx"
 #include "inputopt.hxx"
+#include "rangeutl.hxx"
 
 //----------------------------------------------------------------------------
 
@@ -350,7 +351,8 @@ ScAnyRefDlg::ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
         bEnableColorRef( FALSE ),
         pRefCell(NULL),
         pRefComp(NULL),
-        pActiveWin(NULL)
+        pActiveWin(NULL),
+        nRefTab(0)
 {
     if(GetHelpId()==0)              //Hack, da im SfxModelessDialog die HelpId
         SetHelpId(GetUniqueId());   //fuer einen ModelessDialog entfernt und
@@ -407,7 +409,7 @@ ScAnyRefDlg::ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
     ScInputOptions aInputOption=SC_MOD()->GetInputOptions();
     bEnableColorRef=aInputOption.GetRangeFinder();
 
-    ScViewData* pViewData=ScDocShell::GetViewData();
+    ScViewData* pViewData=ScDocShell::GetViewData();    //! use pScViewShell?
     if ( pViewData )
     {
         ScDocument* pDoc = pViewData->GetDocument();
@@ -420,6 +422,8 @@ ScAnyRefDlg::ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
         pRefCell = new ScFormulaCell( pDoc, aCursorPos, rStrExp );
         pRefComp=new ScCompiler( pDoc, aCursorPos );
         pRefComp->SetCompileForFAP(TRUE);
+
+        nRefTab = nTab;
     }
 
 
@@ -628,6 +632,36 @@ void ScAnyRefDlg::ViewShellChanged(ScTabViewShell* /* pScViewShell */)
     EnableSpreadsheets();
 }
 
+bool ScAnyRefDlg::ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc )
+{
+    bool bError = false;
+    rRanges.RemoveAll();
+
+    ScRangeUtil aRangeUtil;
+    xub_StrLen nTokenCnt = rStr.GetTokenCount();
+    for( xub_StrLen nToken = 0; nToken < nTokenCnt; ++nToken )
+    {
+        ScRange aRange;
+        String aRangeStr( rStr.GetToken( nToken ) );
+
+        USHORT nFlags = aRange.ParseAny( aRangeStr, pDoc );
+        if ( nFlags & SCA_VALID )
+        {
+            if ( (nFlags & SCA_TAB_3D) == 0 )
+                aRange.aStart.SetTab( nRefTab );
+            if ( (nFlags & SCA_TAB2_3D) == 0 )
+                aRange.aEnd.SetTab( aRange.aStart.Tab() );
+            rRanges.Append( aRange );
+        }
+        else if ( aRangeUtil.MakeRangeFromName( aRangeStr, pDoc, nRefTab, aRange, RUTL_NAMES ) )
+            rRanges.Append( aRange );
+        else
+            bError = true;
+    }
+
+    return !bError;
+}
+
 void ScAnyRefDlg::ShowReference( const XubString& rStr )
 {
     if( /*!pRefEdit &&*/ bEnableColorRef )
@@ -668,7 +702,7 @@ void ScAnyRefDlg::ShowSimpleReference( const XubString& rStr )
             pTabViewShell->DoneRefMode( FALSE );
             pTabViewShell->ClearHighlightRanges();
 
-            if(aRangeList.Parse(rStr ,pDoc))
+            if( ParseWithNames( aRangeList, rStr, pDoc ) )
             {
                 ScRange* pRangeEntry=aRangeList.First();
 
@@ -958,7 +992,7 @@ void ScAnyRefDlg::ReleaseFocus( ScRefEdit* pEdit, ScRefButton* pButton )
             const ScViewData* pViewData = pViewShell->GetViewData();
             ScDocument* pDoc = pViewData->GetDocument();
             ScRangeList aRangeList;
-            if( aRangeList.Parse( pRefEdit->GetText(), pDoc ) )
+            if( ParseWithNames( aRangeList, pRefEdit->GetText(), pDoc ) )
             {
                 const ScRange* pRange = aRangeList.GetObject( 0 );
                 if( pRange )
