@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_calc.scp,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 17:07:01 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 13:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@ Module gid_Module_Prg_Calc
     MOD_NAME_DESC ( MODULE_PRG_CALC );
     ParentID = gid_Module_Prg;
     Sortkey = "200";
+    Styles =(APPLICATIONMODULE);
 End
 
 // #110743# Added gid_File_Lib_Bf_Sc and gid_File_Res_Bf_Sc for binfilter
