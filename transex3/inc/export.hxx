@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2007-06-27 22:28:48 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:55:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,6 +344,7 @@ public:
     static bool fileHasUTF8ByteOrderMarker( const ByteString &rString );
     static ByteString GetIsoLangByIndex( USHORT nIndex );
     static void QuotHTML( ByteString &rString );
+    static bool CopyFile( const ByteString& source , const ByteString& dest );
 
     static void QuotHTMLXRM( ByteString &rString );
     static void UnquotHTML( ByteString &rString );
