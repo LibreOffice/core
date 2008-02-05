@@ -1,0 +1,197 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: solveroptions.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:48:14 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#include "solveroptions.hrc"
+
+ModalDialog RID_SCDLG_SOLVEROPTIONS
+{
+    OutputSize = TRUE ;
+    HelpId = HID_SC_SOLVEROPTIONS ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 218 , 156 ) ;
+    Moveable = TRUE ;
+    FixedText FT_ENGINE
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 59 , 8 ) ;
+        Text [ en-US ] = "Solver engine" ;
+    };
+    ListBox LB_ENGINE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 67 , 6 ) ;
+        Size = MAP_APPFONT ( 145 , 90 ) ;
+        TabStop = TRUE ;
+        DropDown = TRUE ;
+    };
+    FixedText FT_SETTINGS
+    {
+        Pos = MAP_APPFONT ( 6 , 24 ) ;
+        Size = MAP_APPFONT ( 156 , 8 ) ;
+        Text [ en-US ] = "Settings:" ;
+    };
+    Control LB_SETTINGS
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 35 ) ;
+        Size = MAP_APPFONT ( 206 , 67 ) ;
+        TabStop = TRUE ;
+    };
+    PushButton BTN_EDIT
+    {
+        Pos = MAP_APPFONT ( 6 , 108 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        Text [ en-US ] = "Edit..." ;
+    };
+    FixedLine FL_BUTTONS
+    {
+        Pos = MAP_APPFONT ( 0 , 125 ) ;
+        Size = MAP_APPFONT ( 218 , 8 ) ;
+    };
+    HelpButton BTN_HELP
+    {
+        Pos = MAP_APPFONT ( 6 , 136 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 106 , 136 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 162 , 136 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ en-US ] = "Options" ;
+};
+
+
+ModalDialog RID_SCDLG_SOLVER_INTEGER
+{
+    OutputSize = TRUE ;
+    HelpId = HID_SC_SOLVER_INTEGER ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 118 , 76 ) ;
+    Moveable = TRUE ;
+    FixedText FT_OPTIONNAME
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 106 , 16 ) ;
+        WordBreak = TRUE ;
+        // text is dynamic
+    };
+    NumericField NF_VALUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 27 ) ;
+        Size = MAP_APPFONT ( 30 , 12 ) ;
+        TabStop = TRUE ;
+        Spin = TRUE ;
+        SpinSize = 1 ;
+        Repeat = TRUE ;
+        Minimum = -2147483648 ;
+        Maximum = 2147483647 ;
+        First = 0 ;
+        Last = 100 ;
+    };
+    FixedLine FL_BUTTONS
+    {
+        Pos = MAP_APPFONT ( 0 , 45 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 6 , 56 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 62 , 56 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ en-US ] = "Edit Setting" ;
+};
+
+ModalDialog RID_SCDLG_SOLVER_DOUBLE
+{
+    OutputSize = TRUE ;
+    HelpId = HID_SC_SOLVER_DOUBLE ;
+    SVLook = TRUE ;
+    Size = MAP_APPFONT ( 118 , 76 ) ;
+    Moveable = TRUE ;
+    FixedText FT_OPTIONNAME
+    {
+        Pos = MAP_APPFONT ( 6 , 8 ) ;
+        Size = MAP_APPFONT ( 106 , 16 ) ;
+        WordBreak = TRUE ;
+        // text is dynamic
+    };
+    Edit ED_VALUE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 27 ) ;
+        Size = MAP_APPFONT ( 50 , 12 ) ;
+        TabStop = TRUE ;
+    };
+    FixedLine FL_BUTTONS
+    {
+        Pos = MAP_APPFONT ( 0 , 45 ) ;
+        Size = MAP_APPFONT ( 118 , 8 ) ;
+    };
+    OKButton BTN_OK
+    {
+        Pos = MAP_APPFONT ( 6 , 56 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+        DefButton = TRUE ;
+    };
+    CancelButton BTN_CANCEL
+    {
+        Pos = MAP_APPFONT ( 62 , 56 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+    };
+    Text [ en-US ] = "Edit Setting" ;
+};
+
