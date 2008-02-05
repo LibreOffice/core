@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atkwrapper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 16:20:23 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:31:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -784,8 +784,11 @@ atk_object_wrapper_new( const ::com::sun::star::uno::Reference< ::com::sun::star
         uno::Reference< accessibility::XAccessibleStateSet > xStateSet( xContext->getAccessibleStateSet() );
         if( xStateSet.is() && ! xStateSet->contains( accessibility::AccessibleStateType::TRANSIENT ) )
         {
-            uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster( xContext, uno::UNO_QUERY_THROW );
-            xBroadcaster->addEventListener( static_cast< accessibility::XAccessibleEventListener * > ( new AtkListener( pWrap ) ) );
+            uno::Reference< accessibility::XAccessibleEventBroadcaster > xBroadcaster(xContext, uno::UNO_QUERY);
+            if( xBroadcaster.is() )
+                xBroadcaster->addEventListener( static_cast< accessibility::XAccessibleEventListener * > ( new AtkListener(pWrap) ) );
+        else
+                OSL_ASSERT( false );
         }
 
         return ATK_OBJECT( pWrap );
