@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiEditSettingDialog.java,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-05 17:22:59 $
+ *  last change: $Author: mav $ $Date: 2008-02-05 18:23:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,8 +59,6 @@ public class WikiEditSettingDialog extends WikiDialog
     private Hashtable setting;
     private boolean addMode;
     private boolean m_bAllowURLChange = true;
-    private Thread m_aLoginThread;
-    private boolean m_bThreadFinished = false;
 
     public WikiEditSettingDialog( XComponentContext xContext, String DialogURL )
     {
@@ -103,7 +101,6 @@ public class WikiEditSettingDialog extends WikiDialog
     public boolean show( )
     {
         SetThrobberVisible( false );
-        m_bThreadFinished = false;
         EnableControls( true );
         return super.show();
     }
@@ -300,6 +297,9 @@ public class WikiEditSettingDialog extends WikiDialog
                 }
             } while ( sRedirectURL.length() > 0 );
         }
+        catch ( WikiCancelException ce )
+        {
+        }
         catch ( SSLException essl )
         {
             if ( Helper.IsConnectionAllowed() )
@@ -326,7 +326,6 @@ public class WikiEditSettingDialog extends WikiDialog
             }
             ex.printStackTrace();
         }
-
     }
 
     public boolean callHandlerMethod( XDialog xDialog, Object EventObject, String MethodName )
@@ -344,7 +343,7 @@ public class WikiEditSettingDialog extends WikiDialog
                 final WikiEditSettingDialog aThis = this;
 
                 // the thread name is used to allow the error dialogs
-                m_aLoginThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
+                m_aThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
                 {
                     public void run()
                     {
@@ -352,25 +351,24 @@ public class WikiEditSettingDialog extends WikiDialog
                         {
                             Thread.yield();
                             DoLogin( xDialogForThread );
-                            m_bThreadFinished = true;
                         } catch( java.lang.Exception e )
                         {}
                         finally
                         {
+                            ThreadStop( true );
                             MainThreadDialogExecutor.Close( xContext, xDialogForThread );
                             Helper.AllowConnection( true );
                         }
                     }
                 };
 
-                m_aLoginThread.start();
+                m_aThread.start();
             }
             else
             {
                 try
                 {
                     DoLogin( xDialog );
-                    m_bThreadFinished = true;
                 } catch( java.lang.Exception e )
                 {}
                 finally
@@ -392,23 +390,7 @@ public class WikiEditSettingDialog extends WikiDialog
 
     public void windowClosed( EventObject e )
     {
-        if ( m_aLoginThread != null && !m_bThreadFinished )
-        {
-            try
-            {
-                Helper.AllowConnection( false );
-                m_aLoginThread.join();
-            }
-            catch( Exception ex )
-            {
-                ex.printStackTrace();
-            }
-            finally
-            {
-                m_aLoginThread = null;
-                Helper.AllowConnection( true );
-            }
-        }
+        ThreadStop( false );
     }
 }
 

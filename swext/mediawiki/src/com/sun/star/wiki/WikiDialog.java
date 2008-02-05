@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiDialog.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-05 17:22:59 $
+ *  last change: $Author: mav $ $Date: 2008-02-05 18:23:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@ public class WikiDialog implements XDialogEventHandler, XTopWindowListener
     boolean m_bAction = false;
     Settings m_aSettings;
 
+    protected Thread m_aThread;
+    protected boolean m_bThreadFinished = false;
+
 
     /** Creates a new instance of WikiDialog */
     public WikiDialog(XComponentContext c, String DialogURL)
@@ -87,6 +90,30 @@ public class WikiDialog implements XDialogEventHandler, XTopWindowListener
         }
     }
 
+    public synchronized void ThreadStop( boolean bSelf )
+    {
+        if ( !bSelf )
+        {
+            if ( m_aThread != null && !m_bThreadFinished )
+            {
+                try
+                {
+                    Helper.AllowConnection( false );
+                }
+                catch( Exception ex )
+                {
+                    ex.printStackTrace();
+                }
+                finally
+                {
+                }
+            }
+        }
+
+        m_aThread = null;
+        m_bThreadFinished = true;
+    }
+
     protected void setMethods (String [] Methods)
     {
         this.m_aMethods = Methods;
@@ -95,6 +122,8 @@ public class WikiDialog implements XDialogEventHandler, XTopWindowListener
 
     public boolean show( )
     {
+        m_bThreadFinished = false;
+
         if( m_xDialog != null ) m_xDialog.execute();
         return m_bAction;
     }

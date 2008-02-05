@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WikiPropDialog.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mav $ $Date: 2008-02-05 17:22:59 $
+ *  last change: $Author: mav $ $Date: 2008-02-05 18:23:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,6 @@ public class WikiPropDialog extends WikiDialog{
     protected String m_sWikiComment = "";
     protected boolean m_bWikiMinorEdit = false;
 
-    private Thread m_aSendingThread;
-
     /** Creates a new instance of WikiPropDialog */
     public WikiPropDialog(XComponentContext xContext, String DialogURL, WikiEditorImpl aWikiEditorForThrobber )
     {
@@ -116,6 +114,21 @@ public class WikiPropDialog extends WikiDialog{
         {
             e.printStackTrace();
         }
+    }
+
+    public synchronized void ThreadStop( boolean bSelf )
+    {
+        boolean bShowError = ( !bSelf && m_aThread != null && !m_bThreadFinished );
+
+        super.ThreadStop( bSelf );
+
+        if ( bShowError )
+            Helper.ShowError( m_xContext,
+                              m_xDialog,
+                              Helper.DLG_SENDTITLE,
+                              Helper.CANCELSENDING_ERROR,
+                              null,
+                              false );
     }
 
     public void fillWikiList()
@@ -250,7 +263,7 @@ public class WikiPropDialog extends WikiDialog{
 
             if ( Helper.AllowThreadUsage( m_xContext ) )
             {
-                m_aSendingThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
+                m_aThread = new Thread( "com.sun.star.thread.WikiEditorSendingThread" )
                 {
                     public void run()
                     {
@@ -266,13 +279,15 @@ public class WikiPropDialog extends WikiDialog{
                         {}
                         finally
                         {
+                            ThreadStop( true );
                             MainThreadDialogExecutor.Close( xContext, xDialogToClose );
+                            // should be marked as finished after dialog closing if an exception was thrown
                             Helper.AllowConnection( true );
                         }
                     }
                 };
 
-                m_aSendingThread.start();
+                m_aThread.start();
             }
             else
             {
@@ -325,30 +340,7 @@ public class WikiPropDialog extends WikiDialog{
 
     public void windowClosed( EventObject e )
     {
-        if ( m_aSendingThread != null && !m_bAction )
-        {
-            try
-            {
-                Helper.AllowConnection( false );
-                m_aSendingThread.join();
-            }
-            catch ( Exception ex )
-            {
-                ex.printStackTrace();
-            }
-            finally
-            {
-                m_aSendingThread = null;
-                Helper.AllowConnection( true );
-
-                Helper.ShowError( m_xContext,
-                                  m_xDialog,
-                                  Helper.DLG_SENDTITLE,
-                                  Helper.CANCELSENDING_ERROR,
-                                  null,
-                                  false );
-            }
-        }
+        ThreadStop( false );
     }
 }
 
