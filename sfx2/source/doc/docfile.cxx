@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.196 $
+ *  $Revision: 1.197 $
  *
- *  last change: $Author: ihi $ $Date: 2007-11-21 16:46:34 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:28:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1412,7 +1412,8 @@ uno::Reference< embed::XStorage > SfxMedium::GetLastCommitReadStorage_Impl()
             OSL_ENSURE( sal_False, "No possibility to get readonly version of storage from medium!\n" );
         }
 
-        ResetError();
+        if ( GetError() ) // do not remove warnings
+            ResetError();
     }
 
     return pImp->m_xReadStorage;
