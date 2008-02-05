@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anyrefdg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:19:30 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:45:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,10 @@
 #include <sfx2/basedlgs.hxx>
 #endif
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 class SfxObjectShell;
 class ScRange;
 class ScDocument;
@@ -57,6 +61,7 @@ class ScAnyRefDlg;
 class ScRefButton;
 class ScFormulaCell;
 class ScCompiler;
+class ScRangeList;
 
 //============================================================================
 
@@ -148,6 +153,7 @@ private:
     Window*             pActiveWin;
     Timer               aTimer;
     String              aDocName;               // document on which the dialog was opened
+    SCTAB               nRefTab;                // used for ShowReference
 
     DECL_LINK( UpdateFocusHdl, Timer* );
     DECL_LINK( AccelSelectHdl, Accelerator* );
@@ -164,6 +170,8 @@ protected:
     virtual void        RefInputDone( BOOL bForced = FALSE );
     void                ShowSimpleReference( const XubString& rStr );
     void                ShowFormulaReference( const XubString& rStr );
+
+    bool                ParseWithNames( ScRangeList& rRanges, const String& rStr, ScDocument* pDoc );
 
 public:
                         ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
