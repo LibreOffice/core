@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.101 $
+#   $Revision: 1.102 $
 #
-#   last change: $Author: ihi $ $Date: 2008-01-16 12:48:41 $
+#   last change: $Author: ihi $ $Date: 2008-02-05 13:35:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1861,6 +1861,9 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # setting the encoding in every table (replacing WINDOWSENCODINGTEMPLATE)
 
             installer::windows::idtglobal::setencoding($languageidtdir, $onelanguage);
+
+            # setting the encoding in every table (replacing WINDOWSENCODINGTEMPLATE)
+            installer::windows::idtglobal::set_multilanguageonly_condition($languageidtdir);
 
             # include the license text into the table Control.idt
 
