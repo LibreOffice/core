@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2008-01-29 15:41:14 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:45:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,6 +140,7 @@
 #include "compiler.hxx"
 #include "cfgids.hxx"
 #include "warnpassword.hxx"
+#include "optsolver.hxx"
 
 #include "docsh.hxx"
 #include "docshimp.hxx"
@@ -2159,6 +2160,7 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
         pAutoStyleList  ( NULL ), \
         pPaintLockData  ( NULL ), \
         pOldJobSetup    ( NULL ), \
+        pSolverSaveData ( NULL ), \
         pModificator    ( NULL )
 
 //------------------------------------------------------------------
@@ -2247,6 +2249,7 @@ __EXPORT ScDocShell::~ScDocShell()
 
     delete pOldJobSetup;        // gesetzt nur bei Fehler in StartJob()
 
+    delete pSolverSaveData;
     delete pOldAutoDBRange;
 
     if (pModificator)
@@ -2410,6 +2413,11 @@ Window* ScDocShell::GetActiveDialogParent()
         return Application::GetDefDialogParent();
 }
 
+void ScDocShell::SetSolverSaveData( const ScOptSolverSave& rData )
+{
+    delete pSolverSaveData;
+    pSolverSaveData = new ScOptSolverSave( rData );
+}
 
 // --- ScDocShellModificator ------------------------------------------
 
