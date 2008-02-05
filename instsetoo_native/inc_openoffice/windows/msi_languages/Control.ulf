@@ -712,6 +712,12 @@ en-US  = "Install [ProductName] to:"
 [OOO_CONTROL_309]
 en-US = "If you are just trying out [ProductName], you probably don't want this to happen, so leave the boxes unchecked."
 
+[OOO_CONTROL_317]
+en-US = "No languages have been selected for installation. Click OK to select one or more languages for installation."
+
+[OOO_CONTROL_318]
+en-US = "No applications have been selected for installation. Click OK to select one or more applications for installation."
+
 [OOO_CONTROL_LANG_1033]
 en-US = "English"
 
