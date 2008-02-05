@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2007-09-20 15:02:34 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:55:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,6 +352,49 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
     aHash[ rPrj ] = !aFlagfile.Exists();
     return aHash[ rPrj ];*/
 //}
+bool Export::CopyFile( const ByteString& source , const ByteString& dest )
+{
+//    cout << "CopyFile( " << source.GetBuffer() << " , " << dest.GetBuffer() << " )\n";
+    const int BUFFERSIZE    = 8192;
+    char buf[ BUFFERSIZE ];
+
+    FILE*  IN_FILE = fopen( source.GetBuffer() , "r" );
+    FILE* OUT_FILE = fopen( dest.GetBuffer() , "w" );
+
+    if( IN_FILE == NULL )
+    {
+        cerr << "Export::CopyFile WARNING: Could not open " << source.GetBuffer() << "\n";
+        return false;
+    }
+    if( OUT_FILE == NULL )
+    {
+        cerr << "Export::CopyFile WARNING: Could not open/create " << dest.GetBuffer() << " for writing\n";
+        return false;
+    }
+
+    while( fgets( buf , BUFFERSIZE , IN_FILE ) != NULL )
+    {
+        if( fputs( buf , OUT_FILE ) == EOF )
+        {
+            cerr << "Export::CopyFile WARNING: Write problems " << source.GetBuffer() << "\n";
+            fclose( IN_FILE );
+            fclose( OUT_FILE );
+            return false;
+        }
+    }
+    if( ferror( IN_FILE ) )
+    {
+        cerr << "Export::CopyFile WARNING: Read problems " << dest.GetBuffer() << "\n";
+        fclose( IN_FILE );
+        fclose( OUT_FILE );
+        return false;
+    }
+    fclose ( IN_FILE );
+    fclose ( OUT_FILE );
+
+    return true;
+}
+
 /*****************************************************************************/
 void Export::UnquotHTML( ByteString &rString )
 /*****************************************************************************/
