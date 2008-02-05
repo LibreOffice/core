@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_impress.scp,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-04 17:07:44 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 13:40:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@ Module gid_Module_Prg_Impress
     MOD_NAME_DESC ( MODULE_PRG_IMPRESS );
     ParentID = gid_Module_Prg;
     Sortkey = "400";
+    Styles =(APPLICATIONMODULE);
 End
 
 Module gid_Module_Prg_Impress_Bin
