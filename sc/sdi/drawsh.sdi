@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh.sdi,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-07-06 12:31:54 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:44:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,7 @@ interface TableDraw
     FID_DEFINE_NAME             [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_DEFINE_COLROWNAMERANGES [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_SOLVE           [ StateMethod = StateDisableItems; Export = FALSE; ]
+    SID_OPENDLG_OPTSOLVER       [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_PIVOTTABLE      [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_OPENDLG_TABOP           [ StateMethod = StateDisableItems; Export = FALSE; ]
     SID_FILTER                  [ StateMethod = StateDisableItems; Export = FALSE; ]
