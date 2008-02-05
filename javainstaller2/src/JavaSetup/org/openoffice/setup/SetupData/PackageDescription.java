@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PackageDescription.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2008-01-07 12:33:00 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 13:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,8 @@ public class PackageDescription implements TreeNode {
     private boolean pkgExists = true;  // must be default, especially for uninstallation
     private boolean isRelocatable = true;
     private boolean isUpdatePackage = false;
+    private boolean showMultiLingualOnly = false;
+    private boolean isApplicationPackage = false;
     private boolean isJavaPackage = false;
     private boolean isNewInstalled = false;
     private boolean wasAlreadyInstalled = false;
@@ -188,6 +190,14 @@ public class PackageDescription implements TreeNode {
 
     public boolean isUpdatePackage() {
         return isUpdatePackage;
+    }
+
+    public boolean showMultiLingualOnly() {
+        return showMultiLingualOnly;
+    }
+
+    public boolean isApplicationPackage() {
+        return isApplicationPackage;
     }
 
     public boolean isJavaPackage() {
@@ -410,6 +420,18 @@ public class PackageDescription implements TreeNode {
                 String isUpdatePackageValue = subSection.getValue();
                 isUpdatePackage = Parser.parseBoolean(isUpdatePackageValue);
                 // isUpdatePackage = Boolean.parseBoolean(isUpdatePackageValue);
+            }
+
+            subSection = section.getElement("showmultilingualonly");
+            if (subSection != null) {
+                String showMultiLingualOnlyValue = subSection.getValue();
+                showMultiLingualOnly = Parser.parseBoolean(showMultiLingualOnlyValue);
+            }
+
+            subSection = section.getElement("applicationmodule");
+            if (subSection != null) {
+                String isApplicationPackageValue = subSection.getValue();
+                isApplicationPackage = Parser.parseBoolean(isApplicationPackageValue);
             }
 
             subSection = section.getElement("isjavapackage");
