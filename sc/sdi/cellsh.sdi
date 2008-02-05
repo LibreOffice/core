@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.sdi,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-08-20 16:50:15 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 15:43:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,7 @@ interface CellSelection
     FID_DEFINE_NAME             [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_DEFINE_COLROWNAMERANGES [ ExecMethod = ExecuteEdit; StateMethod = GetState; ]
     SID_OPENDLG_SOLVE           [ ExecMethod = Execute; StateMethod = GetState; ]
+    SID_OPENDLG_OPTSOLVER       [ ExecMethod = Execute; StateMethod = GetState; ]
     SID_OPENDLG_PIVOTTABLE      [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
     SID_OPENDLG_TABOP           [ ExecMethod = Execute; StateMethod = GetBlockState; ]
     SID_FILTER                  [ ExecMethod = ExecuteDB; StateMethod = GetDBState; ]
