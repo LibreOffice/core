@@ -334,6 +334,7 @@
             <menu:menuitem menu:id=".uno:AutoCorrectDlg"/>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:GoalSeekDialog"/>
+            <menu:menuitem menu:id=".uno:SolverDialog"/>
             <menu:menuitem menu:id=".uno:ScenarioManager"/>
             <menu:menuseparator/>
             <menu:menu menu:id=".uno:ProtectMenu">
