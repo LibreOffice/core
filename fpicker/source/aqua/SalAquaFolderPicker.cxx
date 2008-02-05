@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalAquaFolderPicker.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2007-07-11 10:59:23 $
+ *  last change: $Author: ihi $ $Date: 2008-02-05 12:20:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,10 +116,9 @@ namespace
     // controling event notifications
     uno::Sequence<rtl::OUString> SAL_CALL FolderPicker_getSupportedServiceNames()
     {
-        uno::Sequence<rtl::OUString> aRet(3);
-        aRet[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.FolderPicker" );
-        aRet[1] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFolderPicker" );
-        aRet[2] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.AquaFolderPicker" );
+        uno::Sequence<rtl::OUString> aRet(2);
+        aRet[0] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFolderPicker" );
+        aRet[1] = rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.AquaFolderPicker" );
         return aRet;
     }
 }
